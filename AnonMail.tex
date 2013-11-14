@@ -1,0 +1,202 @@
+\documentclass[11pt,a4paper]{book}
+
+\usepackage{hyperref}
+\usepackage{makeidx}
+\usepackage[titletoc]{appendix} %enable appendix
+
+\usepackage{attachfile}
+
+\usepackage[english]{babel}
+
+\usepackage{fancyref}
+
+\makeindex % Enable indexes
+
+% set numbering for subsubsections
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{4}
+
+% Sans serif font for the whole document
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+% No paragraph indentation
+\setlength\parindent{0pt} 
+\setlength\parskip{6pt} 
+
+% For coments and similar
+\usepackage{verbatim} 
+
+% Required for definitions environment
+\usepackage{hanging}
+\usepackage{ragged2e}
+\newenvironment{entry}{\par\leavevmode\hangpara{1.5mm}{1}\ignorespaces}{\RaggedRight\par}
+\newcommand*{\mainentry}[1]{{\bfseries{#1}}~}
+\begin{document}
+
+\title{Possible solutions to implement email transfer offering anonymity towards 
+third parties}
+\author{Martin Gwerder}
+\date{Dezemer 2013}
+\maketitle
+
+\begin{comment}
+\begin{abstracts}        %this creates the heading for the abstract page
+FIXME abstract is still missing
+\end{abstracts}
+
+\begin{acknowledgements}      %this creates the heading for the acknowlegments
+FIXME family
+FIXME Professor
+FIXME university
+\\
+I would like to acknowledge the thousands of individuals who have coded for the LaTeX project for free. It is due to their efforts that we can generate professionally typeset PDFs now.
+\end{acknowledgements}
+\end{comment}
+\tableofcontents
+
+\chapter{Introduction}
+This document describes a solution which should offer anonymity against third parties when sending emails based on SMTP and the respective client protocols (e.g. IMAPv4 or POP3).
+
+\section{Current situation}
+SMTP as defined in RFC5321\cite{RFC5321} is as of today (2013)  state of the art transmission protocol for electronic mail. It is standardized in its current version since 2008 and is one of the few protocols which is marked as "Standard". While the protocol delivers reliable mail transfer between two endpoint (mail servers) the anonymity of the message content towards any mail server is not given (For a detailed analysis see \nameref{chap:analysis}).\par
+
+Anonymity against third party is not given due to the following facts.
+
+\begin{enumerate}
+  \item There is not always an encryption available between a mail user agent (MUA) and the outgoing mail server.
+	\item There is no way to guarantee that a mail is being transferred encrypted between SMTP hosts.
+	\item There is no always an encryption available between a SMTP host and the MUA of the recipient.
+  \item Encryption based on top level protocols (such as S/MIME or PGP) do hide the message content. The sender, recipient, the subject and some technical information (eg. MIME-Headers) are always in plain available and not protected as such.
+	\item Even if there is a reliable encryption between all endpoints and none of the intermediate servers are compromised sender and recipients might still be identified thru traffic analysis.
+\end{enumerate}
+
+Keeping the message content confidential is more and more relevant in these days. The more the importance of mail transfer in todays economy is growing the more is confidentiality and reliability a topic. Unfortunatley Secret Services have already discovered the significance of today's mail traffic and start to analyze those. With the presence of Secret Services in the internet actively investigating data the importance of a reliable data channel for today's messages has become increasingly important. 
+
+Quick wins such as the use of "Onion Router Networks" (such as TOR) do not offer any additional security since the message content would be revealed in full to an eventual exit node and any mail server on its way.
+
+\section{Problem statement}
+This work is an approach to extend the existing mail routing based on SMTP by an intermediate
+layer which should offer anonymity against third party.\par
+
+This work delivers the following results:
+
+\begin{itemize}
+  \item A throughout analysis of current technology and its weaknesses.\\
+	      Although the Simple Mail Transfer Protocol (SMTP) is a well implemented and well proven technology its weaknesses are well known. The SMTP protocol was originally defined in RFC821\cite{RFC821} by Johnathan B. Postel. At this time internet was only available to universities, some mayor companies and governments. The objective of Simple Mail Transfer Protocol (SMTP) is to transfer mail reliably and efficiently\cite[p.~1]{RFC821}. Confidentiality or having a tamper proof protocol was no design goal. Over the years many standards arose trying to close some of the gaps. Most of them are being used but are not very common. 
+	\item An analysis of possible approaches to improve the current standards.\\
+	      Many standards and technologies do exist these days addressing parts of the issues mentioned above. A throughout research should be carried out to identify how can these technologies be combined to achieve the subsequent goals.
+	\item A RFC document describing an approach offering a significant quality improvement of the existing solutions which could be accepted by the internet community.
+	\item A prototype reflecting at least the minimum baseline of the RFC document to reflect prove its functionality.\\
+	      A prototype should be offered to show the feasibility. The Prototype should be a reference implementation and offer a quick way to use the new technology. It should be distributed under the LGPL license to simplify distribution of the technology. 
+\end{itemize}
+
+\chapter{Current situation}
+As of today the de facto standard for asynchronous mail transfer is SMTP as defined in RFC5321\cite{RFC5321} and its predecessors. While the transfer protocol SMTP is quite compact, the protocol is enhanced with serveral standards for encryption, multimedia support and similar. A mail client offers today various support for a lot of sub-protocols. The following list is an excerpt of related sub-protocols which are either related to transport, reliability, identification or encryption. 
+
+\section{Implemented protocols}
+\subsection{SMTP}
+\cite{RFC5321}
+\subsubsection{Mail transport}
+\cite{RFC1870}
+\subsubsection{encryption}
+
+\subsection{MIME}
+\cite{RFC2045}
+\cite{RFC2046}
+\cite{RFC2047}
+\cite{RFC2048}
+\cite{RFC2049}
+
+\subsection{S/MIME}
+\cite{RFC3851}
+
+\subsection{PGP}
+\cite{RFC2440}
+
+\subsection{Sender Policy Framework}
+\cite{RFC4408}
+\cite{RFC6652}
+
+\subsection{Sender ID}
+\cite{RFC4401}
+
+\subsection{DNS}
+\subsubsection{DNSSEC}
+
+\subsection{Transport Protocols}
+\subsubsection{IPv4}
+\cite{RFC760}
+\cite{RFC791}
+\cite{RFC1180}
+\cite{RFC792}
+\cite{RFC919}
+\cite{RFC922}
+\cite{RFC950}
+\cite[p.~3]{RFC793}
+
+\subsubsection{IPv6}
+\cite{RFC2460}
+
+\subsubsection{EGRP}
+\subsubsection{IGRP}
+\subsection{POP3}
+\cite{RFC1939}
+
+\subsection{IMAPv4}
+\cite{RFC3501}
+
+\section{Ground theory}
+\subsection{Anonymity}
+\subsection{Identification (data signage)}
+\subsection{Encryption}
+\subsection{Mix cascades}
+\section{Other}
+\subsection{Ethics of the Internet}
+\cite[p.~1]{RFC1087}
+
+\chapter{Analysis of current situation\label{chap:analysis}}
+\section{Current state of common Technology}
+\section{Current state of available Technology}
+\section{Missing Gap}
+
+
+\chapter{Designing an approach}
+\section{Defining system boundaries}
+\section{Basic Requirements of an aproach}
+
+\chapter{Specifying a target solution}
+
+\chapter{Analysis of solution}
+\section{User acceptance of the target system}
+\section{Admin acceptance of the target system}
+\section{Possible attacks to the system}
+
+\begin{appendices}
+\chapter{Definitions}
+\begin{entry}
+\mainentry{MUA}{A Mail User Agent}
+\end{entry}
+\begin{thebibliography}{99}
+\bibitem{STD72}{R. Gellens, J. Klensin; \emph{STD72 Message Submission for Mail}; 2011 (\href{http://tools.ietf.org/pdf/rfc6409.pdf}{online},\textattachfile{inc/bib/rfc6409.pdf}{attached})}
+\bibitem{BCP134}{C. Hutzler, D. Crocker, P. Resnick, E. Allman, T. Finch; \emph{BCP143 Email Submission Operations: Access and Accountability Requirements}; 2007 (\href{http://tools.ietf.org/pdf/rfc5068.pdf}{online},\textattachfile{inc/bib/rfc5068.pdf}{attached})}
+\bibitem{RFC821}{Jonathan B. Postel; \emph{RFC821 Simple Mail Transfer Protocol}; 1982 (\href{http://tools.ietf.org/pdf/rfc821.pdf}{online},\textattachfile{inc/bib/rfc821.pdf}{attached})}
+\bibitem{RFC2045}{N. Freed, N. Borenstein; \emph{RFC2045 Multipurpose Internet Mail Extensions; (MIME) Part One: Format of Internet Message Bodies}; 1996 (\href{http://tools.ietf.org/pdf/rfc2045.pdf}{online},\textattachfile{inc/bib/rfc2045.pdf}{attached}) }
+\bibitem{RFC2046}{N. Freed, N. Borenstein; \emph{RFC2046 Multipurpose Internet Mail Extensions; (MIME) Part Two: Media Types}; 1996 (\href{http://tools.ietf.org/pdf/rfc2046.pdf}{online},\textattachfile{inc/bib/rfc2046.pdf}{attached})}
+\bibitem{RFC2047}{N. Freed, N. Borenstein; \emph{RFC2047 Multipurpose Internet Mail Extensions; (MIME) Part Three: Message Header Extensions for Non-ASCII Text}; 1996 (\href{http://tools.ietf.org/pdf/rfc2046.pdf}{online},\textattachfile{inc/bib/rfc2047.pdf}{attached})}
+\bibitem{RFC2048}{N. Freed, J. Klensin, J. Postel; \emph{RFC2048 Multipurpose Internet Mail Extensions; (MIME) Part Four: Registration Procedures}; 1996 (\href{http://tools.ietf.org/pdf/rfc2048.pdf}{online},\textattachfile{inc/bib/rfc2048.pdf}{attached})}
+\bibitem{RFC2049}{N. Freed, J. Klensin, J. Postel; \emph{RFC2049 Multipurpose Internet Mail Extensions; (MIME) Part Five: Conformance Criteria and Examples}; 1996 (\href{http://tools.ietf.org/pdf/rfc2049.pdf}{online},\textattachfile{inc/bib/rfc2049.pdf}{attached})}
+\bibitem{RFC2440}{B. Ramsdell; \emph{RFC2440 Secure/Multipurpose Internet Mail Extensions (S/MIME) Version 3.1
+Message Specification}; 2004 (\href{http://tools.ietf.org/pdf/rfc2440.pdf}{online},\textattachfile{inc/bib/rfc2440.pdf}{attached})}
+\bibitem{RFC3851}{B. Ramsdell; \emph{RFC3851 Secure/Multipurpose Internet Mail Extensions (S/MIME) Version 3.1
+Message Specification}; 2004 (\href{http://tools.ietf.org/pdf/rfc3851.pdf}{online},\textattachfile{inc/bib/rfc3851.pdf}{attached})}
+\bibitem{RFC4401}{N. Williams; \emph{RFC4401 Sender ID: Authenticating E-Mail}; 2006 (\href{http://tools.ietf.org/pdf/rfc4401.pdf}{online},\textattachfile{inc/bib/rfc4401.pdf}{attached})}
+\bibitem{RFC4408}{N. Williams; \emph{RFC4408 Sender Policy Framework (SPF) for Authorizing Use of Domains in E-Mail, Version 1}; 2006 (\href{http://tools.ietf.org/pdf/rfc4408.pdf}{online},\textattachfile{inc/bib/rfc4408.pdf}{attached})}
+\bibitem{RFC5321}{J. Klensin; \emph{RFC5321 Simple Mail Transfer Protocol}; 2008 (\href{http://tools.ietf.org/pdf/rfc5321.pdf}{online},\textattachfile{inc/bib/rfc5321.pdf}{attached})}
+\bibitem{RFC5322}{P. Resnick, Ed.; \emph{RFC5322 Internet Message Format}; 2008 (\href{http://tools.ietf.org/pdf/rfc5322.pdf}{online},\textattachfile{inc/bib/rfc5322.pdf}{attached})}
+\bibitem{RFC6652}{S. Kitterman; \emph{RFC6652 Sender Policy Framework (SPF) Authentication Failure Reporting Using the Abuse Reporting Format}; 2012 (\href{http://tools.ietf.org/pdf/rfc6652.pdf}{online},\textattachfile{inc/bib/rfc6652.pdf}{attached})}
+
+\end{thebibliography}
+\end{appendices}
+\end{document}
