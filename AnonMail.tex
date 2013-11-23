@@ -8,7 +8,7 @@
             maxcitenames=3,
             maxbibnames=100,
             block=none]{biblatex}
-\addbibresource{AnonMail.bib}
+\addbibresource{AnonMail}
 \usepackage{csquotes}
 
 \usepackage{supertabular}
@@ -55,6 +55,7 @@
 }
 
 \begin{document}
+\frontmatter
 
 \title{Possible solutions to implement email transfer offering anonymity towards third parties}
 \author{Martin Gwerder}
@@ -80,44 +81,44 @@ I would like to acknowledge the thousands of individuals who have coded for the 
 \listoftables
 \listoffigures
 
+\mainmatter
 \chapter{Introduction}
-This document describes a solution which should offer anonymity against third parties when sending emails based on SMTP and the respective client protocols (e.g. IMAPv4 or POP3).
+This document describes a solution, which should offer anonymity against third parties when sending emails based on SMTP and the respective client protocols (e.g. IMAPv4 or POP3).
 
 \section{Overview over the current situation}
-SMTP as defined in RFC5321\cite{RFC5321} is as of today (2013)  state of the art transmission protocol for electronic mail. It is standardized in its current version since 2008 and is one of the few protocols which is marked as "Standard". While the protocol delivers reliable mail transfer between two endpoint (mail servers) the anonymity of the message content towards any mail server is not given (For a detailed analysis see \nameref{chap:analysis}).\par
+SMTP as defined in RFC5321\cite{RFC5321} is as of today (2013)  state of the art transmission protocol for electronic mail. It is standardized in its current version since 2008 and is one of the few protocols, which is marked as "Standard". While the protocol delivers reliable mail transfer between two endpoint (mail servers) the anonymity of the message content towards any mail server is not given (For a detailed analysis see \nameref{chap:analysis}).\par
 
 Anonymity against third party is not given due to the following facts.
 
-\begin{enumerate}
+\begin{itemize}
   \item There is not always an encryption available between a mail user agent (MUA) and the outgoing mail server.
-	\item There is no way to guarantee that a mail is being transferred encrypted between SMTP hosts.
+	\item There is no way to guarantee that a mail transfer between two SMTP hosts is encrypted.
 	\item There is no always an encryption available between a SMTP host and the MUA of the recipient.
   \item Encryption based on top level protocols (such as S/MIME or PGP) do hide the message content. The sender, recipient, the subject and some technical information (eg. MIME-Headers) are always in plain available and not protected as such.
 	\item Even if there is a reliable encryption between all endpoints and none of the intermediate servers are compromised sender and recipients might still be identified thru traffic analysis.
-\end{enumerate}
+\end{itemize}
 
-Keeping the message content confidential is more and more relevant in these days. The more the importance of mail transfer in todays economy is growing the more is confidentiality and reliability a topic. Unfortunatley Secret Services have already discovered the significance of today's mail traffic and start to analyze those. With the presence of Secret Services in the internet actively investigating data the importance of a reliable data channel for today's messages has become increasingly important. 
+Keeping the message content confidential is more and more relevant in these days. The more the importance of mail transfer in today's economy is growing the more is confidentiality and reliability a topic. Unfortunately Secret Services have already discovered the significance of today's mail traffic and start to analyze those. With the presence of Secret Services in the internet, actively investigating data the importance of a reliable data channel for today's messages has become increasingly important. 
 
 Quick wins such as the use of "Onion Router Networks" (such as TOR) do not offer any additional security since the message content would be revealed in full to an eventual exit node and any mail server on its way to the recipient.
 
 \section{Problem statement}
-This work is an approach to extend the existing mail routing based on SMTP by an intermediate
-layer which should offer anonymity against third party.\par
+This work is an approach to extend the existing mail routing based on SMTP by an intermediate layer, which should offer anonymity against third party.\par
 
 This work delivers the following results:
 
 \begin{itemize}
   \item A throughout analysis of current technology and its weaknesses.\\
-	      Although the Simple Mail Transfer Protocol (SMTP) is a well implemented and well proven technology its weaknesses are well known. The SMTP protocol was originally defined in RFC821\cite{RFC821} by Johnathan B. Postel. At this time internet was only available to universities, some mayor companies and governments. The objective of Simple Mail Transfer Protocol (SMTP) is to transfer mail reliably and efficiently\cite[p.~1]{RFC821}. Confidentiality or having a tamper proof protocol was no design goal. Over the years many standards arose trying to close some of the gaps. Most of them are being used but are not very common. 
+	      Although the Simple Mail Transfer Protocol (SMTP) is a well-implemented and well proven technology its weaknesses are well known. The SMTP protocol was originally defined in RFC821\cite{RFC821} by Johnathan B. Postel. At this time internet was only available to universities, some mayor companies and governments. The objective of Simple Mail Transfer Protocol (SMTP) is to transfer mail reliably and efficiently\cite[p.~1]{RFC821}. Confidentiality or having a tamper proof protocol was no design goal. Over the years many standards arose trying to close some of the gaps. Most of them are being used but are not very common. 
 	\item An analysis of possible approaches to improve the current standards.\\
 	      Many standards and technologies do exist these days addressing parts of the issues mentioned above. A throughout research should be carried out to identify how can these technologies be combined to achieve the subsequent goals.
-	\item A RFC document describing an approach offering a significant quality improvement of the existing solutions which could be accepted by the internet community.
+	\item A RFC document describing an approach offering a significant quality improvement of the existing solutions, which could be accepted by the internet community.
 	\item A prototype reflecting at least the minimum baseline of the RFC document to reflect prove its functionality.\\
 	      A prototype should be offered to show the feasibility. The Prototype should be a reference implementation and offer a quick way to use the new technology. It should be distributed under the LGPL license to simplify distribution of the technology. 
 \end{itemize}
 
 \chapter{Current situation}
-As of today the de facto standard for asynchronous mail transfer is SMTP as defined in RFC5321\cite{RFC5321} and its predecessors. While the transfer protocol SMTP is quite compact, the protocol is enhanced with serveral standards for encryption, multimedia support and similar. A mail client offers today various support for a lot of sub-protocols. The following list is an excerpt of related sub-protocols which are either related to transport, reliability, identification or encryption. 
+As of today the de facto standard for asynchronous mail transfer is SMTP as defined in RFC5321\cite{RFC5321} and its predecessors. While the transfer protocol SMTP is quite compact, the protocol is enhanced with several standards for encryption, multimedia support and similar. A mail client offers today various support for a lot of sub-protocols. The following list is an excerpt of related sub-protocols which are either related to transport, reliability, identification or encryption. 
 
 \section{Implemented protocols}
 \subsection{SMTP}
@@ -181,6 +182,7 @@ As of today the de facto standard for asynchronous mail transfer is SMTP as defi
 \section{Other}
 \subsection{Ethics of the Internet}
 \cite[p.~1]{RFC1087}
+\subsection{Possible legal issues}
 
 \chapter{Analysis of current situation\label{chap:analysis}}
 \section{Current state of common Technology}
@@ -213,11 +215,11 @@ Collected requirements to a mail system:\par
 \tablelasttail{\hline}
 \bottomcaption{User acceptance requirements}
 \begin{supertabular}{|p{5cm}|p{5cm}|c|}\hline
-The System should transport mails fast under normal conditions & Mails should travel with at least 10MB/min & 5\\
-The System should transport mails reliable & Mails should always arrive or their status should be retrievable & 9\\
-The System should offer anonymity against spying from third parties & Neither original sender nor final destination or any part of the message content should be determinable by any part of the system except for the original sender and the final recipient.& 9\\
-The system must be easy to handle &&\\
-The system must be easy to install & Installing should be able to do most
+The System should transport mails fast under normal conditions & Mails should travel with at least 1MB/min & 5\\\hline
+The System should transport mails reliable & Mails should always arrive or their status should be retrievable & 9\\\hline
+The System should offer anonymity against spying from third parties & Neither original sender nor final destination or any part of the message content should be determinable by any part of the system except for the original sender and the final recipient.& 9\\\hline
+The system must be easy to handle &&8\\\hline
+The system must be easy to install & Installation should be almost a ``single-click''-Thing. Details should be copied or accessed from the existing configurations.&5\\\hline
 \end{supertabular}
 \end{center}
 
@@ -233,6 +235,8 @@ The System should transport mails reliable & Mails should always arrive or their
 \subsection{Attacks on the users anonymity}
 \subsection{Reputaional attacks}
 \subsubsection{Misuse for sending spam}
+
+\backmatter
 \begin{appendices}
 \chapter{Definitions}
 \begin{entry}
@@ -241,5 +245,40 @@ The System should transport mails reliable & Mails should always arrive or their
 
 \chapter{Bibliography}
 \printbibliography[title={},heading=none]
+\begin{comment}
+\bibliography{AnonMail}
+\end{comment}
 \end{appendices}
+
+\begin{comment}
+http://www.rfc-editor.org/pubprocess.html
+RFC2223 Instructions to RFC Authors
+RFC2119 BCP14 Key words for use in RFCs to Indicate Requirement Levels
+RFC3979 BCP79 Intellectual Property Rights in IETF Technology
+RFC5378 BCP78 Rights Contributors Provide to the IETF Trust
+
+
+http://tex.stackexchange.com/questions/36307/formatting-back-references-in-bibliography
+http://www.cs.columbia.edu/irt/software/l2x/ l2x -- conversion from LaTeX to other formats Version 1.13
+http://ftp.gwdg.de/pub/ctan/support/l2x/
+http://tools.ietf.org/tools/xml2rfc2
+
+http://www.zisc.ethz.ch/events/2003-2011/ISC2006Slides/FederrathZISCTalk.pdf
+
+Professorliste
+Dr. Christoph Sprenger (Part I)
+-Prof. David Basin
+Gregory Demay
+Peter Gazi
+Dr. Srdjan Marinovic
+Dr. Sasa Radomirovic
+Dr. Ralf Sasse
+
+T. Hoefler
+A. Perrig 
+-Dr. Jan Camenisch (Keine Berechtigung)
+
+-Srdjan Capkun (Keine Kapazität)
+-David Basin  (Keine Kapazität)
+\end{comment}
 \end{document}
