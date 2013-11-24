@@ -1,6 +1,7 @@
 \documentclass[11pt,a4paper]{article}
 
 \usepackage[english]{babel}
+\usepackage{lscape}
 \usepackage{pgfgantt}
 
 \begin{document}
@@ -26,15 +27,27 @@ The thesis shall be structured in four main Parts:
 	\item Writing of the RFC-Document\\
 				Based on the proposed design an RFC-Document should be written. This document must reflect a minimum and a recommended baseline for an anonymous mail infrastructure.
 	\item Implementation\\
-				Based on the RFC-Document there should be a client implementation and a server implementation for an 
+				Based on the RFC-Document there should be a client implementation and a server implementation for an minimum baseline client.
 \end{itemize}
 \section{Gantt chart}
-\begin{ganttchart}[hgrid,vgrid,x unit=1mm,time slot format=isodate]{2014-01-01}{2015-01-01}
-%\gantttitle{2011}{12} \\
-%\gantttitlelist{1,...,12}{1} \\
-\gantttitlecalendar{year, month} \\
-%\ganttbar{}{2014-01-14}{2014-01-17}
-%\ganttgroup{Group 1}{1}{7} \\
+\begin{landscape}
+\begin{ganttchart}[vgrid,hgrid]{1}{40}
+\gantttitle{2013}{1} \gantttitle{2014}{12} \gantttitle{2015}{12}  \gantttitle{2016}{12} \gantttitle{2017}{3}\\
+\gantttitlelist{12}{1}\gantttitlelist{1,...,12}{1}\gantttitlelist{1,...,12}{1}\gantttitlelist{1,...,12}{1}\gantttitlelist{1,...,3}{1} \\
+%\gantttitlecalendar{year, month} \\
+\ganttgroup{Ground work}{1}{17} \\
+\ganttbar{Initialisation}{1}{4}\\
+\ganttbar{Info gathering}{1}{8}\\
+\ganttbar{Analysis}{1}{12}\\
+\ganttlinkedbar{Design}{13}{17}\\
+\ganttgroup{POC}{18}{36} \\
+\ganttbar{RFC}{18}{23}\\
+\ganttlinkedmilestone{RFC to IETF}{23}\\
+\ganttlinkedbar{Implementation}{24}{36}\\
+\ganttlinkedbar{Finalization}{37}{40}\\
+%\ganttlink{elem6}{elem7}
+\ganttlink{elem4}{elem6}
+\ganttlink{elem2}{elem4}
 %\ganttbar{Task 1}{1}{2} \\
 %\ganttlinkedbar{Task 2}{3}{7}
 %\ganttnewline\ganttmilestone{Milestone}{7}
@@ -42,6 +55,6 @@ The thesis shall be structured in four main Parts:
 %\ganttlink{elem2}{elem3}
 %\ganttlink{elem3}{elem4}
 \end{ganttchart}
-
+\end{landscape}
 \end{document}
 
