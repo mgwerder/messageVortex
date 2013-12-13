@@ -1,5 +1,5 @@
 \documentclass[11pt,a4paper]{book}
-
+%   $Id: test.php 110 2009-04-28 05:20:41Z dordal $
 \usepackage[backref=true,
             backend=bibtex,
             hyperref=true,
@@ -11,8 +11,11 @@
 \addbibresource{AnonMail}
 \usepackage{csquotes}
 
+\def\docid{$id$}
+
+\usepackage{graphicx}
 \usepackage{supertabular}
-\usepackage{hyperref}
+\usepackage[pdfusetitle]{hyperref}
 \usepackage{makeidx}
 \usepackage[titletoc]{appendix} %enable appendix
 
@@ -38,7 +41,11 @@
 \setlength\parskip{6pt} 
 
 % For coments and similar
-\usepackage{verbatim} 
+\usepackage{verbatim}
+
+% For Page background color
+\usepackage{afterpage}
+\usepackage{xcolor} 
 
 % Required for definitions environment
 \usepackage{hanging}
@@ -46,21 +53,55 @@
 \newenvironment{entry}{\par\leavevmode\hangpara{1.5mm}{1}\ignorespaces}{\RaggedRight\par}
 \newcommand*{\mainentry}[1]{{\bfseries{#1}}~}
 
-\pdfinfo{
-   /Author (Martin Gwerder)
-   /Title  (Possible solutions to implement email transfer offering anonymity towards third parties)
-   /CreationDate (D:20131115195600)
-   /Subject (Anonymous Mail transfer)
-   /Keywords (Email; SMTP; MIME; S/MIME; POP3; IMAPv4)
-}
+\title{Possible solutions to implement email transfer offering anonymity towards third parties}
+\author{Martin Gwerder}
+\date{December 2013}
+
+\hypersetup{pdfinfo={
+Subject={Privacy when using mail},
+Keywords={Email; SMTP; MIME; S/MIME; POP3; IMAPv4}
+}}
 
 \begin{document}
 \frontmatter
 
-\title{Possible solutions to implement email transfer offering anonymity towards third parties}
-\author{Martin Gwerder}
-\date{Dezemer 2013}
-\maketitle
+\begin{titlepage}
+\pagecolor{orange}\afterpage{\nopagecolor}
+\begin{center}
+\includegraphics[height=0.4\textwidth]{./inc/logo}~\\[1cm]
+
+\textsc{\LARGE University of ???}\\[1.5cm]
+
+\textsc{\Large PhD Thesis}\\[0.5cm]
+
+% Title
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+\HRule \\[0.4cm]
+{ \huge \bfseries \makeatletter\@title\makeatother \\[0.4cm] }
+
+\HRule \\[1.5cm]
+
+% Author and supervisor
+\begin{minipage}{0.6\textwidth}
+\begin{flushleft} \large
+\emph{Author:}\\
+ \makeatletter\@author\makeatother
+\end{flushleft}
+\end{minipage}
+\begin{minipage}{0.6\textwidth}
+\begin{flushright} \large
+\emph{Supervisor:} \\
+ unknown
+\end{flushright}
+\end{minipage}
+
+\vfill
+
+% Bottom of the page
+{\large \today}
+
+\end{center}
+\end{titlepage}
 
 \begin{comment}
 \begin{abstracts}        %this creates the heading for the abstract page
@@ -188,11 +229,12 @@ As of today the de facto standard for asynchronous mail transfer is SMTP as defi
 \section{Current state of common Technology}
 \section{Current state of available Technology}
 \section{Missing Gap}
+\section{Skeleton of Mails and mail transfer}
 
 
 \chapter{Designing an approach}
 \section{Defining system boundaries}
-\section{Basic Requirements of an aproach}
+\section{Basic Requirements of an approach}
 
 \chapter{Specifying a target solution}
 
@@ -239,9 +281,10 @@ The System should transport mails reliable & Mails should always arrive or their
 \backmatter
 \begin{appendices}
 \chapter{Definitions}
-\begin{entry}
-\mainentry{MUA}{A Mail User Agent}
-\end{entry}
+\begin{entry}\mainentry{MUA}{A Mail User Agent. This user agent reads mails from a local storage and allows a user to read existing mails, create and modify mails.}\end{entry}
+\begin{entry}\mainentry{Local MTA}{A local Mail Transfer Agent. This transfer agent reads mails to be sent to a remote account from a local storage and sends it to a MSA.}\end{entry}
+\begin{entry}\mainentry{MSA}{A local Mail Sending Agent. This agent accepts mails to be sent to a remote MTA. }\end{entry}
+
 
 \chapter{Bibliography}
 \printbibliography[title={},heading=none]
