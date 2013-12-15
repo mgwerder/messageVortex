@@ -1,0 +1,28 @@
+\chapter{Ground theory}
+\section{Mail Transport}
+\section{Anonymity}
+\section{Identification and data signage}
+\section{Encryption}
+\section{Mix cascades}
+\section{Remailers}
+Agents which do accept Mails from one party and forward it to another party while modifying its content well known under the name of ``Remailers''. Wikipedia \cite{wiki:remailer} lists four types of Remailers.\par
+
+Pseudonymous Remailers (or Type-0-Remailers) are remailers that establish a pseudonymity. This means that the senders Email-Address is removed and replaced by a pseudonymous E-Mailadress under the remailers control. This sender address may be used as an ordinary email-Adress to reeach the original sender of the mail. These types of Remailers allow to send mails while one or both recipients do not know their counterpart. The message (or at least parts of it) might be encrypted but do not have to be. For someone controling the Remailer it will always be possible to make a link between the pseudonymous mail address and a original mailadress. So pseudonymity is only granted towards people not controlling the remailer. Furthermore a person or organisation might be able to discover the Information tuple of Sender and pseudonymous email by analyzing messages and their timely context. So this remailer system is suspectible for traffic analysis.\par
+
+Cypherpunk-Remailers (or Type-1-Remailers) do function a bit different. They take an encrypted message which was encrypted using the public key of the server, decrypt it and send it to a recipient. The original senders identity gets lost. A reply to a cypherpunk message is not possible. Messages sent to a cypherpunk server might contain messages to other cypherpunk remailers. This daisy-chaining of cypherpunk-nodes allows hiding the original sender-receiver-tuple from a single node. The first node knows only the the originating sender while the last node knows only the final recipient. All intermediate notes do only know the nodes they were linking. However if having traffic information of the entry and exit nodes the tuple might be discovered by traffic analysis.\par
+
+Mixmaster remailer (or type-2-remailer) FIXME
+
+Mixminion remailer (or type-3-remailer) FIXME
+
+
+\subsection{Ethics of the Internet}
+\cite[p.~1]{RFC1087}
+
+\subsection{Possible legal issues}
+One of the first questions I have been asked when working for this topic was: Is this legal? The question is important but not easy at all. The mail system is a global spanning network coming across almost any country of the world. Some of these countries consider almost any kind of secret as illegal as long as the country itself is not able to capture it. Some countries consider it as perfectly legal and some will generally accept its presence as long as the country or establishment is not endangered due to its usage. \par
+
+My personal unscientific point is: I do not care. In my country it is definitely legal as long as I am a well behaved citizen (as long as I do not missuse this system to plan or do illegal actions). There are already proprietary systems available which offer the same functionality. All I do is adding this functionality to the common system instead of reinventing the wheel. There are however many very good reasons to have such a system. Correspondence about my health, my business relations, my friends or my family (to give just a couple of examples) should be kept private even in an open world. The misuse of information would cause tremendous damage and several events in time (which have been mentioned earlier) showed that there are many secret services and other players using any kind of information to achieve their own goals or the goals of associates. They do this regardless of any country borders or regulations. Since I have no means of controlling the flow of messages in the internet or the hubs where a mail is running thru I consider it as fair to generate an addon to compensate the lack of control in the existing system. Exactly as a car -- the system may be legal or illegal and it depends on the users whether he wants to use it or not and in what way.\par
+
+To some extend the system is related to a remailer system. One of the most famous pseudonymous remailers. Wikipedia 
+

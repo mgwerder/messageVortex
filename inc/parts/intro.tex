@@ -1,0 +1,35 @@
+\chapter{Introduction}
+This document describes a solution, which should offer anonymity against third parties when sending emails based on SMTP and the respective client protocols (e.g. IMAPv4 or POP3). This seemed to bother very few peoples up until information in Echelon became public due to an investigation by a commitee of the european parlament in 2001\cite{ECHELON}. Things settled again with local peaks up until a whistle blower named Edward Snowden disclosed $200000$ documents proofing activities of the NSA and other secret services. This led to the ``2013 mass surveillance disclosures'' and damaged the reputation of the american nation in many countries\cite{wiki:edward_snowden}.
+
+\section{Overview over the current situation}
+SMTP as defined in RFC5321\cite{RFC5321} is as of today (2013)  state of the art transmission protocol for electronic mail. It is standardized in its current version since 2008 and is one of the few protocols, which is marked as "Standard". While the protocol delivers reliable mail transfer between two endpoint (mail servers) the anonymity of the message content towards any mail server is not given (For a detailed analysis see \nameref{chap:analysis}).\par
+
+Anonymity against third party is not given due to the following facts.
+
+\begin{itemize}
+  \item There is not always an encryption available between a mail user agent (MUA) and the outgoing mail server.
+	\item There is no way to guarantee that a mail transfer between two SMTP hosts is encrypted.
+	\item There is no always an encryption available between a SMTP host and the MUA of the recipient.
+  \item Encryption based on top level protocols (such as S/MIME or PGP) do hide the message content. The sender, recipient, the subject and some technical information (eg. MIME-Headers) are always in plain available and not protected as such.
+	\item Even if there is a reliable encryption between all endpoints and none of the intermediate servers are compromised sender and recipients might still be identified thru traffic analysis.
+\end{itemize}
+
+Keeping the message content confidential is more and more relevant in these days. The more the importance of mail transfer in today's economy is growing the more is confidentiality and reliability a topic. Unfortunately Secret Services have already discovered the significance of today's mail traffic and start to analyse those. With the presence of Secret Services in the internet, actively investigating data the importance of a reliable data channel for today's messages has become increasingly important. 
+
+Quick wins such as the use of "Onion Router Networks" (such as TOR) do not offer any additional security since the message content would be revealed in full to an eventual exit node and any mail server on its way to the recipient.
+
+\section{Problem statement}
+This work is an approach to extend the existing mail routing based on SMTP by an intermediate layer, which should offer anonymity against third party.\par
+
+This work delivers the following results:
+
+\begin{itemize}
+  \item A throughout analysis of current technology and its weaknesses.\\
+	      Although the Simple Mail Transfer Protocol (SMTP) is a well-implemented and well proven technology its weaknesses are well known. The SMTP protocol was originally defined in RFC821\cite{RFC821} by Johnathan B. Postel. At this time internet was only available to universities, some mayor companies and governments. The objective of Simple Mail Transfer Protocol (SMTP) is to transfer mail reliably and efficiently\cite[p.~1]{RFC821}. Confidentiality or having a tamper proof protocol was no design goal. Over the years many standards arose trying to close some of the gaps. Some of them are being used but most of them are not very common. 
+	\item An analysis of possible approaches to improve the current standards.\\
+	      Many standards and technologies do exist these days addressing parts of the issues mentioned above. A throughout research should be carried out to identify how can these technologies be combined to achieve the subsequent goals. Furthermore technology advanced. Namely in the field of cryptology ew possibilities and ideas arose (such as new encryption classes [eg. elliptic curves] or the idea of crypto puzzles). Another field of research which emerged in the analysis of traffic flow is handled under the term ``Big Data'' where not single events but the sum of events is handled.
+	\item A RFC document describing an approach offering a significant quality improvement of the existing solutions, which could be accepted by the internet community.
+	\item A prototype reflecting at least the minimum baseline of the RFC document to reflect prove its functionality.\\
+	      A prototype should be offered to show the feasibility. The Prototype should be a reference implementation and offer a quick way to use the new technology. It should be distributed under the LGPL license to simplify distribution of the technology. 
+\end{itemize}
+
