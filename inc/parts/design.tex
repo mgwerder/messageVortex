@@ -1,5 +1,65 @@
 \chapter{Designing an approach}
 \section{Defining system boundaries}
+\subsection{Thread model}
+As an adverser we assume the following attributes:
+\begin{itemize}
+\item Available founding is huge.
+\item can monitor all network traffic.
+\item Can have own mixer infrastructure.
+\item Is able to read, write or modify network data freely at any point of the net.
+\end{itemize}
+His intensions are:
+\begin{itemize}
+\item Discover message flows
+\item Discover message contents
+\item Identify users of the system
+\end{itemize}
+
+\subsection{User model}
+The assumed user of the system is:
+\begin{itemize}
+\item Does care about privacy.
+\item Has no special computer knowhow.
+\item Has the ability to install a program or plugin.
+\item Has no cryptographic knowhow.
+\item Is using a device with enough calculation power to solve cryptographic tasks.
+\end{itemize}
+His intensions are:
+\begin{itemize}
+\item Send personal or confidential Information securely to another user
+\end{itemize}
+His expectations are:
+\begin{itemize}
+\item System should be easy to configure and maintain (in an ideal world: Zero touch). 
+\item System should be fast.
+\item System should be reliable.
+\item System should work on any client he is using.
+\item System should not be a legal problem to him or any of his peers.
+\end{itemize}
+
+\subsection{Mail server admin model}
+The assumed mail server admin of the system is:
+\begin{itemize}
+\item Does care about privacy.
+\item Has cosiderable computer knowhow.
+\item Has the ability to install a program or plugin.
+\item Has possibly no cryptographic knowhow.
+\item Does know his own mail infrastructure
+\item Is using a device with enough calculation power to solve cryptographic tasks.
+\end{itemize}
+His intensions are:
+\begin{itemize}
+\item Support his users in sending personal or confidential information securely to another user
+\end{itemize}
+His expectations are:
+\begin{itemize}
+\item System should be easy to configure and maintain (in an ideal world: Zero touch). 
+\item System should be fast.
+\item System should be reliable.
+\item System should work on any client he is using.
+\item System should not be a legal problem to him or his company.
+\end{itemize}
+
 \section{Basic Requirements of an approach}
 
 \chapter{Specifying a target solution}
