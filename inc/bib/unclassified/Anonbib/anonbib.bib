@@ -28,7 +28,7 @@
 	need for rendezvous points as they exist today. We also discuss the
 	security of the new elements and an analysis of efficiency improvements.},
   bookurl = {http://petworkshop.org/2007/},
-  file = {overlier-pet2007.pdf},
+  file = {overlier-pet2007.pdf:overlier-pet2007.pdf:PDF},
   keywords = {TOR, optimize},
   lastaccessed = {2007-07-25 10:31:54},
   location = {Ottawa, Canada},
@@ -46,8 +46,21 @@
   pages = {223--244},
   month = {June},
   publisher = {Springer},
+  abstract = {Location hidden services have received increasing attention as a means
+	to resist censorship and protect the identity of service operators.
+	Research and vulnerability analysis to date has mainly focused on
+	how to locate the hidden service. But while the hiding techniques
+	have improved, almost no progress has been made in increasing the
+	resistance against DoS attacks directly or indirectly on hidden services.
+	In this paper we suggest improvements that should be easy to adopt
+	with in the existing hidden service design, improvements that will
+	bot h reduce vulnerability to DoS attacks and add QoS as a service
+	option. In addition we show how to hide not just the location but
+	the existence of the hidden service from everyone but the users knowing
+	its service address. Not even the public directory servers will know
+	how a private hidden service can be contacted, or know it exists.},
   bookurl = {http://petworkshop.org/2006/},
-  file = {valet:pet2006.pdf},
+  file = {:valet_pet2006.pdf:PDF},
   lastaccessed = {2006-10-20 01:26:00},
   location = {Cambridge, UK},
   url = {http://www.onion-router.net/Publications/valet-services.pdf}
@@ -77,7 +90,7 @@
 	for Tor. These changes require no operational increase in network
 	overhead and are simple to make; but they prevent the attacks we
 	have demonstrated. They have been implemented.},
-  file = {hs-attack06.pdf:hs-attack06.pdf:PDF;:http\://tor-svn.freehaven.net/anonbib/cache/hs-attack06.pdf:URL;hs-attack06.pdf::Djvu},
+  file = {hs-attack06.pdf:hs-attack06.pdf:PDF},
   lastaccessed = {2006-05-03 17:19:27},
   ranking = {rank4},
   url = {http://tor-svn.freehaven.net/anonbib/cache/hs-attack06.pdf}
@@ -101,7 +114,7 @@
 	We then describe and justify some simplifying assumptions to make
 	the model manageable, and compare optimal strategies for participants
 	based on a variety of scenarios.},
-  file = {econymics.pdf:econymics.pdf:PDF;:http\://freehaven.net/doc/fc03/econymics.pdf:URL;econymics.pdf::Djvu},
+  file = {econymics.pdf:econymics.pdf:PDF},
   lastaccessed = {2003-09-09 00:54:19},
   ranking = {rank4},
   url = {http://freehaven.net/doc/fc03/econymics.pdf}
@@ -128,6 +141,7 @@
   keywords = {theory, classification},
   lastaccessed = {2007-04-19 12:35:32},
   owner = {Martin Gwerder},
+  ranking = {rank5},
   timestamp = {2013.12.18},
   url = {http://www.uoltj.ca/articles/vol3.1/2006.3.1.uoltj.Adams.35-52.pdf}
 }
@@ -167,9 +181,33 @@
   howpublished = {Cryptology ePrint Archive, Report 2005/394},
   month = {November},
   year = {2005},
-  file = {cryptoeprint:2005:394.html},
+  abstract = {We show how to public-key obfuscate two commonly used shuffles: decryption
+	shuffles which permute and decrypt ciphertexts, and re-encryption
+	shuffles which permute and re-encrypt ciphertexts. Given a trusted
+	party that samples and obfuscates a shuffle \emph{before} any ciphertexts
+	are received, this reduces the problem of constructing a mix-net
+	to verifiable joint decryption.
+	
+	
+	We construct a decryption shuffle from any additively homomorphic
+	cryptosystem and show how it can be public-key obfuscated. This construction
+	does not allow efficient distributed verifiable decryption. Then
+	we show how to public-key obfuscate: a decryption shuffle based on
+	the Boneh-Goh-Nissim (BGN) cryptosystem, and a re-encryption shuffle
+	based on the Paillier cryptosystem. Both constructions allow \emph{efficient}
+	distributed verifiable decryption. In the Paillier case we identify
+	and exploit a previously overlooked ``homomorphic'' property of the
+	cryptosystem.
+	
+	
+	Finally, we give a distributed protocol for sampling and obfuscating
+	each of the above shuffles and show how it can be used in a trivial
+	way to construct a universally composable mix-net. Our constructions
+	are practical when the number of senders $N$ is reasonably small,
+	e.g. $N=350$ in the BGN case and $N=2000$ in the Paillier case.},
+  file = {:cryptoeprint_2005_394.pdf:PDF},
   lastaccessed = {2005-12-14 02:19:12},
-  url = {http://eprint.iacr.org/2005/394}
+  url = {http://eprint.iacr.org/2005/394.pdf}
 }
 
 @INPROCEEDINGS{usenix2010:aggarwal2010analysis,
@@ -251,7 +289,7 @@
 	DC-Nets that adds robustness againstadversaries who attempt to disrupt
 	the protocol through perpetual transmission or selectivenon-participation.},
   doi = {10.1145/948109.948128},
-  file = {:k-anonymous_ccs2003.pdf:PDF;:http\://www.abortz.com/papers/k-anon.pdf:URL;k-anonymous:ccs2003.pdf:Djvu},
+  file = {:k-anonymous_ccs2003.pdf:PDF},
   lastaccessed = {2004-01-20 22:05:54},
   ranking = {rank5},
   url = {http://www.abortz.com/papers/k-anon.pdf}
@@ -498,7 +536,7 @@
 	In light of these observations, we discuss the trade-offs that one
 	faces when trying to construct an efficient low latency communication
 	system that protects users anonymity.},
-  file = {back01.pdf:back01.pdf:PDF;:http\://www.cypherspace.org/adam/pubs/traffic.pdf:URL;back01.pdf::Djvu},
+  file = {back01.pdf:back01.pdf:PDF},
   lastaccessed = {2003-09-09 00:53:18},
   ranking = {rank4},
   url = {http://www.cypherspace.org/adam/pubs/traffic.pdf}
@@ -659,7 +697,7 @@
 	set greater than the set of senders and receivers in a realistic
 	threat model. In particular, the protocol provides unobservability
 	in our threat model.},
-  file = {:bauer_wpes2003.pdf:PDF;:http\://arxiv.org/pdf/cs.CR/0404054.pdf:URL;bauer_wpes2003.ps::Djvu},
+  file = {:bauer_wpes2003.pdf:PDF},
   lastaccessed = {2003-10-08 04:36:11},
   location = {Washington, DC, USA},
   ranking = {rank4},
@@ -691,7 +729,7 @@
 	for the communication pattern. Another advantage is that they only
 	require the processors in the communication network to be busy periodically.},
   doi = {10.1007/s00145-002-0128-6},
-  file = {:buses03.pdf:PDF;buses03.ps:buses03.ps:PostScript;:ftp\://ftp.cs.bgu.ac.il/pub/people/dolev/37.ps:URL;buses03.ps::Djvu},
+  file = {:buses03.pdf:PDF},
   keywords = {Anonymous communication, Privacy, Traffic analysis},
   lastaccessed = {2005-10-30 16:21:21},
   ranking = {rank4},
@@ -850,7 +888,7 @@
 	to balance anonymity with efficiency according to their specific
 	needs.},
   doi = {10.1007/978-3-540-40956-4_10},
-  file = {:bennett_pet2003.pdf:PDF;:https\://gnunet.org/sites/default/files/aff.pdf:URL;bennett:pet2003.ps:Djvu},
+  file = {:bennett_pet2003.pdf:PDF},
   lastaccessed = {2003-09-09 00:54:56},
   ranking = {rank4},
   url = {https://gnunet.org/sites/default/files/aff.pdf}
@@ -943,10 +981,21 @@
   pages = {30--45},
   month = {July},
   publisher = {Springer-Verlag, LNCS 2009},
-  file = {disad-free-routes.pdf},
+  abstract = {There are different methods to build an anonymity service using MIXes.
+	A substantial decision for doing so is the method of choosing the
+	MIX route. In this paper we compare two special configurations: a
+	fixed MIX route used by all participants and a network of freely
+	usable MIXes where each participant chooses his own route. The advantages
+	and disadvantages in respect to the freedom of choice are presented
+	and examined. We’ll show that some additional attacks are possible
+	in networks with freely chosen MIX routes. After describing these
+	attacks, we estimate their impact on the achievable degree of anonymity.
+	Finally, we evaluate the relevance of the described attacks with
+	respect to existing systems like e.g. Mixmaster, Crowds, and Freedom.},
+  file = {disad-free-routes.pdf:disad-free-routes.pdf:PDF},
   lastaccessed = {2003-09-09 00:53:32},
   ranking = {rank3},
-  url = {http://www.tik.ee.ethz.ch/~weiler/lehre/netsec/Unterlagen/anon/disadvantages_berthold.pdf}
+  url = {http://pdf.aminer.org/000/155/465/the_disadvantages_of_free_mix_routes_and_how_to_overcome.pdf}
 }
 
 @INPROCEEDINGS{esorics12-torscan,
@@ -1033,7 +1082,7 @@
 	backed by probabilistic modeling and extensive simulations and are
 	of direct applicability to deployed anonymity systems.},
   doi = {10.1145/1315245.1315258},
-  file = {ccs07-doa.pdf:ccs07-doa.pdf:PDF;:http\://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.145.7916&rep=rep1&type=pdf:URL;ccs07-doa.pdf::Djvu},
+  file = {ccs07-doa.pdf:ccs07-doa.pdf:PDF},
   lastaccessed = {2007-10-18 01:41:06},
   ranking = {rank5},
   url = {http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.145.7916&rep=rep1&type=pdf}
@@ -1163,7 +1212,7 @@
 	for encryption) that implies security in the UC framework. We then
 	exhibit an efficient and easy to implement construction of an onion
 	routing scheme satisfying this definition.},
-  file = {camlys05.pdf:camlys05.pdf:PDF;:http\://freehaven.net/anonbib/papers/onion21.pdf:URL;camlys05.pdf::Djvu},
+  file = {camlys05.pdf:camlys05.pdf:PDF},
   lastaccessed = {2005-06-22 13:51:23},
   ranking = {rank4},
   url = {http://freehaven.net/anonbib/papers/onion21.pdf}
@@ -1190,10 +1239,22 @@
   year = {2002},
   pages = {268--289},
   publisher = {Springer Verlag, LNCS 2576},
-  file = {camenisch2002ssep.pdf},
+  abstract = {Digital signature schemes are a fundamental cryptographic primitive,
+	of use both in its own right, and as a building block in cryptographic
+	protocol design. In this paper, we propose a practical and provably
+	secure signature scheme and show protocols (1) for issuing a signature
+	on a committed value (so the signer has no information about the
+	signed value), and (2) for proving knowledge of a signature on a
+	committed value. This signature scheme and corresponding protocols
+	are a building block for the design of anonymity-enhancing cryptographic
+	systems, such as electronic cash, group signatures, and anonymous
+	credential systems. The security of our signature scheme and protocols
+	relies on the Strong RSA assumption. These results are a generalization
+	of the anonymous credential system of Camenisch and Lysyanskaya.},
+  file = {camenisch2002ssep.pdf:camenisch2002ssep.pdf:PDF},
   lastaccessed = {2007-07-16 13:14:40},
   ranking = {rank3},
-  url = {http://www.zurich.ibm.com/%7Ejca/papers/camlys02b.pdf}
+  url = {http://groups.csail.mit.edu/cis/pubs/lysyanskaya/cl02b.pdf}
 }
 
 @INPROCEEDINGS{cl01a,
@@ -1312,7 +1373,21 @@
   booktitle = {Proceedings of the 20th IEEE Computer Security Foundations Symposium
 	(CSF20)},
   year = {2007},
-  file = {ChatziPP07.pdf},
+  abstract = {Randomized protocols for hiding private information can be regarded
+	as noisy channels in the information-theoretic sense, and the inference
+	of the concealed information can be regarded as a hypothesis-testing
+	problem. We consider the Bayesian approach to the problem, and investigate
+	the probability of error associated to the MAP (Maximum Aposteriori
+	Probability) inference rule. Our main result is a constructive characterization
+	of a convex base of the probability of error, which allows us to
+	compute its maximum value (over all possible input distributions),
+	and to identify upper bounds for it in terms of simple functions.
+	As a side result, we are able to improve the Hellman-Raviv and the
+	Santhi-Vardy bounds expressed in terms of conditional entropy. We
+	then discuss an application of our methodology to the Crowds protocol,
+	and in particular we show how to compute the bounds on the probability
+	that an adversary break anonymity.},
+  file = {ChatziPP07.pdf:ChatziPP07.pdf:PDF},
   lastaccessed = {2007-09-19 17:09:12},
   location = {S. Servolo island, Venice - Italy},
   ranking = {rank2},
@@ -1327,7 +1402,13 @@
   year = {1988},
   volume = {1},
   pages = {65--75},
-  file = {chaum-dc.pdf:chaum-dc.pdf:PDF;:http\://www.cs.ucsb.edu/~ravenben/classes/595n-s07/papers/dcnet-jcrypt88.pdf:URL;chaum-dc.pdf::Djvu},
+  abstract = {Keeping confidential who sends which messages, in a world where any
+	physical transmission can be traced to its origin, seems impossible.
+	The solution presented here is unconditionally or cryptographically
+	secure, depending on whether it is based on one-time-use keys or
+	on public keys, respectively. It can be adapted to address efficiently
+	a wide variety of practical considerations.},
+  file = {chaum-dc.pdf:chaum-dc.pdf:PDF},
   lastaccessed = {2008-11-24 15:17:25},
   ranking = {rank5},
   url = {http://www.cs.ucsb.edu/~ravenben/classes/595n-s07/papers/dcnet-jcrypt88.pdf}
@@ -1357,7 +1438,7 @@
 	from a roster of registered voters. Another use allows an individual
 	to correspond with a record-keeping organization under a unique pseudonym,
 	which appears in a roster of acceptable clients.},
-  file = {:chaum-untraceable.pdf:PDF;:http\://users.cis.fiu.edu/~carbunar/teaching/cis5372.2013.online/reading/chaum_untraceable.pdf:URL;chaum-mix.html::Djvu},
+  file = {:chaum-untraceable.pdf:PDF},
   lastaccessed = {2003-09-09 00:52:53},
   ranking = {rank5},
   url = {http://users.cis.fiu.edu/~carbunar/teaching/cis5372.2013.online/reading/chaum_untraceable.pdf}
@@ -1503,7 +1584,7 @@
 	nothing to computer science, that pose the biggest day-to-day danger.
 	This practical experience then permits a start to be made on developing
 	a security policy model for pseudonymous communications.},
-  file = {patterns-failure.pdf:patterns-failure.pdf:PDF;:http\://www.cl.cam.ac.uk/~rnc1/Patterns_of_Failure.pdf:URL;patterns-failure.pdf::Djvu},
+  file = {patterns-failure.pdf:patterns-failure.pdf:PDF},
   lastaccessed = {2003-09-09 00:53:05},
   ranking = {rank5},
   url = {http://www.cl.cam.ac.uk/~rnc1/Patterns_of_Failure.pdf}
@@ -1519,11 +1600,21 @@
   pages = {20--35},
   month = {June},
   publisher = {Springer},
+  abstract = {The so-called “Great Firewall of China” operates, in part, by inspecting
+	TCP packets for keywords that are to be blocked. If the keyword is
+	present, TCP reset packets (viz: with the RST flag set) are sent
+	to both endpoints of the connection, which then close. However, because
+	the original packets are passed through the firewall unscathed, if
+	the endpoints completely ignore the firewall’s resets, then the connection
+	will proceed unhindered. Once one connection has been blocked, the
+	firewall makes further easy-to-evade attempts to block further connections
+	from the same machine. This latter behaviour can be leveraged into
+	a denial-of-service attack on third-party machines.},
   bookurl = {http://petworkshop.org/2006/},
-  file = {clayton:pet2006.pdf},
+  file = {:clayton_pet2006.pdf:PDF},
   lastaccessed = {2006-10-20 01:26:02},
   location = {Cambridge, UK},
-  ranking = {rank2},
+  ranking = {rank5},
   url = {http://www.cl.cam.ac.uk/~rnc1/ignoring.pdf}
 }
 
@@ -1566,7 +1657,7 @@
 	traceable to the culprit, and efficiently handles large, unbalanced
 	message loads. A working prototype demonstrates the protocol’s practicality
 	for anonymousmessaging in groups of 40+members.},
-  file = {ccs10-dissent.pdf:ccs10-dissent.pdf:PDF;:http\://dedis.cs.yale.edu/2010/anon/files/dissent.pdf:URL;ccs10-dissent.pdf::Djvu},
+  file = {ccs10-dissent.pdf:ccs10-dissent.pdf:PDF},
   lastaccessed = {2011-01-03 02:35:47},
   location = {Chicago, Illinois, USA},
   ranking = {rank4},
@@ -1620,7 +1711,18 @@
   pages = {1--17},
   month = {March},
   publisher = {Springer-Verlag, LNCS 2760},
-  file = {:danezis_pet2003.pdf:PDF;:http\://research.microsoft.com/en-us/um/people/gdane/papers/ExpMix.pdf:URL;danezis_pet2003.pdf::Djvu},
+  abstract = {We present a mix network topology that is based on sparse expander
+	graphs, with each mix only communicating with a few neighbouring
+	others. We analyse the anonymity such networks provide, and compare
+	it with fully connected mix networks and mix cascades. We prove that
+	such a topology is e±cient since it only requires the route length
+	of messages to be relatively small in comparison with the number
+	of mixes to achieve maximal anonymity. Additionally mixes can resist
+	intersection attacks while their batch size, that is directly linked
+	to the latency of the network, remains constant. A worked example
+	of a network is also presented to illustrate how these results can
+	be applied to create secure mix networks in practise.},
+  file = {:danezis_pet2003.pdf:PDF},
   lastaccessed = {2003-09-09 00:54:38},
   ranking = {rank4},
   url = {http://research.microsoft.com/en-us/um/people/gdane/papers/ExpMix.pdf}
@@ -1634,8 +1736,16 @@
   editor = {Fisher-Hubner, Jonsson},
   pages = {195--207},
   month = {November},
+  abstract = {New threats such as compulsion to reveal logs, secret and private
+	keys as well as to decrypt material are studied in the context of
+	the security of mix networks. After a comparison of this new threat
+	model with the traditional one, a new construction is introduced,
+	the fs-mix, that minimizes the impact that such powers have on the
+	security of the network, by using forward secure communication channels
+	and key updating operation inside the mixes. A discussion about the
+	forward security of these new proposals and some extensions is included.},
   day = {7},
-  file = {Dan:SFMix03.pdf},
+  file = {:Dan_SFMix03.pdf:PDF},
   lastaccessed = {2003-09-09 00:55:08},
   location = {Karlstad, Sweden},
   ranking = {rank3},
@@ -1679,10 +1789,19 @@
   series = {LNCS},
   pages = {35--50},
   month = {May},
-  file = {danezis:pet2004.pdf},
+  abstract = {We apply the information-theoretic anonymity metrics to continuous-time
+	mixes, that individually delay messages instead of batching them.
+	The anonymity of such mixes is measured based on their delay characteristics,
+	and as an example the exponential mix (sg-mix) is analysed, simulated
+	and shown to use the optimal strategy. We also describe a practical
+	and powerful traffic analysis attack against connection based continuous-time
+	mix networks, despite the presence of some cover traffic. Assuming
+	a passive observer, the conditions are calculated that make tracing
+	messages through the network possible.},
+  file = {:danezis_pet2004.pdf:PDF},
   lastaccessed = {2004-07-18 01:33:48},
   ranking = {rank3},
-  url = {http://www.cl.cam.ac.uk/users/gd216/cmm2.pdf}
+  url = {http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.4.6699&rep=rep1&type=pdf}
 }
 
 @PHDTHESIS{george-thesis,
@@ -1723,7 +1842,7 @@
 	of users. Other minor attacks are described against peer discovery
 	and route reconstruction in anonymous networks, as well as the na¨ive
 	use of anonymous replies.},
-  file = {george-thesis.pdf:george-thesis.pdf:PDF;:https\://mirror.robert-marquardt.com/anonbib/cache/george-thesis.pdf:URL;george-thesis.pdf::Djvu},
+  file = {george-thesis.pdf:george-thesis.pdf:PDF},
   lastaccessed = {2005-06-22 13:28:22},
   ranking = {rank4},
   url = {https://mirror.robert-marquardt.com/anonbib/cache/george-thesis.pdf}
@@ -1818,7 +1937,7 @@
 	and we show that it is superior to previous attacks when replies
 	are routed in the system.},
   bookurl = {http://petworkshop.org/2007/},
-  file = {danezis-pet2007.pdf:danezis-pet2007.pdf:PDF;:http\://petworkshop.org/2007/papers/PET2007_preproc_Two_sided_statistical.pdf:URL},
+  file = {danezis-pet2007.pdf:danezis-pet2007.pdf:PDF},
   lastaccessed = {2007-07-02 15:29:14},
   location = {Ottawa, Canada},
   ranking = {rank4},
@@ -1885,7 +2004,7 @@
 	they will try to detect elsewhere in the network. The proposed scheme
 	imposes a low communication and computational overhead, and only
 	combines well understood cryptographic primitives.},
-  file = {:danezis_wpes2004.pdf:PDF;:http\://apache-ssl.securehost.com/minx.pdf:URL},
+  file = {:danezis_wpes2004.pdf:PDF},
   lastaccessed = {2012-04-19 17:57:36},
   location = {Washington, DC, USA},
   ranking = {rank4},
@@ -1963,7 +2082,7 @@
 	to derive results that could apply to the security of real anonymous
 	communication networks.},
   doi = {10.1007/978-3-540-30114-1_21},
-  file = {:DanSer04.pdf:PDF;DanSer04.ps:DanSer04.ps:PostScript;:http\://www.cl.cam.ac.uk/~aas23/papers_aas/PoolSDA2.ps:URL},
+  file = {:DanSer04.pdf:PDF},
   lastaccessed = {2004-03-26 14:49:49},
   location = {Toronto},
   ranking = {rank4},
@@ -1999,11 +2118,21 @@
   pages = {56--72},
   month = {August},
   publisher = {Springer},
-  file = {DanezisT09.pdf},
+  abstract = {We present the Vida family of abstractions of anonymous communication
+	systems, model them probabilistically and apply Bayesian inference
+	to extract patterns of communications and user profiles. The first
+	is a very generic Vida Black-box model that can be used to analyse
+	information about all users in a system simultaneously, while the
+	second is a simpler Vida Red-Blue model, that is very efficient when
+	used to gain information about particular target senders and receivers.
+	We evaluate the Red-Blue model to find that it is competitive with
+	other established long-term traffic analysis attacks, while additionally
+	providing reliable error estimates, and being more flexible and expressive.},
+  file = {:DanezisT09.pdf:PDF},
   isbn = {978-3-642-03167-0},
   lastaccessed = {2010-02-15 13:51:20},
   ranking = {rank3},
-  url = {http://research.microsoft.com/en-us/um/people/gdane/papers/BRInference.pdf}
+  url = {http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.149.738&rep=rep1&type=pdf}
 }
 
 @INPROCEEDINGS{danezis:weis2006,
@@ -2027,7 +2156,7 @@
 	interception figures, and get a better estimate of the amount of
 	privacy invasion and the actual volume of surveillance taking place.},
   bookurl = {http://weis2006.econinfosec.org/},
-  file = {:danezis_weis2006.pdf:PDF;danezis_weis2006.pdf::Djvu},
+  file = {:danezis_weis2006.pdf:PDF},
   lastaccessed = {2006-09-20 13:35:32},
   location = {Cambridge, UK},
   ranking = {rank5},
@@ -2120,7 +2249,7 @@
 	tool to characterize anonymity properties. Our work is one step towards
 	a better understanding of anonymity and our results can be used for
 	the design of robust anonymity technologies.},
-  file = {DiazThesis05.pdf:DiazThesis05.pdf:PDF;:http\://homes.esat.kuleuven.be/~cdiaz/papers/Thesis-cdiaz-final.pdf:URL;DiazThesis05.pdf::Djvu},
+  file = {DiazThesis05.pdf:DiazThesis05.pdf:PDF},
   lastaccessed = {2005-12-24 22:30:30},
   ranking = {rank5},
   url = {http://homes.esat.kuleuven.be/~cdiaz/papers/Thesis-cdiaz-final.pdf}
@@ -2161,7 +2290,15 @@
 	Anonymity in Networked and Distributed Systems},
   year = {2004},
   month = {August},
-  file = {taxonomy-dummy.pdf},
+  abstract = {This paper presents an analysis of mixes and dummy traffic policies,
+	which are building blocks of anonymous services. The goal of the
+	paper is to bring together all the issues related to the analysis
+	and design of mix networks. We discuss continuous and pool mixes,
+	topologies for mix networks and dummy traffic policies. We point
+	out the advantages and disadvantages of design decisions for mixes
+	and dummy policies. Finally, we provide a list of research problems
+	that need further work.},
+  file = {taxonomy-dummy.pdf:taxonomy-dummy.pdf:PDF},
   lastaccessed = {2011-07-08 22:45:40},
   location = {Toulouse, France},
   ranking = {rank3},
@@ -2196,7 +2333,7 @@
 	algorithms should be used to best achieve anonymity and satisfy their
 	purpose. Our work can also be used as a framework for establishing
 	a security review process for mix node deployments.},
-  file = {mixmaster-reliable.pdf:mixmaster-reliable.pdf:PDF;:http\://www.cosic.esat.kuleuven.be/publications/article-98.pdf:URL;mixmaster-reliable.pdf::Djvu},
+  file = {mixmaster-reliable.pdf:mixmaster-reliable.pdf:PDF},
   lastaccessed = {2007-03-29 15:28:37},
   location = {France},
   ranking = {rank5},
@@ -2224,7 +2361,7 @@
 	mix a timed pool mix that tosses coins and uses a probability function
 	that depends on the number of messages inside the mix at the time
 	of flushing. We discuss the properties of this mix.},
-  file = {:diaz_pet2003.pdf:PDF;:diaz_pet2003.ps.gz:PostScript;:http\://petsymposium.org/2003/slides/talks/claudia-pet2003.pdf:URL},
+  file = {:diaz_pet2003.pdf:PDF},
   lastaccessed = {2003-09-11 18:44:12},
   ranking = {rank4},
   url = {http://petsymposium.org/2003/slides/talks/claudia-pet2003.pdf}
@@ -2349,7 +2486,7 @@
 	between anonymity, usability, and efficiency. We briefly describe
 	our experiences with an international network of more than 30 nodes.
 	We close with a list of open problems in anonymous communication.},
-  file = {:tor-design.pdf:PDF;:http\://www.dtic.mil/cgi-bin/GetTRDoc?Location=U2&doc=GetTRDoc.pdf&AD=ADA465464:URL;tor-design.html::Djvu},
+  file = {:tor-design.pdf:PDF},
   lastaccessed = {2010-06-01 15:32:05},
   ranking = {rank4},
   url = {http://www.dtic.mil/cgi-bin/GetTRDoc?Location=U2&doc=GetTRDoc.pdf&AD=ADA465464}
@@ -2421,7 +2558,15 @@
   editor = {Matt Blaze},
   month = {March},
   publisher = {Springer-Verlag, LNCS 2357},
-  file = {casc-rep.pdf:casc-rep.pdf:PDF;:http\://freehaven.net/doc/casc-rep/casc-rep.pdf:URL},
+  abstract = {We describe a MIX cascade protocol and a reputation system that together
+	increase the reliability of a network of MIX cascades. In our protocol,
+	MIX nodes periodically generate a communally random seed that, along
+	with their reputations, determines cascade configuration. Nodes send
+	test messages to monitor their cascades. Senders can also demonstrate
+	message decryptions to convince honest cascade members that a cascade
+	is misbehaving. By allowing any node to declare the failure of its
+	own cascade, we eliminate the need for global trusted witnesses.},
+  file = {casc-rep.pdf:casc-rep.pdf:PDF},
   lastaccessed = {2003-09-09 00:53:05},
   ranking = {rank4},
   url = {http://freehaven.net/doc/casc-rep/casc-rep.pdf}
@@ -2437,12 +2582,12 @@
   number = {2},
   abstract = {In this work we examine the problem of efficient anonymous broadcast
 	and reception in general communication networks. We show an algorithm
-	which achieves anonymous communication with O(1)  amortized communication
+	which achieves anonymous communication with O(1) amortized communication
 	complexity on each link and low computational complexity. In contrast,
 	all previous solutions require polynomial (in the size of the network
 	and security parameter) amortized communication complexity.},
   address = {New York, NY, USA},
-  file = {xor-trees.pdf:xor-trees.pdf:PDF;:ftp\://ftp.cs.bgu.ac.il/pub/people/dolev/31.ps:URL;xor-trees.ps::Djvu},
+  file = {xor-trees.pdf:xor-trees.pdf:PDF},
   lastaccessed = {2005-10-29 15:28:03},
   publisher = {ACM Press},
   ranking = {rank5},
@@ -2570,7 +2715,26 @@
   booktitle = {Proceedings of the 18th USENIX Security Symposium},
   year = {2009},
   month = {August},
-  file = {congestion-longpaths.pdf},
+  abstract = {In 2005, Murdoch and Danezis demonstrated the first practical congestion
+	attack against a deployed anonymity network. They could identify
+	which relays were on a target Tor user’s path by building paths one
+	at a time through every Tor relay and introducing congestion. However,
+	the original attack was performed on only 13 Tor relays on the nascent
+	and lightly loaded Tor network. We show that the attack from their
+	paper is no longer practical on today’s 1500-relay heavily loaded
+	Tor network. The attack doesn’t scale because a) the attacker needs
+	a tremendous amount of bandwidth to measure enough relays during
+	the attack window, and b) there are too many false positives now
+	that many other users are adding congestion at the same time as the
+	attacks. We then strengthen the original congestion attack by combining
+	it with a novel bandwidth amplification attack based on a flaw in
+	the Tor design that lets us build long circuits that loop back on
+	themselves. We show that this new combination attack is practical
+	and effective by demonstrating a working attack on today’s deployed
+	Tor network. By coming up with a model to better understand Tor’s
+	routing behavior under congestion, we further provide a statistical
+	analysis characterizing how effective our attack is in each case.},
+  file = {congestion-longpaths.pdf:congestion-longpaths.pdf:PDF},
   lastaccessed = {2009-06-11 20:33:58},
   ranking = {rank3},
   url = {http://freehaven.net/anonbib/papers/congestion-longpaths.pdf}
@@ -2677,7 +2841,26 @@
   volume = {10},
   pages = {173--199},
   number = {2},
-  file = {:cheap-pseudonyms.pdf:PDF;:ftp\://www-snde.rutgers.edu/Rutgers/wp/1998-20.pdf:URL},
+  abstract = {On the Internet it is easy for someone to obtain a new identity. This
+	introduces opportunities to misbehave without paying reputational
+	consequences. A large degree of cooperation can still emerge, through
+	a convention in which newcomers "pay their dues" by accepting poor
+	treatment from players who have established positive reputations.
+	One might hope for an open society where newcomers are treated well,
+	but there is an inherent social cost in making the spread of reputations
+	optional. We prove that no equilibrium can sustain significantly
+	more cooperation than the dues-paying equilibrium in a repeated random
+	matching game with a large number of players in which players have
+	finite lives and the ability to change their identities, and there
+	is a small but nonvanishing probability of mistakes. Although one
+	could remove the ineciency of mistreating newcomers by disallowing
+	anonymity, this is not practical or desirable in a wide variety of
+	transactions. We discuss the use of entry fees, which permits newcomers
+	to be trusted but excludes some players with low payoffs, thus introducing
+	a different inefficiency. We also discuss the use of free but unreplaceable
+	pseudonyms, and describe a mechanism which implements them using
+	standard encryption techniques.},
+  file = {:cheap-pseudonyms.pdf:PDF},
   lastaccessed = {2003-09-09 00:54:19},
   ranking = {rank4},
   url = {ftp://www-snde.rutgers.edu/Rutgers/wp/1998-20.pdf}
@@ -2704,7 +2887,7 @@
 	Our experiments validate the effectiveness of this scheme, which
 	can also be used in other scenarios.},
   doi = {10.1109/ICCNMC.2003.1243024},
-  file = {fu-active.pdf:fu-active.pdf:PDF;:http\://ieeexplore.ieee.org/iel5/8807/27858/01243024.pdf:URL},
+  file = {fu-active.pdf:fu-active.pdf:PDF},
   lastaccessed = {2007-03-29 15:28:49},
   ranking = {rank4},
   url = {http://ieeexplore.ieee.org/iel5/8807/27858/01243024.pdf}
@@ -2805,7 +2988,7 @@
 	-- even hostile -- parties. A range of attacks and corresponding
 	countermeasuresis considered. An attempt is made to formalize and
 	quantifycertain dimensions of anonymity and untraceable communication.},
-  file = {:Gulcu-ndss96.pdf:PDF;:http\://www.csl.mtu.edu/cs6461/www/Reading/08/Gulcu-ndss96.pdf:URL;babel.html::Djvu},
+  file = {:Gulcu-ndss96.pdf:PDF},
   lastaccessed = {2003-09-09 00:53:01},
   ranking = {rank5},
   url = {http://citeseer.nj.nec.com/2254.html}
@@ -2844,7 +3027,20 @@
 	Security (CCS 2013)},
   year = {2013},
   month = {November},
-  file = {ccs2013-acks.pdf:ccs2013-acks.pdf:PDF;:http\://www-users.cs.umn.edu/~hopper/ccs13-cya.pdf:URL},
+  abstract = {In response to increasingly sophisticated methods of blocking access
+	to censorship circumvention schemes such as Tor, recently proposed
+	systems such as Skypemorph, FreeWave, and Censor-Spoofer have used
+	voice and video conferencing protocols as “cover channels” to hide
+	proxy connections. We demonstrate that even with perfect emulation
+	of the cover channel, these systems can be vulnerable to attacks
+	that detect or disrupt the covert communications while having no
+	effect on legitimate cover traffic. Our attacks stem from differences
+	in the channel requirements for the cover protocols, which are peer-to-peer
+	and loss tolerant, and the covert traffic, which is client-proxy
+	and loss intolerant. These differences represent significant limitations
+	and suggest that such protocols are a poor choice of cover channel
+	for general censorship circumvention schemes.},
+  file = {ccs2013-acks.pdf:ccs2013-acks.pdf:PDF},
   lastaccessed = {2013-11-02 04:57:58},
   ranking = {rank4},
   url = {http://www-users.cs.umn.edu/~hopper/ccs13-cya.pdf}
@@ -2911,7 +3107,7 @@
 	it from other anonymous communication protocols. Performance measurements
 	from a prototype implementation show that the system can achieve
 	high bandwidths and low latencies when deployed over the Internet.},
-  file = {:herbivore_tr.pdf:PDF;:http\://www.cs.cornell.edu/People/egs/papers/herbivore-tr.pdf:URL;herbivore-tr.pdf::Djvu},
+  file = {:herbivore_tr.pdf:PDF},
   lastaccessed = {2003-09-09 00:55:10},
   ranking = {rank5},
   url = {http://www.cs.cornell.edu/People/egs/papers/herbivore-tr.pdf}
@@ -3030,7 +3226,7 @@
 	has been implemented. This prototype works with HTTP (World Wide
 	Web) proxies. In addition, an analogous proxy for TELNET has been
 	implemented. Proxies for FTP and SMTP are under development.},
-  file = {:onion-routing_ih96.pdf:PDF;:http\://www.onion-router.net/Publications/IH-1996.pdf:URL;onion-routing_ih96.pdf::Djvu},
+  file = {:onion-routing_ih96.pdf:PDF},
   lastaccessed = {2003-09-09 00:53:35},
   ranking = {rank5},
   url = {http://www.onion-router.net/Publications/IH-1996.pdf}
@@ -3079,7 +3275,7 @@
 	protocol is based upon a re-encryption mix network, and requires
 	four times the amount of computation and communication of a basic
 	mixnet.},
-  file = {:reusable-channels_wpes2003.pdf:PDF;:http\://crypto.stanford.edu/~pgolle/papers/return.pdf:URL;reusable-channels_wpes2003.pdf::Djvu},
+  file = {:reusable-channels_wpes2003.pdf:PDF},
   lastaccessed = {2003-09-09 00:55:10},
   location = {Washington, DC, USA},
   ranking = {rank5},
@@ -3106,7 +3302,24 @@
   year = {2004},
   month = {October},
   publisher = {ACM Press},
-  file = {:golle_ccs2004.pdf:PDF;:http\://crypto.stanford.edu/~pgolle/papers/parallel.pdf:URL},
+  abstract = {Efforts to design faster synchronous mix networks have focused on
+	reducing the computational cost of mixing per server. We propose
+	a different approach: our re-encryption mixnet allows servers to
+	mix inputs in parallel. The result is a dramatic reduction in overall
+	mixing time for moderate-to-large numbers of servers. As measured
+	in the model we describe, for n inputs and M servers our parallel
+	re-encryption mixnet produces output in time at most 2n -- and only
+	around n assuming a majority of honest servers. In contrast, a traditional,
+	sequential, synchronous re-encryption mixnet requires time Mn.
+	
+	Parallel re-encryption mixnets offer security guarantees comparable
+	to those of synchronous mixnets, and in many cases only a slightly
+	weaker guarantee of privacy. Our proposed construction is applicable
+	to many recently proposed re-encryption mixnets, such as those of
+	Furukawa and Sako, Neff, Jakobsson et al., and Golle and Boneh. In
+	practice, parallel mixnets promise a potentially substantial time
+	saving in applications such as anonymous electronic elections.},
+  file = {:golle_ccs2004.pdf:PDF},
   lastaccessed = {2004-10-19 18:27:33},
   ranking = {rank4},
   url = {http://crypto.stanford.edu/~pgolle/papers/parallel.pdf}
@@ -3118,7 +3331,29 @@
   booktitle = {Proceedings of Eurocrypt 2004},
   year = {2004},
   month = {May},
-  file = {:golle_eurocrypt2004.pdf:PDF;:http\://crypto.stanford.edu/~pgolle/papers/nim.pdf:URL;golle_eurocrypt2004.pdf::Djvu},
+  abstract = {Dining cryptographers networks (or DC-nets) are a privacypreserving
+	primitive devised by Chaum for anonymous message publication. A very
+	attractive feature of the basic DC-net is its non-interactivity.
+	Subsequent to key establishment, players may publish their messages
+	in a single broadcast round, with no player-to-player communication.
+	This feature is not possible in other privacy-preserving tools like
+	mixnets. A drawback to DC-nets, however, is that malicious players
+	can easily jam them, i.e., corrupt or block the transmission of messages
+	from honest parties, and may do so without being traced. 
+	
+	Several researchers have proposed valuable methods of detecting cheating
+	players in DC-nets. This is usually at the cost, however, of multiple
+	broadcast rounds, even in the optimistic case, and often of high
+	computational and/or communications overhead, particularly for fault
+	recovery. We present new DC-net constructions that simultaneously
+	achieve noninteractivity and high-probability detection and identification
+	of cheating players. Our proposals are quite e±cient, imposing a
+	basic cost that is linear in the number of participating players.
+	Moreover, even in the case of cheating in our proposed system, just
+	one additional broadcast round su±ces for full fault recovery. Among
+	other tools, our constructions employ bilinear maps, a recently popular
+	cryptographic technique for reducing communication complexity.},
+  file = {:golle_eurocrypt2004.pdf:PDF},
   lastaccessed = {2004-10-19 18:27:39},
   ranking = {rank5},
   url = {http://crypto.stanford.edu/~pgolle/papers/nim.pdf}
@@ -3341,7 +3576,24 @@
   pages = {28},
   number = {2},
   month = {February},
-  file = {tissec-latency-leak.pdf:tissec-latency-leak.pdf:PDF;:http\://www.cs.umn.edu/~hopper/tissec-latency-leak.pdf:URL;tissec-latency-leak.pdf::Djvu},
+  abstract = {Low-latency anonymity systems such as Tor, AN.ON, Crowds, and Anonymizer.com
+	aim to provide anonymous connections that are both untraceable by
+	“local” adversaries who control only a few machines and have low
+	enough delay to support anonymous use of network services like Web
+	browsing and remote login. One consequence of these goals is that
+	these services leak some information about the network latency between
+	the sender and one or more nodes in the system. We present two attacks
+	on low-latency anonymity schemes using this information. The first
+	attack allows a pair of colluding Web sites to predict, based on
+	local timing information and with no additional resources, whether
+	two connections from the same Tor exit node are using the same circuit
+	with high confidence. The second attack requires more resources but
+	allows a malicious Web site to gain several bits of information about
+	a client each time he visits the site. We evaluate both attacks against
+	two low-latency anonymity protocols—the Tor network and the MultiProxy
+	proxy aggregator service—and conclude that both are highly vulnerable
+	to these attacks.},
+  file = {tissec-latency-leak.pdf:tissec-latency-leak.pdf:PDF},
   lastaccessed = {2009-01-30 23:27:16},
   ranking = {rank3},
   url = {http://www.cs.umn.edu/~hopper/tissec-latency-leak.pdf}
@@ -3377,7 +3629,27 @@
   booktitle = {Proceedings of the 2013 IEEE Symposium on Security and Privacy},
   year = {2013},
   month = {May},
-  file = {oakland2013-parrot.pdf:oakland2013-parrot.pdf:PDF;:http\://www.cs.utexas.edu/~amir/papers/parrot.pdf:URL},
+  abstract = {In response to the growing popularity of Tor and other censorship
+	circumvention systems, censors in nondemocratic countries have increased
+	their technical capabilities and can now recognize and block network
+	traffic generated by these systems on a nationwide scale. New censorship-resistant
+	communication systems such as SkypeMorph, StegoTorus, and CensorSpoofer
+	aim to evade censors’ observations by imitating common protocols
+	like Skype and HTTP. 
+	
+	We demonstrate that these systems completely fail to achieve unobservability.
+	Even a very weak, local censor can easily distinguish their traffic
+	from the imitated protocols. We show dozens of passive and active
+	methods that recognize even a single imitated session, without any
+	need to correlate multiple network flows or perform sophisticated
+	traffic analysis.
+	
+	We enumerate the requirements that a censorship-resistant system must
+	satisfy to successfully mimic another protocol and conclude that
+	“unobservability by imitation” is a fundamentally flawed approach.We
+	then present our recommendations for the design of unobservable communication
+	systems.},
+  file = {oakland2013-parrot.pdf:oakland2013-parrot.pdf:PDF},
   lastaccessed = {2013-06-15 02:30:17},
   ranking = {rank4},
   url = {http://www.cs.utexas.edu/~amir/papers/parrot.pdf}
@@ -3404,7 +3676,29 @@
 	Security (CCS 2011)},
   year = {2011},
   month = {October},
-  file = {ccs2011-cirripede.pdf},
+  abstract = {Many users face surveillance of their Internet communications and
+	a signifficant fraction suer from outright blocking of certain destinations.
+	Anonymous communication systems allow users to conceal the destinations
+	they communicate with, but do not hide the fact that the users are
+	using them. The mere use of such systems may invite suspicion, or
+	access to them may be blocked. We therefore propose Cirripede, a
+	system that can be used for unobservable communication with Internet
+	destinations. Cirripede is designed to be deployed by ISPs; it intercepts
+	connections from clients to innocent-looking destinations and redirects
+	them to the true destination requested by the client. The communication
+	is encoded in a way that is indistinguishable from normal communications
+	to anyone without the master secret key, while public-key cryptography
+	is used to eliminate the need for any secret information that must
+	be shared with Cirripede users. Cirripede is designed to work scalably
+	with routers that handle large volumes of traffic while imposing
+	minimal over- head on ISPs and not disrupting existing traffic. This
+	allows Cirripede proxies to be strategically deployed at central
+	locations, making access to Cirripede very difficult to block. We
+	built a proof-of-concept implementation of Cirripede and performed
+	a testbed evaluation of its performance proper-
+	
+	ties.},
+  file = {ccs2011-cirripede.pdf:ccs2011-cirripede.pdf:PDF},
   lastaccessed = {2011-10-26 06:05:47},
   ranking = {rank2},
   url = {http://hatswitch.org/~nikita/papers/cirripede-ccs11.pdf}
@@ -3472,9 +3766,32 @@
   journal = {Proceedings of the 47th Annual IEEE Symposium on Foundations of Computer
 	Science (FOCS'06)-Volume 00},
   year = {2006},
+  volume = {0},
   pages = {239--248},
   month = {October},
-  file = {ishai2006ca.pdf},
+  abstract = {There is a vast body of work on implementing anonymous communication.
+	In this paper, we study the possibility of using anonymous communication
+	as a building block, and show that one can leverage on anonymity
+	in a variety of cryptographic contexts. Our results go in two directions:
+	
+	- Feasibility. We show that anonymous communication over insecure
+	channels can be used to implement unconditionally secure point-to-point
+	channels, and hence general multi-party protocols with unconditional
+	security in the presence of an honest majority. In contrast, anonymity
+	cannot be generally used to obtain unconditional security when there
+	is no honest majority.
+	
+	
+	- Efficiency. We show that anonymous channels can yield substantial
+	efficiency improvements for several natural secure computation tasks.
+	In particular, we present the first solution to the problem of private
+	information retrieval (PIR) which can handle multiple users while
+	being close to optimal with respect to both communication and computation.
+	A key observation that underlies these results is that local randomization
+	of inputs, via secret-sharing, when combined with the global mixing
+	of the shares, provided by anonymity, allows to carry out use ful
+	computations on the inputs while keeping the inputs private.},
+  file = {ishai2006ca.pdf:ishai2006ca.pdf:PDF},
   lastaccessed = {2008-11-24 15:17:27},
   publisher = {IEEE Computer Society Washington, DC, USA},
   ranking = {rank3},
@@ -3487,10 +3804,23 @@
   booktitle = {Proceedings of Principles of Distributed Computing - {PODC} '99},
   year = {1999},
   publisher = {ACM Press},
-  file = {flash-mix.pdf},
+  abstract = {By introducing novel methods for robust protocol design,  to substitute
+	for costly zero­knowledge schemes, we are able  to produce a mixing
+	scheme with significantly lower costs  of operation than all previously
+	known such schemes. The  scheme takes a list of ElGamal encrypted
+	messages, and  produces as output a permuted list of encryptions
+	of the  same plaintext messages, such that corresponding items of
+	 the input and output cannot be correlated. For reasonably  large
+	inputs, the cost per participating server and element to  be mixed
+	is less than 200 modular multiplications, which is  almost two orders
+	of magnitude faster than the most efficient  previously known method.
+	The scheme has the novel feature of not requiring the knowledge of
+	a secret key corresponding to the public key used to encrypt the
+	messages constituting the input to the mix­network.},
+  file = {flash-mix.pdf:flash-mix.pdf:PDF},
   lastaccessed = {2003-09-09 00:53:00},
   ranking = {rank4},
-  url = {http://www.rsasecurity.com/rsalabs/staff/bios/mjakobsson/flashmix/flashmix.pdf}
+  url = {http://www.ussrback.com/cryptopapers/1999/www.bell-labs.com/user/markusj/flashmix.ps}
 }
 
 @INPROCEEDINGS{jakobsson-optimally,
@@ -3499,10 +3829,18 @@
   booktitle = {Proceedings of Principles of Distributed Computing - {PODC} '01},
   year = {2001},
   publisher = {ACM Press},
-  file = {jakobsson-optimally.html},
+  abstract = {We present a mix network that achieves efficient integration of public-key
+	and symmetric-key operations. This hybrid mix network is capable
+	of natural processing of arbitrarily long input elements, and is
+	fast in both practical and asymptotic senses. While the overhead
+	in the size of input elements is linear in the number of mix servers,
+	it is quite small in practice. In contrast to previous hybrid constructions,
+	ours has optimal robustness, that is, robustness against any minority
+	coalition of malicious servers.},
+  file = {:jakobson-optimally.pdf:PDF},
   lastaccessed = {2003-09-09 00:52:57},
   ranking = {rank4},
-  url = {http://citeseer.nj.nec.com/492015.html}
+  url = {https://gnunet.org/sites/default/files/10.1.1.24.8205.pdf}
 }
 
 @INPROCEEDINGS{randomized-checking,
@@ -3551,7 +3889,20 @@
   editor = {Angelos D. Keromytis and Vitaly Shmatikov},
   month = {October},
   publisher = {ACM},
-  file = {ccs10-braids.pdf},
+  abstract = {Tor, a distributed Internet anonymizing system, relies on volunteers
+	who run dedicated relays. Other than altruism, these volunteers have
+	no incentive to run relays, causing a large disparity between the
+	number of users and available relays. We introduce BRAIDS, a set
+	of practical mechanisms that encourages users to run Tor relays,
+	allowing them to earn credits redeemable for improved performance
+	of both interactive and non-interactive Tor trac. These performance
+	incentives will allow Tor to support increasing resource demands
+	with almost no loss in anonymity: BRAIDS is robust to well-known
+	attacks. Using a simulation of 20,300 Tor nodes, we show that BRAIDS
+	allows relays to achieve 75% lower latency than non-relays for interactive
+	traffic, and 90% higher bandwidth utilization for non-interactive
+	traffic.},
+  file = {ccs10-braids.pdf:ccs10-braids.pdf:PDF},
   lastaccessed = {2011-01-03 02:35:41},
   location = {Chicago, Illinois, USA},
   ranking = {rank3},
@@ -3652,7 +4003,24 @@
 	Security (CCS 2011)},
   year = {2011},
   month = {October},
-  file = {ccs2011-trust.pdf},
+  abstract = {We introduce a novel model of routing security that incorporates the
+	ordinarily overlooked variations in trust that users have for dierent
+	parts of the network. We focus on anonymous communication, and in
+	particular onion routing, although we expect the approach to apply
+	more broadly.
+	
+	This paper provides two main contributions. First, we present a novel
+	model to consider the various security concerns for route selection
+	in anonymity networks when users vary their trust over parts of the
+	network. Second, to show the usefulness of our model, we present
+	as an example a new algorithm to select paths in onion routing. We
+	analyze its effectiveness against deanonymization and other information
+	leaks, and particularly how it fares in our model versus existing
+	algorithms, which do not consider trust. In contrast to those, we
+	find that our trust-based routing strategy can protect anonymity
+	against an adversary capable of attacking a signifficant fraction
+	of the network.},
+  file = {ccs2011-trust.pdf:ccs2011-trust.pdf:PDF},
   lastaccessed = {2011-10-26 06:05:45},
   ranking = {rank3},
   url = {http://freehaven.net/~arma/anonymity-trust-ccs2011.pdf}
@@ -3721,7 +4089,17 @@
 	on the Internet (FOCI 2011)},
   year = {2011},
   month = {August},
-  file = {foci11-decoy.pdf},
+  abstract = {We present decoy routing, a mechanism capable of circumventing common
+	network filtering strategies. Unlike other circumvention techniques,
+	decoy routing does not require a client to connect to a specific
+	IP address (which is easily blocked) in order to provide circumvention.
+	We show that if it is possible for a client to connect to any unblocked
+	host/service, then decoy routing could be used to connect them to
+	a blocked destination without cooperation from the host. This is
+	accomplished by placing the circumvention service in the network
+	itself – where a single device could proxy traffic between a significant
+	fraction of hosts – instead of at the edge.},
+  file = {foci11-decoy.pdf:foci11-decoy.pdf:PDF},
   lastaccessed = {2011-10-26 06:05:53},
   ranking = {rank4},
   url = {http://www.usenix.org/events/foci11/tech/final_files/Karlin.pdf}
@@ -3905,7 +4283,25 @@
   booktitle = {Proceedings of Financial Cryptography and Data Security (FC'11)},
   year = {2011},
   month = {February},
-  file = {proximax11.pdf},
+  abstract = {Many people currently use proxies to circumvent government censorship
+	that blocks access to content on the Internet. Unfortunately, the
+	dissemination channels used to distribute proxy server locations
+	are increasingly being monitored to discover and quickly block these
+	proxies. This has given rise to a large number of ad hoc dissemination
+	channels that leverage trust networks to reach legitimate users and
+	at the same time prevent proxy server addresses from falling into
+	the hands of censors. To address this problem in a more principled
+	manner, we present Proximax, a robust system that continuously distributes
+	pools of proxies to a large number of channels. The key research
+	challenge in Proximax is to distribute the proxies among the different
+	channels in a way that maximizes the usage of these proxies while
+	minimizing the risk of having them blocked. This is challenging because
+	of two conflicting goals: widely disseminating the location of the
+	proxies to fully utilize their capacity and preventing (or at least
+	delaying) their discovery by censors. We present a practical system
+	that lays out a design and analytic al model that balances these
+	factors.},
+  file = {proximax11.pdf:proximax11.pdf:PDF},
   lastaccessed = {2011-12-29 11:50:35},
   ranking = {rank4},
   url = {http://cseweb.ucsd.edu/~dlmccoy/papers/mccoy2011fc.pdf}
@@ -4146,38 +4542,22 @@
   year = {2003},
   month = {April},
   publisher = {Springer-Verlag, LNCS 2612},
-  abstract = {Mix chains as proposed by Chaum allow sending untraceable
-	
-	electronic e-mail without requiring trust in a single authority: messages
-	
-	are recursively public-key encrypted to multiple intermediates (mixes),
-	
+  abstract = {Mix chains as proposed by Chaum allow sending untraceable electronic
+	e-mail without requiring trust in a single authority: messages are
+	recursively public-key encrypted to multiple intermediates (mixes),
 	each of which forwards the message after removing one layer of encryption.
-	
-	To conceal as much information as possible when using variable
-	
-	(source routed) chains, all messages passed to mixes should be of
-	
-	the same length; thus, message length should not decrease when a mix
-	
-	transforms an input message into the corresponding output message
-	directed
-	
-	at the next mix in the chain. Chaum described an implementation
-	
-	for such length-preserving mixes, but it is not secure against active
-	
-	attacks. We show how to build practical cryptographically secure lengthpreserving
-	
-	mixes. The conventional denition of security against chosen
-	
-	ciphertext attacks is not applicable to length-preserving mixes; we
-	give
-	
-	an appropriate denition and show that our construction achieves provable
-	
-	security.},
-  file = {:BM_mixencrypt.pdf:PDF;:https\://www-old.cdc.informatik.tu-darmstadt.de/reports/TR/TI-02-05.mixencrypt.pdf:URL;BM_mixencrypt.pdf::Djvu},
+	To conceal as much information as possible when using variable (source
+	routed) chains, all messages passed to mixes should be of the same
+	length; thus, message length should not decrease when a mix transforms
+	an input message into the corresponding output message directed at
+	the next mix in the chain. Chaum described an implementation for
+	such length-preserving mixes, but it is not secure against active
+	attacks. We show how to build practical cryptographically secure
+	lengthpreserving mixes. The conventional definition of security against
+	chosen ciphertext attacks is not applicable to length-preserving
+	mixes; we give an appropriate definition and show that our construction
+	achieves provable security.},
+  file = {:BM_mixencrypt.pdf:PDF},
   keywords = {Cryptographic remailers, chosen ciphertext attack security, public-key
 	cryptosystems with length-expanding decryption},
   lastaccessed = {2003-09-09 00:52:56},
@@ -4203,7 +4583,7 @@
 	to hide the correlation between its inputs and outputs. Sending messages
 	through sequences of remailers achieves anonymity and unobservability
 	of communications against a powerful adversary.},
-  file = {:draft-sassaman-mixmaster-03.pdf:PDF;mixmaster-spec.txt:mixmaster-spec.txt:Text;:http\://tools.ietf.org/pdf/draft-sassaman-mixmaster-03.pdf:URL;mixmaster-spec.txt::Djvu},
+  file = {:draft-sassaman-mixmaster-03.pdf:PDF},
   lastaccessed = {2003-09-09 00:52:56},
   ranking = {rank5},
   url = {http://tools.ietf.org/pdf/draft-sassaman-mixmaster-03.pdf}
@@ -4275,7 +4655,7 @@
 	of anonymity in presence of an observing intruder. We validate this
 	definition by analyzing a well-known anonymity preserving protocol,
 	viz. onion routing.},
-  file = {esorics04-mauw.pdf:esorics04-mauw.pdf:PDF;:https\://gnunet.org/sites/default/files/esorics04-mauw.pdf:URL;esorics04-mauw.pdf::Djvu},
+  file = {esorics04-mauw.pdf:esorics04-mauw.pdf:PDF},
   lastaccessed = {2006-06-08 22:03:39},
   location = {Sophia Antipolis},
   ranking = {rank5},
@@ -4335,7 +4715,16 @@
   booktitle = {Proceedings of Financial Cryptography (FC '08)},
   year = {2008},
   month = {January},
-  file = {clog-the-queue.pdf},
+  abstract = {At Oakland 2005, Murdoch and Danezis described an attack on the Tor
+	anonymity service that recovers the nodes in a Tor circuit, but not
+	the client. We observe that in a peer-to-peer anonymity scheme, the
+	client is part of the circuit and thus the technique can be of greater
+	significance in this setting. We experimentally validate this conclusion
+	by showing that “circuit clogging” can identify client nodes using
+	the MorphMix peer-to-peer anonymity protocol. We also propose and
+	empirically validate the use of the Stochastic Fair Queueing discipline
+	on outgoing connections as an efficient and low-cost mitigation technique.},
+  file = {clog-the-queue.pdf:clog-the-queue.pdf:PDF},
   lastaccessed = {2008-01-22 19:27:07},
   ranking = {rank3},
   url = {http://www-users.cs.umn.edu/~hopper/circuit_clogging_fc08.pdf}
@@ -4343,15 +4732,32 @@
 
 @INPROCEEDINGS{ccs09-torsk,
   author = {Jon McLachlan and Andrew Tran and Nicholas Hopper and Yongdae Kim},
-  title = {{Scalable onion routing with Torsk}},
+  title = {Scalable onion routing with Torsk},
   booktitle = {Proceedings of the 2009 ACM Conference on Computer and Communications
 	Security, CCS 2009},
   year = {2009},
   editor = {Ehab Al-Shaer and Somesh Jha and Angelos D. Keromytis},
   month = {November},
   publisher = {ACM},
+  abstract = {We introduce Torsk, a structured peer-to-peer low-latency anonymity
+	protocol. Torsk is designed as an interoperable replacement for the
+	relay selection and directory service of the popular Tor anonymity
+	network, that decreases the bandwidth cost of relay selection and
+	maintenance from quadratic to quasilinear while introducing no new
+	attacks on the anonymity provided by Tor, and no additional delay
+	to connections made via Tor. The resulting bandwidth savings make
+	a modest-sized Torsk network significantly cheaper to operate, and
+	allows low-bandwidth clients to join the network. Unlike previous
+	proposals for P2P anonymity schemes, Torsk does not require all users
+	to relay traffic for others. Torsk utilizes a combination of two
+	P2P lookup mechanisms with complementary strengths in order to avoid
+	attacks on the confidentiality and integrity of lookups. We show
+	by analysis that previously known attacks on P2P anonymity schemes
+	do not apply to Torsk, and report on experiments conducted with a
+	336-node wide-area deployment of Torsk, demonstrating its efficiency
+	and feasibility.},
   bibsource = {DBLP, http://dblp.uni-trier.de},
-  file = {ccs09-torsk.pdf},
+  file = {ccs09-torsk.pdf:ccs09-torsk.pdf:PDF},
   isbn = {978-1-60558-894-0},
   lastaccessed = {2009-12-16 08:52:18},
   location = {Chicago, Illinois, USA},
@@ -4380,8 +4786,28 @@
   editor = {Ehab Al-Shaer and Somesh Jha and Angelos D. Keromytis},
   month = {November},
   publisher = {ACM},
+  abstract = {Peer-to-peer approaches to anonymous communication promise to eliminate
+	the scalability concerns and central vulnerability points of current
+	networks such as Tor. However, the P2P setting introduces many new
+	opportunities for attack, and previous designs do not provide an
+	adequate level of anonymity. We propose ShadowWalker: a new low-latency
+	P2P anonymous communication system, based on a random walk over a
+	redundant structured topology. We base our design on shadows that
+	redundantly check and certify neighbor
+	
+	information; these certifications enable nodes to perform random walks
+	over the structured topology while avoiding route capture and other
+	attacks. 
+	
+	We analytically calculate the anonymity provided by ShadowWalker and
+	show that it performs well for moderate levels of attackers, and
+	is much better than the state of the art. We also design an extension
+	that improves forwarding performance at a slight anonymity cost,
+	while at the same time protecting against selective DoS attacks.
+	We show that our system has manageable overhead and can handle moderate
+	churn, making it an attractive new design for P2P anonymous communication.},
   bibsource = {DBLP, http://dblp.uni-trier.de},
-  file = {ccs09-shadowwalker.pdf},
+  file = {ccs09-shadowwalker.pdf:ccs09-shadowwalker.pdf:PDF},
   isbn = {978-1-60558-894-0},
   lastaccessed = {2011-01-03 02:35:38},
   location = {Chicago, Illinois, USA},
@@ -4400,12 +4826,27 @@
   pages = {267--278},
   month = {October},
   publisher = {ACM Press},
+  abstract = {We analyze information leaks in the lookup mechanisms of structured
+	peer-to-peer anonymous communication systems and how these leaks
+	can be used to compromise anonymity. We show that the techniques
+	that are used to combat active attacks on the lookup mechanism dramatically
+	increase information leaks and increase the efficacy of passive attacks.
+	Thus there is a trade-off between robustness to active and passive
+	attacks. 
+	
+	We study this trade-off in two P2P anonymous systems, Salsa and AP3.
+	In both cases, we find that, by combining both passive and active
+	attacks, anonymity can be compromised much more effectively than
+	previously thought, rendering these systems insecure for most proposed
+	uses. Our results hold even if security parameters are changed or
+	other improvements to the systems are considered. Our study therefore
+	motivates the search for new approaches to P2P anonymous communication.},
   day = {27--31},
-  file = {ccs2008:mittal.pdf},
+  file = {:ccs2008_mittal.pdf:PDF},
   lastaccessed = {2008-11-24 14:18:04},
   location = {Alexandria, Virginia, USA},
   ranking = {rank4},
-  url = {http://www.crhc.uiuc.edu/~nikita/papers/information-leak.pdf}
+  url = {http://www.hatswitch.org/~nikita/papers/information-leak.pdf}
 }
 
 @INPROCEEDINGS{ccs2011-stealthy,
@@ -4732,13 +5173,40 @@
   editor = {Ehab Al-Shaer and Somesh Jha and Angelos D. Keromytis},
   month = {November},
   publisher = {ACM},
+  abstract = {Network information distribution is a fundamental service for any
+	anonymization network. Even though anonymization and information
+	distribution about the network are two orthogonal issues, the design
+	of the distribution service has a direct impact on the anonymization.
+	Requiring each node to know about all other nodes in the network
+	(as in Tor and AN.ON -- the most popular anonymization networks)
+	limits scalability and offers a playground for intersection attacks.
+	The distributed designs existing so far fail to meet security requirements
+	and have therefore not been accepted in real networks.
+	
+	
+	In this paper, we combine probabilistic analysis and simulation to
+	explore DHT-based approaches for distributing network information
+	in anonymization networks. Based on our findings we introduce NISAN,
+	a novel approach that tries to scalably overcome known security problems.
+	It allows for selecting nodes uniformly at random from the full set
+	of all available peers, while each of the nodes has only limited
+	knowledge about the network. We show that our scheme has properties
+	similar to a centralized directory in terms of preventing malicious
+	nodes from biasing the path selection. This is done, however, without
+	requiring to trust any third party. At the same time our approach
+	provides high scalability and adequate performance. Additionally,
+	we analyze different design choices and come up with diverse proposals
+	depending on the attacker model. The proposed combination of security,
+	scalability, and simplicity, to the best of our knowledge, is not
+	available in any other existing network information distribution
+	system.},
   bibsource = {DBLP, http://dblp.uni-trier.de},
-  file = {ccs09-nisan.pdf},
+  file = {ccs09-nisan.pdf:ccs09-nisan.pdf:PDF},
   isbn = {978-1-60558-894-0},
   lastaccessed = {2011-01-03 02:35:37},
   location = {Chicago, Illinois, USA},
   ranking = {rank4},
-  url = {http://www.nets.rwth-aachen.de/~andriy/papers/nisan-ccs09.pdf}
+  url = {http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.185.686&rep=rep1&type=pdf}
 }
 
 @INPROCEEDINGS{shalon-anon,
@@ -4762,7 +5230,30 @@
   booktitle = {Proceedings of the 11th Information Security Conference (ISC 2008)},
   year = {2008},
   month = {September},
-  file = {torspinISC08.pdf:torspinISC08.pdf:PDF;:http\://www.ics.forth.gr/dcs/Activities/papers/torspin.isc08.pdf:URL;torspinISC08.pdf::Djvu},
+  abstract = {We present a novel attack targeting anonymizing systems. The attack
+	involves placing a malicious relay node inside an anonymizing system
+	and keeping legitimate nodes “busy.” We achieve this by creating
+	circular circuits and injecting fraudulent packets, crafted in a
+	way that will make them spin an arbitrary number of times inside
+	our artificial loops. At the same time we inject a small number of
+	malicious nodes that we control into the anonymizing system. By keeping
+	a significant part of the anonymizing system busy spinning useless
+	packets, we increase the probability of having our nodes selected
+	in the creation of legitimate circuits, since we have more free capacity
+	to route requests than the legitimate nodes. This technique may lead
+	to the compromise of the anonymity of people using the system.
+	
+	To evaluate our novel attack, we used a real-world anonymizing system,
+	TOR. We show that an anonymizing system that is composed of a series
+	of relay nodes which perform cryptographic operations is vulnerable
+	to our packet spinning attack. Our evaluation focuses on  determining
+	the cost we can introduce to the legitimate nodes by injecting the
+	fraudulent packets, and the time required for a malicious client
+	to create n-length TOR circuits. Furthermore we prove that routers
+	that are involved in packet spinning do not have the capacity to
+	process requests for the creation of new circuits and thus users
+	are forced to select our malicious nodes for routing their data streams.},
+  file = {torspinISC08.pdf:torspinISC08.pdf:PDF},
   lastaccessed = {2008-07-02 19:54:14},
   location = {Taipei, Taiwan},
   ranking = {rank5},
@@ -4787,7 +5278,7 @@
 	sophisticated techniques to defeat anonymity, there will be a need
 	for both standards and policies to continue to make privacy on the
 	Internet a priority.},
-  file = {:476-5731-1-PB.pdf:PDF;:http\://firstmonday.org/ojs/index.php/fm/article/download/476/833:URL;remailer-history.html:remailer-history.html:URL;remailer-history.html::Djvu},
+  file = {:476-5731-1-PB.pdf:PDF},
   lastaccessed = {2003-09-09 00:53:03},
   ranking = {rank5},
   url = {http://www.firstmonday.dk/issues/issue2/remailers/}
@@ -4906,7 +5397,38 @@
 	Security (CCS 2011)},
   year = {2011},
   month = {October},
-  file = {ccs2011-oneswarm.pdf},
+  abstract = {OneSwarm is a system for anonymous p2p file sharing in use by thousands
+	of peers. It aims to provide Onion Routing-like privacy and BitTorrent-like
+	performance. We demonstrate several aws in OneSwarm's design and
+	implementation through three different attacks available to forensic
+	investigators. First, we prove that the current design is vulnerable
+	to a novel timing attack that allows just two attackers attached
+	to the same target to determine if it is the source of queried content.
+	When attackers comprise 15% of OneSwarm peers,
+	
+	we expect over 90% of remaining peers will be attached to two attackers
+	and therefore vulnerable. Thwarting the attack increases OneSwarm
+	query response times, making them longer than the equivalent in Onion
+	Routing. Second, we show that OneSwarm's vulnerability to traffic
+	analysis by colluding attackers is much greater than was previously
+	reported, and is much worse than Onion Routing. We show for this
+	second attack that when investigators comprise 25% of peers, over
+	40% of the network can be investigated with 80% precision to find
+	the sources of content. Our examination of the OneSwarm source code
+	found differences with the technical paper that significantly reduce
+	security. For the implementation in use by thousands of people, attackers
+	that comprise 25% of the network can successfully use this second
+	attack against 98% of remaining peers with 95% precision. Finally,
+	we show that a novel application of a known TCP-based attack allows
+	a single attacker to identify whether a neighbor is the source of
+	data or a proxy for it. Users that turn off the default rate-limit
+	setting are exposed. Each attack can be repeated as investigators
+	leave and rejoin the network. All of our attacks are successful in
+	a forensics context: Law enforcement can use them legally ahead of
+	a warrant. Furthermore, private investigators, who have fewer restrictions
+	on their behavior, can use them more easily in pursuit of evidence
+	for such civil suits as copyright infringement.},
+  file = {ccs2011-oneswarm.pdf:ccs2011-oneswarm.pdf:PDF},
   lastaccessed = {2011-10-26 06:05:47},
   ranking = {rank2},
   url = {http://forensics.umass.edu/pubs/prusty.ccs.2011.pdf}
@@ -5028,7 +5550,14 @@
 	(WET ICE 2003)}},
   year = {2003},
   month = {June},
-  file = {RP03-1.pdf:RP03-1.pdf:PDF;:https\://gnunet.org/sites/default/files/RP03-1.pdf:URL;RP03-1.pdf::Djvu},
+  abstract = {Designing mix-networks for low-latency applications that offer acceptable
+	performance and provide good resistance against attacks without introducing
+	too much overhead is very difficult. Good performance and small overheads
+	are vital to attract users and to be able to  support many of them,
+	because with only a few users, there is no anonymity at all. In this
+	paper, we analyze how well different kinds of mix-networks are suited
+	to provide practical anonymity for a very large number of users.},
+  file = {RP03-1.pdf:RP03-1.pdf:PDF},
   lastaccessed = {2003-09-09 00:55:02},
   location = {Linz, Austria},
   ranking = {rank5},
@@ -5062,7 +5591,7 @@
 	over their anonymous paths. To counter this attack, we have developed
 	a collusion detection mechanism, which allows to identify compromised
 	paths with high probability before they are being used.},
-  file = {:morphmix_wpes2002.pdf:PDF;:http\://cecid.sourceforge.net/morphmix.pdf:URL;morphmix_wpes2002.pdf::Djvu},
+  file = {:morphmix_wpes2002.pdf:PDF},
   lastaccessed = {2003-09-09 00:55:01},
   location = {Washington, DC, USA},
   ranking = {rank5},
@@ -5118,7 +5647,24 @@
 	Security (CCS 2012)},
   year = {2012},
   month = {October},
-  file = {ccs2012-decoys.pdf},
+  abstract = {Decoy Routing is a new approach to Internet censorship circumvention
+	that was recently and independently proposed at FOCI’11, USENIX Security’11
+	and CCS’11. Decoy routing aims to hamper nation-state level Internet
+	censorship by having routers, rather than end hosts, relay traffic
+	to blocked destinations. We analyze the security of these schemes
+	against a routing capable adversary, a censoring authority that is
+	willing to make routing decisions in response to decoy routing systems.
+	
+	
+	We explore China, Syria, Iran, and Egypt as routing capable adversaries,
+	and evaluate several attacks that defeat the security goals of existing
+	decoy routing proposals. In particular, we show that a routing capable
+	adversary can enumerate the participating routers implementing these
+	protocols; can successfully avoid sending traffic along routes containing
+	these routers with little or no adverse effects; can identify users
+	of these schemes through active and passive attacks; and in some
+	cases can probabilistically identify connections to targeted destinations.},
+  file = {ccs2012-decoys.pdf:ccs2012-decoys.pdf:PDF},
   lastaccessed = {2012-10-22 22:57:53},
   ranking = {rank2},
   url = {http://www-users.cs.umn.edu/~hopper/decoy-ccs12.pdf}
@@ -5165,7 +5711,7 @@
 	while facing threatsfrom a powerful adversary. We show how anonymity
 	can be used to hide the identityof the servers where each of the
 	documents are stored, thus making them harder toremove from the system},
-  file = {andrei-thesis.pdf:andrei-thesis.pdf:PDF;:http\://128.232.0.20/techreports/UCAM-CL-TR-604.pdf:URL;andrei-thesis.ps::Djvu},
+  file = {andrei-thesis.pdf:andrei-thesis.pdf:PDF},
   lastaccessed = {2005-06-22 13:28:25},
   ranking = {rank4},
   url = {http://128.232.0.20/techreports/UCAM-CL-TR-604.pdf}
@@ -5223,7 +5769,7 @@
 	over their anonymous paths. To counter this attack, we have developed
 	a collusion detection mechanism, which allows to identify compromised
 	paths with high probability before they are being used.},
-  file = {trickle02.pdf:trickle02.pdf:PDF;:http\://freehaven.net/doc/batching-taxonomy/taxonomy.pdf:URL;trickle02.pdf::Djvu},
+  file = {trickle02.pdf:trickle02.pdf:PDF},
   lastaccessed = {2003-09-09 00:53:27},
   ranking = {rank5},
   url = {http://freehaven.net/doc/batching-taxonomy/taxonomy.pdf}
@@ -5250,7 +5796,13 @@
   pages = {427--434},
   month = {May},
   publisher = {Kluwer},
-  file = {SN03.ps},
+  abstract = {This paper presents a method for calculating the anonymity of a timed
+	pool mix. Thus we are able to compare it to a threshold pool mix,
+	and any future mixes that might be developed. Although we are only
+	able to compute the anonymity of a timed pool mix after some speci
+	c number of rounds, this is a practical approximation to the real
+	anonymity.},
+  file = {SN03.pdf:SN03.pdf:PDF},
   lastaccessed = {2003-09-09 00:55:09},
   location = {Athens, Greece},
   ranking = {rank4},
@@ -5322,7 +5874,20 @@
   volume = {12},
   pages = {355--377},
   number = {3-4},
-  file = {crowds-model.ps},
+  abstract = {We use the probabilistic model checker PRISM to analyze the Crowds
+	system for anonymous Web browsing. This case study demonstrates how
+	probabilistic model checking techniques can be used to formally analyze
+	security properties of a peer-to-peer group communication system
+	based on random message routing among members. The behavior of group
+	members and the adversary is modeled as a discrete-time Markov chain,
+	and the desired security properties are expressed as PCTL formulas.
+	The PRISM model checker is used to perform automated analysis of
+	the system and verify anonymity guarantees it provides. Our main
+	result is a demonstration of how certain forms of probabilistic anonymity
+	degrade when group size increases or random routing paths are rebuilt,
+	assuming that the corrupt group members are able to identify and/or
+	correlate multiple routing paths originating from the same sender.},
+  file = {crowds-model.pdf:crowds-model.pdf:PDF},
   lastaccessed = {2003-10-08 04:36:00},
   ranking = {rank4},
   url = {http://www.csl.sri.com/users/shmat/shmat_crowds.ps}
@@ -5542,7 +6107,25 @@
   editor = {Angelos D. Keromytis and Vitaly Shmatikov},
   month = {October},
   publisher = {ACM},
-  file = {ccs10-scheduling.pdf},
+  abstract = {Tor is a popular anonymity-preserving network, consisting of routers
+	run by volunteers all around the world. It protects Internet users'
+	privacy by relaying their network traffic through a series of routers,
+	thus concealing the linkage between the sender and the recipient.
+	Despite the advantage of Tor's anonymizing capabilities, it also
+	brings extra latency, which discourages more users from joining the
+	network.
+	
+	One of the factors that causes the latency lies in Tor's circuit scheduling
+	algorithm, which allows busy circuits (those with continuous traffic)
+	to crowd out bursty circuits (those with short bursts of traffic).
+	In this work, we propose and implement a more advanced scheduling
+	algorithm which treats circuits differently, based on their recent
+	activity. In this way, bursty circuits such as those used for web
+	browsing can gain higher priority over busy ones such as used for
+	bulk transfer; the performance for most activities over Tor is improved,
+	while minimal overhead is incurred. Our algorithm has been incorporated
+	into the latest build of Tor.},
+  file = {ccs10-scheduling.pdf:ccs10-scheduling.pdf:PDF},
   lastaccessed = {2011-01-03 02:35:47},
   location = {Chicago, Illinois, USA},
   ranking = {rank2},
@@ -5574,8 +6157,20 @@
   pages = {369--379},
   month = {November},
   publisher = {ACM},
+  abstract = {This work casts the traffic analysis of anonymity systems,and in particular
+	mix networks, in the context of Bayesian inference. A generative
+	probabilistic model of mix network architectures is presented, that
+	incorporates a number of attack techniques in the traffic analysis
+	literature. We use the model to build an Markov Chain Monte Carlo
+	inference engine, that calculates the probabilities of who is talking
+	to whom given an observation of network traces. We provide a thorough
+	evaluation of its correctness and performance, and conrm that mix
+	network with realistic parameters are secure. This approach enables
+	us to apply established information theoretic anonymity metrics on
+	complex mix networks, and extract information from anonymised traffic
+	traces optimally.},
   bibsource = {DBLP, http://dblp.uni-trier.de},
-  file = {TroncosoD09.pdf},
+  file = {:TroncosoD09.pdf:PDF},
   isbn = {978-1-60558-894-0},
   lastaccessed = {2010-02-15 13:51:34},
   location = {Chicago, Illinois, USA},
@@ -5695,7 +6290,7 @@
 	and underlay protocols cannot deliver good throughput, latency, and
 	fairness at the same time, and we establish guidelines for a future,
 	better suited transport layer design.},
-  file = {:translayeranon.pdf:PDF;:tschorsch_translayeranon.pdf:PDF;tschorsch_translayeranon.pdf::Djvu},
+  file = {:translayeranon.pdf:PDF},
   lastaccessed = {2012-08-31 05:04:58},
   ranking = {rank5},
   url = {http://pade12.mytestbed.net/pade12-final6.pdf}
@@ -5740,7 +6335,16 @@
   booktitle = {Proceedings of {EUROCRYPT} 1989},
   year = {1990},
   publisher = {Springer-Verlag, LNCS 434},
-  file = {disco.ps.gz},
+  abstract = {In Journal of Cryptology 1/1 (1988) 65–75, CHAUM describes a beautiful
+	technique, the DC-net, which should allow participants to send and
+	receive messages anonymously in an arbitrary network. The untraceability
+	of the senders is proved to be unconditional, but that of the recipients
+	implicitly assumes a reliable broadcast network. This assumption
+	is unrealistic in some networks, but it can be removed completely
+	by using the fail-stop key generation schemes by WAIDNER (these proceedings).
+	In both cases, however, each participant can untraceably and permanently
+	disrupt the entire DC-net.},
+  file = {disco.pdf:disco.pdf:PDF;:disco.ps.gz:PostScript},
   lastaccessed = {2003-09-09 00:52:57},
   ranking = {rank4},
   url = {http://www.semper.org/sirene/publ/WaPf1_89DiscoEngl.ps.gz}
@@ -5917,7 +6521,7 @@
   editor = {Radu Sion},
   month = {January},
   abstract = {This work presents a cryptographic analysis of AN.ON's anonymization
-	protocols. We have discovered three  aws of differing severity. The
+	protocols. We have discovered three aws of differing severity. The
 	first is caused by the fact that the freshness of the session key
 	was not checked by the mix. This aw leads to a situation where an
 	external attacker is able to perform a replay attack against AN.ON.
@@ -5979,7 +6583,7 @@
 	infrastructure is designed and we propose circumvention techniques.
 	Our work bolsters the understanding of China's censorship capabilities
 	and thus paves the way towards more effective circumvention techniques.},
-  file = {foci12-winter.pdf:foci12-winter.pdf:PDF;:https\://www.usenix.org/system/files/conference/foci12/foci12-final2.pdf:URL;foci12-winter.pdf::Djvu},
+  file = {foci12-winter.pdf:foci12-winter.pdf:PDF},
   lastaccessed = {2012-08-31 05:05:22},
   ranking = {rank5},
   url = {https://www.usenix.org/system/files/conference/foci12/foci12-final2.pdf}
@@ -6006,7 +6610,22 @@
 	Security (CCS 2013)},
   year = {2013},
   month = {November},
-  file = {ccs2013-buddies.pdf},
+  abstract = {Some anonymity schemes might in principle protect users from pervasive
+	network surveillance|but only if all messages are independent and
+	unlinkable. Users in practice often need pseudonymity |sending messages
+	intentionally linkable to each other but not to the sender|but pseudonymity
+	in dynamic networks exposes users to intersection attacks. We present
+	Buddies, the first systematic design for intersection attack resistance
+	in practical anonymity systems. Buddies groups users dynamically
+	into buddy sets, controlling message transmission to make buddies
+	within a set behaviorally indistinguishable under traffic analysis.
+	To manage the inevitable tradeoffs between anonymity guarantees and
+	communication responsiveness, Buddies enables users to select independent
+	attack mitigation policies for each pseudonym. Using trace-based
+	simulations and a working prototype, we find that Buddies can guarantee
+	non-trivial anonymity set sizes in realistic chat/microblogging scenarios,
+	for both short-lived and long-lived pseudonyms.},
+  file = {ccs2013-buddies.pdf:ccs2013-buddies.pdf:PDF},
   lastaccessed = {2013-11-02 04:58:07},
   ranking = {rank3},
   url = {http://dedis.cs.yale.edu/dissent/papers/buddies.pdf}
@@ -6036,11 +6655,11 @@
 	the use of convex optimization techniques, we show how to optimally
 	modify packets in real-time to reduce the accuracy of a variety of
 	traffic classifiers while incurring much less overhead than padding.
-	Our evaluation of this technique  against two published traffic classifiers
+	Our evaluation of this technique against two published traffic classifiers
 	for VoIP [29] and web traffic [14] shows that morphing works well
 	on a wide range of network data—in some cases, simultaneously providing
 	better privacy and lower overhead than na¨ıve defenses.},
-  file = {morphing09.pdf:morphing09.pdf:PDF;:http\://freehaven.net/anonbib/papers/morphing09.pdf:URL;morphing09.pdf::Djvu},
+  file = {morphing09.pdf:morphing09.pdf:PDF},
   lastaccessed = {2009-03-19 02:42:41},
   ranking = {rank5},
   url = {http://freehaven.net/anonbib/papers/morphing09.pdf}

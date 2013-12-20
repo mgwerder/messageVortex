@@ -9,6 +9,8 @@
 <node CREATED="1387381597351" ID="Freemind_Link_1223853174" MODIFIED="1387381602109" TEXT="anonymity"/>
 <node CREATED="1387381622506" ID="Freemind_Link_1652100981" MODIFIED="1387381634753" TEXT="Censorship-resistant"/>
 <node CREATED="1387381742419" ID="Freemind_Link_1048305390" MODIFIED="1387381833634" TEXT="parrot circumvention syststems (oakland2013-parrot)&#xa;&#xa;"/>
+<node CREATED="1387458432399" ID="Freemind_Link_1137517787" MODIFIED="1387458442248" TEXT="censorship circumvention"/>
+<node CREATED="1387458443866" ID="Freemind_Link_717323025" MODIFIED="1387458448355" TEXT="covert channel"/>
 </node>
 <node CREATED="1387381552110" ID="Freemind_Link_1000957008" MODIFIED="1387383141058" POSITION="right" TEXT="Protocol design goals"/>
 <node CREATED="1387382157426" ID="Freemind_Link_119419384" MODIFIED="1387382162675" POSITION="left" TEXT="Requirements">
@@ -62,6 +64,12 @@
 </node>
 <node CREATED="1387383146167" ID="Freemind_Link_8421634" MODIFIED="1387383158398" POSITION="right" TEXT="evaluation">
 <node CREATED="1387383158858" ID="Freemind_Link_542217584" MODIFIED="1387383171416" TEXT="SMTP cannot be shut down"/>
+</node>
+<node CREATED="1387439409963" ID="Freemind_Link_1263455093" MODIFIED="1387439412878" POSITION="left" TEXT="todo">
+<node CREATED="1387439413691" ID="Freemind_Link_277034469" MODIFIED="1387439433049" TEXT="Introduce identity"/>
+<node CREATED="1387439443902" ID="Freemind_Link_64086279" MODIFIED="1387456533795" TEXT="introduce surbs"/>
+<node CREATED="1387455598671" ID="Freemind_Link_641532327" MODIFIED="1387455603961" TEXT="Introduce trace"/>
+<node CREATED="1387456535850" ID="Freemind_Link_117016121" MODIFIED="1387456543199" TEXT="introduce alias"/>
 </node>
 </node>
 </map>
