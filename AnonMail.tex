@@ -120,8 +120,9 @@ I would like to acknowledge the thousands of individuals who have coded for the 
 \backmatter
 \begin{appendices}
 \chapter{Definitions}
-\begin{entry}\mainentry{Local MTA}{A local Mail Transfer Agent. This transfer agent reads mails to be sent to a remote account from a local storage and sends it to a MSA.}\end{entry}
-\begin{entry}\mainentry{MRA}{A local Mail receiving Agent. This agent pulls either mails from a local MDA. An MDA might offer the possibility for a push pull delivery.}\end{entry}
+\begin{entry}\mainentry{MTA}{A Mail Transfer Agent. This transfer agent rroutes mails between other components. Typically  an MTA receives mails from an MRA and forwardes them to a MDA or MSA. The main task of a MTA is to provide reliable queues and solid track of all mails as long as they are not forwarded to another MTA or local storage.}\end{entry}
+\begin{entry}\mainentry{MRA}{A Mail receiving Agent. This agent receives mails from a agent. Depending on the used protocol two subtypes of MRAs are available.
+\subentry{Client MRA}{A client MRA picks up mails in the server mail storage }}\end{entry}
 \begin{entry}\mainentry{MSA}{A local Mail Sending Agent. This agent accepts mails to be sent to a remote MTA. }\end{entry}
 \begin{entry}\mainentry{MUA}{A Mail User Agent. This user agent reads mails from a local storage and allows a user to read existing mails, create and modify mails.}\end{entry}
 \begin{entry}\mainentry{Privacy}{From the Oxford English Dictionary: ``

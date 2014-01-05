@@ -1,8 +1,23 @@
 \chapter{Ground theory}
 \section{Mail Transport}
+Todays mail transport is mostly done via SMTP protocol as specified in \cite{RFC5321}. This protocol has proven to be stable and reliable. Most of the messages are passed from a MUA to a SMTP relay of a provider. From there the message is directly sent to the SMTP server of the recipient and from there to a server based storage of the recipient. The recipient may at any time connect to his server based storage and may optionally relocate the message to a client based (local) storage. The delivery from the server storage to the MUA of the recipient may happen by message polling or by message push (where as the later is usually implemented by a push-pull mechanism).
+
+\includegraphics[width=\textwidth]{inc/MailAgents1}
+
 \section{Anonymity}
+\subsection{$k$-anonymity}
+\subsection{Plausible deniability}
+\subsubsection{Deniable encryption}
 \section{Identification and data signage}
 \section{Encryption}
+\subsection{Key exchange}
+\subsubsection{Diffie-Hellmann key exchange}
+\subsection{Symetric encryption}
+\subsubsection{Advanced Encryption Standard}
+\subsection{Asymetric encryption}
+\subsubsection{RSA}
+\subsubsection{El-Gamal}
+\subsubsection{ECDSA}
 \section{Mix cascades}
 \section{Remailers}
 Agents which do accept Mails from one party and forward it to another party while modifying its content well known under the name of ``Remailers''. Wikipedia \cite{wiki:remailer} lists four types of Remailers.\par
