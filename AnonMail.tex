@@ -68,6 +68,7 @@
 \usepackage{ragged2e}
 \newenvironment{entry}{\par\leavevmode\hangpara{1.5mm}{1}\ignorespaces}{\RaggedRight\par}
 \newcommand*{\mainentry}[1]{{\bfseries{#1}}~}
+\newcommand*{\subentry}[1]{{\par\indent\hangpara{3mm}{1}\bfseries{\itshape{#1}}}~}
 
 \title{Possible solutions to implement email transfer offering anonymity towards third parties}
 \author{Martin Gwerder}
@@ -141,7 +142,11 @@ I would like to acknowledge the thousands of individuals who have coded for the 
 
 \chapter{Bibliography}
 \printbibliography[title={},heading=none]
+
+\printindex
+
 \begin{comment}
+% just a trick to make TexNicCenter Bibliography working
 \bibliography{AnonMail}
 \end{comment}
 \end{appendices}

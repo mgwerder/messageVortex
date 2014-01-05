@@ -28,7 +28,7 @@
 	need for rendezvous points as they exist today. We also discuss the
 	security of the new elements and an analysis of efficiency improvements.},
   bookurl = {http://petworkshop.org/2007/},
-  file = {overlier-pet2007.pdf},
+  file = {overlier-pet2007.pdf:overlier-pet2007.pdf:PDF},
   keywords = {TOR, optimize},
   lastaccessed = {2007-07-25 10:31:54},
   location = {Ottawa, Canada},
@@ -46,8 +46,21 @@
   pages = {223--244},
   month = {June},
   publisher = {Springer},
+  abstract = {Location hidden services have received increasing attention as a means
+	to resist censorship and protect the identity of service operators.
+	Research and vulnerability analysis to date has mainly focused on
+	how to locate the hidden service. But while the hiding techniques
+	have improved, almost no progress has been made in increasing the
+	resistance against DoS attacks directly or indirectly on hidden services.
+	In this paper we suggest improvements that should be easy to adopt
+	with in the existing hidden service design, improvements that will
+	bot h reduce vulnerability to DoS attacks and add QoS as a service
+	option. In addition we show how to hide not just the location but
+	the existence of the hidden service from everyone but the users knowing
+	its service address. Not even the public directory servers will know
+	how a private hidden service can be contacted, or know it exists.},
   bookurl = {http://petworkshop.org/2006/},
-  file = {valet:pet2006.pdf},
+  file = {:valet_pet2006.pdf:PDF},
   lastaccessed = {2006-10-20 01:26:00},
   location = {Cambridge, UK},
   url = {http://www.onion-router.net/Publications/valet-services.pdf}
@@ -168,9 +181,33 @@
   howpublished = {Cryptology ePrint Archive, Report 2005/394},
   month = {November},
   year = {2005},
-  file = {cryptoeprint:2005:394.html},
+  abstract = {We show how to public-key obfuscate two commonly used shuffles: decryption
+	shuffles which permute and decrypt ciphertexts, and re-encryption
+	shuffles which permute and re-encrypt ciphertexts. Given a trusted
+	party that samples and obfuscates a shuffle \emph{before} any ciphertexts
+	are received, this reduces the problem of constructing a mix-net
+	to verifiable joint decryption.
+	
+	
+	We construct a decryption shuffle from any additively homomorphic
+	cryptosystem and show how it can be public-key obfuscated. This construction
+	does not allow efficient distributed verifiable decryption. Then
+	we show how to public-key obfuscate: a decryption shuffle based on
+	the Boneh-Goh-Nissim (BGN) cryptosystem, and a re-encryption shuffle
+	based on the Paillier cryptosystem. Both constructions allow \emph{efficient}
+	distributed verifiable decryption. In the Paillier case we identify
+	and exploit a previously overlooked ``homomorphic'' property of the
+	cryptosystem.
+	
+	
+	Finally, we give a distributed protocol for sampling and obfuscating
+	each of the above shuffles and show how it can be used in a trivial
+	way to construct a universally composable mix-net. Our constructions
+	are practical when the number of senders $N$ is reasonably small,
+	e.g. $N=350$ in the BGN case and $N=2000$ in the Paillier case.},
+  file = {:cryptoeprint_2005_394.pdf:PDF},
   lastaccessed = {2005-12-14 02:19:12},
-  url = {http://eprint.iacr.org/2005/394}
+  url = {http://eprint.iacr.org/2005/394.pdf}
 }
 
 @INPROCEEDINGS{usenix2010:aggarwal2010analysis,
@@ -3729,6 +3766,7 @@
   journal = {Proceedings of the 47th Annual IEEE Symposium on Foundations of Computer
 	Science (FOCS'06)-Volume 00},
   year = {2006},
+  volume = {0},
   pages = {239--248},
   month = {October},
   abstract = {There is a vast body of work on implementing anonymous communication.
