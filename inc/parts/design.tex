@@ -63,5 +63,34 @@ His expectations are:
 \section{Basic Requirements of an approach}
 
 \chapter{Specifying a target solution}
+\section{Blocks}
+\subsection{Preamble}
+\begin{itemize}
+  \item identity
+  \item Request Number (RNR)
+  \item Identity signature
+  \item Message key
+  \item Shuffle
+\end{itemize}
 
+\subsection{Routing block}
+\begin{itemize}
+  \item Next hop address
+  \item RNR (must match preamble)
+  \item Validity time
+  \item delivery expiry
+  \item Message checksum (optional)
+  \item Padding  (optional)
+\end{itemize}
 
+\subsection{Address request block}
+
+\section{Messages}
+\subsection{Basecom}
+\begin{itemize}
+  \item Request Server keys
+  \item Request identity (identity and key tuple)
+  \item Request size quota (size in bytes and end time)
+  \item Request Puzzle spec
+  \item Request capabilities
+\end{itemize}

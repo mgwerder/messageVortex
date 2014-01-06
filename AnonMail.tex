@@ -29,6 +29,9 @@
 %enable hypelinks
 \usepackage[pdfusetitle]{hyperref}
 
+% Link above tables and figures
+\usepackage[hypcap]{caption}
+
 %enable attached files
 \usepackage{attachfile}
 
@@ -67,8 +70,10 @@
 \usepackage{hanging}
 \usepackage{ragged2e}
 \newenvironment{entry}{\par\leavevmode\hangpara{1.5mm}{1}\ignorespaces}{\RaggedRight\par}
-\newcommand*{\mainentry}[1]{{\bfseries{#1}}~}
-\newcommand*{\subentry}[1]{{\par\indent\hangpara{3mm}{1}\bfseries{\itshape{#1}}}~}
+\newcommand*{\mainentry}[1]{{\bfseries{#1\label{def:#1}}}~}
+\newcommand*{\subentry}[1]{{\par\indent\hangpara{3mm}{1}\bfseries{\itshape{#1\label{def:#1}}}}~}
+
+\newcommand*{\defref}[1]{\hyperref[def:#1]{#1}}
 
 \title{Possible solutions to implement email transfer offering anonymity towards third parties}
 \author{Martin Gwerder}
@@ -120,12 +125,39 @@ I would like to acknowledge the thousands of individuals who have coded for the 
 
 \backmatter
 \begin{appendices}
-\chapter{Definitions}
-\begin{entry}\mainentry{MTA}{A Mail Transfer Agent. This transfer agent rroutes mails between other components. Typically  an MTA receives mails from an MRA and forwardes them to a MDA or MSA. The main task of a MTA is to provide reliable queues and solid track of all mails as long as they are not forwarded to another MTA or local storage.}\end{entry}
-\begin{entry}\mainentry{MRA}{A Mail receiving Agent. This agent receives mails from a agent. Depending on the used protocol two subtypes of MRAs are available.
-\subentry{Client MRA}{A client MRA picks up mails in the server mail storage }}\end{entry}
-\begin{entry}\mainentry{MSA}{A local Mail Sending Agent. This agent accepts mails to be sent to a remote MTA. }\end{entry}
-\begin{entry}\mainentry{MUA}{A Mail User Agent. This user agent reads mails from a local storage and allows a user to read existing mails, create and modify mails.}\end{entry}
+\chapter{Glossary}
+
+\begin{entry}
+  \mainentry{IMAPv4}{FIXME}
+\end{entry}
+
+\begin{entry}
+  \mainentry{MTA}{A Mail Transfer Agent. This transfer agent rroutes mails between other components. Typically  an MTA receives mails from an MRA and forwardes them to a MDA or MSA. The main task of a MTA is to provide reliable queues and solid track of all mails as long as they are not forwarded to another MTA or local storage.}
+\end{entry}
+
+\begin{entry}
+  \mainentry{MTS}{A Mail Transfer Service. This is a set of agents which provide the functionallity tor send and receive Messages and forward them to a local or remote store.}
+\end{entry}
+
+\begin{entry}
+  \mainentry{MRA}{A Mail receiving Agent. This agent receives mails from a agent. Depending on the used protocol two subtypes of MRAs are available.
+  \subentry{Client MRA}{A client MRA picks up mails in the server mail storage from a remote MDA. Client MRAs usually connect thru a standard protocol which was designed for client access. Examples for such protocols are \defref{POP3} or \defref{IMAPv4}}}
+  \subentry{Server MRA}{FIXME} 
+\end{entry}
+\begin{entry}\mainentry{MSA}{A Mail Sending Agent. This agent sends mails to a \defref{Server MRA}. }\end{entry}
+
+\begin{entry}
+  \mainentry{MSS}{A Mail Storage Service. This is a set of agents providing a reliable store for local mail accounts. It also provides Interfacing which enables clients to access the users mail.}
+\end{entry}
+
+\begin{entry}
+  \mainentry{MUA}{A Mail User Agent. This user agent reads mails from a local storage and allows a user to read existing mails, create and modify mails.}
+\end{entry}
+
+\begin{entry}
+  \mainentry{POP3}{FIXME}
+\end{entry}
+
 \begin{entry}\mainentry{Privacy}{From the Oxford English Dictionary: ``
   \begin{enumerate}
     \item The state or condition of beeing withdrawn from the society of others, or from the public intrest; seclusion. The state or condition of beeing alone, undisturbed, or free from public attention, as a matter of choice or right; freedom from interference or intrusion.
@@ -137,8 +169,8 @@ I would like to acknowledge the thousands of individuals who have coded for the 
   \end{enumerate}''\cite[FIXME]{OXFORD}\par
   
   In this work privacy is related to definition two. Mails should be able to be handled as a virtual private place where no one knows who is talking to whom and about what or how frequent (except for directly involved people).
-}\end{entry}
-
+}
+\end{entry}
 
 \chapter{Bibliography}
 \printbibliography[title={},heading=none]
@@ -149,9 +181,11 @@ I would like to acknowledge the thousands of individuals who have coded for the 
 % just a trick to make TexNicCenter Bibliography working
 \bibliography{AnonMail}
 \end{comment}
+
 \end{appendices}
 
 \begin{comment}
+% Some Notes 
 http://www.rfc-editor.org/pubprocess.html
 RFC2223 Instructions to RFC Authors
 RFC2119 BCP14 Key words for use in RFCs to Indicate Requirement Levels

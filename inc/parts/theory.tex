@@ -2,16 +2,27 @@
 \section{Mail Transport}
 Todays mail transport is mostly done via SMTP\index{SMTP} protocol as specified in \cite{RFC5321}. This protocol has proven to be stable and reliable. Most of the messages are passed from a MUA to a SMTP relay of a provider. From there the message is directly sent to the SMTP server of the recipient and from there to a server based storage of the recipient. The recipient may at any time connect to his server based storage and may optionally relocate the message to a client based (local) storage. The delivery from the server storage to the MUA of the recipient may happen by message polling or by message push (where as the later is usually implemented by a push-pull mechanism).\par
 
-To understand the routing of a mail it is essential to understand the whole chain staring from a user(-agent) until arriving at the target user (and being read!). To simplify this I used a consistent model which includes all components (server and clients). The figure \ref{fig:MailAgents} shows all involved parties of a typical Mail routing. It is important to understand that Mail routing remains the same regardless of the used client. However -- Availability of a mail at its destination changes drastically depending on the type of client used. Furthermore control of the mail flow is
-\begin{figure}[htb!]
-\centering%
-\label{fig:MailAgents}
-\includegraphics[width=\textwidth]{inc/MailAgents1}
-\caption{Mail Agents}
+To understand the routing of a mail it is essential to understand the whole chain staring from a user(-agent) until arriving at the target user (and being read!). To simplify this I used a consistent model which includes all components (server and clients). The figure \ref{fig:MailAgents} shows all involved parties of a typical Mail routing. It is important to understand that Mail routing remains the same regardless of the used client. However -- Availability of a mail at its destination changes drastically depending on the type of client used. Furthermore control of the mail flow and control is different depending on the client.\par
+
+\begin{figure}[htb]
+  \centering\includegraphics[width=\textwidth]{inc/MailAgents1}
+  \caption{Mail Agents}
+  \label{fig:MailAgents}
 \end{figure}
 
+Mails are typically initiated by a Mail User Agent (\defref{MUA}). A MUA accesses a local mail storage which may be the server storage or a local copy. The local copy may be a cache only copy, the only existing storage (when mails are fetched and deleted from the server after retrieval)  or a collected representation of multiple server storages (cache or authoritative).\par
+
+Besides the MUA the only other component accessing a local mail storage is the Mail Delivery Agent (\defref{MDA}). An MDA is responsible for storing and fetching mails from the local mail storage. Mails destined for other accounts than the current one are forwarded to the MTA. In the case of a rich client the local MDA is part of the software provided by the user agent. In the case of a mail server the local MDA is part of the local Mailstore (not necessarily of the mail transport service).
+
+On the server side there are usually two components (software sets) at work. A ``Mail Transport Service'' (\defref{MTS}) which consists generally of three parts. An server Message Receiving Agent (\defref{server MRA}) is typically a SMTP listening daemon. A Mail Transfer Agent (\defref{MTA}) which is responsible for routing and rewriting mails. 
+
+\subsection{Mail clients}
+\subsubsection{Fat clients}
+\subsubsection{Server located clients}
+\subsubsection{Web clients}
+
 \section{Anonymity}
-\subsection{$k$-anonymity}
+\subsection{\itshape{k}-anonymity}
 \subsection{Plausible deniability}
 \subsubsection{Deniable encryption}
 \section{Identification and data signage}
@@ -26,7 +37,7 @@ To understand the routing of a mail it is essential to understand the whole chai
 \subsubsection{ECDSA}
 \section{Mix cascades}
 \section{Remailers}
-Agents which do accept Mails from one party and forward it to another party while modifying its content well known under the name of ``Remailers''. Wikipedia \cite{wiki:remailer} lists four types of Remailers.\par
+Agents which do accept Mails from one party and forward it to another party while modifying its content well known under the name of ``Remailers''. Wi\-ki\-pe\-dia \cite{wiki:remailer} lists four types of Remailers.\par
 
 Pseudonymous Remailers (or Type-0-Remailers) are remailers that establish a pseudonymity. This means that the senders Email-Address is removed and replaced by a pseudonymous E-Mailadress under the remailers control. This sender address may be used as an ordinary email-Adress to reeach the original sender of the mail. These types of Remailers allow to send mails while one or both recipients do not know their counterpart. The message (or at least parts of it) might be encrypted but do not have to be. For someone controling the Remailer it will always be possible to make a link between the pseudonymous mail address and a original mailadress. So pseudonymity is only granted towards people not controlling the remailer. Furthermore a person or organisation might be able to discover the Information tuple of Sender and pseudonymous email by analyzing messages and their timely context. So this remailer system is suspectible for traffic analysis.\par
 
