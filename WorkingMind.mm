@@ -97,6 +97,13 @@
 </node>
 <node CREATED="1389098214874" ID="Freemind_Link_1468540295" MODIFIED="1389098217557" TEXT="gnutella"/>
 <node CREATED="1389098219515" ID="Freemind_Link_784046352" MODIFIED="1389098222619" TEXT="Freenet"/>
+<node CREATED="1389131353989" ID="Freemind_Link_17625944" MODIFIED="1389131358076" TEXT="Gnutella2"/>
+<node CREATED="1389131421792" ID="Freemind_Link_1014669086" MODIFIED="1389131425445" TEXT="DArknet"/>
+<node CREATED="1389131562715" ID="Freemind_Link_377807649" MODIFIED="1389131565494" TEXT="Special">
+<node CREATED="1389131566015" ID="Freemind_Link_996345173" MODIFIED="1389131571087" TEXT="Sneakernet">
+<node CREATED="1389131571732" ID="Freemind_Link_1470004361" MODIFIED="1389131595431" TEXT="Netzwerk, dass &#xfc;ber Datentr&#xe4;gertransport (manuell) funktioniert."/>
+</node>
+</node>
 </node>
 </node>
 </map>
