@@ -1,4 +1,4 @@
-<map version="0.8.1">
+<map version="1.0.1">
 <!-- To view this file, download free mind mapping software FreeMind from http://freemind.sourceforge.net -->
 <node CREATED="1201229246234" ID="Freemind_Link_721208657" MODIFIED="1387381544481" TEXT="MailVortex">
 <node CREATED="1387381549512" ID="_" MODIFIED="1387381555994" POSITION="right" TEXT="Terms">
@@ -17,7 +17,7 @@
 <node CREATED="1387382162629" ID="Freemind_Link_557085012" MODIFIED="1387382175764" TEXT="unobservable peers">
 <node CREATED="1387382176443" ID="Freemind_Link_412729679" MODIFIED="1387382180936" TEXT="encryption"/>
 </node>
-<node CREATED="1387382183471" ID="Freemind_Link_764087696" MODIFIED="1387382192191" TEXT="Censorship resitant">
+<node COLOR="#000000" CREATED="1387382183471" ID="Freemind_Link_764087696" MODIFIED="1389717527864" TEXT="Censorship resitant">
 <node CREATED="1387382192729" ID="Freemind_Link_1193092763" MODIFIED="1387382227659" TEXT="Parrot flaging function (please answer to embedding mail)"/>
 </node>
 </node>
@@ -43,7 +43,7 @@
 <node CREATED="1387382934366" ID="Freemind_Link_589342771" MODIFIED="1387382937580" TEXT="replay"/>
 <node CREATED="1387382938991" ID="Freemind_Link_1020856387" MODIFIED="1387382953703" TEXT="dropping"/>
 <node CREATED="1387382954241" ID="Freemind_Link_1896854915" MODIFIED="1387382958359" TEXT="injecting">
-<node CREATED="1389259691865" ID="Freemind_Link_1131238193" MODIFIED="1389259706764" TEXT="(n-1)-Attack"/>
+<node CREATED="1389259691865" ID="Freemind_Link_1131238193" MODIFIED="1389716608174" TEXT="(n-1)-Attack (Flooding node)"/>
 </node>
 </node>
 <node CREATED="1387383049258" ID="Freemind_Link_846441053" MODIFIED="1387383051333" TEXT="DoS">
@@ -56,7 +56,10 @@
 </node>
 </node>
 <node CREATED="1387382761795" ID="Freemind_Link_468619327" MODIFIED="1387382764681" TEXT="MIX">
-<node CREATED="1387382843143" ID="Freemind_Link_472515780" MODIFIED="1387382858525" TEXT="chaum Mix"/>
+<node CREATED="1389716630475" ID="Freemind_Link_388672516" MODIFIED="1389716637323" TEXT="Continuous Mix">
+<node CREATED="1387382843143" ID="Freemind_Link_472515780" MODIFIED="1389716702665" TEXT="Chaum Mix"/>
+</node>
+<node CREATED="1389716638158" ID="Freemind_Link_1122324560" MODIFIED="1389716646270" TEXT="Stop and Go Mix"/>
 </node>
 <node CREATED="1387382803628" ID="Freemind_Link_1721382903" MODIFIED="1387382807824" TEXT="identity">
 <node CREATED="1387382808534" ID="Freemind_Link_1937576675" MODIFIED="1387382817925" TEXT="real world identity"/>
@@ -70,15 +73,13 @@
 <node CREATED="1387439409963" ID="Freemind_Link_1263455093" MODIFIED="1387439412878" POSITION="left" TEXT="todo">
 <node CREATED="1387439413691" ID="Freemind_Link_277034469" MODIFIED="1387439433049" TEXT="Introduce identity"/>
 <node CREATED="1387439443902" ID="Freemind_Link_64086279" MODIFIED="1387456533795" TEXT="introduce surbs"/>
-<node CREATED="1387455598671" ID="Freemind_Link_641532327" MODIFIED="1387455603961" TEXT="Introduce trace"/>
-<node CREATED="1387456535850" ID="Freemind_Link_117016121" MODIFIED="1387456543199" TEXT="introduce alias"/>
-<node CREATED="1389189787676" ID="Freemind_Link_1491837672" MODIFIED="1389189811451" TEXT="DC-Net mit Error Correction">
-<node CREATED="1389260329272" ID="Freemind_Link_935081391" MODIFIED="1389260341471" TEXT="what for? Avoid 1 bit error?"/>
-</node>
+<node CREATED="1387455598671" ID="Freemind_Link_641532327" MODIFIED="1389716743333" TEXT="Introduce trace?"/>
+<node CREATED="1389189787676" ID="Freemind_Link_1491837672" MODIFIED="1389717566506" TEXT="DC-Nets"/>
 <node CREATED="1389260033362" ID="Freemind_Link_1026401727" MODIFIED="1389260042691" TEXT="Introduce cryptopuzzle">
 <node CREATED="1389260043167" ID="Freemind_Link_1725067771" MODIFIED="1389260065491" TEXT="Cryptopuzzles for all  DC mixes"/>
-<node CREATED="1389260066513" ID="Freemind_Link_125724480" MODIFIED="1389260091693" TEXT="Initial cryptopuzzle hard and subsequent lower"/>
+<node CREATED="1389260066513" ID="Freemind_Link_125724480" MODIFIED="1389716800718" TEXT="Initial cryptopuzzle hard (to establish identity) and subsequent lower"/>
 <node CREATED="1389260267225" ID="Freemind_Link_245896321" MODIFIED="1389260284821" TEXT="Raise cryptopuzzle on regular extensive usage"/>
+<node CREATED="1389717610999" ID="ID_230914208" MODIFIED="1389717898626" TEXT="Cryptopuzzle should be easy verifiable"/>
 </node>
 </node>
 <node CREATED="1389088410879" ID="Freemind_Link_1125547405" MODIFIED="1389088416105" POSITION="right" TEXT="alternatives">
@@ -117,15 +118,25 @@
 <node CREATED="1389088869532" ID="Freemind_Link_1513979115" MODIFIED="1389088892350" TEXT="Based on the dining cryptographers algorithm"/>
 <node CREATED="1389187131153" ID="Freemind_Link_993883801" MODIFIED="1389187158157" TEXT="Implemented for small systems"/>
 </node>
-<node CREATED="1389088441884" ID="Freemind_Link_435140831" MODIFIED="1389088453366" TEXT="MIX-Nets">
+<node CREATED="1389088441884" ID="Freemind_Link_435140831" MODIFIED="1389717598081" TEXT="MIX-Nets">
 <node CREATED="1389088893905" ID="Freemind_Link_328472632" MODIFIED="1389089532294" TEXT="Mixer decides routes"/>
-<node CREATED="1389187182985" ID="Freemind_Link_1961512102" MODIFIED="1389187182985" TEXT=""/>
 </node>
 <node CREATED="1389088472500" ID="Freemind_Link_585888691" MODIFIED="1389088478600" TEXT="Onion-Routing">
 <node CREATED="1389089656248" ID="Freemind_Link_374739272" MODIFIED="1389089663163" TEXT="Client decides route"/>
 <node CREATED="1389090104925" ID="Freemind_Link_381090478" MODIFIED="1389090150920" TEXT="Client requires Network layout"/>
 </node>
 </node>
+</node>
+<node CREATED="1389716285039" ID="Freemind_Link_552225526" MODIFIED="1389716292091" POSITION="left" TEXT="Fetures">
+<node CREATED="1389716292863" ID="Freemind_Link_756004916" MODIFIED="1389716300741" TEXT="Address (SMTP)">
+<node CREATED="1389716301638" ID="Freemind_Link_1164544698" MODIFIED="1389716344913" TEXT="Subaddress (forwarder Address for a given sub address)">
+<node CREATED="1389716354515" ID="Freemind_Link_107512087" MODIFIED="1389716406963" TEXT="Should have multiple SURBs"/>
+<node CREATED="1389716408499" ID="Freemind_Link_273868391" MODIFIED="1389716419108" TEXT="Must be updateable by the originator"/>
+<node CREATED="1389716498583" ID="Freemind_Link_42223599" MODIFIED="1389716559595" TEXT="Should be limitable to a single identity"/>
+</node>
+</node>
+<node CREATED="1389716422844" ID="Freemind_Link_1522832444" MODIFIED="1389716434591" TEXT="Originator (Initial sender)"/>
+<node CREATED="1389716435613" ID="Freemind_Link_655909062" MODIFIED="1389716449450" TEXT="Destinator (Final recipient)"/>
 </node>
 </node>
 </map>

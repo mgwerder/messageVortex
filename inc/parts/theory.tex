@@ -4,7 +4,7 @@ Todays mail transport is mostly done via SMTP\index{SMTP} protocol as specified 
 
 To understand the routing of a mail it is essential to understand the whole chain staring from a user(-agent) until arriving at the target user (and being read!). To simplify this I used a consistent model which includes all components (server and clients). The figure \ref{fig:MailAgents} shows all involved parties of a typical Mail routing. It is important to understand that Mail routing remains the same regardless of the used client. However -- Availability of a mail at its destination changes drastically depending on the type of client used. Furthermore control of the mail flow and control is different depending on the client.\par
 
-\begin{figure}[htb]
+\begin{figure}[h!]
   \centering\includegraphics[width=\textwidth]{inc/MailAgents1}
   \caption{Mail Agents}
   \label{fig:MailAgents}
