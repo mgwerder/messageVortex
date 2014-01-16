@@ -12,7 +12,6 @@
 <node CREATED="1387458432399" ID="Freemind_Link_1137517787" MODIFIED="1387458442248" TEXT="censorship circumvention"/>
 <node CREATED="1387458443866" ID="Freemind_Link_717323025" MODIFIED="1387458448355" TEXT="covert channel"/>
 </node>
-<node CREATED="1387381552110" ID="Freemind_Link_1000957008" MODIFIED="1387383141058" POSITION="right" TEXT="Protocol design goals"/>
 <node CREATED="1387382157426" ID="Freemind_Link_119419384" MODIFIED="1387382162675" POSITION="left" TEXT="Requirements">
 <node CREATED="1387382162629" ID="Freemind_Link_557085012" MODIFIED="1387382175764" TEXT="unobservable peers">
 <node CREATED="1387382176443" ID="Freemind_Link_412729679" MODIFIED="1387382180936" TEXT="encryption"/>
@@ -71,18 +70,9 @@
 <node CREATED="1387383158858" ID="Freemind_Link_542217584" MODIFIED="1387383171416" TEXT="SMTP cannot be shut down"/>
 </node>
 <node CREATED="1387439409963" ID="Freemind_Link_1263455093" MODIFIED="1387439412878" POSITION="left" TEXT="todo">
-<node CREATED="1387439413691" ID="Freemind_Link_277034469" MODIFIED="1387439433049" TEXT="Introduce identity"/>
 <node CREATED="1387439443902" ID="Freemind_Link_64086279" MODIFIED="1387456533795" TEXT="introduce surbs"/>
-<node CREATED="1387455598671" ID="Freemind_Link_641532327" MODIFIED="1389716743333" TEXT="Introduce trace?"/>
-<node CREATED="1389189787676" ID="Freemind_Link_1491837672" MODIFIED="1389717566506" TEXT="DC-Nets"/>
-<node CREATED="1389260033362" ID="Freemind_Link_1026401727" MODIFIED="1389260042691" TEXT="Introduce cryptopuzzle">
-<node CREATED="1389260043167" ID="Freemind_Link_1725067771" MODIFIED="1389260065491" TEXT="Cryptopuzzles for all  DC mixes"/>
-<node CREATED="1389260066513" ID="Freemind_Link_125724480" MODIFIED="1389716800718" TEXT="Initial cryptopuzzle hard (to establish identity) and subsequent lower"/>
-<node CREATED="1389260267225" ID="Freemind_Link_245896321" MODIFIED="1389260284821" TEXT="Raise cryptopuzzle on regular extensive usage"/>
-<node CREATED="1389717610999" ID="ID_230914208" MODIFIED="1389717898626" TEXT="Cryptopuzzle should be easy verifiable"/>
 </node>
-</node>
-<node CREATED="1389088410879" ID="Freemind_Link_1125547405" MODIFIED="1389088416105" POSITION="right" TEXT="alternatives">
+<node CREATED="1389088410879" ID="Freemind_Link_1125547405" MODIFIED="1389864635102" POSITION="right" TEXT="alternatives">
 <node CREATED="1389088479715" ID="Freemind_Link_1630240612" MODIFIED="1389088545221" TEXT="Crowds">
 <node CREATED="1389088546281" ID="Freemind_Link_1690154168" MODIFIED="1389088565270" TEXT="Mix-Net with random path"/>
 <node CREATED="1389089851479" ID="Freemind_Link_1019910485" MODIFIED="1389089872587" TEXT="Central master server (Blender)"/>
@@ -121,10 +111,13 @@
 <node CREATED="1389088441884" ID="Freemind_Link_435140831" MODIFIED="1389717598081" TEXT="MIX-Nets">
 <node CREATED="1389088893905" ID="Freemind_Link_328472632" MODIFIED="1389089532294" TEXT="Mixer decides routes"/>
 </node>
-<node CREATED="1389088472500" ID="Freemind_Link_585888691" MODIFIED="1389088478600" TEXT="Onion-Routing">
+<node CREATED="1389088472500" ID="Freemind_Link_585888691" MODIFIED="1389875916587" TEXT="Onion-Routing">
 <node CREATED="1389089656248" ID="Freemind_Link_374739272" MODIFIED="1389089663163" TEXT="Client decides route"/>
 <node CREATED="1389090104925" ID="Freemind_Link_381090478" MODIFIED="1389090150920" TEXT="Client requires Network layout"/>
 </node>
+</node>
+<node CREATED="1389864635921" ID="ID_1630973717" MODIFIED="1389864639868" TEXT="Babel">
+<node CREATED="1389864641045" ID="ID_1052531659" MODIFIED="1389864654025" TEXT="Mixing Remailer"/>
 </node>
 </node>
 <node CREATED="1389716285039" ID="Freemind_Link_552225526" MODIFIED="1389716292091" POSITION="left" TEXT="Fetures">
@@ -135,8 +128,368 @@
 <node CREATED="1389716498583" ID="Freemind_Link_42223599" MODIFIED="1389716559595" TEXT="Should be limitable to a single identity"/>
 </node>
 </node>
-<node CREATED="1389716422844" ID="Freemind_Link_1522832444" MODIFIED="1389716434591" TEXT="Originator (Initial sender)"/>
-<node CREATED="1389716435613" ID="Freemind_Link_655909062" MODIFIED="1389716449450" TEXT="Destinator (Final recipient)"/>
+<node CREATED="1389767819166" ID="ID_1398968651" MODIFIED="1389769211514" TEXT="Terms">
+<node CREATED="1389716422844" ID="Freemind_Link_1522832444" MODIFIED="1389767797669" TEXT="Originator">
+<node CREATED="1389767798238" ID="ID_1390605168" MODIFIED="1389852592536" TEXT="Initial sender">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Initial sender of a message
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1389716435613" ID="Freemind_Link_655909062" MODIFIED="1389767787451" TEXT="Destinator">
+<node CREATED="1389767770041" ID="ID_648844801" MODIFIED="1389852603986" TEXT="Final recipient of a message"/>
+</node>
+<node CREATED="1389766128573" ID="ID_1470785548" MODIFIED="1389766131989" TEXT="Sender">
+<node CREATED="1389767739980" ID="ID_1328018854" MODIFIED="1389852645705" TEXT="Immediate Sender">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      current sender of a message.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1389766132793" ID="ID_1147449425" MODIFIED="1389766136162" TEXT="Recipient">
+<node CREATED="1389767749644" ID="ID_248773344" MODIFIED="1389767762140" TEXT="Immediate Recipient"/>
+</node>
+<node CREATED="1389852860818" ID="ID_1628473116" MODIFIED="1389852865046" TEXT="Block">
+<node CREATED="1389852866801" ID="ID_71553329" MODIFIED="1389852977060" TEXT="A single Request"/>
+</node>
+<node CREATED="1389853112202" ID="ID_82013832" MODIFIED="1389853119206" TEXT="set">
+<node CREATED="1389853120166" ID="ID_410777275" MODIFIED="1389853134564" TEXT="One or more Blocks"/>
+</node>
+<node CREATED="1389852978893" ID="ID_1180732671" MODIFIED="1389853065605" TEXT="Message">
+<node CREATED="1389853068654" ID="ID_304989899" MODIFIED="1389853110416" TEXT="Content to be transmitted"/>
+</node>
+<node CREATED="1389769211514" ID="ID_1488995168" MODIFIED="1389769215883" TEXT="Identity">
+<node CREATED="1389769218808" ID="ID_517997884" MODIFIED="1389769255564" TEXT="Binary string of variable length and an asymetric key pair"/>
+<node CREATED="1389769256929" ID="ID_104892337" MODIFIED="1389769290985" TEXT="Should be different for every node"/>
+</node>
+</node>
+</node>
+<node CREATED="1389769589777" ID="ID_1167418647" MODIFIED="1389852647740" POSITION="left" TEXT="Messages">
+<node CREATED="1389858908596" ID="ID_1640519951" MODIFIED="1389858913495" TEXT="Block Types">
+<node CREATED="1389771540229" ID="ID_961833612" MODIFIED="1389880836083" TEXT="capabilitiesRequestBlock">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Type_identifier (2 Byte) -&gt; &quot;CA&quot;
+    </p>
+    <p>
+      Version(2 Byte)
+    </p>
+    <p>
+      startTime:expiryTime
+    </p>
+    <p>
+      Duration
+    </p>
+    <p>
+      identity_length:Identity:publicKey_type_length:publicKey_type:publicKey_size:publicKey
+    </p>
+    <p>
+      Messages_count (2 Byte)
+    </p>
+    <p>
+      Size_count(4 Byte)
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1389771748821" ID="ID_1164848743" MODIFIED="1389881272805" TEXT="capabilitiesReplyBlock">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Type_identifier (2 Byte) -&gt; &quot;CB&quot;
+    </p>
+    <p>
+      Version(2 Byte)
+    </p>
+    <p>
+      # Server keys
+    </p>
+    <p>
+      size(1 Byte):{
+    </p>
+    <p>
+      &#160;&#160;&#160; ServerPublicKey_type_length:ServerPublicKey_type:ServerPublicKey_size:ServerPublicKey
+    </p>
+    <p>
+      }
+    </p>
+    <p>
+      # Cryptographic Algorithm
+    </p>
+    <p>
+      size(1 Byte):{
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;Asymetric_Type
+    </p>
+    <p>
+      }
+    </p>
+    <p>
+      size(1 Byte):{
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;Symetric_Type
+    </p>
+    <p>
+      }
+    </p>
+    <p>
+      size(1 Byte):{
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;Hash_Type
+    </p>
+    <p>
+      }
+    </p>
+    <p>
+      # Cryptopuzzle Specification
+    </p>
+    <p>
+      Puzzle_size:Puzzle_Content:Hash_Type:Puzzle_NumberOfBits(1 Byte)
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1389260033362" ID="Freemind_Link_1026401727" MODIFIED="1389881238321" TEXT="PuzzleBlock">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Type_identifier (2 Byte)
+    </p>
+    <p>
+      Version(2 Byte)
+    </p>
+    <p>
+      identity_length:Identity:publicKey_type_length:publicKey_type:publicKey_size:publicKey
+    </p>
+    <p>
+      MessageID_length:MessageID
+    </p>
+    <p>
+      MessageKey_type_length:MessageKey_type:MessageKey_type_size:MessageKey
+    </p>
+    <p>
+      expiryTime
+    </p>
+    <p>
+      random_length:random
+    </p>
+    <p>
+      hash_type_length:hash_type:hash_length:hash
+    </p>
+    <p>
+      SubIdentity_length:SubIdentity
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1389260043167" ID="Freemind_Link_1725067771" MODIFIED="1389260065491" TEXT="Cryptopuzzles for all  DC mixes"/>
+<node CREATED="1389260066513" ID="Freemind_Link_125724480" MODIFIED="1389716800718" TEXT="Initial cryptopuzzle hard (to establish identity) and subsequent lower"/>
+<node CREATED="1389260267225" ID="Freemind_Link_245896321" MODIFIED="1389260284821" TEXT="Raise cryptopuzzle on regular extensive usage"/>
+<node CREATED="1389717610999" ID="ID_230914208" MODIFIED="1389769475426" TEXT="Cryptopuzzle should be easy verifiable">
+<node CREATED="1389766013362" ID="ID_374782665" MODIFIED="1389769494318" TEXT="content">
+<node CREATED="1389766100183" ID="ID_1195077271" MODIFIED="1389766160122" TEXT="must contain Identity of originator"/>
+<node CREATED="1389766110627" ID="ID_1481024557" MODIFIED="1389766178965" TEXT="must contain serial"/>
+<node CREATED="1389766181563" ID="ID_394805976" MODIFIED="1389766991466" STYLE="fork" TEXT="must contain cryptopuzzle"/>
+<node CREATED="1389767175630" ID="ID_1325099737" MODIFIED="1389767185878" TEXT="must contain symetric key"/>
+</node>
+<node CREATED="1389766005135" ID="ID_498449000" MODIFIED="1389766012263" TEXT="Short Puzzle"/>
+</node>
+</node>
+<node CREATED="1389769330573" ID="ID_152614027" MODIFIED="1389879902905" TEXT="messageBlock">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Message_type (2 Byte)
+    </p>
+    <p>
+      Flags:(1 Byte; Reencrypt Bit 0)
+    </p>
+    <p>
+      Recipient_number(1 Byte):{
+    </p>
+    <p>
+      &#160;&#160;RecipientSMTP_length:RecipientSMTP
+    </p>
+    <p>
+      &#160;&#160;Cryptopuzzle_length:Cryptopuzzle
+    </p>
+    <p>
+      }
+    </p>
+    <p>
+      MessageID_length:MessageID
+    </p>
+    <p>
+      RecipientID_length:RecipientID
+    </p>
+    <p>
+      Message_length(4 Bytes)
+    </p>
+    <p>
+      Chunk_Offset(4 Bytes):Chunk_length(4 Bytes):Chunk
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1389771192456" ID="ID_1920725214" MODIFIED="1389853807019" TEXT="DC1BuildTableBlock">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Message_type (2 Byte)
+    </p>
+    <p>
+      MessageID_length:MessageID
+    </p>
+    <p>
+      StartTime:expiryTime
+    </p>
+    <p>
+      # Block of known members
+    </p>
+    <p>
+      %MemberBlock
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1389853379630" ID="ID_696356377" MODIFIED="1389853741485" TEXT="ID; NextHop; E(NextHop_1, PuzzleBlock_1, E(NextHop_2, PuzzleBlock_2, E(NextHop_3, PuzzleBlock_3)))">
+<node CREATED="1389853652944" ID="ID_1989174130" MODIFIED="1389853712642" TEXT="PuzzleBlock;DC_1_build_table_Block(ID)"/>
+</node>
+</node>
+<node CREATED="1389771419599" ID="ID_237670027" MODIFIED="1389879315795" TEXT="DC2TransmitBlock">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Message_Type(2 Bytes)
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1389853205051" ID="ID_1441407665" MODIFIED="1389853301103" TEXT="ID;Vote_1;S(Vote_1);...;Vote_N;S(Vote_N);E(previous_coins)"/>
+</node>
+<node CREATED="1389852216724" ID="ID_821148844" MODIFIED="1389879310070" TEXT="DC3ConfirmBlock">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Message_Type(2 Bytes)
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1389772009508" ID="ID_1734883655" MODIFIED="1389879276015" TEXT="successBlock/errorBlock">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Message_Type(2 Bytes) -&gt; &quot;SB&quot; Success block;&quot;EB&quot; Error Block
+    </p>
+    <p>
+      ReturnCode(2 Bytes)
+    </p>
+    <p>
+      Text_length:Text
+    </p>
+    <p>
+      % Reply Blocks
+    </p>
+    <p>
+      Musrbs_length:[MURBS]
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1389771688471" ID="ID_42144452" MODIFIED="1389881020634" TEXT="MurBlock">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Message_type (2 Byte)
+    </p>
+    <p>
+      MessageID_length:MessageID
+    </p>
+    <p>
+      expiryTime:SizeTotal:
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1389852647740" ID="ID_923444439" MODIFIED="1389853975200" TEXT="NOPBlock">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Message_type (2 Byte)
+    </p>
+    <p>
+      size(2 Bytes):RandomChunk
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1389858914142" ID="ID_611288689" MODIFIED="1389858917871" TEXT="General">
+<node CREATED="1389858934461" ID="ID_1467848290" MODIFIED="1389858970826" TEXT="sets start with the cryptopuzzle if required"/>
+<node CREATED="1389858989679" ID="ID_1235132233" MODIFIED="1389859040785" TEXT="One NOPBlock may be inserted before the first CryptoPuzzle"/>
+</node>
 </node>
 </node>
 </map>
