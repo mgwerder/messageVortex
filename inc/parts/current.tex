@@ -3,10 +3,26 @@ As of today the de facto standard for asynchronous mail transfer is SMTP as defi
 
 \section{Implemented protocols}
 \subsection{SMTP \index{SMTP|textbf}}
-\cite{RFC5321}
-\subsubsection{Mail transport}
+The SMTP protocol is currently specified in \cite{RFC5321}. It specifies a method to deliver reliably asynchronous messages thru a specific transport medium (most of the time the internet). The Protocol makes a dstinction between a mail envelope and its content. The envelope contains the routing information which is the sender and the recipient. The content again is split into two parts. These parts are the headers (which do contain meta information about the message such as subject, reply address or a comprehensive list of all recipients) and the body which contains the message itself.\par
+
+It furthermore introduces a simplistic model for mail communication. A more comprehensive model is introduced in the section \nameref{sec:mailTransport}. As the proposed model is not sufficient for a comprehensive end-to-end analysis.\par
+
+
+
+FIXME incomplete section
+
+\subsubsection{Mail transport\index{Message!Transport|textbf}}
 \cite{RFC1870}
 \subsubsection{encryption}
+Encryption is the only anonymizing technology which is available. There are serveral kind of encryptions which have to be differentiated. Link encryption controls the E-Mail connection a guarantees that the whole communication between two servers is encrypted. It does however not guarantee that the message and routing information is protected all the way thru the network. Message encryption is a weaker encryption which is done at a higher level of the protocol stack. It guarantees that a message is end to end encrypted but discloses all routing and header information.\par
+
+One kind of Mail link encryption is specified in \cite{RFC3207}. This RFC specifies that when a STARTTLS-Command is issued a TLS handshake initiating a encrypted link should be carried out between two Servers. Only not public servers (not published in DNS using MX records) may enforce the use of TLS. All public servers must allow non-TLS transport. Authentication thru this port is possible but usually not done. The STARTTLS specification states clearly that securing a link provides no end-to-end security. An attack to this mechanism is very simple. The only thing required is injecting a 454 error code when the client issues a STARTTLS. According to the document the sending server may then refuse to deliver the document but in reality this never happens in public SMTP servers.\par
+
+For encryption between a mail endpoint (repective its MSA)  and the server MRA Clients may choose to use alternate ports which enforce a TLS handshake at the TCP handshake. This invalidates the possibility to disturb a connection while still in plain text modes with fake errorcodes but since it is a weak security anyway it makes really a difference. According to the \cite{RFC3207} document the port 587 should be used. On some servers the same functionality is provided on port 465. This was originally intended for mail transmission between two MSAs. The usage of this port has however never been standardized, violates \cite{RFC6409} and the port is according to IANA assigned to the URD Protocol.\par
+
+The second type of encryption is message encryption. Message encryption does not cover the whole server communication starting from a specific point. It does only cover some parts or the full message body. The Two main protocols in use are SMIME (As specified in \cite{RFC2311}) and PGP/MIME as specified in \cite {RFC2015}(which bases on \cite{RFC1847}). Both do reveal vital information to all involved parties and a possible third party observer thus completely invalidating anonymity. Iformation which is visible to anyone are sender address, sender client, Recipient address, message subject and the full routing path including all rewrites, timing information and intermediate hops (and much more).\par 
+
+FIXME unfinished section
 
 \subsection{MIME}
 \cite{RFC2045}

@@ -140,8 +140,7 @@
       Initial sender of a message
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1389716435613" ID="Freemind_Link_655909062" MODIFIED="1389767787451" TEXT="Destinator">
@@ -158,8 +157,7 @@
       current sender of a message.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1389766132793" ID="ID_1147449425" MODIFIED="1389766136162" TEXT="Recipient">
@@ -210,11 +208,10 @@
       Size_count(4 Byte)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1389771748821" ID="ID_1164848743" MODIFIED="1389881272805" TEXT="capabilitiesReplyBlock">
+<node CREATED="1389771748821" ID="ID_1164848743" MODIFIED="1389945255582" TEXT="capabilitiesReplyBlock">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -313,8 +310,7 @@
       SubIdentity_length:SubIdentity
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1389260043167" ID="Freemind_Link_1725067771" MODIFIED="1389260065491" TEXT="Cryptopuzzles for all  DC mixes"/>
 <node CREATED="1389260066513" ID="Freemind_Link_125724480" MODIFIED="1389716800718" TEXT="Initial cryptopuzzle hard (to establish identity) and subsequent lower"/>
@@ -366,8 +362,7 @@
       Chunk_Offset(4 Bytes):Chunk_length(4 Bytes):Chunk
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1389771192456" ID="ID_1920725214" MODIFIED="1389853807019" TEXT="DC1BuildTableBlock">
@@ -407,8 +402,7 @@
       Message_Type(2 Bytes)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1389853205051" ID="ID_1441407665" MODIFIED="1389853301103" TEXT="ID;Vote_1;S(Vote_1);...;Vote_N;S(Vote_N);E(previous_coins)"/>
 </node>
 <node CREATED="1389852216724" ID="ID_821148844" MODIFIED="1389879310070" TEXT="DC3ConfirmBlock">
@@ -421,8 +415,7 @@
       Message_Type(2 Bytes)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1389772009508" ID="ID_1734883655" MODIFIED="1389879276015" TEXT="successBlock/errorBlock">
 <richcontent TYPE="NOTE"><html>
@@ -446,8 +439,7 @@
       Musrbs_length:[MURBS]
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1389771688471" ID="ID_42144452" MODIFIED="1389881020634" TEXT="MurBlock">
@@ -466,8 +458,7 @@
       expiryTime:SizeTotal:
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1389852647740" ID="ID_923444439" MODIFIED="1389853975200" TEXT="NOPBlock">
 <richcontent TYPE="NOTE"><html>
