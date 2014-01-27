@@ -1,8 +1,9 @@
 \documentclass[11pt,a4paper]{article}
 
 \usepackage[english]{babel}
-\usepackage{lscape}
+\usepackage{pdflscape}
 \usepackage{pgfgantt}
+\usepackage{tikz}
 
 \begin{document}
 
@@ -29,8 +30,9 @@ The thesis shall be structured in four main Parts:
 	\item Implementation\\
 				Based on the RFC-Document there should be a client implementation and a server implementation for an minimum baseline client.
 \end{itemize}
-\section{Gantt chart}
 \begin{landscape}
+\section{Gantt chart}
+\resizebox{\textwidth}{0.95\textheight}{
 \begin{ganttchart}[vgrid,hgrid]{1}{40}
 \gantttitle{2013}{1} \gantttitle{2014}{12} \gantttitle{2015}{12}  \gantttitle{2016}{12} \gantttitle{2017}{3}\\
 \gantttitlelist{12}{1}\gantttitlelist{1,...,12}{1}\gantttitlelist{1,...,12}{1}\gantttitlelist{1,...,12}{1}\gantttitlelist{1,...,3}{1} \\
@@ -55,6 +57,7 @@ The thesis shall be structured in four main Parts:
 %\ganttlink{elem2}{elem3}
 %\ganttlink{elem3}{elem4}
 \end{ganttchart}
+}
 \end{landscape}
 \end{document}
 

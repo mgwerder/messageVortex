@@ -211,7 +211,7 @@
 </html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1389771748821" ID="ID_1164848743" MODIFIED="1389945255582" TEXT="capabilitiesReplyBlock">
+<node CREATED="1389771748821" ID="ID_1164848743" MODIFIED="1390051191382" TEXT="capabilitiesReplyBlock">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -269,12 +269,33 @@
       # Cryptopuzzle Specification
     </p>
     <p>
-      Puzzle_size:Puzzle_Content:Hash_Type:Puzzle_NumberOfBits(1 Byte)
+      Puzzle_size:Puzzle_Content:Hash_Type
+    </p>
+    <p>
+      size(1 Byte):{
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;# Types may be: RE (Request identity), RA (Request Address), &quot;RB&quot; (Request Bandwidth)
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;Puzzle_type(2 Bytes):Puzzle_NumberOfBits(1 Byte)
+    </p>
+    <p>
+      }
     </p>
   </body>
 </html>
 </richcontent>
 <icon BUILTIN="button_ok"/>
+<node CREATED="1390051191335" ID="ID_271924974" MODIFIED="1390051205609" TEXT="How exactly to request bandwidth"/>
+<node CREATED="1390052349772" ID="ID_1274492858" MODIFIED="1390052357902" TEXT="encodings?">
+<node CREATED="1390052359062" ID="ID_1680965932" MODIFIED="1390052365070" TEXT="UU-encoding"/>
+<node CREATED="1390052365638" ID="ID_452516426" MODIFIED="1390052370522" TEXT="XX-Encoding"/>
+<node CREATED="1390052371027" ID="ID_1451451037" MODIFIED="1390052379188" TEXT="Base64-Encoding"/>
+</node>
 </node>
 <node CREATED="1389260033362" ID="Freemind_Link_1026401727" MODIFIED="1389881238321" TEXT="PuzzleBlock">
 <richcontent TYPE="NOTE"><html>

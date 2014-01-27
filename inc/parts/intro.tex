@@ -24,12 +24,14 @@ This work is an approach to extend the existing mail routing based on SMTP by an
 This work delivers the following results:
 
 \begin{itemize}
-  \item A throughout analysis of current technology and its weaknesses.\\
-	      Although the Simple Mail Transfer Protocol (SMTP) is a well-implemented and well proven technology its weaknesses are well known. The SMTP protocol was originally defined in RFC821\cite{RFC821} by Johnathan B. Postel. At this time internet was only available to universities, some mayor companies and governments. The objective of Simple Mail Transfer Protocol (SMTP) is to transfer mail reliably and efficiently\cite[p.~1]{RFC821}. Confidentiality or having a tamper proof protocol was no design goal. Over the years many standards arose trying to close some of the gaps. Some of them are being used but most of them are not very common. 
-	\item An analysis of possible approaches to improve the current standards.\\
+  \item A throughout analysis of current technology and its weaknesses.\par
+	      Although the Simple Mail Transfer Protocol (SMTP) is a well-implement\-ed and well proven technology its weaknesses are well known. The SMTP protocol was originally defined in RFC821\cite{RFC821} by Johnathan B. Postel. At this time internet was only available to universities, some mayor companies and governments. The objective of Simple Mail Transfer Protocol (SMTP) is to transfer mail reliably and efficiently\cite[p.~1]{RFC821}. Confidentiality or having a tamper proof protocol was no design goal. Over the years many standards arose trying to close some of the gaps. Some of them are being used but most of them are not very common. 
+	\item An analysis of possible approaches to improve the current standards.\par
 	      Many standards and technologies do exist these days addressing parts of the issues mentioned above. A throughout research should be carried out to identify how can these technologies be combined to achieve the subsequent goals. Furthermore technology advanced. Namely in the field of cryptology few possibilities and ideas arose (such as new encryption classes [eg. elliptic curves] or the idea of crypto puzzles). Another field of research which emerged in the analysis of traffic flow is handled under the term ``Big Data'' where not single events but the sum of events is handled.
-	\item A RFC document describing an approach offering a significant quality improvement of the existing solutions, which could be accepted by the internet community.
-	\item A prototype reflecting at least the minimum baseline of the RFC document to reflect prove its functionality.\\
+	\item A RFC document\par
+	      It will describe an approach offering a significant quality improvement of the existing solutions, which could be accepted by the internet community.\par
+	      The document has to follow the standards FIXME
+	\item A prototype reflecting at least the minimum baseline of the RFC document to reflect prove its functionality.\par
 	      A prototype should be offered to show the feasibility. The Prototype should be a reference implementation and offer a quick way to use the new technology. It should be distributed under the LGPL license to simplify distribution of the technology. 
 \end{itemize}
 
@@ -39,3 +41,15 @@ This thesis contributes to the topic in the following senses:
 \item It introduces a consistent model for message delivery which includes all endpoints
 \item It shows an approach based on existing protocols for anonymous communication
 \end{itemize}
+
+\section{Notation}
+The theory in this document is heavily based on encryption and hashing. In order to use a uniformed notation I use $E^{K_a}(M)$ for a symetric encryption of a message $M$ with a key $K_a$ where $a$ is an index to distinguish different keys. Decryption uses therefore $D^{K_a}(M)$.\par
+As notation for asymetric encryption I use $E^{K^{1}_a}(M)$ where as $K^{-1}_a$ is the private key and $K^{1}_a$ is the public key. The asymetric decryption is noted as $D^{K^{-1}_a}(M)$.\par
+For hashing I do use $H(M)$ if unsalted and $H^{S_a}$ if using a salted hash with salt $S_a$. The generated hash is shown as $H_M$ if unsalted and $\left\lbrace S_a,H_M\right\rbrace$ if salted.\par
+
+\begin{eqnarray}
+D^{K^{1}_a}\left(E^{K^{-1}_a}\left(M\right)\right)&=D^{K^{-1}_a}\left(E^{K^{1}_a}\left(M\right)\right)&=M\\
+D^{K_a}\left(E^{K_a}\left(M\right)\right)&~&=M\\
+H\left(M\right)&~&=H_M\\
+H^{S_a}\left(M\right)&~&=\left\lbrace S_a,H_M\right\rbrace
+\end{eqnarray}

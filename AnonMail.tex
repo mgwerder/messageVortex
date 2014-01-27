@@ -17,6 +17,8 @@
             maxbibnames=100,
             block=none,
             sorting=anyt]{biblatex}
+%\bibstyle{alphadin}
+\bibstyle{plain}
 \addbibresource{AnonMail}
 \usepackage{csquotes}
 
@@ -70,8 +72,8 @@
 \usepackage{hanging}
 \usepackage{ragged2e}
 \newenvironment{entry}{\par\leavevmode\hangpara{1.5mm}{1}\ignorespaces}{\RaggedRight\par}
-\newcommand*{\mainentry}[1]{{\bfseries{#1\label{def:#1}}}~}
-\newcommand*{\subentry}[1]{{\par\indent\hangpara{3mm}{1}\bfseries{\itshape{#1\label{def:#1}}}}~}
+\newcommand*{\mainentry}[2]{{\bfseries{#1\label{def:#1}}}~#2\par}
+\newcommand*{\subentry}[2]{\par~\begin{tabular}{p{\textwidth-.6cm}@{}}{\bfseries{\itshape{#1\label{def:#1}}}}~#2\end{tabular}}
 
 \newcommand*{\defref}[1]{\hyperref[def:#1]{#1}}
 
@@ -140,9 +142,13 @@ I would like to acknowledge the thousands of individuals who have coded for the 
 \end{entry}
 
 \begin{entry}
+  \mainentry{MDA}{FIXME}
+\end{entry}
+
+\begin{entry}
   \mainentry{MRA}{A Mail receiving Agent. This agent receives mails from a agent. Depending on the used protocol two subtypes of MRAs are available.
-  \subentry{Client MRA}{A client MRA picks up mails in the server mail storage from a remote MDA. Client MRAs usually connect thru a standard protocol which was designed for client access. Examples for such protocols are \defref{POP3} or \defref{IMAPv4}}}
-  \subentry{Server MRA}{FIXME} 
+  \subentry{Client MRA}{A client MRA picks up mails in the server mail storage from a remote MDA. Client MRAs usually connect thru a standard protocol which was designed for client access. Examples for such protocols are \defref{POP3} or \defref{IMAPv4}}
+  \subentry{Server MRA}{FIXME} }
 \end{entry}
 \begin{entry}\mainentry{MSA}{A Mail Sending Agent. This agent sends mails to a \defref{Server MRA}. }\end{entry}
 
@@ -158,18 +164,18 @@ I would like to acknowledge the thousands of individuals who have coded for the 
   \mainentry{POP3}{FIXME}
 \end{entry}
 
-\begin{entry}\mainentry{Privacy}{From the Oxford English Dictionary: ``
-  \begin{enumerate}
-    \item The state or condition of beeing withdrawn from the society of others, or from the public intrest; seclusion. The state or condition of beeing alone, undisturbed, or free from public attention, as a matter of choice or right; freedom from interference or intrusion.
-    \item Private or retired place; private apartments; places of retreat.
-    \item Absence or avoidance of publicity or display; a condition approaching to secrecy or concealment. Keeping of a secret.
-    \item A private matter, a secret; private or personal matters or relations; The private parts.
-    \item Intimacy, confidential relations.
-    \item The state of being privy to some act.
-  \end{enumerate}''\cite[FIXME]{OXFORD}\par
-  
-  In this work privacy is related to definition two. Mails should be able to be handled as a virtual private place where no one knows who is talking to whom and about what or how frequent (except for directly involved people).
-}
+\begin{entry}
+  \mainentry{Privacy}{From the Oxford English Dictionary: ``
+    \begin{enumerate}
+      \item The state or condition of beeing withdrawn from the society of others, or from the public intrest; seclusion. The state or condition of beeing alone, undisturbed, or free from public attention, as a matter of choice or right; freedom from interference or intrusion.
+      \item Private or retired place; private apartments; places of retreat.
+      \item Absence or avoidance of publicity or display; a condition approaching to secrecy or concealment. Keeping of a secret.
+      \item A private matter, a secret; private or personal matters or relations; The private parts.
+      \item Intimacy, confidential relations.
+      \item The state of being privy to some act.
+    \end{enumerate}''\cite[FIXME]{OXFORD}\\
+    In this work privacy is related to definition two. Mails should be able to be handled as a virtual private place where no one knows who is talking to whom and about what or how frequent (except for directly involved people).
+  }
 \end{entry}
 
 \chapter{Bibliography}

@@ -18,9 +18,22 @@ Encryption is the only anonymizing technology which is available. There are serv
 
 One kind of Mail link encryption is specified in \cite{RFC3207}. This RFC specifies that when a STARTTLS-Command is issued a TLS handshake initiating a encrypted link should be carried out between two Servers. Only not public servers (not published in DNS using MX records) may enforce the use of TLS. All public servers must allow non-TLS transport. Authentication thru this port is possible but usually not done. The STARTTLS specification states clearly that securing a link provides no end-to-end security. An attack to this mechanism is very simple. The only thing required is injecting a 454 error code when the client issues a STARTTLS. According to the document the sending server may then refuse to deliver the document but in reality this never happens in public SMTP servers.\par
 
-For encryption between a mail endpoint (repective its MSA)  and the server MRA Clients may choose to use alternate ports which enforce a TLS handshake at the TCP handshake. This invalidates the possibility to disturb a connection while still in plain text modes with fake errorcodes but since it is a weak security anyway it makes really a difference. According to the \cite{RFC3207} document the port 587 should be used. On some servers the same functionality is provided on port 465. This was originally intended for mail transmission between two MSAs. The usage of this port has however never been standardized, violates \cite{RFC6409} and the port is according to IANA assigned to the URD Protocol.\par
+For encryption between a mail endpoint (repective its MSA)  and the server MRA Clients may choose to use alternate ports which enforce a TLS handshake at the TCP handshake. This invalidates the possibility to disturb a connection while still in plain text modes with fake errorcodes but since it is a weak security anyway it makes really a difference. According to the \cite{RFC3207} document the port 587 should be used. On some servers the same functionality is provided on port 465. This was originally intended for mail transmission between two MSAs. The usage of this port has however never been standardized, violates \cite{RFC6409} and the port has been assigned to the URD Protocol by IANA.\par
 
-The second type of encryption is message encryption. Message encryption does not cover the whole server communication starting from a specific point. It does only cover some parts or the full message body. The Two main protocols in use are SMIME (As specified in \cite{RFC2311}) and PGP/MIME as specified in \cite {RFC2015}(which bases on \cite{RFC1847}). Both do reveal vital information to all involved parties and a possible third party observer thus completely invalidating anonymity. Iformation which is visible to anyone are sender address, sender client, Recipient address, message subject and the full routing path including all rewrites, timing information and intermediate hops (and much more).\par 
+The second type of encryption is message encryption. Message encryption does not cover the whole server communication starting from a specific point. It does only cover some parts or the full message body. The Two main protocols in use are S/MIME (As specified in \cite{RFC2311}) and PGP/MIME (as specified in \cite {RFC2015}; bases on \cite{RFC1847}). Both do reveal vital information to all involved parties of the mail transport and a possible third party observer thus completely invalidating anonymity. Informations which are visible to anyone are: 
+
+\begin{itemize}
+\item sender address (may be forged)
+\item sender client (may be forged)
+\item Recipient address
+\item message subject 
+\item the full routing path including all rewrites, timing information and intermediate hops.
+\item the content type
+\item Mime-Version
+\item Date and time of sending
+\end{itemize}
+
+Any client or intermediate Server may furthermore add additional information of any kind (such as virus scanning information, anti spam taxation, reply address).
 
 FIXME unfinished section
 
@@ -31,25 +44,27 @@ FIXME unfinished section
 \cite{RFC2048}
 \cite{RFC2049}
 
-\subsection{S/MIME}
+\subsubsection{S/MIME}
 \cite{RFC3851}
 
-\subsection{PGP}
+\subsubsection{PGP/MIME}
 \cite{RFC2440}
-
-\subsection{Sender Policy Framework}
-\cite{RFC4408}
-\cite{RFC6652}
-
-\subsection{Sender ID}
-\cite{RFC4401}
 
 \subsection{DNS}
 \cite{RFC2929}
+
 \subsubsection{DNSSEC}
 \cite{RFC5155}
 
+\subsubsection{Sender Policy Framework}
+\cite{RFC4408}
+\cite{RFC6652}
+
+\subsubsection{Sender ID}
+\cite{RFC4401}
+
 \subsection{Transport Protocols}
+
 \subsubsection{IPv4}
 \cite{RFC760}
 \cite{RFC791}
@@ -65,9 +80,10 @@ FIXME unfinished section
 
 \subsubsection{TCP}
 
-\subsection{POP3}
+\subsection{Remote MDA protocols}
+\subsubsection{POP3}
 \cite{RFC1939}
 
-\subsection{IMAPv4}
+\subsubsection{IMAPv4}
 \cite{RFC3501}
 

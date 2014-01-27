@@ -10,13 +10,19 @@ To understand the routing of a mail it is essential to understand the whole chai
   \label{fig:MailAgents}
 \end{figure}
 
+In the following paragraphs (for definitions) the term "`Mail"' is used synonymously to the term "`Message"'. The reason why "`Mail"' has been chosen over "`Messages"' that a lot of terms do already exist in standard documents. In these documents the term mail is commonly used.\par
+
 Mails are typically initiated by a Mail User Agent (\defref{MUA}). A MUA accesses a local mail storage which may be the server storage or a local copy. The local copy may be a cache only copy, the only existing storage (when mails are fetched and deleted from the server after retrieval)  or a collected representation of multiple server storages (cache or authoritative).\par
 
 Besides the MUA the only other component accessing a local mail storage is the Mail Delivery Agent (\defref{MDA}). An MDA is responsible for storing and fetching mails from the local mail storage. Mails destined for other accounts than the current one are forwarded to the MTA. In the case of a rich client the local MDA is part of the software provided by the user agent. In the case of a mail server the local MDA is part of the local Mailstore (not necessarily of the mail transport service).
 
-On the server side there are usually two components (software sets) at work. A ``Mail Transport Service'' (\defref{MTS}) which consists generally of three parts. An server Message Receiving Agent (\defref{server MRA}) is typically a SMTP listening daemon. A Mail Transfer Agent (\defref{MTA}) which is responsible for routing and rewriting mails. 
+On the server side there are usually two components (software sets) at work. A ``Mail Transport Service'' (\defref{MTS}) responsible for mail transfers and a "`Mail Storage System"' which offers the possibility to store received Mails in a local, persistent store.\par
 
-\subsection{Mail clients}
+A MTS consists generally out of three parts. An server Message Receiving Agent (\defref{Server MRA}) is typically a SMTP listening daemon. A Mail Transfer Agent (\defref{MTA}) which is responsible for routing, forwarding and rewriting mails. And a Mail Sending Agent (\defref{MSA}) which is responsible for transmitting mails to another Server MRA (usually done by SMTP).\par
+
+A MSS consists out of a local storage and delivery agents which do offer uniform interfaces to access the local store.\par
+
+\subsection{Mail clients (\defref{MUA})}
 \subsubsection{Fat clients}
 \subsubsection{Server located clients}
 \subsubsection{Web clients}
@@ -64,6 +70,8 @@ There is an RFC document regarding ``Ethics and the Internet''\cite[p.~1]{RFC108
 Unfortunately these actions do exist in modern internet and the most powerful players discovered so far are governmental agencies. Using a mixer and cryptographic algorithms definitely wastes resources. But it must be considered the right of every single user of the internet to uphold these points. As a final conclusion the proposed system does not violate the ethics of the internet but it must be designed to be as economically as possible with the existing resources.
 
 \section{Possible legal issues}
-One of the first questions I have been asked when working for this topic was: Is this legal? The question is important but not easy at all. The mail system is a global spanning network coming across almost any country of the world. Some of these countries consider almost any kind of secret as illegal as long as the country itself is not able to capture it. Some countries consider it as perfectly legal and some will generally accept its presence as long as the country or establishment is not endangered due to its usage. It is not part of this work to \par
+One of the first questions I have been asked when working for this topic was: Is this legal? The question is important but not easy at all. The mail system is a global spanning network coming across almost any country of the world. Some of these countries consider almost any kind of secret as illegal as long as the country itself is not able to capture it. Some countries consider it as perfectly legal and some will generally accept its presence as long as the country or establishment is not endangered due to its usage. Since there is usually control about mail traffic flow there is no mean to tell what laws have been violated by sending a mail. This is not specific to this work but a general problem which ocures often in connection to the internet.\par
 
+FIXME $<$should be removed$>$\par
 My personal unscientific point is: I do not care. In my country it is definitely legal as long as I am a well behaved citizen (as long as I do not missuse this system to plan or do illegal actions). There are already proprietary systems available which offer the same functionality. All I do is adding this functionality to the common system instead of reinventing the wheel. There are however many very good reasons to have such a system. Correspondence about my health, my business relations, my friends or my family (to give just a couple of examples) should be kept private even in an open world. The misuse of information would cause tremendous damage and several events in time (which have been mentioned earlier) showed that there are many secret services and other players using any kind of information to achieve their own goals or the goals of associates. They do this regardless of any country borders or regulations. Since I have no means of controlling the flow of messages in the internet or the hubs where a mail is running thru I consider it as fair to generate an addon to compensate the lack of control in the existing system. Exactly as a car -- the system may be legal or illegal and it depends on the users whether he wants to use it or not and in what way.\par
+FIXME $<$/should be removed$>$
