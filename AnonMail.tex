@@ -130,11 +130,31 @@ I would like to acknowledge the thousands of individuals who have coded for the 
 \chapter{Glossary}
 
 \begin{entry}
-  \mainentry{IMAPv4}{IMAPv4 is a typical protocol to be used between a \defref{Client MRA} and a \defref{Server MDA}. The protocol is capable of fully maintaining a server based message store. This includes the capability of adding, modifying and deleting messages and folders. It does not include however sening mails to other destinations outside the server based store.}
+  \mainentry{IMAPv4}{IMAPv4 is a typical protocol to be used between a \defref{Client MRA} and a \defref{Remote MDA}. It has been specified in its current version in \cite{RFC3501}. The protocol is capable of fully maintaining a server based message store. This includes the capability of adding, modifying and deleting messages and folders of a mailstore. It does not include however sening mails to other destinations outside the server based store.}
 \end{entry}
 
 \begin{entry}
-  \mainentry{MTA}{A Mail Transfer Agent. This transfer agent rroutes mails between other components. Typically  an MTA receives mails from an MRA and forwardes them to a MDA or MSA. The main task of a MTA is to provide reliable queues and solid track of all mails as long as they are not forwarded to another MTA or local storage.}
+  \mainentry{Local Mail Store}{A Local Mail Store offers a persistent store on a local non volatile memory in which messages are beeing stored. A store may be flat or structured (eg. supports folders). A Local Mail Store may be an authoritative store for mails or a "`Cache Only"' copy. It is typically not a queue.}
+\end{entry}
+
+\begin{entry}
+  \mainentry{MDA}{An MDA provides an uniform access to a \defref{Local Mail Store}.}
+  \subentry{Remote MDA}{A Remote MDA is typically supporting a specific access protocol to access the data stored within a \defref{Local Mail Store} .}
+  \subentry{Local MDA}{A Local MDA is typically giving local applications access to a server store. This may be done thru an API, a named socket or similar mechanisms.}
+\end{entry}
+
+\begin{entry}
+  \mainentry{MRA}{A Mail receiving Agent. This agent receives mails from a agent. Depending on the used protocol two subtypes of MRAs are available.}
+  \subentry{Client MRA}{A client MRA picks up mails in the server mail storage from a remote MDA. Client MRAs usually connect thru a standard protocol which was designed for client access. Examples for such protocols are \defref{POP3} or \defref{IMAPv4}}
+  \subentry{Server MRA}{Unlike a Client MRA a server MRA listens passively for incomming connections and forwardes received Messages to a MTA for delivery and routing. A typical protocol supported by an Server MRA is \defref{SMTP}}
+\end{entry}
+
+\begin{entry}
+  \mainentry{MSA}{A Mail Sending Agent. This agent sends mails to a \defref{Server MRA}. }
+\end{entry}
+
+\begin{entry}
+  \mainentry{MTA}{A Mail Transfer Agent. This transfer agent routes mails between other components. Typically  an MTA receives mails from an MRA and forwardes them to a MDA or MSA. The main task of a MTA is to provide reliable queues and solid track of all mails as long as they are not forwarded to another MTA or local storage.}
 \end{entry}
 
 \begin{entry}
@@ -142,26 +162,11 @@ I would like to acknowledge the thousands of individuals who have coded for the 
 \end{entry}
 
 \begin{entry}
-  \mainentry{MDA}{FIXME}
-\end{entry}
-
-\begin{entry}
-  \mainentry{MRA}{A Mail receiving Agent. This agent receives mails from a agent. Depending on the used protocol two subtypes of MRAs are available.
-  \subentry{Client MRA}{A client MRA picks up mails in the server mail storage from a remote MDA. Client MRAs usually connect thru a standard protocol which was designed for client access. Examples for such protocols are \defref{POP3} or \defref{IMAPv4}}
-  \subentry{Server MRA}{FIXME} }
-\end{entry}
-\begin{entry}\mainentry{MSA}{A Mail Sending Agent. This agent sends mails to a \defref{Server MRA}. }\end{entry}
-
-\begin{entry}
   \mainentry{MSS}{A Mail Storage Service. This is a set of agents providing a reliable store for local mail accounts. It also provides Interfacing which enables clients to access the users mail.}
 \end{entry}
 
 \begin{entry}
   \mainentry{MUA}{A Mail User Agent. This user agent reads mails from a local storage and allows a user to read existing mails, create and modify mails.}
-\end{entry}
-
-\begin{entry}
-  \mainentry{POP3}{FIXME}
 \end{entry}
 
 \begin{entry}
@@ -176,6 +181,14 @@ I would like to acknowledge the thousands of individuals who have coded for the 
     \end{enumerate}''\cite[FIXME]{OXFORD}\\
     In this work privacy is related to definition two. Mails should be able to be handled as a virtual private place where no one knows who is talking to whom and about what or how frequent (except for directly involved people).
   }
+\end{entry}
+
+\begin{entry}
+  \mainentry{POP3}{POP3 is a typical protocol to be used between a \defref{Client MRA} and a \defref{Remote MDA}. Unlike \defref{IMAPv4} it is not able to maintain a mail store. It soley purpose is to fetch and delete mails in a server based store. Modifying Mails or even handling a complex folder structure is not dooable with POP3}
+\end{entry}
+
+\begin{entry}
+  \mainentry{SMTP}{SMTP is the most commonly used protocol for sending mails across the internet. In its current version it has been specified in \cite{RFC5321}.}
 \end{entry}
 
 \chapter{Bibliography}

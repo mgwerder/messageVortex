@@ -17,11 +17,13 @@ Collected requirements to a mail system:\par
 \tablelasttail{\hline}
 \bottomcaption{User acceptance requirements}
 \begin{supertabular}{|p{5cm}|p{5cm}|c|}\hline
-The System should transport mails fast under normal conditions & Mails should travel with at least 1MB/min & 5\\\hline
+The System should be able to transport mails fast under normal conditions & Mails should travel with at least 1MB/min & 5\\\hline
 The System should transport mails reliable & Mails should always arrive or their status should be retrievable & 9\\\hline
 The System should offer anonymity against spying from third parties & Neither original sender nor final destination or any part of the message content should be determinable by any part of the system except for the original sender and the final recipient.& 9\\\hline
 The system must be easy to handle &&8\\\hline
-The system must be easy to install & Installation should be almost a ``single-click''-Thing. Details should be copied or accessed from the existing configurations.&5\\\hline
+The system must be easy to install & Installation should be almost a ``single-click''-Thing. Details should be copied or accessed from the existing configurations.\\\hline
+Messages should be prepared fast &&8\\\hline
+The degree of anonymity should be controllable &  & 8\\\hline
 \end{supertabular}
 \end{center}
 
@@ -29,14 +31,17 @@ The system must be easy to install & Installation should be almost a ``single-cl
 Collected requirements to a mail system from an admin perspective:\par
 \begin{tabular}{|p{5cm}|p{5cm}|c|}\hline
 Requirement& Criteria& weight\\\hline
-The System should transport mails fast under normal conditions & Mails should travel with at least 10MB/min & 5\\
-The System should transport mails reliable & Mails should always arrive or their status should be retrievable & 9\\
+The cost of mail routing should be controllable & under heavy load or due to resource shortage the system should be able to increase the cost for a sender & 5\\
+The system should not be missusable for UCE & UCE mails should be too costly to send & 9\\
 \hline\end{tabular}
 \section{Possible attacks to the system}
 \subsection{Generic DoS attacks}
+It is always possible to overload a system. However due to the combination with cryptopuzzles it is very hard for an attacker to use costly system ressources (such as cpu for decrypting or encrypting messages) without having far higher resource costs on his side. FIXME
 \subsubsection{Overloading single nodes}
+The cost for detecting an illic message are very small (just two or three cypher blocks) while the costs for generating load are very high. FIXME
 \subsection{Attacks on the users anonymity}
 \subsection{Reputaional attacks}
 \subsubsection{Misuse for sending spam}
+\subsubsection{Misuse for covering illegal actions}
 
 
