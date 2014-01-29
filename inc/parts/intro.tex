@@ -43,8 +43,8 @@ This thesis contributes to the topic in the following senses:
 \end{itemize}
 
 \section{Notation}
-The theory in this document is heavily based on encryption and hashing. In order to use a uniformed notation I use $E^{K_a}(M)$ for a symetric encryption of a message $M$ with a key $K_a$ where $a$ is an index to distinguish different keys. Decryption uses therefore $D^{K_a}(M)$.\par
-As notation for asymetric encryption I use $E^{K^{1}_a}(M)$ where as $K^{-1}_a$ is the private key and $K^{1}_a$ is the public key. The asymetric decryption is noted as $D^{K^{-1}_a}(M)$.\par
+The theory in this document is heavily based on symetric encryption, asymetric encryption and hashing. In order to use a uniformed notation I use $E^{K_a}(M)$ for a symetric encryption of a message $M$ with a key $K_a$ where $a$ is an index to distinguish different keys. Decryption uses therefore $D^{K_a}(M)$.\par
+As notation for asymetric encryption I use $E^{K^{1}_a}(M)$ where as $K^{-1}_a$ is the private key and $K^{1}_a$ is the public key of a key pair $K^p_a$. The asymetric decryption is noted as $D^{K^{-1}_a}(M)$.\par
 For hashing I do use $H(M)$ if unsalted and $H^{S_a}$ if using a salted hash with salt $S_a$. The generated hash is shown as $H_M$ if unsalted and $\left\lbrace S_a,H_M\right\rbrace$ if salted.\par
 
 \begin{eqnarray}
