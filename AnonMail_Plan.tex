@@ -1,6 +1,7 @@
 \documentclass[twocolumn,a4paper]{article}
 
 \usepackage[margin=0.7in]{geometry}
+\usepackage{hyperref}
 
 \begin{document}
 \title{Research Plan MailVortex}
@@ -9,7 +10,7 @@
 \maketitle
 
 \begin{abstract}\emph{
-It has never been so easy  to collect huge amounts of data about peoples. The internet allows not only to quickly reach any point of the world but it also allows to automatically monitor all kind interaction which takes place on the internet. Todays message flows in the internet is beeing traced (FIXME cite). The information obtained thru these channels is then being combined with other social streams to obtain a profile of a persons social network.
+It has never been so easy  to collect huge amounts of data about people. The internet allows not only to quickly reach any point of the world but it also allows to automatically monitor all kind interaction which takes place on it. Mobile connection data, Instant messenger data, data from mail accounts and similar kind of data is available in masses and easy to collect and analyse. Ongoing discoveries show that message flows in the internet and our private life is being traced (see \cite{echelon}, \cite{prism}, \cite{tempora} and may more). The information obtained thru these channels is then being combined with other social streams to obtain a profile of a persons social network.
 }\end{abstract}
 
 \section{Investigators}
@@ -25,7 +26,7 @@ The following working structure will be used to try to achieve the goals Listed 
 
 First I analyse current standard. Elaborate known strength and weaknesses thus getting the basic capabilities of the current transport channels. \par
 
-Next I try to work out the current state of theory regarding transmission of anonymous messages. It has to be destinguished between three types of anonymity at this point. The sender anonymity is given if a sender can not be evaluated given a message which has been delivered or is being delivered. Recipient anonymity is given when the recipient of a message can not be evaluated even if the message content is completely known either at the beginning or the end of a transmission. Third party anonymity is given if a message can not be traced by an observer not involved in sending or receiving the message. This means he would be unable to determine neither the content of the message nor the sender nor the recipient. T&his part of the work will be very tempting as there are already solution which have been built which address similar topics.\par
+Next I try to work out the current state of theory regarding transmission of anonymous messages. It has to be destinguished between three types of anonymity at this point. The sender anonymity is given if a sender can not be evaluated given a message which has been delivered or is being delivered. Recipient anonymity is given when the recipient of a message can not be evaluated even if the message content is completely known either at the beginning or the end of a transmission. Third party anonymity is given if a message can not be traced by an observer not involved in sending or receiving the message. This means he would be unable to determine neither the content of the message nor the sender nor the recipient. This part of the work will be very tempting as there are already solution which have been built which address similar topics.\par
 
 By recombining strength and weaknesses of previous works the research should lead to the next step. A protocol definition which allows a controllable degree of anonymity while using already existing transport technology and thus blending into the regular transfer of the targeted media. \par
 
@@ -34,4 +35,12 @@ Last step is the verification of the newly designed protocol. It should be analy
 \section{Potential Risks}
 It is possible that despite careful design of a target solution no acceptable
 \section{Potential Benefits}
+
+\section {Bibliography}
+\begin{thebibliography}{99}
+\bibitem{echelon}Temporary Committee on the ECHELON Interception System. REPORT on the existence of a global system for the interception of private and commercial communications (ECHELON interception system). 2001. url: \url{http://www.europarl.europa.eu/sides/getDoc.do?pubRef=-//EP//NONSGML+REPORT+A5-2001-0264+0+DOC+PDF+V0//EN&language=EN}.
+\bibitem{prism}Wikipedia entry on PRISM 2013. url: \url{https://en.wikipedia.org/wiki/PRISM_%28surveillance_program%29}
+\bibitem{tempora}Wikipedia entry on TEMPORA 2013. url: \url{https://en.wikipedia.org/wiki/Tempora}
+\end{thebibliography}
+
 \end{document}
