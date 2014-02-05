@@ -2,7 +2,7 @@
 
 \usepackage[margin=0.7in]{geometry}
 \usepackage{hyperref}
-
+\newenvironment{myitemize}{\begin{itemize}\setlength{\itemsep}{0em}}{\end{itemize}}
 \begin{document}
 \title{Research Plan MailVortex}
 \author{Martin Gwerder}
@@ -10,37 +10,85 @@
 \maketitle
 
 \begin{abstract}\emph{
-It has never been so easy  to collect huge amounts of data about people. The internet allows not only to quickly reach any point of the world but it also allows to automatically monitor all kind interaction which takes place on it. Mobile connection data, Instant messenger data, data from mail accounts and similar kind of data is available in masses and easy to collect and analyse. Ongoing discoveries show that message flows in the internet and our private life is being traced (see \cite{echelon}, \cite{prism}, \cite{tempora} and may more). The information obtained thru these channels is then being combined with other social streams to obtain a profile of a persons social network.
+It has never been so easy  to collect huge amounts of data about people. The internet allows not only to quickly reach any point of the world but it also allows to automatically monitor all kind interaction which takes place on it. Mobile connection data, Instant messenger data, data from mail accounts and similar kind of data is available in masses and easy to collect and analyse. \par
+
+Ongoing discoveries show that message flows in the internet and our private life are being traced (see \cite{echelon}, \cite{prism}, \cite{tempora} and many more). The information obtained through these channels is then being combined with other social streams to obtain a profile of a persons social network. If miss-used this information may lead to wrong accusations such as being part of illegal activities or socially not acceptable groups.\par
+
+It furthermore violates the human rights where Article 19 of the ICCPR states that "`everyone shall have the right to hold opinions without interference"' and "`everyone shall have the right to freedom of expression; this right shall include freedom to seek, receive and impart information and ideas of all kinds, regardless of frontiers, either orally, in writing or in print, in the form of art, or through any other media of his choice"'\cite{iccpr}.
+
 }\end{abstract}
 
 \section{Investigators}
 This topic has been chosen as main topic for a PhD thesis of Martin Gwerder at the University of Basel. Main supervisor will be Prof. Christian F. Tschudin (Head of Computer Networks Group). A second supervisor has yet to be defined. Being a topic of a PhD thesis the work will be carried out by Martin Gwerder. Guidance and quality assurance is assured by the supervisors.
 
 \section{Research Questions}
-The following Question should be investigated: How is it possible to create a secure channel over existing, asynchronous message transfer protocols which is capable to hide Messages and Meta-Information. The information should be at least untraceable for third parties. Optionally the system may hide sender and recipient information.
+The following question should be investigated: 
+\begin{quote}
+How is it possible to create a secure channel over existing, asynchronous message transfer protocols which is capable to hide Messages and Meta-Information towards any third party. 
+\end{quote}
+The information should be at least untraceable for third parties. Optionally goals might be (non conclusive):
+\begin{myitemize}
+\item The system may hide information about the sender to the recipient
+\item The system may hide information about the recipient. 
+\end{myitemize}
+As a transport base SMTP as defined in \cite{rfc5321} should be used. \par
+Assumption is that an adversary attacking the anonymity of any of the party (sender or recipient) has huge founding and almost unlimited capabilities regarding the internet. These capabilities include:
+\begin{myitemize}
+\item The capability of monitoring traffic at any point of the internet.
+\item The capability of controlling DNS.
+\item The capability of controlling routing.
+\item The capability of building any kind of infrastructure.
+\end{myitemize}
 
 \section{Background and Significance}
+Almon B. Strowger was the inventor of the first "`automatic telephone exchange"' which was a mayor step in information routing automation. He patended it in 1891 \cite{strowger}. Since then automated routing of information became tremendously important for the western world. Phone calls, internet packets and even conventional mail is routed automatically these days. While automated information routing speeds up the message exchange in our society it enables at the same time to collect automatically data about a persons habits. For example are persons more likely to communicate with persons sharing the same interest. So if a person communicates with several persons known to be passionate pony lovers he is more likely to be a pony lover himself.\par
+
+This is generally known and marketing experts, secret services or research institutes try to use available information to be more effective. They invent methods to collect vast amount of data about persons and then try to identify interesting individuals for their respective work. While the interest of the data collection owner might be legal the existence of a database categorizing individuals based on statistical likelihood might be more than questionable. The main problem is that a person in the western world can not choose in some cases whether he wants to be part of such a data collection or not. Some of the media which are interesting are unavoidable. Unavoidable information sources might be public directories, telephone or email.\par
+
+In this thesis the main topic shall be email. Email is today one of the most important business communication media. As such it contains a lot of individual data which can be easily analysed. As an example just imagine what Information could be discovered by analysing the data of a mailbox. Easily identifiable would be who is communicating with the owner of a mailbox ("`from"' and "`to"' headers), the topics which are being discussed (Keyword analyse of message body and subject) and who else was involved ("`cc"' and "`bcc"' headers). Most of this information (all except the message body) is even available if a message is being encrypted prior to sending. This and the fact that it is easily capturable makes todays emails a valuable source for information.\par
 
 \section{Research Method, Design and Analysis}
 The following working structure will be used to try to achieve the goals Listed above:\par
 
-First I analyse current standard. Elaborate known strength and weaknesses thus getting the basic capabilities of the current transport channels. \par
+First the current standard has to be analysed. Known strength and weaknesses have to be evaluated and the basic capabilities of the current transport channels have to be elaborated. \par
 
-Next I try to work out the current state of theory regarding transmission of anonymous messages. It has to be destinguished between three types of anonymity at this point. The sender anonymity is given if a sender can not be evaluated given a message which has been delivered or is being delivered. Recipient anonymity is given when the recipient of a message can not be evaluated even if the message content is completely known either at the beginning or the end of a transmission. Third party anonymity is given if a message can not be traced by an observer not involved in sending or receiving the message. This means he would be unable to determine neither the content of the message nor the sender nor the recipient. This part of the work will be very tempting as there are already solution which have been built which address similar topics.\par
+Next the current state of theory regarding transmission of anonymous messages has to be worked out. It has to be distinguished between three types of anonymity at this point. The "`sender anonymity"' is given if a sender can not be determined given a message which has been delivered or is being delivered. "`Recipient anonymity"' is considered as given when the recipient of a message can not be determined even if the message content is completely known either at the beginning or the end of a transmission. "`Third party anonymity"' is given if a message can not be traced by an observer not involved in sending or receiving the message. This means the observer would be unable to determine neither the content of the message nor its source nor its destination. \par
 
-By recombining strength and weaknesses of previous works the research should lead to the next step. A protocol definition which allows a controllable degree of anonymity while using already existing transport technology and thus blending into the regular transfer of the targeted media. \par
+By recombining strength and weaknesses of previous works the research should lead to the next step. A protocol definition should be written. This protocol should have the following which allows a controllable degree of anonymity while using already existing transport technology and thus blending into the regular transfer of the targeted media. \par
 
-Last step is the verification of the newly designed protocol. It should be analysed based on attacks which are already known to be more or less successful on other anonymity systems.\par
+Next step is writing a RFC quality document defining a protocol based on the findings of the previous phase. \par
+
+Based on the protocol definition a prototype has to be built. The Prototype must be able to run in an isolated environment simulating hundreds of mail servers. The prototype furthermore needs the capability to run as proxy to a Mail client (IMAPv4 or POP3 or EWS).\par
+
+Last step is the verification of the newly designed protocol. It should be analysed based on the prototype and attacks which are already known to be more or less successful on other anonymity systems. Emphasis should be laid on the following type of attacks:\par
+\begin{myitemize}
+\item Traffic analysis\\Can tuples of mail participant be identified?  
+\item Tag analysis\\How is it possible to tag messages in order to follow them.
+\item $(n-1)$ analysis\\is it possible to attack the anonymity with the $(n-1)$ attack?
+\item Evil nodes\\ Is it possible to break anonymity when controlling a certain amount of nodes involved in the delivery process?
+\item Bugging\\Is it possible to break anonymity by using side channel attacks or bugging technologies?
+\end{myitemize}
 
 \section{Potential Risks}
-It is possible that despite careful design of a target solution no acceptable
+It is possible that despite careful design of a target solution no acceptable solution is found to the problem of anonymous message transfer over SMTP. If so the thesis should outline why this is so and what is needed in order to fill the existing gaps. It should list conclusively what has been tried to elaborate anonymity and what counter measure has been found to break effectivity of these measures.\par
+
+Another risk might be that if the thesis leads to a fully or partially effective result the system might be misused for illegal action (such as black mailing, planing terrorist attacks or sending UBE). If possible precausive actions should be taken to avoid such situations (without violating the main goal).\par
+
+All anonymising technologies introduce some kind of "`noise"' information in which the true message content is hidden. This noise is an additional load which has to be handled by the existing mail infrastructure. If successful the reliability of the infrastructure might be endangered due to additional load. Nodes which are already on the brink of their capabilities might become overloaded and therefore unable to handle regular mail traffic. If possible precausive actions should be taken to avoid such situations (without violating the main goal).\par
+
+
 \section{Potential Benefits}
+If successful this thesis will allow normal users without the help of a provider to set up an anonymous communication channel which is using well known, elaborated technology. It will enable a mail user to control the level of anonymity he would like to have when communicating over the internet. This would fill an important gap of the current western information society. 
 
 \section {Bibliography}
 \begin{thebibliography}{99}
 \bibitem{echelon}Temporary Committee on the ECHELON Interception System. REPORT on the existence of a global system for the interception of private and commercial communications (ECHELON interception system). 2001. url: \url{http://www.europarl.europa.eu/sides/getDoc.do?pubRef=-//EP//NONSGML+REPORT+A5-2001-0264+0+DOC+PDF+V0//EN&language=EN}.
 \bibitem{prism}Wikipedia entry on PRISM 2013. url: \url{https://en.wikipedia.org/wiki/PRISM_%28surveillance_program%29}
 \bibitem{tempora}Wikipedia entry on TEMPORA 2013. url: \url{https://en.wikipedia.org/wiki/Tempora}
+\bibitem{iccpr}International Covenant on Civil and Political Rights. UNHR, 1966. url: \url{http://www.ohchr.org/en/professionalinterest/pages/ccpr.aspx}
+\bibitem{rfc5321} Klensin. RFC5321 Simple Mail Transfer Protocol. IETF, 2008. url: \url{http://tools.ietf.org/pdf/rfc5321.pdf}
+\bibitem{strowger}Almon B. Strowger. Patent 447918: Automatic Telephone Exchange. USPTO, 1891. url: \url{http://patft.uspto.gov/netacgi/nph-Parser?patentnumber=447918}
+
 \end{thebibliography}
 
 \end{document}

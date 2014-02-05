@@ -226,8 +226,7 @@
       PreceedingBlockhash_length:PreceedingBlockhashHashType_length:PreceedingBlockhashHashType:PreceedingBlockhash_length(2 Bytes):Signed(PreceedingBlockhash) # post signature
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1389260043167" ID="Freemind_Link_1725067771" MODIFIED="1389260065491" TEXT="Cryptopuzzles for all  DC mixes"/>
 <node CREATED="1389260066513" ID="Freemind_Link_125724480" MODIFIED="1389716800718" TEXT="Initial cryptopuzzle hard (to establish identity) and subsequent lower"/>
@@ -242,14 +241,14 @@
 <node CREATED="1389766005135" ID="ID_498449000" MODIFIED="1389766012263" TEXT="Short Puzzle"/>
 </node>
 </node>
-<node CREATED="1389769330573" ID="ID_152614027" MODIFIED="1391006112064" TEXT="messageBlock">
+<node CREATED="1389769330573" ID="ID_152614027" MODIFIED="1391065903602" TEXT="messageBlock">
 <richcontent TYPE="NOTE"><html>
   <head>
     
   </head>
   <body>
     <p>
-      # symetric encrypted with key from puzzleblock
+      # symetric encrypted with key from puzzleblock obfuscated
     </p>
     <p>
       Message_type (2 Byte)
@@ -269,7 +268,6 @@
   </body>
 </html>
 </richcontent>
-<icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1389771192456" ID="ID_1920725214" MODIFIED="1391001346984" TEXT="DC1BuildTableBlock">
 <richcontent TYPE="NOTE"><html>
@@ -296,8 +294,7 @@
       %MemberBlock
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1389853379630" ID="ID_696356377" MODIFIED="1389853741485" TEXT="ID; NextHop; E(NextHop_1, PuzzleBlock_1, E(NextHop_2, PuzzleBlock_2, E(NextHop_3, PuzzleBlock_3)))">
 <node CREATED="1389853652944" ID="ID_1989174130" MODIFIED="1389853712642" TEXT="PuzzleBlock;DC_1_build_table_Block(ID)"/>
 </node>
@@ -315,8 +312,7 @@
       Version(2 Byte)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1389853205051" ID="ID_1441407665" MODIFIED="1389853301103" TEXT="ID;Vote_1;S(Vote_1);...;Vote_N;S(Vote_N);E(previous_coins)"/>
 </node>
 <node CREATED="1389852216724" ID="ID_821148844" MODIFIED="1391001332648" TEXT="DC3ConfirmBlock">
@@ -332,8 +328,7 @@
       Version(2 Byte)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1389772009508" ID="ID_1734883655" MODIFIED="1391001327468" TEXT="successBlock/errorBlock">
 <richcontent TYPE="NOTE"><html>
@@ -366,11 +361,10 @@
       }
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1389771688471" ID="ID_42144452" MODIFIED="1391004671909" TEXT="MURBlock">
+<node CREATED="1389771688471" ID="ID_42144452" MODIFIED="1391064823443" TEXT="MURBlock">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -392,7 +386,13 @@
       SMTPAddress_length(1 byte):SMTPAddress # next SMTP recipient
     </p>
     <p>
-      startTime:expiryTime
+      startTime:expiryTimeMURBlock
+    </p>
+    <p>
+      &#160;&#160;&#160;&#160;Multi Use Routing Block
+    </p>
+    <p>
+      
     </p>
     <p>
       EmbededMurb_size(2 Bytes): embeddedMurb
@@ -427,8 +427,7 @@
       size(2 Bytes):RandomChunk
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 <node CREATED="1390985598967" ID="ID_1837627382" MODIFIED="1390985604224" TEXT="headerBlock"/>
@@ -577,8 +576,7 @@
       identity_length(1 Byte):Identity:publicKey_type_length(1 Byte):publicKey_type:publicKey_size (2 Bytes):publicKey
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -608,7 +606,7 @@
 </node>
 <node CREATED="1390984005954" ID="ID_569942959" MODIFIED="1390984009792" TEXT="sets">
 <node CREATED="1390984170140" ID="ID_1187380194" MODIFIED="1390984175382" TEXT="MessageSet">
-<node CREATED="1390984071944" ID="ID_82301496" MODIFIED="1390989639856" TEXT="[NOPBlock]&lt;PuzzleBlock&gt;&lt;MurBlock&gt;&lt;headerBlock&gt;&lt;MessageSet&gt;[&lt;success/ErrorBlock&gt;]"/>
+<node CREATED="1390984071944" ID="ID_82301496" MODIFIED="1391065657757" TEXT="[NOPBlock]&lt;PuzzleBlock&gt;&lt;MurBlock&gt;[&lt;headerBlock&gt;]&lt;MessageSet&gt;[&lt;success/ErrorBlock&gt;]"/>
 </node>
 <node CREATED="1390984178011" ID="ID_850580735" MODIFIED="1390984188713" TEXT="CapabilitySets">
 <node CREATED="1390984013169" ID="ID_6188329" MODIFIED="1390984069783" TEXT="[NOPBlock]&lt;CapabilitiesRequestBlock&gt;&lt;MurBlock&gt;"/>
