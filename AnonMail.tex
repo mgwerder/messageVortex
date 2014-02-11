@@ -1,4 +1,4 @@
-\documentclass[10pt,a4paper]{book}
+\documentclass[10pt,a4paper]{scrbook}
 
 \usepackage{svn}
 \SVN $Revision$
@@ -10,7 +10,7 @@
 
 \usepackage[backref=true,
             backend=bibtex,
-            bibstyle=AnonMail,
+            %bibstyle=AnonMail,
             hyperref=true,
             url=true,
             isbn=true,
@@ -20,6 +20,7 @@
             sorting=anyt]{biblatex}
 %\bibstyle{alphadin}
 \addbibresource{AnonMail}
+\addbibresource{inc/bib/unclassified/Anonbib/anonbib}
 \usepackage{csquotes}
 
 % enagle graphics inclusion
@@ -77,14 +78,14 @@
 \newcommand*{\subentry}[2]{\par~\begin{tabular}{p{\textwidth-.6cm}@{}}{\bfseries{\itshape{#1\label{def:#1}}}}~#2\end{tabular}}
 
 \newcommand*{\defref}[1]{\hyperref[def:#1]{#1}}
-
-\title{Possible solutions to implement email transfer offering anonymity towards third parties}
-\author{Martin Gwerder}
+\title{MailVortex}
+\subtitle{A extension to traditional Email to offer anonymity towards third parties}
+\author{Martin Gwerder (06-073-787)}
 \date{\SVNDate}
 
 \hypersetup{pdfinfo={
 Subject={Privacy when using mail},
-Keywords={Email; SMTP; MIME; S/MIME; POP3; IMAPv4}
+Keywords={Email; SMTP; MIME; S/MIME; POP3; IMAPv4; MailVortex}
 }}
 
 \begin{document}
@@ -201,6 +202,7 @@ I would like to acknowledge the thousands of individuals who have coded for the 
 \begin{comment}
 % just a trick to make TexNicCenter Bibliography working
 \bibliography{AnonMail}
+\bibliography{inc/bib/unclassified/Anonbib/anonbib}
 \end{comment}
 
 \end{appendices}
