@@ -7,7 +7,7 @@ SMTP as defined in RFC5321\cite{RFC5321} is as of today (2013)  state of the art
 Anonymity against third party is not given due to the following facts.
 
 \begin{itemize}
-"  \item There is not always an encryption available between a mail user agent (MUA) and the outgoing mail server.
+  \item There is not always an encryption available between a mail user agent (MUA) and the outgoing mail server.
 	\item There is no way to guarantee that a mail transfer between two SMTP hosts is encrypted.
 	\item There is no always an encryption available between a SMTP host and the MUA of the recipient.
   \item Encryption based on top level protocols (such as S/MIME or PGP) do hide the message content. The sender, recipient, the subject and some technical information (eg. MIME-Headers) are always in plain available and not protected as such.
@@ -30,7 +30,7 @@ This work delivers the following results:
 	      Many standards and technologies do exist these days addressing parts of the issues mentioned above. A throughout research should be carried out to identify how can these technologies be combined to achieve the subsequent goals. Furthermore technology advanced. Namely in the field of cryptology few possibilities and ideas arose (such as new encryption classes [eg. elliptic curves] or the idea of crypto puzzles). Another field of research which emerged in the analysis of traffic flow is handled under the term ``Big Data'' where not single events but the sum of events is handled.
 	\item A RFC document\par
 	      It will describe an approach offering a significant quality improvement of the existing solutions, which could be accepted by the internet community.\par
-	      The document has to follow the standards FIXME
+	      The document has to follow the standards \citetitle{RFC2223} \cite{RFC2223}, \citetitle{RFC2119} \cite{RFC2119}, \citetitle{RFC3979} \cite{RFC3979} and \citetitle{RFC5378} \cite{RFC5378}. 
 	\item A prototype reflecting at least the minimum baseline of the RFC document to reflect prove its functionality.\par
 	      A prototype should be offered to show the feasibility. The Prototype should be a reference implementation and offer a quick way to use the new technology. It should be distributed under the LGPL license to simplify distribution of the technology. 
 \end{itemize}
@@ -44,13 +44,21 @@ This thesis contributes to the topic in the following senses:
 \end{itemize}
 
 \section{Notation}
-The theory in this document is heavily based on symetric encryption, asymetric encryption and hashing. In order to use a uniformed notation I use $E^{K_a}(M)$ for a symetric encryption of a message $M$ with a key $K_a$ where $a$ is an index to distinguish different keys. Decryption uses therefore $D^{K_a}(M)$.\par
-As notation for asymetric encryption I use $E^{K^{1}_a}(M)$ where as $K^{-1}_a$ is the private key and $K^{1}_a$ is the public key of a key pair $K^p_a$. The asymetric decryption is noted as $D^{K^{-1}_a}(M)$.\par
-For hashing I do use $H(M)$ if unsalted and $H^{S_a}$ if using a salted hash with salt $S_a$. The generated hash is shown as $H_M$ if unsalted and $\left\lbrace S_a,H_M\right\rbrace$ if salted.\par
+The theory in this document is heavily based on symetric encryption, asymetric encryption and hashing. In order to use a uniformed notation I use $E^{K_a}(M)$ (where $a$ is an index to distinguish multiple keys) resulting in $M^{K_a}$ as the encrypted message. Messages encrypted with multiple keys do list the used keys as a coma separated list in superscript $E^{K_b}\left(E^{K_a}\left(M\right)\right)=M^{{K_{a}},{K_b}}$.\par
 
-\begin{eqnarray}
-D^{K^{1}_a}\left(E^{K^{-1}_a}\left(M\right)\right)&=D^{K^{-1}_a}\left(E^{K^{1}_a}\left(M\right)\right)&=M\\
-D^{K_a}\left(E^{K_a}\left(M\right)\right)&~&=M\\
-H\left(M\right)&~&=H_M\\
-H^{S_a}\left(M\right)&~&=\left\lbrace S_a,H_M\right\rbrace
-\end{eqnarray}
+For a symetric encryption of a message $M$ with a key $K_a$ resulting in $G^{K_a}$ where $a$ is an index to distinguish different keys. Decryption uses therefore $D^{K_a}(M^{K_a})$.\par
+
+As notation for asymetric encryption I use $E^{K^{1}_a}(M)$ where as $K^{-1}_a$ is the private key and $K^{1}_a$ is the public key of a key pair $K^p_a$. The asymetric decryption is noted as $D^{K^{-1}_a}(M)$.\par
+
+For hashing I do use $H(M)$ if unsalted and $H^{S_a}$ if using a salted hash with salt $S_a$. The generated hash is shown as $H_M$ if unsalted and $H^{S_a}_M$ if salted.\par
+
+\begin{align*}
+asymetric: & E^{K^{-1}_a}\left(M\right) &~&=M^{K^{-1}_a}\\
+           & D^{K^{1}_a}\left(E^{K^{-1}_a}\left(M\right)\right)&=D^{K^{-1}_a}\left(E^{K^{1}_a}\left(M\right)\right)&=M\\
+symetric:  & E^{K_a}\left(M\right) &~&=M^{K_a}\\
+           & D^{K_a}\left(E^{K_a}\left(M\right)\right)&~&=M\\
+hashing (unsalted): & H\left(M\right)&~&=H_M\\
+hashing (salted): & H^{S_a}\left(M\right)&~&=H^{S_a}_M
+\end{align*}
+
+

@@ -1,4 +1,7 @@
 \chapter{Designing an approach}
+FIXME Blabla missing
+
+
 \section{Defining system boundaries}
 \subsection{Thread model}
 As an adverser we assume the following attributes:
@@ -60,37 +63,53 @@ His expectations are:
 \item System should still allow him to do regulatory tasks such as virus scanning or backup.
 \end{itemize}
 
-\section{Basic Requirements of an approach}
+\section{Basic Requirements of an Approach}
+Different types of peers must be available:
+
+\begin{itemize}
+  \item Passive\\
+	This peer is sending and receiving only. It works as a endpoint for communication and does only allow relay transfer for messages containing payload for this peer.
+	\item Stealth\\
+	This peer is behaving absolutely passive to unknown peers. No automatic replys are beeing sent unless the sender has been identified. Sender identification may be based on any criteria such as SMTP AUTH, known identity to vortex or knowledge about the public key of the recipient.
+	\item public\\
+	This peer is publicly known to be a participating peer. It may be used for local or relay delivery.
+\end{itemize}
+
+\subsection{Transport Layer Blending}
+In order to blend into SMTP-Transport layer the following Criterias should be met:\par
+\begin{table}[H]
+  \centering
+	\def\fh{\multicolumn{1}{|l}{\textbf{Criteria}} &
+	\multicolumn{1}{|l}{\textbf{Parameter}} &
+	\multicolumn{1}{|l|}{\textbf{Reason}}}
+	\tablefirsthead{\hline\fh\\\hline}
+	\tablehead{\hline\multicolumn{3}{|l|}{\small\slshape continued from previous page}\\\hline\fh\\\hline}
+	\tabletail{\hline\multicolumn{3}{|l|}{\small\slshape continued on next page}\\\hline}
+	\tablelasttail{}
+	\bottomcaption{Transport layer decisions}
+  \begin{supertabular}{|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}p{6cm}|}
+		SMTP address & May have non mandatory extensions & SMTP adresses may have extension. However, these extensions must not be mandatory since a target address must be able to be in stealth mode\\\hline
+		Transfer channel negotiation & Should always use SMTPS or STARTTLS & Hide immediate peer partners. This increases amount of work to be done for analyzing traffic.\\\hline
+		encoding mime message & Should always use Base64 & Any other encoding would differentiate MailVotex from regular traffic\\\hline
+		Transport media & Attachment & May be any kind of attachment. Recommended are mime types which have no verifiable structures such as .raw or .pcm files to avoid detection thru content analysis.\\\hline
+	\end{supertabular}
+\end{table}
+FIXME incomplete section
 
 \chapter{Specifying a target solution}
+FIXME incomplete section
 \section{Blocks}
 \subsection{Preamble}
-\begin{itemize}
-  \item identity
-  \item Request Number (RNR)
-  \item Identity signature
-  \item Message key
-  \item Shuffle
-\end{itemize}
+FIXME incomplete section
 
 \subsection{Routing block}
-\begin{itemize}
-  \item Next hop address
-  \item RNR (must match preamble)
-  \item Validity time
-  \item delivery expiry
-  \item Message checksum (optional)
-  \item Padding  (optional)
-\end{itemize}
+FIXME incomplete section
 
 \subsection{Address request block}
+FIXME incomplete section
 
 \section{Messages}
+FIXME incomplete section
+
 \subsection{Basecom}
-\begin{itemize}
-  \item Request Server keys
-  \item Request identity (identity and key tuple)
-  \item Request size quota (size in bytes and end time)
-  \item Request Puzzle spec
-  \item Request capabilities
-\end{itemize}
+FIXME incomplete section

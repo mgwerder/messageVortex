@@ -7,6 +7,8 @@
 \SVN $URL$
 \SVN $Id$
 
+	
+\usepackage{scrhack}
 
 \usepackage[backref=true,
             backend=bibtex,
@@ -22,6 +24,12 @@
 \addbibresource{AnonMail}
 \addbibresource{inc/bib/unclassified/Anonbib/anonbib}
 \usepackage{csquotes}
+
+% enable raggedright in tables
+\usepackage{array}
+
+% enable placement of floating images
+\usepackage{float}
 
 % enagle graphics inclusion
 \usepackage{graphicx}
@@ -55,9 +63,10 @@
 
 % Sans serif font for the whole document
 \renewcommand{\familydefault}{\sfdefault}
-\usepackage[OT1]{fontenc}
-\usepackage{lmodern}
+\usepackage[T1]{fontenc}
+\usepackage{times}
 
+\usepackage{amsmath}
 
 % No paragraph indentation
 \setlength\parindent{0pt} 
@@ -132,7 +141,15 @@ I would like to acknowledge the thousands of individuals who have coded for the 
 \chapter{Glossary}
 
 \begin{entry}
-  \mainentry{IMAPv4}{IMAPv4 is a typical protocol to be used between a \defref{Client MRA} and a \defref{Remote MDA}. It has been specified in its current version in \cite{RFC3501}. The protocol is capable of fully maintaining a server based message store. This includes the capability of adding, modifying and deleting messages and folders of a mailstore. It does not include however sening mails to other destinations outside the server based store.}
+  \mainentry{Agent}{FIXME}
+\end{entry}
+
+\begin{entry}
+  \mainentry{EWS}{FIXME}
+\end{entry}
+
+\begin{entry}
+  \mainentry{IMAP}{IMAP (currently IMAPv4) is a typical protocol to be used between a \defref{Client MRA} and a \defref{Remote MDA}. It has been specified in its current version in \cite{RFC3501}. The protocol is capable of fully maintaining a server based message store. This includes the capability of adding, modifying and deleting messages and folders of a mailstore. It does not include however sening mails to other destinations outside the server based store.}
 \end{entry}
 
 \begin{entry}
@@ -147,7 +164,7 @@ I would like to acknowledge the thousands of individuals who have coded for the 
 
 \begin{entry}
   \mainentry{MRA}{A Mail receiving Agent. This agent receives mails from a agent. Depending on the used protocol two subtypes of MRAs are available.}
-  \subentry{Client MRA}{A client MRA picks up mails in the server mail storage from a remote MDA. Client MRAs usually connect thru a standard protocol which was designed for client access. Examples for such protocols are \defref{POP3} or \defref{IMAPv4}}
+  \subentry{Client MRA}{A client MRA picks up mails in the server mail storage from a remote MDA. Client MRAs usually connect thru a standard protocol which was designed for client access. Examples for such protocols are \defref{POP} or \defref{IMAP}}
   \subentry{Server MRA}{Unlike a Client MRA a server MRA listens passively for incomming connections and forwardes received Messages to a MTA for delivery and routing. A typical protocol supported by an Server MRA is \defref{SMTP}}
 \end{entry}
 
@@ -186,16 +203,26 @@ I would like to acknowledge the thousands of individuals who have coded for the 
 \end{entry}
 
 \begin{entry}
-  \mainentry{POP3}{POP3 is a typical protocol to be used between a \defref{Client MRA} and a \defref{Remote MDA}. Unlike \defref{IMAPv4} it is not able to maintain a mail store. It soley purpose is to fetch and delete mails in a server based store. Modifying Mails or even handling a complex folder structure is not dooable with POP3}
+  \mainentry{POP}{POP (currently in version 3) is a typical protocol to be used between a \defref{Client MRA} and a \defref{Remote MDA}. Unlike \defref{IMAP} it is not able to maintain a mail store. Its sole purpose is to fetch and delete mails in a server based store. Modifying Mails or even handling a complex folder structure is not doable with POP}
+\end{entry}
+
+\begin{entry}
+  \mainentry{Service}{FIXME}
 \end{entry}
 
 \begin{entry}
   \mainentry{SMTP}{SMTP is the most commonly used protocol for sending mails across the internet. In its current version it has been specified in \cite{RFC5321}.}
 \end{entry}
 
-\chapter{Bibliography}
-\printbibliography[title={},heading=none]
+\begin{entry}
+  \mainentry{Storage}{FIXME}
+\end{entry}
 
+\chapter{Bibliography}
+{
+  \renewcommand*{\bibfont}{\small}
+  \printbibliography[title={},heading=none]
+}
 \index{Mail transport|see {Message Transport}}
 \printindex
 

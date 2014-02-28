@@ -4,52 +4,99 @@ Todays mail transport is mostly done via SMTP\index{SMTP} protocol as specified 
 
 To understand the routing of a mail it is essential to understand the whole chain staring from a user(-agent) until arriving at the target user (and being read!). To simplify this I used a consistent model which includes all components (server and clients). The figure \ref{fig:MailAgents} shows all involved parties of a typical Mail routing. It is important to understand that Mail routing remains the same regardless of the used client. However -- Availability of a mail at its destination changes drastically depending on the type of client used. Furthermore control of the mail flow and control is different depending on the client.\par
 
+The model has three main players storage (derfref{Storage}), agent (derfref{Agent}) and service (derfref{Service}). Storages are endpoint storages storing mails. Not explicitely shown are temporary storages such as spooler queues or state storages. Agents are simple programs taking care of a specific job. Agents may be exchangeable by other similar agents. A service is a bundle of agents which is responsible for a specific task or task sets.
+
 \begin{figure}[ht!]
   \centering\includegraphics[width=\textwidth]{inc/MailAgents1}
   \caption{Mail Agents}
   \label{fig:MailAgents}
 \end{figure}
 
-In the following paragraphs (for definitions) the term "`Mail"' is used synonymously to the term "`Message"'. The reason why "`Mail"' has been chosen over "`Messages"' that a lot of terms do already exist in standard documents. In these documents the term mail is commonly used.\par
+In the following paragraphs (for definitions) the term ``Mail'' is used synonymously to the term ``Message''. The reason why ``Mail'' has been chosen over ``Messages'' that a lot of terms do already exist in standard documents. In these documents the term mail is commonly used.\par
 
 Mails are typically initiated by a Mail User Agent (\defref{MUA}). A MUA accesses a local mail storage which may be the server storage or a local copy. The local copy may be a cache only copy, the only existing storage (when mails are fetched and deleted from the server after retrieval)  or a collected representation of multiple server storages (cache or authoritative).\par
 
 Besides the MUA the only other component accessing a local mail storage is the Mail Delivery Agent (\defref{MDA}). An MDA is responsible for storing and fetching mails from the local mail storage. Mails destined for other accounts than the current one are forwarded to the MTA. In the case of a rich client the local MDA is part of the software provided by the user agent. In the case of a mail server the local MDA is part of the local Mailstore (not necessarily of the mail transport service).
 
-On the server side there are usually two components (software sets) at work. A ``Mail Transport Service'' (\defref{MTS}) responsible for mail transfers and a "`Mail Storage System"' which offers the possibility to store received Mails in a local, persistent store.\par
+On the server side there are usually two components (software sets) at work. A ``Mail Transport Service'' (\defref{MTS}) responsible for mail transfers and a ``Mail Storage System'' which offers the possibility to store received Mails in a local, persistent store.\par
 
-A MTS consists generally out of three parts. An server Message Receiving Agent (\defref{Server MRA}) is typically a SMTP listening daemon. A Mail Transfer Agent (\defref{MTA}) which is responsible for routing, forwarding and rewriting mails. And a Mail Sending Agent (\defref{MSA}) which is responsible for transmitting mails to another Server MRA (usually done by SMTP).\par
+A MTS consists generally out of three parts. For incomming connects there is a daemon called Mail Receiving Agent (\defref{Server MRA}) is typically a SMTP listening daemon. A Mail Transfer Agent (\defref{MTA}) which is responsible for routing, forwarding and rewriting mails. And a Mail Sending Agent (\defref{MSA}) which is responsible for transmitting mails to another Server MRA (usually done by SMTP).\par
 
 A MSS consists out of a local storage and delivery agents which do offer uniform interfaces to access the local store.\par
 
-\subsection{Mail clients (MUA)}
+\subsection{Mail user Agents}
+Mail User Agents (MUA) are the terminal endpoint of a mail delivery. Mail user agents may be implemented as fat clients on a desktop or mobile system or as an interface over a different generic protocol such as HTTP (Web Clients). \par
+
+Server located clients are a special breed of fat clients. These clients share the properties of fat clients except for the fact that they do not connect to the server. The client application itself has to be run on the server. This makes delivery and communication with the server different. Instead of interfacing with a MSA and a client MDA they may directly access the local mail storage on the server. On these systems the local mail storage may be implemented as a database in a user specific directory structure.
+
 \subsubsection{Fat clients}
+The majority of mail clients are fat clients. These clients score over the more centralistic organized web clients in the way that they may offer mail availability even if an internet connection is not available (thru a client specific local mail storage). They furthermore provide the possibility to collect mails from multiple sources and store them in the local storage. Unlike Mail servers, clients are assumed to be not always online. In fact they may be offline most of the time. To guarantee the availability of a certain email address a responsible mail server for a specific address collects all mails (this is done by the \defref{MSS}) and provides a consolidated view onto the database when a client connects thru a local or remote MDA.\par
+
+As these clients vary strongly it is absolutely mandatory for the MDA that they are well specified. Lack in doing so would result in heavy interoperability problems. Most commonly the Protocols \defref{IMAP}, \defref{POP} and \defref{EWS} are being used these days. For mail delivery the SMTP protocol is used. \par
+
+FIXME incomplete section
+
 \subsubsection{Server located clients}
+FIXME incomplete section
+
 \subsubsection{Web clients}
+FIXME incomplete section
 
 \section{Anonymity}
+FIXME incomplete section
+
 \subsection{\itshape{k}-anonymity}
 \cite{k-anonymous:ccs2003}
 \cite{wpes10-unraveling}
+FIXME incomplete section
+
 \subsection{Plausible deniability}
+FIXME incomplete section
+
 \subsubsection{Deniable encryption}
+FIXME incomplete section
+
 \subsection{DC-Nets}
 \cite{chaum-dc}
+FIXME incomplete section
+
 \section{Identification and data signage}
+FIXME incomplete section
+
 \section{Encryption}
+FIXME incomplete section
+
 \subsection{Key exchange}
+FIXME incomplete section
+
 \subsubsection{Diffie-Hellmann key exchange}
+FIXME incomplete section
+
 \subsection{Symetric encryption}
+FIXME incomplete section
+
 \subsubsection{Advanced Encryption Standard}
+FIXME incomplete section
+
 \subsection{Asymetric encryption}
+FIXME incomplete section
+
 \subsubsection{RSA}
+FIXME incomplete section
+
 \subsubsection{El-Gamal}
+FIXME incomplete section
+
 \subsubsection{ECDSA}
+FIXME incomplete section
+
 \section{Mix cascades}
+FIXME incomplete section
+
 \section{Remailers}
 Agents which do accept Mails from one party and forward it to another party while modifying its content well known under the name of ``Remailers''. Wi\-ki\-pe\-dia \cite{wiki:remailer} lists four types of Remailers.\par
 
-Pseudonymous Remailers (or Type-0-Remailers) are remailers that establish a pseudonymity. This means that the senders Email-Address is removed and replaced by a pseudonymous E-Mailadress under the remailers control. This sender address may be used as an ordinary email-Adress to reeach the original sender of the mail. These types of Remailers allow to send mails while one or both recipients do not know their counterpart. The message (or at least parts of it) might be encrypted but do not have to be. For someone controling the Remailer it will always be possible to make a link between the pseudonymous mail address and a original mailadress. So pseudonymity is only granted towards people not controlling the remailer. Furthermore a person or organisation might be able to discover the Information tuple of Sender and pseudonymous email by analyzing messages and their timely context. So this remailer system is suspectible for traffic analysis.\par
+Pseudonymous Remailers (or Type-0-Remailers) are remailers that establish a pseu\-do\-ny\-mi\-ty. This means that the senders Email-Address is removed and replaced by a pseudonymous E-Mailadress under the remailers control. This sender address may be used as an ordinary email-Adress to reeach the original sender of the mail. These types of Remailers allow to send mails while one or both recipients do not know their counterpart. The message (or at least parts of it) might be encrypted but do not have to be. For someone controling the Remailer it will always be possible to make a link between the pseudonymous mail address and a original mailadress. So pseudonymity is only granted towards people not controlling the remailer. Furthermore a person or organisation might be able to discover the Information tuple of Sender and pseudonymous email by analyzing messages and their timely context. So this remailer system is suspectible for traffic analysis.\par
 
 Cypherpunk-Remailers (or Type-1-Remailers) do function a bit different. They take an encrypted message which was encrypted using the public key of the server, decrypt it and send it to a recipient. The original senders identity gets lost. A reply to a cypherpunk message is not possible. Messages sent to a cypherpunk server might contain messages to other cypherpunk remailers. This daisy-chaining of cypherpunk-nodes allows hiding the original sender-receiver-tuple from a single node. The first node knows only the the originating sender while the last node knows only the final recipient. All intermediate notes do only know the nodes they were linking. However if having traffic information of the entry and exit nodes the tuple might be discovered by traffic analysis.\par
 

@@ -16,9 +16,10 @@
 <node CREATED="1387382162629" ID="Freemind_Link_557085012" MODIFIED="1387382175764" TEXT="unobservable peers">
 <node CREATED="1387382176443" ID="Freemind_Link_412729679" MODIFIED="1387382180936" TEXT="encryption"/>
 </node>
-<node COLOR="#000000" CREATED="1387382183471" ID="Freemind_Link_764087696" MODIFIED="1389717527864" TEXT="Censorship resitant">
+<node COLOR="#000000" CREATED="1387382183471" ID="Freemind_Link_764087696" MODIFIED="1392735789430" TEXT="Censorship resitant">
 <node CREATED="1387382192729" ID="Freemind_Link_1193092763" MODIFIED="1387382227659" TEXT="Parrot flaging function (please answer to embedding mail)"/>
 </node>
+<node CREATED="1392280479210" ID="ID_1120554289" MODIFIED="1392280486713" TEXT="little-endian"/>
 </node>
 <node CREATED="1387382381376" ID="Freemind_Link_891870390" MODIFIED="1387382387850" POSITION="left" TEXT="classification">
 <node CREATED="1387382388295" ID="Freemind_Link_449362361" MODIFIED="1387382396329" TEXT="adversary">
@@ -27,7 +28,9 @@
 </node>
 <node CREATED="1387382401961" ID="Freemind_Link_1514579709" MODIFIED="1387382405003" TEXT="passive">
 <node CREATED="1387382446546" ID="Freemind_Link_708279407" MODIFIED="1387382451523" TEXT="espionage"/>
+<node CREATED="1392280660022" ID="ID_1030682161" MODIFIED="1392280667198" TEXT="meta data collection">
 <node CREATED="1387382466624" ID="Freemind_Link_1028832596" MODIFIED="1387382482458" TEXT="user classification"/>
+</node>
 </node>
 </node>
 <node CREATED="1387382534774" ID="Freemind_Link_891081098" MODIFIED="1387382538768" TEXT="attack">
@@ -192,7 +195,7 @@
 </node>
 <node CREATED="1389769589777" ID="ID_1167418647" MODIFIED="1389852647740" POSITION="left" TEXT="Messages">
 <node CREATED="1389858908596" ID="ID_1640519951" MODIFIED="1391004133842" TEXT="Block Types">
-<node CREATED="1389260033362" ID="Freemind_Link_1026401727" MODIFIED="1391003802638" TEXT="PuzzleBlock">
+<node CREATED="1389260033362" ID="Freemind_Link_1026401727" MODIFIED="1392280477299" TEXT="PuzzleBlock">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -220,7 +223,7 @@
       random_length(1 Byte):random
     </p>
     <p>
-      hash_type_length:hash_type:hash_length:hash
+      signed(identityPrivateKey,hash_type_length:hash_type:hash_length:hash)
     </p>
     <p>
       PreceedingBlockhash_length:PreceedingBlockhashHashType_length:PreceedingBlockhashHashType:PreceedingBlockhash_length(2 Bytes):Signed(PreceedingBlockhash) # post signature
@@ -241,6 +244,7 @@
 <node CREATED="1389766005135" ID="ID_498449000" MODIFIED="1389766012263" TEXT="Short Puzzle"/>
 </node>
 </node>
+<node CREATED="1392985649135" ID="ID_649539488" MODIFIED="1392985665147" TEXT="bloatBlock"/>
 <node CREATED="1389769330573" ID="ID_152614027" MODIFIED="1391065903602" TEXT="messageBlock">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -266,8 +270,7 @@
       PreceedingBlockhash_length:PreceedingBlockhashHashType_length:PreceedingBlockhashHashType:PreceedingBlockhash_length(2 Bytes):Signed(PreceedingBlockhash) # post signature
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1389771192456" ID="ID_1920725214" MODIFIED="1391001346984" TEXT="DC1BuildTableBlock">
 <richcontent TYPE="NOTE"><html>
@@ -407,8 +410,7 @@
       # FIXME declare optional load
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1391003818558" ID="ID_1959579373" MODIFIED="1391003875125" TEXT="Multi Use Routing Block"/>
 </node>
 <node CREATED="1389852647740" ID="ID_923444439" MODIFIED="1391001313459" TEXT="NOPBlock">
