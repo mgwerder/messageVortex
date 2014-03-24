@@ -1,5 +1,5 @@
-﻿% This file was created with JabRef 2.9.2.
-% Encoding: UTF8
+% This file was created with JabRef 2.9.2.
+% Encoding: Cp1252
 
 @INPROCEEDINGS{overlier-pet2007,
   author = {Lasse {\O}verlier and Paul Syverson},
@@ -465,19 +465,20 @@
 	users can be revoked if they misbehave, and yet nobody can identify
 	or link such users cryptographically. Despite being the state of
 	the art in anonymous revocation, these schemes allow only a basic
-	form of revocation amounting to ‘revoke anybody with d or more misbehaviors’
-	or ‘revoke anybody whose combined misbehavior score is too high’
-	(where misbehaviors are assigned a ‘severity’ score). We present
-	BLACR, which significantly advances anonymous revocation in three
-	ways: 1) It constitutes a first attempt to generalize reputation-based
-	anonymous revocation, where negative or positive scores can be assigned
-	to anonymous sessions across multiple categories. Servers can block
-	users based on policies, which specify a boolean combination of reputations
-	in these categories; 2) We present a weighted extension, which allows
-	the total severity score to ramp up for multiple misbehaviors by
-	the same user; and, 3) We make a significant improvement in authentication
-	times through a technique we call express lane authentication, which
-	makes reputation-based anonymous revocation practical.},
+	form of revocation amounting to ‘revoke anybody with d or more
+	misbehaviors’ or ‘revoke anybody whose combined misbehavior score
+	is too high’ (where misbehaviors are assigned a ‘severity’
+	score). We present BLACR, which significantly advances anonymous
+	revocation in three ways: 1) It constitutes a first attempt to generalize
+	reputation-based anonymous revocation, where negative or positive
+	scores can be assigned to anonymous sessions across multiple categories.
+	Servers can block users based on policies, which specify a boolean
+	combination of reputations in these categories; 2) We present a weighted
+	extension, which allows the total severity score to ramp up for multiple
+	misbehaviors by the same user; and, 3) We make a significant improvement
+	in authentication times through a technique we call express lane
+	authentication, which makes reputation-based anonymous revocation
+	practical.},
   file = {blacr-ndss.pdf:blacr-ndss.pdf:PDF;:http\://www.cs.indiana.edu/~kapadia/papers/blacr-ndss-draft.pdf:URL;blacr-ndss.pdf::Djvu},
   lastaccessed = {2012-04-19 17:57:50},
   ranking = {rank3},
@@ -642,7 +643,7 @@
   publisher = {ACM},
   abstract = {We present BitBlender, an efficient protocol that provides an anonymity
 	layer for BitTorrent traffic. BitBlender works by creating an ad-hoc
-	multi-hop network consisting of special peers called“relay peers”
+	multi-hop network consisting of special peers called“relay peers�?
 	that proxy requests and replies on behalf of other peers. To understand
 	the effect of introducing relay peers into the BitTorrent system
 	architecture, we provide an analysis of the expected path lengths
@@ -672,18 +673,19 @@
   abstract = {Tor is one of the most widely-used privacy enhancing technologies
 	for achieving online anonymity and resisting censorship. Simultaneously,
 	Tor is also an evolving research network on which investigators perform
-	experiments to improve the network’s resilience to attacks and enhance
-	its performance. Existing methods for studying Tor have included
+	experiments to improve the network’s resilience to attacks and
+	enhance its performance. Existing methods for studying Tor have included
 	analytical modeling, simulations, small-scale network emulations,
 	small-scale PlanetLab deployments, and measurement and analysis of
 	the live Tor network. Despite the growing body of work concerning
 	Tor, there is no widely accepted methodology for conducting Tor research
-	in a manner that preserves realism while protecting live users’ privacy.
-	In an effort to propose a standard, rigorous experimental framework
-	for conducting Tor research in a way that ensures safety and realism,
-	we present the design of ExperimenTor, a largescale Tor network emulation
-	toolkit and testbed. We also report our early experiences with prototype
-	testbeds currently deployed at four research institutions.},
+	in a manner that preserves realism while protecting live users’
+	privacy. In an effort to propose a standard, rigorous experimental
+	framework for conducting Tor research in a way that ensures safety
+	and realism, we present the design of ExperimenTor, a largescale
+	Tor network emulation toolkit and testbed. We also report our early
+	experiences with prototype testbeds currently deployed at four research
+	institutions.},
   file = {cset11-experimentor.pdf},
   lastaccessed = {2011-12-29 11:51:23},
   url = {http://www.usenix.org/events/cset11/tech/final_files/Bauer.pdf}
@@ -758,13 +760,13 @@
 	from any collusion of up to t servers. The main cost-measure of such
 	protocols is the communication complexity of retrieving a single
 	bit of data. This work addresses the information-theoretic setting
-	for PIR, in which the user’s privacy should be unconditionally protected
-	from collusions of servers. We present a unified general construction,
-	whose abstract components can be instantiated to yield both old and
-	new families of PIR protocols. A main ingredient in the new protocols
-	is a generalization of a solution by Babai, Kimmel, and Lokam to
-	a communication complexity problem in the so-called simultaneous
-	messages model.
+	for PIR, in which the user’s privacy should be unconditionally
+	protected from collusions of servers. We present a unified general
+	construction, whose abstract components can be instantiated to yield
+	both old and new families of PIR protocols. A main ingredient in
+	the new protocols is a generalization of a solution by Babai, Kimmel,
+	and Lokam to a communication complexity problem in the so-called
+	simultaneous messages model.
 	
 	Our construction strictly improves upon previous constructions and
 	resolves some previous anomalies. In particular, we obtain: (1) t-private
@@ -934,7 +936,7 @@
 	Our proof technique is markedly different than previous work. We establish
 	a connection with information theory - a connection we believe is
 	useful also elsewhere, and which we believe supplies the correct
-	language to attack the problem. We introduce “obscurant networks”
+	language to attack the problem. We introduce “obscurant networks�?
 	- networks that can obscure the destination of each particular player,
 	and we show almost all executions of the protocol include such a
 	network. The security guarantee we supply is very strong. It shows
@@ -1310,10 +1312,10 @@
 	requires O(n2) rounds of interaction to establish a circuit of size
 	n. In terms of the computational effort required to the parties,
 	our protocol is comparable to TOR, but the network latency associated
-	with TOR’s high round complexity ends up dominating the running time.
-	Compared to other recently proposed alternative to TOR (such as the
-	PB-OR and CL-OR protocols) our scheme still has the advantage of
-	being non-interactive (both PB-OR and CL-OR require some interaction
+	with TOR’s high round complexity ends up dominating the running
+	time. Compared to other recently proposed alternative to TOR (such
+	as the PB-OR and CL-OR protocols) our scheme still has the advantage
+	of being non-interactive (both PB-OR and CL-OR require some interaction
 	to update time-sensitive information), and achieves similar computational
 	performances. We performed extensive implementation and simulation
 	tests that confirm our theoretical analysis. Additionally, while
@@ -1618,16 +1620,16 @@
   pages = {20--35},
   month = jun,
   publisher = {Springer},
-  abstract = {The so-called “Great Firewall of China” operates, in part, by inspecting
-	TCP packets for keywords that are to be blocked. If the keyword is
-	present, TCP reset packets (viz: with the RST flag set) are sent
-	to both endpoints of the connection, which then close. However, because
-	the original packets are passed through the firewall unscathed, if
-	the endpoints completely ignore the firewall’s resets, then the connection
-	will proceed unhindered. Once one connection has been blocked, the
-	firewall makes further easy-to-evade attempts to block further connections
-	from the same machine. This latter behaviour can be leveraged into
-	a denial-of-service attack on third-party machines.},
+  abstract = {The so-called “Great Firewall of China�? operates, in part, by
+	inspecting TCP packets for keywords that are to be blocked. If the
+	keyword is present, TCP reset packets (viz: with the RST flag set)
+	are sent to both endpoints of the connection, which then close. However,
+	because the original packets are passed through the firewall unscathed,
+	if the endpoints completely ignore the firewall’s resets, then
+	the connection will proceed unhindered. Once one connection has been
+	blocked, the firewall makes further easy-to-evade attempts to block
+	further connections from the same machine. This latter behaviour
+	can be leveraged into a denial-of-service attack on third-party machines.},
   bookurl = {http://petworkshop.org/2006/},
   file = {:clayton_pet2006.pdf:PDF},
   lastaccessed = {2006-10-20 01:26:02},
@@ -1635,10 +1637,10 @@
   priority = {prio3},
   ranking = {rank5},
   relevance = {relevant},
-  review = {Basisdokument über die Funktionsweise der chinesischen Firewall. Gemäss
-	dem Author fungiert die Firewall nicht als Portfilter sondern sendet
-	nur RST-Replies wenn eine TCP-Verbindung als problematisch eingestuft
-	wird.},
+  review = {Basisdokument über die Funktionsweise der chinesischen Firewall.
+	Gemäss dem Author fungiert die Firewall nicht als Portfilter sondern
+	sendet nur RST-Replies wenn eine TCP-Verbindung als problematisch
+	eingestuft wird.},
   url = {http://www.cl.cam.ac.uk/~rnc1/ignoring.pdf}
 }
 
@@ -1672,15 +1674,15 @@
 	anonymity with accountability for moderate-size groups, and efficiently
 	handles unbalanced loads where few members wish to transmit in a
 	given round. The N group members first cooperatively shuffle an N
-	× N matrix of pseudorandom seeds, then use these seeds in N “pre-planned”
+	× N matrix of pseudorandom seeds, then use these seeds in N “pre-planned�?
 	DC-nets protocol runs. Each DCnets run transmits the variable-length
 	bulk data comprising one member’s message, using the minimum number
 	of bits required for anonymity under our attack model. The protocol
 	preserves message integrity and one-to-one correspondence between
 	members and messages, makes denial-of-service attacks by members
 	traceable to the culprit, and efficiently handles large, unbalanced
-	message loads. A working prototype demonstrates the protocol’s practicality
-	for anonymousmessaging in groups of 40+members.},
+	message loads. A working prototype demonstrates the protocol’s
+	practicality for anonymousmessaging in groups of 40+members.},
   file = {ccs10-dissent.pdf:ccs10-dissent.pdf:PDF},
   lastaccessed = {2011-01-03 02:35:47},
   location = {Chicago, Illinois, USA},
@@ -2553,8 +2555,8 @@
 	security or speed. Here we describe how to add alpha-mixing to various
 	mix designs, and show that mix networks with this feature can provide
 	increased anonymity for all senders in the network. Along the way
-	we encounter subtle issues to do with the attacker’s knowledge of
-	the security parameters of the users.},
+	we encounter subtle issues to do with the attacker’s knowledge
+	of the security parameters of the users.},
   bookurl = {http://petworkshop.org/2006/},
   file = {:alpha-mixing_pet2006.pdf:PDF;:http\:\\freehaven.net\\doc\\alpha-mixing\\alpha-mixing.pdf:URL;alpha-mixing_pet2006.pdf::Djvu},
   lastaccessed = {2006-09-20 13:35:32},
@@ -2745,13 +2747,13 @@
   month = aug,
   abstract = {In 2005, Murdoch and Danezis demonstrated the first practical congestion
 	attack against a deployed anonymity network. They could identify
-	which relays were on a target Tor user’s path by building paths one
-	at a time through every Tor relay and introducing congestion. However,
-	the original attack was performed on only 13 Tor relays on the nascent
-	and lightly loaded Tor network. We show that the attack from their
-	paper is no longer practical on today’s 1500-relay heavily loaded
-	Tor network. The attack doesn’t scale because a) the attacker needs
-	a tremendous amount of bandwidth to measure enough relays during
+	which relays were on a target Tor user’s path by building paths
+	one at a time through every Tor relay and introducing congestion.
+	However, the original attack was performed on only 13 Tor relays
+	on the nascent and lightly loaded Tor network. We show that the attack
+	from their paper is no longer practical on today’s 1500-relay heavily
+	loaded Tor network. The attack doesn’t scale because a) the attacker
+	needs a tremendous amount of bandwidth to measure enough relays during
 	the attack window, and b) there are too many false positives now
 	that many other users are adding congestion at the same time as the
 	attacks. We then strengthen the original congestion attack by combining
@@ -2969,20 +2971,21 @@
   month = jun,
   publisher = {Springer},
   abstract = {This paper describes a new attack on the anonymity of web browsing
-	with Tor. The attack tricks a user’s web browser into sending a distinctive
-	signal over the Tor network that can be detected using traffic analysis.
-	It is delivered by a malicious exit node using a man-in-the-middle
-	attack on HTTP. Both the attack and the traffic analysis can be performed
-	by an adversary with limited resources. While the attack can only
-	succeed if the attacker controls one of the victim’s entry guards,
-	the method reduces the time required for a traffic analysis attack
-	on Tor from O(nk) to O(n + k), where n is the number of exit nodes
-	and k is the number of entry guards. This paper presents techniques
-	that exploit the Tor exit policy system to greatly simplify the traffic
-	analysis. The fundamental vulnerability exposed by this paper is
-	not specific to Tor but rather to the problem of anonymous web browsing
-	itself. This paper also describes a related attack on users who toggle
-	the use of Tor with the popular Firefox extension Torbutton.},
+	with Tor. The attack tricks a user’s web browser into sending a
+	distinctive signal over the Tor network that can be detected using
+	traffic analysis. It is delivered by a malicious exit node using
+	a man-in-the-middle attack on HTTP. Both the attack and the traffic
+	analysis can be performed by an adversary with limited resources.
+	While the attack can only succeed if the attacker controls one of
+	the victim’s entry guards, the method reduces the time required
+	for a traffic analysis attack on Tor from O(nk) to O(n + k), where
+	n is the number of exit nodes and k is the number of entry guards.
+	This paper presents techniques that exploit the Tor exit policy system
+	to greatly simplify the traffic analysis. The fundamental vulnerability
+	exposed by this paper is not specific to Tor but rather to the problem
+	of anonymous web browsing itself. This paper also describes a related
+	attack on users who toggle the use of Tor with the popular Firefox
+	extension Torbutton.},
   bookurl = {http://petworkshop.org/2007/},
   file = {:abbott-pet2007.pdf:PDF;:http\://petworkshop.org/2007/papers/PET2007_preproc_Browser_based.pdf:URL;abbott-pet2007.pdf::Djvu},
   keywords = {TOR, attack},
@@ -3059,8 +3062,8 @@
   abstract = {In response to increasingly sophisticated methods of blocking access
 	to censorship circumvention schemes such as Tor, recently proposed
 	systems such as Skypemorph, FreeWave, and Censor-Spoofer have used
-	voice and video conferencing protocols as “cover channels” to hide
-	proxy connections. We demonstrate that even with perfect emulation
+	voice and video conferencing protocols as “cover channels�? to
+	hide proxy connections. We demonstrate that even with perfect emulation
 	of the cover channel, these systems can be vulnerable to attacks
 	that detect or disrupt the covert communications while having no
 	effect on legitimate cover traffic. Our attacks stem from differences
@@ -3608,21 +3611,21 @@
   month = feb,
   abstract = {Low-latency anonymity systems such as Tor, AN.ON, Crowds, and Anonymizer.com
 	aim to provide anonymous connections that are both untraceable by
-	“local” adversaries who control only a few machines and have low
-	enough delay to support anonymous use of network services like Web
-	browsing and remote login. One consequence of these goals is that
-	these services leak some information about the network latency between
-	the sender and one or more nodes in the system. We present two attacks
-	on low-latency anonymity schemes using this information. The first
-	attack allows a pair of colluding Web sites to predict, based on
-	local timing information and with no additional resources, whether
-	two connections from the same Tor exit node are using the same circuit
-	with high confidence. The second attack requires more resources but
-	allows a malicious Web site to gain several bits of information about
-	a client each time he visits the site. We evaluate both attacks against
-	two low-latency anonymity protocols—the Tor network and the MultiProxy
-	proxy aggregator service—and conclude that both are highly vulnerable
-	to these attacks.},
+	“local�? adversaries who control only a few machines and have
+	low enough delay to support anonymous use of network services like
+	Web browsing and remote login. One consequence of these goals is
+	that these services leak some information about the network latency
+	between the sender and one or more nodes in the system. We present
+	two attacks on low-latency anonymity schemes using this information.
+	The first attack allows a pair of colluding Web sites to predict,
+	based on local timing information and with no additional resources,
+	whether two connections from the same Tor exit node are using the
+	same circuit with high confidence. The second attack requires more
+	resources but allows a malicious Web site to gain several bits of
+	information about a client each time he visits the site. We evaluate
+	both attacks against two low-latency anonymity protocols—the Tor
+	network and the MultiProxy proxy aggregator service—and conclude
+	that both are highly vulnerable to these attacks.},
   file = {tissec-latency-leak.pdf:tissec-latency-leak.pdf:PDF},
   lastaccessed = {2009-01-30 23:27:16},
   ranking = {rank3},
@@ -3676,7 +3679,7 @@
 	
 	We enumerate the requirements that a censorship-resistant system must
 	satisfy to successfully mimic another protocol and conclude that
-	“unobservability by imitation” is a fundamentally flawed approach.We
+	“unobservability by imitation�? is a fundamentally flawed approach.We
 	then present our recommendations for the design of unobservable communication
 	systems.},
   file = {oakland2013-parrot.pdf:oakland2013-parrot.pdf:PDF},
@@ -3695,6 +3698,45 @@
   file = {ndss09-rainbow.pdf},
   lastaccessed = {2011-12-29 11:50:38},
   url = {http://www.isoc.org/isoc/conferences/ndss/09/pdf/13.pdf}
+}
+
+@INPROCEEDINGS{ccs2011-cirripede,
+  author = {Amir Houmansadr and Giang T. K. Nguyen and Matthew Caesar and Nikita
+	Borisov},
+  title = {Cirripede: Circumvention Infrastructure using Router Redirection
+	with Plausible Deniability},
+  booktitle = {Proceedings of the 18th ACM conference on Computer and Communications
+	Security (CCS 2011)},
+  year = {2011},
+  month = oct,
+  abstract = {Many users face surveillance of their Internet communications and
+	a signifficant fraction suer from outright blocking of certain destinations.
+	Anonymous communication systems allow users to conceal the destinations
+	they communicate with, but do not hide the fact that the users are
+	using them. The mere use of such systems may invite suspicion, or
+	access to them may be blocked. We therefore propose Cirripede, a
+	system that can be used for unobservable communication with Internet
+	destinations. Cirripede is designed to be deployed by ISPs; it intercepts
+	connections from clients to innocent-looking destinations and redirects
+	them to the true destination requested by the client. The communication
+	is encoded in a way that is indistinguishable from normal communications
+	to anyone without the master secret key, while public-key cryptography
+	is used to eliminate the need for any secret information that must
+	be shared with Cirripede users. Cirripede is designed to work scalably
+	with routers that handle large volumes of traffic while imposing
+	minimal over- head on ISPs and not disrupting existing traffic. This
+	allows Cirripede proxies to be strategically deployed at central
+	locations, making access to Cirripede very difficult to block. We
+	built a proof-of-concept implementation of Cirripede and performed
+	a testbed evaluation of its performance proper-
+	
+	ties.},
+  file = {ccs2011-cirripede.pdf:ccs2011-cirripede.pdf:PDF},
+  lastaccessed = {2011-10-26 06:05:47},
+  owner = {Martin},
+  ranking = {rank2},
+  timestamp = {2014.03.24},
+  url = {http://hatswitch.org/~nikita/papers/cirripede-ccs11.pdf}
 }
 
 @INPROCEEDINGS{ccs2011-cirripede,
@@ -4627,7 +4669,7 @@
   title = {Mixmaster {P}rotocol --- {V}ersion 2},
   howpublished = {IETF Internet Draft},
   month = jul,
-  year = 2003,
+  year = {2003},
   abstract = {Most e-mail security protocols only protect the message body, leaving
 	useful information such as the the identities of the conversing parties,
 	sizes of messages and frequency of message exchange open to adversaries.
@@ -4777,10 +4819,11 @@
 	the client. We observe that in a peer-to-peer anonymity scheme, the
 	client is part of the circuit and thus the technique can be of greater
 	significance in this setting. We experimentally validate this conclusion
-	by showing that “circuit clogging” can identify client nodes using
-	the MorphMix peer-to-peer anonymity protocol. We also propose and
-	empirically validate the use of the Stochastic Fair Queueing discipline
-	on outgoing connections as an efficient and low-cost mitigation technique.},
+	by showing that “circuit clogging�? can identify client nodes
+	using the MorphMix peer-to-peer anonymity protocol. We also propose
+	and empirically validate the use of the Stochastic Fair Queueing
+	discipline on outgoing connections as an efficient and low-cost mitigation
+	technique.},
   file = {clog-the-queue.pdf:clog-the-queue.pdf:PDF},
   lastaccessed = {2008-01-22 19:27:07},
   ranking = {rank3},
@@ -5289,7 +5332,7 @@
   month = {September},
   abstract = {We present a novel attack targeting anonymizing systems. The attack
 	involves placing a malicious relay node inside an anonymizing system
-	and keeping legitimate nodes “busy.” We achieve this by creating
+	and keeping legitimate nodes “busy.�? We achieve this by creating
 	circular circuits and injecting fraudulent packets, crafted in a
 	way that will make them spin an arbitrary number of times inside
 	our artificial loops. At the same time we inject a small number of
@@ -5704,12 +5747,13 @@
   year = {2012},
   month = oct,
   abstract = {Decoy Routing is a new approach to Internet censorship circumvention
-	that was recently and independently proposed at FOCI’11, USENIX Security’11
-	and CCS’11. Decoy routing aims to hamper nation-state level Internet
-	censorship by having routers, rather than end hosts, relay traffic
-	to blocked destinations. We analyze the security of these schemes
-	against a routing capable adversary, a censoring authority that is
-	willing to make routing decisions in response to decoy routing systems.
+	that was recently and independently proposed at FOCI’11, USENIX
+	Security’11 and CCS’11. Decoy routing aims to hamper nation-state
+	level Internet censorship by having routers, rather than end hosts,
+	relay traffic to blocked destinations. We analyze the security of
+	these schemes against a routing capable adversary, a censoring authority
+	that is willing to make routing decisions in response to decoy routing
+	systems.
 	
 	
 	We explore China, Syria, Iran, and Egypt as routing capable adversaries,
@@ -5744,8 +5788,8 @@
 	mix-based (email) anonym-ity systems, evaluating their resistance
 	to powerful blending attacks, their delay, theiranonymity under normal
 	conditions and other properties. This leads us to methodsof computing
-	anonymity for a particular class of mixes – timed mixes – and a newbinomial
-	mix.
+	anonymity for a particular class of mixes – timed mixes – and
+	a newbinomial mix.
 	
 	
 	Next, we look at the anonymity of a message going through an entire
@@ -5759,7 +5803,7 @@
 	concreteattacks and describing methods of protection against them.
 	In particular, we showthat Peer-to-Peer anonymity systems provide
 	less anonymity against the global passive adversary than ones based
-	on a “classic” architecture.
+	on a “classic�? architecture.
 	
 	
 	Finally, we give an account of how anonymity can be used in censorship
@@ -5981,9 +6025,11 @@
   year = {2010},
   month = oct,
   publisher = {ACM},
-  file = {wpes10-unraveling.pdf},
+  file = {wpes10-unraveling.pdf:wpes10-unraveling.pdf:PDF},
   lastaccessed = {2011-01-03 02:35:51},
   location = {Chicago, IL, USA},
+  priority = {prio2},
+  ranking = {rank4},
   url = {http://infoscience.epfl.ch/record/150348/files/ShokriTDFH-WPES10_1.pdf?version=2}
 }
 
@@ -6283,15 +6329,15 @@
 	to service providers anonymously. Since anonymity can give users
 	the license to misbehave, some variants allow the selective deanonymization
 	(or linking) of misbehaving users upon a complaint to a Trusted Third
-	Party (TTP). The ability of the TTP to revoke a user’s privacy at
-	any time, however, is too strong a punishment for misbehavior. To
-	limit the scope of deanonymization, some systems have been proposed
+	Party (TTP). The ability of the TTP to revoke a user’s privacy
+	at any time, however, is too strong a punishment for misbehavior.
+	To limit the scope of deanonymization, some systems have been proposed
 	in which users can be deanonymized only if they authenticate “too
-	many times,” such as “double spending” with electronic cash. While
-	useful in some applications, such techniques cannot be generalized
+	many times,�? such as “double spending�? with electronic cash.
+	While useful in some applications, such techniques cannot be generalized
 	to more subjective definitions of misbehavior, for example, using
 	such schemes it is not possible to block anonymous users who “deface
-	too many Web pages” on a Web site.},
+	too many Web pages�? on a Web site.},
   acmid = {1880033},
   address = {New York, NY, USA},
   articleno = {39},
