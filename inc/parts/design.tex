@@ -97,19 +97,44 @@ In order to blend into SMTP-Transport layer the following Criterias should be me
 FIXME incomplete section
 
 \chapter{Specifying a target solution}
-FIXME incomplete section
-\section{Blocks}
-\subsection{Preamble}
+\section{General}
+\subsection{Application Design}
+We first have to define the main hook for our solution. While most of the sent messages are always passed from server to server using SMTP the protocols for accessing a mailbox are varying. The most common interfaces within the private mail traffic are \defref{POP} and \defref{IMAP}. In the business environment it is mainly \defref{IMAP} or \defref{MS-OXMAPIHTTP}. \par
+
+I will use \defref{IMAP} as my hook to the mail account to maximize portability. The Solution is based on a \defref{IMAP} proxy server able to join encrypted delivered data with ordinary data.\par
+
+Final goal should be let the device run on a RASPI-Device (or similar) with permanent internet access. \par
+
+For message sending I will implement an SMTP relay server. This relay server only accepts authenticated messages. The messages shall be scanned for header requesting a specific type of security. The message then is packaged according to these specs and forwarded to the outgoing SMTP server.
+
+All operation carried out on mails are implemented in a thread safe library called libVortex. The API should be stable and suitable for thirdparty apps to be used. Around this a series of connectors are implemented.
+
+\begin{figure}[ht!]
+  \centering\includegraphics[width=\textwidth]{inc/VortexModules}
+  \caption{Vortex Modules}\label{fig:VortexModules}
+\end{figure}
+
+Main language of the core will be Java for portability reasons. All GUI relevant parts are not part of the core to improve portability.\par
+
+Platform specific status apps are not created as part of this work. They are however built in a way so that they may
+
+\subsection{Folder storage}
+The configuration data is stored in a IMAP folder. To hide the IMAP store to an observer the client is provided with a folder name and password (instead of a fixed folder name). The key for all config data and all messages is stored in a message in this folder. The folder is hidden by the proxy if known.
+
+\subsection{Blocks}
+\subsubsection{Preamble}
 FIXME incomplete section
 
-\subsection{Routing block}
+\subsubsection{Routing block}
 FIXME incomplete section
 
-\subsection{Address request block}
+\subsubsection{Address request block}
 FIXME incomplete section
 
-\section{Messages}
+\subsection{Messages}
 FIXME incomplete section
 
-\subsection{Basecom}
+\subsubsection{Basecom}
 FIXME incomplete section
+
+\section{libVortex}

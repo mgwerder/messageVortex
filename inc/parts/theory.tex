@@ -1,5 +1,5 @@
 \chapter{Ground theory}
-\section{Mail Transport\label{sec:mailTransport}}
+\section{Mail Transport}\label{sec:mailTransport}
 Todays mail transport is mostly done via SMTP\index{SMTP} protocol as specified in \cite{RFC5321}. This protocol has proven to be stable and reliable. Most of the messages are passed from a MUA to a SMTP relay of a provider. From there the message is directly sent to the SMTP server of the recipient and from there to a server based storage of the recipient. The recipient may at any time connect to his server based storage and may optionally relocate the message to a client based (local) storage. The delivery from the server storage to the MUA of the recipient may happen by message polling or by message push (where as the later is usually implemented by a push-pull mechanism).\par
 
 To understand the routing of a mail it is essential to understand the whole chain staring from a user(-agent) until arriving at the target user (and being read!). To simplify this I used a consistent model which includes all components (server and clients). The figure \ref{fig:MailAgents} shows all involved parties of a typical Mail routing. It is important to understand that Mail routing remains the same regardless of the used client. However -- Availability of a mail at its destination changes drastically depending on the type of client used. Furthermore control of the mail flow and control is different depending on the client.\par
@@ -8,8 +8,7 @@ The model has three main players storage (derfref{Storage}), agent (derfref{Agen
 
 \begin{figure}[ht!]
   \centering\includegraphics[width=\textwidth]{inc/MailAgents1}
-  \caption{Mail Agents}
-  \label{fig:MailAgents}
+  \caption{Mail Agents}\label{fig:MailAgents}
 \end{figure}
 
 In the following paragraphs (for definitions) the term ``Mail'' is used synonymously to the term ``Message''. The reason why ``Mail'' has been chosen over ``Messages'' that a lot of terms do already exist in standard documents. In these documents the term mail is commonly used.\par
@@ -86,9 +85,15 @@ FIXME incomplete section
 FIXME incomplete section
 
 \section{Steganography}
-\cite{wiki:steganographie}
-\cite{f5}
-\cite{steganalysisf5}
+According to Wikipedia steganography\cite{wiki:steganographie} is "`... the art or practice of concealing a message, image, or file within another message, image, or file."'. \par
+
+Simple steganography applications manipulate the lowest signifficant Bits of lossless compressed images. As the user can not see these kind of variances in colors the image seems to remain "`unchanged"'. Infact the message is obviously embedded in the Image and may be retrieved quite simply. To make the concealed messages less obvoious the message is usually encrypted before embedding. However - most of the embedded messages may be detected as encrypted messages have an equal probability of all characters within an encrypted message. As the lowest significant bits of an image do usually not have this variance (image locally speaking) most of the embedded information may be detected. The same applies to information encoded in the frequency spectrums of lossy packed images. The typical payload of a steganographic message is below $25\%$ of the size of its carrier. The more information is packed into carrier the easier detectable it is.\par
+
+A good example for this kind of steganalysis is \citetitle{steganalysisf5}. The authors have found means in F5\cite{f5} to detect the presence of a steganographic concealed message within JPEG images and can even determine its size using relatively simple histogram analysis methods.\par
+
+Although there are quite some programs available steganography has never found a broad audience. Unlike cryptography most progarms implement their own algorithm which is usually not or badly documented. Interoperability between programs is not given due to a lack of accepted public standards. 
+
+
 FIXME incomplete section
 
 \section{Encryption}
