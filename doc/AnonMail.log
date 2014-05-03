@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.3.31)  3 MAY 2014 17:59
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.3.31)  3 MAY 2014 19:15
 entering extended mode
 **AnonMail.tex
 (F:\Documents\AnonMail\Doc\AnonMail.tex
@@ -826,7 +826,7 @@ LaTeX Info: Redefining \selectfont on input line 100.
 (F:\Documents\AnonMail\Doc\inc/parts/title.tex
 \GPT@outputbox=\box37
 
-<./inc/logo.jpg, id=379, 94.10156pt x 127.97812pt>
+<./inc/logo.jpg, id=391, 94.10156pt x 127.97812pt>
 File: ./inc/logo.jpg Graphic file (type jpg)
  <use ./inc/logo.jpg>
 Package pdftex.def Info: ./inc/logo.jpg used on input line 4.
@@ -889,7 +889,7 @@ Underfull \vbox (badness 4454) has occurred while \output is active []
  [3])
 (F:\Documents\AnonMail\Doc\inc/parts/theory.tex [4]
 Chapter 2.
-<inc/MailAgents1.pdf, id=579, 2321.67375pt x 2890.8pt>
+<inc/MailAgents1.pdf, id=594, 2321.67375pt x 2890.8pt>
 File: inc/MailAgents1.pdf Graphic file (type pdf)
 
 <use inc/MailAgents1.pdf>
@@ -947,14 +947,20 @@ Overfull \hbox (5.59056pt too wide) in paragraph at lines 90--95
 
 ]
 Chapter 6.
-<inc/VortexModules.pdf, id=791, 537.00626pt x 265.99374pt>
+<inc/VortexModules.pdf, id=806, 537.00626pt x 265.99374pt>
 File: inc/VortexModules.pdf Graphic file (type pdf)
 
 <use inc/VortexModules.pdf>
 Package pdftex.def Info: inc/VortexModules.pdf used on input line 113.
 (pdftex.def)             Requested size: 373.44246pt x 184.97672pt.
- [25] [26 <F:/Documents/AnonMail/Doc/inc/VortexModules.pdf>]) (F:\Documents\Ano
-nMail\Doc\inc/parts/verification.tex [27] [28
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [25]
+Underfull \vbox (badness 6125) has occurred while \output is active []
+
+ [26 <F:/Documents/AnonMail/Doc/inc/VortexModules.pdf>])
+(F:\Documents\AnonMail\Doc\inc/parts/verification.tex [27] [28
 
 
 ]
@@ -1046,14 +1052,14 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 273.
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 273.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 273.
 Package rerunfilecheck Info: File `AnonMail.out' has not changed.
-(rerunfilecheck)             Checksum: 4B56013B528AF3797033FA7865F2C028;6656.
+(rerunfilecheck)             Checksum: 49FB0F25D8C4C3A2880FCE8221854E88;6867.
 Package logreq Info: Writing requests to 'AnonMail.run.xml'.
  ) 
 Here is how much of TeX's memory you used:
- 15938 strings out of 493921
- 256580 string characters out of 3142476
+ 15944 strings out of 493921
+ 256702 string characters out of 3142476
  508668 words of memory out of 3000000
- 18750 multiletter control sequences out of 15000+200000
+ 18753 multiletter control sequences out of 15000+200000
  59964 words of font info for 60 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
  45i,11n,51p,1007b,3220s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -1074,9 +1080,9 @@ e/App/MikTeX/fonts/type1/urw/courier/ucrr8a.pfb><F:/PortableApps/MikTeXPortable
 /App/MikTeX/fonts/type1/urw/helvetic/uhvbo8a.pfb><F:/PortableApps/MikTeXPortabl
 e/App/MikTeX/fonts/type1/urw/helvetic/uhvr8a.pfb><F:/PortableApps/MikTeXPortabl
 e/App/MikTeX/fonts/type1/urw/helvetic/uhvro8a.pfb>
-Output written on AnonMail.pdf (49 pages, 379497 bytes).
+Output written on AnonMail.pdf (49 pages, 382460 bytes).
 PDF statistics:
- 1142 PDF objects out of 1200 (max. 8388607)
- 217 named destinations out of 1000 (max. 500000)
- 768 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1160 PDF objects out of 1200 (max. 8388607)
+ 220 named destinations out of 1000 (max. 500000)
+ 792 words of extra memory for PDF output out of 10000 (max. 10000000)
 
