@@ -118,6 +118,12 @@ Main language of the core will be Java for portability reasons. All GUI relevant
 
 Platform specific status apps are not created as part of this work. They are however built in a way so that they may
 
+\subsection{Third Party Code}
+\subsubsection{Java}
+The code will be written in Java 7 compliant code. The JDK beeing used is OpenJDK (\href{http://openjdk.java.net/}). As a crosscompiler I do use gcj 
+\subsubsection{HSQLDB}
+As the main local database backend HSQLDB is used. 
+
 \subsection{Folder storage}
 The configuration data is stored in a IMAP folder. To hide the IMAP store to an observer the client is provided with a folder name and password (instead of a fixed folder name). The key for all config data and all messages is stored in a message in this folder. The folder is hidden by the proxy if known.
 
