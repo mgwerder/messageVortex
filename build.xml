@@ -1,0 +1,169 @@
+<project name="MailVortex" default="compile" basedir=".">
+
+  <property file="system.properties"/>
+  <property file="system.properties"/>
+  <property file="${user.home}/system.properties"/>
+  <property file="application.properties"/>
+
+  <property name="app.version"   value="${app.version.major}.${app.version.minor}.${app.version.revision}"/>
+  <property name="build.home"    value="${basedir}/build"/>
+  <property name="dist.home"     value="${basedir}/dist"/>
+  <property name="doc.home"      value="${basedir}/doc"/>
+  <property name="src.home"      value="${basedir}/src"/>
+  <property name="web.home"      value="${basedir}/web"/>
+  <property name="app.source"    value="1.7"/>
+  <property name="app.target"    value="1.7"/>
+
+  <property name="compile.debug"       value="true"/>
+  <property name="compile.deprecation" value="false"/>
+  <property name="compile.optimize"    value="true"/>
+
+  <!-- ==================== Main Targets ================================== -->
+
+  <target name="all" depends="compile" description="Clean build and dist directories, then compile"/>
+
+  <target name="clean" description="Delete old build and dist directories">
+    <delete dir="${build.home}"/>
+    <delete dir="${dist.home}"/>
+  </target>
+
+  <target name="compile" depends="prepare,xml" description="Compile Java sources">
+    <touch file="${src.home}/java/Version.java"/>
+    <mkdir dir="${build.home}/classes/com/primecalc/java/klb4/images"/>
+    <mkdir dir="${build.home}/classes/endorsed"/>
+    <copy  todir="${build.home}/src/com/primecalc/java/klb4">
+      <fileset dir="${src.home}/java" includes="**/*.java"/>
+    </copy>
+    <copy  todir="${build.home}/classes/com/primecalc/java/klb4/images">
+      <fileset dir="${src.home}/images" includes="**/*.*"/>
+    </copy>
+    <copy  todir="${build.home}/classes/endorsed">
+      <fileset dir="${src.home}/endorsed" includes="**/*"/>
+    </copy>
+    <replace file="${build.home}/src/${app.path}/Version.java">
+      <replacefilter token="@major@" value="${app.version.major}"/>
+      <replacefilter token="@minor@" value="${app.version.minor}"/>
+      <replacefilter token="@revision@" value="${app.version.revision}"/>
+      <replacefilter token="@build@" value="${DSTAMP}${TSTAMP}"/>
+    </replace>
+    <javac srcdir="${build.home}/src"
+          destdir="${build.home}/classes/"
+            debug="${compile.debug}"
+      deprecation="${compile.deprecation}"
+         source="${app.source}"
+         target="${app.target}"
+         optimize="${compile.optimize}">
+        <classpath refid="compile.classpath"/>
+    </javac>
+    <copy  todir="${build.home}/classes/">
+      <fileset dir="${build.home}/src" excludes="**/*.java"/>
+    </copy>
+    <copy todir="${build.home}/classes/${app.path}/xml">
+      <fileset dir="${build.home}/src/${app.path}/xml" includes="*.properties *.ser *.index" />
+    </copy>
+  </target>
+
+  <target name="dist" depends="compile"  description="Create binary distribution">
+    <mkdir dir="${dist.home}/docs"/>
+    <copy todir="${dist.home}/docs">
+      <fileset dir="${src.home}"/>
+    </copy>
+    <jar jarfile="${dist.home}/${app.name}-${app.version}.war"
+         basedir="${build.home}"/>
+  </target>
+
+  <target name="run" depends="compile"  description="run application">
+    <java dir="build/classes" classname="com.primecalc.java.klb4.KLB4" fork="yes" classpathref="compile.classpath">
+      <jvmarg line="-ea -Djava.endorsed.dirs=endorsed"/> <!-- -Djaxp.debug=1 -->
+      <arg line="-openfile ../../src/xml/HamRadio.klb"/>
+    </java>
+  </target>
+
+  <target name="doc" depends="compile,javadoc"  description="create app docs"/>
+  <target name="javadoc" depends="compile"  description="create api docs">
+    <mkdir dir='${doc.home}'/>
+    <mkdir dir='${doc.home}/api/'/>
+    <javadoc source='${app.source}'
+             destdir='${doc.home}/api'
+             author='true'
+             version='true'
+             linksource='true'
+             >
+      <!--<link offline="false" href="http://java.sun.com/j2se/1.5.0/docs/api/" packagelistLoc="C:/temp/pl1"/>
+      <link offline="false" href="http://developer.java.sun.com/developer/products/xml/docs/api/" packagelistLoc="C:/temp/pl2"/>  -->
+      <fileset dir="${build.home}/src/" defaultexcludes="yes">
+        <include name="**/*.java"/>
+      </fileset>
+    </javadoc>
+  </target>
+
+  <!-- =================================== Sub targets -->
+
+  <target name="xml" depends="prepare">
+    <!-- build xml classes -->
+    <taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
+      <classpath>
+        <fileset dir="C:\vApps\jaxb-ri-20110412\lib"  includes="jaxb-xjc.jar" />   
+	  </classpath>
+    </taskdef>
+    <echo message="Building all xml classes ..." />
+    <mkdir dir="${build.home}/src/${app.path}/xml"/>
+    <xjc destdir="${build.home}/src" removeOldOutput="yes" package="${app.package}.xml">
+      <classpath refid="compile.classpath"/>
+      <arg line="-verbose -httpproxy www-proxy.admin.ch:8080"/>
+      <schema dir="${src.home}/xml" includes="test.xsd" />
+      <produces dir="${build.home}/src/${app.path}/xml" includes="* impl/*"/>
+    </xjc>
+    <copy todir="${build.home}/src/${app.path}/xml">
+      <fileset dir="${src.home}/xml" includes="*.index *.xsd"/>
+    </copy>
+  </target>
+
+  <target name="prepare_windows" if="isWindows" depends="pre_prepare">
+    <echo message="Reading windows specific properties ..." />
+    <property file="build.windows.properties"/>
+  </target>
+
+  <target name="prepare_unix" if="isUnix" depends="pre_prepare">
+    <echo message="Reading unix specific properties ..." />
+    <property file="build.unix.properties"/>
+  </target>
+
+  <target name="pre_prepare">
+    <condition property="isUnix">
+      <and>
+        <os family="unix"/>
+      </and>
+    </condition>
+    <condition property="isWindows">
+      <and>
+        <os family="windows"/>
+      </and>
+    </condition>
+  </target>
+
+  <target name="prepare" depends="prepare_windows,prepare_unix">
+    <tstamp/>
+    <mkdir  dir="${build.home}"/>
+    <mkdir  dir="${build.home}/src"/>
+    <mkdir  dir="${build.home}/src"/>
+    <mkdir  dir="${build.home}/classes"/>
+
+    <path id="compile.classpath">
+      <pathelement location="c:/Programme/Java/lib/hsqldb/lib/hsqldb.jar"/>
+      <!--<fileset dir="${junit.dir}" includes="*.jar"/>-->
+      <!--<fileset dir="${jwsdp.dir}/jaxb/lib" includes="*.jar" excludes="jaxb-impl.jar"/>-->
+      <!--<fileset dir="${jwsdp.dir}/jaxb/lib" includes="*.jar"/>-->
+      <!--<fileset dir="${jwsdp.dir}">
+        <include name="jaxp/**/*.jar" exclude="jaxb-api.jar"/>
+        <include name="jwsdp-shared/lib/**/*.jar"/>
+      </fileset>-->
+      <fileset dir="${src.home}/lib" includes="*.jar"/>
+      <pathelement location="${build.home}/classes" />
+    </path>
+
+  </target>
+
+
+
+</project>
