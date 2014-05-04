@@ -105,11 +105,13 @@
   </target>
   
   <target name="pdf">
+  	
     <latex
         latexfile="${doc.home}/AnonMail.tex"
         verbose="on"
         clean="off"
         pdftex="on"
+        passThruLaTeXParameters="-synctex=1"
         workingDir="${doc.home}">
             <makeindex
                 run="on"
