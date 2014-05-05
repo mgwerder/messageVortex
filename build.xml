@@ -5,11 +5,14 @@
   <property file="${user.home}/system.properties"/>
   <property file="application.properties"/>
 
+  <property name="build.sysclasspath" value="ignore"/>
+  
   <property name="app.version"   value="${app.version.major}.${app.version.minor}.${app.version.revision}"/>
   <property name="build.home"    value="${basedir}/app/build"/>
   <property name="dist.home"     value="${basedir}/app/dist"/>
   <property name="doc.home"      value="${basedir}/doc"/>
   <property name="src.home"      value="${basedir}/app/src"/>
+  <property name="rtlib.home"    value="${basedir}/app/rtlib"/>
   <property name="app.source"    value="1.6"/>
   <property name="app.target"    value="1.6"/>
 
@@ -24,29 +27,30 @@
         <fileset dir="${basedir}/lib/"  includes="ant_latex_0.0.9.jar" />   
 	  </classpath>
 	</taskdef>  
-  	
- 
 
-  <target name="all" depends="compile" description="Clean build and dist directories, then compile"/>
+  <target name="all" depends="compile,doc" description="Clean build and dist directories, then compile"/>
 
   <target name="clean" description="Delete old build and dist directories">
     <delete dir="${build.home}"/>
     <delete dir="${dist.home}"/>
   </target>
 
-  <target name="compile" depends="prepare,xml" description="Compile Java sources">
-    <touch file="${src.home}/java/Version.java"/>
-    <mkdir dir="${build.home}/classes/com/primecalc/java/klb4/images"/>
-    <mkdir dir="${build.home}/classes/endorsed"/>
-    <copy  todir="${build.home}/src/com/primecalc/java/klb4">
-      <fileset dir="${src.home}/java" includes="**/*.java"/>
+  <target name="compile" depends="prepare" description="Compile Java sources">
+    <mkdir dir="${build.home}/src/${app.path}"/>
+    <mkdir dir="${build.home}/classes/${app.path}"/>
+    <copy  todir="${build.home}/src/">
+      <fileset dir="${src.home}/" includes="**/*.java"/>
     </copy>
-    <copy  todir="${build.home}/classes/com/primecalc/java/klb4/images">
+  	
+    <touch file="${build.home}/src/${app.path}/Version.java"/>
+
+    <mkdir dir="${build.home}/classes/${app.path}/images"/>
+    <!--<copy  todir="${build.home}/classes/com/primecalc/java/klb4/images">
       <fileset dir="${src.home}/images" includes="**/*.*"/>
     </copy>
     <copy  todir="${build.home}/classes/endorsed">
       <fileset dir="${src.home}/endorsed" includes="**/*"/>
-    </copy>
+    </copy>-->
     <replace file="${build.home}/src/${app.path}/Version.java">
       <replacefilter token="@major@" value="${app.version.major}"/>
       <replacefilter token="@minor@" value="${app.version.minor}"/>
@@ -65,9 +69,9 @@
     <copy  todir="${build.home}/classes/">
       <fileset dir="${build.home}/src" excludes="**/*.java"/>
     </copy>
-    <copy todir="${build.home}/classes/${app.path}/xml">
+    <!--<copy todir="${build.home}/classes/${app.path}/xml">
       <fileset dir="${build.home}/src/${app.path}/xml" includes="*.properties *.ser *.index" />
-    </copy>
+    </copy>-->
   </target>
 
   <target name="dist" depends="compile"  description="Create binary distribution">
@@ -80,13 +84,13 @@
   </target>
 
   <target name="run" depends="compile"  description="run application">
-    <java dir="build/classes" classname="com.primecalc.java.klb4.KLB4" fork="yes" classpathref="compile.classpath">
+    <java dir="${build.home}/classes/" classname="${app.package}.${app.mainclass}" fork="yes" classpathref="compile.classpath">
       <jvmarg line="-ea -Djava.endorsed.dirs=endorsed"/> <!-- -Djaxp.debug=1 -->
-      <arg line="-openfile ../../src/xml/HamRadio.klb"/>
+      <arg line="-help"/>
     </java>
   </target>
 
-  <target name="doc" depends="compile,javadoc"  description="create app docs"/>
+  <target name="doc" depends="compile,javadoc,pdf"  description="create app docs"/>
   <target name="javadoc" depends="compile"  description="create api docs">
     <mkdir dir='${doc.home}'/>
     <mkdir dir='${doc.home}/api/'/>
@@ -105,9 +109,44 @@
   </target>
   
   <target name="pdf">
-  	
     <latex
         latexfile="${doc.home}/AnonMail.tex"
+        verbose="on"
+        clean="off"
+        pdftex="on"
+        passThruLaTeXParameters="-synctex=1"
+        workingDir="${doc.home}">
+            <makeindex
+                run="on"
+                workingDir="${doc.home}">
+                <fileset dir="${doc.home}"> 
+                   <include name="*.nlo" /> 
+                </fileset> 
+            </makeindex>
+            <bibtex
+                run="on"
+                workingDir="${doc.home}" />
+    </latex>
+    <latex
+        latexfile="${doc.home}/AnonMail_Plan.tex"
+        verbose="on"
+        clean="off"
+        pdftex="on"
+        passThruLaTeXParameters="-synctex=1"
+        workingDir="${doc.home}">
+            <makeindex
+                run="on"
+                workingDir="${doc.home}">
+                <fileset dir="${doc.home}"> 
+                   <include name="*.nlo" /> 
+                </fileset> 
+            </makeindex>
+            <bibtex
+                run="on"
+                workingDir="${doc.home}" />
+    </latex>
+    <latex
+        latexfile="${doc.home}/AnonMail_Roadmap.tex"
         verbose="on"
         clean="off"
         pdftex="on"
@@ -188,7 +227,7 @@
         <include name="jaxp/**/*.jar" exclude="jaxb-api.jar"/>
         <include name="jwsdp-shared/lib/**/*.jar"/>
       </fileset>-->
-      <fileset dir="${src.home}/lib" includes="*.jar"/>
+      <fileset dir="${rtlib.home}" includes="*.jar"/>
       <pathelement location="${build.home}/classes" />
     </path>
 
