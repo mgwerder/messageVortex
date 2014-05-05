@@ -108,6 +108,7 @@
              version='true'
              linksource='true'
              >
+      <classpath refid="compile.classpath"/>       
       <!--<link offline="false" href="http://java.sun.com/j2se/1.5.0/docs/api/" packagelistLoc="C:/temp/pl1"/>
       <link offline="false" href="http://developer.java.sun.com/developer/products/xml/docs/api/" packagelistLoc="C:/temp/pl2"/>  -->
       <fileset dir="${build.home}/src/" defaultexcludes="yes">

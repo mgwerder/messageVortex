@@ -8,7 +8,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 /**
- * Tests for {@link MailVortex}.
+ * Tests for {@link net.gwerder.java.mailvortex.MailVortex}.
  *
  * @author martin@gwerder.net (Martin GWERDER)
  */
