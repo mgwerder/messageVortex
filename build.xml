@@ -28,7 +28,7 @@
 	  </classpath>
 	</taskdef>  
 
-  <target name="all" depends="compile,doc" description="Clean build and dist directories, then compile"/>
+  <target name="all" depends="compile,doc,test" description="Clean build and dist directories, then compile"/>
 
   <target name="clean" description="Delete old build and dist directories">
     <delete dir="${build.home}"/>
@@ -91,13 +91,9 @@
   </target>
 
   <target name="test" depends="compile"  description="run application">
-    <java dir="${build.home}/classes/" classname="org.junit.runner.JUnitCore" fork="yes" classpathref="test.classpath">
-      <!--<jvmarg line="-ea -Djava.endorsed.dirs=endorsed -Djaxp.debug=1 "/>-->
-      <arg line="${app.package}.test.MainSuite"/>
-    </java>
     <junit printsummary="yes" fork="yes" haltonfailure="yes">
         <classpath refid="test.classpath"/>
-        <test name="${app.package}.test.MainSuite" outfile="junitTestResults"/>
+        <test name="${app.package}.test.MainSuite" todir="${build.home}" outfile="junitTestResults"/>
         <formatter type="xml"/>
     </junit>
   </target>
