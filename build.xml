@@ -74,7 +74,7 @@
     </copy>-->
   </target>
 
-  <target name="dist" depends="compile"  description="Create binary distribution">
+  <target name="dist" depends="compile,test"  description="Create binary distribution">
     <mkdir dir="${dist.home}/docs"/>
     <copy todir="${dist.home}/docs">
       <fileset dir="${src.home}"/>
@@ -84,10 +84,22 @@
   </target>
 
   <target name="run" depends="compile"  description="run application">
-    <java dir="${build.home}/classes/" classname="${app.package}.${app.mainclass}" fork="yes" classpathref="compile.classpath">
+    <java dir="${build.home}/classes/" classname="${app.package}.${app.mainclass}" fork="yes" classpathref="run.classpath">
       <jvmarg line="-ea -Djava.endorsed.dirs=endorsed"/> <!-- -Djaxp.debug=1 -->
       <arg line="-help"/>
     </java>
+  </target>
+
+  <target name="test" depends="compile"  description="run application">
+    <java dir="${build.home}/classes/" classname="org.junit.runner.JUnitCore" fork="yes" classpathref="test.classpath">
+      <!--<jvmarg line="-ea -Djava.endorsed.dirs=endorsed -Djaxp.debug=1 "/>-->
+      <arg line="${app.package}.test.MainSuite"/>
+    </java>
+    <junit printsummary="yes" fork="yes" haltonfailure="yes">
+        <classpath refid="test.classpath"/>
+        <test name="${app.package}.test.MainSuite" outfile="junitTestResults"/>
+        <formatter type="xml"/>
+    </junit>
   </target>
 
   <target name="doc" depends="compile,javadoc,pdf"  description="create app docs"/>
@@ -227,6 +239,22 @@
         <include name="jaxp/**/*.jar" exclude="jaxb-api.jar"/>
         <include name="jwsdp-shared/lib/**/*.jar"/>
       </fileset>-->
+      <fileset dir="${rtlib.home}" includes="*.jar"/>
+      <fileset dir="${basedir}/lib/junit-4.11" includes="*.jar"/>
+      <pathelement location="${build.home}/classes" />
+    </path>
+
+    <path id="test.classpath">
+      <pathelement location="c:/Programme/Java/lib/hsqldb/lib/hsqldb.jar"/>
+      <fileset dir="${basedir}/lib/junit-4.11" includes="*.jar"/>
+      <pathelement location="${build.home}/classes" />
+    </path>
+    
+    <pathconvert property="formatted-jarpath" pathsep="${line.separator} " refid="test.classpath" /> 
+    <echo message="jarpath = ${formatted-jarpath}" />
+    
+    <path id="run.classpath">
+      <pathelement location="c:/Programme/Java/lib/hsqldb/lib/hsqldb.jar"/>
       <fileset dir="${rtlib.home}" includes="*.jar"/>
       <pathelement location="${build.home}/classes" />
     </path>
