@@ -38,12 +38,11 @@
   <target name="compile" depends="prepare" description="Compile Java sources">
     <mkdir dir="${build.home}/src/${app.path}"/>
     <mkdir dir="${build.home}/classes/${app.path}"/>
-    <copy  todir="${build.home}/src/">
-      <fileset dir="${src.home}/" includes="**/*.java"/>
+    <touch file="${src.home}/Version.java"/>
+    <copy  todir="${build.home}/src/${app.path}">
+      <fileset dir="${src.home}/" includes="**/Version.java"/>
     </copy>
   	
-    <touch file="${build.home}/src/${app.path}/Version.java"/>
-
     <mkdir dir="${build.home}/classes/${app.path}/images"/>
     <!--<copy  todir="${build.home}/classes/com/primecalc/java/klb4/images">
       <fileset dir="${src.home}/images" includes="**/*.*"/>
@@ -57,6 +56,16 @@
       <replacefilter token="@revision@" value="${app.version.revision}"/>
       <replacefilter token="@build@" value="${DSTAMP}${TSTAMP}"/>
     </replace>
+    <javac srcdir="${src.home}"
+		 excludes="**/Version.java"
+          destdir="${build.home}/classes/"
+            debug="${compile.debug}"
+      deprecation="${compile.deprecation}"
+           source="${app.source}"
+           target="${app.target}"
+         optimize="${compile.optimize}">
+        <classpath refid="compile.classpath"/>
+    </javac>
     <javac srcdir="${build.home}/src"
           destdir="${build.home}/classes/"
             debug="${compile.debug}"
@@ -96,6 +105,12 @@
         <test name="${app.package}.test.MainSuite" todir="${build.home}" outfile="junitTestResults"/>
         <formatter type="xml"/>
     </junit>
+  </target>
+
+  <target name="test-gui" depends="compile"  description="run application">
+    <java dir="${build.home}/classes/" classname="junit.swingui.TestRunner" fork="yes" classpathref="test.classpath">
+      <arg line="${app.package}.test.MainSuite"/>
+    </java>
   </target>
 
   <target name="doc" depends="compile,javadoc,pdf"  description="create app docs"/>
@@ -243,12 +258,10 @@
 
     <path id="test.classpath">
       <pathelement location="c:/Programme/Java/lib/hsqldb/lib/hsqldb.jar"/>
+      <fileset dir="${basedir}/lib/" includes="junit*.jar"/>
       <fileset dir="${basedir}/lib/junit-4.11" includes="*.jar"/>
       <pathelement location="${build.home}/classes" />
     </path>
-    
-    <pathconvert property="formatted-jarpath" pathsep="${line.separator} " refid="test.classpath" /> 
-    <echo message="jarpath = ${formatted-jarpath}" />
     
     <path id="run.classpath">
       <pathelement location="c:/Programme/Java/lib/hsqldb/lib/hsqldb.jar"/>
