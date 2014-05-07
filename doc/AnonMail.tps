@@ -11,14 +11,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1008
-NormalPos.bottom=462
+NormalPos.right=1562
+NormalPos.bottom=540
 Class=LaTeXView
-Document=inc\parts\intro.tex
+Document=AnonMail.tex
 
 [Frame0_View0,0]
-TopLine=64
-Cursor=2575
+TopLine=191
+Cursor=6676
 
 [Frame1]
 Flags=0
@@ -29,14 +29,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1008
-NormalPos.bottom=462
+NormalPos.right=1562
+NormalPos.bottom=540
 Class=LaTeXView
-Document=inc\parts\analysis.tex
+Document=inc\parts\intro.tex
 
 [Frame1_View0,0]
-TopLine=17
-Cursor=1474
+TopLine=0
+Cursor=0
 
 [Frame2]
 Flags=0
@@ -47,14 +47,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1008
-NormalPos.bottom=462
+NormalPos.right=1562
+NormalPos.bottom=540
 Class=LaTeXView
 Document=inc\parts\theory.tex
 
 [Frame2_View0,0]
-TopLine=15
-Cursor=2011
+TopLine=103
+Cursor=10852
 
 [Frame3]
 Flags=0
@@ -65,14 +65,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1008
-NormalPos.bottom=462
+NormalPos.right=1562
+NormalPos.bottom=540
 Class=LaTeXView
-Document=AnonMail.tex
+Document=inc\parts\current.tex
 
 [Frame3_View0,0]
-TopLine=189
-Cursor=6181
+TopLine=0
+Cursor=0
 
 [Frame4]
 Flags=0
@@ -83,14 +83,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1008
-NormalPos.bottom=462
-Class=BibTeXView
-Document=AnonMail.bib
+NormalPos.right=1562
+NormalPos.bottom=540
+Class=LaTeXView
+Document=inc\parts\design.tex
 
 [Frame4_View0,0]
-TopLine=3
-Cursor=531
+TopLine=132
+Cursor=7002
 
 [Frame5]
 Flags=0
@@ -101,14 +101,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1008
-NormalPos.bottom=462
+NormalPos.right=1562
+NormalPos.bottom=540
 Class=LaTeXView
-Document=inc\parts\current.tex
+Document=inc\parts\analysis.tex
 
 [Frame5_View0,0]
-TopLine=9
-Cursor=1328
+TopLine=4
+Cursor=1474
 
 [Frame6]
 Flags=0
@@ -119,16 +119,16 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1008
-NormalPos.bottom=462
-Class=LaTeXView
-Document=inc\parts\design.tex
+NormalPos.right=1562
+NormalPos.bottom=540
+Class=BibTeXView
+Document=AnonMail.bib
 
 [Frame6_View0,0]
-TopLine=136
-Cursor=6587
+TopLine=3
+Cursor=531
 
 [SessionInfo]
 FrameCount=7
-ActiveFrame=6
+ActiveFrame=2
 
