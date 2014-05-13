@@ -99,6 +99,13 @@
     </java>
   </target>
 
+  <target name="run-imap" depends="compile"  description="run imap test application">
+    <java dir="${build.home}/classes/" classname="${app.package}.imap.ImapSSLSocket" fork="yes" classpathref="run.classpath">
+      <jvmarg line="-ea -Djava.endorsed.dirs=endorsed"/> <!-- -Djaxp.debug=1 -->
+      <arg line="-help"/>
+    </java>
+  </target>
+
   <target name="test" depends="compile"  description="run application">
     <junit printsummary="yes" fork="yes" haltonfailure="yes">
         <classpath refid="test.classpath"/>
@@ -109,6 +116,7 @@
 
   <target name="test-gui" depends="compile"  description="run application">
     <java dir="${build.home}/classes/" classname="junit.swingui.TestRunner" fork="yes" classpathref="test.classpath">
+		<jvmarg line="-Djavax.net.ssl.keyStore=keystore.jks -Djavax.net.ssl.keyStorePassword=changeme"/> 
       <arg line="${app.package}.test.MainSuite"/>
     </java>
   </target>
