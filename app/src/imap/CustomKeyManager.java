@@ -13,11 +13,13 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.Socket;
 
- 
+/***
+ * @todo support multiple aliases
+ ***/ 
 public class CustomKeyManager implements X509KeyManager {
     private KeyStore keyStore;
     private String alias;
-    private char[] password;
+	char[] password;
 
     CustomKeyManager(String keyStoreFile, String password, String alias)
         throws IOException, GeneralSecurityException
@@ -28,14 +30,14 @@ public class CustomKeyManager implements X509KeyManager {
     CustomKeyManager(String keyStoreFile, char[] password, String alias)
         throws IOException, GeneralSecurityException
     {
+		this.password=password;
         this.alias = alias;
-        this.password = password;
-        InputStream stream = new FileInputStream(keyStoreFile);
         keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-        keyStore.load(stream, password);
+        keyStore.load(new FileInputStream(keyStoreFile), password);
     }
 
-    public PrivateKey getPrivateKey(String alias) {
+    public PrivateKey getPrivateKey(String alias) 
+	{
         try {
 			return (PrivateKey) keyStore.getKey(alias, password);
 		} catch (Exception e) {
@@ -46,11 +48,10 @@ public class CustomKeyManager implements X509KeyManager {
     public X509Certificate[] getCertificateChain(String alias) {
         try {
             java.security.cert.Certificate[] certs = keyStore.getCertificateChain(alias);
-            if (certs == null || certs.length == 0)
-            	return null;
+            if (certs == null || certs.length == 0)	return null;
+			// copy and typcast array
             X509Certificate[] x509 = new X509Certificate[certs.length];
-            for (int i = 0; i < certs.length; i++)
-            	x509[i] = (X509Certificate)certs[i];
+            for (int i = 0; i < certs.length; i++) x509[i] = (X509Certificate)certs[i];
 			return x509;
 		} catch (Exception e) {
 			return null;
@@ -63,11 +64,11 @@ public class CustomKeyManager implements X509KeyManager {
     }
 
     public String[] getClientAliases(String parm1, Principal[] parm2) {
-        throw new UnsupportedOperationException("Method getClientAliases() not yet implemented.");
+        throw new UnsupportedOperationException("Method getClientAliases() not implemented. Server Socket only Manager");
     }
 
     public String chooseClientAlias(String keyTypes[], Principal[] issuers, Socket socket) {
-        throw new UnsupportedOperationException("Method chooseClientAlias() not yet implemented.");
+        throw new UnsupportedOperationException("Method chooseClientAlias() not implemented. Server Socket only Manager");
     }
 
     public String[] getServerAliases(String parm1, Principal[] parm2) {

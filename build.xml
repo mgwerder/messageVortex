@@ -78,9 +78,9 @@
     <copy  todir="${build.home}/classes/">
       <fileset dir="${build.home}/src" excludes="**/*.java"/>
     </copy>
-    <!--<copy todir="${build.home}/classes/${app.path}/xml">
-      <fileset dir="${build.home}/src/${app.path}/xml" includes="*.properties *.ser *.index" />
-    </copy>-->
+    <copy  todir="${build.home}/classes/">
+      <fileset dir="${basedir}/app" includes="*.jks"/>
+    </copy>
   </target>
 
   <target name="dist" depends="compile,test"  description="Create binary distribution">
@@ -94,14 +94,14 @@
 
   <target name="run" depends="compile"  description="run application">
     <java dir="${build.home}/classes/" classname="${app.package}.${app.mainclass}" fork="yes" classpathref="run.classpath">
-      <jvmarg line="-ea -Djava.endorsed.dirs=endorsed"/> <!-- -Djaxp.debug=1 -->
+      <jvmarg line="-ea"/> 
       <arg line="-help"/>
     </java>
   </target>
 
   <target name="run-imap" depends="compile"  description="run imap test application">
     <java dir="${build.home}/classes/" classname="${app.package}.imap.ImapSSLSocket" fork="yes" classpathref="run.classpath">
-      <jvmarg line="-ea -Djava.endorsed.dirs=endorsed"/> <!-- -Djaxp.debug=1 -->
+      <jvmarg line="-ea -Djavax.net.ssl.trustStore=../../keystore.jks -Djavax.net.ssl.trustStorePassword=changeme "/> 
       <arg line="-help"/>
     </java>
   </target>
@@ -252,20 +252,14 @@
 
     <path id="compile.classpath">
       <pathelement location="c:/Programme/Java/lib/hsqldb/lib/hsqldb.jar"/>
-      <!--<fileset dir="${junit.dir}" includes="*.jar"/>-->
-      <!--<fileset dir="${jwsdp.dir}/jaxb/lib" includes="*.jar" excludes="jaxb-impl.jar"/>-->
-      <!--<fileset dir="${jwsdp.dir}/jaxb/lib" includes="*.jar"/>-->
-      <!--<fileset dir="${jwsdp.dir}">
-        <include name="jaxp/**/*.jar" exclude="jaxb-api.jar"/>
-        <include name="jwsdp-shared/lib/**/*.jar"/>
-      </fileset>-->
-      <fileset dir="${rtlib.home}" includes="*.jar"/>
+      <fileset dir="${rtlib.home}" includes="**/*.jar"/>
       <fileset dir="${basedir}/lib/junit-4.11" includes="*.jar"/>
       <pathelement location="${build.home}/classes" />
     </path>
 
     <path id="test.classpath">
       <pathelement location="c:/Programme/Java/lib/hsqldb/lib/hsqldb.jar"/>
+      <fileset dir="${rtlib.home}" includes="**/*.jar"/>
       <fileset dir="${basedir}/lib/" includes="junit*.jar"/>
       <fileset dir="${basedir}/lib/junit-4.11" includes="*.jar"/>
       <pathelement location="${build.home}/classes" />
@@ -273,7 +267,7 @@
     
     <path id="run.classpath">
       <pathelement location="c:/Programme/Java/lib/hsqldb/lib/hsqldb.jar"/>
-      <fileset dir="${rtlib.home}" includes="*.jar"/>
+      <fileset dir="${rtlib.home}" includes="**/*.jar"/>
       <pathelement location="${build.home}/classes" />
     </path>
 
