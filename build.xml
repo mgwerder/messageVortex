@@ -33,6 +33,24 @@
   <target name="clean" description="Delete old build and dist directories">
     <delete dir="${build.home}"/>
     <delete dir="${dist.home}"/>
+    <delete><fileset dir="${doc.home}" includes="**/*.aux"/></delete>
+    <delete><fileset dir="${doc.home}" includes="*.pdf"/></delete>
+    <delete><fileset dir="${doc.home}" includes="**/*.bbl"/></delete>
+    <delete><fileset dir="${doc.home}" includes="**/*.aux"/></delete>
+    <delete><fileset dir="${doc.home}" includes="**/*.idx"/></delete>
+    <delete><fileset dir="${doc.home}" includes="**/*.out"/></delete>
+    <delete><fileset dir="${doc.home}" includes="**/*.log"/></delete>
+    <delete><fileset dir="${doc.home}" includes="**/*.lot"/></delete>
+    <delete><fileset dir="${doc.home}" includes="**/*.ilg"/></delete>
+    <delete><fileset dir="${doc.home}" includes="**/*.ind"/></delete>
+    <delete><fileset dir="${doc.home}" includes="**/*.lof"/></delete>
+    <delete><fileset dir="${doc.home}" includes="**/*.ist"/></delete>
+    <delete><fileset dir="${doc.home}" includes="**/*.bak"/></delete>
+    <delete><fileset dir="${doc.home}" includes="**/*.run.xml"/></delete>
+    <delete><fileset dir="${doc.home}" includes="**/*.synctex.gz"/></delete>
+    <delete><fileset dir="${doc.home}" includes="**/*.blg"/></delete>
+    <delete><fileset dir="${doc.home}" includes="**/*-blx.bib"/></delete>
+    <delete><fileset dir="${doc.home}" includes="**/*.toc"/></delete>
   </target>
 
   <target name="compile" depends="prepare" description="Compile Java sources">
@@ -141,29 +159,8 @@
     </javadoc>
   </target>
   
-  <target name="pdf">
-    <latex
-	path="${path.miktex}"
-        latexfile="${doc.home}/mailvortex.tex"
-        verbose="on"
-        clean="off"
-        pdftex="on"
-        passThruLaTeXParameters="-synctex=1"
-        workingDir="${doc.home}">
-            <makeindex
-		path="${path.miktex}"
-                run="on"
-                workingDir="${doc.home}">
-                <fileset dir="${doc.home}"> 
-                   <include name="*.nlo" /> 
-                </fileset> 
-            </makeindex>
-            <bibtex
-		path="${path.miktex}"
-                run="on"
-                workingDir="${doc.home}" />
-    </latex>
-    <latex
+  <target name="pdf-plan" unless="mailvortexplan.uptodate" depends="pdf-uptodate">
+	<latex
 	path="${path.miktex}"
         latexfile="${doc.home}/mailvortex_Plan.tex"
         verbose="on"
@@ -184,6 +181,9 @@
                 run="on"
                 workingDir="${doc.home}" />
     </latex>
+  </target>
+  
+  <target name="pdf-roadmap" unless="mailvortexrm.uptodate" depends="pdf-uptodate">
     <latex
 	path="${path.miktex}"
         latexfile="${doc.home}/mailvortex_Roadmap.tex"
@@ -205,6 +205,51 @@
                 run="on"
                 workingDir="${doc.home}" />
     </latex>
+  </target>
+  
+  <target name="pdf-vortex" unless="mailvortexdoc.uptodate" depends="pdf-uptodate">
+    <latex
+		path="${path.miktex}"
+        latexfile="${doc.home}/mailvortex.tex"
+        verbose="on"
+        clean="off"
+        pdftex="on"
+        passThruLaTeXParameters="-synctex=1"
+        workingDir="${doc.home}">
+            <makeindex
+		path="${path.miktex}"
+                run="on"
+                workingDir="${doc.home}">
+                <fileset dir="${doc.home}"> 
+                   <include name="*.nlo" /> 
+                </fileset> 
+            </makeindex>
+            <bibtex
+		path="${path.miktex}"
+                run="on"
+                workingDir="${doc.home}" />
+    </latex>
+  </target>
+  
+  <target name="pdf-uptodate">
+	<condition property="mailvortexdoc.uptodate">
+		<uptodate targetfile="${doc.home}/mailvortex.pdf">
+			<srcfiles dir="${doc.home}" includes="inc/**/*.tex inc/**/*.inc **/*.bib mailvortex.tex"/>
+		</uptodate>
+	</condition>
+	<condition property="mailvortexrm.uptodate">
+		<uptodate targetfile="${doc.home}/mailvortex_Roadmap.pdf">
+			<srcfiles dir="${doc.home}" includes="mailvortex_Roadmap.tex"/>
+		</uptodate>
+	</condition>
+	<condition property="mailvortexplan.uptodate">
+		<uptodate targetfile="${doc.home}/mailvortex_Plan.pdf">
+			<srcfiles dir="${doc.home}/inc" includes="mailvortex_Plan.tex"/>
+		</uptodate>
+	</condition>
+  </target>	
+
+  <target name="pdf" depends="pdf-uptodate,pdf-vortex,pdf-roadmap,pdf-plan">
   </target>
   
 
