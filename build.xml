@@ -101,7 +101,7 @@
 
   <target name="run-imap" depends="compile"  description="run imap test application">
     <java dir="${build.home}/classes/" classname="${app.package}.imap.ImapSSLSocket" fork="yes" classpathref="run.classpath">
-      <jvmarg line="-ea -Djavax.net.ssl.trustStore=../../keystore.jks -Djavax.net.ssl.trustStorePassword=changeme "/> 
+      <jvmarg line="-ea "/> 
       <arg line="-help"/>
     </java>
   </target>
