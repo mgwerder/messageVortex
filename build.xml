@@ -159,6 +159,12 @@
     </javadoc>
   </target>
   
+  <target name="pdf" depends="pdf-uptodate,pdf-vortex,pdf-roadmap,pdf-plan">
+  </target>
+  
+
+  <!-- =================================== Sub targets -->
+
   <target name="pdf-plan" unless="mailvortexplan.uptodate" depends="pdf-uptodate">
 	<latex
 	path="${path.miktex}"
@@ -234,7 +240,7 @@
   <target name="pdf-uptodate">
 	<condition property="mailvortexdoc.uptodate">
 		<uptodate targetfile="${doc.home}/mailvortex.pdf">
-			<srcfiles dir="${doc.home}" includes="inc/**/*.tex inc/**/*.inc **/*.bib mailvortex.tex"/>
+			<srcfiles dir="${doc.home}" includes="inc/**/*.tex inc/**/*.inc **/*.bib mailvortex.tex **/*.fig **/*.png **/*.jpg"/>
 		</uptodate>
 	</condition>
 	<condition property="mailvortexrm.uptodate">
@@ -248,12 +254,6 @@
 		</uptodate>
 	</condition>
   </target>	
-
-  <target name="pdf" depends="pdf-uptodate,pdf-vortex,pdf-roadmap,pdf-plan">
-  </target>
-  
-
-  <!-- =================================== Sub targets -->
 
   <target name="xml" depends="prepare">
     <!-- build xml classes -->
