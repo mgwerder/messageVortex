@@ -28,7 +28,7 @@
 	  </classpath>
 	</taskdef>  
 
-  <target name="all" depends="compile,doc,test" description="Clean build and dist directories, then compile"/>
+  <target name="all" depends="compile,test,doc,javadoc" description="Clean build and dist directories, then compile"/>
 
   <target name="clean" description="Delete old build and dist directories">
     <delete dir="${build.home}"/>
@@ -36,6 +36,7 @@
   </target>
 
   <target name="compile" depends="prepare" description="Compile Java sources">
+    <echo message="user.home=${user.home}"/>
     <mkdir dir="${build.home}/src/${app.path}"/>
     <mkdir dir="${build.home}/classes/${app.path}"/>
     <touch file="${src.home}/Version.java"/>
@@ -142,13 +143,15 @@
   
   <target name="pdf">
     <latex
-        latexfile="${doc.home}/AnonMail.tex"
+	path="${path.miktex}"
+        latexfile="${doc.home}/mailvortex.tex"
         verbose="on"
         clean="off"
         pdftex="on"
         passThruLaTeXParameters="-synctex=1"
         workingDir="${doc.home}">
             <makeindex
+		path="${path.miktex}"
                 run="on"
                 workingDir="${doc.home}">
                 <fileset dir="${doc.home}"> 
@@ -156,17 +159,20 @@
                 </fileset> 
             </makeindex>
             <bibtex
+		path="${path.miktex}"
                 run="on"
                 workingDir="${doc.home}" />
     </latex>
     <latex
-        latexfile="${doc.home}/AnonMail_Plan.tex"
+	path="${path.miktex}"
+        latexfile="${doc.home}/mailvortex_Plan.tex"
         verbose="on"
         clean="off"
         pdftex="on"
         passThruLaTeXParameters="-synctex=1"
         workingDir="${doc.home}">
             <makeindex
+		path="${path.miktex}"
                 run="on"
                 workingDir="${doc.home}">
                 <fileset dir="${doc.home}"> 
@@ -174,17 +180,20 @@
                 </fileset> 
             </makeindex>
             <bibtex
+		path="${path.miktex}"
                 run="on"
                 workingDir="${doc.home}" />
     </latex>
     <latex
-        latexfile="${doc.home}/AnonMail_Roadmap.tex"
+	path="${path.miktex}"
+        latexfile="${doc.home}/mailvortex_Roadmap.tex"
         verbose="on"
         clean="off"
         pdftex="on"
         passThruLaTeXParameters="-synctex=1"
         workingDir="${doc.home}">
             <makeindex
+		path="${path.miktex}"
                 run="on"
                 workingDir="${doc.home}">
                 <fileset dir="${doc.home}"> 
@@ -192,6 +201,7 @@
                 </fileset> 
             </makeindex>
             <bibtex
+		path="${path.miktex}"
                 run="on"
                 workingDir="${doc.home}" />
     </latex>
