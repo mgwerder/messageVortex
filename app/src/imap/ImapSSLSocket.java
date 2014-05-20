@@ -7,6 +7,10 @@ package net.gwerder.java.mailvortex.imap;
  */
 public class ImapSSLSocket {
 
+	public static void registerCommand(ImapCommand command) {
+		// FIXME
+	}
+
 	/**
      * Selftest function for IMAP server.
      *
