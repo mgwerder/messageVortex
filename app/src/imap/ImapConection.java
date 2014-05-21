@@ -10,9 +10,9 @@ import java.net.Socket;
 
 class ImapConnection extends StoppableThread implements Comparable<ImapConnection> {
 
-	static private final int CONNECTION_NOT_AUTHENTICATED = 1;
-	static private final int CONNECTION_AUTHENTICATED     = 2;
-	static private final int CONNECTION_SELECTED          = 3;
+	static public final int CONNECTION_NOT_AUTHENTICATED = 1;
+	static public final int CONNECTION_AUTHENTICATED     = 2;
+	static public final int CONNECTION_SELECTED          = 3;
 	
 	private Socket plainSocket;
 	private SSLSocket sslSocket=null;
@@ -30,6 +30,13 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
 		this.encrypted=encrypted;
 		updateSocket();
 		Executors.newSingleThreadExecutor().execute(this);
+	}
+	
+	public int setState(int status) {
+		if(status>3 || status<1) return -status;	
+		int old=status;
+		this.status=status;
+		return old;
 	}
 	
 	private void updateSocket() {

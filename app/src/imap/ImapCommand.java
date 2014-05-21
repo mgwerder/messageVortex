@@ -8,7 +8,11 @@ public abstract class ImapCommand implements Cloneable {
 
 	public static void registerCommand(ImapCommand command) {
 		String[] arr=command.getCommandIdentifier();
-		for(int i=0;i<arr.length;i++) commands.put(arr[i],command);
+		for(int i=0;i<arr.length;i++) commands.put(arr[i],command);		
+	}
+	
+	public static ImapCommand[] getCommands() {
+		return commands.values().toArray(new ImapCommand[commands.size()]);
 	}
 
 	public static String[] getCapabilities() {
