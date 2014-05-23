@@ -5,7 +5,8 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-  MailVortexTest.class
+  MailVortexTest.class,
+  ImapCommandLoginTest.class
 })
 
 public class MainSuite {

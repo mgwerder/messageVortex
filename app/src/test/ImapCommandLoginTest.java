@@ -14,15 +14,15 @@ import org.junit.Assert;
  * @author martin@gwerder.net (Martin GWERDER)
  */
 @RunWith(JUnit4.class)
-public class MailVortexTest {
+public class ImapCommandLoginTest {
 
     @Test
-    public void thisTestAlwaysPasses() {
-		Assert.assertFalse("failure - should be false", false);
+    public void loginCapabilitiesPropagated() {
+		// check if login is passed to capabilities
     }
 
     @Test
-    //@Ignore
+    @Ignore
     public void thisIsIgnored() {
     }
 }

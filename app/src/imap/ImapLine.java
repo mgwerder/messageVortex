@@ -2,8 +2,8 @@ package net.gwerder.java.mailvortex.imap;
 
 public class ImapLine {
 
-	private static int    identifierEnumertor=0;
-	private static final Object identifierEnumertorLock=new Object();
+	private static int    identifierEnumerator=0;
+	private static final Object identifierEnumeratorLock=new Object();
 	private String identifier=null;
 	private ImapConnection con;
 
@@ -26,9 +26,9 @@ public class ImapLine {
 		
 	public static String getNextIdentifier(String prefix) {
 		String ret;
-		synchronized(identifierEnumertorLock) {
-			identifierEnumertor++;
-			ret=prefix+String.format("%06d", identifierEnumertor);
+		synchronized(identifierEnumeratorLock) {
+			identifierEnumerator++;
+			ret=prefix+String.format("%06d", identifierEnumerator);
 		}
 		return ret;
 	}
