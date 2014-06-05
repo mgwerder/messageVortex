@@ -27,7 +27,7 @@
             maxbibnames=100,
             block=none,
             sorting=anyt]{biblatex}
-\addbibresource{AnonMail}
+\addbibresource{mailvortex}
 \addbibresource{inc/bib/unclassified/Anonbib/anonbib}
 
 %\usepackage{inputenc}
@@ -52,7 +52,7 @@
 \usepackage{float}
 
 \hypersetup{pdfinfo={
-Subject={Privacy when using mail},
+Subject={Research Plan MailVortex},
 Keywords={Email; SMTP; MIME; S/MIME; POP3; IMAPv4; MailVortex}
 }}
 
@@ -95,7 +95,7 @@ Assumption is that an adversary attacking the anonymity of any of the party (sen
 \section{Background and Significance}
 Almon B. Strowger was the inventor of the first ``automatic telephone exchange'' which was a mayor step in information routing automation. He patented it in 1891 \cite{strowger}. Since then automated routing of information became tremendously important for the western world. Phone calls, internet traffic and even conventional paper mail is routed automatically these days. While automated information routing speeds up the message exchange in our society it enables at the same time to collect automatically data about a persons and their habits. For example are persons more likely to communicate with persons sharing the same interest. So if a person communicates with several persons known to be passionate philatelists he is more likely to be a philatelist himself.\par
 
-This is generally known and marketing experts, secret services or research institutes try to use available information to be more effective in their job. They invent methods to collect vast amounts of data about persons and then try to identify interesting individuals or groups for their respective work. While the interest of the data collection owner might be legal the existence of a database categorizing individuals based on statistical likelihood might be more than questionable. The main problem is that a person in the western world can not choose in some cases whether he wants to be part of such a data collection or not. Some of the media which are interesting as they offer a lot of data about a person are unavoidable these days. Unavoidable information sources might be public directories, telephone or email.\par
+This is generally known and marketing experts, secret services or research institutes. They try to use available information to be more effective in their job by inventing methods to collect vast amounts of data about persons and then identify interesting individuals or groups for their respective work. While the interest of the data collection owner might be legal the existence of a database categorizing individuals based on statistical likelihood might be more than questionable. The main problem is that a person in the western world can not choose in some cases whether he wants to be part of such a data collection or not. Some of the media which are interesting as they offer a lot of data about a person are unavoidable these days. Unavoidable information sources might be public directories, telephone or email.\par
 
 Ongoing discoveries show that message flows in the internet and our private life are being traced (see \cite{ECHELON}, \cite{wiki:prism}, \cite{wiki:tempora} and many more). The information obtained through these channels is then being combined with other social streams to obtain a profile of a persons social network. If misused this information may lead to wrong accusations such as being part of illegal activities or socially not accepted groups. It furthermore violates the human rights where Article 19 of the ICCPR states that ``everyone shall have the right to hold opinions without interference'' and ``everyone shall have the right to freedom of expression; this right shall include freedom to seek, receive and impart information and ideas of all kinds, regardless of frontiers, either orally, in writing or in print, in the form of art, or through any other media of his choice''\cite{iccpr}.\par
 
@@ -133,7 +133,7 @@ Another risk might be that if the thesis leads to a fully or partially effective
 
 All anonymizing technologies introduce some kind of ``noise'' information in which the true message content is hidden. This ``noise'' is an additional load which has to be handled by the existing mail infrastructure. If successful the reliability of the infrastructure might be endangered due to the additional load opposed by the new protocol. Nodes which are already on the brink of their capabilities might become overloaded and, therefore, unable to handle regular mail traffic. If possible precausive actions should be taken to avoid such situations (without violating the main goal).\par
 
-As with all encryption technologies anti virus and anti spam measurements are rendered ineffective as an anti spam or anti virus program is unable to scan the terminal message content.\par
+As with all encryption technologies anti virus and anti spam measurements are rendered ineffective as an anti spam or anti virus program located on a server is unable to scan the terminal message content.\par
 
 \section{Potential Benefits}
 If successful, this thesis will allow normal users without the help of a provider to set up an anonymous communication channel by using well known, elaborated technology. It will enable a mail user to control the level of anonymity he would like to have when communicating over the internet. This would fill an important gap of the current western information society. \par
@@ -155,6 +155,7 @@ In order to create this plan a minimum research has been carried out. The follow
 \item In \citetitle{buses03}\cite{buses03} the authors \citeauthor{buses03} propose to use a protocol which is clustering multiple messages in ``buses'' to make traffic analysis harder.
 \item In \cite{danezis:wpes2004} \citeauthor{danezis:wpes2004} propose a message format which should be used as transport protocol for chaumian mixes. This format should be lightweight and efficient.
 \item \citeauthor{tor-design} describe in \cite{tor-design} the design of the Tor-Protocol. Tor is a very common, generic onion routing protocol and \cite{foci12-winter} of \citeauthor{foci12-winter} focuses on the Chinese firewall and its dedicated blocking methods for Tor.
+\item Ver few steganographic work has been published on research level which has reached a broader audience and all of them (eg. JSteg, OutGuess, invisible secrets, appendX and F5\cite{f5}) seem to be broken (see \citetitle{hideAndSeek}\cite{hideAndSeek} or Hiding in Plain sight FIXME cite)
 \end{itemize}
 
 \section{Planed Timeline}
@@ -164,23 +165,24 @@ Second, a prototype is being described and built. Based on the prototype and the
 All this information is continuously collected in a thesis document and finalized at the end of the ``POC'' phase.\par
 \begin{figure}[H]%
 \resizebox{\columnwidth}{0.2\textheight}{
-\begin{ganttchart}[vgrid,hgrid]{1}{40}
-\gantttitle{2013}{1} \gantttitle{2014}{12} \gantttitle{2015}{12}  \gantttitle{2016}{12} \gantttitle{2017}{3}\\
-\gantttitlelist{12}{1}\gantttitlelist{1,...,12}{1}\gantttitlelist{1,...,12}{1}\gantttitlelist{1,...,12}{1}\gantttitlelist{1,...,3}{1} \\
-\ganttgroup{Ground work}{1}{17} \\
-\ganttbar{Initialisation}{1}{4}\\
-\ganttbar{Info gathering}{1}{8}\\
-\ganttbar{Analysis}{1}{12}\\
-\ganttlinkedbar{Design}{13}{17}\\
-\ganttgroup{POC}{18}{36} \\
-\ganttbar{RFC}{18}{23}\\
+\begin{ganttchart}[vgrid,hgrid]{1}{45}
+\gantttitle{2013}{12} \gantttitle{2014}{12} \gantttitle{2015}{12}  \gantttitle{2016}{9}\\
+\gantttitlelist{1,...,12}{1}\gantttitlelist{1,...,12}{1}\gantttitlelist{1,...,12}{1}\gantttitlelist{1,...,9}{1} \\
+\ganttgroup{Ground work}{1}{26} \\
+\ganttbar{PhD formalisation}{11}{20}\\
+\ganttbar{Info gathering}{1}{20}\\
+\ganttbar{Analysis}{1}{20}\\
+\ganttlinkedbar{Design}{20}{26}\\
+\ganttgroup{POC}{24}{38} \\
+\ganttbar{RFC}{24}{30}\\
 %\ganttlinkedmilestone{RFC to IETF}{23}\\
-\ganttlinkedbar{Implementation}{24}{36}\\
-\ganttlinkedbar{Finalization}{37}{40}\\
-\ganttbar{Thesis}{1}{36}
+\ganttlinkedbar{Implementation}{26}{38}\\
+\ganttbar{Attack tests}{34}{40}\\
+\ganttbar{Finalization}{38}{45}\\
+\ganttbar{Thesis}{1}{45}
 \ganttlink{elem4}{elem6}
 \ganttlink{elem2}{elem4}
-\ganttlink{elem9}{elem8}
+\ganttlink{elem7}{elem9}
 \end{ganttchart}
 }
 \caption{Planed timetable}%
