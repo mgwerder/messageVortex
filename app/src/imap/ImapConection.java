@@ -21,6 +21,9 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
 	private int status=CONNECTION_NOT_AUTHENTICATED;
 	private Set<String> suppCiphers;
 	private boolean encrypted;
+	private ImapAuthenticationProxy authProxy = null;
+	private InputStream input=null;
+	private OutputStream output=null;
 	
 	public ImapConnection(Socket sock,SSLContext context,Set<String> suppCiphers, boolean encrypted) 
 	{
@@ -30,6 +33,16 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
 		this.encrypted=encrypted;
 		updateSocket();
 		Executors.newSingleThreadExecutor().execute(this);
+	}
+	
+	public ImapAuthenticationProxy setAuth(ImapAuthenticationProxy authProxy) {
+		ImapAuthenticationProxy oldProxyAuth=getAuth();
+		this.authProxy=authProxy;
+		return oldProxyAuth;
+	}
+	
+	public ImapAuthenticationProxy getAuth() {
+		return this.authProxy;
 	}
 	
 	public int setState(int status) {
@@ -45,6 +58,10 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
 		} else {
 			currentSocket=plainSocket;
 		}
+		if(plainSocket!=null) {
+			input=currentSocket.getInputStream();
+			output=currentSocket.getOutputStream();
+		}
 	}
 	
 	public int compareTo(ImapConnection i) {
@@ -56,7 +73,11 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
 	}
 	
 	public int shutdown() {
-		// FIXME implementation missing
+		// FIXME good implementation missing
+		shutdown=true;
+		try{
+			this.join();
+		} catch(InterruptedException e) {}
 		return 0;
 	}
 	

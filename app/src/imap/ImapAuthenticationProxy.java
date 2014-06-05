@@ -1,4 +1,4 @@
-package net.gwerder.java.mailvortex.test;
+package net.gwerder.java.mailvortex.imap;
 
 public abstract class ImapAuthenticationProxy {
 
