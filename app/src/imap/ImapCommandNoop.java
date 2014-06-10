@@ -8,7 +8,13 @@ public class ImapCommandNoop extends ImapCommand {
 	
 	public String[] processCommand(ImapLine line) {
 		// FIXME return status
-		return new String[] {"* CAPABILITY IMAP4rev1",line.getIdentifier()+" OK" };
+		// FIXME reset autologout timer
+		// Example:
+		//// * 22 EXPUNGE
+		//// * 23 EXISTS
+		//// * 3 RECENT
+		//// * 14 FETCH (FLAGS (\Seen \Deleted))
+		return new String[] {line.getIdentifier()+" OK" };
 	}
 	
 	public String[] getCommandIdentifier() {

@@ -1,6 +1,8 @@
 package net.gwerder.java.mailvortex.imap;
  
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.concurrent.Executors;
 import java.util.Set;
 import javax.net.ssl.SSLSocket;
@@ -14,13 +16,13 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
 	static public final int CONNECTION_AUTHENTICATED     = 2;
 	static public final int CONNECTION_SELECTED          = 3;
 	
-	private Socket plainSocket;
+	private Socket plainSocket=null;
 	private SSLSocket sslSocket=null;
-	private Socket currentSocket;
+	private Socket currentSocket=null;
 	private SSLContext context;
 	private int status=CONNECTION_NOT_AUTHENTICATED;
 	private Set<String> suppCiphers;
-	private boolean encrypted;
+	private boolean encrypted=false;
 	private ImapAuthenticationProxy authProxy = null;
 	private InputStream input=null;
 	private OutputStream output=null;
@@ -59,8 +61,12 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
 			currentSocket=plainSocket;
 		}
 		if(plainSocket!=null) {
-			input=currentSocket.getInputStream();
-			output=currentSocket.getOutputStream();
+			try{
+				input=currentSocket.getInputStream();
+				output=currentSocket.getOutputStream();
+			} catch(IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
