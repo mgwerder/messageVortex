@@ -13,12 +13,22 @@ import java.security.KeyStore;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
+import java.util.concurrent.TimeoutException;
+//import java.lang.InterruptedException;
 
 class ImapClient implements Runnable {
 
+	private static final int DEFAULT_TIMEOUT=10000;
+
 	private String targetHost="localhost";
+	private Object sync=new Object();
+	private Object notifyThread=new Object();
 	private int targetPort = 143;
 	private boolean encrypted;
+	private boolean shutdown=false;
+	private String currentCommand=null;
+	private String[] currentCommandReply=null;
+	private boolean currentCommandCompleted=false;
 	private final TrustManager[] trustAllCerts = new TrustManager[] {  new X509TrustManager() {     
 			public java.security.cert.X509Certificate[] getAcceptedIssuers() { return null;	} 
 			public void checkClientTrusted(java.security.cert.X509Certificate[] certs, String authType) {} 
@@ -50,21 +60,41 @@ class ImapClient implements Runnable {
 		for(int i=0;i<arr.length;i++) System.out.println(" supported by client: "+arr[i]);
 		return sslSocket;
 	}
+	
+	public String[] sendCommand(String command) throws TimeoutException { return sendCommand(command,DEFAULT_TIMEOUT); }
+	
+	public String[] sendCommand(String command,int millisTimeout) throws TimeoutException {
+		synchronized(sync) {
+			currentCommand=command;
+			long start = System.currentTimeMillis();
+			currentCommandCompleted=false;
+			System.out.println("IMAP-> C: "+command);
+			synchronized(notifyThread) {notifyThread.notify(); }
+			while(!currentCommandCompleted && System.currentTimeMillis()<start+millisTimeout) {
+				try{sync.wait(100);} catch(InterruptedException e) {};
+			}
+			if(!currentCommandCompleted && System.currentTimeMillis()>start+millisTimeout) throw new TimeoutException("Timeout reached while sending \""+command+"\"");
+		}
+		return new String[0];
+	}
 
 	public void run() {
 		Socket socket=null;
 		try {
 			socket = SocketFactory.getDefault().createSocket(targetHost,targetPort);
 			if(encrypted) socket=startTLS(socket);
-			System.out.flush();
-			socket.getOutputStream().write("test".getBytes());
-			socket.close();
-			System.out.println("Client -> sending...");
-			System.exit(0);
+			while(!shutdown) {
+				synchronized(notifyThread) {try{notifyThread.wait(100);} catch(InterruptedException e) {} }
+				if(currentCommand!=null && !currentCommand.equals("")) {
+					socket.getOutputStream().write((currentCommand+"\r\n").getBytes());
+					socket.getOutputStream().flush();
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {	
 			try{socket.close();}catch(Exception e2) {};
-
+			//if(sslSocket!=null) try{sslSocket.close();}catch(Exception e2) {};
 		}
 	}
 }

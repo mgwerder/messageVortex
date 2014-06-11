@@ -1,4 +1,4 @@
-package net.gwerder.java.mailvortex.imap.test;
+package net.gwerder.java.mailvortex.test;
 
 import static org.junit.Assert.assertEquals;
 
@@ -9,7 +9,7 @@ import org.junit.runners.JUnit4;
 import org.junit.Assert;
 
 /**
- * Tests for {@link net.gwerder.java.mailvortex.imap.ImapComand}.
+ * Tests for {@link net.gwerder.java.mailvortex.imap.ImapCommand}.
  *
  * @author martin@gwerder.net (Martin GWERDER)
  */

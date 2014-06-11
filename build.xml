@@ -144,7 +144,7 @@
   <target name="javadoc" depends="compile"  description="create api docs">
     <mkdir dir='${doc.home}'/>
     <mkdir dir='${doc.home}/api/'/>
-    <javadoc source='${app.source}'
+    <javadoc 
              destdir='${doc.home}/api'
              author='true'
              version='true'
@@ -153,8 +153,14 @@
       <classpath refid="compile.classpath"/>       
       <!--<link offline="false" href="http://java.sun.com/j2se/1.5.0/docs/api/" packagelistLoc="C:/temp/pl1"/>
       <link offline="false" href="http://developer.java.sun.com/developer/products/xml/docs/api/" packagelistLoc="C:/temp/pl2"/>  -->
+	  <tag name="known.bug" description="Known bugs:"/>
+	  <tag name="to.do" description="TODOs:"/>
       <fileset dir="${build.home}/src/" defaultexcludes="yes">
         <include name="**/*.java"/>
+      </fileset>
+      <fileset dir="${src.home}/" defaultexcludes="yes">
+        <include name="**/*.java"/>
+        <exclude name="Version.java"/>
       </fileset>
     </javadoc>
   </target>

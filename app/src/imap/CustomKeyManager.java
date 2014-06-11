@@ -14,19 +14,35 @@ import java.io.InputStream;
 import java.net.Socket;
 
 /***
- * @todo support multiple aliases
+ * Keymanager enables specification of key alias to be used.
+ *
+ * @to.do support multiple aliases
  ***/ 
 public class CustomKeyManager implements X509KeyManager {
     private KeyStore keyStore;
     private String alias;
 	char[] password;
 
+	/**
+     * Convenience constructor.
+     *
+     * @param keyStoreFile      name of the JKS keystore file
+     * @param password      	password to open the kestore file 
+     * @param alias      		alias of the certificate to be used
+     ***/
     CustomKeyManager(String keyStoreFile, String password, String alias)
         throws IOException, GeneralSecurityException
 	{
 		this(keyStoreFile,password.toCharArray(),alias);
 	}
 	
+	/**
+     * Default constructor.
+     *
+     * @param keyStoreFile      name of the JKS keystore file
+     * @param password      	password to open the kestore file 
+     * @param alias      		alias of the certificate to be used
+     ***/
     CustomKeyManager(String keyStoreFile, char[] password, String alias)
         throws IOException, GeneralSecurityException
     {
@@ -36,6 +52,11 @@ public class CustomKeyManager implements X509KeyManager {
         keyStore.load(new FileInputStream(keyStoreFile), password);
     }
 
+	/**
+     * Obtain private key from keystore
+     *
+     * @param alias      		alias of the certificate to be used
+     ***/
     public PrivateKey getPrivateKey(String alias) 
 	{
         try {
@@ -45,6 +66,11 @@ public class CustomKeyManager implements X509KeyManager {
 		}
     }
 
+	/**
+     * Obtain certificate chain of a certificate from keystore
+     *
+     * @param alias      		alias of the certificate to be used
+     ***/
     public X509Certificate[] getCertificateChain(String alias) {
         try {
             java.security.cert.Certificate[] certs = keyStore.getCertificateChain(alias);
@@ -58,24 +84,56 @@ public class CustomKeyManager implements X509KeyManager {
 		}          
     }
 
+	/**
+     * Alias choser always returning the desired alias.
+     *
+     * @param keyType		type of key to be looked for
+     * @param issuers     	issuers accepted
+     * @param socket    	socket requiring the certificate
+     ***/
     public String chooseServerAlias(String keyType, Principal[] issuers,
                                     Socket socket) {
         return alias;
     }
 
-    public String[] getClientAliases(String parm1, Principal[] parm2) {
+	/**
+     * Dummy methode returning UnsupportedOperationException (as this is a "server only" implementation)
+     *
+     * @param param1	dummy
+     * @param param2	dummy
+     ***/
+    public String[] getClientAliases(String param1, Principal[] param2) {
         throw new UnsupportedOperationException("Method getClientAliases() not implemented. Server Socket only Manager");
     }
 
-    public String chooseClientAlias(String keyTypes[], Principal[] issuers, Socket socket) {
+	/**
+     * Dummy methode returning UnsupportedOperationException (as this is a "server only" implementation)
+     *
+     * @param param1	dummy
+     * @param param2	dummy
+     * @param param3	dummy
+     ***/
+    public String chooseClientAlias(String[] param1, Principal[] param2, Socket param3) {
         throw new UnsupportedOperationException("Method chooseClientAlias() not implemented. Server Socket only Manager");
     }
 
-    public String[] getServerAliases(String parm1, Principal[] parm2) {
+	/**
+     * Dummy method always returning the preselected alias
+     *
+     * @param param1	dummy
+     * @param param2	dummy
+     ***/
+    public String[] getServerAliases(String param1, Principal[] param2) {
         return new String[] { alias };
     }
 
-    public String chooseServerAlias(String parm1, Principal[] parm2) {
+	/**
+     * Dummy method always returning the preselected alias
+     *
+     * @param param1	dummy
+     * @param param2	dummy
+     ***/
+    public String chooseServerAlias(String param1, Principal[] param2) {
         return alias;
     }
 }

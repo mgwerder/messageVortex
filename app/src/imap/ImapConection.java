@@ -16,6 +16,10 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
 	static public final int CONNECTION_AUTHENTICATED     = 2;
 	static public final int CONNECTION_SELECTED          = 3;
 	
+	static private int defaultTimeout = 60;
+	
+	private int timeout=defaultTimeout;
+	
 	private Socket plainSocket=null;
 	private SSLSocket sslSocket=null;
 	private Socket currentSocket=null;
@@ -40,12 +44,29 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
 	public ImapAuthenticationProxy setAuth(ImapAuthenticationProxy authProxy) {
 		ImapAuthenticationProxy oldProxyAuth=getAuth();
 		this.authProxy=authProxy;
+		this.authProxy.setImapConnection(this);
 		return oldProxyAuth;
 	}
 	
 	public ImapAuthenticationProxy getAuth() {
 		return this.authProxy;
 	}
+	
+	public int setTimeout(int timeout) {
+		int ot=this.timeout;
+		this.timeout=timeout;
+		return ot;
+	}
+	
+	public int getTimeout() { return this.timeout; }
+	
+	public static int setDefaultTimeout(int timeout) {
+		int ot=defaultTimeout;
+		defaultTimeout=timeout;
+		return ot;
+	}
+	
+	public static int getDefaultTimeout() { return defaultTimeout; }
 	
 	public int setState(int status) {
 		if(status>3 || status<1) return -status;	
@@ -99,12 +120,33 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
 		return false;
 	}
 	
+	public boolean isTLS() {
+		return sslSocket!=null;
+	}
+	
+	private String[] processCommand(String command) {
+		// Extract first word (command) and fetch respective command object
+		ImapLine il=null;
+		try{
+			il=new ImapLine(this,command);
+		} catch(ImapBlankLineException ie) {
+			// just ignore blank lines
+			return new String[0];
+		} catch(ImapException ie) {
+			return new String[] {ie.getTag()+" BAD "+ie.toString()};
+		}
+		
+		// FIXME implementation missing
+		return new String[0];
+	}
+	
 	public void run() {
 		try{
 			if(encrypted) startTLS();
 			if(sslSocket!=null) sslSocket.close();
 			while(!shutdown) {
 				// FIXME wait for commands and send reply
+				// FIXME timeout
 				Thread.sleep(10);// FIXME remove me after implementation
 			}
 			plainSocket.close();

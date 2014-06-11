@@ -2,13 +2,27 @@ package net.gwerder.java.mailvortex.imap;
 
 public class ImapLine {
 
-	private static int    identifierEnumerator=0;
-	private static final Object identifierEnumeratorLock=new Object();
-	private String identifier=null;
+	private static int    tagEnumerator=0;
+	private static final Object tagEnumeratorLock=new Object();
+	private String tag=null;
 	private ImapConnection con;
+	private String commandToken=null;
+	private String tagToken=null;
 
-	public ImapLine(ImapConnection con,String line) {
+	public ImapLine(ImapConnection con,String line) throws ImapException {
 		this.con=con;
+
+		if(line.length()==0) throw new ImapBlankLineException(this);
+		
+		// get first two tokens
+		String[] tokens=line.split("\\p{Space}+");
+		tagToken=line;
+		if(tokens.length<2) {
+			throw new ImapException(this,"Command token not found");
+		}
+		tagToken=tokens[0];
+		commandToken=tokens[1];
+			
 		// FIXME implementation missing
 	}
 
@@ -16,19 +30,19 @@ public class ImapLine {
 		return con;
 	}
 	
-	public String getIdentifier() {
-		return identifier;
+	public String getTag() {
+		return tag;
 	}
 	
-	public static String getNextIdentifier() {
-		return getNextIdentifier("A");
+	public static String getNextTag() {
+		return getNextTag("A");
 	}
 		
-	public static String getNextIdentifier(String prefix) {
+	public static String getNextTag(String prefix) {
 		String ret;
-		synchronized(identifierEnumeratorLock) {
-			identifierEnumerator++;
-			ret=prefix+String.format("%06d", identifierEnumerator);
+		synchronized(tagEnumeratorLock) {
+			tagEnumerator++;
+			ret=prefix+String.format("%06d", tagEnumerator);
 		}
 		return ret;
 	}

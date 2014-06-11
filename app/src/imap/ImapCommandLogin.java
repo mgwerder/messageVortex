@@ -8,7 +8,7 @@ public class ImapCommandLogin extends ImapCommand {
 	
 	public String[] processCommand(ImapLine line) {
 		line.getConnection().setState(ImapConnection.CONNECTION_AUTHENTICATED);
-		return new String[] {line.getIdentifier()+" OK Logged in" };
+		return new String[] {line.getTag()+" OK Logged in" };
 	}
 
 	public static String[] getCapabilities() {
