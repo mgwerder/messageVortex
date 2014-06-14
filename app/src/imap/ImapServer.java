@@ -2,7 +2,6 @@ package net.gwerder.java.mailvortex.imap;
 
 import java.io.IOException;
 import java.util.concurrent.ConcurrentSkipListSet;
-import java.util.concurrent.Executors;
 import java.util.HashSet;
 import java.net.Socket;
 import java.net.ServerSocket;
@@ -18,8 +17,10 @@ import javax.net.ssl.X509KeyManager;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.SSLContext;
 import java.security.SecureRandom;
+import java.util.concurrent.TimeoutException;
 
-class ImapServer extends StoppableThread  {
+
+public class ImapServer extends StoppableThread  {
 	
 	final int port;
 	ServerSocket serverSocket;
@@ -32,6 +33,8 @@ class ImapServer extends StoppableThread  {
 			public void checkClientTrusted(java.security.cert.X509Certificate[] certs, String authType) {} 
 			public void checkServerTrusted( java.security.cert.X509Certificate[] certs, String authType) {}
 	}}; 
+	private Thread runner=null;
+	
 			
 	public ImapServer(boolean encrypted) 
 		throws java.security.NoSuchAlgorithmException,java.security.KeyManagementException,java.security.GeneralSecurityException,IOException
@@ -59,19 +62,13 @@ class ImapServer extends StoppableThread  {
 			try{ 
 				serverSocket = (SSLServerSocket) context.getServerSocketFactory().getDefault().createServerSocket(port);
 				serverSocket.setEnabledCipherSuites(new String[] {arr[i]});
-				Executors.newSingleThreadExecutor().execute(new Thread() {
-					{
-						try{
-							Thread.sleep(30);
-							SSLSocket cs = (SSLSocket)((SSLSocketFactory) context.getSocketFactory().getDefault()).createSocket("localhost", port);
-							cs.close();
-						} catch(Exception e) {}
-					}
-				});
+				SocketDeblocker t=new SocketDeblocker(port,30);
+				t.start();
 				SSLSocket s=(SSLSocket)serverSocket.accept();
 				s.close();
 				serverSocket.close();
 				serverSocket=null;
+				t.shutdown();
 			} catch(SSLException e) {
 				supported=false;
 				// System.out.println(arr[i]+" ("+e+")");
@@ -89,16 +86,24 @@ class ImapServer extends StoppableThread  {
 		// open socket
 		this.serverSocket = (ServerSocket)ServerSocketFactory.getDefault().createServerSocket(port);
 		System.out.println("Server ready..." + serverSocket);	
-		Executors.newSingleThreadExecutor().execute(this);
+		runner=new Thread(this,"ImapServer connection listener");
+		runner.start();
 	}
 	
 	public int shutdown() {
 		try{
 			shutdown=true;
 			Socket sso=SocketFactory.getDefault().createSocket("localhost",this.serverSocket.getLocalPort());
-			sso.close();
-			this.serverSocket.close();
+
+			runner.join();
+
+			// close all connections
+			for(ImapConnection ic:conn) {
+				ic.shutdown();
+			}
+			// FIXME wait for connection termination
 		} catch(Exception e) {};
+
 		return 0;
 	}
 	

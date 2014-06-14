@@ -2,7 +2,7 @@ package net.gwerder.java.mailvortex.imap;
 
 public class ImapCommandNoop extends ImapCommand {
 
-	static {
+	static void init() {
         ImapCommand.registerCommand(new ImapCommandNoop());
     }
 	

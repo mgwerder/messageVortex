@@ -126,10 +126,11 @@
   </target>
 
   <target name="test" depends="compile"  description="run application">
-    <junit printsummary="yes" fork="yes" haltonfailure="yes">
+    <junit  fork="yes" haltonfailure="yes" dir="${build.home}/classes/"> <!-- showoutput="yes" printsummary="withOutAndErr" -->
         <classpath refid="test.classpath"/>
         <test name="${app.package}.test.MainSuite" todir="${build.home}" outfile="junitTestResults"/>
         <formatter type="xml"/>
+        <formatter type="plain" usefile="false"/>
     </junit>
   </target>
 

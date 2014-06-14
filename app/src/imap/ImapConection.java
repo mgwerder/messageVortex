@@ -3,7 +3,6 @@ package net.gwerder.java.mailvortex.imap;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.concurrent.Executors;
 import java.util.Set;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLContext;
@@ -30,6 +29,7 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
 	private ImapAuthenticationProxy authProxy = null;
 	private InputStream input=null;
 	private OutputStream output=null;
+	private Thread runner=null;
 	
 	public ImapConnection(Socket sock,SSLContext context,Set<String> suppCiphers, boolean encrypted) 
 	{
@@ -38,7 +38,8 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
 		this.suppCiphers=suppCiphers;
 		this.encrypted=encrypted;
 		updateSocket();
-		Executors.newSingleThreadExecutor().execute(this);
+		runner=new Thread(this);
+		runner.start();
 	}
 	
 	public ImapAuthenticationProxy setAuth(ImapAuthenticationProxy authProxy) {
@@ -81,7 +82,7 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
 		} else {
 			currentSocket=plainSocket;
 		}
-		if(plainSocket!=null) {
+		if(currentSocket!=null) {
 			try{
 				input=currentSocket.getInputStream();
 				output=currentSocket.getOutputStream();
@@ -102,20 +103,23 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
 	public int shutdown() {
 		// FIXME good implementation missing
 		shutdown=true;
-		try{
-			this.join();
-		} catch(InterruptedException e) {}
+		while(runner.isAlive()) {
+			try{
+				runner.join();
+			} catch(InterruptedException e) {}
+		}	
 		return 0;
 	}
 	
 	private boolean startTLS() throws IOException {
 		this.sslSocket = (SSLSocket) context.getSocketFactory().createSocket(plainSocket,plainSocket.getInetAddress().getHostAddress(),plainSocket.getPort(),false);
 		String[] arr = suppCiphers.toArray(new String[0]);
-		for(int i=0;i<arr.length;i++) {
-			System.out.println("-- "+arr[i]);
-		}
+		//for(int i=0;i<arr.length;i++) {
+		//	System.out.println("-- "+arr[i]);
+		//}
 		this.sslSocket.setUseClientMode(false);
 		this.sslSocket.setEnabledCipherSuites(arr);
+		System.out.println("## Starting server side SSL");
 		this.sslSocket.startHandshake();
 		return false;
 	}
@@ -124,11 +128,11 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
 		return sslSocket!=null;
 	}
 	
-	private String[] processCommand(String command) {
+	private String[] processCommand(String command,InputStream i) throws ImapException {
 		// Extract first word (command) and fetch respective command object
 		ImapLine il=null;
 		try{
-			il=new ImapLine(this,command);
+			il=new ImapLine(this,command,i);
 		} catch(ImapBlankLineException ie) {
 			// just ignore blank lines
 			return new String[0];
@@ -136,30 +140,59 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
 			return new String[] {ie.getTag()+" BAD "+ie.toString()};
 		}
 		
-		// FIXME implementation missing
-		return new String[0];
+		ImapCommand c=ImapCommand.getCommand(il.getCommand());
+		if(c==null) throw new ImapException(il,"Command \""+il.getCommand()+"\" is not implemented");
+		String[] s=c.processCommand(il);
+		
+		return s;
 	}
 	
 	public void run() {
 		try{
-			if(encrypted) startTLS();
-			if(sslSocket!=null) sslSocket.close();
-			while(!shutdown) {
-				// FIXME wait for commands and send reply
-				// FIXME timeout
-				Thread.sleep(10);// FIXME remove me after implementation
+			if(encrypted) {
+				startTLS();
 			}
-			plainSocket.close();
+			while(!shutdown) {
+				String s="";
+				while(input.available()>0 && !s.endsWith("\r\n")) {
+					int b=input.read();
+					s+=(char)b;
+				}
+				if(!s.equals("")) {
+					System.out.println("## IMAP<- S: "+s);
+					try{
+						for(String s1:processCommand(s,input)) {
+							if(s1==null) {
+								shutdown=true;
+								System.out.println("## server connection shutdown initated "+shutdown);
+							} else {
+								output.write((s1+"\r\n").getBytes());
+								System.out.println("## IMAP-> S: "+s1);
+							}	
+						}
+						System.out.println("## command is processed");
+					} catch(ImapException ie) {
+						ie.printStackTrace();
+					}
+					output.flush();
+					s="";
+				} else {
+					// FIXME timeout
+					Thread.sleep(10);// FIXME remove me after implementation
+				}	
+			}
 		} catch(IOException e) {
 			e.printStackTrace();
 		} catch(InterruptedException e) {
 			e.printStackTrace();
-		} finally {	
-			try{
-				if(sslSocket!=null) sslSocket.close();
-				plainSocket.close();
-			}catch(Exception e2) {}
 		}	
+		try{
+			input.close();
+			output.close();
+			if(sslSocket!=null) sslSocket.close();
+			plainSocket.close();
+		}catch(Exception e2) {}
+		System.out.println("## server connection closed");
 	}
 	
 }
