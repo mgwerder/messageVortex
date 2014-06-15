@@ -153,8 +153,8 @@
 	</cobertura-report>
 
 	<!--- directories for sonar build -->
-	<mkdir dir='${doc.home}/target'/>
-    <mkdir dir='${doc.home}/sonar'/>
+	<mkdir dir='${basedir}/target'/>
+    <mkdir dir='${basedir}/target/sonar'/>
 
 
   </target>
