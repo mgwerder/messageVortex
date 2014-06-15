@@ -33,6 +33,8 @@
   <target name="clean" description="Delete old build and dist directories">
     <delete dir="${build.home}"/>
     <delete dir="${dist.home}"/>
+    <delete dir="${doc.home}/api"/>
+    <delete dir="${doc.home}/cobertura"/>
     <delete><fileset dir="${doc.home}" includes="**/*.aux"/></delete>
     <delete><fileset dir="${doc.home}" includes="*.pdf"/></delete>
     <delete><fileset dir="${doc.home}" includes="**/*.bbl"/></delete>
@@ -143,6 +145,19 @@
         <formatter type="xml"/>
         <formatter type="plain" usefile="false"/>
     </junit>
+	
+    <mkdir dir='${doc.home}/cobertura'/>
+	<cobertura-report format="xml" destdir="${doc.home}/cobertura" >
+		<fileset dir="${src.home}">
+			<include name="**/*.java" />
+		</fileset>
+	</cobertura-report>
+	<cobertura-report format="html" destdir="${doc.home}/cobertura" >
+		<fileset dir="${src.home}">
+			<include name="**/*.java" />
+		</fileset>
+	</cobertura-report>
+
   </target>
 
   <target name="test-gui" depends="compile"  description="run application">
