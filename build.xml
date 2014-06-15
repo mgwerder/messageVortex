@@ -63,6 +63,9 @@
     <copy  todir="${build.home}/src/${app.path}">
       <fileset dir="${src.home}/" includes="**/Version.java"/>
     </copy>
+    <copy  todir="${build.home}/src/${app.path}">
+      <fileset dir="${src.home}/" excludes="**/Version.java"/>
+    </copy>
   	
     <mkdir dir="${build.home}/classes/${app.path}/images"/>
     <!--<copy  todir="${build.home}/classes/com/primecalc/java/klb4/images">
@@ -77,22 +80,12 @@
       <replacefilter token="@revision@" value="${app.version.revision}"/>
       <replacefilter token="@build@" value="${DSTAMP}${TSTAMP}"/>
     </replace>
-    <javac srcdir="${src.home}"
-		 excludes="**/Version.java"
+    <javac srcdir="${build.home}/src"
           destdir="${build.home}/classes/"
             debug="${compile.debug}"
       deprecation="${compile.deprecation}"
            source="${app.source}"
            target="${app.target}"
-         optimize="${compile.optimize}">
-        <classpath refid="compile.classpath"/>
-    </javac>
-    <javac srcdir="${build.home}/src"
-          destdir="${build.home}/classes/"
-            debug="${compile.debug}"
-      deprecation="${compile.deprecation}"
-         source="${app.source}"
-         target="${app.target}"
          optimize="${compile.optimize}">
         <classpath refid="compile.classpath"/>
     </javac>
@@ -130,9 +123,9 @@
   <target name="test" depends="compile"  description="test application">
 	<taskdef classpathref="test.classpath" resource="tasks.properties" />
 	<delete file="${build.home}/cobertura.ser" />
-	<cobertura-instrument todir="${build.home}/cobertura">
-		<includeclasses regex=".*" />
-		<excludeclasses regex=".*\.Test.*" />
+	<cobertura-instrument todir="${build.home}/cobertura" datafile="${build.home}/cobertura.ser">
+		<includeclasses regex="net\.gwerder\.java.*" />
+		<excludeclasses regex=".*Test.*" />
 		<instrumentationClasspath>
 			<pathelement location="${build.home}/classes" />
 		</instrumentationClasspath>
@@ -147,13 +140,13 @@
     </junit>
 	
     <mkdir dir='${doc.home}/cobertura'/>
-	<cobertura-report format="xml" destdir="${doc.home}/cobertura" >
-		<fileset dir="${src.home}">
+	<cobertura-report format="xml" destdir="${doc.home}/cobertura"  datafile="${build.home}/cobertura.ser">
+		<fileset dir="${build.home}/src">
 			<include name="**/*.java" />
 		</fileset>
 	</cobertura-report>
-	<cobertura-report format="html" destdir="${doc.home}/cobertura" >
-		<fileset dir="${src.home}">
+	<cobertura-report format="html" destdir="${doc.home}/cobertura"  datafile="${build.home}/cobertura.ser">
+		<fileset dir="${build.home}/src">
 			<include name="**/*.java" />
 		</fileset>
 	</cobertura-report>
