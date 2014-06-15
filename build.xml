@@ -125,8 +125,19 @@
     </java>
   </target>
 
-  <target name="test" depends="compile"  description="run application">
+  <target name="test" depends="compile"  description="test application">
+	<taskdef classpathref="test.classpath" resource="tasks.properties" />
+	<delete file="${build.home}/cobertura.ser" />
+	<cobertura-instrument todir="${build.home}/cobertura">
+		<includeclasses regex=".*" />
+		<excludeclasses regex=".*\.Test.*" />
+		<instrumentationClasspath>
+			<pathelement location="${build.home}/classes" />
+		</instrumentationClasspath>
+	</cobertura-instrument>
+
     <junit  fork="yes" haltonfailure="yes" dir="${build.home}/classes/"> <!-- showoutput="yes" printsummary="withOutAndErr" -->
+		<sysproperty key="net.sourceforge.cobertura.datafile" file="${build.home}/cobertura.ser" />
         <classpath refid="test.classpath"/>
         <test name="${app.package}.test.MainSuite" todir="${build.home}" outfile="junitTestResults"/>
         <formatter type="xml"/>
@@ -311,6 +322,7 @@
     <mkdir  dir="${build.home}/src"/>
     <mkdir  dir="${build.home}/src"/>
     <mkdir  dir="${build.home}/classes"/>
+    <mkdir  dir="${build.home}/cobertura"/>
 
     <path id="compile.classpath">
       <pathelement location="c:/Programme/Java/lib/hsqldb/lib/hsqldb.jar"/>
@@ -323,7 +335,10 @@
       <pathelement location="c:/Programme/Java/lib/hsqldb/lib/hsqldb.jar"/>
       <fileset dir="${rtlib.home}" includes="**/*.jar"/>
       <fileset dir="${basedir}/lib/" includes="junit*.jar"/>
+      <fileset dir="${basedir}/lib/cobertura-2.0.3/lib" includes="*.jar"/>
+      <fileset dir="${basedir}/lib/cobertura-2.0.3" includes="cobertura-2.0.3.jar"/>
       <fileset dir="${basedir}/lib/junit-4.11" includes="*.jar"/>
+      <pathelement location="${build.home}/cobertura" />
       <pathelement location="${build.home}/classes" />
     </path>
     
