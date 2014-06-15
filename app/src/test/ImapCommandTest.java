@@ -59,8 +59,8 @@ public class ImapCommandTest {
 			try{
 				int port = getFreePort();
 				assertTrue("Ports did not differ for tests",port!=lastport);
-				ImapServer s=new ImapServer(port,encrypted);
-				ImapClient c=new ImapClient("localhost",port,encrypted);
+				ImapServer s=new ImapServer(0,encrypted);
+				ImapClient c=new ImapClient("localhost",s.getPort(),encrypted);
 				sendCommand(c,ImapLine.getNextTag()+" LOGOUT");
 				s.shutdown();
 				lastport=port;

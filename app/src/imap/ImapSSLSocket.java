@@ -14,8 +14,8 @@ public class ImapSSLSocket {
      ***/
     public static void main(String[] args) throws Exception {
 		boolean encrypted=false;
-        ImapServer s=new ImapServer(143,encrypted);
-        ImapClient c=new ImapClient("localhost",143,encrypted);
+        ImapServer s=new ImapServer(0,encrypted);
+        ImapClient c=new ImapClient("localhost",s.getPort(),encrypted);
 		System.out.println("## Sending commands");
 		try{ for(String v:c.sendCommand(ImapLine.getNextTag()+" CAPABILITY")) { System.out.println("aIMAP<- C: "+v); } } catch(Exception e) {e.printStackTrace();}
 		try{ for(String v:c.sendCommand(ImapLine.getNextTag()+" LOGIN user password")) { System.out.println("aIMAP<- C: "+v); } } catch(TimeoutException e) {e.printStackTrace();}

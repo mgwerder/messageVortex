@@ -22,7 +22,7 @@ import java.util.concurrent.TimeoutException;
 
 public class ImapServer extends StoppableThread  {
 	
-	final int port;
+	int port;
 	ServerSocket serverSocket;
 	ConcurrentSkipListSet<ImapConnection> conn=new ConcurrentSkipListSet<ImapConnection>();
 	boolean encrypted=false;
@@ -40,6 +40,10 @@ public class ImapServer extends StoppableThread  {
 		throws java.security.NoSuchAlgorithmException,java.security.KeyManagementException,java.security.GeneralSecurityException,IOException
 	{
 		this((encrypted?993:143),encrypted);
+	}
+	
+	public int getPort() {
+		return serverSocket.getLocalPort();
 	}
 	
 	public ImapServer(final int port,boolean encrypted) 
@@ -60,9 +64,9 @@ public class ImapServer extends StoppableThread  {
 			boolean supported=true;
 			SSLServerSocket serverSocket=null;;
 			try{ 
-				serverSocket = (SSLServerSocket) context.getServerSocketFactory().getDefault().createServerSocket(port);
+				serverSocket = (SSLServerSocket) context.getServerSocketFactory().getDefault().createServerSocket(0);
 				serverSocket.setEnabledCipherSuites(new String[] {arr[i]});
-				SocketDeblocker t=new SocketDeblocker(port,30);
+				SocketDeblocker t=new SocketDeblocker(serverSocket.getLocalPort(),30);
 				t.start();
 				SSLSocket s=(SSLSocket)serverSocket.accept();
 				s.close();
@@ -85,6 +89,7 @@ public class ImapServer extends StoppableThread  {
 		
 		// open socket
 		this.serverSocket = (ServerSocket)ServerSocketFactory.getDefault().createServerSocket(port);
+		this.port=serverSocket.getLocalPort();
 		System.out.println("Server ready..." + serverSocket);	
 		runner=new Thread(this,"ImapServer connection listener");
 		runner.start();
