@@ -9,8 +9,4 @@ public class Version {
   
   public static String VERSION = ""+MAJOR+"."+MINOR+"."+REVISION+" ("+BUILD+")";
 
-	public static int main(String args[]) {
-	  System.out.println("Version is "+VERSION);
-		return 0;
-	}
 }

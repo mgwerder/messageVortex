@@ -125,6 +125,7 @@
 	<delete file="${build.home}/cobertura.ser" />
 	<cobertura-instrument todir="${build.home}/cobertura" datafile="${build.home}/cobertura.ser">
 		<includeclasses regex="net\.gwerder\.java.*" />
+		<excludeclasses regex="net\.gwerder\.java.*\.test\..*" />
 		<excludeclasses regex=".*Test.*" />
 		<instrumentationClasspath>
 			<pathelement location="${build.home}/classes" />

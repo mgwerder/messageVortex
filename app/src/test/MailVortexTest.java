@@ -7,6 +7,8 @@ import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.junit.Assert;
+import java.util.concurrent.TimeoutException;
+import static org.junit.Assert.*;
 
 /**
  * Tests for {@link net.gwerder.java.mailvortex.MailVortex}.
@@ -17,12 +19,7 @@ import org.junit.Assert;
 public class MailVortexTest {
 
     @Test
-    public void thisTestAlwaysPasses() {
-		Assert.assertFalse("failure - should be false", false);
-    }
-
-    @Test
-    //@Ignore
-    public void thisIsIgnored() {
-    }
+    public void getHelp() {
+		assertTrue("Errorcode for --help is not 0",net.gwerder.java.mailvortex.MailVortex.main(new String[] {"--help"})==0);
+	}	
 }
