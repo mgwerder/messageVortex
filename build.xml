@@ -152,6 +152,11 @@
 		</fileset>
 	</cobertura-report>
 
+	<!--- directories for sonar build -->
+	<mkdir dir='${doc.home}/target'/>
+    <mkdir dir='${doc.home}/sonar'/>
+
+
   </target>
 
   <target name="test-gui" depends="compile"  description="run application">
