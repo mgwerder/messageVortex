@@ -4,7 +4,7 @@
 
   <groupId>net.gwerder.java</groupId>
   <artifactId>MailVortex</artifactId>
-  <version>0.1.0 (201406161621)</version>
+  <version>0.1.0 (201406161644)</version>
 
   <name>MailVortex</name>
 
@@ -15,8 +15,8 @@
 	<sonar.tests>app/src/test</sonar.tests>
 	<sonar.binaries>app/build/classes,app/build/cobertura</sonar.binaries>	
     <argLine>-Xmx128m</argLine>
-    <sonar.junit.reportsPath>app/build/junitTestResults.xml</sonar.junit.reportsPath>
-    <sonar.surefire.reportsPath>app/build/junitTestResults.xml</sonar.surefire.reportsPath>
+    <sonar.junit.reportsPath>app/build/junit</sonar.junit.reportsPath>
+    <sonar.surefire.reportsPath>app/build/junit</sonar.surefire.reportsPath>
 	<sonar.java.coveragePlugin>cobertura</sonar.java.coveragePlugin>
 	<sonar.cobertura.report>doc/cobertura/coverage.xml</sonar.cobertura.report>
 	<sonar.working.directory>app/build/sonar</sonar.working.directory><!-- does not work -->
