@@ -81,7 +81,7 @@ public class ImapClient implements Runnable {
 				try{
 					sync.wait(100);
 				} catch(InterruptedException e) {
-					// may be safely discarded
+					/* may be safely discarded */
 				};
 			}
 			LOGGER.log(Level.FINEST,"wakeup succeeded");
