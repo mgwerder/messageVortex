@@ -56,7 +56,7 @@ public class ImapServer extends StoppableThread  {
 		
 		// Determine valid cyphers
 		String ks="keystore.jks";
-		context.init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, trustAllCerts, new SecureRandom() );
+		context.init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, new TrustManager[] {new AllTrustManager()}, new SecureRandom() );
 		SSLContext.setDefault(context);
 		String[] arr=((SSLServerSocketFactory) context.getServerSocketFactory().getDefault()).getSupportedCipherSuites(); 
 		for(int i=0; i<arr.length; i++) {
