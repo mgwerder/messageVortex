@@ -14,18 +14,9 @@ import java.net.Socket;
 
 class ImapConnection extends StoppableThread implements Comparable<ImapConnection> {
 
-	private final static Logger LOGGER;
-
-	static {
-		LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-		LOGGER.setLevel(Level.WARNING);
-	}
-
 	static public final int CONNECTION_NOT_AUTHENTICATED = 1;
 	static public final int CONNECTION_AUTHENTICATED     = 2;
 	static public final int CONNECTION_SELECTED          = 3;
-	
-	static private int defaultTimeout = 60;
 	
 	private int timeout=defaultTimeout;
 	
@@ -40,9 +31,15 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
 	private InputStream input=null;
 	private OutputStream output=null;
 	private Thread runner=null;
+
+	static private int defaultTimeout = 60;
+	static private final Logger LOGGER;
+	static {
+		LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+		LOGGER.setLevel(Level.WARNING);
+	}
 	
-	public ImapConnection(Socket sock,SSLContext context,Set<String> suppCiphers, boolean encrypted) 
-	{
+	public ImapConnection(Socket sock,SSLContext context,Set<String> suppCiphers, boolean encrypted) {
 		this.plainSocket=sock;	
 		this.context=context;
 		this.suppCiphers=suppCiphers;
@@ -77,7 +74,9 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
 		return ot;
 	}
 	
-	public static int getDefaultTimeout() { return defaultTimeout; }
+	public static int getDefaultTimeout() { 
+		return defaultTimeout; 
+	}
 	
 	public int setState(int status) {
 		if(status>3 || status<1) return -status;	

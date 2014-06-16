@@ -16,6 +16,8 @@
 	<sonar.binaries>app/build/classes</sonar.binaries>	<argLine>-Xmx128m</argLine>
 	<sonar.java.coveragePlugin>cobertura</sonar.java.coveragePlugin>
 	<sonar.cobertura.report>doc/cobertura/coverage.xml</sonar.cobertura.report>
+	<sonar.working.directory>app/build/sonar</sonar.working.directory>
+
   </properties>
 
   <build>
