@@ -14,9 +14,15 @@ import java.net.Socket;
 
 class ImapConnection extends StoppableThread implements Comparable<ImapConnection> {
 
-	static public final int CONNECTION_NOT_AUTHENTICATED = 1;
-	static public final int CONNECTION_AUTHENTICATED     = 2;
-	static public final int CONNECTION_SELECTED          = 3;
+	private static final Logger LOGGER;
+	static {
+		LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+		LOGGER.setLevel(Level.WARNING);
+	}
+	
+	public static final int CONNECTION_NOT_AUTHENTICATED = 1;
+	public static final int CONNECTION_AUTHENTICATED     = 2;
+	public static final int CONNECTION_SELECTED          = 3;
 	
 	private int timeout=defaultTimeout;
 	
@@ -32,13 +38,8 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
 	private OutputStream output=null;
 	private Thread runner=null;
 
-	static private int defaultTimeout = 60;
-	static private final Logger LOGGER;
-	static {
-		LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-		LOGGER.setLevel(Level.WARNING);
-	}
-	
+	private static int defaultTimeout = 60;
+
 	public ImapConnection(Socket sock,SSLContext context,Set<String> suppCiphers, boolean encrypted) {
 		this.plainSocket=sock;	
 		this.context=context;
@@ -66,7 +67,9 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
 		return ot;
 	}
 	
-	public int getTimeout() { return this.timeout; }
+	public int getTimeout() { 
+		return this.timeout; 
+	}
 	
 	public static int setDefaultTimeout(int timeout) {
 		int ot=defaultTimeout;
@@ -161,6 +164,7 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
 		} 
 		catch(ImapException ie) 
 		{
+			// If line violates the form <tag> <command> refuse processing
 			return new String[] {ie.getTag()+" BAD "+ie.toString()};
 		}
 		
