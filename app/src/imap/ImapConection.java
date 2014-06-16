@@ -117,6 +117,10 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
 		}	
 	}
 	
+	public boolean equals(ImapConnection i) {
+		return (this==i) ;
+	}
+	
 	public int shutdown() {
 		// FIXME good implementation missing
 		shutdown=true;

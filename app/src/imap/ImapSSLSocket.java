@@ -1,5 +1,8 @@
 package net.gwerder.java.mailvortex.imap;
 
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
 import java.util.concurrent.TimeoutException;
  
 /**
@@ -7,6 +10,12 @@ import java.util.concurrent.TimeoutException;
  */
 public class ImapSSLSocket {
 
+	private static final Logger LOGGER;
+	static {
+		LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+		LOGGER.setLevel(Level.FINEST);
+	}
+	
 	/**
      * Selftest function for IMAP server.
      *
@@ -16,15 +25,53 @@ public class ImapSSLSocket {
 		boolean encrypted=false;
         ImapServer s=new ImapServer(0,encrypted);
         ImapClient c=new ImapClient("localhost",s.getPort(),encrypted);
-		System.out.println("## Sending commands");
-		try{ for(String v:c.sendCommand(ImapLine.getNextTag()+" CAPABILITY")) { System.out.println("aIMAP<- C: "+v); } } catch(Exception e) {e.printStackTrace();}
-		try{ for(String v:c.sendCommand(ImapLine.getNextTag()+" LOGIN user password")) { System.out.println("aIMAP<- C: "+v); } } catch(TimeoutException e) {e.printStackTrace();}
-		try{ for(String v:c.sendCommand(ImapLine.getNextTag()+" CAPABILITY")) { System.out.println("aIMAP<- C: "+v); } } catch(Exception e) {e.printStackTrace();}
-		try{ for(String v:c.sendCommand(ImapLine.getNextTag()+" LOGOUT")) { System.out.println("aIMAP<- C: "+v); } } catch(TimeoutException e) {e.printStackTrace();}
-		System.out.println("## ended ending commands");
-		System.out.println("## shutting down server");
+		LOGGER.log(Level.INFO,"Sending commands");
+		try{ 
+			String command = ImapLine.getNextTag()+" CAPABILITY";
+			LOGGER.log(Level.FINEST,"IMAP-> C: "+command);
+			for(String v:c.sendCommand(command)) 
+			{ 
+				LOGGER.log(Level.FINEST,"IMAP<- C: "+v); 
+			} 
+		} catch(Exception e) 
+		{
+			LOGGER.log(Level.SEVERE,"Error while sending CAPABILITY",e);
+		}
+		
+		try{ 
+			String command = ImapLine.getNextTag()+" LOGIN user passwort";
+			LOGGER.log(Level.FINEST,"IMAP-> C: "+command);
+			for(String v:c.sendCommand(command)) 
+			{ 
+				LOGGER.log(Level.FINEST,"IMAP<- C: "+v); 
+			}
+		} catch(TimeoutException e) 
+		{
+			LOGGER.log(Level.SEVERE,"Error while sending LOGIN",e);
+		}
+		
+		try{ 
+			for(String v:c.sendCommand(ImapLine.getNextTag()+" CAPABILITY")) 
+			{ 
+				LOGGER.log(Level.FINEST,"IMAP<- C: "+v); 
+			} 
+		} catch(Exception e) {
+			LOGGER.log(Level.SEVERE,"Error while sending CAPABILITY",e);
+		}
+			
+		try{ 
+			for(String v:c.sendCommand(ImapLine.getNextTag()+" LOGOUT")) 
+			{ 
+				LOGGER.log(Level.FINEST,"IMAP<- C: "+v); 
+			} 
+		} catch(TimeoutException e) {
+			LOGGER.log(Level.SEVERE,"Error while sending LOGOUT",e);
+		}
+
+		LOGGER.log(Level.INFO,"ended ending commands");
+		LOGGER.log(Level.INFO,"shutting down server");
 		s.shutdown();
-		System.out.println("## server shutdown completed");
+		LOGGER.log(Level.INFO,"server shutdown completed");
 		//c.shutdown();
     }
 	 
