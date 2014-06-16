@@ -64,7 +64,7 @@
       <fileset dir="${src.home}/" includes="**/Version.java"/>
     </copy>
     <copy  todir="${build.home}/src/${app.path}">
-      <fileset dir="${src.home}/" excludes="**/Version.java"/>
+      <fileset dir="${src.home}/" excludes="**/Version.java **/*Test.java"/>
     </copy>
   	
     <mkdir dir="${build.home}/classes/${app.path}/images"/>
@@ -81,6 +81,15 @@
       <replacefilter token="@build@" value="${DSTAMP}${TSTAMP}"/>
     </replace>
     <javac srcdir="${build.home}/src"
+          destdir="${build.home}/classes/"
+            debug="${compile.debug}"
+      deprecation="${compile.deprecation}"
+           source="${app.source}"
+           target="${app.target}"
+         optimize="${compile.optimize}">
+        <classpath refid="compile.classpath"/>
+    </javac>
+    <javac srcdir="${src.home}/test"
           destdir="${build.home}/classes/"
             debug="${compile.debug}"
       deprecation="${compile.deprecation}"
