@@ -98,9 +98,7 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
 			try{
 				input=currentSocket.getInputStream();
 				output=currentSocket.getOutputStream();
-			} 
-			catch(IOException e) 
-			{
+			} catch(IOException e) {
 				 LOGGER.log(Level.SEVERE,"unable to get current IO streams",e);
 			}
 		}
@@ -110,9 +108,7 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
 		if(this==i) 
 		{
 			return 0;
-		}
-		else 
-		{
+		} else {
 			return -1;
 		}	
 	}
@@ -168,24 +164,18 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
 	private String[] processCommand(String command,InputStream i) throws ImapException {
 		// Extract first word (command) and fetch respective command object
 		ImapLine il=null;
-		try
-		{
+		try	{
 			il=new ImapLine(this,command,i);
-		} 
-		catch(ImapBlankLineException ie) 
-		{
+		} catch(ImapBlankLineException ie) {
 			// just ignore blank lines
 			return new String[0];
-		} 
-		catch(ImapException ie) 
-		{
+		} catch(ImapException ie) {
 			// If line violates the form <tag> <command> refuse processing
 			return new String[] {ie.getTag()+" BAD "+ie.toString()};
 		}
 		
 		ImapCommand c=ImapCommand.getCommand(il.getCommand());
-		if(c==null) 
-		{
+		if(c==null) {
 			throw new ImapException(il,"Command \""+il.getCommand()+"\" is not implemented");
 		}
 		
@@ -196,13 +186,11 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
 	
 	public void run() {
 		try{
-			if(encrypted) 
-			{
+			if(encrypted) {
 				startTLS();
 			}
 			
-			while(!shutdown) 
-			{
+			while(!shutdown) {
 			
 				String s="";
 				
@@ -212,44 +200,33 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
 				}
 				
 				if(!s.equals("")) {
-					LOGGER.finest("## IMAP<- S: "+s);
-					try
-					{
+					LOGGER.finest("IMAP<- S: "+s);
+					try	{
 					
-						for(String s1:processCommand(s,input)) 
-						{
-							if(s1==null) 
-							{
+						for(String s1:processCommand(s,input)) {
+							if(s1==null) {
 								shutdown=true;
-								LOGGER.finest("## server connection shutdown initated "+shutdown);
-							} 
-							else 
-							{
+								LOGGER.finest("server connection shutdown initated "+shutdown);
+							} else {
 								output.write((s1+"\r\n").getBytes());
-								LOGGER.finest("## IMAP-> S: "+s1);
+								LOGGER.finest("IMAP-> S: "+s1);
 							}	
 						}
-						LOGGER.finest("## command is processed");
+						LOGGER.finest("command is processed");
 					} catch(ImapException ie) {
 						LOGGER.log(Level.WARNING,"error while parsing imap line \""+s+"\"",ie);
 					}
 				
 					output.flush();
 					s="";
-				} 
-				else 
-				{
+				} else {
 					// FIXME timeout
 					Thread.sleep(10);// FIXME remove me after implementation
 				}	
 			}
-		} 
-		catch(IOException e) 
-		{
+		} catch(IOException e) {
 			LOGGER.log(Level.WARNING,"Error while IO with peer partner",e);
-		} 
-		catch(InterruptedException e) 
-		{
+		} catch(InterruptedException e) {
 			// ignore this exception
 		}	
 		try{
@@ -257,9 +234,7 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
 			output.close();
 			if(sslSocket!=null) sslSocket.close();
 			plainSocket.close();
-		}
-		catch(Exception e2) 
-		{
+		} catch(Exception e2) {
 			// all exceptions may be safely ignored
 		}
 		LOGGER.log(Level.FINEST,"## server connection closed");

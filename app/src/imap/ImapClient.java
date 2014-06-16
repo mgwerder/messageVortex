@@ -24,7 +24,7 @@ public class ImapClient implements Runnable {
 	private static final Logger LOGGER;
 	static {
 		LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-		LOGGER.setLevel(Level.WARNING);
+		// LOGGER.setLevel(Level.WARNING);
 	}
 	
 	private static final int DEFAULT_TIMEOUT=10000;
