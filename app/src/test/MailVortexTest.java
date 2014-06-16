@@ -20,6 +20,6 @@ public class MailVortexTest {
 
     @Test
     public void getHelp() {
-		assertTrue("Errorcode for --help is not 0",net.gwerder.java.mailvortex.MailVortex.main(new String[] {"--help"})==0);
-	}	
+        assertTrue("Errorcode for --help is not 0",net.gwerder.java.mailvortex.MailVortex.main(new String[] {"--help"})==0);
+    }    
 }

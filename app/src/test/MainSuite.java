@@ -16,7 +16,7 @@ public class MainSuite {
 
   public static junit.framework.Test suite() {    
         final TestSuite s = new TestSuite();
-		s.addTest(new JUnit4TestAdapter(MailVortexTest.class));
+        s.addTest(new JUnit4TestAdapter(MailVortexTest.class));
         s.addTest(new JUnit4TestAdapter(ImapCommandTest.class));
         s.addTest(new JUnit4TestAdapter(ImapCommandLoginTest.class));
         return s;
