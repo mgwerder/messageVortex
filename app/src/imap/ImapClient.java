@@ -75,7 +75,9 @@ public class ImapClient implements Runnable {
 			currentCommand=command;
 			long start = System.currentTimeMillis();
 			currentCommandCompleted=false;
-			synchronized(notifyThread) {notifyThread.notify(); }
+			synchronized(notifyThread) {
+				notifyThread.notify(); 
+			}
 			while(!currentCommandCompleted && System.currentTimeMillis()<start+millisTimeout) {
 				try{
 					sync.wait(100);
@@ -120,7 +122,13 @@ public class ImapClient implements Runnable {
 			if(encrypted) socket=startTLS(socket);
 			while(!shutdown && !socket.isClosed() && !socket.isInputShutdown() && !socket.isOutputShutdown()) {
 				try{
-					synchronized(notifyThread) {try{notifyThread.wait(100);} catch(InterruptedException e) {} }
+					synchronized(notifyThread) {
+						try{
+							notifyThread.wait(100);
+						} catch(InterruptedException e) {
+							// intentionally ignored
+						} 
+					}
 					if(currentCommand!=null && !currentCommand.equals("")) {
 						LOGGER.log(Level.FINEST,"IMAP-> C: "+currentCommand);
 						socket.getOutputStream().write((currentCommand+"\r\n").getBytes());
@@ -131,7 +139,9 @@ public class ImapClient implements Runnable {
 						try{
 							il=new ImapLine(null,currentCommand);
 							tag=il.getTag();
-						} catch(ImapException ie) {}
+						} catch(ImapException ie) {
+							// intentionally ignored
+						}
 						String reply="";
 						String lastReply="";
 						List<String> l=new ArrayList<String>();
@@ -154,7 +164,9 @@ public class ImapClient implements Runnable {
 							shutdown=true;
 						}	
 						lastReply="";
-						synchronized(sync) {sync.notify(); }
+						synchronized(sync) {
+							sync.notify(); 
+						}
 
 						LOGGER.log(Level.FINEST,"command has been completely processed");
 					}	
