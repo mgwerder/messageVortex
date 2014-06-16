@@ -13,10 +13,11 @@
     <sonar.language>java</sonar.language>
 	<sonar.sources>app/build/src</sonar.sources>
 	<sonar.tests>app/src/test</sonar.tests>
-	<sonar.binaries>app/build/classes</sonar.binaries>	<argLine>-Xmx128m</argLine>
+	<sonar.binaries>app/build/classes,app/build/cobertura</sonar.binaries>	
+    <argLine>-Xmx128m</argLine>
 	<sonar.java.coveragePlugin>cobertura</sonar.java.coveragePlugin>
 	<sonar.cobertura.report>doc/cobertura/coverage.xml</sonar.cobertura.report>
-	<sonar.working.directory>app/build/sonar</sonar.working.directory>
+	<sonar.working.directory>app/build/sonar</sonar.working.directory><!-- does not work -->
 	<sonar.cobertura.reportPath>doc/cobertura/coverage.xml</sonar.cobertura.reportPath>
   </properties>
 

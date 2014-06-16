@@ -14,7 +14,6 @@ import javax.net.ssl.TrustManager;
 import java.io.FileInputStream;
 import javax.net.ssl.TrustManagerFactory;
 import java.security.KeyStore;
-import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
@@ -97,10 +96,10 @@ public class ImapClient implements Runnable {
 	public void shutdown() {
 		shutdown=true;
 		try {
+			synchronized(notifyThread) {
+				notifyThread.notify(); 
+			};
 			try{
-				synchronized(notifyThread) {
-					notifyThread.notify(); 
-				};
 				if(socket!=null) {
 					socket.getOutputStream().close();
 					socket.getInputStream().close();
