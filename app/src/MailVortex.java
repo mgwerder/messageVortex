@@ -1,6 +1,6 @@
 package net.gwerder.java.mailvortex;
 
-
+ 
 public class MailVortex {
 
 	public static int main(String args[]) {

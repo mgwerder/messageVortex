@@ -1,7 +1,5 @@
 package net.gwerder.java.mailvortex.test;
 
-//import org.junit.Assert.assertTrue;
-
 import net.gwerder.java.mailvortex.imap.*;
 
 import org.junit.Test;

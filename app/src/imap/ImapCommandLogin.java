@@ -1,5 +1,5 @@
 package net.gwerder.java.mailvortex.imap;
-
+ 
 public class ImapCommandLogin extends ImapCommand {
 
 	static void init() {

@@ -46,7 +46,7 @@ public class ImapSSLSocket {
 		} catch(TimeoutException e) {
 			LOGGER.log(Level.SEVERE,"Error while sending LOGIN",e);
 		}
-		
+		 
 		try{ 
 			for(String v:c.sendCommand(ImapLine.getNextTag()+" CAPABILITY")) { 
 				LOGGER.log(Level.FINEST,"IMAP<- C: "+v); 

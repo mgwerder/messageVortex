@@ -4,7 +4,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class ImapCommand implements Cloneable {
 
-
+ 
 	static {
 		commands=new ConcurrentHashMap<String,ImapCommand>();
 		ImapCommandCapability.init();

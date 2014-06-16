@@ -16,7 +16,7 @@ public class ImapLine {
 	public ImapLine(ImapConnection con,String line,InputStream input) throws ImapException {
 		this.con=con;
 		this.input=input;
-		
+		 
 		if(line==null) throw new ImapException(this,"null line passed");
 		
 		if(line.length()==0) throw new ImapBlankLineException(this);

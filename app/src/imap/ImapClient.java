@@ -111,7 +111,7 @@ public class ImapClient implements Runnable {
 			runner.join();
 		} catch(InterruptedException ie) {
 			// Intentionally left blank
-		}	
+		}	 
 	}	
 
 	public void run() {

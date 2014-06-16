@@ -1,5 +1,5 @@
 package net.gwerder.java.mailvortex.imap;
-
+ 
 import javax.net.ssl.X509TrustManager;
 import java.security.cert.X509Certificate;
 

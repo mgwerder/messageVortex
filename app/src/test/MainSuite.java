@@ -4,7 +4,7 @@ import org.junit.runner.RunWith;
 import junit.framework.TestSuite;
 import org.junit.runners.Suite;
 import junit.framework.JUnit4TestAdapter;
-
+ 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
   MailVortexTest.class,

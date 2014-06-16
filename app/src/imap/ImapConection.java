@@ -80,7 +80,7 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
 	public static int getDefaultTimeout() { 
 		return defaultTimeout; 
 	}
-	
+	 
 	public int setState(int status) {
 		if(status>3 || status<1) return -status;	
 		int old=status;
