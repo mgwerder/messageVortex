@@ -13,7 +13,9 @@
     <sonar.language>java</sonar.language>
 	<sonar.sources>app/build/src</sonar.sources>
 	<sonar.tests>app/src/test</sonar.tests>
-	<sonar.binaries>app/build/classes</sonar.binaries>
+	<sonar.binaries>app/build/classes</sonar.binaries>	<argLine>-Xmx128m</argLine>
+	<sonar.java.coveragePlugin>cobertura</sonar.java.coveragePlugin>
+	<sonar.cobertura.report>doc/cobertura/coverage.xml</sonar.cobertura.report>
   </properties>
 
   <build>
