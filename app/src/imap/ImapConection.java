@@ -1,4 +1,7 @@
 package net.gwerder.java.mailvortex.imap;
+
+import java.util.logging.Logger;
+import java.util.logging.Level;
  
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,6 +13,13 @@ import java.net.Socket;
 
 
 class ImapConnection extends StoppableThread implements Comparable<ImapConnection> {
+
+	private final static Logger LOGGER;
+
+	static {
+		LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+		LOGGER.setLevel(Level.WARNING);
+	}
 
 	static public final int CONNECTION_NOT_AUTHENTICATED = 1;
 	static public final int CONNECTION_AUTHENTICATED     = 2;
@@ -86,16 +96,21 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
 			try{
 				input=currentSocket.getInputStream();
 				output=currentSocket.getOutputStream();
-			} catch(IOException e) {
-				e.printStackTrace();
+			} 
+			catch(IOException e) 
+			{
+				 LOGGER.log(Level.SEVERE,"unable to get current IO streams",e);
 			}
 		}
 	}
 	
 	public int compareTo(ImapConnection i) {
-		if(this==i) {
+		if(this==i) 
+		{
 			return 0;
-		}else {
+		}
+		else 
+		{
 			return -1;
 		}	
 	}
@@ -104,9 +119,14 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
 		// FIXME good implementation missing
 		shutdown=true;
 		while(runner.isAlive()) {
-			try{
+			try
+			{
 				runner.join();
-			} catch(InterruptedException e) {}
+			} 
+			catch(InterruptedException e) 
+			{
+				 // discard this exception
+			}
 		}	
 		return 0;
 	}
@@ -131,17 +151,26 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
 	private String[] processCommand(String command,InputStream i) throws ImapException {
 		// Extract first word (command) and fetch respective command object
 		ImapLine il=null;
-		try{
+		try
+		{
 			il=new ImapLine(this,command,i);
-		} catch(ImapBlankLineException ie) {
+		} 
+		catch(ImapBlankLineException ie) 
+		{
 			// just ignore blank lines
 			return new String[0];
-		} catch(ImapException ie) {
+		} 
+		catch(ImapException ie) 
+		{
 			return new String[] {ie.getTag()+" BAD "+ie.toString()};
 		}
 		
 		ImapCommand c=ImapCommand.getCommand(il.getCommand());
-		if(c==null) throw new ImapException(il,"Command \""+il.getCommand()+"\" is not implemented");
+		if(c==null) 
+		{
+			throw new ImapException(il,"Command \""+il.getCommand()+"\" is not implemented");
+		}
+		
 		String[] s=c.processCommand(il);
 		
 		return s;
@@ -149,50 +178,73 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
 	
 	public void run() {
 		try{
-			if(encrypted) {
+			if(encrypted) 
+			{
 				startTLS();
 			}
-			while(!shutdown) {
+			
+			while(!shutdown) 
+			{
+			
 				String s="";
+				
 				while(input.available()>0 && !s.endsWith("\r\n")) {
 					int b=input.read();
 					s+=(char)b;
 				}
+				
 				if(!s.equals("")) {
-					System.out.println("## IMAP<- S: "+s);
-					try{
-						for(String s1:processCommand(s,input)) {
-							if(s1==null) {
+					LOGGER.finest("## IMAP<- S: "+s);
+					try
+					{
+					
+						for(String s1:processCommand(s,input)) 
+						{
+							if(s1==null) 
+							{
 								shutdown=true;
-								System.out.println("## server connection shutdown initated "+shutdown);
-							} else {
+								LOGGER.finest("## server connection shutdown initated "+shutdown);
+							} 
+							else 
+							{
 								output.write((s1+"\r\n").getBytes());
-								System.out.println("## IMAP-> S: "+s1);
+								LOGGER.finest("## IMAP-> S: "+s1);
 							}	
 						}
-						System.out.println("## command is processed");
+						LOGGER.finest("## command is processed");
 					} catch(ImapException ie) {
-						ie.printStackTrace();
+						LOGGER.log(Level.WARNING,"error while parsing imap line \""+s+"\"",ie);
 					}
+				
 					output.flush();
 					s="";
-				} else {
+				} 
+				else 
+				{
 					// FIXME timeout
 					Thread.sleep(10);// FIXME remove me after implementation
 				}	
 			}
-		} catch(IOException e) {
-			e.printStackTrace();
-		} catch(InterruptedException e) {
-			e.printStackTrace();
+		} 
+		catch(IOException e) 
+		{
+			LOGGER.log(Level.WARNING,"Error while IO with peer partner",e);
+		} 
+		catch(InterruptedException e) 
+		{
+			// ignore this exception
 		}	
 		try{
 			input.close();
 			output.close();
 			if(sslSocket!=null) sslSocket.close();
 			plainSocket.close();
-		}catch(Exception e2) {}
-		System.out.println("## server connection closed");
+		}
+		catch(Exception e2) 
+		{
+			// all exceptions may be safely ignored
+		}
+		LOGGER.log(Level.FINEST,"## server connection closed");
 	}
 	
 }

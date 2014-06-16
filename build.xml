@@ -345,6 +345,7 @@
     <mkdir  dir="${build.home}/src"/>
     <mkdir  dir="${build.home}/src"/>
     <mkdir  dir="${build.home}/classes"/>
+    <mkdir  dir="${build.home}/classes/logs"/>
     <mkdir  dir="${build.home}/cobertura"/>
 
     <path id="compile.classpath">
