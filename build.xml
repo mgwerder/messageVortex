@@ -166,7 +166,7 @@
 	<mkdir dir='${basedir}/target'/>
     <mkdir dir='${basedir}/target/sonar'/>
 
-    <replaceregexp file="${basedir}/pom.xml" match="&lt;version&gt;.*&lt;/version&gt;" replace="&lt;version&gt;${app.version.major}.${app.version.minor}.${app.version.revision} (${DSTAMP}${TSTAMP})&lt;/version&gt;"/>
+    <replaceregexp file="${basedir}/pom.xml" match="&lt;version&gt;.*&lt;/version&gt;" replace="&lt;version&gt;${app.version.major}.${app.version.minor}.${app.version.revision}_${DSTAMP}${TSTAMP}&lt;/version&gt;"/>
     
 
   </target>
