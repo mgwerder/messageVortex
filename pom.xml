@@ -15,6 +15,7 @@
 	<sonar.tests>app/src/test</sonar.tests>
 	<sonar.binaries>app/build/classes,app/build/cobertura</sonar.binaries>	
     <argLine>-Xmx128m</argLine>
+    <sonar.junit.reportsPath>app/build/junitTestResults.xml</sonar.junit.reportsPath>
 	<sonar.java.coveragePlugin>cobertura</sonar.java.coveragePlugin>
 	<sonar.cobertura.report>doc/cobertura/coverage.xml</sonar.cobertura.report>
 	<sonar.working.directory>app/build/sonar</sonar.working.directory><!-- does not work -->
