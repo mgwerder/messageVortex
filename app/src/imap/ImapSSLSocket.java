@@ -22,6 +22,7 @@ public class ImapSSLSocket {
      * @param args      ignored commandline arguments
      ***/
     public static void main(String[] args) throws Exception {
+		LOGGER.getParent().setLevel(Level.FINEST);
 		boolean encrypted=false;
         ImapServer s=new ImapServer(0,encrypted);
         ImapClient c=new ImapClient("localhost",s.getPort(),encrypted);

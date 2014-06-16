@@ -1,5 +1,8 @@
 package net.gwerder.java.mailvortex.imap;
 
+import java.util.logging.Logger;
+import java.util.logging.Level;
+  
 import java.io.IOException;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.HashSet;
@@ -21,6 +24,12 @@ import java.util.concurrent.TimeoutException;
 
 
 public class ImapServer extends StoppableThread  {
+	
+	private static final Logger LOGGER;
+	static {
+		LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+		// LOGGER.setLevel(Level.WARNING);
+	}
 	
 	int port;
 	ServerSocket serverSocket;
@@ -127,11 +136,13 @@ public class ImapServer extends StoppableThread  {
 			if(socket!=null) {
 				try{
 					socket.close();
-				} catch(IOException e2) {} ;
+				} catch(IOException e2) {
+					// intentionaly ignored
+				} ;
 			}    
-			e.printStackTrace();
+			LOGGER.log(Level.SEVERE,"Error exception on server socket",e);
 		}
 	}
 }
-//SSLSocket sslsocket = (SSLSocket) sslsocketfactory.createSocket(socket,socket.getInetAddress().getHostAddress(),socket.getPort(),true);
+
 

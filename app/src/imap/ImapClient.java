@@ -1,5 +1,8 @@
 package net.gwerder.java.mailvortex.imap;
- 
+
+import java.util.logging.Logger;
+import java.util.logging.Level;
+  
 import java.util.List;
 import java.util.ArrayList;
 import java.net.Socket;
@@ -18,6 +21,12 @@ import java.util.concurrent.TimeoutException;
 
 public class ImapClient implements Runnable {
 
+	private static final Logger LOGGER;
+	static {
+		LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+		LOGGER.setLevel(Level.WARNING);
+	}
+	
 	private static final int DEFAULT_TIMEOUT=10000;
 
 	private String targetHost="localhost";
@@ -57,9 +66,9 @@ public class ImapClient implements Runnable {
 		SSLContext.setDefault(trustContext);
 		SSLSocket sslSocket = (SSLSocket)(((SSLSocketFactory)(trustContext.getSocketFactory().getDefault())).createSocket(sock,sock.getInetAddress().getHostAddress(),sock.getPort(), false));    
 		sslSocket.setUseClientMode(true);    
-		System.out.println("## Starting client side SSL");
+		LOGGER.log(Level.FINEST,"Starting client side SSL");
 		sslSocket.startHandshake();
-		System.out.println("CLientTLS Started");
+		LOGGER.log(Level.FINEST,"CLientTLS Started");
 		//String[] arr=((SSLSocket)(sslSocket)).getEnabledCipherSuites();
 		//for(int i=0;i<arr.length;i++) System.out.println(" supported by client: "+arr[i]);
 		return sslSocket;
@@ -76,7 +85,7 @@ public class ImapClient implements Runnable {
 			while(!currentCommandCompleted && System.currentTimeMillis()<start+millisTimeout) {
 				try{sync.wait(100);} catch(InterruptedException e) {};
 			}
-			System.out.println("## wakeup succeeded");
+			LOGGER.log(Level.FINEST,"wakeup succeeded");
 			if(!currentCommandCompleted && System.currentTimeMillis()>start+millisTimeout) throw new TimeoutException("Timeout reached while sending \""+command+"\"");
 		}
 		currentCommand=null;
@@ -98,7 +107,7 @@ public class ImapClient implements Runnable {
 			} catch(IOException ioe) {;}	
 			runner.join();
 		} catch(InterruptedException ie) {
-			; // Intentionally left blank
+			// Intentionally left blank
 		}	
 	}	
 
@@ -111,7 +120,7 @@ public class ImapClient implements Runnable {
 				try{
 					synchronized(notifyThread) {try{notifyThread.wait(100);} catch(InterruptedException e) {} }
 					if(currentCommand!=null && !currentCommand.equals("")) {
-						System.out.println("IMAP-> C: "+currentCommand);
+						LOGGER.log(Level.FINEST,"IMAP-> C: "+currentCommand);
 						socket.getOutputStream().write((currentCommand+"\r\n").getBytes());
 						socket.getOutputStream().flush();
 				
@@ -130,7 +139,7 @@ public class ImapClient implements Runnable {
 							if(i>=0) reply+=(char)i;
 							if(reply.endsWith("\r\n")) {
 								l.add(reply);
-								System.out.println("IMAP<- C: "+reply.substring(0,reply.length()-2));
+								LOGGER.log(Level.FINEST,"IMAP<- C: "+reply.substring(0,reply.length()-2));
 								currentCommandReply=l.toArray(new String[0]);
 								lastReply=reply.substring(0,reply.length()-2);
 								reply="";
@@ -145,19 +154,23 @@ public class ImapClient implements Runnable {
 						lastReply="";
 						synchronized(sync) {sync.notify(); }
 
-						System.out.println("command has been completely processed");
+						LOGGER.log(Level.FINEST,"command has been completely processed");
 					}	
 				} catch(java.net.SocketException se) {
-					System.out.println("Connection closed by server");
+					LOGGER.log(Level.WARNING,"Connection closed by server");
 					//currentCommandCompleted=true;
 					//synchronized(sync) {sync.notify(); }
 				}				
-				System.out.println("## Client looping ("+shutdown+"/"+socket.isClosed()+")");
+				LOGGER.log(Level.FINEST,"Client looping ("+shutdown+"/"+socket.isClosed()+")");
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.log(Level.SEVERE,"Uncaught exception in ImapClient",e);
 		} finally {	
-			try{socket.close();}catch(Exception e2) {};
+			try{
+				socket.close();
+			} catch(Exception e2) {
+				// THis exception may be safely ignored
+			};
 		}
 	}
 }

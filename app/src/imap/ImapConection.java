@@ -17,7 +17,7 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
 	private static final Logger LOGGER;
 	static {
 		LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-		LOGGER.setLevel(Level.WARNING);
+		// LOGGER.setLevel(Level.WARNING);
 	}
 	
 	public static final int CONNECTION_NOT_AUTHENTICATED = 1;
@@ -117,26 +117,37 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
 		}	
 	}
 	
-	public boolean equals(ImapConnection i) {
+	public boolean equals(Object i) {
 		return (this==i) ;
 	}
 	
+	public int hashCode() {
+		return super.hashCode() ;
+	}
+	
+	/***
+	 * Closes all connections and terminate all subsequent runners.
+	 *
+	 * @FIX.ME Implementation of shudown in ImapConnection should be improved
+	 ***/
 	public int shutdown() {
-		// FIXME good implementation missing
+		// flag runner to shutdown
 		shutdown=true;
+		
+		// wait for runner to terminate
 		while(runner.isAlive()) {
-			try
-			{
+			try {
 				runner.join();
-			} 
-			catch(InterruptedException e) 
-			{
+			} catch(InterruptedException e) {
 				 // discard this exception
 			}
 		}	
 		return 0;
 	}
 	
+	/***
+	 * start TLS handshake on existing connection.
+	 ***/
 	private boolean startTLS() throws IOException {
 		this.sslSocket = (SSLSocket) context.getSocketFactory().createSocket(plainSocket,plainSocket.getInetAddress().getHostAddress(),plainSocket.getPort(),false);
 		String[] arr = suppCiphers.toArray(new String[0]);
