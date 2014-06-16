@@ -105,8 +105,8 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
 	}
 	
 	public int compareTo(ImapConnection i) {
-		if(this==i) 
-		{
+		// BAD implementation as it does not offer a specific order
+		if(this==i) {
 			return 0;
 		} else {
 			return -1;

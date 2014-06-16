@@ -30,9 +30,7 @@ public class CustomKeyManager implements X509KeyManager {
      * @param password      	password to open the kestore file 
      * @param alias      		alias of the certificate to be used
      ***/
-    CustomKeyManager(String keyStoreFile, String password, String alias)
-        throws IOException, GeneralSecurityException
-	{
+    CustomKeyManager(String keyStoreFile, String password, String alias) throws IOException, GeneralSecurityException {
 		this(keyStoreFile,password.toCharArray(),alias);
 	}
 	
@@ -43,9 +41,7 @@ public class CustomKeyManager implements X509KeyManager {
      * @param password      	password to open the kestore file 
      * @param alias      		alias of the certificate to be used
      ***/
-    CustomKeyManager(String keyStoreFile, char[] password, String alias)
-        throws IOException, GeneralSecurityException
-    {
+    CustomKeyManager(String keyStoreFile, char[] password, String alias) throws IOException, GeneralSecurityException {
 		this.password=password;
         this.alias = alias;
         keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
@@ -57,8 +53,7 @@ public class CustomKeyManager implements X509KeyManager {
      *
      * @param alias      		alias of the certificate to be used
      ***/
-    public PrivateKey getPrivateKey(String alias) 
-	{
+    public PrivateKey getPrivateKey(String alias) {
         try {
 			return (PrivateKey) keyStore.getKey(alias, password);
 		} catch (Exception e) {
@@ -91,8 +86,7 @@ public class CustomKeyManager implements X509KeyManager {
      * @param issuers     	issuers accepted
      * @param socket    	socket requiring the certificate
      ***/
-    public String chooseServerAlias(String keyType, Principal[] issuers,
-                                    Socket socket) {
+    public String chooseServerAlias(String keyType, Principal[] issuers, Socket socket) {
         return alias;
     }
 

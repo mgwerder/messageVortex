@@ -30,30 +30,25 @@ public class ImapSSLSocket {
 		try{ 
 			String command = ImapLine.getNextTag()+" CAPABILITY";
 			LOGGER.log(Level.FINEST,"IMAP-> C: "+command);
-			for(String v:c.sendCommand(command)) 
-			{ 
+			for(String v:c.sendCommand(command))  { 
 				LOGGER.log(Level.FINEST,"IMAP<- C: "+v); 
 			} 
-		} catch(Exception e) 
-		{
+		} catch(Exception e) {
 			LOGGER.log(Level.SEVERE,"Error while sending CAPABILITY",e);
 		}
 		
 		try{ 
 			String command = ImapLine.getNextTag()+" LOGIN user passwort";
 			LOGGER.log(Level.FINEST,"IMAP-> C: "+command);
-			for(String v:c.sendCommand(command)) 
-			{ 
+			for(String v:c.sendCommand(command)) { 
 				LOGGER.log(Level.FINEST,"IMAP<- C: "+v); 
 			}
-		} catch(TimeoutException e) 
-		{
+		} catch(TimeoutException e) {
 			LOGGER.log(Level.SEVERE,"Error while sending LOGIN",e);
 		}
 		
 		try{ 
-			for(String v:c.sendCommand(ImapLine.getNextTag()+" CAPABILITY")) 
-			{ 
+			for(String v:c.sendCommand(ImapLine.getNextTag()+" CAPABILITY")) { 
 				LOGGER.log(Level.FINEST,"IMAP<- C: "+v); 
 			} 
 		} catch(Exception e) {
@@ -61,8 +56,7 @@ public class ImapSSLSocket {
 		}
 			
 		try{ 
-			for(String v:c.sendCommand(ImapLine.getNextTag()+" LOGOUT")) 
-			{ 
+			for(String v:c.sendCommand(ImapLine.getNextTag()+" LOGOUT")) { 
 				LOGGER.log(Level.FINEST,"IMAP<- C: "+v); 
 			} 
 		} catch(TimeoutException e) {

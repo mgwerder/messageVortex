@@ -28,14 +28,14 @@ public class ImapServer extends StoppableThread  {
 	private static final Logger LOGGER;
 	static {
 		LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-		// LOGGER.setLevel(Level.WARNING);
 	}
+	private HashSet<String>	suppCiphers=new HashSet<String>();
+	
 	
 	int port;
 	ServerSocket serverSocket;
 	ConcurrentSkipListSet<ImapConnection> conn=new ConcurrentSkipListSet<ImapConnection>();
 	boolean encrypted=false;
-	HashSet<String> suppCiphers;
 	final SSLContext context=SSLContext.getInstance("TLS");
 	private final TrustManager[] trustAllCerts = new TrustManager[] {  new X509TrustManager() {     
 			public java.security.cert.X509Certificate[] getAcceptedIssuers() { return null;	} 
@@ -45,9 +45,7 @@ public class ImapServer extends StoppableThread  {
 	private Thread runner=null;
 	
 			
-	public ImapServer(boolean encrypted) 
-		throws java.security.NoSuchAlgorithmException,java.security.KeyManagementException,java.security.GeneralSecurityException,IOException
-	{
+	public ImapServer(boolean encrypted) throws java.security.NoSuchAlgorithmException,java.security.KeyManagementException,java.security.GeneralSecurityException,IOException {
 		this((encrypted?993:143),encrypted);
 	}
 	
@@ -55,9 +53,7 @@ public class ImapServer extends StoppableThread  {
 		return serverSocket.getLocalPort();
 	}
 	
-	public ImapServer(final int port,boolean encrypted) 
-		throws java.security.NoSuchAlgorithmException,java.security.KeyManagementException,java.security.GeneralSecurityException,IOException
-	{
+	public ImapServer(final int port,boolean encrypted) throws java.security.NoSuchAlgorithmException,java.security.KeyManagementException,java.security.GeneralSecurityException,IOException {
 		java.security.Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
 		this.conn=conn;
 		this.port=port;
@@ -68,8 +64,7 @@ public class ImapServer extends StoppableThread  {
 		context.init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, trustAllCerts, new SecureRandom() );
 		SSLContext.setDefault(context);
 		String[] arr=((SSLServerSocketFactory) context.getServerSocketFactory().getDefault()).getSupportedCipherSuites(); 
-		suppCiphers=new HashSet<String>();
-		for(int i=0;i<arr.length;i++) {
+		for(int i=0; i<arr.length; i++) {
 			boolean supported=true;
 			SSLServerSocket serverSocket=null;;
 			try{ 
@@ -104,20 +99,51 @@ public class ImapServer extends StoppableThread  {
 		runner.start();
 	}
 	
-	public int shutdown() {
+	private void shutdownRunner() {
+		// initiate shutdown of runner
+		shutdown=true;
+			
+		// wakeup runner if necesary
 		try{
-			shutdown=true;
-			Socket sso=SocketFactory.getDefault().createSocket("localhost",this.serverSocket.getLocalPort());
-
-			runner.join();
-
-			// close all connections
-			for(ImapConnection ic:conn) {
-				ic.shutdown();
+			SocketFactory.getDefault().createSocket("localhost",this.serverSocket.getLocalPort());
+		} catch(Exception e) {
+			// Intentionally  ignored
+		}
+		
+		// Shutdown runner task
+		boolean endshutdown=false;
+		do {
+			try{
+				runner.join();
+				endshutdown=true;
+			} catch(InterruptedException ie) {
+				// reloop if exception is risen
 			}
-			// FIXME wait for connection termination
-		} catch(Exception e) {};
-
+		} while(!endshutdown);	
+	}
+	
+	private void shutdownConnections() {
+		// close all connections
+		for(ImapConnection ic:conn) {
+			ic.shutdown();
+		}
+		for(ImapConnection ic:conn) {
+			boolean endshutdown=false;
+			do {
+				try{
+					ic.join();
+					endshutdown=true;
+				} catch(InterruptedException ie) {
+					// reloop if exception is risen
+				}
+			} while(!endshutdown);	
+		}
+		
+	}
+	
+	public int shutdown() {
+		shutdownRunner();
+		shutdownConnections();
 		return 0;
 	}
 	

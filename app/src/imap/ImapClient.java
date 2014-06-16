@@ -24,7 +24,6 @@ public class ImapClient implements Runnable {
 	private static final Logger LOGGER;
 	static {
 		LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-		// LOGGER.setLevel(Level.WARNING);
 	}
 	
 	private static final int DEFAULT_TIMEOUT=10000;
@@ -38,11 +37,6 @@ public class ImapClient implements Runnable {
 	private String currentCommand=null;
 	private String[] currentCommandReply=null;
 	private boolean currentCommandCompleted=false;
-	private final TrustManager[] trustAllCerts = new TrustManager[] {  new X509TrustManager() {     
-			public java.security.cert.X509Certificate[] getAcceptedIssuers() { return null;	} 
-			public void checkClientTrusted(java.security.cert.X509Certificate[] certs, String authType) {} 
-			public void checkServerTrusted( java.security.cert.X509Certificate[] certs, String authType) {}
-	}}; 
 	Socket socket=null;
 	private Thread runner=null;	
 	public ImapClient(String targetHost,int targetPort,boolean encrypted) {
@@ -69,12 +63,12 @@ public class ImapClient implements Runnable {
 		LOGGER.log(Level.FINEST,"Starting client side SSL");
 		sslSocket.startHandshake();
 		LOGGER.log(Level.FINEST,"CLientTLS Started");
-		//String[] arr=((SSLSocket)(sslSocket)).getEnabledCipherSuites();
-		//for(int i=0;i<arr.length;i++) System.out.println(" supported by client: "+arr[i]);
 		return sslSocket;
 	}
 	
-	public String[] sendCommand(String command) throws TimeoutException { return sendCommand(command,DEFAULT_TIMEOUT); }
+	public String[] sendCommand(String command) throws TimeoutException { 
+		return sendCommand(command,DEFAULT_TIMEOUT); 
+	}
 	
 	public String[] sendCommand(String command,int millisTimeout) throws TimeoutException {
 		synchronized(sync) {
@@ -83,10 +77,16 @@ public class ImapClient implements Runnable {
 			currentCommandCompleted=false;
 			synchronized(notifyThread) {notifyThread.notify(); }
 			while(!currentCommandCompleted && System.currentTimeMillis()<start+millisTimeout) {
-				try{sync.wait(100);} catch(InterruptedException e) {};
+				try{
+					sync.wait(100);
+				} catch(InterruptedException e) {
+					// may be safely discarded
+				};
 			}
 			LOGGER.log(Level.FINEST,"wakeup succeeded");
-			if(!currentCommandCompleted && System.currentTimeMillis()>start+millisTimeout) throw new TimeoutException("Timeout reached while sending \""+command+"\"");
+			if(!currentCommandCompleted && System.currentTimeMillis()>start+millisTimeout) {
+				throw new TimeoutException("Timeout reached while sending \""+command+"\"");
+			}
 		}
 		currentCommand=null;
 		return currentCommandReply;
@@ -104,7 +104,9 @@ public class ImapClient implements Runnable {
 					socket.getInputStream().close();
 					socket.close();
 				}
-			} catch(IOException ioe) {;}	
+			} catch(IOException ioe) {
+				// may be safely ignored 
+			}	
 			runner.join();
 		} catch(InterruptedException ie) {
 			// Intentionally left blank
@@ -158,8 +160,6 @@ public class ImapClient implements Runnable {
 					}	
 				} catch(java.net.SocketException se) {
 					LOGGER.log(Level.WARNING,"Connection closed by server");
-					//currentCommandCompleted=true;
-					//synchronized(sync) {sync.notify(); }
 				}				
 				LOGGER.log(Level.FINEST,"Client looping ("+shutdown+"/"+socket.isClosed()+")");
 			}
