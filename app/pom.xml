@@ -15,7 +15,7 @@
     <sonar.tests>app/src/test</sonar.tests>
     <sonar.binaries>app/build/classes/net</sonar.binaries>    
     <argLine>-Xmx128m</argLine>
-    <sonar.tests>junit</sonar.tests>
+    <sonar.tests>app/build/junit</sonar.tests>
     <sonar.junit.reportsPath>app/build/junit</sonar.junit.reportsPath>
     <sonar.surefire.reportsPath>app/build/junit</sonar.surefire.reportsPath>
     <sonar.java.coveragePlugin>cobertura</sonar.java.coveragePlugin>
