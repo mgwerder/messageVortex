@@ -65,6 +65,10 @@ public class ImapClient implements Runnable {
         return sslSocket;
     }
     
+    private void interruptedCatcher() {
+        assert false:"This Point should never be reached";
+    }
+    
     public String[] sendCommand(String command) throws TimeoutException { 
         return sendCommand(command,DEFAULT_TIMEOUT); 
     }
@@ -81,7 +85,7 @@ public class ImapClient implements Runnable {
                 try{
                     sync.wait(100);
                 } catch(InterruptedException e) {
-                    assert false: "This point should never be reached";
+                    interruptedCatcher();
                 };
             }
             LOGGER.log(Level.FINEST,"wakeup succeeded");
@@ -108,7 +112,7 @@ public class ImapClient implements Runnable {
             }    
             runner.join();
         } catch(InterruptedException ie) {
-            assert false: "This point should never be reached";
+            interruptedCatcher();
         }     
     }    
 
@@ -125,10 +129,10 @@ public class ImapClient implements Runnable {
                         try{
                             notifyThread.wait(100);
                         } catch(InterruptedException e) {
-                            assert false:"I did not work with thread interrupting";
+                            interruptedCatcher();
                         } 
                     }
-                    if(currentCommand!=null && !currentCommand.equals("")) {
+                    if(currentCommand!=null && !"".equals(currentCommand)) {
                         LOGGER.log(Level.FINEST,"IMAP-> C: "+currentCommand);
                         socket.getOutputStream().write((currentCommand+"\r\n").getBytes());
                         socket.getOutputStream().flush();

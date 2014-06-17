@@ -56,6 +56,10 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
         return oldProxyAuth;
     }
     
+    private void interruptedCatcher() {
+        assert false:"This Point should never be reached";
+    }
+    
     public ImapAuthenticationProxy getAuth() {
         return this.authProxy;
     }
@@ -132,7 +136,7 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
                 runner.join();
             } catch(InterruptedException e) {
                  // discard this exception
-                 assert false: "should never reach this point";
+                 interruptedCatcher();
             }
         }    
         return 0;
@@ -165,6 +169,7 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
             return new String[0];
         } catch(ImapException ie) {
             // If line violates the form <tag> <command> refuse processing
+            LOGGER.log(Level.WARNING,"got invalid line",ie);
             return new String[] {ie.getTag()+" BAD "+ie.toString()};
         }
         
@@ -222,7 +227,7 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
             LOGGER.log(Level.WARNING,"Error while IO with peer partner",e);
         } catch(InterruptedException e) {
             // ignore this exception
-            assert false:"should never reach this point";
+            interruptedCatcher();
         }    
         try{
             input.close();
@@ -233,7 +238,7 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
             plainSocket.close();
         } catch(Exception e2) {
             // all exceptions may be safely ignored$
-            assert false:"should never reach this point";
+            interruptedCatcher();
         }
         LOGGER.log(Level.FINEST,"## server connection closed");
     }
