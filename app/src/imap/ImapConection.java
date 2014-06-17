@@ -17,7 +17,6 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
     private static final Logger LOGGER;
     static {
         LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-        // LOGGER.setLevel(Level.WARNING);
     }
     
     public static final int CONNECTION_NOT_AUTHENTICATED = 1;
@@ -82,7 +81,9 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
     }
      
     public int setState(int status) {
-        if(status>3 || status<1) return -status;    
+        if(status>3 || status<1) {
+            return -status;    
+        }    
         int old=status;
         this.status=status;
         return old;
@@ -105,20 +106,15 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
     }
     
     public int compareTo(ImapConnection i) {
-        // BAD implementation as it does not offer a specific order
-        if(this==i) {
-            return 0;
-        } else {
-            return -1;
-        }    
+        return (new Integer(hashCode())).compareTo(new Integer(i.hashCode()));
     }
     
     public boolean equals(Object i) {
-        return (this==i) ;
+        return this==i;
     }
     
     public int hashCode() {
-        return super.hashCode() ;
+        return super.hashCode()+1;
     }
     
     /***
@@ -136,6 +132,7 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
                 runner.join();
             } catch(InterruptedException e) {
                  // discard this exception
+                 assert false: "should never reach this point";
             }
         }    
         return 0;
@@ -147,9 +144,6 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
     private boolean startTLS() throws IOException {
         this.sslSocket = (SSLSocket) context.getSocketFactory().createSocket(plainSocket,plainSocket.getInetAddress().getHostAddress(),plainSocket.getPort(),false);
         String[] arr = suppCiphers.toArray(new String[0]);
-        //for(int i=0;i<arr.length;i++) {
-        //    System.out.println("-- "+arr[i]);
-        //}
         this.sslSocket.setUseClientMode(false);
         this.sslSocket.setEnabledCipherSuites(arr);
         System.out.println("## Starting server side SSL");
@@ -199,7 +193,7 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
                     s+=(char)b;
                 }
                 
-                if(!s.equals("")) {
+                if(!"".equals(s)) {
                     LOGGER.finest("IMAP<- S: "+s);
                     try    {
                     
@@ -228,14 +222,18 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
             LOGGER.log(Level.WARNING,"Error while IO with peer partner",e);
         } catch(InterruptedException e) {
             // ignore this exception
+            assert false:"should never reach this point";
         }    
         try{
             input.close();
             output.close();
-            if(sslSocket!=null) sslSocket.close();
+            if(sslSocket!=null) {
+                sslSocket.close();
+            }    
             plainSocket.close();
         } catch(Exception e2) {
-            // all exceptions may be safely ignored
+            // all exceptions may be safely ignored$
+            assert false:"should never reach this point";
         }
         LOGGER.log(Level.FINEST,"## server connection closed");
     }
