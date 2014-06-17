@@ -81,7 +81,7 @@ public class ImapClient implements Runnable {
                 try{
                     sync.wait(100);
                 } catch(InterruptedException e) {
-                    /* may be safely discarded */
+                    assert false: "This point should never be reached";
                 };
             }
             LOGGER.log(Level.FINEST,"wakeup succeeded");
@@ -108,7 +108,7 @@ public class ImapClient implements Runnable {
             }    
             runner.join();
         } catch(InterruptedException ie) {
-            // Intentionally left blank
+            assert false: "This point should never be reached";
         }     
     }    
 
@@ -125,7 +125,7 @@ public class ImapClient implements Runnable {
                         try{
                             notifyThread.wait(100);
                         } catch(InterruptedException e) {
-                            assert true:"I did not work with thread interrupting";
+                            assert false:"I did not work with thread interrupting";
                         } 
                     }
                     if(currentCommand!=null && !currentCommand.equals("")) {
