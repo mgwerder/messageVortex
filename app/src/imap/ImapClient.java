@@ -108,7 +108,7 @@ public class ImapClient implements Runnable {
                     socket.close();
                 }
             } catch(IOException ioe) {
-                // may be safely ignored 
+                LOGGER.log(Level.INFO,"Error tearing down socket on client shutdown (may be safely ignored)",ioe);
             }    
             runner.join();
         } catch(InterruptedException ie) {
@@ -152,7 +152,9 @@ public class ImapClient implements Runnable {
                         int i=0;
                         do{
                             i=socket.getInputStream().read();
-                            if(i>=0) reply+=(char)i;
+                            if(i>=0) {
+                                reply+=(char)i;
+                            }    
                             if(reply.endsWith("\r\n")) {
                                 l.add(reply);
                                 LOGGER.log(Level.FINEST,"IMAP<- C: "+reply.substring(0,reply.length()-2));

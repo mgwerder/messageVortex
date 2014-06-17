@@ -5,7 +5,7 @@ public abstract class MailVortex {
 
     public static int main(String args[]) {
       if(args!=null && args.length>0 && args[0].equals("--help")) {
-        System.out.println("MailVortex V"+Version.VERSION);
+        System.out.println("MailVortex V"+Version.getVersion());
       }    
       return 0;
     }

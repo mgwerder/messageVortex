@@ -103,7 +103,7 @@ public class ImapServer extends StoppableThread  {
         try{
             SocketFactory.getDefault().createSocket("localhost",this.serverSocket.getLocalPort());
         } catch(Exception e) {
-            // Intentionally  ignored
+            LOGGER.log(Level.WARNING,"Wakeup of listener failed (already dead?)",e);
         }
         
         // Shutdown runner task
