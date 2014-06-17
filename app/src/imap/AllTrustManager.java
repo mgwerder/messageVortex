@@ -6,7 +6,7 @@ import java.security.cert.X509Certificate;
 public class AllTrustManager implements X509TrustManager {     
     
     public X509Certificate[] getAcceptedIssuers() { 
-        return null;    
+        return new X509Certificate[0];    
     }
     
     public void checkClientTrusted(X509Certificate[] certs, String authType) {
