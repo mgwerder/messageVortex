@@ -101,8 +101,6 @@ public class ImapClient implements Runnable {
             };
             try{
                 if(socket!=null) {
-                    socket.getOutputStream().close();
-                    socket.getInputStream().close();
                     socket.close();
                 }
             } catch(IOException ioe) {
@@ -118,14 +116,16 @@ public class ImapClient implements Runnable {
 
         try {
             socket = SocketFactory.getDefault().createSocket(targetHost,targetPort);
-            if(encrypted) socket=startTLS(socket);
+            if(encrypted) {
+                socket=startTLS(socket);
+            }
             while(!shutdown && !socket.isClosed() && !socket.isInputShutdown() && !socket.isOutputShutdown()) {
                 try{
                     synchronized(notifyThread) {
                         try{
                             notifyThread.wait(100);
                         } catch(InterruptedException e) {
-                            // intentionally ignored
+                            assert true:"I did not work with thread interrupting";
                         } 
                     }
                     if(currentCommand!=null && !currentCommand.equals("")) {
@@ -140,6 +140,7 @@ public class ImapClient implements Runnable {
                             tag=il.getTag();
                         } catch(ImapException ie) {
                             // intentionally ignored
+                            LOGGER.log(Level.INFO,"ImapParsing of \""+currentCommand+"\" (may be safelly ignored)",ie);
                         }
                         String reply="";
                         String lastReply="";
@@ -180,7 +181,7 @@ public class ImapClient implements Runnable {
             try{
                 socket.close();
             } catch(Exception e2) {
-                // THis exception may be safely ignored
+                LOGGER.log(Level.INFO,"socket close did fail when shutting down (may be safelly ignored)",e2);
             };
         }
     }
