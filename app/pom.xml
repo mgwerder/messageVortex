@@ -11,16 +11,18 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <sonar.language>java</sonar.language>
-	  <sonar.sources>app/build/src</sonar.sources>
-  	<sonar.tests>app/src/test</sonar.tests>
-	  <sonar.binaries>app/build/classes/net</sonar.binaries>	
+    <sonar.sources>app/build/src</sonar.sources>
+    <sonar.tests>app/src/test</sonar.tests>
+    <sonar.binaries>app/build/classes/net</sonar.binaries>    
     <argLine>-Xmx128m</argLine>
+    <sonar.tests>junit</sonar.tests>
     <sonar.junit.reportsPath>app/build/junit</sonar.junit.reportsPath>
     <sonar.surefire.reportsPath>app/build/junit</sonar.surefire.reportsPath>
-	  <sonar.java.coveragePlugin>cobertura</sonar.java.coveragePlugin>
-  	<sonar.cobertura.report>doc/cobertura/coverage.xml</sonar.cobertura.report>
-	  <sonar.working.directory>app/build/sonar</sonar.working.directory><!-- does not work -->
-  	<sonar.cobertura.reportPath>doc/cobertura/coverage.xml</sonar.cobertura.reportPath>
+    <sonar.java.coveragePlugin>cobertura</sonar.java.coveragePlugin>
+    <sonar.jdbc.dialect>mssql</sonar.jdbc.dialect>
+    <sonar.cobertura.report>doc/cobertura/coverage.xml</sonar.cobertura.report>
+    <sonar.working.directory>app/build/sonar</sonar.working.directory><!-- does not work -->
+    <sonar.cobertura.reportPath>doc/cobertura/coverage.xml</sonar.cobertura.reportPath>
   </properties>
 
   <build>
