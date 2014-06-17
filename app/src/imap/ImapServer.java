@@ -5,6 +5,7 @@ import java.util.logging.Level;
   
 import java.io.IOException;
 import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.Set;
 import java.util.HashSet;
 import java.net.Socket;
 import java.net.ServerSocket;
@@ -29,19 +30,17 @@ public class ImapServer extends StoppableThread  {
     static {
         LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
     }
-    private HashSet<String>    suppCiphers=new HashSet<String>();
-    
-    
+    private Set<String>    suppCiphers=new HashSet<String>();
+
     int port;
-    ServerSocket serverSocket;
+    ServerSocket serverSocket=null;
     ConcurrentSkipListSet<ImapConnection> conn=new ConcurrentSkipListSet<ImapConnection>();
     boolean encrypted=false;
     final SSLContext context=SSLContext.getInstance("TLS");
     private Thread runner=null;
-    
             
     public ImapServer(boolean encrypted) throws java.security.NoSuchAlgorithmException,java.security.KeyManagementException,java.security.GeneralSecurityException,IOException {
-        this((encrypted?993:143),encrypted);
+        this(encrypted?993:143,encrypted);
     }
     
     public int getPort() {
@@ -61,10 +60,10 @@ public class ImapServer extends StoppableThread  {
         String[] arr=((SSLServerSocketFactory) context.getServerSocketFactory().getDefault()).getSupportedCipherSuites(); 
         for(int i=0; i<arr.length; i++) {
             boolean supported=true;
-            SSLServerSocket serverSocket=null;;
+            serverSocket=null;;
             try{ 
                 serverSocket = (SSLServerSocket) context.getServerSocketFactory().getDefault().createServerSocket(0);
-                serverSocket.setEnabledCipherSuites(new String[] {arr[i]});
+                ((SSLServerSocket)serverSocket).setEnabledCipherSuites(new String[] {arr[i]});
                 SocketDeblocker t=new SocketDeblocker(serverSocket.getLocalPort(),30);
                 t.start();
                 SSLSocket s=(SSLSocket)serverSocket.accept();
@@ -72,25 +71,27 @@ public class ImapServer extends StoppableThread  {
                 serverSocket.close();
                 serverSocket=null;
                 t.shutdown();
+                LOGGER.log(Level.FINER,"Cipher suite \""+arr[i]+"\" seems to be supported");
             } catch(SSLException e) {
+                LOGGER.log(Level.FINER,"Cipher suite \""+arr[i]+"\" seems to be unsupported",e);
                 supported=false;
-                // System.out.println(arr[i]+" ("+e+")");
                 try{
                     serverSocket.close();
-                } catch(Exception e2) {};
+                } catch(Exception e2) {
+                    LOGGER.log(Level.FINEST,"cleanup failed (never mind)",e2);
+                };
                 serverSocket=null;
             }
             if(supported) {
                 suppCiphers.add(arr[i]);
-            } else {
             }
         }
         
         // open socket
         this.serverSocket = (ServerSocket)ServerSocketFactory.getDefault().createServerSocket(port);
         this.port=serverSocket.getLocalPort();
-        System.out.println("Server ready..." + serverSocket);    
-        runner=new Thread(this,"ImapServer connection listener");
+        LOGGER.log(Level.INFO,"Server listener ready..." + serverSocket);    
+        runner=new Thread(this,"ImapServerConnectionListener");
         runner.start();
     }
     
