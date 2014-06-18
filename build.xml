@@ -66,7 +66,7 @@
     <copy  todir="${build.home}/src/${app.path}">
       <fileset dir="${src.home}/" excludes="**/Version.java **/test/*.java"/>
     </copy>
-    <copy  todir="${build.home}/testsrc/${app.path}/test">
+    <copy  todir="${build.home}/testsrc/${app.path}">
       <fileset dir="${src.home}/" includes="**/test/*.java"/>
     </copy>
   	
@@ -135,7 +135,7 @@
   <target name="test" depends="compile"  description="test application">
 	<taskdef classpathref="test.classpath" resource="tasks.properties" />
 	<delete file="${build.home}/cobertura.ser" />
-	<cobertura-instrument todir="${build.home}/cobertura" datafile="${build.home}/testsrc/cobertura.ser">
+	<cobertura-instrument todir="${build.home}/cobertura" datafile="${build.home}/cobertura.ser">
 		<includeclasses regex="net\.gwerder\.java.*" />
 		<excludeclasses regex="net\.gwerder\.java.*\.test\..*" />
 		<excludeclasses regex=".*Test.*" />
@@ -146,7 +146,7 @@
 
 	<mkdir dir='${build.home}/testsrc'/>
     <junit  fork="yes" haltonfailure="yes" dir="${build.home}/classes/"> <!-- showoutput="yes" printsummary="withOutAndErr" -->
-		<sysproperty key="net.sourceforge.cobertura.datafile" file="${build.home}/testsrc/cobertura.ser" />
+		<sysproperty key="net.sourceforge.cobertura.datafile" file="${build.home}/cobertura.ser" />
         <classpath refid="test.classpath"/>
         <test name="${app.package}.test.MainSuite" todir="${build.home}/testsrc" outfile="junitTestResults.MainSuite"/>
         <formatter type="xml"/>
@@ -154,12 +154,12 @@
     </junit>
 	
     <mkdir dir='${doc.home}/cobertura'/>
-	<cobertura-report format="xml" destdir="${build.home}/testsrc"  datafile="${build.home}/testsrc/cobertura.ser">
+	<cobertura-report format="xml" destdir="${build.home}/testsrc"  datafile="${build.home}/cobertura.ser">
 		<fileset dir="${build.home}/src">
 			<include name="**/*.java" />
 		</fileset>
 	</cobertura-report>
-	<cobertura-report format="html" destdir="${doc.home}/cobertura"  datafile="${build.home}/testsrc/cobertura.ser">
+	<cobertura-report format="html" destdir="${doc.home}/cobertura"  datafile="${build.home}/cobertura.ser">
 		<fileset dir="${build.home}/src">
 			<include name="**/*.java" />
 		</fileset>
@@ -189,11 +189,7 @@
 	<mkdir dir='${basedir}/target'/>
     <mkdir dir='${basedir}/target/sonar'/>
 
-	<!--- create a pom file for sonar build -->
-    <copy  file="${basedir}/app/pom.xml" todir="${basedir}/"/>
-    <replaceregexp file="${basedir}/pom.xml" match="&lt;version&gt;.*&lt;/version&gt;" replace="&lt;version&gt;${app.version.major}.${app.version.minor}.${app.version.revision}_${DSTAMP}${TSTAMP}&lt;/version&gt;"/>
-
-    </target>
+  </target>
 
   <target name="test-gui" depends="compile"  description="run application">
     <java dir="${build.home}/classes/" classname="junit.swingui.TestRunner" fork="yes" classpathref="test.classpath">
