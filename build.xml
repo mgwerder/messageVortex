@@ -135,7 +135,7 @@
   <target name="test" depends="compile"  description="test application">
 	<taskdef classpathref="test.classpath" resource="tasks.properties" />
 	<delete file="${build.home}/cobertura.ser" />
-	<cobertura-instrument todir="${build.home}/cobertura" datafile="${build.home}/cobertura.ser">
+	<cobertura-instrument todir="${build.home}/cobertura" datafile="${build.home}/testsrc/cobertura.ser">
 		<includeclasses regex="net\.gwerder\.java.*" />
 		<excludeclasses regex="net\.gwerder\.java.*\.test\..*" />
 		<excludeclasses regex=".*Test.*" />
@@ -146,7 +146,7 @@
 
 	<mkdir dir='${build.home}/testsrc'/>
     <junit  fork="yes" haltonfailure="yes" dir="${build.home}/classes/"> <!-- showoutput="yes" printsummary="withOutAndErr" -->
-		<sysproperty key="net.sourceforge.cobertura.datafile" file="${build.home}/cobertura.ser" />
+		<sysproperty key="net.sourceforge.cobertura.datafile" file="${build.home}/testsrc/cobertura.ser" />
         <classpath refid="test.classpath"/>
         <test name="${app.package}.test.MainSuite" todir="${build.home}/testsrc" outfile="junitTestResults.MainSuite"/>
         <formatter type="xml"/>
@@ -154,12 +154,12 @@
     </junit>
 	
     <mkdir dir='${doc.home}/cobertura'/>
-	<cobertura-report format="xml" destdir="${doc.home}/cobertura"  datafile="${build.home}/cobertura.ser">
+	<cobertura-report format="xml" destdir="${build.home}/testsrc"  datafile="${build.home}/testsrc/cobertura.ser">
 		<fileset dir="${build.home}/src">
 			<include name="**/*.java" />
 		</fileset>
 	</cobertura-report>
-	<cobertura-report format="html" destdir="${doc.home}/cobertura"  datafile="${build.home}/cobertura.ser">
+	<cobertura-report format="html" destdir="${doc.home}/cobertura"  datafile="${build.home}/testsrc/cobertura.ser">
 		<fileset dir="${build.home}/src">
 			<include name="**/*.java" />
 		</fileset>
