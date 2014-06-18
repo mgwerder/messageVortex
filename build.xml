@@ -144,11 +144,11 @@
 		</instrumentationClasspath>
 	</cobertura-instrument>
 
-	<mkdir dir='${build.home}/junit'/>
+	<mkdir dir='${build.home}/testsrc'/>
     <junit  fork="yes" haltonfailure="yes" dir="${build.home}/classes/"> <!-- showoutput="yes" printsummary="withOutAndErr" -->
 		<sysproperty key="net.sourceforge.cobertura.datafile" file="${build.home}/cobertura.ser" />
         <classpath refid="test.classpath"/>
-        <test name="${app.package}.test.MainSuite" todir="${build.home}/junit" outfile="junitTestResults.MainSuite"/>
+        <test name="${app.package}.test.MainSuite" todir="${build.home}/testsrc" outfile="junitTestResults.MainSuite"/>
         <formatter type="xml"/>
         <formatter type="plain" usefile="false"/>
     </junit>
