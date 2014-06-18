@@ -66,6 +66,9 @@
     <copy  todir="${build.home}/src/${app.path}">
       <fileset dir="${src.home}/" excludes="**/Version.java **/test/*.java"/>
     </copy>
+    <copy  todir="${build.home}/testsrc/${app.path}/test">
+      <fileset dir="${src.home}/" includes="**/test/*.java"/>
+    </copy>
   	
     <mkdir dir="${build.home}/classes/${app.path}/images"/>
     <!--<copy  todir="${build.home}/classes/com/primecalc/java/klb4/images">
@@ -89,7 +92,7 @@
          optimize="${compile.optimize}">
         <classpath refid="compile.classpath"/>
     </javac>
-    <javac srcdir="${src.home}/test"
+    <javac srcdir="${build.home}/testsrc"
           destdir="${build.home}/classes/"
             debug="${compile.debug}"
       deprecation="${compile.deprecation}"
