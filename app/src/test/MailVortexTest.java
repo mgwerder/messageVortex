@@ -22,4 +22,9 @@ public class MailVortexTest {
     public void getHelp() {
         assertTrue("Errorcode for --help is not 0",net.gwerder.java.mailvortex.MailVortex.main(new String[] {"--help"})==0);
     }    
+
+    @Test
+    public void getRunRegularlyAndShutdown() {
+        assertTrue("Errorcode is not 0",net.gwerder.java.mailvortex.MailVortex.main(new String[0])==0);
+    }    
 }

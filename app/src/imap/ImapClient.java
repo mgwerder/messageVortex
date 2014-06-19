@@ -37,7 +37,10 @@ public class ImapClient implements Runnable {
     private String[] currentCommandReply=null;
     private boolean currentCommandCompleted=false;
     Socket socket=null;
-    private Thread runner=null;    
+    private Thread runner=null;
+    private static long defaultTimeout=30*1000; /* set default timeout of thread to 30s */
+    private long timeout=defaultTimeout;    
+    
     public ImapClient(String targetHost,int targetPort,boolean encrypted) {
         this.targetHost=targetHost;
         this.targetPort=targetPort;
@@ -69,6 +72,26 @@ public class ImapClient implements Runnable {
         assert false:"This Point should never be reached";
     }
     
+    public long setTimeout(long timeout) {
+        long ot=this.timeout;
+        this.timeout=timeout;
+        return ot;
+    }
+    
+    public long getTimeout() { 
+        return this.timeout; 
+    }
+    
+    public static long setDefaultTimeout(long timeout) {
+        long ot=defaultTimeout;
+        defaultTimeout=timeout;
+        return ot;
+    }
+    
+    public static long getDefaultTimeout() { 
+        return defaultTimeout; 
+    }
+     
     public String[] sendCommand(String command) throws TimeoutException { 
         return sendCommand(command,DEFAULT_TIMEOUT); 
     }

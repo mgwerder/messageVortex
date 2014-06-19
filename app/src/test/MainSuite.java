@@ -8,6 +8,7 @@ import junit.framework.JUnit4TestAdapter;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
   MailVortexTest.class,
+  ImapClientTest.class,
   ImapCommandTest.class,
   ImapCommandLoginTest.class
 })
@@ -17,6 +18,7 @@ public class MainSuite {
   public static junit.framework.Test suite() {    
         final TestSuite s = new TestSuite();
         s.addTest(new JUnit4TestAdapter(MailVortexTest.class));
+        s.addTest(new JUnit4TestAdapter(ImapClientTest.class));
         s.addTest(new JUnit4TestAdapter(ImapCommandTest.class));
         s.addTest(new JUnit4TestAdapter(ImapCommandLoginTest.class));
         return s;
