@@ -97,6 +97,7 @@ public class ImapClientTest {
     public void ImapClientTimeoutTest() {
         DeadSocket ds=new DeadSocket(0,-1);
         ImapClient ic =new ImapClient("localhost",ds.getPort(),false);
+        assertTrue("No timeoutException was raised",ic.isTLS()==false);
         long start=System.currentTimeMillis();
         ImapCommandIWantATimeout.init();
         try{

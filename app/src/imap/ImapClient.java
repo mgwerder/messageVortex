@@ -123,6 +123,10 @@ public class ImapClient implements Runnable {
         return currentCommandReply;
     }
     
+    public boolean isTLS() {
+        return socket instanceof SSLSocket;
+    }
+
     public void shutdown() {
         shutdown=true;
         try {
