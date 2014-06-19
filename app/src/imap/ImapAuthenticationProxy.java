@@ -12,6 +12,13 @@ public abstract class ImapAuthenticationProxy {
         return oc;
     }
 
-    public ImapConnection getImapConnection() { return this.conn; }
+    /***
+     * Get the ImapConnection object which belongs to this proxy
+     *
+     * @returns A Connection object which is connected to this proxy
+     ***/
+    public ImapConnection getImapConnection() { 
+        return this.conn; 
+    }
     
 }

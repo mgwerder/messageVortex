@@ -19,7 +19,9 @@ class SocketDeblocker extends Thread {
         while(this.isAlive()) {
             try{
                 this.join();
-            }catch(InterruptedException ie) {;}
+            }catch(InterruptedException ie) {
+                ;
+            }
         }    
     }
     
@@ -29,14 +31,16 @@ class SocketDeblocker extends Thread {
             countdown--;
             try{
                 Thread.sleep(10);
-            }catch(InterruptedException ie) {;}
+            }catch(InterruptedException ie) {
+            }
         }
 
         if(!shutdown) {
             try{
                 SSLSocket cs = (SSLSocket)SSLSocketFactory.getDefault().createSocket("localhost", port);
                 cs.close();
-            } catch(Exception e) {;}
+            } catch(Exception e) {
+            }
         }
     }
     
