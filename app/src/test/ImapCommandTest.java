@@ -10,6 +10,9 @@ import org.junit.Assert;
 import java.util.concurrent.TimeoutException;
 import static org.junit.Assert.*;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+
 /**
  * Tests for {@link net.gwerder.java.mailvortex.imap.ImapCommand}.
  *
@@ -17,19 +20,6 @@ import static org.junit.Assert.*;
  */
 @RunWith(JUnit4.class)
 public class ImapCommandTest {
-
-    /***
-     * @known.bug Port should be tested first (Problem when testing subsequent)
-     ***/
-    private static int port = 200;
-    private static Object lock= new Object();
-    
-    private static int getFreePort() {
-        synchronized(lock) {
-            port++;
-        }    
-        return port;
-    }
 
     private String[] sendCommand(ImapClient c,String command) {
         try{ 
@@ -43,30 +33,83 @@ public class ImapCommandTest {
     }
 
     @Test
-    public void checkPortAllocator() {
-        for(int i=0;i<100;i++) {
-            assertTrue("Port allocation does not guarantee uniqueness",getFreePort()!=getFreePort());
-        }
-    }    
-
-    @Test
     public void checkFullLogout() {
         boolean encrypted=false;
-        int lastport=0;
         do{
             try{
-                int port = getFreePort();
-                assertTrue("Ports did not differ for tests",port!=lastport);
                 ImapServer s=new ImapServer(0,encrypted);
                 ImapClient c=new ImapClient("localhost",s.getPort(),encrypted);
                 sendCommand(c,ImapLine.getNextTag()+" LOGOUT");
                 s.shutdown();
-                lastport=port;
             } catch (Exception toe) {
                 assertTrue("exception thrown ("+toe.toString()+") while testing using encryption="+encrypted,false);
             }
             encrypted=!encrypted;
         } while(!encrypted);
+    }
+    
+    @Test
+    public void ImapBlankLine() {
+        try{
+            new ImapLine(null,"",null);
+            assertTrue("Blank Line Exception not rised",true);
+        } catch(ImapBlankLineException ble) {
+            assertTrue("Blank Line Exception rised",true);
+        } catch (ImapException ie) {
+            assertTrue("Imap Exception rised (should have been ImaplBlankLineException",false);
+        }
+    }
+    
+    @Test
+    public void ImapBlankLineStream() {
+        try{
+            InputStream i=new ByteArrayInputStream("".getBytes());
+            new ImapLine(null,"",i);
+            assertTrue("Blank Line Exception not rised",false);
+        } catch(ImapBlankLineException ble) {
+            assertTrue("Blank Line Exception rised",true);
+        } catch (ImapException ie) {
+            assertTrue("Imap Exception rised (should have been ImaplBlankLineException)",false);
+        }
+    }
+    
+    @Test
+    public void ImapNonBlankLineNullStream() {
+        try{
+            new ImapLine(null,"",null);
+            assertTrue("Blank Line Exception not rised",true);
+        } catch(ImapBlankLineException ble) {
+            assertTrue("Blank Line Exception rised",true);
+        } catch (ImapException ie) {
+            assertTrue("Imap Exception rised (should have been ImaplBlankLineException)",false);
+        }
+    }
+    
+    @Test
+    public void ImapNonBlankLineStream() {
+        try{
+            InputStream i=new ByteArrayInputStream("a b".getBytes());
+            ImapLine il=new ImapLine(null,"",i);
+            assertTrue("Returned tag should be \"a\"","a".equals(il.getTag()));
+            assertTrue("Returned command should be \"b\" but is infact \""+il.getCommand()+"\"","b".equals(il.getCommand()));
+        } catch(ImapBlankLineException ble) {
+            assertTrue("Blank Line Exception rised",false);
+        } catch (ImapException ie) {
+            assertTrue("Imap Exception rised (no exception expected)",false);
+        }
+    }
+    
+    @Test
+    public void ImapLineSpacing() {
+        try{
+            InputStream i=new ByteArrayInputStream(" b".getBytes());
+            ImapLine il=new ImapLine(null,"a",i);
+            assertTrue("ImapException not rised",true);
+        } catch(ImapBlankLineException ble) {
+            assertTrue("ImapBlankLineException rised (no exception expected)",false);
+        } catch (ImapException ie) {
+            assertTrue("Imap Exception rised",false);
+        }
     }
 
 }

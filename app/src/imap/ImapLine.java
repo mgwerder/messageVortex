@@ -1,8 +1,19 @@
 package net.gwerder.java.mailvortex.imap;
 
+import java.util.logging.Logger;
+import java.util.logging.Level;  
+  
 import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+
 
 public class ImapLine {
+
+    private static final Logger LOGGER;
+    static {
+        LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+    }
 
     private static int    tagEnumerator=0;
     private static final Object tagEnumeratorLock=new Object();
@@ -19,11 +30,27 @@ public class ImapLine {
         this.con=con;
         this.input=input;
          
-        if(line==null) throw new ImapException(this,"null line passed");
-        
-        if(line.length()==0) throw new ImapBlankLineException(this);
+        // make sure that we have a valid InputStream
+        if(this.input==null) {
+            this.input=new ByteArrayInputStream("".getBytes());
+        }
         
         // get first two tokens
+        // Trivial implementation (just wait fo a newline)
+        int b=0;
+        while(!line.endsWith("\r\n") && b!=-1) {
+            try{
+                b=this.input.read();
+                if(b>=0) line+=(char)b;
+            } catch(IOException ioe) {
+                LOGGER.log(Level.WARNING, "IOException rised while reading line (Ungraceful connection close by client?");
+            }    
+        }   
+        
+        if(line==null) throw new ImapException(this,"null String passed");
+        if(line.length()==0) throw new ImapBlankLineException(this);
+        
+        // parse token and command
         String[] tokens=line.split("\\p{Space}+");
         tagToken=line;
         if(tokens.length<2) {
