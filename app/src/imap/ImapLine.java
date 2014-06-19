@@ -43,7 +43,9 @@ public class ImapLine {
         this.input=input;
          
         // check if nothing at all (no even an empty line) has been passed
-        if(line==null && this.input==null) throw new ImapException(this,"null String passed");
+        if(line==null && this.input==null) {
+            throw new ImapException(this,"null String passed");
+        }
 
         // make sure that we have a valid InputStream
         if(this.input==null) {
@@ -61,13 +63,17 @@ public class ImapLine {
         while(!line.endsWith("\r\n") && b!=-1) {
             try{
                 b=this.input.read();
-                if(b>=0) line+=(char)b;
+                if(b>=0) {
+                    line+=(char)b;
+                }
             } catch(IOException ioe) {
                 LOGGER.log(Level.WARNING, "IOException rised while reading line (Ungraceful connection close by client?");
             }    
         }   
         
-        if(line.length()==0) throw new ImapBlankLineException(this);
+        if(line.length()==0) {
+            throw new ImapBlankLineException(this);
+        }
         
         // parse token and command
         String[] tokens=line.split("\\p{Space}+");

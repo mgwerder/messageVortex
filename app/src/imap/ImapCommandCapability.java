@@ -12,8 +12,10 @@ public class ImapCommandCapability extends ImapCommand {
         for(int i=0;i<arr.length;i++) {
             // FIXME process =-entries
             String[] arr2=arr[i].getCapabilities();
-            if(arr2!=null) for(int j=0;j<arr2.length;j++) {
-                cap+=" "+arr2[j];
+            if(arr2!=null) {
+                for(int j=0;j<arr2.length;j++) {
+                    cap+=" "+arr2[j];
+                }
             }
         }
         return new String[] {"* CAPABILITY IMAP4rev1"+cap,line.getTag()+" OK" };

@@ -62,7 +62,7 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
         return oldProxyAuth;
     }
     
-    private void interruptedCatcher() {
+    private void interruptedCatcher(Exception e) {
         assert false:"This Point should never be reached";
     }
     
@@ -142,7 +142,7 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
                 runner.join();
             } catch(InterruptedException e) {
                  // discard this exception
-                 interruptedCatcher();
+                 interruptedCatcher(e);
             }
         }    
         return 0;
@@ -172,6 +172,7 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
             il=new ImapLine(this,command,i);
         } catch(ImapBlankLineException ie) {
             // just ignore blank lines
+            LOGGER.log(Level.INFO,"got a blank line as command",ie);
             return new String[0];
         } catch(ImapException ie) {
             // If line violates the form <tag> <command> refuse processing
@@ -245,7 +246,7 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
             LOGGER.log(Level.WARNING,"Error while IO with peer partner",e);
         } catch(InterruptedException e) {
             // ignore this exception
-            interruptedCatcher();
+            interruptedCatcher(e);
         }    
         try{
             input.close();
@@ -256,7 +257,7 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
             plainSocket.close();
         } catch(Exception e2) {
             // all exceptions may be safely ignored$
-            interruptedCatcher();
+            interruptedCatcher(e2);
         }
         LOGGER.log(Level.FINEST,"## server connection closed");
     }

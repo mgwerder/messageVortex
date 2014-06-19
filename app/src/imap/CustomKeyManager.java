@@ -1,5 +1,9 @@
 package net.gwerder.java.mailvortex.imap;
  
+
+import java.util.logging.Logger;
+import java.util.logging.Level;
+ 
 import java.security.cert.X509Certificate;
 import javax.net.ssl.X509KeyManager;
 import java.security.KeyStore;
@@ -19,6 +23,12 @@ import java.net.Socket;
  * @to.do support multiple aliases
  ***/ 
 public class CustomKeyManager implements X509KeyManager {
+
+    private static final Logger LOGGER;
+    static {
+        LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+    }
+
     private KeyStore keyStore;
     private String alias;
     char[] password;
@@ -57,6 +67,7 @@ public class CustomKeyManager implements X509KeyManager {
         try {
             return (PrivateKey) keyStore.getKey(alias, password);
         } catch (Exception e) {
+            LOGGER.log(Level.WARNING,"unknown key requested \""+alias+"\"",e);
             return null;
         }
     }
@@ -69,12 +80,18 @@ public class CustomKeyManager implements X509KeyManager {
     public X509Certificate[] getCertificateChain(String alias) {
         try {
             java.security.cert.Certificate[] certs = keyStore.getCertificateChain(alias);
-            if (certs == null || certs.length == 0)    return null;
+            if (certs == null || certs.length == 0)    {
+                return null;
+            }
+            
             // copy and typcast array
             X509Certificate[] x509 = new X509Certificate[certs.length];
-            for (int i = 0; i < certs.length; i++) x509[i] = (X509Certificate)certs[i];
+            for (int i = 0; i < certs.length; i++) {
+                x509[i] = (X509Certificate)certs[i];
+            }
             return x509;
         } catch (Exception e) {
+            LOGGER.log(Level.WARNING,"unknown key requested \""+alias+"\"",e);
             return null;
         }          
     }

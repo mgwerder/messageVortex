@@ -12,10 +12,14 @@ public class ImapAuthenticationDummyProxy extends ImapAuthenticationProxy{
 
     public boolean login(String username,String password) {
         // Always require a username or password
-        if(username==null || password==null) return false;
+        if(username==null || password==null) {
+            return false;
+        }
         
         // check if user exists
-        if(users.get(username.toLowerCase())==null) return false;
+        if(users.get(username.toLowerCase())==null) {
+            return false;
+        }
         
         // check if password is correct
         return users.get(username.toLowerCase()).equals(password);
