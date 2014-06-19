@@ -134,25 +134,29 @@
 
   <target name="test" depends="compile"  description="test application">
 	<taskdef classpathref="test.classpath" resource="tasks.properties" />
+    <taskdef resource="org/jacoco/ant/antlib.xml" classpathref="test.classpath"  uri="antlib:org.jacoco.ant"/>
 	<delete file="${build.home}/cobertura.ser" />
-	<cobertura-instrument todir="${build.home}/cobertura" datafile="${build.home}/cobertura.ser">
+	<!--<cobertura-instrument todir="${build.home}/cobertura" datafile="${build.home}/cobertura.ser">
 		<includeclasses regex="net\.gwerder\.java.*" />
 		<excludeclasses regex="net\.gwerder\.java.*\.test\..*" />
 		<excludeclasses regex=".*Test.*" />
 		<instrumentationClasspath>
 			<pathelement location="${build.home}/classes" />
 		</instrumentationClasspath>
-	</cobertura-instrument>
+	</cobertura-instrument>-->
 
 	<mkdir dir='${build.home}/testsrc'/>
-    <junit  fork="yes" haltonfailure="yes" dir="${build.home}/classes/"> <!-- showoutput="yes" printsummary="withOutAndErr" -->
-		<sysproperty key="net.sourceforge.cobertura.datafile" file="${build.home}/cobertura.ser" />
-        <classpath refid="test.classpath"/>
-        <test name="${app.package}.test.MainSuite" todir="${build.home}/testsrc" outfile="TEST-MainSuite"/>
-        <formatter type="xml"/>
-        <formatter type="plain" usefile="false"/>
-    </junit>
-	
+    <jacoco:coverage>
+        <junit  fork="yes" haltonfailure="yes" dir="${build.home}/classes/"> <!-- showoutput="yes" printsummary="withOutAndErr" -->
+            <sysproperty key="net.sourceforge.cobertura.datafile" file="${build.home}/cobertura.ser" />
+            <classpath refid="test.classpath"/>
+            <test name="${app.package}.test.MainSuite" todir="${build.home}/testsrc" outfile="TEST-MainSuite"/>
+            <formatter type="xml"/>
+            <formatter type="plain" usefile="false"/>
+        </junit>
+	</jacoco:coverage>
+    
+    <!--
     <mkdir dir='${doc.home}/cobertura'/>
 	<cobertura-report format="xml" destdir="${build.home}/testsrc"  datafile="${build.home}/cobertura.ser">
 		<fileset dir="${build.home}/src">
@@ -163,7 +167,7 @@
 		<fileset dir="${build.home}/src">
 			<include name="**/*.java" />
 		</fileset>
-	</cobertura-report>
+	</cobertura-report>-->
 
     <taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask">
         <classpath>
