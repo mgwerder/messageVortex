@@ -10,7 +10,8 @@ import junit.framework.JUnit4TestAdapter;
   MailVortexTest.class,
   ImapClientTest.class,
   ImapCommandTest.class,
-  ImapCommandLoginTest.class
+  ImapCommandLoginTest.class,
+  ImapAuthenticationDummyProxyTest.class
 })
 
 public class MainSuite {
@@ -21,6 +22,8 @@ public class MainSuite {
         s.addTest(new JUnit4TestAdapter(ImapClientTest.class));
         s.addTest(new JUnit4TestAdapter(ImapCommandTest.class));
         s.addTest(new JUnit4TestAdapter(ImapCommandLoginTest.class));
+        s.addTest(new JUnit4TestAdapter(ImapAuthenticationDummyProxyTest.class));
+        
         return s;
   }
   // the class remains empty,
