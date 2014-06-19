@@ -67,7 +67,6 @@ public class ImapSSLSocket {
         LOGGER.log(Level.INFO,"shutting down server");
         s.shutdown();
         LOGGER.log(Level.INFO,"server shutdown completed");
-        //c.shutdown();
     }
      
 }

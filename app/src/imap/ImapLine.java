@@ -11,7 +11,9 @@ public class ImapLine {
     private String tagToken=null;
     private InputStream input=null;
 
-    public ImapLine(ImapConnection con,String line) throws ImapException {this(con,line,null);}
+    public ImapLine(ImapConnection con,String line) throws ImapException {
+        this(con,line,null);
+    }
     
     public ImapLine(ImapConnection con,String line,InputStream input) throws ImapException {
         this.con=con;

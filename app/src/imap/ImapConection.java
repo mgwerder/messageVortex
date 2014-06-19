@@ -15,6 +15,9 @@ import java.net.Socket;
 class ImapConnection extends StoppableThread implements Comparable<ImapConnection> {
 
     private static final Logger LOGGER;
+    private long lastCommand = System.currentTimeMillis();
+    private long timeout = defaultTimeout;
+    
     static {
         LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
     }
@@ -23,7 +26,6 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
     public static final int CONNECTION_AUTHENTICATED     = 2;
     public static final int CONNECTION_SELECTED          = 3;
     
-    private int timeout=defaultTimeout;
     
     private Socket plainSocket=null;
     private SSLSocket sslSocket=null;
@@ -37,7 +39,7 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
     private OutputStream output=null;
     private Thread runner=null;
 
-    private static int defaultTimeout = 60;
+    private static long defaultTimeout = 3 * 60 * 1000;
 
     public ImapConnection(Socket sock,SSLContext context,Set<String> suppCiphers, boolean encrypted) {
         this.plainSocket=sock;    
@@ -64,23 +66,23 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
         return this.authProxy;
     }
     
-    public int setTimeout(int timeout) {
-        int ot=this.timeout;
+    public long setTimeout(long timeout) {
+        long ot=this.timeout;
         this.timeout=timeout;
         return ot;
     }
     
-    public int getTimeout() { 
+    public long getTimeout() { 
         return this.timeout; 
     }
     
-    public static int setDefaultTimeout(int timeout) {
-        int ot=defaultTimeout;
+    public static long setDefaultTimeout(long timeout) {
+        long ot=defaultTimeout;
         defaultTimeout=timeout;
         return ot;
     }
     
-    public static int getDefaultTimeout() { 
+    public static long getDefaultTimeout() { 
         return defaultTimeout; 
     }
      
@@ -219,8 +221,20 @@ class ImapConnection extends StoppableThread implements Comparable<ImapConnectio
                     output.flush();
                     s="";
                 } else {
-                    // FIXME timeout
-                    Thread.sleep(10);// FIXME remove me after implementation
+                    
+                    // no command is pending so lets check if we have a timeout
+                    if(lastCommand+timeout<System.currentTimeMillis()) {
+                        
+                        // we have reached a timeout
+                        shutdown=true;
+                        
+                    } else {
+                        
+                        // No Timeout and no command
+                        // Let's just sleep a bit and then recheck
+                        Thread.sleep(200); // remove afte
+                        
+                    }
                 }    
             }
         } catch(IOException e) {
