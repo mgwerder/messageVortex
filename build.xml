@@ -125,13 +125,6 @@
     </java>
   </target>
 
-  <target name="run-imap" depends="compile"  description="run imap test application">
-    <java dir="${build.home}/classes/" classname="${app.package}.imap.ImapSSLSocket" fork="yes" classpathref="run.classpath">
-      <jvmarg line="-ea "/> 
-      <arg line="-help"/>
-    </java>
-  </target>
-
   <target name="test" depends="compile"  description="test application">
 	<taskdef classpathref="test.classpath" resource="tasks.properties" />
 	<delete file="${build.home}/cobertura.ser" />
