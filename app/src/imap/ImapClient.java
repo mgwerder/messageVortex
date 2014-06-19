@@ -93,10 +93,10 @@ public class ImapClient implements Runnable {
     }
      
     public String[] sendCommand(String command) throws TimeoutException { 
-        return sendCommand(command,DEFAULT_TIMEOUT); 
+        return sendCommand(command,timeout); 
     }
     
-    public String[] sendCommand(String command,int millisTimeout) throws TimeoutException {
+    public String[] sendCommand(String command,long millisTimeout) throws TimeoutException {
         synchronized(sync) {
             currentCommand=command;
             long start = System.currentTimeMillis();
@@ -112,11 +112,14 @@ public class ImapClient implements Runnable {
                 };
             }
             LOGGER.log(Level.FINEST,"wakeup succeeded");
-            if(!currentCommandCompleted && System.currentTimeMillis()>start+millisTimeout) {
+            if(!currentCommandCompleted && System.currentTimeMillis()>=start+millisTimeout) {
                 throw new TimeoutException("Timeout reached while sending \""+command+"\"");
             }
         }
         currentCommand=null;
+        if(currentCommandReply==null) {
+            currentCommandReply=new String[0];
+        }
         return currentCommandReply;
     }
     

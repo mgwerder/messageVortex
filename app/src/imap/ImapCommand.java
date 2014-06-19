@@ -22,6 +22,10 @@ public abstract class ImapCommand implements Cloneable {
         }    
     }
     
+    public static void deregisterCommand(String command) {
+        commands.remove(command.toLowerCase());        
+    }
+    
     public static ImapCommand[] getCommands() {
         return commands.values().toArray(new ImapCommand[commands.size()]);
     }

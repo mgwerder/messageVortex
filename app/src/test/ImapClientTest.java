@@ -72,14 +72,52 @@ public class ImapClientTest {
         }        
     }
     
+    private static  class ImapCommandIWantATimeout extends ImapCommand {
+        static void init() {
+            ImapCommand.registerCommand(new ImapCommandIWantATimeout());
+        }
+    
+        public String[] processCommand(ImapLine line) {
+            do{
+                try{
+                    Thread.sleep(10000000);
+                }catch(InterruptedException ie) {}    
+            }while(true);    
+        }
+    
+        public String[] getCommandIdentifier() {
+            return new String[] {"IWantATimeout"};
+        }
+    
+    }    
 
     // FIXME test broken imapClient always returns immediately
-    @Ignore
     @Test
     public void ImapClientTimeoutTest() {
         DeadSocket ds=new DeadSocket(0,-1);
         ImapClient ic =new ImapClient("localhost",ds.getPort(),false);
-        ic.setTimeout(30000);
+        long start=System.currentTimeMillis();
+        ImapCommandIWantATimeout.init();
+        try{
+            ic.setTimeout(1000);
+            System.out.println("Sending IWantATiomeout");for(String s:ic.sendCommand("a0 IWantATimeout",300)) System.out.println("Reply was: "+s);
+            assertTrue("No timeoutException was raised",false);
+        } catch(TimeoutException te) {
+            long el=(System.currentTimeMillis()-start);
+            assertTrue("Did not wait until end of timeout was reached (just "+el+")",el>=300);
+            assertFalse("Did wait too long",el>=1000);
+        }
+        try{
+            ic.setTimeout(100);
+            System.out.println("Sending IWantATiomeout");for(String s:ic.sendCommand("a1 IWantATimeout",300)) System.out.println("Reply was: "+s);
+            assertTrue("No timeoutException was raised",false);
+        } catch(TimeoutException te) {
+            long el=(System.currentTimeMillis()-start);
+            assertTrue("Did not wait until end of timeout was reached (just "+el+")",el>=300);
+            assertFalse("Did wait too long",el>=1000);
+        }
+        ImapCommand.deregisterCommand("IWantATimeout");
+        ic.shutdown();
         ds.shutdown();
     }
 
