@@ -57,7 +57,7 @@ public class ImapLineTest {
             assertTrue("Error getting tag (got \""+il.getTag()+"\")","a5".equals(il.getTag()));
             assertTrue("Error getting command (got \""+il.getCommand()+"\")","login".equals(il.getCommand()));
             String s=il.getAString();
-            assertTrue("Error getting user (got \""+s+"\")","user".equals(s));
+            assertTrue("Error getting user (got \""+s+"\" at "+il.getContext()+")","user\"".equals(s));
             int skip=il.skipSP(-1);
             assertTrue("Error skipping spaces ("+il.getContext()+"; skip="+skip+")",skip==1);
             s=il.getAString();

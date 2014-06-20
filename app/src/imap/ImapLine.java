@@ -274,7 +274,7 @@ public class ImapLine {
                     ret+=skipBytes(1);
                 }
             }
-            if(snoopBytes(1)!=null || !"\"".equals(skipBytes(1))) {
+            if(snoopBytes(1)==null || !"\"".equals(skipBytes(1))) {
                 return null;
             }    
         }    
