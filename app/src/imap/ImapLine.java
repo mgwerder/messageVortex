@@ -74,7 +74,8 @@ public class ImapLine {
             buffer="";
         }
         
-        if(snoopBytes(1)==null) {
+        if(snoopBytes(1)==null || "\r\n".equals(snoopBytes(2)) || "".equals(snoopBytes(1))) {
+            skipUntilCRLF();
             throw new ImapBlankLineException(this);
         }
         
@@ -82,6 +83,7 @@ public class ImapLine {
         tagToken=getATag();
         
         if(tagToken==null) {
+            skipUntilCRLF();
             throw new ImapException(this, "error getting tag");
         }
         
@@ -93,6 +95,7 @@ public class ImapLine {
         // get password
         commandToken = getATag();
         if(tagToken==null) {
+            skipUntilCRLF();
             throw new ImapException(this, "error getting command");
         }
         
@@ -184,13 +187,19 @@ public class ImapLine {
     }
     
     public String skipBytes(long num) {
+        return skipBytes(num,true);
+    }
+    
+    public String skipBytes(long num,boolean modContext) {
         // make sure that we have sufficient bytes in the buffer
         readBuffer(num);
                 
         // if the string is too short -> return it
         if(buffer.length()<num) {
             buffer="";
-            addContext(buffer);
+            if(modContext) {
+                addContext(buffer);
+            }
             return buffer;
         }
         
@@ -198,7 +207,9 @@ public class ImapLine {
         String ret=snoopBytes(num);
         
         // update context
-        addContext(ret);
+        if(modContext) {
+            addContext(ret);
+        }
         
         // cut the buffer
         buffer=buffer.substring((int)num,buffer.length());
@@ -227,6 +238,18 @@ public class ImapLine {
     public boolean skipCRLF() {
         if(snoopBytes(2)!=null && "\r\n".equals(snoopBytes(2))) {
             skipBytes(2);
+            return true;
+        }    
+        return false;
+    }
+    
+    public boolean skipUntilCRLF() {
+        while(snoopBytes(2)!=null && !"\r\n".equals(snoopBytes(2))) {
+            skipBytes(1,false);
+        }
+        
+        if(snoopBytes(2)!=null && "\r\n".equals(snoopBytes(2))) {
+            skipBytes(2,false);
             return true;
         }    
         return false;
