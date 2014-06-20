@@ -6,7 +6,17 @@ public class ImapCommandCapability extends ImapCommand {
         ImapCommand.registerCommand(new ImapCommandCapability());
     }
     
-    public String[] processCommand(ImapLine line) {
+    public String[] processCommand(ImapLine line) throws ImapException {
+
+        // skip space
+        // WRNING this is "non-strict"
+        line.skipSP(-1);
+        
+        // skip lineend
+        if(!line.skipCRLF()) {
+            throw new ImapException(line,"error parsing command");
+        }
+
         ImapCommand[] arr=ImapCommand.getCommands();
         String cap="";
         for(int i=0;i<arr.length;i++) {

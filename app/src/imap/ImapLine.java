@@ -13,7 +13,6 @@ import java.io.IOException;
  ***/
 public class ImapLine {
     
-    //private final String ABNF_ASTRING_CHAR = "";
     private static final String ABNF_SP = " ";
     private static final String ABNF_CTL = charlistBuilder(0,31);
     private static final String ABNF_LIST_WILDCARDS = "*%";
@@ -173,7 +172,7 @@ public class ImapLine {
     }
     
     private void addContext(String chunk) {
-        final int MAX_CONTEXT=30;
+        final  int MAX_CONTEXT=30;
         context+=chunk;
         if(context.length()>MAX_CONTEXT) {
             context=context.substring(context.length()-MAX_CONTEXT,context.length());
@@ -208,12 +207,20 @@ public class ImapLine {
     }
     
     public int skipSP(int num) {
+        // count number of spaces found
         int count=0;
-        while(snoopBytes(1)!=null && ABNF_SP.contains(snoopBytes(1)) && (num!=0)) {
+        
+        // init countdown counter
+        int countdown=num;
+        
+        // loop thru skipper
+        while(snoopBytes(1)!=null && ABNF_SP.contains(snoopBytes(1)) && (countdown!=0)) {
             skipBytes(1);
             count++;
-            num--;
+            countdown--;
         }
+        
+        // return count of spaces skipped
         return count;
     }
 

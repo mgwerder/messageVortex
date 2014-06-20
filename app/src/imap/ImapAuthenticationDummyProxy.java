@@ -1,13 +1,14 @@
 package net.gwerder.java.mailvortex.imap;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class ImapAuthenticationDummyProxy extends ImapAuthenticationProxy{
 
-    private final HashMap<String,String> users=new HashMap<String,String>();
+    private final Map<String,String> USERS=new HashMap<String,String>();
     
     public void addUser(String username,String password) {
-        users.put(username.toLowerCase(),password);
+        USERS.put(username.toLowerCase(),password);
     }
 
     public boolean login(String username,String password) {
@@ -17,12 +18,12 @@ public class ImapAuthenticationDummyProxy extends ImapAuthenticationProxy{
         }
         
         // check if user exists
-        if(users.get(username.toLowerCase())==null) {
+        if(USERS.get(username.toLowerCase())==null) {
             return false;
         }
         
         // check if password is correct
-        return users.get(username.toLowerCase()).equals(password);
+        return USERS.get(username.toLowerCase()).equals(password);
     }
 
 

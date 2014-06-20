@@ -13,7 +13,7 @@ public abstract class ImapCommand implements Cloneable {
         ImapCommandNoop.init();
     } 
     
-    private static final ConcurrentHashMap<String,ImapCommand> commands;
+    private static ConcurrentHashMap<String,ImapCommand> commands;
 
     public static void registerCommand(ImapCommand command) {
         String[] arr=command.getCommandIdentifier();

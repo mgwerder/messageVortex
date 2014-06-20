@@ -108,7 +108,7 @@ public class ImapClient implements Runnable {
                 try{
                     sync.wait(100);
                 } catch(InterruptedException e) {
-                    interruptedCatcher();
+                    LOGGER.log(Level.SEVERE,"this point should never be reached",e);
                 };
             }
             LOGGER.log(Level.FINEST,"wakeup succeeded");
@@ -130,13 +130,13 @@ public class ImapClient implements Runnable {
     public void shutdown() {
         shutdown=true;
         try {
-            synchronized(notifyThread) {
-                notifyThread.notify(); 
-            };
             try{
-                if(socket!=null) {
-                    socket.close();
-                }
+                synchronized(notifyThread) {
+                    notifyThread.notify(); 
+                    if(socket!=null) {
+                        socket.close();
+                    }   
+                };
             } catch(IOException ioe) {
                 LOGGER.log(Level.INFO,"Error tearing down socket on client shutdown (may be safely ignored)",ioe);
             }    
@@ -195,7 +195,7 @@ public class ImapClient implements Runnable {
                         } while(!lastReply.matches(tag+"\\s+BAD.*") && !lastReply.matches(tag+"\\s+OK.*") && i>=0);
                         currentCommandCompleted=lastReply.matches(tag+"\\s+BAD.*") || lastReply.matches(tag+"\\s+OK.*");
                         currentCommand=null;
-                        if(il!=null && il.getCommand().toLowerCase().equals("logout") && lastReply.matches(tag+"\\s+OK.*")) {
+                        if(il!=null && il.getCommand().equalsIgnoreCase("logout") && lastReply.matches(tag+"\\s+OK.*")) {
                             // Terminate connection on successful logout
                             shutdown=true;
                         }    

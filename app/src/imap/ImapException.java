@@ -2,7 +2,7 @@ package net.gwerder.java.mailvortex.imap;
 
 public class ImapException extends Exception {
 
-    private ImapLine line;
+    private final ImapLine line;
 
     public ImapException(ImapLine line,String reason) {
         super(line==null?reason:reason+" at \""+line.getContext()+"\"");

@@ -57,6 +57,7 @@ public class ImapCommandLogin extends ImapCommand {
         }
         
         if(line.getConnection().getAuth().login(userid,password)) {
+            line.getConnection().setState(ImapConnection.CONNECTION_AUTHENTICATED);
             return new String[] {line.getTag()+" OK LOGIN completed" };
         } else {
             return new String[] {line.getTag()+" NO bad username or password" };

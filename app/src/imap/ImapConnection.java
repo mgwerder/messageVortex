@@ -58,7 +58,9 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
     public ImapAuthenticationProxy setAuth(ImapAuthenticationProxy authProxy) {
         ImapAuthenticationProxy oldProxyAuth=getAuth();
         this.authProxy=authProxy;
-        this.authProxy.setImapConnection(this);
+        if(authProxy!=null) {
+            this.authProxy.setImapConnection(this);
+        }
         return oldProxyAuth;
     }
     
@@ -177,7 +179,7 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
         } catch(ImapException ie) {
             // If line violates the form <tag> <command> refuse processing
             LOGGER.log(Level.WARNING,"got invalid line",ie);
-            return new String[] {ie.getTag()+" BAD "+ie.toString()};
+            return new String[] {(il!=null?il.getTag():"*")+" BAD "+ie.toString()};
         }
         
         ImapCommand c=ImapCommand.getCommand(il.getCommand());
