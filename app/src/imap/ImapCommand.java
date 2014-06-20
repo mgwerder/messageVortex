@@ -44,6 +44,6 @@ public abstract class ImapCommand implements Cloneable {
 
     public abstract String[] getCommandIdentifier();
 
-    public abstract String[] processCommand(ImapLine line);
+    public abstract String[] processCommand(ImapLine line) throws ImapException;
 
 }

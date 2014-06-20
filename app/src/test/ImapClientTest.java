@@ -91,8 +91,6 @@ public class ImapClientTest {
     
     }    
 
-   
-    // FIXME test broken imapClient always returns immediately
     @Test
     public void ImapClientTimeoutTest() {
         DeadSocket ds=new DeadSocket(0,-1);
@@ -102,7 +100,7 @@ public class ImapClientTest {
         ImapCommandIWantATimeout.init();
         try{
             ic.setTimeout(1000);
-            System.out.println("Sending IWantATiomeout");for(String s:ic.sendCommand("a0 IWantATimeout",300)) System.out.println("Reply was: "+s);
+            System.out.println("Sending IWantATimeout");for(String s:ic.sendCommand("a0 IWantATimeout",300)) System.out.println("Reply was: "+s);
             assertTrue("No timeoutException was raised",false);
         } catch(TimeoutException te) {
             long el=(System.currentTimeMillis()-start);
@@ -111,7 +109,7 @@ public class ImapClientTest {
         }
         try{
             ic.setTimeout(100);
-            System.out.println("Sending IWantATiomeout");for(String s:ic.sendCommand("a1 IWantATimeout",300)) System.out.println("Reply was: "+s);
+            System.out.println("Sending IWantATimeout");for(String s:ic.sendCommand("a1 IWantATimeout",300)) System.out.println("Reply was: "+s);
             assertTrue("No timeoutException was raised",false);
         } catch(TimeoutException te) {
             long el=(System.currentTimeMillis()-start);

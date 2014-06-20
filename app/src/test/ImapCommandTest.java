@@ -20,6 +20,11 @@ import java.io.InputStream;
  */
 @RunWith(JUnit4.class)
 public class ImapCommandTest {
+    
+    static {
+        ImapConnection.setDefaultTimeout(1000);
+        ImapClient.setDefaultTimeout(1000);
+    }
 
     private String[] sendCommand(ImapClient c,String command) {
         try{ 
@@ -69,107 +74,4 @@ public class ImapCommandTest {
         } while(!encrypted);
     }
     
-    @Test
-    public void imapBlankLine() {
-        try{
-            new ImapLine(null,"",null);
-            assertTrue("Blank Line Exception not rised",true);
-        } catch(ImapBlankLineException ble) {
-            assertTrue("Blank Line Exception rised",true);
-        } catch (ImapException ie) {
-            assertTrue("Imap Exception rised (should have been ImaplBlankLineException",false);
-        }
-    }
-    
-    @Test
-    public void imapTagOnly() {
-        try{
-            new ImapLine(null,"a",null);
-            assertTrue("ImapException not rised",false);
-        } catch(ImapBlankLineException ble) {
-            assertTrue("Blank Line Exception rised",false);
-        } catch (ImapException ie) {
-            assertTrue("ImapException rised",true);
-        }
-    }
-    
-    @Test
-    public void imapBlankLineStream() {
-        try{
-            InputStream i=new ByteArrayInputStream("".getBytes());
-            new ImapLine(null,"",i);
-            assertTrue("Blank Line Exception not rised",false);
-        } catch(ImapBlankLineException ble) {
-            assertTrue("Blank Line Exception rised",true);
-        } catch (ImapException ie) {
-            assertTrue("Imap Exception rised (should have been ImaplBlankLineException)",false);
-        }
-    }
-    
-    @Test
-    public void imapNonBlankLineNullStream() {
-        try{
-            new ImapLine(null,"",null);
-            assertTrue("Blank Line Exception not rised",true);
-        } catch(ImapBlankLineException ble) {
-            assertTrue("Blank Line Exception rised",true);
-        } catch (ImapException ie) {
-            assertTrue("Imap Exception rised (should have been ImaplBlankLineException)",false);
-        }
-    }
-    
-    @Test
-    public void imapNonBlankLineStream() {
-        try{
-            InputStream i=new ByteArrayInputStream("a b".getBytes());
-            ImapLine il=new ImapLine(null,"",i);
-            assertTrue("Returned tag should be \"a\"","a".equals(il.getTag()));
-            assertTrue("Returned command should be \"b\" but is infact \""+il.getCommand()+"\"","b".equals(il.getCommand()));
-        } catch(ImapBlankLineException ble) {
-            assertTrue("Blank Line Exception rised",false);
-        } catch (ImapException ie) {
-            assertTrue("Imap Exception rised (no exception expected)",false);
-        }
-    }
-    
-    @Test
-    public void imapNullLine() {
-        try{
-            InputStream i=new ByteArrayInputStream("a b".getBytes());
-            ImapLine il=new ImapLine(null,null,null);
-            assertTrue("Should not reach this point as an exception should be rised",false);
-        } catch(ImapBlankLineException ble) {
-            assertTrue("Blank Line Exception rised",false);
-        } catch (ImapException ie) {
-            assertTrue("Imap Exception rised",true);
-        }
-    }
-    
-    @Test
-    public void imapNullStringNonBlankLineStream() {
-        try{
-            InputStream i=new ByteArrayInputStream("a b".getBytes());
-            ImapLine il=new ImapLine(null,null,i);
-            assertTrue("Returned tag should be \"a\"","a".equals(il.getTag()));
-            assertTrue("Returned command should be \"b\" but is infact \""+il.getCommand()+"\"","b".equals(il.getCommand()));
-        } catch(ImapBlankLineException ble) {
-            assertTrue("Blank Line Exception rised",false);
-        } catch (ImapException ie) {
-            assertTrue("Imap Exception rised (no exception expected)",false);
-        }
-    }
-    
-    @Test
-    public void imapLineSpacing() {
-        try{
-            InputStream i=new ByteArrayInputStream(" b".getBytes());
-            ImapLine il=new ImapLine(null,"a",i);
-            assertTrue("ImapException not rised",true);
-        } catch(ImapBlankLineException ble) {
-            assertTrue("ImapBlankLineException rised (no exception expected)",false);
-        } catch (ImapException ie) {
-            assertTrue("Imap Exception rised",false);
-        }
-    }
-
 }

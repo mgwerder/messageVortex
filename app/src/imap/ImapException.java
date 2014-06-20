@@ -5,7 +5,7 @@ public class ImapException extends Exception {
     private ImapLine line;
 
     public ImapException(ImapLine line,String reason) {
-        super(reason);
+        super(line==null?reason:reason+" at \""+line.getContext()+"\"");
         this.line=line;
     }
     

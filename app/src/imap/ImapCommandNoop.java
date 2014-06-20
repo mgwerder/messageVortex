@@ -5,10 +5,10 @@ public class ImapCommandNoop extends ImapCommand {
     static void init() {
         ImapCommand.registerCommand(new ImapCommandNoop());
     }
-    
+    /***
+     * @fix.me return proper status
+     ***/
     public String[] processCommand(ImapLine line) {
-        // FIXME return status
-        // FIXME reset autologout timer
         // Example:
         //// * 22 EXPUNGE
         //// * 23 EXISTS

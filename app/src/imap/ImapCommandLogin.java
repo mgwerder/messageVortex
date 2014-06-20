@@ -6,10 +6,43 @@ public class ImapCommandLogin extends ImapCommand {
         ImapCommand.registerCommand(new ImapCommandLogin());
     }
     
-    public String[] processCommand(ImapLine line) {
+    /***
+     * @fix.me add capabilities to successful login
+     ***/
+    public String[] processCommand(ImapLine line) throws ImapException {
         line.getConnection().setState(ImapConnection.CONNECTION_AUTHENTICATED);
-        // FIXME check credentials
-        return new String[] {line.getTag()+" OK Logged in" };
+        
+        // skip space after command
+        if(line.skipSP(1)!=1) {
+            throw new ImapException(line,"error parsing command");
+        }
+
+        // get userid
+        String userid = line.getAString();
+
+        // skip space after command
+        if(line.skipSP(1)!=1) {
+            throw new ImapException(line,"error parsing command");
+        }
+
+        // get password
+        String password = line.getAString();
+        
+        // skip space
+        if(line.skipSP(1)!=1) {
+            throw new ImapException(line,"error parsing command");
+        }
+        
+        // skip lineend
+        if(!line.skipCRLF()) {
+            throw new ImapException(line,"error parsing command");
+        }
+
+        if(line.getConnection().getAuth().login(userid,password)) {
+            return new String[] {line.getTag()+" OK LOGIN completed" };
+        } else {
+            return new String[] {line.getTag()+" NO bad username or password" };
+        }
     }
 
     public static String[] getCapabilities() {

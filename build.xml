@@ -141,6 +141,7 @@
     <junit  fork="yes" haltonfailure="yes" dir="${build.home}/classes/"> <!-- showoutput="yes" printsummary="withOutAndErr" -->
         <sysproperty key="net.sourceforge.cobertura.datafile" file="${build.home}/cobertura.ser" />
         <classpath refid="test.classpath"/>
+        <test name="${app.package}.test.ImapLineTest" todir="${build.home}/testsrc" outfile="TEST-ImapLineTest"/>
         <test name="${app.package}.test.MainSuite" todir="${build.home}/testsrc" outfile="TEST-MainSuite"/>
         <formatter type="xml"/>
         <formatter type="plain" usefile="false"/>
@@ -186,7 +187,7 @@
 
   <target name="test-gui" depends="compile"  description="run application">
     <java dir="${build.home}/classes/" classname="junit.swingui.TestRunner" fork="yes" classpathref="test.classpath">
-		<jvmarg line="-Djavax.net.ssl.keyStore=keystore.jks -Djavax.net.ssl.keyStorePassword=changeme"/> 
+		<!--<jvmarg line="-Djavax.net.ssl.keyStore=keystore.jks -Djavax.net.ssl.keyStorePassword=changeme"/> -->
       <arg line="${app.package}.test.MainSuite"/>
     </java>
   </target>

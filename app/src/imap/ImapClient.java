@@ -208,6 +208,7 @@ public class ImapClient implements Runnable {
                     }    
                 } catch(java.net.SocketException se) {
                     LOGGER.log(Level.WARNING,"Connection closed by server");
+                    shutdown=true;
                 }                
                 LOGGER.log(Level.FINEST,"Client looping ("+shutdown+"/"+socket.isClosed()+")");
             }
