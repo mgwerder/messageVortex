@@ -8,11 +8,19 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 /***
+/**
+ * A Imap conformant parser/scanner.
+ *
+ * @author Martin Gwerder
  * @fix.me Limit strings and literals to a certain length (otherwise it is litterally unlimited) 
  * @known.bugs Code will fail i Line.length()>Maxint or out of memory
  ***/
 public class ImapLine {
     
+    /* specifies the context range which is given when an exception arises during scanning */
+    private statsic final int MAX_CONTEXT=30;
+    
+    /* These are character subsets specified in RFC3501 */
     private static final String ABNF_SP = " ";
     private static final String ABNF_CTL = charlistBuilder(0,31);
     private static final String ABNF_LIST_WILDCARDS = "*%";
@@ -24,20 +32,38 @@ public class ImapLine {
     private static final String ABNF_QUOTED_CHAR = charlistDifferencer(ABNF_TEXT_CHAR,ABNF_QUOTED_SPECIALS);
     private static final String ABNF_TAG=charlistDifferencer(ABNF_ATOM_CHAR,"+");
 
-    private static final Logger LOGGER;
-    static {
-        LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-    }
+    /* a Logger  for logging purposes */
+    private final Logger LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
 
+    /* this holds the past context for the case that an exception is risen */
     private String context = "";
+    
     private static int    tagEnumerator=0;
     private static final Object tagEnumeratorLock=new Object();
+    
+    /* storage for the connection which created the line */
     private ImapConnection con;
+    
+    /* The holder for the parsed command/status of a line */
     private String commandToken=null;
+    
+    /* The holder for the parsed tag of a line */
     private String tagToken=null;
+
+    /* This input stream is the source of subsequent characters */
     private InputStream input=null;
+    
+    /* this is the buffer of read but unprocessed characters */
     private String buffer="";
 
+    /***
+     * Trivial constructor omiting a stream.
+     *
+     * This constructor is mainly meant for testing purposes
+     *
+     * @param con   The ImapConnection object which generated the Command line
+     * @param line  The String which has already been read (as Read ahead)
+     ***/
     public ImapLine(ImapConnection con,String line) throws ImapException {
         this(con,line,null);
     }
@@ -102,19 +128,44 @@ public class ImapLine {
         skipSP(-1);
     }
     
-    public static String charlistBuilder(int s, int e) {
-        if(s<0 || s>255 || e<0 || e>255 || e<s) {
+    /***
+     * Builds a set of chracters ranging from the ASCII code of start until the ASCII code of end.
+     *
+     * This helper is mainly used to build ABNF strings.
+     *
+     * @param start The first ASCII code to be used
+     * @param end   The last ASCII code to be used
+     ***/
+    public static String charlistBuilder(int start, int end) {
+        // reject chain building if start is not within 0..255
+        if(start<0 || start>255) {
+            return null;
+        }
+
+        // reject chain building if end is not within 0..255
+        if(end<0 || end>255) { 
             return null;
         }
         
+        // reject chain building if start>end
+        if(end<start) {
+            return null
+        }    
+
+        // build the string
         String ret="";
-       
-        for(int i=s;i<=e;i++) {
+        for(int i=start;i<=end;i++) {
             ret+=(char)i;
         }
         return ret;
     }    
 
+    /***
+     * Removes a given set of characters from a superset.
+     *
+     * @param superset    The set where character should be removed from
+     * @param subset      The set of characters to be removed
+     ***/
     public static String charlistDifferencer(String superset,String subset) {
         String ret=superset;
         for(int i=0;i<subset.length();i++) {
@@ -124,6 +175,11 @@ public class ImapLine {
         return ret;
     }    
 
+    /***
+     * Getter for the Imap connection in Control of this command.
+     *
+     * @returns ImapConnection storing the context of this command
+     ***/
     public ImapConnection getConnection() {
         return con;
     }
@@ -175,7 +231,6 @@ public class ImapLine {
     }
     
     private void addContext(String chunk) {
-        final  int MAX_CONTEXT=30;
         context+=chunk;
         if(context.length()>MAX_CONTEXT) {
             context=context.substring(context.length()-MAX_CONTEXT,context.length());
