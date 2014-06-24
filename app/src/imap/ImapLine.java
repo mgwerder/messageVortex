@@ -18,7 +18,7 @@ import java.io.IOException;
 public class ImapLine {
     
     /* specifies the context range which is given when an exception arises during scanning */
-    private statsic final int MAX_CONTEXT=30;
+    private static final int MAX_CONTEXT=30;
     
     /* These are character subsets specified in RFC3501 */
     private static final String ABNF_SP = " ";
@@ -27,8 +27,8 @@ public class ImapLine {
     private static final String ABNF_QUOTED_SPECIALS = "\"\\";
     private static final String ABNF_RESP_SPECIALS = "[";
     private static final String ABNF_ATOM_SPECIALS = "(){"+ABNF_SP+ABNF_CTL+ABNF_LIST_WILDCARDS+ABNF_QUOTED_SPECIALS+ABNF_RESP_SPECIALS;
-    private static final String ABNF_ATOM_CHAR = charlistDifferencer(charlistBuilder(1,255),ABNF_ATOM_SPECIALS);
-    private static final String ABNF_TEXT_CHAR = charlistDifferencer(charlistBuilder(0,255),"\r\n");
+    private static final String ABNF_ATOM_CHAR = charlistDifferencer(charlistBuilder(1,127),ABNF_ATOM_SPECIALS);
+    private static final String ABNF_TEXT_CHAR = charlistDifferencer(charlistBuilder(1,127),"\r\n");
     private static final String ABNF_QUOTED_CHAR = charlistDifferencer(ABNF_TEXT_CHAR,ABNF_QUOTED_SPECIALS);
     private static final String ABNF_TAG=charlistDifferencer(ABNF_ATOM_CHAR,"+");
 
@@ -118,12 +118,16 @@ public class ImapLine {
             throw new ImapException(this,"error skipping to command (line=\""+line+"\"; tag="+tagToken+"; buffer="+buffer+"; skipped="+i+")");
         }
 
-        // get password
+        // get command
         commandToken = getATag();
         if(tagToken==null) {
             skipUntilCRLF();
             throw new ImapException(this, "error getting command");
         }
+        
+        if("BAD".equalsIgnoreCase(commandToken) || "OK".equalsIgnoreCase(commandToken) || "*".equals(tagToken)) {
+            LOGGER.log(Level.INFO,"Parsing command "+tagToken+" "+commandToken);
+        }    
         
         skipSP(-1);
     }
@@ -149,7 +153,7 @@ public class ImapLine {
         
         // reject chain building if start>end
         if(end<start) {
-            return null
+            return null;
         }    
 
         // build the string

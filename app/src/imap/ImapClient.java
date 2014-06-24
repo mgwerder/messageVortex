@@ -99,6 +99,7 @@ public class ImapClient implements Runnable {
     public String[] sendCommand(String command,long millisTimeout) throws TimeoutException {
         synchronized(sync) {
             currentCommand=command;
+            LOGGER.log(Level.INFO,"sending \""+command+"\" to client");
             long start = System.currentTimeMillis();
             currentCommandCompleted=false;
             synchronized(notifyThread) {
