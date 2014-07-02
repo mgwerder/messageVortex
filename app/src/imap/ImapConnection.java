@@ -1,6 +1,7 @@
 package net.gwerder.java.mailvortex.imap;
 
 import java.util.logging.Logger;
+import net.gwerder.java.mailvortex.MailvortexLogger;
 import java.util.logging.Level;
  
 import java.io.IOException;
@@ -14,45 +15,70 @@ import java.net.Socket;
 
 public class ImapConnection extends StoppableThread implements Comparable<ImapConnection> {
 
-    private static final Logger LOGGER;
+    private final Logger LOGGER;
     private long lastCommand = System.currentTimeMillis();
     private long timeout = defaultTimeout;
-    
-    static {
-        LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-    }
     
     public static final int CONNECTION_NOT_AUTHENTICATED = 1;
     public static final int CONNECTION_AUTHENTICATED     = 2;
     public static final int CONNECTION_SELECTED          = 3;
     
-    
+    /* holds sockets and streams of the connection (maintained by updateSocket())*/
     private Socket plainSocket=null;
     private SSLSocket sslSocket=null;
     private Socket currentSocket=null;
-    private SSLContext context;
-    private int status=CONNECTION_NOT_AUTHENTICATED;
-    private Set<String> suppCiphers;
-    private boolean encrypted=false;
-    private ImapAuthenticationProxy authProxy = null;
     private InputStream input=null;
     private OutputStream output=null;
+    
+    /* SSLcontext with enabled ciphers */
+    private SSLContext context;
+    
+    /* Status of the connection (according to RFC */
+    private int status=CONNECTION_NOT_AUTHENTICATED;
+    
+    /* list of supported ciphers */
+    private Set<String> suppCiphers;
+    
+    /* wether the connection is encrypted or not */
+    private boolean encrypted=false;
+    
+    /* Authentication authority for this connection */
+    private ImapAuthenticationProxy authProxy = null;
     private Thread runner=null;
 
+    private static int id=1;
     private static long defaultTimeout = 3 * 60 * 1000;
     
+    /***
+     * Creates a connection object without sockets (primarily for testing) 
+     ***/
     protected ImapConnection() {
         runner=null;
+        LOGGER = MailvortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
     }
     
+    /***
+     * Creates an imapConnection
+     ***/
     public ImapConnection(Socket sock,SSLContext context,Set<String> suppCiphers, boolean encrypted) {
+        this();
+        
+        // store parameters in class
         this.plainSocket=sock;    
         this.context=context;
         this.suppCiphers=suppCiphers;
         this.encrypted=encrypted;
+        
+        // update socket information
         updateSocket();
+        
+        // create and start runner
         runner=new Thread(this);
         runner.start();
+    }
+    
+    private void interruptedCatcher(Exception e) {
+        assert false:"This Point should never be reached";
     }
     
     public ImapAuthenticationProxy setAuth(ImapAuthenticationProxy authProxy) {
@@ -64,20 +90,32 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
         return oldProxyAuth;
     }
     
-    private void interruptedCatcher(Exception e) {
-        assert false:"This Point should never be reached";
-    }
-    
+    /***
+     * Get the authenticator of the connection.
+     ***/
     public ImapAuthenticationProxy getAuth() {
         return this.authProxy;
     }
     
+    public void setID(String id) {
+        runner.setName(id);
+    }
+    
+    /***
+     * Set timeout of the connection.
+     *
+     * @param timeout   The new Timeout
+     * @returns         Previous timeout
+     ***/
     public long setTimeout(long timeout) {
         long ot=this.timeout;
         this.timeout=timeout;
         return ot;
     }
     
+    /***
+     * Get the authenticator of the connection.
+     ***/
     public long getTimeout() { 
         return this.timeout; 
     }
@@ -154,12 +192,15 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
      * start TLS handshake on existing connection.
      ***/
     private boolean startTLS() throws IOException {
+        LOGGER.log(Level.INFO,"doing SSL handshake by server");
         this.sslSocket = (SSLSocket) context.getSocketFactory().createSocket(plainSocket,plainSocket.getInetAddress().getHostAddress(),plainSocket.getPort(),false);
         String[] arr = suppCiphers.toArray(new String[0]);
         this.sslSocket.setUseClientMode(false);
         this.sslSocket.setEnabledCipherSuites(arr);
-        System.out.println("## Starting server side SSL");
+        LOGGER.log(Level.FINER,"start SSL handshake");
         this.sslSocket.startHandshake();
+        LOGGER.log(Level.FINER,"SSL handshake done");
+        updateSocket();
         return false;
     }
     
@@ -182,13 +223,15 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
             return new String[] {(il!=null?il.getTag():"*")+" BAD "+ie.toString()};
         }
         
+        LOGGER.log(Level.INFO,"got command \""+il.getTag()+" "+il.getCommand()+"\"... in connection "+runner.getName());
         ImapCommand c=ImapCommand.getCommand(il.getCommand());
         if(c==null) {
             throw new ImapException(il,"Command \""+il.getCommand()+"\" is not implemented");
         }
-        
+        LOGGER.log(Level.FINEST,"found command in connection "+this.getName()+".");
         String[] s=c.processCommand(il);
         
+        LOGGER.log(Level.INFO,"got command \""+il.getTag()+" "+il.getCommand()+"\"... in connection "+this.getName()+". Reply is \""+ImapLine.commandEncoder(s==null?"null":s[s.length-1])+"\".");
         return s;
     }
     
@@ -203,21 +246,23 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
                 String s="";
                 
                 while(input.available()>0 && !s.endsWith("\r\n")) {
+                    LOGGER.log(Level.INFO,"Read loop in Connection "+runner.getName());
                     int b=input.read();
+                    LOGGER.log(Level.INFO,"Read loop exit in Connection "+runner.getName()+" (got \""+s+"\")");
                     s+=(char)b;
                 }
                 
                 if(!"".equals(s)) {
-                    LOGGER.finest("IMAP<- S: "+s);
+                    LOGGER.finest("IMAP<- S: "+ImapLine.commandEncoder(s));
                     try    {
                     
                         for(String s1:processCommand(s,input)) {
                             if(s1==null) {
                                 shutdown=true;
-                                LOGGER.finest("server connection shutdown initated "+shutdown);
+                                LOGGER.log(Level.FINE,"server connection shutdown initated."    );
                             } else {
-                                output.write((s1+"\r\n").getBytes());
-                                LOGGER.finest("IMAP-> S: "+s1);
+                                output.write((s1).getBytes());
+                                LOGGER.log(Level.INFO,"IMAP-> S: "+ImapLine.commandEncoder(s1));
                             }    
                         }
                         LOGGER.finest("command is processed");

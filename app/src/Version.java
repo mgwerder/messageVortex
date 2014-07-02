@@ -1,5 +1,7 @@
 package net.gwerder.java.mailvortex;
 
+import java.net.URL;
+
 public class Version {
 
     private static int    MAJOR       = @major@;
@@ -16,5 +18,12 @@ public class Version {
 
     public static String getVersion() {
         return VERSION;
+    }
+    
+    static {
+        URL main = Version.class.getResource("Version.class");
+        if (!"file".equalsIgnoreCase(main.getProtocol())) throw new IllegalStateException("Main class is not stored in a file.");
+        System.out.println( "Path to application is "+main.getPath());    
+        System.out.println( "Path to user.dir is "+System.getProperty("user.dir"));    
     }
  }   

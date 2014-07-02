@@ -43,6 +43,10 @@ public class ImapAuthenticationDummyProxyTest {
     public void plainAuthTest() {
         ImapAuthenticationDummyProxy ap=new ImapAuthenticationDummyProxy();
         ap.addUser("Test","Testpw");
+        assertFalse("UserID is null (1)",ap.login(null,"Testpw"));
+        assertFalse("password is null (1)",ap.login("Test",null));
+        assertFalse("UserID and password is null (1)",ap.login(null,null));
+        assertFalse("UserID does not exist",ap.login("testNotExistingUser","testNotExistingUser"));
         assertTrue("UserID is not handled case insensitive (1)",ap.login("TEST","Testpw"));
         assertTrue("UserID is not handled case insensitive (2)",ap.login("test","Testpw"));
         assertFalse("unknown user handling failed",ap.login("test1","Testpw"));

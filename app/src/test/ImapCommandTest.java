@@ -1,6 +1,8 @@
 package net.gwerder.java.mailvortex.test;
 
 import net.gwerder.java.mailvortex.imap.*;
+import net.gwerder.java.mailvortex.*;
+import java.util.logging.Level;
 
 import org.junit.Test;
 import org.junit.Ignore;
@@ -21,19 +23,26 @@ import java.io.InputStream;
 @RunWith(JUnit4.class)
 public class ImapCommandTest {
     
+    private static final java.util.logging.Logger LOGGER;
+
     static {
-        ImapConnection.setDefaultTimeout(1000);
-        ImapClient.setDefaultTimeout(1000);
+        ImapConnection.setDefaultTimeout(10000);
+        ImapClient.setDefaultTimeout(10000);
+        MailvortexLogger.setGlobalLogLevel(Level.FINER);
+        LOGGER = MailvortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
     }
 
     private String[] sendCommand(ImapClient c,String command,String reply) {
         try{ 
-            System.out.println("IMAP C-> "+command);
+            LOGGER.log(Level.FINE,"IMAP C-> "+ImapLine.commandEncoder(command));
             String[] s=c.sendCommand(command+"\r\n");
-            for(String v:s) { System.out.print("IMAP<- C: "+v); }; 
+            for(String v:s) { LOGGER.log(Level.FINE,"IMAP<- C: "+ImapLine.commandEncoder(v)); }; 
             assertTrue("command \""+command+"\" has not been answered properly (expected \""+reply+"\" but got \""+s[s.length-1]+"\")",s[s.length-1].startsWith(reply));
             return s;
-        } catch(TimeoutException e) {e.printStackTrace();}
+        } catch(TimeoutException e) {
+            e.printStackTrace();
+            fail("got timeout while waiting for reply to command "+command);
+        }
         return null;
     }
 
@@ -45,14 +54,14 @@ public class ImapCommandTest {
                 ImapServer s=new ImapServer(0,encrypted);
                 ImapClient c=new ImapClient("localhost",s.getPort(),encrypted);
                 String tag=ImapLine.getNextTag();
-                sendCommand(c,tag+" LOGOUT",tag+" OK");
-                // FIXME somethings wrong assertTrue("command logut failed BYE-check",sendCommand(c,tag+" LOGOUT",tag+" OK")[0].startsWith("* BYE"));
+                assertTrue("command logut failed BYE-check",sendCommand(c,tag+" LOGOUT",tag+" OK")[0].startsWith("* BYE"));
                 s.shutdown();
+                c.shutdown();
             } catch (Exception toe) {
                 assertTrue("exception thrown ("+toe.toString()+") while testing using encryption="+encrypted,false);
             }
             encrypted=!encrypted;
-        } while(!encrypted);
+        } while(encrypted);
     }
     
     @Test
@@ -61,29 +70,32 @@ public class ImapCommandTest {
         do{
             try{
                 ImapServer s=new ImapServer(0,encrypted);
+                ImapConnection.setDefaultTimeout(10000);
                 ImapAuthenticationDummyProxy ap=new ImapAuthenticationDummyProxy();
                 ap.addUser("USER","password");
                 s.setAuth(ap);
                 ImapClient c=new ImapClient("localhost",s.getPort(),encrypted);
+                c.setTimeout(10000);
+                assertTrue("check encryption ("+encrypted+"/"+c.isTLS()+")", encrypted==c.isTLS());
                 String tag=ImapLine.getNextTag();
-                sendCommand(c,tag+" NOOP",tag+" OK");
+                String[] ret=sendCommand(c,tag+" NOOP",tag+" OK");
                 tag=ImapLine.getNextTag();
-                sendCommand(c,tag+" CAPABILITY",tag+" OK");
+                ret=sendCommand(c,tag+" CAPABILITY",tag+" OK");
                 tag=ImapLine.getNextTag();
-                sendCommand(c,tag+" LOGIN user password",tag+" OK");
+                ret=sendCommand(c,tag+" LOGIN user password",tag+" OK");
                 tag=ImapLine.getNextTag();
-                sendCommand(c,tag+" CAPABILITY",tag+" OK");
+                ret=sendCommand(c,tag+" CAPABILITY",tag+" OK");
                 tag=ImapLine.getNextTag();
-                sendCommand(c,tag+" NOOP",tag+" OK");
+                ret=sendCommand(c,tag+" NOOP",tag+" OK");
                 tag=ImapLine.getNextTag();
-                sendCommand(c,tag+" LOGOUT",tag+" OK");
-                tag=ImapLine.getNextTag();
+                ret=sendCommand(c,tag+" LOGOUT",tag+" OK");
                 s.shutdown();
+                c.shutdown();
             } catch (Exception toe) {
-                assertTrue("exception thrown ("+toe.toString()+") while testing using encryption="+encrypted,false);
+                fail("exception thrown ("+toe.toString()+") while testing using encryption="+encrypted+" at "+toe.getStackTrace()[0]);
             }
             encrypted=!encrypted;
-        } while(!encrypted);
+        } while(encrypted);
     }
     
 }

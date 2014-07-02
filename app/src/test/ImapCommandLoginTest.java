@@ -8,6 +8,9 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.junit.Assert;
 
+import java.util.logging.Level;
+import net.gwerder.java.mailvortex.*;
+
 /**
  * Tests for {@link net.gwerder.java.mailvortex.MailVortex}.
  *
@@ -16,13 +19,13 @@ import org.junit.Assert;
 @RunWith(JUnit4.class)
 public class ImapCommandLoginTest {
 
+    static {
+        MailvortexLogger.setGlobalLogLevel(Level.ALL);
+    }    
+
     @Test
     public void loginCapabilitiesPropagated() {
         // check if login is passed to capabilities
     }
 
-    @Test
-    @Ignore
-    public void thisIsIgnored() {
-    }
 }

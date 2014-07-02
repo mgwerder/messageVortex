@@ -23,9 +23,9 @@ public class ImapLineTest {
     
     @Test
     public void charlistHelpers() {
-        assertTrue("Error testing chrlistbuilder space"," ".equals(ImapLine.charlistBuilder(32,32)));
-        assertTrue("Error testing chrlistbuilder digits","0123456789".equals(ImapLine.charlistBuilder(48,57)));
-        assertTrue("Error testing chrlistdifferencer digits","0123568".equals(ImapLine.charlistDifferencer("0123456789","479")));
+        assertTrue("Error testing charlistbuilder space"," ".equals(ImapLine.charlistBuilder(32,32)));
+        assertTrue("Error testing charlistbuilder digits","0123456789".equals(ImapLine.charlistBuilder(48,57)));
+        assertTrue("Error testing charlistdifferencer digits","0123568".equals(ImapLine.charlistDifferencer("0123456789","479")));
     }
     
     @Test

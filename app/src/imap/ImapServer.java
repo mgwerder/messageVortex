@@ -2,6 +2,7 @@ package net.gwerder.java.mailvortex.imap;
 
 import java.util.logging.Logger;
 import java.util.logging.Level;  
+import net.gwerder.java.mailvortex.MailvortexLogger;
   
 import java.io.IOException;
 import java.util.concurrent.ConcurrentSkipListSet;
@@ -28,7 +29,7 @@ public class ImapServer extends StoppableThread  {
     
     private static final Logger LOGGER;
     static {
-        LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+        LOGGER = MailvortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
     }
     private Set<String>    suppCiphers=new HashSet<String>();
 
@@ -152,12 +153,14 @@ public class ImapServer extends StoppableThread  {
     
     public void run() {
         Socket socket=null; 
+        int i=1;
         try {
             while(!shutdown) {
                 socket = serverSocket.accept();
                 ImapConnection imc=null;
                 imc=new ImapConnection(socket,context,suppCiphers,encrypted);
                 imc.setAuth(auth);
+                imc.setID("CONNECT-"+i);
                 conn.add(imc);
                 socket=null;
             }

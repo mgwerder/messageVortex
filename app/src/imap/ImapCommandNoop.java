@@ -24,7 +24,7 @@ public class ImapCommandNoop extends ImapCommand {
         //// * 23 EXISTS
         //// * 3 RECENT
         //// * 14 FETCH (FLAGS (\Seen \Deleted))
-        return new String[] {line.getTag()+" OK" };
+        return new String[] {line.getTag()+" OK\r\n" };
     }
     
     public String[] getCommandIdentifier() {

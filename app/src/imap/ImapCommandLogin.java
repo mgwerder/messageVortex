@@ -48,19 +48,19 @@ public class ImapCommandLogin extends ImapCommand {
 
         if(line.getConnection()==null) {
             LOGGER.log(Level.SEVERE, "no connection found while calling login");
-            return new String[] {line.getTag()+" BAD server configuration error" };
+            return new String[] {line.getTag()+" BAD server configuration error\r\n" };
         }
         
         if(line.getConnection().getAuth()==null) {
             LOGGER.log(Level.SEVERE, "no Authenticator found while calling login");
-            return new String[] {line.getTag()+" BAD server configuration error" };
+            return new String[] {line.getTag()+" BAD server configuration error\r\n" };
         }
         
         if(line.getConnection().getAuth().login(userid,password)) {
             line.getConnection().setState(ImapConnection.CONNECTION_AUTHENTICATED);
-            return new String[] {line.getTag()+" OK LOGIN completed" };
+            return new String[] {line.getTag()+" OK LOGIN completed\r\n" };
         } else {
-            return new String[] {line.getTag()+" NO bad username or password" };
+            return new String[] {line.getTag()+" NO bad username or password\r\n" };
         }
     }
 

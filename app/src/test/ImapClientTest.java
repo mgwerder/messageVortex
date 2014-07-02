@@ -12,9 +12,13 @@ import static org.junit.Assert.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.io.IOException;
 import java.net.ServerSocket;
 import javax.net.SocketFactory;
 import java.net.InetAddress;
+import java.security.NoSuchAlgorithmException;
+import java.security.KeyManagementException;
+import java.security.GeneralSecurityException;
 
 /**
  * Tests for {@link net.gwerder.java.mailvortex.imap.ImapClient}.
@@ -92,16 +96,33 @@ public class ImapClientTest {
     }    
 
     @Test
+    public void ImapClientEncryptedTest() {
+        try{
+            ImapServer is =new ImapServer(0,true); 
+            ImapClient ic =new ImapClient("localhost",is.getPort(),false);
+            assertTrue("TLS is not as expected",ic.isTLS()==false);
+        } catch(NoSuchAlgorithmException nse) {
+            fail("NoSuchAlgorithmException while creating server");
+        } catch(KeyManagementException kme) {
+            fail("KeyManagementException while creating server");
+        } catch(GeneralSecurityException kme) {
+            fail("GeneralSecurityException while creating server");
+        } catch(IOException e) {
+            fail("IOException while creating server");
+        }
+    }
+        
+    @Test
     public void ImapClientTimeoutTest() {
         DeadSocket ds=new DeadSocket(0,-1);
         ImapClient ic =new ImapClient("localhost",ds.getPort(),false);
-        assertTrue("No timeoutException was raised",ic.isTLS()==false);
+        assertTrue("TLS is not as expected",ic.isTLS()==false);
         long start=System.currentTimeMillis();
         ImapCommandIWantATimeout.init();
         try{
             ic.setTimeout(1000);
             System.out.println("Sending IWantATimeout");for(String s:ic.sendCommand("a0 IWantATimeout",300)) System.out.println("Reply was: "+s);
-            assertTrue("No timeoutException was raised",false);
+            fail("No timeoutException was raised");
         } catch(TimeoutException te) {
             long el=(System.currentTimeMillis()-start);
             assertTrue("Did not wait until end of timeout was reached (just "+el+")",el>=300);
@@ -110,7 +131,7 @@ public class ImapClientTest {
         try{
             ic.setTimeout(100);
             System.out.println("Sending IWantATimeout");for(String s:ic.sendCommand("a1 IWantATimeout",300)) System.out.println("Reply was: "+s);
-            assertTrue("No timeoutException was raised",false);
+            fail("No timeoutException was raised");
         } catch(TimeoutException te) {
             long el=(System.currentTimeMillis()-start);
             assertTrue("Did not wait until end of timeout was reached (just "+el+")",el>=300);

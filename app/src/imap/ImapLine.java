@@ -1,7 +1,8 @@
 package net.gwerder.java.mailvortex.imap;
 
-import java.util.logging.Logger;
+import net.gwerder.java.mailvortex.MailvortexLogger;
 import java.util.logging.Level;  
+import java.util.logging.Logger;  
   
 import java.io.InputStream;
 import java.io.ByteArrayInputStream;
@@ -33,7 +34,7 @@ public class ImapLine {
     private static final String ABNF_TAG=charlistDifferencer(ABNF_ATOM_CHAR,"+");
 
     /* a Logger  for logging purposes */
-    private final Logger LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+    private final Logger LOGGER = MailvortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
 
     /* this holds the past context for the case that an exception is risen */
     private String context = "";
@@ -214,6 +215,11 @@ public class ImapLine {
         return ended;
     }
     
+    public static String commandEncoder(String command)  {
+        if(command==null) return "<null>";
+        return command.replaceAll("\r","\\\\r").replaceAll("\n","\\\\n");
+    }
+
     public String snoopBytes(long num) {
         if(num<=0) {
             return null;
@@ -283,22 +289,27 @@ public class ImapLine {
         // init countdown counter
         int countdown=num;
         
+        LOGGER.log(Level.FINER,"Skipping "+num+" spaces");
         // loop thru skipper
         while(snoopBytes(1)!=null && ABNF_SP.contains(snoopBytes(1)) && (countdown!=0)) {
             skipBytes(1);
             count++;
             countdown--;
         }
+        LOGGER.log(Level.FINER,"Skipped "+count+" spaces");
         
         // return count of spaces skipped
         return count;
     }
 
     public boolean skipCRLF() {
+        LOGGER.log(Level.FINER,"Skipping CRLF");
         if(snoopBytes(2)!=null && "\r\n".equals(snoopBytes(2))) {
             skipBytes(2);
+            LOGGER.log(Level.FINER,"CRLF skipped");
             return true;
         }    
+        LOGGER.log(Level.FINER,"no CRLF found");
         return false;
     }
     

@@ -28,7 +28,7 @@ public class ImapCommandCapability extends ImapCommand {
                 }
             }
         }
-        return new String[] {"* CAPABILITY IMAP4rev1"+cap,line.getTag()+" OK" };
+        return new String[] {"* CAPABILITY IMAP4rev1"+cap+"\r\n",line.getTag()+" OK\r\n" };
     }
     
     public String[] getCommandIdentifier() {
