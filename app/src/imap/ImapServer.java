@@ -40,6 +40,8 @@ public class ImapServer extends StoppableThread  {
     final SSLContext context=SSLContext.getInstance("TLS");
     private Thread runner=null;
     private ImapAuthenticationProxy auth=null;
+    
+    private static int id=1;
             
     public ImapServer(boolean encrypted) throws java.security.NoSuchAlgorithmException,java.security.KeyManagementException,java.security.GeneralSecurityException,IOException {
         this(encrypted?993:143,encrypted);
@@ -94,6 +96,7 @@ public class ImapServer extends StoppableThread  {
         this.port=serverSocket.getLocalPort();
         LOGGER.log(Level.INFO,"Server listener ready..." + serverSocket);    
         runner=new Thread(this,"ImapServerConnectionListener");
+        setName("AUTOIDSERVER-"+(id++));
         runner.start();
     }
     
@@ -160,9 +163,10 @@ public class ImapServer extends StoppableThread  {
                 ImapConnection imc=null;
                 imc=new ImapConnection(socket,context,suppCiphers,encrypted);
                 imc.setAuth(auth);
-                imc.setID("CONNECT-"+i);
+                imc.setID(getName()+"-CONNECT-"+i);
                 conn.add(imc);
                 socket=null;
+                i++;
             }
             serverSocket.close();
         } catch (IOException e) {

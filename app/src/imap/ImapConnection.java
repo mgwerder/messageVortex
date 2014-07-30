@@ -74,6 +74,8 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
         
         // create and start runner
         runner=new Thread(this);
+        int a=id++;
+        this.setID("AID-"+a);
         runner.start();
     }
     
@@ -213,6 +215,9 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
         ImapLine il=null;
         try    {
             il=new ImapLine(this,command,i);
+        } catch(ImapNullLineException ie) {
+            // Return if there is no command waiting
+            return new String[0];
         } catch(ImapBlankLineException ie) {
             // just ignore blank lines
             LOGGER.log(Level.INFO,"got a blank line as command",ie);
@@ -243,20 +248,9 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
             
             while(!shutdown) {
             
-                String s="";
-                
-                while(input.available()>0 && !s.endsWith("\r\n")) {
-                    LOGGER.log(Level.INFO,"Read loop in Connection "+runner.getName());
-                    int b=input.read();
-                    LOGGER.log(Level.INFO,"Read loop exit in Connection "+runner.getName()+" (got \""+s+"\")");
-                    s+=(char)b;
-                }
-                
-                if(!"".equals(s)) {
-                    LOGGER.finest("IMAP<- S: "+ImapLine.commandEncoder(s));
+                if(input.available()>0) {
                     try    {
-                    
-                        for(String s1:processCommand(s,input)) {
+                        for(String s1:processCommand("",input)) {
                             if(s1==null) {
                                 shutdown=true;
                                 LOGGER.log(Level.FINE,"server connection shutdown initated."    );
@@ -267,11 +261,10 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
                         }
                         LOGGER.finest("command is processed");
                     } catch(ImapException ie) {
-                        LOGGER.log(Level.WARNING,"error while parsing imap line \""+s+"\"",ie);
+                        LOGGER.log(Level.WARNING,"error while parsing imap command",ie);
                     }
                 
                     output.flush();
-                    s="";
                 } else {
                     
                     // no command is pending so lets check if we have a timeout

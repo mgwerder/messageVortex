@@ -15,6 +15,7 @@ import java.io.IOException;
  * @author Martin Gwerder
  * @fix.me Limit strings and literals to a certain length (otherwise it is litterally unlimited) 
  * @known.bugs Code will fail i Line.length()>Maxint or out of memory
+ * @known.bugs Encrypted connects are failing
  ***/
 public class ImapLine {
     
@@ -102,8 +103,11 @@ public class ImapLine {
         }
         
         if(snoopBytes(1)==null || "\r\n".equals(snoopBytes(2)) || "".equals(snoopBytes(1))) {
-            skipUntilCRLF();
-            throw new ImapBlankLineException(this);
+            if("\r\n".equals(snoopBytes(2))) {
+                skipUntilCRLF();
+                throw new ImapBlankLineException(this);
+            }
+            throw new ImapNullLineException(this);
         }
         
         // getting a tag
