@@ -22,6 +22,8 @@ import java.io.InputStream;
  */
 @RunWith(JUnit4.class)
 public class ImapCommandTest {
+
+    private final boolean  DO_NOT_TEST_ENCRYPTION=true;
     
     private static final java.util.logging.Logger LOGGER;
 
@@ -61,7 +63,7 @@ public class ImapCommandTest {
                 assertTrue("exception thrown ("+toe.toString()+") while testing using encryption="+encrypted,false);
             }
             encrypted=!encrypted;
-        } while(encrypted);
+        } while(encrypted && !DO_NOT_TEST_ENCRYPTION);
     }
     
     @Test
@@ -95,7 +97,7 @@ public class ImapCommandTest {
                 fail("exception thrown ("+toe.toString()+") while testing using encryption="+encrypted+" at "+toe.getStackTrace()[0]);
             }
             encrypted=!encrypted;
-        } while(encrypted);
+        } while(encrypted && !DO_NOT_TEST_ENCRYPTION);
     }
     
 }
