@@ -26,7 +26,7 @@ public class ImapCommandLogout extends ImapCommand {
             throw new ImapException(line,"error parsing command");
         }
 
-        line.getConnection().setState(ImapConnection.CONNECTION_NOT_AUTHENTICATED);
+        if(line.getConnection()!=null) line.getConnection().setState(ImapConnection.CONNECTION_NOT_AUTHENTICATED);
         LOGGER.log(Level.INFO,Thread.currentThread().getName()+" is now in state NOT_AUTHENTICATED");
         return new String[] {"* BYE IMAP4rev1 Server logged out\r\n",line.getTag()+" OK\r\n",null };
     }

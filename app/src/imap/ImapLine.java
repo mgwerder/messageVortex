@@ -35,13 +35,13 @@ public class ImapLine {
     private static final String ABNF_TAG=charlistDifferencer(ABNF_ATOM_CHAR,"+");
 
     /* a Logger  for logging purposes */
-    private final Logger LOGGER = MailvortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+    private static final Logger LOGGER = MailvortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
 
     /* this holds the past context for the case that an exception is risen */
     private String context = "";
     
-    private static int    tagEnumerator=0;
-    private static final Object tagEnumeratorLock=new Object();
+    private static int   tagEnumerator             =0;
+    private static final Object TAG_ENUMERATOR_LOCK=new Object();
     
     /* storage for the connection which created the line */
     private ImapConnection con;
@@ -215,6 +215,7 @@ public class ImapLine {
             }
         } catch(IOException ioe) {
             ended=true;
+            LOGGER.log(Level.FINER,"IO exception raised while reading into buffer ("+ioe+")");
         }
         return ended;
     }
@@ -435,7 +436,7 @@ public class ImapLine {
         
     public static String getNextTag(String prefix) {
         String ret;
-        synchronized(tagEnumeratorLock) {
+        synchronized(TAG_ENUMERATOR_LOCK) {
             tagEnumerator++;
             ret=prefix+String.format("%d", tagEnumerator);
         }
