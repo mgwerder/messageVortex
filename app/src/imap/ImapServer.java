@@ -67,7 +67,7 @@ public class ImapServer extends StoppableThread  {
         LOGGER.log(Level.FINE,"Detecting supported cipher suites");
         for(int i=0; i<arr.length; i++) {
             boolean supported=true;
-            serverSocket=null;;
+            serverSocket=null;
             try{ 
                 serverSocket = (SSLServerSocket) context.getServerSocketFactory().getDefault().createServerSocket(0);
                 ((SSLServerSocket)serverSocket).setEnabledCipherSuites(new String[] {arr[i]});
@@ -86,7 +86,7 @@ public class ImapServer extends StoppableThread  {
                     serverSocket.close();
                 } catch(Exception e2) {
                     LOGGER.log(Level.FINEST,"cleanup failed (never mind)",e2);
-                };
+                }
                 serverSocket=null;
             }
             if(supported) {
@@ -177,6 +177,7 @@ public class ImapServer extends StoppableThread  {
                     socket.close();
                 } catch(IOException e2) {
                     // intentionaly ignored
+                    assert true:"always ignore this exception"+e2;
                 } ;
             }    
             LOGGER.log(Level.SEVERE,"Error exception on server socket",e);
