@@ -13,6 +13,7 @@ import junit.framework.JUnit4TestAdapter;
   ImapClientTest.class,
   ImapCommandTest.class,
   ImapCommandLoginTest.class,
+  ImapCommandNoopTest.class,
   ImapAuthenticationDummyProxyTest.class
 })
 
@@ -26,6 +27,7 @@ public class MainSuite {
         s.addTest(new JUnit4TestAdapter(ImapClientTest.class));
         s.addTest(new JUnit4TestAdapter(ImapCommandTest.class));
         s.addTest(new JUnit4TestAdapter(ImapCommandLoginTest.class));
+        s.addTest(new JUnit4TestAdapter(ImapCommandNoopTest.class));
         s.addTest(new JUnit4TestAdapter(ImapAuthenticationDummyProxyTest.class));
         
         return s;
