@@ -18,7 +18,6 @@ public class ImapCommandLogin extends ImapCommand {
      * @fix.me add capabilities to successful login
      ***/
     public String[] processCommand(ImapLine line) throws ImapException {
-        line.getConnection().setState(ImapConnection.CONNECTION_AUTHENTICATED);
         
         // get userid
         String userid = line.getAString();

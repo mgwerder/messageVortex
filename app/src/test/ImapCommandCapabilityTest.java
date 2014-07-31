@@ -25,7 +25,7 @@ public class ImapCommandCapabilityTest {
     }    
 
     @Test
-    public void noopParsing() {
+    public void capabilityParsing() {
         ImapCommand ic=ImapCommand.getCommand("Capability");
         try{
             ic.processCommand(new ImapLine(null,"A1 Noop\r\n"));
