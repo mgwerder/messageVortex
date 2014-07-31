@@ -49,6 +49,22 @@ public class ImapCommandTest {
     }
 
     @Test
+    public void checkClientTimeout() {
+        try{
+            ImapServer is=new ImapServer(0,false);
+            ImapClient ic=new ImapClient("localhost",is.getPort(),false);
+            assertTrue("test default Timeout",ImapClient.getDefaultTimeout()==ic.setDefaultTimeout(123));
+            assertTrue("test default Timeout",ic.getDefaultTimeout()==123);
+            ic.setDefaultTimeout(3600*1000);
+            assertTrue("test  Timeout set",ic.getTimeout()==ic.setTimeout(123));
+            assertTrue("test  Timeout get",ic.getTimeout()==123);
+            ic.setTimeout(3600*1000);
+        } catch(Exception e) {
+            fail("Exception thrown ("+e+")");
+        }
+    }
+    
+    @Test
     public void checkFullLogout() {
         boolean encrypted=false;
         do{

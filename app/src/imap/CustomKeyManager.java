@@ -8,13 +8,10 @@ import java.security.cert.X509Certificate;
 import javax.net.ssl.X509KeyManager;
 import java.security.KeyStore;
 import java.io.IOException;
-import javax.net.ssl.SSLContext;
 import java.security.PrivateKey;
-import javax.net.ssl.X509KeyManager;
 import java.security.GeneralSecurityException;
 import java.security.Principal;
 import java.io.FileInputStream;
-import java.io.InputStream;
 import java.net.Socket;
 
 /***
