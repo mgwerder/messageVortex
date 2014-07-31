@@ -20,7 +20,7 @@ import java.util.logging.ConsoleHandler;
 public class MailvortexLogger extends Logger {
 
     static final String LINE_SEPARATOR = System.getProperty("line.separator");
-    static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    static final SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     
     static final class MyLogFormatter extends Formatter {
 
@@ -30,7 +30,7 @@ public class MailvortexLogger extends Logger {
             
             StringBuilder sb = new StringBuilder();
 
-            sb.append(sdf.format(new Date()))
+            sb.append(SDF.format(new Date()))
                 .append(" ")
                 .append(record.getLevel().getLocalizedName())
                 .append(": ")
@@ -48,7 +48,7 @@ public class MailvortexLogger extends Logger {
                     pw.close();
                     sb.append(sw.toString());
                 } catch (Exception ex) {
-                    assert true:"Never throw assertion";
+                    assert true:"Never throw assertion"+ex;
                 }
             }
 

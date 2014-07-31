@@ -17,7 +17,7 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
 
     private final Logger LOGGER;
     private long lastCommand = System.currentTimeMillis();
-    private long timeout = defaultTimeout;
+    private int timeout = defaultTimeout;
     
     public static final int CONNECTION_NOT_AUTHENTICATED = 1;
     public static final int CONNECTION_AUTHENTICATED     = 2;
@@ -47,7 +47,7 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
     private Thread runner=null;
 
     private static int id=1;
-    private static long defaultTimeout = 3 * 60 * 1000;
+    private static int defaultTimeout = 3 * 60 * 1000;
     
     /***
      * Creates a connection object without sockets (primarily for testing) 
@@ -109,8 +109,8 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
      * @param timeout   The new Timeout
      * @returns         Previous timeout
      ***/
-    public long setTimeout(long timeout) {
-        long ot=this.timeout;
+    public int setTimeout(int timeout) {
+        int ot=this.timeout;
         this.timeout=timeout;
         return ot;
     }
@@ -118,12 +118,12 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
     /***
      * Get the authenticator of the connection.
      ***/
-    public long getTimeout() { 
+    public int getTimeout() { 
         return this.timeout; 
     }
     
-    public static long setDefaultTimeout(long timeout) {
-        long ot=defaultTimeout;
+    public static int setDefaultTimeout(int timeout) {
+        int ot=defaultTimeout;
         defaultTimeout=timeout;
         return ot;
     }
@@ -194,16 +194,17 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
      * start TLS handshake on existing connection.
      ***/
     private boolean startTLS() throws IOException {
-        LOGGER.log(Level.INFO,"doing SSL handshake by server");
+        LOGGER.log(Level.INFO,"doing SSL handshake in serverConnection "+runner.getName());
         this.sslSocket = (SSLSocket) context.getSocketFactory().createSocket(plainSocket,plainSocket.getInetAddress().getHostAddress(),plainSocket.getPort(),false);
         String[] arr = suppCiphers.toArray(new String[0]);
         this.sslSocket.setUseClientMode(false);
         this.sslSocket.setEnabledCipherSuites(arr);
-        LOGGER.log(Level.FINER,"start SSL handshake");
+        this.sslSocket.setSoTimeout(plainSocket.getSoTimeout());
+        LOGGER.log(Level.INFO,"start SSL handshake");
         this.sslSocket.startHandshake();
-        LOGGER.log(Level.FINER,"SSL handshake done");
+        LOGGER.log(Level.INFO,"SSL handshake done");
         updateSocket();
-        return false;
+        return true;
     }
     
     public boolean isTLS() {
@@ -247,46 +248,28 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
             }
             
             while(!shutdown) {
-            
-                if(input.available()>0) {
-                    try    {
-                        for(String s1:processCommand("",input)) {
-                            if(s1==null) {
-                                shutdown=true;
-                                LOGGER.log(Level.FINE,"server connection shutdown initated."    );
-                            } else {
-                                output.write((s1).getBytes());
-                                LOGGER.log(Level.INFO,"IMAP-> S: "+ImapLine.commandEncoder(s1));
-                            }    
-                        }
-                        LOGGER.finest("command is processed");
-                    } catch(ImapException ie) {
-                        LOGGER.log(Level.WARNING,"error while parsing imap command",ie);
+                currentSocket.setSoTimeout((int)timeout);
+                try{
+                    for(String s1:processCommand("",input)) {
+                        if(s1==null) {
+                            shutdown=true;
+                            LOGGER.log(Level.FINE,"server connection shutdown initated."    );
+                        } else {
+                            output.write((s1).getBytes());
+                            LOGGER.log(Level.INFO,"IMAP-> S: "+ImapLine.commandEncoder(s1));
+                        }    
                     }
-                
                     output.flush();
-                } else {
-                    
-                    // no command is pending so lets check if we have a timeout
-                    if(lastCommand+timeout<System.currentTimeMillis()) {
-                        
-                        // we have reached a timeout
-                        shutdown=true;
-                        
-                    } else {
-                        
-                        // No Timeout and no command
-                        // Let's just sleep a bit and then recheck
-                        Thread.sleep(200); // remove afte
-                        
-                    }
-                }    
+                    LOGGER.finest("command is processed");
+                } catch(ImapException ie) {
+                    LOGGER.log(Level.WARNING,"error while parsing imap command",ie);
+                }
             }
+        } catch(java.net.SocketTimeoutException  e) {
+            shutdown=true;
+            LOGGER.log(Level.WARNING,"connection reached its timeout",e);
         } catch(IOException e) {
             LOGGER.log(Level.WARNING,"Error while IO with peer partner",e);
-        } catch(InterruptedException e) {
-            // ignore this exception
-            interruptedCatcher(e);
         }    
         try{
             input.close();

@@ -28,8 +28,8 @@ public class ImapCommandTest {
     private static final java.util.logging.Logger LOGGER;
 
     static {
-        ImapConnection.setDefaultTimeout(10000);
-        ImapClient.setDefaultTimeout(10000);
+        ImapConnection.setDefaultTimeout(2000);
+        ImapClient.setDefaultTimeout(2000);
         MailvortexLogger.setGlobalLogLevel(Level.FINER);
         LOGGER = MailvortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
     }
@@ -55,6 +55,7 @@ public class ImapCommandTest {
             try{
                 ImapServer s=new ImapServer(0,encrypted);
                 ImapClient c=new ImapClient("localhost",s.getPort(),encrypted);
+                c.setTimeout(2000);
                 String tag=ImapLine.getNextTag();
                 assertTrue("command logut failed BYE-check",sendCommand(c,tag+" LOGOUT",tag+" OK")[0].startsWith("* BYE"));
                 s.shutdown();
@@ -72,12 +73,12 @@ public class ImapCommandTest {
         do{
             try{
                 ImapServer s=new ImapServer(0,encrypted);
-                ImapConnection.setDefaultTimeout(10000);
+                ImapConnection.setDefaultTimeout(2000);
                 ImapAuthenticationDummyProxy ap=new ImapAuthenticationDummyProxy();
                 ap.addUser("USER","password");
                 s.setAuth(ap);
                 ImapClient c=new ImapClient("localhost",s.getPort(),encrypted);
-                c.setTimeout(10000);
+                c.setTimeout(2000);
                 assertTrue("check encryption ("+encrypted+"/"+c.isTLS()+")", encrypted==c.isTLS());
                 String tag=ImapLine.getNextTag();
                 String[] ret=sendCommand(c,tag+" NOOP",tag+" OK");

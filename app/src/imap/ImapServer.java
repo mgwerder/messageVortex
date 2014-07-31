@@ -43,7 +43,7 @@ public class ImapServer extends StoppableThread  {
     
     private static int id=1;
             
-    public ImapServer(boolean encrypted) throws java.security.NoSuchAlgorithmException,java.security.KeyManagementException,java.security.GeneralSecurityException,IOException {
+    public ImapServer(boolean encrypted) throws java.security.GeneralSecurityException,IOException {
         this(encrypted?993:143,encrypted);
     }
     
@@ -51,17 +51,20 @@ public class ImapServer extends StoppableThread  {
         return serverSocket.getLocalPort();
     }
     
-    public ImapServer(final int port,boolean encrypted) throws java.security.NoSuchAlgorithmException,java.security.KeyManagementException,java.security.GeneralSecurityException,IOException {
+    public ImapServer(final int port,boolean encrypted) throws java.security.GeneralSecurityException,IOException {
         java.security.Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
         this.conn=conn;
         this.port=port;
         this.encrypted=encrypted;
+
+        setName("AUTOIDSERVER-"+(id++));
         
         // Determine valid cyphers
         String ks="keystore.jks";
         context.init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, new TrustManager[] {new AllTrustManager()}, new SecureRandom() );
         SSLContext.setDefault(context);
         String[] arr=((SSLServerSocketFactory) context.getServerSocketFactory().getDefault()).getSupportedCipherSuites(); 
+        LOGGER.log(Level.FINE,"Detecting supported cipher suites");
         for(int i=0; i<arr.length; i++) {
             boolean supported=true;
             serverSocket=null;;
@@ -96,7 +99,6 @@ public class ImapServer extends StoppableThread  {
         this.port=serverSocket.getLocalPort();
         LOGGER.log(Level.INFO,"Server listener ready..." + serverSocket);    
         runner=new Thread(this,"ImapServerConnectionListener");
-        setName("AUTOIDSERVER-"+(id++));
         runner.start();
     }
     
