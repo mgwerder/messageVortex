@@ -30,7 +30,7 @@ public class ImapClient implements Runnable {
         LOGGER.setLevel(Level.FINEST);
     }
     
-    private static final int DEFAULT_TIMEOUT=10000;
+    private static final int DEFAULT_TIMEOUT=30*1000;
 
     private String targetHost="localhost";
     private Object sync=new Object();
@@ -43,7 +43,7 @@ public class ImapClient implements Runnable {
     private boolean currentCommandCompleted=false;
     Socket socket=null;
     private Thread runner=null;
-    private static long defaultTimeout=30*1000; /* set default timeout of thread to 30s */
+    private static long defaultTimeout=DEFAULT_TIMEOUT; /* set default timeout of thread to 30s */
     private long timeout=defaultTimeout;    
     
     public ImapClient(String targetHost,int targetPort,boolean encrypted) {
@@ -124,7 +124,7 @@ public class ImapClient implements Runnable {
                     sync.wait(100);
                 } catch(InterruptedException e) {
                     LOGGER.log(Level.SEVERE,"this point should never be reached",e);
-                };
+                }
             }
             LOGGER.log(Level.FINEST,"wakeup succeeded");
             if(!currentCommandCompleted && System.currentTimeMillis()>=start+millisTimeout) {
@@ -153,7 +153,7 @@ public class ImapClient implements Runnable {
                     if(socket!=null) {
                         socket.close();
                     }   
-                };
+                }
             } catch(IOException ioe) {
                 LOGGER.log(Level.INFO,"Error tearing down socket on client shutdown (may be safely ignored)",ioe);
             }    
@@ -236,7 +236,7 @@ public class ImapClient implements Runnable {
                 socket.close();
             } catch(Exception e2) {
                 LOGGER.log(Level.INFO,"socket close did fail when shutting down (may be safelly ignored)",e2);
-            };
+            }
         }
     }
 }

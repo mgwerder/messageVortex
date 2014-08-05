@@ -22,7 +22,9 @@ public class Version {
     
     static {
         URL main = Version.class.getResource("Version.class");
-        if (!"file".equalsIgnoreCase(main.getProtocol())) throw new IllegalStateException("Main class is not stored in a file.");
+        if (!"file".equalsIgnoreCase(main.getProtocol())) {
+            throw new IllegalStateException("Main class is not stored in a file.");
+        }
         System.out.println( "Path to application is "+main.getPath());    
         System.out.println( "Path to user.dir is "+System.getProperty("user.dir"));    
     }

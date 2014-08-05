@@ -16,7 +16,6 @@ import java.net.Socket;
 public class ImapConnection extends StoppableThread implements Comparable<ImapConnection> {
 
     private final Logger LOGGER;
-    private long lastCommand = System.currentTimeMillis();
     private int timeout = defaultTimeout;
     
     public static final int CONNECTION_NOT_AUTHENTICATED = 1;

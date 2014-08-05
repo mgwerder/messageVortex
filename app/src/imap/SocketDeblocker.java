@@ -20,7 +20,7 @@ class SocketDeblocker extends Thread {
             try{
                 this.join();
             }catch(InterruptedException ie) {
-                ;
+                
             }
         }    
     }

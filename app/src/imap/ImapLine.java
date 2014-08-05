@@ -221,7 +221,9 @@ public class ImapLine {
     }
     
     public static String commandEncoder(String command)  {
-        if(command==null) return "<null>";
+        if(command==null) {
+            return "<null>";
+        }
         return command.replaceAll("\r","\\\\r").replaceAll("\n","\\\\n");
     }
 
