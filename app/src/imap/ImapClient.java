@@ -144,25 +144,84 @@ public class ImapClient implements Runnable {
     public boolean isTLS() {
         return encrypted;
     }
+    
+    private void terminateSocket() {
+        try{
+            synchronized(notifyThread) {
+                notifyThread.notify(); 
+                if(socket!=null) {
+                    socket.close();
+                }   
+            }
+        } catch(IOException ioe) {
+            LOGGER.log(Level.INFO,"Error tearing down socket on client shutdown (may be safely ignored)",ioe);
+        }        
+    }
 
     public void shutdown() {
         shutdown=true;
         try {
-            try{
-                synchronized(notifyThread) {
-                    notifyThread.notify(); 
-                    if(socket!=null) {
-                        socket.close();
-                    }   
-                }
-            } catch(IOException ioe) {
-                LOGGER.log(Level.INFO,"Error tearing down socket on client shutdown (may be safely ignored)",ioe);
-            }    
+            terminateSocket();
             runner.join();
         } catch(InterruptedException ie) {
             interruptedCatcher();
         }     
     }    
+    
+    private void waitForWakeupRunner() {
+        synchronized(notifyThread) {
+            try{
+                notifyThread.wait(100);
+            } catch(InterruptedException e) {
+                interruptedCatcher();
+            } 
+        }
+    }
+    
+    private void processRunnerCommand() throws IOException  {
+        LOGGER.log(Level.FINEST,"IMAP-> C: "+ImapLine.commandEncoder(currentCommand));
+        socket.getOutputStream().write((currentCommand+"\r\n").getBytes());
+        socket.getOutputStream().flush();
+
+        String tag=null;
+        ImapLine il=null;
+        try{
+            il=new ImapLine(null,currentCommand);
+            tag=il.getTag();
+        } catch(ImapException ie) {
+            // intentionally ignored
+            LOGGER.log(Level.INFO,"ImapParsing of \""+ImapLine.commandEncoder(currentCommand)+"\" (may be safelly ignored)",ie);
+        }
+        String reply="";
+        String lastReply="";
+        List<String> l=new ArrayList<String>();
+        int i=0;
+        do{
+            i=socket.getInputStream().read();
+            if(i>=0) {
+                reply+=(char)i;
+            }    
+            if(reply.endsWith("\r\n")) {
+                l.add(reply);
+                LOGGER.log(Level.FINEST,"IMAP<- C: "+ImapLine.commandEncoder(reply));
+                currentCommandReply=l.toArray(new String[0]);
+                lastReply=reply.substring(0,reply.length()-2);
+                reply="";
+            }
+        } while(!lastReply.matches(tag+"\\s+BAD.*") && !lastReply.matches(tag+"\\s+OK.*") && i>=0);
+        currentCommandCompleted=lastReply.matches(tag+"\\s+BAD.*") || lastReply.matches(tag+"\\s+OK.*");
+        currentCommand=null;
+        if(il!=null && "logout".equalsIgnoreCase(il.getCommand()) && lastReply.matches(tag+"\\s+OK.*")) {
+            // Terminate connection on successful logout
+            shutdown=true;
+        }    
+        lastReply="";
+        synchronized(sync) {
+            sync.notify(); 
+        }
+
+        LOGGER.log(Level.FINEST,"command has been completely processed");
+    }
 
     public void run() {
 
@@ -173,56 +232,9 @@ public class ImapClient implements Runnable {
             }
             while(!shutdown && !socket.isClosed() && !socket.isInputShutdown() && !socket.isOutputShutdown()) {
                 try{
-                    synchronized(notifyThread) {
-                        try{
-                            notifyThread.wait(100);
-                        } catch(InterruptedException e) {
-                            interruptedCatcher();
-                        } 
-                    }
+                    waitForWakeupRunner();
                     if(currentCommand!=null && !"".equals(currentCommand)) {
-                        LOGGER.log(Level.FINEST,"IMAP-> C: "+ImapLine.commandEncoder(currentCommand));
-                        socket.getOutputStream().write((currentCommand+"\r\n").getBytes());
-                        socket.getOutputStream().flush();
-                
-                        String tag=null;
-                        ImapLine il=null;
-                        try{
-                            il=new ImapLine(null,currentCommand);
-                            tag=il.getTag();
-                        } catch(ImapException ie) {
-                            // intentionally ignored
-                            LOGGER.log(Level.INFO,"ImapParsing of \""+ImapLine.commandEncoder(currentCommand)+"\" (may be safelly ignored)",ie);
-                        }
-                        String reply="";
-                        String lastReply="";
-                        List<String> l=new ArrayList<String>();
-                        int i=0;
-                        do{
-                            i=socket.getInputStream().read();
-                            if(i>=0) {
-                                reply+=(char)i;
-                            }    
-                            if(reply.endsWith("\r\n")) {
-                                l.add(reply);
-                                LOGGER.log(Level.FINEST,"IMAP<- C: "+ImapLine.commandEncoder(reply));
-                                currentCommandReply=l.toArray(new String[0]);
-                                lastReply=reply.substring(0,reply.length()-2);
-                                reply="";
-                            }
-                        } while(!lastReply.matches(tag+"\\s+BAD.*") && !lastReply.matches(tag+"\\s+OK.*") && i>=0);
-                        currentCommandCompleted=lastReply.matches(tag+"\\s+BAD.*") || lastReply.matches(tag+"\\s+OK.*");
-                        currentCommand=null;
-                        if(il!=null && "logout".equalsIgnoreCase(il.getCommand()) && lastReply.matches(tag+"\\s+OK.*")) {
-                            // Terminate connection on successful logout
-                            shutdown=true;
-                        }    
-                        lastReply="";
-                        synchronized(sync) {
-                            sync.notify(); 
-                        }
-
-                        LOGGER.log(Level.FINEST,"command has been completely processed");
+                        processRunnerCommand();
                     }    
                 } catch(java.net.SocketException se) {
                     LOGGER.log(Level.WARNING,"Connection closed by server");
