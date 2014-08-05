@@ -1,7 +1,6 @@
 package net.gwerder.java.mailvortex.imap;
 
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.HashMap;
 
 public abstract class ImapCommand implements Cloneable {
 

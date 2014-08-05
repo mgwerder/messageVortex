@@ -92,6 +92,14 @@ public class ImapCommandTest {
                 ImapConnection.setDefaultTimeout(2000);
                 ImapAuthenticationDummyProxy ap=new ImapAuthenticationDummyProxy();
                 ap.addUser("USER","password");
+                
+                assertFalse("check for fail if user is null",ap.login(null,"a"));
+                assertFalse("check for fail if password is null",ap.login("USER",null));
+                assertFalse("check for fail if user is unknown",ap.login("USER1","password"));
+                assertFalse("check for fail if password is bad",ap.login("USER","password1"));
+                assertTrue("check for fail if password is bad",ap.login("USER","password"));
+                assertTrue("check for success if username casing does not match",ap.login("User","password"));
+                
                 s.setAuth(ap);
                 ImapClient c=new ImapClient("localhost",s.getPort(),encrypted);
                 c.setTimeout(2000);

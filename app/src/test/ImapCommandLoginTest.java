@@ -32,6 +32,7 @@ public class ImapCommandLoginTest {
     @Test
     public void loginParsing() {
         ImapCommand ic=ImapCommand.getCommand("login");
+        
         try{
             ic.processCommand(new ImapLine(null,"A1 Login\r\n"));
             fail("error Noop test for \"A1 Login\"");
