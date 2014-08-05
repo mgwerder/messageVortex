@@ -47,10 +47,6 @@ public class ImapServer extends StoppableThread  {
         this(encrypted?993:143,encrypted);
     }
     
-    public int getPort() {
-        return serverSocket.getLocalPort();
-    }
-    
     public ImapServer(final int port,boolean encrypted) throws java.security.GeneralSecurityException,IOException {
         java.security.Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
         this.conn=conn;
@@ -100,6 +96,10 @@ public class ImapServer extends StoppableThread  {
         LOGGER.log(Level.INFO,"Server listener ready..." + serverSocket);    
         runner=new Thread(this,"ImapServerConnectionListener");
         runner.start();
+    }
+    
+    public int getPort() {
+        return serverSocket.getLocalPort();
     }
     
     public ImapAuthenticationProxy setAuth(ImapAuthenticationProxy ap) {

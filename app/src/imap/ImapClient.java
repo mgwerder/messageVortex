@@ -30,6 +30,7 @@ public class ImapClient implements Runnable {
         LOGGER.setLevel(Level.FINEST);
     }
     
+    /* set default timeout of thread to 30s */
     private static final int DEFAULT_TIMEOUT=30*1000;
 
     private String targetHost="localhost";
@@ -43,7 +44,7 @@ public class ImapClient implements Runnable {
     private boolean currentCommandCompleted=false;
     Socket socket=null;
     private Thread runner=null;
-    private static long defaultTimeout=DEFAULT_TIMEOUT; /* set default timeout of thread to 30s */
+    private static long defaultTimeout=DEFAULT_TIMEOUT; 
     private long timeout=defaultTimeout;    
     
     public ImapClient(String targetHost,int targetPort,boolean encrypted) {
@@ -212,7 +213,7 @@ public class ImapClient implements Runnable {
                         } while(!lastReply.matches(tag+"\\s+BAD.*") && !lastReply.matches(tag+"\\s+OK.*") && i>=0);
                         currentCommandCompleted=lastReply.matches(tag+"\\s+BAD.*") || lastReply.matches(tag+"\\s+OK.*");
                         currentCommand=null;
-                        if(il!=null && il.getCommand().equalsIgnoreCase("logout") && lastReply.matches(tag+"\\s+OK.*")) {
+                        if(il!=null && "logout".equalsIgnoreCase(il.getCommand()) && lastReply.matches(tag+"\\s+OK.*")) {
                             // Terminate connection on successful logout
                             shutdown=true;
                         }    

@@ -6,6 +6,25 @@ public class ImapCommandCapability extends ImapCommand {
         ImapCommand.registerCommand(new ImapCommandCapability());
     }
     
+    private String addCapability(String fullCap,String cap) throws ImapException {
+        String t=fullCap;
+        if(cap.indexOf('=')==-1) {
+            t+=" "+cap;
+        } else {
+            String[] v=cap.split("=");
+            if(v.length!=2) {
+                throw new ImapException(null,"got illegal capability \""+cap+"\" from command");
+            }
+            if(t.indexOf(v[0]+"=")>-1) {
+                t=t.replace(v[0]+"=",v[0]+"="+v[1]+",");
+            } else {
+                t+=" "+cap;
+            }
+        }
+        return t;
+    }
+    
+    
     public String[] processCommand(ImapLine line) throws ImapException {
 
         // skip space
@@ -26,19 +45,7 @@ public class ImapCommandCapability extends ImapCommand {
             String[] arr2=arr[i].getCapabilities();
             if(arr2!=null) {
                 for(int j=0;j<arr2.length;j++) {
-                    if(arr2[j].indexOf('=')==-1) {
-                        cap+=" "+arr2[j];
-                    } else {
-                        String[] v=arr2[j].split("=");
-                        if(v.length!=2) {
-                            throw new ImapException(null,"got illegal capability \""+arr2[j]+"\" from "+arr[i]);
-                        }
-                        if(cap.indexOf(v[0]+"=")>-1) {
-                            cap=cap.replace(v[0]+"=",v[0]+"="+v[1]+",");
-                        } else {
-                            cap+=" "+arr2[j];
-                        }
-                    }
+                    cap=addCapability(cap,arr2[j]);
                 }
             }
         }

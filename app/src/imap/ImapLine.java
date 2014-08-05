@@ -227,6 +227,10 @@ public class ImapLine {
         return command.replaceAll("\r","\\\\r").replaceAll("\n","\\\\n");
     }
 
+    public boolean snoopEscQuotes() {
+        return "\\".contains(snoopBytes(1)) && snoopBytes(2).length()==2 && ABNF_QUOTED_SPECIALS.contains(snoopBytes(2).substring(1,2));
+    }
+    
     public String snoopBytes(long num) {
         if(num<=0) {
             return null;
@@ -374,7 +378,7 @@ public class ImapLine {
             // get a quoted string
             skipBytes(1);
             ret="";
-            while(snoopBytes(1)!=null && (ABNF_QUOTED_CHAR.contains(snoopBytes(1)) || ("\\".contains(snoopBytes(1)) && snoopBytes(2).length()==2 && ABNF_QUOTED_SPECIALS.contains(snoopBytes(2).substring(1,2))))) {
+            while(snoopBytes(1)!=null && (ABNF_QUOTED_CHAR.contains(snoopBytes(1)) || snoopEscQuotes())) {
                 if("\\".contains(snoopBytes(1))) {
                     ret+=skipBytes(2).substring(1,2);
                 } else {

@@ -11,6 +11,10 @@ public class Version {
   
     private static String VERSION     = MAJOR+"."+MINOR+"."+REVISION;
     private static String BUILDVER    = VERSION+" ("+BUILD+")";
+    
+    private Version() {
+        super();
+    }
   
     public static String getBuild() {
         return BUILDVER;
