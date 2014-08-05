@@ -15,7 +15,11 @@ import java.net.Socket;
 
 public class ImapConnection extends StoppableThread implements Comparable<ImapConnection> {
 
-    private final Logger LOGGER;
+    private static final Logger LOGGER;
+    static {
+        LOGGER = MailvortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+
+    }
     private int timeout = defaultTimeout;
     
     public static final int CONNECTION_NOT_AUTHENTICATED = 1;
@@ -53,7 +57,6 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
      ***/
     protected ImapConnection() {
         runner=null;
-        LOGGER = MailvortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
     }
     
     /***

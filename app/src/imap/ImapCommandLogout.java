@@ -37,4 +37,8 @@ public class ImapCommandLogout extends ImapCommand {
         return new String[] {"LOGOUT"};
     }
     
+    public String[] getCapabilities() {
+        return new String[] {};
+    }
+    
 }    

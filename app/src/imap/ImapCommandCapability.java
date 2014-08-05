@@ -19,12 +19,26 @@ public class ImapCommandCapability extends ImapCommand {
 
         ImapCommand[] arr=ImapCommand.getCommands();
         String cap="";
+        
+        // looping thru commands
         for(int i=0;i<arr.length;i++) {
-            // FIXME process =-entries
+
             String[] arr2=arr[i].getCapabilities();
             if(arr2!=null) {
                 for(int j=0;j<arr2.length;j++) {
-                    cap+=" "+arr2[j];
+                    if(arr2[j].indexOf('=')==-1) {
+                        cap+=" "+arr2[j];
+                    } else {
+                        String[] v=arr2[j].split("=");
+                        if(v.length!=2) {
+                            throw new ImapException(null,"got illegal capability \""+arr2[j]+"\" from "+arr[i]);
+                        }
+                        if(cap.indexOf(v[0]+"=")>-1) {
+                            cap=cap.replace(v[0]+"=",v[0]+"="+v[1]+",");
+                        } else {
+                            cap+=" "+arr2[j];
+                        }
+                    }
                 }
             }
         }
@@ -33,6 +47,10 @@ public class ImapCommandCapability extends ImapCommand {
     
     public String[] getCommandIdentifier() {
         return new String[] {"CAPABILITY"};
+    }
+    
+    public String[] getCapabilities() {
+        return new String[] {};
     }
     
 }    

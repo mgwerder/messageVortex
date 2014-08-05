@@ -63,7 +63,8 @@ public class ImapCommandLogin extends ImapCommand {
         }
     }
 
-    public static String[] getCapabilities() {
+    
+    public String[] getCapabilities() {
         return new String[] { "LOGIN" };
     }
     

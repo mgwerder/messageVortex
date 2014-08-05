@@ -93,6 +93,9 @@ public class ImapClientTest {
             return new String[] {"IWantATimeout"};
         }
     
+        public String[] getCapabilities() {
+            return new String[] {};
+        }
     }    
 
     @Test

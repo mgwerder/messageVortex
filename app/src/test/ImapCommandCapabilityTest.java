@@ -41,4 +41,39 @@ public class ImapCommandCapabilityTest {
         }
     }
 
+    private static  class ImapCommandCapabilityParser extends ImapCommand {
+        static void init() {
+            ImapCommand.registerCommand(new ImapCommandCapabilityParser());
+        }
+    
+        public String[] processCommand(ImapLine line) {
+            return null;
+        }
+    
+        public String[] getCommandIdentifier() {
+            return new String[] {"CapabilityParser"};
+        }
+        
+        public String[] getCapabilities() {
+            return new String[] {"CapabilityParser=one","CapabilityParser=two"};
+        }
+    
+    }    
+
+    @Test
+    public void capabilityPropagation() {
+        // check if capabilities with "=" are concatenated
+        ImapCommandCapabilityParser.init();
+        ImapCommand ic=ImapCommand.getCommand("capability");
+        try{
+            String[] a=ic.processCommand(new ImapLine(null,"A1 CAPABILITY\r\n"));
+            if((a[0]+" ").indexOf(" CapabilityParser=two,one ")==-1) {
+                fail("Capabilities wrong or missing ("+a[0]+")");
+            }
+        } catch(ImapException ie) {
+            fail("Got unexpected exception while checking capabilities");
+        }
+
+        
+    }
 }

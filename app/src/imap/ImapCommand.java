@@ -34,9 +34,7 @@ public abstract class ImapCommand implements Cloneable {
         return commands.get(name.toLowerCase());
     }
 
-    public static String[] getCapabilities() {
-        return new String[0];
-    }
+    public abstract String[] getCapabilities();
     
     static void init() {
         throw new RuntimeException("init not overloaded");
