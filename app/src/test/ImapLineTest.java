@@ -45,7 +45,7 @@ public class ImapLineTest {
             s=il.getAString();
             assertTrue("Error getting \"3ttti\" (got \""+s+"\")","3ttti".equals(s));
         } catch(ImapBlankLineException ble) {
-            assertTrue("Blank Line Exception rised",false);
+            fail("Blank Line Exception rised");
             System.out.flush();ble.printStackTrace();System.out.flush();
         } catch (ImapException ie) {
             assertTrue("ImapException rised"+ie.getMessage()+"("+ie.getStackTrace()[0].getFileName()+":"+ie.getStackTrace()[0].getLineNumber()+")",false);
@@ -70,7 +70,7 @@ public class ImapLineTest {
             assertTrue("Error getting \"t\" (got \""+s+"\")","t".equals(s));
             assertTrue("Error skipping EOL",il.skipCRLF());
         } catch(ImapBlankLineException ble) {
-            assertTrue("Blank Line Exception rised",false);
+            fail("Blank Line Exception rised");
             System.out.flush();ble.printStackTrace();System.out.flush();
         } catch (ImapException ie) {
             assertTrue("ImapException rised"+ie.getMessage()+"("+ie.getStackTrace()[0].getFileName()+":"+ie.getStackTrace()[0].getLineNumber()+")",false);
@@ -107,11 +107,13 @@ public class ImapLineTest {
         try{
             InputStream i=new ByteArrayInputStream("".getBytes());
             new ImapLine(null,"",i);
-            assertTrue("Blank Line Exception not rised",false);
+            fail("Blank Line Exception not rised");
         } catch(ImapNullLineException ble) {
-            assertTrue("Blank Line Exception rised",true);
+            /** Null Line Exception rised --- thisis expected ***/
+        } catch(ImapBlankLineException ble) {
+            fail("Blank Line Exception rised");
         } catch (ImapException ie) {
-            assertTrue("Imap Exception rised (should have been ImaplBlankLineException)",false);
+            fail("Imap Exception rised (should have been ImaplBlankLineException)");
         }
     }
     
@@ -119,11 +121,25 @@ public class ImapLineTest {
     public void nonBlankLineNullStream() {
         try{
             new ImapLine(null,"",null);
-            assertTrue("Blank Line Exception not rised",true);
+            fail("Null Line Exception not rised");
         } catch(ImapNullLineException ble) {
-            assertTrue("Blank Line Exception rised",true);
+        } catch(ImapBlankLineException ble) {
+            fail("Blank Line Exception rised");
         } catch (ImapException ie) {
-            assertTrue("Imap Exception rised (should have been ImaplBlankLineException)",false);
+            fail("Imap Exception rised (should have been ImaplBlankLineException but is \""+ie.toString()+"\")");
+        }
+    }
+    
+    @Test
+    public void nonBlankLineNullStream2() {
+        try{
+            new ImapLine(null,"\r\n",null);
+            fail("Blank Line Exception not rised");
+        } catch(ImapBlankLineException ble) {
+        } catch(ImapNullLineException ble) {
+            fail("Null Line Exception rised");
+        } catch (ImapException ie) {
+            fail("Imap Exception rised (should have been ImaplBlankLineException)");
         }
     }
     
@@ -138,9 +154,9 @@ public class ImapLineTest {
             assertTrue("Returned tag should be \"a5\"","a5".equals(il.getTag()));
             assertTrue("Returned command should be \"logout\" but is infact \""+il.getCommand()+"\"","logout".equals(il.getCommand()));
         } catch(ImapBlankLineException ble) {
-            assertTrue("Blank Line Exception rised",false);
+            fail("Blank Line Exception rised");
         } catch (ImapException ie) {
-            assertTrue("Imap Exception rised (no exception expected)",false);
+            fail("Imap Exception rised (no exception expected)");
         }
     }
     
@@ -148,21 +164,22 @@ public class ImapLineTest {
     public void nullLine() {
         try{
             InputStream i=new ByteArrayInputStream("a b".getBytes());
-            ImapLine il=new ImapLine(null,null,null);
-            assertTrue("Should not reach this point as an exception should be rised",false);
+            ImapLine il=new ImapLine(null,null,i);
+        } catch(ImapBlankLineException ble) {
+            fail("Should not reach this point as an Null Line exception should be rised");
         } catch(ImapNullLineException ble) {
-            assertTrue("Blank Line Exception rised",false);
+            assertTrue("Blank Line Exception rised",true);
         } catch (ImapException ie) {
-            assertTrue("Imap Exception rised",true);
+            fail("Imap Exception rised");
         }
     }
     
     @Test
     public void badLine1() {
         try{
-            InputStream i=new ByteArrayInputStream("..,".getBytes());
-            ImapLine il=new ImapLine(null,null,null);
-            assertTrue("Should not reach this point as an exception should be rised",false);
+            InputStream i=new ByteArrayInputStream("+".getBytes());
+            ImapLine il=new ImapLine(null,null,i);
+            fail("Should not reach this point as an exception should be rised");
         } catch(ImapNullLineException ble) {
             fail("Blank Line Exception rised");
         } catch (ImapException ie) {
@@ -173,9 +190,9 @@ public class ImapLineTest {
     @Test
     public void badLine2() {
         try{
-            InputStream i=new ByteArrayInputStream("a ..,".getBytes());
-            ImapLine il=new ImapLine(null,null,null);
-            assertTrue("Should not reach this point as an exception should be rised",false);
+            InputStream i=new ByteArrayInputStream("a +".getBytes());
+            ImapLine il=new ImapLine(null,null,i);
+            fail("Should not reach this point as an exception should be rised got ["+il.getTag()+"] ["+il.getCommand()+"]"); 
         } catch(ImapNullLineException ble) {
             fail("Blank Line Exception rised");
         } catch (ImapException ie) {
@@ -187,12 +204,12 @@ public class ImapLineTest {
     public void goodLine() {
         try{
             InputStream i=new ByteArrayInputStream("a OK\r\n".getBytes());
-            ImapLine il=new ImapLine(null,null,null);
-            assertTrue("Should not reach this point as an exception should be rised",false);
+            ImapLine il=new ImapLine(null,null,i);
+            assertTrue("Should  reach this point",true);
         } catch(ImapNullLineException ble) {
             fail("Blank Line Exception rised");
         } catch (ImapException ie) {
-            // all OK this exception is expected 
+            fail("ImapException rised");
         }
     }
     

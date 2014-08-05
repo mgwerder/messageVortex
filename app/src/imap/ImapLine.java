@@ -89,7 +89,7 @@ public class ImapLine {
          
         // check if nothing at all (no even an empty line) has been passed
         if(this.buffer==null && this.input==null) {
-            throw new ImapException(this,"null String passed");
+            throw new ImapNullLineException(this);
         }
 
         // make sure that we have a valid InputStream
@@ -100,9 +100,12 @@ public class ImapLine {
         // make sure that a line is never null when reaching the parsing section
         if(buffer==null) {
             buffer="";
+            if(snoopBytes(1)==null) {
+                throw new ImapBlankLineException(this);
+            }
         }
         
-        if(snoopBytes(1)==null || "\r\n".equals(snoopBytes(2)) || "".equals(snoopBytes(1))) {
+        if("\r\n".equals(snoopBytes(2)) || "".equals(snoopBytes(1)) || snoopBytes(1)==null) {
             if("\r\n".equals(snoopBytes(2))) {
                 skipUntilCRLF();
                 throw new ImapBlankLineException(this);
@@ -113,7 +116,7 @@ public class ImapLine {
         // getting a tag
         tagToken=getATag();
         
-        if(tagToken==null) {
+        if(tagToken==null || "".equals(tagToken)) {
             skipUntilCRLF();
             throw new ImapException(this, "error getting tag");
         }
@@ -125,7 +128,7 @@ public class ImapLine {
 
         // get command
         commandToken = getATag();
-        if(tagToken==null) {
+        if(commandToken==null || "".equals(commandToken)) {
             skipUntilCRLF();
             throw new ImapException(this, "error getting command");
         }
