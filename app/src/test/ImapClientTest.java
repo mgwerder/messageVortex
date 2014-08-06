@@ -84,7 +84,7 @@ public class ImapClientTest {
         public String[] processCommand(ImapLine line) {
             do{
                 try{
-                    Thread.sleep(10000000);
+                    Thread.sleep(100000);
                 }catch(InterruptedException ie) {}    
             }while(true);    
         }
@@ -99,11 +99,13 @@ public class ImapClientTest {
     }    
 
     @Test
-    public void ImapClientEncryptedTest() {
+    public void ImapClientEncryptedTest1() {
         try{
             ImapServer is =new ImapServer(0,true); 
-            ImapClient ic =new ImapClient("localhost",is.getPort(),false);
-            assertTrue("TLS is not as expected",ic.isTLS()==false);
+            ImapConnection.setDefaultTimeout(1000);
+            ImapClient ic =new ImapClient("localhost",is.getPort(),true);
+            ic.setTimeout(1000);
+            assertTrue("TLS is not as expected",ic.isTLS()==true);
         } catch(NoSuchAlgorithmException nse) {
             fail("NoSuchAlgorithmException while creating server");
         } catch(KeyManagementException kme) {
@@ -130,6 +132,7 @@ public class ImapClientTest {
             long el=(System.currentTimeMillis()-start);
             assertTrue("Did not wait until end of timeout was reached (just "+el+")",el>=300);
             assertFalse("Did wait too long",el>=1000);
+            // assertTrue("Connection was not terminated",ic.isTerminated());
         }
         try{
             ic.setTimeout(100);
@@ -139,6 +142,7 @@ public class ImapClientTest {
             long el=(System.currentTimeMillis()-start);
             assertTrue("Did not wait until end of timeout was reached (just "+el+")",el>=300);
             assertFalse("Did wait too long",el>=1000);
+            // assertTrue("Connection was not terminated",ic.isTerminated());
         }
         ImapCommand.deregisterCommand("IWantATimeout");
         ic.shutdown();

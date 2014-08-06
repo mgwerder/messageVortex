@@ -45,7 +45,8 @@ public class ImapClient implements Runnable {
     Socket socket=null;
     private Thread runner=null;
     private static long defaultTimeout=DEFAULT_TIMEOUT; 
-    private long timeout=defaultTimeout;    
+    private long timeout=defaultTimeout;  
+    private boolean terminated=false;
     
     public ImapClient(String targetHost,int targetPort,boolean encrypted) {
         this.targetHost=targetHost;
@@ -168,6 +169,10 @@ public class ImapClient implements Runnable {
         }     
     }    
     
+    public boolean isTerminated() {
+        return terminated;
+    }
+    
     private void waitForWakeupRunner() {
         synchronized(notifyThread) {
             try{
@@ -239,11 +244,13 @@ public class ImapClient implements Runnable {
                 } catch(java.net.SocketException se) {
                     LOGGER.log(Level.WARNING,"Connection closed by server",se);
                     shutdown=true;
+                    terminated=true;
                 }                
                 LOGGER.log(Level.FINEST,"Client looping (shutdown="+shutdown+"/socket.closed()="+(socket==null?"null":socket.isClosed())+")");
             }
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE,"Uncaught exception in ImapClient",e);
+            terminated=true;
         } finally {    
             try{
                 socket.close();

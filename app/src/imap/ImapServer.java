@@ -93,7 +93,6 @@ public class ImapServer extends StoppableThread  {
         // open socket
         this.serverSocket = (ServerSocket)ServerSocketFactory.getDefault().createServerSocket(port);
         this.port=serverSocket.getLocalPort();
-        LOGGER.log(Level.INFO,"Server listener ready..." + serverSocket);    
         runner=new Thread(this,"ImapServerConnectionListener");
         runner.start();
     }
@@ -159,6 +158,7 @@ public class ImapServer extends StoppableThread  {
     public void run() {
         Socket socket=null; 
         int i=1;
+        LOGGER.log(Level.INFO,"Server listener ready..." + serverSocket);    
         try {
             while(!shutdown) {
                 socket = serverSocket.accept();

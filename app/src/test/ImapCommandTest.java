@@ -23,7 +23,7 @@ import java.io.InputStream;
 @RunWith(JUnit4.class)
 public class ImapCommandTest {
 
-    private final boolean  DO_NOT_TEST_ENCRYPTION=true;
+    private final boolean  DO_NOT_TEST_ENCRYPTION=false;
     
     private static final java.util.logging.Logger LOGGER;
 
@@ -49,7 +49,7 @@ public class ImapCommandTest {
     }
 
     @Test
-    public void checkClientTimeout() {
+    public void checkSetClientTimeout() {
         try{
             ImapServer is=new ImapServer(0,false);
             ImapClient ic=new ImapClient("localhost",is.getPort(),false);
@@ -72,12 +72,13 @@ public class ImapCommandTest {
                 ImapServer s=new ImapServer(0,encrypted);
                 ImapClient c=new ImapClient("localhost",s.getPort(),encrypted);
                 c.setTimeout(2000);
+                ImapConnection.setDefaultTimeout(2000);
                 String tag=ImapLine.getNextTag();
                 assertTrue("command logut failed BYE-check",sendCommand(c,tag+" LOGOUT",tag+" OK")[0].startsWith("* BYE"));
                 s.shutdown();
                 c.shutdown();
             } catch (Exception toe) {
-                assertTrue("exception thrown ("+toe.toString()+") while testing using encryption="+encrypted,false);
+                fail("exception thrown ("+toe.toString()+") while testing using encryption="+encrypted);
             }
             encrypted=!encrypted;
         } while(encrypted && !DO_NOT_TEST_ENCRYPTION);
