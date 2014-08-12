@@ -76,7 +76,7 @@ public class MailvortexLogger extends Logger {
     }
     
     public static void setGlobalLogLevel(Level l) {
-        getGlobalLogger().getParent().setLevel(l); 
+        getGlobalLogger().setLevel(l);
     }
     
     public static Logger getGlobalLogger() {

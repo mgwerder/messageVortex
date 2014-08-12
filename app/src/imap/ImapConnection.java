@@ -218,9 +218,6 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
         ImapLine il=null;
         try    {
             il=new ImapLine(this,command,i);
-        } catch(ImapNullLineException ie) {
-            // Return if there is no command waiting
-            return new String[0];
         } catch(ImapBlankLineException ie) {
             // just ignore blank lines
             LOGGER.log(Level.INFO,"got a blank line as command",ie);

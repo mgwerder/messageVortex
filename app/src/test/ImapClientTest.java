@@ -1,6 +1,9 @@
 package net.gwerder.java.mailvortex.test;
 
 import net.gwerder.java.mailvortex.imap.*;
+import net.gwerder.java.mailvortex.MailvortexLogger;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import org.junit.Test;
 import org.junit.Ignore;
@@ -27,6 +30,15 @@ import java.security.GeneralSecurityException;
  */
 @RunWith(JUnit4.class)
 public class ImapClientTest {
+
+    private static final java.util.logging.Logger LOGGER;
+
+    static {
+        ImapConnection.setDefaultTimeout(2000);
+        ImapClient.setDefaultTimeout(2000);
+        LOGGER = MailvortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+        MailvortexLogger.setGlobalLogLevel(Level.ALL);
+    }
 
     private class DeadSocket implements Runnable {
         private boolean shutdown=false;
@@ -101,6 +113,9 @@ public class ImapClientTest {
     @Test
     public void ImapClientEncryptedTest1() {
         try{
+            LOGGER.log(Level.INFO,"************************************************************************");
+            LOGGER.log(Level.INFO,"IMAP Client Encrypted Test");
+            LOGGER.log(Level.INFO,"************************************************************************");
             ImapServer is =new ImapServer(0,true); 
             ImapConnection.setDefaultTimeout(1000);
             ImapClient ic =new ImapClient("localhost",is.getPort(),true);
@@ -119,6 +134,9 @@ public class ImapClientTest {
         
     @Test
     public void ImapClientTimeoutTest() {
+        LOGGER.log(Level.INFO,"************************************************************************");
+        LOGGER.log(Level.INFO,"IMAP Client Timeout Test");
+        LOGGER.log(Level.INFO,"************************************************************************");
         DeadSocket ds=new DeadSocket(0,-1);
         ImapClient ic =new ImapClient("localhost",ds.getPort(),false);
         assertTrue("TLS is not as expected",ic.isTLS()==false);
@@ -132,7 +150,6 @@ public class ImapClientTest {
             long el=(System.currentTimeMillis()-start);
             assertTrue("Did not wait until end of timeout was reached (just "+el+")",el>=300);
             assertFalse("Did wait too long",el>=1000);
-            // assertTrue("Connection was not terminated",ic.isTerminated());
         }
         try{
             ic.setTimeout(100);

@@ -2,6 +2,9 @@ package net.gwerder.java.mailvortex.test;
 
 import net.gwerder.java.mailvortex.imap.*;
 
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
 import org.junit.Test;
 import org.junit.Ignore;
 import org.junit.runner.RunWith;

@@ -30,15 +30,15 @@ public class ImapCommandTest {
     static {
         ImapConnection.setDefaultTimeout(2000);
         ImapClient.setDefaultTimeout(2000);
-        MailvortexLogger.setGlobalLogLevel(Level.FINER);
         LOGGER = MailvortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+        MailvortexLogger.setGlobalLogLevel(Level.ALL);
     }
 
     private String[] sendCommand(ImapClient c,String command,String reply) {
         try{ 
-            LOGGER.log(Level.FINE,"IMAP C-> "+ImapLine.commandEncoder(command));
+            LOGGER.log(Level.INFO,"IMAP C-> "+ImapLine.commandEncoder(command));
             String[] s=c.sendCommand(command);
-            for(String v:s) { LOGGER.log(Level.FINE,"IMAP<- C: "+ImapLine.commandEncoder(v)); }; 
+            for(String v:s) { LOGGER.log(Level.INFO,"IMAP<- C: "+ImapLine.commandEncoder(v)); }; 
             assertTrue("command \""+command+"\" has not been answered properly (expected \""+reply+"\" but got \""+s[s.length-1]+"\")",s[s.length-1].startsWith(reply));
             return s;
         } catch(TimeoutException e) {
@@ -51,6 +51,9 @@ public class ImapCommandTest {
     @Test
     public void checkSetClientTimeout() {
         try{
+            LOGGER.log(Level.INFO,"************************************************************************");
+            LOGGER.log(Level.INFO,"Check set client timeout");
+            LOGGER.log(Level.INFO,"************************************************************************");
             ImapServer is=new ImapServer(0,false);
             ImapClient ic=new ImapClient("localhost",is.getPort(),false);
             assertTrue("test default Timeout",ImapClient.getDefaultTimeout()==ic.setDefaultTimeout(123));
@@ -70,6 +73,9 @@ public class ImapCommandTest {
         do{
             try{
                 ImapServer s=new ImapServer(0,encrypted);
+                LOGGER.log(Level.INFO,"************************************************************************");
+                LOGGER.log(Level.INFO,"Check full Login Logout ("+encrypted+"/"+s.getName()+")");
+                LOGGER.log(Level.INFO,"************************************************************************");
                 ImapClient c=new ImapClient("localhost",s.getPort(),encrypted);
                 c.setTimeout(2000);
                 ImapConnection.setDefaultTimeout(2000);
@@ -90,6 +96,9 @@ public class ImapCommandTest {
         do{
             try{
                 ImapServer s=new ImapServer(0,encrypted);
+                LOGGER.log(Level.INFO,"************************************************************************");
+                LOGGER.log(Level.INFO,"Check full Login Logout ("+encrypted+"/"+s.getName()+")");
+                LOGGER.log(Level.INFO,"************************************************************************");
                 ImapConnection.setDefaultTimeout(2000);
                 ImapAuthenticationDummyProxy ap=new ImapAuthenticationDummyProxy();
                 ap.addUser("USER","password");
