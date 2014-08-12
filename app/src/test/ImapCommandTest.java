@@ -23,7 +23,7 @@ import java.io.InputStream;
 @RunWith(JUnit4.class)
 public class ImapCommandTest {
 
-    private final boolean  DO_NOT_TEST_ENCRYPTION=false;
+    private final boolean  DO_NOT_TEST_ENCRYPTION=true;
     
     private static final java.util.logging.Logger LOGGER;
 
