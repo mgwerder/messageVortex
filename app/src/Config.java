@@ -5,6 +5,10 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Config {
 
     private static ConcurrentHashMap<String,Object> configurationData= new ConcurrentHashMap<String,Object>();
+    
+    private Config() {
+        super();
+    }
 
     public static boolean createBooleanConfigValue(String id,boolean dval) {
         synchronized(configurationData) {
