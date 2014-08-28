@@ -91,6 +91,29 @@ public class ImapLine {
         }
     }
     
+    private void  prefillCommandFields() throws ImapException {
+        // getting a tag
+        tagToken=getATag();
+        
+        if(tagToken==null || "".equals(tagToken)) {
+            skipUntilCRLF();
+            throw new ImapException(this, "error getting tag");
+        }
+        
+        int i=skipSP(1);
+        if(i!=1) {
+            throw new ImapException(this,"error skipping to command (line=\""+context+"\"; tag="+tagToken+"; buffer="+buffer+"; skipped="+i+")");
+        }
+
+        // get command
+        commandToken = getATag();
+        if(commandToken==null || "".equals(commandToken)) {
+            skipUntilCRLF();
+            throw new ImapException(this, "error getting command");
+        }
+        
+    }
+    
     /***
      * Creates an imap line object with a parser for a command.
      *
@@ -122,26 +145,8 @@ public class ImapLine {
         
         checkEmptyLine();
 
-        // getting a tag
-        tagToken=getATag();
-        
-        if(tagToken==null || "".equals(tagToken)) {
-            skipUntilCRLF();
-            throw new ImapException(this, "error getting tag");
-        }
-        
-        int i=skipSP(1);
-        if(i!=1) {
-            throw new ImapException(this,"error skipping to command (line=\""+line+"\"; tag="+tagToken+"; buffer="+buffer+"; skipped="+i+")");
-        }
+        prefillCommandFields(); 
 
-        // get command
-        commandToken = getATag();
-        if(commandToken==null || "".equals(commandToken)) {
-            skipUntilCRLF();
-            throw new ImapException(this, "error getting command");
-        }
-        
         if("BAD".equalsIgnoreCase(commandToken) || "OK".equalsIgnoreCase(commandToken) || "*".equals(tagToken)) {
             LOGGER.log(Level.INFO,"Parsing command "+tagToken+" "+commandToken);
         }    
@@ -348,9 +353,7 @@ public class ImapLine {
         return false;
     }
     
-    private String getLengthPrefixedString() {
-        // get a length prefixed sting
-        
+    private long getLengthPrefix() {
         //skip curly brace
         skipBytes(1);
         
@@ -360,10 +363,17 @@ public class ImapLine {
         while(snoopBytes(1)!=null && "0123456789".contains(snoopBytes(1)) && num<4294967295L) {
             num=num*10+(int)(skipBytes(1).charAt(0))-(int)("0".charAt(0));
         }
+        return num;
+    }
+    
+    private String getLengthPrefixedString() {
+    
+        long num=getLengthPrefix();
+    
         if(num<0 || num>4294967295L) {
             return null;
         }
-        
+
         // skip rcurly brace
         String ret=skipBytes(1);
         if(ret==null || !"}".equals(ret)) {
