@@ -14,28 +14,30 @@ public class ImapCommandLogin extends ImapCommand {
         ImapCommand.registerCommand(new ImapCommandLogin());
     }
     
+    private String getAuthToken(ImapLine line) throws ImapException {
+        String userid = line.getAString();
+        if(userid==null) {
+            throw new ImapException(line,"error parsing command (getting userid)");
+        }
+        return userid;
+    }
+    
     /***
      * @fix.me add capabilities to successful login
      ***/
     public String[] processCommand(ImapLine line) throws ImapException {
         
         // get userid
-        String userid = line.getAString();
-        if(userid==null) {
-            throw new ImapException(line,"error parsing command (getting userid)");
-        }
-
+        String userid=getAuthToken(line);
+        
         // skip space after command
         if(line.skipSP(1)!=1) {
             throw new ImapException(line,"error parsing command (skipping to password)");
         }
 
         // get password
-        String password = line.getAString();
-        if(userid==null) {
-            throw new ImapException(line,"error parsing command (getting password)");
-        }
-        
+        String password = getAuthToken(line);
+
         // skip space
         // WRNING this is "non-strict"
         line.skipSP(-1);

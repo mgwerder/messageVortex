@@ -1,10 +1,11 @@
 package net.gwerder.java.mailvortex;
 
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
 
 public class Config {
 
-    private static ConcurrentHashMap<String,Object> configurationData= new ConcurrentHashMap<String,Object>();
+    private static Map<String,Object> configurationData= new ConcurrentHashMap<String,Object>();
     
     private Config() {
         super();
