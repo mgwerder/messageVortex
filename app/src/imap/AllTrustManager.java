@@ -10,9 +10,11 @@ public class AllTrustManager implements X509TrustManager {
     }
     
     public void checkClientTrusted(X509Certificate[] certs, String authType) {
+        /* No check to be done */
     }
     
     public void checkServerTrusted( X509Certificate[] certs, String authType) {
+        /* No check to be done */
     }
     
 } 

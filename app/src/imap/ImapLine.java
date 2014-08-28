@@ -70,6 +70,27 @@ public class ImapLine {
         this(con,line,null);
     }
     
+    private void prepareStorage(ImapConnection con,String line,InputStream input) throws ImapException {
+        // make sure that a line is never null when reaching the parsing section
+        if(buffer==null) {
+            buffer="";
+            if(snoopBytes(1)==null) {
+                throw new ImapBlankLineException(this);
+            }
+        }
+        
+    }
+    
+    private void checkEmptyLine() throws ImapException {
+        if("\r\n".equals(snoopBytes(2)) || "".equals(snoopBytes(1)) || snoopBytes(1)==null) {
+            if("\r\n".equals(snoopBytes(2))) {
+                skipUntilCRLF();
+                throw new ImapBlankLineException(this);
+            }
+            throw new ImapNullLineException(this);
+        }
+    }
+    
     /***
      * Creates an imap line object with a parser for a command.
      *
@@ -97,22 +118,10 @@ public class ImapLine {
             this.input=new ByteArrayInputStream("".getBytes());
         }
         
-        // make sure that a line is never null when reaching the parsing section
-        if(buffer==null) {
-            buffer="";
-            if(snoopBytes(1)==null) {
-                throw new ImapBlankLineException(this);
-            }
-        }
+        prepareStorage(con,line,input);
         
-        if("\r\n".equals(snoopBytes(2)) || "".equals(snoopBytes(1)) || snoopBytes(1)==null) {
-            if("\r\n".equals(snoopBytes(2))) {
-                skipUntilCRLF();
-                throw new ImapBlankLineException(this);
-            }
-            throw new ImapNullLineException(this);
-        }
-        
+        checkEmptyLine();
+
         // getting a tag
         tagToken=getATag();
         
@@ -339,58 +348,71 @@ public class ImapLine {
         return false;
     }
     
+    private String getLengthPrefixedString() {
+        // get a length prefixed sting
+        
+        //skip curly brace
+        skipBytes(1);
+        
+        // get number
+        
+        long num=0;
+        while(snoopBytes(1)!=null && "0123456789".contains(snoopBytes(1)) && num<4294967295L) {
+            num=num*10+(int)(skipBytes(1).charAt(0))-(int)("0".charAt(0));
+        }
+        if(num<0 || num>4294967295L) {
+            return null;
+        }
+        
+        // skip rcurly brace
+        String ret=skipBytes(1);
+        if(ret==null || !"}".equals(ret)) {
+            return null;
+        }
+        
+        // skip crlf
+        skipCRLF();
+        
+        // get String
+        ret=skipBytes(num);
+        
+        if(ret==null || ret.length()<num) {
+            return null;
+        }    
+        
+        return ret;
+    }    
+    
+    private String getQuotedString() {
+        // get a quoted string
+        skipBytes(1);
+        String ret="";
+        while(snoopBytes(1)!=null && (ABNF_QUOTED_CHAR.contains(snoopBytes(1)) || snoopEscQuotes())) {
+            if("\\".contains(snoopBytes(1))) {
+                ret+=skipBytes(2).substring(1,2);
+            } else {
+                ret+=skipBytes(1);
+            }
+        }
+        if(snoopBytes(1)==null || !"\"".equals(skipBytes(1))) {
+            return null;
+        }    
+        
+        return ret;
+    }
+    
     public String getString() {
         String start=snoopBytes(1);
         String ret=null;
         
         if("{".equals(start)) {
             
-            // get a length prefixed sting
-            
-            //skip curly brace
-            skipBytes(1);
-            
-            // get number
-            
-            long num=0;
-            while(snoopBytes(1)!=null && "0123456789".contains(snoopBytes(1)) && num<4294967295L) {
-                num=num*10+(int)(skipBytes(1).charAt(0))-(int)("0".charAt(0));
-            }
-            if(num<0 || num>4294967295L) {
-                return null;
-            }
-            
-            // skip rcurly brace
-            ret=skipBytes(1);
-            if(ret==null || !"}".equals(ret)) {
-                return null;
-            }
-            
-            // skip crlf
-            skipCRLF();
-            
-            // get String
-            ret=skipBytes(num);
-            
-            if(ret==null || ret.length()<num) {
-                return null;
-            }    
+            return getLengthPrefixedString();
             
         } else if("\"".equals(start)) {
+        
+            return getQuotedString();
             
-            // get a quoted string
-            skipBytes(1);
-            ret="";
-            while(snoopBytes(1)!=null && (ABNF_QUOTED_CHAR.contains(snoopBytes(1)) || snoopEscQuotes())) {
-                if("\\".contains(snoopBytes(1))) {
-                    ret+=skipBytes(2).substring(1,2);
-                } else {
-                    ret+=skipBytes(1);
-                }
-            }
-            if(snoopBytes(1)==null || !"\"".equals(skipBytes(1))) {
-                return null;
-            }    
         }    
         
         return ret;
