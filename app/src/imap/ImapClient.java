@@ -227,33 +227,33 @@ public class ImapClient implements Runnable {
 
         LOGGER.log(Level.FINEST,"command has been completely processed");
     }
-	
-	private void runStep() throws IOException {
-		try{
-			waitForWakeupRunner();
-			if(currentCommand!=null && !"".equals(currentCommand)) {
-				processRunnerCommand();
-			}    
-		} catch(java.net.SocketException se) {
-			LOGGER.log(Level.WARNING,"Connection closed by server",se);
-			shutdown=true;
-			terminated=true;
-		}                
-		LOGGER.log(Level.FINEST,"Client looping (shutdown="+shutdown+"/socket.closed()="+(socket==null?"null":socket.isClosed())+")");
-	}
+    
+    private void runStep() throws IOException {
+        try{
+            waitForWakeupRunner();
+            if(currentCommand!=null && !"".equals(currentCommand)) {
+                processRunnerCommand();
+            }    
+        } catch(java.net.SocketException se) {
+            LOGGER.log(Level.WARNING,"Connection closed by server",se);
+            shutdown=true;
+            terminated=true;
+        }                
+        LOGGER.log(Level.FINEST,"Client looping (shutdown="+shutdown+"/socket.closed()="+(socket==null?"null":socket.isClosed())+")");
+    }
 
     public void run() {
 
         try {
-			// initialize socket
+            // initialize socket
             socket = SocketFactory.getDefault().createSocket(targetHost,targetPort);
             if(encrypted) {
                 socket=startTLS(socket);
             }
-			
-			// running socket
+            
+            // running socket
             while(!shutdown && !socket.isClosed() && !socket.isInputShutdown() && !socket.isOutputShutdown()) {
-				runStep();
+                runStep();
             }
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE,"Uncaught exception in ImapClient",e);

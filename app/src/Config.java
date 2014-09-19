@@ -21,8 +21,12 @@ public class Config {
             }
         }    
     }
-
-    public static boolean setBooleanValue(String id,boolean value) throws NullPointerException,ClassCastException {
+    
+    /***
+     * @throws NullPointerException when id is unknown
+     * @throws ClassCastException   when id is not a boolean setting
+     ***/
+    public static boolean setBooleanValue(String id,boolean value) {
         boolean ret;
         if(configurationData.get(id.toLowerCase())==null) {
             throw new NullPointerException();
@@ -35,7 +39,11 @@ public class Config {
         return ret;
     }
 
-    public static boolean getBooleanValue(String id) throws NullPointerException,ClassCastException {
+    /***
+     * @throws NullPointerException when id is unknown
+     * @throws ClassCastException   when id is not a boolean setting
+     ***/
+    public static boolean getBooleanValue(String id) {
         boolean ret;
         if(configurationData.get(id.toLowerCase())==null) {
             throw new NullPointerException();
