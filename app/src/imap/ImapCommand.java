@@ -5,10 +5,10 @@ import java.util.Map;
 
 public abstract class ImapCommand implements Cloneable {
 
-    private static final Map<String,ImapCommand> commands;
+    private static final Map<String,ImapCommand> COMMANDS;
  
     static  {
-        commands=new ConcurrentHashMap<String,ImapCommand>();
+        COMMANDS=new ConcurrentHashMap<String,ImapCommand>();
         (new ImapCommandCapability()).init();
         (new ImapCommandLogin()).init();
         (new ImapCommandLogout()).init();
@@ -18,20 +18,20 @@ public abstract class ImapCommand implements Cloneable {
     public static final void registerCommand(ImapCommand command) {
         String[] arr=command.getCommandIdentifier();
         for(int i=0;i<arr.length;i++) {
-            commands.put(arr[i].toLowerCase(),command);        
+            COMMANDS.put(arr[i].toLowerCase(),command);        
         }    
     }
     
     public static final void deregisterCommand(String command) {
-        commands.remove(command.toLowerCase());        
+        COMMANDS.remove(command.toLowerCase());        
     }
     
     public static final ImapCommand[] getCommands() {
-        return commands.values().toArray(new ImapCommand[commands.size()]);
+        return COMMANDS.values().toArray(new ImapCommand[COMMANDS.size()]);
     }
 
     public static final ImapCommand getCommand(String name) {
-        return commands.get(name.toLowerCase());
+        return COMMANDS.get(name.toLowerCase());
     }
 
     public abstract String[] getCapabilities();

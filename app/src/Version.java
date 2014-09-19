@@ -1,7 +1,5 @@
 package net.gwerder.java.mailvortex;
 
-import java.net.URL;
-
 public class Version {
 
     private static int    MAJOR       = @major@;
