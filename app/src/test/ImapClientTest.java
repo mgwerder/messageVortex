@@ -88,9 +88,10 @@ public class ImapClientTest {
         }        
     }
     
-    private static  class ImapCommandIWantATimeout extends ImapCommand {
-        static void init() {
-            ImapCommand.registerCommand(new ImapCommandIWantATimeout());
+    private class ImapCommandIWantATimeout extends ImapCommand {
+    
+        public void init() {
+            ImapCommand.registerCommand(this);
         }
     
         public String[] processCommand(ImapLine line) {
@@ -141,7 +142,7 @@ public class ImapClientTest {
         ImapClient ic =new ImapClient("localhost",ds.getPort(),false);
         assertTrue("TLS is not as expected",ic.isTLS()==false);
         long start=System.currentTimeMillis();
-        ImapCommandIWantATimeout.init();
+        (new ImapCommandIWantATimeout()).init();
         try{
             ic.setTimeout(1000);
             System.out.println("Sending IWantATimeout");for(String s:ic.sendCommand("a0 IWantATimeout",300)) System.out.println("Reply was: "+s);

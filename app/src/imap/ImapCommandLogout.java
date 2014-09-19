@@ -12,8 +12,8 @@ public class ImapCommandLogout extends ImapCommand {
         LOGGER = MailvortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
     }
 
-    static void init() {
-        ImapCommand.registerCommand(new ImapCommandLogout());
+    public void init() {
+        ImapCommand.registerCommand(this);
     }
     
     public String[] processCommand(ImapLine line) throws ImapException {

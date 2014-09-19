@@ -9,10 +9,10 @@ public abstract class ImapCommand implements Cloneable {
  
     static  {
         commands=new ConcurrentHashMap<String,ImapCommand>();
-        ImapCommandCapability.init();
-        ImapCommandLogin.init();
-        ImapCommandLogout.init();
-        ImapCommandNoop.init();
+        (new ImapCommandCapability()).init();
+        (new ImapCommandLogin()).init();
+        (new ImapCommandLogout()).init();
+        (new ImapCommandNoop()).init();
     } 
 
     public static final void registerCommand(ImapCommand command) {
@@ -36,7 +36,7 @@ public abstract class ImapCommand implements Cloneable {
 
     public abstract String[] getCapabilities();
     
-    protected abstract void init();
+    public abstract void init();
 
     public abstract String[] getCommandIdentifier();
 

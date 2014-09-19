@@ -41,9 +41,9 @@ public class ImapCommandCapabilityTest {
         }
     }
 
-    private static  class ImapCommandCapabilityParser extends ImapCommand {
-        static void init() {
-            ImapCommand.registerCommand(new ImapCommandCapabilityParser());
+    private class ImapCommandCapabilityParser extends ImapCommand {
+        public void init() {
+            ImapCommand.registerCommand(this);
         }
     
         public String[] processCommand(ImapLine line) {
@@ -63,7 +63,7 @@ public class ImapCommandCapabilityTest {
     @Test
     public void capabilityPropagation() {
         // check if capabilities with "=" are concatenated
-        ImapCommandCapabilityParser.init();
+        (new ImapCommandCapabilityParser()).init();
         ImapCommand ic=ImapCommand.getCommand("capability");
         try{
             String[] a=ic.processCommand(new ImapLine(null,"A1 CAPABILITY\r\n"));

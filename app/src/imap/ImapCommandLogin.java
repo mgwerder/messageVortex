@@ -10,8 +10,8 @@ public class ImapCommandLogin extends ImapCommand {
         LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
     }
 
-    static void init() {
-        ImapCommand.registerCommand(new ImapCommandLogin());
+    public void init() {
+        ImapCommand.registerCommand(this);
     }
     
     private String getAuthToken(ImapLine line) throws ImapException {

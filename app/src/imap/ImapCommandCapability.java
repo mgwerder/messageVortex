@@ -2,8 +2,8 @@ package net.gwerder.java.mailvortex.imap;
 
 public class ImapCommandCapability extends ImapCommand {
 
-    static void init() {
-        ImapCommand.registerCommand(new ImapCommandCapability());
+    public void init() {
+        ImapCommand.registerCommand(this);
     }
     
     private String addCapability(String fullCap,String cap) throws ImapException {
