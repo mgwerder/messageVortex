@@ -184,6 +184,8 @@ public class ImapClient implements Runnable {
     }
     
     private void processRunnerCommand() throws IOException  {
+        final String REGEXP_IMAP_OK ="\\s+OK.*";
+        final String REGEXP_IMAP_BAD="\\s+BAD.*";
         LOGGER.log(Level.FINEST,"IMAP-> C: "+ImapLine.commandEncoder(currentCommand));
         socket.getOutputStream().write((currentCommand+"\r\n").getBytes());
         socket.getOutputStream().flush();
@@ -213,10 +215,10 @@ public class ImapClient implements Runnable {
                 lastReply=reply.substring(0,reply.length()-2);
                 reply="";
             }
-        } while(!lastReply.matches(tag+"\\s+BAD.*") && !lastReply.matches(tag+"\\s+OK.*") && i>=0);
-        currentCommandCompleted=lastReply.matches(tag+"\\s+BAD.*") || lastReply.matches(tag+"\\s+OK.*");
+        } while(!lastReply.matches(tag+REGEXP_IMAP_BAD) && !lastReply.matches(tag+REGEXP_IMAP_OK ) && i>=0);
+        currentCommandCompleted=lastReply.matches(tag+REGEXP_IMAP_BAD) || lastReply.matches(tag+REGEXP_IMAP_OK );
         currentCommand=null;
-        if(il!=null && "logout".equalsIgnoreCase(il.getCommand()) && lastReply.matches(tag+"\\s+OK.*")) {
+        if(il!=null && "logout".equalsIgnoreCase(il.getCommand()) && lastReply.matches(tag+REGEXP_IMAP_OK )) {
             // Terminate connection on successful logout
             shutdown=true;
         }    

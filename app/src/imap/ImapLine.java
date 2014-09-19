@@ -59,6 +59,46 @@ public class ImapLine {
     private String buffer="";
 
     /***
+     * Creates an imap line object with a parser for a command.
+     *
+     * A passed input stream is appended to line. Reading takes place according to the ABNF-Rules defined in the respective RFC
+     *
+     * @param con   The ImapConnection object which generated the Command line
+     * @param line  The String which has already been read (as Read ahead)
+     * @param input The Stream offering more data to read if required
+     *
+     * @fix.me should be a ABNF implementation
+     * @fix.me extract reading from constructor
+     ***/
+    public ImapLine(ImapConnection con,String line,InputStream input) throws ImapException {
+        this.con=con;
+        this.input=input;
+        this.buffer=line;
+         
+        // check if nothing at all (no even an empty line) has been passed
+        if(this.buffer==null && this.input==null) {
+            throw new ImapNullLineException(this);
+        }
+
+        // make sure that we have a valid InputStream
+        if(this.input==null) {
+            this.input=new ByteArrayInputStream("".getBytes());
+        }
+        
+        prepareStorage(con,line,input);
+        
+        checkEmptyLine();
+
+        prefillCommandFields(); 
+
+        if("BAD".equalsIgnoreCase(commandToken) || "OK".equalsIgnoreCase(commandToken) || "*".equals(tagToken)) {
+            LOGGER.log(Level.INFO,"Parsing command "+tagToken+" "+commandToken);
+        }    
+        
+        skipSP(-1);
+    }
+    
+    /***
      * Trivial constructor omiting a stream.
      *
      * This constructor is mainly meant for testing purposes
@@ -112,46 +152,6 @@ public class ImapLine {
             throw new ImapException(this, "error getting command");
         }
         
-    }
-    
-    /***
-     * Creates an imap line object with a parser for a command.
-     *
-     * A passed input stream is appended to line. Reading takes place according to the ABNF-Rules defined in the respective RFC
-     *
-     * @param con   The ImapConnection object which generated the Command line
-     * @param line  The String which has already been read (as Read ahead)
-     * @param input The Stream offering more data to read if required
-     *
-     * @fix.me should be a ABNF implementation
-     * @fix.me extract reading from constructor
-     ***/
-    public ImapLine(ImapConnection con,String line,InputStream input) throws ImapException {
-        this.con=con;
-        this.input=input;
-        this.buffer=line;
-         
-        // check if nothing at all (no even an empty line) has been passed
-        if(this.buffer==null && this.input==null) {
-            throw new ImapNullLineException(this);
-        }
-
-        // make sure that we have a valid InputStream
-        if(this.input==null) {
-            this.input=new ByteArrayInputStream("".getBytes());
-        }
-        
-        prepareStorage(con,line,input);
-        
-        checkEmptyLine();
-
-        prefillCommandFields(); 
-
-        if("BAD".equalsIgnoreCase(commandToken) || "OK".equalsIgnoreCase(commandToken) || "*".equals(tagToken)) {
-            LOGGER.log(Level.INFO,"Parsing command "+tagToken+" "+commandToken);
-        }    
-        
-        skipSP(-1);
     }
     
     /***

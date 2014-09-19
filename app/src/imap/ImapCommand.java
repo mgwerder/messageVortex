@@ -5,9 +5,9 @@ import java.util.Map;
 
 public abstract class ImapCommand implements Cloneable {
 
-    private static Map<String,ImapCommand> commands;
+    private static final Map<String,ImapCommand> commands;
  
-    static {
+    static  {
         commands=new ConcurrentHashMap<String,ImapCommand>();
         ImapCommandCapability.init();
         ImapCommandLogin.init();
@@ -15,30 +15,28 @@ public abstract class ImapCommand implements Cloneable {
         ImapCommandNoop.init();
     } 
 
-    public static void registerCommand(ImapCommand command) {
+    public static final void registerCommand(ImapCommand command) {
         String[] arr=command.getCommandIdentifier();
         for(int i=0;i<arr.length;i++) {
             commands.put(arr[i].toLowerCase(),command);        
         }    
     }
     
-    public static void deregisterCommand(String command) {
+    public static final void deregisterCommand(String command) {
         commands.remove(command.toLowerCase());        
     }
     
-    public static ImapCommand[] getCommands() {
+    public static final ImapCommand[] getCommands() {
         return commands.values().toArray(new ImapCommand[commands.size()]);
     }
 
-    public static ImapCommand getCommand(String name) {
+    public static final ImapCommand getCommand(String name) {
         return commands.get(name.toLowerCase());
     }
 
     public abstract String[] getCapabilities();
     
-    static void init() {
-        throw new RuntimeException("init not overloaded");
-    }
+    protected abstract void init();
 
     public abstract String[] getCommandIdentifier();
 

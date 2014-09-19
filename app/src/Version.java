@@ -24,12 +24,4 @@ public class Version {
         return VERSION;
     }
     
-    static {
-        URL main = Version.class.getResource("Version.class");
-        if (!"file".equalsIgnoreCase(main.getProtocol())) {
-            throw new IllegalStateException("Main class is not stored in a file.");
-        }
-        // can be asked System.out.println( "Path to application is "+main.getPath());    
-        // can be asked System.out.println( "Path to user.dir is "+System.getProperty("user.dir"));    
-    }
- }   
+}   
