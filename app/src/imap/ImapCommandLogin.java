@@ -42,18 +42,14 @@ public class ImapCommandLogin extends ImapCommand {
         // WRNING this is "non-strict"
         line.skipSP(-1);
         
-        // skip lineend
+        // skip line end
         if(!line.skipCRLF()) {
             throw new ImapException(line,"error parsing command");
         }
-
-        if(line.getConnection()==null) {
-            LOGGER.log(Level.SEVERE, "no connection found while calling login");
-            return new String[] {line.getTag()+" BAD server configuration error\r\n" };
-        }
         
-        if(line.getConnection().getAuth()==null) {
-            LOGGER.log(Level.SEVERE, "no Authenticator found while calling login");
+        // test if there is an associated authenticator in connection
+        if(line.getConnection()==null || line.getConnection().getAuth()==null) {
+            LOGGER.log(Level.SEVERE, "no Authenticator or connection found while calling login");
             return new String[] {line.getTag()+" BAD server configuration error\r\n" };
         }
         
