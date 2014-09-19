@@ -29,7 +29,7 @@ public class Version {
         if (!"file".equalsIgnoreCase(main.getProtocol())) {
             throw new IllegalStateException("Main class is not stored in a file.");
         }
-        System.out.println( "Path to application is "+main.getPath());    
-        System.out.println( "Path to user.dir is "+System.getProperty("user.dir"));    
+        // can be asked System.out.println( "Path to application is "+main.getPath());    
+        // can be asked System.out.println( "Path to user.dir is "+System.getProperty("user.dir"));    
     }
  }   

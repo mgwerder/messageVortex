@@ -78,7 +78,7 @@ public class CustomKeyManager implements X509KeyManager {
         try {
             java.security.cert.Certificate[] certs = keyStore.getCertificateChain(alias);
             if (certs == null || certs.length == 0)    {
-                return null;
+                return new X509Certificate[0]; // was a null return val documentation is unclear
             }
             
             // copy and typcast array
@@ -89,7 +89,7 @@ public class CustomKeyManager implements X509KeyManager {
             return x509;
         } catch (Exception e) {
             LOGGER.log(Level.WARNING,"unknown key requested \""+alias+"\"",e);
-            return null;
+            return new X509Certificate[0]; // was a null return val documentation is unclear
         }          
     }
 

@@ -240,6 +240,24 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
         return s;
     }
     
+    private void processCommands() throws IOException {
+        try{
+            for(String s1:processCommand("",input)) {
+                if(s1==null) {
+                    shutdown=true;
+                    LOGGER.log(Level.FINE,"server connection shutdown initated."    );
+                } else {
+                    output.write((s1).getBytes());
+                    LOGGER.log(Level.INFO,"IMAP-> S: "+ImapLine.commandEncoder(s1));
+                }    
+            }
+            output.flush();
+            LOGGER.finest("command is processed");
+        } catch(ImapException ie) {
+            LOGGER.log(Level.WARNING,"error while parsing imap command",ie);
+        }
+    }
+    
     public void run() {
         try{
             if(encrypted) {
@@ -248,21 +266,7 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
             
             while(!shutdown) {
                 currentSocket.setSoTimeout((int)timeout);
-                try{
-                    for(String s1:processCommand("",input)) {
-                        if(s1==null) {
-                            shutdown=true;
-                            LOGGER.log(Level.FINE,"server connection shutdown initated."    );
-                        } else {
-                            output.write((s1).getBytes());
-                            LOGGER.log(Level.INFO,"IMAP-> S: "+ImapLine.commandEncoder(s1));
-                        }    
-                    }
-                    output.flush();
-                    LOGGER.finest("command is processed");
-                } catch(ImapException ie) {
-                    LOGGER.log(Level.WARNING,"error while parsing imap command",ie);
-                }
+                processCommands();
             }
         } catch(java.net.SocketTimeoutException  e) {
             shutdown=true;
