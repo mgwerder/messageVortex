@@ -47,8 +47,14 @@ public class ImapCommandLogin extends ImapCommand {
             throw new ImapException(line,"error parsing command");
         }
         
+        // test if there is an associated connection
+        if(line.getConnection()==null) {
+            LOGGER.log(Level.SEVERE, "no connection found while calling login");
+            return new String[] {line.getTag()+" BAD server configuration error\r\n" };
+        }
+        
         // test if there is an associated authenticator in connection
-        if(line.getConnection()==null || line.getConnection().getAuth()==null) {
+        if(line.getConnection().getAuth()==null) {
             LOGGER.log(Level.SEVERE, "no Authenticator or connection found while calling login");
             return new String[] {line.getTag()+" BAD server configuration error\r\n" };
         }

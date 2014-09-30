@@ -28,9 +28,11 @@ import java.util.concurrent.TimeoutException;
 public class ImapServer extends StoppableThread  {
     
     private static final Logger LOGGER;
+    
     static {
         LOGGER = MailvortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
     }
+    
     private Set<String>    suppCiphers=new HashSet<String>();
 
     int port;
@@ -113,7 +115,11 @@ public class ImapServer extends StoppableThread  {
             
         // wakeup runner if necesary
         try{
-            SocketFactory.getDefault().createSocket("localhost",this.serverSocket.getLocalPort());
+            if(encrypted) {
+                (context.getSocketFactory().getDefault().createSocket("localhost",this.serverSocket.getLocalPort())).close();
+            } else {
+                (SocketFactory.getDefault().createSocket("localhost",this.serverSocket.getLocalPort())).close();
+            }    
         } catch(Exception e) {
             LOGGER.log(Level.WARNING,"Wakeup of listener failed (already dead?)",e);
         }
@@ -135,23 +141,14 @@ public class ImapServer extends StoppableThread  {
         for(ImapConnection ic:conn) {
             ic.shutdown();
         }
-        for(ImapConnection ic:conn) {
-            boolean endshutdown=false;
-            do {
-                try{
-                    ic.join();
-                    endshutdown=true;
-                } catch(InterruptedException ie) {
-                    // reloop if exception is risen
-                }
-            } while(!endshutdown);    
-        }
-        
     }
     
     public int shutdown() {
+        LOGGER.log(Level.INFO,"Server runner shutdown");    
         shutdownRunner();
+        LOGGER.log(Level.INFO,"Server connections shutdown");    
         shutdownConnections();
+        LOGGER.log(Level.INFO,"Server shutdown done");    
         return 0;
     }
     
@@ -161,6 +158,7 @@ public class ImapServer extends StoppableThread  {
         LOGGER.log(Level.INFO,"Server listener ready..." + serverSocket);    
         try {
             while(!shutdown) {
+                // FIXME remove unused connections from time to time
                 socket = serverSocket.accept();
                 ImapConnection imc=null;
                 imc=new ImapConnection(socket,context,suppCiphers,encrypted);

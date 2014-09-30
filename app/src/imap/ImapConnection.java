@@ -183,12 +183,17 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
         // wait for runner to terminate
         while(runner.isAlive()) {
             try {
-                runner.join();
+                LOGGER.log(Level.INFO,"waiting for connection to shutdown ("+runner.getName()+"/"+runner.isAlive()+")");
+                plainSocket.close();
+                runner.join(1000);
             } catch(InterruptedException e) {
                  // discard this exception
                  interruptedCatcher(e);
+            } catch(IOException e) {
+                LOGGER.log(Level.WARNING,"IOException while shutting down input stream (may be normal)",e);
             }
         }    
+        LOGGER.log(Level.WARNING,"connection shutdown done");
         return 0;
     }
     
@@ -228,7 +233,7 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
             return new String[] {(il!=null?il.getTag():"*")+" BAD "+ie.toString()};
         }
         
-        LOGGER.log(Level.INFO,"got command \""+il.getTag()+" "+il.getCommand()+"\"... in connection "+runner.getName());
+        LOGGER.log(Level.INFO,"got command \""+il.getTag()+" "+il.getCommand()+"\".");
         ImapCommand c=ImapCommand.getCommand(il.getCommand());
         if(c==null) {
             throw new ImapException(il,"Command \""+il.getCommand()+"\" is not implemented");
@@ -236,7 +241,7 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
         LOGGER.log(Level.FINEST,"found command in connection "+this.getName()+".");
         String[] s=c.processCommand(il);
         
-        LOGGER.log(Level.INFO,"got command \""+il.getTag()+" "+il.getCommand()+"\"... in connection "+this.getName()+". Reply is \""+ImapLine.commandEncoder(s==null?"null":s[s.length-1])+"\".");
+        LOGGER.log(Level.INFO,"got command \""+il.getTag()+" "+il.getCommand()+"\". Reply is \""+ImapLine.commandEncoder(s==null?"null":s[s.length-1])+"\".");
         return s;
     }
     
@@ -282,10 +287,11 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
             }    
             plainSocket.close();
         } catch(Exception e2) {
-            // all exceptions may be safely ignored$
+            // all exceptions may be safely ignored
             interruptedCatcher(e2);
         }
-        LOGGER.log(Level.FINEST,"## server connection closed");
+        LOGGER.log(Level.INFO,"server connection closed");
+        return;
     }
     
 }

@@ -37,7 +37,7 @@ public class CustomKeyManager implements X509KeyManager {
      * @param password          password to open the kestore file 
      * @param alias              alias of the certificate to be used
      ***/
-    CustomKeyManager(String keyStoreFile, String password, String alias) throws IOException, GeneralSecurityException {
+    public CustomKeyManager(String keyStoreFile, String password, String alias) throws IOException, GeneralSecurityException {
         this(keyStoreFile,password.toCharArray(),alias);
     }
     
