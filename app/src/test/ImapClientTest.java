@@ -138,13 +138,13 @@ public class ImapClientTest {
         long start=System.currentTimeMillis();
         (new ImapCommandIWantATimeout()).init();
         try{
-            ic.setTimeout(1000);
+            ic.setTimeout(2000);
             System.out.println("Sending IWantATimeout");for(String s:ic.sendCommand("a0 IWantATimeout",300)) System.out.println("Reply was: "+s);
             fail("No timeoutException was raised");
         } catch(TimeoutException te) {
             long el=(System.currentTimeMillis()-start);
             assertTrue("Did not wait until end of timeout was reached (just "+el+")",el>=300);
-            assertFalse("Did wait too long",el>=1000);
+            assertFalse("Did wait too long",el>2100);
         }
         try{
             ic.setTimeout(100);
@@ -153,7 +153,7 @@ public class ImapClientTest {
         } catch(TimeoutException te) {
             long el=(System.currentTimeMillis()-start);
             assertTrue("Did not wait until end of timeout was reached (just "+el+")",el>=300);
-            assertFalse("Did wait too long",el>=1000);
+            assertFalse("Did wait too long",el>1000);
             // assertTrue("Connection was not terminated",ic.isTerminated());
         }
         ImapCommand.deregisterCommand("IWantATimeout");
