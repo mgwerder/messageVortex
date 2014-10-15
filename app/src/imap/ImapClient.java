@@ -21,8 +21,8 @@ import java.util.concurrent.TimeoutException;
 
 public class ImapClient implements Runnable {
 
-    private final static String regexpImapOK ="\\s+OK.*";
-    private final static String regexpImapBAD="\\s+BAD.*";
+    private static final String REGEXP_IMAP_OK ="\\s+OK.*";
+    private static final String REGEXP_IMAP_BAD="\\s+BAD.*";
     
     private static final Logger LOGGER;
     
@@ -216,10 +216,10 @@ public class ImapClient implements Runnable {
                 lastReply=reply.substring(0,reply.length()-2);
                 reply="";
             }
-        } while(!lastReply.matches(tag+regexpImapBAD+"|"+tag+regexpImapOK ) && i>=0);
-        currentCommandCompleted=lastReply.matches(tag+regexpImapBAD) || lastReply.matches(tag+regexpImapOK );
+        } while(!lastReply.matches(tag+REGEXP_IMAP_BAD+"|"+tag+REGEXP_IMAP_OK ) && i>=0);
+        currentCommandCompleted=lastReply.matches(tag+REGEXP_IMAP_OK+"|"+tag+REGEXP_IMAP_BAD );
         currentCommand=null;
-        if(il!=null && "logout".equalsIgnoreCase(il.getCommand()) && lastReply.matches(tag+regexpImapOK )) {
+        if(il!=null && "logout".equalsIgnoreCase(il.getCommand()) && lastReply.matches(tag+REGEXP_IMAP_OK )) {
             // Terminate connection on successful logout
             shutdown=true;
         }    
