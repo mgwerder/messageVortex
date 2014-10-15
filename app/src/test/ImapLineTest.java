@@ -17,7 +17,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 /**
- * Tests for {@link net.gwerder.java.mailvortex.imap.ImapCommand}.
+ * Tests for {@link net.gwerder.java.mailvortex.imap.ImapLine}.
  *
  * @author martin@gwerder.net (Martin GWERDER)
  */
