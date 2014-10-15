@@ -230,7 +230,7 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
         } catch(ImapException ie) {
             // If line violates the form <tag> <command> refuse processing
             LOGGER.log(Level.WARNING,"got invalid line",ie);
-            return new String[] {(il!=null?il.getTag():"*")+" BAD "+ie.toString()};
+            return new String[] {"* BAD "+ie.toString()};
         }
         
         LOGGER.log(Level.INFO,"got command \""+il.getTag()+" "+il.getCommand()+"\".");

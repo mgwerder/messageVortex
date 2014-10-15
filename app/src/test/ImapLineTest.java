@@ -168,7 +168,7 @@ public class ImapLineTest {
     public void nullLine() {
         try{
             InputStream i=new ByteArrayInputStream("a b".getBytes());
-            ImapLine il=new ImapLine(null,null,i);
+            new ImapLine(null,null,i);
         } catch(ImapBlankLineException ble) {
             fail("Should not reach this point as an Null Line exception should be rised");
         } catch(ImapNullLineException ble) {
@@ -182,7 +182,7 @@ public class ImapLineTest {
     public void badLine1() {
         try{
             InputStream i=new ByteArrayInputStream("+".getBytes());
-            ImapLine il=new ImapLine(null,null,i);
+            new ImapLine(null,null,i);
             fail("Should not reach this point as an exception should be rised");
         } catch(ImapNullLineException ble) {
             fail("Blank Line Exception rised");
@@ -208,7 +208,7 @@ public class ImapLineTest {
     public void goodLine() {
         try{
             InputStream i=new ByteArrayInputStream("a OK\r\n".getBytes());
-            ImapLine il=new ImapLine(null,null,i);
+            new ImapLine(null,null,i);
             assertTrue("Should  reach this point",true);
         } catch(ImapNullLineException ble) {
             fail("Blank Line Exception rised");

@@ -52,7 +52,6 @@ public class ImapServer extends StoppableThread  {
     
     public ImapServer(final int port,boolean encrypted) throws IOException {
         java.security.Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
-        this.conn=conn;
         this.port=port;
         this.encrypted=encrypted;
         try{
@@ -91,7 +90,9 @@ public class ImapServer extends StoppableThread  {
                 LOGGER.log(Level.FINER,"Cipher suite \""+arr[i]+"\" seems to be unsupported",e);
                 supported=false;
                 try{
-                    serverSocket.close();
+                    if(serverSocket!=null) {
+                        serverSocket.close();
+                    }    
                 } catch(Exception e2) {
                     LOGGER.log(Level.FINEST,"cleanup failed (never mind)",e2);
                 }
@@ -187,14 +188,12 @@ public class ImapServer extends StoppableThread  {
             }
             serverSocket.close();
         } catch (IOException e) {
-            if(socket!=null) {
-                try{
-                    socket.close();
-                } catch(IOException e2) {
-                    // intentionaly ignored
-                    assert true:"always ignore this exception"+e2;
-                }
-            }    
+            try{
+                socket.close();
+            } catch(IOException e2) {
+                // intentionaly ignored
+                assert true:"always ignore this exception"+e2;
+            }
             LOGGER.log(Level.SEVERE,"Error exception on server socket",e);
         }
     }
