@@ -21,6 +21,9 @@ import java.util.concurrent.TimeoutException;
 
 public class ImapClient implements Runnable {
 
+    private final String regexpImapOK ="\\s+OK.*";
+    private final String regexpImapBAD="\\s+BAD.*";
+    
     private static final Logger LOGGER;
     
     private static int ccount=0;
@@ -184,8 +187,6 @@ public class ImapClient implements Runnable {
     }
     
     private void processRunnerCommand() throws IOException  {
-        final String regexpImapOK ="\\s+OK.*";
-        final String regexpImapBAD="\\s+BAD.*";
         LOGGER.log(Level.FINEST,"IMAP-> C: "+ImapLine.commandEncoder(currentCommand));
         socket.getOutputStream().write((currentCommand+"\r\n").getBytes());
         socket.getOutputStream().flush();
