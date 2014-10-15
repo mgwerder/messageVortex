@@ -51,7 +51,7 @@ public class ImapLineTest {
             fail("Blank Line Exception rised");
             System.out.flush();ble.printStackTrace();System.out.flush();
         } catch (ImapException ie) {
-            assertTrue("ImapException rised"+ie.getMessage()+"("+ie.getStackTrace()[0].getFileName()+":"+ie.getStackTrace()[0].getLineNumber()+")",false);
+            fail("ImapException rised"+ie.getMessage()+"("+ie.getStackTrace()[0].getFileName()+":"+ie.getStackTrace()[0].getLineNumber()+")");
             System.out.flush();System.err.flush();System.out.println("## ImapExceptionRised in getAStringNormal");ie.printStackTrace();System.out.flush();
         }
     }
@@ -76,7 +76,7 @@ public class ImapLineTest {
             fail("Blank Line Exception rised");
             System.out.flush();ble.printStackTrace();System.out.flush();
         } catch (ImapException ie) {
-            assertTrue("ImapException rised"+ie.getMessage()+"("+ie.getStackTrace()[0].getFileName()+":"+ie.getStackTrace()[0].getLineNumber()+")",false);
+            fail("ImapException rised"+ie.getMessage()+"("+ie.getStackTrace()[0].getFileName()+":"+ie.getStackTrace()[0].getLineNumber()+")");
             System.out.flush();System.err.flush();System.out.println("## ImapExceptionRised in getAStringNormal");ie.printStackTrace();System.out.flush();
         }
     }
@@ -89,7 +89,7 @@ public class ImapLineTest {
         } catch(ImapNullLineException ble) {
             assertTrue("Blank Line Exception rised",true);
         } catch (ImapException ie) {
-            assertTrue("Imap Exception rised (should have been ImaplBlankLineException",false);
+            fail("Imap Exception rised (should have been ImaplBlankLineException");
         }
     }
     
@@ -97,11 +97,12 @@ public class ImapLineTest {
     public void tagOnly() {
         try{
             new ImapLine(null,"a",null);
-            assertTrue("ImapException not rised",false);
+            fail("ImapException not rised");
         } catch(ImapBlankLineException ble) {
-            assertTrue("Blank Line Exception rised",false);
+            fail("Blank Line Exception rised");
         } catch (ImapException ie) {
             assertTrue("ImapException rised",true);
+            System.out.println("## tag of exception is \""+ie.getTag()+"\"");
         }
     }
     
@@ -224,9 +225,9 @@ public class ImapLineTest {
             assertTrue("Returned tag should be \"a\"","a".equals(il.getTag()));
             assertTrue("Returned command should be \"b\" but is infact \""+il.getCommand()+"\"","b".equals(il.getCommand()));
         } catch(ImapBlankLineException ble) {
-            assertTrue("Blank Line Exception rised",false);
+            fail("Blank Line Exception rised");
         } catch (ImapException ie) {
-            assertTrue("Imap Exception rised (no exception expected)",false);
+            fail("Imap Exception rised (no exception expected)");
         }
     }
     
@@ -239,11 +240,11 @@ public class ImapLineTest {
             assertTrue("Returned tag should be \"a\"","a".equals(il.getTag()));
             assertTrue("Returned command should be \"b\" but is infact \""+il.getCommand()+"\"","b".equals(il.getCommand()));
         } catch(ImapBlankLineException ble) {
-            assertTrue("ImapBlankLineException rised (no exception expected)",false);
+            fail("ImapBlankLineException rised (no exception expected)");
             ble.printStackTrace();
             System.out.flush();ble.printStackTrace();System.out.flush();
         } catch (ImapException ie) {
-            assertTrue("Imap Exception rised",false);
+            fail("Imap Exception rised");
             System.out.flush();ie.printStackTrace();System.out.flush();
         }
     }

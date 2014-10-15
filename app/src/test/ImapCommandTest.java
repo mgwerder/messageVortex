@@ -68,6 +68,69 @@ public class ImapCommandTest {
     }
     
     @Test
+    public void checkServerTimeout() {
+        try{
+            LOGGER.log(Level.INFO,"************************************************************************");
+            LOGGER.log(Level.INFO,"Check server default timeout");
+            LOGGER.log(Level.INFO,"************************************************************************");
+            ImapConnection.setDefaultTimeout(300);
+            ImapServer is=new ImapServer(0,false);
+            ImapClient ic=new ImapClient("localhost",is.getPort(),false);
+            ic.sendCommand("a0 IWantATimeout",300);
+            ic.setTimeout(3600*1000);
+            Thread.sleep(1000);
+            fail("Timeout not issued");
+        } catch(TimeoutException toe) {
+            // Exception reached as planed
+        } catch(Exception e) {
+            fail("Exception thrown ("+e+")");
+        }
+        ImapConnection.setDefaultTimeout(10000);
+    }
+    
+    @Test
+    public void checkClientTimeout() {
+        try{
+            LOGGER.log(Level.INFO,"************************************************************************");
+            LOGGER.log(Level.INFO,"Check client timeout");
+            LOGGER.log(Level.INFO,"************************************************************************");
+            ImapServer is=new ImapServer(0,false);
+            ImapClient ic=new ImapClient("localhost",is.getPort(),false);
+            ic.sendCommand("a0 IWantATimeout",300);
+            ic.setTimeout(300);
+            Thread.sleep(300);
+            ic.sendCommand("a0 IWantATimeout",300);
+            Thread.sleep(1000);
+            fail("Timeout not issued");
+        } catch(TimeoutException toe) {
+            // Exception reached as planed
+        } catch(Exception e) {
+            fail("Exception thrown ("+e+")");
+        }
+    }
+    
+    @Test
+    public void checkClientDefaultTimeout() {
+        try{
+            LOGGER.log(Level.INFO,"************************************************************************");
+            LOGGER.log(Level.INFO,"Check client default timeout");
+            LOGGER.log(Level.INFO,"************************************************************************");
+            ImapClient.setDefaultTimeout(300);
+            ImapServer is=new ImapServer(0,false);
+            ImapClient ic=new ImapClient("localhost",is.getPort(),false);
+            Thread.sleep(300);
+            ic.sendCommand("a0 IWantATimeout",300);
+            Thread.sleep(1000);
+            fail("Timeout not issued");
+        } catch(TimeoutException toe) {
+            // Exception reached as planed
+        } catch(Exception e) {
+            fail("Exception thrown ("+e+")");
+        }
+        ImapClient.setDefaultTimeout(10000);
+    }
+    
+    @Test
     public void checkFullLogout() {
         boolean encrypted=false;
         do{
