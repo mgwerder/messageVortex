@@ -152,13 +152,20 @@ public class ImapServer extends StoppableThread  {
         return 0;
     }
     
+    /***
+     * Main server task (Do not call).
+     *
+     * This Task listens for new connections and forkes them off as needed.
+     *
+     * @to.do Garbage collector should clean up closed connections from time to time
+     ***/
     public void run() {
         Socket socket=null; 
         int i=1;
         LOGGER.log(Level.INFO,"Server listener ready..." + serverSocket);    
         try {
             while(!shutdown) {
-                // FIXME remove unused connections from time to time
+                // <- Insert garbage collector here (should only run from time to time)
                 socket = serverSocket.accept();
                 ImapConnection imc=null;
                 imc=new ImapConnection(socket,context,suppCiphers,encrypted);
