@@ -23,6 +23,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.SSLContext;
 import java.security.SecureRandom;
 import java.util.concurrent.TimeoutException;
+import java.security.GeneralSecurityException;
 
 
 public class ImapServer extends StoppableThread  {
@@ -39,27 +40,36 @@ public class ImapServer extends StoppableThread  {
     ServerSocket serverSocket=null;
     ConcurrentSkipListSet<ImapConnection> conn=new ConcurrentSkipListSet<ImapConnection>();
     boolean encrypted=false;
-    final SSLContext context=SSLContext.getInstance("TLS");
+    final SSLContext context;
     private Thread runner=null;
     private ImapAuthenticationProxy auth=null;
     
     private static int id=1;
             
-    public ImapServer(boolean encrypted) throws java.security.GeneralSecurityException,IOException {
+    public ImapServer(boolean encrypted) throws IOException {
         this(encrypted?993:143,encrypted);
     }
     
-    public ImapServer(final int port,boolean encrypted) throws java.security.GeneralSecurityException,IOException {
+    public ImapServer(final int port,boolean encrypted) throws IOException {
         java.security.Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
         this.conn=conn;
         this.port=port;
         this.encrypted=encrypted;
+        try{
+          context=SSLContext.getInstance("TLS");
+        } catch(GeneralSecurityException gse) {
+          throw new IOException("error obtaining valid security context",gse);
+        }  
 
         setName("AUTOIDSERVER-"+(id++));
         
         // Determine valid cyphers
         String ks="keystore.jks";
-        context.init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, new TrustManager[] {new AllTrustManager()}, new SecureRandom() );
+        try{
+          context.init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, new TrustManager[] {new AllTrustManager()}, new SecureRandom() );
+        } catch(GeneralSecurityException gse) {
+          throw new IOException("Error initializing security context for connection",gse);
+        }
         SSLContext.setDefault(context);
         String[] arr=((SSLServerSocketFactory) context.getServerSocketFactory().getDefault()).getSupportedCipherSuites(); 
         LOGGER.log(Level.FINE,"Detecting supported cipher suites");
