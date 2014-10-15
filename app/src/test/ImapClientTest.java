@@ -122,12 +122,6 @@ public class ImapClientTest {
             ImapClient ic =new ImapClient("localhost",is.getPort(),true);
             ic.setTimeout(1000);
             assertTrue("TLS is not as expected",ic.isTLS()==true);
-        } catch(NoSuchAlgorithmException nse) {
-            fail("NoSuchAlgorithmException while creating server");
-        } catch(KeyManagementException kme) {
-            fail("KeyManagementException while creating server");
-        } catch(GeneralSecurityException kme) {
-            fail("GeneralSecurityException while creating server");
         } catch(IOException e) {
             fail("IOException while creating server");
         }

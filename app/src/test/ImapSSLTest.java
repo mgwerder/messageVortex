@@ -114,7 +114,7 @@ public class ImapSSLTest {
             }).start();
             
             ImapClient ic =new ImapClient("localhost",ss.getLocalPort(),true);
-            ic.setTimeout(1000);
+            ic.setTimeout(2000);
             ic.sendCommand("a1 test");
             assertTrue("check client socket state",ic.isTLS());
             
