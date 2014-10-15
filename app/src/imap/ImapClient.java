@@ -18,6 +18,7 @@ import java.security.KeyStore;
 import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
+import java.nio.charset.Charset;
 
 public class ImapClient implements Runnable {
 
@@ -68,7 +69,17 @@ public class ImapClient implements Runnable {
         LOGGER.log(Level.INFO,"doing SSL handshake by client");
         java.security.Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
         KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
-        trustStore.load(new FileInputStream("keystore.jks"), "changeme".toCharArray());
+        FileInputStream is=null;
+        try{
+            is=new FileInputStream("keystore.jks");
+            trustStore.load(is, "changeme".toCharArray());
+            is.close();
+        } catch(IOException ioe) {
+            if(is!=null) {
+                is.close();
+            }
+            throw ioe;
+        }    
         TrustManagerFactory trustFactory =  TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());    
         trustFactory.init(trustStore);
         TrustManager[] trustManagers = trustFactory.getTrustManagers();
@@ -188,7 +199,7 @@ public class ImapClient implements Runnable {
     
     private void processRunnerCommand() throws IOException  {
         LOGGER.log(Level.FINEST,"IMAP-> C: "+ImapLine.commandEncoder(currentCommand));
-        socket.getOutputStream().write((currentCommand+"\r\n").getBytes());
+        socket.getOutputStream().write((currentCommand+"\r\n").getBytes(Charset.defaultCharset()));
         socket.getOutputStream().flush();
 
         String tag=null;

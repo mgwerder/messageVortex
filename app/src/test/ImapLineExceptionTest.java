@@ -25,12 +25,18 @@ public class ImapLineExceptionTest {
     @Test
     public void dummyTest() {
         // improve Test coverage (no testing function possible)
+        int id=0;
         try{
-          new ImapException(null,"test");
-          new ImapException(new ImapLine(null,"a b"),"test");
+          throw new ImapException(null,"test");
         } catch(ImapException ie) {
-          fail("ImapException thrown");
+          id++;
+        }  
+        try{
+          throw new ImapException(new ImapLine(null,"a b"),"test");
+        } catch(ImapException ie) {
+          id++;
         }
+        assertTrue("Code coverage for imapException failed", id==2);
     }
     
 }

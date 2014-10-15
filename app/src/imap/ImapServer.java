@@ -188,12 +188,6 @@ public class ImapServer extends StoppableThread  {
             }
             serverSocket.close();
         } catch (IOException e) {
-            try{
-                socket.close();
-            } catch(IOException e2) {
-                // intentionaly ignored
-                assert true:"always ignore this exception"+e2;
-            }
             LOGGER.log(Level.SEVERE,"Error exception on server socket",e);
         }
     }

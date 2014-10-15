@@ -31,6 +31,7 @@ import java.security.SecureRandom;
 import java.util.Set;
 import java.util.HashSet;
 import java.io.File;
+import java.nio.charset.Charset;
 
 
 /**
@@ -102,7 +103,7 @@ public class ImapSSLTest {
                         LOGGER.log(Level.INFO,"pseudoserver waiting for command");
                         s.getInputStream().skip(9);
                         LOGGER.log(Level.INFO,"pseudoserver sending reply");
-                        s.getOutputStream().write("a1 OK\r\n".getBytes());
+                        s.getOutputStream().write("a1 OK\r\n".getBytes(Charset.defaultCharset()));
                         LOGGER.log(Level.INFO,"pseudoserver closing");
                         s.close();
                         ss.close();
@@ -138,7 +139,7 @@ public class ImapSSLTest {
             final Socket s=SSLSocketFactory.getDefault().createSocket(InetAddress.getByName("localhost"),is.getPort());
             s.setSoTimeout(500);
             LOGGER.log(Level.INFO,"sending command");
-            s.getOutputStream().write("a1 capability\r\n".getBytes());
+            s.getOutputStream().write("a1 capability\r\n".getBytes(Charset.defaultCharset()));
             byte b[]=new byte[7];
             int start=0;
             int len=b.length;

@@ -11,6 +11,7 @@ import java.util.Set;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLContext;
 import java.net.Socket;
+import java.nio.charset.Charset;
 
 
 public class ImapConnection extends StoppableThread implements Comparable<ImapConnection> {
@@ -252,7 +253,7 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
                     shutdown=true;
                     LOGGER.log(Level.FINE,"server connection shutdown initated."    );
                 } else {
-                    output.write((s1).getBytes());
+                    output.write((s1).getBytes(Charset.defaultCharset()));
                     LOGGER.log(Level.INFO,"IMAP-> S: "+ImapLine.commandEncoder(s1));
                 }    
             }

@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import java.io.InputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 /***
 /**
@@ -82,7 +83,7 @@ public class ImapLine {
 
         // make sure that we have a valid InputStream
         if(this.input==null) {
-            this.input=new ByteArrayInputStream("".getBytes());
+            this.input=new ByteArrayInputStream("".getBytes(Charset.defaultCharset()));
         }
         
         prepareStorage(con,line,input);
@@ -179,11 +180,11 @@ public class ImapLine {
         }    
 
         // build the string
-        String ret="";
+        StringBuilder ret=new StringBuilder();
         for(int i=start;i<=end;i++) {
-            ret+=(char)i;
+            ret.append((char)i);
         }
-        return ret;
+        return ret.toString();
     }    
 
     /***
@@ -396,19 +397,19 @@ public class ImapLine {
     private String getQuotedString() {
         // get a quoted string
         skipBytes(1);
-        String ret="";
+        StringBuilder ret=new StringBuilder();
         while(snoopBytes(1)!=null && (ABNF_QUOTED_CHAR.contains(snoopBytes(1)) || snoopEscQuotes())) {
             if("\\".contains(snoopBytes(1))) {
-                ret+=skipBytes(2).substring(1,2);
+                ret.append(skipBytes(2).substring(1,2));
             } else {
-                ret+=skipBytes(1);
+                ret.append(skipBytes(1));
             }
         }
         if(snoopBytes(1)==null || !"\"".equals(skipBytes(1))) {
             return null;
         }    
         
-        return ret;
+        return ret.toString();
     }
     
     public String getString() {

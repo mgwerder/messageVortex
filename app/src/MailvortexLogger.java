@@ -19,7 +19,6 @@ import java.util.logging.ConsoleHandler;
 public class MailvortexLogger extends Logger {
 
     static final String LINE_SEPARATOR = System.getProperty("line.separator");
-    static final SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     
     static final class MyLogFormatter extends Formatter {
 
@@ -29,7 +28,7 @@ public class MailvortexLogger extends Logger {
             
             StringBuilder sb = new StringBuilder();
 
-            sb.append(SDF.format(new Date()))
+            sb.append(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()))
                 .append(" ")
                 .append(record.getLevel().getLocalizedName())
                 .append(": ")

@@ -13,6 +13,7 @@ import org.junit.Assert;
 import java.util.concurrent.TimeoutException;
 import static org.junit.Assert.*;
 
+import java.nio.charset.Charset;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
@@ -109,7 +110,7 @@ public class ImapLineTest {
     @Test
     public void blankLineStream() {
         try{
-            InputStream i=new ByteArrayInputStream("".getBytes());
+            InputStream i=new ByteArrayInputStream("".getBytes(Charset.defaultCharset()));
             new ImapLine(null,"",i);
             fail("Blank Line Exception not rised");
         } catch(ImapNullLineException ble) {
@@ -150,7 +151,7 @@ public class ImapLineTest {
     @Test
     public void nonBlankLineStream() {
         try{
-            InputStream i=new ByteArrayInputStream("a b".getBytes());
+            InputStream i=new ByteArrayInputStream("a b".getBytes(Charset.defaultCharset()));
             ImapLine il=new ImapLine(null,"",i);
             assertTrue("Returned tag should be \"a\"","a".equals(il.getTag()));
             assertTrue("Returned command should be \"b\" but is infact \""+il.getCommand()+"\"","b".equals(il.getCommand()));
@@ -167,7 +168,7 @@ public class ImapLineTest {
     @Test
     public void nullLine() {
         try{
-            InputStream i=new ByteArrayInputStream("a b".getBytes());
+            InputStream i=new ByteArrayInputStream("a b".getBytes(Charset.defaultCharset()));
             new ImapLine(null,null,i);
         } catch(ImapBlankLineException ble) {
             fail("Should not reach this point as an Null Line exception should be rised");
@@ -181,7 +182,7 @@ public class ImapLineTest {
     @Test
     public void badLine1() {
         try{
-            InputStream i=new ByteArrayInputStream("+".getBytes());
+            InputStream i=new ByteArrayInputStream("+".getBytes(Charset.defaultCharset()));
             new ImapLine(null,null,i);
             fail("Should not reach this point as an exception should be rised");
         } catch(ImapNullLineException ble) {
@@ -194,7 +195,7 @@ public class ImapLineTest {
     @Test
     public void badLine2() {
         try{
-            InputStream i=new ByteArrayInputStream("a +".getBytes());
+            InputStream i=new ByteArrayInputStream("a +".getBytes(Charset.defaultCharset()));
             ImapLine il=new ImapLine(null,null,i);
             fail("Should not reach this point as an exception should be rised got ["+il.getTag()+"] ["+il.getCommand()+"]"); 
         } catch(ImapNullLineException ble) {
@@ -207,7 +208,7 @@ public class ImapLineTest {
     @Test
     public void goodLine() {
         try{
-            InputStream i=new ByteArrayInputStream("a OK\r\n".getBytes());
+            InputStream i=new ByteArrayInputStream("a OK\r\n".getBytes(Charset.defaultCharset()));
             new ImapLine(null,null,i);
             assertTrue("Should  reach this point",true);
         } catch(ImapNullLineException ble) {
@@ -220,7 +221,7 @@ public class ImapLineTest {
     @Test
     public void nullStringNonBlankLineStream() {
         try{
-            InputStream i=new ByteArrayInputStream("a b".getBytes());
+            InputStream i=new ByteArrayInputStream("a b".getBytes(Charset.defaultCharset()));
             ImapLine il=new ImapLine(null,null,i);
             assertTrue("Returned tag should be \"a\"","a".equals(il.getTag()));
             assertTrue("Returned command should be \"b\" but is infact \""+il.getCommand()+"\"","b".equals(il.getCommand()));
@@ -234,7 +235,7 @@ public class ImapLineTest {
     @Test
     public void lineSpacing() {
         try{
-            InputStream i=new ByteArrayInputStream(" b".getBytes());
+            InputStream i=new ByteArrayInputStream(" b".getBytes(Charset.defaultCharset()));
             ImapLine il=new ImapLine(null,"a",i);
             assertTrue("ImapException not rised",true);
             assertTrue("Returned tag should be \"a\"","a".equals(il.getTag()));
