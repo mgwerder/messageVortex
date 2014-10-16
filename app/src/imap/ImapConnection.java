@@ -135,13 +135,17 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
         return defaultTimeout; 
     }
      
-    public int setState(int status) {
+    public int setImapState(int status) {
         if(status>3 || status<1) {
             return -status;    
         }    
         int old=status;
         this.status=status;
         return old;
+    }
+    
+    public int getImapState() {
+        return this.status;
     }
     
     private void updateSocket() {

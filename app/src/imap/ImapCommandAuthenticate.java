@@ -2,8 +2,15 @@ package net.gwerder.java.mailvortex.imap;
  
 import java.util.logging.Logger;
 import java.util.logging.Level;
+
+import javax.security.auth.callback.CallbackHandler;
+import java.util.Map;
+import java.util.HashMap;
+import javax.security.sasl.Sasl;
+import javax.security.sasl.SaslServer;
+import javax.security.sasl.SaslException;
  
-public class ImapCommandLogin extends ImapCommand {
+public class ImapCommandAuthenticate extends ImapCommand {
 
     private static final Logger LOGGER;
     static {
@@ -28,16 +35,8 @@ public class ImapCommandLogin extends ImapCommand {
     public String[] processCommand(ImapLine line) throws ImapException {
         
         // get userid
-        String userid=getAuthToken(line);
+        String mech=getAuthToken(line);
         
-        // skip space after command
-        if(line.skipSP(1)!=1) {
-            throw new ImapException(line,"error parsing command (skipping to password)");
-        }
-
-        // get password
-        String password = getAuthToken(line);
-
         // skip space
         // WRNING this is "non-strict"
         line.skipSP(-1);
@@ -58,7 +57,7 @@ public class ImapCommandLogin extends ImapCommand {
         } else if(line.getConnection().getAuth()==null) {
             LOGGER.log(Level.SEVERE, "no Authenticator or connection found while calling login");
             reply=new String[] {line.getTag()+" BAD server configuration error\r\n" };
-        } else if(line.getConnection().getAuth().login(userid,password)) {
+        } else if(auth(mech,line)) { // line.getConnection().getAuth().login(userid,password)
             line.getConnection().setImapState(ImapConnection.CONNECTION_AUTHENTICATED);
             reply=new String[] {line.getTag()+" OK LOGIN completed\r\n" };
         } else {
@@ -66,14 +65,36 @@ public class ImapCommandLogin extends ImapCommand {
         }
         return reply;
     }
+    
+    private boolean auth(String mech,ImapLine line) {
+        Map props=new HashMap<String,Object>();
+        if(line.getConnection().isTLS()) {
+            props.put("Sasl.POLICY_NOPLAINTEXT","false");
+        }
+        CallbackHandler cbh=new ImapCommandAuthenticateCallbackHandler();
+        try{
+            SaslServer ss=Sasl.createSaslServer(mech, "imap", "localhost", props, cbh);
+        } catch(SaslException se) {
+            LOGGER.log(Level.WARNING, "Got Exception",se);
+        }
+        return true;
+    }
 
     
     public String[] getCapabilities() {
-        return new String[] { "LOGIN" };
+        return getCapabilities(null);
+    }
+    
+    public String[] getCapabilities(ImapConnection ic) {
+        if(ic.getImapState()==ImapConnection.CONNECTION_NOT_AUTHENTICATED || ic==null) {
+            return new String[] { "AUTH=GSSAPI","AUTH=DIGEST-MD5","AUTH=CRAM-MD5","AUTH=PLAIN" };
+        } else {
+            return new String[0];
+        }
     }
     
     public String[] getCommandIdentifier() {
-        return new String[] {"LOGIN"};
+        return new String[] {"AUTHENTICATE"};
     }
     
 }    
