@@ -152,7 +152,7 @@ public class ImapSSLTest {
                     numread=0;
                 }
             }
-            LOGGER.log(Level.INFO,"got sequence \""+(new String(b))+"\"");
+            LOGGER.log(Level.INFO,"got sequence \""+(new String(b,java.nio.charset.Charset.defaultCharset()))+"\"");
             LOGGER.log(Level.INFO,"done");
         } catch(Exception ioe) {
             ioe.printStackTrace();
