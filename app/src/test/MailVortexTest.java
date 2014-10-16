@@ -27,4 +27,8 @@ public class MailVortexTest {
     public void getRunRegularlyAndShutdown() {
         assertTrue("Errorcode is not 0",net.gwerder.java.mailvortex.MailVortex.main(new String[0])==0);
     }    
+    @Test
+    public void getRunRegularlyAndShutdownNull() {
+        assertTrue("Errorcode is not 0",net.gwerder.java.mailvortex.MailVortex.main(null)==0);
+    }    
 }

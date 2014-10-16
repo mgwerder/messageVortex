@@ -46,6 +46,8 @@ public class ConfigTest {
             fail("should raise NPE but a different exception is raised ("+e+")");
         }
         
+        // <-ADD here a class cast test as soon as multiple types are available
+        
         try{
             assertTrue("Should return true on first creation",Config.createBooleanConfigValue("booleanConfigHandling",true));
             assertFalse("Should return false on recreation",Config.createBooleanConfigValue("booleanConfigHandling",false));
@@ -57,7 +59,7 @@ public class ConfigTest {
             assertTrue("Should return true as last value",Config.setBooleanValue("booleanConfigHandling",true));
             assertTrue("Should return true as last value",Config.getBooleanValue("booleanConfigHandling"));
         } catch(Exception e) {
-            fail("should raise NPE but a different exception is raised ("+e+")");
+            fail("should not raisean exception but did ("+e+")");
         }
     }
 

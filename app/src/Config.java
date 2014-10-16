@@ -55,4 +55,59 @@ public class Config {
         return ret;
     }
 
+    /***
+     * Creates a String config item.
+     *
+     * Creates a config item with a case insensitive identifier. 
+     * The content of the item may not be null.
+     *
+     * @param id    Name of config item (case insensitive)
+     * @param dval  Default content if not set
+     *
+     * @returns     True if item did not exist and was successfully created
+     ***/
+    public static boolean createStringConfigValue(String id,String dval) {
+        synchronized(configurationData) {
+            if(configurationData.get(id.toLowerCase())==null && dval!=null) {
+                configurationData.put(id.toLowerCase(),dval);
+                return true;
+            } else {
+                return false;
+            }
+        }    
+    }
+    
+    /***
+     * @throws NullPointerException when id is unknown
+     * @throws ClassCastException   when id is not a String setting
+     ***/
+    public static String setStringValue(String id,String value) {
+        String ret;
+        if(configurationData.get(id.toLowerCase())==null || value==null) {
+            throw new NullPointerException();
+        } else if(!(configurationData.get(id.toLowerCase()) instanceof String)) {
+            throw new ClassCastException();
+        } else {
+            ret=getStringValue(id);
+            configurationData.put(id.toLowerCase(),value);
+        }    
+        return ret;
+    }
+
+    /***
+     * @throws NullPointerException when id is unknown
+     * @throws ClassCastException   when id is not a String setting
+     ***/
+    public static String getStringValue(String id) {
+        String ret;
+        if(configurationData.get(id.toLowerCase())==null) {
+            throw new NullPointerException();
+        } else if(!(configurationData.get(id.toLowerCase()) instanceof String)) {
+            throw new ClassCastException();
+        } else {
+            ret=(String)(configurationData.get(id.toLowerCase()));
+        }    
+        return ret;
+    }
+
 }
