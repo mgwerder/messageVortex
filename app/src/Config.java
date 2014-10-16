@@ -2,16 +2,15 @@ package net.gwerder.java.mailvortex;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.Map;
+import java.util.Iterator;
 
 public class Config {
 
-    private static Map<String,Object> configurationData= new ConcurrentHashMap<String,Object>();
-    
-    private Config() {
-        super();
-    }
+    private static final Config defaultCfg=new Config();
 
-    public static boolean createBooleanConfigValue(String id,boolean dval) {
+    private Map<String,Object> configurationData= new ConcurrentHashMap<String,Object>();
+    
+    public boolean createBooleanConfigValue(String id,boolean dval) {
         synchronized(configurationData) {
             if(configurationData.get(id.toLowerCase())==null) {
                 configurationData.put(id.toLowerCase(),Boolean.valueOf(dval));
@@ -22,11 +21,41 @@ public class Config {
         }    
     }
     
+    public static Config getDefault() {
+        return defaultCfg;
+    }    
+    
+    public static Config copy(Config src) {
+        Config dst=new Config();
+        synchronized(src.configurationData) {
+            Iterator it = src.configurationData.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry p=(Map.Entry)it.next();
+                Object o=null;
+                if(p.getValue() instanceof Boolean) {
+                    dst.configurationData.put((String)p.getKey(),Boolean.valueOf(((Boolean)(p.getValue())).booleanValue()));
+                } else if(p.getValue() instanceof String) {
+                    dst.configurationData.put((String)p.getKey(),new String((String)p.getValue()));
+                } else {
+                    throw new ClassCastException("unknown value in config data");
+                }
+            }                
+        }  
+        return dst;
+    }
+    
+    /***
+     * Returns a deep copy of this config store.
+     ***/
+    public Config copy() {
+        return copy(this);
+    }
+    
     /***
      * @throws NullPointerException when id is unknown
      * @throws ClassCastException   when id is not a boolean setting
      ***/
-    public static boolean setBooleanValue(String id,boolean value) {
+    public boolean setBooleanValue(String id,boolean value) {
         boolean ret;
         if(configurationData.get(id.toLowerCase())==null) {
             throw new NullPointerException();
@@ -43,7 +72,7 @@ public class Config {
      * @throws NullPointerException when id is unknown
      * @throws ClassCastException   when id is not a boolean setting
      ***/
-    public static boolean getBooleanValue(String id) {
+    public boolean getBooleanValue(String id) {
         boolean ret;
         if(configurationData.get(id.toLowerCase())==null) {
             throw new NullPointerException();
@@ -66,7 +95,7 @@ public class Config {
      *
      * @returns     True if item did not exist and was successfully created
      ***/
-    public static boolean createStringConfigValue(String id,String dval) {
+    public boolean createStringConfigValue(String id,String dval) {
         synchronized(configurationData) {
             if(configurationData.get(id.toLowerCase())==null && dval!=null) {
                 configurationData.put(id.toLowerCase(),dval);
@@ -81,7 +110,7 @@ public class Config {
      * @throws NullPointerException when id is unknown
      * @throws ClassCastException   when id is not a String setting
      ***/
-    public static String setStringValue(String id,String value) {
+    public String setStringValue(String id,String value) {
         String ret;
         if(configurationData.get(id.toLowerCase())==null || value==null) {
             throw new NullPointerException();
@@ -98,7 +127,7 @@ public class Config {
      * @throws NullPointerException when id is unknown
      * @throws ClassCastException   when id is not a String setting
      ***/
-    public static String getStringValue(String id) {
+    public String getStringValue(String id) {
         String ret;
         if(configurationData.get(id.toLowerCase())==null) {
             throw new NullPointerException();

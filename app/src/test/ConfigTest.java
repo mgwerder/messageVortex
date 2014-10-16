@@ -26,10 +26,8 @@ public class ConfigTest {
 
     @Test
     public void booleanConfigHandling() {
-        boolean v;
-
         try{
-            Config.getBooleanValue("booleanConfigHandling");
+            Config.getDefault().getBooleanValue("booleanConfigHandling");
             fail("should raise NPE but nothing happened");
         } catch(NullPointerException npe) {
             // all OK this is expected
@@ -38,7 +36,7 @@ public class ConfigTest {
         }
 
         try{
-            Config.setBooleanValue("booleanConfigHandling",true);
+            Config.getDefault().setBooleanValue("booleanConfigHandling",true);
             fail("should raise NPE but nothing happened");
         } catch(NullPointerException npe) {
             // all OK this is expected
@@ -46,21 +44,84 @@ public class ConfigTest {
             fail("should raise NPE but a different exception is raised ("+e+")");
         }
         
-        // <-ADD here a class cast test as soon as multiple types are available
+        try{
+            Config.getDefault().getStringValue("stringConfigHandling");
+            fail("should raise NPE but nothing happened");
+        } catch(NullPointerException npe) {
+            // all OK this is expected
+        } catch(Exception e) {
+            fail("should raise NPE but a different exception is raised ("+e+")");
+        }
+
+        try{
+            Config.getDefault().setStringValue("StringConfigHandling","test");
+            fail("should raise NPE but nothing happened");
+        } catch(NullPointerException npe) {
+            // all OK this is expected
+        } catch(Exception e) {
+            fail("should raise NPE but a different exception is raised ("+e+")");
+        }
         
         try{
-            assertTrue("Should return true on first creation",Config.createBooleanConfigValue("booleanConfigHandling",true));
-            assertFalse("Should return false on recreation",Config.createBooleanConfigValue("booleanConfigHandling",false));
-            assertTrue("Should return true as default value",Config.getBooleanValue("booleanConfigHandling"));
-            assertTrue("Should return true as last value",Config.setBooleanValue("booleanConfigHandling",false));
-            assertFalse("Should return false as last value",Config.setBooleanValue("booleanConfigHandling",false));
-            assertFalse("Should return false as last value",Config.getBooleanValue("booleanConfigHandling"));
-            assertFalse("Should return false as last value",Config.setBooleanValue("booleanConfigHandling",true));
-            assertTrue("Should return true as last value",Config.setBooleanValue("booleanConfigHandling",true));
-            assertTrue("Should return true as last value",Config.getBooleanValue("booleanConfigHandling"));
+            // String
+            assertTrue("Should return true on first creation",Config.getDefault().createStringConfigValue("stringConfigHandling","def"));
+            assertFalse("Should return false on recreation",Config.getDefault().createStringConfigValue("stringConfigHandling","otherdef"));
+            assertTrue("Should return true as default value","def".equals(Config.getDefault().getStringValue("stringConfigHandling")));
+            assertTrue("Should return true as last value","def".equals(Config.getDefault().setStringValue("stringConfigHandling","otherval")));
+            assertTrue("Should return false as last value","otherval".equals(Config.getDefault().setStringValue("stringConfigHandling","thirdval")));
+            assertTrue("Should return false as last value","thirdval".equals(Config.getDefault().getStringValue("stringConfigHandling")));
+            assertTrue("Should return false as last value","thirdval".equals(Config.getDefault().setStringValue("stringConfigHandling","fourthval")));
+            
+            //Boolean
+            assertTrue("Should return true on first creation",Config.getDefault().createBooleanConfigValue("booleanConfigHandling",true));
+            assertFalse("Should return false on recreation",Config.getDefault().createBooleanConfigValue("booleanConfigHandling",false));
+            assertTrue("Should return true as default value",Config.getDefault().getBooleanValue("booleanConfigHandling"));
+            assertTrue("Should return true as last value",Config.getDefault().setBooleanValue("booleanConfigHandling",false));
+            assertFalse("Should return false as last value",Config.getDefault().setBooleanValue("booleanConfigHandling",false));
+            assertFalse("Should return false as last value",Config.getDefault().getBooleanValue("booleanConfigHandling"));
+            assertFalse("Should return false as last value",Config.getDefault().setBooleanValue("booleanConfigHandling",true));
+            assertTrue("Should return true as last value",Config.getDefault().setBooleanValue("booleanConfigHandling",true));
+            assertTrue("Should return true as last value",Config.getDefault().getBooleanValue("booleanConfigHandling"));
         } catch(Exception e) {
-            fail("should not raisean exception but did ("+e+")");
+            fail("should not raise an exception but did ("+e+")");
         }
+
+        try{
+            Config.getDefault().setStringValue("booleanConfigHandling","test");
+            fail("should raise CCE but nothing happened");
+        } catch(ClassCastException npe) {
+            // all OK this is expected
+        } catch(Exception e) {
+            fail("should raise CCE but a different exception is raised ("+e+")");
+        }
+        
+        try{
+            Config.getDefault().getStringValue("booleanConfigHandling");
+            fail("should raise CCE but nothing happened");
+        } catch(ClassCastException npe) {
+            // all OK this is expected
+        } catch(Exception e) {
+            fail("should raise CCE but a different exception is raised ("+e+")");
+        }
+        
+        try{
+            Config.getDefault().setBooleanValue("stringConfigHandling",true);
+            fail("should raise CCE but nothing happened");
+        } catch(ClassCastException npe) {
+            // all OK this is expected
+        } catch(Exception e) {
+            fail("should raise CCE but a different exception is raised ("+e+")");
+        }
+        
+        try{
+            Config.getDefault().getBooleanValue("stringConfigHandling");
+            fail("should raise CCE but nothing happened");
+        } catch(ClassCastException npe) {
+            // all OK this is expected
+        } catch(Exception e) {
+            fail("should raise CCE but a different exception is raised ("+e+")");
+        }
+        
     }
 
 }
