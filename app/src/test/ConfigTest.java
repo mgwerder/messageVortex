@@ -121,6 +121,12 @@ public class ConfigTest {
         } catch(Exception e) {
             fail("should raise CCE but a different exception is raised ("+e+")");
         }
+
+        try{
+            Config.getDefault().copy();
+        } catch(Exception e) {
+            fail("should not raise an exception ("+e+")");
+        }
         
     }
 
