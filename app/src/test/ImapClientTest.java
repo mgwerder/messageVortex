@@ -40,7 +40,7 @@ public class ImapClientTest {
         MailvortexLogger.setGlobalLogLevel(Level.ALL);
     }
 
-    private class DeadSocket implements Runnable {
+    private static class DeadSocket implements Runnable {
         private boolean shutdown=false;
         private Thread runner=new Thread(this,"Dead socket (init)");
         
@@ -88,7 +88,7 @@ public class ImapClientTest {
         }        
     }
     
-    private class ImapCommandIWantATimeout extends ImapCommand {
+    private static class ImapCommandIWantATimeout extends ImapCommand {
     
         public void init() {
             ImapCommand.registerCommand(this);

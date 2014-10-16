@@ -14,7 +14,7 @@ public class Config {
     public static boolean createBooleanConfigValue(String id,boolean dval) {
         synchronized(configurationData) {
             if(configurationData.get(id.toLowerCase())==null) {
-                configurationData.put(id.toLowerCase(),new Boolean(dval));
+                configurationData.put(id.toLowerCase(),Boolean.valueOf(dval));
                 return true;
             } else {
                 return false;
@@ -34,7 +34,7 @@ public class Config {
             throw new ClassCastException();
         } else {
             ret=getBooleanValue(id);
-            configurationData.put(id.toLowerCase(),new Boolean(value));
+            configurationData.put(id.toLowerCase(),Boolean.valueOf(value));
         }    
         return ret;
     }

@@ -20,7 +20,7 @@ import net.gwerder.java.mailvortex.imap.*;
 @RunWith(JUnit4.class)
 public class ImapAuthenticationDummyProxyTest {
 
-    private class ImapConnectionDummy extends ImapConnection {
+    private static class ImapConnectionDummy extends ImapConnection {
         public ImapConnectionDummy() {
             // This is a dummy constructor for test cases do not use it for anything else
         }    

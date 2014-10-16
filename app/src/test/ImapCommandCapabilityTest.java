@@ -41,7 +41,7 @@ public class ImapCommandCapabilityTest {
         }
     }
 
-    private class ImapCommandCapabilityParser extends ImapCommand {
+    private static class ImapCommandCapabilityParser extends ImapCommand {
         public void init() {
             ImapCommand.registerCommand(this);
         }

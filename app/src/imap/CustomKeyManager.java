@@ -67,6 +67,9 @@ public class CustomKeyManager implements X509KeyManager {
             }
           }
         }  
+        if(getPrivateKey(alias)==null) {
+            throw new GeneralSecurityException("requested alias not found in keystore");
+        }
     }
 
     /**

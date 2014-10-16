@@ -10,6 +10,7 @@ import junit.framework.JUnit4TestAdapter;
   MailVortexTest.class,
   VersionTest.class,
   ConfigTest.class,
+  CustomKeyManagerTest.class,
   ImapLineExceptionTest.class,
   ImapLineTest.class,
   ImapSSLTest.class,
@@ -30,6 +31,7 @@ public class MainSuite {
         s.addTest(new JUnit4TestAdapter(MailVortexTest.class));
         s.addTest(new JUnit4TestAdapter(VersionTest.class));
         s.addTest(new JUnit4TestAdapter(ConfigTest.class));
+        s.addTest(new JUnit4TestAdapter(CustomKeyManagerTest.class));
         s.addTest(new JUnit4TestAdapter(ImapLineExceptionTest.class));
         s.addTest(new JUnit4TestAdapter(ImapLineTest.class));
         s.addTest(new JUnit4TestAdapter(ImapSSLTest.class));
