@@ -52,6 +52,9 @@ public class ImapCommandLogin extends ImapCommand {
         if(line.getConnection()==null) {
             LOGGER.log(Level.SEVERE, "no connection found while calling login");
             reply=new String[] {line.getTag()+" BAD server configuration error\r\n" };
+        } else if(!line.getConnection().isTLS()) {
+            LOGGER.log(Level.SEVERE, "no TLS but logging in with username and password");
+            reply=new String[] {line.getTag()+" BAD authentication with username and password refused due current security strength\r\n" };
         } else if(line.getConnection().getAuth()==null) {
             LOGGER.log(Level.SEVERE, "no Authenticator or connection found while calling login");
             reply=new String[] {line.getTag()+" BAD server configuration error\r\n" };

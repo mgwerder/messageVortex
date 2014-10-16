@@ -23,7 +23,7 @@ import java.io.InputStream;
 @RunWith(JUnit4.class)
 public class ImapCommandTest {
 
-    private final boolean  DO_NOT_TEST_ENCRYPTION=true;
+    private final boolean  DO_NOT_TEST_ENCRYPTION=false;
     
     private static final java.util.logging.Logger LOGGER;
 
@@ -182,7 +182,11 @@ public class ImapCommandTest {
                 tag=ImapLine.getNextTag();
                 ret=sendCommand(c,tag+" CAPABILITY",tag+" OK");
                 tag=ImapLine.getNextTag();
-                ret=sendCommand(c,tag+" LOGIN user password",tag+" OK");
+                if(encrypted) {
+                    ret=sendCommand(c,tag+" LOGIN user password",tag+" OK");
+                } else {    
+                    ret=sendCommand(c,tag+" LOGIN user password",tag+" BAD");
+                }
                 tag=ImapLine.getNextTag();
                 ret=sendCommand(c,tag+" CAPABILITY",tag+" OK");
                 tag=ImapLine.getNextTag();
