@@ -75,11 +75,12 @@ public class ImapClient implements Runnable {
             trustStore.load(is, "changeme".toCharArray());
             is.close();
         } catch(IOException ioe) {
+            throw ioe;
+        } finally {
             if(is!=null) {
                 is.close();
             }
-            throw ioe;
-        }    
+        }
         TrustManagerFactory trustFactory =  TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());    
         trustFactory.init(trustStore);
         TrustManager[] trustManagers = trustFactory.getTrustManagers();
