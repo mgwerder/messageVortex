@@ -86,7 +86,7 @@ public class ImapCommandAuthenticate extends ImapCommand {
     }
     
     public String[] getCapabilities(ImapConnection ic) {
-        if(ic.getImapState()==ImapConnection.CONNECTION_NOT_AUTHENTICATED || ic==null) {
+        if(ic==null || ic.getImapState()==ImapConnection.CONNECTION_NOT_AUTHENTICATED) {
             return new String[] { "AUTH=GSSAPI","AUTH=DIGEST-MD5","AUTH=CRAM-MD5","AUTH=PLAIN" };
         } else {
             return new String[0];
