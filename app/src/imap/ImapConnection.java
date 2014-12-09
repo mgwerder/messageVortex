@@ -275,7 +275,7 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
             }
             
             while(!shutdown) {
-                currentSocket.setSoTimeout((int)timeout);
+                currentSocket.setSoTimeout(timeout);
                 processCommands();
             }
         } catch(java.net.SocketTimeoutException  e) {

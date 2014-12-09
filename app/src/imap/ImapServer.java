@@ -104,7 +104,7 @@ public class ImapServer extends StoppableThread  {
         }
         
         // open socket
-        this.serverSocket = (ServerSocket)ServerSocketFactory.getDefault().createServerSocket(this.port);
+        this.serverSocket = ServerSocketFactory.getDefault().createServerSocket(this.port);
         this.port=serverSocket.getLocalPort();
         runner=new Thread(this,"ImapServerConnectionListener");
         runner.start();

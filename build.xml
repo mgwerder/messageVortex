@@ -91,6 +91,7 @@
            target="${app.target}"
          optimize="${compile.optimize}">
         <classpath refid="compile.classpath"/>
+        <compilerarg value="-Xlint"/>
     </javac>
     <javac srcdir="${build.home}/testsrc"
           destdir="${build.home}/classes/"
@@ -100,6 +101,7 @@
            target="${app.target}"
          optimize="${compile.optimize}">
         <classpath refid="compile.classpath"/>
+        <compilerarg value="-Xlint"/>
     </javac>
     <copy  todir="${build.home}/classes/">
       <fileset dir="${build.home}/src" excludes="**/*.java"/>

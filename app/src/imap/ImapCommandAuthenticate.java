@@ -17,19 +17,18 @@ public class ImapCommandAuthenticate extends ImapCommand {
         LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
     }
 
+    /***
+     * Initializer called by the static constructor of ImapCommand.
+     ***/
     public void init() {
         ImapCommand.registerCommand(this);
     }
     
-    private String getAuthToken(ImapLine line) throws ImapException {
-        String userid = line.getAString();
-        if(userid==null) {
-            throw new ImapException(line,"error parsing command (getting userid)");
-        }
-        return userid;
-    }
-    
     /***
+     * process authentication command.
+     *
+     * @param line The context of the line triggered
+     *
      * @fix.me add capabilities to successful login
      ***/
     public String[] processCommand(ImapLine line) throws ImapException {
@@ -66,8 +65,34 @@ public class ImapCommandAuthenticate extends ImapCommand {
         return reply;
     }
     
+    /***
+     * Returns the capabilities to be reported by the CAPABILITIES command.
+     *
+     * @returns A list of capabilities
+     ***/
+    public String[] getCapabilities() {
+        return getCapabilities(null);
+    }
+    
+    /***
+     * Returns the Identifier (IMAP command) which are processed by this class.
+     *
+     * @returns A list of identifiers
+     ***/
+    public String[] getCommandIdentifier() {
+        return new String[] {"AUTHENTICATE"};
+    }
+    
+    private String getAuthToken(ImapLine line) throws ImapException {
+        String userid = line.getAString();
+        if(userid==null) {
+            throw new ImapException(line,"error parsing command (getting userid)");
+        }
+        return userid;
+    }
+    
     private boolean auth(String mech,ImapLine line) {
-        Map props=new HashMap<String,Object>();
+        Map<String,Object> props=new HashMap<String,Object>();
         if(line.getConnection().isTLS()) {
             props.put("Sasl.POLICY_NOPLAINTEXT","false");
         }
@@ -81,20 +106,12 @@ public class ImapCommandAuthenticate extends ImapCommand {
     }
 
     
-    public String[] getCapabilities() {
-        return getCapabilities(null);
-    }
-    
-    public String[] getCapabilities(ImapConnection ic) {
+    private String[] getCapabilities(ImapConnection ic) {
         if(ic==null || ic.getImapState()==ImapConnection.CONNECTION_NOT_AUTHENTICATED) {
             return new String[] { "AUTH=GSSAPI","AUTH=DIGEST-MD5","AUTH=CRAM-MD5","AUTH=PLAIN" };
         } else {
             return new String[0];
         }
-    }
-    
-    public String[] getCommandIdentifier() {
-        return new String[] {"AUTHENTICATE"};
     }
     
 }    

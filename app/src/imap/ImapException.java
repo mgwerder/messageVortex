@@ -2,6 +2,7 @@ package net.gwerder.java.mailvortex.imap;
 
 public class ImapException extends Exception {
 
+    private static final long serialVersionUID = 42L;
     private final ImapLine line;
 
     public ImapException(ImapLine line,String reason) {
@@ -12,4 +13,6 @@ public class ImapException extends Exception {
     public String getTag() {
         return line.getTag();
     }
+    
+    
 }
