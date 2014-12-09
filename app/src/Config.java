@@ -92,7 +92,7 @@ public class Config {
      * @param id    Name of config item (case insensitive)
      * @param dval  Default content if not set
      *
-     * @returns     True if item did not exist and was successfully created
+     * @return     True if item did not exist and was successfully created
      ***/
     public boolean createStringConfigValue(String id,String dval) {
         synchronized(configurationData) {

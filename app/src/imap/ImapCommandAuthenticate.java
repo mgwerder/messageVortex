@@ -34,8 +34,8 @@ public class ImapCommandAuthenticate extends ImapCommand {
     /***
      * process authentication command.
      *
-     * @param line The context of the line triggered
-     *
+     * @param  line           The context of the line triggered
+     * @throws ImapException
      * @fix.me add capabilities to successful login
      ***/
     public String[] processCommand(ImapLine line) throws ImapException {
@@ -75,7 +75,7 @@ public class ImapCommandAuthenticate extends ImapCommand {
     /***
      * Returns the capabilities to be reported by the CAPABILITIES command.
      *
-     * @returns A list of capabilities
+     * @return A list of capabilities
      ***/
     public String[] getCapabilities() {
         return getCapabilities(null);
@@ -84,7 +84,7 @@ public class ImapCommandAuthenticate extends ImapCommand {
     /***
      * Returns the Identifier (IMAP command) which are processed by this class.
      *
-     * @returns A list of identifiers
+     * @return A list of identifiers
      ***/
     public String[] getCommandIdentifier() {
         return new String[] {"AUTHENTICATE"};

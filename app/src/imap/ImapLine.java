@@ -14,9 +14,10 @@ import java.nio.charset.Charset;
  * A Imap conformant parser/scanner.
  *
  * @author Martin Gwerder
+ *
  * @fix.me Limit strings and literals to a certain length (otherwise it is litterally unlimited) 
- * @known.bugs Code will fail i Line.length()>Maxint or out of memory
- * @known.bugs Encrypted connects are failing
+ * @known.bug Code will fail i Line.length()>Maxint or out of memory
+ * @known.bug Encrypted connects are failing
  ***/
 public class ImapLine {
     
@@ -205,7 +206,7 @@ public class ImapLine {
     /***
      * Getter for the Imap connection in Control of this command.
      *
-     * @returns ImapConnection storing the context of this command
+     * @return ImapConnection storing the context of this command
      ***/
     public ImapConnection getConnection() {
         return con;
@@ -214,7 +215,7 @@ public class ImapLine {
     /***
      * Getter for the command.
      *
-     * @returns command token
+     * @return command token
      ***/
     public String getCommand() {
         return commandToken;
@@ -223,7 +224,7 @@ public class ImapLine {
     /***
      * Getter for the command tag.
      *
-     * @returns command tag
+     * @return command tag
      ***/
     public String getTag() {
         return tagToken;
@@ -251,7 +252,7 @@ public class ImapLine {
     /***
      * Encodes a command so that newlines are visible.
      *
-     * @returns a printable string representation
+     * @return a printable string representation
      ***/
     public static String commandEncoder(String command)  {
         if(command==null) {
@@ -263,7 +264,7 @@ public class ImapLine {
     /***
      * Returns true if escaped quotes are present at the current position.
      *
-     * @returns true if escaped quotes are present
+     * @return true if escaped quotes are present
      ***/
     public boolean snoopEscQuotes() {
         return "\\".contains(snoopBytes(1)) && 
@@ -277,7 +278,7 @@ public class ImapLine {
      * of available bytes is lower than the number of requested characters
      * then the buffer content is returned. 
      *
-     * @returns The requested string
+     * @return The requested string
      ***/
     public String snoopBytes(long num) {
         if(num<=0) {
@@ -309,7 +310,7 @@ public class ImapLine {
     /***
      * Returns the current buffer (including position) and some of the already read characters.
      *
-     * @returns String representation of the current context
+     * @return String representation of the current context
      ***/
     public String getContext() {
         return context+"^^^"+buffer;
@@ -319,7 +320,7 @@ public class ImapLine {
      * Skips the specified number of characters and adds them to the past context.
      *
      * @param   num number of characters to be skipped    
-     * @returns     String representation of the skipped characters
+     * @return     String representation of the skipped characters
      ***/
     public String skipBytes(long num) {
         return skipBytes(num,true);
@@ -356,7 +357,7 @@ public class ImapLine {
      * Skips the specified number of SPACES.
      *
      * @param   num number of spaces to be skipped    
-     * @returns     number of skipped spaces
+     * @return     number of skipped spaces
      ***/
     public int skipSP(int num) {
         // count number of spaces found
@@ -381,7 +382,7 @@ public class ImapLine {
     /***
      * Skips a CRLF combo in the buffer.
      *
-     * @returns     True if a combo has been skipped
+     * @return     True if a combo has been skipped
      ***/
     public boolean skipCRLF() {
         LOGGER.log(Level.FINER,"Skipping CRLF");
@@ -397,7 +398,7 @@ public class ImapLine {
     /***
      * Skips up to a CRLF combo in the buffer.
      *
-     * @returns     True if a combo has been skipped (false if buffer ended before a CRLF combo was read
+     * @return     True if a combo has been skipped (false if buffer ended before a CRLF combo was read
      ***/
     public boolean skipUntilCRLF() {
         while(snoopBytes(2)!=null && !"\r\n".equals(snoopBytes(2))) {
@@ -472,7 +473,7 @@ public class ImapLine {
     /***
      * Get an IMAP String from the buffer (quoted or prefixed).
      *
-     * @returns     The String or null if no string is at the current position
+     * @return     The String or null if no string is at the current position
      ***/
     public String getString() {
         String start=snoopBytes(1);
@@ -494,7 +495,7 @@ public class ImapLine {
     /***
      * Get an IMAP AString (direct, quoted or prefixed) from the current buffer position.
      *
-     * @returns     The String or null if no string at the current position
+     * @return     The String or null if no string at the current position
      ***/
     public String getAString() {
         
@@ -523,7 +524,7 @@ public class ImapLine {
     /***
      * Get the tag at the current position.
      *
-     * @returns     the tag or null if no valid is found
+     * @return     the tag or null if no valid is found
      ***/
     public String getATag() {
         String ret=null;
@@ -547,7 +548,7 @@ public class ImapLine {
     /***
      * Get a unique identifier as a tag.
      *
-     * @returns     A unique tag ("A" prefixed)
+     * @return     A unique tag ("A" prefixed)
      ***/
     public static String getNextTag() {
         return getNextTag("A");
@@ -556,7 +557,7 @@ public class ImapLine {
     /***
      * Get a unique identifier as a tag.
      *
-     * @returns     A unique tag 
+     * @return     A unique tag 
      ***/
     public static String getNextTag(String prefix) {
         String ret;

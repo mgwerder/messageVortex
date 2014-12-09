@@ -15,7 +15,7 @@ public abstract class ImapAuthenticationProxy {
     /***
      * Get the ImapConnection object which belongs to this proxy
      *
-     * @returns A Connection object which is connected to this proxy
+     * @return A Connection object which is connected to this proxy
      ***/
     public ImapConnection getImapConnection() { 
         return this.conn; 

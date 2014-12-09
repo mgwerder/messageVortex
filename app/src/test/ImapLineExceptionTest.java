@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
 
 
 /**
- * Tests for {@link net.gwerder.java.mailvortex.imap.ImapLineException}.
+ * Tests for {@link net.gwerder.java.mailvortex.imap.ImapException}.
  *
  * @author martin@gwerder.net (Martin GWERDER)
  */

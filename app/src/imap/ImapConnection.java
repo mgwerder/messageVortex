@@ -109,8 +109,8 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
     /***
      * Set timeout of the connection.
      *
-     * @param timeout   The new Timeout
-     * @returns         Previous timeout
+     * @param  timeout  The new Timeout
+     * @return          Previous timeout
      ***/
     public int setTimeout(int timeout) {
         int ot=this.timeout;
@@ -179,7 +179,7 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
     /***
      * Closes all connections and terminate all subsequent runners.
      *
-     * @FIX.ME Implementation of shudown in ImapConnection should be improved
+     * @fix.me Implementation of shudown in ImapConnection should be improved
      ***/
     public int shutdown() {
         // flag runner to shutdown

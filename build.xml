@@ -226,12 +226,12 @@
       <link offline="false" href="http://developer.java.sun.com/developer/products/xml/docs/api/" packagelistLoc="C:/temp/pl2"/>  -->
 	  <tag name="known.bug" description="Known bugs:"/>
 	  <tag name="to.do" description="TODOs:"/>
-      <fileset dir="${build.home}/src/" defaultexcludes="yes">
+	  <tag name="fix.me" description="Fix me:"/>
+      <fileset dir="${build.home}/testsrc/" defaultexcludes="yes">
         <include name="**/*.java"/>
       </fileset>
-      <fileset dir="${src.home}/" defaultexcludes="yes">
+      <fileset dir="${build.home}/src" defaultexcludes="yes">
         <include name="**/*.java"/>
-        <exclude name="Version.java"/>
       </fileset>
     </javadoc>
   </target>
