@@ -9,7 +9,14 @@ import java.util.HashMap;
 import javax.security.sasl.Sasl;
 import javax.security.sasl.SaslServer;
 import javax.security.sasl.SaslException;
- 
+
+/***
+* Provides the the Authenticate command to the IMAP server.
+*
+* @author  Martin Gwerder  
+* @version 1.0
+* @since   2014-12-09 
+***/ 
 public class ImapCommandAuthenticate extends ImapCommand {
 
     private static final Logger LOGGER;
