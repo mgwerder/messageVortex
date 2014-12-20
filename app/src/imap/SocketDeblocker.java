@@ -4,6 +4,8 @@ import net.gwerder.java.mailvortex.MailvortexLogger;
 import java.util.logging.Logger;
 import java.util.logging.Level;
   
+import java.net.ConnectException;
+
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
@@ -50,6 +52,9 @@ public class SocketDeblocker extends Thread {
             try{
                 SSLSocket cs = (SSLSocket)SSLSocketFactory.getDefault().createSocket("localhost", port);
                 cs.close();
+            } catch(ConnectException e) {
+				/* there was nothing to deblock */
+				LOGGER.log(Level.FINEST,"Exception while running SocketDeblocker",e);
             } catch(Exception e) {
                 LOGGER.log(Level.FINEST,"Exception while running SocketDeblocker",e);
             }

@@ -20,7 +20,14 @@ public class Config {
             }
         }    
     }
-    
+    /* Gets a boolean value from the application config.
+	 *
+	 * @param id key which should be set 
+	 * @param value Vlue to be set in key
+	 * @returns old value before setting to new value
+	 * @throws NullPointerException if key does not exist in configurationData
+	 * @throws ClassCastException	if key is not of type boolean
+	 ***/
     public static Config getDefault() {
         return DEFAULT_CFG;
     }    
@@ -50,11 +57,15 @@ public class Config {
         return copy(this);
     }
     
-    /***
-     * @throws NullPointerException when id is unknown
-     * @throws ClassCastException   when id is not a boolean setting
-     ***/
-    public boolean setBooleanValue(String id,boolean value) {
+	/***
+	 * Gets a boolean value from the application config.
+	 *
+	 * @param id key which should be set 
+	 * @param value Vlue to be set in key
+	 * @returns old value before setting to new value
+	 * @throws NullPointerException if key does not exist in configurationData
+	 * @throws ClassCastException	if key is not of type boolean
+	 ***/    public boolean setBooleanValue(String id,boolean value) {
         boolean ret;
         if(configurationData.get(id.toLowerCase())==null) {
             throw new NullPointerException();
@@ -67,11 +78,15 @@ public class Config {
         return ret;
     }
 
-    /***
-     * @throws NullPointerException when id is unknown
-     * @throws ClassCastException   when id is not a boolean setting
-     ***/
-    public boolean getBooleanValue(String id) {
+	/***
+	 * Gets a boolean value from the application config.
+	 *
+	 * @param id 					key which should be set 
+	 * @returns 					current value of the specified key
+	 * @throws NullPointerException if key does not exist in configurationData
+	 * @throws ClassCastException	if key is not of type boolean
+	 ***/
+    public static boolean getBooleanValue(String id) {
         boolean ret;
         if(configurationData.get(id.toLowerCase())==null) {
             throw new NullPointerException();
