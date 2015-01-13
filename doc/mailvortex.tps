@@ -11,13 +11,13 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1546
-NormalPos.bottom=540
+NormalPos.right=1322
+NormalPos.bottom=510
 Class=LaTeXView
 Document=mailvortex.tex
 
 [Frame0_View0,0]
-TopLine=257
+TopLine=272
 Cursor=8896
 
 [Frame1]
@@ -29,8 +29,8 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1546
-NormalPos.bottom=540
+NormalPos.right=1322
+NormalPos.bottom=510
 Class=LaTeXView
 Document=inc\parts\intro.tex
 
@@ -47,13 +47,13 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1546
-NormalPos.bottom=540
+NormalPos.right=1322
+NormalPos.bottom=510
 Class=LaTeXView
 Document=inc\parts\theory.tex
 
 [Frame2_View0,0]
-TopLine=220
+TopLine=250
 Cursor=10852
 
 [Frame3]
@@ -65,8 +65,8 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1546
-NormalPos.bottom=540
+NormalPos.right=1322
+NormalPos.bottom=510
 Class=LaTeXView
 Document=inc\parts\current.tex
 
@@ -83,8 +83,8 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1546
-NormalPos.bottom=540
+NormalPos.right=1322
+NormalPos.bottom=510
 Class=LaTeXView
 Document=inc\parts\analysis.tex
 
@@ -101,13 +101,13 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1546
-NormalPos.bottom=540
+NormalPos.right=1322
+NormalPos.bottom=510
 Class=LaTeXView
 Document=inc\parts\design.tex
 
 [Frame5_View0,0]
-TopLine=125
+TopLine=134
 Cursor=7002
 
 [Frame6]
@@ -119,8 +119,8 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1546
-NormalPos.bottom=540
+NormalPos.right=1322
+NormalPos.bottom=510
 Class=LaTeXView
 Document=inc\parts\verification.tex
 
@@ -137,14 +137,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1546
-NormalPos.bottom=540
+NormalPos.right=1322
+NormalPos.bottom=510
 Class=LaTeXView
 Document=mailvortex_Plan.tex
 
 [Frame7_View0,0]
-TopLine=205
-Cursor=16468
+TopLine=270
+Cursor=18082
 
 [SessionInfo]
 FrameCount=8
