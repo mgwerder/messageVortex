@@ -7,6 +7,8 @@
 \SVN $URL: https://bachus.gwerder.net/svn/AnonMail/AnonMail.tex $
 \SVN $Id: AnonMail.tex 40 2014-05-03 15:52:35Z mgwerder $
 
+% titlepage geometry change
+\usepackage[showframe,paper=a4paper,top=1in,bottom=1in,right=0.5in,left=1.5in]{geometry}% http://ctan.org/pkg/geometry
 	
 \usepackage{scrhack}
 
@@ -94,14 +96,18 @@
 
 \hypersetup{pdfinfo={
 Subject={Privacy when using mail},
-Keywords={Email; SMTP; MIME; S/MIME; POP3; IMAPv4; MailVortex}
+Keywords={Email; SMTP; MIME; S/MIME; POP3; IMAPv4; MailVortex; Anonymity}
 }}
 
 \begin{document}
+\newgeometry{margin=0cm, footskip=0mm}\showframe
+
 \frontmatter
 
 % include title page
 \input{inc/parts/title.tex}
+
+\restoregeometry
 
 \begin{comment}
 \begin{abstracts}        %this creates the heading for the abstract page
