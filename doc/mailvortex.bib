@@ -2,6 +2,19 @@
 % Encoding: Cp1252
 
 
+@Book{RFC1087,
+  Title                    = {RFC1087 Ethics and the Internet},
+  Author                   = {Internet Activities Board},
+  Editor                   = {IETF},
+  Publisher                = {IETF},
+  Year                     = {1989},
+
+  File                     = {:inc\\bib\\rfc1087.pdf:PDF},
+  Localfile                = {inc/bib/rfc1087.pdf},
+  Organization             = {Internet Activities Board},
+  Url                      = {http://tools.ietf.org/pdf/rfc1087.pdf}
+}
+
 @Book{RFC3979,
   Title                    = {RFC3979 Intellectual Property Rights in IETF Technologys},
   Author                   = {S. Bradner},
@@ -34,14 +47,18 @@
   Url                      = {http://tools.ietf.org/pdf/rfc5378.pdf}
 }
 
-@Article{CHAUM,
+@Article{CHAUM1,
   Title                    = {Untraceable Electronic Mail, Return, Addresses, and Digital Pseudonyms},
   Author                   = {David Chaum},
+  Journal                  = {Communications of the ACM},
   Year                     = {1981},
 
+  File                     = {:inc\\bib\\unclassified\\Anonbib\\chaum-untraceable.pdf:PDF},
   Lastaccessed             = {19.12.2013},
   Localfile                = {inc/bib/chaum81.pdf},
   Publisher                = {Communications of the ACM},
+  Review                   = {A technique based on public key cryptography is presented that allows an electronic mail system to hide who a participant communicates with as well as the content of the communication - in spite of an unsecured underlying telecommunication system.  The technique does not require a universally trusted authority.  One correspondent can remain anonymous to a second, while allowing the second to respond via an untraceable return address.
+The technique can also be used to form rosters of untraceable digital pseudonyms from selected applications.  Applicants retain the exclusive ability to form digital signatures corresponding to their pseudonyms.  Elections in which any interested party can verify that the ballots have been properly counted are possible if anonymously mailed ballots are signed with pseudonyms from a roster of registered voters.  Another use allows an individual to correspond witha record-keeping organization under a unique pseudonym which appears in a roster of acceptable clients.},
   Url                      = {http://www.cs.utexas.edu/~shmat/courses/cs395t_fall04/chaum81.pdf}
 }
 
@@ -61,7 +78,8 @@
   Author                   = {Alexis Czekikis and David J. St. Hilare and Karl Koscher amd Sven D. Gribble and Taddayoshi Kohno and Bruce Schneier},
   Year                     = {2008},
 
-  File                     = {inc/bib/truecryprDFS.pdf:inc/bib/truecryprDFS.pdf:PDF},
+  Abstract                 = {We examine the security requirements for creating a Deniable File System (DFS), and the efficacy with which the TrueCrypt disk-encryption software meets those requirements. We find that the Windows Vista operating system itself, Microsoft Word, and Google Desktop all compromise the deniability of a TrueCrypt DFS. While staged in the context of TrueCrypt, our research highlights several fundamental challenges to the creation and use of any DFS: even when the file system may be deniable in the pure, mathematical sense, we find that the environment surrounding that file system can undermine its deniability, as well as its contents. We hypothesize some extensions of our discoveries to regular (non-deniable) encrypted file systems. Finally, we suggest approaches for overcoming these challenges on modern operating systems like Windows. We analyzed TrueCrypt version 5.1a (latest available version during the writing of the paper); Truecrypt v6 introduces new features, including the ability to create deniable operating systems, which we have not studied.},
+  File                     = {truecryptDFS.pdf:inc\\bib\\truecryptDFS.pdf:PDF},
   Url                      = {https://www.schneier.com/paper-truecrypt-dfs.pdf}
 }
 
@@ -129,7 +147,8 @@
   Title                    = {Oxford English Dictionary},
   Author                   = {FIXME},
 
-  Localfile                = {inc/bib/FIXME.pdf}
+  Localfile                = {inc/bib/FIXME.pdf},
+  Url                      = {http://www.oed.com}
 }
 
 @Book{RFC2045,
@@ -393,6 +412,17 @@
   Url                      = {http://tools.ietf.org/pdf/rfc821.pdf}
 }
 
+@Book{hideAndSeek,
+  Title                    = {An Introduction to Steganography},
+  Author                   = {Niels Provos and Peter Honeyman},
+  Publisher                = {IEEE},
+  Year                     = {2003},
+
+  Localfile                = {inc/bib/hideAndSeek.pdf},
+  Organization             = {IEEE},
+  Url                      = {http://www.citi.umich.edu/u/provos/papers/practical.pdf}
+}
+
 @Book{RFC2440,
   Title                    = {RFC2440 Secure/Multipurpose Internet Mail Extensions (S/MIME) Version 3.1 Message Specification},
   Author                   = {B. Ramsdell},
@@ -483,8 +513,9 @@
   Title                    = {F5 - A Steganographic Algorithm},
   Author                   = {Andreas Westfeld},
   Year                     = {2002},
+  Volume                   = {none},
 
-  File                     = {inc/bib/steganalysisf5.pdf:inc/bib/steganalysisf5.pdf:PDF},
+  File                     = {:inc\\bib\\F5.pdf:PDF},
   Url                      = {http://www.ws.binghamton.edu/fridrich/research/f5.pdf}
 }
 
@@ -651,26 +682,5 @@
 
   Localfile                = {inc/bib/bahrain.pdf},
   Url                      = {http://www.ictregulationtoolkit.org/Documents/Document/Document/1453}
-}
-
-@Book{RFC1087,
-  Title                    = {RFC1087 Ethics and the Internet},
-  Publisher                = {IETF},
-  Year                     = {1989},
-
-  Localfile                = {inc/bib/rfc1087.pdf},
-  Organization             = {Internet Activities Board},
-  Url                      = {http://tools.ietf.org/pdf/rfc1087.pdf}
-}
-
-@Book{hideAndSeek,
-  Title                    = {An Introduction to Steganography},
-	Author									 = {Niels Provos and Peter Honeyman},
-  Publisher                = {IEEE},
-  Year                     = {2003},
-
-  Localfile                = {inc/bib/hideAndSeek.pdf},
-  Organization             = {IEEE},
-  Url                      = {http://www.citi.umich.edu/u/provos/papers/practical.pdf}
 }
 

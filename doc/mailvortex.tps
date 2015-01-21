@@ -11,14 +11,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1562
-NormalPos.bottom=580
+NormalPos.right=1066
+NormalPos.bottom=243
 Class=LaTeXView
 Document=mailvortex.tex
 
 [Frame0_View0,0]
-TopLine=88
-Cursor=2741
+TopLine=155
+Cursor=3553
 
 [Frame1]
 Flags=0
@@ -29,14 +29,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1562
-NormalPos.bottom=580
+NormalPos.right=1066
+NormalPos.bottom=243
 Class=LaTeXView
 Document=inc\parts\intro.tex
 
 [Frame1_View0,0]
 TopLine=0
-Cursor=0
+Cursor=160
 
 [Frame2]
 Flags=0
@@ -47,14 +47,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1562
-NormalPos.bottom=580
+NormalPos.right=1066
+NormalPos.bottom=243
 Class=LaTeXView
 Document=inc\parts\theory.tex
 
 [Frame2_View0,0]
-TopLine=225
-Cursor=10852
+TopLine=296
+Cursor=19913
 
 [Frame3]
 Flags=0
@@ -65,8 +65,8 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1562
-NormalPos.bottom=580
+NormalPos.right=1066
+NormalPos.bottom=243
 Class=LaTeXView
 Document=inc\parts\current.tex
 
@@ -83,8 +83,8 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1562
-NormalPos.bottom=580
+NormalPos.right=1066
+NormalPos.bottom=243
 Class=LaTeXView
 Document=inc\parts\analysis.tex
 
@@ -101,14 +101,14 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1562
-NormalPos.bottom=580
+NormalPos.right=1066
+NormalPos.bottom=243
 Class=LaTeXView
 Document=inc\parts\design.tex
 
 [Frame5_View0,0]
-TopLine=130
-Cursor=7002
+TopLine=112
+Cursor=5128
 
 [Frame6]
 Flags=0
@@ -119,8 +119,8 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1562
-NormalPos.bottom=580
+NormalPos.right=1066
+NormalPos.bottom=243
 Class=LaTeXView
 Document=inc\parts\verification.tex
 
@@ -137,34 +137,16 @@ MaxPos.x=-1
 MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
-NormalPos.right=1562
-NormalPos.bottom=580
+NormalPos.right=1066
+NormalPos.bottom=243
 Class=LaTeXView
 Document=mailvortex_Plan.tex
 
 [Frame7_View0,0]
-TopLine=234
-Cursor=18082
-
-[Frame8]
-Flags=0
-ShowCmd=1
-MinPos.x=-1
-MinPos.y=-1
-MaxPos.x=-1
-MaxPos.y=-1
-NormalPos.left=4
-NormalPos.top=26
-NormalPos.right=1562
-NormalPos.bottom=580
-Class=LaTeXView
-Document=inc\parts\title.tex
-
-[Frame8_View0,0]
-TopLine=0
-Cursor=166
+TopLine=150
+Cursor=8806
 
 [SessionInfo]
-FrameCount=9
-ActiveFrame=0
+FrameCount=8
+ActiveFrame=5
 

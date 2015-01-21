@@ -1,4 +1,4 @@
-\documentclass[10pt,a4paper]{scrbook}
+\documentclass[10pt,a4paper,showframe]{scrbook}
 
 \usepackage{svn}
 \SVN $Revision: 40 $
@@ -8,7 +8,7 @@
 \SVN $Id: AnonMail.tex 40 2014-05-03 15:52:35Z mgwerder $
 
 % titlepage geometry change
-\usepackage[showframe,paper=a4paper,top=1in,bottom=1in,right=0.5in,left=1.5in]{geometry}% http://ctan.org/pkg/geometry
+\usepackage[showframe,paper=a4paper,top=1cm,bottom=1cm,inner=2cm,outer=2cm]{geometry}% http://ctan.org/pkg/geometry
 	
 \usepackage{scrhack}
 
@@ -100,7 +100,7 @@ Keywords={Email; SMTP; MIME; S/MIME; POP3; IMAPv4; MailVortex; Anonymity}
 }}
 
 \begin{document}
-\newgeometry{margin=0cm, footskip=0mm}\showframe
+\newgeometry{margin=0.1cm, footskip=1mm}
 
 \frontmatter
 
@@ -123,7 +123,7 @@ I would like to acknowledge the thousands of individuals who have coded for the 
 \end{acknowledgements}
 \end{comment}
 
-
+\cleardoublepage
 \tableofcontents
 \listoftables
 \listoffigures
@@ -225,7 +225,7 @@ I would like to acknowledge the thousands of individuals who have coded for the 
 \end{entry}
 
 \begin{entry}
-  \mainentry{Storage}{FIXME}
+  \mainentry{Storage}{A store to keep data. It is assumed to be temporary or persistent in its nature.}
 \end{entry}
 
 \chapter{Bibliography}
