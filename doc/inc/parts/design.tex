@@ -121,10 +121,13 @@ Platform specific status apps are not created as part of this work. They are how
 
 \subsection{Third Party Code}
 \subsubsection{Java}
-The code will be written in Java 7 compliant code. The JDK beeing used is OpenJDK (\url{http://openjdk.java.net/}). As a crosscompiler I do use gcj (\url{http://gcc.gnu.org/java/}).
+The code will be written in Java 7 compliant code. And allThe JDK beeing used is OpenJDK (\url{http://openjdk.java.net/}). As a crosscompiler I do use gcj (\url{http://gcc.gnu.org/java/}). All configuration is either done in files or using a http interface.
 
-\subsubsection{HSQLDB}
-As the main local database backend HSQLDB is used. 
+\subsubsection{SQL Server}
+As the main local database backend H2 is used. 
+
+\subsubsection{Mail Server}
+Base for all local caching and intermediate mail services a Hedwig Mail Server will be used. However This code will undergo heavy modifications.
 
 \subsection{Folder storage}
 The configuration data is stored in a IMAP folder. To hide the IMAP store to an observer the client is provided with a folder name and password (instead of a fixed folder name). The key for all config data and all messages is stored in a message in this folder. The folder is hidden by the proxy if known.
