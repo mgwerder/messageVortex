@@ -1,4 +1,4 @@
-\documentclass[10pt,a4paper,showframe]{scrbook}
+\documentclass[10pt,a4paper]{scrbook}
 
 \usepackage{svn}
 \SVN $Revision: 40 $
@@ -7,8 +7,34 @@
 \SVN $URL: https://bachus.gwerder.net/svn/AnonMail/AnonMail.tex $
 \SVN $Id: AnonMail.tex 40 2014-05-03 15:52:35Z mgwerder $
 
+\usepackage{pdfsync} 
+
+\usepackage{MnSymbol} % required for the arrow
+\usepackage{listings}
+\lstset{ %
+	backgroundcolor=\color{lightgray},   
+	language=java,
+	frame=single,
+  numbers=left,
+  numbersep=5pt,
+  numberstyle=\tiny
+}
+
+\lstdefinestyle{BashInputStyle}{
+  language=bash,
+  basicstyle=\small\sffamily,
+  numbers=none,
+  frame=tb,
+  breaklines=true,
+  prebreak={\mbox{\quad$\rhookswarrow$}},
+  columns=fullflexible,
+  backgroundcolor=\color{gray!20},
+  linewidth=0.9\linewidth,
+  xleftmargin=0.1\linewidth
+}
+
 % titlepage geometry change
-\usepackage[showframe,paper=a4paper,top=1cm,bottom=1cm,inner=2cm,outer=2cm]{geometry}% http://ctan.org/pkg/geometry
+\usepackage[paper=a4paper,top=2cm,bottom=2cm,inner=2cm,outer=2cm]{geometry}% http://ctan.org/pkg/geometry
 	
 \usepackage{scrhack}
 
@@ -40,7 +66,12 @@
 \usepackage{supertabular}
 
 %enable hypelinks
-\usepackage[pdfusetitle,hidelinks]{hyperref}
+\usepackage[pdftex]{hyperref}
+\hypersetup{
+	hidelinks,
+  pdfpagelayout=TwoPageRight,
+  pdfstartview=Fit
+}
 
 % Link above tables and figures
 \usepackage[hypcap]{caption}
@@ -147,6 +178,10 @@ I would like to acknowledge the thousands of individuals who have coded for the 
 \chapter{Glossary}
 
 \begin{entry}
+  \mainentry{adverser}{FIXME}
+\end{entry}
+
+\begin{entry}
   \mainentry{Agent}{FIXME}
 \end{entry}
 
@@ -160,6 +195,10 @@ I would like to acknowledge the thousands of individuals who have coded for the 
 
 \begin{entry}
   \mainentry{Local Mail Store}{A Local Mail Store offers a persistent store on a local non volatile memory in which messages are beeing stored. A store may be flat or structured (eg. supports folders). A Local Mail Store may be an authoritative store for mails or a "`Cache Only"' copy. It is typically not a queue.}
+\end{entry}
+
+\begin{entry}
+  \mainentry{mail server admin}{FIXME}
 \end{entry}
 
 \begin{entry}
@@ -226,6 +265,14 @@ I would like to acknowledge the thousands of individuals who have coded for the 
 
 \begin{entry}
   \mainentry{Storage}{A store to keep data. It is assumed to be temporary or persistent in its nature.}
+\end{entry}
+
+\begin{entry}
+  \mainentry{user}{FIXME}
+\end{entry}
+
+\begin{entry}
+  \mainentry{UBE}{FIXME}
 \end{entry}
 
 \chapter{Bibliography}

@@ -3,16 +3,16 @@ As of today the de facto standard for asynchronous mail transfer is SMTP as defi
 
 \section{Implemented protocols}
 \subsection{SMTP \index{SMTP|textbf}}
-The SMTP protocol is currently specified in \cite{RFC5321}. It specifies a method to deliver reliably asynchronous messages thru a specific transport medium (most of the time the internet). The Protocol makes a dstinction between a mail envelope and its content. The envelope contains the routing information which is the sender and the recipient. The content again is split into two parts. These parts are the headers (which do contain meta information about the message such as subject, reply address or a comprehensive list of all recipients) and the body which contains the message itself.\par
+The SMTP protocol is currently specified in \cite{RFC5321}. It specifies a method to deliver reliably asynchronous mail objects thru a specific transport medium (most of the time the internet). The document splits a mail object into a mail envelope and its content. The envelope contains the routing information which is the sender (one) and the recipient (one or more) in 7-Bit ASCII. The envelope may additionally contain optional protocol extension material. \par
 
-It furthermore introduces a simplistic model for mail communication. A more comprehensive model is introduced in the section \nameref{sec:mailTransport}. As the proposed model is not sufficient for a comprehensive end-to-end analysis.\par
+The content should be in 7-Bit-ASCII (8-Bit ASCII may be requested). It is split into two parts. These parts are the headers (which do contain meta information about the message such as subject, reply address or a comprehensive list of all recipients) and the body which contains the message itself. All lines of the content must be terminated with a CRLF and must not be longer than 998 characters excluding CRLF.\par
 
+The header consists of a collection of header fields. Each of them is built by a header name, a colon and the data. Exact outline of the header is specified in \cite{RFC5322} and is separated with a blank line from the body. 
 
+It \cite{RFC5321} furthermore introduces a simplistic model for mail communication. A more comprehensive model is introduced in the section \nameref{sec:mailTransport}. As the proposed model is not sufficient for a comprehensive end-to-end analysis.\par
 
-FIXME incomplete section
-
-\subsubsection{Mail transport\index{Message!Transport|textbf}}
-\cite{RFC1870}
+\subsubsection{Message transport\index{Message!Transport|textbf}}
+Messages are transported from MTA to \cite{RFC1870}
 FIXME incomplete section
 
 \subsubsection{encryption}

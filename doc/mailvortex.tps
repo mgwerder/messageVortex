@@ -12,13 +12,13 @@ MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
 NormalPos.right=1562
-NormalPos.bottom=676
+NormalPos.bottom=540
 Class=LaTeXView
 Document=mailvortex.tex
 
 [Frame0_View0,0]
-TopLine=153
-Cursor=3553
+TopLine=198
+Cursor=9777
 
 [Frame1]
 Flags=0
@@ -30,13 +30,13 @@ MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
 NormalPos.right=1562
-NormalPos.bottom=676
+NormalPos.bottom=540
 Class=LaTeXView
 Document=inc\parts\intro.tex
 
 [Frame1_View0,0]
-TopLine=0
-Cursor=160
+TopLine=88
+Cursor=7486
 
 [Frame2]
 Flags=0
@@ -48,13 +48,13 @@ MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
 NormalPos.right=1562
-NormalPos.bottom=676
+NormalPos.bottom=540
 Class=LaTeXView
 Document=inc\parts\theory.tex
 
 [Frame2_View0,0]
-TopLine=217
-Cursor=19913
+TopLine=56
+Cursor=4893
 
 [Frame3]
 Flags=0
@@ -66,13 +66,13 @@ MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
 NormalPos.right=1562
-NormalPos.bottom=676
+NormalPos.bottom=540
 Class=LaTeXView
 Document=inc\parts\current.tex
 
 [Frame3_View0,0]
 TopLine=0
-Cursor=0
+Cursor=1484
 
 [Frame4]
 Flags=0
@@ -84,12 +84,12 @@ MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
 NormalPos.right=1562
-NormalPos.bottom=676
+NormalPos.bottom=540
 Class=LaTeXView
 Document=inc\parts\analysis.tex
 
 [Frame4_View0,0]
-TopLine=13
+TopLine=4
 Cursor=1474
 
 [Frame5]
@@ -102,13 +102,13 @@ MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
 NormalPos.right=1562
-NormalPos.bottom=676
+NormalPos.bottom=540
 Class=LaTeXView
 Document=inc\parts\design.tex
 
 [Frame5_View0,0]
-TopLine=117
-Cursor=6473
+TopLine=0
+Cursor=0
 
 [Frame6]
 Flags=0
@@ -120,7 +120,7 @@ MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
 NormalPos.right=1562
-NormalPos.bottom=676
+NormalPos.bottom=540
 Class=LaTeXView
 Document=inc\parts\verification.tex
 
@@ -138,15 +138,15 @@ MaxPos.y=-1
 NormalPos.left=4
 NormalPos.top=26
 NormalPos.right=1562
-NormalPos.bottom=676
+NormalPos.bottom=540
 Class=LaTeXView
 Document=mailvortex_Plan.tex
 
 [Frame7_View0,0]
-TopLine=148
-Cursor=8806
+TopLine=0
+Cursor=0
 
 [SessionInfo]
 FrameCount=8
-ActiveFrame=5
+ActiveFrame=2
 

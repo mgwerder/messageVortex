@@ -1,10 +1,10 @@
 \chapter{Designing an approach}
-FIXME Blabla missing
+In this chapter I lay out the design goals, the main design and the decisions which led to them.
 
 
 \section{Defining system boundaries}
 \subsection{Thread model}
-As an adverser we assume the following attributes:
+As an \defref{adverser} we assume the following attributes:
 \begin{itemize}
 \item Available founding is huge.
 \item Can have own mailer infrastructure.
@@ -18,7 +18,7 @@ His intensions are:
 \end{itemize}
 
 \subsection{User model}
-The assumed user of the system is:
+The assumed \defref{user} of the system is:
 \begin{itemize}
 \item Does care about privacy.
 \item Does or does not have support from a mail server admin.
@@ -42,7 +42,7 @@ His expectations are:
 \end{itemize}
 
 \subsection{Mail server admin model}
-The assumed mail server admin of the system is:
+The assumed \defref{mail server admin} of the system is:
 \begin{itemize}
 \item Does care about privacy.
 \item Has considerable computer knowhow.
@@ -102,7 +102,7 @@ FIXME incomplete section
 \subsection{Application Design}
 We first have to define the main hook for our solution. While most of the sent messages are always passed from server to server using SMTP the protocols for accessing a mailbox are varying. The most common interfaces within the private mail traffic are \defref{POP} and \defref{IMAP}. In the business environment it is mainly \defref{IMAP} or \defref{MS-OXMAPIHTTP}. \par
 
-I will use \defref{IMAP} as my hook to the mail account to maximize portability. The Solution is based on a \defref{IMAP} proxy server able to join encrypted delivered data with ordinary data.\par
+I will use \defref{IMAP} as my hook to the mail account to maximize portability. The Solution is based on a \defref{IMAP} proxy server able to join encrypted delivered data with ordinary data. This hook provides means to turn any mailbox into a vortex\par
 
 Final goal should be let the device run on a RASPI-Device (or similar) with permanent internet access. \par
 
