@@ -42,8 +42,6 @@ Allthough port numbers 25 and 465 are valid and do have usually the same capabil
 Unlike a normal server-to-server (relay or final delivery) SMTP connections on port 25 clients should always be authenticated of some sort. This may be based on data provided by the user (eg. username/passsword or certificate) or data identifying the sending system (eg. IP address)\cite{RFC4409}. Failure in doing authentication may result in this port beeing misused as an sender for \defref{UBE}.
 \end{itemize}
 
-
-
 Mail User Agents (MUA) are the terminal endpoint of a mail delivery. Mail user agents may be implemented as fat clients on a desktop or mobile system or as an interface over a different generic protocol such as HTTP (Web Clients). \par
 
 Server located clients are a special breed of fat clients. These clients share the properties of fat clients except for the fact that they do not connect to the server. The client application itself has to be run on the server. This makes delivery and communication with the server different. Instead of interfacing with a MSA and a client MDA they may directly access the local mail storage on the server. On these systems the local mail storage may be implemented as a database in a user specific directory structure.
@@ -63,6 +61,8 @@ Web clients are these days a common alternative to fat clients. Most big provide
 
 \subsection{Interfaces of Mail Endpoints}
 There are two interfaces 
+
+FIXME
 
 \section{Anonymity}
 Anonymity is according to Wikipedia\cite{wiki:anonymity} defined as follows:
