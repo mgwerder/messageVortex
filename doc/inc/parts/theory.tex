@@ -13,15 +13,15 @@ The model has three main players storage (derfref{Storage}), agent (derfref{Agen
 
 In the following paragraphs (for definitions) the term ``Mail'' is used synonymously to the term ``Message''. The reason why ``Mail'' has been chosen over ``Messages'' that a lot of terms do already exist in standard documents. In these documents the term mail is commonly used.\par
 
-Mails are typically initiated by a Mail User Agent (\defref{MUA}). A MUA accesses a local mail storage which may be the server storage or a local copy. The local copy may be a cache only copy, the only existing storage (when mails are fetched and deleted from the server after retrieval)  or a collected representation of multiple server storages (cache or authoritative).\par
+Mails are typically initiated by a Mail User Agent (\defref{MUA}). A MUA accesses a local mail storage which may be the server storage or a local copy. The local copy may be a cache only copy, the only existing storage (when mails are fetched and deleted from the server after retrieval) or a collected representation of multiple server storages (cache or authoritative).\par
 
-Besides the MUA the only other component accessing a local mail storage is the Mail Delivery Agent (\defref{MDA}). An MDA is responsible for storing and fetching mails from the local mail storage. Mails destined for other accounts than the current one are forwarded to the MTA. In the case of a rich client the local MDA is part of the software provided by the user agent. In the case of a mail server the local MDA is part of the local Mailstore (not necessarily of the mail transport service).
+Besides the MUA the only other component accessing a local mail storage is the Mail Delivery Agent (\defref{MDA}). An MDA is responsible for storing and fetching mails from the local mail storage. Mails destined for other accounts than the current one are forwarded to the MTA. Mails destined to a User are persistently stored  in the local mailstorage. It is important to understand that a mailstorage not nessesarily reflects a simple mailbox. It may as well represent multiple mailboxes (eg. a rich client serving multiple IMAP accounts) or a combined view of multiple accounts (eg. a rich client collecting mail from multiple \defref{POP} accounts. In the case of a rich client the local MDA is part of the software provided by the user agent. In the case of a mail server the local MDA is part of the local Mailstore (not necessarily of the mail transport service).
 
-On the server side there are usually two components (software sets) at work. A ``Mail Transport Service'' (\defref{MTS}) responsible for mail transfers and a ``Mail Storage System'' which offers the possibility to store received Mails in a local, persistent store.\par
+On the server side there are usually two components (services) at work. A ``Mail Transport Service'' (\defref{MTS}) responsible for mail transfers and a ``Mail Storage System'' which offers the possibility to store received Mails in a local, persistent store.\par
 
-A MTS consists generally out of three parts. For incomming connects there is a daemon called Mail Receiving Agent (\defref{Server MRA}) is typically a SMTP listening daemon. A Mail Transfer Agent (\defref{MTA}) which is responsible for routing, forwarding and rewriting mails. And a Mail Sending Agent (\defref{MSA}) which is responsible for transmitting mails to another Server MRA (usually done by SMTP).\par
+A MTS consists generally out of three parts. For incoming connects there is a daemon called Mail Receiving Agent (\defref{Server MRA}) is typically a \defref{SMTP} listening daemon. A Mail Transfer Agent (\defref{MTA}) which is responsible for routing, forwarding and rewriting mails. And a Mail Sending Agent (\defref{MSA}) which is responsible for transmitting mails reliably to another Server MRA (usually sent via \defref{SMTP}).\par
 
-A MSS consists out of a local storage and delivery agents which do offer uniform interfaces to access the local store.\par
+A MSS consists out of a local storage and delivery agents which do offer uniform interfaces to access the local store. They do also deal with replication issues and grant should take care of the atomicity of transactions committed to the storage. Typically there are two different kind of \defref{MDA}s. \defref{Local MDA}s offer possibilities to access the store via efficient (non network based) mechanisms (eg IPC or named sockets). This is usually done with a stripped down protocol (eg. \defref{LMTP}). For remote agents there a publicly -- network based -- agent available. Common Protocols for this \defref{Remote MDA}\ include \defref{POP}, \defref{IMAP}, or \defref{MS-OXMAPIHTTP}.\par
 
 \subsection{Mail Endpoints}
 Mail endpoints consist typically of the following components:
@@ -44,7 +44,7 @@ Unlike a normal server-to-server (relay or final delivery) SMTP connections on p
 
 Mail User Agents (MUA) are the terminal endpoint of a mail delivery. Mail user agents may be implemented as fat clients on a desktop or mobile system or as an interface over a different generic protocol such as HTTP (Web Clients). \par
 
-Server located clients are a special breed of fat clients. These clients share the properties of fat clients except for the fact that they do not connect to the server. The client application itself has to be run on the server. This makes delivery and communication with the server different. Instead of interfacing with a MSA and a client MDA they may directly access the local mail storage on the server. On these systems the local mail storage may be implemented as a database in a user specific directory structure.
+Server located clients are a special breed of fat clients. These clients share the properties of fat clients except for the fact that they do not connect to the server. The client application itself has to be run on the server where the mail storage persists. This makes delivery and communication with the server different. Instead of interfacing with a MSA and a client MDA they may directly access the local mail storage on the server. On these systems the local mail storage may be implemented as a database in a user specific directory structure.
 
 \subsubsection{Fat clients}
 The majority of mail clients are fat clients. These clients score over the more centralistic organized web clients in the way that they may offer mail availability even if an internet connection is not available (thru a client specific local mail storage). They furthermore provide the possibility to collect mails from multiple sources and store them in the local storage. Unlike Mail servers, clients are assumed to be not always online. In fact they may be offline most of the time. To guarantee the availability of a certain email address a responsible mail server for a specific address collects all mails (this is done by the \defref{MSS}) and provides a consolidated view onto the database when a client connects thru a local or remote MDA.\par
@@ -65,6 +65,8 @@ There are two interfaces
 FIXME
 
 \section{Anonymity}
+\cite{anon_terminology}
+
 Anonymity is according to Wikipedia\cite{wiki:anonymity} defined as follows:
 \begin{quote}
 Anonymity is derived from the Greek word anonymia, meaning "`without a name"' or "`namelessness"'. In colloquial use, anonymity typically refer to the state of an individual's personal identity, or personally identifiable information, being publicly unknown.
@@ -80,7 +82,7 @@ and under the "`Pseudonymity"' \cite{wiki:pseudonymity} entry:
 The pseudonym identifies a holder, that is, one or more human beings who possess but do not disclose their true names (that is, legal identities). Most pseudonym holders use pseudonyms because they wish to remain anonymous, but anonymity is difficult to achieve, and is often fraught with legal issues.[2] True anonymity requires unlinkability, such that an attacker's examination of the pseudonym holder's message provides no new information about the holder's true name.
 \end{quote}
 
-\subsection{Unobsevable Communication}
+\subsection{Unobservable Communication}
 \cite{ccs2011-cirripede}
 \subsubsection{\itshape{k}-anonymity}
 In \citetitle{k-anonymous:ccs2003}\cite{k-anonymous:ccs2003} \citeauthor{k-anonymous:ccs2003} outline that a individual in most of the cases does not have to be completely anonymous. Instead it might be sufficient to blend into a group of $k$ identities. in \cite{wpes10-unraveling} \citeauthor{wpes10-unraveling} do show that this is not always sufficient. 

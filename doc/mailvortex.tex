@@ -10,6 +10,9 @@
 \usepackage{pdfsync} 
 
 \usepackage{MnSymbol} % required for the arrow
+
+\usepackage{underscore}
+
 \usepackage{listings}
 \lstset{ %
 	backgroundcolor=\color{lightgray},   
@@ -21,7 +24,7 @@
 }
 
 \lstdefinestyle{BashInputStyle}{
-  language=bash,
+  language={},
   basicstyle=\small\sffamily,
   numbers=none,
   frame=tb,
@@ -35,7 +38,7 @@
 
 % titlepage geometry change
 \usepackage[paper=a4paper,top=2cm,bottom=2cm,inner=2cm,outer=2cm]{geometry}% http://ctan.org/pkg/geometry
-	
+
 \usepackage{scrhack}
 
 \usepackage[backref=true,
@@ -70,8 +73,11 @@
 \hypersetup{
 	hidelinks,
   pdfpagelayout=TwoPageRight,
+%	bookmarks=true,
   pdfstartview=Fit
 }
+
+\usepackage{thumbs}
 
 % Link above tables and figures
 \usepackage[hypcap]{caption}
@@ -191,6 +197,10 @@ I would like to acknowledge the thousands of individuals who have coded for the 
 
 \begin{entry}
   \mainentry{IMAP}{IMAP (currently IMAPv4) is a typical protocol to be used between a \defref{Client MRA} and a \defref{Remote MDA}. It has been specified in its current version in \cite{RFC3501}. The protocol is capable of fully maintaining a server based message store. This includes the capability of adding, modifying and deleting messages and folders of a mailstore. It does not include however sening mails to other destinations outside the server based store.}
+\end{entry}
+
+\begin{entry}
+  \mainentry{LMTP}{FIXME}
 \end{entry}
 
 \begin{entry}
