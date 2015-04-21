@@ -124,21 +124,6 @@
 \definecolor{Black}		  	    {RGB}{30, 30, 30}       % Black  Approximate PANTONE PROCESS-BLACK
 \definecolor{White}		  	    {RGB}{255, 255, 255}    % White  No PANTONE match
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 % set the basic colors
 \setbeamercolor{palette primary}   {fg=black,bg=white}
 \setbeamercolor{palette secondary} {fg=black,bg=white}
@@ -163,12 +148,11 @@
 \setbeamercolor{block alerted body}{fg=black,bg=jblue!10}
 
 % set the fonts
-\setbeamerfont{section in head/foot}{series=\bfseries}
-\setbeamerfont{block title}{series=\bfseries}
-\setbeamerfont{block alerted title}{series=\bfseries}
-\setbeamerfont{frametitle}{series=\bfseries}
-\setbeamerfont{frametitle}{size=\Large}
-\setbeamerfont{block body}{series=\rmfamily}
+\setbeamerfont{section in head/foot}{series=\bfseries,size=\large}
+\setbeamerfont{block title}{series=\bfseries,size=\normalsize}
+\setbeamerfont{block alerted title}{series=\bfseries,size=\normalsize}
+\setbeamerfont{frametitle}{series=\bfseries,size=\normalsize}
+\setbeamerfont{block body}{series=\rmfamily,size=\small}
 
 % set some beamer theme options
 \setbeamertemplate{title page}[default][colsep=-4bp,rounded=true]
@@ -196,16 +180,26 @@
 \setbeamertemplate{headline}{
  \leavevmode
   \begin{columns}
-   \begin{column}{\linewidth}
+   \begin{column}{.1\linewidth}
+    \vskip1cm
+    \includegraphics[width=10cm]{uni-basel-logo.png} 
+    \vskip1cm
+   \end{column}
+   \begin{column}{.8\linewidth}
     \vskip1cm
     \centering
-    \usebeamercolor{title in headline}{\color{jblue}\Huge{\textbf{\inserttitle}}\\[0.5ex]}
-    \usebeamercolor{author in headline}{\color{fg}\Large{\insertauthor}\\[1ex]}
+    \usebeamercolor{title in headline}{\color{jblue}\huge{\textbf{\inserttitle}}\\[0.5ex]}
+    \usebeamercolor{author in headline}{\color{fg}\large{\insertauthor}\\[1ex]}
     \usebeamercolor{institute in headline}{\color{fg}\large{\insertinstitute}\\[1ex]}
     \vskip1cm
    \end{column}
+   \begin{column}{.1\linewidth}
+    \vskip1cm
+    \raggedleft\includegraphics[width=6cm]{qr.png} 
+    \vskip1cm
+   \end{column}
    \vspace{1cm}
-  \end{columns}
+ \end{columns}
  \vspace{0.5in}
  \hspace{0.5in}\begin{beamercolorbox}[wd=47in,colsep=0.15cm]{cboxb}\end{beamercolorbox}
  \vspace{0.1in}
@@ -214,6 +208,7 @@
 % Block definition
 \setbeamertemplate{block begin}
 {
+  \vfill
   \par\vskip\medskipamount
   \begin{beamercolorbox}[colsep*=0ex,dp={2ex},center]{block title}
     \vskip-0.25cm
@@ -232,19 +227,31 @@
   {\ifbeamercolorempty[bg]{block body}{}{\nointerlineskip\vskip-0.5pt}}
   \usebeamerfont{block body}
   \vskip-0.5cm
+  \setlength{\inboxwd}{\linewidth}
+  \addtolength{\inboxwd}{-1cm}
   \begin{beamercolorbox}[colsep*=0ex,vmode]{block body}
+  \setlength{\iinboxwd}{\inboxwd}
+  \setlength{\inboxrule}{\inboxwd}
+  \addtolength{\iinboxwd}{-0.5cm}
+  \addtolength{\inboxrule}{0.5cm}
+  \begin{center}
+  \begin{minipage}{\iinboxwd}
   \justifying
 }
 
 \setbeamertemplate{block end}
 {
+  \end{minipage}
+  \end{center}
   \end{beamercolorbox}
   \vskip\smallskipamount
+  \vfill
 }
 
 % Alert block definition (with frame)
 \setbeamertemplate{block alerted begin}
 {
+  \vfill
   \par\vskip\medskipamount
   \begin{beamercolorbox}[sep=0ex,rounded=true,center,dp={2ex}]{block alerted title}
     \vskip0.01cm
@@ -273,4 +280,25 @@
   \end{beamercolorbox}
   \end{beamercolorbox}
   \vskip\smallskipamount
+  \vfill
 }
+
+\setbeamertemplate{footline}{
+  \begin{beamercolorbox}[wd=\paperwidth]{upper separation line foot}
+    \rule{0pt}{2pt}
+  \end{beamercolorbox}
+  \leavevmode%
+  \begin{beamercolorbox}[ht=4ex,leftskip=1cm,rightskip=1cm]{author in head/foot}%
+    \usebeamercolor{website in footline}{\color{fg} \href{https://www.gwerder.net/\~mgwerder/phd/how\_unobservable/}{https://www.gwerder.net/\textasciitilde mgwerder/phd/how\_unobservable/}}
+    \hfill
+    \usebeamercolor{email in footline}{\color{fg} m.gwerder@unibas.ch}
+    \vskip1ex
+  \end{beamercolorbox}
+  \vskip0pt%
+  \begin{beamercolorbox}[wd=\paperwidth]{lower separation line foot}
+    \rule{0pt}{2pt}
+  \end{beamercolorbox}
+}
+ 
+\mode<all>
+\def\footer#1{\def\insertfooter{#1}}

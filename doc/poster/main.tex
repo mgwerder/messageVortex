@@ -22,16 +22,20 @@
 %	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
 %----------------------------------------------------------------------------------------
 
-\documentclass[final]{beamer}
-\usepackage[utf8]{inputenc}
-\usepackage[scale=1.24]{beamerposter} % Use the beamerposter package for laying out the poster
+\documentclass[10pt]{beamer}
+%\usepackage[utf8]{inputenc}
+\usepackage[large]{optional}% use small or large
 
+\usepackage[scale=1.2]{beamerposter} % Use the beamerposter package for laying out the poster
+\usepackage{palatino} 
+\usepackage{textpos}
 \usetheme{confposter} % Use the confposter theme supplied with this template
 
 \setbeamercolor{block title}{fg=ngreen,bg=white} % Colors of the block titles
 \setbeamercolor{block body}{fg=black,bg=white} % Colors of the body of blocks
 \setbeamercolor{block alerted title}{fg=white,bg=dblue!70} % Colors of the highlighted block titles
-\setbeamercolor{block alerted body}{fg=black,bg=dblue!10} % Colors of the body of highlighted blocks
+\setbeamercolor{block alerted body}{fg=black,bg=dblue!20} % Colors of the body of highlighted blocks
+\setbeamercolor{background canvas}{fg=black,bg=dblue!10} 
 % Many more colors are available for use in beamerthemeconfposter.sty
 
 %-----------------------------------------------------------
@@ -57,33 +61,28 @@
 
 \usepackage{graphicx}  % Required for including images
 
-\usepackage{booktabs} % Top and bottom rules for tables
-
 %----------------------------------------------------------------------------------------
 %	TITLE SECTION 
 %----------------------------------------------------------------------------------------
 
-\title{Why is it so hard to send unobservable messages across the internet?} % Poster title
+\title{\LARGE Why is it so hard sending unobservable messages across the internet?} % Poster title
 
-\author{Martin Gwerder} % Author(s)
+\author{Martin Gwerder (m.gwerder@unibas.ch)} % Author(s)
 
-\institute{Department für Mathematik und Informatik, Universität Basel} % Institution(s)
-
+\institute{Department of Mathematics and Computer Science, University of Basel} % Institution(s)
+ 
 %----------------------------------------------------------------------------------------
 
-\begin{document}
-
-{\usebackgroundtemplate{
-\includegraphics[left=-2cm,width=1.2\paperwidth,
-height=1.7\paperheight]{bg_image}
-}
-
+%{\usebackgroundtemplate{%
+%\includegraphics[width=1.2\paperwidth,height=1.7\paperheight]{bg_image}%
+%}
 \addtobeamertemplate{block end}{}{\vspace*{2ex}} % White space under blocks
 \addtobeamertemplate{block alerted end}{}{\vspace*{2ex}} % White space under highlighted (alert) blocks
 
 \setlength{\belowcaptionskip}{2ex} % White space under figures
 \setlength\belowdisplayshortskip{2ex} % White space under equations
 
+\begin{document}%
 \begin{frame}[t] % The whole poster is enclosed in one beamer frame
 
 \begin{columns}[t] % The whole poster consists of three major columns, the second of which is split into two columns twice - the [t] option aligns each column's content to the top
@@ -98,33 +97,46 @@ height=1.7\paperheight]{bg_image}
 
 \begin{alertblock}{Objectives}
 
-This work emphasizes on the requirements needed to create a system which is capable to transfer unobserved messages accross the internet. It focusses on:
+This work emphasizes on the requirements needed to create a system that is capable to transfer unobserved messages across the internet. It focusses on:
 \begin{itemize}
 \item What is required to create unobservable messages?
 \item What parts are already available as well established technologies?
-\item Where do we have a lack of reliable technologies?
+\item Where do we have a lack of reliable and researched technologies?
 \end{itemize}
+
+In this poster, I emphasize on the result. If you are interested at the argumentation, I recommend the corresponding paper referenced at the lower right for further reading.
 
 \end{alertblock}
 
 %----------------------------------------------------------------------------------------
 %	INTRODUCTION
 %----------------------------------------------------------------------------------------
-
+\vfill
 \begin{block}{Introduction}
 
-There are lots of works (FIXME CITE) which relate to anonymous message transfer. However -- none of these works (with exception to TOR) has been widely adopted in the internet. The reason for this is usually that peoples tend to concentrate on the method to transport the message and fail at the same time completely to to take the real world and its problems into account. I collected some informations which helps to create sensible and reliable systems. 
-
-\end{block}
-
-%------------------------------------------------
+There are lots of works\cite{tor-design}\cite{mixmaster-spec}\cite{xor-trees}\cite{Levine:2002} that relate to anonymous message transfer. However -- none of these works (with exception to TOR\cite{tor-design}) has been widely adopted in the internet. The reason for this is usually that peoples tend to concentrate on the method to transport the message and fail at the same time completely to take the real world and its problems into account. I collected some information that helps to create sensible and reliable systems. 
 
 \begin{figure}
-\includegraphics[width=0.8\linewidth]{placeholder.jpg}
-\caption{Figure caption}
+\includegraphics[width=0.9\linewidth]{messagetransfer.png}
+\caption{sending unobservable messages is not easy}
 \end{figure}
+\end{block}
 
-%----------------------------------------------------------------------------------------
+\vfill
+\begin{block}{Categorisation}
+
+In order to simplify the aspects of unobservability I categorized them into three categories. 
+
+\begin{itemize}
+\item Acceptance \opt{large}{\\
+      What properties are expected from a user perspective? A ``user'' might be any participant (eg sender, recipient, or infrastructure administrator) except the suspected observer.}
+\item Protocol\opt{large}{\\
+      What properties are expected when looking at the communication protocol? This point spans across all layers of protocol. It includes properties required for hiding communication, for routing and even for message interpretation.}
+\item Infrastructure\opt{large}{\\
+      What properties are required from the infrastructure point of view? As infrastructure, we regard all publicly reachable parts of a message transfer system. }
+\end{itemize}
+
+\end{block}
 
 \end{column} % End of the first column
 
@@ -137,28 +149,21 @@ There are lots of works (FIXME CITE) which relate to anonymous message transfer.
 \begin{column}{\onecolwid}\vspace{-.6in} % The first column within column 2 (column 2.1)
 
 %----------------------------------------------------------------------------------------
-%	MATERIALS
+%	Acceptance
 %----------------------------------------------------------------------------------------
 
-\begin{block}{Materials}
-
-The following materials were required to complete the research:
-
+\begin{block}{Acceptance}
+In order to get users to accept a solution we have minimum baselines to meet:
 \begin{itemize}
-\item Curabitur pellentesque dignissim
-\item Eu facilisis est tempus quis
-\item Duis porta consequat lorem
-\item Eu facilisis est tempus quis
+\item Easy\opt{large}{\\
+Users might reject a solution that is hard to learn. Experiences with new systems show that when covering a field that is already covered by a convenient system, the willingness of users to learn for the benefit of security related issues is very low.}
+\item Fast\opt{large}{\\
+Email, chat and similar systems are available fast and convenient. Users are not willing to accept a system where a message transfer might take hours or days.}
+\item Reliable\opt{large}{\\
+Available message transferring systems are quite reliable. This makes it hard for new systems. They have to be equally reliabl}e in order to be accepted.
+\item Not abuseable\opt{large}{\\
+If a new system is misused easily (eg. for spamming purposes) the acceptance drops drastically. This is because misuse of today's mass message transfer systems already leads to considerable annoyance.}
 \end{itemize}
-
-The materials were prepared according to the steps outlined below:
-
-\begin{enumerate}
-\item Curabitur pellentesque dignissim
-\item Eu facilisis est tempus quis
-\item Duis porta consequat lorem
-\item Curabitur pellentesque dignissim
-\end{enumerate}
 
 \end{block}
 
@@ -169,33 +174,43 @@ The materials were prepared according to the steps outlined below:
 \begin{column}{\onecolwid}\vspace{-.6in} % The second column within column 2 (column 2.2)
 
 %----------------------------------------------------------------------------------------
-%	METHODS
+%	Protocol
 %----------------------------------------------------------------------------------------
 
-\begin{block}{Methods}
-
-Lorem ipsum dolor \textbf{sit amet}, consectetur adipiscing elit. Sed laoreet accumsan mattis. Integer sapien tellus, auctor ac blandit eget, sollicitudin vitae lorem. Praesent dictum tempor pulvinar. Suspendisse potenti. Sed tincidunt varius ipsum, et porta nulla suscipit et. Etiam congue bibendum felis, ac dictum augue cursus a. \textbf{Donec} magna eros, iaculis sit amet placerat quis, laoreet id est. In ut orci purus, interdum ornare nibh. Pellentesque pulvinar, nibh ac malesuada accumsan, urna nunc convallis tortor, ac vehicula nulla tellus eget nulla. Nullam lectus tortor, \textit{consequat tempor hendrerit} quis, vestibulum in diam. Maecenas sed diam augue.
-
+\begin{block}{Protocol}
+In order to succeed with the goal the protocol needs to support certain features:
+\begin{itemize}
+\item Unidentifiable\opt{large}{\\
+If a message or a participating system is automatically identifiable then it is easy for an adversary to block some or all parts of the infrastructure. Only a service that is able to hide its messages in legitimate network traffic is not subject to selective blocking.}
+\item Untagable\opt{large}{\\
+If messages going thru the system are taggable by any of the routing participants then anyone might tag messages and then follow them thru the network.}
+\item Unreplayable\opt{large}{\\
+If an adversary can replay any part of the message, he can identify the traffic generated by those messages by statistical means.}
+\item Monolythic messages\opt{large}{\\
+If a message is not self-contained then ``bugging'' is an easy way to identify the message on its way up until they reach the recipient.}
+\end{itemize}
+\vfill
 \end{block}
-
 %----------------------------------------------------------------------------------------
 
 \end{column} % End of column 2.2
 
 \end{columns} % End of the split of column 2 - any content after this will now take up 2 columns width
-
+\vfill
 %----------------------------------------------------------------------------------------
-%	IMPORTANT RESULT
+%	IMPORTANT factors
 %----------------------------------------------------------------------------------------
-
+{
+\opt{small}{\vskip 10cm}
+\setbeamercolor{block alerted body}{fg=black,bg=white} % Colors of the body of highlighted blocks
 \begin{alertblock}{Important factors}
 
 \begin{figure}
-\includegraphics[width=0.8\linewidth]{clouds_full.png}
+\includegraphics[width=\linewidth]{clouds_full.png}
 \caption{Important factors when designing an unobservable message channel}
 \end{figure}
-
 \end{alertblock} 
+}
 
 %----------------------------------------------------------------------------------------
 
@@ -206,12 +221,23 @@ Lorem ipsum dolor \textbf{sit amet}, consectetur adipiscing elit. Sed laoreet ac
 \begin{column}{\onecolwid} % The third column
 
 %----------------------------------------------------------------------------------------
-%	CONCLUSION
+%	Infrastructure
 %----------------------------------------------------------------------------------------
 
-\begin{block}{Conclusion}
-
-Nunc tempus venenatis facilisis. \textbf{Curabitur suscipit} consequat eros non porttitor. Sed a massa dolor, id ornare enim. Fusce quis massa dictum tortor \textbf{tincidunt mattis}. Donec quam est, lobortis quis pretium at, laoreet scelerisque lacus. Nam quis odio enim, in molestie libero. Vivamus cursus mi at \textit{nulla elementum sollicitudin}.
+\begin{block}{Infrastructure}
+In order to succeed there are as well certain baselines for the infrastructure:
+\begin{itemize}
+\item Unknown endpoints\opt{large}{\\
+Every endpoint should behave the same as an intermediate routing point. They should receive and send messages so that they are not identifiable as endpoints. Identifiable endpoints simplify analysis.}
+\item No relations between single hops\opt{large}{\\
+Messages transferred from server to server must be unrelated. Server identifiable to send messages due to received messages are potential targets for analysis.}
+\item Untrusted infrastructure\opt{large}{\\
+Unlike in a company owned net, in the internet trusting an infrastructure is not possible. It is very often not clear who owns a server and who else does have access to it. So an unobservable system may not build its unobservability based on behavior of the transporting infrastructure.}
+\item No central infrastructure\opt{large}{\\
+Central infrastructure may be attacked or shut down. They are easier to monitor than an unknown number of participants.}
+\item No direct communication between endpoints\opt{large}{\\
+If sender and receiver communicate directly then they are easily identified. }
+\end{itemize}
 
 \end{block}
 
@@ -219,14 +245,18 @@ Nunc tempus venenatis facilisis. \textbf{Curabitur suscipit} consequat eros non 
 %	ADDITIONAL INFORMATION
 %----------------------------------------------------------------------------------------
 
-\begin{block}{Additional Information}
+\begin{block}{Conclusions}
+\raggedright
+Sending unobservable messages thru a public network is not easy. It cannot be done by inventing a new identifiable service. It has to blend into today's traffic and look unsuspicious compared to all other traffic to be of any value. Yet it has to be easy to handle and simple to understand. Combining today's technologies might be sufficient but have to be researched further.
+\end{block}
 
-Maecenas ultricies feugiat velit non mattis. Fusce tempus arcu id ligula varius dictum. 
-\begin{itemize}
-\item Curabitur pellentesque dignissim
-\item Eu facilisis est tempus quis
-\item Duis porta consequat lorem
-\end{itemize}
+%----------------------------------------------------------------------------------------
+%	ADDITIONAL INFORMATION
+%----------------------------------------------------------------------------------------
+
+\begin{block}{Additional Information}
+\raggedright
+For additional information, please see the corresponding papers and presentations published at: {\footnotesize\href{https://www.gwerder.net/\~mgwerder/phd/how\_unobservable/}{https://www.gwerder.net/\textasciitilde mgwerder/phd/how\_unobservable/}} or use the QR code in the top right corner.
 
 \end{block}
 
@@ -236,48 +266,13 @@ Maecenas ultricies feugiat velit non mattis. Fusce tempus arcu id ligula varius 
 
 \begin{block}{References}
 
-\nocite{*} % Insert publications even if they are not cited in the poster
-\small{\bibliographystyle{unsrt}
-\bibliography{../inc/bib/unclassified/Anonbib/anonbib}\vspace{0.75in}}
+%\nocite{*} % Insert publications even if they are not cited in the poster
+\opt{large}{\tiny{\bibliographystyle{unsrt}
+\bibliography{../inc/bib/unclassified/Anonbib/anonbib}}}
+\opt{small}{\footnotesize{\bibliographystyle{unsrt}
+\bibliography{../inc/bib/unclassified/Anonbib/anonbib}}}
 
 \end{block}
-
-%----------------------------------------------------------------------------------------
-%	ACKNOWLEDGEMENTS
-%----------------------------------------------------------------------------------------
-
-\setbeamercolor{block title}{fg=red,bg=white} % Change the block title color
-
-\begin{block}{Acknowledgements}
-
-\small{\rmfamily{Nam mollis tristique neque eu luctus. Suspendisse rutrum congue nisi sed convallis. Aenean id neque dolor. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.}} \\
-
-\end{block}
-
-%----------------------------------------------------------------------------------------
-%	CONTACT INFORMATION
-%----------------------------------------------------------------------------------------
-
-\setbeamercolor{block alerted title}{fg=black,bg=norange} % Change the alert block title colors
-\setbeamercolor{block alerted body}{fg=black,bg=white} % Change the alert block body colors
-
-\begin{alertblock}{Contact Information}
-
-\begin{itemize}
-\item Web: \href{https://www.gwerder.net/\~mgwerder/cv}{https://www.gwerder.net/\textasciitilde mgwerder/cv}
-\item Email: \href{mailto:m.gwerder@unibas.ch}{m.gwerder@unibas.ch}
-\item Phone: +41 (79) 345 14 14
-\end{itemize}
-
-\end{alertblock}
-
-\begin{center}
-\begin{tabular}{c}
-\includegraphics[width=0.9\linewidth]{uni-basel-logo.png} 
-\end{tabular}
-\end{center}
-
-%----------------------------------------------------------------------------------------
 
 \end{column} % End of the third column
 
