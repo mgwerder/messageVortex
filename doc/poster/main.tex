@@ -24,9 +24,9 @@
 
 \documentclass[10pt]{beamer}
 %\usepackage[utf8]{inputenc}
-\usepackage[large]{optional}% use small or large
+\usepackage[small]{optional}% use small or large
 
-\usepackage[scale=1.2]{beamerposter} % Use the beamerposter package for laying out the poster
+\usepackage[scale=1.4]{beamerposter} % Use the beamerposter package for laying out the poster
 \usepackage{palatino} 
 \usepackage{textpos}
 \usetheme{confposter} % Use the confposter theme supplied with this template
@@ -65,7 +65,7 @@
 %	TITLE SECTION 
 %----------------------------------------------------------------------------------------
 
-\title{\LARGE Why is it so hard sending unobservable messages across the internet?} % Poster title
+\title{\LARGE Why is it so hard to send unobservable messages across the internet?} % Poster title
 
 \author{Martin Gwerder (m.gwerder@unibas.ch)} % Author(s)
 
@@ -189,19 +189,18 @@ If an adversary can replay any part of the message, he can identify the traffic 
 \item Monolythic messages\opt{large}{\\
 If a message is not self-contained then ``bugging'' is an easy way to identify the message on its way up until they reach the recipient.}
 \end{itemize}
-\vfill
 \end{block}
 %----------------------------------------------------------------------------------------
 
 \end{column} % End of column 2.2
 
 \end{columns} % End of the split of column 2 - any content after this will now take up 2 columns width
-\vfill
+
 %----------------------------------------------------------------------------------------
 %	IMPORTANT factors
 %----------------------------------------------------------------------------------------
 {
-\opt{small}{\vskip 10cm}
+
 \setbeamercolor{block alerted body}{fg=black,bg=white} % Colors of the body of highlighted blocks
 \begin{alertblock}{Important factors}
 
@@ -212,6 +211,15 @@ If a message is not self-contained then ``bugging'' is an easy way to identify t
 \end{alertblock} 
 }
 
+%----------------------------------------------------------------------------------------
+%	Whats missing
+%----------------------------------------------------------------------------------------
+
+\opt{small}{
+\begin{block}{What is missing?}
+It is still unclear if researchers have done enough research in the past to build an unobservable system. Namely, the research of steganography seems to be in its childhood. Unlike in Cryptology there are no researched “best practices” and no mathematical language for it. We have been unable so far to research the characteristics of covert channels and attributes and we are unable to describe them with scientifically defined attributes in an elaborated language.\\
+One thing seems to be clear when looking at the requirements for unobservable system. The costs in terms of bandwidth are tremendous compared to the normal (observable) messages. Cutting the costs of being unobservable should be one of our main goals in future.
+\end{block}}
 %----------------------------------------------------------------------------------------
 
 \end{column} % End of the second column
@@ -238,7 +246,7 @@ Central infrastructure may be attacked or shut down. They are easier to monitor 
 \item No direct communication between endpoints\opt{large}{\\
 If sender and receiver communicate directly then they are easily identified. }
 \end{itemize}
-
+\vfill
 \end{block}
 
 %----------------------------------------------------------------------------------------
@@ -248,6 +256,7 @@ If sender and receiver communicate directly then they are easily identified. }
 \begin{block}{Conclusions}
 \raggedright
 Sending unobservable messages thru a public network is not easy. It cannot be done by inventing a new identifiable service. It has to blend into today's traffic and look unsuspicious compared to all other traffic to be of any value. Yet it has to be easy to handle and simple to understand. Combining today's technologies might be sufficient but have to be researched further.
+\vfill
 \end{block}
 
 %----------------------------------------------------------------------------------------
@@ -257,7 +266,7 @@ Sending unobservable messages thru a public network is not easy. It cannot be do
 \begin{block}{Additional Information}
 \raggedright
 For additional information, please see the corresponding papers and presentations published at: {\footnotesize\href{https://www.gwerder.net/\~mgwerder/phd/how\_unobservable/}{https://www.gwerder.net/\textasciitilde mgwerder/phd/how\_unobservable/}} or use the QR code in the top right corner.
-
+\vfill
 \end{block}
 
 %----------------------------------------------------------------------------------------
