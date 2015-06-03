@@ -1,4 +1,4 @@
-\documentclass[12pt,journal,compsoc,peerreview]{IEEEtran}
+\documentclass[12pt,journal,compsoc]{IEEEtran}
 % The Computer Society requires 12pt.
 % If IEEEtran.cls has not been installed into the LaTeX system files,
 % manually specify the path to it like:
@@ -540,7 +540,7 @@ pdfkeywords={messages, unobservable}}%<^!CHANGE!
 % in the abstract or keywords.
 \IEEEtitleabstractindextext{%
 \begin{abstract}
-In this paper I elaborate all criteria required to create a system capable of transporting messages unobserved through public networks. This is done by collecting all requirements based on the assumed capabilities of the participants. Sending unobservable messages is much harder as generally assumed. It involves a lot of parameters such as "acceptance" or "trust" which are commonly overlooked because of the technical approach most authors prefer. Using a holistic view to the topic I collect all requirements for such a system and categorise them. I furthermore describe why certain systems may not be considered unobservable at any time by definition.
+In this paper We elaborate all criteria required to create a system capable of transporting messages unobserved through public networks. This is done by collecting all requirements based on the assumed capabilities of the participants. Sending unobservable messages is much harder as generally assumed. It involves a lot of parameters such as "acceptance" or "trust" which are commonly overlooked because of the technical approach most authors prefer. Using a holistic view to the topic we collect all requirements for such a system and categorise them. We furthermore describe why certain systems may not be considered unobservable at any time by definition.
 \end{abstract}
 
 % Note that keywords are not normally used for peerreview papers.
@@ -614,20 +614,19 @@ Data privacy, Message systems, Security
 % 
 % Here we have the typical use of a "T" for an initial drop letter
 % and "HIS" in caps to complete the first word.
-\IEEEPARstart{W}{e} do send messages across the internet every day. Most of them we consider not valuable. However -- secret services, advertising companies and researchers have found means to extract data from these messages and create profiles of all participating parties. These profiles often contain very valuable and personal information. The information collected contains often intimate details about all aspects of a person. Even worse: These details might be used against a sender itself if they are considered a problem. \par
+\IEEEPARstart{W}{e} do send messages across the internet every day. Most of them seem to be considered as "not valuable". However -- secret services, advertising companies and researchers have found means to extract data from these messages and create profiles of all participating parties. These profiles often contain very valuable and personal information. The information collected contains often intimate details about all aspects of a person. Even worse: These details might be used against a sender, a recipient or even another peer-partner if they are considered a problem. To give a drastic example: This may happen if someone is a peer-partner to more than one person that is suspected to be a terrorist.\par
 
 As economic aspects are in favour of this kind of data harvesting we can not expect this problem to solve itself. We do need the possibility to send information across public networks which do not disclose personal informations about any of the involved parties. A naive approach would be to encrypt all messages. While this might be sufficient to hide the content of a message it still leaks a lot of information. Even in a perfectly encrypted message the system still needs routing information (such as sender and recipient) to pass on the message. Using this and the technical information we have we may extract many valuable details such as sender, recipient, movement patterns of them, frequency of sending messages between them, average message length, classification of use scheme, preferred services, used devices and clients, and so on.\par
 This does not solely apply to personal information. On a similar level it does disclose partnerships between companies, and reveal informations such as research, negotiations, and legal affairs.
 \par
-There are lots of works\cite{tor-design}\cite{mixmaster-spec}\cite{xor-trees}\cite{Levine:2002}\cite{chaum-mix} that relate to
-anonymous message transfer. However -- none of these works (with exception to TOR\cite{tor-design}) has been widely adopted in the internet. The reason for this is usually that research tends to concentrate on the method to transport the message and fail at the same time completely to take the real world and its problems into account. 
+There are lots of works\cite{tor-design}\cite{mixmaster-spec}\cite{xor-trees}\cite{Levine:2002}\cite{chaum-mix} that relate to anonymous message transfer. However -- none of these works (with exception to TOR\cite{tor-design}) have been widely adopted in the internet. The reason for this is usually that research tends to concentrate on the method to transport the message and fail at the same time completely to take the real world and its problems into account. 
 
 \begin{figure}
 	\includegraphics[width=0.9\linewidth]{../poster/messagetransfer.png}
 	\caption{sending unobservable messages is not easy}
 \end{figure}
 
-In this paper I do analyse what is really required to build a service sending unobservable messages. I categorise them and try to build a foundation for future research on this topic.
+In this paper we analyse what is really required to build a service sending unobservable messages. I categorize them and try to build a foundation for future research on this topic.
 \par
 \ifCLASSOPTIONpeerreview
 \else
@@ -641,13 +640,13 @@ I assume that we do have a \emph{system} which may or may not require an \emph{i
 \par
 On the thread side we do have an \emph{observer} that is capable of monitoring all traffic in the public network and wants to collect data. He may cloak himself as \emph{user} or \emph{owner} and introduce malicious \emph{nodes} into any part of the \emph{system}.
 \par
-For a more verbose definition see Appendix~\ref{app:definitions}. The \emph{nodes}'s are connected thru a packet based network (for ease of argumentation an IP based network is assumed). For definitions of terms such as "unobservable", "anonymity", "psudonymity", "unlinkability" please refer to\cite{pfitzmann2010terminology}.
+For a more verbose definition see Appendix~\ref{app:definitions}. The \emph{nodes}'s are connected through a packet based network (for ease of argumentation an IP based network is assumed). For definitions of terms such as "unobservable", "anonymity", "psudonymity", "unlinkability" please refer to\cite{pfitzmann2010terminology}.
 
 % needed in second column of first page if using \IEEEpubid
 %\IEEEpubidadjcol
 
 \section{Results}
-Requirements may be categorised into three groups:
+Requirements for an unobservable system may be categorised into three groups:
 \begin{itemize}
 	\item Acceptance requirements
 	\item Protocol requirements
@@ -791,8 +790,8 @@ In order to establish means to send unobservable messages people must be willing
 
 \section{Discussion}
 Taking all criteria listed above together we get an unexpected set of results. First of all: it seems that unobservable messages is very likely to be asynchronous. It is far harder to hide a multi hop communication if we do not have the possibility to blend into other traffic. Blending into other traffic can be done on a high load node or when collecting up data before sending it on.
-
-I identified clusters of criteria which should not be looked at isolated. These clusters are:
+\par
+We identified clusters of criteria which should not be looked at isolated. These clusters are:
 
 \begin{itemize}
 	\item Unidentifiable (pro.1), unknown endpoints (inf.1), no relations between single hops (inf.2), and no direct communication between endpoints (inf.5).
@@ -800,7 +799,7 @@ I identified clusters of criteria which should not be looked at isolated. These 
 	\item Reliable(acc.3), and untrusted infrastructure (inf.3) .
 \end{itemize}
 
-Looking at the first cluster we see that the users interaction of the system should be equal to the one between nodes. This brings the conclusion that a users node is a specialized message router. Furthermore the infrastructure has to be an established one which has a common legitimate use. This denies the use of a dedicated service. It furthermore leads us to the conclusion, that the chosen service is asymmetric and allows the service to send and receive messages (e.g. SMTP, or XMMP; but unlike HTTP). 
+Looking at the first cluster we see that the users interaction of the system should be equal to the one between nodes. This brings the conclusion that a users node is a specialized message router. Furthermore the infrastructure has to be an established one which has a common legitimate use. This denies the use of a dedicated service. It furthermore leads us to the conclusion, that the chosen service is asynchrnous (or synchronous with message clustering) and allows the service to send and receive messages (e.g. SMTP, or XMMP; but unlike HTTP). 
 \par
 Since trust is limited to the users any additional measures to hide the message (e.g. such as dummy traffic) have to be user controlled. Sending one big message containing all messages and dummy traffic will result in a big message that decreases in size over time. This is easily detectable. Therefore, the protocol needs a capability to recombine parts of the message without the knowledge of its content.
 \par
@@ -808,14 +807,14 @@ While using an existing layer of transport we still need to send commonly lookin
 \par
 Looking at the second cluster brings up other conclusions. If we can not trust an infrastructure and the nodes and protocol should be unidentifiable then it means we have to use a common established infrastructure as a transport media. Since no such infrastructure has features mentioned above we need to add them on top of it. As we cannot trust an infrastructure or its admin it means that users must be capable of modifying the behaviour of the infrastructure to match the required results. This has to be done without any privileged access to the server.
 \par
-The third cluster is not important from a protocol and infrastructure perspective. However, it seems to be very hard to make a service error prone (acc.3) which includes the possibility to send error messages and react to it and not being able to trust the infrastructure (inf.3). If we cannot trust it we are unable to provide a readable error reply address as it would disclose the senders identity. We do therefore need the possibility to provide a identity or routing token which provides the mean to create a fully unobservable way to reply. Naturally, this does not only apply to the senders identity but to the whole message.
+The third cluster is not important from a protocol and infrastructure perspective. It is very hard to make a service error prone (acc.3) that includes the possibility to send error messages and react to it considering that we are not able to trust the infrastructure (inf.3). If we cannot trust it we are unable to provide a readable error reply address as it would disclose the senders identity. We do therefore need the possibility to provide a identity or routing token which provides the mean to create a fully unobservable way to reply. Naturally, this does not only apply to the senders identity but to the whole message.
 \par
 If we have no trust into an infrastructure then we have to establish a kind of discardable identity. If not we do introduce this we do create a kind of pseudonymity enabling an observer to match same identities. Another approach would be that messages are sent to multiple destinations (could be done using a DC algorithm\cite{chaum-dc} or an improved version of it such as\cite{golle:eurocrypt2004}, or Xor-Trees\cite{xor-trees}) without knowing the recipient. It could even be used to recombine multiple messages into one without the knowledge of any node that it has been done.
 \par
-Another important criteria is "not-abuseable" (acc.4). Having a system which sends unobservable messages makes it easy to blackmail someone. It is therefore vitally important to add unobservable routing information to a message to make sure that a legitimate recipient is capable of identifying the senders identity. Naturally this could be done by a signature. The problem with a signature approach is that as of today we do not have a possibility to find a trustworthy real world identity to a digital identity. We could enforce the use of certificates which contain real world information but by doing so we must trust third party infrastructure and add considerable complexity in the use of such a system.
+Another important criteria is "not-abuseable" (acc.4). Having a system which sends unobservable messages makes it easy to blackmail someone. It is therefore vitally important to add unobservable routing information to a message to make sure that a legitimate recipient is capable of identifying the senders identity. Naturally this could be done by a signature. The problem with a signature approach is that as of today we do not have a possibility to find a trustworthy real world identity to a digital identity. We could enforce the use of certificates which contain real world information but by doing so we must trust third party infrastructure (violates inf.3) and add considerable complexity in the use of such a system (may violate acc.1).
 
 \section{Conclusion}
-As outlined in the previous sections being unobservable is tricky by itself. The main problem however is to make unobservable messages acceptable for everydays use. To achieve this we need to take into account that people are not really aware of the extend being observed. And their readiness to invest efforts into this field is very limited. 
+As outlined in the previous sections being unobservable is tricky by itself. The main problem however is to make unobservable messages acceptable for every days use. To achieve this we need to take into account that people are not really aware of the extend being observed. And their readiness to invest efforts into this field is very limited. 
 \par
 Summing up the findings based on the requirements it looks as follows:
 \begin{itemize}
@@ -860,7 +859,7 @@ Summing up the findings based on the requirements it looks as follows:
 
 \appendices
 \section{Definitions}\label{app:definitions}
-\subsection{Observer}
+\subsection{Definition of "observer"}
 As an observer of the system we assume the following attributes:
 \begin{itemize}
 	\item Available founding is huge.
@@ -874,7 +873,7 @@ His intensions are:
 	\item Identify users of the system
 \end{itemize}
 
-\subsection{User}
+\subsection{Definition of "user"}
 The assumed user of the system is:
 \begin{itemize}
 	\item Does care about privacy.
@@ -904,7 +903,16 @@ Users may be split into two groups.
 \end{itemize}
 There may be certain members of these groups which do not care about privacy may not be using an unobservable system .
 
-\subsection{Infrastructure owner}
+\subsection{Definition of "node"}
+The assumed node of the system is:
+\begin{itemize}
+	\item Server publicly reachable.
+	\item Server participating in the whole system.
+	\item serves one or more defined purposes.
+	\item does hove users participating in the unobservable system and other users.
+\end{itemize}
+
+\subsection{Definition of "owner"}
 The assumed infrastructure owner of the system is:
 \begin{itemize}
 	\item Does care about privacy.
@@ -941,7 +949,7 @@ His expectations are:
 \fi
 
 
-The authors would like to thank his wife and kids for being so patient with him, Dr. Craig Hamilton and Dr. Manolis Sifalakis for their thoughts on the paper.
+The authors would like to thank their families for being so patient with them, Dr. Craig Hamilton and Dr. Manolis Sifalakis for their thoughts on the paper.
 
 
 % Can use something like this to put references on a page
