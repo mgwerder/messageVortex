@@ -9,7 +9,7 @@
 \usepackage{multirow}
 %\usepackage[override]{xcolor}
 \usepackage{lmodern}
-\usepackage[ngerman]{babel}
+\usepackage[english]{babel}
 
 \usepackage[absolute,overlay]{textpos}
 \usepackage[]{eso-pic}

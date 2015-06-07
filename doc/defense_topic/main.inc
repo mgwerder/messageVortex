@@ -60,6 +60,24 @@
 }
 
 % *****************************************************************************************
+% ***  Main Goal
+% *****************************************************************************************
+\newpage
+\mode<all>{\mySubsection[Thesis Goal]{Thesis Goal}}
+\begin{frame}<presentation>[label=tgoal]{General}{Thesis Goal}
+  \begin{block}{Thesis Goal}
+    Send messages unobserved through a public network.
+  \end{block}
+\end{frame}
+\showslide{tgoal}
+
+\teachernotes[09:20]{
+\begin{itemize}
+\item Abhohlen ob diese Ziele dem generellen Verständnis entsprechen.
+\end{itemize}
+}
+
+% *****************************************************************************************
 % ***  Definition system
 % *****************************************************************************************
 \newpage
@@ -69,23 +87,18 @@
   \begin{block}{Definition of system}
     \begin{itemize}
       \item Sends messages unobserved (not perceived) through public networks.
-      \item Is easy to accept for users.
+      \item Is easy to accept for users and node owners.
       \item Is reliable (in terms of message delivery and security).
     \end{itemize}  
   \end{block}
 \end{frame}
 \showslide{system}
 
-\teachernotes[FIXME]{
-  \begin{itemize}
-    \item FIXME
-  \end{itemize}
-}
+Actually a more comprehensive list of attributes will follow in a couple of slides. But this definition should do it as a general approach.
 
 % *****************************************************************************************
 % ***  Definition user
 % *****************************************************************************************
-\newpage
 \mode<all>{\mySubsection[User]{User}}
 \begin{frame}<presentation>[label=user]{Definitions}{User}
   \begin{block}{Attributes of user}
@@ -98,7 +111,7 @@
 	  \item Is using a device with enough calculation power to solve cryptographic tasks.
     \end{itemize}
   \end{block}
-  \begin{block}{Intensions of user}
+  \begin{block}{Intentions of user}
     \tiny\begin{itemize}
 	  \item Send personal or confidential information securely to another user.
     \end{itemize}
@@ -115,12 +128,6 @@
 \end{frame}
 \showslide{user}
 
-\teachernotes[FIXME]{
-  \begin{itemize}
-    \item FIXME
-  \end{itemize}
-}
-
 % *****************************************************************************************
 % ***  Definition observer
 % *****************************************************************************************
@@ -134,7 +141,7 @@
 	  \item Is able to read, write, modify or reroute network data freely at any point of the net.
     \end{itemize}
   \end{block}
-  \begin{block}{Intensions of observer}
+  \begin{block}{Intentions of observer}
     \begin{itemize}
 	  \item Discover message flows
   	  \item Discover message contents
@@ -145,29 +152,22 @@
 \end{frame}
 \showslide{observer}
 
-\teachernotes[FIXME]{
-  \begin{itemize}
-    \item FIXME
-  \end{itemize}
-}
-
 % *****************************************************************************************
 % ***  Definition owner
 % *****************************************************************************************
-\newpage
 \mode<all>{\mySubsection[Owner]{Owner}}
 \begin{frame}<presentation>[label=owner]{Definitions}{Owner}
   \begin{block}{Definition of owner}
     \tiny\begin{itemize}
       \item Does care about privacy.
-	  \item Has considerable computer knowhow.
+	  \item Has considerable computer know-how.
 	  \item Has the ability to install programs or plugins.
-	  \item Has possibly no cryptographic knowhow.
+	  \item Has possibly no cryptographic know-how.
 	  \item Does know his own infrastructure.
 	  \item Is using an Infrastructure with enough calculation power to solve cryptographic tasks.
     \end{itemize}
   \end{block}  
-  \begin{block}{Intensions of owner}
+  \begin{block}{Intentions of owner}
     \tiny\begin{itemize}
 	  \item Support his users in sending personal or confidential information securely to another user
     \end{itemize}
@@ -185,12 +185,6 @@
 \end{frame}
 \showslide{owner}
 
-\teachernotes[FIXME]{
-  \begin{itemize}
-    \item FIXME
-  \end{itemize}
-}
-
 % *****************************************************************************************
 % ***  Definition node
 % *****************************************************************************************
@@ -199,20 +193,14 @@
 \begin{frame}<presentation>[label=node]{Definitions}{Node}
   \begin{block}{Attributes of Node}
     \begin{itemize}
-	  \item Server publicly reachable.
-	  \item Server participating in the whole system.
-	  \item serves one or more defined purposes.
+	  \item Is a publicly reachable Server.
+	  \item Participates in the whole system.
+	  \item Serves one or more defined purposes.
 	  \item Does have users participating in the unobservable system and other users.
     \end{itemize}  
   \end{block}
 \end{frame}
 \showslide{node}
-
-\teachernotes[FIXME]{
-  \begin{itemize}
-    \item FIXME
-  \end{itemize}
-}
 
 % *****************************************************************************************
 % ***  Required Attributes (Protocol)
@@ -226,18 +214,11 @@
 	  \item{Unidentifiable}
       \item{Untagable}
 	  \item{Unreplayable}
-	  \item{monolythic}{Monolithic messages}
+	  \item{Monolithic messages}
     \end{itemize}  
   \end{block}
 \end{frame}
 \showslide{protocol}
-
-\teachernotes[FIXME]{
-  \begin{itemize}
-    \item FIXME
-  \end{itemize}
-}
-
 
 \begin{itemize}
 	\item{Unidentifiable}\\
@@ -267,12 +248,6 @@
   \end{block}
 \end{frame}
 \showslide{infrastructure}
-
-\teachernotes[FIXME]{
-  \begin{itemize}
-    \item FIXME
-  \end{itemize}
-}
 
 \begin{itemize}
 	\item{Unknown endpoints}\\
@@ -305,12 +280,6 @@
   \end{block}
 \end{frame}
 \showslide{acceptance}
-
-\teachernotes[FIXME]{
-  \begin{itemize}
-    \item FIXME
-  \end{itemize}
-}
 
 \begin{itemize}
 	\item{Easy}\\
@@ -351,41 +320,61 @@
 \end{frame}
 \showslide{sneak}
 
-\teachernotes[FIXME]{
-  \begin{itemize}
-    \item FIXME
-  \end{itemize}
-}
+\begin{frame}<presentation>[label=sneak2]{Solution}{Sneak peek (2)}
+\begin{block}{Solution so far}
+  \begin{itemize}\small
+    \item User sends a steganographicalli hidden message to a peer. This message contains:
+    \begin{itemize}
+      \item Message (or parts of it) to be sent to the final recipient.
+      \item Decoy traffic.
+      \item OTRT (One Time Routing Token) for error messages. 
+      \item Possible additional routing information.
+    \end{itemize} 
+    \item Node tries to decypt, uncompress, and disassemble received message into chunks.
+    \item Node may reassemble chunks in the wait queue to a bigger chunk.
+    \item Node may add routing information to chunk.
+    \item Node passes message chunks on without knowing what is in it. It knows last and next hop (by IP).
+  \end{itemize}  
+\end{block}
+\end{frame}
+\showslide{sneak2}
+
+% *****************************************************************************************
+% ***  Thesis Title
+% *****************************************************************************************
+\newpage
+\mode<all>{\mySection[Thesis]{Thesis}}
+\mode<all>{\mySubsection[Title]{Thesis Title}}
+\begin{frame}<presentation>[label=ttitle]{Thesis}{Proposed Title}
+  \begin{block}{Thesis Title}
+    Messagevortex -- Sending messages unobserved through a public network.
+  \end{block}
+\end{frame}
+\showslide{ttitle}
 
 % *****************************************************************************************
 % ***  Thesis content
 % *****************************************************************************************
-\newpage
-\mode<all>{\mySection[Thesis]{Thesis}}
 \mode<all>{\mySubsection[Content]{Content}}
 \begin{frame}<presentation>[label=thesiscontent]{Thesis}{Content}
   \begin{block}{Proposed thesis content is ...}
     \begin{itemize}\tiny
       \item Create a generic approach to transport messages through public networks unobserved. (as defined previously)
       \item Create a generic implementation (traffic generator) of the approach.
-      \item Do traffic analysis against the approach to identify weaknesses and find optimal beahveour. \\Focus lies on:
+      \item Generate large scale traffic samples with different parameters used by sender.
+      \item Do traffic analysis against the approach to identify weaknesses and find optimal behaviour. \\Focus lies on:
       \begin{itemize}\tiny
         \item Identifying endpoints of communication.
         \item Identifying messages, message types or parts of them.
         \item Identifying patterns of service usage.
-        \item Identifying weaknesses in robustnes.
+        \item Identifying weaknesses in robustness.
       \end{itemize}
-      \item Create a working minimal prototype based on the findings.
+      \item Create a library/framework for creating messages.
+      \item Create a working minimal prototype based on the library.
     \end{itemize}
   \end{block}
 \end{frame}
 \showslide{thesiscontent}
-
-\teachernotes[FIXME]{
-  \begin{itemize}
-    \item FIXME
-  \end{itemize}
-}
 
 % *****************************************************************************************
 % ***  Discussion
@@ -396,11 +385,5 @@
 ~
 \end{frame}
 \showslide{discussion}
-
-\teachernotes[FIXME]{
-  \begin{itemize}
-    \item FIXME
-  \end{itemize}
-}
 
 \end{document}
