@@ -99,6 +99,16 @@ FIXME incomplete section
 
 \chapter{Specifying a target solution}
 \section{General}
+We have chosen a general message approach which may use any established message passing protocol as a carrier. In general we use an existing protocol (or protocol set) as carrier to transport the message (transport layer) on top of this layer we have a layer handling all presentation concerns for the transport layer (shaping layer). This layer handles the building of the message (including but not limited to steganographic messages and dead parrot avoidance). The Topmost layer handles all messages, calculates next hops and queues messages (routing layer). It takes furthermore care of the error handling.\par
+
+The routing layer has a couple of partnering blocks. The main Block is called ``router''. 
+
+The next important block is the accounting helper. This building block takes care of all states required to manage the system . It stores identities and quotas and authorizes messages to be routed. 
+
+The integrity helper collects messages authenticates and checks the integrity. It gets messages from the inbound queue
+
+The queue helper maintains queues of the system. 
+
 \subsection{Application Design}
 We first have to define the main hook for our solution. While most of the sent messages are always passed from server to server using SMTP the protocols for accessing a mailbox are varying. The most common interfaces within the private mail traffic are \defref{POP} and \defref{IMAP}. In the business environment it is mainly \defref{IMAP} or \defref{MS-OXMAPIHTTP}. \par
 
