@@ -1,14 +1,14 @@
--- ToDo use Key 
 
 Message-Blocks DEFINITIONS EXPLICIT TAGS ::= 
 BEGIN
   Message     ::= SEQUENCE {
-    header  HeaderBlock,
-    routing SEQUENCE (SIZE (0..1)) OF RoutingBlock,
-    payload SEQUENCE (SIZE (0..MAX)) OF PayloadBlock 
+    identity    IdentityBlock,
+    routing     RoutingBlock OPTIONAL,
+    routingInfo RoutingInformationBlock OPTIONAL,
+    payload     SEQUENCE (SIZE (0..MAX)) OF PayloadBlock 
   }
   
-  HeaderBlock ::= SEQUENCE {
+  IdentityBlock ::= SEQUENCE {
     identity          AsymetricKey,
     serial            INTEGER (0..MAX),
     valid             UsagePeriod,  -- subsequent Blocks are not processed before valid. Host may reject too long retention.
@@ -91,24 +91,42 @@ BEGIN
  
   -- Compatible to SubjectPublicKeyInfo taken from RFC3280
   PublicKeyInfo  ::=  SEQUENCE  {
-    algorithm            AlgorithmIdentifier,
+    algorithm     AsymetricAlgorithmIdentifier,
     publicKey     BIT STRING  
   }
   
   PrivateKeyInfo ::= SEQUENCE {
-    algorithm       AlgorithmIdentifier,
+    algorithm       AsymetricAlgorithmIdentifier,
     privateKey      BIT STRING
   }
 
 
   -- adapted from RFC3280
-  AlgorithmIdentifier  ::=  SEQUENCE  {
-    algorithm               Algorithm,
-    parameters              AlgorithmParameters  
+  SymetricAlgorithmIdentifier  ::=  SEQUENCE  {
+    algorithm               SymetricAlgorithm
   }
 
-  Algorithm ::= ENUMERATED {
-    rsaEncryption ,
+  AsymetricAlgorithmIdentifier  ::=  SEQUENCE  {
+    algorithm               AsymetricAlgorithm
+  }
+
+  
+  SymetricAlgorithm ::= ENUMERATED {
+    aes256    (1),
+    aesgcm256 (2),
+    ...    
+  }
+  
+  AsymetricAlgorithm ::= ENUMERATED {
+    rsa    (1),
+    ecdsa  (2),
+    dss    (3),
+    ...    
+  }
+  
+  MacAlgorithm ::= ENUMERATED {
+    sha    (1),
+    aead   (2),
     ...    
   }
   
@@ -124,13 +142,13 @@ BEGIN
   
   -- Symetric key
   SymetricKey ::= SEQUENCE {
-    keyType AlgorithmIdentifier,
+    keyType SymetricAlgorithmIdentifier,
     key     BIT STRING
   }
   
   -- Asymetric Key
   AsymetricKey ::= SEQUENCE {
-    keyType       AlgorithmIdentifier,
+    keyType       AsymetricAlgorithmIdentifier,
     publicKey     BIT STRING,
     privateKey    BIT STRING OPTIONAL
   }
