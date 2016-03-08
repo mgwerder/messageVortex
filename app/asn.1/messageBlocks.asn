@@ -1,13 +1,18 @@
+-- FIXME Backreferences
+-- FIXME Replay protection (delay between packets embedded multiple serials)
+-- FIXME Embed all encrypted information
 
 Message-Blocks DEFINITIONS EXPLICIT TAGS ::= 
 BEGIN
+
   Message     ::= SEQUENCE {
     identity    IdentityBlock,
-    routing     RoutingBlock OPTIONAL,
-    routingInfo RoutingInformationBlock OPTIONAL,
-    payload     SEQUENCE (SIZE (0..MAX)) OF PayloadBlock 
+    routing     [0] RoutingBlock OPTIONAL,
+    routingLog  [1] RoutingLogBlock OPTIONAL,
+    reply       [2] HeaderReply OPTIONAL,
+    payload     SEQUENCE (SIZE (0..65535)) OF PayloadBlock  
   }
-  
+
   IdentityBlock ::= SEQUENCE {
     identity          AsymetricKey,
     serial            INTEGER (0..MAX),
@@ -15,8 +20,58 @@ BEGIN
     forwardSecret     ChainSecret OPTIONAL,
     decryptionKey     SymetricKey,
     requests          SEQUENCE (SIZE (0..5)) OF HeaderRequest ,
-    challenge     [0] OCTET STRING OPTIONAL, -- The Challenge of a crypto puzzle
-    padding       [1] OCTET STRING OPTIONAL  -- This is for solving crypto puzzles
+    padding       [1] BIT STRING OPTIONAL  -- This is for solving crypto puzzles
+  }
+  
+  RoutingBlock ::= SEQUENCE {
+    recipient OCTET STRING,
+    queueTime UsagePeriod,
+    nextHop   OCTET STRING,
+    
+    forwardSecret     [0] ChainSecret OPTIONAL,
+    errorRoutingBlock [1] RoutingBlock OPTIONAL,
+    replyBlock        [2] RoutingBlock OPTIONAL,
+    
+    -- This section is required if payload is routed with a prebuilt RB
+    decryptionKey [100] SEQUENCE (SIZE (1..2)) OF SymetricKey OPTIONAL,
+    encryptionKey [101] SymetricKey OPTIONAL,
+    
+    -- FIXME This section is optional. It is required for reply blocks (building information)
+    cascade       [200] SEQUENCE(SIZE (0..255)) OF CascadeBuildInformation,
+    ...
+  }
+  
+  CascadeBuildInformation ::= SEQUENCE {
+    encryptionKey   SymetricKey,
+    secret          ChainSecret,
+    ...
+  }
+ 
+  EncryptedRoutingLogBlock ::= OCTET STRING -- contains symetrically encrypted RoutingLogBlock
+  RoutingLogBlock ::= SEQUENCE {
+    routingLog           SEQUENCE (SIZE (0..16)) OF RoutingLog,
+    nestedRoutingInformationBlock EncryptedRoutingLogBlock     
+  }
+  
+  RoutingLog ::=SEQUENCE   {
+    nodeIdentifier    OCTET STRING,
+    time              GeneralizedTime,
+    code              ErrorCode,
+    information       OCTET STRING
+  }
+  
+  IdentityStore ::= SEQUENCE {
+    identities SEQUENCE (SIZE (0..4294967295)) OF IdentityStoreBlock
+  }
+  
+  IdentityStoreBlock ::= SEQUENCE {
+    identity            KeyInfo,
+    valid               UsagePeriod,
+    messageQuota        INTEGER (0..4294967295),
+    transferQuota       INTEGER (0..4294967295),
+    nodeAddress         OCTET STRING OPTIONAL,
+    nodeKey             PublicKeyInfo,
+    ...
   }
   
   ChainSecret ::= INTEGER (0..MAX)
@@ -25,11 +80,44 @@ BEGIN
   HeaderRequest ::= CHOICE {
     identity      [0] HeaderRequestIdentity,
     capabilities  [1] HeaderRequestCapability,
+    messageQuota  [2] HeaderRequestIncreaseMessageQuota,
+    transferQuota [3] HeaderRequestIncreaseTransferQuota,
+    quotaQuery    [4] HeaderRequestQuotaQuery,
+    ...
+  }
+  
+  HeaderReply ::= CHOICE {
+    identity      [0] HeaderReplyIdentity,
+    capabilities  [1] HeaderReplyCapability,
     ...
   }
   
   HeaderRequestIdentity ::= SEQUENCE {
     period UsagePeriod,
+    identity PublicKeyInfo,
+    ...
+  }
+  
+  HeaderRequestQuotaQuery ::= SEQUENCE {
+    identity PublicKeyInfo,
+    ...
+  }
+  
+  HeaderRequestIncreaseMessageQuota ::= SEQUENCE {
+    identity PublicKeyInfo,
+    messages INTEGER (0..4294967295),
+    ...
+  }
+  
+  HeaderRequestIncreaseTransferQuota ::= SEQUENCE {
+    identity PublicKeyInfo,
+    size     INTEGER (0..4294967295),
+    ...
+  }
+  
+  HeaderReplyIdentity ::= SEQUENCE {
+    challenge     BIT STRING, -- bit sequence at beginning of hash from encrypted identity block
+    hash          MacAlgorithmIdentifier,
     ...
   }
   
@@ -38,13 +126,32 @@ BEGIN
     ...
   }
 
-  HeaderReplyCapabilities ::= SEQUENCE {
+  CypherSpec ::= SEQUENCE {
+      asymetric AsymetricAlgorithmIdentifier,
+      symetric  SymetricAlgorithmIdentifier,
+      mac       MacAlgorithmIdentifier
+  }
+  
+  HeaderReplyCapability ::= SEQUENCE {
+    cypher            SEQUENCE (SIZE (2..256)) OF CypherSpec,
+    maxTransferQuota  INTEGER (0..4294967295),
+    maxMessageQuota   INTEGER (0..4294967295),
+    supportedProtocol SEQUENCE OF Protocol,
+    ...
+  }
+  
+  Protocol ::= CHOICE {
+    smtp  (100),
+    xmmp  (110),
     ...
   }
   
   ErrorCode ::= ENUMERATED {
     
     -- System messages
+    ok                    (2001),
+    transferQuotaStatus   (2101),
+    messageQuotaStatus    (2102),
     
     -- protocol usage failures
     transferQuotaExceeded (3001),
@@ -69,20 +176,6 @@ BEGIN
     chunk ChunkMessage
   }
   
-  RoutingBlock ::= SEQUENCE {
-    recipient OCTET STRING,
-    queueTime UsagePeriod,
-    nextHop   OCTET STRING,
-    
-    forwardSecret ChainSecret OPTIONAL,
-    
-    -- This section is required if payload is routed 
-    decryptionKey [0] SymetricKey OPTIONAL,
-    encryptionKey [1] SymetricKey OPTIONAL,
-    
-    ...
-  }
- 
   -- Compatible to PrivateKeyUsagePeriod taken from RFC3280
   UsagePeriod ::= SEQUENCE {
     notBefore       [0]     GeneralizedTime OPTIONAL,
@@ -95,19 +188,28 @@ BEGIN
     publicKey     BIT STRING  
   }
   
-  PrivateKeyInfo ::= SEQUENCE {
+  KeyInfo ::= SEQUENCE {
     algorithm       AsymetricAlgorithmIdentifier,
-    privateKey      BIT STRING
+    publicKey       BIT STRING,  
+    privateKey      BIT STRING OPTIONAL,
+    ...
   }
 
 
   -- adapted from RFC3280
   SymetricAlgorithmIdentifier  ::=  SEQUENCE  {
-    algorithm               SymetricAlgorithm
+    algorithm               SymetricAlgorithm,
+    parameter               SEQUENCE (SIZE (0..128)) OF AlgorithmParameters
   }
 
   AsymetricAlgorithmIdentifier  ::=  SEQUENCE  {
-    algorithm               AsymetricAlgorithm
+    algorithm               AsymetricAlgorithm,
+    parameter               SEQUENCE (SIZE (0..128)) OF AlgorithmParameters
+  }
+
+  MacAlgorithmIdentifier  ::=  SEQUENCE  {
+    algorithm               MacAlgorithm,
+    parameter               SEQUENCE (SIZE (0..128)) OF AlgorithmParameters
   }
 
   
@@ -125,13 +227,34 @@ BEGIN
   }
   
   MacAlgorithm ::= ENUMERATED {
-    sha    (1),
-    aead   (2),
+    sha2   (1),
+    sha3   (2),
+    tiger192 (3),
     ...    
   }
   
-  AlgorithmParameters ::= CHOICE {
-    keySize INTEGER (1..MAX),
+  ECCurveType ::= ENUMERATED {
+    secp192r1,
+    sect163k1,
+    sect163r2,
+    secp224r1,
+    sect233k1,
+    sect233r1,
+    secp256r1,
+    sect283k1,
+    sect283r1,
+    secp384r1,
+    sect409k1,
+    sect409r1,
+    secp521r1,
+    sect571k1,
+    sect571r1,
+    ...
+  }
+  
+  AlgorithmParameters ::= SEQUENCE  {
+    keySize   [0] INTEGER (0..63535) OPTIONAL,
+    curveType [1] ECCurveType OPTIONAL,
     ...    
   }
   
