@@ -1,6 +1,11 @@
 -- FIXME Backreferences
 -- FIXME Replay protection (delay between packets embedded multiple serials)
 -- FIXME Embed all encrypted information
+-- FIXME ADAPT NeoScrypt 
+
+-- States: Tuple()=Value() [vallidity; allowed operations] {Store}
+-- - Tuple(identity)=Value(messageQuota,transferQuota) [validity; Requested at creation; may be extended upon request] {identityStore}
+-- - Tuple(Identity,Serial)=maxReplays ['valid' from Identity Block; from First Identity Block; may only be reduced] {IdentityReplayStore}
 
 Message-Blocks DEFINITIONS EXPLICIT TAGS ::= 
 BEGIN
@@ -13,16 +18,19 @@ BEGIN
     payload     SEQUENCE (SIZE (0..65535)) OF PayloadBlock  
   }
 
+  -- represents the identity of the rights owner
   IdentityBlock ::= SEQUENCE {
     identity          AsymetricKey,
     serial            INTEGER (0..MAX),
-    valid             UsagePeriod,  -- subsequent Blocks are not processed before valid. Host may reject too long retention.
+	  maxReplays		    INTEGER (0..MAX),  -- 
+    valid             UsagePeriod,       -- subsequent Blocks are not processed before valid. Host may reject too long retention.
     forwardSecret     ChainSecret OPTIONAL,
     decryptionKey     SymetricKey,
     requests          SEQUENCE (SIZE (0..5)) OF HeaderRequest ,
     padding       [1] BIT STRING OPTIONAL  -- This is for solving crypto puzzles
   }
   
+  -- represents the building and sending process for the next hop
   RoutingBlock ::= SEQUENCE {
     recipient OCTET STRING,
     queueTime UsagePeriod,
@@ -36,7 +44,7 @@ BEGIN
     decryptionKey [100] SEQUENCE (SIZE (1..2)) OF SymetricKey OPTIONAL,
     encryptionKey [101] SymetricKey OPTIONAL,
     
-    -- FIXME This section is optional. It is required for reply blocks (building information)
+    -- This section is optional. It is required for reply blocks (building information)
     cascade       [200] SEQUENCE(SIZE (0..255)) OF CascadeBuildInformation,
     ...
   }
@@ -60,6 +68,16 @@ BEGIN
     information       OCTET STRING
   }
   
+  IdentityReplayStore ::= SEQUENCE {
+	replays		SEQUENCE (SIZE (0..4294967295)) OF IdentityReplayBlock
+  }
+  
+  IdentityReplayBlock ::= SEQUENCE {
+    identity            KeyInfo,
+    valid               UsagePeriod,
+	replaysRemaining	INTEGER (0..4294967295)
+  }
+
   IdentityStore ::= SEQUENCE {
     identities SEQUENCE (SIZE (0..4294967295)) OF IdentityStoreBlock
   }
@@ -69,8 +87,8 @@ BEGIN
     valid               UsagePeriod,
     messageQuota        INTEGER (0..4294967295),
     transferQuota       INTEGER (0..4294967295),
-    nodeAddress         OCTET STRING OPTIONAL,
-    nodeKey             PublicKeyInfo,
+    nodeAddress         OCTET STRING OPTIONAL,     -- Contains the node URL 
+    nodeKey             PublicKeyInfo OPTIONAL,    -- Contains the identity of the owning node; May be ommited if local node
     ...
   }
   
@@ -140,7 +158,7 @@ BEGIN
     ...
   }
   
-  Protocol ::= CHOICE {
+  Protocol ::= ENUMERATED {
     smtp  (100),
     xmmp  (110),
     ...
