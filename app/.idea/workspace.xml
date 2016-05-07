@@ -2,44 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="5a656906-b81d-4dfc-810f-74d16a7a648c" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/imap/AllTrustManager.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/imap/CustomKeyManager.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/imap/ImapAuthenticationDummyProxy.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/imap/ImapAuthenticationProxy.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/imap/ImapBlankLineException.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/imap/ImapClient.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/imap/ImapCommand.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/imap/ImapCommandAuthenticate.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/imap/ImapCommandAuthenticateCallbackHandler.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/imap/ImapCommandCapability.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/imap/ImapCommandLogin.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/imap/ImapCommandLogout.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/imap/ImapCommandNoop.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/imap/ImapConnection.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/imap/ImapException.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/imap/ImapLine.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/imap/ImapNullLineException.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/imap/ImapServer.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/imap/SocketDeblocker.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/imap/StoppableThread.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/imap/package-info.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/test/ConfigTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/test/CustomKeyManagerTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/test/ImapAuthenticationDummyProxyTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/test/ImapClientTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/test/ImapCommandCapabilityTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/test/ImapCommandLoginTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/test/ImapCommandLogoutTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/test/ImapCommandNoopTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/test/ImapCommandTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/test/ImapLineExceptionTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/test/ImapLineTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/test/ImapSSLTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/test/MailVortexTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/test/MainSuite.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/test/VersionTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/imap" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/test" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/asn.1/messageBlocks.asn" afterPath="$PROJECT_DIR$/asn.1/messageBlocks.asn" />
     </list>
     <ignored path="asnone.iws" />
@@ -548,6 +510,9 @@
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="LAST_COMMIT_MESSAGE" value="" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />

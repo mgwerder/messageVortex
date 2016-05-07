@@ -120,7 +120,7 @@ For message sending I will implement an SMTP relay server. This relay server onl
 
 All operation carried out on mails are implemented in a thread safe library called libVortex. The API should be stable and suitable for thirdparty apps to be used. Around this a series of connectors are implemented.
 
-\begin{figure}[ht!]
+\begin{figure}[H]
   \centering\includegraphics[width=\textwidth]{inc/VortexModules}
   \caption{Vortex Modules}\label{fig:VortexModules}
 \end{figure}
@@ -142,8 +142,66 @@ Base for all local caching and intermediate mail services a Hedwig Mail Server w
 \subsection{Folder storage}
 The configuration data is stored in a IMAP folder. To hide the IMAP store to an observer the client is provided with a folder name and password (instead of a fixed folder name). The key for all config data and all messages is stored in a message in this folder. The folder is hidden by the proxy if known.
 
-\subsection{Blocks}
+\subsection{Protocol Design}
+\subsubsection{General Design}
+The protocol is based on serveral Design criterias. It is important to understand that the protocol does not trust any infrastructure exept the own. It is therefore based on a zero trust infrastructure. It splits up into the layers transport, obfuscation and routing. Whereas routing may be split up in accounting, queuing.
+
+\begin{figure}[H]
+	\centering\includegraphics[width=0.6\textwidth]{inc/parts/PrinciplesOfProtocol.pdf}
+	\caption{Vortex Modules}\label{fig:PrinciplesOfProtocol}
+\end{figure}
+
+
+\subsubsection{General Process of Communication}
+FIXME incomplete section
+
+\subsubsection{General Process of Bootstrapping}
+FIXME incomplete section
+
+\subsubsection{General Information about Encryption and Hashing\label{sec:genEncrypt}}
+In This Protocol a lot of encryption and hashing algorithms have been chosen. This Choice should be explained. 
+
+First of all we need a subset of encryption algorithms all implementations may rely on. Defining such a subset garatees interoperability between all nodes regardless of their origins. 
+
+Secondly we need to have a spectrum of algorithm in such a manor that it may be (a) enlarged if necesary and (b) there is an alternative if an algorithm is broken (so that algorithms may be withdrawn if required without affecting the function in general). 
+
+And third due to the onion like design described in this document asymetric encryption should be avoided in favour of symetric encryption to minimize losses due to the key length and the generally higher CPU load oposed by asymetric keys.
+
+If the algorithm is generally bound to specific keysizes (due to S-Boxes or similar constructs) the key size is incorporated into the definition. If not the key size is handled as parameter.
+
+The keysizes have been chosen in such a manor that the keytypes form tupples of approximately equal strength. The support of Camelia192 and Aes192 has been defined as optional. But as they are wildly common in implementations they have allready been standardized as they  build a possibility to step up security in future.
+
+Having this criterias for choice I chose to use th following keys and keysizes:
+\begin{itemize}
+	\item Symetric
+	\begin{itemize}
+		\item AES (Keysizes 128, 192, 256)
+		\item Camellia (Keysizes 128, 192, 256)
+	\end{itemize}
+	\item Asymetric
+	\begin{itemize}
+		\item RSA (Keysizes free)
+		\item DSA
+		\item Named Elliptic Courves
+		\begin{itemize}
+			\item secp384r1
+			\item sect409k1
+			\item secp521r1
+		\end{itemize}
+	\end{itemize}
+	\item Hashing
+	\begin{itemize}
+		\item sha384
+		\item sha512
+		\item tiger192
+	\end{itemize}
+\end{itemize}
+
+
+
+\subsection{Block Details}
 \subsubsection{Preamble}
+The following sections contains exact building information about the blocks used by the Protocol. It contains handling instructions and validity ranges.
 FIXME incomplete section
 
 \subsubsection{Routing block}

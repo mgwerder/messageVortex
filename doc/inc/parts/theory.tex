@@ -112,18 +112,19 @@ FIXME incomplete section
 FIXME incomplete section
 
 \section{Steganography}
-According to Wikipedia steganography\cite{wiki:steganographie} is "`... the art or practice of concealing a message, image, or file within another message, image, or file."'. \par
+According to Wikipedia steganography\cite{wiki:steganographie} is ``... the art or practice of concealing a message, image, or file within another message, image, or file.''. \par
 
-Simple steganography applications manipulate the lowest signifficant Bits of lossless compressed images. As the user can not see these kind of variances in colors the image seems to remain "`unchanged"'. Infact the message is obviously embedded in the Image and may be retrieved quite simply. To make the concealed messages less obvoious the message is usually encrypted before embedding. However - most of the embedded messages may be detected as encrypted messages have an equal probability of all characters within an encrypted message. As the lowest significant bits of an image do usually not have this variance (image locally speaking) most of the embedded information may be detected. The same applies to information encoded in the frequency spectrums of lossy packed images. The typical payload of a steganographic message is below $25\%$ of the size of its carrier. The more information is packed into carrier the easier detectable it is.\par
+Simple steganography applications manipulate the lowest signifficant Bits of lossless compressed images. As the user can not see these kind of variances in colors the image seems to remain ``unchanged''. Infact the message is obviously embedded in the Image and may be retrieved quite simply. To make the concealed messages less obvoious the message is usually encrypted before embedding. However - most of the embedded messages may be detected as encrypted messages have an equal probability of all characters within an encrypted message. As the lowest significant bits of an image do usually not have this variance (image locally speaking) most of the embedded information may be detected. The same applies to information encoded in the frequency spectrums of lossy packed images. The typical payload of a steganographic message is below $25\%$ of the size of its carrier. The more information is packed into carrier the easier detectable it is.\par
 
 A good example for this kind of steganalysis is \citetitle{steganalysisf5}. The authors have found means in F5\cite{f5} to detect the presence of a steganographic concealed message within JPEG images and can even determine its size using relatively simple histogram analysis methods.\par
 
-Although there are quite some programs available steganography has never found a broad audience. Unlike cryptography most progarms implement their own algorithm which is usually not or badly documented. Interoperability between programs is not given due to a lack of accepted public standards. 
-
+Although there are quite some programs available for steganography it has never found a broad audience. Unlike cryptography most progarms implement their own algorithm which is usually not or badly documented and not scientifically analyzed. Interoperability between programs is not given due to a lack of accepted public standards. 
 
 FIXME incomplete section
 
-\section{Encryption}
+\section{Encryption and Hashing}
+With regards to the implementation some of the available cryptographic Algorithms have been chosen  (see \ref{sec:genEncrypt}). These cryptographic algorithms are 
+
 FIXME incomplete section
 
 \subsection{Symetric encryption}
@@ -132,22 +133,25 @@ FIXME incomplete section
 \subsubsection{Advanced Encryption Standard}
 FIXME incomplete section
 
+\subsubsection{Camellia}
+FIXME incomplete section
+
 \subsection{Asymetric encryption}
 FIXME incomplete section
 
 \subsubsection{RSA}
 FIXME incomplete section
 
-\subsubsection{El-Gamal}
+\subsubsection{Elliptic Curves}
 FIXME incomplete section
 
-\subsubsection{ECDSA}
+\subsection{Hashing}
 FIXME incomplete section
 
-\subsection{Key exchange}
+\subsubsection{Secure Hashing Algorithm}
 FIXME incomplete section
 
-\subsubsection{Diffie-Hellmann key exchange}
+\subsubsection{Tiger}
 FIXME incomplete section
 
 \section{Mix cascades}
