@@ -1,6 +1,5 @@
 example1 Message ::= { 
-    identity {
-        identityKey {
+    header IdentityBlock {
             keyType {
               algorithm rsa,
               parameter {
@@ -15,11 +14,5 @@ example1 Message ::= {
         decryptionKey 'ACF12121212121212121'H,
         requests {}  
     },
-    routing {
-        recipient "test@test.com",
-        queueTime {},
-        nextHop {},
-        cascade {}
-    },
-    payload {}
+    blocks 'AFCFFFCDE12392861263126387634817'H
 }

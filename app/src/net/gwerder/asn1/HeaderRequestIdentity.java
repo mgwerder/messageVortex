@@ -37,7 +37,7 @@ public class HeaderRequestIdentity extends HeaderRequest {
     public String dumpValueNotation(String prefix) {
         StringBuilder sb=new StringBuilder();
         sb.append("{"+Block.CRLF);
-        if(identity!=null) sb.append( prefix+"  identity "+identity.dumpValueNotation( prefix+"  ",false )+Block.CRLF );
+        if(identity!=null) sb.append( prefix+"  identity "+identity.dumpValueNotation( prefix+"  ", AsymetricKey.DumpType.PRIVATE_COMMENTED )+Block.CRLF );
         if(period!=null)   sb.append( prefix+"  period "+period.dumpValueNotation( prefix+"  " )+identity!=null?",":""+Block.CRLF );
         sb.append(prefix+"}");
         return sb.toString();

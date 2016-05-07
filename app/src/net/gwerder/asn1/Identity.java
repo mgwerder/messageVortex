@@ -73,7 +73,7 @@ public class Identity extends Block {
     public String dumpValueNotation(String prefix) throws IOException {
         StringBuilder sb=new StringBuilder();
         sb.append("{"+CRLF);
-        sb.append(prefix+"  identityKey "+identityKey.dumpValueNotation(prefix+"  ",true)+","+CRLF);
+        sb.append(prefix+"  identityKey "+identityKey.dumpValueNotation(prefix+"  ", AsymetricKey.DumpType.PRIVATE_COMMENTED)+","+CRLF);
         sb.append(prefix+"  serial "+serial+","+CRLF);
         sb.append(prefix+"  maxReplays "+maxReplays+","+CRLF);
         sb.append(prefix+"  valid "+valid.dumpValueNotation(prefix+"  ")+","+CRLF);

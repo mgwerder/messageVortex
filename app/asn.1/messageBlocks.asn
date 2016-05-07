@@ -11,8 +11,11 @@ Message-Blocks DEFINITIONS EXPLICIT TAGS ::=
 BEGIN
 
   Message     ::= SEQUENCE { -- This Block is encrypted with the hosts public key or may be transmitted in plan (if empty)
-    header      OCTET STRING, -- contains IdentityBlock structure; Decryption key is hosts private key
-    blocks      OCTET STRING  -- contains EncryptedBlock structure; Decyrption key is found in header>identity>decryptionKey
+    header CHOICE {
+        encrypted [0] OCTET STRING,  -- contains IdentityBlock structure; Decryption key is hosts private key
+        plain     [1] IdentityBlock
+    },
+    blocks        [2] OCTET STRING   -- contains EncryptedBlock structure; Decyrption key is found in header>identity>decryptionKey
   }
 
   -- represents the identity of the rights owner
@@ -58,7 +61,7 @@ BEGIN
     reply       [2] ReplyBlock OPTIONAL,
     
     -- contains the actual payload
-    payload     SEQUENCE (SIZE (0..128)) OF PayloadBlock  
+    payload     SEQUENCE (SIZE (0..128)) OF PayloadChunk  
   }
 
   
@@ -236,20 +239,10 @@ BEGIN
     ...
   }
   
-  PayloadBlock ::= SEQUENCE {
-    chunk  [0] ChunkMessage,
-    ...
-  }  
-
-  ChunkMessage ::= SEQUENCE {
+  PayloadChunk ::= SEQUENCE {
     offset                   INTEGER (0..MAX),
     routingBlockIdentifier   [0]   SEQUENCE (SIZE (0..255)) OF INTEGER,
     payload                  [100] OCTET STRING
-  }
-  
-  RoutableChunkMessage ::= SEQUENCE {
-    route RoutingBlock,
-    chunk ChunkMessage
   }
   
   -- Compatible to PrivateKeyUsagePeriod taken from RFC3280

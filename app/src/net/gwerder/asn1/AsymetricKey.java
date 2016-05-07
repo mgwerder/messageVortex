@@ -20,6 +20,14 @@ import java.util.Map;
  */
 public class AsymetricKey extends Key {
 
+    public static enum DumpType {
+        ALL,
+        PUBLIC_ONLY,
+        PUBLIC_COMMENTED,
+        PRIVATE_ONLY,
+        PRIVATE_COMMENTED,
+    };
+
     static {
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
     }
@@ -84,26 +92,37 @@ public class AsymetricKey extends Key {
         return null;
     }
 
-    public String dumpValueNotation(String prefix,boolean dumpPrivateKey) {
+    public String dumpValueNotation(String prefix,DumpType dt) {
         StringBuilder sb=new StringBuilder();
         sb.append("{"+CRLF);
-        sb.append(dumpKeyTypeValueNotation(prefix));
-        String s=null;
-        try{
-            s=toHex(publicKey.getOctets());
-        } catch(IllegalStateException ise) {
-            s=toBitString(publicKey);
+        if(publicKey!=null && (dt==DumpType.ALL || dt==DumpType.PUBLIC_ONLY || dt==DumpType.PUBLIC_COMMENTED || dt==DumpType.PRIVATE_COMMENTED)) {
+            sb.append( dumpKeyTypeValueNotation( prefix ) );
+            String s = null;
+            try {
+                s = toHex( publicKey.getOctets() );
+            } catch (IllegalStateException ise) {
+                s = toBitString( publicKey );
+            }
+            sb.append( prefix + "  " );
+            if(dt==DumpType.PUBLIC_COMMENTED) sb.append( "-- " );
+            sb.append( "publicKey " + s );
+            if (dt == DumpType.ALL) {
+                sb.append( "," );
+            }
+            sb.append( CRLF );
         }
-        sb.append(prefix+"  publicKey "+s);
-        if(privateKey!=null && dumpPrivateKey) {
-            sb.append(","+CRLF);
-            s=null;
+        if(privateKey!=null && (dt==DumpType.PRIVATE_COMMENTED || dt==DumpType.PRIVATE_ONLY || dt==DumpType.ALL)) {
+            String s=null;
             try{
                 s=toHex(privateKey.getOctets());
             } catch(IllegalStateException ise) {
                 s=toBitString(privateKey);
             }
-            sb.append(prefix+"  privateKey "+s+CRLF);
+            sb.append(prefix+"  ");
+            if(dt==DumpType.PRIVATE_COMMENTED) {
+                sb.append("-- ");
+            }
+            sb.append("privateKey "+s+CRLF);
         } else sb.append(CRLF);
         sb.append(prefix+"}");
         return sb.toString();
