@@ -4,48 +4,94 @@
 -- FIXME ADAPT NeoScrypt 
 
 -- States: Tuple()=Value() [vallidity; allowed operations] {Store}
--- - Tuple(identity)=Value(messageQuota,transferQuota) [validity; Requested at creation; may be extended upon request] {identityStore}
+-- - Tuple(identity)=Value(messageQuota,transferQuota,sequence of Routingblocks for Error Message Routing) [validity; Requested at creation; may be extended upon request] {identityStore}
 -- - Tuple(Identity,Serial)=maxReplays ['valid' from Identity Block; from First Identity Block; may only be reduced] {IdentityReplayStore}
 
 Message-Blocks DEFINITIONS EXPLICIT TAGS ::= 
 BEGIN
 
-  Message     ::= SEQUENCE {
-    identity    IdentityBlock,
-    routing     [0] RoutingBlock OPTIONAL,
-    routingLog  [1] RoutingLogBlock OPTIONAL,
-    reply       [2] HeaderReply OPTIONAL,
-    payload     SEQUENCE (SIZE (0..65535)) OF PayloadBlock  
+  Message     ::= SEQUENCE { -- This Block is encrypted with the hosts public key or may be transmitted in plan (if empty)
+    header      OCTET STRING, -- contains IdentityBlock structure; Decryption key is hosts private key
+    blocks      OCTET STRING  -- contains EncryptedBlock structure; Decyrption key is found in header>identity>decryptionKey
   }
 
   -- represents the identity of the rights owner
   IdentityBlock ::= SEQUENCE {
-    identity          AsymetricKey,
-    serial            INTEGER (0..MAX),
-	  maxReplays		    INTEGER (0..MAX),  -- 
-    valid             UsagePeriod,       -- subsequent Blocks are not processed before valid. Host may reject too long retention.
-    forwardSecret     ChainSecret OPTIONAL,
-    decryptionKey     SymetricKey,
+    -- Public key of the identity representing this transmission
+    identityKey       AsymetricKey,
+    
+    -- serial identifying this block
+    serial            INTEGER (0..4294967295), 
+    
+    -- number of times this block may be replayed (Tuple is identityKey,serial while 
+    maxReplays        INTEGER (0..65535), 
+    
+    -- subsequent Blocks are not processed before valid time. 
+    -- Host may reject too long retention. Recomended validity support >=1Mt.
+    valid             UsagePeriod,        
+    
+    -- represents the chained secret which has to be found in subsequent blocks
+    -- prevents reassembly attack
+    forwardSecret [0] ChainSecret OPTIONAL,
+    
+    -- contains SymetricKey encrypted with private key of identityKey 
+    -- encryption is done as proof of identity (identity hijack protection)
+    decryptionKey     OCTET STRING,
+    
+    -- contains administrative requests such as quota requests
     requests          SEQUENCE (SIZE (0..5)) OF HeaderRequest ,
-    padding       [1] BIT STRING OPTIONAL  -- This is for solving crypto puzzles
+    
+    -- padding and identitifier required to solve the cryptopuzzle
+    identifier    [1] INTEGER (0..4294967295) OPTIONAL, 
+    padding       [2] OCTET STRING OPTIONAL  -- This is for solving crypto puzzles
   }
+
+  EncryptedBlocks ::= SEQUENCE {
+    -- contains routing information (next hop) for the payloads
+    -- FIXME how handle multiple payloads
+    routing     [0] RoutingBlock OPTIONAL,
+    
+    -- contains encrypted log data of the data traveling
+    routingLog  [1] RoutingLogBlock OPTIONAL,
+    
+    -- contains replys to header requests (eg. quota and identity handling)
+    reply       [2] ReplyBlock OPTIONAL,
+    
+    -- contains the actual payload
+    payload     SEQUENCE (SIZE (0..128)) OF PayloadBlock  
+  }
+
   
   -- represents the building and sending process for the next hop
   RoutingBlock ::= SEQUENCE {
-    recipient OCTET STRING,
+  
+    -- contains the next recipient in sequence
+    recipient NodeSpec,
+    
+    -- contains the period when the payload should be processed 
+    -- Router might refuse to long queue retention
+    -- Recommended support for retention >=1h
     queueTime UsagePeriod,
-    nextHop   OCTET STRING,
     
-    forwardSecret     [0] ChainSecret OPTIONAL,
-    errorRoutingBlock [1] RoutingBlock OPTIONAL,
-    replyBlock        [2] RoutingBlock OPTIONAL,
+    -- contains Encrypted next routing block for the payload
+    -- decryption is done by the target node
+    nextHop           [101] SEQUENCE (SIZE (0..128)) OF OCTET STRING,   -- encrypted next RoutingBlocks for the payload
     
-    -- This section is required if payload is routed with a prebuilt RB
-    decryptionKey [100] SEQUENCE (SIZE (1..2)) OF SymetricKey OPTIONAL,
-    encryptionKey [101] SymetricKey OPTIONAL,
+    -- contains the secret of the identity block (if any)
+    forwardSecret     [102]   ChainSecret OPTIONAL,
+
+    -- contains a routing block which may be used when sending error messages back to the quota owner
+    -- this routing block may be cached for future use
+    errorRoutingBlock [103]   RoutingBlock OPTIONAL,
+    replyBlock        [104]   RoutingBlock OPTIONAL,
     
-    -- This section is optional. It is required for reply blocks (building information)
-    cascade       [200] SEQUENCE(SIZE (0..255)) OF CascadeBuildInformation,
+    -- This section is required if payload is routed with a prebuilt RB (
+    -- Messages MAY always request recompression (otherwise the message is identifyable from a non reply routing block)
+    decryptionKey     [100] SEQUENCE (SIZE (1..2)) OF SymetricKey OPTIONAL,
+    encryptionKey     [101] SymetricKey OPTIONAL,
+    
+    -- contains information for building replys
+    cascade           [200] SEQUENCE(SIZE (0..255)) OF CascadeBuildInformation,
     ...
   }
   
@@ -62,10 +108,10 @@ BEGIN
   }
   
   RoutingLog ::=SEQUENCE   {
-    nodeIdentifier    OCTET STRING,
+    nodeIdentifier    IA5String,
     time              GeneralizedTime,
     code              ErrorCode,
-    information       OCTET STRING
+    information       IA5String
   }
   
   IdentityReplayStore ::= SEQUENCE {
@@ -87,36 +133,49 @@ BEGIN
     valid               UsagePeriod,
     messageQuota        INTEGER (0..4294967295),
     transferQuota       INTEGER (0..4294967295),
-    nodeAddress         OCTET STRING OPTIONAL,     -- Contains the node URL 
+    -- Contains the node spec
+    nodeAddress         NodeSpec OPTIONAL,      
     nodeKey             PublicKeyInfo OPTIONAL,    -- Contains the identity of the owning node; May be ommited if local node
     ...
   }
   
-  ChainSecret ::= INTEGER (0..MAX)
+  -- contains a node spec of a routing point
+  -- At the moment either smtp:<email> or xmpp:<jabber>
+  NodeSpec ::= IA5String
+  
+  ChainSecret ::= INTEGER (0..4294967295)
   
   -- FIXME define requests
   HeaderRequest ::= CHOICE {
     identity      [0] HeaderRequestIdentity,
     capabilities  [1] HeaderRequestCapability,
     messageQuota  [2] HeaderRequestIncreaseMessageQuota,
-    transferQuota [3] HeaderRequestIncreaseTransferQuota,
-    quotaQuery    [4] HeaderRequestQuotaQuery,
+    transferQuota [3] RequestIncreaseTransferQuota,
+    quotaQuery    [4] HeaderRequestQueryQuota,
     ...
   }
   
-  HeaderReply ::= CHOICE {
-    identity      [0] HeaderReplyIdentity,
-    capabilities  [1] HeaderReplyCapability,
+  ReplyBlock ::= CHOICE {
+    identity      [0] ReplyIdentity,
+    capabilities  [1] ReplyCapability,
     ...
   }
   
   HeaderRequestIdentity ::= SEQUENCE {
-    period UsagePeriod,
     identity PublicKeyInfo,
+    period UsagePeriod,
     ...
   }
   
-  HeaderRequestQuotaQuery ::= SEQUENCE {
+  ReplyIdentity ::= SEQUENCE {
+    challenge     BIT STRING, -- bit sequence at beginning of hash from encrypted identity block
+    hash          MacAlgorithmIdentifier,
+    valid         UsagePeriod,
+    identifier    INTEGER (0..4294967295),
+    ...
+  }
+  
+  HeaderRequestQueryQuota ::= SEQUENCE {
     identity PublicKeyInfo,
     ...
   }
@@ -127,15 +186,9 @@ BEGIN
     ...
   }
   
-  HeaderRequestIncreaseTransferQuota ::= SEQUENCE {
+  RequestIncreaseTransferQuota ::= SEQUENCE {
     identity PublicKeyInfo,
     size     INTEGER (0..4294967295),
-    ...
-  }
-  
-  HeaderReplyIdentity ::= SEQUENCE {
-    challenge     BIT STRING, -- bit sequence at beginning of hash from encrypted identity block
-    hash          MacAlgorithmIdentifier,
     ...
   }
   
@@ -144,18 +197,18 @@ BEGIN
     ...
   }
 
-  CypherSpec ::= SEQUENCE {
-      asymetric AsymetricAlgorithmIdentifier,
-      symetric  SymetricAlgorithmIdentifier,
-      mac       MacAlgorithmIdentifier
-  }
-  
-  HeaderReplyCapability ::= SEQUENCE {
+  ReplyCapability ::= SEQUENCE {
     cypher            SEQUENCE (SIZE (2..256)) OF CypherSpec,
     maxTransferQuota  INTEGER (0..4294967295),
     maxMessageQuota   INTEGER (0..4294967295),
     supportedProtocol SEQUENCE OF Protocol,
     ...
+  }
+  
+  CypherSpec ::= SEQUENCE {
+      asymetric AsymetricAlgorithmIdentifier,
+      symetric  SymetricAlgorithmIdentifier,
+      mac       MacAlgorithmIdentifier
   }
   
   Protocol ::= ENUMERATED {
@@ -179,16 +232,21 @@ BEGIN
     messageLifeExpired    (3202), 
     
     -- Mayor host specific errors
-    hostError     (5001),
+    hostError             (5001),
     ...
   }
   
-  PayloadBlock ::= CHOICE {
+  PayloadBlock ::= SEQUENCE {
     chunk  [0] ChunkMessage,
-    rchunk [1] RoutableChunkMessage,
     ...
   }  
 
+  ChunkMessage ::= SEQUENCE {
+    offset                   INTEGER (0..MAX),
+    routingBlockIdentifier   [0]   SEQUENCE (SIZE (0..255)) OF INTEGER,
+    payload                  [100] OCTET STRING
+  }
+  
   RoutableChunkMessage ::= SEQUENCE {
     route RoutingBlock,
     chunk ChunkMessage
@@ -217,41 +275,45 @@ BEGIN
   -- adapted from RFC3280
   SymetricAlgorithmIdentifier  ::=  SEQUENCE  {
     algorithm               SymetricAlgorithm,
-    parameter               SEQUENCE (SIZE (0..128)) OF AlgorithmParameters
+    parameter               AlgorithmParameters OPTIONAL
   }
 
   AsymetricAlgorithmIdentifier  ::=  SEQUENCE  {
     algorithm               AsymetricAlgorithm,
-    parameter               SEQUENCE (SIZE (0..128)) OF AlgorithmParameters
+    parameter               AlgorithmParameters OPTIONAL
   }
 
   MacAlgorithmIdentifier  ::=  SEQUENCE  {
     algorithm               MacAlgorithm,
-    parameter               SEQUENCE (SIZE (0..128)) OF AlgorithmParameters
+    parameter               AlgorithmParameters
   }
 
   
   SymetricAlgorithm ::= ENUMERATED {
-    aes256    (1),
-    aesgcm256 (2),
-    ...    
+    aes128      (1000),
+    aes192      (1001),  -- optional support
+    aes256      (1002),
+    camellia128 (1100),
+    camellia192 (1101),  -- optional support
+    camellia256 (1102)
   }
   
   AsymetricAlgorithm ::= ENUMERATED {
-    rsa    (1),
-    ecdsa  (2),
-    dss    (3),
-    ...    
+    rsa       (2000),
+    dsa       (2100),
+    secp384r1 (2500),
+    sect409k1 (2501),
+    secp521r1 (2502)
   }
   
   MacAlgorithm ::= ENUMERATED {
-    sha2   (1),
-    sha3   (2),
-    tiger192 (3),
-    ...    
+    sha384   (3000),
+    sha512   (3001),
+    -- FIXME check AEAD
+    tiger192 (3100)
   }
   
-  ECCurveType ::= ENUMERATED {
+  ECCurveType ::= ENUMERATED{
     secp192r1,
     sect163k1,
     sect163r2,
@@ -270,15 +332,10 @@ BEGIN
     ...
   }
   
-  AlgorithmParameters ::= SEQUENCE  {
-    keySize   [0] INTEGER (0..63535) OPTIONAL,
-    curveType [1] ECCurveType OPTIONAL,
+  AlgorithmParameters ::= SEQUENCE {
+    keySize   [10000] INTEGER (0..65535) OPTIONAL,
+    curveType [10001] ECCurveType OPTIONAL,
     ...    
-  }
-  
-  ChunkMessage ::= SEQUENCE {
-    offset INTEGER (0..MAX),
-    payload OCTET STRING
   }
   
   -- Symetric key
@@ -291,34 +348,35 @@ BEGIN
   AsymetricKey ::= SEQUENCE {
     keyType       AsymetricAlgorithmIdentifier,
     publicKey     BIT STRING,
-    privateKey    BIT STRING OPTIONAL
+    privateKey    [0] BIT STRING OPTIONAL
   }
+  
+  pkcs-1    OBJECT IDENTIFIER ::= { iso(1) member-body(2) us(840) rsadsi(113549) pkcs(1) 1 }
+
+  -- FROM RFC5480
+  id-ansi        OBJECT IDENTIFIER ::= { iso(1) member-body(2) us(840) ansi-X9-62(10045) }
+  id-certicom    OBJECT IDENTIFIER ::= { iso(1) identified-organization(3) certicom(132) }
+
+  id-ecPublicKey OBJECT IDENTIFIER ::= { id-ansi keyType(2) 1 }
+
+  dsaEncryption  OBJECT IDENTIFIER ::= { iso(1) member-body(2) us(840) x9-57(10040) x9cm(4) 1 } -- RFC3279
+  rsaEncryption  OBJECT IDENTIFIER ::= { pkcs-1 1 }
+
+  secp192r1 OBJECT IDENTIFIER ::= { id-ansi  curves(3) prime(1) 1 }
+  sect163k1 OBJECT IDENTIFIER ::= { id-certicom curve(0) 1 }
+  sect163r2 OBJECT IDENTIFIER ::= { id-certicom curve(0) 15 }
+  secp224r1 OBJECT IDENTIFIER ::= { id-certicom curve(0) 33 }
+  sect233k1 OBJECT IDENTIFIER ::= { id-certicom curve(0) 26 }
+  sect233r1 OBJECT IDENTIFIER ::= { id-certicom curve(0) 27 }
+  secp256r1 OBJECT IDENTIFIER ::= { id-ansi curves(3) prime(1) 7 }
+  sect283k1 OBJECT IDENTIFIER ::= { id-certicom curve(0) 16 }
+  sect283r1 OBJECT IDENTIFIER ::= { id-certicom curve(0) 17 }
+  secp384r1 OBJECT IDENTIFIER ::= { id-certicom curve(0) 34 }
+  sect409k1 OBJECT IDENTIFIER ::= { id-certicom curve(0) 36 }
+  sect409r1 OBJECT IDENTIFIER ::= { id-certicom curve(0) 37 }
+  secp521r1 OBJECT IDENTIFIER ::= { id-certicom curve(0) 35 }
+  sect571k1 OBJECT IDENTIFIER ::= { id-certicom curve(0) 38 }
+  sect571r1 OBJECT IDENTIFIER ::= { id-certicom curve(0) 39 }
   
 END
 
-pkcs-1    OBJECT IDENTIFIER ::= { iso(1) member-body(2) us(840) rsadsi(113549) pkcs(1) 1 }
-
--- FROM RFC5480
-id-ansi        OBJECT IDENTIFIER ::= { iso(1) member-body(2) us(840) ansi-X9-62(10045) }
-id-certicom    OBJECT IDENTIFIER ::= { iso(1) identified-organization(3) certicom(132) }
-
-id-ecPublicKey OBJECT IDENTIFIER ::= { id-ansi keyType(2) 1 }
-
-dsaEncryption  OBJECT IDENTIFIER ::= { iso(1) member-body(2) us(840) x9-57(10040) x9cm(4) 1 } -- RFC3279
-rsaEncryption  OBJECT IDENTIFIER ::= { pkcs-1 1 }
-
-secp192r1 OBJECT IDENTIFIER ::= { id-ansi  curves(3) prime(1) 1 }
-sect163k1 OBJECT IDENTIFIER ::= { id-certicom curve(0) 1 }
-sect163r2 OBJECT IDENTIFIER ::= { id-certicom curve(0) 15 }
-secp224r1 OBJECT IDENTIFIER ::= { id-certicom curve(0) 33 }
-sect233k1 OBJECT IDENTIFIER ::= { id-certicom curve(0) 26 }
-sect233r1 OBJECT IDENTIFIER ::= { id-certicom curve(0) 27 }
-secp256r1 OBJECT IDENTIFIER ::= { id-ansi curves(3) prime(1) 7 }
-sect283k1 OBJECT IDENTIFIER ::= { id-certicom curve(0) 16 }
-sect283r1 OBJECT IDENTIFIER ::= { id-certicom curve(0) 17 }
-secp384r1 OBJECT IDENTIFIER ::= { id-certicom curve(0) 34 }
-sect409k1 OBJECT IDENTIFIER ::= { id-certicom curve(0) 36 }
-sect409r1 OBJECT IDENTIFIER ::= { id-certicom curve(0) 37 }
-secp521r1 OBJECT IDENTIFIER ::= { id-certicom curve(0) 35 }
-sect571k1 OBJECT IDENTIFIER ::= { id-certicom curve(0) 38 }
-sect571r1 OBJECT IDENTIFIER ::= { id-certicom curve(0) 39 }

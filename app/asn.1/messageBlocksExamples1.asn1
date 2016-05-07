@@ -1,0 +1,25 @@
+example1 Message ::= { 
+    identity {
+        identityKey {
+            keyType {
+              algorithm rsa,
+              parameter {
+                keySize 1024
+              }
+            },
+            publicKey '010101111'B
+        },
+        serial 42,
+        maxReplays 0,
+        valid {},
+        decryptionKey 'ACF12121212121212121'H,
+        requests {}  
+    },
+    routing {
+        recipient "test@test.com",
+        queueTime {},
+        nextHop {},
+        cascade {}
+    },
+    payload {}
+}
