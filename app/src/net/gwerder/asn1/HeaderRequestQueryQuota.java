@@ -10,7 +10,7 @@ import java.text.ParseException;
  */
 public class HeaderRequestQueryQuota extends HeaderRequest {
 
-    protected AsymetricKey identity = null;
+    protected AsymmetricKey identity = null;
 
     protected HeaderRequestQueryQuota() {super();}
 
@@ -21,7 +21,7 @@ public class HeaderRequestQueryQuota extends HeaderRequest {
     protected void parse(ASN1Encodable ae) throws ParseException{
         ASN1Sequence s1 = ASN1Sequence.getInstance(ae);
         int i=0;
-        identity=new AsymetricKey(s1.getObjectAt(i++));
+        identity=new AsymmetricKey(s1.getObjectAt(i++));
     }
 
     protected HeaderRequest getRequest(ASN1Encodable ae) throws ParseException {
@@ -33,7 +33,7 @@ public class HeaderRequestQueryQuota extends HeaderRequest {
     public String dumpValueNotation(String prefix) {
         StringBuilder sb=new StringBuilder();
         sb.append("{"+Block.CRLF);
-        if(identity!=null) sb.append( prefix+"  identity "+identity.dumpValueNotation( prefix+"  ", AsymetricKey.DumpType.PRIVATE_COMMENTED ) );
+        if(identity!=null) sb.append( prefix+"  identity "+identity.dumpValueNotation( prefix+"  ", AsymmetricKey.DumpType.PRIVATE_COMMENTED ) );
         sb.append(prefix+"}");
         return sb.toString();
     }

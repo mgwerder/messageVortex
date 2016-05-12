@@ -7,16 +7,15 @@ import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.text.ParseException;
 
 /**
  * Created by martin.gwerder on 19.04.2016.
  */
-public class SymetricKey extends Key {
+public class SymmetricKey extends Key {
 
-    protected ASN1BitString key= null;
+    protected byte[] key= null;
 
-    public SymetricKey(Algorithm sk) throws IOException,NoSuchAlgorithmException {
+    public SymmetricKey(Algorithm sk) throws IOException,NoSuchAlgorithmException {
         keytype=sk;
         if(sk.toString().equals(Algorithm.AES256.toString())) {
            createAES( 256 );
@@ -34,18 +33,36 @@ public class SymetricKey extends Key {
         byte[] keyBytes = new byte[keysize/8];
         random.nextBytes(keyBytes);
         SecretKeySpec aeskey = new SecretKeySpec(keyBytes, "AES");
-        key=new DERBitString(aeskey.getEncoded(),0);
+        key=aeskey.getEncoded();
     }
 
-    public SymetricKey(byte[] sk,AsymetricKey deckey,boolean withPublicKey) throws IOException {
-        // FIXME decrypt and decode (key must be added to params)
-        if(deckey==null) {
+    public SymmetricKey(byte[] sk, AsymmetricKey deckey, boolean decryptWithPublicKey) throws IOException {
+        // decrypt and decode
+        if(deckey!=null) {
             try {
-                parse( deckey.decrypt( sk, withPublicKey ) );
+                if(deckey!=null) {
+                    parse( deckey.decrypt( sk, decryptWithPublicKey ) );
+                } else {
+                    parse( sk );
+                }
             } catch (Exception e) {
-                throw new IOException("Error while parsing/decrypting object",e);
+                throw new IOException( "Error while parsing/decrypting object", e );
             }
+        } else {
+            parse(DERSequence.fromByteArray( sk ));
         }
+    }
+
+    @Override
+    public byte[] encrypt(byte[] b) {
+        // FIXME
+        return null;
+    }
+
+    @Override
+    public byte[] decrypt(byte[] b) {
+        // FIXME
+        return null;
     }
 
     protected void parse(ASN1Encodable to) {
@@ -54,16 +71,18 @@ public class SymetricKey extends Key {
         // parsing asymetric Key Idetifier
         ASN1Sequence s2 = ASN1Sequence.getInstance(s1.getObjectAt(i++));
         parseKeyParameter(s2.getObjectAt(0),s2.getObjectAt(1));
-        key=((ASN1BitString)(s1.getObjectAt(i++)));
+        key=ASN1OctetString.getInstance( s1.getObjectAt(i++)).getOctets();
     }
 
+    public byte[] getKey() { return key; }
+
     @Override
-    public ASN1Encodable encodeDER() {
+    public ASN1Object toASN1Object() {
         ASN1EncodableVector ret = new ASN1EncodableVector();
-        ASN1Encodable e=super.encodeDER();
+        ASN1Encodable e=super.getASN1();
         if(e==null) return null;
         ret.add(e);
-        ret.add(key);
+        ret.add(new DEROctetString( key ));
         return new DERSequence(ret);
     }
 

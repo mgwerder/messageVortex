@@ -8,6 +8,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import java.io.IOException;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
@@ -18,7 +19,7 @@ import java.util.Map;
 /**
  * Created by martin.gwerder on 19.04.2016.
  */
-public class AsymetricKey extends Key {
+public class AsymmetricKey extends Key {
 
     public static enum DumpType {
         ALL,
@@ -36,14 +37,14 @@ public class AsymetricKey extends Key {
     protected ASN1BitString privateKey = null;
 
 
-    public AsymetricKey(Algorithm alg,int keysize) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {
+    public AsymmetricKey(Algorithm alg, int keysize) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {
         if(alg==null) throw new NoSuchAlgorithmException( "Algorithm null is not encodable by the system" );
         Map<String,Integer> pm= new HashMap();
         pm.put(""+Parameter.KEYSIZE.getId()+"_0",keysize);
         createKey(alg,pm);
     }
 
-    public AsymetricKey(Algorithm alg,Map<String,Integer> params) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {
+    public AsymmetricKey(Algorithm alg, Map<String,Integer> params) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {
         // store algorithm and parameters
         createKey( alg, params );
     }
@@ -70,26 +71,24 @@ public class AsymetricKey extends Key {
 
     }
 
-    public AsymetricKey(ASN1Encodable to) {
+    public AsymmetricKey(ASN1Encodable to) {
         parse(to);
     }
 
     protected void parse(ASN1Encodable to) {
-        int i=0;
         ASN1Sequence s1 = ASN1Sequence.getInstance(to);
         // parsing asymetric Key Idetifier
-        ASN1Sequence s2=ASN1Sequence.getInstance(s1.getObjectAt(i++));
+        int i=0;
+        ASN1Sequence s2 = ASN1Sequence.getInstance(s1.getObjectAt(i++));
         parseKeyParameter(s2.getObjectAt(0),s2.getObjectAt(1));
         publicKey=((ASN1BitString)(s1.getObjectAt(i++)));
         if(s1.size()>i) {
-            privateKey=((ASN1BitString)(s1.getObjectAt(i++)));
+            privateKey=((ASN1BitString)(((DERTaggedObject)(s1.getObjectAt(i++))).getObject()));
         }
     }
 
-    @Override
-    public ASN1Encodable encodeDER() {
-        // FIXME
-        return null;
+    public String dumpValueNotation(String prefix) {
+        return dumpValueNotation(prefix,DumpType.PUBLIC_ONLY);
     }
 
     public String dumpValueNotation(String prefix,DumpType dt) {
@@ -128,27 +127,18 @@ public class AsymetricKey extends Key {
         return sb.toString();
     }
 
-    public byte[] decrypt(byte[] b,boolean withPublicKey) throws NoSuchAlgorithmException,NoSuchPaddingException,InvalidKeyException,IllegalBlockSizeException,BadPaddingException,NoSuchProviderException,InvalidKeySpecException {
-        KeyPair key = getKeyPair();
-        Cipher cipher = Cipher.getInstance(keytype.toString().toUpperCase()+"/ECB/PKCS1Padding");
-        java.security.Key k=key.getPrivate();
-        if(withPublicKey) k=key.getPublic();
-        cipher.init(Cipher.DECRYPT_MODE,k);
-        byte[] newText = cipher.doFinal(b);
-        return newText;
+    public ASN1Object toASN1Object() throws IOException{
+        if(publicKey==null) throw new IOException("publicKey may not be null when dumping");
+        ASN1EncodableVector v =new ASN1EncodableVector();
+        encodeKeyParameter(v);
+        v.add(publicKey);
+        if(privateKey!=null) v.add(new DERTaggedObject( false,0,privateKey));
+        return new DERSequence( v );
     }
 
-    private KeyFactory getKeyFactory() throws NoSuchAlgorithmException,NoSuchProviderException {
-        return KeyFactory.getInstance(keytype.toString().toUpperCase(), "BC");
-    }
-
-    private KeyPair getKeyPair() throws NoSuchAlgorithmException,NoSuchProviderException,InvalidKeySpecException {
-        KeyFactory kf=getKeyFactory();
-        PKCS8EncodedKeySpec rks = new PKCS8EncodedKeySpec(privateKey.getBytes());
-        PrivateKey priv = kf.generatePrivate(rks);
-        X509EncodedKeySpec uks=new X509EncodedKeySpec(publicKey.getBytes());
-        PublicKey pub = kf.generatePublic(uks);
-        return new KeyPair( pub,priv );
+    @Override
+    public byte[] encrypt(byte[] b) throws NoSuchAlgorithmException,NoSuchPaddingException,InvalidKeyException,IllegalBlockSizeException,BadPaddingException,NoSuchProviderException,InvalidKeySpecException {
+        return encrypt(b,false);
     }
 
     public byte[] encrypt(byte[] b,boolean withPublicKey) throws NoSuchAlgorithmException,NoSuchPaddingException,InvalidKeyException,IllegalBlockSizeException,BadPaddingException,NoSuchProviderException,InvalidKeySpecException {
@@ -157,11 +147,45 @@ public class AsymetricKey extends Key {
         java.security.Key k=key.getPrivate();
         if(withPublicKey) k=key.getPublic();
         cipher.init(Cipher.ENCRYPT_MODE,k);
-        byte[] newText = cipher.doFinal(b);
-        return newText;
+        return cipher.doFinal(b);
     }
 
-    public boolean equals(AsymetricKey ak) {
+    @Override
+    public byte[] decrypt(byte[] b) throws NoSuchAlgorithmException,NoSuchPaddingException,InvalidKeyException,IllegalBlockSizeException,BadPaddingException,NoSuchProviderException,InvalidKeySpecException {
+        return decrypt(b,false);
+    }
+
+    public byte[] decrypt(byte[] b,boolean withPublicKey) throws NoSuchAlgorithmException,NoSuchPaddingException,InvalidKeyException,IllegalBlockSizeException,BadPaddingException,NoSuchProviderException,InvalidKeySpecException {
+        KeyPair key = getKeyPair();
+        Cipher cipher = Cipher.getInstance(keytype.toString().toUpperCase()+"/ECB/PKCS1Padding");
+        java.security.Key k=key.getPrivate();
+        if(withPublicKey) k=key.getPublic();
+        cipher.init(Cipher.DECRYPT_MODE,k);
+        return cipher.doFinal(b);
+    }
+
+    private KeyFactory getKeyFactory() throws NoSuchAlgorithmException,NoSuchProviderException {
+        return KeyFactory.getInstance(keytype.toString().toUpperCase(), "BC");
+    }
+
+    private KeyPair getKeyPair() throws NoSuchAlgorithmException,NoSuchProviderException,InvalidKeySpecException {
+        KeyFactory kf=getKeyFactory();
+        PKCS8EncodedKeySpec rks = null;
+        PrivateKey priv = null;
+        if(privateKey!=null) {
+            rks  = new PKCS8EncodedKeySpec(privateKey.getBytes());
+            priv = kf.generatePrivate(rks);
+        }
+        X509EncodedKeySpec uks=null;
+        PublicKey pub = null;
+        if(publicKey!=null) {
+            uks = new X509EncodedKeySpec(publicKey.getBytes());
+            pub = kf.generatePublic(uks);
+        }
+        return new KeyPair( pub,priv );
+    }
+
+    public boolean equals(AsymmetricKey ak) {
         return publicKey.equals(ak.publicKey);
     }
 }

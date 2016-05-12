@@ -11,7 +11,7 @@ import java.text.ParseException;
  */
 public class HeaderRequestIncreaseMessageQuota extends HeaderRequest {
 
-    protected AsymetricKey identity = null;
+    protected AsymmetricKey identity = null;
     protected int quota = -1;
 
     protected HeaderRequestIncreaseMessageQuota() {super();}
@@ -23,7 +23,7 @@ public class HeaderRequestIncreaseMessageQuota extends HeaderRequest {
     protected void parse(ASN1Encodable ae) throws ParseException{
         ASN1Sequence s1 = ASN1Sequence.getInstance(ae);
         int i=0;
-        identity=new AsymetricKey(s1.getObjectAt(i++));
+        identity=new AsymmetricKey(s1.getObjectAt(i++));
         // FIXME check integer bounds
         quota = ASN1Integer.getInstance( s1.getObjectAt( i++ ) ).getValue().intValue();
     }
@@ -37,7 +37,7 @@ public class HeaderRequestIncreaseMessageQuota extends HeaderRequest {
     public String dumpValueNotation(String prefix) {
         StringBuilder sb=new StringBuilder();
         sb.append("{"+Block.CRLF);
-        if(identity!=null) sb.append( prefix+"  identity "+identity.dumpValueNotation( prefix+"  ", AsymetricKey.DumpType.PRIVATE_COMMENTED )+(quota>-1?",":"")+Block.CRLF );
+        if(identity!=null) sb.append( prefix+"  identity "+identity.dumpValueNotation( prefix+"  ", AsymmetricKey.DumpType.PRIVATE_COMMENTED )+(quota>-1?",":"")+Block.CRLF );
         if(quota>-1) sb.append( prefix+"  quota "+quota+Block.CRLF );
         sb.append(prefix+"}");
         return sb.toString();

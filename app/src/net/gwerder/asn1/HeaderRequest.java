@@ -1,8 +1,10 @@
 package net.gwerder.asn1;
 
 import org.bouncycastle.asn1.ASN1Encodable;
+import org.bouncycastle.asn1.ASN1Object;
 import org.bouncycastle.asn1.ASN1TaggedObject;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.Vector;
 
@@ -28,6 +30,10 @@ public abstract class HeaderRequest {
     }
 
     protected HeaderRequest() {};
+
+    public ASN1Object toASN1Object() throws IOException {
+        throw new IOException( "not implemented" ); //FIXME
+    }
 
     protected abstract HeaderRequest getRequest(ASN1Encodable ae) throws ParseException;
 

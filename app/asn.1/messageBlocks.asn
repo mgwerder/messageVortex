@@ -1,7 +1,6 @@
--- FIXME Backreferences
--- FIXME Replay protection (delay between packets embedded multiple serials)
--- FIXME Embed all encrypted information
 -- FIXME ADAPT NeoScrypt 
+
+-- encryption: as specified in the key. If not specified default mode is ECB and default padding is PKCS1Padding
 
 -- States: Tuple()=Value() [vallidity; allowed operations] {Store}
 -- - Tuple(identity)=Value(messageQuota,transferQuota,sequence of Routingblocks for Error Message Routing) [validity; Requested at creation; may be extended upon request] {identityStore}
@@ -10,14 +9,17 @@
 Message-Blocks DEFINITIONS EXPLICIT TAGS ::= 
 BEGIN
 
-  Message     ::= SEQUENCE { -- This Block is encrypted with the hosts public key or may be transmitted in plan (if empty)
-    header CHOICE {
-        encrypted [0] OCTET STRING,  -- contains IdentityBlock structure; Decryption key is hosts private key
-        plain     [1] IdentityBlock
+  Message     ::= SEQUENCE { 
+    header        CHOICE { 
+        encrypted [1001] OCTET STRING,  -- contains IdentityBlock structure; Decryption key is hosts private key
+        plain     [1002] IdentityBlock  -- may be transmitted in plain (if empty)
     },
-    blocks        [2] OCTET STRING   -- contains EncryptedBlock structure; Decyrption key is found in header>identity>decryptionKey
+    blocks        CHOICE {
+        encrypted [1101] OCTET STRING,     -- contains encrypted UnencryptedBlocks structure; Decryption key is in identity block [decryptionKey]
+        plain     [1102] UnencryptedBlocks -- should not be used except for internal diagnostic purposes
+    }
   }
-
+  
   -- represents the identity of the rights owner
   IdentityBlock ::= SEQUENCE {
     -- Public key of the identity representing this transmission
@@ -39,7 +41,7 @@ BEGIN
     
     -- contains SymetricKey encrypted with private key of identityKey 
     -- encryption is done as proof of identity (identity hijack protection)
-    decryptionKey     OCTET STRING,
+    decryptionKey     OCTET STRING,   -- contains (encrypted) DER encoded ASN1BitString with key representation
     
     -- contains administrative requests such as quota requests
     requests          SEQUENCE (SIZE (0..5)) OF HeaderRequest ,
@@ -49,7 +51,7 @@ BEGIN
     padding       [2] OCTET STRING OPTIONAL  -- This is for solving crypto puzzles
   }
 
-  EncryptedBlocks ::= SEQUENCE {
+  UnencryptedBlocks ::= SEQUENCE {
     -- contains routing information (next hop) for the payloads
     -- FIXME how handle multiple payloads
     routing     [0] RoutingBlock OPTIONAL,
@@ -241,7 +243,7 @@ BEGIN
   
   PayloadChunk ::= SEQUENCE {
     offset                   INTEGER (0..MAX),
-    routingBlockIdentifier   [0]   SEQUENCE (SIZE (0..255)) OF INTEGER,
+    routingBlockIdentifier   [0]   SEQUENCE (SIZE (0..255)) OF INTEGER, -- FIXME limit integer range
     payload                  [100] OCTET STRING
   }
   

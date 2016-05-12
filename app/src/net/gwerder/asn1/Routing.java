@@ -1,10 +1,8 @@
 package net.gwerder.asn1;
 
-import org.bouncycastle.asn1.ASN1Encodable;
-import org.bouncycastle.asn1.ASN1Primitive;
-import org.bouncycastle.asn1.ASN1Sequence;
-import org.bouncycastle.asn1.ASN1String;
+import org.bouncycastle.asn1.*;
 
+import java.io.IOException;
 import java.text.ParseException;
 
 /**
@@ -28,10 +26,8 @@ public class Routing extends Block {
 
     }
 
-    @Override
-    public ASN1Encodable encodeDER() {
-        // FIXME
-        return null;
+    public ASN1Object toASN1Object() throws IOException{
+        throw new IOException( "not implemented" ); //FIXME
     }
 
     public String dumpValueNotation(String prefix) {

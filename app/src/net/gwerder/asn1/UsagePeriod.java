@@ -1,9 +1,6 @@
 package net.gwerder.asn1;
 
-import org.bouncycastle.asn1.ASN1Encodable;
-import org.bouncycastle.asn1.ASN1GeneralizedTime;
-import org.bouncycastle.asn1.ASN1Sequence;
-import org.bouncycastle.asn1.ASN1TaggedObject;
+import org.bouncycastle.asn1.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -37,18 +34,20 @@ public class UsagePeriod extends Block {
     }
 
     @Override
-    public ASN1Encodable encodeDER() {
-        // FIXME
-        return null;
+    public ASN1Object toASN1Object() {
+        ASN1EncodableVector v = new ASN1EncodableVector();
+        if(notBefore!=null) v.add( new DERTaggedObject( true,1,new DERGeneralizedTime( notBefore ) ) );
+        if(notAfter!=null) v.add( new DERTaggedObject( true,2,new DERGeneralizedTime( notAfter ) ) );
+        return new DERSequence(v);
     }
 
     public String dumpValueNotation(String prefix) {
         StringBuilder sb=new StringBuilder();
         sb.append("{"+CRLF);
-        final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddkkmmss.SSSZ");
+        final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddkkmmss.SSS");
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-        if(notBefore!=null) sb.append(prefix+"  notBefore \""+sdf.format(notBefore)+"\""+(notAfter!=null?",":"")+CRLF);
-        if(notAfter!=null)  sb.append(prefix+"  notAfter \""+sdf.format(notAfter)+"\""+CRLF);
+        if(notBefore!=null) sb.append(prefix+"  notBefore \""+sdf.format(notBefore)+"Z\""+(notAfter!=null?",":"")+CRLF);
+        if(notAfter!=null)  sb.append(prefix+"  notAfter \""+sdf.format(notAfter)+"Z\""+CRLF);
         sb.append(prefix+"}");
         return sb.toString();
     }
