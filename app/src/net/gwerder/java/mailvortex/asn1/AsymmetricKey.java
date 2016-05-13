@@ -71,6 +71,9 @@ public class AsymmetricKey extends Key {
 
     }
 
+    public AsymmetricKey(byte[] b) {
+        this(ASN1Sequence.getInstance( b ));
+    }
     public AsymmetricKey(ASN1Encodable to) {
         parse(to);
     }

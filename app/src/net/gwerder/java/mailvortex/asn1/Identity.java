@@ -37,6 +37,12 @@ public class Identity extends Block {
         requests=new Request[0];
     }
 
+    public Identity(byte[] b,AsymmetricKey dk) throws ParseException,IOException,NoSuchAlgorithmException  {
+        identityDecryptionKey=dk;
+        ASN1Sequence s=ASN1Sequence.getInstance( b );
+        parse(s);
+    }
+
     public Identity(ASN1Encodable to,AsymmetricKey dk) throws ParseException,IOException,NoSuchAlgorithmException  {
         identityDecryptionKey=dk;
         parse(to);
@@ -47,21 +53,23 @@ public class Identity extends Block {
         ASN1Sequence s1 = ASN1Sequence.getInstance(to);
         int i=0;
         ASN1Encodable s3=s1.getObjectAt(i++);
-        if( ASN1String.class.isAssignableFrom( s3.getClass() )) {
-            // we got an encrypted string ... lets unpack it
-            try {
-                s1 = (ASN1Sequence.getInstance( (new EncryptedString( (ASN1String) s3, identityDecryptionKey )).getDecryptedBytes() ));
-            } catch(Exception e) {
-                throw new IOException("Exception while decrypting content",e);
-            }
+            if( ASN1String.class.isAssignableFrom( s3.getClass() )) {
+                // we got an encrypted string ... lets unpack it
+                try {
+                    s1 = (ASN1Sequence.getInstance( (new EncryptedString( (ASN1String) s3, identityDecryptionKey )).getDecryptedBytes() ));
+                } catch(Exception e) {
+                    throw new IOException("Exception while decrypting content",e);
+                }
             s3=s1.getObjectAt(i-1);
         }
-        identityKey=new AsymmetricKey(s3);
-        serial = ((ASN1Integer)(s1.getObjectAt(i++))).getValue().intValue();
-        maxReplays = ((ASN1Integer)(s1.getObjectAt(i++))).getValue().intValue();
+        identityKey= new AsymmetricKey(s3);
+        serial     = ASN1Integer.getInstance( s1.getObjectAt(i++)).getValue().longValue();
+        maxReplays = ASN1Integer.getInstance( s1.getObjectAt(i++)).getValue().intValue();
         valid=new UsagePeriod(s1.getObjectAt(i++));
         try {
-            ASN1Sequence s2 = ((ASN1Sequence)(s1.getObjectAt(i++)));
+            ASN1TaggedObject ato=ASN1TaggedObject.getInstance( s1.getObjectAt(i++) );
+            if(ato.getTagNo()!=0) throw new Exception("not a forward secret");
+            ASN1Sequence s2 = ASN1Sequence.getInstance( ato );
             forwardSecret = new int[s2.size()];
             for(int y=0;y<s2.size();y++) {
                 forwardSecret[y] = ((ASN1Integer)(s2.getObjectAt(y))).getValue().intValue();
@@ -72,7 +80,7 @@ public class Identity extends Block {
         }
         decryptionKeyRaw = ASN1OctetString.getInstance(s1.getObjectAt(i++)).getOctets();
         decryptionKey=new SymmetricKey(decryptionKeyRaw,identityKey,true);
-        ASN1Sequence s2=((ASN1Sequence)(s1.getObjectAt(i++)));
+        ASN1Sequence s2=ASN1Sequence.getInstance( s1.getObjectAt(i++));
         requests= new Request[s2.size()];
         for(int y=0;y<s2.size();y++) {
             requests[y]=new Request(s2.getObjectAt(y));
@@ -114,7 +122,7 @@ public class Identity extends Block {
         v.add(o);
         // FIXME missing forward secrets
         try {
-            v.add( new DEROctetString( identityKey.encrypt( decryptionKey.getKey(), false ) ) );
+            v.add( new DEROctetString( (decryptionKeyRaw!=null?decryptionKeyRaw:identityKey.encrypt( decryptionKey.getKey(), false ) ) ) );
         } catch(Exception e) {
             throw new IOException( "Error while encrypting decryptionKey",e );
         }

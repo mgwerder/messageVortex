@@ -17,8 +17,8 @@ public abstract class Block {
     protected static final String CRLF="\r\n";
 
     public static enum AlgorithmType {
-        SYMETRIC,
-        ASYMETRIC,
+        SYMMETRIC,
+        ASYMMETRIC,
         HASHING
     };
 

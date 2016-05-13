@@ -77,7 +77,11 @@ public class Message extends Block {
         ASN1TaggedObject ae = ASN1TaggedObject.getInstance(s1.getObjectAt( 1 ));
         if(ASN1TaggedObject.getInstance(ae).getTagNo()==BLOCKS_ENCRYPTED) {
             // decrypting block (if required)
-            ae = ASN1TaggedObject.getInstance( identity.getDecryptionKey().decrypt( ae.getEncoded() ) );
+            try {
+                ae = ASN1TaggedObject.getInstance( identity.getDecryptionKey().decrypt( ae.getEncoded() ) );
+            } catch(Exception e) {
+                throw new IOException("Error while decrypting block structur after identity",e);
+            }
         } else if(ASN1TaggedObject.getInstance(ae).getTagNo()!=BLOCKS_PLAIN) {
             throw new IOException( "Got bad tag when parsing blocks (expected: 1101 or 1102;got:"+ae.getTagNo()+")" );
         }
@@ -113,7 +117,12 @@ public class Message extends Block {
         }
         try {
             // getting payload
-            payload = new Payload( s1.getObjectAt( i ) ); // payloadblock
+            ASN1TaggedObject tag=ASN1TaggedObject.getInstance( s1.getObjectAt( i ) );
+            // check if we really parse the payload
+            if(tag.getTagNo()!=10) {
+                throw new IOException("Reached payload but a wrong tag was encountered (expected:10; got:"+tag.getTagNo()+")");
+            }
+            payload = new Payload( tag.getObject() ); // payloadblock
         } catch (IllegalArgumentException iae) {
             Logger.getLogger( "Message" ).log( Level.WARNING, "Error while parsing payload block in message", iae );
             throw iae;
@@ -122,43 +131,44 @@ public class Message extends Block {
         if( payload==null ) throw new NullPointerException( "Payload may not be null" );
     }
 
-    public ASN1Object toASN1Object(AsymmetricKey targetNodeIdentity, SymmetricKey blocksKey) throws IOException {
-        ASN1EncodableVector v=new ASN1EncodableVector();
-        if(blocksKey==null) blocksKey=identity.decryptionKey;
-        if(targetNodeIdentity==null) {
-            v.add(new DERTaggedObject( true, HEADER_PLAIN, identity.toASN1Object()));
-        } else {
-            try{
-                v.add( new DERTaggedObject( true, HEADER_ENCRYPTED, new DEROctetString( targetNodeIdentity.encrypt( identity.toBytes(),true )) ) );
-            } catch(Exception e) {
-                throw new IOException("Exception while encrypting identity",e);
-            }
-        }
-        ASN1EncodableVector v3=new ASN1EncodableVector();
-        if(routing!=null)      v3.add( new DERTaggedObject( true,ROUTING    ,routing.toASN1Object()));
-        if(routingLog!=null)   v3.add( new DERTaggedObject( true,ROUTINGLOG ,routingLog.toASN1Object()));
-        if(headerReply!=null)  v3.add( new DERTaggedObject( true,REPLY      ,headerReply.toASN1Object()));
-        v3.add(payload.toASN1Object());
-        v.add(new DERTaggedObject( true, BLOCKS_ENCRYPTED, new DEROctetString( blocksKey.encrypt((new DERSequence( v3 )).getEncoded()))));
-        return new DERSequence( v );
+    public ASN1Object toASN1Object() throws IOException {
+        return toASN1Object( null,null );
     }
 
-    public ASN1Object toASN1Object() throws IOException {
+    public ASN1Object toASN1Object(AsymmetricKey ik,SymmetricKey sk) throws IOException {
         Logger.getLogger("Message").log(Level.FINER,"Executing toASN1Object()");
+        if(sk==null) sk=getIdentity().getDecryptionKey();
         // FIXME adapt encrypted/decrypted structure
         ASN1EncodableVector v2=new ASN1EncodableVector();
         if(identity==null) throw new IOException("identity may not be null when encoding");
         Logger.getLogger("Message").log(Level.FINER,"adding identity");
         ASN1Encodable o=identity.toASN1Object();
-        if(o==null) throw new IOException("returned identity object may not be null");
-        v2.add(new DERTaggedObject( true, HEADER_PLAIN, o ));
+        if (o == null) throw new IOException( "returned identity object may not be null" );
+        if(ik==null) {
+            v2.add( new DERTaggedObject( true, HEADER_PLAIN, o ) );
+        } else {
+            try {
+                o=new DEROctetString(  ik.encrypt( getIdentity().toBytes(), false ) );
+            }catch(Exception e) {
+                throw new IOException( "error while encrypting header",e );
+            }
+            v2.add( new DERTaggedObject( true, HEADER_ENCRYPTED, o ) );
+        }
         ASN1EncodableVector v3=new ASN1EncodableVector();
         if(routing!=null)      v3.add( new DERTaggedObject( true,ROUTING    ,routing.toASN1Object()));
         if(routingLog!=null)   v3.add( new DERTaggedObject( true,ROUTINGLOG ,routingLog.toASN1Object()));
         if(headerReply!=null)  v3.add( new DERTaggedObject( true,REPLY      ,headerReply.toASN1Object()));
         if(payload !=null)     v3.add( new DERTaggedObject( true,PAYLOAD    ,payload.toASN1Object()));
         Logger.getLogger("Message").log(Level.FINER,"adding blocks");
-        v2.add(new DERTaggedObject( true, BLOCKS_PLAIN, new DERSequence( v3 )));
+        if(sk==null) {
+            v2.add( new DERTaggedObject( true, BLOCKS_PLAIN, new DERSequence( v3 ) ) );
+        } else {
+            try {
+                v2.add( new DERTaggedObject( true, BLOCKS_ENCRYPTED, new DEROctetString( sk.encrypt( (new DERSequence( v3 )).getEncoded() ) ) ) );
+            }catch(Exception e) {
+                throw new IOException( "Error while encrypting block structure after Identity block",e );
+            }
+        }
         ASN1Sequence seq=new DERSequence(v2);
         Logger.getLogger("Message").log(Level.FINER,"done toASN1Object()");
         return seq;

@@ -3,10 +3,14 @@ package net.gwerder.java.mailvortex.asn1;
 
 import org.bouncycastle.asn1.*;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
+import java.security.*;
 
 /**
  * Created by martin.gwerder on 19.04.2016.
@@ -53,16 +57,26 @@ public class SymmetricKey extends Key {
         parse( s );
     }
 
-    @Override
-    public byte[] encrypt(byte[] b) {
-        // FIXME
-        return null;
+    private Cipher getCipher() throws NoSuchAlgorithmException,NoSuchPaddingException {
+        return Cipher.getInstance( keytype.getAlgorithmFamily().toUpperCase()+"/ECB/PKCS5Padding" );
     }
 
     @Override
-    public byte[] decrypt(byte[] b) {
-        // FIXME
-        return null;
+    public byte[] encrypt(byte[] b) throws NoSuchAlgorithmException,NoSuchPaddingException,InvalidKeyException,InvalidAlgorithmParameterException,BadPaddingException,IllegalBlockSizeException {
+        Cipher c=getCipher();
+        SecretKeySpec ks=new SecretKeySpec( key,keytype.getAlgorithmFamily() );
+        SecureRandom r=new SecureRandom();
+        c.init(Cipher.ENCRYPT_MODE,ks );
+        return c.doFinal( b );
+    }
+
+    @Override
+    public byte[] decrypt(byte[] b) throws NoSuchAlgorithmException,NoSuchPaddingException,InvalidKeyException,InvalidAlgorithmParameterException,BadPaddingException,IllegalBlockSizeException {
+        Cipher c=getCipher();
+        SecretKeySpec ks=new SecretKeySpec( key,keytype.getAlgorithmFamily().toUpperCase() );
+        SecureRandom r=new SecureRandom();
+        c.init(Cipher.DECRYPT_MODE,ks );
+        return c.doFinal( b );
     }
 
     protected void parse(ASN1Encodable to) {
@@ -74,7 +88,6 @@ public class SymmetricKey extends Key {
         parseKeyParameter(ASN1Sequence.getInstance( s1.getObjectAt(i++) ));
 
         // getting key
-        System.out.println("getting THE key ");
         key=ASN1OctetString.getInstance( s1.getObjectAt(i++)).getOctets();
     }
 

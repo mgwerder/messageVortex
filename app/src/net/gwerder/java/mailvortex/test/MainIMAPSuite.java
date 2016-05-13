@@ -1,5 +1,6 @@
-package net.gwerder.java.mailvortex.test.imap;
+package net.gwerder.java.mailvortex.test;
 
+import net.gwerder.java.mailvortex.test.imap.*;
 import org.junit.runner.RunWith;
 import junit.framework.TestSuite;
 import org.junit.runners.Suite;
@@ -24,7 +25,7 @@ import junit.framework.JUnit4TestAdapter;
   ImapAuthenticationDummyProxyTest.class
 })
 
-public class MainSuite {
+public class MainIMAPSuite {
 
   public static junit.framework.Test suite() {    
         final TestSuite s = new TestSuite();

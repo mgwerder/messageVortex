@@ -6,6 +6,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -28,11 +29,11 @@ public class EncryptedString extends Block {
         parse( (ASN1Encodable) to );
     }
 
-    public byte[] getDecryptedBytes() throws NoSuchAlgorithmException,NoSuchPaddingException,NoSuchProviderException,IllegalBlockSizeException,InvalidKeyException,BadPaddingException,InvalidKeySpecException {
+    public byte[] getDecryptedBytes() throws NoSuchAlgorithmException,NoSuchPaddingException,NoSuchProviderException,IllegalBlockSizeException,InvalidKeyException,BadPaddingException,InvalidKeySpecException,InvalidAlgorithmParameterException {
         byte[] as=null;
         if(AsymmetricKey.class.isAssignableFrom(key.getClass())) {
             // decrypt symetric
-            as=key.decrypt( encStr.getString().getBytes() );
+            as = key.decrypt( encStr.getString().getBytes() );
         } else {
             // decrypt asymetric
             as=((AsymmetricKey)(key)).decrypt( encStr.getString().getBytes(),false);
@@ -40,7 +41,7 @@ public class EncryptedString extends Block {
         return as;
     }
 
-    public ASN1OctetString getDecryptedString()  throws NoSuchAlgorithmException,NoSuchPaddingException,NoSuchProviderException,IllegalBlockSizeException,InvalidKeyException,BadPaddingException,InvalidKeySpecException {
+    public ASN1OctetString getDecryptedString()  throws NoSuchAlgorithmException,NoSuchPaddingException,NoSuchProviderException,IllegalBlockSizeException,InvalidKeyException,BadPaddingException,InvalidKeySpecException,InvalidAlgorithmParameterException {
         return new DEROctetString( getDecryptedBytes() );
     }
 

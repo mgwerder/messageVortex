@@ -7,12 +7,14 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,14 +24,14 @@ import java.util.logging.Logger;
 abstract public class Key extends Block {
 
     public static enum Algorithm {
-        AES128    (1000,AlgorithmType.SYMETRIC,"aes128"),
-        AES192    (1001,AlgorithmType.SYMETRIC,"aes192"),
-        AES256    (1002,AlgorithmType.SYMETRIC,"aes256"),
-        RSA       (2000,AlgorithmType.ASYMETRIC,"rsa"),
-        DSA       (2100,AlgorithmType.ASYMETRIC,"dsa"),
-        SECP384R1 (2500,AlgorithmType.ASYMETRIC,"secp384R1"),
-        SECT409K1 (2501,AlgorithmType.ASYMETRIC,"sect409K1"),
-        SECP521R1 (2502,AlgorithmType.ASYMETRIC,"secp521r1"),
+        AES128    (1000,AlgorithmType.SYMMETRIC,"aes128"),
+        AES192    (1001,AlgorithmType.SYMMETRIC,"aes192"),
+        AES256    (1002,AlgorithmType.SYMMETRIC,"aes256"),
+        RSA       (2000,AlgorithmType.ASYMMETRIC,"rsa"),
+        DSA       (2100,AlgorithmType.ASYMMETRIC,"dsa"),
+        SECP384R1 (2500,AlgorithmType.ASYMMETRIC,"secp384R1"),
+        SECT409K1 (2501,AlgorithmType.ASYMMETRIC,"sect409K1"),
+        SECP521R1 (2502,AlgorithmType.ASYMMETRIC,"secp521r1"),
         SHA384    (3000,AlgorithmType.HASHING,"sha384"),
         SHA512    (3001,AlgorithmType.HASHING,"sha512"),
         TIGER192  (3100,AlgorithmType.HASHING,"tiger192");
@@ -47,6 +49,14 @@ abstract public class Key extends Block {
 
         public int getId() {return id;};
 
+        public static Algorithm[] getAlgorithms(AlgorithmType at) {
+            Vector<Algorithm> v=new Vector<Algorithm>();
+            for(Algorithm e : values()) {
+                if(e.t==at) v.add(e);
+            }
+            return v.toArray(new Algorithm[v.size()]);
+        }
+
         public static Algorithm getById(int id) {
             for(Algorithm e : values()) {
                 if(e.id==id) return e;
@@ -59,6 +69,10 @@ abstract public class Key extends Block {
                 if(e.toString().equals(s.toLowerCase())) return e;
             }
             return null;
+        }
+
+        public String getAlgorithmFamily() {
+            return txt.replaceAll("[0-9]*$","");
         }
 
         @Override
@@ -77,7 +91,7 @@ abstract public class Key extends Block {
         for(ASN1Encodable e: ASN1Sequence.getInstance( s.getObjectAt( 1 ) )) {
             ASN1TaggedObject to=ASN1TaggedObject.getInstance( e );
             Parameter p=Parameter.getById(to.getTagNo());
-            System.out.println("## got parameter "+p.toString());
+            //System.out.println("## got parameter "+p.toString());
             if(p==null) {
                 Logger.getLogger("Key").log(Level.WARNING,"got unsupported Parameter \""+((ASN1TaggedObject)(e)).getTagNo()+"\"");
             } else {
@@ -86,7 +100,7 @@ abstract public class Key extends Block {
                 parameters.put("" + p.getId() + "_" + j, ASN1Integer.getInstance( to.getObject() ).getValue().intValue());
             }
         }
-        System.out.println("## parameter parsing done");
+        //System.out.println("## parameter parsing done");
     }
 
     protected ASN1Encodable encodeKeyParameter() throws IOException {
@@ -136,6 +150,6 @@ abstract public class Key extends Block {
         return sb.toString();
     }
 
-    abstract public byte[] decrypt(byte[] encrypted) throws NoSuchAlgorithmException,NoSuchPaddingException,InvalidKeyException,IllegalBlockSizeException,BadPaddingException,NoSuchProviderException,InvalidKeySpecException;
-    abstract public byte[] encrypt(byte[] decrypted) throws NoSuchAlgorithmException,NoSuchPaddingException,InvalidKeyException,IllegalBlockSizeException,BadPaddingException,NoSuchProviderException,InvalidKeySpecException;
+    abstract public byte[] decrypt(byte[] encrypted) throws NoSuchAlgorithmException,NoSuchPaddingException,InvalidKeyException,IllegalBlockSizeException,BadPaddingException,NoSuchProviderException,InvalidKeySpecException,InvalidAlgorithmParameterException;
+    abstract public byte[] encrypt(byte[] decrypted) throws NoSuchAlgorithmException,NoSuchPaddingException,InvalidKeyException,IllegalBlockSizeException,BadPaddingException,NoSuchProviderException,InvalidKeySpecException,InvalidAlgorithmParameterException;
 }

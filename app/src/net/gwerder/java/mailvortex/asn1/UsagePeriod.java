@@ -2,6 +2,7 @@ package net.gwerder.java.mailvortex.asn1;
 
 import org.bouncycastle.asn1.*;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -20,7 +21,12 @@ public class UsagePeriod extends Block {
 
     public UsagePeriod(long seconds) {
         notBefore= new Date();
-        notAfter = new Date( notBefore.getTime()+seconds*1000);
+        notAfter = new Date( notBefore.getTime()+seconds*1000L);
+    }
+
+    public UsagePeriod(byte[] b) throws ParseException,IOException {
+        ASN1InputStream aIn=new ASN1InputStream( b );
+        parse(aIn.readObject());
     }
 
     public UsagePeriod(ASN1Encodable to) throws ParseException {
@@ -31,26 +37,51 @@ public class UsagePeriod extends Block {
         ASN1Sequence s1 = ASN1Sequence.getInstance(to);
         for(ASN1Encodable e:s1.toArray()) {
             ASN1TaggedObject tag=ASN1TaggedObject.getInstance(e);
-            if(tag.getTagNo()==0) notBefore = ASN1GeneralizedTime.getInstance(tag.getObject()).getDate();
-            if(tag.getTagNo()==1) notAfter  = ASN1GeneralizedTime.getInstance(tag.getObject()).getDate();
+            if(tag.getTagNo()==TAG_NOT_BEFORE && notBefore==null) {
+                notBefore = ASN1GeneralizedTime.getInstance(tag.getObject()).getDate();
+            } else if(tag.getTagNo()==TAG_NOT_AFTER  && notAfter==null) {
+                notAfter  = ASN1GeneralizedTime.getInstance(tag.getObject()).getDate();
+            } else {
+                throw new ParseException("Encountered unknown or repeated Tag number in Usage Period ("+tag.getTagNo()+")",-1);
+            }
         }
+    }
+
+    public Date getNotBefore() {
+        return notBefore;
+    }
+
+    public Date getNotAfter() {
+        return notAfter;
+    }
+
+    public Date setNotBefore(Date d) {
+        Date d2=notBefore;
+        notBefore=d;
+        return d2;
+    }
+
+    public Date setNotAfter(Date d) {
+        Date d2=notAfter;
+        notAfter=d;
+        return d2;
     }
 
     @Override
     public ASN1Object toASN1Object() {
         ASN1EncodableVector v = new ASN1EncodableVector();
         if(notBefore!=null) v.add( new DERTaggedObject( true,TAG_NOT_BEFORE,new DERGeneralizedTime( notBefore ) ) );
-        if(notAfter!=null)  v.add( new DERTaggedObject( true,TAG_NOT_AFTER ,new DERGeneralizedTime( notAfter ) ) );
+        if(notAfter !=null) v.add( new DERTaggedObject( true,TAG_NOT_AFTER ,new DERGeneralizedTime( notAfter  ) ) );
         return new DERSequence(v);
     }
 
     public String dumpValueNotation(String prefix) {
         StringBuilder sb=new StringBuilder();
         sb.append("{"+CRLF);
-        final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddkkmmss.SSS");
+        final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddkkmmss"); // removed ".SSS"
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
         if(notBefore!=null) sb.append(prefix+"  notBefore \""+sdf.format(notBefore)+"Z\""+(notAfter!=null?",":"")+CRLF);
-        if(notAfter!=null)  sb.append(prefix+"  notAfter \""+sdf.format(notAfter)+"Z\""+CRLF);
+        if(notAfter!=null)  sb.append(prefix+"  notAfter  \""+sdf.format(notAfter )+"Z\""+CRLF);
         sb.append(prefix+"}");
         return sb.toString();
     }

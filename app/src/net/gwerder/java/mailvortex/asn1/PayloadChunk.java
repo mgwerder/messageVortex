@@ -16,8 +16,13 @@ public class PayloadChunk extends Block {
         payload=new byte[0];
     }
 
-    public PayloadChunk(ASN1Encodable to) {
+    public PayloadChunk(byte[] b) throws IOException {
+        ASN1InputStream aIn=new ASN1InputStream( b );
+        parse(aIn.readObject());
+    }
 
+    public PayloadChunk(ASN1Encodable to) throws IOException {
+        parse(to);
     }
 
     public ASN1Object toASN1Object() throws IOException{
@@ -31,23 +36,31 @@ public class PayloadChunk extends Block {
         return new DERSequence( v );
     }
 
+    public byte[] setPayload(byte[] b) {
+        byte[] opl=payload;
+        payload=b;
+        return opl;
+    }
+
     @Override
     protected void parse(ASN1Encodable to) throws IOException {
         ASN1Sequence s1 = ASN1Sequence.getInstance(to);
         int i=0;
-        offset=((ASN1Integer)(s1.getObjectAt(i++))).getValue().longValue();
+        offset=ASN1Integer.getInstance( s1.getObjectAt(i++)).getValue().longValue();
 
         //FIXME routingBlockIdentifier parsing missing
-        s1.getObjectAt(i++);// FIXME this is a dummy
+        i++;// FIXME this is a dummy
 
-        payload=((ASN1OctetString)(s1.getObjectAt(i++))).getOctets();
+        ASN1TaggedObject dto=ASN1TaggedObject.getInstance( s1.getObjectAt(i++) );
+        if(dto.getTagNo()!=100) throw new IOException( "got bad tag number (expected:10;got:"+dto.getTagNo()+")" );
+        payload=ASN1OctetString.getInstance( dto.getObject() ).getOctets();
         if(offset<0) throw new IOException("illegal offset parsed");
     }
 
     public String dumpValueNotation(String prefix) {
         StringBuilder sb=new StringBuilder();
         sb.append(" {"+CRLF);
-        sb.append(prefix+"  -- FIXME dumping of Payload object not yet supported"+CRLF);
+        sb.append(prefix+"  -- FIXME dumping of PayloadChunk object not yet supported"+CRLF);
         sb.append(prefix+"}");
         return sb.toString();
     }
