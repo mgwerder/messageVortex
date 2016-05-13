@@ -63,7 +63,7 @@ BEGIN
     reply       [2] ReplyBlock OPTIONAL,
     
     -- contains the actual payload
-    payload     SEQUENCE (SIZE (0..128)) OF PayloadChunk  
+    payload     [10] SEQUENCE (SIZE (0..128)) OF PayloadChunk  
   }
 
   
