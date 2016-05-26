@@ -136,6 +136,54 @@ public class FuzzerTest {
     }
 
     @Test
+    public void FuzzingSymmetricEncryption() {
+        SecureRandom sr=new SecureRandom(  );
+        for(Key.Algorithm alg: Key.Algorithm.getAlgorithms( Block.AlgorithmType.SYMMETRIC )) {
+            try {
+                System.out.println("Testing "+alg+" ("+SYMMETRIC_FUZZER_CYCLES+")");
+                for (int i = 0; i < SYMMETRIC_FUZZER_CYCLES; i++) {
+                    SymmetricKey s = new SymmetricKey( alg );
+                    byte[] b1=new byte[sr.nextInt(64*1024)];
+                    sr.nextBytes( b1 );
+                    byte[] b2=s.decrypt( s.encrypt(b1) );
+                    assertTrue( "error in encrypt/decrypt cycle with "+alg+" (same object)",Arrays.equals( b1,b2));
+                    b2=(new SymmetricKey(s.toBytes())).decrypt( s.encrypt(b1) );
+                    assertTrue( "error in encrypt/decrypt cycle with "+alg+" (same reserialized object)",Arrays.equals( b1,b2));
+                }
+            } catch(Exception e) {
+                fail("fuzzer encountered exception in Symmetric en/decryp test with algorithm "+alg.toString());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Test
+    public void FuzzingAsymmetricEncryption() {
+        SecureRandom sr=new SecureRandom(  );
+        for(Key.Algorithm alg: Key.Algorithm.getAlgorithms( Block.AlgorithmType.ASYMMETRIC )) {
+            for(int size:new int[] {1024,2048}) {
+                try {
+                    System.out.print("Testing "+alg+"/"+size+" ("+ASYMMETRIC_FUZZER_CYCLES+")");
+                    for (int i = 0; i < ASYMMETRIC_FUZZER_CYCLES; i++) {
+                        System.out.print(".");
+                        AsymmetricKey s = new AsymmetricKey(alg,size);
+                        byte[] b1=new byte[sr.nextInt(size/8-11)];
+                        sr.nextBytes( b1 );
+                        byte[] b2=s.decrypt( s.encrypt(b1) );
+                        assertTrue( "error in encrypt/decrypt cycle with "+alg+" (same object)",Arrays.equals( b1,b2));
+                        b2=(new AsymmetricKey(s.toBytes())).decrypt( s.encrypt(b1) );
+                        assertTrue( "error in encrypt/decrypt cycle with "+alg+" (same reserialized object)",Arrays.equals( b1,b2));
+                    }
+                    System.out.println("");
+                } catch(Exception e) {
+                    e.printStackTrace();
+                    fail("fuzzer encountered exception in Symmetric en/decryption test with algorithm "+alg.toString());
+                }
+            }
+        }
+    }
+
+    @Test
     public void FuzzingSymmetricKey() {
         for(Key.Algorithm alg: Key.Algorithm.getAlgorithms( Block.AlgorithmType.SYMMETRIC )) {
             try {
@@ -159,7 +207,7 @@ public class FuzzerTest {
     public void FuzzingAsymmetricKey() {
         for(Key.Algorithm alg: Key.Algorithm.getAlgorithms( Block.AlgorithmType.ASYMMETRIC )) {
             for (int ks : new int[]{512, 1024, 2048, 4096 }) {
-                if(alg!=Key.Algorithm.DSA || ks<2048) {
+//                if(alg!=Key.Algorithm.DSA || ks<2048) {
                     System.out.println("Testing "+alg+"/"+ks+" ("+ASYMMETRIC_FUZZER_CYCLES+")");
                     try {
                         for (int i = 0; i < ASYMMETRIC_FUZZER_CYCLES; i++) {
@@ -178,7 +226,7 @@ public class FuzzerTest {
                         e.printStackTrace();
                     }
                 }
-            }
+ //           }
         }
     }
 

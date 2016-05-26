@@ -7,10 +7,12 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
-import java.security.*;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 
 /**
  * Created by martin.gwerder on 19.04.2016.
@@ -38,6 +40,10 @@ public class SymmetricKey extends Key {
         random.nextBytes(keyBytes);
         SecretKeySpec aeskey = new SecretKeySpec(keyBytes, "AES");
         key=aeskey.getEncoded();
+    }
+
+    public SymmetricKey(byte[] sk) throws IOException {
+        this(sk,null,false);
     }
 
     public SymmetricKey(byte[] sk, AsymmetricKey deckey, boolean decryptWithPublicKey) throws IOException {

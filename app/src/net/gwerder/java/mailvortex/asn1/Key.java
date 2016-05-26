@@ -28,9 +28,9 @@ abstract public class Key extends Block {
         AES192    (1001,AlgorithmType.SYMMETRIC,"aes192"),
         AES256    (1002,AlgorithmType.SYMMETRIC,"aes256"),
         RSA       (2000,AlgorithmType.ASYMMETRIC,"rsa"),
-        DSA       (2100,AlgorithmType.ASYMMETRIC,"dsa"),
-        SECP384R1 (2500,AlgorithmType.ASYMMETRIC,"secp384R1"),
-        SECT409K1 (2501,AlgorithmType.ASYMMETRIC,"sect409K1"),
+//        DSA       (2100,AlgorithmType.ASYMMETRIC,"dsa"),
+        SECP384R1 (2500,AlgorithmType.ASYMMETRIC,"secp384r1"),
+        SECT409K1 (2501,AlgorithmType.ASYMMETRIC,"sect409k1"),
         SECP521R1 (2502,AlgorithmType.ASYMMETRIC,"secp521r1"),
         SHA384    (3000,AlgorithmType.HASHING,"sha384"),
         SHA512    (3001,AlgorithmType.HASHING,"sha512"),
@@ -73,6 +73,10 @@ abstract public class Key extends Block {
 
         public String getAlgorithmFamily() {
             return txt.replaceAll("[0-9]*$","");
+        }
+
+        public String getAlgorithm() {
+            return txt;
         }
 
         @Override

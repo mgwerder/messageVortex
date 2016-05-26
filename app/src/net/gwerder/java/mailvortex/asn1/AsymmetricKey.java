@@ -33,9 +33,17 @@ public class AsymmetricKey extends Key {
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
     }
 
-    protected ASN1BitString publicKey = null;
-    protected ASN1BitString privateKey = null;
+    protected byte[] publicKey = null;
+    protected byte[] privateKey = null;
 
+
+    public AsymmetricKey(byte[] b) {
+        this(ASN1Sequence.getInstance( b ));
+    }
+
+    public AsymmetricKey(ASN1Encodable to) {
+        parse(to);
+    }
 
     public AsymmetricKey(Algorithm alg, int keysize) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {
         if(alg==null) throw new NoSuchAlgorithmException( "Algorithm null is not encodable by the system" );
@@ -51,31 +59,24 @@ public class AsymmetricKey extends Key {
 
     private void createKey(Algorithm alg, Map<String,Integer> params) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException  {
         this.keytype=alg;
-        this.parameters.putAll(params);
+        if(params!=null) this.parameters.putAll(params);
 
         // create key pair
         if(alg.toString().equals("rsa") || alg.toString().equals("dsa")) {
             KeyPairGenerator keyGen = KeyPairGenerator.getInstance(alg.toString().toUpperCase());
             keyGen.initialize(parameters.get("" + Parameter.KEYSIZE.getId() + "_0"));
             KeyPair pair = keyGen.genKeyPair();
-            publicKey = new DLBitString(pair.getPublic().getEncoded(), 0);
-            privateKey = new DLBitString(pair.getPrivate().getEncoded(), 0);
+            publicKey = pair.getPublic().getEncoded();
+            privateKey = pair.getPrivate().getEncoded();
         } else if(alg.toString().startsWith("sec")) {
-            ECParameterSpec ecSpec = ECNamedCurveTable.getParameterSpec(alg.toString());
+            ECParameterSpec ecSpec = ECNamedCurveTable.getParameterSpec(alg.getAlgorithm());
             KeyPairGenerator g = KeyPairGenerator.getInstance("ECDSA", "BC");
             g.initialize(ecSpec, new SecureRandom());
             KeyPair pair = g.generateKeyPair();
-            publicKey = new DLBitString(pair.getPublic().getEncoded(), 0);
-            privateKey = new DLBitString(pair.getPrivate().getEncoded(), 0);
+            publicKey = pair.getPublic().getEncoded();
+            privateKey = pair.getPrivate().getEncoded();
         } else throw new NoSuchAlgorithmException("Encountered unknown parameter \""+alg.toString()+"\"");
 
-    }
-
-    public AsymmetricKey(byte[] b) {
-        this(ASN1Sequence.getInstance( b ));
-    }
-    public AsymmetricKey(ASN1Encodable to) {
-        parse(to);
     }
 
     protected void parse(ASN1Encodable to) {
@@ -83,9 +84,9 @@ public class AsymmetricKey extends Key {
         // parsing asymetric Key Idetifier
         int i=0;
         parseKeyParameter(ASN1Sequence.getInstance( s1.getObjectAt(i++) ));
-        publicKey=((ASN1BitString)(s1.getObjectAt(i++)));
+        publicKey=((ASN1OctetString)(s1.getObjectAt(i++))).getOctets();
         if(s1.size()>i) {
-            privateKey=((ASN1BitString)(((DERTaggedObject)(s1.getObjectAt(i++))).getObject()));
+            privateKey=((ASN1OctetString)(((DERTaggedObject)(s1.getObjectAt(i++))).getObject())).getOctets();
         }
     }
 
@@ -102,7 +103,7 @@ public class AsymmetricKey extends Key {
             sb.append( dumpKeyTypeValueNotation( prefix ) );
             String s = null;
             try {
-                s = toHex( publicKey.getOctets() );
+                s = toHex( publicKey );
             } catch (IllegalStateException ise) {
                 s = toBitString( publicKey );
             }
@@ -117,7 +118,7 @@ public class AsymmetricKey extends Key {
         if(privateKey!=null && (dt==DumpType.PRIVATE_COMMENTED || dt==DumpType.PRIVATE_ONLY || dt==DumpType.ALL)) {
             String s=null;
             try{
-                s=toHex(privateKey.getOctets());
+                s=toHex(privateKey);
             } catch(IllegalStateException ise) {
                 s=toBitString(privateKey);
             }
@@ -135,19 +136,19 @@ public class AsymmetricKey extends Key {
         if(publicKey==null) throw new IOException("publicKey may not be null when dumping");
         ASN1EncodableVector v =new ASN1EncodableVector();
         v.add(encodeKeyParameter());
-        v.add(publicKey);
-        if(privateKey!=null) v.add(new DERTaggedObject( true,0,privateKey));
+        v.add( new DEROctetString(publicKey) );
+        if(privateKey!=null) v.add(new DERTaggedObject( true,0,new DEROctetString( privateKey )));
         return new DERSequence( v );
     }
 
     @Override
     public byte[] encrypt(byte[] b) throws NoSuchAlgorithmException,NoSuchPaddingException,InvalidKeyException,IllegalBlockSizeException,BadPaddingException,NoSuchProviderException,InvalidKeySpecException {
-        return encrypt(b,false);
+        return encrypt(b,true);
     }
 
     public byte[] encrypt(byte[] b,boolean withPublicKey) throws NoSuchAlgorithmException,NoSuchPaddingException,InvalidKeyException,IllegalBlockSizeException,BadPaddingException,NoSuchProviderException,InvalidKeySpecException {
         KeyPair key = getKeyPair();
-        Cipher cipher = Cipher.getInstance(keytype.toString().toUpperCase()+"/ECB/PKCS1Padding");
+        Cipher cipher=getCipher();
         java.security.Key k=key.getPrivate();
         if(withPublicKey) k=key.getPublic();
         cipher.init(Cipher.ENCRYPT_MODE,k);
@@ -161,7 +162,7 @@ public class AsymmetricKey extends Key {
 
     public byte[] decrypt(byte[] b,boolean withPublicKey) throws NoSuchAlgorithmException,NoSuchPaddingException,InvalidKeyException,IllegalBlockSizeException,BadPaddingException,NoSuchProviderException,InvalidKeySpecException {
         KeyPair key = getKeyPair();
-        Cipher cipher = Cipher.getInstance(keytype.toString().toUpperCase()+"/ECB/PKCS1Padding");
+        Cipher cipher = getCipher();
         java.security.Key k=key.getPrivate();
         if(withPublicKey) k=key.getPublic();
         cipher.init(Cipher.DECRYPT_MODE,k);
@@ -169,7 +170,11 @@ public class AsymmetricKey extends Key {
     }
 
     private KeyFactory getKeyFactory() throws NoSuchAlgorithmException,NoSuchProviderException {
-        return KeyFactory.getInstance(keytype.toString().toUpperCase(), "BC");
+        if(keytype.getAlgorithm().startsWith( "sec" )) {
+            return KeyFactory.getInstance( "ECDSA", "BC" );
+        } else {
+            return KeyFactory.getInstance( keytype.getAlgorithm(), "BC" );
+        }
     }
 
     private KeyPair getKeyPair() throws NoSuchAlgorithmException,NoSuchProviderException,InvalidKeySpecException {
@@ -177,19 +182,46 @@ public class AsymmetricKey extends Key {
         PKCS8EncodedKeySpec rks = null;
         PrivateKey priv = null;
         if(privateKey!=null) {
-            rks  = new PKCS8EncodedKeySpec(privateKey.getBytes());
+            rks  = new PKCS8EncodedKeySpec(privateKey);
             priv = kf.generatePrivate(rks);
         }
         X509EncodedKeySpec uks=null;
         PublicKey pub = null;
         if(publicKey!=null) {
-            uks = new X509EncodedKeySpec(publicKey.getBytes());
+            uks = new X509EncodedKeySpec(publicKey);
             pub = kf.generatePublic(uks);
         }
         return new KeyPair( pub,priv );
     }
 
+    private Cipher getCipher() throws NoSuchPaddingException,NoSuchAlgorithmException,NoSuchProviderException {
+        if(keytype.getAlgorithm().startsWith("sec")) {
+            return Cipher.getInstance( "ECIES","BC" );
+        } else {
+            return Cipher.getInstance(keytype.getAlgorithm()+"/ECB/PKCS1Padding");
+        }
+    }
+
     public boolean equals(AsymmetricKey ak) {
         return publicKey.equals(ak.publicKey);
     }
+
+    public byte[] setPublicKey(byte[] b) throws InvalidKeyException {
+        byte[] old=publicKey;
+        if( b!= null && b.length!=publicKey.length) throw new InvalidKeyException( "KeySizeMissmatch in key detected" );
+        publicKey=b;
+        return old;
+    }
+
+    public byte[] getPublicKey() {return publicKey; }
+
+    public byte[] setPrivateKey(byte[] b) throws InvalidKeyException {
+        byte[] old=privateKey;
+        if( b!= null && b.length!=privateKey.length) throw new InvalidKeyException( "KeySizeMissmatch in key detected" );
+        privateKey=b;
+        return old;
+    }
+
+    public byte[] getPrivateKey() {return privateKey; }
+
 }

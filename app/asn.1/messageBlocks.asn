@@ -9,6 +9,12 @@
 Message-Blocks DEFINITIONS EXPLICIT TAGS ::= 
 BEGIN
 
+  -- define constants
+  maxSerial             INTEGER ::= 4294967295      -- maximum serial number
+  maxChunkSize          INTEGER ::= 4294967295      -- maximum size of a message chunk
+  maxNumberOfReplays    INTEGER ::= 65535           -- maximum number of replys
+  maxNumberOfRequests   INTEGER ::= 8               -- maximum number of administrative requests
+
   Message     ::= SEQUENCE { 
     header        CHOICE { 
         encrypted [1001] OCTET STRING,  -- contains IdentityBlock structure; Decryption key is hosts private key
@@ -23,13 +29,13 @@ BEGIN
   -- represents the identity of the rights owner
   IdentityBlock ::= SEQUENCE {
     -- Public key of the identity representing this transmission
-    identityKey       AsymetricKey,
+    identityKey       AsymmetricKey,
     
     -- serial identifying this block
-    serial            INTEGER (0..4294967295), 
+    serial            INTEGER (0..maxSerial), 
     
     -- number of times this block may be replayed (Tuple is identityKey,serial while 
-    maxReplays        INTEGER (0..65535), 
+    maxReplays        INTEGER (0..maxNumberOfReplays), 
     
     -- subsequent Blocks are not processed before valid time. 
     -- Host may reject too long retention. Recomended validity support >=1Mt.
@@ -37,33 +43,33 @@ BEGIN
     
     -- represents the chained secret which has to be found in subsequent blocks
     -- prevents reassembly attack
-    forwardSecret [0] ChainSecret OPTIONAL,
+    forwardSecret [2000] ChainSecret OPTIONAL,
     
-    -- contains SymetricKey encrypted with private key of identityKey 
+    -- contains SymmetricKey encrypted with private key of identityKey 
     -- encryption is done as proof of identity (identity hijack protection)
     decryptionKey     OCTET STRING,   -- contains (encrypted) DER encoded ASN1BitString with key representation
     
     -- contains administrative requests such as quota requests
-    requests          SEQUENCE (SIZE (0..5)) OF HeaderRequest ,
+    requests          SEQUENCE (SIZE (0..maxNumberOfRequests)) OF HeaderRequest ,
     
     -- padding and identitifier required to solve the cryptopuzzle
-    identifier    [1] INTEGER (0..4294967295) OPTIONAL, 
-    padding       [2] OCTET STRING OPTIONAL  -- This is for solving crypto puzzles
+    identifier    [2001] INTEGER (0..maxSerial) OPTIONAL, 
+    padding       [2002] OCTET STRING OPTIONAL  -- This is for solving crypto puzzles
   }
 
   UnencryptedBlocks ::= SEQUENCE {
     -- contains routing information (next hop) for the payloads
     -- FIXME how handle multiple payloads
-    routing     [0] RoutingBlock OPTIONAL,
+    routing     [3000] RoutingBlock OPTIONAL,
     
     -- contains encrypted log data of the data traveling
-    routingLog  [1] RoutingLogBlock OPTIONAL,
+    routingLog  [3010] RoutingLogBlock OPTIONAL,
     
     -- contains replys to header requests (eg. quota and identity handling)
-    reply       [2] ReplyBlock OPTIONAL,
+    reply       [3020] ReplyBlock OPTIONAL,
     
     -- contains the actual payload
-    payload     [10] SEQUENCE (SIZE (0..128)) OF PayloadChunk  
+    payload     [3100] SEQUENCE (SIZE (0..128)) OF PayloadChunk  
   }
 
   
@@ -78,35 +84,82 @@ BEGIN
     -- Recommended support for retention >=1h
     queueTime UsagePeriod,
     
-    -- contains Encrypted next routing block for the payload
-    -- decryption is done by the target node
-    nextHop           [101] SEQUENCE (SIZE (0..128)) OF OCTET STRING,   -- encrypted next RoutingBlocks for the payload
+    nextHop           SEQUENCE (SIZE (0..128)) OF NextHopBlock,   -- encrypted next RoutingBlocks for the payload
     
     -- contains the secret of the identity block (if any)
-    forwardSecret     [102]   ChainSecret OPTIONAL,
+    forwardSecret     [111]   ChainSecret OPTIONAL,
 
     -- contains a routing block which may be used when sending error messages back to the quota owner
     -- this routing block may be cached for future use
-    errorRoutingBlock [103]   RoutingBlock OPTIONAL,
-    replyBlock        [104]   RoutingBlock OPTIONAL,
+    replyBlock [131]   RoutingBlock OPTIONAL,
     
     -- This section is required if payload is routed with a prebuilt RB (
     -- Messages MAY always request recompression (otherwise the message is identifyable from a non reply routing block)
-    decryptionKey     [100] SEQUENCE (SIZE (1..2)) OF SymetricKey OPTIONAL,
-    encryptionKey     [101] SymetricKey OPTIONAL,
+    decryptionKey     [200] SEQUENCE (SIZE (1..2)) OF SymmetricKey OPTIONAL,
+    encryptionKey     [201] SymmetricKey OPTIONAL,
     
     -- contains information for building replys
-    cascade           [200] SEQUENCE(SIZE (0..255)) OF CascadeBuildInformation,
+    cascade           [300] SEQUENCE(SIZE (0..255)) OF CascadeBuildInformation,
     ...
   }
   
+  NextHopBlock ::= SEQUENCE {
+    nextIdentityBlock   [13100] OCTET STRING,
+    nextRoutingBlock    [13200] OCTET STRING,
+    nextReplyBlock      [13300] OCTET STRING OPTIONAL,
+    nextErrorReplyBlock [13400] OCTET STRING OPTIONAL
+  }
+  
+  PayloadOperation ::= SEQUENCE{
+    operation           PayloadType,
+    thisid              [12010] INTEGER (0..65535)
+  }
+  
+  PayloadType ::= CHOICE {
+        randomPayload   [100] RandomPayloadOperation, 
+        splitPayload    [150] SplitPayloadOperation, 
+        mergePayload    [200] MergePayloadOperation,
+        xorPayload      [250] XorPayloadOperation
+  }
+  
   CascadeBuildInformation ::= SEQUENCE {
-    encryptionKey   SymetricKey,
-    secret          ChainSecret,
+    encryptionKey       SymmetricKey,
+    secret              ChainSecret,
+    payloadOp           PayloadOperation,
     ...
   }
+  
+  PercentSizeType ::= SEQUENCE {
+    fromPercent         REAL (0..100),
+    toPercent           REAL (0..100)
+  }
+  
+  AbsoluteSizeType ::= SEQUENCE {
+    fromAbsolute        INTEGER (0..maxChunkSize),
+    toAbsolut           INTEGER (0..maxChunkSize)
+  }
+  
+  SizeType ::= CHOICE {
+    percent     [15001] PercentSizeType,
+    absolute    [15101] AbsoluteSizeType
+  }
+  
+  RandomPayloadOperation ::= SEQUENCE {
+    size                SizeType
+  }
  
-  EncryptedRoutingLogBlock ::= OCTET STRING -- contains symetrically encrypted RoutingLogBlock
+  SplitPayloadOperation ::= SEQUENCE {
+  }
+ 
+  MergePayloadOperation ::= SEQUENCE {
+    -- FIXME 
+  }
+ 
+  XorPayloadOperation ::= SEQUENCE {
+    -- FIXME 
+  }
+ 
+  EncryptedRoutingLogBlock ::= OCTET STRING -- contains symmetrically encrypted RoutingLogBlock
   RoutingLogBlock ::= SEQUENCE {
     routingLog           SEQUENCE (SIZE (0..16)) OF RoutingLog,
     nestedRoutingInformationBlock EncryptedRoutingLogBlock     
@@ -124,7 +177,7 @@ BEGIN
   }
   
   IdentityReplayBlock ::= SEQUENCE {
-    identity            KeyInfo,
+    identity            AsymmetricKey,
     valid               UsagePeriod,
 	replaysRemaining	INTEGER (0..4294967295)
   }
@@ -134,13 +187,12 @@ BEGIN
   }
   
   IdentityStoreBlock ::= SEQUENCE {
-    identity            KeyInfo,
     valid               UsagePeriod,
     messageQuota        INTEGER (0..4294967295),
     transferQuota       INTEGER (0..4294967295),
-    -- Contains the node spec
-    nodeAddress         NodeSpec OPTIONAL,      
-    nodeKey             PublicKeyInfo OPTIONAL,    -- Contains the identity of the owning node; May be ommited if local node
+    identity            [1001] AsymmetricKey OPTIONAL,    -- if omitted this is a node identity
+    nodeAddress         [1002] NodeSpec      OPTIONAL,    -- if ommited own identity key
+    nodeKey             [1003] AsymmetricKey OPTIONAL,    -- Contains the identity of the owning node; May be ommited if local node
     ...
   }
   
@@ -167,7 +219,7 @@ BEGIN
   }
   
   HeaderRequestIdentity ::= SEQUENCE {
-    identity PublicKeyInfo,
+    identity AsymmetricKey,
     period UsagePeriod,
     ...
   }
@@ -181,18 +233,18 @@ BEGIN
   }
   
   HeaderRequestQueryQuota ::= SEQUENCE {
-    identity PublicKeyInfo,
+    identity AsymmetricKey,
     ...
   }
   
   HeaderRequestIncreaseMessageQuota ::= SEQUENCE {
-    identity PublicKeyInfo,
+    identity AsymmetricKey,
     messages INTEGER (0..4294967295),
     ...
   }
   
   RequestIncreaseTransferQuota ::= SEQUENCE {
-    identity PublicKeyInfo,
+    identity AsymmetricKey,
     size     INTEGER (0..4294967295),
     ...
   }
@@ -211,8 +263,8 @@ BEGIN
   }
   
   CypherSpec ::= SEQUENCE {
-      asymetric AsymetricAlgorithmIdentifier,
-      symetric  SymetricAlgorithmIdentifier,
+      asymmetric AsymmetricAlgorithmIdentifier,
+      symmetric  SymmetricAlgorithmIdentifier,
       mac       MacAlgorithmIdentifier
   }
   
@@ -253,28 +305,14 @@ BEGIN
     notAfter        [1]     GeneralizedTime OPTIONAL
  }
  
-  -- Compatible to SubjectPublicKeyInfo taken from RFC3280
-  PublicKeyInfo  ::=  SEQUENCE  {
-    algorithm     AsymetricAlgorithmIdentifier,
-    publicKey     BIT STRING  
-  }
-  
-  KeyInfo ::= SEQUENCE {
-    algorithm       AsymetricAlgorithmIdentifier,
-    publicKey       BIT STRING,  
-    privateKey      BIT STRING OPTIONAL,
-    ...
-  }
-
-
-  -- adapted from RFC3280
-  SymetricAlgorithmIdentifier  ::=  SEQUENCE  {
-    algorithm               SymetricAlgorithm,
+ -- adapted from RFC3280
+  SymmetricAlgorithmIdentifier  ::=  SEQUENCE  {
+    algorithm               SymmetricAlgorithm,
     parameter               AlgorithmParameters OPTIONAL
   }
 
-  AsymetricAlgorithmIdentifier  ::=  SEQUENCE  {
-    algorithm               AsymetricAlgorithm,
+  AsymmetricAlgorithmIdentifier  ::=  SEQUENCE  {
+    algorithm               AsymmetricAlgorithm,
     parameter               AlgorithmParameters OPTIONAL
   }
 
@@ -284,7 +322,7 @@ BEGIN
   }
 
   
-  SymetricAlgorithm ::= ENUMERATED {
+  SymmetricAlgorithm ::= ENUMERATED {
     aes128      (1000),
     aes192      (1001),  -- optional support
     aes256      (1002),
@@ -293,7 +331,7 @@ BEGIN
     camellia256 (1102)
   }
   
-  AsymetricAlgorithm ::= ENUMERATED {
+  AsymmetricAlgorithm ::= ENUMERATED {
     rsa       (2000),
     dsa       (2100),
     secp384r1 (2500),
@@ -333,17 +371,17 @@ BEGIN
     ...    
   }
   
-  -- Symetric key
-  SymetricKey ::= SEQUENCE {
-    keyType SymetricAlgorithmIdentifier,
-    key     BIT STRING
+  -- Symmetric key
+  SymmetricKey ::= SEQUENCE {
+    keyType SymmetricAlgorithmIdentifier,
+    key     OCTET STRING
   }
   
-  -- Asymetric Key
-  AsymetricKey ::= SEQUENCE {
-    keyType       AsymetricAlgorithmIdentifier,
-    publicKey     BIT STRING,
-    privateKey    [0] BIT STRING OPTIONAL
+  -- Asymmetric Key
+  AsymmetricKey ::= SEQUENCE {
+    keyType       AsymmetricAlgorithmIdentifier,
+    publicKey     OCTET STRING,
+    privateKey    [0] OCTET STRING OPTIONAL
   }
   
   pkcs-1    OBJECT IDENTIFIER ::= { iso(1) member-body(2) us(840) rsadsi(113549) pkcs(1) 1 }
