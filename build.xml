@@ -143,7 +143,9 @@
     <junit  fork="yes" haltonfailure="yes" dir="${build.home}/classes/"> <!-- showoutput="yes" printsummary="withOutAndErr" -->
         <sysproperty key="net.sourceforge.cobertura.datafile" file="${build.home}/cobertura.ser" />
         <classpath refid="test.classpath"/>
-        <test name="${app.package}.test.MainSuite" todir="${build.home}/testsrc" outfile="TEST-MainSuite"/>
+        <test name="${app.package}.test.MainCoreSuite" todir="${build.home}/testsrc" outfile="TEST-MainSuite"/>
+        <test name="${app.package}.test.MainIMAPSuite" todir="${build.home}/testsrc" outfile="TEST-IMAPSuite"/>
+        <test name="${app.package}.test.MainASN1Suite" todir="${build.home}/testsrc" outfile="TEST-ASN1Suite"/>
         <formatter type="xml"/>
         <formatter type="plain" usefile="false"/>
     </junit>
