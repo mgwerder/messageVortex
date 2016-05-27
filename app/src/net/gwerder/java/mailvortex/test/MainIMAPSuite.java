@@ -1,5 +1,8 @@
 package net.gwerder.java.mailvortex.test;
 
+import net.gwerder.java.mailvortex.test.core.ConfigTest;
+import net.gwerder.java.mailvortex.test.core.MailVortexTest;
+import net.gwerder.java.mailvortex.test.core.VersionTest;
 import net.gwerder.java.mailvortex.test.imap.*;
 import org.junit.runner.RunWith;
 import junit.framework.TestSuite;
@@ -29,9 +32,6 @@ public class MainIMAPSuite {
 
   public static junit.framework.Test suite() {    
         final TestSuite s = new TestSuite();
-        s.addTest(new JUnit4TestAdapter(MailVortexTest.class));
-        s.addTest(new JUnit4TestAdapter(VersionTest.class));
-        s.addTest(new JUnit4TestAdapter(ConfigTest.class));
         s.addTest(new JUnit4TestAdapter(CustomKeyManagerTest.class));
         s.addTest(new JUnit4TestAdapter(ImapLineExceptionTest.class));
         s.addTest(new JUnit4TestAdapter(ImapLineTest.class));

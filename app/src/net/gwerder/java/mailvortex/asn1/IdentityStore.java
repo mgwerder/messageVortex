@@ -37,7 +37,6 @@ public class IdentityStore extends Block {
 
 
     public static IdentityStore getIdentityStoreDemo() throws IOException {
-        //FIXME implementation missing
         if(demo==null) {
             IdentityStore tmp=new IdentityStore(  );
             tmp.add(IdentityStoreBlock.getIdentityStoreBlockDemo( IdentityStoreBlock.IdentityType.OWNED_IDENTITY,true ));
@@ -67,7 +66,7 @@ public class IdentityStore extends Block {
     }
 
     public ASN1Object toASN1Object() throws IOException {
-        // Prepare envoding
+        // Prepare encoding
         Logger.getLogger("IdentityStore").log( Level.FINER,"Executing toASN1Object()");
 
         ASN1EncodableVector v=new ASN1EncodableVector();

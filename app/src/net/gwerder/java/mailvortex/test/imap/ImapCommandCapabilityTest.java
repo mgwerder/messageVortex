@@ -66,8 +66,9 @@ public class ImapCommandCapabilityTest {
         ImapCommand ic=ImapCommand.getCommand("capability");
         try{
             String[] a=ic.processCommand(new ImapLine(null,"A1 CAPABILITY\r\n"));
-            if((a[0]+" ").indexOf(" CapabilityParser=two,one ")==-1) {
-                fail("Capabilities wrong or missing ("+a[0]+")");
+            String toCheck=a[0].replace( '\r',' ' ).replace( '\n',' ' );
+            if((toCheck+" ").indexOf(" CapabilityParser=two,one ")==-1) {
+                fail("Capabilities wrong or missing ("+toCheck+")");
             }
         } catch(ImapException ie) {
             fail("Got unexpected exception while checking capabilities");

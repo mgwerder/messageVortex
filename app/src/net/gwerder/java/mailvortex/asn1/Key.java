@@ -134,7 +134,6 @@ abstract public class Key extends Block {
             params.add(new DERTaggedObject(true,Integer.parseInt(s[0]),new ASN1Integer(new BigInteger(""+e.getValue()))) );
         }
         ret.add(new DERSequence(params));
-        // FIXME
         return new DERSequence(ret);
     }
 

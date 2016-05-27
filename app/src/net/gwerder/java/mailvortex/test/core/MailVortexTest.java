@@ -1,4 +1,4 @@
-package net.gwerder.java.mailvortex.test.imap;
+package net.gwerder.java.mailvortex.test.core;
  
 import static org.junit.Assert.assertEquals;
 
