@@ -56,7 +56,7 @@ public class ImapSSLTest {
                 boolean supported=true;
                 ServerSocket serverSocket=null;
                 try{ 
-                    serverSocket = (SSLServerSocket) context.getServerSocketFactory().getDefault().createServerSocket(0);
+                    serverSocket = context.getServerSocketFactory().getDefault().createServerSocket(0);
                     ((SSLServerSocket)serverSocket).setEnabledCipherSuites(new String[] {arr[i]});
                     SocketDeblocker t=new SocketDeblocker(serverSocket.getLocalPort(),30);
                     t.start();

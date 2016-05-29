@@ -1,7 +1,8 @@
 package net.gwerder.java.mailvortex.asn1;
 
-import org.bouncycastle.asn1.*;
 import net.gwerder.java.mailvortex.asn1.Key.Algorithm;
+import org.bouncycastle.asn1.*;
+
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
@@ -15,17 +16,17 @@ import java.text.ParseException;
 
 public class Identity extends Block {
 
-    protected AsymmetricKey identityDecryptionKey=null;
-    protected AsymmetricKey identityKey = null;
-    protected long serial;
-    protected int maxReplays;
-    protected UsagePeriod valid = null;
-    protected int[] forwardSecret = null;
-    protected byte[] decryptionKeyRaw = null;
-    protected SymmetricKey decryptionKey;
-    protected Request[] requests;
-    protected long identifier=-1;
-    protected String padding=null;
+    private AsymmetricKey identityDecryptionKey=null;
+    private AsymmetricKey identityKey = null;
+    private long serial;
+    private int maxReplays;
+    private UsagePeriod valid = null;
+    private int[] forwardSecret = null;
+    private byte[] decryptionKeyRaw = null;
+    private SymmetricKey decryptionKey;
+    private Request[] requests;
+    private long identifier=-1;
+    private String padding=null;
 
     public Identity() throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException,IOException,NoSuchPaddingException,InvalidKeyException,IllegalBlockSizeException,BadPaddingException,NoSuchProviderException,InvalidKeySpecException {
         identityKey=new AsymmetricKey(Algorithm.RSA,1024);
@@ -68,7 +69,9 @@ public class Identity extends Block {
         valid=new UsagePeriod(s1.getObjectAt(i++));
         try {
             ASN1TaggedObject ato=ASN1TaggedObject.getInstance( s1.getObjectAt(i++) );
-            if(ato.getTagNo()!=0) throw new Exception("not a forward secret");
+            if(ato.getTagNo()!=0) {
+                throw new IOException("not a forward secret");
+            }
             ASN1Sequence s2 = ASN1Sequence.getInstance( ato );
             forwardSecret = new int[s2.size()];
             for(int y=0;y<s2.size();y++) {
@@ -166,9 +169,9 @@ public class Identity extends Block {
             }
         }
         sb.append(prefix+"  requests {"+CRLF);
-        for (int i = 0; i < requests.length; i++) {
+        foreach(Request r:requests) {
             sb.append(valid.dumpValueNotation(prefix + "  ")+CRLF);
-            sb.append(requests[i].dumpValueNotation(prefix + "  ")+CRLF);
+            sb.append(r.dumpValueNotation(prefix + "  ")+CRLF);
         }
         sb.append(prefix+"  }");
         if(padding!=null) {

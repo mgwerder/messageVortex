@@ -8,7 +8,7 @@ public class Config {
 
     private static final Config DEFAULT_CFG=new Config();
 
-    private Map<String,Object> configurationData= new ConcurrentHashMap<String,Object>();
+    private final Map<String,Object> configurationData= new ConcurrentHashMap<String,Object>();
     
     public boolean createBooleanConfigValue(String id,boolean dval) {
         synchronized(configurationData) {
@@ -39,9 +39,9 @@ public class Config {
             while (it.hasNext()) {
                 Map.Entry<String,Object> p=it.next();
                 if(p.getValue() instanceof Boolean) {
-                    dst.configurationData.put((String)p.getKey(),Boolean.valueOf(((Boolean)(p.getValue())).booleanValue()));
+                    dst.configurationData.put(p.getKey(),Boolean.valueOf(((Boolean)(p.getValue())).booleanValue()));
                 } else if(p.getValue() instanceof String) {
-                    dst.configurationData.put((String)p.getKey(),p.getValue());
+                    dst.configurationData.put(p.getKey(),p.getValue());
                 } else {
                     throw new ClassCastException("unknown value in config data");
                 }

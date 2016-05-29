@@ -1,24 +1,19 @@
 package net.gwerder.java.mailvortex.imap;
 
 import net.gwerder.java.mailvortex.MailvortexLogger;
-import java.util.logging.Logger;
-import java.util.logging.Level;
-  
-import java.util.List;
-import java.util.ArrayList;
-import java.net.Socket;
-import javax.net.ssl.SSLSocket;
+
 import javax.net.SocketFactory;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
+import javax.net.ssl.*;
 import java.io.FileInputStream;
-import javax.net.ssl.TrustManagerFactory;
-import java.security.KeyStore;
-import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
-import java.util.concurrent.TimeoutException;
+import java.net.Socket;
 import java.nio.charset.Charset;
+import java.security.KeyStore;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeoutException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ImapClient implements Runnable {
 
@@ -38,8 +33,8 @@ public class ImapClient implements Runnable {
     private static final int DEFAULT_TIMEOUT=30*1000;
 
     private String targetHost="localhost";
-    private Object sync=new Object();
-    private Object notifyThread=new Object();
+    private final Object sync=new Object();
+    private final Object notifyThread=new Object();
     private int targetPort = 143;
     private boolean encrypted;
     private boolean shutdown=false;

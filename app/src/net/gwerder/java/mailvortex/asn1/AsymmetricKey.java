@@ -101,7 +101,7 @@ public class AsymmetricKey extends Key {
         sb.append("{"+CRLF);
         if(publicKey!=null && (dt==DumpType.ALL || dt==DumpType.PUBLIC_ONLY || dt==DumpType.PUBLIC_COMMENTED || dt==DumpType.PRIVATE_COMMENTED)) {
             sb.append( dumpKeyTypeValueNotation( prefix ) );
-            String s = null;
+            String s;
             try {
                 s = toHex( publicKey );
             } catch (IllegalStateException ise) {
@@ -116,7 +116,7 @@ public class AsymmetricKey extends Key {
             sb.append( CRLF );
         }
         if(privateKey!=null && (dt==DumpType.PRIVATE_COMMENTED || dt==DumpType.PRIVATE_ONLY || dt==DumpType.ALL)) {
-            String s=null;
+            String s;
             try{
                 s=toHex(privateKey);
             } catch(IllegalStateException ise) {
@@ -203,7 +203,7 @@ public class AsymmetricKey extends Key {
     }
 
     public boolean equals(AsymmetricKey ak) {
-        return publicKey.equals(ak.publicKey);
+        return Arrays.equals(publicKey,ak.publicKey);
     }
 
     public byte[] setPublicKey(byte[] b) throws InvalidKeyException {

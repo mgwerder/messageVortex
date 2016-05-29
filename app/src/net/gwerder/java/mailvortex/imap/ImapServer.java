@@ -1,29 +1,20 @@
 package net.gwerder.java.mailvortex.imap;
 
-import java.util.logging.Logger;
-import java.util.logging.Level;  
 import net.gwerder.java.mailvortex.MailvortexLogger;
-  
-import java.io.IOException;
-import java.util.concurrent.ConcurrentSkipListSet;
-import java.util.Set;
-import java.util.HashSet;
-import java.net.Socket;
-import java.net.ServerSocket;
-import javax.net.SocketFactory;
+
 import javax.net.ServerSocketFactory;
-import javax.net.ssl.SSLSocket;
-import javax.net.ssl.SSLSocketFactory; 
-import javax.net.ssl.SSLServerSocket;
-import javax.net.ssl.SSLServerSocketFactory;
-import javax.net.ssl.SSLException;
-import javax.net.ssl.X509TrustManager;
-import javax.net.ssl.X509KeyManager;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.SSLContext;
-import java.security.SecureRandom;
-import java.util.concurrent.TimeoutException;
+import javax.net.SocketFactory;
+import javax.net.ssl.*;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.security.GeneralSecurityException;
+import java.security.SecureRandom;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class ImapServer extends StoppableThread  {
@@ -76,7 +67,7 @@ public class ImapServer extends StoppableThread  {
             boolean supported=true;
             serverSocket=null;
             try{ 
-                serverSocket = (SSLServerSocket) context.getServerSocketFactory().getDefault().createServerSocket(0);
+                serverSocket = context.getServerSocketFactory().getDefault().createServerSocket(0);
                 ((SSLServerSocket)serverSocket).setEnabledCipherSuites(new String[] {arr[i]});
                 SocketDeblocker t=new SocketDeblocker(serverSocket.getLocalPort(),30);
                 t.start();
