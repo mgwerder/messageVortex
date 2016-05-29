@@ -1,37 +1,25 @@
 package net.gwerder.java.mailvortex.test.imap;
- 
-import static org.junit.Assert.assertEquals;
 
-import net.gwerder.java.mailvortex.imap.*;
 import net.gwerder.java.mailvortex.MailvortexLogger;
-import java.util.logging.Level;
-
+import net.gwerder.java.mailvortex.imap.*;
 import org.junit.Test;
-import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.junit.Assert;
-import java.util.concurrent.TimeoutException;
-import static org.junit.Assert.*;
 
-import javax.net.ssl.SSLServerSocket;
-import javax.net.ssl.SSLServerSocketFactory;
-import javax.net.ssl.SSLSocket;
-import javax.net.ssl.SSLSocketFactory;
-import java.net.Socket;
-import java.net.ServerSocket;
+import javax.net.ssl.*;
+import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
-import javax.net.ssl.X509TrustManager;
-import javax.net.ssl.X509KeyManager;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLException;
-import java.security.SecureRandom;
-import java.util.Set;
-import java.util.HashSet;
-import java.io.File;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.nio.charset.Charset;
+import java.security.SecureRandom;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.logging.Level;
+
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 
 /**
@@ -108,7 +96,7 @@ public class ImapSSLTest {
                         s.close();
                         ss.close();
                     } catch(IOException ioe) {
-                        ioe.printStackTrace();
+                        LOGGER.log(Level.WARNING,"Unexpected Exception",ioe);
                         fail("Exception rised in server ("+ioe+") while communicating");
                     }
                 }
@@ -120,7 +108,7 @@ public class ImapSSLTest {
             assertTrue("check client socket state",ic.isTLS());
             
             // Selftest 
-            // Socket s=SSLSocketFactory.getDefault().createSocket(InetAddress.getByName("localhost"),ss.getLocalPort());
+            // This selftest ought to be removed Socket s=SSLSocketFactory.getDefault().createSocket(InetAddress.getByName("localhost"),ss.getLocalPort());
         } catch(Exception ioe) {
             ioe.printStackTrace();
             fail("Exception rised  in client("+ioe+") while communicating");
@@ -155,7 +143,7 @@ public class ImapSSLTest {
             LOGGER.log(Level.INFO,"got sequence \""+(new String(b,java.nio.charset.Charset.defaultCharset()))+"\"");
             LOGGER.log(Level.INFO,"done");
         } catch(Exception ioe) {
-            ioe.printStackTrace();
+            LOGGER.log(Level.WARNING,"Unexpected Exception",ioe);
             fail("Exception rised  in client("+ioe+") while communicating");
         }
     }    
@@ -177,7 +165,7 @@ public class ImapSSLTest {
             ic.shutdown();
             LOGGER.log(Level.INFO,"done");
         } catch(Exception ioe) {
-            ioe.printStackTrace();
+            LOGGER.log(Level.WARNING,"Unexpected Exception",ioe);
             fail("Exception rised  in client("+ioe+") while communicating");
         }
     }    
