@@ -36,7 +36,7 @@ public class ImapCommandTest {
             String[] s=c.sendCommand(command);
             for(String v:s) {
                 LOGGER.log(Level.INFO,"IMAP<- C: "+ImapLine.commandEncoder(v));
-            };
+            }
             assertTrue("command \""+command+"\" has not been answered properly (expected \""+reply+"\" but got \""+s[s.length-1]+"\")",s[s.length-1].startsWith(reply));
             return s;
         } catch(TimeoutException e) {

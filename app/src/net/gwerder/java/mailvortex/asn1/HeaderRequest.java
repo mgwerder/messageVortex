@@ -29,7 +29,7 @@ public abstract class HeaderRequest {
         return null;
     }
 
-    protected HeaderRequest() {};
+    protected HeaderRequest() {}
 
     public ASN1Object toASN1Object() throws IOException {
         throw new IOException( "not implemented" ); //FIXME

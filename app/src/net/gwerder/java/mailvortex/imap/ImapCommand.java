@@ -1,7 +1,7 @@
 package net.gwerder.java.mailvortex.imap;
 
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class ImapCommand implements Cloneable {
 
@@ -15,22 +15,22 @@ public abstract class ImapCommand implements Cloneable {
         (new ImapCommandNoop()).init();
     } 
 
-    public static final void registerCommand(ImapCommand command) {
+    public static void registerCommand(ImapCommand command) {
         String[] arr=command.getCommandIdentifier();
         for(int i=0;i<arr.length;i++) {
             COMMANDS.put(arr[i].toLowerCase(),command);        
         }    
     }
     
-    public static final void deregisterCommand(String command) {
-        COMMANDS.remove(command.toLowerCase());        
+    public static void deregisterCommand(String command) {
+        COMMANDS.remove(command.toLowerCase());
     }
     
-    public static final ImapCommand[] getCommands() {
+    public static ImapCommand[] getCommands() {
         return COMMANDS.values().toArray(new ImapCommand[COMMANDS.size()]);
     }
 
-    public static final ImapCommand getCommand(String name) {
+    public static ImapCommand getCommand(String name) {
         return COMMANDS.get(name.toLowerCase());
     }
 

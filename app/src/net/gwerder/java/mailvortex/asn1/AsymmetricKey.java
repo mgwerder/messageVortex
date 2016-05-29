@@ -21,13 +21,13 @@ import java.util.Map;
  */
 public class AsymmetricKey extends Key {
 
-    public static enum DumpType {
+    public enum DumpType {
         ALL,
         PUBLIC_ONLY,
         PUBLIC_COMMENTED,
         PRIVATE_ONLY,
         PRIVATE_COMMENTED,
-    };
+    }
 
     static {
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());

@@ -158,7 +158,9 @@ public class ImapSSLTest {
             ImapClient ic=new ImapClient("localhost",is.getPort(),true);
             ic.setDefaultTimeout(300);
             String[] s=ic.sendCommand("a1 capability\r\n");
-            for(String v:s) { LOGGER.log(Level.INFO,"IMAP<- C: "+ImapLine.commandEncoder(v)); };             
+            for(String v:s) {
+                LOGGER.log(Level.INFO,"IMAP<- C: "+ImapLine.commandEncoder(v));
+            }
             LOGGER.log(Level.INFO,"closing server");
             is.shutdown();
             LOGGER.log(Level.INFO,"closing client");

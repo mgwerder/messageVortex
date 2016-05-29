@@ -1,16 +1,16 @@
 package net.gwerder.java.mailvortex.test.imap;
 
-import static org.junit.Assert.assertEquals;
-
+import net.gwerder.java.mailvortex.MailvortexLogger;
+import net.gwerder.java.mailvortex.imap.ImapCommand;
+import net.gwerder.java.mailvortex.imap.ImapException;
+import net.gwerder.java.mailvortex.imap.ImapLine;
 import org.junit.Test;
-import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import static org.junit.Assert.*;
 
 import java.util.logging.Level;
-import net.gwerder.java.mailvortex.*;
-import net.gwerder.java.mailvortex.imap.*;
+
+import static org.junit.Assert.fail;
 
 /**
  * Tests for {@link net.gwerder.java.mailvortex.MailVortex}.
@@ -37,7 +37,7 @@ public class ImapCommandLogoutTest {
             ic.processCommand(new ImapLine(null,"A1 Logout error trigger\r\n"));
             fail("error logout test for \"A1 logout error trigger\"");
         } catch(ImapException ie) {
-            ;
+
         }
     }
 

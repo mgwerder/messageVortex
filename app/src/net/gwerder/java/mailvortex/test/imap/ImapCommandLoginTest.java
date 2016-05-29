@@ -1,16 +1,16 @@
 package net.gwerder.java.mailvortex.test.imap;
 
-import static org.junit.Assert.assertEquals;
-
+import net.gwerder.java.mailvortex.MailvortexLogger;
+import net.gwerder.java.mailvortex.imap.ImapCommand;
+import net.gwerder.java.mailvortex.imap.ImapException;
+import net.gwerder.java.mailvortex.imap.ImapLine;
 import org.junit.Test;
-import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import static org.junit.Assert.*;
 
 import java.util.logging.Level;
-import net.gwerder.java.mailvortex.*;
-import net.gwerder.java.mailvortex.imap.*;
+
+import static org.junit.Assert.fail;
 
 /**
  * Tests for {@link net.gwerder.java.mailvortex.MailVortex}.
@@ -37,42 +37,42 @@ public class ImapCommandLoginTest {
             ic.processCommand(new ImapLine(null,"A1 Login\r\n"));
             fail("error Noop test for \"A1 Login\"");
         } catch(ImapException ie) {
-            ;
+
         }
 
         try{
             ic.processCommand(new ImapLine(null,"A1 Login \r\n"));
             fail("error Noop test for \"A1 Login \"");
         } catch(ImapException ie) {
-            ;
+
         }
 
         try{
             ic.processCommand(new ImapLine(null,"A1 Login a\r\n"));
             fail("error Noop test for \"A1 Login a\"");
         } catch(ImapException ie) {
-            ;
+
         }
 
         try{
             ic.processCommand(new ImapLine(null,"A1 Login a*\r\n"));
             fail("error Noop test for \"A1 Login a*\"");
         } catch(ImapException ie) {
-            ;
+
         }
 
         try{
             ic.processCommand(new ImapLine(null,"A1 Login a *\r\n"));
             fail("error Noop test for \"A1 Login a *\"");
         } catch(ImapException ie) {
-            ;
+
         }
 
         try{
             ic.processCommand(new ImapLine(null,"A1 Login a b *\r\n"));
             fail("error Noop test for \"A1 Login a b *\"");
         } catch(ImapException ie) {
-            ;
+
         }
 
     }

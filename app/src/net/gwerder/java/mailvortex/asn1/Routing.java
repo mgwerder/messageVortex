@@ -12,8 +12,8 @@ import java.util.Vector;
  */
 public class Routing extends Block {
 
-    private String recipient = null;
-    private UsagePeriod queueTime = null;
+    private String       recipient = null;
+    private UsagePeriod  queueTime = null;
     private List<byte[]> nextHop=new Vector<byte[]>();
 
     public Routing(ASN1Encodable to) throws ParseException {

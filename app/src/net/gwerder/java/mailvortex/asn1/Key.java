@@ -23,7 +23,7 @@ import java.util.logging.Logger;
  */
 abstract public class Key extends Block {
 
-    public static enum Algorithm {
+    public enum Algorithm {
         AES128    (1000,AlgorithmType.SYMMETRIC,"aes128"),
         AES192    (1001,AlgorithmType.SYMMETRIC,"aes192"),
         AES256    (1002,AlgorithmType.SYMMETRIC,"aes256"),
@@ -47,7 +47,7 @@ abstract public class Key extends Block {
             this.txt=txt;
         }
 
-        public int getId() {return id;};
+        public int getId() {return id;}
 
         public static Algorithm[] getAlgorithms(AlgorithmType at) {
             Vector<Algorithm> v=new Vector<Algorithm>();

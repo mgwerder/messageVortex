@@ -14,11 +14,11 @@ import java.util.logging.Logger;
  */
 public class IdentityStoreBlock extends Block {
 
-    public static enum IdentityType{
+    public enum IdentityType{
         OWNED_IDENTITY,
         NODE_IDENTITY,
         RECIPIENT_IDENTITY
-    };
+    }
 
     UsagePeriod   valid         = null;
     int           messageQuota  = 0;

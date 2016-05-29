@@ -16,13 +16,13 @@ public abstract class Block {
 
     protected static final String CRLF="\r\n";
 
-    public static enum AlgorithmType {
+    public enum AlgorithmType {
         SYMMETRIC,
         ASYMMETRIC,
         HASHING
-    };
+    }
 
-    public static enum Parameter {
+    public enum Parameter {
         KEYSIZE   (10000,"keySize"),
         CURVETYPE (10001,"curveType");
 
@@ -48,7 +48,7 @@ public abstract class Block {
             return null;
         }
 
-        public int getId() {return id;};
+        public int getId() {return id;}
 
         public String toString() {
             return txt;
