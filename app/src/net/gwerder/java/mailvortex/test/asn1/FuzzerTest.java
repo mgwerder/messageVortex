@@ -1,21 +1,18 @@
 package net.gwerder.java.mailvortex.test.asn1;
 
-import static net.gwerder.java.mailvortex.asn1.Key.Algorithm.AES128;
-import static net.gwerder.java.mailvortex.asn1.Key.Algorithm.AES192;
-import static net.gwerder.java.mailvortex.asn1.Key.Algorithm.AES256;
-import static org.junit.Assert.assertEquals;
-
+import net.gwerder.java.mailvortex.MailvortexLogger;
 import net.gwerder.java.mailvortex.asn1.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import static org.junit.Assert.*;
 
 import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.logging.Level;
-import net.gwerder.java.mailvortex.*;
+
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * Fuzzer Tests for ASN1 Parser Classes {@link net.gwerder.java.mailvortex.asn1.Block}.
@@ -30,13 +27,15 @@ public class FuzzerTest {
 
     public static final int BLOCK_FUZZER_CYCLES =1000;
 
+    private static final java.util.logging.Logger LOGGER;
 
     static {
+        LOGGER = MailvortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
         MailvortexLogger.setGlobalLogLevel(Level.ALL);
     }
 
     @Test
-    public void FuzzingMessage() {
+    public void fuzzingMessage() {
         try {
             for (int i = 0; i < BLOCK_FUZZER_CYCLES; i++) {
                 Message s = new Message(new Identity(),new Payload());
@@ -47,13 +46,13 @@ public class FuzzerTest {
                 assertTrue( "Byte arrays should be equal when reencoding", Arrays.equals( b1, b2 ) );
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.WARNING,"Unexpected exception",e);
             fail( "fuzzer encountered exception in Message ("+e.toString()+")" );
         }
     }
 
     @Test
-    public void FuzzingPayload() {
+    public void fuzzingPayload() {
         try {
             for (int i = 0; i < BLOCK_FUZZER_CYCLES; i++) {
                 Payload s = new Payload();
@@ -64,13 +63,13 @@ public class FuzzerTest {
                 assertTrue( "Byte arrays should be equal when reencoding", Arrays.equals( b1, b2 ) );
             }
         } catch (Exception e) {
+            LOGGER.log(Level.WARNING,"Unexpected exception",e);
             fail( "fuzzer encountered exception in Payload ("+e.toString()+")" );
-            e.printStackTrace();
         }
     }
 
     @Test
-    public void FuzzingPayloadChunk() {
+    public void fuzzingPayloadChunk() {
         try {
             SecureRandom r=new SecureRandom(  );
             for (int i = 0; i < BLOCK_FUZZER_CYCLES; i++) {
@@ -85,13 +84,13 @@ public class FuzzerTest {
                 assertTrue( "Byte arrays should be equal when reencoding", Arrays.equals( b1, b2 ) );
             }
         } catch (Exception e) {
+            LOGGER.log(Level.WARNING,"Unexpected exception",e);
             fail( "fuzzer encountered exception in PayloadChunk ("+e.toString()+")" );
-            e.printStackTrace();
         }
     }
 
     @Test
-    public void FuzzingIdentity() {
+    public void fuzzingIdentity() {
         try {
             for (int i = 0; i < BLOCK_FUZZER_CYCLES; i++) {
                 Identity s = new Identity();
@@ -104,13 +103,13 @@ public class FuzzerTest {
                 assertTrue( "Byte arrays should be equal when reencoding", Arrays.equals( b1, b2 ) );
             }
         } catch (Exception e) {
+            LOGGER.log(Level.WARNING,"Unexpected exception",e);
             fail( "fuzzer encountered exception in Identity ("+e.toString()+")" );
-            e.printStackTrace();
         }
     }
 
     @Test
-    public void FuzzingUsagePeriod() {
+    public void fuzzingUsagePeriod() {
         Random r = new Random();
         try {
             for (int i = 0; i < BLOCK_FUZZER_CYCLES; i++) {
@@ -130,13 +129,13 @@ public class FuzzerTest {
                 assertTrue( "Byte arrays should be equal when reencoding ("+s.getNotBefore()+"/"+s.getNotAfter()+") ["+b1.length+"/"+b2.length+"]", Arrays.equals( b1, b2 ) );
             }
         } catch (Exception e) {
+            LOGGER.log(Level.WARNING,"Unexpected exception",e);
             fail( "fuzzer encountered exception in UsagePeriod ("+e.toString()+")" );
-            e.printStackTrace();
         }
     }
 
     @Test
-    public void FuzzingSymmetricEncryption() {
+    public void fuzzingSymmetricEncryption() {
         SecureRandom sr=new SecureRandom(  );
         for(Key.Algorithm alg: Key.Algorithm.getAlgorithms( Block.AlgorithmType.SYMMETRIC )) {
             try {
@@ -151,14 +150,14 @@ public class FuzzerTest {
                     assertTrue( "error in encrypt/decrypt cycle with "+alg+" (same reserialized object)",Arrays.equals( b1,b2));
                 }
             } catch(Exception e) {
+                LOGGER.log(Level.WARNING,"Unexpected exception",e);
                 fail("fuzzer encountered exception in Symmetric en/decryp test with algorithm "+alg.toString());
-                e.printStackTrace();
             }
         }
     }
 
     @Test
-    public void FuzzingAsymmetricEncryption() {
+    public void fuzzingAsymmetricEncryption() {
         SecureRandom sr=new SecureRandom(  );
         for(Key.Algorithm alg: Key.Algorithm.getAlgorithms( Block.AlgorithmType.ASYMMETRIC )) {
             for(int size:new int[] {1024,2048}) {
@@ -176,7 +175,7 @@ public class FuzzerTest {
                     }
                     System.out.println("");
                 } catch(Exception e) {
-                    e.printStackTrace();
+                    LOGGER.log(Level.WARNING,"Unexpected exception",e);
                     fail("fuzzer encountered exception in Symmetric en/decryption test with algorithm "+alg.toString());
                 }
             }
@@ -184,7 +183,7 @@ public class FuzzerTest {
     }
 
     @Test
-    public void FuzzingSymmetricKey() {
+    public void fuzzingSymmetricKey() {
         for(Key.Algorithm alg: Key.Algorithm.getAlgorithms( Block.AlgorithmType.SYMMETRIC )) {
             try {
                 System.out.println("Testing "+alg+" ("+SYMMETRIC_FUZZER_CYCLES+")");
@@ -197,14 +196,14 @@ public class FuzzerTest {
                     assertTrue( "Byte arrays should be equal when reencoding",Arrays.equals(b1,b2));
                 }
             } catch(Exception e) {
+                LOGGER.log(Level.WARNING,"Unexpected exception",e);
                 fail("fuzzer encountered exception in Symmetric key with algorithm "+alg.toString());
-                e.printStackTrace();
             }
         }
     }
 
     @Test
-    public void FuzzingAsymmetricKey() {
+    public void fuzzingAsymmetricKey() {
         for(Key.Algorithm alg: Key.Algorithm.getAlgorithms( Block.AlgorithmType.ASYMMETRIC )) {
             for (int ks : new int[]{512, 1024, 2048, 4096 }) {
 //                if(alg!=Key.Algorithm.DSA || ks<2048) {
@@ -222,8 +221,8 @@ public class FuzzerTest {
                             assertTrue( "Byte arrays should be equal when reencoding", Arrays.equals( b1, b2 ) );
                         }
                     } catch (Exception e) {
+                        LOGGER.log(Level.WARNING,"Unexpected exception",e);
                         fail( "fuzzer encountered exception in Asymmetric key with algorithm " + alg.toString() +"/"+ ks+" ("+e.toString()+")" );
-                        e.printStackTrace();
                     }
                 }
  //           }

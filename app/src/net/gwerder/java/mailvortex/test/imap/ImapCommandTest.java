@@ -1,19 +1,15 @@
 package net.gwerder.java.mailvortex.test.imap;
 
+import net.gwerder.java.mailvortex.MailvortexLogger;
 import net.gwerder.java.mailvortex.imap.*;
-import net.gwerder.java.mailvortex.*;
-import java.util.logging.Level;
-
 import org.junit.Test;
-import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.junit.Assert;
-import java.util.concurrent.TimeoutException;
-import static org.junit.Assert.*;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
+import java.util.concurrent.TimeoutException;
+import java.util.logging.Level;
+
+import static org.junit.Assert.*;
 
 /**
  * Tests for {@link net.gwerder.java.mailvortex.imap.ImapCommand}.
@@ -23,7 +19,7 @@ import java.io.InputStream;
 @RunWith(JUnit4.class)
 public class ImapCommandTest {
 
-    private final boolean  DO_NOT_TEST_ENCRYPTION=false;
+    private final static boolean  DO_NOT_TEST_ENCRYPTION=false;
     
     private static final java.util.logging.Logger LOGGER;
 
@@ -38,11 +34,13 @@ public class ImapCommandTest {
         try{ 
             LOGGER.log(Level.INFO,"IMAP C-> "+ImapLine.commandEncoder(command));
             String[] s=c.sendCommand(command);
-            for(String v:s) { LOGGER.log(Level.INFO,"IMAP<- C: "+ImapLine.commandEncoder(v)); }; 
+            for(String v:s) {
+                LOGGER.log(Level.INFO,"IMAP<- C: "+ImapLine.commandEncoder(v));
+            };
             assertTrue("command \""+command+"\" has not been answered properly (expected \""+reply+"\" but got \""+s[s.length-1]+"\")",s[s.length-1].startsWith(reply));
             return s;
         } catch(TimeoutException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.WARNING,"Unexpected exception",e);
             fail("got timeout while waiting for reply to command "+command);
         }
         return null;
@@ -63,6 +61,7 @@ public class ImapCommandTest {
             assertTrue("test  Timeout get",ic.getTimeout()==123);
             ic.setTimeout(3600*1000);
         } catch(Exception e) {
+            LOGGER.log(Level.WARNING,"Unexpected exception",e);
             fail("Exception thrown ("+e+")");
         }
     }
@@ -82,7 +81,9 @@ public class ImapCommandTest {
             fail("Timeout not issued");
         } catch(TimeoutException toe) {
             // Exception reached as planed
+            assertTrue("Got expected timeout",true);
         } catch(Exception e) {
+            LOGGER.log(Level.WARNING,"Unexpected exception",e);
             fail("Exception thrown ("+e+")");
         }
         ImapConnection.setDefaultTimeout(10000);
@@ -104,7 +105,9 @@ public class ImapCommandTest {
             fail("Timeout not issued");
         } catch(TimeoutException toe) {
             // Exception reached as planed
+            assertTrue("Got expected timeout",true);
         } catch(Exception e) {
+            LOGGER.log(Level.WARNING,"Unexpected exception",e);
             fail("Exception thrown ("+e+")");
         }
     }
@@ -124,7 +127,9 @@ public class ImapCommandTest {
             fail("Timeout not issued");
         } catch(TimeoutException toe) {
             // Exception reached as planed
+            assertTrue("Got expected timeout",true);
         } catch(Exception e) {
+            LOGGER.log(Level.WARNING,"Unexpected exception",e);
             fail("Exception thrown ("+e+")");
         }
         ImapClient.setDefaultTimeout(10000);
@@ -196,6 +201,7 @@ public class ImapCommandTest {
                 s.shutdown();
                 c.shutdown();
             } catch (Exception toe) {
+                LOGGER.log(Level.WARNING,"Unexpected exception",toe);
                 fail("exception thrown ("+toe.toString()+") while testing using encryption="+encrypted+" at "+toe.getStackTrace()[0]);
             }
             encrypted=!encrypted;
