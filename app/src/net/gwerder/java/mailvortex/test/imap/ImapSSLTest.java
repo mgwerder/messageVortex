@@ -110,7 +110,7 @@ public class ImapSSLTest {
             // Selftest 
             // This selftest ought to be removed Socket s=SSLSocketFactory.getDefault().createSocket(InetAddress.getByName("localhost"),ss.getLocalPort());
         } catch(Exception ioe) {
-            ioe.printStackTrace();
+            LOGGER.log(Level.WARNING,"Unexpected Exception",ioe);
             fail("Exception rised  in client("+ioe+") while communicating");
         }
     }    
