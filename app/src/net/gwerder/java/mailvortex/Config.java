@@ -21,13 +21,13 @@ public class Config {
         }    
     }
     /* Gets a boolean value from the application config.
-	 *
-	 * @param id key which should be set 
-	 * @param value Vlue to be set in key
-	 * @returns old value before setting to new value
-	 * @throws NullPointerException if key does not exist in configurationData
-	 * @throws ClassCastException	if key is not of type boolean
-	 ***/
+     *
+     * @param id key which should be set
+     * @param value Vlue to be set in key
+     * @returns old value before setting to new value
+     * @throws NullPointerException if key does not exist in configurationData
+     * @throws ClassCastException	if key is not of type boolean
+     ***/
     public static Config getDefault() {
         return DEFAULT_CFG;
     }    
@@ -57,15 +57,15 @@ public class Config {
         return copy(this);
     }
     
-	/***
-	 * Gets a boolean value from the application config.
-	 *
-	 * @param id key which should be set 
-	 * @param value Vlue to be set in key
-	 * @returns old value before setting to new value
-	 * @throws NullPointerException if key does not exist in configurationData
-	 * @throws ClassCastException	if key is not of type boolean
-	 ***/
+    /***
+     * Gets a boolean value from the application config.
+     *
+     * @param id key which should be set
+     * @param value Vlue to be set in key
+     * @returns old value before setting to new value
+     * @throws NullPointerException if key does not exist in configurationData
+     * @throws ClassCastException	if key is not of type boolean
+     ***/
     public boolean setBooleanValue(String id,boolean value) {
         boolean ret;
         if(getDefault().configurationData.get(id.toLowerCase())==null) {
@@ -79,14 +79,14 @@ public class Config {
         return ret;
     }
 
-	/***
-	 * Gets a boolean value from the application config.
-	 *
-	 * @param id 					key which should be set 
-	 * @returns 					current value of the specified key
-	 * @throws NullPointerException if key does not exist in configurationData
-	 * @throws ClassCastException	if key is not of type boolean
-	 ***/
+    /***
+     * Gets a boolean value from the application config.
+     *
+     * @param id 					key which should be set
+     * @returns 					current value of the specified key
+     * @throws NullPointerException if key does not exist in configurationData
+     * @throws ClassCastException	if key is not of type boolean
+     ***/
     public boolean getBooleanValue(String id) {
         boolean ret;
         if(getDefault().configurationData.get(id.toLowerCase())==null) {
