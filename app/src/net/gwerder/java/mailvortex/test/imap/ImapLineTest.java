@@ -1,21 +1,21 @@
 package net.gwerder.java.mailvortex.test.imap;
 
-import net.gwerder.java.mailvortex.imap.*;
-
-import java.util.logging.Logger;
-import java.util.logging.Level;
-
+import net.gwerder.java.mailvortex.MailvortexLogger;
+import net.gwerder.java.mailvortex.imap.ImapBlankLineException;
+import net.gwerder.java.mailvortex.imap.ImapException;
+import net.gwerder.java.mailvortex.imap.ImapLine;
+import net.gwerder.java.mailvortex.imap.ImapNullLineException;
 import org.junit.Test;
-import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.junit.Assert;
-import java.util.concurrent.TimeoutException;
-import static org.junit.Assert.*;
 
-import java.nio.charset.Charset;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.util.logging.Level;
+
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * Tests for {@link net.gwerder.java.mailvortex.imap.ImapLine}.
@@ -23,8 +23,15 @@ import java.io.InputStream;
  * @author martin@gwerder.net (Martin GWERDER)
  */
 @RunWith(JUnit4.class)
-public class ImapLineTest {    
-    
+public class ImapLineTest {
+
+    private static final java.util.logging.Logger LOGGER;
+
+    static {
+        LOGGER = MailvortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+        MailvortexLogger.setGlobalLogLevel(Level.ALL);
+    }
+
     @Test
     public void charlistHelpers() {
         assertTrue("Error testing charlistbuilder space"," ".equals(ImapLine.charlistBuilder(32,32)));
@@ -49,11 +56,11 @@ public class ImapLineTest {
             s=il.getAString();
             assertTrue("Error getting \"3ttti\" (got \""+s+"\")","3ttti".equals(s));
         } catch(ImapBlankLineException ble) {
+            LOGGER.log(Level.WARNING,"Unexpected Exception",ble);
             fail("Blank Line Exception rised");
-            System.out.flush();ble.printStackTrace();System.out.flush();
         } catch (ImapException ie) {
+            LOGGER.log(Level.WARNING,"Unexpected Exception",ie);
             fail("ImapException rised"+ie.getMessage()+"("+ie.getStackTrace()[0].getFileName()+":"+ie.getStackTrace()[0].getLineNumber()+")");
-            System.out.flush();System.err.flush();System.out.println("## ImapExceptionRised in getAStringNormal");ie.printStackTrace();System.out.flush();
         }
     }
     
@@ -74,22 +81,24 @@ public class ImapLineTest {
             assertTrue("Error getting \"t\" (got \""+s+"\")","t".equals(s));
             assertTrue("Error skipping EOL",il.skipCRLF());
         } catch(ImapBlankLineException ble) {
+            LOGGER.log(Level.WARNING,"Unexpected Exception",ble);
             fail("Blank Line Exception rised");
-            System.out.flush();ble.printStackTrace();System.out.flush();
         } catch (ImapException ie) {
+            LOGGER.log(Level.WARNING,"Unexpected Exception",ie);
             fail("ImapException rised"+ie.getMessage()+"("+ie.getStackTrace()[0].getFileName()+":"+ie.getStackTrace()[0].getLineNumber()+")");
-            System.out.flush();System.err.flush();System.out.println("## ImapExceptionRised in getAStringNormal");ie.printStackTrace();System.out.flush();
-        }
+       }
     }
     
     @Test
     public void blankLine() {
         try{
             new ImapLine(null,"",null);
-            assertTrue("Blank Line Exception not rised",true);
+            fail("Blank Line Exception not rised");
         } catch(ImapNullLineException ble) {
+            LOGGER.log(Level.WARNING,"Expected Exception",ble);
             assertTrue("Blank Line Exception rised",true);
         } catch (ImapException ie) {
+            LOGGER.log(Level.WARNING,"Unexpected Exception",ie);
             fail("Imap Exception rised (should have been ImaplBlankLineException");
         }
     }
@@ -100,10 +109,11 @@ public class ImapLineTest {
             new ImapLine(null,"a",null);
             fail("ImapException not rised");
         } catch(ImapBlankLineException ble) {
+            LOGGER.log(Level.WARNING,"Unexpected Exception",ble);
             fail("Blank Line Exception rised");
         } catch (ImapException ie) {
+            LOGGER.log(Level.WARNING,"Expected Exception",ie);
             assertTrue("ImapException rised",true);
-            System.out.println("## tag of exception is \""+ie.getTag()+"\"");
         }
     }
     
@@ -115,9 +125,12 @@ public class ImapLineTest {
             fail("Blank Line Exception not rised");
         } catch(ImapNullLineException ble) {
             /** Null Line Exception rised --- thisis expected ***/
+            assertTrue("Got expected exception",true);
         } catch(ImapBlankLineException ble) {
+            LOGGER.log(Level.WARNING,"Unexpected Exception",ble);
             fail("Blank Line Exception rised");
         } catch (ImapException ie) {
+            LOGGER.log(Level.WARNING,"Unexpected Exception",ie);
             fail("Imap Exception rised (should have been ImaplBlankLineException)");
         }
     }
@@ -128,9 +141,12 @@ public class ImapLineTest {
             new ImapLine(null,"",null);
             fail("Null Line Exception not rised");
         } catch(ImapNullLineException ble) {
+            assertTrue("Got expected exception",true);
         } catch(ImapBlankLineException ble) {
+            LOGGER.log(Level.WARNING,"Unexpected Exception",ble);
             fail("Blank Line Exception rised");
         } catch (ImapException ie) {
+            LOGGER.log(Level.WARNING,"Unexpected Exception",ie);
             fail("Imap Exception rised (should have been ImaplBlankLineException but is \""+ie.toString()+"\")");
         }
     }
@@ -141,9 +157,12 @@ public class ImapLineTest {
             new ImapLine(null,"\r\n",null);
             fail("Blank Line Exception not rised");
         } catch(ImapBlankLineException ble) {
+            assertTrue("Got expected exception",true);
         } catch(ImapNullLineException ble) {
+            LOGGER.log(Level.WARNING,"Unexpected Exception",ble);
             fail("Null Line Exception rised");
         } catch (ImapException ie) {
+            LOGGER.log(Level.WARNING,"Unexpected Exception",ie);
             fail("Imap Exception rised (should have been ImaplBlankLineException)");
         }
     }
@@ -159,8 +178,10 @@ public class ImapLineTest {
             assertTrue("Returned tag should be \"a5\"","a5".equals(il.getTag()));
             assertTrue("Returned command should be \"logout\" but is infact \""+il.getCommand()+"\"","logout".equals(il.getCommand()));
         } catch(ImapBlankLineException ble) {
+            LOGGER.log(Level.WARNING,"Unexpected Exception",ble);
             fail("Blank Line Exception rised");
         } catch (ImapException ie) {
+            LOGGER.log(Level.WARNING,"Unexpected Exception",ie);
             fail("Imap Exception rised (no exception expected)");
         }
     }
@@ -171,10 +192,12 @@ public class ImapLineTest {
             InputStream i=new ByteArrayInputStream("a b".getBytes(Charset.defaultCharset()));
             new ImapLine(null,null,i);
         } catch(ImapBlankLineException ble) {
+            LOGGER.log(Level.WARNING,"Unexpected Exception",ble);
             fail("Should not reach this point as an Null Line exception should be rised");
         } catch(ImapNullLineException ble) {
             assertTrue("Blank Line Exception rised",true);
         } catch (ImapException ie) {
+            LOGGER.log(Level.WARNING,"Unexpected Exception",ie);
             fail("Imap Exception rised");
         }
     }
@@ -186,6 +209,7 @@ public class ImapLineTest {
             new ImapLine(null,null,i);
             fail("Should not reach this point as an exception should be rised");
         } catch(ImapNullLineException ble) {
+            LOGGER.log(Level.WARNING,"Unexpected Exception",ble);
             fail("Blank Line Exception rised");
         } catch (ImapException ie) {
             // all OK this exception is expected 
@@ -199,6 +223,7 @@ public class ImapLineTest {
             ImapLine il=new ImapLine(null,null,i);
             fail("Should not reach this point as an exception should be rised got ["+il.getTag()+"] ["+il.getCommand()+"]"); 
         } catch(ImapNullLineException ble) {
+            LOGGER.log(Level.WARNING,"Unexpected Exception",ble);
             fail("Blank Line Exception rised");
         } catch (ImapException ie) {
             // all OK this exception is expected 
@@ -212,8 +237,10 @@ public class ImapLineTest {
             new ImapLine(null,null,i);
             assertTrue("Should  reach this point",true);
         } catch(ImapNullLineException ble) {
+            LOGGER.log(Level.WARNING,"Unexpected Exception",ble);
             fail("Blank Line Exception rised");
         } catch (ImapException ie) {
+            LOGGER.log(Level.WARNING,"Unexpected Exception",ie);
             fail("ImapException rised");
         }
     }
@@ -226,8 +253,10 @@ public class ImapLineTest {
             assertTrue("Returned tag should be \"a\"","a".equals(il.getTag()));
             assertTrue("Returned command should be \"b\" but is infact \""+il.getCommand()+"\"","b".equals(il.getCommand()));
         } catch(ImapBlankLineException ble) {
+            LOGGER.log(Level.WARNING,"Unexpected Exception",ble);
             fail("Blank Line Exception rised");
         } catch (ImapException ie) {
+            LOGGER.log(Level.WARNING,"Unexpected Exception",ie);
             fail("Imap Exception rised (no exception expected)");
         }
     }
@@ -241,12 +270,11 @@ public class ImapLineTest {
             assertTrue("Returned tag should be \"a\"","a".equals(il.getTag()));
             assertTrue("Returned command should be \"b\" but is infact \""+il.getCommand()+"\"","b".equals(il.getCommand()));
         } catch(ImapBlankLineException ble) {
+            LOGGER.log(Level.WARNING,"Unexpected Exception",ble);
             fail("ImapBlankLineException rised (no exception expected)");
-            ble.printStackTrace();
-            System.out.flush();ble.printStackTrace();System.out.flush();
         } catch (ImapException ie) {
+            LOGGER.log(Level.WARNING,"Unexpected Exception",ie);
             fail("Imap Exception rised");
-            System.out.flush();ie.printStackTrace();System.out.flush();
         }
     }
 }    
