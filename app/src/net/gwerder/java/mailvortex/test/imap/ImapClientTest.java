@@ -1,27 +1,19 @@
 package net.gwerder.java.mailvortex.test.imap;
 
-import net.gwerder.java.mailvortex.imap.*;
 import net.gwerder.java.mailvortex.MailvortexLogger;
-import java.util.logging.Logger;
-import java.util.logging.Level;
-
+import net.gwerder.java.mailvortex.imap.*;
 import org.junit.Test;
-import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.junit.Assert;
-import java.util.concurrent.TimeoutException;
-import static org.junit.Assert.*;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.IOException;
-import java.net.ServerSocket;
 import javax.net.SocketFactory;
+import java.io.IOException;
 import java.net.InetAddress;
-import java.security.NoSuchAlgorithmException;
-import java.security.KeyManagementException;
-import java.security.GeneralSecurityException;
+import java.net.ServerSocket;
+import java.util.concurrent.TimeoutException;
+import java.util.logging.Level;
+
+import static org.junit.Assert.*;
 
 /**
  * Tests for {@link net.gwerder.java.mailvortex.imap.ImapClient}.
@@ -95,11 +87,14 @@ public class ImapClientTest {
         }
     
         public String[] processCommand(ImapLine line) {
+            int i=0;
             do{
                 try{
                     Thread.sleep(100000);
-                }catch(InterruptedException ie) {}    
-            }while(true);    
+                }catch(InterruptedException ie) {}
+                i++;
+            }while(i<11000);
+            return null;
         }
     
         public String[] getCommandIdentifier() {
@@ -121,7 +116,7 @@ public class ImapClientTest {
             ImapConnection.setDefaultTimeout(1000);
             ImapClient ic =new ImapClient("localhost",is.getPort(),true);
             ic.setTimeout(1000);
-            assertTrue("TLS is not as expected",ic.isTLS()==true);
+            assertTrue("TLS is not as expected",ic.isTLS());
         } catch(IOException e) {
             fail("IOException while creating server");
         }
@@ -134,7 +129,7 @@ public class ImapClientTest {
         LOGGER.log(Level.INFO,"************************************************************************");
         DeadSocket ds=new DeadSocket(0,-1);
         ImapClient ic =new ImapClient("localhost",ds.getPort(),false);
-        assertTrue("TLS is not as expected",ic.isTLS()==false);
+        assertTrue("TLS is not as expected",!ic.isTLS());
         long start=System.currentTimeMillis();
         (new ImapCommandIWantATimeout()).init();
         try{

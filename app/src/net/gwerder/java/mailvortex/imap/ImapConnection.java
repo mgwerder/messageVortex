@@ -1,17 +1,17 @@
 package net.gwerder.java.mailvortex.imap;
 
-import java.util.logging.Logger;
 import net.gwerder.java.mailvortex.MailvortexLogger;
-import java.util.logging.Level;
- 
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocket;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Set;
-import javax.net.ssl.SSLSocket;
-import javax.net.ssl.SSLContext;
 import java.net.Socket;
 import java.nio.charset.Charset;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class ImapConnection extends StoppableThread implements Comparable<ImapConnection> {
@@ -296,7 +296,6 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
             interruptedCatcher(e2);
         }
         LOGGER.log(Level.INFO,"server connection closed");
-        return;
     }
     
 }

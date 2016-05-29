@@ -58,7 +58,21 @@ public class Identity extends Block {
                 // we got an encrypted string ... lets unpack it
                 try {
                     s1 = (ASN1Sequence.getInstance( (new EncryptedString( (ASN1String) s3, identityDecryptionKey )).getDecryptedBytes() ));
-                } catch(Exception e) {
+                } catch(BadPaddingException e) {
+                    throw new IOException("Exception while decrypting content",e);
+                } catch(InvalidKeyException e) {
+                    throw new IOException("Exception while decrypting content",e);
+                } catch(InvalidAlgorithmParameterException e) {
+                    throw new IOException("Exception while decrypting content",e);
+                } catch(InvalidKeySpecException e) {
+                    throw new IOException("Exception while decrypting content",e);
+                } catch(IllegalBlockSizeException e) {
+                    throw new IOException("Exception while decrypting content",e);
+                } catch(NoSuchPaddingException e) {
+                    throw new IOException("Exception while decrypting content",e);
+                } catch(NoSuchProviderException e) {
+                    throw new IOException("Exception while decrypting content",e);
+                } catch(ParseException e) {
                     throw new IOException("Exception while decrypting content",e);
                 }
             s3=s1.getObjectAt(i-1);
@@ -169,7 +183,7 @@ public class Identity extends Block {
             }
         }
         sb.append(prefix+"  requests {"+CRLF);
-        foreach(Request r:requests) {
+        for(Request r:requests) {
             sb.append(valid.dumpValueNotation(prefix + "  ")+CRLF);
             sb.append(r.dumpValueNotation(prefix + "  ")+CRLF);
         }
