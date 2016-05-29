@@ -1,18 +1,17 @@
 package net.gwerder.java.mailvortex.imap;
- 
 
-import java.util.logging.Logger;
-import java.util.logging.Level;
- 
-import java.security.cert.X509Certificate;
+
 import javax.net.ssl.X509KeyManager;
-import java.security.KeyStore;
-import java.io.IOException;
-import java.security.PrivateKey;
-import java.security.GeneralSecurityException;
-import java.security.Principal;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.Socket;
+import java.security.GeneralSecurityException;
+import java.security.KeyStore;
+import java.security.Principal;
+import java.security.PrivateKey;
+import java.security.cert.X509Certificate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /***
  * Keymanager enables specification of key alias to be used.
@@ -57,16 +56,18 @@ public class CustomKeyManager implements X509KeyManager {
           is=new FileInputStream(keyStoreFile);
           keyStore.load(is, password);
         } catch(IOException ioe) {
-          throw new GeneralSecurityException("IOException while loading keystore",ioe);
-        }  finally {
-          if(is!=null) {
+            throw new GeneralSecurityException("IOException while loading keystore", ioe);
+        }
+
+        // closing keystore
+        if(is!=null) {
             try{
                 is.close();
             } catch(IOException ioe) {
                 throw new GeneralSecurityException("IOException while closing keystore",ioe);
             }
-          }
-        }  
+        }
+
         if(getPrivateKey(alias)==null) {
             throw new GeneralSecurityException("requested alias not found in keystore");
         }

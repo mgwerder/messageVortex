@@ -47,7 +47,7 @@ public class AsymmetricKey extends Key {
 
     public AsymmetricKey(Algorithm alg, int keysize) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {
         if(alg==null) throw new NoSuchAlgorithmException( "Algorithm null is not encodable by the system" );
-        Map<String,Integer> pm= new HashMap();
+        Map<String,Integer> pm= new HashMap<String,Integer>();
         pm.put(""+Parameter.KEYSIZE.getId()+"_0",keysize);
         createKey(alg,pm);
     }

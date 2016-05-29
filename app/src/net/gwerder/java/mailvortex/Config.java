@@ -1,8 +1,8 @@
 package net.gwerder.java.mailvortex;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.Map;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Config {
 
@@ -35,9 +35,9 @@ public class Config {
     public static Config copy(Config src) {
         Config dst=new Config();
         synchronized(src.configurationData) {
-            Iterator it = src.configurationData.entrySet().iterator();
+            Iterator<Map.Entry<String,Object>> it = src.configurationData.entrySet().iterator();
             while (it.hasNext()) {
-                Map.Entry p=(Map.Entry)it.next();
+                Map.Entry<String,Object> p=it.next();
                 if(p.getValue() instanceof Boolean) {
                     dst.configurationData.put((String)p.getKey(),Boolean.valueOf(((Boolean)(p.getValue())).booleanValue()));
                 } else if(p.getValue() instanceof String) {
@@ -65,7 +65,8 @@ public class Config {
 	 * @returns old value before setting to new value
 	 * @throws NullPointerException if key does not exist in configurationData
 	 * @throws ClassCastException	if key is not of type boolean
-	 ***/    public boolean setBooleanValue(String id,boolean value) {
+	 ***/
+    public boolean setBooleanValue(String id,boolean value) {
         boolean ret;
         if(getDefault().configurationData.get(id.toLowerCase())==null) {
             throw new NullPointerException();
@@ -86,7 +87,7 @@ public class Config {
 	 * @throws NullPointerException if key does not exist in configurationData
 	 * @throws ClassCastException	if key is not of type boolean
 	 ***/
-    public static boolean getBooleanValue(String id) {
+    public boolean getBooleanValue(String id) {
         boolean ret;
         if(getDefault().configurationData.get(id.toLowerCase())==null) {
             throw new NullPointerException();
