@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,7 +19,7 @@ import java.util.logging.Logger;
  */
 public class IdentityStore extends Block {
 
-    private ConcurrentHashMap<String,IdentityStoreBlock> blocks=new ConcurrentHashMap<String,IdentityStoreBlock>();
+    private Map<String,IdentityStoreBlock> blocks=new TreeMap<String,IdentityStoreBlock>();
     private static IdentityStore demo=null;
 
     public IdentityStore() {
@@ -34,7 +36,9 @@ public class IdentityStore extends Block {
         parse(aIn.readObject());
     }
 
-
+    public static void resetDemo() {
+        demo=null;
+    }
 
     public static IdentityStore getIdentityStoreDemo() throws IOException {
         if(demo==null) {

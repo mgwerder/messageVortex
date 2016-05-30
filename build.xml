@@ -59,17 +59,17 @@
     <echo message="user.home=${user.home}"/>
     <mkdir dir="${build.home}/src/${app.path}"/>
     <mkdir dir="${build.home}/classes/${app.path}"/>
-    <touch file="${src.home}/Version.java"/>
-    <copy  todir="${build.home}/src/${app.path}">
+    <touch file="${src.home}/net/gwerder/java/mailvortex/Version.java"/>
+    <copy  todir="${build.home}/src/">
       <fileset dir="${src.home}/" includes="**/Version.java"/>
     </copy>
-    <copy  todir="${build.home}/src/${app.path}">
-      <fileset dir="${src.home}/" excludes="**/Version.java **/test/*.java"/>
+    <copy  todir="${build.home}/src/">
+      <fileset dir="${src.home}/" excludes="**/Version.java **/test/**/*.java **/test/*.java"/>
     </copy>
-    <copy  todir="${build.home}/testsrc/${app.path}">
-      <fileset dir="${src.home}/" includes="**/test/*.java"/>
+    <copy  todir="${build.home}/testsrc/">
+      <fileset dir="${src.home}/" includes="**/test/*.java **/test/**/*.java"/>
     </copy>
-  	
+
     <mkdir dir="${build.home}/classes/${app.path}/images"/>
     <!--<copy  todir="${build.home}/classes/com/primecalc/java/klb4/images">
       <fileset dir="${src.home}/images" includes="**/*.*"/>

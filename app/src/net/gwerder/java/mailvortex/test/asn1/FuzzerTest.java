@@ -203,6 +203,30 @@ public class FuzzerTest {
     }
 
     @Test
+    public void fuzzingIdentityStore() {
+        try {
+            System.out.println("Testing IdentityStore ("+ASYMMETRIC_FUZZER_CYCLES+")");
+            for (int i = 0; i < ASYMMETRIC_FUZZER_CYCLES; i++) {
+                IdentityStore.resetDemo();
+                IdentityStore s = IdentityStore.getIdentityStoreDemo();
+                assertTrue( "IdentityStore may not be null",s!=null);
+                byte[] b1=s.toBytes();
+                assertTrue( "Byte representation may not be null",b1!=null);
+                byte[] b2=(new IdentityStore(b1)).toBytes();
+                if(!Arrays.equals(b1,b2)) {
+                    System.out.println((new IdentityStore( b1 ) ).dumpValueNotation( "" ));
+                    System.out.println((new IdentityStore( b2 ) ).dumpValueNotation( "" ));
+                    System.out.flush();
+                    fail( "Byte arrays should be equal when reencoding" );
+                }
+            }
+        } catch(Exception e) {
+            LOGGER.log(Level.WARNING,"Unexpected exception",e);
+            fail("fuzzer encountered exception in IdetityStore");
+        }
+    }
+
+    @Test
     public void fuzzingAsymmetricKey() {
         for(Key.Algorithm alg: Key.Algorithm.getAlgorithms( Block.AlgorithmType.ASYMMETRIC )) {
             for (int ks : new int[]{512, 1024, 2048, 4096 }) {
