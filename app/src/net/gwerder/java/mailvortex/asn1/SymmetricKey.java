@@ -111,7 +111,7 @@ public class SymmetricKey extends Key {
         StringBuilder sb=new StringBuilder();
         sb.append("{"+CRLF);
         sb.append(dumpKeyTypeValueNotation(prefix)+CRLF);
-        sb.append(prefix+"  key "+toBitString(key)+CRLF);
+        sb.append(prefix+"  key "+toHex(key)+CRLF);
         sb.append(prefix+"}");
         return sb.toString();
     }

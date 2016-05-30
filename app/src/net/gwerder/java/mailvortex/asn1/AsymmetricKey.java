@@ -102,12 +102,7 @@ public class AsymmetricKey extends Key {
         sb.append("{"+CRLF);
         if(publicKey!=null && (dt==DumpType.ALL || dt==DumpType.PUBLIC_ONLY || dt==DumpType.PUBLIC_COMMENTED || dt==DumpType.PRIVATE_COMMENTED)) {
             sb.append( dumpKeyTypeValueNotation( prefix ) );
-            String s;
-            try {
-                s = toHex( publicKey );
-            } catch (IllegalStateException ise) {
-                s = toBitString( publicKey );
-            }
+            String s = toHex( publicKey );
             sb.append( prefix + "  " );
             if(dt==DumpType.PUBLIC_COMMENTED) sb.append( "-- " );
             sb.append( "publicKey " + s );
@@ -117,12 +112,7 @@ public class AsymmetricKey extends Key {
             sb.append( CRLF );
         }
         if(privateKey!=null && (dt==DumpType.PRIVATE_COMMENTED || dt==DumpType.PRIVATE_ONLY || dt==DumpType.ALL)) {
-            String s;
-            try{
-                s=toHex(privateKey);
-            } catch(IllegalStateException ise) {
-                s=toBitString(privateKey);
-            }
+            String s=toHex(privateKey);
             sb.append(prefix+"  ");
             if(dt==DumpType.PRIVATE_COMMENTED) {
                 sb.append("-- ");

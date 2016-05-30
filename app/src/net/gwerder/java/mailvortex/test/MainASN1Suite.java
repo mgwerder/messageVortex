@@ -8,7 +8,6 @@ import junit.framework.JUnit4TestAdapter;
 import junit.framework.TestSuite;
 import net.gwerder.java.mailvortex.test.asn1.FuzzerTest;
 import net.gwerder.java.mailvortex.test.asn1.MessageTest;
-import net.gwerder.java.mailvortex.test.imap.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 

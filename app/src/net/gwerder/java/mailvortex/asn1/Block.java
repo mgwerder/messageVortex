@@ -68,8 +68,9 @@ public abstract class Block {
 
     public static String toBitString(ASN1BitString bs) {
         if(bs==null) return "''B";
-        String ret="'";
         int i=bs.getBytes().length*8-bs.getPadBits();
+        if(i%8==0) return toHex(bs.getOctets());
+        String ret="'";
         int j=0;
         byte k=0;
         byte[] b=bs.getBytes();
@@ -83,11 +84,6 @@ public abstract class Block {
             i--;
         }
         return ret+"'B";
-    }
-
-    public static String toBitString(byte[] bs) {
-        if(bs==null || bs.length==0) return "''B";
-        return toBitString(new DLBitString(bs,1));
     }
 
     protected void parse(byte[] b) throws IOException,ParseException,NoSuchAlgorithmException {
