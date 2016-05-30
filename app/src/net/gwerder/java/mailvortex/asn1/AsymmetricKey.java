@@ -47,7 +47,9 @@ public class AsymmetricKey extends Key {
     }
 
     public AsymmetricKey(Algorithm alg, int keysize) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {
-        if(alg==null) throw new NoSuchAlgorithmException( "Algorithm null is not encodable by the system" );
+        if(alg==null) {
+            throw new NoSuchAlgorithmException( "Algorithm null is not encodable by the system" );
+        }
         Map<String,Integer> pm= new HashMap<String,Integer>();
         pm.put(""+Parameter.KEYSIZE.getId()+"_0",keysize);
         createKey(alg,pm);
@@ -60,10 +62,12 @@ public class AsymmetricKey extends Key {
 
     private void createKey(Algorithm alg, Map<String,Integer> params) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException  {
         this.keytype=alg;
-        if(params!=null) this.parameters.putAll(params);
+        if(params!=null) {
+            this.parameters.putAll(params);
+        }
 
         // create key pair
-        if(alg.toString().equals("rsa") || alg.toString().equals("dsa")) {
+        if("rsa".equals(alg.toString()) || "dsa".equals(alg.toString())) {
             KeyPairGenerator keyGen = KeyPairGenerator.getInstance(alg.toString().toUpperCase());
             keyGen.initialize(parameters.get("" + Parameter.KEYSIZE.getId() + "_0"));
             KeyPair pair = keyGen.genKeyPair();
@@ -76,7 +80,9 @@ public class AsymmetricKey extends Key {
             KeyPair pair = g.generateKeyPair();
             publicKey = pair.getPublic().getEncoded();
             privateKey = pair.getPrivate().getEncoded();
-        } else throw new NoSuchAlgorithmException("Encountered unknown parameter \""+alg.toString()+"\"");
+        } else {
+            throw new NoSuchAlgorithmException("Encountered unknown parameter \""+alg.toString()+"\"");
+        }
 
     }
 
@@ -104,7 +110,9 @@ public class AsymmetricKey extends Key {
             sb.append( dumpKeyTypeValueNotation( prefix ) );
             String s = toHex( publicKey );
             sb.append( prefix + "  " );
-            if(dt==DumpType.PUBLIC_COMMENTED) sb.append( "-- " );
+            if(dt==DumpType.PUBLIC_COMMENTED) {
+                sb.append( "-- " );
+            }
             sb.append( "publicKey " + s );
             if (dt == DumpType.ALL) {
                 sb.append( "," );
@@ -124,11 +132,15 @@ public class AsymmetricKey extends Key {
     }
 
     public ASN1Object toASN1Object() throws IOException{
-        if(publicKey==null) throw new IOException("publicKey may not be null when dumping");
+        if(publicKey==null) {
+            throw new IOException("publicKey may not be null when dumping");
+        }
         ASN1EncodableVector v =new ASN1EncodableVector();
         v.add(encodeKeyParameter());
         v.add( new DEROctetString(publicKey) );
-        if(privateKey!=null) v.add(new DERTaggedObject( true,0,new DEROctetString( privateKey )));
+        if(privateKey!=null) {
+            v.add(new DERTaggedObject( true,0,new DEROctetString( privateKey )));
+        }
         return new DERSequence( v );
     }
 
@@ -199,7 +211,9 @@ public class AsymmetricKey extends Key {
 
     public byte[] setPublicKey(byte[] b) throws InvalidKeyException {
         byte[] old=publicKey;
-        if( b!= null && b.length!=publicKey.length) throw new InvalidKeyException( "KeySizeMissmatch in key detected" );
+        if( b!= null && b.length!=publicKey.length) {
+            throw new InvalidKeyException( "KeySizeMissmatch in key detected" );
+        }
         publicKey=b;
         return old;
     }
@@ -208,7 +222,9 @@ public class AsymmetricKey extends Key {
 
     public byte[] setPrivateKey(byte[] b) throws InvalidKeyException {
         byte[] old=privateKey;
-        if( b!= null && b.length!=privateKey.length) throw new InvalidKeyException( "KeySizeMissmatch in key detected" );
+        if( b!= null && b.length!=privateKey.length) {
+            throw new InvalidKeyException( "KeySizeMissmatch in key detected" );
+        }
         privateKey=b;
         return old;
     }
