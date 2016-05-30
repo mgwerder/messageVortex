@@ -209,7 +209,7 @@
   <target name="test-gui" depends="compile"  description="run application">
     <java dir="${build.home}/classes/" classname="junit.swingui.TestRunner" fork="yes" classpathref="test.classpath">
 		<!--<jvmarg line="-Djavax.net.ssl.keyStore=keystore.jks -Djavax.net.ssl.keyStorePassword=changeme"/> -->
-      <arg line="${app.package}.test.MainSuite"/>
+        <arg line="${app.package}.test.MainCoreSuite"/>
     </java>
   </target>
 
