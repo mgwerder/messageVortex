@@ -53,5 +53,17 @@ public class BlockTest {
         assertTrue("toBitString('0101010'B) is not '0101010'B","'0101010'B".equals(Block.toBitString(new DERBitString(new byte[] { 85 },1))));
     }
 
+    @Test
+    /***
+     * Testing null behaveour of toBitString()
+     */
+    public void parameterGetters() {
+        assertTrue("getById(10000)!=KEYSIZE",Block.Parameter.getById(10000)==Block.Parameter.KEYSIZE);
+        assertTrue("getById(10001)!=CURVETYPE",Block.Parameter.getById(10001)==Block.Parameter.CURVETYPE);
+        assertTrue("getById(0)!=null",Block.Parameter.getById(0)==null);
+        assertTrue("getByString(10000)!=KEYSIZE",Block.Parameter.getByString("keySize")==Block.Parameter.KEYSIZE);
+        assertTrue("getByString(10001)!=CURVETYPE",Block.Parameter.getByString("curveType")==Block.Parameter.CURVETYPE);
+        assertTrue("getByString(curvetype)!=null",Block.Parameter.getByString("curvetype")==null);
+    }
 
 }

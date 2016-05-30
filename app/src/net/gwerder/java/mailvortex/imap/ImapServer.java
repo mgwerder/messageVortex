@@ -61,7 +61,7 @@ public class ImapServer extends StoppableThread  {
           throw new IOException("Error initializing security context for connection",gse);
         }
         SSLContext.setDefault(context);
-        String[] arr=((SSLServerSocketFactory) context.getServerSocketFactory().getDefault()).getSupportedCipherSuites(); 
+        String[] arr=((SSLServerSocketFactory)SSLServerSocketFactory.getDefault()).getSupportedCipherSuites();
         LOGGER.log(Level.FINE,"Detecting supported cipher suites");
         for(int i=0; i<arr.length; i++) {
             boolean supported=true;

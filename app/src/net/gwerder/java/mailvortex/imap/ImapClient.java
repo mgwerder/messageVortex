@@ -83,7 +83,7 @@ public class ImapClient implements Runnable {
         trustContext.init(null, trustManagers, null);
         SSLContext.setDefault(trustContext);
         LOGGER.log(Level.INFO,"Getting socket");
-        SSLSocket sslSocket = (SSLSocket)(((SSLSocketFactory)(trustContext.getSocketFactory().getDefault())).createSocket(sock,sock.getInetAddress().getHostAddress(),sock.getPort(), false));    
+        SSLSocket sslSocket = (SSLSocket)(((SSLSocketFactory)(SSLSocketFactory.getDefault())).createSocket(sock,sock.getInetAddress().getHostAddress(),sock.getPort(), false));
         sslSocket.setUseClientMode(true);    
         LOGGER.log(Level.INFO,"Starting client side SSL");
         sslSocket.setSoTimeout(sock.getSoTimeout());
