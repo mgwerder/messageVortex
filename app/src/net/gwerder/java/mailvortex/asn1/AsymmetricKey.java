@@ -217,7 +217,7 @@ public class AsymmetricKey extends Key {
 
     public byte[] setPublicKey(byte[] b) throws InvalidKeyException {
         byte[] old=publicKey;
-        if( b!= null && b.length!=publicKey.length) {
+        if( b==null ) {
             throw new InvalidKeyException( "KeySizeMissmatch in key detected" );
         }
         publicKey=b;
@@ -228,7 +228,7 @@ public class AsymmetricKey extends Key {
 
     public byte[] setPrivateKey(byte[] b) throws InvalidKeyException {
         byte[] old=privateKey;
-        if( b!= null && b.length!=privateKey.length) {
+        if( b==null) {
             throw new InvalidKeyException( "KeySizeMissmatch in key detected" );
         }
         privateKey=b;

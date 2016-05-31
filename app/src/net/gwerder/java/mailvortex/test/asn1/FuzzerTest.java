@@ -165,7 +165,7 @@ public class FuzzerTest {
             for(int size:new int[] {1024,2048,4096,8192}) {
                 try {
                     System.out.print("Testing "+alg+"/"+size+" ("+ksDisc/size+")");
-                    for (int i = 0; i < 16384/size; i++) {
+                    for (int i = 0; i < ksDisc/size; i++) {
                         System.out.print(".");
                         AsymmetricKey s = new AsymmetricKey(alg, Padding.getDefault(),size);
                         byte[] b1=new byte[sr.nextInt(Math.min(s.getPadding().getMaxSize( size ),1024))];

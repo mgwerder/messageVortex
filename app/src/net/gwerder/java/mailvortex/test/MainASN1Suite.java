@@ -6,10 +6,7 @@ package net.gwerder.java.mailvortex.test;
 
 import junit.framework.JUnit4TestAdapter;
 import junit.framework.TestSuite;
-import net.gwerder.java.mailvortex.test.asn1.BlockTest;
-import net.gwerder.java.mailvortex.test.asn1.FuzzerTest;
-import net.gwerder.java.mailvortex.test.asn1.MessageTest;
-import net.gwerder.java.mailvortex.test.asn1.IdentityTest;
+import net.gwerder.java.mailvortex.test.asn1.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -18,6 +15,8 @@ import org.junit.runners.Suite;
         FuzzerTest.class,
         MessageTest.class,
         BlockTest.class,
+        AsymmetricKeyTest.class,
+        IdentityStoreTest.class,
         IdentityTest.class
 })
 
@@ -28,6 +27,8 @@ public class MainASN1Suite {
         s.addTest(new JUnit4TestAdapter(FuzzerTest.class));
         s.addTest(new JUnit4TestAdapter(MessageTest.class));
         s.addTest(new JUnit4TestAdapter(BlockTest.class));
+        s.addTest(new JUnit4TestAdapter(AsymmetricKeyTest.class));
+        s.addTest(new JUnit4TestAdapter(IdentityStoreTest.class));
         s.addTest(new JUnit4TestAdapter(IdentityTest.class));
         return s;
     }
