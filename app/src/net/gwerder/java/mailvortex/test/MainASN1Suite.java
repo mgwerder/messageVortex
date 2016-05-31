@@ -16,7 +16,8 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
         FuzzerTest.class,
         MessageTest.class,
-        BlockTest.class
+        BlockTest.class,
+        IdentityTest.class
 })
 
 public class MainASN1Suite {
@@ -26,8 +27,8 @@ public class MainASN1Suite {
         s.addTest(new JUnit4TestAdapter(FuzzerTest.class));
         s.addTest(new JUnit4TestAdapter(MessageTest.class));
         s.addTest(new JUnit4TestAdapter(BlockTest.class));
+        s.addTest(new JUnit4TestAdapter(IdentityTest.class));
         return s;
     }
-    // the class remains empty,
-    // used only as a holder for the above annotations
+
 }
