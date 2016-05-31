@@ -62,7 +62,7 @@ public class Config {
      *
      * @param id key which should be set
      * @param value Vlue to be set in key
-     * @returns old value before setting to new value
+     * @return old value before setting to new value
      * @throws NullPointerException if key does not exist in configurationData
      * @throws ClassCastException	if key is not of type boolean
      ***/
@@ -83,7 +83,7 @@ public class Config {
      * Gets a boolean value from the application config.
      *
      * @param id 					key which should be set
-     * @returns 					current value of the specified key
+     * @return 				  	    current value of the specified key
      * @throws NullPointerException if key does not exist in configurationData
      * @throws ClassCastException	if key is not of type boolean
      ***/

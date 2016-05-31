@@ -40,7 +40,12 @@ public class Identity extends Block {
 
     public Identity(byte[] b,AsymmetricKey dk) throws ParseException,IOException,NoSuchAlgorithmException  {
         identityDecryptionKey=dk;
-        ASN1Sequence s=ASN1Sequence.getInstance( b );
+        ASN1Encodable s;
+        if(dk!=null) {
+            s=new DEROctetString(b);
+        } else {
+            s=ASN1Sequence.getInstance(b);
+        }
         parse(s);
     }
 
@@ -51,32 +56,29 @@ public class Identity extends Block {
 
     @Override
     protected void parse(ASN1Encodable to) throws ParseException,IOException,NoSuchAlgorithmException {
-        ASN1Sequence s1 = ASN1Sequence.getInstance(to);
+        ASN1Sequence s1;
+        if( identityDecryptionKey!=null ) {
+            // we got an encrypted string ... lets unpack it
+            try {
+                s1 = ASN1Sequence.getInstance( identityDecryptionKey.decrypt(((ASN1OctetString)(to)).getOctets()));
+            } catch(BadPaddingException e) {
+                throw new IOException("Exception while decrypting content",e);
+            } catch(InvalidKeyException e) {
+                throw new IOException("Exception while decrypting content",e);
+            } catch(InvalidKeySpecException e) {
+                throw new IOException("Exception while decrypting content",e);
+            } catch(IllegalBlockSizeException e) {
+                throw new IOException("Exception while decrypting content",e);
+            } catch(NoSuchPaddingException e) {
+                throw new IOException("Exception while decrypting content",e);
+            } catch(NoSuchProviderException e) {
+                throw new IOException("Exception while decrypting content",e);
+            }
+        } else {
+            s1=ASN1Sequence.getInstance(to);
+        }
         int i=0;
         ASN1Encodable s3=s1.getObjectAt(i++);
-            if( ASN1String.class.isAssignableFrom( s3.getClass() )) {
-                // we got an encrypted string ... lets unpack it
-                try {
-                    s1 = (ASN1Sequence.getInstance( (new EncryptedString( (ASN1String) s3, identityDecryptionKey )).getDecryptedBytes() ));
-                } catch(BadPaddingException e) {
-                    throw new IOException("Exception while decrypting content",e);
-                } catch(InvalidKeyException e) {
-                    throw new IOException("Exception while decrypting content",e);
-                } catch(InvalidAlgorithmParameterException e) {
-                    throw new IOException("Exception while decrypting content",e);
-                } catch(InvalidKeySpecException e) {
-                    throw new IOException("Exception while decrypting content",e);
-                } catch(IllegalBlockSizeException e) {
-                    throw new IOException("Exception while decrypting content",e);
-                } catch(NoSuchPaddingException e) {
-                    throw new IOException("Exception while decrypting content",e);
-                } catch(NoSuchProviderException e) {
-                    throw new IOException("Exception while decrypting content",e);
-                } catch(ParseException e) {
-                    throw new IOException("Exception while decrypting content",e);
-                }
-            s3=s1.getObjectAt(i-1);
-        }
         identityKey= new AsymmetricKey(s3);
         serial     = ASN1Integer.getInstance( s1.getObjectAt(i++)).getValue().longValue();
         maxReplays = ASN1Integer.getInstance( s1.getObjectAt(i++)).getValue().intValue();

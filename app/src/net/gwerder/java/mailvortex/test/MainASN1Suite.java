@@ -9,6 +9,7 @@ import junit.framework.TestSuite;
 import net.gwerder.java.mailvortex.test.asn1.BlockTest;
 import net.gwerder.java.mailvortex.test.asn1.FuzzerTest;
 import net.gwerder.java.mailvortex.test.asn1.MessageTest;
+import net.gwerder.java.mailvortex.test.asn1.IdentityTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
