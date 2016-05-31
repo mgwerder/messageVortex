@@ -54,9 +54,9 @@ public class ImapCommandTest {
             LOGGER.log(Level.INFO,"************************************************************************");
             ImapServer is=new ImapServer(0,false);
             ImapClient ic=new ImapClient("localhost",is.getPort(),false);
-            assertTrue("test default Timeout",ImapClient.getDefaultTimeout()==ic.setDefaultTimeout(123));
-            assertTrue("test default Timeout",ic.getDefaultTimeout()==123);
-            ic.setDefaultTimeout(3600*1000);
+            assertTrue("test default Timeout",ImapClient.getDefaultTimeout()==ImapClient.setDefaultTimeout(123));
+            assertTrue("test default Timeout",ImapClient.getDefaultTimeout()==123);
+            ImapClient.setDefaultTimeout(3600*1000);
             assertTrue("test  Timeout set",ic.getTimeout()==ic.setTimeout(123));
             assertTrue("test  Timeout get",ic.getTimeout()==123);
             ic.setTimeout(3600*1000);

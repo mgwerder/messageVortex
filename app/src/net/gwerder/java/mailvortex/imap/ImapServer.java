@@ -67,7 +67,7 @@ public class ImapServer extends StoppableThread  {
             boolean supported=true;
             serverSocket=null;
             try{ 
-                serverSocket = context.getServerSocketFactory().getDefault().createServerSocket(0);
+                serverSocket = SSLServerSocketFactory.getDefault().createServerSocket(0);
                 ((SSLServerSocket)serverSocket).setEnabledCipherSuites(new String[] {arr[i]});
                 SocketDeblocker t=new SocketDeblocker(serverSocket.getLocalPort(),30);
                 t.start();
@@ -118,7 +118,7 @@ public class ImapServer extends StoppableThread  {
         // wakeup runner if necesary
         try{
             if(encrypted) {
-                (context.getSocketFactory().getDefault().createSocket("localhost",this.serverSocket.getLocalPort())).close();
+                (SSLSocketFactory.getDefault().createSocket("localhost",this.serverSocket.getLocalPort())).close();
             } else {
                 (SocketFactory.getDefault().createSocket("localhost",this.serverSocket.getLocalPort())).close();
             }    

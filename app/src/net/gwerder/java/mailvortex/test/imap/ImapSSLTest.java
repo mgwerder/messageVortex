@@ -50,13 +50,13 @@ public class ImapSSLTest {
             SSLContext.setDefault(context);
             
             Set<String> suppCiphers=new HashSet<String>();
-            String[] arr=((SSLServerSocketFactory) context.getServerSocketFactory().getDefault()).getSupportedCipherSuites(); 
+            String[] arr=((SSLServerSocketFactory) SSLServerSocketFactory.getDefault()).getSupportedCipherSuites();
             LOGGER.log(Level.FINE,"Detecting supported cipher suites");
             for(int i=0; i<arr.length; i++) {
                 boolean supported=true;
                 ServerSocket serverSocket=null;
                 try{ 
-                    serverSocket = context.getServerSocketFactory().getDefault().createServerSocket(0);
+                    serverSocket = SSLServerSocketFactory.getDefault().createServerSocket(0);
                     ((SSLServerSocket)serverSocket).setEnabledCipherSuites(new String[] {arr[i]});
                     SocketDeblocker t=new SocketDeblocker(serverSocket.getLocalPort(),30);
                     t.start();
@@ -156,7 +156,7 @@ public class ImapSSLTest {
             LOGGER.log(Level.INFO,"************************************************************************");
             ImapServer is=new ImapServer(0,true);
             ImapClient ic=new ImapClient("localhost",is.getPort(),true);
-            ic.setDefaultTimeout(300);
+            ImapClient.setDefaultTimeout(300);
             String[] s=ic.sendCommand("a1 capability\r\n");
             for(String v:s) {
                 LOGGER.log(Level.INFO,"IMAP<- C: "+ImapLine.commandEncoder(v));
