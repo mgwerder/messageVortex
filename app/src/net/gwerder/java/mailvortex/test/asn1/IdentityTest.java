@@ -34,7 +34,7 @@ public class IdentityTest {
      */
     public void testingIdentityDump1() {
         try {
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < 10; i++) {
                 Identity s = new Identity();
                 assertTrue( "Identity may not be null", s != null );
                 String s1=s.dumpValueNotation( "" );
@@ -46,15 +46,16 @@ public class IdentityTest {
                 assertTrue( "Value Notations should be equal when reencoding", s1.equals( s2 ) );
                 // redoing it encrypted
                 Identity i3 = new Identity();
-                AsymmetricKey ak=new AsymmetricKey(Key.Algorithm.RSA,1024);
+                AsymmetricKey ak=new AsymmetricKey(Key.Algorithm.SECP521R1,0);
                 assertTrue( "Identity may not be null", i3 != null );
                 String s3=i3.dumpValueNotation( "" );
                 byte[] b3 = i3.toBytes();
                 assertTrue( "Byte representation may not be null", b3 != null );
-                byte[] b4 = (new Identity( ak.encrypt(b3),ak )).toBytes();
+                Identity i4=(new Identity( ak.encrypt(b3,true),ak ));
+                byte[] b4 = i4.toBytes();
                 assertTrue( "Byte arrays should be equal when reencoding", Arrays.equals( b3, b4 ) );
-                String s4=(new Identity(b4,ak)).dumpValueNotation( "" );
-                assertTrue( "Value Notations should be equal when reencoding", s1.equals( s4 ) );
+                String s4= i4.dumpValueNotation( "" );
+                assertTrue( "Value Notations should be equal when reencoding", s3.equals( s4 ) );
             }
         } catch (Exception e) {
             LOGGER.log( Level.WARNING,"Unexpected exception",e);

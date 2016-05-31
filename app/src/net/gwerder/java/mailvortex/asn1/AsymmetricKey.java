@@ -34,6 +34,8 @@ public class AsymmetricKey extends Key {
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
     }
 
+    private   String  mode       = "none";
+    private   Padding padding    = Padding.OAEP_SHA384_MGF1;
     protected byte[] publicKey = null;
     protected byte[] privateKey = null;
 
@@ -201,7 +203,7 @@ public class AsymmetricKey extends Key {
         if(keytype.getAlgorithm().startsWith("sec")) {
             return Cipher.getInstance( "ECIES","BC" );
         } else {
-            return Cipher.getInstance(keytype.getAlgorithm()+"/ECB/PKCS1Padding");
+            return Cipher.getInstance(keytype.getAlgorithm()+"/"+mode+"/"+padding.getPadding(),"BC");
         }
     }
 
@@ -230,5 +232,7 @@ public class AsymmetricKey extends Key {
     }
 
     public byte[] getPrivateKey() {return privateKey; }
+
+    public Padding getPadding() {return padding; }
 
 }

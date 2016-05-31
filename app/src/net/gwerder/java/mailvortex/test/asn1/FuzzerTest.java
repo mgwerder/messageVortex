@@ -166,7 +166,7 @@ public class FuzzerTest {
                     for (int i = 0; i < ASYMMETRIC_FUZZER_CYCLES; i++) {
                         System.out.print(".");
                         AsymmetricKey s = new AsymmetricKey(alg,size);
-                        byte[] b1=new byte[sr.nextInt(size/8-11)];
+                        byte[] b1=new byte[sr.nextInt(Math.min(s.getPadding().getMaxSize( size ),1024))];
                         sr.nextBytes( b1 );
                         byte[] b2=s.decrypt( s.encrypt(b1) );
                         assertTrue( "error in encrypt/decrypt cycle with "+alg+" (same object)",Arrays.equals( b1,b2));

@@ -29,7 +29,7 @@ public class Identity extends Block {
     private String padding=null;
 
     public Identity() throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException,IOException,NoSuchPaddingException,InvalidKeyException,IllegalBlockSizeException,BadPaddingException,NoSuchProviderException,InvalidKeySpecException {
-        identityKey=new AsymmetricKey(Algorithm.RSA,1024);
+        identityKey=new AsymmetricKey(Algorithm.RSA,2048);
         serial = (long)(Math.random()*4294967295L);
         maxReplays=1;
         valid=new UsagePeriod(3600);
