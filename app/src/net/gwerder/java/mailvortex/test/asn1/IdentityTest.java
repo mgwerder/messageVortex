@@ -1,10 +1,10 @@
 package net.gwerder.java.mailvortex.test.asn1;
 
 import net.gwerder.java.mailvortex.MailvortexLogger;
-import net.gwerder.java.mailvortex.asn1.Identity;
-import net.gwerder.java.mailvortex.asn1.Message;
 import net.gwerder.java.mailvortex.asn1.AsymmetricKey;
-import net.gwerder.java.mailvortex.asn1.Key;
+import net.gwerder.java.mailvortex.asn1.Identity;
+import net.gwerder.java.mailvortex.asn1.encryption.Algorithm;
+import net.gwerder.java.mailvortex.asn1.encryption.Padding;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -46,7 +46,7 @@ public class IdentityTest {
                 assertTrue( "Value Notations should be equal when reencoding", s1.equals( s2 ) );
                 // redoing it encrypted
                 Identity i3 = new Identity();
-                AsymmetricKey ak=new AsymmetricKey(Key.Algorithm.SECP521R1,0);
+                AsymmetricKey ak=new AsymmetricKey( Algorithm.SECP521R1, Padding.getDefault(),0);
                 assertTrue( "Identity may not be null", i3 != null );
                 String s3=i3.dumpValueNotation( "" );
                 byte[] b3 = i3.toBytes();

@@ -1,5 +1,8 @@
 package net.gwerder.java.mailvortex.asn1;
 
+import net.gwerder.java.mailvortex.asn1.encryption.Algorithm;
+import net.gwerder.java.mailvortex.asn1.encryption.Padding;
+import net.gwerder.java.mailvortex.asn1.encryption.Parameter;
 import org.bouncycastle.asn1.*;
 import org.bouncycastle.jce.ECNamedCurveTable;
 import org.bouncycastle.jce.spec.ECParameterSpec;
@@ -35,7 +38,7 @@ public class AsymmetricKey extends Key {
     }
 
     private   String  mode       = "none";
-    private   Padding padding    = Padding.OAEP_SHA384_MGF1;
+    private Padding padding    = Padding.OAEP_SHA384_MGF1;
     protected byte[] publicKey = null;
     protected byte[] privateKey = null;
 
@@ -48,12 +51,13 @@ public class AsymmetricKey extends Key {
         parse(to);
     }
 
-    public AsymmetricKey(Algorithm alg, int keysize) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {
+    public AsymmetricKey(Algorithm alg, Padding p, int keysize) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {
         if(alg==null) {
             throw new NoSuchAlgorithmException( "Algorithm null is not encodable by the system" );
         }
         Map<String,Integer> pm= new HashMap<String,Integer>();
-        pm.put(""+Parameter.KEYSIZE.getId()+"_0",keysize);
+        pm.put(""+ Parameter.KEYSIZE.getId()+"_0",keysize);
+        padding=p;
         createKey(alg,pm);
     }
 

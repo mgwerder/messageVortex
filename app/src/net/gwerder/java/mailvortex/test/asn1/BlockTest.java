@@ -2,6 +2,7 @@ package net.gwerder.java.mailvortex.test.asn1;
 
 import net.gwerder.java.mailvortex.MailvortexLogger;
 import net.gwerder.java.mailvortex.asn1.Block;
+import net.gwerder.java.mailvortex.asn1.encryption.Parameter;
 import org.bouncycastle.asn1.DERBitString;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -58,12 +59,12 @@ public class BlockTest {
      * Testing null behaveour of toBitString()
      */
     public void parameterGetters() {
-        assertTrue("getById(10000)!=KEYSIZE",Block.Parameter.getById(10000)==Block.Parameter.KEYSIZE);
-        assertTrue("getById(10001)!=CURVETYPE",Block.Parameter.getById(10001)==Block.Parameter.CURVETYPE);
-        assertTrue("getById(0)!=null",Block.Parameter.getById(0)==null);
-        assertTrue("getByString(10000)!=KEYSIZE",Block.Parameter.getByString("keySize")==Block.Parameter.KEYSIZE);
-        assertTrue("getByString(10001)!=CURVETYPE",Block.Parameter.getByString("curveType")==Block.Parameter.CURVETYPE);
-        assertTrue("getByString(curvetype)!=null",Block.Parameter.getByString("curvetype")==null);
+        assertTrue("getById(10000)!=KEYSIZE", Parameter.getById(10000)==Parameter.KEYSIZE);
+        assertTrue("getById(10001)!=CURVETYPE",Parameter.getById(10001)==Parameter.CURVETYPE);
+        assertTrue("getById(0)!=null",Parameter.getById(0)==null);
+        assertTrue("getByString(10000)!=KEYSIZE",Parameter.getByString("keySize")==Parameter.KEYSIZE);
+        assertTrue("getByString(10001)!=CURVETYPE",Parameter.getByString("curveType")==Parameter.CURVETYPE);
+        assertTrue("getByString(curvetype)!=null",Parameter.getByString("curvetype")==null);
     }
 
 }

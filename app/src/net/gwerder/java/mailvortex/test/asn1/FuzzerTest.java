@@ -2,6 +2,9 @@ package net.gwerder.java.mailvortex.test.asn1;
 
 import net.gwerder.java.mailvortex.MailvortexLogger;
 import net.gwerder.java.mailvortex.asn1.*;
+import net.gwerder.java.mailvortex.asn1.encryption.Algorithm;
+import net.gwerder.java.mailvortex.asn1.encryption.AlgorithmType;
+import net.gwerder.java.mailvortex.asn1.encryption.Padding;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -22,8 +25,7 @@ import static org.junit.Assert.fail;
 @RunWith(JUnit4.class)
 public class FuzzerTest {
 
-    public static final int ASYMMETRIC_FUZZER_CYCLES=10;
-    public static final int SYMMETRIC_FUZZER_CYCLES =1000;
+    private int ksDisc=16384;
 
     public static final int BLOCK_FUZZER_CYCLES =1000;
 
@@ -137,10 +139,10 @@ public class FuzzerTest {
     @Test
     public void fuzzingSymmetricEncryption() {
         SecureRandom sr=new SecureRandom(  );
-        for(Key.Algorithm alg: Key.Algorithm.getAlgorithms( Block.AlgorithmType.SYMMETRIC )) {
+        for(Algorithm alg: Algorithm.getAlgorithms( AlgorithmType.SYMMETRIC )) {
             try {
-                System.out.println("Testing "+alg+" ("+SYMMETRIC_FUZZER_CYCLES+")");
-                for (int i = 0; i < SYMMETRIC_FUZZER_CYCLES; i++) {
+                System.out.println("Testing "+alg+" ("+ksDisc+")");
+                for (int i = 0; i < ksDisc; i++) {
                     SymmetricKey s = new SymmetricKey( alg );
                     byte[] b1=new byte[sr.nextInt(64*1024)];
                     sr.nextBytes( b1 );
@@ -159,13 +161,13 @@ public class FuzzerTest {
     @Test
     public void fuzzingAsymmetricEncryption() {
         SecureRandom sr=new SecureRandom(  );
-        for(Key.Algorithm alg: Key.Algorithm.getAlgorithms( Block.AlgorithmType.ASYMMETRIC )) {
-            for(int size:new int[] {1024,2048}) {
+        for(Algorithm alg: Algorithm.getAlgorithms( AlgorithmType.ASYMMETRIC )) {
+            for(int size:new int[] {1024,2048,4096,8192}) {
                 try {
-                    System.out.print("Testing "+alg+"/"+size+" ("+ASYMMETRIC_FUZZER_CYCLES+")");
-                    for (int i = 0; i < ASYMMETRIC_FUZZER_CYCLES; i++) {
+                    System.out.print("Testing "+alg+"/"+size+" ("+ksDisc/size+")");
+                    for (int i = 0; i < 16384/size; i++) {
                         System.out.print(".");
-                        AsymmetricKey s = new AsymmetricKey(alg,size);
+                        AsymmetricKey s = new AsymmetricKey(alg, Padding.getDefault(),size);
                         byte[] b1=new byte[sr.nextInt(Math.min(s.getPadding().getMaxSize( size ),1024))];
                         sr.nextBytes( b1 );
                         byte[] b2=s.decrypt( s.encrypt(b1) );
@@ -184,10 +186,10 @@ public class FuzzerTest {
 
     @Test
     public void fuzzingSymmetricKey() {
-        for(Key.Algorithm alg: Key.Algorithm.getAlgorithms( Block.AlgorithmType.SYMMETRIC )) {
+        for(Algorithm alg: Algorithm.getAlgorithms( AlgorithmType.SYMMETRIC )) {
             try {
-                System.out.println("Testing "+alg+" ("+SYMMETRIC_FUZZER_CYCLES+")");
-                for (int i = 0; i < SYMMETRIC_FUZZER_CYCLES; i++) {
+                System.out.println("Testing "+alg+" ("+ksDisc+")");
+                for (int i = 0; i < ksDisc; i++) {
                     SymmetricKey s = new SymmetricKey( alg );
                     assertTrue( "Symmetric may not be null",s!=null);
                     byte[] b1=s.toBytes();
@@ -205,8 +207,8 @@ public class FuzzerTest {
     @Test
     public void fuzzingIdentityStore() {
         try {
-            System.out.println("Testing IdentityStore ("+ASYMMETRIC_FUZZER_CYCLES+")");
-            for (int i = 0; i < ASYMMETRIC_FUZZER_CYCLES; i++) {
+            System.out.println("Testing IdentityStore ("+ksDisc/8192+")");
+            for (int i = 0; i < ksDisc/8192; i++) {
                 IdentityStore.resetDemo();
                 IdentityStore s = IdentityStore.getIdentityStoreDemo();
                 assertTrue( "IdentityStore may not be null",s!=null);
@@ -228,13 +230,13 @@ public class FuzzerTest {
 
     @Test
     public void fuzzingAsymmetricKey() {
-        for(Key.Algorithm alg: Key.Algorithm.getAlgorithms( Block.AlgorithmType.ASYMMETRIC )) {
+        for(Algorithm alg: Algorithm.getAlgorithms( AlgorithmType.ASYMMETRIC )) {
             for (int ks : new int[]{512, 1024, 2048, 4096 }) {
 //                if(alg!=Key.Algorithm.DSA || ks<2048) {
-                    System.out.println("Testing "+alg+"/"+ks+" ("+ASYMMETRIC_FUZZER_CYCLES+")");
+                    System.out.println("Testing "+alg+"/"+ks+" ("+(ksDisc/ks)+")");
                     try {
-                        for (int i = 0; i < ASYMMETRIC_FUZZER_CYCLES; i++) {
-                            AsymmetricKey s = new AsymmetricKey( alg, ks );
+                        for (int i = 0; i < ksDisc/ks; i++) {
+                            AsymmetricKey s = new AsymmetricKey( alg, Padding.getDefault(),ks );
                             assertTrue( "Asymmetric may not be null", s != null );
                             byte[] b1 = s.toBytes();
                             s.dumpValueNotation( "" );

@@ -16,44 +16,6 @@ public abstract class Block {
 
     protected static final String CRLF="\r\n";
 
-    public enum AlgorithmType {
-        SYMMETRIC,
-        ASYMMETRIC,
-        HASHING
-    }
-
-    public enum Parameter {
-        KEYSIZE   (10000,"keySize"),
-        CURVETYPE (10001,"curveType");
-
-        int id=-1;
-        String txt=null;
-
-        Parameter(int id,String txt) {
-            this.id=id;
-            this.txt=txt;
-        }
-
-        public static Parameter getById(int id) {
-            for(Parameter e : values()) {
-                if(e.id==id) return e;
-            }
-            return null;
-        }
-
-        public static Parameter getByString(String s) {
-            for(Parameter e : values()) {
-                if(e.toString().equals(s)) return e;
-            }
-            return null;
-        }
-
-        public int getId() {return id;}
-
-        public String toString() {
-            return txt;
-        }
-    }
 
     public static String toHex(byte[] bytes) {
         if(bytes==null) {

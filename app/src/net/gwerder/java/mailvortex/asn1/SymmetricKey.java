@@ -1,6 +1,7 @@
 package net.gwerder.java.mailvortex.asn1;
 
 
+import net.gwerder.java.mailvortex.asn1.encryption.Algorithm;
 import org.bouncycastle.asn1.*;
 
 import javax.crypto.BadPaddingException;
