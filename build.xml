@@ -13,8 +13,8 @@
   <property name="doc.home"      value="${basedir}/doc"/>
   <property name="src.home"      value="${basedir}/app/src"/>
   <property name="rtlib.home"    value="${basedir}/app/rtlib"/>
-  <property name="app.source"    value="1.6"/>
-  <property name="app.target"    value="1.6"/>
+  <property name="app.source"    value="1.7"/>
+  <property name="app.target"    value="1.7"/>
 
   <property name="compile.debug"       value="true"/>
   <property name="compile.deprecation" value="false"/>
