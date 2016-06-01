@@ -1,8 +1,6 @@
 package net.gwerder.java.mailvortex.asn1;
 
-import net.gwerder.java.mailvortex.asn1.encryption.Algorithm;
-import net.gwerder.java.mailvortex.asn1.encryption.Padding;
-import net.gwerder.java.mailvortex.asn1.encryption.Parameter;
+import net.gwerder.java.mailvortex.asn1.encryption.*;
 import org.bouncycastle.asn1.*;
 import org.bouncycastle.jce.ECNamedCurveTable;
 import org.bouncycastle.jce.spec.ECParameterSpec;
@@ -37,10 +35,10 @@ public class AsymmetricKey extends Key {
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
     }
 
-    private   String  mode       = "none";
-    private Padding padding    = Padding.OAEP_SHA384_MGF1;
-    protected byte[] publicKey = null;
-    protected byte[] privateKey = null;
+    private   Mode    mode       = Mode.getDefault();
+    private   Padding padding    = Padding.getDefault(AlgorithmType.ASYMMETRIC);
+    protected byte[]  publicKey  = null;
+    protected byte[]  privateKey = null;
 
 
     public AsymmetricKey(byte[] b) {
@@ -49,6 +47,10 @@ public class AsymmetricKey extends Key {
 
     public AsymmetricKey(ASN1Encodable to) {
         parse(to);
+    }
+
+    public AsymmetricKey() throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException  {
+        this(Algorithm.getDefault( AlgorithmType.ASYMMETRIC ), Padding.getDefault(AlgorithmType.ASYMMETRIC), Algorithm.getDefault(AlgorithmType.ASYMMETRIC).getKeySize());
     }
 
     public AsymmetricKey(Algorithm alg, Padding p, int keysize) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {
@@ -73,10 +75,17 @@ public class AsymmetricKey extends Key {
         }
 
         // create key pair
-        if("rsa".equals(alg.toString()) || "dsa".equals(alg.toString())) {
-            KeyPairGenerator keyGen = KeyPairGenerator.getInstance(alg.toString().toUpperCase());
-            keyGen.initialize(parameters.get("" + Parameter.KEYSIZE.getId() + "_0"));
-            KeyPair pair = keyGen.genKeyPair();
+        if("RSA".equals(alg.getAlgorithm()) || "EC".equals(alg.getAlgorithm())) {
+            int keysize=parameters.get("" + Parameter.KEYSIZE.getId() + "_0");
+            KeyPairGenerator keyGen = KeyPairGenerator.getInstance(alg.toString().toUpperCase(),alg.getProvider());
+            keyGen.initialize(keysize);
+            int i=0;
+            KeyPair pair;
+            try {
+                pair = keyGen.genKeyPair();
+            } catch (IllegalStateException ise) {
+                throw new IllegalStateException( "unable to generate keys with " + alg.getAlgorithm() + "/" + mode + "/" + padding.getPadding() + " (size "+keysize+")", ise );
+            }
             publicKey = pair.getPublic().getEncoded();
             privateKey = pair.getPrivate().getEncoded();
         } else if(alg.toString().startsWith("sec")) {
@@ -87,7 +96,7 @@ public class AsymmetricKey extends Key {
             publicKey = pair.getPublic().getEncoded();
             privateKey = pair.getPrivate().getEncoded();
         } else {
-            throw new NoSuchAlgorithmException("Encountered unknown parameter \""+alg.toString()+"\"");
+            throw new NoSuchAlgorithmException("Encountered unknown parameter \""+alg.getAlgorithm()+"\"");
         }
 
     }
@@ -182,7 +191,7 @@ public class AsymmetricKey extends Key {
         if(keytype.getAlgorithm().startsWith( "sec" )) {
             return KeyFactory.getInstance( "ECDSA", "BC" );
         } else {
-            return KeyFactory.getInstance( keytype.getAlgorithm(), "BC" );
+            return KeyFactory.getInstance( keytype.getAlgorithm() );
         }
     }
 
@@ -207,7 +216,7 @@ public class AsymmetricKey extends Key {
         if(keytype.getAlgorithm().startsWith("sec")) {
             return Cipher.getInstance( "ECIES","BC" );
         } else {
-            return Cipher.getInstance(keytype.getAlgorithm()+"/"+mode+"/"+padding.getPadding(),"BC");
+            return Cipher.getInstance(keytype.getAlgorithm()+"/"+mode+"/"+padding.getPadding());
         }
     }
 
@@ -217,9 +226,6 @@ public class AsymmetricKey extends Key {
 
     public byte[] setPublicKey(byte[] b) throws InvalidKeyException {
         byte[] old=publicKey;
-        if( b==null ) {
-            throw new InvalidKeyException( "KeySizeMissmatch in key detected" );
-        }
         publicKey=b;
         return old;
     }
@@ -228,9 +234,6 @@ public class AsymmetricKey extends Key {
 
     public byte[] setPrivateKey(byte[] b) throws InvalidKeyException {
         byte[] old=privateKey;
-        if( b==null) {
-            throw new InvalidKeyException( "KeySizeMissmatch in key detected" );
-        }
         privateKey=b;
         return old;
     }

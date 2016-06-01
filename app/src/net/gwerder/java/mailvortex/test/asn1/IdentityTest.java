@@ -46,7 +46,7 @@ public class IdentityTest {
                 assertTrue( "Value Notations should be equal when reencoding", s1.equals( s2 ) );
                 // redoing it encrypted
                 Identity i3 = new Identity();
-                AsymmetricKey ak=new AsymmetricKey( Algorithm.SECP521R1, Padding.getDefault(),0);
+                AsymmetricKey ak=new AsymmetricKey();
                 assertTrue( "Identity may not be null", i3 != null );
                 String s3=i3.dumpValueNotation( "" );
                 byte[] b3 = i3.toBytes();

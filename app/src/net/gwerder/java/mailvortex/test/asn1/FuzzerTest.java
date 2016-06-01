@@ -37,7 +37,7 @@ public class FuzzerTest {
     }
 
     @Test
-    public void fuzzingMessage() {
+    public void fuzzingMessage() throws Exception {
         try {
             for (int i = 0; i < BLOCK_FUZZER_CYCLES; i++) {
                 Message s = new Message(new Identity(),new Payload());
@@ -49,8 +49,9 @@ public class FuzzerTest {
             }
         } catch (Exception e) {
             LOGGER.log(Level.WARNING,"Unexpected exception",e);
-            fail( "fuzzer encountered exception in Message ("+e.toString()+")" );
-        }
+
+            throw e;
+       }
     }
 
     @Test
@@ -159,33 +160,7 @@ public class FuzzerTest {
     }
 
     @Test
-    public void fuzzingAsymmetricEncryption() {
-        SecureRandom sr=new SecureRandom(  );
-        for(Algorithm alg: Algorithm.getAlgorithms( AlgorithmType.ASYMMETRIC )) {
-            for(int size:new int[] {1024,2048,4096,8192}) {
-                try {
-                    System.out.print("Testing "+alg+"/"+size+" ("+ksDisc/size+")");
-                    for (int i = 0; i < ksDisc/size; i++) {
-                        System.out.print(".");
-                        AsymmetricKey s = new AsymmetricKey(alg, Padding.getDefault(),size);
-                        byte[] b1=new byte[sr.nextInt(Math.min(s.getPadding().getMaxSize( size ),1024))];
-                        sr.nextBytes( b1 );
-                        byte[] b2=s.decrypt( s.encrypt(b1) );
-                        assertTrue( "error in encrypt/decrypt cycle with "+alg+" (same object)",Arrays.equals( b1,b2));
-                        b2=(new AsymmetricKey(s.toBytes())).decrypt( s.encrypt(b1) );
-                        assertTrue( "error in encrypt/decrypt cycle with "+alg+" (same reserialized object)",Arrays.equals( b1,b2));
-                    }
-                    System.out.println("");
-                } catch(Exception e) {
-                    LOGGER.log(Level.WARNING,"Unexpected exception",e);
-                    fail("fuzzer encountered exception in Symmetric en/decryption test with algorithm "+alg.toString());
-                }
-            }
-        }
-    }
-
-    @Test
-    public void fuzzingSymmetricKey() {
+    public void fuzzingSymmetricKey() throws Exception {
         for(Algorithm alg: Algorithm.getAlgorithms( AlgorithmType.SYMMETRIC )) {
             try {
                 System.out.println("Testing "+alg+" ("+ksDisc+")");
@@ -199,21 +174,24 @@ public class FuzzerTest {
                 }
             } catch(Exception e) {
                 LOGGER.log(Level.WARNING,"Unexpected exception",e);
-                fail("fuzzer encountered exception in Symmetric key with algorithm "+alg.toString());
+                throw e;
             }
         }
     }
 
     @Test
-    public void fuzzingIdentityStore() {
-        try {
-            System.out.println("Testing IdentityStore ("+ksDisc/8192+")");
+    public void fuzzingIdentityStore() throws Exception {
+        try{
+            LOGGER.log(Level.INFO,"testing with "+ksDisc/8192+" stores");
             for (int i = 0; i < ksDisc/8192; i++) {
                 IdentityStore.resetDemo();
+                LOGGER.log(Level.FINE,"creating store");
                 IdentityStore s = IdentityStore.getIdentityStoreDemo();
                 assertTrue( "IdentityStore may not be null",s!=null);
+                LOGGER.log(Level.FINE,"encoding demo binary");
                 byte[] b1=s.toBytes();
                 assertTrue( "Byte representation may not be null",b1!=null);
+                LOGGER.log(Level.FINE,"reencoding demo binary");
                 byte[] b2=(new IdentityStore(b1)).toBytes();
                 if(!Arrays.equals(b1,b2)) {
                     System.out.println((new IdentityStore( b1 ) ).dumpValueNotation( "" ));
@@ -224,34 +202,7 @@ public class FuzzerTest {
             }
         } catch(Exception e) {
             LOGGER.log(Level.WARNING,"Unexpected exception",e);
-            fail("fuzzer encountered exception in IdetityStore");
-        }
-    }
-
-    @Test
-    public void fuzzingAsymmetricKey() {
-        for(Algorithm alg: Algorithm.getAlgorithms( AlgorithmType.ASYMMETRIC )) {
-            for (int ks : new int[]{512, 1024, 2048, 4096 }) {
-//                if(alg!=Key.Algorithm.DSA || ks<2048) {
-                    System.out.println("Testing "+alg+"/"+ks+" ("+(ksDisc/ks)+")");
-                    try {
-                        for (int i = 0; i < ksDisc/ks; i++) {
-                            AsymmetricKey s = new AsymmetricKey( alg, Padding.getDefault(),ks );
-                            assertTrue( "Asymmetric may not be null", s != null );
-                            byte[] b1 = s.toBytes();
-                            s.dumpValueNotation( "" );
-                            assertTrue( "Byte representation may not be null", b1 != null );
-                            AsymmetricKey s2=new AsymmetricKey( b1 );
-                            byte[] b2 = (s2).toBytes();
-                            System.out.println("dumping object tuple \n"+s.dumpValueNotation( "" )+"\n"+s2.dumpValueNotation( "" ));
-                            assertTrue( "Byte arrays should be equal when reencoding", Arrays.equals( b1, b2 ) );
-                        }
-                    } catch (Exception e) {
-                        LOGGER.log(Level.WARNING,"Unexpected exception",e);
-                        fail( "fuzzer encountered exception in Asymmetric key with algorithm " + alg.toString() +"/"+ ks+" ("+e.toString()+")" );
-                    }
-                }
- //           }
+            throw e;
         }
     }
 

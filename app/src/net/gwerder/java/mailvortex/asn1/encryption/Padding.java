@@ -1,19 +1,27 @@
 package net.gwerder.java.mailvortex.asn1.encryption;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 /**
  * Created by martin.gwerder on 31.05.2016.
  */
 public enum Padding {
-    PKCS1            ( 1000, "PKCS1Padding"                 , new SizeCalc(){public int maxSize(int s) {return s/8-11;}}),
-    OAEP_SHA384_MGF1 ( 2000, "OAEPWithSHA384AndMGF1Padding" , new SizeCalc(){public int maxSize(int s) {return s/8-2-384/4;}});
+    PKCS1            ( 1000, "PKCS1Padding"                 , new SizeCalc(){public int maxSize(int s) {return s/8-11;}}            ),
+    OAEP_SHA384_MGF1 ( 1100, "OAEPWithSHA384AndMGF1Padding" , new SizeCalc(){public int maxSize(int s) {return s/8-2-384/4;}}       ),
+    PKCS5            ( 2000, "PKCS5Padding"                 , new SizeCalc(){public int maxSize(int keySize) {return keySize/8-1;}} );
 
     private static abstract class SizeCalc{
         public abstract int maxSize(int keySize);
     }
 
-    private static Padding def=Padding.OAEP_SHA384_MGF1;
+    private static Map<AlgorithmType,Padding> def=new HashMap<AlgorithmType,Padding>(  ) {
+        {
+            put( AlgorithmType.ASYMMETRIC, Padding.PKCS1 );
+            put( AlgorithmType.SYMMETRIC, Padding.PKCS5 );
+        }};
+
     private int id;
     private String txt;
     private SizeCalc s;
@@ -52,13 +60,13 @@ public enum Padding {
         return txt;
     }
 
-    public static Padding getDefault() {
-        return def;
+    public static Padding getDefault(AlgorithmType at) {
+        return def.get(at);
     }
 
-    public static Padding setDefault(Padding ndef) {
-        Padding old=def;
-        def=ndef;
+    public static Padding setDefault(AlgorithmType at,Padding ndef) {
+        Padding old=def.get(at);
+        def.put(at,ndef);
         return old;
     }
 

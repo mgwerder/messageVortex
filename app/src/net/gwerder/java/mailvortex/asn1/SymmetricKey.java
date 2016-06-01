@@ -2,6 +2,9 @@ package net.gwerder.java.mailvortex.asn1;
 
 
 import net.gwerder.java.mailvortex.asn1.encryption.Algorithm;
+import net.gwerder.java.mailvortex.asn1.encryption.AlgorithmType;
+import net.gwerder.java.mailvortex.asn1.encryption.Mode;
+import net.gwerder.java.mailvortex.asn1.encryption.Padding;
 import org.bouncycastle.asn1.*;
 
 import javax.crypto.BadPaddingException;
@@ -21,6 +24,12 @@ import java.security.SecureRandom;
 public class SymmetricKey extends Key {
 
     protected byte[] key= null;
+    private Mode mode=Mode.getDefault();
+    private Padding padding= Padding.getDefault(AlgorithmType.SYMMETRIC);
+
+    public SymmetricKey() throws IOException,NoSuchAlgorithmException {
+        this(Algorithm.getDefault( AlgorithmType.SYMMETRIC ));
+    }
 
     public SymmetricKey(Algorithm sk) throws IOException,NoSuchAlgorithmException {
         keytype=sk;
@@ -65,7 +74,7 @@ public class SymmetricKey extends Key {
     }
 
     private Cipher getCipher() throws NoSuchAlgorithmException,NoSuchPaddingException {
-        return Cipher.getInstance( keytype.getAlgorithmFamily().toUpperCase()+"/ECB/PKCS5Padding" );
+        return Cipher.getInstance( keytype.getAlgorithmFamily()+"/"+mode.getMode()+"/"+padding.getPadding() );
     }
 
     @Override

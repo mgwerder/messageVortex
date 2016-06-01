@@ -1,6 +1,7 @@
 package net.gwerder.java.mailvortex.asn1;
 
 import net.gwerder.java.mailvortex.asn1.encryption.Algorithm;
+import net.gwerder.java.mailvortex.asn1.encryption.AlgorithmType;
 import net.gwerder.java.mailvortex.asn1.encryption.Padding;
 import org.bouncycastle.asn1.*;
 
@@ -47,7 +48,7 @@ public class IdentityStoreBlock extends Block {
         switch(it) {
             case OWNED_IDENTITY:
                 try {
-                    ret.setIdentityKey( new AsymmetricKey( Algorithm.SECP521R1, Padding.getDefault(), 521 ) );
+                    ret.setIdentityKey( new AsymmetricKey() );
                     byte [] b=new byte[r.nextInt(20)+3];
                     r.nextBytes( b );
                     ret.setNodeAddress( "smtp:"+toHex( b )+"@localhost" );
@@ -62,7 +63,7 @@ public class IdentityStoreBlock extends Block {
                     byte [] b=new byte[r.nextInt(20)+3];
                     r.nextBytes( b );
                     ret.setNodeAddress( "smtp:"+toHex( b )+"@demo"+r.nextInt( 3 ) );
-                    AsymmetricKey ak=new AsymmetricKey( Algorithm.SECP521R1, Padding.getDefault(), 521 );
+                    AsymmetricKey ak=new AsymmetricKey();
                     if(!complete) ak.setPrivateKey(null);
                     ret.setNodeKey(ak);
                 } catch(Exception e) {
@@ -71,13 +72,13 @@ public class IdentityStoreBlock extends Block {
                 break;
             case RECIPIENT_IDENTITY:
                 try {
-                    AsymmetricKey ak=new AsymmetricKey( Algorithm.SECP521R1, Padding.getDefault(),521 );
+                    AsymmetricKey ak=new AsymmetricKey();
                     if(!complete) ak.setPrivateKey(null);
                     ret.setIdentityKey( ak );
                     byte [] b=new byte[r.nextInt(20)+3];
                     r.nextBytes( b );
                     ret.setNodeAddress( "smtp:"+toHex( b )+"@demo"+r.nextInt( 3 ) );
-                    ak=new AsymmetricKey( Algorithm.SECP521R1, Padding.getDefault(),521 );
+                    ak=new AsymmetricKey();
                     if(!complete) ak.setPrivateKey(null);
                     ret.setNodeKey(ak);
                 } catch(Exception e) {

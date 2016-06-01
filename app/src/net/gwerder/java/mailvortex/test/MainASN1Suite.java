@@ -16,6 +16,7 @@ import org.junit.runners.Suite;
         MessageTest.class,
         BlockTest.class,
         AsymmetricKeyTest.class,
+        AsymmetricKeyFuzzerTest.class,
         IdentityStoreTest.class,
         IdentityTest.class
 })
@@ -28,6 +29,7 @@ public class MainASN1Suite {
         s.addTest(new JUnit4TestAdapter(MessageTest.class));
         s.addTest(new JUnit4TestAdapter(BlockTest.class));
         s.addTest(new JUnit4TestAdapter(AsymmetricKeyTest.class));
+        s.addTest(new JUnit4TestAdapter(AsymmetricKeyFuzzerTest.class));
         s.addTest(new JUnit4TestAdapter(IdentityStoreTest.class));
         s.addTest(new JUnit4TestAdapter(IdentityTest.class));
         return s;
