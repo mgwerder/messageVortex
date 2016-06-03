@@ -18,7 +18,6 @@ import java.text.ParseException;
 
 public class Identity extends Block {
 
-    private AsymmetricKey identityDecryptionKey=null;
     private AsymmetricKey identityKey = null;
     private long serial;
     private int maxReplays;
@@ -30,7 +29,7 @@ public class Identity extends Block {
     private long identifier=-1;
     private String padding=null;
 
-    public Identity() throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException,IOException,NoSuchPaddingException,InvalidKeyException,IllegalBlockSizeException,BadPaddingException,NoSuchProviderException,InvalidKeySpecException {
+    public Identity() throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, IOException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, NoSuchProviderException, InvalidKeySpecException {
         identityKey=new AsymmetricKey(Algorithm.RSA, Padding.getDefault(AlgorithmType.ASYMMETRIC),2048);
         serial = (long)(Math.random()*4294967295L);
         maxReplays=1;
@@ -40,45 +39,23 @@ public class Identity extends Block {
         requests=new Request[0];
     }
 
-    public Identity(byte[] b,AsymmetricKey dk) throws ParseException,IOException,NoSuchAlgorithmException  {
-        identityDecryptionKey=dk;
-        ASN1Encodable s;
-        if(dk!=null) {
-            s=new DEROctetString(b);
-        } else {
-            s=ASN1Sequence.getInstance(b);
-        }
+    public Identity(byte[] b) throws ParseException, IOException, NoSuchAlgorithmException {
+        ASN1Encodable s = ASN1Sequence.getInstance( b );
         parse(s);
     }
 
-    public Identity(ASN1Encodable to,AsymmetricKey dk) throws ParseException,IOException,NoSuchAlgorithmException  {
-        identityDecryptionKey=dk;
-        parse(to);
+    public Identity(ASN1Encodable to) throws ParseException, IOException, NoSuchAlgorithmException {
+        this( to, null );
+    }
+
+    public Identity(ASN1Encodable to, AsymmetricKey identityKey) throws ParseException, IOException, NoSuchAlgorithmException {
+        this.identityKey = identityKey;
+        parse( to );
     }
 
     @Override
     protected void parse(ASN1Encodable to) throws ParseException,IOException,NoSuchAlgorithmException {
-        ASN1Sequence s1;
-        if( identityDecryptionKey!=null ) {
-            // we got an encrypted string ... lets unpack it
-            try {
-                s1 = ASN1Sequence.getInstance( identityDecryptionKey.decrypt(((ASN1OctetString)(to)).getOctets()));
-            } catch(BadPaddingException e) {
-                throw new IOException("Exception while decrypting content",e);
-            } catch(InvalidKeyException e) {
-                throw new IOException("Exception while decrypting content",e);
-            } catch(InvalidKeySpecException e) {
-                throw new IOException("Exception while decrypting content",e);
-            } catch(IllegalBlockSizeException e) {
-                throw new IOException("Exception while decrypting content",e);
-            } catch(NoSuchPaddingException e) {
-                throw new IOException("Exception while decrypting content",e);
-            } catch(NoSuchProviderException e) {
-                throw new IOException("Exception while decrypting content",e);
-            }
-        } else {
-            s1=ASN1Sequence.getInstance(to);
-        }
+        ASN1Sequence s1 = ASN1Sequence.getInstance( to );
         int i=0;
         ASN1Encodable s3=s1.getObjectAt(i++);
         identityKey= new AsymmetricKey(s3);

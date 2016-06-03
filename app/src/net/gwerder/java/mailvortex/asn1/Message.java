@@ -25,7 +25,7 @@ public class Message extends Block {
     private static final int BLOCKS_ENCRYPTED = 1101;
     private static final int BLOCKS_PLAIN     = 1102;
 
-
+    private AsymmetricKey headerTargetIdentityKey;
     private Identity identity;
     private Routing routing;
     private RoutingLog routingLog ;
@@ -60,6 +60,42 @@ public class Message extends Block {
         payload=p;
     }
 
+    public static void main(String[] args) throws Exception {
+        System.out.println( "\n;;; -------------------------------------------" );
+        System.out.println( ";;; creating blank dump" );
+        Message m = new Message( new Identity(), new Payload() );
+        System.out.println( m.dumpValueNotation( "" ) );
+
+        System.out.println( "\n;;; -------------------------------------------" );
+        System.out.println( ";;; Reading from File example1.PDU.der" );
+        Message msg = new Message( new File( "example1.PDU.der" ) );
+        System.out.println( ";;; dumping" );
+        System.out.println( msg.dumpValueNotation( "" ) );
+
+        System.out.println( "\n;;; -------------------------------------------" );
+        System.out.println( ";;; simple building message" );
+        Message m2 = new Message( new Identity(), new Payload() );
+        System.out.println( ";;; dumping" );
+        System.out.println( m2.dumpValueNotation( "" ) );
+        System.out.println( ";;; reencode check" );
+        System.out.println( ";;;   getting DER stream" );
+        byte[] b1 = m.toBytes();
+        System.out.println( ";;;   storing to DER stream to " + System.getProperty( "java.io.tmpdir" ) );
+        DEROutputStream f = new DEROutputStream( new FileOutputStream( System.getProperty( "java.io.tmpdir" ) + "/temp.der" ) );
+        f.writeObject( m.toASN1Object() );
+        f.close();
+        System.out.println( ";;;   parsing DER stream" );
+        Message m3 = new Message( b1 );
+        System.out.println( ";;;   getting DER stream again" );
+        byte[] b2 = m3.toBytes();
+        System.out.println( ";;;   comparing" );
+        if (Arrays.equals( b1, b2 )) {
+            System.out.println( "Reencode success" );
+        } else {
+            System.out.println( "Reencode FAILED" );
+        }
+    }
+
     protected void parse(byte[] p) throws IOException,ParseException,NoSuchAlgorithmException {
         ASN1InputStream aIn=new ASN1InputStream( p );
         parse(aIn.readObject());
@@ -70,11 +106,19 @@ public class Message extends Block {
     protected void parse(ASN1Encodable p) throws IOException,ParseException,NoSuchAlgorithmException {
         Logger.getLogger("Message").log(Level.FINER,"Executing parse()");
 
+        int i = 0;
         ASN1Sequence s1 = ASN1Sequence.getInstance( p );
-        identity = new Identity( ((ASN1TaggedObject)(s1.getObjectAt( 0 ))).getObject(),null );
+        ASN1TaggedObject to = ((ASN1TaggedObject) (s1.getObjectAt( i++ )));
+        if (to.getTagNo() == HEADER_PLAIN) {
+            identity = new Identity( to.getObject() );
+        } else if (to.getTagNo() == HEADER_ENCRYPTED) {
+            ASN1Sequence s2 = ASN1Sequence.getInstance( to.getObject() );
+            SymmetricKey headerKey = new SymmetricKey( headerTargetIdentityKey.decrypt( ASN1OctetString.getInstance( s2.getObjectAt( 0 ) ).getOctets(), false ) );
+            identity = new Identity( ASN1Sequence.getInstance( headerKey.decrypt( ASN1OctetString.getInstance( s2.getObjectAt( 1 ) ).getOctets() ) ) );
+        }
 
         // getting blocks
-        ASN1TaggedObject ae = ASN1TaggedObject.getInstance(s1.getObjectAt( 1 ));
+        ASN1TaggedObject ae = ASN1TaggedObject.getInstance( s1.getObjectAt( i++ ) );
         if(ASN1TaggedObject.getInstance(ae).getTagNo()==BLOCKS_ENCRYPTED) {
             // decrypting block (if required)
             try {
@@ -88,8 +132,8 @@ public class Message extends Block {
         }
 
         // decoding block
-        int i=0;
         s1=ASN1Sequence.getInstance( ae.getObject() );
+        i = 0;
         try {
             // get tagged block (if any)
             ASN1TaggedObject tmp= ASN1TaggedObject.getInstance( s1.getObjectAt( i ) ); //optional block;
@@ -133,24 +177,28 @@ public class Message extends Block {
     }
 
     public ASN1Object toASN1Object() throws IOException {
-        return toASN1Object( null,null );
+        return toASN1Object( null, null, null );
     }
 
-    public ASN1Object toASN1Object(AsymmetricKey ik,SymmetricKey sk) throws IOException {
-        // Prepare envoding
+    public ASN1Object toASN1Object(AsymmetricKey identityKey, SymmetricKey identityBlockKey, SymmetricKey blocksKey) throws IOException {
+        // Prepare encoding
         Logger.getLogger("Message").log(Level.FINER,"Executing toASN1Object()");
-        if(sk==null) sk=getIdentity().getDecryptionKey();
+        if (blocksKey == null) blocksKey = getIdentity().getDecryptionKey();
 
         ASN1EncodableVector v=new ASN1EncodableVector();
         if(identity==null) throw new IOException("identity may not be null when encoding");
         Logger.getLogger("Message").log(Level.FINER,"adding identity");
         ASN1Encodable o=identity.toASN1Object();
         if (o == null) throw new IOException( "returned identity object may not be null" );
-        if(ik==null) {
+        if (identityKey == null) {
             v.add( new DERTaggedObject( true, HEADER_PLAIN, o ) );
         } else {
             try {
-                o=new DEROctetString(  ik.encrypt( getIdentity().toBytes(), false ) );
+                ASN1EncodableVector s = new ASN1EncodableVector();
+                if (identityBlockKey == null) identityBlockKey = new SymmetricKey();
+                s.add( new DEROctetString( identityKey.encrypt( identityBlockKey.toBytes(), true ) ) );
+                s.add( new DEROctetString( identityBlockKey.encrypt( identity.toBytes() ) ) );
+                o = new DERSequence( s );
             }catch(Exception e) {
                 throw new IOException( "error while encrypting header",e );
             }
@@ -164,11 +212,11 @@ public class Message extends Block {
         if(headerReply!=null)  v2.add( new DERTaggedObject( true,REPLY      ,headerReply.toASN1Object()));
         if(payload !=null)     v2.add( new DERTaggedObject( true,PAYLOAD    ,payload.toASN1Object()));
         Logger.getLogger("Message").log(Level.FINER,"adding blocks");
-        if(sk==null) {
+        if (blocksKey == null) {
             v.add( new DERTaggedObject( true, BLOCKS_PLAIN, new DERSequence( v2 ) ) );
         } else {
             try {
-                v.add( new DERTaggedObject( true, BLOCKS_ENCRYPTED, new DEROctetString( sk.encrypt( (new DERSequence( v2 )).getEncoded() ) ) ) );
+                v.add( new DERTaggedObject( true, BLOCKS_ENCRYPTED, new DEROctetString( blocksKey.encrypt( (new DERSequence( v2 )).getEncoded() ) ) ) );
             }catch(Exception e) {
                 throw new IOException( "Error while encrypting block structure after Identity block",e );
             }
@@ -179,16 +227,20 @@ public class Message extends Block {
     }
 
     public Identity getIdentity() { return identity; }
+
     public Routing getRouting() { return routing; }
+
     public RoutingLog getRoutingLog() { return routingLog; }
+
     public HeaderReply getHeaderReply() { return headerReply; }
+
     public Payload getPayload() { return payload; }
 
     public String dumpValueNotation(String prefix) throws IOException {
-        return dumpValueNotation( prefix,null,null );
+        return dumpValueNotation( prefix );
     }
 
-    public String dumpValueNotation(String prefix, AsymmetricKey headerKey, SymmetricKey sessionKey) throws IOException {
+    public String dumpValueNotation(String prefix, AsymmetricKey headerTargetIdentityKey, SymmetricKey headerKey, SymmetricKey sessionKey) throws IOException {
         StringBuilder sb=new StringBuilder();
         sb.append( prefix + "m Message ::= {" + CRLF );
         if(identity!=null) {
@@ -197,7 +249,10 @@ public class Message extends Block {
                 sb.append( prefix + "  header plain " + identity.dumpValueNotation( prefix + "  " ) + "," + CRLF );
             } else {
                 try {
-                    sb.append( prefix + "  header encrypted " + toHex( headerKey.encrypt( identity.toBytes(), true ) ) + CRLF );
+                    sb.append( prefix + "  header encrypted {" + CRLF );
+                    sb.append( prefix + "    headerKey " + toHex( headerTargetIdentityKey.encrypt( headerKey.toBytes(), true ) ) + CRLF );
+                    sb.append( prefix + "    identity " + toHex( headerKey.encrypt( identity.toBytes() ) ) + CRLF );
+                    sb.append( prefix + "  }" + CRLF );
                 } catch(Exception e) {
                     throw new IOException( "Exception while encrypting stream",e );
                 }
@@ -239,41 +294,5 @@ public class Message extends Block {
         }
         sb.append( prefix + "}" + CRLF );
         return sb.toString();
-    }
-
-    public static void main(String[] args) throws Exception {
-        System.out.println("\n;;; -------------------------------------------");
-        System.out.println(";;; creating blank dump");
-        Message m=new Message(new Identity(),new Payload());
-        System.out.println(m.dumpValueNotation(""));
-
-        System.out.println("\n;;; -------------------------------------------");
-        System.out.println(";;; Reading from File example1.PDU.der");
-        Message msg=new Message(new File("example1.PDU.der"));
-        System.out.println(";;; dumping");
-        System.out.println(msg.dumpValueNotation(""));
-
-        System.out.println("\n;;; -------------------------------------------");
-        System.out.println(";;; simple building message");
-        Message m2=new Message(new Identity(),new Payload());
-        System.out.println(";;; dumping");
-        System.out.println(m2.dumpValueNotation(""));
-        System.out.println(";;; reencode check");
-        System.out.println(";;;   getting DER stream");
-        byte[] b1=m.toBytes();
-        System.out.println(";;;   storing to DER stream to "+System.getProperty("java.io.tmpdir"));
-        DEROutputStream f=new DEROutputStream( new FileOutputStream(System.getProperty("java.io.tmpdir")+"/temp.der") );
-        f.writeObject(m.toASN1Object());
-        f.close();
-        System.out.println(";;;   parsing DER stream");
-        Message m3=new Message(b1);
-        System.out.println(";;;   getting DER stream again");
-        byte[] b2=m3.toBytes();
-        System.out.println(";;;   comparing");
-        if(Arrays.equals(b1,b2) ) {
-            System.out.println( "Reencode success" );
-        } else {
-            System.out.println( "Reencode FAILED" );
-        }
     }
 }

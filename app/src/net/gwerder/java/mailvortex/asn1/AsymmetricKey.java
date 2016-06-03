@@ -23,27 +23,20 @@ import java.util.Map;
  */
 public class AsymmetricKey extends Key {
 
-    public enum DumpType {
-        ALL,
-        PUBLIC_ONLY,
-        PUBLIC_COMMENTED,
-        PRIVATE_ONLY,
-        PRIVATE_COMMENTED,
-    }
+    private static SecureRandom secureRandom = new SecureRandom();
 
     static {
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
     }
 
-    private   Mode    mode       = Mode.getDefault();
-    private   Padding padding    = Padding.getDefault(AlgorithmType.ASYMMETRIC);
     protected byte[]  publicKey  = null;
     protected byte[]  privateKey = null;
-
-
+    private Mode mode = Mode.getDefault();
+    private Padding padding = Padding.getDefault( AlgorithmType.ASYMMETRIC );
     public AsymmetricKey(byte[] b) {
         this(ASN1Sequence.getInstance( b ));
     }
+
 
     public AsymmetricKey(ASN1Encodable to) {
         parse(to);
@@ -91,7 +84,7 @@ public class AsymmetricKey extends Key {
         } else if(alg.toString().startsWith("sec")) {
             ECParameterSpec ecSpec = ECNamedCurveTable.getParameterSpec(alg.getAlgorithm());
             KeyPairGenerator g = KeyPairGenerator.getInstance("ECDSA", "BC");
-            g.initialize(ecSpec, new SecureRandom());
+            g.initialize( ecSpec, secureRandom );
             KeyPair pair = g.generateKeyPair();
             publicKey = pair.getPublic().getEncoded();
             privateKey = pair.getPrivate().getEncoded();
@@ -160,31 +153,64 @@ public class AsymmetricKey extends Key {
     }
 
     @Override
-    public byte[] encrypt(byte[] b) throws NoSuchAlgorithmException,NoSuchPaddingException,InvalidKeyException,IllegalBlockSizeException,BadPaddingException,NoSuchProviderException,InvalidKeySpecException {
+    public byte[] encrypt(byte[] b) throws IOException {
         return encrypt(b,true);
     }
 
-    public byte[] encrypt(byte[] b,boolean withPublicKey) throws NoSuchAlgorithmException,NoSuchPaddingException,InvalidKeyException,IllegalBlockSizeException,BadPaddingException,NoSuchProviderException,InvalidKeySpecException {
-        KeyPair key = getKeyPair();
-        Cipher cipher=getCipher();
-        java.security.Key k=key.getPrivate();
-        if(withPublicKey) k=key.getPublic();
-        cipher.init(Cipher.ENCRYPT_MODE,k);
-        return cipher.doFinal(b);
+    public byte[] encrypt(byte[] b, boolean withPublicKey) throws IOException {
+        try {
+            KeyPair key = getKeyPair();
+            Cipher cipher = getCipher();
+            java.security.Key k = key.getPrivate();
+            if (withPublicKey) k = key.getPublic();
+            cipher.init( Cipher.ENCRYPT_MODE, k );
+            return cipher.doFinal( b );
+        } catch (InvalidKeySpecException e) {
+            throw new IOException( "Exception while getting key pair", e );
+        } catch (NoSuchAlgorithmException e) {
+            throw new IOException( "Exception while encrypting", e );
+        } catch (NoSuchPaddingException e) {
+            throw new IOException( "Exception while encrypting", e );
+        } catch (NoSuchProviderException e) {
+            throw new IOException( "Exception while encrypting", e );
+        } catch (InvalidKeyException e) {
+            throw new IOException( "Exception while init of cipher", e );
+        } catch (IllegalBlockSizeException e) {
+            throw new IOException( "Exception while encrypting", e );
+        } catch (BadPaddingException e) {
+            throw new IOException( "Exception while encrypting", e );
+        }
     }
 
     @Override
-    public byte[] decrypt(byte[] b) throws NoSuchAlgorithmException,NoSuchPaddingException,InvalidKeyException,IllegalBlockSizeException,BadPaddingException,NoSuchProviderException,InvalidKeySpecException {
+    public byte[] decrypt(byte[] b) throws IOException {
         return decrypt(b,false);
     }
 
-    public byte[] decrypt(byte[] b,boolean withPublicKey) throws NoSuchAlgorithmException,NoSuchPaddingException,InvalidKeyException,IllegalBlockSizeException,BadPaddingException,NoSuchProviderException,InvalidKeySpecException {
-        KeyPair key = getKeyPair();
-        Cipher cipher = getCipher();
-        java.security.Key k=key.getPrivate();
-        if(withPublicKey) k=key.getPublic();
-        cipher.init(Cipher.DECRYPT_MODE,k);
-        return cipher.doFinal(b);
+    public byte[] decrypt(byte[] b, boolean withPublicKey) throws IOException {
+        try {
+            KeyPair key = getKeyPair();
+            Cipher cipher = getCipher();
+            java.security.Key k = key.getPrivate();
+            if (withPublicKey) k = key.getPublic();
+            cipher.init( Cipher.DECRYPT_MODE, k );
+            return cipher.doFinal( b );
+        } catch (InvalidKeySpecException e) {
+            throw new IOException( "Exception while getting key pair", e );
+        } catch (NoSuchAlgorithmException e) {
+            throw new IOException( "Exception while encrypting", e );
+        } catch (NoSuchPaddingException e) {
+            throw new IOException( "Exception while encrypting", e );
+        } catch (NoSuchProviderException e) {
+            throw new IOException( "Exception while encrypting", e );
+        } catch (InvalidKeyException e) {
+            throw new IOException( "Exception while init of cipher", e );
+        } catch (IllegalBlockSizeException e) {
+            throw new IOException( "Exception while encrypting", e );
+        } catch (BadPaddingException e) {
+            throw new IOException( "Exception while encrypting", e );
+        }
+
     }
 
     private KeyFactory getKeyFactory() throws NoSuchAlgorithmException,NoSuchProviderException {
@@ -241,5 +267,13 @@ public class AsymmetricKey extends Key {
     public byte[] getPrivateKey() {return privateKey; }
 
     public Padding getPadding() {return padding; }
+
+    public enum DumpType {
+        ALL,
+        PUBLIC_ONLY,
+        PUBLIC_COMMENTED,
+        PRIVATE_ONLY,
+        PRIVATE_COMMENTED,
+    }
 
 }

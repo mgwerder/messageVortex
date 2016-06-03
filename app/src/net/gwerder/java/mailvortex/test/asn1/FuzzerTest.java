@@ -99,7 +99,7 @@ public class FuzzerTest {
                 assertTrue( "Identity may not be null", s != null );
                 byte[] b1 = s.toBytes();
                 assertTrue( "Byte representation may not be null", b1 != null );
-                Identity s2=new Identity( b1,null );
+                Identity s2 = new Identity( b1 );
                 byte[] b2 = (s2).toBytes();
                 System.out.println("dumping object tuple \n"+s.dumpValueNotation( "" )+"\n"+s2.dumpValueNotation( "" ));
                 assertTrue( "Byte arrays should be equal when reencoding", Arrays.equals( b1, b2 ) );
@@ -141,7 +141,7 @@ public class FuzzerTest {
         SecureRandom sr=new SecureRandom(  );
         for(Algorithm alg: Algorithm.getAlgorithms( AlgorithmType.SYMMETRIC )) {
             try {
-                System.out.println("Testing "+alg+" ("+ksDisc+")");
+                LOGGER.log( Level.INFO, "Testing " + alg + " (" + ksDisc + ")" );
                 for (int i = 0; i < ksDisc; i++) {
                     SymmetricKey s = new SymmetricKey( alg );
                     byte[] b1=new byte[sr.nextInt(64*1024)];

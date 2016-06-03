@@ -4,16 +4,8 @@ import net.gwerder.java.mailvortex.asn1.encryption.Algorithm;
 import net.gwerder.java.mailvortex.asn1.encryption.Parameter;
 import org.bouncycastle.asn1.*;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -64,7 +56,7 @@ abstract public class Key extends Block {
         return new DERSequence( v );
     }
 
-    public ASN1Encodable getASN1() {
+    private ASN1Encodable getASN1() {
         if(keytype==null) return null;
         ASN1EncodableVector ret = new ASN1EncodableVector();
         // keyType
@@ -94,6 +86,7 @@ abstract public class Key extends Block {
         return sb.toString();
     }
 
-    abstract public byte[] decrypt(byte[] encrypted) throws NoSuchAlgorithmException,NoSuchPaddingException,InvalidKeyException,IllegalBlockSizeException,BadPaddingException,NoSuchProviderException,InvalidKeySpecException,InvalidAlgorithmParameterException;
-    abstract public byte[] encrypt(byte[] decrypted) throws NoSuchAlgorithmException,NoSuchPaddingException,InvalidKeyException,IllegalBlockSizeException,BadPaddingException,NoSuchProviderException,InvalidKeySpecException,InvalidAlgorithmParameterException;
+    abstract public byte[] decrypt(byte[] encrypted) throws IOException;
+
+    abstract public byte[] encrypt(byte[] decrypted) throws IOException;
 }

@@ -13,7 +13,6 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
-import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -22,6 +21,8 @@ import java.security.SecureRandom;
  * Created by martin.gwerder on 19.04.2016.
  */
 public class SymmetricKey extends Key {
+
+    private static SecureRandom secureRandom = new SecureRandom();
 
     protected byte[] key= null;
     private Mode mode=Mode.getDefault();
@@ -42,14 +43,6 @@ public class SymmetricKey extends Key {
         } else {
             throw new NoSuchAlgorithmException( "Algorithm "+sk+" is not encodable by the system" );
         }
-    }
-
-    private void createAES(int keysize) {
-        SecureRandom random = new SecureRandom();
-        byte[] keyBytes = new byte[keysize/8];
-        random.nextBytes(keyBytes);
-        SecretKeySpec aeskey = new SecretKeySpec(keyBytes, "AES");
-        key=aeskey.getEncoded();
     }
 
     public SymmetricKey(byte[] sk) throws IOException {
@@ -73,26 +66,55 @@ public class SymmetricKey extends Key {
         parse( s );
     }
 
+    private void createAES(int keysize) {
+        byte[] keyBytes = new byte[keysize / 8];
+        secureRandom.nextBytes( keyBytes );
+        SecretKeySpec aeskey = new SecretKeySpec( keyBytes, "AES" );
+        key = aeskey.getEncoded();
+    }
+
     private Cipher getCipher() throws NoSuchAlgorithmException,NoSuchPaddingException {
         return Cipher.getInstance( keytype.getAlgorithmFamily()+"/"+mode.getMode()+"/"+padding.getPadding() );
     }
 
     @Override
-    public byte[] encrypt(byte[] b) throws NoSuchAlgorithmException,NoSuchPaddingException,InvalidKeyException,InvalidAlgorithmParameterException,BadPaddingException,IllegalBlockSizeException {
-        Cipher c=getCipher();
-        SecretKeySpec ks=new SecretKeySpec( key,keytype.getAlgorithmFamily() );
-        SecureRandom r=new SecureRandom();
-        c.init(Cipher.ENCRYPT_MODE,ks );
-        return c.doFinal( b );
+    public byte[] encrypt(byte[] b) throws IOException {
+        try {
+            Cipher c = getCipher();
+            SecretKeySpec ks = new SecretKeySpec( key, keytype.getAlgorithmFamily() );
+            c.init( Cipher.ENCRYPT_MODE, ks );
+            return c.doFinal( b );
+        } catch (NoSuchAlgorithmException e) {
+            throw new IOException( "Exception while encrypting", e );
+        } catch (NoSuchPaddingException e) {
+            throw new IOException( "Exception while encrypting", e );
+        } catch (InvalidKeyException e) {
+            throw new IOException( "Exception while init of cipher", e );
+        } catch (IllegalBlockSizeException e) {
+            throw new IOException( "Exception while encrypting", e );
+        } catch (BadPaddingException e) {
+            throw new IOException( "Exception while encrypting", e );
+        }
     }
 
     @Override
-    public byte[] decrypt(byte[] b) throws NoSuchAlgorithmException,NoSuchPaddingException,InvalidKeyException,InvalidAlgorithmParameterException,BadPaddingException,IllegalBlockSizeException {
-        Cipher c=getCipher();
-        SecretKeySpec ks=new SecretKeySpec( key,keytype.getAlgorithmFamily().toUpperCase() );
-        SecureRandom r=new SecureRandom();
-        c.init(Cipher.DECRYPT_MODE,ks );
-        return c.doFinal( b );
+    public byte[] decrypt(byte[] b) throws IOException {
+        try {
+            Cipher c = getCipher();
+            SecretKeySpec ks = new SecretKeySpec( key, keytype.getAlgorithmFamily().toUpperCase() );
+            c.init( Cipher.DECRYPT_MODE, ks );
+            return c.doFinal( b );
+        } catch (NoSuchAlgorithmException e) {
+            throw new IOException( "Exception while encrypting", e );
+        } catch (NoSuchPaddingException e) {
+            throw new IOException( "Exception while encrypting", e );
+        } catch (InvalidKeyException e) {
+            throw new IOException( "Exception while init of cipher", e );
+        } catch (IllegalBlockSizeException e) {
+            throw new IOException( "Exception while encrypting", e );
+        } catch (BadPaddingException e) {
+            throw new IOException( "Exception while encrypting", e );
+        }
     }
 
     protected void parse(ASN1Encodable to) {

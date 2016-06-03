@@ -1,8 +1,5 @@
 package net.gwerder.java.mailvortex.asn1;
 
-import net.gwerder.java.mailvortex.asn1.encryption.Algorithm;
-import net.gwerder.java.mailvortex.asn1.encryption.AlgorithmType;
-import net.gwerder.java.mailvortex.asn1.encryption.Padding;
 import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
@@ -17,40 +14,33 @@ import java.util.logging.Logger;
  */
 public class IdentityStoreBlock extends Block {
 
-    public enum IdentityType{
-        OWNED_IDENTITY,
-        NODE_IDENTITY,
-        RECIPIENT_IDENTITY
-    }
-
+    private static SecureRandom secureRandom = new SecureRandom();
     UsagePeriod   valid         = null;
     int           messageQuota  = 0;
     int           transferQuota = 0;
     AsymmetricKey identityKey   = null;
     String        nodeAddress   = null;
     AsymmetricKey nodeKey       = null;
-
-
     public IdentityStoreBlock() {
         super();
     }
+
 
     public IdentityStoreBlock(ASN1Encodable ae) throws ParseException,NoSuchAlgorithmException,IOException {
         parse(ae);
     }
 
     public static IdentityStoreBlock getIdentityStoreBlockDemo(IdentityType it,boolean complete) throws IOException {
-        SecureRandom r=new SecureRandom(  );
         IdentityStoreBlock ret= new IdentityStoreBlock();
         ret.setValid(new UsagePeriod(3600*24*30));
-        ret.setTransferQuota(r.nextInt( 1024*1024*1024 ));
-        ret.setMessageQuota(r.nextInt( 1024*1024 ));
+        ret.setTransferQuota( secureRandom.nextInt( 1024 * 1024 * 1024 ) );
+        ret.setMessageQuota( secureRandom.nextInt( 1024 * 1024 ) );
         switch(it) {
             case OWNED_IDENTITY:
                 try {
                     ret.setIdentityKey( new AsymmetricKey() );
-                    byte [] b=new byte[r.nextInt(20)+3];
-                    r.nextBytes( b );
+                    byte[] b = new byte[secureRandom.nextInt( 20 ) + 3];
+                    secureRandom.nextBytes( b );
                     ret.setNodeAddress( "smtp:"+toHex( b )+"@localhost" );
                     ret.setNodeKey(null);
                 } catch(Exception e) {
@@ -60,9 +50,9 @@ public class IdentityStoreBlock extends Block {
             case NODE_IDENTITY:
                 try {
                     ret.setIdentityKey( null );
-                    byte [] b=new byte[r.nextInt(20)+3];
-                    r.nextBytes( b );
-                    ret.setNodeAddress( "smtp:"+toHex( b )+"@demo"+r.nextInt( 3 ) );
+                    byte[] b = new byte[secureRandom.nextInt( 20 ) + 3];
+                    secureRandom.nextBytes( b );
+                    ret.setNodeAddress( "smtp:" + toHex( b ) + "@demo" + secureRandom.nextInt( 3 ) );
                     AsymmetricKey ak=new AsymmetricKey();
                     if(!complete) ak.setPrivateKey(null);
                     ret.setNodeKey(ak);
@@ -75,9 +65,9 @@ public class IdentityStoreBlock extends Block {
                     AsymmetricKey ak=new AsymmetricKey();
                     if(!complete) ak.setPrivateKey(null);
                     ret.setIdentityKey( ak );
-                    byte [] b=new byte[r.nextInt(20)+3];
-                    r.nextBytes( b );
-                    ret.setNodeAddress( "smtp:"+toHex( b )+"@demo"+r.nextInt( 3 ) );
+                    byte[] b = new byte[secureRandom.nextInt( 20 ) + 3];
+                    secureRandom.nextBytes( b );
+                    ret.setNodeAddress( "smtp:" + toHex( b ) + "@demo" + secureRandom.nextInt( 3 ) );
                     ak=new AsymmetricKey();
                     if(!complete) ak.setPrivateKey(null);
                     ret.setNodeKey(ak);
@@ -192,6 +182,12 @@ public class IdentityStoreBlock extends Block {
         sb.append( CRLF );
         sb.append( prefix + "}" );
         return sb.toString();
+    }
+
+    public enum IdentityType {
+        OWNED_IDENTITY,
+        NODE_IDENTITY,
+        RECIPIENT_IDENTITY
     }
 
 }
