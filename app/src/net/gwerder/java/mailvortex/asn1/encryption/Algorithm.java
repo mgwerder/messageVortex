@@ -1,10 +1,13 @@
 package net.gwerder.java.mailvortex.asn1.encryption;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
 /**
+ * Represents all supported cryptographical algorithms.
+ *
  * Created by martin.gwerder on 31.05.2016.
  */
 public enum Algorithm {
@@ -48,7 +51,7 @@ public enum Algorithm {
     public int getId() {return id;}
 
     public static Algorithm[] getAlgorithms(AlgorithmType at) {
-        Vector<Algorithm> v=new Vector<Algorithm>();
+        List<Algorithm> v=new Vector<>();
         for(Algorithm e : values()) {
             if(e.t==at) v.add(e);
         }
@@ -88,7 +91,7 @@ public enum Algorithm {
         return getKeySize(SecurityLevel.getDefault());
     }
     public int getKeySize(SecurityLevel sl) {
-        return secLevel.get(sl).intValue();
+        return secLevel.get(sl);
     }
 
     public static Algorithm getDefault(AlgorithmType at) {

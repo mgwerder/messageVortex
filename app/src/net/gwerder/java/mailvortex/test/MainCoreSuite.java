@@ -9,7 +9,7 @@ import net.gwerder.java.mailvortex.test.imap.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-@RunWith(Suite.class)
+@RunWith(ConcurrentSuite.class)
 @Suite.SuiteClasses({
   MailVortexTest.class,
   VersionTest.class,

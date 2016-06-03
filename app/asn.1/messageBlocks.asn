@@ -16,6 +16,7 @@ BEGIN
   maxNumberOfRequests   INTEGER ::= 8               -- maximum number of administrative requests
 
   Message     ::= SEQUENCE { 
+    headerKey     [1000] OCTET STRING OPTIONAL,  -- contains SymmetricKey encrypted with recipient nodes private key
     header        CHOICE { 
         encrypted [1001] OCTET STRING,  -- contains IdentityBlock structure; Decryption key is hosts private key
         plain     [1002] IdentityBlock  -- may be transmitted in plain (if empty)

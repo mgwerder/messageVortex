@@ -9,7 +9,7 @@ import junit.framework.TestSuite;
 import org.junit.runners.Suite;
 import junit.framework.JUnit4TestAdapter;
  
-@RunWith(Suite.class)
+@RunWith(ConcurrentSuite.class)
 @Suite.SuiteClasses({
   MailVortexTest.class,
   VersionTest.class,

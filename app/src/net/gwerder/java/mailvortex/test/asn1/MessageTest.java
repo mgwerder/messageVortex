@@ -15,6 +15,8 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 /**
+ * Tests for the Message class.
+ *
  * Created by martin.gwerder on 30.05.2016.
  */
 @RunWith(JUnit4.class)
@@ -36,7 +38,6 @@ public class MessageTest {
             for (int i = 0; i < 100; i++) {
                 LOGGER.log( Level.INFO, "Testing Message reencoding " + (i + 1) + " of " + 100 );
                 Message s = new Message(new Identity(),new Payload());
-                assertTrue( "Message may not be null", s != null );
                 String s1=s.dumpValueNotation( "" );
                 byte[] b1 = s.toBytes();
                 assertTrue( "Byte representation may not be null", b1 != null );
