@@ -4,7 +4,6 @@ import net.gwerder.java.mailvortex.MailvortexLogger;
 import net.gwerder.java.mailvortex.asn1.*;
 import net.gwerder.java.mailvortex.asn1.encryption.Algorithm;
 import net.gwerder.java.mailvortex.asn1.encryption.AlgorithmType;
-import net.gwerder.java.mailvortex.asn1.encryption.Padding;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -25,10 +24,7 @@ import static org.junit.Assert.fail;
 @RunWith(JUnit4.class)
 public class FuzzerTest {
 
-    private int ksDisc=16384;
-
-    public static final int BLOCK_FUZZER_CYCLES =1000;
-
+    public static final int BLOCK_FUZZER_CYCLES = 30;
     private static final java.util.logging.Logger LOGGER;
 
     static {
@@ -36,10 +32,13 @@ public class FuzzerTest {
         MailvortexLogger.setGlobalLogLevel(Level.ALL);
     }
 
+    private int ksDisc = 16384;
+
     @Test
     public void fuzzingMessage() throws Exception {
         try {
             for (int i = 0; i < BLOCK_FUZZER_CYCLES; i++) {
+                LOGGER.log( Level.INFO, "Starting fuzzer cycle " + (i + 1) + " of " + BLOCK_FUZZER_CYCLES );
                 Message s = new Message(new Identity(),new Payload());
                 assertTrue( "Message may not be null", s != null );
                 byte[] b1 = s.toBytes();

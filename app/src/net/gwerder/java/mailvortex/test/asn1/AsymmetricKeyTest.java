@@ -5,6 +5,7 @@ import net.gwerder.java.mailvortex.asn1.AsymmetricKey;
 import net.gwerder.java.mailvortex.asn1.encryption.Algorithm;
 import net.gwerder.java.mailvortex.asn1.encryption.AlgorithmType;
 import net.gwerder.java.mailvortex.asn1.encryption.Padding;
+import net.gwerder.java.mailvortex.asn1.encryption.SecurityLevel;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -36,12 +37,12 @@ public class AsymmetricKeyTest {
     public void fuzzingAsymmetricEncryption() {
         SecureRandom sr=new SecureRandom(  );
         for(Algorithm alg: Algorithm.getAlgorithms( AlgorithmType.ASYMMETRIC )) {
-            for(int size:new int[] {512,1024,2048,4096,8192}) {
+            for (int size : new int[]{alg.getKeySize( SecurityLevel.LOW ), alg.getKeySize( SecurityLevel.MEDIUM ), alg.getKeySize( SecurityLevel.HIGH ), alg.getKeySize( SecurityLevel.QUANTUM )}) {
                 try {
-                    int j=(int)Math.pow(2,(int)(ksDisc/size));
-                    System.out.print("Testing "+alg+"/"+size+" ("+j+")");
+                    int j = (int) Math.pow( 2, (int) (ksDisc / 2 / size) );
+                    LOGGER.log( Level.INFO, "Testing " + alg + "/" + size + " (" + j + " passes)" );
                     for (int i = 0; i < j; i++) {
-                        System.out.print(".");
+                        LOGGER.log( Level.INFO, "Testing " + alg + "/" + size + " (" + (i + 1) + "/" + j + ")" );
                         AsymmetricKey s = new AsymmetricKey(alg, Padding.getDefault(alg.getAlgorithmType()),size);
                         byte[] b1=new byte[sr.nextInt(Math.min(s.getPadding().getMaxSize( size ),1024))];
                         sr.nextBytes( b1 );
@@ -50,7 +51,6 @@ public class AsymmetricKeyTest {
                         b2=(new AsymmetricKey(s.toBytes())).decrypt( s.encrypt(b1) );
                         assertTrue( "error in encrypt/decrypt cycle with "+alg+" (same reserialized object)",Arrays.equals( b1,b2));
                     }
-                    System.out.println("");
                 } catch(Exception e) {
                     LOGGER.log(Level.WARNING,"Unexpected exception",e);
                     fail("fuzzer encountered exception in Symmetric en/decryption test with algorithm "+alg.toString());
@@ -62,10 +62,11 @@ public class AsymmetricKeyTest {
     @Test
     public void transferKeyTest() {
         for(Algorithm alg: Algorithm.getAlgorithms( AlgorithmType.ASYMMETRIC )) {
-            int size=2048;
+            int size = alg.getKeySize();
             try {
-                System.out.print("Testing "+alg+"/"+size+" ("+16384/size+")");
-                for (int i = 0; i < 16384/size; i++) {
+                LOGGER.log( Level.INFO, "starting tests with " + alg.getAlgorithm() + " and keysize " + size );
+                for (int i = 0; i < ksDisc / size; i++) {
+                    LOGGER.log( Level.FINE, "starting test " + (i + 1) + " of " + ksDisc / size );
                     System.out.print(".");
                     AsymmetricKey k1 = new AsymmetricKey(alg, Padding.getDefault(AlgorithmType.ASYMMETRIC),size);
                     AsymmetricKey k2 = new AsymmetricKey(alg, Padding.getDefault(AlgorithmType.ASYMMETRIC),size);
