@@ -34,7 +34,7 @@ public class MessageTest {
     public void fuzzingMessage() {
         try {
             for (int i = 0; i < 100; i++) {
-                LOGGER.log( Level.INFO, "Testing Message reencoding " + (i + 1) + " of " + 10 );
+                LOGGER.log( Level.INFO, "Testing Message reencoding " + (i + 1) + " of " + 100 );
                 Message s = new Message(new Identity(),new Payload());
                 assertTrue( "Message may not be null", s != null );
                 String s1=s.dumpValueNotation( "" );

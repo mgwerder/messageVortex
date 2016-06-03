@@ -237,7 +237,7 @@ public class Message extends Block {
     public Payload getPayload() { return payload; }
 
     public String dumpValueNotation(String prefix) throws IOException {
-        return dumpValueNotation( prefix );
+        return dumpValueNotation( prefix, null, null, null );
     }
 
     public String dumpValueNotation(String prefix, AsymmetricKey headerTargetIdentityKey, SymmetricKey headerKey, SymmetricKey sessionKey) throws IOException {
