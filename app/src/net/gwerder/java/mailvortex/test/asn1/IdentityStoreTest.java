@@ -53,12 +53,12 @@ public class IdentityStoreTest {
 
     @Test
     /***
-     * Reencodes 100 IdentityStore and checks whether their byte and Value Notation Dumps are equivalent
+     * Reencodes 4 IdentityStore and checks whether their byte and Value Notation Dumps are equivalent
      */
     public void testingIdentityStoreDemo() {
         try {
-            for (int i = 0; i < 10; i++) {
-                LOGGER.log( Level.INFO, "Testing IdentityStore reencoding " + (i + 1) + " of " + 10 );
+            for (int i = 0; i < 4; i++) {
+                LOGGER.log( Level.INFO, "Testing IdentityStore reencoding " + (i + 1) + " of " + 4 );
                 Date start = new Date();
                 IdentityStore s1 = IdentityStore.getIdentityStoreDemo();
                 assertTrue( "IdentityStore may not be null", s1 != null );

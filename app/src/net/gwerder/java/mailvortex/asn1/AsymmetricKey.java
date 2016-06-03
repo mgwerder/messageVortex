@@ -19,6 +19,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Asymmetic Key Handling.
+ *
+ * This class parses and encodes Asymmetric keys from/to ASN.1.
+ * It furthermore handles encoding and decoding of encrypted material.
+ *
  * Created by martin.gwerder on 19.04.2016.
  */
 public class AsymmetricKey extends Key {
@@ -50,7 +55,7 @@ public class AsymmetricKey extends Key {
         if(alg==null) {
             throw new NoSuchAlgorithmException( "Algorithm null is not encodable by the system" );
         }
-        Map<String,Integer> pm= new HashMap<String,Integer>();
+        Map<String,Integer> pm= new HashMap<>();
         pm.put(""+ Parameter.KEYSIZE.getId()+"_0",keysize);
         padding=p;
         createKey(alg,pm);
@@ -72,7 +77,6 @@ public class AsymmetricKey extends Key {
             int keysize=parameters.get("" + Parameter.KEYSIZE.getId() + "_0");
             KeyPairGenerator keyGen = KeyPairGenerator.getInstance(alg.toString().toUpperCase(),alg.getProvider());
             keyGen.initialize(keysize);
-            int i=0;
             KeyPair pair;
             try {
                 pair = keyGen.genKeyPair();
@@ -117,7 +121,7 @@ public class AsymmetricKey extends Key {
         if(publicKey!=null && (dt==DumpType.ALL || dt==DumpType.PUBLIC_ONLY || dt==DumpType.PUBLIC_COMMENTED || dt==DumpType.PRIVATE_COMMENTED)) {
             sb.append( dumpKeyTypeValueNotation( prefix ) );
             String s = toHex( publicKey );
-            sb.append( prefix + "  " );
+            sb.append( prefix ).append( "  " );
             if(dt==DumpType.PUBLIC_COMMENTED) {
                 sb.append( "-- " );
             }
@@ -129,13 +133,13 @@ public class AsymmetricKey extends Key {
         }
         if(privateKey!=null && (dt==DumpType.PRIVATE_COMMENTED || dt==DumpType.PRIVATE_ONLY || dt==DumpType.ALL)) {
             String s=toHex(privateKey);
-            sb.append(prefix+"  ");
+            sb.append(prefix).append("  ");
             if(dt==DumpType.PRIVATE_COMMENTED) {
                 sb.append("-- ");
             }
-            sb.append("privateKey "+s+CRLF);
+            sb.append("privateKey ").append(s).append(CRLF);
         } else sb.append(CRLF);
-        sb.append(prefix+"}");
+        sb.append(prefix).append("}");
         return sb.toString();
     }
 
@@ -167,18 +171,10 @@ public class AsymmetricKey extends Key {
             return cipher.doFinal( b );
         } catch (InvalidKeySpecException e) {
             throw new IOException( "Exception while getting key pair", e );
-        } catch (NoSuchAlgorithmException e) {
-            throw new IOException( "Exception while encrypting", e );
-        } catch (NoSuchPaddingException e) {
-            throw new IOException( "Exception while encrypting", e );
-        } catch (NoSuchProviderException e) {
+        } catch (NoSuchAlgorithmException|NoSuchPaddingException|NoSuchProviderException|IllegalBlockSizeException|BadPaddingException e) {
             throw new IOException( "Exception while encrypting", e );
         } catch (InvalidKeyException e) {
             throw new IOException( "Exception while init of cipher", e );
-        } catch (IllegalBlockSizeException e) {
-            throw new IOException( "Exception while encrypting", e );
-        } catch (BadPaddingException e) {
-            throw new IOException( "Exception while encrypting", e );
         }
     }
 

@@ -18,6 +18,8 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 /**
+ * Tests for AsymmetricKey class.
+ *
  * Created by martin.gwerder on 31.05.2016.
  */
 @RunWith(JUnit4.class)
@@ -37,25 +39,24 @@ public class AsymmetricKeyTest {
     public void fuzzingAsymmetricEncryption() {
         SecureRandom sr=new SecureRandom(  );
         for(Algorithm alg: Algorithm.getAlgorithms( AlgorithmType.ASYMMETRIC )) {
-            for (int size : new int[]{alg.getKeySize( SecurityLevel.LOW ), alg.getKeySize( SecurityLevel.MEDIUM ), alg.getKeySize( SecurityLevel.HIGH ), alg.getKeySize( SecurityLevel.QUANTUM )}) {
+            for (int size : new int[]{alg.getKeySize( SecurityLevel.LOW ), alg.getKeySize( SecurityLevel.MEDIUM ), alg.getKeySize( SecurityLevel.HIGH ), alg.getKeySize( SecurityLevel.QUANTUM )})
                 try {
-                    int j = (int) Math.pow( 2, (int) (ksDisc / 2 / size) );
+                    int j = (int) Math.pow( 2, ksDisc / 4 / size );
                     LOGGER.log( Level.INFO, "Testing " + alg + "/" + size + " (" + j + " passes)" );
                     for (int i = 0; i < j; i++) {
                         LOGGER.log( Level.INFO, "Testing " + alg + "/" + size + " (" + (i + 1) + "/" + j + ")" );
-                        AsymmetricKey s = new AsymmetricKey(alg, Padding.getDefault(alg.getAlgorithmType()),size);
-                        byte[] b1=new byte[sr.nextInt(Math.min(s.getPadding().getMaxSize( size ),1024))];
+                        AsymmetricKey s = new AsymmetricKey( alg, Padding.getDefault( alg.getAlgorithmType() ), size );
+                        byte[] b1 = new byte[sr.nextInt( Math.min( s.getPadding().getMaxSize( size ), 1024 ) )];
                         sr.nextBytes( b1 );
-                        byte[] b2=s.decrypt( s.encrypt(b1) );
-                        assertTrue( "error in encrypt/decrypt cycle with "+alg+" (same object)",Arrays.equals( b1,b2));
-                        b2=(new AsymmetricKey(s.toBytes())).decrypt( s.encrypt(b1) );
-                        assertTrue( "error in encrypt/decrypt cycle with "+alg+" (same reserialized object)",Arrays.equals( b1,b2));
+                        byte[] b2 = s.decrypt( s.encrypt( b1 ) );
+                        assertTrue( "error in encrypt/decrypt cycle with " + alg + " (same object)", Arrays.equals( b1, b2 ) );
+                        b2 = (new AsymmetricKey( s.toBytes() )).decrypt( s.encrypt( b1 ) );
+                        assertTrue( "error in encrypt/decrypt cycle with " + alg + " (same reserialized object)", Arrays.equals( b1, b2 ) );
                     }
-                } catch(Exception e) {
-                    LOGGER.log(Level.WARNING,"Unexpected exception",e);
-                    fail("fuzzer encountered exception in Symmetric en/decryption test with algorithm "+alg.toString());
+                } catch (Exception e) {
+                    LOGGER.log( Level.WARNING, "Unexpected exception", e );
+                    fail( "fuzzer encountered exception in Symmetric en/decryption test with algorithm " + alg.toString() );
                 }
-            }
         }
     }
 
