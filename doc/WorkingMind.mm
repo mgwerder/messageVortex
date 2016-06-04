@@ -1,6 +1,6 @@
 <map version="1.0.1">
 <!-- To view this file, download free mind mapping software FreeMind from http://freemind.sourceforge.net -->
-<node CREATED="1201229246234" ID="Freemind_Link_721208657" MODIFIED="1387381544481" TEXT="MailVortex">
+<node CREATED="1201229246234" ID="Freemind_Link_721208657" MODIFIED="1465049095705" TEXT="MailVortex">
 <node CREATED="1387381549512" ID="_" MODIFIED="1387381555994" POSITION="right" TEXT="Terms">
 <node CREATED="1387381556813" ID="Freemind_Link_1627035857" MODIFIED="1387381561329" TEXT="SURB">
 <node CREATED="1387381561283" ID="Freemind_Link_719503040" MODIFIED="1387381570237" TEXT="Single use Reply Block"/>

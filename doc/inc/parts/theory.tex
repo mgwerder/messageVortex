@@ -1,5 +1,14 @@
 \chapter{Ground theory}
-\section{Mail Transport}\label{sec:mailTransport}
+Messaging today can be split into various groups. Most commonly they are split into synchronous and asynchronous systems. Both of them do exist in various flavours such as face-toface-communication, traditional Mail, Telephone, Fax, Telex, Email, Forums life stream\ldots With this work we focus on transport between humans interfaced by some kind of electronic device. This kind of communication is due to its high automation grade very 
+
+FIXME
+
+\subsection{Synchronous Messaging}
+
+FIXME
+
+\subsection{Asynchronous Messaging}
+Most Asynchronous Messaging today
 Todays mail transport is mostly done via SMTP\index{SMTP} protocol as specified in \cite{RFC5321}. This protocol has proven to be stable and reliable. Most of the messages are passed from a MUA to a SMTP relay of a provider. From there the message is directly sent to the SMTP server of the recipient and from there to a server based storage of the recipient. The recipient may at any time connect to his server based storage and may optionally relocate the message to a client based (local) storage. The delivery from the server storage to the MUA of the recipient may happen by message polling or by message push (where as the later is usually implemented by a push-pull mechanism).\par
 
 To understand the routing of a mail it is essential to understand the whole chain starting from a user(-agent) until arriving at the target user (and being read!). To simplify this I used a consistent model which includes all components (server and clients). The figure \ref{fig:MailAgents} shows all involved parties of a typical Mail routing. It is important to understand that Mail routing remains the same regardless of the used client. However -- Availability of a mail at its destination changes drastically depending on the type of client used. Furthermore control of the mail flow and control is different depending on the client.\par
