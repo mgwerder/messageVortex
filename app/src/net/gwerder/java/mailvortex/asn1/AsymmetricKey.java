@@ -1,11 +1,9 @@
 package net.gwerder.java.mailvortex.asn1;
 
-import de.flexiprovider.core.FlexiCoreProvider;
-import de.flexiprovider.ec.FlexiECProvider;
-import de.flexiprovider.ec.parameters.CurveParams;
-import de.flexiprovider.ec.parameters.CurveRegistry;
 import net.gwerder.java.mailvortex.asn1.encryption.*;
 import org.bouncycastle.asn1.*;
+import org.bouncycastle.jce.ECNamedCurveTable;
+import org.bouncycastle.jce.spec.ECParameterSpec;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -34,8 +32,8 @@ public class AsymmetricKey extends Key {
 
     static {
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
-        Security.addProvider( new FlexiCoreProvider() );
-        Security.addProvider( new FlexiECProvider() );
+        //Security.addProvider( new FlexiCoreProvider() );
+        //Security.addProvider( new FlexiECProvider() );
     }
 
     protected byte[]  publicKey  = null;
@@ -94,8 +92,8 @@ public class AsymmetricKey extends Key {
             publicKey = pair.getPublic().getEncoded();
             privateKey = pair.getPrivate().getEncoded();
         } else if (alg.toString().toLowerCase().startsWith( "sec" )) {
-            CurveParams parameters = new CurveRegistry.Secp384r1();
-            KeyPairGenerator g = KeyPairGenerator.getInstance( "EC", "FlexiEC" );
+            ECParameterSpec parameters = ECNamedCurveTable.getParameterSpec( alg.getAlgorithm() );
+            KeyPairGenerator g = KeyPairGenerator.getInstance( "ECDSA", "BC" );
             g.initialize( parameters, secureRandom );
             KeyPair pair = g.generateKeyPair();
             publicKey = pair.getPublic().getEncoded();
