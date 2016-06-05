@@ -45,6 +45,16 @@ public class Routing extends Block {
 
     }
 
+    public UsagePeriod getQueueTime() {
+        return queueTime;
+    }
+
+    public UsagePeriod setQueueTime(UsagePeriod queueTime) {
+        UsagePeriod old = this.queueTime;
+        this.queueTime = queueTime;
+        return old;
+    }
+
     public ASN1Object toASN1Object() throws IOException{
         throw new IOException( "not implemented" ); // FIXME
     }

@@ -28,7 +28,7 @@ import static org.junit.Assert.fail;
 public class AsymmetricKeyFuzzerTest {
 
     private static final java.util.logging.Logger LOGGER;
-    private static int ksDisc = 8192; //16384
+    private static final int ksDisc = 8192; //16384
     private static SecureRandom sr = new SecureRandom();
 
     static {
