@@ -10,10 +10,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.logging.Level;
 
+import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -45,13 +47,40 @@ public class AsymmetricKeyTest {
                     LOGGER.log( Level.INFO, "Testing " + alg + "/" + size + " (" + j + " passes)" );
                     for (int i = 0; i < j; i++) {
                         LOGGER.log( Level.INFO, "Testing " + alg + "/" + size + " (" + (i + 1) + "/" + j + ")" );
+                        LOGGER.log( Level.INFO, "  creating key" );
                         AsymmetricKey s = new AsymmetricKey( alg, Padding.getDefault( alg.getAlgorithmType() ), size );
-                        byte[] b1 = new byte[sr.nextInt( Math.min( s.getPadding().getMaxSize( size ), 1024 ) )];
+                        byte[] b1 = new byte[0];
+                        while (b1.length < 10) {
+                            b1 = new byte[sr.nextInt( Math.min( s.getPadding().getMaxSize( size ), 1024 ) )];
+                        }
                         sr.nextBytes( b1 );
-                        byte[] b2 = s.decrypt( s.encrypt( b1 ) );
-                        assertTrue( "error in encrypt/decrypt cycle with " + alg + " (same object)", Arrays.equals( b1, b2 ) );
-                        b2 = (new AsymmetricKey( s.toBytes() )).decrypt( s.encrypt( b1 ) );
-                        assertTrue( "error in encrypt/decrypt cycle with " + alg + " (same reserialized object)", Arrays.equals( b1, b2 ) );
+                        LOGGER.log( Level.INFO, "  doing an encrypt/decrypt cycle with " + b1.length + " bytes" );
+                        byte[] b2 = s.encrypt( b1 );
+                        byte[] b3 = s.decrypt( b2 );
+                        assertTrue( "error in encrypt/decrypt cycle with " + alg + " (same object)", Arrays.equals( b1, b3 ) );
+                        LOGGER.log( Level.INFO, "  doing an encrypt/decrypt cycle with a reencoded key" );
+                        b3 = (new AsymmetricKey( s.toBytes() )).decrypt( b2 );
+                        assertTrue( "error in encrypt/decrypt cycle with " + alg + " (same reserialized object)", Arrays.equals( b1, b3 ) );
+                        for (Algorithm a : Algorithm.getAlgorithms( AlgorithmType.HASHING )) {
+                            b1 = new byte[sr.nextInt( 4096 ) + 2048];
+                            sr.nextBytes( b1 );
+                            byte[] sig = s.sign( b1, a );
+                            LOGGER.log( Level.INFO, "  signing with " + a + " (signature size:" + sig.length + "; message size:" + b1.length + ")" );
+                            assertTrue( "error in signature verification " + a + "With" + alg + "", s.verify( b1, sig, a ) );
+                            try {
+                                int pos = -1;
+                                int value = 0;
+                                while (pos == -1 || b1[pos] == (byte) (value)) {
+                                    pos = sr.nextInt( b1.length );
+                                    value = sr.nextInt( 256 );
+                                }
+                                byte old = b1[pos];
+                                b1[pos] = (byte) value;
+                                assertFalse( "Error while verifying a bad signature (returned good; old was " + old + "; new was " + value + "; pos was " + pos + ")", s.verify( b1, sig, a ) );
+                            } catch (IOException ioe) {
+                                LOGGER.log( Level.FINE, "verification of bad signature threw an exception (this is OK)" );
+                            }
+                        }
                     }
                 } catch (Exception e) {
                     LOGGER.log( Level.WARNING, "Unexpected exception", e );
@@ -82,6 +111,11 @@ public class AsymmetricKeyTest {
                 fail("fuzzer encountered exception in Symmetric en/decryption test with algorithm "+alg.toString());
             }
         }
+    }
+
+    @Test
+    public void asymmetricKeySizeTest() {
+        assertTrue( "getKeySize for SECP384R1 is bad", Algorithm.SECP384R1.getKeySize() == 384 );
     }
 
 }

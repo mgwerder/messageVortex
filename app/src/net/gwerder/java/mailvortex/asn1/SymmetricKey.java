@@ -46,16 +46,16 @@ public class SymmetricKey extends Key {
     }
 
     public SymmetricKey(byte[] sk) throws IOException {
-        this(sk,null,false);
+        this( sk, null );
     }
 
-    public SymmetricKey(byte[] sk, AsymmetricKey deckey, boolean decryptWithPublicKey) throws IOException {
+    public SymmetricKey(byte[] sk, AsymmetricKey deckey) throws IOException {
         // decrypt and decode
         ASN1Primitive s;
         if(deckey!=null) {
             byte[] b;
             try {
-                b=deckey.decrypt( sk, decryptWithPublicKey );
+                b = deckey.decrypt( sk );
             } catch(Exception e) {
                 throw new IOException( "Error while decrypting object", e );
             }

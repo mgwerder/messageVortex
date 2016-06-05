@@ -37,9 +37,12 @@ public class FuzzerTest {
     @Test
     public void fuzzingMessage() throws Exception {
         try {
+            AsymmetricKey ownIdentity = new AsymmetricKey();
             for (int i = 0; i < BLOCK_FUZZER_CYCLES; i++) {
                 LOGGER.log( Level.INFO, "Starting fuzzer cycle " + (i + 1) + " of " + BLOCK_FUZZER_CYCLES );
-                Message s = new Message(new Identity(),new Payload());
+                Identity id = new Identity();
+                id.setOwnIdentity( ownIdentity );
+                Message s = new Message( id, new Payload() );
                 assertTrue( "Message may not be null", s != null );
                 byte[] b1 = s.toBytes();
                 assertTrue( "Byte representation may not be null", b1 != null );
@@ -141,8 +144,8 @@ public class FuzzerTest {
         SecureRandom sr=new SecureRandom(  );
         for(Algorithm alg: Algorithm.getAlgorithms( AlgorithmType.SYMMETRIC )) {
             try {
-                LOGGER.log( Level.INFO, "Testing " + alg + " (" + ksDisc + ")" );
-                for (int i = 0; i < ksDisc; i++) {
+                LOGGER.log( Level.INFO, "Testing " + alg + " (" + ksDisc / 16 + ")" );
+                for (int i = 0; i < ksDisc / 16; i++) {
                     SymmetricKey s = new SymmetricKey( alg );
                     byte[] b1=new byte[sr.nextInt(64*1024)];
                     sr.nextBytes( b1 );
@@ -168,7 +171,7 @@ public class FuzzerTest {
                     assertTrue( "Symmetric may not be null",s!=null);
                     byte[] b1=s.toBytes();
                     assertTrue( "Byte representation may not be null",b1!=null);
-                    byte[] b2=(new SymmetricKey(b1,null,false)).toBytes();
+                    byte[] b2 = (new SymmetricKey( b1, null )).toBytes();
                     assertTrue( "Byte arrays should be equal when reencoding",Arrays.equals(b1,b2));
                 }
             } catch(Exception e) {

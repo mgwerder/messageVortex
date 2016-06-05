@@ -105,17 +105,9 @@ public class Message extends Block {
 
     protected void parse(ASN1Encodable p) throws IOException,ParseException,NoSuchAlgorithmException {
         Logger.getLogger("Message").log(Level.FINER,"Executing parse()");
-
         int i = 0;
         ASN1Sequence s1 = ASN1Sequence.getInstance( p );
-        ASN1TaggedObject to = ((ASN1TaggedObject) (s1.getObjectAt( i++ )));
-        if (to.getTagNo() == HEADER_PLAIN) {
-            identity = new Identity( to.getObject() );
-        } else if (to.getTagNo() == HEADER_ENCRYPTED) {
-            ASN1Sequence s2 = ASN1Sequence.getInstance( to.getObject() );
-            SymmetricKey headerKey = new SymmetricKey( headerTargetIdentityKey.decrypt( ASN1OctetString.getInstance( s2.getObjectAt( 0 ) ).getOctets(), false ) );
-            identity = new Identity( ASN1Sequence.getInstance( headerKey.decrypt( ASN1OctetString.getInstance( s2.getObjectAt( 1 ) ).getOctets() ) ) );
-        }
+        identity = new Identity( s1.getObjectAt( i++ ) );
 
         // getting blocks
         ASN1TaggedObject ae = ASN1TaggedObject.getInstance( s1.getObjectAt( i++ ) );
@@ -190,20 +182,7 @@ public class Message extends Block {
         Logger.getLogger("Message").log(Level.FINER,"adding identity");
         ASN1Encodable o=identity.toASN1Object();
         if (o == null) throw new IOException( "returned identity object may not be null" );
-        if (identityKey == null) {
-            v.add( new DERTaggedObject( true, HEADER_PLAIN, o ) );
-        } else {
-            try {
-                ASN1EncodableVector s = new ASN1EncodableVector();
-                if (identityBlockKey == null) identityBlockKey = new SymmetricKey();
-                s.add( new DEROctetString( identityKey.encrypt( identityBlockKey.toBytes(), true ) ) );
-                s.add( new DEROctetString( identityBlockKey.encrypt( identity.toBytes() ) ) );
-                o = new DERSequence( s );
-            }catch(Exception e) {
-                throw new IOException( "error while encrypting header",e );
-            }
-            v.add( new DERTaggedObject( true, HEADER_ENCRYPTED, o ) );
-        }
+        v.add( o );
 
         // Writing encoded Blocks
         ASN1EncodableVector v2=new ASN1EncodableVector();
@@ -250,7 +229,7 @@ public class Message extends Block {
             } else {
                 try {
                     sb.append( prefix + "  header encrypted {" + CRLF );
-                    sb.append( prefix + "    headerKey " + toHex( headerTargetIdentityKey.encrypt( headerKey.toBytes(), true ) ) + CRLF );
+                    sb.append( prefix + "    headerKey " + toHex( headerTargetIdentityKey.encrypt( headerKey.toBytes() ) ) + CRLF );
                     sb.append( prefix + "    identity " + toHex( headerKey.encrypt( identity.toBytes() ) ) + CRLF );
                     sb.append( prefix + "  }" + CRLF );
                 } catch(Exception e) {

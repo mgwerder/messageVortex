@@ -1,6 +1,8 @@
 package net.gwerder.java.mailvortex.test;
 
 /**
+ * Test all classes related to parsing/handling ASN.1 data.
+ *
  * Created by martin.gwerder on 19.04.2016.
  */
 
@@ -15,6 +17,7 @@ import org.junit.runners.Suite;
         FuzzerTest.class,
         MessageTest.class,
         BlockTest.class,
+        SymmetricKeyTest.class,
         AsymmetricKeyTest.class,
         AsymmetricKeyFuzzerTest.class,
         IdentityStoreTest.class,
@@ -28,6 +31,7 @@ public class MainASN1Suite {
         s.addTest(new JUnit4TestAdapter(FuzzerTest.class));
         s.addTest(new JUnit4TestAdapter(MessageTest.class));
         s.addTest(new JUnit4TestAdapter(BlockTest.class));
+        s.addTest( new JUnit4TestAdapter( SymmetricKeyTest.class ) );
         s.addTest(new JUnit4TestAdapter(AsymmetricKeyTest.class));
         s.addTest(new JUnit4TestAdapter(AsymmetricKeyFuzzerTest.class));
         s.addTest(new JUnit4TestAdapter(IdentityStoreTest.class));

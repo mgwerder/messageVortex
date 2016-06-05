@@ -1,9 +1,11 @@
 package net.gwerder.java.mailvortex.asn1;
 
+import de.flexiprovider.core.FlexiCoreProvider;
+import de.flexiprovider.ec.FlexiECProvider;
+import de.flexiprovider.ec.parameters.CurveParams;
+import de.flexiprovider.ec.parameters.CurveRegistry;
 import net.gwerder.java.mailvortex.asn1.encryption.*;
 import org.bouncycastle.asn1.*;
-import org.bouncycastle.jce.ECNamedCurveTable;
-import org.bouncycastle.jce.spec.ECParameterSpec;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -12,12 +14,12 @@ import javax.crypto.NoSuchPaddingException;
 import java.io.IOException;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
+import java.security.spec.InvalidParameterSpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-
 /**
  * Asymmetic Key Handling.
  *
@@ -32,6 +34,8 @@ public class AsymmetricKey extends Key {
 
     static {
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+        Security.addProvider( new FlexiCoreProvider() );
+        Security.addProvider( new FlexiECProvider() );
     }
 
     protected byte[]  publicKey  = null;
@@ -47,26 +51,30 @@ public class AsymmetricKey extends Key {
         parse(to);
     }
 
-    public AsymmetricKey() throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException  {
-        this(Algorithm.getDefault( AlgorithmType.ASYMMETRIC ), Padding.getDefault(AlgorithmType.ASYMMETRIC), Algorithm.getDefault(AlgorithmType.ASYMMETRIC).getKeySize());
+    public AsymmetricKey() throws IOException {
+        this( Algorithm.getDefault( AlgorithmType.ASYMMETRIC ), Padding.getDefault( AlgorithmType.ASYMMETRIC ), Algorithm.getDefault( AlgorithmType.ASYMMETRIC ).getKeySize() );
     }
 
-    public AsymmetricKey(Algorithm alg, Padding p, int keysize) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {
+    public AsymmetricKey(Algorithm alg, Padding p, int keysize) throws IOException {
         if(alg==null) {
-            throw new NoSuchAlgorithmException( "Algorithm null is not encodable by the system" );
+            throw new IOException( "Algorithm null is not encodable by the system" );
         }
         Map<String,Integer> pm= new HashMap<>();
         pm.put(""+ Parameter.KEYSIZE.getId()+"_0",keysize);
         padding=p;
-        createKey(alg,pm);
+        try {
+            createKey( alg, pm );
+        } catch (NoSuchAlgorithmException | NoSuchProviderException | InvalidAlgorithmParameterException | InvalidParameterSpecException e) {
+            throw new IOException( "Exception while creating key", e );
+        }
     }
 
-    public AsymmetricKey(Algorithm alg, Map<String,Integer> params) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException {
+    public AsymmetricKey(Algorithm alg, Map<String, Integer> params) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException, InvalidParameterSpecException {
         // store algorithm and parameters
         createKey( alg, params );
     }
 
-    private void createKey(Algorithm alg, Map<String,Integer> params) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException  {
+    private void createKey(Algorithm alg, Map<String, Integer> params) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException, InvalidParameterSpecException {
         this.keytype=alg;
         if(params!=null) {
             this.parameters.putAll(params);
@@ -85,10 +93,10 @@ public class AsymmetricKey extends Key {
             }
             publicKey = pair.getPublic().getEncoded();
             privateKey = pair.getPrivate().getEncoded();
-        } else if(alg.toString().startsWith("sec")) {
-            ECParameterSpec ecSpec = ECNamedCurveTable.getParameterSpec(alg.getAlgorithm());
-            KeyPairGenerator g = KeyPairGenerator.getInstance("ECDSA", "BC");
-            g.initialize( ecSpec, secureRandom );
+        } else if (alg.toString().toLowerCase().startsWith( "sec" )) {
+            CurveParams parameters = new CurveRegistry.Secp384r1();
+            KeyPairGenerator g = KeyPairGenerator.getInstance( "EC", "FlexiEC" );
+            g.initialize( parameters, secureRandom );
             KeyPair pair = g.generateKeyPair();
             publicKey = pair.getPublic().getEncoded();
             privateKey = pair.getPrivate().getEncoded();
@@ -158,15 +166,10 @@ public class AsymmetricKey extends Key {
 
     @Override
     public byte[] encrypt(byte[] b) throws IOException {
-        return encrypt(b,true);
-    }
-
-    public byte[] encrypt(byte[] b, boolean withPublicKey) throws IOException {
         try {
             KeyPair key = getKeyPair();
             Cipher cipher = getCipher();
-            java.security.Key k = key.getPrivate();
-            if (withPublicKey) k = key.getPublic();
+            java.security.Key k = key.getPublic();
             cipher.init( Cipher.ENCRYPT_MODE, k );
             return cipher.doFinal( b );
         } catch (InvalidKeySpecException e) {
@@ -180,33 +183,66 @@ public class AsymmetricKey extends Key {
 
     @Override
     public byte[] decrypt(byte[] b) throws IOException {
-        return decrypt(b,false);
-    }
-
-    public byte[] decrypt(byte[] b, boolean withPublicKey) throws IOException {
         try {
             KeyPair key = getKeyPair();
             Cipher cipher = getCipher();
             java.security.Key k = key.getPrivate();
-            if (withPublicKey) k = key.getPublic();
             cipher.init( Cipher.DECRYPT_MODE, k );
             return cipher.doFinal( b );
-        } catch (InvalidKeySpecException e) {
-            throw new IOException( "Exception while getting key pair", e );
-        } catch (NoSuchAlgorithmException e) {
-            throw new IOException( "Exception while encrypting", e );
-        } catch (NoSuchPaddingException e) {
-            throw new IOException( "Exception while encrypting", e );
-        } catch (NoSuchProviderException e) {
-            throw new IOException( "Exception while encrypting", e );
-        } catch (InvalidKeyException e) {
-            throw new IOException( "Exception while init of cipher", e );
-        } catch (IllegalBlockSizeException e) {
-            throw new IOException( "Exception while encrypting", e );
-        } catch (BadPaddingException e) {
+        } catch (InvalidKeySpecException | NoSuchAlgorithmException | NoSuchPaddingException | NoSuchProviderException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
             throw new IOException( "Exception while encrypting", e );
         }
 
+    }
+
+    public byte[] sign(byte[] b) throws IOException {
+        return sign( b, Algorithm.getDefault( AlgorithmType.HASHING ) );
+    }
+
+    public byte[] sign(byte[] b, Algorithm mac) throws IOException {
+        Signature signature;
+        try {
+            KeyPair key = getKeyPair();
+            signature = getSignature( mac );
+            signature.initSign( key.getPrivate() );
+            signature.update( b );
+            return signature.sign();
+        } catch (SignatureException | InvalidKeySpecException | NoSuchAlgorithmException | NoSuchPaddingException | NoSuchProviderException | InvalidKeyException e) {
+            throw new IOException( "Exception while encrypting", e );
+        }
+    }
+
+    public boolean verify(byte[] b, byte[] sig) throws IOException {
+        return verify( b, sig, Algorithm.getDefault( AlgorithmType.HASHING ) );
+    }
+
+    public boolean verify(byte[] b, byte[] sig, Algorithm mac) throws IOException {
+        /*try {
+            KeyPair key = getKeyPair();
+            MessageDigest dig = MessageDigest.getInstance( mac.getAlgorithm() );
+            byte[] hash = dig.digest(b);
+            Signature s;
+            if(keytype.getAlgorithm().startsWith("sec")) {
+                s=Signature.getInstance( "NONEWithECDSA","BC" );
+            } else {
+                s=Signature.getInstance("NONEWith"+keytype.getAlgorithm());
+            }
+            s.initVerify( key.getPublic() );
+            s.update(hash);
+            return s.verify(sig);
+        } catch(NoSuchAlgorithmException|InvalidKeyException|NoSuchProviderException|InvalidKeySpecException|SignatureException e) {
+            throw new IOException(e);
+        }*/
+        Signature signature;
+        try {
+            KeyPair key = getKeyPair();
+            signature = getSignature( mac );
+            signature.initVerify( key.getPublic() );
+            signature.update( b );
+            return signature.verify( sig );
+        } catch (SignatureException | InvalidKeySpecException | NoSuchAlgorithmException | NoSuchPaddingException | NoSuchProviderException | InvalidKeyException e) {
+            throw new IOException( "Exception while verifying signature", e );
+        }
     }
 
     private KeyFactory getKeyFactory() throws NoSuchAlgorithmException,NoSuchProviderException {
@@ -239,6 +275,14 @@ public class AsymmetricKey extends Key {
             return Cipher.getInstance( "ECIES","BC" );
         } else {
             return Cipher.getInstance(keytype.getAlgorithm()+"/"+mode+"/"+padding.getPadding());
+        }
+    }
+
+    private Signature getSignature(Algorithm a) throws NoSuchPaddingException, NoSuchAlgorithmException, NoSuchProviderException {
+        if (keytype.getAlgorithm().startsWith( "sec" )) {
+            return Signature.getInstance( a.getAlgorithm() + "WithECDSA", "BC" );
+        } else {
+            return Signature.getInstance( a.getAlgorithm() + "With" + keytype.getAlgorithm() );
         }
     }
 
