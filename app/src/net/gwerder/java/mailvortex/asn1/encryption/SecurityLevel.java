@@ -6,8 +6,15 @@ package net.gwerder.java.mailvortex.asn1.encryption;
  * Created by martin.gwerder on 01.06.2016.
  */
 public enum SecurityLevel {
-    LOW,MEDIUM,HIGH,QUANTUM;
+    LOW,
+    MEDIUM,
+    HIGH,
+    QUANTUM;
 
     public static SecurityLevel getDefault() {return LOW;}
+
+    public SecurityLevel next() {
+        return values()[(this.ordinal() + 1) % values().length];
+    }
 
 }

@@ -32,7 +32,7 @@ public class Message extends Block {
     private HeaderReply headerReply;
     private Payload payload;
 
-    private Message() {
+    public Message() {
         identity=null;
         routing=null;
         routingLog=null;

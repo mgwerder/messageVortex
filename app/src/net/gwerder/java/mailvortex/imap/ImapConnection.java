@@ -16,42 +16,36 @@ import java.util.logging.Logger;
 
 public class ImapConnection extends StoppableThread implements Comparable<ImapConnection> {
 
+    public static final int CONNECTION_NOT_AUTHENTICATED = 1;
+    public static final int CONNECTION_AUTHENTICATED = 2;
+    public static final int CONNECTION_SELECTED = 3;
     private static final Logger LOGGER;
+    private static int id = 1;
+    private static int defaultTimeout = 3 * 60 * 1000;
+    
     static {
         LOGGER = MailvortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
 
     }
+
     private int timeout = defaultTimeout;
-    
-    public static final int CONNECTION_NOT_AUTHENTICATED = 1;
-    public static final int CONNECTION_AUTHENTICATED     = 2;
-    public static final int CONNECTION_SELECTED          = 3;
-    
     /* holds sockets and streams of the connection (maintained by updateSocket())*/
     private Socket plainSocket=null;
     private SSLSocket sslSocket=null;
     private Socket currentSocket=null;
     private InputStream input=null;
     private OutputStream output=null;
-    
     /* SSLcontext with enabled ciphers */
     private SSLContext context;
-    
     /* Status of the connection (according to RFC */
     private int status=CONNECTION_NOT_AUTHENTICATED;
-    
     /* list of supported ciphers */
     private Set<String> suppCiphers;
-    
     /* wether the connection is encrypted or not */
     private boolean encrypted=false;
-    
     /* Authentication authority for this connection */
     private ImapAuthenticationProxy authProxy = null;
     private Thread runner=null;
-
-    private static int id=1;
-    private static int defaultTimeout = 3 * 60 * 1000;
     
     /***
      * Creates a connection object without sockets (primarily for testing) 
@@ -80,6 +74,16 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
         int a=id++;
         this.setID("AID-"+a);
         runner.start();
+    }
+
+    public static int setDefaultTimeout(int timeout) {
+        int ot = defaultTimeout;
+        defaultTimeout = timeout;
+        return ot;
+    }
+
+    public static long getDefaultTimeout() {
+        return defaultTimeout;
     }
     
     private void interruptedCatcher(Exception e) {
@@ -121,25 +125,15 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
     /***
      * Get the authenticator of the connection.
      ***/
-    public int getTimeout() { 
-        return this.timeout; 
-    }
-    
-    public static int setDefaultTimeout(int timeout) {
-        int ot=defaultTimeout;
-        defaultTimeout=timeout;
-        return ot;
-    }
-    
-    public static long getDefaultTimeout() { 
-        return defaultTimeout; 
+    public int getTimeout() {
+        return this.timeout;
     }
      
     public int setImapState(int status) {
         if(status>3 || status<1) {
             return -status;    
-        }    
-        int old=status;
+        }
+        int old = this.status;
         this.status=status;
         return old;
     }

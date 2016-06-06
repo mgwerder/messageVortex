@@ -1,7 +1,7 @@
 package net.gwerder.java.mailvortex.asn1.encryption;
 
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Vector;
 
@@ -11,28 +11,56 @@ import java.util.Vector;
  * Created by martin.gwerder on 31.05.2016.
  */
 public enum Padding {
-    PKCS1            ( 1000, "PKCS1Padding"                 , new SizeCalc(){public int maxSize(int s) {return s/8-11;}}            ),
-    OAEP_SHA384_MGF1 ( 1100, "OAEPWithSHA384AndMGF1Padding" , new SizeCalc(){public int maxSize(int s) {return s/8-2-384/4;}}       ),
-    PKCS5            ( 2000, "PKCS5Padding"                 , new SizeCalc(){public int maxSize(int keySize) {return keySize/8-1;}} );
+    PKCS1( 1000, "PKCS1Padding", new AlgorithmType[]{AlgorithmType.ASYMMETRIC}, new SizeCalc() {
+        public int maxSize(int s) {
+            return s / 8 - 11;
+        }
+    } ),
+    OAEP_SHA256_MGF1( 1100, "OAEPWithSHA256AndMGF1Padding", new AlgorithmType[]{AlgorithmType.ASYMMETRIC}, new SizeCalc() {
+        public int maxSize(int s) {
+            return s / 8 - 2 - 256 / 4;
+        }
+    } ),
+    OAEP_SHA384_MGF1( 1101, "OAEPWithSHA384AndMGF1Padding", new AlgorithmType[]{AlgorithmType.ASYMMETRIC}, new SizeCalc() {
+        public int maxSize(int s) {
+            return s / 8 - 2 - 384 / 4;
+        }
+    } ),
+    OAEP_SHA512_MGF1( 1102, "OAEPWithSHA512AndMGF1Padding", new AlgorithmType[]{AlgorithmType.ASYMMETRIC}, new SizeCalc() {
+        public int maxSize(int s) {
+            return s / 8 - 2 - 512 / 4;
+        }
+    } ),
+    PKCS7( 2000, "PKCS7Padding", new AlgorithmType[]{AlgorithmType.SYMMETRIC}, new SizeCalc() {
+        public int maxSize(int keySize) {
+            return keySize / 8 - 1;
+        }
+    } );
 
     private static Map<AlgorithmType,Padding> def=new HashMap<AlgorithmType,Padding>(  ) {
         private static final long serialVersionUID = 121321383445L;
         {
             put( AlgorithmType.ASYMMETRIC, Padding.PKCS1 );
-            put( AlgorithmType.SYMMETRIC, Padding.PKCS5 );
+            put( AlgorithmType.SYMMETRIC, Padding.PKCS7 );
         }};
     private int id;
     private String txt;
+    private HashSet<AlgorithmType> at;
     private SizeCalc s;
-    Padding(int id,String txt,SizeCalc s) {
+
+    Padding(int id, String txt, AlgorithmType[] at, SizeCalc s) {
         this.id=id;
         this.txt=txt;
+        this.at = new HashSet<>();
+        for (AlgorithmType tat : at) this.at.add( tat );
         this.s=s;
     }
 
-    public static Padding[] getAlgorithms() {
+    public static Padding[] getAlgorithms(AlgorithmType at) {
         Vector<Padding> v = new Vector<>();
-        Collections.addAll(v, values());
+        for (Padding val : values()) {
+            if (val.at.contains( at )) v.add( val );
+        }
         return v.toArray(new Padding[v.size()]);
     }
 
@@ -73,4 +101,5 @@ public enum Padding {
     private static abstract class SizeCalc {
         public abstract int maxSize(int keySize);
     }
+
 }

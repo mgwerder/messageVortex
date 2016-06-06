@@ -13,6 +13,7 @@ import org.junit.runners.JUnit4;
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.Random;
 import java.util.logging.Level;
 
 import static junit.framework.TestCase.assertFalse;
@@ -27,8 +28,8 @@ import static org.junit.Assert.fail;
 @RunWith(JUnit4.class)
 public class AsymmetricKeyTest {
 
-
     private static final java.util.logging.Logger LOGGER;
+    private static Random sr = new Random();
 
     static {
         LOGGER = MailvortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
@@ -43,7 +44,7 @@ public class AsymmetricKeyTest {
         for(Algorithm alg: Algorithm.getAlgorithms( AlgorithmType.ASYMMETRIC )) {
             for (int size : new int[]{alg.getKeySize( SecurityLevel.LOW ), alg.getKeySize( SecurityLevel.MEDIUM ), alg.getKeySize( SecurityLevel.HIGH ), alg.getKeySize( SecurityLevel.QUANTUM )})
                 try {
-                    int j = (int) Math.pow( 2, ksDisc / 4 / size );
+                    int j = (int) Math.min( Math.pow( 2, ksDisc / 8 / size ), 100 );
                     LOGGER.log( Level.INFO, "Testing " + alg + "/" + size + " (" + j + " passes)" );
                     for (int i = 0; i < j; i++) {
                         LOGGER.log( Level.INFO, "Testing " + alg + "/" + size + " (" + (i + 1) + "/" + j + ")" );
@@ -118,4 +119,41 @@ public class AsymmetricKeyTest {
         assertTrue( "getKeySize for SECP384R1 is bad", Algorithm.SECP384R1.getKeySize() == 384 );
     }
 
+    @Test
+    public void fuzzingAsymmetricKeyPadding() {
+        for (Padding p : Padding.getAlgorithms( AlgorithmType.ASYMMETRIC )) {
+            try {
+                for (Algorithm a : Algorithm.getAlgorithms( AlgorithmType.ASYMMETRIC )) {
+                    LOGGER.log( Level.INFO, "testing " + a + "/" + p );
+                    int maximumPayload = -1;
+                    int size = 0;
+                    SecurityLevel sl = SecurityLevel.LOW;
+                    while (maximumPayload < 0 && maximumPayload != -100000) {
+                        size = a.getKeySize( sl );
+                        maximumPayload = p.getMaxSize( size );
+                        if (maximumPayload < 0 && sl == SecurityLevel.QUANTUM) {
+                            LOGGER.log( Level.INFO, "skipping test for " + a + "/" + p + " due to insufficient key length" );
+                            maximumPayload = -100000;
+                        } else if (maximumPayload < 0) {
+                            sl = sl.next();
+                            LOGGER.log( Level.INFO, "  incremented to " + sl );
+                        }
+                    }
+                    if (maximumPayload == -100000) break;
+                    LOGGER.log( Level.INFO, "  minimum securityLevel is " + sl );
+                    for (int i = 0; i < 100; i++) {
+                        AsymmetricKey ak = new AsymmetricKey( a, p, size );
+                        assertTrue( "negative maximum payload for " + a.getAlgorithm() + "/" + size + "/" + p.getPadding(), maximumPayload > 1 );
+                        byte[] b = new byte[maximumPayload];
+                        sr.nextBytes( b );
+                        byte[] b2 = ak.decrypt( ak.encrypt( b ) );
+                        assertTrue( "byte arrays mus be equal after redecryption", Arrays.equals( b, b2 ) );
+                    }
+
+                }
+            } catch (IOException ioe) {
+                fail( "got exception while fuzzing padding" );
+            }
+        }
+    }
 }

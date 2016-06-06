@@ -146,6 +146,8 @@ public class AsymmetricKey extends Key {
             }
             sb.append( CRLF );
         }
+
+        // dump private key
         if(privateKey!=null && (dt==DumpType.PRIVATE_COMMENTED || dt==DumpType.PRIVATE_ONLY || dt==DumpType.ALL)) {
             String s=toHex(privateKey);
             sb.append(prefix).append("  ");
@@ -153,19 +155,25 @@ public class AsymmetricKey extends Key {
                 sb.append("-- ");
             }
             sb.append("privateKey ").append(s).append(CRLF);
-        } else sb.append(CRLF);
+        } else {
+            sb.append( CRLF );
+        }
         sb.append(prefix).append("}");
         return sb.toString();
     }
 
     public ASN1Object toASN1Object() throws IOException{
+        return toASN1Object( DumpType.PUBLIC_ONLY );
+    }
+
+    public ASN1Object toASN1Object(DumpType dt) throws IOException {
         if(publicKey==null) {
             throw new IOException("publicKey may not be null when dumping");
         }
         ASN1EncodableVector v =new ASN1EncodableVector();
         v.add(encodeKeyParameter());
         v.add( new DEROctetString(publicKey) );
-        if(privateKey!=null) {
+        if (privateKey != null && (dt != DumpType.PUBLIC_ONLY || dt != DumpType.PUBLIC_COMMENTED)) {
             v.add(new DERTaggedObject( true,0,new DEROctetString( privateKey )));
         }
         return new DERSequence( v );

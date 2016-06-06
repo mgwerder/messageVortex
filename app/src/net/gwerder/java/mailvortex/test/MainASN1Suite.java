@@ -17,6 +17,7 @@ import org.junit.runners.Suite;
         FuzzerTest.class,
         MessageTest.class,
         BlockTest.class,
+        SecurityLevelTest.class,
         SymmetricKeyTest.class,
         AsymmetricKeyTest.class,
         AsymmetricKeyReencodingTest.class,
@@ -31,6 +32,7 @@ public class MainASN1Suite {
         s.addTest(new JUnit4TestAdapter(FuzzerTest.class));
         s.addTest(new JUnit4TestAdapter(MessageTest.class));
         s.addTest(new JUnit4TestAdapter(BlockTest.class));
+        s.addTest( new JUnit4TestAdapter( SecurityLevelTest.class ) );
         s.addTest( new JUnit4TestAdapter( SymmetricKeyTest.class ) );
         s.addTest(new JUnit4TestAdapter(AsymmetricKeyTest.class));
         s.addTest(new JUnit4TestAdapter(AsymmetricKeyReencodingTest.class));
