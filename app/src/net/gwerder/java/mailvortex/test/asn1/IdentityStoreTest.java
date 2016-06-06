@@ -7,8 +7,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.Vector;
 import java.util.logging.Level;
 
 import static org.junit.Assert.assertTrue;
@@ -55,21 +58,46 @@ public class IdentityStoreTest {
     /***
      * Reencodes 4 IdentityStore and checks whether their byte and Value Notation Dumps are equivalent
      */
-    public void testingIdentityStoreDemo() {
+    public void testingIdentityStoreDemo() throws InterruptedException {
+        class ISThread extends Thread {
+            public IdentityStore is = null;
+
+            public void run() {
+                try {
+                    is = IdentityStore.getNewIdentityStoreDemo();
+                } catch (IOException ioe) {
+                    LOGGER.log( Level.WARNING, "got IOException while generating new demo", ioe );
+                }
+            }
+        }
+
+        Date start = new Date();
+        final IdentityStore[] arr = new IdentityStore[10];
+        List<ISThread> t = new Vector<>();
+
+        // prepare stores
+        for (int i = 0; i < arr.length; i++) {
+            t.add( new ISThread() );
+        }
+        for (ISThread is : t) is.start();
+        for (ISThread is : t) is.join();
+        for (int i = 0; i < arr.length; i++) arr[i] = t.get( i ).is;
+        LOGGER.log( Level.INFO, "store preparation took " + (((new Date()).getTime() - start.getTime()) / 1000) + " s" );
+
+        //testing
         try {
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < arr.length; i++) {
                 LOGGER.log( Level.INFO, "Testing IdentityStore reencoding " + (i + 1) + " of " + 4 );
-                Date start = new Date();
-                IdentityStore s1 = IdentityStore.getIdentityStoreDemo();
+                start = new Date();
+                IdentityStore s1 = arr[i];
                 assertTrue( "IdentityStore may not be null", s1 != null );
                 byte[] b1 = s1.toBytes();
                 assertTrue( "Byte representation may not be null", b1 != null );
-                IdentityStore s2 = IdentityStore.getIdentityStoreDemo();
+                IdentityStore s2 = new IdentityStore( b1 );
                 byte[] b2 = s2.toBytes();
                 assertTrue( "Byte arrays should be equal when reencoding", Arrays.equals( b1, b2 ) );
                 assertTrue( "Value Notations should be equal when reencoding", (new IdentityStore( b2 )).dumpValueNotation( "" ).equals( (new IdentityStore( b1 )).dumpValueNotation( "" ) ) );
-                IdentityStore.resetDemo();
-                s2 = IdentityStore.getIdentityStoreDemo();
+                s2 = arr[(i + 1) % arr.length];
                 b2 = s2.toBytes();
                 assertTrue( "Value Notations should NOT be equal when reencoding new demo", !(new IdentityStore( b2 )).dumpValueNotation( "" ).equals( (new IdentityStore( b1 )).dumpValueNotation( "" ) ) );
                 LOGGER.log( Level.INFO, "Testing IdentityStore reencoding " + (i + 1) + " took " + (((new Date()).getTime() - start.getTime()) / 1000) + " s" );

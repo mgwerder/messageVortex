@@ -17,8 +17,8 @@ import java.util.logging.Logger;
  */
 public class IdentityStore extends Block {
 
-    private Map<String,IdentityStoreBlock> blocks=new TreeMap<String,IdentityStoreBlock>();
     private static IdentityStore demo=null;
+    private Map<String, IdentityStoreBlock> blocks = new TreeMap<String, IdentityStoreBlock>();
 
     public IdentityStore() {
         blocks.clear();
@@ -29,25 +29,60 @@ public class IdentityStore extends Block {
         parse( b );
     }
 
-    protected void parse(byte[] p) throws IOException,ParseException,NoSuchAlgorithmException {
-        ASN1InputStream aIn=new ASN1InputStream( p );
-        parse(aIn.readObject());
-    }
-
     public static void resetDemo() {
         demo=null;
     }
 
     public static IdentityStore getIdentityStoreDemo() throws IOException {
-        if(demo==null) {
-            IdentityStore tmp=new IdentityStore(  );
-            tmp.add(IdentityStoreBlock.getIdentityStoreBlockDemo( IdentityStoreBlock.IdentityType.OWNED_IDENTITY,true ));
-            for(int i=0;i<400;i++) tmp.add(IdentityStoreBlock.getIdentityStoreBlockDemo( IdentityStoreBlock.IdentityType.NODE_IDENTITY,true ));
-            for(int i=0;i<100;i++) tmp.add(IdentityStoreBlock.getIdentityStoreBlockDemo( IdentityStoreBlock.IdentityType.RECIPIENT_IDENTITY,true ));
-            demo=tmp;
+        if (demo == null) {
+            demo = getNewIdentityStoreDemo();
         }
-
         return demo;
+    }
+
+    public static IdentityStore getNewIdentityStoreDemo() throws IOException {
+        IdentityStore tmp = new IdentityStore();
+        tmp.add( IdentityStoreBlock.getIdentityStoreBlockDemo( IdentityStoreBlock.IdentityType.OWNED_IDENTITY, true ) );
+        for (int i = 0; i < 400; i++)
+            tmp.add( IdentityStoreBlock.getIdentityStoreBlockDemo( IdentityStoreBlock.IdentityType.NODE_IDENTITY, true ) );
+        for (int i = 0; i < 100; i++)
+            tmp.add( IdentityStoreBlock.getIdentityStoreBlockDemo( IdentityStoreBlock.IdentityType.RECIPIENT_IDENTITY, true ) );
+        return tmp;
+    }
+
+    public static void main(String[] args) throws Exception {
+        System.out.println( "\n;;; -------------------------------------------" );
+        System.out.println( ";;; creating blank dump" );
+        IdentityStore m = new IdentityStore();
+        System.out.println( m.dumpValueNotation( "" ) );
+
+        System.out.println( "\n;;; -------------------------------------------" );
+        System.out.println( ";;; Demo Store Test" );
+        IdentityStore m2 = IdentityStore.getIdentityStoreDemo();
+        System.out.println( ";;; dumping" );
+        System.out.println( m2.dumpValueNotation( "" ) );
+        System.out.println( ";;; reencode check" );
+        System.out.println( ";;;   getting DER stream" );
+        byte[] b1 = m.toBytes();
+        System.out.println( ";;;   storing to DER stream to " + System.getProperty( "java.io.tmpdir" ) );
+        DEROutputStream f = new DEROutputStream( new FileOutputStream( System.getProperty( "java.io.tmpdir" ) + "/temp.der" ) );
+        f.writeObject( m.toASN1Object() );
+        f.close();
+        System.out.println( ";;;   parsing DER stream" );
+        IdentityStore m3 = new IdentityStore( b1 );
+        System.out.println( ";;;   getting DER stream again" );
+        byte[] b2 = m3.toBytes();
+        System.out.println( ";;;   comparing" );
+        if (Arrays.equals( b1, b2 )) {
+            System.out.println( "Reencode success" );
+        } else {
+            System.out.println( "Reencode FAILED" );
+        }
+    }
+
+    protected void parse(byte[] p) throws IOException, ParseException, NoSuchAlgorithmException {
+        ASN1InputStream aIn = new ASN1InputStream( p );
+        parse( aIn.readObject() );
     }
 
     public void add(IdentityStoreBlock isb) {
@@ -97,36 +132,6 @@ public class IdentityStore extends Block {
         sb.append( prefix + "  }" + CRLF );
         sb.append( prefix + "}" + CRLF );
         return sb.toString();
-    }
-
-    public static void main(String[] args) throws Exception {
-        System.out.println("\n;;; -------------------------------------------");
-        System.out.println(";;; creating blank dump");
-        IdentityStore m=new IdentityStore();
-        System.out.println(m.dumpValueNotation(""));
-
-        System.out.println("\n;;; -------------------------------------------");
-        System.out.println(";;; Demo Store Test");
-        IdentityStore m2=IdentityStore.getIdentityStoreDemo();
-        System.out.println(";;; dumping");
-        System.out.println(m2.dumpValueNotation(""));
-        System.out.println(";;; reencode check");
-        System.out.println(";;;   getting DER stream");
-        byte[] b1=m.toBytes();
-        System.out.println(";;;   storing to DER stream to "+System.getProperty("java.io.tmpdir"));
-        DEROutputStream f=new DEROutputStream( new FileOutputStream(System.getProperty("java.io.tmpdir")+"/temp.der") );
-        f.writeObject(m.toASN1Object());
-        f.close();
-        System.out.println(";;;   parsing DER stream");
-        IdentityStore m3=new IdentityStore(b1);
-        System.out.println(";;;   getting DER stream again");
-        byte[] b2=m3.toBytes();
-        System.out.println(";;;   comparing");
-        if(Arrays.equals(b1,b2) ) {
-            System.out.println( "Reencode success" );
-        } else {
-            System.out.println( "Reencode FAILED" );
-        }
     }
 
 }

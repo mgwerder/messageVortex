@@ -96,6 +96,7 @@ public class FuzzerTest {
 
     @Test
     public void fuzzingIdentity() {
+        String lastTuple = "";
         try {
             for (int i = 0; i < BLOCK_FUZZER_CYCLES; i++) {
                 Identity s = new Identity();
@@ -104,11 +105,11 @@ public class FuzzerTest {
                 assertTrue( "Byte representation may not be null", b1 != null );
                 Identity s2 = new Identity( b1 );
                 byte[] b2 = (s2).toBytes();
-                System.out.println("dumping object tuple \n"+s.dumpValueNotation( "" )+"\n"+s2.dumpValueNotation( "" ));
+                lastTuple = s.dumpValueNotation( "" ) + "\n" + s2.dumpValueNotation( "" );
                 assertTrue( "Byte arrays should be equal when reencoding", Arrays.equals( b1, b2 ) );
             }
         } catch (Exception e) {
-            LOGGER.log(Level.WARNING,"Unexpected exception",e);
+            LOGGER.log( Level.WARNING, "Unexpected exception (" + lastTuple + ")", e );
             fail( "fuzzer encountered exception in Identity ("+e.toString()+")" );
         }
     }
@@ -116,6 +117,7 @@ public class FuzzerTest {
     @Test
     public void fuzzingUsagePeriod() {
         Random r = new Random();
+        String lastTuple = "";
         try {
             for (int i = 0; i < BLOCK_FUZZER_CYCLES; i++) {
                 UsagePeriod s = new UsagePeriod( r.nextInt(3600*24*356) );
@@ -130,11 +132,11 @@ public class FuzzerTest {
                 assertTrue( "Byte representation may not be null", b1 != null );
                 UsagePeriod s2=new UsagePeriod( b1 );
                 byte[] b2 = (s2).toBytes();
-                System.out.println("dumping object tuple \n"+s.dumpValueNotation( "" )+"\n"+s2.dumpValueNotation( "" ));
+                lastTuple = s.dumpValueNotation( "" ) + "\n" + s2.dumpValueNotation( "" );
                 assertTrue( "Byte arrays should be equal when reencoding ("+s.getNotBefore()+"/"+s.getNotAfter()+") ["+b1.length+"/"+b2.length+"]", Arrays.equals( b1, b2 ) );
             }
         } catch (Exception e) {
-            LOGGER.log(Level.WARNING,"Unexpected exception",e);
+            LOGGER.log( Level.WARNING, "Unexpected exception (" + lastTuple + ")", e );
             fail( "fuzzer encountered exception in UsagePeriod ("+e.toString()+")" );
         }
     }
