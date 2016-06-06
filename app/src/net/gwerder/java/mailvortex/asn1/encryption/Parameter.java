@@ -1,6 +1,8 @@
 package net.gwerder.java.mailvortex.asn1.encryption;
 
 /**
+ * Enumeration of all supported Parameters.
+ *
  * Created by martin.gwerder on 31.05.2016.
  */
 public enum Parameter {

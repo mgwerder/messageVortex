@@ -7,12 +7,14 @@ import org.bouncycastle.asn1.ASN1Sequence;
 import java.text.ParseException;
 
 /**
+ * ASN1 parser for increasing message quota.
+ *
  * Created by martin.gwerder on 25.04.2016.
  */
 public class HeaderRequestIncreaseMessageQuota extends HeaderRequest {
 
-    protected AsymmetricKey identity = null;
-    protected int quota = -1;
+    private AsymmetricKey identity = null;
+    private long quota = -1;
 
     protected HeaderRequestIncreaseMessageQuota() {super();}
 
@@ -30,6 +32,10 @@ public class HeaderRequestIncreaseMessageQuota extends HeaderRequest {
 
     protected HeaderRequest getRequest(ASN1Encodable ae) throws ParseException {
         return new HeaderRequestIncreaseMessageQuota(ae);
+    }
+
+    public long getQuota() {
+        return quota;
     }
 
     public int getId() {return 0;}

@@ -18,6 +18,9 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * Asymmetic Key Handling.
  *
@@ -28,7 +31,12 @@ import java.util.Map;
  */
 public class AsymmetricKey extends Key {
 
+    private static final Logger LOGGER;
     private static SecureRandom secureRandom = new SecureRandom();
+
+    static {
+        LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+    }
 
     static {
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
@@ -113,6 +121,7 @@ public class AsymmetricKey extends Key {
         if(s1.size()>i) {
             privateKey=((ASN1OctetString)(((DERTaggedObject)(s1.getObjectAt(i++))).getObject())).getOctets();
         }
+        LOGGER.log(Level.FINEST, "parsed " + i + " fields");
     }
 
     public boolean hasPrivateKey() { return privateKey!=null; }

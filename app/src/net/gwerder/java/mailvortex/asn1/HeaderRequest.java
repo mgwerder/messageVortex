@@ -9,11 +9,13 @@ import java.text.ParseException;
 import java.util.Vector;
 
 /**
+ * ASN1 parser class for header request.
+ *
  * Created by martin.gwerder on 25.04.2016.
  */
 public abstract class HeaderRequest {
 
-    private static final Vector<HeaderRequest> req = new Vector<HeaderRequest>();
+    private static final Vector<HeaderRequest> req = new Vector<>();
 
     static {
         try {
@@ -22,14 +24,15 @@ public abstract class HeaderRequest {
         } catch(Exception e) {}
     }
 
+    protected HeaderRequest() {
+    }
+
     public static HeaderRequest createRequest(ASN1Encodable ae) throws ParseException {
         for(HeaderRequest hr:req) {
             if(hr.getId()==((ASN1TaggedObject)(ae)).getTagNo()) return hr.getRequest(ae);
         }
         return null;
     }
-
-    protected HeaderRequest() {}
 
     public ASN1Object toASN1Object() throws IOException {
         throw new IOException( "not implemented" ); //FIXME

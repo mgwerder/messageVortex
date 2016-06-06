@@ -7,6 +7,8 @@ import org.bouncycastle.asn1.ASN1Primitive;
 import java.io.IOException;
 
 /**
+ * ASN1 parser class for header reply.
+ *
  * Created by martin.gwerder on 14.04.2016.
  */
 public class HeaderReply extends Block {
@@ -26,7 +28,7 @@ public class HeaderReply extends Block {
 
     public String dumpValueNotation(String prefix) {
         StringBuilder sb=new StringBuilder();
-        sb.append("-- FIXME unsuported dump of HeaderReply"+CRLF);
+        sb.append("-- FIXME unsuported dump of HeaderReply").append(CRLF);
         return sb.toString();
     }
 

@@ -82,13 +82,6 @@ public enum Algorithm {
         return null;
     }
 
-    public static Algorithm getByString(String s) {
-        for(Algorithm e : values()) {
-            if(e.toString().equals(s.toLowerCase())) return e;
-        }
-        return null;
-    }
-
     public static Algorithm getDefault(AlgorithmType at) {
         return def.get( at );
     }

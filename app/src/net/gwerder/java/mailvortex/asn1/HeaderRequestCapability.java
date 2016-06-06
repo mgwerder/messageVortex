@@ -6,6 +6,8 @@ import org.bouncycastle.asn1.ASN1Sequence;
 import java.text.ParseException;
 
 /**
+ * ASN1 parser block for the capability request.
+ *
  * Created by martin.gwerder on 25.04.2016.
  */
 public class HeaderRequestCapability extends HeaderRequest {
@@ -33,8 +35,9 @@ public class HeaderRequestCapability extends HeaderRequest {
     public String dumpValueNotation(String prefix) {
         StringBuilder sb=new StringBuilder();
         sb.append("{"+Block.CRLF);
-        if(period!=null) sb.append( prefix+"  period "+period.dumpValueNotation( prefix+"  " )+Block.CRLF );
-        sb.append(prefix+"}");
+        if (period != null)
+            sb.append(prefix).append("  period ").append(period.dumpValueNotation(prefix + "  ")).append(Block.CRLF);
+        sb.append(prefix).append("}");
         return sb.toString();
     }
 }

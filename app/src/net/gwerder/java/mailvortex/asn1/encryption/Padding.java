@@ -1,5 +1,6 @@
 package net.gwerder.java.mailvortex.asn1.encryption;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
@@ -31,22 +32,13 @@ public enum Padding {
 
     public static Padding[] getAlgorithms() {
         Vector<Padding> v = new Vector<>();
-        for(Padding e : values()) {
-            v.add(e);
-        }
+        Collections.addAll(v, values());
         return v.toArray(new Padding[v.size()]);
     }
 
     public static Padding getById(int id) {
         for(Padding e : values()) {
             if(e.id==id) return e;
-        }
-        return null;
-    }
-
-    public static Padding getByString(String s) {
-        for(Padding e : values()) {
-            if(e.toString().equals(s.toLowerCase())) return e;
         }
         return null;
     }

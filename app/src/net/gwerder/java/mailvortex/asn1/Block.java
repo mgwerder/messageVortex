@@ -10,6 +10,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * Abstract class collecting all ASN1 Block parser classes.
+ *
  * Created by martin.gwerder on 14.04.2016.
  */
 public abstract class Block {

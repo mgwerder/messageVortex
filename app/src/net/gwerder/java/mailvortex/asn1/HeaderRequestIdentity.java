@@ -6,6 +6,8 @@ import org.bouncycastle.asn1.ASN1Sequence;
 import java.text.ParseException;
 
 /**
+ * ASN1 parser for identity request.
+ *
  * Created by martin.gwerder on 25.04.2016.
  */
 public class HeaderRequestIdentity extends HeaderRequest {

@@ -26,13 +26,6 @@ public enum Mode {
         return null;
     }
 
-    public static Mode getByString(String s) {
-        for(Mode e : values()) {
-            if(e.toString().equals(s)) return e;
-        }
-        return null;
-    }
-
     public static Mode getDefault() {
         return def;
     }

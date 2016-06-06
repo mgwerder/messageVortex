@@ -6,6 +6,8 @@ import org.bouncycastle.asn1.ASN1Sequence;
 import java.text.ParseException;
 
 /**
+ * ASN1 parser to request status of current quota.
+ *
  * Created by martin.gwerder on 25.04.2016.
  */
 public class HeaderRequestQueryQuota extends HeaderRequest {
