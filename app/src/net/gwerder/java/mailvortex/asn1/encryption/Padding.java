@@ -14,8 +14,8 @@ public enum Padding {
     OAEP_SHA384_MGF1 ( 1100, "OAEPWithSHA384AndMGF1Padding" , new SizeCalc(){public int maxSize(int s) {return s/8-2-384/4;}}       ),
     PKCS5            ( 2000, "PKCS5Padding"                 , new SizeCalc(){public int maxSize(int keySize) {return keySize/8-1;}} );
 
-    private static final long serialVersionUID = 1000000000L;
     private static Map<AlgorithmType,Padding> def=new HashMap<AlgorithmType,Padding>(  ) {
+        private static final long serialVersionUID = 121321383445L;
         {
             put( AlgorithmType.ASYMMETRIC, Padding.PKCS1 );
             put( AlgorithmType.SYMMETRIC, Padding.PKCS5 );
