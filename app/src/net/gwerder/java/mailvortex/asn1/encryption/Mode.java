@@ -1,8 +1,8 @@
 package net.gwerder.java.mailvortex.asn1.encryption;
 
-import com.sun.media.sound.MidiOutDeviceProvider;
-
 /**
+ * Enumeration to list available encryption modes.
+ *
  * Created by martin.gwerder on 31.05.2016.
  */
 public enum Mode {
@@ -33,12 +33,6 @@ public enum Mode {
         return null;
     }
 
-    public int getId() {return id;}
-
-    public String getMode() {
-        return txt;
-    }
-
     public static Mode getDefault() {
         return def;
     }
@@ -47,6 +41,14 @@ public enum Mode {
         Mode old=def;
         def=ndef;
         return old;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getMode() {
+        return txt;
     }
 }
 

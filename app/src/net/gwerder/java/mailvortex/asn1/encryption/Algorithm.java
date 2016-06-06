@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Vector;
 
 /**
- * Represents all supported cryptographical algorithms.
+ * Represents all supported crypto algorithms.
  *
  * Created by martin.gwerder on 31.05.2016.
  */

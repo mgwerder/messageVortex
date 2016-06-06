@@ -18,9 +18,11 @@ import java.text.ParseException;
 
 public class Identity extends Block {
 
-    public static final int ENCRYPTED_HEADER_KEY = 1000;
-    public static final int PLAIN_IDENTITY_BLOCK = 1002;
-    public static final int ENCRYPTED_IDENTITY_BLOCK = 1001;
+    private static final int ENCRYPTED_HEADER_KEY = 1000;
+    private static final int PLAIN_IDENTITY_BLOCK = 1002;
+    private static final int ENCRYPTED_IDENTITY_BLOCK = 1001;
+
+    private static final Request[] NULLREQUESTS = new Request[0];
 
 
     private SymmetricKey headerKey;
@@ -41,13 +43,13 @@ public class Identity extends Block {
     private AsymmetricKey ownIdentity = null;
 
     public Identity() throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, IOException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, NoSuchProviderException, InvalidKeySpecException {
-        identityKey=new AsymmetricKey(Algorithm.RSA, Padding.getDefault(AlgorithmType.ASYMMETRIC),2048);
-        serial = (long)(Math.random()*4294967295L);
-        maxReplays=1;
-        valid=new UsagePeriod(3600);
-        decryptionKey=new SymmetricKey(Algorithm.AES256);
-        decryptionKeyRaw = identityKey.encrypt( toDER( decryptionKey.toASN1Object() ) );
-        requests=new Request[0];
+        this.identityKey = new AsymmetricKey(Algorithm.RSA, Padding.getDefault(AlgorithmType.ASYMMETRIC), 2048);
+        this.serial = (long) (Math.random() * 4294967295L);
+        this.maxReplays = 1;
+        this.valid = new UsagePeriod(3600);
+        this.decryptionKey = new SymmetricKey(Algorithm.AES256);
+        this.decryptionKeyRaw = this.identityKey.encrypt(this.toDER(decryptionKey.toASN1Object()));
+        this.requests = Identity.NULLREQUESTS;
     }
 
     public Identity(byte[] b, AsymmetricKey ownIdentity) throws ParseException, IOException, NoSuchAlgorithmException {
@@ -66,6 +68,7 @@ public class Identity extends Block {
     }
 
     public Identity(ASN1Encodable to, AsymmetricKey ownIdentity) throws ParseException, IOException, NoSuchAlgorithmException {
+        super();
         this.ownIdentity = ownIdentity;
         parse( to );
     }

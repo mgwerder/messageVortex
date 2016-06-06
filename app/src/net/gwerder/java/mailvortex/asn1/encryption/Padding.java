@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.Vector;
 
 /**
+ * Enumeration listing all available padding types for encryption.
+ *
  * Created by martin.gwerder on 31.05.2016.
  */
 public enum Padding {
@@ -12,30 +14,23 @@ public enum Padding {
     OAEP_SHA384_MGF1 ( 1100, "OAEPWithSHA384AndMGF1Padding" , new SizeCalc(){public int maxSize(int s) {return s/8-2-384/4;}}       ),
     PKCS5            ( 2000, "PKCS5Padding"                 , new SizeCalc(){public int maxSize(int keySize) {return keySize/8-1;}} );
 
-    private static abstract class SizeCalc{
-        public abstract int maxSize(int keySize);
-    }
-
+    private static final long serialVersionUID = 1000000000L;
     private static Map<AlgorithmType,Padding> def=new HashMap<AlgorithmType,Padding>(  ) {
         {
             put( AlgorithmType.ASYMMETRIC, Padding.PKCS1 );
             put( AlgorithmType.SYMMETRIC, Padding.PKCS5 );
         }};
-
     private int id;
     private String txt;
     private SizeCalc s;
-
     Padding(int id,String txt,SizeCalc s) {
         this.id=id;
         this.txt=txt;
         this.s=s;
     }
 
-    public int getId() {return id;}
-
     public static Padding[] getAlgorithms() {
-        Vector<Padding> v=new Vector<Padding>();
+        Vector<Padding> v = new Vector<>();
         for(Padding e : values()) {
             v.add(e);
         }
@@ -56,10 +51,6 @@ public enum Padding {
         return null;
     }
 
-    public String getPadding() {
-        return txt;
-    }
-
     public static Padding getDefault(AlgorithmType at) {
         return def.get(at);
     }
@@ -70,6 +61,14 @@ public enum Padding {
         return old;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public String getPadding() {
+        return txt;
+    }
+
     public int getMaxSize(int keysize) {
         return s.maxSize( keysize );
     }
@@ -77,5 +76,9 @@ public enum Padding {
     @Override
     public String toString() {
         return super.toString().toLowerCase();
+    }
+
+    private static abstract class SizeCalc {
+        public abstract int maxSize(int keySize);
     }
 }

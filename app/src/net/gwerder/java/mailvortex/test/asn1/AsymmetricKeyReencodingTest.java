@@ -22,10 +22,12 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 /**
+ * Tests reencoding of asymetric keys.
+ *
  * Created by martin.gwerder on 31.05.2016.
  */
 @RunWith(Parameterized.class)
-public class AsymmetricKeyFuzzerTest {
+public class AsymmetricKeyReencodingTest {
 
     private static final java.util.logging.Logger LOGGER;
     private static final int ksDisc = 8192; //16384
@@ -41,7 +43,7 @@ public class AsymmetricKeyFuzzerTest {
     private Padding   pad;
     private int       size;
 
-    public AsymmetricKeyFuzzerTest(String testname, Algorithm alg, Padding pad, int size) {
+    public AsymmetricKeyReencodingTest(String testname, Algorithm alg, Padding pad, int size) {
         this.testname = testname;
         this.alg=alg;
         this.pad=pad;
@@ -53,7 +55,7 @@ public class AsymmetricKeyFuzzerTest {
         List<Object[]> ret = new Vector<>();
         for(Algorithm alg: Algorithm.getAlgorithms( AlgorithmType.ASYMMETRIC )) {
             for (int ks : new int[]{1024 }) { // FIXME ",2048,4096"
-                int j = (int) Math.pow( 2, (int) (ksDisc / ks) );
+                int j = (int) Math.pow(2, ksDisc / ks);
                 for (int i = 0; i < j; i++) {
                     ret.add( new Object[]{"" + alg.getAlgorithm() + "/" + ks + "/" + i, alg, Padding.getDefault( AlgorithmType.ASYMMETRIC ), ks} );
                 }
@@ -70,7 +72,6 @@ public class AsymmetricKeyFuzzerTest {
         try {
             LOGGER.log( Level.INFO, "running reencoding test for " + testname );
             AsymmetricKey s = new AsymmetricKey( alg, pad, size );
-            assertTrue( "Asymmetric may not be null", s != null );
             byte[] b1 = s.toBytes();
             s.dumpValueNotation( "" );
             assertTrue( "Byte representation may not be null", b1 != null );
@@ -86,10 +87,12 @@ public class AsymmetricKeyFuzzerTest {
 
     @Test
     public void fuzzingAsymmetricEncryption() {
-        AsymmetricKey s=null;
+        AsymmetricKey s;
+        String currentObject = null;
         try {
             LOGGER.log( Level.INFO, "Running encryption test with " + alg + "/" + Mode.getDefault() + "/" + pad + " (" + size + ")" );
             s = new AsymmetricKey(alg, pad,size);
+            currentObject = s.dumpValueNotation("", AsymmetricKey.DumpType.ALL);
             byte[] b1=new byte[sr.nextInt(Math.min(s.getPadding().getMaxSize( size ),1024))];
             sr.nextBytes( b1 );
             byte[] b2=s.decrypt( s.encrypt(b1) );
@@ -101,7 +104,7 @@ public class AsymmetricKeyFuzzerTest {
             LOGGER.log(Level.INFO,"done with "+alg+"/unspecified/"+pad+" ("+size+")");
         } catch(Exception e) {
             LOGGER.log(Level.WARNING,"Unexpected exception",e);
-            fail("fuzzer encountered exception in Symmetric en/decryption test with algorithm "+alg.toString()+"\n"+s.dumpValueNotation( "", AsymmetricKey.DumpType.ALL ));
+            fail("fuzzer encountered exception in Symmetric en/decryption test with algorithm " + alg.toString() + "\n" + currentObject);
         } finally {
             System.err.flush();
             System.out.flush();

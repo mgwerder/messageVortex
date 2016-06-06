@@ -9,17 +9,7 @@ public class Config {
     private static final Config DEFAULT_CFG=new Config();
 
     private final Map<String,Object> configurationData= new ConcurrentHashMap<String,Object>();
-    
-    public boolean createBooleanConfigValue(String id,boolean dval) {
-        synchronized(configurationData) {
-            if(configurationData.get(id.toLowerCase())==null) {
-                configurationData.put(id.toLowerCase(),Boolean.valueOf(dval));
-                return true;
-            } else {
-                return false;
-            }
-        }    
-    }
+
     /* Gets a boolean value from the application config.
      *
      * @param id key which should be set
@@ -30,14 +20,15 @@ public class Config {
      ***/
     public static Config getDefault() {
         return DEFAULT_CFG;
-    }    
-    
+    }
+
     public static Config copy(Config src) {
         Config dst=new Config();
         synchronized(src.configurationData) {
             Iterator<Map.Entry<String,Object>> it = src.configurationData.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry<String,Object> p=it.next();
+                //noinspection ChainOfInstanceofChecks
                 if(p.getValue() instanceof Boolean) {
                     dst.configurationData.put(p.getKey(),Boolean.valueOf(((Boolean)(p.getValue())).booleanValue()));
                 } else if(p.getValue() instanceof String) {
@@ -45,18 +36,29 @@ public class Config {
                 } else {
                     throw new ClassCastException("unknown value in config data");
                 }
-            }                
-        }  
+            }
+        }
         return dst;
     }
-    
+
+    public boolean createBooleanConfigValue(String id, boolean dval) {
+        synchronized (configurationData) {
+            if (configurationData.get(id.toLowerCase()) == null) {
+                configurationData.put(id.toLowerCase(), Boolean.valueOf(dval));
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
     /***
      * Returns a deep copy of this config store.
      ***/
     public Config copy() {
         return copy(this);
     }
-    
+
     /***
      * Gets a boolean value from the application config.
      *
@@ -75,7 +77,7 @@ public class Config {
         } else {
             ret=getBooleanValue(id);
             getDefault().configurationData.put(id.toLowerCase(),Boolean.valueOf(value));
-        }    
+        }
         return ret;
     }
 
@@ -95,14 +97,14 @@ public class Config {
             throw new ClassCastException();
         } else {
             ret=((Boolean)(getDefault().configurationData.get(id.toLowerCase()))).booleanValue();
-        }    
+        }
         return ret;
     }
 
     /***
      * Creates a String config item.
      *
-     * Creates a config item with a case insensitive identifier. 
+     * Creates a config item with a case insensitive identifier.
      * The content of the item may not be null.
      *
      * @param id    Name of config item (case insensitive)
@@ -118,9 +120,9 @@ public class Config {
             } else {
                 return false;
             }
-        }    
+        }
     }
-    
+
     /***
      * @throws NullPointerException when id is unknown
      * @throws ClassCastException   when id is not a String setting
@@ -134,7 +136,7 @@ public class Config {
         } else {
             ret=getStringValue(id);
             configurationData.put(id.toLowerCase(),value);
-        }    
+        }
         return ret;
     }
 
@@ -150,7 +152,7 @@ public class Config {
             throw new ClassCastException();
         } else {
             ret=(String)(configurationData.get(id.toLowerCase()));
-        }    
+        }
         return ret;
     }
 
