@@ -15,12 +15,16 @@ public enum Algorithm {
     AES128( 1000, AlgorithmType.SYMMETRIC, "aes128", "BC", SecurityLevel.LOW ),
     AES192( 1001, AlgorithmType.SYMMETRIC, "aes192", "BC" ),
     AES256( 1002, AlgorithmType.SYMMETRIC, "aes256", "BC" ),
-    RSA       (2000, AlgorithmType.ASYMMETRIC,"RSA"   ,"BC", new HashMap<SecurityLevel,Integer>() {{
-        put(SecurityLevel.LOW    ,1024);
-        put(SecurityLevel.MEDIUM ,2048);
-        put(SecurityLevel.HIGH   ,4096);
-        put(SecurityLevel.QUANTUM,8192);
-    }}), //available as well under "SunJCE"
+    RSA(2000, AlgorithmType.ASYMMETRIC, "RSA", "BC", new HashMap<SecurityLevel, Integer>() {
+        private static final long serialVersionUID = 12132345345L;
+
+        {
+            put(SecurityLevel.LOW, 1024);
+            put(SecurityLevel.MEDIUM, 2048);
+            put(SecurityLevel.HIGH, 4096);
+            put(SecurityLevel.QUANTUM, 8192);
+        }
+    }), //available as well under "SunJCE"
     //EC        (2100, AlgorithmType.ASYMMETRIC,"EC"   ,"SunEC",null),
     SECP384R1( 2500, AlgorithmType.ASYMMETRIC, "secp384r1", "BC" ),
     SECT409K1( 2501, AlgorithmType.ASYMMETRIC, "sect409k1", "BC" ),
@@ -29,11 +33,15 @@ public enum Algorithm {
     SHA512( 3001, AlgorithmType.HASHING, "sha512", "BC" );
     //TIGER192  (3100, AlgorithmType.HASHING,"tiger192","BC");
 
-    private static Map<AlgorithmType,Algorithm> def=new HashMap<AlgorithmType,Algorithm>() {{
-        put(AlgorithmType.ASYMMETRIC,RSA);
-        put(AlgorithmType.SYMMETRIC ,AES256);
-        put(AlgorithmType.HASHING   ,SHA512);
-    }};
+    private static Map<AlgorithmType, Algorithm> def = new HashMap<AlgorithmType, Algorithm>() {
+        private static final long serialVersionUID = 12132324789789L;
+
+        {
+            put(AlgorithmType.ASYMMETRIC, RSA);
+            put(AlgorithmType.SYMMETRIC, AES256);
+            put(AlgorithmType.HASHING, SHA512);
+        }
+    };
 
     private int id;
     private AlgorithmType t;
