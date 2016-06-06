@@ -100,8 +100,7 @@ BEGIN
     encryptionKey     [201] SymmetricKey OPTIONAL,
     
     -- contains information for building replys
-    cascade           [300] SEQUENCE(SIZE (0..255)) OF CascadeBuildInformation,
-    ...
+    cascade           [300] SEQUENCE(SIZE (0..255)) OF CascadeBuildInformation
   }
   
   NextHopBlock ::= SEQUENCE {
@@ -113,14 +112,16 @@ BEGIN
   
   PayloadOperation ::= SEQUENCE{
     operation           PayloadType,
-    thisid              [12010] INTEGER (0..65535)
+    thisid              [12010] SEQUENCE (0..128) OF INTEGER (0..65535)
   }
   
   PayloadType ::= CHOICE {
         randomPayload   [100] RandomPayloadOperation, 
         splitPayload    [150] SplitPayloadOperation, 
         mergePayload    [200] MergePayloadOperation,
-        xorPayload      [250] XorPayloadOperation
+        xorPayload      [250] XorPayloadOperation,
+        encryptPayload  [300] EncryptPayloadOperation,
+		...
   }
   
   CascadeBuildInformation ::= SEQUENCE {
@@ -140,9 +141,12 @@ BEGIN
     toAbsolut           INTEGER (0..maxChunkSize)
   }
   
-  SizeType ::= CHOICE {
-    percent     [15001] PercentSizeType,
-    absolute    [15101] AbsoluteSizeType
+  SizeType ::= SEQUENCE{
+	reference		INTEGER (0..65535),
+	size CHOICE {
+		percent     [15001] PercentSizeType,
+		absolute    [15101] AbsoluteSizeType
+	}
   }
   
   RandomPayloadOperation ::= SEQUENCE {
@@ -150,6 +154,9 @@ BEGIN
   }
  
   SplitPayloadOperation ::= SEQUENCE {
+    originalId				 INTEGER (0..65535),
+    firstSize                SizeType,
+	secondId				 INTEGER (0..65535)
   }
  
   MergePayloadOperation ::= SEQUENCE {
