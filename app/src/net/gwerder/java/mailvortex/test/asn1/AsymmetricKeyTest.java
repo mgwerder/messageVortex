@@ -11,7 +11,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.io.IOException;
-import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -46,7 +45,7 @@ public class AsymmetricKeyTest {
             private int size;
             private Algorithm alg;
 
-            public TestThread(int size, Algorithm alg) {
+            private TestThread(int size, Algorithm alg) {
                 this.size = size;
                 this.alg = alg;
             }
@@ -119,7 +118,6 @@ public class AsymmetricKeyTest {
             }
         }
 
-        SecureRandom sr=new SecureRandom(  );
         List<Thread> t = new Vector<>();
         for(Algorithm alg: Algorithm.getAlgorithms( AlgorithmType.ASYMMETRIC )) {
             for (int size : new int[]{alg.getKeySize( SecurityLevel.LOW ), alg.getKeySize( SecurityLevel.MEDIUM ), alg.getKeySize( SecurityLevel.HIGH ), alg.getKeySize( SecurityLevel.QUANTUM )})

@@ -270,17 +270,13 @@ public class AsymmetricKey extends Key {
 
     private KeyPair getKeyPair() throws NoSuchAlgorithmException,NoSuchProviderException,InvalidKeySpecException {
         KeyFactory kf=getKeyFactory();
-        PKCS8EncodedKeySpec rks = null;
         PrivateKey priv = null;
         if(privateKey!=null) {
-            rks  = new PKCS8EncodedKeySpec(privateKey);
-            priv = kf.generatePrivate(rks);
+            priv = kf.generatePrivate(new PKCS8EncodedKeySpec(privateKey));
         }
-        X509EncodedKeySpec uks=null;
         PublicKey pub = null;
         if(publicKey!=null) {
-            uks = new X509EncodedKeySpec(publicKey);
-            pub = kf.generatePublic(uks);
+            pub = kf.generatePublic(new X509EncodedKeySpec(publicKey));
         }
         return new KeyPair( pub,priv );
     }
