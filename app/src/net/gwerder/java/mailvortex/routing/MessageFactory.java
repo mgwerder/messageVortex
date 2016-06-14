@@ -20,7 +20,6 @@ public abstract class MessageFactory {
     protected String msg = "";
     protected IdentityStoreBlock source = null;
     protected IdentityStoreBlock target = null;
-    protected IdentityStoreBlock[] anonGroupMembers = null;
     protected IdentityStoreBlock hotspot = null;
     protected IdentityStore identityStore = null;
 

@@ -21,6 +21,8 @@ public class IdentityStoreBlock extends Block {
     AsymmetricKey identityKey   = null;
     String        nodeAddress   = null;
     AsymmetricKey nodeKey       = null;
+    IdentityType  iType         = null;
+
     public IdentityStoreBlock() {
         super();
     }
@@ -35,8 +37,10 @@ public class IdentityStoreBlock extends Block {
         ret.setValid(new UsagePeriod(3600*24*30));
         ret.setTransferQuota( secureRandom.nextInt( 1024 * 1024 * 1024 ) );
         ret.setMessageQuota( secureRandom.nextInt( 1024 * 1024 ) );
+        ret.iType=it;
         switch(it) {
             case OWNED_IDENTITY:
+                // my own identity to decrypt everything
                 try {
                     ret.setIdentityKey( new AsymmetricKey() );
                     byte[] b = new byte[secureRandom.nextInt( 20 ) + 3];
@@ -48,6 +52,7 @@ public class IdentityStoreBlock extends Block {
                 }
                 break;
             case NODE_IDENTITY:
+                // My identities I have on remote nodes
                 try {
                     ret.setIdentityKey( null );
                     byte[] b = new byte[secureRandom.nextInt( 20 ) + 3];
@@ -61,6 +66,7 @@ public class IdentityStoreBlock extends Block {
                 }
                 break;
             case RECIPIENT_IDENTITY:
+                // Identities for receiving mails
                 try {
                     AsymmetricKey ak=new AsymmetricKey();
                     if(!complete) ak.setPrivateKey(null);
@@ -184,6 +190,12 @@ public class IdentityStoreBlock extends Block {
         sb.append( CRLF );
         sb.append( prefix + "}" );
         return sb.toString();
+    }
+
+    public IdentityType getType() {
+        if(iType!=null) return iType;
+
+        return (nodeKey.getPrivateKey()!=null?IdentityType.NODE_IDENTITY:IdentityType.RECIPIENT_IDENTITY);
     }
 
     public enum IdentityType {

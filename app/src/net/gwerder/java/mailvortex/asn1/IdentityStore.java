@@ -5,10 +5,9 @@ import org.bouncycastle.asn1.*;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.text.ParseException;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,6 +15,8 @@ import java.util.logging.Logger;
  * Created by martin.gwerder on 26.05.2016.
  */
 public class IdentityStore extends Block {
+
+    private static SecureRandom secureRandom = new SecureRandom();
 
     private static IdentityStore demo=null;
     private Map<String, IdentityStoreBlock> blocks = new TreeMap<String, IdentityStoreBlock>();
@@ -78,6 +79,21 @@ public class IdentityStore extends Block {
         } else {
             System.out.println( "Reencode FAILED" );
         }
+    }
+
+    public List<IdentityStoreBlock> getAnonSet(int size) {
+        Logger.getLogger( "IdentityStore" ).log( Level.WARNING, "Executing getAnonSet("+size+") from "+blocks.size() );
+        List<IdentityStoreBlock> ret=new Vector<>();
+        String[] keys=blocks.keySet().toArray(new String[0]);
+        while(ret.size()<size) {
+            IdentityStoreBlock isb=blocks.get(keys[secureRandom.nextInt(keys.length)]);
+            if(isb!=null && isb.getType()==IdentityStoreBlock.IdentityType.RECIPIENT_IDENTITY && !ret.contains( isb ) ) {
+                ret.add(isb);
+                Logger.getLogger( "IdentityStore" ).log( Level.INFO, "adding to anonSet "+isb.getIdentityKey().getPublicKey() );
+            }
+        }
+        Logger.getLogger( "IdentityStore" ).log( Level.FINE, "done getAnonSet()" );
+        return ret;
     }
 
     protected void parse(byte[] p) throws IOException, ParseException, NoSuchAlgorithmException {

@@ -4,7 +4,9 @@
       <root url="jar://$PROJECT_DIR$/rtlib/bouncycastle/bcprov-ext-jdk15on-154.jar!/" />
       <root url="jar://$PROJECT_DIR$/rtlib/bouncycastle/bcprov-jdk15on-154.jar!/" />
     </CLASSES>
-    <JAVADOC />
+    <JAVADOC>
+      <root url="https://bouncycastle.org/docs/docs1.5on/index.html" />
+    </JAVADOC>
     <SOURCES />
   </library>
 </component>

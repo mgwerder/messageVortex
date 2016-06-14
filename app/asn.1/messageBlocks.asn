@@ -16,11 +16,7 @@ BEGIN
   maxNumberOfRequests   INTEGER ::= 8               -- maximum number of administrative requests
 
   Message     ::= SEQUENCE { 
-    headerKey     [1000] OCTET STRING OPTIONAL,  -- contains SymmetricKey encrypted with recipient nodes private key
-    header        CHOICE { 
-        encrypted [1001] OCTET STRING,  -- contains IdentityBlock structure; Decryption key is hosts private key
-        plain     [1002] IdentityBlock  -- may be transmitted in plain (if empty)
-    },
+    header        IdentityBlock,
     blocks        CHOICE {
         encrypted [1101] OCTET STRING,     -- contains encrypted UnencryptedBlocks structure; Decryption key is in identity block [decryptionKey]
         plain     [1102] UnencryptedBlocks -- should not be used except for internal diagnostic purposes
@@ -29,6 +25,15 @@ BEGIN
   
   -- represents the identity of the rights owner
   IdentityBlock ::= SEQUENCE {
+    headerKey             [1000] OCTET STRING OPTIONAL,  -- contains SymmetricKey encrypted with recipient nodes public key
+    identityBlock         CHOICE {
+        encrypted  [1001] OCTET STRING,   
+        plain      [1002] IdentityPayloadBlock,   
+    },
+    identitySignature OCTET STRING   -- contains signature of Identity [as stored in identityBlock;signed identityBlock without Tag]
+  }
+  
+  IdentityPayloadBlock ::= SEQUENCE {
     -- Public key of the identity representing this transmission
     identityKey       AsymmetricKey,
     
@@ -49,6 +54,9 @@ BEGIN
     -- contains SymmetricKey encrypted with private key of identityKey 
     -- encryption is done as proof of identity (identity hijack protection)
     decryptionKey     OCTET STRING,   -- contains (encrypted) DER encoded ASN1BitString with key representation
+    
+    --  contains the MAC-Algorithm used for signing
+    hash              MacAlgorithm,
     
     -- contains administrative requests such as quota requests
     requests          SEQUENCE (SIZE (0..maxNumberOfRequests)) OF HeaderRequest ,
@@ -200,7 +208,8 @@ BEGIN
     transferQuota       INTEGER (0..4294967295),
     identity            [1001] AsymmetricKey OPTIONAL,    -- if omitted this is a node identity
     nodeAddress         [1002] NodeSpec      OPTIONAL,    -- if ommited own identity key
-    nodeKey             [1003] AsymmetricKey OPTIONAL,    -- Contains the identity of the owning node; May be ommited if local node
+    nodeKey             [1003] SEQUENCE OF AsymmetricKey OPTIONAL,    -- Contains the identity of the owning node; May be ommited if local node
+    routingBlocks       [1004] SEQUENCE OF RoutingBlock OTIONAL
     ...
   }
   
