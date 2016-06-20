@@ -3,6 +3,7 @@ package net.gwerder.java.mailvortex.asn1;
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1Sequence;
 
+import java.io.IOException;
 import java.text.ParseException;
 
 /**
@@ -17,18 +18,18 @@ public class HeaderRequestIdentity extends HeaderRequest {
 
     protected HeaderRequestIdentity() {super();}
 
-    public HeaderRequestIdentity(ASN1Encodable ae) throws ParseException {
+    public HeaderRequestIdentity(ASN1Encodable ae) throws IOException {
         parse(ae);
     }
 
-    protected void parse(ASN1Encodable ae) throws ParseException{
+    protected void parse(ASN1Encodable ae) throws IOException {
         ASN1Sequence s1 = ASN1Sequence.getInstance(ae);
         int i=0;
         identity=new AsymmetricKey(s1.getObjectAt(i++));
         period = new UsagePeriod( s1.getObjectAt( i++ ) );
     }
 
-    protected HeaderRequest getRequest(ASN1Encodable ae) throws ParseException {
+    protected HeaderRequest getRequest(ASN1Encodable ae) throws IOException {
         return new HeaderRequestIdentity(ae);
     }
 

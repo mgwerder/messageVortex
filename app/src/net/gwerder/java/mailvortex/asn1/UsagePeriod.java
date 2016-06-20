@@ -24,25 +24,33 @@ public class UsagePeriod extends Block {
         notAfter = new Date( notBefore.getTime()+seconds*1000L);
     }
 
-    public UsagePeriod(byte[] b) throws ParseException,IOException {
+    public UsagePeriod(byte[] b) throws IOException {
         ASN1InputStream aIn=new ASN1InputStream( b );
         parse(aIn.readObject());
     }
 
-    public UsagePeriod(ASN1Encodable to) throws ParseException {
+    public UsagePeriod(ASN1Encodable to) throws IOException {
         parse(to);
     }
 
-    protected void parse(ASN1Encodable to) throws ParseException {
+    protected void parse(ASN1Encodable to) throws IOException {
         ASN1Sequence s1 = ASN1Sequence.getInstance(to);
         for(ASN1Encodable e:s1.toArray()) {
             ASN1TaggedObject tag=ASN1TaggedObject.getInstance(e);
             if(tag.getTagNo()==TAG_NOT_BEFORE && notBefore==null) {
-                notBefore = ASN1GeneralizedTime.getInstance(tag.getObject()).getDate();
+                try{
+                    notBefore = ASN1GeneralizedTime.getInstance(tag.getObject()).getDate();
+                }catch(ParseException pe) {
+                    throw new IOException( "unable to parse notAfter",pe);
+                }
             } else if(tag.getTagNo()==TAG_NOT_AFTER  && notAfter==null) {
-                notAfter  = ASN1GeneralizedTime.getInstance(tag.getObject()).getDate();
+                try {
+                    notAfter = ASN1GeneralizedTime.getInstance( tag.getObject() ).getDate();
+                }catch(ParseException pe) {
+                    throw new IOException( "unable to parse notAfter",pe);
+                }
             } else {
-                throw new ParseException("Encountered unknown or repeated Tag number in Usage Period ("+tag.getTagNo()+")",-1);
+                throw new IOException("Encountered unknown or repeated Tag number in Usage Period ("+tag.getTagNo()+")");
             }
         }
     }

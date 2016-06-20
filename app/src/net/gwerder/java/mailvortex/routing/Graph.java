@@ -11,6 +11,8 @@ class Graph {
 
     private IdentityStoreBlock from;
     private IdentityStoreBlock to;
+    private long               startTime = 0;
+    private long               maxDelay  = 10000;
 
     /***
      * Represents a routing graph during sending.
@@ -42,6 +44,22 @@ class Graph {
      */
     public IdentityStoreBlock getTo() {
         return to;
+    }
+
+    public long getStartTime() { return startTime; }
+
+    public long setStartTime( long newStartTime ) {
+        long old=startTime;
+        this.startTime=newStartTime;
+        return old;
+    }
+
+    public long getDelayTime() { return maxDelay; }
+
+    public long setDelayTime( long newMaxDelay ) {
+        long old=maxDelay;
+        this.startTime=newMaxDelay;
+        return old;
     }
 
     public boolean equals(Graph g) {

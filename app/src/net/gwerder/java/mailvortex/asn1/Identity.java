@@ -15,6 +15,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.spec.InvalidKeySpecException;
 import java.text.ParseException;
+import java.util.Arrays;
 
 public class Identity extends Block {
 
@@ -41,6 +42,25 @@ public class Identity extends Block {
     private byte[] encryptedIdentityBlock = null;
 
     private AsymmetricKey ownIdentity = null;
+
+    public boolean equals(Identity o) {
+        if(!headerKey.equals(o.headerKey)) return false;
+        if(!Arrays.equals(encryptedHeaderKey,o.encryptedHeaderKey)) return false;
+        if(!identityKey.equals(o.identityKey)) return false;
+        if(serial!=o.serial) return false;
+        if(maxReplays!=o.maxReplays) return false;
+        if(!valid.equals(o.valid)) return false;
+        if(!Arrays.equals(forwardSecret,o.forwardSecret)) return false;
+        if(!Arrays.equals(decryptionKeyRaw,o.decryptionKeyRaw)) return false;
+        if(hash!=o.hash) return false;
+        for(int i=0;i<requests.length;i++) {
+            if(!requests[i].equals(o.requests[i])) return false;
+        }
+        if(identifier!=o.identifier) return false;
+        if(!Arrays.equals(padding,o.padding)) return false;
+        if(!Arrays.equals(encryptedIdentityBlock,o.encryptedIdentityBlock)) return false;
+        return true;
+    }
 
     public Identity() throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, IOException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, NoSuchProviderException, InvalidKeySpecException {
         this.identityKey = new AsymmetricKey(Algorithm.RSA, Padding.getDefault(AlgorithmType.ASYMMETRIC), 2048);
@@ -201,7 +221,7 @@ public class Identity extends Block {
             ae = new DEROctetString( encryptedIdentityBlock );
         } else {
             ASN1EncodableVector v = new ASN1EncodableVector();
-            ASN1Object o = identityKey.toASN1Object();
+            ASN1Object o = identityKey.toASN1Object( AsymmetricKey.DumpType.ALL );
             if (o == null) throw new IOException( "identityKey did return null object" );
             v.add( o );
             v.add( new ASN1Integer( serial ) );

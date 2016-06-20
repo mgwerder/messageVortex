@@ -78,4 +78,5 @@ public abstract class Block {
         if(o==null) throw new IOException( "Got a null reply from toASN1Object ... get coding man" );
         return toDER( o );
     }
+
 }

@@ -64,7 +64,7 @@ public class IdentityStoreTest {
 
             public void run() {
                 try {
-                    is = IdentityStore.getNewIdentityStoreDemo();
+                    is = IdentityStore.getNewIdentityStoreDemo(false);
                 } catch (IOException ioe) {
                     LOGGER.log( Level.WARNING, "got IOException while generating new demo", ioe );
                 }

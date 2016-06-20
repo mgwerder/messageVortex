@@ -2,8 +2,12 @@ package net.gwerder.java.mailvortex.asn1;
 
 import org.bouncycastle.asn1.*;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.text.ParseException;
@@ -25,9 +29,16 @@ public class IdentityStore extends Block {
         blocks.clear();
     }
 
-    public IdentityStore(byte[] b) throws IOException,ParseException,NoSuchAlgorithmException {
+    public IdentityStore(byte[] b) throws IOException {
         this();
         parse( b );
+    }
+
+    public IdentityStore(File f) throws IOException {
+        this();
+        Path asn1DataPath = Paths.get(f.getAbsolutePath());
+        byte[] p = Files.readAllBytes(asn1DataPath);
+        parse( p );
     }
 
     public static void resetDemo() {
@@ -36,18 +47,18 @@ public class IdentityStore extends Block {
 
     public static IdentityStore getIdentityStoreDemo() throws IOException {
         if (demo == null) {
-            demo = getNewIdentityStoreDemo();
+            demo = getNewIdentityStoreDemo(true);
         }
         return demo;
     }
 
-    public static IdentityStore getNewIdentityStoreDemo() throws IOException {
+    public static IdentityStore getNewIdentityStoreDemo(boolean complete) throws IOException {
         IdentityStore tmp = new IdentityStore();
-        tmp.add( IdentityStoreBlock.getIdentityStoreBlockDemo( IdentityStoreBlock.IdentityType.OWNED_IDENTITY, true ) );
+        tmp.add( IdentityStoreBlock.getIdentityStoreBlockDemo( IdentityStoreBlock.IdentityType.OWNED_IDENTITY, complete ) );
         for (int i = 0; i < 400; i++)
-            tmp.add( IdentityStoreBlock.getIdentityStoreBlockDemo( IdentityStoreBlock.IdentityType.NODE_IDENTITY, true ) );
+            tmp.add( IdentityStoreBlock.getIdentityStoreBlockDemo( IdentityStoreBlock.IdentityType.NODE_IDENTITY, complete ) );
         for (int i = 0; i < 100; i++)
-            tmp.add( IdentityStoreBlock.getIdentityStoreBlockDemo( IdentityStoreBlock.IdentityType.RECIPIENT_IDENTITY, true ) );
+            tmp.add( IdentityStoreBlock.getIdentityStoreBlockDemo( IdentityStoreBlock.IdentityType.RECIPIENT_IDENTITY, complete ) );
         return tmp;
     }
 
@@ -81,22 +92,26 @@ public class IdentityStore extends Block {
         }
     }
 
-    public List<IdentityStoreBlock> getAnonSet(int size) {
+    public List<IdentityStoreBlock> getAnonSet(int size) throws IOException {
         Logger.getLogger( "IdentityStore" ).log( Level.WARNING, "Executing getAnonSet("+size+") from "+blocks.size() );
         List<IdentityStoreBlock> ret=new Vector<>();
         String[] keys=blocks.keySet().toArray(new String[0]);
-        while(ret.size()<size) {
+        int i=0;
+        while(ret.size()<size && i<10000) {
+            i++;
             IdentityStoreBlock isb=blocks.get(keys[secureRandom.nextInt(keys.length)]);
             if(isb!=null && isb.getType()==IdentityStoreBlock.IdentityType.RECIPIENT_IDENTITY && !ret.contains( isb ) ) {
                 ret.add(isb);
+                System.out.println("## "+isb.getIdentityKey());
                 Logger.getLogger( "IdentityStore" ).log( Level.INFO, "adding to anonSet "+isb.getIdentityKey().getPublicKey() );
             }
         }
+        if(ret.size()<size) throw new IOException("unable to get anon set (size ["+size+"] too big)?");
         Logger.getLogger( "IdentityStore" ).log( Level.FINE, "done getAnonSet()" );
         return ret;
     }
 
-    protected void parse(byte[] p) throws IOException, ParseException, NoSuchAlgorithmException {
+    protected void parse(byte[] p) throws IOException {
         ASN1InputStream aIn = new ASN1InputStream( p );
         parse( aIn.readObject() );
     }
@@ -107,7 +122,7 @@ public class IdentityStore extends Block {
         blocks.put(ident,isb);
     }
 
-    protected void parse(ASN1Encodable p) throws IOException,ParseException,NoSuchAlgorithmException {
+    protected void parse(ASN1Encodable p) throws IOException {
         Logger.getLogger( "IdentityStore" ).log( Level.FINER, "Executing parse()" );
 
         ASN1Sequence s1 = ASN1Sequence.getInstance( p );

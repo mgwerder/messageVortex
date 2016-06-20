@@ -2,19 +2,19 @@ package net.gwerder.java.mailvortex.routing;
 
 import net.gwerder.java.mailvortex.asn1.IdentityStore;
 import net.gwerder.java.mailvortex.asn1.IdentityStoreBlock;
-
-import java.io.InvalidObjectException;
 import java.util.*;
 
 /**
+ * Represents the graphs between the nodes.
+ *
  * Created by martin.gwerder on 13.06.2016.
  */
 public class GraphSet extends Vector<Graph> implements Comparator<GraphSet>,Comparable<GraphSet> {
 
-    IdentityStore identityStore=null;
-    List<IdentityStoreBlock> anonymitySet;
-    IdentityStoreBlock source=null;
-    IdentityStoreBlock target=null;
+    private IdentityStore            identityStore=null;
+    private List<IdentityStoreBlock> anonymitySet;
+    private IdentityStoreBlock       source=null;
+    private IdentityStoreBlock       target=null;
 
     public GraphSet() {
         anonymitySet = new Vector<>();
@@ -74,8 +74,9 @@ public class GraphSet extends Vector<Graph> implements Comparator<GraphSet>,Comp
         return true;
     }
 
-    public boolean targetReached(IdentityStoreBlock is) {
-        if (is == source) return true;
+    public boolean targetReached( IdentityStoreBlock is) throws NullPointerException {
+        if(is==null) throw new NullPointerException();
+        if (is.equals(source)) return true;
         for (Graph g : this) {
             if (g.getTo() == is) return true;
         }

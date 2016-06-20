@@ -117,6 +117,7 @@ public class ImapClientTest {
             ImapClient ic =new ImapClient("localhost",is.getPort(),true);
             ic.setTimeout(1000);
             assertTrue("TLS is not as expected",ic.isTLS());
+            is.shutdown();
         } catch(IOException e) {
             fail("IOException while creating server");
         }
@@ -143,7 +144,8 @@ public class ImapClientTest {
         }
         try{
             ic.setTimeout(100);
-            System.out.println("Sending IWantATimeout");for(String s:ic.sendCommand("a1 IWantATimeout",300)) System.out.println("Reply was: "+s);
+            System.out.println("Sending IWantATimeout");
+            for(String s:ic.sendCommand("a1 IWantATimeout",300)) System.out.println("Reply was: "+s);
             fail("No timeoutException was raised");
         } catch(TimeoutException te) {
             long el=(System.currentTimeMillis()-start);

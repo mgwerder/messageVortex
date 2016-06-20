@@ -27,7 +27,7 @@ public abstract class HeaderRequest {
     protected HeaderRequest() {
     }
 
-    public static HeaderRequest createRequest(ASN1Encodable ae) throws ParseException {
+    public static HeaderRequest createRequest(ASN1Encodable ae) throws IOException {
         for(HeaderRequest hr:req) {
             if(hr.getId()==((ASN1TaggedObject)(ae)).getTagNo()) return hr.getRequest(ae);
         }
@@ -38,7 +38,7 @@ public abstract class HeaderRequest {
         throw new IOException( "not implemented" ); //FIXME
     }
 
-    protected abstract HeaderRequest getRequest(ASN1Encodable ae) throws ParseException;
+    protected abstract HeaderRequest getRequest(ASN1Encodable ae) throws IOException;
 
     public abstract int getId();
 

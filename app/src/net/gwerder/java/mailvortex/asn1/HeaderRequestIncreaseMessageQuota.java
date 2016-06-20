@@ -4,6 +4,7 @@ import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1Integer;
 import org.bouncycastle.asn1.ASN1Sequence;
 
+import java.io.IOException;
 import java.text.ParseException;
 
 /**
@@ -18,11 +19,11 @@ public class HeaderRequestIncreaseMessageQuota extends HeaderRequest {
 
     protected HeaderRequestIncreaseMessageQuota() {super();}
 
-    public HeaderRequestIncreaseMessageQuota(ASN1Encodable ae) throws ParseException {
+    public HeaderRequestIncreaseMessageQuota(ASN1Encodable ae) throws IOException {
         parse(ae);
     }
 
-    protected void parse(ASN1Encodable ae) throws ParseException{
+    protected void parse(ASN1Encodable ae) throws IOException{
         ASN1Sequence s1 = ASN1Sequence.getInstance(ae);
         int i=0;
         identity=new AsymmetricKey(s1.getObjectAt(i++));
@@ -30,7 +31,7 @@ public class HeaderRequestIncreaseMessageQuota extends HeaderRequest {
         quota = ASN1Integer.getInstance( s1.getObjectAt( i++ ) ).getValue().intValue();
     }
 
-    protected HeaderRequest getRequest(ASN1Encodable ae) throws ParseException {
+    protected HeaderRequest getRequest(ASN1Encodable ae) throws IOException {
         return new HeaderRequestIncreaseMessageQuota(ae);
     }
 

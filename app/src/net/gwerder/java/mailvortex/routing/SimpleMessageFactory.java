@@ -1,5 +1,6 @@
 package net.gwerder.java.mailvortex.routing;
 
+import net.gwerder.java.mailvortex.ExtendedSecureRandom;
 import net.gwerder.java.mailvortex.asn1.IdentityStore;
 import net.gwerder.java.mailvortex.asn1.IdentityStoreBlock;
 
@@ -13,6 +14,8 @@ public class SimpleMessageFactory extends MessageFactory {
 
     /* number of ms for the graph to be completed */
     long     maxMessageTransferTime = 600*1000;
+
+    ExtendedSecureRandom esr=new ExtendedSecureRandom();
 
     protected SimpleMessageFactory(String msg, int source, int target, IdentityStoreBlock[] anonGroupMembers, IdentityStore is) {
         this.msg = msg;
@@ -34,15 +37,43 @@ public class SimpleMessageFactory extends MessageFactory {
             while (from == null || !graph.targetReached( from )) {
                 from = graph.getAnonIdentity( sr.nextInt( graph.getAnonymitySetSize() ) );
             }
-            while (to == null || to == from) {
+            while (to == null || to == from || to.equals( from )) {
                 to = graph.getAnonIdentity( sr.nextInt( graph.getAnonymitySetSize() ) );
             }
             graph.add( new Graph( from, to ) );
         }
 
-        // FIXME honour hotspot
-        // FIXME set times
-        // FIXME determine message route
+        // set times
+        long fullTime=maxMessageTransferTime*sr.nextInt(1000)/1000;
+        for(int i=0;i<graph.size();i++) {
+            Graph g=graph.get(i);
+            double nea=esr.nextGauss();
+            double mirr=0.1;
+            double range=0.5;
+            double q1=0.5-mirr;
+            double q3=0.5+mirr;
+            long start=0;
+            long delay=0;
+            for(int j=0;j<2;j++) {
+                double lin=(0.0+fullTime)/(graph.size()-i);
+                long tmp=0;
+                if(nea<q1) {
+                    tmp=(long)(nea/q1*range*lin);
+                } else {
+                    tmp=(long)(lin+(fullTime-lin)*0.5+(nea-q3)/(1-q3)*range*(fullTime-lin));
+                }
+                if(j==0) {
+                    start = tmp;
+                } else {
+                    delay=tmp;
+                }
+                fullTime-=tmp;
+            }
+            g.setStartTime( start );
+            g.setDelayTime( delay );
+        }
+
+        // determine message route
         // FIXME select operations
 
     }

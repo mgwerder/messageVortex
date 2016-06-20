@@ -16,12 +16,12 @@ public class Routing extends Block {
     private UsagePeriod  queueTime = null;
     private List<byte[]> nextHop=new Vector<byte[]>();
 
-    public Routing(ASN1Encodable to) throws ParseException {
+    public Routing(ASN1Encodable to) throws IOException {
         parse(to);
     }
 
     @Override
-    protected void parse(ASN1Encodable to) throws ParseException {
+    protected void parse(ASN1Encodable to) throws IOException {
         ASN1Sequence s1 = ASN1Sequence.getInstance(to);
         int i=0;
         recipient=DERIA5String.getInstance(s1.getObjectAt(i++)).getString();

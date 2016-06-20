@@ -10,6 +10,7 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.InvalidParameterSpecException;
@@ -48,10 +49,18 @@ public class AsymmetricKey extends Key {
     protected byte[]  privateKey = null;
     private Mode mode = Mode.getDefault();
     private Padding padding = Padding.getDefault( AlgorithmType.ASYMMETRIC );
+
     public AsymmetricKey(byte[] b) {
         this(ASN1Sequence.getInstance( b ));
     }
 
+    public boolean equals(AsymmetricKey o) {
+        if(!Arrays.equals(o.publicKey,publicKey)) return false;
+        if(!Arrays.equals(o.privateKey,privateKey)) return false;
+        if(o.mode!=mode) return false;
+        if(o.padding!=padding) return false;
+        return true;
+    }
 
     public AsymmetricKey(ASN1Encodable to) {
         parse(to);
@@ -173,7 +182,7 @@ public class AsymmetricKey extends Key {
         ASN1EncodableVector v =new ASN1EncodableVector();
         v.add(encodeKeyParameter());
         v.add( new DEROctetString(publicKey) );
-        if (privateKey != null && (dt != DumpType.PUBLIC_ONLY || dt != DumpType.PUBLIC_COMMENTED)) {
+        if (privateKey != null && dt != DumpType.PUBLIC_ONLY && dt!=DumpType.PUBLIC_COMMENTED) {
             v.add(new DERTaggedObject( true,0,new DEROctetString( privateKey )));
         }
         return new DERSequence( v );
@@ -295,10 +304,6 @@ public class AsymmetricKey extends Key {
         } else {
             return Signature.getInstance( a.getAlgorithm() + "With" + keytype.getAlgorithm() );
         }
-    }
-
-    public boolean equals(AsymmetricKey ak) {
-        return Arrays.equals(publicKey,ak.publicKey);
     }
 
     public byte[] setPublicKey(byte[] b) throws InvalidKeyException {

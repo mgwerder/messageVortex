@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 public class IdentityStoreBlock extends Block {
 
     private static SecureRandom secureRandom = new SecureRandom();
+
     UsagePeriod   valid         = null;
     int           messageQuota  = 0;
     int           transferQuota = 0;
@@ -27,8 +28,18 @@ public class IdentityStoreBlock extends Block {
         super();
     }
 
+    public boolean equals(IdentityStoreBlock isb) {
+        if(!valid.equals(isb.valid)) return false;
+        if(messageQuota!=isb.messageQuota) return false;
+        if(transferQuota!=isb.transferQuota) return false;
+        if(!identityKey.equals(isb.identityKey)) return false;
+        if((nodeAddress!=null && !nodeAddress.equals(isb.nodeAddress) || (nodeAddress==null && isb.nodeAddress!=null))) return false;
+        if(!nodeKey.equals(isb.nodeKey)) return false;
+        return true;
+    }
 
-    public IdentityStoreBlock(ASN1Encodable ae) throws ParseException,NoSuchAlgorithmException,IOException {
+
+    public IdentityStoreBlock(ASN1Encodable ae) throws IOException {
         parse(ae);
     }
 
@@ -133,7 +144,7 @@ public class IdentityStoreBlock extends Block {
 
     public AsymmetricKey getNodeKey() { return nodeKey; }
 
-    protected void parse(ASN1Encodable p) throws IOException,ParseException,NoSuchAlgorithmException {
+    protected void parse(ASN1Encodable p) throws IOException {
         Logger.getLogger( "IdentityStoreBlock" ).log( Level.FINER, "Executing parse()" );
         ASN1Sequence s1 = ASN1Sequence.getInstance( p );
         int i=0;
@@ -167,11 +178,15 @@ public class IdentityStoreBlock extends Block {
         v.add(new ASN1Integer( messageQuota ));
         v.add(new ASN1Integer( transferQuota ));
 
-        if (identityKey != null)
+        if (identityKey != null) {
             v.add( new DERTaggedObject( true, 1001, identityKey.toASN1Object( AsymmetricKey.DumpType.ALL ) ) );
-        if(nodeAddress!=null) v.add(new DERTaggedObject( true,1002, new DERIA5String(nodeAddress)));
-        if (nodeKey != null)
+        }
+        if(nodeAddress!=null) {
+            v.add( new DERTaggedObject( true, 1002, new DERIA5String(nodeAddress)));
+        }
+        if (nodeKey != null){
             v.add( new DERTaggedObject( true, 1003, nodeKey.toASN1Object( AsymmetricKey.DumpType.ALL ) ) );
+        }
 
         ASN1Sequence seq=new DERSequence(v);
         Logger.getLogger("IdentityStoreBlock").log(Level.FINER,"done toASN1Object()");
@@ -194,8 +209,8 @@ public class IdentityStoreBlock extends Block {
 
     public IdentityType getType() {
         if(iType!=null) return iType;
-
-        return (nodeKey.getPrivateKey()!=null?IdentityType.NODE_IDENTITY:IdentityType.RECIPIENT_IDENTITY);
+        if(nodeKey==null) return IdentityType.OWNED_IDENTITY;
+        return (identityKey==null?IdentityType.NODE_IDENTITY:IdentityType.RECIPIENT_IDENTITY);
     }
 
     public enum IdentityType {
