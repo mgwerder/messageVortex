@@ -172,7 +172,7 @@ public class AsymmetricKey extends Key {
     }
 
     public ASN1Object toASN1Object() throws IOException{
-        return toASN1Object( DumpType.PUBLIC_ONLY );
+        return toASN1Object( DumpType.ALL );
     }
 
     public ASN1Object toASN1Object(DumpType dt) throws IOException {
@@ -214,7 +214,7 @@ public class AsymmetricKey extends Key {
             cipher.init( Cipher.DECRYPT_MODE, k );
             return cipher.doFinal( b );
         } catch (InvalidKeySpecException | NoSuchAlgorithmException | NoSuchPaddingException | NoSuchProviderException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
-            throw new IOException( "Exception while encrypting", e );
+            throw new IOException( "Exception while decrypting", e );
         }
 
     }
