@@ -44,4 +44,6 @@ public abstract class MessageFactory {
 
     public abstract void build();
 
+    public abstract GraphSet getGraph();
+
 }

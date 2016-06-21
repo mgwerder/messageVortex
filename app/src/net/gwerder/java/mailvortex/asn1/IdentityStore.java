@@ -93,7 +93,7 @@ public class IdentityStore extends Block {
     }
 
     public List<IdentityStoreBlock> getAnonSet(int size) throws IOException {
-        Logger.getLogger( "IdentityStore" ).log( Level.WARNING, "Executing getAnonSet("+size+") from "+blocks.size() );
+        Logger.getLogger( "IdentityStore" ).log( Level.FINE, "Executing getAnonSet("+size+") from "+blocks.size() );
         List<IdentityStoreBlock> ret=new Vector<>();
         String[] keys=blocks.keySet().toArray(new String[0]);
         int i=0;
@@ -102,8 +102,7 @@ public class IdentityStore extends Block {
             IdentityStoreBlock isb=blocks.get(keys[secureRandom.nextInt(keys.length)]);
             if(isb!=null && isb.getType()==IdentityStoreBlock.IdentityType.RECIPIENT_IDENTITY && !ret.contains( isb ) ) {
                 ret.add(isb);
-                System.out.println("## "+isb.getIdentityKey());
-                Logger.getLogger( "IdentityStore" ).log( Level.INFO, "adding to anonSet "+isb.getIdentityKey().getPublicKey() );
+                Logger.getLogger( "IdentityStore" ).log( Level.FINER, "adding to anonSet "+isb.getIdentityKey().getPublicKey() );
             }
         }
         if(ret.size()<size) throw new IOException("unable to get anon set (size ["+size+"] too big)?");

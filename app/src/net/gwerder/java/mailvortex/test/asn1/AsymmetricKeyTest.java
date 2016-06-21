@@ -140,6 +140,7 @@ public class AsymmetricKeyTest {
         } catch (InterruptedException ie) {
             fail( "Got exception while waitinmg for end of tests" );
         }
+        throw new NullPointerException( "WARNING this test does not fail even if it should due to the threads!" );
     }
 
     @Test

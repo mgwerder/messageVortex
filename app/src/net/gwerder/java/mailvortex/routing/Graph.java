@@ -7,7 +7,7 @@ import net.gwerder.java.mailvortex.asn1.IdentityStoreBlock;
  *
  * Created by martin.gwerder on 13.06.2016.
  */
-class Graph {
+public class Graph {
 
     private IdentityStoreBlock from;
     private IdentityStoreBlock to;
