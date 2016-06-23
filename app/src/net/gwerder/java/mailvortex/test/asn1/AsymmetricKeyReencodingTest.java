@@ -1,5 +1,6 @@
 package net.gwerder.java.mailvortex.test.asn1;
 
+import net.gwerder.java.mailvortex.ExtendedSecureRandom;
 import net.gwerder.java.mailvortex.MailvortexLogger;
 import net.gwerder.java.mailvortex.asn1.AsymmetricKey;
 import net.gwerder.java.mailvortex.asn1.encryption.Algorithm;
@@ -31,7 +32,7 @@ public class AsymmetricKeyReencodingTest {
 
     private static final java.util.logging.Logger LOGGER;
     private static final int ksDisc = 8192; //16384
-    private static SecureRandom sr = new SecureRandom();
+    private static ExtendedSecureRandom sr = new ExtendedSecureRandom();
 
     static {
         LOGGER = MailvortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());

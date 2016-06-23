@@ -1,5 +1,6 @@
 package net.gwerder.java.mailvortex.test.asn1;
 
+import net.gwerder.java.mailvortex.ExtendedSecureRandom;
 import net.gwerder.java.mailvortex.MailvortexLogger;
 import net.gwerder.java.mailvortex.asn1.*;
 import net.gwerder.java.mailvortex.asn1.encryption.Algorithm;
@@ -26,6 +27,8 @@ public class FuzzerTest {
 
     public static final int BLOCK_FUZZER_CYCLES = 30;
     private static final java.util.logging.Logger LOGGER;
+
+    private static final ExtendedSecureRandom esr=new ExtendedSecureRandom();
 
     static {
         LOGGER = MailvortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
@@ -76,11 +79,10 @@ public class FuzzerTest {
     @Test
     public void fuzzingPayloadChunk() {
         try {
-            SecureRandom r=new SecureRandom(  );
             for (int i = 0; i < BLOCK_FUZZER_CYCLES; i++) {
                 PayloadChunk s = new PayloadChunk();
-                byte[] plb=new byte[r.nextInt(1024*1024)];
-                r.nextBytes( plb );
+                byte[] plb=new byte[esr.nextInt(1024*1024)];
+                esr.nextBytes( plb );
                 s.setPayload(plb);
                 assertTrue( "PayloadChunk may not be null", s != null );
                 byte[] b1 = s.toBytes();
@@ -143,14 +145,13 @@ public class FuzzerTest {
 
     @Test
     public void fuzzingSymmetricEncryption() {
-        SecureRandom sr=new SecureRandom(  );
         for(Algorithm alg: Algorithm.getAlgorithms( AlgorithmType.SYMMETRIC )) {
             try {
                 LOGGER.log( Level.INFO, "Testing " + alg + " (" + ksDisc / 16 + ")" );
                 for (int i = 0; i < ksDisc / 16; i++) {
                     SymmetricKey s = new SymmetricKey( alg );
-                    byte[] b1=new byte[sr.nextInt(64*1024)];
-                    sr.nextBytes( b1 );
+                    byte[] b1=new byte[esr.nextInt(64*1024)];
+                    esr.nextBytes( b1 );
                     byte[] b2=s.decrypt( s.encrypt(b1) );
                     assertTrue( "error in encrypt/decrypt cycle with "+alg+" (same object)",Arrays.equals( b1,b2));
                     b2=(new SymmetricKey(s.toBytes())).decrypt( s.encrypt(b1) );

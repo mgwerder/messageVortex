@@ -170,7 +170,7 @@ public class AsymmetricKeyTest {
                     AsymmetricKey k2 = new AsymmetricKey(alg, Padding.getDefault(AlgorithmType.ASYMMETRIC),size);
                     k2.setPrivateKey( k1.getPrivateKey() );
                     k2.setPublicKey(  k1.getPublicKey()  );
-                    assertTrue( "error in key transfer cycle with "+alg+" ",k1.equals( k2));
+                    assertTrue( "error in key transfer cycle with "+alg+" ",k1.equals( k2 ));
                     assertTrue( "reencode error in key transfer cycle with "+alg+" ",Arrays.equals(k1.toBytes(),k2.toBytes()));
                 }
                 System.out.println("");

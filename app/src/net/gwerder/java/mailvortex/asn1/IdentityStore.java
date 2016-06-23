@@ -1,5 +1,6 @@
 package net.gwerder.java.mailvortex.asn1;
 
+import net.gwerder.java.mailvortex.ExtendedSecureRandom;
 import org.bouncycastle.asn1.*;
 
 import java.io.File;
@@ -20,7 +21,7 @@ import java.util.logging.Logger;
  */
 public class IdentityStore extends Block {
 
-    private static SecureRandom secureRandom = new SecureRandom();
+    private static ExtendedSecureRandom secureRandom = new ExtendedSecureRandom();
 
     private static IdentityStore demo=null;
     private Map<String, IdentityStoreBlock> blocks = new TreeMap<String, IdentityStoreBlock>();

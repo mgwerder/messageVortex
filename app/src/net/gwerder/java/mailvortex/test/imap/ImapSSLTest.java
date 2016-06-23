@@ -1,5 +1,6 @@
 package net.gwerder.java.mailvortex.test.imap;
 
+import net.gwerder.java.mailvortex.ExtendedSecureRandom;
 import net.gwerder.java.mailvortex.MailvortexLogger;
 import net.gwerder.java.mailvortex.imap.*;
 import org.junit.Test;
@@ -31,6 +32,7 @@ import static org.junit.Assert.fail;
 public class ImapSSLTest {
 
     private static final java.util.logging.Logger LOGGER;
+    private static final ExtendedSecureRandom esr=new ExtendedSecureRandom();
 
     static {
         LOGGER = MailvortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
@@ -46,7 +48,7 @@ public class ImapSSLTest {
             final SSLContext context=SSLContext.getInstance("TLS");
             String ks="keystore.jks";
             assertTrue("Keystore check",(new File(ks)).exists());
-            context.init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, new TrustManager[] {new AllTrustManager()}, new SecureRandom() );
+            context.init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, new TrustManager[] {new AllTrustManager()}, esr.getSecureRandom() );
             SSLContext.setDefault(context);
             
             Set<String> suppCiphers=new HashSet<String>();

@@ -15,8 +15,6 @@ public class SimpleMessageFactory extends MessageFactory {
     /* number of ms for the graph to be completed */
     long     maxMessageTransferTime = 600*1000;
 
-    ExtendedSecureRandom esr=new ExtendedSecureRandom();
-
     protected SimpleMessageFactory(String msg, int source, int target, IdentityStoreBlock[] anonGroupMembers, IdentityStore is) {
         this.msg = msg;
 
@@ -35,16 +33,16 @@ public class SimpleMessageFactory extends MessageFactory {
             IdentityStoreBlock from = null;
             IdentityStoreBlock to = null;
             while (from == null || !graph.targetReached( from )) {
-                from = graph.getAnonIdentity( sr.nextInt( graph.getAnonymitySetSize() ) );
+                from = graph.getAnonIdentity( esr.nextInt( graph.getAnonymitySetSize() ) );
             }
             while (to == null || to == from || to.equals( from )) {
-                to = graph.getAnonIdentity( sr.nextInt( graph.getAnonymitySetSize() ) );
+                to = graph.getAnonIdentity( esr.nextInt( graph.getAnonymitySetSize() ) );
             }
             graph.add( new Graph( from, to ) );
         }
 
         // set times
-        long fullTime=maxMessageTransferTime*sr.nextInt(1000)/1000;
+        long fullTime=maxMessageTransferTime*esr.nextInt(1000)/1000;
         for(int i=0;i<graph.size();i++) {
             Graph g=graph.get(i);
             double nea=esr.nextGauss();

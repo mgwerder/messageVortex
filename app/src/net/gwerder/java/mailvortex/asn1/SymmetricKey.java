@@ -1,6 +1,7 @@
 package net.gwerder.java.mailvortex.asn1;
 
 
+import net.gwerder.java.mailvortex.ExtendedSecureRandom;
 import net.gwerder.java.mailvortex.asn1.encryption.Algorithm;
 import net.gwerder.java.mailvortex.asn1.encryption.AlgorithmType;
 import net.gwerder.java.mailvortex.asn1.encryption.Mode;
@@ -22,7 +23,7 @@ import java.security.SecureRandom;
  */
 public class SymmetricKey extends Key {
 
-    private static SecureRandom secureRandom = new SecureRandom();
+    private static ExtendedSecureRandom secureRandom = new ExtendedSecureRandom();
 
     protected byte[] key= null;
     private Mode mode=Mode.getDefault();

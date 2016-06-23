@@ -10,9 +10,11 @@ public class ExtendedSecureRandom {
     private static final SecureRandom sr=new SecureRandom();
 
     public int nextInt(int bound) { return sr.nextInt( bound );}
+    public void nextBytes(byte[] bound) { sr.nextBytes( bound );}
 
     public double nextDouble() { return sr.nextDouble();}
 
+    public SecureRandom getSecureRandom() { return sr; }
 
     public double nextGauss() {
         //calculate value

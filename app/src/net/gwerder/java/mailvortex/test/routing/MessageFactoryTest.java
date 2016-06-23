@@ -33,7 +33,7 @@ public class MessageFactoryTest {
             f.writeObject( is.toASN1Object() );
             f.close();
         }
-        MessageFactory smf= MessageFactory.buildMessage( "Subject: Thisis the message subject\n\nhello", 0, 1, is.getAnonSet( 30 ).toArray( new IdentityStoreBlock[0] ), is );
+        MessageFactory smf= MessageFactory.buildMessage( "Subject: This is the message subject\n\nhello", 0, 1, is.getAnonSet( 30 ).toArray( new IdentityStoreBlock[0] ), is );
         smf.build();
         GraphSet gs=smf.getGraph();
         for(Graph gt:gs) {

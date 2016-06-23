@@ -1,5 +1,6 @@
 package net.gwerder.java.mailvortex.imap;
 
+import net.gwerder.java.mailvortex.ExtendedSecureRandom;
 import net.gwerder.java.mailvortex.MailvortexLogger;
 
 import javax.net.ServerSocketFactory;
@@ -18,6 +19,8 @@ import java.util.logging.Logger;
 
 
 public class ImapServer extends StoppableThread  {
+
+    private static final ExtendedSecureRandom esr=new ExtendedSecureRandom();
     
     private static final Logger LOGGER;
     
@@ -56,7 +59,7 @@ public class ImapServer extends StoppableThread  {
         // Determine valid cyphers
         String ks="keystore.jks";
         try{
-          context.init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, new TrustManager[] {new AllTrustManager()}, new SecureRandom() );
+          context.init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, new TrustManager[] {new AllTrustManager()}, esr.getSecureRandom() );
         } catch(GeneralSecurityException gse) {
           throw new IOException("Error initializing security context for connection",gse);
         }

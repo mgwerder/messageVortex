@@ -1,5 +1,6 @@
 package net.gwerder.java.mailvortex.asn1;
 
+import net.gwerder.java.mailvortex.ExtendedSecureRandom;
 import net.gwerder.java.mailvortex.asn1.encryption.*;
 import org.bouncycastle.asn1.*;
 import org.bouncycastle.jce.ECNamedCurveTable;
@@ -33,7 +34,7 @@ import java.util.logging.Logger;
 public class AsymmetricKey extends Key {
 
     private static final Logger LOGGER;
-    private static SecureRandom secureRandom = new SecureRandom();
+    private static ExtendedSecureRandom esr = new ExtendedSecureRandom();
 
     static {
         LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
@@ -53,7 +54,8 @@ public class AsymmetricKey extends Key {
     }
 
     public boolean equals(Object t) {
-        if(t.getClass().equals(getClass())) return false;
+        if(t==null) return false;
+        if(! (t instanceof AsymmetricKey)) return false;
         AsymmetricKey o=(AsymmetricKey)t;
         if(!Arrays.equals(o.publicKey,publicKey)) return false;
         if(!Arrays.equals(o.privateKey,privateKey)) return false;
@@ -111,7 +113,7 @@ public class AsymmetricKey extends Key {
         } else if (alg.toString().toLowerCase().startsWith( "sec" )) {
             ECParameterSpec parameters = ECNamedCurveTable.getParameterSpec( alg.getAlgorithm() );
             KeyPairGenerator g = KeyPairGenerator.getInstance( "ECDSA", "BC" );
-            g.initialize( parameters, secureRandom );
+            g.initialize( parameters, esr.getSecureRandom() );
             KeyPair pair = g.generateKeyPair();
             publicKey = pair.getPublic().getEncoded();
             privateKey = pair.getPrivate().getEncoded();

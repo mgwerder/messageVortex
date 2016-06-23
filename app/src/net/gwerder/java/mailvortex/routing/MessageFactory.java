@@ -1,5 +1,6 @@
 package net.gwerder.java.mailvortex.routing;
 
+import net.gwerder.java.mailvortex.ExtendedSecureRandom;
 import net.gwerder.java.mailvortex.asn1.IdentityStore;
 import net.gwerder.java.mailvortex.asn1.IdentityStoreBlock;
 import net.gwerder.java.mailvortex.asn1.Message;
@@ -13,7 +14,7 @@ import java.security.SecureRandom;
  */
 public abstract class MessageFactory {
 
-    protected static final SecureRandom sr = new SecureRandom();
+    protected static final ExtendedSecureRandom esr = new ExtendedSecureRandom();
 
     protected Message fullmsg = null;
 
@@ -31,7 +32,7 @@ public abstract class MessageFactory {
         MessageFactory fullmsg = new SimpleMessageFactory( msg, source, target, anonGroupMembers, is );
 
         // selecting hotspot
-        fullmsg.hotspot = anonGroupMembers[sr.nextInt( anonGroupMembers.length )];
+        fullmsg.hotspot = anonGroupMembers[esr.nextInt( anonGroupMembers.length )];
 
         fullmsg.build();
 

@@ -1,5 +1,6 @@
 package net.gwerder.java.mailvortex.asn1;
 
+import net.gwerder.java.mailvortex.ExtendedSecureRandom;
 import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
@@ -14,7 +15,7 @@ import java.util.logging.Logger;
  */
 public class IdentityStoreBlock extends Block {
 
-    private static SecureRandom secureRandom = new SecureRandom();
+    private static ExtendedSecureRandom secureRandom = new ExtendedSecureRandom();
 
     UsagePeriod   valid         = null;
     int           messageQuota  = 0;
@@ -28,7 +29,10 @@ public class IdentityStoreBlock extends Block {
         super();
     }
 
-    public boolean equals(IdentityStoreBlock isb) {
+    public boolean equals(Object t) {
+        if(t==null) return false;
+        if(!(t instanceof IdentityStoreBlock)) return false;
+        IdentityStoreBlock isb=(IdentityStoreBlock)t;
         if(!valid.equals(isb.valid)) return false;
         if(messageQuota!=isb.messageQuota) return false;
         if(transferQuota!=isb.transferQuota) return false;
