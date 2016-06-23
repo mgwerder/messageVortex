@@ -51,21 +51,13 @@ public class CustomKeyManager implements X509KeyManager {
         this.password=password;
         this.alias = alias;
         keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-        FileInputStream is=null;
+        FileInputStream is;
         try{
           is=new FileInputStream(keyStoreFile);
           keyStore.load(is, password);
+            is.close();
         } catch(IOException ioe) {
             throw new GeneralSecurityException("IOException while loading keystore", ioe);
-        }
-
-        // closing keystore
-        if(is!=null) {
-            try{
-                is.close();
-            } catch(IOException ioe) {
-                throw new GeneralSecurityException("IOException while closing keystore",ioe);
-            }
         }
 
         if(getPrivateKey(alias)==null) {

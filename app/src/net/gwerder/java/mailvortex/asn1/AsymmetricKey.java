@@ -23,7 +23,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Asymmetic Key Handling.
+ * Asymmetric Key Handling.
  *
  * This class parses and encodes Asymmetric keys from/to ASN.1.
  * It furthermore handles encoding and decoding of encrypted material.
@@ -100,12 +100,12 @@ public class AsymmetricKey extends Key {
         this( Algorithm.getDefault( AlgorithmType.ASYMMETRIC ), Padding.getDefault( AlgorithmType.ASYMMETRIC ), Algorithm.getDefault( AlgorithmType.ASYMMETRIC ).getKeySize() );
     }
 
-    public AsymmetricKey(Algorithm alg, Padding p, int keysize) throws IOException {
+    public AsymmetricKey(Algorithm alg, Padding p, int keySize) throws IOException {
         if(alg==null) {
             throw new IOException( "Algorithm null is not encodable by the system" );
         }
         Map<String,Integer> pm= new HashMap<>();
-        pm.put(""+ Parameter.KEYSIZE.getId()+"_0",keysize);
+        pm.put(""+ Parameter.KEYSIZE.getId()+"_0",keySize);
         padding=p;
         try {
             createKey( alg, pm );
@@ -127,14 +127,14 @@ public class AsymmetricKey extends Key {
 
         // create key pair
         if("RSA".equals(alg.getAlgorithm()) || "EC".equals(alg.getAlgorithm())) {
-            int keysize=parameters.get("" + Parameter.KEYSIZE.getId() + "_0");
+            int keySize=parameters.get("" + Parameter.KEYSIZE.getId() + "_0");
             KeyPairGenerator keyGen = KeyPairGenerator.getInstance(alg.toString().toUpperCase(),alg.getProvider());
-            keyGen.initialize(keysize);
+            keyGen.initialize(keySize);
             KeyPair pair;
             try {
                 pair = keyGen.genKeyPair();
             } catch (IllegalStateException ise) {
-                throw new IllegalStateException( "unable to generate keys with " + alg.getAlgorithm() + "/" + mode + "/" + padding.getPadding() + " (size "+keysize+")", ise );
+                throw new IllegalStateException( "unable to generate keys with " + alg.getAlgorithm() + "/" + mode + "/" + padding.getPadding() + " (size "+keySize+")", ise );
             }
             publicKey = pair.getPublic().getEncoded();
             privateKey = pair.getPrivate().getEncoded();
@@ -153,7 +153,7 @@ public class AsymmetricKey extends Key {
 
     protected void parse(ASN1Encodable to) {
         ASN1Sequence s1 = ASN1Sequence.getInstance(to);
-        // parsing asymetric Key Idetifier
+        // parsing asymmetric key identifier
         int i=0;
         parseKeyParameter(ASN1Sequence.getInstance( s1.getObjectAt(i++) ));
         publicKey=((ASN1OctetString)(s1.getObjectAt(i++))).getOctets();
@@ -293,15 +293,15 @@ public class AsymmetricKey extends Key {
 
     private KeyPair getKeyPair() throws NoSuchAlgorithmException,NoSuchProviderException,InvalidKeySpecException {
         KeyFactory kf=getKeyFactory();
-        PrivateKey priv = null;
+        PrivateKey privateKey = null;
         if(privateKey!=null) {
-            priv = kf.generatePrivate(new PKCS8EncodedKeySpec(privateKey));
+            privateKey = kf.generatePrivate(new PKCS8EncodedKeySpec(this.privateKey));
         }
         PublicKey pub = null;
         if(publicKey!=null) {
             pub = kf.generatePublic(new X509EncodedKeySpec(publicKey));
         }
-        return new KeyPair( pub,priv );
+        return new KeyPair( pub,privateKey );
     }
 
     private Cipher getCipher() throws NoSuchPaddingException,NoSuchAlgorithmException,NoSuchProviderException {

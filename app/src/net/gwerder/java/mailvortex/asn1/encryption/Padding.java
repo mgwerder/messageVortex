@@ -1,9 +1,6 @@
 package net.gwerder.java.mailvortex.asn1.encryption;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Vector;
+import java.util.*;
 
 /**
  * Enumeration listing all available padding types for encryption.
@@ -52,7 +49,7 @@ public enum Padding {
         this.id=id;
         this.txt=txt;
         this.at = new HashSet<>();
-        for (AlgorithmType tat : at) this.at.add( tat );
+        this.at.addAll( Arrays.asList(at) );
         this.s=s;
     }
 

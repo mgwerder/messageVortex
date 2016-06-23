@@ -56,10 +56,12 @@ public class MailvortexLogger extends Logger {
                 .append(formatMessage(record))
                 .append(LINE_SEPARATOR);
 
+            //noinspection ThrowableResultOfMethodCallIgnored
             if (record.getThrown() != null) {
                 try {
                     StringWriter sw = new StringWriter();
                     PrintWriter pw = new PrintWriter(sw);
+                    //noinspection ThrowableResultOfMethodCallIgnored
                     record.getThrown().printStackTrace(pw);
                     pw.close();
                     sb.append(sw.toString());

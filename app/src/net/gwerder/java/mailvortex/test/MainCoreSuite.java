@@ -8,7 +8,7 @@ import net.gwerder.java.mailvortex.test.core.VersionTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-@RunWith(ConcurrentSuite.class)
+@RunWith(Suite.class)
 @Suite.SuiteClasses({
   MailVortexTest.class,
   VersionTest.class,

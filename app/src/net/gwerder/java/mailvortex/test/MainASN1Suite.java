@@ -12,7 +12,7 @@ import net.gwerder.java.mailvortex.test.asn1.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-@RunWith(ConcurrentSuite.class)
+@RunWith(Suite.class)
 @Suite.SuiteClasses({
         FuzzerTest.class,
         MessageTest.class,

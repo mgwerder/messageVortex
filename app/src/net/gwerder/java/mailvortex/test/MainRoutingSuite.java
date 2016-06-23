@@ -12,7 +12,7 @@ import net.gwerder.java.mailvortex.test.routing.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-@RunWith(ConcurrentSuite.class)
+@RunWith(Suite.class)
 @Suite.SuiteClasses({
         MessageFactoryTest.class
 })

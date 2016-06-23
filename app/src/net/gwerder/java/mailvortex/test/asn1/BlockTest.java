@@ -13,6 +13,8 @@ import java.util.logging.Level;
 import static org.junit.Assert.assertTrue;
 
 /**
+ * General Test class for all unspecific Block tests.
+ *
  * Created by martin.gwerder on 30.05.2016.
  */
 @RunWith(JUnit4.class)
