@@ -43,7 +43,9 @@ public class Identity extends Block {
 
     private AsymmetricKey ownIdentity = null;
 
-    public boolean equals(Identity o) {
+    public boolean equals(Object t) {
+        if(! t.getClass().equals(this.getClass()) ) return false;
+        Identity o=(Identity)t;
         if(!headerKey.equals(o.headerKey)) return false;
         if(!Arrays.equals(encryptedHeaderKey,o.encryptedHeaderKey)) return false;
         if(!identityKey.equals(o.identityKey)) return false;

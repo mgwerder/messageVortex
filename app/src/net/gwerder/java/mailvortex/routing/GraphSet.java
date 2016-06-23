@@ -153,4 +153,13 @@ public class GraphSet extends Vector<Graph> implements Comparator<GraphSet>,Comp
         }
         return true;
     }
+
+    public boolean equals(Object g) {
+        if(g instanceof GraphSet) {
+            return equals((GraphSet)g);
+        } else {
+            return g==this;
+        }
+    }
+
 }

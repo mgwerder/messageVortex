@@ -41,8 +41,6 @@ public class AsymmetricKey extends Key {
 
     static {
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
-        //Security.addProvider( new FlexiCoreProvider() );
-        //Security.addProvider( new FlexiECProvider() );
     }
 
     protected byte[]  publicKey  = null;
@@ -54,7 +52,9 @@ public class AsymmetricKey extends Key {
         this(ASN1Sequence.getInstance( b ));
     }
 
-    public boolean equals(AsymmetricKey o) {
+    public boolean equals(Object t) {
+        if(t.getClass().equals(getClass())) return false;
+        AsymmetricKey o=(AsymmetricKey)t;
         if(!Arrays.equals(o.publicKey,publicKey)) return false;
         if(!Arrays.equals(o.privateKey,privateKey)) return false;
         if(o.mode!=mode) return false;
@@ -241,22 +241,6 @@ public class AsymmetricKey extends Key {
     }
 
     public boolean verify(byte[] b, byte[] sig, Algorithm mac) throws IOException {
-        /*try {
-            KeyPair key = getKeyPair();
-            MessageDigest dig = MessageDigest.getInstance( mac.getAlgorithm() );
-            byte[] hash = dig.digest(b);
-            Signature s;
-            if(keytype.getAlgorithm().startsWith("sec")) {
-                s=Signature.getInstance( "NONEWithECDSA","BC" );
-            } else {
-                s=Signature.getInstance("NONEWith"+keytype.getAlgorithm());
-            }
-            s.initVerify( key.getPublic() );
-            s.update(hash);
-            return s.verify(sig);
-        } catch(NoSuchAlgorithmException|InvalidKeyException|NoSuchProviderException|InvalidKeySpecException|SignatureException e) {
-            throw new IOException(e);
-        }*/
         Signature signature;
         try {
             KeyPair key = getKeyPair();

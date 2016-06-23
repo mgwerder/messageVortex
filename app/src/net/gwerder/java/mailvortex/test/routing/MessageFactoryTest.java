@@ -33,13 +33,18 @@ public class MessageFactoryTest {
             f.writeObject( is.toASN1Object() );
             f.close();
         }
-        MessageFactory smf= MessageFactory.buildMessage( "", 0, 1, is.getAnonSet( 30 ).toArray( new IdentityStoreBlock[0] ), is );
+        MessageFactory smf= MessageFactory.buildMessage( "Subject: Thisis the message subject\n\nhello", 0, 1, is.getAnonSet( 30 ).toArray( new IdentityStoreBlock[0] ), is );
         smf.build();
         GraphSet gs=smf.getGraph();
-        GraphSet[] g=gs.getRoutes();
-        assertTrue("Routes not found",g!=null && g.length>0);
         for(Graph gt:gs) {
             assertTrue("unreached endpoint",gs.targetReached( gt.getFrom() ) && gs.targetReached( gt.getTo() ));
+        }
+        GraphSet[] g=gs.getRoutes();
+        assertTrue("Routes not found",g!=null && g.length>0);
+        for(GraphSet gt:g) {
+            for(Graph gt2:gt) {
+                assertTrue("unreached endpoint",gt.targetReached( gt2.getFrom() ) && gt.targetReached( gt2.getTo() ));
+            }
         }
     }
 
