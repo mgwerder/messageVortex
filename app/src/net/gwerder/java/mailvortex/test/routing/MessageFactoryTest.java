@@ -27,7 +27,7 @@ public class MessageFactoryTest {
         IdentityStore is=null;
         try {
             is = new IdentityStore( new File(System.getProperty( "java.io.tmpdir" ) + "/IdentityStoreExample1.der") );
-        } catch( IOException ioe ){
+        } catch( Exception ioe ){
             is = IdentityStore.getNewIdentityStoreDemo( false );
             DEROutputStream f = new DEROutputStream( new FileOutputStream( System.getProperty( "java.io.tmpdir" ) + "/IdentityStoreExample1.der" ) );
             f.writeObject( is.toASN1Object() );

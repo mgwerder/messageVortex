@@ -153,7 +153,7 @@ public class CustomKeyManager implements X509KeyManager {
      * @param param1    dummy
      * @param param2    dummy
      ***/
-    public String chooseServerAlias(String param1, Principal[] param2) {
+    public String chooseServerAlias(@SuppressWarnings("UnusedParameters") String param1, @SuppressWarnings("UnusedParameters") Principal[] param2) {
         return alias;
     }
 }

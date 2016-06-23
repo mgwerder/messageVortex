@@ -2,6 +2,7 @@ package net.gwerder.java.mailvortex.asn1;
 
 import net.gwerder.java.mailvortex.asn1.encryption.Algorithm;
 import net.gwerder.java.mailvortex.asn1.encryption.AlgorithmType;
+import net.gwerder.java.mailvortex.asn1.encryption.DumpType;
 import net.gwerder.java.mailvortex.asn1.encryption.Padding;
 import org.bouncycastle.asn1.*;
 
@@ -19,9 +20,10 @@ import java.util.Arrays;
 
 public class Identity extends Block {
 
-    private static final int ENCRYPTED_HEADER_KEY = 1000;
-    private static final int PLAIN_IDENTITY_BLOCK = 1002;
-    private static final int ENCRYPTED_IDENTITY_BLOCK = 1001;
+    private static final int ENCRYPTED_HEADER_KEY     = 1000;
+    private static final int ENCRYPTED_BLOCK          = 1001;
+    private static final int PLAIN_BLOCK              = 1002;
+    private static final int ENCRYPTED_HEADER         = 1101;
 
     private static final Request[] NULLREQUESTS = new Request[0];
 
@@ -113,13 +115,12 @@ public class Identity extends Block {
                 to = DERTaggedObject.getInstance( s.getObjectAt( j++ ) );
             } else {
                 headerKey = new SymmetricKey( ownIdentity.decrypt( to.getObject().getEncoded() ) );
-                // FIXME check tag
                 to = DERTaggedObject.getInstance( s.getObjectAt( j++ ) );
             }
         }
         byte[] signVerifyObject = to.getObject().getEncoded();
-        if ((headerKey != null && to.getTagNo() == ENCRYPTED_HEADER_KEY) || to.getTagNo() == PLAIN_IDENTITY_BLOCK) {
-            if (headerKey != null && to.getTagNo() == ENCRYPTED_HEADER_KEY) {
+        if ((headerKey != null && to.getTagNo() == ENCRYPTED_HEADER) || to.getTagNo() == PLAIN_BLOCK) {
+            if (headerKey != null && to.getTagNo() == ENCRYPTED_BLOCK) {
                 s1 = ASN1Sequence.getInstance( headerKey.decrypt( to.getObject().getEncoded() ) );
             } else {
                 s1 = ASN1Sequence.getInstance( to.getObject() );
@@ -185,7 +186,7 @@ public class Identity extends Block {
     }
 
     public ASN1Object toASN1Object() throws IOException {
-        return toASN1Object( ownIdentity, null );
+        return toASN1Object( null );
     }
 
     public AsymmetricKey getOwnIdentity() {
@@ -210,7 +211,7 @@ public class Identity extends Block {
         }
     }
 
-    public ASN1Object toASN1Object(AsymmetricKey ownIdentity, AsymmetricKey targetIdentity) throws IOException, NullPointerException {
+    public ASN1Object toASN1Object(AsymmetricKey targetIdentity) throws IOException, NullPointerException {
         sanitizeHeaderKey();
         //if(ownIdentity==null) throw new NullPointerException( "ownIdentity must not be null" );
         if (headerKey == null && encryptedHeaderKey == null)
@@ -229,7 +230,7 @@ public class Identity extends Block {
             ae = new DEROctetString( encryptedIdentityBlock );
         } else {
             ASN1EncodableVector v = new ASN1EncodableVector();
-            ASN1Object o = identityKey.toASN1Object( AsymmetricKey.DumpType.ALL );
+            ASN1Object o = identityKey.toASN1Object( DumpType.ALL );
             if (o == null) throw new IOException( "identityKey did return null object" );
             v.add( o );
             v.add( new ASN1Integer( serial ) );
@@ -237,7 +238,9 @@ public class Identity extends Block {
             o = valid.toASN1Object();
             if (o == null) throw new IOException( "validity did return null object" );
             v.add( o );
-            // FIXME missing forward secrets
+            if(forwardSecret!=null && forwardSecret.length>0) {
+                // FIXME dumping of forward secrets is not implemented
+            }
             try {
                 v.add( new DEROctetString( (decryptionKeyRaw != null ? decryptionKeyRaw : identityKey.encrypt( decryptionKey.getKey() )) ) );
             } catch (Exception e) {
@@ -261,11 +264,11 @@ public class Identity extends Block {
         if (encryptIdentity) {
             // store identity encrypted
             o = new DEROctetString( headerKey.encrypt( ae.toASN1Primitive().getEncoded() ) );
-            v1.add( new DERTaggedObject( true, ENCRYPTED_IDENTITY_BLOCK, o ) );
+            v1.add( new DERTaggedObject( true, ENCRYPTED_BLOCK, o ) );
         } else {
             // store identity plain
             o = ae.toASN1Primitive();
-            v1.add( new DERTaggedObject( true, PLAIN_IDENTITY_BLOCK, o ) );
+            v1.add( new DERTaggedObject( true, PLAIN_BLOCK, o ) );
         }
         v1.add( new DEROctetString( identityKey.sign( o.getEncoded() ) ) );
         return new DERSequence( v1 );
@@ -278,10 +281,10 @@ public class Identity extends Block {
             sb.append( prefix + "  headerKey " + toHex( encryptedHeaderKey ) );
         }
         if (encryptedIdentityBlock != null) {
-            sb.append( prefix + "  blocks encrypted [" + ENCRYPTED_IDENTITY_BLOCK + "]" + toHex( encryptedIdentityBlock ) );
+            sb.append( prefix + "  blocks encrypted [" + ENCRYPTED_BLOCK + "]" + toHex( encryptedIdentityBlock ) );
         } else {
-            sb.append( prefix + "  blocks plain [" + PLAIN_IDENTITY_BLOCK + "]" + toHex( encryptedIdentityBlock ) );
-            sb.append( prefix + "    identityKey " + identityKey.dumpValueNotation( prefix + "  ", AsymmetricKey.DumpType.PRIVATE_COMMENTED ) + "," + CRLF );
+            sb.append( prefix + "  blocks plain [" + PLAIN_BLOCK + "]" + toHex( encryptedIdentityBlock ) );
+            sb.append( prefix + "    identityKey " + identityKey.dumpValueNotation( prefix + "  ", DumpType.PRIVATE_COMMENTED ) + "," + CRLF );
             sb.append( prefix + "    serial " + serial + "," + CRLF );
             sb.append( prefix + "    maxReplays " + maxReplays + "," + CRLF );
             sb.append( prefix + "    valid " + valid.dumpValueNotation( prefix + "  " ) + "," + CRLF );

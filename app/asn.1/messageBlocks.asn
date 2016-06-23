@@ -397,8 +397,8 @@ BEGIN
   -- Asymmetric Key
   AsymmetricKey ::= SEQUENCE {
     keyType       AsymmetricAlgorithmIdentifier,
-    publicKey     OCTET STRING,
-    privateKey    [0] OCTET STRING OPTIONAL
+    publicKey     [1] OCTET STRING,
+    privateKey    [2] OCTET STRING OPTIONAL
   }
   
   pkcs-1    OBJECT IDENTIFIER ::= { iso(1) member-body(2) us(840) rsadsi(113549) pkcs(1) 1 }

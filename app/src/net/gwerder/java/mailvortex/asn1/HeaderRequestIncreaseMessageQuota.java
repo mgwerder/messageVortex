@@ -1,5 +1,6 @@
 package net.gwerder.java.mailvortex.asn1;
 
+import net.gwerder.java.mailvortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1Integer;
 import org.bouncycastle.asn1.ASN1Sequence;
@@ -42,7 +43,7 @@ public class HeaderRequestIncreaseMessageQuota extends HeaderRequest {
     public String dumpValueNotation(String prefix) {
         StringBuilder sb=new StringBuilder();
         sb.append("{"+Block.CRLF);
-        if(identity!=null) sb.append( prefix+"  identity "+identity.dumpValueNotation( prefix+"  ", AsymmetricKey.DumpType.PRIVATE_COMMENTED )+(quota>-1?",":"")+Block.CRLF );
+        if(identity!=null) sb.append( prefix+"  identity "+identity.dumpValueNotation( prefix+"  ", DumpType.PRIVATE_COMMENTED )+(quota>-1?",":"")+Block.CRLF );
         if(quota>-1) sb.append( prefix+"  quota "+quota+Block.CRLF );
         sb.append(prefix+"}");
         return sb.toString();

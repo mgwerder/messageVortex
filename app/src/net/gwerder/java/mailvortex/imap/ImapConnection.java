@@ -86,10 +86,6 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
         return defaultTimeout;
     }
     
-    private void interruptedCatcher(Exception e) {
-        assert false:"This Point should never be reached";
-    }
-    
     public ImapAuthenticationProxy setAuth(ImapAuthenticationProxy authProxy) {
         ImapAuthenticationProxy oldProxyAuth=getAuth();
         this.authProxy=authProxy;
@@ -186,8 +182,8 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
                 plainSocket.close();
                 runner.join(1000);
             } catch(InterruptedException e) {
-                 // discard this exception
-                 interruptedCatcher(e);
+                // discard this exception
+                continue;
             } catch(IOException e) {
                 LOGGER.log(Level.WARNING,"IOException while shutting down input stream (may be normal)",e);
             }
@@ -286,8 +282,7 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
             }    
             plainSocket.close();
         } catch(Exception e2) {
-            // all exceptions may be safely ignored
-            interruptedCatcher(e2);
+            // all exceptions may be safely ignored as we are doing a clean up cycle
         }
         LOGGER.log(Level.INFO,"server connection closed");
     }

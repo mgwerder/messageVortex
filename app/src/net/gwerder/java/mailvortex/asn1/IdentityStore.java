@@ -14,6 +14,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * Stores all known identities of a node.
+ *
  * Created by martin.gwerder on 26.05.2016.
  */
 public class IdentityStore extends Block {
@@ -100,7 +102,7 @@ public class IdentityStore extends Block {
             IdentityStoreBlock isb=blocks.get(keys[secureRandom.nextInt(keys.length)]);
             if(isb!=null && isb.getType()==IdentityStoreBlock.IdentityType.RECIPIENT_IDENTITY && !ret.contains( isb ) ) {
                 ret.add(isb);
-                Logger.getLogger( "IdentityStore" ).log( Level.FINER, "adding to anonSet "+isb.getIdentityKey().getPublicKey() );
+                Logger.getLogger( "IdentityStore" ).log( Level.FINER, "adding to anonSet "+isb.getIdentityKey().getPublicKey().hashCode() );
             }
         }
         if(ret.size()<size) throw new IOException("unable to get anon set (size ["+size+"] too big)?");

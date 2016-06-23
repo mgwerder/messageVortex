@@ -3,10 +3,7 @@ package net.gwerder.java.mailvortex.test.asn1;
 import net.gwerder.java.mailvortex.ExtendedSecureRandom;
 import net.gwerder.java.mailvortex.MailvortexLogger;
 import net.gwerder.java.mailvortex.asn1.AsymmetricKey;
-import net.gwerder.java.mailvortex.asn1.encryption.Algorithm;
-import net.gwerder.java.mailvortex.asn1.encryption.AlgorithmType;
-import net.gwerder.java.mailvortex.asn1.encryption.Mode;
-import net.gwerder.java.mailvortex.asn1.encryption.Padding;
+import net.gwerder.java.mailvortex.asn1.encryption.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -95,7 +92,7 @@ public class AsymmetricKeyReencodingTest {
             LOGGER.log( Level.INFO, "Running encryption test with " + alg + "/" + Mode.getDefault() + "/" + pad + " (" + size + ")" );
             for (int i = 0; i < repeat; i++) {
                 s = new AsymmetricKey( alg, pad, size );
-                currentObject = s.dumpValueNotation( "", AsymmetricKey.DumpType.ALL );
+                currentObject = s.dumpValueNotation( "", DumpType.ALL );
                 byte[] b1 = new byte[sr.nextInt( Math.min( s.getPadding().getMaxSize( size ), 1024 ) )];
                 sr.nextBytes( b1 );
                 byte[] b2 = s.decrypt( s.encrypt( b1 ) );

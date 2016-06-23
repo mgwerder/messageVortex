@@ -1,5 +1,6 @@
 package net.gwerder.java.mailvortex.asn1;
 
+import net.gwerder.java.mailvortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1Sequence;
 import java.io.IOException;
@@ -34,7 +35,7 @@ public class HeaderRequestQueryQuota extends HeaderRequest {
     public String dumpValueNotation(String prefix) {
         StringBuilder sb=new StringBuilder();
         sb.append("{"+Block.CRLF);
-        if(identity!=null) sb.append( prefix+"  identity "+identity.dumpValueNotation( prefix+"  ", AsymmetricKey.DumpType.PRIVATE_COMMENTED ) );
+        if(identity!=null) sb.append( prefix+"  identity "+identity.dumpValueNotation( prefix+"  ", DumpType.PRIVATE_COMMENTED ) );
         sb.append(prefix+"}");
         return sb.toString();
     }

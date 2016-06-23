@@ -1,6 +1,7 @@
 package net.gwerder.java.mailvortex.asn1;
 
 import net.gwerder.java.mailvortex.ExtendedSecureRandom;
+import net.gwerder.java.mailvortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
@@ -184,13 +185,13 @@ public class IdentityStoreBlock extends Block {
         v.add(new ASN1Integer( transferQuota ));
 
         if (identityKey != null) {
-            v.add( new DERTaggedObject( true, 1001, identityKey.toASN1Object( AsymmetricKey.DumpType.ALL ) ) );
+            v.add( new DERTaggedObject( true, 1001, identityKey.toASN1Object( DumpType.ALL ) ) );
         }
         if(nodeAddress!=null) {
             v.add( new DERTaggedObject( true, 1002, new DERIA5String(nodeAddress)));
         }
         if (nodeKey != null){
-            v.add( new DERTaggedObject( true, 1003, nodeKey.toASN1Object( AsymmetricKey.DumpType.ALL ) ) );
+            v.add( new DERTaggedObject( true, 1003, nodeKey.toASN1Object( DumpType.ALL ) ) );
         }
 
         ASN1Sequence seq=new DERSequence(v);

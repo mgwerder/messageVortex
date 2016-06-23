@@ -16,6 +16,7 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
         FuzzerTest.class,
         MessageTest.class,
+        DumpTypeTest.class,
         BlockTest.class,
         SecurityLevelTest.class,
         SymmetricKeyTest.class,
@@ -31,6 +32,7 @@ public class MainASN1Suite {
         final TestSuite s = new TestSuite();
         s.addTest(new JUnit4TestAdapter(FuzzerTest.class));
         s.addTest(new JUnit4TestAdapter(MessageTest.class));
+        s.addTest(new JUnit4TestAdapter(DumpTypeTest.class));
         s.addTest(new JUnit4TestAdapter(BlockTest.class));
         s.addTest( new JUnit4TestAdapter( SecurityLevelTest.class ) );
         s.addTest( new JUnit4TestAdapter( SymmetricKeyTest.class ) );
