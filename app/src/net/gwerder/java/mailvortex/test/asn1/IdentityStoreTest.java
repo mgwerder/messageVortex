@@ -87,7 +87,7 @@ public class IdentityStoreTest {
         //testing
         try {
             for (int i = 0; i < arr.length; i++) {
-                LOGGER.log( Level.INFO, "Testing IdentityStore reencoding " + (i + 1) + " of " + 4 );
+                LOGGER.log( Level.INFO, "Testing IdentityStore reencoding " + (i + 1) + " of " + arr.length );
                 start = new Date();
                 IdentityStore s1 = arr[i];
                 assertTrue( "IdentityStore may not be null", s1 != null );

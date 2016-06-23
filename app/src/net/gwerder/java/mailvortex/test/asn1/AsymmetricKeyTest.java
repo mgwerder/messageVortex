@@ -199,14 +199,17 @@ public class AsymmetricKeyTest {
                         size = a.getKeySize( sl );
                         maximumPayload = p.getMaxSize( size );
                         if (maximumPayload < 0 && sl == SecurityLevel.QUANTUM) {
-                            LOGGER.log( Level.INFO, "skipping test for " + a + "/" + p + " due to insufficient key length" );
+                            LOGGER.log( Level.INFO, "  skipping test for " + a + "/" + p + " due to insufficient key length" );
                             maximumPayload = -100000;
                         } else if (maximumPayload < 0) {
                             sl = sl.next();
                         }
                     }
-                    if (maximumPayload == -100000) break;
-                    LOGGER.log( Level.INFO, "  minimum securityLevel is " + sl );
+                    if (maximumPayload == -100000) {
+                        LOGGER.log( Level.INFO, "  What is going on here??" );
+                        break;
+                    }
+                    LOGGER.log( Level.INFO, "  testing " + a + "/" + p + " with level "+sl );
                     for (int i = 0; i < 100; i++) {
                         AsymmetricKey ak = new AsymmetricKey( a, p, size );
                         assertTrue( "negative maximum payload for " + a.getAlgorithm() + "/" + size + "/" + p.getPadding(), maximumPayload > 1 );
@@ -215,6 +218,7 @@ public class AsymmetricKeyTest {
                         byte[] b2 = ak.decrypt( ak.encrypt( b ) );
                         assertTrue( "byte arrays mus be equal after redecryption", Arrays.equals( b, b2 ) );
                     }
+                    LOGGER.log( Level.INFO, "  done " + a + "/" + p + " with level "+sl );
 
                 }
             } catch (IOException ioe) {

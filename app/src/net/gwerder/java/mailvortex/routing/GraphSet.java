@@ -11,6 +11,8 @@ import java.util.*;
  */
 public class GraphSet extends Vector<Graph> implements Comparator<GraphSet>,Comparable<GraphSet> {
 
+    private static final long serialVersionUID = 16134223345689L;
+
     private IdentityStore            identityStore=null;
     private List<IdentityStoreBlock> anonymitySet;
     private IdentityStoreBlock       source=null;
@@ -151,14 +153,6 @@ public class GraphSet extends Vector<Graph> implements Comparator<GraphSet>,Comp
 
     public int compareTo(GraphSet gs) { return compare(this,gs); }
 
-    public boolean equals(GraphSet g) {
-        if( g.size()!=size()) return false;
-        for(int i=0;i<size();i++) {
-            if(g.get(i)==null ||get(i)==null || !get(i).equals(g.get(i))) return false;
-        }
-        return true;
-    }
-
     @Override
     public synchronized int hashCode() {
         return super.hashCode();
@@ -167,7 +161,12 @@ public class GraphSet extends Vector<Graph> implements Comparator<GraphSet>,Comp
     public boolean equals(Object g) {
         if(g==null) return false;
         if(g instanceof GraphSet) {
-            return equals((GraphSet)g);
+            GraphSet t=(GraphSet)g;
+            if( t.size()!=size()) return false;
+            for(int i=0;i<size();i++) {
+                if(t.get(i)==null ||get(i)==null || !get(i).equals(t.get(i))) return false;
+            }
+            return true;
         } else {
             return g==this;
         }

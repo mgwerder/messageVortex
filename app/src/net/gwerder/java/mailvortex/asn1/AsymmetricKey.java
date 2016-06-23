@@ -54,13 +54,37 @@ public class AsymmetricKey extends Key {
     }
 
     public boolean equals(Object t) {
-        if(t==null) return false;
-        if(! (t instanceof AsymmetricKey)) return false;
+        // make sure object is not null
+        if(t==null) {
+            return false;
+        }
+
+        //make sure object is of right type
+        if(! (t instanceof AsymmetricKey)) {
+            return false;
+        }
+
+        // compare public keys
         AsymmetricKey o=(AsymmetricKey)t;
-        if(!Arrays.equals(o.publicKey,publicKey)) return false;
-        if(!Arrays.equals(o.privateKey,privateKey)) return false;
-        if(o.mode!=mode) return false;
-        if(o.padding!=padding) return false;
+        if(!Arrays.equals(o.publicKey,publicKey)) {
+            return false;
+        }
+
+        // compare private keys
+        if(!Arrays.equals(o.privateKey,privateKey)) {
+            return false;
+        }
+
+        // compare mode (CBC, ECB et al)
+        if(o.mode!=mode) {
+            return false;
+        }
+
+        // compare padding
+        if(o.padding!=padding) {
+            return false;
+        }
+
         return true;
     }
 
@@ -149,7 +173,7 @@ public class AsymmetricKey extends Key {
     public String dumpValueNotation(String prefix,DumpType dt) {
         StringBuilder sb=new StringBuilder();
         sb.append("{"+CRLF);
-        if(publicKey!=null && (dt==DumpType.ALL || dt==DumpType.PUBLIC_ONLY || dt==DumpType.PUBLIC_COMMENTED || dt==DumpType.PRIVATE_COMMENTED)) {
+        if(publicKey!=null && (dt.dumpPublicKey() || DumpType.PUBLIC_COMMENTED==dt)) {
             sb.append( dumpKeyTypeValueNotation( prefix ) );
             String s = toHex( publicKey );
             sb.append( prefix ).append( "  " );
@@ -164,7 +188,7 @@ public class AsymmetricKey extends Key {
         }
 
         // dump private key
-        if(privateKey!=null && (dt==DumpType.PRIVATE_COMMENTED || dt==DumpType.PRIVATE_ONLY || dt==DumpType.ALL)) {
+        if(privateKey!=null && (dt==DumpType.PRIVATE_COMMENTED || dt.dumpPrivateKey())) {
             String s=toHex(privateKey);
             sb.append(prefix).append("  ");
             if(dt==DumpType.PRIVATE_COMMENTED) {
@@ -320,7 +344,27 @@ public class AsymmetricKey extends Key {
         PUBLIC_ONLY,
         PUBLIC_COMMENTED,
         PRIVATE_ONLY,
-        PRIVATE_COMMENTED,
+        PRIVATE_COMMENTED;
+
+        public boolean dumpPublicKey() {
+            if("ALL".equals(name())) {
+                return true;
+            }
+            if("PUBLIC_ONLY".equals(name())) {
+                return true;
+            }
+            return false;
+        }
+
+        public boolean dumpPrivateKey() {
+            if("ALL".equals(name())) {
+                return true;
+            }
+            if("PRIVATE_ONLY".equals(name())) {
+                return true;
+            }
+            return false;
+        }
     }
 
 }

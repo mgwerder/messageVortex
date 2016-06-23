@@ -9,6 +9,8 @@ import net.gwerder.java.mailvortex.asn1.IdentityStoreBlock;
  */
 public class Graph {
 
+    private static final long serialVersionUID = 9070431563L;
+
     private IdentityStoreBlock from;
     private IdentityStoreBlock to;
     private long               startTime = 0;
@@ -62,8 +64,16 @@ public class Graph {
         return old;
     }
 
-    public boolean equals(Graph g) {
+    public boolean equals(Object t) {
+        if(t==null) return false;
+        if(! (t instanceof Graph)) return false;
+        Graph g=(Graph)t;
         return g.to.equals(to) && g.from.equals( from );
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 
 }
