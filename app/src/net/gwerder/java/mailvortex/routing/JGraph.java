@@ -3,17 +3,13 @@ package net.gwerder.java.mailvortex.routing;
 import net.gwerder.java.mailvortex.asn1.IdentityStore;
 import net.gwerder.java.mailvortex.asn1.IdentityStoreBlock;
 import org.bouncycastle.asn1.DEROutputStream;
-import org.bouncycastle.asn1.ocsp.BasicOCSPResponse;
-
 import java.awt.*;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
-import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 

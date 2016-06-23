@@ -16,7 +16,6 @@ import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 
 /**
  * Created by martin.gwerder on 19.04.2016.

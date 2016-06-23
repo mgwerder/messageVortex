@@ -1,8 +1,6 @@
 package net.gwerder.java.mailvortex.imap;
  
 import java.util.logging.Logger;
-import java.util.logging.Level;
-
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.Callback;
 import java.io.IOException;

@@ -209,7 +209,7 @@ public class ImapClient implements Runnable {
         }
         String reply="";
         String lastReply="";
-        List<String> l=new ArrayList<String>();
+        List<String> l=new ArrayList<>();
         int i=0;
         do{
             i=socket.getInputStream().read();

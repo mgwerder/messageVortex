@@ -8,7 +8,7 @@ public abstract class ImapCommand implements Cloneable {
     private static final Map<String,ImapCommand> COMMANDS;
  
     static  {
-        COMMANDS=new ConcurrentHashMap<String,ImapCommand>();
+        COMMANDS=new ConcurrentHashMap<>();
         (new ImapCommandCapability()).init();
         (new ImapCommandLogin()).init();
         (new ImapCommandLogout()).init();
@@ -17,8 +17,8 @@ public abstract class ImapCommand implements Cloneable {
 
     public static void registerCommand(ImapCommand command) {
         String[] arr=command.getCommandIdentifier();
-        for(int i=0;i<arr.length;i++) {
-            COMMANDS.put(arr[i].toLowerCase(),command);        
+        for(String a:arr) {
+            COMMANDS.put(a.toLowerCase(),command);
         }    
     }
     

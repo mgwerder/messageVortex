@@ -14,7 +14,6 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.Charset;
-import java.security.SecureRandom;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
@@ -51,7 +50,7 @@ public class ImapSSLTest {
             context.init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, new TrustManager[] {new AllTrustManager()}, esr.getSecureRandom() );
             SSLContext.setDefault(context);
             
-            Set<String> suppCiphers=new HashSet<String>();
+            Set<String> suppCiphers=new HashSet<>();
             String[] arr=((SSLServerSocketFactory) SSLServerSocketFactory.getDefault()).getSupportedCipherSuites();
             LOGGER.log(Level.FINE,"Detecting supported cipher suites");
             for(int i=0; i<arr.length; i++) {

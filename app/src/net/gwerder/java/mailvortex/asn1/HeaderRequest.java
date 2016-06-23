@@ -3,9 +3,7 @@ package net.gwerder.java.mailvortex.asn1;
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1Object;
 import org.bouncycastle.asn1.ASN1TaggedObject;
-
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.Vector;
 
 /**

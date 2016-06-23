@@ -38,27 +38,12 @@
             <set />
           </value>
         </entry>
-        <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/ExtendedSecureRandom.java">
-          <value>
-            <set />
-          </value>
-        </entry>
         <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/MailVortexConfig.java">
           <value>
             <set />
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/asn1/AsymmetricKey.java">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/asn1/Block.java">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/asn1/HeaderReply.java">
           <value>
             <set />
           </value>
@@ -88,11 +73,6 @@
             <set />
           </value>
         </entry>
-        <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/asn1/Identity.java">
-          <value>
-            <set />
-          </value>
-        </entry>
         <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/asn1/IdentityStore.java">
           <value>
             <set />
@@ -103,12 +83,22 @@
             <set />
           </value>
         </entry>
-        <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/asn1/Message.java">
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/asn1/Key.java">
           <value>
             <set />
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/asn1/MessageFactory.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/asn1/Payload.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/asn1/Request.java">
           <value>
             <set />
           </value>
@@ -128,16 +118,6 @@
             <set />
           </value>
         </entry>
-        <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/asn1/UsagePeriod.java">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/asn1/encryption/Algorithm.java">
-          <value>
-            <set />
-          </value>
-        </entry>
         <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/asn1/encryption/Hash.java">
           <value>
             <set />
@@ -148,27 +128,37 @@
             <set />
           </value>
         </entry>
-        <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/asn1/encryption/Padding.java">
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/imap/ImapAuthenticationDummyProxy.java">
           <value>
             <set />
           </value>
         </entry>
-        <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/asn1/encryption/SecurityLevel.java">
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/imap/ImapClient.java">
           <value>
             <set />
           </value>
         </entry>
-        <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/imap/ImapConnection.java">
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/imap/ImapCommand.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/imap/ImapCommandAuthenticate.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/imap/ImapCommandAuthenticateCallbackHandler.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/imap/ImapCommandCapability.java">
           <value>
             <set />
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/imap/ImapServer.java">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/routing/Graph.java">
           <value>
             <set />
           </value>
@@ -198,12 +188,12 @@
             <set />
           </value>
         </entry>
-        <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/test/MainASN1Suite.java">
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/test/ConcurrentSuite.java">
           <value>
             <set />
           </value>
         </entry>
-        <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/test/MainRoutingSuite.java">
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/test/MainCoreSuite.java">
           <value>
             <set />
           </value>
@@ -223,11 +213,6 @@
             <set />
           </value>
         </entry>
-        <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/test/asn1/AsymmetricKeyTest.java">
-          <value>
-            <set />
-          </value>
-        </entry>
         <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/test/asn1/FuzzerTest.java">
           <value>
             <set />
@@ -243,27 +228,37 @@
             <set />
           </value>
         </entry>
-        <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/test/asn1/SecurityLevelTest.java">
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/test/core/ConfigTest.java">
           <value>
             <set />
           </value>
         </entry>
-        <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/test/imap/ImapClientTest.java">
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/test/core/MailVortexTest.java">
           <value>
             <set />
           </value>
         </entry>
-        <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/test/imap/ImapCommandTest.java">
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/test/core/VersionTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/test/imap/CustomKeyManagerTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/test/imap/ImapAuthenticationDummyProxyTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/test/imap/ImapLineExceptionTest.java">
           <value>
             <set />
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/test/imap/ImapSSLTest.java">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/test/routing/MessageFactoryTest.java">
           <value>
             <set />
           </value>

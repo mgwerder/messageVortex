@@ -65,8 +65,8 @@ public final class ConcurrentSuite extends Suite {
                             klass.getAnnotation(Concurrent.class).threads() :
                             (int) (Runtime.getRuntime().availableProcessors() * 1.5),
                     new NamedThreadFactory(klass.getSimpleName()));
-            CompletionService<Void> completionService = new ExecutorCompletionService<Void>(executorService);
-            Queue<Future<Void>> tasks = new LinkedList<Future<Void>>();
+            CompletionService<Void> completionService = new ExecutorCompletionService<>(executorService);
+            Queue<Future<Void>> tasks = new LinkedList<>();
 
             @Override
             public void schedule(Runnable childStatement) {

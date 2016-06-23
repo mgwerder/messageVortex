@@ -1,16 +1,12 @@
 package net.gwerder.java.mailvortex.test.core;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
-import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import static org.junit.Assert.*;
 
 import java.util.logging.Level;
 import net.gwerder.java.mailvortex.*;
-import net.gwerder.java.mailvortex.imap.*;
 
 /**
  * booleanConfigHandlings for {@link net.gwerder.java.mailvortex.MailVortex}.

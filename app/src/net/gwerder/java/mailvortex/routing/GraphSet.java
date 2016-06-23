@@ -27,7 +27,7 @@ public class GraphSet extends Vector<Graph> implements Comparator<GraphSet>,Comp
     }
 
     public void setAnonymitySet(IdentityStoreBlock[] anonymitySet ) {
-        Vector<IdentityStoreBlock> tmp =new Vector<IdentityStoreBlock>();
+        Vector<IdentityStoreBlock> tmp =new Vector<>();
         tmp.addAll( Arrays.asList(anonymitySet) );
         this.anonymitySet=tmp;
     }
@@ -92,13 +92,13 @@ public class GraphSet extends Vector<Graph> implements Comparator<GraphSet>,Comp
         for(int i=0;i<size();i++) {
             if(get(i).getFrom().equals(source)) {
                 Graph[][] g=getRoute(i,new Graph[] {get(i)},target);
-                for(int j=0;j<g.length;j++) {
+                for(Graph[] gr:g) {
                     GraphSet gs=new GraphSet();
                     gs.setAnonymitySet( getAnonymitySet() );
                     gs.setSource(getSource());
                     gs.setTarget(getTarget());
                     gs.add(get(i));
-                    gs.addAll(Arrays.asList(g[j]));
+                    gs.addAll(Arrays.asList(gr));
                     ret.add(gs);
                 }
             }

@@ -40,12 +40,12 @@ public class ImapCommandCapability extends ImapCommand {
         String cap="";
         
         // looping thru commands
-        for(int i=0;i<arr.length;i++) {
+        for(ImapCommand ic:arr) {
 
-            String[] arr2=arr[i].getCapabilities();
+            String[] arr2=ic.getCapabilities();
             if(arr2!=null) {
-                for(int j=0;j<arr2.length;j++) {
-                    cap=addCapability(cap,arr2[j]);
+                for(String a2:arr2) {
+                    cap=addCapability(cap,a2);
                 }
             }
         }

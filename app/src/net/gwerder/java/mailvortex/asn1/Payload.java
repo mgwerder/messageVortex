@@ -1,10 +1,7 @@
 package net.gwerder.java.mailvortex.asn1;
 
 import org.bouncycastle.asn1.*;
-
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.text.ParseException;
 
 public class Payload extends Block {
 

@@ -13,7 +13,7 @@ import java.util.Vector;
  */
 public class Request extends Block {
 
-    protected Vector<HeaderRequest> requests = new Vector<HeaderRequest>();
+    protected Vector<HeaderRequest> requests = new Vector<>();
 
     public Request(ASN1Encodable to) {
         parse(to);

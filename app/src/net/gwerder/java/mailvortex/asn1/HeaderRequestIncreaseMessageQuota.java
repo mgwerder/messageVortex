@@ -3,9 +3,7 @@ package net.gwerder.java.mailvortex.asn1;
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1Integer;
 import org.bouncycastle.asn1.ASN1Sequence;
-
 import java.io.IOException;
-import java.text.ParseException;
 
 /**
  * ASN1 parser for increasing message quota.

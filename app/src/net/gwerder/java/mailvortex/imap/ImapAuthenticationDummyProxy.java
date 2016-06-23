@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class ImapAuthenticationDummyProxy extends ImapAuthenticationProxy{
 
-    private final Map<String,String> users = new HashMap<String,String>();
+    private final Map<String,String> users = new HashMap<>();
     
     public void addUser(String username,String password) {
         users.put(username.toLowerCase(),password);

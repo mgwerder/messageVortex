@@ -99,7 +99,7 @@ public class ImapCommandAuthenticate extends ImapCommand {
     }
     
     private boolean auth(String mech,ImapLine line) {
-        Map<String,Object> props=new HashMap<String,Object>();
+        Map<String,Object> props=new HashMap<>();
         if(line.getConnection().isTLS()) {
             props.put("Sasl.POLICY_NOPLAINTEXT","false");
         }

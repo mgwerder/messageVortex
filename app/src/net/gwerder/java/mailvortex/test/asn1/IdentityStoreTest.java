@@ -76,12 +76,19 @@ public class IdentityStoreTest {
         List<ISThread> t = new Vector<>();
 
         // prepare stores
-        for (int i = 0; i < arr.length; i++) {
+        for (IdentityStore a:arr) {
             t.add( new ISThread() );
         }
-        for (ISThread is : t) is.start();
-        for (ISThread is : t) is.join();
-        for (int i = 0; i < arr.length; i++) arr[i] = t.get( i ).is;
+        for (ISThread is : t) {
+            is.start();
+        }
+        for (ISThread is : t) {
+            is.join();
+        }
+
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = t.get( i ).is;
+        }
         LOGGER.log( Level.INFO, "store preparation took " + (((new Date()).getTime() - start.getTime()) / 1000) + " s" );
 
         //testing

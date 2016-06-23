@@ -5,8 +5,6 @@ import net.gwerder.java.mailvortex.asn1.IdentityStore;
 import net.gwerder.java.mailvortex.asn1.IdentityStoreBlock;
 import net.gwerder.java.mailvortex.asn1.Message;
 
-import java.security.SecureRandom;
-
 /**
  * Factory class to build full message (anonymizing structure)
  * <p>

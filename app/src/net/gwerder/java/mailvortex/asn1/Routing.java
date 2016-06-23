@@ -3,7 +3,6 @@ package net.gwerder.java.mailvortex.asn1;
 import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.List;
 import java.util.Vector;
 
@@ -14,7 +13,7 @@ public class Routing extends Block {
 
     private String       recipient = null;
     private UsagePeriod  queueTime = null;
-    private List<byte[]> nextHop=new Vector<byte[]>();
+    private List<byte[]> nextHop=new Vector<>();
 
     public Routing(ASN1Encodable to) throws IOException {
         parse(to);

@@ -8,8 +8,6 @@ import net.gwerder.java.mailvortex.asn1.encryption.AlgorithmType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
-import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.logging.Level;

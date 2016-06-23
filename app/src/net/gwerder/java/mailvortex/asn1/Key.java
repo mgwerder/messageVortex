@@ -19,7 +19,7 @@ abstract public class Key extends Block {
 
 
     protected Algorithm keytype = null;
-    protected HashMap<String,Integer> parameters = new HashMap<String,Integer>();
+    protected HashMap<String,Integer> parameters = new HashMap<>();
 
     protected void parseKeyParameter(ASN1Sequence s) {
         // FIXME may contain multiple keys

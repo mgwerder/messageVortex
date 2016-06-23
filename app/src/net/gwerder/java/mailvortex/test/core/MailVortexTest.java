@@ -1,13 +1,8 @@
 package net.gwerder.java.mailvortex.test.core;
  
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
-import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.junit.Assert;
-import java.util.concurrent.TimeoutException;
 import static org.junit.Assert.*;
 
 /**

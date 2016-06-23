@@ -5,7 +5,6 @@ import junit.framework.TestSuite;
 import net.gwerder.java.mailvortex.test.core.ConfigTest;
 import net.gwerder.java.mailvortex.test.core.MailVortexTest;
 import net.gwerder.java.mailvortex.test.core.VersionTest;
-import net.gwerder.java.mailvortex.test.imap.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 

@@ -9,9 +9,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.text.ParseException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,7 +21,7 @@ public class IdentityStore extends Block {
     private static ExtendedSecureRandom secureRandom = new ExtendedSecureRandom();
 
     private static IdentityStore demo=null;
-    private Map<String, IdentityStoreBlock> blocks = new TreeMap<String, IdentityStoreBlock>();
+    private Map<String, IdentityStoreBlock> blocks = new TreeMap<>();
 
     public IdentityStore() {
         blocks.clear();

@@ -2,7 +2,6 @@ package net.gwerder.java.mailvortex.imap;
 
 import net.gwerder.java.mailvortex.ExtendedSecureRandom;
 import net.gwerder.java.mailvortex.MailvortexLogger;
-
 import javax.net.ServerSocketFactory;
 import javax.net.SocketFactory;
 import javax.net.ssl.*;
@@ -10,7 +9,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.GeneralSecurityException;
-import java.security.SecureRandom;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
@@ -28,11 +26,11 @@ public class ImapServer extends StoppableThread  {
         LOGGER = MailvortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
     }
     
-    private Set<String>    suppCiphers=new HashSet<String>();
+    private Set<String>    suppCiphers=new HashSet<>();
 
     int port;
     ServerSocket serverSocket=null;
-    ConcurrentSkipListSet<ImapConnection> conn=new ConcurrentSkipListSet<ImapConnection>();
+    ConcurrentSkipListSet<ImapConnection> conn=new ConcurrentSkipListSet<>();
     boolean encrypted=false;
     final SSLContext context;
     private Thread runner=null;

@@ -1,6 +1,5 @@
 package net.gwerder.java.mailvortex.routing;
 
-import net.gwerder.java.mailvortex.ExtendedSecureRandom;
 import net.gwerder.java.mailvortex.asn1.IdentityStore;
 import net.gwerder.java.mailvortex.asn1.IdentityStoreBlock;
 

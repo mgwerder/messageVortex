@@ -2,13 +2,14 @@ package net.gwerder.java.mailvortex;
 
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Config {
 
     private static final Config DEFAULT_CFG=new Config();
 
-    private final Map<String,Object> configurationData= new ConcurrentHashMap<String,Object>();
+    private final Map<String,Object> configurationData= new ConcurrentHashMap<>();
 
     /* Gets a boolean value from the application config.
      *
@@ -25,12 +26,11 @@ public class Config {
     public static Config copy(Config src) {
         Config dst=new Config();
         synchronized(src.configurationData) {
-            Iterator<Map.Entry<String,Object>> it = src.configurationData.entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry<String,Object> p=it.next();
+            Set<Map.Entry<String,Object>> it = src.configurationData.entrySet();
+            for(Map.Entry<String,Object> p:it) {
                 //noinspection ChainOfInstanceofChecks
                 if(p.getValue() instanceof Boolean) {
-                    dst.configurationData.put(p.getKey(),Boolean.valueOf(((Boolean)(p.getValue())).booleanValue()));
+                    dst.configurationData.put(p.getKey(),p.getValue());
                 } else if(p.getValue() instanceof String) {
                     dst.configurationData.put(p.getKey(),p.getValue());
                 } else {
@@ -44,7 +44,7 @@ public class Config {
     public boolean createBooleanConfigValue(String id, boolean dval) {
         synchronized (configurationData) {
             if (configurationData.get(id.toLowerCase()) == null) {
-                configurationData.put(id.toLowerCase(), Boolean.valueOf(dval));
+                configurationData.put(id.toLowerCase(), dval);
                 return true;
             } else {
                 return false;
@@ -76,7 +76,7 @@ public class Config {
             throw new ClassCastException();
         } else {
             ret=getBooleanValue(id);
-            getDefault().configurationData.put(id.toLowerCase(),Boolean.valueOf(value));
+            getDefault().configurationData.put(id.toLowerCase(),value);
         }
         return ret;
     }
@@ -96,7 +96,7 @@ public class Config {
         } else if(!(getDefault().configurationData.get(id.toLowerCase()) instanceof Boolean)) {
             throw new ClassCastException();
         } else {
-            ret=((Boolean)(getDefault().configurationData.get(id.toLowerCase()))).booleanValue();
+            ret=((Boolean)(getDefault().configurationData.get(id.toLowerCase())));
         }
         return ret;
     }
