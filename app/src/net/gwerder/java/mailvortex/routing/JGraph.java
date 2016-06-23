@@ -22,6 +22,8 @@ import java.io.IOException;
  */
 public class JGraph extends JPanel implements MouseListener  {
 
+    private static final long serialVersionUID = 1213422324789789L;
+
     private int X_OFFSET     = 20;
     private int Y_OFFSET     = 10;
     private int ROUTE_BORDER = 10;

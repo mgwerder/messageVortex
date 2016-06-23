@@ -159,6 +159,11 @@ public class GraphSet extends Vector<Graph> implements Comparator<GraphSet>,Comp
         return true;
     }
 
+    @Override
+    public synchronized int hashCode() {
+        return super.hashCode();
+    }
+
     public boolean equals(Object g) {
         if(g==null) return false;
         if(g instanceof GraphSet) {

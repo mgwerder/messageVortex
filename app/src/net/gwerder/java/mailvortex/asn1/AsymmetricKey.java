@@ -64,6 +64,11 @@ public class AsymmetricKey extends Key {
         return true;
     }
 
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
     public AsymmetricKey(ASN1Encodable to) {
         parse(to);
     }

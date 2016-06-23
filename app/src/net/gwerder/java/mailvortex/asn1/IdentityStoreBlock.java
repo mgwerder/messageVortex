@@ -42,6 +42,10 @@ public class IdentityStoreBlock extends Block {
         return true;
     }
 
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 
     public IdentityStoreBlock(ASN1Encodable ae) throws IOException {
         parse(ae);
