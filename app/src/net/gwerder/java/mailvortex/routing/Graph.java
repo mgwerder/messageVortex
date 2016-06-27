@@ -19,17 +19,21 @@ public class Graph {
     /***
      * Represents a routing graph during sending.
      *
-     * @param  from  The starting point of the graph
-     * @param  to    The ending point of the graph
+     * @param  from       The starting point of the graph
+     * @param  to         The ending point of the graph
+     * @param  startTime  The starting time relative to the GraphSet start (in ms)
+     * @param  maxDelay   The maximum delay after the start of this graph (in ms)
      * @throws IllegalArgumentException if from and two are equal
      * @throws NullPointerException if one of the parameters is null
      */
-    public Graph(IdentityStoreBlock from, IdentityStoreBlock to) throws IllegalArgumentException,NullPointerException {
+    public Graph(IdentityStoreBlock from, IdentityStoreBlock to, long startTime, long maxDelay) throws IllegalArgumentException,NullPointerException {
         if(from==to) throw new IllegalArgumentException( "a graph may not have the same start and ending point" );
         if(from==null) throw new NullPointerException( "from may not be null" );
         if(to==null) throw new NullPointerException( "from may not be null" );
         this.from = from;
         this.to = to;
+        this.startTime= startTime;
+        this.maxDelay= maxDelay;
     }
 
     /***
@@ -68,7 +72,7 @@ public class Graph {
         if(t==null) return false;
         if(! (t instanceof Graph)) return false;
         Graph g=(Graph)t;
-        return g.to.equals(to) && g.from.equals( from );
+        return g.to.equals(to) && g.from.equals( from ) && g.startTime==startTime && g.maxDelay==maxDelay;
     }
 
     @Override

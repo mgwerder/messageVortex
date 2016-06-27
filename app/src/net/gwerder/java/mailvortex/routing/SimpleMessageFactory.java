@@ -28,7 +28,7 @@ public class SimpleMessageFactory extends MessageFactory {
         // building vector graphs
         int numberOfGraphs = (int) (graph.getAnonymitySetSize() * 2.5);
 
-        while (graph.size() < numberOfGraphs && !graph.allTargetsReached()) {
+        while (graph.size() < numberOfGraphs || !graph.allTargetsReached()) {
             IdentityStoreBlock from = null;
             IdentityStoreBlock to = null;
             while (from == null || !graph.targetReached( from )) {
@@ -37,7 +37,7 @@ public class SimpleMessageFactory extends MessageFactory {
             while (to == null || to == from || to.equals( from )) {
                 to = graph.getAnonIdentity( esr.nextInt( graph.getAnonymitySetSize() ) );
             }
-            graph.add( new Graph( from, to ) );
+            graph.add( new Graph( from, to , graph.size(),0 ) );
         }
 
         // set times
