@@ -240,7 +240,6 @@ The technique can also be used to form rosters of untraceable digital pseudonyms
   Year                     = {2006},
 
   File                     = {:inc\\bib\\rfc4409.pdf:PDF},
-  Owner                    = {U80815488},
   Timestamp                = {2015.01.29},
   Url                      = {http://tools.ietf.org/pdf/rfc4409.pdf}
 }
@@ -311,6 +310,35 @@ The technique can also be used to form rosters of untraceable digital pseudonyms
   Url                      = {http://tools.ietf.org/pdf/rfc5155.pdf}
 }
 
+@InProceedings{li2007t,
+  Title                    = {t-closeness: Privacy beyond k-anonymity and l-diversity},
+  Author                   = {Li, Ninghui and Li, Tiancheng and Venkatasubramanian, Suresh},
+  Booktitle                = {2007 IEEE 23rd International Conference on Data Engineering},
+  Year                     = {2007},
+  Organization             = {IEEE},
+  Pages                    = {106--115},
+
+  Abstract                 = {The k-anonymity privacy requirement for publishing microdata requires that each equivalence class (i.e., a set of records that are indistinguishable from each other with respect to certain "identifying" attributes) contains at least k records. Recently, several authors have recognized that k-anonymity cannot prevent attribute disclosure. The notion of l-diversity has been proposed to address this; l-diversity requires that each equivalence class has at least l well-represented values for each sensitive attribute. In this paper we show that l-diversity has a number of limitations. In particular, it is neither necessary nor sufficient to prevent attribute disclosure. We propose a novel privacy notion called t-closeness, which requires that the distribution of a sensitive attribute in any equivalence class is close to the distribution of the attribute in the overall table (i.e., the distance between the two distributions should be no more than a threshold t). We choose to use the earth mover distance measure for our t-closeness requirement. We discuss the rationale for t-closeness and illustrate its advantages through examples and experiments.},
+  Doi                      = {10.1109/ICDE.2007.367856},
+  File                     = {:inc\\bib\\unclassified\\tcloseness.pdf:PDF},
+  Url                      = {http://www.utdallas.edu/~mxk055100/courses/privacy08f_files/tcloseness.pdf}
+}
+
+@Article{machanavajjhala2007diversity,
+  Title                    = {l-diversity: Privacy beyond k-anonymity},
+  Author                   = {Machanavajjhala, Ashwin and Kifer, Daniel and Gehrke, Johannes and Venkitasubramaniam, Muthuramakrishnan},
+  Journal                  = {ACM Transactions on Knowledge Discovery from Data (TKDD)},
+  Year                     = {2007},
+  Number                   = {1},
+  Pages                    = {3},
+  Volume                   = {1},
+
+  Abstract                 = {Publishing data about individuals without revealing sensitive information about them is an important problem. In recent years, a new definition of privacy called k-anonymity has gained popularity. In a k-anonymized dataset, each record is indistinguishable from at least k-1 other records with respect to certain "identifying" attributes. In this paper we show with two simple attacks that a k-anonymized dataset has some subtle, but severe privacy problems. First, we show that an attacker can discover the values of sensitive attributes when there is little diversity in those sensitive attributes. Second, attackers often have background knowledge, and we show that k-anonymity does not guarantee privacy against attackers using background knowledge. We give a detailed analysis of these two attacks and we propose a novel and powerful privacy definition called l-diversity. In addition to building a formal foundation for l-diversity, we show in an experimental evaluation that l-diversity is practical and can be implemented efficiently.},
+  File                     = {:inc\\bib\\ldiversity.pdf:PDF},
+  Publisher                = {ACM},
+  Url                      = {http://www.cs.cornell.edu/~vmuthu/research/ldiversity.pdf}
+}
+
 @Book{RFC919,
   Title                    = {RFC919 BROADCASTING INTERNET DATAGRAMS},
   Author                   = {Jeffrey Mogul},
@@ -353,6 +381,16 @@ The technique can also be used to form rosters of untraceable digital pseudonyms
   File                     = {:inc\\bib\\rfc1939.pdf:PDF},
   Localfile                = {inc/bib/rfc1939.pdf},
   Url                      = {http://tools.ietf.org/pdf/rfc1939.pdf}
+}
+
+@Misc{pfitzmann2010terminology,
+  Title                    = {A terminology for talking about privacy by data minimization: Anonymity, unlinkability, undetectability, unobservability, pseudonymity, and identity management},
+
+  Author                   = {Pfitzmann, Andreas and Hansen, Marit},
+  Year                     = {2010},
+
+  Url                      = {http://www.maroki.de/pub/dphistory/Anon_Terminology_v0.34.pdf},
+  Version                  = {0.34}
 }
 
 @Book{RFC791,
@@ -719,10 +757,4 @@ The technique can also be used to form rosters of untraceable digital pseudonyms
   Localfile                = {inc/bib/bahrain.pdf},
   Url                      = {http://www.ictregulationtoolkit.org/Documents/Document/Document/1453}
 }
-@misc{pfitzmann2010terminology,
-	title                  = {A terminology for talking about privacy by data minimization: Anonymity, unlinkability, undetectability, unobservability, pseudonymity, and identity management},
-	author                 = {Pfitzmann, Andreas and Hansen, Marit},
-	year                   = {2010},
-	version                = {0.34},
-	Url                    = {http://www.maroki.de/pub/dphistory/Anon_Terminology_v0.34.pdf}
-}
+
