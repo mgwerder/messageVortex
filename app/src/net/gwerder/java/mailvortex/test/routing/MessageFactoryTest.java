@@ -3,8 +3,8 @@ package net.gwerder.java.mailvortex.test.routing;
 import net.gwerder.java.mailvortex.MailvortexLogger;
 import net.gwerder.java.mailvortex.asn1.IdentityStore;
 import net.gwerder.java.mailvortex.asn1.IdentityStoreBlock;
+import net.gwerder.java.mailvortex.routing.Edge;
 import net.gwerder.java.mailvortex.routing.GraphSet;
-import net.gwerder.java.mailvortex.routing.Graph;
 import net.gwerder.java.mailvortex.routing.MessageFactory;
 import org.bouncycastle.asn1.DEROutputStream;
 import org.junit.Test;
@@ -51,7 +51,7 @@ public class MessageFactoryTest {
             MessageFactory smf = MessageFactory.buildMessage( "Subject: This is the message subject\n\nhello", 0, 1, is.getAnonSet( 30 ).toArray( new IdentityStoreBlock[0] ), is );
             smf.build();
             GraphSet gs = smf.getGraph();
-            for (Graph gt : gs) {
+            for (Edge gt : gs) {
                 assertTrue( "unreached endpoint", gs.targetReached( gt.getFrom() ) && gs.targetReached( gt.getTo() ) );
             }
             LOGGER.log( Level.INFO, "  getting routes ("+i+" of "+maxTests+")" );
@@ -62,7 +62,7 @@ public class MessageFactoryTest {
             }
             LOGGER.log( Level.INFO, "  testing full GraphSet ("+i+" of "+maxTests+")" );
             for (GraphSet gt : g) {
-                for (Graph gt2 : gt) {
+                for (Edge gt2 : gt) {
                     assertTrue( "unreached endpoint", gt.targetReached( gt2.getFrom() ) && gt.targetReached( gt2.getTo() ) );
                 }
             }

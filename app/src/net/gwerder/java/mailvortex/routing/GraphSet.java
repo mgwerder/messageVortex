@@ -9,7 +9,7 @@ import java.util.*;
  *
  * Created by martin.gwerder on 13.06.2016.
  */
-public class GraphSet extends Vector<Graph> implements Comparator<GraphSet>,Comparable<GraphSet> {
+public class GraphSet extends Vector<Edge> implements Comparator<GraphSet>,Comparable<GraphSet> {
 
     private static final long serialVersionUID = 16134223345689L;
 
@@ -60,13 +60,13 @@ public class GraphSet extends Vector<Graph> implements Comparator<GraphSet>,Comp
     }
 
     @Override
-    public boolean add(Graph g) {
+    public boolean add(Edge g) {
         hasChanged=true;
         return super.add(g);
     }
 
     @Override
-    public boolean addAll(Collection<? extends Graph> g) {
+    public boolean addAll(Collection<? extends Edge> g) {
         hasChanged=true;
         return super.addAll(g);
     }
@@ -100,7 +100,7 @@ public class GraphSet extends Vector<Graph> implements Comparator<GraphSet>,Comp
     public boolean targetReached( IdentityStoreBlock is) throws NullPointerException {
         if(is==null) throw new NullPointerException();
         if (is.equals(source)) return true;
-        for (Graph g : this) {
+        for (Edge g : this) {
             if (g.getTo() == is) return true;
         }
         return false;
@@ -112,8 +112,8 @@ public class GraphSet extends Vector<Graph> implements Comparator<GraphSet>,Comp
                 Set<GraphSet> ret = new TreeSet<>();
                 for (int i = 0; i < size(); i++) {
                     if (get( i ).getFrom().equals( getSource() )) {
-                        Graph[][] g = getRoute( i, new Graph[]{get( i )}, getTarget() );
-                        for (Graph[] gr : g) {
+                        Edge[][] g = getRoute( i, new Edge[]{get( i )}, getTarget() );
+                        for (Edge[] gr : g) {
                             GraphSet gs = new GraphSet();
                             gs.setAnonymitySet( getAnonymitySet() );
                             gs.setSource( getSource() );
@@ -131,23 +131,23 @@ public class GraphSet extends Vector<Graph> implements Comparator<GraphSet>,Comp
         }
     }
 
-    private Graph[][] getRoute(int startIndex,Graph[] visited,IdentityStoreBlock to) {
-        List<Graph[]> ret=new Vector<>(  );
+    private Edge[][] getRoute(int startIndex, Edge[] visited, IdentityStoreBlock to) {
+        List<Edge[]> ret=new Vector<>(  );
 
         // get last graph
-        Graph g=get(startIndex);
+        Edge g=get(startIndex);
 
         // if target reached tell so
-        if(g.getTo().equals(to)) return new Graph[][] {new Graph[0]};
+        if(g.getTo().equals(to)) return new Edge[][] {new Edge[0]};
 
         //
         for(int i=startIndex+1;i<size();i++) {
-            Graph tmp=get(i);
+            Edge tmp=get(i);
             if(tmp==null) throw new NullPointerException("access to bad index");
 
             // avoid loops in current path (no visited graphs)
             boolean vis=false;
-            for(Graph v:visited) {
+            for(Edge v:visited) {
                 if(v==null) throw new NullPointerException("OUCH got an null visited graph ... thats impossible (size is "+visited.length+";v[0]="+visited[0]+";v[1]="+visited[1]+")");
                 if(tmp.getTo().equals(v.getFrom()) || tmp.getTo().equals(v.getTo())) vis=true;
             }
@@ -158,18 +158,18 @@ public class GraphSet extends Vector<Graph> implements Comparator<GraphSet>,Comp
                 // this node is not yet visited (check possibility)
 
                 // building new visited array
-                List<Graph> tg1=new Vector<>(  );
+                List<Edge> tg1=new Vector<>(  );
                 tg1.addAll( Arrays.asList( visited ) );
                 tg1.add( tmp );
 
                 // recursive call from new position
-                Graph[][] tg=getRoute(i,tg1.toArray(new Graph[tg1.size()]),to);
+                Edge[][] tg=getRoute(i,tg1.toArray(new Edge[tg1.size()]),to);
 
                 //prepend to each solution mine
                 int j=0;
                 while(j<tg.length) {
-                    Graph[] gj=tg[j];
-                    Graph[] gk=new Graph[gj.length+1];
+                    Edge[] gj=tg[j];
+                    Edge[] gk=new Edge[gj.length+1];
                     if(gj.length>0) {
                         System.arraycopy(gj, 0, gk, 1, gj.length);
                     }
@@ -180,7 +180,7 @@ public class GraphSet extends Vector<Graph> implements Comparator<GraphSet>,Comp
                 ret.addAll( Arrays.asList(tg) );
             }
         }
-        return ret.toArray(new Graph[ret.size()][]);
+        return ret.toArray(new Edge[ret.size()][]);
     }
 
     public int compare(GraphSet g1,GraphSet g2) {
@@ -210,7 +210,7 @@ public class GraphSet extends Vector<Graph> implements Comparator<GraphSet>,Comp
     }
 
     public void dump() {
-        for(Graph g:this) {
+        for(Edge g:this) {
             System.out.println( "  "+anonymitySet.indexOf( g.getFrom() ) + " -> " + anonymitySet.indexOf( g.getTo() ) );
         }
         System.out.println("}");

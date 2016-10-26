@@ -7,7 +7,7 @@ import net.gwerder.java.mailvortex.asn1.IdentityStoreBlock;
  *
  * Created by martin.gwerder on 13.06.2016.
  */
-public class Graph {
+public class Edge {
 
     private static final long serialVersionUID = 9070431563L;
 
@@ -26,10 +26,10 @@ public class Graph {
      * @throws IllegalArgumentException if from and two are equal
      * @throws NullPointerException if one of the parameters is null
      */
-    public Graph(IdentityStoreBlock from, IdentityStoreBlock to, long startTime, long maxDelay) throws IllegalArgumentException,NullPointerException {
-        if(from==to) throw new IllegalArgumentException( "a graph may not have the same start and ending point" );
-        if(from==null) throw new NullPointerException( "from may not be null" );
-        if(to==null) throw new NullPointerException( "from may not be null" );
+    public Edge(IdentityStoreBlock from, IdentityStoreBlock to, long startTime, long maxDelay) throws IllegalArgumentException,NullPointerException {
+        if(from==to) throw new IllegalArgumentException( "an edge may not have the same start and ending point" );
+        if(from==null) throw new NullPointerException( "from may not be null in an edge" );
+        if(to==null) throw new NullPointerException( "from may not be null in an edge" );
         this.from = from;
         this.to = to;
         this.startTime= startTime;
@@ -70,14 +70,14 @@ public class Graph {
 
     public boolean equals(Object t) {
         if(t==null) return false;
-        if(! (t instanceof Graph)) return false;
-        Graph g=(Graph)t;
-        return g.to.equals(to) && g.from.equals( from ) && g.startTime==startTime && g.maxDelay==maxDelay;
+        if(! (t instanceof Edge)) return false;
+        Edge g=(Edge)t;
+        return g.to.equals(this.to) && g.from.equals(this.from) && (g.startTime==this.startTime) && (g.maxDelay==this.maxDelay);
     }
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        return (""+from+"/"+to+"/"+startTime+"/"+maxDelay).hashCode();
     }
 
 }

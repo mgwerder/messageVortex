@@ -4,36 +4,120 @@
 %!TeX root = mailvortex_new.tex
 
 \chapter{Introduction}
+\fxfatal{Introduce Bell as example (Telephone)}
+
 Numerous events in present and past have shown that data is broadly collected in the internet. Wether this is a problem or not may be a disputable fact. Undisputed is however that if data is not handled with care peoples are accused with numerous ``facts'' that are more than questionable. To show that this may happen even under complete democratic control we might refer to events such as the ``secret files scandal?? (or ``Fichenskandal'') in Switzerland. In the years  from 1900 to 1990 Swiss government collected 900'000 files in a secret archive (covering roughly 10\% of the natural and juristic entities within Switzerland at that time). 
 
 A series of similar attempts to attack privacy on a global scale have been discovered by whistle blower Edward Snowden. The documents leaked in 2009 by him claim that there was a data collection starting in 2010. Since these documents are not publicly available it is hard to to prove claims based on these documents. However -- due to the fact that the documents were screened by a significant number of journalists spanning multiple countries, the information seems credible.
 
 According to these documents (verified by \href{http://www.nrc.nl/nieuws/2013/11/23/nederland-sinds-1946-doelwit-van-nsa}{NRC}) NSA infiltrated more than 50k computers with malware to collect classified information. They furthermore infiltrated Telecom-Operators (executed by british GCHQ) such as Belgacom to collect data and targeted high member of governments even in associated states (such as the germans president mobile phone). A later published shortened list of ``selectors'' showed 68 telephone and fax numbers targeting enconomy, finance and agricultural parts of the german government.
 
-This list of events shows that big players are collecting and storing vast amounts of data for future use. The list of events shows also that the use of this data has in the past been at least partially questionable. As a part of possible counter measures this work analyses the possibility of using state of the art technology to minimize the information footprint of a person on the internet. 
+This list of events shows that big players are collecting and storing vast amounts of data for analysis or possibly future use. The list of events shows also that the use of this data has in the past been at least partially questionable. As a part of possible counter measures this work analyses the possibility of using state of the art technology to minimize the information footprint of a person on the internet. 
 
-We leave a vast information footprint in our daily communication. On a regular email we disclose everything in an ``postcard'' to any entity on its way. Even when encrypting a message perfectly with todays technology (S/MIME\cite{RFC2045} or PGP\cite{RFC2015}) leaves at least the originating and the receiving entity disclosed. Most likely other relevant information such as ``message subject'', ``frequency of exchanged messages'', ``size of messages'', or ``client beeing used''. A good anonymity protocol has therefore far more attributes to cover than the message itself. Furthermore a protocol anonymising messages should not rely on the trust of infrastructure other than the infrastructure under control of the sending or receiving entity. 
+We leave a vast information footprint in our daily communication. On a regular email we disclose everything in an ``postcard'' to any entity on its way. Even when encrypting a message perfectly with today's technology (S/MIME\cite{RFC2045} or PGP\cite{RFC2015}) leaves at least the originating and the receiving entity disclosed or we rely on the promises of a third party provider which offers a proprietary solution. Even in those cases we leak informations such as ``message subject'', ``frequency of exchanged messages'', ``size of messages'', or ``client beeing used''. A good anonymity protocol has therefore far more attributes to cover than the message itself. It includes beside the message all metadata and the traffic flows. Furthermore a protocol anonymising messages should not rely on the trust of infrastructure other than the infrastructure under control of the sending or receiving entity. 
 
-Any central infrastructure is bound to be of special interest to anyone gathering data concerning the using entities of such a protocol. So central infrastructure has to be avoided.
+Any central infrastructure is bound to be of special interest to anyone gathering data concerning the using entities of such a protocol. It furthermore may be manipulated in order to attack the messages or their flow. So central infrastructure has to be avoided.
 
-In this work a new protocol is designed to allow message transfer through existing communication channels. These messages should be unobservable to any third party. This unobservability does not only cover the message itself but all metadata associated with it. 
+In this work a new protocol is designed to allow message transfer through existing communication channels. These messages should be unobservable to any third party. This unobservability does not only cover the message itself but all metadata and flows associated with it. The protocol should be designed in such a way so that it is capable to use any type of transfer protocol. It should be even possible to switch protocols while have messages in transfer to allow media breaches (at least on a protocol level).
+
+The new protocol should allow safe communication without the need of trusting the underlying transport media. Furthermore it is desirable that the usage of the protocol itself is possible without altering the immediate behaveour of the transport layer. That way it is possible to use the transport layers normal traffic to increase the noise in which information has to be searched. 
+
+This work splits into multiple parts. In the first part we are collecting available researches and technologies. We emphasize in all technologies on the strength and weaknesses relevant to this work. In the second part we reassemble the parts to a new protocol. In the third part we analyse the protocol for fitness of the purpose. We try to find weaknesses and work out recommendations for the protocol usage. In the last part we discuss the results and try to summarize the findings. Try to elaborate to what extend the protocol fullfills the requirements of this work.
 
 \chapter{Main Research Question}
 The main topic of this thesis was defined as follows:
 \begin{itemize}
-	\item Is it possible to have specialized asynchronous messaging protocol based on ``state of the science'' technologies offering a high level of unlikability (sender and receiver anonymity) towards an advisor with a high budget and privileged access to infrastructure?
+	\item Is it possible to have specialized messaging protocol used in the internet based on ``state of the science'' technologies offering a high level of unlikability (sender and receiver anonymity) towards an adverser with a high budget and privileged access to internet infrastructure?
 \end{itemize}
 
 Based on this main question there are several sub questions grouped around various topics:
 
-\begin{itemize}
-	\item What technologies and methods can be used to provide anonymity against a potential adverser?
-	\item How can entities utilizing these technologies and methods be attacked?
+\begin{enumerate}
+	\item What technologies and methods can be used to provide anonymity against a potential adverser. And what technologies may be used in order to mitigate already known weaknesses of this technologies? 
+	\item How can entities utilizing these technologies and methods be attacked and what measures are  available to circumvent such attacks?
 	\item How can attacks targeting anonymity of a sending or receiving entity be mitigated by design?
-\end{itemize}
+\end{enumerate}
 
 \part{Methodes}
-In this part of the dissertation we collect definitions, methods, and existing research relevant to the topic of this thesis
+In this part of the dissertation we collect requirements, definitions, methods, and existing research relevant to the topic of this thesis. We start with collecting We start with researching existing technologies
+
+\chapter{Requirements for an anonymising Protocol\label{sec:genRequirements}}
+In the following sections we try to elaborate the main characteristics of the anonymising protocol. The main goal of the protocol is to enable Freedom of speech as defined in Article 19 of the International Covenant on Civil and Political Rights (ICCPR)\cite{iccpr}.
+\begin{quote}
+	everyone shall have the right to hold opinions without interference 
+\end{quote}
+and
+\begin{quote}
+	everyone shall have the right to freedom of expression; this right shall include freedom to seek, receive and impart information and ideas of all kinds, regardless of frontiers, either orally, in writing or in print, in the form of art, or through any other media of his choice.
+\end{quote}
+
+We imply that not all participants in the internet share this value. As of sept \nth{1} 2016 Countries such as China (signatory), Cuba (signatory), Quatar, Saudi Arabia, Singapore, United Arab Emirates, or Myanmar did not ratify the ICCPR. Other countries such as United States or Russia did either put local laws in place superseding the ICCPR or made reservations rendering parts of it ineffective. We may therefore safely assume that freedom of speech is not given in the internet as a lot of countries explicitly supersede them.
+
+We always have to keep in mind that we have no control over the flow of data packets in the internet. Packets may pass though any point of the world. It is not even possible to detect what way has a packet taken. The common network diagnostic tool \verb|tracert| respectively \verb|traceroute| tries to figure that out. But neither can a route of a packet beeing sent forseen nor can it be measured while or after sending. This is due to the fact that all routers along the way only decide for the next hop of a packet.
+
+As an example of the problems analysing a packet route we may look at \verb|traceroute|. The mapage of traceroute of Linux tells us that \verb|traceroute| uses UDP, TCP, or ICMP packets with a short TTL and analyses the IP of the peer sending an TIME\_EXCEEDED (message of the ICMP protocol). This information is then collected and shown as a route. This route may be completely wrong. Some of the possible cases are described in the manpage.
+
+The output of \verb|traceroute| is therefore not a reliable indication of route. Since routes do not have to be static and may be changed or even be alternating the output represents in the best case a snapshot of the current routing situation. We cannot be sure that data packets we are sending are passing only through countries accepting the ICCPR to the full extend.
+
+\section{Anonymizing and unlinking}
+If we are unable to limit the route of our packets through named jurisdictions we must protect ourselves from unintentionally breaking the law of a foreign country. Therefore we need to be anonymous when sending or receiving messages. Unfortunately most transport protocols (in fact almost all of them such as SMTP, SMS, XMPP or IP) use a globaly unique identifier for senders and receivers which are readable by any party which is capable of reading the packets. 
+
+As a result anonymisation of a sender or a receiver is not simple. If messages are being sent through a relay at least the original sender might be concealed (Sender anonymity). By combining it with encryption we may even achieve a very simple form of sender and receiver pseudonymity. If cascading more relay like infrastructures and combining it with cryptography we might even achieve sender and receiver anonymity. This approach has however serveral downsides (see \ref{sec:remailer} and \ref{sec:mixnets} for details) and is easily attackable.
+
+\section{Censorship Resistant}
+In our scenario in \ref{sec:genRequirements} we defined the adverser as someone with superior access to the internet and its infrastructure. Such an adverser might attack a message flow in serveral ways:
+\begin{itemize}
+	\item Identify sender
+	\item Identify recipient
+	\item Read messages passed or extract meta information
+	\item Disrupt communication fully or partially
+\end{itemize}
+
+We furthermore have to assume that all actions taken by a potential adverser are not subject to legal prosecution. This is due to the fact that an adverser trying to establish censorship may be part of a jurisdictions government. We may safely assume that there are legal exceptions in some jurisdiction for such entities.
+
+In order to be able to withstand an adverser outlined above the protocol needs certain attibutes. The message content needs to be unidentifiable by attributes or content. Whereas ``Attributes'' include meta information such as frequency, timing, message size, sender, protocol, ports, or recipient (list not conclusive).
+
+\section{Reliable}
+Any message sending protocol needs to be reliable in its functionality. If means of message transport are unreliable users tend to use different means for communication
+
+\section{Available}
+\fxfatal{add content here}
+
+\chapter{Existing Transport Layer Protocols}
+\section{HTTP}
+The HTTP protocol allows message transfer from and to a server and is specified in RFC2616 \fxfatal{add citation}. It is not suitable as a communication protocol for messages due to the lack of notifications. There are some extensions which would allow such communications (such as WebDAV) but in general even those are not suitable as they require a continous connection to the server in order to get notifications. Having a ``rollup'' of notifications when connecting is not doable but could be programmed. 
+
+http server listen on standard ports 80 or 443 and listen to incomming connects. The port 443 is equivalent to the port 80 except for the fact that it has a wrapping encryption layer (usually TLS). The incomming connects (requests) must offer a header part and may contain a body part which would be suitable for transferring messages to the server. The reply onto this request is transferred over the same TCP connection containing the same two sections.
+
+The main disadvantage in terms as message transport protocol is that this protocol is not symetrically. This means that a server is always just ``serving requests'' and not sending actively information to peers. This Request-Reply design makes the protocol unsuitable for message transport.
+
+\section{MQTT}
+MQTT is an ISO standard (ISO/IEC PRF 20922:2016) and was formerly called MQ Telemetry Transport. The protocol runs by default on the two ports 1883 and 8883 and may be encrypted with TLS.\fxfatal{add more information}
+
+\section{Advanced Message Queuing}
+\fxfatal{add missing content}
+
+\section{Constrained Application Protocol}
+\fxfatal{add missing content}
+
+\section{Web Application Messaging Protocol}
+\fxfatal{add missing content}
+
+\section{XMPP (jabber)}
+\fxfatal{add missing content}
+
+\section{SMTP}
+\fxfatal{add missing content}
+
+\section{SMS}
+SMS capability was introduced in the SS7 protocol \fxfatal{add credible source}. This protocol allows the message transfer of messages not bigger than 144 character. Due to this restriction in size it is unlikely to be suitable for this type of communication as the keys beeing required are already sized similarly leaving no space for Messages or routing information.
+
+\fxfatal{add more information}
+
+\section{MMS}
+The Multimedia Messaging Service (MMS) is maintained by 3GPP (\nth{3} Generation Partnership Project)
+
+\fxfatal{add more information}
 
 \chapter{Existing Research and Implementations on the Topic}
 \section{Anonymity}
@@ -49,7 +133,9 @@ and
 
 Whereas the anonymity set is defined as the set of all possible subjects.
 
-Especially the second quote is very important to this paper. 
+Especially the anonymity of a subject from an attacker's is very important to this paper. 
+
+
 \subsection{$k$-Anonymity}
 $k$-anonymity is a term introduced in \cite{k-anonymous:ccs2003}. This work claims that no one might be held responsible for an action if the action itself can only be identified as an action which has been taken by one unidentifiable entity out of $k$ entities.
 
@@ -58,19 +144,21 @@ The Document distinguishes between \textit{Sender $k$-anonymity} where the sendi
 \subsection{$\ell$-Diversity}
 In \cite{machanavajjhala2007diversity} an extended model of $k$-anonymity. According to the authors it is possible to break a $k$-anonymity set if there is additional Information available which may be merged into a data set so that a special entity can be filtered from the $k$-anonymity set. In other words if an anonymity set is to tightly specified a single additional background information might be sufficient to identify a specific entity in an anonymity set.
 
+While it might be arguable that a $k$-anonymity in which a member is not implicitely $k$-anonymous still is sufficient for $k$-anonymity in its sense the point made in this work is definitely right and should be taken into account.
+
 Their approach is to introduce an amount of invisible diversity into $k$-anonymous sets so that simple background knowledge is no longer sufficient to isolate a single member.
 
 \subsection{$t$-Closeness}
-While $\ell$-diversity protects the identity of an entity it does not prevent informatino gain. A subject which is in a class has the same attributes. This is where $t$-closeness\cite{li2007t} comes into play. $t$-closeness is defined as follows:
+While $\ell$-diversity protects the identity of an entity it does not prevent information gain. A subject which is in a class has the same attributes. This is where $t$-closeness\cite{li2007t} comes into play. $t$-closeness is defined as follows:
 
 \begin{quote}
-  An equivalence class is said to have $t$-closeness if the distance between the distribution of a sensitive attribute in this class and the distribution of the attribute in the whole table is no more than a threshold t. A table is said to have t-closeness if all equivalence classes have t-closeness.
+  An equivalence class is said to have $t$-closeness if the distance between the distribution of a sensitive attribute in this class and the distribution of the attribute in the whole table is no more than a threshold. A table is said to have $t$-closeness if all equivalence classes have $t$-closeness.
 \end{quote}
 
 \section{Zero Trust}
 Zero trust is not a truly researched model in systems engineering. It is however widely adopted. 
 
-We refer in this work to the zero trust model when denying the trust in any infrastructure not directly controlled by the sending or receiving entity. This distrust extends especially but not exclusively to the network transporting the message, the nodes storing and forwarding messages, the backup taken from any system, and software, hardware and operators of all systems not explicitly trusted.
+We refer in this work to the zero trust model when denying the trust in any infrastructure not directly controlled by the sending or receiving entity. This distrust extends especially but not exclusively to the network transporting the message, the nodes storing and forwarding messages, the backup taken from any system, and software, hardware, and operators of all systems not explicitly trusted.
 
 \section{Pseuidonymity}
 As Pseudonymity we take the definition as specified in \cite{anon_terminology}.
@@ -80,40 +168,107 @@ As Pseudonymity we take the definition as specified in \cite{anon_terminology}.
 	names. The subject which the pseudonym refers to is the holder of the pseudonym. A subject is pseudonymous if a pseudonym is used as identifier instead of one of its real names.\omitted
 \end{quote}
 
-\section{undetectability}
-\section{unobservability}
+\section{Undetectability}
+As undetectability we take the definition as specified in \cite{anon_terminology}.
+
+\begin{quote}
+	Undetectability of an item of interest (IOI\index{Item of Interest}) from an attacker's perspective means that the
+	attacker cannot sufficiently distinguish whether it exists or not.\omitted
+\end{quote}
+
+\section{Unobservability}
+As unobservability we take the definition as specified in \cite{anon_terminology}.
+
+\begin{quote}
+	Unobservability of an item of interest (IOI) means
+	\begin{itemize}
+		\item undetectability of the IOI against all subjects uninvolved in it and
+     	\item anonymity of the subject(s) involved in the IOI even against the other subject(s)
+	\end{itemize}
+	involved in that IOI.
+\end{quote}
+
+This part is very important. As we are heading for a censorship resistant solution unobservability is a key. As mentioned in this paper unobservability raises the bar of required attributes again ($\Rightarrow$ reads ``implies''):
+\begin{eqnarray*}
+	censorship\ resistance & \Rightarrow & unobservability\\
+	unobserability         & \Rightarrow & undetectability\\
+	unobserability         & \Rightarrow & anonymity
+\end{eqnarray*}
+
+So this means that we have to use an undetectable data channel in order to achieve censorship resistance.
 
 \subsection{Ephemeral Identity}
-\section{Single Use Reply Blocks}
+In this work we use accounting on various levels. While we are dealing with anonymity accounting has still to be linked to some kind of identity for this reason we are introducing a term called ``ephemeral identity''.
+
+\begin{quote}
+	A Ephemeral identity is a temporary identity which is defined by the following attributes:
+	\begin{itemize}
+		\item It is an artificial identity
+		\item It is only used for a short timespan
+		\item It is not linkable to another identity
+	\end{itemize}
+\end{quote}
+
+The key in this definition is the last point is crucial and at the same time hard to achieve.
+
+\section{Single Use Reply Blocks and Multi Use Reply Blocks}
+The use of single use reply blocks were first introduced by Chaum in \cite{chaum-mix}. The concept is that we have in our case a routing block which might be used up to $n$ times ($0<n<FIXME$)
+\fxfatal{Add reference to Chaum}
+
 \section{Censorship}
 \subsection{Censorship Resistant}
-\subsection{Parrot Coircumvention}
+
+\subsection{Parrot Circumvention}
 \subsection{Censorship Circumvention}
 \subsubsection{Covert Channel}
 \subsubsection{Spread Spectrum}
 
 \section{Cryptography}
 \subsection{Symmetric Encryption}
-\subsubsection{RSA}
-\subsubsection{Elliptic Curve Cryptogaphy}
 \subsection{Asymmetric Encryption}
+\subsubsection{RSA}
+\fxfatal{Add content}\cite{Rivest:1978:MOD:359340.359342}
+
+\subsubsection{Elliptic Curve Cryptogaphy}
+
+\subsection{Homomorphic encryption}
+
+\section{Routing}
+\subsection{Mixing}
+\fxfatal{suspectible to timing analysis}
+
+\subsection{Onion Routing}
+\fxfatal{suspectible to timing analysis}
+\fxfatal{mention example tarzan}
+
+\subsection{Crowds}
+\fxfatal{suspectible to timing analysis}
+\fxfatal{mention example Freenet}
+
+\subsection{Mimic routes}
+\fxfatal{
+	- mimics are chosen statically
+	- garbage traffic is sent to mimics periodically
+	- garbage traffic is replaced with real traffic when there’s real traffic
+}
 
 \section{System Implementations}
 The following sections describe 
 \subsection{Concepts}
 \subsubsection{DC Networks}
-\subsubsection{MIX Networks}
+\subsubsection{MIX Networks\label{sec:mixnets}}
 \subsubsection{Onion Routing}
-\subsubsection{Remailer}
+\subsubsection{Remailer\label{sec:remailer}}
 
 \subsection{Implementations}
-The following sections emphasize on implementations of anonymising (and related) protocols regardless of their usage in the domain of messaging. It si a list of system classes or their specific implementations together with a short analysis of strength and weaknesses. Wherever possible we try to refer to original sources.
+The following sections emphasize on implementations of anonymising (and related) protocols regardless of their usage in the domain of messaging. It is a list of system classes or their specific implementations together with a short analysis of strength and weaknesses. Wherever possible we try to refer to original sources. This is however not always possible since some of these systems are no longer in use.
 \subsubsection{Pseudonymous Remailer}
 \subsubsection{Babel}
 \subsubsection{Cypherpunk-Remailer}
 \subsubsection{Mixmaster-Remailer}
 \subsubsection{Mixminion-Remailer}
 \subsubsection{Crowds}
+\subsubsection{Tarzan}
 \subsubsection{Herbivore}
 \subsubsection{Dissent}
 \subsubsection{P5}
@@ -134,6 +289,8 @@ In the following sections we emphasize on possible attacks to an anonymity prese
 \subsubsection{Hotspot Attacks}
 \subsubsection{Message Tagging and Tracing}
 \subsubsection{Side Channel Attacks}
+\subsubsection{Timing Attacks}
+\subsubsection{Sizing Attacks}
 
 \subsubsection{Bugging Attacks}
 \fxfatal{Bugging thru certificate/identity lookup}
@@ -142,22 +299,77 @@ In the following sections we emphasize on possible attacks to an anonymity prese
 
 \subsection{Denial of Service Attacks}
 \subsubsection{Censorship}
+Where as traditional censorship is widely regarded as selective information filtering and alteration a very repressive censorship can even include denial of information flows in general. Any anonymity system not offering the possibility to hide in legitimate information flows is therfore not censorship resistant.
+ 
 \subsubsection{Credibility Attack}
+Another type of DoS attack is the credibility attack. While not necessarily a technical attack it is very effective. A system not having a sufficiently big user base is offering thus a bad level of anonymity due to the fact that the anonymity set is too small or the traffic concealing message flow is insufficient. 
+
+In a credibility attack a systems reputation is degraded in such a way that the system is no longer used. This may be achieved in serveral ways. This is usually done by reducing the reputation of a system.
+
+This may be achieved in several ways. Examples:
+\begin{itemize}
+	\item Disrupt functionality of a system.
+	\item Publicly dispute the effectiveness of a system.
+	\item Reduce the effectiveness of a system.
+	\item Dispute the credibility of the system founders.
+	\item Dispute the credibility of the infrastructure.
+\end{itemize}
 
 \chapter{Applied Methodes}
+Dased in the findings in this chapter we used the following methodology:
+\begin{enumerate}
+	\item Identify problem hotspots for a new protocol
+	\item Design a protocol which adresses the previously identified hotspots
+	\item Build a protocol prototype
+	\item Analyse the protocol for weaknesses using attack schemes
+	\begin{enumerate}
+		\item Tagging/Bugging attacks
+		\item Tracing attacks
+	\end{enumerate}
+\end{enumerate}
+\section{Problem Hotspots}
+\section{Protocol Design}
+\section{Protocol Analysis}
 
 \part{Results}
+To verify the hypothesis made in this paper, and to analyse properties of the protocol in a real world scenario a library was implemented in Java which was capable of handling all message packets and the routing stack as a whole. The following paragraphs describe the protocol developed in general as a generic approach. Appendix \ref{app:asnone} gives the full ASN.1 representation of the protocol. 
+
+It is important to notice that ASN.1 has no mean to express encrypted structures. Due to this fact we defined all encrypted fields as \verb|OCTET STRING|. The protocol offers according to the ASN.1 the possibility to store onionized information in an unencrypted form. This is meant for debuing purposes. At no point this should be used in a production environment.
+
+The protocol described in the next chapter is independent from routing. At the moment capabilities include SMTP and XMPP. The protocol may be extended by adding new transport layer capabilities and their addressing schemes.
 
 \chapter{MessageVortex - Transport Independent Messaging anonymous to \nth{3} Parties}
+\section{Protocol Description}
+\section{Accounting}
+\section{Message Flows}
+\section{Considerations for Building Messages}
+\subsection{Timing of messages}
+\subsection{Building Diagnostic Paths}
+\subsubsection{Implicit Diagnostic}
+\fxfatal{Add comments about messages splitting and returning to sender}
+
+\subsubsection{Automatic Explicit Diagnostic}
+\fxfatal{Add comments about error and diagnosis messages officially spliting of messages}
+
+\subsubsection{On-Demand Explicit Diagnostic}
+\fxfatal{Add comments about normal, error, and diagnosis messages beeing picked up by a routing block}
+
+\section{Real World Considerations}
+This approach is heavily dependent of the transport protocol and builds on top a new obfuscating/routing layer. For this system to become a real peer-to-peer approach some additional quirks are required. A message-Vortex-Account needs always an active routing handler. This routing handler may be introduced by new server capabilities or by having a device handling the routing from the client side. For this reason we built a RaspberryPi appliance capable of connecting to one (or more) accounts fetching incomming mails, analysing them and reroute them if necessary. Although the system is designed to be run on a RaspberryPi the software might be installed to any Java capable client. The RaspberryPi is just an affordable lightweight device which offers all required capabilities.
+
 \chapter{Security Analysis}
 \chapter{Additional Considerations}
-\section{Storage of Messages}
+\section{Storage of Messages and queues}
 The storage of messages sent though MessageVortex should be handled with great care. It seems on the first sight a good idea to merge all messages in a globally available storage such as the mail account of the receiving entity. However -- In doing so we would discover the message content to the providing party of a mail account. Since we handled the message with great care and tremendous costs up until this point it would be careless doing so. 
 
 Storing them in a localized and receiving entity controlled storage is definitely a good idea but leaves security considerations like a backup possibly to an end user. This might be better but in effect a questionable decision. There is however a third option. By leaving the message unhandled on the last entity of the MessageVortex chain we may safely backup the data without disclosing the message content. Merging the content then dynamically through a specialized proxy would allow the user tu have a unified view on his without compromising the security.
 
 \fxfatal{implemented in prototype?}
 
-\part{Discussion}
+\section{Economy of transfer}
+\fxfatal{Write something about wasting bandwidth}
 
+\part{Discussion}
 \chapter{Anonymity}
+\section{Effects of anonymous communication on behaveour}
+\fxfatal{add content}\cite{postmes2001social}

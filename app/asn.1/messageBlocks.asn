@@ -19,6 +19,7 @@ BEGIN
     header        IdentityBlock,
     blocks        CHOICE {
         encrypted [1101] OCTET STRING,     -- contains encrypted UnencryptedBlocks structure; Decryption key is in identity block [decryptionKey]
+        -- it is not allowed to use plain in production environments; This is for testing and analysis only
         plain     [1102] UnencryptedBlocks -- should not be used except for internal diagnostic purposes
     }
   }
@@ -28,6 +29,7 @@ BEGIN
     headerKey             [1000] OCTET STRING OPTIONAL,  -- contains SymmetricKey encrypted with recipient nodes public key
     identityBlock         CHOICE {
         encrypted  [1001] OCTET STRING,   
+        -- it is not allowed to use plain in production environments; This is for testing and analysis only
         plain      [1002] IdentityPayloadBlock,   
     },
     identitySignature OCTET STRING   -- contains signature of Identity [as stored in identityBlock;signed identityBlock without Tag]
@@ -403,30 +405,5 @@ BEGIN
   
   pkcs-1    OBJECT IDENTIFIER ::= { iso(1) member-body(2) us(840) rsadsi(113549) pkcs(1) 1 }
 
-  -- FROM RFC5480
-  id-ansi        OBJECT IDENTIFIER ::= { iso(1) member-body(2) us(840) ansi-X9-62(10045) }
-  id-certicom    OBJECT IDENTIFIER ::= { iso(1) identified-organization(3) certicom(132) }
-
-  id-ecPublicKey OBJECT IDENTIFIER ::= { id-ansi keyType(2) 1 }
-
-  dsaEncryption  OBJECT IDENTIFIER ::= { iso(1) member-body(2) us(840) x9-57(10040) x9cm(4) 1 } -- RFC3279
-  rsaEncryption  OBJECT IDENTIFIER ::= { pkcs-1 1 }
-
-  secp192r1 OBJECT IDENTIFIER ::= { id-ansi  curves(3) prime(1) 1 }
-  sect163k1 OBJECT IDENTIFIER ::= { id-certicom curve(0) 1 }
-  sect163r2 OBJECT IDENTIFIER ::= { id-certicom curve(0) 15 }
-  secp224r1 OBJECT IDENTIFIER ::= { id-certicom curve(0) 33 }
-  sect233k1 OBJECT IDENTIFIER ::= { id-certicom curve(0) 26 }
-  sect233r1 OBJECT IDENTIFIER ::= { id-certicom curve(0) 27 }
-  secp256r1 OBJECT IDENTIFIER ::= { id-ansi curves(3) prime(1) 7 }
-  sect283k1 OBJECT IDENTIFIER ::= { id-certicom curve(0) 16 }
-  sect283r1 OBJECT IDENTIFIER ::= { id-certicom curve(0) 17 }
-  secp384r1 OBJECT IDENTIFIER ::= { id-certicom curve(0) 34 }
-  sect409k1 OBJECT IDENTIFIER ::= { id-certicom curve(0) 36 }
-  sect409r1 OBJECT IDENTIFIER ::= { id-certicom curve(0) 37 }
-  secp521r1 OBJECT IDENTIFIER ::= { id-certicom curve(0) 35 }
-  sect571k1 OBJECT IDENTIFIER ::= { id-certicom curve(0) 38 }
-  sect571r1 OBJECT IDENTIFIER ::= { id-certicom curve(0) 39 }
-  
 END
 

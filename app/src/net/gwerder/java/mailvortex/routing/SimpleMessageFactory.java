@@ -8,7 +8,7 @@ import net.gwerder.java.mailvortex.asn1.IdentityStoreBlock;
  */
 public class SimpleMessageFactory extends MessageFactory {
 
-    /* Graph set to be honored */
+    /* Edge set to be honored */
     GraphSet graph = new GraphSet();
 
     /* number of ms for the graph to be completed */
@@ -37,13 +37,13 @@ public class SimpleMessageFactory extends MessageFactory {
             while (to == null || to == from || to.equals( from )) {
                 to = graph.getAnonIdentity( esr.nextInt( graph.getAnonymitySetSize() ) );
             }
-            graph.add( new Graph( from, to , graph.size(),0 ) );
+            graph.add( new Edge( from, to , graph.size(),0 ) );
         }
 
         // set times
         long fullTime=maxMessageTransferTime*esr.nextInt(1000)/1000;
         for(int i=0;i<graph.size();i++) {
-            Graph g=graph.get(i);
+            Edge g=graph.get(i);
             double nea=esr.nextGauss();
             double mirr=0.1;
             double range=0.5;

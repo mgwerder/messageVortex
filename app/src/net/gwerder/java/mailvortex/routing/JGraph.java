@@ -79,8 +79,9 @@ public class JGraph extends JPanel implements MouseListener  {
         // draw arrows
         GraphSet[] routes=graph.getRoutes();
         int lastY=0;
+        System.out.println("## displaying route "+this.route+" ("+routes[this.route].size()+")");
         for(int i=0;i<graph.size();i++) {
-            Graph gr=graph.get(i);
+            Edge gr=graph.get(i);
             int x1=(int)(X_OFFSET+BOX_WIDTH/2+graph.getAnonymityIndex( gr.getFrom() )*xSpace);
             int x2=(int)(X_OFFSET+BOX_WIDTH/2+graph.getAnonymityIndex( gr.getTo()   )*xSpace);
             int y=(int)(Y_OFFSET+2*BOX_HEIGHT+i*ySpace);
@@ -180,7 +181,7 @@ public class JGraph extends JPanel implements MouseListener  {
     private void createAndShowGUI() {
         System.out.println("Created GUI on EDT? "+
                 SwingUtilities.isEventDispatchThread());
-        JFrame f = new JFrame("Graph Demo");
+        JFrame f = new JFrame("Edge Demo");
         f.add(this);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setSize(250,250);
