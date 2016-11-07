@@ -50,6 +50,13 @@
 
 % enable raggedright in tables
 \usepackage{array}
+% for diagonal divided cells in tables
+\usepackage{makecell}
+\renewcommand\theadfont{\bfseries}
+
+% footnotes for tables
+\usepackage{tablefootnote}
+%\makesavenoteenv{tabular}
 
 % enable placement of floating images
 \usepackage{float}
@@ -187,8 +194,8 @@ FIXME abstract is still missing
 I would like to thank my wife Cornelia and my lovely three kids (Saphira, Florian and Aurelius) for their patience and their support. Without them I could never have done this work.\par
 
 FIXME Professor\par
-
 FIXME university\par
+FIXME family\par
 
 I would like to acknowledge the thousands of individuals who have coded for the LaTeX project for free. It is due to their efforts that we can generate professionally typeset PDFs now.
 \end{acknowledgements}

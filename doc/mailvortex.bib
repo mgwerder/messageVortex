@@ -310,20 +310,6 @@ The technique can also be used to form rosters of untraceable digital pseudonyms
   Url                      = {http://tools.ietf.org/pdf/rfc5155.pdf}
 }
 
-@InProceedings{li2007t,
-  Title                    = {t-closeness: Privacy beyond k-anonymity and l-diversity},
-  Author                   = {Li, Ninghui and Li, Tiancheng and Venkatasubramanian, Suresh},
-  Booktitle                = {2007 IEEE 23rd International Conference on Data Engineering},
-  Year                     = {2007},
-  Organization             = {IEEE},
-  Pages                    = {106--115},
-
-  Abstract                 = {The k-anonymity privacy requirement for publishing microdata requires that each equivalence class (i.e., a set of records that are indistinguishable from each other with respect to certain "identifying" attributes) contains at least k records. Recently, several authors have recognized that k-anonymity cannot prevent attribute disclosure. The notion of l-diversity has been proposed to address this; l-diversity requires that each equivalence class has at least l well-represented values for each sensitive attribute. In this paper we show that l-diversity has a number of limitations. In particular, it is neither necessary nor sufficient to prevent attribute disclosure. We propose a novel privacy notion called t-closeness, which requires that the distribution of a sensitive attribute in any equivalence class is close to the distribution of the attribute in the overall table (i.e., the distance between the two distributions should be no more than a threshold t). We choose to use the earth mover distance measure for our t-closeness requirement. We discuss the rationale for t-closeness and illustrate its advantages through examples and experiments.},
-  Doi                      = {10.1109/ICDE.2007.367856},
-  File                     = {:inc\\bib\\unclassified\\tcloseness.pdf:PDF},
-  Url                      = {http://www.utdallas.edu/~mxk055100/courses/privacy08f_files/tcloseness.pdf}
-}
-
 @Article{machanavajjhala2007diversity,
   Title                    = {l-diversity: Privacy beyond k-anonymity},
   Author                   = {Machanavajjhala, Ashwin and Kifer, Daniel and Gehrke, Johannes and Venkitasubramaniam, Muthuramakrishnan},
@@ -381,6 +367,18 @@ The technique can also be used to form rosters of untraceable digital pseudonyms
   File                     = {:inc\\bib\\rfc1939.pdf:PDF},
   Localfile                = {inc/bib/rfc1939.pdf},
   Url                      = {http://tools.ietf.org/pdf/rfc1939.pdf}
+}
+
+@Article{li2007t,
+  Title                    = {t-Closeness: Privacy Beyond k-Anonymity and },
+  Author                   = {Ninghui Li, Tiancheng Li, Suresh Venkatasubramanian},
+
+  Abstract                 = {The k-anonymity privacy requirement for publishing microdata requires that each equivalence class (i.e., a set of records that are indistinguishable from each other with respect to certain "identifying" attributes) contains at least k records. Recently, several authors have recognized that k-anonymity cannot prevent attribute disclosure. The notion of l-diversity has been proposed to address this; l-diversity requires that each equivalence class has at least l well-represented values for each sensitive attribute. 
+
+In this paper we show that l-diversity has a number of limitations. In particular, it is neither necessary nor sufficient to prevent attribute disclosure. We propose a novel privacy notion called t-closeness, which requires that the distribution of a sensitive attribute in any equivalence class is close to the distribution of the attribute in the overall table (i.e., the distance between the two distributions should be no more than a threshold t). We choose to use the Earth Mover Distance measure for our t-closeness requirement. We discuss the rationale for t-closeness and illustrate its advantages through examples and experiments.},
+  Affiliation              = {Purdue University},
+  File                     = {:inc\\bib\\t_closeness_icde07.pd.pdf:PDF},
+  Url                      = {http://www.cs.purdue.edu/homes/li83/papers/icde_closeness.pdf}
 }
 
 @Misc{pfitzmann2010terminology,
@@ -520,6 +518,50 @@ The technique can also be used to form rosters of untraceable digital pseudonyms
   Url                      = {http://tools.ietf.org/pdf/rfc5322.pdf}
 }
 
+@Book{RFC3923,
+  Title                    = {RFC3923: End-to-End Signing and Object Encryption for the Extensible Messaging and Presence Protocol (XMPP)},
+  Author                   = {J. P. Sain-Andre},
+  Publisher                = {IETF},
+  Year                     = {2004},
+
+  File                     = {:inc\\bib\\rfc3923.pdf:PDF},
+  Localfile                = {inc/bib/rfc3923.pdf},
+  Url                      = {http://tools.ietf.org/pdf/rfc3923.pdf}
+}
+
+@Book{RFC6120,
+  Title                    = {RFC6120: Extensible Messaging and Presence Protocol (XMPP): Core},
+  Author                   = {P. Saint-Andre},
+  Publisher                = {IETF},
+  Year                     = {2011},
+
+  File                     = {:inc\\bib\\rfc6120.pdf:PDF},
+  Localfile                = {inc/bib/rfc6120.pdf},
+  Url                      = {http://tools.ietf.org/pdf/rfc6120.pdf}
+}
+
+@Book{RFC6121,
+  Title                    = {RFC6121: Extensible Messaging and Presence Protocol (XMPP): Instant Messaging and Presence},
+  Author                   = {P. Saint-Andre},
+  Publisher                = {IETF},
+  Year                     = {2011},
+
+  File                     = {:inc\\bib\\rfc6121.pdf:PDF},
+  Localfile                = {inc/bib/rfc6121.pdf},
+  Url                      = {http://tools.ietf.org/pdf/rfc6121.pdf}
+}
+
+@Book{RFC3922,
+  Title                    = {RFC3922: Mapping the Extensible Messaging and Presence Protocol (XMPP) to Common Presence and Instant Messaging (CPIM)},
+  Author                   = {P. Saint-Andre},
+  Publisher                = {IETF},
+  Year                     = {2004},
+
+  File                     = {:inc\\bib\\rfc3922.pdf:PDF},
+  Localfile                = {inc/bib/rfc3922.pdf},
+  Url                      = {http://tools.ietf.org/pdf/rfc3922.pdf}
+}
+
 @Book{MAILPRIV,
   Title                    = {E-Mail im Internet und Privatheitsrechte},
   Author                   = {Anne Siegetsleitner},
@@ -575,6 +617,17 @@ The technique can also be used to form rosters of untraceable digital pseudonyms
   Localfile                = {inc/bib/none.pdf},
   Publisher                = {USPTO},
   Url                      = {http://patft.uspto.gov/netacgi/nph-Parser?patentnumber=447918}
+}
+
+@Book{xep0096,
+  Title                    = {XEP-0096: SI File Transfer},
+  Author                   = {Muldowney Thomas and Miller Mathew and Eatmon Ryan and Saint-Andre Peter},
+  Publisher                = {XMPP Standards Foundation},
+  Year                     = {2004},
+
+  File                     = {:inc\\bib\\xep0096.pdf:PDF},
+  Localfile                = {inc/bib/xep0096.pdf},
+  Url                      = {http://xmpp.org/extensions/xep-0096.html}
 }
 
 @Misc{iccpr,
