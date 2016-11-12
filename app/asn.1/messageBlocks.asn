@@ -10,10 +10,12 @@ Message-Blocks DEFINITIONS EXPLICIT TAGS ::=
 BEGIN
 
   -- define constants
-  maxSerial             INTEGER ::= 4294967295      -- maximum serial number
-  maxChunkSize          INTEGER ::= 4294967295      -- maximum size of a message chunk
-  maxNumberOfReplays    INTEGER ::= 65535           -- maximum number of replys
-  maxNumberOfRequests   INTEGER ::= 8               -- maximum number of administrative requests
+  maxSerial                 INTEGER ::= 4294967295      -- maximum serial number
+  maxChunkSize              INTEGER ::= 4294967295      -- maximum size of a message chunk
+  maxNumberOfReplays        INTEGER ::= 127             -- maximum number of replys
+  maxNumberOfRequests       INTEGER ::= 8               -- maximum number of administrative requests
+  maxDurationOfProcessing   INTEGER ::= 86400           -- maximum number of seconds which the message might be delayed in the local queue (starting from startOffset)
+  maxID                     INTEGER ::= 32767           -- maximum id of an operation
 
   Message     ::= SEQUENCE { 
     header        IdentityBlock,
@@ -30,7 +32,7 @@ BEGIN
     identityBlock         CHOICE {
         encrypted  [1001] OCTET STRING,   
         -- it is not allowed to use plain in production environments; This is for testing and analysis only
-        plain      [1002] IdentityPayloadBlock,   
+        plain      [1002] IdentityPayloadBlock
     },
     identitySignature OCTET STRING   -- contains signature of Identity [as stored in identityBlock;signed identityBlock without Tag]
   }
@@ -51,7 +53,7 @@ BEGIN
     
     -- represents the chained secret which has to be found in subsequent blocks
     -- prevents reassembly attack
-    forwardSecret [2000] ChainSecret OPTIONAL,
+    forwardSecret     ChainSecret,
     
     -- contains SymmetricKey encrypted with private key of identityKey 
     -- encryption is done as proof of identity (identity hijack protection)
@@ -70,7 +72,6 @@ BEGIN
 
   UnencryptedBlocks ::= SEQUENCE {
     -- contains routing information (next hop) for the payloads
-    -- FIXME how handle multiple payloads
     routing     [3000] RoutingBlock OPTIONAL,
     
     -- contains encrypted log data of the data traveling
@@ -93,24 +94,21 @@ BEGIN
     -- contains the period when the payload should be processed 
     -- Router might refuse to long queue retention
     -- Recommended support for retention >=1h
-    queueTime UsagePeriod,
+    processTime INTEGER (0..maxDurationOfProcessing),
     
-    nextHop           SEQUENCE (SIZE (0..128)) OF NextHopBlock,   -- encrypted next RoutingBlocks for the payload
+    -- routing blocks for the next operation
+    nextHop           SEQUENCE (SIZE (0..128)) OF NextHopBlock,  
     
-    -- contains the secret of the identity block (if any)
-    forwardSecret     [111]   ChainSecret OPTIONAL,
+    -- contains the secret of the identity block
+    forwardSecret     ChainSecret,
 
     -- contains a routing block which may be used when sending error messages back to the quota owner
     -- this routing block may be cached for future use
     replyBlock [131]   RoutingBlock OPTIONAL,
     
-    -- This section is required if payload is routed with a prebuilt RB (
-    -- Messages MAY always request recompression (otherwise the message is identifyable from a non reply routing block)
-    decryptionKey     [200] SEQUENCE (SIZE (1..2)) OF SymmetricKey OPTIONAL,
-    encryptionKey     [201] SymmetricKey OPTIONAL,
-    
-    -- contains information for building replys
-    cascade           [300] SEQUENCE(SIZE (0..255)) OF CascadeBuildInformation
+    -- contains information for building replys (when used as MURB ID 1 denotes original message)
+    cascade           [300] SEQUENCE(SIZE (0..255)) OF CascadeBuildInformation,
+    replyCascade      [301] SEQUENCE(SIZE (0..255)) OF CascadeBuildInformation
   }
   
   NextHopBlock ::= SEQUENCE {
@@ -120,22 +118,17 @@ BEGIN
     nextErrorReplyBlock [13400] OCTET STRING OPTIONAL
   }
   
-  PayloadOperation ::= SEQUENCE{
-    operation           PayloadType,
-    thisid              [12010] SEQUENCE (0..128) OF INTEGER (0..65535)
-  }
-  
-  PayloadType ::= CHOICE {
-        randomPayload   [100] RandomPayloadOperation, 
+  PayloadOperation ::= CHOICE {
         splitPayload    [150] SplitPayloadOperation, 
         mergePayload    [200] MergePayloadOperation,
-        xorPayload      [250] XorPayloadOperation,
+        xorMergePayload [250] XorMergePayloadOperation,
         encryptPayload  [300] EncryptPayloadOperation,
+        decryptPayload  [350] DecryptPayloadOperation,
 		...
   }
   
   CascadeBuildInformation ::= SEQUENCE {
-    encryptionKey       SymmetricKey,
+    id                  INTEGER (1..maxID),
     secret              ChainSecret,
     payloadOp           PayloadOperation,
     ...
@@ -152,29 +145,42 @@ BEGIN
   }
   
   SizeType ::= SEQUENCE{
-	reference		INTEGER (0..65535),
 	size CHOICE {
 		percent     [15001] PercentSizeType,
 		absolute    [15101] AbsoluteSizeType
 	}
   }
   
-  RandomPayloadOperation ::= SEQUENCE {
-    size                SizeType
-  }
- 
   SplitPayloadOperation ::= SEQUENCE {
-    originalId				 INTEGER (0..65535),
+    originalId				 INTEGER (0..maxID),
     firstSize                SizeType,
-	secondId				 INTEGER (0..65535)
+	newFirstId				 INTEGER (1..maxID),
+	newSecondId				 INTEGER (1..maxID)
   }
  
   MergePayloadOperation ::= SEQUENCE {
-    -- FIXME 
+    originalFirstId			 INTEGER (0..maxID),
+    originalSecondId		 INTEGER (0..maxID),
+	newId			    	 INTEGER (1..maxID)
   }
  
-  XorPayloadOperation ::= SEQUENCE {
-    -- FIXME 
+  XorMergePayloadOperation ::= SEQUENCE {
+    originalFirstId			 INTEGER (0..maxID),
+    originalSecondId		 INTEGER (-1..maxID),
+    originalSize             SizeType,
+	newId			    	 INTEGER (1..maxID)
+  }
+ 
+  EncryptPayloadOperation ::= SEQUENCE {
+    originalId		        INTEGER (0..maxID),
+    key                     SymmetricKey,
+	newId	    	    	INTEGER (1..maxID)
+  }
+ 
+  DecryptPayloadOperation ::= SEQUENCE {
+    originalId		        INTEGER (0..maxID),
+    key                     SymmetricKey,
+	newId	    	    	INTEGER (1..maxID)
   }
  
   EncryptedRoutingLogBlock ::= OCTET STRING -- contains symmetrically encrypted RoutingLogBlock
@@ -211,7 +217,7 @@ BEGIN
     identity            [1001] AsymmetricKey OPTIONAL,    -- if omitted this is a node identity
     nodeAddress         [1002] NodeSpec      OPTIONAL,    -- if ommited own identity key
     nodeKey             [1003] SEQUENCE OF AsymmetricKey OPTIONAL,    -- Contains the identity of the owning node; May be ommited if local node
-    routingBlocks       [1004] SEQUENCE OF RoutingBlock OTIONAL
+    routingBlocks       [1004] SEQUENCE OF RoutingBlock OPTIONAL,
     ...
   }
   
