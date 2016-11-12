@@ -38,23 +38,23 @@ As an example of the problems analysing a packet route we may look at \verb|trac
 
 The output of \verb|traceroute| is therefore not a reliable indication of route. Since routes do not have to be static and may be changed or even be alternating the output represents in the best case a snapshot of the current routing situation. We cannot be sure that data packets we are sending are passing only through countries accepting the ICCPR to the full extend.
 \begin{figure}[H]
-	\begin{lstlisting}[language=bash,breaklines=true,prebreak={\mbox{\quad$\rhookswarrow$}},basicstyle=\footnotesize]
-	$ traceroute www.ietf.org
-	traceroute to www.ietf.org.cdn.cloudflare-dnssec.net (104.20.0.85), 64 hops max
-	1   147.86.8.253  0.418ms  0.593ms  0.421ms
-	2   10.19.0.253  1.177ms  0.829ms  0.782ms
-	3   10.19.0.253  0.620ms  0.427ms  0.402ms
-	4   193.73.125.35  1.121ms  0.828ms  0.905ms
-	5   193.73.125.81  2.991ms  2.450ms  2.414ms
-	6   193.73.125.81  2.264ms  1.961ms  1.959ms
-	7   192.43.192.196  6.472ms  199.543ms  201.152ms
-	8   130.59.37.105  3.465ms  3.138ms  3.121ms
-	9   130.59.36.34  3.904ms  3.897ms  4.989ms
-	10   130.59.38.110  3.625ms  3.333ms  3.379ms
-	11   130.59.36.93  7.518ms  7.232ms  7.246ms
-	12   130.59.38.82  7.155ms  17.166ms  7.034ms
-	13   80.249.211.140  22.749ms  22.415ms  22.467ms
-	14   104.20.0.85  22.398ms  22.222ms  22.146ms
+	\begin{lstlisting}[language=bash,breaklines=true,prebreak={\mbox{\quad$\rhookswarrow$}},basicstyle=\tiny]
+$ traceroute www.ietf.org
+traceroute to www.ietf.org.cdn.cloudflare-dnssec.net (104.20.0.85), 64 hops max
+1   147.86.8.253  0.418ms  0.593ms  0.421ms
+2   10.19.0.253  1.177ms  0.829ms  0.782ms
+3   10.19.0.253  0.620ms  0.427ms  0.402ms
+4   193.73.125.35  1.121ms  0.828ms  0.905ms
+5   193.73.125.81  2.991ms  2.450ms  2.414ms
+6   193.73.125.81  2.264ms  1.961ms  1.959ms
+7   192.43.192.196  6.472ms  199.543ms  201.152ms
+8   130.59.37.105  3.465ms  3.138ms  3.121ms
+9   130.59.36.34  3.904ms  3.897ms  4.989ms
+10   130.59.38.110  3.625ms  3.333ms  3.379ms
+11   130.59.36.93  7.518ms  7.232ms  7.246ms
+12   130.59.38.82  7.155ms  17.166ms  7.034ms
+13   80.249.211.140  22.749ms  22.415ms  22.467ms
+14   104.20.0.85  22.398ms  22.222ms  22.146ms
 	\end{lstlisting}
 	\caption{A traceroute to the host www.ietf.org}
 \end{figure}
