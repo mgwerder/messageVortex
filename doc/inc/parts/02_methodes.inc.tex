@@ -3,110 +3,6 @@
 %!TeX spellcheck = en_GB
 %!TeX root = mailvortex_new.tex
 
-\chapter{Introduction}
-Almon Brown Strowger was owner of a funeral parlour in St. Petersburg. He filed a patent in March \nth{10} 1891 for an ``Automatic Telephone Exchange'' \cite{pulseDialingPatent}. This patent built the base for modern automated telephone systems. According to several sources he was annoyed by the fact that the local telephone operator was married to another undertaker. She diverted potential customers of Mr. Strowger to her husband instead which caused Almon B. Strowger to lose business. In 1922 this telephone dialing system which is nowadays called pulse dialing became the standard dialing technology for more than 70 years until it was replaced by tone dialing. 
-
-This dialing technology enabled automatic messaging for voice and text messages (e.g. telex) up until today and built the base technology for today's routed networks. 
-
-These networks are building the base for our communication based society today. We are using these networks today as a common communication meaning for all purposes and do spend very little thoughts on the possible consequences arising if someone is able to put hands on this communication. This is not only a question if someone wants to hide something. The main problem is that the broad availability of data enabled our society to judge on peoples not only on what they are doing but as well on what they did. While this is nothing bad people seem to be unable to differentiate that things that might have been common and normal in the past might be judged differently in present.
-
-Numerous events in present and past have shown that data is broadly collected in the internet. Whether this is a problem or not may be a disputable fact. Undisputed is however that if data is not handled with care peoples are accused with numerous ``facts'' that are more than questionable. To show that this may happen even under complete democratic control we might refer to events such as the ``secret files scandal'' (or ``Fichenskandal'') in Switzerland. In the years  from 1900 to 1990 Swiss government collected 900'000 files in a secret archive (covering roughly 10\% of the natural and juristic entities within Switzerland at that time). \fxfatal{add official reference} 
-
-A series of similar attempts to attack privacy on a global scale have been discovered by whistle blower Edward Snowden. The documents leaked in 2009 by him claim that there was a data collection starting in 2010. Since these documents are not publicly available it is hard to to prove claims based on these documents. However -- due to the fact that the documents were screened by a significant number of journalists spanning multiple countries, the information seems credible.
-
-According to these documents (verified by \href{http://www.nrc.nl/nieuws/2013/11/23/nederland-sinds-1946-doelwit-van-nsa}{NRC}) NSA infiltrated more than 50k computers with malware to collect classified information. They furthermore infiltrated Telecom-Operators (mainly executed by british GCHQ) such as Belgacom to collect data and targeted high member of governments even in associated states (such as the germans president mobile phone). A later published shortened list of ``selectors'' in germany showed 68 telephone and fax numbers targeting enconomy, finance and agricultural parts of the german government.
-
-This list of events shows that big players are collecting and storing vast amounts of data for analysis or possibly future use. The list of events shows also that the use of this data has in the past been at least partially questionable. As a part of possible counter measures this work analyses the possibility of using state of the art technology to minimize the information footprint of a person on the internet. 
-
-We leave a vast information footprint in our daily communication. On a regular email we disclose everything in an ``postcard'' to any entity on its way. Even when encrypting a message perfectly with today's technology (S/MIME\cite{RFC2045} or PGP\cite{RFC2015}) leaves at least the originating and the receiving entity disclosed or we rely on the promises of a third party provider which offers a proprietary solution. Even in those cases we leak informations such as ``message subject'', ``frequency of exchanged messages'', ``size of messages'', or ``client beeing used''. A good anonymity protocol has therefore far more attributes to cover than the message itself. It includes beside the message itself, all metadata, and all the traffic flows. Furthermore a protocol anonymising messages should not rely on the trust of infrastructure other than the infrastructure under control of the sending or receiving entity as a trust in any third party might be misleading.  
-
-Furthermore -- Any central infrastructure is bound to be of special interest to anyone gathering data concerning the using entities of such a protocol. It furthermore may be manipulated in order to attack the messages or their flow. So central infrastructure has to be avoided.
-
-In this work a new protocol is designed to allow message transfer through existing communication channels. These messages should be unobservable to any third party. This unobservability does not only cover the message itself but all metadata and flows associated with it. The protocol should be designed in such a way so that it is capable to use any type of transfer protocol. It should be even possible to switch protocols while have messages in transfer to allow media breaches (at least on a protocol level).
-
-The new protocol should allow safe communication without the need of trusting the underlying transport media. Furthermore it is desirable that the usage of the protocol itself is possible without altering the immediate behaviour of the transport layer. That way it is possible to use the transport layers normal traffic to increase the noise in which information has to be searched. 
-
-This work splits into multiple parts. In the first part we are collecting available researches and technologies. We emphasize in all technologies on the strength and weaknesses relevant to this work. In the second part we reassemble the parts to a new protocol. In the third part we analyse the protocol for fitness of the purpose. We try to find weaknesses and work out recommendations for the protocol usage. In the last part we discuss the results and try to summarize the findings. Try to elaborate to what extend the protocol fulfils the requirements of this work.
-
-\section{Contributions}
-This thesis contributes to the topic in the following senses:
-\begin{itemize}
-	\item It introduces a consistent model for message delivery which includes all endpoints and involved parties.
-	\item It shows an approach based on existing protocols for anonymous communication which gives full control of the anonymity to the sender while controlling the costs.
-	\item It offers a client application implementing the proposed Protocol as IMAPv4 cache daemon and as SMTP relay.
-\end{itemize}
-
-\section{Notation}
-\subsection{Cryptography}
-The theory in this document is heavily based on symetric encryption, asymetric encryption and hashing. In order to use a uniformed notation I use $E^{K_a}(M)$ (where $a$ is an index to distinguish multiple keys) resulting in $M^{K_a}$ as the encrypted message. Messages encrypted with multiple keys do list the used keys as a coma separated list in superscript $E^{K_b}\left(E^{K_a}\left(M\right)\right)=M^{{K_{a}},{K_b}}$.
-
-For a symetric encryption of a message $M$ with a key $K_a$ resulting in $G^{K_a}$ where $a$ is an index to distinguish different keys. Decryption uses therefore $D^{K_a}(M^{K_a})$.
-
-As notation for asymetric encryption we use $E^{K^{1}_a}(M)$ where as $K^{-1}_a$ is the private key and $K^{1}_a$ is the public key of a key pair $K^p_a$. The asymmetric decryption is noted as $D^{K^{-1}_a}(M)$.
-
-For hashing we do use $H(M)$ if unsalted and $H^{S_a}$ if using a salted hash with salt $S_a$. The generated hash is shown as $H_M$ if unsalted and $H^{S_a}_M$ if salted.
-
-if we want to express what details contained in a tuple we use the the notation $M(timebase,MURB,serialNumber)$ respectively if encrypted $M_{K_{a}}(timebase,MURB,serialNumber)$.
-
-\begin{align*}
-asymetric: & E^{K^{-1}_a}\left(M\right) &~&=M^{K^{-1}_a}\\
-& D^{K^{1}_a}\left(E^{K^{-1}_a}\left(M\right)\right)&=D^{K^{-1}_a}\left(E^{K^{1}_a}\left(M\right)\right)&=M\\
-symetric:  & E^{K_a}\left(M\right) &~&=M^{K_a}\\
-& D^{K_a}\left(E^{K_a}\left(M\right)\right)&~&=M\\
-hashing (unsalted): & H\left(M\right)&~&=H_M\\
-hashing (salted): & H^{S_a}\left(M\right)&~&=H^{S_a}_M
-\end{align*}
-
-In general Subscripts denote selectors to differentiate values of the same type and superscript denote relevant parameters to operations expressed.
-
-\subsection{Code and commands}
-Code blocks are always displayed as light grey block with line numbers:
-
-\begin{lstlisting}
-public class Hello {
-  public static void main(String args[]) {
-    System.println("Hello. "+args[1]);
-  }
-}
-\end{lstlisting}
-
-Commands entered at the command line are in a grey box with top and bottom line. Whenever root rights are required the command line is prefixed with a ``\#''. Commands not requiring specific rights are prefixed with a ``\$''. Lines without a trailing ``\$'' or ``\#'' are output lines of the previous command. If long lines have to be broken to fit into the paper a ``$\rhookswarrow$'' is inserted to indicate that the line break has been introduced for readability.
-
-\begin{lstlisting}[style=BashInputStyle]
-~ su -
-# javac Hello.java 
-# exit
-$ java Hello
-Hello.
-$ java Hello "This is a very long command-line that had to be broken to fit into the code box displayed on this page."
-Hello. This is a very long command-line that had to be broken to fit into the code box displayed on this page.
-\end{lstlisting}
-
-\subsection{Hyperlinking}
-The electronic version of this  document is hyperlinked. This means that references to the glossary or the literature may be clicked to find the respective entry. Chapter or table references are clickable too. 
-
-\chapter{Main Research Question}
-The main topic of this thesis was defined as follows:
-\begin{itemize}
-	\item Is it possible to have specialized messaging protocol used in the internet based on ``state of the science'' technologies offering a high level of unlikability (sender and receiver anonymity) towards an adverser with a high budget and privileged access to internet infrastructure?
-\end{itemize}
-
-Based on this main question there are several sub questions grouped around various topics:
-
-\begin{enumerate}
-	\item What technologies and methods may be used to provide sender and receiver anonymity and unlinkability when sending messages against a potential adverser? (RQ1)
-	\item How can entities utilizing these technologies and methods be attacked and what measures are  available to circumvent such attacks? (RQ2)
-	\item How can attacks targeting anonymity of a sending or receiving entity be mitigated by design? (RQ3)
-\end{enumerate}
-
-\section{RQ1: Sending messages maintaining unlikability against an adverser}
-This question covers the principal part of the work. We try to elaborate first rough criterias for the protocol. We then create a list of suitable technologies. Based on this list we define a protocol combining these technologies and researches to a solution. This solution will be implemented and analysed for suitability based on the criteria defined.
-
-\section{RQ2: Attacking unlinkability and circumvention}
-Within this questions we look at common attacks and test resistance of the protocol based on the definition of the protocol. We do this by first collecting well known attacks (either generic or specific to a technology used in the protocol). We then try to elaborate if these attacks might be successful (and if so under what cicumstances).
-
-\section{RQ3: Mitigation by design}
-Within this question we define baselines in order to mitigate attacks by defining guidelines for using the protocol. We analyse the effectiveness of the guidelines and try to elaborate the general achievement level of the protocol by looking at the criteria defined in RQ1.
 
 % ********************************************************************************************************
 % *** Methodes
@@ -142,25 +38,25 @@ As an example of the problems analysing a packet route we may look at \verb|trac
 
 The output of \verb|traceroute| is therefore not a reliable indication of route. Since routes do not have to be static and may be changed or even be alternating the output represents in the best case a snapshot of the current routing situation. We cannot be sure that data packets we are sending are passing only through countries accepting the ICCPR to the full extend.
 \begin{figure}[H]
-\begin{lstlisting}[language=bash,breaklines=true,prebreak={\mbox{\quad$\rhookswarrow$}},basicstyle=\footnotesize]
-$ traceroute www.ietf.org
-traceroute to www.ietf.org.cdn.cloudflare-dnssec.net (104.20.0.85), 64 hops max
-1   147.86.8.253  0.418ms  0.593ms  0.421ms
-2   10.19.0.253  1.177ms  0.829ms  0.782ms
-3   10.19.0.253  0.620ms  0.427ms  0.402ms
-4   193.73.125.35  1.121ms  0.828ms  0.905ms
-5   193.73.125.81  2.991ms  2.450ms  2.414ms
-6   193.73.125.81  2.264ms  1.961ms  1.959ms
-7   192.43.192.196  6.472ms  199.543ms  201.152ms
-8   130.59.37.105  3.465ms  3.138ms  3.121ms
-9   130.59.36.34  3.904ms  3.897ms  4.989ms
-10   130.59.38.110  3.625ms  3.333ms  3.379ms
-11   130.59.36.93  7.518ms  7.232ms  7.246ms
-12   130.59.38.82  7.155ms  17.166ms  7.034ms
-13   80.249.211.140  22.749ms  22.415ms  22.467ms
-14   104.20.0.85  22.398ms  22.222ms  22.146ms
-\end{lstlisting}
-\caption{A traceroute to the host www.ietf.org}
+	\begin{lstlisting}[language=bash,breaklines=true,prebreak={\mbox{\quad$\rhookswarrow$}},basicstyle=\footnotesize]
+	$ traceroute www.ietf.org
+	traceroute to www.ietf.org.cdn.cloudflare-dnssec.net (104.20.0.85), 64 hops max
+	1   147.86.8.253  0.418ms  0.593ms  0.421ms
+	2   10.19.0.253  1.177ms  0.829ms  0.782ms
+	3   10.19.0.253  0.620ms  0.427ms  0.402ms
+	4   193.73.125.35  1.121ms  0.828ms  0.905ms
+	5   193.73.125.81  2.991ms  2.450ms  2.414ms
+	6   193.73.125.81  2.264ms  1.961ms  1.959ms
+	7   192.43.192.196  6.472ms  199.543ms  201.152ms
+	8   130.59.37.105  3.465ms  3.138ms  3.121ms
+	9   130.59.36.34  3.904ms  3.897ms  4.989ms
+	10   130.59.38.110  3.625ms  3.333ms  3.379ms
+	11   130.59.36.93  7.518ms  7.232ms  7.246ms
+	12   130.59.38.82  7.155ms  17.166ms  7.034ms
+	13   80.249.211.140  22.749ms  22.415ms  22.467ms
+	14   104.20.0.85  22.398ms  22.222ms  22.146ms
+	\end{lstlisting}
+	\caption{A traceroute to the host www.ietf.org}
 \end{figure}
 
 \section{Anonymizing and unlinking}
@@ -230,11 +126,11 @@ In order to mitigate size based attacks (an onionised packet looses permanently 
 The defined message operations are as follows:
 \begin{itemize}
 	\item Split a message block into two parts of variable size.\\
-	      This operation may be used to fan out decoy traffic, to cut off decoy data, or to send multiple parts of a message through diffferent routing nodes.
+	This operation may be used to fan out decoy traffic, to cut off decoy data, or to send multiple parts of a message through diffferent routing nodes.
 	\item Join two data blocks to a bigger block using an xor operation.\\
-	      This operation may be used to minimise decoy traffic or to rejoin data which has been split earlier.
+	This operation may be used to minimise decoy traffic or to rejoin data which has been split earlier.
 	\item Fork off xor'ed data from a data block by applying an xor operation to a received block with a block of random data.\\
-	      With this operation we may create decoy traffic, or split a message into two parts.
+	With this operation we may create decoy traffic, or split a message into two parts.
 	\item Encrypt a block with a given key.      
 	\item Decrypt a block with a given key.
 \end{itemize}
@@ -265,19 +161,19 @@ In order to limit the possibility to Denial of Service (DoS) a node by overloadi
 For our protocol we assume the following outline for a message:
 \begin{itemize}
 	\item Header block\\ 
-	      This block contains an ephemeral identity of the sender on the message processing host. It allows the host to decide wether he is willing to process the rest of the message or not. It is important to know that the identity block contains a symmetric key for decryption of the main block and a secret repeated in the main block. This prevents that a malicious node may exchange the main block.
+	This block contains an ephemeral identity of the sender on the message processing host. It allows the host to decide wether he is willing to process the rest of the message or not. It is important to know that the identity block contains a symmetric key for decryption of the main block and a secret repeated in the main block. This prevents that a malicious node may exchange the main block.
 	\item Main block\\
-	      This block contains all information regarding routing and processing data. It furthermore contains the payload data which may or may not contain messages.
-	      \begin{itemize}
-	      	\item Routing Blocks\\
-	      	      This block contains information of which data block should be sent to what recipient. It furthermore may contain instruction for processing the data blocks and routing/reply blocks for subsequent processing. Another important thing to note is that routing blocks and payload data may arrive on two different paths to the target node.
-	      	\item Routing Log Block\\
-	      	      This Block contains information about the already occurred routing in onionised form. It may be regarded as the onionised pendant of received header in an SMTP header.
-	      	\item Reply Block\\
-	      	      This Block contains a Routing block which may be used to contact the original sender of a message (e.g. for an error message)
-	      	\item payload Block\\
-	      	      These Blocks form the payload data. It might contain a message, parts of a message or decoy material.
-	      \end{itemize}      
+	This block contains all information regarding routing and processing data. It furthermore contains the payload data which may or may not contain messages.
+	\begin{itemize}
+		\item Routing Blocks\\
+		This block contains information of which data block should be sent to what recipient. It furthermore may contain instruction for processing the data blocks and routing/reply blocks for subsequent processing. Another important thing to note is that routing blocks and payload data may arrive on two different paths to the target node.
+		\item Routing Log Block\\
+		This Block contains information about the already occurred routing in onionised form. It may be regarded as the onionised pendant of received header in an SMTP header.
+		\item Reply Block\\
+		This Block contains a Routing block which may be used to contact the original sender of a message (e.g. for an error message)
+		\item payload Block\\
+		These Blocks form the payload data. It might contain a message, parts of a message or decoy material.
+	\end{itemize}      
 \end{itemize}
 
 The message is picked up from the transport layer and extracted in the blending layer. Processing is then split. First the Assembly/accounting layer is extracting the identity block and authorises further processing. The message building instructions are put into a identity specific list (with the expiration dates of the message). and the payload blocks are stored (again with the expiration date). 
@@ -288,11 +184,11 @@ After having prepared the message in such a way the routing layer gets the routi
 In this chapter we have a look at various available transport layer protocol. The main goal is to identify strong candidates as a transport layer. Main focus lies on the following criterias:
 \begin{itemize}
 	\item Widely adopted (Ct1)\\
-	      The more widely adopted and used a protocol is the harder it is for an adverser to monitor (due to the sheer mass), filter or block the protocol (censorship resistance).
+	The more widely adopted and used a protocol is the harder it is for an adverser to monitor (due to the sheer mass), filter or block the protocol (censorship resistance).
 	\item Reliable (Ct2)\\
-	      Message transport between peers should be reliable. As messages may arrive anytime from everywhere we don not have means to synchronize the peer partners on a higher level without investing a considerable effort. In order to avoid this effort we do look for inherently reliable protocols.
+	Message transport between peers should be reliable. As messages may arrive anytime from everywhere we don not have means to synchronize the peer partners on a higher level without investing a considerable effort. In order to avoid this effort we do look for inherently reliable protocols.
 	\item Symmetrical built (Ct3)\\
-	      The transport layer should be built on a peer to peer base. All servers implement a generic routing which requires no prior knowledge of possible targets. This criteria neglects centralised infrastructures.
+	The transport layer should be built on a peer to peer base. All servers implement a generic routing which requires no prior knowledge of possible targets. This criteria neglects centralised infrastructures.
 \end{itemize}
 
 \section{HTTP}
@@ -430,7 +326,7 @@ Their approach is to introduce an amount of invisible diversity into $k$-anonymo
 While $\ell$-diversity protects the identity of an entity it does not prevent information gain. A subject which is in a class has the same attributes. This is where $t$-closeness\cite{li2007t} comes into play. $t$-closeness is defined as follows:
 
 \begin{quote}
-  An equivalence class is said to have $t$-closeness if the distance between the distribution of a sensitive attribute in this class and the distribution of the attribute in the whole table is no more than a threshold. A table is said to have $t$-closeness if all equivalence classes have $t$-closeness.
+	An equivalence class is said to have $t$-closeness if the distance between the distribution of a sensitive attribute in this class and the distribution of the attribute in the whole table is no more than a threshold. A table is said to have $t$-closeness if all equivalence classes have $t$-closeness.
 \end{quote}
 
 \section{Zero Trust}
@@ -463,7 +359,7 @@ As unobservability we take the definition as specified in \cite{anon_terminology
 	Unobservability of an item of interest (IOI) means
 	\begin{itemize}
 		\item undetectability of the IOI against all subjects uninvolved in it and
-     	\item anonymity of the subject(s) involved in the IOI even against the other subject(s) involved in that IOI.
+		\item anonymity of the subject(s) involved in the IOI even against the other subject(s) involved in that IOI.
 	\end{itemize}
 	
 \end{quote}
@@ -513,9 +409,9 @@ A censorship resistant system is a system which allows the users of the system a
 
 \begin{itemize}
 	\item The system must be either undetectable or out of reach for an entity censoring.\\
-	      The possibility of identifying a protocol or data allows a censoring entity to suppress the use of the protocol itself. 
+	The possibility of identifying a protocol or data allows a censoring entity to suppress the use of the protocol itself. 
 	\item The entities involved in a system must be untraceable.\\
-	      Traceable entities would result in means of suppressing real world entities participating in the system.
+	Traceable entities would result in means of suppressing real world entities participating in the system.
 \end{itemize}
 
 \subsection{Parrot Circumvention}
@@ -542,13 +438,13 @@ Whenever dealing with hiding data and maintaining integrity of data cryptography
 \subsection{Symmetric Encryption}
 Symmetric encryption in this paper assumes always that
 \begin{eqnarray}
-D^{K_a}\left(E^{K_a}\left(M\right)\right) & = & M
+	D^{K_a}\left(E^{K_a}\left(M\right)\right) & = & M
 \end{eqnarray} 
 
 For a key $K_b\neq K_a$ this means
 \begin{eqnarray}
-D^{K_a}\left(E^{K_b}\left(M\right)\right) & \neq & M\\
-D^{K_b}\left(E^{K_a}\left(M\right)\right) & \neq & M
+	D^{K_a}\left(E^{K_b}\left(M\right)\right) & \neq & M\\
+	D^{K_b}\left(E^{K_a}\left(M\right)\right) & \neq & M
 \end{eqnarray} 
 
 \subsubsection{AES}
@@ -557,22 +453,22 @@ D^{K_b}\left(E^{K_a}\left(M\right)\right) & \neq & M
 \subsection{Asymmetric Encryption}
 For all asymmetric encryption algorithm in this paper we may assume that 
 \begin{eqnarray}
-D^{K^{-1}_a}\left(E^{K^{1}_a}\left(M\right)\right) & = & M\\
-D^{K^{1}_a}\left(E^{K^{-1}_a}\left(M\right)\right) & = & M
+	D^{K^{-1}_a}\left(E^{K^{1}_a}\left(M\right)\right) & = & M\\
+	D^{K^{1}_a}\left(E^{K^{-1}_a}\left(M\right)\right) & = & M
 \end{eqnarray} 
 
 It is important that 
 \begin{eqnarray}
-D^{K^{-1}_a}\left(E^{K^{-1}_a}\left(M\right)\right) & \neq & M\\
-D^{K^{1}_a}\left(E^{K^{1}_a}\left(M\right)\right) & \neq & M
+	D^{K^{-1}_a}\left(E^{K^{-1}_a}\left(M\right)\right) & \neq & M\\
+	D^{K^{1}_a}\left(E^{K^{1}_a}\left(M\right)\right) & \neq & M
 \end{eqnarray} 
 
 And for any other Keypair $K^{p}_a \neq K^{p}_b$
 \begin{eqnarray}
-D^{K^{-1}_b}\left(E^{K^{1}_a}\left(M\right)\right) & \neq & M\\
-D^{K^{1}_b}\left(E^{K^{1}_a}\left(M\right)\right) & \neq & M\\
-D^{K^{-1}_b}\left(E^{K^{-1}_a}\left(M\right)\right) & \neq & M\\
-D^{K^{1}_b}\left(E^{K^{-1}_a}\left(M\right)\right) & \neq & M
+	D^{K^{-1}_b}\left(E^{K^{1}_a}\left(M\right)\right) & \neq & M\\
+	D^{K^{1}_b}\left(E^{K^{1}_a}\left(M\right)\right) & \neq & M\\
+	D^{K^{-1}_b}\left(E^{K^{-1}_a}\left(M\right)\right) & \neq & M\\
+	D^{K^{1}_b}\left(E^{K^{-1}_a}\left(M\right)\right) & \neq & M
 \end{eqnarray} 
 
 \subsubsection{RSA}
@@ -873,7 +769,7 @@ Encryption algorithms may become broken at any time. This either to new findings
 \subsection{Denial of Service Attacks}
 \subsubsection{Censorship}
 Where as traditional censorship is widely regarded as selective information filtering and alteration a very repressive censorship can even include denial of information flows in general. Any anonymity system not offering the possibility to hide in legitimate information flows is therefore not censorship resistant.
- 
+
 \subsubsection{Credibility Attack}
 Another type of DoS attack is the credibility attack. While not necessarily a technical attack it is very effective. A system not having a sufficiently big user base is offering thus a bad level of anonymity due to the fact that the anonymity set is too small or the traffic concealing message flow is insufficient. 
 
@@ -882,15 +778,15 @@ In a credibility attack a systems reputation is degraded in such a way that the 
 This may be achieved in several ways. Examples:
 \begin{itemize}
 	\item Disrupt functionality of a system.\\ 
-	      This may be done by blocking ports the messaging protocol uses or blocking selectively messages. It may be done by removing publicly known participants from the internet either by law or by threatening.
+	This may be done by blocking ports the messaging protocol uses or blocking selectively messages. It may be done by removing publicly known participants from the internet either by law or by threatening.
 	\item Publicly dispute the effectiveness of a system.\\
-	      This is a very effective way to destroy a system. People are not willing to use a system which is compromised if the main goal of using the system is avoiding being observed.
+	This is a very effective way to destroy a system. People are not willing to use a system which is compromised if the main goal of using the system is avoiding being observed.
 	\item Reduce the effectiveness of a system.\\
-	      A system may be considerably being loaded by an adverser to decrease the positive reception of the system. He may further use the system to send UBE to reduce the overall experience when using the system. Another way of reducing the effectiveness is to misuse the system for bad purposes and making them public.
+	A system may be considerably being loaded by an adverser to decrease the positive reception of the system. He may further use the system to send UBE to reduce the overall experience when using the system. Another way of reducing the effectiveness is to misuse the system for bad purposes and making them public.
 	\item Dispute the credibility of the system founders.\\
-	      Another way of reducing credibility of a system is to undermine its creators. If -- for example -- people believe that a founders interest was to create a honey pot (e.g. because he is working for a potential state sponsored adverser) for personal secrets they will not be willing to use it.
+	Another way of reducing credibility of a system is to undermine its creators. If -- for example -- people believe that a founders interest was to create a honey pot (e.g. because he is working for a potential state sponsored adverser) for personal secrets they will not be willing to use it.
 	\item Dispute the credibility of the infrastructure.\\
-	      If an infrastructure is known or suspected to be run by a potential adverser peoples willingness to believe into such a system might be drastically reduced.
+	If an infrastructure is known or suspected to be run by a potential adverser peoples willingness to believe into such a system might be drastically reduced.
 \end{itemize}
 
 \chapter{Applied Methodes}
@@ -1049,84 +945,3 @@ Having this criterias for choice I chose to use th following keys and key sizes:
 
 \section{Protocol Analysis}
 \fxfatal{add content here}
-
-\part{Results}
-To verify the hypothesis made in this paper, and to analyse properties of the protocol in a real world scenario a library was implemented in Java which was capable of handling all message packets and the routing stack as a whole. The following paragraphs describe the protocol developed in general as a generic approach. Appendix \ref{app:asnone} gives the full ASN.1 representation of the protocol. 
-
-It is important to notice that ASN.1 has no mean to express encrypted structures. Due to this fact we defined all encrypted fields as \verb|OCTET STRING|. The protocol offers according to the ASN.1 the possibility to store onionized information in an unencrypted form. This is meant for debuing purposes. At no point this should be used in a production environment.
-
-The protocol described in the next chapter is independent from routing. At the moment capabilities include SMTP and XMPP. The protocol may be extended by adding new transport layer capabilities and their addressing schemes.
-
-\chapter{MessageVortex - Transport Independent Messaging anonymous to \nth{3} Parties}
-This approach is different from all approaches discussed previously. Unlike them we put complete distrust into the infrastructure being used. Furthermore we do not rely on a custom server infrastructure in the internet. Instead we take advantage of the availability of internet connected devices such as internet connected mobile phones, tablets, or even commonly available SoC such as RaspberryPi or similar. It is still very hard to maintain a server in the internet and considering the vastly growing amount of automated attack carried out against internet connected servers it is not advisable or realistic to assume that a future user of this system owns either a server or connects to a service which is offering explicitly anonymizing services. These infrastructures would be suspectible to monitoring or even banning. Instead we take a different approach.
-
-We use common messaging protocols as transport layers and connect to them using the respective client protocols. The actual mixes are operated by the users on their ``always connected'' devices. It goes without saying that such a system is far less reliable than a traditionally run server as this hardware is typically cheap and normally connected to the internet using a bandwidth shared media.
-
-The basic idea is that a client generates all traffic (including decoy or dummy traffic) by itself. It defines the routes a message takes through the mixes and decides which targets are receiving dummy traffic at the same time. In such a system even when possessing all the nodes routing the traffic (without the endpoints) an anonymity set of $k$ (whereas the size of $k$ is defined by the sender) is guaranteed.
-
-As decoy traffic is generated with the same operations as the true content is split it is impossible for an adverser running a node to determine wether he is generating noise or actually processing the true message.
-
-\fxfatal{add a lot more text here}
-\begin{figure}[h]
-	\includegraphics[width=\columnwidth]{inc/VortexModules}
-	\caption{Overview of the Vortex modules}
-	\label{fig:vortexModules}
-\end{figure}
-
-\section{Protocol Description}
-\section{Accounting}
-\section{Message Flows}
-
-\section{Considerations for Building Messages}
-In a worst case scenario we assume that an adverser is controlling most of the network utilized for anonymisation. While this is not nessessarily a problem (as pointed out earlier) it allows an adverser to track a message while agents are being used under his control. So for simplicity and as a worst case assumption we always assume that an adverser has perfect knowledge of an associated message flow. This is however a worst case scenario. One missing agent disconnects the whole chain and as messages are not traceable in size.
-
-\subsection{Ephemeral identities}
-\fxfatal{expiring ephemeral identities shold not only be replaced after their expiration but anytime during the livetime}
-\subsection{Timing of messages}
-\fxfatal{add content here}
-
-\subsection{Building Diagnostic Paths}
-\fxfatal{add content here}
-
-\subsubsection{Implicit Diagnostic}
-\fxfatal{Add comments about messages splitting and returning to sender}
-
-\subsubsection{Automatic Explicit Diagnostic}
-\fxfatal{Add comments about error and diagnosis messages officially spliting of messages}
-
-\subsubsection{On-Demand Explicit Diagnostic}
-\fxfatal{Add comments about normal, error, and diagnosis messages beeing picked up by a routing block}
-
-\section{Considerations for Routing Messages}
-\subsection{Time of sending}
-Messages should always be sent timewise nearby other messages. This means that the best moment for sending a message in a ready queue is at a time when sending of other messages is due. However no optimisation should be done to send as many messages as possible at the same time. this would lead to a forseeable behaviour of the routing layer and thus to misusable behaviour.
-
-
-
-\section{Real World Considerations}
-This approach is heavily dependent of the transport protocol and builds on top a new obfuscating/routing layer. For this system to become a real peer-to-peer approach some additional quirks are required. A message-Vortex-Account needs always an active routing handler. This routing handler may be introduced by new server capabilities or by having a device handling the routing from the client side. For this reason we built a RaspberryPi appliance capable of connecting to one (or more) accounts fetching incomming mails, analysing them and reroute them if necessary. Although the system is designed to be run on a RaspberryPi the software might be installed to any Java capable client. The RaspberryPi is just an affordable lightweight device which offers all required capabilities.
-
-\chapter{Security Analysis}
-\fxfatal{add content here}
-
-\chapter{Additional Considerations}
-\fxfatal{add content here}
-
-\section{Storage of Messages and queues}
-The storage of messages sent though MessageVortex should be handled with great care. It seems on the first sight a good idea to merge all messages in a globally available storage such as the mail account of the receiving entity. However -- In doing so we would discover the message content to the providing party of a mail account. Since we handled the message with great care and tremendous costs up until this point it would be careless doing so. 
-
-Storing them in a localized and receiving entity controlled storage is definitely a good idea but leaves security considerations like a backup possibly to an end user. This might be better but in effect a questionable decision. There is however a third option. By leaving the message unhandled on the last entity of the MessageVortex chain we may safely backup the data without disclosing the message content. Merging the content then dynamically through a specialized proxy would allow the user tu have a unified view on his without compromising the security.
-
-\fxfatal{implemented in prototype?}
-
-\section{Economy of transfer}
-\fxfatal{Write something about wasting bandwidth}
-
-\part{Discussion}
-\fxfatal{add content here}
-
-\chapter{Anonymity}
-\fxfatal{add content here}
-
-\section{Effects of anonymous communication on behaveour}
-\fxfatal{add content}\cite{postmes2001social}

@@ -67,9 +67,9 @@
 %enable hypelinks
 \usepackage[pdftex,pdfusetitle]{hyperref}
 \hypersetup{
-	hidelinks,
+  hidelinks,
   pdfpagelayout=TwoPageRight,
-%	bookmarks=true,
+  bookmarks=true,
   pdfstartview=Fit
 }
 
@@ -210,7 +210,10 @@ I would like to acknowledge the thousands of individuals who have coded for the 
 
 \mainmatter
 
-\input{rewrite-main.tex}
+\input{inc/parts/01_intro.inc.tex}
+\input{inc/parts/02_methodes.inc.tex}
+\input{inc/parts/03_results.inc.tex}
+\input{inc/parts/04_discussion.inc.tex}
 
 \backmatter
 \appendix
