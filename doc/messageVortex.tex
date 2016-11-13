@@ -101,6 +101,9 @@
 % format appendix
 \usepackage[titletoc,page,title]{appendix} %enable appendix 
 
+% citations
+%\usepackage{cite}
+
 % set numbering for subsubsections
 \usepackage{tocstyle}
 \setcounter{secnumdepth}{3}
@@ -160,6 +163,8 @@ Keywords={Email; SMTP; MIME; S/MIME; POP3; IMAPv4; MailVortex; Anonymity}
 	commentstyle=\itshape,%
 	morecomment=[l]{--},%
 	basicstyle=\tiny\sffamily,
+	breaklines=true,
+	prebreak={\mbox{\quad$\rhookswarrow$}},
 }
 
 \lstdefinestyle{BashInputStyle}{
@@ -174,6 +179,9 @@ Keywords={Email; SMTP; MIME; S/MIME; POP3; IMAPv4; MailVortex; Anonymity}
 %	linewidth=0.9\linewidth,
 %	xleftmargin=0.1\linewidth
 }
+
+\captionsetup[lstlisting]{position=bottom}
+\captionsetup[lstinputlisting]{position=bottom}
 
 \begin{document}
 \newgeometry{margin=0.1cm, footskip=1mm}

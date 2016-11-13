@@ -426,10 +426,26 @@ Several technical ways have been explored to circumvent censorship. All seem to 
 
 In the following section we look at technologies and ideas dealing with these circumvention technologies.
 
-\subsubsection{Covert Channel}
-\fxfatal{add content here}
+\subsubsection{Covert Channel and Channel Exploitations}
+The original term of covert channels was defined by \citeauthor{Lampson73anote}\cite{Lampson73anote} as 
+\begin{quote}
+	not intended for information transfer at all, such as the service program's effect on system load.
+\end{quote}
+
+This was defined  in such a way to distinguish the message flow from 
+\begin{quote}
+	legitimate channels used by the confined service, such as the bill.
+\end{quote}
+
+The use of a legitimate channel such as SMTP and hide information in this specific channel is not a usage of covert channel. This methode is commonly referenced as channel exploitation. In the following section we analyse technologies for suitability in a P2P network construct as data channel.
 
 \subsubsection{Spread Spectrum}
+\fxfatal{add content here}
+
+\subsubsection{Steganography}
+\fxfatal{add content here}
+
+\subsubsection{Timing Channels}
 \fxfatal{add content here}
 
 \section{Cryptography}
@@ -615,13 +631,30 @@ Babel was an academic system defined in a paper by \citeauthor{babel} in \citeye
 \fxfatal{add content here}
 
 \subsection{Crowds}
+Crowds is an implementation of the crowds protocol.
 \fxfatal{add content here}
 
 \subsection{Tarzan}
 \fxfatal{add content here}
 
 \subsection{Tor\label{sec:tor}}
-\fxfatal{add content here}
+Tor is one of the most common onion router networks these days. It is specified in \cite{tor-spec}. It might be considered  one of the most advanced networks since a lot of research has been done here.
+
+In short tor is a network consisting of multiple onion routers. Each client first picks an entry node. Then it establishes an identity, gets a listing of relay servers, and chooses a path through multiple onion routers. This path is linked to the temporary identity. This identity (and the path connected to it) should be changed at least once a day. 
+
+There is centrally organized directory in the tor network knowing all tor relay servers. Any Tor relay server may be a directory server as well.
+
+Many attacks involving the Tor networks have been discussed in the academic world such as \cite{hs-attack06,esorics13-cellflood,bauer:wpes2007,esorics12-torscan,oakland2013-trawling,danner-et-al:tissec12,congestion-longpaths} and some have even been exploited actively. In the best case the people discovering the attacks did propose mitigation to the attack an took care that these mitigations flowed back into the protocol. Some general thoughts of the attacks should be emphasized here for treatment in our protocol.
+
+Being an exit node may be a problem in some jurisdictions. In general it seems to be accepted that routing traffic with unknown content (to the routing node) seems to be accepted as one might argue that users of Tor are not regarded bad in general. So by being unable to tell malicious or illegal traffic apart from legitimate traffic this is not a problem. However -- being an exit node can mean that unencrypted and illegal traffic is leaving the routing traffic. In this specific case operators of a relay node might fear legal prosecution. This is why tor nodes may be listed as ``non exit nodes'' 
+
+Furthermore several DoS-Attacks have been carried out in order to overload parts of the Tor network. Most of them do a bandwidth drain on the network layer.
+
+Attacking anonymisation has been done by several ways. First of all the most common attack is a time wise correlation of packets if in control of an entry and an exit node. A huge attack of this kind was published in 2014 and has been published on the tor website (\href{https://blog.torproject.org/blog/tor-security-advisory-relay-early-traffic-confirmation-attack}{relay early traffic confirmation attack}). This has been possible because tor is a low latency network. Another attack is to identify routes through tor by statistically analyse the traffic density in the network between nodes. More theoretical attacks focus on the possibility of controlling the directory servers to guarantee that a entity may be deanonymised because it is using compromised routers.
+
+Generally the effectiveness of monitoring of single or multiple networks is disputed. According to a study by \citeauthor{ccs2013-usersrouted} in \citeyear{ccs2013-usersrouted}\cite{ccs2013-usersrouted} a system in the scale of PRISM should be able to correlate traffic of 95\% of the users within a few days. Other sources based on the Snowden Papers claim that NSA was unable so far to De-Anonymize Tor users. However since these papers referenced to ``manual analysis'' the  statement may be disputed when looking at automated attacks as well.
+
+\fxfatal{add content here; focus more precise on the attacks as they give valuable infromation}
 
 \subsection{Herbivore}
 \fxfatal{add content here}
@@ -755,13 +788,24 @@ All attacks targeting users anonymity is a main focus of this work. Many informa
 
 \begin{itemize}
 \item Prevent an attack\\
-      This can only be done for attacks which are already known and may not be realistic in all cases. For us this means leaving as little information about identities or meta information as possible on untrusted infrastructures. If we leave traces (i.e. message flows, or accounting information) they should have the least possible information content and should expire within a reasonable ammount of time.
+      This can only be done for attacks which are already known and may not be realistic in all cases. In our protocol we have strict boundaries defined. A node under attack should at any time of a valid protocol usage (this excepts bandwidth depletion attacks) be able to block malicious identities. Since establishing new identities is costly an attacker should always require far more resources than the defender.
+\item Minimize attack surface\\
+      This part of the attack prevention is included by design in the protocol.
+\item Redirect an attack\\
+	  Although this is not done by the implementation it is possible to handle suspected malicious nodes differently.
+\item Control damage\\
+      For us this means leaving as little information about identities or meta information as possible on untrusted infrastructures. If we leave traces (i.e. message flows, or accounting information) they should have the least possible information content and should expire within a reasonable amount of time.
+\item Discover an attack\\
+      The protocol is designed in such a way that discovering attacks (such as a query attack) may be done. However -- we consider active attacks just as part of the ordinary message flow as an immediate result. 
 \item Recover from an attack\\
       An attack does always impose a load onto a systems resources regardless of its success. It is important that a system recovers almost immediately from an attack and is not covered in a non or only partial functional state either temporarily or permanently.
 \end{itemize}
 
 In the following subsections we list a couple of attack classes whiih have been used against systems listed in \ref{sec:sysImpl} or the respective academic works. We list the counter measures which have been taken to defelct these attacks.
 \fxfatal{fill list}
+
+\subsubsection{Probing Attacks}
+\fxfatal{add content here; Reduce attactiveness of cleartext probing attacks by discard 80\% of messages and blacklist on early retry}
 
 \subsubsection{Hotspot Attacks}
 \fxfatal{add content here}
@@ -891,19 +935,19 @@ And third due to the onion like design described in this document asymmetric enc
 
 If the algorithm is generally bound to specific key sizes (due to S-Boxes or similar constructs) the key size is incorporated into the definition. If not the key size is handled as parameter.
 
-The key sizes have been chosen in such a manor that the key types form tupples of approximately equal strength. The support of Camelia192 and Aes192 has been defined as optional. But as they are wildly common in implementations they have already been standardized as they  build a possibility to step up security in future.
+The key sizes have been chosen in such a manor that the key types form tuples of approximately equal strength. The support of Camelia192 and Aes192 has been defined as optional. But as they are wildly common in implementations they have already been standardized as they  build a possibility to step up security in future.
 
-Having this criterias for choice I chose to use th following keys and key sizes:
+Having these criteria for choice we chose to use the following keys and key sizes:
 \begin{itemize}
 	\item Symetric
 	\begin{itemize}
-		\item AES (Keysizes 128, 192, 256)
-		\item Camellia (Keysizes 128, 192, 256)
+		\item AES (key size: 128, 192, 256)
+		\item Camellia (key size: 128, 192, 256); optional
 	\end{itemize}
 	\item Asymetric
 	\begin{itemize}
-		\item RSA/DSA (Keysizes free)
-		\item Named Elliptic Courves
+		\item RSA (key size: 2048, 4096, 8192)
+		\item Named Elliptic Curves
 		\begin{itemize}
 			\item secp384r1
 			\item sect409k1
@@ -914,36 +958,88 @@ Having this criterias for choice I chose to use th following keys and key sizes:
 	\begin{itemize}
 		\item sha384
 		\item sha512
-		\item tiger192
+		\item tiger192; optional
 	\end{itemize}
 \end{itemize}
+
+Within the implementation we assigned algorithms to a security strength level:
+\begin{itemize}
+	\item LOW\\
+	      AES128, RSA1024
+	\item MEDIUM\\
+	      AES192, RSA2048, ECC secp384r1
+	\item HIGH\\
+		  RSA4096, ECC sect409k1, sha384
+	\item QUANTUM\\
+	      AES256, RSA8192, ECC secp521r1, sha512
+\end{itemize}
+This allows to categorize the used algorithms to a strength. This list however should only serve the purpose of selecting algorithms for people without cryptological know how.
+
 \fxfatal{add content here; Fix content (copied from first version)}
 
 \subsection{Usability}
 \fxfatal{add content here}
 
 \section{Protocol Specification}
+The protocol itself is independently from the transport layer specified. 
 \fxfatal{add content here from old part and update}
 
 \subsection{MURBs}
 \fxfatal{Limit at 127 uses per murb}
 
 \section{Protocol implementation}
-\fxfatal{add content here}
+In this section we emphasize on the protocol blocks. These blocks are extracted from the blending layer and passed to the routing layer. 
+\fxfatal{add content here; add general message outline}
 
 \subsection{Header block}
+The header block contains the identity and should contain all information required to decide whether subsequent blocks of the message should be handled.
+\lstinputlisting[language=ASN1, caption={Header Block}, backgroundcolor=\color{gray!10},linerange={29-71},firstnumber=29]{../app/asn.1/messageBlocks.asn} 
+
+The header block contains the following data:
+\begin{itemize}
+	\item A symmetric header key (header key)\\
+	      This key is encrypted with the receiving identities public key.
+	\item An identity block (identityBlock)\\
+		  This block contains a number of data which reflects the identity of the sender and the use of this (and subsequent blocks).
+		  \begin{itemize}
+		  	\item sending ephemeral identity public key (identityKey)
+		  	\item serial
+		  	\item maximum number of replays for the serial for this identity
+		  	\item validity period for this block (UTC)
+		  	\item Symmetric decryption key for subsequent routing blocks
+		  	\item Chain secret for the forwarding block\\
+		  	      If specified the specified secret should be named in all subsequent blocks.
+		  	\item Protocol requests to this node
+		  	\item Identifier and padding for proof of work
+		  \end{itemize}
+	\item An identity signature (identitySignature)\\
+	      Contains a signed hash (hash type is specified in identityBlock.hash) with the senders private key.
+\end{itemize}
 \fxfatal{add content here}
 
 \subsubsection{Ephemeral Identity}
-\fxfatal{add content here}
+The identity in this header block is an ephemeral identity. It exists for a limited amount of time (recommended <90d). Creating a new ephemeral identity is done with an identity request. This identity is mapped to all accounting figures.
 
 \subsubsection{Requests}
+
 \fxfatal{add content here}
+
+\subsubsection{Proof of work}
+\fxfatal{add content here}
+
+\subsubsection{Clear Text Requests}
+It is up to the decision of the node whether it wants to answer a clear text request or not. Recommended for this behaviour is to discard plain text requests. In order to make the public key of the receiving entity available it is recommended to publish key on a PGP key server.
+
+\fxfatal{PGP only works with RSA ... what about ECC keys} 
+
+This should only be a problem when bootstrapping or when adding new identities to the own address book. 
+
+\fxfatal{add content here; how to handle key clashes (multiple valid keys); Should have a book on how do I invite friends}
+
+\subsubsection{Requests}
+\fxfatal{new identities already existing on that node for incomming requests should be rerequested with a probability of 75\%}
 
 \subsubsection{Replys}
-\fxfatal{add content here}
-
-\subsubsection{Crypto Puzzle}
 \fxfatal{add content here}
 
 \subsection{Main block}
@@ -959,6 +1055,15 @@ Having this criterias for choice I chose to use th following keys and key sizes:
 \fxfatal{add content here}
 
 \subsubsection{payload Block}
+\fxfatal{add content here}
+
+\section{Protocol handling}
+\fxfatal{add content here}
+
+\subsection{Received Block Processing}
+\fxfatal{add content here}
+
+\subsection{Transmission Block Processing}
 \fxfatal{add content here}
 
 \section{Protocol Analysis}

@@ -7,17 +7,17 @@ import java.util.Vector;
 
 /**
  * Represents all supported crypto algorithms.
- *
+ * FIXME: Add Camelia support for final version
+ * FIXME: Add tiger192 support for final version
  * Created by martin.gwerder on 31.05.2016.
  */
 public enum Algorithm {
 
     AES128( 1000, AlgorithmType.SYMMETRIC, "aes128", "BC", SecurityLevel.LOW ),
-    AES192( 1001, AlgorithmType.SYMMETRIC, "aes192", "BC" ),
-    AES256( 1002, AlgorithmType.SYMMETRIC, "aes256", "BC" ),
+    AES192( 1001, AlgorithmType.SYMMETRIC, "aes192", "BC", SecurityLevel.MEDIUM ),
+    AES256( 1002, AlgorithmType.SYMMETRIC, "aes256", "BC", SecurityLevel.QUANTUM ),
     RSA(2000, AlgorithmType.ASYMMETRIC, "RSA", "BC", new HashMap<SecurityLevel, Integer>() {
         private static final long serialVersionUID = 12132345345L;
-
         {
             put(SecurityLevel.LOW, 1024);
             put(SecurityLevel.MEDIUM, 2048);
@@ -26,11 +26,11 @@ public enum Algorithm {
         }
     }), //available as well under "SunJCE"
     //EC        (2100, AlgorithmType.ASYMMETRIC,"EC"   ,"SunEC",null),
-    SECP384R1( 2500, AlgorithmType.ASYMMETRIC, "secp384r1", "BC" ),
-    SECT409K1( 2501, AlgorithmType.ASYMMETRIC, "sect409k1", "BC" ),
-    SECP521R1( 2502, AlgorithmType.ASYMMETRIC, "secp521r1", "BC" ),
-    SHA384( 3000, AlgorithmType.HASHING, "sha384", "BC" ),
-    SHA512( 3001, AlgorithmType.HASHING, "sha512", "BC" );
+    SECP384R1( 2500, AlgorithmType.ASYMMETRIC, "secp384r1", "BC", SecurityLevel.MEDIUM ),
+    SECT409K1( 2501, AlgorithmType.ASYMMETRIC, "sect409k1", "BC", SecurityLevel.HIGH ),
+    SECP521R1( 2502, AlgorithmType.ASYMMETRIC, "secp521r1", "BC", SecurityLevel.QUANTUM ),
+    SHA384( 3000, AlgorithmType.HASHING, "sha384", "BC",  SecurityLevel.HIGH ),
+    SHA512( 3001, AlgorithmType.HASHING, "sha512", "BC", SecurityLevel.QUANTUM );
     //TIGER192  (3100, AlgorithmType.HASHING,"tiger192","BC");
 
     private static Map<AlgorithmType, Algorithm> def = new HashMap<AlgorithmType, Algorithm>() {
