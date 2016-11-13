@@ -1,7 +1,7 @@
 %!TeX program=pdflatex
 %!TeX encoding=utf8
 %!TeX spellcheck = en_GB
-%!TeX root = mailvortex_new.tex
+%!TeX root = ../../messageVortex.tex
 
 
 % ********************************************************************************************************
@@ -503,7 +503,7 @@ If we can follow data from a source to a destination we may safely assume that t
 
 In \nameref{sec:sysImpl} we the analyze some related real world systems regarding how they work and how they have been attacked in the past.
 
-\subsection{Mixing}
+\subsection{Mixing\label{sec:mixnets}}
 Mixes have been first introduced by \citetitle{CHAUM1}\cite{CHAUM1} in \citeyear{CHAUM1}. The basic concept in a mix goes as follows. We do not send a message directly from the source to the target. Instead we use a kind of proxy server or router in between which picks up the packet, anonymizes it, and forwards it either to the recipient or another mix. If we assume that we have at least 3 mixes cascaded we then can conclude that:
 \begin{itemize}
 	\item Only the first mix knows the true sender
@@ -710,13 +710,13 @@ The majority of mail clients are fat clients. These clients score over the more 
 
 As these clients vary strongly it is absolutely mandatory for the MDA that they are well specified. Lack in doing so would result in heavy interoperability problems. Most commonly the Protocols \defref{IMAP}, \defref{POP} and \defref{EWS} are being used these days. For mail delivery the SMTP protocol is used. \par
 
-Fat clients ar comonly used on mobile devices. According to  \cite{clientDistribution} in Aug 2012 the most common fat email client was Apple Mail client on iOS devices ($35.6\%$), followed by Outlook ($20.14\%$), and Apple Mail ($11\%$). \citetitle{clientDistribution2}\cite{clientDistribution2} as a more recent source lists in February 2014 iOS devices with $37\%$, followed by Outlook ($13\%$), and  Google Android ($9\%$).
+Fat clients are commonly used on mobile devices. According to  \cite{clientDistribution} in Aug 2012 the most common fat email client was Apple Mail client on iOS devices ($35.6\%$), followed by Outlook ($20.14\%$), and Apple Mail ($11\%$). \citetitle{clientDistribution2}\cite{clientDistribution2} as a more recent source lists in February 2014 iOS devices with $37\%$, followed by Outlook ($13\%$), and  Google Android ($9\%$).
 
 \subsubsection{Server located clients}
 server located clients build an absolute minority. This kind of clients have been used mainly in the days of centralized hosts. An example for a Server Located Client is the Unix command "`mail"'. This client reads a mail storage from a file in the users home directory.
 
 \subsubsection{Web clients}
-Web clients are these days a common alternative to fat clients. Most big provider companies use their own proprietary web client. According to \cite{clientDistribution2} the most common web clients are "`Gmail"', "`Outlook.com"', and "`Yahoo! Mail"'. All these Interfaces do not offer a kind of public plugin interface. However,  they do offer IMAP-interfaces. This important for a future generalistic aproach to the problem.
+Web clients are these days a common alternative to fat clients. Most big provider companies use their own proprietary web client. According to \cite{clientDistribution2} the most common web clients are "`Gmail"', "`Outlook.com"', and "`Yahoo! Mail"'. All these Interfaces do not offer a kind of public plug-in interface. However,  they do offer IMAP-interfaces. This important for a future generalistic approach to the problem.
 
 \subsection{Interfaces of Mail Endpoints}
 There are two interfaces 
@@ -724,11 +724,19 @@ There are two interfaces
 \fxfatal{add content here}
 
 \subsection{S/MIME}
-\cite{RFC3851}
-\fxfatal{add content here}
+S/MIME is an extension to the MIME standard. The MIME standard allows in simple text oriented mails an alternate representation of the same content (e.g. as text and as html), or it allows to split a message into multiple parts which may be encoded. It is important to note that MIME encoding is only effective in the body part of a mail.
+
+S/MIME as described in \cite{RFC3851} extends this standard with the possibility to encrypt mail content or to sign it. Practically this is achieved by either putting the encrypted part, or the signature into an attachment. It is important to know, that this method leaks significant parts of the data.
+
+As the mail travels directly from sender to recipient both involved parties are revealed. Neither message subject nor message size or frequency are hidden. This method does offer limited protection when assuming an adverser with interest in the message content only. It does not protect from the kind of adverser in our case. 
+
+The trust model is based on a centralistic approach involving generally trusted root certification authorities.
 
 \subsection{PGP/MIME}
-\cite{RFC2440}
+Exactly as S/MIME PGP\cite{RFC2440} builds upon the base of S/MIME. Although the trust model in PGP is peer based. The encryption technology doesnot significantly differ (as seen from the security model).
+
+A good thing to learn from PGP is that there are peer based approaches offering limited possibilities for trust. The trust in PGP is based on the peer review of users. This peer review may give an idea of how well verified the key of a user is.
+
 \fxfatal{add content here}
 
 \subsection{XMMP}
@@ -738,12 +746,22 @@ There are two interfaces
 In the following sections we emphasize on possible attacks to an anonymity preserving protocols. In the following sections we describe classes of attacks. These attacks may be used to attack the anonymity of any entity involved in the message channel. In a later stage we test the protocol for immunity against these classes of attacks.
 
 \subsection{Broken Encryption Algorithms}
-Encryption algorithms may become broken at any time. This either to new findings in attacking them, by more resources being available to an adverser, or by new technologies allowing new kind of attacks. A good protocol must be able to react to such threads in a timely manor. This reaction should not rely on a required update of the infrastructure.
+Encryption algorithms may become broken at any time. This either to new findings in attacking them, by more resources being available to an adverser, or by new technologies allowing new kind of attacks. A good protocol must be able to react to such threads in a timely manor. This reaction should not rely on a required update of the infrastructure. The grade of security should solely be controlled by the users. 
 
-\fxfatal{add content here}
+We cannot do a lot for attacks of this kind to happen. However -- we might introduce a choice of algorithms and key sizes to give the user a choice in the degree of security he wants to have.
 
 \subsection{Attacks Targeting Anonymity}
-\fxfatal{add content here}
+All attacks targeting users anonymity is a main focus of this work. Many informations may be leaked and the main goal should therefore rely on the principles established in security.
+
+\begin{itemize}
+\item Prevent an attack\\
+      This can only be done for attacks which are already known and may not be realistic in all cases. For us this means leaving as little information about identities or meta information as possible on untrusted infrastructures. If we leave traces (i.e. message flows, or accounting information) they should have the least possible information content and should expire within a reasonable ammount of time.
+\item Recover from an attack\\
+      An attack does always impose a load onto a systems resources regardless of its success. It is important that a system recovers almost immediately from an attack and is not covered in a non or only partial functional state either temporarily or permanently.
+\end{itemize}
+
+In the following subsections we list a couple of attack classes whiih have been used against systems listed in \ref{sec:sysImpl} or the respective academic works. We list the counter measures which have been taken to defelct these attacks.
+\fxfatal{fill list}
 
 \subsubsection{Hotspot Attacks}
 \fxfatal{add content here}
