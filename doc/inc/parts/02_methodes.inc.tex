@@ -59,7 +59,7 @@ traceroute to www.ietf.org.cdn.cloudflare-dnssec.net (104.20.0.85), 64 hops max
 	\caption{A traceroute to the host www.ietf.org}
 \end{figure}
 
-\section{Anonymizing and unlinking}
+\section{Anonymizing and Unlinking}
 If we are unable to limit the route of our packets through named jurisdictions we must protect ourselves from unintentionally breaking the law of a foreign country. Therefore we need to be anonymous when sending or receiving messages. Unfortunately most transport protocols (in fact almost all of them such as SMTP, SMS, XMPP or IP) use a globally unique identifier for senders and receivers which are readable by any party which is capable of reading the packets. 
 
 As a result anonymisation of a sender or a receiver is not simple. If messages are being sent through a relay at least the original sender might be concealed (Sender anonymity). By combining it with encryption we may even achieve a very simple form of sender and receiver pseudonymity. If cascading more relay like infrastructures and combining it with cryptography we might even achieve sender and receiver anonymity. This approach has however several downsides (see \ref{sec:remailer} and \ref{sec:mixnets} for details) and is easily attackable.
@@ -464,6 +464,9 @@ For a key $K_b\neq K_a$ this means
 \end{eqnarray} 
 
 \subsubsection{AES}
+\fxfatal{add content here}
+
+\subsubsection{Camelia}
 \fxfatal{add content here}
 
 \subsection{Asymmetric Encryption}
