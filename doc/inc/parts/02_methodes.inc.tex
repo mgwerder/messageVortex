@@ -704,34 +704,73 @@ Freenet was originally designed to be a fully distributed data store\cite{freene
 
 \subsection{Herbivore}
 Herbivore is a network protocol designed by \citeauthor{herbivore:tr} in \cite{herbivore:tr}.
+
 \fxfatal{add content here}
 
 \subsection{Dissent}
 \cite{Corrigan-Gibbs:2010:DAA:1866307.1866346}
+
 \fxfatal{add content here}
 
 \subsection{P5}
+\cite{sherwood-protocol}
+
 \fxfatal{add content here}
 
 \subsection{Gnutella}
+Gnutella is not a protocol to the anonymity world in special. It is a file sharing protocol on a Peer to peer base. This is the most intresting aspect of gnutella in this context. Gnutella has proven to be working with a large number of clients.
+
+The current protocol specification may be found under \href{http://rfc-gnutella.sourceforge.net/developer/stable/index.html}{http://rfc-gnutella.sourceforge.net/}
+
+extension: \cite{AthanRAM07}
+
 \fxfatal{add content here}
 
 \subsection{Gnutella2}
+Despite its name Gnutella2 is not the next generation of Gnutella. It was a fork in 2002 from the original Gnutella and has been developed in a different direction. The specification may be found on \href{http://g2.doxu.org}{http://g2.doxu.org}.
+
 \fxfatal{add content here}
 
 \subsection{Darknet}
-\fxfatal{add content here}
+
+\fxfatal{More concept than a protocol or technology. Remove?}
 
 \subsection{Sneakernet}
-\fxfatal{add content here}
+
+\fxfatal{More concept than a protocol or technology. Remove?}
 
 \subsection{Hordes}
+\cite{Levine:2002}
+
 \fxfatal{add content here}
 
 \subsection{Salsa}
+\cite{Salsa}
+
+Related: \cite{ccs2008:mittal}
+
+\fxfatal{add content here}
+
+\subsection{AP3}
+
+\cite{mislove2004ap3}
+
 \fxfatal{add content here}
 
 \subsection{Hydra-Onion}
+\cite{iwanik2005duo}
+
+\fxfatal{add content here}
+
+\subsection{DUO-Onion}
+\cite{iwanik2005duo}
+
+\fxfatal{add content here}
+
+\subsection{Cashmere}
+
+\cite{zhuang2005cashmere}
+
 \fxfatal{add content here}
 
 \subsection{SMTP}
@@ -1099,8 +1138,8 @@ The reason for not giving control over the behaviour to this layer to the sender
 \subsubsection{Message replay protection}
 Message reply protection is crucial for such a system. With the ability to replay a message an adverser may ``highlight'' a message flow as it would always generate the same traffic pattern. So there needs to be a reply pattern protecting the protocol from message replay. As we do have MURBs in our protocol this is a problem. A MURB is by design replayable. We therefore need a possibility for the original sender using a MURB to make messages distinguishable which may not be used by an adverser.
 
-\begin{requirement}{untraceable}{untraceable}
-	A message must be untraceable. 
+\begin{requirement}{replay}{replay}
+	A message must not be replayable
 \end{requirement}
 
 It should be able to increase and shrink in size or all messages must have uniform size. Decoy traffic should not be distinguishable from true message traffic. 
@@ -1335,14 +1374,21 @@ If an identity is rejected the request may not be replayed by the same identity 
 
 This request should be by far the most expensive request. It must at any time be more expensive to request a new identity compared to raise the quota of an existing one.
 
-\paragraph{queryPeer request:} 
+\paragraph{queryPeer request:} A peer request is a request for publicly known Vortex nodes. This request does offer the possibillity of harvesting the Vortex network. To counter this the following limmitations should apply:
+\begin{itemize}
+	\item The request should be very costly
+	\item Only nodes avertising themselfes as public are disclosed.
+	\item Only one or two nodes should be disclosed upon request.
+	\item The number of requests should be limmited per identity.
+	\item A node should always pick random nodes out of a 5\% pool of known Vortex addresses.
+\end{itemize}
 
-\fxfatal{add content}
+These measures limit the effectivity of harvesting attacks while giving a normal node the possibility of bootstrapping itself.
 
 \paragraph{queryCapabillity request:} This request is the only request answered as a clear text request. To minimize probing this request should be only answered if the node owner agrees. The reply contains the following information:
 \begin{itemize}
 	\item Vortex identities (not encoded)
-	\item Supported Vortex transports (may be omitted if already represented in identities).
+	\item Supported Vortex transports including blending specification.
 	\item Maximum quotas.
 	\item Minimum identity sizes.
 \end{itemize}

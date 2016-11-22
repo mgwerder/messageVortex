@@ -40,13 +40,16 @@ By definition any transport layer address may represent a Vortex identity. This 
 \subsection{Vortex node types}
 
 \subsubsection{Public vortex node}
+Public nodes are nodes
 \fxfatal{accepts all requests} 
 
 \fxfatal{accepts is known to be a vortex node} 
 
 \subsubsection{Stealth vortex node}
+This node does not answer any clear text requests. As an immediate result the node is only usable by other nodes knowing the public key of this node. The node is therefore on a know secret base only reachable.
 
 \subsubsection{Hidden vortex node}
+A hidden node is a special form to a stealth node it has a set of preset identities. Only these entities are processed. This behaveour has certain drawbacks. An identity may not be changed. As an immediate result traffic may become a pseudonymity. To counter this effect at least partially we may use the same local identity for multiple senders. As an immediate result the sender is only one of all senders knowing the private key of an identity.
 
 \chapter{MessageVortex - Transport Independent Messaging anonymous to \nth{3} Parties}
 This approach is different from all approaches discussed previously. Unlike them we put complete distrust into the infrastructure being used. Furthermore we do not rely on a custom server infrastructure in the internet. Instead we take advantage of the availability of internet connected devices such as internet connected mobile phones, tablets, or even commonly available SoC such as RaspberryPi or similar. It is still very hard to maintain a server in the internet and considering the vastly growing amount of automated attack carried out against internet connected servers it is not advisable or realistic to assume that a future user of this system owns either a server or connects to a service which is offering explicitly anonymizing services. These infrastructures would be suspectible to monitoring or even banning. Instead we take a different approach.
@@ -96,6 +99,9 @@ In table \ref{tab:protoReplyCrit} we show under what circumstances a reply to a 
 
 \fxfatal{add content here}
 
+\section{Blending layer}
+\fxfatal{add content here}
+
 \section{Message Flows}
 \fxfatal{add content here}
 
@@ -125,9 +131,37 @@ In the previous sections we identified the following list of requirements:
 In the following subsections we will iterate through all requirements and verify to what degree we achieved the goal.
 
 \fxfatal{list all requirements}
-\ref{req:1}
 
+\paragraph{\ref{req:zeroTrust}:}
 
+\fxfatal{add content}
+\paragraph{\ref{req:P2P}:}
+
+\fxfatal{add content}
+\paragraph{\ref{req:untagable}:}
+
+\fxfatal{add content}
+\paragraph{\ref{req:unbugable}:}
+
+\fxfatal{add content}
+\paragraph{\ref{req:replay}:}
+
+\fxfatal{add content}
+\paragraph{\ref{req:accounting}:}
+
+\fxfatal{add content}
+\paragraph{\ref{req:anon}:} This point is the hardest to proof. We certaindly achieved a high degree of anonymity. No node can tell by observing traffic if a node is a final recipient or just a mix. There are however some weaknesses in the protocol. As the implementation is currently connecting simultaneously to the tru named and the Vortex account the user might be identified by that fact. Using a anonymisation proxy could solve the problem but it would violate the Zero trust principle.
+
+\paragraph{\ref{req:boot}:}
+
+\fxfatal{add content}
+\paragraph{\ref{req:cryptVar}:}
+
+\fxfatal{add content}
+
+\paragraph{\ref{req:easy}:}
+
+\fxfatal{add content}
 
 \section{Considerations for Routing Messages}
 \subsection{Time of sending}
@@ -137,6 +171,7 @@ Messages should always be sent timewise nearby other messages. This means that t
 This approach is heavily dependent of the transport protocol and builds on top a new obfuscating/routing layer. For this system to become a real peer-to-peer approach some additional quirks are required. A message-Vortex-Account needs always an active routing handler. This routing handler may be introduced by new server capabilities or by having a device handling the routing from the client side. For this reason we built a RaspberryPi appliance capable of connecting to one (or more) accounts fetching incomming mails, analysing them and reroute them if necessary. Although the system is designed to be run on a RaspberryPi the software might be installed to any Java capable client. The RaspberryPi is just one affordable lightweight device which offers all required capabilities.
 
 \chapter{Security Analysis}
+In the following sections we emphasize on attacks targeting either sender recipient tuples or on identification of participants
 \fxfatal{add content here}
 
 \chapter{Additional Considerations}
