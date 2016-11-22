@@ -6,9 +6,47 @@
 \part{Results}
 To verify the hypothesis made in this paper, and to analyse properties of the protocol in a real world scenario a library was implemented in Java which was capable of handling all message packets and the routing stack as a whole. The following paragraphs describe the protocol developed in general as a generic approach. Appendix \ref{app:asnone} gives the full ASN.1 representation of the protocol. 
 
-It is important to notice that ASN.1 has no mean to express encrypted structures. Due to this fact we defined all encrypted fields as \verb|OCTET STRING|. The protocol offers according to the ASN.1 the possibility to store onionized information in an unencrypted form. This is meant for debuing purposes. At no point this should be used in a production environment.
+It is important to notice that ASN.1 has no mean to express encrypted structures. Due to this fact we defined all encrypted fields as \verb|OCTET STRING|. 
 
-The protocol described in the next chapter is independent from routing. At the moment capabilities include SMTP and XMPP. The protocol may be extended by adding new transport layer capabilities and their addressing schemes.
+The protocol is defined int the ASN.1 to support onionized information in an unencrypted form. This is meant for debugging purposes only. At no point should this possibility be used in a production environment.
+
+The protocol described in the next chapter is independent from routing. We built a blending layer for SMTP. Layers for other protocols such as XMMP may be built similarly. The protocol may be extended by adding blending layers and their addressing schemes.
+
+\section{Vortex Client}
+We did not create a Vortex client for sending messages. Instead we used a standard Thunderbird email client pointing to a local SMTP and IMAP Server provided by Vortex. On the SMTP side Vortex does encapsulate where possible mails into a Vortex message and builds automated route to the recipient. The SMTP part of vortex may be used to encapsulate automatically all messages with a known Vortex identity into a vortex message. On the IMAP side it merges a local Vortex message store with the standard Email repository building a combined view.
+
+Using Vortex like this offers us the advantages of a known client with the anonymity Vortex offers.
+
+This has certain downsides. At the moment the vortex client has only a local store this makes it impossible to handle multiple simulatneously connected clients to use Vortex. This is however just a lack of the current implementation and not of the protocol itself as we may safely use an IMAP storage for storing vortex mails centrally.
+
+\section{Vortex Addresses}
+A Vortex address is built as follows: $vortexAddress=<transport>:<address>!<publicKey>$
+
+To allow storage of Vortex addresses sin standard messaging programs such as Outlook or Thunderbird. We define an alternate representation $encodedVortexAddress=base64(vortexAddress)@localhost$. 
+
+The suffix ``@localhost'' makes sure that a message intended for Vortex is not routed by any non-participating server.
+
+The main downside of vortex addresses are that they are no longer readable by a human. The main reason for this is the public key which is required. We may abstract ths further by allowing clear text requests on the main email address for the public key. Such requests must then be answered by the vortex account with the valid vortex address.
+
+\subsection{Vortex Accounts}
+By definition any transport layer address may represent a Vortex identity. This fact may make people believe that their current email or jabber address is suitable as Vortex address. This is technically perfectly true, but should not be done for the following reasons:
+
+\begin{itemize}
+	\item If an address is identified as a vortex address it may be blocked (directly or indirectly) by an adverser.
+	\item If a vortex node is malfunctioning non-vortex messages should remain unaffected. This is more likely to happen if non-Vortex messages are kept in a separate account.
+	\item If a user wants no longer to maintain its Vortex address (hopfully there will be a better technology in future) he just may give up his Vortex accounts. If he would have been using his normal mail account for vortex he would receive mixing messages which he has to filter.
+\end{itemize}
+
+\subsection{Vortex node types}
+
+\subsubsection{Public vortex node}
+\fxfatal{accepts all requests} 
+
+\fxfatal{accepts is known to be a vortex node} 
+
+\subsubsection{Stealth vortex node}
+
+\subsubsection{Hidden vortex node}
 
 \chapter{MessageVortex - Transport Independent Messaging anonymous to \nth{3} Parties}
 This approach is different from all approaches discussed previously. Unlike them we put complete distrust into the infrastructure being used. Furthermore we do not rely on a custom server infrastructure in the internet. Instead we take advantage of the availability of internet connected devices such as internet connected mobile phones, tablets, or even commonly available SoC such as RaspberryPi or similar. It is still very hard to maintain a server in the internet and considering the vastly growing amount of automated attack carried out against internet connected servers it is not advisable or realistic to assume that a future user of this system owns either a server or connects to a service which is offering explicitly anonymizing services. These infrastructures would be suspectible to monitoring or even banning. Instead we take a different approach.
@@ -24,17 +62,48 @@ As decoy traffic is generated with the same operations as the true content is sp
 	\includegraphics[width=\columnwidth]{inc/VortexModules.pdf}
 	\caption{Overview of the Vortex modules}
 	\label{fig:vortexModules}
+	\fxfatal{replace image with up to date representation; show implemented and not implemented parts; Maybe make it two column wide}
 \end{figure}
 
-\section{Protocol Description}
+\section{Protocol Implementation\label{protoImpl}}
+\fxfatal{add content here}
+
+\begin{figure}[H]
+	\includegraphics[width=\columnwidth]{inc/fixme.png}
+	\caption{flow diagram showing message processing}
+	\label{fig:msgProcessing}
+\end{figure}
+
+\section{Block Structure}
+\lstinputlisting[language=ASN1, caption={Header Block}, backgroundcolor=\color{gray!10},linerange={29-71},firstnumber=29]{../app/asn.1/messageBlocks.asn} 
+
+
 \section{Accounting}
+In table \ref{tab:protoReplyCrit} we show under what circumstances a reply to a header request should be sent. The capitalised words MAY, MUST, SHOULD and SHOULD NOT are used as defined in RFC2119\cite{RFC2119}.
+\begin{table*}[h]
+	\centering\scriptsize
+	\begin{tabular}{|l|l|l|l|l|}\hline
+		\diaghead{\theadfont Request Criteria}{Request}{Criteria} & \thead{unknown identity; cleartext} & \thead{unknown identity; encrypted} & \thead{expired identity; encrypted} & \thead{known identity; encrypted}\\\hline
+		newIdentity	 	& SHOULD NOT 	& SHOULD NOT& Invalid (Error) 	& Invalid (Error)\\              
+		queryPeer       & MUST NOT      & MUST NOT  & MAY               & MAY\\        
+		queryCapability	& SHOULD 		& MUST 		& MUST				& MUST \\
+		messageQuota	& MUST NOT 		& MUST NOT	& MAY				& MUST \\              
+		transferQuota	& MUST NOT		& MUST NOT	& MAY				& MUST \\\hline             
+	\end{tabular}	
+	\caption{Requests and the applicable criteria for replies}
+	\label{tab:protoReplyCrit}
+\end{table*}
+
+\fxfatal{add content here}
+
 \section{Message Flows}
+\fxfatal{add content here}
 
 \section{Considerations for Building Messages}
-In a worst case scenario we assume that an adverser is controlling most of the network utilized for anonymisation. While this is not nessessarily a problem (as pointed out earlier) it allows an adverser to track a message while agents are being used under his control. So for simplicity and as a worst case assumption we always assume that an adverser has perfect knowledge of an associated message flow. This is however a worst case scenario. One missing agent disconnects the whole chain and as messages are not traceable in size.
+In a worst case scenario we assume that an adverser is controlling most of the network utilized for anonymisation. While this is not necessarily a problem (as pointed out earlier) it allows an adverser to track a message while agents are being used under his control. So for simplicity and as a worst case assumption we always assume that an adverser has perfect knowledge of an associated message flow. This is however a worst case scenario. One missing agent disconnects the whole chain and as messages are not traceable in size.
 
 \subsection{Ephemeral identities}
-\fxfatal{expiring ephemeral identities shold not only be replaced after their expiration but anytime during the livetime}
+\fxfatal{expiring ephemeral identities should not only be replaced after their expiration but anytime during the livetime}
 \subsection{Timing of messages}
 \fxfatal{add content here}
 
@@ -48,16 +117,24 @@ In a worst case scenario we assume that an adverser is controlling most of the n
 \fxfatal{Add comments about error and diagnosis messages officially spliting of messages}
 
 \subsubsection{On-Demand Explicit Diagnostic}
-\fxfatal{Add comments about normal, error, and diagnosis messages beeing picked up by a routing block}
+\fxfatal{Add comments about normal, error, and diagnosis messages being picked up by a routing block}
+
+\section{Verification of requirements}
+In the previous sections we identified the following list of requirements:
+\slistofrequirements
+In the following subsections we will iterate through all requirements and verify to what degree we achieved the goal.
+
+\fxfatal{list all requirements}
+\ref{req:1}
+
+
 
 \section{Considerations for Routing Messages}
 \subsection{Time of sending}
 Messages should always be sent timewise nearby other messages. This means that the best moment for sending a message in a ready queue is at a time when sending of other messages is due. However no optimisation should be done to send as many messages as possible at the same time. this would lead to a forseeable behaviour of the routing layer and thus to misusable behaviour.
 
-
-
 \section{Real World Considerations}
-This approach is heavily dependent of the transport protocol and builds on top a new obfuscating/routing layer. For this system to become a real peer-to-peer approach some additional quirks are required. A message-Vortex-Account needs always an active routing handler. This routing handler may be introduced by new server capabilities or by having a device handling the routing from the client side. For this reason we built a RaspberryPi appliance capable of connecting to one (or more) accounts fetching incomming mails, analysing them and reroute them if necessary. Although the system is designed to be run on a RaspberryPi the software might be installed to any Java capable client. The RaspberryPi is just an affordable lightweight device which offers all required capabilities.
+This approach is heavily dependent of the transport protocol and builds on top a new obfuscating/routing layer. For this system to become a real peer-to-peer approach some additional quirks are required. A message-Vortex-Account needs always an active routing handler. This routing handler may be introduced by new server capabilities or by having a device handling the routing from the client side. For this reason we built a RaspberryPi appliance capable of connecting to one (or more) accounts fetching incomming mails, analysing them and reroute them if necessary. Although the system is designed to be run on a RaspberryPi the software might be installed to any Java capable client. The RaspberryPi is just one affordable lightweight device which offers all required capabilities.
 
 \chapter{Security Analysis}
 \fxfatal{add content here}
@@ -67,6 +144,10 @@ This approach is heavily dependent of the transport protocol and builds on top a
 \fxfatal{add content here}
 
 \section{Identification of participating account}
+\fxfatal{add content here}
+
+\subsection{Identification by content}
+It is possible to identify a message by content. Assuming that an adverser knows the applied blending methode he may identify an ASN.1 structure of 
 \fxfatal{add content here}
 
 \subsection{Identification by Query}

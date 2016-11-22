@@ -100,7 +100,7 @@ Availability has two meanings in this context which do differ. A technology is a
 
 The first meaning tells us that a protocol must run independently from infrastructure the user has commonly ready.
 
-The second meaning tells us that messages must always be capable of flowing from the sender to the recipient. As infrastructure may fail at any time the protocol must offer the possibilities to send messages through alternate routes. This sounds easy and many protocols implement such redundancies already. However -- taking into account that sender and recipient is not known to a routing node this is a goal hard to achieve.
+The second meaning tells us that messages must always be capable of flowing from the sender to the recipient. As infrastructure may fail at any time the protocol must offer the possibilities to send messages through alternate routes. This sounds easy and many protocols implement such redundancies already. However, taking into account that sender and recipient is not known to a routing node this is a goal hard to achieve.
 
 \section{Rough draft of Protocol Layers}
 In order to fulfil the criteria given above we define a very rough idea of the protocol and its layers. The rough overview is given in figure \ref{fig:roughProtocolDesign}. The protocol should work on the base of onion routing. Unlike Tor (see \ref{sec:tor}) it should not rely on central infrastructures. it furthermore should not be limited to onionize messages. It should be capable of splitting and reassemble messages at any layer 
@@ -198,9 +198,29 @@ HTTP servers listen on standard ports 80 or 443 for incomming connects. The port
 
 HTTP0.9-HTTP/1.1 are clear text protocols which are human readable (except for the data part which might contain binary data). The HTTP/2 (as specified in \cite{RFC7540}) is using the same ports and default behaviour. Unlike HTTP/0.9-HTTP/1.1 it is not a clear text but a binary protocol. Headers and bodies of messages are sent as binaries. 
 
+\fxfatal{add as possible bad transport layer und er conditions: WEBDAV-Support, Upload without listing/download unauthenticated}
+
 The protocol does definitely satisfy the first two main criteria (Ct1: Widely Adopted and Ct2: Reliable).
 
-The main disadvantage in terms as message transport protocol is that this protocol is not symetrically. This means that a server is always just ``serving requests'' and not sending actively information to peers. This Request-Reply violates criteria (Ct1: Symmetrically built) and makes the protocol not a primary choice for  message transport. 
+The main disadvantage in terms as message transport protocol is that this protocol is not symmetrically. This means that a server is always just ``serving requests'' and not sending actively information to peers. This Request-Reply violates criteria (Ct1: Symmetrically built) and makes the protocol not a primary choice for  message transport. 
+
+\section{FTP}
+FTP is defined in RFC959\cite{RFC959}. This Protocol is intended for authenticated file transfer only. There is a account available for general access (``anonymous''). This account does for security reasons normally not offer upload rights.
+
+It is possible to use FTP as message transfer endpoint. The configuration would work as follows: ``anonymous'' has upload rights only. It is unable to download or list a directory. A node may upload a message with a random name. If there is a collision the node retries with another random name.
+
+The blending layer picks messages up using an authenticated user.
+
+This has multiple downsides. At first, handling FTP that way is very uncommon and usually requires an own dedicated infrastructure. Secondly passwords are within FTP always in plain text. This is considered as a very bad practice nowadays. Encryption as a wrapping layer (FTPS) is not common and SFTP (actually a subsystem of SSH) has nothing in common with FTP except for the fact that it may transfer files as well.
+
+Furthermore FTP may be problematic when used in active mode for firewalls. All these problems make FTP not very suitable as transport layer protocol.
+
+Like HTTP a main disadvantage of FTP in terms as a message transport protocol is that this protocol is not symmetrically. This means that a server is always just ``serving requests'' and not sending actively information to peers. This Request-Reply violates criteria (Ct3: Symmetrically built) and makes the protocol not a primary choice for  message transport. The Protocol however satisfies the first two criteria  (Ct1: Widely Adopted and Ct2: Reliable).
+
+\section{TFTP}
+TFTP has despite its naming similarities to FTP very little in common with it. TFTP is a UDP based file transfer protocol without any authentication scheme. This makes it not suitable as transport layer as it would leave messages open to anyone. The protocol is due to the use of UDP in a meshed network with reduntant routes. Since the internet has a lot of these redundant routes this neglects the use of this protocol.
+
+TFTP is rarely ever used in the internet (it is quite commonly used in lans for booting over a network connection). This violates Criteria one (Ct1: Widely Adopted). TFTP is not symmetrically. This means that a server is always just ``serving requests'' and not sending actively information to peers. This Request-Reply violates criteria (Ct3: Symmetrically built) and makes the protocol not a primary choice for  message transport. The Protocol furthermore violates Ct2 (Ct2: Reliable) as it is based on UDP without any additional error correction.
 
 \section{MQTT}
 MQTT is an ISO standard (ISO/IEC PRF 20922:2016) and was formerly called MQ Telemetry Transport. The current standard as the time of writing this document was 3.1.1 \cite{mqtt}. 
@@ -272,6 +292,8 @@ The Multimedia Messaging Service (MMS) is maintained by 3GPP (\nth{3} Generation
 	\begin{tabular}{|l|l|l|l|}\hline
 		\diaghead{\theadfont protocol Criteria}{Protocol}{Criteria} & \thead{Ct1: Widely adopted} 	& \thead{Ct2: Reliable} & \thead{Ct3: Symmetrically built}\\\hline
 		HTTP	 & $\checkmark$			& $\checkmark$		& $\times$\\              
+		FTP		 & $\checkmark$			& $\checkmark$		& $\times$\\
+		TFTP     & $\times$				& $\times$			& $\times$\\
 		MQTT	 & \textasciitilde		& $\checkmark$		& $\times$\\              
 		AMQP	 & \textasciitilde		& $\checkmark$		& $\times$\\
 		CoAP	 & \textasciitilde		& \textasciitilde 	& $\times$\\
@@ -454,13 +476,13 @@ Whenever dealing with hiding data and maintaining integrity of data cryptography
 \subsection{Symmetric Encryption}
 Symmetric encryption in this paper assumes always that
 \begin{eqnarray}
-	D^{K_a}\left(E^{K_a}\left(M\right)\right) & = & M
+	D^{K_a}\left(E^{K_a}\left(\mathbf{M}\right)\right) & = & \mathbf{M}
 \end{eqnarray} 
 
 For a key $K_b\neq K_a$ this means
 \begin{eqnarray}
-	D^{K_a}\left(E^{K_b}\left(M\right)\right) & \neq & M\\
-	D^{K_b}\left(E^{K_a}\left(M\right)\right) & \neq & M
+	D^{K_a}\left(E^{K_b}\left(\mathbf{M}\right)\right) & \neq & \mathbf{M}\\
+	D^{K_b}\left(E^{K_a}\left(\mathbf{M}\right)\right) & \neq & \mathbf{M}
 \end{eqnarray} 
 
 \subsubsection{AES}
@@ -472,22 +494,22 @@ For a key $K_b\neq K_a$ this means
 \subsection{Asymmetric Encryption}
 For all asymmetric encryption algorithm in this paper we may assume that 
 \begin{eqnarray}
-	D^{K^{-1}_a}\left(E^{K^{1}_a}\left(M\right)\right) & = & M\\
-	D^{K^{1}_a}\left(E^{K^{-1}_a}\left(M\right)\right) & = & M
+	D^{K^{-1}_a}\left(E^{K^{1}_a}\left(\mathbf{M}\right)\right) & = & \mathbf{M}\\
+	D^{K^{1}_a}\left(E^{K^{-1}_a}\left(\mathbf{M}\right)\right) & = & \mathbf{M}
 \end{eqnarray} 
 
 It is important that 
 \begin{eqnarray}
-	D^{K^{-1}_a}\left(E^{K^{-1}_a}\left(M\right)\right) & \neq & M\\
-	D^{K^{1}_a}\left(E^{K^{1}_a}\left(M\right)\right) & \neq & M
+	D^{K^{-1}_a}\left(E^{K^{-1}_a}\left(\mathbf{M}\right)\right) & \neq & \mathbf{M}\\
+	D^{K^{1}_a}\left(E^{K^{1}_a}\left(\mathbf{M}\right)\right)   & \neq & \mathbf{M}
 \end{eqnarray} 
 
 And for any other Keypair $K^{p}_a \neq K^{p}_b$
 \begin{eqnarray}
-	D^{K^{-1}_b}\left(E^{K^{1}_a}\left(M\right)\right) & \neq & M\\
-	D^{K^{1}_b}\left(E^{K^{1}_a}\left(M\right)\right) & \neq & M\\
-	D^{K^{-1}_b}\left(E^{K^{-1}_a}\left(M\right)\right) & \neq & M\\
-	D^{K^{1}_b}\left(E^{K^{-1}_a}\left(M\right)\right) & \neq & M
+	D^{K^{-1}_b}\left(E^{K^{1}_a}\left(\mathbf{M}\right)\right)  & \neq & \mathbf{M}\\
+	D^{K^{1}_b}\left(E^{K^{1}_a}\left(\mathbf{M}\right)\right)   & \neq & \mathbf{M}\\
+	D^{K^{-1}_b}\left(E^{K^{-1}_a}\left(\mathbf{M}\right)\right) & \neq & \mathbf{M}\\
+	D^{K^{1}_b}\left(E^{K^{-1}_a}\left(\mathbf{M}\right)\right)  & \neq & \mathbf{M}
 \end{eqnarray} 
 
 \subsubsection{RSA}
@@ -577,9 +599,11 @@ DC networks are based on the work \citetitle{chaum-dc} by \citeauthor{chaum-dc}\
 Several attempts have been made to strengthen the proposal of Chaum\cite{golle:eurocrypt2004}\cite{disco}. But no one succeeded without introducing significant downsides on the privacy side.
 
 \subsubsection{Annonymous Remailer\label{sec:remailer}}
-Remailers have been in use for quite some time. There are serveral classes of remailers and all of them are somehow related to Mixnets. There are ``types'' of remailers defined. Although these ``types'' offer some kind of hierarchy none of the more advanced ``types'' seem to have more than one implementation in the wild. \fxfatal{verify again if this claim is true}
+Remailers have been in use for quite some time. There are serveral classes of remailers and all of them are somehow related to Mixnets. There are ``types'' of remailers defined. Although these ``types'' offer some kind of hierarchy none of the more advanced ``types'' seem to have more than one implementation in the wild. 
 
-Pseudonymous Remailers (also called Nym Servers) take a message and replace all information pointing to the original sender with a pseudonym. This pseudonym may be used as an answer address. The most well known psydonymous remailer possibly was anon.penet.fi run by Johan Helsingius. This service has been forced several times to reveal a pseudonyms true identity before Johan Heösingius decided to shut it down. For a more in depth discussion of Pseudonymous Remailers see \ref{sec:remPsydo}
+\fxfatal{verify again if this claim is true}
+
+Pseudonymous Remailers (also called Nym Servers) take a message and replace all information pointing to the original sender with a pseudonym. This pseudonym may be used as an answer address. The most well known psydonymous remailer possibly was anon.penet.fi run by Johan Helsingius. This service has been forced several times to reveal a pseudonyms true identity before Johan Heösingius decided to shut it down. For a more in depth discussion of Pseudonymous Remailers see \ref{sec:remPseudo}
 
 Cypherpunk remailers forward messages like pseudonymous remailers. Unlike pseudonymous remailers Cypherpunk remailers decrypt a received message and its content is forwarded without adding a pseudonym. A reply to such a message is not possible. They may therefore be regarded as an ``decrypting reflector'' or a ``decrypting mix'' and may be used to build an onion routing network for messages. For a more in depth discussion of Type I Remailers see \ref{sec:remCypherpunk}.
 
@@ -617,11 +641,9 @@ As the example shows this kind of remailer is easily attackable by an authority.
 
 This remailer offers therefore no protection against an adverser defined in our problem.
 
-\subsection{$I^2P$}
-\fxfatal{add content here}
-
 \subsection{Babel}
 Babel was an academic system defined in a paper by \citeauthor{babel} in \citeyear{babel}\cite{babel}.
+
 \fxfatal{add content here}
 
 \subsection{Cypherpunk-Remailer\label{sec:remCypherpunk}}
@@ -635,6 +657,7 @@ Babel was an academic system defined in a paper by \citeauthor{babel} in \citeye
 
 \subsection{Crowds}
 Crowds is an implementation of the crowds protocol.
+
 \fxfatal{add content here}
 
 \subsection{Tarzan}
@@ -659,10 +682,32 @@ Generally the effectiveness of monitoring of single or multiple networks is disp
 
 \fxfatal{add content here; focus more precise on the attacks as they give valuable infromation}
 
+\subsection{$I^2P$}
+The name $I^2P$ is an derived from  ``Invisible Internet Project'' according to \href{https://geti2p.net/}{geti2p.net}. The system itself is comparable to Tor for its capabilities. Mayor differences are:
+\begin{itemize}
+	\item P2P based
+	\item Packet switched routing (tor is ``circuit switched'')
+	\item Different forward and backward routes (called tunnels)
+	\item Works pseudonymously
+	\item Supports TCP and UDP
+\end{itemize}
+
+$I^2P$ has not attracted as much attention as Tor so far. So it is hard tu judge upon its real qualities.
+
+\fxfatal{ add \cite{pets2011-i2p}}
+
+\fxfatal{add content here}
+
+\subsection{Freenet}
+Freenet was originally designed to be a fully distributed data store\cite{freenet}. Exactly as $I^2P$ it is not analysed thoroughly by the scientific world.
+\fxfatal{add content here}
+
 \subsection{Herbivore}
+Herbivore is a network protocol designed by \citeauthor{herbivore:tr} in \cite{herbivore:tr}.
 \fxfatal{add content here}
 
 \subsection{Dissent}
+\cite{Corrigan-Gibbs:2010:DAA:1866307.1866346}
 \fxfatal{add content here}
 
 \subsection{P5}
@@ -672,9 +717,6 @@ Generally the effectiveness of monitoring of single or multiple networks is disp
 \fxfatal{add content here}
 
 \subsection{Gnutella2}
-\fxfatal{add content here}
-
-\subsection{Freenet}
 \fxfatal{add content here}
 
 \subsection{Darknet}
@@ -742,7 +784,7 @@ Mail User Agents (MUA) are the terminal endpoint of a mail delivery. Mail user a
 Server located clients are a special breed of fat clients. These clients share the properties of fat clients except for the fact that they do not connect to the server. The client application itself has to be run on the server where the mail storage persists. This makes delivery and communication with the server different. Instead of interfacing with a MSA and a client MDA they may directly access the local mail storage on the server. On these systems the local mail storage may be implemented as a database in a user specific directory structure.
 
 \subsubsection{Fat clients}
-The majority of mail clients are fat clients. These clients score over the more centralistic organized web clients in the way that they may offer mail availability even if an internet connection is not available (thru a client specific local mail storage). They furthermore provide the possibility to collect mails from multiple sources and store them in the local storage. Unlike Mail servers, clients are assumed to be not always online. In fact they may be offline most of the time. To guarantee the availability of a certain email address a responsible mail server for a specific address collects all mails (this is done by the \defref{MSS}) and provides a consolidated view onto the database when a client connects thru a local or remote MDA.\par
+The majority of mail clients are fat clients. These clients score over the more centralistic organized web clients in the way that they may offer mail availability even if an internet connection is not available (through a client specific local mail storage). They furthermore provide the possibility to collect mails from multiple sources and store them in the local storage. Unlike Mail servers, clients are assumed to be not always online. In fact they may be offline most of the time. To guarantee the availability of a certain email address a responsible mail server for a specific address collects all mails (this is done by the \defref{MSS}) and provides a consolidated view onto the database when a client connects through a local or remote MDA.\par
 
 As these clients vary strongly it is absolutely mandatory for the MDA that they are well specified. Lack in doing so would result in heavy interoperability problems. Most commonly the Protocols \defref{IMAP}, \defref{POP} and \defref{EWS} are being used these days. For mail delivery the SMTP protocol is used. \par
 
@@ -769,13 +811,127 @@ As the mail travels directly from sender to recipient both involved parties are 
 The trust model is based on a centralistic approach involving generally trusted root certification authorities.
 
 \subsection{PGP/MIME}
-Exactly as S/MIME PGP\cite{RFC2440} builds upon the base of S/MIME. Although the trust model in PGP is peer based. The encryption technology doesnot significantly differ (as seen from the security model).
+Exactly as S/MIME PGP\cite{RFC2440} builds upon the base of MIME. Although the trust model in PGP is peer based. The encryption technology does not significantly differ (as seen from the security model).
 
 A good thing to learn from PGP is that there are peer based approaches offering limited possibilities for trust. The trust in PGP is based on the peer review of users. This peer review may give an idea of how well verified the key of a user is.
 
 \fxfatal{add content here}
 
 \subsection{XMMP}
+\fxfatal{add content here}
+
+\section{Proof of work}
+Proof of work is one possibility to limit resource exhaustion on locally controlled resources. Traditional proofs are either CPU- or memory-bound. This means that they have to proof that they assigned a certain amount of their own CPU time or memory bandwidth to a problem posed by the receiving node.
+
+In \cite{amiri2015theoretical} is a good summary of proposed proof of work methods. Although they are used there for the defence of DDoS-attacks (Distributed Denial of Service) they might as well be used for defence against misuse for UBE and (D)DoS of the Vortex system. The list has been shortened with irrelevant algorithms for this work and extended with newer research in that field.
+
+In our case we are looking for a proof which imposes ideally the same amount of work to an attacker and a valid sender. Since an attacker need a lot more resources than a normal sender the amount of work should be for him unbearable. A normal sender on the other hand should be able to cover the load imposed by the system easily.
+
+\subsection{CPU-Bound Proof of work}
+CPU bound proof of work tries to assign a task to a request. By presenting a result the sender proofs that he solved a puzzle. Normally these puzzles may only be solved by brute force.
+
+\subsubsection{Hash based puzzle by Juels and Brainard} 
+The hash puzzle by \citeauthor{juels1999client} in \cite{juels1999client} works as follows: 
+\begin{itemize}
+	\item The requester requests an operation.
+	\item The service provider sends a block of data back with a known number of missing bits at the end and a cryptographic hash of the original block (including the missing bits)
+	\item The requester then brute forces the missing bits until he finds the correct bit sequence to complete the hash puzzle and sends it to the service provider.
+\end{itemize}
+
+This puzzle has several downsides. One of the biggest downsides is that the puzzle may be solved by using multiple instances in parallel. This allows a specialised adverser to build an efficient infrastructure for solving this kind of puzzle.
+
+\subsubsection{Hash based puzzle by Aura, Nikander and Leiwo} 
+The hash based puzzle by \citeauthor{aura2000resistant} in \cite{aura2000resistant} is an improved variant of \cite{juels1999client}. It works as follows:
+
+\begin{itemize}
+	\item The requester requests an operation.
+	\item The service provider sends a nonce block $N_{sp}$ to the requester and a number $k$ (this number represents the difficulty).
+	\item The requester chooses a nonce $N_{r}$.
+	\item The requester brute forces  $puzzlesolution$ by solving $hash(identity_r, N_{sp}, N_{r}, puzzlesolution)=hashValueStartingWithKBitsOfZeroes$.
+	\item The requester sends $N_r$ and $X$ it to the service provider.
+\end{itemize}
+
+The downsides of this puzzles are that it may be calculated in parallel. This allows a specialised adverser to build an efficient infrastructure for solving this kind of puzzle. Furthermore the client side nonce $N_r$ must be stored as long as the server side nonce $N_{sp}$ is not regenerated in order to avoid replay attacks.
+
+\subsubsection{Modified Repeated Squaring Puzzle} 
+\citeauthor{jeckmans2009practical} proposed in \cite{jeckmans2009practical} a Squaring hash puzzle. The algorithm is described as follows:
+
+\begin{itemize}
+	\item $Setup(\ell)$: the sever generates a new public parameter $sp$ with length $\ell$ bits using a (pseudo)random number generator. It then selects two random large primes $p$, $q$ and creates $n = p \times q$ out of this. The server also selects a difficulty for the puzzles, $k$. The algorithm then outputs $mk = 2^k  \mod \phi(n)$ and $params = {k, sp, n}$.
+	\item $PuzzleGen(mk, req)$: $puz = \emptyset$ and $info = \emptyset$.	
+	\item $PuzzleSol(puz)$: $g = h(sp, id_C )$, $sol = g^{2^k} \mod n$.
+	\item $PuzzleVer(info, mk, sol)$: this algorithm computes the generator, $g = h( sp, id_C )$. The solution is then verified $sol =? g^{2^k \mod \phi(n) mod n}$.
+	\item $BatchVer(info, mk, sol_i (1 \leq i \leq m))$: assume that the server has stored $m$ solutions to check, $sol_i$, 
+	$1 \leq i \leq m$. Compute the corresponding generators $g_i = h(sp, id_{C_i} )$, $1 \leq i \leq m$.  These solutions are then verified with batch verification using Equation $(\prod_{i=1}^{m}g_i)^{2^k} \mod n =? \prod_{i=1}^{m} sol_i \mod n$.
+\end{itemize}
+
+This puzzle is a typical CPU bound puzzle compensating a lot of the drawbacks of \cite{aura2000resistant} and \cite{juels1999client} mentioned in the sections before. First it offers a potential verification in batches under the assumption that all solutions within the batch are correct. Secondly it is non-parallelizable. There is very little information to be stored on the server side and non of the information has a lifetime which is longer than the puzzle.
+
+
+\subsubsection{Hinted Hash Puzzle} 
+In \cite{1498523} the authors \citeauthor{1498523} proposed a protocol and is closely related to \cite{aura2000resistant}. The protocol itself is working as follows:
+
+\begin{itemize}
+	\item The requester requests an operation and includes a nonce $N_c$.
+	\item The service provider sends a chosen puzzle $P$ and the hash answer $h(A,N_s)$ to the requester.
+	\item The requester brute forces $A$.
+	\item The requester sends $A$ to the service provider.
+\end{itemize}
+
+In the original protocols hashes and nonces are resent in order to verify if the requests do still match the originally sent data. As they have no impacts on the mathematical side of the operation they have been eliminated in this description.
+
+From today's view this protocol is however not very secure. Solutions may be searched in parallel and the protocol is susceptible to replay attacks as found result $A$ is replayed over the course of time to re-authenticate 
+
+\subsubsection{Chained Hash Puzzle} 
+\cite{groza2006} (CPU Bound)
+
+\fxfatal{add content here}
+
+\subsubsection{Targeted Hash Puzzle} 
+
+\cite{4301429} (CPU Bound)
+
+\fxfatal{add content here}
+
+\subsubsection{Repeated Squaring Puzzle} 
+
+\cite{rivest1996time} (CPU Bound)
+
+\fxfatal{add content here}
+
+\subsubsection{Discrete Logarithm Puzzle} 
+
+\cite{waters2004new} (CPU bound)
+
+\fxfatal{add content here}
+
+\subsubsection{Subset sum puzzle} 
+
+\cite{tritilanunt2007toward} (CPU bound)
+
+\fxfatal{add content here}
+
+\subsection{Memory-Bound Proof of work}
+\subsubsection{Moderately hard, memory-bound functions} 
+
+\cite{abadi2005moderately} (Memory hard)
+
+\fxfatal{add content here}
+
+\subsubsection{Memory bound puzzle based on pattern databases} 
+
+\cite{doshi2006efficient} (Memory hard)
+
+\fxfatal{add content here}
+
+\subsection{Summary for Proof of Work Algorithms}
+\fxfatal{to check: Groza 2016 Cryptanalysis of an authentication protocol}
+
+\fxfatal{add Revisiting Difficulty Notions for Client Puzzles and DoS Resilience}
+
+\fxfatal{add Toward Non-parallelizable Client Puzzles (http://link.springer.com/chapter/10.1007/978-3-540-76969-9_16) ordered in nebis}
+
+\fxfatal{add table from \cite{amiri2015theoretical} here and extend with additional puzzles}
 \fxfatal{add content here}
 
 \section{Known Attacks}
@@ -804,10 +960,14 @@ All attacks targeting users anonymity is a main focus of this work. Many informa
       An attack does always impose a load onto a systems resources regardless of its success. It is important that a system recovers almost immediately from an attack and is not covered in a non or only partial functional state either temporarily or permanently.
 \end{itemize}
 
-In the following subsections we list a couple of attack classes whiih have been used against systems listed in \ref{sec:sysImpl} or the respective academic works. We list the counter measures which have been taken to defelct these attacks.
-\fxfatal{fill list}
+In the following subsections we list a couple of attack classes which have been used against systems listed in \ref{sec:sysImpl} or the respective academic works. We list the counter measures which have been taken to deflect these attacks.
 
 \subsubsection{Probing Attacks}
+Identifying a node by probingand check their reaction is commonly done when fingerprinting a service. As a node is participating in a network and relaying messages probing may not be evaded. However, it may be made costly for an adverser to do systematic probing. This should be taken into account. 
+
+One strategy to avoid would be to put high costs onto clear text requests in such a way that a clear text request may have a long reply time (e.g. up to one day). An early retry of the same identity would lead to automatic blacklisting. This is however an insufficient strategy as a huge adverser may have lots identities in stock. Requesting a particularly long key as an plain text identity does not make sense either as these as well may be kept in stock. We may however force a plaintext request to have a hash following certain rules. We may for example put in a requirement that the first four bytes of the hash of a header block translates to the first four characters of the receiving address
+
+
 \fxfatal{add content here; Reduce attactiveness of cleartext probing attacks by discard 80\% of messages and blacklist on early retry}
 
 \subsubsection{Hotspot Attacks}
@@ -826,10 +986,25 @@ In the following subsections we list a couple of attack classes whiih have been 
 \fxfatal{add content here}
 
 \subsubsection{Bugging Attacks}
-\fxfatal{Bugging thru certificate/identity lookup}
-\fxfatal{Bugging thru CRL lookup}
-\fxfatal{Bugging thru DNS traffic}
-\fxfatal{Bugging thru message content}
+Numerous attacks are available through bugging of a protocol. In this chapter we outline some of the possibilities and how they may be countered:
+
+\paragraph{Bugging through certificate or identity lookup:} Almost all kind of proof of identities, such as certificates, offer some kind of revocation facility. While this is a perfect desirable property of these infrastructures they offer a flaw. Since the location of this revocation information is typically embedded in the proof of identity an evil attacker might use a falsified proof of identity with a recording revocation point.
+	      
+There are multiple possibilities to counter such an attack. The easiest one is to do no verification at all. This is however not desirable from the security point of view. 
+
+Another possibility is to only verify trusted proof of identities. By doing so the only attacker could be someone having access to a trusted source of proof of identities. 
+
+A third possibility is to relay the request to an other host either by using an anonymity structure such as Tor or by using its own infrastructure. Using Tor would violate the ``Zero Trust'' principle we are aiming for. Furthermore this measure would only conceal the source of the verification. It would not hide the fact that the message is being processed. 
+
+A fourth and most promising technology would be to force the sender of the certificate to include a ``proof of non revocation''. This could be a timestamped and signed partial \defref{CRL}. Such a mandatory proof of non-revocation would allow a node to verify the validity of a certificate without being forced to disclose itself by doing a verification. On the downside has to be mentioned that including a proof of non-revocation involves the requirement to accept a certain amount of caching time to be accepted. This allowed caching time reduces the value of the proof as it may be expired in the mean time. It is recommended to keep the maximum cache time as low as 1d in order to avoid that revoked certificates may be used. 
+
+\paragraph{Bugging through DNS traffic:} A widely common protocol in the internet is DNS. Almost all network related programs use it without thinking. Normally is the usage of such a protocol not a minor issue since the resolution of a lookup usually done by an ISP. In the case of a small ISP this might however already become a problem.
+
+The bugging in general attack works as follows: We include a unique DNS name to be resolved by a recipient. This can be done most easily by including an external resource such as an image. A recipient will process this resource and might therefore deliver information about the frequency of reading, or the type of client. 
+
+It must be taken into account that the transport layer will always do DNS lookups and that we may not avoid this attack completely. We may however minimise the possibilities of this attack.
+
+\paragraph{Bugging through external resources:} An easy attack is always to include external resources into a message and wait until they are fetched. In order to avoid this kind of attack plain text or other self contained formats should be used when sending a message. As we may not govern the type of contained message we can make at least recomendations concering its structure
 
 \subsection{Denial of Service Attacks}
 \subsubsection{Censorship}
@@ -873,27 +1048,28 @@ Starting off from the previous research we identified several hotspots which hav
 \fxfatal{add content here}
 
 \subsection{Zero Trust Philosophy}
-One main disadvantage of almost any system listed in section \ref{sec:sysImpl} is that a rust (unlimited or limited) has been put into the infrastructure. In example when using Tor you need to trust the directory servers. Control over the directory servers might give an attacker the possibility to redirect a connection to controlled entry and exit nodes which would then break anonymity. In general control of entry and exit nodes makes a system vulnerable. 
+One main disadvantage of almost any system listed in section \ref{sec:sysImpl} is that a trust (unlimited or limited) has been put into the infrastructure. In example when using Tor you need to trust the directory servers. Control over the directory servers might give an attacker the possibility to redirect a connection to controlled entry and exit nodes which would then break anonymity. In general control of entry and exit nodes makes a system vulnerable. 
 
-To avoid this problem we decided to apply a zero trust model. We do not trust any platform except for the sending and receiving computer. We assume that all other devices are compromised and do create detailed logs about what they are doing. We furthermore assume that traffic on the network layer is observed and recorded at any time. This Philosophy creates very hard to meet goals. But by assuming so we prevent the system from leaking information through side channels.
-\fxfatal{add content here}
+To avoid this problem we decided to apply a zero trust model. We do not trust any platform except for the sending and receiving computer. We assume that all other devices are compromised and do create detailed logs about what they are doing. We furthermore assume that traffic on the network layer is observed and recorded at any time. This philosophy creates very hard to meet goals. But by assuming so we prevent the system from leaking information through side channels.
+
+\begin{requirement}{zeroTrust}{Zero Trust}
+	No infrastructure should be trusted unless it is the senders or the recipients infrastructure.
+\end{requirement}	
 
 \subsection{Information leakage}
 Information of messages or their meta data should not be leaked. This means that in a normal message flow any hop should be a valid sender, a valid recipient, or a valid mix this implies some kind of peer-to-peer (\defref{P2P}) design. 
-
-The message should be untaggable (neither by a sender, or by an intermediate party such as a mixer) and unbuggable. 
-
-In order to make a message untraceable it should be able to increase and shrink in size or all messages must have uniform size. Decoy traffic should not be distinguishable from true message traffic. 
-\fxfatal{add content here}
 
 \subsubsection{P2P design}
 A main problem of the \defref{P2P} design is that usually port forwarding or a central infrastructure is required. Technologies such as ``\defref{hole punching}'' and ``\defref{hairpin translation}'' usually require central infrastructures to support at least the connection and may be depending on the client infrastructure being used fragile or ineffective. To avoid these problems we decided to rely on traditional centralistic transport infrastructures. As the proof of concept we decided to use SMTP. 
 
 The approach supports however even mixing transport media. This makes it harder for an attacker to trace a message as the message flow may go through any suitable transport protocol at any time of message transfer.
-\fxfatal{add content here}
+
+\begin{requirement}{P2P}{P2P}
+	Mixes and peers must be undistinguishable.
+\end{requirement}
 
 \subsubsection{Decoy traffic generation}
-In order to create decoy traffic in an untrusted way we need means to increase an decrease messages in size without knowledge of the routing node. An easy approach would be to create decoy traffic in the initial message. This would however create a pattern of decreasing message size in the net. To avoid this we introduced a set of operations to be applied to the original message. The operations are done in such a way that a mixer is unable to tell wether the message size or decrease results in decoy traffic generation/removal or not.
+In order to create decoy traffic in an untrusted way we need means to increase an decrease messages in size without knowledge of the routing node. An easy approach would be to create decoy traffic in the initial message. This would however create a pattern of decreasing message size in the net. To avoid this we introduced a set of operations to be applied to the original message. The operations are done in such a way that a mixer is unable to tell whether the message size or decrease results in decoy traffic generation/removal or not.
 
 The main message operations are:
 \begin{itemize}
@@ -912,20 +1088,46 @@ In our approach we give a single mix the full control over the message hiding/bl
 
 The reason for not giving control over the behaviour to this layer to the sender of the message is simple. By giving him control over it we would allow him to use the information provided here as the main medium. As an immediate result the system would suitable to blackmail any user of the world. It furthermore would create unintentional ``exit nodes'' to the system which might oppose further legal threads for participants.
 
+\begin{requirement}{untagable}{untagable}
+	The message should be untagable (neither by a sender, or by an intermediate party such as a mixer).
+\end{requirement}
+
+\begin{requirement}{unbugable}{unbugable}
+	The message should be unbugable (neither by a sender, or by an intermediate party such as a mixer).
+\end{requirement}
+
 \subsubsection{Message replay protection}
 Message reply protection is crucial for such a system. With the ability to replay a message an adverser may ``highlight'' a message flow as it would always generate the same traffic pattern. So there needs to be a reply pattern protecting the protocol from message replay. As we do have MURBs in our protocol this is a problem. A MURB is by design replayable. We therefore need a possibility for the original sender using a MURB to make messages distinguishable which may not be used by an adverser.
 
+\begin{requirement}{untraceable}{untraceable}
+	A message must be untraceable. 
+\end{requirement}
+
+It should be able to increase and shrink in size or all messages must have uniform size. Decoy traffic should not be distinguishable from true message traffic. 
+
 \subsubsection{No Dedicated Infrastructure Philosophy}
-There should be no infrastructure dedicated for the operation of the solution. This avoids single point of failures as well as the possibility for an adverser to shut down this infrastructure to disrupt the operation of the system as a whole.
+There should be no infrastructure dedicated for the operation of the solution. This avoids single point of failures as well as the possibility for an adverser to shut down this infrastructure to disrupt the operation of the system as a whole. This requirement is already covered implicitely in \ref{req:zeroTrust}.
 
 \subsection{Accounting}
-\fxfatal{add content here}
+The infrastructure must not be misused as UBE sending infrastructure. This implies that sending messages is connected to some kind of ``cost''. ``Costs'' must be connected to some kind of identity to allow accounting. Linking to a a global identity would allow to assign traffic to a real world user. Therefore the protocol must allow to create ephemeral local identities not linked to a real identity.
+
+\begin{requirement}{accounting}{accounting}
+	The system must be able to do accounting without being linked to a real identity.
+\end{requirement}
 
 \subsection{Anonymisation}
-\fxfatal{add content here}
+The system must allow to anonymise message source and message destination at any point. It should not be visible to the infrastructure protocol whether a message has reached its destination or not. 
+
+\begin{requirement}{anon}{anonymisation}
+	System must be able to anonymise sender and recipient at any point of the transport layer and at any point of mixing unless it is the sender or the recipient itself.
+\end{requirement}
 
 \subsection{Initial Bootstraping}
-\fxfatal{add content here}
+The system must allow to boot strap from a zero knowledge or near zero knowledge point. Starting off from this point the protocol must be able to extend the network on its own.
+
+\begin{requirement}{boot}{bootstrapping}
+	The system must allow to boot strap from a zero knowledge or near zero knowledge point and extend the network on its own. 
+\end{requirement}
 
 \subsection{Cypher selection}
 In This Protocol a lot of encryption and hashing algorithms have to be used. This Choice should be explained. 
@@ -978,38 +1180,131 @@ Within the implementation we assigned algorithms to a security strength level:
 \end{itemize}
 This allows to categorize the used algorithms to a strength. This list however should only serve the purpose of selecting algorithms for people without cryptological know how.
 
-\fxfatal{add content here; Fix content (copied from first version)}
+\begin{requirement}{cryptVar}{encryption variety}
+	The system must be able to use multiple symmetric, asymmetric, and hashing algorithms. 
+\end{requirement}
+
+\fxfatal{Fix content (copied from first version)}
 
 \subsection{Usability}
-\fxfatal{add content here}
+The system must be usable without cryptographic know-how and with well known tools. This is necessary to accept the system broadly and makes it easy to use for peoples already communicating.
 
-\section{Protocol Specification}
-The protocol itself is independently from the transport layer specified. 
-\fxfatal{add content here from old part and update}
+\begin{requirement}{easy}{easy handleable}
+	The system must be usable without cryptographic know-how and with well known tools.
+\end{requirement}
 
-\subsection{MURBs}
-\fxfatal{Limit at 127 uses per murb}
+\section{Protocol outline}
+The protocol itself is independently from the transport layer specified. We emphasize in this section to the general building blocks, the cryptographic structure, and the general protocol attributes. In Section \ref{sec:protoImpl} we will then further elaborate the protocols inner structure.
 
-\section{Protocol implementation}
+The protocol is built on multiple layers. On the logic side the protocol is split into two parts:
+\begin{enumerate}
+	\item Transport Layer\\
+	      This Layer is provided by normal internet infrastructures. The main goal is to hide or blend our protocol into ordinary traffic within that layer.
+	\item Blending and subsequent layers\\
+	      These layers may be provided by any user of the internet. Since these layers may be mixes only or valid endpoints they may or may not be publicly known. In a first implementation we build this system as a normal Java application. The main goal is to compile afterwards either native code and run it on a SoC like infrastructure such as a RaspberryPi or port it to an android device.
+	      
+	      We may further split these layers into
+	      \begin{enumerate}
+	      	\item Blending layer\\
+	      	      This layer takes messages and creates transport layer conformant messages. In an ideal case the messages generated by this layer are undistinguishable from the normal message traffic and the embedded message is only visible for the receiving node.
+	      	\item Routing layer\\
+	      	      The routing layer disassembles and reassembles messages. This operation guarantees that messages are generated in such a way that decoy traffic is not differentiable from non decoy traffic.
+	      	\item Accounting layer\\
+	      	      The accounting layer has three jobs. First he has to authorise the message processing after decrypting the header block. Secondly he handles all header request blocks and the reply blocks. And third, it keeps track of the accounting in regard to the sent messages.    
+	      \end{enumerate}
+\end{enumerate}
+
+\subsection{Transport Layer}
+For our test we used a custom transport layer allowing us to monitor all traffic easily, and build structures in a very flexible way. This can be done with a minimum amount of work for setup  and deployment. It furthermore works across multiple hosts in a broadcast domain. The API may be used to support almost any kind of transport layer.
+
+We identified in the previous section the following protocols as suitable for transport:
+\begin{itemize}
+	\item SMTP
+	\item XMPP
+\end{itemize}
+
+For a prototype we will implement a SMTP-Transport agent.
+
+\subsection{Blending Layer}
+The blending layer is taking care of multiple problems:
+\begin{itemize}
+	\item It is translating the message block into a suitable format for transport\\
+	      This includes jobs such as embedding a block as encoded text, as a binary attachment, or hide it within am message using steganography.
+	\item Extract incomming blocks\\
+	      Identify incomming messages containing a possible block and extract it from the message.
+	\item Do housekeeping on the storage layer of the transport protocol\\
+	      It may be required that messages are deleted from time to time in order to stay below sizing quotas of an account.      
+\end{itemize}
+
+We define the blending layer to work as follows when receiving messages:
+
+\begin{enumerate}
+	\item Log arrival time (in UTC) on the transport layer.
+	\item Extract possible blocks.
+	\item Apply decryption on a suspected header block .
+	\item Identify header block as valid by querying the accounting.
+	\item Extract and decrypt subsequent blocks.
+	\item Pass extracted blocks and information to the routing layer.
+\end{enumerate}
+
+We define the blending layer to work as follows for sending messages:
+
+\begin{enumerate}
+	\item Assemble message as passed on by the routing layer.
+	\item Using the blending method specified in the routing block build an empty message. 
+	\item Create a message decoy content.
+	\item Send the Message to the appropriate recipient using the transport layer protocol.
+\end{enumerate}
+
+There is no specification on the housekeeping part of the blending layer as this part is specific to the requirements of the account owner. We do however recommend to handle messages exactly as if the messages would be handled on a account handled by a human. 
+
+\subsection{Routing Layer}
+The routing layer receives the message blocks in a decrypted and authorised form from the blending layer. and processes them as follows:
+
+\begin{itemize}
+	\item Build structure representing the block building and the appropriate block IDs.
+	\item Schedule all Routing blocks for processing in an priority queue.
+	\item Authorise all routing blocks ready for processing with the calculated block sizes.
+	\item Process blocks.
+	\item Send prepared building blocks to the Blending layer.
+\end{itemize}
+
+\subsubsection{Block Structure}
+The main block structure is defined as a sequence of blocks.
+
+The block sequence starts with a header containing a symmetric key encrypted with public key of the current node and a header block containing the immediate details to decrypt the subsequent blocks (if any).
+
+The header block is followed by a routing block. This block contains information required for subsequent routing. According to this block currently valid data blocks may be assembled and sent to a different location. 
+
+The next block is the routing log block. This block protocols the routing information of a message and is somewhat similar to an onionized variant of the received headers in SMTP.
+
+The final sequence of blocks are data blocks. They contain the actual data or decoy traffic.
+
+\subsubsection{MURBs}
+The protocol allows to use MURBs. This enables a user to send a limited amount of times a message to an anonymous receiver without having any knowledge about its name or the location or infrastructure he is using.
+
+A MURB in our term is a completely prepared routing instruction built by the recipient of a message. The sender has only the routing blocks and the instructions to assemble the initial message. It has no knowledge about the message path except for the first message hops.
+
+As a MURB is a routing block it generates the same pattern on the network each time it is used. In order to avoid statistical visibility we need to limit the number of uses per MURB. As a maximum number of usages the number 127 has been chosen. This number allows to be used for automated messages. A minute pattern would disappear latest after 2 hours and an hourly pattern after 5 days.
+
+\section{Protocol design}
 In this section we emphasize on the protocol blocks. These blocks are extracted from the blending layer and passed to the routing layer. 
-\fxfatal{add content here; add general message outline}
 
 \subsection{Header block}
 The header block contains the identity and should contain all information required to decide whether subsequent blocks of the message should be handled.
-\lstinputlisting[language=ASN1, caption={Header Block}, backgroundcolor=\color{gray!10},linerange={29-71},firstnumber=29]{../app/asn.1/messageBlocks.asn} 
 
 The header block contains the following data:
 \begin{itemize}
 	\item A symmetric header key (header key)\\
-	      This key is encrypted with the receiving identities public key.
+	      This key is encrypted with the receiving identities public key. This key guarantees an efficient handling of the header data. As the number of bytes in the header is limited a receiving node may assign all subsequent work to a known identity or discard it.
 	\item An identity block (identityBlock)\\
 		  This block contains a number of data which reflects the identity of the sender and the use of this (and subsequent blocks).
 		  \begin{itemize}
 		  	\item sending ephemeral identity public key (identityKey)
 		  	\item serial
 		  	\item maximum number of replays for the serial for this identity
-		  	\item validity period for this block (UTC)
-		  	\item Symmetric decryption key for subsequent routing blocks
+		  	\item validity period for this block (in seconds)
+		  	\item Symmetric decryption key for subsequent blocks
 		  	\item Chain secret for the forwarding block\\
 		  	      If specified the specified secret should be named in all subsequent blocks.
 		  	\item Protocol requests to this node
@@ -1018,29 +1313,68 @@ The header block contains the following data:
 	\item An identity signature (identitySignature)\\
 	      Contains a signed hash (hash type is specified in identityBlock.hash) with the senders private key.
 \end{itemize}
-\fxfatal{add content here}
 
 \subsubsection{Ephemeral Identity}
 The identity in this header block is an ephemeral identity. It exists for a limited amount of time (recommended <90d). Creating a new ephemeral identity is done with an identity request. This identity is mapped to all accounting figures.
 
 \subsubsection{Requests}
+Requests are always embedded in a header block. All requests are answered with a provided MURB (which is recommended to have a maximum replay value of 1).
 
+There are several header requests defined:
+
+\paragraph{newIdentity request:} This request may be answered with either a reject or a puzzle which is required to solve. Solving the puzzle results in the creation of the identity on the node. Identities may be rejected by the node for various reasons:
+
+\begin{itemize}
+	\item The node is not accepting newIdentity requests
+	\item The identity is already taken.
+	\item The identity is not strong enough (should be a longer key).
+	\item The used encryption scheme is not supported by the node.
+\end{itemize}
+
+If an identity is rejected the request may not be replayed by the same identity again. A sending party must generate a new identity for a new request. 
+
+This request should be by far the most expensive request. It must at any time be more expensive to request a new identity compared to raise the quota of an existing one.
+
+\paragraph{queryPeer request:} 
+
+\fxfatal{add content}
+
+\paragraph{queryCapabillity request:} This request is the only request answered as a clear text request. To minimize probing this request should be only answered if the node owner agrees. The reply contains the following information:
+\begin{itemize}
+	\item Vortex identities (not encoded)
+	\item Supported Vortex transports (may be omitted if already represented in identities).
+	\item Maximum quotas.
+	\item Minimum identity sizes.
+\end{itemize}
 \fxfatal{add content here}
 
-\subsubsection{Proof of work}
+\paragraph{messageQuota request:} This request raises the number of routing blocks which may be processed for an identity. A node may reject this request depending on the load of the node, personal preferences, or because this identity causes too much traffic.
+
+It is normally answered for all valid identities only. The node may answer it for recently expired identities. It is however not recommended to send a reply to an unknown identity as this behaviour might be used for probing of a node.
+
+\paragraph{transferQuota request:} This request raises the number of bytes which may be transferred for an identity. A node may reject this request depending on the load of the node, personal preferences, or because this identity causes too much traffic.
+
+It is normally answered for all valid identities only. The node may answer it for recently expired identities. It is however not recommended to send a reply to an unknown identity as this behaviour might be used for probing of a node.
+
+\paragraph{queryQuota request:} This request instructs the node to send information about the given identity.
+
+It is normally answered for all valid identities only. The node may answer it for recently expired identities. It is however not recommended to send a reply to an unknown identity as this behaviour might be used for probing of a node.
+
+\subsection{Request Replies}
+Message replies are encoded as an ASN.1 message in a data block. Unlike normal data blocks these messages are not accounted in quotas. It is however up to the node to decide whether it wants to answer a request or not.
 \fxfatal{add content here}
 
 \subsubsection{Clear Text Requests}
 It is up to the decision of the node whether it wants to answer a clear text request or not. Recommended for this behaviour is to discard plain text requests. In order to make the public key of the receiving entity available it is recommended to publish key on a PGP key server.
 
-\fxfatal{PGP only works with RSA ... what about ECC keys} 
+\fxfatal{PGP only works with RSA ... what about ECC keys. Rethink this!} 
 
 This should only be a problem when bootstrapping or when adding new identities to the own address book. 
 
 \fxfatal{add content here; how to handle key clashes (multiple valid keys); Should have a book on how do I invite friends}
 
 \subsubsection{Requests}
-\fxfatal{new identities already existing on that node for incomming requests should be rerequested with a probability of 75\%}
+\fxfatal{New identities already existing on that node for incomming requests should be rerequested with a probability of 75\%}
 
 \subsubsection{Replys}
 \fxfatal{add content here}
@@ -1058,6 +1392,9 @@ This should only be a problem when bootstrapping or when adding new identities t
 \fxfatal{add content here}
 
 \subsubsection{payload Block}
+\fxfatal{add content here}
+
+\subsection{Accounting}
 \fxfatal{add content here}
 
 \section{Protocol handling}

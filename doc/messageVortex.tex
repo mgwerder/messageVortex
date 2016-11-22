@@ -142,7 +142,7 @@
 
 \hypersetup{pdfinfo={
 Subject={Privacy when using common internet transport protocols},
-Keywords={Email; SMTP; MIME; S/MIME; POP3; IMAPv4; MailVortex; Anonymity}
+Keywords={Email; SMTP; MIME; S/MIME; POP3; IMAPv4; Message Vortex; Anonymity}
 }}
 
 \lstset{ %
@@ -180,6 +180,75 @@ Keywords={Email; SMTP; MIME; S/MIME; POP3; IMAPv4; MailVortex; Anonymity}
 %	xleftmargin=0.1\linewidth
 }
 
+%% This package will make dealing with the ``requirements'' environment a lot easier:
+\usepackage{environ}
+\newcounter{requirements}\setcounter{requirements}{0}
+\makeatletter
+%% This is a macro that gets called by the .aux file to load in data.
+\gdef\savedreq#1#2{\expandafter\gdef\csname req#1\endcsname{#2}}
+%% This macro will save the given requirement to the .aux file so we will have it during the next LaTeX pass to put in the list:
+\def\recordrequirement#1{\immediate\write\@mainaux{\string\savedreq{\the\value{requirements}}{#1}}}
+\AtEndDocument{
+	\refstepcounter{requirements}
+	\immediate\write\@mainaux{\string\xdef\string\totalreqsplusone{\the\value{requirements}}}
+}
+\NewEnviron{requirement}[2]{
+	\noindent
+	\begingroup
+	%% Increment the requirement counter
+	\refstepcounter{requirements}
+	%% Here is the ``Req.'' text:
+	%\textbf{RQ\arabic{requirements} (#2)}:
+	%% Make a label that we can use to refer to this counter:
+	\label{req:\arabic{requirements}}
+	\protected@write \@auxout {}{\string \newlabel {req:#1}{{RQ\arabic{requirements} (#2)}{\thepage}{RQ\arabic{requirements} (#2)}{req:#1}{}} }\recordrequirement{\BODY}
+	
+	%% Next, save this requirement to the .aux file so we will have it during the next LaTeX pass to put in the list:
+	%% We will make the remainder italic:
+	\textbf{RQ\arabic{requirements} (#2):} \it
+	\BODY\hypertarget{req:#1}{}
+	\endgroup
+}
+\newcommand{\listofrequirements}{
+	\chapter*{List of Requirements}
+	%% First, we need to make sure that this is not the first LaTeX pass (i.e., that all of the information has already been recorded to the .aux file):
+	\expandafter\ifx\csname totalreqsplusone\endcsname\relax
+	Please run \LaTeX\ again to populate this list!
+	\else
+	\begingroup
+	%% This \reqi counter is what we are going to use to iterate over the requirements:
+	\newcount\reqi
+	\reqi=0
+	\loop
+	\advance\reqi by 1
+	\ifnum\reqi<\totalreqsplusone
+	%% The requirement numbered \reqi exists!
+	\noindent\textbf{RQ\the\reqi} \csname req\the\reqi\endcsname\leaders\hbox to 2em{\dotfill}\hfill\pageref{req:\the\reqi}\\
+	\repeat
+	\endgroup
+	\fi
+}
+\newcommand{\slistofrequirements}{
+	%% First, we need to make sure that this is not the first LaTeX pass (i.e., that all of the information has already been recorded to the .aux file):
+	\expandafter\ifx\csname totalreqsplusone\endcsname\relax
+	Please run \LaTeX\ again to populate this list!
+	\else
+	\begingroup
+	%% This \reqi counter is what we are going to use to iterate over the requirements:
+	\newline
+	\newcount\reqi
+	\reqi=0
+	\loop
+	\advance\reqi by 1
+	\ifnum\reqi<\totalreqsplusone
+	%% The requirement numbered \reqi exists!
+	\indent\textbf{RQ\the\reqi} \csname req\the\reqi\endcsname\\*[5pt]
+	\repeat
+	\endgroup
+	\fi
+}
+\makeatother
+
 \captionsetup[lstlisting]{position=bottom}
 \captionsetup[lstinputlisting]{position=bottom}
 
@@ -211,10 +280,12 @@ I would like to acknowledge the thousands of individuals who have coded for the 
 
 \cleardoublepage
 \makeatletter\renewcommand{\l@subsubsection}{\@dottedtocline{3}{7.4em}{4.5em}}\makeatother
-\tableofcontents
+\onecolumn
+\tableofcontents[parts=1]
 \listoftables
 \listoffigures
-
+\listofrequirements
+\twocolumn
 \mainmatter
 
 \input{inc/parts/01_intro.inc.tex}
@@ -223,6 +294,8 @@ I would like to acknowledge the thousands of individuals who have coded for the 
 \input{inc/parts/04_discussion.inc.tex}
 
 \backmatter
+\pagenumbering{arabic}% resets `page` counter to 1
+\renewcommand*{\thepage}{A\arabic{page}}
 \appendix
 \part{Appendix}
 \makeatletter

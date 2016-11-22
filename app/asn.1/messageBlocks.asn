@@ -12,10 +12,12 @@ BEGIN
   -- define constants
   maxSerial                 INTEGER ::= 4294967295      -- maximum serial number
   maxChunkSize              INTEGER ::= 4294967295      -- maximum size of a message chunk
-  maxNumberOfReplays        INTEGER ::= 127             -- maximum number of replys
+  maxNumberOfReplays        INTEGER ::= 127             -- maximum number a block may be replayed
   maxNumberOfRequests       INTEGER ::= 8               -- maximum number of administrative requests
   maxDurationOfProcessing   INTEGER ::= 86400           -- maximum number of seconds which the message might be delayed in the local queue (starting from startOffset)
   maxID                     INTEGER ::= 32767           -- maximum id of an operation
+  maxPayloadBlocks          INTEGER ::= 127             -- maximum number of payload blocks in a message
+  maxTimeCachedProof        INTEGER ::= 86400           -- maximum number of seconds a proof of non revocation may be old
 
   Message     ::= SEQUENCE { 
     header        IdentityBlock,
@@ -31,7 +33,6 @@ BEGIN
     headerKey             [1000] OCTET STRING OPTIONAL,  -- contains SymmetricKey encrypted with recipient nodes public key
     identityBlock         CHOICE {
         encrypted  [1001] OCTET STRING,   
-        -- it is not allowed to use plain in production environments; This is for testing and analysis only
         plain      [1002] IdentityPayloadBlock
     },
     identitySignature OCTET STRING   -- contains signature of Identity [as stored in identityBlock;signed identityBlock without Tag]
@@ -81,7 +82,7 @@ BEGIN
     reply       [3020] ReplyBlock OPTIONAL,
     
     -- contains the actual payload
-    payload     [3100] SEQUENCE (SIZE (0..128)) OF PayloadChunk  
+    payload     [3100] SEQUENCE (SIZE (0..maxPayloadBlocks)) OF PayloadChunk  
   }
 
   
@@ -97,7 +98,7 @@ BEGIN
     processTime INTEGER (0..maxDurationOfProcessing),
     
     -- routing blocks for the next operation
-    nextHop           SEQUENCE (SIZE (0..128)) OF NextHopBlock,  
+    nextHop           SEQUENCE (SIZE (0..128)) OF NextHopBlock OPTIONAL,  
     
     -- contains the secret of the identity block
     forwardSecret     ChainSecret,
@@ -107,15 +108,16 @@ BEGIN
     replyBlock [131]   RoutingBlock OPTIONAL,
     
     -- contains information for building replys (when used as MURB ID 1 denotes original message)
-    cascade           [300] SEQUENCE(SIZE (0..255)) OF CascadeBuildInformation,
-    replyCascade      [301] SEQUENCE(SIZE (0..255)) OF CascadeBuildInformation
+    cascade           [300] SEQUENCE(SIZE (0..255)) OF PayloadOperation,
+    replyCascade      [301] SEQUENCE(SIZE (0..255)) OF PayloadOperation
   }
   
   NextHopBlock ::= SEQUENCE {
     nextIdentityBlock   [13100] OCTET STRING,
     nextRoutingBlock    [13200] OCTET STRING,
     nextReplyBlock      [13300] OCTET STRING OPTIONAL,
-    nextErrorReplyBlock [13400] OCTET STRING OPTIONAL
+    nextErrorReplyBlock [13400] OCTET STRING OPTIONAL,
+    nextPayloadIdBlock  [13500] SEQUENCE (SIZE (0..maxPayloadBlocks)) OF INTEGER (1..maxID)
   }
   
   PayloadOperation ::= CHOICE {
@@ -125,13 +127,6 @@ BEGIN
         encryptPayload  [300] EncryptPayloadOperation,
         decryptPayload  [350] DecryptPayloadOperation,
 		...
-  }
-  
-  CascadeBuildInformation ::= SEQUENCE {
-    id                  INTEGER (1..maxID),
-    secret              ChainSecret,
-    payloadOp           PayloadOperation,
-    ...
   }
   
   PercentSizeType ::= SEQUENCE {
@@ -167,7 +162,7 @@ BEGIN
   XorMergePayloadOperation ::= SEQUENCE {
     originalFirstId			 INTEGER (0..maxID),
     originalSecondId		 INTEGER (-1..maxID),
-    originalSize             SizeType,
+    originalFirstSize        SizeType,
 	newId			    	 INTEGER (1..maxID)
   }
  
@@ -319,9 +314,9 @@ BEGIN
   }
   
   PayloadChunk ::= SEQUENCE {
-    offset                   INTEGER (0..MAX),
-    routingBlockIdentifier   [0]   SEQUENCE (SIZE (0..255)) OF INTEGER, -- FIXME limit integer range
-    payload                  [100] OCTET STRING
+    id                        INTEGER (0..maxId),
+    routingBlockForwardSecret INTEGER (0..maxSerial),
+    payload                   [100] OCTET STRING
   }
   
   -- Compatible to PrivateKeyUsagePeriod taken from RFC3280
@@ -345,7 +340,6 @@ BEGIN
     algorithm               MacAlgorithm,
     parameter               AlgorithmParameters
   }
-
   
   SymmetricAlgorithm ::= ENUMERATED {
     aes128      (1000),
