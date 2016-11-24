@@ -18,6 +18,8 @@ BEGIN
   maxID                     INTEGER ::= 32767           -- maximum id of an operation
   maxPayloadBlocks          INTEGER ::= 127             -- maximum number of payload blocks in a message
   maxTimeCachedProof        INTEGER ::= 86400           -- maximum number of seconds a proof of non revocation may be old
+  
+  puzzleIdentifier          ::= OCTET STRING (size(16))
 
   Message     ::= SEQUENCE { 
     header        IdentityBlock,
@@ -67,19 +69,13 @@ BEGIN
     requests          SEQUENCE (SIZE (0..maxNumberOfRequests)) OF HeaderRequest ,
     
     -- padding and identitifier required to solve the cryptopuzzle
-    identifier    [2001] INTEGER (0..maxSerial) OPTIONAL, 
-    padding       [2002] OCTET STRING OPTIONAL  -- This is for solving crypto puzzles
-  }
+    identifier    [2001] puzzleIdentifier OPTIONAL, 
+    proofOfWork   [2002] OCTET STRING OPTIONAL  -- This is for solving crypto puzzles
 
   UnencryptedBlocks ::= SEQUENCE {
+
     -- contains routing information (next hop) for the payloads
     routing     [3000] RoutingBlock OPTIONAL,
-    
-    -- contains encrypted log data of the data traveling
-    routingLog  [3010] RoutingLogBlock OPTIONAL,
-    
-    -- contains replys to header requests (eg. quota and identity handling)
-    reply       [3020] ReplyBlock OPTIONAL,
     
     -- contains the actual payload
     payload     [3100] SEQUENCE (SIZE (0..maxPayloadBlocks)) OF PayloadChunk  
@@ -87,6 +83,7 @@ BEGIN
 
   
   -- represents the building and sending process for the next hop
+  -- FIXME rework this part intensly (Missing features reply block for header requests; Insufficient handling of operation stack)
   RoutingBlock ::= SEQUENCE {
   
     -- contains the next recipient in sequence
@@ -95,7 +92,8 @@ BEGIN
     -- contains the period when the payload should be processed 
     -- Router might refuse to long queue retention
     -- Recommended support for retention >=1h
-    processTime INTEGER (0..maxDurationOfProcessing),
+    minProcessTime INTEGER (0..maxDurationOfProcessing),
+    maxProcessTime INTEGER (0..maxDurationOfProcessing),
     
     -- routing blocks for the next operation
     nextHop           SEQUENCE (SIZE (0..128)) OF NextHopBlock OPTIONAL,  
@@ -244,7 +242,7 @@ BEGIN
     ...
   }
   
-  ReplyIdentity ::= SEQUENCE {
+  replyPuzzleRequired ::= SEQUENCE {
     challenge     BIT STRING, -- bit sequence at beginning of hash from encrypted identity block
     hash          MacAlgorithmIdentifier,
     valid         UsagePeriod,

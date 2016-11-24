@@ -34,19 +34,16 @@ By definition any transport layer address may represent a Vortex identity. This 
 \begin{itemize}
 	\item If an address is identified as a vortex address it may be blocked (directly or indirectly) by an adverser.
 	\item If a vortex node is malfunctioning non-vortex messages should remain unaffected. This is more likely to happen if non-Vortex messages are kept in a separate account.
-	\item If a user wants no longer to maintain its Vortex address (hopfully there will be a better technology in future) he just may give up his Vortex accounts. If he would have been using his normal mail account for vortex he would receive mixing messages which he has to filter.
+	\item If a user wants no longer to maintain its Vortex address (hopefully there will be a better technology in future) he just may give up his Vortex accounts. If he would have been using his normal messaging account for Vortex he would receive mixing messages which he has to filter in future.
 \end{itemize}
 
 \subsection{Vortex node types}
 
 \subsubsection{Public vortex node}
-Public nodes are nodes
-\fxfatal{accepts all requests} 
-
-\fxfatal{accepts is known to be a vortex node} 
+Public nodes are nodeswhich advertise themself as mixes. Just as all nodes they may be an endpoint or a mix. Typically they accept all requests exactly as outlined in \ref{tab:protoReplyCrit}. As an immediate result of the publicly available information about such a node the owner may be target of our adverser. Pressure may be oposed to close down such a node. However since we do not need a specific account we may safely close down one transport account and open up a different one (on the same or a different infrastructure).
 
 \subsubsection{Stealth vortex node}
-This node does not answer any clear text requests. As an immediate result the node is only usable by other nodes knowing the public key of this node. The node is therefore on a know secret base only reachable.
+This node does not answer any clear text requests. As an immediate result the node is only usable by other nodes knowing the public key of this node. The node is therefore on a known secret base only reachable.
 
 \subsubsection{Hidden vortex node}
 A hidden node is a special form to a stealth node it has a set of preset identities. Only these entities are processed. This behaveour has certain drawbacks. An identity may not be changed. As an immediate result traffic may become a pseudonymity. To counter this effect at least partially we may use the same local identity for multiple senders. As an immediate result the sender is only one of all senders knowing the private key of an identity.
@@ -58,7 +55,7 @@ We use common messaging protocols as transport layers and connect to them using 
 
 The basic idea is that a client generates all traffic (including decoy or dummy traffic) by itself. It defines the routes a message takes through the mixes and decides which targets are receiving dummy traffic at the same time. In such a system even when possessing all the nodes routing the traffic (without the endpoints) an anonymity set of $k$ (whereas the size of $k$ is defined by the sender) is guaranteed.
 
-As decoy traffic is generated with the same operations as the true content is split it is impossible for an adverser running a node to determine wether he is generating noise or actually processing the true message.
+As decoy traffic is generated with the same operations as the true content is split it is impossible for an adverser running a node to determine whether he is generating noise or actually processing the true message.
 
 \fxfatal{add a lot more text here}
 \begin{figure}[h]
@@ -79,6 +76,9 @@ As decoy traffic is generated with the same operations as the true content is sp
 
 \section{Block Structure}
 \lstinputlisting[language=ASN1, caption={Header Block}, backgroundcolor=\color{gray!10},linerange={29-71},firstnumber=29]{../app/asn.1/messageBlocks.asn} 
+
+\section{Message Building}
+\fxfatal{take care of percentage and floating point precision}
 
 
 \section{Accounting}
@@ -132,30 +132,37 @@ In the following subsections we will iterate through all requirements and verify
 
 \fxfatal{list all requirements}
 
-\paragraph{\ref{req:zeroTrust}:}
+\paragraph{\ref{req:zeroTrust}:} 
+We have not put any trust intu an external infrastructure. While we do assume that all routing nodes act as defined. A misbehaving node may be identified and eliminated without putting any trust on other nodes. Analysis have shown no means for a misbehaving node which might be intentional or unintentional endangering anonymity at any time. We do not rely on any third party technology or infrastructure for our anonymity. 
+
+This requirement is therefore fulfilled.
+
+\paragraph{\ref{req:P2P}:} 
+No node has additional privileges or offers additional services. All are equal and share the same privileges.
+
+This requirement is therefore fulfilled.
+
+\paragraph{\ref{req:untagable}:} 
+Messages may not be tagged. All content is either strictly onionised or defined and linked with unknown hooks. Tampering with a message will cause the message delivery to fail at the next node.
+
+This requirement is therefore fulfilled.
+ 
+\paragraph{\ref{req:unbugable}:} 
+There are always means to bug a message. As we put trust in sender and recipient and we know already that a intermediate mixing node is not able to modify the message the protocol is hard to bug. There may be a possibility to bug a message with a routing log entry over DNS. If a recipient is not resolving names or trusts in the content of such a message he is safe.
+
+This requirement is therefore fulfilled.
+\paragraph{\ref{req:replay}:} 
 
 \fxfatal{add content}
-\paragraph{\ref{req:P2P}:}
-
-\fxfatal{add content}
-\paragraph{\ref{req:untagable}:}
-
-\fxfatal{add content}
-\paragraph{\ref{req:unbugable}:}
-
-\fxfatal{add content}
-\paragraph{\ref{req:replay}:}
-
-\fxfatal{add content}
-\paragraph{\ref{req:accounting}:}
+\paragraph{\ref{req:accounting}:} 
 
 \fxfatal{add content}
 \paragraph{\ref{req:anon}:} This point is the hardest to proof. We certaindly achieved a high degree of anonymity. No node can tell by observing traffic if a node is a final recipient or just a mix. There are however some weaknesses in the protocol. As the implementation is currently connecting simultaneously to the tru named and the Vortex account the user might be identified by that fact. Using a anonymisation proxy could solve the problem but it would violate the Zero trust principle.
 
-\paragraph{\ref{req:boot}:}
+\paragraph{\ref{req:boot}:} 
 
 \fxfatal{add content}
-\paragraph{\ref{req:cryptVar}:}
+\paragraph{\ref{req:cryptVar}:} 
 
 \fxfatal{add content}
 
@@ -170,31 +177,80 @@ Messages should always be sent timewise nearby other messages. This means that t
 \section{Real World Considerations}
 This approach is heavily dependent of the transport protocol and builds on top a new obfuscating/routing layer. For this system to become a real peer-to-peer approach some additional quirks are required. A message-Vortex-Account needs always an active routing handler. This routing handler may be introduced by new server capabilities or by having a device handling the routing from the client side. For this reason we built a RaspberryPi appliance capable of connecting to one (or more) accounts fetching incomming mails, analysing them and reroute them if necessary. Although the system is designed to be run on a RaspberryPi the software might be installed to any Java capable client. The RaspberryPi is just one affordable lightweight device which offers all required capabilities.
 
+\subsection{No Routing Log}
+There was up until very late a routing log functionality in the protocol. This functionality did however have the disadvantage that it allowed bugging and disclosed intermediate mixes to a recipient which did not comply with the policy the mixes might have chosen. Therefore this feature was dropped and replaced with the fetch block behaviour.
+
+\subsection{Message Content}
+\fxfatal{add content here}
+
 \chapter{Security Analysis}
-In the following sections we emphasize on attacks targeting either sender recipient tuples or on identification of participants
+In the following sections we emphasize on attacks targeting either sender recipient tuples or on identification of participants. 
+
+Based on the protocol we may safely assume the following key ponts:
+\begin{itemize}
+	\item An adverser knows and controls a significant number of nodes (for our analysis we assume less than 80\%).
+	\item An adverser may observe the traffic at any point without getting any information about the message content
+	\item An adverser is not capable of matching multiple messages on different nodes to one message.
+\end{itemize}
+
+We always assume an adverser to have more knowledge than we think he may extract from the messages.
+\begin{itemize}
+	\item We assume that an adverser knows all messages of a transaction running over his nodes and matches them correctly to the same message.
+	\item 
+\end{itemize}
+
+We assume that the adverser is targeting the following informations:
+\begin{itemize}
+	\item Sender identity
+	\item Recipient identity
+	\item Message content
+	\item Message size
+\end{itemize}
+
+\subsection{Attack on Users Identity}
+\fxfatal{add content here}
+
+\subsubsection{Frequency and Bandwidth Analysis}
+\fxfatal{add content here}
+
+\subsection{Attack on Message content}
+\fxfatal{add content here}
+
+\subsubsection{Attacking Routing Blocks}
+\fxfatal{add content here}
+
+\subsection{Attack on Message size}
+
 \fxfatal{add content here}
 
 \chapter{Additional Considerations}
 \section{Man in the Middle Attacks to Conversations}
+
 \fxfatal{add content here}
 
 \section{Identification of participating account}
+
 \fxfatal{add content here}
 
 \subsection{Identification by content}
 It is possible to identify a message by content. Assuming that an adverser knows the applied blending methode he may identify an ASN.1 structure of 
+
 \fxfatal{add content here}
 
 \subsection{Identification by Query}
+
 \fxfatal{add content here}
 
 \subsection{Identification by Traffic Type}
+
 \fxfatal{add content here}
 
 \subsection{Identification by Bandwidth}
+
 \fxfatal{add content here}
 
 \subsection{Identification by Behavioural analysis}
+
 \fxfatal{add content here}
 
 \section{Storage of Messages and queues}
@@ -205,4 +261,5 @@ Storing them in a localized and receiving entity controlled storage is definitel
 \fxfatal{implemented in prototype?}
 
 \section{Economy of transfer}
+
 \fxfatal{Write something about wasting bandwidth}

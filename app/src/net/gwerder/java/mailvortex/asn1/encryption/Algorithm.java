@@ -31,7 +31,7 @@ public enum Algorithm {
     SECP521R1( 2502, AlgorithmType.ASYMMETRIC, "secp521r1", "BC", SecurityLevel.QUANTUM ),
     SHA384( 3000, AlgorithmType.HASHING, "sha384", "BC",  SecurityLevel.HIGH ),
     SHA512( 3001, AlgorithmType.HASHING, "sha512", "BC", SecurityLevel.QUANTUM );
-    //TIGER192  (3100, AlgorithmType.HASHING,"tiger192","BC");
+    //TIGER192  (3100, AlgorithmType.HASHING,"tiger","BC",SecurityLevel.LOW);
 
     private static Map<AlgorithmType, Algorithm> def = new HashMap<AlgorithmType, Algorithm>() {
         private static final long serialVersionUID = 12132324789789L;
@@ -113,8 +113,10 @@ public enum Algorithm {
     public int getKeySize(SecurityLevel sl) {
         if (txt.startsWith( "sec" )) {
             return Integer.parseInt( txt.substring( 4, 7 ) );
-        } else if (txt.startsWith( "aes" )) {
+        } else if (txt.startsWith( "aes" ) || txt.startsWith( "sha" )) {
             return Integer.parseInt( txt.substring( 3, 6 ) );
+        } else if (txt.startsWith( "tiger" )) {
+            return 192;
         }
         return secLevel.get(sl);
     }

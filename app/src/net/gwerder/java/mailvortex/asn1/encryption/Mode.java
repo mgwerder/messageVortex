@@ -3,11 +3,17 @@ package net.gwerder.java.mailvortex.asn1.encryption;
 /**
  * Enumeration to list available encryption modes.
  *
+ * @FIXME add sensible modes
+ *
  * Created by martin.gwerder on 31.05.2016.
  */
 public enum Mode {
     ECB       (10000,"ECB"),
-    NONE      (10001,"NONE");
+    //CBC       (10001,"CBC"),
+    //EAX       (10002,"EAX"),
+    //GCM       (10003,"GCM"),
+    OCB       (10004,"OCB"),
+    NONE      (10010,"NONE");
 
     private static Mode def=Mode.ECB;
 
