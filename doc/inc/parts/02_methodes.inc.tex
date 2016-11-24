@@ -1244,6 +1244,7 @@ Within the implementation we assigned algorithms to a security strength level:
 	\item QUANTUM\\
 	      AES256, RSA8192, ECC secp521r1, sha512
 \end{itemize}
+
 This allows to categorize the used algorithms to a strength. This list however should only serve the purpose of selecting algorithms for people without cryptological know how.
 
 \begin{requirement}{cryptVar}{encryption variety}
@@ -1253,21 +1254,19 @@ This allows to categorize the used algorithms to a strength. This list however s
 \fxfatal{Fix content (copied from first version)}
 
 \subsubsection{Cypher Mode}
-\paragraph{ECB (Electronic Code Book):} This is the most basic operation. Each block is encrypted on its own. This results in a big flaw. blocks containing the same data will always transform to the same byte code. This makes it possible to see some structures of the plain text when looking at the cypher text. For this reason ECB should not be used for our solution. This solution allows parallelisation of encryption, decryption, and random access while decrypting.
+\paragraph{ECB (Electronic Code Book):} This is the most basic operation. Each block is encrypted on its own. This results in a big flaw. blocks containing the same data will always transform to the same byte code. This makes it possible to see some structures of the plain text when looking at the cypher text. This solution allows parallelisation of encryption, decryption, and random access while decrypting.
 
-\paragraph{CBC (Cypher Block Chaining):}  CBC extends the encryption by xor'ing an initialisation vector into the first block before encrypting. For all subsequent blocks the cyphertext result of the preceding block is taken as xor input. This solution does not allow parallelisation of encryption, but decryption may be paralleled and random access is possible. As another downside CBC requires a shared initialisation vector. This makes it unsuitable for our solution.
+\paragraph{CBC (Cypher Block Chaining):}  CBC extends the encryption by xor'ing an initialisation vector into the first block before encrypting. For all subsequent blocks the cyphertext result of the preceding block is taken as xor input. This solution does not allow parallelisation of encryption, but decryption may be paralleled and random access is possible. As another downside CBC requires a shared initialisation vector. 
 
-\paragraph{PCBC (Propagation Cypher Block Chaining):}  CBC extends the encryption by xor'ing an initialisation vector into the first block before encrypting. For all subsequent blocks the cyphertext result of the preceding block xor'ed with its plain text is taken as xor input. This solution does not allow parallel decryption or encryption, nor does it allow random access. As another downside CBC requires a shared initialisation vector. This makes it unsuitable for our solution.
+\paragraph{PCBC (Propagation Cypher Block Chaining):}  CBC extends the encryption by xor'ing an initialisation vector into the first block before encrypting. For all subsequent blocks the cyphertext result of the preceding block xor'ed with its plain text is taken as xor input. This solution does not allow parallel decryption or encryption, nor does it allow random access. As another downside PCBC requires a shared initialisation vector. 
 
 \paragraph{EAX:} EAX has been broken in 2012\cite{minematsu2013attacks} and is therefore rejected for our use.
 
 \paragraph{CFB (Cypher Feedback):} CFB works exactly as CBC with the difference that the plain text is xor'ed and the initialisation vector respectively the preceding cypher result is encrypted. CFB does not support parallel encryption as the cyphertext input from the preceeding operation is required for a round, it does however allow parallel decryption and random access.
 
-\paragraph{OFB:} OFB works exactly as CFB except for the fact that not the cyphertext result is taken as feedback but the result of the encryption before xor'ing the plain text. This denies parrallel encryption and decryption as well as random access.
+\paragraph{OFB:} OFB works exactly as CFB except for the fact that not the cyphertext result is taken as feedback but the result of the encryption before xor'ing the plain text. This denies parallel encryption and decryption as well as random access.
 
-\paragraph{OCB (Offset Codebook Mode):} This mode is specified in \cite{krovetz-ocb-04}. OCB is specifically designed for AES128, AES192, and AES256. It supports authentication taglengths of 128, 96 , or 64 bits for each specified encryption algorithm. OCB hashes the plaintext of a message with a specialised function $H_{OCB}(\mathbf{M})$
-
-\fxfatal{Important! We use this. Is this wise?}
+\paragraph{OCB (Offset Codebook Mode):} This mode is specified in \cite{krovetz-ocb-04}. OCB is specifically designed for AES128, AES192, and AES256. It supports authentication tag lengths of 128, 96 , or 64 bits for each specified encryption algorithm. OCB hashes the plaintext of a message with a specialised function $H_{OCB}(\mathbf{M})$
 
 \fxfatal{Add about parrallelisation here}
 
@@ -1278,6 +1277,8 @@ This allows to categorize the used algorithms to a strength. This list however s
 \paragraph{CTR:} CTR is a mixture between OFB and CBC. A nonce concatenated with a counter which is incremented on every block is encrypted and then xor'ed with the plain text. This allows parallel decryption and encryption as well as random access.
 
 \paragraph{GCM (Galois Counter Mode):} GCM is related to CTR but has some major differences. The nonce  is not used (just the counter starting with value 1). In order to authenticate the encryption an authentication token $auth$ is hashed with $H_{GFmult}$ and then xor'ed with the first cypher block. All subsequent cipher blocks are xor'ed with the previos result and then hashed  again with $H_{GFmult}$. After the last block the output $o$ is processed  as follows: $H_{GFmult}(o\bigoplus (len(A)||len(B))) \bigoplus E^{K^0}(counter_0)$. Encryption and decryption can be paralleled in GCM. Random access is possible. However authentication of a encryption is not parallelizable. The authentication makes it unsuitable for our purposes. Alternatively we could use a fixed authentication string.
+
+\fxfatal{add choices of padding}
 
 \subsubsection{Padding}
 A plan text stream may have any length. Since we always encrypt in blocks of a fixed size we need a mechanism to indicate how many bytes of the last encrypted block may be safely discarded. This mechanism is called padding. 
@@ -1443,6 +1444,7 @@ The header block contains the following data:
 		  	\item sending ephemeral identity public key (identityKey)
 		  	\item serial
 		  	\item maximum number of replays for the serial for this identity
+		  	\item Minimum number of seconds for replay protection.
 		  	\item validity period for this block (in seconds)
 		  	\item Symmetric decryption key for subsequent blocks
 		  	\item Chain secret for the forwarding block\\
@@ -1471,11 +1473,13 @@ There are several header requests defined:
 	\item The used encryption scheme is not supported by the node.
 \end{itemize}
 
+An identity may be rejected if the wrong types of keys and key sizes are used. However it must accept at least the key types and sizes it uses for its own identity.
+
 If an identity is rejected the request may not be replayed by the same identity again. A sending party must generate a new identity for a new request. 
 
 This request should be by far the most expensive request. It must at any time be more expensive to request a new identity compared to raise the quota of an existing one.
 
-\fxfatal{add content here; how to handle key clashes (multiple valid keys); Should have a book on how do I invite friends}
+\fxfatal{add content here; Should have a book on how do I invite friends}
 
 \paragraph{queryPeer request:} A peer request is a request for publicly known Vortex nodes. This request does offer the possibillity of harvesting the Vortex network. To counter this the following limmitations should apply:
 \begin{itemize}
@@ -1519,15 +1523,15 @@ Payload blocks contain an encrypted message, parts of it or simply decoy traffic
 \subsubsection{Routing Blocks}
 Routing blocks contain the following information:
 \begin{itemize}
-	\item The node specification of the next hop (requires a full identity)
+	\item The node specification of the next hop (requires a full identity; may be not there if no next hop)
+	\item Purpose of routing block (May be normal/statusOK/statusError)
 	\item The moment of processing as a range in seconds since the time of arrival.
 	\item Retention time in seconds since the time of arrival.
 	\item The identity block for the next hop
 	\item The routing block for the next hop
-	\item Payload building instructions (optional)
 	\item Payload ID to be included
-	\item A reply block (optional)
-	\item A error block (optional)
+	\item Payload building instructions (optional; only if MURB)
+	\item A signing key for the payload (optional; only if MURB)
 \end{itemize}
 
 \subsubsection{Payload Building Instructions}
@@ -1545,10 +1549,11 @@ Every node maintains a list of received blocks including their IDs and building 
 \paragraph{forkMessage:} Split a messsage block into two parts horizontally using an xor operation. Technically the operation works as follows:
 \begin{itemize}
 	\item The size of the source block is determined.
-	\item A new random block of data of the same size as the source block is generated.
+	\item Create a new reproducable random pattern of data with the determined length.
 	\item The original block is xor'ed with the random pattern block generated in the previous step
 	\item Both blocks may be processed further and must be sent to different locations.
 \end{itemize}
+
 With this operation we may create decoy traffic, or split a message into two parts.
 
 \paragraph{unforkMessage:} This operation takes two blocks equal in size and uses an xor operation to join them. Blocks with different sizes should not be processed.
@@ -1575,6 +1580,9 @@ The reply contains the following information:
 	\item Maximum quotas.
 	\item Minimum identity sizes.
 	\item Supported cyphers and hashes.
+	\item Maximum number of simultaneous valid header serials.
+	\item Maximum number of simultaneous valid building operations.
+	\item Maximum identity lifespan in seconds.
 \end{itemize}
 \fxfatal{add content here}
 
@@ -1582,28 +1590,86 @@ The reply contains the following information:
 
 \fxfatal{add content here}
 
-\paragraph{replyError block:}
-
-\fxfatal{add content here}
-
-\paragraph{replyOk block:}
-
-\fxfatal{add content here}
+\paragraph{replyStatus block:}
+General answer block signalling a a status. The block is limited in length in order to minimize misuse of bandwidth. The Block contains the following data:
+\begin{itemize}
+	\item Three digit status number
+	\item Sending node identity
+	\item Status text (optional)
+	\item Affected block ID (optional)
+\end{itemize}
 
 \paragraph{ctxlessNewidentity block:}
+This block may be used to signal the change of identity. As this request is signed with the old known identity no means should exist to hijack such an identity.
 
-\fxfatal{add content here}
+This request contains:
+\begin{itemize}
+	\item old Identity
+	\item new Identity
+	\item Signature (with old identity)
+\end{itemize}
+
+This message may arrive at any time. Any recipient might decide on its own whether it wants to accept the update or not.
+
+A node should not accept a identity update if the strength has been significantly lowered. A client may make a difference on the fact whether the transport layer address or the key is exchanged. 
 
 \subsubsection{payload Block}
-\fxfatal{add content here}
+The payload block contains the actual message or decoy traffic. Since this block is heavily modified in course of the transport of the block it is built very simple.
+
+It contains:
+\begin{itemize}
+	\item A block ID
+	\item The payload data
+	\item A payload signature (optional; required for vortex blocks)
+\end{itemize}
+
+It is important to understand that a block may be exchanged at any time by an evil node. This however does not affect the safety on the message. Any tagging introduced at this point does invalidate the stream. The output after the next hop is completely unpredictable.
 
 \subsection{Accounting}
+Accounting covers several purposes in this system:
+\begin{itemize}
+	\item It makes the system costly for nodes sending bulk messages.
+	\item It protects from replaying .
+	\item It offers an ephemeral identity with a limited lifespan.
+\end{itemize}
+
+As accounting data may be used to overfill a nodes accounting tables special care has been taken in order to limit the number of information which has to be maintained per identity. We furthermore tried to minimize the risk that someone might occupy accounting memory of a node without costs. Furthermore any node may cancel an illict behaving identity at any time.
+
+It is important that the accounting described here is for mixes. A node assembling messages needs to keep a lot more information.
+
+\subsubsection{Accounting Data of an Identity}
+For an ephemeral identity very little information has to be kept. This identity expires after a certain amount of time. The maximum time may be queried with a capability request. The choice of Encryption type and key size is left to the node requesting the identity. However, a node may reject the request if it considers the identity to be unsafe, it has no more capacity for new identities, or if it would create an identity clash on the current node.
+
+The following data has to be kept per identity:
+\begin{itemize}
+	\item $\mathbf{ID}\langle pubKey, expiry, messagesLeft, bytesLeft \rangle$
+\end{itemize}
+\fxfatal{add content here}
+
+\subsubsection{Accounting Data of a Header Block}
+All accounting data of a header block is connected to the respective identity. All header blocks do expire latest with their respective identity. The following data has to be kept on a mix:
+\begin{itemize}
+	\item $\mathbf{HL}\langle serial, remainingReplays, expiry\rangle$\\
+	      This is the long term header list. It lists all headers of an identity, and how many replays are left until the requests are rejected.
+	\item $\mathbf{HS}\langle serial, arrivalTime, msgHash, duration \rangle$\\
+	      This is the short term replay protection. It protects a block with the same hash from being replayed.
+\end{itemize}
+
+\subsubsection{Accounting Data of a Payload Block}
 \fxfatal{add content here}
 
 \section{Protocol handling}
-\fxfatal{add content here}
+In the following sections we outline the handling of messages we split the handling into incoming messages and outgoing messages. All handling assumes that we have a blending layer independently picking up messages as advertised in the capabilities messages.
 
 \subsection{Received Block Processing}
+A Block picked up in the blending layer is handled as shown in image \ref{fig:msgRecvProcessing}.
+
+\begin{figure*}[ht]
+	\includegraphics[width=\textwidth]{inc/fixme}
+	\caption{flow diagram showing processing of incomming messages}
+	\label{fig:msgRecvProcessing}
+\end{figure*}
+
 \fxfatal{add content here}
 
 \subsection{Transmission Block Processing}

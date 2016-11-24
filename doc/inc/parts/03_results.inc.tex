@@ -68,12 +68,6 @@ As decoy traffic is generated with the same operations as the true content is sp
 \section{Protocol Implementation\label{protoImpl}}
 \fxfatal{add content here}
 
-\begin{figure}[H]
-	\includegraphics[width=\columnwidth]{inc/fixme.png}
-	\caption{flow diagram showing message processing}
-	\label{fig:msgProcessing}
-\end{figure}
-
 \section{Block Structure}
 \lstinputlisting[language=ASN1, caption={Header Block}, backgroundcolor=\color{gray!10},linerange={29-71},firstnumber=29]{../app/asn.1/messageBlocks.asn} 
 
@@ -107,6 +101,8 @@ In table \ref{tab:protoReplyCrit} we show under what circumstances a reply to a 
 
 \section{Considerations for Building Messages}
 In a worst case scenario we assume that an adverser is controlling most of the network utilized for anonymisation. While this is not necessarily a problem (as pointed out earlier) it allows an adverser to track a message while agents are being used under his control. So for simplicity and as a worst case assumption we always assume that an adverser has perfect knowledge of an associated message flow. This is however a worst case scenario. One missing agent disconnects the whole chain and as messages are not traceable in size.
+
+\fxfatal{add selffailing operations as checkpoint}
 
 \subsection{Ephemeral identities}
 \fxfatal{expiring ephemeral identities should not only be replaced after their expiration but anytime during the livetime}

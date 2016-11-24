@@ -1,5 +1,10 @@
 package net.gwerder.java.mailvortex.asn1.encryption;
 
+import com.sun.org.apache.xml.internal.security.algorithms.JCEMapper;
+
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Enumeration to list available encryption modes.
  *
@@ -10,12 +15,17 @@ package net.gwerder.java.mailvortex.asn1.encryption;
 public enum Mode {
     ECB       (10000,"ECB"),
     //CBC       (10001,"CBC"),
-    //EAX       (10002,"EAX"),
+    EAX       (10002,"EAX"),
     //GCM       (10003,"GCM"),
-    OCB       (10004,"OCB"),
+    //OCB       (10004,"OCB"),
     NONE      (10010,"NONE");
 
-    private static Mode def=Mode.ECB;
+    private static Map<AlgorithmType,Mode> def=new HashMap<AlgorithmType,Mode>();
+
+    static {
+        def.put(AlgorithmType.ASYMMETRIC,Mode.ECB);
+        def.put(AlgorithmType.SYMMETRIC,Mode.ECB);
+    }
 
     int id=-1;
     String txt=null;
@@ -32,13 +42,13 @@ public enum Mode {
         return null;
     }
 
-    public static Mode getDefault() {
-        return def;
+    public static Mode getDefault(AlgorithmType t) {
+        return def.get(t);
     }
 
-    public static Mode setDefault(Mode ndef) {
-        Mode old=def;
-        def=ndef;
+    public static Mode setDefault(AlgorithmType t,Mode ndef) {
+        Mode old=def.get(t);
+        def.put(t,ndef);
         return old;
     }
 

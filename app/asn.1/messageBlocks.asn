@@ -326,6 +326,8 @@ BEGIN
  -- adapted from RFC3280
   SymmetricAlgorithmIdentifier  ::=  SEQUENCE  {
     algorithm               SymmetricAlgorithm,
+    padding                 CypherPadding,
+    mode                    CypherMode,
     parameter               AlgorithmParameters OPTIONAL
   }
 
@@ -346,6 +348,16 @@ BEGIN
     camellia128 (1100),
     camellia192 (1101),  -- optional support
     camellia256 (1102)
+  }
+  
+  CypherMode ::= ENUMERATED {
+    ECB      (1000),
+    CBC      (1001)
+  }
+
+  CypherPadding ::= ENUMERATED {
+    PKCS7      (1000),
+    PKCS1      (1001)
   }
   
   AsymmetricAlgorithm ::= ENUMERATED {
@@ -391,7 +403,7 @@ BEGIN
   -- Symmetric key
   SymmetricKey ::= SEQUENCE {
     keyType SymmetricAlgorithmIdentifier,
-    key     OCTET STRING
+    key     OCTET STRING (size(1..512))
   }
   
   -- Asymmetric Key
