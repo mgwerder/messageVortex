@@ -60,7 +60,8 @@ BEGIN
     
     -- contains SymmetricKey encrypted with private key of identityKey 
     -- encryption is done as proof of identity (identity hijack protection)
-    decryptionKey     OCTET STRING,   -- contains (encrypted) DER encoded ASN1BitString with key representation
+    decryptionKeyPayload OCTET STRING,   -- contains DER encoded ASN1BitString with key representation
+    decryptionKeyverify  OCTET STRING,   -- contains DER encoded ASN1BitString with key representation
     
     --  contains the MAC-Algorithm used for signing
     hash              MacAlgorithm,

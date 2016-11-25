@@ -27,7 +27,7 @@
             maxbibnames=100,
             block=none,
             sorting=anyt]{biblatex} 
-\addbibresource{mailvortex}
+\addbibresource{messageVortex}
 \addbibresource{inc/bib/unclassified/Anonbib/anonbib}
 
 %\usepackage{inputenc}
@@ -145,7 +145,7 @@ In order to create this plan a minimum research has been carried out. The follow
 \begin{itemize}
 \item In \citetitle{k-anonymous:ccs2003}\cite{k-anonymous:ccs2003} \citeauthor{k-anonymous:ccs2003} emphasised on the level of anonymity introducing a measure of anonymity depending on a constant number of people to whom a transmission-tuple may be traced back.
 \item In \citeyear{chaum-dc} \citeauthor{chaum-dc} writes an excellent article\cite{chaum-dc} about a method to share information while keeping the source of the information anonymous.
-\item In \citetitle{chaum-mix}\cite{chaum-mix} \citeauthor{chaum-mix} describes mechanisms addressing anonymity. While the main principles of cloaking a sender (or recipient) by encrypting information ``onion like'' are still valid, the approach for using mixes showed considerable weaknesses.
+\item In \citetitle{CHAUM1}\cite{CHAUM1} \citeauthor{CHAUM1} describes mechanisms addressing anonymity. While the main principles of cloaking a sender (or recipient) by encrypting information ``onion like'' are still valid, the approach for using mixes showed considerable weaknesses.
 \item \citeauthor{danezis:weis2006} focused in their work \cite{danezis:weis2006} on the economics of anonymity.
 \item In \cite{xor-trees} \citeauthor{xor-trees} introduced a method broadcasting a message to multiple recipients while keeping the source secret. The introduced method has a $O(1)$ complexity degree scoring over most of other solutions considerably.
 \item Herbivore as described in \cite{herbivore:tr} introduces a proprietary protocol implementing Chaums's DC-Nets and a routing layer. This network is based on a centrally known topology of servers.
@@ -165,23 +165,21 @@ Second, a prototype is being described and built. Based on the prototype and the
 All this information is continuously collected in a thesis document and finalized at the end of the ``POC'' phase.\par
 \begin{figure}[H]%
 \resizebox{\columnwidth}{0.17\textheight}{
-\begin{ganttchart}[vgrid,hgrid]{1}{52}
-\gantttitle{2013}{12} \gantttitle{2014}{12} \gantttitle{2015}{12}  \gantttitle{2016}{12} \gantttitle{2017}{4}\\
-\gantttitlelist{1,...,12}{1}\gantttitlelist{1,...,12}{1}\gantttitlelist{1,...,12}{1}\gantttitlelist{1,...,12}{1}\gantttitlelist{1,...,4}{1} \\
+\begin{ganttchart}[vgrid,hgrid]{1}{60}
+\gantttitle{2013}{12} \gantttitle{2014}{12} \gantttitle{2015}{12}  \gantttitle{2016}{12} \gantttitle{2017}{12}\\
+\gantttitlelist{1,...,12}{1}\gantttitlelist{1,...,12}{1}\gantttitlelist{1,...,12}{1}\gantttitlelist{1,...,12}{1}\gantttitlelist{1,...,12}{1} \\
 \ganttgroup[progress=80]{Ground work}{1}{26} \\
 \ganttbar[progress=100]{PhD formalisation}{11}{26}\\
 \ganttbar[progress=90]{Info gathering}{1}{30}\\
-\ganttbar[progress=60]{Analysis}{1}{30}\\
-\ganttlinkedbar[progress=30]{Design}{20}{36}\\
-\ganttgroup[progress=5]{POC}{24}{40} \\
-\ganttmilestone{Intermediate Colloquium}{35}\\
-\ganttbar[progress=30]{RFC}{24}{38}\\
-\ganttlinkedbar[progress=5]{Implementation}{26}{38}\\
-\ganttbar{Attack tests}{34}{44}\\
-\ganttmilestone{Colloquium}{48}\\
-\ganttmilestone{Dissertation}{50}\\
-\ganttbar[progress=20]{Thesis}{1}{38}\\
-\ganttbar{Finalization}{38}{50}
+\ganttbar[progress=80]{Analysis}{1}{30}\\
+\ganttlinkedbar[progress=80]{Design}{20}{36}\\
+\ganttgroup[progress=70]{POC}{24}{40} \\
+\ganttbar[progress=70]{RFC and documentation}{24}{38}\\
+\ganttlinkedbar[progress=60]{Implementation}{26}{38}\\
+\ganttbar[progress=70]{Attack tests}{34}{58}\\
+\ganttmilestone{Dissertation}{60}\\
+\ganttbar[progress=50]{Thesis}{1}{56}\\
+\ganttbar{Finalization}{56}{60}
 \ganttlink{elem2}{elem4}
 \ganttlink{elem4}{elem7}
 \ganttlink{elem7}{elem9}
@@ -194,4 +192,12 @@ All this information is continuously collected in a thesis document and finalize
 \section{Bibliography}
 \printbibliography[title={},heading=none]
 
+\section{Changelog}
+\begin{tabular}{|l|l|l|}\hline
+	Date       & Version & Changes\\\hline
+	7.4.2015   & 1.0     & Initial version of this document\\
+	2.5.2016   & 1.1     & Updated timeline to reflect new progress\\
+	25.11.2016 & 1.2     & Adapted planed end and progress to reality\\
+	\hline
+\end{tabular}
 \end{document}
