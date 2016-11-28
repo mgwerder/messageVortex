@@ -24,7 +24,7 @@ Based on findings in this section we collect in chapter \ref{sec:existingTPP}.
 
 In chapter \ref{sec:existingRD} we collect relevant research to the topic. 
 
-In chapter \ref{sec:appliedMethods}
+In chapter \ref{sec:appliedMethods} we summarize the identified  methods which will be used. We explain choices and give a rough outline of the protocol baselines.
 
 \chapter{Requirements for an anonymising Protocol\label{sec:genRequirements}}
 In the following sections we try to elaborate the main characteristics of the anonymising protocol. 
@@ -694,7 +694,7 @@ The name $I^2P$ is an derived from  ``Invisible Internet Project'' according to 
 	\item Supports TCP and UDP
 \end{itemize}
 
-$I^2P$ has not attracted as much attention as Tor so far. So it is hard tu judge upon its real qualities.
+$I^2P$ has not attracted as much attention as Tor so far. So it is hard to judge upon its real qualities.
 
 \fxfatal{ add \cite{pets2011-i2p}}
 
@@ -1288,6 +1288,27 @@ This allows to categorize the used algorithms to a strength. This list however s
 
 \fxfatal{add choices of padding}
 
+\begin{table}[h]
+	\centering\tiny
+	\begin{tabular}{|l|l|l|l|}\hline
+		\diaghead{\theadfont Mode Criteria}{Mode}{Criteria} 	& \thead{Requires IV} 	& \thead{binary proof} & \thead{parallelisable}\\\hline
+		GCM	                            							& $\checkmark$			& $\checkmark$			& $\times$\\              
+		CTR	                            							& $\checkmark$			& $\checkmark$			& $\checkmark$\\              
+		CCM	                            							& FIXME  				& $\checkmark$			& $\times$\\              
+		CFB	                            							& $\checkmark$			& $\checkmark$			& $\checkmark$\\              
+		OCB	                            							& FIXME					& $\checkmark$			& $\times$\\              
+		OFB	                            							& $\checkmark$			& $\checkmark$			& $\times$\\              
+		PCBC                            							& $\checkmark$			& $\checkmark$			& $\times$\\              
+		CBC 	                           							& $\checkmark$			& $\checkmark$			& $\times$\\              
+		ECB 	                           							& $\times$				& $\checkmark$			& $\checkmark$\\    
+		\hline          
+	\end{tabular}	
+	\caption{comparison of encryption modes in terms of the suitability criteria as transport layer}
+	\label{tab:ModeSuitCrit}
+\end{table}
+
+\fxfatal{remove binary proof column as it does not add any value}
+
 \subsubsection{Padding}
 A plan text stream may have any length. Since we always encrypt in blocks of a fixed size we need a mechanism to indicate how many bytes of the last encrypted block may be safely discarded. This mechanism is called padding. 
 
@@ -1297,7 +1318,7 @@ Different paddings are used at the end of a cypher stream to indicate how many b
 
 \paragraph{PKCS7:} This padding is the standard used in symmetric encryption up to 256 bits key length. The free bytes in the last sypher block indicate the number of bytes being used. This makes this padding very compact. It requires only 1 Byte of functional data at the end of the block. All other bytes are defined but not needed.
 
-\paragraph{OAEP with SHA and MGF1 padding:} This padding is closely related to PKCS1 padding. The hashsize is however bigger and thus the required space for padding is much higher. OAEP with SHA and MGF1 Padding is used in asymetric encryption only. Due to its size it is important to note that the payload in the last block shrinks to $keySizeInBits/8-2-MacSize/4$.
+\paragraph{OAEP with SHA and MGF1 padding:} This padding is closely related to PKCS1 padding. The hash size is however bigger and thus the required space for padding is much higher. OAEP with SHA and MGF1 Padding is used in asymetric encryption only. Due to its size it is important to note that the payload in the last block shrinks to $keySizeInBits/8-2-MacSize/4$.
 
 In our approach we have chosen to allow these three paddings. The allowed sha sizes match the allowed hash sizes chosen above. It is important to note that padding costs space at the end of a stream. Since we are using always one block for signing we have to take care that the chosen signing mac plus the bytes required for padding do not exceed the key size of the asymmetric encryption. While this is normally not a problem for RSA as there are keys 1024+ Bits required it is a considerable problem for ECC algorithms as there are much shorter keys required to achieve an equivalent strength compared to RSA.
 
@@ -1651,21 +1672,22 @@ For an ephemeral identity very little information has to be kept. This identity 
 The following data has to be kept per identity:
 \begin{itemize}
 	\item $\mathbf{ID}\langle pubKey, expiry, messagesLeft, bytesLeft \rangle$
+	\item $\mathbf{Puzz}\langle identity, expiry, requestedOperation, offeredPuzzle \rangle$
 \end{itemize}
 \fxfatal{add content here}
 
 \subsubsection{Accounting Data of a Header Block}
 All accounting data of a header block is connected to the respective identity. All header blocks do expire latest with their respective identity. The following data has to be kept on a mix:
 \begin{itemize}
-	\item $\mathbf{HL}\langle serial, remainingReplays, expiry\rangle$\\
+	\item $\mathbf{HL}\langle identity, serial, remainingReplays, expiry\rangle$\\
 	      This is the long term header list. It lists all headers of an identity, and how many replays are left until the requests are rejected.
-	\item $\mathbf{HS}\langle serial, arrivalTime, msgHash, duration \rangle$\\
+	\item $\mathbf{HS}\langle identity, serial, arrivalTime, msgHash, duration \rangle$\\
 	      This is the short term replay protection. It protects a block with the same hash from being replayed.
 \end{itemize}
 
 \subsubsection{Accounting Data of a Payload Block}
 \begin{itemize}
-	\item $\mathbf{PL}\langle serial, id, hash, expiry\rangle$\\
+	\item $\mathbf{PL}\langle identity, serial, id, hash, expiry, content or buildInstructions \rangle$\\
 \end{itemize}
 \fxfatal{add content here}
 

@@ -9,13 +9,14 @@
 
 \makeatletter
 \def\title#1{\gdef\@title{#1}\gdef\thetitle{#1}}
+\usepackage{lipsum}
 
 \title{MessageVortex}
 \gdef\thesubtitle{Transport Independent Messaging anonymous to \nth{3} Parties}
 \subtitle{\thesubtitle}
 \author{Martin Gwerder (06-073-787)}
 \date{\SVNDate}
-\gdef\myabstract{Abstract still missing}
+\gdef\myabstract{\lipsum*[1-2]}
 \makeatother
 
 % enable graphics inclusion
@@ -81,14 +82,14 @@
 \makeatletter
 \hypersetup{
   hidelinks,
-  pdftitle=\thetitle,
+  pdftitle={\thetitle},
   pdfpagelayout=TwoPageRight,
   bookmarks=true,
   pdfstartview=Fit,
   pdfauthor={\author},
-  pdftitle={\thetitle}
+  pdftitle={\thetitle\\\small\thesubtitle},
   pdflang=en,
-  pdfsubject={\thesubtitle},
+  pdfsubject={\myabstract},
   pdfkeywords={Messaging, Anonymity, SMTP, MIME, S/MIME, POP3, IMAPv4, Message Vortex},
   pdfcontactemail={martin.gwerder@fhnw.ch},
   pdflicenseurl={http://creativecommons.org/licenses/by-nc-nd/3.0/ch/},
@@ -121,7 +122,19 @@
 \usepackage{fancyref}
 
 % For abstracts
-\usepackage{abstract}
+\makeatletter
+\newenvironment{abstract}{%
+	\if@twocolumn
+	\section*{\abstractname}%
+	\else
+	\small
+	\begin{center}%
+		{\bfseries \abstractname\vspace{-.5em}\vspace{\z@}}%
+	\end{center}%
+	\quotation
+	\fi}
+{\if@twocolumn\else\endquotation\fi}
+\makeatother
 
 % Enable indexes
 \usepackage{makeidx}
@@ -282,18 +295,13 @@
 \captionsetup[lstinputlisting]{position=bottom}
 
 \begin{document}
-\newgeometry{margin=0.1cm, footskip=1mm}
 
 \frontmatter
 
 % include title page
 \input{inc/parts/title.tex}
 
-\restoregeometry
 
-\begin{abstract}        %this creates the heading for the abstract page
-    \myabstract
-\end{abstract}
 
 \begin{comment}
 \begin{acknowledgements}      %this creates the heading for the acknowlegments
@@ -346,7 +354,7 @@ I would like to acknowledge the thousands of individuals who have coded for the 
 }
 \makeatother
 \onecolumn
-\chapter{ASN.1 representation of the protocol\label{app:asnone}}
+\chapter{ASN.1 Representation of the Protocol\label{app:asnone}}
 \lstinputlisting[language=ASN1, caption={ASN.1 representation of the protocol}, backgroundcolor=\color{gray!10}]{../app/asn.1/messageBlocks.asn} 
 \twocolumn
 
@@ -511,8 +519,22 @@ A. Perrig
 -David Basin  (Keine Kapazität)
 \end{comment}
 
-\chapter{Curriculum Vitae}
+\onecolumn\chapter{Curriculum Vitae}
+\section*{Personal Details}
+\begin{tabular}{ll}
+Name:             	& Martin Gwerder\\
+Employer address: 	& Untere Parkstrasse 9,5212 Hausen AG, Switzerland\\
+Email: 				& martin.gwerder@fhnw.ch\\
+\end{tabular}
+\section*{Career Summary}
+Martin Gwerder started off withan apprenticeship as an electro mecanic. After concluding studies at the polytechnic he worked first as an engineer, later as seniorengineer, and architect for several companies in banking, industry and for the gvernment. 
 
-\fxfatal{add content here}
+\section*{Education}
+Martin Gwerder is currently a doctoral Student at the University of Basel. After having concluded his studies at the polytechnic at Brugg in 1997, he did a postgraduate study as a master of business and engineering. Following that, he changed to the university track doing an MSc in Informatics at FernUniversit\"at in Hagen.
+
+\section*{Focus}
+The main focus of Martin Gwerder are in the fields of data protection, privacy, confidentiality, and anonymity.
+
+\fxfatal{more content to CV}
 
 \end{document}
