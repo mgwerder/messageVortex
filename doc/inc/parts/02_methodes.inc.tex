@@ -18,6 +18,14 @@ Technologies are always referenced through their respective standard. If applica
 
 Research are referenced by a paper. If applicable multiple related researches and papers are collected together into a bigger picture an then analysed for suitability concerning specific problem. If related to a standard technology links to that technology are provided where relevant.
 
+The chapters have been chosen by possible relevance. In chapter \ref{sec:genRequirements} we collect the requirements for the protocol. 
+
+Based on findings in this section we collect in chapter \ref{sec:existingTPP}. 
+
+In chapter \ref{sec:existingRD} we collect relevant research to the topic. 
+
+In chapter \ref{sec:appliedMethods}
+
 \chapter{Requirements for an anonymising Protocol\label{sec:genRequirements}}
 In the following sections we try to elaborate the main characteristics of the anonymising protocol. 
 
@@ -180,7 +188,7 @@ The message is picked up from the transport layer and extracted in the blending 
 
 After having prepared the message in such a way the routing layer gets the routing blocks. Every routing block is then processed after a final approval by the accounting layer (he is in charge to keep the quotas for this identity in  sync). The routing layer assembles the new messages according to the (no authorized) instructions in the routing block and sends it to the next hop where the processing restarts with the new instructions. 
 
-\chapter{Existing Transport Layer Protocols}
+\chapter{Existing Transport Layer Protocols \label{sec:existingTPP}}
 In this chapter we have a look at various available transport layer protocol. The main goal is to identify strong candidates as a transport layer. Main focus lies on the following criterias:
 \begin{itemize}
 	\item Widely adopted (Ct1)\\
@@ -314,7 +322,7 @@ This table shows that strong identified candidates are SMTP (being already a mes
 \footnotetext[1]{omitted due to message size being too small}
 
 
-\chapter{Existing Research and Implementations on the Topic}
+\chapter{Existing Research and Implementations on the Topic \label{sec:existingRD}}
 \section{Anonymity}
 \DeclareFixedFootnote{\omitted}{footnotes omitted in quote}
 As Anonymity we take the definition as specified in \cite{anon_terminology}.
@@ -1095,7 +1103,7 @@ This may be achieved in several ways. Examples:
 	If an infrastructure is known or suspected to be run by a potential adverser peoples willingness to believe into such a system might be drastically reduced.
 \end{itemize}
 
-\chapter{Applied Methodes}
+\chapter{Applied Methodes\label{sec:appliedMethods}}
 Based in the findings of the previous chapter we used the following methodology in order to find a solution:
 \begin{enumerate}
 	\item Identify problem hotspots for a new protocol.
@@ -1656,6 +1664,9 @@ All accounting data of a header block is connected to the respective identity. A
 \end{itemize}
 
 \subsubsection{Accounting Data of a Payload Block}
+\begin{itemize}
+	\item $\mathbf{PL}\langle serial, id, hash, expiry\rangle$\\
+\end{itemize}
 \fxfatal{add content here}
 
 \section{Protocol handling}

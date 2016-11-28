@@ -12,21 +12,26 @@ The protocol is defined int the ASN.1 to support onionized information in an une
 
 The protocol described in the next chapter is independent from routing. We built a blending layer for SMTP. Layers for other protocols such as XMMP may be built similarly. The protocol may be extended by adding blending layers and their addressing schemes.
 
-\section{Vortex Client}
-We did not create a Vortex client for sending messages. Instead we used a standard Thunderbird email client pointing to a local SMTP and IMAP Server provided by Vortex. On the SMTP side Vortex does encapsulate where possible mails into a Vortex message and builds automated route to the recipient. The SMTP part of vortex may be used to encapsulate automatically all messages with a known Vortex identity into a vortex message. On the IMAP side it merges a local Vortex message store with the standard Email repository building a combined view.
+\chapter{Vortex Prerequisites}
+\section{Hardware}
 
-Using Vortex like this offers us the advantages of a known client with the anonymity Vortex offers.
+\fxfatal{add content here}
 
-This has certain downsides. At the moment the vortex client has only a local store this makes it impossible to handle multiple simulatneously connected clients to use Vortex. This is however just a lack of the current implementation and not of the protocol itself as we may safely use an IMAP storage for storing vortex mails centrally.
-
-\section{Vortex Addresses}
+\section{Addresses}
 A Vortex address is built as follows: $vortexAddress=<transport>:<address>!<publicKey>$
 
 To allow storage of Vortex addresses sin standard messaging programs such as Outlook or Thunderbird. We define an alternate representation $encodedVortexAddress=base64(vortexAddress)@localhost$. 
 
 The suffix ``@localhost'' makes sure that a message intended for Vortex is not routed by any non-participating server.
 
-The main downside of vortex addresses are that they are no longer readable by a human. The main reason for this is the public key which is required. We may abstract ths further by allowing clear text requests on the main email address for the public key. Such requests must then be answered by the vortex account with the valid vortex address.
+The main downside of vortex addresses are that they are no longer readable by a human. The main reason for this is the public key which is required. We may abstract this further by allowing clear text requests on the main email address for the public key. Such requests must then be answered by the vortex account with the valid Vortex address.
+
+\section{Client}
+We did not create a Vortex client for sending messages. Instead we used a standard Thunderbird email client pointing to a local SMTP and IMAP Server provided by Vortex. On the SMTP side Vortex does encapsulate where possible mails into a Vortex message and builds automated route to the recipient. The SMTP part of vortex may be used to encapsulate automatically all messages with a known Vortex identity into a vortex message. On the IMAP side it merges a local Vortex message store with the standard Email repository building a combined view.
+
+Using Vortex like this offers us the advantages of a known client with the anonymity Vortex offers.
+
+This has certain downsides. At the moment the vortex client has only a local store this makes it impossible to handle multiple simulatneously connected clients to use Vortex. This is however just a lack of the current implementation and not of the protocol itself as we may safely use an IMAP storage for storing vortex mails centrally.
 
 \subsection{Vortex Accounts}
 By definition any transport layer address may represent a Vortex identity. This fact may make people believe that their current email or jabber address is suitable as Vortex address. This is technically perfectly true, but should not be done for the following reasons:
@@ -37,15 +42,15 @@ By definition any transport layer address may represent a Vortex identity. This 
 	\item If a user wants no longer to maintain its Vortex address (hopefully there will be a better technology in future) he just may give up his Vortex accounts. If he would have been using his normal messaging account for Vortex he would receive mixing messages which he has to filter in future.
 \end{itemize}
 
-\subsection{Vortex node types}
+\subsection{Vortex Node Types}
 
-\subsubsection{Public vortex node}
+\subsubsection{Public Vortex Node}
 Public nodes are nodeswhich advertise themself as mixes. Just as all nodes they may be an endpoint or a mix. Typically they accept all requests exactly as outlined in \ref{tab:protoReplyCrit}. As an immediate result of the publicly available information about such a node the owner may be target of our adverser. Pressure may be oposed to close down such a node. However since we do not need a specific account we may safely close down one transport account and open up a different one (on the same or a different infrastructure).
 
-\subsubsection{Stealth vortex node}
+\subsubsection{Stealth Vortex Node}
 This node does not answer any clear text requests. As an immediate result the node is only usable by other nodes knowing the public key of this node. The node is therefore on a known secret base only reachable.
 
-\subsubsection{Hidden vortex node}
+\subsubsection{Hidden Vortex Node}
 A hidden node is a special form to a stealth node it has a set of preset identities. Only these entities are processed. This behaveour has certain drawbacks. An identity may not be changed. As an immediate result traffic may become a pseudonymity. To counter this effect at least partially we may use the same local identity for multiple senders. As an immediate result the sender is only one of all senders knowing the private key of an identity.
 
 \chapter{MessageVortex - Transport Independent Messaging anonymous to \nth{3} Parties}
@@ -70,6 +75,15 @@ As decoy traffic is generated with the same operations as the true content is sp
 
 \section{Block Structure}
 \lstinputlisting[language=ASN1, caption={Header Block}, backgroundcolor=\color{gray!10},linerange={29-71},firstnumber=29]{../app/asn.1/messageBlocks.asn} 
+
+\subsection{Header Block}
+\fxfatal{add content here}
+
+\subsection{Routing Blocks}
+\fxfatal{add content here}
+
+\subsection{Payload Blocks}
+\fxfatal{add content here}
 
 \section{Message Building}
 \fxfatal{take care of percentage and floating point precision}
@@ -106,10 +120,11 @@ In a worst case scenario we assume that an adverser is controlling most of the n
 
 \subsection{Ephemeral identities}
 \fxfatal{expiring ephemeral identities should not only be replaced after their expiration but anytime during the livetime}
+
 \subsection{Timing of messages}
 \fxfatal{add content here}
 
-\subsection{Building Diagnostic Paths}
+\subsection{Diagnostics}
 \fxfatal{add content here}
 
 \subsubsection{Implicit Diagnostic}
@@ -174,7 +189,7 @@ Messages should always be sent timewise nearby other messages. This means that t
 This approach is heavily dependent of the transport protocol and builds on top a new obfuscating/routing layer. For this system to become a real peer-to-peer approach some additional quirks are required. A message-Vortex-Account needs always an active routing handler. This routing handler may be introduced by new server capabilities or by having a device handling the routing from the client side. For this reason we built a RaspberryPi appliance capable of connecting to one (or more) accounts fetching incomming mails, analysing them and reroute them if necessary. Although the system is designed to be run on a RaspberryPi the software might be installed to any Java capable client. The RaspberryPi is just one affordable lightweight device which offers all required capabilities.
 
 \subsection{No Routing Log}
-There was up until very late a routing log functionality in the protocol. This functionality did however have the disadvantage that it allowed bugging and disclosed intermediate mixes to a recipient which did not comply with the policy the mixes might have chosen. Therefore this feature was dropped and replaced with the fetch block behaviour.
+There was up until very late a routing log functionality in the protocol. This functionality did however have the disadvantage that it allowed bugging and could possibly  disclose intermediate mixes to a recipient which did not comply with the policy the mixes might have chosen. Therefore this feature was dropped and replaced with the fetch block behaviour.
 
 \subsection{Message Content}
 \fxfatal{add content here}

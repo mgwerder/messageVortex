@@ -1,4 +1,4 @@
-\documentclass[10pt,a4paper,appendixprefix,twocolumn,draft]{scrbook}
+\documentclass[10pt,a4paper,appendixprefix,pdfusetitle,twocolumn,draft]{scrbook}
 
 \usepackage{svn}
 \SVN $Revision: 295 $
@@ -7,11 +7,21 @@
 \SVN $URL: https://qetesh.gwerder.net/svn/mailvortex/doc/mailvortex.tex $
 \SVN $Id: mailvortex.tex 295 2016-06-14 16:30:29Z mgwerder $
 
+\makeatletter
+\def\title#1{\gdef\@title{#1}\gdef\thetitle{#1}}
+
+\title{MessageVortex}
+\gdef\thesubtitle{Transport Independent Messaging anonymous to \nth{3} Parties}
+\subtitle{\thesubtitle}
 \author{Martin Gwerder (06-073-787)}
 \date{\SVNDate}
+\gdef\myabstract{Abstract still missing}
+\makeatother
 
 % enable graphics inclusion
 \usepackage[final]{graphicx}
+
+\usepackage{hyperxmp}
 
 \usepackage{pdfsync} 
 
@@ -63,14 +73,33 @@
 %enable page spanning tables
 \usepackage{supertabular}
 
+% enable superscript  for 1st, 2nd, 3rd etc.
+\usepackage[super]{nth}
+
 %enable hypelinks
-\usepackage[pdftex,pdfusetitle]{hyperref}
+\usepackage[pdftex]{hyperref}
+\makeatletter
 \hypersetup{
   hidelinks,
+  pdftitle=\thetitle,
   pdfpagelayout=TwoPageRight,
   bookmarks=true,
-  pdfstartview=Fit
+  pdfstartview=Fit,
+  pdfauthor={\author},
+  pdftitle={\thetitle}
+  pdflang=en,
+  pdfsubject={\thesubtitle},
+  pdfkeywords={Messaging, Anonymity, SMTP, MIME, S/MIME, POP3, IMAPv4, Message Vortex},
+  pdfcontactemail={martin.gwerder@fhnw.ch},
+  pdflicenseurl={http://creativecommons.org/licenses/by-nc-nd/3.0/ch/},
+  pdfcopyright={"Creative Commons Attribution-NonCommercial-NoDerivatives 3.0 Switzerland" (CC BY-NC-ND 3.0 CH)}
 }
+\makeatother
+
+% for PDF/A generation
+%\usepackage[a-3b]{pdfx}
+
+
 
 % Link above tables and figures
 %\usepackage[hypcap]{caption}
@@ -91,8 +120,8 @@
 % enable nice references
 \usepackage{fancyref}
 
-% enable superscript  for 1st, 2nd, 3rd etc.
-\usepackage[super]{nth}
+% For abstracts
+\usepackage{abstract}
 
 % Enable indexes
 \usepackage{makeidx}
@@ -140,10 +169,10 @@
 \author{Martin Gwerder (06-073-787)}
 \date{\SVNDate}
 
-\hypersetup{pdfinfo={
-Subject={Privacy when using common internet transport protocols},
-Keywords={Email; SMTP; MIME; S/MIME; POP3; IMAPv4; Message Vortex; Anonymity}
-}}
+%\hypersetup{pdfinfo={
+%Subject={Privacy when using common internet transport protocols},
+%
+%}}
 
 \lstset{ %
 	backgroundcolor=\color{lightgray},   
@@ -262,11 +291,11 @@ Keywords={Email; SMTP; MIME; S/MIME; POP3; IMAPv4; Message Vortex; Anonymity}
 
 \restoregeometry
 
-\begin{comment}
-\begin{abstracts}        %this creates the heading for the abstract page
-FIXME abstract is still missing
-\end{abstracts}
+\begin{abstract}        %this creates the heading for the abstract page
+    \myabstract
+\end{abstract}
 
+\begin{comment}
 \begin{acknowledgements}      %this creates the heading for the acknowlegments
 I would like to thank my wife Cornelia and my lovely three kids (Saphira, Florian and Aurelius) for their patience and their support. Without them I could never have done this work.\par
 
@@ -281,7 +310,7 @@ I would like to acknowledge the thousands of individuals who have coded for the 
 \cleardoublepage
 \makeatletter\renewcommand{\l@subsubsection}{\@dottedtocline{3}{7.4em}{4.5em}}\makeatother
 \onecolumn
-\tableofcontents[
+\tableofcontents
 \listoftables
 \listoffigures
 \listofrequirements
@@ -481,4 +510,9 @@ A. Perrig
 -Srdjan Capkun (Keine Kapazität)
 -David Basin  (Keine Kapazität)
 \end{comment}
+
+\chapter{Curriculum Vitae}
+
+\fxfatal{add content here}
+
 \end{document}
