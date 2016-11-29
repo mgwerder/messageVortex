@@ -809,6 +809,7 @@ A MTS consists generally out of three parts. For incoming connects there is a da
 A MSS consists out of a local storage and delivery agents which do offer uniform interfaces to access the local store. They do also deal with replication issues and grant should take care of the atomicity of transactions committed to the storage. Typically there are two different kind of \defref{MDA}s. \defref{Local MDA}s offer possibilities to access the store via efficient (non network based) mechanisms (eg IPC or named sockets). This is usually done with a stripped down protocol (eg. \defref{LMTP}). For remote agents there a publicly -- network based -- agent available. Common Protocols for this \defref{Remote MDA}\ include \defref{POP}, \defref{IMAP}, or \defref{MS-OXMAPIHTTP}.\par
 
 \subsection{Mail Endpoints}
+\fxfatal{Move this section to appropriate location}
 Mail endpoints consist typically of the following components:
 \begin{itemize}
 	\item A Mail User agent (\defref{MUA})
@@ -1009,8 +1010,6 @@ The puzzle of \citeauthor{waters2004new} in \cite{waters2004new} are somewhat si
 
 \subsubsection{Scrypt}
 Scrypt was originally developed by \citeauthor{percival2009stronger} in \citeyear{percival2009stronger} and formally defined by \citeauthor{RFC7914} in \cite{RFC7914}. It was originally designed as a key derivation function for an online backup service called tarsnap. Acording to the tarsnap site (\href{http://www.tarsnap.com/scrypt.html}{http://www.tarsnap.com/scrypt.html}) the cryptocurrency Litecoin uses a simplified version of the scrypt as proof of work scheme.
-
-As ASIC implementations have already su
 
 \cite{forler2014memory}
 
