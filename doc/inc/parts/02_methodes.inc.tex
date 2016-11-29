@@ -287,12 +287,8 @@ SMS capability was introduced in the SS7 protocol. This protocol allows the mess
 
 Secondly the protocol is not widely adopted within the internet domain. There are gateways providing bridging functionalities to the SMS service. However -- the protocol itself is insignificant in the internet itself. 
 
-\fxfatal{add credible source}
-
 \section{MMS}
-The Multimedia Messaging Service (MMS) is maintained by 3GPP (\nth{3} Generation Partnership Project). This protocol is manly a mobile protocl based on telephone networks.
-
-\fxfatal{analyse criterias and add more information}
+The Multimedia Messaging Service (MMS) is maintained by 3GPP (\nth{3} Generation Partnership Project). This protocol is manly a mobile protocol based on telephone networks. This protocol is just like the SMS protocol accessible through the internet by using gateways but not directly usable within the internet.
 
 \section{Roundup for Transport Protocols}
 \begin{table}[h]
@@ -309,7 +305,7 @@ The Multimedia Messaging Service (MMS) is maintained by 3GPP (\nth{3} Generation
 		XMPP	 & $\checkmark$			& $\checkmark$		& $\checkmark$\\
 		SMTP	 & $\checkmark$			& $\checkmark$		& $\checkmark$\\
 		SMS\footnotemark[1] & 			& 					& \\
-		MMS		 & $\checkmark$			& $\checkmark$		& $\times$\\\hline
+		MMS		 & $\times$			    & $\checkmark$		& $\times$\\\hline
 	\end{tabular}	
 	\caption{comparison of protocols in terms of the suitability criteria as transport layer}
 	\label{tab:protoSuitCrit}
@@ -341,9 +337,9 @@ Especially the anonymity of a subject from an attacker's is very important to th
 \subsection{$k$-Anonymity}
 $k$-anonymity is a term introduced in \cite{k-anonymous:ccs2003}. This work claims that no one might be held responsible for an action if the action itself can only be identified as an action which has been taken by one unidentifiable entity out of $k$ entities.
 
-The Document distinguishes between \textit{Sender $k$-anonymity} where the sending entity can only be narrowed down to a set of $k$ entities and \textit{Receiver $k$-anonymity} 
+The Document distinguishes between \textit{Sender $k$-anonymity} where the sending entity can only be narrowed down to a set of $k$ entities and \textit{Receiver $k$-anonymity}. 
 
-\fxfatal{say something about the size of $k$; add more content}
+The size of $k$ is a key factor. One of the criteria might be the legal requirements of a jurisdiction. Depending on the jurisdiction it is normally not possible prosecute someone if an action is not directly coupled to one person. Another criteria might be the decreasing of $k$ over time. If a Vortex account is used we have to assume that some vortex identities go out of commission over time. If $k$ is chosen according to a legal requirement it should be taken into account that $k$ might be decreasing over time.
 
 \subsection{$\ell$-Diversity}
 In \cite{machanavajjhala2007diversity} an extended model of $k$-anonymity is introduced. In this paper the the authors emphasize that it is possible to break a $k$-anonymity set if there is additional Information available which may be merged into a data set so that a special entity can be filtered from the $k$-anonymity set. In other words if an anonymity set is to tightly specified a single additional background information might be sufficient to identify a specific entity in an anonymity set.
@@ -470,13 +466,18 @@ This was defined  in such a way to distinguish the message flow from
 The use of a legitimate channel such as SMTP and hide information in this specific channel is not a usage of covert channel. This methode is commonly referenced as channel exploitation. In the following section we analyse technologies for suitability in a P2P network construct as data channel.
 
 \subsubsection{Spread Spectrum}
+\cite{viterbi1995cdma}
 \fxfatal{add content here}
 
 \subsubsection{Steganography}
-\fxfatal{add content here}
+According to \cite{wiki:steganographie} steganography is the art of hiding information in carrier data. The carrier data is commonly called container. The modified container containing the hidden information is commonly called steganogram.
+
+\fxfatal{add more content here}
 
 \subsubsection{Timing Channels}
-\fxfatal{add content here}
+Timing channels are a specialised form of covert channels. In timing channels not the information itself is written into the channel but the usage of the channel is encoded in such a way that it is capable to reflect the data being transferred.
+
+\fxfatal{add more and better description here;}
 
 \section{Cryptography}
 Whenever dealing with hiding data and maintaining integrity of data cryptography is the first tool in the hand of an implementer. A vast amount of research in this area does already exist. For this work we did not collect a lot of information. We focussed on algorithms either well researched and implemented or research which seem very valuable when putting this work into place. 
@@ -494,10 +495,12 @@ For a key $K_b\neq K_a$ this means
 \end{eqnarray} 
 
 \subsubsection{AES}
-\fxfatal{add content here}
+AES was anounced by NIST in \citeyear{standard2001announcing} as a result of a contest. The algorithm works with four operations (subBytes, ShiftRows, mixColumns and addRoundKey). These operations are repeated depending on the key length 10 to 14 times. 
 
-\subsubsection{Camelia}
-\fxfatal{add content here}
+AES is up until now (2016) unbroken. It has been weakened in the analysis described in \cite{tao2015improving} which reduces the complexity by roughly one to two bits. 
+
+\subsubsection{Camellia}
+The camellia algorithm is described in \cite{RFC3713}. The key sizes are 128, 192, and 256. Camellia is a Feinstel cypher with 18 to 24 rounds depending on the key size. Up until today the cypher is not known to be broken. 
 
 \subsection{Asymmetric Encryption}
 For all asymmetric encryption algorithm in this paper we may assume that 
@@ -529,10 +532,11 @@ RSA is up until the day of writing this paper not publicly know to be broken (un
 The elliptic curves were independently suggestd by \cite{Miller1986} and \cite{Koblitz04guideto} in 1986. Elliptic curve Cryptography started to be widely deployed in the public space about in 2006. Since then it seems to compete very well with the well established RSA algorithm. While being similarly well researched ECC has the advantage of far shorter key sizes for the same grade of security.
 
 \subsection{Homomorphic encryption}
-\fxfatal{add content here}
+\cite{Gentry:2009:FHE:1536414.1536440}
+\fxfatal{add content here; Is there somewhere a definition for this?}
 
 \subsection{Deniable Encryption and Deniable Steganography}
-\fxfatal{add content here}
+\fxfatal{add content here; Is there a definition for this}
 
 \subsection{Key Sizes\label{sec:keySize}}
 The question of key sizes is a hard to answer as it depends on the current and future possibilities of an adverser which is again depending on not forseeable research. We tried to collect a couple of recommendatitions.
@@ -871,6 +875,37 @@ In \cite{amiri2015theoretical} is a good summary of proposed proof of work metho
 
 In our case we are looking for a proof which imposes ideally the same amount of work to an attacker and a valid sender. Since an attacker need a lot more resources than a normal sender the amount of work should be for him unbearable. A normal sender on the other hand should be able to cover the load imposed by the system easily.
 
+The website coinwarz and \cite{cryptomining-blog.com} list the current mining speeds on up to date hardware for several algorithms as shown in table \ref{tab:hashSpeed}.
+\begin{table*}[t]
+	\centering\tiny
+	\begin{tabular}{|l|r|l|l|}\hline
+		\diaghead{\theadfont Proof of work Criteria}{Proof of Work}{Criteria} 	 & \thead{Speed}	& \thead{hardness type} & \thead{Cryptocurrency} \\\hline
+		Blake-256\cite{aumasson2008blake}   &  $11\, 200\, 000$ & FIXME          & Blakecoin\\
+		CryptoNight                         &               $2$ & Memory or egalitarian & Monero\\
+		EtHash\cite{ethash}                 &       $108\, 000$ & Memory and IO  & Ethereum, Ethereum-classic\\
+		Equihash\cite{biryukov2016equihash} &               $1$ & FIXME          & Zclassic, Zcash\\
+		Groestl\cite{gauravaram2009grostl}  &        $45\, 000$ & FIXME          & Groestlcoin, Diamond\\
+		HEFTY1                              &           unknown & FIXME          & Heavycoin, Mjollnircoin \\
+		Keccak\cite{bertoni2009keccak}      &   $1\, 000\, 000$ & FIXME          & Maxcoin, Startcoin, CryptoMeth\\
+		Lyra2REv2    \cite{lyra2}           &        $30\, 000$ & Memory         & Vertcoin\\
+		NeoScrypt                           &             $400$	& Memory         & Feathercoin, UFOCoin, OrbitCoin, Phoenixcoin\\
+		\multirow{2}{*}{SHA-256} 	        &   $9\, 460\, 000$	& CPU            & UniversalCurrency, Mazacoin, Titcoin, Peercoin, Bitcoin, HAMRadioCoin, eMarl,        Digitalcoin-SHA-256, Zetacoin, Curecoin, Freicoin, \\
+		                                    &                   &                & Tigercoin, Terracoin, Unbreakable, Myriadcoin-SHA-256, Joulecoin, Acoin, Tekcoin, Unobtanium, Namecoin, DevCoin, IxCoin\\    
+		\multirow{3}{*}{Scrypt} 		    &       $110\, 000$	& Memory         & Einsteinium, Gulden, Casinocoin, Quatloo, GameCredits, DNotes, Auracoin, Novacoin, CHNCoin, Goldcoin, Florincoin, Megacoin, \\
+		                                    &                   &                & Bottlecaps, Litecoin, Bitbar, DigiByte, Verge, Franko, BATA, Worldcoin, WildBeastBitcoin, BBQCoin, Nyancoin, Digitalcoin-Scrypt,  \\
+		                                    &                   &                & Aricoin, Sexcoin, Spots, Emerald, Dodgecoin, Viacoin, Myriadcoin-Scrypt\\    
+		Scrypt-Adaptive-NFactor             &           unknown & FIXME          & Vertcoin, Execoin, GPUcoin, ParallaxCoin, SiliconValleyCoin\\
+		Scrypt-Jane                         &           unknown & FIXME          & YaCoin, Ultracoin, Velocitycoin\\
+		Quark                               &        $20\, 000$ & FIXME          & MonetaryUnit, Quark, Securecoin\\
+		X11                                 &        $34\, 400$	& FIXME          & Digitalcoin-X11, Dash, CanabisCoin, darkCoin, HiroCoin, X11Coin\\
+		X13                                 &           unknown & FIXME          & MaruCoin, BoostCoin, X13Coin\\
+		Yescrypt   \cite{yescrypt}          &           unknown & ROM-port       & Globalboost-Y \\
+		\hline          
+	\end{tabular}	
+	\caption{comparison of of Proof of Work algorithms}
+	\label{tab:hashSpeed}
+\end{table*}
+
 \subsection{CPU-Bound Proof of work}
 CPU bound proof of work tries to assign a task to a request. By presenting a result the sender proofs that he solved a puzzle. Normally these puzzles may only be solved by brute force.
 
@@ -973,41 +1008,49 @@ The puzzle of \citeauthor{waters2004new} in \cite{waters2004new} are somewhat si
 \fxfatal{add content here}
 
 \subsubsection{Scrypt}
+Scrypt was originally developed by \citeauthor{percival2009stronger} in \citeyear{percival2009stronger} and formally defined by \citeauthor{RFC7914} in \cite{RFC7914}. It was originally designed as a key derivation function for an online backup service called tarsnap. Acording to the tarsnap site (\href{http://www.tarsnap.com/scrypt.html}{http://www.tarsnap.com/scrypt.html}) the cryptocurrency Litecoin uses a simplified version of the scrypt as proof of work scheme.
+
+As ASIC implementations have already su
+
 \cite{forler2014memory}
+
+\fxfatal{add content here}
+
+\subsubsection{HashCash}
+\cite{back2003hashcash}
 
 \fxfatal{add content here}
 
 \subsection{Summary for Proof of Work Algorithms}
 \fxfatal{to check: Groza 2016 Cryptanalysis of an authentication protocol}
+\cite{groza2005cryptanalysis}
 
 \fxfatal{add Revisiting Difficulty Notions for Client Puzzles and DoS Resilience}
+\cite{groza2012revisiting}
 
-\fxfatal{add Toward Non-parallelizable Client Puzzles (http://link.springer.com/chapter/10.1007/978-3-540-76969-9_16) ordered in nebis}
+\fxfatal{check and possibly add}
+\cite{tritilanunt2007toward}
 
-\fxfatal{add content here}
+\fxfatal{check and possibly add}
+\cite{alwen2016efficiently}
 
-\fxfatal{add table from \cite{amiri2015theoretical} here and extend with additional puzzles}
+\fxfatal{check and add}
+\cite{dwork2003memory}
 
-\fxfatal{add "Integer square root  modulo a large prime" Dwork 92/93}
+\fxfatal{check and possibly add}
+\cite{cryptoeprint:2005:356}
 
-\fxfatal{add "Weaken Fiat shamir signatures" Dwork 92/93}
-
-\fxfatal{add "Ong–Schnorr–Shamir signature broken by Pollard" Dwork 92/93}
-
-\fxfatal{Add "HashCash" Back 97}
-
-\fxfatal{Add Franklin, Matthew K.; Malkhi, Dahlia (1997). "Auditable metering with lightweight security". Financial Cryptography '97. Updated version May 4, 1998.}
-
-\fxfatal{add Dwork, Cynthia; Goldberg, Andrew; Naor, Moni (2003). "On memory-bound functions for fighting spam". Advances in Cryptology: CRYPTO 2003. Springer. 2729: 426–444.}
-
-\fxfatal{add hokaido from Coelho, Fabien. "Exponential memory-bound functions for proof of work protocols". Cryptology ePrint Archive, Report.}
-
-\fxfatal{add Tromp, John (2015). "Cuckoo Cycle; a memory bound graph-theoretic proof-of-work" (PDF). Financial Cryptography and Data Security: BITCOIN 2015. Springer. pp. 49–62.}
+\fxfatal{check and possibly add}
+\cite{tromp2015cuckoo}
 
 \fxfatal{add Merkle tree based Coelho, Fabien. "An (almost) constant-effort solution-verification proof-of-work protocol based on Merkle trees". Cryptology ePrint Archive, Report.}
+\cite{coelho2008almost}
 
-\fxfatal{add Guided tour puzzle protocol Abliz, Mehmud; Znati, Taieb (December 2009). "A Guided Tour Puzzle for Denial of Service Prevention". Proceedings of the Annual Computer Security Applications Conference (ACSAC) 2009. Honolulu, HI: 279–288.}
+\fxfatal{check carefully; possibly bad}
+\cite{abliz2009guided}
 	
+\fxfatal{add table from \cite{amiri2015theoretical} here and extend with additional puzzles}
+
 \section{Known Attacks}
 In the following sections we emphasize on possible attacks to an anonymity preserving protocols. In the following sections we describe classes of attacks. These attacks may be used to attack the anonymity of any entity involved in the message channel. In a later stage we test the protocol for immunity against these classes of attacks.
 
@@ -1272,19 +1315,25 @@ This allows to categorize the used algorithms to a strength. This list however s
 
 \paragraph{CFB (Cypher Feedback):} CFB works exactly as CBC with the difference that the plain text is xor'ed and the initialisation vector respectively the preceding cypher result is encrypted. CFB does not support parallel encryption as the cyphertext input from the preceeding operation is required for a round, it does however allow parallel decryption and random access.
 
-\paragraph{OFB:} OFB works exactly as CFB except for the fact that not the cyphertext result is taken as feedback but the result of the encryption before xor'ing the plain text. This denies parallel encryption and decryption as well as random access.
+\fxfatal{add source}
+
+\paragraph{OFB:} OFB works exactly as CFB except for the fact that not the cypher text result is taken as feedback but the result of the encryption before xor'ing the plain text. This denies parallel encryption and decryption as well as random access.
+
+\fxfatal{add source}
 
 \paragraph{OCB (Offset Codebook Mode):} This mode is specified in \cite{krovetz-ocb-04}. OCB is specifically designed for AES128, AES192, and AES256. It supports authentication tag lengths of 128, 96 , or 64 bits for each specified encryption algorithm. OCB hashes the plaintext of a message with a specialised function $H_{OCB}(\mathbf{M})$
 
 \fxfatal{Add about parrallelisation here}
 
-\paragraph{CCM:}
+\paragraph{CCM:} Counter with CBC-MAC (CCM) is specified in \cite{RFC3610}.
 
 \fxfatal{Add content here}
 
-\paragraph{CTR:} CTR is a mixture between OFB and CBC. A nonce concatenated with a counter which is incremented on every block is encrypted and then xor'ed with the plain text. This allows parallel decryption and encryption as well as random access.
+\paragraph{CTR:} CTR is specified in \cite{lipmaa2000ctr} and is a mixture between OFB and CBC. A nonce concatenated with a counter incrementing on every block is encrypted and then xor'ed with the plain text. This allows parallel decryption and encryption as well as random access.
 
-\paragraph{GCM (Galois Counter Mode):} GCM is related to CTR but has some major differences. The nonce  is not used (just the counter starting with value 1). In order to authenticate the encryption an authentication token $auth$ is hashed with $H_{GFmult}$ and then xor'ed with the first cypher block. All subsequent cipher blocks are xor'ed with the previos result and then hashed  again with $H_{GFmult}$. After the last block the output $o$ is processed  as follows: $H_{GFmult}(o\bigoplus (len(A)||len(B))) \bigoplus E^{K^0}(counter_0)$. Encryption and decryption can be paralleled in GCM. Random access is possible. However authentication of a encryption is not parallelizable. The authentication makes it unsuitable for our purposes. Alternatively we could use a fixed authentication string.
+\paragraph{GCM (Galois Counter Mode):} GCM has been defined in \cite{mcgrew2004galois}, and is related to CTR but has some major differences. The nonce is not used (just the counter starting with value 1). In order to authenticate the encryption an authentication token $auth$ is hashed with $H_{GFmult}$ and then xor'ed with the first cypher block. All subsequent cipher blocks are xor'ed with the previos result and then hashed  again with $H_{GFmult}$. After the last block the output $o$ is processed  as follows: $H_{GFmult}(o\bigoplus (len(A)||len(B))) \bigoplus E^{K^0}(counter_0)$. Encryption and decryption can be paralleled in GCM. Random access is possible. However authentication of a encryption is not parallelizable. The authentication makes it unsuitable for our purposes. Alternatively we could use a fixed authentication string.
+
+\fxfatal{add analysis of GCM \cite{mcgrew2004security}}
 
 \fxfatal{add choices of padding}
 
@@ -1316,7 +1365,7 @@ Different paddings are used at the end of a cypher stream to indicate how many b
 \paragraph{PKCS1:}  
 \fxfatal{Add content here}
 
-\paragraph{PKCS7:} This padding is the standard used in symmetric encryption up to 256 bits key length. The free bytes in the last sypher block indicate the number of bytes being used. This makes this padding very compact. It requires only 1 Byte of functional data at the end of the block. All other bytes are defined but not needed.
+\paragraph{PKCS7:} This padding is the standard used in symmetric encryption up to 256 bits key length. The free bytes in the last cypher block indicate the number of bytes being used. This makes this padding very compact. It requires only 1 Byte of functional data at the end of the block. All other bytes are defined but not needed.
 
 \paragraph{OAEP with SHA and MGF1 padding:} This padding is closely related to PKCS1 padding. The hash size is however bigger and thus the required space for padding is much higher. OAEP with SHA and MGF1 Padding is used in asymetric encryption only. Due to its size it is important to note that the payload in the last block shrinks to $keySizeInBits/8-2-MacSize/4$.
 
@@ -1672,20 +1721,20 @@ For an ephemeral identity very little information has to be kept. This identity 
 The following data has to be kept per identity:
 \begin{itemize}
 	\item $\mathbf{ID}\langle pubKey, expiry, messagesLeft, bytesLeft \rangle$
-	\item $\mathbf{Puzz}\langle identity, expiry, requestedOperation, offeredPuzzle \rangle$
+	\item $\mathbf{Puzz}\langle identity, expiry, request, puzzle \rangle$
 \end{itemize}
 \fxfatal{add content here}
 
-\subsubsection{Accounting Data of a Header Block}
+\subsubsection{Accounting Data of a ``header'' Block}
 All accounting data of a header block is connected to the respective identity. All header blocks do expire latest with their respective identity. The following data has to be kept on a mix:
 \begin{itemize}
 	\item $\mathbf{HL}\langle identity, serial, remainingReplays, expiry\rangle$\\
 	      This is the long term header list. It lists all headers of an identity, and how many replays are left until the requests are rejected.
-	\item $\mathbf{HS}\langle identity, serial, arrivalTime, msgHash, duration \rangle$\\
+	\item $\mathbf{HS}\langle identity, serial, arrivalTime, hash, duration \rangle$\\
 	      This is the short term replay protection. It protects a block with the same hash from being replayed.
 \end{itemize}
 
-\subsubsection{Accounting Data of a Payload Block}
+\subsubsection{Accounting Data of a ``payload'' Block}
 \begin{itemize}
 	\item $\mathbf{PL}\langle identity, serial, id, hash, expiry, content or buildInstructions \rangle$\\
 \end{itemize}
