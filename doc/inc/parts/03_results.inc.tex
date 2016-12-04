@@ -83,6 +83,7 @@ As decoy traffic is generated with the same operations as the true content is sp
 \subsection{Routing Blocks}
 \fxfatal{add content here}
 
+
 \subsection{Payload Blocks}
 \fxfatal{add content here}
 
@@ -109,6 +110,9 @@ In table \ref{tab:protoReplyCrit} we show under what circumstances a reply to a 
 \fxfatal{add content here}
 
 \section{Blending layer}
+In our implementation the blending layer is a weak implementation. It attaches a message in non-obfuscated form with a mime type application/octet stream the application name is randomly chosen. Start offset is fixed to 200 and a valid header part is prepended. Text is not generated.
+
+
 \fxfatal{add content here}
 
 \section{Message Flows}
@@ -229,7 +233,7 @@ We assume that the adverser is targeting the following informations:
 \fxfatal{add content here}
 
 \subsubsection{Attacking Routing Blocks}
-\fxfatal{add content here}
+\fxfatal{add content here; Routing block length analysis}
 
 \subsection{Attack on Message size}
 
@@ -240,11 +244,11 @@ We assume that the adverser is targeting the following informations:
 
 \fxfatal{add content here}
 
-\section{Identification of participating account}
+\section{Identification of Participating Accounts}
 
 \fxfatal{add content here}
 
-\subsection{Identification by content}
+\subsection{Identification by Content}
 It is possible to identify a message by content. Assuming that an adverser knows the applied blending methode he may identify an ASN.1 structure of 
 
 \fxfatal{add content here}
@@ -261,14 +265,14 @@ It is possible to identify a message by content. Assuming that an adverser knows
 
 \fxfatal{add content here}
 
-\subsection{Identification by Behavioural analysis}
+\subsection{Identification by Behavioural Analysis}
 
 \fxfatal{add content here}
 
 \section{Storage of Messages and queues}
-The storage of messages sent though MessageVortex should be handled with great care. It seems on the first sight a good idea to merge all messages in a globally available storage such as the mail account of the receiving entity. However -- In doing so we would discover the message content to the providing party of a mail account. Since we handled the message with great care and tremendous costs up until this point it would be careless doing so. 
+The storage of messages sent though MessageVortex should be handled with great care. It seems on the first sight a good idea to merge all messages in a globally available storage such as the IMAP account of the receiving entity. However -- In doing so we would discover the message content to the providing party of a mail account. Since we handled the message with great care and tremendous costs up until this point it would be careless doing so. 
 
-Storing them in a localized and receiving entity controlled storage is definitely a good idea but leaves security considerations like a backup possibly to an end user. This might be better but in effect a questionable decision. There is however a third option. By leaving the message unhandled on the last entity of the MessageVortex chain we may safely backup the data without disclosing the message content. Merging the content then dynamically through a specialized proxy would allow the user tu have a unified view on his without compromising the security.
+Storing them in a localized and receiving entity controlled storage is definitely a good idea but leaves security considerations like a backup possibly to an end user. This might be better, but in effect a questionable decision. There is however a third option. By leaving the message unhandled on the last entity of the MessageVortex chain we may safely backup the data without disclosing the message content. Merging the content then dynamically through a specialized proxy would allow the user to have a unified view on his without compromising the security.
 
 \fxfatal{implemented in prototype?}
 

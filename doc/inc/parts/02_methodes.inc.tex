@@ -740,14 +740,6 @@ Despite its name Gnutella2 is not the next generation of Gnutella. It was a fork
 
 \fxfatal{add content here}
 
-\subsection{Darknet}
-
-\fxfatal{More concept than a protocol or technology. Remove?}
-
-\subsection{Sneakernet}
-
-\fxfatal{More concept than a protocol or technology. Remove?}
-
 \subsection{Hordes}
 \cite{Levine:2002}
 
@@ -1312,13 +1304,9 @@ This allows to categorize the used algorithms to a strength. This list however s
 
 \paragraph{EAX:} EAX has been broken in 2012\cite{minematsu2013attacks} and is therefore rejected for our use.
 
-\paragraph{CFB (Cypher Feedback):} CFB works exactly as CBC with the difference that the plain text is xor'ed and the initialisation vector respectively the preceding cypher result is encrypted. CFB does not support parallel encryption as the cyphertext input from the preceeding operation is required for a round, it does however allow parallel decryption and random access.
+\paragraph{CFB (Cypher Feedback):} CFB is specified in \cite{dworkin2001recommendation} and works exactly as CBC with the difference that the plain text is xor'ed and the initialisation vector respectively the preceding cypher result is encrypted. CFB does not support parallel encryption as the cyphertext input from the preceeding operation is required for a round, it does however allow parallel decryption and random access.
 
-\fxfatal{add source}
-
-\paragraph{OFB:} OFB works exactly as CFB except for the fact that not the cypher text result is taken as feedback but the result of the encryption before xor'ing the plain text. This denies parallel encryption and decryption as well as random access.
-
-\fxfatal{add source}
+\paragraph{OFB:} OFB is specified in \cite{dworkin2001recommendation} and works exactly as CFB except for the fact that not the cypher text result is taken as feedback but the result of the encryption before xor'ing the plain text. This denies parallel encryption and decryption as well as random access.
 
 \paragraph{OCB (Offset Codebook Mode):} This mode is specified in \cite{krovetz-ocb-04}. OCB is specifically designed for AES128, AES192, and AES256. It supports authentication tag lengths of 128, 96 , or 64 bits for each specified encryption algorithm. OCB hashes the plaintext of a message with a specialised function $H_{OCB}(\mathbf{M})$
 
@@ -1339,16 +1327,16 @@ This allows to categorize the used algorithms to a strength. This list however s
 \begin{table}[h]
 	\centering\tiny
 	\begin{tabular}{|l|l|l|l|}\hline
-		\diaghead{\theadfont Mode Criteria}{Mode}{Criteria} 	& \thead{Requires IV} 	& \thead{binary proof} & \thead{parallelisable}\\\hline
-		GCM	                            							& $\checkmark$			& $\checkmark$			& $\times$\\              
-		CTR	                            							& $\checkmark$			& $\checkmark$			& $\checkmark$\\              
-		CCM	                            							& FIXME  				& $\checkmark$			& $\times$\\              
-		CFB	                            							& $\checkmark$			& $\checkmark$			& $\checkmark$\\              
-		OCB	                            							& FIXME					& $\checkmark$			& $\times$\\              
-		OFB	                            							& $\checkmark$			& $\checkmark$			& $\times$\\              
-		PCBC                            							& $\checkmark$			& $\checkmark$			& $\times$\\              
-		CBC 	                           							& $\checkmark$			& $\checkmark$			& $\times$\\              
-		ECB 	                           							& $\times$				& $\checkmark$			& $\checkmark$\\    
+		\diaghead{\theadfont Mode Criteria}{Mode}{Criteria} 		& \thead{Requires IV} 			& \thead{binary proof}	& \thead{parallelisable}\\\hline
+		GCM	                            							& $\checkmark$					& $\checkmark$			& $\times$\\              
+		CTR	                            							& $\checkmark$					& $\checkmark$			& $\checkmark$\\              
+		CCM	                            							& $\checkmark$					& $\checkmark$			& $\times$\\              
+		CFB	                            							& $\checkmark$					& $\checkmark$			& $\checkmark$\\              
+		OCB	                            							&$\times^{\text{includes auth}}$& $\checkmark$			& $\times$\\              
+		OFB	                            							& $\checkmark$					& $\checkmark$			& $\times$\\              
+		PCBC                            							& $\checkmark$					& $\checkmark$			& $\times$\\              
+		CBC 	                           							& $\checkmark$					& $\checkmark$			& $\times$\\              
+		ECB 	                           							& $\times$						& $\checkmark$			& $\checkmark$\\    
 		\hline          
 	\end{tabular}	
 	\caption{comparison of encryption modes in terms of the suitability criteria as transport layer}
