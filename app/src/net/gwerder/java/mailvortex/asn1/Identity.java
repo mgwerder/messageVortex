@@ -1,9 +1,6 @@
 package net.gwerder.java.mailvortex.asn1;
 
-import net.gwerder.java.mailvortex.asn1.encryption.Algorithm;
-import net.gwerder.java.mailvortex.asn1.encryption.AlgorithmType;
-import net.gwerder.java.mailvortex.asn1.encryption.DumpType;
-import net.gwerder.java.mailvortex.asn1.encryption.Padding;
+import net.gwerder.java.mailvortex.asn1.encryption.*;
 import org.bouncycastle.asn1.*;
 
 import javax.crypto.BadPaddingException;
@@ -73,7 +70,7 @@ public class Identity extends Block {
     }
 
     public Identity() throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, IOException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, NoSuchProviderException, InvalidKeySpecException {
-        this.identityKey = new AsymmetricKey(Algorithm.RSA, Padding.getDefault(AlgorithmType.ASYMMETRIC), 2048);
+        this.identityKey = new AsymmetricKey(Algorithm.RSA, Padding.getDefault(AlgorithmType.ASYMMETRIC), Mode.getDefault(AlgorithmType.ASYMMETRIC), 2048);
         this.serial = (long) (Math.random() * 4294967295L);
         this.maxReplays = 1;
         this.valid = new UsagePeriod(3600);

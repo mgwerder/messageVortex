@@ -2,10 +2,7 @@ package net.gwerder.java.mailvortex.test.asn1;
 
 import net.gwerder.java.mailvortex.MailvortexLogger;
 import net.gwerder.java.mailvortex.asn1.AsymmetricKey;
-import net.gwerder.java.mailvortex.asn1.encryption.Algorithm;
-import net.gwerder.java.mailvortex.asn1.encryption.AlgorithmType;
-import net.gwerder.java.mailvortex.asn1.encryption.Padding;
-import net.gwerder.java.mailvortex.asn1.encryption.SecurityLevel;
+import net.gwerder.java.mailvortex.asn1.encryption.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -56,7 +53,7 @@ public class AsymmetricKeyTest {
                 LOGGER.log(Level.INFO, "  creating key");
                 AsymmetricKey s = null;
                 try {
-                    s = new AsymmetricKey(alg, Padding.getDefault(alg.getAlgorithmType()), size);
+                    s = new AsymmetricKey(alg, Padding.getDefault(alg.getAlgorithmType()), Mode.getDefault(alg.getAlgorithmType()), size);
                 } catch (IOException ioe) {
                     setException(ioe);
                     LOGGER.log(Level.WARNING, "unexpected exception", ioe);
@@ -166,8 +163,8 @@ public class AsymmetricKeyTest {
                 for (int i = 0; i < ksDisc / size; i++) {
                     LOGGER.log( Level.FINE, "starting test " + (i + 1) + " of " + ksDisc / size );
                     System.out.print(".");
-                    AsymmetricKey k1 = new AsymmetricKey(alg, Padding.getDefault(AlgorithmType.ASYMMETRIC),size);
-                    AsymmetricKey k2 = new AsymmetricKey(alg, Padding.getDefault(AlgorithmType.ASYMMETRIC),size);
+                    AsymmetricKey k1 = new AsymmetricKey(alg, Padding.getDefault(AlgorithmType.ASYMMETRIC), Mode.getDefault(AlgorithmType.ASYMMETRIC),size);
+                    AsymmetricKey k2 = new AsymmetricKey(alg, Padding.getDefault(AlgorithmType.ASYMMETRIC), Mode.getDefault(AlgorithmType.ASYMMETRIC),size);
                     k2.setPrivateKey( k1.getPrivateKey() );
                     k2.setPublicKey(  k1.getPublicKey()  );
                     assertTrue( "error in key transfer cycle with "+alg+" ",k1.equals( k2 ));
@@ -211,7 +208,7 @@ public class AsymmetricKeyTest {
                     }
                     LOGGER.log( Level.INFO, "  testing " + a + "/" + p + " with level "+sl );
                     for (int i = 0; i < 100; i++) {
-                        AsymmetricKey ak = new AsymmetricKey( a, p, size );
+                        AsymmetricKey ak = new AsymmetricKey( a, p, Mode.getDefault(AlgorithmType.ASYMMETRIC),size );
                         assertTrue( "negative maximum payload for " + a.getAlgorithm() + "/" + size + "/" + p.getPadding(), maximumPayload > 1 );
                         byte[] b = new byte[maximumPayload];
                         sr.nextBytes( b );
@@ -222,6 +219,7 @@ public class AsymmetricKeyTest {
 
                 }
             } catch (IOException ioe) {
+                ioe.printStackTrace();
                 fail( "got exception while fuzzing padding" );
             }
         }

@@ -10,6 +10,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.IvParameterSpec;
 import java.io.IOException;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
@@ -47,13 +48,41 @@ public class AsymmetricKey extends Key {
 
     protected byte[]  publicKey  = null;
     protected byte[]  privateKey = null;
-    private Mode mode = Mode.getDefault();
-    private Padding padding = Padding.getDefault( AlgorithmType.ASYMMETRIC );
 
     public AsymmetricKey(byte[] b) throws IOException {
         this(ASN1Sequence.getInstance( b ));
         selftest();
     }
+
+    public AsymmetricKey(ASN1Encodable to) throws IOException  {
+        parse(to);
+        selftest();
+    }
+
+    public AsymmetricKey() throws IOException {
+        this( Algorithm.getDefault( AlgorithmType.ASYMMETRIC ), Padding.getDefault( AlgorithmType.ASYMMETRIC ),Mode.getDefault( AlgorithmType.ASYMMETRIC ), Algorithm.getDefault( AlgorithmType.ASYMMETRIC ).getKeySize() );
+        selftest();
+    }
+
+    public AsymmetricKey(Algorithm alg, Padding p, Mode mode, int keySize) throws IOException {
+        if(alg==null) {
+            throw new IOException( "Algorithm null is not encodable by the system" );
+        }
+        this.parameters.put(""+ Parameter.KEYSIZE.getId()+"_0",keySize);
+        this.mode=mode;
+        this.padding=p;
+        try {
+            createKey( alg, parameters );
+        } catch (NoSuchAlgorithmException | NoSuchProviderException | InvalidAlgorithmParameterException | InvalidParameterSpecException e) {
+            throw new IOException( "Exception while creating key", e );
+        }
+        selftest();
+    }
+
+    //public AsymmetricKey(Algorithm alg, Map<String, Integer> params) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException, InvalidParameterSpecException {
+    //    // store algorithm and parameters
+    //    createKey( alg, params );
+    //}
 
     private void selftest() throws IOException {
         if(publicKey==null) throw new IOException( "selftest failed: Public key may not be null");
@@ -97,36 +126,6 @@ public class AsymmetricKey extends Key {
     @Override
     public int hashCode() {
         return super.hashCode();
-    }
-
-    public AsymmetricKey(ASN1Encodable to) throws IOException  {
-        parse(to);
-        selftest();
-    }
-
-    public AsymmetricKey() throws IOException {
-        this( Algorithm.getDefault( AlgorithmType.ASYMMETRIC ), Padding.getDefault( AlgorithmType.ASYMMETRIC ), Algorithm.getDefault( AlgorithmType.ASYMMETRIC ).getKeySize() );
-        selftest();
-    }
-
-    public AsymmetricKey(Algorithm alg, Padding p, int keySize) throws IOException {
-        if(alg==null) {
-            throw new IOException( "Algorithm null is not encodable by the system" );
-        }
-        Map<String,Integer> pm= new HashMap<>();
-        pm.put(""+ Parameter.KEYSIZE.getId()+"_0",keySize);
-        padding=p;
-        try {
-            createKey( alg, pm );
-        } catch (NoSuchAlgorithmException | NoSuchProviderException | InvalidAlgorithmParameterException | InvalidParameterSpecException e) {
-            throw new IOException( "Exception while creating key", e );
-        }
-        selftest();
-    }
-
-    public AsymmetricKey(Algorithm alg, Map<String, Integer> params) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException, InvalidParameterSpecException {
-        // store algorithm and parameters
-        createKey( alg, params );
     }
 
     private void createKey(Algorithm alg, Map<String, Integer> params) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException, InvalidParameterSpecException {
@@ -173,7 +172,6 @@ public class AsymmetricKey extends Key {
             if(tagged.getTagNo()!=PRIVATE_KEY) throw new IOException("encountered wrong tag number (expected: "+PRIVATE_KEY+"; got:"+tagged.getTagNo()+")");
             privateKey=ASN1OctetString.getInstance(tagged.getObject()).getOctets();
         }
-        LOGGER.log(Level.FINEST, "parsed " + i + " fields");
     }
 
     public boolean hasPrivateKey() { return privateKey!=null; }
@@ -324,7 +322,7 @@ public class AsymmetricKey extends Key {
 
     private Cipher getCipher() throws NoSuchPaddingException,NoSuchAlgorithmException,NoSuchProviderException {
         if(keytype.getAlgorithm().startsWith("sec")) {
-            return Cipher.getInstance( "ECIES","BC" );
+            return Cipher.getInstance( "ECIES","BC");
         } else {
             return Cipher.getInstance(keytype.getAlgorithm()+"/"+mode+"/"+padding.getPadding());
         }
@@ -357,6 +355,8 @@ public class AsymmetricKey extends Key {
 
     public Padding getPadding() {return padding; }
 
-
+    public String toString() {
+        return "([AsymmetricKey]"+keytype+"/"+parameters.get(""+ Parameter.KEYSIZE.getId()+"_0")+"/"+mode+"/"+padding+")";
+    }
 
 }

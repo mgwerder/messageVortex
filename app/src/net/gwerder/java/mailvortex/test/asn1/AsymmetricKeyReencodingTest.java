@@ -38,13 +38,15 @@ public class AsymmetricKeyReencodingTest {
     private String testname;
     private Algorithm alg;
     private Padding   pad;
+    private Mode      mode;
     private int       size;
     private int repeat;
 
-    public AsymmetricKeyReencodingTest(String testname, Algorithm alg, Padding pad, int size, int repeat) {
+    public AsymmetricKeyReencodingTest(String testname, Algorithm alg, Padding pad, Mode mode, int size, int repeat) {
         this.testname = testname;
         this.alg=alg;
         this.pad=pad;
+        this.mode=mode;
         this.size=size;
         this.repeat = repeat;
     }
@@ -53,9 +55,9 @@ public class AsymmetricKeyReencodingTest {
     public static Collection<Object[]> generateData() {
         List<Object[]> ret = new Vector<>();
         for(Algorithm alg: Algorithm.getAlgorithms( AlgorithmType.ASYMMETRIC )) {
-            for (int ks : new int[]{1024 }) { // FIXME ",2048,4096"
+            for (int ks : new int[]{ 1024,2048,4096 }) {
                 int j = Math.min( (int) Math.pow( 2, ksDisc / ks ), 100 );
-                ret.add( new Object[]{"" + alg.getAlgorithm() + "/" + ks, alg, Padding.getDefault( AlgorithmType.ASYMMETRIC ), ks, j} );
+                ret.add( new Object[]{"" + alg.getAlgorithm() + "/" + ks, alg, Padding.getDefault( AlgorithmType.ASYMMETRIC ),Mode.getDefault( AlgorithmType.ASYMMETRIC ), ks, j} );
             }
         }
         LOGGER.log( Level.INFO,"Prepared for fuzzer "+ret.size()+" tests");
@@ -69,14 +71,14 @@ public class AsymmetricKeyReencodingTest {
         try {
             LOGGER.log( Level.INFO, "running reencoding test for " + testname );
             for (int i = 0; i < repeat; i++) {
-                AsymmetricKey s = new AsymmetricKey( alg, pad, size );
+                AsymmetricKey s = new AsymmetricKey( alg, pad, mode, size );
                 byte[] b1 = s.toBytes();
                 s.dumpValueNotation( "" );
                 assertTrue( "Byte representation may not be null", b1 != null );
                 AsymmetricKey s2 = new AsymmetricKey( b1 );
                 byte[] b2 = (s2).toBytes();
                 //System.out.println("dumping object tuple \n"+s.dumpValueNotation( "" )+"\n"+s2.dumpValueNotation( "" ));
-                assertTrue( "Byte arrays should be equal when reencoding", Arrays.equals( b1, b2 ) );
+                assertTrue( "Byte arrays should be equal when reencoding ("+s+"/"+s2+")", Arrays.equals( b1, b2 ) );
             }
         } catch (Exception e) {
             LOGGER.log( Level.WARNING,"Unexpected exception",e);
@@ -89,9 +91,9 @@ public class AsymmetricKeyReencodingTest {
         AsymmetricKey s;
         String currentObject = null;
         try {
-            LOGGER.log( Level.INFO, "Running encryption test with " + alg + "/" + Mode.getDefault() + "/" + pad + " (" + size + ")" );
+            LOGGER.log( Level.INFO, "Running encryption test with " + alg + "/" + Mode.getDefault(alg.getAlgorithmType()) + "/" + pad + " (" + size + ")" );
             for (int i = 0; i < repeat; i++) {
-                s = new AsymmetricKey( alg, pad, size );
+                s = new AsymmetricKey( alg, pad, mode, size );
                 currentObject = s.dumpValueNotation( "", DumpType.ALL );
                 byte[] b1 = new byte[sr.nextInt( Math.min( s.getPadding().getMaxSize( size ), 1024 ) )];
                 sr.nextBytes( b1 );

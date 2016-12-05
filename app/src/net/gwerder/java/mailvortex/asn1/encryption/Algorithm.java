@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
+import java.util.logging.Level;
+
+import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
 
 /**
  * Represents all supported crypto algorithms.
@@ -16,6 +19,9 @@ public enum Algorithm {
     AES128( 1000, AlgorithmType.SYMMETRIC, "aes128", "BC", SecurityLevel.LOW ),
     AES192( 1001, AlgorithmType.SYMMETRIC, "aes192", "BC", SecurityLevel.MEDIUM ),
     AES256( 1002, AlgorithmType.SYMMETRIC, "aes256", "BC", SecurityLevel.QUANTUM ),
+    CAMELLIA128( 1100, AlgorithmType.SYMMETRIC, "CAMELLIA128", "BC", SecurityLevel.LOW ),
+    CAMELLIA192( 1101, AlgorithmType.SYMMETRIC, "CAMELLIA192", "BC", SecurityLevel.MEDIUM ),
+    CAMELLIA256( 1102, AlgorithmType.SYMMETRIC, "CAMELLIA256", "BC", SecurityLevel.QUANTUM ),
     RSA(2000, AlgorithmType.ASYMMETRIC, "RSA", "BC", new HashMap<SecurityLevel, Integer>() {
         private static final long serialVersionUID = 12132345345L;
         {
@@ -111,14 +117,22 @@ public enum Algorithm {
     }
 
     public int getKeySize(SecurityLevel sl) {
-        if (txt.startsWith( "sec" )) {
+        if (txt.toLowerCase().startsWith( "sec" )) {
             return Integer.parseInt( txt.substring( 4, 7 ) );
-        } else if (txt.startsWith( "aes" ) || txt.startsWith( "sha" )) {
+        } else if (txt.toLowerCase().startsWith( "aes" ) || txt.startsWith( "sha" ) ) {
             return Integer.parseInt( txt.substring( 3, 6 ) );
-        } else if (txt.startsWith( "tiger" )) {
+        } else if (txt.toLowerCase().startsWith( "camellia" )  ) {
+            return Integer.parseInt( txt.substring( 8, 11 ) );
+        } else if (txt.toLowerCase().startsWith( "tiger" )) {
             return 192;
         }
+        if(secLevel==null || secLevel.get(sl)==null) LOGGER.log( Level.SEVERE, "Error fetching keysize for " + txt + "/" + secLevel.get(sl) + "");
+
         return secLevel.get(sl);
+    }
+
+    public boolean equals(Algorithm alg) {
+        return txt.equals(alg.getAlgorithm());
     }
 
     @Override

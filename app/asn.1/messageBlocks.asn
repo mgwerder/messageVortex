@@ -364,9 +364,7 @@ BEGIN
   AsymmetricAlgorithm ::= ENUMERATED {
     rsa       (2000),
     dsa       (2100),
-    secp384r1 (2500),
-    sect409k1 (2501),
-    secp521r1 (2502)
+    EC        (2500)
   }
   
   MacAlgorithm ::= ENUMERATED {
@@ -376,28 +374,21 @@ BEGIN
     tiger192 (3100)
   }
   
+  // FIXME replace with OID
   ECCurveType ::= ENUMERATED{
-    secp192r1,
-    sect163k1,
-    sect163r2,
-    secp224r1,
-    sect233k1,
-    sect233r1,
-    secp256r1,
-    sect283k1,
-    sect283r1,
-    secp384r1,
-    sect409k1,
-    sect409r1,
-    secp521r1,
-    sect571k1,
-    sect571r1,
+    secp384r1 (2500),
+    sect409k1 (2501),
+    secp521r1 (2502),
     ...
   }
   
   AlgorithmParameters ::= SEQUENCE {
-    keySize   [10000] INTEGER (0..65535) OPTIONAL,
-    curveType [10001] ECCurveType OPTIONAL,
+    keySize              [10000] INTEGER (0..65535) OPTIONAL,
+    curveType            [10001] ECCurveType OPTIONAL,
+    initialisationVector [10002] OCTET STRING OPTIONAL,
+    nonce                [10003] OCTET STRING OPTIONAL,
+    mode                 [10004] OCTET STRING OPTIONAL,
+    padding              [10005] OCTET STRING OPTIONAL,
     ...    
   }
   

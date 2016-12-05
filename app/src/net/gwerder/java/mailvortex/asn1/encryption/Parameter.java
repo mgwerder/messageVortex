@@ -7,7 +7,11 @@ package net.gwerder.java.mailvortex.asn1.encryption;
  */
 public enum Parameter {
     KEYSIZE   (10000,"keySize"),
-    CURVETYPE (10001,"curveType");
+    CURVETYPE (10001,"curveType"),
+    IV        (10002,"initialisationVector"),
+    NONCE     (10003,"nonce"),
+    MODE      (10004,"mode"),
+    PADDING   (10005,"padding");
 
     int id=-1;
     String txt=null;

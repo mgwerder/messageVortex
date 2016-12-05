@@ -68,6 +68,13 @@ public enum Padding {
         return null;
     }
 
+    public static Padding getByName(String name) {
+        for(Padding e : values()) {
+            if(e.txt.equals(name)) return e;
+        }
+        return null;
+    }
+
     public static Padding getDefault(AlgorithmType at) {
         return def.get(at);
     }

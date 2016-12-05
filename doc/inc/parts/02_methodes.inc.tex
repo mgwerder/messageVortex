@@ -1326,16 +1326,16 @@ Encryption and decryption can be paralleled in GCM. Random access is possible. H
 \begin{table}[h]
 	\centering\tiny
 	\begin{tabular}{|l|l|l|l|}\hline
-		\diaghead{\theadfont Mode Criteria}{Mode}{Criteria} 		& \thead{Requires IV} 			& \thead{binary proof}	& \thead{parallelisable}\\\hline
-		GCM	                            							& $\checkmark$					& $\checkmark$			& $\times$\\              
-		CTR	                            							& $\checkmark$					& $\checkmark$			& $\checkmark$\\              
-		CCM	                            							& $\checkmark$					& $\checkmark$			& $\times$\\              
-		CFB	                            							& $\checkmark$					& $\checkmark$			& $\checkmark$\\              
-		OCB	                            							&$\times^{\text{includes auth}}$& $\checkmark$			& $\times$\\              
-		OFB	                            							& $\checkmark$					& $\checkmark$			& $\times$\\              
-		PCBC                            							& $\checkmark$					& $\checkmark$			& $\times$\\              
-		CBC 	                           							& $\checkmark$					& $\checkmark$			& $\times$\\              
-		ECB 	                           							& $\times$						& $\checkmark$			& $\checkmark$\\    
+		\diaghead{\theadfont Mode Criteria}{Mode}{Criteria} 		& \thead{Requires IV} 			  & \thead{binary proof}	& \thead{parallelisable}\\\hline
+		GCM	                            							& $\checkmark$					  & $\checkmark$			& $\times$\\              
+		CTR	                            							& $\checkmark$					  & $\checkmark$			& $\checkmark$\\              
+		CCM	                            							& $\checkmark$					  & $\checkmark$			& $\times$\\              
+		CFB	                            							& $\checkmark$					  & $\checkmark$			& $\checkmark$\\              
+		OCB	                            							& $\times^{\text{includes auth}}$ & $\checkmark$			& $\times$\\              
+		OFB	                            							& $\checkmark$					  & $\checkmark$			& $\times$\\              
+		PCBC                            							& $\checkmark$					  & $\checkmark$			& $\times$\\              
+		CBC 	                           							& $\checkmark$					  & $\checkmark$			& $\times$\\              
+		ECB 	                           							& $\times$						  & $\checkmark$			& $\checkmark$\\    
 		\hline          
 	\end{tabular}	
 	\caption{comparison of encryption modes in terms of the suitability criteria as transport layer}
