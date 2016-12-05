@@ -1,12 +1,9 @@
 package net.gwerder.java.mailvortex.asn1.encryption;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
-import java.util.logging.Level;
+import net.gwerder.java.mailvortex.MailvortexLogger;
 
-import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
+import java.util.*;
+import java.util.logging.Level;
 
 /**
  * Represents all supported crypto algorithms.
@@ -38,6 +35,12 @@ public enum Algorithm {
     SHA384( 3000, AlgorithmType.HASHING, "sha384", "BC",  SecurityLevel.HIGH ),
     SHA512( 3001, AlgorithmType.HASHING, "sha512", "BC", SecurityLevel.QUANTUM );
     //TIGER192  (3100, AlgorithmType.HASHING,"tiger","BC",SecurityLevel.LOW);
+
+    private static final java.util.logging.Logger LOGGER;
+    static {
+        LOGGER = MailvortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+        MailvortexLogger.setGlobalLogLevel(Level.ALL);
+    }
 
     private static Map<AlgorithmType, Algorithm> def = new HashMap<AlgorithmType, Algorithm>() {
         private static final long serialVersionUID = 12132324789789L;

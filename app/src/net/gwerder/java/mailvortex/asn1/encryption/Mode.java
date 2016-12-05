@@ -1,7 +1,5 @@
 package net.gwerder.java.mailvortex.asn1.encryption;
 
-import com.sun.org.apache.xml.internal.security.algorithms.JCEMapper;
-
 import java.util.HashMap;
 import java.util.Map;
 
