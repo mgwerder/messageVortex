@@ -19,7 +19,8 @@ public abstract class Block {
     protected static final String CRLF="\r\n";
 
 
-    public static String toHex(byte[] bytes) {
+    public static String toHex(byte[] data) {
+        byte[] bytes=data;
         if(bytes==null) {
             bytes = new byte[0];
         }
@@ -31,9 +32,13 @@ public abstract class Block {
     }
 
     public static String toBitString(ASN1BitString bs) {
-        if(bs==null) return "''B";
+        if(bs==null) {
+            return "''B";
+        }
         int i=bs.getBytes().length*8-bs.getPadBits();
-        if(i%8==0) return toHex(bs.getOctets());
+        if(i%8==0) {
+            return toHex(bs.getOctets());
+        }
         String ret="'";
         int j=0;
         byte k=0;
@@ -59,7 +64,9 @@ public abstract class Block {
     abstract public String dumpValueNotation(String prefix) throws IOException;
 
     protected byte[] toDER(ASN1Object a) {
-        if(a==null) throw new NullPointerException( "null object may not be encoded in DER" );
+        if(a==null) {
+            throw new NullPointerException( "null object may not be encoded in DER" );
+        }
         ByteArrayOutputStream bOut = new ByteArrayOutputStream();
         DEROutputStream       dOut = new DEROutputStream(bOut);
         try {
@@ -75,7 +82,9 @@ public abstract class Block {
 
     public byte[] toBytes() throws IOException {
         ASN1Object o=toASN1Object();
-        if(o==null) throw new IOException( "Got a null reply from toASN1Object ... get coding man" );
+        if(o==null) {
+            throw new IOException( "Got a null reply from toASN1Object ... get coding man" );
+        }
         return toDER( o );
     }
 

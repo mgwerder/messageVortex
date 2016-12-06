@@ -134,10 +134,6 @@ public enum Algorithm {
         return secLevel.get(sl);
     }
 
-    public boolean equals(Algorithm alg) {
-        return txt.equals(alg.getAlgorithm());
-    }
-
     @Override
     public String toString() {
         return super.toString();

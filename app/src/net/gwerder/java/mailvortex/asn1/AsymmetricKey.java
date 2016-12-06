@@ -33,14 +33,9 @@ import java.util.logging.Logger;
  */
 public class AsymmetricKey extends Key {
 
-    private static final Logger LOGGER;
     private static ExtendedSecureRandom esr = new ExtendedSecureRandom();
     private static int PUBLIC_KEY = 1;
     private static int PRIVATE_KEY = 2;
-
-    static {
-        LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-    }
 
     static {
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
@@ -79,13 +74,10 @@ public class AsymmetricKey extends Key {
         selftest();
     }
 
-    //public AsymmetricKey(Algorithm alg, Map<String, Integer> params) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException, InvalidParameterSpecException {
-    //    // store algorithm and parameters
-    //    createKey( alg, params );
-    //}
-
     private void selftest() throws IOException {
-        if(publicKey==null) throw new IOException( "selftest failed: Public key may not be null");
+        if(publicKey==null) {
+            throw new IOException( "selftest failed: Public key may not be null");
+        }
     }
 
     public boolean equals(Object t) {
@@ -165,11 +157,15 @@ public class AsymmetricKey extends Key {
         int i=0;
         parseKeyParameter(ASN1Sequence.getInstance( s1.getObjectAt(i++) ));
         DERTaggedObject tagged=(DERTaggedObject)(s1.getObjectAt(i++));
-        if(tagged.getTagNo()!=PUBLIC_KEY) throw new IOException("encountered wrong tag number (expected: "+PUBLIC_KEY+"; got:"+tagged.getTagNo()+")");
+        if(tagged.getTagNo()!=PUBLIC_KEY) {
+            throw new IOException("encountered wrong tag number (expected: "+PUBLIC_KEY+"; got:"+tagged.getTagNo()+")");
+        }
         publicKey=ASN1OctetString.getInstance(tagged.getObject()).getOctets();
         if(s1.size()>i) {
             tagged=(DERTaggedObject)(s1.getObjectAt(i++));
-            if(tagged.getTagNo()!=PRIVATE_KEY) throw new IOException("encountered wrong tag number (expected: "+PRIVATE_KEY+"; got:"+tagged.getTagNo()+")");
+            if(tagged.getTagNo()!=PRIVATE_KEY) {
+                throw new IOException("encountered wrong tag number (expected: "+PRIVATE_KEY+"; got:"+tagged.getTagNo()+")");
+            }
             privateKey=ASN1OctetString.getInstance(tagged.getObject()).getOctets();
         }
     }
