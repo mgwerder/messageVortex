@@ -53,7 +53,7 @@ public class AsymmetricKeyTest {
                 LOGGER.log(Level.INFO, "  creating key");
                 AsymmetricKey s = null;
                 try {
-                    s = new AsymmetricKey(alg, Padding.getDefault(alg.getAlgorithmType()), Mode.getDefault(alg.getAlgorithmType()), size);
+                    s = new AsymmetricKey(alg, size, alg.getParameters( SecurityLevel.LOW ));
                 } catch (IOException ioe) {
                     setException(ioe);
                     LOGGER.log(Level.WARNING, "unexpected exception", ioe);
@@ -163,8 +163,8 @@ public class AsymmetricKeyTest {
                 for (int i = 0; i < ksDisc / size; i++) {
                     LOGGER.log( Level.FINE, "starting test " + (i + 1) + " of " + ksDisc / size );
                     System.out.print(".");
-                    AsymmetricKey k1 = new AsymmetricKey(alg, Padding.getDefault(AlgorithmType.ASYMMETRIC), Mode.getDefault(AlgorithmType.ASYMMETRIC),size);
-                    AsymmetricKey k2 = new AsymmetricKey(alg, Padding.getDefault(AlgorithmType.ASYMMETRIC), Mode.getDefault(AlgorithmType.ASYMMETRIC),size);
+                    AsymmetricKey k1 = new AsymmetricKey(alg,size,alg.getParameters( SecurityLevel.LOW ));
+                    AsymmetricKey k2 = new AsymmetricKey(alg,size,alg.getParameters( SecurityLevel.LOW ));
                     k2.setPrivateKey( k1.getPrivateKey() );
                     k2.setPublicKey(  k1.getPublicKey()  );
                     assertTrue( "error in key transfer cycle with "+alg+" ",k1.equals( k2 ));
@@ -180,7 +180,8 @@ public class AsymmetricKeyTest {
 
     @Test
     public void asymmetricKeySizeTest() {
-        // assertTrue( "getKeySize for SECP384R1 is bad", Algorithm.SECP384R1.getKeySize() == 384 );
+        assertTrue( "getKeySize for RSA is bad", Algorithm.RSA.getKeySize(SecurityLevel.LOW) == 1024 );
+        assertTrue( "getKeySize for EC is bad", Algorithm.EC.getKeySize(SecurityLevel.QUANTUM) == 512 );
     }
 
     @Test
@@ -199,6 +200,7 @@ public class AsymmetricKeyTest {
                             LOGGER.log( Level.INFO, "  skipping test for " + a + "/" + p + " due to insufficient key length" );
                             maximumPayload = -100000;
                         } else if (maximumPayload < 0) {
+                            LOGGER.log( Level.INFO, "  max payload is " + maximumPayload );
                             sl = sl.next();
                         }
                     }
@@ -206,11 +208,12 @@ public class AsymmetricKeyTest {
                         LOGGER.log( Level.INFO, "  What is going on here??" );
                         break;
                     }
-                    LOGGER.log( Level.INFO, "  testing " + a + "/" + p + " with level "+sl );
+                    LOGGER.log( Level.INFO, "  testing " + a + " with level "+sl+" ("+a.getKeySize( sl )+")" );
                     for (int i = 0; i < 100; i++) {
-                        AsymmetricKey ak = new AsymmetricKey( a, p, Mode.getDefault(AlgorithmType.ASYMMETRIC),size );
+                        AsymmetricKey ak = new AsymmetricKey( a, size,a.getParameters( sl ) );
                         assertTrue( "negative maximum payload for " + a.getAlgorithm() + "/" + size + "/" + p.getPadding(), maximumPayload > 1 );
                         byte[] b = new byte[maximumPayload];
+                        LOGGER.log( Level.INFO, "    Algorithm " + ak.getAlgorithm() +"["+ ak.getKeySize()+"]/" + ak.getMode() + "/"+ak.getPadding().getPadding()  );
                         sr.nextBytes( b );
                         byte[] b2 = ak.decrypt( ak.encrypt( b ) );
                         assertTrue( "byte arrays mus be equal after redecryption", Arrays.equals( b, b2 ) );

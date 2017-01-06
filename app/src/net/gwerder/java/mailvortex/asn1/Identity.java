@@ -70,7 +70,7 @@ public class Identity extends Block {
     }
 
     public Identity() throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, IOException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, NoSuchProviderException, InvalidKeySpecException {
-        this.identityKey = new AsymmetricKey(Algorithm.RSA, Padding.getDefault(AlgorithmType.ASYMMETRIC), Mode.getDefault(AlgorithmType.ASYMMETRIC), 2048);
+        this.identityKey = new AsymmetricKey(Algorithm.RSA, 2048, Algorithm.RSA.getParameters( SecurityLevel.MEDIUM ) );
         this.serial = (long) (Math.random() * 4294967295L);
         this.maxReplays = 1;
         this.valid = new UsagePeriod(3600);

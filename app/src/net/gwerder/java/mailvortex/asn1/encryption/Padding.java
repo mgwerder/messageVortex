@@ -8,7 +8,12 @@ import java.util.*;
  * Created by martin.gwerder on 31.05.2016.
  */
 public enum Padding {
-    PKCS1( 1000, "PKCS1Padding", new AlgorithmType[]{AlgorithmType.ASYMMETRIC}, new SizeCalc() {
+    NONE            ( 1000, "NONE", new AlgorithmType[]{AlgorithmType.ASYMMETRIC}, new SizeCalc() {
+        public int maxSize(int s) {
+            return s / 8;
+        }
+    } ),
+    PKCS1           ( 1001, "PKCS1Padding", new AlgorithmType[]{AlgorithmType.ASYMMETRIC}, new SizeCalc() {
         public int maxSize(int s) {
             return s / 8 - 11;
         }
@@ -28,9 +33,9 @@ public enum Padding {
             return s / 8 - 2 - 512 / 4;
         }
     } ),
-    PKCS7( 2000, "PKCS7Padding", new AlgorithmType[]{AlgorithmType.SYMMETRIC}, new SizeCalc() {
-        public int maxSize(int keySize) {
-            return keySize / 8 - 1;
+    PKCS7           ( 1007, "PKCS7Padding", new AlgorithmType[]{AlgorithmType.SYMMETRIC},  new SizeCalc() {
+        public int maxSize(int s) {
+            return s / 8 - 1;
         }
     } );
 
@@ -38,7 +43,7 @@ public enum Padding {
         private static final long serialVersionUID = 121321383445L;
         {
             put( AlgorithmType.ASYMMETRIC, Padding.PKCS1 );
-            put( AlgorithmType.SYMMETRIC, Padding.PKCS7 );
+            put( AlgorithmType.SYMMETRIC,  Padding.PKCS7 );
         }};
     private int id;
     private String txt;

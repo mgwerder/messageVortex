@@ -21,7 +21,7 @@ public enum Mode {
     //OFB       (10005,"OFB" ,true ,new Algorithm[] {Algorithm.CAMELLIA128, Algorithm.CAMELLIA192,Algorithm.CAMELLIA256}),
     NONE      (10010,"NONE",false,new Algorithm[] { Algorithm.RSA });
 
-    private static Map<AlgorithmType,Mode> def=new HashMap<AlgorithmType,Mode>();
+    private static Map<AlgorithmType,Mode> def=new HashMap<>();
 
     static {
         def.put(AlgorithmType.ASYMMETRIC,Mode.ECB);
@@ -31,11 +31,13 @@ public enum Mode {
     int id=-1;
     String txt=null;
     boolean requiresIV=false;
+    Algorithm[] alg;
 
     Mode(int id,String txt, boolean iv,Algorithm[] alg) {
         this.id=id;
         this.txt=txt;
         this.requiresIV=iv;
+        this.alg=alg;
     }
 
     public boolean getRequiresIV() {

@@ -10,7 +10,6 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import javax.crypto.spec.IvParameterSpec;
 import java.io.IOException;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
@@ -20,8 +19,6 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Asymmetric Key Handling.
@@ -43,6 +40,7 @@ public class AsymmetricKey extends Key {
 
     protected byte[]  publicKey  = null;
     protected byte[]  privateKey = null;
+    protected Algorithm mac=Algorithm.getDefault( AlgorithmType.HASHING );
 
     public AsymmetricKey(byte[] b) throws IOException {
         this(ASN1Sequence.getInstance( b ));
@@ -55,17 +53,25 @@ public class AsymmetricKey extends Key {
     }
 
     public AsymmetricKey() throws IOException {
-        this( Algorithm.getDefault( AlgorithmType.ASYMMETRIC ), Padding.getDefault( AlgorithmType.ASYMMETRIC ),Mode.getDefault( AlgorithmType.ASYMMETRIC ), Algorithm.getDefault( AlgorithmType.ASYMMETRIC ).getKeySize() );
+        this( Algorithm.getDefault( AlgorithmType.ASYMMETRIC ), Algorithm.getDefault( AlgorithmType.ASYMMETRIC ).getKeySize(),null );
         selftest();
     }
 
-    public AsymmetricKey(Algorithm alg, Padding p, Mode mode, int keySize) throws IOException {
+    public AsymmetricKey(Algorithm alg, int keySize ,Map<String,Object> params) throws IOException {
+        if(this.parameters==null) {
+            this.parameters=new HashMap<>();
+        }
+        if(params!=null) {
+            this.parameters.putAll( params );
+        }
         if(alg==null) {
             throw new IOException( "Algorithm null is not encodable by the system" );
         }
-        this.parameters.put(""+ Parameter.KEYSIZE.getId()+"_0",keySize);
-        this.mode=mode;
-        this.padding=p;
+        this.mode=null;
+        this.padding=null;
+        this.parameters.remove(Parameter.PADDING.toString()+"_0");
+        this.parameters.put(Parameter.KEYSIZE.toString()+"_0",keySize);
+        this.parameters.remove(Parameter.MODE.toString()+"_0");
         try {
             createKey( alg, parameters );
         } catch (NoSuchAlgorithmException | NoSuchProviderException | InvalidAlgorithmParameterException | InvalidParameterSpecException e) {
@@ -108,7 +114,7 @@ public class AsymmetricKey extends Key {
         }
 
         // compare padding
-        if(o.padding!=padding) {
+        if(o.getPadding().equals(getPadding())) {
             return false;
         }
 
@@ -120,15 +126,15 @@ public class AsymmetricKey extends Key {
         return super.hashCode();
     }
 
-    private void createKey(Algorithm alg, Map<String, Integer> params) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException, InvalidParameterSpecException {
+    private void createKey(Algorithm alg, Map<String, Object> params) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException, InvalidParameterSpecException {
         this.keytype=alg;
         if(params!=null) {
             this.parameters.putAll(params);
         }
 
         // create key pair
-        if("RSA".equals(alg.getAlgorithm()) || "EC".equals(alg.getAlgorithm())) {
-            int keySize=parameters.get("" + Parameter.KEYSIZE.getId() + "_0");
+        if("RSA".equals(alg.getAlgorithm()) ) {
+            int keySize=(Integer)(parameters.get("" + Parameter.KEYSIZE.toString() + "_0"));
             KeyPairGenerator keyGen = KeyPairGenerator.getInstance(alg.toString().toUpperCase(),alg.getProvider());
             keyGen.initialize(keySize);
             KeyPair pair;
@@ -139,15 +145,15 @@ public class AsymmetricKey extends Key {
             }
             publicKey  = pair.getPublic().getEncoded();
             privateKey = pair.getPrivate().getEncoded();
-        } else if (alg.toString().toLowerCase().startsWith( "sec" )) {
-            ECParameterSpec parameters = ECNamedCurveTable.getParameterSpec( alg.getAlgorithm() );
+        } else if ("ECIES".equals( alg.getAlgorithm() )) {
+            ECParameterSpec parameters = ECNamedCurveTable.getParameterSpec( (String)(params.get("curveType_0")) );
             KeyPairGenerator g = KeyPairGenerator.getInstance( "ECDSA", "BC" );
             g.initialize( parameters, esr.getSecureRandom() );
             KeyPair pair = g.generateKeyPair();
             publicKey  = pair.getPublic().getEncoded();
             privateKey = pair.getPrivate().getEncoded();
         } else {
-            throw new NoSuchAlgorithmException("Encountered unknown parameter \""+alg.getAlgorithm()+"\"");
+            throw new NoSuchAlgorithmException("Encountered unknown parameter \""+alg.getAlgorithm()+"\" ("+getParameterString()+")");
         }
     }
 
@@ -293,7 +299,7 @@ public class AsymmetricKey extends Key {
     }
 
     private KeyFactory getKeyFactory() throws NoSuchAlgorithmException,NoSuchProviderException {
-        if(keytype.getAlgorithm().startsWith( "sec" )) {
+        if(keytype.getAlgorithm().startsWith( Algorithm.EC.toString() )) {
             return KeyFactory.getInstance( "ECDSA", "BC" );
         } else {
             return KeyFactory.getInstance( keytype.getAlgorithm() );
@@ -304,36 +310,38 @@ public class AsymmetricKey extends Key {
         KeyFactory kf=getKeyFactory();
 
         // Getting public key
-        PublicKey publicKey = kf.generatePublic(new X509EncodedKeySpec(this.publicKey));
+        PublicKey lPublicKey = kf.generatePublic(new X509EncodedKeySpec(this.publicKey));
 
         // getting stored private key
-        PrivateKey privateKey = null;
+        PrivateKey lPrivateKey = null;
         if(this.privateKey!=null) {
-            privateKey = kf.generatePrivate(new PKCS8EncodedKeySpec(this.privateKey));
+            lPrivateKey = kf.generatePrivate(new PKCS8EncodedKeySpec(this.privateKey));
         }
 
         // build result and return
-        return new KeyPair( publicKey,privateKey );
+        return new KeyPair( lPublicKey,lPrivateKey );
     }
 
     private Cipher getCipher() throws NoSuchPaddingException,NoSuchAlgorithmException,NoSuchProviderException {
-        if(keytype.getAlgorithm().startsWith("sec")) {
+        if(keytype.getAlgorithm().equals(Algorithm.EC.getAlgorithm())) {
             return Cipher.getInstance( "ECIES","BC");
         } else {
-            return Cipher.getInstance(keytype.getAlgorithm()+"/"+mode+"/"+padding.getPadding());
+            return Cipher.getInstance(keytype.getAlgorithm()+"/"+getMode()+"/"+getPadding().getPadding());
         }
     }
 
     private Signature getSignature(Algorithm a) throws NoSuchPaddingException, NoSuchAlgorithmException, NoSuchProviderException {
-        if (keytype.getAlgorithm().startsWith( "sec" )) {
-            return Signature.getInstance( a.getAlgorithm() + "WithECDSA", "BC" );
+        if (keytype.getAlgorithm().equals( "ECIES" )) {
+            return Signature.getInstance( mac.getAlgorithm() + "WithECDSA", "BC" );
         } else {
             return Signature.getInstance( a.getAlgorithm() + "With" + keytype.getAlgorithm() );
         }
     }
 
     public byte[] setPublicKey(byte[] b) throws InvalidKeyException {
-        if(b==null) throw new NullPointerException( "Public key may not be null" );
+        if(b==null) {
+            throw new NullPointerException( "Public key may not be null" );
+        }
         byte[] old=publicKey;
         publicKey=b;
         return old;
@@ -349,10 +357,16 @@ public class AsymmetricKey extends Key {
 
     public byte[] getPrivateKey() {return privateKey; }
 
-    public Padding getPadding() {return padding; }
+    public Algorithm getAlgorithm() {return keytype; }
+
+    public Padding getPadding() {return (padding==null?Padding.getDefault( AlgorithmType.ASYMMETRIC ):padding); }
+
+    public int getKeySize() {return (Integer)(this.parameters.get(Parameter.KEYSIZE.toString()+"_0")); }
+
+    public Mode getMode() {return (mode==null?Mode.getDefault( AlgorithmType.ASYMMETRIC ):mode); }
 
     public String toString() {
-        return "([AsymmetricKey]"+keytype+"/"+parameters.get(""+ Parameter.KEYSIZE.getId()+"_0")+"/"+mode+"/"+padding+")";
+        return "([AsymmetricKey]"+keytype+"/"+parameters.get(""+ Parameter.KEYSIZE.toString()+"_0")+"/"+mode+"/"+getPadding().toString()+")";
     }
 
 }

@@ -95,7 +95,7 @@ public class Config {
         } else if(!(getDefault().configurationData.get(id.toLowerCase()) instanceof Boolean)) {
             throw new ClassCastException();
         } else {
-            ret=((Boolean)(getDefault().configurationData.get(id.toLowerCase())));
+            ret=(Boolean)(getDefault().configurationData.get(id.toLowerCase()));
         }
         return ret;
     }

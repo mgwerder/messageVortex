@@ -13,27 +13,27 @@ import java.util.logging.Level;
  */
 public enum Algorithm {
 
-    AES128( 1000, AlgorithmType.SYMMETRIC, "aes128", "BC", SecurityLevel.LOW ),
-    AES192( 1001, AlgorithmType.SYMMETRIC, "aes192", "BC", SecurityLevel.MEDIUM ),
-    AES256( 1002, AlgorithmType.SYMMETRIC, "aes256", "BC", SecurityLevel.QUANTUM ),
+    AES128     ( 1000, AlgorithmType.SYMMETRIC, "aes128", "BC", SecurityLevel.LOW ),
+    AES192     ( 1001, AlgorithmType.SYMMETRIC, "aes192", "BC", SecurityLevel.MEDIUM ),
+    AES256     ( 1002, AlgorithmType.SYMMETRIC, "aes256", "BC", SecurityLevel.QUANTUM ),
     CAMELLIA128( 1100, AlgorithmType.SYMMETRIC, "CAMELLIA128", "BC", SecurityLevel.LOW ),
     CAMELLIA192( 1101, AlgorithmType.SYMMETRIC, "CAMELLIA192", "BC", SecurityLevel.MEDIUM ),
     CAMELLIA256( 1102, AlgorithmType.SYMMETRIC, "CAMELLIA256", "BC", SecurityLevel.QUANTUM ),
-    RSA(2000, AlgorithmType.ASYMMETRIC, "RSA", "BC", new HashMap<SecurityLevel, Integer>() {
-        private static final long serialVersionUID = 12132345345L;
-        {
-            put(SecurityLevel.LOW, 1024);
-            put(SecurityLevel.MEDIUM, 2048);
-            put(SecurityLevel.HIGH, 4096);
-            put(SecurityLevel.QUANTUM, 8192);
-        }
-    }), //available as well under "SunJCE"
-    //EC        (2100, AlgorithmType.ASYMMETRIC,"EC"   ,"SunEC",null),
-    SECP384R1( 2500, AlgorithmType.ASYMMETRIC, "secp384r1", "BC", SecurityLevel.MEDIUM ),
-    SECT409K1( 2501, AlgorithmType.ASYMMETRIC, "sect409k1", "BC", SecurityLevel.HIGH ),
-    SECP521R1( 2502, AlgorithmType.ASYMMETRIC, "secp521r1", "BC", SecurityLevel.QUANTUM ),
-    SHA384( 3000, AlgorithmType.HASHING, "sha384", "BC",  SecurityLevel.HIGH ),
-    SHA512( 3001, AlgorithmType.HASHING, "sha512", "BC", SecurityLevel.QUANTUM );
+
+    RSA        (2000, AlgorithmType.ASYMMETRIC, "RSA", "BC", getSecLevelList( getSecLevelList( getSecLevelList( getSecLevelList(
+              SecurityLevel.LOW,     getParameterList("keySize_0",1024)),
+              SecurityLevel.MEDIUM,  getParameterList("keySize_0",2048)),
+              SecurityLevel.HIGH,    getParameterList("keySize_0",4096)),
+              SecurityLevel.QUANTUM, getParameterList("keySize_0",8192))
+
+    ),
+    EC         ( 2100, AlgorithmType.ASYMMETRIC, "ECIES"    , "BC", getSecLevelList( getSecLevelList( getSecLevelList(
+            ECCurveType.SECP384R1.getSecurityLevel(), getParameterList(getParameterList("keySize_0",ECCurveType.SECP384R1.getKeySize()),"curveType_0",ECCurveType.SECP384R1.getECCurveType())),
+            ECCurveType.SECT409K1.getSecurityLevel(), getParameterList(getParameterList("keySize_0",ECCurveType.SECT409K1.getKeySize()),"curveType_0",ECCurveType.SECT409K1.getECCurveType())),
+            ECCurveType.SECP521R1.getSecurityLevel(), getParameterList(getParameterList("keySize_0",ECCurveType.SECP521R1.getKeySize()),"curveType_0",ECCurveType.SECP521R1.getECCurveType()))
+    ),
+    SHA384     ( 3000, AlgorithmType.HASHING, "sha384", "BC",  SecurityLevel.HIGH ),
+    SHA512     ( 3001, AlgorithmType.HASHING, "sha512", "BC", SecurityLevel.QUANTUM );
     //TIGER192  (3100, AlgorithmType.HASHING,"tiger","BC",SecurityLevel.LOW);
 
     private static final java.util.logging.Logger LOGGER;
@@ -48,7 +48,7 @@ public enum Algorithm {
         {
             put(AlgorithmType.ASYMMETRIC, RSA);
             put(AlgorithmType.SYMMETRIC, AES256);
-            put(AlgorithmType.HASHING, SHA512);
+            put(AlgorithmType.HASHING, SHA384);
         }
     };
 
@@ -56,24 +56,39 @@ public enum Algorithm {
     private AlgorithmType t;
     private String txt;
     private String provider;
-    private Map<SecurityLevel,Integer> secLevel;
+    private Map<SecurityLevel,Map<String,Object>> secLevel;
 
-    Algorithm(int id, AlgorithmType t, String txt, String provider) {
-        this( id, t, txt, provider, (Map<SecurityLevel, Integer>) null );
+    private static HashMap<String,Object> getParameterList(String txt,Object o) {
+        HashMap<String,Object> ret=new HashMap<String,Object>();
+        return getParameterList( ret,txt,o );
+    }
+
+    private static HashMap<String,Object> getParameterList(HashMap<String,Object> ret, String txt,Object o) {
+        ret.put(txt,o);
+        return ret;
+    }
+
+    private static  Map<SecurityLevel,Map<String,Object>> getSecLevelList(SecurityLevel level ,Map<String,Object> o) {
+        Map<SecurityLevel,Map<String,Object>> ret=new HashMap<SecurityLevel,Map<String,Object>>();
+        return getSecLevelList(ret, level, o);
+    }
+
+    private static  Map<SecurityLevel,Map<String,Object>> getSecLevelList(Map<SecurityLevel,Map<String,Object>> lst, SecurityLevel level ,Map<String,Object> o) {
+        lst.put(level,o);
+        return lst;
     }
 
     Algorithm(int id, AlgorithmType t, String txt, String provider, SecurityLevel level) {
-        this( id, t, txt, provider, (Map<SecurityLevel, Integer>) null );
-        secLevel = new HashMap<>();
-        secLevel.put( level, getKeySize() );
+        this(id,t,txt,provider,(Map<SecurityLevel,Map<String,Object>>) null);
+        secLevel = getSecLevelList( level, getParameterList("keySize_0",getKeySize()) );
     }
 
-    Algorithm(int id, AlgorithmType t, String txt, String provider, Map<SecurityLevel, Integer> level) {
+    Algorithm(int id, AlgorithmType t, String txt, String provider, Map<SecurityLevel,Map<String, Object>> parameters) {
         this.id=id;
         this.t=t;
         this.txt=txt;
         this.provider=provider;
-        this.secLevel=level;
+        this.secLevel=parameters;
     }
 
     public static Algorithm[] getAlgorithms(AlgorithmType at) {
@@ -129,9 +144,18 @@ public enum Algorithm {
         } else if (txt.toLowerCase().startsWith( "tiger" )) {
             return 192;
         }
-        if(secLevel==null || secLevel.get(sl)==null) LOGGER.log( Level.SEVERE, "Error fetching keysize for " + txt + "/" + secLevel.get(sl) + "");
+        if(secLevel==null || secLevel.get(sl)==null || (! (secLevel.get(sl).get(Parameter.KEYSIZE.toString()+"_0") instanceof Integer))) {
+            LOGGER.log( Level.SEVERE, "Error fetching keysize for " + txt + "/" +sl.toString()+" ("+ secLevel.get(sl) + ")");
+        }
+        return ((Integer)(secLevel.get(sl).get(Parameter.KEYSIZE.toString()+"_0"))).intValue();
+    }
 
+    public Map<String,Object> getParameters(SecurityLevel sl) {
         return secLevel.get(sl);
+    }
+
+    public Map<SecurityLevel,Map<String,Object>> getParameters() {
+        return secLevel;
     }
 
     @Override
