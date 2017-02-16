@@ -110,7 +110,7 @@
 
 % Document annotations
 \usepackage[nomargin]{fixme}
-\fxuselayouts{pdfnote}
+\fxsetup{layout=pdfnote}
 
 %enable attached files
 \usepackage{attachfile}
@@ -274,6 +274,7 @@
 	\endgroup
 	\fi
 }
+
 \newcommand{\slistofrequirements}{
 	%% First, we need to make sure that this is not the first LaTeX pass (i.e., that all of the information has already been recorded to the .aux file):
 	\expandafter\ifx\csname totalreqsplusone\endcsname\relax
@@ -281,14 +282,15 @@
 	\else
 	\begingroup
 	%% This \reqi counter is what we are going to use to iterate over the requirements:
-	\newline
+	\par
 	\newcount\reqi
 	\reqi=0
+%	\leftskip=25pt
 	\loop
 	\advance\reqi by 1
 	\ifnum\reqi<\totalreqsplusone
 	%% The requirement numbered \reqi exists!
-	\indent\textbf{RQ\the\reqi} \csname req\the\reqi\endcsname\\*[5pt]
+	\hangindent=30pt \parbox{30pt}{\textbf{RQ\the\reqi} }\csname req\the\reqi\endcsname\par
 	\repeat
 	\endgroup
 	\fi

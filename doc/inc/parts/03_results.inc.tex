@@ -171,46 +171,54 @@ In a worst case scenario we assume that an adverser is controlling most of the n
 
 \section{Verification of requirements}
 In the previous sections we identified the following list of requirements:
+
 \slistofrequirements
+
 In the following subsections we will iterate through all requirements and verify to what degree we achieved the goal.
 
 \fxfatal{list all requirements}
 
-\paragraph{\ref{req:zeroTrust}:} 
-We have not put any trust intu an external infrastructure. While we do assume that all routing nodes act as defined. A misbehaving node may be identified and eliminated without putting any trust on other nodes. Analysis have shown no means for a misbehaving node which might be intentional or unintentional endangering anonymity at any time. We do not rely on any third party technology or infrastructure for our anonymity. 
+\paragraph*{\ref{req:zeroTrust}:} 
+We have not put any trust into an external infrastructure. While we do assume that all routing nodes act as defined. A misbehaving node may be identified and eliminated without putting any trust on other nodes. Analysis have shown no means for a misbehaving node which might be intentional or unintentional endangering anonymity at any time. We do not rely on any third party technology or infrastructure for our anonymity. 
 
 This requirement is therefore fulfilled.
 
-\paragraph{\ref{req:P2P}:} 
+\paragraph*{\ref{req:P2P}:} 
 No node has additional privileges or offers additional services. All are equal and share the same privileges.
 
 This requirement is therefore fulfilled.
 
-\paragraph{\ref{req:untagable}:} 
+\paragraph*{\ref{req:untagable}:} 
 Messages may not be tagged. All content is either strictly onionised or defined and linked with unknown hooks. Tampering with a message will cause the message delivery to fail at the next node.
 
 This requirement is therefore fulfilled.
  
-\paragraph{\ref{req:unbugable}:} 
+\paragraph*{\ref{req:unbugable}:} 
 There are always means to bug a message. As we put trust in sender and recipient and we know already that a intermediate mixing node is not able to modify the message the protocol is hard to bug. There may be a possibility to bug a message with a routing log entry over DNS. If a recipient is not resolving names or trusts in the content of such a message he is safe.
 
+This requirement is therefore fulfilled. May be only partially fulfilled if log entries are not handled with care.
+
+\paragraph*{\ref{req:replay}:} Messages may only be replayed a limited amount of times. The number of replays is controlled by the sender and may not be altered by any mix. A malfunctioning mix replaying more often than allowed will not be able to extract any information than the information it obtained when sending the first time. 
+
 This requirement is therefore fulfilled.
-\paragraph{\ref{req:replay}:} 
+
+\paragraph*{\ref{req:accounting}:} 
+All identities generated are not traceable as any identity is generated without any context and may not be mapped to an older or newer identity (perfect anonymous forward identity). Neither the source nor the replies may be used to be traced as all messages 
+
+This requirement is therefore fulfilled.
+
+\paragraph*{\ref{req:anon}:} This point is the hardest to proof. We certainly achieved a high degree of anonymity. No node can tell by observing traffic if a node is a final recipient or just a mix. There are however some weaknesses in the protocol. As the implementation is currently connecting simultaneously to the true name (email or jabber account in the current implementation) and the Vortex account the user might be identified by that fact. Using a anonymisation proxy could solve the problem but it would violate the Zero trust principle.
+
+This requirement is therefore only partially fulfilled. However, the weakness is very faint.
+
+\paragraph*{\ref{req:boot}:} 
 
 \fxfatal{add content}
-\paragraph{\ref{req:accounting}:} 
-
-\fxfatal{add content}
-\paragraph{\ref{req:anon}:} This point is the hardest to proof. We certaindly achieved a high degree of anonymity. No node can tell by observing traffic if a node is a final recipient or just a mix. There are however some weaknesses in the protocol. As the implementation is currently connecting simultaneously to the tru named and the Vortex account the user might be identified by that fact. Using a anonymisation proxy could solve the problem but it would violate the Zero trust principle.
-
-\paragraph{\ref{req:boot}:} 
-
-\fxfatal{add content}
-\paragraph{\ref{req:cryptVar}:} 
+\paragraph*{\ref{req:cryptVar}:} 
 
 \fxfatal{add content}
 
-\paragraph{\ref{req:easy}:}
+\paragraph*{\ref{req:easy}:}
 
 \fxfatal{add content}
 

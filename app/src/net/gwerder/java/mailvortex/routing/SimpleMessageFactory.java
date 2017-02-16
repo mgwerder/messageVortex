@@ -62,10 +62,11 @@ public class SimpleMessageFactory extends MessageFactory {
                 if(j==0) {
                     start = tmp;
                 } else {
-                    delay=tmp;
+                    delay = tmp;
                 }
-                fullTime-=tmp;
+                fullTime -= tmp;
             }
+            System.out.println( "setting times to "+start+"/"+delay);
             g.setStartTime( start );
             g.setDelayTime( delay );
         }

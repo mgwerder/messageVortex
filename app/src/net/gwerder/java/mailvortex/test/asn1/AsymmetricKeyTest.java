@@ -8,10 +8,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-import java.util.Vector;
+import java.util.*;
 import java.util.logging.Level;
 
 import static junit.framework.TestCase.assertFalse;
@@ -181,7 +178,7 @@ public class AsymmetricKeyTest {
     @Test
     public void asymmetricKeySizeTest() {
         assertTrue( "getKeySize for RSA is bad", Algorithm.RSA.getKeySize(SecurityLevel.LOW) == 1024 );
-        assertTrue( "getKeySize for EC is bad", Algorithm.EC.getKeySize(SecurityLevel.QUANTUM) == 512 );
+        assertTrue( "getKeySize for EC is bad (got "+Algorithm.EC.getKeySize(SecurityLevel.QUANTUM)+")", Algorithm.EC.getKeySize(SecurityLevel.QUANTUM) == 521 );
     }
 
     @Test
@@ -209,14 +206,28 @@ public class AsymmetricKeyTest {
                         break;
                     }
                     LOGGER.log( Level.INFO, "  testing " + a + " with level "+sl+" ("+a.getKeySize( sl )+")" );
-                    for (int i = 0; i < 100; i++) {
-                        AsymmetricKey ak = new AsymmetricKey( a, size,a.getParameters( sl ) );
-                        assertTrue( "negative maximum payload for " + a.getAlgorithm() + "/" + size + "/" + p.getPadding(), maximumPayload > 1 );
-                        byte[] b = new byte[maximumPayload];
-                        LOGGER.log( Level.INFO, "    Algorithm " + ak.getAlgorithm() +"["+ ak.getKeySize()+"]/" + ak.getMode() + "/"+ak.getPadding().getPadding()  );
-                        sr.nextBytes( b );
-                        byte[] b2 = ak.decrypt( ak.encrypt( b ) );
-                        assertTrue( "byte arrays mus be equal after redecryption", Arrays.equals( b, b2 ) );
+                    AsymmetricKey ak = new AsymmetricKey( a, size,a.getParameters( sl ) );
+                    ak.setPadding(p);
+                    boolean supported=true;
+                    try {
+                        ak.encrypt(new byte[] {'B'});
+                    } catch (IOException ioe) {
+                        supported=false;
+                    }
+                    if(!supported) {
+                        LOGGER.log( Level.INFO, "  skipped reason=unsupported/" + a + "/" + p + "/"+ak.getMode() );
+                    } else {
+                        for (int i = 0; i < 100; i++) {
+                            ak = new AsymmetricKey( a, size,a.getParameters( sl ) );
+                            ak.setPadding(p);
+                            assertTrue( "negative maximum payload for " + a.getAlgorithm() + "/" + size + "/" + p.getPadding(), maximumPayload > 1 );
+                            maximumPayload=ak.getPadding().getMaxSize( size );
+                            byte[] b = new byte[maximumPayload];
+                            LOGGER.log( Level.INFO, "    Algorithm " + ak.getAlgorithm() +"[keySize="+ak.getKeySize()+"]/" + ak.getMode() + "/"+ak.getPadding().getPadding()+"/maxPayload="+maximumPayload  );
+                            sr.nextBytes( b );
+                            byte[] b2 = ak.decrypt( ak.encrypt( b ) );
+                            assertTrue( "byte arrays mus be equal after redecryption", Arrays.equals( b, b2 ) );
+                        }
                     }
                     LOGGER.log( Level.INFO, "  done " + a + "/" + p + " with level "+sl );
 

@@ -114,7 +114,7 @@ public class AsymmetricKey extends Key {
         }
 
         // compare padding
-        if(o.getPadding().equals(getPadding())) {
+        if(!o.getPadding().equals(getPadding())) {
             return false;
         }
 
@@ -146,8 +146,11 @@ public class AsymmetricKey extends Key {
             publicKey  = pair.getPublic().getEncoded();
             privateKey = pair.getPrivate().getEncoded();
         } else if ("ECIES".equals( alg.getAlgorithm() )) {
+            if(params.get("curveType_0")==null) {
+                throw new NoSuchAlgorithmException( "curve type is not set" );
+            }
             ECParameterSpec parameters = ECNamedCurveTable.getParameterSpec( (String)(params.get("curveType_0")) );
-            KeyPairGenerator g = KeyPairGenerator.getInstance( "ECDSA", "BC" );
+            KeyPairGenerator g = KeyPairGenerator.getInstance( "ECIES", "BC" );
             g.initialize( parameters, esr.getSecureRandom() );
             KeyPair pair = g.generateKeyPair();
             publicKey  = pair.getPublic().getEncoded();
@@ -360,6 +363,12 @@ public class AsymmetricKey extends Key {
     public Algorithm getAlgorithm() {return keytype; }
 
     public Padding getPadding() {return (padding==null?Padding.getDefault( AlgorithmType.ASYMMETRIC ):padding); }
+
+    public Padding setPadding(Padding p) {
+        Padding old=padding;
+        padding=p;
+        return old;
+    }
 
     public int getKeySize() {return (Integer)(this.parameters.get(Parameter.KEYSIZE.toString()+"_0")); }
 

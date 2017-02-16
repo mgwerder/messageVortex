@@ -64,7 +64,7 @@ public class Edge {
 
     public long setDelayTime( long newMaxDelay ) {
         long old=maxDelay;
-        this.startTime=newMaxDelay;
+        this.maxDelay=newMaxDelay;
         return old;
     }
 
@@ -72,6 +72,8 @@ public class Edge {
         if(t==null) return false;
         if(! (t instanceof Edge)) return false;
         Edge g=(Edge)t;
+        //System.out.println("comparing "+this+":"+toString());
+        //System.out.println("     with "+g   +":"+g.toString());
         return g.to.equals(this.to) && g.from.equals(this.from) && (g.startTime==this.startTime) && (g.maxDelay==this.maxDelay);
     }
 
@@ -80,4 +82,8 @@ public class Edge {
         return (""+from+"/"+to+"/"+startTime+"/"+maxDelay).hashCode();
     }
 
+    @Override
+    public String toString() {
+        return from + " -"+startTime+"/"+maxDelay+"-> "+ to;
+    }
 }

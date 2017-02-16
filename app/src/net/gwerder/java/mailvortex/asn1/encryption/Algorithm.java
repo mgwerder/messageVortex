@@ -147,10 +147,22 @@ public enum Algorithm {
         if(secLevel==null || secLevel.get(sl)==null || (! (secLevel.get(sl).get(Parameter.KEYSIZE.toString()+"_0") instanceof Integer))) {
             LOGGER.log( Level.SEVERE, "Error fetching keysize for " + txt + "/" +sl.toString()+" ("+ secLevel.get(sl) + ")");
         }
-        return ((Integer)(secLevel.get(sl).get(Parameter.KEYSIZE.toString()+"_0"))).intValue();
+        Map<String,Object> params=secLevel.get(sl);
+        // get next higher security level if not available
+        while(params==null) {
+            sl=sl.next();
+            params=secLevel.get(sl);
+        }
+        return ((Integer)(params.get(Parameter.KEYSIZE.toString()+"_0"))).intValue();
     }
 
     public Map<String,Object> getParameters(SecurityLevel sl) {
+        Map<String,Object> params=secLevel.get(sl);
+        // get next higher security level if not available
+        while(params==null) {
+            sl=sl.next();
+            params=secLevel.get(sl);
+        }
         return secLevel.get(sl);
     }
 

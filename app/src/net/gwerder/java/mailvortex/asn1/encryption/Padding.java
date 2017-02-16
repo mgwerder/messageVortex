@@ -15,12 +15,12 @@ public enum Padding {
     } ),
     PKCS1           ( 1001, "PKCS1Padding", new AlgorithmType[]{AlgorithmType.ASYMMETRIC}, new SizeCalc() {
         public int maxSize(int s) {
-            return s / 8 - 11;
+            return (s / 8) - 11;
         }
     } ),
     OAEP_SHA256_MGF1( 1100, "OAEPWithSHA256AndMGF1Padding", new AlgorithmType[]{AlgorithmType.ASYMMETRIC}, new SizeCalc() {
         public int maxSize(int s) {
-            return s / 8 - 2 - 256 / 4;
+            return (s / 8) - 2 - (256 / 4);
         }
     } ),
     OAEP_SHA384_MGF1( 1101, "OAEPWithSHA384AndMGF1Padding", new AlgorithmType[]{AlgorithmType.ASYMMETRIC}, new SizeCalc() {
@@ -105,10 +105,6 @@ public enum Padding {
     @Override
     public String toString() {
         return super.toString().toLowerCase();
-    }
-
-    private static abstract class SizeCalc {
-        public abstract int maxSize(int keySize);
     }
 
 }

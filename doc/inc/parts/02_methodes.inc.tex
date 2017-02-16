@@ -551,6 +551,81 @@ As it might seem not a wise idea to consider the recommendation of a potential s
 
 Furthermore taking all recommendations together it seems that all involved parties assume the biggest trust into elliptic curves rather than asymmetric encryption based on factoring modulus.
 
+\subsection{Cypher Mode}
+The cypher mode defines how multiple blocks encrypted with the same key are handled. Main characterias of cypher suites are:
+\begin{itemize}
+	\item Parallelisable\\ 
+	Can multiple parts of a plaintext be encrypted simultaneously This feature is important for multi CPU and multi core systems as they can handle parallelizable more efficiently by distributing them on multiple CPUs.
+	\item Random access in decryption\\
+	Random access on decryption allows efficient partial encryption of a cypher text.
+	\item Initialisation vector\\
+	An initialisation vector has downsides and advantages. On the downsides is the fact that an initialisation vector must be shared with the message or prior distributing it. It is important to understand that the initialisation vector itself is normally not treated as a secret. It is not part of the key.
+	\item Authentication
+\end{itemize}
+\fxfatal{add more content here}
+
+\subsubsection{ECB (Electronic Code Book):} This is the most basic operation. Each block is encrypted on its own. This results in a big flaw. blocks containing the same data will always transform to the same byte code. This makes it possible to see some structures of the plain text when looking at the cypher text. This solution allows parallelisation of encryption, decryption, and random access while decrypting.
+
+\subsubsection{CBC (Cypher Block Chaining):}  CBC extends the encryption by xor'ing an initialisation vector into the first block before encrypting. For all subsequent blocks the cyphertext result of the preceding block is taken as xor input. This solution does not allow parallelisation of encryption, but decryption may be paralleled and random access is possible. As another downside CBC requires a shared initialisation vector. 
+
+\subsubsection{PCBC (Propagation Cypher Block Chaining):}  CBC extends the encryption by xor'ing an initialisation vector into the first block before encrypting. For all subsequent blocks the cyphertext result of the preceding block xor'ed with its plain text is taken as xor input. This solution does not allow parallel decryption or encryption, nor does it allow random access. As another downside PCBC requires a shared initialisation vector. 
+
+\subsubsection{EAX:} EAX has been broken in 2012\cite{minematsu2013attacks} and is therefore rejected for our use.
+
+\subsubsection{CFB (Cypher Feedback):} CFB is specified in \cite{dworkin2001recommendation} and works exactly as CBC with the difference that the plain text is xor'ed and the initialisation vector respectively the preceding cypher result is encrypted. CFB does not support parallel encryption as the cyphertext input from the preceeding operation is required for a round, it does however allow parallel decryption and random access.
+
+\subsubsection{OFB:} OFB is specified in \cite{dworkin2001recommendation} and works exactly as CFB except for the fact that not the cypher text result is taken as feedback but the result of the encryption before xor'ing the plain text. This denies parallel encryption and decryption as well as random access.
+
+\subsubsection{OCB (Offset Codebook Mode):} This mode was first proposed in \cite{rogaway2003ocb} and later specified in \cite{krovetz-ocb-04}. OCB is specifically designed for AES128, AES192, and AES256. It supports authentication tag lengths of 128, 96 , or 64 bits for each specified encryption algorithm. OCB hashes the plaintext of a message with a specialised function $H_{OCB}(\mathbf{M})$. OCB is fully parallelizable due to its internal structure. All blocks except the first and the last may be encrypted or decrypted in parallel.
+
+\fxfatal{Add exact mode here}
+
+\subsubsection{CTR:} CTR is specified in \cite{lipmaa2000ctr} and is a mixture between OFB and CBC. A nonce concatenated with a counter incrementing on every block is encrypted and then xor'ed with the plain text. This allows parallel decryption and encryption as well as random access.
+
+\subsubsection{CCM:} Counter with CBC-MAC (CCM) is specified in \cite{RFC3610}. It allows to pad and authenticate encrypted and unencrypted data. It furthermore requires a nonce for its operation. The size of the nonce is dependent of the number of octets in the length field. In the first 16 bytes of the message the nonce and the message size is stored. for the encryption itself CTR is used. Irt therefore shares the same properties like CTR. 
+
+It allows parallel decryption and encryption as well as random access.
+
+\subsubsection{GCM (Galois Counter Mode):} GCM has been defined in \cite{mcgrew2004galois}, and is related to CTR but has some major differences. The nonce is not used (just the counter starting with value 1). In order to authenticate the encryption an authentication token $auth$ is hashed with $H_{GFmult}$ and then xor'ed with the first cypher block. All subsequent cipher blocks are xor'ed with the previos result and then hashed  again with $H_{GFmult}$. After the last block the output $o$ is processed  as follows: $H_{GFmult}(o\bigoplus (len(A)||len(B))) \bigoplus E^{K^0}(counter_0)$. 
+
+The mode has been analysed security wise in \citeyear{mcgrew2004security} and showed no weaknesses in the analysed fields \cite{mcgrew2004security}. 
+
+Encryption and decryption can be paralleled in GCM. Random access is possible. However authentication of a encryption is not parallelizable. The authentication makes it unsuitable for our purposes. Alternatively we could use a fixed authentication string.
+
+\begin{table}[h]
+	\centering\tiny
+	\begin{tabular}{|l|l|l|l|}\hline
+		\diaghead{\theadfont Mode Criteria}{Mode}{Criteria} 		& \thead{Requires IV} 			  & \thead{binary proof}	& \thead{parallelisable}\\\hline
+		GCM	                            							& $\checkmark$					  & $\checkmark$			& $\times$\\              
+		CTR	                            							& $\checkmark$					  & $\checkmark$			& $\checkmark$\\              
+		CCM	                            							& $\checkmark$					  & $\checkmark$			& $\times$\\              
+		CFB	                            							& $\checkmark$					  & $\checkmark$			& $\checkmark$\\              
+		OCB	                            							& $\times^{\text{includes auth}}$ & $\checkmark$			& $\times$\\              
+		OFB	                            							& $\checkmark$					  & $\checkmark$			& $\times$\\              
+		PCBC                            							& $\checkmark$					  & $\checkmark$			& $\times$\\              
+		CBC 	                           							& $\checkmark$					  & $\checkmark$			& $\times$\\              
+		ECB 	                           							& $\times$						  & $\checkmark$			& $\checkmark$\\    
+		\hline          
+	\end{tabular}	
+	\caption{comparison of encryption modes in terms of the suitability criteria as transport layer}
+	\label{tab:ModeSuitCrit}
+\end{table}
+
+\fxfatal{remove binary proof column as it does not add any value}
+
+\subsection{Padding}
+A plan text stream may have any length. Since we always encrypt in blocks of a fixed size we need a mechanism to indicate how many bytes of the last encrypted block may be safely discarded. This mechanism is called padding. 
+
+Different paddings are used at the end of a cypher stream to indicate how many bytes belong to the decrypted stream.
+\subsubsection{PKCS1:}  
+\fxfatal{Add content here}
+
+\subsubsection{PKCS7:} This padding is the standard used in symmetric encryption up to 256 bits key length. The free bytes in the last cypher block indicate the number of bytes being used. This makes this padding very compact. It requires only 1 Byte of functional data at the end of the block. All other bytes are defined but not needed.
+
+\subsubsection{OAEP with SHA and MGF1 padding:} This padding is closely related to PKCS1 padding. The hash size is however bigger and thus the required space for padding is much higher. OAEP with SHA and MGF1 Padding is used in asymetric encryption only. Due to its size it is important to note that the payload in the last block shrinks to $keySizeInBits/8-2-MacSize/4$.
+
+In our approach we have chosen to allow these three paddings. The allowed sha sizes match the allowed hash sizes chosen above. It is important to note that padding costs space at the end of a stream. Since we are using always one block for signing we have to take care that the chosen signing mac plus the bytes required for padding do not exceed the key size of the asymmetric encryption. While this is normally not a problem for RSA as there are keys 1024+ Bits required it is a considerable problem for ECC algorithms as there are much shorter keys required to achieve an equivalent strength compared to RSA.
+
 \section{Routing}
 If we can follow data from a source to a destination we may safely assume that the participants of this data exchange are no longer anonymous. So special care should be taken to this aspect. In the past several approaches have been made in order to avoid detection of data while routing. in the following sections we will look at some basic concepts which have been proposed up until today. We describe their concept and have a look at their weaknesses discovered so far.
 
@@ -1239,9 +1314,14 @@ The system must allow to boot strap from a zero knowledge or near zero knowledge
 \subsection{Cypher selection}
 In This Protocol a lot of encryption and hashing algorithms have to be used. This Choice should be explained. 
 
+From the requirements side we have to follow the following principle:
+\begin{requirement}{cryptVar}{encryption variety}
+	The system must be able to use multiple symmetric, asymmetric, and hashing algorithms in order to immediately fall back to a secure algorithm for all new messages if required. 
+\end{requirement}
+
 First of all we need a subset of encryption algorithms all implementations may rely on. Defining such a subset guarantees interoperability between all nodes regardless of their origins. 
 
-Secondly we need to have a spectrum of algorithm in such a manor that it may be (a) enlarged if necesary and (b) there is an alternative if an algorithm is broken (so that algorithms may be withdrawn if required without affecting the function in general). 
+Secondly we need to have a spectrum of algorithm in such a manor that it may be (a) enlarged if necesary and (b) there is an alternative if an algorithm (or a mathmatical problem class) is broken (so that algorithms may be withdrawn if required without affecting the function in general). 
 
 And third due to the onion like design described in this document asymmetric encryption should be avoided in favour of symmetric encryption to minimize losses due to the key length and the generally higher CPU load opposed by asymmetric keys.
 
@@ -1254,7 +1334,7 @@ Having these criteria for choice we chose to use the following keys and key size
 	\item Symetric
 	\begin{itemize}
 		\item AES (key size: 128, 192, 256)
-		\item Camellia (key size: 128, 192, 256); optional
+		\item Camellia (key size: 128, 192, 256)
 	\end{itemize}
 	\item Asymetric
 	\begin{itemize}
@@ -1270,7 +1350,7 @@ Having these criteria for choice we chose to use the following keys and key size
 	\begin{itemize}
 		\item sha384
 		\item sha512
-		\item tiger192; optional
+		\item tiger192
 	\end{itemize}
 \end{itemize}
 
@@ -1288,74 +1368,7 @@ Within the implementation we assigned algorithms to a security strength level:
 
 This allows to categorize the used algorithms to a strength. This list however should only serve the purpose of selecting algorithms for people without cryptological know how.
 
-\begin{requirement}{cryptVar}{encryption variety}
-	The system must be able to use multiple symmetric, asymmetric, and hashing algorithms. 
-\end{requirement}
-
-\fxfatal{Fix content (copied from first version)}
-
-\subsubsection{Cypher Mode}
-\paragraph{ECB (Electronic Code Book):} This is the most basic operation. Each block is encrypted on its own. This results in a big flaw. blocks containing the same data will always transform to the same byte code. This makes it possible to see some structures of the plain text when looking at the cypher text. This solution allows parallelisation of encryption, decryption, and random access while decrypting.
-
-\paragraph{CBC (Cypher Block Chaining):}  CBC extends the encryption by xor'ing an initialisation vector into the first block before encrypting. For all subsequent blocks the cyphertext result of the preceding block is taken as xor input. This solution does not allow parallelisation of encryption, but decryption may be paralleled and random access is possible. As another downside CBC requires a shared initialisation vector. 
-
-\paragraph{PCBC (Propagation Cypher Block Chaining):}  CBC extends the encryption by xor'ing an initialisation vector into the first block before encrypting. For all subsequent blocks the cyphertext result of the preceding block xor'ed with its plain text is taken as xor input. This solution does not allow parallel decryption or encryption, nor does it allow random access. As another downside PCBC requires a shared initialisation vector. 
-
-\paragraph{EAX:} EAX has been broken in 2012\cite{minematsu2013attacks} and is therefore rejected for our use.
-
-\paragraph{CFB (Cypher Feedback):} CFB is specified in \cite{dworkin2001recommendation} and works exactly as CBC with the difference that the plain text is xor'ed and the initialisation vector respectively the preceding cypher result is encrypted. CFB does not support parallel encryption as the cyphertext input from the preceeding operation is required for a round, it does however allow parallel decryption and random access.
-
-\paragraph{OFB:} OFB is specified in \cite{dworkin2001recommendation} and works exactly as CFB except for the fact that not the cypher text result is taken as feedback but the result of the encryption before xor'ing the plain text. This denies parallel encryption and decryption as well as random access.
-
-\paragraph{OCB (Offset Codebook Mode):} This mode was first proposed in \cite{rogaway2003ocb} and later specified in \cite{krovetz-ocb-04}. OCB is specifically designed for AES128, AES192, and AES256. It supports authentication tag lengths of 128, 96 , or 64 bits for each specified encryption algorithm. OCB hashes the plaintext of a message with a specialised function $H_{OCB}(\mathbf{M})$. OCB is fully parallelizable due to its internal structure. All blocks except the first and the last may be encrypted or decrypted in parallel.
-
-\fxfatal{Add exact mode here}
-
-\paragraph{CTR:} CTR is specified in \cite{lipmaa2000ctr} and is a mixture between OFB and CBC. A nonce concatenated with a counter incrementing on every block is encrypted and then xor'ed with the plain text. This allows parallel decryption and encryption as well as random access.
-
-\paragraph{CCM:} Counter with CBC-MAC (CCM) is specified in \cite{RFC3610}. It allows to pad and authenticate encrypted and unencrypted data. It furthermore requires a nonce for its operation. The size of the nonce is dependent of the number of octets in the length field. In the first 16 bytes of the message the nonce and the message size is stored. for the encryption itself CTR is used. Irt therefore shares the same properties like CTR. 
-
-It allows parallel decryption and encryption as well as random access.
-
-\paragraph{GCM (Galois Counter Mode):} GCM has been defined in \cite{mcgrew2004galois}, and is related to CTR but has some major differences. The nonce is not used (just the counter starting with value 1). In order to authenticate the encryption an authentication token $auth$ is hashed with $H_{GFmult}$ and then xor'ed with the first cypher block. All subsequent cipher blocks are xor'ed with the previos result and then hashed  again with $H_{GFmult}$. After the last block the output $o$ is processed  as follows: $H_{GFmult}(o\bigoplus (len(A)||len(B))) \bigoplus E^{K^0}(counter_0)$. 
-
-The mode has been analysed security wise in \citeyear{mcgrew2004security} and showed no weaknesses in the analysed fields \cite{mcgrew2004security}. 
-
-Encryption and decryption can be paralleled in GCM. Random access is possible. However authentication of a encryption is not parallelizable. The authentication makes it unsuitable for our purposes. Alternatively we could use a fixed authentication string.
-
-\begin{table}[h]
-	\centering\tiny
-	\begin{tabular}{|l|l|l|l|}\hline
-		\diaghead{\theadfont Mode Criteria}{Mode}{Criteria} 		& \thead{Requires IV} 			  & \thead{binary proof}	& \thead{parallelisable}\\\hline
-		GCM	                            							& $\checkmark$					  & $\checkmark$			& $\times$\\              
-		CTR	                            							& $\checkmark$					  & $\checkmark$			& $\checkmark$\\              
-		CCM	                            							& $\checkmark$					  & $\checkmark$			& $\times$\\              
-		CFB	                            							& $\checkmark$					  & $\checkmark$			& $\checkmark$\\              
-		OCB	                            							& $\times^{\text{includes auth}}$ & $\checkmark$			& $\times$\\              
-		OFB	                            							& $\checkmark$					  & $\checkmark$			& $\times$\\              
-		PCBC                            							& $\checkmark$					  & $\checkmark$			& $\times$\\              
-		CBC 	                           							& $\checkmark$					  & $\checkmark$			& $\times$\\              
-		ECB 	                           							& $\times$						  & $\checkmark$			& $\checkmark$\\    
-		\hline          
-	\end{tabular}	
-	\caption{comparison of encryption modes in terms of the suitability criteria as transport layer}
-	\label{tab:ModeSuitCrit}
-\end{table}
-
-\fxfatal{remove binary proof column as it does not add any value}
-
-\subsubsection{Padding}
-A plan text stream may have any length. Since we always encrypt in blocks of a fixed size we need a mechanism to indicate how many bytes of the last encrypted block may be safely discarded. This mechanism is called padding. 
-
-Different paddings are used at the end of a cypher stream to indicate how many bytes belong to the decrypted stream.
-\paragraph{PKCS1:}  
-\fxfatal{Add content here}
-
-\paragraph{PKCS7:} This padding is the standard used in symmetric encryption up to 256 bits key length. The free bytes in the last cypher block indicate the number of bytes being used. This makes this padding very compact. It requires only 1 Byte of functional data at the end of the block. All other bytes are defined but not needed.
-
-\paragraph{OAEP with SHA and MGF1 padding:} This padding is closely related to PKCS1 padding. The hash size is however bigger and thus the required space for padding is much higher. OAEP with SHA and MGF1 Padding is used in asymetric encryption only. Due to its size it is important to note that the payload in the last block shrinks to $keySizeInBits/8-2-MacSize/4$.
-
-In our approach we have chosen to allow these three paddings. The allowed sha sizes match the allowed hash sizes chosen above. It is important to note that padding costs space at the end of a stream. Since we are using always one block for signing we have to take care that the chosen signing mac plus the bytes required for padding do not exceed the key size of the asymmetric encryption. While this is normally not a problem for RSA as there are keys 1024+ Bits required it is a considerable problem for ECC algorithms as there are much shorter keys required to achieve an equivalent strength compared to RSA.
+\fxfatal{Fix content (copied from first version). Be careful here!}
 
 \subsection{Usability}
 The system must be usable without cryptographic know-how and with well known tools. This is necessary to accept the system broadly and makes it easy to use for peoples already communicating.
@@ -1550,7 +1563,7 @@ An identity is always ephemeral and expires after a given period of time. An ide
 	\item The request should be very costly
 	\item Only nodes avertising themselfes as public are disclosed.
 	\item Only one or two nodes should be disclosed upon request.
-	\item The number of requests should be limmited per identity.
+	\item The number of requests should be limited per identity.
 	\item A node should always pick random nodes out of a 5\% pool of known Vortex addresses.
 \end{itemize}
 
@@ -1602,7 +1615,7 @@ Payload is being built right before sending a block (processing a routing block)
 srcIDs \xrightarrow{\text{build operation}} targetIDs
 \end{equation*}
 
-Every node maintains a list of received blocks including their IDs and building instructions for them. Any node must keep blocks and building instructions during the whole lifetime of a routing block. It may keep it longer. If a conflicting building instruction arrives all conflicting older rules are removed. Building instructions are always kept on a per identity base. It is not possible to reference building instructions of a foreign identity.
+Every node maintains a list of received blocks including their IDs and building instructions for them. Any node must keep blocks and building instructions during the whole lifetime of a routing block. It may keep it longer. If a conflicting building instruction arrives all conflicting older rules are removed. Building instructions are always kept on a per-identity base. It is not possible to reference building instructions of a foreign identity.
 
 \paragraph{splitMessage:} Split a message block into two parts of variable size. The size is expressed in percent of the original block size.
 
@@ -1705,9 +1718,14 @@ For an ephemeral identity very little information has to be kept. This identity 
 The following data has to be kept per identity:
 \begin{itemize}
 	\item $\mathbf{ID}\langle pubKey, expiry, messagesLeft, bytesLeft \rangle$
-	\item $\mathbf{Puzz}\langle identity, expiry, request, puzzle \rangle$
+	\item $\mathbf{Puzz[]}\langle expiry, request, puzzle \rangle$
+	\item $\mathbf{Build[]}\langle expiry, targetID, buildOperation \rangle$
 \end{itemize}
+The $\mathbf{ID}$ tuple is the longest living tuple. It reflects an identity and exists as long as the current identity is valid. All other tuples are short living lists. As the server decides if he accepts new identities or not the size of this data is controllable.
 
+$\mathbf{Puzz[]}$ is a list of not yet solved puzzles of this user. Every puzzle has a relatively short lifespan (typically below 1d). As the server may decide how many outstanding puzzles he accepts he controlls explicitely the size of this.
+
+$\mathbf{Build[]}$ is a list of building instructions for a message. The server may decide at any time to reject a too big list or a too long living message. Thus he may control the size of this list as well. However, controlling the size of this list will most likely result in the non-delivery of a message.
 
 \subsubsection{Accounting Data of a ``header'' Block}
 All accounting data of a header block is connected to the respective identity. All header blocks do expire latest with their respective identity. The following data has to be kept on a mix:
@@ -1742,3 +1760,12 @@ A Block picked up in the blending layer is handled as shown in image \ref{fig:ms
 
 \subsection{Transmission Block Processing}
 \fxfatal{add content here}
+
+\section{Sub Research Questions Roundup}
+\subsection{SQ1: Sending messages maintaining unlikability against an adverser}
+\fxfatal{add content here}
+\subsection{SQ2: Attacking unlinkability and circumvention}
+\fxfatal{add content here}
+\subsection{SQ3: Attack Mitigation by design}
+\fxfatal{add content here}
+
