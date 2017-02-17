@@ -39,7 +39,7 @@ This thesis contributes to the topic in the following senses:
 \end{itemize}
 
 \section{Notation}
-\subsection{Cryptography}
+\subsection{Cryptography \label{sec:encNot}}
 The theory in this document is heavily based on symmetric encryption, asymmetric encryption and hashing. In order to use a uniformed notation I use $E^{K_a}(M)$ (where $a$ is an index to distinguish multiple keys) resulting in $\mathbf{M^{K_a}}$ as the encrypted message. If we are reflecting a tuple of information we write it in boldface. to express the tuples content we use angular brackets $\mathbf{L\langle normalAddress,vortexAddress\rangle }$. If we want Messages encrypted with multiple keys do list the used keys as a comma separated list in superscript $E^{K_b}\left(E^{K_a}\left(M\right)\right)=M^{{K_{a}},{K_b}}$.
 
 For a symmetric encryption of a message $\mathbf{M}$ with a key $K_a$ resulting in $\mathbf{M^{K_a}}$ where $a$ is an index to distinguish different keys. Decryption uses therefore $D^{K_a}(\mathbf{M^{K_a}})=\mathbf{M}$.
@@ -54,8 +54,8 @@ If we want to express what details contained in a tuple we use the the notation 
 asymetric:         & E^{K^{-1}_a}\left(\mathbf{M}\right)                        	&& =\mathbf{M^{K^{-1}_a}}\\
                    & D^{K^{1}_a}\left(E^{K^{-1}_a}\left(\mathbf{M}\right)\right)	&& =\mathbf{M}\\
                    & D^{K^{-1}_a}\left(E^{K^{1}_a}\left(\mathbf{M}\right)\right)	&& =\mathbf{M}\\
-symetric:          & E^{K^{0}_a}\left(\mathbf{M}\right)                             	&& =\mathbf{M^{K_a}}\\
-                   & D^{K_a}\left(E^{K^{0}_a}\left(\mathbf{M}\right)\right)         	&& =\mathbf{M}\\
+symetric:          & E^{K_a}\left(\mathbf{M}\right)                             	&& =\mathbf{M^{K_a}}\\
+                   & D^{K_a}\left(E^{K_a}\left(\mathbf{M}\right)\right)             && =\mathbf{M}\\
 hashing (unsalted):& H\left(\mathbf{M}\right)                                   	&& =\mathbf{H_M}\\
 hashing (salted):  & H^{S_a}\left(\mathbf{M}\right)                             	&& =\mathbf{H^{S_a}_M}
 \end{align*}
