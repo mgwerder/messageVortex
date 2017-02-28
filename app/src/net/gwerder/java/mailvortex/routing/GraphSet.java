@@ -2,6 +2,7 @@ package net.gwerder.java.mailvortex.routing;
 
 import net.gwerder.java.mailvortex.asn1.IdentityStore;
 import net.gwerder.java.mailvortex.asn1.IdentityStoreBlock;
+
 import java.util.*;
 
 /**
@@ -9,8 +10,9 @@ import java.util.*;
  *
  * Created by martin.gwerder on 13.06.2016.
  */
-public class GraphSet extends Vector<Edge> implements Comparator<GraphSet>,Comparable<GraphSet> {
+public class GraphSet implements Comparator<GraphSet>,Comparable<GraphSet>,Iterable<Edge> {
 
+    private Vector<Edge> store=new Vector<>();
     private static final long serialVersionUID = 16134223345689L;
 
     private IdentityStore            identityStore=null;
@@ -59,16 +61,21 @@ public class GraphSet extends Vector<Edge> implements Comparator<GraphSet>,Compa
         return anonymitySet.indexOf( isb );
     }
 
-    @Override
     public boolean add(Edge g) {
         hasChanged=true;
-        return super.add(g);
+        return store.add(g);
     }
 
-    @Override
+    public boolean contains(Edge g) {
+        for(Edge e:store) {
+            if(e.equals(g)) return true;
+        }
+        return false;
+    }
+
     public boolean addAll(Collection<? extends Edge> g) {
         hasChanged=true;
-        return super.addAll(g);
+        return store.addAll(g);
     }
 
     public IdentityStoreBlock getAnonIdentity(int i) throws ArrayIndexOutOfBoundsException {
@@ -100,7 +107,7 @@ public class GraphSet extends Vector<Edge> implements Comparator<GraphSet>,Compa
     public boolean targetReached( IdentityStoreBlock is) throws NullPointerException {
         if(is==null) throw new NullPointerException();
         if (is.equals(source)) return true;
-        for (Edge g : this) {
+        for (Edge g : store) {
             if (g.getTo() == is) return true;
         }
         return false;
@@ -110,15 +117,15 @@ public class GraphSet extends Vector<Edge> implements Comparator<GraphSet>,Compa
         synchronized(cacheLock) {
             if (hasChanged) {
                 Set<GraphSet> ret = new TreeSet<>();
-                for (int i = 0; i < size(); i++) {
-                    if (get( i ).getFrom().equals( getSource() )) {
-                        Edge[][] g = getRoute( i, new Edge[]{get( i )}, getTarget() );
+                for (int i = 0; i < store.size(); i++) {
+                    if (store.get( i ).getFrom().equals( getSource() )) {
+                        Edge[][] g = getRoute( i, new Edge[]{store.get( i )}, getTarget() );
                         for (Edge[] gr : g) {
                             GraphSet gs = new GraphSet();
                             gs.setAnonymitySet( getAnonymitySet() );
                             gs.setSource( getSource() );
                             gs.setTarget( getTarget() );
-                            gs.add( get( i ) );
+                            gs.add( store.get( i ) );
                             gs.addAll( Arrays.asList( gr ) );
                             ret.add( gs );
                         }
@@ -135,14 +142,14 @@ public class GraphSet extends Vector<Edge> implements Comparator<GraphSet>,Compa
         List<Edge[]> ret=new Vector<>(  );
 
         // get last graph
-        Edge g=get(startIndex);
+        Edge g=store.get(startIndex);
 
         // if target reached tell so
         if(g.getTo().equals(to)) return new Edge[][] {new Edge[0]};
 
         //
-        for(int i=startIndex+1;i<size();i++) {
-            Edge tmp=get(i);
+        for(int i=startIndex+1;i<store.size();i++) {
+            Edge tmp=store.get(i);
             if(tmp==null) throw new NullPointerException("access to bad index");
 
             // avoid loops in current path (no visited graphs)
@@ -199,9 +206,9 @@ public class GraphSet extends Vector<Edge> implements Comparator<GraphSet>,Compa
         if(g==null) return false;
         if(g instanceof GraphSet) {
             GraphSet t=(GraphSet)g;
-            if( t.size()!=size()) return false;
-            for(int i=0;i<size();i++) {
-                if(t.get(i)==null ||get(i)==null || !get(i).equals(t.get(i))) return false;
+            if( t.store.size()!=store.size()) return false;
+            for(int i=0;i<store.size();i++) {
+                if(t.store.get(i)==null ||get(i)==null || !get(i).equals(t.store.get(i))) return false;
             }
             return true;
         } else {
@@ -210,10 +217,15 @@ public class GraphSet extends Vector<Edge> implements Comparator<GraphSet>,Compa
     }
 
     public void dump() {
-        for(Edge g:this) {
+        for(Edge g:store) {
             System.out.println( "  "+anonymitySet.indexOf( g.getFrom() ) + " -> " + anonymitySet.indexOf( g.getTo() ) );
         }
         System.out.println("}");
     }
+
+    public int size() {return store.size();}
+    public Edge get(int i) {return store.get( i );}
+    public Iterator iterator() {return store.iterator();}
+
 
 }

@@ -3,14 +3,13 @@ package net.gwerder.java.mailvortex.routing;
 import net.gwerder.java.mailvortex.asn1.IdentityStore;
 import net.gwerder.java.mailvortex.asn1.IdentityStoreBlock;
 import org.bouncycastle.asn1.DEROutputStream;
+
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileOutputStream;
-import javax.swing.JPanel;
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
-import java.awt.event.MouseEvent;
 import java.io.IOException;
 
 /**
@@ -87,6 +86,7 @@ public class JGraph extends JPanel implements MouseListener  {
             int y=(int)(Y_OFFSET+2*BOX_HEIGHT+i*ySpace);
 
             if(routes[this.route].contains( gr )) {
+                System.out.println("##   route "+this.route+" contains "+i+" ("+routes[this.route].size()+"/"+gr.getStartTime()+")");
                 g2.setColor( Color.GREEN );
                 g2.setStroke( s2 );
                 if(lastY>0) g2.drawLine(x1,lastY,x1,y);

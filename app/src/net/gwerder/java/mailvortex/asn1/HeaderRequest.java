@@ -1,10 +1,13 @@
 package net.gwerder.java.mailvortex.asn1;
 
+import net.gwerder.java.mailvortex.MailvortexLogger;
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1Object;
 import org.bouncycastle.asn1.ASN1TaggedObject;
+
 import java.io.IOException;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.logging.Level;
 
 /**
  * ASN1 parser class for header request.
@@ -13,13 +16,21 @@ import java.util.Vector;
  */
 public abstract class HeaderRequest {
 
-    private static final Vector<HeaderRequest> req = new Vector<>();
+    private static final java.util.logging.Logger LOGGER;
+    static {
+        LOGGER = MailvortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+    }
+
+
+    private static final ArrayList<HeaderRequest> req = new ArrayList<>();
 
     static {
         try {
             req.add( new HeaderRequestIdentity() );
             req.add( new HeaderRequestQueryQuota() );
-        } catch(Exception e) {}
+        } catch(Exception e) {
+            LOGGER.log(Level.SEVERE,"Unexpected exception when adding Header Requests in static constructor",e);
+        }
     }
 
     protected HeaderRequest() {

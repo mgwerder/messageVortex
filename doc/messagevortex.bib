@@ -28,6 +28,30 @@
   File                     = {:inc\\bib\\abliz2009tour.pdf:PDF}
 }
 
+@InProceedings{k-anonymous:ccs2003,
+  Title                    = {k-Anonymous Message Transmission},
+  Author                   = {Luis von Ahn and Andrew Bortz and Nicholas J. Hopper},
+  Booktitle                = {Proceedings of the 10th ACM Conference on Computer and Communications Security (CCS 2003)},
+  Year                     = {2003},
+  Editor                   = {Vijay Atluri and Peng Liu},
+  Month                    = oct,
+  Pages                    = {122--130},
+  Publisher                = {ACM Press},
+
+  Abstract                 = {Informally, a communication protocol is sender k - anonymous if it can guarantee that anadversary, trying to determine the sender of a particular message, can only narrow down itssearch to a set of k suspects. Receiver k-anonymity places a similar guarantee on the receiver:an adversary, at best, can only narrow down the possible receivers to a set of size k. In this paperwe introduce the notions of sender and receiver k-anonymity and consider their applications.We show that there exist simple and efficient protocols which are k-anonymous for both thesender and the receiver in a model where a polynomial time adversary can see all traffic in thenetwork and can control up to a constant fraction of the participants. Our protocol is provablysecure, practical, and does not require the existence of trusted third parties. This paper alsoprovides a conceptually simple augmentation to Chaum’s DC-Nets that adds robustness againstadversaries who attempt to disrupt the protocol through perpetual transmission or selectivenon-participation.},
+  Doi                      = {10.1145/948109.948128},
+  File                     = {:inc\\bib\\unclassified\\Anonbib\\k-anonymous_ccs2003.pdf:PDF},
+  Lastaccessed             = {2004-01-20 22:05:54},
+  Owner                    = {Martin},
+  Priority                 = {prio2},
+  Ranking                  = {rank5},
+  Review                   = {Meldungstransmission, die immer auf mnidestens k Ziele (oder Ursprünge) zurückzuführen ist.
+
+TODO: Mathe begreifen},
+  Timestamp                = {2017.02.20},
+  Url                      = {http://www.abortz.com/papers/k-anon.pdf}
+}
+
 @TechReport{alwen2016efficiently,
   Title                    = {Efficiently computing data-independent memory-hard functions},
   Author                   = {Alwen, Joel and Blocki, Jeremiah},
@@ -50,6 +74,37 @@
   Url                      = {https://books.google.ch/books?hl=de&lr=&id=75-4CgAAQBAJ&oi=fnd&pg=PP1&dq=Theoretical+and+experimental+methods+for+defending+against+ddos+attacks&ots=U_12I0fVIP&sig=Zx6g2jDjUPRBur-Y3k0kJm0Hlvk#v=onepage&q=Theoretical%20and%20experimental%20methods%20for%20defending%20against%20ddos%20attacks&f=false}
 }
 
+@Standard{mqtt,
+  Title                    = {MQTT},
+  Organization             = {OASIS},
+  Author                   = {Banks Andrew and Gupta Rahul},
+  Language                 = {en},
+  Month                    = apr,
+  Revision                 = {3.1.1},
+  Url                      = {http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.pdf},
+  Year                     = {2014},
+
+  File                     = {:inc\\bib\\mqtt-v3.1.1-os.pdf:PDF},
+  Owner                    = {martin.gwerder},
+  Timestamp                = {2016.11.06}
+}
+
+@InProceedings{AthanRAM07,
+  Title                    = {GAS: Overloading a File Sharing Network as an Anonymizing System},
+  Author                   = {Elias Athanasopoulos and Mema Roussopoulos and Kostas G. Anagnostakis and Evangelos P. Markatos},
+  Booktitle                = {Proceedings of Second International Workshop on Security, (IWSEC 2007)},
+  Year                     = {2007},
+
+  Abstract                 = {Anonymity is considered as a valuable property as far as everyday transactions in the Internet are concerned. Users care about their privacy and they seek for new ways to keep secret as much as of their personal information from third parties. Anonymizing systems exist nowadays that provide users with the technology, which is able to hide their origin when they use applications such as the World Wide Web or Instant Messaging. However, all these systems are vulnerable to a number of attacks and some of them may collapse under a low strength adversary. In this paper we explore anonymity from a di®erent perspective. Instead of building a new anonymizing system, we try to overload an existing file sharing system, Gnutella, and use it for a di®erent purpose. We develop a technique that transforms Gnutella as an Anonymizing System (GAS) for a single download from the World Wide Web.},
+  File                     = {:inc\\bib\\unclassified\\Anonbib\\AthanRAM07.pdf:PDF},
+  Keywords                 = {GAS},
+  Lastaccessed             = {2007-10-18 03:18:39},
+  Location                 = {Nara, Japan},
+  Owner                    = {Martin},
+  Timestamp                = {2017.02.20},
+  Url                      = {http://dcs.ics.forth.gr/Activities/papers/gas%20iwsec07.pdf}
+}
+
 @Article{aumasson2008blake,
   Title                    = {Sha-3 proposal blake},
   Author                   = {Aumasson, Jean-Philippe and Henzen, Luca and Meier, Willi and Phan, Raphael C-W},
@@ -68,7 +123,7 @@
   Organization             = {Springer},
   Pages                    = {170--177},
 
-  File                     = {:inc\\bib\\aura-nikander-leiwo-protocols00.pdf:PDF;:http\://www.tcs.hut.fi/old/papers/aura/aura-nikander-leiwo-protocols00.pdf:URL},
+  File                     = {:inc\\bib\\aura-nikander-leiwo-protocols00.pdf:PDF},
   Url                      = {@inproceedings{aura2000resistant,
  title={DOS-resistant authentication with client puzzles},
  author={Aura, Tuomas and Nikander, Pekka and Leiwo, Jussipekka},
@@ -85,7 +140,71 @@
   Journal                  = {Draft-Hashcash-back-00, Internet-Draft Created,(Jun. 2003)},
   Year                     = {2003},
 
+  File                     = {:inc\\bib\\draft-hashcash.pdf:PDF},
   Url                      = {http://www.hashcash.org/docs/hashcash.html}
+}
+
+@Misc{back2002hashcash,
+  Title                    = {Hashcash-a denial of service counter-measure},
+
+  Author                   = {Back, Adam and others},
+  Year                     = {2002},
+
+  File                     = {:inc\\bib\\hashcash.pdf:PDF}
+}
+
+@InProceedings{esorics13-cellflood,
+  Title                    = {{CellFlood}: Attacking {T}or Onion Routers on the Cheap},
+  Author                   = {Marco Valerio Barbera and Vasileios P. Kemerlis and Vasilis Pappas and Angelos Keromytis},
+  Booktitle                = {Proceedings of ESORICS 2013},
+  Year                     = {2013},
+  Month                    = sep,
+
+  File                     = {:inc\\bib\\unclassified\\Anonbib\\esorics13-cellflood.pdf:PDF},
+  Lastaccessed             = {2013-09-19 22:28:50},
+  Owner                    = {Martin},
+  Timestamp                = {2017.02.24},
+  Url                      = {http://www.cs.columbia.edu/~vpk/papers/cellflood.esorics13.pdf}
+}
+
+@InProceedings{bauer:wpes2007,
+  Title                    = {Low-Resource Routing Attacks Against {Tor}},
+  Author                   = {Kevin Bauer and Damon McCoy and Dirk Grunwald and Tadayoshi Kohno and Douglas Sicker},
+  Booktitle                = {Proceedings of the Workshop on Privacy in the Electronic Society (WPES 2007)},
+  Year                     = {2007},
+  Month                    = oct,
+
+  Abstract                 = {Tor has become one of the most popular overlay networks for anonymizing TCP traffic. Its popularity is due in part to its perceived strong anonymity properties and its relatively low latency service. Low latency is achieved through Tor's ability to balance the traffic load by optimizing Tor router selection to probabilistically favor routers with highbandwidth capabilities.
+
+We investigate how Tor's routing optimizations impact its ability to provide strong anonymity. Through experiments conducted on PlanetLab, we show the extent to which routing performance optimizations have left the system vulnerable to end-to-end traffic analysis attacks from non-global adversaries with minimal resources. Further, we demonstrate that entry guards, added to mitigate path disruption attacks, are themselves vulnerable to attack. Finally, we explore solutions to improve Tor's current routing algorithms and propose alternative routing strategies that prevent some of the routing attacks used in our experiments.},
+  Doi                      = {10.1145/1314333.1314336},
+  File                     = {:inc\\bib\\unclassified\\Anonbib\\bauer_wpes2007.pdf:PDF},
+  Lastaccessed             = {2007-10-18 03:18:41},
+  Location                 = {Washington, DC, USA},
+  Owner                    = {Martin},
+  Ranking                  = {rank3},
+  Timestamp                = {2017.02.24},
+  Url                      = {http://systems.cs.colorado.edu/~bauerk/papers/wpes25-bauer.pdf}
+}
+
+@Misc{rfc7540,
+  Title                    = {Hypertext Transfer Protocol Version 2 (HTTP/2)},
+
+  Author                   = {Mike Belshe and Roberto Peon and Martin Thomson},
+  HowPublished             = {RFC 7540},
+  Month                    = may,
+  Year                     = {2015},
+
+  Abstract                 = {This specification describes an optimized expression of the semantics of the Hypertext Transfer Protocol (HTTP), referred to as HTTP version 2 (HTTP/2). HTTP/2 enables a more efficient use of network resources and a reduced perception of latency by introducing header field compression and allowing multiple concurrent exchanges on the same connection. It also introduces unsolicited push of representations from servers to clients.},
+  Doi                      = {10.17487/rfc7540},
+  File                     = {:inc\\bib\\rfc7540.pdf:PDF},
+  Number                   = {7540},
+  Owner                    = {Martin},
+  Pagetotal                = {96},
+  Publisher                = {RFC Editor},
+  Series                   = {Request for Comments},
+  Timestamp                = {2017.02.24},
+  Url                      = {https://rfc-editor.org/rfc/rfc7540.txt}
 }
 
 @Article{bertoni2009keccak,
@@ -135,6 +254,35 @@
   File                     = {:inc\\bib\\alex-ivan-tor-micropayments.pdf:PDF}
 }
 
+@InProceedings{esorics12-torscan,
+  Title                    = {{TorScan}: Tracing Long-lived Connections and Differential Scanning Attacks},
+  Author                   = {Alex Biryukov and Ivan Pustogarov and Ralf Philipp Weinmann},
+  Booktitle                = {Proceedings of the European Symposium Research Computer Security - {ESORICS}'12},
+  Year                     = {2012},
+  Month                    = sep,
+  Publisher                = {Springer},
+
+  File                     = {:inc\\bib\\torscan-esorics2012.pdf:PDF},
+  Lastaccessed             = {2013-02-25 07:49:32},
+  Owner                    = {Martin},
+  Timestamp                = {2017.02.24},
+  Url                      = {http://freehaven.net/anonbib/papers/torscan-esorics2012.pdf}
+}
+
+@InProceedings{oakland2013-trawling,
+  Title                    = {Trawling for Tor Hidden Services: Detection, Measurement, Deanonymization},
+  Author                   = {Alex Biryukov and Ivan Pustogarov and Ralf-Philipp Weinmann},
+  Booktitle                = {Proceedings of the 2013 IEEE Symposium on Security and Privacy},
+  Year                     = {2013},
+  Month                    = may,
+
+  File                     = {:inc\\bib\\unclassified\\Anonbib\\oakland2013-trawling.pdf:PDF},
+  Lastaccessed             = {2013-06-15 02:30:17},
+  Owner                    = {Martin},
+  Timestamp                = {2017.02.24},
+  Url                      = {http://www.ieee-security.org/TC/SP2013/papers/4977a080.pdf}
+}
+
 @Book{RFC1087,
   Title                    = {RFC1087 Ethics and the Internet},
   Author                   = {Internet Activities Board},
@@ -146,6 +294,26 @@
   Localfile                = {inc/bib/rfc1087.pdf},
   Organization             = {Internet Activities Board},
   Url                      = {http://tools.ietf.org/pdf/rfc1087.pdf}
+}
+
+@Misc{RFC7252,
+  Title                    = {RFC7252: The Constrained Application Protocol (CoAP)},
+
+  Author                   = {Carsten Bormann and Klaus Hartke and Zach Shelby},
+  HowPublished             = {RFC 7252},
+  Month                    = jun,
+  Year                     = {2014},
+
+  Abstract                 = {The Constrained Application Protocol (CoAP) is a specialized web transfer protocol for use with constrained nodes and constrained (e.g., low-power, lossy) networks. The nodes often have 8-bit microcontrollers with small amounts of ROM and RAM, while constrained networks such as IPv6 over Low-Power Wireless Personal Area Networks (6LoWPANs) often have high packet error rates and a typical throughput of 10s of kbit/s. The protocol is designed for machine- to-machine (M2M) applications such as smart energy and building automation.},
+  Doi                      = {10.17487/rfc7252},
+  File                     = {:inc\\bib\\rfc7252.pdf:PDF},
+  Number                   = {7252},
+  Owner                    = {Martin},
+  Pagetotal                = {112},
+  Publisher                = {RFC Editor},
+  Series                   = {Request for Comments},
+  Timestamp                = {2017.02.24},
+  Url                      = {https://rfc-editor.org/rfc/rfc7252.txt}
 }
 
 @Book{RFC3979,
@@ -181,6 +349,26 @@
   Url                      = {http://tools.ietf.org/pdf/rfc5378.pdf}
 }
 
+@Article{chaum-dc,
+  Title                    = {The Dining Cryptographers Problem: Unconditional Sender and Recipient Untraceability},
+  Author                   = {David Chaum},
+  Journal                  = {Journal of Cryptology},
+  Year                     = {1988},
+  Pages                    = {65--75},
+  Volume                   = {1},
+
+  Abstract                 = {Keeping confidential who sends which messages, in a world where any physical transmission can be traced to its origin, seems impossible. The solution presented here is unconditionally or cryptographically secure, depending on whether it is based on one-time-use keys or on public keys, respectively. It can be adapted to address efficiently a wide variety of practical considerations.},
+  File                     = {:inc\\bib\\unclassified\\Anonbib\\chaum-dc.pdf:PDF},
+  Lastaccessed             = {2008-11-24 15:17:25},
+  Owner                    = {Martin},
+  Priority                 = {prio1},
+  Ranking                  = {rank5},
+  Relevance                = {relevant},
+  Review                   = {Important Base document about the dining Crytographers},
+  Timestamp                = {2017.02.24},
+  Url                      = {http://www.cs.ucsb.edu/~ravenben/classes/595n-s07/papers/dcnet-jcrypt88.pdf}
+}
+
 @Article{CHAUM1,
   Title                    = {Untraceable Electronic Mail, Return, Addresses, and Digital Pseudonyms},
   Author                   = {David Chaum},
@@ -194,6 +382,21 @@
   Review                   = {A technique based on public key cryptography is presented that allows an electronic mail system to hide who a participant communicates with as well as the content of the communication - in spite of an unsecured underlying telecommunication system. The technique does not require a universally trusted authority. One correspondent can remain anonymous to a second, while allowing the second to respond via an untraceable return address.
 The technique can also be used to form rosters of untraceable digital pseudonyms from selected applications. Applicants retain the exclusive ability to form digital signatures corresponding to their pseudonyms. Elections in which any interested party can verify that the ballots have been properly counted are possible if anonymously mailed ballots are signed with pseudonyms from a roster of registered voters. Another use allows an individual to correspond witha record-keeping organization under a unique pseudonym which appears in a roster of acceptable clients.},
   Url                      = {http://www.cs.utexas.edu/~shmat/courses/cs395t_fall04/chaum81.pdf}
+}
+
+@InProceedings{freenet,
+  Title                    = {Freenet: {A} Distributed Anonymous Information Storage and Retrieval System},
+  Author                   = {Ian Clarke and Oskar Sandberg and Brandon Wiley and Theodore W. Hong},
+  Booktitle                = {Proceedings of Designing Privacy Enhancing Technologies: Workshop on Design Issues in Anonymity and Unobservability},
+  Year                     = {2000},
+  Month                    = jul,
+  Pages                    = {46--66},
+
+  File                     = {:inc\\bib\\freenet1-big.pdf:PDF},
+  Lastaccessed             = {2003-09-09 00:53:33},
+  Owner                    = {Martin},
+  Timestamp                = {2017.02.24},
+  Url                      = {https://freenetproject.org/}
 }
 
 @InProceedings{coelho2008almost,
@@ -241,6 +444,24 @@ The technique can also be used to form rosters of untraceable digital pseudonyms
   Url                      = {https://www.schneier.com/paper-truecrypt-dfs.pdf}
 }
 
+@Article{danner-et-al:tissec12,
+  Title                    = {Effectiveness and detection of denial of service attacks in {Tor}},
+  Author                   = {Norman Danner and Sam DeFabbia-Kane and Danny Krizanc and Marc Liberatore},
+  Journal                  = {Transactions on Information and System Security},
+  Year                     = {2012},
+  Number                   = {3},
+  Pages                    = {11:1--11:25},
+  Volume                   = {15},
+
+  Doi                      = {10.1145/2382448.2382449},
+  File                     = {:inc\\bib\\tissec12.pdf:PDF},
+  Keywords                 = {anonymity},
+  Lastaccessed             = {2013-11-02 04:58:07},
+  Owner                    = {Martin},
+  Timestamp                = {2017.02.24},
+  Url                      = {http://arxiv.org/pdf/1110.5395v3.pdf}
+}
+
 @Book{RFC2460,
   Title                    = {RFC2460 Internet Protocol, Version 6 (IPv6) Specification},
   Author                   = {S. Deering and R. Hinden},
@@ -257,6 +478,7 @@ The technique can also be used to form rosters of untraceable digital pseudonyms
 
   Author                   = {Roger Dingledine and Nick Mathewson},
 
+  File                     = {:inc\\bib\\tor-spec.pdf:PDF},
   Owner                    = {martin.gwerder},
   Timestamp                = {2016.11.13},
   Url                      = {https://gitweb.torproject.org/torspec.git/tree/tor-spec.txt}
@@ -336,6 +558,22 @@ The technique can also be used to form rosters of untraceable digital pseudonyms
   File                     = {:inc\\bib\\rfc2015.pdf:PDF},
   Localfile                = {inc/bib/rfc2015.pdf},
   Url                      = {http://tools.ietf.org/pdf/rfc2015.pdf}
+}
+
+@InProceedings{congestion-longpaths,
+  Title                    = {A Practical Congestion Attack on {T}or Using Long Paths},
+  Author                   = {Nathan Evans and Roger Dingledine and Christian Grothoff},
+  Booktitle                = {Proceedings of the 18th USENIX Security Symposium},
+  Year                     = {2009},
+  Month                    = aug,
+
+  Abstract                 = {In 2005, Murdoch and Danezis demonstrated the first practical congestion attack against a deployed anonymity network. They could identify which relays were on a target Tor user’s path by building paths one at a time through every Tor relay and introducing congestion. However, the original attack was performed on only 13 Tor relays on the nascent and lightly loaded Tor network. We show that the attack from their paper is no longer practical on today’s 1500-relay heavily loaded Tor network. The attack doesn’t scale because a) the attacker needs a tremendous amount of bandwidth to measure enough relays during the attack window, and b) there are too many false positives now that many other users are adding congestion at the same time as the attacks. We then strengthen the original congestion attack by combining it with a novel bandwidth amplification attack based on a flaw in the Tor design that lets us build long circuits that loop back on themselves. We show that this new combination attack is practical and effective by demonstrating a working attack on today’s deployed Tor network. By coming up with a model to better understand Tor’s routing behavior under congestion, we further provide a statistical analysis characterizing how effective our attack is in each case.},
+  File                     = {:inc\\bib\\unclassified\\Anonbib\\congestion-longpaths.pdf:PDF},
+  Lastaccessed             = {2009-06-11 20:33:58},
+  Owner                    = {Martin},
+  Ranking                  = {rank3},
+  Timestamp                = {2017.02.24},
+  Url                      = {http://freehaven.net/anonbib/papers/congestion-longpaths.pdf}
 }
 
 @InProceedings{4301429,
@@ -1449,6 +1687,7 @@ In this paper we show that l-diversity has a number of limitations. In particula
   Title                    = {Email Client Market Share},
   Year                     = {2014},
 
+  File                     = {:inc\\bib\\emailclientmarketshare.pdf:PDF},
   Localfile                = {inc/bib/client_distribution2.pdf},
   Url                      = {http://emailclientmarketshare.com/}
 }
@@ -1477,8 +1716,23 @@ In this paper we show that l-diversity has a number of limitations. In particula
   Title                    = {Campaign Monitor},
   Year                     = {2012},
 
+  File                     = {:inc\\bib\\campaignmonitor.pdf:PDF},
   Localfile                = {inc/bib/client_distribution.pdf},
   Url                      = {http://www.campaignmonitor.com/resources/will-it-work/email-clients/}
+}
+
+@Standard{amqp,
+  Title                    = {AMQP v1.0},
+  Institution              = {none},
+  Organization             = {AMQP.org},
+  Month                    = oct,
+  Revision                 = {0},
+  Url                      = {http://www.amqp.org/confluence/display/AMQP/AMQP+Specification},
+  Year                     = {2011},
+
+  File                     = {:inc\\bib\\amqp.pdf:PDF},
+  Owner                    = {martin.gwerder},
+  Timestamp                = {2016.11.06}
 }
 
 @Misc{MAROCO,

@@ -123,6 +123,7 @@ BEGIN
         splitPayload    [150] SplitPayloadOperation, 
         mergePayload    [200] MergePayloadOperation,
         xorMergePayload [250] XorMergePayloadOperation,
+		xorSplitPayload	[260] XorSplitPayloadOperation,
         encryptPayload  [300] EncryptPayloadOperation,
         decryptPayload  [350] DecryptPayloadOperation,
 		...
@@ -405,7 +406,5 @@ BEGIN
     privateKey    [2] OCTET STRING OPTIONAL
   }
   
-  pkcs-1    OBJECT IDENTIFIER ::= { iso(1) member-body(2) us(840) rsadsi(113549) pkcs(1) 1 }
-
 END
 

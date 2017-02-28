@@ -42,33 +42,6 @@ public class Identity extends Block {
 
     private AsymmetricKey ownIdentity = null;
 
-    public boolean equals(Object t) {
-        if(t==null) return false;
-        if(! (t instanceof Identity) ) return false;
-        Identity o=(Identity)t;
-        if(!headerKey.equals(o.headerKey)) return false;
-        if(!Arrays.equals(encryptedHeaderKey,o.encryptedHeaderKey)) return false;
-        if(!identityKey.equals(o.identityKey)) return false;
-        if(serial!=o.serial) return false;
-        if(maxReplays!=o.maxReplays) return false;
-        if(!valid.equals(o.valid)) return false;
-        if(!Arrays.equals(forwardSecret,o.forwardSecret)) return false;
-        if(!Arrays.equals(decryptionKeyRaw,o.decryptionKeyRaw)) return false;
-        if(hash!=o.hash) return false;
-        for(int i=0;i<requests.length;i++) {
-            if(!requests[i].equals(o.requests[i])) return false;
-        }
-        if(identifier!=o.identifier) return false;
-        if(!Arrays.equals(padding,o.padding)) return false;
-        if(!Arrays.equals(encryptedIdentityBlock,o.encryptedIdentityBlock)) return false;
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
-
     public Identity() throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, IOException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, NoSuchProviderException, InvalidKeySpecException {
         this.identityKey = new AsymmetricKey(Algorithm.RSA, 2048, Algorithm.RSA.getParameters( SecurityLevel.MEDIUM ) );
         this.serial = (long) (Math.random() * 4294967295L);
@@ -98,6 +71,33 @@ public class Identity extends Block {
         super();
         this.ownIdentity = ownIdentity;
         parse( to );
+    }
+
+    public boolean equals(Object t) {
+        if(t==null) return false;
+        if(! (t instanceof Identity) ) return false;
+        Identity o=(Identity)t;
+        if(!headerKey.equals(o.headerKey)) return false;
+        if(!Arrays.equals(encryptedHeaderKey,o.encryptedHeaderKey)) return false;
+        if(!identityKey.equals(o.identityKey)) return false;
+        if(serial!=o.serial) return false;
+        if(maxReplays!=o.maxReplays) return false;
+        if(!valid.equals(o.valid)) return false;
+        if(!Arrays.equals(forwardSecret,o.forwardSecret)) return false;
+        if(!Arrays.equals(decryptionKeyRaw,o.decryptionKeyRaw)) return false;
+        if(hash!=o.hash) return false;
+        for(int i=0;i<requests.length;i++) {
+            if(!requests[i].equals(o.requests[i])) return false;
+        }
+        if(identifier!=o.identifier) return false;
+        if(!Arrays.equals(padding,o.padding)) return false;
+        if(!Arrays.equals(encryptedIdentityBlock,o.encryptedIdentityBlock)) return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 
     @Override

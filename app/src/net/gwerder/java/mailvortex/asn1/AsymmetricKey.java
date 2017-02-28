@@ -34,6 +34,8 @@ public class AsymmetricKey extends Key {
     private static int PUBLIC_KEY = 1;
     private static int PRIVATE_KEY = 2;
 
+    final static String ECC="ECIES";
+
     static {
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
     }
@@ -145,12 +147,12 @@ public class AsymmetricKey extends Key {
             }
             publicKey  = pair.getPublic().getEncoded();
             privateKey = pair.getPrivate().getEncoded();
-        } else if ("ECIES".equals( alg.getAlgorithm() )) {
+        } else if (ECC.equals( alg.getAlgorithm() )) {
             if(params.get("curveType_0")==null) {
                 throw new NoSuchAlgorithmException( "curve type is not set" );
             }
             ECParameterSpec parameters = ECNamedCurveTable.getParameterSpec( (String)(params.get("curveType_0")) );
-            KeyPairGenerator g = KeyPairGenerator.getInstance( "ECIES", "BC" );
+            KeyPairGenerator g = KeyPairGenerator.getInstance( ECC, "BC" );
             g.initialize( parameters, esr.getSecureRandom() );
             KeyPair pair = g.generateKeyPair();
             publicKey  = pair.getPublic().getEncoded();
@@ -327,14 +329,14 @@ public class AsymmetricKey extends Key {
 
     private Cipher getCipher() throws NoSuchPaddingException,NoSuchAlgorithmException,NoSuchProviderException {
         if(keytype.getAlgorithm().equals(Algorithm.EC.getAlgorithm())) {
-            return Cipher.getInstance( "ECIES","BC");
+            return Cipher.getInstance( ECC,"BC");
         } else {
             return Cipher.getInstance(keytype.getAlgorithm()+"/"+getMode()+"/"+getPadding().getPadding());
         }
     }
 
     private Signature getSignature(Algorithm a) throws NoSuchPaddingException, NoSuchAlgorithmException, NoSuchProviderException {
-        if (keytype.getAlgorithm().equals( "ECIES" )) {
+        if (keytype.getAlgorithm().equals( ECC )) {
             return Signature.getInstance( mac.getAlgorithm() + "WithECDSA", "BC" );
         } else {
             return Signature.getInstance( a.getAlgorithm() + "With" + keytype.getAlgorithm() );
@@ -362,7 +364,9 @@ public class AsymmetricKey extends Key {
 
     public Algorithm getAlgorithm() {return keytype; }
 
-    public Padding getPadding() {return (padding==null?Padding.getDefault( AlgorithmType.ASYMMETRIC ):padding); }
+    public Padding getPadding() {
+        return padding==null?Padding.getDefault( AlgorithmType.ASYMMETRIC ):padding;
+    }
 
     public Padding setPadding(Padding p) {
         Padding old=padding;
@@ -370,9 +374,13 @@ public class AsymmetricKey extends Key {
         return old;
     }
 
-    public int getKeySize() {return (Integer)(this.parameters.get(Parameter.KEYSIZE.toString()+"_0")); }
+    public int getKeySize() {
+        return (Integer)(this.parameters.get(Parameter.KEYSIZE.toString()+"_0"));
+    }
 
-    public Mode getMode() {return (mode==null?Mode.getDefault( AlgorithmType.ASYMMETRIC ):mode); }
+    public Mode getMode() {
+        return mode==null?Mode.getDefault( AlgorithmType.ASYMMETRIC ):mode;
+    }
 
     public String toString() {
         return "([AsymmetricKey]"+keytype+"/"+parameters.get(""+ Parameter.KEYSIZE.toString()+"_0")+"/"+mode+"/"+getPadding().toString()+")";

@@ -848,7 +848,7 @@ This means that the failure of one mix does not result in the non-delivery of a 
 
 No client implementation could be found on the internet. The project homepage \href{http://current.cs.ucsb.edu/projects/cashmere/}{http://current.cs.ucsb.edu/projects/cashmere/} has not been updated since 2005. This suggests that this project is dead or sleeping.
 
-\subsection{SMTP}
+\subsection{SMTP\label{sec:mailTransport}}
 As SMTP is our trasport prototype we focus in depth onto this topic.
 
 Todays mail transport is mostly done via SMTP\index{SMTP} protocol as specified in \cite{RFC5321}. This protocol has proven to be stable and reliable. Most of the messages are passed from a MUA to a SMTP relay of a provider. From there the message is directly sent to the SMTP server of the recipient and from there to a server based storage of the recipient. The recipient may at any time connect to his server based storage and may optionally relocate the message to a client based (local) storage. The delivery from the server storage to the MUA of the recipient may happen by message polling or by message push (where as the later is usually implemented by a push-pull mechanism).\par
@@ -1130,6 +1130,8 @@ Scrypt was originally developed by \citeauthor{percival2009stronger} in \citeyea
 \section{Pseudo Random Number Generators}
 \fxfatal{add content here}
 
+\fxfatal{refer to FC 1750: Randomness Recommendations for Security}
+
 \section{Known Attacks}
 In the following sections we emphasize on possible attacks to an anonymity preserving protocols. In the following sections we describe classes of attacks. These attacks may be used to attack the anonymity of any entity involved in the message channel. In a later stage we test the protocol for immunity against these classes of attacks.
 
@@ -1392,7 +1394,7 @@ The system must be usable without cryptographic know-how and with well known too
 \end{requirement}
 
 \section{Protocol outline}
-The protocol itself is independently from the transport layer specified. We emphasize in this section to the general building blocks, the cryptographic structure, and the general protocol attributes. In Section \ref{sec:protoImpl} we will then further elaborate the protocols inner structure.
+The protocol itself is independently from the transport layer specified. We emphasize in this section to the general building blocks, the cryptographic structure, and the general protocol attributes. In section \ref{sec:spec} we will then further elaborate the protocols inner structure.
 
 The protocol is built on multiple layers. On the logic side the protocol is split into two parts:
 \begin{enumerate}
@@ -1717,7 +1719,7 @@ It contains:
 
 It is important to understand that a block may be exchanged at any time by an evil node. This however does not affect the safety on the message. Any tagging introduced at this point does invalidate the stream. The output after the next hop is completely unpredictable.
 
-\subsection{Accounting\label{accounting}}
+\subsection{Accounting\label{sec:accounting}}
 Accounting covers several purposes in this system:
 \begin{itemize}
 	\item It makes the system costly for nodes sending bulk messages.

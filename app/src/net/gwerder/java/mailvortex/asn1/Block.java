@@ -59,9 +59,9 @@ public abstract class Block {
         parse( ASN1Sequence.getInstance( b ) );
     }
 
-    abstract protected void parse(ASN1Encodable to) throws IOException,ParseException,NoSuchAlgorithmException;
+    protected abstract void parse(ASN1Encodable to) throws IOException,ParseException,NoSuchAlgorithmException;
 
-    abstract public String dumpValueNotation(String prefix) throws IOException;
+    public abstract String dumpValueNotation(String prefix) throws IOException;
 
     protected byte[] toDER(ASN1Object a) {
         if(a==null) {

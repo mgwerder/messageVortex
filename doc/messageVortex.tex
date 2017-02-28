@@ -24,6 +24,8 @@
 
 \usepackage{hyperxmp}
 
+\usepackage{xstring}
+
 \usepackage{pdfsync} 
 
 \usepackage{MnSymbol} % required for the arrow
@@ -85,6 +87,10 @@
   pdftitle={\thetitle},
   pdfpagelayout=TwoPageRight,
   bookmarks=true,
+  hyperindex=true,
+  hyperfigures=true,
+  pdftex=true,
+  pdfpagelabels=true,
   pdfstartview=Fit,
   pdfauthor={\author},
   pdftitle={\thetitle\\\small\thesubtitle},
@@ -475,6 +481,10 @@ I would like to acknowledge the thousands of individuals who have coded for the 
 
 \chapter{Bibliography}
 {
+  %\def\filespliter#1{\expandafter\intfilespliter#1\relax}
+  %\def\intfilespliter#1 #2 #3\relax{ First: (#1), Second: (#2), Third: (#3) }
+  \DeclareFieldFormat{file}{\StrGobbleLeft{#1}{1}[\wtcGwM]\StrGobbleRight{\wtcGwM}{4}[\filename] \IfFileExists{\filename}{\attachfile{\filename}}{FIXIT}}
+  \renewbibmacro{finentry}{\finentry\addspace \printfield{file}}
   \renewcommand*{\bibfont}{\small}
   \printbibliography[title={},heading=none]
 }
