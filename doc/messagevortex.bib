@@ -283,6 +283,21 @@ We investigate how Tor's routing optimizations impact its ability to provide str
   Url                      = {http://www.ieee-security.org/TC/SP2013/papers/4977a080.pdf}
 }
 
+@Article{blum1984generate,
+  Title                    = {How to generate cryptographically strong sequences of pseudorandom bits},
+  Author                   = {Blum, Manuel and Micali, Silvio},
+  Journal                  = {SIAM journal on Computing},
+  Year                     = {1984},
+  Number                   = {4},
+  Pages                    = {850--864},
+  Volume                   = {13},
+
+  Doi                      = {10.1137/0213053},
+  File                     = {:inc\\bib\\0213053.pdf:PDF},
+  Publisher                = {SIAM},
+  Url                      = {http://dx.doi.org/10.1137/0213053}
+}
+
 @Book{RFC1087,
   Title                    = {RFC1087 Ethics and the Internet},
   Author                   = {Internet Activities Board},
@@ -796,6 +811,18 @@ The technique can also be used to form rosters of untraceable digital pseudonyms
   Url                      = {http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.716.9775&rep=rep1&type=pdf}
 }
 
+@Unpublished{messageVortex,
+  Title                    = {MessageVortex -- Transport Independent Messaging Anonymous to Third Parties},
+  Author                   = {Martin Gwerder},
+
+  Month                    = {12},
+  Year                     = {2017},
+
+  Keywords                 = {Messaging, Anonymity, SMTP, MIME, S/MIME, POP3, IMAPv4, Message Vortex},
+  Owner                    = {martin.gwerder},
+  Timestamp                = {2017.03.15}
+}
+
 @Book{RFC3207,
   Title                    = {RFC3207 SMTP Service Extension for Secure SMTP over Transport Layer Security},
   Author                   = {P. Hoffman},
@@ -870,6 +897,21 @@ The technique can also be used to form rosters of untraceable digital pseudonyms
 
   File                     = {:inc\\bib\\juels.pdf:PDF;:http\://www.isoc.org/isoc/conferences/ndss/99/proceedings/papers/juels.pdf:URL},
   Url                      = {http://www.isoc.org/isoc/conferences/ndss/99/proceedings/papers/juels.pdf}
+}
+
+@Article{karnin1983secret,
+  Title                    = {On secret sharing systems},
+  Author                   = {Karnin, Ehud and Greene, Jonathan and Hellman, Martin},
+  Journal                  = {IEEE Transactions on Information Theory},
+  Year                     = {1983},
+  Number                   = {1},
+  Pages                    = {35--41},
+  Volume                   = {29},
+
+  Doi                      = {10.1109/TIT.1983.1056621},
+  File                     = {:inc\\bib\\onSecretSharing.pdf:PDF},
+  Publisher                = {IEEE},
+  Url                      = {http://ieeexplore.ieee.org/abstract/document/1056621/}
 }
 
 @Book{RFC6652,
@@ -959,6 +1001,18 @@ The technique can also be used to form rosters of untraceable digital pseudonyms
   File                     = {:inc\\bib\\ldiversity.pdf:PDF},
   Publisher                = {ACM},
   Url                      = {http://www.cs.cornell.edu/~vmuthu/research/ldiversity.pdf}
+}
+
+@Article{marsaglia2003xorshift,
+  Title                    = {Xorshift rngs},
+  Author                   = {Marsaglia, George and others},
+  Journal                  = {Journal of Statistical Software},
+  Year                     = {2003},
+  Number                   = {14},
+  Pages                    = {1--6},
+  Volume                   = {8},
+
+  File                     = {:inc\\bib\\xorshift.pdf:PDF}
 }
 
 @Article{RFC3713,
@@ -1119,6 +1173,35 @@ In this paper we show that l-diversity has a number of limitations. In particula
   Version                  = {0.34}
 }
 
+@TechReport{pd:96:rs,
+  Title                    = {A Tutorial on Reed-Solomon Coding for Fault-Tolerance in RAID-like Systems},
+  Author                   = {J. S. Plank},
+  Institution              = {University of Tennessee},
+  Year                     = {1996},
+  Month                    = {July},
+  Number                   = {CS-96-332},
+
+  Abstract                 = {It is well-known that Reed-Solomon codes may be used to provide error correction for multiple failures in RAID-like systems. The coding technique itself, however, is not as well-known. To the coding theorist, this technique is a straightforward extension to a basic coding paradigm and needs no special mention. However, to the systems programmer with no training in coding theory, the technique may be a mystery. Currently, there are no references that describe how to perform this coding that do not assume that the reader is already well-versed in algebra and coding theory. 
+This paper is intended for the systems programmer. It presents a complete specification of the coding algorithm plus details on how it may be implemented. This specification assumes no prior knowledge of algebra or coding theory. The goal of this paper is for a systems programmer to be able to implement Reed-Solomon coding for reliability in RAID-like systems without needing to consult any external references.},
+  File                     = {:inc\\bib\\CS-96-332.pdf:PDF},
+  Url                      = {http://web.eecs.utk.edu/~plank/plank/papers/CS-96-332.html},
+  Where                    = {http://web.eecs.utk.edu/~plank/plank/papers/CS-96-332.html}
+}
+
+@TechReport{pd:03:rs,
+  Title                    = {Note: Correction to the 1997 Tutorial on Reed-Solomon Coding},
+  Author                   = {J. S. Plank and Y. Ding},
+  Institution              = {University of Tennessee},
+  Year                     = {2003},
+  Month                    = {April},
+  Number                   = {CS-03-504},
+
+  Abstract                 = {In 1997, SPE published a tutorial by Plank on implementing Reed-Solomon codes for erasure correction in redundant data storage systems. The motivation of this tutorial was to present these codes, which are typically described mathematically by coding theorists, in a way accessible to the programmers who need to implement them. The tutorial as published presented an information dispersal matrix A, which does not have the properties claimed -- that the deletion of any m rows results in an invertable n*n matrix. The purpose of this note is to present a correct information dispersal matrix that has the desired properties, and to put the work in current context.},
+  File                     = {:inc\\bib\\CS-03-504.pdf:PDF},
+  Url                      = {http://web.eecs.utk.edu/~plank/plank/papers/CS-03-504.html},
+  Where                    = {http://web.eecs.utk.edu/~plank/plank/papers/CS-03-504.html}
+}
+
 @Book{RFC791,
   Title                    = {RFC791 INTERNET PROTOCOL DARPA INTERNET PROGRAM PROTOCOL SPECIFICATION},
   Author                   = {J. Postel},
@@ -1213,6 +1296,22 @@ In this paper we show that l-diversity has a number of limitations. In particula
   Url                      = {http://psp.sagepub.com/content/27/10/1243.short}
 }
 
+@Article{preparata1989holographic,
+  Title                    = {Holographic dispersal and recovery of information},
+  Author                   = {Preparata, Franco P},
+  Journal                  = {IEEE Transactions on Information Theory},
+  Year                     = {1989},
+  Number                   = {5},
+  Pages                    = {1123--1124},
+  Volume                   = {35},
+
+  Abstract                 = {A simple scheme for dispersal and recovery of digital information based on the discrete Fourier transform is discussed. The author presents a different implementation of M.O. Rabin's (J. ACM, vol.36, no.2, p.335-48, Apr. 1989) scheme, whose recovery cost is O(log m+k) operations per character, assuming m= Theta (n); for example, when k= Theta (log n), this cost drops from O(m) to O(log m) per character. Since the implementation is based on the Fourier transform, it is termed holographic.},
+  Doi                      = {10.1109/18.42233},
+  File                     = {:inc\\bib\\00042233.pdf:PDF},
+  Publisher                = {IEEE},
+  Url                      = {http://ieeexplore.ieee.org/abstract/document/42233/}
+}
+
 @Book{hideAndSeek,
   Title                    = {An Introduction to Steganography},
   Author                   = {Niels Provos and Peter Honeyman},
@@ -1223,6 +1322,28 @@ In this paper we show that l-diversity has a number of limitations. In particula
   Localfile                = {inc/bib/hideAndSeek.pdf},
   Organization             = {IEEE},
   Url                      = {http://www.citi.umich.edu/u/provos/papers/practical.pdf}
+}
+
+@Article{Rabin:1989:EDI:62044.62050,
+  Title                    = {Efficient Dispersal of Information for Security, Load Balancing, and Fault Tolerance},
+  Author                   = {Rabin, Michael O.},
+  Journal                  = {J. ACM},
+  Year                     = {1989},
+
+  Month                    = apr,
+  Number                   = {2},
+  Pages                    = {335--348},
+  Volume                   = {36},
+
+  Acmid                    = {62050},
+  Address                  = {New York, NY, USA},
+  Doi                      = {10.1145/62044.62050},
+  File                     = {:inc\\bib\\p335-rabin.pdf:PDF},
+  ISSN                     = {0004-5411},
+  Issue_date               = {April 1989},
+  Numpages                 = {14},
+  Publisher                = {ACM},
+  Url                      = {http://doi.acm.org/10.1145/62044.62050}
 }
 
 @Book{RFC2440,
@@ -1245,6 +1366,21 @@ In this paper we show that l-diversity has a number of limitations. In particula
   File                     = {:inc\\bib\\rfc3851.pdf:PDF},
   Localfile                = {inc/bib/rfc3851.pdf},
   Url                      = {http://tools.ietf.org/pdf/rfc3851.pdf}
+}
+
+@Article{reed1960polynomial,
+  Title                    = {Polynomial codes over certain finite fields},
+  Author                   = {Reed, Irving S and Solomon, Gustave},
+  Journal                  = {Journal of the society for industrial and applied mathematics},
+  Year                     = {1960},
+  Number                   = {2},
+  Pages                    = {300--304},
+  Volume                   = {8},
+
+  File                     = {:inc\\bib\\2098968.pd.pdf:PDF},
+  Owner                    = {martin.gwerder},
+  Publisher                = {SIAM},
+  Timestamp                = {2017.03.13}
 }
 
 @Book{RFC5322,

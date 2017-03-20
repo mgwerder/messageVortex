@@ -17,7 +17,7 @@ The Protocol outlined here is the final product and has undergone many developme
 \chapter{Protocol Overview}
 The Mailvortex protocol described here is an onionizing protocol for asynchronus data transfer. The protocol itself is embbeded into a carrier protocol as binary information to avoid easy detection and make it hard to block traffic without blocking other legitimate traffic.
 
-The data transferred is passed thru a number of mixes. The builder of a routing block (normally the sender)decides upon the following attributes:
+The data transferred is passed thru a number of mixes. The builder of a routing block (normally the sender) decides upon the following attributes:
 \begin{itemize}
 	\item Hops for the message and all decoy traffic.
 	\item Timing behaviour respectively speed of the message.
@@ -261,6 +261,13 @@ decrypt(pb_1, spec, k) & = & pb_2 \\
 pb_2 & = & D_{spec}^{K_a}\left( pb_1 \right)\\\
 len(pb_2) & \leq & len(pb_1)
 \end{eqnarray}
+
+\subsubsection{VortexMessage addRedundancy Operation}
+\fxfatal{add content here}
+
+\subsubsection{VortexMessage removeRedundancy Operation}
+\fxfatal{add content here}
+
 
 
 \section{VortexMessage Request Processing}

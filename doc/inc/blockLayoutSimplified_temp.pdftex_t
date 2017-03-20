@@ -1,0 +1,47 @@
+\begin{picture}(0,0)%
+\includegraphics{F:/Subversion/messagevortex/doc/inc/blockLayoutSimplified_temp.pdf}%
+\end{picture}%
+%
+%  Created by WinFIG version 6.2 
+%  METADATA <version>1.0</version> 
+%
+\setlength{\unitlength}{3947sp}%
+%
+\begingroup\makeatletter\ifx\SetFigFont\undefined%
+\gdef\SetFigFont#1#2#3#4#5{%
+  \reset@font\fontsize{#1}{#2pt}%
+  \fontfamily{#3}\fontseries{#4}\fontshape{#5}%
+  \selectfont}%
+\fi\endgroup%
+\begin{picture}(9130,2291)(244,-2715)
+%  METADATA <id>49</id> 
+\put(7440,-1415){\rotatebox{90.0}{\makebox(0,0)[b]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$payloadBlock_0$}%
+}}}}}
+%  METADATA <id>51</id> 
+\put(7898,-1430){\rotatebox{90.0}{\makebox(0,0)[b]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$payloadBlock_1$}%
+}}}}}
+%  METADATA <id>52</id> 
+\put(8843,-1415){\rotatebox{90.0}{\makebox(0,0)[b]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$payloadBlock_{n-1}$}%
+}}}}}
+%  METADATA <id>56</id> 
+\put(2844,-2126){\makebox(0,0)[b]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}headerBlock}%
+}}}}
+%  METADATA <id>60</id> 
+\put(2866,-2611){\makebox(0,0)[b]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$k_{sender1}$}%
+}}}}
+%  METADATA <id>61</id> 
+\put(6782,-2641){\makebox(0,0)[b]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$k_{peer}$}%
+}}}}
+%  METADATA <id>62</id> 
+\put(5926,-2311){\makebox(0,0)[b]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$k_{sender1}$}%
+}}}}
+%  METADATA <id>63</id> 
+\put(5924,-1884){\makebox(0,0)[b]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$routingBlock_i$}%
+}}}}
+%  METADATA <id>67</id> 
+\put(759,-2116){\makebox(0,0)[b]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$pre$}%
+}}}}
+%  METADATA <id>68</id> 
+\put(781,-2611){\makebox(0,0)[b]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}$k^{-1}_{host}$}%
+}}}}
+\end{picture}%
