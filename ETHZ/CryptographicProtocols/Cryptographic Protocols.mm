@@ -89,7 +89,26 @@
 </node>
 </node>
 <node CREATED="1488436511929" ID="ID_1017925759" MODIFIED="1488436644861" TEXT="(optional) zero-knowledge">
-<node CREATED="1488436533173" ID="ID_711188075" MODIFIED="1488436562169" TEXT="Folowing the protocol does not reveal any information from the prover to the verifier"/>
+<node CREATED="1488436533173" ID="ID_711188075" MODIFIED="1490186405792" TEXT="trivial: Following the protocol does not reveal any information from the prover to the verifier"/>
+<node CREATED="1490186408880" ID="ID_603195593" MODIFIED="1490186918397" TEXT="Formal">
+<node CREATED="1490186422577" ID="ID_1572856481" MODIFIED="1490186473321" TEXT="Zero-Knowledge (ZK)">
+<node CREATED="1490186477726" ID="ID_1989357067" MODIFIED="1490186501559" TEXT="Transscript and simulated Transscript are indistinguishable"/>
+<node CREATED="1490186504412" ID="ID_1840419716" MODIFIED="1490186537523" TEXT="Runtime is polynomially bounded"/>
+</node>
+<node CREATED="1490186541225" ID="ID_1262142804" MODIFIED="1490187039217" TEXT="Black-Box-Zero-Knowledge (BB-ZK)">
+<node CREATED="1490186648035" ID="ID_158878207" MODIFIED="1490186896537" TEXT="Transscript of an possibly cheating is indstinguishable "/>
+<node CREATED="1490186921854" ID="ID_190636856" MODIFIED="1490186924148" TEXT="Runtime is polynomially bounded "/>
+</node>
+<node CREATED="1490186941953" ID="ID_1737898532" MODIFIED="1490187074913" TEXT="Honest-verifyer zero-knowledge (HVZK)">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1490187813808" ID="ID_1477914116" MODIFIED="1490187845245" TEXT="types">
+<icon BUILTIN="down"/>
+<node CREATED="1490187819099" ID="ID_596154690" MODIFIED="1490187822737" TEXT="perfect"/>
+<node CREATED="1490187823182" ID="ID_1641242076" MODIFIED="1490187831260" TEXT="statistical"/>
+<node CREATED="1490187832040" ID="ID_1011087498" MODIFIED="1490187838823" TEXT="computational"/>
+</node>
 </node>
 <node CREATED="1488963069744" ID="ID_1992504849" MODIFIED="1488963080627" TEXT="additional">
 <node CREATED="1488436646496" ID="ID_1480636869" MODIFIED="1488961583510" TEXT="efficient">
@@ -325,10 +344,10 @@
       Vermutlich Pr&#252;fungsrelevant
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
+<node CREATED="1490186600177" ID="ID_1697726801" MODIFIED="1490186607274" TEXT="Is zero-knowledge"/>
 </node>
 <node CREATED="1489581472509" ID="ID_697322789" MODIFIED="1489581479248" POSITION="right" TEXT="Fragen">
 <node CREATED="1489581481924" ID="ID_1803130025" MODIFIED="1489581488623" TEXT="NP">
