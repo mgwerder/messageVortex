@@ -41,8 +41,8 @@ public class SimpleMessageFactory extends MessageFactory {
         }
 
         // set times
-        // THIS SETION IS BROKEN!!!!!!
-        long ful lTime=maxMessageTransferTime*esr.nextInt(1000)/1000;
+        // THIS SECTION IS BROKEN!!!!!!
+        long fullTime=maxMessageTransferTime*esr.nextInt(1000)/1000;
         for(int i=0;i<graph.size();i++) {
             Edge g=graph.get(i);
             double nea=esr.nextGauss();

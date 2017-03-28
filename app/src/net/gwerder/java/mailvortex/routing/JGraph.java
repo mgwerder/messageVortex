@@ -167,7 +167,7 @@ public class JGraph extends JPanel implements MouseListener  {
             f.writeObject( is.toASN1Object() );
             f.close();
         }
-        SimpleMessageFactory smf=new SimpleMessageFactory( "", 0,1, is.getAnonSet( 30 ).toArray( new IdentityStoreBlock[0] ),is);
+        SimpleMessageFactory smf=new SimpleMessageFactory( "", 0,1, is.getAnonSet( 7 ).toArray( new IdentityStoreBlock[0] ),is);
         smf.build();
         System.out.println( "got "+smf.getGraph().getRoutes().length+" routes");
         final JGraph jg=new JGraph(smf.getGraph());
