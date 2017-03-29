@@ -107,7 +107,7 @@
 \DeclareMathOperator{\splitPayload}{splitPayload}
 \DeclareMathOperator{\mergePayload}{mergePayload}
 \DeclareMathOperator{\startsWith}{startsWith}
-%\DeclareMathOperator{\endsWith}{endsWith}
+\DeclareMathOperator{\lendsWith}{endsWith}
 \DeclareMathOperator{\addRedundancy}{addRedundancy}
 \DeclareMathOperator{\removeRedundancy}{removeRedundancy}
 \DeclareMathOperator{\encrypt}{encrypt}
@@ -564,7 +564,7 @@ pdfkeywords={messages, unobservable}}%<^!CHANGE!
 % in the abstract or keywords.
 \IEEEtitleabstractindextext{%
 \begin{abstract}
-In this paper we intoduce the MessageVortex protocol. An unobservable message annonymisation protocol based on zero trust and a distributed peer-to-peer (P2P) architecture without central aspects such as infrastructures. It scores over existing work by blending its traffic into suitable existing transport protocol thus making it next to impossible to block it without affecting significantly regular users of the transport medium. It furthermore requires no protocol specific infrastructure in public networks and allows a sender to control all aspects of a message such as degree of anonymity, timing, and redundancy of the message transport without disclosing any of these details to the routing or transporting node.
+In this paper we intoduce the MessageVortex protocol. An unobservable message annonymisation protocol. It is based on the zero trust principle and a distributed peer-to-peer (P2P) architecture and avoids  central aspects such as fixed infrastructures wuithin a global network. It scores over existing work by blending its traffic into suitable existing transport protocols thus making it next to impossible to block it without affecting significantly regular users of the transport medium. It furthermore requires no protocol specific infrastructure in public networks and allows a sender to control all aspects of a message such as degree of anonymity, timing, and redundancy of the message transport without disclosing any of these details to the routing or transporting nodes.
 \end{abstract}
 
 % Note that keywords are not normally used for peerreview papers.
@@ -638,21 +638,21 @@ Data privacy, Message systems, Anonymity, Security
 % 
 % Here we have the typical use of a "T" for an initial drop letter
 % and "HIS" in caps to complete the first word.
-\IEEEPARstart{S}{ince} whistle blower Edward Snowden disclosed documents it seems generally accepted that global monitoring of internet traffic is monitored. According to these documents (verified by \href{http://www.nrc.nl/nieuws/2013/11/23/nederland-sinds-1946-doelwit-van-nsa}{NRC}) NSA infiltrated more than 50k computers with malware to collect classified, or personal information. They furthermore infiltrated Telecom-Operators such as Belgacom to collect data, and targeted high member of governments even in associated states. 
+\IEEEPARstart{S}{ince} whistle blower Edward Snowden disclosed documents it seems generally accepted that global monitoring of internet traffic is done. According to these documents (verified by \href{http://www.nrc.nl/nieuws/2013/11/23/nederland-sinds-1946-doelwit-van-nsa}{NRC}) NSA infiltrated more than 50k computers with malware to collect classified, or personal information. They furthermore infiltrated Telecom-Operators such as Belgacom to collect data, and targeted high members of governments even in associated states. 
 
-A normal message sent throughout the internet must, even when perfectly encrypted, disclose at least the recipient to the router transporting a message. The sender can be identified by the return path or is identifiable by following the source of packets. Meta information is valuable as frequency and message size disclose important facts about the association and intensity of relationship of the involved parties. Typical attacks are traffic capturing by network observation or by inserting one or more malicious nodes into a routing network. 
+A message sent throughout the internet must, even when perfectly encrypted, disclose at least the recipient to the router transporting a message. The sender can be identified by the return path or is identifiable by following the source of packets. Meta information is valuable as frequency and message size disclose important facts about the association and intensity of the relationship of involved parties. Typical attacks are traffic capturing by network observation or by inserting one or more malicious nodes into a routing network. 
 
-This work addresses the above mentioned problems of message recording for either real time analysis or later processing by introducing a new  protocol called MessageVortex. It furthermore addresses the leak of routing information most protocols have by applying a zero trust model to the whole network except the sending and receiving node. This protocol is able to sustain anonymity even under harsh assumptions such as an adverser possessing a huge founding and unlimited monitoring capability on the network and a huge amount of own nodes. For a more precise adverser model see appendix~\ref{sec:adverser}.
+This work addresses the above mentioned problems of traffic monitoring by introducing a new  protocol called MessageVortex. Within MessageVortex we consider the whole network except the sending and receiving node to be untrusted. It furthermore addresses the leak of routing information most protocols have. This protocol is able to sustain anonymity even under harsh assumptions such as an adverser possessing a huge founding and unlimited monitoring capability on the network and a considerable number of own nodes. For a more precise adverser model see appendix~\ref{sec:adverser}.
 
-Numerous attempts such as in \cite{minion-design,babel,mixmaster-spec,tor-design,freehaven-berk,herbivore:tr} have been made to use relays\cite{CHAUM1}, mixes\cite{CHAUM1}, or DC-related-networks\cite{chaum-dc} to anonymize message flow. But most of them have problems as they rely at least on the partial trust to the nodes routing the messages, or some central infrastructures \cite{hs-attack06,esorics13-cellflood,esorics12-torscan,oakland2013-trawling}. Exit and entry points are important as they may leak information which is otherwise well hidden within the network. Additionally, a dedicated transport protocol is easy to block since their implementation can be easily identified by used ports or some protocol properties. Furthermore, most approaches require to have infrastructure with fixed addressing in the internet making owners of participating nodes easily identifiable and vulnerable.
+Numerous attempts such as in \cite{minion-design,babel,mixmaster-spec,tor-design,freehaven-berk,herbivore:tr} have been made to anonymize message flow. They generally use relays\cite{CHAUM1}, mixes\cite{CHAUM1}, or DC-related-networks\cite{chaum-dc} to achieve anonymisation. But most of them have problems as they rely at least on the partial trust to the nodes routing the messages, or some central infrastructures \cite{hs-attack06,esorics13-cellflood,esorics12-torscan,oakland2013-trawling}. Exit and entry points are important as they may leak information which is otherwise well hidden within the network. Additionally, a dedicated transport protocol is easy to block since their implementation can be easily identified by used ports or some protocol properties. Furthermore, most approaches require to have infrastructure with fixed addressing in the internet rendering owners vulnerable.
 
-All works analysed for this paper introduced a new transport layer solving these problems. In our approach we decouple the routing layer from the transport layer. By doing so we introduce new degrees of complexity to attack scenarios as messages may use any common transport protocol of the used network. 
+All papers analysed for this protocol introduced a new transport layer solving these problems. Only TOR defined an additional transporting mechanism which may be used as alternate transport medium between two defined nodes to avoid detection. In our approach we decouple consequently the routing layer from the transport layer. By doing so we introduce new degrees of complexity to attack scenarios as messages may use any common transport protocol of the used network. 
 
-Our work consists of a routing layer which is completely P2P based without any central protocol specific infrastructure. Any node is a routing node and may be an endpoint. There is no implicit or explicit trust into any particular system of the  network. Decoy traffic generation is controlled by the original sender of a message. Even a decoy traffic generating node is unable to differentiate between message and decoy traffic as a Solomon-Reed algorithm is used to blow the message up by adding redundancy information. This redundancy information may be decoy traffic or later required. The redundant blocks are always encrypted and a multitude of the cyphers block size as they are padded before splitting. This eliminates the need of padded encryption at block level. This fact makes it next to impossible to brute force the content as üadding gives no longer hints if decryption has been successful or not.
+Our work consists of a routing layer which is completely P2P based without any central protocol specific infrastructure. Any node is a routing node and may be an endpoint. There is no implicit or explicit trust into any particular system of the  network. Decoy traffic generation is controlled by the original sender of a message. Even a decoy traffic generating node is unable to differentiate between message and decoy traffic as a Solomon-Reed algorithm is used to blow the message up by adding redundancy information. This redundancy information may be decoy traffic or later required to rebuild data blocks. The redundant blocks are always encrypted and a multitude of the cyphers block size as they are padded before splitting. This eliminates the need of padded encryption at block level. This fact makes it very hard to apply brute force in order to decrypt the content. This is due to the fact  that padding gives no longer hints whether decryption has been successful or not.
 
-As transport media we use common, well known store and forward based protocols. By doing so the protocol has no affiliation to the transport layer. Literally any free-mailer email address or chat account may be converted into a transport media for our protocol without any modification required on the server side. This makes the network very agile on one side at the cost of reliability as nodes may suddenly appear or disappear. To counter this phenomenon we are able to introduce a high degree of redundancy in our routes thus making the protocol stable again.
+As transport media we use common, well known store and forward based protocols. By doing so the routing logic has no affiliation to the transport layer. Literally any free-mailer email address or chat account may be converted into a transport media for our protocol without any modification required on the server side. This makes the network very agile on one side at the cost of reliability as nodes may suddenly appear or disappear. To counter this phenomenon we are able to introduce a high degree of redundancy.
 
-Using the MessageVortex protocol any device with a latent or permanent connectivity to the internet may act as routing node. It conceals its own traffic with the routed traffic. This is making it harder for any adverser to identify affiliated traffic. 
+Using the MessageVortex protocol any device with a latent or permanent connectivity to the internet may act as routing node. 
 
 By applying the zero trust model we give full control of all traffic to the original sender of the message. He controls message flow, redundancy, degree of anonymity, timing, and many more aspects of the message transport throughout the whole network. This is done without disclosing any of these parameters to the participating nodes.
 
@@ -676,42 +676,46 @@ To limit possibilities of DoS within the system and guarantee an efficient handl
 As shown in figure~\ref{fig:layers} we define the protocol on three different layers:
 \begin{itemize}
 	\item A blending layer\\
-	      This is where messages are applied to the transport protocol. 
+	      In this layer we embedd MessageVotex message into the transport protocol. 
 	\item A routing layer\\
 	      This layer applies the logic to the message routing and prepares the message for the blending layer.
 	\item An accounting layer\\
 	      This layer is a DoS and misuse protection. It keeps track of the transfers for each ephemeral identity and makes sure that queue and storage capacity are efficiently handled.     
 \end{itemize}
-All three layers are connected through one or more store-and-forward based, common internet protocols. Protocols on this layer we refer as transport protocols. This layer is an unmodified, existing protocol layer on the internet.
+These three layers are connected through a forth existing layer. This layer is one or more store-and-forward based, common internet transport protocol. Protocols on this layer we refer in general as transport protocols. It is important to note that no modification is applied to the transport protocol to accommodate MessageVortex messages (in short ``vmessages'').
 
-All cryptographic operations such as encryption, decryption, hashing, or random number generation do not rely on a single algorithm. The protocol is able to signal what capabilities a node has and how exactly a message should be processed. This makes the protocol very robust if an used algorithm is broken. For this reason we defined for each capability at least two algorithms which are dependant on different mathematical problems (eg. RSA and EC as asymmetric encryption). This introduces a redundancy in algorithms allowing a sender to switch if required.
+All cryptographic operations such as encryption, decryption, hashing, or random number generation do not rely on a single algorithm. The protocol is able to signal what capabilities a node has and how exactly a message should be processed. This makes the protocol very robust if an used algorithm is broken. For this reason we defined for each capability at least two algorithms which depend on different mathematical problems (eg. ``integer factorization problem'' versus ``discrete logarithms problem''). This introduces a redundancy in algorithms allowing a sender to switch if required.
 
 \subsection{Protocol Layers}
 \subsubsection{Transport}
-The transport layer provides the internet infrastructure. Unlike in most other approaches such as \cite{tor-design,sherwood-protocol,freenet} this layer is not protocol specific. We use already existing, symmetrically built store and forward protocols. Attributes such as anonymity do not rely on the security of this layer.
+The transport layer provides the internet infrastructure. Unlike in most other approaches such as \cite{tor-design,sherwood2005p5,freenet} this layer is not protocol specific. We use already existing, symmetrically built store and forward protocols. Attributes such as anonymity do not rely on the security of this layer.
 
-By using this approach we remove the need for shaky technologies such as TCP or UDP hole punching to connect peer partners. It furthermore makes the use of ``mostly connected'' clients such as mobile phones or DSL connections suitable for this protocol as our transport endpoints are always within the global network connected and only the routing part may disconnect from time to time. 
+By using this approach we remove the need for shaky technologies such as TCP or UDP hole punching to connect peer partners. It furthermore makes the use of ``mostly connected'' clients such as mobile phones or DSL connections suitable for this protocol. This is because our transport endpoints are always reachable within the global network and only the routing nodes may disconnect from time to time. 
 
 Protocols on this layer are typically well known and frequently used. They have no prerequisite for encryption or privacy and are store-and-forward based protocols with routing capabilities. 
 
 \subsubsection{Blending}
-This layer is a translation-only layer and blends traffic onto the transport protocol. Protocol features such as anonymity or redundancy do not rely on this level. This layer embeds messages within the transport layer in such a way that an adverser is no longer able to identify VortexMessages from ordinary transport layer messages. Good blending is achieved if transport layer censorship measurements such as application level firewalls are be unable the difference between real world messages and MessageVortex messages. In an ideal application this applies to censorship applied by humans as well as censorship applied on the base of algorithms. 
+This layer is a translation-only layer and embeds vmessages from the rozuting layer in transport protocol messages. Incomming vmessages are extracted from the transport layer and passed to the routing layer. 
 
-In a real scenario it is hard to achieve human proof censorship circumvention. If not done with care, problems as described in \cite{abadi2005moderately} arise. It is in our case not necessary as human censorship is very costly and slow compared to algorithms. For real time censorship as human censorship is too slow. Our transport layer is by definition frequently used for communication. We always consider an algorithm based censorship as existing.
+Protocol features such as anonymity or redundancy do not rely on this level. This layer embeds messages within the transport layer in such a way that an adverser is no longer able to identify vmessages from regular transport layer messages. Good blending is achieved if transport layer censorship measurements such as application level firewalls are be unable the difference between real world messages and vmessages. In an ideal application this applies to censorship applied by humans as well as censorship applied on the base of algorithms. 
+
+In a real scenario it is hard to achieve human proof censorship circumvention. If not done with care, problems as described in \cite{abadi2005moderately} arise. It is in our case not necessary as human censorship is very costly and slow compared to algorithms. For real time censorship human censorship is too slow. Our transport layer is by definition frequently used for regular communication. We always consider an algorithm based censorship as existing.
 
 At the moment the specification of this layer is limited to the two capabilities ``embedd with offset'' and ``F5''. 
 
 ``Embedd with offset'' is a plain embedding of a block in a file attached to a message. The offset allows to issue first a valid header of some sort in order to improve blending (eg. for a PCM encoded WAV file). While this is considered a very weak protection, analysis to detect such a file on a global transport scale is very demanding due to the sheer mass to be analysed. 
 
-``F5'' means applying the F5 algorithm to hide a message within a random suitable jpeg image. ``F5'' is one of the very few steganographic works which have a real world implementation and attracted at least some interest in the research community. In \cite{steganalysisf5} an approach to detect embedded information in steganographically modified images is presented. To obtain this information a considerable effort in terms of calculation power is required. This makes it impractical for real time censorship on our scale. It does however allow to identify messages. It does furthermore only disclose the fact that F5 is being used. It does not leak the content of a message, its immediate sender (apart from a socket), or a message size.
+``F5'' means applying the F5 algorithm to hide a message within a random suitable jpeg image. ``F5'' is one of the very few steganographic works which have a real world implementation and attracted at least some interest in the research community. In \cite{steganalysisf5}, an approach to detect embedded information in steganographically modified images is presented. To obtain this information a considerable effort in terms of calculation power is required. This makes it impractical for real time censorship on our scale. It does however allow to identify messages. It does furthermore only disclose the fact that F5 is being used. It does not leak the content of a message, its immediate sender (apart from a socket), or a message size.
 
 \subsubsection{Routing}
-The routing layer is the mixer of the system. It processes messages received by the blending layer and is supported by the accounting layer. Any related set of messages is processed by the routing layer by recombining payload with operations defined in section~\ref{sec:operations}. Due to the nature of these operations a node is unable to tell whether the traffic flow processed is decoy traffic or actual part of the message flow.
+The routing layer is the mixer of the system. It processes messages extracted by the blending layer and is supported by the accounting layer. Any related set of messages is processed by the routing layer by recombining payload with operations defined in section~\ref{sec:operations}. Due to the nature of these operations a node is unable to tell whether the traffic flow processed is decoy traffic or actual part of the message flow.
+
+If a message is processed a new vmessage is generated and passed on to the blending layer.
 
 For a more precise working of the routing process see section~\ref{sec:processing}.
 
 \subsubsection{Accounting}
-The accounting layer protects a node from being overloaded or misused. Every sender must first apply for an ephemeral identity which is limited in lifetime prior to be able to route messages through a node. This is done by a proof of work (PoW) algorithm. The ephemeral identity is assigned with message and size transfer quotas. Any identity may apply as long as it is not expired for a raise of quota. It is up to the node to decicde whether this raise will be accepted with a new PoW puzzle or not at all. If rejected any sender might try to apply for a new ephemeral identity.
+The accounting layer protects a node from being overloaded or misused. Every sender must first apply for an ephemeral identity which is limited in lifetime. This is done by a proof of work (PoW) algorithm. When an ephemeral identity is created the owner of the identity may route vmessages through a node. The ephemeral identity is assigned with message and size transfer quotas. Any identity may apply for a raise of quota as long as it is not expired. It is up to the node to decicde whether  a raise of quota is acceptable or not. If rejected any sender might try to apply for a new ephemeral identity.
 
 Due to the costs of maintaining multiple identities and their parental identities for anonymity of the original sender, the number of identities grow exponentially when growing a network of ephemeral identities. A sender might either introduce a new node to cut identity costs or maintain at higher identity costs a single node.
 
@@ -725,20 +729,20 @@ We define a protocol block which has an inner block structure as shown in figure
 	\label{fig:blocks}
 \end{figure}
 
-These Blocks are passed from node to node. All blocks are binary proof which means that the same block sent twice will always result in exactly the same bit layout. There is no room for misbehaving node to tag the block within it without compromising the message. The message as a whole is replay protected. Routing and header blocks are linked with a chain secret to avoid hijacking of header or routing blocks.
+These blocks are passed from node to node. All blocks are binary proof which means that the same block sent twice will always result in exactly the same bit layout. There is no room for misbehaving node to tag the block within it without compromising the message. The message as a whole is replay protected. Routing and header blocks are linked with a chain secret to avoid hijacking of header or routing blocks.
 
 \subsubsection{Message Keys}
-Every protocol block is protected by two symmetric keys $key_{peer}$ (in short $k_p$) , $key_{sender}$ (in short $k_s$) and the private part of an asymmetric host key $k^{-1}_{host}$ (in short $k^{-1}_h$). The public host key $k^{1}_h$ and both symmetric keys are known to the builder of the routing block structure. 
+Every protocol block is protected by two symmetric keys $key_{peer_N}$ (in short $k_{p_N}$) , $key_{sender_N}$ (in short $k_{s_N}$) and the private part of an asymmetric host key $k^{-1}_{host_N}$ (in short $k^{-1}_{h_N}$). The public host key $k^{1}_{h_N}$ and both symmetric keys are known to the builder of the routing block structure. 
 
 This building is done by the sender. If using SURBs (Single Use Reply Blocks) or MURBs (Multi Use Reply Blocks) it is done by the builder of the reply block. 
 
-The header is protected by the symmetric $k_s$ and is found in a preamble to the header protected by the receiving peers private key $k^{-1}_h$. The key $k_s$ is known to the routing block builder only and the receiving node receives all important information protected by this key. $k_{p}$ is known to two immediate peers and the builder of the routing block. The sending peer gets it from the routing block whereas the receiving peer finds it in the $headerBlock$. 
+The header is protected by the symmetric $k_{s_N}$ and is found in a preamble to the header protected by the receiving peers private key $k^{-1}_{h_N}$. The key $k_{s_N}$ is known to the routing block builder only and the receiving node receives all important information protected by this key. $k_{p_N}$ is known to two immediate peers and the builder of the routing block. The sending peer gets it from the routing block whereas the receiving peer finds it in the $headerBlock$. 
 
 \subsection{Pad Block}
 The pad block is a short block of a few bytes of padding content (first bytes of the first message block; fixed size per message; null padded) guaranteeing that all messages sent with the same routing block look different on the transport layer.
 
 \subsubsection{Header Block}
-The header block contains vital static information for the message disclosed to only one peer of the network. It is protected ba $k_s$. The minimally contained information can be described in the tuple $headerBlock_i:=\langle sendingIdentity,\allowbreak{} serial_i,\allowbreak{} replayAttributes_i,\allowbreak{} key_{p_i},\allowbreak{} chainSecret,\allowbreak{} signature,\allowbreak{} optionalOperations \rangle$.
+The header block contains vital static information for the message disclosed to only one peer of the network. It is protected by key $k_{s_N}$. The minimally contained information can be described by the list $headerBlock_i:=\langle sendingIdentity,\allowbreak{} serial_i,\allowbreak{} replayAttributes_i,\allowbreak{} key_{p_i},\allowbreak{} chainSecret,\allowbreak{} signature,\allowbreak{} optionalOperations \rangle$.
 
 \subsubsection{Routing Block}
 A routing block can be expressed with the following recursive definition $routingBlock_i:=\langle\allowbreak{} nexthopAddress,\allowbreak{} chainSecret,\allowbreak{} timingAttributes,\allowbreak{} E^{k_{s_{i+1}}}\left(headerBlock_{i+1}\right),\allowbreak{} E^{k_{s_{i+1}}}\left(routingBlock_{i+1}\right),\allowbreak{} payloadBuildInstructions_i,\allowbreak{} payloadId,\allowbreak{} optionalReplyBlocks \rangle$
@@ -753,12 +757,12 @@ First the preamble to the header is extracted. This proves that the sender posse
 
 The routing block may contain instructions on processing information contained in this or any message related to this message and identity. These instructions are encoded in so called ``Operations'' as specified in section~\ref{sec:operations} and may be any combination of them. As soon as time arises for a routing block to be processed the operations building the new message blocks are executed. If all prerequisites are satisfied the new payload blocks are built, concatenated with the new routing block, pad, and header block. This resulting block is encrypted with $k_{p_{i+1}}$ and prepended with the preamble. The built block is passed to the blending layer with the blending specification and the target address.
 
-It is important to note that the blending specification contains vital information about how the message must be blended but not how the carrier message looks like. This is defined like that to minimise the risk of abuse (eg. sending plain text spam through the vortex system).
+It is important to note that the blending specification contains vital information about how the message must be blended but not how the carrier message looks like. By doing so we avoid abuse of the blending blending layer (eg. sending plain text spam through the MessageVortex system).
 
 \subsection{Operations\label{sec:operations}}
 The operations are designed in such a way that they do allow  variance of message size without telling to anyone including the generator which message part is used later. They include features to protect message content from bugging.
 
-Some of the operations require a pseudo random number generator (PRNG). This PRNG is defined in section~\ref{sec:prng}. The definition of a reproduceable PRNG to be used by messages is important as we have to achieve binary proof messages.
+Some of the operations require a pseudo random number generator (PRNG). This PRNG is defined in appendix~\ref{sec:prng}. The definition of a reproduceable PRNG to be used by messages is important as we have to achieve binary proof messages.
 
 All interactions are non-interactive. Interactive operations such as DC-nets do add more complexity to the system. Behavioural analysis can be used to identify interactive operations. 
 
@@ -774,23 +778,23 @@ This Operation is based on a modified Reed-Solomon redundancy function in order 
 	\label{fig:addRedundancy}
 \end{figure}
 
-We define a function $\addRedundancy_{n,m}( \mathbf{M},k_0\ldots k_{m-1} )$ where $M$ denotes the message, $n$ the number number of total output blocks, $m$ the number of redundancy blocks k the encryption key and scheme to be used, and $bs_k$ the block size required to accommodate scheme and key size described by $k$. It is important to note that the number of true data blocks is $d=n-m$ the rest of the output blocks are redundancy informations.
+We define a function $\addRedundancy_{n,m}( \mathbf{M},k_1\ldots k_{m} )$ where $M$ denotes the message, $n$ the number number of total output blocks, $m$ the number of redundancy blocks wheras $m<n$, $k$ the encryption key and scheme to be used, and $bs_k$ the block size required to accommodate scheme and key size described by $k$. It is important to note that the number of true data blocks is $d=n-m$ the rest of the output blocks are redundancy informations.
 
 By encrypting all output blocks individually we make sure that no node having access to enough blocks may rebuild the data stream without the senders consent.
 
-The message is length prefixed with a big endian 64 bit unsigned integer number and padded in such a way that $8+\len(M)+\len(padding) \bmod bs_k =0$. As padding stream we take the output of $\prng_i\left(\left\lceil\frac{8+\len(M)}{b_s}\right\rceil b_s n\right )$. The first 64 bytes of the message (padded with 0 if required) is taken as initializer $i$ for the PRNG function. By preparing our message block in such a way we guarantee that the output blocks are encryptable without further padding and that the output of all $addRedundancy$ functions is binary proof. If stream cyphers are used as output cyphers then padding is not required.
+The message is length prefixed with a big endian 64 bit unsigned integer number and padded in such a way that $8+\len(M)+\len(padding) \bmod bs_k =0$. As padding stream we take the output of $\prng_i\left(\left\lceil\frac{8+\len(M)}{b_s}\right\rceil b_s n\right )$. The first 64 bytes of the message (padded with 0 if required) are taken as initializer $i$ for the PRNG function. By preparing our message block in such a way we guarantee that the output blocks are encryptable without further padding and that the output of all $addRedundancy$ functions is binary proof. If stream cyphers are used as output cyphers then padding is not required.
 
-The reverse function for $\addRedundancy$ is called $\removeRedundancy_{m,n}(B_0\ldots B_{m-1},k_0\ldots k_{m-1})=\mathbf{M}$ and recovers the original data stream if enough blocks (at least $m$) and respective valid keys are provided. 
+The reverse function for $\addRedundancy$ is called $\removeRedundancy_{m,n}(B_1\ldots B_{m},k_1\ldots k_{m})=\mathbf{M}$ and recovers the original data stream if enough blocks (at least $m$) and respective valid keys are provided. 
 
 \subsubsection{$\splitPayload$ and $\mergePayload$ Operation}
-The $\splitPayload$ and $\mergePayload$ operations split and merge payload blocks into two chunks of different or equal sizes respectively joins them. We define the functions as follows:
+The $\splitPayload$ and $\mergePayload$ operations split and merge payload blocks ($pb_N$)into two chunks of different or equal sizes respectively joins them. We define the functions as follows:
 
 If $\len(pb_1)$ expresses the size of a payload block called $pb_0$ in bytes then the two resulting blocks of the $splitPayload$ Operation $pb_1$ and $pb_2$ have to follow the following rules:
 
 \begin{eqnarray}
 \splitPayload(f, pb_0) & = &\langle pb_1, pb_2 \rangle\\
 \startsWith(pb_0, pb_1)\\
-endsWith(pb_0, pb_2)\\
+\lendsWith(pb_0, pb_2)\\
 \len(pb_2) & = & \left\lfloor \len(pb_0)\cdot f\right \rfloor\\
 \len(pb_0) & = & \len(pb_1) + \len(pb_2)
 \end{eqnarray}
@@ -798,7 +802,7 @@ respectively
 \begin{eqnarray}
 \mergePayload(pb_1, pb_2) & = & pb_0 \\
 \startsWith(pb_0, pb_1)\\
-endsWith(pb_0, pb_2)\\
+\lendsWith(pb_0, pb_2)\\
 \len(pb_0) & = & \len(pb_1) + \len(pb_2)
 \end{eqnarray}
  
@@ -816,13 +820,13 @@ pb_0 & = & pb_1 \oplus pb_2
 \end{eqnarray}
 
 \subsubsection{$\encrypt$ and $\decrypt$ Operation}
-$\encrypt$ and $\decrypt$ are message obfuscation operations. These operations may be applied if a block is passed on without any required operation. They minimize the risk for a known plain text attack to a MessageVortex block. Both operations are defined as a padded or unpadded symmetrical encryption. $spec$ is the encryption specification and key provided by the routing block.
+$\encrypt$ and $\decrypt$ are used as message obfuscation operations. These operations may be applied if a block is passed on without any required operation. They minimize the risk for a known plain text attack to a MessageVortex block. Both operations are defined as a padded or unpadded symmetrical encryption. $spec$ is the encryption specification and key provided by the routing block.
 
 The operations are trivially defined as follows:
 \begin{eqnarray}
-\encrypt(pb_0) & = &E_{spec}(pb_0) =pb_1 \rangle\\
+\encrypt(pb_0) & = & pb_1 \\
 \len(pb_1) & \geq & \len(pb_0)\\
-\decrypt(pb_1) & = &D_{spec}(pb_1)= pb_0
+\decrypt(pb_1) & = & pb_0
 \end{eqnarray}
 
 \section{Results}
@@ -960,7 +964,7 @@ MessageVortex tries to address these problems in multiple ways. First there is n
 MessageVortex several has downsides compared to TOR. As it is asynchronously it introduces a timing component. It is therefore not suitable for real time communication. It is furthermore a closed system. TOR allows to tunnel almost any traffic through it. Whereas MessageVortex is a closed system. Only participating members may use it. 
 
 \subsubsection{$\mathcal{P}^5$}
-The Peer-to-Peer Personal Privacy Protocol is defined in \cite{sherwood-protocol}. It provides sender-, receiver- and sender-receiver anonymity. Unlike many other protocols. According to the project page of $\mathcal{P}^5$ there is only a simulator available for the protocol.
+The Peer-to-Peer Personal Privacy Protocol is defined in \cite{sherwood2005p5}. It provides sender-, receiver- and sender-receiver anonymity. Unlike many other protocols. According to the project page of $\mathcal{P}^5$ there is only a simulator available for the protocol.
 
 The transport layer problematic has been completely ignored. As there is no true protocol specification but only a rough outline about the messaging and the crypto operations $\mathcal{P}^5$ offers very limited possibilities for analysis. It claims to be peer to peer which would result in some kind of NAT (Network Address Translation) circumvention technology. This technology does usually rely in at least partial central infrastructure (e.g. for hole punching). 
 
@@ -1019,21 +1023,23 @@ Messages transported by MessageVortex generate huge amount of decoy traffic. Unl
 % starts a section numbered zero.)
 %
 
-
+\newpage
 \appendices
 
 \section{Reed-Solomon Function\label{sec:reedSolomon}}
 The origins of the Reed-Solomon code go back to \cite{reed1960polynomial}. The method described in this paper was however not applicable in all cases. The publications \cite{karnin1983secret} and \cite{Rabin:1989:EDI:62044.62050} describe a more practical solution whereas \cite{preparata1989holographic} brings up the similarity to the Reed-Solomon code with a $GF(2^\omega)$. 
 
-Reed-Solomon is used for many applications today. One of the most well known application is a redundancy generator for RAID-6 like systems. It is able to generate multiple linearly independent equation systems to a given set of data thus allowing to create systems where $m$ out of $n$ data storage systems may fail. The remaining  $n-m$ data storages may then be used to rebuild the missing content. Traditionally the data and redundancy information is striped into blocks and distributed together with the redundancy information over all $n$ storages. This is done to avoid data storages as bottleneck since a change to one data stripe  in a stripe set results always in a change of the redundancy data on the other $m$ storages. This would result in hot spots on redundancy information drives.
+Reed-Solomon is used for many applications today. One of the most well known application is a redundancy generator for RAID-6 like systems. It is able to generate multiple linearly independent equation systems to a given set of data $B_1\ldots B_{n-m}$ creating redundancy information $R_1\ldots R_m$. In a system with all blocks $\langle B_1\ldots B_{n-m}, R_1\ldots R_m \rangle$ any number $k$ where $0\le k\le m$ datablocks may be removed and the information contained in $\langle B_1\ldots B_{n-m}\rangle$ is still recoverable. 
+
+Traditionally the data and redundancy information is striped into blocks and distributed together with the redundancy information over all $n$ storages. This is done to avoid data storages as bottleneck since a change to one data stripe  in a stripe set results always in a change of the redundancy data on the other $m$ redundancy storages. This would result in hot spots on redundancy information storages.
 
 We use the Reed-Solomon function as redundancy generating function shown in figure~\ref{fig:addRedundancy}. Unlike in storage technology we encrypt each redundancy block and all data stripes individually. By doing so we make it impossible to recover the contained information without knowledge of the keys. All blocks do then contain the same amount of data. Given we have enough blocks and the corresponding keys we may rebuild the message. 
 
 At the same time the generating node is unable to tell what blocks belong to the true message path and what blocks are sent for decoy traffic only. 
 
-As our resulting blocks are encrypted with a stream or block cypher we need to introduce some padding. The padding is applied before doing RS calculation. In the case of a stream cypher we need to pad so that the number of bytes is dividable by the number of data blocks. In the case of block cyphers we need to pad so that all resulting data blocks have exactly a size dividable by the block size. By applying the padding before spliting the blocks we achieve two goals. First we reduce overhead by adding only one instead of $m$ paddings. Secondly an unpadded block is much harder to brute force. any resulting block to a key might be the right one as we have no longer padding to suggest that a decryption has been successful.
+As our resulting blocks are encrypted with a stream or block cypher we need to introduce some padding. The padding is applied before doing RS calculation. In the case of a stream cypher we need to pad so that the number of bytes is dividable by the number of data blocks. In the case of block cyphers we need to pad so that all resulting data blocks have exactly a size dividable by the block size. By applying the padding before spliting the blocks we achieve two goals. First we reduce overhead by adding only one instead of $n$ paddings. Secondly an unpadded block is much harder to brute force. any resulting block to a key might be the right one as we have no longer padding to suggest that a decryption has been successful.
 
-We defined to use Vandermonde matrices for our redundancy calculations. For more information of the used GF-Fields and exact matrix building instructions see \cite{messageVortex}.
+We defined to use Vandermonde matrices as outlined in \cite{pd:96:rs} and in \cite{pd:03:rs} for our redundancy calculations. For more information of the used GF-Fields and exact matrix building instructions see \cite{messageVortex}.
 
 \section{Pseudo Random Number Generator\label{sec:prng}}
 Our PRNG used for this work is an xorshift+ generator. It is based on the XSadd PRNG\cite{marsaglia2003xorshift} and passes the bigcrush PRNG test suite. It is a fast, xor based PRNG which has two internal 64 bit seed states $s_0$ respectively $s_1$ and is defined as follows:
