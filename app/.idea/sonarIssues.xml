@@ -288,6 +288,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/test/core/MessageVortexTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/test/routing/MessageFactoryTest.java">
           <value>
             <set />
@@ -314,6 +319,66 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/transport/TransportListener.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/blending/AbstractBlender.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/blending/DummyBlender.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/routing/GraphSet.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/routing/IncomingMessageRouterListener.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/test/MainCoreSuite.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/test/MainIMAPSuite.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/test/core/MessageVortexTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/transport/ByteArrayBuilder.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/transport/DummyTransport.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/transport/RandomString.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/transport/Transport.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/transport/TransportListener.java">
           <value>
             <set />
           </value>

@@ -225,7 +225,7 @@ public class GraphSet implements Comparator<GraphSet>,Comparable<GraphSet>,Itera
 
     public int size() {return store.size();}
     public Edge get(int i) {return store.get( i );}
-    public Iterator iterator() {return store.iterator();}
+    public Iterator<Edge> iterator() {return store.iterator();}
 
 
 }

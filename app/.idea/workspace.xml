@@ -5,22 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="5a656906-b81d-4dfc-810f-74d16a7a648c" name="Default" comment="Added missing IdentityStoreTest">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/accountant" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/blending" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/transport" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/accountant/Accountant.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/accountant/HeaderVerifyer.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/blending/AbstractBlender.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/blending/Blender.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/blending/DummyBlender.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/routing/IncomingMessageRouterListener.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/routing/Router.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/transport/ByteArrayBuilder.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/transport/DummyTransport.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/transport/RandomString.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/transport/Transport.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/transport/TransportListener.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/sonarIssues.xml" afterPath="$PROJECT_DIR$/.idea/sonarIssues.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/routing/GraphSet.java" afterPath="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/routing/GraphSet.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/test/MainIMAPSuite.java" afterPath="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/test/MainIMAPSuite.java" />
     </list>
     <ignored path="asnone.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -47,21 +34,8 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file leaf-file-name="JGraph.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/routing/JGraph.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="19" column="58" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
-              <folding>
-                <element signature="e#6773#6884#0" expanded="true" />
-                <element signature="e#6883#6884#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="AbstractBlender.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/blending/AbstractBlender.java">
+        <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/blending/AbstractBlender.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="289">
               <caret line="17" column="4" lean-forward="false" selection-start-line="17" selection-start-column="4" selection-end-line="17" selection-end-column="4" />
@@ -73,34 +47,34 @@
         </entry>
       </file>
       <file leaf-file-name="DummyTransport.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/transport/DummyTransport.java">
+        <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/transport/DummyTransport.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="22" column="74" lean-forward="true" selection-start-line="22" selection-start-column="74" selection-end-line="22" selection-end-column="74" />
+            <state relative-caret-position="357">
+              <caret line="21" column="74" lean-forward="false" selection-start-line="21" selection-start-column="74" selection-end-line="21" selection-end-column="74" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#456#457#0" expanded="true" />
-                <element signature="e#497#498#0" expanded="true" />
+                <element signature="e#394#395#0" expanded="true" />
+                <element signature="e#435#436#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="ByteArrayBuilder.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/transport/ByteArrayBuilder.java">
+        <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/transport/ByteArrayBuilder.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="136">
               <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
               <folding>
-                <element signature="e#395#396#0" expanded="true" />
-                <element signature="e#424#425#0" expanded="true" />
+                <element signature="e#398#399#0" expanded="true" />
+                <element signature="e#427#428#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="Transport.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/transport/Transport.java">
+        <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/transport/Transport.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="85">
               <caret line="5" column="0" lean-forward="false" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
@@ -111,58 +85,67 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RandomString.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/transport/RandomString.java">
+      <file leaf-file-name="DummyBlender.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/blending/DummyBlender.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="145">
-              <caret line="9" column="0" lean-forward="true" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+            <state relative-caret-position="102">
+              <caret line="6" column="0" lean-forward="false" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
               <folding>
-                <element signature="e#563#564#0" expanded="true" />
-                <element signature="e#624#625#0" expanded="true" />
+                <element signature="imports" expanded="true" />
+                <element signature="e#376#377#0" expanded="true" />
+                <element signature="e#412#413#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TransportListener.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/transport/TransportListener.java">
+      <file leaf-file-name="MessageVortexTest.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/test/core/MessageVortexTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="17" column="29" lean-forward="false" selection-start-line="17" selection-start-column="29" selection-end-line="17" selection-end-column="29" />
+            <state relative-caret-position="153">
+              <caret line="12" column="22" lean-forward="false" selection-start-line="12" selection-start-column="22" selection-end-line="12" selection-end-column="22" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DummyBlender.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/blending/DummyBlender.java">
+      <file leaf-file-name="MainCoreSuite.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/test/MainCoreSuite.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="391">
-              <caret line="23" column="68" lean-forward="false" selection-start-line="23" selection-start-column="68" selection-end-line="23" selection-end-column="68" />
+            <state relative-caret-position="119">
+              <caret line="7" column="32" lean-forward="false" selection-start-line="7" selection-start-column="32" selection-end-line="7" selection-end-column="32" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MainIMAPSuite.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/test/MainIMAPSuite.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="221">
+              <caret line="13" column="2" lean-forward="false" selection-start-line="13" selection-start-column="2" selection-end-line="13" selection-end-column="2" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#422#423#0" expanded="true" />
-                <element signature="e#458#459#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GraphSet.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/routing/GraphSet.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="548">
+              <caret line="211" column="13" lean-forward="true" selection-start-line="211" selection-start-column="13" selection-end-line="211" selection-end-column="13" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="IncomingMessageRouterListener.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/routing/IncomingMessageRouterListener.java">
+        <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/routing/IncomingMessageRouterListener.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="153">
               <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GraphSet.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/routing/GraphSet.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="20" column="49" lean-forward="true" selection-start-line="20" selection-start-column="49" selection-end-line="20" selection-end-column="49" />
               <folding />
             </state>
           </provider>
@@ -193,11 +176,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/test/MainRoutingSuite.java" />
-        <option value="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/MailvortexLogger.java" />
-        <option value="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/imap/CustomKeyManager.java" />
-        <option value="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/asn1/IdentityStore.java" />
-        <option value="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/imap/ImapConnection.java" />
         <option value="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/asn1/encryption/DumpType.java" />
         <option value="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/asn1/HeaderRequestQueryQuota.java" />
         <option value="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/asn1/HeaderRequestIdentity.java" />
@@ -244,6 +222,11 @@
         <option value="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/transport/Transport.java" />
         <option value="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/routing/IncomingMessageRouterListener.java" />
         <option value="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/blending/DummyBlender.java" />
+        <option value="$PROJECT_DIR$/src/net/gwerder/java/mailvortex/test/core/MessageVortexTest.java" />
+        <option value="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/test/core/MessageVortexTest.java" />
+        <option value="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/test/MainCoreSuite.java" />
+        <option value="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/test/MainIMAPSuite.java" />
+        <option value="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/routing/GraphSet.java" />
       </list>
     </option>
   </component>
@@ -307,7 +290,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="mailvortex" />
+              <option name="myItemId" value="messagevortex" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -325,7 +308,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="mailvortex" />
+              <option name="myItemId" value="messagevortex" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -347,7 +330,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="mailvortex" />
+              <option name="myItemId" value="messagevortex" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -369,7 +352,33 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="mailvortex" />
+              <option name="myItemId" value="messagevortex" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MessageVortex" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="messagevortex" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -391,7 +400,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="mailvortex" />
+              <option name="myItemId" value="messagevortex" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -413,7 +422,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="mailvortex" />
+              <option name="myItemId" value="messagevortex" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -435,7 +444,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="mailvortex" />
+              <option name="myItemId" value="messagevortex" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -457,7 +466,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="mailvortex" />
+              <option name="myItemId" value="messagevortex" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -816,7 +825,7 @@
     </configuration>
     <configuration default="false" name="JGraph" type="Application" factoryName="Application">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <option name="MAIN_CLASS_NAME" value="net.gwerder.java.mailvortex.routing.JGraph" />
+      <option name="MAIN_CLASS_NAME" value="net.gwerder.java.messagevortex.routing.JGraph" />
       <option name="VM_PARAMETERS" value="" />
       <option name="PROGRAM_PARAMETERS" value="" />
       <option name="WORKING_DIRECTORY" value="" />
@@ -831,7 +840,7 @@
     </configuration>
     <configuration default="false" name="IdentityStore" type="Application" factoryName="Application">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <option name="MAIN_CLASS_NAME" value="net.gwerder.java.mailvortex.asn1.IdentityStore" />
+      <option name="MAIN_CLASS_NAME" value="net.gwerder.java.messagevortex.asn1.IdentityStore" />
       <option name="VM_PARAMETERS" value="" />
       <option name="PROGRAM_PARAMETERS" value="" />
       <option name="WORKING_DIRECTORY" value="" />
@@ -840,17 +849,17 @@
       <option name="ENABLE_SWING_INSPECTOR" value="false" />
       <option name="ENV_VARIABLES" />
       <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="" />
+      <module name="messageVortex" />
       <envs />
       <method />
     </configuration>
     <configuration default="false" name="All Routing Tests" type="JUnit" factoryName="JUnit">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <module name="asnone" />
+      <module name="messageVortex" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="net.gwerder.java.mailvortex.test" />
-      <option name="MAIN_CLASS_NAME" value="net.gwerder.java.mailvortex.test.MainRoutingSuite" />
+      <option name="PACKAGE_NAME" value="net.gwerder.java.messagevortex.test" />
+      <option name="MAIN_CLASS_NAME" value="net.gwerder.java.messagevortex.test.MainRoutingSuite" />
       <option name="METHOD_NAME" value="" />
       <option name="TEST_OBJECT" value="class" />
       <option name="VM_PARAMETERS" value="" />
@@ -870,7 +879,7 @@
       <module name="asnone" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="net.gwerder.java.mailvortex.test.imap" />
+      <option name="PACKAGE_NAME" value="net.gwerder.java.messagevortex.test.imap" />
       <option name="MAIN_CLASS_NAME" value="" />
       <option name="METHOD_NAME" value="" />
       <option name="TEST_OBJECT" value="package" />
@@ -891,7 +900,7 @@
       <module name="" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="net.gwerder.java.mailvortex.test.asn1" />
+      <option name="PACKAGE_NAME" value="net.gwerder.java.messagevortex.test.asn1" />
       <option name="MAIN_CLASS_NAME" value="" />
       <option name="METHOD_NAME" value="" />
       <option name="TEST_OBJECT" value="package" />
@@ -1014,7 +1023,7 @@
       <workItem from="1488357028299" duration="172000" />
       <workItem from="1490688731927" duration="1458000" />
       <workItem from="1490855559320" duration="87000" />
-      <workItem from="1491213945570" duration="7325000" />
+      <workItem from="1491213945570" duration="8166000" />
     </task>
     <task id="LOCAL-00001" summary="Done some code improvments for less warnings during build process">
       <created>1464537588989</created>
@@ -1206,7 +1215,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="32008000" />
+    <option name="totallyTimeSpent" value="32849000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1219,7 +1228,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1176" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -1242,7 +1251,7 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32088122" sideWeight="0.7027897" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32936507" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32954547" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22921109" sideWeight="0.48820058" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22921109" sideWeight="0.48820058" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32471263" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="true" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29774678" sideWeight="0.5117994" order="4" side_tool="true" content_ui="tabs" />
@@ -1369,84 +1378,56 @@
     </buildFile>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/asn1/IdentityStore.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="437">
-          <caret line="107" column="103" lean-forward="false" selection-start-line="107" selection-start-column="103" selection-end-line="107" selection-end-column="103" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/imap/ImapConnection.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="671">
-          <caret line="284" column="84" lean-forward="false" selection-start-line="284" selection-start-column="84" selection-end-line="284" selection-end-column="84" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/asn1/HeaderRequestQueryQuota.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="392">
-          <caret line="37" column="101" lean-forward="false" selection-start-line="37" selection-start-column="101" selection-end-line="37" selection-end-column="101" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/asn1/HeaderRequestIdentity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="370">
-          <caret line="39" column="100" lean-forward="false" selection-start-line="39" selection-start-column="100" selection-end-line="39" selection-end-column="100" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/asn1/IdentityStoreBlock.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/asn1/IdentityStoreBlock.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="415">
           <caret line="196" column="44" lean-forward="false" selection-start-line="196" selection-start-column="44" selection-end-line="196" selection-end-column="44" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/asn1/HeaderRequestIncreaseMessageQuota.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/asn1/HeaderRequestIncreaseMessageQuota.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="825">
           <caret line="51" column="0" lean-forward="false" selection-start-line="51" selection-start-column="0" selection-end-line="51" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/test/asn1/IdentityTest.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/test/asn1/IdentityTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="396">
           <caret line="28" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/test/MainASN1Suite.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/test/MainASN1Suite.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="660">
           <caret line="34" column="48" lean-forward="false" selection-start-line="34" selection-start-column="48" selection-end-line="34" selection-end-column="48" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/asn1/encryption/DumpType.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/asn1/encryption/DumpType.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="110">
           <caret line="5" column="12" lean-forward="false" selection-start-line="5" selection-start-column="12" selection-end-line="5" selection-end-column="12" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/test/asn1/DumpTypeTest.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/test/asn1/DumpTypeTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="924">
           <caret line="52" column="9" lean-forward="false" selection-start-line="52" selection-start-column="9" selection-end-line="52" selection-end-column="9" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/test/routing/MessageFactoryTest.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/test/routing/MessageFactoryTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="836">
           <caret line="55" column="13" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="71" selection-end-column="1" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/test/asn1/BlockTest.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/test/asn1/BlockTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="132">
           <caret line="16" column="2" lean-forward="false" selection-start-line="16" selection-start-column="2" selection-end-line="16" selection-end-column="2" />
@@ -1454,162 +1435,162 @@
       </provider>
     </entry>
     <entry file="file://G:/Migros/ch-migros-appJuly-19-2016_source_from_JADX/ch/migros/app/cumulus/fragments/CumulusDashboardFragment.java" />
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/asn1/MacAlgorithm.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/asn1/MacAlgorithm.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="374">
           <caret line="25" column="36" lean-forward="false" selection-start-line="25" selection-start-column="36" selection-end-line="25" selection-end-column="36" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/asn1/encryption/SecurityLevel.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/asn1/encryption/SecurityLevel.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="154">
           <caret line="7" column="12" lean-forward="false" selection-start-line="7" selection-start-column="12" selection-end-line="7" selection-end-column="12" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/test/asn1/SymmetricKeyTest.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/test/asn1/SymmetricKeyTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-843">
           <caret line="85" column="45" lean-forward="false" selection-start-line="85" selection-start-column="0" selection-end-line="86" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/asn1/encryption/Parameter.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/asn1/encryption/Parameter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="286">
           <caret line="13" column="29" lean-forward="false" selection-start-line="13" selection-start-column="29" selection-end-line="13" selection-end-column="29" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/test/asn1/FuzzerTest.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/test/asn1/FuzzerTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="424">
           <caret line="49" column="40" lean-forward="false" selection-start-line="49" selection-start-column="33" selection-end-line="49" selection-end-column="40" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/asn1/SymmetricKey.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/asn1/SymmetricKey.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="415">
           <caret line="243" column="25" lean-forward="false" selection-start-line="243" selection-start-column="25" selection-end-line="243" selection-end-column="25" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/asn1/HeaderReply.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/asn1/HeaderReply.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="330">
           <caret line="19" column="13" lean-forward="false" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/Config.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/Config.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="299">
           <caret line="100" column="5" lean-forward="false" selection-start-line="100" selection-start-column="5" selection-end-line="100" selection-end-column="5" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/asn1/Block.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/asn1/Block.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="317">
           <caret line="83" column="12" lean-forward="false" selection-start-line="83" selection-start-column="11" selection-end-line="83" selection-end-column="12" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/asn1/Key.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/asn1/Key.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1122">
           <caret line="58" column="20" lean-forward="false" selection-start-line="58" selection-start-column="20" selection-end-line="58" selection-end-column="20" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/asn1/Identity.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/asn1/Identity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1254">
           <caret line="72" column="115" lean-forward="false" selection-start-line="72" selection-start-column="115" selection-end-line="72" selection-end-column="115" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/test/asn1/AsymmetricKeyReencodingTest.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/test/asn1/AsymmetricKeyReencodingTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1848">
           <caret line="97" column="60" lean-forward="false" selection-start-line="97" selection-start-column="60" selection-end-line="97" selection-end-column="60" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/asn1/encryption/ECCurveType.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/asn1/encryption/ECCurveType.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="924">
           <caret line="54" column="78" lean-forward="false" selection-start-line="54" selection-start-column="78" selection-end-line="54" selection-end-column="78" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/asn1/encryption/AlgorithmType.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/asn1/encryption/AlgorithmType.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="154">
           <caret line="7" column="12" lean-forward="false" selection-start-line="7" selection-start-column="12" selection-end-line="7" selection-end-column="12" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/asn1/encryption/Algorithm.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/asn1/encryption/Algorithm.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="376">
           <caret line="164" column="9" lean-forward="false" selection-start-line="164" selection-start-column="9" selection-end-line="164" selection-end-column="9" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/asn1/encryption/SizeCalc.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/asn1/encryption/SizeCalc.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="110">
           <caret line="5" column="25" lean-forward="false" selection-start-line="5" selection-start-column="25" selection-end-line="5" selection-end-column="25" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/asn1/AsymmetricKey.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/asn1/AsymmetricKey.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2148">
           <caret line="371" column="0" lean-forward="false" selection-start-line="371" selection-start-column="0" selection-end-line="371" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/asn1/encryption/Padding.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/asn1/encryption/Padding.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="572">
           <caret line="43" column="9" lean-forward="false" selection-start-line="41" selection-start-column="50" selection-end-line="46" selection-end-column="10" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/asn1/encryption/Mode.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/asn1/encryption/Mode.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="542">
           <caret line="80" column="0" lean-forward="false" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/test/asn1/AsymmetricKeyTest.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/test/asn1/AsymmetricKeyTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="300">
           <caret line="224" column="31" lean-forward="false" selection-start-line="224" selection-start-column="31" selection-end-line="224" selection-end-column="31" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/routing/Edge.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/routing/Edge.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1241">
           <caret line="75" column="10" lean-forward="false" selection-start-line="75" selection-start-column="10" selection-end-line="75" selection-end-column="10" />
           <folding>
-            <element signature="e#1839#1840#0" expanded="false" />
-            <element signature="e#1864#1865#0" expanded="false" />
-            <element signature="e#2708#2709#0" expanded="false" />
-            <element signature="e#2785#2786#0" expanded="false" />
-            <element signature="e#2831#2832#0" expanded="false" />
-            <element signature="e#2898#2899#0" expanded="false" />
+            <element signature="e#1845#1846#0" expanded="false" />
+            <element signature="e#1870#1871#0" expanded="false" />
+            <element signature="e#2714#2715#0" expanded="false" />
+            <element signature="e#2791#2792#0" expanded="false" />
+            <element signature="e#2837#2838#0" expanded="false" />
+            <element signature="e#2904#2905#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/routing/SimpleMessageFactory.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/routing/SimpleMessageFactory.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="140">
           <caret line="38" column="13" lean-forward="true" selection-start-line="38" selection-start-column="13" selection-end-line="38" selection-end-column="13" />
@@ -1617,7 +1598,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/imap/package-info.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/imap/package-info.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
           <caret line="3" column="41" lean-forward="true" selection-start-line="3" selection-start-column="41" selection-end-line="3" selection-end-column="41" />
@@ -1633,7 +1614,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/accountant/Accountant.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/accountant/Accountant.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
           <caret line="5" column="16" lean-forward="false" selection-start-line="5" selection-start-column="16" selection-end-line="5" selection-end-column="16" />
@@ -1641,7 +1622,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/accountant/HeaderVerifyer.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/accountant/HeaderVerifyer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
           <caret line="7" column="17" lean-forward="false" selection-start-line="7" selection-start-column="17" selection-end-line="7" selection-end-column="17" />
@@ -1649,7 +1630,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/routing/Router.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/routing/Router.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="289">
           <caret line="17" column="0" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
@@ -1659,7 +1640,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/blending/Blender.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/blending/Blender.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="434">
           <caret line="32" column="29" lean-forward="false" selection-start-line="32" selection-start-column="29" selection-end-line="32" selection-end-column="29" />
@@ -1669,37 +1650,29 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/routing/JGraph.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/routing/JGraph.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
           <caret line="19" column="58" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
           <folding>
-            <element signature="e#6773#6884#0" expanded="true" />
-            <element signature="e#6883#6884#0" expanded="true" />
+            <element signature="e#6782#6893#0" expanded="true" />
+            <element signature="e#6892#6893#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/routing/GraphSet.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="20" column="49" lean-forward="true" selection-start-line="20" selection-start-column="49" selection-end-line="20" selection-end-column="49" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/transport/RandomString.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/transport/RandomString.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="145">
-          <caret line="9" column="0" lean-forward="true" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+          <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
           <folding>
-            <element signature="e#563#564#0" expanded="true" />
-            <element signature="e#624#625#0" expanded="true" />
+            <element signature="e#566#567#0" expanded="true" />
+            <element signature="e#627#628#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/transport/TransportListener.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/transport/TransportListener.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="289">
           <caret line="17" column="29" lean-forward="false" selection-start-line="17" selection-start-column="29" selection-end-line="17" selection-end-column="29" />
@@ -1707,18 +1680,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/transport/ByteArrayBuilder.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/transport/ByteArrayBuilder.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
           <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
           <folding>
-            <element signature="e#395#396#0" expanded="true" />
-            <element signature="e#424#425#0" expanded="true" />
+            <element signature="e#398#399#0" expanded="true" />
+            <element signature="e#427#428#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/blending/AbstractBlender.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/blending/AbstractBlender.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="289">
           <caret line="17" column="4" lean-forward="false" selection-start-line="17" selection-start-column="4" selection-end-line="17" selection-end-column="4" />
@@ -1728,19 +1701,19 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/transport/DummyTransport.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/transport/DummyTransport.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="22" column="74" lean-forward="true" selection-start-line="22" selection-start-column="74" selection-end-line="22" selection-end-column="74" />
+        <state relative-caret-position="357">
+          <caret line="21" column="74" lean-forward="false" selection-start-line="21" selection-start-column="74" selection-end-line="21" selection-end-column="74" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#456#457#0" expanded="true" />
-            <element signature="e#497#498#0" expanded="true" />
+            <element signature="e#394#395#0" expanded="true" />
+            <element signature="e#435#436#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/transport/Transport.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/transport/Transport.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
           <caret line="5" column="0" lean-forward="false" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
@@ -1750,7 +1723,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/routing/IncomingMessageRouterListener.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/routing/IncomingMessageRouterListener.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
           <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
@@ -1758,15 +1731,57 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/blending/DummyBlender.java">
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/mailvortex/test/core.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="23" column="68" lean-forward="false" selection-start-line="23" selection-start-column="68" selection-end-line="23" selection-end-column="68" />
+        <state relative-caret-position="85">
+          <caret line="5" column="17" lean-forward="false" selection-start-line="5" selection-start-column="17" selection-end-line="5" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/blending/DummyBlender.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="0" lean-forward="false" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#422#423#0" expanded="true" />
-            <element signature="e#458#459#0" expanded="true" />
+            <element signature="e#376#377#0" expanded="true" />
+            <element signature="e#412#413#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/test/core/MessageVortexTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="12" column="22" lean-forward="false" selection-start-line="12" selection-start-column="22" selection-end-line="12" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/test/MainCoreSuite.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="32" lean-forward="false" selection-start-line="7" selection-start-column="32" selection-end-line="7" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/test/MainIMAPSuite.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="13" column="2" lean-forward="false" selection-start-line="13" selection-start-column="2" selection-end-line="13" selection-end-column="2" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/routing/GraphSet.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="548">
+          <caret line="211" column="13" lean-forward="true" selection-start-line="211" selection-start-column="13" selection-end-line="211" selection-end-column="13" />
+          <folding />
         </state>
       </provider>
     </entry>
