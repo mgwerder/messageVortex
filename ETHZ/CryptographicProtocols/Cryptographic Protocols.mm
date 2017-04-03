@@ -354,5 +354,6 @@
 <node CREATED="1489581494406" ID="ID_758504994" MODIFIED="1489582199638" TEXT="Es muss eine Sprache geben, welche durch eine non-det TM akkzeptiert wird"/>
 </node>
 </node>
+<node CREATED="1490786210028" ID="ID_1859278811" MODIFIED="1490786216303" POSITION="left" TEXT="Lecture 5"/>
 </node>
 </map>

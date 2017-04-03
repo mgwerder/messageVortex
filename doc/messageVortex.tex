@@ -16,7 +16,7 @@
 \subtitle{\thesubtitle}
 \author{Martin Gwerder (06-073-787)}
 \date{\SVNDate}
-\gdef\myabstract{\lipsum*[1-2]}
+\gdef\myabstract{In this paper we introduce an unobservable message annonymisation protocol, named MessageVortex. It is based on the zero trust principle and a distributed peer-to-peer (P2P) architecture and avoids  central aspects such as fixed infrastructures within a global network. It scores over existing work by blending its traffic into suitable existing transport protocols, thus making it next to impossible to block it without significantly affecting regular users of the transport medium. It furthermore requires no protocol specific infrastructure in public networks and allows a sender to control all aspects of a message such as degree of anonymity, timing, and redundancy of the message transport without disclosing any of these details to the routing or transporting nodes.}
 \makeatother
 
 % enable graphics inclusion
@@ -179,6 +179,10 @@
 \usepackage{tabularx}
 \usepackage{multirow}
 
+% XMP support 
+\RequirePackage{xmpincl}
+\includexmp{messageVortex}
+
 % Required for definitions environment
 \usepackage{hanging}
 \usepackage{ragged2e}
@@ -231,6 +235,8 @@
 %	linewidth=0.9\linewidth,
 %	xleftmargin=0.1\linewidth
 }
+
+\usepackage{wrapfig}
 
 %% This package will make dealing with the ``requirements'' environment a lot easier:
 \usepackage{environ}
@@ -319,9 +325,9 @@
 \begin{acknowledgements}      %this creates the heading for the acknowlegments
 I would like to thank my wife Cornelia and my lovely three kids (Saphira, Florian and Aurelius) for their patience and their support. Without them I could never have done this work.\par
 
-FIXME Professor\par
-FIXME university\par
-FIXME family\par
+FIXME Prof. Dr. C. Tschudin and the University of Basel for the possibility to write this work and for the challenges they oposed to me, allowing me to grow. \par
+FIXME Dr. Andreas Hueni for his thoughts and challenging outside-the-normal-box.
+FIXME Prof. Dr. Carlos Nicolas of the University of Northwestern Switzerland for being such a valuable sparring partner allowing me to test my thoughts.
 
 I would like to acknowledge the thousands of individuals who have coded for the LaTeX project for free. It is due to their efforts that we can generate professionally typeset PDFs now.
 \end{acknowledgements}
@@ -483,7 +489,7 @@ I would like to acknowledge the thousands of individuals who have coded for the 
 {
   %\def\filespliter#1{\expandafter\intfilespliter#1\relax}
   %\def\intfilespliter#1 #2 #3\relax{ First: (#1), Second: (#2), Third: (#3) }
-  \DeclareFieldFormat{file}{\StrGobbleLeft{#1}{1}[\wtcGwM]\StrGobbleRight{\wtcGwM}{4}[\filename] \IfFileExists{\filename}{\attachfile{\filename}}{FIXIT}}
+  \DeclareFieldFormat{file}{\StrGobbleLeft{#1}{1}[\wtcGwM]\StrGobbleRight{\wtcGwM}{4}[\filename] \IfFileExists{\filename}{\attachfile{\filename}}{FIXME missing document link}}
   \renewbibmacro{finentry}{\finentry\addspace \printfield{file}}
   \renewcommand*{\bibfont}{\small}
   \printbibliography[title={},heading=none]
@@ -535,7 +541,13 @@ A. Perrig
 -David Basin  (Keine Kapazität)
 \end{comment}
 
-\onecolumn\chapter{Curriculum Vitae}
+\chapter{Short Biography}
+\begin{wrapfigure}[9]{r}[0pt]{0.3\columnwidth}
+	\includegraphics[width=0.29\columnwidth]{inc/biography/passphoto}
+\end{wrapfigure}
+\input{inc/biography/biotext.inc.tex}
+
+\begin{comment}
 \section*{Personal Details}
 \begin{tabular}{ll}
 Name:             	& Martin Gwerder\\
@@ -543,7 +555,7 @@ Employer address: 	& Untere Parkstrasse 9,5212 Hausen AG, Switzerland\\
 Email: 				& martin.gwerder@fhnw.ch\\
 \end{tabular}
 \section*{Career Summary}
-Martin Gwerder started off withan apprenticeship as an electro mecanic. After concluding studies at the polytechnic he worked first as an engineer, later as seniorengineer, and architect for several companies in banking, industry and for the gvernment. 
+Martin Gwerder started off with an apprenticeship as an electro mecanic. After concluding studies at the polytechnic he worked first as an engineer, later as seniorengineer, and architect for several companies in banking, industry and for the gvernment. 
 
 \section*{Education}
 Martin Gwerder is currently a doctoral Student at the University of Basel. After having concluded his studies at the polytechnic at Brugg in 1997, he did a postgraduate study as a master of business and engineering. Following that, he changed to the university track doing an MSc in Informatics at FernUniversit\"at in Hagen.
@@ -552,5 +564,6 @@ Martin Gwerder is currently a doctoral Student at the University of Basel. After
 The main focus of Martin Gwerder are in the fields of data protection, privacy, confidentiality, and anonymity.
 
 \fxfatal{more content to CV}
+\end{comment}
 
 \end{document}
