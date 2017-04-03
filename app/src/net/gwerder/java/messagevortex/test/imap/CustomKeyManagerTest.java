@@ -1,13 +1,15 @@
 package net.gwerder.java.messagevortex.test.imap;
 
+import net.gwerder.java.messagevortex.MailvortexLogger;
+import net.gwerder.java.messagevortex.imap.CustomKeyManager;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import static org.junit.Assert.*;
 
 import java.util.logging.Level;
-import net.gwerder.java.messagevortex.*;
-import net.gwerder.java.messagevortex.imap.*;
+
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * booleanConfigHandlings for {@link net.gwerder.java.messagevortex.MailVortex}.

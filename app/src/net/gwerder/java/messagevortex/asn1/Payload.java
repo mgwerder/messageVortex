@@ -1,6 +1,7 @@
 package net.gwerder.java.messagevortex.asn1;
 
 import org.bouncycastle.asn1.*;
+
 import java.io.IOException;
 
 public class Payload extends Block {
@@ -16,15 +17,16 @@ public class Payload extends Block {
         payloads=new PayloadChunk[] {new PayloadChunk()};
     }
 
+    public Payload(ASN1Encodable to) throws IOException {
+        parse( to );
+    }
+
     public PayloadChunk[] getPayloadChunks() { return payloads; }
+
     public PayloadChunk[] setPayloadChunks(PayloadChunk[] nplc) {
         PayloadChunk[] oplc=payloads;
         payloads=nplc;
         return oplc;
-    }
-
-    public Payload(ASN1Encodable to) throws IOException {
-        parse(to);
     }
 
     @Override

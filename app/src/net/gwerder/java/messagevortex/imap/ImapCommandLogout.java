@@ -1,6 +1,7 @@
 package net.gwerder.java.messagevortex.imap;
 
 import net.gwerder.java.messagevortex.MailvortexLogger;
+
 import java.util.logging.Level;
 
 

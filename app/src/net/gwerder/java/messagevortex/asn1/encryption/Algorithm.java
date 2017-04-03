@@ -2,7 +2,10 @@ package net.gwerder.java.messagevortex.asn1.encryption;
 
 import net.gwerder.java.messagevortex.MailvortexLogger;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
 import java.util.logging.Level;
 
 /**
@@ -37,11 +40,6 @@ public enum Algorithm {
     //TIGER192  (3100, AlgorithmType.HASHING,"tiger","BC",SecurityLevel.LOW);
 
     private static final java.util.logging.Logger LOGGER;
-    static {
-        LOGGER = MailvortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-        MailvortexLogger.setGlobalLogLevel(Level.ALL);
-    }
-
     private static Map<AlgorithmType, Algorithm> def = new HashMap<AlgorithmType, Algorithm>() {
         private static final long serialVersionUID = 12132324789789L;
 
@@ -52,11 +50,29 @@ public enum Algorithm {
         }
     };
 
+    static {
+        LOGGER = MailvortexLogger.getLogger( (new Throwable()).getStackTrace()[0].getClassName() );
+        MailvortexLogger.setGlobalLogLevel( Level.ALL );
+    }
+
     private int id;
     private AlgorithmType t;
     private String txt;
     private String provider;
     private Map<SecurityLevel,Map<String,Object>> secLevel;
+
+    Algorithm(int id, AlgorithmType t, String txt, String provider, SecurityLevel level) {
+        this( id, t, txt, provider, (Map<SecurityLevel, Map<String, Object>>) null );
+        secLevel = getSecLevelList( level, getParameterList( "keySize_0", getKeySize() ) );
+    }
+
+    Algorithm(int id, AlgorithmType t, String txt, String provider, Map<SecurityLevel, Map<String, Object>> parameters) {
+        this.id = id;
+        this.t = t;
+        this.txt = txt;
+        this.provider = provider;
+        this.secLevel = parameters;
+    }
 
     private static HashMap<String,Object> getParameterList(String txt,Object o) {
         HashMap<String,Object> ret=new HashMap<String,Object>();
@@ -76,19 +92,6 @@ public enum Algorithm {
     private static  Map<SecurityLevel,Map<String,Object>> getSecLevelList(Map<SecurityLevel,Map<String,Object>> lst, SecurityLevel level ,Map<String,Object> o) {
         lst.put(level,o);
         return lst;
-    }
-
-    Algorithm(int id, AlgorithmType t, String txt, String provider, SecurityLevel level) {
-        this(id,t,txt,provider,(Map<SecurityLevel,Map<String,Object>>) null);
-        secLevel = getSecLevelList( level, getParameterList("keySize_0",getKeySize()) );
-    }
-
-    Algorithm(int id, AlgorithmType t, String txt, String provider, Map<SecurityLevel,Map<String, Object>> parameters) {
-        this.id=id;
-        this.t=t;
-        this.txt=txt;
-        this.provider=provider;
-        this.secLevel=parameters;
     }
 
     public static Algorithm[] getAlgorithms(AlgorithmType at) {

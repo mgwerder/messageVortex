@@ -1,13 +1,13 @@
 package net.gwerder.java.messagevortex.imap;
 
 import net.gwerder.java.messagevortex.MailvortexLogger;
-import java.util.logging.Level;  
-import java.util.logging.Logger;  
-  
-import java.io.InputStream;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /***
 /**
@@ -38,13 +38,10 @@ public class ImapLine {
 
     /* a Logger  for logging purposes */
     private static final Logger LOGGER = MailvortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-
+    private static final Object TAG_ENUMERATOR_LOCK = new Object();
+    private static int tagEnumerator = 0;
     /* this holds the past context for the case that an exception is risen */
     private String context = "";
-    
-    private static int   tagEnumerator             =0;
-    private static final Object TAG_ENUMERATOR_LOCK=new Object();
-    
     /* storage for the connection which created the line */
     private ImapConnection con;
     
@@ -112,50 +109,6 @@ public class ImapLine {
         this(con,line,null);
     }
     
-    private void prepareStorage(ImapConnection con,String line,InputStream input) throws ImapException {
-        // make sure that a line is never null when reaching the parsing section
-        if(buffer==null) {
-            buffer="";
-            if(snoopBytes(1)==null) {
-                throw new ImapBlankLineException(this);
-            }
-        }
-        
-    }
-    
-    private void checkEmptyLine() throws ImapException {
-        if("\r\n".equals(snoopBytes(2)) || "".equals(snoopBytes(1)) || snoopBytes(1)==null) {
-            if("\r\n".equals(snoopBytes(2))) {
-                skipUntilCRLF();
-                throw new ImapBlankLineException(this);
-            }
-            throw new ImapNullLineException(this);
-        }
-    }
-    
-    private void  prefillCommandFields() throws ImapException {
-        // getting a tag
-        tagToken=getATag();
-        
-        if(tagToken==null || "".equals(tagToken)) {
-            skipUntilCRLF();
-            throw new ImapException(this, "error getting tag");
-        }
-        
-        int i=skipSP(1);
-        if(i!=1) {
-            throw new ImapException(this,"error skipping to command (line=\""+context+"\"; tag="+tagToken+"; buffer="+buffer+"; skipped="+i+")");
-        }
-
-        // get command
-        commandToken = getATag();
-        if(commandToken==null || "".equals(commandToken)) {
-            skipUntilCRLF();
-            throw new ImapException(this, "error getting command");
-        }
-        
-    }
-    
     /***
      * Builds a set of chracters ranging from the ASCII code of start until the ASCII code of end.
      *
@@ -171,14 +124,14 @@ public class ImapLine {
         }
 
         // reject chain building if end is not within 0..255
-        if(end<0 || end>255) { 
+        if (end < 0 || end > 255) {
             return null;
         }
-        
+
         // reject chain building if start>end
         if(end<start) {
             return null;
-        }    
+        }
 
         // build the string
         StringBuilder ret=new StringBuilder();
@@ -186,8 +139,8 @@ public class ImapLine {
             ret.append((char)i);
         }
         return ret.toString();
-    }    
-
+    }
+    
     /***
      * Removes a given set of characters from a superset.
      *
@@ -201,8 +154,87 @@ public class ImapLine {
             ret=ret.replace(""+c,"");
         }
         return ret;
-    }    
+    }
 
+    /***
+     * Encodes a command so that newlines are visible.
+     *
+     * @return a printable string representation
+     ***/
+    public static String commandEncoder(String command) {
+        if (command == null) {
+            return "<null>";
+        }
+        return command.replaceAll( "\r", "\\\\r" ).replaceAll( "\n", "\\\\n" );
+    }
+
+    /***
+     * Get a unique identifier as a tag.
+     *
+     * @return A unique tag ("A" prefixed)
+     ***/
+    public static String getNextTag() {
+        return getNextTag( "A" );
+    }
+
+    /***
+     * Get a unique identifier as a tag.
+     *
+     * @return A unique tag
+     ***/
+    public static String getNextTag(String prefix) {
+        String ret;
+        synchronized (TAG_ENUMERATOR_LOCK) {
+            tagEnumerator++;
+            ret = prefix + String.format( "%d", tagEnumerator );
+        }
+        return ret;
+    }
+
+    private void prepareStorage(ImapConnection con, String line, InputStream input) throws ImapException {
+        // make sure that a line is never null when reaching the parsing section
+        if (buffer == null) {
+            buffer = "";
+            if (snoopBytes( 1 ) == null) {
+                throw new ImapBlankLineException( this );
+            }
+        }
+
+    }
+
+    private void checkEmptyLine() throws ImapException {
+        if ("\r\n".equals( snoopBytes( 2 ) ) || "".equals( snoopBytes( 1 ) ) || snoopBytes( 1 ) == null) {
+            if ("\r\n".equals( snoopBytes( 2 ) )) {
+                skipUntilCRLF();
+                throw new ImapBlankLineException( this );
+            }
+            throw new ImapNullLineException( this );
+        }
+    }
+
+    private void prefillCommandFields() throws ImapException {
+        // getting a tag
+        tagToken = getATag();
+
+        if (tagToken == null || "".equals( tagToken )) {
+            skipUntilCRLF();
+            throw new ImapException( this, "error getting tag" );
+        }
+
+        int i = skipSP( 1 );
+        if (i != 1) {
+            throw new ImapException( this, "error skipping to command (line=\"" + context + "\"; tag=" + tagToken + "; buffer=" + buffer + "; skipped=" + i + ")" );
+        }
+
+        // get command
+        commandToken = getATag();
+        if (commandToken == null || "".equals( commandToken )) {
+            skipUntilCRLF();
+            throw new ImapException( this, "error getting command" );
+        }
+
+    }
+    
     /***
      * Getter for the Imap connection in Control of this command.
      *
@@ -220,7 +252,7 @@ public class ImapLine {
     public String getCommand() {
         return commandToken;
     }
-    
+
     /***
      * Getter for the command tag.
      *
@@ -240,7 +272,7 @@ public class ImapLine {
                     buffer+=(char)i;
                 } else {
                     ended=true;
-                }   
+                }
             }
         } catch(IOException ioe) {
             ended=true;
@@ -250,33 +282,21 @@ public class ImapLine {
     }
     
     /***
-     * Encodes a command so that newlines are visible.
-     *
-     * @return a printable string representation
-     ***/
-    public static String commandEncoder(String command)  {
-        if(command==null) {
-            return "<null>";
-        }
-        return command.replaceAll("\r","\\\\r").replaceAll("\n","\\\\n");
-    }
-
-    /***
      * Returns true if escaped quotes are present at the current position.
      *
      * @return true if escaped quotes are present
      ***/
     public boolean snoopEscQuotes() {
-        return "\\".contains(snoopBytes(1)) && 
-               snoopBytes(2).length()==2 && 
+        return "\\".contains( snoopBytes( 1 ) ) &&
+                snoopBytes( 2 ).length() == 2 &&
                ABNF_QUOTED_SPECIALS.contains(snoopBytes(2).substring(1,2));
     }
     
     /***
      * Get the specified number of characters without moving from the current position.
-     * if num is 0 or negative then null is returned. If the number 
+     * if num is 0 or negative then null is returned. If the number
      * of available bytes is lower than the number of requested characters
-     * then the buffer content is returned. 
+     * then the buffer content is returned.
      *
      * @return The requested string
      ***/
@@ -287,16 +307,16 @@ public class ImapLine {
 
         // build buffer
         readBuffer(num);
-        
+
         if(buffer.length()==0) {
             return null;
         }
-        
+
         // if the string is too short -> return it
         if(buffer.length()<num) {
             return buffer;
         }
-        
+
         return buffer.substring(0,(int)num);
     }
     
@@ -319,17 +339,17 @@ public class ImapLine {
     /***
      * Skips the specified number of characters and adds them to the past context.
      *
-     * @param   num number of characters to be skipped    
+     * @param   num number of characters to be skipped
      * @return     String representation of the skipped characters
      ***/
     public String skipBytes(long num) {
         return skipBytes(num,true);
     }
-    
+
     public String skipBytes(long num,boolean modContext) {
         // make sure that we have sufficient bytes in the buffer
         readBuffer(num);
-                
+
         // if the string is too short -> return it
         if(buffer.length()<num) {
             buffer="";
@@ -338,34 +358,34 @@ public class ImapLine {
             }
             return buffer;
         }
-        
+
         // prepare return result
         String ret=snoopBytes(num);
-        
+
         // update context
         if(modContext) {
             addContext(ret);
         }
-        
+
         // cut the buffer
         buffer=buffer.substring((int)num,buffer.length());
-        
+
         return ret;
     }
     
     /***
      * Skips the specified number of SPACES.
      *
-     * @param   num number of spaces to be skipped    
+     * @param   num number of spaces to be skipped
      * @return     number of skipped spaces
      ***/
     public int skipSP(int num) {
         // count number of spaces found
         int count=0;
-        
+
         // init countdown counter
         int countdown=num;
-        
+
         LOGGER.log(Level.FINER,"Skipping "+num+" spaces");
         // loop thru skipper
         while(snoopBytes(1)!=null && ABNF_SP.contains(snoopBytes(1)) && (countdown!=0)) {
@@ -374,7 +394,7 @@ public class ImapLine {
             countdown--;
         }
         LOGGER.log(Level.FINER,"Skipped "+count+" spaces");
-        
+
         // return count of spaces skipped
         return count;
     }
@@ -390,7 +410,7 @@ public class ImapLine {
             skipBytes(2);
             LOGGER.log(Level.FINER,"CRLF skipped");
             return true;
-        }    
+        }
         LOGGER.log(Level.FINER,"no CRLF found");
         return false;
     }
@@ -404,20 +424,20 @@ public class ImapLine {
         while(snoopBytes(2)!=null && !"\r\n".equals(snoopBytes(2))) {
             skipBytes(1,false);
         }
-        
+
         if(snoopBytes(2)!=null && "\r\n".equals(snoopBytes(2))) {
             skipBytes(2,false);
             return true;
-        }    
+        }
         return false;
     }
     
     private long getLengthPrefix() {
         //skip curly brace
         skipBytes(1);
-        
+
         // get number
-        
+
         long num=0;
         while(snoopBytes(1)!=null && "0123456789".contains(snoopBytes(1)) && num<4294967295L) {
             num=num*10+(int)(skipBytes(1).charAt(0))-(int)("0".charAt(0));
@@ -426,9 +446,9 @@ public class ImapLine {
     }
     
     private String getLengthPrefixedString() {
-    
+
         long num=getLengthPrefix();
-    
+
         if(num<0 || num>4294967295L) {
             return null;
         }
@@ -438,19 +458,19 @@ public class ImapLine {
         if(ret==null || !"}".equals(ret)) {
             return null;
         }
-        
+
         // skip crlf
         skipCRLF();
-        
+
         // get String
         ret=skipBytes(num);
-        
+
         if(ret==null || ret.length()<num) {
             return null;
-        }    
-        
+        }
+
         return ret;
-    }    
+    }
     
     private String getQuotedString() {
         // get a quoted string
@@ -465,8 +485,8 @@ public class ImapLine {
         }
         if(snoopBytes(1)==null || !"\"".equals(skipBytes(1))) {
             return null;
-        }    
-        
+        }
+
         return ret.toString();
     }
     
@@ -478,17 +498,17 @@ public class ImapLine {
     public String getString() {
         String start=snoopBytes(1);
         String ret=null;
-        
+
         if("{".equals(start)) {
-            
+
             return getLengthPrefixedString();
-            
+
         } else if("\"".equals(start)) {
-        
+
             return getQuotedString();
-            
-        }    
-        
+
+        }
+
         return ret;
     }
     
@@ -498,15 +518,15 @@ public class ImapLine {
      * @return     The String or null if no string at the current position
      ***/
     public String getAString() {
-        
+
         String start=snoopBytes(1);
         String ret=null;
-        
+
         if("{".equals(start) || "\"".equals(start)) {
 
             // get a dquoted or literal (length prefixed) String
             ret=getString();
-            
+
         } else {
 
             // get a sequence of atom chars
@@ -517,10 +537,10 @@ public class ImapLine {
                 ret+=skipBytes(1);
             }
         }
-        
+
         return ret;
     }
-    
+
     /***
      * Get the tag at the current position.
      *
@@ -528,7 +548,7 @@ public class ImapLine {
      ***/
     public String getATag() {
         String ret=null;
-        
+
         // get a sequence of atom chars
         while(snoopBytes(1)!=null && ABNF_TAG.contains(snoopBytes(1))) {
             if(ret==null) {
@@ -536,35 +556,12 @@ public class ImapLine {
             }
             ret+=skipBytes(1);
         }
-        
+
         if("".equals(ret)){
             // empty tags are not alowed. At least one char is required
             return null;
-        }    
-        
-        return ret;
-    }
-    
-    /***
-     * Get a unique identifier as a tag.
-     *
-     * @return     A unique tag ("A" prefixed)
-     ***/
-    public static String getNextTag() {
-        return getNextTag("A");
-    }
-        
-    /***
-     * Get a unique identifier as a tag.
-     *
-     * @return     A unique tag 
-     ***/
-    public static String getNextTag(String prefix) {
-        String ret;
-        synchronized(TAG_ENUMERATOR_LOCK) {
-            tagEnumerator++;
-            ret=prefix+String.format("%d", tagEnumerator);
         }
+
         return ret;
     }
 }

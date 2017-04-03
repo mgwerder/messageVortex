@@ -3,7 +3,6 @@ package net.gwerder.java.messagevortex.test.asn1;
 import net.gwerder.java.messagevortex.MailvortexLogger;
 import net.gwerder.java.messagevortex.asn1.SymmetricKey;
 import net.gwerder.java.messagevortex.asn1.encryption.*;
-
 import org.junit.Test;
 
 import java.io.IOException;
@@ -92,8 +91,11 @@ public class SymmetricKeyTest {
                 assertTrue("error in encrypt/decrypt cycle with " + alg + " (same reserialized object)", Arrays.equals(b1, b3));
             }
 
-            public void setException(Exception e) { ex=e; }
             public Exception getException() { return ex; }
+
+            public void setException(Exception e) {
+                ex = e;
+            }
         }
 
         List<Thread> t = new Vector<>();

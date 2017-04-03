@@ -2,6 +2,7 @@ package net.gwerder.java.messagevortex.imap;
 
 import net.gwerder.java.messagevortex.ExtendedSecureRandom;
 import net.gwerder.java.messagevortex.MailvortexLogger;
+
 import javax.net.ServerSocketFactory;
 import javax.net.SocketFactory;
 import javax.net.ssl.*;
@@ -21,22 +22,20 @@ public class ImapServer extends StoppableThread  {
     private static final ExtendedSecureRandom esr=new ExtendedSecureRandom();
     
     private static final Logger LOGGER;
+    private static int id = 1;
     
     static {
         LOGGER = MailvortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
     }
-    
-    private Set<String>    suppCiphers=new HashSet<>();
 
+    final SSLContext context;
     int port;
     ServerSocket serverSocket=null;
     ConcurrentSkipListSet<ImapConnection> conn=new ConcurrentSkipListSet<>();
     boolean encrypted=false;
-    final SSLContext context;
+    private Set<String> suppCiphers = new HashSet<>();
     private Thread runner=null;
     private ImapAuthenticationProxy auth=null;
-    
-    private static int id=1;
             
     public ImapServer(boolean encrypted) throws IOException {
         this(encrypted?993:143,encrypted);

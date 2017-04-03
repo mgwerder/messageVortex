@@ -1,11 +1,13 @@
 package net.gwerder.java.messagevortex.test.imap;
- 
+
+import net.gwerder.java.messagevortex.imap.ImapAuthenticationDummyProxy;
+import net.gwerder.java.messagevortex.imap.ImapConnection;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import static org.junit.Assert.*;
 
-import net.gwerder.java.messagevortex.imap.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for {@link net.gwerder.java.messagevortex.MailVortex}.
@@ -14,14 +16,6 @@ import net.gwerder.java.messagevortex.imap.*;
  */
 @RunWith(JUnit4.class)
 public class ImapAuthenticationDummyProxyTest {
-
-    private static class ImapConnectionDummy extends ImapConnection {
-        public ImapConnectionDummy() {
-            // This is a dummy constructor for test cases do not use it for anything else
-        }    
-    }
-
-
 
     @Test
     public void setGetConnection() {
@@ -33,7 +27,7 @@ public class ImapAuthenticationDummyProxyTest {
         assertTrue("ImapConnection should return set value",ap.getImapConnection()==ic);
         assertTrue("ImapConnection should return set value",ap.setImapConnection(null)==ic);
         assertTrue("ImapConnection should be null if set to null",ap.getImapConnection()==null);
-    }    
+    }
 
     public void plainAuthTest() {
         ImapAuthenticationDummyProxy ap=new ImapAuthenticationDummyProxy();
@@ -52,6 +46,12 @@ public class ImapAuthenticationDummyProxyTest {
         assertFalse("bad password handling failed (1)",ap.login("test",""));
         assertFalse("bad password handling failed (1)",ap.login("test",null));
         assertFalse("bad password handling failed (1)",ap.login("test","T"));
-    }    
+    }
+
+    private static class ImapConnectionDummy extends ImapConnection {
+        public ImapConnectionDummy() {
+            // This is a dummy constructor for test cases do not use it for anything else
+        }
+    }
 
 }

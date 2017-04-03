@@ -1,7 +1,7 @@
 package net.gwerder.java.messagevortex.imap;
- 
-import java.util.logging.Logger;
+
 import java.util.logging.Level;
+import java.util.logging.Logger;
  
 public class ImapCommandLogin extends ImapCommand {
 

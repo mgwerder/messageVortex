@@ -12,9 +12,8 @@ import java.util.*;
  */
 public class GraphSet implements Comparator<GraphSet>,Comparable<GraphSet>,Iterable<Edge> {
 
-    private Vector<Edge> store=new Vector<>();
     private static final long serialVersionUID = 16134223345689L;
-
+    private Vector<Edge> store = new Vector<>();
     private IdentityStore            identityStore=null;
     private List<IdentityStoreBlock> anonymitySet;
     private IdentityStoreBlock       source=null;
@@ -31,14 +30,14 @@ public class GraphSet implements Comparator<GraphSet>,Comparable<GraphSet>,Itera
         this.identityStore=is;
     }
 
+    public IdentityStoreBlock[] getAnonymitySet() {
+        return anonymitySet.toArray( new IdentityStoreBlock[anonymitySet.size()] );
+    }
+
     public void setAnonymitySet(IdentityStoreBlock[] anonymitySet ) {
         Vector<IdentityStoreBlock> tmp =new Vector<>();
         tmp.addAll( Arrays.asList(anonymitySet) );
         this.anonymitySet=tmp;
-    }
-
-    public IdentityStoreBlock[] getAnonymitySet() {
-        return anonymitySet.toArray( new IdentityStoreBlock[anonymitySet.size()] );
     }
 
     public IdentityStoreBlock getAnonymity(int i) {
@@ -49,8 +48,24 @@ public class GraphSet implements Comparator<GraphSet>,Comparable<GraphSet>,Itera
         return source;
     }
 
+    public void setSource(IdentityStoreBlock source) throws NullPointerException, IllegalArgumentException {
+        if (source == null) throw new NullPointerException( "source may not be null" );
+        if (!anonymitySet.contains( source ))
+            throw new IllegalArgumentException( "source must be member of anonymity set" );
+        this.hasChanged = true;
+        this.source = source;
+    }
+
     public IdentityStoreBlock getTarget() {
         return target;
+    }
+
+    public void setTarget(IdentityStoreBlock target) throws NullPointerException, IllegalArgumentException {
+        if (target == null) throw new NullPointerException( "target may not be null" );
+        if (!anonymitySet.contains( target ))
+            throw new IllegalArgumentException( "target must be member of anonymity set" );
+        this.hasChanged = true;
+        this.target = target;
     }
 
     public int  getAnonymitySetSize() {
@@ -81,20 +96,6 @@ public class GraphSet implements Comparator<GraphSet>,Comparable<GraphSet>,Itera
     public IdentityStoreBlock getAnonIdentity(int i) throws ArrayIndexOutOfBoundsException {
         if(i<0 || i>=anonymitySet.size()) throw new ArrayIndexOutOfBoundsException( "got invalid identity vector ("+i+")" );
         return anonymitySet.get(i);
-    }
-
-    public void setSource(IdentityStoreBlock source) throws NullPointerException, IllegalArgumentException {
-        if(source==null) throw new NullPointerException( "source may not be null" );
-        if(!anonymitySet.contains(source)) throw new IllegalArgumentException( "source must be member of anonymity set" );
-        this.hasChanged=true;
-        this.source=source;
-    }
-
-    public void setTarget(IdentityStoreBlock target) throws NullPointerException, IllegalArgumentException {
-        if(target==null) throw new NullPointerException( "target may not be null" );
-        if(!anonymitySet.contains(target)) throw new IllegalArgumentException( "target must be member of anonymity set" );
-        this.hasChanged=true;
-        this.target=target;
     }
 
     public boolean allTargetsReached() {
@@ -225,7 +226,10 @@ public class GraphSet implements Comparator<GraphSet>,Comparable<GraphSet>,Itera
 
     public int size() {return store.size();}
     public Edge get(int i) {return store.get( i );}
-    public Iterator<Edge> iterator() {return store.iterator();}
+
+    public Iterator<Edge> iterator() {
+        return store.iterator();
+    }
 
 
 }

@@ -8,7 +8,7 @@ package net.gwerder.java.messagevortex.test;
 
 import junit.framework.JUnit4TestAdapter;
 import junit.framework.TestSuite;
-import net.gwerder.java.messagevortex.test.routing.*;
+import net.gwerder.java.messagevortex.test.routing.MessageFactoryTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 

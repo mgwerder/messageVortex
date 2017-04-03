@@ -1,11 +1,16 @@
 package net.gwerder.java.messagevortex.asn1;
 
-import net.gwerder.java.messagevortex.asn1.encryption.*;
+import net.gwerder.java.messagevortex.asn1.encryption.Algorithm;
+import net.gwerder.java.messagevortex.asn1.encryption.Mode;
+import net.gwerder.java.messagevortex.asn1.encryption.Padding;
+import net.gwerder.java.messagevortex.asn1.encryption.Parameter;
 import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

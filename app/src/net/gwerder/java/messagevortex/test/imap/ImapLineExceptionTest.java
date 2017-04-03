@@ -1,10 +1,12 @@
 package net.gwerder.java.messagevortex.test.imap;
 
-import net.gwerder.java.messagevortex.imap.*;
+import net.gwerder.java.messagevortex.imap.ImapException;
+import net.gwerder.java.messagevortex.imap.ImapLine;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for {@link net.gwerder.java.messagevortex.imap.ImapException}.

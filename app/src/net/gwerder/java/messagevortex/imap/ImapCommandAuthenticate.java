@@ -1,14 +1,13 @@
 package net.gwerder.java.messagevortex.imap;
- 
-import java.util.logging.Logger;
-import java.util.logging.Level;
 
 import javax.security.auth.callback.CallbackHandler;
-import java.util.Map;
-import java.util.HashMap;
 import javax.security.sasl.Sasl;
-import javax.security.sasl.SaslServer;
 import javax.security.sasl.SaslException;
+import javax.security.sasl.SaslServer;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /***
 * Provides the the Authenticate command to the IMAP server.

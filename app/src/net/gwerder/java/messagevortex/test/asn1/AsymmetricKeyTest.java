@@ -2,13 +2,19 @@ package net.gwerder.java.messagevortex.test.asn1;
 
 import net.gwerder.java.messagevortex.MailvortexLogger;
 import net.gwerder.java.messagevortex.asn1.AsymmetricKey;
-import net.gwerder.java.messagevortex.asn1.encryption.*;
+import net.gwerder.java.messagevortex.asn1.encryption.Algorithm;
+import net.gwerder.java.messagevortex.asn1.encryption.AlgorithmType;
+import net.gwerder.java.messagevortex.asn1.encryption.Padding;
+import net.gwerder.java.messagevortex.asn1.encryption.SecurityLevel;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+import java.util.Vector;
 import java.util.logging.Level;
 
 import static junit.framework.TestCase.assertFalse;
@@ -117,8 +123,11 @@ public class AsymmetricKeyTest {
                 }
             }
 
-            public void setException(Exception e) { ex=e; }
             public Exception getException() { return ex; }
+
+            public void setException(Exception e) {
+                ex = e;
+            }
         }
 
         List<Thread> t = new Vector<>();

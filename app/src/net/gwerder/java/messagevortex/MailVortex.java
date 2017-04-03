@@ -1,7 +1,7 @@
 package net.gwerder.java.messagevortex;
 
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
  
 public abstract class MailVortex {
 

@@ -1,13 +1,12 @@
 package net.gwerder.java.messagevortex.imap;
 
 import net.gwerder.java.messagevortex.MailvortexLogger;
-import java.util.logging.Logger;
-import java.util.logging.Level;
-  
-import java.net.ConnectException;
 
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
+import java.net.ConnectException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class SocketDeblocker extends Thread {
 

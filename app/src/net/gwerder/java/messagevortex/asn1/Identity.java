@@ -1,6 +1,9 @@
 package net.gwerder.java.messagevortex.asn1;
 
-import net.gwerder.java.messagevortex.asn1.encryption.*;
+import net.gwerder.java.messagevortex.asn1.encryption.Algorithm;
+import net.gwerder.java.messagevortex.asn1.encryption.AlgorithmType;
+import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
+import net.gwerder.java.messagevortex.asn1.encryption.SecurityLevel;
 import org.bouncycastle.asn1.*;
 
 import javax.crypto.BadPaddingException;

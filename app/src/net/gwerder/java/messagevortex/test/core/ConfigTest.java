@@ -1,12 +1,14 @@
 package net.gwerder.java.messagevortex.test.core;
 
+import net.gwerder.java.messagevortex.Config;
+import net.gwerder.java.messagevortex.MailvortexLogger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import static org.junit.Assert.*;
 
 import java.util.logging.Level;
-import net.gwerder.java.messagevortex.*;
+
+import static org.junit.Assert.*;
 
 /**
  * booleanConfigHandlings for {@link net.gwerder.java.messagevortex.MailVortex}.

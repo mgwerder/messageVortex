@@ -1,13 +1,13 @@
 package net.gwerder.java.messagevortex.test;
 
+import junit.framework.JUnit4TestAdapter;
+import junit.framework.TestSuite;
 import net.gwerder.java.messagevortex.test.core.ConfigTest;
 import net.gwerder.java.messagevortex.test.core.MessageVortexTest;
 import net.gwerder.java.messagevortex.test.core.VersionTest;
 import net.gwerder.java.messagevortex.test.imap.*;
 import org.junit.runner.RunWith;
-import junit.framework.TestSuite;
 import org.junit.runners.Suite;
-import junit.framework.JUnit4TestAdapter;
  
 @RunWith(Suite.class)
 @Suite.SuiteClasses({

@@ -1,9 +1,10 @@
 package net.gwerder.java.messagevortex.test.core;
- 
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for {@link net.gwerder.java.messagevortex.MailVortex}.
