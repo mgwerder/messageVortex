@@ -1,4 +1,4 @@
-<project name="MailVortex" default="compile" basedir=".">
+<project name="MessageVortex" default="compile" basedir=".">
 
   <property file="system.properties"/>
   <property file="system.properties"/>
@@ -59,7 +59,7 @@
     <echo message="user.home=${user.home}"/>
     <mkdir dir="${build.home}/src/${app.path}"/>
     <mkdir dir="${build.home}/classes/${app.path}"/>
-    <touch file="${src.home}/net/gwerder/java/mailvortex/Version.java"/>
+    <touch file="${src.home}/net/gwerder/java/messagevortex/Version.java"/>
     <copy  todir="${build.home}/src/">
       <fileset dir="${src.home}/" includes="**/Version.java"/>
     </copy>
@@ -245,10 +245,10 @@
 
   <!-- =================================== Sub targets -->
 
-  <target name="pdf-plan" unless="mailvortexplan.uptodate" depends="pdf-uptodate">
+  <target name="pdf-plan" unless="messagevortexplan.uptodate" depends="pdf-uptodate">
 	<latex
 	path="${path.miktex}"
-        latexfile="${doc.home}/mailvortex_Plan.tex"
+        latexfile="${doc.home}/messagevortex_Plan.tex"
         verbose="on"
         clean="off"
         pdftex="on"
@@ -269,10 +269,10 @@
     </latex>
   </target>
   
-  <target name="pdf-roadmap" unless="mailvortexrm.uptodate" depends="pdf-uptodate">
+  <target name="pdf-roadmap" unless="messagevortexrm.uptodate" depends="pdf-uptodate">
     <latex
 	path="${path.miktex}"
-        latexfile="${doc.home}/mailvortex_Roadmap.tex"
+        latexfile="${doc.home}/messagevortex_Roadmap.tex"
         verbose="on"
         clean="off"
         pdftex="on"
@@ -293,10 +293,10 @@
     </latex>
   </target>
   
-  <target name="pdf-vortex" unless="mailvortexdoc.uptodate" depends="pdf-uptodate">
+  <target name="pdf-vortex" unless="messagevortexdoc.uptodate" depends="pdf-uptodate">
     <latex
 		path="${path.miktex}"
-        latexfile="${doc.home}/mailvortex.tex"
+        latexfile="${doc.home}/messagevortex.tex"
         verbose="on"
         clean="off"
         pdftex="on"
@@ -318,19 +318,19 @@
   </target>
   
   <target name="pdf-uptodate">
-	<condition property="mailvortexdoc.uptodate">
-		<uptodate targetfile="${doc.home}/mailvortex.pdf">
-			<srcfiles dir="${doc.home}" includes="inc/**/*.tex inc/**/*.inc **/*.bib mailvortex.tex **/*.fig **/*.png **/*.jpg"/>
+	<condition property="messagevortexdoc.uptodate">
+		<uptodate targetfile="${doc.home}/messagevortex.pdf">
+			<srcfiles dir="${doc.home}" includes="inc/**/*.tex inc/**/*.inc **/*.bib messagevortex.tex **/*.fig **/*.png **/*.jpg"/>
 		</uptodate>
 	</condition>
-	<condition property="mailvortexrm.uptodate">
-		<uptodate targetfile="${doc.home}/mailvortex_Roadmap.pdf">
-			<srcfiles dir="${doc.home}" includes="mailvortex_Roadmap.tex"/>
+	<condition property="messagevortexrm.uptodate">
+		<uptodate targetfile="${doc.home}/messagevortex_Roadmap.pdf">
+			<srcfiles dir="${doc.home}" includes="messagevortex_Roadmap.tex"/>
 		</uptodate>
 	</condition>
-	<condition property="mailvortexplan.uptodate">
-		<uptodate targetfile="${doc.home}/mailvortex_Plan.pdf">
-			<srcfiles dir="${doc.home}/inc" includes="mailvortex_Plan.tex"/>
+	<condition property="messagevortexplan.uptodate">
+		<uptodate targetfile="${doc.home}/messagevortex_Plan.pdf">
+			<srcfiles dir="${doc.home}/inc" includes="messagevortex_Plan.tex"/>
 		</uptodate>
 	</condition>
   </target>	
