@@ -1,7 +1,7 @@
 package net.gwerder.java.messagevortex.test.asn1;
 
 import net.gwerder.java.messagevortex.ExtendedSecureRandom;
-import net.gwerder.java.messagevortex.MailvortexLogger;
+import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.asn1.AsymmetricKey;
 import net.gwerder.java.messagevortex.asn1.encryption.*;
 import org.junit.Test;
@@ -28,8 +28,8 @@ public class AsymmetricKeyReencodingTest {
     private static ExtendedSecureRandom sr = new ExtendedSecureRandom();
 
     static {
-        LOGGER = MailvortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-        MailvortexLogger.setGlobalLogLevel(Level.ALL);
+        LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+        MessageVortexLogger.setGlobalLogLevel(Level.ALL);
     }
 
     private String testname;

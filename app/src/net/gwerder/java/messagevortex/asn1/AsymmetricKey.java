@@ -34,7 +34,7 @@ public class AsymmetricKey extends Key {
     private static int PUBLIC_KEY = 1;
     private static int PRIVATE_KEY = 2;
 
-    final static String ECC="ECIES";
+    static final String ECC="ECIES";
 
     static {
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());

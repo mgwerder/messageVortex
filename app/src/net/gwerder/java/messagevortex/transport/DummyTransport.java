@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class DummyTransport implements Transport {
 
-    public static Map<String,TransportListener> endpoints=new ConcurrentHashMap<>(  );
+    public static final Map<String,TransportListener> endpoints=new ConcurrentHashMap<>(  );
 
     public DummyTransport(String id,TransportListener blender) {
         endpoints.put(id,blender);

@@ -1,6 +1,6 @@
 package net.gwerder.java.messagevortex.test.imap;
 
-import net.gwerder.java.messagevortex.MailvortexLogger;
+import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.imap.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,17 +28,17 @@ public class ImapClientTest {
     static {
         ImapConnection.setDefaultTimeout(2000);
         ImapClient.setDefaultTimeout(2000);
-        LOGGER = MailvortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-        MailvortexLogger.setGlobalLogLevel(Level.ALL);
+        LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+        MessageVortexLogger.setGlobalLogLevel(Level.ALL);
     }
 
     private static class DeadSocket implements Runnable {
         private boolean shutdown=false;
         private Thread runner=new Thread(this,"Dead socket (init)");
-        
+
         private ServerSocket ss;
         private int counter;
-        
+
         public DeadSocket(int port, int counter) {
             this.counter=counter;
             try{
@@ -48,44 +48,44 @@ public class ImapClientTest {
             runner.setDaemon(true);
             runner.start();
         }
-        
+
         public void shutdown() {
             // initiate shutdown of runner
             shutdown=true;
-            
+
             // wakeup runner if necesary
             try{
                 SocketFactory.getDefault().createSocket("localhost",ss.getLocalPort());
             } catch(Exception e) {}
-        
+
             // Shutdown runner task
             boolean endshutdown=false;
             try{
                 runner.join();
             } catch(InterruptedException ie) { }
         }
-        
+
         public int getPort() { return ss.getLocalPort();}
-         
+
         public void run() {
             while(!shutdown) {
                 try{
                     ss.accept();
                 } catch(Exception sorry) {
                     assertTrue("Exception should not be rised",false);
-                }    
+                }
                 counter--;
                 if(counter==0) shutdown=true;
             }
-        }        
+        }
     }
-    
+
     private static class ImapCommandIWantATimeout extends ImapCommand {
-    
+
         public void init() {
             ImapCommand.registerCommand(this);
         }
-    
+
         public String[] processCommand(ImapLine line) {
             int i=0;
             do{
@@ -96,15 +96,15 @@ public class ImapClientTest {
             }while(i<11000);
             return null;
         }
-    
+
         public String[] getCommandIdentifier() {
             return new String[] {"IWantATimeout"};
         }
-    
+
         public String[] getCapabilities() {
             return new String[] {};
         }
-    }    
+    }
 
     @Test
     public void ImapClientEncryptedTest1() {
@@ -112,7 +112,7 @@ public class ImapClientTest {
             LOGGER.log(Level.INFO,"************************************************************************");
             LOGGER.log(Level.INFO,"IMAP Client Encrypted Test");
             LOGGER.log(Level.INFO,"************************************************************************");
-            ImapServer is =new ImapServer(0,true); 
+            ImapServer is =new ImapServer(0,true);
             ImapConnection.setDefaultTimeout(1000);
             ImapClient ic =new ImapClient("localhost",is.getPort(),true);
             ic.setTimeout(1000);
@@ -122,7 +122,7 @@ public class ImapClientTest {
             fail("IOException while creating server");
         }
     }
-        
+
     @Test
     public void ImapClientTimeoutTest() {
         LOGGER.log(Level.INFO,"************************************************************************");
@@ -158,4 +158,4 @@ public class ImapClientTest {
         ds.shutdown();
     }
 
-}    
+}

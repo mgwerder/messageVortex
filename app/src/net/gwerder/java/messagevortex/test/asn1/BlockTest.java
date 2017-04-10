@@ -1,6 +1,6 @@
 package net.gwerder.java.messagevortex.test.asn1;
 
-import net.gwerder.java.messagevortex.MailvortexLogger;
+import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.asn1.Block;
 import net.gwerder.java.messagevortex.asn1.encryption.Parameter;
 import org.bouncycastle.asn1.DERBitString;
@@ -23,8 +23,8 @@ public class BlockTest {
     private static final java.util.logging.Logger LOGGER;
 
     static {
-        LOGGER = MailvortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-        MailvortexLogger.setGlobalLogLevel(Level.ALL);
+        LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+        MessageVortexLogger.setGlobalLogLevel(Level.ALL);
     }
 
     @Test

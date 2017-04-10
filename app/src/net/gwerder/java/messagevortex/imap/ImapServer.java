@@ -1,7 +1,7 @@
 package net.gwerder.java.messagevortex.imap;
 
 import net.gwerder.java.messagevortex.ExtendedSecureRandom;
-import net.gwerder.java.messagevortex.MailvortexLogger;
+import net.gwerder.java.messagevortex.MessageVortexLogger;
 
 import javax.net.ServerSocketFactory;
 import javax.net.SocketFactory;
@@ -20,12 +20,12 @@ import java.util.logging.Logger;
 public class ImapServer extends StoppableThread  {
 
     private static final ExtendedSecureRandom esr=new ExtendedSecureRandom();
-    
+
     private static final Logger LOGGER;
     private static int id = 1;
-    
+
     static {
-        LOGGER = MailvortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+        LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
     }
 
     final SSLContext context;
@@ -36,11 +36,11 @@ public class ImapServer extends StoppableThread  {
     private Set<String> suppCiphers = new HashSet<>();
     private Thread runner=null;
     private ImapAuthenticationProxy auth=null;
-            
+
     public ImapServer(boolean encrypted) throws IOException {
         this(encrypted?993:143,encrypted);
     }
-    
+
     public ImapServer(final int port,boolean encrypted) throws IOException {
         java.security.Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
         this.port=port;
@@ -49,10 +49,10 @@ public class ImapServer extends StoppableThread  {
           context=SSLContext.getInstance("TLS");
         } catch(GeneralSecurityException gse) {
           throw new IOException("error obtaining valid security context",gse);
-        }  
+        }
 
         setName("AUTOIDSERVER-"+(id++));
-        
+
         // Determine valid cyphers
         String ks="keystore.jks";
         try{
@@ -66,7 +66,7 @@ public class ImapServer extends StoppableThread  {
         for(int i=0; i<arr.length; i++) {
             boolean supported=true;
             serverSocket=null;
-            try{ 
+            try{
                 serverSocket = SSLServerSocketFactory.getDefault().createServerSocket(0);
                 ((SSLServerSocket)serverSocket).setEnabledCipherSuites(new String[] {arr[i]});
                 SocketDeblocker t=new SocketDeblocker(serverSocket.getLocalPort(),30);
@@ -83,7 +83,7 @@ public class ImapServer extends StoppableThread  {
                 try{
                     if(serverSocket!=null) {
                         serverSocket.close();
-                    }    
+                    }
                 } catch(Exception e2) {
                     LOGGER.log(Level.FINEST,"cleanup failed (never mind)",e2);
                 }
@@ -93,39 +93,39 @@ public class ImapServer extends StoppableThread  {
                 suppCiphers.add(arr[i]);
             }
         }
-        
+
         // open socket
         this.serverSocket = ServerSocketFactory.getDefault().createServerSocket(this.port);
         this.port=serverSocket.getLocalPort();
         runner=new Thread(this,"ImapServerConnectionListener");
         runner.start();
     }
-    
+
     public int getPort() {
         return serverSocket.getLocalPort();
     }
-    
+
     public ImapAuthenticationProxy setAuth(ImapAuthenticationProxy ap) {
         ImapAuthenticationProxy old=auth;
         auth=ap;
         return old;
     }
-    
+
     private void shutdownRunner() {
         // initiate shutdown of runner
         shutdown=true;
-            
+
         // wakeup runner if necesary
         try{
             if(encrypted) {
                 (SSLSocketFactory.getDefault().createSocket("localhost",this.serverSocket.getLocalPort())).close();
             } else {
                 (SocketFactory.getDefault().createSocket("localhost",this.serverSocket.getLocalPort())).close();
-            }    
+            }
         } catch(Exception e) {
             LOGGER.log(Level.WARNING,"Wakeup of listener failed (already dead?)",e);
         }
-        
+
         // Shutdown runner task
         boolean endshutdown=false;
         do {
@@ -135,25 +135,25 @@ public class ImapServer extends StoppableThread  {
             } catch(InterruptedException ie) {
                 // reloop if exception is risen
             }
-        } while(!endshutdown);    
+        } while(!endshutdown);
     }
-    
+
     private void shutdownConnections() {
         // close all connections
         for(ImapConnection ic:conn) {
             ic.shutdown();
         }
     }
-    
+
     public int shutdown() {
-        LOGGER.log(Level.INFO,"Server runner shutdown");    
+        LOGGER.log(Level.INFO,"Server runner shutdown");
         shutdownRunner();
-        LOGGER.log(Level.INFO,"Server connections shutdown");    
+        LOGGER.log(Level.INFO,"Server connections shutdown");
         shutdownConnections();
-        LOGGER.log(Level.INFO,"Server shutdown done");    
+        LOGGER.log(Level.INFO,"Server shutdown done");
         return 0;
     }
-    
+
     /***
      * Main server task (Do not call).
      *
@@ -162,9 +162,9 @@ public class ImapServer extends StoppableThread  {
      * @to.do Garbage collector should clean up closed connections from time to time
      ***/
     public void run() {
-        Socket socket=null; 
+        Socket socket=null;
         int i=1;
-        LOGGER.log(Level.INFO,"Server listener ready..." + serverSocket);    
+        LOGGER.log(Level.INFO,"Server listener ready..." + serverSocket);
         try {
             while(!shutdown) {
                 // <- Insert garbage collector here (should only run from time to time)

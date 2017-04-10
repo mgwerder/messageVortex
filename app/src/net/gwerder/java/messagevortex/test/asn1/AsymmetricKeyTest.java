@@ -1,6 +1,6 @@
 package net.gwerder.java.messagevortex.test.asn1;
 
-import net.gwerder.java.messagevortex.MailvortexLogger;
+import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.asn1.AsymmetricKey;
 import net.gwerder.java.messagevortex.asn1.encryption.Algorithm;
 import net.gwerder.java.messagevortex.asn1.encryption.AlgorithmType;
@@ -33,8 +33,8 @@ public class AsymmetricKeyTest {
     private static final Random sr = new Random();
 
     static {
-        LOGGER = MailvortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-        MailvortexLogger.setGlobalLogLevel(Level.ALL);
+        LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+        MessageVortexLogger.setGlobalLogLevel(Level.ALL);
     }
 
     private int ksDisc=16384;

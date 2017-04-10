@@ -1,6 +1,6 @@
 package net.gwerder.java.messagevortex.asn1.encryption;
 
-import net.gwerder.java.messagevortex.MailvortexLogger;
+import net.gwerder.java.messagevortex.MessageVortexLogger;
 
 import java.util.HashMap;
 import java.util.List;
@@ -51,8 +51,8 @@ public enum Algorithm {
     };
 
     static {
-        LOGGER = MailvortexLogger.getLogger( (new Throwable()).getStackTrace()[0].getClassName() );
-        MailvortexLogger.setGlobalLogLevel( Level.ALL );
+        LOGGER = MessageVortexLogger.getLogger( (new Throwable()).getStackTrace()[0].getClassName() );
+        MessageVortexLogger.setGlobalLogLevel( Level.ALL );
     }
 
     private int id;

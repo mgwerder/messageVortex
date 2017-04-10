@@ -1,6 +1,6 @@
 package net.gwerder.java.messagevortex.test.imap;
 
-import net.gwerder.java.messagevortex.MailvortexLogger;
+import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.imap.ImapBlankLineException;
 import net.gwerder.java.messagevortex.imap.ImapException;
 import net.gwerder.java.messagevortex.imap.ImapLine;
@@ -28,8 +28,8 @@ public class ImapLineTest {
     private static final java.util.logging.Logger LOGGER;
 
     static {
-        LOGGER = MailvortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-        MailvortexLogger.setGlobalLogLevel(Level.ALL);
+        LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+        MessageVortexLogger.setGlobalLogLevel(Level.ALL);
     }
 
     @Test
@@ -41,7 +41,7 @@ public class ImapLineTest {
         assertTrue("Error testing charlistbuilder range2",ImapLine.charlistBuilder(1,0)==null);
         assertTrue("Error testing charlistbuilder range3",ImapLine.charlistBuilder(1,260)==null);
     }
-    
+
     @Test
     public void getAStringNormal() {
         try{
@@ -63,7 +63,7 @@ public class ImapLineTest {
             fail("ImapException rised"+ie.getMessage()+"("+ie.getStackTrace()[0].getFileName()+":"+ie.getStackTrace()[0].getLineNumber()+")");
         }
     }
-    
+
     @Test
     public void getAStringUgly1() {
         try{
@@ -88,7 +88,7 @@ public class ImapLineTest {
             fail("ImapException rised"+ie.getMessage()+"("+ie.getStackTrace()[0].getFileName()+":"+ie.getStackTrace()[0].getLineNumber()+")");
        }
     }
-    
+
     @Test
     public void blankLine() {
         try{
@@ -102,7 +102,7 @@ public class ImapLineTest {
             fail("Imap Exception rised (should have been ImaplBlankLineException");
         }
     }
-    
+
     @Test
     public void tagOnly() {
         try{
@@ -116,7 +116,7 @@ public class ImapLineTest {
             assertTrue("ImapException rised",true);
         }
     }
-    
+
     @Test
     public void blankLineStream() {
         try{
@@ -134,7 +134,7 @@ public class ImapLineTest {
             fail("Imap Exception rised (should have been ImaplBlankLineException)");
         }
     }
-    
+
     @Test
     public void nonBlankLineNullStream() {
         try{
@@ -150,7 +150,7 @@ public class ImapLineTest {
             fail("Imap Exception rised (should have been ImaplBlankLineException but is \""+ie.toString()+"\")");
         }
     }
-    
+
     @Test
     public void nonBlankLineNullStream2() {
         try{
@@ -166,7 +166,7 @@ public class ImapLineTest {
             fail("Imap Exception rised (should have been ImaplBlankLineException)");
         }
     }
-    
+
     @Test
     public void nonBlankLineStream() {
         try{
@@ -185,7 +185,7 @@ public class ImapLineTest {
             fail("Imap Exception rised (no exception expected)");
         }
     }
-    
+
     @Test
     public void nullLine() {
         try{
@@ -201,7 +201,7 @@ public class ImapLineTest {
             fail("Imap Exception rised");
         }
     }
-    
+
     @Test
     public void badLine1() {
         try{
@@ -212,24 +212,24 @@ public class ImapLineTest {
             LOGGER.log(Level.WARNING,"Unexpected Exception",ble);
             fail("Blank Line Exception rised");
         } catch (ImapException ie) {
-            // all OK this exception is expected 
+            // all OK this exception is expected
         }
     }
-    
+
     @Test
     public void badLine2() {
         try{
             InputStream i=new ByteArrayInputStream("a +".getBytes(Charset.defaultCharset()));
             ImapLine il=new ImapLine(null,null,i);
-            fail("Should not reach this point as an exception should be rised got ["+il.getTag()+"] ["+il.getCommand()+"]"); 
+            fail("Should not reach this point as an exception should be rised got ["+il.getTag()+"] ["+il.getCommand()+"]");
         } catch(ImapNullLineException ble) {
             LOGGER.log(Level.WARNING,"Unexpected Exception",ble);
             fail("Blank Line Exception rised");
         } catch (ImapException ie) {
-            // all OK this exception is expected 
+            // all OK this exception is expected
         }
     }
-    
+
     @Test
     public void goodLine() {
         try{
@@ -244,7 +244,7 @@ public class ImapLineTest {
             fail("ImapException rised");
         }
     }
-    
+
     @Test
     public void nullStringNonBlankLineStream() {
         try{
@@ -260,7 +260,7 @@ public class ImapLineTest {
             fail("Imap Exception rised (no exception expected)");
         }
     }
-    
+
     @Test
     public void lineSpacing() {
         try{
@@ -277,4 +277,4 @@ public class ImapLineTest {
             fail("Imap Exception rised");
         }
     }
-}    
+}

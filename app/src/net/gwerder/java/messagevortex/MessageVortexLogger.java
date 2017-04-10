@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.logging.*;
 
 
-public class MailvortexLogger extends Logger {
+public class MessageVortexLogger extends Logger {
 
     static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
@@ -26,7 +26,7 @@ public class MailvortexLogger extends Logger {
         getGlobalLogger().getParent().addHandler( console );
     }
 
-    private MailvortexLogger() {
+    private MessageVortexLogger() {
         super( null, null );
     }
 
@@ -37,7 +37,7 @@ public class MailvortexLogger extends Logger {
     public static Logger getGlobalLogger() {
         return LogManager.getLogManager().getLogger( Logger.GLOBAL_LOGGER_NAME );
     }
-    
+
     static final class MyLogFormatter extends Formatter {
 
 
@@ -73,5 +73,5 @@ public class MailvortexLogger extends Logger {
             return sb.toString();
         }
     }
-    
+
 }

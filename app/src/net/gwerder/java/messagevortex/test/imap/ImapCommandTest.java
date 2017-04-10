@@ -1,6 +1,6 @@
 package net.gwerder.java.messagevortex.test.imap;
 
-import net.gwerder.java.messagevortex.MailvortexLogger;
+import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.imap.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,18 +20,18 @@ import static org.junit.Assert.*;
 public class ImapCommandTest {
 
     private final static boolean  DO_NOT_TEST_ENCRYPTION=false;
-    
+
     private static final java.util.logging.Logger LOGGER;
 
     static {
         ImapConnection.setDefaultTimeout(2000);
         ImapClient.setDefaultTimeout(2000);
-        LOGGER = MailvortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-        MailvortexLogger.setGlobalLogLevel(Level.ALL);
+        LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+        MessageVortexLogger.setGlobalLogLevel(Level.ALL);
     }
 
     private String[] sendCommand(ImapClient c,String command,String reply) {
-        try{ 
+        try{
             LOGGER.log(Level.INFO,"IMAP C-> "+ImapLine.commandEncoder(command));
             String[] s=c.sendCommand(command);
             for(String v:s) {
@@ -66,7 +66,7 @@ public class ImapCommandTest {
             fail("Exception thrown ("+e+")");
         }
     }
-    
+
     @Test
     public void checkServerTimeout() {
         ImapServer is=null;
@@ -91,7 +91,7 @@ public class ImapCommandTest {
         ImapConnection.setDefaultTimeout(10000);
         if(is!=null) is.shutdown();
     }
-    
+
     @Test
     public void checkClientTimeout() {
         ImapServer is=null;
@@ -116,7 +116,7 @@ public class ImapCommandTest {
         }
         if(is!=null) is.shutdown();
     }
-    
+
     @Test
     public void checkClientDefaultTimeout() {
         ImapServer is=null;
@@ -141,7 +141,7 @@ public class ImapCommandTest {
         ImapClient.setDefaultTimeout(10000);
         if(is!=null) is.shutdown();
     }
-    
+
     @Test
     public void checkFullLogout() {
         boolean encrypted=false;
@@ -164,7 +164,7 @@ public class ImapCommandTest {
             encrypted=!encrypted;
         } while(encrypted && !DO_NOT_TEST_ENCRYPTION);
     }
-    
+
     @Test
     public void checkFullLoginLogout() {
         boolean encrypted=false;
@@ -177,14 +177,14 @@ public class ImapCommandTest {
                 ImapConnection.setDefaultTimeout(2000);
                 ImapAuthenticationDummyProxy ap=new ImapAuthenticationDummyProxy();
                 ap.addUser("USER","password");
-                
+
                 assertFalse("check for fail if user is null",ap.login(null,"a"));
                 assertFalse("check for fail if password is null",ap.login("USER",null));
                 assertFalse("check for fail if user is unknown",ap.login("USER1","password"));
                 assertFalse("check for fail if password is bad",ap.login("USER","password1"));
                 assertTrue("check for fail if password is bad",ap.login("USER","password"));
                 assertTrue("check for success if username casing does not match",ap.login("User","password"));
-                
+
                 s.setAuth(ap);
                 ImapClient c=new ImapClient("localhost",s.getPort(),encrypted);
                 c.setTimeout(2000);
@@ -196,7 +196,7 @@ public class ImapCommandTest {
                 tag=ImapLine.getNextTag();
                 if(encrypted) {
                     ret=sendCommand(c,tag+" LOGIN user password",tag+" OK");
-                } else {    
+                } else {
                     ret=sendCommand(c,tag+" LOGIN user password",tag+" BAD");
                 }
                 tag=ImapLine.getNextTag();
@@ -214,5 +214,5 @@ public class ImapCommandTest {
             encrypted=!encrypted;
         } while(encrypted && !DO_NOT_TEST_ENCRYPTION);
     }
-    
+
 }

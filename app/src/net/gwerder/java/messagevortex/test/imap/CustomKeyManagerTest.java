@@ -1,6 +1,6 @@
 package net.gwerder.java.messagevortex.test.imap;
 
-import net.gwerder.java.messagevortex.MailvortexLogger;
+import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.imap.CustomKeyManager;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,8 +20,8 @@ import static org.junit.Assert.fail;
 public class CustomKeyManagerTest {
 
     static {
-        MailvortexLogger.setGlobalLogLevel(Level.ALL);
-    }    
+        MessageVortexLogger.setGlobalLogLevel(Level.ALL);
+    }
 
     @Test
     public void loadKeyStore() {

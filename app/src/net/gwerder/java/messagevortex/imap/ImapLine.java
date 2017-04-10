@@ -1,6 +1,6 @@
 package net.gwerder.java.messagevortex.imap;
 
-import net.gwerder.java.messagevortex.MailvortexLogger;
+import net.gwerder.java.messagevortex.MessageVortexLogger;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -15,15 +15,15 @@ import java.util.logging.Logger;
  *
  * @author Martin Gwerder
  *
- * @fix.me Limit strings and literals to a certain length (otherwise it is litterally unlimited) 
+ * @fix.me Limit strings and literals to a certain length (otherwise it is litterally unlimited)
  * @known.bug Code will fail i Line.length()>Maxint or out of memory
  * @known.bug Encrypted connects are failing
  ***/
 public class ImapLine {
-    
+
     /* specifies the context range which is given when an exception arises during scanning */
     private static final int MAX_CONTEXT=30;
-    
+
     /* These are character subsets specified in RFC3501 */
     private static final String ABNF_SP = " ";
     private static final String ABNF_CTL = charlistBuilder(0,31);
@@ -37,23 +37,23 @@ public class ImapLine {
     private static final String ABNF_TAG=charlistDifferencer(ABNF_ATOM_CHAR,"+");
 
     /* a Logger  for logging purposes */
-    private static final Logger LOGGER = MailvortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+    private static final Logger LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
     private static final Object TAG_ENUMERATOR_LOCK = new Object();
     private static int tagEnumerator = 0;
     /* this holds the past context for the case that an exception is risen */
     private String context = "";
     /* storage for the connection which created the line */
     private ImapConnection con;
-    
+
     /* The holder for the parsed command/status of a line */
     private String commandToken=null;
-    
+
     /* The holder for the parsed tag of a line */
     private String tagToken=null;
 
     /* This input stream is the source of subsequent characters */
     private InputStream input=null;
-    
+
     /* this is the buffer of read but unprocessed characters */
     private String buffer="";
 
@@ -73,7 +73,7 @@ public class ImapLine {
         this.con=con;
         this.input=input;
         this.buffer=line;
-         
+
         // check if nothing at all (no even an empty line) has been passed
         if(this.buffer==null && this.input==null) {
             throw new ImapNullLineException(this);
@@ -83,20 +83,20 @@ public class ImapLine {
         if(this.input==null) {
             this.input=new ByteArrayInputStream("".getBytes(Charset.defaultCharset()));
         }
-        
+
         prepareStorage(con,line,input);
-        
+
         checkEmptyLine();
 
-        prefillCommandFields(); 
+        prefillCommandFields();
 
         if("BAD".equalsIgnoreCase(commandToken) || "OK".equalsIgnoreCase(commandToken) || "*".equals(tagToken)) {
             LOGGER.log(Level.INFO,"Parsing command "+tagToken+" "+commandToken);
-        }    
-        
+        }
+
         skipSP(-1);
     }
-    
+
     /***
      * Trivial constructor omiting a stream.
      *
@@ -108,7 +108,7 @@ public class ImapLine {
     public ImapLine(ImapConnection con,String line) throws ImapException {
         this(con,line,null);
     }
-    
+
     /***
      * Builds a set of chracters ranging from the ASCII code of start until the ASCII code of end.
      *
@@ -140,7 +140,7 @@ public class ImapLine {
         }
         return ret.toString();
     }
-    
+
     /***
      * Removes a given set of characters from a superset.
      *
@@ -234,7 +234,7 @@ public class ImapLine {
         }
 
     }
-    
+
     /***
      * Getter for the Imap connection in Control of this command.
      *
@@ -243,7 +243,7 @@ public class ImapLine {
     public ImapConnection getConnection() {
         return con;
     }
-    
+
     /***
      * Getter for the command.
      *
@@ -261,7 +261,7 @@ public class ImapLine {
     public String getTag() {
         return tagToken;
     }
-    
+
     private boolean readBuffer(long num) {
         // make sure that we have sufficient bytes in the buffer
         boolean ended=false;
@@ -280,7 +280,7 @@ public class ImapLine {
         }
         return ended;
     }
-    
+
     /***
      * Returns true if escaped quotes are present at the current position.
      *
@@ -291,7 +291,7 @@ public class ImapLine {
                 snoopBytes( 2 ).length() == 2 &&
                ABNF_QUOTED_SPECIALS.contains(snoopBytes(2).substring(1,2));
     }
-    
+
     /***
      * Get the specified number of characters without moving from the current position.
      * if num is 0 or negative then null is returned. If the number
@@ -319,14 +319,14 @@ public class ImapLine {
 
         return buffer.substring(0,(int)num);
     }
-    
+
     private void addContext(String chunk) {
         context+=chunk;
         if(context.length()>MAX_CONTEXT) {
             context=context.substring(context.length()-MAX_CONTEXT,context.length());
         }
     }
-    
+
     /***
      * Returns the current buffer (including position) and some of the already read characters.
      *
@@ -335,7 +335,7 @@ public class ImapLine {
     public String getContext() {
         return context+"^^^"+buffer;
     }
-    
+
     /***
      * Skips the specified number of characters and adds them to the past context.
      *
@@ -372,7 +372,7 @@ public class ImapLine {
 
         return ret;
     }
-    
+
     /***
      * Skips the specified number of SPACES.
      *
@@ -414,7 +414,7 @@ public class ImapLine {
         LOGGER.log(Level.FINER,"no CRLF found");
         return false;
     }
-    
+
     /***
      * Skips up to a CRLF combo in the buffer.
      *
@@ -431,7 +431,7 @@ public class ImapLine {
         }
         return false;
     }
-    
+
     private long getLengthPrefix() {
         //skip curly brace
         skipBytes(1);
@@ -444,7 +444,7 @@ public class ImapLine {
         }
         return num;
     }
-    
+
     private String getLengthPrefixedString() {
 
         long num=getLengthPrefix();
@@ -471,7 +471,7 @@ public class ImapLine {
 
         return ret;
     }
-    
+
     private String getQuotedString() {
         // get a quoted string
         skipBytes(1);
@@ -489,7 +489,7 @@ public class ImapLine {
 
         return ret.toString();
     }
-    
+
     /***
      * Get an IMAP String from the buffer (quoted or prefixed).
      *
@@ -511,7 +511,7 @@ public class ImapLine {
 
         return ret;
     }
-    
+
     /***
      * Get an IMAP AString (direct, quoted or prefixed) from the current buffer position.
      *

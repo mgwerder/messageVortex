@@ -1,6 +1,6 @@
 package net.gwerder.java.messagevortex.imap;
 
-import net.gwerder.java.messagevortex.MailvortexLogger;
+import net.gwerder.java.messagevortex.MessageVortexLogger;
 
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
@@ -11,20 +11,20 @@ import java.util.logging.Logger;
 public class SocketDeblocker extends Thread {
 
     private static final Logger LOGGER;
-    
+
     static {
-        LOGGER = MailvortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+        LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
     }
-    
+
     private int timeout;
     private int port;
     private boolean shutdown=false;
 
-    public SocketDeblocker(int port,int timeout) { 
+    public SocketDeblocker(int port,int timeout) {
         this.port=port;
         this.timeout=timeout;
-    }    
-    
+    }
+
     public void shutdown() {
         shutdown=true;
         while(this.isAlive()) {
@@ -33,9 +33,9 @@ public class SocketDeblocker extends Thread {
             }catch(InterruptedException ie) {
                 LOGGER.log(Level.FINEST,"Interrupted exception while shutting down deblocking socket",ie);
             }
-        }    
+        }
     }
-    
+
     public void run() {
         int countdown=timeout/10;
         while(!shutdown && countdown>0) {
@@ -59,5 +59,5 @@ public class SocketDeblocker extends Thread {
             }
         }
     }
-    
+
 }

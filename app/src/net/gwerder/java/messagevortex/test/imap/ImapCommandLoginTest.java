@@ -1,6 +1,6 @@
 package net.gwerder.java.messagevortex.test.imap;
 
-import net.gwerder.java.messagevortex.MailvortexLogger;
+import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.imap.ImapCommand;
 import net.gwerder.java.messagevortex.imap.ImapException;
 import net.gwerder.java.messagevortex.imap.ImapLine;
@@ -21,8 +21,8 @@ import static org.junit.Assert.fail;
 public class ImapCommandLoginTest {
 
     static {
-        MailvortexLogger.setGlobalLogLevel(Level.ALL);
-    }    
+        MessageVortexLogger.setGlobalLogLevel(Level.ALL);
+    }
 
     @Test
     public void loginCapabilitiesPropagated() {
@@ -32,7 +32,7 @@ public class ImapCommandLoginTest {
     @Test
     public void loginParsing() {
         ImapCommand ic=ImapCommand.getCommand("login");
-        
+
         try{
             ic.processCommand(new ImapLine(null,"A1 Login\r\n"));
             fail("error Noop test for \"A1 Login\"");

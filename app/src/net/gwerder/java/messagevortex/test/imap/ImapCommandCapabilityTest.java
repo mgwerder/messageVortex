@@ -1,6 +1,6 @@
 package net.gwerder.java.messagevortex.test.imap;
 
-import net.gwerder.java.messagevortex.MailvortexLogger;
+import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.imap.ImapCommand;
 import net.gwerder.java.messagevortex.imap.ImapException;
 import net.gwerder.java.messagevortex.imap.ImapLine;
@@ -21,8 +21,8 @@ import static org.junit.Assert.fail;
 public class ImapCommandCapabilityTest {
 
     static {
-        MailvortexLogger.setGlobalLogLevel(Level.ALL);
-    }    
+        MessageVortexLogger.setGlobalLogLevel(Level.ALL);
+    }
 
     @Test
     public void capabilityParsing() {
@@ -45,20 +45,20 @@ public class ImapCommandCapabilityTest {
         public void init() {
             ImapCommand.registerCommand(this);
         }
-    
+
         public String[] processCommand(ImapLine line) {
             return null;
         }
-    
+
         public String[] getCommandIdentifier() {
             return new String[] {"CapabilityParser"};
         }
-        
+
         public String[] getCapabilities() {
             return new String[] {"CapabilityParser=one","CapabilityParser=two"};
         }
-    
-    }    
+
+    }
 
     @Test
     public void capabilityPropagation() {
@@ -75,6 +75,6 @@ public class ImapCommandCapabilityTest {
             fail("Got unexpected exception while checking capabilities");
         }
 
-        
+
     }
 }

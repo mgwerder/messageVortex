@@ -1,6 +1,6 @@
 package net.gwerder.java.messagevortex.asn1;
 
-import net.gwerder.java.messagevortex.MailvortexLogger;
+import net.gwerder.java.messagevortex.MessageVortexLogger;
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1Object;
 import org.bouncycastle.asn1.ASN1TaggedObject;
@@ -18,7 +18,7 @@ public abstract class HeaderRequest {
 
     private static final java.util.logging.Logger LOGGER;
     static {
-        LOGGER = MailvortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+        LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
     }
 
 

@@ -1,7 +1,7 @@
 package net.gwerder.java.messagevortex.test.imap;
 
 import net.gwerder.java.messagevortex.ExtendedSecureRandom;
-import net.gwerder.java.messagevortex.MailvortexLogger;
+import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.imap.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,8 +34,8 @@ public class ImapSSLTest {
     private static final ExtendedSecureRandom esr=new ExtendedSecureRandom();
 
     static {
-        LOGGER = MailvortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-        MailvortexLogger.setGlobalLogLevel(Level.ALL);
+        LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+        MessageVortexLogger.setGlobalLogLevel(Level.ALL);
     }
 
     @Test
@@ -49,14 +49,14 @@ public class ImapSSLTest {
             assertTrue("Keystore check",(new File(ks)).exists());
             context.init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, new TrustManager[] {new AllTrustManager()}, esr.getSecureRandom() );
             SSLContext.setDefault(context);
-            
+
             Set<String> suppCiphers=new HashSet<>();
             String[] arr=((SSLServerSocketFactory) SSLServerSocketFactory.getDefault()).getSupportedCipherSuites();
             LOGGER.log(Level.FINE,"Detecting supported cipher suites");
             for(int i=0; i<arr.length; i++) {
                 boolean supported=true;
                 ServerSocket serverSocket=null;
-                try{ 
+                try{
                     serverSocket = SSLServerSocketFactory.getDefault().createServerSocket(0);
                     ((SSLServerSocket)serverSocket).setEnabledCipherSuites(new String[] {arr[i]});
                     SocketDeblocker t=new SocketDeblocker(serverSocket.getLocalPort(),30);
@@ -81,13 +81,13 @@ public class ImapSSLTest {
                     suppCiphers.add(arr[i]);
                 }
             }
-            
+
             final ServerSocket ss=SSLServerSocketFactory.getDefault().createServerSocket(0);
             ((SSLServerSocket)(ss)).setEnabledCipherSuites(suppCiphers.toArray(new String[0]));
             (new Thread() {
                 public void run() {
                     try{
-                        SSLContext.setDefault(context);                       
+                        SSLContext.setDefault(context);
                         Socket s=ss.accept();
                         LOGGER.log(Level.INFO,"pseudoserver waiting for command");
                         s.getInputStream().skip(9);
@@ -102,19 +102,19 @@ public class ImapSSLTest {
                     }
                 }
             }).start();
-            
+
             ImapClient ic =new ImapClient("localhost",ss.getLocalPort(),true);
             ic.setTimeout(2000);
             ic.sendCommand("a1 test");
             assertTrue("check client socket state",ic.isTLS());
-            
-            // Selftest 
+
+            // Selftest
             // This selftest ought to be removed Socket s=SSLSocketFactory.getDefault().createSocket(InetAddress.getByName("localhost"),ss.getLocalPort());
         } catch(Exception ioe) {
             LOGGER.log(Level.WARNING,"Unexpected Exception",ioe);
             fail("Exception rised  in client("+ioe+") while communicating");
         }
-    }    
+    }
 
     @Test
     public void testInitalSSLServer() {
@@ -147,7 +147,7 @@ public class ImapSSLTest {
             LOGGER.log(Level.WARNING,"Unexpected Exception",ioe);
             fail("Exception rised  in client("+ioe+") while communicating");
         }
-    }    
+    }
 
     @Test
     public void testInitalSSLBoth() {
@@ -171,5 +171,5 @@ public class ImapSSLTest {
             LOGGER.log(Level.WARNING,"Unexpected Exception",ioe);
             fail("Exception rised  in client("+ioe+") while communicating");
         }
-    }    
+    }
 }

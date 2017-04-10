@@ -1,7 +1,7 @@
 package net.gwerder.java.messagevortex.test.core;
 
 import net.gwerder.java.messagevortex.Config;
-import net.gwerder.java.messagevortex.MailvortexLogger;
+import net.gwerder.java.messagevortex.MessageVortexLogger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -19,8 +19,8 @@ import static org.junit.Assert.*;
 public class ConfigTest {
 
     static {
-        MailvortexLogger.setGlobalLogLevel(Level.ALL);
-    }    
+        MessageVortexLogger.setGlobalLogLevel(Level.ALL);
+    }
 
     @Test
     public void booleanConfigHandling() {
@@ -41,7 +41,7 @@ public class ConfigTest {
         } catch(Exception e) {
             fail("should raise NPE but a different exception is raised ("+e+")");
         }
-        
+
         try{
             Config.getDefault().getStringValue("stringConfigHandling");
             fail("should raise NPE but nothing happened");
@@ -59,7 +59,7 @@ public class ConfigTest {
         } catch(Exception e) {
             fail("should raise NPE but a different exception is raised ("+e+")");
         }
-        
+
         try{
             // String
             assertTrue("Should return true on first creation",Config.getDefault().createStringConfigValue("stringConfigHandling","def"));
@@ -69,7 +69,7 @@ public class ConfigTest {
             assertTrue("Should return false as last value","otherval".equals(Config.getDefault().setStringValue("stringConfigHandling","thirdval")));
             assertTrue("Should return false as last value","thirdval".equals(Config.getDefault().getStringValue("stringConfigHandling")));
             assertTrue("Should return false as last value","thirdval".equals(Config.getDefault().setStringValue("stringConfigHandling","fourthval")));
-            
+
             //Boolean
             assertTrue("Should return true on first creation",Config.getDefault().createBooleanConfigValue("booleanConfigHandling",true));
             assertFalse("Should return false on recreation",Config.getDefault().createBooleanConfigValue("booleanConfigHandling",false));
@@ -92,7 +92,7 @@ public class ConfigTest {
         } catch(Exception e) {
             fail("should raise CCE but a different exception is raised ("+e+")");
         }
-        
+
         try{
             Config.getDefault().getStringValue("booleanConfigHandling");
             fail("should raise CCE but nothing happened");
@@ -101,7 +101,7 @@ public class ConfigTest {
         } catch(Exception e) {
             fail("should raise CCE but a different exception is raised ("+e+")");
         }
-        
+
         try{
             Config.getDefault().setBooleanValue("stringConfigHandling",true);
             fail("should raise CCE but nothing happened");
@@ -110,7 +110,7 @@ public class ConfigTest {
         } catch(Exception e) {
             fail("should raise CCE but a different exception is raised ("+e+")");
         }
-        
+
         try{
             Config.getDefault().getBooleanValue("stringConfigHandling");
             fail("should raise CCE but nothing happened");
@@ -125,7 +125,7 @@ public class ConfigTest {
         } catch(Exception e) {
             fail("should not raise an exception ("+e+")");
         }
-        
+
     }
 
 }

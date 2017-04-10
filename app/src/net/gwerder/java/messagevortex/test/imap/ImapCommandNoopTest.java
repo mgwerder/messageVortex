@@ -1,6 +1,6 @@
 package net.gwerder.java.messagevortex.test.imap;
 
-import net.gwerder.java.messagevortex.MailvortexLogger;
+import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.imap.ImapCommand;
 import net.gwerder.java.messagevortex.imap.ImapException;
 import net.gwerder.java.messagevortex.imap.ImapLine;
@@ -21,8 +21,8 @@ import static org.junit.Assert.fail;
 public class ImapCommandNoopTest {
 
     static {
-        MailvortexLogger.setGlobalLogLevel(Level.ALL);
-    }    
+        MessageVortexLogger.setGlobalLogLevel(Level.ALL);
+    }
 
     @Test
     public void noopParsing() {
