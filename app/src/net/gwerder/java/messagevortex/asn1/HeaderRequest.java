@@ -38,7 +38,9 @@ public abstract class HeaderRequest {
 
     public static HeaderRequest createRequest(ASN1Encodable ae) throws IOException {
         for(HeaderRequest hr:req) {
-            if(hr.getId()==((ASN1TaggedObject)(ae)).getTagNo()) return hr.getRequest(ae);
+            if(hr.getId()==((ASN1TaggedObject)(ae)).getTagNo()) {
+                return hr.getRequest(ae);
+            }
         }
         return null;
     }
