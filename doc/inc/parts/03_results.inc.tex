@@ -367,7 +367,7 @@ The suffix ``@localhost'' makes sure that a message intended for Vortex is not r
 The main downside of vortex addresses are that they are no longer readable by a human. The main reason for this is the public key which is required. We may abstract this further by allowing clear text requests on the main email address for the public key. Such requests must then be answered by the vortex account with the valid Vortex address.
 
 \subsection{Public Key Encoding in Address Representation}
-The public key of an adress is encoded as follows:
+The public key of an address is encoded as follows:
 \begin{enumerate}
 	\item The asymmetric key is encoded as specified in the AsymmetricKey in ASN.1
 	\item The ASN.1 representation is then encoded using BASE64

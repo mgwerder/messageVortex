@@ -1,7 +1,7 @@
 % !TeX spellcheck = en_GB
 
 \documentclass[9pt,journal,compsoc]{IEEEtran}
-%\usepackage{extsizes}
+
 % The Computer Society requires 12pt.
 % If IEEEtran.cls has not been installed into the LaTeX system files,
 % manually specify the path to it like:
@@ -445,7 +445,8 @@ pdfkeywords={messages, unobservable}}%<^!CHANGE!
 \hyphenation{op-tical net-works semi-conduc-tor}
 
 \usepackage{zref-user}
-
+%\usepackage{extsizes}
+\usepackage[margin=0.6in]{geometry}
 \begin{document}
 %
 % paper title
@@ -555,7 +556,7 @@ In this paper we introduce an unobservable message annonymisation protocol, name
 
 % Note that keywords are not normally used for peerreview papers.
 \begin{IEEEkeywords}
-Data privacy, Message systems, Anonymity, Security, Solomon-Reed
+Data privacy, Message systems, Anonymity, Security
 \end{IEEEkeywords}}
 
 
@@ -626,28 +627,44 @@ Data privacy, Message systems, Anonymity, Security, Solomon-Reed
 % and "HIS" in caps to complete the first word.
 \IEEEPARstart{S}{ince} whistle blower Edward Snowden disclosed documents it seems generally accepted that global monitoring of internet traffic is done. According to these documents (verified by \href{http://www.nrc.nl/nieuws/2013/11/23/nederland-sinds-1946-doelwit-van-nsa}{NRC}) NSA infiltrated more than 50k computers with malware to collect classified or personal information. They furthermore infiltrated Telecom-Operators such as Belgacom to collect data, and targeted high members of governments even in associated states. 
 
-A message sent throughout the internet must, even when perfectly encrypted, disclose at least the recipient to the router transporting a message. The sender can be identified by the return path or is identifiable by following the source of packets. Meta information is valuable as frequency and message size disclose important facts about the association and intensity of the relationship of involved parties. Typical attacks are traffic capturing by network observation or by inserting one or more malicious nodes into a routing network. 
+A message sent throughout the internet must, even when perfectly encrypted, disclose at least the recipient to the router transporting a message. The sender can be identified by the return path or is identifiable by following the source of packets. Meta information is valuable as frequency and message size disclose important facts about the association and intensity of the relationship of involved parties. %Typical attacks are traffic capturing by network observation or by inserting one or more malicious nodes into a routing network. 
 
-This work addresses the above mentioned problems of traffic monitoring by introducing a new  protocol called MessageVortex. Within MessageVortex we consider the whole network except the sending and receiving node to be untrusted. It furthermore addresses the leak of routing information most protocols have. This protocol is able to sustain anonymity even under harsh assumptions such as an adversary possessing a huge funding and unlimited monitoring capability on the network and a considerable number of own nodes. For a more precise adversary model see appendix~\ref{sec:adversary}.
+This work addresses the above mentioned problems of traffic monitoring by introducing a new  protocol called MessageVortex. Within MessageVortex we consider the whole network as untrusted with exception to the sending and receiving node. MessageVortex does not leak routing information as only the immediate peers are known to a node. The protocol is able to sustain anonymity\cite{anon_terminology} even under harsh assumptions such as an adversary possessing a huge but limited funding, unlimited monitoring capability on the network and a considerable number of own nodes. For a more precise adversary model see appendix~\ref{sec:adversary}.
 
-Numerous attempts such as in \cite{minion-design,babel,mixmaster-spec,tor-design,freehaven-berk,herbivore:tr} have been made to anonymize message flow. They generally use relays\cite{CHAUM1}, mixes\cite{CHAUM1}, or Dining-Cryptographers-related-networks\cite{chaum-dc} to achieve anonymisation. But most of them have problems as they rely at least on the partial trust in the nodes routing the messages, or some central infrastructures \cite{hs-attack06,esorics13-cellflood,esorics12-torscan,oakland2013-trawling}. Exit and entry points are important as they may leak information which is otherwise well hidden within the network. Additionally, a dedicated transport protocol is easy to block since their implementation can be easily identified by used ports or some protocol properties. Furthermore, most approaches require to have infrastructure with fixed addressing in the internet, rendering owners vulnerable.
+Numerous attempts such as in \cite{minion-design,babel,mixmaster-spec,tor-design,freehaven-berk,herbivore:tr} have been made to anonymize message flow. But most of them have problems as they rely at least on the partial trust in the nodes routing the messages, or some central infrastructures \cite{hs-attack06,esorics13-cellflood,esorics12-torscan,oakland2013-trawling}. Exit and entry points are important as they may leak information which is otherwise well hidden within the network. By degrading the network, message flows can be redirected and information extracted from the new flows. Additionally, a dedicated transport protocol is easy to block since their implementation can be easily identified by used ports or some protocol properties. Furthermore, most approaches require to have infrastructure with fixed addressing in the internet, rendering owners vulnerable.
 
 All papers analysed for this work introduced a new transport layer solving these problems. Only TOR defined an additional transporting mechanism which may be used as alternate transport medium between two defined nodes to avoid detection. In our approach we decouple consequently the routing layer from the transport layer. By doing so we introduce new degrees of complexity to attack scenarios as messages may use any common transport protocol of the used network. 
 
 Our work consists of a routing layer which is completely P2P based without any central protocol specific infrastructure. Any node is a routing node and may be an endpoint. There is no implicit or explicit trust into any particular system of the  network. Decoy traffic generation is controlled by the original sender of a message. Even a decoy traffic generating node is unable to differentiate between message and decoy traffic as a Solomon-Reed algorithm is used to blow the message up by adding redundancy information. This redundancy information may be decoy traffic or later required to rebuild data blocks. The redundant blocks are always encrypted and a multitude of the cyphers block size as they are padded before splitting. This eliminates the need of padded encryption at block level. This fact makes it very hard to apply brute force in order to decrypt the content. This is due to the fact  that padding gives no longer hints whether decryption has been successful or not.
 
-As transport media we use common, well known store and forward based protocols. By doing so the routing logic has no affiliation to the transport layer. Literally any free-mailer email address or chat account may be converted into a transport media for our protocol without any modification required on the server side. This makes the network very agile on one side at the cost of reliability as nodes may suddenly appear or disappear. To counter this phenomenon we are able to introduce a high degree of redundancy.
+As transport media we use common, well known store and forward based protocols. By doing so the routing logic has no affiliation to the transport layer. Literally any free-mailer email address or chat account may be converted into a transport media for our protocol without any modification required on the server side. This makes the network very agile on one side at the cost of reliability as nodes may suddenly appear or disappear. To counter this phenomenon we are able to introduce a high degree of redundancy if required and wished by the routing block builder.
 
 Using the MessageVortex protocol any device with a latent or permanent connectivity to the internet may act as routing node. 
 
-By applying the zero trust model we give full control of all traffic to the original sender of the message. He controls message flow, redundancy, degree of anonymity, timing, and many more aspects of the message transport throughout the whole network. This is done without disclosing any of these parameters to the participating nodes.
+By applying the zero trust model we give full control of all traffic to the original sender of the message. He controls message flow, redundancy, degree of anonymity, timing, and many more aspects of the message transport throughout the whole network. This is done without disclosing any of these parameters to the participating nodes as they are encoded in the operations and only visible to the node executing them. The operations itself are chosen in such a way that they do not reveal the nature of the traffic.
 
-To limit possibilities of Denial-of-Service (DoS) within the system and guarantee an efficient handling of messages, MessageVortex nodes (in short ``node'') rely on unlinked, ephemeral identities which are created in a proof of work system (PoW). While it is technically easy to use a node, it is hard to carry out traditional attacks against them. The amount of work required to disrupt services or do traditional attacks against the system grows significantly due to the non linear growth of calculation power required when maintaining more ephemeral identities. It is however still possible to exhaust external resources such as network bandwidth.\par\nopagebreak
+To limit possibilities of Denial-of-Service (DoS) within the system and guarantee an efficient handling of messages, MessageVortex nodes (in short ``node'') rely on unlinked, ephemeral identities which are created in a proof of work system (PoW). While it is technically easy to use a node, it is hard to carry out traditional attacks against them as all transactions have to be pre-authenticated with PoW puzzles. The amount of work required to disrupt services or do traditional attacks against the system grows significantly due to the non linear growth of calculation power required when maintaining more ephemeral identities. It is however still possible to exhaust external resources such as network bandwidth.\par\nopagebreak
 %\ifCLASSOPTIONpeerreview
 %\else
 %\hfill gwm\par\nopagebreak
 %\hfill Mai 27, 2015
 %\fi
+\subsection{Previous Work}
+Generally not many technologies are usable to gain anonymity or unlinkability as defined in \cite{anon_terminology}. Most analysed protocol use relays\cite{CHAUM1}, mixes\cite{CHAUM1}, or Dining-Cryptographers-related-networks\cite{chaum-dc} or their variants to achieve anonymisation. Numerous protocols have evolved from these technologies:
+\begin{itemize}
+	\item \emph{TOR}\cite{tor-design}: Mixer based infrastructure for tunnelling TCP based protocol streams. TOR is a synchronous or near synchronous routing system. The anonymisation is based on mixing by using a statical path consisting out of a entry node, an exit node and at least three more intermediate nodes.
+	\item \emph{mixmaster}\cite{mixmaster-spec}: A type-II remailer where all mixes may chose the path on their own logic.
+	\item \emph{Babel}\cite{babel}: Mixer based remailer where the sender chooses path and sends an onionized message.
+	\item \emph{Mixminion}\cite{minion-design}: A type-III remailer offering sender anonymity. Unlike their predecessors it is no longer based on the SMTP transport protocol. This system requires at least a centralized directory infrastructure.
+	\item \emph{Freehaven}\cite{freehaven-berk}: A distributed storage system. The system offers anonymous document storage. To receive a document a hash of a public key used to sign the document must be known. Known documents may be identified and owners of infrastructure might held responsible if hosting such well known, forbidden documents.
+	\item \emph{Freenet}\cite{freenet}: Freenet is an anonymous, distributed data storage system. The system is not trusting any server. Instead a reputation system is used. This system has attracted very little attation from the researcher community.
+	\item \emph{Herbivore}\cite{herbivore:tr}: A DC-net based protocol without client implementation.
+	\item \emph{$\mathcal{P}^5$}\cite{sherwood2005p5}: There is a simulator available for this protocol. Real world implementations do not exist and therefore no attack schemes have been elaborated so far.
+	\item \emph{$I^2P$}(\href{https://geti2p.net/}{geti2p.net}): P2P-based pseudonymous protocol allowing TCP and UDP streams to be tunnelled synchronously or near-synchronously. Unlike TOR $I^2P$ works pseudonymously and mixes using packet switching. 
+	\item \emph{Dissent}\cite{Corrigan-Gibbs:2010:DAA:1866307.1866346}: 
+\end{itemize}
+
+Our protocol differs from these works in several ways. There is no central network infrastructure. There are no entry or exit nodes which might be blocked. All nodes including the sender and the recipient are treated equal. The number of nodes, the traffic to be generated, anonymity sets, timing of the message, redundancy in message transmission, and size of all packages to be sent along is solely decided by the builder of a routing block. The builder is normally synonymous to the sender but might be the recipient of a message in case of a reply block. Furthermore there is no dedicated transport protocol. Instead MessageVortex messages  (in short ``vmessages'') are embedded in other existing internet protocols. The traffic itself is mixed by operations. As traffic is generated reproduceable either by adding redundancy information or by using PRNG with a defined seeding, decoy traffic can not be differentiated from required blocks.
 
 \section{Methods and Material}
 
@@ -665,7 +682,7 @@ We define the protocol on three different layers:
 	\item \emph{Routing layer:} this layer applies the logic to the message routing and prepares the message for the blending layer.
 	\item \emph{Accounting layer:} this layer is a DoS and misuse protection. It keeps track of the transfers for each ephemeral identity and makes sure that queue and storage capacity are efficiently handled.     
 \end{itemize}
-These three layers are connected through a fourth existing layer. This layer bases on one or more store-and-forward based, common internet transport protocols. Protocols on this layer we refer in general as transport protocols. It is important to note that no modification is applied to the transport protocol to accommodate MessageVortex messages (in short ``vmessages'').
+These three layers are connected through a fourth existing layer. This layer bases on one or more store-and-forward based, common internet transport protocols. Protocols on this layer we refer in general as transport protocols. It is important to note that no modification is applied to the transport protocol to accommodate vmessages.
 
 All cryptographic operations such as encryption, decryption, hashing, or random number generation do not rely on a single algorithm. The protocol is able to signal what capabilities a node has and how exactly a message should be processed. This makes the protocol very robust if a used algorithm is broken. For this reason we defined for each capability at least two algorithms which depend on different mathematical puzzles (eg. ``integer factorization problem'' versus ``discrete logarithms problem''). This introduces a redundancy in algorithms, allowing a sender to switch between algorithms if required.
 
@@ -941,33 +958,32 @@ The following section gives a short comparison to existing systems. It shows tha
 It is important to note that this is not a ranking. It just outlines the differences between the system and shows where our system is different compared to existing solutions.
 
 \subsubsection{TOR}
-TOR\cite{tor-spec} is a synchronous or near synchronous routing system. The anonymisation is based on mixing by using a statical path consisting out of a entry node, an exit node and at least three more intermediate nodes.
-
-TOR has attracted considerable efforts from the scientific community in both attacking and defence. As an immediate result numerous attacks and counter measures exist within TOR. It was however never designed to withstand such a harsh definition for an adversary as we used it. TOR fails therefore in several aspects. Numerous attacks as outlined previously will succeed when assuming our adversary. 
-
+%TOR has attracted considerable efforts from the scientific community in both attacking and defence. As an immediate result numerous attacks and counter measures exist within TOR. It was however never designed to withstand such a harsh definition for an adversary as we used it. TOR fails therefore in several aspects. Numerous attacks as outlined previously will succeed when assuming our adversary. 
+%
 TOR is criticised for several things. Firstly it is easy attackable encryption is not used in the transported protocol. It does rely on the trust in a centralized directory infrastructure. It is susceptible if more than $\approx 30\%$ of the nodes are controlled by an adversary as shown in \cite{jansen2014sniper}. Furthermore timing analysis on entry and exit nodes are particularly easy due to the fact that TOR is a low latency network\cite{torta05,esorics10-bandwidth}. Harvesting of nodes is possible (e.g. \url{https://torstatus.blutmagie.de}). Tor nodes are easily identifiable by traffic as shown in \cite{foci12-winter}. To avoid this detection TOR uses ``pluggable transports''. Unlike MessageVortex this is not used in general but only when specifically set up between nodes.
 
 MessageVortex tries to address these problems in multiple ways. First there is no central infrastructure which defies the trust problem. There are no entry or exit nodes as all participating members are routers at the same time. Therefore, all problems related to entry and exit nodes do not exist. There is no dedicated transport protocol making the presence of vmessages hard to detect.
 
-MessageVortex has several downsides compared to TOR. It is not suitable for real time communication due to its asynchronous operation. It is furthermore a closed system and only participating members may use it. In contrast, TOR allows to tunnel almost any traffic through it to any destination. 
+MessageVortex has several downsides compared to TOR. It is not suitable for real time communication due to its asynchronous operation. It is furthermore a closed system and only participating members may use it. %In contrast, TOR allows to tunnel almost any traffic through it to any destination. 
 
 \subsubsection{$\mathcal{P}^5$}
-The Peer-to-Peer Personal Privacy Protocol is defined in \cite{sherwood2005p5}. It provides sender-, receiver- and sender-receiver anonymity. According to the project page of $\mathcal{P}^5$ there is only a simulator available for the protocol.
+%The Peer-to-Peer Personal Privacy Protocol is defined in \cite{sherwood2005p5}. It provides sender-, receiver- and sender-receiver anonymity. According to the project page of $\mathcal{P}^5$ there is only a simulator available for the protocol.
+%
+%The transport layer issue has been completely ignored. 
+In depth analysis of $\mathcal{P}^5$ is very limited, as there is no true protocol specification but only a rough outline available. This outline specifies the messaging and the crypto operations only. It claims to be peer to peer, which would result in some kind of NAT (Network Address Translation) circumvention technology. This technology does usually rely, at least partially, on a central infrastructure (e.g. for hole punching). 
 
-The transport layer issue has been completely ignored. In depth analysis of $\mathcal{P}^5$ is very limited, as there is no true protocol specification but only a rough outline available. This outline specifies the messaging and the crypto operations only. It claims to be peer to peer, which would result in some kind of NAT (Network Address Translation) circumvention technology. This technology does usually rely, at least partially, on a central infrastructure (e.g. for hole punching). 
-
-In contrast MessageVortex protocol is peer to peer the transport layer is not. It misuses already existing infrastructure for transport. This makes it not susceptible to approaches against infrastructure unless our messages are identified and filtered. This may be corrected by applying different blending schemes for the transport layer. 
+In contrast MessageVortex protocol is peer to peer but the transport layer is not. It misuses already existing infrastructure for transport. This makes it not susceptible to approaches against infrastructure unless our messages are identified and filtered. This may be corrected by applying different blending schemes for the transport layer. It furthermore removes the need for NAT hole punching and similar technologies.
 
 \subsubsection{$I^2P$}
-The name $I^2P$ is derived from  ``Invisible Internet Project'' according to \href{https://geti2p.net/}{geti2p.net}. The system itself is comparable to TOR in its capabilities. Mayor differences are:
-\begin{itemize}
-	\item P2P based
-	\item Packet switched routing (TOR is ``circuit switched'')
-	\item Different forward and backward routes (called tunnels)
-	\item Works pseudonymously
-	\item Supports TCP and UDP
-\end{itemize}
-
+%The name $I^2P$ is derived from  ``Invisible Internet Project'' according to \href{https://geti2p.net/}{geti2p.net}. The system itself is comparable to TOR in its capabilities. Mayor differences are:
+%\begin{itemize}
+%	\item P2P based
+%	\item Packet switched routing (TOR is ``circuit switched'')
+%	\item Different forward and backward routes (called tunnels)
+%	\item Works pseudonymously
+%	\item Supports TCP and UDP
+%\end{itemize}
+%
 $I^2P$ has not attracted as much attention as TOR so far. It is thus hard to judge its real qualities. 
 
 Unlike TOR, anonymity is not fully granted. Instead a pseudonymity is used. 
@@ -977,8 +993,8 @@ In \cite{pets2011-i2p} an attack specific to $I^2P$ is presented. As $I^2P$s sec
 MessageVortex does only allow a routing block builder to choose routes and amount of traffic. Due to the replay protection and the trust, we do not rely on any node, we show in \cite{messageVortex} that attacks on this level are not possible.
 
 \subsubsection{Freenet}
-Freenet was originally designed to be a fully distributed data store\cite{freenet}. Documents are stored in an encrypted form. Downloaders must know a document descriptor called CHK containing the file hash, the key, and some background about the crypto being used. A file is stored more or less redundantly based on the number of accesses to a stored file. The main goal of Freenet is to decouple  authorship from a particular document. It furthermore provides a fault tolerant storage, which improves caching of a document if requested more often.
-
+%Freenet was originally designed to be a fully distributed data store\cite{freenet}. Documents are stored in an encrypted form. Downloaders must know a document descriptor called CHK containing the file hash, the key, and some background about the crypto being used. A file is stored more or less redundantly based on the number of accesses to a stored file. The main goal of Freenet is to decouple  authorship from a particular document. It furthermore provides a fault tolerant storage, which improves caching of a document if requested more often.
+%
 While Freenet is a pure distributed storage system it has many good features adapted by MessageVortex. Like in Freenet a MessageVortex node may deny to be the owner of a specific information unless the key for the respective ephemeral identity can be found on the system. As the key is only required for building routing blocks but not for message assembly and sending this makes it a valuable feature comparable to the deniability of Freenet.
 
 \section{Conclusion}
@@ -1049,7 +1065,7 @@ x_{i+1}=g^{x_i}\mod p
 \end{eqnarray}
 
 
-\section{Adverser Model\label{sec:adversary}}
+\section{Adversary Model\label{sec:adversary}}
 We assume as an adversary a state sponsored actor who has unlimited monitoring possibilities on the network layer within a limited geographic region (e.g. country). We furthermore assume available funding and capabilities to efficiently run a considerable amount of nodes (not exceeding the number of $70\%$) within the network and harvest and combine all operations and content processed by these nodes.
 
 This means he is at least capable of analysing traffic by algorithms and may disrupt any unwanted traffic.
@@ -1067,7 +1083,7 @@ Any adversary may use detection schemes to detect traffic. This may be used to a
 We assume that an adversary is accepting considerable economic damage but not the downfall of its own economy as a whole. An active adversary may apply algorithmic censorship based on the detection constraint (\ref{sec:detCons}) on a large scale.
 
 \subsection{Information Retrieval}
-We assume an adversary to be interested in all sorts of informations available around messages. We consider the triple ``sender'', ``receiver'', and ``content'' as the most valuable set of information for an adversary. Other important information may be:
+We assume an adversary to be interested in all sorts of informations available around messages. We consider the triple ``sender'', ``receiver'', and ``content'' as the most valuable set of information for an adversary. Other important informations are:
 
 \begin{itemize}
 	\item frequency of message interchange
