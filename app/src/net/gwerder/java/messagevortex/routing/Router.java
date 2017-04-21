@@ -2,13 +2,14 @@ package net.gwerder.java.messagevortex.routing;
 
 import net.gwerder.java.messagevortex.accountant.Accountant;
 import net.gwerder.java.messagevortex.blending.Blender;
+import net.gwerder.java.messagevortex.blending.BlenderListener;
 
 import java.util.List;
 
 /**
  * Created by martin.gwerder on 03.04.2017.
  */
-public interface Router {
+public interface Router extends BlenderListener {
 
     public boolean addBlendingLayer(Blender blendingLayer);
 

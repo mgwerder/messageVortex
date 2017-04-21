@@ -1,6 +1,7 @@
 package net.gwerder.java.messagevortex.blending;
 
 import net.gwerder.java.messagevortex.accountant.HeaderVerifyer;
+import net.gwerder.java.messagevortex.asn1.BlendingSpec;
 import net.gwerder.java.messagevortex.asn1.Message;
 import net.gwerder.java.messagevortex.routing.IncomingMessageRouterListener;
 
@@ -32,12 +33,10 @@ public interface Blender {
     /***
      * This method is called by the routing layer to blend a message.
      *
-     * @// FIXME: 03.04.2017 blending spec missing in call
-     *
      * @param message the message to be blended
      * @return true if blended successfully and sent by the transport layer
      */
-    public boolean blendMessage(Message message);
+    public boolean blendMessage(BlendingSpec target,Message message);
 
     /***
      * Returns the address supported for blending.
