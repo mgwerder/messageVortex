@@ -15,10 +15,11 @@ public class HeaderRequestQueryQuota extends HeaderRequest {
 
     protected AsymmetricKey identity = null;
 
-    protected HeaderRequestQueryQuota() {super();}
+    public HeaderRequestQueryQuota() {super();}
 
     public HeaderRequestQueryQuota(ASN1Encodable ae) throws IOException {
-        parse(ae);
+        this();
+        if (ae!=null) parse(ae);
     }
 
     protected void parse(ASN1Encodable ae) throws IOException {

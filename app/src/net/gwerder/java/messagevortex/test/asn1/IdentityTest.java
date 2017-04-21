@@ -1,7 +1,7 @@
 package net.gwerder.java.messagevortex.test.asn1;
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
-import net.gwerder.java.messagevortex.asn1.Identity;
+import net.gwerder.java.messagevortex.asn1.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -42,6 +42,8 @@ public class IdentityTest {
                 assertTrue( "Byte arrays should be equal when reencoding", Arrays.equals( b1, b2 ) );
                 String s2 = (new Identity( b2 )).dumpValueNotation( "" );
                 assertTrue( "Value Notations should be equal when reencoding", s1.equals( s2 ) );
+
+                s.setRequests(new HeaderRequest[] { new HeaderRequestCapability(),new HeaderRequestIdentity(null),new HeaderRequestIncreaseMessageQuota(null),new HeaderRequestQueryQuota(null)});
             }
         } catch (Exception e) {
             LOGGER.log( Level.WARNING,"Unexpected exception",e);

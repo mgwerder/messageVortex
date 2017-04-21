@@ -16,10 +16,11 @@ public class HeaderRequestIdentity extends HeaderRequest {
     protected UsagePeriod period = null;
     protected AsymmetricKey identity = null;
 
-    protected HeaderRequestIdentity() {super();}
+    public HeaderRequestIdentity() {super();}
 
     public HeaderRequestIdentity(ASN1Encodable ae) throws IOException {
-        parse(ae);
+        this();
+        if (ae!=null) parse(ae);
     }
 
     protected void parse(ASN1Encodable ae) throws IOException {

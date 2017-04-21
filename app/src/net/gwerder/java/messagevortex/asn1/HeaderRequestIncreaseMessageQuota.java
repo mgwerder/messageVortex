@@ -17,10 +17,11 @@ public class HeaderRequestIncreaseMessageQuota extends HeaderRequest {
     private AsymmetricKey identity = null;
     private long quota = -1;
 
-    protected HeaderRequestIncreaseMessageQuota() {super();}
+    public HeaderRequestIncreaseMessageQuota() {super();}
 
     public HeaderRequestIncreaseMessageQuota(ASN1Encodable ae) throws IOException {
-        parse(ae);
+        this();
+        if (ae!=null) parse(ae);
     }
 
     protected void parse(ASN1Encodable ae) throws IOException{

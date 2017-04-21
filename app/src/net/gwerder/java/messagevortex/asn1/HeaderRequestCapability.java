@@ -14,10 +14,11 @@ public class HeaderRequestCapability extends HeaderRequest {
 
     protected UsagePeriod period = null;
 
-    protected HeaderRequestCapability() {super();}
+    public HeaderRequestCapability() {super();}
 
     public HeaderRequestCapability(ASN1Encodable ae) throws IOException {
-        parse(ae);
+        this();
+        if (ae!=null) parse(ae);
     }
 
     protected void parse(ASN1Encodable ae) throws IOException{
