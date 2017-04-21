@@ -73,7 +73,7 @@ public class SimpleMessageFactory extends MessageFactory {
         }
 
         // determine message route
-        // FIXME select operations
+        // FIXME select operation
 
     }
 

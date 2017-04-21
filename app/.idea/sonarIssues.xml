@@ -18,6 +18,46 @@
             <set />
           </value>
         </entry>
+        <entry key="C:/Portabel Programme/Documents/Subversion/mailvortex/build.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="C:/Portabel Programme/Documents/Subversion/mailvortex/sonar.properties">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$USER_HOME$/IdeaProjects/i-Telex/src/net/gwerder/java/itelex/Baudot.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$USER_HOME$/IdeaProjects/i-Telex/src/net/gwerder/java/itelex/Endpoint.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$USER_HOME$/IdeaProjects/i-Telex/src/net/gwerder/java/itelex/ITelexCLI.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$USER_HOME$/IdeaProjects/i-Telex/src/net/gwerder/java/itelex/MonitorEndpoint.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$USER_HOME$/IdeaProjects/i-Telex/src/net/gwerder/java/itelex/TelexMode.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$USER_HOME$/IdeaProjects/i-Telex/src/net/gwerder/java/itelex/test/BaudotTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/asn.1/messageBlocks.asn">
           <value>
             <set />
@@ -318,6 +358,51 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/routing/operation/AbstractOperation.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/routing/operation/GaloisFieldMathMode.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/routing/operation/MathMode.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/routing/operation/Matrix.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/routing/operation/RealMathMode.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/routing/operation/RemoveRedundancy.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/routing/operation/VandemondeMatrix.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/routing/operation/VandermondeMatrix.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/routing/operations/AbstractOperation.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/test/MainCoreSuite.java">
           <value>
             <set />
@@ -328,7 +413,22 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/test/MainRoutingSuite.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/test/core/MessageVortexTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/test/routing/MathModeTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/test/routing/MatrixTest.java">
           <value>
             <set />
           </value>
@@ -364,46 +464,6 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/../sonar.properties">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="C:/Portabel Programme/Documents/Subversion/mailvortex/build.xml">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="C:/Portabel Programme/Documents/Subversion/mailvortex/sonar.properties">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$USER_HOME$/IdeaProjects/i-Telex/src/net/gwerder/java/itelex/Baudot.java">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$USER_HOME$/IdeaProjects/i-Telex/src/net/gwerder/java/itelex/Endpoint.java">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$USER_HOME$/IdeaProjects/i-Telex/src/net/gwerder/java/itelex/ITelexCLI.java">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$USER_HOME$/IdeaProjects/i-Telex/src/net/gwerder/java/itelex/MonitorEndpoint.java">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$USER_HOME$/IdeaProjects/i-Telex/src/net/gwerder/java/itelex/TelexMode.java">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$USER_HOME$/IdeaProjects/i-Telex/src/net/gwerder/java/itelex/test/BaudotTest.java">
           <value>
             <set />
           </value>
