@@ -6,7 +6,7 @@
   <property file="application.properties"/>
 
   <property name="build.sysclasspath" value="ignore"/>
-  
+
   <property name="app.version"   value="${app.version.major}.${app.version.minor}.${app.version.revision}"/>
   <property name="build.home"    value="${basedir}/app/build"/>
   <property name="dist.home"     value="${basedir}/app/dist"/>
@@ -21,12 +21,12 @@
   <property name="compile.optimize"    value="true"/>
 
   <!-- ==================== Main Targets ================================== -->
-  
+
   <taskdef name="latex" classname="de.dokutransdata.antlatex.LaTeX">
     <classpath>
-        <fileset dir="${basedir}/lib/"  includes="ant_latex_0.0.9.jar" />   
+        <fileset dir="${basedir}/lib/"  includes="ant_latex_0.0.9.jar" />
 	  </classpath>
-	</taskdef>  
+	</taskdef>
 
   <target name="all" depends="compile,test,doc,javadoc" description="Clean build and dist directories, then compile"/>
 
@@ -122,7 +122,7 @@
 
   <target name="run" depends="compile"  description="run application">
     <java dir="${build.home}/classes/" classname="${app.package}.${app.mainclass}" fork="yes" classpathref="run.classpath">
-      <jvmarg line="-ea"/> 
+      <jvmarg line="-ea"/>
       <arg line="-help"/>
     </java>
   </target>
@@ -147,10 +147,12 @@
         <test name="${app.package}.test.MainIMAPSuite" todir="${build.home}/testsrc" outfile="TEST-IMAPSuite"/>
         <test name="${app.package}.test.MainASN1Suite" todir="${build.home}/testsrc" outfile="TEST-ASN1Suite"/>
         <test name="${app.package}.test.MainRoutingSuite" todir="${build.home}/testsrc" outfile="TEST-RoutingSuite"/>
+        <test name="${app.package}.test.MainBlenderSuite" todir="${build.home}/testsrc" outfile="TEST-BlenderSuite"/>
+        <test name="${app.package}.test.MainTransportSuite" todir="${build.home}/testsrc" outfile="TEST-TransportSuite"/>
         <formatter type="xml"/>
         <formatter type="plain" usefile="false"/>
     </junit>
-   
+
     <mkdir dir='${doc.home}/cobertura'/>
 	<cobertura-report format="xml" destdir="${build.home}/testsrc"  datafile="${build.home}/cobertura.ser">
 		<fileset dir="${build.home}/src">
@@ -167,7 +169,7 @@
         <classpath>
             <fileset dir="${basedir}/lib/pmd-bin-5.3.7/lib" includes="*.jar"/>
         </classpath>
-    </taskdef>  
+    </taskdef>
     <pmd shortFilenames="true">
         <sourceLanguage name="java" version="1.7"/>
         <ruleset>rulesets/java/design.xml</ruleset>
@@ -188,8 +190,8 @@
     <mkdir dir='${basedir}/target/sonar'/>
 
   </target>
-  
-  <target name="ensure-test-name" unless="test">    
+
+  <target name="ensure-test-name" unless="test">
     <fail message="You must run this target with -Dtest=TestName"/>
   </target>
 
@@ -218,13 +220,13 @@
   <target name="javadoc" depends="compile"  description="create api docs">
     <mkdir dir='${doc.home}'/>
     <mkdir dir='${doc.home}/api/'/>
-    <javadoc 
+    <javadoc
              destdir='${doc.home}/api'
              author='true'
              version='true'
              linksource='true'
              >
-      <classpath refid="compile.classpath"/>       
+      <classpath refid="compile.classpath"/>
       <!--<link offline="false" href="http://java.sun.com/j2se/1.5.0/docs/api/" packagelistLoc="C:/temp/pl1"/>
       <link offline="false" href="http://developer.java.sun.com/developer/products/xml/docs/api/" packagelistLoc="C:/temp/pl2"/>  -->
 	  <tag name="known.bug" description="Known bugs:"/>
@@ -238,10 +240,10 @@
       </fileset>
     </javadoc>
   </target>
-  
+
   <target name="pdf" depends="pdf-uptodate,pdf-vortex,pdf-roadmap,pdf-plan">
   </target>
-  
+
 
   <!-- =================================== Sub targets -->
 
@@ -258,9 +260,9 @@
 		path="${path.miktex}"
                 run="on"
                 workingDir="${doc.home}">
-                <fileset dir="${doc.home}"> 
-                   <include name="*.nlo" /> 
-                </fileset> 
+                <fileset dir="${doc.home}">
+                   <include name="*.nlo" />
+                </fileset>
             </makeindex>
             <bibtex
 		path="${path.miktex}"
@@ -268,7 +270,7 @@
                 workingDir="${doc.home}" />
     </latex>
   </target>
-  
+
   <target name="pdf-roadmap" unless="messagevortexrm.uptodate" depends="pdf-uptodate">
     <latex
 	path="${path.miktex}"
@@ -282,9 +284,9 @@
 		path="${path.miktex}"
                 run="on"
                 workingDir="${doc.home}">
-                <fileset dir="${doc.home}"> 
-                   <include name="*.nlo" /> 
-                </fileset> 
+                <fileset dir="${doc.home}">
+                   <include name="*.nlo" />
+                </fileset>
             </makeindex>
             <bibtex
 		path="${path.miktex}"
@@ -292,7 +294,7 @@
                 workingDir="${doc.home}" />
     </latex>
   </target>
-  
+
   <target name="pdf-vortex" unless="messagevortexdoc.uptodate" depends="pdf-uptodate">
     <latex
 		path="${path.miktex}"
@@ -306,9 +308,9 @@
 		path="${path.miktex}"
                 run="on"
                 workingDir="${doc.home}">
-                <fileset dir="${doc.home}"> 
-                   <include name="*.nlo" /> 
-                </fileset> 
+                <fileset dir="${doc.home}">
+                   <include name="*.nlo" />
+                </fileset>
             </makeindex>
             <bibtex
 		path="${path.miktex}"
@@ -316,7 +318,7 @@
                 workingDir="${doc.home}" />
     </latex>
   </target>
-  
+
   <target name="pdf-uptodate">
 	<condition property="messagevortexdoc.uptodate">
 		<uptodate targetfile="${doc.home}/messagevortex.pdf">
@@ -333,13 +335,13 @@
 			<srcfiles dir="${doc.home}/inc" includes="messagevortex_Plan.tex"/>
 		</uptodate>
 	</condition>
-  </target>	
+  </target>
 
   <target name="xml" depends="prepare">
     <!-- build xml classes -->
     <taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
       <classpath>
-        <fileset dir="C:\vApps\jaxb-ri-20110412\lib"  includes="jaxb-xjc.jar" />   
+        <fileset dir="C:\vApps\jaxb-ri-20110412\lib"  includes="jaxb-xjc.jar" />
 	  </classpath>
     </taskdef>
     <echo message="Building all xml classes ..." />
@@ -404,7 +406,7 @@
       <pathelement location="${build.home}/cobertura" />
       <pathelement location="${build.home}/classes" />
     </path>
-    
+
     <path id="run.classpath">
       <pathelement location="c:/Programme/Java/lib/hsqldb/lib/hsqldb.jar"/>
       <fileset dir="${rtlib.home}" includes="**/*.jar"/>
