@@ -69,6 +69,7 @@ public class Matrix {
         return ret;
     }
 
+    @Override
     public boolean equals(Object o) {
         if(! (o instanceof Matrix) ) return false;
         Matrix m=(Matrix)o;
@@ -76,6 +77,11 @@ public class Matrix {
         for(int i=0;dimension.length>i;i++) if(dimension[i]!=m.dimension[i]) return false;
         for(int i=0;m.matrix.length>i;i++) if(matrix[i]!=m.matrix[i]) return false;
         return true;
+    }
+    
+    @Override
+    public int hashCode() {
+        return toString().hashCode();
     }
 
     public String toString() {
