@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
+import static net.gwerder.java.messagevortex.asn1.Block.CRLF;
+
 /**
  * ASN1 parser class for header request.
  *
@@ -48,6 +50,13 @@ public abstract class HeaderRequest {
     public ASN1Object toASN1Object() throws IOException {
         throw new IOException( "not implemented" ); //FIXME
     }
+
+    public String dumpValueNotation(String prefix) {
+        StringBuilder sb=new StringBuilder();
+        sb.append(prefix+"-- FIXME dumping of Request object not yet supported"+CRLF);
+        return sb.toString();
+    }
+
 
     protected abstract HeaderRequest getRequest(ASN1Encodable ae) throws IOException;
 

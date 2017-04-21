@@ -25,7 +25,7 @@ public class Identity extends Block {
     private static final int PLAIN_BLOCK              = 1002;
     private static final int ENCRYPTED_HEADER         = 1101;
 
-    private static final Request[] NULLREQUESTS = new Request[0];
+    private static final HeaderRequest[] NULLREQUESTS = new HeaderRequest[0];
 
 
     private SymmetricKey headerKey;
@@ -38,7 +38,7 @@ public class Identity extends Block {
     private byte[] decryptionKeyRaw = null;
     private SymmetricKey decryptionKey;
     private MacAlgorithm hash = new MacAlgorithm( Algorithm.getDefault( AlgorithmType.HASHING ) );
-    private Request[] requests;
+    private HeaderRequest[] requests;
     private long identifier=-1;
     private byte[] padding = null;
     private byte[] encryptedIdentityBlock = null;
@@ -74,6 +74,10 @@ public class Identity extends Block {
         super();
         this.ownIdentity = ownIdentity;
         parse( to );
+    }
+
+    public void setRequests(HeaderRequest[] hr) {
+        this.requests=hr;
     }
 
     public boolean equals(Object t) {
@@ -149,9 +153,9 @@ public class Identity extends Block {
             decryptionKey = new SymmetricKey( decryptionKeyRaw, identityKey );
             hash = new MacAlgorithm( s1.getObjectAt( i++ ) );
             ASN1Sequence s2 = ASN1Sequence.getInstance( s1.getObjectAt( i++ ) );
-            requests = new Request[s2.size()];
+            requests = new HeaderRequest[s2.size()];
             for (int y = 0; y < s2.size(); y++) {
-                requests[y] = new Request( s2.getObjectAt( y ) );
+                requests[y] = HeaderRequest.createRequest( s2.getObjectAt( y ) );
             }
             while (s1.size() > i) {
                 to = ASN1TaggedObject.getInstance( s1.getObjectAt( i++ ) );
@@ -248,7 +252,7 @@ public class Identity extends Block {
             }
             v.add( hash.toASN1Object() );
             ASN1EncodableVector s = new ASN1EncodableVector();
-            for (Request r : requests) {
+            for (HeaderRequest r : requests) {
                 s.add( r.toASN1Object() );
             }
             v.add( new DERSequence( s ) );
@@ -307,7 +311,7 @@ public class Identity extends Block {
                 }
             }
             sb.append( prefix + "    requests {" + CRLF );
-            for (Request r : requests) {
+            for (HeaderRequest r : requests) {
                 sb.append( valid.dumpValueNotation( prefix + "  " ) + CRLF );
                 sb.append( r.dumpValueNotation( prefix + "  " ) + CRLF );
             }

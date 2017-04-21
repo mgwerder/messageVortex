@@ -78,7 +78,7 @@ public class Matrix {
         for(int i=0;m.matrix.length>i;i++) if(matrix[i]!=m.matrix[i]) return false;
         return true;
     }
-    
+
     @Override
     public int hashCode() {
         return toString().hashCode();

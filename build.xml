@@ -25,8 +25,8 @@
   <taskdef name="latex" classname="de.dokutransdata.antlatex.LaTeX">
     <classpath>
         <fileset dir="${basedir}/lib/"  includes="ant_latex_0.0.9.jar" />
-	  </classpath>
-	</taskdef>
+    </classpath>
+  </taskdef>
 
   <target name="all" depends="compile,test,doc,javadoc" description="Clean build and dist directories, then compile"/>
 
@@ -128,18 +128,18 @@
   </target>
 
   <target name="test" depends="compile"  description="test application">
-	<taskdef classpathref="test.classpath" resource="tasks.properties" />
-	<delete file="${build.home}/cobertura.ser" />
-	<cobertura-instrument todir="${build.home}/cobertura" datafile="${build.home}/cobertura.ser">
-		<includeclasses regex="net\.gwerder\.java.*" />
-		<excludeclasses regex="net\.gwerder\.java.*\.test\..*" />
-		<excludeclasses regex=".*Test.*" />
-		<instrumentationClasspath>
-			<pathelement location="${build.home}/classes" />
-		</instrumentationClasspath>
-	</cobertura-instrument>
+  <taskdef classpathref="test.classpath" resource="tasks.properties" />
+  <delete file="${build.home}/cobertura.ser" />
+  <cobertura-instrument todir="${build.home}/cobertura" datafile="${build.home}/cobertura.ser">
+    <includeclasses regex="net\.gwerder\.java.*" />
+    <excludeclasses regex="net\.gwerder\.java.*\.test\..*" />
+    <excludeclasses regex=".*Test.*" />
+    <instrumentationClasspath>
+      <pathelement location="${build.home}/classes" />
+    </instrumentationClasspath>
+  </cobertura-instrument>
 
-	<mkdir dir='${build.home}/testsrc'/>
+  <mkdir dir='${build.home}/testsrc'/>
     <junit  fork="yes" haltonfailure="yes" dir="${build.home}/classes/"> <!-- showoutput="yes" printsummary="withOutAndErr" -->
         <sysproperty key="net.sourceforge.cobertura.datafile" file="${build.home}/cobertura.ser" />
         <classpath refid="test.classpath"/>
@@ -154,16 +154,16 @@
     </junit>
 
     <mkdir dir='${doc.home}/cobertura'/>
-	<cobertura-report format="xml" destdir="${build.home}/testsrc"  datafile="${build.home}/cobertura.ser">
-		<fileset dir="${build.home}/src">
-			<include name="**/*.java" />
-		</fileset>
-	</cobertura-report>
-	<cobertura-report format="html" destdir="${doc.home}/cobertura"  datafile="${build.home}/cobertura.ser">
-		<fileset dir="${build.home}/src">
-			<include name="**/*.java" />
-		</fileset>
-	</cobertura-report>
+  <cobertura-report format="xml" destdir="${build.home}/testsrc"  datafile="${build.home}/cobertura.ser">
+    <fileset dir="${build.home}/src">
+      <include name="**/*.java" />
+    </fileset>
+  </cobertura-report>
+  <cobertura-report format="html" destdir="${doc.home}/cobertura"  datafile="${build.home}/cobertura.ser">
+    <fileset dir="${build.home}/src">
+      <include name="**/*.java" />
+    </fileset>
+  </cobertura-report>
 
     <taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask">
         <classpath>
@@ -185,8 +185,8 @@
         </fileset>
     </pmd>
 
-	<!--- directories for sonar build -->
-	<mkdir dir='${basedir}/target'/>
+  <!--- directories for sonar build -->
+  <mkdir dir='${basedir}/target'/>
     <mkdir dir='${basedir}/target/sonar'/>
 
   </target>
@@ -211,7 +211,7 @@
 
   <target name="test-gui" depends="compile"  description="run application">
     <java dir="${build.home}/classes/" classname="junit.swingui.TestRunner" fork="yes" classpathref="test.classpath">
-		<!--<jvmarg line="-Djavax.net.ssl.keyStore=keystore.jks -Djavax.net.ssl.keyStorePassword=changeme"/> -->
+    <!--<jvmarg line="-Djavax.net.ssl.keyStore=keystore.jks -Djavax.net.ssl.keyStorePassword=changeme"/> -->
         <arg line="${app.package}.test.MainCoreSuite"/>
     </java>
   </target>
@@ -229,9 +229,9 @@
       <classpath refid="compile.classpath"/>
       <!--<link offline="false" href="http://java.sun.com/j2se/1.5.0/docs/api/" packagelistLoc="C:/temp/pl1"/>
       <link offline="false" href="http://developer.java.sun.com/developer/products/xml/docs/api/" packagelistLoc="C:/temp/pl2"/>  -->
-	  <tag name="known.bug" description="Known bugs:"/>
-	  <tag name="to.do" description="TODOs:"/>
-	  <tag name="fix.me" description="Fix me:"/>
+    <tag name="known.bug" description="Known bugs:"/>
+    <tag name="to.do" description="TODOs:"/>
+    <tag name="fix.me" description="Fix me:"/>
       <fileset dir="${build.home}/testsrc/" defaultexcludes="yes">
         <include name="**/*.java"/>
       </fileset>
@@ -248,8 +248,8 @@
   <!-- =================================== Sub targets -->
 
   <target name="pdf-plan" unless="messagevortexplan.uptodate" depends="pdf-uptodate">
-	<latex
-	path="${path.miktex}"
+  <latex
+  path="${path.miktex}"
         latexfile="${doc.home}/messagevortex_Plan.tex"
         verbose="on"
         clean="off"
@@ -257,7 +257,7 @@
         passThruLaTeXParameters="-synctex=1"
         workingDir="${doc.home}">
             <makeindex
-		path="${path.miktex}"
+    path="${path.miktex}"
                 run="on"
                 workingDir="${doc.home}">
                 <fileset dir="${doc.home}">
@@ -265,7 +265,7 @@
                 </fileset>
             </makeindex>
             <bibtex
-		path="${path.miktex}"
+    path="${path.miktex}"
                 run="on"
                 workingDir="${doc.home}" />
     </latex>
@@ -273,7 +273,7 @@
 
   <target name="pdf-roadmap" unless="messagevortexrm.uptodate" depends="pdf-uptodate">
     <latex
-	path="${path.miktex}"
+  path="${path.miktex}"
         latexfile="${doc.home}/messagevortex_Roadmap.tex"
         verbose="on"
         clean="off"
@@ -281,7 +281,7 @@
         passThruLaTeXParameters="-synctex=1"
         workingDir="${doc.home}">
             <makeindex
-		path="${path.miktex}"
+    path="${path.miktex}"
                 run="on"
                 workingDir="${doc.home}">
                 <fileset dir="${doc.home}">
@@ -289,7 +289,7 @@
                 </fileset>
             </makeindex>
             <bibtex
-		path="${path.miktex}"
+    path="${path.miktex}"
                 run="on"
                 workingDir="${doc.home}" />
     </latex>
@@ -297,7 +297,7 @@
 
   <target name="pdf-vortex" unless="messagevortexdoc.uptodate" depends="pdf-uptodate">
     <latex
-		path="${path.miktex}"
+    path="${path.miktex}"
         latexfile="${doc.home}/messagevortex.tex"
         verbose="on"
         clean="off"
@@ -305,7 +305,7 @@
         passThruLaTeXParameters="-synctex=1"
         workingDir="${doc.home}">
             <makeindex
-		path="${path.miktex}"
+    path="${path.miktex}"
                 run="on"
                 workingDir="${doc.home}">
                 <fileset dir="${doc.home}">
@@ -313,28 +313,28 @@
                 </fileset>
             </makeindex>
             <bibtex
-		path="${path.miktex}"
+    path="${path.miktex}"
                 run="on"
                 workingDir="${doc.home}" />
     </latex>
   </target>
 
   <target name="pdf-uptodate">
-	<condition property="messagevortexdoc.uptodate">
-		<uptodate targetfile="${doc.home}/messagevortex.pdf">
-			<srcfiles dir="${doc.home}" includes="inc/**/*.tex inc/**/*.inc **/*.bib messagevortex.tex **/*.fig **/*.png **/*.jpg"/>
-		</uptodate>
-	</condition>
-	<condition property="messagevortexrm.uptodate">
-		<uptodate targetfile="${doc.home}/messagevortex_Roadmap.pdf">
-			<srcfiles dir="${doc.home}" includes="messagevortex_Roadmap.tex"/>
-		</uptodate>
-	</condition>
-	<condition property="messagevortexplan.uptodate">
-		<uptodate targetfile="${doc.home}/messagevortex_Plan.pdf">
-			<srcfiles dir="${doc.home}/inc" includes="messagevortex_Plan.tex"/>
-		</uptodate>
-	</condition>
+  <condition property="messagevortexdoc.uptodate">
+    <uptodate targetfile="${doc.home}/messagevortex.pdf">
+      <srcfiles dir="${doc.home}" includes="inc/**/*.tex inc/**/*.inc **/*.bib messagevortex.tex **/*.fig **/*.png **/*.jpg"/>
+    </uptodate>
+  </condition>
+  <condition property="messagevortexrm.uptodate">
+    <uptodate targetfile="${doc.home}/messagevortex_Roadmap.pdf">
+      <srcfiles dir="${doc.home}" includes="messagevortex_Roadmap.tex"/>
+    </uptodate>
+  </condition>
+  <condition property="messagevortexplan.uptodate">
+    <uptodate targetfile="${doc.home}/messagevortex_Plan.pdf">
+      <srcfiles dir="${doc.home}/inc" includes="messagevortex_Plan.tex"/>
+    </uptodate>
+  </condition>
   </target>
 
   <target name="xml" depends="prepare">
@@ -342,7 +342,7 @@
     <taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
       <classpath>
         <fileset dir="C:\vApps\jaxb-ri-20110412\lib"  includes="jaxb-xjc.jar" />
-	  </classpath>
+    </classpath>
     </taskdef>
     <echo message="Building all xml classes ..." />
     <mkdir dir="${build.home}/src/${app.path}/xml"/>
