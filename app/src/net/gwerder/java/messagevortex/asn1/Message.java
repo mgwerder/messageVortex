@@ -17,7 +17,6 @@ import java.util.logging.Logger;
 public class Message extends Block {
 
     private static final int ROUTING          = 3000;
-    private static final int ROUTINGLOG       = 3010;
     private static final int REPLY            = 3020;
     private static final int PAYLOAD          = 3100;
     private static final int HEADER_ENCRYPTED = 1001;
@@ -28,14 +27,12 @@ public class Message extends Block {
     private AsymmetricKey headerTargetIdentityKey;
     private Identity identity;
     private Routing routing;
-    private RoutingLog routingLog ;
     private HeaderReply headerReply;
     private Payload payload;
 
     public Message() {
         identity=null;
         routing=null;
-        routingLog=null;
         headerReply=null;
         payload=null;
     }
@@ -136,12 +133,6 @@ public class Message extends Block {
                 tmp = ASN1TaggedObject.getInstance( s1.getObjectAt( ++i ) ); //optional block
             }
 
-            // testing for routingLogBlock
-            if (tmp.getTagNo() == ROUTINGLOG) {
-                routingLog = new RoutingLog( tmp.getObject() ); //optional block
-                tmp = ASN1TaggedObject.getInstance( s1.getObjectAt( ++i ) ); //optional block
-            }
-
             // Testing for reply block
             if (tmp.getTagNo() == REPLY) {
                 headerReply = new HeaderReply( tmp.getObject() ); //optional block
@@ -187,7 +178,6 @@ public class Message extends Block {
         // Writing encoded Blocks
         ASN1EncodableVector v2=new ASN1EncodableVector();
         if(routing!=null)      v2.add( new DERTaggedObject( true,ROUTING    ,routing.toASN1Object()));
-        if(routingLog!=null)   v2.add( new DERTaggedObject( true,ROUTINGLOG ,routingLog.toASN1Object()));
         if(headerReply!=null)  v2.add( new DERTaggedObject( true,REPLY      ,headerReply.toASN1Object()));
         if(payload !=null)     v2.add( new DERTaggedObject( true,PAYLOAD    ,payload.toASN1Object()));
         Logger.getLogger("Message").log(Level.FINER,"adding blocks");
@@ -208,8 +198,6 @@ public class Message extends Block {
     public Identity getIdentity() { return identity; }
 
     public Routing getRouting() { return routing; }
-
-    public RoutingLog getRoutingLog() { return routingLog; }
 
     public HeaderReply getHeaderReply() { return headerReply; }
 
@@ -248,12 +236,6 @@ public class Message extends Block {
                 sb.append( prefix + "    routing " + routing.dumpValueNotation( prefix + "  " ) + "," + CRLF );
             } else {
                 sb.append( prefix + "    -- NO Routing" + CRLF );
-            }
-            if (routingLog != null) {
-                sb.append( prefix + "    -- Dumping RoutingLog" + CRLF );
-                sb.append( prefix + "    routingLog " + routingLog.dumpValueNotation( prefix + "  " ) + "," + CRLF );
-            } else {
-                sb.append( prefix + "    -- NO RoutingLog" + CRLF );
             }
             if (headerReply != null) {
                 sb.append( prefix + "    -- Dumping HeaderReply" + CRLF );

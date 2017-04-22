@@ -19,6 +19,10 @@ public class BlendingSpec extends Block {
         parse(to);
     }
 
+    public BlendingSpec(String blendingEndpointAddress) {
+        this.blendingEndpointAddress = blendingEndpointAddress;
+    }
+
     protected void parse(ASN1Encodable to) {
         throw new UnsupportedOperationException( "not yet implemented" ); //FIXME
     }

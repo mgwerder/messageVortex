@@ -1,6 +1,10 @@
 package net.gwerder.java.messagevortex.test.blender;
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
+import net.gwerder.java.messagevortex.asn1.BlendingSpec;
+import net.gwerder.java.messagevortex.asn1.Identity;
+import net.gwerder.java.messagevortex.asn1.Message;
+import net.gwerder.java.messagevortex.asn1.Payload;
 import net.gwerder.java.messagevortex.blending.BlenderListener;
 import net.gwerder.java.messagevortex.blending.DummyBlender;
 import net.gwerder.java.messagevortex.transport.DummyTransport;
@@ -15,7 +19,7 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  * Created by martin.gwerder on 19.04.2017.
@@ -23,12 +27,14 @@ import static org.junit.Assert.fail;
 @RunWith(JUnit4.class)
 public class DummyBlenderTest implements BlenderListener,TransportListener {
 
-    private List<InputStream> msgs=new Vector<>();
     private static final java.util.logging.Logger LOGGER;
+
     static {
             LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
             MessageVortexLogger.setGlobalLogLevel( Level.ALL);
     }
+
+    private List<InputStream> msgs = new Vector<>();
 
     @Test
     public void dummyBlenderEndpointTest()  {
@@ -55,6 +61,13 @@ public class DummyBlenderTest implements BlenderListener,TransportListener {
             fail("duplicate addition of ID to DummyTransport unexpectedly succeeded");
         } catch(IOException ioe) {
             // this is expected behaviour
+        }
+        try {
+            assertTrue("Failed sending message to different endpoint", dt[0].blendMessage(new BlendingSpec("martin@example.com1"), new Message(new Identity(), new Payload())));
+            assertFalse("Failed sending message to unknown endpoint (unexpectedly succeeded)", dt[0].blendMessage(new BlendingSpec("martin@example.com-1"), new Message(new Identity(), new Payload())));
+        } catch (Exception ioe) {
+            LOGGER.log(Level.SEVERE, "Caught exception while creating message", ioe);
+            fail("Endpointests failed as there was an error opening sample messages");
         }
 
     }
