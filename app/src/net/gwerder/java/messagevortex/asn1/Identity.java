@@ -81,29 +81,61 @@ public class Identity extends Block {
     }
 
     public boolean equals(Object t) {
-        if(t==null) return false;
-        if(! (t instanceof Identity) ) return false;
-        Identity o=(Identity)t;
-        if(!headerKey.equals(o.headerKey)) return false;
-        if(!Arrays.equals(encryptedHeaderKey,o.encryptedHeaderKey)) return false;
-        if(!identityKey.equals(o.identityKey)) return false;
-        if(serial!=o.serial) return false;
-        if(maxReplays!=o.maxReplays) return false;
-        if(!valid.equals(o.valid)) return false;
-        if(!Arrays.equals(forwardSecret,o.forwardSecret)) return false;
-        if(!Arrays.equals(decryptionKeyRaw,o.decryptionKeyRaw)) return false;
-        if(hash!=o.hash) return false;
-        for(int i=0;i<requests.length;i++) {
-            if(!requests[i].equals(o.requests[i])) return false;
+        if(t==null) {
+            return false;
         }
-        if(identifier!=o.identifier) return false;
-        if(!Arrays.equals(padding,o.padding)) return false;
-        if(!Arrays.equals(encryptedIdentityBlock,o.encryptedIdentityBlock)) return false;
+        if(! (t instanceof Identity) ) {
+            return false;
+        }
+        Identity o=(Identity)t;
+        if(!headerKey.equals(o.headerKey)) {
+            return false;
+        }
+        if(!Arrays.equals(encryptedHeaderKey,o.encryptedHeaderKey)) {
+            return false;
+        }
+        if(!identityKey.equals(o.identityKey)) {
+            return false;
+        }
+        if(serial!=o.serial) {
+            return false;
+        }
+        if(maxReplays!=o.maxReplays) {
+            return false;
+        }
+        if(!valid.equals(o.valid)) {
+            return false;
+        }
+        if(!Arrays.equals(forwardSecret,o.forwardSecret)) {
+            return false;
+        }
+        if(!Arrays.equals(decryptionKeyRaw,o.decryptionKeyRaw)) {
+            return false;
+        }
+        if(hash!=o.hash) {
+            return false;
+        }
+        for(int i=0;i<requests.length;i++) {
+            if(!requests[i].equals(o.requests[i])) {
+                return false;
+            }
+        }
+        if(identifier!=o.identifier) {
+            return false;
+        }
+        if(!Arrays.equals(padding,o.padding)) {
+            return false;
+        }
+        // verify equality of encrypted identity block
+        if(!Arrays.equals(encryptedIdentityBlock,o.encryptedIdentityBlock)) {
+            return false;
+        }
         return true;
     }
 
     @Override
     public int hashCode() {
+        // this methode is required for code sanity
         return super.hashCode();
     }
 
@@ -170,8 +202,9 @@ public class Identity extends Block {
         }
 
         byte[] signature = ASN1OctetString.getInstance( s.getObjectAt( j++ ) ).getOctets();
-        if (!identityKey.verify( signVerifyObject, signature, hash.getAlgorithm() ))
+        if (!identityKey.verify( signVerifyObject, signature, hash.getAlgorithm() )) {
             throw new IOException( "Exception while verifying signature of identity block" );
+        }
     }
 
     public SymmetricKey getDecryptionKey() {
@@ -204,13 +237,11 @@ public class Identity extends Block {
     }
 
     private void sanitizeHeaderKey() throws IOException {
-        if (headerKey == null) {
-            if (encryptedHeaderKey == null) {
-                try {
-                    headerKey = new SymmetricKey();
-                } catch (NoSuchAlgorithmException nae) {
-                    throw new IOException( "exception while generating header key", nae );
-                }
+        if (headerKey == null && encryptedHeaderKey == null) {
+            try {
+                headerKey = new SymmetricKey();
+            } catch (NoSuchAlgorithmException nae) {
+                throw new IOException( "exception while generating header key", nae );
             }
         }
     }
@@ -218,8 +249,9 @@ public class Identity extends Block {
     public ASN1Object toASN1Object(AsymmetricKey targetIdentity) throws IOException, NullPointerException {
         sanitizeHeaderKey();
         //if(ownIdentity==null) throw new NullPointerException( "ownIdentity must not be null" );
-        if (headerKey == null && encryptedHeaderKey == null)
+        if (headerKey == null && encryptedHeaderKey == null) {
             throw new NullPointerException( "headerKey may not be null" );
+        }
         ASN1EncodableVector v1 = new ASN1EncodableVector();
         boolean encryptIdentity = false;
         if (headerKey != null && targetIdentity != null) {
@@ -235,18 +267,22 @@ public class Identity extends Block {
         } else {
             ASN1EncodableVector v = new ASN1EncodableVector();
             ASN1Object o = identityKey.toASN1Object( DumpType.ALL );
-            if (o == null) throw new IOException( "identityKey did return null object" );
+            if (o == null) {
+                throw new IOException( "identityKey did return null object" );
+            }
             v.add( o );
             v.add( new ASN1Integer( serial ) );
             v.add( new ASN1Integer( maxReplays ) );
             o = valid.toASN1Object();
-            if (o == null) throw new IOException( "validity did return null object" );
+            if (o == null) {
+                throw new IOException( "validity did return null object" );
+            }
             v.add( o );
             if(forwardSecret!=null && forwardSecret.length>0) {
                 // FIXME dumping of forward secrets is not implemented
             }
             try {
-                v.add( new DEROctetString( (decryptionKeyRaw != null ? decryptionKeyRaw : identityKey.encrypt( decryptionKey.getKey() )) ) );
+                v.add( new DEROctetString( decryptionKeyRaw != null ? decryptionKeyRaw : identityKey.encrypt( decryptionKey.getKey() ))  );
             } catch (Exception e) {
                 throw new IOException( "Error while encrypting decryptionKey", e );
             }
@@ -319,7 +355,9 @@ public class Identity extends Block {
             if (padding != null) {
                 sb.append( "," + CRLF );
                 sb.append( prefix + "    padding " + toHex( padding ) + CRLF );
-            } else sb.append( CRLF );
+            } else {
+                sb.append( CRLF );
+            }
             sb.append( prefix + "  }," );
         }
         sb.append(prefix+"}");
