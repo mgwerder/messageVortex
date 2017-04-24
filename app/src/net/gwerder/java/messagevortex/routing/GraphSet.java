@@ -13,7 +13,7 @@ import java.util.*;
 public class GraphSet implements Comparator<GraphSet>,Comparable<GraphSet>,Iterable<Edge> {
 
     private static final long serialVersionUID = 16134223345689L;
-    private Vector<Edge> store = new Vector<>();
+    private List<Edge> store = new ArrayList<>();
     private IdentityStore            identityStore=null;
     private List<IdentityStoreBlock> anonymitySet;
     private IdentityStoreBlock       source=null;
@@ -35,7 +35,7 @@ public class GraphSet implements Comparator<GraphSet>,Comparable<GraphSet>,Itera
     }
 
     public void setAnonymitySet(IdentityStoreBlock[] anonymitySet ) {
-        Vector<IdentityStoreBlock> tmp =new Vector<>();
+        List<IdentityStoreBlock> tmp =new ArrayList<>();
         tmp.addAll( Arrays.asList(anonymitySet) );
         this.anonymitySet=tmp;
     }
@@ -49,9 +49,12 @@ public class GraphSet implements Comparator<GraphSet>,Comparable<GraphSet>,Itera
     }
 
     public void setSource(IdentityStoreBlock source) throws NullPointerException, IllegalArgumentException {
-        if (source == null) throw new NullPointerException( "source may not be null" );
-        if (!anonymitySet.contains( source ))
+        if (source == null) {
+            throw new NullPointerException( "source may not be null" );
+        }
+        if (!anonymitySet.contains( source )){
             throw new IllegalArgumentException( "source must be member of anonymity set" );
+        }
         this.hasChanged = true;
         this.source = source;
     }
@@ -61,9 +64,12 @@ public class GraphSet implements Comparator<GraphSet>,Comparable<GraphSet>,Itera
     }
 
     public void setTarget(IdentityStoreBlock target) throws NullPointerException, IllegalArgumentException {
-        if (target == null) throw new NullPointerException( "target may not be null" );
-        if (!anonymitySet.contains( target ))
+        if (target == null) {
+            throw new NullPointerException( "target may not be null" );
+        }
+        if (!anonymitySet.contains( target )){
             throw new IllegalArgumentException( "target must be member of anonymity set" );
+        }
         this.hasChanged = true;
         this.target = target;
     }
@@ -83,7 +89,9 @@ public class GraphSet implements Comparator<GraphSet>,Comparable<GraphSet>,Itera
 
     public boolean contains(Edge g) {
         for(Edge e:store) {
-            if(e.equals(g)) return true;
+            if(e.equals(g)) {
+                return true;
+            }
         }
         return false;
     }
@@ -94,7 +102,9 @@ public class GraphSet implements Comparator<GraphSet>,Comparable<GraphSet>,Itera
     }
 
     public IdentityStoreBlock getAnonIdentity(int i) throws ArrayIndexOutOfBoundsException {
-        if(i<0 || i>=anonymitySet.size()) throw new ArrayIndexOutOfBoundsException( "got invalid identity vector ("+i+")" );
+        if(i<0 || i>=anonymitySet.size()) {
+            throw new ArrayIndexOutOfBoundsException( "got invalid identity vector ("+i+")" );
+        }
         return anonymitySet.get(i);
     }
 
@@ -106,10 +116,16 @@ public class GraphSet implements Comparator<GraphSet>,Comparable<GraphSet>,Itera
     }
 
     public boolean targetReached( IdentityStoreBlock is) throws NullPointerException {
-        if(is==null) throw new NullPointerException();
-        if (is.equals(source)) return true;
+        if(is==null) {
+            throw new NullPointerException();
+        }
+        if (is.equals(source)){
+            return true;
+        }
         for (Edge g : store) {
-            if (g.getTo() == is) return true;
+            if (g.getTo() == is) {
+                return true;
+            }
         }
         return false;
     }
@@ -140,24 +156,32 @@ public class GraphSet implements Comparator<GraphSet>,Comparable<GraphSet>,Itera
     }
 
     private Edge[][] getRoute(int startIndex, Edge[] visited, IdentityStoreBlock to) {
-        List<Edge[]> ret=new Vector<>(  );
+        List<Edge[]> ret=new ArrayList<>(  );
 
         // get last graph
         Edge g=store.get(startIndex);
 
         // if target reached tell so
-        if(g.getTo().equals(to)) return new Edge[][] {new Edge[0]};
+        if(g.getTo().equals(to)) {
+            return new Edge[][]{new Edge[0]};
+        }
 
         //
         for(int i=startIndex+1;i<store.size();i++) {
             Edge tmp=store.get(i);
-            if(tmp==null) throw new NullPointerException("access to bad index");
+            if(tmp==null) {
+                throw new NullPointerException("access to bad index");
+            }
 
             // avoid loops in current path (no visited graphs)
             boolean vis=false;
             for(Edge v:visited) {
-                if(v==null) throw new NullPointerException("OUCH got an null visited graph ... thats impossible (size is "+visited.length+";v[0]="+visited[0]+";v[1]="+visited[1]+")");
-                if(tmp.getTo().equals(v.getFrom()) || tmp.getTo().equals(v.getTo())) vis=true;
+                if(v==null) {
+                    throw new NullPointerException("OUCH got an null visited graph ... thats impossible (size is "+visited.length+";v[0]="+visited[0]+";v[1]="+visited[1]+")");
+                }
+                if(tmp.getTo().equals(v.getFrom()) || tmp.getTo().equals(v.getTo())) {
+                    vis=true;
+                }
             }
 
             // if not yet visited and going off from current node -> evaluate possibilities
@@ -204,12 +228,18 @@ public class GraphSet implements Comparator<GraphSet>,Comparable<GraphSet>,Itera
     }
 
     public boolean equals(Object g) {
-        if(g==null) return false;
+        if(g==null) {
+            return false;
+        }
         if(g instanceof GraphSet) {
             GraphSet t=(GraphSet)g;
-            if( t.store.size()!=store.size()) return false;
+            if( t.store.size()!=store.size()) {
+                return false;
+            }
             for(int i=0;i<store.size();i++) {
-                if(t.store.get(i)==null ||get(i)==null || !get(i).equals(t.store.get(i))) return false;
+                if(t.store.get(i)==null ||get(i)==null || !get(i).equals(t.store.get(i))) {
+                    return false;
+                }
             }
             return true;
         } else {

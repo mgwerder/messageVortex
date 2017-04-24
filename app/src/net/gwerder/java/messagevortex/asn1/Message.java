@@ -3,14 +3,12 @@ package net.gwerder.java.messagevortex.asn1;
 import org.bouncycastle.asn1.*;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -51,53 +49,25 @@ public class Message extends Block {
 
     public Message(Identity i,Payload p) {
         this();
-        if( i==null ) throw new NullPointerException( "Identity may not be null" );
-        if( p==null ) throw new NullPointerException( "Payload may not be null" );
+        if( i==null ) {
+            throw new NullPointerException( "Identity may not be null" );
+        };
+        if( p==null ) {
+            throw new NullPointerException( "Payload may not be null" );
+        }
         identity=i;
         payload=p;
-    }
-
-    public static void main(String[] args) throws Exception {
-        System.out.println( "\n;;; -------------------------------------------" );
-        System.out.println( ";;; creating blank dump" );
-        Message m = new Message( new Identity(), new Payload() );
-        System.out.println( m.dumpValueNotation( "" ) );
-
-        System.out.println( "\n;;; -------------------------------------------" );
-        System.out.println( ";;; Reading from File example1.PDU.der" );
-        Message msg = new Message( new File( "example1.PDU.der" ) );
-        System.out.println( ";;; dumping" );
-        System.out.println( msg.dumpValueNotation( "" ) );
-
-        System.out.println( "\n;;; -------------------------------------------" );
-        System.out.println( ";;; simple building message" );
-        Message m2 = new Message( new Identity(), new Payload() );
-        System.out.println( ";;; dumping" );
-        System.out.println( m2.dumpValueNotation( "" ) );
-        System.out.println( ";;; reencode check" );
-        System.out.println( ";;;   getting DER stream" );
-        byte[] b1 = m.toBytes();
-        System.out.println( ";;;   storing to DER stream to " + System.getProperty( "java.io.tmpdir" ) );
-        DEROutputStream f = new DEROutputStream( new FileOutputStream( System.getProperty( "java.io.tmpdir" ) + "/temp.der" ) );
-        f.writeObject( m.toASN1Object() );
-        f.close();
-        System.out.println( ";;;   parsing DER stream" );
-        Message m3 = new Message( b1 );
-        System.out.println( ";;;   getting DER stream again" );
-        byte[] b2 = m3.toBytes();
-        System.out.println( ";;;   comparing" );
-        if (Arrays.equals( b1, b2 )) {
-            System.out.println( "Reencode success" );
-        } else {
-            System.out.println( "Reencode FAILED" );
-        }
     }
 
     protected void parse(byte[] p) throws IOException,ParseException,NoSuchAlgorithmException {
         ASN1InputStream aIn=new ASN1InputStream( p );
         parse(aIn.readObject());
-        if( identity==null ) throw new NullPointerException( "Identity may not be null" );
-        if( payload==null ) throw new NullPointerException( "Payload may not be null" );
+        if( identity==null ) {
+            throw new NullPointerException( "Identity may not be null" );
+        }
+        if( payload==null ) {
+            throw new NullPointerException( "Payload may not be null" );
+        }
     }
 
     protected void parse(ASN1Encodable p) throws IOException,ParseException,NoSuchAlgorithmException {
@@ -155,8 +125,15 @@ public class Message extends Block {
             Logger.getLogger( "Message" ).log( Level.WARNING, "Error while parsing payload block in message", iae );
             throw iae;
         }
-        if( identity==null ) throw new NullPointerException( "Identity may not be null" );
-        if( payload==null )  throw new NullPointerException( "Payload may not be null" );
+        // only allow if identity is set (mandatory)
+        if( identity==null ) {
+            throw new NullPointerException( "Identity may not be null" );
+        }
+        // only allow if payload or routing is set (mandatory)
+        // FIXME check for header request blocks
+        if( payload==null && routing==null)  {
+            throw new NullPointerException( "Payload may not be null" );
+        }
     }
 
     public ASN1Object toASN1Object() throws IOException {
@@ -166,20 +143,30 @@ public class Message extends Block {
     public ASN1Object toASN1Object(AsymmetricKey identityKey, SymmetricKey identityBlockKey, SymmetricKey blocksKey) throws IOException {
         // Prepare encoding
         Logger.getLogger("Message").log(Level.FINER,"Executing toASN1Object()");
-        if (blocksKey == null) blocksKey = getIdentity().getDecryptionKey();
+        if (blocksKey == null) {
+            blocksKey = getIdentity().getDecryptionKey();
+        }
 
         ASN1EncodableVector v=new ASN1EncodableVector();
         if(identity==null) throw new IOException("identity may not be null when encoding");
         Logger.getLogger("Message").log(Level.FINER,"adding identity");
         ASN1Encodable o=identity.toASN1Object();
-        if (o == null) throw new IOException( "returned identity object may not be null" );
+        if (o == null) {
+            throw new IOException( "returned identity object may not be null" );
+        }
         v.add( o );
 
         // Writing encoded Blocks
         ASN1EncodableVector v2=new ASN1EncodableVector();
-        if(routing!=null)      v2.add( new DERTaggedObject( true,ROUTING    ,routing.toASN1Object()));
-        if(headerReply!=null)  v2.add( new DERTaggedObject( true,REPLY      ,headerReply.toASN1Object()));
-        if(payload !=null)     v2.add( new DERTaggedObject( true,PAYLOAD    ,payload.toASN1Object()));
+        if(routing!=null) {
+            v2.add( new DERTaggedObject( true,ROUTING    ,routing.toASN1Object()));
+        }
+        if(headerReply!=null) {
+            v2.add( new DERTaggedObject( true,REPLY      ,headerReply.toASN1Object()));
+        }
+        if(payload !=null) {
+            v2.add( new DERTaggedObject( true,PAYLOAD    ,payload.toASN1Object()));
+        }
         Logger.getLogger("Message").log(Level.FINER,"adding blocks");
         if (blocksKey == null) {
             v.add( new DERTaggedObject( true, BLOCKS_PLAIN, new DERSequence( v2 ) ) );
