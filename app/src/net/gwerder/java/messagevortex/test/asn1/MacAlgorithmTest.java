@@ -29,9 +29,6 @@ public class MacAlgorithmTest {
         MessageVortexLogger.setGlobalLogLevel(Level.ALL);
     }
 
-    /***
-     * Testing null beheour of toHex()
-     */
     @Test
     public void basicMacAlgorithmExceptionTest() {
         // null on algorithm
