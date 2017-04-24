@@ -20,6 +20,9 @@ public class MacAlgorithm extends Block {
     }
 
     public MacAlgorithm(ASN1Encodable to) throws IOException {
+        if (to == null) {
+            throw new IOException( "Only hashing algorithms allowed" );
+        }
         parse( to );
     }
 

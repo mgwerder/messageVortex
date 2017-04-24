@@ -48,7 +48,7 @@ public class MacAlgorithmTest {
         } catch(IOException ioe) {
             // this is expected benhaviour
         } catch(Exception e) {
-            fail("got unexpected exception");
+            fail("got unexpected exception ("+e+")");
         }
         // bad algorithm
         try {
@@ -60,20 +60,19 @@ public class MacAlgorithmTest {
         }
         MacAlgorithm ma=null;
         try {
-            ma=new MacAlgorithm(Algorithm.CAMELLIA256);
-        } catch(IOException ioe) {
-            // this is expected benhaviour
+            ma=new MacAlgorithm(Algorithm.SHA512);
         } catch(Exception e) {
             fail("got unexpected exception");
         }
-        assertTrue("error verifying AlgTypeSetting",ma.getAlgorithm().equals(Algorithm.CAMELLIA256));
+        assertTrue("Error AlgorithmType returns NULL instead of type",ma.getAlgorithm()!=null);
+        assertTrue("error verifying AlgTypeSetting",ma.getAlgorithm().equals(Algorithm.SHA512));
         try {
-            assertTrue("error verifying AlgTypeSetting (2)",ma.setAlgorithm(Algorithm.CAMELLIA128).equals(Algorithm.CAMELLIA256));
+            assertTrue("error verifying AlgTypeSetting (2)",ma.setAlgorithm(Algorithm.SHA384).equals(Algorithm.SHA512));
         } catch(Exception e) {
             fail("got unexpected exception");
         }
         try {
-            assertTrue("error verifying AlgTypeSetting (3)",ma.setAlgorithm(Algorithm.CAMELLIA256).equals(Algorithm.CAMELLIA128));
+            assertTrue("error verifying AlgTypeSetting (3)",ma.setAlgorithm(Algorithm.SHA512).equals(Algorithm.SHA384));
         } catch(Exception e) {
             fail("got unexpected exception");
         }
