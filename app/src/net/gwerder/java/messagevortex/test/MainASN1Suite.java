@@ -1,10 +1,5 @@
 package net.gwerder.java.messagevortex.test;
 
-/**
- * Test all classes related to parsing/handling ASN.1 data.
- *
- * Created by martin.gwerder on 19.04.2016.
- */
 
 import junit.framework.JUnit4TestAdapter;
 import junit.framework.TestSuite;
@@ -27,6 +22,9 @@ import org.junit.runners.Suite;
         IdentityTest.class
 })
 
+/***
+ * Test all classes related to parsing/handling ASN.1 data.
+ */
 public class MainASN1Suite {
 
     public static junit.framework.Test suite() {

@@ -124,7 +124,7 @@ public class ImapLineTest {
             new ImapLine(null,"",i);
             fail("Blank Line Exception not rised");
         } catch(ImapNullLineException ble) {
-            /** Null Line Exception rised --- thisis expected ***/
+            // Null Line Exception rised -- this is expected
             assertTrue("Got expected exception",true);
         } catch(ImapBlankLineException ble) {
             LOGGER.log(Level.WARNING,"Unexpected Exception",ble);

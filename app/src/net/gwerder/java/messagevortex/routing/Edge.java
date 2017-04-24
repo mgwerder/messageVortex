@@ -3,7 +3,7 @@ package net.gwerder.java.messagevortex.routing;
 import net.gwerder.java.messagevortex.asn1.IdentityStoreBlock;
 
 /**
- * Represents a graph betwee two identity blocks inclusive senders operation and time.
+ * Represents a graph between two identity blocks inclusive senders operation and time.
  *
  * Created by martin.gwerder on 13.06.2016.
  */

@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 /***
  * Keymanager enables specification of key alias to be used.
  *
- * @to.do support multiple aliases
+ * @todo support multiple aliases
  ***/ 
 public class CustomKeyManager implements X509KeyManager {
 

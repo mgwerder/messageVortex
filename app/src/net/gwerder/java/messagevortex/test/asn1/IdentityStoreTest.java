@@ -31,9 +31,6 @@ public class IdentityStoreTest {
     }
 
     @Test
-    /***
-     * Reencodes 100 IdentityStore and checks whether their byte and Value Notation Dumps are equivalent
-     */
     public void testingIdentityStoreDump1() {
         try {
             for (int i = 0; i < 10; i++) {
@@ -55,9 +52,6 @@ public class IdentityStoreTest {
     }
 
     @Test
-    /***
-     * Reencodes 4 IdentityStore and checks whether their byte and Value Notation Dumps are equivalent
-     */
     public void testingIdentityStoreDemo() throws InterruptedException {
         class ISThread extends Thread {
             public IdentityStore is = null;

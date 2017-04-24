@@ -27,22 +27,24 @@ public class BlockTest {
         MessageVortexLogger.setGlobalLogLevel(Level.ALL);
     }
 
-    @Test
     /***
-     * Testing null beheour of toHex()
+     * Testing null behaviour of toHex().
      */
-    public void toHex() {
+    @Test
+    public void toHexTest() {
+        LOGGER.log(Level.INFO,"Testing toHex behaviour");
         assertTrue("toHex(null) is not ''H","''H".equals(Block.toHex(null)));
         assertTrue("toHex({}) is not ''H","''H".equals(Block.toHex(new byte[0])));
         assertTrue("toHex(\"\\r\\n\") is not '0D0A'H","'0D0A'H".equals(Block.toHex(new byte[] { '\r','\n'})));
         assertTrue("toHex(\"\\0\") is not '00'H","'00'H".equals(Block.toHex(new byte[] { 0 })));
     }
 
-    @Test
     /***
      * Testing null behaveour of toBitString()
      */
-    public void toBitString() {
+    @Test
+    public void toBitStringTest() {
+        LOGGER.log(Level.INFO,"Testing toBitString() behaviour");
         assertTrue("toBitString(null) is not ''B","''B".equals(Block.toBitString(null)));
         assertTrue("toBitString(\"\"B) is not ''H ("+Block.toBitString(new DERBitString(new byte[] { },0))+")","''H".equals(Block.toBitString(new DERBitString(new byte[] { },0))));
         assertTrue("toBitString(\"\\r\\n\") is not '0D0A'H ("+Block.toBitString(new DERBitString(new byte[] { '\r','\n'},0))+")","'0D0A'H".equals(Block.toBitString(new DERBitString(new byte[] { '\r','\n'},0))));
@@ -56,11 +58,11 @@ public class BlockTest {
         assertTrue("toBitString('0101010'B) is not '0101010'B","'0101010'B".equals(Block.toBitString(new DERBitString(new byte[] { 85 },1))));
     }
 
-    @Test
     /***
-     * Testing null behaveour of toBitString()
+     * Testing behaviour of getters
      */
-    public void parameterGetters() {
+    @Test
+    public void parameterGettersTest() {
         assertTrue("getById(10000)!=KEYSIZE", Parameter.getById(10000)==Parameter.KEYSIZE);
         assertTrue("getById(10001)!=CURVETYPE",Parameter.getById(10001)==Parameter.CURVETYPE);
         assertTrue("getById(0)!=null",Parameter.getById(0)==null);

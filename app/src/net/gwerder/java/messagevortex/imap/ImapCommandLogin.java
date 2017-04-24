@@ -23,7 +23,7 @@ public class ImapCommandLogin extends ImapCommand {
     }
     
     /***
-     * @fix.me add capabilities to successful login
+     * @todo add capabilities to successful login
      ***/
     public String[] processCommand(ImapLine line) throws ImapException {
         

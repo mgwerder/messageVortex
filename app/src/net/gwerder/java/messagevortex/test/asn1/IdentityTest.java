@@ -25,10 +25,10 @@ public class IdentityTest {
         MessageVortexLogger.setGlobalLogLevel(Level.ALL);
     }
 
-    @Test
     /***
-     * Reencodes 100 Identities and checks wether their byte and Value Notation Dumps are equivalent
+     * Reencodes 100 Identities and checks whether their byte and Value Notation Dumps are equivalent.
      */
+    @Test
     public void testingIdentityDump1() {
         try {
             for (int i = 0; i < 10; i++) {

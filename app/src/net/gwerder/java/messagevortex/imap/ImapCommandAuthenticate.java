@@ -35,7 +35,7 @@ public class ImapCommandAuthenticate extends ImapCommand {
      *
      * @param  line           The context of the line triggered
      * @throws ImapException
-     * @fix.me add capabilities to successful login
+     * @todo add capabilities to successful login
      ***/
     public String[] processCommand(ImapLine line) throws ImapException {
         

@@ -25,10 +25,10 @@ public interface Blender {
      *
      * All decoded headers will be verified using this verifier.
      *
-     * @param verifyer
-     * @return
+     * @param verifier The verifier to be used
+     * @return previous/old verifier
      */
-    public HeaderVerifyer setHeaderVerifyer(HeaderVerifyer verifyer);
+    public HeaderVerifyer setHeaderVerifyer(HeaderVerifyer verifier);
 
     /***
      * This method is called by the routing layer to blend a message.
