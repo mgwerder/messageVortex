@@ -9,7 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Created by martin.gwerder on 26.05.2016.
+ * This class represents one block of an identity store for storage.
  */
 public class IdentityStoreBlock extends Block {
 
@@ -28,15 +28,31 @@ public class IdentityStoreBlock extends Block {
     }
 
     public boolean equals(Object t) {
-        if(t==null) return false;
-        if(!(t instanceof IdentityStoreBlock)) return false;
+        if(t==null) {
+            return false;
+        }
+        if(!(t instanceof IdentityStoreBlock)) {
+            return false;
+        }
         IdentityStoreBlock isb=(IdentityStoreBlock)t;
-        if(!valid.equals(isb.valid)) return false;
-        if(messageQuota!=isb.messageQuota) return false;
-        if(transferQuota!=isb.transferQuota) return false;
-        if(!identityKey.equals(isb.identityKey)) return false;
-        if((nodeAddress!=null && !nodeAddress.equals(isb.nodeAddress) || (nodeAddress==null && isb.nodeAddress!=null))) return false;
-        if(!nodeKey.equals(isb.nodeKey)) return false;
+        if(!valid.equals(isb.valid)) {
+            return false;
+        }
+        if(messageQuota!=isb.messageQuota) {
+            return false;
+        }
+        if(transferQuota!=isb.transferQuota) {
+            return false;
+        }
+        if(!identityKey.equals(isb.identityKey)) {
+            return false;
+        }
+        if((nodeAddress!=null && !nodeAddress.equals(isb.nodeAddress) || (nodeAddress==null && isb.nodeAddress!=null))) {
+            return false;
+        }
+        if(!nodeKey.equals(isb.nodeKey)) {
+            return false;
+        }
         return true;
     }
 
@@ -76,7 +92,9 @@ public class IdentityStoreBlock extends Block {
                     secureRandom.nextBytes( b );
                     ret.setNodeAddress( "smtp:" + toHex( b ) + "@demo" + secureRandom.nextInt( 3 ) );
                     AsymmetricKey ak=new AsymmetricKey();
-                    if(!complete) ak.setPrivateKey(null);
+                    if(!complete) {
+                        ak.setPrivateKey(null);
+                    }
                     ret.setNodeKey(ak);
                 } catch(Exception e) {
                     throw new IOException("Exception while generating identity",e);
@@ -92,12 +110,17 @@ public class IdentityStoreBlock extends Block {
                     secureRandom.nextBytes( b );
                     ret.setNodeAddress( "smtp:" + toHex( b ) + "@demo" + secureRandom.nextInt( 3 ) );
                     ak=new AsymmetricKey();
-                    if(!complete) ak.setPrivateKey(null);
+                    if(!complete) {
+                        ak.setPrivateKey(null);
+                    }
                     ret.setNodeKey(ak);
                 } catch(Exception e) {
                     throw new IOException("Exception while generating identity",e);
                 }
                 break;
+            default:
+                // Unknown type just ignore it
+                return null;
         }
         return ret;
     }
@@ -205,18 +228,28 @@ public class IdentityStoreBlock extends Block {
         sb.append( prefix + "  valid "+valid.dumpValueNotation( prefix+"    " ) +","+CRLF );
         sb.append( prefix + "  messageQuota "+messageQuota+","+CRLF );
         sb.append( prefix + "  transferQuota "+transferQuota );
-        if(identityKey!=null) sb.append( ","+CRLF+prefix + "  identity "+identityKey.dumpValueNotation( prefix+"    " ) );
-        if(nodeAddress!=null) sb.append( ","+CRLF+prefix + "  nodeAddress \""+nodeAddress+"\"" );
-        if(nodeKey!=null)     sb.append( ","+CRLF+prefix + "  nodeKey "+nodeKey.dumpValueNotation( prefix+"    " ) );
+        if(identityKey!=null) {
+            sb.append( ","+CRLF+prefix + "  identity "+identityKey.dumpValueNotation( prefix+"    " ) );
+        }
+        if(nodeAddress!=null) {
+            sb.append( ","+CRLF+prefix + "  nodeAddress \""+nodeAddress+"\"" );
+        }
+        if(nodeKey!=null)     {
+            sb.append( ","+CRLF+prefix + "  nodeKey "+nodeKey.dumpValueNotation( prefix+"    " ) );
+        }
         sb.append( CRLF );
         sb.append( prefix + "}" );
         return sb.toString();
     }
 
     public IdentityType getType() {
-        if(iType!=null) return iType;
-        if(nodeKey==null) return IdentityType.OWNED_IDENTITY;
-        return (identityKey==null?IdentityType.NODE_IDENTITY:IdentityType.RECIPIENT_IDENTITY);
+        if(iType!=null) {
+            return iType;
+        }
+        if(nodeKey==null) {
+            return IdentityType.OWNED_IDENTITY;
+        }
+        return identityKey==null?IdentityType.NODE_IDENTITY:IdentityType.RECIPIENT_IDENTITY;
     }
 
     public enum IdentityType {

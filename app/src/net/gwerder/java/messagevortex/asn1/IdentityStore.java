@@ -14,10 +14,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Stores all known identities of a node.
- *
- * Created by martin.gwerder on 26.05.2016.
- */
+ * Stores all known identities of a node. Identities are stored as IdentityStoreBlocks.
+ ***/
 public class IdentityStore extends Block {
 
     private static ExtendedSecureRandom secureRandom = new ExtendedSecureRandom();
@@ -55,40 +53,42 @@ public class IdentityStore extends Block {
     public static IdentityStore getNewIdentityStoreDemo(boolean complete) throws IOException {
         IdentityStore tmp = new IdentityStore();
         tmp.add( IdentityStoreBlock.getIdentityStoreBlockDemo( IdentityStoreBlock.IdentityType.OWNED_IDENTITY, complete ) );
-        for (int i = 0; i < 400; i++)
+        for (int i = 0; i < 400; i++) {
             tmp.add( IdentityStoreBlock.getIdentityStoreBlockDemo( IdentityStoreBlock.IdentityType.NODE_IDENTITY, complete ) );
-        for (int i = 0; i < 100; i++)
+        }
+        for (int i = 0; i < 100; i++){
             tmp.add( IdentityStoreBlock.getIdentityStoreBlockDemo( IdentityStoreBlock.IdentityType.RECIPIENT_IDENTITY, complete ) );
+        }
         return tmp;
     }
 
     public static void main(String[] args) throws Exception {
-        System.out.println( "\n;;; -------------------------------------------" );
-        System.out.println( ";;; creating blank dump" );
+        Logger.getLogger( "IdentityStore" ).log( Level.INFO, "\n;;; -------------------------------------------" );
+        Logger.getLogger( "IdentityStore" ).log( Level.INFO, ";;; creating blank dump" );
         IdentityStore m = new IdentityStore();
         System.out.println( m.dumpValueNotation( "" ) );
 
-        System.out.println( "\n;;; -------------------------------------------" );
-        System.out.println( ";;; Demo Store Test" );
+        Logger.getLogger( "IdentityStore" ).log( Level.INFO, "\n;;; -------------------------------------------" );
+        Logger.getLogger( "IdentityStore" ).log( Level.INFO, ";;; Demo Store Test" );
         IdentityStore m2 = IdentityStore.getIdentityStoreDemo();
-        System.out.println( ";;; dumping" );
+        Logger.getLogger( "IdentityStore" ).log( Level.INFO, ";;; dumping" );
         System.out.println( m2.dumpValueNotation( "" ) );
-        System.out.println( ";;; reencode check" );
-        System.out.println( ";;;   getting DER stream" );
+        Logger.getLogger( "IdentityStore" ).log( Level.INFO, ";;; reencode check" );
+        Logger.getLogger( "IdentityStore" ).log( Level.INFO, ";;;   getting DER stream" );
         byte[] b1 = m.toBytes();
-        System.out.println( ";;;   storing to DER stream to " + System.getProperty( "java.io.tmpdir" ) );
+        Logger.getLogger( "IdentityStore" ).log( Level.INFO, ";;;   storing to DER stream to " + System.getProperty( "java.io.tmpdir" ) );
         DEROutputStream f = new DEROutputStream( new FileOutputStream( System.getProperty( "java.io.tmpdir" ) + "/temp.der" ) );
         f.writeObject( m.toASN1Object() );
         f.close();
-        System.out.println( ";;;   parsing DER stream" );
+        Logger.getLogger( "IdentityStore" ).log( Level.INFO, ";;;   parsing DER stream" );
         IdentityStore m3 = new IdentityStore( b1 );
-        System.out.println( ";;;   getting DER stream again" );
+        Logger.getLogger( "IdentityStore" ).log( Level.INFO, ";;;   getting DER stream again" );
         byte[] b2 = m3.toBytes();
-        System.out.println( ";;;   comparing" );
+        Logger.getLogger( "IdentityStore" ).log( Level.INFO, ";;;   comparing" );
         if (Arrays.equals( b1, b2 )) {
-            System.out.println( "Reencode success" );
+            Logger.getLogger( "IdentityStore" ).log( Level.INFO, "Reencode success" );
         } else {
-            System.out.println( "Reencode FAILED" );
+            Logger.getLogger( "IdentityStore" ).log( Level.INFO, "Reencode FAILED" );
         }
     }
 
