@@ -27,35 +27,6 @@ public class IdentityStoreBlock extends Block {
         super();
     }
 
-    public boolean equals(Object t) {
-        if(t==null) {
-            return false;
-        }
-        if(!(t instanceof IdentityStoreBlock)) {
-            return false;
-        }
-        IdentityStoreBlock isb=(IdentityStoreBlock)t;
-        if(!valid.equals(isb.valid)) {
-            return false;
-        }
-        if(messageQuota!=isb.messageQuota) {
-            return false;
-        }
-        if(transferQuota!=isb.transferQuota) {
-            return false;
-        }
-        if(!identityKey.equals(isb.identityKey)) {
-            return false;
-        }
-        if((nodeAddress!=null && !nodeAddress.equals(isb.nodeAddress) || (nodeAddress==null && isb.nodeAddress!=null))) {
-            return false;
-        }
-        if(!nodeKey.equals(isb.nodeKey)) {
-            return false;
-        }
-        return true;
-    }
-
     @Override
     public int hashCode() {
         return super.hashCode();
@@ -250,6 +221,35 @@ public class IdentityStoreBlock extends Block {
             return IdentityType.OWNED_IDENTITY;
         }
         return identityKey==null?IdentityType.NODE_IDENTITY:IdentityType.RECIPIENT_IDENTITY;
+    }
+
+    public boolean equals(Object t) {
+        if(t==null) {
+            return false;
+        }
+        if(!(t instanceof IdentityStoreBlock)) {
+            return false;
+        }
+        IdentityStoreBlock isb=(IdentityStoreBlock)t;
+        if(!valid.equals(isb.valid)) {
+            return false;
+        }
+        if(messageQuota!=isb.messageQuota) {
+            return false;
+        }
+        if(transferQuota!=isb.transferQuota) {
+            return false;
+        }
+        if((identityKey==null && isb.identityKey!=null) || (identityKey!=null && isb.identityKey==null) || (identityKey!=null && isb.identityKey!=null && !identityKey.equals(isb.identityKey))) {
+            return false;
+        }
+        if((nodeAddress!=null && !nodeAddress.equals(isb.nodeAddress) || (nodeAddress==null && isb.nodeAddress!=null))) {
+            return false;
+        }
+        if(!nodeKey.equals(isb.nodeKey)) {
+            return false;
+        }
+        return true;
     }
 
     public enum IdentityType {

@@ -69,17 +69,19 @@ public class Edge {
     }
 
     public boolean equals(Object t) {
-        if(t==null) return false;
-        if(! (t instanceof Edge)) return false;
+        if(t==null) {
+            return false;
+        }
+        if(! (t instanceof Edge)) {
+            return false;
+        }
         Edge g=(Edge)t;
-        //System.out.println("comparing "+this+":"+toString());
-        //System.out.println("     with "+g   +":"+g.toString());
         return g.to.equals(this.to) && g.from.equals(this.from) && (g.startTime==this.startTime) && (g.maxDelay==this.maxDelay);
     }
 
     @Override
     public int hashCode() {
-        return (""+from+"/"+to+"/"+startTime+"/"+maxDelay).hashCode();
+        return toString().hashCode();
     }
 
     @Override
