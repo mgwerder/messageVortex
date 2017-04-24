@@ -49,7 +49,6 @@ abstract public class Key extends Block {
         for(ASN1Encodable e: ASN1Sequence.getInstance( s.getObjectAt( 1 ) )) {
             ASN1TaggedObject to=ASN1TaggedObject.getInstance( e );
             Parameter p=Parameter.getById(to.getTagNo());
-            //System.out.println("## got parameter "+p.toString());
             if(p==null) {
                 Logger.getLogger( "Key" ).log( Level.WARNING, "got unsupported Parameter \"" + ((ASN1TaggedObject) (e)).getTagNo() + "\"" );
             } else if(p.toString().equals(Parameter.IV.toString())) {
@@ -67,7 +66,6 @@ abstract public class Key extends Block {
                 parameters.put("" + p.toString() + "_" + j, ASN1Integer.getInstance( to.getObject() ).getValue().intValue());
             }
         }
-        //System.out.println("## parameter parsing done");
     }
 
     protected ASN1Encodable encodeKeyParameter() throws IOException {

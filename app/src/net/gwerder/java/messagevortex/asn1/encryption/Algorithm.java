@@ -10,9 +10,8 @@ import java.util.logging.Level;
 
 /**
  * Represents all supported crypto algorithms.
- * FIXME: Add Camelia support for final version
+ *
  * FIXME: Add tiger192 support for final version
- * Created by martin.gwerder on 31.05.2016.
  */
 public enum Algorithm {
 
@@ -75,7 +74,7 @@ public enum Algorithm {
     }
 
     private static HashMap<String,Object> getParameterList(String txt,Object o) {
-        HashMap<String,Object> ret=new HashMap<String,Object>();
+        HashMap<String,Object> ret=new HashMap<>();
         return getParameterList( ret,txt,o );
     }
 
@@ -85,7 +84,7 @@ public enum Algorithm {
     }
 
     private static  Map<SecurityLevel,Map<String,Object>> getSecLevelList(SecurityLevel level ,Map<String,Object> o) {
-        Map<SecurityLevel,Map<String,Object>> ret=new HashMap<SecurityLevel,Map<String,Object>>();
+        Map<SecurityLevel,Map<String,Object>> ret=new HashMap<>();
         return getSecLevelList(ret, level, o);
     }
 
@@ -139,13 +138,13 @@ public enum Algorithm {
 
     public int getKeySize(SecurityLevel sl) {
         if (txt.toLowerCase().startsWith( "sec" )) {
+            // Extract key size from EC courve name
             return Integer.parseInt( txt.substring( 4, 7 ) );
         } else if (txt.toLowerCase().startsWith( "aes" ) || txt.startsWith( "sha" ) ) {
+            // Extract key size from AES and SHA name
             return Integer.parseInt( txt.substring( 3, 6 ) );
         } else if (txt.toLowerCase().startsWith( "camellia" )  ) {
             return Integer.parseInt( txt.substring( 8, 11 ) );
-        } else if (txt.toLowerCase().startsWith( "tiger" )) {
-            return 192;
         }
         if(secLevel==null || secLevel.get(sl)==null || (! (secLevel.get(sl).get(Parameter.KEYSIZE.toString()+"_0") instanceof Integer))) {
             LOGGER.log( Level.SEVERE, "Error fetching keysize for " + txt + "/" +sl.toString()+" ("+ secLevel.get(sl) + ")");
@@ -156,7 +155,7 @@ public enum Algorithm {
             sl=sl.next();
             params=secLevel.get(sl);
         }
-        return ((Integer)(params.get(Parameter.KEYSIZE.toString()+"_0"))).intValue();
+        return (Integer)(params.get(Parameter.KEYSIZE.toString()+"_0"));
     }
 
     public Map<String,Object> getParameters(SecurityLevel sl) {

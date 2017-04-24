@@ -24,15 +24,17 @@ public class MacAlgorithm extends Block {
     }
 
     public MacAlgorithm(Algorithm a) throws IOException {
-        if (a == null || a.getAlgorithmType() != AlgorithmType.HASHING)
+        if (a == null || a.getAlgorithmType() != AlgorithmType.HASHING) {
             throw new IOException( "Only hashing algorithms allowed" );
+        }
         alg = a;
     }
 
     protected void parse(ASN1Encodable to) throws IOException {
         Algorithm a = Algorithm.getById( ASN1Integer.getInstance( to ).getValue().intValue() );
-        if (a == null || a.getAlgorithmType() != AlgorithmType.HASHING)
+        if (a == null || a.getAlgorithmType() != AlgorithmType.HASHING){
             throw new IOException( "Only hashing algorithms allowed" );
+        }
         alg = a;
     }
 
@@ -45,7 +47,9 @@ public class MacAlgorithm extends Block {
     }
 
     public Algorithm setAlgorithm(Algorithm alg) throws IOException {
-        if (alg.getAlgorithmType() != AlgorithmType.HASHING) throw new IOException( "Only hashing algorithms allowed" );
+        if (alg.getAlgorithmType() != AlgorithmType.HASHING) {
+            throw new IOException( "Only hashing algorithms allowed" );
+        }
         Algorithm old = this.alg;
         this.alg = alg;
         return old;

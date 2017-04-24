@@ -18,6 +18,7 @@ import org.junit.runners.Suite;
         MessageTest.class,
         DumpTypeTest.class,
         BlockTest.class,
+        MacAlgorithmTest.class,
         SecurityLevelTest.class,
         SymmetricKeyTest.class,
         AsymmetricKeyTest.class,
@@ -34,6 +35,7 @@ public class MainASN1Suite {
         s.addTest(new JUnit4TestAdapter(MessageTest.class));
         s.addTest(new JUnit4TestAdapter(DumpTypeTest.class));
         s.addTest(new JUnit4TestAdapter(BlockTest.class));
+        s.addTest(new JUnit4TestAdapter(MacAlgorithmTest.class));
         s.addTest( new JUnit4TestAdapter( SecurityLevelTest.class ) );
         s.addTest( new JUnit4TestAdapter( SymmetricKeyTest.class ) );
         s.addTest(new JUnit4TestAdapter(AsymmetricKeyTest.class));

@@ -1,9 +1,10 @@
 package net.gwerder.java.messagevortex.asn1.encryption;
 
 /**
- * Created by martin.gwerder on 23.06.2016.
+ * Enumeration representing the type of dump requested or parsed.
  */
 public enum DumpType {
+    /* Dump all information to the maximum possible */
     ALL,
     PUBLIC_ONLY,
     PUBLIC_COMMENTED,
@@ -11,22 +12,24 @@ public enum DumpType {
     PRIVATE_COMMENTED;
 
     public boolean dumpPublicKey() {
-        if("ALL".equals(name())) {
-            return true;
+        switch(this) {
+            case ALL:
+                return true;
+            case PUBLIC_ONLY:
+                return true;
+            default:
+                return false;
         }
-        if("PUBLIC_ONLY".equals(name())) {
-            return true;
-        }
-        return false;
     }
 
     public boolean dumpPrivateKey() {
-        if("ALL".equals(name())) {
-            return true;
+        switch(this) {
+            case ALL:
+                return true;
+            case PRIVATE_ONLY:
+                return true;
+            default:
+                return false;
         }
-        if("PRIVATE_ONLY".equals(name())) {
-            return true;
-        }
-        return false;
     }
 }

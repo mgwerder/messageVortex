@@ -338,12 +338,32 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/asn1/Key.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/asn1/MacAlgorithm.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/asn1/Message.java">
           <value>
             <set />
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/asn1/Request.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/asn1/encryption/Algorithm.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/asn1/encryption/DumpType.java">
           <value>
             <set />
           </value>
@@ -433,6 +453,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/test/MainASN1Suite.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/test/MainBlenderSuite.java">
           <value>
             <set />
@@ -459,6 +484,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/test/asn1/IdentityTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/test/asn1/MacAlgorithmTest.java">
           <value>
             <set />
           </value>
