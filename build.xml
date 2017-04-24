@@ -83,6 +83,16 @@
       <replacefilter token="@revision@" value="${app.version.revision}"/>
       <replacefilter token="@build@" value="${DSTAMP}${TSTAMP}"/>
     </replace>
+    <!-- writing sonar properties -->
+    <copy  file="${basedir}/sonar.properties.master" tofile="sonar.properties"/>
+    <replace file="${basedir}/sonar.properties">
+      <replacefilter token="@version@" value="${app.version}"/>
+      <replacefilter token="@java@" value="${app.source}"/>
+      <replacefilter token="@major@" value="${app.version.major}"/>
+      <replacefilter token="@minor@" value="${app.version.minor}"/>
+      <replacefilter token="@revision@" value="${app.version.revision}"/>
+      <replacefilter token="@build@" value="${DSTAMP}${TSTAMP}"/>
+    </replace>
     <javac srcdir="${build.home}/src"
           destdir="${build.home}/classes/"
             debug="${compile.debug}"
