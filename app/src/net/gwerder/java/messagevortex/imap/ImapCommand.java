@@ -25,7 +25,14 @@ public abstract class ImapCommand implements Cloneable {
     public static void deregisterCommand(String command) {
         COMMANDS.remove(command.toLowerCase());
     }
-    
+
+    /***
+     * Returns a list of all supported ImapCommands in no particular order.
+     *
+     * The returned list is independent of any state.
+     *
+     * @return an array containing all ImapCommands available at any state
+     */
     public static ImapCommand[] getCommands() {
         return COMMANDS.values().toArray(new ImapCommand[COMMANDS.size()]);
     }
@@ -40,6 +47,13 @@ public abstract class ImapCommand implements Cloneable {
 
     public abstract String[] getCommandIdentifier();
 
+    /***
+     * Processes the imap lie prefixed by a command returned by getCommandIdentifier().
+     *
+     * @param line
+     * @return
+     * @throws ImapException
+     */
     public abstract String[] processCommand(ImapLine line) throws ImapException;
 
 }

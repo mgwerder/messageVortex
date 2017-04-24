@@ -21,10 +21,14 @@ public class ImapCommandLogin extends ImapCommand {
         }
         return userid;
     }
-    
+
     /***
-     * @todo add capabilities to successful login
-     ***/
+     * Process the login command.
+     *
+     * @param line The Imap line representing a login command
+     * @return array of lines representing the server reply
+     * @throws ImapException For all parsing errors
+     */
     public String[] processCommand(ImapLine line) throws ImapException {
         
         // get userid
@@ -39,7 +43,7 @@ public class ImapCommandLogin extends ImapCommand {
         String password = getAuthToken(line);
 
         // skip space
-        // WRNING this is "non-strict"
+        // WARNING this is "non-strict"
         line.skipSP(-1);
         
         // skip line end
@@ -67,7 +71,6 @@ public class ImapCommandLogin extends ImapCommand {
         return reply;
     }
 
-    
     public String[] getCapabilities() {
         return new String[] { "LOGIN" };
     }

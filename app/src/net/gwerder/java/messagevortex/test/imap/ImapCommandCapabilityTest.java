@@ -41,19 +41,24 @@ public class ImapCommandCapabilityTest {
         }
     }
 
-    private static class ImapCommandCapabilityParser extends ImapCommand {
+    public static class ImapCommandCapabilityParser extends ImapCommand {
+
+        @Override
         public void init() {
             ImapCommand.registerCommand(this);
         }
 
+        @Override
         public String[] processCommand(ImapLine line) {
             return null;
         }
 
-        public String[] getCommandIdentifier() {
+        @Override
+        public String[] getCommandIdentifier(){
             return new String[] {"CapabilityParser"};
         }
 
+        @Override
         public String[] getCapabilities() {
             return new String[] {"CapabilityParser=one","CapabilityParser=two"};
         }

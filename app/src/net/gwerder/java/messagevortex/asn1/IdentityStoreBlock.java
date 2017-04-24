@@ -240,7 +240,7 @@ public class IdentityStoreBlock extends Block {
         if(transferQuota!=isb.transferQuota) {
             return false;
         }
-        if((identityKey==null && isb.identityKey!=null) || (identityKey!=null && isb.identityKey==null) || (identityKey!=null && isb.identityKey!=null && !identityKey.equals(isb.identityKey))) {
+        if((identityKey==null && isb.identityKey!=null) || (identityKey!=null && !identityKey.equals(isb.identityKey))) {
             return false;
         }
         if((nodeAddress!=null && !nodeAddress.equals(isb.nodeAddress) || (nodeAddress==null && isb.nodeAddress!=null))) {
