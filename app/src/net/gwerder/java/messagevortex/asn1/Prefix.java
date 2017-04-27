@@ -1,0 +1,151 @@
+package net.gwerder.java.messagevortex.asn1;
+
+import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
+import org.bouncycastle.asn1.*;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+/**
+ * ASN1 parser class for header reply.
+ *
+ * Created by martin.gwerder on 14.04.2016.
+ */
+public class Prefix extends Block {
+
+    public static final int PLAIN_PREFIX=100001;
+    public static final int ENCRYPTED_PREFIX=100002;
+
+    byte[] encrypted=null;
+    AsymmetricKey decryptionKey=null;
+
+    /** The key used for decryption of the rest of the VortexMessage **/
+    SymmetricKey key=null;
+
+    /**
+     * Creates an empty prefix
+     */
+    public Prefix() {
+        // nothing to be done here
+    }
+
+    /***
+     * Creates a prefix by parsing to in plan (unencrypted)
+     *
+     * @param to The primitive to be parsed
+     *
+     * @throws IOException if parsing fails
+     */
+    public Prefix(ASN1Primitive to,AsymmetricKey ak) throws IOException {
+        parse(to);
+        setDecryptionKey(ak);
+    }
+
+    /***
+     * Creates a prefix from the provided octet stream by decyphering it with the provided key.
+     *
+     * @param to the ASN1 OCTET STRING containing the encrypted prefix
+     * @param ak the host key
+     *
+     * @throws IOException
+     * @throws NoSuchAlgorithmException
+     * @throws ParseException
+     */
+    public Prefix(ASN1OctetString to, AsymmetricKey ak) throws IOException,NoSuchAlgorithmException,ParseException {
+        this(to.getOctets(),ak);
+    }
+
+
+    /***
+     * Creates a prefix from the provided byte array by decyphering it with the provided key.
+     *
+     * @param to the ASN1 OCTET STRING containing the encrypted prefix
+     * @param ak the host key
+     *
+     * @throws IOException
+     * @throws NoSuchAlgorithmException
+     * @throws ParseException
+     */
+    public Prefix(byte[] to,AsymmetricKey ak) throws IOException,NoSuchAlgorithmException,ParseException {
+        encrypted=to;
+        setDecryptionKey(ak);
+        if(getDecryptionKey()!=null && getDecryptionKey().hasPrivateKey()) {
+            parse( decryptionKey.decrypt( encrypted ));
+        }
+    }
+
+    @Override
+    protected void parse(ASN1Encodable to) throws IOException {
+        Logger.getLogger("VortexMessage").log( Level.FINER,"Executing parse()");
+        int i = 0;
+        ASN1Sequence s1 = ASN1Sequence.getInstance( to );
+
+        // getting key
+        key = new SymmetricKey( s1.getObjectAt(0).toASN1Primitive().getEncoded(),null );
+    }
+
+    public AsymmetricKey setDecryptionKey(AsymmetricKey dk) {
+        AsymmetricKey old=getDecryptionKey();
+        decryptionKey=dk;
+        return old;
+    }
+
+    public AsymmetricKey getDecryptionKey() {
+        return decryptionKey;
+    }
+
+    public SymmetricKey setKey(SymmetricKey dk) {
+        SymmetricKey old=getKey();
+        key=dk;
+        return old;
+    }
+
+    public SymmetricKey getKey() {
+        return key;
+    }
+
+    @Override
+    public ASN1Object toASN1Object() throws IOException {
+        return toASN1Object( null );
+    }
+
+    public ASN1Object toASN1Object(AsymmetricKey ak) throws IOException {
+        if(ak!=null) setDecryptionKey(ak);
+        ASN1EncodableVector v=new ASN1EncodableVector();
+        if(key==null) throw new IOException("symmetric key may not be null when encoding");
+        Logger.getLogger("Prefix").log(Level.FINER,"adding symmetric key");
+        ASN1Encodable o=key.toASN1Object();
+        if (o == null) {
+            throw new IOException( "returned symmetric object may not be null" );
+        }
+        v.add( o );
+        ASN1Object seq=new DERSequence(v);
+        if(ak!=null) {
+            // encrypt and embedd in OCTET STREAM
+            Logger.getLogger("Prefix").log(Level.FINER,"encrypting prefix contend to octet string in Prefix");
+            seq=new DEROctetString( ak.encrypt(seq.getEncoded()) );
+            return new DERTaggedObject( ENCRYPTED_PREFIX,seq );
+        }
+        Logger.getLogger("Prefix").log(Level.FINER,"done toASN1Object() of Prefix");
+        return new DERTaggedObject( PLAIN_PREFIX,seq );
+    }
+
+    public String dumpValueNotation(String prefix) {
+        return dumpValueNotation( prefix,DumpType.PUBLIC_ONLY );
+    }
+
+    public String dumpValueNotation(String prefix, DumpType dt) {
+        StringBuilder sb=new StringBuilder();
+        if(DumpType.ALL.equals(dt) || DumpType.PUBLIC_ONLY.equals(dt)) {
+            // dump standard block as octet string
+        } else {
+            // dump as unecrypted structure
+        }
+        throw new NotImplementedException();
+    }
+
+}

@@ -6,9 +6,11 @@ package net.gwerder.java.messagevortex.asn1.encryption;
 public enum DumpType {
     /* Dump all information to the maximum possible */
     ALL,
+    /* Dump all information to the maximum possible in unecrypted default manor */
+    ALL_UNENCRYPTED,
+    /* dump only public information */
     PUBLIC_ONLY,
-    PUBLIC_COMMENTED,
-    PRIVATE_ONLY,
+    /* dump public information; private information is dumped as comment */
     PRIVATE_COMMENTED;
 
     public boolean dumpPublicKey() {
@@ -26,7 +28,7 @@ public enum DumpType {
         switch(this) {
             case ALL:
                 return true;
-            case PRIVATE_ONLY:
+            case ALL_UNENCRYPTED:
                 return true;
             default:
                 return false;

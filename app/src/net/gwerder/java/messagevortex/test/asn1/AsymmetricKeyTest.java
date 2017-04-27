@@ -11,6 +11,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -82,7 +84,7 @@ public class AsymmetricKeyTest {
                 LOGGER.log(Level.INFO, "  doing an encrypt/decrypt cycle with a reencoded key");
                 try {
                     b3 = (new AsymmetricKey(s.toBytes())).decrypt(b2);
-                } catch (IOException ioe) {
+                } catch (IOException|ParseException|NoSuchAlgorithmException ioe) {
                     LOGGER.log(Level.WARNING, "unexpected exception", ioe);
                     setException(ioe);
                     fail("Constructor threw IOException");

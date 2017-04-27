@@ -44,11 +44,11 @@ public class FuzzerTest {
                 LOGGER.log( Level.INFO, "Starting fuzzer cycle " + (i + 1) + " of " + BLOCK_FUZZER_CYCLES );
                 Identity id = new Identity();
                 id.setOwnIdentity( ownIdentity );
-                Message s = new Message( id, new Payload() );
-                assertTrue( "Message may not be null", s != null );
+                VortexMessage s = new VortexMessage( new Prefix(  ),new InnerMessage(  ) );
+                assertTrue( "VortexMessage may not be null", s != null );
                 byte[] b1 = s.toBytes();
                 assertTrue( "Byte representation may not be null", b1 != null );
-                byte[] b2 = (new Message( b1 )).toBytes();
+                byte[] b2 = (new VortexMessage( b1,null )).toBytes();
                 assertTrue( "Byte arrays should be equal when reencoding", Arrays.equals( b1, b2 ) );
             }
         } catch (Exception e) {

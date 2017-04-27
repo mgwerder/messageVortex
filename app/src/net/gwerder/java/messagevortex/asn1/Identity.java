@@ -222,10 +222,6 @@ public class Identity extends Block {
         return decryptionKeyRaw;
     }
 
-    public ASN1Object toASN1Object() throws IOException {
-        return toASN1Object( null );
-    }
-
     public AsymmetricKey getOwnIdentity() {
         return ownIdentity;
     }
@@ -246,7 +242,11 @@ public class Identity extends Block {
         }
     }
 
-    public ASN1Object toASN1Object(AsymmetricKey targetIdentity) throws IOException, NullPointerException {
+    public ASN1Object toASN1Object() throws IOException,NoSuchAlgorithmException,ParseException {
+        return toASN1Object( null );
+    }
+
+    public ASN1Object toASN1Object(AsymmetricKey targetIdentity) throws IOException, NullPointerException,NoSuchAlgorithmException,ParseException {
         sanitizeHeaderKey();
         //if(ownIdentity==null) throw new NullPointerException( "ownIdentity must not be null" );
         if (headerKey == null && encryptedHeaderKey == null) {
@@ -315,6 +315,9 @@ public class Identity extends Block {
     }
 
     public String dumpValueNotation(String prefix) throws IOException {
+        return dumpValueNotation( prefix, DumpType.PUBLIC_ONLY );
+    }
+    public String dumpValueNotation(String prefix, DumpType dt) throws IOException {
         StringBuilder sb=new StringBuilder();
         sb.append("{"+CRLF);
         if (encryptedHeaderKey != null) {
@@ -335,17 +338,7 @@ public class Identity extends Block {
                 }
                 sb.append( " }," + CRLF );
             }
-            byte[] a = decryptionKey.toBytes();
-            if (a == null) {
-                sb.append( prefix + "    decryptionKey ''B," + CRLF );
-            } else {
-                // this key is
-                try {
-                    sb.append( prefix + "    decryptionKey " + toHex( getRawDecryptionKey() ) + "," + CRLF );
-                } catch (Exception e) {
-                    throw new IOException( "unable to sign decryptionKey", e );
-                }
-            }
+            sb.append( prefix + "    decryptionKey ''B," + CRLF );
             sb.append( prefix + "    requests {" + CRLF );
             for (HeaderRequest r : requests) {
                 sb.append( valid.dumpValueNotation( prefix + "  " ) + CRLF );

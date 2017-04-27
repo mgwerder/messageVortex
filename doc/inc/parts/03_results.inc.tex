@@ -25,6 +25,8 @@ The data transferred is passed thru a number of mixes. The builder of a routing 
 	\item Set of possible recipients.
 \end{itemize}
 
+These decisions are compiled into a routing block structure which is onionized. This routing block may then be used to transfer a message of almost any size. This message is then sent to the involved mixes.
+
 A mix may be just an intermediate station or the final target of a message. Only the recipient of a message is able to tell whether a message was intended for him or not. Any mix does a certain number of operations on a message. Considering the message, the timing and the operations applied a mix may extract the following informations:
 
 \begin{itemize}
@@ -46,7 +48,11 @@ The operations to be applied on a message are chosen in such a way that they may
 Redundancy may be built in a routing block as well as progress indication.
 
 \section{Vortex Message}
-The following outline is a simplified view onto the message block of MessageVortex. for a more comprehensive
+The following outline is a simplified view onto the message block of MessageVortex.
+
+\begin{figure}[hbt]
+	\includegraphics[width=\textwidth]{inc/blockLayoutSimplified}
+\end{figure}
 
 A vortex message is a message passed from one mix to another this message may or may not contain any valuable information. The message itself is embedded as binary data into a transfer protocol. Every Mix may decide for himself what kind of protocols and embedding mechanisms are supported.
 

@@ -73,14 +73,14 @@ public abstract class Block {
             dOut.writeObject( a );
         } catch (IOException ioe) {
             // should never occur as we have no IO
-            Logger.getLogger("Message").log( Level.SEVERE,"Exception while encoding object",ioe);
+            Logger.getLogger("VortexMessage").log( Level.SEVERE,"Exception while encoding object",ioe);
         }
         return bOut.toByteArray();
     }
 
-    abstract ASN1Object toASN1Object() throws IOException;
+    abstract ASN1Object toASN1Object() throws IOException,NoSuchAlgorithmException,ParseException;
 
-    public byte[] toBytes() throws IOException {
+    public byte[] toBytes() throws IOException,NoSuchAlgorithmException,ParseException {
         ASN1Object o=toASN1Object();
         if(o==null) {
             throw new IOException( "Got a null reply from toASN1Object ... get coding man" );

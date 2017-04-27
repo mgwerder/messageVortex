@@ -184,19 +184,16 @@ public class AsymmetricKey extends Key {
     public boolean hasPrivateKey() { return privateKey!=null; }
 
     public String dumpValueNotation(String prefix) {
-        return dumpValueNotation(prefix,DumpType.PUBLIC_COMMENTED);
+        return dumpValueNotation(prefix,DumpType.PUBLIC_ONLY);
     }
 
     public String dumpValueNotation(String prefix,DumpType dt) {
         StringBuilder sb=new StringBuilder();
         sb.append("{"+CRLF);
-        if(publicKey!=null && (dt.dumpPublicKey() || DumpType.PUBLIC_COMMENTED==dt)) {
+        if(publicKey!=null && dt.dumpPublicKey()) {
             sb.append( dumpKeyTypeValueNotation( prefix ) );
             String s = toHex( publicKey );
             sb.append( prefix ).append( "  " );
-            if(dt==DumpType.PUBLIC_COMMENTED) {
-                sb.append( "-- " );
-            }
             sb.append( "publicKey " + s );
             if (dt == DumpType.ALL) {
                 sb.append( "," );

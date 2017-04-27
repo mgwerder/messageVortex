@@ -3,7 +3,7 @@ package net.gwerder.java.messagevortex.routing;
 import net.gwerder.java.messagevortex.ExtendedSecureRandom;
 import net.gwerder.java.messagevortex.asn1.IdentityStore;
 import net.gwerder.java.messagevortex.asn1.IdentityStoreBlock;
-import net.gwerder.java.messagevortex.asn1.Message;
+import net.gwerder.java.messagevortex.asn1.VortexMessage;
 
 /**
  * Factory class to build full message (anonymizing structure)
@@ -14,7 +14,7 @@ public abstract class MessageFactory {
 
     protected static final ExtendedSecureRandom esr = new ExtendedSecureRandom();
 
-    protected Message fullmsg = null;
+    protected VortexMessage fullmsg = null;
 
     protected String msg = "";
     protected IdentityStoreBlock source = null;
@@ -37,7 +37,7 @@ public abstract class MessageFactory {
         return fullmsg;
     }
 
-    private Message getMessage() {
+    private VortexMessage getMessage() {
         return this.fullmsg;
     }
 

@@ -8,6 +8,7 @@ import java.util.*;
  * Created by martin.gwerder on 31.05.2016.
  */
 public enum Padding {
+
     NONE            ( 1000, "NONE", new AlgorithmType[]{AlgorithmType.ASYMMETRIC}, new SizeCalc() {
         public int maxSize(int s) {
             return s / 8;

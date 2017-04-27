@@ -10,7 +10,7 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         FuzzerTest.class,
-        MessageTest.class,
+        VortexMessageTest.class,
         DumpTypeTest.class,
         BlockTest.class,
         MacAlgorithmTest.class,
@@ -30,7 +30,7 @@ public class MainASN1Suite {
     public static junit.framework.Test suite() {
         final TestSuite s = new TestSuite();
         s.addTest(new JUnit4TestAdapter(FuzzerTest.class));
-        s.addTest(new JUnit4TestAdapter(MessageTest.class));
+        s.addTest(new JUnit4TestAdapter(VortexMessageTest.class));
         s.addTest(new JUnit4TestAdapter(DumpTypeTest.class));
         s.addTest(new JUnit4TestAdapter(BlockTest.class));
         s.addTest(new JUnit4TestAdapter(MacAlgorithmTest.class));

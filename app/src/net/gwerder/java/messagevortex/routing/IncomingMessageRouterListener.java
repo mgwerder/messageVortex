@@ -1,12 +1,12 @@
 package net.gwerder.java.messagevortex.routing;
 
-import net.gwerder.java.messagevortex.asn1.Message;
+import net.gwerder.java.messagevortex.asn1.VortexMessage;
 
 /**
  * Created by martin.gwerder on 03.04.2017.
  */
 public interface IncomingMessageRouterListener {
 
-    public void processMessage(Message message);
+    public void processMessage(VortexMessage message);
 
 }

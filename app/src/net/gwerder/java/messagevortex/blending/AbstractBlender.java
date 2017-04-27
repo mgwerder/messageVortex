@@ -2,7 +2,7 @@ package net.gwerder.java.messagevortex.blending;
 
 import net.gwerder.java.messagevortex.accountant.HeaderVerifyer;
 import net.gwerder.java.messagevortex.asn1.BlendingSpec;
-import net.gwerder.java.messagevortex.asn1.Message;
+import net.gwerder.java.messagevortex.asn1.VortexMessage;
 import net.gwerder.java.messagevortex.routing.IncomingMessageRouterListener;
 import net.gwerder.java.messagevortex.transport.TransportListener;
 
@@ -27,6 +27,6 @@ abstract public class AbstractBlender implements Blender,TransportListener {
 
     }
 
-    abstract public boolean blendMessage(BlendingSpec target,Message message);
+    abstract public boolean blendMessage(BlendingSpec target,VortexMessage message);
 
 }

@@ -16,31 +16,47 @@ BEGIN
   maxNumberOfRequests       INTEGER ::= 8               -- maximum number of administrative requests
   maxDurationOfProcessing   INTEGER ::= 86400           -- maximum number of seconds which the message might be delayed in the local queue (starting from startOffset)
   maxID                     INTEGER ::= 32767           -- maximum id of an operation
+  maxRoutingBlocks          INTEGER ::= 127             -- maximum number of routing blocks in a message
   maxPayloadBlocks          INTEGER ::= 127             -- maximum number of payload blocks in a message
   maxTimeCachedProof        INTEGER ::= 86400           -- maximum number of seconds a proof of non revocation may be old
   
-  puzzleIdentifier          ::= OCTET STRING (size(16))
+  PuzzleIdentifier          ::= OCTET STRING ( SIZE(0..16) )
 
-  Message     ::= SEQUENCE { 
-    header        IdentityBlock,
-    blocks        CHOICE {
-        encrypted [1101] OCTET STRING,     -- contains encrypted UnencryptedBlocks structure; Decryption key is in identity block [decryptionKey]
-        -- it is not allowed to use plain in production environments; This is for testing and analysis only
-        plain     [1102] UnencryptedBlocks -- should not be used except for internal diagnostic purposes
+  VortexMessage ::= SEQUENCE {
+    prefix        CHOICE {
+        plain           [10001] MessagePrefix,
+        encrypted       [10002] OCTET STRING -- contains prefix encrypted with receivers public key
+    },
+    innerMessage  CHOICE {
+        plain     [10011] InnerMessage,
+        encrypted [10012] OCTET STRING -- contains inner message encrypted with Symmetric key from Prefix
     }
   }
-  
-  -- represents the identity of the rights owner
-  IdentityBlock ::= SEQUENCE {
-    headerKey             [1000] OCTET STRING OPTIONAL,  -- contains SymmetricKey encrypted with recipient nodes public key
-    identityBlock         CHOICE {
-        encrypted  [1001] OCTET STRING,   
-        plain      [1002] IdentityPayloadBlock
+
+  MessagePrefix ::= SEQUENCE {
+    key             SymmetricKey
+  }
+
+  InnerMessage ::= SEQUENCE {
+	padding		[11001] OCTET STRING,
+	
+	prefix      [11002] CHOICE {
+        plain           [10001] MessagePrefix,
+        encrypted       [10002] OCTET STRING -- contains prefix encrypted with receivers public key
     },
-    identitySignature OCTET STRING   -- contains signature of Identity [as stored in identityBlock;signed identityBlock without Tag]
+  
+    identity    [11003] IdentityBlock,
+    identitySignature OCTET STRING,   -- contains signature of Identity [as stored in identityBlock;signed unencrypted identityBlock without Tag]
+	
+    -- contains routing information (next hop) for the payloads
+    routing     [11004] SEQUENCE (SIZE (0..maxRoutingBlocks)) OF RoutingBlock ,
+    
+    -- contains the actual payload
+    payload     [11005] SEQUENCE (SIZE (0..maxPayloadBlocks)) OF PayloadChunk  
+
   }
   
-  IdentityPayloadBlock ::= SEQUENCE {
+  IdentityBlock ::= SEQUENCE {
     -- Public key of the identity representing this transmission
     identityKey       AsymmetricKey,
     
@@ -70,21 +86,12 @@ BEGIN
     requests          SEQUENCE (SIZE (0..maxNumberOfRequests)) OF HeaderRequest ,
     
     -- padding and identitifier required to solve the cryptopuzzle
-    identifier    [2001] puzzleIdentifier OPTIONAL, 
-    proofOfWork   [2002] OCTET STRING OPTIONAL  -- This is for solving crypto puzzles
-
-  UnencryptedBlocks ::= SEQUENCE {
-
-    -- contains routing information (next hop) for the payloads
-    routing     [3000] RoutingBlock OPTIONAL,
-    
-    -- contains the actual payload
-    payload     [3100] SEQUENCE (SIZE (0..maxPayloadBlocks)) OF PayloadChunk  
+    identifier    [12201] PuzzleIdentifier OPTIONAL,
+    proofOfWork   [12202] OCTET STRING OPTIONAL  -- This is for solving crypto puzzles
   }
 
-  
   -- represents the building and sending process for the next hop
-  -- FIXME rework this part intensly (Missing features reply block for header requests; Insufficient handling of operation stack)
+  -- FIXME rework this part intensively (Missing features reply block for header requests; Insufficient handling of operation stack)
   RoutingBlock ::= SEQUENCE {
   
     -- contains the next recipient in sequence
@@ -126,7 +133,8 @@ BEGIN
 		xorSplitPayload	[260] XorSplitPayloadOperation,
         encryptPayload  [300] EncryptPayloadOperation,
         decryptPayload  [350] DecryptPayloadOperation,
-		...
+        addRedundancy   [400] AddRedundancyOperation,
+        removeRedundancy[410] RemoveRedundancyOperation
   }
   
   PercentSizeType ::= SEQUENCE {
@@ -146,13 +154,29 @@ BEGIN
 	}
   }
   
+  AddRedundancyOperation ::= SEQUENCE {
+    originalId				 [16000] INTEGER (0..maxID),
+    stripes                  [16001] INTEGER (1..256),
+    redundancy               [16002] INTEGER (1..256),
+    keys                     [16003] SEQUENCE (SIZE (2..512)) OF SymmetricKey,
+	newFirstId				 [16004] INTEGER (1..maxID)
+  }
+ 
+  RemoveRedundancyOperation ::= SEQUENCE {
+    originalId				 [16000] INTEGER (0..maxID),
+    stripes                  [16001] INTEGER (1..256),
+    redundancy               [16002] INTEGER (1..256),
+    keys                     [16003] SEQUENCE (SIZE (2..512)) OF SymmetricKey,
+	newFirstId				 [16004] INTEGER (1..maxID)
+  }
+
   SplitPayloadOperation ::= SEQUENCE {
     originalId				 INTEGER (0..maxID),
     firstSize                SizeType,
 	newFirstId				 INTEGER (1..maxID),
 	newSecondId				 INTEGER (1..maxID)
   }
- 
+
   MergePayloadOperation ::= SEQUENCE {
     originalFirstId			 INTEGER (0..maxID),
     originalSecondId		 INTEGER (0..maxID),
@@ -166,6 +190,13 @@ BEGIN
 	newId			    	 INTEGER (1..maxID)
   }
  
+  XorSplitPayloadOperation ::= SEQUENCE {
+    originalId			     INTEGER (0..maxID),
+    prngSpec                 PRNGSpec,
+	newFirstBlockId			 INTEGER (1..maxID),
+	newSecondBlockId		 INTEGER (1..maxID)
+  }
+
   EncryptPayloadOperation ::= SEQUENCE {
     originalId		        INTEGER (0..maxID),
     key                     SymmetricKey,
@@ -177,20 +208,7 @@ BEGIN
     key                     SymmetricKey,
 	newId	    	    	INTEGER (1..maxID)
   }
- 
-  EncryptedRoutingLogBlock ::= OCTET STRING -- contains symmetrically encrypted RoutingLogBlock
-  RoutingLogBlock ::= SEQUENCE {
-    routingLog           SEQUENCE (SIZE (0..16)) OF RoutingLog,
-    nestedRoutingInformationBlock EncryptedRoutingLogBlock     
-  }
-  
-  RoutingLog ::=SEQUENCE   {
-    nodeIdentifier    IA5String,
-    time              GeneralizedTime,
-    code              ErrorCode,
-    information       IA5String
-  }
-  
+
   IdentityReplayStore ::= SEQUENCE {
 	replays		SEQUENCE (SIZE (0..4294967295)) OF IdentityReplayBlock
   }
@@ -213,7 +231,8 @@ BEGIN
     nodeAddress         [1002] NodeSpec      OPTIONAL,    -- if ommited own identity key
     nodeKey             [1003] SEQUENCE OF AsymmetricKey OPTIONAL,    -- Contains the identity of the owning node; May be ommited if local node
     routingBlocks       [1004] SEQUENCE OF RoutingBlock OPTIONAL,
-    ...
+    replayStore         [1005] IdentityReplayStore,
+    puzzle              [1006] ReplyPuzzleRequired OPTIONAL
   }
   
   -- contains a node spec of a routing point
@@ -222,64 +241,60 @@ BEGIN
   
   ChainSecret ::= INTEGER (0..4294967295)
   
-  -- FIXME define requests
   HeaderRequest ::= CHOICE {
     identity      [0] HeaderRequestIdentity,
     capabilities  [1] HeaderRequestCapability,
     messageQuota  [2] HeaderRequestIncreaseMessageQuota,
-    transferQuota [3] RequestIncreaseTransferQuota,
-    quotaQuery    [4] HeaderRequestQueryQuota,
-    ...
+    transferQuota [3] HeaderRequestIncreaseTransferQuota,
+    quotaQuery    [4] HeaderRequestQueryQuota
   }
   
   ReplyBlock ::= CHOICE {
     identity      [0] ReplyIdentity,
     capabilities  [1] ReplyCapability,
-    ...
+    puzzle        [2] ReplyPuzzleRequired,
+    error          [99] ErrorBlock
   }
   
+  ReplyIdentity ::= SEQUENCE {
+    -- FIXME this has to be done
+  }
+
   HeaderRequestIdentity ::= SEQUENCE {
     identity AsymmetricKey,
-    period UsagePeriod,
-    ...
+    period UsagePeriod
   }
   
-  replyPuzzleRequired ::= SEQUENCE {
+  ReplyPuzzleRequired ::= SEQUENCE {
     challenge     BIT STRING, -- bit sequence at beginning of hash from encrypted identity block
     hash          MacAlgorithmIdentifier,
     valid         UsagePeriod,
-    identifier    INTEGER (0..4294967295),
-    ...
+    identifier    INTEGER (0..4294967295)
   }
   
   HeaderRequestQueryQuota ::= SEQUENCE {
-    identity AsymmetricKey,
-    ...
+    identity AsymmetricKey
   }
   
   HeaderRequestIncreaseMessageQuota ::= SEQUENCE {
     identity AsymmetricKey,
-    messages INTEGER (0..4294967295),
-    ...
+    messages INTEGER (0..4294967295)
   }
   
-  RequestIncreaseTransferQuota ::= SEQUENCE {
+  HeaderRequestIncreaseTransferQuota ::= SEQUENCE {
     identity AsymmetricKey,
-    size     INTEGER (0..4294967295),
-    ...
+    size     INTEGER (0..4294967295)
   }
   
   HeaderRequestCapability ::= SEQUENCE {
-    period UsagePeriod,
-    ...
+    period UsagePeriod
   }
 
   ReplyCapability ::= SEQUENCE {
     cypher            SEQUENCE (SIZE (2..256)) OF CypherSpec,
     maxTransferQuota  INTEGER (0..4294967295),
     maxMessageQuota   INTEGER (0..4294967295),
-    supportedProtocol SEQUENCE OF Protocol,
-    ...
+    supportedProtocol SEQUENCE OF Protocol
   }
   
   CypherSpec ::= SEQUENCE {
@@ -291,6 +306,12 @@ BEGIN
   Protocol ::= ENUMERATED {
     smtp  (100),
     xmmp  (110),
+    ...
+  }
+
+  ErrorBlock ::= SEQUENCE {
+    code            ErrorCode,
+    request         HeaderRequest,
     ...
   }
   
@@ -306,7 +327,16 @@ BEGIN
     messageQuotaExceeded  (3002),
     identityUnknown       (3101),
     messageChunkMissing   (3201),
-    messageLifeExpired    (3202), 
+    messageLifeExpired    (3202),
+    puzzleUnknown         (3301),
+	
+	-- capability errors
+	MacAlgorithmUnknown         (3801),
+	SymmetricAlgorithmUnknown   (3801),
+	AsymmetricAlgorithmUnknown  (3801),
+	PrngAlgorithmUnknown        (3801),
+	MissingParameters           (3801),
+	BadParameters               (3801),
     
     -- Mayor host specific errors
     hostError             (5001),
@@ -314,18 +344,19 @@ BEGIN
   }
   
   PayloadChunk ::= SEQUENCE {
-    id                        INTEGER (0..maxId),
+    id                        INTEGER (0..maxID),
     routingBlockForwardSecret INTEGER (0..maxSerial),
-    payload                   [100] OCTET STRING
+    payload                 CHOICE {
+      payload                   [100] OCTET STRING,
+      replyBlock                [101] ReplyBlock
+    }
   }
   
-  -- Compatible to PrivateKeyUsagePeriod taken from RFC3280
   UsagePeriod ::= SEQUENCE {
     notBefore       [0]     GeneralizedTime OPTIONAL,
     notAfter        [1]     GeneralizedTime OPTIONAL
  }
  
- -- adapted from RFC3280
   SymmetricAlgorithmIdentifier  ::=  SEQUENCE  {
     algorithm               SymmetricAlgorithm,
     padding                 CypherPadding,
@@ -342,7 +373,17 @@ BEGIN
     algorithm               MacAlgorithm,
     parameter               AlgorithmParameters
   }
+
+  PRNGSpec ::= SEQUENCE {
+    type                PRNGType,
+    seed                OCTET STRING
+  }
   
+  PRNGType ::= ENUMERATED {
+    xsadd       (1000),
+    blumMicali  (1001)
+  }
+
   SymmetricAlgorithm ::= ENUMERATED {
     aes128      (1000),
     aes192      (1001),  -- optional support
@@ -353,29 +394,27 @@ BEGIN
   }
   
   CypherMode ::= ENUMERATED {
-    ECB      (1000),
-    CBC      (1001)
+    ecb      (1000),
+    cbc      (1001)
   }
 
   CypherPadding ::= ENUMERATED {
-    PKCS7      (1000),
-    PKCS1      (1001)
+    pkcs7      (1000),
+    pkcs1      (1001)
   }
   
   AsymmetricAlgorithm ::= ENUMERATED {
     rsa       (2000),
     dsa       (2100),
-    EC        (2500)
+    ec        (2500)
   }
   
   MacAlgorithm ::= ENUMERATED {
     sha384   (3000),
     sha512   (3001),
-    -- FIXME check AEAD
     tiger192 (3100)
   }
   
-  // FIXME replace with OID
   ECCurveType ::= ENUMERATED{
     secp384r1 (2500),
     sect409k1 (2501),
@@ -389,14 +428,13 @@ BEGIN
     initialisationVector [10002] OCTET STRING OPTIONAL,
     nonce                [10003] OCTET STRING OPTIONAL,
     mode                 [10004] OCTET STRING OPTIONAL,
-    padding              [10005] OCTET STRING OPTIONAL,
-    ...    
+    padding              [10005] OCTET STRING OPTIONAL
   }
   
   -- Symmetric key
   SymmetricKey ::= SEQUENCE {
     keyType SymmetricAlgorithmIdentifier,
-    key     OCTET STRING (size(1..512))
+    key     OCTET STRING (SIZE(1..512))
   }
   
   -- Asymmetric Key

@@ -2,13 +2,15 @@ package net.gwerder.java.messagevortex.blending;
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.asn1.BlendingSpec;
-import net.gwerder.java.messagevortex.asn1.Message;
+import net.gwerder.java.messagevortex.asn1.VortexMessage;
 import net.gwerder.java.messagevortex.transport.DummyTransport;
 import net.gwerder.java.messagevortex.transport.TransportListener;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
 import java.util.logging.Level;
 
 public class DummyBlender extends AbstractBlender implements TransportListener {
@@ -34,11 +36,11 @@ public class DummyBlender extends AbstractBlender implements TransportListener {
         return this.identity;
     }
 
-    public boolean blendMessage(BlendingSpec target, Message msg) {
+    public boolean blendMessage(BlendingSpec target, VortexMessage msg) {
         // FIXME encode message in clear readable and send it
         try {
             return transport.sendMessage(target.getBlendingEndpointAddress(), new ByteArrayInputStream(msg.toBytes()));
-        } catch(IOException ioe) {
+        } catch(IOException|NoSuchAlgorithmException|ParseException ioe) {
             LOGGER.log(Level.SEVERE,"Unable to send to transport endpoint "+target.toString());
             return false;
         }
