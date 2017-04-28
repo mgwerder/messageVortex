@@ -33,6 +33,10 @@ public class Prefix extends Block {
         // nothing to be done here
     }
 
+    public Prefix(SymmetricKey sk) {
+        key=sk;
+    }
+
     /***
      * Creates a prefix by parsing to in plan (unencrypted)
      *
@@ -40,9 +44,8 @@ public class Prefix extends Block {
      *
      * @throws IOException if parsing fails
      */
-    public Prefix(ASN1Primitive to,AsymmetricKey ak) throws IOException {
-        parse(to);
-        setDecryptionKey(ak);
+    public Prefix(ASN1Primitive to,AsymmetricKey ak) throws IOException,NoSuchAlgorithmException,ParseException {
+        this(to.getEncoded(),ak);
     }
 
     /***
@@ -74,7 +77,9 @@ public class Prefix extends Block {
         encrypted=to;
         setDecryptionKey(ak);
         if(getDecryptionKey()!=null && getDecryptionKey().hasPrivateKey()) {
-            parse( decryptionKey.decrypt( encrypted ));
+            parse( ASN1OctetString.getInstance(decryptionKey.decrypt( encrypted )));
+        } else {
+            parse( ASN1Sequence.getInstance(to) );
         }
     }
 
@@ -85,7 +90,8 @@ public class Prefix extends Block {
         ASN1Sequence s1 = ASN1Sequence.getInstance( to );
 
         // getting key
-        key = new SymmetricKey( s1.getObjectAt(0).toASN1Primitive().getEncoded(),null );
+        key = new SymmetricKey( s1.getObjectAt(0).toASN1Primitive().getEncoded() ,null );
+        if(key==null) throw new IOException("symmetric key may not be null when decoding");
     }
 
     public AsymmetricKey setDecryptionKey(AsymmetricKey dk) {
@@ -114,38 +120,61 @@ public class Prefix extends Block {
     }
 
     public ASN1Object toASN1Object(AsymmetricKey ak) throws IOException {
-        if(ak!=null) setDecryptionKey(ak);
-        ASN1EncodableVector v=new ASN1EncodableVector();
-        if(key==null) throw new IOException("symmetric key may not be null when encoding");
         Logger.getLogger("Prefix").log(Level.FINER,"adding symmetric key");
+        if(ak!=null) setDecryptionKey(ak);
+        if(key==null) throw new IOException("symmetric key may not be null when encoding");
+
+        ASN1EncodableVector v=new ASN1EncodableVector();
         ASN1Encodable o=key.toASN1Object();
         if (o == null) {
             throw new IOException( "returned symmetric object may not be null" );
         }
         v.add( o );
         ASN1Object seq=new DERSequence(v);
+
+        // encrypt and embedd if requested
         if(ak!=null) {
             // encrypt and embedd in OCTET STREAM
             Logger.getLogger("Prefix").log(Level.FINER,"encrypting prefix contend to octet string in Prefix");
             seq=new DEROctetString( ak.encrypt(seq.getEncoded()) );
-            return new DERTaggedObject( ENCRYPTED_PREFIX,seq );
         }
         Logger.getLogger("Prefix").log(Level.FINER,"done toASN1Object() of Prefix");
-        return new DERTaggedObject( PLAIN_PREFIX,seq );
+        return seq;
     }
 
-    public String dumpValueNotation(String prefix) {
+    public String dumpValueNotation(String prefix) throws IOException {
         return dumpValueNotation( prefix,DumpType.PUBLIC_ONLY );
     }
 
-    public String dumpValueNotation(String prefix, DumpType dt) {
+    public String dumpValueNotation(String prefix, DumpType dt) throws IOException {
         StringBuilder sb=new StringBuilder();
         if(DumpType.ALL.equals(dt) || DumpType.PUBLIC_ONLY.equals(dt)) {
             // dump standard block as octet string
+            sb.append( "  {"+CRLF );
+            sb.append( prefix+"key "+toHex( key.toASN1Object().getEncoded() ));
+            sb.append( "  }"+CRLF );
         } else {
             // dump as unecrypted structure
+            sb.append( "  {"+CRLF );
+            sb.append( prefix+"key "+key.dumpValueNotation( prefix+"  " ) );
+            sb.append( "  }"+CRLF );
         }
-        throw new NotImplementedException();
+        return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        // must be equivalent in type
+        if(!(o instanceof Prefix)) return false;
+
+        // do casting
+        Prefix p=(Prefix)(o);
+
+        // look for not equal keys
+        if((p.getKey()==null && getKey()!=null) || (p.getKey()!=null && getKey()==null)) return false;
+        if(p.getKey()!=null && !p.getKey().equals(getKey())) return false;
+
+        return true;
     }
 
 }

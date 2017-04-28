@@ -82,23 +82,47 @@ public class VortexMessage extends Block {
         Logger.getLogger("VortexMessage").log(Level.FINER,"Executing parse()");
         int i = 0;
         ASN1Sequence s1 = ASN1Sequence.getInstance( p );
-        prefix = new Prefix( s1.getObjectAt( i++ ).toASN1Primitive().getEncoded(),getDecryptionKey() );
-        innerMessage = new InnerMessage( s1.getObjectAt( i++ ).toASN1Primitive().getEncoded(),prefix.getKey() );
+
+        // reading prefix
+        ASN1TaggedObject to=ASN1TaggedObject.getInstance( s1.getObjectAt( i++ ) );
+        switch(to.getTagNo()) {
+            case Prefix.PLAIN_PREFIX:
+                prefix = new Prefix( to.getObject(),null );
+                break;
+            case Prefix.ENCRYPTED_PREFIX:
+                prefix = new Prefix( to.getObject() , getDecryptionKey());
+                break;
+            default:
+                throw new ParseException( "got unexpected tag number when reading prefix ("+to.getTagNo()+")",0 );
+        }
+
+        // reading inner message
+        to=ASN1TaggedObject.getInstance( s1.getObjectAt( i++ ) );
+        switch(to.getTagNo()) {
+            case InnerMessage.PLAIN_MESSAGE:
+                innerMessage = new InnerMessage( to.getObject().getEncoded() );
+                break;
+            case InnerMessage.ENCRYPTED_MESSAGE:
+                innerMessage = new InnerMessage( prefix.getKey().decrypt(ASN1OctetString.getInstance(to.getObject()).getOctets())  );
+                break;
+            default:
+                throw new ParseException( "got unexpected tag number when reading inner message ("+to.getTagNo()+")",0 );
+        }
     }
 
     public ASN1Object toASN1Object() throws IOException,NoSuchAlgorithmException,ParseException {
-        return toASN1Object( null, null,DumpType.PUBLIC_ONLY );
+        return toASN1Object( null, DumpType.PUBLIC_ONLY );
     }
 
-    public ASN1Object toASN1Object(AsymmetricKey identityKey, SymmetricKey messageKey, DumpType dt) throws IOException,NoSuchAlgorithmException,ParseException {
+    public ASN1Object toASN1Object(AsymmetricKey identityKey, DumpType dt) throws IOException,NoSuchAlgorithmException,ParseException {
         // Prepare encoding
         Logger.getLogger("VortexMessage").log(Level.FINER,"Executing toASN1Object()");
-        if(messageKey==null) {
-        } else if(getPrefix().getKey()!=null) {
-            messageKey=getPrefix().getKey();
-        }
-        getPrefix().setDecryptionKey( identityKey );
 
+        if(identityKey!=null || DumpType.ALL_UNENCRYPTED==dt) {
+            getPrefix().setDecryptionKey(null);
+        } else {
+            getPrefix().setDecryptionKey( identityKey );
+        }
         ASN1EncodableVector v=new ASN1EncodableVector();
 
         // add prefix to structure
@@ -106,9 +130,13 @@ public class VortexMessage extends Block {
         if (o == null) {
             throw new IOException( "returned prefix object may not be null" );
         }
-        v.add( o );
+        v.add( new DERTaggedObject( getPrefix().getDecryptionKey()==null?Prefix.PLAIN_PREFIX:Prefix.ENCRYPTED_PREFIX,o ));
 
-        v.add( getInnerMessage().toASN1Object( messageKey,dt ) );
+        if(prefix.getKey()==null || DumpType.ALL_UNENCRYPTED.equals(dt)) {
+            v.add( new DERTaggedObject( InnerMessage.PLAIN_MESSAGE,getInnerMessage().toASN1Object(dt) ));
+        } else {
+            v.add( new DERTaggedObject( InnerMessage.ENCRYPTED_MESSAGE,new DEROctetString( prefix.getKey().encrypt(getInnerMessage().toASN1Object(dt).getEncoded() ))));
+        }
         ASN1Sequence seq=new DERSequence(v);
         Logger.getLogger("VortexMessage").log(Level.FINER,"done toASN1Object()");
         return seq;

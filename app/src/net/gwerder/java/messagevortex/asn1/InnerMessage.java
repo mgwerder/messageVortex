@@ -18,6 +18,9 @@ import java.util.logging.Logger;
 
 public class InnerMessage extends Block {
 
+    public static final int PLAIN_MESSAGE=10011;
+    public static final int ENCRYPTED_MESSAGE=10012;
+
     private static final int ROUTING          = 11001;
     private static final int PAYLOAD          = 11002;
 
@@ -25,27 +28,21 @@ public class InnerMessage extends Block {
     private Routing[] routing;
     private Payload[] payload;
 
-    public InnerMessage() {
-        identity=null;
+    public InnerMessage(Identity i) {
+        identity=i;
         routing=null;
         payload=null;
     }
 
-    public InnerMessage(File f,SymmetricKey messageKey) throws IOException,ParseException,NoSuchAlgorithmException {
-        this();
+    public InnerMessage(File f) throws IOException,ParseException,NoSuchAlgorithmException {
+        this((Identity)null);
         Path asn1DataPath = Paths.get(f.getAbsolutePath());
         byte[] p = Files.readAllBytes(asn1DataPath);
-        if(messageKey!=null) {
-            p=messageKey.decrypt(p);
-        }
         parse( p );
     }
 
-    public InnerMessage(byte[] b,SymmetricKey messageKey) throws IOException,ParseException,NoSuchAlgorithmException {
-        this();
-        if(messageKey!=null) {
-            b=messageKey.decrypt(b);
-        }
+    public InnerMessage(byte[] b) throws IOException,ParseException,NoSuchAlgorithmException {
+        this((Identity)null);
         parse( b );
     }
 
@@ -54,9 +51,6 @@ public class InnerMessage extends Block {
         parse(aIn.readObject());
         if( identity==null ) {
             throw new NullPointerException( "Identity may not be null" );
-        }
-        if( payload==null ) {
-            throw new NullPointerException( "Payload may not be null" );
         }
     }
 
@@ -97,10 +91,10 @@ public class InnerMessage extends Block {
     }
 
     public ASN1Object toASN1Object() throws IOException,NoSuchAlgorithmException,ParseException {
-        return toASN1Object( null, DumpType.PUBLIC_ONLY );
+        return toASN1Object( DumpType.PUBLIC_ONLY );
     }
 
-    public ASN1Object toASN1Object(SymmetricKey messageKey,DumpType dt) throws IOException,NoSuchAlgorithmException,ParseException {
+    public ASN1Object toASN1Object(DumpType dt) throws IOException,NoSuchAlgorithmException,ParseException {
         // Prepare encoding
         Logger.getLogger("VortexMessage").log(Level.FINER,"Executing toASN1Object()");
 
@@ -115,15 +109,19 @@ public class InnerMessage extends Block {
 
         // Writing encoded Routing Blocks
         ASN1EncodableVector v2=new ASN1EncodableVector();
-        for(Routing r:routing) {
-            v2.add( r.toASN1Object() );
+        if(routing!=null) {
+            for(Routing r:routing) {
+                v2.add( r.toASN1Object() );
+            }
         }
         v.add( new DERTaggedObject( true,ROUTING    ,new DERSequence( v2 )));
 
         // Writing encoded Payload Blocks
         v2=new ASN1EncodableVector();
-        for(Payload p:payload) {
-            v2.add( p.toASN1Object() );
+        if(payload!=null) {
+            for(Payload p:payload) {
+                v2.add( p.toASN1Object() );
+            }
         }
         v.add( new DERTaggedObject( true,PAYLOAD    ,new DERSequence( v2 )));
 

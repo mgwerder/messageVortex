@@ -28,14 +28,17 @@ public class VortexMessageTest {
     }
 
     /***
-     * Reencodes 100 Messages and checks wether their byte and Value Notation Dumps are equivalent
+     * Reencodes 10 Messages and checks whether their byte and Value Notation Dumps are equivalent
      */
     @Test
     public void fuzzingMessage() {
         try {
-            for (int i = 0; i < 100; i++) {
-                LOGGER.log( Level.INFO, "Testing VortexMessage reencoding " + (i + 1) + " of " + 100 );
-                VortexMessage s = new VortexMessage(new Prefix(),new InnerMessage(  ));
+            final int TESTS=10;
+            for (int i = 0; i < TESTS; i++) {
+                LOGGER.log( Level.INFO, "Testing VortexMessage reencoding " + (i + 1) + " of " + TESTS );
+                Prefix p=new Prefix();
+                p.setKey(new SymmetricKey() );
+                VortexMessage s = new VortexMessage(p,new InnerMessage( new Identity() ));
                 String s1=s.dumpValueNotation( "" );
                 byte[] b1 = s.toBytes();
                 assertTrue( "Byte representation may not be null", b1 != null );

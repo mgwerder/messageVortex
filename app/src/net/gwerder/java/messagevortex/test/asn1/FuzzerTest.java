@@ -34,7 +34,7 @@ public class FuzzerTest {
         MessageVortexLogger.setGlobalLogLevel(Level.ALL);
     }
 
-    private int ksDisc = 16384;
+    private final int ksDisc = 8192;
 
     @Test
     public void fuzzingMessage() throws Exception {
@@ -44,11 +44,15 @@ public class FuzzerTest {
                 LOGGER.log( Level.INFO, "Starting fuzzer cycle " + (i + 1) + " of " + BLOCK_FUZZER_CYCLES );
                 Identity id = new Identity();
                 id.setOwnIdentity( ownIdentity );
-                VortexMessage s = new VortexMessage( new Prefix(  ),new InnerMessage(  ) );
+                Prefix p=new Prefix();
+                p.setKey( new SymmetricKey() );
+                VortexMessage s = new VortexMessage( p,new InnerMessage( new Identity() ) );
                 assertTrue( "VortexMessage may not be null", s != null );
                 byte[] b1 = s.toBytes();
                 assertTrue( "Byte representation may not be null", b1 != null );
-                byte[] b2 = (new VortexMessage( b1,null )).toBytes();
+                VortexMessage s2=new VortexMessage( b1,null );
+                assertTrue( "Contained Prefix is not considered equivalent (original key="+s.getPrefix().getKey()+";new key="+s2.getPrefix().getKey()+")", s.getPrefix().equals(s2.getPrefix()) );
+                byte[] b2 = (s2).toBytes();
                 assertTrue( "Byte arrays should be equal when reencoding", Arrays.equals( b1, b2 ) );
             }
         } catch (Exception e) {

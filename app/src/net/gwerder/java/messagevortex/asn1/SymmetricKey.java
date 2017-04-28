@@ -169,16 +169,14 @@ public class SymmetricKey extends Key {
                 c.init( Cipher.DECRYPT_MODE, ks );
             }
             return c.doFinal( b );
-        } catch (NoSuchAlgorithmException e) {
-            throw new IOException( "Exception while encrypting", e );
-        } catch (NoSuchPaddingException e) {
-            throw new IOException( "Exception while encrypting", e );
+        } catch (NoSuchAlgorithmException|NoSuchPaddingException e) {
+            throw new IOException( "Exception while decrypting", e );
         } catch (InvalidKeyException e) {
             throw new IOException( "Exception while init of cipher", e );
         } catch (IllegalBlockSizeException e) {
-            throw new IOException( "Exception while encrypting", e );
+            throw new IOException( "Exception while decrypting", e );
         } catch (BadPaddingException e) {
-            throw new IOException( "Exception while encrypting", e );
+            throw new IOException( "Exception while decrypting", e );
         } catch (InvalidAlgorithmParameterException e) {
             throw new IOException( "Exception while encrypting", e );
         }
@@ -223,7 +221,7 @@ public class SymmetricKey extends Key {
             return false;
         }
 
-        // compare public keys
+        // compare  keys
         SymmetricKey o=(SymmetricKey)t;
         if(!Arrays.equals(o.key,key)) {
             return false;
@@ -257,9 +255,9 @@ public class SymmetricKey extends Key {
         sb.append("{"+CRLF);
         sb.append(dumpKeyTypeValueNotation(prefix)+CRLF);
         sb.append(prefix+"  key "+toHex(key)+CRLF);
+        // FIXME dump rest
         sb.append(prefix+"}");
         return sb.toString();
     }
-
 
 }

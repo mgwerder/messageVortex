@@ -331,12 +331,12 @@ BEGIN
     puzzleUnknown         (3301),
 	
 	-- capability errors
-	MacAlgorithmUnknown         (3801),
-	SymmetricAlgorithmUnknown   (3801),
-	AsymmetricAlgorithmUnknown  (3801),
-	PrngAlgorithmUnknown        (3801),
-	MissingParameters           (3801),
-	BadParameters               (3801),
+	macAlgorithmUnknown         (3801),
+	symmetricAlgorithmUnknown   (3802),
+	asymmetricAlgorithmUnknown  (3803),
+	prngAlgorithmUnknown        (3804),
+	missingParameters           (3820),
+	badParameters               (3821),
     
     -- Mayor host specific errors
     hostError             (5001),
