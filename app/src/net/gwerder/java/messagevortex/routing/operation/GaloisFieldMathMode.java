@@ -10,53 +10,54 @@ public class GaloisFieldMathMode implements MathMode {
 
     int MODAR_W;
     int MODAR_NW;
-    int MODAR_NWM1;
     int[] gflog;
     int[] gfilog;
 
-    final static Map<Integer,Integer> PRIM_POLY=new ConcurrentHashMap<>(  );
-    static{
-        PRIM_POLY.put(2,7);
-        PRIM_POLY.put(4,19);
-        PRIM_POLY.put(8,285);
-        PRIM_POLY.put(16,69643);
-    }
+    final static int[] PRIM_POLY=new int[] {3,7,11,19,37,67,137,285,529,1033,2053,4179,8219,17475,32771,69643};
+    final static Map<Integer,GaloisFieldMathMode> cachedMathMode=new ConcurrentHashMap<>();
 
-    public GaloisFieldMathMode(int omega) {
-        if(!PRIM_POLY.containsKey( omega )) throw new ArithmeticException( "illegal GF size (PRIM_POLY unknown)" );
+    private GaloisFieldMathMode(int omega) {
+        if(omega<1 ||omega>16) throw new ArithmeticException( "illegal GF size "+omega+" (PRIM_POLY unknown)" );
         MODAR_W=omega;
-        MODAR_NW = MODAR_W*MODAR_W;
-        MODAR_NWM1 = MODAR_NW-1;
+        MODAR_NW = (int)Math.pow(2,omega);
         gflog=new int[MODAR_NW];
         gfilog=new int[MODAR_NW];
         int b=1;
-        for(int log=0;log<MODAR_NWM1;log++) {
-            gflog[b]=log;
-            gfilog[log]=b;
-            b=2*b;
-            if((b & MODAR_NW)!=0) b=b^PRIM_POLY.get(omega);
+        for(int log=0;log<MODAR_NW-1;log++) {
+            gflog[b%MODAR_NW]=log;
+            gfilog[log%MODAR_NW]=b;
+            b=lshift(b,1,(byte)33);
+            if((b & MODAR_NW)!=0) b=b^PRIM_POLY[omega-1];
         }
         // initialize undefined values with 0
-        gflog[0]=0;
-        gfilog[MODAR_NWM1]=0;
+        gflog[0]=-1;
+        gfilog[MODAR_NW-1]=-1;
     }
 
+    public static GaloisFieldMathMode getGaloisFieldMathMode(int omega) {
+        GaloisFieldMathMode ret=cachedMathMode.get(omega);
+        if(ret==null) {
+            ret=new GaloisFieldMathMode(omega);
+            cachedMathMode.put(omega,ret);
+        }
+        return ret;
+    }
 
     @Override
     public int mul(int c1, int c2) {
         int sumLog;
         if (c1 == 0 || c2 == 0) return 0;
         sumLog = (gflog[c1] + gflog[c2]);
-        if(sumLog>=MODAR_NWM1) sumLog-=MODAR_NWM1;
+        if(sumLog>=MODAR_NW-1) sumLog-=MODAR_NW-1;
         return gfilog[sumLog];
     }
 
     public int div(int c1, int divisor) {
         int diffLog;
         if (c1 == 0) return 0;
-        if (divisor == 0) return -1; /* Can’t divide by 0 */
-        diffLog = (gflog[c1] - gflog[divisor])%MODAR_NWM1;
-        while(diffLog<0) diffLog+=MODAR_NWM1;
+        if (divisor == 0) throw new ArithmeticException("Divisionby 0");
+        diffLog = (gflog[c1] - gflog[divisor]);
+        while(diffLog<0) diffLog+=MODAR_NW-1;
         return gfilog[diffLog];
     }
 
@@ -65,7 +66,13 @@ public class GaloisFieldMathMode implements MathMode {
         return c1^c2;
     }
 
+    @Override
+    public int sub(int c1, int c2) {
+        return add(c1,c2);
+    }
+
     public int[] getGFLog() { return gflog; }
+
     public int[] getGFILog() { return gfilog; }
 
     public static int rshift(int value,int shift, byte length) {

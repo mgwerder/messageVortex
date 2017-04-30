@@ -1,19 +1,18 @@
 package net.gwerder.java.messagevortex.routing.operation;
 
+import net.gwerder.java.messagevortex.asn1.Identity;
+
 /**
  * Created by martin.gwerder on 19.04.2017.
  */
 public abstract class AbstractOperation {
 
-    protected int[] id=new int[0];
+    Identity identity;
 
-    public AbstractOperation(int[] id) {
-        this.id=id;
+    public AbstractOperation(Identity i) {
+        this.identity=i;
     }
 
-    public AbstractOperation(int startid,int number) {
-        this.id=new int[number];
-        for(int j=startid;j<startid+number;j++) this.id[j-startid]=startid;
-    }
+    abstract public boolean canRun();
 
 }
