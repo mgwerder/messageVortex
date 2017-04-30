@@ -1,12 +1,11 @@
 package net.gwerder.java.messagevortex.routing.operation;
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
-
 import java.util.Arrays;
 import java.util.logging.Level;
 
 /**
- * Created by martin.gwerder on 19.04.2017.
+ * Offers matrix calculations in different fields.
  */
 public class Matrix {
 
@@ -85,8 +84,12 @@ public class Matrix {
     }
 
     public Matrix mul(Matrix m) {
-        if(! this.mode.equals(m.mode)) throw new ArithmeticException( "illegal matrix math mode" );
-        if(this.dimension[0]!=m.dimension[1]) throw new ArithmeticException( "illegal matrix size" );
+        if(! this.mode.equals(m.mode)) {
+            throw new ArithmeticException( "illegal matrix math mode" );
+        }
+        if(this.dimension[0]!=m.dimension[1]) {
+            throw new ArithmeticException( "illegal matrix size" );
+        }
         Matrix ret=new Matrix(m.dimension[0],this.dimension[1],mode);
         for(int x=0;x<m.dimension[0];x++) {
             for(int y=0;y<this.dimension[1];y++) {
@@ -102,11 +105,23 @@ public class Matrix {
 
     @Override
     public boolean equals(Object o) {
-        if(! (o instanceof Matrix) ) return false;
+        if(! (o instanceof Matrix) ) {
+            return false;
+        }
         Matrix m=(Matrix)o;
-        if(m.dimension.length!=dimension.length) return false;
-        for(int i=0;dimension.length>i;i++) if(dimension[i]!=m.dimension[i]) return false;
-        for(int i=0;m.matrix.length>i;i++) if(matrix[i]!=m.matrix[i]) return false;
+        if(m.dimension.length!=dimension.length) {
+            return false;
+        }
+        for(int i=0;dimension.length>i;i++) {
+            if(dimension[i]!=m.dimension[i]) {
+                return false;
+            }
+        }
+        for(int i=0;m.matrix.length>i;i++) {
+            if(matrix[i]!=m.matrix[i]) {
+                return false;
+            }
+        }
         return true;
     }
 
@@ -121,11 +136,15 @@ public class Matrix {
         for(int y=0;y<dimension[1];y++) {
             sb.append( "{" );
             for (int x = 0; x < dimension[0]; x++) {
-                if (x > 0) sb.append( "," );
+                if (x > 0) {
+                    sb.append( "," );
+                }
                 sb.append( matrix[y * dimension[0] + x] );
             }
             sb.append( "}" );
-            if (y < dimension[1] - 1) sb.append( ",\n" );
+            if (y < dimension[1] - 1) {
+                sb.append( ",\n" );
+            }
         }
         sb.append( "}" );
         return sb.toString();
@@ -133,13 +152,17 @@ public class Matrix {
 
     public int setModulo(int i) {
         int ret=modulo;
-        if(i<1) modulo=Integer.MAX_VALUE;
+        if(i<1) {
+            modulo=Integer.MAX_VALUE;
+        }
         modulo=i;
         return ret;
     }
 
     public int[] getRow(int i) {
-        if(i<0 || i>=dimension[1]) throw new ArithmeticException("row index out of range 0<=i<"+dimension[0]);
+        if(i<0 || i>=dimension[1]) {
+            throw new ArithmeticException("row index out of range 0<=i<"+dimension[0]);
+        }
         int[] ret=new int[dimension[0]];
         for(int j=0;j<ret.length;j++) {
             ret[j]=getField(j,i);
@@ -148,14 +171,22 @@ public class Matrix {
     }
 
     public int getField(int x,int y) {
-        if(x<0 || x>=dimension[0]) throw new ArithmeticException("column index out of range 0<=i<"+dimension[0]);
-        if(y<0 || y>=dimension[1]) throw new ArithmeticException("row index out of range 0<=i<"+dimension[0]);
+        if(x<0 || x>=dimension[0]) {
+            throw new ArithmeticException("column index out of range 0<=i<"+dimension[0]);
+        }
+        if(y<0 || y>=dimension[1]) {
+            throw new ArithmeticException("row index out of range 0<=i<"+dimension[0]);
+        }
         return matrix[y*getX()+x];
     }
 
     public int setField(int x,int y,int value) {
-        if(x<0 || x>=dimension[0]) throw new ArithmeticException("column index out of range 0<=i<"+dimension[0]);
-        if(y<0 || y>=dimension[1]) throw new ArithmeticException("row index out of range 0<=i<"+dimension[0]);
+        if(x<0 || x>=dimension[0]) {
+            throw new ArithmeticException("column index out of range 0<=i<"+dimension[0]);
+        }
+        if(y<0 || y>=dimension[1]) {
+            throw new ArithmeticException("row index out of range 0<=i<"+dimension[0]);
+        }
         int old=getField(x,y);
         matrix[y*getX()+x]=value;
         return old;
@@ -168,7 +199,9 @@ public class Matrix {
      * @throws ArithmeticException if matrix is not square in dimensions or the algorithm was unable to compute an inverse
      */
     public Matrix getInverse() {
-        if(dimension[0]!=dimension[1]) throw new ArithmeticException("matrix to inverse must have square dimensions");
+        if(dimension[0]!=dimension[1]) {
+            throw new ArithmeticException("matrix to inverse must have square dimensions");
+        }
         Matrix red=clone();
         Matrix ret = Matrix.unitMatrix(dimension[0], mode);
         for (int row = 0; row < dimension[1]; row++) {
@@ -203,7 +236,9 @@ public class Matrix {
                 LOGGER.log(Level.FINEST, "  step diagonal right\r\n" + red.toString() + "\r\n" + ret.toString());
             }
         }
-        if (!Matrix.unitMatrix(red.dimension[0],mode).equals(red)) throw new ArithmeticException("unable to calculate inverse");
+        if (!Matrix.unitMatrix(red.dimension[0],mode).equals(red)) {
+            throw new ArithmeticException("unable to calculate inverse");
+        }
         return ret;
     }
 
@@ -215,8 +250,12 @@ public class Matrix {
     }
 
     void transformColumn(int col,int col2, int scalar) {
-        if(col<0 || col>getX()) throw new ArithmeticException("first column is out of range");
-        if(col2>getX()) throw new ArithmeticException("second column is out of range");
+        if(col<0 || col>getX()) {
+            throw new ArithmeticException("first column is out of range");
+        }
+        if(col2>getX()) {
+            throw new ArithmeticException("second column is out of range");
+        }
         for(int row=0;row<getY();row++) {
             int value1 = getField(col, row);
             int value2;
@@ -234,8 +273,12 @@ public class Matrix {
     }
 
     void transformRow(int row,int row2, int scalar) {
-        if(row<0 || row>getY()) throw new ArithmeticException("first row is out of range");
-        if(row2<0 || row2>getX()) throw new ArithmeticException("second row is out of range");
+        if(row<0 || row>getY()) {
+            throw new ArithmeticException("first row is out of range");
+        }
+        if(row2<0 || row2>getX()) {
+            throw new ArithmeticException("second row is out of range");
+        }
         for(int col=0;col<getX();col++){
             int value1=getField(col,row);
             int value2=getField(col,row2);

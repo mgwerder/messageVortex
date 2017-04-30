@@ -10,9 +10,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -67,7 +67,7 @@ public class InnerMessage extends Block {
         }
 
         // getting routing blocks
-        List<Routing> v=new Vector<>();
+        List<Routing> v=new ArrayList<>();
         for (Iterator<ASN1Encodable> iter= ASN1Sequence.getInstance( ASN1TaggedObject.getInstance(ae).getObject() ).iterator(); iter.hasNext(); ) {
             ASN1Encodable tr = iter.next();
             v.add(new Routing(tr));
@@ -81,7 +81,7 @@ public class InnerMessage extends Block {
         }
 
         // getting routing blocks
-        List<Payload> p=new Vector<>();
+        List<Payload> p=new ArrayList<>();
         for (Iterator<ASN1Encodable> iter= ASN1Sequence.getInstance( ASN1TaggedObject.getInstance(ae).getObject() ).iterator(); iter.hasNext(); ) {
             ASN1Encodable tr = iter.next();
             p.add(new Payload(tr));
@@ -94,14 +94,21 @@ public class InnerMessage extends Block {
         return toASN1Object( DumpType.PUBLIC_ONLY );
     }
 
-    public ASN1Object toASN1Object(DumpType dt) throws IOException,NoSuchAlgorithmException,ParseException {
+    public ASN1Object toASN1Object(DumpType dt) throws IOException {
         // Prepare encoding
         Logger.getLogger("VortexMessage").log(Level.FINER,"Executing toASN1Object()");
 
         ASN1EncodableVector v=new ASN1EncodableVector();
-        if(identity==null) throw new IOException("identity may not be null when encoding");
+        if(identity==null) {
+            throw new IOException("identity may not be null when encoding");
+        }
         Logger.getLogger("VortexMessage").log(Level.FINER,"adding identity");
-        ASN1Encodable o=identity.toASN1Object();
+        ASN1Encodable o=null;
+        try {
+            o = identity.toASN1Object();
+        }catch(NoSuchAlgorithmException|ParseException e) {
+            throw new IOException("Exception while getting identity object",e);
+        }
         if (o == null) {
             throw new IOException( "returned identity object may not be null" );
         }
@@ -196,7 +203,9 @@ public class InnerMessage extends Block {
      * @return the long representation of the byte array
      */
     public static long getBytesAsInteger(byte[] b) {
-        if(b==null || b.length<1 || b.length>8) throw new IllegalArgumentException( "byte array must contain exactly four bytes" );
+        if(b==null || b.length<1 || b.length>8) {
+            throw new IllegalArgumentException( "byte array must contain exactly four bytes" );
+        }
         long ret=0;
         for(int i=0;i<b.length;i++) {
             ret|=((long)(b[i]&0xFF))<<(i*8);

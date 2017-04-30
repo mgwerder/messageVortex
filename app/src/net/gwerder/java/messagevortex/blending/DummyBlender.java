@@ -9,8 +9,6 @@ import net.gwerder.java.messagevortex.transport.TransportListener;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.NoSuchAlgorithmException;
-import java.text.ParseException;
 import java.util.logging.Level;
 
 public class DummyBlender extends AbstractBlender implements TransportListener {
@@ -40,7 +38,7 @@ public class DummyBlender extends AbstractBlender implements TransportListener {
         // FIXME encode message in clear readable and send it
         try {
             return transport.sendMessage(target.getBlendingEndpointAddress(), new ByteArrayInputStream(msg.toBytes()));
-        } catch(IOException|NoSuchAlgorithmException|ParseException ioe) {
+        } catch(IOException ioe) {
             LOGGER.log(Level.SEVERE,"Unable to send to transport endpoint "+target.toString());
             return false;
         }

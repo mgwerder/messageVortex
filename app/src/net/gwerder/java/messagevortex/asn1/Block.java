@@ -80,12 +80,16 @@ public abstract class Block {
 
     abstract ASN1Object toASN1Object() throws IOException,NoSuchAlgorithmException,ParseException;
 
-    public byte[] toBytes() throws IOException,NoSuchAlgorithmException,ParseException {
-        ASN1Object o=toASN1Object();
-        if(o==null) {
-            throw new IOException( "Got a null reply from toASN1Object ... get coding man" );
+    public byte[] toBytes() throws IOException {
+        try {
+            ASN1Object o = toASN1Object();
+            if (o == null) {
+                throw new IOException("Got a null reply from toASN1Object ... get coding man");
+            }
+            return toDER(o);
+        } catch(NoSuchAlgorithmException|ParseException e) {
+            throw new IOException("exception while getting ASN.1 object",e);
         }
-        return toDER( o );
     }
 
 }

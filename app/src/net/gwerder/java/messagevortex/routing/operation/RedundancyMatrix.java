@@ -59,7 +59,9 @@ public class RedundancyMatrix extends VandermondeMatrix {
         for(int i=missingRowIndex.length-1;i>=0;i--) {
             red.removeRow(missingRowIndex[i]);
         }
-        while (red.getX() < red.getY()) red.removeRow(red.getY() - 1);
+        while (red.getX() < red.getY()) {
+            red.removeRow(red.getY() - 1);
+        }
         LOGGER.log(Level.FINEST, "  reduced redundancy matrix\r\n" + red.toString());
         Matrix ret=red.getInverse();
         LOGGER.log(Level.FINEST, "  inverse of reduced redundancy matrix\r\n" + ret.toString());

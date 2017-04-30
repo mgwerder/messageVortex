@@ -21,7 +21,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 /**
- * Created by martin.gwerder on 19.04.2016.
+ * Represents a Symmetric Key in the ASN.1 structure
  */
 public class SymmetricKey extends Key {
 
@@ -59,6 +59,27 @@ public class SymmetricKey extends Key {
         }
     }
 
+    public SymmetricKey(byte[] sk) throws IOException {
+        this( sk, null );
+    }
+
+    public SymmetricKey(byte[] sk, AsymmetricKey deckey) throws IOException {
+        // decrypt and decode
+        ASN1Primitive s;
+        if(deckey!=null) {
+            byte[] b;
+            try {
+                b = deckey.decrypt( sk );
+            } catch(Exception e) {
+                throw new IOException( "Error while decrypting object", e );
+            }
+            s=DERSequence.fromByteArray(b);
+        } else {
+            s=DERSequence.fromByteArray(sk);
+        }
+        parse( s );
+    }
+
     public byte[] setIV(byte[] b) {
         byte[] old=initialisationVector;
         if(b==null || b.length==0) {
@@ -81,27 +102,6 @@ public class SymmetricKey extends Key {
 
     public Mode getMode() {
         return this.mode;
-    }
-
-    public SymmetricKey(byte[] sk) throws IOException {
-        this( sk, null );
-    }
-
-    public SymmetricKey(byte[] sk, AsymmetricKey deckey) throws IOException {
-        // decrypt and decode
-        ASN1Primitive s;
-        if(deckey!=null) {
-            byte[] b;
-            try {
-                b = deckey.decrypt( sk );
-            } catch(Exception e) {
-                throw new IOException( "Error while decrypting object", e );
-            }
-            s=DERSequence.fromByteArray(b);
-        } else {
-            s=DERSequence.fromByteArray(sk);
-        }
-        parse( s );
     }
 
     private void createAES(int keysize) {
@@ -143,16 +143,10 @@ public class SymmetricKey extends Key {
                 c.init( Cipher.ENCRYPT_MODE, ks );
             }
             return c.doFinal( b );
-        } catch (NoSuchAlgorithmException e) {
-            throw new IOException( "Exception while encrypting", e );
-        } catch (NoSuchPaddingException e) {
+        } catch (NoSuchAlgorithmException|NoSuchPaddingException|IllegalBlockSizeException|BadPaddingException e) {
             throw new IOException( "Exception while encrypting", e );
         } catch (InvalidKeyException e) {
             throw new IOException( "Exception while init of cipher", e );
-        } catch (IllegalBlockSizeException e) {
-            throw new IOException( "Exception while encrypting", e );
-        } catch (BadPaddingException e) {
-            throw new IOException( "Exception while encrypting", e );
         } catch (InvalidAlgorithmParameterException e) {
             throw new IOException( "Exception while encrypting ("+keytype.getAlgorithmFamily()+"/"+initialisationVector.length+")", e );
         }
@@ -169,16 +163,10 @@ public class SymmetricKey extends Key {
                 c.init( Cipher.DECRYPT_MODE, ks );
             }
             return c.doFinal( b );
-        } catch (NoSuchAlgorithmException|NoSuchPaddingException e) {
+        } catch (NoSuchAlgorithmException|NoSuchPaddingException|IllegalBlockSizeException|InvalidAlgorithmParameterException|BadPaddingException e) {
             throw new IOException( "Exception while decrypting", e );
         } catch (InvalidKeyException e) {
             throw new IOException( "Exception while init of cipher", e );
-        } catch (IllegalBlockSizeException e) {
-            throw new IOException( "Exception while decrypting", e );
-        } catch (BadPaddingException e) {
-            throw new IOException( "Exception while decrypting", e );
-        } catch (InvalidAlgorithmParameterException e) {
-            throw new IOException( "Exception while encrypting", e );
         }
     }
 
@@ -191,7 +179,7 @@ public class SymmetricKey extends Key {
         parseKeyParameter(ASN1Sequence.getInstance( s1.getObjectAt(i++) ));
 
         // getting key
-        key=ASN1OctetString.getInstance( s1.getObjectAt(i++)).getOctets();
+        key=ASN1OctetString.getInstance( s1.getObjectAt(i)).getOctets();
     }
 
     public byte[] getKey() { return key; }
@@ -247,6 +235,7 @@ public class SymmetricKey extends Key {
 
     @Override
     public int hashCode() {
+        // FIXME do it better
         return super.hashCode();
     }
 

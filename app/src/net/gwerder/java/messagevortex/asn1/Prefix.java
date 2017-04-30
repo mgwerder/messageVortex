@@ -2,8 +2,6 @@ package net.gwerder.java.messagevortex.asn1;
 
 import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.*;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
@@ -91,7 +89,9 @@ public class Prefix extends Block {
 
         // getting key
         key = new SymmetricKey( s1.getObjectAt(0).toASN1Primitive().getEncoded() ,null );
-        if(key==null) throw new IOException("symmetric key may not be null when decoding");
+        if(key==null) {
+            throw new IOException("symmetric key may not be null when decoding");
+        }
     }
 
     public AsymmetricKey setDecryptionKey(AsymmetricKey dk) {
@@ -121,8 +121,12 @@ public class Prefix extends Block {
 
     public ASN1Object toASN1Object(AsymmetricKey ak) throws IOException {
         Logger.getLogger("Prefix").log(Level.FINER,"adding symmetric key");
-        if(ak!=null) setDecryptionKey(ak);
-        if(key==null) throw new IOException("symmetric key may not be null when encoding");
+        if(ak!=null) {
+            setDecryptionKey(ak);
+        }
+        if(key==null) {
+            throw new IOException("symmetric key may not be null when encoding");
+        }
 
         ASN1EncodableVector v=new ASN1EncodableVector();
         ASN1Encodable o=key.toASN1Object();
@@ -165,16 +169,26 @@ public class Prefix extends Block {
     @Override
     public boolean equals(Object o) {
         // must be equivalent in type
-        if(!(o instanceof Prefix)) return false;
+        if(!(o instanceof Prefix)) {
+            return false;
+        }
 
         // do casting
         Prefix p=(Prefix)(o);
 
         // look for not equal keys
-        if((p.getKey()==null && getKey()!=null) || (p.getKey()!=null && getKey()==null)) return false;
-        if(p.getKey()!=null && !p.getKey().equals(getKey())) return false;
+        if((p.getKey()==null && getKey()!=null) || (p.getKey()!=null && getKey()==null)) {
+            return false;
+        }
+        if(p.getKey()!=null && !p.getKey().equals(getKey())) {
+            return false;
+        }
 
         return true;
     }
 
+    @Override
+    public int hashCode() {
+        return getKey().hashCode();
+    }
 }
