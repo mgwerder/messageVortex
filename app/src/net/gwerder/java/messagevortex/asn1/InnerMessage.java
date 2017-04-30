@@ -22,6 +22,7 @@ package net.gwerder.java.messagevortex.asn1;
  ***/
 
 
+import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.*;
 
@@ -36,7 +37,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /***
  * represents the inner encrypted part of a VortexMessage.
@@ -52,6 +52,12 @@ public class InnerMessage extends Block {
     private Identity identity;
     private Routing[] routing;
     private Payload[] payload;
+
+    private static final java.util.logging.Logger LOGGER;
+    static {
+        LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+        MessageVortexLogger.setGlobalLogLevel( Level.ALL);
+    }
 
     public InnerMessage(Identity i) {
         identity=i;
@@ -80,7 +86,7 @@ public class InnerMessage extends Block {
     }
 
     protected void parse(ASN1Encodable o) throws IOException,ParseException,NoSuchAlgorithmException {
-        Logger.getLogger("VortexMessage").log(Level.FINER,"Executing parse()");
+        LOGGER.log(Level.FINER,"Executing parse()");
         int i = 0;
         ASN1Sequence s1 = ASN1Sequence.getInstance( o );
         identity = new Identity( s1.getObjectAt( i++ ) );
@@ -121,19 +127,15 @@ public class InnerMessage extends Block {
 
     public ASN1Object toASN1Object(DumpType dt) throws IOException {
         // Prepare encoding
-        Logger.getLogger("VortexMessage").log(Level.FINER,"Executing toASN1Object()");
+        LOGGER.log(Level.FINER,"Executing toASN1Object()");
 
         ASN1EncodableVector v=new ASN1EncodableVector();
         if(identity==null) {
             throw new IOException("identity may not be null when encoding");
         }
-        Logger.getLogger("VortexMessage").log(Level.FINER,"adding identity");
+        LOGGER.log(Level.FINER,"adding identity");
         ASN1Encodable o=null;
-        try {
-            o = identity.toASN1Object();
-        }catch(NoSuchAlgorithmException|ParseException e) {
-            throw new IOException("Exception while getting identity object",e);
-        }
+        o = identity.toASN1Object();
         if (o == null) {
             throw new IOException( "returned identity object may not be null" );
         }
@@ -159,7 +161,7 @@ public class InnerMessage extends Block {
 
         ASN1Sequence seq=new DERSequence(v);
 
-        Logger.getLogger("VortexMessage").log(Level.FINER,"done toASN1Object()");
+        LOGGER.log(Level.FINER,"done toASN1Object()");
         return seq;
     }
 

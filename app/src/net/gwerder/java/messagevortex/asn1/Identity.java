@@ -8,7 +8,6 @@ import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.text.ParseException;
 import java.util.Arrays;
 
 public class Identity extends Block {
@@ -235,11 +234,11 @@ public class Identity extends Block {
         }
     }
 
-    public ASN1Object toASN1Object() throws IOException,NoSuchAlgorithmException,ParseException {
+    public ASN1Object toASN1Object() throws IOException {
         return toASN1Object( null );
     }
 
-    public ASN1Object toASN1Object(AsymmetricKey targetIdentity) throws IOException, NullPointerException,NoSuchAlgorithmException,ParseException {
+    public ASN1Object toASN1Object(AsymmetricKey targetIdentity) throws IOException {
         sanitizeHeaderKey();
         //if(ownIdentity==null) throw new NullPointerException( "ownIdentity must not be null" );
         if (headerKey == null && encryptedHeaderKey == null) {

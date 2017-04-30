@@ -22,13 +22,14 @@ package net.gwerder.java.messagevortex.asn1;
  ***/
 
 
+import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.*;
+
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * ASN1 parser class for header reply.
@@ -43,6 +44,12 @@ public class Prefix extends Block {
 
     /** The key used for decryption of the rest of the VortexMessage **/
     SymmetricKey key=null;
+
+    private static final java.util.logging.Logger LOGGER;
+    static {
+        LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+        MessageVortexLogger.setGlobalLogLevel( Level.ALL);
+    }
 
     /**
      * Creates an empty prefix
@@ -103,12 +110,12 @@ public class Prefix extends Block {
 
     @Override
     protected void parse(ASN1Encodable to) throws IOException {
-        Logger.getLogger("VortexMessage").log( Level.FINER,"Executing parse()");
+        LOGGER.log( Level.FINER,"Executing parse()");
         int i = 0;
         ASN1Sequence s1 = ASN1Sequence.getInstance( to );
 
         // getting key
-        key = new SymmetricKey( s1.getObjectAt(0).toASN1Primitive().getEncoded() ,null );
+        key = new SymmetricKey( s1.getObjectAt(i++).toASN1Primitive().getEncoded() ,null );
         if(key==null) {
             throw new IOException("symmetric key may not be null when decoding");
         }
@@ -140,7 +147,7 @@ public class Prefix extends Block {
     }
 
     public ASN1Object toASN1Object(AsymmetricKey ak) throws IOException {
-        Logger.getLogger("Prefix").log(Level.FINER,"adding symmetric key");
+        LOGGER.log(Level.FINER,"adding symmetric key");
         if(ak!=null) {
             setDecryptionKey(ak);
         }
@@ -159,10 +166,10 @@ public class Prefix extends Block {
         // encrypt and embedd if requested
         if(ak!=null) {
             // encrypt and embedd in OCTET STREAM
-            Logger.getLogger("Prefix").log(Level.FINER,"encrypting prefix contend to octet string in Prefix");
+            LOGGER.log(Level.FINER,"encrypting prefix contend to octet string in Prefix");
             seq=new DEROctetString( ak.encrypt(seq.getEncoded()) );
         }
-        Logger.getLogger("Prefix").log(Level.FINER,"done toASN1Object() of Prefix");
+        LOGGER.log(Level.FINER,"done toASN1Object() of Prefix");
         return seq;
     }
 

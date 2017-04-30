@@ -10,14 +10,14 @@ public abstract class AbstractOperation implements Operation {
         this.identity=i;
     }
 
-    abstract public boolean canRun();
+    public abstract boolean canRun();
 
     public Identity getIdentity() {
         return identity;
     }
 
     public boolean isInUsagePeriod() {
-        // FIXME do something sensible here
+        // TODO do something sensible here
         return true;
     }
 

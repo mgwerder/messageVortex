@@ -22,6 +22,7 @@ package net.gwerder.java.messagevortex.asn1;
  ***/
 
 
+import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.*;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -34,13 +35,18 @@ import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class VortexMessage extends Block {
 
     private Prefix       prefix;
     private InnerMessage innerMessage;
     private AsymmetricKey key;
+
+    private static final java.util.logging.Logger LOGGER;
+    static {
+        LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+        MessageVortexLogger.setGlobalLogLevel( Level.ALL);
+    }
 
     private VortexMessage() {
         prefix=null;
@@ -101,7 +107,7 @@ public class VortexMessage extends Block {
     }
 
     protected void parse(ASN1Encodable p) throws IOException,ParseException,NoSuchAlgorithmException {
-        Logger.getLogger("VortexMessage").log(Level.FINER,"Executing parse()");
+        LOGGER.log(Level.FINER,"Executing parse()");
         int i = 0;
         ASN1Sequence s1 = ASN1Sequence.getInstance( p );
 
@@ -138,7 +144,7 @@ public class VortexMessage extends Block {
 
     public ASN1Object toASN1Object(AsymmetricKey identityKey, DumpType dt) throws IOException {
         // Prepare encoding
-        Logger.getLogger("VortexMessage").log(Level.FINER,"Executing toASN1Object()");
+        LOGGER.log(Level.FINER,"Executing toASN1Object()");
 
         if(identityKey!=null || DumpType.ALL_UNENCRYPTED==dt) {
             getPrefix().setDecryptionKey(null);
@@ -160,7 +166,7 @@ public class VortexMessage extends Block {
             v.add( new DERTaggedObject( InnerMessage.ENCRYPTED_MESSAGE,new DEROctetString( prefix.getKey().encrypt(getInnerMessage().toASN1Object(dt).getEncoded() ))));
         }
         ASN1Sequence seq=new DERSequence(v);
-        Logger.getLogger("VortexMessage").log(Level.FINER,"done toASN1Object()");
+        LOGGER.log(Level.FINER,"done toASN1Object()");
         return seq;
     }
 
