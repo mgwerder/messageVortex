@@ -2,18 +2,12 @@ package net.gwerder.java.messagevortex.test;
 
 import junit.framework.JUnit4TestAdapter;
 import junit.framework.TestSuite;
-import net.gwerder.java.messagevortex.test.core.ConfigTest;
-import net.gwerder.java.messagevortex.test.core.MessageVortexTest;
-import net.gwerder.java.messagevortex.test.core.VersionTest;
 import net.gwerder.java.messagevortex.test.imap.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
- 
+
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-  MessageVortexTest.class,
-  VersionTest.class,
-  ConfigTest.class,
   CustomKeyManagerTest.class,
   ImapLineExceptionTest.class,
   ImapLineTest.class,
@@ -30,7 +24,7 @@ import org.junit.runners.Suite;
 
 public class MainIMAPSuite {
 
-  public static junit.framework.Test suite() {    
+  public static junit.framework.Test suite() {
         final TestSuite s = new TestSuite();
         s.addTest(new JUnit4TestAdapter(CustomKeyManagerTest.class));
         s.addTest(new JUnit4TestAdapter(ImapLineExceptionTest.class));
@@ -44,7 +38,7 @@ public class MainIMAPSuite {
         s.addTest(new JUnit4TestAdapter(ImapCommandLoginTest.class));
         s.addTest(new JUnit4TestAdapter(ImapCommandLogoutTest.class));
         s.addTest(new JUnit4TestAdapter(ImapAuthenticationDummyProxyTest.class));
-        
+
         return s;
   }
   // the class remains empty,

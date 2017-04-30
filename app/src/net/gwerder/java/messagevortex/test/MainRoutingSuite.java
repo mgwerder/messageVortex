@@ -8,10 +8,7 @@ package net.gwerder.java.messagevortex.test;
 
 import junit.framework.JUnit4TestAdapter;
 import junit.framework.TestSuite;
-import net.gwerder.java.messagevortex.test.routing.EdgeTest;
-import net.gwerder.java.messagevortex.test.routing.MathModeTest;
-import net.gwerder.java.messagevortex.test.routing.MatrixTest;
-import net.gwerder.java.messagevortex.test.routing.MessageFactoryTest;
+import net.gwerder.java.messagevortex.test.routing.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -20,6 +17,7 @@ import org.junit.runners.Suite;
         MessageFactoryTest.class,
         MatrixTest.class,
         EdgeTest.class,
+        OperationProcessingTest.class,
         MathModeTest.class
 })
 
@@ -31,6 +29,7 @@ public class MainRoutingSuite {
         s.addTest(new JUnit4TestAdapter(MatrixTest.class));
         s.addTest(new JUnit4TestAdapter(EdgeTest.class));
         s.addTest(new JUnit4TestAdapter(MathModeTest.class));
+        s.addTest(new JUnit4TestAdapter(OperationProcessingTest.class));
         return s;
     }
 

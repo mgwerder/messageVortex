@@ -35,27 +35,19 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class InternalPayload {
 
-    private static Map<Identity,InternalPayload> internalPayloadMap = new ConcurrentHashMap<>();
 
+    InternalPayloadSpace payloadSpace;
     Identity identity;
-    List<AbstractOperation> operations=new ArrayList<>();
+    List<Operation> operations=new ArrayList<>();
     Map<Integer,PayloadChunk> internalPayload=new ConcurrentHashMap<>();
+    Map<Integer,Operation> internalOperationOutput=new ConcurrentHashMap<>();
 
     private long lastcompact=System.currentTimeMillis();
 
-    private InternalPayload( Identity i) {
+    protected InternalPayload( InternalPayloadSpace payloadSpace, Identity i) {
         identity=i;
-        internalPayloadMap.put(i,this);
-    }
-
-    public static InternalPayload getInternalPayload(Identity i) {
-        synchronized(internalPayloadMap) {
-            InternalPayload ret = internalPayloadMap.get(i);
-            if(ret==null) {
-                ret=new InternalPayload(i);
-            }
-            return ret;
-        }
+        this.payloadSpace=payloadSpace;
+        payloadSpace.setPayload(i,this);
     }
 
     public Identity getIdentity() {
@@ -80,14 +72,41 @@ public class InternalPayload {
         }
     }
 
-    private boolean compact() {
-        if(System.currentTimeMillis()<lastcompact+60000) return false;
+    private void registerOperation(Operation op) throws NullPointerException {
+        if(op==null || op.getOutputID()==null) {
+            throw new NullPointerException();
+        }
+        int[] id=op.getOutputID();
+        for(int i=0;i<id.length;i++) {
+            internalOperationOutput.put(id[i],op);
+        }
+        operations.add(op);
+    }
 
-        // FIXME compact structure
+    public boolean setOperation(Operation op) {
+        // FIXME check for conflicting operations
+
+        // FIXME check for valid usage Period
+
+        // store operation
+        registerOperation(op);
 
         return true;
     }
 
+    private boolean compact() {
+        // skip running if last run is less than 60s ago
+        if(System.currentTimeMillis()<lastcompact+60000) return false;
 
+        // FIXME compact structure
+
+        // FIXME remove expired identities
+
+        // FIXME remove expired operations
+
+        // FIXME remove expired payloads
+
+        return true;
+    }
 
 }

@@ -6,15 +6,8 @@ import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import net.gwerder.java.messagevortex.asn1.encryption.SecurityLevel;
 import org.bouncycastle.asn1.*;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import java.io.IOException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.spec.InvalidKeySpecException;
 import java.text.ParseException;
 import java.util.Arrays;
 
@@ -45,8 +38,8 @@ public class Identity extends Block {
 
     private AsymmetricKey ownIdentity = null;
 
-    public Identity() throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, IOException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, NoSuchProviderException, InvalidKeySpecException {
-        this.identityKey = new AsymmetricKey(Algorithm.RSA, 2048, Algorithm.RSA.getParameters( SecurityLevel.MEDIUM ) );
+    public Identity() throws IOException {
+        this.identityKey = new AsymmetricKey(Algorithm.RSA, 2048, Algorithm.RSA.getParameters(SecurityLevel.MEDIUM));
         this.serial = (long) (Math.random() * 4294967295L);
         this.maxReplays = 1;
         this.valid = new UsagePeriod(3600);
@@ -55,22 +48,22 @@ public class Identity extends Block {
         this.requests = Identity.NULLREQUESTS;
     }
 
-    public Identity(byte[] b, AsymmetricKey ownIdentity) throws ParseException, IOException, NoSuchAlgorithmException {
+    public Identity(byte[] b, AsymmetricKey ownIdentity) throws IOException {
         this.ownIdentity = ownIdentity;
         ASN1Encodable s = ASN1Sequence.getInstance( b );
         parse( s );
     }
 
-    public Identity(byte[] b) throws ParseException, IOException, NoSuchAlgorithmException {
+    public Identity(byte[] b) throws IOException {
         ASN1Encodable s = ASN1Sequence.getInstance( b );
         parse(s);
     }
 
-    public Identity(ASN1Encodable to) throws ParseException, IOException, NoSuchAlgorithmException {
+    public Identity(ASN1Encodable to) throws IOException {
         this( to, null );
     }
 
-    public Identity(ASN1Encodable to, AsymmetricKey ownIdentity) throws ParseException, IOException, NoSuchAlgorithmException {
+    public Identity(ASN1Encodable to, AsymmetricKey ownIdentity) throws IOException {
         super();
         this.ownIdentity = ownIdentity;
         parse( to );

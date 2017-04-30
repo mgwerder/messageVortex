@@ -2,10 +2,7 @@ package net.gwerder.java.messagevortex.routing.operation;
 
 import net.gwerder.java.messagevortex.asn1.Identity;
 
-/**
- * Created by martin.gwerder on 19.04.2017.
- */
-public abstract class AbstractOperation {
+public abstract class AbstractOperation implements Operation {
 
     Identity identity;
 
@@ -14,5 +11,14 @@ public abstract class AbstractOperation {
     }
 
     abstract public boolean canRun();
+
+    public Identity getIdentity() {
+        return identity;
+    }
+
+    public boolean isInUsagePeriod() {
+        // FIXME do something sensible here
+        return true;
+    }
 
 }

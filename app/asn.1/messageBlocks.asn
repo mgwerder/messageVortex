@@ -19,6 +19,7 @@ BEGIN
   maxRoutingBlocks          INTEGER ::= 127             -- maximum number of routing blocks in a message
   maxPayloadBlocks          INTEGER ::= 127             -- maximum number of payload blocks in a message
   maxTimeCachedProof        INTEGER ::= 86400           -- maximum number of seconds a proof of non revocation may be old
+  maxGFSize                 INTEGER ::= 16              -- maximum omega of the Galois field used
   
   PuzzleIdentifier          ::= OCTET STRING ( SIZE(0..16) )
 
@@ -32,28 +33,27 @@ BEGIN
         encrypted [10012] OCTET STRING -- contains inner message encrypted with Symmetric key from Prefix
     }
   }
-
+  
   MessagePrefix ::= SEQUENCE {
     key             SymmetricKey
   }
-
+  
   InnerMessage ::= SEQUENCE {
-	padding		[11001] OCTET STRING,
-	
-	prefix      [11002] CHOICE {
+    padding   [11001] OCTET STRING,
+    
+    prefix      [11002] CHOICE {
         plain           [10001] MessagePrefix,
         encrypted       [10002] OCTET STRING -- contains prefix encrypted with receivers public key
     },
-  
+    
     identity    [11003] IdentityBlock,
     identitySignature OCTET STRING,   -- contains signature of Identity [as stored in identityBlock;signed unencrypted identityBlock without Tag]
-	
+    
     -- contains routing information (next hop) for the payloads
     routing     [11004] SEQUENCE (SIZE (0..maxRoutingBlocks)) OF RoutingBlock ,
     
     -- contains the actual payload
     payload     [11005] SEQUENCE (SIZE (0..maxPayloadBlocks)) OF PayloadChunk  
-
   }
   
   IdentityBlock ::= SEQUENCE {
@@ -89,7 +89,7 @@ BEGIN
     identifier    [12201] PuzzleIdentifier OPTIONAL,
     proofOfWork   [12202] OCTET STRING OPTIONAL  -- This is for solving crypto puzzles
   }
-
+  
   -- represents the building and sending process for the next hop
   -- FIXME rework this part intensively (Missing features reply block for header requests; Insufficient handling of operation stack)
   RoutingBlock ::= SEQUENCE {
@@ -108,7 +108,7 @@ BEGIN
     
     -- contains the secret of the identity block
     forwardSecret     ChainSecret,
-
+    
     -- contains a routing block which may be used when sending error messages back to the quota owner
     -- this routing block may be cached for future use
     replyBlock [131]   RoutingBlock OPTIONAL,
@@ -127,14 +127,14 @@ BEGIN
   }
   
   PayloadOperation ::= CHOICE {
-        splitPayload    [150] SplitPayloadOperation, 
-        mergePayload    [200] MergePayloadOperation,
-        xorMergePayload [250] XorMergePayloadOperation,
-		xorSplitPayload	[260] XorSplitPayloadOperation,
-        encryptPayload  [300] EncryptPayloadOperation,
-        decryptPayload  [350] DecryptPayloadOperation,
-        addRedundancy   [400] AddRedundancyOperation,
-        removeRedundancy[410] RemoveRedundancyOperation
+    splitPayload    [150] SplitPayloadOperation, 
+    mergePayload    [200] MergePayloadOperation,
+    xorMergePayload [250] XorMergePayloadOperation,
+    xorSplitPayload [260] XorSplitPayloadOperation,
+    encryptPayload  [300] EncryptPayloadOperation,
+    decryptPayload  [350] DecryptPayloadOperation,
+    addRedundancy   [400] AddRedundancyOperation,
+    removeRedundancy[410] RemoveRedundancyOperation
   }
   
   PercentSizeType ::= SEQUENCE {
@@ -148,75 +148,76 @@ BEGIN
   }
   
   SizeType ::= SEQUENCE{
-	size CHOICE {
-		percent     [15001] PercentSizeType,
-		absolute    [15101] AbsoluteSizeType
-	}
+    size CHOICE {
+      percent     [15001] PercentSizeType,
+      absolute    [15101] AbsoluteSizeType
+    }
   }
   
   AddRedundancyOperation ::= SEQUENCE {
-    originalId				 [16000] INTEGER (0..maxID),
-    stripes                  [16001] INTEGER (1..256),
-    redundancy               [16002] INTEGER (1..256),
-    keys                     [16003] SEQUENCE (SIZE (2..512)) OF SymmetricKey,
-	newFirstId				 [16004] INTEGER (1..maxID)
+    inputId            [16000] INTEGER (0..maxID),
+    dataStripes        [16001] INTEGER (1..254),
+    redundancy         [16002] INTEGER (1..254),
+    keys               [16003] SEQUENCE (SIZE (2..512)) OF SymmetricKey,
+    outputId           [16004] INTEGER (1..maxID),
+    gfSize             [16005] INTEGER (2..maxGFSize)
   }
  
   RemoveRedundancyOperation ::= SEQUENCE {
-    originalId				 [16000] INTEGER (0..maxID),
-    stripes                  [16001] INTEGER (1..256),
-    redundancy               [16002] INTEGER (1..256),
-    keys                     [16003] SEQUENCE (SIZE (2..512)) OF SymmetricKey,
-	newFirstId				 [16004] INTEGER (1..maxID)
+    inputId            [16000] INTEGER (0..maxID),
+    dataStripes        [16001] INTEGER (1..256),
+    redundancy         [16002] INTEGER (1..256),
+    keys               [16003] SEQUENCE (SIZE (2..512)) OF SymmetricKey,
+    outputId           [16004] INTEGER (1..maxID)
   }
 
   SplitPayloadOperation ::= SEQUENCE {
-    originalId				 INTEGER (0..maxID),
-    firstSize                SizeType,
-	newFirstId				 INTEGER (1..maxID),
-	newSecondId				 INTEGER (1..maxID)
+    originalId         INTEGER (0..maxID),
+    firstSize          SizeType,
+    newFirstId         INTEGER (1..maxID),
+    newSecondId        INTEGER (1..maxID)
   }
 
   MergePayloadOperation ::= SEQUENCE {
-    originalFirstId			 INTEGER (0..maxID),
-    originalSecondId		 INTEGER (0..maxID),
-	newId			    	 INTEGER (1..maxID)
+    originalFirstId      INTEGER (0..maxID),
+    originalSecondId     INTEGER (0..maxID),
+    newId            INTEGER (1..maxID)
   }
  
   XorMergePayloadOperation ::= SEQUENCE {
-    originalFirstId			 INTEGER (0..maxID),
-    originalSecondId		 INTEGER (-1..maxID),
+    originalFirstId      INTEGER (0..maxID),
+    originalSecondId     INTEGER (-1..maxID),
     originalFirstSize        SizeType,
-	newId			    	 INTEGER (1..maxID)
+    newId            INTEGER (1..maxID)
   }
  
   XorSplitPayloadOperation ::= SEQUENCE {
-    originalId			     INTEGER (0..maxID),
+    originalId           INTEGER (0..maxID),
     prngSpec                 PRNGSpec,
-	newFirstBlockId			 INTEGER (1..maxID),
-	newSecondBlockId		 INTEGER (1..maxID)
+    newFirstBlockId      INTEGER (1..maxID),
+    newSecondBlockId     INTEGER (1..maxID)
   }
 
   EncryptPayloadOperation ::= SEQUENCE {
-    originalId		        INTEGER (0..maxID),
+    originalId            INTEGER (0..maxID),
     key                     SymmetricKey,
-	newId	    	    	INTEGER (1..maxID)
+    newId             INTEGER (1..maxID)
   }
  
   DecryptPayloadOperation ::= SEQUENCE {
-    originalId		        INTEGER (0..maxID),
+    originalId            INTEGER (0..maxID),
     key                     SymmetricKey,
-	newId	    	    	INTEGER (1..maxID)
+    newId             INTEGER (1..maxID)
   }
 
   IdentityReplayStore ::= SEQUENCE {
-	replays		SEQUENCE (SIZE (0..4294967295)) OF IdentityReplayBlock
+    replays   SEQUENCE (SIZE (0..4294967295)) OF IdentityReplayBlock
   }
   
   IdentityReplayBlock ::= SEQUENCE {
     identity            AsymmetricKey,
     valid               UsagePeriod,
-	replaysRemaining	INTEGER (0..4294967295)
+    replaysRemaining  INTEGER (0..4294967295)
   }
 
   IdentityStore ::= SEQUENCE {
@@ -289,7 +290,7 @@ BEGIN
   HeaderRequestCapability ::= SEQUENCE {
     period UsagePeriod
   }
-
+  
   ReplyCapability ::= SEQUENCE {
     cypher            SEQUENCE (SIZE (2..256)) OF CypherSpec,
     maxTransferQuota  INTEGER (0..4294967295),
@@ -308,7 +309,7 @@ BEGIN
     xmmp  (110),
     ...
   }
-
+  
   ErrorBlock ::= SEQUENCE {
     code            ErrorCode,
     request         HeaderRequest,
@@ -329,14 +330,14 @@ BEGIN
     messageChunkMissing   (3201),
     messageLifeExpired    (3202),
     puzzleUnknown         (3301),
-	
-	-- capability errors
-	macAlgorithmUnknown         (3801),
-	symmetricAlgorithmUnknown   (3802),
-	asymmetricAlgorithmUnknown  (3803),
-	prngAlgorithmUnknown        (3804),
-	missingParameters           (3820),
-	badParameters               (3821),
+    
+    -- capability errors
+    macAlgorithmUnknown         (3801),
+    symmetricAlgorithmUnknown   (3802),
+    asymmetricAlgorithmUnknown  (3803),
+    prngAlgorithmUnknown        (3804),
+    missingParameters           (3820),
+    badParameters               (3821),
     
     -- Mayor host specific errors
     hostError             (5001),
@@ -355,20 +356,20 @@ BEGIN
   UsagePeriod ::= SEQUENCE {
     notBefore       [0]     GeneralizedTime OPTIONAL,
     notAfter        [1]     GeneralizedTime OPTIONAL
- }
- 
+  }
+  
   SymmetricAlgorithmIdentifier  ::=  SEQUENCE  {
     algorithm               SymmetricAlgorithm,
     padding                 CypherPadding,
     mode                    CypherMode,
     parameter               AlgorithmParameters OPTIONAL
   }
-
+  
   AsymmetricAlgorithmIdentifier  ::=  SEQUENCE  {
     algorithm               AsymmetricAlgorithm,
     parameter               AlgorithmParameters OPTIONAL
   }
-
+  
   MacAlgorithmIdentifier  ::=  SEQUENCE  {
     algorithm               MacAlgorithm,
     parameter               AlgorithmParameters
