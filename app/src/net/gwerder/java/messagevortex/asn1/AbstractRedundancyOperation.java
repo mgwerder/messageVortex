@@ -1,19 +1,32 @@
 package net.gwerder.java.messagevortex.asn1;
 
+import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.routing.operation.GaloisFieldMathMode;
-import org.bouncycastle.asn1.ASN1Encodable;
-import org.bouncycastle.asn1.ASN1Object;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  * Represents a the Blending specification of the routing block.
  *
  */
 public class AbstractRedundancyOperation extends Operation {
+
+    public static final int INPUT_ID     = 16000;
+    public static final int DATA_STRIPES = 16001;
+    public static final int REDUNDANCY   = 16002;
+    public static final int KEYS         = 16003;
+    public static final int OUTPUT_ID    = 16004;
+    public static final int GF_SIZE      = 16005;
+
+    private static final java.util.logging.Logger LOGGER;
+    static {
+        LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+        MessageVortexLogger.setGlobalLogLevel( Level.ALL);
+    }
 
     int inputId;
     int dataStripes=1;
@@ -32,16 +45,75 @@ public class AbstractRedundancyOperation extends Operation {
         this.outputId =newFirstId;
     }
 
-    public AbstractRedundancyOperation(ASN1Encodable to) {
+    public AbstractRedundancyOperation(ASN1Encodable to) throws IOException {
         parse(to);
     }
 
-    protected void parse(ASN1Encodable to) {
-        throw new NotImplementedException();
+    protected void parse(ASN1Encodable p) throws IOException {
+        LOGGER.log( Level.FINER, "Executing parse()" );
+
+        int i=0;
+        ASN1Sequence s1 = ASN1Sequence.getInstance( p );
+
+        inputId=parseIntval(ASN1TaggedObject.getInstance(s1.getObjectAt(i++)),INPUT_ID,"inputId");
+        dataStripes=parseIntval(ASN1TaggedObject.getInstance(s1.getObjectAt(i++)),DATA_STRIPES,"dataStripes");
+        redundancy=parseIntval(ASN1TaggedObject.getInstance(s1.getObjectAt(i++)),REDUNDANCY,"redundancy");
+
+        // reading keys
+        ASN1TaggedObject to=ASN1TaggedObject.getInstance(s1.getObjectAt(i++));
+        if(to.getTagNo()!=KEYS) {
+            throw new IOException("got unknown tag id ("+to.getTagNo()+") when expecting keys" );
+        }
+        ASN1Sequence s=ASN1Sequence.getInstance(to.getObject());
+        keys=new ArrayList<>();
+        for(ASN1Encodable o:s) {
+            keys.add(new SymmetricKey(o.toASN1Primitive().getEncoded()));
+        }
+
+        outputId=parseIntval(ASN1TaggedObject.getInstance(s1.getObjectAt(i++)),OUTPUT_ID,"outputId");
+        gfSize=parseIntval(ASN1TaggedObject.getInstance(s1.getObjectAt(i++)),GF_SIZE,"gfSize");
+
+        LOGGER.log( Level.FINER, "Finished parse()" );
+
+    }
+
+    private int parseIntval(ASN1TaggedObject obj,int id,String description) throws IOException {
+        if(obj.getTagNo()!=id) {
+            throw new IOException("got unknown tag id ("+id+") when expecting "+description );
+        }
+        return ASN1Integer.getInstance(obj.getObject()).getValue().intValue();
     }
 
     public ASN1Object toASN1Object() throws IOException{
-        throw new UnsupportedOperationException( "not yet implemented" ); //FIXME
+        // Prepare encoding
+        LOGGER.log( Level.FINER,"Executing toASN1Object()");
+
+        ASN1EncodableVector v=new ASN1EncodableVector();
+
+        LOGGER.log(Level.FINER,"  adding inputId");
+        v.add(new DERTaggedObject( INPUT_ID,new ASN1Integer(inputId)));
+
+        LOGGER.log(Level.FINER,"  adding dataStripes");
+        v.add(new DERTaggedObject( DATA_STRIPES,new ASN1Integer(dataStripes)));
+
+        LOGGER.log(Level.FINER,"  adding redundancy");
+        v.add(new DERTaggedObject( REDUNDANCY,new ASN1Integer(redundancy)));
+
+        ASN1EncodableVector v2=new ASN1EncodableVector();
+        for(SymmetricKey k:keys) {
+            v2.add(k.toASN1Object());
+        }
+        v.add(new DERTaggedObject( KEYS,new DERSequence(v2)));
+
+        LOGGER.log(Level.FINER,"  adding outputId");
+        v.add(new DERTaggedObject( OUTPUT_ID,new ASN1Integer(outputId)));
+
+        LOGGER.log(Level.FINER,"  adding gfSize");
+        v.add(new DERTaggedObject( GF_SIZE,new ASN1Integer(gfSize)));
+
+        ASN1Sequence seq=new DERSequence(v);
+        LOGGER.log(Level.FINER,"done toASN1Object()");
+        return seq;
     }
 
     public String dumpValueNotation(String prefix) {

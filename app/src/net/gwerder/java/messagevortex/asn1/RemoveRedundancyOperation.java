@@ -2,6 +2,7 @@ package net.gwerder.java.messagevortex.asn1;
 
 import org.bouncycastle.asn1.ASN1Encodable;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -14,7 +15,7 @@ public class RemoveRedundancyOperation extends AbstractRedundancyOperation {
         super(inputId,dataStripes,redundancy,keys,outputId,gfSize);
     }
 
-    public RemoveRedundancyOperation(ASN1Encodable to) {
+    public RemoveRedundancyOperation(ASN1Encodable to) throws IOException {
         super(to);
     }
 

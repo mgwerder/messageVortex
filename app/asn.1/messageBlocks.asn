@@ -193,7 +193,7 @@ BEGIN
  
   XorSplitPayloadOperation ::= SEQUENCE {
     originalId           INTEGER (0..maxID),
-    prngSpec                 PRNGSpec,
+    prngSpec             PRNGSpec,
     newFirstBlockId      INTEGER (1..maxID),
     newSecondBlockId     INTEGER (1..maxID)
   }
