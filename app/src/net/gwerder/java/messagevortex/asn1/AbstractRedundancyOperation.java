@@ -122,6 +122,12 @@ public class AbstractRedundancyOperation extends Operation {
         return sb.toString();
     }
 
+    /***
+     * Sets the id of the first input id of the payload.
+     *
+     * @param id the new first input id
+     * @return the previously set first input id
+     */
     public int setInputId(int id) {
         int old=this.inputId;
         this.inputId =id;
@@ -132,7 +138,14 @@ public class AbstractRedundancyOperation extends Operation {
         return this.inputId;
     }
 
-    public int setDataStripes(int stripes) throws ArithmeticException {
+    /***
+     * Sets the number of data stripes for this operation.
+     *
+     * @param stripes The number of data stripes to be used for the redundancy operation
+     * @return the previously set number of stripes
+     * @throws ArithmeticException if all stripes together are not accomodatable in the given GF field
+     */
+    public int setDataStripes(int stripes)  {
         if(stripes<1 || stripes+this.redundancy> GaloisFieldMathMode.lshift(gfSize,1,(byte)33)) {
             throw new ArithmeticException("too many stripes to be acomodated in given GF field");
         }
@@ -145,7 +158,14 @@ public class AbstractRedundancyOperation extends Operation {
         return this.dataStripes;
     }
 
-    public int setRedundancy(int stripes) throws ArithmeticException {
+    /***
+     * sets the number of redundancy stripes.
+     *
+     * @param stripes the number of redundancy stripes to be set
+     * @return the previous number of redundancy stripes
+     * @throws ArithmeticException if the defined GF size is unable to accomodate all values
+     */
+    public int setRedundancy(int stripes)  {
         if(stripes<1 || stripes+this.dataStripes> GaloisFieldMathMode.lshift(gfSize,1,(byte)33)) {
             throw new ArithmeticException("too many stripes to be acomodated in given GF field");
         }
@@ -158,9 +178,16 @@ public class AbstractRedundancyOperation extends Operation {
         return this.redundancy;
     }
 
-    public SymmetricKey[] setKeys(List<SymmetricKey> keys) throws ArithmeticException {
+    /***
+     * sets the keys to be used to encrypt all input respective output fields.
+     *
+     * @param keys a list of teys
+     * @return the old list of keys
+     * @throws ArithmeticException if the number of keys doees not match the number of stripes
+     */
+    public SymmetricKey[] setKeys(List<SymmetricKey> keys) {
         if(this.dataStripes+this.dataStripes!=keys.size()) {
-            throw new ArithmeticException("too many stripes to be acomodated in given GF field");
+            throw new ArithmeticException("illegal number of keys");
         }
         SymmetricKey[] old=new SymmetricKey[0];
         if(this.keys!=null) {
@@ -171,16 +198,28 @@ public class AbstractRedundancyOperation extends Operation {
         return old;
     }
 
+    /***
+     * Gets the omega parameter of the Galoise field.
+     *
+     * @return the omega parameter of the GF.
+     */
     public SymmetricKey[] getkeys() {
         return this.keys.toArray(new SymmetricKey[this.keys.size()]);
     }
 
-    public int setGFSize(int size) throws ArithmeticException {
-        if(gfSize<2 || gfSize>16 || this.redundancy+this.dataStripes> GaloisFieldMathMode.lshift(size,1,(byte)33)) {
+    /***
+     * Sets the omega parameter of the Galoise field.
+     *
+     * @param omega the omega of the new GF
+     * @return the previous omega parameter of the GF.
+     * @throws ArithmeticException if the number of all stripes in total (data and redundancy) exceeds the address space of the GF
+     */
+    public int setGFSize(int omega) {
+        if(omega<2 || omega>16 || this.redundancy+this.dataStripes> GaloisFieldMathMode.lshift(omega,1,(byte)33)) {
             throw new ArithmeticException("too many stripes to be acomodated in given GF field");
         }
         int old=this.gfSize;
-        this.gfSize=size;
+        this.gfSize=omega;
         return old;
     }
 

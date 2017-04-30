@@ -59,25 +59,25 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file leaf-file-name="AbstractRedundancyOperation.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="AbstractRedundancyOperation.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/asn1/AbstractRedundancyOperation.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="819">
-              <caret line="70" column="9" selection-start-line="70" selection-start-column="9" selection-end-line="70" selection-end-column="9" />
+            <state relative-caret-position="17">
+              <caret line="86" column="56" selection-start-line="86" selection-start-column="56" selection-end-line="86" selection-end-column="56" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#4737#4738#0" expanded="true" />
-                <element signature="e#4772#4773#0" expanded="true" />
-                <element signature="e#5180#5181#0" expanded="true" />
-                <element signature="e#5219#5220#0" expanded="true" />
-                <element signature="e#5624#5625#0" expanded="true" />
-                <element signature="e#5662#5663#0" expanded="true" />
-                <element signature="e#6215#6216#0" expanded="true" />
-                <element signature="e#6291#6292#0" expanded="true" />
-                <element signature="e#6692#6693#0" expanded="true" />
-                <element signature="e#6726#6727#0" expanded="true" />
-                <element signature="e#7179#7180#0" expanded="true" />
-                <element signature="e#7215#7216#0" expanded="true" />
+                <element signature="e#4907#4908#0" expanded="true" />
+                <element signature="e#4942#4943#0" expanded="true" />
+                <element signature="e#5651#5652#0" expanded="true" />
+                <element signature="e#5690#5691#0" expanded="true" />
+                <element signature="e#6354#6355#0" expanded="true" />
+                <element signature="e#6392#6393#0" expanded="true" />
+                <element signature="e#7281#7282#0" expanded="true" />
+                <element signature="e#7357#7358#0" expanded="true" />
+                <element signature="e#8040#8041#0" expanded="true" />
+                <element signature="e#8074#8075#0" expanded="true" />
+                <element signature="e#8527#8528#0" expanded="true" />
+                <element signature="e#8563#8564#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -150,12 +150,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RemoveRedundancyOperation.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="RemoveRedundancyOperation.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/asn1/RemoveRedundancyOperation.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
+            <state relative-caret-position="289">
               <caret line="17" column="74" selection-start-line="17" selection-start-column="74" selection-end-line="17" selection-end-column="74" />
-              <folding />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -284,9 +286,9 @@
         <option value="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/test/routing/OperationProcessingTest.java" />
         <option value="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/test/routing/MatrixTest.java" />
         <option value="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/asn1/Operation.java" />
-        <option value="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/asn1/AbstractRedundancyOperation.java" />
         <option value="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/asn1/AddRedundancyOperation.java" />
         <option value="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/asn1/RemoveRedundancyOperation.java" />
+        <option value="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/asn1/AbstractRedundancyOperation.java" />
       </list>
     </option>
   </component>
@@ -1302,8 +1304,8 @@
     <history-entry file="MainRoutingSuite - 2017.04.30 at 19h 32m 55s.xml">
       <configuration name="MainRoutingSuite" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="MathModeTest_gfMathModeTest - 2017.04.30 at 13h 13m 20s.xml">
-      <configuration name="MathModeTest.gfMathModeTest" configurationId="JUnit" />
+    <history-entry file="MainRoutingSuite - 2017.04.30 at 19h 46m 39s.xml">
+      <configuration name="MainRoutingSuite" configurationId="JUnit" />
     </history-entry>
     <history-entry file="OperationProcessingTest_redundancyOperationTest - 2017.04.30 at 14h 02m 49s.xml">
       <configuration name="OperationProcessingTest.redundancyOperationTest" configurationId="JUnit" />
@@ -1930,28 +1932,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/asn1/AbstractRedundancyOperation.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="819">
-          <caret line="70" column="9" selection-start-line="70" selection-start-column="9" selection-end-line="70" selection-end-column="9" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#4737#4738#0" expanded="true" />
-            <element signature="e#4772#4773#0" expanded="true" />
-            <element signature="e#5180#5181#0" expanded="true" />
-            <element signature="e#5219#5220#0" expanded="true" />
-            <element signature="e#5624#5625#0" expanded="true" />
-            <element signature="e#5662#5663#0" expanded="true" />
-            <element signature="e#6215#6216#0" expanded="true" />
-            <element signature="e#6291#6292#0" expanded="true" />
-            <element signature="e#6692#6693#0" expanded="true" />
-            <element signature="e#6726#6727#0" expanded="true" />
-            <element signature="e#7179#7180#0" expanded="true" />
-            <element signature="e#7215#7216#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/asn1/AddRedundancyOperation.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
@@ -1962,9 +1942,33 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/asn1/RemoveRedundancyOperation.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
+        <state relative-caret-position="289">
           <caret line="17" column="74" selection-start-line="17" selection-start-column="74" selection-end-line="17" selection-end-column="74" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/net/gwerder/java/messagevortex/asn1/AbstractRedundancyOperation.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="86" column="56" selection-start-line="86" selection-start-column="56" selection-end-line="86" selection-end-column="56" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#4907#4908#0" expanded="true" />
+            <element signature="e#4942#4943#0" expanded="true" />
+            <element signature="e#5651#5652#0" expanded="true" />
+            <element signature="e#5690#5691#0" expanded="true" />
+            <element signature="e#6354#6355#0" expanded="true" />
+            <element signature="e#6392#6393#0" expanded="true" />
+            <element signature="e#7281#7282#0" expanded="true" />
+            <element signature="e#7357#7358#0" expanded="true" />
+            <element signature="e#8040#8041#0" expanded="true" />
+            <element signature="e#8074#8075#0" expanded="true" />
+            <element signature="e#8527#8528#0" expanded="true" />
+            <element signature="e#8563#8564#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
