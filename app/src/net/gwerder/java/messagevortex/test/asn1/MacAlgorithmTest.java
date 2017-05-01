@@ -92,6 +92,7 @@ public class MacAlgorithmTest {
             try {
                 MacAlgorithm ak = new MacAlgorithm(a);
                 File f = new File("out/test/MacAlgorithm_" + a.getAlgorithmFamily() + ".der");
+                f.mkdirs();
                 OutputStream o = new FileOutputStream(f);
                 o.write(ak.toBytes());
                 o.close();

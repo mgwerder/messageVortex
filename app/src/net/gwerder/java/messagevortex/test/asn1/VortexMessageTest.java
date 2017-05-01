@@ -93,6 +93,7 @@ public class VortexMessageTest {
             p.setKey(new SymmetricKey() );
             VortexMessage s = new VortexMessage(p,new InnerMessage( new Identity() ));
             File f = new File("out/test/VortexMessage_encrypted.der");
+            f.mkdirs();
             OutputStream o = new FileOutputStream(f);
             o.write(s.toBytes());
             o.close();

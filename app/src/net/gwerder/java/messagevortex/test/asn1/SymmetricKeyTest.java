@@ -203,6 +203,7 @@ public class SymmetricKeyTest {
                 try {
                     SymmetricKey ak = new SymmetricKey(a, p, Mode.getDefault(AlgorithmType.SYMMETRIC));
                     File f = new File("out/test/SymmetricKey_" +p.getPadding()+"_"+ a.getAlgorithmFamily() + ".der");
+                    f.mkdirs();
                     OutputStream o = new FileOutputStream(f);
                     o.write(ak.toBytes());
                     o.close();

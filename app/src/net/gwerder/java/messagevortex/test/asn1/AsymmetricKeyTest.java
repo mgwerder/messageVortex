@@ -257,6 +257,7 @@ public class AsymmetricKeyTest {
             try {
                 AsymmetricKey ak = new AsymmetricKey(a,a.getKeySize(SecurityLevel.MEDIUM), a.getParameters(SecurityLevel.MEDIUM));
                 File f = new File("out/test/AsymmetricKey_" + a.getAlgorithmFamily() + ".der");
+                f.mkdirs();
                 OutputStream o = new FileOutputStream(f);
                 o.write(ak.toBytes());
                 o.close();
