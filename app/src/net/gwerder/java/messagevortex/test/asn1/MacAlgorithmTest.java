@@ -3,12 +3,16 @@ package net.gwerder.java.messagevortex.test.asn1;
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.asn1.MacAlgorithm;
 import net.gwerder.java.messagevortex.asn1.encryption.Algorithm;
+import net.gwerder.java.messagevortex.asn1.encryption.AlgorithmType;
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.logging.Level;
 
 import static org.junit.Assert.assertTrue;
@@ -81,6 +85,22 @@ public class MacAlgorithmTest {
             fail("got unexpected exception");
         }
     }
+
+    @Test
+    public void writeAsAsn1() {
+        for (Algorithm a : Algorithm.getAlgorithms(AlgorithmType.HASHING)) {
+            try {
+                MacAlgorithm ak = new MacAlgorithm(a);
+                File f = new File("out/test/MacAlgorithm_" + a.getAlgorithmFamily() + ".der");
+                OutputStream o = new FileOutputStream(f);
+                o.write(ak.toBytes());
+                o.close();
+            } catch (Exception e) {
+                fail("unexpected exception");
+            }
+        }
+    }
+
 
 
 }

@@ -36,7 +36,6 @@ public enum Algorithm {
     ),
     SHA384     ( 3000, AlgorithmType.HASHING, "sha384", "BC",  SecurityLevel.HIGH ),
     SHA512     ( 3001, AlgorithmType.HASHING, "sha512", "BC", SecurityLevel.QUANTUM );
-    // missing support of TIGER192
 
     private static final String KEYSIZE   = "keySize_0";
     private static final String CURVETYPE = "curveType_0";

@@ -221,7 +221,7 @@ public class GraphSet implements Comparator<GraphSet>,Comparable<GraphSet>,Itera
                 // this node is not yet visited (check possibility)
 
                 // building new visited array
-                List<Edge> tg1=new Vector<>(  );
+                List<Edge> tg1=new ArrayList<>(  );
                 tg1.addAll( Arrays.asList( visited ) );
                 tg1.add( tmp );
 
@@ -247,7 +247,9 @@ public class GraphSet implements Comparator<GraphSet>,Comparable<GraphSet>,Itera
     }
 
     public int compare(GraphSet g1,GraphSet g2) {
-        if(g1.equals( g2 )) return 0;
+        if(g1.equals( g2 )) {
+            return 0;
+        }
         return (""+g1.hashCode()).compareTo( ""+g2.hashCode() );
     }
 

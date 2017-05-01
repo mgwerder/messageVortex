@@ -12,7 +12,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Stores all known identities of a node. Identities are stored as IdentityStoreBlocks.
@@ -22,7 +21,7 @@ public class IdentityStore extends Block {
     private static final java.util.logging.Logger LOGGER;
     static {
         LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-        MessageVortexLogger.setGlobalLogLevel( Level.ALL);
+        MessageVortexLogger.setGlobalLogLevel( Level.ALL );
     }
 
     private static ExtendedSecureRandom secureRandom = new ExtendedSecureRandom();
@@ -70,7 +69,7 @@ public class IdentityStore extends Block {
     }
 
     public List<IdentityStoreBlock> getAnonSet(int size) throws IOException {
-        Logger.getLogger( "IdentityStore" ).log( Level.FINE, "Executing getAnonSet("+size+") from "+blocks.size() );
+        LOGGER.log( Level.FINE, "Executing getAnonSet("+size+") from "+blocks.size() );
         List<IdentityStoreBlock> ret=new ArrayList<>();
         String[] keys=blocks.keySet().toArray(new String[0]);
         int i=0;
@@ -79,13 +78,13 @@ public class IdentityStore extends Block {
             IdentityStoreBlock isb=blocks.get(keys[secureRandom.nextInt(keys.length)]);
             if(isb!=null && isb.getType()==IdentityStoreBlock.IdentityType.RECIPIENT_IDENTITY && !ret.contains( isb ) ) {
                 ret.add(isb);
-                Logger.getLogger( "IdentityStore" ).log( Level.FINER, "adding to anonSet "+isb.getIdentityKey().getPublicKey().hashCode() );
+                LOGGER.log( Level.FINER, "adding to anonSet "+isb.getIdentityKey().getPublicKey().hashCode() );
             }
         }
         if(ret.size()<size) {
             throw new IOException("unable to get anon set (size ["+size+"] too big)?");
         }
-        Logger.getLogger( "IdentityStore" ).log( Level.FINE, "done getAnonSet()" );
+        LOGGER.log( Level.FINE, "done getAnonSet()" );
         return ret;
     }
 
@@ -103,28 +102,28 @@ public class IdentityStore extends Block {
     }
 
     protected void parse(ASN1Encodable p) throws IOException {
-        Logger.getLogger( "IdentityStore" ).log( Level.FINER, "Executing parse()" );
+        LOGGER.log( Level.FINER, "Executing parse()" );
 
         ASN1Sequence s1 = ASN1Sequence.getInstance( p );
         for (ASN1Encodable ao : s1.toArray()) {
             IdentityStoreBlock sb = new IdentityStoreBlock( ao );
             add( sb );
         }
-        Logger.getLogger( "IdentityStore" ).log( Level.FINER, "Finished parse()" );
+        LOGGER.log( Level.FINER, "Finished parse()" );
     }
 
     public ASN1Object toASN1Object() throws IOException {
         // Prepare encoding
-        Logger.getLogger("IdentityStore").log( Level.FINER,"Executing toASN1Object()");
+        LOGGER.log( Level.FINER,"Executing toASN1Object()");
 
         ASN1EncodableVector v=new ASN1EncodableVector();
 
-        Logger.getLogger("IdentityStore").log(Level.FINER,"adding blocks");
+        LOGGER.log(Level.FINER,"adding blocks");
         for(Map.Entry<String,IdentityStoreBlock> e:blocks.entrySet()) {
             v.add(e.getValue().toASN1Object());
         }
         ASN1Sequence seq=new DERSequence(v);
-        Logger.getLogger("IdentityStore").log(Level.FINER,"done toASN1Object()");
+        LOGGER.log(Level.FINER,"done toASN1Object()");
         return seq;
     }
 

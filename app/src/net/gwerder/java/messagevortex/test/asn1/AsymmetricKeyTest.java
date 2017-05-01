@@ -10,7 +10,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -244,6 +247,21 @@ public class AsymmetricKeyTest {
             } catch (IOException ioe) {
                 ioe.printStackTrace();
                 fail( "got exception while fuzzing padding" );
+            }
+        }
+    }
+
+    @Test
+    public void writeAsAsn1() {
+        for (Algorithm a : Algorithm.getAlgorithms( AlgorithmType.ASYMMETRIC )) {
+            try {
+                AsymmetricKey ak = new AsymmetricKey(a,a.getKeySize(SecurityLevel.MEDIUM), a.getParameters(SecurityLevel.MEDIUM));
+                File f = new File("out/test/AsymmetricKey_" + a.getAlgorithmFamily() + ".der");
+                OutputStream o = new FileOutputStream(f);
+                o.write(ak.toBytes());
+                o.close();
+            } catch (Exception e) {
+                fail( "unexpected exception" );
             }
         }
     }

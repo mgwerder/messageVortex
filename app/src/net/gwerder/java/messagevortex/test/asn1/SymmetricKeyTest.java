@@ -5,7 +5,10 @@ import net.gwerder.java.messagevortex.asn1.SymmetricKey;
 import net.gwerder.java.messagevortex.asn1.encryption.*;
 import org.junit.Test;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -189,6 +192,23 @@ public class SymmetricKeyTest {
                 }
             } catch (IOException ioe) {
                 fail( "got exception while fuzzing padding" );
+            }
+        }
+    }
+
+    @Test
+    public void writeAsAsn1() {
+        for (Padding p : Padding.getAlgorithms( AlgorithmType.SYMMETRIC )) {
+            for (Algorithm a : Algorithm.getAlgorithms(AlgorithmType.SYMMETRIC)) {
+                try {
+                    SymmetricKey ak = new SymmetricKey(a, p, Mode.getDefault(AlgorithmType.SYMMETRIC));
+                    File f = new File("out/test/SymmetricKey_" +p.getPadding()+"_"+ a.getAlgorithmFamily() + ".der");
+                    OutputStream o = new FileOutputStream(f);
+                    o.write(ak.toBytes());
+                    o.close();
+                } catch (Exception e) {
+                    fail("unexpected exception");
+                }
             }
         }
     }

@@ -15,7 +15,7 @@ public interface TransportListener {
      *
      * @param is the InputStream containing a possible message
      */
-    public void gotMessage(InputStream is);
+    void gotMessage(InputStream is);
 
 
 }

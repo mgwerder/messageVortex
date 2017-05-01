@@ -19,11 +19,11 @@ public class JGraph extends JPanel implements MouseListener  {
 
     private static final long serialVersionUID = 1213422324789789L;
 
-    private final int X_OFFSET     = 20;
-    private final int Y_OFFSET     = 10;
-    private final int ROUTE_BORDER = 10;
-    private final int BOX_HEIGHT   = 15;
-    private final int BOX_WIDTH    = 20;
+    private static final int X_OFFSET     = 20;
+    private static final int Y_OFFSET     = 10;
+    private static final int ROUTE_BORDER = 10;
+    private static final int BOX_HEIGHT   = 15;
+    private static final int BOX_WIDTH    = 20;
 
     private int route   = 0;
 

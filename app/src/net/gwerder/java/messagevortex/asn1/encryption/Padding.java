@@ -38,12 +38,14 @@ public enum Padding {
         }
     } );
 
-    private static Map<AlgorithmType,Padding> def=new HashMap<AlgorithmType,Padding>(  ) {
+    private static final Map<AlgorithmType,Padding> DEFAULT_PADDING =new HashMap<AlgorithmType,Padding>(  ) {
         private static final long serialVersionUID = 121321383445L;
         {
             put( AlgorithmType.ASYMMETRIC, Padding.PKCS1 );
             put( AlgorithmType.SYMMETRIC,  Padding.PKCS7 );
-        }};
+        }
+    };
+
     private int id;
     private String txt;
     private HashSet<AlgorithmType> at;
@@ -86,12 +88,12 @@ public enum Padding {
     }
 
     public static Padding getDefault(AlgorithmType at) {
-        return def.get(at);
+        return DEFAULT_PADDING.get(at);
     }
 
     public static Padding setDefault(AlgorithmType at,Padding ndef) {
-        Padding old=def.get(at);
-        def.put(at,ndef);
+        Padding old= DEFAULT_PADDING.get(at);
+        DEFAULT_PADDING.put(at,ndef);
         return old;
     }
 

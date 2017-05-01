@@ -26,7 +26,7 @@ public class Edge {
      * @throws IllegalArgumentException if from and two are equal
      * @throws NullPointerException if one of the parameters is null
      */
-    public Edge(IdentityStoreBlock from, IdentityStoreBlock to, long startTime, long maxDelay) throws IllegalArgumentException,NullPointerException {
+    public Edge(IdentityStoreBlock from, IdentityStoreBlock to, long startTime, long maxDelay) {
         if(from==to) {
             throw new IllegalArgumentException( "an edge may not have the same start and ending point" );
         }

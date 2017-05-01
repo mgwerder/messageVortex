@@ -11,13 +11,43 @@ import java.util.List;
  */
 public interface Router extends BlenderListener {
 
-    public boolean addBlendingLayer(Blender blendingLayer);
+    /***
+     * Adds a blending layer to the routing infrastructure.
+     *
+     * @param blendingLayer the blending layer to be added
+     * @return true if the blending layer has been accepted
+     *         (only one blending layer per transport scheme is accepted)
+     */
+    boolean addBlendingLayer(Blender blendingLayer);
 
-    public boolean removeBlendingLayer(Blender blendingLayer);
+    /***
+     * Removes a previously added blending layer.
+     *
+     * @param blendingLayer the blending layer to be removed
+     * @return true if the blending layer was found (and removed)
+     */
+    boolean removeBlendingLayer(Blender blendingLayer);
 
-    public List<Blender> getAllBlendingLayer();
+    /***
+     * Get a list of all currently known blending layers.
+     *
+     * @return a list of a registered blending layers
+     */
+    List<Blender> getAllBlendingLayer();
 
-    public Accountant setAccountant(Accountant accountant);
-    public Accountant getAccountant();
+    /***
+     * Sets the accountant layer for the routing layer.
+     *
+     * @param accountant the accountant layer to be used
+     * @return the previously set accountant layer
+     */
+    Accountant setAccountant(Accountant accountant);
+
+    /***
+     * Get the currently set accountant layer.
+     *
+     * @return the accountant layer or null if none
+     */
+    Accountant getAccountant();
 
 }

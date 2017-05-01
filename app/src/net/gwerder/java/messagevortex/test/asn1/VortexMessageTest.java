@@ -2,10 +2,14 @@ package net.gwerder.java.messagevortex.test.asn1;
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.asn1.*;
+import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.logging.Level;
 
@@ -81,5 +85,25 @@ public class VortexMessageTest {
         assertTrue( "Error reencoding "+i+ " (old="+i+";"+ Block.toHex(b)+";new="+ VortexMessage.getBytesAsInteger( b )+"]", VortexMessage.getBytesAsInteger( b ) == i );
     }
 
+    @Test
+    public void writeAsAsn1() {
+        try {
+            // FIXME build a full message with all possible blocks
+            Prefix p=new Prefix();
+            p.setKey(new SymmetricKey() );
+            VortexMessage s = new VortexMessage(p,new InnerMessage( new Identity() ));
+            File f = new File("out/test/VortexMessage_encrypted.der");
+            OutputStream o = new FileOutputStream(f);
+            o.write(s.toBytes());
+            o.close();
+
+            f = new File("out/test/VortexMessage_plain.der");
+            o = new FileOutputStream(f);
+            o.write(s.toASN1Object(null,DumpType.ALL_UNENCRYPTED).getEncoded());
+            o.close();
+        } catch (Exception e) {
+            fail("unexpected exception");
+        }
+    }
 
 }

@@ -458,6 +458,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/imap/SocketDeblocker.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/routing/Edge.java">
           <value>
             <set />
@@ -468,7 +473,17 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/routing/IncomingMessageRouterListener.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/routing/JGraph.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/routing/Router.java">
           <value>
             <set />
           </value>
@@ -598,6 +613,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/test/asn1/SymmetricKeyTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/test/asn1/VortexMessageTest.java">
           <value>
             <set />
@@ -649,6 +669,16 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/transport/RandomString.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/transport/Transport.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/net/gwerder/java/messagevortex/transport/TransportListener.java">
           <value>
             <set />
           </value>
