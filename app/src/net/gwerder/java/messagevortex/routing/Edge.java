@@ -27,9 +27,15 @@ public class Edge {
      * @throws NullPointerException if one of the parameters is null
      */
     public Edge(IdentityStoreBlock from, IdentityStoreBlock to, long startTime, long maxDelay) throws IllegalArgumentException,NullPointerException {
-        if(from==to) throw new IllegalArgumentException( "an edge may not have the same start and ending point" );
-        if(from==null) throw new NullPointerException( "from may not be null in an edge" );
-        if(to==null) throw new NullPointerException( "from may not be null in an edge" );
+        if(from==to) {
+            throw new IllegalArgumentException( "an edge may not have the same start and ending point" );
+        }
+        if(from==null) {
+            throw new NullPointerException( "from may not be null in an edge" );
+        }
+        if(to==null) {
+            throw new NullPointerException( "from may not be null in an edge" );
+        }
         this.from = from;
         this.to = to;
         this.startTime= startTime;

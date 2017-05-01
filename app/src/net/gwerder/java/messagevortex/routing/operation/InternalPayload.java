@@ -61,6 +61,7 @@ public class InternalPayload {
     }
 
     public PayloadChunk setPayload(int id,PayloadChunk p) {
+        compact();
         synchronized(internalPayload) {
             PayloadChunk old=getPayload(id);
             if(p==null) {
@@ -72,7 +73,7 @@ public class InternalPayload {
         }
     }
 
-    private void registerOperation(Operation op) throws NullPointerException {
+    private void registerOperation(Operation op) {
         if(op==null || op.getOutputID()==null) {
             throw new NullPointerException();
         }
@@ -84,6 +85,9 @@ public class InternalPayload {
     }
 
     public boolean setOperation(Operation op) {
+        // do first a compact cycle if required
+        compact();
+
         // FIXME check for conflicting operations
 
         // FIXME check for valid usage Period
@@ -94,9 +98,11 @@ public class InternalPayload {
         return true;
     }
 
-    private boolean compact() {
+    protected boolean compact() {
         // skip running if last run is less than 60s ago
-        if(System.currentTimeMillis()<lastcompact+60000) return false;
+        if(System.currentTimeMillis()<lastcompact+60000) {
+            return false;
+        }
 
         // FIXME compact structure
 

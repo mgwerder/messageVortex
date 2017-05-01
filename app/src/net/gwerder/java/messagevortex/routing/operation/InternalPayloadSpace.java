@@ -23,12 +23,13 @@ public class InternalPayloadSpace {
     }
 
     public InternalPayload getPayload(Identity i) {
-        InternalPayload ret=null;
+        InternalPayload ret;
         synchronized(internalPayloadMap) {
             ret=internalPayloadMap.get(i);
-            if(ret==null)
-            ret=new InternalPayload(this,i);
-            internalPayloadMap.put(i,ret);
+            if(ret==null) {
+                ret=new InternalPayload(this,i);
+                internalPayloadMap.put(i,ret);
+            }
         }
         return ret;
     }

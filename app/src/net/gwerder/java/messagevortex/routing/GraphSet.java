@@ -13,6 +13,7 @@ import java.util.*;
 public class GraphSet implements Comparator<GraphSet>,Comparable<GraphSet>,Iterable<Edge> {
 
     private static final long serialVersionUID = 16134223345689L;
+
     private List<Edge> store = new ArrayList<>();
     private IdentityStore            identityStore=null;
     private List<IdentityStoreBlock> anonymitySet;
@@ -48,7 +49,14 @@ public class GraphSet implements Comparator<GraphSet>,Comparable<GraphSet>,Itera
         return source;
     }
 
-    public void setSource(IdentityStoreBlock source) throws NullPointerException, IllegalArgumentException {
+    /***
+     * Sets the source identity of this graph.
+     *
+     * @param source                    the source identity to be set
+     * @throws IllegalArgumentException if the source is not part of the anonymity set
+     * @throws NullPointerException     if the source is null
+     */
+    public void setSource(IdentityStoreBlock source) {
         if (source == null) {
             throw new NullPointerException( "source may not be null" );
         }
@@ -63,7 +71,14 @@ public class GraphSet implements Comparator<GraphSet>,Comparable<GraphSet>,Itera
         return target;
     }
 
-    public void setTarget(IdentityStoreBlock target) throws NullPointerException, IllegalArgumentException {
+    /***
+     * Sets the target identity of this graph.
+     *
+     * @param target the target identity to be set
+     * @throws IllegalArgumentException if the target is not part of the anonymity set
+     * @throws NullPointerException     if the target is null
+     */
+    public void setTarget(IdentityStoreBlock target) {
         if (target == null) {
             throw new NullPointerException( "target may not be null" );
         }
@@ -101,7 +116,14 @@ public class GraphSet implements Comparator<GraphSet>,Comparable<GraphSet>,Itera
         return store.addAll(g);
     }
 
-    public IdentityStoreBlock getAnonIdentity(int i) throws ArrayIndexOutOfBoundsException {
+    /***
+     * Get an identity from the specified anonymity set.
+     *
+     * @param i  the index of the identity to obtain
+     * @return   the identity store block specified
+     * @throws ArrayIndexOutOfBoundsException if i is outside the bounds of the anonymity set
+     */
+    public IdentityStoreBlock getAnonIdentity(int i) {
         if(i<0 || i>=anonymitySet.size()) {
             throw new ArrayIndexOutOfBoundsException( "got invalid identity vector ("+i+")" );
         }
@@ -110,12 +132,21 @@ public class GraphSet implements Comparator<GraphSet>,Comparable<GraphSet>,Itera
 
     public boolean allTargetsReached() {
         for (IdentityStoreBlock is : anonymitySet) {
-            if (!targetReached( is )) return false;
+            if (!targetReached( is )) {
+                return false;
+            }
         }
         return true;
     }
 
-    public boolean targetReached( IdentityStoreBlock is) throws NullPointerException {
+    /***
+     * Checks if a specific identity store block is already reached by this graph.
+     *
+     * @param is the identity store block
+     * @return true if the identity store block has been reached already in the past
+     * @throws NullPointerException if the specified identity stor block is null
+     */
+    public boolean targetReached( IdentityStoreBlock is) {
         if(is==null) {
             throw new NullPointerException();
         }
@@ -247,11 +278,13 @@ public class GraphSet implements Comparator<GraphSet>,Comparable<GraphSet>,Itera
         }
     }
 
-    public void dump() {
+    public String dump() {
+        StringBuilder sb=new StringBuilder();
         for(Edge g:store) {
-            System.out.println( "  "+anonymitySet.indexOf( g.getFrom() ) + " -> " + anonymitySet.indexOf( g.getTo() ) );
+            sb.append( "  "+anonymitySet.indexOf( g.getFrom() ) + " -> " + anonymitySet.indexOf( g.getTo() ) );
         }
-        System.out.println("}");
+        sb.append("}");
+        return sb.toString();
     }
 
     public int size() {return store.size();}

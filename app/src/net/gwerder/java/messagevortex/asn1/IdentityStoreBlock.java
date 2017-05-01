@@ -1,17 +1,23 @@
 package net.gwerder.java.messagevortex.asn1;
 
 import net.gwerder.java.messagevortex.ExtendedSecureRandom;
+import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * This class represents one block of an identity store for storage.
  */
 public class IdentityStoreBlock extends Block {
+
+    private static final java.util.logging.Logger LOGGER;
+    static {
+        LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+        MessageVortexLogger.setGlobalLogLevel( Level.ALL);
+    }
 
     private static ExtendedSecureRandom secureRandom = new ExtendedSecureRandom();
 
@@ -27,13 +33,13 @@ public class IdentityStoreBlock extends Block {
         super();
     }
 
+    public IdentityStoreBlock(ASN1Encodable ae) throws IOException {
+        parse(ae);
+    }
+
     @Override
     public int hashCode() {
         return super.hashCode();
-    }
-
-    public IdentityStoreBlock(ASN1Encodable ae) throws IOException {
-        parse(ae);
     }
 
     public static IdentityStoreBlock getIdentityStoreBlockDemo(IdentityType it,boolean complete) throws IOException {
@@ -52,7 +58,7 @@ public class IdentityStoreBlock extends Block {
                     ret.setNodeAddress( "smtp:"+toHex( b )+"@localhost" );
                     ret.setNodeKey(null);
                 } catch(Exception e) {
-                    throw new IOException("Exception while generating identity",e);
+                    throw new IOException("Exception while generating owned identity",e);
                 }
                 break;
             case NODE_IDENTITY:
@@ -68,14 +74,16 @@ public class IdentityStoreBlock extends Block {
                     }
                     ret.setNodeKey(ak);
                 } catch(Exception e) {
-                    throw new IOException("Exception while generating identity",e);
+                    throw new IOException("Exception while generating node identity",e);
                 }
                 break;
             case RECIPIENT_IDENTITY:
                 // Identities for receiving mails
                 try {
                     AsymmetricKey ak=new AsymmetricKey();
-                    if(!complete) ak.setPrivateKey(null);
+                    if(!complete) {
+                        ak.setPrivateKey(null);
+                    }
                     ret.setIdentityKey( ak );
                     byte[] b = new byte[secureRandom.nextInt( 20 ) + 3];
                     secureRandom.nextBytes( b );
@@ -86,7 +94,7 @@ public class IdentityStoreBlock extends Block {
                     }
                     ret.setNodeKey(ak);
                 } catch(Exception e) {
-                    throw new IOException("Exception while generating identity",e);
+                    throw new IOException("Exception while generating recipient identity",e);
                 }
                 break;
             default:
@@ -145,13 +153,13 @@ public class IdentityStoreBlock extends Block {
     public AsymmetricKey getNodeKey() { return nodeKey; }
 
     protected void parse(ASN1Encodable p) throws IOException {
-        Logger.getLogger( "IdentityStoreBlock" ).log( Level.FINER, "Executing parse()" );
+        LOGGER.log( Level.FINER, "Executing parse()" );
         ASN1Sequence s1 = ASN1Sequence.getInstance( p );
         int i=0;
         valid = new UsagePeriod( s1.getObjectAt( i++ ) );
         messageQuota=ASN1Integer.getInstance( s1.getObjectAt( i++ ) ).getValue().intValue();
         transferQuota=ASN1Integer.getInstance( s1.getObjectAt( i++ ) ).getValue().intValue();
-        Logger.getLogger( "IdentityStoreBlock" ).log( Level.FINER, "Finished parse()" );
+        LOGGER.log( Level.FINER, "Finished parse()" );
         for(;i<s1.size();i++) {
             ASN1TaggedObject to = ASN1TaggedObject.getInstance( s1.getObjectAt( i ) );
             switch(to.getTagNo()) {
@@ -164,13 +172,15 @@ public class IdentityStoreBlock extends Block {
                 case 1003:
                     nodeKey=new AsymmetricKey( to.getObject() );
                     break;
+                default:
+                    throw new IOException("unknown tag encountered");
             }
         }
     }
 
     public ASN1Object toASN1Object() throws IOException {
         // Prepare encoding
-        Logger.getLogger("IdentityStoreBlock").log( Level.FINER,"Executing toASN1Object()");
+        LOGGER.log( Level.FINER,"Executing toASN1Object()");
 
         ASN1EncodableVector v=new ASN1EncodableVector();
 
@@ -189,7 +199,7 @@ public class IdentityStoreBlock extends Block {
         }
 
         ASN1Sequence seq=new DERSequence(v);
-        Logger.getLogger("IdentityStoreBlock").log(Level.FINER,"done toASN1Object()");
+        LOGGER.log(Level.FINER,"done toASN1Object()");
         return seq;
     }
 
@@ -243,7 +253,7 @@ public class IdentityStoreBlock extends Block {
         if((identityKey==null && isb.identityKey!=null) || (identityKey!=null && !identityKey.equals(isb.identityKey))) {
             return false;
         }
-        if((nodeAddress!=null && !nodeAddress.equals(isb.nodeAddress) || (nodeAddress==null && isb.nodeAddress!=null))) {
+        if(nodeAddress!=null && !nodeAddress.equals(isb.nodeAddress) || (nodeAddress==null && isb.nodeAddress!=null)) {
             return false;
         }
         if(!nodeKey.equals(isb.nodeKey)) {

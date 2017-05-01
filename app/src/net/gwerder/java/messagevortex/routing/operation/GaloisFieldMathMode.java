@@ -32,8 +32,8 @@ public class GaloisFieldMathMode implements MathMode {
 
     final int MODAR_W;
     final int MODAR_NW;
-    final int[] gflog;
-    final int[] gfilog;
+    final int[] GF_LOG;
+    final int[] GF_INVERSE_LOG;
 
     final static int[] PRIM_POLY=new int[] {3,7,11,19,37,67,137,285,529,1033,2053,4179,8219,17475,32771,69643};
     final static Map<Integer,GaloisFieldMathMode> cachedMathMode=new ConcurrentHashMap<>();
@@ -44,20 +44,20 @@ public class GaloisFieldMathMode implements MathMode {
         }
         MODAR_W=omega;
         MODAR_NW = (int)Math.pow(2,omega);
-        gflog=new int[MODAR_NW];
-        gfilog=new int[MODAR_NW];
+        GF_LOG=new int[MODAR_NW];
+        GF_INVERSE_LOG=new int[MODAR_NW];
         int b=1;
         for(int log=0;log<MODAR_NW-1;log++) {
-            gflog[b%MODAR_NW]=log;
-            gfilog[log%MODAR_NW]=b;
+            GF_LOG[b%MODAR_NW]=log;
+            GF_INVERSE_LOG[log%MODAR_NW]=b;
             b=lshift(b,1,(byte)33);
             if((b & MODAR_NW)!=0) {
                 b=b^PRIM_POLY[omega-1];
             }
         }
         // initialize undefined values with 0
-        gflog[0]=-1;
-        gfilog[MODAR_NW-1]=-1;
+        GF_LOG[0]=-1;
+        GF_INVERSE_LOG[MODAR_NW-1]=-1;
     }
 
     public static GaloisFieldMathMode getGaloisFieldMathMode(int omega) {
@@ -74,11 +74,11 @@ public class GaloisFieldMathMode implements MathMode {
         if (c1 == 0 || c2 == 0) {
             return 0;
         };
-        int sumLog = (gflog[c1] + gflog[c2]);
+        int sumLog = GF_LOG[c1] + GF_LOG[c2];
         if(sumLog>=MODAR_NW-1) {
             sumLog-=MODAR_NW-1;
         }
-        return gfilog[sumLog];
+        return GF_INVERSE_LOG[sumLog];
     }
 
     public int div(int c1, int divisor) {
@@ -88,11 +88,11 @@ public class GaloisFieldMathMode implements MathMode {
         if (divisor == 0) {
             throw new ArithmeticException("Divisionby 0");
         }
-        int diffLog = (gflog[c1] - gflog[divisor]);
+        int diffLog = GF_LOG[c1] - GF_LOG[divisor];
         while(diffLog<0) {
             diffLog+=MODAR_NW-1;
         }
-        return gfilog[diffLog];
+        return GF_INVERSE_LOG[diffLog];
     }
 
     @Override
@@ -105,9 +105,9 @@ public class GaloisFieldMathMode implements MathMode {
         return add(c1,c2);
     }
 
-    public int[] getGFLog() { return gflog; }
+    public int[] getGFLog() { return GF_LOG; }
 
-    public int[] getGFILog() { return gfilog; }
+    public int[] getGFILog() { return GF_INVERSE_LOG; }
 
     public static int rshift(int value,int shift, byte length) {
         return lshift(value,-shift,length);
@@ -118,21 +118,21 @@ public class GaloisFieldMathMode implements MathMode {
         if(shift==0) {
             return value;
         }
-        shift=shift%length;
-        if(shift<0) {
-            shift+=length;
+        int lshift=shift%length;
+        if(lshift<0) {
+            lshift+=length;
         }
 
         // do shift
-        ret=ret << shift;
+        ret=ret << lshift;
 
         // move overflow to lower end
-        long bitmask=((long)Math.pow(2,shift)-1)<<length;
+        long bitmask=((long)Math.pow(2,lshift)-1)<<length;
         long lowbits=(ret & bitmask)>>length;
         ret=ret | lowbits;
 
         // truncate result (inefficient but works)
-        ret=(long)(ret & ((int)Math.pow(2,length)-1));
+        ret=ret & ((int)Math.pow(2,length)-1);
         return (int)ret;
     }
 }

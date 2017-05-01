@@ -9,7 +9,7 @@ import org.bouncycastle.asn1.ASN1Object;
 import java.io.IOException;
 
 /**
- * Created by martin.gwerder on 05.06.2016.
+ * TODO
  */
 public class MacAlgorithm extends Block {
 
@@ -19,15 +19,32 @@ public class MacAlgorithm extends Block {
         alg = Algorithm.getDefault( AlgorithmType.HASHING );
     }
 
+    /***
+     * constructor to creates a mac algorith from an ASN.1 encoded object.
+     *
+     * @param to            the object description in ASN.1 notation
+     * @throws IOException  if an error occures during parsing
+     * @throws NullPointerException if object is null
+     */
     public MacAlgorithm(ASN1Encodable to) throws IOException {
         if (to == null) {
-            throw new IOException( "Only hashing algorithms allowed" );
+            throw new NullPointerException( "object may not be null" );
         }
         parse( to );
     }
 
+    /***
+     * constructor to creates a mac algorith from an ASN.1 encoded object.
+     *
+     * @param a             the object description in ASN.1 notation
+     * @throws IOException  if an error occures during parsing
+     * @throws NullPointerException if object is null
+     */
     public MacAlgorithm(Algorithm a) throws IOException {
-        if (a == null || a.getAlgorithmType() != AlgorithmType.HASHING) {
+        if (a == null ) {
+            throw new NullPointerException( "object may not be null" );
+        }
+        if( a.getAlgorithmType() != AlgorithmType.HASHING) {
             throw new IOException( "Only hashing algorithms allowed" );
         }
         alg = a;

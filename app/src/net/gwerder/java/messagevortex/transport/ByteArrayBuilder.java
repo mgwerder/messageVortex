@@ -6,10 +6,10 @@ public class ByteArrayBuilder {
 
     byte[] values=new byte[0];
 
-    ByteArrayBuilder append(byte[] _bytes,int length) {
+    ByteArrayBuilder append(byte[] bytes,int length) {
         int offset = values.length;
         values = Arrays.copyOf(values, offset+length);
-        System.arraycopy(_bytes, 0, values, offset,length);
+        System.arraycopy(bytes, 0, values, offset,length);
         return this;
     }
 

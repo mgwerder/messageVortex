@@ -19,7 +19,9 @@ public class HeaderRequestQueryQuota extends HeaderRequest {
 
     public HeaderRequestQueryQuota(ASN1Encodable ae) throws IOException {
         this();
-        if (ae!=null) parse(ae);
+        if (ae!=null) {
+            parse(ae);
+        }
     }
 
     protected void parse(ASN1Encodable ae) throws IOException {
@@ -37,7 +39,9 @@ public class HeaderRequestQueryQuota extends HeaderRequest {
     public String dumpValueNotation(String prefix) {
         StringBuilder sb=new StringBuilder();
         sb.append("{"+Block.CRLF);
-        if(identity!=null) sb.append( prefix+"  identity "+identity.dumpValueNotation( prefix+"  ", DumpType.PRIVATE_COMMENTED ) );
+        if(identity!=null) {
+            sb.append( prefix+"  identity "+identity.dumpValueNotation( prefix+"  ", DumpType.PRIVATE_COMMENTED ) );
+        }
         sb.append(prefix+"}");
         return sb.toString();
     }

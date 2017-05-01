@@ -49,12 +49,17 @@ public class PayloadChunk extends Block {
         offset=ASN1Integer.getInstance( s1.getObjectAt(i++)).getValue().longValue();
 
         //FIXME routingBlockIdentifier parsing missing
-        i++;// FIXME this is a dummy
+        // The following line is a dummy
+        i++;
 
         ASN1TaggedObject dto=ASN1TaggedObject.getInstance( s1.getObjectAt(i++) );
-        if(dto.getTagNo()!=100) throw new IOException( "got bad tag number (expected:10;got:"+dto.getTagNo()+")" );
+        if(dto.getTagNo()!=100) {
+            throw new IOException( "got bad tag number (expected:10;got:"+dto.getTagNo()+")" );
+        }
         payload=ASN1OctetString.getInstance( dto.getObject() ).getOctets();
-        if(offset<0) throw new IOException("illegal offset parsed");
+        if(offset<0) {
+            throw new IOException("illegal offset parsed");
+        }
     }
 
     public String dumpValueNotation(String prefix) {

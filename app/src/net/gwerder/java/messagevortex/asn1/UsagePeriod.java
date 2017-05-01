@@ -78,18 +78,26 @@ public class UsagePeriod extends Block {
     @Override
     public ASN1Object toASN1Object() {
         ASN1EncodableVector v = new ASN1EncodableVector();
-        if(notBefore!=null) v.add( new DERTaggedObject( true,TAG_NOT_BEFORE,new DERGeneralizedTime( notBefore ) ) );
-        if(notAfter !=null) v.add( new DERTaggedObject( true,TAG_NOT_AFTER ,new DERGeneralizedTime( notAfter  ) ) );
+        if(notBefore!=null) {
+            v.add( new DERTaggedObject( true,TAG_NOT_BEFORE,new DERGeneralizedTime( notBefore ) ) );
+        }
+        if(notAfter !=null) {
+            v.add( new DERTaggedObject( true,TAG_NOT_AFTER ,new DERGeneralizedTime( notAfter  ) ) );
+        }
         return new DERSequence(v);
     }
 
     public String dumpValueNotation(String prefix) {
         StringBuilder sb=new StringBuilder();
         sb.append("{"+CRLF);
-        final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddkkmmss"); // removed ".SSS"
+        final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddkkmmss");
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-        if(notBefore!=null) sb.append(prefix+"  notBefore \""+sdf.format(notBefore)+"Z\""+(notAfter!=null?",":"")+CRLF);
-        if(notAfter!=null)  sb.append(prefix+"  notAfter  \""+sdf.format(notAfter )+"Z\""+CRLF);
+        if(notBefore!=null) {
+            sb.append(prefix+"  notBefore \""+sdf.format(notBefore)+"Z\""+(notAfter!=null?",":"")+CRLF);
+        }
+        if(notAfter!=null)  {
+            sb.append(prefix+"  notAfter  \""+sdf.format(notAfter )+"Z\""+CRLF);
+        }
         sb.append(prefix+"}");
         return sb.toString();
     }

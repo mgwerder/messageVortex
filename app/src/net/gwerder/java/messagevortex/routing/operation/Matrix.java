@@ -267,8 +267,7 @@ public class Matrix {
 
     @Override
     public Matrix clone() {
-        Matrix ret=new Matrix(getX(),getY(),mode,matrix);
-        return ret;
+        return new Matrix(getX(),getY(),mode,matrix);
     }
 
     void transformColumn(int col,int col2, int scalar) {

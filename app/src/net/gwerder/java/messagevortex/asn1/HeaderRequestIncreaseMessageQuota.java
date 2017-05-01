@@ -21,7 +21,9 @@ public class HeaderRequestIncreaseMessageQuota extends HeaderRequest {
 
     public HeaderRequestIncreaseMessageQuota(ASN1Encodable ae) throws IOException {
         this();
-        if (ae!=null) parse(ae);
+        if (ae!=null) {
+            parse(ae);
+        }
     }
 
     protected void parse(ASN1Encodable ae) throws IOException{

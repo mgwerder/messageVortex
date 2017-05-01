@@ -10,7 +10,6 @@ public enum ECCurveType {
     SECP384R1( 2500, "secp384r1", Algorithm.EC, SecurityLevel.MEDIUM ),
     SECT409K1( 2501, "sect409k1", Algorithm.EC, SecurityLevel.HIGH ),
     SECP521R1( 2502, "secp521r1", Algorithm.EC, SecurityLevel.QUANTUM );
-    //TIGER192  (3100, AlgorithmType.HASHING,"tiger","BC",SecurityLevel.LOW);
 
     static ECCurveType def=SECP521R1;
 
@@ -29,7 +28,9 @@ public enum ECCurveType {
 
     public static ECCurveType getById(int id) {
         for(ECCurveType e : values()) {
-            if(e.id==id) return e;
+            if(e.id==id) {
+                return e;
+            }
         }
         return null;
     }
@@ -45,11 +46,6 @@ public enum ECCurveType {
         return secLevel;
     }
     public int getKeySize() { return Integer.parseInt( txt.substring( 4,7 ) ); }
-
-    @Override
-    public String toString() {
-        return super.toString();
-    }
 
     public static ECCurveType getDefault() {
         return def;

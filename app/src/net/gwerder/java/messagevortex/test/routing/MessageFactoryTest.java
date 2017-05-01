@@ -57,7 +57,7 @@ public class MessageFactoryTest {
             LOGGER.log( Level.INFO, "  getting routes ("+i+" of "+maxTests+")" );
             GraphSet[] g = gs.getRoutes();
             if(g == null || g.length == 0) {
-                gs.dump();
+                System.out.println(gs.dump());
                 fail( "Routes not found (" + g + "/" + (g != null ? g.length : 0) + ")" );
             }
             LOGGER.log( Level.INFO, "  testing full GraphSet ("+i+" of "+maxTests+")" );

@@ -181,33 +181,33 @@ BEGIN
   MergePayloadOperation ::= SEQUENCE {
     originalFirstId      INTEGER (0..maxID),
     originalSecondId     INTEGER (0..maxID),
-    newId            INTEGER (1..maxID)
+    newId                INTEGER (1..maxID)
   }
  
   XorMergePayloadOperation ::= SEQUENCE {
     originalFirstId      INTEGER (0..maxID),
     originalSecondId     INTEGER (-1..maxID),
-    originalFirstSize        SizeType,
-    newId            INTEGER (1..maxID)
+    originalFirstSize    SizeType,
+    newId                INTEGER (1..maxID)
   }
  
   XorSplitPayloadOperation ::= SEQUENCE {
     originalId           INTEGER (0..maxID),
-    prngSpec             PRNGSpec,
+    prngSpec             PRNGAlgorithmIdentifier,
     newFirstBlockId      INTEGER (1..maxID),
     newSecondBlockId     INTEGER (1..maxID)
   }
 
   EncryptPayloadOperation ::= SEQUENCE {
     originalId            INTEGER (0..maxID),
-    key                     SymmetricKey,
-    newId             INTEGER (1..maxID)
+    key                   SymmetricKey,
+    newId                 INTEGER (1..maxID)
   }
  
   DecryptPayloadOperation ::= SEQUENCE {
     originalId            INTEGER (0..maxID),
-    key                     SymmetricKey,
-    newId             INTEGER (1..maxID)
+    key                   SymmetricKey,
+    newId                 INTEGER (1..maxID)
   }
 
   IdentityReplayStore ::= SEQUENCE {
@@ -251,10 +251,10 @@ BEGIN
   }
   
   ReplyBlock ::= CHOICE {
-    identity      [0] ReplyIdentity,
-    capabilities  [1] ReplyCapability,
-    puzzle        [2] ReplyPuzzleRequired,
-    error          [99] ErrorBlock
+    identity      [0]  ReplyIdentity,
+    capabilities  [1]  ReplyCapability,
+    puzzle        [2]  ReplyPuzzleRequired,
+    error         [99] ErrorBlock
   }
   
   ReplyIdentity ::= SEQUENCE {
@@ -301,7 +301,7 @@ BEGIN
   CypherSpec ::= SEQUENCE {
       asymmetric AsymmetricAlgorithmIdentifier,
       symmetric  SymmetricAlgorithmIdentifier,
-      mac       MacAlgorithmIdentifier
+      mac        MacAlgorithmIdentifier
   }
   
   Protocol ::= ENUMERATED {
@@ -319,17 +319,17 @@ BEGIN
   ErrorCode ::= ENUMERATED {
     
     -- System messages
-    ok                    (2001),
-    transferQuotaStatus   (2101),
-    messageQuotaStatus    (2102),
+    ok                          (2001),
+    transferQuotaStatus         (2101),
+    messageQuotaStatus          (2102),
     
     -- protocol usage failures
-    transferQuotaExceeded (3001),
-    messageQuotaExceeded  (3002),
-    identityUnknown       (3101),
-    messageChunkMissing   (3201),
-    messageLifeExpired    (3202),
-    puzzleUnknown         (3301),
+    transferQuotaExceeded       (3001),
+    messageQuotaExceeded        (3002),
+    identityUnknown             (3101),
+    messageChunkMissing         (3201),
+    messageLifeExpired          (3202),
+    puzzleUnknown               (3301),
     
     -- capability errors
     macAlgorithmUnknown         (3801),
@@ -340,14 +340,14 @@ BEGIN
     badParameters               (3821),
     
     -- Mayor host specific errors
-    hostError             (5001),
+    hostError                   (5001),
     ...
   }
   
   PayloadChunk ::= SEQUENCE {
     id                        INTEGER (0..maxID),
     routingBlockForwardSecret INTEGER (0..maxSerial),
-    payload                 CHOICE {
+    payload                   CHOICE {
       payload                   [100] OCTET STRING,
       replyBlock                [101] ReplyBlock
     }
@@ -375,51 +375,51 @@ BEGIN
     parameter               AlgorithmParameters
   }
 
-  PRNGSpec ::= SEQUENCE {
-    type                PRNGType,
-    seed                OCTET STRING
+  PRNGAlgorithmIdentifier ::= SEQUENCE {
+    type                    PRNGType,
+    seed                    OCTET STRING
   }
   
   PRNGType ::= ENUMERATED {
-    xsadd       (1000),
-    blumMicali  (1001)
+    xsadd           (1000),
+    blumMicali      (1001)
   }
 
   SymmetricAlgorithm ::= ENUMERATED {
-    aes128      (1000),
-    aes192      (1001),  -- optional support
-    aes256      (1002),
-    camellia128 (1100),
-    camellia192 (1101),  -- optional support
-    camellia256 (1102)
+    aes128          (1000),
+    aes192          (1001),  -- optional support
+    aes256          (1002),
+    camellia128     (1100),
+    camellia192     (1101),  -- optional support
+    camellia256     (1102)
   }
   
   CypherMode ::= ENUMERATED {
-    ecb      (1000),
-    cbc      (1001)
+    ecb             (1000),
+    cbc             (1001)
   }
 
   CypherPadding ::= ENUMERATED {
-    pkcs7      (1000),
-    pkcs1      (1001)
+    pkcs7           (1000),
+    pkcs1           (1001)
   }
   
   AsymmetricAlgorithm ::= ENUMERATED {
-    rsa       (2000),
-    dsa       (2100),
-    ec        (2500)
+    rsa             (2000),
+    dsa             (2100),
+    ec              (2500)
   }
   
   MacAlgorithm ::= ENUMERATED {
-    sha384   (3000),
-    sha512   (3001),
-    tiger192 (3100)
+    sha384          (3000),
+    sha512          (3001),
+    tiger192        (3100)
   }
   
   ECCurveType ::= ENUMERATED{
-    secp384r1 (2500),
-    sect409k1 (2501),
-    secp521r1 (2502),
+    secp384r1       (2500),
+    sect409k1       (2501),
+    secp521r1       (2502),
     ...
   }
   

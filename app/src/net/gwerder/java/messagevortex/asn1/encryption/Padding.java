@@ -4,8 +4,6 @@ import java.util.*;
 
 /**
  * Enumeration listing all available padding types for encryption.
- *
- * Created by martin.gwerder on 31.05.2016.
  */
 public enum Padding {
 
@@ -60,23 +58,29 @@ public enum Padding {
     }
 
     public static Padding[] getAlgorithms(AlgorithmType at) {
-        Vector<Padding> v = new Vector<>();
+        List<Padding> v = new ArrayList<>();
         for (Padding val : values()) {
-            if (val.at.contains( at )) v.add( val );
+            if (val.at.contains( at )) {
+                v.add( val );
+            }
         }
         return v.toArray(new Padding[v.size()]);
     }
 
     public static Padding getById(int id) {
         for(Padding e : values()) {
-            if(e.id==id) return e;
+            if(e.id==id) {
+                return e;
+            }
         }
         return null;
     }
 
     public static Padding getByName(String name) {
         for(Padding e : values()) {
-            if(e.txt.equals(name)) return e;
+            if(e.txt.equals(name)) {
+                return e;
+            }
         }
         return null;
     }

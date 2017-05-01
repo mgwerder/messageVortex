@@ -34,7 +34,7 @@ public class MacAlgorithmTest {
         // null on algorithm
         try {
             new MacAlgorithm((Algorithm)null);
-        } catch(IOException ioe) {
+        } catch(NullPointerException ioe) {
             // this is expected benhaviour
         } catch(Exception e) {
             fail("got unexpected exception");
@@ -42,7 +42,7 @@ public class MacAlgorithmTest {
         // null on ASN1§Encodeable
         try {
             new MacAlgorithm((ASN1Encodable) null);
-        } catch(IOException ioe) {
+        } catch(NullPointerException ioe) {
             // this is expected benhaviour
         } catch(Exception e) {
             fail("got unexpected exception ("+e+")");

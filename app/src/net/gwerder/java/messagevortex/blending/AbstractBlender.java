@@ -27,6 +27,6 @@ abstract public class AbstractBlender implements Blender,TransportListener {
 
     }
 
-    abstract public boolean blendMessage(BlendingSpec target,VortexMessage message);
+    public abstract boolean blendMessage(BlendingSpec target,VortexMessage message);
 
 }

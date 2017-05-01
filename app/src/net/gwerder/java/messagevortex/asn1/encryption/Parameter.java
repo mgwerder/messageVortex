@@ -23,14 +23,18 @@ public enum Parameter {
 
     public static Parameter getById(int id) {
         for(Parameter e : values()) {
-            if(e.id==id) return e;
+            if(e.id==id) {
+                return e;
+            }
         }
         return null;
     }
 
     public static Parameter getByString(String s) {
         for(Parameter e : values()) {
-            if(e.toString().equals(s)) return e;
+            if(e.toString().equals(s)) {
+                return e;
+            }
         }
         return null;
     }

@@ -198,46 +198,4 @@ public class InnerMessage extends Block {
         return sb.toString();
     }
 
-    /***
-     * converts an unsigned long value into a byte array representation (LSB).
-     *
-     * @param i the long value to be converted
-     * @param num the number of bytes to be returned
-     * @return the unsigned byte array representation
-     */
-    public static byte[] getLongAsBytes(long i, int num) {
-        byte[] ret = new byte[num];
-        for (int j = 0; j < num; j++) {
-            ret[j]=(byte)((i>>(j*8))&0xFF);
-        }
-        return ret;
-    }
-
-    /***
-     * converts an unsigned long value into a 32 bit byte array representation (LSB).
-     *
-     * @param i the long value to be converted
-     * @return the unsigned byte array of length 4 representation
-     */
-    public static byte[] getLongAsBytes(long i) {
-        return getLongAsBytes(i,4);
-    }
-
-    /***
-     * converts a number of bytes into a long representation (LSB)
-     *
-     * @param b the byte array to be converted to long
-     * @return the long representation of the byte array
-     */
-    public static long getBytesAsInteger(byte[] b) {
-        if(b==null || b.length<1 || b.length>8) {
-            throw new IllegalArgumentException( "byte array must contain exactly four bytes" );
-        }
-        long ret=0;
-        for(int i=0;i<b.length;i++) {
-            ret|=((long)(b[i]&0xFF))<<(i*8);
-        }
-        return ret;
-    }
-
 }

@@ -60,7 +60,7 @@ public class DummyBlender extends AbstractBlender implements TransportListener {
         try {
             return transport.sendMessage(target.getBlendingEndpointAddress(), new ByteArrayInputStream(msg.toBytes()));
         } catch(IOException ioe) {
-            LOGGER.log(Level.SEVERE,"Unable to send to transport endpoint "+target.toString());
+            LOGGER.log(Level.SEVERE,"Unable to send to transport endpoint "+target.toString(),ioe);
             return false;
         }
     }

@@ -3,8 +3,8 @@ package net.gwerder.java.messagevortex.asn1;
 import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 /**
  * Created by martin.gwerder on 14.04.2016.
@@ -13,7 +13,7 @@ public class Routing extends Block {
 
     private String       recipient = null;
     private UsagePeriod  queueTime = null;
-    private List<byte[]> nextHop=new Vector<>();
+    private List<byte[]> nextHop=new ArrayList<>();
 
     public Routing(ASN1Encodable to) throws IOException {
         parse(to);
@@ -41,6 +41,7 @@ public class Routing extends Block {
         // encryptionKey     [101] SymetricKey OPTIONAL,
 
         // cascade           [200] SEQUENCE(SIZE (0..255)) OF CascadeBuildInformation,
+        recipient="";
 
     }
 
@@ -55,6 +56,8 @@ public class Routing extends Block {
     }
 
     public ASN1Object toASN1Object() throws IOException{
+        // FIXME this is a dummy to be removed as soon as recipient parsing/encoding is implemented
+        recipient.hashCode();
         throw new IOException( "not implemented" ); // FIXME
     }
 

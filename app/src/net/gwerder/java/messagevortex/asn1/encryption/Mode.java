@@ -48,14 +48,18 @@ public enum Mode {
 
     public static Mode getById(int id) {
         for(Mode e : values()) {
-            if(e.id==id) return e;
+            if(e.id==id) {
+                return e;
+            }
         }
         return null;
     }
 
     public static Mode getByName(String name) {
         for(Mode e : values()) {
-            if(e.txt.equals(name)) return e;
+            if(e.txt.equals(name)) {
+                return e;
+            }
         }
         return null;
     }

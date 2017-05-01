@@ -147,7 +147,7 @@ public class AbstractRedundancyOperation extends Operation {
      */
     public int setDataStripes(int stripes)  {
         if(stripes<1 || stripes+this.redundancy> GaloisFieldMathMode.lshift(gfSize,1,(byte)33)) {
-            throw new ArithmeticException("too many stripes to be acomodated in given GF field");
+            throw new ArithmeticException("too many stripes to be acomodated in given galois field");
         }
         int old=this.dataStripes;
         this.dataStripes=stripes;
@@ -167,7 +167,7 @@ public class AbstractRedundancyOperation extends Operation {
      */
     public int setRedundancy(int stripes)  {
         if(stripes<1 || stripes+this.dataStripes> GaloisFieldMathMode.lshift(gfSize,1,(byte)33)) {
-            throw new ArithmeticException("too many stripes to be acomodated in given GF field");
+            throw new ArithmeticException("too many stripes to be acomodated in current galois field");
         }
         int old=this.redundancy;
         this.redundancy=stripes;
@@ -216,7 +216,7 @@ public class AbstractRedundancyOperation extends Operation {
      */
     public int setGFSize(int omega) {
         if(omega<2 || omega>16 || this.redundancy+this.dataStripes> GaloisFieldMathMode.lshift(omega,1,(byte)33)) {
-            throw new ArithmeticException("too many stripes to be acomodated in given GF field");
+            throw new ArithmeticException("galois field too small for the stripes to be acomodated");
         }
         int old=this.gfSize;
         this.gfSize=omega;

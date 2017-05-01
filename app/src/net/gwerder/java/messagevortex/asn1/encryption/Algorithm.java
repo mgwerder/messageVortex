@@ -2,10 +2,10 @@ package net.gwerder.java.messagevortex.asn1.encryption;
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 import java.util.logging.Level;
 
 /**
@@ -23,23 +23,27 @@ public enum Algorithm {
     CAMELLIA256( 1102, AlgorithmType.SYMMETRIC, "CAMELLIA256", "BC", SecurityLevel.QUANTUM ),
 
     RSA        (2000, AlgorithmType.ASYMMETRIC, "RSA", "BC", getSecLevelList( getSecLevelList( getSecLevelList( getSecLevelList(
-              SecurityLevel.LOW,     getParameterList("keySize_0",1024)),
-              SecurityLevel.MEDIUM,  getParameterList("keySize_0",2048)),
-              SecurityLevel.HIGH,    getParameterList("keySize_0",4096)),
-              SecurityLevel.QUANTUM, getParameterList("keySize_0",8192))
+              SecurityLevel.LOW,     getParameterList(Algorithm.KEYSIZE,1024)),
+              SecurityLevel.MEDIUM,  getParameterList(Algorithm.KEYSIZE,2048)),
+              SecurityLevel.HIGH,    getParameterList(Algorithm.KEYSIZE,4096)),
+              SecurityLevel.QUANTUM, getParameterList(Algorithm.KEYSIZE,8192))
 
     ),
     EC         ( 2100, AlgorithmType.ASYMMETRIC, "ECIES"    , "BC", getSecLevelList( getSecLevelList( getSecLevelList(
-            ECCurveType.SECP384R1.getSecurityLevel(), getParameterList(getParameterList("keySize_0",ECCurveType.SECP384R1.getKeySize()),"curveType_0",ECCurveType.SECP384R1.getECCurveType())),
-            ECCurveType.SECT409K1.getSecurityLevel(), getParameterList(getParameterList("keySize_0",ECCurveType.SECT409K1.getKeySize()),"curveType_0",ECCurveType.SECT409K1.getECCurveType())),
-            ECCurveType.SECP521R1.getSecurityLevel(), getParameterList(getParameterList("keySize_0",ECCurveType.SECP521R1.getKeySize()),"curveType_0",ECCurveType.SECP521R1.getECCurveType()))
+            ECCurveType.SECP384R1.getSecurityLevel(), getParameterList(getParameterList(Algorithm.KEYSIZE,ECCurveType.SECP384R1.getKeySize()),Algorithm.CURVETYPE,ECCurveType.SECP384R1.getECCurveType())),
+            ECCurveType.SECT409K1.getSecurityLevel(), getParameterList(getParameterList(Algorithm.KEYSIZE,ECCurveType.SECT409K1.getKeySize()),Algorithm.CURVETYPE,ECCurveType.SECT409K1.getECCurveType())),
+            ECCurveType.SECP521R1.getSecurityLevel(), getParameterList(getParameterList(Algorithm.KEYSIZE,ECCurveType.SECP521R1.getKeySize()),Algorithm.CURVETYPE,ECCurveType.SECP521R1.getECCurveType()))
     ),
     SHA384     ( 3000, AlgorithmType.HASHING, "sha384", "BC",  SecurityLevel.HIGH ),
     SHA512     ( 3001, AlgorithmType.HASHING, "sha512", "BC", SecurityLevel.QUANTUM );
-    //TIGER192  (3100, AlgorithmType.HASHING,"tiger","BC",SecurityLevel.LOW);
+    // missing support of TIGER192
+
+    private static final String KEYSIZE   = "keySize_0";
+    private static final String CURVETYPE = "curveType_0";
 
     private static final java.util.logging.Logger LOGGER;
     private static Map<AlgorithmType, Algorithm> def = new HashMap<AlgorithmType, Algorithm>() {
+
         private static final long serialVersionUID = 12132324789789L;
 
         {
@@ -94,16 +98,20 @@ public enum Algorithm {
     }
 
     public static Algorithm[] getAlgorithms(AlgorithmType at) {
-        List<Algorithm> v=new Vector<>();
+        List<Algorithm> v=new ArrayList<>();
         for(Algorithm e : values()) {
-            if(e.t==at) v.add(e);
+            if(e.t==at) {
+                v.add(e);
+            }
         }
         return v.toArray(new Algorithm[v.size()]);
     }
 
     public static Algorithm getById(int id) {
         for(Algorithm e : values()) {
-            if(e.id==id) return e;
+            if(e.id==id) {
+                return e;
+            }
         }
         return null;
     }
@@ -172,9 +180,5 @@ public enum Algorithm {
         return secLevel;
     }
 
-    @Override
-    public String toString() {
-        return super.toString();
-    }
 }
 

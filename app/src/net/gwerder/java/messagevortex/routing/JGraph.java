@@ -19,11 +19,11 @@ public class JGraph extends JPanel implements MouseListener  {
 
     private static final long serialVersionUID = 1213422324789789L;
 
-    private int X_OFFSET     = 20;
-    private int Y_OFFSET     = 10;
-    private int ROUTE_BORDER = 10;
-    private int BOX_HEIGHT   = 15;
-    private int BOX_WIDTH    = 20;
+    private final int X_OFFSET     = 20;
+    private final int Y_OFFSET     = 10;
+    private final int ROUTE_BORDER = 10;
+    private final int BOX_HEIGHT   = 15;
+    private final int BOX_WIDTH    = 20;
 
     private int route   = 0;
 
@@ -89,7 +89,9 @@ public class JGraph extends JPanel implements MouseListener  {
                 System.out.println("##   route "+this.route+" contains "+i+" ("+routes[this.route].size()+"/"+gr.getStartTime()+")");
                 g2.setColor( Color.GREEN );
                 g2.setStroke( s2 );
-                if(lastY>0) g2.drawLine(x1,lastY,x1,y);
+                if(lastY>0) {
+                    g2.drawLine(x1,lastY,x1,y);
+                }
                 lastY=y;
             }else {
                 g2.setStroke( s );
@@ -119,10 +121,14 @@ public class JGraph extends JPanel implements MouseListener  {
 
     public int setRoute(int r) {
         int s=graph.getRoutes().length;
-        if(r<0 || s<=r) throw new NullPointerException("unable to find adressed route r (0<="+r+"<"+s+")");
+        if(r<0 || s<=r) {
+            throw new NullPointerException("unable to find adressed route r (0<="+r+"<"+s+")");
+        }
         int old=this.route;
         this.route=r;
-        if(old!=r) repaint();
+        if(old!=r) {
+            repaint();
+        }
         return old;
     }
 
