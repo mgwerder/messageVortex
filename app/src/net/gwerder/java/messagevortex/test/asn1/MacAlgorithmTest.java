@@ -91,8 +91,7 @@ public class MacAlgorithmTest {
         for (Algorithm a : Algorithm.getAlgorithms(AlgorithmType.HASHING)) {
             try {
                 MacAlgorithm ak = new MacAlgorithm(a);
-                File f = new File("out/test/MacAlgorithm_" + a.getAlgorithmFamily() + ".der");
-                f.mkdirs();
+                File f = new File("testfile_MacAlgorithm_" + a.getAlgorithmFamily() + ".der");
                 OutputStream o = new FileOutputStream(f);
                 o.write(ak.toBytes());
                 o.close();

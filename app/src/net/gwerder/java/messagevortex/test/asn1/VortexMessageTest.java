@@ -92,13 +92,12 @@ public class VortexMessageTest {
             Prefix p=new Prefix();
             p.setKey(new SymmetricKey() );
             VortexMessage s = new VortexMessage(p,new InnerMessage( new Identity() ));
-            File f = new File("out/test/VortexMessage_encrypted.der");
-            f.mkdirs();
+            File f = new File("testfile_VortexMessage_encrypted.der");
             OutputStream o = new FileOutputStream(f);
             o.write(s.toBytes());
             o.close();
 
-            f = new File("out/test/VortexMessage_plain.der");
+            f = new File("testfile_VortexMessage_plain.der");
             o = new FileOutputStream(f);
             o.write(s.toASN1Object(null,DumpType.ALL_UNENCRYPTED).getEncoded());
             o.close();
