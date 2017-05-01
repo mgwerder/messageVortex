@@ -58,35 +58,24 @@ public class MathModeTest {
     }
 
     @Test
-    public void gfMathModeTest()  {
-        LOGGER.log( Level.INFO, "testing using Blackbox" );
-        LOGGER.log( Level.INFO, "  testing illgal GF sizes" );
+    public void gfMathModeExceptionTest() {
+        LOGGER.log(Level.INFO, "testing using Blackbox");
+        LOGGER.log(Level.INFO, "  testing illgal GF sizes");
         try {
-            GaloisFieldMathMode m=GaloisFieldMathMode.getGaloisFieldMathMode( 1 );
+            GaloisFieldMathMode.getGaloisFieldMathMode(1);
             fail("GF 1 did not raise exception");
-        } catch(ArithmeticException e) {
+        } catch (ArithmeticException e) {
             // this is expected
         }
 
         try {
-            GaloisFieldMathMode m=GaloisFieldMathMode.getGaloisFieldMathMode( 17 );
+            GaloisFieldMathMode.getGaloisFieldMathMode(17);
             fail("GF 17 did not raise exception");
-        } catch(ArithmeticException e) {
+        } catch (ArithmeticException e) {
             // this is expected
         }
 
-        GaloisFieldMathMode m=GaloisFieldMathMode.getGaloisFieldMathMode( 4 );
-
-        // Testing example operations from http://web.eecs.utk.edu/~plank/plank/papers/CS-96-332.pdf with imnplementation
-        m=GaloisFieldMathMode.getGaloisFieldMathMode( 4 );
-        LOGGER.log( Level.INFO, "  checking GF(2^4) math" );
-        assertTrue( "  Failed GF(2^4)-Test for 11+7",m.add(11,7)==12 );
-        assertTrue( "  Failed GF(2^4)-Test for 3*7 ["+m.mul(3,7)+"]",m.mul(3,7)==9 );
-        assertTrue( "  Failed GF(2^4)-Test for 13*10",m.mul(13,10)==11 );
-        assertTrue( "  Failed GF(2^4)-Test for 13/10",m.div(13,10)==3 );
-        assertTrue( "  Failed GF(2^4)-Test for 3/7",m.div(3,7)==10 );
-        assertTrue( "  Failed GF(2^4)-Test for 0/7",m.div(0,7)==0 );
-        assertTrue( "  Failed GF(2^4)-Test for 0/13",m.div(0,13)==0 );
+        GaloisFieldMathMode m = GaloisFieldMathMode.getGaloisFieldMathMode(4);
         try {
             m.div(13, 0);
             fail("division by zero did not raise exception");
@@ -94,32 +83,53 @@ public class MathModeTest {
             // this is expected
         }
 
+    }
+
+    @Test
+    public void gfMathModeTest() {
+        // Testing example operations from http://web.eecs.utk.edu/~plank/plank/papers/CS-96-332.pdf with imnplementation
+        GaloisFieldMathMode m = GaloisFieldMathMode.getGaloisFieldMathMode(4);
+        LOGGER.log(Level.INFO, "  checking GF(2^4) math");
+        assertTrue("  Failed GF(2^4)-Test for 11+7", m.add(11, 7) == 12);
+        assertTrue("  Failed GF(2^4)-Test for 3*7 [" + m.mul(3, 7) + "]", m.mul(3, 7) == 9);
+        assertTrue("  Failed GF(2^4)-Test for 13*10", m.mul(13, 10) == 11);
+        assertTrue("  Failed GF(2^4)-Test for 13/10", m.div(13, 10) == 3);
+        assertTrue("  Failed GF(2^4)-Test for 3/7", m.div(3, 7) == 10);
+        assertTrue("  Failed GF(2^4)-Test for 0/7", m.div(0, 7) == 0);
+        assertTrue("  Failed GF(2^4)-Test for 0/13", m.div(0, 13) == 0);
 
         // some more random examples from the internet
-        m=GaloisFieldMathMode.getGaloisFieldMathMode( 8 );
-        LOGGER.log( Level.INFO, "  checking GF(2^8) math" );
-        assertTrue( "  Failed GF(2^8)-Test for 2*4 ["+m.mul(2,4)+"]",m.mul(2,4)==8 );
-        assertTrue( "  Failed GF(2^8)-Test for 7*11",m.mul(7,11)==49);
-        assertTrue( "  Failed GF(2^8)-Test for 7/11",m.div(7,11)==239);
-        assertTrue( "  Failed GF(2^8)-Test for 7/31",m.div(7,31)==214);
-        assertTrue( "  Failed GF(2^8)-Test for 0/7",m.div(0,7)==0 );
-        assertTrue( "  Failed GF(2^8)-Test for 0/13",m.div(0,13)==0 );
+        m = GaloisFieldMathMode.getGaloisFieldMathMode(8);
+        LOGGER.log(Level.INFO, "  checking GF(2^8) math");
+        assertTrue("  Failed GF(2^8)-Test for 2*4 [" + m.mul(2, 4) + "]", m.mul(2, 4) == 8);
+        assertTrue("  Failed GF(2^8)-Test for 7*11", m.mul(7, 11) == 49);
+        assertTrue("  Failed GF(2^8)-Test for 7/11", m.div(7, 11) == 239);
+        assertTrue("  Failed GF(2^8)-Test for 7/31", m.div(7, 31) == 214);
+        assertTrue("  Failed GF(2^8)-Test for 0/7", m.div(0, 7) == 0);
+        assertTrue("  Failed GF(2^8)-Test for 0/13", m.div(0, 13) == 0);
         try {
             m.div(13, 0);
             fail("division by zero did not raise exception");
-        } catch(ArithmeticException e) {
+        } catch (ArithmeticException e) {
             // this is expected
         }
+    }
 
+    @Test
+    public void gfDivisopnByItself() {
+        LOGGER.log(Level.INFO, "checking division by itself");
         //testing division by itself (should alway return 1
-        for(int galois=2;galois<=16;galois++) {
-            m=GaloisFieldMathMode.getGaloisFieldMathMode( galois );
-            for(int i=1;i>Math.pow(2,galois);i++) {
-                assertTrue( "  Failed GF(2^"+galois+")-Test for "+i+"/"+i+"",m.div(i,i)==1);
-                assertTrue( "  Failed GF(2^"+galois+")-Test for "+i+"*2/"+i+"/2",m.div(m.div(m.mul(i,2),i),2)==1);
+        for (int galois = 2; galois <= 16; galois++) {
+            GaloisFieldMathMode m = GaloisFieldMathMode.getGaloisFieldMathMode(galois);
+            for (int i = 1; i > Math.pow(2, galois); i++) {
+                assertTrue("  Failed GF(2^" + galois + ")-Test for " + i + "/" + i + "", m.div(i, i) == 1);
+                assertTrue("  Failed GF(2^" + galois + ")-Test for " + i + "*2/" + i + "/2", m.div(m.div(m.mul(i, 2), i), 2) == 1);
             }
         }
+    }
 
+    @Test
+    public void gfCheckAllValidInits() {
         LOGGER.log( Level.INFO, "  checking init" );
         for(int i=2;i<16;i++) GaloisFieldMathMode.getGaloisFieldMathMode(i);
     }

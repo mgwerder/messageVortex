@@ -38,7 +38,7 @@ public class GaloisFieldMathMode implements MathMode {
     static final Map<Integer,GaloisFieldMathMode> cachedMathMode=new ConcurrentHashMap<>();
 
     private GaloisFieldMathMode(int omega) {
-        if(omega<1 ||omega>16) {
+        if(omega<2 ||omega>16) {
             throw new ArithmeticException( "illegal GF size "+omega+" (PRIM_POLYNOM unknown)" );
         }
         GF_FIELD_SIZE = (int)Math.pow(2,omega);
