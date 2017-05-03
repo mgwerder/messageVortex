@@ -38,7 +38,7 @@ public class HeaderRequestQueryQuota extends HeaderRequest {
 
     public String dumpValueNotation(String prefix) {
         StringBuilder sb=new StringBuilder();
-        sb.append("{"+Block.CRLF);
+        sb.append("{"+ AbstractBlock.CRLF);
         if(identity!=null) {
             sb.append( prefix+"  identity "+identity.dumpValueNotation( prefix+"  ", DumpType.PRIVATE_COMMENTED ) );
         }

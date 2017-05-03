@@ -11,7 +11,7 @@ import java.util.logging.Level;
 /**
  * This class represents one block of an identity store for storage.
  */
-public class IdentityStoreBlock extends Block {
+public class IdentityStoreBlock extends AbstractBlock {
 
     private static final java.util.logging.Logger LOGGER;
     static {

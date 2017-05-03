@@ -40,9 +40,9 @@ public class VortexMessageTest {
             final int TESTS=10;
             for (int i = 0; i < TESTS; i++) {
                 LOGGER.log( Level.INFO, "Testing VortexMessage reencoding " + (i + 1) + " of " + TESTS );
-                Prefix p=new Prefix();
+                PrefixBlock p=new PrefixBlock();
                 p.setKey(new SymmetricKey() );
-                VortexMessage s = new VortexMessage(p,new InnerMessage( new Identity() ));
+                VortexMessage s = new VortexMessage(p,new InnerMessageBlock( new IdentityBlock() ));
                 String s1=s.dumpValueNotation( "" );
                 byte[] b1 = s.toBytes();
                 assertTrue( "Byte representation may not be null", b1 != null );
@@ -82,16 +82,16 @@ public class VortexMessageTest {
     private void testIntByteConverter(long i, int len) {
         byte[] b= VortexMessage.getLongAsBytes( i,len );
         assertTrue("wrong number of bytes returned (expected="+len+"; received="+b.length+")",b.length==len);
-        assertTrue( "Error reencoding "+i+ " (old="+i+";"+ Block.toHex(b)+";new="+ VortexMessage.getBytesAsInteger( b )+"]", VortexMessage.getBytesAsInteger( b ) == i );
+        assertTrue( "Error reencoding "+i+ " (old="+i+";"+ AbstractBlock.toHex(b)+";new="+ VortexMessage.getBytesAsInteger( b )+"]", VortexMessage.getBytesAsInteger( b ) == i );
     }
 
     @Test
     public void writeAsAsn1() {
         try {
             // FIXME build a full message with all possible blocks
-            Prefix p=new Prefix();
+            PrefixBlock p=new PrefixBlock();
             p.setKey(new SymmetricKey() );
-            VortexMessage s = new VortexMessage(p,new InnerMessage( new Identity() ));
+            VortexMessage s = new VortexMessage(p,new InnerMessageBlock( new IdentityBlock() ));
             File f = new File("testfile_VortexMessage_encrypted.der");
             OutputStream o = new FileOutputStream(f);
             o.write(s.toBytes());

@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
-import static net.gwerder.java.messagevortex.asn1.Block.CRLF;
+import static net.gwerder.java.messagevortex.asn1.AbstractBlock.CRLF;
 
 /**
  * ASN1 parser class for header request.

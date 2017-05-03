@@ -11,7 +11,7 @@ import java.io.IOException;
  *
  * Created by martin.gwerder on 14.04.2016.
  */
-public class HeaderReply extends Block {
+public class HeaderReply extends AbstractBlock {
 
     // FIXME get HeaderReply
     public HeaderReply(ASN1Primitive to) {

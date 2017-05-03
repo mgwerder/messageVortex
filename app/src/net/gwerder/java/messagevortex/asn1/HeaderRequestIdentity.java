@@ -40,12 +40,12 @@ public class HeaderRequestIdentity extends HeaderRequest {
 
     public String dumpValueNotation(String prefix) {
         StringBuilder sb=new StringBuilder();
-        sb.append("{"+Block.CRLF);
+        sb.append("{"+ AbstractBlock.CRLF);
         if(identity!=null) {
-            sb.append( prefix+"  identity "+identity.dumpValueNotation( prefix+"  ", DumpType.PRIVATE_COMMENTED )+Block.CRLF );
+            sb.append( prefix+"  identity "+identity.dumpValueNotation( prefix+"  ", DumpType.PRIVATE_COMMENTED )+ AbstractBlock.CRLF );
         }
         if(period!=null) {
-            sb.append( prefix+"  period "+period.dumpValueNotation( prefix+"  " )+identity!=null?",":""+Block.CRLF );
+            sb.append( prefix+"  period "+period.dumpValueNotation( prefix+"  " )+identity!=null?",":""+ AbstractBlock.CRLF );
         }
         sb.append(prefix+"}");
         return sb.toString();

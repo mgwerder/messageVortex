@@ -1,6 +1,6 @@
 package net.gwerder.java.messagevortex.routing.operation;
 
-import net.gwerder.java.messagevortex.asn1.Identity;
+import net.gwerder.java.messagevortex.asn1.IdentityBlock;
 import net.gwerder.java.messagevortex.asn1.RemoveRedundancyOperation;
 
 /**
@@ -10,7 +10,7 @@ public class RemoveRedundancy extends AbstractOperation {
 
     RemoveRedundancyOperation operation;
 
-    public RemoveRedundancy(Identity i, RemoveRedundancyOperation op) {
+    public RemoveRedundancy(IdentityBlock i, RemoveRedundancyOperation op) {
         super(i);
         this.operation=op;
     }

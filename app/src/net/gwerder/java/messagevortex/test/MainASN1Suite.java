@@ -12,14 +12,14 @@ import org.junit.runners.Suite;
         FuzzerTest.class,
         VortexMessageTest.class,
         DumpTypeTest.class,
-        BlockTest.class,
+        AbstractBlockTest.class,
         MacAlgorithmTest.class,
         SecurityLevelTest.class,
         SymmetricKeyTest.class,
         AsymmetricKeyTest.class,
         AsymmetricKeyReencodingTest.class,
         IdentityStoreTest.class,
-        IdentityTest.class
+        IdentityBlockTest.class
 })
 
 /***
@@ -32,14 +32,14 @@ public class MainASN1Suite {
         s.addTest(new JUnit4TestAdapter(FuzzerTest.class));
         s.addTest(new JUnit4TestAdapter(VortexMessageTest.class));
         s.addTest(new JUnit4TestAdapter(DumpTypeTest.class));
-        s.addTest(new JUnit4TestAdapter(BlockTest.class));
+        s.addTest(new JUnit4TestAdapter(AbstractBlockTest.class));
         s.addTest(new JUnit4TestAdapter(MacAlgorithmTest.class));
         s.addTest(new JUnit4TestAdapter( SecurityLevelTest.class ) );
         s.addTest(new JUnit4TestAdapter( SymmetricKeyTest.class ) );
         s.addTest(new JUnit4TestAdapter(AsymmetricKeyTest.class));
         s.addTest(new JUnit4TestAdapter(AsymmetricKeyReencodingTest.class));
         s.addTest(new JUnit4TestAdapter(IdentityStoreTest.class));
-        s.addTest(new JUnit4TestAdapter(IdentityTest.class));
+        s.addTest(new JUnit4TestAdapter(IdentityBlockTest.class));
         return s;
     }
 

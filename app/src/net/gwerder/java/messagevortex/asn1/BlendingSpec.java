@@ -9,7 +9,7 @@ import java.io.IOException;
  * Represents a the Blending specification of the routing block.
  *
  */
-public class BlendingSpec extends Block {
+public class BlendingSpec extends AbstractBlock {
 
     /* The endpoint address to be used */
     private String blendingEndpointAddress=null;

@@ -1,6 +1,6 @@
 package net.gwerder.java.messagevortex.routing;
 
-import net.gwerder.java.messagevortex.accountant.Accountant;
+import net.gwerder.java.messagevortex.accounting.Accountant;
 import net.gwerder.java.messagevortex.blending.Blender;
 import net.gwerder.java.messagevortex.blending.BlenderListener;
 
@@ -36,17 +36,17 @@ public interface Router extends BlenderListener {
     List<Blender> getAllBlendingLayer();
 
     /***
-     * Sets the accountant layer for the routing layer.
+     * Sets the accounting layer for the routing layer.
      *
-     * @param accountant the accountant layer to be used
-     * @return the previously set accountant layer
+     * @param accountant the accounting layer to be used
+     * @return the previously set accounting layer
      */
     Accountant setAccountant(Accountant accountant);
 
     /***
-     * Get the currently set accountant layer.
+     * Get the currently set accounting layer.
      *
-     * @return the accountant layer or null if none
+     * @return the accounting layer or null if none
      */
     Accountant getAccountant();
 

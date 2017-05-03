@@ -1,6 +1,6 @@
 package net.gwerder.java.messagevortex.blending;
 
-import net.gwerder.java.messagevortex.accountant.HeaderVerifyer;
+import net.gwerder.java.messagevortex.accounting.HeaderVerifyer;
 import net.gwerder.java.messagevortex.asn1.BlendingSpec;
 import net.gwerder.java.messagevortex.asn1.VortexMessage;
 import net.gwerder.java.messagevortex.routing.IncomingMessageRouterListener;

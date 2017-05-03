@@ -16,7 +16,7 @@ import java.util.logging.Level;
 /**
  * Stores all known identities of a node. Identities are stored as IdentityStoreBlocks.
  ***/
-public class IdentityStore extends Block {
+public class IdentityStore extends AbstractBlock {
 
     private static final java.util.logging.Logger LOGGER;
     static {

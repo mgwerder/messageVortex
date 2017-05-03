@@ -11,7 +11,7 @@ import java.io.IOException;
 /**
  * TODO
  */
-public class MacAlgorithm extends Block {
+public class MacAlgorithm extends AbstractBlock {
 
     Algorithm alg = null;
 

@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 /**
  *Abstract class for all encryption key types
  */
-abstract public class Key extends Block {
+abstract public class Key extends AbstractBlock {
 
 
     Algorithm keytype = null;

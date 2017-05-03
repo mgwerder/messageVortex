@@ -22,7 +22,7 @@ package net.gwerder.java.messagevortex.routing.operation;
  ***/
 
 
-import net.gwerder.java.messagevortex.asn1.Identity;
+import net.gwerder.java.messagevortex.asn1.IdentityBlock;
 import net.gwerder.java.messagevortex.asn1.PayloadChunk;
 
 import java.util.ArrayList;
@@ -37,20 +37,20 @@ public class InternalPayload {
 
 
     InternalPayloadSpace payloadSpace;
-    Identity identity;
+    IdentityBlock identity;
     List<Operation> operations=new ArrayList<>();
     Map<Integer,PayloadChunk> internalPayload=new ConcurrentHashMap<>();
     Map<Integer,Operation> internalOperationOutput=new ConcurrentHashMap<>();
 
     private long lastcompact=System.currentTimeMillis();
 
-    protected InternalPayload( InternalPayloadSpace payloadSpace, Identity i) {
+    protected InternalPayload( InternalPayloadSpace payloadSpace, IdentityBlock i) {
         identity=i;
         this.payloadSpace=payloadSpace;
         payloadSpace.setPayload(i,this);
     }
 
-    public Identity getIdentity() {
+    public IdentityBlock getIdentity() {
         return identity;
     }
 

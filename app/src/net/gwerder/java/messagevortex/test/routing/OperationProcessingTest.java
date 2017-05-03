@@ -23,7 +23,7 @@ package net.gwerder.java.messagevortex.test.routing;
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.asn1.AbstractRedundancyOperation;
-import net.gwerder.java.messagevortex.asn1.Identity;
+import net.gwerder.java.messagevortex.asn1.IdentityBlock;
 import net.gwerder.java.messagevortex.asn1.SymmetricKey;
 import net.gwerder.java.messagevortex.routing.operation.AddRedundancy;
 import net.gwerder.java.messagevortex.routing.operation.InternalPayload;
@@ -52,7 +52,7 @@ public class OperationProcessingTest {
     @Test
     public void redundancyOperationTest()  {
         try {
-            Identity identity = new Identity();
+            IdentityBlock identity = new IdentityBlock();
             InternalPayloadSpace ps=new InternalPayloadSpace();
             InternalPayload p=ps.getPayload(identity);
             SymmetricKey[] keys=new SymmetricKey[] {new SymmetricKey(),new SymmetricKey(),new SymmetricKey(),new SymmetricKey(),new SymmetricKey(),new SymmetricKey()};

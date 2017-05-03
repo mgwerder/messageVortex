@@ -37,9 +37,9 @@ public class HeaderRequestCapability extends HeaderRequest {
 
     public String dumpValueNotation(String prefix) {
         StringBuilder sb=new StringBuilder();
-        sb.append("{"+Block.CRLF);
+        sb.append("{"+ AbstractBlock.CRLF);
         if (period != null) {
-            sb.append(prefix).append("  period ").append(period.dumpValueNotation(prefix + "  ")).append(Block.CRLF);
+            sb.append(prefix).append("  period ").append(period.dumpValueNotation(prefix + "  ")).append(AbstractBlock.CRLF);
         }
         sb.append(prefix).append("}");
         return sb.toString();

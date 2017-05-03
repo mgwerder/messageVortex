@@ -34,7 +34,7 @@ public class IdentityStoreTest {
     public void testingIdentityStoreDump1() {
         try {
             for (int i = 0; i < 10; i++) {
-                LOGGER.log( Level.INFO, "Testing Identity Store dumping " + (i + 1) + " of " + 10 );
+                LOGGER.log( Level.INFO, "Testing IdentityBlock Store dumping " + (i + 1) + " of " + 10 );
                 IdentityStore s = new IdentityStore();
                 assertTrue( "IdentityStore may not be null", s != null );
                 String s1 = s.dumpValueNotation( "" );

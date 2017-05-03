@@ -1,15 +1,15 @@
 package net.gwerder.java.messagevortex.routing.operation;
 
-import net.gwerder.java.messagevortex.asn1.Identity;
+import net.gwerder.java.messagevortex.asn1.IdentityBlock;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class InternalPayloadSpace {
 
-    private static Map<Identity,InternalPayload> internalPayloadMap = new ConcurrentHashMap<>();
+    private static Map<IdentityBlock,InternalPayload> internalPayloadMap = new ConcurrentHashMap<>();
 
-    public InternalPayload setPayload(Identity i, InternalPayload pl) {
+    public InternalPayload setPayload(IdentityBlock i, InternalPayload pl) {
         InternalPayload ret=null;
         synchronized(internalPayloadMap) {
             ret=internalPayloadMap.get(i);
@@ -22,7 +22,7 @@ public class InternalPayloadSpace {
         return ret;
     }
 
-    public InternalPayload getPayload(Identity i) {
+    public InternalPayload getPayload(IdentityBlock i) {
         InternalPayload ret;
         synchronized(internalPayloadMap) {
             ret=internalPayloadMap.get(i);

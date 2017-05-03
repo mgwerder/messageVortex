@@ -4,7 +4,7 @@ import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
 
-public class Payload extends Block {
+public class Payload extends AbstractBlock {
 
     PayloadChunk[] payloads = null;
 

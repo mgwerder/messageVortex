@@ -17,7 +17,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 /**
- * Fuzzer Tests for ASN1 Parser Classes {@link net.gwerder.java.messagevortex.asn1.Block}.
+ * Fuzzer Tests for ASN1 Parser Classes {@link AbstractBlock}.
  *
  * @author martin@gwerder.net (Martin GWERDER)
  */
@@ -42,16 +42,16 @@ public class FuzzerTest {
             AsymmetricKey ownIdentity = new AsymmetricKey();
             for (int i = 0; i < BLOCK_FUZZER_CYCLES; i++) {
                 LOGGER.log( Level.INFO, "Starting fuzzer cycle " + (i + 1) + " of " + BLOCK_FUZZER_CYCLES );
-                Identity id = new Identity();
+                IdentityBlock id = new IdentityBlock();
                 id.setOwnIdentity( ownIdentity );
-                Prefix p=new Prefix();
+                PrefixBlock p=new PrefixBlock();
                 p.setKey( new SymmetricKey() );
-                VortexMessage s = new VortexMessage( p,new InnerMessage( new Identity() ) );
+                VortexMessage s = new VortexMessage( p,new InnerMessageBlock( new IdentityBlock() ) );
                 assertTrue( "VortexMessage may not be null", s != null );
                 byte[] b1 = s.toBytes();
                 assertTrue( "Byte representation may not be null", b1 != null );
                 VortexMessage s2=new VortexMessage( b1,null );
-                assertTrue( "Contained Prefix is not considered equivalent (original key="+s.getPrefix().getKey()+";new key="+s2.getPrefix().getKey()+")", s.getPrefix().equals(s2.getPrefix()) );
+                assertTrue( "Contained PrefixBlock is not considered equivalent (original key="+s.getPrefix().getKey()+";new key="+s2.getPrefix().getKey()+")", s.getPrefix().equals(s2.getPrefix()) );
                 byte[] b2 = (s2).toBytes();
                 assertTrue( "Byte arrays should be equal when reencoding", Arrays.equals( b1, b2 ) );
             }
@@ -104,18 +104,18 @@ public class FuzzerTest {
         String lastTuple = "";
         try {
             for (int i = 0; i < BLOCK_FUZZER_CYCLES; i++) {
-                Identity s = new Identity();
-                assertTrue( "Identity may not be null", s != null );
+                IdentityBlock s = new IdentityBlock();
+                assertTrue( "IdentityBlock may not be null", s != null );
                 byte[] b1 = s.toBytes();
                 assertTrue( "Byte representation may not be null", b1 != null );
-                Identity s2 = new Identity( b1 );
+                IdentityBlock s2 = new IdentityBlock( b1 );
                 byte[] b2 = (s2).toBytes();
                 lastTuple = s.dumpValueNotation( "" ) + "\n" + s2.dumpValueNotation( "" );
                 assertTrue( "Byte arrays should be equal when reencoding", Arrays.equals( b1, b2 ) );
             }
         } catch (Exception e) {
             LOGGER.log( Level.WARNING, "Unexpected exception (" + lastTuple + ")", e );
-            fail( "fuzzer encountered exception in Identity ("+e.toString()+")" );
+            fail( "fuzzer encountered exception in IdentityBlock ("+e.toString()+")" );
         }
     }
 

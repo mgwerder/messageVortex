@@ -96,7 +96,6 @@ BEGIN
   }
   
   -- represents the building and sending process for the next hop
-  -- FIXME rework this part intensively (Missing features reply block for header requests; Insufficient handling of operation stack)
   RoutingBlock ::= SEQUENCE {
   
     -- contains the next recipient in sequence
@@ -282,13 +281,9 @@ BEGIN
     identity      [0]  ReplyIdentity,
     capabilities  [1]  ReplyCapability,
     puzzle        [2]  ReplyPuzzleRequired,
-    error         [99] ErrorBlock
+    status        [99] StatusBlock
   }
   
-  ReplyIdentity ::= SEQUENCE {
-    -- FIXME this has to be done
-  }
-
   HeaderRequestIdentity ::= SEQUENCE {
     identity AsymmetricKey,
     period UsagePeriod

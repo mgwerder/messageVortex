@@ -11,7 +11,7 @@ import java.util.TimeZone;
 /**
  * Created by martin.gwerder on 19.04.2016.
  */
-public class UsagePeriod extends Block {
+public class UsagePeriod extends AbstractBlock {
 
     public static final int TAG_NOT_BEFORE =0;
     public static final int TAG_NOT_AFTER  =1;

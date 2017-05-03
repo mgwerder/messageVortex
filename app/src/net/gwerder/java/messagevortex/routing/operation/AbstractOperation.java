@@ -1,18 +1,18 @@
 package net.gwerder.java.messagevortex.routing.operation;
 
-import net.gwerder.java.messagevortex.asn1.Identity;
+import net.gwerder.java.messagevortex.asn1.IdentityBlock;
 
 public abstract class AbstractOperation implements Operation {
 
-    Identity identity;
+    IdentityBlock identity;
 
-    public AbstractOperation(Identity i) {
+    public AbstractOperation(IdentityBlock i) {
         this.identity=i;
     }
 
     public abstract boolean canRun();
 
-    public Identity getIdentity() {
+    public IdentityBlock getIdentity() {
         return identity;
     }
 

@@ -36,10 +36,10 @@ import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.util.logging.Level;
 
-public class VortexMessage extends Block {
+public class VortexMessage extends AbstractBlock {
 
-    private Prefix       prefix;
-    private InnerMessage innerMessage;
+    private PrefixBlock prefix;
+    private InnerMessageBlock innerMessage;
     private AsymmetricKey key;
 
     private static final java.util.logging.Logger LOGGER;
@@ -68,28 +68,28 @@ public class VortexMessage extends Block {
         parse( b );
     }
 
-    public VortexMessage(Prefix pre, InnerMessage im) {
+    public VortexMessage(PrefixBlock pre, InnerMessageBlock im) {
         this();
         setPrefix(pre);
         setInnerMessage(im);
     }
 
-    public InnerMessage getInnerMessage() {return innerMessage;}
-    public InnerMessage setInnerMessage(InnerMessage im) {
+    public InnerMessageBlock getInnerMessage() {return innerMessage;}
+    public InnerMessageBlock setInnerMessage(InnerMessageBlock im) {
         if( im==null ) {
             throw new NullPointerException( "InnerMessage may not be null" );
         }
-        InnerMessage old=getInnerMessage();
+        InnerMessageBlock old=getInnerMessage();
         innerMessage=im;
         return old;
     }
 
-    public Prefix getPrefix() {return prefix;}
-    public Prefix setPrefix(Prefix pre) {
+    public PrefixBlock getPrefix() {return prefix;}
+    public PrefixBlock setPrefix(PrefixBlock pre) {
         if( pre==null ) {
             throw new NullPointerException( "Prefix may not be null" );
         }
-        Prefix old=getPrefix();
+        PrefixBlock old=getPrefix();
         prefix=pre;
         return old;
     }
@@ -114,11 +114,11 @@ public class VortexMessage extends Block {
         // reading prefix
         ASN1TaggedObject to=ASN1TaggedObject.getInstance( s1.getObjectAt( i++ ) );
         switch(to.getTagNo()) {
-            case Prefix.PLAIN_PREFIX:
-                prefix = new Prefix( to.getObject(),null );
+            case PrefixBlock.PLAIN_PREFIX:
+                prefix = new PrefixBlock( to.getObject(),null );
                 break;
-            case Prefix.ENCRYPTED_PREFIX:
-                prefix = new Prefix( to.getObject() , getDecryptionKey());
+            case PrefixBlock.ENCRYPTED_PREFIX:
+                prefix = new PrefixBlock( to.getObject() , getDecryptionKey());
                 break;
             default:
                 throw new ParseException( "got unexpected tag number when reading prefix ("+to.getTagNo()+")",0 );
@@ -127,11 +127,11 @@ public class VortexMessage extends Block {
         // reading inner message
         to=ASN1TaggedObject.getInstance( s1.getObjectAt( i++ ) );
         switch(to.getTagNo()) {
-            case InnerMessage.PLAIN_MESSAGE:
-                innerMessage = new InnerMessage( to.getObject().getEncoded() );
+            case InnerMessageBlock.PLAIN_MESSAGE:
+                innerMessage = new InnerMessageBlock( to.getObject().getEncoded() );
                 break;
-            case InnerMessage.ENCRYPTED_MESSAGE:
-                innerMessage = new InnerMessage( prefix.getKey().decrypt(ASN1OctetString.getInstance(to.getObject()).getOctets())  );
+            case InnerMessageBlock.ENCRYPTED_MESSAGE:
+                innerMessage = new InnerMessageBlock( prefix.getKey().decrypt(ASN1OctetString.getInstance(to.getObject()).getOctets())  );
                 break;
             default:
                 throw new ParseException( "got unexpected tag number when reading inner message ("+to.getTagNo()+")",0 );
@@ -158,12 +158,12 @@ public class VortexMessage extends Block {
         if (o == null) {
             throw new IOException( "returned prefix object may not be null" );
         }
-        v.add( new DERTaggedObject( getPrefix().getDecryptionKey()==null?Prefix.PLAIN_PREFIX:Prefix.ENCRYPTED_PREFIX,o ));
+        v.add( new DERTaggedObject( getPrefix().getDecryptionKey()==null? PrefixBlock.PLAIN_PREFIX: PrefixBlock.ENCRYPTED_PREFIX,o ));
 
         if(prefix.getKey()==null || DumpType.ALL_UNENCRYPTED.equals(dt)) {
-            v.add( new DERTaggedObject( InnerMessage.PLAIN_MESSAGE,getInnerMessage().toASN1Object(dt) ));
+            v.add( new DERTaggedObject( InnerMessageBlock.PLAIN_MESSAGE,getInnerMessage().toASN1Object(dt) ));
         } else {
-            v.add( new DERTaggedObject( InnerMessage.ENCRYPTED_MESSAGE,new DEROctetString( prefix.getKey().encrypt(getInnerMessage().toASN1Object(dt).getEncoded() ))));
+            v.add( new DERTaggedObject( InnerMessageBlock.ENCRYPTED_MESSAGE,new DEROctetString( prefix.getKey().encrypt(getInnerMessage().toASN1Object(dt).getEncoded() ))));
         }
         ASN1Sequence seq=new DERSequence(v);
         LOGGER.log(Level.FINER,"done toASN1Object()");

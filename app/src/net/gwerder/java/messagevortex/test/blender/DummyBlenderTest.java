@@ -60,8 +60,8 @@ public class DummyBlenderTest implements BlenderListener,TransportListener {
             // this is expected behaviour
         }
         try {
-            assertTrue("Failed sending message to different endpoint", dt[0].blendMessage(new BlendingSpec("martin@example.com1"), new VortexMessage(new Prefix(new SymmetricKey()), new InnerMessage(new Identity()))));
-            assertFalse("Failed sending message to unknown endpoint (unexpectedly succeeded)", dt[0].blendMessage(new BlendingSpec("martin@example.com-1"), new VortexMessage(new Prefix(), new InnerMessage(new Identity()))));
+            assertTrue("Failed sending message to different endpoint", dt[0].blendMessage(new BlendingSpec("martin@example.com1"), new VortexMessage(new PrefixBlock(new SymmetricKey()), new InnerMessageBlock(new IdentityBlock()))));
+            assertFalse("Failed sending message to unknown endpoint (unexpectedly succeeded)", dt[0].blendMessage(new BlendingSpec("martin@example.com-1"), new VortexMessage(new PrefixBlock(), new InnerMessageBlock(new IdentityBlock()))));
         } catch (Exception ioe) {
             LOGGER.log(Level.SEVERE, "Caught exception while creating message", ioe);
             fail("Endpointests failed as there was an error opening sample messages");

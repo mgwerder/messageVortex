@@ -1,13 +1,13 @@
 package net.gwerder.java.messagevortex.routing.operation;
 
 import net.gwerder.java.messagevortex.asn1.AbstractRedundancyOperation;
-import net.gwerder.java.messagevortex.asn1.Identity;
+import net.gwerder.java.messagevortex.asn1.IdentityBlock;
 
 public class AddRedundancy extends AbstractOperation {
 
     AbstractRedundancyOperation operation;
 
-    public AddRedundancy(Identity i, AbstractRedundancyOperation op) {
+    public AddRedundancy(IdentityBlock i, AbstractRedundancyOperation op) {
         super(i);
         this.operation=op;
     }

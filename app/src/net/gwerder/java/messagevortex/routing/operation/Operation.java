@@ -1,13 +1,13 @@
 package net.gwerder.java.messagevortex.routing.operation;
 
-import net.gwerder.java.messagevortex.asn1.Identity;
+import net.gwerder.java.messagevortex.asn1.IdentityBlock;
 
 /**
  * Created by Martin on 30.04.2017.
  */
 public interface Operation {
 
-    Identity getIdentity();
+    IdentityBlock getIdentity();
 
     boolean canRun();
 

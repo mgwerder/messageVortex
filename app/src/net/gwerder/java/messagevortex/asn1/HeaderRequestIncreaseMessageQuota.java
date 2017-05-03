@@ -46,12 +46,12 @@ public class HeaderRequestIncreaseMessageQuota extends HeaderRequest {
 
     public String dumpValueNotation(String prefix) {
         StringBuilder sb=new StringBuilder();
-        sb.append("{"+Block.CRLF);
+        sb.append("{"+ AbstractBlock.CRLF);
         if(identity!=null) {
-            sb.append( prefix+"  identity "+identity.dumpValueNotation( prefix+"  ", DumpType.PRIVATE_COMMENTED )+(quota>-1?",":"")+Block.CRLF );
+            sb.append( prefix+"  identity "+identity.dumpValueNotation( prefix+"  ", DumpType.PRIVATE_COMMENTED )+(quota>-1?",":"")+ AbstractBlock.CRLF );
         }
         if(quota>-1) {
-            sb.append( prefix+"  quota "+quota+Block.CRLF );
+            sb.append( prefix+"  quota "+quota+ AbstractBlock.CRLF );
         }
         sb.append(prefix+"}");
         return sb.toString();
