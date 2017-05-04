@@ -1,9 +1,7 @@
 package net.gwerder.java.messagevortex.test;
 
 /**
- * Test all classes related to parsing/handling ASN.1 data.
- *
- * Created by martin.gwerder on 19.04.2016.
+ * Test all classes related to routing.
  */
 
 import junit.framework.JUnit4TestAdapter;
@@ -14,6 +12,7 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+        InternalPayloadTest.class,
         MessageFactoryTest.class,
         MatrixTest.class,
         EdgeTest.class,
@@ -25,6 +24,7 @@ public class MainRoutingSuite {
 
     public static junit.framework.Test suite() {
         final TestSuite s = new TestSuite();
+        s.addTest(new JUnit4TestAdapter(InternalPayloadTest.class));
         s.addTest(new JUnit4TestAdapter(MessageFactoryTest.class));
         s.addTest(new JUnit4TestAdapter(MatrixTest.class));
         s.addTest(new JUnit4TestAdapter(EdgeTest.class));

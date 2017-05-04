@@ -30,7 +30,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Represents a payload in memory for processing
+ * Represents a payload space of an identity in memory for processing
  */
 public class InternalPayload {
 
@@ -39,23 +39,46 @@ public class InternalPayload {
     IdentityBlock identity;
     List<Operation> operations=new ArrayList<>();
     Map<Integer,PayloadChunk> internalPayload=new ConcurrentHashMap<>();
+    Map<Integer,PayloadChunk> internalPayloadCache=new ConcurrentHashMap<>();
     Map<Integer,Operation> internalOperationOutput=new ConcurrentHashMap<>();
+    Map<Integer,List<Operation>> internalOperationInput=new ConcurrentHashMap<>();
 
     private long lastcompact=System.currentTimeMillis();
 
-    protected InternalPayload( InternalPayloadSpace payloadSpace, IdentityBlock i) {
-        identity=i;
+    protected InternalPayload( InternalPayloadSpace payloadSpace, IdentityBlock identity) {
+        this.identity=identity;
         this.payloadSpace=payloadSpace;
-        payloadSpace.setPayload(i,this);
+        this.payloadSpace.setInternalPayload(this.identity,this);
     }
 
     public IdentityBlock getIdentity() {
         return identity;
     }
 
+    private PayloadChunk getPayloadCache(int id) {
+        synchronized(internalPayloadCache) {
+            PayloadChunk pc=internalPayloadCache.get(id);
+            return pc;
+        }
+    }
+
     public PayloadChunk getPayload(int id) {
         synchronized(internalPayload) {
-            return internalPayload.get(id);
+            PayloadChunk pc=internalPayload.get(id);
+            if(pc!=null) return pc;
+
+            // Check if already in payload cache
+            pc=getPayloadCache(id);
+            if(pc!=null) return pc;
+
+            // build if payload cache is empty
+            Operation op=internalOperationOutput.get(id);
+            if(op!=null && op.canRun()) {
+                op.execute(new int[] {id});
+            }
+
+            // return whatever we have now
+            return getPayloadCache(id);
         }
     }
 
@@ -72,6 +95,15 @@ public class InternalPayload {
         }
     }
 
+    public void setCalculatedPayload(int id,PayloadChunk p) {
+        compact();
+        if(p==null) {
+            internalPayloadCache.remove(id);
+        } else {
+            internalPayloadCache.put(id,p);
+        }
+    }
+
     private void registerOperation(Operation op) {
         if(op==null || op.getOutputID()==null) {
             throw new NullPointerException();
@@ -80,16 +112,49 @@ public class InternalPayload {
         for(int i=0;i<id.length;i++) {
             internalOperationOutput.put(id[i],op);
         }
+        id=op.getInputID();
+        for(int i=0;i<id.length;i++) {
+            synchronized(internalOperationInput) {
+                List l=internalOperationInput.get(id[i]);
+                if(l==null) {
+                    l=new ArrayList<>();
+                    internalOperationInput.put(id[i],l);
+                }
+                l.add(op);
+            }
+        }
         operations.add(op);
+    }
+
+    private void deregisterOperation(Operation op) {
+        if(op==null || op.getOutputID()==null) {
+            throw new NullPointerException();
+        }
+        int[] id=op.getOutputID();
+        for(int i=0;i<id.length;i++) {
+            internalOperationOutput.remove(id[i]);
+        }
+        id=op.getInputID();
+        for(int i=0;i<id.length;i++) {
+            synchronized(internalOperationInput) {
+                List<Operation> l=internalOperationInput.get(id[i]);
+                l.remove(op);
+                if(l!=null && l.size()==0) {
+                    internalOperationInput.remove(id[i]);
+                }
+            }
+        }
+        operations.remove(op);
     }
 
     public boolean setOperation(Operation op) {
         // do first a compact cycle if required
         compact();
 
-        // FIXME check for conflicting operations
-
-        // FIXME check for valid usage Period
+        // check for conflicting operations
+        for( int id:op.getOutputID()) {
+            if(internalOperationOutput.get(id)!=null) return false;
+        }
 
         // store operation
         registerOperation(op);
@@ -98,19 +163,48 @@ public class InternalPayload {
     }
 
     protected boolean compact() {
-        // skip running if last run is less than 60s ago
+        // skip running if last run is less than 10s ago
         if(System.currentTimeMillis()<lastcompact+60000) {
             return false;
         }
 
-        // FIXME compact structure
+        // remove expired operations
+        synchronized(operations) {
+            List<Operation> ops=new ArrayList<>();
+            for(Operation op:operations) {
+                if(! op.isInUsagePeriod()) ops.add(op);
+            }
+            for(Operation op:ops) {
+                deregisterOperation(op);
+            }
+        }
 
-        // FIXME remove expired identities
+        // remove expired payloads
+        synchronized(internalPayload) {
 
-        // FIXME remove expired operations
+            // search for expired payloads
+            List<Integer> expiredPayloadIds=new ArrayList<>();
+            for(Map.Entry<Integer,PayloadChunk> pce:internalPayload.entrySet()) {
+                if(!pce.getValue().isInUsagePeriod()) expiredPayloadIds.add(pce.getKey());
+            }
 
-        // FIXME remove expired payloads
+            // remove expired payloads
+            for(int i:expiredPayloadIds) {
+                setPayload(i,null);
+            }
 
+            // remove subsequent payloadcaches
+            for(int i:expiredPayloadIds) {
+                List<Operation> ops=internalOperationInput.get(i);
+                if(ops!=null && ops.size()>0) {
+                    for(Operation op:ops) {
+                        for(int j:op.getOutputID()) {
+                            setCalculatedPayload(j,null);
+                        }
+                    }
+                }
+            }
+        }
         return true;
     }
 

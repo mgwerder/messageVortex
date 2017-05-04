@@ -22,6 +22,7 @@ package net.gwerder.java.messagevortex.asn1;
 // ************************************************************************************
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
+import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import net.gwerder.java.messagevortex.routing.operation.GaloisFieldMathMode;
 import org.bouncycastle.asn1.*;
 
@@ -136,7 +137,30 @@ public abstract class AbstractRedundancyOperation extends Operation {
         return seq;
     }
 
-    public abstract String dumpValueNotation(String prefix) ;
+    /***
+     * Dumps the ASN1 value representation of the removeRedundancy operation.
+     * @return the representation of the object
+     */
+    public String dumpValueNotation(String prefix) {
+        StringBuilder sb=new StringBuilder();
+        sb.append(  "  {" + CRLF );
+        sb.append( prefix + "  inputId ").append(inputId).append(",").append(CRLF);
+        sb.append( prefix + "  dataStripes ").append(dataStripes).append(",").append(CRLF);
+        sb.append( prefix + "  redundancy ").append(redundancy).append(",").append(CRLF);
+        sb.append( prefix + "  keys {").append(CRLF);
+        int i=keys.size();
+        for(SymmetricKey sk:keys) {
+            i--;
+            sb.append(sk.dumpValueNotation(prefix+"  "));
+            if(i>0) sb.append(",");
+            sb.append(CRLF);
+        }
+        sb.append( prefix + "  },").append(CRLF);
+        sb.append( prefix + "  outputId ").append(outputId).append(",").append(CRLF);
+        sb.append( prefix + "  gfSize ").append(gfSize).append(CRLF);
+        sb.append( prefix + "}");
+        return sb.toString();
+    }
 
     /***
      * Sets the id of the first input id of the payload.

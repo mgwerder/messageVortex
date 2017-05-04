@@ -22,14 +22,15 @@ package net.gwerder.java.messagevortex.routing.operation;
 // ************************************************************************************
 
 import net.gwerder.java.messagevortex.asn1.AbstractRedundancyOperation;
+import net.gwerder.java.messagevortex.asn1.AddRedundancyOperation;
 import net.gwerder.java.messagevortex.asn1.IdentityBlock;
 
 public class AddRedundancy extends AbstractOperation {
 
     AbstractRedundancyOperation operation;
 
-    public AddRedundancy(IdentityBlock i, AbstractRedundancyOperation op) {
-        super(i);
+    public AddRedundancy(InternalPayload p, AddRedundancyOperation op) {
+        super(p);
         this.operation=op;
     }
 
@@ -44,6 +45,21 @@ public class AddRedundancy extends AbstractOperation {
         for(int i=0;i<ret.length;i++) {
             ret[i]=operation.getOutputId()+i;
         }
+        return ret;
+    }
+
+    @Override
+    public int[] getInputID() {
+        int[] ret=new int[operation.getDataStripes()];
+        for(int i=0;i<ret.length;i++) {
+            ret[i]=operation.getInputId()+i;
+        }
+        return ret;
+    }
+
+    public int[] execute(int[] id) {
+        int[] ret=getOutputID();
+        // FIXME do redundancy calculation
         return ret;
     }
 

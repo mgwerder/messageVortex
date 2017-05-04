@@ -87,7 +87,7 @@ public class AsymmetricKey extends Key {
      * @throws IOException if an error happens during generation
      */
     public AsymmetricKey() throws IOException {
-        this( Algorithm.getDefault( AlgorithmType.ASYMMETRIC ), Algorithm.getDefault( AlgorithmType.ASYMMETRIC ).getKeySize(),null );
+        this( Algorithm.getDefault( AlgorithmType.ASYMMETRIC ), Algorithm.getDefault( AlgorithmType.ASYMMETRIC ).getKeySize(),Algorithm.getDefault( AlgorithmType.ASYMMETRIC ).getParameters(SecurityLevel.MEDIUM) );
         selftest();
     }
 
@@ -109,11 +109,23 @@ public class AsymmetricKey extends Key {
         if(alg==null) {
             throw new IOException( "Algorithm null is not encodable by the system" );
         }
-        this.mode=null;
-        this.padding=null;
+
+        // handle padding
+        this.padding=Padding.getByName(((String)(this.parameters.get(Parameter.PADDING.toString()+"_0"))));
+        if(this.padding==null) {
+            throw new IOException("Padding is not set ("+this.parameters.get(Parameter.PADDING.toString()+"_0")+")");
+        }
         this.parameters.remove(Parameter.PADDING.toString()+"_0");
-        this.parameters.put(Parameter.KEYSIZE.toString()+"_0",keySize);
+
+        // handle mode
+        this.mode=Mode.getByName(((String)(this.parameters.get(Parameter.MODE.toString()+"_0"))));
+        if(this.mode==null) {
+            throw new IOException("Mode is not set ("+this.parameters.get(Parameter.MODE.toString()+"_0")+")");
+        }
         this.parameters.remove(Parameter.MODE.toString()+"_0");
+
+        // Handle keysize
+        this.parameters.put(Parameter.KEYSIZE.toString()+"_0",keySize);
         try {
             createKey( alg, parameters );
         } catch (NoSuchAlgorithmException | NoSuchProviderException | InvalidAlgorithmParameterException | InvalidParameterSpecException e) {

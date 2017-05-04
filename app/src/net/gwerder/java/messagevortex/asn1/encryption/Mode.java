@@ -99,7 +99,7 @@ public enum Mode {
         return id;
     }
 
-    public String getMode() {
+    public String toString() {
         return txt;
     }
 

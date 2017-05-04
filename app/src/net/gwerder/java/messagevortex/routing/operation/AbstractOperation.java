@@ -26,9 +26,11 @@ import net.gwerder.java.messagevortex.asn1.IdentityBlock;
 public abstract class AbstractOperation implements Operation {
 
     IdentityBlock identity;
+    InternalPayload payload;
 
-    public AbstractOperation(IdentityBlock i) {
-        this.identity=i;
+    public AbstractOperation(InternalPayload payload) {
+        this.identity=payload.getIdentity();
+        this.payload=payload;
     }
 
     public abstract boolean canRun();
@@ -41,5 +43,7 @@ public abstract class AbstractOperation implements Operation {
         // TODO do something sensible here
         return true;
     }
+
+    public abstract int[] execute(int[] id);
 
 }

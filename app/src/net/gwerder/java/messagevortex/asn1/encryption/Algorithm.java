@@ -44,16 +44,16 @@ public enum Algorithm {
     CAMELLIA256( 1102, AlgorithmType.SYMMETRIC, "CAMELLIA256", "BC", SecurityLevel.QUANTUM ),
 
     RSA        (2000, AlgorithmType.ASYMMETRIC, "RSA", "BC", getSecLevelList( getSecLevelList( getSecLevelList( getSecLevelList(
-              SecurityLevel.LOW,     getParameterList(Algorithm.KEYSIZE,1024)),
-              SecurityLevel.MEDIUM,  getParameterList(Algorithm.KEYSIZE,2048)),
-              SecurityLevel.HIGH,    getParameterList(Algorithm.KEYSIZE,4096)),
-              SecurityLevel.QUANTUM, getParameterList(Algorithm.KEYSIZE,8192))
+              SecurityLevel.LOW,     getParameterList(getParameterList(getParameterList(Algorithm.KEYSIZE,1024),Parameter.MODE.toString()+"_0",Mode.getDefault(AlgorithmType.ASYMMETRIC).toString()),Parameter.PADDING.toString()+"_0",Padding.getDefault(AlgorithmType.ASYMMETRIC).getPadding())),
+              SecurityLevel.MEDIUM,  getParameterList(getParameterList(getParameterList(Algorithm.KEYSIZE,2048),Parameter.MODE.toString()+"_0",Mode.getDefault(AlgorithmType.ASYMMETRIC).toString()),Parameter.PADDING.toString()+"_0",Padding.getDefault(AlgorithmType.ASYMMETRIC).getPadding())),
+              SecurityLevel.HIGH,    getParameterList(getParameterList(getParameterList(Algorithm.KEYSIZE,4096),Parameter.MODE.toString()+"_0",Mode.getDefault(AlgorithmType.ASYMMETRIC).toString()),Parameter.PADDING.toString()+"_0",Padding.getDefault(AlgorithmType.ASYMMETRIC).getPadding())),
+              SecurityLevel.QUANTUM, getParameterList(getParameterList(getParameterList(Algorithm.KEYSIZE,8192),Parameter.MODE.toString()+"_0",Mode.getDefault(AlgorithmType.ASYMMETRIC).toString()),Parameter.PADDING.toString()+"_0",Padding.getDefault(AlgorithmType.ASYMMETRIC).getPadding()))
 
     ),
     EC         ( 2100, AlgorithmType.ASYMMETRIC, "ECIES"    , "BC", getSecLevelList( getSecLevelList( getSecLevelList(
-            ECCurveType.SECP384R1.getSecurityLevel(), getParameterList(getParameterList(Algorithm.KEYSIZE,ECCurveType.SECP384R1.getKeySize()),Algorithm.CURVETYPE,ECCurveType.SECP384R1.getECCurveType())),
-            ECCurveType.SECT409K1.getSecurityLevel(), getParameterList(getParameterList(Algorithm.KEYSIZE,ECCurveType.SECT409K1.getKeySize()),Algorithm.CURVETYPE,ECCurveType.SECT409K1.getECCurveType())),
-            ECCurveType.SECP521R1.getSecurityLevel(), getParameterList(getParameterList(Algorithm.KEYSIZE,ECCurveType.SECP521R1.getKeySize()),Algorithm.CURVETYPE,ECCurveType.SECP521R1.getECCurveType()))
+            ECCurveType.SECP384R1.getSecurityLevel(), getParameterList(getParameterList(getParameterList(getParameterList(Algorithm.KEYSIZE,ECCurveType.SECP384R1.getKeySize()),Algorithm.CURVETYPE,ECCurveType.SECP384R1.getECCurveType()),Parameter.MODE.toString()+"_0",Mode.getDefault(AlgorithmType.ASYMMETRIC).toString()),Parameter.PADDING.toString()+"_0",Padding.getDefault(AlgorithmType.ASYMMETRIC).getPadding())),
+            ECCurveType.SECT409K1.getSecurityLevel(), getParameterList(getParameterList(getParameterList(getParameterList(Algorithm.KEYSIZE,ECCurveType.SECT409K1.getKeySize()),Algorithm.CURVETYPE,ECCurveType.SECT409K1.getECCurveType()),Parameter.MODE.toString()+"_0",Mode.getDefault(AlgorithmType.ASYMMETRIC).toString()),Parameter.PADDING.toString()+"_0",Padding.getDefault(AlgorithmType.ASYMMETRIC).getPadding())),
+            ECCurveType.SECP521R1.getSecurityLevel(), getParameterList(getParameterList(getParameterList(getParameterList(Algorithm.KEYSIZE,ECCurveType.SECP521R1.getKeySize()),Algorithm.CURVETYPE,ECCurveType.SECP521R1.getECCurveType()),Parameter.MODE.toString()+"_0",Mode.getDefault(AlgorithmType.ASYMMETRIC).toString()),Parameter.PADDING.toString()+"_0",Padding.getDefault(AlgorithmType.ASYMMETRIC).getPadding()))
     ),
     SHA384     ( 3000, AlgorithmType.HASHING, "sha384", "BC",  SecurityLevel.HIGH ),
     SHA512     ( 3001, AlgorithmType.HASHING, "sha512", "BC", SecurityLevel.QUANTUM );

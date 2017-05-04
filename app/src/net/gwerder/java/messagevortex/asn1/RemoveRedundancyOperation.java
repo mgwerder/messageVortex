@@ -21,14 +21,14 @@ package net.gwerder.java.messagevortex.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
+import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.ASN1Encodable;
 
 import java.io.IOException;
 import java.util.List;
 
 /**
- * Represents a the Blending specification of the routing block.
- *
+ * Represents a remove redundancy operation.
  */
 public class RemoveRedundancyOperation extends AbstractRedundancyOperation {
 
@@ -39,5 +39,7 @@ public class RemoveRedundancyOperation extends AbstractRedundancyOperation {
     public RemoveRedundancyOperation(ASN1Encodable to) throws IOException {
         super(to);
     }
+
+
 
 }

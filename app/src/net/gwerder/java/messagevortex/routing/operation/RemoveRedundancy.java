@@ -21,7 +21,6 @@ package net.gwerder.java.messagevortex.routing.operation;
 // * SOFTWARE.
 // ************************************************************************************
 
-import net.gwerder.java.messagevortex.asn1.IdentityBlock;
 import net.gwerder.java.messagevortex.asn1.RemoveRedundancyOperation;
 
 /**
@@ -31,14 +30,21 @@ public class RemoveRedundancy extends AbstractOperation {
 
     RemoveRedundancyOperation operation;
 
-    public RemoveRedundancy(IdentityBlock i, RemoveRedundancyOperation op) {
-        super(i);
+    public RemoveRedundancy(InternalPayload p, RemoveRedundancyOperation op) {
+        super(p);
         this.operation=op;
     }
 
     @Override
     public boolean canRun() {
+        // FIXME implementation missing
         return false;
+    }
+
+    @Override
+    public int[] execute(int[] id) {
+        // FIXME implemenattion missing
+        return new int[0];
     }
 
     @Override
@@ -46,6 +52,15 @@ public class RemoveRedundancy extends AbstractOperation {
         int[] ret=new int[operation.getDataStripes()+operation.getRedundancy()];
         for(int i=0;i<ret.length;i++) {
             ret[i]=operation.getOutputId()+i;
+        }
+        return ret;
+    }
+
+    @Override
+    public int[] getInputID() {
+        int[] ret=new int[operation.getDataStripes()+operation.getRedundancy()];
+        for(int i=0;i<ret.length;i++) {
+            ret[i]= operation.getInputId()+i;
         }
         return ret;
     }

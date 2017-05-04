@@ -32,13 +32,13 @@ public interface HeaderVerifyer {
      * checks the given IdentityBlock for validity of processing.
      *
      * One of the following criteria must be met:
-     * 1. The identity is known and the serial has not yet reached its replay limmit
+     * 1. The identity is known and the serial has not yet reached its replay limit and is not replayed too early
      * 2. The identity is not known but has a RequestIdentityBlock
      * 3. The IdentityBlock is not known but has a request capability block
      *
      * @param header the header to be verified
      * @return the maximum nuber of bytes allowed for processing
      */
-    int verfyHeaderForProcessing(IdentityBlock header);
+    int verifyHeaderForProcessing(IdentityBlock header);
 
 }

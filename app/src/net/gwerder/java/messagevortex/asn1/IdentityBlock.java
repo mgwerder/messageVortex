@@ -62,11 +62,12 @@ public class IdentityBlock extends AbstractBlock {
     private AsymmetricKey ownIdentity = null;
 
     public IdentityBlock() throws IOException {
-        this.identityKey = new AsymmetricKey(Algorithm.RSA, 2048, Algorithm.RSA.getParameters(SecurityLevel.MEDIUM));
+        Algorithm alg=Algorithm.getDefault(AlgorithmType.ASYMMETRIC);
+        this.identityKey = new AsymmetricKey(alg, alg.getKeySize(SecurityLevel.MEDIUM), alg.getParameters(SecurityLevel.MEDIUM));
         this.serial = (long) (Math.random() * 4294967295L);
         this.maxReplays = 1;
         this.valid = new UsagePeriod(3600);
-        this.decryptionKey = new SymmetricKey(Algorithm.AES256);
+        this.decryptionKey = new SymmetricKey(Algorithm.getDefault(AlgorithmType.SYMMETRIC));
         this.decryptionKeyRaw = this.identityKey.encrypt(this.toDER(decryptionKey.toASN1Object()));
         this.requests = IdentityBlock.NULLREQUESTS;
     }

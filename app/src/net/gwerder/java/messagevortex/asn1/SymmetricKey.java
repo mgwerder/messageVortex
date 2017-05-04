@@ -148,7 +148,7 @@ public class SymmetricKey extends Key {
 
     private Cipher getCipher() throws NoSuchAlgorithmException,NoSuchPaddingException {
         setIV(initialisationVector);
-        return Cipher.getInstance( keytype.getAlgorithmFamily()+"/"+mode.getMode()+"/"+padding.getPadding() );
+        return Cipher.getInstance( keytype.getAlgorithmFamily()+"/"+mode.toString()+"/"+padding.getPadding() );
     }
 
     @Override

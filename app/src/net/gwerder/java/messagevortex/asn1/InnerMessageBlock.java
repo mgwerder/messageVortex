@@ -45,8 +45,8 @@ import java.util.logging.Level;
  */
 public class InnerMessageBlock extends AbstractBlock {
 
-    public static final int PLAIN_MESSAGE=10011;
-    public static final int ENCRYPTED_MESSAGE=10012;
+    public static final int PLAIN_MESSAGE     = 10011;
+    public static final int ENCRYPTED_MESSAGE = 10012;
 
     private static final int ROUTING          = 11001;
     private static final int PAYLOAD          = 11002;

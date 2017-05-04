@@ -112,12 +112,6 @@ public enum Padding {
         return DEFAULT_PADDING.get(at);
     }
 
-    public static Padding setDefault(AlgorithmType at,Padding ndef) {
-        Padding old= DEFAULT_PADDING.get(at);
-        DEFAULT_PADDING.put(at,ndef);
-        return old;
-    }
-
     public int getId() {
         return id;
     }

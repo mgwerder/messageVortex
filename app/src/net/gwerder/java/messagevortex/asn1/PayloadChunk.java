@@ -91,4 +91,9 @@ public class PayloadChunk extends AbstractBlock {
         return sb.toString();
     }
 
+    public boolean isInUsagePeriod() {
+        // FIXME not yet implemented
+        return true;
+    }
+
 }
