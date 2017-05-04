@@ -33,6 +33,7 @@ public class RemoveRedundancy extends AbstractOperation {
     public RemoveRedundancy(InternalPayload p, RemoveRedundancyOperation op) {
         super(p);
         this.operation=op;
+        initDone();
     }
 
     @Override

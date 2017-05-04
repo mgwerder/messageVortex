@@ -22,14 +22,10 @@ package net.gwerder.java.messagevortex.test.routing;
  ***/
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
-import net.gwerder.java.messagevortex.asn1.AddRedundancyOperation;
-import net.gwerder.java.messagevortex.asn1.IdentityBlock;
-import net.gwerder.java.messagevortex.asn1.Payload;
-import net.gwerder.java.messagevortex.asn1.SymmetricKey;
-import net.gwerder.java.messagevortex.routing.operation.AddRedundancy;
-import net.gwerder.java.messagevortex.routing.operation.InternalPayload;
-import net.gwerder.java.messagevortex.routing.operation.InternalPayloadSpace;
+import net.gwerder.java.messagevortex.asn1.*;
+import net.gwerder.java.messagevortex.routing.operation.*;
 import net.gwerder.java.messagevortex.routing.operation.Operation;
+import net.gwerder.java.messagevortex.transport.RandomString;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -89,5 +85,45 @@ public class InternalPayloadTest {
         assertTrue("PayloadSpace isolation test 4",space[0].getInternalPayload(identity[0])!=space[1].getInternalPayload(identity[0]));
         assertTrue("PayloadSpace isolation test 5",space[0].getInternalPayload(identity[0])!=space[2].getInternalPayload(identity[0]));
     }
+
+    @Test
+    public void payloadSpaceSetAndGetTest() {
+        InternalPayload p=space[0].getInternalPayload(identity[0]);
+        String pl=RandomString.nextString((int)(Math.random()*1024*10+1));
+        PayloadChunk pc =new PayloadChunk();
+        pc.setPayload(pl.getBytes());
+        assertTrue("payload space previously unexpetedly not empty",p.setPayload(100,pc)==null);
+        assertTrue("payload space previously unexpetedly not equal",pl.equals(new String(p.getPayload(100).getPayload())));
+    }
+
+    @Test
+    public void payloadSpaceProcessingTest()  {
+        // just a quick small test
+        payloadSpaceProcessingTest(RandomString.nextString(1));
+
+        //test with a 100MB blob
+        payloadSpaceProcessingTest(RandomString.nextString(1024*1024*100)); // creating a random sting up to 100 MB
+
+        // fuzz it with some random strings
+        for(int i=0;i<100;i++) {
+            payloadSpaceProcessingTest(RandomString.nextString((int)(Math.random()*1024*10+1))); // creating a random sting up to 10KB
+        }
+    }
+
+    private void payloadSpaceProcessingTest(String s) {
+        LOGGER.log(Level.INFO,"Testing payload handling with "+s.getBytes().length+" bytes");
+        InternalPayload p=space[0].getInternalPayload(identity[0]);
+        PayloadChunk pc =new PayloadChunk();
+        Operation op=new IdMapOperation(p,200,201,1);
+        pc.setPayload(s.getBytes());
+        assertTrue("payload space previously unexpetedly not empty",p.setPayload(200,pc)==null);
+        assertTrue("addin of operation unexpectedly rejected",p.addOperation(op)==false);
+        assertTrue("target  payload should not be null",p.getPayload(201)!=null);
+        assertTrue("target  payload should be identical",s.equals(new String(p.getPayload(201).getPayload())));
+        p.setPayload(200,null); //remove the payload chunk from store
+        assertTrue("target  payload should be null",p.getPayload(201)==null);
+        p.removeOperation(op);
+    }
+
 
 }

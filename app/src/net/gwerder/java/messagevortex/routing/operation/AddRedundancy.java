@@ -32,6 +32,7 @@ public class AddRedundancy extends AbstractOperation {
     public AddRedundancy(InternalPayload p, AddRedundancyOperation op) {
         super(p);
         this.operation=op;
+        initDone();
     }
 
     @Override

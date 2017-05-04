@@ -33,6 +33,10 @@ public abstract class AbstractOperation implements Operation {
         this.payload=payload;
     }
 
+    void initDone() {
+        payload.addOperation(this);
+    }
+
     public abstract boolean canRun();
 
     public IdentityBlock getIdentity() {

@@ -57,7 +57,7 @@ public class OperationProcessingTest {
             InternalPayload p=ps.getInternalPayload(identity);
             SymmetricKey[] keys=new SymmetricKey[] {new SymmetricKey(),new SymmetricKey(),new SymmetricKey(),new SymmetricKey(),new SymmetricKey(),new SymmetricKey()};
             Operation op=new AddRedundancy(p,new AddRedundancyOperation(1,3,3, Arrays.asList(keys),10,8));
-            p.setOperation(op);
+            p.addOperation(op);
             // FIXME this test is highly incomplete
         }catch(IOException|NoSuchAlgorithmException ioe) {
             ioe.printStackTrace();

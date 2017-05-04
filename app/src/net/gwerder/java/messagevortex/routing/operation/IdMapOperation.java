@@ -1,9 +1,19 @@
 package net.gwerder.java.messagevortex.routing.operation;
 
+import net.gwerder.java.messagevortex.MessageVortexLogger;
+
+import java.util.logging.Level;
+
 /**
  * This is a dummy operation mainly for testing it maps output to input ids.
  */
 public class IdMapOperation extends AbstractOperation {
+
+    private static final java.util.logging.Logger LOGGER;
+    static {
+        LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+        MessageVortexLogger.setGlobalLogLevel( Level.ALL);
+    }
 
     private int[] outputId;
     private int[] inputId;
@@ -16,6 +26,7 @@ public class IdMapOperation extends AbstractOperation {
             inputId[i]=sourceId+i;
             outputId[i]=targetId+i;
         }
+        initDone();
     }
 
     @Override
@@ -35,6 +46,7 @@ public class IdMapOperation extends AbstractOperation {
 
     @Override
     public int[] execute(int[] id) {
+        LOGGER.log(Level.INFO,"running IDMapper "+inputId[0]+"/"+outputId[0]+"/"+inputId.length);
         for(int i=0;i<inputId.length;i++) {
             payload.setCalculatedPayload(outputId[i],payload.getPayload(inputId[i]));
         }

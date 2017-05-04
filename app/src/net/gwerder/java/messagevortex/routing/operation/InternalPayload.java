@@ -21,18 +21,27 @@ package net.gwerder.java.messagevortex.routing.operation;
 // * SOFTWARE.
 // ************************************************************************************
 
+import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.asn1.IdentityBlock;
 import net.gwerder.java.messagevortex.asn1.PayloadChunk;
 
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
 
 /**
  * Represents a payload space of an identity in memory for processing
  */
 public class InternalPayload {
+
+    private static final java.util.logging.Logger LOGGER;
+    static {
+        LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+        MessageVortexLogger.setGlobalLogLevel( Level.ALL);
+    }
 
 
     InternalPayloadSpace payloadSpace;
@@ -74,6 +83,7 @@ public class InternalPayload {
             // build if payload cache is empty
             Operation op=internalOperationOutput.get(id);
             if(op!=null && op.canRun()) {
+                LOGGER.log(Level.INFO,"executing operation "+op+" of identity "+getIdentity()+" to populate payload id "+id);
                 op.execute(new int[] {id});
             }
 
@@ -91,6 +101,10 @@ public class InternalPayload {
             } else {
                 internalPayload.put(id,p);
             }
+            // invalidate all cached payloads depending on this value
+            // FIXME do a sensible cleanup here --- the following line is a stupid dummy
+            internalPayloadCache.clear();
+
             return old;
         }
     }
@@ -135,8 +149,8 @@ public class InternalPayload {
             internalOperationOutput.remove(id[i]);
         }
         id=op.getInputID();
-        for(int i=0;i<id.length;i++) {
-            synchronized(internalOperationInput) {
+        synchronized(internalOperationInput) {
+            for(int i=0;i<id.length;i++) {
                 List<Operation> l=internalOperationInput.get(id[i]);
                 l.remove(op);
                 if(l!=null && l.size()==0) {
@@ -147,7 +161,7 @@ public class InternalPayload {
         operations.remove(op);
     }
 
-    public boolean setOperation(Operation op) {
+    public boolean addOperation(Operation op) {
         // do first a compact cycle if required
         compact();
 
@@ -158,6 +172,21 @@ public class InternalPayload {
 
         // store operation
         registerOperation(op);
+
+        return true;
+    }
+
+    public boolean removeOperation(Operation op) {
+        // check for conflicting operations
+        for( int id:op.getOutputID()) {
+            if(internalOperationOutput.get(id)!=null) return false;
+        }
+
+        // store operation
+        deregisterOperation(op);
+
+        // do first a compact cycle if required
+        compact();
 
         return true;
     }
@@ -175,6 +204,7 @@ public class InternalPayload {
                 if(! op.isInUsagePeriod()) ops.add(op);
             }
             for(Operation op:ops) {
+                LOGGER.log(Level.INFO,"clearing expired operation "+op+" of identity "+getIdentity());
                 deregisterOperation(op);
             }
         }
@@ -190,6 +220,7 @@ public class InternalPayload {
 
             // remove expired payloads
             for(int i:expiredPayloadIds) {
+                LOGGER.log(Level.INFO,"clearing expired payload "+i+" of identity "+getIdentity());
                 setPayload(i,null);
             }
 

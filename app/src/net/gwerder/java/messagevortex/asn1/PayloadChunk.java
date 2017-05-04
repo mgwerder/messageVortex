@@ -24,6 +24,7 @@ package net.gwerder.java.messagevortex.asn1;
 import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class PayloadChunk extends AbstractBlock {
 
@@ -63,6 +64,10 @@ public class PayloadChunk extends AbstractBlock {
         return opl;
     }
 
+    public byte[] getPayload() {
+        return payload;
+    }
+
     @Override
     protected void parse(ASN1Encodable to) throws IOException {
         ASN1Sequence s1 = ASN1Sequence.getInstance(to);
@@ -94,6 +99,15 @@ public class PayloadChunk extends AbstractBlock {
     public boolean isInUsagePeriod() {
         // FIXME not yet implemented
         return true;
+    }
+
+    public boolean equals(Object o) {
+        if(o==null) return false;
+
+        if(! (o instanceof PayloadChunk)) return false;
+        PayloadChunk pl=(PayloadChunk)o;
+
+        return Arrays.equals(getPayload(),pl.getPayload());
     }
 
 }
