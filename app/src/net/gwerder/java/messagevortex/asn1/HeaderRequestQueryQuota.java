@@ -48,7 +48,7 @@ public class HeaderRequestQueryQuota extends HeaderRequest {
     protected void parse(ASN1Encodable ae) throws IOException {
         ASN1Sequence s1 = ASN1Sequence.getInstance(ae);
         int i=0;
-        identity=new AsymmetricKey(s1.getObjectAt(i++));
+        identity=new AsymmetricKey(s1.getObjectAt(i++).toASN1Primitive().getEncoded());
     }
 
     protected HeaderRequest getRequest(ASN1Encodable ae) throws IOException {

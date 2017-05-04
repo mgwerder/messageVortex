@@ -42,13 +42,13 @@ public class IdentityStoreBlock extends AbstractBlock {
 
     private static ExtendedSecureRandom secureRandom = new ExtendedSecureRandom();
 
-    UsagePeriod   valid         = null;
-    int           messageQuota  = 0;
-    int           transferQuota = 0;
-    AsymmetricKey identityKey   = null;
-    String        nodeAddress   = null;
-    AsymmetricKey nodeKey       = null;
-    IdentityType  iType         = null;
+    private UsagePeriod   valid         = null;
+    private int           messageQuota  = 0;
+    private int           transferQuota = 0;
+    private AsymmetricKey identityKey   = null;
+    private String        nodeAddress   = null;
+    private AsymmetricKey nodeKey       = null;
+    private IdentityType  iType         = null;
 
     public IdentityStoreBlock() {
         super();
@@ -185,13 +185,13 @@ public class IdentityStoreBlock extends AbstractBlock {
             ASN1TaggedObject to = ASN1TaggedObject.getInstance( s1.getObjectAt( i ) );
             switch(to.getTagNo()) {
                 case 1001:
-                    identityKey=new AsymmetricKey( to.getObject() );
+                    identityKey=new AsymmetricKey( to.getObject().getEncoded() );
                     break;
                 case 1002:
                     nodeAddress=((ASN1String)(to.getObject())).getString();
                     break;
                 case 1003:
-                    nodeKey=new AsymmetricKey( to.getObject() );
+                    nodeKey=new AsymmetricKey( to.getObject().getEncoded() );
                     break;
                 default:
                     throw new IOException("unknown tag encountered");
@@ -226,21 +226,24 @@ public class IdentityStoreBlock extends AbstractBlock {
 
     public String dumpValueNotation(String prefix) throws IOException {
         StringBuilder sb=new StringBuilder();
-        sb.append( "{" + CRLF );
-        sb.append( prefix + "  valid "+valid.dumpValueNotation( prefix+"    " ) +","+CRLF );
-        sb.append( prefix + "  messageQuota "+messageQuota+","+CRLF );
-        sb.append( prefix + "  transferQuota "+transferQuota );
+        sb.append( "{" ).append( CRLF );
+        sb.append( prefix ).append( "  valid " ).append(valid.dumpValueNotation( prefix+"    " )  ).append("," ).append(CRLF );
+        sb.append( prefix ).append( "  messageQuota " ).append(messageQuota ).append("," ).append(CRLF );
+        sb.append( prefix ).append( "  transferQuota " ).append(transferQuota );
         if(identityKey!=null) {
-            sb.append( ","+CRLF+prefix + "  identity "+identityKey.dumpValueNotation( prefix+"    " ) );
+            sb.append( "," ).append(CRLF);
+            sb.append(prefix ).append( "  identity " ).append( identityKey.dumpValueNotation( prefix+"    " ) );
         }
         if(nodeAddress!=null) {
-            sb.append( ","+CRLF+prefix + "  nodeAddress \""+nodeAddress+"\"" );
+            sb.append( "," ).append(CRLF);
+            sb.append(prefix ).append( "  nodeAddress \"" ).append(nodeAddress ).append("\"" );
         }
         if(nodeKey!=null)     {
-            sb.append( ","+CRLF+prefix + "  nodeKey "+nodeKey.dumpValueNotation( prefix+"    " ) );
+            sb.append( "," ).append(CRLF);
+            sb.append(prefix ).append( "  nodeKey " ).append( nodeKey.dumpValueNotation( prefix+"    " ) );
         }
         sb.append( CRLF );
-        sb.append( prefix + "}" );
+        sb.append( prefix ).append( "}" );
         return sb.toString();
     }
 
@@ -274,13 +277,10 @@ public class IdentityStoreBlock extends AbstractBlock {
         if((identityKey==null && isb.identityKey!=null) || (identityKey!=null && !identityKey.equals(isb.identityKey))) {
             return false;
         }
-        if(nodeAddress!=null && !nodeAddress.equals(isb.nodeAddress) || (nodeAddress==null && isb.nodeAddress!=null)) {
+        if((nodeAddress!=null && !nodeAddress.equals(isb.nodeAddress)) || (nodeAddress==null && isb.nodeAddress!=null)) {
             return false;
         }
-        if(!nodeKey.equals(isb.nodeKey)) {
-            return false;
-        }
-        return true;
+        return nodeKey.equals(isb.nodeKey);
     }
 
     public enum IdentityType {

@@ -32,9 +32,8 @@ import java.util.logging.Level;
 
 /**
  * Represents a the Blending specification of the routing block.
- *
  */
-public class AbstractRedundancyOperation extends Operation {
+public abstract class AbstractRedundancyOperation extends Operation {
 
     public static final int INPUT_ID     = 16000;
     public static final int DATA_STRIPES = 16001;
@@ -137,11 +136,7 @@ public class AbstractRedundancyOperation extends Operation {
         return seq;
     }
 
-    public String dumpValueNotation(String prefix) {
-        StringBuilder sb=new StringBuilder();
-        sb.append(prefix).append("-- FIXME dumping of BlendingSpec object not yet supported").append(CRLF); //FIXME
-        return sb.toString();
-    }
+    public abstract String dumpValueNotation(String prefix) ;
 
     /***
      * Sets the id of the first input id of the payload.

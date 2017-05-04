@@ -31,6 +31,9 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
+/***
+ * represents an identity block of a vortexMessage.
+ */
 public class IdentityBlock extends AbstractBlock {
 
     private static final int ENCRYPTED_HEADER_KEY     = 1000;
@@ -140,10 +143,7 @@ public class IdentityBlock extends AbstractBlock {
             return false;
         }
         // verify equality of encrypted identity block
-        if(!Arrays.equals(encryptedIdentityBlock,o.encryptedIdentityBlock)) {
-            return false;
-        }
-        return true;
+        return Arrays.equals(encryptedIdentityBlock,o.encryptedIdentityBlock);
     }
 
     @Override
@@ -176,7 +176,7 @@ public class IdentityBlock extends AbstractBlock {
             }
             int i = 0;
             ASN1Encodable s3 = s1.getObjectAt( i++ );
-            identityKey = new AsymmetricKey( s3 );
+            identityKey = new AsymmetricKey( s3.toASN1Primitive().getEncoded() );
             serial = ASN1Integer.getInstance( s1.getObjectAt( i++ ) ).getValue().longValue();
             maxReplays = ASN1Integer.getInstance( s1.getObjectAt( i++ ) ).getValue().intValue();
             valid = new UsagePeriod( s1.getObjectAt( i++ ) );

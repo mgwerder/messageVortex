@@ -65,21 +65,40 @@ public class AsymmetricKey extends Key {
     protected byte[]  privateKey = null;
     protected Algorithm mac=Algorithm.getDefault( AlgorithmType.HASHING );
 
+    /***
+     * Creates an asymmetric key based on the byte sequence.
+     *
+     * @param b             the byte array containing the key.
+     * @throws IOException  if an error occures during parsing
+     */
     public AsymmetricKey(byte[] b) throws IOException {
         this(ASN1Sequence.getInstance( b ));
         selftest();
     }
 
-    public AsymmetricKey(ASN1Encodable to) throws IOException  {
+    private AsymmetricKey(ASN1Encodable to) throws IOException  {
         parse(to);
         selftest();
     }
 
+    /***
+     * creates a new Asymmetric key based on the default values.
+     *
+     * @throws IOException if an error happens during generation
+     */
     public AsymmetricKey() throws IOException {
         this( Algorithm.getDefault( AlgorithmType.ASYMMETRIC ), Algorithm.getDefault( AlgorithmType.ASYMMETRIC ).getKeySize(),null );
         selftest();
     }
 
+    /***
+     * creates a new asymmetric key based on the parameters given.
+     *
+     * @param alg      the algorithm of the key
+     * @param keySize  the key size
+     * @param params   the parameters to be used
+     * @throws IOException if the key can not be generated with the given parameters
+     */
     public AsymmetricKey(Algorithm alg, int keySize ,Map<String,Object> params) throws IOException {
         if(this.parameters==null) {
             this.parameters=new HashMap<>();
@@ -109,19 +128,27 @@ public class AsymmetricKey extends Key {
         }
     }
 
-    public boolean equals(Object t) {
+    /***
+     * tests two asymmetric keys for equality.
+     *
+     * Two keys are considered equal if they contain the same parameters and the same keys (public and private)
+     *
+     * @param key the other key
+     * @return true if both keys are considered equivalent
+     */
+    public boolean equals(Object key) {
         // make sure object is not null
-        if(t==null) {
+        if(key==null) {
             return false;
         }
 
         //make sure object is of right type
-        if(! (t instanceof AsymmetricKey)) {
+        if(! (key instanceof AsymmetricKey)) {
             return false;
         }
 
         // compare public keys
-        AsymmetricKey o=(AsymmetricKey)t;
+        AsymmetricKey o=(AsymmetricKey)key;
         if(!Arrays.equals(o.publicKey,publicKey)) {
             return false;
         }
@@ -145,8 +172,11 @@ public class AsymmetricKey extends Key {
     }
 
     @Override
+    /***
+     * returns the hashcode of the dump representation.
+     */
     public int hashCode() {
-        return super.hashCode();
+        return dumpValueNotation("",DumpType.ALL).hashCode();
     }
 
     private void createKey(Algorithm alg, Map<String, Object> params) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException, InvalidParameterSpecException {
@@ -202,12 +232,30 @@ public class AsymmetricKey extends Key {
         }
     }
 
+    /***
+     * Checks if the object contains a private key
+     *
+     * @return true if the object contains a private key
+     */
     public boolean hasPrivateKey() { return privateKey!=null; }
 
+    /***
+     * Generates the ASN1 notation of the object.
+     *
+     * @param prefix the line prefix to be used (normally &quot;&quot;)
+     * @return the string representation of the ASN1 dump
+     */
     public String dumpValueNotation(String prefix) {
         return dumpValueNotation(prefix,DumpType.PUBLIC_ONLY);
     }
 
+    /***
+     * Generates the ASN1 notation of the object.
+     *
+     * @param prefix the line prefix to be used (normally &quot;&quot;)
+     * @param dt     the dump type to be used (normally DumpType.PUBLIC_ONLY)
+     * @return the string representation of the ASN1 dump
+     */
     public String dumpValueNotation(String prefix,DumpType dt) {
         StringBuilder sb=new StringBuilder();
         sb.append("{"+CRLF);
@@ -237,26 +285,63 @@ public class AsymmetricKey extends Key {
         return sb.toString();
     }
 
-    public ASN1Object toASN1Object() throws IOException{
+    /***
+     * Dumps the key as ASN1 object.
+     *
+     * @return the ASN1 object suitable for encoding
+     * @throws IOException if not encodable
+     */
+    public ASN1Object toASN1Object() throws IOException {
         return toASN1Object( DumpType.ALL );
     }
 
+    /***
+     * Dumps the key as ASN1 object.
+     *
+     * @param dt the dump type to be used
+     * @return the ASN1 object suitable for encoding
+     * @throws IOException if not encodable
+     */
     public ASN1Object toASN1Object(DumpType dt) throws IOException {
+        // at least a public key must be set
         if(publicKey==null) {
             throw new IOException("publicKey may not be null when dumping");
         }
         ASN1EncodableVector v =new ASN1EncodableVector();
-        v.add(encodeKeyParameter());
-        if(dt.dumpPublicKey()) {
-            v.add(new DERTaggedObject( true,PUBLIC_KEY,new DEROctetString( publicKey )));
-        }
-        if (privateKey != null && dt.dumpPrivateKey()) {
-            v.add(new DERTaggedObject( true,PRIVATE_KEY,new DEROctetString( privateKey )));
-        }
+
+        // add key parameters
+        addToASN1Parameter(v);
+        // add public key
+        addToASN1PublicKey(v,dt);
+        // add private key
+        addToASN1PrivateKey(v,dt);
+
         return new DERSequence( v );
     }
 
+    private void addToASN1Parameter(ASN1EncodableVector v ) throws IOException {
+        v.add(encodeKeyParameter());
+    }
+
+    private void addToASN1PublicKey(ASN1EncodableVector v, DumpType dt ) {
+        if(dt.dumpPublicKey()) {
+            v.add(new DERTaggedObject( true,PUBLIC_KEY,new DEROctetString( publicKey )));
+        }
+    }
+
+    private void addToASN1PrivateKey(ASN1EncodableVector v, DumpType dt ) {
+        if (privateKey != null && dt.dumpPrivateKey()) {
+            v.add(new DERTaggedObject( true,PRIVATE_KEY,new DEROctetString( privateKey )));
+        }
+    }
+
     @Override
+    /***
+     * Encrypts a byte array using the key contained in this object.
+     *
+     * @param b the plain text byte array to encrypt
+     * @return the encrypted byte array including padding
+     */
     public byte[] encrypt(byte[] b) throws IOException {
         try {
             KeyPair key = getKeyPair();
@@ -274,6 +359,12 @@ public class AsymmetricKey extends Key {
     }
 
     @Override
+    /***
+     * Decrypts a byte array using the key contained in this object.
+     *
+     * @param b the encrypted byte array
+     * @return the plain text byte array
+     */
     public byte[] decrypt(byte[] b) throws IOException {
         try {
             KeyPair key = getKeyPair();
@@ -287,10 +378,27 @@ public class AsymmetricKey extends Key {
 
     }
 
+    /***
+     * Signs a byte array.
+     *
+     * This method uses the default hashing algorithm.
+     *
+     * @param b the byte array to be signed
+     * @return the signature
+     * @throws IOException if unable to carry out signature
+     */
     public byte[] sign(byte[] b) throws IOException {
         return sign( b, Algorithm.getDefault( AlgorithmType.HASHING ) );
     }
 
+    /***
+     * Signs a byte array.
+     *
+     * @param b the byte array to be signed
+     * @param mac the hashing algorithm to be used
+     * @return the signature
+     * @throws IOException if unable to carry out signature
+     */
     public byte[] sign(byte[] b, Algorithm mac) throws IOException {
         Signature signature;
         try {
@@ -304,10 +412,27 @@ public class AsymmetricKey extends Key {
         }
     }
 
+    /***
+     * Verifies a given signature accourding to the objects public key.
+     *
+     * @param b the byte array representing the message
+     * @param sig the byte array representing the signature
+     * @return true if signature could be verified successfully
+     * @throws IOException if signature processing failed
+     */
     public boolean verify(byte[] b, byte[] sig) throws IOException {
         return verify( b, sig, Algorithm.getDefault( AlgorithmType.HASHING ) );
     }
 
+    /***
+     * Verifies a given signature accourding to the objects public key.
+     *
+     * @param b the byte array representing the message
+     * @param sig the byte array representing the signature
+     * @param mac the mac algorithm to verify the signature
+     * @return true if signature could be verified successfully
+     * @throws IOException if signature processing failed
+     */
     public boolean verify(byte[] b, byte[] sig, Algorithm mac) throws IOException {
         Signature signature;
         try {
@@ -361,6 +486,13 @@ public class AsymmetricKey extends Key {
         }
     }
 
+    /***
+     * Sets the public key.
+     *
+     * @param b the byte array representing the public key
+     * @return the previously set public key
+     * @throws NullPointerException if key was tried to set to null
+     */
     public byte[] setPublicKey(byte[] b) throws InvalidKeyException {
         if(b==null) {
             throw new NullPointerException( "Public key may not be null" );
@@ -370,36 +502,92 @@ public class AsymmetricKey extends Key {
         return old;
     }
 
+    /***
+     * Gets the public key in binary representation.
+     * @return the public key
+     */
     public byte[] getPublicKey() {return publicKey; }
 
-    public byte[] setPrivateKey(byte[] b) throws InvalidKeyException {
+    /***
+     * Sets the private key of this object.
+     *
+     * @param b the byte representation of the key to be set.
+     * @return the previously set private key
+     */
+    public byte[] setPrivateKey(byte[] b) {
         byte[] old=privateKey;
         privateKey=b;
         return old;
     }
 
+    /***
+     * Gets the private key of this object.
+     *
+     * @return the pyte representation of the private key
+     */
     public byte[] getPrivateKey() {return privateKey; }
 
+    /***
+     * Gets the algorithm of this key type.
+     *
+     * @return the algorithm used for generation
+     */
     public Algorithm getAlgorithm() {return keytype; }
 
+    /***
+     * Gets the padding used for encryption.
+     *
+     * @return the padding which is used for encryption
+     */
     public Padding getPadding() {
         return padding==null?Padding.getDefault( AlgorithmType.ASYMMETRIC ):padding;
     }
 
+    /***
+     * Sets the padding used for encryption.
+     *
+     * @param p the padding to be set
+     * @return the previously set padding
+     */
     public Padding setPadding(Padding p) {
         Padding old=padding;
         padding=p;
         return old;
     }
 
+    /***
+     * Gets the size of the key stored in this object.
+     * @return the key size in bits
+     */
     public int getKeySize() {
         return (Integer)(this.parameters.get(Parameter.KEYSIZE.toString()+"_0"));
     }
 
+    /***
+     * Gets the mode used for encryption.
+     *
+     * @return the mode set used for encryption
+     */
     public Mode getMode() {
-        return mode==null?Mode.getDefault( AlgorithmType.ASYMMETRIC ):mode;
+        return mode;
     }
 
+    /***
+     * Sets the mode used for encryption.
+     *
+     * @param m the mode to be set
+     * @return the mode previously set
+     */
+    public Mode setMode(Mode m) {
+        Mode old=mode;
+        mode=m;
+        return old;
+    }
+
+    /***
+     * Gets a textual representation of the objects parameters (without the keys)
+     * @return the string
+     */
     public String toString() {
         return "([AsymmetricKey]"+keytype+"/"+parameters.get(""+ Parameter.KEYSIZE.toString()+"_0")+"/"+mode+"/"+getPadding().toString()+")";
     }
