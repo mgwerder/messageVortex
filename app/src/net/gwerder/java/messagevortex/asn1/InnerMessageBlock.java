@@ -1,25 +1,25 @@
 package net.gwerder.java.messagevortex.asn1;
-/***
- * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- ***/
+// ************************************************************************************
+// * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
+// *
+// * Permission is hereby granted, free of charge, to any person obtaining a copy
+// * of this software and associated documentation files (the "Software"), to deal
+// * in the Software without restriction, including without limitation the rights
+// * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// * copies of the Software, and to permit persons to whom the Software is
+// * furnished to do so, subject to the following conditions:
+// *
+// * The above copyright notice and this permission notice shall be included in all
+// * copies or substantial portions of the Software.
+// *
+// * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// * SOFTWARE.
+// ************************************************************************************
 
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
@@ -40,6 +40,8 @@ import java.util.logging.Level;
 
 /***
  * represents the inner encrypted part of a VortexMessage.
+ *
+ * This part is specified as InnerMessageBlock in the file asn.1/messageBlocks.asn1
  */
 public class InnerMessageBlock extends AbstractBlock {
 
@@ -59,25 +61,22 @@ public class InnerMessageBlock extends AbstractBlock {
         MessageVortexLogger.setGlobalLogLevel( Level.ALL);
     }
 
+    public InnerMessageBlock() throws IOException {
+        this(new IdentityBlock() );
+    }
+
     public InnerMessageBlock(IdentityBlock i) {
         identity=i;
         routing=null;
         payload=null;
     }
 
-    public InnerMessageBlock(File f) throws IOException,ParseException,NoSuchAlgorithmException {
-        this((IdentityBlock)null);
-        Path asn1DataPath = Paths.get(f.getAbsolutePath());
-        byte[] p = Files.readAllBytes(asn1DataPath);
-        parse( p );
-    }
-
-    public InnerMessageBlock(byte[] b) throws IOException,ParseException,NoSuchAlgorithmException {
+    public InnerMessageBlock(byte[] b) throws IOException {
         this((IdentityBlock)null);
         parse( b );
     }
 
-    protected void parse(byte[] p) throws IOException,ParseException,NoSuchAlgorithmException {
+    protected void parse(byte[] p) throws IOException {
         ASN1InputStream aIn=new ASN1InputStream( p );
         parse(aIn.readObject());
         if( identity==null ) {
@@ -85,7 +84,7 @@ public class InnerMessageBlock extends AbstractBlock {
         }
     }
 
-    protected void parse(ASN1Encodable o) throws IOException,ParseException,NoSuchAlgorithmException {
+    protected void parse(ASN1Encodable o) throws IOException {
         LOGGER.log(Level.FINER,"Executing parse()");
         int i = 0;
         ASN1Sequence s1 = ASN1Sequence.getInstance( o );
@@ -94,7 +93,7 @@ public class InnerMessageBlock extends AbstractBlock {
         // check tag number of routing block
         ASN1TaggedObject ae = ASN1TaggedObject.getInstance( s1.getObjectAt( i++ ) );
         if(ASN1TaggedObject.getInstance(ae).getTagNo()!=ROUTING) {
-            throw new ParseException( "got unexpected tag (expect: " + ROUTING + "; got: " + ASN1TaggedObject.getInstance( ae ).getTagNo() + ")", 0 );
+            throw new IOException( "got unexpected tag (expect: " + ROUTING + "; got: " + ASN1TaggedObject.getInstance( ae ).getTagNo() + ")" );
         }
 
         // getting routing blocks
@@ -108,7 +107,7 @@ public class InnerMessageBlock extends AbstractBlock {
         // check tag number of payloadblock
         ae = ASN1TaggedObject.getInstance( s1.getObjectAt( i++ ) );
         if(ASN1TaggedObject.getInstance(ae).getTagNo()!=PAYLOAD) {
-            throw new ParseException( "got unexpected tag (expect: " + PAYLOAD+ "; got: " + ASN1TaggedObject.getInstance( ae ).getTagNo() + ")", 0 );
+            throw new IOException( "got unexpected tag (expect: " + PAYLOAD+ "; got: " + ASN1TaggedObject.getInstance( ae ).getTagNo() + ")" );
         }
 
         // getting routing blocks
