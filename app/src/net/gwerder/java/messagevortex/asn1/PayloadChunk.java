@@ -141,6 +141,27 @@ public class PayloadChunk extends AbstractBlock {
     }
 
     /***
+     * Sets the id of the payload chunk.
+     *
+     * @param id the id to be set
+     * @return the previously set id
+     */
+    public int setId(int id) {
+        int ret=this.id;
+        this.id=id;
+        return ret;
+    }
+
+    /***
+     * Gets the id of the payload chunk.
+     *
+     * @return the id currently set
+     */
+    public int getId() {
+        return this.id;
+    }
+
+    /***
      * Dumps the current object as a value representation.
      *
      * @param prefix the prefix to be used (nurmally used for indentation

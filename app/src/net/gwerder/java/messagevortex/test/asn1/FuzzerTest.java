@@ -88,6 +88,7 @@ public class FuzzerTest {
                 byte[] plb=new byte[esr.nextInt(1024*1024)];
                 esr.nextBytes( plb );
                 s.setPayload(plb);
+                s.setId(1000);
                 assertTrue( "PayloadChunk may not be null", s != null );
                 byte[] b1 = s.toBytes();
                 assertTrue( "Byte representation may not be null", b1 != null );
