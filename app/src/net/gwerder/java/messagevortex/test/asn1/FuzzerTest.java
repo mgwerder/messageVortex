@@ -5,6 +5,7 @@ import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.asn1.*;
 import net.gwerder.java.messagevortex.asn1.encryption.Algorithm;
 import net.gwerder.java.messagevortex.asn1.encryption.AlgorithmType;
+import org.bouncycastle.asn1.ASN1InputStream;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -90,7 +91,7 @@ public class FuzzerTest {
                 assertTrue( "PayloadChunk may not be null", s != null );
                 byte[] b1 = s.toBytes();
                 assertTrue( "Byte representation may not be null", b1 != null );
-                byte[] b2 = (new PayloadChunk( b1 )).toBytes();
+                byte[] b2 = (new PayloadChunk( new ASN1InputStream(b1).readObject() )).toBytes();
                 assertTrue( "Byte arrays should be equal when reencoding", Arrays.equals( b1, b2 ) );
             }
         } catch (Exception e) {

@@ -24,74 +24,141 @@ package net.gwerder.java.messagevortex.asn1;
 import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 public class PayloadChunk extends AbstractBlock {
 
-    long offset = -1;
-    int[]  rbi = null;
+    /* ASN1 tag number for a contained payload */
+    public static final int PAYLOAD = 100;
+    /* ASN1 tag number for a contained reply block */
+    public static final int REPLY   = 101;
+
+    /* the minimum required id in order to allow dumping to der */
+    public static final int MIN_VALID_ID = 100;
+
+    int    id = 0;
     byte[] payload=null;
+    int    payloadType = PAYLOAD;
 
+    /***
+     * Creates an empty payload block.
+     */
     public PayloadChunk() {
-        offset=0;
-        rbi=new int[] { 0 };
+        id=0;
         payload=new byte[0];
+        payloadType=-1;
     }
 
-    public PayloadChunk(byte[] b) throws IOException {
-        ASN1InputStream aIn=new ASN1InputStream( b );
-        parse(aIn.readObject());
-    }
-
+    /***
+     * Creates a payload block from a ASN1 stream.
+     */
     public PayloadChunk(ASN1Encodable to) throws IOException {
         parse(to);
     }
 
+    /***
+     * Creates a der encoded ASN1 representation of the payload chunk.
+     *
+     * @return
+     * @throws IOException if id is too low or the payload has not been set
+     */
     public ASN1Object toASN1Object() throws IOException{
         ASN1EncodableVector v=new ASN1EncodableVector();
-        v.add( new ASN1Integer( offset ) );
+        if(id<MIN_VALID_ID) {
+            throw new IOException("illegal dump id is set");
+        }
+        v.add( new ASN1Integer( id ) );
 
-        // FIXME RBI dummy only
-        v.add( new DERTaggedObject( true,0,new DERSequence() ));
-
-        v.add( new DERTaggedObject( true, 100, new DEROctetString(payload) ));
+        if(payloadType==PAYLOAD) {
+            v.add(new DERTaggedObject(true, PAYLOAD, new DEROctetString(payload)));
+        } else if(payloadType==REPLY) {
+            v.add(new DERTaggedObject(true, REPLY, new DEROctetString(payload)));
+        } else {
+            throw new IOException( "unable to dump payload block as payload and reply are empty" );
+        }
         return new DERSequence( v );
     }
 
+    /***
+     * set a byte array as payload.
+     *
+     * @param b the payload to be set
+     * @return the previously set payload (may have been a reply block)
+     */
     public byte[] setPayload(byte[] b) {
         byte[] opl=payload;
         payload=b;
+        payloadType=PAYLOAD;
         return opl;
     }
 
+    /***
+     * Gets the the currently set payload.
+     *
+     * @return the payload as byte array or null if a replyblock has been set
+     */
     public byte[] getPayload() {
-        return payload;
+        if(payloadType!=PAYLOAD) return null;
+        return payload.clone();
+    }
+
+    /***
+     * set a byte array as reply block.
+     *
+     * @param b the reply block to be set
+     * @return the previously set reply block (may have been a payload block)
+     */
+    public byte[] setReplyBlock(byte[] b) {
+        byte[] opl=payload;
+        payload=b;
+        payloadType=REPLY;
+        return opl;
+    }
+
+    /***
+     * Gets the the currently set reply block.
+     *
+     * @return the reply block as byte array or null if a payload block has been set
+     */
+    public byte[] getReplyBlock() {
+        if(payloadType!=REPLY) return null;
+        return payload.clone();
     }
 
     @Override
     protected void parse(ASN1Encodable to) throws IOException {
         ASN1Sequence s1 = ASN1Sequence.getInstance(to);
         int i=0;
-        offset=ASN1Integer.getInstance( s1.getObjectAt(i++)).getValue().longValue();
-
-        //FIXME routingBlockIdentifier parsing missing
-        // The following line is a dummy
-        i++;
+        id=ASN1Integer.getInstance( s1.getObjectAt(i++)).getValue().intValue();
 
         ASN1TaggedObject dto=ASN1TaggedObject.getInstance( s1.getObjectAt(i++) );
-        if(dto.getTagNo()!=100) {
-            throw new IOException( "got bad tag number (expected:10;got:"+dto.getTagNo()+")" );
-        }
-        payload=ASN1OctetString.getInstance( dto.getObject() ).getOctets();
-        if(offset<0) {
-            throw new IOException("illegal offset parsed");
+        if(dto.getTagNo()==PAYLOAD) {
+            setPayload(ASN1OctetString.getInstance( dto.getObject() ).getOctets());
+        } else if(dto.getTagNo()==REPLY) {
+                setReplyBlock(ASN1OctetString.getInstance( dto.getObject() ).getOctets());
+        } else {
+            throw new IOException( "got bad tag number (expected:"+REPLY+" or "+PAYLOAD+";got:"+dto.getTagNo()+")" );
         }
     }
 
-    public String dumpValueNotation(String prefix) {
+    /***
+     * Dumps the current object as a value representation.
+     *
+     * @param prefix the prefix to be used (nurmally used for indentation
+     * @return       the string representation of the ASN1 object
+     * @throws IOException if the payload id is below MIN_VALID_ID or no payload/reply block has been set
+     */
+    public String dumpValueNotation(String prefix) throws IOException {
         StringBuilder sb=new StringBuilder();
         sb.append(" {"+CRLF);
-        sb.append(prefix+"  -- FIXME dumping of PayloadChunk object not yet supported"+CRLF);
+        sb.append(prefix+"  id "+id+","+CRLF);
+        sb.append(prefix+"  content ");
+        if(payloadType==PAYLOAD) {
+            sb.append("payload " + toHex(payload) + CRLF);
+        } else if(payloadType==REPLY) {
+            sb.append("reply " + toHex(payload) + CRLF);
+        } else {
+            throw new IOException( "unable to determine payload type (expected:"+REPLY+" or "+PAYLOAD+";got:"+payloadType+")" );
+        }
         sb.append(prefix+"}");
         return sb.toString();
     }
@@ -101,13 +168,27 @@ public class PayloadChunk extends AbstractBlock {
         return true;
     }
 
+    @Override
     public boolean equals(Object o) {
         if(o==null) return false;
 
         if(! (o instanceof PayloadChunk)) return false;
         PayloadChunk pl=(PayloadChunk)o;
 
-        return Arrays.equals(getPayload(),pl.getPayload());
+        try {
+            return dumpValueNotation("").equals(pl.dumpValueNotation(""));
+        } catch(IOException ioe) {
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        try {
+            return dumpValueNotation("").hashCode();
+        } catch(IOException ioe) {
+            return 0;
+        }
     }
 
 }
