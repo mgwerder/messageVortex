@@ -25,10 +25,8 @@ import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.asn1.IdentityBlock;
 import net.gwerder.java.messagevortex.asn1.PayloadChunk;
 
-import java.util.AbstractList;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.security.InvalidParameterException;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
@@ -46,11 +44,11 @@ public class InternalPayload {
 
     InternalPayloadSpace payloadSpace;
     IdentityBlock identity;
-    List<Operation> operations=new ArrayList<>();
-    Map<Integer,PayloadChunk> internalPayload=new ConcurrentHashMap<>();
-    Map<Integer,PayloadChunk> internalPayloadCache=new ConcurrentHashMap<>();
-    Map<Integer,Operation> internalOperationOutput=new ConcurrentHashMap<>();
-    Map<Integer,List<Operation>> internalOperationInput=new ConcurrentHashMap<>();
+    final List<Operation> operations=new ArrayList<>();
+    final Map<Integer,PayloadChunk> internalPayload=new ConcurrentHashMap<>();
+    final Map<Integer,PayloadChunk> internalPayloadCache=new ConcurrentHashMap<>();
+    final Map<Integer,Operation> internalOperationOutput=new ConcurrentHashMap<>();
+    final Map<Integer,List<Operation>> internalOperationInput=new ConcurrentHashMap<>();
 
     private long lastcompact=System.currentTimeMillis();
 
@@ -102,11 +100,30 @@ public class InternalPayload {
                 internalPayload.put(id,p);
             }
             // invalidate all cached payloads depending on this value
-            // FIXME do a sensible cleanup here --- the following line is a stupid dummy
-            internalPayloadCache.clear();
+            invalidateInternalPayloadCache(id);
 
             return old;
         }
+    }
+
+    private void invalidateInternalPayloadCache(int id) {
+        // WARNING this method is not as threadsafe as it should be
+
+        List<Operation> ops=new ArrayList<>();
+        // remove calculated value of field
+        setCalculatedPayload(id,null);
+
+        //invalidate all subsequent depending values
+        synchronized (operations) {
+            for(Operation op:operations) {
+                if(Arrays.binarySearch(op.getInputID(),id)>=0) {
+                    for(int i:op.getOutputID()) {
+                        invalidateInternalPayloadCache(i);
+                    }
+                }
+            }
+        }
+        internalPayloadCache.clear();
     }
 
     public void setCalculatedPayload(int id,PayloadChunk p) {
@@ -119,13 +136,25 @@ public class InternalPayload {
     }
 
     private void registerOperation(Operation op) {
-        if(op==null || op.getOutputID()==null) {
+        // check for valid operation
+        if(op==null || op.getOutputID()==null || op.getOutputID().length==0) {
             throw new NullPointerException();
         }
+
+        // search for circular dependencies
+        for(int id:op.getOutputID()) {
+            if(isCircularDependent(op,id)) {
+                throw new InvalidParameterException("circular dependency detected on id "+id);
+            }
+        }
+
+        // register output ids
         int[] id=op.getOutputID();
         for(int i=0;i<id.length;i++) {
             internalOperationOutput.put(id[i],op);
         }
+
+        //register input ids
         id=op.getInputID();
         for(int i=0;i<id.length;i++) {
             synchronized(internalOperationInput) {
@@ -137,7 +166,24 @@ public class InternalPayload {
                 l.add(op);
             }
         }
+
+        // register operation
         operations.add(op);
+    }
+
+    private boolean isCircularDependent(Operation op,int id) {
+        Operation top=internalOperationOutput.get(id);
+        if (top != null) {
+            for (int tid : top.getInputID()) {
+                // this operation generates that id
+                if (Arrays.binarySearch(op.getOutputID(), tid) >= 0) {
+                    return true;
+                } else if (isCircularDependent(op, tid)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private void deregisterOperation(Operation op) {

@@ -174,7 +174,8 @@ BEGIN
     dataStripes        [16001] INTEGER (1..254),
     redundancy         [16002] INTEGER (1..254),
     keys               [16003] SEQUENCE (SIZE (2..512)) OF SymmetricKey,
-    outputId           [16004] INTEGER (1..maxID)
+    outputId           [16004] INTEGER (1..maxID),
+    gfSize             [16005] INTEGER (2..maxGFSize)
   }
 
   SplitPayloadOperation ::= SEQUENCE {
@@ -333,17 +334,18 @@ BEGIN
   }
   
   StatusBlock ::= SEQUENCE {
-    code            ErrorCode,
+    code            StatusCode,
     request         HeaderRequest,
     ...
   }
   
-  ErrorCode ::= ENUMERATED {
+  StatusCode ::= ENUMERATED {
     
     -- System messages
-    ok                          (2001),
+    ok                          (2000),
     transferQuotaStatus         (2101),
     messageQuotaStatus          (2102),
+	puzleRequired               (2201),
     
     -- protocol usage failures
     transferQuotaExceeded       (3001),
@@ -368,7 +370,6 @@ BEGIN
   
   PayloadChunk ::= SEQUENCE {
     id                        INTEGER (0..maxID),
-    routingBlockForwardSecret INTEGER (0..maxSerial),
     payload                   CHOICE {
       payload                   [100] OCTET STRING,
       replyBlock                [101] ReplyBlock

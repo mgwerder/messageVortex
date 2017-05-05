@@ -21,6 +21,8 @@ package net.gwerder.java.messagevortex.asn1.encryption;
 // * SOFTWARE.
 // ************************************************************************************
 
+import org.bouncycastle.asn1.ASN1Enumerated;
+
 import java.util.*;
 
 /**
@@ -71,6 +73,7 @@ public enum Padding {
     private String txt;
     private HashSet<AlgorithmType> at;
     private SizeCalc s;
+    final ASN1Enumerated asn;
 
     Padding(int id, String txt, AlgorithmType[] at, SizeCalc s) {
         this.id=id;
@@ -78,6 +81,7 @@ public enum Padding {
         this.at = new HashSet<>();
         this.at.addAll( Arrays.asList(at) );
         this.s=s;
+        this.asn=new ASN1Enumerated(id);
     }
 
     public static Padding[] getAlgorithms(AlgorithmType at) {
@@ -128,5 +132,14 @@ public enum Padding {
     public String toString() {
         return super.toString().toLowerCase();
     }
+
+    /***
+     * returns the corresponding ASN1 enumeration
+     * @return the ASN1 enumeration representing this padding
+     */
+    public ASN1Enumerated toASN1() {
+        return asn;
+    }
+
 
 }

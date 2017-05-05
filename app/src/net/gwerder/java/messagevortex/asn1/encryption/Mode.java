@@ -21,6 +21,8 @@ package net.gwerder.java.messagevortex.asn1.encryption;
 // * SOFTWARE.
 // ************************************************************************************
 
+import org.bouncycastle.asn1.ASN1Enumerated;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,11 +51,12 @@ public enum Mode {
         def.put(AlgorithmType.SYMMETRIC,Mode.CBC);
     }
 
-    int id=-1;
-    String txt=null;
-    boolean requiresIV=false;
-    Algorithm[] alg;
-    Padding[] pad;
+    final int id;
+    final String txt;
+    final boolean requiresIV;
+    final Algorithm[] alg;
+    final Padding[] pad;
+    final ASN1Enumerated asn;
 
     Mode(int id,String txt, boolean iv,Algorithm[] alg,Padding[] pad) {
         this.id=id;
@@ -61,6 +64,7 @@ public enum Mode {
         this.requiresIV=iv;
         this.alg=alg;
         this.pad=pad;
+        this.asn=new ASN1Enumerated(id);
     }
 
     public boolean getRequiresIV() {
@@ -85,10 +89,22 @@ public enum Mode {
         return null;
     }
 
-    public static Mode getDefault(AlgorithmType t) {
-        return def.get(t);
+    /***
+     * Gets the currently set default value for the given type
+     * @param type the type for which the default value is required
+     * @return     the default value requested
+     */
+    public static Mode getDefault(AlgorithmType type) {
+        return def.get(type);
     }
 
+    /***
+     * Sets the default encryption mode for a specific algorithm type.
+     *
+     * @param t     the type for which the default value should be set
+     * @param ndef  the new default value
+     * @return      the previously set default value
+     */
     public static Mode setDefault(AlgorithmType t,Mode ndef) {
         Mode old=def.get(t);
         def.put(t,ndef);
@@ -99,12 +115,34 @@ public enum Mode {
         return id;
     }
 
+    /***
+     * Gets the mode identifier as required by the encryption provider.
+     *
+     * This value is returned regardless of the support of the provider classes.
+     *
+     * @return the mode identifier
+     */
     public String toString() {
         return txt;
     }
 
+    /***
+     * Gets all known paddings regardless of their support.
+     *
+     * @return an array of all paddings
+     */
     public Padding[] getPaddings() {
         return pad;
     }
+
+    /**
+     * Gets the corresponding ASN1 enumeration.
+     *
+     * @return the corresponding ASN1 enumeration
+     */
+    public ASN1Enumerated toASN1() {
+        return asn;
+    }
+
 }
 

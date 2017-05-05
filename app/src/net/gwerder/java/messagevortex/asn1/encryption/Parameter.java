@@ -21,6 +21,8 @@ package net.gwerder.java.messagevortex.asn1.encryption;
 // * SOFTWARE.
 // ************************************************************************************
 
+import org.bouncycastle.asn1.ASN1Enumerated;
+
 /**
  * Enumeration of all supported Parameters.
  *
@@ -34,8 +36,8 @@ public enum Parameter {
     MODE      (10004,"mode"),
     PADDING   (10005,"padding");
 
-    int id=-1;
-    String txt=null;
+    final int id;
+    final String txt;
 
     Parameter(int id,String txt) {
         this.id=id;
