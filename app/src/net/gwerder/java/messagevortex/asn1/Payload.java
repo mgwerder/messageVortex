@@ -35,7 +35,7 @@ public class Payload extends AbstractBlock {
     }
 
     public Payload() {
-        payloads=new PayloadChunk[] {new PayloadChunk()};
+        payloads=new PayloadChunk[0];
     }
 
     public Payload(ASN1Encodable to) throws IOException {
