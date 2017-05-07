@@ -81,15 +81,15 @@ public class AsymmetricKeyPreCalculator implements Serializable {
 
     }
 
-    private static final Map<Map<String,Object>,Queue<AsymmetricKey>> cache=new ConcurrentHashMap<>();
+    private static final Map<AlgorithmParameter,Queue<AsymmetricKey>> cache=new ConcurrentHashMap<>();
 
-    private static final Map<Map<String,Object>,Integer> cacheSize=new ConcurrentHashMap<>();
+    private static final Map<AlgorithmParameter,Integer> cacheSize=new ConcurrentHashMap<>();
 
     private static InternalThread runner=null;
 
     private static String filename=null;
 
-    public static AsymmetricKey getPrecomputedAsymmetricKey(Map<String,Object> parameters) {
+    public static AsymmetricKey getPrecomputedAsymmetricKey(AlgorithmParameter parameters) {
         synchronized (cache) {
             if(filename==null && runner!=null) {
                 if(!runner.isAlive()) {
@@ -102,7 +102,7 @@ public class AsymmetricKeyPreCalculator implements Serializable {
             } else if(cache.get(parameters)==null) {
                 // this cache does not yet exist schedule for creation
                 cacheSize.put(parameters,1);
-                cache.put(parameters,new ArrayDeque<>());
+                cache.put(parameters,new ArrayDeque<AsymmetricKey>());
                 return null;
             } else if(cache.get(parameters).size()==0) {
                 // this cache is too small as it is empty
@@ -162,8 +162,8 @@ public class AsymmetricKeyPreCalculator implements Serializable {
 
     private static void load() throws IOException,ClassNotFoundException {
         ObjectInputStream f = new ObjectInputStream(new FileInputStream(filename));
-        Map<Map<String, Object>, Queue<AsymmetricKey>> lc = (Map<Map<String, Object>, Queue<AsymmetricKey>>)f.readObject();
-        Map<Map<String, Object>, Integer> lcc = (Map<Map<String, Object>, Integer>) (f.readObject());
+        Map<AlgorithmParameter, Queue<AsymmetricKey>> lc = (Map<AlgorithmParameter, Queue<AsymmetricKey>>)f.readObject();
+        Map<AlgorithmParameter, Integer> lcc = (Map<AlgorithmParameter, Integer>) (f.readObject());
         cache.clear();
         cache.putAll(lc);
         cacheSize.clear();

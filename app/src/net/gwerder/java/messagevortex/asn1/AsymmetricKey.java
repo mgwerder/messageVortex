@@ -107,7 +107,7 @@ public class AsymmetricKey extends Key {
         }
 
         try {
-            createKey( parameters );
+            createKey();
         } catch (NoSuchAlgorithmException | NoSuchProviderException | InvalidAlgorithmParameterException | InvalidParameterSpecException e) {
             throw new IOException( "Exception while creating key", e );
         }
@@ -166,15 +166,22 @@ public class AsymmetricKey extends Key {
         return dumpValueNotation("",DumpType.ALL).hashCode();
     }
 
-    private void createKey(AlgorithmParameter params) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException, InvalidParameterSpecException {
-        if(params!=null) {
-            this.parameters=params;
+    private void createKey() throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException, InvalidParameterSpecException {
+        if(parameters==null) {
+            throw new NullPointerException("parameters may not be null");
         }
-
+        // check for precomputed key
+        AsymmetricKey tk=AsymmetricKeyPreCalculator.getPrecomputedAsymmetricKey(parameters);
+        if(tk != null) {
+            // set precomputed values
+            publicKey=tk.publicKey;
+            privateKey=tk.privateKey;
+            return;
+        }
         // create key pair
-        Algorithm alg=Algorithm.getByString(params.get(Parameter.ALGORITHM.getId()));
+        Algorithm alg=Algorithm.getByString(parameters.get(Parameter.ALGORITHM));
         if(alg==null) {
-            throw new NoSuchAlgorithmException("unknown algorithm is set in parameter list ("+params.get(Parameter.ALGORITHM.getId())+")");
+            throw new NoSuchAlgorithmException("unknown algorithm is set in parameter list ("+parameters.get(Parameter.ALGORITHM)+")");
         }
         if("RSA".equals(alg.name()) ) {
             int keySize=getKeySize();
@@ -184,17 +191,17 @@ public class AsymmetricKey extends Key {
             try {
                 pair = keyGen.genKeyPair();
             } catch (IllegalStateException ise) {
-                throw new IllegalStateException( "unable to generate keys with " + alg.toString() + "/" + params.get(Parameter.MODE) + "/" + params.get(Parameter.PADDING) + " (size "+keySize+")", ise );
+                throw new IllegalStateException( "unable to generate keys with " + alg.toString() + "/" + parameters.get(Parameter.MODE) + "/" + parameters.get(Parameter.PADDING) + " (size "+keySize+")", ise );
             }
             publicKey  = pair.getPublic().getEncoded();
             privateKey = pair.getPrivate().getEncoded();
         } else if (alg==Algorithm.EC) {
-            if(params.get(Parameter.CURVETYPE)==null) {
+            if(parameters.get(Parameter.CURVETYPE)==null) {
                 throw new NoSuchAlgorithmException( "curve type is not set" );
             }
-            ECParameterSpec parameters = ECNamedCurveTable.getParameterSpec( params.get(Parameter.CURVETYPE) );
+            ECParameterSpec ecpara = ECNamedCurveTable.getParameterSpec( parameters.get(Parameter.CURVETYPE) );
             KeyPairGenerator g = KeyPairGenerator.getInstance( alg.getAlgorithmFamily(), "BC" );
-            g.initialize( parameters, esr.getSecureRandom() );
+            g.initialize( ecpara, esr.getSecureRandom() );
             KeyPair pair = g.generateKeyPair();
             publicKey  = pair.getPublic().getEncoded();
             privateKey = pair.getPrivate().getEncoded();

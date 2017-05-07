@@ -3,7 +3,9 @@ package net.gwerder.java.messagevortex.test.asn1;
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.asn1.AlgorithmParameter;
 import net.gwerder.java.messagevortex.asn1.AsymmetricKey;
+import net.gwerder.java.messagevortex.asn1.AsymmetricKeyPreCalculator;
 import net.gwerder.java.messagevortex.asn1.encryption.*;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -36,6 +38,11 @@ public class AsymmetricKeyTest {
     }
 
     private int ksDisc=16384;
+
+    static{
+        // start key precalculator
+        AsymmetricKeyPreCalculator.setCacheFileName("asymmetrichKey.cache");
+    }
 
     @Test
     public void fuzzingAsymmetricEncryption() throws Exception {
