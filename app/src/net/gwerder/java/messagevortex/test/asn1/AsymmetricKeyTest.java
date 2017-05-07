@@ -1,11 +1,9 @@
 package net.gwerder.java.messagevortex.test.asn1;
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
+import net.gwerder.java.messagevortex.asn1.AlgorithmParameter;
 import net.gwerder.java.messagevortex.asn1.AsymmetricKey;
-import net.gwerder.java.messagevortex.asn1.encryption.Algorithm;
-import net.gwerder.java.messagevortex.asn1.encryption.AlgorithmType;
-import net.gwerder.java.messagevortex.asn1.encryption.Padding;
-import net.gwerder.java.messagevortex.asn1.encryption.SecurityLevel;
+import net.gwerder.java.messagevortex.asn1.encryption.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -14,10 +12,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-import java.util.Vector;
+import java.util.*;
 import java.util.logging.Level;
 
 import static junit.framework.TestCase.assertFalse;
@@ -59,7 +54,9 @@ public class AsymmetricKeyTest {
                 LOGGER.log(Level.INFO, "  creating key");
                 AsymmetricKey s = null;
                 try {
-                    s = new AsymmetricKey(alg, size, alg.getParameters( SecurityLevel.LOW ));
+                    AlgorithmParameter p=alg.getParameters( SecurityLevel.LOW );
+                    p.put(Parameter.KEYSIZE.getId(),""+size);
+                    s = new AsymmetricKey(p);
                 } catch (IOException ioe) {
                     setException(ioe);
                     LOGGER.log(Level.WARNING, "unexpected exception", ioe);
@@ -168,12 +165,12 @@ public class AsymmetricKeyTest {
         for(Algorithm alg: Algorithm.getAlgorithms( AlgorithmType.ASYMMETRIC )) {
             int size = alg.getKeySize();
             try {
-                LOGGER.log( Level.INFO, "starting tests with " + alg.getAlgorithm() + " and keysize " + size );
+                LOGGER.log( Level.INFO, "starting tests with " + alg.toString() + " and keysize " + size );
                 for (int i = 0; i < ksDisc / size; i++) {
                     LOGGER.log( Level.FINE, "starting test " + (i + 1) + " of " + ksDisc / size );
                     System.out.print(".");
-                    AsymmetricKey k1 = new AsymmetricKey(alg,size,alg.getParameters( SecurityLevel.LOW ));
-                    AsymmetricKey k2 = new AsymmetricKey(alg,size,alg.getParameters( SecurityLevel.LOW ));
+                    AsymmetricKey k1 = new AsymmetricKey(alg.getParameters( SecurityLevel.LOW ));
+                    AsymmetricKey k2 = new AsymmetricKey(alg.getParameters( SecurityLevel.LOW ));
                     k2.setPrivateKey( k1.getPrivateKey() );
                     k2.setPublicKey(  k1.getPublicKey()  );
                     assertTrue( "error in key transfer cycle with "+alg+" ",k1.equals( k2 ));
@@ -189,8 +186,9 @@ public class AsymmetricKeyTest {
 
     @Test
     public void asymmetricKeySizeTest() {
-        assertTrue( "getKeySize for RSA is bad", Algorithm.RSA.getKeySize(SecurityLevel.LOW) == 1024 );
+        assertTrue( "getKeySize for RSA is bad (got "+Algorithm.RSA.getKeySize(SecurityLevel.LOW)+")", Algorithm.RSA.getKeySize(SecurityLevel.LOW) == 1024 );
         assertTrue( "getKeySize for EC is bad (got "+Algorithm.EC.getKeySize(SecurityLevel.QUANTUM)+")", Algorithm.EC.getKeySize(SecurityLevel.QUANTUM) == 521 );
+        assertTrue( "getKeySize for EC is bad (got "+Algorithm.EC.getKeySize(SecurityLevel.LOW)+")", Algorithm.EC.getKeySize(SecurityLevel.LOW) == 384 );
     }
 
     @Test
@@ -218,7 +216,7 @@ public class AsymmetricKeyTest {
                         break;
                     }
                     LOGGER.log( Level.INFO, "  testing " + a + " with level "+sl+" ("+a.getKeySize( sl )+")" );
-                    AsymmetricKey ak = new AsymmetricKey( a, size,a.getParameters( sl ) );
+                    AsymmetricKey ak = new AsymmetricKey( a.getParameters( sl ) );
                     ak.setPadding(p);
                     boolean supported=true;
                     try {
@@ -230,12 +228,12 @@ public class AsymmetricKeyTest {
                         LOGGER.log( Level.INFO, "  skipped reason=unsupported/" + a + "/" + p + "/"+ak.getMode() );
                     } else {
                         for (int i = 0; i < 100; i++) {
-                            ak = new AsymmetricKey( a, size,a.getParameters( sl ) );
+                            ak = new AsymmetricKey( a.getParameters( sl ) );
                             ak.setPadding(p);
-                            assertTrue( "negative maximum payload for " + a.getAlgorithm() + "/" + size + "/" + p.getPadding(), maximumPayload > 1 );
+                            assertTrue( "negative maximum payload for " + a.toString() + "/" + size + "/" + p.toString(), maximumPayload > 1 );
                             maximumPayload=ak.getPadding().getMaxSize( size );
                             byte[] b = new byte[maximumPayload];
-                            LOGGER.log( Level.INFO, "    Algorithm " + ak.getAlgorithm() +"[keySize="+ak.getKeySize()+"]/" + ak.getMode() + "/"+ak.getPadding().getPadding()+"/maxPayload="+maximumPayload  );
+                            LOGGER.log( Level.INFO, "    Algorithm " + ak.getAlgorithm() +"[keySize="+ak.getKeySize()+"]/" + ak.getMode() + "/"+ak.toString().toString()+"/maxPayload="+maximumPayload  );
                             sr.nextBytes( b );
                             byte[] b2 = ak.decrypt( ak.encrypt( b ) );
                             assertTrue( "byte arrays mus be equal after redecryption", Arrays.equals( b, b2 ) );
@@ -255,7 +253,7 @@ public class AsymmetricKeyTest {
     public void writeAsAsn1() {
         for (Algorithm a : Algorithm.getAlgorithms( AlgorithmType.ASYMMETRIC )) {
             try {
-                AsymmetricKey ak = new AsymmetricKey(a,a.getKeySize(SecurityLevel.MEDIUM), a.getParameters(SecurityLevel.MEDIUM));
+                AsymmetricKey ak = new AsymmetricKey(a.getParameters(SecurityLevel.MEDIUM));
                 File f = new File("testfile_AsymmetricKey_" + a.getAlgorithmFamily() + ".der");
                 OutputStream o = new FileOutputStream(f);
                 o.write(ak.toBytes());

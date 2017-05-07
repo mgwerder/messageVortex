@@ -23,6 +23,8 @@ package net.gwerder.java.messagevortex.test.routing;
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.routing.operation.GaloisFieldMathMode;
+import net.gwerder.java.messagevortex.routing.operation.MathMode;
+import net.gwerder.java.messagevortex.routing.operation.RealMathMode;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -86,11 +88,28 @@ public class MathModeTest {
     }
 
     @Test
-    public void gfMathModeTest() {
+    public void realMathModeTest() {
+        // Testing example operations from http://web.eecs.utk.edu/~plank/plank/papers/CS-96-332.pdf with imnplementation
+        MathMode m = RealMathMode.getRealMathMode();
+        LOGGER.log(Level.INFO, " checking real math");
+        assertTrue("  Failed Real-Test for 11+7", m.add(11, 7) == 18);
+        assertTrue("  Failed Real-Test for 11-7", m.sub(11, 7) == 4);
+        assertTrue("  Failed Real-Test for 3*7", m.mul(3, 7) == 21);
+        assertTrue("  Failed Real-Test for 13*10", m.mul(13, 10) == 130);
+        assertTrue("  Failed Real-Test for 13/10", m.div(13, 10) == 1);
+        assertTrue("  Failed Real-Test for 3/7", m.div(3, 7) == 0);
+        assertTrue("  Failed Real-Test for 0/7", m.div(0, 7) == 0);
+        assertTrue("  Failed Real-Test for 0/13", m.div(0, 13) == 0);
+    }
+
+
+     @Test
+     public void gfMathModeTest() {
         // Testing example operations from http://web.eecs.utk.edu/~plank/plank/papers/CS-96-332.pdf with imnplementation
         GaloisFieldMathMode m = GaloisFieldMathMode.getGaloisFieldMathMode(4);
         LOGGER.log(Level.INFO, "  checking GF(2^4) math");
         assertTrue("  Failed GF(2^4)-Test for 11+7", m.add(11, 7) == 12);
+        assertTrue("  Failed GF(2^4)-Test for 11-7", m.sub(11, 7) == 12);
         assertTrue("  Failed GF(2^4)-Test for 3*7 [" + m.mul(3, 7) + "]", m.mul(3, 7) == 9);
         assertTrue("  Failed GF(2^4)-Test for 13*10", m.mul(13, 10) == 11);
         assertTrue("  Failed GF(2^4)-Test for 13/10", m.div(13, 10) == 3);

@@ -2,6 +2,7 @@ package net.gwerder.java.messagevortex.test.asn1;
 
 import net.gwerder.java.messagevortex.ExtendedSecureRandom;
 import net.gwerder.java.messagevortex.MessageVortexLogger;
+import net.gwerder.java.messagevortex.asn1.AlgorithmParameter;
 import net.gwerder.java.messagevortex.asn1.AsymmetricKey;
 import net.gwerder.java.messagevortex.asn1.encryption.*;
 import org.junit.Test;
@@ -33,31 +34,23 @@ public class AsymmetricKeyReencodingTest {
     }
 
     private String testname;
-    private Algorithm alg;
-    private Padding   pad;
-    private Mode      mode;
-    private int       size;
+    private AlgorithmParameter parameter;
     private int repeat;
-    private Map<String,Object> params;
 
-    public AsymmetricKeyReencodingTest(String testname, Algorithm alg, Padding pad, Mode mode, int size, int repeat, Map<String,Object> params) {
+    public AsymmetricKeyReencodingTest(String testname, AlgorithmParameter p, int repeat) {
         this.testname = testname;
-        this.alg=alg;
-        this.pad=pad;
-        this.mode=mode;
-        this.size=size;
-        this.repeat = repeat;
-        this.params = params;
+        this.repeat=repeat;
+        this.parameter = p;
     }
 
     @Parameters(name = "{0}")
     public static Collection<Object[]> generateData() {
         List<Object[]> ret = new Vector<>();
         for(Algorithm alg: Algorithm.getAlgorithms( AlgorithmType.ASYMMETRIC )) {
-            for (Map.Entry<SecurityLevel,Map<String,Object>> params : alg.getParameters().entrySet() ) {
-                int ks=(Integer)(params.getValue().get("keySize_0"));
+            for (Map.Entry<SecurityLevel,AlgorithmParameter> params : alg.getParameters().entrySet() ) {
+                int ks=Integer.parseInt(params.getValue().get(Parameter.KEYSIZE));
                 int j = Math.min( (int) Math.pow( 2, ksDisc / ks ), 100 );
-                ret.add( new Object[]{"" + alg.getAlgorithm() + "/" + ks, alg, Padding.getDefault( AlgorithmType.ASYMMETRIC ),Mode.getDefault( AlgorithmType.ASYMMETRIC ), ks, j,params.getValue() } );
+                ret.add( new Object[]{"" + params.getValue().get(Parameter.ALGORITHM) + "/" + ks, params.getValue(),j } );
             }
         }
         LOGGER.log( Level.INFO,"Prepared for fuzzer "+ret.size()+" tests");
@@ -71,18 +64,23 @@ public class AsymmetricKeyReencodingTest {
         try {
             LOGGER.log( Level.INFO, "running reencoding test for " + testname );
             for (int i = 0; i < repeat; i++) {
-                AsymmetricKey s = new AsymmetricKey( alg, size, params);
+                LOGGER.log( Level.INFO, "  running reencoding round "+(i+1)+"/"+repeat+" for " + testname );
+                LOGGER.log( Level.INFO, "  generating key" );
+                AsymmetricKey s = new AsymmetricKey( parameter );
+                LOGGER.log( Level.INFO, "  encoding" );
                 byte[] b1 = s.toBytes();
-                s.dumpValueNotation( "" );
                 assertTrue( "Byte representation may not be null", b1 != null );
+                LOGGER.log( Level.INFO, "  reencoding" );
                 AsymmetricKey s2 = new AsymmetricKey( b1 );
                 byte[] b2 = (s2).toBytes();
                 //System.out.println("dumping object tuple \n"+s.dumpValueNotation( "" )+"\n"+s2.dumpValueNotation( "" ));
                 assertTrue( "Byte arrays should be equal when reencoding ("+s+"/"+s2+")", Arrays.equals( b1, b2 ) );
+                assertTrue( "dumped ASN value strings should be equal after reencoding 1", s.dumpValueNotation("",DumpType.ALL).equals( s2.dumpValueNotation("",DumpType.ALL) ) );
+                assertTrue( "dumped ASN value strings should be equal after reencoding 2", s.dumpValueNotation("",DumpType.PUBLIC_ONLY).equals( s2.dumpValueNotation("",DumpType.PUBLIC_ONLY) ) );
             }
         } catch (Exception e) {
             LOGGER.log( Level.WARNING,"Unexpected exception",e);
-            fail( "fuzzer encountered exception in Asymmetric key with algorithm " + alg.toString() +"/"+ size+" ("+e.toString()+")" );
+            fail( "fuzzer encountered exception in Asymmetric key with algorithm " + parameter.get(Parameter.ALGORITHM) +"/"+ parameter.get(Parameter.KEYSIZE)+" ("+e.toString()+")" );
         }
     }
 
@@ -91,23 +89,27 @@ public class AsymmetricKeyReencodingTest {
         AsymmetricKey s;
         String currentObject = null;
         try {
-            LOGGER.log( Level.INFO, "Running encryption test with " + alg + "/" + Mode.getDefault(alg.getAlgorithmType()) + "/" + pad + " (" + size + ")" );
+            LOGGER.log( Level.INFO, "Running encryption test with " + parameter.get(Parameter.ALGORITHM) + "/" + parameter.get(Parameter.MODE) + "/" + parameter.get(Parameter.PADDING) + "" );
             for (int i = 0; i < repeat; i++) {
-                s = new AsymmetricKey( alg, size ,params);
+                LOGGER.log( Level.INFO, "  generating key");
+                s = new AsymmetricKey( parameter );
+                LOGGER.log( Level.INFO, "  dumping object");
                 currentObject = s.dumpValueNotation( "", DumpType.ALL );
-                byte[] b1 = new byte[sr.nextInt( Math.min( s.getPadding().getMaxSize( size ), 1024 ) )];
+                byte[] b1 = new byte[sr.nextInt( Math.min( s.getPadding().getMaxSize( Integer.parseInt(parameter.get(Parameter.KEYSIZE)) ), 1024 ) )];
                 sr.nextBytes( b1 );
+                LOGGER.log( Level.INFO, "  running encryption/decryption test with " + parameter.get(Parameter.ALGORITHM) + "/" + parameter.get(Parameter.MODE) + "/" + parameter.get(Parameter.PADDING) + "" );
                 byte[] b2 = s.decrypt( s.encrypt( b1 ) );
-                assertTrue( "error in encrypt/decrypt cycle with " + alg + " (same object)", Arrays.equals( b1, b2 ) );
+                assertTrue( "error in encrypt/decrypt cycle with " + parameter.get(Parameter.ALGORITHM) + " (same object)", Arrays.equals( b1, b2 ) );
                 b2 = s.decrypt( s.encrypt( b1 ) );
-                assertTrue( "error in encrypt/decrypt cycle with " + alg + " (same object; with keys specified for signature)", Arrays.equals( b1, b2 ) );
+                assertTrue( "error in encrypt/decrypt cycle with " + parameter.get(Parameter.ALGORITHM) + " (same object; with keys specified for signature)", Arrays.equals( b1, b2 ) );
+                LOGGER.log( Level.INFO, "  Running signature test with " + parameter.get(Parameter.ALGORITHM) + "/" + parameter.get(Parameter.MODE) + "/" + parameter.get(Parameter.PADDING) + "" );
                 byte[] sig = s.sign( b1 );
-                assertTrue( "error in encrypt/decrypt cycle with " + alg + " (same object; with keys specified for signature)", s.verify( b1, sig ) );
+                assertTrue( "error verifying signature with " + parameter.get(Parameter.ALGORITHM) + " (same object; with keys specified for signature)", s.verify( b1, sig ) );
             }
-            LOGGER.log( Level.INFO, "done with " + alg + "/unspecified/" + pad + " (" + size + ")" );
+            LOGGER.log( Level.INFO, "done with " + parameter.get(Parameter.ALGORITHM)  + "/unspecified/" + parameter.get(Parameter.PADDING)  + " (" + parameter.get(Parameter.KEYSIZE)   + ")" );
         } catch(Exception e) {
             LOGGER.log(Level.WARNING,"Unexpected exception",e);
-            fail("fuzzer encountered exception in Symmetric en/decryption test with algorithm " + alg.toString() + "\n" + currentObject);
+            fail("fuzzer encountered exception in Symmetric en/decryption test with algorithm " + parameter.get(Parameter.ALGORITHM)  + "\n" + currentObject);
         } finally {
             System.err.flush();
             System.out.flush();

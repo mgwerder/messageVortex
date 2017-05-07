@@ -136,7 +136,7 @@ public class SymmetricKeyTest {
         for(Algorithm alg: Algorithm.getAlgorithms( AlgorithmType.SYMMETRIC )) {
             int size = alg.getKeySize();
             try {
-                LOGGER.log( Level.INFO, "starting tests with " + alg.getAlgorithm() + " and keysize " + size );
+                LOGGER.log( Level.INFO, "starting tests with " + alg.toString() + " and keysize " + size );
                 for (int i = 0; i < ksDisc / size; i++) {
                     LOGGER.log( Level.FINE, "starting test " + (i + 1) + " of " + ksDisc / size );
                     System.out.print(".");
@@ -181,7 +181,7 @@ public class SymmetricKeyTest {
                     LOGGER.log( Level.INFO, "  testing " + a + "/" + p + " with level "+sl );
                     for (int i = 0; i < 100; i++) {
                         SymmetricKey ak = new SymmetricKey( a, p, Mode.getDefault( AlgorithmType.SYMMETRIC ) );
-                        assertTrue( "negative maximum payload for " + a.getAlgorithm() + "/" + size + "/" + p.getPadding(), maximumPayload > 1 );
+                        assertTrue( "negative maximum payload for " + a.toString() + "/" + size + "/" + p.toString(), maximumPayload > 1 );
                         byte[] b = new byte[maximumPayload];
                         sr.nextBytes( b );
                         byte[] b2 = ak.decrypt( ak.encrypt( b ) );
@@ -202,7 +202,7 @@ public class SymmetricKeyTest {
             for (Algorithm a : Algorithm.getAlgorithms(AlgorithmType.SYMMETRIC)) {
                 try {
                     SymmetricKey ak = new SymmetricKey(a, p, Mode.getDefault(AlgorithmType.SYMMETRIC));
-                    File f = new File("testfile_SymmetricKey_" +p.getPadding()+"_"+ a.getAlgorithmFamily() + ".der");
+                    File f = new File("testfile_SymmetricKey_" +p.toString()+"_"+ a.getAlgorithmFamily() + ".der");
                     OutputStream o = new FileOutputStream(f);
                     o.write(ak.toBytes());
                     o.close();

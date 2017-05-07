@@ -63,7 +63,7 @@ public class IdentityBlock extends AbstractBlock {
 
     public IdentityBlock() throws IOException {
         Algorithm alg=Algorithm.getDefault(AlgorithmType.ASYMMETRIC);
-        this.identityKey = new AsymmetricKey(alg, alg.getKeySize(SecurityLevel.MEDIUM), alg.getParameters(SecurityLevel.MEDIUM));
+        this.identityKey = new AsymmetricKey(alg.getParameters(SecurityLevel.MEDIUM));
         this.serial = (long) (Math.random() * 4294967295L);
         this.maxReplays = 1;
         this.valid = new UsagePeriod(3600);
@@ -95,62 +95,6 @@ public class IdentityBlock extends AbstractBlock {
 
     public void setRequests(HeaderRequest[] hr) {
         this.requests=hr;
-    }
-
-    public boolean equals(Object t) {
-        if(t==null) {
-            return false;
-        }
-        if(! (t instanceof IdentityBlock) ) {
-            return false;
-        }
-        IdentityBlock o=(IdentityBlock)t;
-        if(!headerKey.equals(o.headerKey)) {
-            return false;
-        }
-        if(!Arrays.equals(encryptedHeaderKey,o.encryptedHeaderKey)) {
-            return false;
-        }
-        if(!identityKey.equals(o.identityKey)) {
-            return false;
-        }
-        if(serial!=o.serial) {
-            return false;
-        }
-        if(maxReplays!=o.maxReplays) {
-            return false;
-        }
-        if(!valid.equals(o.valid)) {
-            return false;
-        }
-        if(!Arrays.equals(forwardSecret,o.forwardSecret)) {
-            return false;
-        }
-        if(!Arrays.equals(decryptionKeyRaw,o.decryptionKeyRaw)) {
-            return false;
-        }
-        if(hash!=o.hash) {
-            return false;
-        }
-        for(int i=0;i<requests.length;i++) {
-            if(!requests[i].equals(o.requests[i])) {
-                return false;
-            }
-        }
-        if(identifier!=o.identifier) {
-            return false;
-        }
-        if(!Arrays.equals(padding,o.padding)) {
-            return false;
-        }
-        // verify equality of encrypted identity block
-        return Arrays.equals(encryptedIdentityBlock,o.encryptedIdentityBlock);
-    }
-
-    @Override
-    public int hashCode() {
-        // this methode is required for code sanity
-        return super.hashCode();
     }
 
     @Override
@@ -331,6 +275,7 @@ public class IdentityBlock extends AbstractBlock {
     public String dumpValueNotation(String prefix) throws IOException {
         return dumpValueNotation( prefix, DumpType.PUBLIC_ONLY );
     }
+
     public String dumpValueNotation(String prefix, DumpType dt) throws IOException {
         StringBuilder sb=new StringBuilder();
         sb.append("{"+CRLF);
@@ -369,6 +314,32 @@ public class IdentityBlock extends AbstractBlock {
         }
         sb.append(prefix+"}");
         return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object t) {
+        if(t==null) {
+            return false;
+        }
+        if(! (t instanceof IdentityBlock) ) {
+            return false;
+        }
+        IdentityBlock o=(IdentityBlock)t;
+        try {
+            return dumpValueNotation("", DumpType.ALL).equals(o.dumpValueNotation("", DumpType.ALL));
+        } catch(IOException ioe) {
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        // this methode is required for code sanity
+        try{
+            return dumpValueNotation("",DumpType.ALL).hashCode();
+        } catch(IOException ioe) {
+            return "FAILED".hashCode();
+        }
     }
 
 }

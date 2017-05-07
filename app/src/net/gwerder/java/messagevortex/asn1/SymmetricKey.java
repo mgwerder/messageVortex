@@ -22,11 +22,9 @@ package net.gwerder.java.messagevortex.asn1;
 // ************************************************************************************
 
 import net.gwerder.java.messagevortex.ExtendedSecureRandom;
-import net.gwerder.java.messagevortex.asn1.encryption.Algorithm;
-import net.gwerder.java.messagevortex.asn1.encryption.AlgorithmType;
-import net.gwerder.java.messagevortex.asn1.encryption.Mode;
-import net.gwerder.java.messagevortex.asn1.encryption.Padding;
+import net.gwerder.java.messagevortex.asn1.encryption.*;
 import org.bouncycastle.asn1.*;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -38,6 +36,7 @@ import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.util.Arrays;
 
 /**
@@ -54,9 +53,11 @@ public class SymmetricKey extends Key {
     }
 
     public SymmetricKey(Algorithm sk ,Padding pad, Mode mode) throws IOException {
-        keytype=sk;
-        this.padding=pad;
-        this.mode=mode;
+        if(pad==null) throw new NullPointerException("padding may not be null");
+        if(mode==null) throw new NullPointerException("mode may not be null");
+        parameters.put(Parameter.ALGORITHM,sk.toString());
+        parameters.put(Parameter.PADDING,pad.toString());
+        parameters.put(Parameter.MODE,mode.toString());
         if(sk.toString().toLowerCase().startsWith("aes")) {
             createAES( sk.getKeySize() );
         } else if(sk.toString().toLowerCase().startsWith("camellia")) {
@@ -67,16 +68,7 @@ public class SymmetricKey extends Key {
     }
 
     public SymmetricKey(Algorithm sk) throws IOException {
-        mode = Mode.getDefault(AlgorithmType.SYMMETRIC);
-        padding = Padding.getDefault( AlgorithmType.SYMMETRIC );
-        keytype=sk;
-        if(sk.toString().toLowerCase().startsWith("aes")) {
-           createAES( sk.getKeySize() );
-        } else if(sk.toString().toLowerCase().startsWith("camellia")) {
-            createCamellia( sk.getKeySize() );
-        } else {
-            throw new IOException( "Algorithm "+sk+" is not encodable by the system" );
-        }
+        this(sk,Padding.getDefault( AlgorithmType.SYMMETRIC ),Mode.getDefault(AlgorithmType.SYMMETRIC));
     }
 
     public SymmetricKey(byte[] sk) throws IOException {
@@ -101,64 +93,76 @@ public class SymmetricKey extends Key {
     }
 
     public byte[] setIV(byte[] b) {
-        byte[] old=initialisationVector;
-        if(b==null || b.length==0) {
-            // generate random IV
-            initialisationVector=new byte[16];
-            secureRandom.nextBytes( initialisationVector );
+        String s=parameters.get(Parameter.IV);
+        byte[] old;
+        if(s==null) {
+            old = null;
         } else {
-            initialisationVector=b;
+            old=s.getBytes();
+        }
+        if(b==null || b.length==0) {
+            parameters.put(Parameter.IV,toHex(secureRandom.generateSeed(16)));
+        } else {
+            parameters.put(Parameter.IV,toHex(b));
         }
         return old;
     }
 
     public byte[] getIV() {
-        return initialisationVector;
+        return fromHex(parameters.get(Parameter.IV));
     }
 
     public Padding getPadding() {
-        return this.padding;
+        return Padding.getByString(parameters.get(Parameter.PADDING.toString()));
     }
 
     public Mode getMode() {
-        return this.mode;
+        return Mode.getByString(parameters.get(Parameter.MODE.toString()));
+    }
+
+    public Algorithm getAlgorithm() {
+        return Algorithm.getByString(parameters.get(Parameter.ALGORITHM));
     }
 
     private void createAES(int keysize) {
+        Mode mode=getMode();
         byte[] keyBytes = new byte[keysize / 8];
         secureRandom.nextBytes( keyBytes );
-        if(mode.getRequiresIV()) {
-            initialisationVector=new byte[16];
-            setIV( initialisationVector );
+        if(mode.getRequiresIV() && (getIV()==null || getIV().length!=16)) {
+            setIV( null );
         }
         SecretKeySpec aeskey = new SecretKeySpec( keyBytes, "AES" );
         key = aeskey.getEncoded();
     }
 
     private void createCamellia(int keysize) {
+        Mode mode=getMode();
         byte[] keyBytes = new byte[keysize / 8];
         secureRandom.nextBytes( keyBytes );
         if(mode.getRequiresIV()) {
-            initialisationVector=new byte[16];
-            setIV( initialisationVector );
+            setIV( null );
         }
         SecretKeySpec camelliakey = new SecretKeySpec( keyBytes, "Camellia" );
         key = camelliakey.getEncoded();
     }
 
     private Cipher getCipher() throws NoSuchAlgorithmException,NoSuchPaddingException {
-        setIV(initialisationVector);
-        return Cipher.getInstance( keytype.getAlgorithmFamily()+"/"+mode.toString()+"/"+padding.getPadding() );
+        setIV( getIV() );
+        try {
+            return Cipher.getInstance(getAlgorithm().getAlgorithmFamily().toUpperCase() + "/" + getMode().toString() + "/" + getPadding().toString(), getAlgorithm().getProvider());
+        } catch(NoSuchProviderException e) {
+            throw new NoSuchAlgorithmException("unknown provider",e);
+        }
     }
 
     @Override
     public byte[] encrypt(byte[] b) throws IOException {
         try {
             Cipher c = getCipher();
-            SecretKeySpec ks = new SecretKeySpec( key, keytype.getAlgorithmFamily() );
-            if(mode.getRequiresIV()) {
-                setIV( initialisationVector );
-                c.init( Cipher.ENCRYPT_MODE, ks, new IvParameterSpec( initialisationVector ) );
+            SecretKeySpec ks = new SecretKeySpec( key, getAlgorithm().getAlgorithmFamily() );
+            if(getMode().getRequiresIV()) {
+                setIV( getIV() );
+                c.init( Cipher.ENCRYPT_MODE, ks, new IvParameterSpec( getIV()) );
             } else {
                 c.init( Cipher.ENCRYPT_MODE, ks );
             }
@@ -168,7 +172,7 @@ public class SymmetricKey extends Key {
         } catch (InvalidKeyException e) {
             throw new IOException( "Exception while init of cipher", e );
         } catch (InvalidAlgorithmParameterException e) {
-            throw new IOException( "Exception while encrypting ("+keytype.getAlgorithmFamily()+"/"+initialisationVector.length+")", e );
+            throw new IOException( "Exception while encrypting ("+getAlgorithm().getAlgorithmFamily()+"/"+getIV().length+")", e );
         }
     }
 
@@ -176,9 +180,9 @@ public class SymmetricKey extends Key {
     public byte[] decrypt(byte[] b) throws IOException {
         try {
             Cipher c = getCipher();
-            SecretKeySpec ks = new SecretKeySpec( key, keytype.getAlgorithmFamily().toUpperCase() );
-            if(mode.getRequiresIV()) {
-                c.init( Cipher.DECRYPT_MODE, ks, new IvParameterSpec( initialisationVector ) );
+            SecretKeySpec ks = new SecretKeySpec( key, getAlgorithm().getAlgorithmFamily().toUpperCase() );
+            if(getMode().getRequiresIV()) {
+                c.init( Cipher.DECRYPT_MODE, ks, new IvParameterSpec( getIV()) );
             } else {
                 c.init( Cipher.DECRYPT_MODE, ks );
             }
@@ -190,7 +194,7 @@ public class SymmetricKey extends Key {
         }
     }
 
-    protected void parse(ASN1Encodable to) {
+    protected void parse(ASN1Encodable to) throws IOException {
         // preparing parsing
         int i=0;
         ASN1Sequence s1 = ASN1Sequence.getInstance(to);
@@ -231,32 +235,12 @@ public class SymmetricKey extends Key {
 
         // compare  keys
         SymmetricKey o=(SymmetricKey)t;
-        if(!Arrays.equals(o.key,key)) {
-            return false;
-        }
-
-        // compare initialisationVectors
-        if(!Arrays.equals(o.initialisationVector,initialisationVector)) {
-            return false;
-        }
-
-        // compare mode (CBC, ECB et al)
-        if(o.mode!=mode) {
-            return false;
-        }
-
-        // compare padding
-        if(o.padding!=padding) {
-            return false;
-        }
-
-        return true;
-    }
+        return o.dumpValueNotation("").equals(dumpValueNotation(""));
+   }
 
     @Override
     public int hashCode() {
-        // FIXME do it better
-        return super.hashCode();
+        return dumpValueNotation("").hashCode();
     }
 
     public String dumpValueNotation(String prefix) {
@@ -264,7 +248,6 @@ public class SymmetricKey extends Key {
         sb.append("{"+CRLF);
         sb.append(dumpKeyTypeValueNotation(prefix)+CRLF);
         sb.append(prefix+"  key "+toHex(key)+CRLF);
-        // FIXME dump rest
         sb.append(prefix+"}");
         return sb.toString();
     }

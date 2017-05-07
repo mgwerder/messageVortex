@@ -195,13 +195,13 @@ public class FuzzerTest {
             LOGGER.log(Level.INFO,"testing with "+ksDisc/8192+" stores");
             for (int i = 0; i < ksDisc/8192; i++) {
                 IdentityStore.resetDemo();
-                LOGGER.log(Level.FINE,"creating store");
+                LOGGER.log(Level.INFO,"creating store");
                 IdentityStore s = IdentityStore.getIdentityStoreDemo();
                 assertTrue( "IdentityStore may not be null",s!=null);
-                LOGGER.log(Level.FINE,"encoding demo binary");
+                LOGGER.log(Level.INFO,"encoding demo binary");
                 byte[] b1=s.toBytes();
                 assertTrue( "Byte representation may not be null",b1!=null);
-                LOGGER.log(Level.FINE,"reencoding demo binary");
+                LOGGER.log(Level.INFO,"reencoding demo binary");
                 byte[] b2=(new IdentityStore(b1)).toBytes();
                 if(!Arrays.equals(b1,b2)) {
                     System.out.println((new IdentityStore( b1 ) ).dumpValueNotation( "" ));

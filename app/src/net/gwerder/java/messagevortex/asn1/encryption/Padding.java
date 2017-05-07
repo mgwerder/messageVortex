@@ -62,7 +62,6 @@ public enum Padding {
     } );
 
     private static final Map<AlgorithmType,Padding> DEFAULT_PADDING =new HashMap<AlgorithmType,Padding>(  ) {
-        private static final long serialVersionUID = 121321383445L;
         {
             put( AlgorithmType.ASYMMETRIC, Padding.PKCS1 );
             put( AlgorithmType.SYMMETRIC,  Padding.PKCS7 );
@@ -103,7 +102,7 @@ public enum Padding {
         return null;
     }
 
-    public static Padding getByName(String name) {
+    public static Padding getByString(String name) {
         for(Padding e : values()) {
             if(e.txt.equals(name)) {
                 return e;
@@ -113,24 +112,23 @@ public enum Padding {
     }
 
     public static Padding getDefault(AlgorithmType at) {
-        return DEFAULT_PADDING.get(at);
+        Padding p=DEFAULT_PADDING.get(at);
+        if(p==null) {
+            throw new NullPointerException("no default padding for "+at);
+        }
+        return p;
     }
 
     public int getId() {
         return id;
     }
 
-    public String getPadding() {
+    public String toString() {
         return txt;
     }
 
     public int getMaxSize(int keysize) {
         return s.maxSize( keysize );
-    }
-
-    @Override
-    public String toString() {
-        return super.toString().toLowerCase();
     }
 
     /***

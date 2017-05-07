@@ -26,11 +26,7 @@ import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.*;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.util.ArrayList;

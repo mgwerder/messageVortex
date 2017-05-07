@@ -29,9 +29,9 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class GaloisFieldMathMode implements MathMode {
 
-    private final int GF_FIELD_SIZE;
-    private final int[] GF_LOG;
-    private final int[] GF_INVERSE_LOG;
+    private final int gfFieldSize;
+    private final int[] gfLog;
+    private final int[] gfInverseLog;
 
     static final int[] PRIM_POLYNOM =new int[] {3,7,11,19,37,67,137,285,529,1033,2053,4179,8219,17475,32771,69643};
     static final Map<Integer,GaloisFieldMathMode> cachedMathMode=new ConcurrentHashMap<>();
@@ -40,21 +40,21 @@ public class GaloisFieldMathMode implements MathMode {
         if(omega<2 ||omega>16) {
             throw new ArithmeticException( "illegal GF size "+omega+" (PRIM_POLYNOM unknown)" );
         }
-        GF_FIELD_SIZE = (int)Math.pow(2,omega);
-        GF_LOG=new int[GF_FIELD_SIZE];
-        GF_INVERSE_LOG=new int[GF_FIELD_SIZE];
+        gfFieldSize = (int)Math.pow(2,omega);
+        gfLog =new int[gfFieldSize];
+        gfInverseLog =new int[gfFieldSize];
         int b=1;
-        for(int log = 0; log< GF_FIELD_SIZE -1; log++) {
-            GF_LOG[b% GF_FIELD_SIZE]=log;
-            GF_INVERSE_LOG[log% GF_FIELD_SIZE]=b;
+        for(int log = 0; log< gfFieldSize -1; log++) {
+            gfLog[b% gfFieldSize]=log;
+            gfInverseLog[log% gfFieldSize]=b;
             b=lshift(b,1,(byte)33);
-            if((b & GF_FIELD_SIZE)!=0) {
+            if((b & gfFieldSize)!=0) {
                 b=b^PRIM_POLYNOM[omega-1];
             }
         }
         // initialize undefined values with 0
-        GF_LOG[0]=-1;
-        GF_INVERSE_LOG[GF_FIELD_SIZE -1]=-1;
+        gfLog[0]=-1;
+        gfInverseLog[gfFieldSize -1]=-1;
     }
 
     public static GaloisFieldMathMode getGaloisFieldMathMode(int omega) {
@@ -71,11 +71,11 @@ public class GaloisFieldMathMode implements MathMode {
         if (c1 == 0 || c2 == 0) {
             return 0;
         }
-        int sumLog = GF_LOG[c1] + GF_LOG[c2];
-        if(sumLog>= GF_FIELD_SIZE -1) {
-            sumLog-= GF_FIELD_SIZE -1;
+        int sumLog = gfLog[c1] + gfLog[c2];
+        if(sumLog>= gfFieldSize -1) {
+            sumLog-= gfFieldSize -1;
         }
-        return GF_INVERSE_LOG[sumLog];
+        return gfInverseLog[sumLog];
     }
 
     public int div(int c1, int divisor) {
@@ -85,11 +85,11 @@ public class GaloisFieldMathMode implements MathMode {
         if (divisor == 0) {
             throw new ArithmeticException("Divisionby 0");
         }
-        int diffLog = GF_LOG[c1] - GF_LOG[divisor];
+        int diffLog = gfLog[c1] - gfLog[divisor];
         while(diffLog<0) {
-            diffLog+= GF_FIELD_SIZE -1;
+            diffLog+= gfFieldSize -1;
         }
-        return GF_INVERSE_LOG[diffLog];
+        return gfInverseLog[diffLog];
     }
 
     @Override
@@ -102,9 +102,9 @@ public class GaloisFieldMathMode implements MathMode {
         return add(c1,c2);
     }
 
-    public int[] getGFLog() { return GF_LOG; }
+    public int[] getGFLog() { return gfLog; }
 
-    public int[] getGFILog() { return GF_INVERSE_LOG; }
+    public int[] getGFILog() { return gfInverseLog; }
 
     public static int rshift(int value,int shift, byte length) {
         return lshift(value,-shift,length);

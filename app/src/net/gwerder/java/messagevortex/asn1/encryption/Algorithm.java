@@ -22,6 +22,7 @@ package net.gwerder.java.messagevortex.asn1.encryption;
 // ************************************************************************************
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
+import net.gwerder.java.messagevortex.asn1.AlgorithmParameter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,22 +45,19 @@ public enum Algorithm {
     CAMELLIA256( 1102, AlgorithmType.SYMMETRIC, "CAMELLIA256", "BC", SecurityLevel.QUANTUM ),
 
     RSA        (2000, AlgorithmType.ASYMMETRIC, "RSA", "BC", getSecLevelList( getSecLevelList( getSecLevelList( getSecLevelList(
-              SecurityLevel.LOW,     getParameterList(getParameterList(getParameterList(Algorithm.KEYSIZE,1024),Parameter.MODE.toString()+"_0",Mode.getDefault(AlgorithmType.ASYMMETRIC).toString()),Parameter.PADDING.toString()+"_0",Padding.getDefault(AlgorithmType.ASYMMETRIC).getPadding())),
-              SecurityLevel.MEDIUM,  getParameterList(getParameterList(getParameterList(Algorithm.KEYSIZE,2048),Parameter.MODE.toString()+"_0",Mode.getDefault(AlgorithmType.ASYMMETRIC).toString()),Parameter.PADDING.toString()+"_0",Padding.getDefault(AlgorithmType.ASYMMETRIC).getPadding())),
-              SecurityLevel.HIGH,    getParameterList(getParameterList(getParameterList(Algorithm.KEYSIZE,4096),Parameter.MODE.toString()+"_0",Mode.getDefault(AlgorithmType.ASYMMETRIC).toString()),Parameter.PADDING.toString()+"_0",Padding.getDefault(AlgorithmType.ASYMMETRIC).getPadding())),
-              SecurityLevel.QUANTUM, getParameterList(getParameterList(getParameterList(Algorithm.KEYSIZE,8192),Parameter.MODE.toString()+"_0",Mode.getDefault(AlgorithmType.ASYMMETRIC).toString()),Parameter.PADDING.toString()+"_0",Padding.getDefault(AlgorithmType.ASYMMETRIC).getPadding()))
+              SecurityLevel.LOW,     getParameterList(new String[] { Parameter.ALGORITHM+"=RSA",Parameter.KEYSIZE.toString()+"=1024",Parameter.MODE.toString()+"="+Mode.getDefault(AlgorithmType.ASYMMETRIC).toString(),Parameter.PADDING.toString()+"="+Padding.getDefault(AlgorithmType.ASYMMETRIC).toString()})),
+              SecurityLevel.MEDIUM,  getParameterList(new String[] { Parameter.ALGORITHM+"=RSA",Parameter.KEYSIZE.toString()+"=2048",Parameter.MODE.toString()+"="+Mode.getDefault(AlgorithmType.ASYMMETRIC).toString(),Parameter.PADDING.toString()+"="+Padding.getDefault(AlgorithmType.ASYMMETRIC).toString()})),
+              SecurityLevel.HIGH,    getParameterList(new String[] { Parameter.ALGORITHM+"=RSA",Parameter.KEYSIZE.toString()+"=4096",Parameter.MODE.toString()+"="+Mode.getDefault(AlgorithmType.ASYMMETRIC).toString(),Parameter.PADDING.toString()+"="+Padding.getDefault(AlgorithmType.ASYMMETRIC).toString()})),
+              SecurityLevel.QUANTUM, getParameterList(new String[] { Parameter.ALGORITHM+"=RSA",Parameter.KEYSIZE.toString()+"=8192",Parameter.MODE.toString()+"="+Mode.getDefault(AlgorithmType.ASYMMETRIC).toString(),Parameter.PADDING.toString()+"="+Padding.getDefault(AlgorithmType.ASYMMETRIC).toString()}))
 
     ),
     EC         ( 2100, AlgorithmType.ASYMMETRIC, "ECIES"    , "BC", getSecLevelList( getSecLevelList( getSecLevelList(
-            ECCurveType.SECP384R1.getSecurityLevel(), getParameterList(getParameterList(getParameterList(getParameterList(Algorithm.KEYSIZE,ECCurveType.SECP384R1.getKeySize()),Algorithm.CURVETYPE,ECCurveType.SECP384R1.getECCurveType()),Parameter.MODE.toString()+"_0",Mode.getDefault(AlgorithmType.ASYMMETRIC).toString()),Parameter.PADDING.toString()+"_0",Padding.getDefault(AlgorithmType.ASYMMETRIC).getPadding())),
-            ECCurveType.SECT409K1.getSecurityLevel(), getParameterList(getParameterList(getParameterList(getParameterList(Algorithm.KEYSIZE,ECCurveType.SECT409K1.getKeySize()),Algorithm.CURVETYPE,ECCurveType.SECT409K1.getECCurveType()),Parameter.MODE.toString()+"_0",Mode.getDefault(AlgorithmType.ASYMMETRIC).toString()),Parameter.PADDING.toString()+"_0",Padding.getDefault(AlgorithmType.ASYMMETRIC).getPadding())),
-            ECCurveType.SECP521R1.getSecurityLevel(), getParameterList(getParameterList(getParameterList(getParameterList(Algorithm.KEYSIZE,ECCurveType.SECP521R1.getKeySize()),Algorithm.CURVETYPE,ECCurveType.SECP521R1.getECCurveType()),Parameter.MODE.toString()+"_0",Mode.getDefault(AlgorithmType.ASYMMETRIC).toString()),Parameter.PADDING.toString()+"_0",Padding.getDefault(AlgorithmType.ASYMMETRIC).getPadding()))
+            ECCurveType.SECP384R1.getSecurityLevel(), getParameterList(new String[] { Parameter.ALGORITHM+"=ECIES",Parameter.KEYSIZE.toString()+"=384",Parameter.CURVETYPE.toString()+"="+ECCurveType.SECP384R1.toString(),Parameter.MODE.toString()+"="+Mode.getDefault(AlgorithmType.ASYMMETRIC).toString(),Parameter.PADDING.toString()+"="+Padding.getDefault(AlgorithmType.ASYMMETRIC).toString()})),
+            ECCurveType.SECT409K1.getSecurityLevel(), getParameterList(new String[] { Parameter.ALGORITHM+"=ECIES",Parameter.KEYSIZE.toString()+"=409",Parameter.CURVETYPE.toString()+"="+ECCurveType.SECT409K1.toString(),Parameter.MODE.toString()+"="+Mode.getDefault(AlgorithmType.ASYMMETRIC).toString(),Parameter.PADDING.toString()+"=",Padding.getDefault(AlgorithmType.ASYMMETRIC).toString()})),
+            ECCurveType.SECP521R1.getSecurityLevel(), getParameterList(new String[] { Parameter.ALGORITHM+"=ECIES",Parameter.KEYSIZE.toString()+"=521",Parameter.CURVETYPE.toString()+"="+ECCurveType.SECP521R1.toString(),Parameter.MODE.toString()+"="+Mode.getDefault(AlgorithmType.ASYMMETRIC).toString(),Parameter.PADDING.toString()+"=",Padding.getDefault(AlgorithmType.ASYMMETRIC).toString()}))
     ),
     SHA384     ( 3000, AlgorithmType.HASHING, "sha384", "BC",  SecurityLevel.HIGH ),
     SHA512     ( 3001, AlgorithmType.HASHING, "sha512", "BC", SecurityLevel.QUANTUM );
-
-    private static final String KEYSIZE   = "keySize_0";
-    private static final String CURVETYPE = "curveType_0";
 
     private static final java.util.logging.Logger LOGGER;
     private static Map<AlgorithmType, Algorithm> def = new HashMap<AlgorithmType, Algorithm>() {
@@ -82,14 +80,18 @@ public enum Algorithm {
     private AlgorithmType t;
     private String txt;
     private String provider;
-    private Map<SecurityLevel,Map<String,Object>> secLevel;
+    private Map<SecurityLevel,AlgorithmParameter> secLevel;
 
     Algorithm(int id, AlgorithmType t, String txt, String provider, SecurityLevel level) {
-        this( id, t, txt, provider, (Map<SecurityLevel, Map<String, Object>>) null );
-        secLevel = getSecLevelList( level, getParameterList( "keySize_0", getKeySize() ) );
+        this( id, t, txt, provider, (Map<SecurityLevel, AlgorithmParameter>) null );
+        secLevel = getSecLevelList( level, getParameterList( new String[] { Parameter.ALGORITHM+"="+id,Parameter.KEYSIZE+"="+getKeySize()} ) );
+        if(t==AlgorithmType.SYMMETRIC) {
+            secLevel.get(level).put(Parameter.PADDING.getId(),Padding.getDefault(t).toString());
+            secLevel.get(level).put(Parameter.MODE.getId(),Mode.getDefault(t).toString());
+        }
     }
 
-    Algorithm(int id, AlgorithmType t, String txt, String provider, Map<SecurityLevel, Map<String, Object>> parameters) {
+    Algorithm(int id, AlgorithmType t, String txt, String provider, Map<SecurityLevel, AlgorithmParameter> parameters) {
         this.id = id;
         this.t = t;
         this.txt = txt;
@@ -97,22 +99,23 @@ public enum Algorithm {
         this.secLevel = parameters;
     }
 
-    private static HashMap<String,Object> getParameterList(String txt,Object o) {
-        HashMap<String,Object> ret=new HashMap<>();
-        return getParameterList( ret,txt,o );
-    }
-
-    private static HashMap<String,Object> getParameterList(HashMap<String,Object> ret, String txt,Object o) {
-        ret.put(txt,o);
+    private static AlgorithmParameter getParameterList(String[] txt) {
+        AlgorithmParameter ret=new AlgorithmParameter();
+        for(String s:txt) {
+            String[] kv=s.split("=");
+            if(kv.length==2) {
+                ret.put(kv[0], kv[1]);
+            }
+        }
         return ret;
     }
 
-    private static  Map<SecurityLevel,Map<String,Object>> getSecLevelList(SecurityLevel level ,Map<String,Object> o) {
-        Map<SecurityLevel,Map<String,Object>> ret=new HashMap<>();
+    private static  Map<SecurityLevel,AlgorithmParameter> getSecLevelList(SecurityLevel level ,AlgorithmParameter o) {
+        Map<SecurityLevel,AlgorithmParameter> ret=new HashMap<>();
         return getSecLevelList(ret, level, o);
     }
 
-    private static  Map<SecurityLevel,Map<String,Object>> getSecLevelList(Map<SecurityLevel,Map<String,Object>> lst, SecurityLevel level ,Map<String,Object> o) {
+    private static  Map<SecurityLevel,AlgorithmParameter> getSecLevelList(Map<SecurityLevel,AlgorithmParameter> lst, SecurityLevel level ,AlgorithmParameter o) {
         lst.put(level,o);
         return lst;
     }
@@ -136,6 +139,15 @@ public enum Algorithm {
         return null;
     }
 
+    public static Algorithm getByString(String s) {
+        for(Algorithm e : values()) {
+            if(e.toString().equals(s)) {
+                return e;
+            }
+        }
+        return null;
+    }
+
     public static Algorithm getDefault(AlgorithmType at) {
         return def.get( at );
     }
@@ -148,7 +160,7 @@ public enum Algorithm {
         return txt.replaceAll("[0-9]*$","");
     }
 
-    public String getAlgorithm() {
+    public String toString() {
         return txt;
     }
 
@@ -165,29 +177,31 @@ public enum Algorithm {
     }
 
     public int getKeySize(SecurityLevel sl) {
-        if (txt.toLowerCase().startsWith( "sec" )) {
-            // Extract key size from EC courve name
-            return Integer.parseInt( txt.substring( 4, 7 ) );
-        } else if (txt.toLowerCase().startsWith( "aes" ) || txt.startsWith( "sha" ) ) {
+        if (txt.toLowerCase().startsWith( "aes" ) || txt.startsWith( "sha" ) ) {
             // Extract key size from AES and SHA name
             return Integer.parseInt( txt.substring( 3, 6 ) );
         } else if (txt.toLowerCase().startsWith( "camellia" )  ) {
             return Integer.parseInt( txt.substring( 8, 11 ) );
         }
-        if(secLevel==null || secLevel.get(sl)==null || (! (secLevel.get(sl).get(Parameter.KEYSIZE.toString()+"_0") instanceof Integer))) {
+
+        // get requested parameters
+        AlgorithmParameter params=getParameters(sl);
+
+        // get kesize from parameters
+        if(params==null || (Integer.parseInt(params.get(Parameter.KEYSIZE.getId()))<10)) {
             LOGGER.log( Level.SEVERE, "Error fetching keysize for " + txt + "/" +sl.toString()+" ("+ secLevel.get(sl) + ")");
+            throw new IllegalArgumentException("Error fetching key size for " + txt + "/" +sl.toString()+" ("+ secLevel.get(sl) + ")");
         }
-        Map<String,Object> params=secLevel.get(sl);
-        // get next higher security level if not available
-        while(params==null) {
-            sl=sl.next();
-            params=secLevel.get(sl);
+        if (params.get(Parameter.ALGORITHM).toLowerCase().startsWith( "ecies" )) {
+            // Extract key size from EC courve name
+            return Integer.parseInt( params.get(Parameter.CURVETYPE).substring( 4, 7 ) );
+        } else {
+            return Integer.parseInt(params.get(Parameter.KEYSIZE));
         }
-        return (Integer)(params.get(Parameter.KEYSIZE.toString()+"_0"));
     }
 
-    public Map<String,Object> getParameters(SecurityLevel sl) {
-        Map<String,Object> params=secLevel.get(sl);
+    public AlgorithmParameter getParameters(SecurityLevel sl) {
+        AlgorithmParameter params=secLevel.get(sl);
         // get next higher security level if not available
         while(params==null) {
             sl=sl.next();
@@ -196,7 +210,7 @@ public enum Algorithm {
         return secLevel.get(sl);
     }
 
-    public Map<SecurityLevel,Map<String,Object>> getParameters() {
+    public Map<SecurityLevel,AlgorithmParameter> getParameters() {
         return secLevel;
     }
 

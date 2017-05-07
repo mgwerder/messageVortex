@@ -80,7 +80,7 @@ public enum Mode {
         return null;
     }
 
-    public static Mode getByName(String name) {
+    public static Mode getByString(String name) {
         for(Mode e : values()) {
             if(e.txt.equals(name)) {
                 return e;

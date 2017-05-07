@@ -56,16 +56,27 @@ public enum ECCurveType {
         return null;
     }
 
+    public static ECCurveType getByString(String s) {
+        for(ECCurveType e : values()) {
+            if(e.toString().equals(s)) {
+                return e;
+            }
+        }
+        return null;
+    }
+
     public int getId() {
         return id;
     }
 
-    public String getECCurveType() {
+    public String toString() {
         return txt;
     }
+
     public SecurityLevel getSecurityLevel() {
         return secLevel;
     }
+
     public int getKeySize() { return Integer.parseInt( txt.substring( 4,7 ) ); }
 
     public static ECCurveType getDefault() {

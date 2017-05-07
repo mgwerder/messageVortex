@@ -97,7 +97,9 @@ public class PayloadChunk extends AbstractBlock {
      * @return the payload as byte array or null if a replyblock has been set
      */
     public byte[] getPayload() {
-        if(payloadType!=PAYLOAD) return null;
+        if(payloadType!=PAYLOAD) {
+            return null;
+        }
         return payload.clone();
     }
 
@@ -120,7 +122,9 @@ public class PayloadChunk extends AbstractBlock {
      * @return the reply block as byte array or null if a payload block has been set
      */
     public byte[] getReplyBlock() {
-        if(payloadType!=REPLY) return null;
+        if(payloadType!=REPLY) {
+            return null;
+        }
         return payload.clone();
     }
 

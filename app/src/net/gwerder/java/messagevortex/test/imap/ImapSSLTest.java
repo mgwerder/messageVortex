@@ -109,7 +109,7 @@ public class ImapSSLTest {
             assertTrue("check client socket state",ic.isTLS());
 
             // Selftest
-            // This selftest ought to be removed Socket s=SSLSocketFactory.getDefault().createSocket(InetAddress.getByName("localhost"),ss.getLocalPort());
+            // This selftest ought to be removed Socket s=SSLSocketFactory.getDefault().createSocket(InetAddress.getByString("localhost"),ss.getLocalPort());
         } catch(Exception ioe) {
             LOGGER.log(Level.WARNING,"Unexpected Exception",ioe);
             fail("Exception rised  in client("+ioe+") while communicating");

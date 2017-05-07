@@ -1,5 +1,6 @@
 package net.gwerder.java.messagevortex.test.asn1;
 
+import net.gwerder.java.messagevortex.ExtendedSecureRandom;
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.asn1.AbstractBlock;
 import net.gwerder.java.messagevortex.asn1.encryption.Parameter;
@@ -8,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.util.Arrays;
 import java.util.logging.Level;
 
 import static org.junit.Assert.assertTrue;
@@ -37,6 +39,21 @@ public class AbstractBlockTest {
         assertTrue("toHex({}) is not ''H","''H".equals(AbstractBlock.toHex(new byte[0])));
         assertTrue("toHex(\"\\r\\n\") is not '0D0A'H","'0D0A'H".equals(AbstractBlock.toHex(new byte[] { '\r','\n'})));
         assertTrue("toHex(\"\\0\") is not '00'H","'00'H".equals(AbstractBlock.toHex(new byte[] { 0 })));
+    }
+
+    /***
+     * Testing behaviour of fromHex().
+     */
+    @Test
+    public void fromHexTest() {
+        LOGGER.log(Level.INFO,"Testing fromHex behaviour");
+        assertTrue("fromHex(null) is not null",AbstractBlock.fromHex(null)==null);
+        assertTrue("fromHex(\"\") is not byte[0]", Arrays.equals(new byte[0],AbstractBlock.fromHex( "" )));
+        ExtendedSecureRandom esr=new ExtendedSecureRandom();
+        for(int i=0;i<100;i++) {
+            byte[]arr=esr.generateSeed(257 );
+            assertTrue("fromHex(\"\") fuzzer rounf "+i, Arrays.equals(arr,AbstractBlock.fromHex( AbstractBlock.toHex(arr) )));
+        }
     }
 
     /***

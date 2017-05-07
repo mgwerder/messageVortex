@@ -39,6 +39,16 @@ public abstract class AbstractBlock {
 
     protected static final String CRLF="\r\n";
 
+    public static byte[] fromHex(String s) {
+        if(s==null) return null;
+        int len = s.length();
+        byte[] data = new byte[Math.max(0,(len-3) / 2)];
+        for (int i = 1; i < len-2; i += 2) {
+            data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+                    + Character.digit(s.charAt(i+1), 16));
+        }
+        return data;
+    }
 
     public static String toHex(byte[] data) {
         byte[] bytes=data;

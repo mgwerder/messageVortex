@@ -22,7 +22,6 @@ package net.gwerder.java.messagevortex.asn1;
 // ************************************************************************************
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
-import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import net.gwerder.java.messagevortex.routing.operation.GaloisFieldMathMode;
 import org.bouncycastle.asn1.*;
 
@@ -152,7 +151,9 @@ public abstract class AbstractRedundancyOperation extends Operation {
         for(SymmetricKey sk:keys) {
             i--;
             sb.append(sk.dumpValueNotation(prefix+"  "));
-            if(i>0) sb.append(",");
+            if(i>0) {
+                sb.append(",");
+            }
             sb.append(CRLF);
         }
         sb.append( prefix + "  },").append(CRLF);

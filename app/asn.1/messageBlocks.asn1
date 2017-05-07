@@ -247,25 +247,19 @@ BEGIN
   -- At the moment either smtp:<email> or xmpp:<jabber>
   BlendingSpec ::= SEQUENCE {
     target            NodeSpec,
-    blendingType      IA5String, -- 'F5' or 'atttach'
-    optionalParameter SEQUENCE (SIZE (0..maxNumberOfParameter)) OF BlendingParameter
+    blendingType      IA5String, -- 'F5' or 'atttach' FIXME
+    parameter         SEQUENCE (SIZE (0..maxNumberOfParameter)) OF BlendingParameter
   }
   
   BlendingParameter ::= CHOICE {
-    keyvalue        [1] KeyValueParameter,
-    offset          [2] INTEGER,
-    symmetricKey    [3] SymmetricKey,         
-    asymmetricKey   [4] AsymmetricKey
+    offset          [1] INTEGER,
+    symmetricKey    [2] SymmetricKey,         
+    asymmetricKey   [3] AsymmetricKey
   }
   
   NodeSpec ::= SEQUENCE {
     media             IA5String,  -- defined so far are 'xmpp' and 'smtp'
     recipientAddress  IA5String
-  }
-  
-  KeyValueParameter ::= SEQUENCE {
-    key             IA5String,
-    vlaue           IA5String
   }
   
   ChainSecret ::= INTEGER (0..4294967295)
@@ -458,14 +452,16 @@ BEGIN
   -- Symmetric key
   SymmetricKey ::= SEQUENCE {
     keyType SymmetricAlgorithmIdentifier,
-    key     OCTET STRING (SIZE(1..512))
+	parameter AlgorithmParameters
+    key     OCTET STRING (SIZE(1..512)),
   }
   
   -- Asymmetric Key
   AsymmetricKey ::= SEQUENCE {
     keyType       AsymmetricAlgorithmIdentifier,
-    publicKey     [1] OCTET STRING,
-    privateKey    [2] OCTET STRING OPTIONAL
+	parameter     [1] AlgorithmParameters 
+    publicKey     [2] OCTET STRING,
+    privateKey    [3] OCTET STRING OPTIONAL,
   }
   
 END

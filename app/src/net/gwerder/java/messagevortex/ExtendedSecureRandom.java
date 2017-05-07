@@ -32,6 +32,7 @@ public class ExtendedSecureRandom {
 
     public int nextInt(int bound) { return sr.nextInt( bound );}
     public void nextBytes(byte[] bound) { sr.nextBytes( bound );}
+    public byte[] generateSeed(int i) { return sr.generateSeed( i );}
 
     public double nextDouble() { return sr.nextDouble();}
 

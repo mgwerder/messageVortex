@@ -103,7 +103,7 @@ public class VortexMessageTest {
     private void testIntByteConverter(long i, int len) {
         byte[] b= VortexMessage.getLongAsBytes( i,len );
         assertTrue("wrong number of bytes returned (expected="+len+"; received="+b.length+")",b.length==len);
-        assertTrue( "Error reencoding "+i+ " (old="+i+";"+ AbstractBlock.toHex(b)+";new="+ VortexMessage.getBytesAsInteger( b )+"]", VortexMessage.getBytesAsInteger( b ) == i );
+        assertTrue( "Error reencoding "+i+ " (old="+i+";"+ AbstractBlock.toHex(b)+";new="+ VortexMessage.getBytesAsLong( b )+"]", VortexMessage.getBytesAsLong( b ) == i );
     }
 
     @Test
@@ -124,6 +124,23 @@ public class VortexMessageTest {
             o.close();
         } catch (Exception e) {
             fail("unexpected exception");
+        }
+    }
+
+    @Test
+    public void ByteToLongConversionTest() {
+        assertTrue("error testing byte conversion with 0 ["+VortexMessage.toHex(VortexMessage.getLongAsBytes(0))+"->"+VortexMessage.getBytesAsLong(VortexMessage.getLongAsBytes(0))+"]",0==VortexMessage.getBytesAsLong(VortexMessage.getLongAsBytes(0)));
+        assertTrue("error testing byte conversion with 1",1==VortexMessage.getBytesAsLong(VortexMessage.getLongAsBytes(1)));
+        assertTrue("error testing byte conversion with 1 to bytes",Arrays.equals(new byte[] {1,0,0,0},VortexMessage.getLongAsBytes(1)));
+        assertTrue("error testing byte conversion with 0 to bytes",Arrays.equals(new byte[] {0,0,0,0},VortexMessage.getLongAsBytes(0)));
+        assertTrue("error testing byte conversion with 256 to bytes",Arrays.equals(new byte[] {0,1,0,0},VortexMessage.getLongAsBytes(256)));
+        assertTrue("error testing byte conversion with 65536 to bytes",Arrays.equals(new byte[] {0,0,1,0},VortexMessage.getLongAsBytes(65536)));
+        assertTrue("error testing byte conversion with "+Long.MAX_VALUE,Long.MAX_VALUE==VortexMessage.getBytesAsLong(VortexMessage.getLongAsBytes(Long.MAX_VALUE,8)));
+
+        // fuzzing value
+        for(int i=0;i<1000;i++) {
+            long r=(long)(Math.random()+Long.MAX_VALUE);
+            assertTrue( "error fuzzing byte conversion with "+r, r==VortexMessage.getBytesAsLong(VortexMessage.getLongAsBytes(r,8)));
         }
     }
 

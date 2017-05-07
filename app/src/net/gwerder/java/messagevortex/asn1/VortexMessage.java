@@ -322,7 +322,7 @@ public class VortexMessage extends AbstractBlock {
      * @param b the byte array to be converted to long
      * @return the long representation of the byte array
      */
-    public static long getBytesAsInteger(byte[] b) {
+    public static long getBytesAsLong(byte[] b) {
         if(b==null || b.length<1 || b.length>8) {
             throw new IllegalArgumentException( "byte array must contain exactly four bytes" );
         }

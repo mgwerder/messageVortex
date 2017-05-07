@@ -72,11 +72,15 @@ public class InternalPayload {
     public PayloadChunk getPayload(int id) {
         synchronized(internalPayload) {
             PayloadChunk pc=internalPayload.get(id);
-            if(pc!=null) return pc;
+            if(pc!=null) {
+                return pc;
+            }
 
             // Check if already in payload cache
             pc=getPayloadCache(id);
-            if(pc!=null) return pc;
+            if(pc!=null) {
+                return pc;
+            }
 
             // build if payload cache is empty
             Operation op=internalOperationOutput.get(id);
@@ -213,7 +217,9 @@ public class InternalPayload {
 
         // check for conflicting operations
         for( int id:op.getOutputID()) {
-            if(internalOperationOutput.get(id)!=null) return false;
+            if(internalOperationOutput.get(id)!=null) {
+                return false;
+            }
         }
 
         // store operation
@@ -225,7 +231,9 @@ public class InternalPayload {
     public boolean removeOperation(Operation op) {
         // check for conflicting operations
         for( int id:op.getOutputID()) {
-            if(internalOperationOutput.get(id)!=null) return false;
+            if(internalOperationOutput.get(id)!=null) {
+                return false;
+            }
         }
 
         // store operation
@@ -247,7 +255,9 @@ public class InternalPayload {
         synchronized(operations) {
             List<Operation> ops=new ArrayList<>();
             for(Operation op:operations) {
-                if(! op.isInUsagePeriod()) ops.add(op);
+                if(! op.isInUsagePeriod()) {
+                    ops.add(op);
+                }
             }
             for(Operation op:ops) {
                 LOGGER.log(Level.INFO,"clearing expired operation "+op+" of identity "+getIdentity());
@@ -261,7 +271,9 @@ public class InternalPayload {
             // search for expired payloads
             List<Integer> expiredPayloadIds=new ArrayList<>();
             for(Map.Entry<Integer,PayloadChunk> pce:internalPayload.entrySet()) {
-                if(!pce.getValue().isInUsagePeriod()) expiredPayloadIds.add(pce.getKey());
+                if(!pce.getValue().isInUsagePeriod()) {
+                    expiredPayloadIds.add(pce.getKey());
+                }
             }
 
             // remove expired payloads

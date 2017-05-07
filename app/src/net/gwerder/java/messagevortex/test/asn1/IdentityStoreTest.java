@@ -31,7 +31,7 @@ public class IdentityStoreTest {
     }
 
     @Test
-    public void testingIdentityStoreDump1() {
+    public void testingIdentityStoreDump() {
         try {
             for (int i = 0; i < 10; i++) {
                 LOGGER.log( Level.INFO, "Testing IdentityBlock Store dumping " + (i + 1) + " of " + 10 );
