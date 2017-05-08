@@ -57,6 +57,11 @@ public class AsymmetricKey extends Key {
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
     }
 
+    static{
+        // start key precalculator
+        AsymmetricKey.setCacheFileName("AsymmetricKey.cache");
+    }
+
     protected byte[]  publicKey  = null;
     protected byte[]  privateKey = null;
     protected Algorithm mac=Algorithm.getDefault( AlgorithmType.HASHING );
@@ -124,6 +129,10 @@ public class AsymmetricKey extends Key {
             throw new IOException( "Exception while creating key", e );
         }
         selftest();
+    }
+
+    public static String setCacheFileName(String name) {
+        return AsymmetricKeyPreCalculator.setCacheFileName(name);
     }
 
     private void selftest() throws IOException {

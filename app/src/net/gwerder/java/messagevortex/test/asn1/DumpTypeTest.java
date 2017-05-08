@@ -1,7 +1,7 @@
 package net.gwerder.java.messagevortex.test.asn1;
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
-import net.gwerder.java.messagevortex.asn1.AsymmetricKeyPreCalculator;
+import net.gwerder.java.messagevortex.asn1.AsymmetricKey;
 import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,11 +24,6 @@ public class DumpTypeTest {
     static {
         LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
         MessageVortexLogger.setGlobalLogLevel( Level.ALL);
-    }
-
-    static{
-        // start key precalculator
-        AsymmetricKeyPreCalculator.setCacheFileName("AsymmetricKey.cache");
     }
 
     @Test

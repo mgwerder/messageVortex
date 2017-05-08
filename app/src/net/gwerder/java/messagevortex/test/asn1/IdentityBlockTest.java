@@ -24,12 +24,6 @@ public class IdentityBlockTest {
         MessageVortexLogger.setGlobalLogLevel(Level.ALL);
     }
 
-    static{
-        // start key precalculator
-        AsymmetricKeyPreCalculator.setCacheFileName("AsymmetricKey.cache");
-    }
-
-
     /***
      * Reencodes 100 Identities and checks whether their byte and Value Notation Dumps are equivalent.
      */

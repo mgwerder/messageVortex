@@ -37,12 +37,6 @@ public class FuzzerTest {
         MessageVortexLogger.setGlobalLogLevel(Level.ALL);
     }
 
-    static{
-        // start key precalculator
-        AsymmetricKeyPreCalculator.setCacheFileName("AsymmetricKey.cache");
-    }
-
-
     private final int ksDisc = 8192;
 
     @Test

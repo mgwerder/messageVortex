@@ -4,7 +4,6 @@ import net.gwerder.java.messagevortex.ExtendedSecureRandom;
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.asn1.AlgorithmParameter;
 import net.gwerder.java.messagevortex.asn1.AsymmetricKey;
-import net.gwerder.java.messagevortex.asn1.AsymmetricKeyPreCalculator;
 import net.gwerder.java.messagevortex.asn1.encryption.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,7 +26,7 @@ public class AsymmetricKeyReencodingTest {
 
     static{
         // start key precalculator
-        AsymmetricKeyPreCalculator.setCacheFileName("AsymmetricKey.cache");
+        AsymmetricKey.setCacheFileName("AsymmetricKey.cache");
     }
 
     private static final java.util.logging.Logger LOGGER;
