@@ -26,7 +26,8 @@ public class AsymmetricKeyPreCalculator implements Serializable {
     }
     private static long lastSaved = 0;
 
-    private static int numThreads=4;
+    /* nuber of threads to use */
+    private static int numThreads=Math.max(2,Runtime.getRuntime().availableProcessors()-1);
 
     private static class InternalThread extends Thread {
 
@@ -103,6 +104,12 @@ public class AsymmetricKeyPreCalculator implements Serializable {
                                 }
 
                             });
+                        }
+                        // start threads
+                        for(Thread t:tl) {
+                            t.setName("cache precalculation thread");
+                            t.setPriority(Thread.MIN_PRIORITY);
+                            t.start();
                         }
 
                         // wait for all threads to finish
