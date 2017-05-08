@@ -5,7 +5,6 @@ import net.gwerder.java.messagevortex.asn1.AlgorithmParameter;
 import net.gwerder.java.messagevortex.asn1.AsymmetricKey;
 import net.gwerder.java.messagevortex.asn1.AsymmetricKeyPreCalculator;
 import net.gwerder.java.messagevortex.asn1.encryption.*;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -41,7 +40,7 @@ public class AsymmetricKeyTest {
 
     static{
         // start key precalculator
-        AsymmetricKeyPreCalculator.setCacheFileName("asymmetrichKey.cache");
+        AsymmetricKeyPreCalculator.setCacheFileName("AsymmetricKey.cache");
     }
 
     @Test
@@ -74,7 +73,7 @@ public class AsymmetricKeyTest {
                     b1 = new byte[sr.nextInt(Math.min(s.getPadding().getMaxSize(size), 1024))];
                 }
                 sr.nextBytes(b1);
-                LOGGER.log(Level.INFO, "  doing an encrypt/decrypt cycle with " + b1.length + " bytes");
+                LOGGER.log(Level.INFO, "  doing an encrypt/decrypt cycle with " + b1.length + " bytes (max:"+s.getPadding().getMaxSize(size)+"; size:"+size+")");
                 byte[] b2 = null;
                 byte[] b3 = null;
                 try {
@@ -176,11 +175,14 @@ public class AsymmetricKeyTest {
                 for (int i = 0; i < ksDisc / size; i++) {
                     LOGGER.log( Level.FINE, "starting test " + (i + 1) + " of " + ksDisc / size );
                     System.out.print(".");
-                    AsymmetricKey k1 = new AsymmetricKey(alg.getParameters( SecurityLevel.LOW ));
-                    AsymmetricKey k2 = new AsymmetricKey(alg.getParameters( SecurityLevel.LOW ));
+                    AlgorithmParameter p=alg.getParameters( SecurityLevel.LOW );
+                    AsymmetricKey k1 = new AsymmetricKey(p);
+                    AsymmetricKey k2 = new AsymmetricKey(p);
                     k2.setPrivateKey( k1.getPrivateKey() );
                     k2.setPublicKey(  k1.getPublicKey()  );
                     assertTrue( "error in key transfer cycle with "+alg+" ",k1.equals( k2 ));
+                    assertTrue( "error in key size 1",Integer.parseInt(p.get(Parameter.KEYSIZE))==k1.getKeySize());
+                    assertTrue( "error in key size 2",Integer.parseInt(p.get(Parameter.KEYSIZE))==k2.getKeySize());
                     assertTrue( "reencode error in key transfer cycle with "+alg+" ",Arrays.equals(k1.toBytes(),k2.toBytes()));
                 }
                 System.out.println("");
@@ -193,9 +195,35 @@ public class AsymmetricKeyTest {
 
     @Test
     public void asymmetricKeySizeTest() {
-        assertTrue( "getKeySize for RSA is bad (got "+Algorithm.RSA.getKeySize(SecurityLevel.LOW)+")", Algorithm.RSA.getKeySize(SecurityLevel.LOW) == 1024 );
-        assertTrue( "getKeySize for EC is bad (got "+Algorithm.EC.getKeySize(SecurityLevel.QUANTUM)+")", Algorithm.EC.getKeySize(SecurityLevel.QUANTUM) == 521 );
-        assertTrue( "getKeySize for EC is bad (got "+Algorithm.EC.getKeySize(SecurityLevel.LOW)+")", Algorithm.EC.getKeySize(SecurityLevel.LOW) == 384 );
+        assertTrue( "getKeySize for RSA LOW is bad (got "+Algorithm.RSA.getKeySize(SecurityLevel.LOW)+")", Algorithm.RSA.getKeySize(SecurityLevel.LOW) == 1024 );
+        assertTrue( "getKeySize for RSA MEDIUM is bad (got "+Algorithm.RSA.getKeySize(SecurityLevel.MEDIUM)+")", Algorithm.RSA.getKeySize(SecurityLevel.MEDIUM) == 2048 );
+        assertTrue( "getKeySize for RSA HIGH is bad (got "+Algorithm.RSA.getKeySize(SecurityLevel.HIGH)+")", Algorithm.RSA.getKeySize(SecurityLevel.HIGH) == 4096 );
+        assertTrue( "getKeySize for RSA QUANTUM is bad (got "+Algorithm.RSA.getKeySize(SecurityLevel.QUANTUM)+")", Algorithm.RSA.getKeySize(SecurityLevel.QUANTUM) == 8192 );
+        assertTrue( "getKeySize for RSA LOW 2 is bad (got "+Algorithm.RSA.getKeySize(SecurityLevel.LOW)+")", Algorithm.RSA.getKeySize(SecurityLevel.LOW) == 1024 );
+        assertTrue( "getKeySize for EC QUANTUM is bad (got "+Algorithm.EC.getKeySize(SecurityLevel.QUANTUM)+")", Algorithm.EC.getKeySize(SecurityLevel.QUANTUM) == 521 );
+        assertTrue( "getKeySize for EC LOW is bad (got "+Algorithm.EC.getKeySize(SecurityLevel.LOW)+")", Algorithm.EC.getKeySize(SecurityLevel.LOW) == 384 );
+
+        Algorithm[] a=Algorithm.values();
+        SecurityLevel[] sl=SecurityLevel.values();
+        Map<String,Integer> lm=new HashMap<>();
+        LOGGER.log( Level.INFO, "fuzzing key size test" );
+        int repeat=10000;
+        for(int i=0;i<repeat;i++) {
+            // pick random algrithm
+            Algorithm ta=a[(int)(Math.random()*a.length)];
+            SecurityLevel ts=sl[(int)(Math.random()*sl.length)];
+            String s=ta.toString()+"/"+ts.toString();
+
+            LOGGER.log( Level.INFO, "  starting test " + (i + 1) + " with "+s+" ("+i+"/"+ repeat+")" );
+
+            Integer size=lm.get(s);
+            if(size==null) {
+                lm.put(s,ta.getKeySize(ts));
+            } else {
+                Integer size2=lm.get(s);
+                assertTrue("Failed fuzzing for "+s+" (was: "+size2.intValue()+"; is new:"+size.intValue()+")",size2.intValue()==size.intValue());
+            }
+        }
     }
 
     @Test

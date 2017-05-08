@@ -23,19 +23,23 @@ package net.gwerder.java.messagevortex.asn1.encryption;
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.asn1.AlgorithmParameter;
+import org.bouncycastle.jcajce.util.AlgorithmParametersUtils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
 /**
  * Represents all supported crypto algorithms.
  *
  * FIXME: Add tiger192 support for final version
+ * FIXME: concurrency problem at startup for static map
  */
-public enum Algorithm {
+public enum Algorithm implements Serializable {
 
     AES128     ( 1000, AlgorithmType.SYMMETRIC, "aes128", "BC", SecurityLevel.LOW ),
     AES192     ( 1001, AlgorithmType.SYMMETRIC, "aes192", "BC", SecurityLevel.MEDIUM ),
@@ -60,10 +64,7 @@ public enum Algorithm {
     SHA512     ( 3001, AlgorithmType.HASHING, "sha512", "BC", SecurityLevel.QUANTUM );
 
     private static final java.util.logging.Logger LOGGER;
-    private static Map<AlgorithmType, Algorithm> def = new HashMap<AlgorithmType, Algorithm>() {
-
-        private static final long serialVersionUID = 12132324789789L;
-
+    private static Map<AlgorithmType, Algorithm> def = new ConcurrentHashMap<AlgorithmType, Algorithm>() {
         {
             put(AlgorithmType.ASYMMETRIC, RSA);
             put(AlgorithmType.SYMMETRIC, AES256);
@@ -76,18 +77,24 @@ public enum Algorithm {
         MessageVortexLogger.setGlobalLogLevel( Level.ALL );
     }
 
-    private int id;
-    private AlgorithmType t;
-    private String txt;
-    private String provider;
-    private Map<SecurityLevel,AlgorithmParameter> secLevel;
+    private final int id;
+    private final AlgorithmType t;
+    private final String txt;
+    private final String provider;
+    private final Map<SecurityLevel,AlgorithmParameter> secLevel;
 
     Algorithm(int id, AlgorithmType t, String txt, String provider, SecurityLevel level) {
-        this( id, t, txt, provider, (Map<SecurityLevel, AlgorithmParameter>) null );
-        secLevel = getSecLevelList( level, getParameterList( new String[] { Parameter.ALGORITHM+"="+id,Parameter.KEYSIZE+"="+getKeySize()} ) );
-        if(t==AlgorithmType.SYMMETRIC) {
-            secLevel.get(level).put(Parameter.PADDING.getId(),Padding.getDefault(t).toString());
-            secLevel.get(level).put(Parameter.MODE.getId(),Mode.getDefault(t).toString());
+        this.secLevel = new ConcurrentHashMap<>();
+        synchronized(secLevel) {
+            this.id = id;
+            this.t = t;
+            this.txt = txt;
+            this.provider = provider;
+            secLevel.putAll(getSecLevelList( level, getParameterList( new String[] { Parameter.ALGORITHM+"="+id,Parameter.KEYSIZE+"="+getKeySize()} ) ) );
+            if(t==AlgorithmType.SYMMETRIC) {
+                secLevel.get(level).put(Parameter.PADDING.getId(),Padding.getDefault(t).toString());
+                secLevel.get(level).put(Parameter.MODE.getId(),Mode.getDefault(t).toString());
+            }
         }
     }
 
@@ -111,7 +118,7 @@ public enum Algorithm {
     }
 
     private static  Map<SecurityLevel,AlgorithmParameter> getSecLevelList(SecurityLevel level ,AlgorithmParameter o) {
-        Map<SecurityLevel,AlgorithmParameter> ret=new HashMap<>();
+        Map<SecurityLevel,AlgorithmParameter> ret=new ConcurrentHashMap<>();
         return getSecLevelList(ret, level, o);
     }
 
@@ -184,34 +191,49 @@ public enum Algorithm {
             return Integer.parseInt( txt.substring( 8, 11 ) );
         }
 
-        // get requested parameters
-        AlgorithmParameter params=getParameters(sl);
+        synchronized(secLevel) {
+            // get requested parameters
+            AlgorithmParameter params = getParameters(sl);
 
-        // get kesize from parameters
-        if(params==null || (Integer.parseInt(params.get(Parameter.KEYSIZE.getId()))<10)) {
-            LOGGER.log( Level.SEVERE, "Error fetching keysize for " + txt + "/" +sl.toString()+" ("+ secLevel.get(sl) + ")");
-            throw new IllegalArgumentException("Error fetching key size for " + txt + "/" +sl.toString()+" ("+ secLevel.get(sl) + ")");
-        }
-        if (params.get(Parameter.ALGORITHM).toLowerCase().startsWith( "ecies" )) {
-            // Extract key size from EC courve name
-            return Integer.parseInt( params.get(Parameter.CURVETYPE).substring( 4, 7 ) );
-        } else {
-            return Integer.parseInt(params.get(Parameter.KEYSIZE));
+            // get kesize from parameters
+            if (params == null || (Integer.parseInt(params.get(Parameter.KEYSIZE.getId())) < 10)) {
+                LOGGER.log(Level.SEVERE, "Error fetching keysize for " + txt + "/" + sl.toString() + " (" + secLevel.get(sl) + ")");
+                throw new IllegalArgumentException("Error fetching key size for " + txt + "/" + sl.toString() + " (" + secLevel.get(sl) + ")");
+            }
+            if (params.get(Parameter.ALGORITHM).toLowerCase().startsWith("ecies")) {
+                // Extract key size from EC courve name
+                return Integer.parseInt(params.get(Parameter.CURVETYPE).substring(4, 7));
+            } else {
+                return Integer.parseInt(params.get(Parameter.KEYSIZE));
+            }
         }
     }
 
     public AlgorithmParameter getParameters(SecurityLevel sl) {
-        AlgorithmParameter params=secLevel.get(sl);
-        // get next higher security level if not available
-        while(params==null) {
-            sl=sl.next();
-            params=secLevel.get(sl);
+        synchronized(secLevel) {
+            AlgorithmParameter params = null;
+
+            // get next higher security level if not available
+            while (params == null) {
+                params = secLevel.get(sl);
+
+                // if required repeat with next higher SecurityLevel
+                if(params==null) {
+                    sl = sl.next();
+                }
+            }
+            return params.clone();
         }
-        return secLevel.get(sl);
     }
 
     public Map<SecurityLevel,AlgorithmParameter> getParameters() {
-        return secLevel;
+        synchronized(secLevel) {
+            Map<SecurityLevel,AlgorithmParameter> ret=new HashMap<>();
+            for(Map.Entry<SecurityLevel,AlgorithmParameter> e:secLevel.entrySet()) {
+                ret.put(e.getKey(),e.getValue().clone());
+            }
+            return ret;
+        }
     }
 
 }

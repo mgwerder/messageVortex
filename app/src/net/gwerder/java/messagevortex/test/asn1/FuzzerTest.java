@@ -5,6 +5,8 @@ import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.asn1.*;
 import net.gwerder.java.messagevortex.asn1.encryption.Algorithm;
 import net.gwerder.java.messagevortex.asn1.encryption.AlgorithmType;
+import net.gwerder.java.messagevortex.asn1.encryption.Parameter;
+import net.gwerder.java.messagevortex.asn1.encryption.SecurityLevel;
 import org.bouncycastle.asn1.ASN1InputStream;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,12 +37,18 @@ public class FuzzerTest {
         MessageVortexLogger.setGlobalLogLevel(Level.ALL);
     }
 
+    static{
+        // start key precalculator
+        AsymmetricKeyPreCalculator.setCacheFileName("AsymmetricKey.cache");
+    }
+
+
     private final int ksDisc = 8192;
 
     @Test
     public void fuzzingMessage() throws Exception {
         try {
-            AsymmetricKey ownIdentity = new AsymmetricKey();
+            AsymmetricKey ownIdentity = new AsymmetricKey(Algorithm.RSA.getParameters(SecurityLevel.LOW));
             for (int i = 0; i < BLOCK_FUZZER_CYCLES; i++) {
                 LOGGER.log( Level.INFO, "Starting fuzzer cycle " + (i + 1) + " of " + BLOCK_FUZZER_CYCLES );
                 IdentityBlock id = new IdentityBlock();
@@ -173,8 +181,9 @@ public class FuzzerTest {
     public void fuzzingSymmetricKey() throws Exception {
         for(Algorithm alg: Algorithm.getAlgorithms( AlgorithmType.SYMMETRIC )) {
             try {
-                System.out.println("Testing "+alg+" ("+ksDisc+")");
-                for (int i = 0; i < ksDisc; i++) {
+                int size=alg.getKeySize()/8;
+                System.out.println("Testing "+alg+" ("+ksDisc/size+")");
+                for (int i = 0; i < ksDisc/size; i++) {
                     SymmetricKey s = new SymmetricKey( alg );
                     assertTrue( "Symmetric may not be null",s!=null);
                     byte[] b1=s.toBytes();

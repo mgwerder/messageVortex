@@ -90,24 +90,36 @@ public class AsymmetricKey extends Key {
     /***
      * creates a new asymmetric key based on the parameters given.
      *
+     * If available a precalculated key will be offered.
+     *
      * @param params   the parameters to be used
      * @throws IOException if the key can not be generated with the given parameters
      */
-    //public AsymmetricKey(Algorithm alg, Map<String,Object> params) throws IOException {
     public AsymmetricKey(AlgorithmParameter params) throws IOException {
-        Algorithm alg=Algorithm.getByString(params.get(Parameter.ALGORITHM.getId()));
-        if(this.parameters==null) {
-            this.parameters=new AlgorithmParameter();
+        this(params,true);
+    }
+
+    /***
+     * creates a new asymmetric key based on the parameters given.
+     *
+     * This call is mainly used by the cache manager to enforce new calculation of a key.
+     *
+     * @param params             the parameters to be used
+     * @param allowPrecalculated true if a precalculated key is allowed
+     * @throws IOException if the key can not be generated with the given parameters
+     */
+    public AsymmetricKey(AlgorithmParameter params,boolean allowPrecalculated) throws IOException {
+        if(params==null) {
+            throw new NullPointerException("parameters may not be null");
         }
-        if(params!=null) {
-            this.parameters=params;
-        }
+        this.parameters=params;
+
         if(params.get(Parameter.ALGORITHM)==null) {
             throw new IOException( "Algorithm null is not encodable by the system" );
         }
 
         try {
-            createKey();
+            createKey(allowPrecalculated);
         } catch (NoSuchAlgorithmException | NoSuchProviderException | InvalidAlgorithmParameterException | InvalidParameterSpecException e) {
             throw new IOException( "Exception while creating key", e );
         }
@@ -120,69 +132,24 @@ public class AsymmetricKey extends Key {
         }
     }
 
-    /***
-     * tests two asymmetric keys for equality.
-     *
-     * Two keys are considered equal if they contain the same parameters and the same keys (public and private)
-     *
-     * @param key the other key
-     * @return true if both keys are considered equivalent
-     */
-    public boolean equals(Object key) {
-        // make sure object is not null
-        if(key==null) {
-            return false;
-        }
+    private void createKey(boolean allowPrecomputed) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException, InvalidParameterSpecException {
+        // Selfcheck
+        assert parameters!=null;
+        Algorithm alg=Algorithm.getByString(parameters.get(Parameter.ALGORITHM));
+        assert alg!=null;
 
-        //make sure object is of right type
-        if(! (key instanceof AsymmetricKey)) {
-            return false;
-        }
-
-        // compare public keys
-        AsymmetricKey o=(AsymmetricKey)key;
-        if(!Arrays.equals(o.publicKey,publicKey)) {
-            return false;
-        }
-
-        // compare private keys
-        if(!Arrays.equals(o.privateKey,privateKey)) {
-            return false;
-        }
-
-        // compare padding
-        if(!o.getPadding().equals(getPadding())) {
-            return false;
-        }
-
-        return true;
-    }
-
-    @Override
-    /***
-     * returns the hashcode of the dump representation.
-     */
-    public int hashCode() {
-        return dumpValueNotation("",DumpType.ALL).hashCode();
-    }
-
-    private void createKey() throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException, InvalidParameterSpecException {
-        if(parameters==null) {
-            throw new NullPointerException("parameters may not be null");
-        }
         // check for precomputed key
-        AsymmetricKey tk=AsymmetricKeyPreCalculator.getPrecomputedAsymmetricKey(parameters);
-        if(tk != null) {
-            // set precomputed values
-            publicKey=tk.publicKey;
-            privateKey=tk.privateKey;
-            return;
+        if(allowPrecomputed) {
+            AsymmetricKey tk = AsymmetricKeyPreCalculator.getPrecomputedAsymmetricKey(parameters);
+            if (tk != null) {
+                // set precomputed values
+                assert getKeySize()==tk.getKeySize();
+                publicKey = tk.publicKey;
+                privateKey = tk.privateKey;
+                return;
+            }
         }
         // create key pair
-        Algorithm alg=Algorithm.getByString(parameters.get(Parameter.ALGORITHM));
-        if(alg==null) {
-            throw new NoSuchAlgorithmException("unknown algorithm is set in parameter list ("+parameters.get(Parameter.ALGORITHM)+")");
-        }
         if("RSA".equals(alg.name()) ) {
             int keySize=getKeySize();
             KeyPairGenerator keyGen = KeyPairGenerator.getInstance(alg.toString(),alg.getProvider());
@@ -586,11 +553,59 @@ public class AsymmetricKey extends Key {
     }
 
     /***
+     * tests two asymmetric keys for equality.
+     *
+     * Two keys are considered equal if they contain the same parameters and the same keys (public and private)
+     *
+     * @param key the other key
+     * @return true if both keys are considered equivalent
+     */
+    @Override
+    public boolean equals(Object key) {
+        // make sure object is not null
+        if(key==null) {
+            return false;
+        }
+
+        //make sure object is of right type
+        if(! (key instanceof AsymmetricKey)) {
+            return false;
+        }
+
+        // compare public keys
+        AsymmetricKey o=(AsymmetricKey)key;
+        if(!Arrays.equals(o.publicKey,publicKey)) {
+            return false;
+        }
+
+        // compare private keys
+        if(!Arrays.equals(o.privateKey,privateKey)) {
+            return false;
+        }
+
+        // compare padding
+        if(!o.getPadding().equals(getPadding())) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /***
+     * returns the hashcode of the dump representation.
+     */
+    @Override
+    public int hashCode() {
+        return dumpValueNotation("",DumpType.ALL).hashCode();
+    }
+
+    /***
      * Gets a textual representation of the objects parameters (without the keys)
      * @return the string
      */
+    @Override
     public String toString() {
-        return "([AsymmetricKey]"+getAlgorithm()+"/"+getKeySize()+"/"+getMode()+"/"+getPadding().toString()+")";
+        return "([AsymmetricKey]"+parameters.toString()+")";
     }
 
 }

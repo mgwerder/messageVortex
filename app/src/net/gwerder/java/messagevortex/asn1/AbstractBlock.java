@@ -25,6 +25,7 @@ import org.bouncycastle.asn1.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.util.logging.Level;
@@ -35,7 +36,7 @@ import java.util.logging.Logger;
  *
  * Created by martin.gwerder on 14.04.2016.
  */
-public abstract class AbstractBlock {
+public abstract class AbstractBlock implements Serializable {
 
     protected static final String CRLF="\r\n";
 

@@ -4,6 +4,7 @@ import net.gwerder.java.messagevortex.ExtendedSecureRandom;
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.asn1.AlgorithmParameter;
 import net.gwerder.java.messagevortex.asn1.AsymmetricKey;
+import net.gwerder.java.messagevortex.asn1.AsymmetricKeyPreCalculator;
 import net.gwerder.java.messagevortex.asn1.encryption.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,6 +25,11 @@ import static org.junit.Assert.fail;
 @RunWith(Parameterized.class)
 public class AsymmetricKeyReencodingTest {
 
+    static{
+        // start key precalculator
+        AsymmetricKeyPreCalculator.setCacheFileName("AsymmetricKey.cache");
+    }
+
     private static final java.util.logging.Logger LOGGER;
     private static final int ksDisc = 8192; //16384
     private static ExtendedSecureRandom sr = new ExtendedSecureRandom();
@@ -39,8 +45,8 @@ public class AsymmetricKeyReencodingTest {
 
     public AsymmetricKeyReencodingTest(String testname, AlgorithmParameter p, int repeat) {
         this.testname = testname;
-        this.repeat=repeat;
         this.parameter = p;
+        this.repeat=repeat;
     }
 
     @Parameters(name = "{0}")
@@ -65,7 +71,7 @@ public class AsymmetricKeyReencodingTest {
             LOGGER.log( Level.INFO, "running reencoding test for " + testname );
             for (int i = 0; i < repeat; i++) {
                 LOGGER.log( Level.INFO, "  running reencoding round "+(i+1)+"/"+repeat+" for " + testname );
-                LOGGER.log( Level.INFO, "  generating key" );
+                LOGGER.log( Level.INFO, "  generating key of size "+parameter.get(Parameter.KEYSIZE) );
                 AsymmetricKey s = new AsymmetricKey( parameter );
                 LOGGER.log( Level.INFO, "  encoding" );
                 byte[] b1 = s.toBytes();

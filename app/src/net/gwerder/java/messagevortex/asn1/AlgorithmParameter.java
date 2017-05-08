@@ -28,6 +28,7 @@ import org.bouncycastle.asn1.*;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.util.HashMap;
@@ -40,7 +41,7 @@ import java.util.concurrent.ConcurrentSkipListMap;
  *
  * Created by martin.gwerder on 25.04.2016.
  */
-public class AlgorithmParameter extends AbstractBlock {
+public class AlgorithmParameter extends AbstractBlock implements Serializable,Comparable<AlgorithmParameter> {
 
     Map<Integer,String> parameter;
 
@@ -60,7 +61,13 @@ public class AlgorithmParameter extends AbstractBlock {
     }
 
     public String put(int id,String value) {
-        return parameter.put(id,value);
+        if(value==null) {
+            String ret=get(id);
+            parameter.remove(id);
+            return ret;
+        } else {
+            return parameter.put(id,value);
+        }
     }
 
     public String put(Parameter parameter,String value) {
@@ -125,5 +132,49 @@ public class AlgorithmParameter extends AbstractBlock {
             }
         }
         return new DERSequence(v);
+    }
+
+    @Override
+    public AlgorithmParameter clone() {
+        AlgorithmParameter ap=new AlgorithmParameter();
+        for(Map.Entry<Integer,String> e:this.parameter.entrySet()) {
+            ap.put(new Integer(e.getKey()),new String (e.getValue()));
+        }
+        return ap;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb=new StringBuilder();
+        int i=0;
+        for(Map.Entry<Integer,String> e:this.parameter.entrySet()) {
+            if(i>0) {
+                sb.append(", ");
+            }
+            sb.append(Parameter.getById(e.getKey()).toString()).append("=\"").append(e.getValue().toString()).append("\"");
+            i++;
+        }
+        return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o==null) {
+            return false;
+        }
+        if(! (o instanceof AlgorithmParameter)) {
+            return false;
+        }
+        return ((AlgorithmParameter)(o)).compareTo(this)==0;
+    }
+
+    @Override
+    public int hashCode() {
+        return toString().hashCode();
+    }
+
+    @Override
+    public int compareTo(AlgorithmParameter o) {
+        return toString().compareTo(o.toString());
     }
 }

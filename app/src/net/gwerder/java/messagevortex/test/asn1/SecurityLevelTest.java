@@ -17,7 +17,6 @@ import static org.junit.Assert.assertTrue;
 public class SecurityLevelTest {
 
     private static final java.util.logging.Logger LOGGER;
-
     static {
         LOGGER = MessageVortexLogger.getLogger( (new Throwable()).getStackTrace()[0].getClassName() );
         MessageVortexLogger.setGlobalLogLevel( Level.ALL );
@@ -31,7 +30,7 @@ public class SecurityLevelTest {
         assertTrue( "incrementing LOW (got " + SecurityLevel.LOW.next() + ")", SecurityLevel.LOW.next() == SecurityLevel.MEDIUM );
         assertTrue( "incrementing MEDIUM", SecurityLevel.MEDIUM.next() == SecurityLevel.HIGH );
         assertTrue( "incrementing HIGH", SecurityLevel.HIGH.next() == SecurityLevel.QUANTUM );
-        assertTrue( "incrementing QUANTUM", SecurityLevel.QUANTUM.next() == SecurityLevel.LOW );
+        assertTrue( "incrementing QUANTUM", SecurityLevel.QUANTUM.next() == null );
     }
 }
 

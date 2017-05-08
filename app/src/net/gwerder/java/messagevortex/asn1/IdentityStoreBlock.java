@@ -23,7 +23,9 @@ package net.gwerder.java.messagevortex.asn1;
 
 import net.gwerder.java.messagevortex.ExtendedSecureRandom;
 import net.gwerder.java.messagevortex.MessageVortexLogger;
+import net.gwerder.java.messagevortex.asn1.encryption.Algorithm;
 import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
+import net.gwerder.java.messagevortex.asn1.encryption.SecurityLevel;
 import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
@@ -73,7 +75,7 @@ public class IdentityStoreBlock extends AbstractBlock {
             case OWNED_IDENTITY:
                 // my own identity to decrypt everything
                 try {
-                    ret.setIdentityKey( new AsymmetricKey() );
+                    ret.setIdentityKey( new AsymmetricKey(Algorithm.RSA.getParameters(SecurityLevel.LOW)) );
                     byte[] b = new byte[secureRandom.nextInt( 20 ) + 3];
                     secureRandom.nextBytes( b );
                     ret.setNodeAddress( "smtp:"+toHex( b )+"@localhost" );
@@ -101,7 +103,7 @@ public class IdentityStoreBlock extends AbstractBlock {
             case RECIPIENT_IDENTITY:
                 // Identities for receiving mails
                 try {
-                    AsymmetricKey ak=new AsymmetricKey();
+                    AsymmetricKey ak=new AsymmetricKey(Algorithm.EC.getParameters(SecurityLevel.LOW));
                     if(!complete) {
                         ak.setPrivateKey(null);
                     }

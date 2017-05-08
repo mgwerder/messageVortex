@@ -23,8 +23,6 @@ package net.gwerder.java.messagevortex.asn1.encryption;
 
 /**
  * Enumeration of all possible security levels.
- *
- * Created by martin.gwerder on 01.06.2016.
  */
 public enum SecurityLevel {
     LOW,
@@ -35,7 +33,15 @@ public enum SecurityLevel {
     public static SecurityLevel getDefault() {return LOW;}
 
     public SecurityLevel next() {
+        if(this.ordinal()==values().length-1) {
+            return null;
+        }
         return values()[(this.ordinal() + 1) % values().length];
+    }
+
+    @Override
+    public String toString() {
+        return ""+this.name() ;
     }
 
 }

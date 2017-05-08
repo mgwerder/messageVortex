@@ -80,10 +80,10 @@ public class IdentityStore extends AbstractBlock {
     public static IdentityStore getNewIdentityStoreDemo(boolean complete) throws IOException {
         IdentityStore tmp = new IdentityStore();
         tmp.add( IdentityStoreBlock.getIdentityStoreBlockDemo( IdentityStoreBlock.IdentityType.OWNED_IDENTITY, complete ) );
-        for (int i = 0; i < 400; i++) {
+        for (int i = 0; i < 100; i++) {
             tmp.add( IdentityStoreBlock.getIdentityStoreBlockDemo( IdentityStoreBlock.IdentityType.NODE_IDENTITY, complete ) );
         }
-        for (int i = 0; i < 100; i++){
+        for (int i = 0; i < 10; i++){
             tmp.add( IdentityStoreBlock.getIdentityStoreBlockDemo( IdentityStoreBlock.IdentityType.RECIPIENT_IDENTITY, complete ) );
         }
         return tmp;

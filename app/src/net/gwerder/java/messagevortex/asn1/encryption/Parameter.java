@@ -24,13 +24,14 @@ package net.gwerder.java.messagevortex.asn1.encryption;
 import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * Enumeration of all supported Parameters.
  *
  * Created by martin.gwerder on 31.05.2016.
  */
-public enum Parameter {
+public enum Parameter implements Serializable {
     ALGORITHM (1,    "algorithm",null),
     KEYSIZE   (10000,"keySize",new Transcoder() {
         @Override

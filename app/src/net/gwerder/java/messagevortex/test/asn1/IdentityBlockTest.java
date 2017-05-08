@@ -19,11 +19,16 @@ import static org.junit.Assert.fail;
 public class IdentityBlockTest {
 
     private static final java.util.logging.Logger LOGGER;
-
     static {
         LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
         MessageVortexLogger.setGlobalLogLevel(Level.ALL);
     }
+
+    static{
+        // start key precalculator
+        AsymmetricKeyPreCalculator.setCacheFileName("AsymmetricKey.cache");
+    }
+
 
     /***
      * Reencodes 100 Identities and checks whether their byte and Value Notation Dumps are equivalent.
