@@ -22,20 +22,12 @@ package net.gwerder.java.messagevortex.asn1;
 // ************************************************************************************
 
 import net.gwerder.java.messagevortex.asn1.encryption.Algorithm;
-import net.gwerder.java.messagevortex.asn1.encryption.Mode;
-import net.gwerder.java.messagevortex.asn1.encryption.Padding;
 import net.gwerder.java.messagevortex.asn1.encryption.Parameter;
 import org.bouncycastle.asn1.*;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import java.io.IOException;
 import java.security.Security;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *Abstract class for all encryption key types
@@ -69,7 +61,7 @@ abstract public class Key extends AbstractBlock {
         return sb.toString();
     }
 
-    abstract public byte[] decrypt(byte[] encrypted) throws IOException;
+    public abstract byte[] decrypt(byte[] encrypted) throws IOException;
 
-    abstract public byte[] encrypt(byte[] decrypted) throws IOException;
+    public abstract byte[] encrypt(byte[] decrypted) throws IOException;
 }

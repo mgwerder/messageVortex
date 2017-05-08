@@ -23,7 +23,6 @@ package net.gwerder.java.messagevortex.asn1.encryption;
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.asn1.AlgorithmParameter;
-import org.bouncycastle.jcajce.util.AlgorithmParametersUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -37,7 +36,6 @@ import java.util.logging.Level;
  * Represents all supported crypto algorithms.
  *
  * FIXME: Add tiger192 support for final version
- * FIXME: concurrency problem at startup for static map
  */
 public enum Algorithm implements Serializable {
 

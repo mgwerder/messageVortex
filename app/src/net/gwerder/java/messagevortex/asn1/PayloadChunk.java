@@ -195,9 +195,13 @@ public class PayloadChunk extends AbstractBlock {
 
     @Override
     public boolean equals(Object o) {
-        if(o==null) return false;
+        if(o==null) {
+            return false;
+        }
 
-        if(! (o instanceof PayloadChunk)) return false;
+        if(! (o instanceof PayloadChunk)) {
+            return false;
+        }
         PayloadChunk pl=(PayloadChunk)o;
 
         try {

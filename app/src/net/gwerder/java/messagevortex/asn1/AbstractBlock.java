@@ -41,7 +41,9 @@ public abstract class AbstractBlock implements Serializable {
     protected static final String CRLF="\r\n";
 
     public static byte[] fromHex(String s) {
-        if(s==null) return null;
+        if(s==null) {
+            return null;
+        }
         int len = s.length();
         byte[] data = new byte[Math.max(0,(len-3) / 2)];
         for (int i = 1; i < len-2; i += 2) {

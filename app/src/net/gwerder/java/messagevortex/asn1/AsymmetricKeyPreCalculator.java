@@ -15,9 +15,8 @@ import java.util.logging.Level;
  * This is a class to precalculate keys.
  *
  * It is disabled by default. Enable it by setting a caching file Name. To disable set the name to null.
- * @TODO: 06.05.2017  make it multi threaded
  */
-public class AsymmetricKeyPreCalculator implements Serializable {
+class AsymmetricKeyPreCalculator implements Serializable {
 
     private static final java.util.logging.Logger LOGGER;
     static {
@@ -35,7 +34,7 @@ public class AsymmetricKeyPreCalculator implements Serializable {
 
         private boolean shutdown=false;
 
-        public InternalThread() {
+        InternalThread() {
             // This thread may die safely
             setDaemon(true);
 
@@ -51,8 +50,8 @@ public class AsymmetricKeyPreCalculator implements Serializable {
         /***
          * Tells the process to shutdown asap
          */
-        public void shutdown() {
-
+        void shutdown() {
+            shutdown=true;
         }
 
         public void run() {
@@ -71,7 +70,7 @@ public class AsymmetricKeyPreCalculator implements Serializable {
                         assert maxSize!=null;
                         Queue<AsymmetricKey> q=e.getValue();
                         assert q!=null;
-                        if(maxSize.intValue()>e.getValue().size() && tfiller<filler) {
+                        if(maxSize>e.getValue().size() && tfiller<filler) {
                             p=e.getKey();
                             filler=tfiller;
                         }
@@ -149,6 +148,10 @@ public class AsymmetricKeyPreCalculator implements Serializable {
     private static InternalThread runner=null;
 
     private static String filename=null;
+
+    private AsymmetricKeyPreCalculator() {
+        // just a dummy to hide the default constructor
+    }
 
     public static AsymmetricKey getPrecomputedAsymmetricKey(AlgorithmParameter parameters) {
         parameters=prepareParameters(parameters);
@@ -278,10 +281,11 @@ public class AsymmetricKeyPreCalculator implements Serializable {
     }
 
     private static void showStats() {
+        final String sepLine="-----------------------------------------------------------";
         synchronized(cache) {
-            LOGGER.log(Level.INFO, "-----------------------------------------------------------");
+            LOGGER.log(Level.INFO, sepLine);
             LOGGER.log(Level.INFO, "| cache stats");
-            LOGGER.log(Level.INFO, "-----------------------------------------------------------");
+            LOGGER.log(Level.INFO, sepLine);
             int sum = 0;
             int tot = 0;
             for (Map.Entry<AlgorithmParameter, Queue<AsymmetricKey>> q : cache.entrySet()) {
@@ -290,9 +294,9 @@ public class AsymmetricKeyPreCalculator implements Serializable {
                 tot += cacheSize.get(q.getKey());
 
             }
-            LOGGER.log(Level.INFO, "-----------------------------------------------------------");
+            LOGGER.log(Level.INFO, sepLine);
             LOGGER.log(Level.INFO, "| Total: "+sum+"/"+tot);
-            LOGGER.log(Level.INFO, "-----------------------------------------------------------");
+            LOGGER.log(Level.INFO, sepLine);
         }
     }
 

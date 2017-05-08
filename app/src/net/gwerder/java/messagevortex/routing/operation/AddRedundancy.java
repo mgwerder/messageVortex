@@ -23,7 +23,6 @@ package net.gwerder.java.messagevortex.routing.operation;
 
 import net.gwerder.java.messagevortex.asn1.AbstractRedundancyOperation;
 import net.gwerder.java.messagevortex.asn1.AddRedundancyOperation;
-import net.gwerder.java.messagevortex.asn1.IdentityBlock;
 
 public class AddRedundancy extends AbstractOperation {
 

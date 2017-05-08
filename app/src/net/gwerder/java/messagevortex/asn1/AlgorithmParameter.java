@@ -21,19 +21,12 @@ package net.gwerder.java.messagevortex.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
-import jdk.nashorn.internal.ir.Block;
-import net.gwerder.java.messagevortex.asn1.encryption.ECCurveType;
 import net.gwerder.java.messagevortex.asn1.encryption.Parameter;
 import org.bouncycastle.asn1.*;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.security.NoSuchAlgorithmException;
-import java.text.ParseException;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.SortedMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 
 /**
@@ -92,7 +85,6 @@ public class AlgorithmParameter extends AbstractBlock implements Serializable,Co
 
     protected void parse(ASN1Encodable ae) throws IOException{
         ASN1Sequence s1 = ASN1Sequence.getInstance(ae);
-        int i=0;
         for(ASN1Encodable o:s1) {
             ASN1TaggedObject to=ASN1TaggedObject.getInstance(o);
             Parameter p=Parameter.getById(to.getTagNo());

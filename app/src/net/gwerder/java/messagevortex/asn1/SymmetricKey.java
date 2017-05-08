@@ -24,7 +24,6 @@ package net.gwerder.java.messagevortex.asn1;
 import net.gwerder.java.messagevortex.ExtendedSecureRandom;
 import net.gwerder.java.messagevortex.asn1.encryption.*;
 import org.bouncycastle.asn1.*;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -37,7 +36,6 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
-import java.util.Arrays;
 
 /**
  * Represents a Symmetric Key in the ASN.1 structure

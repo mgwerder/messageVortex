@@ -113,7 +113,6 @@ public class InternalPayload {
     private void invalidateInternalPayloadCache(int id) {
         // WARNING this method is not as threadsafe as it should be
 
-        List<Operation> ops=new ArrayList<>();
         // remove calculated value of field
         setCalculatedPayload(id,null);
 
@@ -203,7 +202,7 @@ public class InternalPayload {
             for(int i=0;i<id.length;i++) {
                 List<Operation> l=internalOperationInput.get(id[i]);
                 l.remove(op);
-                if(l!=null && l.size()==0) {
+                if(l!=null && l.isEmpty()) {
                     internalOperationInput.remove(id[i]);
                 }
             }
@@ -285,7 +284,7 @@ public class InternalPayload {
             // remove subsequent payloadcaches
             for(int i:expiredPayloadIds) {
                 List<Operation> ops=internalOperationInput.get(i);
-                if(ops!=null && ops.size()>0) {
+                if(ops!=null && !ops.isEmpty()) {
                     for(Operation op:ops) {
                         for(int j:op.getOutputID()) {
                             setCalculatedPayload(j,null);
