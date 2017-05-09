@@ -21,7 +21,7 @@ package net.gwerder.java.messagevortex.blending;
 // * SOFTWARE.
 // ************************************************************************************
 
-import net.gwerder.java.messagevortex.accounting.HeaderVerifyer;
+import net.gwerder.java.messagevortex.accounting.HeaderVerifier;
 import net.gwerder.java.messagevortex.asn1.BlendingSpec;
 import net.gwerder.java.messagevortex.asn1.VortexMessage;
 import net.gwerder.java.messagevortex.routing.IncomingMessageRouterListener;
@@ -33,7 +33,7 @@ import net.gwerder.java.messagevortex.transport.TransportListener;
 public abstract class AbstractBlender implements Blender,TransportListener {
 
     IncomingMessageRouterListener listener=null;
-    HeaderVerifyer verifyer=null;
+    HeaderVerifier verifyer=null;
 
     /***
      * Sets the listener for incomming messages to the routing listener.
@@ -52,8 +52,8 @@ public abstract class AbstractBlender implements Blender,TransportListener {
      * @param verifyer the verifier to be set
      * @return the previously set header verifier
      */
-    public HeaderVerifyer setHeaderVerifyer(HeaderVerifyer verifyer) {
-        HeaderVerifyer old=this.verifyer;
+    public HeaderVerifier setHeaderVerifyer(HeaderVerifier verifyer) {
+        HeaderVerifier old=this.verifyer;
         this.verifyer=verifyer;
         return old;
 

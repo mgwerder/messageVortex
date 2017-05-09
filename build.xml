@@ -159,6 +159,7 @@
         <test name="${app.package}.test.MainRoutingSuite" todir="${build.home}/testsrc" outfile="TEST-RoutingSuite"/>
         <test name="${app.package}.test.MainBlenderSuite" todir="${build.home}/testsrc" outfile="TEST-BlenderSuite"/>
         <test name="${app.package}.test.MainTransportSuite" todir="${build.home}/testsrc" outfile="TEST-TransportSuite"/>
+        <test name="${app.package}.test.MainAccountingSuite" todir="${build.home}/testsrc" outfile="TEST-TransportSuite"/>
         <formatter type="xml"/>
         <formatter type="plain" usefile="false"/>
     </junit>

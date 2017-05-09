@@ -55,6 +55,11 @@ public class PayloadChunk extends AbstractBlock {
         parse(to);
     }
 
+    public PayloadChunk(int id,byte[] payload) throws IOException {
+        setId(id);
+        setPayload(payload);
+    }
+
     /***
      * Creates a der encoded ASN1 representation of the payload chunk.
      *
@@ -100,18 +105,22 @@ public class PayloadChunk extends AbstractBlock {
         if(payloadType!=PAYLOAD) {
             return null;
         }
-        return payload.clone();
+        if(payload==null) {
+            return null;
+        } else {
+            return payload.clone();
+        }
     }
 
     /***
      * set a byte array as reply block.
      *
-     * @param b the reply block to be set
+     * @param reply the reply block to be set
      * @return the previously set reply block (may have been a payload block)
      */
-    public byte[] setReplyBlock(byte[] b) {
+    public byte[] setReplyBlock(byte[] reply) throws IOException{
         byte[] opl=payload;
-        payload=b;
+        payload=reply;
         payloadType=REPLY;
         return opl;
     }

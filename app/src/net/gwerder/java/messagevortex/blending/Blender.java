@@ -21,7 +21,7 @@ package net.gwerder.java.messagevortex.blending;
 // * SOFTWARE.
 // ************************************************************************************
 
-import net.gwerder.java.messagevortex.accounting.HeaderVerifyer;
+import net.gwerder.java.messagevortex.accounting.HeaderVerifier;
 import net.gwerder.java.messagevortex.asn1.BlendingSpec;
 import net.gwerder.java.messagevortex.asn1.VortexMessage;
 import net.gwerder.java.messagevortex.routing.IncomingMessageRouterListener;
@@ -49,7 +49,7 @@ public interface Blender {
      * @param verifier The verifier to be used
      * @return previous/old verifier
      */
-    public HeaderVerifyer setHeaderVerifyer(HeaderVerifyer verifier);
+    public HeaderVerifier setHeaderVerifyer(HeaderVerifier verifier);
 
     /***
      * This method is called by the routing layer to blend a message.

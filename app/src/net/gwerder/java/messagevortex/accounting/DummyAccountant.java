@@ -26,11 +26,12 @@ import net.gwerder.java.messagevortex.asn1.IdentityBlock;
 /**
  * Created by Martin on 03.05.2017.
  */
-public class DummyAccountant implements Accountant,HeaderVerifyer {
+public class DummyAccountant implements Accountant,HeaderVerifier {
 
     @Override
     public int verifyHeaderForProcessing(IdentityBlock header) {
         // this verifier accepts all identities
         return Integer.MAX_VALUE;
     }
+
 }

@@ -23,6 +23,7 @@ package net.gwerder.java.messagevortex.asn1;
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.routing.operation.GaloisFieldMathMode;
+import net.gwerder.java.messagevortex.routing.operation.MathMode;
 import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
@@ -187,7 +188,7 @@ public abstract class AbstractRedundancyOperation extends Operation {
      * @throws ArithmeticException if all stripes together are not accomodatable in the given GF field
      */
     public int setDataStripes(int stripes)  {
-        if(stripes<1 || stripes+this.redundancy> GaloisFieldMathMode.lshift(gfSize,1,(byte)33)) {
+        if(stripes<1 || stripes+this.redundancy> GaloisFieldMathMode.lshift(2,gfSize,(byte)33)) {
             throw new ArithmeticException("too many stripes to be acomodated in given galois field");
         }
         int old=this.dataStripes;
@@ -207,7 +208,9 @@ public abstract class AbstractRedundancyOperation extends Operation {
      * @throws ArithmeticException if the defined GF size is unable to accomodate all values
      */
     public int setRedundancy(int stripes)  {
-        if(stripes<1 || stripes+this.dataStripes> GaloisFieldMathMode.lshift(gfSize,1,(byte)33)) {
+        if(stripes<1) {
+            throw new ArithmeticException("too few stripes to be acomodated in current galois field");
+        } else if(stripes+this.dataStripes> GaloisFieldMathMode.lshift(2,gfSize,(byte)33)) {
             throw new ArithmeticException("too many stripes to be acomodated in current galois field");
         }
         int old=this.redundancy;
@@ -227,7 +230,7 @@ public abstract class AbstractRedundancyOperation extends Operation {
      * @throws ArithmeticException if the number of keys doees not match the number of stripes
      */
     public SymmetricKey[] setKeys(List<SymmetricKey> keys) {
-        if(this.dataStripes+this.dataStripes!=keys.size()) {
+        if(this.dataStripes+this.redundancy!=keys.size()) {
             throw new ArithmeticException("illegal number of keys");
         }
         SymmetricKey[] old=new SymmetricKey[0];
@@ -256,7 +259,7 @@ public abstract class AbstractRedundancyOperation extends Operation {
      * @throws ArithmeticException if the number of all stripes in total (data and redundancy) exceeds the address space of the GF
      */
     public int setGFSize(int omega) {
-        if(omega<2 || omega>16 || this.redundancy+this.dataStripes> GaloisFieldMathMode.lshift(omega,1,(byte)33)) {
+        if(omega<2 || omega>16 || this.redundancy+this.dataStripes> GaloisFieldMathMode.lshift(2,omega,(byte)33)) {
             throw new ArithmeticException("galois field too small for the stripes to be acomodated");
         }
         int old=this.gfSize;

@@ -25,6 +25,7 @@ import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.asn1.IdentityBlock;
 import net.gwerder.java.messagevortex.asn1.PayloadChunk;
 
+import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -94,17 +95,17 @@ public class InternalPayload {
         }
     }
 
-    public PayloadChunk setPayload(int id,PayloadChunk p) {
+    public PayloadChunk setPayload(PayloadChunk p) {
         compact();
         synchronized(internalPayload) {
-            PayloadChunk old=getPayload(id);
-            if(p==null) {
-                internalPayload.remove(id);
+            PayloadChunk old=getPayload(p.getId());
+            if(p.getPayload()==null) {
+                internalPayload.remove(p.getId());
             } else {
-                internalPayload.put(id,p);
+                internalPayload.put(p.getId(),p);
             }
             // invalidate all cached payloads depending on this value
-            invalidateInternalPayloadCache(id);
+            invalidateInternalPayloadCache(p.getId());
 
             return old;
         }
@@ -150,6 +151,14 @@ public class InternalPayload {
                 throw new InvalidParameterException("circular dependency detected on id "+id);
             }
         }
+
+        // check for self dependency
+        for(int id:op.getOutputID()) {
+            if(Arrays.binarySearch(op.getInputID(),id)>-1) {
+                throw new InvalidParameterException("circular dependency detected between the in and outputs of this function on id "+id);
+            }
+        }
+
 
         // register output ids
         int[] id=op.getOutputID();
@@ -278,7 +287,11 @@ public class InternalPayload {
             // remove expired payloads
             for(int i:expiredPayloadIds) {
                 LOGGER.log(Level.INFO,"clearing expired payload "+i+" of identity "+getIdentity());
-                setPayload(i,null);
+                try {
+                    setPayload(new PayloadChunk(i, null));
+                }catch(IOException ioe) {
+                    // ignore this exception
+                }
             }
 
             // remove subsequent payloadcaches

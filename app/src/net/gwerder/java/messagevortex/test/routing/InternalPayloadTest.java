@@ -87,17 +87,16 @@ public class InternalPayloadTest {
     }
 
     @Test
-    public void payloadSpaceSetAndGetTest() {
+    public void payloadSpaceSetAndGetTest() throws Exception {
         InternalPayload p=space[0].getInternalPayload(identity[0]);
         String pl=RandomString.nextString((int)(Math.random()*1024*10+1));
-        PayloadChunk pc =new PayloadChunk();
-        pc.setPayload(pl.getBytes());
-        assertTrue("payload space previously unexpetedly not empty",p.setPayload(100,pc)==null);
+        PayloadChunk pc =new PayloadChunk(100,pl.getBytes());
+        assertTrue("payload space previously unexpetedly not empty",p.setPayload(pc)==null);
         assertTrue("payload space previously unexpetedly not equal",pl.equals(new String(p.getPayload(100).getPayload())));
     }
 
     @Test
-    public void payloadSpaceProcessingTest()  {
+    public void payloadSpaceProcessingTest() throws Exception {
         // just a quick small test
         payloadSpaceProcessingTest(RandomString.nextString(1));
 
@@ -110,17 +109,16 @@ public class InternalPayloadTest {
         }
     }
 
-    private void payloadSpaceProcessingTest(String s) {
+    private void payloadSpaceProcessingTest(String s) throws Exception {
         LOGGER.log(Level.INFO,"Testing payload handling with "+s.getBytes().length+" bytes");
         InternalPayload p=space[0].getInternalPayload(identity[0]);
-        PayloadChunk pc =new PayloadChunk();
+        PayloadChunk pc =new PayloadChunk(200,s.getBytes());
         Operation op=new IdMapOperation(p,200,201,1);
-        pc.setPayload(s.getBytes());
-        assertTrue("payload space previously unexpetedly not empty",p.setPayload(200,pc)==null);
+        assertTrue("payload space previously unexpetedly not empty",p.setPayload(pc)==null);
         assertTrue("addin of operation unexpectedly rejected",p.addOperation(op)==false);
         assertTrue("target  payload should not be null",p.getPayload(201)!=null);
         assertTrue("target  payload should be identical",s.equals(new String(p.getPayload(201).getPayload())));
-        p.setPayload(200,null); //remove the payload chunk from store
+        p.setPayload(new PayloadChunk(200,null)); //remove the payload chunk from store
         assertTrue("target  payload should be null",p.getPayload(201)==null);
         p.removeOperation(op);
     }

@@ -21,9 +21,11 @@ package net.gwerder.java.messagevortex.test.routing;
  * SOFTWARE.
  ***/
 
+import net.gwerder.java.messagevortex.ExtendedSecureRandom;
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.asn1.AddRedundancyOperation;
 import net.gwerder.java.messagevortex.asn1.IdentityBlock;
+import net.gwerder.java.messagevortex.asn1.PayloadChunk;
 import net.gwerder.java.messagevortex.asn1.SymmetricKey;
 import net.gwerder.java.messagevortex.routing.operation.AddRedundancy;
 import net.gwerder.java.messagevortex.routing.operation.InternalPayload;
@@ -55,10 +57,24 @@ public class OperationProcessingTest {
             IdentityBlock identity = new IdentityBlock();
             InternalPayloadSpace ps=new InternalPayloadSpace();
             InternalPayload p=ps.getInternalPayload(identity);
-            SymmetricKey[] keys=new SymmetricKey[] {new SymmetricKey(),new SymmetricKey(),new SymmetricKey(),new SymmetricKey(),new SymmetricKey(),new SymmetricKey()};
-            Operation op=new AddRedundancy(p,new AddRedundancyOperation(1,3,3, Arrays.asList(keys),10,8));
-            p.addOperation(op);
-            // FIXME this test is highly incomplete
+            int repeat=20;
+            ExtendedSecureRandom esr=new ExtendedSecureRandom();
+            for(int gfSize:new int[] {8,16}) {
+                for (int i = 0; i < repeat; i++) {
+                    int stripesRange=gfSize==8?220:500;
+                    int dataStripes = (int) (Math.random() * stripesRange)+1;
+                    int redundancy = (int) (Math.random() * (stripesRange*1.1 - dataStripes))+1;
+                    SymmetricKey[] keys = new SymmetricKey[dataStripes + redundancy];
+                    LOGGER.log(Level.INFO,"fuzzing with data:"+dataStripes+"/redundancy:"+redundancy+"/GF("+gfSize+") ["+(i+(gfSize>8?repeat:0)+1)+"/"+(repeat*2)+"]");
+                    for (int j = 0; j < keys.length; j++) keys[j] = new SymmetricKey();
+                    Operation op = new AddRedundancy(p, new AddRedundancyOperation(1, dataStripes, redundancy, Arrays.asList(keys), 10,gfSize));
+                    p.addOperation(op);
+                    byte[] inBuffer=new byte[dataStripes*10+(int)(Math.random()*(dataStripes*1000))];
+                    esr.nextBytes(inBuffer);
+                    p.setPayload(new PayloadChunk(1,inBuffer));
+                }
+                // FIXME this test is highly incomplete
+            }
         }catch(IOException|NoSuchAlgorithmException ioe) {
             ioe.printStackTrace();
             fail("Exception while testing redundancy operation");

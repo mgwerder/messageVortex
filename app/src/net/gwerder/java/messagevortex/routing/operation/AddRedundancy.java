@@ -50,7 +50,7 @@ public class AddRedundancy extends AbstractOperation {
 
     @Override
     public int[] getInputID() {
-        int[] ret=new int[operation.getDataStripes()];
+        int[] ret=new int[1];
         for(int i=0;i<ret.length;i++) {
             ret[i]=operation.getInputId()+i;
         }

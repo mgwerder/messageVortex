@@ -26,7 +26,7 @@ import net.gwerder.java.messagevortex.asn1.IdentityBlock;
 /**
  * Interface for an Accountant to verify the header for further processing.
  */
-public interface HeaderVerifyer {
+public interface HeaderVerifier {
 
     /***
      * checks the given IdentityBlock for validity of processing.
