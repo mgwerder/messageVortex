@@ -83,7 +83,7 @@ public class IdentityStore extends AbstractBlock {
         for (int i = 0; i < 100; i++) {
             tmp.add( IdentityStoreBlock.getIdentityStoreBlockDemo( IdentityStoreBlock.IdentityType.NODE_IDENTITY, complete ) );
         }
-        for (int i = 0; i < 10; i++){
+        for (int i = 0; i < 40; i++){
             tmp.add( IdentityStoreBlock.getIdentityStoreBlockDemo( IdentityStoreBlock.IdentityType.RECIPIENT_IDENTITY, complete ) );
         }
         return tmp;
@@ -103,7 +103,7 @@ public class IdentityStore extends AbstractBlock {
             }
         }
         if(ret.size()<size) {
-            throw new IOException("unable to get anon set (size ["+size+"] too big)?");
+            throw new IOException("unable to get anon set (size "+size+" too big; achieved: "+ret.size()+")?");
         }
         LOGGER.log( Level.FINE, "done getAnonSet()" );
         return ret;

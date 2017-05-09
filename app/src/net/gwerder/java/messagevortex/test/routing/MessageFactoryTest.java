@@ -34,7 +34,7 @@ public class MessageFactoryTest {
 
     @Test
     public void simpleMessageFactoryTest() throws IOException {
-        LOGGER.log( Level.INFO, "getting example store" );
+        LOGGER.log( Level.INFO, "getting example store from "+System.getProperty( "java.io.tmpdir" ) );
         IdentityStore is = null;
         try {
             is = new IdentityStore( new File( System.getProperty( "java.io.tmpdir" ) + "/IdentityStoreExample1.der" ) );
