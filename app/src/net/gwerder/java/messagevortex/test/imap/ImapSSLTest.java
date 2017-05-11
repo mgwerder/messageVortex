@@ -14,6 +14,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.Charset;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
@@ -53,6 +54,7 @@ public class ImapSSLTest {
             Set<String> suppCiphers=new HashSet<>();
             String[] arr=((SSLServerSocketFactory) SSLServerSocketFactory.getDefault()).getSupportedCipherSuites();
             LOGGER.log(Level.FINE,"Detecting supported cipher suites");
+            Set<Thread> threadSet = getThreadList();
             for(int i=0; i<arr.length; i++) {
                 boolean supported=true;
                 ServerSocket serverSocket=null;
@@ -81,7 +83,6 @@ public class ImapSSLTest {
                     suppCiphers.add(arr[i]);
                 }
             }
-
             final ServerSocket ss=SSLServerSocketFactory.getDefault().createServerSocket(0);
             ((SSLServerSocket)(ss)).setEnabledCipherSuites(suppCiphers.toArray(new String[0]));
             (new Thread() {
@@ -107,13 +108,28 @@ public class ImapSSLTest {
             ic.setTimeout(2000);
             ic.sendCommand("a1 test");
             assertTrue("check client socket state",ic.isTLS());
+            ic.shutdown();
 
             // Selftest
             // This selftest ought to be removed Socket s=SSLSocketFactory.getDefault().createSocket(InetAddress.getByString("localhost"),ss.getLocalPort());
+            assertTrue("error searching for hangig threads",verifyHangingThreads(threadSet).size()==0);
         } catch(Exception ioe) {
             LOGGER.log(Level.WARNING,"Unexpected Exception",ioe);
             fail("Exception rised  in client("+ioe+") while communicating");
         }
+    }
+
+    protected static Set<Thread> getThreadList() {
+        return Thread.getAllStackTraces().keySet();
+    }
+
+    protected static Set<Thread> verifyHangingThreads(Set<Thread> pThread) {
+        Set<Thread> cThread = Thread.getAllStackTraces().keySet();
+        cThread.removeAll(pThread);
+        for(Thread t:cThread) {
+            LOGGER.log(Level.INFO,"Error got new thread "+t.getName());
+        }
+        return cThread;
     }
 
     @Test
@@ -123,6 +139,7 @@ public class ImapSSLTest {
             LOGGER.log(Level.INFO,"Testing SSL handshake by server");
             LOGGER.log(Level.INFO,"************************************************************************");
             LOGGER.log(Level.INFO,"setting up server");
+            Set<Thread> threadSet = getThreadList();
             ImapServer is=new ImapServer(0,true);
             LOGGER.log(Level.INFO,"setting up pseudo client");
             final Socket s=SSLSocketFactory.getDefault().createSocket(InetAddress.getByName("localhost"),is.getPort());
@@ -143,6 +160,8 @@ public class ImapSSLTest {
             }
             LOGGER.log(Level.INFO,"got sequence \""+(new String(b,java.nio.charset.Charset.defaultCharset()))+"\"");
             LOGGER.log(Level.INFO,"done");
+            is.shutdown();
+            assertTrue("error searching for hangig threads",verifyHangingThreads(threadSet).size()==0);
         } catch(Exception ioe) {
             LOGGER.log(Level.WARNING,"Unexpected Exception",ioe);
             fail("Exception rised  in client("+ioe+") while communicating");
@@ -155,6 +174,7 @@ public class ImapSSLTest {
             LOGGER.log(Level.INFO,"************************************************************************");
             LOGGER.log(Level.INFO,"Testing initial SSL handshake for both components");
             LOGGER.log(Level.INFO,"************************************************************************");
+            Set<Thread> threadSet = getThreadList();
             ImapServer is=new ImapServer(0,true);
             ImapClient ic=new ImapClient("localhost",is.getPort(),true);
             ImapClient.setDefaultTimeout(300);
@@ -167,6 +187,7 @@ public class ImapSSLTest {
             LOGGER.log(Level.INFO,"closing client");
             ic.shutdown();
             LOGGER.log(Level.INFO,"done");
+            assertTrue("error searching for hangig threads",verifyHangingThreads(threadSet).size()==0);
         } catch(Exception ioe) {
             LOGGER.log(Level.WARNING,"Unexpected Exception",ioe);
             fail("Exception rised  in client("+ioe+") while communicating");

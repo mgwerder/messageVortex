@@ -441,8 +441,11 @@
 </node>
 </node>
 </node>
+<node CREATED="1494420491556" ID="ID_174508214" MODIFIED="1494420505289" TEXT="Homomorphic commitment scheme"/>
+<node CREATED="1494420839397" ID="ID_1907541262" MODIFIED="1494420849708" TEXT="Commitment Transfer Protocol"/>
+<node CREATED="1494420850142" ID="ID_440866422" MODIFIED="1494420870380" TEXT="Commitment sharing protocol"/>
 </node>
-<node CREATED="1493810628715" ID="ID_731551708" MODIFIED="1493810641882" POSITION="right" TEXT="Mukti-Party Computation">
+<node CREATED="1493810628715" ID="ID_731551708" MODIFIED="1494414392292" POSITION="right" TEXT="Multi-Party Computation">
 <node CREATED="1493810699654" ID="ID_92397186" MODIFIED="1493810703421" TEXT="Terms">
 <node CREATED="1493810704558" ID="ID_933572721" MODIFIED="1493810708470" TEXT="Secure">
 <node CREATED="1493810719322" ID="ID_1773678499" MODIFIED="1493810740353" TEXT="If bad guys can not do more in the protocol as in the specification"/>
@@ -486,6 +489,16 @@
 </node>
 </node>
 </node>
+</node>
+</node>
+<node CREATED="1494416780045" ID="ID_1900173431" MODIFIED="1494416784682" POSITION="left" TEXT="Adverser">
+<node CREATED="1494416785980" ID="ID_683786955" MODIFIED="1494416792897" TEXT="passive"/>
+<node CREATED="1494416796158" ID="ID_1110915818" MODIFIED="1494416800053" TEXT="active">
+<node CREATED="1494416804277" ID="ID_761744134" MODIFIED="1494416812552" TEXT="publish secret information">
+<node CREATED="1494417408097" ID="ID_1891124665" MODIFIED="1494417446121" TEXT="Is not conidered a problem as honest parties do not conclude anything unless they are malicious"/>
+</node>
+<node CREATED="1494416813140" ID="ID_1207815254" MODIFIED="1494416833964" TEXT="withhold information/do not send"/>
+<node CREATED="1494416834472" ID="ID_124093048" MODIFIED="1494416845454" TEXT="sending illegal information"/>
 </node>
 </node>
 </node>

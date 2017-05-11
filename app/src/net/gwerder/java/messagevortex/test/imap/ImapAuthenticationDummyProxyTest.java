@@ -6,6 +6,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.util.Set;
+
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -19,6 +21,7 @@ public class ImapAuthenticationDummyProxyTest {
 
     @Test
     public void setGetConnection() {
+        Set<Thread> threadSet = ImapSSLTest.getThreadList();
         ImapAuthenticationDummyProxy ap=new ImapAuthenticationDummyProxy();
         ap.addUser("Test","Testpw");
         ImapConnection ic=new ImapConnectionDummy() {};
@@ -27,9 +30,11 @@ public class ImapAuthenticationDummyProxyTest {
         assertTrue("ImapConnection should return set value",ap.getImapConnection()==ic);
         assertTrue("ImapConnection should return set value",ap.setImapConnection(null)==ic);
         assertTrue("ImapConnection should be null if set to null",ap.getImapConnection()==null);
+        assertTrue("error searching for hangig threads",ImapSSLTest.verifyHangingThreads(threadSet).size()==0);
     }
 
     public void plainAuthTest() {
+        Set<Thread> threadSet = ImapSSLTest.getThreadList();
         ImapAuthenticationDummyProxy ap=new ImapAuthenticationDummyProxy();
         ap.addUser("Test","Testpw");
         assertFalse("UserID is null (1)",ap.login(null,"Testpw"));
@@ -46,6 +51,7 @@ public class ImapAuthenticationDummyProxyTest {
         assertFalse("bad password handling failed (1)",ap.login("test",""));
         assertFalse("bad password handling failed (1)",ap.login("test",null));
         assertFalse("bad password handling failed (1)",ap.login("test","T"));
+        assertTrue("error searching for hangig threads",ImapSSLTest.verifyHangingThreads(threadSet).size()==0);
     }
 
     private static class ImapConnectionDummy extends ImapConnection {

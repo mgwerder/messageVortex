@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.util.Set;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 
@@ -52,6 +53,7 @@ public class ImapCommandTest {
             LOGGER.log(Level.INFO,"************************************************************************");
             LOGGER.log(Level.INFO,"Check set client timeout");
             LOGGER.log(Level.INFO,"************************************************************************");
+            Set<Thread> threadSet = ImapSSLTest.getThreadList();
             ImapServer is=new ImapServer(0,false);
             ImapClient ic=new ImapClient("localhost",is.getPort(),false);
             assertTrue("test default Timeout",ImapClient.getDefaultTimeout()==ImapClient.setDefaultTimeout(123));
@@ -61,6 +63,8 @@ public class ImapCommandTest {
             assertTrue("test  Timeout get",ic.getTimeout()==123);
             ic.setTimeout(3600*1000);
             is.shutdown();
+            ic.shutdown();
+            assertTrue("error searching for hangig threads",ImapSSLTest.verifyHangingThreads(threadSet).size()==0);
         } catch(Exception e) {
             LOGGER.log(Level.WARNING,"Unexpected exception",e);
             fail("Exception thrown ("+e+")");
@@ -70,13 +74,15 @@ public class ImapCommandTest {
     @Test
     public void checkServerTimeout() {
         ImapServer is=null;
+        ImapClient ic=null;
+        Set<Thread> threadSet = ImapSSLTest.getThreadList();
         try{
             LOGGER.log(Level.INFO,"************************************************************************");
             LOGGER.log(Level.INFO,"Check server default timeout");
             LOGGER.log(Level.INFO,"************************************************************************");
             ImapConnection.setDefaultTimeout(300);
             is=new ImapServer(0,false);
-            ImapClient ic=new ImapClient("localhost",is.getPort(),false);
+            ic=new ImapClient("localhost",is.getPort(),false);
             ic.sendCommand("a0 IWantATimeout",300);
             ic.setTimeout(3600*1000);
             Thread.sleep(1000);
@@ -90,17 +96,21 @@ public class ImapCommandTest {
         }
         ImapConnection.setDefaultTimeout(10000);
         if(is!=null) is.shutdown();
+        if(ic!=null) ic.shutdown();
+        assertTrue("error searching for hangig threads",ImapSSLTest.verifyHangingThreads(threadSet).size()==0);
     }
 
     @Test
     public void checkClientTimeout() {
+        Set<Thread> threadSet = ImapSSLTest.getThreadList();
         ImapServer is=null;
+        ImapClient ic=null;
         try{
             LOGGER.log(Level.INFO,"************************************************************************");
             LOGGER.log(Level.INFO,"Check client timeout");
             LOGGER.log(Level.INFO,"************************************************************************");
             is=new ImapServer(0,false);
-            ImapClient ic=new ImapClient("localhost",is.getPort(),false);
+            ic=new ImapClient("localhost",is.getPort(),false);
             ic.sendCommand("a0 IWantATimeout",300);
             ic.setTimeout(300);
             Thread.sleep(300);
@@ -115,10 +125,14 @@ public class ImapCommandTest {
             fail("Exception thrown ("+e+")");
         }
         if(is!=null) is.shutdown();
+        if(ic!=null) ic.shutdown();
+        assertTrue("error searching for hangig threads",ImapSSLTest.verifyHangingThreads(threadSet).size()==0);
     }
 
     @Test
     public void checkClientDefaultTimeout() {
+        Set<Thread> threadSet = ImapSSLTest.getThreadList();
+        ImapClient ic=null;
         ImapServer is=null;
         try{
             LOGGER.log(Level.INFO,"************************************************************************");
@@ -126,7 +140,7 @@ public class ImapCommandTest {
             LOGGER.log(Level.INFO,"************************************************************************");
             ImapClient.setDefaultTimeout(300);
             is=new ImapServer(0,false);
-            ImapClient ic=new ImapClient("localhost",is.getPort(),false);
+            ic=new ImapClient("localhost",is.getPort(),false);
             Thread.sleep(300);
             ic.sendCommand("a0 IWantATimeout",300);
             Thread.sleep(1000);
@@ -140,10 +154,13 @@ public class ImapCommandTest {
         }
         ImapClient.setDefaultTimeout(10000);
         if(is!=null) is.shutdown();
+        if(ic!=null) ic.shutdown();
+        assertTrue("error searching for hangig threads",ImapSSLTest.verifyHangingThreads(threadSet).size()==0);
     }
 
     @Test
     public void checkFullLogout() {
+        Set<Thread> threadSet = ImapSSLTest.getThreadList();
         boolean encrypted=false;
         do{
             try{
@@ -163,10 +180,12 @@ public class ImapCommandTest {
             }
             encrypted=!encrypted;
         } while(encrypted && !DO_NOT_TEST_ENCRYPTION);
+        assertTrue("error searching for hangig threads",ImapSSLTest.verifyHangingThreads(threadSet).size()==0);
     }
 
     @Test
     public void checkFullLoginLogout() {
+        Set<Thread> threadSet = ImapSSLTest.getThreadList();
         boolean encrypted=false;
         do{
             try{
@@ -213,6 +232,7 @@ public class ImapCommandTest {
             }
             encrypted=!encrypted;
         } while(encrypted && !DO_NOT_TEST_ENCRYPTION);
+        assertTrue("error searching for hangig threads",ImapSSLTest.verifyHangingThreads(threadSet).size()==0);
     }
 
 }

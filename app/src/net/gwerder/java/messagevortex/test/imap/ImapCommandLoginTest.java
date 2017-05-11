@@ -26,7 +26,7 @@ public class ImapCommandLoginTest {
 
     @Test
     public void loginCapabilitiesPropagated() {
-        // check if login is passed to capabilities
+        // FIXME check if login is passed to capabilities
     }
 
     @Test

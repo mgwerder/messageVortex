@@ -10,6 +10,7 @@ import javax.net.SocketFactory;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
+import java.util.Set;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 
@@ -112,12 +113,15 @@ public class ImapClientTest {
             LOGGER.log(Level.INFO,"************************************************************************");
             LOGGER.log(Level.INFO,"IMAP Client Encrypted Test");
             LOGGER.log(Level.INFO,"************************************************************************");
+            Set<Thread> threadSet = ImapSSLTest.getThreadList();
             ImapServer is =new ImapServer(0,true);
             ImapConnection.setDefaultTimeout(1000);
             ImapClient ic =new ImapClient("localhost",is.getPort(),true);
             ic.setTimeout(1000);
             assertTrue("TLS is not as expected",ic.isTLS());
             is.shutdown();
+            ic.shutdown();
+            assertTrue("error searching for hangig threads",ImapSSLTest.verifyHangingThreads(threadSet).size()==0);
         } catch(IOException e) {
             fail("IOException while creating server");
         }
@@ -128,6 +132,7 @@ public class ImapClientTest {
         LOGGER.log(Level.INFO,"************************************************************************");
         LOGGER.log(Level.INFO,"IMAP Client Timeout Test");
         LOGGER.log(Level.INFO,"************************************************************************");
+        Set<Thread> threadSet = ImapSSLTest.getThreadList();
         DeadSocket ds=new DeadSocket(0,-1);
         ImapClient ic =new ImapClient("localhost",ds.getPort(),false);
         assertTrue("TLS is not as expected",!ic.isTLS());
@@ -156,6 +161,7 @@ public class ImapClientTest {
         ImapCommand.deregisterCommand("IWantATimeout");
         ic.shutdown();
         ds.shutdown();
+        assertTrue("error searching for hangig threads",ImapSSLTest.verifyHangingThreads(threadSet).size()==0);
     }
 
 }
