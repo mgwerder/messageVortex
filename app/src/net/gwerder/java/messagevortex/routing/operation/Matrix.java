@@ -272,23 +272,15 @@ public class Matrix {
             // make diagonal 1 and left 0 in red
             scalar = red.getField(row, row);
             if (scalar != 1) {
-                LOGGER.log(Level.FINEST, "  processing step diagonal with row=" + row + "; row2=" + row + "; scalar=" + scalar);
                 red.divRow(row, scalar);
                 ret.divRow(row, scalar);
-                LOGGER.log(Level.FINEST, "  step diagonal \r\n" + red.toString() + "\r\n" + ret.toString());
-            } else {
-                LOGGER.log(Level.FINEST, "  step diagonal skipped in row "+row+" (already 1)\r\n" + red.toString() + "\r\n" + ret.toString());
             }
 
             for (int row2 = row + 1; row2 < dimension[1]; row2++) {
                 scalar = red.getField(row, row2);
                 if (scalar != 0) {
-                    LOGGER.log(Level.FINEST, "  processing step left with row=" + row2 + "; row2=" + row + "; scalar=" + scalar);
                     red.transformRow(row2, row, scalar,false);
                     ret.transformRow(row2, row, scalar,false);
-                    LOGGER.log(Level.FINEST, "  after step left \r\n" + red.toString() + "\r\n" + ret.toString());
-                } else {
-                    LOGGER.log(Level.FINEST, "  step left skipped at "+row2+"/"+row+" (already 0)");
                 }
             }
 
@@ -298,10 +290,8 @@ public class Matrix {
             for (int row2 = row - 1; row2 >= 0; row2--) {
                 int scalar = red.getField(row, row2);
                 if (scalar != 0) {
-                    LOGGER.log(Level.FINEST, "  processing step right with row=" + row + "; row2=" + row2 + "; scalar=" + scalar);
                     red.transformRow(row2, row, scalar,false);
                     ret.transformRow(row2, row, scalar,false);
-                    LOGGER.log(Level.FINEST, "  after step right\r\n" + red.toString() + "\r\n" + ret.toString());
                 }
             }
         }
@@ -352,7 +342,6 @@ public class Matrix {
                 value2 = getField(col2, row);
                 newValue = mode.sub(value1, mode.mul(value2, scalar));
             }
-            LOGGER.log(Level.FINEST, "  doing transformColumn("+col+","+col2+","+scalar+") for row "+row+" -> col1="+value1+"; col2="+value2+"; newValue="+newValue);
             setField(col,row,newValue);
         }
     }

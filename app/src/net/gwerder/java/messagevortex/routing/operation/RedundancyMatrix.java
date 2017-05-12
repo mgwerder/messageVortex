@@ -75,7 +75,6 @@ public class RedundancyMatrix extends VandermondeMatrix {
                 if (getField(col, col) != 1) {
                     int scalar = getField(col, col);
                     transformColumn(col, -1, scalar);
-                    LOGGER.log(Level.FINEST, "## did unify (" + col + "/" + col + ") (" + col + "/" + col + "/" + scalar + ")\r\n" + toString());
                     assert getField(col, col) == 1;
                 }
 
@@ -84,7 +83,6 @@ public class RedundancyMatrix extends VandermondeMatrix {
                     int scalar = getField(col2, col);
                     if (col != col2 && scalar != 0) {
                         transformColumn(col2, col, scalar);
-                        LOGGER.log(Level.FINEST, "## nullified (" + col2 + "/" + col + ") with " + scalar + " " + (getField(col2, col) != 0 ? "FAILED [" + getField(col2, col) + "]" : "") + "\r\n" + toString());
                         assert getField(col2, col) == 0;
                     }
                 }
@@ -110,9 +108,7 @@ public class RedundancyMatrix extends VandermondeMatrix {
         while (red.getX() < red.getY()) {
             red.removeRow(red.getY() - 1);
         }
-        LOGGER.log(Level.FINEST, "  reduced redundancy matrix\r\n" + red.toString());
         Matrix ret=red.getInverse();
-        LOGGER.log(Level.FINEST, "  inverse of reduced redundancy matrix\r\n" + ret.toString());
         return ret;
     }
 
