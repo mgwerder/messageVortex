@@ -66,7 +66,7 @@ public class RemoveRedundancy extends AbstractOperation {
     }
 
     @Override
-    public int[] execute(int[] id)  {
+    public int[] execute(int[] id) {
         if (!canRun()) {
             return new int[0];
         }
@@ -102,15 +102,19 @@ public class RemoveRedundancy extends AbstractOperation {
 
         // prepare data set
         byte[] in2=new byte[stripeSize*(operation.getDataStripes()+operation.getRedundancy()-missingIds.length)];
-        int j=0;
-        for(int i :getInputID()) {
-            if(!l.contains(i)) {
-                for(byte b:payload.getPayload(i).getPayload()) {
-                    in2[j++]=b;
+        try {
+            int j = 0;
+            for (int i : getInputID()) {
+                if (!l.contains(i)) {
+                    for (byte b : operation.getkeys()[i - getInputID()[0]].decrypt(payload.getPayload(i).getPayload())) {
+                        in2[j++] = b;
+                    }
                 }
             }
+            //assert j==in2.length;
+        } catch(IOException ioe) {
+            return new int[0];
         }
-        assert j==in2.length;
         MathMode mm=GaloisFieldMathMode.getGaloisFieldMathMode(operation.getGFSize());
         Matrix data=new Matrix(in2.length/(operation.getDataStripes()+operation.getRedundancy()-missingIds.length),operation.getDataStripes()+operation.getRedundancy()-missingIds.length,mm,in2);
         LOGGER.log(Level.INFO, "  created "+data.getX()+"x"+data.getY()+" data matrix" );

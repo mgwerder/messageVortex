@@ -120,8 +120,7 @@ public class AddRedundancy extends AbstractOperation {
         try {
             for (int i = 0; i < out.getY(); i++) {
                 int plid = operation.getOutputId() + i;
-                LOGGER.log(Level.INFO, "    setting chunk "+plid+" (row: "+i+")");
-                byte[] b=out.getRowAsByteArray(i);
+                byte[] b=operation.getkeys()[i].encrypt(out.getRowAsByteArray(i));
                 payload.setCalculatedPayload(plid, new PayloadChunk(plid, b));
                 tot+=b.length;
             }
