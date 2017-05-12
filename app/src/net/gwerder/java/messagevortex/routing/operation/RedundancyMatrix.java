@@ -45,28 +45,55 @@ public class RedundancyMatrix extends VandermondeMatrix {
      * @param mode     the math mode to be used
      */
     public RedundancyMatrix(int dataRows, int total, MathMode mode) {
-        super(dataRows, total, mode);
-        for(int col=1;col<getX();col++) {
-            // make x=y a unit field
-            if(getField(col,col)!=1) {
-                int scalar=getField(col,col);
-                transformColumn(col,-1,scalar);
-                LOGGER.log(Level.FINEST,"## did unify ("+col+"/"+col+") ("+col+"/"+col+"/"+scalar+")\r\n"+toString());
-                assert getField(col,col)==1;
-            }
-
-            // nullify other columns in this row
-            for(int col2=0;col2<getX();col2++) {
-                int scalar=getField(col2,col);
-                if(col!=col2 && scalar!=0) {
-                    transformColumn(col2,col,scalar);
-                    LOGGER.log(Level.FINEST,"## nullified ("+col2+"/"+col+") with "+scalar+" "+(getField(col2,col)!=0?"FAILED ["+getField(col2,col)+"]":"")+"\r\n"+toString());
-                    assert getField(col2,col)==0;
-                }
-            }
-
-        }
+        this(dataRows,total,mode,true,false);
     }
+
+    /***
+     * Creates a redundancy matrix based on vnadermonde matrices.
+     *
+     * @param dataRows the number of data rows
+     * @param total    the number of total rows (redundancy + data rows)
+     * @param mode     the math mode to be used
+     * @param noInit  if set precached values are ignored
+     */
+    private RedundancyMatrix(int dataRows, int total, MathMode mode,boolean noCache,boolean noInit) {
+        super(dataRows, total, mode);
+
+        // get value from cache
+        if(!matrixCacheDisabled) {
+            Matrix m = matrixCache.get("rm" + dataRows + "/" + total + "/" + mode.toString());
+            if (!noCache && m != null) {
+                m = m.clone();
+                this.matrix = m.matrix;
+                return;
+            }
+        }
+
+        if(!noInit) {
+            for (int col = 1; col < getX(); col++) {
+                // make x=y a unit field
+                if (getField(col, col) != 1) {
+                    int scalar = getField(col, col);
+                    transformColumn(col, -1, scalar);
+                    LOGGER.log(Level.FINEST, "## did unify (" + col + "/" + col + ") (" + col + "/" + col + "/" + scalar + ")\r\n" + toString());
+                    assert getField(col, col) == 1;
+                }
+
+                // nullify other columns in this row
+                for (int col2 = 0; col2 < getX(); col2++) {
+                    int scalar = getField(col2, col);
+                    if (col != col2 && scalar != 0) {
+                        transformColumn(col2, col, scalar);
+                        LOGGER.log(Level.FINEST, "## nullified (" + col2 + "/" + col + ") with " + scalar + " " + (getField(col2, col) != 0 ? "FAILED [" + getField(col2, col) + "]" : "") + "\r\n" + toString());
+                        assert getField(col2, col) == 0;
+                    }
+                }
+
+            }
+            matrixCache.put("rm" + dataRows + "/" + total + "/" + mode.toString(), clone());
+       }
+    }
+
 
     /***
      * calculates a matrix to recover all data rows given the missing rows.
@@ -91,6 +118,9 @@ public class RedundancyMatrix extends VandermondeMatrix {
 
     @Override
     public RedundancyMatrix clone() {
-        return new RedundancyMatrix(dimension[0],dimension[1],mode);
+        RedundancyMatrix ret=new RedundancyMatrix(dimension[0],dimension[1],mode,true,true);
+        ret.matrix=Arrays.copyOf(this.matrix,this.matrix.length);
+        assert ret.equals(this);
+        return ret;
     }
 }

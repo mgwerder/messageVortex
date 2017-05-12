@@ -22,6 +22,7 @@ package net.gwerder.java.messagevortex.test.routing;
  ***/
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
+import net.gwerder.java.messagevortex.routing.operation.BitShifter;
 import net.gwerder.java.messagevortex.routing.operation.GaloisFieldMathMode;
 import net.gwerder.java.messagevortex.routing.operation.MathMode;
 import net.gwerder.java.messagevortex.routing.operation.RealMathMode;
@@ -132,6 +133,16 @@ public class MathModeTest {
         } catch (ArithmeticException e) {
             // this is expected
         }
+
+         for(int i=1;i<256;i++) {
+             assertTrue("  Failed GF(2^8)-Test for division by itself for i", m.div(i, i) == 1);
+         }
+
+         m = GaloisFieldMathMode.getGaloisFieldMathMode(16);
+         LOGGER.log(Level.INFO, "  checking GF(2^16) math");
+         for(int i=1;i<65536;i++) {
+             assertTrue("  Failed GF(2^16)-Test for division by itself for i", m.div(i, i) == 1);
+         }
     }
 
     @Test
@@ -157,21 +168,21 @@ public class MathModeTest {
     public void gfMathModeShiftTest()  {
         LOGGER.log( Level.INFO, "testing shift function" );
         // Test  rshift
-        assertTrue( "  shift 2>>1 (length:4) ["+GaloisFieldMathMode.rshift(2,1, (byte)4)+"]", GaloisFieldMathMode.rshift(2,1, (byte)4)==1 );
-        assertTrue( "  shift 2>>1 (length:8)", GaloisFieldMathMode.rshift(2,1, (byte)8)==1 );
-        assertTrue( "  shift 2>>1 (length:16)", GaloisFieldMathMode.rshift(2,1, (byte)16)==1 );
+        assertTrue( "  shift 2>>1 (length:4) ["+ BitShifter.rshift(2,1, (byte)4)+"]", BitShifter.rshift(2,1, (byte)4)==1 );
+        assertTrue( "  shift 2>>1 (length:8)", BitShifter.rshift(2,1, (byte)8)==1 );
+        assertTrue( "  shift 2>>1 (length:16)", BitShifter.rshift(2,1, (byte)16)==1 );
         // Test  Lshift
-        assertTrue( "  shift 1<<1 (length:4) ["+GaloisFieldMathMode.lshift(1,1, (byte)4)+"]", GaloisFieldMathMode.lshift(1,1, (byte)4)==2 );
-        assertTrue( "  shift 1<<1 (length:8)", GaloisFieldMathMode.lshift(1,1, (byte)8)==2 );
-        assertTrue( "  shift 1<<1 (length:16)", GaloisFieldMathMode.lshift(1,1, (byte)16)==2 );
+        assertTrue( "  shift 1<<1 (length:4) ["+BitShifter.lshift(1,1, (byte)4)+"]", BitShifter.lshift(1,1, (byte)4)==2 );
+        assertTrue( "  shift 1<<1 (length:8)", BitShifter.lshift(1,1, (byte)8)==2 );
+        assertTrue( "  shift 1<<1 (length:16)", BitShifter.lshift(1,1, (byte)16)==2 );
         //Test overflow wrap
-        assertTrue( "  shift 7<<3 (length:4)", GaloisFieldMathMode.lshift(7,3, (byte)4)==11 );
-        assertTrue( "  shift 7<<7 (length:8)", GaloisFieldMathMode.lshift(7,7, (byte)8)==131 );
-        assertTrue( "  shift 7<<15 (length:16)", GaloisFieldMathMode.lshift(7,15, (byte)16)==Math.pow(2,15)+3 );
+        assertTrue( "  shift 7<<3 (length:4)", BitShifter.lshift(7,3, (byte)4)==11 );
+        assertTrue( "  shift 7<<7 (length:8)", BitShifter.lshift(7,7, (byte)8)==131 );
+        assertTrue( "  shift 7<<15 (length:16)", BitShifter.lshift(7,15, (byte)16)==Math.pow(2,15)+3 );
         // Test underflow wrap
-        assertTrue( "  shift 1>>1 (length:4)["+GaloisFieldMathMode.rshift(1,1, (byte)4)+"]", GaloisFieldMathMode.rshift(1,1, (byte)4)==8 );
-        assertTrue( "  shift 1>>1 (length:8)", GaloisFieldMathMode.rshift(1,1, (byte)8)==128 );
-        assertTrue( "  shift 1>>1 (length:16)", GaloisFieldMathMode.rshift(1,1, (byte)16)== 32768);
+        assertTrue( "  shift 1>>1 (length:4)["+BitShifter.rshift(1,1, (byte)4)+"]", BitShifter.rshift(1,1, (byte)4)==8 );
+        assertTrue( "  shift 1>>1 (length:8)", BitShifter.rshift(1,1, (byte)8)==128 );
+        assertTrue( "  shift 1>>1 (length:16)", BitShifter.rshift(1,1, (byte)16)== 32768);
     }
 
 }

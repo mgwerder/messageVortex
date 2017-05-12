@@ -30,6 +30,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class GaloisFieldMathMode implements MathMode {
 
     private final int gfFieldSize;
+    private final int omega;
     private final int[] gfLog;
     private final int[] gfInverseLog;
 
@@ -40,6 +41,7 @@ public class GaloisFieldMathMode implements MathMode {
         if(omega<2 ||omega>16) {
             throw new ArithmeticException( "illegal GF size "+omega+" (PRIM_POLYNOM unknown)" );
         }
+        this.omega=omega;
         gfFieldSize = (int)Math.pow(2,omega);
         gfLog =new int[gfFieldSize];
         gfInverseLog =new int[gfFieldSize];
@@ -47,7 +49,7 @@ public class GaloisFieldMathMode implements MathMode {
         for(int log = 0; log< gfFieldSize -1; log++) {
             gfLog[b% gfFieldSize]=log;
             gfInverseLog[log% gfFieldSize]=b;
-            b=lshift(b,1,(byte)33);
+            b=BitShifter.lshift(b,1,(byte)33);
             if((b & gfFieldSize)!=0) {
                 b=b^PRIM_POLYNOM[omega-1];
             }
@@ -106,30 +108,8 @@ public class GaloisFieldMathMode implements MathMode {
 
     public int[] getGFILog() { return gfInverseLog; }
 
-    public static int rshift(int value,int shift, byte length) {
-        return lshift(value,-shift,length);
-    }
-
-    public static int lshift(int value,int shift, byte length) {
-        long ret=value;
-        if(shift==0) {
-            return value;
-        }
-        int lshift=shift%length;
-        if(lshift<0) {
-            lshift+=length;
-        }
-
-        // do shift
-        ret=ret << lshift;
-
-        // move overflow to lower end
-        long bitmask=((long)Math.pow(2,lshift)-1)<<length;
-        long lowbits=(ret & bitmask)>>length;
-        ret=ret | lowbits;
-
-        // truncate result (inefficient but works)
-        ret=ret & ((int)Math.pow(2,length)-1);
-        return (int)ret;
+    @Override
+    public String toString() {
+        return "GF(2^"+omega+")";
     }
 }

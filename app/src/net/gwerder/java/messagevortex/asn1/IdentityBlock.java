@@ -36,6 +36,8 @@ import java.util.Arrays;
  */
 public class IdentityBlock extends AbstractBlock {
 
+    private static int nextID=0;
+
     private static final int ENCRYPTED_HEADER_KEY     = 1000;
     private static final int ENCRYPTED_BLOCK          = 1001;
     private static final int PLAIN_BLOCK              = 1002;
@@ -59,6 +61,8 @@ public class IdentityBlock extends AbstractBlock {
     private byte[] padding = null;
     private byte[] encryptedIdentityBlock = null;
 
+    private int id;
+
     private AsymmetricKey ownIdentity = null;
 
     public IdentityBlock() throws IOException {
@@ -70,16 +74,19 @@ public class IdentityBlock extends AbstractBlock {
         this.decryptionKey = new SymmetricKey(Algorithm.getDefault(AlgorithmType.SYMMETRIC));
         this.decryptionKeyRaw = this.identityKey.encrypt(this.toDER(decryptionKey.toASN1Object()));
         this.requests = IdentityBlock.NULLREQUESTS;
+        id=nextID++;
     }
 
     public IdentityBlock(byte[] b, AsymmetricKey ownIdentity) throws IOException {
         this.ownIdentity = ownIdentity;
         ASN1Encodable s = ASN1Sequence.getInstance( b );
+        id=nextID++;
         parse( s );
     }
 
     public IdentityBlock(byte[] b) throws IOException {
         ASN1Encodable s = ASN1Sequence.getInstance( b );
+        id=nextID++;
         parse(s);
     }
 
@@ -91,6 +98,7 @@ public class IdentityBlock extends AbstractBlock {
         super();
         this.ownIdentity = ownIdentity;
         parse( to );
+        id=nextID++;
     }
 
     public void setRequests(HeaderRequest[] hr) {
@@ -340,6 +348,10 @@ public class IdentityBlock extends AbstractBlock {
         } catch(IOException ioe) {
             return "FAILED".hashCode();
         }
+    }
+
+    public String toString() {
+        return "Identity"+id;
     }
 
 }

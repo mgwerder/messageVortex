@@ -28,13 +28,15 @@ public abstract class AbstractOperation implements Operation {
     IdentityBlock identity;
     InternalPayload payload;
 
-    public AbstractOperation(InternalPayload payload) {
-        this.identity=payload.getIdentity();
-        this.payload=payload;
-    }
 
-    void initDone() {
-        payload.addOperation(this);
+    public void setInternalPayload(InternalPayload payload) {
+        if(payload==null) {
+            this.identity=null;
+            this.payload=null;
+        } else {
+            this.identity = payload.getIdentity();
+            this.payload = payload;
+        }
     }
 
     public abstract boolean canRun();
@@ -49,5 +51,7 @@ public abstract class AbstractOperation implements Operation {
     }
 
     public abstract int[] execute(int[] id);
+
+    public abstract String toString();
 
 }

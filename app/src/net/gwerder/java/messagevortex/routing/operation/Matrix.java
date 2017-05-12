@@ -23,7 +23,10 @@ package net.gwerder.java.messagevortex.routing.operation;
 
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
+
 import java.util.Arrays;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
 /**
@@ -31,11 +34,16 @@ import java.util.logging.Level;
  */
 public class Matrix {
 
+    /** may be set to disable cache **/
+    static boolean matrixCacheDisabled =false;
+
     private static final java.util.logging.Logger LOGGER;
     static {
         LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
         MessageVortexLogger.setGlobalLogLevel( Level.ALL);
     }
+
+    static Map<String,Matrix> matrixCache=new ConcurrentHashMap<>();
 
 
     int[] matrix;
@@ -57,6 +65,14 @@ public class Matrix {
         matrix=Arrays.copyOf(content,content.length);
     }
 
+    public Matrix(int x,int y,MathMode mode,byte[] content) {
+        this(x,y,mode);
+        matrix=new int[content.length];
+        for(int i=0;i<content.length;i++) {
+            matrix[i]=content[i] &0xFF;
+        }
+    }
+
     public Matrix(int x,int y,MathMode mode,int content) {
         this(x,y,mode);
         for(int i=0;i<x*y;i++) {
@@ -65,6 +81,12 @@ public class Matrix {
     }
 
     public static Matrix unitMatrix(int size,MathMode mode) {
+        if(!matrixCacheDisabled) {
+            Matrix m = matrixCache.get("um" + size + "/" + mode);
+            if (m != null) {
+                return m.clone();
+            }
+        }
         Matrix ret=new Matrix(size,size,mode);
         for(int x=0;x<size;x++) {
             for(int y=0;y<size;y++) {
@@ -75,6 +97,7 @@ public class Matrix {
                 }
             }
         }
+        matrixCache.put("um"+size+"/"+mode,ret.clone());
         return ret;
     }
 
@@ -109,10 +132,10 @@ public class Matrix {
         if(! this.mode.equals(m.mode)) {
             throw new ArithmeticException( "illegal matrix math mode" );
         }
-        if(this.dimension[0]!=m.dimension[1]) {
+        if(this.getX()!=m.getY()) {
             throw new ArithmeticException( "illegal matrix size" );
         }
-        Matrix ret=new Matrix(m.dimension[0],this.dimension[1],mode);
+        Matrix ret=new Matrix(m.getX(),getY(),mode);
         for(int x=0;x<m.dimension[0];x++) {
             for(int y=0;y<this.dimension[1];y++) {
                 ret.matrix[y*ret.dimension[0]+x]=0;
@@ -194,20 +217,20 @@ public class Matrix {
 
     public int getField(int x,int y) {
         if(x<0 || x>=dimension[0]) {
-            throw new ArithmeticException("column index out of range 0<=i<"+dimension[0]);
+            throw new ArithmeticException("column index out of range 0<=col["+x+"]<"+dimension[0]);
         }
         if(y<0 || y>=dimension[1]) {
-            throw new ArithmeticException("row index out of range 0<=i<"+dimension[0]);
+            throw new ArithmeticException("row index out of range 0<=row["+y+"]<"+dimension[1]);
         }
         return matrix[y*getX()+x];
     }
 
     public int setField(int x,int y,int value) {
         if(x<0 || x>=dimension[0]) {
-            throw new ArithmeticException("column index out of range 0<=i<"+dimension[0]);
+            throw new ArithmeticException("column index out of range 0<=col["+x+"]<"+dimension[0]);
         }
         if(y<0 || y>=dimension[1]) {
-            throw new ArithmeticException("row index out of range 0<=i<"+dimension[0]);
+            throw new ArithmeticException("row index out of range 0<=row["+y+"]<"+dimension[1]);
         }
         int old=getField(x,y);
         matrix[y*getX()+x]=value;
@@ -222,27 +245,51 @@ public class Matrix {
      */
     public Matrix getInverse() {
         if(dimension[0]!=dimension[1]) {
-            throw new ArithmeticException("matrix to inverse must have square dimensions");
+            throw new ArithmeticException("matrix to inverse must have square dimensions (dimension is "+getX()+"/"+getY()+")");
         }
         Matrix red=clone();
         Matrix ret = Matrix.unitMatrix(dimension[0], mode);
-        for (int row = 0; row < dimension[1]; row++) {
-            // make diagonal 1 and left 0 in red
-            int scalar = red.getField(row, row);
-            if (scalar != 1) {
-                red.transformRow(row, row, scalar);
-                ret.transformRow(row, row, scalar);
+        for (int row = 0; row < getY(); row++) {
+            // flip rows if required
+            int scalar=red.getField(row, row);
+            if(scalar==0) {
+                // search next row!=0 at diagonal position
+                int flipRow=row+1;
+                while(flipRow<getY() && red.getField(row, flipRow)==0) {
+                    flipRow++;
+                }
+                if(flipRow==getY()) {
+                    throw new ArithmeticException("unable to inverse matrix (in flip row)");
+                }
+
+                // flip rows
+                LOGGER.log(Level.FINEST, "  processing flip row with row=" + row + "; row2=" + flipRow );
+                red.flipRow(row,flipRow);
+                ret.flipRow(row,flipRow);
             }
-            LOGGER.log(Level.FINEST, "  step diagonal \r\n" + red.toString() + "\r\n" + ret.toString());
+
+
+            // make diagonal 1 and left 0 in red
+            scalar = red.getField(row, row);
+            if (scalar != 1) {
+                LOGGER.log(Level.FINEST, "  processing step diagonal with row=" + row + "; row2=" + row + "; scalar=" + scalar);
+                red.divRow(row, scalar);
+                ret.divRow(row, scalar);
+                LOGGER.log(Level.FINEST, "  step diagonal \r\n" + red.toString() + "\r\n" + ret.toString());
+            } else {
+                LOGGER.log(Level.FINEST, "  step diagonal skipped in row "+row+" (already 1)\r\n" + red.toString() + "\r\n" + ret.toString());
+            }
 
             for (int row2 = row + 1; row2 < dimension[1]; row2++) {
                 scalar = red.getField(row, row2);
                 if (scalar != 0) {
-                    red.transformRow(row2, row, scalar);
-                    ret.transformRow(row2, row, scalar);
+                    LOGGER.log(Level.FINEST, "  processing step left with row=" + row2 + "; row2=" + row + "; scalar=" + scalar);
+                    red.transformRow(row2, row, scalar,false);
+                    ret.transformRow(row2, row, scalar,false);
+                    LOGGER.log(Level.FINEST, "  after step left \r\n" + red.toString() + "\r\n" + ret.toString());
+                } else {
+                    LOGGER.log(Level.FINEST, "  step left skipped at "+row2+"/"+row+" (already 0)");
                 }
-                LOGGER.log(Level.FINEST, "    row=" + row + "; row2=" + row2 + "; scalar=" + scalar);
-                LOGGER.log(Level.FINEST, "  step left \r\n" + red.toString() + "\r\n" + ret.toString());
             }
 
         }
@@ -251,11 +298,11 @@ public class Matrix {
             for (int row2 = row - 1; row2 >= 0; row2--) {
                 int scalar = red.getField(row, row2);
                 if (scalar != 0) {
-                    red.transformRow(row2, row, scalar);
-                    ret.transformRow(row2, row, scalar);
+                    LOGGER.log(Level.FINEST, "  processing step right with row=" + row + "; row2=" + row2 + "; scalar=" + scalar);
+                    red.transformRow(row2, row, scalar,false);
+                    ret.transformRow(row2, row, scalar,false);
+                    LOGGER.log(Level.FINEST, "  after step right\r\n" + red.toString() + "\r\n" + ret.toString());
                 }
-                LOGGER.log(Level.FINEST, "    row=" + row + "; row2=" + row2 + "; scalar=" + scalar);
-                LOGGER.log(Level.FINEST, "  step diagonal right\r\n" + red.toString() + "\r\n" + ret.toString());
             }
         }
         if (!Matrix.unitMatrix(red.dimension[0],mode).equals(red)) {
@@ -264,6 +311,23 @@ public class Matrix {
         return ret;
     }
 
+    public byte[] getRowAsByteArray(int row) {
+        byte[] ret=new byte[getX()];
+        for(int i=0;i<ret.length;i++) {
+            ret[i]=(byte)(getField(i,row));
+        }
+        return ret;
+    }
+
+    public byte[] getAsByteArray() {
+        byte[] ret=new byte[getX()*getY()];
+        for(int y=0;y<getY();y++) {
+            for(int x=0;x<getX();x++) {
+                ret[y * getX() + x] = (byte) (getField(x, y));
+            }
+        }
+        return ret;
+    }
 
     @Override
     public Matrix clone() {
@@ -293,7 +357,7 @@ public class Matrix {
         }
     }
 
-    void transformRow(int row,int row2, int scalar) {
+    void transformRow(int row,int row2, int scalar,boolean doDiv) {
         if(row<0 || row>getY()) {
             throw new ArithmeticException("first row is out of range");
         }
@@ -303,11 +367,38 @@ public class Matrix {
         for(int col=0;col<getX();col++){
             int value1=getField(col,row);
             int value2=getField(col,row2);
-            int newValue=mode.sub(value1,mode.div(value2,scalar));
+            int tValue;
+            if(doDiv) {
+                tValue = mode.div(value2, scalar);
+            } else {
+                tValue = mode.mul(value2, scalar);
+            }
+            int newValue=mode.sub(value1,tValue);
             setField(col,row,newValue);
         }
     }
 
+    void divRow(int row, int scalar) {
+        if(row<0 || row>getY()) {
+            throw new ArithmeticException("first row is out of range");
+        }
 
+        for(int col=0;col<getX();col++){
+            setField(col,row,mode.div(getField(col,row),scalar));
+        }
+    }
+
+    void flipRow(int row1, int row2) {
+        int tmp;
+        for(int i=0;i<getX();i++) {
+            tmp=getField(i,row1);
+            setField(i,row1,getField(i,row2));
+            setField(i,row2,tmp);
+        }
+    }
+
+    public static void enableMatrixCache(boolean enable) {
+        matrixCacheDisabled =!enable;
+    }
 
 }

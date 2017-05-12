@@ -113,14 +113,15 @@ public class InternalPayloadTest {
         LOGGER.log(Level.INFO,"Testing payload handling with "+s.getBytes().length+" bytes");
         InternalPayload p=space[0].getInternalPayload(identity[0]);
         PayloadChunk pc =new PayloadChunk(200,s.getBytes());
-        Operation op=new IdMapOperation(p,200,201,1);
+        Operation op=new IdMapOperation(200,201,1);
         assertTrue("payload space previously unexpetedly not empty",p.setPayload(pc)==null);
-        assertTrue("addin of operation unexpectedly rejected",p.addOperation(op)==false);
+        assertTrue("addin of operation unexpectedly rejected",p.addOperation(op)==true);
         assertTrue("target  payload should not be null",p.getPayload(201)!=null);
         assertTrue("target  payload should be identical",s.equals(new String(p.getPayload(201).getPayload())));
         p.setPayload(new PayloadChunk(200,null)); //remove the payload chunk from store
-        assertTrue("target  payload should be null",p.getPayload(201)==null);
-        p.removeOperation(op);
+        assertTrue("source payload should be null",p.getPayload(200)==null);
+        assertTrue("target payload should be null",p.getPayload(201)==null);
+        assertTrue("removal of operation "+op.toString()+" unexpectedly failed",p.removeOperation(op)==true);
     }
 
 

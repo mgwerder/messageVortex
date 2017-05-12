@@ -7,6 +7,7 @@ import net.gwerder.java.messagevortex.asn1.encryption.Padding;
 import net.gwerder.java.messagevortex.asn1.encryption.Parameter;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
@@ -18,12 +19,31 @@ import java.util.logging.Level;
  */
 class AsymmetricKeyPreCalculator implements Serializable {
 
+    private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+
     private static final java.util.logging.Logger LOGGER;
     static {
         LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
         MessageVortexLogger.setGlobalLogLevel( Level.ALL);
     }
     private static long lastSaved = 0;
+    private static List<LastCalculated> log=new ArrayList<>();
+
+    private static class LastCalculated {
+        public String msg;
+        public Date lastStored=new Date();
+        public int num=1;
+
+        public LastCalculated(String msg) {
+            this.msg=msg;
+        }
+
+        public String toString() {
+            String ret="["+SIMPLE_DATE_FORMAT.format(lastStored)+"] "+msg;
+            if(num>1) ret+=" ("+num+")";
+            return ret;
+        }
+    }
 
     /* nuber of threads to use */
     private static int numThreads=Math.max(2,Runtime.getRuntime().availableProcessors()-1);
@@ -115,6 +135,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
                         for(Thread t:tl) {
                             try {
                                 t.join();
+                                attachLog("stored precomputed key "+param.toString()+" in cache");
                             }catch(InterruptedException ie) {
                                 LOGGER.log(Level.SEVERE,"got unexpected exception",ie);
                             }
@@ -139,6 +160,18 @@ class AsymmetricKeyPreCalculator implements Serializable {
 
         }
 
+    }
+
+    private static void attachLog(String msg) {
+        synchronized(log) {
+            if(log.size()>0 && log.get(log.size()-1).msg.equals(msg)) {
+                log.get(log.size()-1).num++;
+                log.get(log.size()-1).lastStored=new Date();
+            } else {
+                while(log.size()>10) log.remove(0);
+                log.add(log.size(),new LastCalculated(msg));
+            }
+        }
     }
 
     private static final Map<AlgorithmParameter,Queue<AsymmetricKey>> cache=new ConcurrentHashMap<>();
@@ -288,7 +321,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
             LOGGER.log(Level.INFO, sepLine);
             int sum = 0;
             int tot = 0;
-            for (Map.Entry<AlgorithmParameter, Queue<AsymmetricKey>> q : cache.entrySet()) {
+            for (Map.Entry<AlgorithmParameter, Queue<AsymmetricKey>> q : new TreeMap<AlgorithmParameter,Queue<AsymmetricKey>>(cache).entrySet()) {
                 LOGGER.log(Level.INFO, "| " + q.getKey().toString() + ": " + q.getValue().size() + "/" + cacheSize.get(q.getKey()));
                 sum += q.getValue().size();
                 tot += cacheSize.get(q.getKey());
@@ -296,6 +329,14 @@ class AsymmetricKeyPreCalculator implements Serializable {
             }
             LOGGER.log(Level.INFO, sepLine);
             LOGGER.log(Level.INFO, "| Total: "+sum+"/"+tot);
+            synchronized(log) {
+                if(log.size()>0) {
+                    LOGGER.log(Level.INFO, sepLine);
+                    for(LastCalculated l:log) {
+                        LOGGER.log(Level.INFO, "| "+l.toString());
+                    }
+                }
+            }
             LOGGER.log(Level.INFO, sepLine);
         }
     }

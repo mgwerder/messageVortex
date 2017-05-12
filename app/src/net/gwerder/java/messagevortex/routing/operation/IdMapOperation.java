@@ -18,15 +18,13 @@ public class IdMapOperation extends AbstractOperation {
     private int[] outputId;
     private int[] inputId;
 
-    public IdMapOperation(InternalPayload p, int sourceId, int targetId, int number) {
-        super(p);
+    public IdMapOperation(int sourceId, int targetId, int number) {
         inputId  = new int[number];
         outputId = new int[number];
         for(int i=0;i<inputId.length;i++) {
             inputId[i]=sourceId+i;
             outputId[i]=targetId+i;
         }
-        initDone();
     }
 
     @Override
@@ -51,5 +49,10 @@ public class IdMapOperation extends AbstractOperation {
             payload.setCalculatedPayload(outputId[i],payload.getPayload(inputId[i]));
         }
         return getOutputID();
+    }
+
+    @Override
+    public String toString() {
+        return inputId[0]+"->IdMapper("+inputId.length+")->"+outputId[0];
     }
 }

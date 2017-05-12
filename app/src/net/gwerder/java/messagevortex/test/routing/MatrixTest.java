@@ -107,22 +107,36 @@ public class MatrixTest {
                     }
                 }
                 Arrays.sort(missing);
+
                 LOGGER.log(Level.INFO, "  test parameter: dataRows="+data.getY()+"; totalRows="+tot+"; missingRows="+missing.length);
+
+                LOGGER.log(Level.INFO, "  Got data vector\r\n" + data.toString());
 
                 RedundancyMatrix m1 = new RedundancyMatrix(data.getY(), tot, mm);
                 LOGGER.log(Level.INFO, "  Got redundancy matrix for GF(2^" + galois + ")\r\n" + m1.toString());
-                RedundancyMatrix tmp = m1.clone();
-                while (tmp.getX() != tmp.getY()) tmp.removeRow(tmp.getX());
-                assertTrue("data rows in redundancy matrix are not unit rows", Matrix.unitMatrix(tmp.getX(), mm).equals(tmp));
-                LOGGER.log(Level.INFO, "  Got data vector\r\n" + data.toString());
+                RedundancyMatrix dataRowsOfRedundancyMatrix = m1.clone();
+                while (dataRowsOfRedundancyMatrix.getX() != dataRowsOfRedundancyMatrix.getY()) {
+                    dataRowsOfRedundancyMatrix.removeRow(dataRowsOfRedundancyMatrix.getX());
+                }
+                assertTrue("data rows in redundancy matrix are not unit rows \n"+Matrix.unitMatrix(dataRowsOfRedundancyMatrix.getX(), mm).toString()+"\n"+dataRowsOfRedundancyMatrix.toString(), Matrix.unitMatrix(dataRowsOfRedundancyMatrix.getX(), mm).equals(dataRowsOfRedundancyMatrix));
+
                 Matrix red = m1.mul(data);
                 LOGGER.log(Level.INFO, "  Got data with redundancy vector\r\n" + red.toString());
+
+                Matrix damaged=red.clone();
                 for (int i = missing.length - 1; i >= 0; i--) {
                     red.removeRow(missing[i]);
+                    damaged.removeRow(missing[i]);
                 }
+                while (damaged.getY() != data.getY()) {
+                    damaged.removeRow(data.getY());
+                }
+                LOGGER.log(Level.INFO, "  Got damaged vector\r\n" + damaged.toString());
+
                 Matrix m2 = m1.getRecoveryMatrix(missing);
                 LOGGER.log(Level.INFO, "  Got recovery matrix\r\n" + m2.toString());
-                Matrix recovered = m2.mul(data);
+
+                Matrix recovered = m2.mul(damaged);
                 LOGGER.log(Level.INFO, "  Got recovered data\r\n" + recovered.toString());
                 assertTrue("data and recovered data is not equal\r\n" + data.toString() + "\r\n" + recovered.toString(), recovered.equals(data));
             }

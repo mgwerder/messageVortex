@@ -39,6 +39,4 @@ public class RemoveRedundancyOperation extends AbstractRedundancyOperation {
         super(to);
     }
 
-
-
 }

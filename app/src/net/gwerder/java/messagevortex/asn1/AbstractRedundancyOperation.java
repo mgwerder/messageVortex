@@ -22,6 +22,7 @@ package net.gwerder.java.messagevortex.asn1;
 // ************************************************************************************
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
+import net.gwerder.java.messagevortex.routing.operation.BitShifter;
 import net.gwerder.java.messagevortex.routing.operation.GaloisFieldMathMode;
 import net.gwerder.java.messagevortex.routing.operation.MathMode;
 import org.bouncycastle.asn1.*;
@@ -188,7 +189,7 @@ public abstract class AbstractRedundancyOperation extends Operation {
      * @throws ArithmeticException if all stripes together are not accomodatable in the given GF field
      */
     public int setDataStripes(int stripes)  {
-        if(stripes<1 || stripes+this.redundancy> GaloisFieldMathMode.lshift(2,gfSize,(byte)33)) {
+        if(stripes<1 || stripes+this.redundancy> BitShifter.lshift(2,gfSize,(byte)33)) {
             throw new ArithmeticException("too many stripes to be acomodated in given galois field");
         }
         int old=this.dataStripes;
@@ -210,7 +211,7 @@ public abstract class AbstractRedundancyOperation extends Operation {
     public int setRedundancy(int stripes)  {
         if(stripes<1) {
             throw new ArithmeticException("too few stripes to be acomodated in current galois field");
-        } else if(stripes+this.dataStripes> GaloisFieldMathMode.lshift(2,gfSize,(byte)33)) {
+        } else if(stripes+this.dataStripes> BitShifter.lshift(2,gfSize,(byte)33)) {
             throw new ArithmeticException("too many stripes to be acomodated in current galois field");
         }
         int old=this.redundancy;
@@ -259,7 +260,7 @@ public abstract class AbstractRedundancyOperation extends Operation {
      * @throws ArithmeticException if the number of all stripes in total (data and redundancy) exceeds the address space of the GF
      */
     public int setGFSize(int omega) {
-        if(omega<2 || omega>16 || this.redundancy+this.dataStripes> GaloisFieldMathMode.lshift(2,omega,(byte)33)) {
+        if(omega<2 || omega>16 || this.redundancy+this.dataStripes> BitShifter.lshift(2,omega,(byte)33)) {
             throw new ArithmeticException("galois field too small for the stripes to be acomodated");
         }
         int old=this.gfSize;

@@ -68,4 +68,13 @@ public interface Operation {
      */
     int[] execute(int[] id);
 
+    /***
+     * sets the internal payload and associated identity.
+     *
+     * This method is called from the InternalPayload when registering.
+     *
+     * @param payload the internal payload of an identity to be registered within
+     */
+    public void setInternalPayload(InternalPayload payload);
+
 }

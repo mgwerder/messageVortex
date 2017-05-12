@@ -110,8 +110,21 @@ public class SymmetricKey extends Key {
         return fromHex(parameters.get(Parameter.IV));
     }
 
+    public AlgorithmParameter getParameter() {
+        return parameters.clone();
+    }
+
     public Padding getPadding() {
         return Padding.getByString(parameters.get(Parameter.PADDING.toString()));
+    }
+
+    /***
+     * gets the key size from the key generation parameters.
+     *
+     * @return the key size in bits or -1 if there is no key size set
+     */
+    public int getKeySize() {
+        return parameters.get(Parameter.KEYSIZE)!=null?Integer.parseInt(parameters.get(Parameter.KEYSIZE)):getAlgorithm().getKeySize();
     }
 
     public Mode getMode() {

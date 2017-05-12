@@ -139,6 +139,12 @@ public class InternalPayload {
         }
     }
 
+    /***
+     *
+     *
+     * @param op
+     * @throws InvalidParameterException if dependency is circular
+     */
     private void registerOperation(Operation op) {
         // check for valid operation
         if(op==null || op.getOutputID()==null || op.getOutputID().length==0) {
@@ -160,28 +166,33 @@ public class InternalPayload {
         }
 
 
-        // register output ids
-        int[] id=op.getOutputID();
-        for(int i=0;i<id.length;i++) {
-            internalOperationOutput.put(id[i],op);
-        }
+        synchronized (operations) {
+            op.setInternalPayload(this);
 
-        //register input ids
-        id=op.getInputID();
-        for(int i=0;i<id.length;i++) {
-            synchronized(internalOperationInput) {
-                List l=internalOperationInput.get(id[i]);
-                if(l==null) {
-                    l=new ArrayList<>();
-                    internalOperationInput.put(id[i],l);
-                }
-                l.add(op);
+            // register output ids
+            int[] id = op.getOutputID();
+            for (int i = 0; i < id.length; i++) {
+                internalOperationOutput.put(id[i], op);
             }
-        }
 
-        // register operation
-        operations.add(op);
+            //register input ids
+            id = op.getInputID();
+            for (int i = 0; i < id.length; i++) {
+                synchronized (internalOperationInput) {
+                    List l = internalOperationInput.get(id[i]);
+                    if (l == null) {
+                        l = new ArrayList<>();
+                        internalOperationInput.put(id[i], l);
+                    }
+                    l.add(op);
+                }
+            }
+
+            // register operation
+            operations.add(op);
+        }
     }
+
 
     private boolean isCircularDependent(Operation op,int id) {
         Operation top=internalOperationOutput.get(id);
@@ -202,21 +213,30 @@ public class InternalPayload {
         if(op==null || op.getOutputID()==null) {
             throw new NullPointerException();
         }
-        int[] id=op.getOutputID();
-        for(int i=0;i<id.length;i++) {
-            internalOperationOutput.remove(id[i]);
-        }
-        id=op.getInputID();
-        synchronized(internalOperationInput) {
-            for(int i=0;i<id.length;i++) {
-                List<Operation> l=internalOperationInput.get(id[i]);
-                l.remove(op);
-                if(l!=null && l.isEmpty()) {
-                    internalOperationInput.remove(id[i]);
+        synchronized(operations) {
+            op.setInternalPayload(null);
+
+            // remove output
+            int[] id = op.getOutputID();
+            for (int i = 0; i < id.length; i++) {
+                internalOperationOutput.remove(id[i]);
+                setCalculatedPayload(id[i], null);
+            }
+            // remove inputs
+            id = op.getInputID();
+            synchronized (internalOperationInput) {
+                for (int i = 0; i < id.length; i++) {
+                    List<Operation> l = internalOperationInput.get(id[i]);
+                    if (l != null && l.isEmpty()) {
+                        l.remove(op);
+                        if (l.size() == 0) {
+                            internalOperationInput.remove(id[i]);
+                        }
+                    }
                 }
             }
+            operations.remove(op);
         }
-        operations.remove(op);
     }
 
     public boolean addOperation(Operation op) {
@@ -226,6 +246,7 @@ public class InternalPayload {
         // check for conflicting operations
         for( int id:op.getOutputID()) {
             if(internalOperationOutput.get(id)!=null) {
+                LOGGER.log(Level.WARNING,"addin of operation "+op.toString()+" due to conflicting outputs");
                 return false;
             }
         }
@@ -237,25 +258,24 @@ public class InternalPayload {
     }
 
     public boolean removeOperation(Operation op) {
-        // check for conflicting operations
-        for( int id:op.getOutputID()) {
-            if(internalOperationOutput.get(id)!=null) {
+        synchronized(operations) {
+            // remove operation
+            if (operations.contains(op)) {
+                deregisterOperation(op);
+            } else {
+                // removal filed as operation is not registered
                 return false;
             }
+
+            // do first a compact cycle if required
+            compact();
         }
-
-        // store operation
-        deregisterOperation(op);
-
-        // do first a compact cycle if required
-        compact();
-
         return true;
     }
 
     protected boolean compact() {
         // skip running if last run is less than 10s ago
-        if(System.currentTimeMillis()<lastcompact+60000) {
+        if(System.currentTimeMillis()<lastcompact+10000) {
             return false;
         }
 

@@ -53,4 +53,9 @@ public class RealMathMode implements MathMode {
     public int sub(int c1, int c2) {
         return c1-c2;
     }
+
+    @Override
+    public String toString() {
+        return "Real";
+    }
 }
