@@ -30,9 +30,9 @@ class AsymmetricKeyPreCalculator implements Serializable {
     private static List<LastCalculated> log=new ArrayList<>();
 
     private static class LastCalculated {
-        public String msg;
-        public Date lastStored=new Date();
-        public int num=1;
+        private String msg;
+        private Date lastStored=new Date();
+        private int num=1;
 
         public LastCalculated(String msg) {
             this.msg=msg;
@@ -40,8 +40,36 @@ class AsymmetricKeyPreCalculator implements Serializable {
 
         public String toString() {
             String ret="["+SIMPLE_DATE_FORMAT.format(lastStored)+"] "+msg;
-            if(num>1) ret+=" ("+num+")";
+            if(num>1) {
+                ret+=" ("+num+")";
+            }
             return ret;
+        }
+
+        public String getMessage() {
+            return msg;
+        }
+
+        public Date getTimestamp() {
+            return lastStored;
+        }
+
+        public Date setTimestamp(Date newTimestamp) {
+            Date ret=lastStored;
+            if(newTimestamp==null) {
+                lastStored = new Date();
+            } else {
+                lastStored=newTimestamp;
+            }
+            return ret;
+        }
+
+        public int getNumberOfCalls() {
+            return num;
+        }
+
+        public int incrementNumberOfCalls() {
+            return ++num;
         }
     }
 
@@ -162,11 +190,15 @@ class AsymmetricKeyPreCalculator implements Serializable {
 
     }
 
+    private AsymmetricKeyPreCalculator() {
+        // just a dummy to hide the default constructor
+    }
+
     private static void attachLog(String msg) {
         synchronized(log) {
-            if(log.size()>0 && log.get(log.size()-1).msg.equals(msg)) {
-                log.get(log.size()-1).num++;
-                log.get(log.size()-1).lastStored=new Date();
+            if(log.size()>0 && log.get(log.size()-1).getMessage().equals(msg)) {
+                log.get(log.size()-1).incrementNumberOfCalls();
+                log.get(log.size()-1).setTimestamp(null);
             } else {
                 while(log.size()>10) log.remove(0);
                 log.add(log.size(),new LastCalculated(msg));
@@ -182,18 +214,13 @@ class AsymmetricKeyPreCalculator implements Serializable {
 
     private static String filename=null;
 
-    private AsymmetricKeyPreCalculator() {
-        // just a dummy to hide the default constructor
-    }
-
     public static AsymmetricKey getPrecomputedAsymmetricKey(AlgorithmParameter parameters) {
-        parameters=prepareParameters(parameters);
+
+        prepareParameters(parameters);
 
         synchronized (cache) {
-            if(filename==null && runner!=null) {
-                if(!runner.isAlive()) {
-                    runner=null;
-                }
+            if(filename==null && runner!=null && !runner.isAlive()) {
+                runner=null;
             }
             if(filename==null) {
                 // we are shutting down or have been shut down. No services are provided

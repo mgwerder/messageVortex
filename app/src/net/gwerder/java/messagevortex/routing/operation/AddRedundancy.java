@@ -28,9 +28,6 @@ import net.gwerder.java.messagevortex.asn1.PayloadChunk;
 import net.gwerder.java.messagevortex.asn1.VortexMessage;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.logging.Level;
 /**
  * This is the core of the redundancy add operation.
@@ -77,7 +74,9 @@ public class AddRedundancy extends AbstractOperation {
     }
 
     public int[] execute(int[] id) {
-        if(!canRun()) return new int[0];
+        if(!canRun()) {
+            return new int[0];
+        }
         LOGGER.log(Level.INFO, "executing add redundancy operation ("+this.toString()+")");
         byte[] in=payload.getPayload(operation.getInputId()).getPayload();
 

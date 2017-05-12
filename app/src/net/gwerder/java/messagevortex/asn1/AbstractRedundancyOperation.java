@@ -23,8 +23,6 @@ package net.gwerder.java.messagevortex.asn1;
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.routing.operation.BitShifter;
-import net.gwerder.java.messagevortex.routing.operation.GaloisFieldMathMode;
-import net.gwerder.java.messagevortex.routing.operation.MathMode;
 import org.bouncycastle.asn1.*;
 
 import java.io.IOException;

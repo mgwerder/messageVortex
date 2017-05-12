@@ -29,7 +29,6 @@ import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 
 /***
  * represents an identity block of a vortexMessage.
@@ -214,7 +213,6 @@ public class IdentityBlock extends AbstractBlock {
 
     public ASN1Object toASN1Object(AsymmetricKey targetIdentity) throws IOException {
         sanitizeHeaderKey();
-        //if(ownIdentity==null) throw new NullPointerException( "ownIdentity must not be null" );
         if (headerKey == null && encryptedHeaderKey == null) {
             throw new NullPointerException( "headerKey may not be null" );
         }

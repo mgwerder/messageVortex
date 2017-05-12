@@ -65,8 +65,7 @@ public class InternalPayload {
 
     private PayloadChunk getPayloadCache(int id) {
         synchronized(internalPayloadCache) {
-            PayloadChunk pc=internalPayloadCache.get(id);
-            return pc;
+            return internalPayloadCache.get(id);
         }
     }
 
@@ -229,7 +228,7 @@ public class InternalPayload {
                     List<Operation> l = internalOperationInput.get(id[i]);
                     if (l != null && l.isEmpty()) {
                         l.remove(op);
-                        if (l.size() == 0) {
+                        if (l.isEmpty()) {
                             internalOperationInput.remove(id[i]);
                         }
                     }

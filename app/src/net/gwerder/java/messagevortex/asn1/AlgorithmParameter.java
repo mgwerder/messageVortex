@@ -49,7 +49,7 @@ public class AlgorithmParameter extends AbstractBlock implements Serializable,Co
         }
     }
 
-    public String put(String id,String value) throws IllegalArgumentException {
+    public String put(String id,String value) {
         return put(Parameter.getByString(id).getId(),value);
     }
 
@@ -67,7 +67,7 @@ public class AlgorithmParameter extends AbstractBlock implements Serializable,Co
         return put(parameter.getId(),value);
     }
 
-    public String get(String id) throws IllegalArgumentException {
+    public String get(String id) {
         Parameter p=Parameter.getByString(id);
         if(p==null) {
             throw new IllegalArgumentException("got unknown parameter id to map ("+id+")");
@@ -75,7 +75,7 @@ public class AlgorithmParameter extends AbstractBlock implements Serializable,Co
         return get(p.getId());
     }
 
-    public String get(Parameter p) throws IllegalArgumentException {
+    public String get(Parameter p) {
         return get(p.getId());
     }
 

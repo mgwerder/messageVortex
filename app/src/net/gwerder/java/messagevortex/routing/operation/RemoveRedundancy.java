@@ -64,9 +64,10 @@ public class RemoveRedundancy extends AbstractOperation {
 
     @Override
     public int[] execute(int[] id)  {
-        if (!canRun()) return new int[0];
+        if (!canRun()) {
+            return new int[0];
+        }
         LOGGER.log(Level.INFO, "executing add redundancy operation");
-        byte[] in = payload.getPayload(operation.getInputId()).getPayload();
         int paddingSize = 4;
 
         // generate list of missing rows

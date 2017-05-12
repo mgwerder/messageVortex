@@ -51,8 +51,12 @@ public class SymmetricKey extends Key {
     }
 
     public SymmetricKey(Algorithm sk ,Padding pad, Mode mode) throws IOException {
-        if(pad==null) throw new NullPointerException("padding may not be null");
-        if(mode==null) throw new NullPointerException("mode may not be null");
+        if(pad==null) {
+            throw new NullPointerException("padding may not be null");
+        }
+        if(mode==null) {
+            throw new NullPointerException("mode may not be null");
+        }
         parameters.put(Parameter.ALGORITHM,sk.toString());
         parameters.put(Parameter.PADDING,pad.toString());
         parameters.put(Parameter.MODE,mode.toString());
