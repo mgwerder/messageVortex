@@ -32,7 +32,9 @@ import org.junit.runners.JUnit4;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 
 import static org.junit.Assert.assertTrue;
@@ -54,7 +56,7 @@ public class OperationProcessingTest {
             InternalPayloadSpace ps=new InternalPayloadSpace();
             InternalPayload p=ps.getInternalPayload(identity);
             redundancyOperationTest(p,3,2,8);
-            int repeat=5;
+            int repeat=20;
             for(int gfSize:new int[] {8,16}) {
                 for (int i = 0; i < repeat; i++) {
                     // determine data to be processed
@@ -96,19 +98,28 @@ public class OperationProcessingTest {
         assertTrue("error testing straight redundancy calculation",b!=null && Arrays.equals(inBuffer,b));
 
         // redundancy operation
-        /*
         Operation oop2=new RemoveRedundancy(new RemoveRedundancyOperation(3000, dataStripes, redundancy, Arrays.asList(keys), 4000,gfSize));
+        assertTrue("add operation for rebuild test not added",p.addOperation(oop2));
         // set random passthrus
-        //FIXME
-        assertTrue("remove operation for rebuild test not added",p.addOperation(oop2));
+        List<Operation> l=new ArrayList<>();
+        while(l.size()<iop.getOutputID().length) {
+            int i=esr.nextInt(dataStripes+redundancy);
+            Operation o=new IdMapOperation(1000+i,3000+i,1);
+            if(p.addOperation(o)) {
+                l.add(o);
+            }
+        }
+        assertTrue("error in determining canRun",oop2.canRun());
         assertTrue("error testing redundancy calculation with random stripes",Arrays.equals(inBuffer,p.getPayload(4000).getPayload()));
-        */
+        assertTrue("remove operation for rebuild test not added",p.removeOperation(oop2));
+        for(Operation o:l){
+            assertTrue("error removing passthru operation",p.removeOperation(o));
+        }
 
         assertTrue("unable to successfully remove add operation",p.removeOperation(iop));
         assertTrue("unable to successfully remove remove redundancy operation",p.removeOperation(oop));
         assertTrue("unable remove payload data",p.setPayload(new PayloadChunk(1,null))!=null);
-        //assertTrue("unable to successfully remove remove redundancy operation for rebuild test",p.removeOperation(oop2));
-        // fixme remove random passthrus
+
     }
 
 }

@@ -53,6 +53,9 @@ public class RemoveRedundancy extends AbstractOperation {
 
     @Override
     public boolean canRun() {
+        if(payload==null) {
+            return false;
+        }
         int j=0;
         for(int i:getInputID()) {
             if(payload.getPayload(i)!=null) {
