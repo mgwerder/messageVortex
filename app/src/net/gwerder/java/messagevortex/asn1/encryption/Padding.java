@@ -30,11 +30,11 @@ import java.util.*;
  */
 public enum Padding {
 
-    NONE            ( 1000, "NONE", new AlgorithmType[]{AlgorithmType.ASYMMETRIC}, new SizeCalc() {
+    /*NONE            ( 1000, "NoPadding", new AlgorithmType[]{AlgorithmType.ASYMMETRIC}, new SizeCalc() {
         public int maxSize(int s) {
             return s / 8;
         }
-    } ),
+    } ),*/
     PKCS1           ( 1001, "PKCS1Padding", new AlgorithmType[]{AlgorithmType.ASYMMETRIC}, new SizeCalc() {
         public int maxSize(int s) {
             return (s / 8) - 11;

@@ -22,8 +22,10 @@ package net.gwerder.java.messagevortex.asn1;
 // ************************************************************************************
 
 import net.gwerder.java.messagevortex.asn1.encryption.Algorithm;
+import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import net.gwerder.java.messagevortex.asn1.encryption.Parameter;
 import org.bouncycastle.asn1.*;
+import org.bouncycastle.asn1.util.Dump;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import java.io.IOException;
@@ -47,17 +49,17 @@ abstract public class Key extends AbstractBlock {
         parameters.put(Parameter.ALGORITHM.getId(),alg.toString());
     }
 
-    ASN1Encodable encodeKeyParameter() throws IOException {
+    ASN1Encodable encodeKeyParameter(DumpType dumpType) throws IOException {
         ASN1EncodableVector v=new ASN1EncodableVector();
         v.add(new ASN1Enumerated( Algorithm.getByString( parameters.get( Parameter.ALGORITHM.getId() ) ).getId()));
-        v.add(parameters.toASN1Object());
+        v.add(parameters.toASN1Object(dumpType));
         return new DERSequence( v );
     }
 
-    String dumpKeyTypeValueNotation(String prefix) {
+    String dumpKeyTypeValueNotation(String prefix, DumpType dumpType) {
         StringBuilder sb=new StringBuilder();
-        sb.append(prefix).append("  keyType " + Algorithm.getByString( parameters.get( Parameter.ALGORITHM.getId() ) ).toString() + ",").append(CRLF);
-        sb.append(prefix).append("  parameter "+parameters.dumpValueNotation(prefix+"  "));
+        sb.append(prefix).append("keyType " + Algorithm.getByString( parameters.get( Parameter.ALGORITHM.getId() ) ).toString() + ",").append(CRLF);
+        sb.append(prefix).append("parameter "+parameters.dumpValueNotation(prefix+"",dumpType));
         return sb.toString();
     }
 

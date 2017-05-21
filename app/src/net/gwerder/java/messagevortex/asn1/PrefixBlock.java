@@ -35,9 +35,6 @@ import java.util.logging.Level;
  */
 public class PrefixBlock extends AbstractBlock {
 
-    public static final int PLAIN_PREFIX=100001;
-    public static final int ENCRYPTED_PREFIX=100002;
-
     byte[] encrypted=null;
     AsymmetricKey decryptionKey=null;
 
@@ -53,7 +50,7 @@ public class PrefixBlock extends AbstractBlock {
     /**
      * Creates an empty prefix
      */
-    public PrefixBlock() throws IOException,NoSuchAlgorithmException  {
+    public PrefixBlock() throws IOException  {
        this(null);
     }
 
@@ -62,7 +59,7 @@ public class PrefixBlock extends AbstractBlock {
      *
      * @param sk
      */
-    public PrefixBlock(SymmetricKey sk) throws IOException,NoSuchAlgorithmException {
+    public PrefixBlock(SymmetricKey sk) throws IOException {
         if(sk==null) {
             key=new SymmetricKey();
         } else {
@@ -77,24 +74,9 @@ public class PrefixBlock extends AbstractBlock {
      *
      * @throws IOException if parsing fails
      */
-    public PrefixBlock(ASN1Primitive to, AsymmetricKey ak) throws IOException,NoSuchAlgorithmException,ParseException {
-        this(to.getEncoded(),ak);
+    public PrefixBlock(ASN1Primitive to, AsymmetricKey ak) throws IOException {
+        this(toDER(to),ak);
     }
-
-    /***
-     * Creates a prefix from the provided octet stream by decyphering it with the provided key.
-     *
-     * @param to the ASN1 OCTET STRING containing the encrypted prefix
-     * @param ak the host key
-     *
-     * @throws IOException
-     * @throws NoSuchAlgorithmException
-     * @throws ParseException
-     */
-    public PrefixBlock(ASN1OctetString to, AsymmetricKey ak) throws IOException,NoSuchAlgorithmException,ParseException {
-        this(to.getOctets(),ak);
-    }
-
 
     /***
      * Creates a prefix from the provided byte array by decyphering it with the provided key.
@@ -106,32 +88,45 @@ public class PrefixBlock extends AbstractBlock {
      * @throws NoSuchAlgorithmException
      * @throws ParseException
      */
-    public PrefixBlock(byte[] to, AsymmetricKey ak) throws IOException,NoSuchAlgorithmException,ParseException {
-        encrypted=to;
-        setDecryptionKey(ak);
-        if(getDecryptionKey()!=null && getDecryptionKey().hasPrivateKey()) {
-            parse( ASN1OctetString.getInstance(decryptionKey.decrypt( encrypted )));
+    public PrefixBlock(byte[] to, AsymmetricKey ak) throws IOException {
+        if(ak!=null) {
+            setDecryptionKey(ak);
+        }
+        AsymmetricKey decrypt=getDecryptionKey();
+        if(decrypt!=null && decrypt.hasPrivateKey()) {
+            parse( ASN1Sequence.getInstance(decrypt.decrypt( to )));
         } else {
-            parse( ASN1Sequence.getInstance(to) );
+            try {
+                parse(ASN1Sequence.getInstance(to));
+            } catch(IOException|RuntimeException ioe) {
+                LOGGER.log(Level.WARNING, "Parsing of prefix block failed", ioe);
+                setDecryptionKey(null);
+                key=null;
+                encrypted=to;
+            }
         }
     }
 
     @Override
     protected void parse(ASN1Encodable to) throws IOException {
+        encrypted=null;
         LOGGER.log( Level.FINER,"Executing parse()");
         int i = 0;
         ASN1Sequence s1 = ASN1Sequence.getInstance( to );
 
         // getting key
-        key = new SymmetricKey( s1.getObjectAt(i++).toASN1Primitive().getEncoded() ,null );
+        key = new SymmetricKey( toDER(s1.getObjectAt(i++).toASN1Primitive()) ,null );
         if(key==null) {
             throw new IOException("symmetric key may not be null when decoding");
         }
     }
 
-    public AsymmetricKey setDecryptionKey(AsymmetricKey dk) {
+    public AsymmetricKey setDecryptionKey(AsymmetricKey dk) throws IOException {
         AsymmetricKey old=getDecryptionKey();
         decryptionKey=dk;
+        if(isEncrypted()) {
+            parse(dk.decrypt(encrypted));
+        }
         return old;
     }
 
@@ -140,8 +135,12 @@ public class PrefixBlock extends AbstractBlock {
     }
 
     public SymmetricKey setKey(SymmetricKey dk) {
+        if(dk==null) {
+            throw new NullPointerException("symmetric key may not be null");
+        }
         SymmetricKey old=getKey();
         key=dk;
+        encrypted=null;
         return old;
     }
 
@@ -150,53 +149,32 @@ public class PrefixBlock extends AbstractBlock {
     }
 
     @Override
-    public ASN1Object toASN1Object() throws IOException {
-        return toASN1Object( null );
-    }
-
-    public ASN1Object toASN1Object(AsymmetricKey ak) throws IOException {
-        LOGGER.log(Level.FINER,"adding symmetric key");
-        if(ak!=null) {
-            setDecryptionKey(ak);
+    public ASN1Object toASN1Object(DumpType dumpType) throws IOException {
+        if (getKey() == null && isEncrypted()) {
+            throw new IOException( "only encrypted form may be dumped without providing a valid decryption key" );
         }
-        if(key==null) {
-            throw new IOException("symmetric key may not be null when encoding");
-        }
-
         ASN1EncodableVector v=new ASN1EncodableVector();
-        ASN1Encodable o=key.toASN1Object();
+        ASN1Encodable o=getKey().toASN1Object(dumpType);
         if (o == null) {
             throw new IOException( "returned symmetric object may not be null" );
         }
         v.add( o );
-        ASN1Object seq=new DERSequence(v);
 
-        // encrypt and embedd if requested
-        if(ak!=null) {
-            // encrypt and embedd in OCTET STREAM
-            LOGGER.log(Level.FINER,"encrypting prefix contend to octet string in PrefixBlock");
-            seq=new DEROctetString( ak.encrypt(seq.getEncoded()) );
-        }
         LOGGER.log(Level.FINER,"done toASN1Object() of PrefixBlock");
-        return seq;
+        return new DERSequence(v);
     }
 
-    public String dumpValueNotation(String prefix) throws IOException {
-        return dumpValueNotation( prefix,DumpType.PUBLIC_ONLY );
-    }
-
-    public String dumpValueNotation(String prefix, DumpType dt) throws IOException {
+    @Override
+    public String dumpValueNotation(String prefix, DumpType dumpType) throws IOException {
         StringBuilder sb=new StringBuilder();
-        if(DumpType.ALL.equals(dt) || DumpType.PUBLIC_ONLY.equals(dt)) {
+        if(DumpType.ALL==dumpType || DumpType.PUBLIC_ONLY==dumpType) {
             // dump standard block as octet string
-            sb.append( "  {"+CRLF );
-            sb.append( prefix+"key "+toHex( key.toASN1Object().getEncoded() ));
-            sb.append( "  }"+CRLF );
+            sb.append( "encrypted "+toHex(toEncBytes()) );
         } else {
             // dump as unecrypted structure
-            sb.append( "  {"+CRLF );
-            sb.append( prefix+"key "+key.dumpValueNotation( prefix+"  " ) );
-            sb.append( "  }"+CRLF );
+            sb.append( "plain  {"+CRLF );
+            sb.append( prefix+"  key "+key.dumpValueNotation(prefix+"  ",dumpType)+CRLF);
+            sb.append( prefix+"}" );
         }
         return sb.toString();
     }
@@ -225,5 +203,17 @@ public class PrefixBlock extends AbstractBlock {
     @Override
     public int hashCode() {
         return getKey().hashCode();
+    }
+
+    public boolean isEncrypted() {
+        return encrypted!=null;
+    }
+
+    public byte[] toEncBytes() throws IOException {
+        if(decryptionKey != null && encrypted == null) {
+            return decryptionKey.encrypt(toBytes(DumpType.PUBLIC_ONLY));
+        } else {
+            return encrypted;
+        }
     }
 }

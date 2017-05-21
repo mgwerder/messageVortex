@@ -2,6 +2,8 @@ package net.gwerder.java.messagevortex.test.blender;
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.asn1.*;
+import net.gwerder.java.messagevortex.asn1.encryption.Algorithm;
+import net.gwerder.java.messagevortex.asn1.encryption.SecurityLevel;
 import net.gwerder.java.messagevortex.blending.BlenderListener;
 import net.gwerder.java.messagevortex.blending.DummyBlender;
 import net.gwerder.java.messagevortex.transport.DummyTransport;
@@ -60,8 +62,10 @@ public class DummyBlenderTest implements BlenderListener,TransportListener {
             // this is expected behaviour
         }
         try {
-            assertTrue("Failed sending message to different endpoint", dt[0].blendMessage(new BlendingSpec("martin@example.com1"), new VortexMessage(new PrefixBlock(new SymmetricKey()), new InnerMessageBlock(new IdentityBlock()))));
-            assertFalse("Failed sending message to unknown endpoint (unexpectedly succeeded)", dt[0].blendMessage(new BlendingSpec("martin@example.com-1"), new VortexMessage(new PrefixBlock(), new InnerMessageBlock(new IdentityBlock()))));
+            VortexMessage v=new VortexMessage(new PrefixBlock(), new InnerMessageBlock(new PrefixBlock(),new IdentityBlock(),new RoutingBlock()));
+            v.setDecryptionKey(new AsymmetricKey(Algorithm.RSA.getParameters(SecurityLevel.LOW)));
+            assertTrue("Failed sending message to different endpoint", dt[0].blendMessage(new BlendingSpec("martin@example.com1"), v));
+            assertFalse("Failed sending message to unknown endpoint (unexpectedly succeeded)", dt[0].blendMessage(new BlendingSpec("martin@example.com-1"), new VortexMessage(new PrefixBlock(), new InnerMessageBlock(new PrefixBlock(),new IdentityBlock(),new RoutingBlock()))));
         } catch (Exception ioe) {
             LOGGER.log(Level.SEVERE, "Caught exception while creating message", ioe);
             fail("Endpointests failed as there was an error opening sample messages");

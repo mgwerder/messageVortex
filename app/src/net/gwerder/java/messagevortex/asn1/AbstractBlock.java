@@ -21,6 +21,8 @@ package net.gwerder.java.messagevortex.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
+import net.gwerder.java.messagevortex.asn1.encryption.Block;
+import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.*;
 
 import java.io.ByteArrayOutputStream;
@@ -36,7 +38,7 @@ import java.util.logging.Logger;
  *
  * Created by martin.gwerder on 14.04.2016.
  */
-public abstract class AbstractBlock implements Serializable {
+public abstract class AbstractBlock implements Serializable,Block {
 
     protected static final String CRLF="\r\n";
 
@@ -89,41 +91,47 @@ public abstract class AbstractBlock implements Serializable {
         return ret+"'B";
     }
 
-    protected void parse(byte[] b) throws IOException,ParseException,NoSuchAlgorithmException {
+    protected void parse(byte[] b) throws IOException {
         parse( ASN1Sequence.getInstance( b ) );
     }
 
-    protected abstract void parse(ASN1Encodable to) throws IOException,ParseException,NoSuchAlgorithmException;
+    protected abstract void parse(ASN1Encodable to) throws IOException;
 
-    public abstract String dumpValueNotation(String prefix) throws IOException;
+    public abstract String dumpValueNotation(String prefix,DumpType dumptype) throws IOException;
 
-    protected byte[] toDER(ASN1Object a) {
+    protected static byte[] toDER(ASN1Object a) {
         if(a==null) {
             throw new NullPointerException( "null object may not be encoded in DER" );
         }
-        ByteArrayOutputStream bOut = new ByteArrayOutputStream();
-        DEROutputStream       dOut = new DEROutputStream(bOut);
+        // FIXME remove unused DEROutputStream
+        //ByteArrayOutputStream bOut = new ByteArrayOutputStream();
+        //DEROutputStream       dOut = new DEROutputStream(bOut);
         try {
-            dOut.writeObject( a );
+            //dOut.writeObject( a );
+            return a.getEncoded();
         } catch (IOException ioe) {
             // should never occur as we have no IO
             Logger.getLogger("VortexMessage").log( Level.SEVERE,"Exception while encoding object",ioe);
+            return null;
         }
-        return bOut.toByteArray();
+        //return bOut.toByteArray();
     }
 
-    abstract ASN1Object toASN1Object() throws IOException,NoSuchAlgorithmException,ParseException;
+    public abstract ASN1Object toASN1Object(DumpType dumpType) throws IOException;
 
-    public byte[] toBytes() throws IOException {
-        try {
-            ASN1Object o = toASN1Object();
-            if (o == null) {
-                throw new IOException("Got a null reply from toASN1Object ... get coding man");
-            }
-            return toDER(o);
-        } catch(NoSuchAlgorithmException|ParseException e) {
-            throw new IOException("exception while getting ASN.1 object",e);
+    /***
+     * Dumps the object as ASN.1 der encoded byte array.
+     *
+     * @param dumpType  the dump type to be used (@see DumpType)
+     * @return          the der encoded byte array
+     * @throws IOException if encoding was unsuccessful
+     */
+    public byte[] toBytes(DumpType dumpType) throws IOException {
+        ASN1Object o = toASN1Object(dumpType);
+        if (o == null) {
+            throw new IOException("Got a null reply from toASN1Object ... get coding man");
         }
+        return toDER(o);
     }
 
 }

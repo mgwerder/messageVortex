@@ -23,7 +23,9 @@ package net.gwerder.java.messagevortex.asn1;
 
 import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.ASN1Encodable;
+import org.bouncycastle.asn1.ASN1Object;
 import org.bouncycastle.asn1.ASN1Sequence;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.IOException;
 
@@ -48,7 +50,7 @@ public class HeaderRequestQueryQuota extends HeaderRequest {
     protected void parse(ASN1Encodable ae) throws IOException {
         ASN1Sequence s1 = ASN1Sequence.getInstance(ae);
         int i=0;
-        identity=new AsymmetricKey(s1.getObjectAt(i++).toASN1Primitive().getEncoded());
+        identity=new AsymmetricKey(toDER(s1.getObjectAt(i++).toASN1Primitive()));
     }
 
     protected HeaderRequest getRequest(ASN1Encodable ae) throws IOException {
@@ -57,7 +59,8 @@ public class HeaderRequestQueryQuota extends HeaderRequest {
 
     public int getId() {return 4;}
 
-    public String dumpValueNotation(String prefix) {
+    @Override
+    public String dumpValueNotation(String prefix,DumpType dumpType) {
         StringBuilder sb=new StringBuilder();
         sb.append("{"+ AbstractBlock.CRLF);
         if(identity!=null) {
@@ -65,5 +68,10 @@ public class HeaderRequestQueryQuota extends HeaderRequest {
         }
         sb.append(prefix+"}");
         return sb.toString();
+    }
+
+    @Override
+    public ASN1Object toASN1Object(DumpType dumpType) throws IOException {
+        throw new NotImplementedException();
     }
 }

@@ -21,7 +21,9 @@ package net.gwerder.java.messagevortex.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
+import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.*;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.IOException;
 
@@ -63,10 +65,11 @@ public class PayloadChunk extends AbstractBlock {
     /***
      * Creates a der encoded ASN1 representation of the payload chunk.
      *
-     * @return
+     * @param  dumpType    the dump type to be used
+     * @return             the ASN.1 object
      * @throws IOException if id is too low or the payload has not been set
      */
-    public ASN1Object toASN1Object() throws IOException{
+    public ASN1Object toASN1Object(DumpType dumpType) throws IOException{
         ASN1EncodableVector v=new ASN1EncodableVector();
         if(id<MIN_VALID_ID) {
             throw new IOException("illegal dump id is set");
@@ -177,11 +180,13 @@ public class PayloadChunk extends AbstractBlock {
     /***
      * Dumps the current object as a value representation.
      *
-     * @param prefix the prefix to be used (nurmally used for indentation
-     * @return       the string representation of the ASN1 object
+     * @param prefix       the prefix to be used (normally used for indentation)
+     * @param dumpType     the dump type to be used (@see DumpType)
+     * @return             the string representation of the ASN1 object
      * @throws IOException if the payload id is below MIN_VALID_ID or no payload/reply block has been set
      */
-    public String dumpValueNotation(String prefix) throws IOException {
+    @Override
+    public String dumpValueNotation(String prefix,DumpType dumpType) throws IOException {
         StringBuilder sb=new StringBuilder();
         sb.append(" {"+CRLF);
         sb.append(prefix+"  id "+id+","+CRLF);
@@ -214,7 +219,7 @@ public class PayloadChunk extends AbstractBlock {
         PayloadChunk pl=(PayloadChunk)o;
 
         try {
-            return dumpValueNotation("").equals(pl.dumpValueNotation(""));
+            return dumpValueNotation("",DumpType.ALL_UNENCRYPTED).equals(pl.dumpValueNotation("",DumpType.ALL_UNENCRYPTED));
         } catch(IOException ioe) {
             return false;
         }
@@ -223,7 +228,7 @@ public class PayloadChunk extends AbstractBlock {
     @Override
     public int hashCode() {
         try {
-            return dumpValueNotation("").hashCode();
+            return dumpValueNotation("",DumpType.ALL_UNENCRYPTED).hashCode();
         } catch(IOException ioe) {
             return 0;
         }

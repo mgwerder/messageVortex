@@ -2,6 +2,7 @@ package net.gwerder.java.messagevortex.test.asn1;
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.asn1.*;
+import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -35,9 +36,9 @@ public class IdentityBlockTest {
                 IdentityBlock s = new IdentityBlock();
                 assertTrue( "IdentityBlock may not be null", s != null );
                 String s1=s.dumpValueNotation( "" );
-                byte[] b1 = s.toBytes();
+                byte[] b1 = s.toBytes(DumpType.ALL_UNENCRYPTED);
                 assertTrue( "Byte representation may not be null", b1 != null );
-                byte[] b2 = (new IdentityBlock( b1 )).toBytes();
+                byte[] b2 = (new IdentityBlock( b1 )).toBytes(DumpType.ALL_UNENCRYPTED);
                 assertTrue( "Byte arrays should be equal when reencoding", Arrays.equals( b1, b2 ) );
                 String s2 = (new IdentityBlock( b2 )).dumpValueNotation( "" );
                 assertTrue( "Value Notations should be equal when reencoding", s1.equals( s2 ) );

@@ -85,7 +85,7 @@ public class SymmetricKeyTest {
                 assertTrue("error in encrypt/decrypt cycle with " + alg + " (same object)", Arrays.equals(b1, b3));
                 LOGGER.log(Level.INFO, "  doing an encrypt/decrypt cycle with a reencoded key");
                 try {
-                    b3 = (new SymmetricKey(s.toBytes())).decrypt(b2);
+                    b3 = (new SymmetricKey(s.toBytes(DumpType.ALL_UNENCRYPTED))).decrypt(b2);
                 } catch (Exception ioe) {
                     LOGGER.log(Level.WARNING, "unexpected exception", ioe);
                     setException(ioe);
@@ -145,7 +145,7 @@ public class SymmetricKeyTest {
                     k2.setKey( k1.getKey() );
                     k2.setIV( k1.getIV() );
                     assertTrue( "error in key transfer cycle with "+alg+" ",k1.equals( k2 ));
-                    assertTrue( "reencode error in key transfer cycle with "+alg+" ",Arrays.equals(k1.toBytes(),k2.toBytes()));
+                    assertTrue( "reencode error in key transfer cycle with "+alg+" ",Arrays.equals(k1.toBytes(DumpType.ALL_UNENCRYPTED),k2.toBytes(DumpType.ALL_UNENCRYPTED)));
                 }
                 System.out.println("");
             } catch(Exception e) {
@@ -156,7 +156,7 @@ public class SymmetricKeyTest {
     }
 
     @Test
-    public void fuzzingSymmetricKeyPadding() {
+    public void fuzzingSymmetricKeyPadding() throws IOException {
         for (Padding p : Padding.getAlgorithms( AlgorithmType.SYMMETRIC )) {
             try {
                 for (Algorithm a : Algorithm.getAlgorithms( AlgorithmType.SYMMETRIC )) {
@@ -191,7 +191,7 @@ public class SymmetricKeyTest {
 
                 }
             } catch (IOException ioe) {
-                fail( "got exception while fuzzing padding" );
+                throw ioe;
             }
         }
     }
@@ -204,7 +204,7 @@ public class SymmetricKeyTest {
                     SymmetricKey ak = new SymmetricKey(a, p, Mode.getDefault(AlgorithmType.SYMMETRIC));
                     File f = new File("testfile_SymmetricKey_" +p.toString()+"_"+ a.getAlgorithmFamily() + ".der");
                     OutputStream o = new FileOutputStream(f);
-                    o.write(ak.toBytes());
+                    o.write(ak.toBytes(DumpType.ALL_UNENCRYPTED));
                     o.close();
                 } catch (Exception e) {
                     fail("unexpected exception");

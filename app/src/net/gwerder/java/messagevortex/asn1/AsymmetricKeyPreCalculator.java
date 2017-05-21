@@ -6,7 +6,10 @@ import net.gwerder.java.messagevortex.asn1.encryption.Mode;
 import net.gwerder.java.messagevortex.asn1.encryption.Padding;
 import net.gwerder.java.messagevortex.asn1.encryption.Parameter;
 
+import javax.swing.text.html.parser.Entity;
 import java.io.*;
+import java.nio.file.*;
+import java.security.AlgorithmParameters;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -19,15 +22,32 @@ import java.util.logging.Level;
  */
 class AsymmetricKeyPreCalculator implements Serializable {
 
+    private static final boolean DISABLE_CACHE=false;
+
+    private static double dequeueProbability = 1.0;
+
     private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
     private static final java.util.logging.Logger LOGGER;
     static {
         LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
         MessageVortexLogger.setGlobalLogLevel( Level.ALL);
+
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            public void run() {
+                try{
+                    // force saving of cache on shutdown
+                    lastSaved=-1;
+                    save();
+                } catch(IOException|RuntimeException|ClassNotFoundException ioe) {
+                    LOGGER.log(Level.WARNING,"Error while writing cache",ioe);
+                }
+            }
+        });
     }
     private static long lastSaved = 0;
     private static List<LastCalculated> log=new ArrayList<>();
+    private static boolean firstWarning=true;
 
     private static class LastCalculated {
         private String msg;
@@ -103,6 +123,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
         }
 
         public void run() {
+
             while(!shutdown) {
                 // get a parameter set to be calculated
                 AlgorithmParameter p=null;
@@ -136,7 +157,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
                                 public void run() {
                                     LOGGER.log(Level.FINE,"precalculating key "+param.toString()+"");
                                     try{
-                                        AsymmetricKey ak=new AsymmetricKey(param,false);
+                                        AsymmetricKey ak=new AsymmetricKey(param.clone(),false);
 
                                         // put in cache
                                         synchronized (cache) {
@@ -216,35 +237,56 @@ class AsymmetricKeyPreCalculator implements Serializable {
 
     public static AsymmetricKey getPrecomputedAsymmetricKey(AlgorithmParameter parameters) {
 
-        prepareParameters(parameters);
+        AlgorithmParameter ap=prepareParameters(parameters.clone());
 
         synchronized (cache) {
-            if(filename==null && runner!=null && !runner.isAlive()) {
-                runner=null;
+            if (filename == null && runner != null && !runner.isAlive()) {
+                runner = null;
             }
-            if(filename==null) {
-                // we are shutting down or have been shut down. No services are provided
-                LOGGER.log(Level.INFO, "cache disabled .. no key offered");
-                return null;
-            } else if(cache.get(parameters)==null) {
-                // this cache does not yet exist schedule for creation
-                synchronized(cache) {
-                    cacheSize.put(parameters, 1);
-                    cache.put(parameters, new ArrayDeque<AsymmetricKey>());
+            synchronized (cache) {
+                if(DISABLE_CACHE) {
+                    if(firstWarning) {
+                        LOGGER.log(Level.WARNING, "Cache is disabled");
+                        firstWarning=false;
+                    }
+                    return null;
+                } else if (filename == null) {
+                    // we are shutting down or have been shut down. No services are provided
+                    LOGGER.log(Level.INFO, "cache disabled .. no key offered");
+                    return null;
+                } else if (cache.get(ap) == null) {
+                    // this cache does not yet exist schedule for creation
+                    cacheSize.put(ap, 1);
+                    cache.put(ap, new ArrayDeque<AsymmetricKey>());
+                    LOGGER.log(Level.FINE, "added new key type to cache");
+                    return null;
+                } else if (cache.get(ap).size() == 0) {
+                    // this cache is too small as it is empty increase up to 100 storage places
+                    cacheSize.put(ap, Math.min(400, cacheSize.get(ap) + 1));
+                    LOGGER.log(Level.FINE, "cache underrun ... increased key type " + ap.get(Parameter.ALGORITHM) + "/" + ap.get(Parameter.KEYSIZE) + " cache to " + cacheSize.get(ap));
+                    return null;
                 }
-                LOGGER.log(Level.FINE, "added new key type to cache");
-                return null;
-            } else if(cache.get(parameters).size()==0) {
-                // this cache is too small as it is empty increase up to 100 storage places
-                synchronized(cache) {
-                    cacheSize.put(parameters, Math.min(400, cacheSize.get(parameters) + 1));
-                }
-                LOGGER.log(Level.FINE, "cache underrun ... increased key type "+parameters.get(Parameter.ALGORITHM)+"/"+parameters.get(Parameter.KEYSIZE)+" cache to "+cacheSize.get(parameters));
-                return null;
             }
             LOGGER.log(Level.FINE, "cache offered precalculated key");
-            return cache.get(parameters).poll();
+            if(Math.random()<dequeueProbability) {
+                return cache.get(ap).poll();
+            } else {
+                return cache.get(ap).peek();
+            }
         }
+    }
+
+    public static double getDequeueProbability() {
+        return dequeueProbability;
+    }
+
+    public static double setDequeueProbability(double newProbability) {
+        if(newProbability>1 || newProbability<0) {
+            throw new IllegalArgumentException("probablitiy must be in interval [0,1]");
+        }
+        double ret=getDequeueProbability();
+        dequeueProbability=newProbability;
+        return ret;
     }
 
     private static AlgorithmParameter prepareParameters(AlgorithmParameter ap) {
@@ -306,7 +348,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
                 // load cache
                 try {
                     load();
-                } catch (IOException | ClassNotFoundException e) {
+                } catch (IOException | ClassNotFoundException|ExceptionInInitializerError e) {
                     LOGGER.log(Level.INFO, "error loading cache file (will be recreated)", e);
                 }
                 // start runner
@@ -325,9 +367,25 @@ class AsymmetricKeyPreCalculator implements Serializable {
                 Map<AlgorithmParameter, Integer> lcc = (Map<AlgorithmParameter, Integer>) (f.readObject());
                 synchronized(cache) {
                     cache.clear();
-                    cache.putAll(lc);
+                    for(Map.Entry<AlgorithmParameter, Queue<AsymmetricKey>> e:lc.entrySet()) {
+                        AlgorithmParameter p=prepareParameters(e.getKey());
+                        Queue<AsymmetricKey> q=cache.get(p);
+                        if(q==null) {
+                            cache.put(p,e.getValue());
+                        } else {
+                            q.addAll(e.getValue());
+                        }
+                    }
                     cacheSize.clear();
-                    cacheSize.putAll(lcc);
+                    for(Map.Entry<AlgorithmParameter, Integer> e:lcc.entrySet()) {
+                        AlgorithmParameter p=prepareParameters(e.getKey());
+                        Integer i=cacheSize.get(p);
+                        if(i==null) {
+                            cacheSize.put(p,e.getValue());
+                        } else {
+                            cacheSize.put(p,Math.max(i,e.getValue()));
+                        }
+                    }
                 }
                 showStats();
             }
@@ -370,19 +428,23 @@ class AsymmetricKeyPreCalculator implements Serializable {
 
     private static void save() throws IOException,ClassNotFoundException {
         // do not allow saving more often than every minute
-        if(lastSaved+60000>System.currentTimeMillis()) {
-            return;
+        synchronized(runner) {
+            if (lastSaved + 60000 > System.currentTimeMillis()) {
+                return;
+            }
         }
 
         // store data
         ObjectOutputStream f=null;
         try {
             synchronized (cache) {
-                f = new ObjectOutputStream(new FileOutputStream(filename));
+                f = new ObjectOutputStream(new FileOutputStream(filename+".tmp"));
                 f.writeObject(cache);
                 f.writeObject(cacheSize);
                 lastSaved=System.currentTimeMillis();
                 showStats();
+                f.close();
+                Files.move(Paths.get(filename+".tmp"),Paths.get(filename), StandardCopyOption.REPLACE_EXISTING);
             }
         } catch(Exception e) {
             throw e;

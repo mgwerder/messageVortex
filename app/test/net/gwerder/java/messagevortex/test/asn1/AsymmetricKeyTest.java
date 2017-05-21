@@ -33,6 +33,7 @@ public class AsymmetricKeyTest {
     static {
         LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
         MessageVortexLogger.setGlobalLogLevel(Level.ALL);
+        AsymmetricKey.setDequeueProbability(0.02);
     }
 
     private int ksDisc=16384;
@@ -50,75 +51,78 @@ public class AsymmetricKeyTest {
             }
 
             public void run() {
-                LOGGER.log(Level.INFO, "Testing " + alg + "/" + size + "");
-                LOGGER.log(Level.INFO, "  creating key");
-                AsymmetricKey s = null;
-                try {
-                    AlgorithmParameter p=alg.getParameters( SecurityLevel.LOW );
-                    p.put(Parameter.KEYSIZE.getId(),""+size);
-                    s = new AsymmetricKey(p);
-                } catch (IOException ioe) {
-                    setException(ioe);
-                    LOGGER.log(Level.WARNING, "unexpected exception", ioe);
-                    fail("Constructor threw IOException");
-                }
-                byte[] b1 = new byte[0];
-                while (b1.length < 10) {
-                    b1 = new byte[sr.nextInt(Math.min(s.getPadding().getMaxSize(size), 1024))];
-                }
-                sr.nextBytes(b1);
-                LOGGER.log(Level.INFO, "  doing an encrypt/decrypt cycle with " + b1.length + " bytes (max:"+s.getPadding().getMaxSize(size)+"; size:"+size+")");
-                byte[] b2 = null;
-                byte[] b3 = null;
-                try {
-                    b2 = s.encrypt(b1);
-                    b3 = s.decrypt(b2);
-                } catch (IOException ioe) {
-                    setException(ioe);
-                    LOGGER.log(Level.WARNING, "unexpected exception", ioe);
-                    fail("IOException while reencrypting");
-                }
-                assertTrue("error in encrypt/decrypt cycle with " + alg + " (same object)", Arrays.equals(b1, b3));
-                LOGGER.log(Level.INFO, "  doing an encrypt/decrypt cycle with a reencoded key");
-                try {
-                    b3 = (new AsymmetricKey(s.toBytes())).decrypt(b2);
-                } catch (IOException ioe) {
-                    LOGGER.log(Level.WARNING, "unexpected exception", ioe);
-                    setException(ioe);
-                    fail("Constructor threw IOException");
-                }
-                assertTrue("error in encrypt/decrypt cycle with " + alg + " (same reserialized object)", Arrays.equals(b1, b3));
-                for (Algorithm a : Algorithm.getAlgorithms(AlgorithmType.HASHING)) {
-                    b1 = new byte[sr.nextInt(4096) + 2048];
+                for(Mode m:Mode.getModes(alg)) {
+                    LOGGER.log(Level.INFO, "Testing " + alg + "/" + size + "/"+m);
+                    LOGGER.log(Level.INFO, "  creating key");
+                    AsymmetricKey s = null;
+                    try {
+                        AlgorithmParameter p=alg.getParameters( SecurityLevel.LOW );
+                        p.put(Parameter.KEYSIZE.getId(),""+size);
+                        s = new AsymmetricKey(p);
+                    } catch (IOException ioe) {
+                        setException(ioe);
+                        LOGGER.log(Level.WARNING, "unexpected exception", ioe);
+                        fail("Constructor threw IOException");
+                    }
+                    byte[] b1 = new byte[0];
+                    while (b1.length < 10) {
+                        b1 = new byte[sr.nextInt(Math.min(s.getPadding().getMaxSize(size), 1024))];
+                    }
+                    s.setMode(m);
                     sr.nextBytes(b1);
-                    byte[] sig = null;
+                    LOGGER.log(Level.INFO, "  doing an encrypt/decrypt cycle with " + b1.length + " bytes (max:"+s.getPadding().getMaxSize(size)+"; size:"+size+")");
+                    byte[] b2 = null;
+                    byte[] b3 = null;
                     try {
-                        sig = s.sign(b1, a);
+                        b2 = s.encrypt(b1);
+                        b3 = s.decrypt(b2);
+                    } catch (IOException ioe) {
+                        setException(ioe);
+                        LOGGER.log(Level.WARNING, "unexpected exception", ioe);
+                        fail("IOException while reencrypting");
+                    }
+                    assertTrue("error in encrypt/decrypt cycle with " + alg + " (same object)", Arrays.equals(b1, b3));
+                    LOGGER.log(Level.INFO, "  doing an encrypt/decrypt cycle with a reencoded key");
+                    try {
+                        b3 = (new AsymmetricKey(s.toBytes(DumpType.ALL_UNENCRYPTED))).decrypt(b2);
                     } catch (IOException ioe) {
                         LOGGER.log(Level.WARNING, "unexpected exception", ioe);
                         setException(ioe);
                         fail("Constructor threw IOException");
                     }
-                    try {
-                        LOGGER.log(Level.INFO, "  signing with " + a + " (signature size:" + sig.length + "; message size:" + b1.length + ")");
-                        assertTrue("error in signature verification " + a + "With" + alg + "", s.verify(b1, sig, a));
-                    } catch (IOException ioe) {
-                        LOGGER.log(Level.WARNING, "unexpected exception", ioe);
-                        setException(ioe);
-                        fail("Constructor threw IOException");
-                    }
-                    try {
-                        int pos = -1;
-                        int value = 0;
-                        while (pos == -1 || b1[pos] == (byte) (value)) {
-                            pos = sr.nextInt(b1.length);
-                            value = sr.nextInt(256);
+                    assertTrue("error in encrypt/decrypt cycle with " + alg + " (same reserialized object)", Arrays.equals(b1, b3));
+                    for (Algorithm a : Algorithm.getAlgorithms(AlgorithmType.HASHING)) {
+                        b1 = new byte[sr.nextInt(4096) + 2048];
+                        sr.nextBytes(b1);
+                        byte[] sig = null;
+                        try {
+                            sig = s.sign(b1, a);
+                        } catch (IOException ioe) {
+                            LOGGER.log(Level.WARNING, "unexpected exception", ioe);
+                            setException(ioe);
+                            fail("Constructor threw IOException");
                         }
-                        byte old = b1[pos];
-                        b1[pos] = (byte) value;
-                        assertFalse("Error while verifying a bad signature (returned good; old was " + old + "; new was " + value + "; pos was " + pos + ")", s.verify(b1, sig, a));
-                    } catch (IOException ioe) {
-                        LOGGER.log(Level.FINE, "verification of bad signature threw an exception (this is OK)");
+                        try {
+                            LOGGER.log(Level.INFO, "  signing with " + a + " (signature size:" + sig.length + "; message size:" + b1.length + ")");
+                            assertTrue("error in signature verification " + a + "With" + alg + "", s.verify(b1, sig, a));
+                        } catch (IOException ioe) {
+                            LOGGER.log(Level.WARNING, "unexpected exception", ioe);
+                            setException(ioe);
+                            fail("Constructor threw IOException");
+                        }
+                        try {
+                            int pos = -1;
+                            int value = 0;
+                            while (pos == -1 || b1[pos] == (byte) (value)) {
+                                pos = sr.nextInt(b1.length);
+                                value = sr.nextInt(256);
+                            }
+                            byte old = b1[pos];
+                            b1[pos] = (byte) value;
+                            assertFalse("Error while verifying a bad signature (returned good; old was " + old + "; new was " + value + "; pos was " + pos + ")", s.verify(b1, sig, a));
+                        } catch (IOException ioe) {
+                            LOGGER.log(Level.FINE, "verification of bad signature threw an exception (this is OK)");
+                        }
                     }
                 }
             }
@@ -177,7 +181,7 @@ public class AsymmetricKeyTest {
                     assertTrue( "error in key transfer cycle with "+alg+" ",k1.equals( k2 ));
                     assertTrue( "error in key size 1",Integer.parseInt(p.get(Parameter.KEYSIZE))==k1.getKeySize());
                     assertTrue( "error in key size 2",Integer.parseInt(p.get(Parameter.KEYSIZE))==k2.getKeySize());
-                    assertTrue( "reencode error in key transfer cycle with "+alg+" ",Arrays.equals(k1.toBytes(),k2.toBytes()));
+                    assertTrue( "reencode error in key transfer cycle with "+alg+" ",Arrays.equals(k1.toBytes(DumpType.ALL_UNENCRYPTED),k2.toBytes(DumpType.ALL_UNENCRYPTED)));
                 }
                 System.out.println("");
             } catch(Exception e) {
@@ -285,7 +289,7 @@ public class AsymmetricKeyTest {
                 AsymmetricKey ak = new AsymmetricKey(a.getParameters(SecurityLevel.MEDIUM));
                 File f = new File("testfile_AsymmetricKey_" + a.getAlgorithmFamily() + ".der");
                 OutputStream o = new FileOutputStream(f);
-                o.write(ak.toBytes());
+                o.write(ak.toBytes(DumpType.ALL_UNENCRYPTED));
                 o.close();
             } catch (Exception e) {
                 fail( "unexpected exception" );

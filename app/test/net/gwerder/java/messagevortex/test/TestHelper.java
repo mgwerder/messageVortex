@@ -18,12 +18,21 @@ public class TestHelper {
                 return reply;
             }
             if(s1.charAt(i)=='\n') {
-                col=1;
+                col=0;
                 lfpos=i+1;
                 line++;
             }
+            col++;
         }
         return "no differences detected\n";
+    }
+
+    public static String compareDumps(String s1,String s2) {
+        return compareStrings(prepareDump(s1),prepareDump(s2));
+    }
+
+    public static String prepareDump(String s) {
+        return s.replaceAll( "encrypted *'[^']*'H","encrypted '<encryptedString>'H");
     }
 
 }

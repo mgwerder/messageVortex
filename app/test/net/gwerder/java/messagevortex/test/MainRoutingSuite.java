@@ -17,7 +17,8 @@ import org.junit.runners.Suite;
         MatrixTest.class,
         EdgeTest.class,
         OperationProcessingTest.class,
-        MathModeTest.class
+        MathModeTest.class,
+        FullMessageTest.class,
 })
 
 public class MainRoutingSuite {
@@ -30,6 +31,7 @@ public class MainRoutingSuite {
         s.addTest(new JUnit4TestAdapter(EdgeTest.class));
         s.addTest(new JUnit4TestAdapter(MathModeTest.class));
         s.addTest(new JUnit4TestAdapter(OperationProcessingTest.class));
+        s.addTest(new JUnit4TestAdapter(FullMessageTest.class));
         return s;
     }
 

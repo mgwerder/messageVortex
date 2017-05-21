@@ -22,6 +22,7 @@ package net.gwerder.java.messagevortex.asn1;
 // ************************************************************************************
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
+import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import net.gwerder.java.messagevortex.routing.operation.BitShifter;
 import org.bouncycastle.asn1.*;
 
@@ -87,7 +88,7 @@ public abstract class AbstractRedundancyOperation extends Operation {
         ASN1Sequence s=ASN1Sequence.getInstance(to.getObject());
         keys=new ArrayList<>();
         for(ASN1Encodable o:s) {
-            keys.add(new SymmetricKey(o.toASN1Primitive().getEncoded()));
+            keys.add(new SymmetricKey(toDER(o.toASN1Primitive())));
         }
 
         outputId=parseIntval(ASN1TaggedObject.getInstance(s1.getObjectAt(i++)),OUTPUT_ID,"outputId");
@@ -104,7 +105,8 @@ public abstract class AbstractRedundancyOperation extends Operation {
         return ASN1Integer.getInstance(obj.getObject()).getValue().intValue();
     }
 
-    public ASN1Object toASN1Object() throws IOException{
+    @Override
+    public ASN1Object toASN1Object(DumpType dumpType) throws IOException{
         // Prepare encoding
         LOGGER.log( Level.FINER,"Executing toASN1Object()");
 
@@ -121,7 +123,7 @@ public abstract class AbstractRedundancyOperation extends Operation {
 
         ASN1EncodableVector v2=new ASN1EncodableVector();
         for(SymmetricKey k:keys) {
-            v2.add(k.toASN1Object());
+            v2.add(k.toASN1Object(dumpType));
         }
         v.add(new DERTaggedObject( KEYS,new DERSequence(v2)));
 
@@ -140,7 +142,8 @@ public abstract class AbstractRedundancyOperation extends Operation {
      * Dumps the ASN1 value representation of the removeRedundancy operation.
      * @return the representation of the object
      */
-    public String dumpValueNotation(String prefix) {
+    @Override
+    public String dumpValueNotation(String prefix,DumpType dumpType) {
         StringBuilder sb=new StringBuilder();
         sb.append(  "  {" + CRLF );
         sb.append( prefix + "  inputId ").append(inputId).append(",").append(CRLF);
@@ -150,7 +153,7 @@ public abstract class AbstractRedundancyOperation extends Operation {
         int i=keys.size();
         for(SymmetricKey sk:keys) {
             i--;
-            sb.append(sk.dumpValueNotation(prefix+"  "));
+            sb.append(sk.dumpValueNotation(prefix+"  ",dumpType));
             if(i>0) {
                 sb.append(",");
             }

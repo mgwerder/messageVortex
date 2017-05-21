@@ -55,8 +55,8 @@ public enum Algorithm implements Serializable {
     ),
     EC         ( 2100, AlgorithmType.ASYMMETRIC, "ECIES"    , "BC", getSecLevelList( getSecLevelList( getSecLevelList(
             ECCurveType.SECP384R1.getSecurityLevel(), getParameterList(new String[] { Parameter.ALGORITHM+"=ECIES",Parameter.KEYSIZE.toString()+"=384",Parameter.CURVETYPE.toString()+"="+ECCurveType.SECP384R1.toString(),Parameter.MODE.toString()+"="+Mode.getDefault(AlgorithmType.ASYMMETRIC).toString(),Parameter.PADDING.toString()+"="+Padding.getDefault(AlgorithmType.ASYMMETRIC).toString()})),
-            ECCurveType.SECT409K1.getSecurityLevel(), getParameterList(new String[] { Parameter.ALGORITHM+"=ECIES",Parameter.KEYSIZE.toString()+"=409",Parameter.CURVETYPE.toString()+"="+ECCurveType.SECT409K1.toString(),Parameter.MODE.toString()+"="+Mode.getDefault(AlgorithmType.ASYMMETRIC).toString(),Parameter.PADDING.toString()+"=",Padding.getDefault(AlgorithmType.ASYMMETRIC).toString()})),
-            ECCurveType.SECP521R1.getSecurityLevel(), getParameterList(new String[] { Parameter.ALGORITHM+"=ECIES",Parameter.KEYSIZE.toString()+"=521",Parameter.CURVETYPE.toString()+"="+ECCurveType.SECP521R1.toString(),Parameter.MODE.toString()+"="+Mode.getDefault(AlgorithmType.ASYMMETRIC).toString(),Parameter.PADDING.toString()+"=",Padding.getDefault(AlgorithmType.ASYMMETRIC).toString()}))
+            ECCurveType.SECT409K1.getSecurityLevel(), getParameterList(new String[] { Parameter.ALGORITHM+"=ECIES",Parameter.KEYSIZE.toString()+"=409",Parameter.CURVETYPE.toString()+"="+ECCurveType.SECT409K1.toString(),Parameter.MODE.toString()+"="+Mode.getDefault(AlgorithmType.ASYMMETRIC).toString(),Parameter.PADDING.toString()+"="+Padding.getDefault(AlgorithmType.ASYMMETRIC).toString()})),
+            ECCurveType.SECP521R1.getSecurityLevel(), getParameterList(new String[] { Parameter.ALGORITHM+"=ECIES",Parameter.KEYSIZE.toString()+"=521",Parameter.CURVETYPE.toString()+"="+ECCurveType.SECP521R1.toString(),Parameter.MODE.toString()+"="+Mode.getDefault(AlgorithmType.ASYMMETRIC).toString(),Parameter.PADDING.toString()+"="+Padding.getDefault(AlgorithmType.ASYMMETRIC).toString()}))
     ),
     SHA384     ( 3000, AlgorithmType.HASHING, "sha384", "BC",  SecurityLevel.HIGH ),
     SHA512     ( 3001, AlgorithmType.HASHING, "sha512", "BC", SecurityLevel.QUANTUM );
@@ -110,6 +110,8 @@ public enum Algorithm implements Serializable {
             String[] kv=s.split("=");
             if(kv.length==2) {
                 ret.put(kv[0], kv[1]);
+            } else {
+                LOGGER.log(Level.WARNING, "split of \""+s+"\" failed");
             }
         }
         return ret;
@@ -121,8 +123,10 @@ public enum Algorithm implements Serializable {
     }
 
     private static  Map<SecurityLevel,AlgorithmParameter> getSecLevelList(Map<SecurityLevel,AlgorithmParameter> lst, SecurityLevel level ,AlgorithmParameter o) {
-        lst.put(level,o);
-        return lst;
+        Map<SecurityLevel,AlgorithmParameter> ret=new HashMap<>();
+        ret.putAll(lst);
+        ret.put(level,o);
+        return ret;
     }
 
     public static Algorithm[] getAlgorithms(AlgorithmType at) {

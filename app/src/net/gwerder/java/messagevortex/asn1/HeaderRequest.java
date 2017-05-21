@@ -37,7 +37,7 @@ import static net.gwerder.java.messagevortex.asn1.AbstractBlock.CRLF;
  *
  * Created by martin.gwerder on 25.04.2016.
  */
-public abstract class HeaderRequest {
+public abstract class HeaderRequest extends AbstractBlock {
 
     private static final java.util.logging.Logger LOGGER;
     static {

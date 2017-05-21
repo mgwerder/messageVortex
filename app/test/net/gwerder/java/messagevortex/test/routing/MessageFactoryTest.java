@@ -1,8 +1,10 @@
 package net.gwerder.java.messagevortex.test.routing;
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
+import net.gwerder.java.messagevortex.asn1.AsymmetricKey;
 import net.gwerder.java.messagevortex.asn1.IdentityStore;
 import net.gwerder.java.messagevortex.asn1.IdentityStoreBlock;
+import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import net.gwerder.java.messagevortex.routing.Edge;
 import net.gwerder.java.messagevortex.routing.GraphSet;
 import net.gwerder.java.messagevortex.routing.MessageFactory;
@@ -30,6 +32,8 @@ public class MessageFactoryTest {
     static {
         LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
         MessageVortexLogger.setGlobalLogLevel( Level.ALL);
+
+        AsymmetricKey.setDequeueProbability(0.02);
     }
 
     @Test
@@ -41,10 +45,10 @@ public class MessageFactoryTest {
         } catch (Exception ioe) {
             is = IdentityStore.getNewIdentityStoreDemo( false );
             DEROutputStream f = new DEROutputStream( new FileOutputStream( System.getProperty( "java.io.tmpdir" ) + "/IdentityStoreExample1.der" ) );
-            f.writeObject( is.toASN1Object() );
+            f.writeObject( is.toASN1Object(DumpType.ALL_UNENCRYPTED) );
             f.close();
         }
-        int maxTests=100;
+        int maxTests=10;
         for (int i = 1; i <= maxTests; i++) {
             LOGGER.log( Level.INFO, "cycle "+i+" of "+maxTests );
             LOGGER.log( Level.INFO, "  building message ("+i+" of "+maxTests+")" );

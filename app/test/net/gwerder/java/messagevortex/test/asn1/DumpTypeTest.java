@@ -27,21 +27,11 @@ public class DumpTypeTest {
     }
 
     @Test
-    public void testingLogicDumpPublicKey() {
-        Map<DumpType,Boolean> arr=new HashMap<>(  );
-        arr.put(DumpType.ALL,true);
-        arr.put(DumpType.PUBLIC_ONLY,true);
-        arr.put(DumpType.PRIVATE_COMMENTED,false);
-        for(Map.Entry<DumpType,Boolean> e:arr.entrySet()) {
-            assertTrue("bad reply for "+e.getKey()+"",e.getValue()==e.getKey().dumpPublicKey());
-        }
-    }
-
-    @Test
     public void testingLogicDumpPrivateKey() {
         Map<DumpType,Boolean> arr=new HashMap<>(  );
         arr.put(DumpType.ALL,true);
         arr.put(DumpType.PUBLIC_ONLY,false);
+        arr.put(DumpType.ALL_UNENCRYPTED,true);
         arr.put(DumpType.PRIVATE_COMMENTED,false);
         for(Map.Entry<DumpType,Boolean> e:arr.entrySet()) {
             assertTrue("bad reply for "+e.getKey()+"",e.getValue()==e.getKey().dumpPrivateKey());

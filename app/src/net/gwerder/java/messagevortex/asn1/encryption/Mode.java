@@ -22,27 +22,27 @@ package net.gwerder.java.messagevortex.asn1.encryption;
 // ************************************************************************************
 
 import org.bouncycastle.asn1.ASN1Enumerated;
+import org.bouncycastle.util.Arrays;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Enumeration to list available encryption modes.
  *
- * @FIXME add sensible modes
- *
- * Created by martin.gwerder on 31.05.2016.
+ * @FIXME no modes for ECIES so far
  */
 public enum Mode {
-    ECB       (10000,"ECB" ,false,new Algorithm[] { Algorithm.RSA,Algorithm.CAMELLIA128, Algorithm.CAMELLIA192,Algorithm.CAMELLIA256 }, new Padding[] { Padding.NONE,Padding.PKCS7 }),
-    CBC       (10001,"CBC" ,true ,new Algorithm[] { Algorithm.AES128, Algorithm.AES192,Algorithm.AES256,Algorithm.CAMELLIA128, Algorithm.CAMELLIA192,Algorithm.CAMELLIA256 }, new Padding[] { Padding.NONE,Padding.PKCS7 }),
-    //EAX       (10002,"EAX" ,true ,new Algorithm[] { Algorithm.CAMELLIA128, Algorithm.CAMELLIA192,Algorithm.CAMELLIA256}),
-    //CTR       (10002,"EAX" ,true ,new Algorithm[] { Algorithm.AES128, Algorithm.AES192,Algorithm.AES256,Algorithm.CAMELLIA128, Algorithm.CAMELLIA192,Algorithm.CAMELLIA256 }),
-    //CCM       (10002,"EAX" ,true ,new Algorithm[] { Algorithm.AES128, Algorithm.AES192,Algorithm.AES256,Algorithm.CAMELLIA128, Algorithm.CAMELLIA192,Algorithm.CAMELLIA256 }),
-    //GCM       (10003,"GCM" ,true ,new Algorithm[] { Algorithm.AES128, Algorithm.AES192,Algorithm.AES256,Algorithm.CAMELLIA128, Algorithm.CAMELLIA192,Algorithm.CAMELLIA256 }),
-    //OCB       (10004,"OCB" ,true ,new Algorithm[] { Algorithm.AES128, Algorithm.AES192,Algorithm.AES256,Algorithm.CAMELLIA128, Algorithm.CAMELLIA192,Algorithm.CAMELLIA256 }),
-    //OFB       (10005,"OFB" ,true ,new Algorithm[] {Algorithm.CAMELLIA128, Algorithm.CAMELLIA192,Algorithm.CAMELLIA256}),
-    NONE      (10010,"NONE",false,new Algorithm[] { Algorithm.RSA }, new Padding[] { Padding.NONE,Padding.PKCS7 });
+    ECB       (10000,"ECB" ,false,new String[] { "RSA","CAMELLIA128","CAMELLIA192","CAMELLIA256" }, new Padding[] { Padding.PKCS7 }),
+    CBC       (10001,"CBC" ,true ,new String[] { "aes128", "aes192","aes256","CAMELLIA128", "CAMELLIA192","CAMELLIA256" }, new Padding[] { Padding.PKCS7 }),
+    EAX       (10002,"EAX" ,true ,new String[] { "CAMELLIA128", "CAMELLIA192","CAMELLIA256"},new Padding[] { Padding.PKCS7 }),
+    CTR       (10002,"EAX" ,true ,new String[] { "aes128", "aes192","aes256","CAMELLIA128", "CAMELLIA192","CAMELLIA256" },new Padding[] { Padding.PKCS7 }),
+    CCM       (10002,"EAX" ,true ,new String[] { "aes128", "aes192","aes256","CAMELLIA128", "CAMELLIA192","CAMELLIA256" },new Padding[] { Padding.PKCS7 }),
+    GCM       (10003,"GCM" ,true ,new String[] { "aes128", "aes192","AES256","CAMELLIA128", "CAMELLIA192","CAMELLIA256" },new Padding[] { Padding.PKCS7 }),
+    OCB       (10004,"OCB" ,true ,new String[] { "aes128", "aes192","AES256","CAMELLIA128", "CAMELLIA192","CAMELLIA256" },new Padding[] { Padding.PKCS7 }),
+    OFB       (10005,"OFB" ,true ,new String[] { "CAMELLIA128", "CAMELLIA192","CAMELLIA256"},new Padding[] { Padding.PKCS7 }),
+    NONE      (10010,"NONE",false,new String[] { "RSA" }, new Padding[] { Padding.PKCS7 });
 
     private static Map<AlgorithmType,Mode> def=new HashMap<>();
 
@@ -54,11 +54,11 @@ public enum Mode {
     final int id;
     final String txt;
     final boolean requiresIV;
-    final Algorithm[] alg;
+    final String[] alg;
     final Padding[] pad;
     final ASN1Enumerated asn;
 
-    Mode(int id,String txt, boolean iv,Algorithm[] alg,Padding[] pad) {
+    Mode(int id,String txt, boolean iv,String[] alg,Padding[] pad) {
         this.id=id;
         this.txt=txt;
         this.requiresIV=iv;
@@ -133,6 +133,18 @@ public enum Mode {
      */
     public Padding[] getPaddings() {
         return pad;
+    }
+
+    public static Mode[] getModes(Algorithm alg) {
+        ArrayList<Mode> l=new ArrayList<>();
+        for(Mode m:values()) {
+            for(String a:m.alg) {
+                if(alg==Algorithm.getByString(a)) {
+                    l.add(m);
+                }
+            }
+        }
+        return l.toArray(new Mode[0]);
     }
 
     /**

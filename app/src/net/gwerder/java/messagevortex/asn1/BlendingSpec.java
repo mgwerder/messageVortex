@@ -21,8 +21,8 @@ package net.gwerder.java.messagevortex.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
-import org.bouncycastle.asn1.ASN1Encodable;
-import org.bouncycastle.asn1.ASN1Object;
+import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
+import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
 
@@ -33,7 +33,10 @@ import java.io.IOException;
 public class BlendingSpec extends AbstractBlock {
 
     /* The endpoint address to be used */
-    private String blendingEndpointAddress=null;
+    private String recipientAddress=null;
+    private String media ="smtp:";
+    private String blendingType = "attach";
+    private BlendingParameter[] blendingParameter = new BlendingParameter[0];
 
     /* constructor */
     public BlendingSpec(ASN1Encodable to) {
@@ -41,28 +44,73 @@ public class BlendingSpec extends AbstractBlock {
     }
 
     public BlendingSpec(String blendingEndpointAddress) {
-        this.blendingEndpointAddress = blendingEndpointAddress;
+        this.recipientAddress = blendingEndpointAddress;
     }
 
     protected void parse(ASN1Encodable to) {
-        throw new UnsupportedOperationException( "not yet implemented" ); //FIXME
+        ASN1Sequence s1 = ASN1Sequence.getInstance(to);
+        int i=0;
+
+        // parse target sequence
+        ASN1Sequence s2 = ASN1Sequence.getInstance(s1.getObjectAt(i++));
+        int i2=0;
+        // get media
+        media= DERIA5String.getInstance(s2.getObjectAt(i2++)).getString();
+        // get recipient address
+        recipientAddress= DERIA5String.getInstance(s2.getObjectAt(i2++)).getString();
+
+        //get blending type
+        blendingType= DERIA5String.getInstance(s1.getObjectAt(i++)).getString();
+
+        // FIXME dump Blending Parameter
     }
 
-    public ASN1Object toASN1Object() throws IOException{
-        throw new UnsupportedOperationException( "not yet implemented" ); //FIXME
+    @Override
+    public ASN1Object toASN1Object(DumpType dumpType) throws IOException{
+        ASN1EncodableVector v=new ASN1EncodableVector();
+
+        // encode target sequence
+        ASN1EncodableVector v2=new ASN1EncodableVector();
+        v2.add(new DERIA5String(media));
+        v2.add(new DERIA5String(recipientAddress));
+        v.add(new DERSequence(v2));
+
+        // encode blending type
+        v.add(new DERIA5String(blendingType));
+
+        // FIXME dump Blending Parameter
+
+        return new DERSequence(v);
     }
 
-    public String dumpValueNotation(String prefix) {
+    @Override
+    public String dumpValueNotation(String prefix,DumpType dumpType) {
         StringBuilder sb=new StringBuilder();
         sb.append(prefix).append("-- FIXME dumping of BlendingSpec object not yet supported").append(CRLF); //FIXME
         return sb.toString();
     }
 
-    public String getBlendingEndpointAddress() { return blendingEndpointAddress; }
+    public String getRecipientAddress() { return recipientAddress; }
 
-    public String setBlendingEndpointAddress(String blendingEndpointAddress) {
-        String old=this.blendingEndpointAddress;
-        this.blendingEndpointAddress=blendingEndpointAddress;
+    public String setRecipientAddress(String recipientAddress) {
+        String old=this.recipientAddress;
+        this.recipientAddress=recipientAddress;
+        return old;
+    }
+
+    public String getMedia() { return media; }
+
+    public String setMedia(String media) {
+        String old=this.media;
+        this.media=media;
+        return old;
+    }
+
+    public String getBlendingType() { return blendingType; }
+
+    public String setBlendingType(String blendingType) {
+        String old=this.blendingType;
+        this.blendingType=blendingType;
         return old;
     }
 

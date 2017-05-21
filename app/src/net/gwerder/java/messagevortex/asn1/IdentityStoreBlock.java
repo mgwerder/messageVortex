@@ -187,13 +187,13 @@ public class IdentityStoreBlock extends AbstractBlock {
             ASN1TaggedObject to = ASN1TaggedObject.getInstance( s1.getObjectAt( i ) );
             switch(to.getTagNo()) {
                 case 1001:
-                    identityKey=new AsymmetricKey( to.getObject().getEncoded() );
+                    identityKey=new AsymmetricKey( toDER(to.getObject()) );
                     break;
                 case 1002:
                     nodeAddress=((ASN1String)(to.getObject())).getString();
                     break;
                 case 1003:
-                    nodeKey=new AsymmetricKey( to.getObject().getEncoded() );
+                    nodeKey=new AsymmetricKey( toDER(to.getObject()) );
                     break;
                 default:
                     throw new IOException("unknown tag encountered");
@@ -201,24 +201,25 @@ public class IdentityStoreBlock extends AbstractBlock {
         }
     }
 
-    public ASN1Object toASN1Object() throws IOException {
+    @Override
+    public ASN1Object toASN1Object(DumpType dumpType) throws IOException {
         // Prepare encoding
         LOGGER.log( Level.FINER,"Executing toASN1Object()");
 
         ASN1EncodableVector v=new ASN1EncodableVector();
 
-        v.add(valid.toASN1Object());
+        v.add(valid.toASN1Object(dumpType));
         v.add(new ASN1Integer( messageQuota ));
         v.add(new ASN1Integer( transferQuota ));
 
         if (identityKey != null) {
-            v.add( new DERTaggedObject( true, 1001, identityKey.toASN1Object( DumpType.ALL ) ) );
+            v.add( new DERTaggedObject( true, 1001, identityKey.toASN1Object( dumpType ) ) );
         }
         if(nodeAddress!=null) {
             v.add( new DERTaggedObject( true, 1002, new DERIA5String(nodeAddress)));
         }
         if (nodeKey != null){
-            v.add( new DERTaggedObject( true, 1003, nodeKey.toASN1Object( DumpType.ALL ) ) );
+            v.add( new DERTaggedObject( true, 1003, nodeKey.toASN1Object( dumpType ) ) );
         }
 
         ASN1Sequence seq=new DERSequence(v);
@@ -226,15 +227,16 @@ public class IdentityStoreBlock extends AbstractBlock {
         return seq;
     }
 
-    public String dumpValueNotation(String prefix) throws IOException {
+    @Override
+    public String dumpValueNotation(String prefix,DumpType dumpType) throws IOException {
         StringBuilder sb=new StringBuilder();
         sb.append( "{" ).append( CRLF );
-        sb.append( prefix ).append( "  valid " ).append(valid.dumpValueNotation( prefix+"    " )  ).append("," ).append(CRLF );
+        sb.append( prefix ).append( "  valid " ).append(valid.dumpValueNotation( prefix+"    ",dumpType )  ).append("," ).append(CRLF );
         sb.append( prefix ).append( "  messageQuota " ).append(messageQuota ).append("," ).append(CRLF );
         sb.append( prefix ).append( "  transferQuota " ).append(transferQuota );
         if(identityKey!=null) {
             sb.append( "," ).append(CRLF);
-            sb.append(prefix ).append( "  identity " ).append( identityKey.dumpValueNotation( prefix+"    " ) );
+            sb.append(prefix ).append( "  identity " ).append( identityKey.dumpValueNotation( prefix+"    ",dumpType ) );
         }
         if(nodeAddress!=null) {
             sb.append( "," ).append(CRLF);
@@ -242,7 +244,7 @@ public class IdentityStoreBlock extends AbstractBlock {
         }
         if(nodeKey!=null)     {
             sb.append( "," ).append(CRLF);
-            sb.append(prefix ).append( "  nodeKey " ).append( nodeKey.dumpValueNotation( prefix+"    " ) );
+            sb.append(prefix ).append( "  nodeKey " ).append( nodeKey.dumpValueNotation( prefix+"    ",dumpType ) );
         }
         sb.append( CRLF );
         sb.append( prefix ).append( "}" );

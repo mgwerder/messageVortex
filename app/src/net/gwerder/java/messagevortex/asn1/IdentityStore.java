@@ -23,6 +23,7 @@ package net.gwerder.java.messagevortex.asn1;
 
 import net.gwerder.java.messagevortex.ExtendedSecureRandom;
 import net.gwerder.java.messagevortex.MessageVortexLogger;
+import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.*;
 
 import java.io.File;
@@ -133,7 +134,8 @@ public class IdentityStore extends AbstractBlock {
         LOGGER.log( Level.FINER, "Finished parse()" );
     }
 
-    public ASN1Object toASN1Object() throws IOException {
+    @Override
+    public ASN1Object toASN1Object(DumpType dumpType) throws IOException {
         // Prepare encoding
         LOGGER.log( Level.FINER,"Executing toASN1Object()");
 
@@ -141,14 +143,15 @@ public class IdentityStore extends AbstractBlock {
 
         LOGGER.log(Level.FINER,"adding blocks");
         for(Map.Entry<String,IdentityStoreBlock> e:blocks.entrySet()) {
-            v.add(e.getValue().toASN1Object());
+            v.add(e.getValue().toASN1Object(dumpType));
         }
         ASN1Sequence seq=new DERSequence(v);
         LOGGER.log(Level.FINER,"done toASN1Object()");
         return seq;
     }
 
-    public String dumpValueNotation(String prefix) throws IOException {
+    @Override
+    public String dumpValueNotation(String prefix,DumpType dumpType) throws IOException {
         StringBuilder sb=new StringBuilder();
         sb.append( prefix + "i IdentityStore ::= {" + CRLF );
         sb.append( prefix + "  identities {" +CRLF );
@@ -158,7 +161,7 @@ public class IdentityStore extends AbstractBlock {
                 sb.append(","+CRLF);
             }
             sb.append( prefix + "    -- Dumping IdentityBlock "+e.getKey() + CRLF );
-            sb.append( prefix + "    "+e.getValue().dumpValueNotation( prefix+"    " ) );
+            sb.append( prefix + "    "+e.getValue().dumpValueNotation( prefix+"    ",dumpType ) );
             i++;
         }
         sb.append( CRLF );
@@ -171,23 +174,23 @@ public class IdentityStore extends AbstractBlock {
         LOGGER.log( Level.INFO, "\n;;; -------------------------------------------" );
         LOGGER.log( Level.INFO, ";;; creating blank dump" );
         IdentityStore m = new IdentityStore();
-        LOGGER.log( Level.INFO, m.dumpValueNotation( "" ) );
+        LOGGER.log( Level.INFO, m.dumpValueNotation( "",DumpType.ALL_UNENCRYPTED ) );
 
         LOGGER.log( Level.INFO, "\n;;; -------------------------------------------" );
         LOGGER.log( Level.INFO, ";;; Demo Store Test" );
         IdentityStore m2 = IdentityStore.getIdentityStoreDemo();
-        LOGGER.log( Level.INFO, ";;; dumping\r\n"+m2.dumpValueNotation( "" ) );
+        LOGGER.log( Level.INFO, ";;; dumping\r\n"+m2.dumpValueNotation( "",DumpType.ALL_UNENCRYPTED ) );
         LOGGER.log( Level.INFO, ";;; reencode check" );
         LOGGER.log( Level.INFO, ";;;   getting DER stream" );
-        byte[] b1 = m.toBytes();
+        byte[] b1 = m.toBytes(DumpType.ALL_UNENCRYPTED);
         LOGGER.log( Level.INFO, ";;;   storing to DER stream to " + System.getProperty( "java.io.tmpdir" ) );
         DEROutputStream f = new DEROutputStream( new FileOutputStream( System.getProperty( "java.io.tmpdir" ) + "/temp.der" ) );
-        f.writeObject( m.toASN1Object() );
+        f.writeObject( m.toASN1Object(DumpType.ALL_UNENCRYPTED) );
         f.close();
         LOGGER.log( Level.INFO, ";;;   parsing DER stream" );
         IdentityStore m3 = new IdentityStore( b1 );
         LOGGER.log( Level.INFO, ";;;   getting DER stream again" );
-        byte[] b2 = m3.toBytes();
+        byte[] b2 = m3.toBytes(DumpType.ALL_UNENCRYPTED);
         LOGGER.log( Level.INFO, ";;;   comparing" );
         if (Arrays.equals( b1, b2 )) {
             LOGGER.log( Level.INFO, "Reencode success" );

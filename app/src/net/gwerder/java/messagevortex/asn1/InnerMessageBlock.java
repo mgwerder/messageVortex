@@ -23,7 +23,9 @@ package net.gwerder.java.messagevortex.asn1;
 
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
+import net.gwerder.java.messagevortex.asn1.encryption.Algorithm;
 import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
+import net.gwerder.java.messagevortex.asn1.encryption.Padding;
 import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
@@ -41,15 +43,23 @@ import java.util.logging.Level;
  */
 public class InnerMessageBlock extends AbstractBlock {
 
-    public static final int PLAIN_MESSAGE     = 10011;
-    public static final int ENCRYPTED_MESSAGE = 10012;
+    public static final int PREFIX_PLAIN      = 11011;
+    public static final int PREFIX_ENCRYPTED  = 11012;
 
-    private static final int ROUTING          = 11001;
+    public static final int IDENTITY_PLAIN    = 11021;
+    public static final int IDENTITY_ENCRYPTED= 11022;
+
+    public static final int ROUTING_PLAIN     = 11031;
+    public static final int ROUTING_ENCRYPTED = 11032;
+
     private static final int PAYLOAD          = 11002;
 
+    private byte[] padding=new byte[0];
+    private PrefixBlock prefix;
     private IdentityBlock identity;
-    private RoutingBlock[] routing;
-    private Payload[] payload;
+    private byte[] identitySignature=null;
+    private RoutingBlock routing;
+    private PayloadChunk[] payload;
 
     private static final java.util.logging.Logger LOGGER;
     static {
@@ -58,61 +68,106 @@ public class InnerMessageBlock extends AbstractBlock {
     }
 
     public InnerMessageBlock() throws IOException {
-        this(new IdentityBlock() );
+        this(new PrefixBlock(),new IdentityBlock(), new RoutingBlock() );
     }
 
-    public InnerMessageBlock(IdentityBlock i) {
+    public InnerMessageBlock(Algorithm sym,AsymmetricKey asym) throws IOException {
+        this(new PrefixBlock(new SymmetricKey(sym)),new IdentityBlock(asym), new RoutingBlock() );
+    }
+
+    public InnerMessageBlock(PrefixBlock prefix,IdentityBlock i, RoutingBlock routing) throws IOException {
+        this.prefix=prefix;
         identity=i;
-        routing=null;
-        payload=null;
+        this.routing=routing;
+        payload=new PayloadChunk[0];
     }
 
-    public InnerMessageBlock(byte[] b) throws IOException {
-        this((IdentityBlock)null);
-        parse( b );
+    public InnerMessageBlock(byte[] b,AsymmetricKey decryptionKey) throws IOException {
+        this(null,null,null);
+        parse( b,decryptionKey );
     }
 
-    protected void parse(byte[] p) throws IOException {
+    protected void parse(byte[] p, AsymmetricKey decryptionKey ) throws IOException {
         ASN1InputStream aIn=new ASN1InputStream( p );
-        parse(aIn.readObject());
+        parse(aIn.readObject(),decryptionKey);
         if( identity==null ) {
             throw new NullPointerException( "IdentityBlock may not be null" );
         }
     }
 
-    protected void parse(ASN1Encodable o) throws IOException {
+    protected void parse(ASN1Encodable o ) throws IOException {
+        parse(o);
+    }
+
+    protected void parse(ASN1Encodable o,AsymmetricKey decryptionKey ) throws IOException {
         LOGGER.log(Level.FINER,"Executing parse()");
         int i = 0;
         ASN1Sequence s1 = ASN1Sequence.getInstance( o );
-        identity = new IdentityBlock( s1.getObjectAt( i++ ) );
 
-        // check tag number of routing block
+        // get padding
+        padding = ASN1OctetString.getInstance(s1.getObjectAt( i++ ) ).getOctets();
+
+        // get prefix
+        ASN1TaggedObject ato = ASN1TaggedObject.getInstance(s1.getObjectAt( i++ ));
+        switch(ato.getTagNo()) {
+            case PREFIX_PLAIN:
+                prefix=new PrefixBlock(ato.getObject(),null);
+                break;
+            case PREFIX_ENCRYPTED:
+                prefix=new PrefixBlock(ASN1OctetString.getInstance(ato.getObject()).getOctets(),decryptionKey);
+                break;
+            default:
+                throw new IOException( "got unexpected tag (expect: " + PREFIX_PLAIN + " or "+PREFIX_ENCRYPTED+"; got: " + ato.getTagNo() + ")" );
+        }
+
+        // get identity
+        ato = ASN1TaggedObject.getInstance(s1.getObjectAt( i++ ));
+        byte[] identityEncoded;
+        switch(ato.getTagNo()) {
+            case IDENTITY_PLAIN:
+                identityEncoded = toDER(ato.getObject());
+                identity = new IdentityBlock( identityEncoded );
+                break;
+            case IDENTITY_ENCRYPTED:
+                identityEncoded = ASN1OctetString.getInstance(ato.getObject()).getOctets();
+                identity = new IdentityBlock( prefix.getKey().decrypt(identityEncoded) );
+                break;
+            default:
+                throw new IOException( "got unexpected tag (expect: " + PREFIX_PLAIN + " or "+PREFIX_ENCRYPTED+"; got: " + ato.getTagNo() + ")" );
+        }
+
+
+        // get signature
+        identitySignature=ASN1OctetString.getInstance(s1.getObjectAt( i++ ) ).getOctets();
+        if(!identity.getIdentityKey().verify(identityEncoded,identitySignature)) {
+            throw new IOException( "failed verifying signature (signature length:"+identitySignature.length+"; signedBlock:"+identityEncoded+")" );
+        }
+
+        // getting routing block
         ASN1TaggedObject ae = ASN1TaggedObject.getInstance( s1.getObjectAt( i++ ) );
-        if(ASN1TaggedObject.getInstance(ae).getTagNo()!=ROUTING) {
-            throw new IOException( "got unexpected tag (expect: " + ROUTING + "; got: " + ASN1TaggedObject.getInstance( ae ).getTagNo() + ")" );
+        byte[] routingBlockArray;
+        switch(ae.getTagNo()) {
+            case ROUTING_PLAIN:
+                routing=new RoutingBlock(ae.getObject());
+                break;
+            case ROUTING_ENCRYPTED:
+                try {
+                    routing = new RoutingBlock(ASN1Sequence.getInstance(prefix.getKey().decrypt(ASN1OctetString.getInstance(ae.getObject()).getOctets())));
+                } catch(IOException ioe) {
+                    throw new IOException("error while decrypting routing block",ioe);
+                }
+                break;
+            default:
+                throw new IOException( "got unexpected tag (expect: " + ROUTING_PLAIN + " or "+ROUTING_ENCRYPTED+"; got: " + ASN1TaggedObject.getInstance( ae ).getTagNo() + ")" );
         }
 
-        // getting routing blocks
-        List<RoutingBlock> v=new ArrayList<>();
-        for (Iterator<ASN1Encodable> iter= ASN1Sequence.getInstance( ASN1TaggedObject.getInstance(ae).getObject() ).iterator(); iter.hasNext(); ) {
+        // getting payload blocks
+        List<PayloadChunk> p2=new ArrayList<>();
+        for (Iterator<ASN1Encodable> iter= ASN1Sequence.getInstance( s1.getObjectAt( i++ ) ).iterator(); iter.hasNext(); ) {
             ASN1Encodable tr = iter.next();
-            v.add(new RoutingBlock(tr));
+            p2.add(new PayloadChunk(tr));
         }
-        routing=v.toArray(new RoutingBlock[v.size()]);
-
-        // check tag number of payloadblock
-        ae = ASN1TaggedObject.getInstance( s1.getObjectAt( i++ ) );
-        if(ASN1TaggedObject.getInstance(ae).getTagNo()!=PAYLOAD) {
-            throw new IOException( "got unexpected tag (expect: " + PAYLOAD+ "; got: " + ASN1TaggedObject.getInstance( ae ).getTagNo() + ")" );
-        }
-
-        // getting routing blocks
-        List<Payload> p=new ArrayList<>();
-        for (Iterator<ASN1Encodable> iter= ASN1Sequence.getInstance( ASN1TaggedObject.getInstance(ae).getObject() ).iterator(); iter.hasNext(); ) {
-            ASN1Encodable tr = iter.next();
-            p.add(new Payload(tr));
-        }
-        payload=p.toArray(new Payload[p.size()]);
+        payload = p2.toArray(new PayloadChunk[p2.size()]);
 
     }
 
@@ -120,39 +175,81 @@ public class InnerMessageBlock extends AbstractBlock {
         return toASN1Object( DumpType.PUBLIC_ONLY );
     }
 
-    public ASN1Object toASN1Object(DumpType dt) throws IOException {
+    @Override
+    public ASN1Object toASN1Object(DumpType dumpType) throws IOException {
         // Prepare encoding
         LOGGER.log(Level.FINER,"Executing toASN1Object()");
 
         ASN1EncodableVector v=new ASN1EncodableVector();
+        v.add( new DEROctetString(padding));
+        switch(dumpType) {
+            case ALL_UNENCRYPTED:
+                v.add( new DERTaggedObject(PREFIX_PLAIN,prefix.toASN1Object(dumpType)));
+                break;
+            case ALL:
+            case PUBLIC_ONLY:
+            case PRIVATE_COMMENTED:
+                if(prefix.getDecryptionKey()==null || !prefix.getDecryptionKey().hasPrivateKey()) {
+                    throw new IOException( "need a decryption key to encrypt prefix block ("+prefix.getDecryptionKey()+")" );
+                }
+                v.add( new DERTaggedObject(PREFIX_ENCRYPTED,new DEROctetString(prefix.toEncBytes())));
+                break;
+            default:
+        }
         if(identity==null) {
             throw new IOException("identity may not be null when encoding");
         }
         LOGGER.log(Level.FINER,"adding identity");
-        ASN1Encodable o=null;
-        o = identity.toASN1Object();
-        if (o == null) {
-            throw new IOException( "returned identity object may not be null" );
+        byte[] o=null;
+        switch(dumpType) {
+            case ALL_UNENCRYPTED:
+                ASN1Object t=identity.toASN1Object(dumpType);
+                o= toDER(t);
+                v.add( new DERTaggedObject(IDENTITY_PLAIN,t) );
+                break;
+            case ALL:
+            case PUBLIC_ONLY:
+            case PRIVATE_COMMENTED:
+                o= prefix.getKey().encrypt(identity.toBytes(dumpType));
+                v.add( new DERTaggedObject(IDENTITY_ENCRYPTED,new DEROctetString(o)) );
+                break;
+            default:
         }
-        v.add( o );
+        LOGGER.log(Level.FINER,"adding signature");
+        if(identity.getIdentityKey()==null || ! identity.getIdentityKey().hasPrivateKey()) {
+            throw new IOException( "identity needs private key to sign request ("+identity.getIdentityKey()+")" );
+        }
+        try {
+            v.add(new DEROctetString(identity.getIdentityKey().sign(o)));
+        } catch(IOException ioe) {
+            throw new IOException("exception while signing identity",ioe);
+        }
 
-        // Writing encoded Routing Blocks
-        ASN1EncodableVector v2=new ASN1EncodableVector();
-        if(routing!=null) {
-            for(RoutingBlock r:routing) {
-                v2.add( r.toASN1Object() );
-            }
+        // Writing encoded Routing Block
+        if(routing==null) {
+            throw new NullPointerException("routing may not be null when encoding");
         }
-        v.add( new DERTaggedObject( true,ROUTING    ,new DERSequence( v2 )));
+        switch(dumpType) {
+            case ALL_UNENCRYPTED:
+                v.add( new DERTaggedObject( true,ROUTING_PLAIN ,routing.toASN1Object(dumpType)));
+                break;
+            case ALL:
+            case PUBLIC_ONLY:
+            case PRIVATE_COMMENTED:
+                v.add( new DERTaggedObject( true,ROUTING_ENCRYPTED ,new DEROctetString( prefix.getKey().encrypt(toDER(routing.toASN1Object(dumpType))) )));
+                break;
+            default:
+                throw new IOException("got unknown dump type "+dumpType.name());
+        }
 
         // Writing encoded Payload Blocks
-        v2=new ASN1EncodableVector();
-        if(payload!=null) {
-            for(Payload p:payload) {
-                v2.add( p.toASN1Object() );
+        ASN1EncodableVector v2=new ASN1EncodableVector();
+        if(payload!=null && payload.length>0) {
+            for(PayloadChunk p:payload) {
+                v2.add( p.toASN1Object(dumpType) );
             }
         }
-        v.add( new DERTaggedObject( true,PAYLOAD    ,new DERSequence( v2 )));
+        v.add( new DERSequence( v2 ));
 
         ASN1Sequence seq=new DERSequence(v);
 
@@ -162,18 +259,17 @@ public class InnerMessageBlock extends AbstractBlock {
 
     public IdentityBlock getIdentity() { return identity; }
 
-    public RoutingBlock[] getRouting() { return routing; }
+    public RoutingBlock getRouting() { return routing; }
 
-    public Payload[] getPayload() { return payload; }
+    public PayloadChunk[] getPayload() { return payload; }
 
-    public String dumpValueNotation(String prefix) throws IOException {
-        return dumpValueNotation( prefix, null, DumpType.PUBLIC_ONLY );
-    }
+    public PrefixBlock getPrefix() { return prefix; }
 
-    public String dumpValueNotation(String prefix, SymmetricKey sessionKey,DumpType dt) throws IOException {
+    @Override
+    public String dumpValueNotation(String prefix, DumpType dt) throws IOException {
         StringBuilder sb=new StringBuilder();
         sb.append(  "  {" + CRLF );
-        // FIXME dump padding
+        sb.append( prefix +"  padding "+toHex(padding)+CRLF);
 
         sb.append( prefix + "  -- Dumping IdentityBlock" + CRLF );
         sb.append( prefix + "  identity ");
@@ -182,15 +278,42 @@ public class InnerMessageBlock extends AbstractBlock {
             sb.append( "plain " + identity.dumpValueNotation( prefix + "  ",DumpType.ALL_UNENCRYPTED ) + "," + CRLF );
         } else {
             // dumping encrypted identity
-            sb.append( "encrypted " + identity.dumpValueNotation( prefix + "  ", DumpType.PUBLIC_ONLY ) + "," + CRLF );
+            sb.append( "encrypted " + identity.dumpValueNotation( prefix + "  ", dt ) + "," + CRLF );
         }
 
-        // FIXME dump routing
+        sb.append( prefix + "  routing "+routing.dumpValueNotation( prefix+"  ",dt)+","+CRLF);
 
-        // FIXME dump payload
+        sb.append( prefix + "  payload {" );
+        int i=0;
+        if(payload!=null){
+            for(PayloadChunk p:payload) {
+                if(i>0) {
+                    sb.append( "," );
+                }
+                sb.append( CRLF );
+                p.dumpValueNotation( prefix+"  ",dt);
+            }
+        }
+        sb.append( CRLF + prefix + "  }" + CRLF );
 
-        sb.append( prefix + "}" + CRLF );
+        sb.append( prefix + "}"  );
         return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o==null) {
+            return false;
+        }
+        if(! (o instanceof InnerMessageBlock)) {
+            return false;
+        }
+        InnerMessageBlock ib=(InnerMessageBlock)o;
+        try {
+            return toBytes(DumpType.ALL_UNENCRYPTED).equals(ib.toBytes(DumpType.ALL_UNENCRYPTED));
+        } catch(IOException ioe) {
+            return false;
+        }
     }
 
 }

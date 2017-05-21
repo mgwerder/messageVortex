@@ -21,6 +21,7 @@ package net.gwerder.java.messagevortex.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
+import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import net.gwerder.java.messagevortex.asn1.encryption.Parameter;
 import org.bouncycastle.asn1.*;
 
@@ -64,6 +65,9 @@ public class AlgorithmParameter extends AbstractBlock implements Serializable,Co
     }
 
     public String put(Parameter parameter,String value) {
+        // this assertion catches rewritten keysizes (different values)
+        assert parameter!=Parameter.KEYSIZE || (get(parameter.getId())==null || (get(parameter.getId()).equals(value)));
+
         return put(parameter.getId(),value);
     }
 
@@ -96,7 +100,8 @@ public class AlgorithmParameter extends AbstractBlock implements Serializable,Co
         }
     }
 
-    public String dumpValueNotation(String prefix) {
+    @Override
+    public String dumpValueNotation(String prefix,DumpType dumpType) {
         StringBuilder sb=new StringBuilder();
         sb.append("{"+ AbstractBlock.CRLF);
         int i=0;
@@ -115,7 +120,7 @@ public class AlgorithmParameter extends AbstractBlock implements Serializable,Co
     }
 
     @Override
-    ASN1Object toASN1Object() throws IOException {
+    public ASN1Object toASN1Object(DumpType dt) throws IOException {
         ASN1EncodableVector v =new ASN1EncodableVector();
         for(Map.Entry<Integer,String> e:parameter.entrySet()) {
             Parameter p=Parameter.getById(e.getKey());

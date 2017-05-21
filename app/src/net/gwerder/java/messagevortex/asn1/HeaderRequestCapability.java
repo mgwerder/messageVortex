@@ -21,8 +21,11 @@ package net.gwerder.java.messagevortex.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
+import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.ASN1Encodable;
+import org.bouncycastle.asn1.ASN1Object;
 import org.bouncycastle.asn1.ASN1Sequence;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.IOException;
 
@@ -56,13 +59,19 @@ public class HeaderRequestCapability extends HeaderRequest {
 
     public int getId() {return 1;}
 
-    public String dumpValueNotation(String prefix) {
+    @Override
+    public String dumpValueNotation(String prefix, DumpType dumpType) {
         StringBuilder sb=new StringBuilder();
         sb.append("{"+ AbstractBlock.CRLF);
         if (period != null) {
-            sb.append(prefix).append("  period ").append(period.dumpValueNotation(prefix + "  ")).append(AbstractBlock.CRLF);
+            sb.append(prefix).append("  period ").append(period.dumpValueNotation(prefix + "  ",dumpType )).append(AbstractBlock.CRLF);
         }
         sb.append(prefix).append("}");
         return sb.toString();
+    }
+
+    @Override
+    public ASN1Object toASN1Object(DumpType dumpType) throws IOException {
+        throw new NotImplementedException();
     }
 }

@@ -62,11 +62,11 @@ public class VortexMessageTest {
                 LOGGER.log( Level.INFO, "Testing VortexMessage reencoding " + (i + 1) + " of " + TESTS );
                 PrefixBlock p=new PrefixBlock();
                 p.setKey(new SymmetricKey() );
-                VortexMessage s = new VortexMessage(p,new InnerMessageBlock( new IdentityBlock() ));
+                VortexMessage s = new VortexMessage(p,new InnerMessageBlock( new PrefixBlock(),new IdentityBlock(),new RoutingBlock() ));
                 String s1=s.dumpValueNotation( "" );
-                byte[] b1 = s.toBytes();
+                byte[] b1 = s.toBytes(DumpType.ALL_UNENCRYPTED);
                 assertTrue( "Byte representation may not be null", b1 != null );
-                byte[] b2 = (new VortexMessage( b1,null )).toBytes();
+                byte[] b2 = (new VortexMessage( b1,null )).toBytes(DumpType.ALL_UNENCRYPTED);
                 assertTrue( "Byte arrays should be equal when reencoding", Arrays.equals( b1, b2 ) );
                 String s2=s.dumpValueNotation( "" );
                 assertTrue( "Value Notations should be equal when reencoding", s1.equals( s2 ) );
@@ -111,15 +111,15 @@ public class VortexMessageTest {
             // FIXME build a full message with all possible blocks
             PrefixBlock p=new PrefixBlock();
             p.setKey(new SymmetricKey() );
-            VortexMessage s = new VortexMessage(p,new InnerMessageBlock( new IdentityBlock() ));
+            VortexMessage s = new VortexMessage(p,new InnerMessageBlock( new PrefixBlock(),new IdentityBlock(),new RoutingBlock() ));
             File f = new File("testfile_VortexMessage_encrypted.der");
             OutputStream o = new FileOutputStream(f);
-            o.write(s.toBytes());
+            o.write(s.toBytes(DumpType.ALL_UNENCRYPTED));
             o.close();
 
             f = new File("testfile_VortexMessage_plain.der");
             o = new FileOutputStream(f);
-            o.write(s.toASN1Object(null,DumpType.ALL_UNENCRYPTED).getEncoded());
+            o.write(s.toASN1Object(DumpType.ALL_UNENCRYPTED).getEncoded());
             o.close();
         } catch (Exception e) {
             fail("unexpected exception");

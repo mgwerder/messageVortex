@@ -21,9 +21,14 @@ package net.gwerder.java.messagevortex.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
+import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.ASN1Encodable;
+import org.bouncycastle.asn1.ASN1Object;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -39,4 +44,8 @@ public class RemoveRedundancyOperation extends AbstractRedundancyOperation {
         super(to);
     }
 
+    @Override
+    public ASN1Object toASN1Object(DumpType dumpType) throws IOException {
+        throw new NotImplementedException();
+    }
 }

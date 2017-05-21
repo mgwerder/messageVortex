@@ -50,8 +50,8 @@ import java.util.Arrays;
 public class AsymmetricKey extends Key {
 
     private static ExtendedSecureRandom esr = new ExtendedSecureRandom();
-    private static int PUBLIC_KEY = 1;
-    private static int PRIVATE_KEY = 2;
+    private static int PUBLIC_KEY_TAG  = 2;
+    private static int PRIVATE_KEY_TAG = 3;
 
     static {
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
@@ -190,19 +190,26 @@ public class AsymmetricKey extends Key {
         ASN1Sequence s1 = ASN1Sequence.getInstance(to);
         // parsing asymmetric key identifier
         int i=0;
+
+        // parse parameters
         parseKeyParameter(ASN1Sequence.getInstance( s1.getObjectAt(i++) ));
+
+        //parse public key
         DERTaggedObject tagged=(DERTaggedObject)(s1.getObjectAt(i++));
-        if(tagged.getTagNo()!=PUBLIC_KEY) {
-            throw new IOException("encountered wrong tag number (expected: "+PUBLIC_KEY+"; got:"+tagged.getTagNo()+")");
+        if(tagged.getTagNo()!= PUBLIC_KEY_TAG) {
+            throw new IOException("encountered wrong tag number when parsing public key (expected: "+ PUBLIC_KEY_TAG +"; got:"+tagged.getTagNo()+")");
         }
         publicKey=ASN1OctetString.getInstance(tagged.getObject()).getOctets();
+
+        // parse private key
         if(s1.size()>i) {
             tagged=(DERTaggedObject)(s1.getObjectAt(i++));
-            if(tagged.getTagNo()!=PRIVATE_KEY) {
-                throw new IOException("encountered wrong tag number (expected: "+PRIVATE_KEY+"; got:"+tagged.getTagNo()+")");
+            if(tagged.getTagNo()!= PRIVATE_KEY_TAG) {
+                throw new IOException("encountered wrong tag number when parsing private key (expected: "+ PRIVATE_KEY_TAG +"; got:"+tagged.getTagNo()+")");
             }
             privateKey=ASN1OctetString.getInstance(tagged.getObject()).getOctets();
         }
+
     }
 
     /***
@@ -226,28 +233,26 @@ public class AsymmetricKey extends Key {
      * Generates the ASN1 notation of the object.
      *
      * @param prefix the line prefix to be used (normally &quot;&quot;)
-     * @param dt     the dump type to be used (normally DumpType.PUBLIC_ONLY)
+     * @param dumpType     the dump type to be used (normally DumpType.PUBLIC_ONLY)
      * @return the string representation of the ASN1 dump
      */
-    public String dumpValueNotation(String prefix,DumpType dt) {
+    public String dumpValueNotation(String prefix,DumpType dumpType) {
         StringBuilder sb=new StringBuilder();
         sb.append("{"+CRLF);
-        sb.append( dumpKeyTypeValueNotation( prefix ) );
+        sb.append( dumpKeyTypeValueNotation( prefix,dumpType ) );
         sb.append( "," ).append(CRLF);
-        if(publicKey!=null && dt.dumpPublicKey()) {
-            String s = toHex( publicKey );
-            sb.append( prefix ).append( "  publicKey " + s );
-            if (dt.dumpPrivateKey()) {
-                sb.append( "," );
-            }
-            sb.append( CRLF );
+        String s = toHex( publicKey );
+        sb.append( prefix ).append( "  publicKey " + s );
+        if (dumpType.dumpPrivateKey()) {
+            sb.append( "," );
         }
+        sb.append( CRLF );
 
         // dump private key
-        if(privateKey!=null && (dt==DumpType.PRIVATE_COMMENTED || dt.dumpPrivateKey())) {
-            String s=toHex(privateKey);
+        if(privateKey!=null && (dumpType==DumpType.PRIVATE_COMMENTED || dumpType.dumpPrivateKey())) {
+            s=toHex(privateKey);
             sb.append(prefix).append("  ");
-            if(dt==DumpType.PRIVATE_COMMENTED) {
+            if(dumpType==DumpType.PRIVATE_COMMENTED) {
                 sb.append("-- ");
             }
             sb.append("privateKey ").append(s).append(CRLF);
@@ -256,16 +261,6 @@ public class AsymmetricKey extends Key {
         }
         sb.append(prefix).append("}");
         return sb.toString();
-    }
-
-    /***
-     * Dumps the key as ASN1 object.
-     *
-     * @return the ASN1 object suitable for encoding
-     * @throws IOException if not encodable
-     */
-    public ASN1Object toASN1Object() throws IOException {
-        return toASN1Object( DumpType.ALL );
     }
 
     /***
@@ -283,28 +278,28 @@ public class AsymmetricKey extends Key {
         ASN1EncodableVector v =new ASN1EncodableVector();
 
         // add key parameters
-        addToASN1Parameter(v);
+        addToASN1Parameter(v,dt);
+
         // add public key
         addToASN1PublicKey(v,dt);
+
         // add private key
         addToASN1PrivateKey(v,dt);
 
         return new DERSequence( v );
     }
 
-    private void addToASN1Parameter(ASN1EncodableVector v ) throws IOException {
-        v.add(encodeKeyParameter());
+    private void addToASN1Parameter(ASN1EncodableVector v,DumpType dumpType ) throws IOException {
+        v.add(encodeKeyParameter(dumpType));
     }
 
     private void addToASN1PublicKey(ASN1EncodableVector v, DumpType dt ) {
-        if(dt.dumpPublicKey()) {
-            v.add(new DERTaggedObject( true,PUBLIC_KEY,new DEROctetString( publicKey )));
-        }
+        v.add(new DERTaggedObject( true, PUBLIC_KEY_TAG,new DEROctetString( publicKey )));
     }
 
     private void addToASN1PrivateKey(ASN1EncodableVector v, DumpType dt ) {
         if (privateKey != null && dt.dumpPrivateKey()) {
-            v.add(new DERTaggedObject( true,PRIVATE_KEY,new DEROctetString( privateKey )));
+            v.add(new DERTaggedObject( true, PRIVATE_KEY_TAG,new DEROctetString( privateKey )));
         }
     }
 
@@ -325,9 +320,9 @@ public class AsymmetricKey extends Key {
         } catch (InvalidKeySpecException e) {
             throw new IOException( "Exception while getting key pair", e );
         } catch (NoSuchAlgorithmException|NoSuchPaddingException|NoSuchProviderException|IllegalBlockSizeException|BadPaddingException e) {
-            throw new IOException( "Exception while encrypting", e );
+            throw new IOException( "Exception while encrypting (len: "+b.length+")", e );
         } catch (InvalidKeyException e) {
-            throw new IOException( "Exception while init of cipher", e );
+            throw new IOException( "Exception while init of cipher ", e );
         }
     }
 
@@ -346,7 +341,7 @@ public class AsymmetricKey extends Key {
             cipher.init( Cipher.DECRYPT_MODE, k );
             return cipher.doFinal( b );
         } catch (InvalidKeySpecException | NoSuchAlgorithmException | NoSuchPaddingException | NoSuchProviderException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
-            throw new IOException( "Exception while decrypting", e );
+            throw new IOException( "Exception while decrypting (len: "+b.length+")", e );
         }
 
     }
@@ -428,6 +423,26 @@ public class AsymmetricKey extends Key {
         }
     }
 
+    /***
+     * Sets the probability of reusing a precalculated key again.
+     *
+     * This capability is used to reduce cpu load during tests.
+     *
+     * @param probability the new probability to be set
+     * @return the previously set probability
+     */
+    public static double setDequeueProbability(double probability) {
+        return AsymmetricKeyPreCalculator.setDequeueProbability(probability);
+    }
+
+    /***
+     * Gets the current probability for dequeing a used key (nolrmally 1.0)
+     * @return the current probability set
+     */
+    public static double getDequeueProbability() {
+        return AsymmetricKeyPreCalculator.getDequeueProbability();
+    }
+
     private KeyPair getKeyPair() throws NoSuchAlgorithmException,NoSuchProviderException,InvalidKeySpecException {
         KeyFactory kf=getKeyFactory();
 
@@ -447,18 +462,18 @@ public class AsymmetricKey extends Key {
     private Cipher getCipher() throws NoSuchPaddingException,NoSuchAlgorithmException,NoSuchProviderException {
         Algorithm alg=getAlgorithm();
         if(alg==Algorithm.EC) {
-            return Cipher.getInstance( alg.getAlgorithmFamily(),"BC");
+            return Cipher.getInstance( alg.getAlgorithmFamily(),alg.getProvider());
         } else {
-            return Cipher.getInstance(alg+"/"+getMode()+"/"+getPadding().toString());
+            return Cipher.getInstance(alg+"/"+getMode()+"/"+getPadding().toString(),alg.getProvider());
         }
     }
 
     private Signature getSignature(Algorithm a) throws NoSuchPaddingException, NoSuchAlgorithmException, NoSuchProviderException {
         Algorithm alg=getAlgorithm();
         if ( alg==Algorithm.EC ) {
-            return Signature.getInstance( a.toString() + "WithECDSA", "BC" );
+            return Signature.getInstance( a.toString() + "WithECDSA", alg.getProvider() );
         } else {
-            return Signature.getInstance( a.toString() + "With" + alg.toString() );
+            return Signature.getInstance( a.toString() + "With" + alg.toString(),alg.getProvider() );
         }
     }
 
@@ -583,21 +598,16 @@ public class AsymmetricKey extends Key {
 
         // compare public keys
         AsymmetricKey o=(AsymmetricKey)key;
-        if(!Arrays.equals(o.publicKey,publicKey)) {
-            return false;
-        }
+        return dumpValueNotation("",DumpType.ALL_UNENCRYPTED).equals(o.dumpValueNotation("",DumpType.ALL_UNENCRYPTED));
 
-        // compare private keys
-        if(!Arrays.equals(o.privateKey,privateKey)) {
-            return false;
-        }
+    }
 
-        // compare padding
-        if(!o.getPadding().equals(getPadding())) {
-            return false;
+    public AsymmetricKey clone() {
+        try {
+            return new AsymmetricKey(this.toASN1Object(DumpType.ALL));
+        } catch( IOException ioe) {
+            return null;
         }
-
-        return true;
     }
 
     /***
@@ -605,7 +615,7 @@ public class AsymmetricKey extends Key {
      */
     @Override
     public int hashCode() {
-        return dumpValueNotation("",DumpType.ALL).hashCode();
+        return dumpValueNotation("",DumpType.ALL_UNENCRYPTED).hashCode();
     }
 
     /***
@@ -614,7 +624,7 @@ public class AsymmetricKey extends Key {
      */
     @Override
     public String toString() {
-        return "([AsymmetricKey]"+parameters.toString()+")";
+        return "([AsymmetricKey]hash="+(privateKey!=null?Arrays.hashCode(privateKey):"null")+"/"+(publicKey!=null?Arrays.hashCode(publicKey):"null")+";"+parameters.toString()+")";
     }
 
 }

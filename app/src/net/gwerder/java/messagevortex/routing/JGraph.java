@@ -23,6 +23,7 @@ package net.gwerder.java.messagevortex.routing;
 
 import net.gwerder.java.messagevortex.asn1.IdentityStore;
 import net.gwerder.java.messagevortex.asn1.IdentityStoreBlock;
+import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.DEROutputStream;
 
 import javax.swing.*;
@@ -191,7 +192,7 @@ public class JGraph extends JPanel implements MouseListener  {
         } catch( IOException ioe ){
             is = IdentityStore.getNewIdentityStoreDemo( false );
             DEROutputStream f = new DEROutputStream( new FileOutputStream( System.getProperty( "java.io.tmpdir" ) + "/IdentityStoreExample1.der" ) );
-            f.writeObject( is.toASN1Object() );
+            f.writeObject( is.toASN1Object(DumpType.ALL_UNENCRYPTED) );
             f.close();
         }
         SimpleMessageFactory smf=new SimpleMessageFactory( "", 0,1, is.getAnonSet( 7 ).toArray( new IdentityStoreBlock[0] ),is);

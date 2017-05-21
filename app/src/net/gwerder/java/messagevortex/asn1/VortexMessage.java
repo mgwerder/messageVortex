@@ -30,6 +30,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -40,9 +41,14 @@ import java.util.logging.Logger;
  */
 public class VortexMessage extends AbstractBlock {
 
+    public static final int PREFIX_PLAIN            =  10011;
+    public static final int PREFIX_ENCRYPTED        =  10012;
+    public static final int INNER_MESSAGE_PLAIN     =  10021;
+    public static final int INNER_MESSAGE_ENCRYPTED =  10022;
+
     private PrefixBlock prefix;
     private InnerMessageBlock innerMessage;
-    private AsymmetricKey key;
+    private AsymmetricKey decryptionKey;
 
     private static final Logger LOGGER;
     static {
@@ -51,28 +57,27 @@ public class VortexMessage extends AbstractBlock {
     }
 
     /***
-     * Creates an empty message with a new symmetric encrypption key in the prefix.
+     * Creates an empty message with a new symmetric encrypption decryptionKey in the prefix.
      *
      * @throws IOException if the constructor was unable to build a message skeleton from the default values
      * @throws NoSuchAlgorithmException if the default values for symmetric encryption keys are invalid
      */
-    private VortexMessage()  throws IOException,NoSuchAlgorithmException {
+    private VortexMessage()  throws IOException {
         prefix=new PrefixBlock();
         innerMessage=new InnerMessageBlock();
-        key=null;
+        decryptionKey =null;
     }
 
     /***
      * Parses a byte array to a  VortexMessage.
      *
      * @param b  the byte array to be parsed
-     * @param dk the key required to decrypt the prefix
+     * @param dk the decryptionKey required to decrypt the prefix
      * @throws IOException if there was a problem parsing or decrypting the object
      * @throws ParseException if there was a problem parsing the object
      * @throws NoSuchAlgorithmException if there was a problem decrypting the object
      */
-    public VortexMessage(byte[] b,AsymmetricKey dk) throws IOException,ParseException,NoSuchAlgorithmException {
-        this();
+    public VortexMessage(byte[] b,AsymmetricKey dk) throws IOException {
         setDecryptionKey(dk);
         parse( b );
     }
@@ -83,9 +88,9 @@ public class VortexMessage extends AbstractBlock {
      * @param pre the prefix block to use
      * @param im  the inner message block to use
      * @throws IOException if there was an error generating the kay
-     * @throws NoSuchAlgorithmException if the default values of a symmetric key point to an invalid algorithm
+     * @throws NoSuchAlgorithmException if the default values of a symmetric decryptionKey point to an invalid algorithm
      */
-    public VortexMessage(PrefixBlock pre, InnerMessageBlock im)  throws IOException,NoSuchAlgorithmException {
+    public VortexMessage(PrefixBlock pre, InnerMessageBlock im)  throws IOException {
         this();
         if(pre==null) {
             setPrefix( new PrefixBlock( new SymmetricKey() ) );
@@ -133,29 +138,37 @@ public class VortexMessage extends AbstractBlock {
     }
 
     /***
-     * get the currently set encryption/decryption key (asymmetric).
+     * get the currently set encryption/decryption decryptionKey (asymmetric).
      *
-     * @return the key or null if not set
+     * @return the decryptionKey or null if not set
      */
-    public AsymmetricKey getDecryptionKey() {return key;}
+    public AsymmetricKey getDecryptionKey() {
+        return decryptionKey;
+    }
 
     /***
-     * Set the encryption/decryption key.
+     * Set the encryption/decryption decryptionKey.
      *
-     * @return the key which has been set previously or null if the key ha not been set
+     * @return the decryptionKey which has been set previously or null if the decryptionKey ha not been set
      */
-    public AsymmetricKey setDecryptionKey(AsymmetricKey dk) {
+    public AsymmetricKey setDecryptionKey(AsymmetricKey dk) throws IOException {
         AsymmetricKey old=getDecryptionKey();
-        this.key=dk;
+        this.decryptionKey = dk!=null?dk.clone():null;
+        if(prefix!=null) {
+            prefix.setDecryptionKey(dk);
+        }
+        if(innerMessage!=null && innerMessage.getPrefix()!=null) {
+            innerMessage.getPrefix().setDecryptionKey(dk);
+        }
         return old;
     }
 
-    protected void parse(byte[] p) throws IOException,ParseException,NoSuchAlgorithmException {
+    protected void parse(byte[] p) throws IOException {
         ASN1InputStream aIn=new ASN1InputStream( p );
         parse(aIn.readObject());
     }
 
-    protected void parse(ASN1Encodable p) throws IOException,ParseException,NoSuchAlgorithmException {
+    protected void parse(ASN1Encodable p) throws IOException {
         LOGGER.log(Level.FINER,"Executing parse()");
         int i = 0;
         ASN1Sequence s1 = ASN1Sequence.getInstance( p );
@@ -164,29 +177,32 @@ public class VortexMessage extends AbstractBlock {
         ASN1TaggedObject to=ASN1TaggedObject.getInstance( s1.getObjectAt( i ) );
         i++;
         switch(to.getTagNo()) {
-            case PrefixBlock.PLAIN_PREFIX:
+            case PREFIX_PLAIN:
                 prefix = new PrefixBlock( to.getObject(),null );
                 break;
-            case PrefixBlock.ENCRYPTED_PREFIX:
-                prefix = new PrefixBlock( to.getObject() , getDecryptionKey());
+            case PREFIX_ENCRYPTED:
+                prefix = new PrefixBlock( ASN1OctetString.getInstance(to.getObject()).getOctets() , getDecryptionKey());
                 break;
             default:
-                throw new ParseException( "got unexpected tag number when reading prefix ("+to.getTagNo()+")",0 );
+                throw new IOException( "got unexpected tag number when reading prefix ("+to.getTagNo()+")");
         }
 
         // reading inner message
         to=ASN1TaggedObject.getInstance( s1.getObjectAt( i ) );
         i++;
         switch(to.getTagNo()) {
-            case InnerMessageBlock.PLAIN_MESSAGE:
-                innerMessage = new InnerMessageBlock( to.getObject().getEncoded() );
+            case INNER_MESSAGE_PLAIN:
+                innerMessage = new InnerMessageBlock( toDER(to.getObject()),null );
                 break;
-            case InnerMessageBlock.ENCRYPTED_MESSAGE:
-                innerMessage = new InnerMessageBlock( prefix.getKey().decrypt(ASN1OctetString.getInstance(to.getObject()).getOctets())  );
+            case INNER_MESSAGE_ENCRYPTED:
+                innerMessage = new InnerMessageBlock( prefix.getKey().decrypt(ASN1OctetString.getInstance(to.getObject()).getOctets()),getDecryptionKey()  );
                 break;
             default:
-                throw new ParseException( "got unexpected tag number when reading inner message ("+to.getTagNo()+")",0 );
+                throw new IOException( "got unexpected tag number when reading inner message ("+to.getTagNo()+")" );
         }
+
+        // propagate decryption key to sub elements
+        setDecryptionKey(getDecryptionKey());
     }
 
     /***
@@ -194,36 +210,18 @@ public class VortexMessage extends AbstractBlock {
      *
      * This method is mainly useful for diagnostic purposes.
      *
-     * @return             the requested object as ASN1Object
-     * @throws IOException if any object or subobject can not be dumped
-     */
-    public ASN1Object toASN1Object() throws IOException {
-        return toASN1Object( null, DumpType.PUBLIC_ONLY );
-    }
-
-    /***
-     * Dumps the object a ASN1Object.
-     *
-     * This method is mainly useful for diagnostic purposes.
-     *
-     * @param identityKey  the identity key to apply to the message
      * @param dt           the dumpType to apply
      * @return             the requested object as ASN1Object
      * @throws IOException if any object or subobject can not be dumped
      */
-    public ASN1Object toASN1Object(AsymmetricKey identityKey, DumpType dt) throws IOException {
+    public ASN1Object toASN1Object(DumpType dt) throws IOException {
         // Prepare encoding
         LOGGER.log(Level.FINER,"Executing toASN1Object()");
 
-        if(identityKey==null || DumpType.ALL_UNENCRYPTED==dt) {
-            getPrefix().setDecryptionKey(null);
-        } else {
-            getPrefix().setDecryptionKey( identityKey );
-        }
         ASN1EncodableVector v=new ASN1EncodableVector();
 
         // add prefix to structure
-        addPrefixBlockToASN1(v);
+        addPrefixBlockToASN1(v,dt);
         // add inner message to structure
         addInnerMessageBlockToASN1(v,dt);
 
@@ -232,19 +230,24 @@ public class VortexMessage extends AbstractBlock {
         return seq;
     }
 
-    private void addPrefixBlockToASN1(ASN1EncodableVector v) throws IOException {
-        ASN1Encodable o=getPrefix().toASN1Object();
+    private void addPrefixBlockToASN1(ASN1EncodableVector v,DumpType dumpType) throws IOException {
+        ASN1Object o=getPrefix().toASN1Object(dumpType);
         if (o == null) {
             throw new IOException( "returned prefix object may not be null" );
         }
-        v.add( new DERTaggedObject( getPrefix().getDecryptionKey()==null? PrefixBlock.PLAIN_PREFIX: PrefixBlock.ENCRYPTED_PREFIX,o ));
+        if(dumpType==DumpType.ALL_UNENCRYPTED || getPrefix().getDecryptionKey()==null) {
+            v.add(new DERTaggedObject(PREFIX_PLAIN, o));
+        } else {
+            v.add(new DERTaggedObject(PREFIX_ENCRYPTED, new DEROctetString(getPrefix().toEncBytes())));
+        }
     }
 
     private void addInnerMessageBlockToASN1(ASN1EncodableVector v, DumpType dt) throws IOException {
         if(prefix.getKey()==null || DumpType.ALL_UNENCRYPTED.equals(dt)) {
-            v.add( new DERTaggedObject( InnerMessageBlock.PLAIN_MESSAGE,getInnerMessage().toASN1Object(dt) ));
+            v.add( new DERTaggedObject( INNER_MESSAGE_PLAIN,getInnerMessage().toASN1Object(dt) ));
         } else {
-            v.add( new DERTaggedObject( InnerMessageBlock.ENCRYPTED_MESSAGE,new DEROctetString( prefix.getKey().encrypt(getInnerMessage().toASN1Object(dt).getEncoded() ))));
+            byte[] b=toDER(getInnerMessage().toASN1Object(dt));
+            v.add( new DERTaggedObject( INNER_MESSAGE_ENCRYPTED,new DEROctetString( prefix.getKey().encrypt( b ))));
         }
     }
 
@@ -273,7 +276,7 @@ public class VortexMessage extends AbstractBlock {
         ret+=prefix+"  -- Dumping prefix"+CRLF;
         ret+=prefix+"  prefix " + getPrefix().dumpValueNotation( prefix + "  ",dt ) + "," + CRLF;
         ret+=prefix+"  -- Dumping innerMessage" + CRLF ;
-        ret+=prefix+"  innerMessage " + getInnerMessage().dumpValueNotation( prefix + "  ",DumpType.PUBLIC_ONLY.equals(dt)?this.prefix.getKey():null,dt ) + "," + CRLF;
+        ret+=prefix+"  innerMessage " + getInnerMessage().dumpValueNotation( prefix + "  ",dt ) + "," + CRLF;
         ret+=prefix+"}"+CRLF;
         return ret;
     }
@@ -331,6 +334,20 @@ public class VortexMessage extends AbstractBlock {
             ret|=((long)(b[i]&0xFF))<<(i*8);
         }
         return ret;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o==null) return false;
+        if(!(o instanceof VortexMessage)) {
+            return false;
+        }
+        VortexMessage vm=(VortexMessage)o;
+        try{
+            return Arrays.equals(vm.toBytes(DumpType.ALL_UNENCRYPTED),this.toBytes(DumpType.ALL_UNENCRYPTED));
+        } catch (IOException ioe) {
+            return false;
+        }
     }
 
 }

@@ -29,12 +29,12 @@ BEGIN
 
   VortexMessage ::= SEQUENCE {
     prefix        CHOICE {
-        plain           [10001] PrefixBlock,
-        encrypted       [10002] OCTET STRING -- contains prefix encrypted with receivers public key
+        plain           [10011] PrefixBlock,
+        encrypted       [10012] OCTET STRING -- contains prefix encrypted with receivers public key
     },
     innerMessage  CHOICE {
-        plain     [10011] InnerMessageBlock,
-        encrypted [10012] OCTET STRING -- contains inner message encrypted with Symmetric key from Prefix
+        plain     [10021] InnerMessageBlock,
+        encrypted [10022] OCTET STRING -- contains inner message encrypted with Symmetric key from Prefix
     }
   }
   
@@ -43,24 +43,27 @@ BEGIN
   }
   
   InnerMessageBlock ::= SEQUENCE {
-    padding   [11001] OCTET STRING,
+    padding   OCTET STRING,
     
-    prefix      [11002] CHOICE {
-        plain           [10001] PrefixBlock,
-        encrypted       [10002] OCTET STRING -- contains prefix encrypted with receivers public key
+    prefix    CHOICE {
+        plain           [11011] PrefixBlock,
+        encrypted       [11012] OCTET STRING -- contains prefix encrypted with receivers public key
     },
     
-    identity    [11003] IdentityBlock,
+    identity    {
+      plain     [11021] IdentityBlock ,
+      encyrpted [11022] OCTET STRING -- contains encrypted identity block
+    }
     identitySignature OCTET STRING,   -- contains signature of Identity [as stored in identityBlock;signed unencrypted identityBlock without Tag]
     
     -- contains routing information (next hop) for the payloads
-    routing     [11004] CHOICE {
-      plain     [11005] RoutingBlock ,
-      encyrpted [11006] OCTET STRING -- contains encrypted routing block
+    routing     CHOICE {
+      plain     [11031] SEQUENCE (SIZE (1..maxRoutingBlocks)) OF RoutingBlock ,
+      encyrpted [11032] OCTET STRING -- contains encrypted routing block
     },
     
     -- contains the actual payload
-    payload     [11005] SEQUENCE (SIZE (0..maxPayloadBlocks)) OF PayloadChunk  
+    payload     SEQUENCE (SIZE (0..maxPayloadBlocks)) OF PayloadChunk
   }
   
   IdentityBlock ::= SEQUENCE {
@@ -81,9 +84,6 @@ BEGIN
     -- prevents reassembly attack
     forwardSecret     ChainSecret,
     
-    -- the key to decrypt the routing block
-    routingBlockKey   SymmetricKey,
-    
     --  contains the MAC-Algorithm used for signing
     hash              MacAlgorithm,
     
@@ -100,35 +100,59 @@ BEGIN
   
     -- contains the next recipient in sequence
     recipient BlendingSpec,
-    -- contains the prefix to be used
-    prefix    PrefixBlock,
-    
-    -- contains the period when the payload should be processed 
+
+    -- contains the period when the payload should be processed
     -- Router might refuse to long queue retention
     -- Recommended support for retention >=1h
     minProcessTime INTEGER (0..maxDurationOfProcessing),
     maxProcessTime INTEGER (0..maxDurationOfProcessing),
     
+    -- contains the prefix to be used
+    identityPrefix    CHOICE {
+      plain             [331] SEQUENCE (SIZE (0..maxRoutingBlocks)) OF PrefixBlock,
+      encrypted         [332] SEQUENCE (SIZE (0..maxRoutingBlocks)) OF OCTET STRING
+    },
+
+    identity            CHOICE{
+        plain            [335] IdentityBlock,
+        encrypted        [336] OCTET STRING
+    },
+
+    routingPrefix    CHOICE {
+      plain             [331] SEQUENCE (SIZE (0..maxRoutingBlocks)) OF PrefixBlock,
+      encrypted         [332] SEQUENCE (SIZE (0..maxRoutingBlocks)) OF OCTET STRING
+    },
+
     -- routing blocks for the next operation
-    nextHop           SEQUENCE (SIZE (0..maxRoutingBlocks)) OF RoutingBlock,  
-    
+    nextHop           CHOICE {
+      plain             [333] SEQUENCE (SIZE (0..maxRoutingBlocks)) OF RoutingBlock,
+      encrypted         [334] SEQUENCE (SIZE (0..maxRoutingBlocks)) OF OCTET STRING
+    },
+
+    innerMessageKey     SymmetricKey,
+
     -- contains the secret of the identity block
     forwardSecret     ChainSecret,
     
     -- contains a routing block which may be used when sending error messages back to the quota owner
     -- this routing block may be cached for future use
-    replyBlock [131]   RoutingBlock OPTIONAL,
+    replyBlock [131]   SEQUENCE {
+         murb           RoutingBlock,
+         replay         INTEGER,
+         validity       UsagePeriod
+    } OPTIONAL,
     
     -- contains information for building replys (when used as MURB ID 1 denotes original message; ID 100-999 denotes target message)
     operations           [300] SEQUENCE (SIZE (0..255)) OF PayloadOperation,
     assembly             [301] SEQUENCE (SIZE (0..maxRoutingBlocks)) OF AssemblyBlock
     
   }
-  
-  AssemblyBlock ::= SEQUENCE {
-    routingBlockIndex   [13100] INTEGER (0..maxRoutingBlocks),
-    nextRoutingBlock    [13200] SEQUENCE (SIZE (1..maxPayloadBlocks)) OF INTEGER (0..maxID)
-  }
+
+   AssemblyBlock ::= SEQUENCE {
+      routingBlockIndex   [13100] INTEGER (0..maxRoutingBlocks),
+      nextRoutingBlock    [13200] SEQUENCE (SIZE (1..maxPayloadBlocks)) OF INTEGER (0..maxID)
+    }
+
   
   PayloadOperation ::= CHOICE {
     splitPayload    [150] SplitPayloadOperation, 
@@ -247,7 +271,7 @@ BEGIN
   -- At the moment either smtp:<email> or xmpp:<jabber>
   BlendingSpec ::= SEQUENCE {
     target            NodeSpec,
-    blendingType      IA5String, -- 'F5' or 'atttach' FIXME
+    blendingType      IA5String, -- 'F5' or 'atttach'
     parameter         SEQUENCE (SIZE (0..maxNumberOfParameter)) OF BlendingParameter
   }
   
@@ -329,8 +353,7 @@ BEGIN
   
   StatusBlock ::= SEQUENCE {
     code            StatusCode,
-    request         HeaderRequest,
-    ...
+    request         HeaderRequest
   }
   
   StatusCode ::= ENUMERATED {
@@ -411,12 +434,12 @@ BEGIN
     camellia256     (1102)
   }
   
-  CypherMode ::= ENUMERATED {
+  CipherMode ::= ENUMERATED {
     ecb             (1000),
     cbc             (1001)
   }
 
-  CypherPadding ::= ENUMERATED {
+  CipherPadding ::= ENUMERATED {
     pkcs7           (1000),
     pkcs1           (1001)
   }
@@ -442,26 +465,25 @@ BEGIN
   
   AlgorithmParameters ::= SEQUENCE {
     keySize              [10000] INTEGER (0..65535) OPTIONAL,
-    curveType            [10001] ECCurveType OPTIONAL,
-    initialisationVector [10002] OCTET STRING OPTIONAL,
-    nonce                [10003] OCTET STRING OPTIONAL,
-    mode                 [10004] OCTET STRING OPTIONAL,
-    padding              [10005] OCTET STRING OPTIONAL
+    curveType            [10001] ECCurveType   OPTIONAL,
+    initialisationVector [10002] OCTET STRING  OPTIONAL,
+    nonce                [10003] OCTET STRING  OPTIONAL,
+    mode                 [10004] CipherMode    OPTIONAL,
+    padding              [10005] CipherPadding OPTIONAL
   }
   
   -- Symmetric key
   SymmetricKey ::= SEQUENCE {
     keyType SymmetricAlgorithmIdentifier,
-	parameter AlgorithmParameters
-    key     OCTET STRING (SIZE(1..512)),
+	parameter AlgorithmParameters,
+    key     OCTET STRING (SIZE(1..512))
   }
   
   -- Asymmetric Key
   AsymmetricKey ::= SEQUENCE {
     keyType       AsymmetricAlgorithmIdentifier,
-	parameter     [1] AlgorithmParameters 
     publicKey     [2] OCTET STRING,
-    privateKey    [3] OCTET STRING OPTIONAL,
+    privateKey    [3] OCTET STRING OPTIONAL
   }
   
 END

@@ -21,6 +21,7 @@ package net.gwerder.java.messagevortex.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
+import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1Object;
 import org.bouncycastle.asn1.ASN1Primitive;
@@ -43,11 +44,13 @@ public class HeaderReply extends AbstractBlock {
         // FIXME
     }
 
-    public ASN1Object toASN1Object() throws IOException {
+    @Override
+    public ASN1Object toASN1Object(DumpType dumpType) throws IOException {
         throw new IOException( "not implemented" ); //FIXME
     }
 
-    public String dumpValueNotation(String prefix) {
+    @Override
+    public String dumpValueNotation(String prefix,DumpType dumpType) {
         StringBuilder sb=new StringBuilder();
         sb.append("-- FIXME unsuported dump of HeaderReply").append(CRLF);
         return sb.toString();

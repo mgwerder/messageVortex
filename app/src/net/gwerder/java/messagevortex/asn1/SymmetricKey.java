@@ -36,6 +36,7 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.util.Arrays;
 
 /**
  * Represents a Symmetric Key in the ASN.1 structure
@@ -46,11 +47,15 @@ public class SymmetricKey extends Key {
 
     protected byte[] key= null;
 
-    public SymmetricKey() throws IOException,NoSuchAlgorithmException {
+    public SymmetricKey() throws IOException {
         this(Algorithm.getDefault( AlgorithmType.SYMMETRIC ));
     }
 
-    public SymmetricKey(Algorithm sk ,Padding pad, Mode mode) throws IOException {
+    public SymmetricKey(Algorithm sk) throws IOException {
+        this(sk,Padding.getDefault( AlgorithmType.SYMMETRIC ),Mode.getDefault(AlgorithmType.SYMMETRIC));
+    }
+
+    public SymmetricKey(Algorithm sk , Padding pad, Mode mode) throws IOException {
         if(pad==null) {
             throw new NullPointerException("padding may not be null");
         }
@@ -67,10 +72,6 @@ public class SymmetricKey extends Key {
         } else {
             throw new IOException( "Algorithm "+sk+" is not encodable by the system" );
         }
-    }
-
-    public SymmetricKey(Algorithm sk) throws IOException {
-        this(sk,Padding.getDefault( AlgorithmType.SYMMETRIC ),Mode.getDefault(AlgorithmType.SYMMETRIC));
     }
 
     public SymmetricKey(byte[] sk) throws IOException {
@@ -174,7 +175,7 @@ public class SymmetricKey extends Key {
     public byte[] encrypt(byte[] b) throws IOException {
         try {
             Cipher c = getCipher();
-            SecretKeySpec ks = new SecretKeySpec( key, getAlgorithm().getAlgorithmFamily() );
+            SecretKeySpec ks = new SecretKeySpec( key, getAlgorithm().getAlgorithmFamily().toUpperCase() );
             if(getMode().getRequiresIV()) {
                 setIV( getIV() );
                 c.init( Cipher.ENCRYPT_MODE, ks, new IvParameterSpec( getIV()) );
@@ -185,7 +186,7 @@ public class SymmetricKey extends Key {
         } catch (NoSuchAlgorithmException|NoSuchPaddingException|IllegalBlockSizeException|BadPaddingException e) {
             throw new IOException( "Exception while encrypting", e );
         } catch (InvalidKeyException e) {
-            throw new IOException( "Exception while init of cipher", e );
+            throw new IOException( "Exception while init of cipher [possible limmited JCE installed] ("+getParameter()+"/"+getIV().length+"/"+(key.length*8)+")", e );
         } catch (InvalidAlgorithmParameterException e) {
             throw new IOException( "Exception while encrypting ("+getAlgorithm().getAlgorithmFamily()+"/"+getIV().length+")", e );
         }
@@ -230,9 +231,9 @@ public class SymmetricKey extends Key {
     }
 
     @Override
-    public ASN1Object toASN1Object() throws IOException {
+    public ASN1Object toASN1Object(DumpType dumpType) throws IOException {
         ASN1EncodableVector ret = new ASN1EncodableVector();
-        ret.add(encodeKeyParameter());
+        ret.add(encodeKeyParameter(dumpType));
         ret.add(new DEROctetString( key ));
         return new DERSequence(ret);
     }
@@ -250,21 +251,33 @@ public class SymmetricKey extends Key {
 
         // compare  keys
         SymmetricKey o=(SymmetricKey)t;
-        return o.dumpValueNotation("").equals(dumpValueNotation(""));
+        return o.dumpValueNotation("",DumpType.ALL_UNENCRYPTED).equals(dumpValueNotation("",DumpType.ALL_UNENCRYPTED));
    }
 
     @Override
     public int hashCode() {
-        return dumpValueNotation("").hashCode();
+        return dumpValueNotation("",DumpType.ALL_UNENCRYPTED).hashCode();
     }
 
-    public String dumpValueNotation(String prefix) {
+    @Override
+    public String dumpValueNotation(String prefix,DumpType dumpType) {
         StringBuilder sb=new StringBuilder();
         sb.append("{"+CRLF);
-        sb.append(dumpKeyTypeValueNotation(prefix)+CRLF);
+        sb.append(dumpKeyTypeValueNotation(prefix+"  ",dumpType)+","+CRLF);
         sb.append(prefix+"  key "+toHex(key)+CRLF);
         sb.append(prefix+"}");
         return sb.toString();
     }
+
+    /***
+     * Gets a textual representation of the objects parameters (without the keys)
+     * @return the string
+     */
+    @Override
+    public String toString() {
+        return "([SymmetricKey]hash="+(key!=null? Arrays.hashCode(key):"null")+";"+parameters.toString()+")";
+    }
+
+
 
 }

@@ -21,6 +21,7 @@ package net.gwerder.java.messagevortex.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
+import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
@@ -30,26 +31,43 @@ import java.util.Date;
 import java.util.TimeZone;
 
 /**
- * Created by martin.gwerder on 19.04.2016.
+ * Represents a usage period.
  */
 public class UsagePeriod extends AbstractBlock {
 
     public static final int TAG_NOT_BEFORE =0;
     public static final int TAG_NOT_AFTER  =1;
 
-    protected Date notBefore =null;
-    protected Date notAfter  =null;
+    protected Date notBefore ;
+    protected Date notAfter  ;
 
+    /***
+     * Creates a new object valid from this point in time for a duration of the specified amount of seconds.
+     *
+     * @param seconds The number of seconds to be valid
+     */
     public UsagePeriod(long seconds) {
         notBefore= new Date();
         notAfter = new Date( notBefore.getTime()+seconds*1000L);
     }
 
+    /***
+     * Creates a new object by parsing the passed ASN.1 byte stream.
+     *
+     * @param b            the stream to be parsed
+     * @throws IOException if parsing fails
+     */
     public UsagePeriod(byte[] b) throws IOException {
         ASN1InputStream aIn=new ASN1InputStream( b );
         parse(aIn.readObject());
     }
 
+    /***
+     * Creates a new object by parsing the passed ASN.1 object.
+     *
+     * @param to           the stream to be parsed
+     * @throws IOException if parsing fails
+     */
     public UsagePeriod(ASN1Encodable to) throws IOException {
         parse(to);
     }
@@ -76,28 +94,51 @@ public class UsagePeriod extends AbstractBlock {
         }
     }
 
+    /***
+     * Gets the start of validity.
+     *
+     * @return the currently set start of the validity
+     */
     public Date getNotBefore() {
-        return notBefore;
+        return (Date)notBefore.clone();
     }
 
-    public Date getNotAfter() {
-        return notAfter;
-    }
-
-    public Date setNotBefore(Date d) {
+    /***
+     * Sets the start date of validity.
+     *
+     * @param validityStart the new point in time to be set as start for the validity
+     * @return              the previously set point in time
+     */
+    public Date setNotBefore(Date validityStart) {
         Date d2=notBefore;
-        notBefore=d;
+
+        notBefore=(Date)validityStart.clone();
         return d2;
     }
 
-    public Date setNotAfter(Date d) {
+    /***
+     * Gets the date of expiry
+     *
+     * @return the currently set date of expiry
+     */
+    public Date getNotAfter() {
+        return (Date)notAfter.clone();
+    }
+
+    /***
+     * Sets the Date for expiriy of the validity
+     *
+     * @param pointInTime  the new date to be set
+     * @return             the previously set date
+     */
+    public Date setNotAfter(Date pointInTime) {
         Date d2=notAfter;
-        notAfter=d;
+        notAfter=(Date)pointInTime.clone();
         return d2;
     }
 
     @Override
-    public ASN1Object toASN1Object() {
+    public ASN1Object toASN1Object(DumpType dumpType) {
         ASN1EncodableVector v = new ASN1EncodableVector();
         if(notBefore!=null) {
             v.add( new DERTaggedObject( true,TAG_NOT_BEFORE,new DERGeneralizedTime( notBefore ) ) );
@@ -108,7 +149,14 @@ public class UsagePeriod extends AbstractBlock {
         return new DERSequence(v);
     }
 
-    public String dumpValueNotation(String prefix) {
+    /***
+     * Dumps the object as ASN.1 value notation.
+     *
+     * @param prefix  the prefix to be prepended in front of each line
+     * @return        the string representation of the object
+     */
+    @Override
+    public String dumpValueNotation(String prefix,DumpType dumpType) {
         StringBuilder sb=new StringBuilder();
         sb.append("{"+CRLF);
         final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddkkmmss");
@@ -121,6 +169,14 @@ public class UsagePeriod extends AbstractBlock {
         }
         sb.append(prefix+"}");
         return sb.toString();
+    }
+
+    @Override
+    public UsagePeriod clone() {
+        UsagePeriod ret=new UsagePeriod(0);
+        ret.notAfter=notAfter;
+        ret.notBefore=notBefore;
+        return ret;
     }
 
 }

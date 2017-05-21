@@ -24,6 +24,7 @@ package net.gwerder.java.messagevortex.blending;
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.asn1.BlendingSpec;
 import net.gwerder.java.messagevortex.asn1.VortexMessage;
+import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import net.gwerder.java.messagevortex.transport.DummyTransport;
 import net.gwerder.java.messagevortex.transport.TransportListener;
 
@@ -58,7 +59,7 @@ public class DummyBlender extends AbstractBlender implements TransportListener {
     public boolean blendMessage(BlendingSpec target, VortexMessage msg) {
         // FIXME encode message in clear readable and send it
         try {
-            return transport.sendMessage(target.getBlendingEndpointAddress(), new ByteArrayInputStream(msg.toBytes()));
+            return transport.sendMessage(target.getRecipientAddress(), new ByteArrayInputStream(msg.toBytes(DumpType.PUBLIC_ONLY)));
         } catch(IOException ioe) {
             LOGGER.log(Level.SEVERE,"Unable to send to transport endpoint "+target.toString(),ioe);
             return false;
