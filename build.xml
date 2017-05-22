@@ -12,6 +12,7 @@
   <property name="dist.home"     value="${basedir}/app/dist"/>
   <property name="doc.home"      value="${basedir}/doc"/>
   <property name="src.home"      value="${basedir}/app/src"/>
+  <property name="testsrc.home"  value="${basedir}/app/test"/>
   <property name="rtlib.home"    value="${basedir}/app/rtlib"/>
   <property name="app.source"    value="1.7"/>
   <property name="app.target"    value="1.7"/>
@@ -67,7 +68,7 @@
       <fileset dir="${src.home}/" excludes="**/Version.java **/test/**/*.java **/test/*.java"/>
     </copy>
     <copy  todir="${build.home}/testsrc/">
-      <fileset dir="${src.home}/" includes="**/test/*.java **/test/**/*.java"/>
+      <fileset dir="${testsrc.home}/" includes="**/test/*.java **/test/**/*.java"/>
     </copy>
 
     <mkdir dir="${build.home}/classes/${app.path}/images"/>
@@ -138,66 +139,66 @@
   </target>
 
   <target name="test" depends="compile"  description="test application">
-  <taskdef classpathref="test.classpath" resource="tasks.properties" />
-  <delete file="${build.home}/cobertura.ser" />
-  <cobertura-instrument todir="${build.home}/cobertura" datafile="${build.home}/cobertura.ser">
-    <includeclasses regex="net\.gwerder\.java.*" />
-    <excludeclasses regex="net\.gwerder\.java.*\.test\..*" />
-    <excludeclasses regex=".*Test.*" />
-    <instrumentationClasspath>
-      <pathelement location="${build.home}/classes" />
-    </instrumentationClasspath>
-  </cobertura-instrument>
+    <taskdef classpathref="test.classpath" resource="tasks.properties" />
+    <delete file="${build.home}/cobertura.ser" />
+    <cobertura-instrument todir="${build.home}/cobertura" datafile="${build.home}/cobertura.ser">
+      <includeclasses regex="net\.gwerder\.java.*" />
+      <excludeclasses regex="net\.gwerder\.java.*\.test\..*" />
+      <excludeclasses regex=".*Test.*" />
+      <instrumentationClasspath>
+        <pathelement location="${build.home}/classes" />
+      </instrumentationClasspath>
+    </cobertura-instrument>
 
-  <mkdir dir='${build.home}/testsrc'/>
+    <mkdir dir='${build.home}/testsrc'/>
     <junit  fork="yes" haltonfailure="yes" dir="${build.home}/classes/"> <!-- showoutput="yes" printsummary="withOutAndErr" -->
-        <sysproperty key="net.sourceforge.cobertura.datafile" file="${build.home}/cobertura.ser" />
-        <classpath refid="test.classpath"/>
-        <test name="${app.package}.test.MainCoreSuite" todir="${build.home}/testsrc" outfile="TEST-MainSuite"/>
-        <test name="${app.package}.test.MainIMAPSuite" todir="${build.home}/testsrc" outfile="TEST-IMAPSuite"/>
-        <test name="${app.package}.test.MainASN1Suite" todir="${build.home}/testsrc" outfile="TEST-ASN1Suite"/>
-        <test name="${app.package}.test.MainRoutingSuite" todir="${build.home}/testsrc" outfile="TEST-RoutingSuite"/>
-        <test name="${app.package}.test.MainBlenderSuite" todir="${build.home}/testsrc" outfile="TEST-BlenderSuite"/>
-        <test name="${app.package}.test.MainTransportSuite" todir="${build.home}/testsrc" outfile="TEST-TransportSuite"/>
-        <test name="${app.package}.test.MainAccountingSuite" todir="${build.home}/testsrc" outfile="TEST-AccountingSuite"/>
-        <formatter type="xml"/>
-        <formatter type="plain" usefile="false"/>
+          <sysproperty key="net.sourceforge.cobertura.datafile" file="${build.home}/cobertura.ser" />
+          <classpath refid="test.classpath"/>
+          <test name="${app.package}.test.MainCoreSuite" todir="${build.home}/testsrc" outfile="TEST-MainSuite"/>
+          <test name="${app.package}.test.MainIMAPSuite" todir="${build.home}/testsrc" outfile="TEST-IMAPSuite"/>
+          <test name="${app.package}.test.MainASN1Suite" todir="${build.home}/testsrc" outfile="TEST-ASN1Suite"/>
+          <test name="${app.package}.test.MainRoutingSuite" todir="${build.home}/testsrc" outfile="TEST-RoutingSuite"/>
+          <test name="${app.package}.test.MainBlenderSuite" todir="${build.home}/testsrc" outfile="TEST-BlenderSuite"/>
+          <test name="${app.package}.test.MainTransportSuite" todir="${build.home}/testsrc" outfile="TEST-TransportSuite"/>
+          <test name="${app.package}.test.MainAccountingSuite" todir="${build.home}/testsrc" outfile="TEST-AccountingSuite"/>
+          <formatter type="xml"/>
+          <formatter type="plain" usefile="false"/>
     </junit>
 
     <mkdir dir='${doc.home}/cobertura'/>
-  <cobertura-report format="xml" destdir="${build.home}/testsrc"  datafile="${build.home}/cobertura.ser">
-    <fileset dir="${build.home}/src">
-      <include name="**/*.java" />
-    </fileset>
-  </cobertura-report>
-  <cobertura-report format="html" destdir="${doc.home}/cobertura"  datafile="${build.home}/cobertura.ser">
-    <fileset dir="${build.home}/src">
-      <include name="**/*.java" />
-    </fileset>
-  </cobertura-report>
+    <cobertura-report format="xml" destdir="${build.home}/testsrc"  datafile="${build.home}/cobertura.ser">
+      <fileset dir="${build.home}/src">
+        <include name="**/*.java" />
+      </fileset>
+    </cobertura-report>
+    <cobertura-report format="html" destdir="${doc.home}/cobertura"  datafile="${build.home}/cobertura.ser">
+      <fileset dir="${build.home}/src">
+        <include name="**/*.java" />
+      </fileset>
+    </cobertura-report>
 
     <taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask">
-        <classpath>
-            <fileset dir="${basedir}/lib/pmd-bin-5.3.7/lib" includes="*.jar"/>
-        </classpath>
+          <classpath>
+              <fileset dir="${basedir}/lib/pmd-bin-5.3.7/lib" includes="*.jar"/>
+          </classpath>
     </taskdef>
     <pmd shortFilenames="true">
-        <sourceLanguage name="java" version="1.7"/>
-        <ruleset>rulesets/java/design.xml</ruleset>
-        <ruleset>java-basic</ruleset>
-        <formatter type="html" toFile="${build.home}/pmd_report.html">
-            <!--<param name="linkPrefix" value="http://pmd.sourceforge.net/xref/"/>-->
-        </formatter>
-        <formatter type="xml" toFile="${build.home}/pmd_report.xml">
-            <!--<param name="linkPrefix" value="http://pmd.sourceforge.net/xref/"/>-->
-        </formatter>
-        <fileset dir="${build.home}/src">
-            <include name="**/*.java"/>
-        </fileset>
+          <sourceLanguage name="java" version="1.7"/>
+          <ruleset>rulesets/java/design.xml</ruleset>
+          <ruleset>java-basic</ruleset>
+          <formatter type="html" toFile="${build.home}/pmd_report.html">
+              <!--<param name="linkPrefix" value="http://pmd.sourceforge.net/xref/"/>-->
+          </formatter>
+          <formatter type="xml" toFile="${build.home}/pmd_report.xml">
+              <!--<param name="linkPrefix" value="http://pmd.sourceforge.net/xref/"/>-->
+          </formatter>
+          <fileset dir="${build.home}/src">
+              <include name="**/*.java"/>
+          </fileset>
     </pmd>
 
-  <!--- directories for sonar build -->
-  <mkdir dir='${basedir}/target'/>
+    <!--- directories for sonar build -->
+    <mkdir dir='${basedir}/target'/>
     <mkdir dir='${basedir}/target/sonar'/>
 
   </target>
@@ -395,7 +396,7 @@
     <tstamp/>
     <mkdir  dir="${build.home}"/>
     <mkdir  dir="${build.home}/src"/>
-    <mkdir  dir="${build.home}/src"/>
+    <mkdir  dir="${build.home}/testsrc"/>
     <mkdir  dir="${build.home}/classes"/>
     <mkdir  dir="${build.home}/classes/logs"/>
     <mkdir  dir="${build.home}/cobertura"/>
