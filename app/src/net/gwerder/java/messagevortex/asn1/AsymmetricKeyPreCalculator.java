@@ -218,11 +218,13 @@ class AsymmetricKeyPreCalculator implements Serializable {
 
     private static void attachLog(String msg) {
         synchronized(log) {
-            if(log.size()>0 && log.get(log.size()-1).getMessage().equals(msg)) {
+            if(!log.isEmpty() && log.get(log.size()-1).getMessage().equals(msg)) {
                 log.get(log.size()-1).incrementNumberOfCalls();
                 log.get(log.size()-1).setTimestamp(null);
             } else {
-                while(log.size()>10) log.remove(0);
+                while(log.size()>10) {
+                    log.remove(0);
+                }
                 log.add(log.size(),new LastCalculated(msg));
             }
         }
@@ -238,7 +240,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
 
     public static AsymmetricKey getPrecomputedAsymmetricKey(AlgorithmParameter parameters) {
 
-        AlgorithmParameter ap=prepareParameters(parameters.clone());
+        AlgorithmParameter ap=prepareParameters(parameters);
 
         synchronized (cache) {
             if (filename == null && runner != null && !runner.isAlive()) {
@@ -261,7 +263,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
                     cache.put(ap, new ArrayDeque<AsymmetricKey>());
                     LOGGER.log(Level.FINE, "added new key type to cache");
                     return null;
-                } else if (cache.get(ap).size() == 0) {
+                } else if (cache.get(ap).isEmpty()) {
                     // this cache is too small as it is empty increase up to 100 storage places
                     cacheSize.put(ap, Math.min(400, cacheSize.get(ap) + 1));
                     LOGGER.log(Level.FINE, "cache underrun ... increased key type " + ap.get(Parameter.ALGORITHM) + "/" + ap.get(Parameter.KEYSIZE) + " cache to " + cacheSize.get(ap));
@@ -294,13 +296,13 @@ class AsymmetricKeyPreCalculator implements Serializable {
         AlgorithmParameter ret=ap.clone();
 
         // clear IV parameters as they are not relevant
-        ap.put(Parameter.IV,null);
+        ret.put(Parameter.IV,null);
 
         // make sure that padding and mode are on default
-        ap.put(Parameter.PADDING, Padding.getDefault(AlgorithmType.ASYMMETRIC).toString());
-        ap.put(Parameter.MODE, Mode.getDefault(AlgorithmType.ASYMMETRIC).toString());
+        ret.put(Parameter.PADDING, Padding.getDefault(AlgorithmType.ASYMMETRIC).toString());
+        ret.put(Parameter.MODE, Mode.getDefault(AlgorithmType.ASYMMETRIC).toString());
 
-        return ap;
+        return ret;
     }
 
     /***
@@ -316,10 +318,8 @@ class AsymmetricKeyPreCalculator implements Serializable {
         }
 
         // check if there is a dead runner
-        if(filename==null && runner!=null) {
-            if(!runner.isAlive()) {
-                runner=null;
-            }
+        if(filename==null && runner!=null && !runner.isAlive()) {
+            runner=null;
         }
 
         // abort if there is a dying runner
@@ -416,7 +416,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
             LOGGER.log(Level.INFO, sepLine);
             LOGGER.log(Level.INFO, "| Total: "+sum+"/"+tot);
             synchronized(log) {
-                if(log.size()>0) {
+                if(!log.isEmpty()) {
                     LOGGER.log(Level.INFO, sepLine);
                     for(LastCalculated l:log) {
                         LOGGER.log(Level.INFO, "| "+l.toString());

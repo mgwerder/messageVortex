@@ -123,11 +123,8 @@ public class AsymmetricKey extends Key {
             throw new IOException( "Algorithm null is not encodable by the system" );
         }
 
-        try {
-            createKey(allowPrecalculated);
-        } catch (NoSuchAlgorithmException | NoSuchProviderException | InvalidAlgorithmParameterException | InvalidParameterSpecException e) {
-            throw new IOException( "Exception while creating key", e );
-        }
+        createKey(allowPrecalculated);
+
         selftest();
     }
 
@@ -141,7 +138,7 @@ public class AsymmetricKey extends Key {
         }
     }
 
-    private void createKey(boolean allowPrecomputed) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidAlgorithmParameterException, InvalidParameterSpecException {
+    private void createKey(boolean allowPrecomputed) throws IOException {
         // Selfcheck
         assert parameters!=null;
         Algorithm alg=Algorithm.getByString(parameters.get(Parameter.ALGORITHM));
@@ -160,29 +157,48 @@ public class AsymmetricKey extends Key {
         }
         // create key pair
         if("RSA".equals(alg.name()) ) {
-            int keySize=getKeySize();
-            KeyPairGenerator keyGen = KeyPairGenerator.getInstance(alg.toString(),alg.getProvider());
+            createRSAKey();
+        } else if (alg==Algorithm.EC) {
+            createECKey();
+        } else {
+            throw new IOException("Encountered unsupported algorithm \""+alg.toString()+"\"");
+        }
+    }
+
+    private void createRSAKey() throws IOException {
+        Algorithm alg=Algorithm.getByString(parameters.get(Parameter.ALGORITHM));
+        try {
+            int keySize = getKeySize();
+            KeyPairGenerator keyGen = KeyPairGenerator.getInstance(alg.toString(), alg.getProvider());
             keyGen.initialize(keySize);
             KeyPair pair;
             try {
                 pair = keyGen.genKeyPair();
             } catch (IllegalStateException ise) {
-                throw new IllegalStateException( "unable to generate keys with " + alg.toString() + "/" + parameters.get(Parameter.MODE) + "/" + parameters.get(Parameter.PADDING) + " (size "+keySize+")", ise );
+                throw new IllegalStateException("unable to generate keys with " + alg.toString() + "/" + parameters.get(Parameter.MODE) + "/" + parameters.get(Parameter.PADDING) + " (size " + keySize + ")", ise);
             }
-            publicKey  = pair.getPublic().getEncoded();
+            publicKey = pair.getPublic().getEncoded();
             privateKey = pair.getPrivate().getEncoded();
-        } else if (alg==Algorithm.EC) {
-            if(parameters.get(Parameter.CURVETYPE)==null) {
-                throw new NoSuchAlgorithmException( "curve type is not set" );
+        } catch(NoSuchAlgorithmException|NoSuchProviderException e) {
+            throw new IOException("Exception while generating key pair",e);
+        }
+    }
+
+
+    private void createECKey() throws IOException {
+        Algorithm alg=Algorithm.getByString(parameters.get(Parameter.ALGORITHM));
+        try {
+            if (parameters.get(Parameter.CURVETYPE) == null) {
+                throw new IOException("curve type is not set");
             }
-            ECParameterSpec ecpara = ECNamedCurveTable.getParameterSpec( parameters.get(Parameter.CURVETYPE) );
-            KeyPairGenerator g = KeyPairGenerator.getInstance( alg.getAlgorithmFamily(), "BC" );
-            g.initialize( ecpara, esr.getSecureRandom() );
+            ECParameterSpec ecpara = ECNamedCurveTable.getParameterSpec(parameters.get(Parameter.CURVETYPE));
+            KeyPairGenerator g = KeyPairGenerator.getInstance(alg.getAlgorithmFamily(), "BC");
+            g.initialize(ecpara, esr.getSecureRandom());
             KeyPair pair = g.generateKeyPair();
-            publicKey  = pair.getPublic().getEncoded();
+            publicKey = pair.getPublic().getEncoded();
             privateKey = pair.getPrivate().getEncoded();
-        } else {
-            throw new NoSuchAlgorithmException("Encountered unsupported algorithm \""+alg.toString()+"\"");
+        } catch(InvalidAlgorithmParameterException|NoSuchAlgorithmException|NoSuchProviderException e) {
+            throw new IOException("Exception while initializing key generation",e);
         }
     }
 
