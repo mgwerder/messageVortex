@@ -6,10 +6,10 @@ import net.gwerder.java.messagevortex.asn1.encryption.Mode;
 import net.gwerder.java.messagevortex.asn1.encryption.Padding;
 import net.gwerder.java.messagevortex.asn1.encryption.Parameter;
 
-import javax.swing.text.html.parser.Entity;
 import java.io.*;
-import java.nio.file.*;
-import java.security.AlgorithmParameters;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -39,7 +39,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
                     // force saving of cache on shutdown
                     lastSaved=-1;
                     save();
-                } catch(IOException|RuntimeException|ClassNotFoundException ioe) {
+                } catch(IOException |RuntimeException|ClassNotFoundException ioe) {
                     LOGGER.log(Level.WARNING,"Error while writing cache",ioe);
                 }
             }

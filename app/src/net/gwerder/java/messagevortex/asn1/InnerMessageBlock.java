@@ -25,7 +25,6 @@ package net.gwerder.java.messagevortex.asn1;
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.asn1.encryption.Algorithm;
 import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
-import net.gwerder.java.messagevortex.asn1.encryption.Padding;
 import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
@@ -33,7 +32,7 @@ import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Vector;
+import java.util.List;
 import java.util.logging.Level;
 
 /***
@@ -160,7 +159,7 @@ public class InnerMessageBlock extends AbstractBlock {
         }
 
         // getting payload blocks
-        Vector<PayloadChunk> p2=new Vector<PayloadChunk>();
+        List<PayloadChunk> p2=new ArrayList<PayloadChunk>();
         for (Iterator<ASN1Encodable> iter= ASN1Sequence.getInstance( s1.getObjectAt( i++ ) ).iterator(); iter.hasNext(); ) {
             ASN1Encodable tr = iter.next();
             p2.add(new PayloadChunk(tr));

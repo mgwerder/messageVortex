@@ -31,9 +31,10 @@ public class MessageFactoryTest {
 
     static {
         LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-        MessageVortexLogger.setGlobalLogLevel( Level.ALL);
+        MessageVortexLogger.setGlobalLogLevel(Level.ALL);
 
-        AsymmetricKey.setDequeueProbability(0.02);
+        // Danger: any other value than 1 messes up demo store creation
+        AsymmetricKey.setDequeueProbability(1);
     }
 
     @Test

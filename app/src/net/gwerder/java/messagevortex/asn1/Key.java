@@ -25,7 +25,6 @@ import net.gwerder.java.messagevortex.asn1.encryption.Algorithm;
 import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import net.gwerder.java.messagevortex.asn1.encryption.Parameter;
 import org.bouncycastle.asn1.*;
-import org.bouncycastle.asn1.util.Dump;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import java.io.IOException;

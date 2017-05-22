@@ -25,11 +25,8 @@ import net.gwerder.java.messagevortex.asn1.encryption.Block;
 import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.*;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
-import java.security.NoSuchAlgorithmException;
-import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

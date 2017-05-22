@@ -33,8 +33,6 @@ import java.util.logging.Level;
  * This is the core of the redundancy add operation.
  *
  * It builds redundant data blocksfrom the existing data blocks.
- *
- * FIXME add encryption
  */
 public class AddRedundancy extends AbstractOperation {
 

@@ -59,7 +59,7 @@ public abstract class AbstractRedundancyOperation extends Operation {
     /* constructor */
     public AbstractRedundancyOperation(int inputId, int dataStripes, int redundancy, List<SymmetricKey> keys, int newFirstId, int gfSize) {
         this.inputId = inputId;
-        this.gfSize=gfSize;
+        setGFSize(gfSize);
         setDataStripes(dataStripes);
         setRedundancy(redundancy);
         setKeys(keys);
