@@ -33,7 +33,7 @@ import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Vector;
 import java.util.logging.Level;
 
 /***
@@ -59,7 +59,7 @@ public class InnerMessageBlock extends AbstractBlock {
     private IdentityBlock identity;
     private byte[] identitySignature=null;
     private RoutingBlock routing;
-    private PayloadChunk[] payload;
+    private PayloadChunk[] payload=new PayloadChunk[0];
 
     private static final java.util.logging.Logger LOGGER;
     static {
@@ -79,11 +79,9 @@ public class InnerMessageBlock extends AbstractBlock {
         this.prefix=prefix;
         identity=i;
         this.routing=routing;
-        payload=new PayloadChunk[0];
     }
 
     public InnerMessageBlock(byte[] b,AsymmetricKey decryptionKey) throws IOException {
-        this(null,null,null);
         parse( b,decryptionKey );
     }
 
@@ -162,7 +160,7 @@ public class InnerMessageBlock extends AbstractBlock {
         }
 
         // getting payload blocks
-        List<PayloadChunk> p2=new ArrayList<>();
+        Vector<PayloadChunk> p2=new Vector<PayloadChunk>();
         for (Iterator<ASN1Encodable> iter= ASN1Sequence.getInstance( s1.getObjectAt( i++ ) ).iterator(); iter.hasNext(); ) {
             ASN1Encodable tr = iter.next();
             p2.add(new PayloadChunk(tr));

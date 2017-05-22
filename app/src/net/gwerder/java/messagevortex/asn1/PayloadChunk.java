@@ -23,23 +23,34 @@ package net.gwerder.java.messagevortex.asn1;
 
 import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.*;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.IOException;
 
 public class PayloadChunk extends AbstractBlock {
+    private enum PayloadType {
+        /* ASN1 tag number for a contained payload */
+        PAYLOAD(100),
+        /* ASN1 tag number for a contained reply block */
+        REPLY(101);
 
-    /* ASN1 tag number for a contained payload */
-    public static final int PAYLOAD = 100;
-    /* ASN1 tag number for a contained reply block */
-    public static final int REPLY   = 101;
+        private final int id;
+
+        PayloadType(int id) {
+            this.id=id;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+    }
 
     /* the minimum required id in order to allow dumping to der */
     public static final int MIN_VALID_ID = 100;
 
     int    id = 0;
     byte[] payload=null;
-    int    payloadType = PAYLOAD;
+    PayloadType payloadType = PayloadType.PAYLOAD;
 
     /***
      * Creates an empty payload block.
@@ -47,7 +58,7 @@ public class PayloadChunk extends AbstractBlock {
     public PayloadChunk() {
         id=0;
         payload=new byte[0];
-        payloadType=-1;
+        payloadType=PayloadType.PAYLOAD;
     }
 
     /***
@@ -76,10 +87,10 @@ public class PayloadChunk extends AbstractBlock {
         }
         v.add( new ASN1Integer( id ) );
 
-        if(payloadType==PAYLOAD) {
-            v.add(new DERTaggedObject(true, PAYLOAD, new DEROctetString(payload)));
-        } else if(payloadType==REPLY) {
-            v.add(new DERTaggedObject(true, REPLY, new DEROctetString(payload)));
+        if(payloadType==PayloadType.PAYLOAD) {
+            v.add(new DERTaggedObject(true, PayloadType.PAYLOAD.getId(), new DEROctetString(payload)));
+        } else if(payloadType==PayloadType.REPLY) {
+            v.add(new DERTaggedObject(true, PayloadType.REPLY.getId(), new DEROctetString(payload)));
         } else {
             throw new IOException( "unable to dump payload block as payload and reply are empty" );
         }
@@ -95,7 +106,7 @@ public class PayloadChunk extends AbstractBlock {
     public byte[] setPayload(byte[] b) {
         byte[] opl=payload;
         payload=b;
-        payloadType=PAYLOAD;
+        payloadType=PayloadType.PAYLOAD;
         return opl;
     }
 
@@ -105,7 +116,7 @@ public class PayloadChunk extends AbstractBlock {
      * @return the payload as byte array or null if a replyblock has been set
      */
     public byte[] getPayload() {
-        if(payloadType!=PAYLOAD) {
+        if(payloadType!=PayloadType.PAYLOAD) {
             return null;
         }
         if(payload==null) {
@@ -124,7 +135,7 @@ public class PayloadChunk extends AbstractBlock {
     public byte[] setReplyBlock(byte[] reply) throws IOException{
         byte[] opl=payload;
         payload=reply;
-        payloadType=REPLY;
+        payloadType=PayloadType.REPLY;
         return opl;
     }
 
@@ -134,7 +145,7 @@ public class PayloadChunk extends AbstractBlock {
      * @return the reply block as byte array or null if a payload block has been set
      */
     public byte[] getReplyBlock() {
-        if(payloadType!=REPLY) {
+        if(payloadType!=PayloadType.REPLY) {
             return null;
         }
         return payload.clone();
@@ -147,12 +158,12 @@ public class PayloadChunk extends AbstractBlock {
         id=ASN1Integer.getInstance( s1.getObjectAt(i++)).getValue().intValue();
 
         ASN1TaggedObject dto=ASN1TaggedObject.getInstance( s1.getObjectAt(i++) );
-        if(dto.getTagNo()==PAYLOAD) {
+        if(dto.getTagNo()==PayloadType.PAYLOAD.getId()) {
             setPayload(ASN1OctetString.getInstance( dto.getObject() ).getOctets());
-        } else if(dto.getTagNo()==REPLY) {
+        } else if(dto.getTagNo()==PayloadType.REPLY.getId()) {
                 setReplyBlock(ASN1OctetString.getInstance( dto.getObject() ).getOctets());
         } else {
-            throw new IOException( "got bad tag number (expected:"+REPLY+" or "+PAYLOAD+";got:"+dto.getTagNo()+")" );
+            throw new IOException( "got bad tag number (expected:"+PayloadType.REPLY.getId()+" or "+PayloadType.PAYLOAD.getId()+";got:"+dto.getTagNo()+")" );
         }
     }
 
@@ -191,12 +202,12 @@ public class PayloadChunk extends AbstractBlock {
         sb.append(" {"+CRLF);
         sb.append(prefix+"  id "+id+","+CRLF);
         sb.append(prefix+"  content ");
-        if(payloadType==PAYLOAD) {
+        if(payloadType==PayloadType.PAYLOAD) {
             sb.append("payload " + toHex(payload) + CRLF);
-        } else if(payloadType==REPLY) {
+        } else if(payloadType==PayloadType.REPLY) {
             sb.append("reply " + toHex(payload) + CRLF);
         } else {
-            throw new IOException( "unable to determine payload type (expected:"+REPLY+" or "+PAYLOAD+";got:"+payloadType+")" );
+            throw new IOException( "unable to determine payload type (expected:"+PayloadType.REPLY.getId()+" or "+PayloadType.PAYLOAD.getId()+";got:"+payloadType+")" );
         }
         sb.append(prefix+"}");
         return sb.toString();
