@@ -245,7 +245,7 @@ public class InternalPayload {
         // check for conflicting operations
         for( int id:op.getOutputID()) {
             if(internalOperationOutput.get(id)!=null) {
-                LOGGER.log(Level.WARNING,"addin of operation "+op.toString()+" due to conflicting outputs");
+                LOGGER.log(Level.WARNING,"addin of operation "+op.toString()+" due to conflicting outputs (conflicting op is:"+internalOperationOutput.get(id).toString()+")");
                 return false;
             }
         }
@@ -278,6 +278,14 @@ public class InternalPayload {
             return false;
         }
 
+        compactExpiredOperations();
+
+        compactExpiredPayloads();
+
+        return true;
+    }
+
+    private void compactExpiredOperations() {
         // remove expired operations
         synchronized(operations) {
             List<Operation> ops=new ArrayList<>();
@@ -291,7 +299,9 @@ public class InternalPayload {
                 deregisterOperation(op);
             }
         }
+    }
 
+    private void compactExpiredPayloads() {
         // remove expired payloads
         synchronized(internalPayload) {
 
@@ -325,7 +335,6 @@ public class InternalPayload {
                 }
             }
         }
-        return true;
     }
 
 }
