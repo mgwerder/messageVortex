@@ -34,7 +34,6 @@ import javax.crypto.NoSuchPaddingException;
 import java.io.IOException;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
-import java.security.spec.InvalidParameterSpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
@@ -167,18 +166,16 @@ public class AsymmetricKey extends Key {
 
     private void createRSAKey() throws IOException {
         Algorithm alg=Algorithm.getByString(parameters.get(Parameter.ALGORITHM));
+        int keySize = getKeySize();
         try {
-            int keySize = getKeySize();
             KeyPairGenerator keyGen = KeyPairGenerator.getInstance(alg.toString(), alg.getProvider());
             keyGen.initialize(keySize);
             KeyPair pair;
-            try {
-                pair = keyGen.genKeyPair();
-            } catch (IllegalStateException ise) {
-                throw new IllegalStateException("unable to generate keys with " + alg.toString() + "/" + parameters.get(Parameter.MODE) + "/" + parameters.get(Parameter.PADDING) + " (size " + keySize + ")", ise);
-            }
+            pair = keyGen.genKeyPair();
             publicKey = pair.getPublic().getEncoded();
             privateKey = pair.getPrivate().getEncoded();
+        } catch (IllegalStateException ise) {
+            throw new IllegalStateException("unable to generate keys with " + alg.toString() + "/" + parameters.get(Parameter.MODE) + "/" + parameters.get(Parameter.PADDING) + " (size " + keySize + ")", ise);
         } catch(NoSuchAlgorithmException|NoSuchProviderException e) {
             throw new IOException("Exception while generating key pair",e);
         }

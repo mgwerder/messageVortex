@@ -78,7 +78,14 @@ public class BlendingSpec extends AbstractBlock {
         // encode blending type
         v.add(new DERIA5String(blendingType));
 
-        // FIXME dump Blending Parameter
+        // encode BlendingParameter
+        v2=new ASN1EncodableVector();
+        if(blendingParameter!=null && blendingParameter.length>0) {
+            for(BlendingParameter p:blendingParameter) {
+                v2.add(p.toASN1Object(dumpType));
+            }
+        }
+        v.add(new DERSequence(v2));
 
         return new DERSequence(v);
     }
@@ -86,7 +93,23 @@ public class BlendingSpec extends AbstractBlock {
     @Override
     public String dumpValueNotation(String prefix,DumpType dumpType) {
         StringBuilder sb=new StringBuilder();
-        sb.append(prefix).append("-- FIXME dumping of BlendingSpec object not yet supported").append(CRLF); //FIXME
+        sb.append(" {").append(CRLF);
+        sb.append(prefix).append("  target '"+media+recipientAddress+"',").append(CRLF);
+        sb.append(prefix).append("  blendingType '"+blendingType+"',").append(CRLF);
+        sb.append(prefix).append("  blendingParameter {");
+        if(blendingParameter!=null && blendingParameter.length>0) {
+            int i=0;
+            for(BlendingParameter p:blendingParameter) {
+                if(i>0) {
+                    sb.append(",");
+                }
+                sb.append(CRLF);
+                sb.append(prefix).append(dumpValueNotation("",dumpType));
+            }
+            sb.append(CRLF);
+        }
+        sb.append(prefix).append("  }").append(CRLF);
+        sb.append(prefix).append("}");
         return sb.toString();
     }
 

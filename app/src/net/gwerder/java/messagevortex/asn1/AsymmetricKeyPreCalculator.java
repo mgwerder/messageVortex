@@ -23,10 +23,17 @@ import java.util.logging.Level;
 class AsymmetricKeyPreCalculator implements Serializable {
 
     private static final boolean DISABLE_CACHE=false;
-
     private static double dequeueProbability = 1.0;
 
     private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+    private static long lastSaved = 0;
+    private static List<LastCalculated> log=new ArrayList<>();
+    private static boolean firstWarning=true;
+    private static final Map<AlgorithmParameter,Queue<AsymmetricKey>> cache=new ConcurrentHashMap<>();
+    private static final Map<AlgorithmParameter,Integer> cacheSize=new ConcurrentHashMap<>();
+    private static InternalThread runner=null;
+    private static String filename=null;
+
 
     private static final java.util.logging.Logger LOGGER;
     static {
@@ -45,9 +52,6 @@ class AsymmetricKeyPreCalculator implements Serializable {
             }
         });
     }
-    private static long lastSaved = 0;
-    private static List<LastCalculated> log=new ArrayList<>();
-    private static boolean firstWarning=true;
 
     private static class LastCalculated {
         private String msg;
@@ -163,29 +167,10 @@ class AsymmetricKeyPreCalculator implements Serializable {
 
         private void calculateKey(AlgorithmParameter p) {
             try {
-                final AlgorithmParameter param = p;
                 // prepare thread list
                 List<Thread> tl = new ArrayList<>();
                 for (int i = 0; i < numThreads; i++) {
-                    tl.add(new Thread() {
-                        public void run() {
-                            LOGGER.log(Level.FINE, "precalculating key " + param.toString() + "");
-                            try {
-                                AsymmetricKey ak = new AsymmetricKey(param.clone(), false);
-
-                                // put in cache
-                                synchronized (cache) {
-                                    Queue<AsymmetricKey> q = cache.get(param);
-                                    assert q != null;
-                                    assert ak != null;
-                                    q.add(ak);
-                                }
-                            } catch (IOException ioe) {
-                                LOGGER.log(Level.SEVERE, "got unexpected exception", ioe);
-                            }
-                        }
-
-                    });
+                    tl.add(runCalculatorThread(p));
                 }
                 // start threads
                 for (Thread t : tl) {
@@ -198,7 +183,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
                 for (Thread t : tl) {
                     try {
                         t.join();
-                        attachLog("stored precomputed key " + param.toString() + " in cache");
+                        attachLog("stored precomputed key " + p.toString() + " in cache");
                     } catch (InterruptedException ie) {
                         LOGGER.log(Level.SEVERE, "got unexpected exception", ie);
                     }
@@ -209,6 +194,27 @@ class AsymmetricKeyPreCalculator implements Serializable {
             } catch (IOException | ClassNotFoundException ioe) {
                 LOGGER.log(Level.INFO, "exception while storing file", ioe);
             }
+        }
+        private Thread runCalculatorThread(final AlgorithmParameter param) {
+            return new Thread() {
+                public void run() {
+                    LOGGER.log(Level.FINE, "precalculating key " + param.toString() + "");
+                    try {
+                        AsymmetricKey ak = new AsymmetricKey(param.clone(), false);
+
+                        // put in cache
+                        synchronized (cache) {
+                            Queue<AsymmetricKey> q = cache.get(param);
+                            assert q != null;
+                            assert ak != null;
+                            q.add(ak);
+                        }
+                    } catch (IOException ioe) {
+                        LOGGER.log(Level.SEVERE, "got unexpected exception", ioe);
+                    }
+                }
+
+            };
         }
     }
 
@@ -230,13 +236,6 @@ class AsymmetricKeyPreCalculator implements Serializable {
         }
     }
 
-    private static final Map<AlgorithmParameter,Queue<AsymmetricKey>> cache=new ConcurrentHashMap<>();
-
-    private static final Map<AlgorithmParameter,Integer> cacheSize=new ConcurrentHashMap<>();
-
-    private static InternalThread runner=null;
-
-    private static String filename=null;
 
     public static AsymmetricKey getPrecomputedAsymmetricKey(AlgorithmParameter parameters) {
 
