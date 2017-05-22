@@ -148,67 +148,68 @@ class AsymmetricKeyPreCalculator implements Serializable {
 
                 // calculate parameter set (if any)
                 if(p!=null) {
+                    calculateKey(p);
+                } else {
                     try {
-                        final AlgorithmParameter param=p;
-                        // prepare thread list
-                        List<Thread> tl=new ArrayList<>();
-                        for(int i=0;i<numThreads;i++) {
-                            tl.add(new Thread() {
-                                public void run() {
-                                    LOGGER.log(Level.FINE,"precalculating key "+param.toString()+"");
-                                    try{
-                                        AsymmetricKey ak=new AsymmetricKey(param.clone(),false);
-
-                                        // put in cache
-                                        synchronized (cache) {
-                                            Queue<AsymmetricKey> q=cache.get(param);
-                                            assert q!=null;
-                                            assert ak!=null;
-                                            q.add(ak);
-                                        }
-                                    } catch(IOException ioe) {
-                                        LOGGER.log(Level.SEVERE,"got unexpected exception",ioe);
-                                    }
-                                }
-
-                            });
-                        }
-                        // start threads
-                        for(Thread t:tl) {
-                            t.setName("cache precalculation thread");
-                            t.setPriority(Thread.MIN_PRIORITY);
-                            t.start();
-                        }
-
-                        // wait for all threads to finish
-                        for(Thread t:tl) {
-                            try {
-                                t.join();
-                                attachLog("stored precomputed key "+param.toString()+" in cache");
-                            }catch(InterruptedException ie) {
-                                LOGGER.log(Level.SEVERE,"got unexpected exception",ie);
-                            }
-                        }
-
-                        // store cache
-                        save();
-                    } catch(IOException|ClassNotFoundException ioe) {
-                        LOGGER.log(Level.INFO,"exception while storing file",ioe);
-                    }
-                }
-
-                // sleep 10
-                if(p==null) {
-                    try{
                         Thread.sleep(10000);
-                    } catch(InterruptedException ie) {
+                    } catch (InterruptedException ie) {
                         // ignore it as we do not care
                     }
                 }
+
             }
 
         }
 
+        private void calculateKey(AlgorithmParameter p) {
+            try {
+                final AlgorithmParameter param = p;
+                // prepare thread list
+                List<Thread> tl = new ArrayList<>();
+                for (int i = 0; i < numThreads; i++) {
+                    tl.add(new Thread() {
+                        public void run() {
+                            LOGGER.log(Level.FINE, "precalculating key " + param.toString() + "");
+                            try {
+                                AsymmetricKey ak = new AsymmetricKey(param.clone(), false);
+
+                                // put in cache
+                                synchronized (cache) {
+                                    Queue<AsymmetricKey> q = cache.get(param);
+                                    assert q != null;
+                                    assert ak != null;
+                                    q.add(ak);
+                                }
+                            } catch (IOException ioe) {
+                                LOGGER.log(Level.SEVERE, "got unexpected exception", ioe);
+                            }
+                        }
+
+                    });
+                }
+                // start threads
+                for (Thread t : tl) {
+                    t.setName("cache precalculation thread");
+                    t.setPriority(Thread.MIN_PRIORITY);
+                    t.start();
+                }
+
+                // wait for all threads to finish
+                for (Thread t : tl) {
+                    try {
+                        t.join();
+                        attachLog("stored precomputed key " + param.toString() + " in cache");
+                    } catch (InterruptedException ie) {
+                        LOGGER.log(Level.SEVERE, "got unexpected exception", ie);
+                    }
+                }
+
+                // store cache
+                save();
+            } catch (IOException | ClassNotFoundException ioe) {
+                LOGGER.log(Level.INFO, "exception while storing file", ioe);
+            }
+        }
     }
 
     private AsymmetricKeyPreCalculator() {

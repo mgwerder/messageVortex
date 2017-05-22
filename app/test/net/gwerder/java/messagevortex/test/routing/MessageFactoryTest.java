@@ -42,7 +42,7 @@ public class MessageFactoryTest {
         LOGGER.log( Level.INFO, "getting example store from "+System.getProperty( "java.io.tmpdir" ) );
         IdentityStore is = null;
         try {
-            is = new IdentityStore( new File( System.getProperty( "java.io.tmpdir" ) + "/IdentityStoreExample1.der" ) );
+            is = new IdentityStore( new File( "CachedIdentityStoreExample.der" ) );
         } catch (Exception ioe) {
             is = IdentityStore.getNewIdentityStoreDemo( false );
             DEROutputStream f = new DEROutputStream( new FileOutputStream( System.getProperty( "java.io.tmpdir" ) + "/IdentityStoreExample1.der" ) );

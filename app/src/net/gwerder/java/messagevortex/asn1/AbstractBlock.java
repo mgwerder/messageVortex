@@ -100,18 +100,13 @@ public abstract class AbstractBlock implements Serializable,Block {
         if(a==null) {
             throw new NullPointerException( "null object may not be encoded in DER" );
         }
-        // FIXME remove unused DEROutputStream
-        //ByteArrayOutputStream bOut = new ByteArrayOutputStream();
-        //DEROutputStream       dOut = new DEROutputStream(bOut);
         try {
-            //dOut.writeObject( a );
             return a.getEncoded();
         } catch (IOException ioe) {
             // should never occur as we have no IO
             Logger.getLogger("VortexMessage").log( Level.SEVERE,"Exception while encoding object",ioe);
             return null;
         }
-        //return bOut.toByteArray();
     }
 
     public abstract ASN1Object toASN1Object(DumpType dumpType) throws IOException;
@@ -129,6 +124,11 @@ public abstract class AbstractBlock implements Serializable,Block {
             throw new IOException("Got a null reply from toASN1Object ... get coding man");
         }
         return toDER(o);
+    }
+
+
+    protected String prepareDump(String s) {
+        return s.replaceAll( "encrypted *'[^']*'H","encrypted '<encryptedString>'H");
     }
 
 }

@@ -246,4 +246,10 @@ public class RoutingBlock extends AbstractBlock {
             return false;
         }
     }
+
+    @Override
+    public int hashCode() {
+        return prepareDump(dumpValueNotation("",DumpType.ALL_UNENCRYPTED)).hashCode();
+    }
+
 }

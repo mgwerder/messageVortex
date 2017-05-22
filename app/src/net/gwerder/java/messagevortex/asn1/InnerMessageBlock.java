@@ -313,4 +313,13 @@ public class InnerMessageBlock extends AbstractBlock {
         }
     }
 
+    @Override
+    public int hashCode() {
+        try {
+            return prepareDump(dumpValueNotation("",DumpType.ALL_UNENCRYPTED)).hashCode();
+        } catch(IOException ioe) {
+            return -1;
+        }
+    }
+
 }
