@@ -23,6 +23,7 @@ package net.gwerder.java.messagevortex.test.routing;
 
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
+import net.gwerder.java.messagevortex.routing.operation.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -47,7 +48,7 @@ public class MatrixTest {
         LOGGER.log( Level.INFO, "basic multiplication test (unit matrices)" );
         for(int i=1;i<=10;i++) {
             LOGGER.log( Level.INFO, "  Testing unit multiplication with size "+i );
-            Matrix unit=Matrix.unitMatrix( i,RealMathMode.getRealMathMode());
+            Matrix unit= Matrix.unitMatrix( i, RealMathMode.getRealMathMode());
             assertTrue("error multiplying unit matrices ("+i+")\n"+unit.toString(), unit.mul(unit).equals( unit ));
             for(int j=0;j<11;j++) {
                 int size = (int) (Math.random() * 10) + 1;
@@ -62,7 +63,7 @@ public class MatrixTest {
     @Test
     public void vandermondeMatrixTest() {
         LOGGER.log( Level.INFO, "VandermondeMatrix blackbox tests" );
-        Matrix m=new VandermondeMatrix(3,6,GaloisFieldMathMode.getGaloisFieldMathMode(4));
+        Matrix m=new VandermondeMatrix(3,6, GaloisFieldMathMode.getGaloisFieldMathMode(4));
         LOGGER.log(Level.INFO,"Matrix is \n"+m.toString());
         assertTrue("Illegal row 0 of GF(2^4) VandermodeMatrix ["+Arrays.toString(m.getRow(0))+"]",Arrays.equals(new int[]{1,0,0},m.getRow(0)));
         assertTrue("Illegal row 1 of GF(2^4) VandermodeMatrix ["+Arrays.toString(m.getRow(1))+"]",Arrays.equals(new int[]{1,1,1},m.getRow(1)));

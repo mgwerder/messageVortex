@@ -2,6 +2,7 @@ package net.gwerder.java.messagevortex.test.imap;
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.asn1.AsymmetricKey;
+import net.gwerder.java.messagevortex.imap.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -36,7 +37,7 @@ public class ImapCommandTest {
 
     private String[] sendCommand(ImapClient c,String command,String reply) {
         try{
-            LOGGER.log(Level.INFO,"IMAP C-> "+ImapLine.commandEncoder(command));
+            LOGGER.log(Level.INFO,"IMAP C-> "+ ImapLine.commandEncoder(command));
             String[] s=c.sendCommand(command);
             for(String v:s) {
                 LOGGER.log(Level.INFO,"IMAP<- C: "+ImapLine.commandEncoder(v));

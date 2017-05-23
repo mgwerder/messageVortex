@@ -3,6 +3,7 @@ package net.gwerder.java.messagevortex.test.asn1;
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.asn1.AlgorithmParameter;
 import net.gwerder.java.messagevortex.asn1.AsymmetricKey;
+import net.gwerder.java.messagevortex.asn1.encryption.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -11,6 +12,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.*;
 import java.util.logging.Level;
 
 import static junit.framework.TestCase.assertFalse;
@@ -50,7 +52,7 @@ public class AsymmetricKeyTest {
             }
 
             public void run() {
-                for(Mode m:Mode.getModes(alg)) {
+                for(Mode m: Mode.getModes(alg)) {
                     LOGGER.log(Level.INFO, "Testing " + alg + "/" + size + "/"+m);
                     LOGGER.log(Level.INFO, "  creating key");
                     AsymmetricKey s = null;

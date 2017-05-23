@@ -171,7 +171,7 @@ public class RoutingBlock extends AbstractBlock {
             ASN1Sequence s2=ASN1Sequence.getInstance(ae.getObject());
             List<Operation> o=new ArrayList<>();
             for(ASN1Encodable obj:s2) {
-                o.add(Operation.parseInstance(obj));
+                o.add(Operation.parseInstance(ASN1TaggedObject.getInstance(obj)));
             }
         } else {
             throw new IOException("Got unknown tag number (got: "+ae.getTagNo()+"; expected: "+OPERATIONS+")");
@@ -252,7 +252,31 @@ public class RoutingBlock extends AbstractBlock {
                 throw new IOException( "Error encoding prefix (unknown dump type "+dumpType.name()+")");
         }
 
-        //FIXME a lot missing here
+        v.add(new ASN1Integer(forwardSecret));
+
+        if(murbMaxReplay>0) {
+            ASN1EncodableVector v2=new ASN1EncodableVector();
+            v2.add(murbReplyBlock.toASN1Object(dumpType));
+            v2.add(new ASN1Integer(murbMaxReplay));
+            v2.add(murbValidity.toASN1Object(dumpType));
+            v.add(new DERTaggedObject(MURB,new DERSequence(v2)));
+        }
+
+        ASN1EncodableVector v2=new ASN1EncodableVector();
+        if(operation!=null && operation.length>0) {
+            for (Operation o : operation) {
+                v2.add(o.toASN1Object(dumpType));
+            }
+        }
+        v.add(new DERTaggedObject(OPERATIONS,new DERSequence(v2)));
+
+        v2=new ASN1EncodableVector();
+        if(assembly!=null && assembly.length>0) {
+            for (AssemblyBlock a : assembly) {
+                v2.add(a.toASN1Object(dumpType));
+            }
+        }
+        v.add(new DERSequence(v2));
 
         return new DERSequence(v);
     }

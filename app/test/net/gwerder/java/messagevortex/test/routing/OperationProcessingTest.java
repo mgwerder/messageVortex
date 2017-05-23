@@ -23,6 +23,8 @@ package net.gwerder.java.messagevortex.test.routing;
 
 import net.gwerder.java.messagevortex.ExtendedSecureRandom;
 import net.gwerder.java.messagevortex.MessageVortexLogger;
+import net.gwerder.java.messagevortex.asn1.*;
+import net.gwerder.java.messagevortex.routing.operation.*;
 import net.gwerder.java.messagevortex.routing.operation.Operation;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,6 +32,9 @@ import org.junit.runners.JUnit4;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 
 import static org.junit.Assert.assertTrue;
@@ -70,7 +75,7 @@ public class OperationProcessingTest {
         }
     }
 
-    private void redundancyOperationTest(InternalPayload p,int dataStripes,int redundancy,int gfSize) throws IOException,NoSuchAlgorithmException {
+    private void redundancyOperationTest(InternalPayload p, int dataStripes, int redundancy, int gfSize) throws IOException,NoSuchAlgorithmException {
         ExtendedSecureRandom esr=new ExtendedSecureRandom();
         // create symmetric keys for stripes
         SymmetricKey[] keys = new SymmetricKey[dataStripes + redundancy];

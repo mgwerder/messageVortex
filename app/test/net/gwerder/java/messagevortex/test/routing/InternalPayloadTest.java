@@ -22,6 +22,11 @@ package net.gwerder.java.messagevortex.test.routing;
  ***/
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
+import net.gwerder.java.messagevortex.asn1.IdentityBlock;
+import net.gwerder.java.messagevortex.asn1.PayloadChunk;
+import net.gwerder.java.messagevortex.routing.operation.IdMapOperation;
+import net.gwerder.java.messagevortex.routing.operation.InternalPayload;
+import net.gwerder.java.messagevortex.routing.operation.InternalPayloadSpace;
 import net.gwerder.java.messagevortex.routing.operation.Operation;
 import net.gwerder.java.messagevortex.transport.RandomString;
 import org.junit.Before;
