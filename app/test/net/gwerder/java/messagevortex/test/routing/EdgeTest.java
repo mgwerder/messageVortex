@@ -10,9 +10,7 @@ import org.junit.runners.JUnit4;
 import java.io.IOException;
 import java.util.logging.Level;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  * Created by martin.gwerder on 19.04.2017.

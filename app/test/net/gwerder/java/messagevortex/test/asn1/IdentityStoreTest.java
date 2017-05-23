@@ -11,8 +11,6 @@ import org.junit.runners.JUnit4;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
-import java.util.Vector;
 import java.util.logging.Level;
 
 import static org.junit.Assert.assertTrue;

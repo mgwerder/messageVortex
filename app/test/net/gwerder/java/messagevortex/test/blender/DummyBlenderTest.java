@@ -1,7 +1,6 @@
 package net.gwerder.java.messagevortex.test.blender;
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
-import net.gwerder.java.messagevortex.asn1.*;
 import net.gwerder.java.messagevortex.asn1.encryption.Algorithm;
 import net.gwerder.java.messagevortex.asn1.encryption.SecurityLevel;
 import net.gwerder.java.messagevortex.blending.BlenderListener;

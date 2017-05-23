@@ -1,4 +1,4 @@
--- FIXME ADAPT NeoScrypt 
+-- FIXME ADAPT NeoScrypt
 
 -- encryption: as specified in the key. If not specified default mode is ECB and default padding is PKCS1Padding
 
@@ -6,7 +6,7 @@
 -- - Tuple(identity)=Value(messageQuota,transferQuota,sequence of Routingblocks for Error Message Routing) [validity; Requested at creation; may be extended upon request] {identityStore}
 -- - Tuple(Identity,Serial)=maxReplays ['valid' from Identity Block; from First Identity Block; may only be reduced] {IdentityReplayStore}
 
-Message-Blocks DEFINITIONS EXPLICIT TAGS ::= 
+Message-Blocks DEFINITIONS EXPLICIT TAGS ::=
 BEGIN
 
   -- define constants
@@ -24,7 +24,7 @@ BEGIN
   maxTimeCachedProof        INTEGER ::= 86400           -- maximum number of seconds a proof of non revocation may be old
   maxGFSize                 INTEGER ::= 16              -- maximum omega of the Galois field used
   maxNumberOfParameter      INTEGER ::= 127             -- the maximum number of parameters that might be embedded
-  
+
   PuzzleIdentifier          ::= OCTET STRING ( SIZE(0..16) )
 
   VortexMessage ::= SEQUENCE {
@@ -37,67 +37,67 @@ BEGIN
         encrypted [10022] OCTET STRING -- contains inner message encrypted with Symmetric key from Prefix
     }
   }
-  
+
   PrefixBlock ::= SEQUENCE {
     key             SymmetricKey
   }
-  
+
   InnerMessageBlock ::= SEQUENCE {
     padding   OCTET STRING,
-    
+
     prefix    CHOICE {
         plain           [11011] PrefixBlock,
         encrypted       [11012] OCTET STRING -- contains prefix encrypted with receivers public key
     },
-    
+
     identity    {
       plain     [11021] IdentityBlock ,
       encyrpted [11022] OCTET STRING -- contains encrypted identity block
     }
     identitySignature OCTET STRING,   -- contains signature of Identity [as stored in identityBlock;signed unencrypted identityBlock without Tag]
-    
+
     -- contains routing information (next hop) for the payloads
     routing     CHOICE {
       plain     [11031] SEQUENCE (SIZE (1..maxRoutingBlocks)) OF RoutingBlock ,
       encyrpted [11032] OCTET STRING -- contains encrypted routing block
     },
-    
+
     -- contains the actual payload
     payload     SEQUENCE (SIZE (0..maxPayloadBlocks)) OF PayloadChunk
   }
-  
+
   IdentityBlock ::= SEQUENCE {
     -- Public key of the identity representing this transmission
     identityKey       AsymmetricKey,
-    
+
     -- serial identifying this block
-    serial            INTEGER (0..maxSerial), 
-    
-    -- number of times this block may be replayed (Tuple is identityKey,serial while 
-    maxReplays        INTEGER (0..maxNumberOfReplays), 
-    
-    -- subsequent Blocks are not processed before valid time. 
+    serial            INTEGER (0..maxSerial),
+
+    -- number of times this block may be replayed (Tuple is identityKey,serial while
+    maxReplays        INTEGER (0..maxNumberOfReplays),
+
+    -- subsequent Blocks are not processed before valid time.
     -- Host may reject too long retention. Recomended validity support >=1Mt.
-    valid             UsagePeriod,        
-    
+    valid             UsagePeriod,
+
     -- represents the chained secret which has to be found in subsequent blocks
     -- prevents reassembly attack
     forwardSecret     ChainSecret,
-    
+
     --  contains the MAC-Algorithm used for signing
     hash              MacAlgorithm,
-    
+
     -- contains administrative requests such as quota requests
     requests          SEQUENCE (SIZE (0..maxNumberOfRequests)) OF HeaderRequest ,
-    
+
     -- padding and identitifier required to solve the cryptopuzzle
     identifier    [12201] PuzzleIdentifier OPTIONAL,
     proofOfWork   [12202] OCTET STRING OPTIONAL  -- This is for solving crypto puzzles
   }
-  
+
   -- represents the building and sending process for the next hop
   RoutingBlock ::= SEQUENCE {
-  
+
     -- contains the next recipient in sequence
     recipient BlendingSpec,
 
@@ -106,7 +106,7 @@ BEGIN
     -- Recommended support for retention >=1h
     minProcessTime INTEGER (0..maxDurationOfProcessing),
     maxProcessTime INTEGER (0..maxDurationOfProcessing),
-    
+
     -- contains the prefix to be used
     identityPrefix    CHOICE {
       plain             [331] SEQUENCE (SIZE (0..maxRoutingBlocks)) OF PrefixBlock,
@@ -129,23 +129,21 @@ BEGIN
       encrypted         [334] SEQUENCE (SIZE (0..maxRoutingBlocks)) OF OCTET STRING
     },
 
-    innerMessageKey     SymmetricKey,
-
     -- contains the secret of the identity block
     forwardSecret     ChainSecret,
-    
+
     -- contains a routing block which may be used when sending error messages back to the quota owner
     -- this routing block may be cached for future use
     replyBlock [131]   SEQUENCE {
          murb           RoutingBlock,
-         replay         INTEGER,
+         maxReplay      INTEGER,
          validity       UsagePeriod
     } OPTIONAL,
-    
+
     -- contains information for building replys (when used as MURB ID 1 denotes original message; ID 100-999 denotes target message)
-    operations           [300] SEQUENCE (SIZE (0..255)) OF PayloadOperation,
-    assembly             [301] SEQUENCE (SIZE (0..maxRoutingBlocks)) OF AssemblyBlock
-    
+    operations           [132] SEQUENCE (SIZE (0..255)) OF PayloadOperation,
+    assembly             SEQUENCE (SIZE (0..maxRoutingBlocks)) OF AssemblyBlock
+
   }
 
    AssemblyBlock ::= SEQUENCE {
@@ -153,37 +151,37 @@ BEGIN
       nextRoutingBlock    [13200] SEQUENCE (SIZE (1..maxPayloadBlocks)) OF INTEGER (0..maxID)
     }
 
-  
+
   PayloadOperation ::= CHOICE {
-    splitPayload    [150] SplitPayloadOperation, 
-    mergePayload    [200] MergePayloadOperation,
-    xorMergePayload [250] XorMergePayloadOperation,
-    xorSplitPayload [260] XorSplitPayloadOperation,
+    splitPayload    [150] SplitPayloadOperation,
+    mergePayload    [160] MergePayloadOperation,
+    xorSplitPayload [250] XorSplitPayloadOperation,
+    xorMergePayload [260] XorMergePayloadOperation,
     encryptPayload  [300] EncryptPayloadOperation,
-    decryptPayload  [350] DecryptPayloadOperation,
+    decryptPayload  [310] DecryptPayloadOperation,
     addRedundancy   [400] AddRedundancyOperation,
     removeRedundancy[410] RemoveRedundancyOperation
   }
-  
+
   PercentSizeType ::= SEQUENCE {
     fromPercent         REAL (0..100),
     toPercent           REAL (0..100)
   }
-  
+
   AbsoluteSizeType ::= SEQUENCE {
     fromAbsolute        INTEGER (0..maxChunkSize),
-    
-    toAbsolute          INTEGER (minChunkSize..maxChunkSize) 
+
+    toAbsolute          INTEGER (minChunkSize..maxChunkSize)
     -- negative toAbsolute denominates end in absolute value specified from the end of block
   }
-  
+
   SizeType ::= SEQUENCE{
     size CHOICE {
       percent     [15001] PercentSizeType,
       absolute    [15101] AbsoluteSizeType
     }
   }
-  
+
   AddRedundancyOperation ::= SEQUENCE {
     inputId            [16000] INTEGER (0..maxID),
     dataStripes        [16001] INTEGER (1..254),
@@ -192,7 +190,7 @@ BEGIN
     outputId           [16004] INTEGER (1..maxID),
     gfSize             [16005] INTEGER (2..maxGFSize)
   }
- 
+
   RemoveRedundancyOperation ::= SEQUENCE {
     inputId            [16000] INTEGER (0..maxID),
     dataStripes        [16001] INTEGER (1..254),
@@ -214,14 +212,14 @@ BEGIN
     originalSecondId     INTEGER (0..maxID),
     newId                INTEGER (1..maxID)
   }
- 
+
   XorMergePayloadOperation ::= SEQUENCE {
     originalFirstId      INTEGER (0..maxID),
     originalSecondId     INTEGER (-1..maxID),
     originalFirstSize    SizeType,
     newId                INTEGER (1..maxID)
   }
- 
+
   XorSplitPayloadOperation ::= SEQUENCE {
     originalId           INTEGER (0..maxID),
     prngSpec             PRNGAlgorithmIdentifier,
@@ -234,7 +232,7 @@ BEGIN
     key                   SymmetricKey,
     newId                 INTEGER (1..maxID)
   }
- 
+
   DecryptPayloadOperation ::= SEQUENCE {
     originalId            INTEGER (0..maxID),
     key                   SymmetricKey,
@@ -244,7 +242,7 @@ BEGIN
   IdentityReplayStore ::= SEQUENCE {
     replays   SEQUENCE (SIZE (0..4294967295)) OF IdentityReplayBlock
   }
-  
+
   IdentityReplayBlock ::= SEQUENCE {
     identity            AsymmetricKey,
     valid               UsagePeriod,
@@ -254,7 +252,7 @@ BEGIN
   IdentityStore ::= SEQUENCE {
     identities SEQUENCE (SIZE (0..4294967295)) OF IdentityStoreBlock
   }
-  
+
   IdentityStoreBlock ::= SEQUENCE {
     valid               UsagePeriod,
     messageQuota        INTEGER (0..maxMessageQuota),
@@ -266,7 +264,7 @@ BEGIN
     replayStore         [1005] IdentityReplayStore,
     puzzle              [1006] ReplyPuzzleRequired OPTIONAL
   }
-  
+
   -- contains a node spec of a routing point
   -- At the moment either smtp:<email> or xmpp:<jabber>
   BlendingSpec ::= SEQUENCE {
@@ -274,20 +272,20 @@ BEGIN
     blendingType      IA5String, -- 'F5' or 'atttach'
     parameter         SEQUENCE (SIZE (0..maxNumberOfParameter)) OF BlendingParameter
   }
-  
+
   BlendingParameter ::= CHOICE {
     offset          [1] INTEGER,
-    symmetricKey    [2] SymmetricKey,         
+    symmetricKey    [2] SymmetricKey,
     asymmetricKey   [3] AsymmetricKey
   }
-  
+
   NodeSpec ::= SEQUENCE {
     media             IA5String,  -- defined so far are 'xmpp' and 'smtp'
     recipientAddress  IA5String
   }
-  
+
   ChainSecret ::= INTEGER (0..4294967295)
-  
+
   HeaderRequest ::= CHOICE {
     identity      [0] HeaderRequestIdentity,
     capabilities  [1] HeaderRequestCapability,
@@ -295,75 +293,75 @@ BEGIN
     transferQuota [3] HeaderRequestIncreaseTransferQuota,
     quotaQuery    [4] HeaderRequestQueryQuota
   }
-  
+
   ReplyBlock ::= CHOICE {
     capabilities  [1]  ReplyCapability,
     puzzle        [2]  ReplyPuzzleRequired,
     status        [99] StatusBlock
   }
-  
+
   HeaderRequestIdentity ::= SEQUENCE {
     identity AsymmetricKey,
     period UsagePeriod
   }
-  
+
   ReplyPuzzleRequired ::= SEQUENCE {
     challenge     BIT STRING, -- bit sequence at beginning of hash from encrypted identity block
     hash          MacAlgorithmIdentifier,
     valid         UsagePeriod,
     identifier    INTEGER (0..4294967295)
   }
-  
+
   HeaderRequestQueryQuota ::= SEQUENCE {
     identity AsymmetricKey
   }
-  
+
   HeaderRequestIncreaseMessageQuota ::= SEQUENCE {
     identity AsymmetricKey,
     messages INTEGER (0..4294967295)
   }
-  
+
   HeaderRequestIncreaseTransferQuota ::= SEQUENCE {
     identity AsymmetricKey,
     size     INTEGER (0..4294967295)
   }
-  
+
   HeaderRequestCapability ::= SEQUENCE {
     period UsagePeriod
   }
-  
+
   ReplyCapability ::= SEQUENCE {
     cypher            SEQUENCE (SIZE (2..256)) OF CypherSpec,
     maxTransferQuota  INTEGER (0..4294967295),
     maxMessageQuota   INTEGER (0..4294967295),
     supportedProtocol SEQUENCE OF Protocol
   }
-  
+
   CypherSpec ::= SEQUENCE {
       asymmetric AsymmetricAlgorithmIdentifier,
       symmetric  SymmetricAlgorithmIdentifier,
       mac        MacAlgorithmIdentifier
   }
-  
+
   Protocol ::= ENUMERATED {
     smtp  (100),
     xmmp  (110),
     ...
   }
-  
+
   StatusBlock ::= SEQUENCE {
     code            StatusCode,
     request         HeaderRequest
   }
-  
+
   StatusCode ::= ENUMERATED {
-    
+
     -- System messages
     ok                          (2000),
     transferQuotaStatus         (2101),
     messageQuotaStatus          (2102),
 	puzleRequired               (2201),
-    
+
     -- protocol usage failures
     transferQuotaExceeded       (3001),
     messageQuotaExceeded        (3002),
@@ -371,7 +369,7 @@ BEGIN
     messageChunkMissing         (3201),
     messageLifeExpired          (3202),
     puzzleUnknown               (3301),
-    
+
     -- capability errors
     macAlgorithmUnknown         (3801),
     symmetricAlgorithmUnknown   (3802),
@@ -379,12 +377,12 @@ BEGIN
     prngAlgorithmUnknown        (3804),
     missingParameters           (3820),
     badParameters               (3821),
-    
+
     -- Mayor host specific errors
     hostError                   (5001),
     ...
   }
-  
+
   PayloadChunk ::= SEQUENCE {
     id                        INTEGER (0..maxID),
     payload                   CHOICE {
@@ -392,24 +390,24 @@ BEGIN
       replyBlock                [101] ReplyBlock
     }
   }
-  
+
   UsagePeriod ::= SEQUENCE {
     notBefore       [0]     GeneralizedTime OPTIONAL,
     notAfter        [1]     GeneralizedTime OPTIONAL
   }
-  
+
   SymmetricAlgorithmIdentifier  ::=  SEQUENCE  {
     algorithm               SymmetricAlgorithm,
     padding                 CypherPadding,
     mode                    CypherMode,
     parameter               AlgorithmParameters OPTIONAL
   }
-  
+
   AsymmetricAlgorithmIdentifier  ::=  SEQUENCE  {
     algorithm               AsymmetricAlgorithm,
     parameter               AlgorithmParameters OPTIONAL
   }
-  
+
   MacAlgorithmIdentifier  ::=  SEQUENCE  {
     algorithm               MacAlgorithm,
     parameter               AlgorithmParameters
@@ -419,7 +417,7 @@ BEGIN
     type                    PRNGType,
     seed                    OCTET STRING
   }
-  
+
   PRNGType ::= ENUMERATED {
     xsadd           (1000),
     blumMicali      (1001)
@@ -433,7 +431,7 @@ BEGIN
     camellia192     (1101),  -- optional support
     camellia256     (1102)
   }
-  
+
   CipherMode ::= ENUMERATED {
     ecb             (1000),
     cbc             (1001)
@@ -443,26 +441,26 @@ BEGIN
     pkcs7           (1000),
     pkcs1           (1001)
   }
-  
+
   AsymmetricAlgorithm ::= ENUMERATED {
     rsa             (2000),
     dsa             (2100),
     ec              (2500)
   }
-  
+
   MacAlgorithm ::= ENUMERATED {
     sha384          (3000),
     sha512          (3001),
     tiger192        (3100)
   }
-  
+
   ECCurveType ::= ENUMERATED{
     secp384r1       (2500),
     sect409k1       (2501),
     secp521r1       (2502),
     ...
   }
-  
+
   AlgorithmParameters ::= SEQUENCE {
     keySize              [10000] INTEGER (0..65535) OPTIONAL,
     curveType            [10001] ECCurveType   OPTIONAL,
@@ -471,20 +469,20 @@ BEGIN
     mode                 [10004] CipherMode    OPTIONAL,
     padding              [10005] CipherPadding OPTIONAL
   }
-  
+
   -- Symmetric key
   SymmetricKey ::= SEQUENCE {
     keyType SymmetricAlgorithmIdentifier,
 	parameter AlgorithmParameters,
     key     OCTET STRING (SIZE(1..512))
   }
-  
+
   -- Asymmetric Key
   AsymmetricKey ::= SEQUENCE {
     keyType       AsymmetricAlgorithmIdentifier,
     publicKey     [2] OCTET STRING,
     privateKey    [3] OCTET STRING OPTIONAL
   }
-  
+
 END
 

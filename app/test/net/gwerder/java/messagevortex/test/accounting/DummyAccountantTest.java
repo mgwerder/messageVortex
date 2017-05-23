@@ -10,7 +10,6 @@ import org.junit.runners.JUnit4;
 import java.util.logging.Level;
 
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 /**
  * General Test class for all unspecific Block tests.

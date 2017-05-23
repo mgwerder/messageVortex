@@ -21,9 +21,7 @@ package net.gwerder.java.messagevortex.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
-import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
-import org.bouncycastle.asn1.*;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import org.bouncycastle.asn1.ASN1Encodable;
 
 import java.io.IOException;
 import java.util.List;
@@ -32,6 +30,8 @@ import java.util.List;
  * Represents a remove redundancy operation.
  */
 public class RemoveRedundancyOperation extends AbstractRedundancyOperation {
+
+    RemoveRedundancyOperation() {}
 
     public RemoveRedundancyOperation(int inputId, int dataStripes, int redundancy, List<SymmetricKey> keys, int outputId, int gfSize) {
         super(inputId,dataStripes,redundancy,keys,outputId,gfSize);

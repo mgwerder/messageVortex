@@ -22,23 +22,17 @@ package net.gwerder.java.messagevortex.test.routing;
  ***/
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
-import net.gwerder.java.messagevortex.asn1.*;
-import net.gwerder.java.messagevortex.routing.operation.*;
 import net.gwerder.java.messagevortex.routing.operation.Operation;
 import net.gwerder.java.messagevortex.transport.RandomString;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 import java.util.logging.Level;
 
 import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 @RunWith(JUnit4.class)

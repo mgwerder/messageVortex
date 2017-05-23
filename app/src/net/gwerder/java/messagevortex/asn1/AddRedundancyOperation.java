@@ -22,6 +22,7 @@ package net.gwerder.java.messagevortex.asn1;
 // ************************************************************************************
 
 import org.bouncycastle.asn1.*;
+import org.bouncycastle.asn1.cms.Evidence;
 
 import java.io.IOException;
 import java.util.List;
@@ -32,6 +33,8 @@ import java.util.List;
  */
 public class AddRedundancyOperation extends AbstractRedundancyOperation {
 
+    AddRedundancyOperation() {}
+
     public AddRedundancyOperation(int inputId, int dataStripes, int redundancy, List<SymmetricKey> keys, int outputId, int gfSize) {
         super(inputId,dataStripes,redundancy,keys,outputId,gfSize);
     }
@@ -40,4 +43,19 @@ public class AddRedundancyOperation extends AbstractRedundancyOperation {
         super(to);
     }
 
+    public static AddRedundancyOperation getInstance(Object obj) throws IOException {
+        if (obj == null || obj instanceof Evidence) {
+            return (AddRedundancyOperation) obj;
+        } else if (obj instanceof ASN1TaggedObject) {
+            ASN1TaggedObject to=ASN1TaggedObject.getInstance(obj);
+            return new AddRedundancyOperation(to.getObject());
+        }
+
+        throw new IllegalArgumentException("unknown object in getInstance");
+    }
+
+    public ASN1Primitive toASN1Primitive() {
+        ASN1Sequence v=null;
+        return new DERTaggedObject(false, ADD_REDUNDANCY , new DERSequence(v));
+    }
 }

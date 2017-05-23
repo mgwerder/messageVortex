@@ -36,6 +36,9 @@ import java.util.logging.Level;
  */
 public class RoutingBlock extends AbstractBlock {
 
+    public static final int MURB = 131;
+    public static final int OPERATIONS = 132;
+
     private static final java.util.logging.Logger LOGGER;
     static {
         LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
@@ -64,7 +67,9 @@ public class RoutingBlock extends AbstractBlock {
     private PrefixBlock[]   prefix;
     private RoutingBlock[]  nextHop;
     private long            forwardSecret=-1;
-    private RoutingBlock    replyBlock = null;
+    private RoutingBlock    murbReplyBlock = null;
+    private long            murbMaxReplay =-1;
+    private UsagePeriod     murbValidity  = null;
     private Operation[]     operation = null;
     private AssemblyBlock[] assembly=null;
 
@@ -141,7 +146,38 @@ public class RoutingBlock extends AbstractBlock {
                 throw new IOException( "Error parsing prefix (expected: "+ROUTING_PLAIN+" or "+ROUTING_ENCRYPTED+";got:"+ae.getTagNo()+")");
         }
 
-        //FIXME a lot missing here
+        // parse forward secret
+        forwardSecret=ASN1Integer.getInstance(s1.getObjectAt(i++)).getValue().longValue();
+
+        // parse reply block
+        ae = ASN1TaggedObject.getInstance(s1.getObjectAt(i++));
+        if (ae.getTagNo() == MURB) {
+            ASN1Sequence s2=ASN1Sequence.getInstance(ae.getObject());
+            if(s2.size()!=3) {
+                throw new IOException("invalid sequence size for reply block (got: "+s2.size()+"; expected: 3)");
+            }
+            murbReplyBlock=new RoutingBlock(s2.getObjectAt(0));
+            murbMaxReplay=ASN1Integer.getInstance(s2.getObjectAt(1)).getPositiveValue().intValue();
+            murbValidity=new UsagePeriod(s2.getObjectAt(2));
+        } else if(ae.getTagNo()==OPERATIONS) {
+            i--;
+        } else {
+            throw new IOException("Got unknown tag number (got: "+ae.getTagNo()+"; expected: "+MURB+" or "+OPERATIONS+")");
+        }
+
+        // parse operations
+        ae = ASN1TaggedObject.getInstance(s1.getObjectAt(i++));
+        if (ae.getTagNo() == OPERATIONS) {
+            ASN1Sequence s2=ASN1Sequence.getInstance(ae.getObject());
+            List<Operation> o=new ArrayList<>();
+            for(ASN1Encodable obj:s2) {
+                o.add(Operation.parseInstance(obj));
+            }
+        } else {
+            throw new IOException("Got unknown tag number (got: "+ae.getTagNo()+"; expected: "+OPERATIONS+")");
+        }
+
+        // parse assembly
     }
 
     public boolean isEncrypted() {

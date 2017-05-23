@@ -23,8 +23,6 @@ package net.gwerder.java.messagevortex.test.routing;
 
 import net.gwerder.java.messagevortex.ExtendedSecureRandom;
 import net.gwerder.java.messagevortex.MessageVortexLogger;
-import net.gwerder.java.messagevortex.asn1.*;
-import net.gwerder.java.messagevortex.routing.operation.*;
 import net.gwerder.java.messagevortex.routing.operation.Operation;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,7 +30,6 @@ import org.junit.runners.JUnit4;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.util.*;
 import java.util.logging.Level;
 
 import static org.junit.Assert.assertTrue;

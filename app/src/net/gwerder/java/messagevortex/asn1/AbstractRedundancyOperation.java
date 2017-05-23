@@ -34,7 +34,7 @@ import java.util.logging.Level;
 /**
  * Represents a the Blending specification of the routing block.
  */
-public abstract class AbstractRedundancyOperation extends Operation {
+public abstract class AbstractRedundancyOperation extends Operation implements ASN1Choice {
 
     public static final int INPUT_ID     = 16000;
     public static final int DATA_STRIPES = 16001;
@@ -55,6 +55,9 @@ public abstract class AbstractRedundancyOperation extends Operation {
     ArrayList<SymmetricKey> keys;
     int outputId;
     int gfSize=4;
+
+    // Required for template objects
+    AbstractRedundancyOperation() {}
 
     /* constructor */
     public AbstractRedundancyOperation(int inputId, int dataStripes, int redundancy, List<SymmetricKey> keys, int newFirstId, int gfSize) {

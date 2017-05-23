@@ -2,7 +2,9 @@ package net.gwerder.java.messagevortex.test.routing;
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.asn1.*;
-import net.gwerder.java.messagevortex.asn1.encryption.*;
+import net.gwerder.java.messagevortex.asn1.encryption.Algorithm;
+import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
+import net.gwerder.java.messagevortex.asn1.encryption.SecurityLevel;
 import net.gwerder.java.messagevortex.test.TestHelper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,6 +37,8 @@ public class FullMessageTest {
         blockIdentity.setSerial(42);
         blockIdentity.setReplay(84);
         blockIdentity.setUsagePeriod(new UsagePeriod(100));
+        RoutingBlock routing=message.getInnerMessage().getRouting();
+        // add operations to
         message.setDecryptionKey(new AsymmetricKey(Algorithm.RSA.getParameters(SecurityLevel.LOW)));
         testMessageEncoding(message);
     }

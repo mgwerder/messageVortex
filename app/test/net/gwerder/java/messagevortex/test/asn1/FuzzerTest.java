@@ -2,14 +2,12 @@ package net.gwerder.java.messagevortex.test.asn1;
 
 import net.gwerder.java.messagevortex.ExtendedSecureRandom;
 import net.gwerder.java.messagevortex.MessageVortexLogger;
-import net.gwerder.java.messagevortex.asn1.*;
 import net.gwerder.java.messagevortex.asn1.encryption.Algorithm;
 import net.gwerder.java.messagevortex.asn1.encryption.AlgorithmType;
 import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import net.gwerder.java.messagevortex.asn1.encryption.SecurityLevel;
 import org.bouncycastle.asn1.ASN1InputStream;
 import org.bouncycastle.asn1.ASN1Sequence;
-import org.bouncycastle.asn1.util.Dump;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;

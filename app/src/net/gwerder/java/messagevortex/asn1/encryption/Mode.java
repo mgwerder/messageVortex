@@ -22,7 +22,6 @@ package net.gwerder.java.messagevortex.asn1.encryption;
 // ************************************************************************************
 
 import org.bouncycastle.asn1.ASN1Enumerated;
-import org.bouncycastle.util.Arrays;
 
 import java.util.ArrayList;
 import java.util.HashMap;

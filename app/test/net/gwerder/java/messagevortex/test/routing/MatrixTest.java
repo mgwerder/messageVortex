@@ -23,7 +23,6 @@ package net.gwerder.java.messagevortex.test.routing;
 
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
-import net.gwerder.java.messagevortex.routing.operation.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;

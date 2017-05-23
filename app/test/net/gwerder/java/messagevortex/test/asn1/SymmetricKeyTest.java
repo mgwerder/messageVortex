@@ -2,7 +2,6 @@ package net.gwerder.java.messagevortex.test.asn1;
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.asn1.SymmetricKey;
-import net.gwerder.java.messagevortex.asn1.encryption.*;
 import org.junit.Test;
 
 import java.io.File;

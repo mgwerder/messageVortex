@@ -21,14 +21,51 @@ package net.gwerder.java.messagevortex.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
+import org.bouncycastle.asn1.*;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
+import java.io.IOException;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * Represents a the Blending specification of the routing block.
  *
  */
 public abstract class Operation extends AbstractBlock {
 
+    public static final int SPLIT_PAYLOAD     = 150;
+    public static final int MERGE_PAYLOAD     = 160;
+    public static final int XOR_SPLIT_PAYLOAD = 250;
+    public static final int XOR_MERGE_PAYLOAD = 260;
+    public static final int ENCRYPT_PAYLOAD   = 300;
+    public static final int DECRYPT_PAYLOAD   = 310;
+    public static final int ADD_REDUNDANCY    = 400;
+    public static final int REMOVE_REDUNDANCY = 410;
+
+    private static final Map<Integer,Operation> operations=new ConcurrentHashMap<>();
+    static {
+        operations.put(SPLIT_PAYLOAD    ,new SplitPayloadOperation());
+        operations.put(MERGE_PAYLOAD    ,new MergePayloadOperation());
+        operations.put(XOR_SPLIT_PAYLOAD,new XorSplitPayloadOperation());
+        operations.put(XOR_MERGE_PAYLOAD,new XorMergePayloadOperation());
+        operations.put(ENCRYPT_PAYLOAD  ,new EncryptPayloadOperation());
+        operations.put(DECRYPT_PAYLOAD  ,new DecryptPayloadOperation());
+        operations.put(ADD_REDUNDANCY   ,new AddRedundancyOperation());
+        operations.put(REMOVE_REDUNDANCY,new RemoveRedundancyOperation());
+    }
+
     /* constructor */
-    public Operation() {}
+    Operation() {};
 
+    public static Operation getInstance(ASN1Primitive object) {
+        throw new RuntimeException("missing implementation of getInstance in class");
+    }
 
+    public static Operation parseInstance(ASN1TaggedObject object) throws IOException {
+        if(operations.get(object.getTagNo())==null) {
+            throw new IOException("got unknown tag number for operation ("+object.getTagNo());
+        }
+        return operations.get(object.getTagNo()).getInstance(object.getObject());
+    }
 }
