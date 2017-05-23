@@ -70,7 +70,7 @@ public class RoutingBlock extends AbstractBlock {
     private RoutingBlock    murbReplyBlock = null;
     private long            murbMaxReplay =-1;
     private UsagePeriod     murbValidity  = null;
-    private Operation[]     operation = null;
+    private List<Operation> operation = new ArrayList<>();
     private AssemblyBlock[] assembly=null;
 
     public RoutingBlock() {
@@ -170,14 +170,21 @@ public class RoutingBlock extends AbstractBlock {
         if (ae.getTagNo() == OPERATIONS) {
             ASN1Sequence s2=ASN1Sequence.getInstance(ae.getObject());
             List<Operation> o=new ArrayList<>();
-            for(ASN1Encodable obj:s2) {
-                o.add(Operation.parseInstance(ASN1TaggedObject.getInstance(obj)));
+            if(s2.size()>0) {
+                for (ASN1Encodable obj : s2) {
+                    o.add(Operation.getInstance(obj));
+                }
             }
         } else {
             throw new IOException("Got unknown tag number (got: "+ae.getTagNo()+"; expected: "+OPERATIONS+")");
         }
 
         // parse assembly
+        ASN1Sequence s2=ASN1Sequence.getInstance(s1.getObjectAt(i++));
+        List<AssemblyBlock> o=new ArrayList<>();
+        for(ASN1Encodable obj:s2) {
+            o.add(new AssemblyBlock(obj));
+        }
     }
 
     public boolean isEncrypted() {
@@ -263,7 +270,7 @@ public class RoutingBlock extends AbstractBlock {
         }
 
         ASN1EncodableVector v2=new ASN1EncodableVector();
-        if(operation!=null && operation.length>0) {
+        if(operation!=null && !operation.isEmpty()) {
             for (Operation o : operation) {
                 v2.add(o.toASN1Object(dumpType));
             }
@@ -279,6 +286,10 @@ public class RoutingBlock extends AbstractBlock {
         v.add(new DERSequence(v2));
 
         return new DERSequence(v);
+    }
+
+    public boolean addOperation(Operation o) {
+        return operation.add(o);
     }
 
     public byte[] toEncBytes() {

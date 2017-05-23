@@ -58,8 +58,12 @@ public abstract class Operation extends AbstractBlock {
     /* constructor */
     Operation() {};
 
-    public static Operation getInstance(ASN1Primitive object) {
-        throw new RuntimeException("missing implementation of getInstance in class");
+    public static Operation getInstance(ASN1Encodable object) throws IOException {
+        int tag=ASN1TaggedObject.getInstance(object).getTagNo();
+        if(operations.get(tag)==null) {
+            throw new IOException("unknown tag for choice detected");
+        }
+        return operations.get(tag).getNewInstance(ASN1TaggedObject.getInstance(object).getObject());
     }
 
     public static Operation parseInstance(ASN1TaggedObject object) throws IOException {
@@ -68,4 +72,7 @@ public abstract class Operation extends AbstractBlock {
         }
         return operations.get(object.getTagNo()).getInstance(object.getObject());
     }
+
+    public abstract Operation getNewInstance(ASN1Encodable object) throws IOException;
+
 }

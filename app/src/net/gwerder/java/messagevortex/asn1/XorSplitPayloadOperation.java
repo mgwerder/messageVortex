@@ -13,6 +13,12 @@ import java.io.IOException;
  */
 public class XorSplitPayloadOperation extends Operation {
 
+    XorSplitPayloadOperation() {}
+
+    public XorSplitPayloadOperation(ASN1Encodable object) throws IOException {
+        parse(object);
+    }
+
     @Override
     protected void parse(ASN1Encodable to) throws IOException {
         throw new NotImplementedException();
@@ -26,5 +32,10 @@ public class XorSplitPayloadOperation extends Operation {
     @Override
     public ASN1Object toASN1Object(DumpType dumpType) throws IOException {
         throw new NotImplementedException();
+    }
+
+    @Override
+    public Operation getNewInstance(ASN1Encodable object) throws IOException {
+        return new XorSplitPayloadOperation(object);
     }
 }

@@ -21,6 +21,7 @@ package net.gwerder.java.messagevortex.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
+import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.*;
 import org.bouncycastle.asn1.cms.Evidence;
 
@@ -44,7 +45,7 @@ public class AddRedundancyOperation extends AbstractRedundancyOperation {
     }
 
     public static AddRedundancyOperation getInstance(Object obj) throws IOException {
-        if (obj == null || obj instanceof Evidence) {
+        if (obj == null || obj instanceof AddRedundancyOperation) {
             return (AddRedundancyOperation) obj;
         } else if (obj instanceof ASN1TaggedObject) {
             ASN1TaggedObject to=ASN1TaggedObject.getInstance(obj);
@@ -54,8 +55,16 @@ public class AddRedundancyOperation extends AbstractRedundancyOperation {
         throw new IllegalArgumentException("unknown object in getInstance");
     }
 
-    public ASN1Primitive toASN1Primitive() {
-        ASN1Sequence v=null;
-        return new DERTaggedObject(false, ADD_REDUNDANCY , new DERSequence(v));
+    @Override
+    public ASN1Object toASN1Object(DumpType dumpType) throws IOException {
+        return new DERTaggedObject(true, ADD_REDUNDANCY ,super.toASN1Object(dumpType));
+    }
+
+    public ASN1Primitive toASN1Primitive() throws IOException {
+        return toASN1Object(DumpType.PUBLIC_ONLY).toASN1Primitive();
+    }
+
+    public Operation getNewInstance(ASN1Encodable object) throws IOException {
+        return new AddRedundancyOperation(object);
     }
 }

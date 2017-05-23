@@ -12,6 +12,12 @@ import java.io.IOException;
  */
 public class MergePayloadOperation extends Operation {
 
+    MergePayloadOperation() {}
+
+    public MergePayloadOperation(ASN1Encodable object) throws IOException {
+        parse(object);
+    }
+
     @Override
     protected void parse(ASN1Encodable to) throws IOException {
         throw new NotImplementedException();
@@ -27,4 +33,8 @@ public class MergePayloadOperation extends Operation {
         throw new NotImplementedException();
     }
 
+    @Override
+    public Operation getNewInstance(ASN1Encodable object) throws IOException {
+        return new MergePayloadOperation(object);
+    }
 }

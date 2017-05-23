@@ -147,8 +147,8 @@ BEGIN
   }
 
    AssemblyBlock ::= SEQUENCE {
-      routingBlockIndex   [13100] INTEGER (0..maxRoutingBlocks),
-      nextRoutingBlock    [13200] SEQUENCE (SIZE (1..maxPayloadBlocks)) OF INTEGER (0..maxID)
+      routingBlockIndex    INTEGER (0..maxRoutingBlocks),
+      payloadBlockIndex    SEQUENCE (SIZE (1..maxPayloadBlocks)) OF INTEGER (0..maxID)
     }
 
 

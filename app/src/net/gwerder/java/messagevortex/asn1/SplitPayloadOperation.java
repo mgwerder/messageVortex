@@ -12,6 +12,11 @@ import java.io.IOException;
  */
 public class SplitPayloadOperation extends Operation {
 
+    SplitPayloadOperation() {}
+
+    public SplitPayloadOperation(ASN1Encodable object) throws IOException {
+        parse(object);
+    }
 
     @Override
     protected void parse(ASN1Encodable to) throws IOException {
@@ -26,5 +31,10 @@ public class SplitPayloadOperation extends Operation {
     @Override
     public ASN1Object toASN1Object(DumpType dumpType) throws IOException {
         throw new NotImplementedException();
+    }
+
+    @Override
+    public Operation getNewInstance(ASN1Encodable object) throws IOException {
+        return new SplitPayloadOperation(object);
     }
 }

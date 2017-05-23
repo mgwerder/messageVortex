@@ -13,6 +13,12 @@ import java.io.IOException;
  */
 public class DecryptPayloadOperation extends Operation {
 
+    DecryptPayloadOperation() {}
+
+    public DecryptPayloadOperation(ASN1Encodable object) throws IOException {
+        parse(object);
+    }
+
     @Override
     protected void parse(ASN1Encodable to) throws IOException {
         throw new NotImplementedException();
@@ -28,4 +34,8 @@ public class DecryptPayloadOperation extends Operation {
         throw new NotImplementedException();
     }
 
+    @Override
+    public Operation getNewInstance(ASN1Encodable object) throws IOException {
+        return new DecryptPayloadOperation(object);
+    }
 }

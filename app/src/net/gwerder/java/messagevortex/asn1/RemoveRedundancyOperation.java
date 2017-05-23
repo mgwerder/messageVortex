@@ -33,6 +33,11 @@ public class RemoveRedundancyOperation extends AbstractRedundancyOperation {
 
     RemoveRedundancyOperation() {}
 
+    @Override
+    public Operation getNewInstance(ASN1Encodable object) throws IOException {
+        return new RemoveRedundancyOperation(object);
+    }
+
     public RemoveRedundancyOperation(int inputId, int dataStripes, int redundancy, List<SymmetricKey> keys, int outputId, int gfSize) {
         super(inputId,dataStripes,redundancy,keys,outputId,gfSize);
     }

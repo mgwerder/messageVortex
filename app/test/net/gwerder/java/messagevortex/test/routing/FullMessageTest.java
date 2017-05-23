@@ -11,7 +11,9 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,7 +40,11 @@ public class FullMessageTest {
         blockIdentity.setReplay(84);
         blockIdentity.setUsagePeriod(new UsagePeriod(100));
         RoutingBlock routing=message.getInnerMessage().getRouting();
-        // add operations to
+        List<SymmetricKey> sk=new ArrayList<>();
+        for(int i=0;i<20;i++) {
+            sk.add(new SymmetricKey());
+        }
+        routing.addOperation(new AddRedundancyOperation(1000,10,10,sk,2000,8));
         message.setDecryptionKey(new AsymmetricKey(Algorithm.RSA.getParameters(SecurityLevel.LOW)));
         testMessageEncoding(message);
     }
@@ -50,6 +56,7 @@ public class FullMessageTest {
             LOGGER.log(Level.INFO, "  encoding objects");
             VortexMessage m2=new VortexMessage( b.toBytes(dt),b.getDecryptionKey());
             VortexMessage m3=new VortexMessage(m2.toBytes(dt),b.getDecryptionKey());
+            assertTrue("found fixme in dump text\n"+m3.dumpValueNotation("",dt),m3.dumpValueNotation("",dt).toUpperCase().indexOf("FIXME")>-1);
             LOGGER.log(Level.INFO, "  Testing object reencoding ("+m2.getDecryptionKey()+"/"+m3.getDecryptionKey()+")");
             for(VortexMessage v:new VortexMessage[] {m2,m3}) {
                 assertTrue("test for toBytes() capability in prefix when aplying dump type "+dt+"",v.getPrefix().toBytes(dt)!=null);
