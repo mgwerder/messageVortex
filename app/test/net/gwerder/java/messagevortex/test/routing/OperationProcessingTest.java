@@ -56,7 +56,7 @@ public class OperationProcessingTest {
             InternalPayloadSpace ps=new InternalPayloadSpace();
             InternalPayload p=ps.getInternalPayload(identity);
             redundancyOperationTest(p,3,2,8);
-            int repeat=20;
+            int repeat=5;
             for(int gfSize:new int[] {8,16}) {
                 for (int i = 0; i < repeat; i++) {
                     // determine data to be processed

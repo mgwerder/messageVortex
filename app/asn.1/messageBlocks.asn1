@@ -483,6 +483,8 @@ BEGIN
     publicKey     [2] OCTET STRING,
     privateKey    [3] OCTET STRING OPTIONAL
   }
+  
+  -- reserved OID primeCalc GmbH 1.3.6.1.4.1.50057 OBJECT 
 
 END
 
