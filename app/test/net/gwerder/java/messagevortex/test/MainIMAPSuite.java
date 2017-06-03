@@ -2,6 +2,7 @@ package net.gwerder.java.messagevortex.test;
 
 import junit.framework.JUnit4TestAdapter;
 import junit.framework.TestSuite;
+import net.gwerder.java.messagevortex.asn1.AsymmetricKey;
 import net.gwerder.java.messagevortex.test.imap.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -24,7 +25,11 @@ import org.junit.runners.Suite;
 
 public class MainIMAPSuite {
 
-  public static junit.framework.Test suite() {
+      static {
+            AsymmetricKey.setCacheFileName("AsymmetricKey.cache");
+      }
+
+      public static junit.framework.Test suite() {
         final TestSuite s = new TestSuite();
         s.addTest(new JUnit4TestAdapter(CustomKeyManagerTest.class));
         s.addTest(new JUnit4TestAdapter(ImapLineExceptionTest.class));

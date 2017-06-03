@@ -35,12 +35,12 @@ import java.io.IOException;
  */
 public class HeaderReply extends AbstractBlock {
 
-    // FIXME get HeaderReply
-    public HeaderReply(ASN1Primitive to) {
+    public HeaderReply(ASN1Primitive to) throws IOException {
+        parse(to);
     }
 
     @Override
-    protected void parse(ASN1Encodable to) {
+    protected void parse(ASN1Encodable to) throws IOException {
         // FIXME
     }
 

@@ -8,7 +8,7 @@ import java.io.IOException;
 /**
  * Created by Martin on 03.06.2017.
  */
-abstract public class AbstractCryptPayloadOperation extends Operation  {
+public abstract class AbstractCryptPayloadOperation extends Operation  {
 
     int originalId=-1;
     SymmetricKey key=null;
@@ -49,5 +49,5 @@ abstract public class AbstractCryptPayloadOperation extends Operation  {
         return new DERSequence(v);
     }
 
-    abstract public Operation getNewInstance(ASN1Encodable object) throws IOException ;
+    public abstract Operation getNewInstance(ASN1Encodable object) throws IOException ;
 }

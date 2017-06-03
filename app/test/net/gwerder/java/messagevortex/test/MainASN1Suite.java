@@ -3,6 +3,7 @@ package net.gwerder.java.messagevortex.test;
 
 import junit.framework.JUnit4TestAdapter;
 import junit.framework.TestSuite;
+import net.gwerder.java.messagevortex.asn1.AsymmetricKey;
 import net.gwerder.java.messagevortex.test.asn1.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -26,6 +27,10 @@ import org.junit.runners.Suite;
  * Test all classes related to parsing/handling ASN.1 data.
  */
 public class MainASN1Suite {
+
+    static {
+        AsymmetricKey.setCacheFileName("AsymmetricKey.cache");
+    }
 
     public static junit.framework.Test suite() {
         final TestSuite s = new TestSuite();
