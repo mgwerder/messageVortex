@@ -22,17 +22,12 @@ package net.gwerder.java.messagevortex.asn1;
 // ************************************************************************************
 
 import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
-import org.bouncycastle.asn1.ASN1Encodable;
-import org.bouncycastle.asn1.ASN1Object;
-import org.bouncycastle.asn1.ASN1Sequence;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
 
 /**
  * ASN1 parser for identity request.
- *
- * Created by martin.gwerder on 25.04.2016.
  */
 public class HeaderRequestIdentity extends HeaderRequest {
 
@@ -77,6 +72,9 @@ public class HeaderRequestIdentity extends HeaderRequest {
 
     @Override
     public ASN1Object toASN1Object(DumpType dumpType) throws IOException {
-        throw new NotImplementedException();
+        ASN1EncodableVector s1=new ASN1EncodableVector();
+        s1.add(identity.toASN1Object(dumpType));
+        s1.add(period.toASN1Object(dumpType));
+        return new DERSequence(s1);
     }
 }

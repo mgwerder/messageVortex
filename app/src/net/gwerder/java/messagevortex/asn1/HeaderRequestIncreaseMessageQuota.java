@@ -22,11 +22,7 @@ package net.gwerder.java.messagevortex.asn1;
 // ************************************************************************************
 
 import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
-import org.bouncycastle.asn1.ASN1Encodable;
-import org.bouncycastle.asn1.ASN1Integer;
-import org.bouncycastle.asn1.ASN1Object;
-import org.bouncycastle.asn1.ASN1Sequence;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
 
@@ -53,7 +49,6 @@ public class HeaderRequestIncreaseMessageQuota extends HeaderRequest {
         ASN1Sequence s1 = ASN1Sequence.getInstance(ae);
         int i=0;
         identity=new AsymmetricKey(toDER(s1.getObjectAt(i++).toASN1Primitive()));
-        // FIXME check integer bounds
         quota = ASN1Integer.getInstance( s1.getObjectAt( i++ ) ).getValue().intValue();
     }
 
@@ -83,6 +78,9 @@ public class HeaderRequestIncreaseMessageQuota extends HeaderRequest {
 
     @Override
     public ASN1Object toASN1Object(DumpType dumpType) throws IOException {
-        throw new NotImplementedException();
+        ASN1EncodableVector s1=new ASN1EncodableVector();
+        s1.add(identity.toASN1Object(dumpType));
+        s1.add(new ASN1Integer(quota));
+        return new DERSequence(s1);
     }
 }

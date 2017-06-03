@@ -22,10 +22,7 @@ package net.gwerder.java.messagevortex.asn1;
 // ************************************************************************************
 
 import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
-import org.bouncycastle.asn1.ASN1Encodable;
-import org.bouncycastle.asn1.ASN1Object;
-import org.bouncycastle.asn1.ASN1Sequence;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
 
@@ -72,6 +69,8 @@ public class HeaderRequestCapability extends HeaderRequest {
 
     @Override
     public ASN1Object toASN1Object(DumpType dumpType) throws IOException {
-        throw new NotImplementedException();
+        ASN1EncodableVector s1=new ASN1EncodableVector();
+        s1.add(period.toASN1Object(dumpType));
+        return new DERSequence(s1);
     }
 }

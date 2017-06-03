@@ -50,7 +50,7 @@ public class IdentityBlock extends AbstractBlock {
     private long serial;
     private int maxReplays;
     private UsagePeriod valid = null;
-    private int[] forwardSecret = null;
+    private int forwardSecret = -1;
     private MacAlgorithm hash = new MacAlgorithm( Algorithm.getDefault( AlgorithmType.HASHING ) );
     private HeaderRequest[] requests;
     private long identifier=-1;
@@ -130,20 +130,7 @@ public class IdentityBlock extends AbstractBlock {
             serial = ASN1Integer.getInstance( s1.getObjectAt( i++ ) ).getValue().longValue();
             maxReplays = ASN1Integer.getInstance( s1.getObjectAt( i++ ) ).getValue().intValue();
             valid = new UsagePeriod( s1.getObjectAt( i++ ) );
-            try {
-                ASN1TaggedObject ato = ASN1TaggedObject.getInstance( s1.getObjectAt( i++ ) );
-                if (ato.getTagNo() != 0) {
-                    throw new IOException( "not a forward secret" );
-                }
-                ASN1Sequence s2 = ASN1Sequence.getInstance( ato );
-                forwardSecret = new int[s2.size()];
-                for (int y = 0; y < s2.size(); y++) {
-                    forwardSecret[y] = ((ASN1Integer) (s2.getObjectAt( y ))).getValue().intValue();
-                }
-            } catch (Exception e) {
-                // redo this line if not optional forwardSecret
-                i--;
-            }
+            forwardSecret = ASN1Integer.getInstance(s1.getObjectAt( i++ )).getValue().intValue();
             hash = new MacAlgorithm( s1.getObjectAt( i++ ) );
             ASN1Sequence s2 = ASN1Sequence.getInstance( s1.getObjectAt( i++ ) );
             requests = new HeaderRequest[s2.size()];
@@ -309,9 +296,7 @@ public class IdentityBlock extends AbstractBlock {
                 throw new IOException( "validity did return null object" );
             }
             v.add( o );
-            if(forwardSecret!=null && forwardSecret.length>0) {
-                // FIXME dumping of forward secrets is not implemented
-            }
+            v.add(new ASN1Integer(forwardSecret));
             v.add( hash.toASN1Object(dumpType) );
             ASN1EncodableVector s = new ASN1EncodableVector();
             for (HeaderRequest r : requests) {
@@ -366,13 +351,7 @@ public class IdentityBlock extends AbstractBlock {
             sb.append( prefix + "    serial " + serial + "," + CRLF );
             sb.append( prefix + "    maxReplays " + maxReplays + "," + CRLF );
             sb.append( prefix + "    valid " + valid.dumpValueNotation( prefix + "  ",dumpType ) + "," + CRLF );
-            if (forwardSecret != null) {
-                sb.append( prefix + "    forwardSecret { " + CRLF );
-                for (int i = 0; i < forwardSecret.length; i++) {
-                    sb.append( forwardSecret[i] + (i < forwardSecret.length - 1 ? "," : "") + CRLF );
-                }
-                sb.append( " }," + CRLF );
-            }
+            sb.append( prefix + "    forwardSecret "+forwardSecret + CRLF );
             sb.append( prefix + "    decryptionKey ''B," + CRLF );
             sb.append( prefix + "    requests {" + CRLF );
             for (HeaderRequest r : requests) {
