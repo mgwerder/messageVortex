@@ -3,13 +3,11 @@ package net.gwerder.java.messagevortex.asn1;
 
 import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.*;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 /**
- * Contains all classes extending assemply blocks (Payload operations).
+ * Contains all classes extending assembly blocks (Payload operations).
  */
 public class AssemblyBlock extends AbstractBlock {
 
@@ -36,7 +34,20 @@ public class AssemblyBlock extends AbstractBlock {
 
     @Override
     public String dumpValueNotation(String prefix, DumpType dumptype) throws IOException {
-        throw new NotImplementedException();
+        StringBuilder sb=new StringBuilder();
+        sb.append("{"+CRLF);
+        sb.append(prefix+"  routingBlockIndex "+routingBlockIndex+CRLF);
+        sb.append(prefix+"  payloadBlockIndex { ");
+        int j=0;
+        for(int i:payloadBlockIndex) {
+            if(j>0) {
+                sb.append(", ");
+            }
+            sb.append(i);
+            j++;
+        }
+        sb.append(" }");
+        return sb.toString();
     }
 
     @Override

@@ -23,7 +23,6 @@ package net.gwerder.java.messagevortex.asn1;
 
 import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.*;
-import org.bouncycastle.asn1.cms.Evidence;
 
 import java.io.IOException;
 import java.util.List;
