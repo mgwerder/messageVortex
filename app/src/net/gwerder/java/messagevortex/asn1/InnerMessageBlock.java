@@ -188,7 +188,7 @@ public class InnerMessageBlock extends AbstractBlock {
             case PRIVATE_COMMENTED:
                 try {
                     v.add(new DERTaggedObject(PREFIX_ENCRYPTED, new DEROctetString(prefix.toEncBytes())));
-                } catch(IOException e) {
+                } catch(IOException|NullPointerException e) {
                     throw new IOException( "need a decryption key to encrypt prefix block ("+prefix.getDecryptionKey()+")",e );
                 }
                 break;

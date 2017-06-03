@@ -65,7 +65,7 @@ public class DummyBlenderTest implements BlenderListener,TransportListener {
             VortexMessage v=new VortexMessage(new PrefixBlock(), new InnerMessageBlock(new PrefixBlock(),new IdentityBlock(),new RoutingBlock()));
             v.setDecryptionKey(new AsymmetricKey(Algorithm.RSA.getParameters(SecurityLevel.LOW)));
             assertTrue("Failed sending message to different endpoint", dt[0].blendMessage(new BlendingSpec("martin@example.com1"), v));
-            assertFalse("Failed sending message to unknown endpoint (unexpectedly succeeded)", dt[0].blendMessage(new BlendingSpec("martin@example.com-1"), new VortexMessage(new PrefixBlock(), new InnerMessageBlock(new PrefixBlock(),new IdentityBlock(),new RoutingBlock()))));
+            assertFalse("Failed sending message to unknown endpoint (unexpectedly succeeded)", dt[0].blendMessage(new BlendingSpec("martin@example.com-1"), v));
         } catch (Exception ioe) {
             LOGGER.log(Level.SEVERE, "Caught exception while creating message", ioe);
             fail("Endpointests failed as there was an error opening sample messages");

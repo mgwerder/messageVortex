@@ -14,6 +14,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
@@ -125,9 +126,15 @@ public class ImapSSLTest {
     protected static Set<Thread> verifyHangingThreads(Set<Thread> pThread) {
         Set<Thread> cThread = Thread.getAllStackTraces().keySet();
         cThread.removeAll(pThread);
+        ArrayList<Thread> al=new ArrayList<>();
         for(Thread t:cThread) {
-            LOGGER.log(Level.INFO,"Error got new thread "+t.getName());
+            if(t.isAlive() && ! t.isDaemon()) {
+                LOGGER.log(Level.SEVERE, "Error got new thread " + t.getName());
+            } else {
+                al.add(t);
+            }
         }
+        cThread.removeAll(al);
         return cThread;
     }
 
