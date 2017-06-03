@@ -38,6 +38,10 @@ public class BlendingParameter extends AbstractBlock {
     SymmetricKey symmetricKey=null;
     AsymmetricKey asymmetricKey=null;
 
+    public BlendingParameter(ASN1Encodable e ) throws IOException {
+        parse(e);
+    }
+
     @Override
     protected void parse(ASN1Encodable to) throws IOException {
         ASN1TaggedObject t=ASN1TaggedObject.getInstance(to);

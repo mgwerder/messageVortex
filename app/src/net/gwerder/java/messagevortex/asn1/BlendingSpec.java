@@ -25,6 +25,7 @@ import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Represents a the Blending specification of the routing block.
@@ -39,7 +40,7 @@ public class BlendingSpec extends AbstractBlock {
     private BlendingParameter[] blendingParameter = new BlendingParameter[0];
 
     /* constructor */
-    public BlendingSpec(ASN1Encodable to) {
+    public BlendingSpec(ASN1Encodable to)throws IOException  {
         parse(to);
     }
 
@@ -47,7 +48,7 @@ public class BlendingSpec extends AbstractBlock {
         this.recipientAddress = blendingEndpointAddress;
     }
 
-    protected void parse(ASN1Encodable to) {
+    protected void parse(ASN1Encodable to) throws IOException {
         ASN1Sequence s1 = ASN1Sequence.getInstance(to);
         int i=0;
 
@@ -62,7 +63,12 @@ public class BlendingSpec extends AbstractBlock {
         //get blending type
         blendingType= DERIA5String.getInstance(s1.getObjectAt(i++)).getString();
 
-        // FIXME dump Blending Parameter
+        // get Blending Parameter
+        s2=ASN1Sequence.getInstance(s1.getObjectAt(i++));
+        ArrayList<BlendingParameter> al=new ArrayList<>();
+        for(ASN1Encodable e:s2) {
+            al.add(new BlendingParameter(e));
+        }
     }
 
     @Override
@@ -91,7 +97,7 @@ public class BlendingSpec extends AbstractBlock {
     }
 
     @Override
-    public String dumpValueNotation(String prefix,DumpType dumpType) {
+    public String dumpValueNotation(String prefix,DumpType dumpType) throws IOException {
         StringBuilder sb=new StringBuilder();
         sb.append(" {").append(CRLF);
         sb.append(prefix).append("  target '"+media+recipientAddress+"',").append(CRLF);
@@ -104,7 +110,7 @@ public class BlendingSpec extends AbstractBlock {
                     sb.append(",");
                 }
                 sb.append(CRLF);
-                sb.append(prefix).append(dumpValueNotation("",dumpType));
+                sb.append(prefix).append(p.dumpValueNotation("",dumpType));
             }
             sb.append(CRLF);
         }
