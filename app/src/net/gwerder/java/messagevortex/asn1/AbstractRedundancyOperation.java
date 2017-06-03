@@ -52,7 +52,7 @@ public abstract class AbstractRedundancyOperation extends Operation implements A
     int inputId;
     int dataStripes=1;
     int redundancy=1;
-    ArrayList<SymmetricKey> keys;
+    final ArrayList<SymmetricKey> keys=new ArrayList<>();
     int outputId;
     int gfSize=4;
 
@@ -89,9 +89,11 @@ public abstract class AbstractRedundancyOperation extends Operation implements A
             throw new IOException("got unknown tag id ("+to.getTagNo()+") when expecting keys" );
         }
         ASN1Sequence s=ASN1Sequence.getInstance(to.getObject());
-        keys=new ArrayList<>();
-        for(ASN1Encodable o:s) {
-            keys.add(new SymmetricKey(toDER(o.toASN1Primitive())));
+        synchronized(keys) {
+            keys.clear();
+            for (ASN1Encodable o : s) {
+                keys.add(new SymmetricKey(toDER(o.toASN1Primitive())));
+            }
         }
 
         outputId=parseIntval(ASN1TaggedObject.getInstance(s1.getObjectAt(i++)),OUTPUT_ID,"outputId");
@@ -242,8 +244,10 @@ public abstract class AbstractRedundancyOperation extends Operation implements A
         if(this.keys!=null) {
             old = this.keys.toArray(new SymmetricKey[this.keys.size()]);
         }
-        this.keys=new ArrayList<>();
-        this.keys.addAll(keys);
+        synchronized(this.keys) {
+            this.keys.clear();
+            this.keys.addAll(keys);
+        }
         return old;
     }
 

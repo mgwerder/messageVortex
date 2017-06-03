@@ -22,7 +22,6 @@ package net.gwerder.java.messagevortex.asn1;
 // ************************************************************************************
 
 import org.bouncycastle.asn1.*;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.IOException;
 import java.util.Map;
@@ -44,21 +43,12 @@ public abstract class Operation extends AbstractBlock {
     public static final int REMOVE_REDUNDANCY = 410;
 
     private static final Map<Integer,Operation> operations=new ConcurrentHashMap<>();
-    static {
-        operations.put(SPLIT_PAYLOAD    ,new SplitPayloadOperation());
-        operations.put(MERGE_PAYLOAD    ,new MergePayloadOperation());
-        operations.put(XOR_SPLIT_PAYLOAD,new XorSplitPayloadOperation());
-        operations.put(XOR_MERGE_PAYLOAD,new XorMergePayloadOperation());
-        operations.put(ENCRYPT_PAYLOAD  ,new EncryptPayloadOperation());
-        operations.put(DECRYPT_PAYLOAD  ,new DecryptPayloadOperation());
-        operations.put(ADD_REDUNDANCY   ,new AddRedundancyOperation());
-        operations.put(REMOVE_REDUNDANCY,new RemoveRedundancyOperation());
-    }
 
     /* constructor */
     Operation() {};
 
     public static Operation getInstance(ASN1Encodable object) throws IOException {
+        if(operations.isEmpty()) throw new IOException("init() not called");
         int tag=ASN1TaggedObject.getInstance(object).getTagNo();
         if(operations.get(tag)==null) {
             throw new IOException("unknown tag for choice detected");
@@ -66,7 +56,23 @@ public abstract class Operation extends AbstractBlock {
         return operations.get(tag).getNewInstance(ASN1TaggedObject.getInstance(object).getObject());
     }
 
+    public static void init() {
+        synchronized(operations) {
+            if (operations.isEmpty()) {
+                operations.put(SPLIT_PAYLOAD, new SplitPayloadOperation());
+                operations.put(MERGE_PAYLOAD, new MergePayloadOperation());
+                operations.put(XOR_SPLIT_PAYLOAD, new XorSplitPayloadOperation());
+                operations.put(XOR_MERGE_PAYLOAD, new XorMergePayloadOperation());
+                operations.put(ENCRYPT_PAYLOAD, new EncryptPayloadOperation());
+                operations.put(DECRYPT_PAYLOAD, new DecryptPayloadOperation());
+                operations.put(ADD_REDUNDANCY, new AddRedundancyOperation());
+                operations.put(REMOVE_REDUNDANCY, new RemoveRedundancyOperation());
+            }
+        }
+    }
+
     public static Operation parseInstance(ASN1TaggedObject object) throws IOException {
+        if(operations.isEmpty()) throw new IOException("init() not called");
         if(operations.get(object.getTagNo())==null) {
             throw new IOException("got unknown tag number for operation ("+object.getTagNo());
         }
