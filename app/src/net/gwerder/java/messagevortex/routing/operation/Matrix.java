@@ -51,6 +51,13 @@ public class Matrix {
     int modulo=Integer.MAX_VALUE;
     MathMode mode;
 
+    /***
+     * creates a matrix (x,y) with the specified MathMode.
+     *
+     * @param x      the number of columns of the matrix
+     * @param y      the number of rows of the matrix
+     * @param mode   the math mode to be applied
+     */
     public Matrix(int x,int y,MathMode mode) {
         dimension[0]=x;
         dimension[1]=y;
@@ -60,11 +67,27 @@ public class Matrix {
         }
     }
 
+    /***
+     * creates a two dimensional matrix (x,y) with the specified MathMode.
+     *
+     * @param x       the number of columns of the matrix
+     * @param y       the number of rows of the matrix
+     * @param mode    the math mode to be applied
+     * @param content the content as one dimensional array (sequence of rows)
+     */
     public Matrix(int x,int y,MathMode mode,int[] content) {
         this(x,y,mode);
         matrix=Arrays.copyOf(content,content.length);
     }
 
+    /***
+     * creates a two dimensional matrix (x,y) with the specified MathMode.
+     *
+     * @param x       the number of columns of the matrix
+     * @param y       the number of rows of the matrix
+     * @param mode    the math mode to be applied
+     * @param content the content as one dimensional array (sequence of rows)
+     */
     public Matrix(int x,int y,MathMode mode,byte[] content) {
         this(x,y,mode);
         matrix=new int[content.length];
@@ -73,6 +96,14 @@ public class Matrix {
         }
     }
 
+    /***
+     * creates a two dimensional matrix (x,y) with the specified MathMode.
+     *
+     * @param x       the number of columns of the matrix
+     * @param y       the number of rows of the matrix
+     * @param mode    the math mode to be applied
+     * @param content the value to be set in all fields
+     */
     public Matrix(int x,int y,MathMode mode,int content) {
         this(x,y,mode);
         for(int i=0;i<x*y;i++) {
@@ -80,6 +111,12 @@ public class Matrix {
         }
     }
 
+    /***
+     * creates a two dimensional unit matrix (size,size) with the specified MathMode.
+     *
+     * @param size    the number of columns of the matrix
+     * @param mode    the math mode to be applied
+     */
     public static Matrix unitMatrix(int size,MathMode mode) {
         if(!matrixCacheDisabled) {
             Matrix m = matrixCache.get("um" + size + "/" + mode);
@@ -101,14 +138,29 @@ public class Matrix {
         return ret;
     }
 
+    /***
+     * Get the number of columns.
+     *
+     * @return the nuber of columns as int value
+     */
     public int getX() {
         return dimension[0];
     }
 
+    /***
+     * Set the number of rows.
+     *
+     * @return the nuber of rows as int value
+     */
     public int getY() {
         return dimension[1];
     }
 
+    /***
+     * Removes the specified row from the matrix.
+     *
+     * @param index the index of the row to be removed (starting with 0)
+     */
     public void removeRow(int index) {
         int[] newMatrix= Arrays.copyOf(matrix,getX()*(getY()-1));
         for(int i=(1+index)*getX();i<matrix.length;i++){
@@ -118,6 +170,14 @@ public class Matrix {
         matrix=newMatrix;
     }
 
+    /***
+     * Returns a matrix with the specified dimension initialised with random values.
+     *
+     * @param x       the number of columns of the matrix
+     * @param y       the number of rows of the matrix
+     * @param mode    the math mode to be applied
+     * @return        the generated matrix
+     */
     public static Matrix randomMatrix(int x,int y,MathMode mode) {
         Matrix ret=new Matrix(x,y,mode);
         for(int xl=0;xl<x;xl++) {
@@ -128,6 +188,13 @@ public class Matrix {
         return ret;
     }
 
+    /***
+     * Multiplies the current matrix with the specified matrix.
+     *
+     * @param m                    the matrix to multitply with
+     * @return                     the resulting matrix
+     * @throws ArithmeticException if multiplication may not be caried out
+     */
     public Matrix mul(Matrix m) {
         if(! this.mode.equals(m.mode)) {
             throw new ArithmeticException( "illegal matrix math mode" );
@@ -195,6 +262,12 @@ public class Matrix {
         return sb.toString();
     }
 
+    /***
+     * Sets a modulo value of the matrix for all operations.
+     *
+     * @param i   the value to be used as modulo
+     * @return    the previously set modulo
+     */
     public int setModulo(int i) {
         int ret=modulo;
         if(i<1) {
@@ -204,6 +277,12 @@ public class Matrix {
         return ret;
     }
 
+    /***
+     * Get a row of the matrix as array.
+     *
+     * @param i  the index of the row to be extracted as array
+     * @return   the row representation as array
+     */
     public int[] getRow(int i) {
         if(i<0 || i>=dimension[1]) {
             throw new ArithmeticException("row index out of range 0<=i<"+dimension[0]);
@@ -215,6 +294,13 @@ public class Matrix {
         return ret;
     }
 
+    /***
+     * Extracts the value of a specified matrix field.
+     *
+     * @param x  the column of the field
+     * @param y  the row of the field
+     * @return   the value of the field
+     */
     public int getField(int x,int y) {
         if(x<0 || x>=dimension[0]) {
             throw new ArithmeticException("column index out of range 0<=col["+x+"]<"+dimension[0]);
@@ -225,6 +311,14 @@ public class Matrix {
         return matrix[y*getX()+x];
     }
 
+    /***
+     * Sets the value of a specified matrix field.
+     *
+     * @param x     the column of the field
+     * @param y     the row of the field
+     * @param value the value to be set
+     * @return      the previously set value of the field
+     */
     public int setField(int x,int y,int value) {
         if(x<0 || x>=dimension[0]) {
             throw new ArithmeticException("column index out of range 0<=col["+x+"]<"+dimension[0]);
@@ -301,6 +395,12 @@ public class Matrix {
         return ret;
     }
 
+    /***
+     * Get the values of a row as byte arrays.
+     *
+     * @param row the index of the row to be used (starting with 0)
+     * @return    the array containing the calues of the row
+     */
     public byte[] getRowAsByteArray(int row) {
         byte[] ret=new byte[getX()];
         for(int i=0;i<ret.length;i++) {
@@ -309,6 +409,11 @@ public class Matrix {
         return ret;
     }
 
+    /***
+     * Get the content of the matrix as byte array.
+     *
+     * @return the byte array representing the matrix values (row by row)
+     */
     public byte[] getAsByteArray() {
         byte[] ret=new byte[getX()*getY()];
         for(int y=0;y<getY();y++) {
@@ -324,7 +429,14 @@ public class Matrix {
         return new Matrix(getX(),getY(),mode,matrix);
     }
 
-    void transformColumn(int col,int col2, int scalar) {
+    /***
+     * Multiplies element by element the values of the second column by the specified scalar and subtracts the resulting value from the first element.
+     *
+     * @param col    the column to be recalculated/altered
+     * @param col2   the column to be used for recalculation
+     * @param scalar the scalar to be used for division/multiplication
+     */
+    public void transformColumn(int col,int col2, int scalar) {
         if(col<0 || col>getX()) {
             throw new ArithmeticException("first column is out of range");
         }
@@ -333,20 +445,26 @@ public class Matrix {
         }
         for(int row=0;row<getY();row++) {
             int value1 = getField(col, row);
-            int value2;
             int newValue;
             if (col2 <0 )  {
-                value2=-1;
                 newValue=mode.div(value1,scalar);
             } else {
-                value2 = getField(col2, row);
+                int value2 = getField(col2, row);
                 newValue = mode.sub(value1, mode.mul(value2, scalar));
             }
             setField(col,row,newValue);
         }
     }
 
-    void transformRow(int row,int row2, int scalar,boolean doDiv) {
+    /***
+     * Divides or multiplies element by element the values of the second row by the specified scalar and subtracts the resulting value from the first element.
+     *
+     * @param row    the row o be recalculated/altered
+     * @param row2   the row to be used for recalculation
+     * @param scalar the scalar to be used for division/multiplication
+     * @param doDiv  flag to specify whether division (true) or multiplication (false) should be used
+     */
+    public void transformRow(int row,int row2, int scalar,boolean doDiv) {
         if(row<0 || row>getY()) {
             throw new ArithmeticException("first row is out of range");
         }
@@ -367,7 +485,13 @@ public class Matrix {
         }
     }
 
-    void divRow(int row, int scalar) {
+    /***
+     * Divides all values of the specified row in the matrix by the scalar specified.
+     *
+     * @param row     the index of the row (starting with 0)
+     * @param scalar  the scalar to be used as divisor
+     */
+    public void divRow(int row, int scalar) {
         if(row<0 || row>getY()) {
             throw new ArithmeticException("first row is out of range");
         }
@@ -377,7 +501,13 @@ public class Matrix {
         }
     }
 
-    void flipRow(int row1, int row2) {
+    /***
+     * Flips two rows of the current matrix.
+     *
+     * @param row1 index of the first row (starting with 0)
+     * @param row2 index of the second row (starting with 0)
+     */
+    public void flipRow(int row1, int row2) {
         int tmp;
         for(int i=0;i<getX();i++) {
             tmp=getField(i,row1);
@@ -386,8 +516,16 @@ public class Matrix {
         }
     }
 
-    public static void enableMatrixCache(boolean enable) {
+    /***
+     * Enables or disables the matrix  cache.
+     *
+     * @param enable  set to true if matrix cache should be enabled
+     * @return        the previously set value
+     */
+    public static boolean enableMatrixCache(boolean enable) {
+        boolean old=!matrixCacheDisabled;
         matrixCacheDisabled =!enable;
+        return old;
     }
 
 }
