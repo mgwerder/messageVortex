@@ -36,6 +36,12 @@ import java.util.logging.Level;
  */
 public class IdentityStoreBlock extends AbstractBlock {
 
+    public enum IdentityType {
+        OWNED_IDENTITY,
+        NODE_IDENTITY,
+        RECIPIENT_IDENTITY
+    }
+
     private static final java.util.logging.Logger LOGGER;
     static {
         LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
@@ -52,9 +58,7 @@ public class IdentityStoreBlock extends AbstractBlock {
     private AsymmetricKey nodeKey       = null;
     private IdentityType  iType         = null;
 
-    public IdentityStoreBlock() {
-        super();
-    }
+    public IdentityStoreBlock() {super();}
 
     public IdentityStoreBlock(ASN1Encodable ae) throws IOException {
         parse(ae);
@@ -62,7 +66,11 @@ public class IdentityStoreBlock extends AbstractBlock {
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        try {
+            return dumpValueNotation("", DumpType.ALL_UNENCRYPTED).hashCode();
+        } catch(IOException e) {
+            return "".hashCode();
+        }
     }
 
     public static IdentityStoreBlock getIdentityStoreBlockDemo(IdentityType it,boolean complete) throws IOException {
@@ -285,12 +293,6 @@ public class IdentityStoreBlock extends AbstractBlock {
             return false;
         }
         return nodeKey.equals(isb.nodeKey);
-    }
-
-    public enum IdentityType {
-        OWNED_IDENTITY,
-        NODE_IDENTITY,
-        RECIPIENT_IDENTITY
     }
 
 }

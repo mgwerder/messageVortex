@@ -33,7 +33,7 @@ import java.security.Security;
 /**
  *Abstract class for all encryption key types
  */
-abstract public class Key extends AbstractBlock {
+public abstract class Key extends AbstractBlock {
 
     static {
         Security.addProvider(new BouncyCastleProvider());

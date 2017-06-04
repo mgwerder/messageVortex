@@ -6,6 +6,7 @@ import net.gwerder.java.messagevortex.asn1.AsymmetricKey;
 import net.gwerder.java.messagevortex.test.core.ConfigTest;
 import net.gwerder.java.messagevortex.test.core.MessageVortexTest;
 import net.gwerder.java.messagevortex.test.core.VersionTest;
+import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -18,7 +19,8 @@ import org.junit.runners.Suite;
 
 public class MainCoreSuite {
 
-    static {
+    @Before
+    public void init() {
         AsymmetricKey.setCacheFileName("AsymmetricKey.cache");
     }
 

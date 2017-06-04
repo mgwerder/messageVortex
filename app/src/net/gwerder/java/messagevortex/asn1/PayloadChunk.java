@@ -25,6 +25,7 @@ import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
+import java.util.Date;
 
 public class PayloadChunk extends AbstractBlock {
     private enum PayloadType {
@@ -214,6 +215,10 @@ public class PayloadChunk extends AbstractBlock {
     }
 
     public boolean isInUsagePeriod() {
+        return isInUsagePeriod(new Date());
+    }
+
+    public boolean isInUsagePeriod(Date reference) {
         // FIXME not yet implemented
         return true;
     }

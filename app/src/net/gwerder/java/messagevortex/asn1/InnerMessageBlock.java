@@ -28,8 +28,6 @@ import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -50,8 +48,6 @@ public class InnerMessageBlock extends AbstractBlock {
 
     public static final int ROUTING_PLAIN     = 11031;
     public static final int ROUTING_ENCRYPTED = 11032;
-
-    private static final int PAYLOAD          = 11002;
 
     private byte[] padding=new byte[0];
     private PrefixBlock prefix;
@@ -142,7 +138,6 @@ public class InnerMessageBlock extends AbstractBlock {
 
         // getting routing block
         ASN1TaggedObject ae = ASN1TaggedObject.getInstance( s1.getObjectAt( i++ ) );
-        byte[] routingBlockArray;
         switch(ae.getTagNo()) {
             case ROUTING_PLAIN:
                 routing=new RoutingBlock(ae.getObject());
@@ -168,7 +163,7 @@ public class InnerMessageBlock extends AbstractBlock {
 
     }
 
-    public ASN1Object toASN1Object() throws IOException,NoSuchAlgorithmException,ParseException {
+    public ASN1Object toASN1Object() throws IOException {
         return toASN1Object( DumpType.PUBLIC_ONLY );
     }
 

@@ -3,23 +3,16 @@ package net.gwerder.java.messagevortex.asn1;
 import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1Object;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.IOException;
 
-public class ReplyBlock extends AbstractBlock {
+public abstract class ReplyBlock extends AbstractBlock {
     @Override
-    protected void parse(ASN1Encodable to) throws IOException {
-        throw new NotImplementedException();
-    }
+    protected abstract void parse(ASN1Encodable to) throws IOException;
 
     @Override
-    public String dumpValueNotation(String prefix,DumpType dumpType) throws IOException {
-        throw new NotImplementedException();
-    }
+    public abstract String dumpValueNotation(String prefix,DumpType dumpType) throws IOException;
 
     @Override
-    public ASN1Object toASN1Object(DumpType dumpType) throws IOException {
-        throw new NotImplementedException();
-    }
+    public abstract ASN1Object toASN1Object(DumpType dumpType) throws IOException;
 }

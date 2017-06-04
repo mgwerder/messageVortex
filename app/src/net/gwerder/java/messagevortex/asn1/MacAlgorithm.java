@@ -31,7 +31,7 @@ import org.bouncycastle.asn1.ASN1Object;
 import java.io.IOException;
 
 /**
- * TODO
+ * Represents a Mac Algorithm as ASN.1 structure.
  */
 public class MacAlgorithm extends AbstractBlock {
 

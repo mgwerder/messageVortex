@@ -9,6 +9,7 @@ import junit.framework.JUnit4TestAdapter;
 import junit.framework.TestSuite;
 import net.gwerder.java.messagevortex.asn1.AsymmetricKey;
 import net.gwerder.java.messagevortex.test.accounting.DummyAccountantTest;
+import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -19,7 +20,8 @@ import org.junit.runners.Suite;
 
 public class MainAccountingSuite {
 
-    static {
+    @Before
+    public void init() {
         AsymmetricKey.setCacheFileName("AsymmetricKey.cache");
     }
 

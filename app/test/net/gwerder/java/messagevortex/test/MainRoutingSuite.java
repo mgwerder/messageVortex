@@ -8,6 +8,7 @@ import junit.framework.JUnit4TestAdapter;
 import junit.framework.TestSuite;
 import net.gwerder.java.messagevortex.asn1.AsymmetricKey;
 import net.gwerder.java.messagevortex.test.routing.*;
+import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -24,7 +25,8 @@ import org.junit.runners.Suite;
 
 public class MainRoutingSuite {
 
-    static {
+    @Before
+    public void init() {
         AsymmetricKey.setCacheFileName("AsymmetricKey.cache");
     }
 

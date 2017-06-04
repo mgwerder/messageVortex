@@ -163,22 +163,22 @@ BEGIN
     removeRedundancy[410] RemoveRedundancyOperation
   }
 
-  PercentSizeType ::= SEQUENCE {
+  PercentSizeBlock ::= SEQUENCE {
     fromPercent         REAL (0..100),
     toPercent           REAL (0..100)
   }
 
-  AbsoluteSizeType ::= SEQUENCE {
+  AbsoluteSizeBlock ::= SEQUENCE {
     fromAbsolute        INTEGER (0..maxChunkSize),
 
     toAbsolute          INTEGER (minChunkSize..maxChunkSize)
     -- negative toAbsolute denominates end in absolute value specified from the end of block
   }
 
-  SizeType ::= SEQUENCE{
+  SizeBlock ::= SEQUENCE{
     size CHOICE {
-      percent     [15001] PercentSizeType,
-      absolute    [15101] AbsoluteSizeType
+      percent     [15001] PercentSizeBlock,
+      absolute    [15101] AbsoluteSizeBlock
     }
   }
 
@@ -202,7 +202,7 @@ BEGIN
 
   SplitPayloadOperation ::= SEQUENCE {
     originalId         INTEGER (0..maxID),
-    firstSize          SizeType,
+    firstSize          SizeBlock,
     newFirstId         INTEGER (1..maxID),
     newSecondId        INTEGER (1..maxID)
   }
@@ -216,7 +216,7 @@ BEGIN
   XorMergePayloadOperation ::= SEQUENCE {
     originalFirstId      INTEGER (0..maxID),
     originalSecondId     INTEGER (-1..maxID),
-    originalFirstSize    SizeType,
+    originalSize         SizeBlock,
     newId                INTEGER (1..maxID)
   }
 
@@ -483,8 +483,8 @@ BEGIN
     publicKey     [2] OCTET STRING,
     privateKey    [3] OCTET STRING OPTIONAL
   }
-  
-  -- reserved OID primeCalc GmbH 1.3.6.1.4.1.50057 OBJECT 
+
+  -- reserved OID primeCalc GmbH 1.3.6.1.4.1.50057 OBJECT
 
 END
 
