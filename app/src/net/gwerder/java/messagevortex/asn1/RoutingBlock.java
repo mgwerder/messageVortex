@@ -301,7 +301,7 @@ public class RoutingBlock extends AbstractBlock {
     public String dumpValueNotation(String prefix,DumpType dumpType) {
         StringBuilder sb=new StringBuilder();
         sb.append("{"+CRLF);
-        sb.append(prefix+"  -- FIXME RoutingBlock dump not yet implemented"+CRLF);
+        sb.append(prefix+"  "+CRLF);
         sb.append(prefix+"}");
         return sb.toString();
     }

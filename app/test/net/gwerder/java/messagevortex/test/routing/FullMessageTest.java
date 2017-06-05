@@ -56,7 +56,8 @@ public class FullMessageTest {
             LOGGER.log(Level.INFO, "  encoding objects");
             VortexMessage m2=new VortexMessage( b.toBytes(dt),b.getDecryptionKey());
             VortexMessage m3=new VortexMessage(m2.toBytes(dt),b.getDecryptionKey());
-            assertTrue("found fixme in dump text\n"+m3.dumpValueNotation("",dt),m3.dumpValueNotation("",dt).toUpperCase().indexOf("FIXME")>-1);
+            String s=m3.dumpValueNotation("",dt);
+            assertTrue("found fixme in dump text\n"+s,!s.toUpperCase().contains("FIXME"));
             LOGGER.log(Level.INFO, "  Testing object reencoding ("+m2.getDecryptionKey()+"/"+m3.getDecryptionKey()+")");
             for(VortexMessage v:new VortexMessage[] {m2,m3}) {
                 assertTrue("test for toBytes() capability in prefix when aplying dump type "+dt+"",v.getPrefix().toBytes(dt)!=null);
