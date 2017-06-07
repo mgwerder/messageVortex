@@ -277,7 +277,7 @@
                 </fileset>
             </makeindex>
             <bibtex
-    path="${path.miktex}"
+    path="${path.miktex}" 
                 run="on"
                 workingDir="${doc.home}" />
     </latex>
