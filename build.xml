@@ -262,7 +262,7 @@
   <target name="pdf-plan" unless="messagevortexplan.uptodate" depends="pdf-uptodate">
   <latex
   path="${path.miktex}"
-        latexfile="${doc.home}/messagevortex_Plan.tex"
+        latexfile="${doc.home}/messagevortex_plan.tex"
         verbose="on"
         clean="off"
         pdftex="on"
