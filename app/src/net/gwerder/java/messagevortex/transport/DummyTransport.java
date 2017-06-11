@@ -32,7 +32,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class DummyTransport implements Transport {
 
-    public static final Map<String,TransportListener> endpoints=new ConcurrentHashMap<>(  );
+    static final Map<String,TransportListener> endpoints=new ConcurrentHashMap<>(  );
 
     public DummyTransport(String id,TransportListener blender) throws IOException{
         synchronized(endpoints) {
@@ -68,6 +68,8 @@ public class DummyTransport implements Transport {
         // send byte array as input stream to target
         final InputStream iso=new ByteArrayInputStream(bab.toBytes());
         new Thread() {
+
+            @Override
             public void run() {
                 endpoints.get(address).gotMessage( iso );
             }
