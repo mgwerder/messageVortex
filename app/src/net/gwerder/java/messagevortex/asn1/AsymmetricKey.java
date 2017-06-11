@@ -256,24 +256,28 @@ public class AsymmetricKey extends Key {
         sb.append( "," ).append(CRLF);
         String s = toHex( publicKey );
         sb.append( prefix ).append( "  publicKey " + s );
-        if (dumpType.dumpPrivateKey()) {
-            sb.append( "," );
+        switch(dumpType) {
+            case ALL:
+            case ALL_UNENCRYPTED:
+            case PRIVATE_COMMENTED:
+                dumpPrivateKey(sb,dumpType,prefix);
+            default:
+                sb.append( CRLF );
         }
-        sb.append( CRLF );
 
-        // dump private key
-        if(privateKey!=null && (dumpType==DumpType.PRIVATE_COMMENTED || dumpType.dumpPrivateKey())) {
-            s=toHex(privateKey);
-            sb.append(prefix).append("  ");
-            if(dumpType==DumpType.PRIVATE_COMMENTED) {
-                sb.append("-- ");
-            }
-            sb.append("privateKey ").append(s).append(CRLF);
-        } else {
-            sb.append( CRLF );
-        }
         sb.append(prefix).append("}");
         return sb.toString();
+    }
+
+    private void dumpPrivateKey(StringBuilder sb, DumpType dumpType,String prefix) {
+        if(dumpType!=DumpType.PRIVATE_COMMENTED) sb.append( "," );
+        sb.append( CRLF );
+        String s=toHex(privateKey);
+        sb.append(prefix).append("  ");
+        if(dumpType==DumpType.PRIVATE_COMMENTED) {
+            sb.append("-- ");
+        }
+        sb.append("privateKey ").append(s).append(CRLF);
     }
 
     /***
@@ -311,7 +315,7 @@ public class AsymmetricKey extends Key {
     }
 
     private void addToASN1PrivateKey(ASN1EncodableVector v, DumpType dt ) {
-        if (privateKey != null && dt.dumpPrivateKey()) {
+        if (privateKey != null && (dt==DumpType.ALL || dt==DumpType.ALL_UNENCRYPTED)) {
             v.add(new DERTaggedObject( true, PRIVATE_KEY_TAG,new DEROctetString( privateKey )));
         }
     }

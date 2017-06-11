@@ -129,6 +129,12 @@ public enum Algorithm implements Serializable {
         return ret;
     }
 
+    /***
+     * Return a list of algorithms of the specified type.
+     *
+     * @param at   the algorithm type to generate a list for
+     * @return     the list of algorithms
+     */
     public static Algorithm[] getAlgorithms(AlgorithmType at) {
         List<Algorithm> v=new ArrayList<>();
         for(Algorithm e : values()) {
@@ -139,6 +145,12 @@ public enum Algorithm implements Serializable {
         return v.toArray(new Algorithm[v.size()]);
     }
 
+    /***
+     * Look up an algorithm by id.
+     *
+     * @param id     the idto be looked up
+     * @return       the algorithm or null if not known
+     */
     public static Algorithm getById(int id) {
         for(Algorithm e : values()) {
             if(e.id==id) {
@@ -148,6 +160,12 @@ public enum Algorithm implements Serializable {
         return null;
     }
 
+    /***
+     * Look up an algorithm by its identification string.
+     *
+     * @param s  the identification string to be looked up
+     * @return   the algorithm or null if not found
+     */
     public static Algorithm getByString(String s) {
         for(Algorithm e : values()) {
             if(e.toString().equals(s)) {
@@ -157,34 +175,79 @@ public enum Algorithm implements Serializable {
         return null;
     }
 
+    /***
+     * Look up the default algorithm to be used on the system.
+     *
+     * @param at   the type of algorithm to be looked for
+     * @return     the default type
+     */
     public static Algorithm getDefault(AlgorithmType at) {
         return def.get( at );
     }
 
+    /***
+     * Look up the current id.
+     *
+     * @return the current id
+     */
     public int getId() {
         return id;
     }
 
+    /***
+     * The algorithm family.
+     *
+     * This is either the identification string without the key size or identical to the identification string
+     *
+     * @return  the identification string without key size (if any)
+     */
     public String getAlgorithmFamily() {
         return txt.replaceAll("[0-9]*$","");
     }
 
+    /***
+     * Get the identification string.
+     *
+     * @return the identification string
+     */
     public String toString() {
         return txt;
     }
 
+    /***
+     * Get the type of algorithm.
+     *
+     * @return the type of algorithm
+     */
     public AlgorithmType getAlgorithmType() {
         return t;
     }
 
+    /***
+     * Get the provider string for this algorithm.
+     *
+     * @return the provider string for this algorithm
+     */
     public String getProvider() {
         return provider;
     }
 
+
+    /***
+     * Get the default key size for this algorithm.
+     *
+     * @return the default key size in bits
+     */
     public int getKeySize() {
         return getKeySize(SecurityLevel.getDefault());
     }
 
+    /***
+     * Get the key size for this algorithm and security level.
+     *
+     * @param sl   the security level
+     * @return     the key size in bits for the security level specified
+     */
     public int getKeySize(SecurityLevel sl) {
         if (txt.toLowerCase().startsWith( "aes" ) || txt.startsWith( "sha" ) ) {
             // Extract key size from AES and SHA name
@@ -211,6 +274,12 @@ public enum Algorithm implements Serializable {
         }
     }
 
+    /***
+     * Get default parameters for the security level specified.
+     *
+     * @param sl  the security level
+     * @return    the default set of parameters for the security level specified
+     */
     public AlgorithmParameter getParameters(SecurityLevel sl) {
         synchronized(secLevel) {
             AlgorithmParameter params = null;
@@ -228,6 +297,11 @@ public enum Algorithm implements Serializable {
         }
     }
 
+    /***
+     * Get a map of security levels and default parameters for this algorithm.
+     *
+     * @return The map containing the default parameters
+     */
     public Map<SecurityLevel,AlgorithmParameter> getParameters() {
         synchronized(secLevel) {
             Map<SecurityLevel,AlgorithmParameter> ret=new HashMap<>();

@@ -34,14 +34,4 @@ public enum DumpType {
     /* dump public information; private information is dumped as comment */
     PRIVATE_COMMENTED;
 
-    public boolean dumpPrivateKey() {
-        switch(this) {
-            case ALL:
-                return true;
-            case ALL_UNENCRYPTED:
-                return true;
-            default:
-                return false;
-        }
-    }
 }
