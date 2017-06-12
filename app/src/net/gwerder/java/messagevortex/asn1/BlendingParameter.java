@@ -45,6 +45,9 @@ public class BlendingParameter extends AbstractBlock {
     @Override
     protected void parse(ASN1Encodable to) throws IOException {
         ASN1TaggedObject t=ASN1TaggedObject.getInstance(to);
+        if(BlendingParameterChoice.getById(t.getTagNo())==null) {
+            throw new IOException("unknown blending parameter choice detected ("+t.getTagNo()+")");
+        }
         switch(BlendingParameterChoice.getById(t.getTagNo())) {
             case OFFSET:
                 offset=ASN1Integer.getInstance(t.getObject()).getValue().intValue();

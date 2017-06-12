@@ -37,7 +37,7 @@ import java.util.concurrent.ConcurrentSkipListMap;
  */
 public class AlgorithmParameter extends AbstractBlock implements Serializable,Comparable<AlgorithmParameter> {
 
-    Map<Integer,String> parameter;
+    private Map<Integer,String> parameter;
 
     public AlgorithmParameter() {
         parameter=new ConcurrentSkipListMap<>();

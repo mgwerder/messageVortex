@@ -25,7 +25,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
     private static final boolean DISABLE_CACHE=false;
     private static double dequeueProbability = 1.0;
 
-    private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+    private static SimpleDateFormat sortableFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
     private static long lastSaved = 0;
     private static List<LastCalculated> log=new ArrayList<>();
     private static boolean firstWarning=true;
@@ -63,7 +63,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
         }
 
         public String toString() {
-            String ret="["+SIMPLE_DATE_FORMAT.format(lastStored)+"] "+msg;
+            String ret="["+ sortableFormat.format(lastStored)+"] "+msg;
             if(num>1) {
                 ret+=" ("+num+")";
             }
@@ -444,6 +444,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
                 lastSaved=System.currentTimeMillis();
                 showStats();
                 f.close();
+                f=null;
                 Files.move(Paths.get(filename+".tmp"),Paths.get(filename), StandardCopyOption.REPLACE_EXISTING);
             }
         } catch(Exception e) {
