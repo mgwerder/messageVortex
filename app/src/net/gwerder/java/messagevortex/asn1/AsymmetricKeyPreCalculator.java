@@ -13,6 +13,9 @@ import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
 /**
@@ -33,6 +36,10 @@ class AsymmetricKeyPreCalculator implements Serializable {
     private static final Map<AlgorithmParameter,Integer> cacheSize=new ConcurrentHashMap<>();
     private static InternalThread runner=null;
     private static String filename=null;
+
+    /* nuber of threads to use */
+    private static int numThreads=Math.max(2,Runtime.getRuntime().availableProcessors()-1);
+    private static ExecutorService pool = Executors.newFixedThreadPool(numThreads);
 
 
     private static final java.util.logging.Logger LOGGER;
@@ -99,9 +106,6 @@ class AsymmetricKeyPreCalculator implements Serializable {
         }
     }
 
-    /* nuber of threads to use */
-    private static int numThreads=Math.max(2,Runtime.getRuntime().availableProcessors()-1);
-
     private static class InternalThread extends Thread {
 
         private static int counter=0;
@@ -125,6 +129,16 @@ class AsymmetricKeyPreCalculator implements Serializable {
          * Tells the process to shutdown asap
          */
         void shutdown() {
+            pool.shutdown();
+
+            // wait maximum 60 seconds for shutdown then abbort key calculation
+            try{
+                pool.awaitTermination(60,TimeUnit.SECONDS);
+                pool.shutdownNow();
+            } catch (InterruptedException ie) {
+                pool.shutdownNow();
+                Thread.currentThread().interrupt();
+            }
             shutdown=true;
         }
 
@@ -170,33 +184,38 @@ class AsymmetricKeyPreCalculator implements Serializable {
         private void calculateKey(AlgorithmParameter p) {
             try {
                 // prepare thread list
-                List<Thread> tl = new ArrayList<>();
                 for (int i = 0; i < numThreads; i++) {
-                    tl.add(runCalculatorThread(p));
-                }
-                // start threads
-                for (Thread t : tl) {
+                    Thread t=runCalculatorThread(p);
                     t.setName("cache precalculation thread");
                     t.setPriority(Thread.MIN_PRIORITY);
-                    t.start();
+                    pool.execute(t);
+
                 }
 
-                // wait for all threads to finish
-                for (Thread t : tl) {
-                    try {
-                        t.join();
-                        attachLog("stored precomputed key " + p.toString() + " in cache");
-                    } catch (InterruptedException ie) {
-                        LOGGER.log(Level.SEVERE, "got unexpected exception", ie);
-                    }
-                }
+                // Wait a while for existing tasks to terminate
+                pool.awaitTermination(60, TimeUnit.SECONDS);
 
                 // store cache
                 save();
             } catch (IOException | ClassNotFoundException ioe) {
                 LOGGER.log(Level.INFO, "exception while storing file", ioe);
+            } catch (InterruptedException ie) {
+                // (Re-)Cancel if current thread also interrupted
+                pool.shutdownNow();
+                // Preserve interrupt status
+                Thread.currentThread().interrupt();
             }
         }
+
+        private void waitForCalculationThread(AlgorithmParameter p,Thread t) {
+            try {
+                t.join();
+                attachLog("added precomputed key " + p.toString() + " to cache");
+            } catch (InterruptedException ie) {
+                LOGGER.log(Level.SEVERE, "got unexpected exception", ie);
+            }
+        }
+
         private Thread runCalculatorThread(final AlgorithmParameter param) {
             return new Thread() {
                 public void run() {

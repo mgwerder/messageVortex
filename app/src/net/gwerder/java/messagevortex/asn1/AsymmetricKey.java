@@ -272,7 +272,9 @@ public class AsymmetricKey extends Key {
     }
 
     private void dumpPrivateKey(StringBuilder sb, DumpType dumpType,String prefix) {
-        if(dumpType!=DumpType.PRIVATE_COMMENTED) sb.append( "," );
+        if(dumpType!=DumpType.PRIVATE_COMMENTED) {
+            sb.append( "," );
+        }
         sb.append( CRLF );
         String s=toHex(privateKey);
         sb.append(prefix).append("  ");
