@@ -261,6 +261,8 @@ public class AsymmetricKey extends Key {
             case ALL_UNENCRYPTED:
             case PRIVATE_COMMENTED:
                 dumpPrivateKey(sb,dumpType,prefix);
+                sb.append( CRLF );
+                break;
             default:
                 sb.append( CRLF );
         }

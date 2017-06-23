@@ -63,11 +63,13 @@ class AsymmetricKeyPreCalculator implements Serializable {
         }
 
         public String toString() {
-            String ret="["+ sortableFormat.format(lastStored)+"] "+msg;
-            if(num>1) {
-                ret+=" ("+num+")";
+            synchronized(sortableFormat) {
+                String ret = "[" + sortableFormat.format(lastStored) + "] " + msg;
+                if (num > 1) {
+                    ret += " (" + num + ")";
+                }
+                return ret;
             }
-            return ret;
         }
 
         public String getMessage() {
