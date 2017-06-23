@@ -173,7 +173,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
                     try {
                         Thread.sleep(10000);
                     } catch (InterruptedException ie) {
-                        // ignore it as we do not care
+                        Thread.currentThread().interrupt();
                     }
                 }
 
@@ -213,6 +213,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
                 attachLog("added precomputed key " + p.toString() + " to cache");
             } catch (InterruptedException ie) {
                 LOGGER.log(Level.SEVERE, "got unexpected exception", ie);
+                Thread.currentThread().interrupt();
             }
         }
 

@@ -53,6 +53,8 @@ public class SocketDeblocker extends Thread {
                 this.join();
             }catch(InterruptedException ie) {
                 LOGGER.log(Level.FINEST,"Interrupted exception while shutting down deblocking socket",ie);
+                // Preserve
+                Thread.currentThread().interrupt();
             }
         }
     }
@@ -65,6 +67,8 @@ public class SocketDeblocker extends Thread {
                 Thread.sleep(10);
             }catch(InterruptedException ie) {
                 LOGGER.log(Level.FINEST,"Interrupted exception while running SocketDeblocker",ie);
+                // Preserve
+                Thread.currentThread().interrupt();
             }
         }
 

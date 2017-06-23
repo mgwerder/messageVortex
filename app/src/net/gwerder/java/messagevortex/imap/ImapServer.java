@@ -154,7 +154,9 @@ public class ImapServer extends StoppableThread  {
                 runner.join();
                 endshutdown=true;
             } catch(InterruptedException ie) {
-                // reloop if exception is risen
+
+                // Preserve
+                Thread.currentThread().interrupt();
             }
         } while(!endshutdown);
     }
