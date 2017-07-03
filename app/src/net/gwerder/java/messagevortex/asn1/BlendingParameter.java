@@ -1,5 +1,6 @@
 package net.gwerder.java.messagevortex.asn1;
 
+import com.sun.istack.internal.Nullable;
 import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.*;
 import java.io.IOException;
@@ -43,6 +44,7 @@ public class BlendingParameter extends AbstractBlock {
     }
 
     @Override
+    @Nullable
     protected void parse(ASN1Encodable to) throws IOException {
         ASN1TaggedObject t=ASN1TaggedObject.getInstance(to);
         if(BlendingParameterChoice.getById(t.getTagNo())==null) {

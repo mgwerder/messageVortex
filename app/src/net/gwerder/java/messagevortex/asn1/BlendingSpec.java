@@ -26,6 +26,7 @@ import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents a the Blending specification of the routing block.
@@ -65,7 +66,7 @@ public class BlendingSpec extends AbstractBlock {
 
         // get Blending Parameter
         s2=ASN1Sequence.getInstance(s1.getObjectAt(i++));
-        ArrayList<BlendingParameter> al=new ArrayList<>();
+        List<BlendingParameter> al=new ArrayList<>();
         for(ASN1Encodable e:s2) {
             al.add(new BlendingParameter(e));
         }

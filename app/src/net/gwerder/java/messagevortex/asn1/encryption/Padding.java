@@ -70,7 +70,7 @@ public enum Padding {
 
     private int id;
     private String txt;
-    private HashSet<AlgorithmType> at;
+    private Set<AlgorithmType> at;
     private SizeCalc s;
     final ASN1Enumerated asn;
 
