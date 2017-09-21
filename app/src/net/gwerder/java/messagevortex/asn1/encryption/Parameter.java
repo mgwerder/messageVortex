@@ -86,9 +86,9 @@ public enum Parameter implements Serializable {
         }
     });
 
-    private abstract static class Transcoder {
-        public abstract String fromASN1(ASN1Object o);
-        public abstract ASN1Encodable toASN1(String s);
+    private interface Transcoder {
+        String fromASN1(ASN1Object o);
+        ASN1Encodable toASN1(String s);
     }
 
     final int id;

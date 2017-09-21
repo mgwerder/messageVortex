@@ -204,6 +204,7 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
                 runner.join(1000);
             } catch(InterruptedException e) {
                 // discard this exception
+                Thread.currentThread().interrupt();
                 continue;
             } catch(IOException e) {
                 LOGGER.log(Level.WARNING,"IOException while shutting down input stream (may be normal)",e);

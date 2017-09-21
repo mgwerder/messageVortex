@@ -28,6 +28,7 @@ import org.bouncycastle.asn1.ASN1TaggedObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 
 /**
@@ -43,7 +44,7 @@ public abstract class HeaderRequest extends AbstractBlock {
     }
 
 
-    private static final ArrayList<HeaderRequest> req = new ArrayList<>();
+    private static final List<HeaderRequest> req = new ArrayList<>();
 
     static {
         try {

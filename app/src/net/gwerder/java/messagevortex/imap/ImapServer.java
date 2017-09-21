@@ -52,7 +52,7 @@ public class ImapServer extends StoppableThread  {
     final SSLContext context;
     int port;
     ServerSocket serverSocket=null;
-    ConcurrentSkipListSet<ImapConnection> conn=new ConcurrentSkipListSet<>();
+    Set<ImapConnection> conn=new ConcurrentSkipListSet<>();
     boolean encrypted=false;
     private Set<String> suppCiphers = new HashSet<>();
     private Thread runner=null;
@@ -154,7 +154,9 @@ public class ImapServer extends StoppableThread  {
                 runner.join();
                 endshutdown=true;
             } catch(InterruptedException ie) {
-                // reloop if exception is risen
+
+                // Preserve
+                Thread.currentThread().interrupt();
             }
         } while(!endshutdown);
     }

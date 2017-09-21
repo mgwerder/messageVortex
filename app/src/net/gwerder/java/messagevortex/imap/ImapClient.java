@@ -117,6 +117,7 @@ public class ImapClient implements Runnable {
 
     private void interruptedCatcher() {
         assert false:"This Point should never be reached";
+        Thread.currentThread().interrupt();
     }
 
     public long setTimeout(long timeout) {
@@ -157,6 +158,7 @@ public class ImapClient implements Runnable {
                     sync.wait(100);
                 } catch(InterruptedException e) {
                     LOGGER.log(Level.SEVERE,"this point should never be reached",e);
+                    Thread.currentThread().interrupt();
                 }
             }
             LOGGER.log(Level.FINEST,"wakeup succeeded");

@@ -313,6 +313,9 @@ public class IdentityBlock extends AbstractBlock {
         }
         ASN1Object o;
         if (encryptIdentity) {
+            if(headerKey!=null) {
+                throw new IOException("header key is empty but block should be encrypted");
+            }
             // store identity encrypted
             o = new DEROctetString( headerKey.encrypt( toDER(ae.toASN1Primitive()) ) );
             v1.add( new DERTaggedObject( true, ENCRYPTED_BLOCK, o ) );

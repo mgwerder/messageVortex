@@ -13,7 +13,6 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
         FuzzerTest.class,
         VortexMessageTest.class,
-        DumpTypeTest.class,
         AbstractBlockTest.class,
         MacAlgorithmTest.class,
         SecurityLevelTest.class,
@@ -38,7 +37,6 @@ public class MainASN1Suite {
         final TestSuite s = new TestSuite();
         s.addTest(new JUnit4TestAdapter(FuzzerTest.class));
         s.addTest(new JUnit4TestAdapter(VortexMessageTest.class));
-        s.addTest(new JUnit4TestAdapter(DumpTypeTest.class));
         s.addTest(new JUnit4TestAdapter(AbstractBlockTest.class));
         s.addTest(new JUnit4TestAdapter(MacAlgorithmTest.class));
         s.addTest(new JUnit4TestAdapter( SecurityLevelTest.class ) );
