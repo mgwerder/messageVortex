@@ -28,7 +28,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Represents a the Blending specification of the routing block.
+ * Represents a addRedundancy operation on a routing block.
  *
  */
 public class AddRedundancyOperation extends AbstractRedundancyOperation {
