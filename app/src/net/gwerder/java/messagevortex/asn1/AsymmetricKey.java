@@ -58,7 +58,11 @@ public class AsymmetricKey extends Key {
 
     static{
         // start key precalculator
-        AsymmetricKey.setCacheFileName("AsymmetricKey.cache");
+        try {
+            AsymmetricKey.setCacheFileName("AsymmetricKey.cache");
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
     protected byte[]  publicKey  = null;

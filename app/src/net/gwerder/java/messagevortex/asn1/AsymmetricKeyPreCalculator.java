@@ -25,6 +25,13 @@ import java.util.logging.Level;
  */
 class AsymmetricKeyPreCalculator implements Serializable {
 
+    private static final java.util.logging.Logger LOGGER;
+    static {
+        LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+        MessageVortexLogger.setGlobalLogLevel( Level.ALL);
+    }
+
+
     private static final boolean DISABLE_CACHE=false;
     private static double dequeueProbability = 1.0;
 
@@ -40,12 +47,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
     private static int numThreads=Math.max(2,Runtime.getRuntime().availableProcessors()-1);
     private static ExecutorService pool = Executors.newFixedThreadPool(numThreads);
 
-
-    private static final java.util.logging.Logger LOGGER;
     static {
-        LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-        MessageVortexLogger.setGlobalLogLevel( Level.ALL);
-
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
                 try{
@@ -380,34 +382,90 @@ class AsymmetricKeyPreCalculator implements Serializable {
 
     private static void load() throws IOException,ClassNotFoundException {
         ObjectInputStream f=null;
-        try{
+        try {
             synchronized (cache) {
                 f = new ObjectInputStream(new FileInputStream(filename));
-                Map<AlgorithmParameter, Queue<AsymmetricKey>> lc = (Map<AlgorithmParameter, Queue<AsymmetricKey>>) f.readObject();
+                Map<AlgorithmParameter, Queue<AsymmetricKey>> lc = new HashMap<>();
+                int i = (int) f.readObject();
+                for (int j = 0; j < i; j++) {
+                    AlgorithmParameter ap = (AlgorithmParameter) f.readObject();
+                    Queue<AsymmetricKey> q = (Queue<AsymmetricKey>) f.readObject();
+                    lc.put(prepareParameters(ap), q);
+                }
                 Map<AlgorithmParameter, Integer> lcc = (Map<AlgorithmParameter, Integer>) (f.readObject());
-                synchronized(cache) {
+                i = (int) f.readObject();
+                for (int j = 0; j < i; j++) {
+                    AlgorithmParameter ap = (AlgorithmParameter) f.readObject();
+                    int num = (Integer) f.readObject();
+                    lcc.put(prepareParameters(ap), num);
+                }
+                synchronized (cache) {
                     cache.clear();
-                    for(Map.Entry<AlgorithmParameter, Queue<AsymmetricKey>> e:lc.entrySet()) {
-                        AlgorithmParameter p=prepareParameters(e.getKey());
-                        Queue<AsymmetricKey> q=cache.get(p);
-                        if(q==null) {
-                            cache.put(p,e.getValue());
+                    for (Map.Entry<AlgorithmParameter, Queue<AsymmetricKey>> e : lc.entrySet()) {
+                        AlgorithmParameter p = prepareParameters(e.getKey());
+                        Queue<AsymmetricKey> q = cache.get(p);
+                        if (q == null) {
+                            cache.put(p, e.getValue());
                         } else {
                             q.addAll(e.getValue());
                         }
                     }
                     cacheSize.clear();
-                    for(Map.Entry<AlgorithmParameter, Integer> e:lcc.entrySet()) {
-                        AlgorithmParameter p=prepareParameters(e.getKey());
-                        Integer i=cacheSize.get(p);
-                        if(i==null) {
-                            cacheSize.put(p,e.getValue());
+                    for (Map.Entry<AlgorithmParameter, Integer> e : lcc.entrySet()) {
+                        AlgorithmParameter p = prepareParameters(e.getKey());
+                        Integer i1 = cacheSize.get(p);
+                        if (i1 == null) {
+                            cacheSize.put(p, e.getValue());
                         } else {
-                            cacheSize.put(p,Math.max(i,e.getValue()));
+                            cacheSize.put(p, Math.max(i1, e.getValue()));
                         }
                     }
                 }
                 showStats();
+            }
+        } catch(ClassCastException e) {
+            LOGGER.log(Level.WARNING, "error casting file ... restarting",e);
+        } catch(Exception e) {
+            throw e;
+        } finally {
+            if(f!=null) {
+                f.close();
+            }
+        }
+    }
+
+    private static void save() throws IOException,ClassNotFoundException {
+        // do not allow saving more often than every minute
+        synchronized(runner) {
+            if (lastSaved + 60000 > System.currentTimeMillis()) {
+                return;
+            }
+        }
+
+        // store data
+        ObjectOutputStream f=null;
+        try {
+            synchronized (cache) {
+                f = new ObjectOutputStream(new FileOutputStream(filename+".tmp"));
+                synchronized(cache) {
+                    f.writeObject(cache.size());
+                    for (Map.Entry<AlgorithmParameter, Queue<AsymmetricKey>> e : cache.entrySet()) {
+                        f.writeObject(e.getKey());
+                        f.writeObject(e.getValue());
+                    }
+                }
+                synchronized(cacheSize) {
+                    f.writeObject(cacheSize.size());
+                    for (Map.Entry<AlgorithmParameter, Integer> e : cacheSize.entrySet()) {
+                        f.writeObject(e.getKey());
+                        f.writeObject(e.getValue());
+                    }
+                }
+                lastSaved=System.currentTimeMillis();
+                showStats();
+                f.close();
+                f=null;
+                Files.move(Paths.get(filename+".tmp"),Paths.get(filename), StandardCopyOption.REPLACE_EXISTING);
             }
         } catch(Exception e) {
             throw e;
@@ -443,36 +501,6 @@ class AsymmetricKeyPreCalculator implements Serializable {
                 }
             }
             LOGGER.log(Level.INFO, sepLine);
-        }
-    }
-
-    private static void save() throws IOException,ClassNotFoundException {
-        // do not allow saving more often than every minute
-        synchronized(runner) {
-            if (lastSaved + 60000 > System.currentTimeMillis()) {
-                return;
-            }
-        }
-
-        // store data
-        ObjectOutputStream f=null;
-        try {
-            synchronized (cache) {
-                f = new ObjectOutputStream(new FileOutputStream(filename+".tmp"));
-                f.writeObject(cache);
-                f.writeObject(cacheSize);
-                lastSaved=System.currentTimeMillis();
-                showStats();
-                f.close();
-                f=null;
-                Files.move(Paths.get(filename+".tmp"),Paths.get(filename), StandardCopyOption.REPLACE_EXISTING);
-            }
-        } catch(Exception e) {
-            throw e;
-        } finally {
-            if(f!=null) {
-                f.close();
-            }
         }
     }
 
