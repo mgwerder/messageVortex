@@ -386,19 +386,27 @@ class AsymmetricKeyPreCalculator implements Serializable {
             synchronized (cache) {
                 f = new ObjectInputStream(new FileInputStream(filename));
                 Map<AlgorithmParameter, Queue<AsymmetricKey>> lc = new HashMap<>();
+
+                // number of tuples
                 int i = (int) f.readObject();
+
+                // get tupples
                 for (int j = 0; j < i; j++) {
                     AlgorithmParameter ap = (AlgorithmParameter) f.readObject();
                     Queue<AsymmetricKey> q = (Queue<AsymmetricKey>) f.readObject();
                     lc.put(prepareParameters(ap), q);
                 }
-                Map<AlgorithmParameter, Integer> lcc = (Map<AlgorithmParameter, Integer>) (f.readObject());
+
+                // Loading list of algs
+                Map<AlgorithmParameter, Integer> lcc = new HashMap<>();
                 i = (int) f.readObject();
                 for (int j = 0; j < i; j++) {
                     AlgorithmParameter ap = (AlgorithmParameter) f.readObject();
                     int num = (Integer) f.readObject();
                     lcc.put(prepareParameters(ap), num);
                 }
+
+                // building new cache
                 synchronized (cache) {
                     cache.clear();
                     for (Map.Entry<AlgorithmParameter, Queue<AsymmetricKey>> e : lc.entrySet()) {
@@ -448,7 +456,11 @@ class AsymmetricKeyPreCalculator implements Serializable {
             synchronized (cache) {
                 f = new ObjectOutputStream(new FileOutputStream(filename+".tmp"));
                 synchronized(cache) {
+
+                    // Number of tuples
                     f.writeObject(cache.size());
+
+                    // write tuples
                     for (Map.Entry<AlgorithmParameter, Queue<AsymmetricKey>> e : cache.entrySet()) {
                         f.writeObject(e.getKey());
                         f.writeObject(e.getValue());
