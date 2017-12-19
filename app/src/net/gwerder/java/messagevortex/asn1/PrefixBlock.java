@@ -193,11 +193,7 @@ public class PrefixBlock extends AbstractBlock {
         if((p.getKey()==null && getKey()!=null) || (p.getKey()!=null && getKey()==null)) {
             return false;
         }
-        if(p.getKey()!=null && !p.getKey().equals(getKey())) {
-            return false;
-        }
-
-        return true;
+        return !(p.getKey() != null && !p.getKey().equals(getKey()));
     }
 
     @Override

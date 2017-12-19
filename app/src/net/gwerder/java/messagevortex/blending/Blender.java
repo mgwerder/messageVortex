@@ -39,7 +39,7 @@ public interface Blender {
      * @param listener The listening routing layer
      * @return The old/previous routing layer
      */
-    public IncomingMessageRouterListener setIncomingMessageListener(IncomingMessageRouterListener listener);
+    IncomingMessageRouterListener setIncomingMessageListener(IncomingMessageRouterListener listener);
 
     /***
      * Sets the verifier which is called after decoding the header block.
@@ -49,7 +49,7 @@ public interface Blender {
      * @param verifier The verifier to be used
      * @return previous/old verifier
      */
-    public HeaderVerifier setHeaderVerifyer(HeaderVerifier verifier);
+    HeaderVerifier setHeaderVerifyer(HeaderVerifier verifier);
 
     /***
      * This method is called by the routing layer to blend a message.
@@ -57,7 +57,7 @@ public interface Blender {
      * @param message the message to be blended
      * @return true if blended successfully and sent by the transport layer
      */
-    public boolean blendMessage(BlendingSpec target,VortexMessage message);
+    boolean blendMessage(BlendingSpec target, VortexMessage message);
 
     /***
      * Returns the address supported for blending.
@@ -66,6 +66,6 @@ public interface Blender {
      *
      * @return The vortex adress.
      */
-    public String getBlendingAddress();
+    String getBlendingAddress();
 
 }

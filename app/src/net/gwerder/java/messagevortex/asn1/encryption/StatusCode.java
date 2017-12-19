@@ -32,7 +32,7 @@ public enum StatusCode {
     private final int id;
     private final ASN1Enumerated asn;
 
-    private StatusCode(int i) {
+    StatusCode(int i) {
         id=i;
         asn=new ASN1Enumerated(id);
     }

@@ -33,6 +33,6 @@ public interface BlenderListener {
      *
      * @param is the InputStream containing a vmessage
      */
-    public void gotMessage(InputStream is);
+    void gotMessage(InputStream is);
 
 }

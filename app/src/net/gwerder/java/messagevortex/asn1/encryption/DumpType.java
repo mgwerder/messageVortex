@@ -32,6 +32,6 @@ public enum DumpType {
     /* dump only public information */
     PUBLIC_ONLY,
     /* dump public information; private information is dumped as comment */
-    PRIVATE_COMMENTED;
+    PRIVATE_COMMENTED
 
 }

@@ -75,6 +75,6 @@ public interface Operation {
      *
      * @param payload the internal payload of an identity to be registered within
      */
-    public void setInternalPayload(InternalPayload payload);
+    void setInternalPayload(InternalPayload payload);
 
 }

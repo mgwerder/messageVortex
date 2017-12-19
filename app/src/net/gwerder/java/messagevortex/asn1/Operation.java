@@ -45,7 +45,7 @@ public abstract class Operation extends AbstractBlock {
     private static final Map<Integer,Operation> operations=new ConcurrentHashMap<>();
 
     /* constructor */
-    Operation() {};
+    Operation() {}
 
     public static Operation getInstance(ASN1Encodable object) throws IOException {
         if(operations.isEmpty()) throw new IOException("init() not called");

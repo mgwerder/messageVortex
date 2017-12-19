@@ -34,6 +34,6 @@ public interface IncomingMessageRouterListener {
      *
      * @param message the message received
      */
-    public void processMessage(VortexMessage message);
+    void processMessage(VortexMessage message);
 
 }

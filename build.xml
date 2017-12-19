@@ -404,7 +404,7 @@
     <path id="compile.classpath">
       <pathelement location="c:/Programme/Java/lib/hsqldb/lib/hsqldb.jar"/>
       <fileset dir="${rtlib.home}" includes="**/*.jar"/>
-      <fileset dir="${basedir}/lib/junit-4.11" includes="*.jar"/>
+      <fileset dir="${basedir}/lib/junit-4.12" includes="*.jar"/>
       <pathelement location="${build.home}/classes" />
     </path>
 
@@ -414,7 +414,7 @@
       <fileset dir="${basedir}/lib/" includes="junit*.jar"/>
       <fileset dir="${basedir}/lib/cobertura-2.0.3/lib" includes="*.jar"/>
       <fileset dir="${basedir}/lib/cobertura-2.0.3" includes="cobertura-2.0.3.jar"/>
-      <fileset dir="${basedir}/lib/junit-4.11" includes="*.jar"/>
+      <fileset dir="${basedir}/lib/junit-4.12" includes="*.jar"/>
       <pathelement location="${build.home}/cobertura" />
       <pathelement location="${build.home}/classes" />
     </path>
