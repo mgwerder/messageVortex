@@ -429,12 +429,22 @@ BEGIN
     aes256          (1002),
     camellia128     (1100),
     camellia192     (1101),  -- optional support
-    camellia256     (1102)
+    camellia256     (1102),
+    twofish128      (1200),  -- optional support
+    twofish192      (1201),  -- optional support
+    twofish256      (1202)   -- optional support
   }
 
   CipherMode ::= ENUMERATED {
-    ecb             (1000),
-    cbc             (1001)
+    ecb             (10000), --- ECB is a bad choice. Do not use unless really necessary
+    cbc             (10001),
+    eax             (10002),
+    ctr             (10003),
+    ccm             (10004),
+    gcm             (10005),
+    ocb             (10006),
+    ofb             (10007),
+    none            (10100)
   }
 
   CipherPadding ::= ENUMERATED {
@@ -451,7 +461,9 @@ BEGIN
   MacAlgorithm ::= ENUMERATED {
     sha384          (3000),
     sha512          (3001),
-    tiger192        (3100)
+    ripemd160       (3100),
+    ripemd256       (3101),
+    ripemd320       (3102)
   }
 
   ECCurveType ::= ENUMERATED{

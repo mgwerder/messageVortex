@@ -35,16 +35,18 @@ import java.util.logging.Level;
 /**
  * Represents all supported crypto algorithms.
  *
- * FIXME: Add tiger192 support for final version
  */
 public enum Algorithm implements Serializable {
 
-    AES128     ( 1000, AlgorithmType.SYMMETRIC, "aes128", "BC", SecurityLevel.LOW ),
-    AES192     ( 1001, AlgorithmType.SYMMETRIC, "aes192", "BC", SecurityLevel.MEDIUM ),
-    AES256     ( 1002, AlgorithmType.SYMMETRIC, "aes256", "BC", SecurityLevel.QUANTUM ),
+    AES128     ( 1000, AlgorithmType.SYMMETRIC, "aes128"     , "BC", SecurityLevel.LOW ),
+    AES192     ( 1001, AlgorithmType.SYMMETRIC, "aes192"     , "BC", SecurityLevel.MEDIUM ),
+    AES256     ( 1002, AlgorithmType.SYMMETRIC, "aes256"     , "BC", SecurityLevel.QUANTUM ),
     CAMELLIA128( 1100, AlgorithmType.SYMMETRIC, "CAMELLIA128", "BC", SecurityLevel.LOW ),
     CAMELLIA192( 1101, AlgorithmType.SYMMETRIC, "CAMELLIA192", "BC", SecurityLevel.MEDIUM ),
     CAMELLIA256( 1102, AlgorithmType.SYMMETRIC, "CAMELLIA256", "BC", SecurityLevel.QUANTUM ),
+    TWOFISH128 ( 1200, AlgorithmType.SYMMETRIC, "TWOFISH128" , "BC", SecurityLevel.LOW ),
+    TWOFISH192 ( 1201, AlgorithmType.SYMMETRIC, "TWOFISH192" , "BC", SecurityLevel.MEDIUM ),
+    TWOFISH256 ( 1202, AlgorithmType.SYMMETRIC, "TWOFISH256" , "BC", SecurityLevel.QUANTUM ),
 
     RSA        (2000, AlgorithmType.ASYMMETRIC, "RSA", "BC", getSecLevelList( getSecLevelList( getSecLevelList( getSecLevelList(
               SecurityLevel.LOW,     getParameterList(new String[] { Parameter.ALGORITHM+"=RSA",Parameter.KEYSIZE.toString()+"=1024",Parameter.MODE.toString()+"="+Mode.getDefault(AlgorithmType.ASYMMETRIC).toString(),Parameter.PADDING.toString()+"="+Padding.getDefault(AlgorithmType.ASYMMETRIC).toString()})),
@@ -58,15 +60,19 @@ public enum Algorithm implements Serializable {
             ECCurveType.SECT409K1.getSecurityLevel(), getParameterList(new String[] { Parameter.ALGORITHM+"=ECIES",Parameter.KEYSIZE.toString()+"=409",Parameter.CURVETYPE.toString()+"="+ECCurveType.SECT409K1.toString(),Parameter.MODE.toString()+"="+Mode.getDefault(AlgorithmType.ASYMMETRIC).toString(),Parameter.PADDING.toString()+"="+Padding.getDefault(AlgorithmType.ASYMMETRIC).toString()})),
             ECCurveType.SECP521R1.getSecurityLevel(), getParameterList(new String[] { Parameter.ALGORITHM+"=ECIES",Parameter.KEYSIZE.toString()+"=521",Parameter.CURVETYPE.toString()+"="+ECCurveType.SECP521R1.toString(),Parameter.MODE.toString()+"="+Mode.getDefault(AlgorithmType.ASYMMETRIC).toString(),Parameter.PADDING.toString()+"="+Padding.getDefault(AlgorithmType.ASYMMETRIC).toString()}))
     ),
-    SHA384     ( 3000, AlgorithmType.HASHING, "sha384", "BC",  SecurityLevel.HIGH ),
-    SHA512     ( 3001, AlgorithmType.HASHING, "sha512", "BC", SecurityLevel.QUANTUM );
+    SHA384     ( 3000, AlgorithmType.HASHING, "sha384"   , "BC", SecurityLevel.HIGH ),
+    SHA512     ( 3001, AlgorithmType.HASHING, "sha512"   , "BC", SecurityLevel.QUANTUM ),
+    RIPEMD160  ( 3100, AlgorithmType.HASHING, "ripemd160", "BC", SecurityLevel.LOW ),
+    //RIPEMD256  ( 3101, AlgorithmType.HASHING, "ripemd256", "BC", SecurityLevel.MEDIUM ),
+    //RIPEMD320  ( 3102, AlgorithmType.HASHING, "ripemd320", "BC", SecurityLevel.HIGH ),
+    ;
 
     private static final java.util.logging.Logger LOGGER;
     private static Map<AlgorithmType, Algorithm> def = new ConcurrentHashMap<AlgorithmType, Algorithm>() {
         {
             put(AlgorithmType.ASYMMETRIC, RSA);
-            put(AlgorithmType.SYMMETRIC, AES256);
-            put(AlgorithmType.HASHING, SHA384);
+            put(AlgorithmType.SYMMETRIC,  AES256);
+            put(AlgorithmType.HASHING,    SHA384);
         }
     };
 
@@ -249,11 +255,10 @@ public enum Algorithm implements Serializable {
      * @return     the key size in bits for the security level specified
      */
     public int getKeySize(SecurityLevel sl) {
-        if (txt.toLowerCase().startsWith( "aes" ) || txt.startsWith( "sha" ) ) {
-            // Extract key size from AES and SHA name
-            return Integer.parseInt( txt.substring( 3, 6 ) );
-        } else if (txt.toLowerCase().startsWith( "camellia" )  ) {
-            return Integer.parseInt( txt.substring( 8, 11 ) );
+        for(String i: new String[] { "aes","sha","camellia","twofish","ripemd"}) {
+            if( txt.toLowerCase().startsWith(i)) {
+                return Integer.parseInt( txt.substring( i.length(), i.length()+3 ) );
+            }
         }
 
         synchronized(secLevel) {

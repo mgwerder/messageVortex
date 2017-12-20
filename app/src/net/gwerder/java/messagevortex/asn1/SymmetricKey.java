@@ -69,6 +69,8 @@ public class SymmetricKey extends Key {
             createAES( sk.getKeySize() );
         } else if(sk.toString().toLowerCase().startsWith("camellia")) {
             createCamellia( sk.getKeySize() );
+        } else if(sk.toString().toLowerCase().startsWith("twofish")) {
+            createTwofish( sk.getKeySize() );
         } else {
             throw new IOException( "Algorithm "+sk+" is not encodable by the system" );
         }
@@ -160,6 +162,17 @@ public class SymmetricKey extends Key {
         }
         SecretKeySpec camelliakey = new SecretKeySpec( keyBytes, "Camellia" );
         key = camelliakey.getEncoded();
+    }
+
+    private void createTwofish(int keysize) {
+        Mode mode=getMode();
+        byte[] keyBytes = new byte[keysize / 8];
+        secureRandom.nextBytes( keyBytes );
+        if(mode.getRequiresIV()) {
+            setIV( null );
+        }
+        SecretKeySpec twofishkey = new SecretKeySpec( keyBytes, "Twofish" );
+        key = twofishkey.getEncoded();
     }
 
     private Cipher getCipher() throws NoSuchAlgorithmException,NoSuchPaddingException {
