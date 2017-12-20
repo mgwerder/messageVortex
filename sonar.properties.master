@@ -18,5 +18,5 @@ sonar.doxygen.generateClassGraphs=true
 sonar.doxygen.generateCallerGraphs=true
 sonar.doxygen.generateCallGraphs=true
 sonar.java.libraries=app/rtlib/bouncycastle/*.jar
-sonar.java.test.libraries=lib/junit-4.11/*.jar
+sonar.java.test.libraries=lib/junit-4.12/*.jar
 sonar.technicalDebt.developmentCost=5

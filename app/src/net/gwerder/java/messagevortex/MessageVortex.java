@@ -24,14 +24,14 @@ package net.gwerder.java.messagevortex;
 import java.util.logging.Level;
 import java.util.logging.Logger;
  
-public abstract class MailVortex {
+public class MessageVortex {
 
     private static final Logger LOGGER;
     static {
         LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
     }
 
-    private MailVortex() {
+    private MessageVortex() {
         super();
     }
 

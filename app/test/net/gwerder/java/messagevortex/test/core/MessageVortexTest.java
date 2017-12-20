@@ -12,7 +12,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 /**
- * Tests for {@link net.gwerder.java.messagevortex.MailVortex}.
+ * Tests for {@link net.gwerder.java.messagevortex.MessageVortex}.
  *
  * @author martin@gwerder.net (Martin GWERDER)
  */
@@ -21,16 +21,16 @@ public class MessageVortexTest {
 
     @Test
     public void getHelp() {
-        assertTrue("Errorcode for --help is not 0",net.gwerder.java.messagevortex.MailVortex.main(new String[] {"--help"})==0);
+        assertTrue("Errorcode for --help is not 0",net.gwerder.java.messagevortex.MessageVortex.main(new String[] {"--help"})==0);
     }    
 
     @Test
     public void getRunRegularlyAndShutdown() {
-        assertTrue("Errorcode is not 0",net.gwerder.java.messagevortex.MailVortex.main(new String[0])==0);
+        assertTrue("Errorcode is not 0",net.gwerder.java.messagevortex.MessageVortex.main(new String[0])==0);
     }    
     @Test
     public void getRunRegularlyAndShutdownNull() {
-        assertTrue("Errorcode is not 0",net.gwerder.java.messagevortex.MailVortex.main(null)==0);
+        assertTrue("Errorcode is not 0",net.gwerder.java.messagevortex.MessageVortex.main(null)==0);
     }
 
     @Test
