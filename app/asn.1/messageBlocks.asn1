@@ -6,7 +6,7 @@
 -- - Tuple(identity)=Value(messageQuota,transferQuota,sequence of Routingblocks for Error Message Routing) [validity; Requested at creation; may be extended upon request] {identityStore}
 -- - Tuple(Identity,Serial)=maxReplays ['valid' from Identity Block; from First Identity Block; may only be reduced] {IdentityReplayStore}
 
-Message-Blocks DEFINITIONS EXPLICIT TAGS ::=
+MessageBlocks DEFINITIONS EXPLICIT TAGS ::=
 BEGIN
 
   -- define constants
@@ -50,10 +50,10 @@ BEGIN
         encrypted       [11012] OCTET STRING -- contains prefix encrypted with receivers public key
     },
 
-    identity    {
+    identity  CHOICE  {
       plain     [11021] IdentityBlock ,
       encyrpted [11022] OCTET STRING -- contains encrypted identity block
-    }
+    },
     identitySignature OCTET STRING,   -- contains signature of Identity [as stored in identityBlock;signed unencrypted identityBlock without Tag]
 
     -- contains routing information (next hop) for the payloads
@@ -338,9 +338,9 @@ BEGIN
   }
 
   CypherSpec ::= SEQUENCE {
-      asymmetric AsymmetricAlgorithmIdentifier,
-      symmetric  SymmetricAlgorithmIdentifier,
-      mac        MacAlgorithmIdentifier
+      asymmetric [16001] AsymmetricAlgorithmIdentifier OPTIONAL,
+      symmetric  [16002] SymmetricAlgorithmIdentifier OPTIONAL,
+      mac        [16003] MacAlgorithmIdentifier OPTIONAL
   }
 
   Protocol ::= ENUMERATED {
@@ -398,8 +398,8 @@ BEGIN
 
   SymmetricAlgorithmIdentifier  ::=  SEQUENCE  {
     algorithm               SymmetricAlgorithm,
-    padding                 CypherPadding,
-    mode                    CypherMode,
+    padding                 CipherPadding,
+    mode                    CipherMode,
     parameter               AlgorithmParameters OPTIONAL
   }
 
