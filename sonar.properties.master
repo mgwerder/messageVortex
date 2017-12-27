@@ -21,3 +21,5 @@ sonar.doxygen.generateCallGraphs=true
 sonar.java.libraries=app/rtlib/bouncycastle/*.jar
 sonar.java.test.libraries=lib/junit-4.12/*.jar
 sonar.technicalDebt.developmentCost=5
+sonar.issues.defaultAssigneeLogin=mgwerder
+sonar.scm.disabled=true
