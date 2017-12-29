@@ -25,77 +25,8 @@ BEGIN
   maxGFSize                 INTEGER ::= 16              -- maximum omega of the Galois field used
   maxNumberOfParameter      INTEGER ::= 127             -- the maximum number of parameters that might be embedded
 
-  PuzzleIdentifier          ::= OCTET STRING ( SIZE(0..16) )
+  PuzzleIdentifier          ::= OCTET STRING ( SIZE(0..16) ) --
 
-  VortexMessage ::= SEQUENCE {
-    prefix        CHOICE {
-        plain           [10011] PrefixBlock,
-        encrypted       [10012] OCTET STRING -- contains prefix encrypted with receivers public key
-    },
-    innerMessage  CHOICE {
-        plain     [10021] InnerMessageBlock,
-        encrypted [10022] OCTET STRING -- contains inner message encrypted with Symmetric key from Prefix
-    }
-  }
-
-  PrefixBlock ::= SEQUENCE {
-    key             SymmetricKey
-  }
-
-  InnerMessageBlock ::= SEQUENCE {
-    padding   OCTET STRING,
-
-    prefix    CHOICE {
-        plain           [11011] PrefixBlock,
-        encrypted       [11012] OCTET STRING -- contains prefix encrypted with receivers public key
-    },
-
-    identity  CHOICE  {
-      plain     [11021] IdentityBlock ,
-      encyrpted [11022] OCTET STRING -- contains encrypted identity block
-    },
-    identitySignature OCTET STRING,   -- contains signature of Identity [as stored in identityBlock;signed unencrypted identityBlock without Tag]
-
-    -- contains routing information (next hop) for the payloads
-    routing     CHOICE {
-      plain     [11031] SEQUENCE (SIZE (1..maxRoutingBlocks)) OF RoutingBlock ,
-      encyrpted [11032] OCTET STRING -- contains encrypted routing block
-    },
-
-    -- contains the actual payload
-    payload     SEQUENCE (SIZE (0..maxPayloadBlocks)) OF PayloadChunk
-  }
-
-  IdentityBlock ::= SEQUENCE {
-    -- Public key of the identity representing this transmission
-    identityKey       AsymmetricKey,
-
-    -- serial identifying this block
-    serial            INTEGER (0..maxSerial),
-
-    -- number of times this block may be replayed (Tuple is identityKey,serial while
-    maxReplays        INTEGER (0..maxNumberOfReplays),
-
-    -- subsequent Blocks are not processed before valid time.
-    -- Host may reject too long retention. Recomended validity support >=1Mt.
-    valid             UsagePeriod,
-
-    -- represents the chained secret which has to be found in subsequent blocks
-    -- prevents reassembly attack
-    forwardSecret     ChainSecret,
-
-    --  contains the MAC-Algorithm used for signing
-    hash              MacAlgorithm,
-
-    -- contains administrative requests such as quota requests
-    requests          SEQUENCE (SIZE (0..maxNumberOfRequests)) OF HeaderRequest ,
-
-    -- padding and identitifier required to solve the cryptopuzzle
-    identifier    [12201] PuzzleIdentifier OPTIONAL,
-    proofOfWork   [12202] OCTET STRING OPTIONAL  -- This is for solving crypto puzzles
-  }
-
-  -- represents the building and sending process for the next hop
   RoutingBlock ::= SEQUENCE {
 
     -- contains the next recipient in sequence
@@ -146,6 +77,75 @@ BEGIN
 
   }
 
+  InnerMessageBlock ::= SEQUENCE {
+    padding   OCTET STRING,
+
+    prefix    CHOICE {
+        plain           [11011] PrefixBlock,
+        encrypted       [11012] OCTET STRING -- contains prefix encrypted with receivers public key
+    },
+
+    identity  CHOICE  {
+      plain     [11021] IdentityBlock ,
+      encyrpted [11022] OCTET STRING -- contains encrypted identity block
+    },
+    identitySignature OCTET STRING,   -- contains signature of Identity [as stored in identityBlock;signed unencrypted identityBlock without Tag]
+
+    -- contains routing information (next hop) for the payloads
+    routing     CHOICE {
+      plain     [11031] SEQUENCE (SIZE (1..maxRoutingBlocks)) OF RoutingBlock ,
+      encyrpted [11032] OCTET STRING -- contains encrypted routing block
+    },
+
+    -- contains the actual payload
+    payload     SEQUENCE (SIZE (0..maxPayloadBlocks)) OF PayloadChunk
+  }
+
+  VortexMessage ::= SEQUENCE {
+    prefix        CHOICE {
+        plain           [10011] PrefixBlock,
+        encrypted       [10012] OCTET STRING -- contains prefix encrypted with receivers public key
+    },
+    innerMessage  CHOICE {
+        plain     [10021] InnerMessageBlock,
+        encrypted [10022] OCTET STRING -- contains inner message encrypted with Symmetric key from Prefix
+    }
+  }
+
+  PrefixBlock ::= SEQUENCE {
+    key             SymmetricKey
+  }
+
+  IdentityBlock ::= SEQUENCE {
+    -- Public key of the identity representing this transmission
+    identityKey       AsymmetricKey,
+
+    -- serial identifying this block
+    serial            INTEGER (0..maxSerial),
+
+    -- number of times this block may be replayed (Tuple is identityKey,serial while
+    maxReplays        INTEGER (0..maxNumberOfReplays),
+
+    -- subsequent Blocks are not processed before valid time.
+    -- Host may reject too long retention. Recomended validity support >=1Mt.
+    valid             UsagePeriod,
+
+    -- represents the chained secret which has to be found in subsequent blocks
+    -- prevents reassembly attack
+    forwardSecret     ChainSecret,
+
+    --  contains the MAC-Algorithm used for signing
+    hash              MacAlgorithm,
+
+    -- contains administrative requests such as quota requests
+    requests          SEQUENCE (SIZE (0..maxNumberOfRequests)) OF HeaderRequest ,
+
+    -- padding and identitifier required to solve the cryptopuzzle
+    identifier    [12201] PuzzleIdentifier OPTIONAL,
+    proofOfWork   [12202] OCTET STRING OPTIONAL  -- This is for solving crypto puzzles
+  }
+
+  -- represents the building and sending process for the next hop
    AssemblyBlock ::= SEQUENCE {
       routingBlockIndex    INTEGER (0..maxRoutingBlocks),
       payloadBlockIndex    SEQUENCE (SIZE (1..maxPayloadBlocks)) OF INTEGER (0..maxID)
@@ -269,8 +269,8 @@ BEGIN
   -- At the moment either smtp:<email> or xmpp:<jabber>
   BlendingSpec ::= SEQUENCE {
     target            NodeSpec,
-    blendingType      IA5String, -- 'F5' or 'atttach'
-    parameter         SEQUENCE (SIZE (0..maxNumberOfParameter)) OF BlendingParameter
+    blendingType      UTF8String, -- 'F5' or 'atttach'
+    parameter         SEQUENCE ( SIZE (0..maxNumberOfParameter) ) OF BlendingParameter
   }
 
   BlendingParameter ::= CHOICE {
@@ -280,8 +280,8 @@ BEGIN
   }
 
   NodeSpec ::= SEQUENCE {
-    media             IA5String,  -- defined so far are 'xmpp' and 'smtp'
-    recipientAddress  IA5String
+    media             UTF8String,  -- defined so far are 'xmpp' and 'smtp'
+    recipientAddress  UTF8String
   }
 
   ChainSecret ::= INTEGER (0..4294967295)
@@ -331,16 +331,22 @@ BEGIN
   }
 
   ReplyCapability ::= SEQUENCE {
-    cypher            SEQUENCE (SIZE (2..256)) OF CypherSpec,
+    cipher            SEQUENCE (SIZE (2..256)) OF CipherSpec,
     maxTransferQuota  INTEGER (0..4294967295),
     maxMessageQuota   INTEGER (0..4294967295),
     supportedProtocol SEQUENCE OF Protocol
   }
 
-  CypherSpec ::= SEQUENCE {
-      asymmetric [16001] AsymmetricAlgorithmIdentifier OPTIONAL,
-      symmetric  [16002] SymmetricAlgorithmIdentifier OPTIONAL,
-      mac        [16003] MacAlgorithmIdentifier OPTIONAL
+  CipherSpec ::= SEQUENCE {
+      asymmetric [16001] AsymmetricAlgorithmSpec OPTIONAL,
+      symmetric  [16002] SymmetricAlgorithmSpec OPTIONAL,
+      mac        [16003] MacAlgorithmSpec OPTIONAL,
+      cipherUsage[16004] CipherUsage
+  }
+
+  CipherUsage ::= ENUMERATED {
+    sign     (200),
+    encrypt  (210)
   }
 
   Protocol ::= ENUMERATED {
@@ -396,24 +402,24 @@ BEGIN
     notAfter        [1]     GeneralizedTime OPTIONAL
   }
 
-  SymmetricAlgorithmIdentifier  ::=  SEQUENCE  {
+  SymmetricAlgorithmSpec  ::=  SEQUENCE  {
     algorithm               SymmetricAlgorithm,
     padding                 CipherPadding,
     mode                    CipherMode,
     parameter               AlgorithmParameters OPTIONAL
   }
 
-  AsymmetricAlgorithmIdentifier  ::=  SEQUENCE  {
+  AsymmetricAlgorithmSpec  ::=  SEQUENCE  {
     algorithm               AsymmetricAlgorithm,
     parameter               AlgorithmParameters OPTIONAL
   }
 
-  MacAlgorithmIdentifier  ::=  SEQUENCE  {
+  MacAlgorithmSpec  ::=  SEQUENCE  {
     algorithm               MacAlgorithm,
     parameter               AlgorithmParameters
   }
 
-  PRNGAlgorithmIdentifier ::= SEQUENCE {
+  PRNGAlgorithmSpec ::= SEQUENCE {
     type                    PRNGType,
     seed                    OCTET STRING
   }

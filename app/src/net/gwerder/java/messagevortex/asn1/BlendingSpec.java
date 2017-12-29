@@ -57,12 +57,12 @@ public class BlendingSpec extends AbstractBlock {
         ASN1Sequence s2 = ASN1Sequence.getInstance(s1.getObjectAt(i++));
         int i2=0;
         // get media
-        media= DERIA5String.getInstance(s2.getObjectAt(i2++)).getString();
+        media= DERUTF8String.getInstance(s2.getObjectAt(i2++)).getString();
         // get recipient address
-        recipientAddress= DERIA5String.getInstance(s2.getObjectAt(i2++)).getString();
+        recipientAddress= DERUTF8String.getInstance(s2.getObjectAt(i2++)).getString();
 
         //get blending type
-        blendingType= DERIA5String.getInstance(s1.getObjectAt(i++)).getString();
+        blendingType= DERUTF8String.getInstance(s1.getObjectAt(i++)).getString();
 
         // get Blending Parameter
         s2=ASN1Sequence.getInstance(s1.getObjectAt(i++));
@@ -78,12 +78,12 @@ public class BlendingSpec extends AbstractBlock {
 
         // encode target sequence
         ASN1EncodableVector v2=new ASN1EncodableVector();
-        v2.add(new DERIA5String(media));
-        v2.add(new DERIA5String(recipientAddress));
+        v2.add(new DERUTF8String(media));
+        v2.add(new DERUTF8String(recipientAddress));
         v.add(new DERSequence(v2));
 
         // encode blending type
-        v.add(new DERIA5String(blendingType));
+        v.add(new DERUTF8String(blendingType));
 
         // encode BlendingParameter
         v2=new ASN1EncodableVector();

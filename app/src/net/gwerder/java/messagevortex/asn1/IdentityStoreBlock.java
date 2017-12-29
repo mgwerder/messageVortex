@@ -224,7 +224,7 @@ public class IdentityStoreBlock extends AbstractBlock {
             v.add( new DERTaggedObject( true, 1001, identityKey.toASN1Object( dumpType ) ) );
         }
         if(nodeAddress!=null) {
-            v.add( new DERTaggedObject( true, 1002, new DERIA5String(nodeAddress)));
+            v.add( new DERTaggedObject( true, 1002, new DERUTF8String(nodeAddress)));
         }
         if (nodeKey != null){
             v.add( new DERTaggedObject( true, 1003, nodeKey.toASN1Object( dumpType ) ) );
