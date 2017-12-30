@@ -40,7 +40,7 @@ import java.util.logging.Level;
  */
 public class RemoveRedundancy extends AbstractOperation  implements Serializable {
 
-    public static long serialVersionUID = 100000000020L;
+    public static final long serialVersionUID = 100000000020L;
 
     private static final java.util.logging.Logger LOGGER;
     static {

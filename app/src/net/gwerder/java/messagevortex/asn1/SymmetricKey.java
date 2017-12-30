@@ -32,6 +32,7 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
+import java.io.Serializable;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -41,7 +42,9 @@ import java.util.Arrays;
 /**
  * Represents a Symmetric Key in the ASN.1 structure
  */
-public class SymmetricKey extends Key {
+public class SymmetricKey extends Key implements Serializable {
+
+    public static final long serialVersionUID = 100000000040L;
 
     private static ExtendedSecureRandom secureRandom = new ExtendedSecureRandom();
 

@@ -37,7 +37,7 @@ import java.util.logging.Level;
  */
 public class AddRedundancy extends AbstractOperation implements Serializable {
 
-    public static long serialVersionUID = 100000000018L;
+    public static final long serialVersionUID = 100000000018L;
 
     private static final java.util.logging.Logger LOGGER;
     static {

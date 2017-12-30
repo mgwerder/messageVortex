@@ -42,7 +42,7 @@ import java.util.logging.Logger;
  */
 public class VortexMessage extends AbstractBlock implements Serializable {
 
-    public static long serialVersionUID = 100000000018L;
+    public static final long serialVersionUID = 100000000018L;
 
     public static final int PREFIX_PLAIN            =  10011;
     public static final int PREFIX_ENCRYPTED        =  10012;

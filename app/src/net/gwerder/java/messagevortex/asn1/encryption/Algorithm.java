@@ -67,6 +67,8 @@ public enum Algorithm implements Serializable {
     //RIPEMD320  ( 3102, AlgorithmType.HASHING, "ripemd320", "BC", SecurityLevel.HIGH ),
     ;
 
+    public static final long serialVersionUID = 100000000039L;
+
     private static final java.util.logging.Logger LOGGER;
     private static Map<AlgorithmType, Algorithm> def = new ConcurrentHashMap<AlgorithmType, Algorithm>() {
         {

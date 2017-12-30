@@ -21,11 +21,16 @@ package net.gwerder.java.messagevortex.asn1.encryption;
 // * SOFTWARE.
 // ************************************************************************************
 
+import java.io.Serializable;
+
 /**
  * Represents an enumeration of all cryptographical algorithm types.
  */
-public enum AlgorithmType {
+public enum AlgorithmType implements Serializable {
     SYMMETRIC,
     ASYMMETRIC,
-    HASHING
+    HASHING;
+
+    public static final long serialVersionUID = 100000000041L;
+
 }

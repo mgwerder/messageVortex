@@ -94,6 +94,15 @@ public class RoutingBlock extends AbstractBlock  implements Serializable {
         parse(to);
     }
 
+    private PrefixBlock[] getPrefix(ASN1Primitive seq) throws IOException {
+        // if it is encrypted we have no decryption key for it anyway
+        List<PrefixBlock> ap = new ArrayList<>();
+        for (ASN1Encodable e : ASN1Sequence.getInstance(seq)) {
+            ap.add(new PrefixBlock(e.toASN1Primitive(), null));
+        }
+        return ap.toArray(new PrefixBlock[ap.size()]);
+    }
+
     @Override
     protected void parse(ASN1Encodable to) throws IOException {
         Operation.init();
@@ -112,16 +121,16 @@ public class RoutingBlock extends AbstractBlock  implements Serializable {
         maxProcessTime=ASN1Integer.getInstance(s1.getObjectAt(i++)).getValue().intValue();
 
         // get prefix block
+        // FIXME check thorougly. How is this tag preserved when reencoding
         ASN1TaggedObject ae=ASN1TaggedObject.getInstance(s1.getObjectAt(i++));
         switch(ae.getTagNo()) {
             case PREFIX_PLAIN:
+                LOGGER.log(Level.INFO,"parsing plain prefix");
+                prefix=getPrefix(ae.getObject().toASN1Primitive());
+                break;
             case PREFIX_ENCRYPTED:
-                // if it is encrypted we have no decryption key for it anyway
-                List<PrefixBlock> ap=new ArrayList<>();
-                for(ASN1Encodable e:ASN1Sequence.getInstance(ae.getObject().toASN1Primitive())) {
-                    ap.add(new PrefixBlock(e.toASN1Primitive(), null));
-                }
-                prefix=ap.toArray(new PrefixBlock[ap.size()]);
+                LOGGER.log(Level.INFO,"parsing encrypted prefix");
+                prefix=getPrefix(ae.getObject().toASN1Primitive());
                 break;
             default:
                 throw new IOException( "Error parsing prefix (expected: "+PREFIX_PLAIN+" or "+PREFIX_ENCRYPTED+";got:"+ae.getTagNo()+")");

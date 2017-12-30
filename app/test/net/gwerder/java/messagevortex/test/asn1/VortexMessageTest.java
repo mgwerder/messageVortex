@@ -24,18 +24,15 @@ package net.gwerder.java.messagevortex.test.asn1;
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.asn1.*;
 import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.logging.Level;
-
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 /**
  * Tests for the VortexMessage class.
@@ -60,20 +57,23 @@ public class VortexMessageTest {
             final int TESTS=10;
             for (int i = 0; i < TESTS; i++) {
                 LOGGER.log( Level.INFO, "Testing VortexMessage reencoding " + (i + 1) + " of " + TESTS );
-                PrefixBlock p=new PrefixBlock();
-                p.setKey(new SymmetricKey() );
-                VortexMessage s = new VortexMessage(p,new InnerMessageBlock( new PrefixBlock(),new IdentityBlock(),new RoutingBlock() ));
+                PrefixBlock randomOuterPrefixBlock=new PrefixBlock();
+                randomOuterPrefixBlock.setKey(new SymmetricKey() );
+                IdentityBlock randomIdentityBlock=new IdentityBlock();
+                RoutingBlock randomRoutingBlock=new RoutingBlock();
+                PrefixBlock randomPrefixBlock=new PrefixBlock();
+                VortexMessage s = new VortexMessage(randomOuterPrefixBlock,new InnerMessageBlock( randomPrefixBlock,randomIdentityBlock,randomRoutingBlock));
                 String s1=s.dumpValueNotation( "" );
                 byte[] b1 = s.toBytes(DumpType.ALL_UNENCRYPTED);
-                assertTrue( "Byte representation may not be null", b1 != null );
+                Assert.assertTrue( "Byte representation may not be null", b1 != null );
                 byte[] b2 = (new VortexMessage( b1,null )).toBytes(DumpType.ALL_UNENCRYPTED);
-                assertTrue( "Byte arrays should be equal when reencoding", Arrays.equals( b1, b2 ) );
+                Assert.assertTrue( "Byte arrays should be equal when reencoding", Arrays.equals( b1, b2 ) );
                 String s2=s.dumpValueNotation( "" );
-                assertTrue( "Value Notations should be equal when reencoding", s1.equals( s2 ) );
+                Assert.assertTrue( "Value Notations should be equal when reencoding", s1.equals( s2 ) );
             }
         } catch (Exception e) {
             LOGGER.log( Level.WARNING,"Unexpected exception",e);
-            fail( "fuzzer encountered exception in VortexMessage ("+e.toString()+")" );
+            Assert.fail( "fuzzer encountered exception in VortexMessage ("+e.toString()+")" );
         }
     }
 
@@ -82,7 +82,7 @@ public class VortexMessageTest {
         LOGGER.log( Level.INFO, "Testing basic byte reencoding length 4");
         testIntByteConverter( 0,4 );
         testIntByteConverter( 1,4 );
-        testIntByteConverter( 4294967295l,4 );
+        testIntByteConverter( 4294967295L,4 );
         for (int i = 0; i < 100; i++) {
             int rand = (int) (Math.random() * Integer.MAX_VALUE);
             LOGGER.log( Level.INFO, "  Testing byte reencoding " + (i + 1) + " of " + 200 + " [" + rand + "]" );
@@ -91,7 +91,7 @@ public class VortexMessageTest {
         LOGGER.log( Level.INFO, "Testing basic byte reencoding length 2");
         testIntByteConverter( 0,2 );
         testIntByteConverter( 1,2 );
-        testIntByteConverter( 65525l,2 );
+        testIntByteConverter( 65525L,2 );
         for (int i = 101; i < 200; i++) {
             int rand = (int) (Math.random() * 65535);
             LOGGER.log( Level.INFO, "  Testing byte reencoding " + (i + 1) + " of " + 200 + " [" + rand + "]" );
@@ -101,19 +101,22 @@ public class VortexMessageTest {
 
     private void testIntByteConverter(long i, int len) {
         byte[] b= VortexMessage.getLongAsBytes( i,len );
-        assertTrue("wrong number of bytes returned (expected="+len+"; received="+b.length+")",b.length==len);
-        assertTrue( "Error reencoding "+i+ " (old="+i+";"+ AbstractBlock.toHex(b)+";new="+ VortexMessage.getBytesAsLong( b )+"]", VortexMessage.getBytesAsLong( b ) == i );
+        Assert.assertTrue("wrong number of bytes returned (expected="+len+"; received="+b.length+")",b.length==len);
+        Assert.assertTrue( "Error reencoding "+i+ " (old="+i+";"+ AbstractBlock.toHex(b)+";new="+ VortexMessage.getBytesAsLong( b )+"]", VortexMessage.getBytesAsLong( b ) == i );
     }
 
     @Test
     public void writeAsAsn1() {
         try {
             // FIXME build a full message with all possible blocks
-            PrefixBlock p=new PrefixBlock();
-            p.setKey(new SymmetricKey() );
-            VortexMessage s = new VortexMessage(p,new InnerMessageBlock( new PrefixBlock(),new IdentityBlock(),new RoutingBlock() ));
+            PrefixBlock randomOuterPrefixBlock=new PrefixBlock();
+            randomOuterPrefixBlock.setKey(new SymmetricKey() );
+            IdentityBlock randomIdentityBlock=new IdentityBlock();
+            RoutingBlock randomRoutingBlock=new RoutingBlock();
+            PrefixBlock randomPrefixBlock=new PrefixBlock();
+            VortexMessage s = new VortexMessage(randomOuterPrefixBlock,new InnerMessageBlock( randomPrefixBlock,randomIdentityBlock,randomRoutingBlock));
             File f = new File("testfile_VortexMessage_encrypted.der");
-            OutputStream o = new FileOutputStream(f);
+            FileOutputStream o = new FileOutputStream(f);
             o.write(s.toBytes(DumpType.ALL_UNENCRYPTED));
             o.close();
 
@@ -122,24 +125,24 @@ public class VortexMessageTest {
             o.write(s.toASN1Object(DumpType.ALL_UNENCRYPTED).getEncoded());
             o.close();
         } catch (Exception e) {
-            fail("unexpected exception");
+            Assert.fail("unexpected exception");
         }
     }
 
     @Test
     public void ByteToLongConversionTest() {
-        assertTrue("error testing byte conversion with 0 ["+VortexMessage.toHex(VortexMessage.getLongAsBytes(0))+"->"+VortexMessage.getBytesAsLong(VortexMessage.getLongAsBytes(0))+"]",0==VortexMessage.getBytesAsLong(VortexMessage.getLongAsBytes(0)));
-        assertTrue("error testing byte conversion with 1",1==VortexMessage.getBytesAsLong(VortexMessage.getLongAsBytes(1)));
-        assertTrue("error testing byte conversion with 1 to bytes",Arrays.equals(new byte[] {1,0,0,0},VortexMessage.getLongAsBytes(1)));
-        assertTrue("error testing byte conversion with 0 to bytes",Arrays.equals(new byte[] {0,0,0,0},VortexMessage.getLongAsBytes(0)));
-        assertTrue("error testing byte conversion with 256 to bytes",Arrays.equals(new byte[] {0,1,0,0},VortexMessage.getLongAsBytes(256)));
-        assertTrue("error testing byte conversion with 65536 to bytes",Arrays.equals(new byte[] {0,0,1,0},VortexMessage.getLongAsBytes(65536)));
-        assertTrue("error testing byte conversion with "+Long.MAX_VALUE,Long.MAX_VALUE==VortexMessage.getBytesAsLong(VortexMessage.getLongAsBytes(Long.MAX_VALUE,8)));
+        Assert.assertTrue("error testing byte conversion with 0 ["+VortexMessage.toHex(VortexMessage.getLongAsBytes(0))+"->"+VortexMessage.getBytesAsLong(VortexMessage.getLongAsBytes(0))+"]",0==VortexMessage.getBytesAsLong(VortexMessage.getLongAsBytes(0)));
+        Assert.assertTrue("error testing byte conversion with 1",1==VortexMessage.getBytesAsLong(VortexMessage.getLongAsBytes(1)));
+        Assert.assertTrue("error testing byte conversion with 1 to bytes", Arrays.equals(new byte[]{1, 0, 0, 0}, VortexMessage.getLongAsBytes(1)));
+        Assert.assertTrue("error testing byte conversion with 0 to bytes",Arrays.equals(new byte[] {0,0,0,0},VortexMessage.getLongAsBytes(0)));
+        Assert.assertTrue("error testing byte conversion with 256 to bytes",Arrays.equals(new byte[] {0,1,0,0},VortexMessage.getLongAsBytes(256)));
+        Assert.assertTrue("error testing byte conversion with 65536 to bytes",Arrays.equals(new byte[] {0,0,1,0},VortexMessage.getLongAsBytes(65536)));
+        Assert.assertTrue("error testing byte conversion with "+Long.MAX_VALUE,Long.MAX_VALUE==VortexMessage.getBytesAsLong(VortexMessage.getLongAsBytes(Long.MAX_VALUE,8)));
 
         // fuzzing value
         for(int i=0;i<1000;i++) {
             long r=(long)(Math.random()+Long.MAX_VALUE);
-            assertTrue( "error fuzzing byte conversion with "+r, r==VortexMessage.getBytesAsLong(VortexMessage.getLongAsBytes(r,8)));
+            Assert.assertTrue( "error fuzzing byte conversion with "+r, r==VortexMessage.getBytesAsLong(VortexMessage.getLongAsBytes(r,8)));
         }
     }
 

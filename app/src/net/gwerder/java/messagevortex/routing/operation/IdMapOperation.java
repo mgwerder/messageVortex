@@ -10,7 +10,7 @@ import java.util.logging.Level;
  */
 public class IdMapOperation extends AbstractOperation implements Serializable {
 
-    public static long serialVersionUID = 100000000019L;
+    public static final long serialVersionUID = 100000000019L;
 
     private static final java.util.logging.Logger LOGGER;
     static {

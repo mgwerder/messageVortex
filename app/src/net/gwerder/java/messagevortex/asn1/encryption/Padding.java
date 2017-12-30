@@ -23,12 +23,13 @@ package net.gwerder.java.messagevortex.asn1.encryption;
 
 import org.bouncycastle.asn1.ASN1Enumerated;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * Enumeration listing all available padding types for encryption.
  */
-public enum Padding {
+public enum Padding implements Serializable {
 
     /*NONE            ( 1000, "NoPadding", new AlgorithmType[]{AlgorithmType.ASYMMETRIC}, new SizeCalc() {
         public int maxSize(int s) {
@@ -60,6 +61,8 @@ public enum Padding {
             return s / 8 - 1;
         }
     } );
+
+    public static final long serialVersionUID = 100000000038L;
 
     private static final Map<AlgorithmType,Padding> DEFAULT_PADDING =new HashMap<AlgorithmType,Padding>(  ) {
         {

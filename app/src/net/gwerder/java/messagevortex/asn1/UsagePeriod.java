@@ -36,7 +36,7 @@ import java.util.TimeZone;
  */
 public class UsagePeriod extends AbstractBlock  implements Serializable {
 
-    public static long serialVersionUID = 100000000017L;
+    public static final long serialVersionUID = 100000000017L;
 
     public static final int TAG_NOT_BEFORE =0;
     public static final int TAG_NOT_AFTER  =1;

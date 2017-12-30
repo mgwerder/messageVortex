@@ -47,9 +47,10 @@ public abstract class Operation extends AbstractBlock  implements Serializable {
     public static final int REMOVE_REDUNDANCY = 410;
 
     private static final Map<Integer,Operation> operations=new ConcurrentHashMap<>();
+    private static boolean initInProgress=false;
 
     /* constructor */
-    Operation() {}
+    Operation() {init();}
 
     public static Operation getInstance(ASN1Encodable object) throws IOException {
         if(operations.isEmpty()) throw new IOException("init() not called");
@@ -62,7 +63,8 @@ public abstract class Operation extends AbstractBlock  implements Serializable {
 
     public static void init() {
         synchronized(operations) {
-            if (operations.isEmpty()) {
+            if (operations.isEmpty() && ! initInProgress) {
+                initInProgress=true;
                 operations.put(SPLIT_PAYLOAD, new SplitPayloadOperation());
                 operations.put(MERGE_PAYLOAD, new MergePayloadOperation());
                 operations.put(XOR_SPLIT_PAYLOAD, new XorSplitPayloadOperation());
@@ -71,6 +73,7 @@ public abstract class Operation extends AbstractBlock  implements Serializable {
                 operations.put(DECRYPT_PAYLOAD, new DecryptPayloadOperation());
                 operations.put(ADD_REDUNDANCY, new AddRedundancyOperation());
                 operations.put(REMOVE_REDUNDANCY, new RemoveRedundancyOperation());
+                initInProgress=false;
             }
         }
     }

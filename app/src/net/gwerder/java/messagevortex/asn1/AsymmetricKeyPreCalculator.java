@@ -394,7 +394,9 @@ class AsymmetricKeyPreCalculator implements Serializable {
 
                 // get tupples
                 for (int j = 0; j < i; j++) {
+                    @SuppressWarnings("unchecked")
                     AlgorithmParameter ap = (AlgorithmParameter) f.readObject();
+                    @SuppressWarnings("unchecked")
                     Queue<AsymmetricKey> q = (Queue<AsymmetricKey>) f.readObject();
                     lc.put(prepareParameters(ap), q);
                 }
@@ -403,7 +405,9 @@ class AsymmetricKeyPreCalculator implements Serializable {
                 Map<AlgorithmParameter, Integer> lcc = new HashMap<>();
                 i = (int) f.readObject();
                 for (int j = 0; j < i; j++) {
+                    @SuppressWarnings("unchecked")
                     AlgorithmParameter ap = (AlgorithmParameter) f.readObject();
+                    @SuppressWarnings("unchecked")
                     int num = (Integer) f.readObject();
                     lcc.put(prepareParameters(ap), num);
                 }

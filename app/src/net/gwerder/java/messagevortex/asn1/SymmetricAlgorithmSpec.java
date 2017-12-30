@@ -12,7 +12,7 @@ import java.io.Serializable;
  */
 public class SymmetricAlgorithmSpec  extends AbstractBlock  implements Serializable {
 
-    public static long serialVersionUID = 100000000016L;
+    public static final long serialVersionUID = 100000000016L;
 
     public SymmetricAlgorithmSpec(ASN1Encodable to) throws IOException {
         parse(to);
