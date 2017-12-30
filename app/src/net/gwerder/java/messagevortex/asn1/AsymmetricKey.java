@@ -22,6 +22,7 @@ package net.gwerder.java.messagevortex.asn1;
 // ************************************************************************************
 
 import net.gwerder.java.messagevortex.ExtendedSecureRandom;
+import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.asn1.encryption.*;
 import org.bouncycastle.asn1.*;
 import org.bouncycastle.jce.ECNamedCurveTable;
@@ -38,6 +39,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
+import java.util.logging.Level;
 
 /**
  * Asymmetric Key Handling.
@@ -59,12 +61,19 @@ public class AsymmetricKey extends Key  implements Serializable {
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
     }
 
+    private static final java.util.logging.Logger LOGGER;
+    static {
+        LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+    }
+
+
+
     static{
         // start key precalculator
         try {
             AsymmetricKey.setCacheFileName("AsymmetricKey.cache");
         } catch(Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.WARNING,"Failed to set cache file name",e);
         }
     }
 
