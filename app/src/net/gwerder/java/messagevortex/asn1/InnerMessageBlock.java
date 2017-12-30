@@ -30,6 +30,7 @@ import org.bouncycastle.asn1.*;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
@@ -84,10 +85,17 @@ public class InnerMessageBlock extends AbstractBlock  implements Serializable {
     }
 
     protected void parse(byte[] p, AsymmetricKey decryptionKey ) throws IOException {
-        ASN1InputStream aIn=new ASN1InputStream( p );
-        parse(aIn.readObject(),decryptionKey);
-        if( identity==null ) {
-            throw new NullPointerException( "IdentityBlock may not be null" );
+        ASN1InputStream aIn=null;
+        try {
+            aIn = new ASN1InputStream(p);
+            parse(aIn.readObject(),decryptionKey);
+            if( identity==null ) {
+                throw new NullPointerException( "IdentityBlock may not be null" );
+            }
+        } finally {
+            if(aIn!=null) {
+                aIn.close();
+            }
         }
     }
 
@@ -306,7 +314,7 @@ public class InnerMessageBlock extends AbstractBlock  implements Serializable {
         }
         InnerMessageBlock ib=(InnerMessageBlock)o;
         try {
-            return toBytes(DumpType.ALL_UNENCRYPTED).equals(ib.toBytes(DumpType.ALL_UNENCRYPTED));
+            return Arrays.equals(toBytes(DumpType.ALL_UNENCRYPTED),ib.toBytes(DumpType.ALL_UNENCRYPTED));
         } catch(IOException ioe) {
             return false;
         }

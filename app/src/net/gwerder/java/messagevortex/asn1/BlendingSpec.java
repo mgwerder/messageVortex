@@ -73,6 +73,7 @@ public class BlendingSpec extends AbstractBlock implements Serializable {
         for(ASN1Encodable e:s2) {
             al.add(new BlendingParameter(e));
         }
+        blendingParameter=al.toArray(new BlendingParameter[al.size()]);
     }
 
     @Override

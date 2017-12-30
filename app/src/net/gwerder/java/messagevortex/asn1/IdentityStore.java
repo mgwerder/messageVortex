@@ -103,7 +103,7 @@ public class IdentityStore extends AbstractBlock  implements Serializable {
             IdentityStoreBlock isb=blocks.get(keys[secureRandom.nextInt(keys.length)]);
             if(isb!=null && isb.getType()==IdentityStoreBlock.IdentityType.RECIPIENT_IDENTITY && !ret.contains( isb ) ) {
                 ret.add(isb);
-                LOGGER.log( Level.FINER, "adding to anonSet "+isb.getIdentityKey().getPublicKey().hashCode() );
+                LOGGER.log( Level.FINER, "adding to anonSet "+Arrays.hashCode(isb.getIdentityKey().getPublicKey()) );
             }
         }
         if(ret.size()<size) {
@@ -114,8 +114,15 @@ public class IdentityStore extends AbstractBlock  implements Serializable {
     }
 
     protected void parse(byte[] p) throws IOException {
-        ASN1InputStream aIn = new ASN1InputStream( p );
-        parse( aIn.readObject() );
+        ASN1InputStream aIn=null;
+        try {
+            aIn = new ASN1InputStream(p);
+            parse(aIn.readObject());
+        } finally {
+            if(aIn!=null) {
+                aIn.close();
+            }
+        }
     }
 
     public void add(IdentityStoreBlock isb) {

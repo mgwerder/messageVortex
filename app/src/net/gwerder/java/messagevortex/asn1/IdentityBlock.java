@@ -316,7 +316,7 @@ public class IdentityBlock extends AbstractBlock  implements Serializable {
         }
         ASN1Object o;
         if (encryptIdentity) {
-            if(headerKey!=null) {
+            if(headerKey==null) {
                 throw new IOException("header key is empty but block should be encrypted");
             }
             // store identity encrypted
