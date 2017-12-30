@@ -145,11 +145,10 @@
       </instrumentationClasspath>
       </cobertura-instrument>-->
 
-      <mkdir dir='${build.home}/testsrc'/>
       <taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
           <classpath path="${basedir}/lib/jacoco/lib/jacocoant.jar"/>
       </taskdef>
-      <jacoco:coverage>
+      <jacoco:coverage destfile="${build.home}/jacoco.exec">
             <junit  fork="yes" forkmode="once" haltonfailure="yes" dir="${build.home}/classes/"> <!-- showoutput="yes" printsummary="withOutAndErr" -->
                 <!--<sysproperty key="net.sourceforge.cobertura.datafile" file="${build.home}/cobertura.ser" />-->
                 <jvmarg value="-XX:-UseSplitVerifier"/>
@@ -165,6 +164,24 @@
                 <formatter type="plain" usefile="false"/>
             </junit>
       </jacoco:coverage>
+      <mkdir dir="${build.home}/jacoco"/>
+      <jacoco:report>
+          <executiondata>
+              <file file="${build.home}/jacoco.exec"/>
+          </executiondata>
+          <structure name="MessageVortex">
+              <classfiles>
+                  <fileset dir="${build.home}/classes/"/>
+              </classfiles>
+              <sourcefiles encoding="UTF-8">
+                  <fileset dir="${build.home}/src"/>
+                  <fileset dir="${build.home}/testsrc"/>
+              </sourcefiles>
+          </structure>
+          <html destdir="${build.home}/jacoco"/>
+          <csv destfile="${build.home}/jacoco/report.csv"/>
+          <xml destfile="${build.home}/jacoco/report.xml"/>
+      </jacoco:report>
 
       <!--<mkdir dir='${doc.home}/cobertura'/>
       <cobertura-report format="xml" destdir="${build.home}/testsrc"  datafile="${build.home}/cobertura.ser">
