@@ -25,6 +25,8 @@ import java.util.logging.Level;
  */
 class AsymmetricKeyPreCalculator implements Serializable {
 
+    public static final long serialVersionUID = 100000000031L;
+
     private static final java.util.logging.Logger LOGGER;
     static {
         LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());

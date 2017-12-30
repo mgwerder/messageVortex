@@ -97,8 +97,6 @@
           destdir="${build.home}/classes/"
             debug="${compile.debug}"
       deprecation="${compile.deprecation}"
-           source="${app.source}"
-           target="${app.target}"
          optimize="${compile.optimize}">
         <classpath refid="compile.classpath"/>
         <compilerarg value="-Xlint"/>
@@ -107,8 +105,6 @@
           destdir="${build.home}/classes/"
             debug="${compile.debug}"
       deprecation="${compile.deprecation}"
-           source="${app.source}"
-           target="${app.target}"
          optimize="${compile.optimize}">
         <classpath refid="compile.classpath"/>
         <compilerarg value="-Xlint"/>

@@ -28,13 +28,16 @@ import net.gwerder.java.messagevortex.asn1.PayloadChunk;
 import net.gwerder.java.messagevortex.asn1.VortexMessage;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.logging.Level;
 /**
  * This is the core of the redundancy add operation.
  *
  * It builds redundant data blocksfrom the existing data blocks.
  */
-public class AddRedundancy extends AbstractOperation {
+public class AddRedundancy extends AbstractOperation implements Serializable {
+
+    public static long serialVersionUID = 100000000018L;
 
     private static final java.util.logging.Logger LOGGER;
     static {

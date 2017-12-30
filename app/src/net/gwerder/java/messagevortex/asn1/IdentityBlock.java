@@ -28,11 +28,14 @@ import net.gwerder.java.messagevortex.asn1.encryption.SecurityLevel;
 import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 /***
  * represents an identity block of a vortexMessage.
  */
-public class IdentityBlock extends AbstractBlock {
+public class IdentityBlock extends AbstractBlock  implements Serializable {
+
+    public static final long serialVersionUID = 100000000008L;
 
     private static int nextID=0;
 

@@ -2,12 +2,15 @@ package net.gwerder.java.messagevortex.routing.operation;
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 
+import java.io.Serializable;
 import java.util.logging.Level;
 
 /**
  * This is a dummy operation mainly for testing it maps output to input ids.
  */
-public class IdMapOperation extends AbstractOperation {
+public class IdMapOperation extends AbstractOperation implements Serializable {
+
+    public static long serialVersionUID = 100000000019L;
 
     private static final java.util.logging.Logger LOGGER;
     static {

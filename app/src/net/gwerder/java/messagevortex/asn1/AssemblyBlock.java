@@ -5,11 +5,14 @@ import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * Contains all classes extending assembly blocks (Payload operations).
  */
-public class AssemblyBlock extends AbstractBlock {
+public class AssemblyBlock extends AbstractBlock implements Serializable {
+
+    public static final long serialVersionUID = 100000000002L;
 
     int   routingBlockIndex = -1;
     int[] payloadBlockIndex = new int[0];

@@ -6,11 +6,14 @@ import org.bouncycastle.asn1.ASN1Object;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * Created by Martin on 04.06.2017.
  */
-public class SizeBlock extends AbstractBlock {
+public class SizeBlock extends AbstractBlock  implements Serializable {
+
+    public static final long serialVersionUID = 100000000015L;
 
     public SizeBlock(ASN1Encodable o) throws IOException {
         parse(o);

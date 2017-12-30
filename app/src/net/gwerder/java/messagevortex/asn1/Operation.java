@@ -21,9 +21,11 @@ package net.gwerder.java.messagevortex.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
-import org.bouncycastle.asn1.*;
+import org.bouncycastle.asn1.ASN1Encodable;
+import org.bouncycastle.asn1.ASN1TaggedObject;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -31,7 +33,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * Represents a the Blending specification of the routing block.
  *
  */
-public abstract class Operation extends AbstractBlock {
+public abstract class Operation extends AbstractBlock  implements Serializable {
+
+    public static final long serialVersionUID = 100000000012L;
 
     public static final int SPLIT_PAYLOAD     = 150;
     public static final int MERGE_PAYLOAD     = 160;

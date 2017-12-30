@@ -25,13 +25,16 @@ import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * ASN1 parser for increasing message quota.
  *
  * Created by martin.gwerder on 25.04.2016.
  */
-public class HeaderRequestIncreaseMessageQuota extends HeaderRequest {
+public class HeaderRequestIncreaseMessageQuota extends HeaderRequest  implements Serializable {
+
+    public static final long serialVersionUID = 100000000026L;
 
     private AsymmetricKey identity = null;
     private long quota = -1;
@@ -65,7 +68,7 @@ public class HeaderRequestIncreaseMessageQuota extends HeaderRequest {
     @Override
     public String dumpValueNotation(String prefix,DumpType dumpType) {
         StringBuilder sb=new StringBuilder();
-        sb.append("{"+ AbstractBlock.CRLF);
+        sb.append("{"+CRLF);
         if(identity!=null) {
             sb.append( prefix+"  identity "+identity.dumpValueNotation( prefix+"  ", dumpType )+(quota>-1?",":"")+ CRLF );
         }

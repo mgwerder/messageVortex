@@ -4,13 +4,16 @@ import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * Represents a merge payload operation.
  *
  * This operation joins two payloads to one new payload with size first.length+second.length
  */
-public class MergePayloadOperation extends Operation {
+public class MergePayloadOperation extends Operation implements Serializable {
+
+    public static final long serialVersionUID = 100000000024L;
 
     int originalFirstId =-1;
     int originalSecondId=-1;

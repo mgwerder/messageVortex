@@ -25,13 +25,16 @@ import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * ASN1 parser block for the capability request.
  *
  * Created by martin.gwerder on 25.04.2016.
  */
-public class HeaderRequestCapability extends HeaderRequest {
+public class HeaderRequestCapability extends HeaderRequest implements Serializable {
+
+    public static final long serialVersionUID = 100000000028L;
 
     protected UsagePeriod period = null;
 
@@ -59,9 +62,9 @@ public class HeaderRequestCapability extends HeaderRequest {
     @Override
     public String dumpValueNotation(String prefix, DumpType dumpType) {
         StringBuilder sb=new StringBuilder();
-        sb.append("{"+ AbstractBlock.CRLF);
+        sb.append("{"+ CRLF);
         if (period != null) {
-            sb.append(prefix).append("  period ").append(period.dumpValueNotation(prefix + "  ",dumpType )).append(AbstractBlock.CRLF);
+            sb.append(prefix).append("  period ").append(period.dumpValueNotation(prefix + "  ",dumpType )).append(CRLF);
         }
         sb.append(prefix).append("}");
         return sb.toString();

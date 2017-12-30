@@ -28,12 +28,15 @@ import org.bouncycastle.asn1.*;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.security.Security;
 
 /**
  *Abstract class for all encryption key types
  */
-public abstract class Key extends AbstractBlock {
+public abstract class Key extends AbstractBlock  implements Serializable {
+
+    public static final long serialVersionUID = 100000000009L;
 
     static {
         Security.addProvider(new BouncyCastleProvider());

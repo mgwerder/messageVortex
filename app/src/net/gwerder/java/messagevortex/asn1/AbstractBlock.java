@@ -28,7 +28,6 @@ import org.bouncycastle.asn1.ASN1Object;
 import org.bouncycastle.asn1.ASN1Sequence;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -37,7 +36,7 @@ import java.util.logging.Logger;
  *
  * Created by martin.gwerder on 14.04.2016.
  */
-public abstract class AbstractBlock implements Serializable,Block {
+public abstract class AbstractBlock implements Block {
 
     protected static final String CRLF="\r\n";
 

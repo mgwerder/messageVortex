@@ -28,6 +28,7 @@ import org.bouncycastle.asn1.*;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.util.Arrays;
@@ -39,7 +40,9 @@ import java.util.logging.Logger;
  *
  * This part is specified as vortexMessage in the file asn.1/messageBlocks.asn1
  */
-public class VortexMessage extends AbstractBlock {
+public class VortexMessage extends AbstractBlock implements Serializable {
+
+    public static long serialVersionUID = 100000000018L;
 
     public static final int PREFIX_PLAIN            =  10011;
     public static final int PREFIX_ENCRYPTED        =  10012;

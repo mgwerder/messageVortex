@@ -29,12 +29,15 @@ import net.gwerder.java.messagevortex.asn1.encryption.SecurityLevel;
 import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.logging.Level;
 
 /**
  * This class represents one block of an identity store for storage.
  */
-public class IdentityStoreBlock extends AbstractBlock {
+public class IdentityStoreBlock extends AbstractBlock  implements Serializable {
+
+    public static final long serialVersionUID = 10000000024L;
 
     public enum IdentityType {
         OWNED_IDENTITY,

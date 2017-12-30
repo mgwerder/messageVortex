@@ -25,6 +25,7 @@ import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +33,9 @@ import java.util.List;
  * Represents a the Blending specification of the routing block.
  *
  */
-public class BlendingSpec extends AbstractBlock {
+public class BlendingSpec extends AbstractBlock implements Serializable {
+
+    public static final long serialVersionUID = 100000000005L;
 
     /* The endpoint address to be used */
     private String recipientAddress=null;

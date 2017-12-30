@@ -32,6 +32,7 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
@@ -46,7 +47,9 @@ import java.util.Arrays;
  *
  * Created by martin.gwerder on 19.04.2016.
  */
-public class AsymmetricKey extends Key {
+public class AsymmetricKey extends Key  implements Serializable {
+
+    public static final long serialVersionUID = 100000000032L;
 
     private static ExtendedSecureRandom esr = new ExtendedSecureRandom();
     private static int PUBLIC_KEY_TAG  = 2;

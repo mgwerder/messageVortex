@@ -25,6 +25,7 @@ import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -33,7 +34,9 @@ import java.util.TimeZone;
 /**
  * Represents a usage period.
  */
-public class UsagePeriod extends AbstractBlock {
+public class UsagePeriod extends AbstractBlock  implements Serializable {
+
+    public static long serialVersionUID = 100000000017L;
 
     public static final int TAG_NOT_BEFORE =0;
     public static final int TAG_NOT_AFTER  =1;

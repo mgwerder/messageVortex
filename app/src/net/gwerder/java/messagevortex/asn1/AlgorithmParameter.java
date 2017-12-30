@@ -37,6 +37,8 @@ import java.util.concurrent.ConcurrentSkipListMap;
  */
 public class AlgorithmParameter extends AbstractBlock implements Serializable,Comparable<AlgorithmParameter> {
 
+    public static final long serialVersionUID = 100000000001L;
+
     private Map<Integer,String> parameter;
 
     public AlgorithmParameter() {
@@ -103,7 +105,7 @@ public class AlgorithmParameter extends AbstractBlock implements Serializable,Co
     @Override
     public String dumpValueNotation(String prefix,DumpType dumpType) {
         StringBuilder sb=new StringBuilder();
-        sb.append("{"+ AbstractBlock.CRLF);
+        sb.append("{"+ CRLF);
         int i=0;
         for(Map.Entry<Integer,String> e:parameter.entrySet()) {
             Parameter p=Parameter.getById(e.getKey());

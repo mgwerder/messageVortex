@@ -181,7 +181,7 @@ public class InternalPayload {
             id = op.getInputID();
             for (int i = 0; i < id.length; i++) {
                 synchronized (internalOperationInput) {
-                    List l = internalOperationInput.get(id[i]);
+                    List<Operation> l = internalOperationInput.get(id[i]);
                     if (l == null) {
                         l = new ArrayList<>();
                         internalOperationInput.put(id[i], l);

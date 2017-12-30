@@ -4,11 +4,14 @@ import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * Created by Martin on 03.06.2017.
  */
-public abstract class AbstractCryptPayloadOperation extends Operation  {
+public abstract class AbstractCryptPayloadOperation extends Operation implements Serializable {
+
+    public static final long serialVersionUID = 100000000033L;
 
     int originalId=-1;
     SymmetricKey key=null;

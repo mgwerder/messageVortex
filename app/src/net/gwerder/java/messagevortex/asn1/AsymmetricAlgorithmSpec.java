@@ -5,11 +5,14 @@ import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1Object;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * Created by martin.gwerder on 29.12.2017.
  */
-public class AsymmetricAlgorithmSpec extends AbstractBlock {
+public class AsymmetricAlgorithmSpec extends AbstractBlock implements Serializable {
+
+    public static final long serialVersionUID = 100000000003L;
 
     public AsymmetricAlgorithmSpec(ASN1Encodable to) throws IOException {
         parse(to);

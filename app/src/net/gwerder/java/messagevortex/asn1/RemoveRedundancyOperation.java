@@ -24,12 +24,15 @@ package net.gwerder.java.messagevortex.asn1;
 import org.bouncycastle.asn1.ASN1Encodable;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Represents a remove redundancy operation.
  */
-public class RemoveRedundancyOperation extends AbstractRedundancyOperation {
+public class RemoveRedundancyOperation extends AbstractRedundancyOperation implements Serializable {
+
+    public static final long serialVersionUID = 100000000023L;
 
     RemoveRedundancyOperation() {}
 

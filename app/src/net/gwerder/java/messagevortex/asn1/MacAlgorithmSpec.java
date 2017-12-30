@@ -5,11 +5,14 @@ import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1Object;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * Created by martin.gwerder on 29.12.2017.
  */
-public class MacAlgorithmSpec extends AbstractBlock {
+public class MacAlgorithmSpec extends AbstractBlock implements Serializable {
+
+    public static final long serialVersionUID = 100000000011L;
 
     public MacAlgorithmSpec(ASN1Encodable to) throws IOException {
         parse(to);

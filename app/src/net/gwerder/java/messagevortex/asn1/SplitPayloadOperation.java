@@ -4,11 +4,14 @@ import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * Splits a payload block in two blocks.
  */
-public class SplitPayloadOperation extends Operation {
+public class SplitPayloadOperation extends Operation implements Serializable {
+
+    public static final long serialVersionUID = 100000000023L;
 
     int originalFirstId=-1;
     int originalSecondId=-1;

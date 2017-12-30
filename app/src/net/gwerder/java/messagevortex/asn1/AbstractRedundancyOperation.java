@@ -27,6 +27,7 @@ import net.gwerder.java.messagevortex.routing.operation.BitShifter;
 import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -34,7 +35,9 @@ import java.util.logging.Level;
 /**
  * Represents a the Blending specification of the routing block.
  */
-public abstract class AbstractRedundancyOperation extends Operation implements ASN1Choice {
+public abstract class AbstractRedundancyOperation extends Operation implements ASN1Choice,Serializable {
+
+    public static final long serialVersionUID = 100000000032L;
 
     public static final int INPUT_ID     = 16000;
     public static final int DATA_STRIPES = 16001;

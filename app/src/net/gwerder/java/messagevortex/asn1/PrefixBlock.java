@@ -26,6 +26,7 @@ import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.util.logging.Level;
@@ -33,7 +34,9 @@ import java.util.logging.Level;
 /**
  * ASN1 parser class for header reply.
  */
-public class PrefixBlock extends AbstractBlock {
+public class PrefixBlock extends AbstractBlock  implements Serializable {
+
+    public static final long serialVersionUID = 100000000014L;
 
     byte[] encrypted=null;
     AsymmetricKey decryptionKey=null;

@@ -25,9 +25,13 @@ import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Date;
 
-public class PayloadChunk extends AbstractBlock {
+public class PayloadChunk extends AbstractBlock implements Serializable {
+
+    public static final long serialVersionUID = 100000000013L;
+
     private enum PayloadType {
         /* ASN1 tag number for a contained payload */
         PAYLOAD(100),

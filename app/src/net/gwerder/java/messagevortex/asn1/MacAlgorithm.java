@@ -29,11 +29,14 @@ import org.bouncycastle.asn1.ASN1Integer;
 import org.bouncycastle.asn1.ASN1Object;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * Represents a Mac Algorithm as ASN.1 structure.
  */
-public class MacAlgorithm extends AbstractBlock {
+public class MacAlgorithm extends AbstractBlock implements Serializable {
+
+    public static final long serialVersionUID = 100000000010L;
 
     Algorithm alg = null;
 

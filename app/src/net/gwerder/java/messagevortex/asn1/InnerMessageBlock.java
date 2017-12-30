@@ -28,6 +28,7 @@ import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -38,7 +39,9 @@ import java.util.logging.Level;
  *
  * This part is specified as InnerMessageBlock in the file asn.1/messageBlocks.asn1
  */
-public class InnerMessageBlock extends AbstractBlock {
+public class InnerMessageBlock extends AbstractBlock  implements Serializable {
+
+    public static final long serialVersionUID = 100000000009L;
 
     public static final int PREFIX_PLAIN      = 11011;
     public static final int PREFIX_ENCRYPTED  = 11012;

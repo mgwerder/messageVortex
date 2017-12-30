@@ -27,6 +27,7 @@ import org.bouncycastle.asn1.ASN1Object;
 import org.bouncycastle.asn1.ASN1TaggedObject;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -36,7 +37,9 @@ import java.util.logging.Level;
  *
  * Created by martin.gwerder on 25.04.2016.
  */
-public abstract class HeaderRequest extends AbstractBlock {
+public abstract class HeaderRequest extends AbstractBlock implements Serializable {
+
+    public static final long serialVersionUID = 100000000007L;
 
     private static final java.util.logging.Logger LOGGER;
     static {

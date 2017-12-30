@@ -4,13 +4,17 @@ import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 import static net.gwerder.java.messagevortex.asn1.BlendingParameter.BlendingParameterChoice.*;
 
 /**
  * Created by martin.gwerder on 15.05.2017.
  */
-public class BlendingParameter extends AbstractBlock {
+public class BlendingParameter extends AbstractBlock implements Serializable {
+
+    public static final long serialVersionUID = 100000000004L;
+
     enum BlendingParameterChoice {
         OFFSET(1),
         SYMMETRIC_KEY(2),

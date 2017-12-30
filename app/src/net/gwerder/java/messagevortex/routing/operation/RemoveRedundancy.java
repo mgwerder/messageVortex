@@ -27,6 +27,7 @@ import net.gwerder.java.messagevortex.asn1.RemoveRedundancyOperation;
 import net.gwerder.java.messagevortex.asn1.VortexMessage;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -37,7 +38,9 @@ import java.util.logging.Level;
  * It rebuilds the data stream from the existing data blocks.
  * FIXME add decryption
  */
-public class RemoveRedundancy extends AbstractOperation {
+public class RemoveRedundancy extends AbstractOperation  implements Serializable {
+
+    public static long serialVersionUID = 100000000020L;
 
     private static final java.util.logging.Logger LOGGER;
     static {

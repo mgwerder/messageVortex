@@ -26,12 +26,15 @@ import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 
 /**
  * Represents a the Blending specification of the cipher specification including usage.
  */
-public class CipherSpec extends AbstractBlock {
+public class CipherSpec extends AbstractBlock implements Serializable {
+
+    public static final long serialVersionUID = 100000000006L;
 
     private static int SYMMETRIC  = 16001;
     private static int ASYMMETRIC = 16002;

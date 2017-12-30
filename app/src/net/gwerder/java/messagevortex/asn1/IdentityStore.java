@@ -29,6 +29,7 @@ import org.bouncycastle.asn1.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -38,7 +39,9 @@ import java.util.logging.Level;
 /**
  * Stores all known identities of a node. Identities are stored as IdentityStoreBlocks.
  ***/
-public class IdentityStore extends AbstractBlock {
+public class IdentityStore extends AbstractBlock  implements Serializable {
+
+    public static final long serialVersionUID = 100000000008L;
 
     private static final java.util.logging.Logger LOGGER;
     static {

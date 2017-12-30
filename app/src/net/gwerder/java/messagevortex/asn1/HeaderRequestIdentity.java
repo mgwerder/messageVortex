@@ -25,11 +25,14 @@ import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * ASN1 parser for identity request.
  */
-public class HeaderRequestIdentity extends HeaderRequest {
+public class HeaderRequestIdentity extends HeaderRequest  implements Serializable {
+
+    public static final long serialVersionUID = 100000000027L;
 
     protected UsagePeriod period = null;
     protected AsymmetricKey identity = null;
@@ -59,7 +62,7 @@ public class HeaderRequestIdentity extends HeaderRequest {
     @Override
     public String dumpValueNotation(String prefix,DumpType dumpType) {
         StringBuilder sb=new StringBuilder();
-        sb.append("{"+ AbstractBlock.CRLF);
+        sb.append("{"+ CRLF);
         if(identity!=null) {
             sb.append( prefix+"  identity "+identity.dumpValueNotation( prefix+"  ", dumpType )+ CRLF );
         }
