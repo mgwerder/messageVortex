@@ -34,7 +34,7 @@
     <delete dir="${build.home}"/>
     <delete dir="${dist.home}"/>
     <delete dir="${doc.home}/api"/>
-    <delete dir="${doc.home}/cobertura"/>
+    <!--<delete dir="${doc.home}/cobertura"/>-->
     <delete><fileset dir="${basedir}" includes="pom.xml"/></delete>
     <delete><fileset dir="${doc.home}" includes="**/*.aux"/></delete>
     <delete><fileset dir="${doc.home}" includes="**/*.bbl"/></delete>
@@ -135,8 +135,8 @@
 
   <target name="test" depends="compile"  description="test application">
       <taskdef classpathref="test.classpath" resource="tasks.properties" />
-      <delete file="${build.home}/cobertura.ser" />
-      <!--<cobertura-instrument todir="${build.home}/cobertura" datafile="${build.home}/cobertura.ser">
+      <!--<delete file="${build.home}/cobertura.ser" />
+      <cobertura-instrument todir="${build.home}/cobertura" datafile="${build.home}/cobertura.ser">
       <includeclasses regex="net\.gwerder\.java.*" />
       <excludeclasses regex="net\.gwerder\.java.*\.test\..*" />
       <excludeclasses regex=".*Test.*" />
@@ -416,7 +416,7 @@
     <mkdir  dir="${build.home}/testsrc"/>
     <mkdir  dir="${build.home}/classes"/>
     <mkdir  dir="${build.home}/classes/logs"/>
-    <mkdir  dir="${build.home}/cobertura"/>
+    <!--<mkdir  dir="${build.home}/cobertura"/>-->
 
     <path id="compile.classpath">
       <pathelement location="c:/Programme/Java/lib/hsqldb/lib/hsqldb.jar"/>
@@ -429,10 +429,10 @@
       <pathelement location="c:/Programme/Java/lib/hsqldb/lib/hsqldb.jar"/>
       <fileset dir="${rtlib.home}" includes="**/*.jar"/>
       <fileset dir="${basedir}/lib/" includes="junit*.jar"/>
-      <fileset dir="${basedir}/lib/cobertura-2.0.3/lib" includes="*.jar"/>
-      <fileset dir="${basedir}/lib/cobertura-2.0.3" includes="cobertura-2.0.3.jar"/>
+      <!--<fileset dir="${basedir}/lib/cobertura-2.0.3/lib" includes="*.jar"/>
+      <fileset dir="${basedir}/lib/cobertura-2.0.3" includes="cobertura-2.0.3.jar"/>-->
       <fileset dir="${basedir}/lib/junit-4.12" includes="*.jar"/>
-      <pathelement location="${build.home}/cobertura" />
+      <!--<pathelement location="${build.home}/cobertura" />-->
       <pathelement location="${build.home}/classes" />
     </path>
 
