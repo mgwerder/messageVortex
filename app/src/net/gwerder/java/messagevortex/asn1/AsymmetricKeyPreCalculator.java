@@ -396,9 +396,13 @@ class AsymmetricKeyPreCalculator implements Serializable {
                 for (int j = 0; j < i; j++) {
                     @SuppressWarnings("unchecked")
                     AlgorithmParameter ap = (AlgorithmParameter) f.readObject();
-                    @SuppressWarnings("unchecked")
-                    Queue<AsymmetricKey> q = (Queue<AsymmetricKey>) f.readObject();
-                    lc.put(prepareParameters(ap), q);
+                    int size = (Integer) f.readObject();
+                    Queue<AsymmetricKey> q = new ArrayDeque<>();
+                    while (q.size() < size) {
+                        @SuppressWarnings("unchecked")
+                        AsymmetricKey ak=(AsymmetricKey)(f.readObject());
+                        q.add(ak);
+                    }
                 }
 
                 // Loading list of algs
@@ -469,7 +473,10 @@ class AsymmetricKeyPreCalculator implements Serializable {
                     // write tuples
                     for (Map.Entry<AlgorithmParameter, Queue<AsymmetricKey>> e : cache.entrySet()) {
                         f.writeObject(e.getKey());
-                        f.writeObject(e.getValue());
+                        f.writeObject(e.getValue().size());
+                        for(AsymmetricKey ak:e.getValue().toArray(new AsymmetricKey[e.getValue().size()])) {
+                            f.writeObject(ak);
+                        }
                     }
                 }
                 synchronized(cacheSize) {
