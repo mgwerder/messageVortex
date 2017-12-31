@@ -33,10 +33,10 @@ import java.util.logging.Logger;
 /***
 * Provides the the Authenticate command to the IMAP server.
 *
-* @author  Martin Gwerder  
+* @author  Martin Gwerder
 * @version 1.0
-* @since   2014-12-09 
-***/ 
+* @since   2014-12-09
+***/
 public class ImapCommandAuthenticate extends ImapCommand {
 
     private static final Logger LOGGER;
@@ -50,7 +50,7 @@ public class ImapCommandAuthenticate extends ImapCommand {
     public void init() {
         ImapCommand.registerCommand(this);
     }
-    
+
     /***
      * process authentication command.
      *
@@ -59,21 +59,21 @@ public class ImapCommandAuthenticate extends ImapCommand {
      * @todo add capabilities to successful login
      ***/
     public String[] processCommand(ImapLine line) throws ImapException {
-        
+
         // get userid
         String mech=getAuthToken(line);
-        
+
         // skip space
         // WRNING this is "non-strict"
         line.skipSP(-1);
-        
+
         // skip line end
         if(!line.skipCRLF()) {
             throw new ImapException(line,"error parsing command");
         }
-        
+
         String[] reply=null;
-        
+
         if(line.getConnection()==null) {
             LOGGER.log(Level.SEVERE, "no connection found while calling login");
             reply=new String[] {line.getTag()+" BAD server configuration error\r\n" };
@@ -91,7 +91,7 @@ public class ImapCommandAuthenticate extends ImapCommand {
         }
         return reply;
     }
-    
+
     /***
      * Returns the capabilities to be reported by the CAPABILITIES command.
      *
@@ -100,7 +100,7 @@ public class ImapCommandAuthenticate extends ImapCommand {
     public String[] getCapabilities() {
         return getCapabilities(null);
     }
-    
+
     /***
      * Returns the Identifier (IMAP command) which are processed by this class.
      *
@@ -109,7 +109,7 @@ public class ImapCommandAuthenticate extends ImapCommand {
     public String[] getCommandIdentifier() {
         return new String[] {"AUTHENTICATE"};
     }
-    
+
     private String getAuthToken(ImapLine line) throws ImapException {
         String userid = line.getAString();
         if(userid==null) {
@@ -117,7 +117,7 @@ public class ImapCommandAuthenticate extends ImapCommand {
         }
         return userid;
     }
-    
+
     private boolean auth(String mech,ImapLine line) {
         Map<String,Object> props=new HashMap<>();
         if(line.getConnection().isTLS()) {
@@ -128,11 +128,12 @@ public class ImapCommandAuthenticate extends ImapCommand {
             SaslServer ss=Sasl.createSaslServer(mech, "imap", "localhost", props, cbh);
         } catch(SaslException se) {
             LOGGER.log(Level.WARNING, "Got Exception",se);
+            return false;
         }
         return true;
     }
 
-    
+
     private String[] getCapabilities(ImapConnection ic) {
         if(ic==null || ic.getImapState()==ImapConnection.CONNECTION_NOT_AUTHENTICATED) {
             return new String[] { "AUTH=GSSAPI","AUTH=DIGEST-MD5","AUTH=CRAM-MD5","AUTH=PLAIN" };
@@ -140,5 +141,5 @@ public class ImapCommandAuthenticate extends ImapCommand {
             return new String[0];
         }
     }
-    
-}    
+
+}

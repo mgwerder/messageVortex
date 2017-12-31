@@ -193,12 +193,16 @@ public class ImapClient implements Runnable {
     }
 
     public void shutdown() {
-        shutdown=true;
-        try {
-            terminateSocket();
-            runner.join();
-        } catch(InterruptedException ie) {
-            interruptedCatcher();
+        shutdown = true;
+        boolean success = false;
+        while (!success) {
+            try {
+                terminateSocket();
+                runner.join();
+                success = true;
+            } catch (InterruptedException ie) {
+                interruptedCatcher();
+            }
         }
     }
 

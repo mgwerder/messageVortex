@@ -119,9 +119,6 @@ public class PrefixBlock extends AbstractBlock  implements Serializable {
 
         // getting key
         key = new SymmetricKey( toDER(s1.getObjectAt(i++).toASN1Primitive()) ,null );
-        if(key==null) {
-            throw new IOException("symmetric key may not be null when decoding");
-        }
     }
 
     public AsymmetricKey setDecryptionKey(AsymmetricKey dk) throws IOException {

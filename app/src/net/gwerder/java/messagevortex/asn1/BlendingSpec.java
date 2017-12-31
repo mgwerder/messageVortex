@@ -116,6 +116,7 @@ public class BlendingSpec extends AbstractBlock implements Serializable {
                 }
                 sb.append(CRLF);
                 sb.append(prefix).append(p.dumpValueNotation("",dumpType));
+                i++;
             }
             sb.append(CRLF);
         }

@@ -296,6 +296,7 @@ public class InnerMessageBlock extends AbstractBlock  implements Serializable {
                 }
                 sb.append( CRLF );
                 p.dumpValueNotation( prefix+"  ",dt);
+                i++;
             }
         }
         sb.append( CRLF + prefix + "  }" + CRLF );

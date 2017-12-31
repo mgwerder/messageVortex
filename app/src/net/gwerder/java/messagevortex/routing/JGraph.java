@@ -173,7 +173,7 @@ public class JGraph extends JPanel implements MouseListener  {
     public void mouseClicked(MouseEvent e) {
         if(e!=null) {
             GraphSet[] routes = graph.getRoutes();
-            double xSpace = (getWidth() - 2 * X_OFFSET) / (routes.length * 2 - 1);
+            double xSpace = (double)(getWidth() - 2 * X_OFFSET) / (routes.length * 2 - 1);
             int offset = (int) (getWidth() - (routes.length * 2 - 1) * xSpace) / 2;
             int tmp = e.getX() - offset;
             int pos = (int) Math.min( Math.floor( (0.0 + tmp) / (xSpace * 2) ), routes.length );
