@@ -31,7 +31,7 @@ public class Version {
 
     private static final String VERSION     = MAJOR + "." + MINOR + "." + REVISION;
     private static final String BUILDVER    = VERSION + " (" + BUILD + ")";
-    private static final String FORMAT      = "$Format:%ci$";
+    private static final String DATE      = "$Format:%cI$";
 
     private Version() {
         super();
@@ -45,8 +45,8 @@ public class Version {
         return VERSION;
     }
 
-    public static String getGitFormat() {
-        return FORMAT;
+    public static String getGitCommitDate() {
+        return DATE;
     }
 
 }
