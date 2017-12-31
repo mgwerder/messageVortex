@@ -1,6 +1,7 @@
 package net.gwerder.java.messagevortex.test.core;
 
 import net.gwerder.java.messagevortex.Version;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -19,12 +20,13 @@ public class VersionTest {
     public void testVersion() {
         System.out.println("Version is "+ Version.getVersion());
         assertTrue("Version String does not match regexp",net.gwerder.java.messagevortex.Version.getVersion().matches("[0-9]+\\.[0-9]+\\.[0-9]+"));
-    }    
+    }
 
     @Test
+    @Ignore
     public void testBuild() {
         System.out.println("Build is "+ Version.getBuild());
         assertTrue("Build String ("+Version.getBuild()+") does not match regexp.",Version.getBuild().matches("[0-9]+\\.[0-9]+\\.[0-9]+ \\([0-9]+\\)"));
-    }    
+    }
 
 }
