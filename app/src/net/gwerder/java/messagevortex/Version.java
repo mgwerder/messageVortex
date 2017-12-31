@@ -26,7 +26,7 @@ public class Version {
     private static final int    MAJOR       = 1; //@major@
     private static final int    MINOR       = 0; //@minor@
     private static final int    REVISION    = 0; //@revision@
-    private static final String GIT_BUILD   = "\$Id\$"; //@build@
+    private static final String GIT_BUILD   = "$Id$"; //@build@
     private static final String BUILD       = SVN_BUILD.replaceAll( "\\$Id$$","" );
 
     private static final String VERSION     = MAJOR + "." + MINOR + "." + REVISION;
