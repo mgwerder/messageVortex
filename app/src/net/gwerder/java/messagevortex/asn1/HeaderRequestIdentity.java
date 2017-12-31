@@ -67,7 +67,7 @@ public class HeaderRequestIdentity extends HeaderRequest  implements Serializabl
             sb.append( prefix+"  identity "+identity.dumpValueNotation( prefix+"  ", dumpType )+ CRLF );
         }
         if(period!=null) {
-            sb.append( prefix+"  period "+period.dumpValueNotation( prefix+"  ",dumpType )+identity!=null?",":""+ CRLF );
+            sb.append( prefix+"  period "+period.dumpValueNotation( prefix+"  ",dumpType )+(identity!=null?",":"")+ CRLF );
         }
         sb.append(prefix+"}");
         return sb.toString();

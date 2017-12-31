@@ -51,10 +51,14 @@ public class BlendingParameter extends AbstractBlock implements Serializable {
     @Override
     protected void parse(ASN1Encodable to) throws IOException {
         ASN1TaggedObject t=ASN1TaggedObject.getInstance(to);
-        if(to==null || t==null || BlendingParameterChoice.getById(t.getTagNo())==null ) {
+        if(to==null || t==null) {
+            throw new IOException("unknown blending parameter choice detected (tagged object is null)");
+        }
+        BlendingParameterChoice bpc=BlendingParameterChoice.getById(t.getTagNo());
+        if(bpc==null ) {
             throw new IOException("unknown blending parameter choice detected ("+t.getTagNo()+")");
         }
-        switch(BlendingParameterChoice.getById(t.getTagNo())) {
+        switch(bpc) {
             case OFFSET:
                 offset=ASN1Integer.getInstance(t.getObject()).getValue().intValue();
                 break;
