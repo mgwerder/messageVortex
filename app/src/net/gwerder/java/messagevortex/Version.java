@@ -23,19 +23,19 @@ package net.gwerder.java.messagevortex;
 
 public class Version {
 
-    private static int    MAJOR       = 1; //@major@
-    private static int    MINOR       = 0; //@minor@
-    private static int    REVISION    = 0; //@revision@
-    private static String SVN_BUILD   = "$Revision: 248 $"; //@build@
-    private static String BUILD       = SVN_BUILD.replaceAll( "\\$Revision: *","" ).replaceAll( " *\\$$","" );
-  
-    private static String VERSION     = MAJOR+"."+MINOR+"."+REVISION;
-    private static String BUILDVER    = VERSION+" ("+BUILD+")";
-    
+    private static final int    MAJOR       = 1; //@major@
+    private static final int    MINOR       = 0; //@minor@
+    private static final int    REVISION    = 0; //@revision@
+    private static final String SVN_BUILD   = "$Revision: 248 $"; //@build@
+    private static final String BUILD       = SVN_BUILD.replaceAll( "\\$Revision: *","" ).replaceAll( " *\\$$","" );
+
+    private static final String VERSION     = MAJOR + "." + MINOR + "." + REVISION;
+    private static final String BUILDVER    = VERSION + " (" + BUILD + ")";
+
     private Version() {
         super();
     }
-  
+
     public static String getBuild() {
         return BUILDVER;
     }
@@ -43,5 +43,5 @@ public class Version {
     public static String getVersion() {
         return VERSION;
     }
-    
-}   
+
+}
