@@ -33,7 +33,7 @@ public class SimpleMessageFactory extends MessageFactory {
     GraphSet graph = new GraphSet();
 
     /* number of ms for the graph to be completed */
-    long     maxMessageTransferTime = 600*1000;
+    long     maxMessageTransferTime = 600L*1000L;
 
     protected SimpleMessageFactory(String msg, int source, int target, IdentityStoreBlock[] anonGroupMembers, IdentityStore is) {
         this.msg = msg;

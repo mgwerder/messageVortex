@@ -61,8 +61,16 @@ public class UsagePeriod extends AbstractBlock  implements Serializable {
      * @throws IOException if parsing fails
      */
     public UsagePeriod(byte[] b) throws IOException {
-        ASN1InputStream aIn=new ASN1InputStream( b );
-        parse(aIn.readObject());
+        ASN1InputStream aIn=null;
+        try {
+            aIn = new ASN1InputStream(b);
+            parse(aIn.readObject());
+        } finally {
+            if(aIn!=null) {
+                aIn.close();
+            }
+        }
+
     }
 
     /***

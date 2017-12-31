@@ -33,4 +33,7 @@ abstract class StoppableThread extends Thread implements Runnable {
      ***/
     abstract int shutdown();
 
+    @Override
+    abstract public void run();
+
 }

@@ -103,8 +103,8 @@ public class JGraph extends JPanel implements MouseListener  {
         System.out.println("## displaying route "+this.route+" ("+routes[this.route].size()+")");
         for(int i=0;i<graph.size();i++) {
             Edge gr=graph.get(i);
-            int x1=(int)(X_OFFSET+BOX_WIDTH/2+graph.getAnonymityIndex( gr.getFrom() )*xSpace);
-            int x2=(int)(X_OFFSET+BOX_WIDTH/2+graph.getAnonymityIndex( gr.getTo()   )*xSpace);
+            int x1=(int)(X_OFFSET+(double)BOX_WIDTH/2+graph.getAnonymityIndex( gr.getFrom() )*xSpace);
+            int x2=(int)(X_OFFSET+(double)BOX_WIDTH/2+graph.getAnonymityIndex( gr.getTo()   )*xSpace);
             int y=(int)(Y_OFFSET+2*BOX_HEIGHT+i*ySpace);
 
             if(routes[this.route].contains( gr )) {
@@ -122,13 +122,13 @@ public class JGraph extends JPanel implements MouseListener  {
             // draw arrow
             g2.drawLine(x1,y,x2,y);
             // draw arrowhead
-            int xh=(int)((x2-x1)/Math.abs(x2-x1)*ySpace);
+            int xh=(int)((double)(x2-x1)/Math.abs(x2-x1)*ySpace);
             g2.drawLine(x2,y,x2-xh,y-xh/4);
             g2.drawLine(x2,y,x2-xh,y+xh/4);
         }
 
         // draw route buttons
-        xSpace=(getWidth()-2*X_OFFSET)/(routes.length*2-1);
+        xSpace=(double)(getWidth()-2*X_OFFSET)/(routes.length*2-1);
         for(int i=0;i<routes.length;i++) {
             int x1=(int)((getWidth()-(routes.length*2-1)*xSpace)/2+i*xSpace*2);
             int y=getHeight()-Y_OFFSET-ROUTE_BORDER;
