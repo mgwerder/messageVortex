@@ -10,9 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
-import java.util.Vector;
 import java.util.logging.Level;
 
 import static org.junit.Assert.assertTrue;
@@ -43,91 +41,57 @@ public class SymmetricKeyTest {
         assertTrue( "getKeySize for CAMELLIA256 is bad", Algorithm.CAMELLIA256.getKeySize() == 256 );
     }
 
+    private void symmetricEncryptionTestRun(Algorithm alg,int size) {
+        LOGGER.log(Level.INFO, "Testing " + alg + "/" + size + "");
+        LOGGER.log(Level.INFO, "  creating key");
+        SymmetricKey s = null;
+        try {
+            s = new SymmetricKey(alg, Padding.getDefault(alg.getAlgorithmType()) , Mode.getDefault(alg.getAlgorithmType()));
+        } catch (Exception ioe) {
+            LOGGER.log(Level.WARNING, "unexpected exception", ioe);
+            fail("Constructor threw IOException");
+        }
+        byte[] b1 = new byte[0];
+        while (b1.length < 10) {
+            b1 = new byte[sr.nextInt(Math.min(s.getPadding().getMaxSize(size), 1024))];
+        }
+        sr.nextBytes(b1);
+        LOGGER.log(Level.INFO, "  doing an encrypt/decrypt cycle with " + b1.length + " bytes");
+        byte[] b2 = null;
+        byte[] b3 = null;
+        try {
+            b2 = s.encrypt(b1);
+            b3 = s.decrypt(b2);
+        } catch (IOException ioe) {
+            LOGGER.log(Level.WARNING, "unexpected exception", ioe);
+            fail("IOException while reencrypting");
+        }
+        assertTrue("error in encrypt/decrypt cycle with " + alg + " (same object)", Arrays.equals(b1, b3));
+        LOGGER.log(Level.INFO, "  doing an encrypt/decrypt cycle with a reencoded key");
+        try {
+            b3 = (new SymmetricKey(s.toBytes(DumpType.ALL_UNENCRYPTED))).decrypt(b2);
+        } catch (Exception ioe) {
+            LOGGER.log(Level.WARNING, "unexpected exception", ioe);
+            fail("Constructor threw IOException");
+        }
+        assertTrue("error in encrypt/decrypt cycle with " + alg + " (same reserialized object)", Arrays.equals(b1, b3));
+    }
+
     @Test
     public void fuzzingSymmetricEncryption() throws Exception {
-        class TestThread extends Thread {
-            private int size;
-            private Algorithm alg;
-            private Exception ex=null;
-
-            private TestThread(int size, Algorithm alg) {
-                this.size = size;
-                this.alg = alg;
-            }
-
-            public void run() {
-                LOGGER.log(Level.INFO, "Testing " + alg + "/" + size + "");
-                LOGGER.log(Level.INFO, "  creating key");
-                SymmetricKey s = null;
-                try {
-                    s = new SymmetricKey(alg, Padding.getDefault(alg.getAlgorithmType()) , Mode.getDefault(alg.getAlgorithmType()));
-                } catch (Exception ioe) {
-                    setException(ioe);
-                    LOGGER.log(Level.WARNING, "unexpected exception", ioe);
-                    fail("Constructor threw IOException");
-                }
-                byte[] b1 = new byte[0];
-                while (b1.length < 10) {
-                    b1 = new byte[sr.nextInt(Math.min(s.getPadding().getMaxSize(size), 1024))];
-                }
-                sr.nextBytes(b1);
-                LOGGER.log(Level.INFO, "  doing an encrypt/decrypt cycle with " + b1.length + " bytes");
-                byte[] b2 = null;
-                byte[] b3 = null;
-                try {
-                    b2 = s.encrypt(b1);
-                    b3 = s.decrypt(b2);
-                } catch (IOException ioe) {
-                    setException(ioe);
-                    LOGGER.log(Level.WARNING, "unexpected exception", ioe);
-                    fail("IOException while reencrypting");
-                }
-                assertTrue("error in encrypt/decrypt cycle with " + alg + " (same object)", Arrays.equals(b1, b3));
-                LOGGER.log(Level.INFO, "  doing an encrypt/decrypt cycle with a reencoded key");
-                try {
-                    b3 = (new SymmetricKey(s.toBytes(DumpType.ALL_UNENCRYPTED))).decrypt(b2);
-                } catch (Exception ioe) {
-                    LOGGER.log(Level.WARNING, "unexpected exception", ioe);
-                    setException(ioe);
-                    fail("Constructor threw IOException");
-                }
-                assertTrue("error in encrypt/decrypt cycle with " + alg + " (same reserialized object)", Arrays.equals(b1, b3));
-            }
-
-            public Exception getException() { return ex; }
-
-            public void setException(Exception e) {
-                ex = e;
-            }
-        }
-
-        List<Thread> t = new Vector<>();
         for(Algorithm alg: Algorithm.getAlgorithms( AlgorithmType.SYMMETRIC )) {
-            for (int size : new int[]{alg.getKeySize( SecurityLevel.LOW ), alg.getKeySize( SecurityLevel.MEDIUM ), alg.getKeySize( SecurityLevel.HIGH ), alg.getKeySize( SecurityLevel.QUANTUM )})
+            for (int size : new int[]{alg.getKeySize( SecurityLevel.LOW ), alg.getKeySize( SecurityLevel.MEDIUM ), alg.getKeySize( SecurityLevel.HIGH ), alg.getKeySize( SecurityLevel.QUANTUM )}) {
                 try {
-                    int j = (int) Math.min( Math.pow( 2, ksDisc / 8 / size ), 100 );
-                    LOGGER.log( Level.INFO, "Testing " + alg + "/" + size + " (" + j + " passes)" );
+                    int j = (int) Math.min(Math.pow(2, ksDisc / 8 / size), 100);
+                    LOGGER.log(Level.INFO, "Testing " + alg + "/" + size + " (" + j + " passes)");
                     for (int i = 0; i < j; i++) {
-                        Thread t1 = new TestThread(size, alg);
-                        t.add( t1 );
+                        symmetricEncryptionTestRun(alg, size);
                     }
                 } catch (Exception e) {
-                    LOGGER.log( Level.WARNING, "Unexpected exception", e );
-                    fail( "fuzzer encountered exception in Symmetric en/decryption test with algorithm " + alg.toString() );
-                }
-        }
-
-        for (Thread t1 : t) t1.start();
-        try {
-            for (Thread t1 : t) {
-                t1.join();
-                Exception e=((TestThread)(t1)).getException();
-                if(e!=null) {
-                    throw e;
+                    LOGGER.log(Level.WARNING, "Unexpected exception", e);
+                    fail("fuzzer encountered exception in Symmetric en/decryption test with algorithm " + alg.toString());
                 }
             }
-        } catch (InterruptedException ie) {
-            fail( "Got exception while waitinmg for end of tests" );
         }
     }
 
