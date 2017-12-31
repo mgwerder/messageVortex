@@ -26,11 +26,12 @@ public class Version {
     private static final int    MAJOR       = 1; //@major@
     private static final int    MINOR       = 0; //@minor@
     private static final int    REVISION    = 0; //@revision@
-    private static final String SVN_BUILD   = "$Revision: 248 $"; //@build@
-    private static final String BUILD       = SVN_BUILD.replaceAll( "\\$Revision: *","" ).replaceAll( " *\\$$","" );
+    private static final String SVN_BUILD   = "$Id$"; //@build@
+    private static final String BUILD       = SVN_BUILD.replaceAll( "\\$Id$$","" );
 
     private static final String VERSION     = MAJOR + "." + MINOR + "." + REVISION;
     private static final String BUILDVER    = VERSION + " (" + BUILD + ")";
+    private static final String FORMAT      = "$Format:%ci$";
 
     private Version() {
         super();
@@ -42,6 +43,10 @@ public class Version {
 
     public static String getVersion() {
         return VERSION;
+    }
+
+    public static String getGitFormat() {
+        return FORMAT;
     }
 
 }
