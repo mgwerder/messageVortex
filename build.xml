@@ -71,12 +71,6 @@
       </copy>
 
       <mkdir dir="${build.home}/classes/${app.path}/images"/>
-    <!--<copy  todir="${build.home}/classes/com/primecalc/java/klb4/images">
-      <fileset dir="${src.home}/images" includes="**/*.*"/>
-    </copy>
-    <copy  todir="${build.home}/classes/endorsed">
-      <fileset dir="${src.home}/endorsed" includes="**/*"/>
-    </copy>-->
       <replace file="${build.home}/src/${app.path}/Version.java">
           <replacefilter token="@major@" value="${app.version.major}"/>
           <replacefilter token="@minor@" value="${app.version.minor}"/>
