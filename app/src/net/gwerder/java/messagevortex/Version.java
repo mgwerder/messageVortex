@@ -31,7 +31,7 @@ public class Version {
 
     private static final String VERSION     = MAJOR + "." + MINOR + "." + REVISION;
     private static final String BUILDVER    = VERSION + " (" + BUILD + ")";
-    private static final String DATE        = "$Format:%cI$";
+    private static final String DATE        = "$Format: %cI$";
 
     private Version() {
         super();

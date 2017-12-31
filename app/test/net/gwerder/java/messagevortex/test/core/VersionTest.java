@@ -1,7 +1,6 @@
 package net.gwerder.java.messagevortex.test.core;
 
 import net.gwerder.java.messagevortex.Version;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -9,7 +8,7 @@ import org.junit.runners.JUnit4;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Tests for {@link net.gwerder.java.messagevortex.MailVortex}.
+ * Tests for {@link net.gwerder.java.messagevortex.MessageVortex}.
  *
  * @author martin@gwerder.net (Martin GWERDER)
  */
@@ -23,10 +22,10 @@ public class VersionTest {
     }
 
     @Test
-    @Ignore
     public void testBuild() {
         System.out.println("Build is "+ Version.getBuild());
-        assertTrue("Build String ("+Version.getBuild()+") does not match regexp.",Version.getBuild().matches("[0-9]+\\.[0-9]+\\.[0-9]+ \\([0-9]+\\)"));
+        System.out.println("Date  is "+ Version.getGitCommitDate() );
+        assertTrue("Build String ("+Version.getBuild()+") does not match regexp.",Version.getBuild().matches("[0-9]+\\.[0-9]+\\.[0-9]+ \\([0-9a-f]+\\)"));
     }
 
 }
