@@ -13,8 +13,8 @@ import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
@@ -37,6 +37,8 @@ class AsymmetricKeyPreCalculator implements Serializable {
     private static final boolean DISABLE_CACHE=false;
     private static double dequeueProbability = 1.0;
 
+    private static File tempdir=null;
+
     private static long lastSaved = 0;
     private static List<LastCalculated> log=new ArrayList<>();
     private static boolean firstWarning=true;
@@ -45,9 +47,12 @@ class AsymmetricKeyPreCalculator implements Serializable {
     private static InternalThread runner=null;
     private static String filename=null;
 
+    private static int incrementor = 1;
+    private static AlgorithmParameter oldPrecalculationAlgorithm=null;
+
     /* nuber of threads to use */
     private static int numThreads=Math.max(2,Runtime.getRuntime().availableProcessors()-1);
-    private static ExecutorService pool = Executors.newFixedThreadPool(numThreads);
+    private static ThreadPoolExecutor pool = (ThreadPoolExecutor)(Executors.newFixedThreadPool(numThreads));
 
     static {
         Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -135,7 +140,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
 
             // wait maximum 60 seconds for shutdown then abbort key calculation
             try{
-                pool.awaitTermination(60,TimeUnit.SECONDS);
+                pool.awaitTermination(180,TimeUnit.SECONDS);
                 pool.shutdownNow();
             } catch (InterruptedException ie) {
                 pool.shutdownNow();
@@ -147,6 +152,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
         public void run() {
 
             while(!shutdown) {
+                pool.setKeepAliveTime(100,TimeUnit.MILLISECONDS);
                 // get a parameter set to be calculated
                 AlgorithmParameter p=null;
                 double filler=1;
@@ -170,7 +176,22 @@ class AsymmetricKeyPreCalculator implements Serializable {
 
                 // calculate parameter set (if any)
                 if(p!=null) {
+                    // calculate key
                     calculateKey(p);
+                    // merge precalculated keys (if applicable)
+                    if(tempdir==null && mergePrecalculatedKeys()) {
+                        try {
+                            save();
+                        } catch(IOException|ClassNotFoundException e) {
+                            LOGGER.log(Level.WARNING, "Error saving cache (1)",e);
+                        }
+                    } else if( tempdir!=null ) {
+                        try {
+                            save();
+                        } catch(IOException|ClassNotFoundException e) {
+                            LOGGER.log(Level.WARNING, "Error saving cache (2)",e);
+                        }
+                    }
                 } else {
                     try {
                         Thread.sleep(10000);
@@ -183,22 +204,66 @@ class AsymmetricKeyPreCalculator implements Serializable {
 
         }
 
+        private boolean mergePrecalculatedKeys() {
+            boolean ret=false;
+            // get list of files to merge
+            String target_file ;  // fileThatYouWantToFilter
+            List<File> listOfFiles=new ArrayList<>();
+            for (File tfile:(new File(System.getProperty("java.io.tmpdir"))).listFiles()) {
+                if (tfile.isFile()) {
+                    target_file = tfile.getName();
+                    if (target_file.startsWith("MessageVortexPrecalc") && target_file.endsWith(".key")) {
+                        listOfFiles.add(tfile);
+                    }
+                }
+            }
+            // add keys to cache
+            for(File f:listOfFiles) {
+                try {
+                    load(f, true);
+                    f.delete();
+                    ret=true;
+                }catch(IOException|ClassNotFoundException e) {
+                    LOGGER.log(Level.WARNING,"Error merging file "+f.getAbsolutePath(),e);
+                }
+                f.delete();
+            }
+            return ret;
+        }
+
         private void calculateKey(AlgorithmParameter p) {
             try {
+                if(!p.equals(oldPrecalculationAlgorithm)) {
+                    incrementor=1;
+                }
+                oldPrecalculationAlgorithm=p;
                 // prepare thread list
-                for (int i = 0; i < numThreads; i++) {
+                while(pool.getPoolSize()<incrementor*2 || pool.getActiveCount()<numThreads) {
                     Thread t=runCalculatorThread(p);
                     t.setName("cache precalculation thread");
                     t.setPriority(Thread.MIN_PRIORITY);
                     pool.execute(t);
-
+                    LOGGER.log(Level.INFO, "Added key precalculator for "+p);
                 }
 
                 // Wait a while for existing tasks to terminate
-                pool.awaitTermination(60, TimeUnit.SECONDS);
+                pool.awaitTermination(10, TimeUnit.SECONDS);
+                if(tempdir!=null) {
+                    showStats();
+                }
+
+                // calculate new incrementor
+                if(pool.getPoolSize()>incrementor*2) {
+                    incrementor=Math.max(1,incrementor/2);
+                    LOGGER.log(Level.INFO, "lowered incrementor to "+incrementor);
+                } else if(pool.getPoolSize()<numThreads) {
+                    incrementor=incrementor*2;
+                    LOGGER.log(Level.INFO, "raised incrementor to "+incrementor);
+                }
 
                 // store cache
                 save();
+
             } catch (IOException | ClassNotFoundException ioe) {
                 LOGGER.log(Level.INFO, "exception while storing file", ioe);
             } catch (InterruptedException ie) {
@@ -229,7 +294,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
                         // put in cache
                         synchronized (cache) {
                             Queue<AsymmetricKey> q = cache.get(param);
-                            assert q != null;
+                            assert q  != null;
                             assert ak != null;
                             q.add(ak);
                         }
@@ -244,6 +309,37 @@ class AsymmetricKeyPreCalculator implements Serializable {
 
     private AsymmetricKeyPreCalculator() {
         // just a dummy to hide the default constructor
+        this(false);
+    }
+
+    private AsymmetricKeyPreCalculator(boolean detached) {
+        File t=null;
+        if(detached) {
+            try {
+                // create temporary file
+                t = File.createTempFile("MessageVortexPrecalc", ".keydir");
+            } catch (IOException ioe) {
+                LOGGER.log(Level.WARNING, "Unable to create temp file", ioe);
+            } finally {
+                tempdir = t;
+            }
+            try {
+                // remove tempfile
+                if (!(tempdir.delete())) {
+                    throw new IOException("Could not delete temp file: " + tempdir.getAbsolutePath());
+                }
+                // create directory instead
+                if (!(tempdir.mkdir())) {
+                    throw new IOException("Could not create temp directory: " + tempdir.getAbsolutePath());
+                }
+                // make sure that the directory is deleted on exit
+                tempdir.deleteOnExit();
+            } catch (IOException ioe) {
+                LOGGER.log(Level.WARNING, "Unable to create temp dir", ioe);
+            }
+        } else {
+            tempdir=t;
+        }
     }
 
     private static void attachLog(String msg) {
@@ -371,7 +467,9 @@ class AsymmetricKeyPreCalculator implements Serializable {
             if (filename != null && runner == null) {
                 // load cache
                 try {
-                    load();
+                    if(cache.isEmpty() || cacheSize.isEmpty()) {
+                        load(null,false);
+                    }
                 } catch (IOException | ClassNotFoundException|ExceptionInInitializerError e) {
                     LOGGER.log(Level.INFO, "error loading cache file (will be recreated)", e);
                 }
@@ -382,11 +480,15 @@ class AsymmetricKeyPreCalculator implements Serializable {
 
     }
 
-    private static void load() throws IOException,ClassNotFoundException {
+    private static void load(File inFile,boolean merge) throws IOException,ClassNotFoundException {
         ObjectInputStream f=null;
         try {
             synchronized (cache) {
-                f = new ObjectInputStream(new FileInputStream(filename));
+                if(inFile==null) {
+                    f = new ObjectInputStream(new FileInputStream(filename));
+                } else {
+                    f = new ObjectInputStream(new FileInputStream(inFile));
+                }
                 Map<AlgorithmParameter, Queue<AsymmetricKey>> lc = new HashMap<>();
 
                 // number of tuples
@@ -396,13 +498,14 @@ class AsymmetricKeyPreCalculator implements Serializable {
                 for (int j = 0; j < i; j++) {
                     @SuppressWarnings("unchecked")
                     AlgorithmParameter ap = (AlgorithmParameter) f.readObject();
-                    int size = (Integer) f.readObject();
+                    int size = (Integer)(f.readObject());
                     Queue<AsymmetricKey> q = new ArrayDeque<>();
                     while (q.size() < size) {
                         @SuppressWarnings("unchecked")
                         AsymmetricKey ak=(AsymmetricKey)(f.readObject());
                         q.add(ak);
                     }
+                    lc.put(ap,q);
                 }
 
                 // Loading list of algs
@@ -418,7 +521,13 @@ class AsymmetricKeyPreCalculator implements Serializable {
 
                 // building new cache
                 synchronized (cache) {
-                    cache.clear();
+                    if(!merge) {
+                        for (Map.Entry<AlgorithmParameter, Queue<AsymmetricKey>> e : cache.entrySet()) {
+                            e.getValue().clear();
+                        }
+                    } else {
+                        LOGGER.log(Level.INFO,"merging cache");
+                    }
                     for (Map.Entry<AlgorithmParameter, Queue<AsymmetricKey>> e : lc.entrySet()) {
                         AlgorithmParameter p = prepareParameters(e.getKey());
                         Queue<AsymmetricKey> q = cache.get(p);
@@ -428,7 +537,9 @@ class AsymmetricKeyPreCalculator implements Serializable {
                             q.addAll(e.getValue());
                         }
                     }
-                    cacheSize.clear();
+                    if(!merge) {
+                        cacheSize.clear();
+                    }
                     for (Map.Entry<AlgorithmParameter, Integer> e : lcc.entrySet()) {
                         AlgorithmParameter p = prepareParameters(e.getKey());
                         Integer i1 = cacheSize.get(p);
@@ -465,6 +576,8 @@ class AsymmetricKeyPreCalculator implements Serializable {
         try {
             synchronized (cache) {
                 f = new ObjectOutputStream(new FileOutputStream(filename+".tmp"));
+                int maxSize=0;
+                int currentSize=0;
                 synchronized(cache) {
 
                     // Number of tuples
@@ -474,6 +587,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
                     for (Map.Entry<AlgorithmParameter, Queue<AsymmetricKey>> e : cache.entrySet()) {
                         f.writeObject(e.getKey());
                         f.writeObject(e.getValue().size());
+                        currentSize+=e.getValue().size();
                         for(AsymmetricKey ak:e.getValue().toArray(new AsymmetricKey[e.getValue().size()])) {
                             f.writeObject(ak);
                         }
@@ -484,15 +598,29 @@ class AsymmetricKeyPreCalculator implements Serializable {
                     for (Map.Entry<AlgorithmParameter, Integer> e : cacheSize.entrySet()) {
                         f.writeObject(e.getKey());
                         f.writeObject(e.getValue());
+                        maxSize+=e.getValue();
                     }
                 }
                 lastSaved=System.currentTimeMillis();
                 showStats();
                 f.close();
                 f=null;
-                Files.move(Paths.get(filename+".tmp"),Paths.get(filename), StandardCopyOption.REPLACE_EXISTING);
+                LOGGER.log(Level.INFO,"Cache size is "+(100.0/maxSize*currentSize)+"%");
+                if((100.0/maxSize*currentSize)>10 && tempdir!=null) {
+                    // move file as temp file and clear cache
+                    String fn=File.createTempFile("MessageVortexPrecalc", ".key").getAbsolutePath();
+                    LOGGER.log(Level.INFO,"stored chunk to file \""+fn+"\" to pick up");
+                    Files.move(Paths.get(filename + ".tmp"), Paths.get(fn), StandardCopyOption.REPLACE_EXISTING);
+                    for(Queue<AsymmetricKey> q:cache.values()) {
+                        q.clear();
+                    }
+                } else {
+                    LOGGER.log(Level.INFO,"stored cache");
+                    Files.move(Paths.get(filename + ".tmp"), Paths.get(filename), StandardCopyOption.REPLACE_EXISTING);
+                }
             }
         } catch(Exception e) {
+            LOGGER.log(Level.WARNING,"Exception while storing file",e);
             throw e;
         } finally {
             if(f!=null) {
@@ -505,7 +633,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
         final String sepLine="-----------------------------------------------------------";
         synchronized(cache) {
             LOGGER.log(Level.INFO, sepLine);
-            LOGGER.log(Level.INFO, "| cache stats");
+            LOGGER.log(Level.INFO, "| cache stats "+filename);
             LOGGER.log(Level.INFO, sepLine);
             int sum = 0;
             int tot = 0;
@@ -516,7 +644,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
 
             }
             LOGGER.log(Level.INFO, sepLine);
-            LOGGER.log(Level.INFO, "| Total: "+sum+"/"+tot);
+            LOGGER.log(Level.INFO, "| Total: "+sum+"/"+tot+" (pool running "+pool.getActiveCount()+" of "+pool.getPoolSize()+" threads ["+incrementor+"/"+oldPrecalculationAlgorithm+"])");
             synchronized(log) {
                 if(!log.isEmpty()) {
                     LOGGER.log(Level.INFO, sepLine);
@@ -529,4 +657,19 @@ class AsymmetricKeyPreCalculator implements Serializable {
         }
     }
 
+    public static void main(String[] args) throws InterruptedException {
+        MessageVortexLogger.setGlobalLogLevel(Level.ALL);
+        new AsymmetricKeyPreCalculator(true);
+        if( cacheSize.isEmpty() ) {
+            setCacheFileName("AsymmetricKey.cache");
+            for (Map.Entry<AlgorithmParameter, Queue<AsymmetricKey>> q : new TreeMap<AlgorithmParameter,Queue<AsymmetricKey>>(cache).entrySet()) {
+                q.getValue().clear();
+            }
+            showStats();
+        }
+        if( ! cacheSize.isEmpty() ) {
+            setCacheFileName(tempdir.getAbsolutePath() + "/../precalcCache.cache");
+            runner.join();
+        }
+    }
 }
