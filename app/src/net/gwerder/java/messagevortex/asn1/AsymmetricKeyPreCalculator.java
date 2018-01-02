@@ -220,9 +220,21 @@ class AsymmetricKeyPreCalculator implements Serializable {
             // add keys to cache
             for(File f:listOfFiles) {
                 try {
-                    load(f, true);
-                    f.delete();
-                    ret=true;
+                    //  merge only if one key cache is below 40%
+                    double lowest=1;
+                    for (Map.Entry<AlgorithmParameter, Integer> e : cacheSize.entrySet()) {
+                        Queue<AsymmetricKey> q=cache.get(e.getKey());
+                        double curr=0;
+                        if(q!=null) {
+                            curr=q.size();
+                        }
+                        lowest=Math.min(lowest,curr/e.getValue());
+                    }
+                    if(lowest<0.4) {
+                        load(f, true);
+                        f.delete();
+                        ret=true;
+                    }
                 }catch(IOException|ClassNotFoundException e) {
                     LOGGER.log(Level.WARNING,"Error merging file "+f.getAbsolutePath(),e);
                 }
@@ -325,6 +337,9 @@ class AsymmetricKeyPreCalculator implements Serializable {
             }
             try {
                 // remove tempfile
+                if(tempdir==null) {
+                    throw new IOException("failed to create temp file: " + tempdir.getAbsolutePath());
+                }
                 if (!(tempdir.delete())) {
                     throw new IOException("Could not delete temp file: " + tempdir.getAbsolutePath());
                 }
