@@ -39,6 +39,11 @@ public class AcceptanceTest extends TestCase {
 	private CharsetDecoder decoder;
 	private CharsetEncoder encoder;
 
+	private String[][] testcases = {
+			new String[] {}
+	};
+
+	@Override
 	protected void setUp() throws Exception {
 		provider = new CharsetProvider();
 	}
@@ -73,21 +78,21 @@ public class AcceptanceTest extends TestCase {
 	}
 
 	private void verifyAll() throws Exception {
-		verifySymmetrical("áéíóúäëïöüàèìòùâêîôûãõçñ€");
-		verifySymmetrical("aábécídóeúfägëhïiöjükàlèmìnòoùpâqêrîsôtûuãvõwçxñy€z");
-		verifySymmetrical("abcáéídefóúäghiëïöjklüàèmnoìòùpqrâêîstuôûãvwxõçñyz€");
-		verifySymmetrical("abcdefghijklmnopqrstuvwyxzáéíóúäëïöüàèìòùâêîôûãõçñ€abcdefghijklmnopqrstuvwyxz");
-		verifySymmetrical("aáb+écí+-dóe-úfä-+gëh+ïiö+-jük-àlè-+mìn+òoù+-pâq-êrî-+sôt+ûuã+-võwç-xñy-+€z+");
-		verifySymmetrical("á+éí+óúä+ëïö++ü++àè++ìòù+++â+++êî+++ôûã+++õçñ€");
-		verifySymmetrical("á+-éí+-óúä+-ëïö++-ü++-àè++-ìòù+++-â+++-êî+++-ôûã+++-õçñ€");
+		verifySymmetrical("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
+		verifySymmetrical("aï¿½bï¿½cï¿½dï¿½eï¿½fï¿½gï¿½hï¿½iï¿½jï¿½kï¿½lï¿½mï¿½nï¿½oï¿½pï¿½qï¿½rï¿½sï¿½tï¿½uï¿½vï¿½wï¿½xï¿½yï¿½z");
+		verifySymmetrical("abcï¿½ï¿½ï¿½defï¿½ï¿½ï¿½ghiï¿½ï¿½ï¿½jklï¿½ï¿½ï¿½mnoï¿½ï¿½ï¿½pqrï¿½ï¿½ï¿½stuï¿½ï¿½ï¿½vwxï¿½ï¿½ï¿½yzï¿½");
+		verifySymmetrical("abcdefghijklmnopqrstuvwyxzï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½abcdefghijklmnopqrstuvwyxz");
+		verifySymmetrical("aï¿½b+ï¿½cï¿½+-dï¿½e-ï¿½fï¿½-+gï¿½h+ï¿½iï¿½+-jï¿½k-ï¿½lï¿½-+mï¿½n+ï¿½oï¿½+-pï¿½q-ï¿½rï¿½-+sï¿½t+ï¿½uï¿½+-vï¿½wï¿½-xï¿½y-+ï¿½z+");
+		verifySymmetrical("ï¿½+ï¿½ï¿½+ï¿½ï¿½ï¿½+ï¿½ï¿½ï¿½++ï¿½++ï¿½ï¿½++ï¿½ï¿½ï¿½+++ï¿½+++ï¿½ï¿½+++ï¿½ï¿½ï¿½+++ï¿½ï¿½ï¿½");
+		verifySymmetrical("ï¿½+-ï¿½ï¿½+-ï¿½ï¿½ï¿½+-ï¿½ï¿½ï¿½++-ï¿½++-ï¿½ï¿½++-ï¿½ï¿½ï¿½+++-ï¿½+++-ï¿½ï¿½+++-ï¿½ï¿½ï¿½+++-ï¿½ï¿½ï¿½");
 		verifySymmetrical("++++++++");
 		verifySymmetrical("+-++--+++---++");
-		verifySymmetrical("+áéí+");
-		verifySymmetrical("`~!@#$%^&*()_+-=[]\\{}|;':\",./<>?\u0000\r\n\t\b\f€");
-		verifySymmetrical("#aáa#á#áá#ááá#");
+		verifySymmetrical("+ï¿½ï¿½ï¿½+");
+		verifySymmetrical("`~!@#$%^&*()_+-=[]\\{}|;':\",./<>?\u0000\r\n\t\b\fï¿½");
+		verifySymmetrical("#aï¿½a#ï¿½#ï¿½ï¿½#ï¿½ï¿½ï¿½#");
 	}
 
-	protected void verifySymmetrical(String s) throws Exception {
+	protected void verifySymmetrical(String s) {
 		final String encoded = encodeGetBytes(s);
 		assertEquals(encoded, encodeCharsetEncode(s));
 		assertEquals("problem decoding " + encoded, s, decode(encoded));

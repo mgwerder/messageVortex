@@ -1,5 +1,6 @@
 package net.gwerder.java.messagevortex.test.imap;
 
+import net.gwerder.java.messagevortex.ExtendedSecureRandom;
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.imap.CustomKeyManager;
 import org.junit.Test;
@@ -19,6 +20,12 @@ import static org.junit.Assert.fail;
 @RunWith(JUnit4.class)
 public class CustomKeyManagerTest {
 
+    private static final java.util.logging.Logger LOGGER;
+
+    static {
+        LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+        MessageVortexLogger.setGlobalLogLevel(Level.ALL);
+    }
     static {
         MessageVortexLogger.setGlobalLogLevel(Level.ALL);
     }
@@ -26,9 +33,13 @@ public class CustomKeyManagerTest {
     @Test
     public void loadKeyStore() {
         try{
+            LOGGER.log(Level.INFO,"************************************************************************");
+            LOGGER.log(Level.INFO,"Loading keystore");
+            LOGGER.log(Level.INFO,"************************************************************************");
             new CustomKeyManager("keystore.jks","changeme", "mykey3");
         } catch(Exception e) {
-            fail("Exception should not be thrown");
+            LOGGER.log(Level.SEVERE,"Unexpected Exception",e);
+            fail("Exception should not be thrown ("+e+") in directory "+System.getProperty("user.dir"));
         }
         try{
             new CustomKeyManager("keystore.jks_does_not_exist","changeme", "mykey3");
@@ -56,7 +67,7 @@ public class CustomKeyManagerTest {
         try{
             ckm=new CustomKeyManager("keystore.jks","changeme", "mykey3");
         } catch(Exception e) {
-            fail("Exception should not be thrown");
+            fail("Exception should not be thrown ("+e+")");
         }
         try{
             ckm.getClientAliases("",null);

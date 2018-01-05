@@ -54,8 +54,8 @@ public abstract class AbstractRedundancyOperation extends Operation implements A
 
     int inputId;
     int dataStripes=1;
-    int redundancy=1;
-    final ArrayList<SymmetricKey> keys=new ArrayList<>();
+    int redundancyStripes=1;
+    final ArrayList<SymmetricKey> stripeKeys=new ArrayList<>();
     int outputId;
     int gfSize=4;
 
@@ -63,12 +63,12 @@ public abstract class AbstractRedundancyOperation extends Operation implements A
     AbstractRedundancyOperation() {}
 
     /* constructor */
-    public AbstractRedundancyOperation(int inputId, int dataStripes, int redundancy, List<SymmetricKey> keys, int newFirstId, int gfSize) {
+    public AbstractRedundancyOperation(int inputId, int dataStripes, int redundancy, List<SymmetricKey> stripeKeys, int newFirstId, int gfSize) {
         this.inputId = inputId;
         setGFSize(gfSize);
         setDataStripes(dataStripes);
         setRedundancy(redundancy);
-        setKeys(keys);
+        setKeys(stripeKeys);
         this.outputId =newFirstId;
     }
 
@@ -84,7 +84,7 @@ public abstract class AbstractRedundancyOperation extends Operation implements A
 
         inputId=parseIntval(ASN1TaggedObject.getInstance(s1.getObjectAt(i++)),INPUT_ID,"inputId");
         dataStripes=parseIntval(ASN1TaggedObject.getInstance(s1.getObjectAt(i++)),DATA_STRIPES,"dataStripes");
-        redundancy=parseIntval(ASN1TaggedObject.getInstance(s1.getObjectAt(i++)),REDUNDANCY,"redundancy");
+        redundancyStripes=parseIntval(ASN1TaggedObject.getInstance(s1.getObjectAt(i++)),REDUNDANCY,"redundancy");
 
         // reading keys
         ASN1TaggedObject to=ASN1TaggedObject.getInstance(s1.getObjectAt(i++));
@@ -92,10 +92,10 @@ public abstract class AbstractRedundancyOperation extends Operation implements A
             throw new IOException("got unknown tag id ("+to.getTagNo()+") when expecting keys" );
         }
         ASN1Sequence s=ASN1Sequence.getInstance(to.getObject());
-        synchronized(keys) {
-            keys.clear();
+        synchronized(stripeKeys) {
+            stripeKeys.clear();
             for (ASN1Encodable o : s) {
-                keys.add(new SymmetricKey(toDER(o.toASN1Primitive())));
+                stripeKeys.add(new SymmetricKey(toDER(o.toASN1Primitive())));
             }
         }
 
@@ -127,10 +127,10 @@ public abstract class AbstractRedundancyOperation extends Operation implements A
         v.add(new DERTaggedObject( DATA_STRIPES,new ASN1Integer(dataStripes)));
 
         LOGGER.log(Level.FINER,"  adding redundancy");
-        v.add(new DERTaggedObject( REDUNDANCY,new ASN1Integer(redundancy)));
+        v.add(new DERTaggedObject( REDUNDANCY,new ASN1Integer(redundancyStripes)));
 
         ASN1EncodableVector v2=new ASN1EncodableVector();
-        for(SymmetricKey k:keys) {
+        for(SymmetricKey k:stripeKeys) {
             v2.add(k.toASN1Object(dumpType));
         }
         v.add(new DERTaggedObject( KEYS,new DERSequence(v2)));
@@ -156,10 +156,10 @@ public abstract class AbstractRedundancyOperation extends Operation implements A
         sb.append(  "  {" + CRLF );
         sb.append( prefix + "  inputId ").append(inputId).append(",").append(CRLF);
         sb.append( prefix + "  dataStripes ").append(dataStripes).append(",").append(CRLF);
-        sb.append( prefix + "  redundancy ").append(redundancy).append(",").append(CRLF);
+        sb.append( prefix + "  redundancy ").append(redundancyStripes).append(",").append(CRLF);
         sb.append( prefix + "  keys {").append(CRLF);
-        int i=keys.size();
-        for(SymmetricKey sk:keys) {
+        int i=stripeKeys.size();
+        for(SymmetricKey sk:stripeKeys) {
             i--;
             sb.append(sk.dumpValueNotation(prefix+"  ",dumpType));
             if(i>0) {
@@ -198,7 +198,7 @@ public abstract class AbstractRedundancyOperation extends Operation implements A
      * @throws ArithmeticException if all stripes together are not accomodatable in the given GF field
      */
     public int setDataStripes(int stripes)  {
-        if(stripes<1 || stripes+this.redundancy> BitShifter.lshift(2,gfSize,(byte)33)) {
+        if(stripes<1 || stripes+this.redundancyStripes> BitShifter.lshift(2,gfSize,(byte)33)) {
             throw new ArithmeticException("too many stripes to be acomodated in given galois field");
         }
         int old=this.dataStripes;
@@ -223,13 +223,13 @@ public abstract class AbstractRedundancyOperation extends Operation implements A
         } else if(stripes+this.dataStripes> BitShifter.lshift(2,gfSize,(byte)33)) {
             throw new ArithmeticException("too many stripes to be acomodated in current galois field");
         }
-        int old=this.redundancy;
-        this.redundancy=stripes;
+        int old=this.redundancyStripes;
+        this.redundancyStripes=stripes;
         return old;
     }
 
     public int getRedundancy() {
-        return this.redundancy;
+        return this.redundancyStripes;
     }
 
     /***
@@ -240,16 +240,17 @@ public abstract class AbstractRedundancyOperation extends Operation implements A
      * @throws ArithmeticException if the number of keys doees not match the number of stripes
      */
     public SymmetricKey[] setKeys(List<SymmetricKey> keys) {
-        if(this.dataStripes+this.redundancy!=keys.size()) {
+        if(this.dataStripes+this.redundancyStripes!=keys.size()) {
             throw new ArithmeticException("illegal number of keys");
         }
+
         SymmetricKey[] old=new SymmetricKey[0];
-        if(this.keys!=null) {
-            old = this.keys.toArray(new SymmetricKey[this.keys.size()]);
+        if(stripeKeys!=null) {
+            old = stripeKeys.toArray(new SymmetricKey[stripeKeys.size()]);
         }
-        synchronized(this.keys) {
-            this.keys.clear();
-            this.keys.addAll(keys);
+        synchronized(stripeKeys) {
+            stripeKeys.clear();
+            stripeKeys.addAll(keys);
         }
         return old;
     }
@@ -260,7 +261,7 @@ public abstract class AbstractRedundancyOperation extends Operation implements A
      * @return the omega parameter of the GF.
      */
     public SymmetricKey[] getkeys() {
-        return this.keys.toArray(new SymmetricKey[this.keys.size()]);
+        return stripeKeys.toArray(new SymmetricKey[stripeKeys.size()]);
     }
 
     /***
@@ -271,7 +272,7 @@ public abstract class AbstractRedundancyOperation extends Operation implements A
      * @throws ArithmeticException if the number of all stripes in total (data and redundancy) exceeds the address space of the GF
      */
     public int setGFSize(int omega) {
-        if(omega<2 || omega>16 || this.redundancy+this.dataStripes> BitShifter.lshift(2,omega,(byte)33)) {
+        if(omega<2 || omega>16 || this.redundancyStripes+this.dataStripes> BitShifter.lshift(2,omega,(byte)33)) {
             throw new ArithmeticException("galois field too small for the stripes to be acomodated");
         }
         int old=this.gfSize;

@@ -563,6 +563,13 @@ public class AsymmetricKey extends Key  implements Serializable {
     public Algorithm getAlgorithm() {return Algorithm.getByString(parameters.get(Parameter.ALGORITHM)); }
 
     /***
+     * Gets the full algorithm parameters of this key.
+     *
+     * @return the algorithm parameters used for generation
+     */
+    public AlgorithmParameter getAlgorithmParameter() {return parameters.clone(); }
+
+    /***
      * Gets the padding used for encryption.
      *
      * @return the padding which is used for encryption
