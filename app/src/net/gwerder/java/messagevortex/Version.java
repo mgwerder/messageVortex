@@ -23,15 +23,15 @@ package net.gwerder.java.messagevortex;
 
 public class Version {
 
-    private static final int    MAJOR       = 1; //@major@
-    private static final int    MINOR       = 0; //@minor@
-    private static final int    REVISION    = 0; //@revision@
-    private static final String GIT_BUILD   = "$Id$"; //@build@
-    private static final String BUILD       = GIT_BUILD.substring( 5,GIT_BUILD.length()-2 );
+    private static final int    MAJOR          = 1; //@major@
+    private static final int    MINOR          = 0; //@minor@
+    private static final int    REVISION       = 0; //@revision@
+    private static final String GIT_BUILD      = "$Id$"; //@build@
+    private static final String BUILD          = GIT_BUILD.substring( 5,GIT_BUILD.length()-2 );
 
-    private static final String VERSION     = MAJOR + "." + MINOR + "." + REVISION;
-    private static final String BUILDVER    = VERSION + " (" + BUILD + ")";
-    private static final String DATE        = "$Format: %cI$";
+    private static final String VERSION_STRING = MAJOR + "." + MINOR + "." + REVISION;
+    private static final String BUILDVER       = VERSION + " (" + BUILD + ")";
+    private static final String DATE           = "$Format: %cI$";
 
     private Version() {
         super();
@@ -42,7 +42,7 @@ public class Version {
     }
 
     public static String getVersion() {
-        return VERSION;
+        return VERSION_STRING;
     }
 
     public static String getGitCommitDate() {

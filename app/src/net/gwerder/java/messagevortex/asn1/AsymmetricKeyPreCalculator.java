@@ -8,7 +8,6 @@ import net.gwerder.java.messagevortex.asn1.encryption.Parameter;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -282,7 +281,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
             try {
                 // remove tempfile
                 if(tempdir==null) {
-                    throw new IOException("failed to create temp file: " + tempdir.getAbsolutePath());
+                    throw new IOException("failed to create temp file");
                 }
                 if (!(tempdir.delete())) {
                     throw new IOException("Could not delete temp file: " + tempdir.getAbsolutePath());
@@ -436,7 +435,6 @@ class AsymmetricKeyPreCalculator implements Serializable {
         }
 
         // store data
-        ObjectOutputStream f=null;
         try {
             synchronized (cache) {
                 cache.store(filename+".tmp");
@@ -455,10 +453,6 @@ class AsymmetricKeyPreCalculator implements Serializable {
         } catch(Exception e) {
             LOGGER.log(Level.WARNING,"Exception while storing file",e);
             throw e;
-        } finally {
-            if(f!=null) {
-                f.close();
-            }
         }
     }
 
