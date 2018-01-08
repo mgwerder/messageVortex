@@ -463,7 +463,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
             try {
                 load("AsymmetricKey.cache", true);
             } catch(IOException ioe) {
-                throw new IOException("unable to lad existing asymmetric key cache file ... aborting execution",ioe);
+                throw new IOException("unable to load existing asymmetric key cache file ... aborting execution",ioe);
             }
             cache.clear();
             cache.showStats();
