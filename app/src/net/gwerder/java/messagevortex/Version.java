@@ -30,7 +30,7 @@ public class Version {
     private static final String BUILD          = GIT_BUILD.substring( 5,GIT_BUILD.length()-2 );
 
     private static final String VERSION_STRING = MAJOR + "." + MINOR + "." + REVISION;
-    private static final String BUILDVER       = VERSION + " (" + BUILD + ")";
+    private static final String BUILDVER       = VERSION_STRING + " (" + BUILD + ")";
     private static final String DATE           = "$Format: %cI$";
 
     private Version() {
