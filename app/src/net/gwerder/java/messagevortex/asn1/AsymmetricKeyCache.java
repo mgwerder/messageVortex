@@ -1,10 +1,9 @@
 package net.gwerder.java.messagevortex.asn1;
 
-import com.sun.deploy.cache.CacheEntry;
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 
 import java.io.*;
-import java.text.DecimalFormat;
+import java.security.SecureRandom;
 import java.util.*;
 import java.util.logging.Level;
 
@@ -14,6 +13,8 @@ import java.util.logging.Level;
 public class AsymmetricKeyCache implements Serializable {
 
     public static final long serialVersionUID = 100000000081L;
+
+    public static final SecureRandom esr=new SecureRandom();
 
     private static final java.util.logging.Logger LOGGER;
     static {
@@ -78,7 +79,7 @@ public class AsymmetricKeyCache implements Serializable {
         }
 
         public double getCacheFillTime() {
-            return Math.max(0,maxSize-size())*getAverageCalcTime();
+            return Math.max(0,maxSize-cache.size())*getAverageCalcTime();
         }
 
         public int size() {
@@ -159,6 +160,8 @@ public class AsymmetricKeyCache implements Serializable {
         ObjectInputStream f=new ObjectInputStream(new FileInputStream(filename));
         try {
             load(f, true);
+        } catch(ClassCastException cce) {
+            throw new IOException("Error deserializing file \""+filename+"\"",cce);
         } finally {
             f.close();
         }
@@ -252,19 +255,26 @@ public class AsymmetricKeyCache implements Serializable {
         Map<Long,AlgorithmParameter> hm=new TreeMap<>();
         synchronized(cache) {
             for(Map.Entry<AlgorithmParameter,CacheElement> me:cache.entrySet()) {
-                l+=me.getValue().getCacheFillTime();
-                hm.put(l,me.getKey());
+                long ft=(long)(me.getValue().getCacheFillTime());
+                l+=ft;
+                if(ft>0) {
+                    hm.put(l,me.getKey());
+                }
             }
         }
 
         // if all caches are full return no parameter
-        if(l==0) {
+        if(l==0 || hm.size()==0) {
             return null;
         }
 
         // elect weighted element acording to number and estimated calc time
-        Random r=new Random();
-        long e=r.nextLong()%(l+1);
+
+        long e;
+        synchronized(esr) {
+            e=esr.nextLong()%(l+1);
+        }
+
 
         // get element and return
         for(Map.Entry<Long,AlgorithmParameter> me:hm.entrySet()) {
@@ -328,8 +338,20 @@ public class AsymmetricKeyCache implements Serializable {
         }
     }
 
+    public static String percentBar(double percent, int size) {
+        StringBuilder sb=new StringBuilder();
+        sb.append("|");
+        for(int i=1;i<Math.min(size,percent*size);i++) {
+            sb.append("#");
+        }
+        while(sb.length()<size) {
+            sb.append(".");
+        }
+        sb.append("|");
+        return sb.toString();
+    }
+
     public void showStats() {
-        DecimalFormat formatter = new java.text.DecimalFormat("0000.##");
         final String sepLine="-----------------------------------------------------------";
         synchronized(cache) {
             LOGGER.log(Level.INFO, sepLine);
@@ -339,7 +361,7 @@ public class AsymmetricKeyCache implements Serializable {
             int tot = 0;
             for (AlgorithmParameter q : cache.keySet()) {
                 CacheElement ce=cache.get(q);
-                LOGGER.log(Level.INFO, "| " + ce.size() + "/" + ce.getMaxSize()+" : "+ q.toString());
+                LOGGER.log(Level.INFO, "| " + String.format("%4s",ce.size()) + "/" + String.format("%4s",ce.getMaxSize())+" "+percentBar((double)(ce.size())/ce.getMaxSize(),20)+" "+ q.toString());
                 sum += ce.size();
                 tot += ce.getMaxSize();
 

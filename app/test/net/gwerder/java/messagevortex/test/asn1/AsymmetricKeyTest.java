@@ -33,8 +33,6 @@ public class AsymmetricKeyTest {
     static {
         LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
         MessageVortexLogger.setGlobalLogLevel(Level.ALL);
-        // Danger : Messes up demo store
-        // DemoStore has to be fixed firs before reenablicng AsymmetricKey.setDequeueProbability(0.02);
     }
 
     private int ksDisc=16384;

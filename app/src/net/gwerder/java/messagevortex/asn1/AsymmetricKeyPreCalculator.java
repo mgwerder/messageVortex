@@ -6,13 +6,15 @@ import net.gwerder.java.messagevortex.asn1.encryption.Mode;
 import net.gwerder.java.messagevortex.asn1.encryption.Padding;
 import net.gwerder.java.messagevortex.asn1.encryption.Parameter;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.security.SecureRandom;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.*;
 import java.util.logging.Level;
 
@@ -43,12 +45,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
     private static InternalThread runner=null;
     private static String filename=null;
 
-    private static int incrementor = 1;
-    private static AlgorithmParameter oldPrecalculationAlgorithm=null;
-
-    /* nuber of threads to use */
-    private static int numThreads=Math.max(2,Runtime.getRuntime().availableProcessors()-1);
-    private static ThreadPoolExecutor pool = new ThreadPoolExecutor(0, numThreads,0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
+    private static int incrementor = 128;
 
     static {
         Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -102,7 +99,6 @@ class AsymmetricKeyPreCalculator implements Serializable {
         }
 
         public void run() {
-            pool.setKeepAliveTime(10L,TimeUnit.MILLISECONDS);
             pool.allowCoreThreadTimeOut(true);
             while(!shutdown) {
                 // get a parameter set to be calculated
@@ -111,9 +107,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
                 // calculate parameter set (if any)
                 if(p!=null) {
                     // calculate key
-                    long start=System.currentTimeMillis();
                     calculateKey(p);
-                    cache.setCalcTime(p,System.currentTimeMillis()-start);
 
                     // merge precalculated keys (if applicable)
                     if(tempdir==null && mergePrecalculatedKeys()) {
@@ -131,8 +125,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
                     }
                 } else {
                     try {
-                        LOGGER.log(Level.INFO, "cache is idle ... sleeping for a short while and waiting for requests");
-                        cache.showStats();
+                        LOGGER.log(Level.INFO, "cache is idle ("+String.format("%d2.3",cache.getCacheFillGrade())+") ... sleeping for a short while and waiting for requests");
                         Thread.sleep(10000);
                     } catch (InterruptedException ie) {
                         Thread.currentThread().interrupt();
@@ -179,36 +172,33 @@ class AsymmetricKeyPreCalculator implements Serializable {
 
         private void calculateKey(AlgorithmParameter p) {
             try {
-                if(!p.equals(oldPrecalculationAlgorithm)) {
-                    incrementor=1;
-                }
-                oldPrecalculationAlgorithm=p;
-                // prepare thread list
-                while(pool.getQueue().size()<Math.max(incrementor*2,numThreads)) {
-                    Thread t=runCalculatorThread(p);
-                    t.setName("cache precalculation thread");
-                    t.setPriority(Thread.MIN_PRIORITY);
-                    pool.execute(t);
-                    LOGGER.log(Level.INFO, "Added key precalculator for "+p+" (pool size:"+pool.getQueue().size()+"; active count:"+pool.getCorePoolSize()+")");
-                }
+                // prepare thread
+                Thread t=runCalculatorThread(p);
+                t.setName("cache precalculation thread");
+                t.setPriority(Thread.MIN_PRIORITY);
+                pool.execute(t);
+                LOGGER.log(Level.INFO, "Added key precalculator for "+p+" (pool size:"+pool.getQueue().size()+"; active count:"+pool.getCorePoolSize()+")");
 
                 // Wait a while for existing tasks to terminate
-                pool.awaitTermination(10, TimeUnit.SECONDS);
-                if(tempdir!=null) {
-                    cache.showStats();
-                }
+                if(pool.getQueue().size()>Math.max(incrementor*2,numThreads)) {
+                    pool.awaitTermination(10, TimeUnit.SECONDS);
+                    if (tempdir != null) {
+                        cache.showStats();
+                        LOGGER.log(Level.INFO,"|Running threads "+pool.getActiveCount()+" of "+pool.getQueue().size());
+                    }
 
-                // calculate new incrementor
-                if(pool.getQueue().size()>incrementor) {
-                    incrementor=Math.max(1,incrementor/2);
-                    LOGGER.log(Level.INFO, "lowered incrementor to "+incrementor);
-                } else if(pool.getQueue().size()<numThreads) {
-                    incrementor=incrementor*2;
-                    LOGGER.log(Level.INFO, "raised incrementor to "+incrementor);
-                }
+                    // calculate new incrementor
+                    if (pool.getQueue().size() > incrementor && pool.getQueue().size() < incrementor*2 && tempdir != null) {
+                        incrementor = Math.max(1, incrementor / 2);
+                        LOGGER.log(Level.INFO, "lowered incrementor to " + incrementor);
+                    } else if (pool.getQueue().size() < numThreads && tempdir != null) {
+                        incrementor = incrementor * 2;
+                        LOGGER.log(Level.INFO, "raised incrementor to " + incrementor);
+                    }
 
-                // store cache
-                save();
+                    // store cache
+                    save();
+                }
 
             } catch (IOException | ClassNotFoundException ioe) {
                 LOGGER.log(Level.INFO, "exception while storing file", ioe);
@@ -234,7 +224,9 @@ class AsymmetricKeyPreCalculator implements Serializable {
                 public void run() {
                     LOGGER.log(Level.FINE, "precalculating key " + param.toString() + "");
                     try {
+                        long start=System.currentTimeMillis();
                         AsymmetricKey ak = new AsymmetricKey(param.clone(), false);
+                        cache.setCalcTime(param.clone(),System.currentTimeMillis()-start);
 
                         // put in cache
                         assert ak != null;
@@ -246,6 +238,29 @@ class AsymmetricKeyPreCalculator implements Serializable {
 
             };
         }
+    }
+
+    /* nuber of threads to use */
+    private static int numThreads=Math.max(2,Runtime.getRuntime().availableProcessors()-1);
+    private static ThreadPoolExecutor pool;
+    static {
+        BlockingQueue<Runnable> queue = new LinkedTransferQueue<Runnable>() {
+            @Override
+            public boolean offer(Runnable e) {
+                return tryTransfer(e);
+            }
+        };
+        pool = new ThreadPoolExecutor(1, numThreads, 1, TimeUnit.SECONDS, queue);
+        pool.setRejectedExecutionHandler(new RejectedExecutionHandler() {
+            @Override
+            public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
+                try {
+                    executor.getQueue().put(r);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        });
     }
 
     private AsymmetricKeyPreCalculator() {
@@ -456,6 +471,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
             } catch(IOException ioe) {
                 throw new IOException("unable to lad existing asymmetric key cache file ... aborting execution",ioe);
             }
+            cache.clear();
             cache.showStats();
         }
         setCacheFileName(tempdir.getAbsolutePath() + "/precalcCache.cache");
