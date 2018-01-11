@@ -176,7 +176,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
                 t.setName("cache precalculation thread");
                 t.setPriority(Thread.MIN_PRIORITY);
                 pool.execute(t);
-                LOGGER.log(Level.INFO, "Added key precalculator for "+p+" (pool size:"+pool.getQueue().size()+"; active count:"+pool.getCorePoolSize()+")");
+                LOGGER.log(Level.INFO, "Added key precalculator for "+p+" (pool size:"+pool.getQueue().size()+"; thread count (min/current/max):"+pool.getCorePoolSize()+"/"+pool.getActiveCount()+"/"+pool.getMaximumPoolSize()+")");
 
                 // Wait a while for existing tasks to terminate
                 if(pool.getQueue().size()>Math.max(incrementor*2,numThreads)) {
