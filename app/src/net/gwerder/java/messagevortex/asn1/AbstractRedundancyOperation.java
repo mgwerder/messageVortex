@@ -245,9 +245,7 @@ public abstract class AbstractRedundancyOperation extends Operation implements A
         }
 
         SymmetricKey[] old=new SymmetricKey[0];
-        if(stripeKeys!=null) {
-            old = stripeKeys.toArray(new SymmetricKey[stripeKeys.size()]);
-        }
+        old = stripeKeys.toArray(new SymmetricKey[stripeKeys.size()]);
         synchronized(stripeKeys) {
             stripeKeys.clear();
             stripeKeys.addAll(keys);

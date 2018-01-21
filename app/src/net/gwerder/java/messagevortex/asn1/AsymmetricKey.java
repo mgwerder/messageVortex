@@ -92,6 +92,15 @@ public class AsymmetricKey extends Key  implements Serializable {
         selftest();
     }
 
+    public AsymmetricKey(AsymmetricKey ak) {
+        try {
+            parse(ak.toASN1Object(DumpType.ALL));
+            selftest();
+        } catch(IOException ioe) {
+            throw new IllegalArgumentException("Error cloning key",ioe);
+        }
+    }
+
     private AsymmetricKey(ASN1Encodable to) throws IOException  {
         parse(to);
         selftest();
@@ -644,14 +653,6 @@ public class AsymmetricKey extends Key  implements Serializable {
         AsymmetricKey o=(AsymmetricKey)key;
         return dumpValueNotation("",DumpType.ALL_UNENCRYPTED).equals(o.dumpValueNotation("",DumpType.ALL_UNENCRYPTED));
 
-    }
-
-    public AsymmetricKey clone() {
-        try {
-            return new AsymmetricKey(this.toASN1Object(DumpType.ALL));
-        } catch( IOException ioe) {
-            return null;
-        }
     }
 
     /***

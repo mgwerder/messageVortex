@@ -95,9 +95,6 @@ public abstract class AbstractBlock implements Block {
 
     protected abstract void parse(ASN1Encodable to) throws IOException;
 
-    // public abstract String dumpValueNotation(String prefix,DumpType dumptype) throws IOException;
-    // public abstract ASN1Object toASN1Object(DumpType dumpType) throws IOException;
-
     protected static byte[] toDER(ASN1Object a) {
         if(a==null) {
             throw new NullPointerException( "null object may not be encoded in DER" );

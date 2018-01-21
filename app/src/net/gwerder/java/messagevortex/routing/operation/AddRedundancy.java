@@ -79,7 +79,7 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
         if(!canRun()) {
             return new int[0];
         }
-        LOGGER.log(Level.INFO, "executing add redundancy operation ("+this.toString()+")");
+        LOGGER.log(Level.INFO, "executing add redundancy operation ("+toString()+")");
         byte[] in=payload.getPayload(operation.getInputId()).getPayload();
 
         // do the padding

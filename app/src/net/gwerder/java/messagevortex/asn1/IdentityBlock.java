@@ -230,7 +230,7 @@ public class IdentityBlock extends AbstractBlock  implements Serializable {
         if(identityKey==null) {
             return null;
         }
-        return identityKey.clone();
+        return new AsymmetricKey(identityKey);
     }
 
     /***

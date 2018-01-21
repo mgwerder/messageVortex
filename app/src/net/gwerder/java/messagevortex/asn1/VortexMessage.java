@@ -156,7 +156,7 @@ public class VortexMessage extends AbstractBlock implements Serializable {
      */
     public AsymmetricKey setDecryptionKey(AsymmetricKey dk) throws IOException {
         AsymmetricKey old=getDecryptionKey();
-        this.decryptionKey = dk!=null?dk.clone():null;
+        this.decryptionKey = dk!=null?new AsymmetricKey(dk):null;
         if(prefix!=null) {
             prefix.setDecryptionKey(dk);
         }
