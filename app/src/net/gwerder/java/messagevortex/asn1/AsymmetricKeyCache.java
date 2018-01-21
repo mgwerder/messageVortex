@@ -290,7 +290,7 @@ public class AsymmetricKeyCache implements Serializable {
         double lowest=0;
         for (Map.Entry<AlgorithmParameter, CacheElement> e : cache.entrySet()) {
             lowest=Math.min(lowest,(double)(e.getValue().size())/e.getValue().getMaxSize());
-        }
+        };
         return lowest;
     }
 
@@ -299,7 +299,7 @@ public class AsymmetricKeyCache implements Serializable {
         int currSize=0;
         for (Map.Entry<AlgorithmParameter, CacheElement> e : cache.entrySet()) {
             maxSize+=e.getValue().getMaxSize();
-            currSize+=e.getValue().size();
+            currSize+=Math.min(e.getValue().size(),e.getValue().getMaxSize());
         }
         if(maxSize==0) return 1;
         return (0.0+currSize)/maxSize;
