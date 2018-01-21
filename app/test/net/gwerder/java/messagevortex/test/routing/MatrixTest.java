@@ -123,7 +123,7 @@ public class MatrixTest {
                 Matrix red = m1.mul(data);
                 LOGGER.log(Level.INFO, "  Got data with redundancy vector\r\n" + red.toString());
 
-                Matrix damaged=red.clone();
+                Matrix damaged=new Matrix(red);
                 for (int i = missing.length - 1; i >= 0; i--) {
                     red.removeRow(missing[i]);
                     damaged.removeRow(missing[i]);
