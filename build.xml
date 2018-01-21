@@ -158,7 +158,7 @@
                 <formatter type="plain" usefile="false"/>
             </junit>
       </jacoco:coverage>
-      <mkdir dir="${build.home}/jacoco"/>
+      <mkdir dir="${build.home}/jacoco/"/>
       <jacoco:report>
           <executiondata>
               <file file="${build.home}/jacoco.exec"/>
@@ -172,9 +172,9 @@
                   <fileset dir="${build.home}/testsrc"/>
               </sourcefiles>
           </structure>
-          <html destdir="${build.home}/jacoco"/>
-          <csv destfile="${build.home}/jacoco/report.csv"/>
-          <xml destfile="${build.home}/jacoco/report.xml"/>
+          <html destdir="${build.home}/jacoco/"/>
+          <csv destfile="${build.home}/jacoco_report.csv"/>
+          <xml destfile="${build.home}/jacoco_report.xml"/>
       </jacoco:report>
 
       <!--<mkdir dir='${doc.home}/cobertura'/>

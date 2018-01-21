@@ -104,7 +104,7 @@ public class ImapClient implements Runnable {
         trustContext.init(null, trustManagers, null);
         SSLContext.setDefault(trustContext);
         LOGGER.log(Level.INFO,"Getting socket");
-        SSLSocket sslSocket = (SSLSocket)(((SSLSocketFactory)(SSLSocketFactory.getDefault())).createSocket(sock,sock.getInetAddress().getHostAddress(),sock.getPort(), false));
+        SSLSocket sslSocket = (SSLSocket)((SSLSocketFactory)(SSLSocketFactory.getDefault())).createSocket(sock,sock.getInetAddress().getHostAddress(),sock.getPort(), false);
         sslSocket.setUseClientMode(true);
         LOGGER.log(Level.INFO,"Starting client side SSL");
         sslSocket.setSoTimeout(sock.getSoTimeout());
@@ -115,8 +115,8 @@ public class ImapClient implements Runnable {
         return sslSocket;
     }
 
-    private void interruptedCatcher() {
-        assert false:"This Point should never be reached";
+    private void interruptedCatcher(InterruptedException ie) {
+        assert false:"This Point should never be reached ("+ie.toString()+")";
         Thread.currentThread().interrupt();
     }
 
@@ -201,7 +201,7 @@ public class ImapClient implements Runnable {
                 runner.join();
                 success = true;
             } catch (InterruptedException ie) {
-                interruptedCatcher();
+                interruptedCatcher(ie);
             }
         }
     }
@@ -215,7 +215,7 @@ public class ImapClient implements Runnable {
             try{
                 notifyThread.wait(100);
             } catch(InterruptedException e) {
-                interruptedCatcher();
+                interruptedCatcher(e);
             }
         }
     }
@@ -257,9 +257,8 @@ public class ImapClient implements Runnable {
             // Terminate connection on successful logout
             shutdown=true;
         }
-        lastReply="";
         synchronized(sync) {
-            sync.notify();
+            sync.notifyAll();
         }
 
         LOGGER.log(Level.FINEST,"command has been completely processed");
