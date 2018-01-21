@@ -69,7 +69,6 @@ public enum Algorithm implements Serializable {
 
     public static final long serialVersionUID = 100000000039L;
 
-    private static final java.util.logging.Logger LOGGER;
     private static Map<AlgorithmType, Algorithm> def = new ConcurrentHashMap<AlgorithmType, Algorithm>() {
         {
             put(AlgorithmType.ASYMMETRIC, RSA);
@@ -78,10 +77,7 @@ public enum Algorithm implements Serializable {
         }
     };
 
-    static {
-        LOGGER = MessageVortexLogger.getLogger( (new Throwable()).getStackTrace()[0].getClassName() );
-        MessageVortexLogger.setGlobalLogLevel( Level.ALL );
-    }
+    private static java.util.logging.Logger LOGGER=MessageVortexLogger.getLogger( (new Throwable()).getStackTrace()[0].getClassName() );
 
     private final int id;
     private final AlgorithmType t;

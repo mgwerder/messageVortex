@@ -23,6 +23,7 @@ package net.gwerder.java.messagevortex.asn1;
 
 import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.*;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -223,8 +224,7 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
     }
 
     public boolean isInUsagePeriod(Date reference) {
-        // FIXME not yet implemented
-        return true;
+        throw new NotImplementedException(); // FIXME implementation missing
     }
 
     @Override

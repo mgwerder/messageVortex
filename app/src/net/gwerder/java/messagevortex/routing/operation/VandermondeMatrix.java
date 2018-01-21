@@ -28,6 +28,10 @@ package net.gwerder.java.messagevortex.routing.operation;
  */
 public class VandermondeMatrix extends Matrix {
 
+    public VandermondeMatrix(VandermondeMatrix m) {
+        super(m);
+    }
+
     public VandermondeMatrix(int x, int y,MathMode mode) {
         super(x,y,mode);
         // init matrix with given math mode

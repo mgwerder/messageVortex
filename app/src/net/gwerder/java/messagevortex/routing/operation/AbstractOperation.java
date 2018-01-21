@@ -22,6 +22,7 @@ package net.gwerder.java.messagevortex.routing.operation;
 // ************************************************************************************
 
 import net.gwerder.java.messagevortex.asn1.IdentityBlock;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public abstract class AbstractOperation implements Operation {
 
@@ -46,8 +47,7 @@ public abstract class AbstractOperation implements Operation {
     }
 
     public boolean isInUsagePeriod() {
-        // TODO do something sensible here
-        return true;
+        throw new NotImplementedException(); // FIXME implementation missing
     }
 
     public abstract int[] execute(int[] id);

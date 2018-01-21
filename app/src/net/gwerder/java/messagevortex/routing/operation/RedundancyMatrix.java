@@ -38,6 +38,10 @@ public class RedundancyMatrix extends VandermondeMatrix {
         MessageVortexLogger.setGlobalLogLevel( Level.ALL);
     }
 
+    public RedundancyMatrix(RedundancyMatrix m) {
+        super(m);
+    }
+
     /***
      * Creates a redundancy matrix based on vnadermonde matrices.
      *
@@ -64,7 +68,7 @@ public class RedundancyMatrix extends VandermondeMatrix {
         if(!matrixCacheDisabled) {
             Matrix m = matrixCache.get("rm" + dataRows + "/" + total + "/" + mode.toString());
             if (!noCache && m != null) {
-                m = m.clone();
+                m = new Matrix(m);
                 this.matrix = m.matrix;
                 return;
             }
@@ -89,7 +93,7 @@ public class RedundancyMatrix extends VandermondeMatrix {
                 }
 
             }
-            matrixCache.put("rm" + dataRows + "/" + total + "/" + mode.toString(), clone());
+            matrixCache.put("rm" + dataRows + "/" + total + "/" + mode.toString(), new Matrix(this));
        }
     }
 
@@ -101,7 +105,7 @@ public class RedundancyMatrix extends VandermondeMatrix {
      * @return a square matrix rebuilding the data vector
      */
     public Matrix getRecoveryMatrix(int[] missingRowIndex) {
-        RedundancyMatrix red=clone();
+        RedundancyMatrix red=new RedundancyMatrix(this);
         Arrays.sort(missingRowIndex);
         for(int i=missingRowIndex.length-1;i>=0;i--) {
             red.removeRow(missingRowIndex[i]);

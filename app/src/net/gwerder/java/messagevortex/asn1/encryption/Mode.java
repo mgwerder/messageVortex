@@ -29,8 +29,6 @@ import java.util.Map;
 
 /**
  * Enumeration to list available encryption modes.
- *
- * @FIXME no modes for ECIES so far
  */
 public enum Mode {
     ECB       (10000,"ECB" ,false,new String[] { "ECIES","RSA","CAMELLIA128","CAMELLIA192","CAMELLIA256", "Twofish128", "Twofish192","Twofish256" }, new Padding[] { Padding.PKCS7 }),

@@ -24,6 +24,7 @@ package net.gwerder.java.messagevortex.asn1;
 import net.gwerder.java.messagevortex.asn1.encryption.CipherUsage;
 import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.*;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -83,13 +84,11 @@ public class CipherSpec extends AbstractBlock implements Serializable {
 
     @Override
     public String dumpValueNotation(String prefix, DumpType dumpType) throws IOException {
-        // FIXME implementation missing
-        return null;
+        throw new NotImplementedException(); // FIXME implementation missing
     }
 
     @Override
     public ASN1Object toASN1Object(DumpType dumpType) throws IOException {
-        // FIXME impementation missing
-        return null;
+        throw new NotImplementedException(); // FIXME implementation missing
     }
 }

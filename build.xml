@@ -129,16 +129,6 @@
 
   <target name="test" depends="compile"  description="test application">
       <taskdef classpathref="test.classpath" resource="tasks.properties" />
-      <!--<delete file="${build.home}/cobertura.ser" />
-      <cobertura-instrument todir="${build.home}/cobertura" datafile="${build.home}/cobertura.ser">
-      <includeclasses regex="net\.gwerder\.java.*" />
-      <excludeclasses regex="net\.gwerder\.java.*\.test\..*" />
-      <excludeclasses regex=".*Test.*" />
-      <instrumentationClasspath>
-        <pathelement location="${build.home}/classes" />
-      </instrumentationClasspath>
-      </cobertura-instrument>-->
-
       <taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
           <classpath path="${basedir}/lib/jacoco/lib/jacocoant.jar"/>
       </taskdef>
@@ -176,18 +166,6 @@
           <csv destfile="${build.home}/jacoco_report.csv"/>
           <xml destfile="${build.home}/jacoco_report.xml"/>
       </jacoco:report>
-
-      <!--<mkdir dir='${doc.home}/cobertura'/>
-      <cobertura-report format="xml" destdir="${build.home}/testsrc"  datafile="${build.home}/cobertura.ser">
-      <fileset dir="${build.home}/src">
-        <include name="**/*.java" />
-      </fileset>
-      </cobertura-report>
-      <cobertura-report format="html" destdir="${doc.home}/cobertura"  datafile="${build.home}/cobertura.ser">
-      <fileset dir="${build.home}/src">
-        <include name="**/*.java" />
-        </fileset>
-      </cobertura-report>-->
       <taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask">
           <classpath>
               <fileset dir="${basedir}/lib/pmd-bin-5.3.7/lib" includes="*.jar"/>

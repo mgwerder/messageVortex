@@ -300,8 +300,7 @@ public class VortexMessage extends AbstractBlock implements Serializable {
      * @return the binary representation of the vortexMessage
      */
     public byte[] toBinary(DumpType dt) {
-        //FIXME
-        throw new NotImplementedException();
+        throw new NotImplementedException(); // FIXME implementation missing
     }
 
     /***

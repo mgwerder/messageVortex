@@ -151,7 +151,7 @@ public class ImapClient implements Runnable {
             long start = System.currentTimeMillis();
             currentCommandCompleted=false;
             synchronized(notifyThread) {
-                notifyThread.notify();
+                notifyThread.notifyAll();
             }
             while(!currentCommandCompleted && System.currentTimeMillis()<start+millisTimeout) {
                 try{
@@ -182,7 +182,7 @@ public class ImapClient implements Runnable {
     private void terminateSocket() {
         try{
             synchronized(notifyThread) {
-                notifyThread.notify();
+                notifyThread.notifyAll();
                 if(socket!=null) {
                     socket.close();
                 }

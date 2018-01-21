@@ -51,6 +51,10 @@ public class Matrix {
     int modulo=Integer.MAX_VALUE;
     MathMode mode;
 
+    public Matrix(Matrix m) {
+        this(m.getX(),m.getY(),m.mode,m.matrix);
+    }
+
     /***
      * creates a matrix (x,y) with the specified MathMode.
      *
@@ -121,7 +125,7 @@ public class Matrix {
         if(!matrixCacheDisabled) {
             Matrix m = matrixCache.get("um" + size + "/" + mode);
             if (m != null) {
-                return m.clone();
+                return new Matrix(m);
             }
         }
         Matrix ret=new Matrix(size,size,mode);
@@ -134,7 +138,7 @@ public class Matrix {
                 }
             }
         }
-        matrixCache.put("um"+size+"/"+mode,ret.clone());
+        matrixCache.put("um"+size+"/"+mode,new Matrix(ret));
         return ret;
     }
 
@@ -341,7 +345,7 @@ public class Matrix {
         if(dimension[0]!=dimension[1]) {
             throw new ArithmeticException("matrix to inverse must have square dimensions (dimension is "+getX()+"/"+getY()+")");
         }
-        Matrix red=clone();
+        Matrix red=new Matrix(this);
         Matrix ret = Matrix.unitMatrix(dimension[0], mode);
         for (int row = 0; row < getY(); row++) {
             // flip rows if required
@@ -422,11 +426,6 @@ public class Matrix {
             }
         }
         return ret;
-    }
-
-    @Override
-    public Matrix clone() {
-        return new Matrix(getX(),getY(),mode,matrix);
     }
 
     /***
@@ -524,7 +523,7 @@ public class Matrix {
      */
     public static boolean enableMatrixCache(boolean enable) {
         boolean old=!matrixCacheDisabled;
-        matrixCacheDisabled =!enable;
+        matrixCacheDisabled = (!enable);
         return old;
     }
 

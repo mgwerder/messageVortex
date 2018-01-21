@@ -25,6 +25,7 @@ import net.gwerder.java.messagevortex.MessageVortexLogger;
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1Object;
 import org.bouncycastle.asn1.ASN1TaggedObject;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -71,7 +72,7 @@ public abstract class HeaderRequest extends AbstractBlock implements Serializabl
     }
 
     public ASN1Object toASN1Object() throws IOException {
-        throw new IOException( "not implemented" ); //FIXME
+        throw new NotImplementedException(); // FIXME implementation missing
     }
 
     public String dumpValueNotation(String prefix) {
