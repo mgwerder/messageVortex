@@ -124,7 +124,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
                     }
                 } else {
                     try {
-                        LOGGER.log(Level.INFO, "cache is idle ("+String.format("%d2.3",cache.getCacheFillGrade())+") ... sleeping for a short while and waiting for requests");
+                        LOGGER.log(Level.INFO, "cache is idle ("+String.format("%f2.3",cache.getCacheFillGrade())+"%) ... sleeping for a short while and waiting for requests");
                         Thread.sleep(10000);
                     } catch (InterruptedException ie) {
                         Thread.currentThread().interrupt();

@@ -301,7 +301,7 @@ public class AsymmetricKeyCache implements Serializable {
             maxSize+=e.getValue().getMaxSize();
             currSize+=Math.min(e.getValue().size(),e.getValue().getMaxSize());
         }
-        if(maxSize==0) return 1;
+        if(maxSize==0) return 1.0;
         return (0.0+currSize)/maxSize;
     }
 

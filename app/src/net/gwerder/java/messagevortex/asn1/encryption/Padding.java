@@ -33,7 +33,7 @@ public enum Padding implements Serializable {
 
     NONE            ( 1000, "NoPadding", new AlgorithmType[]{AlgorithmType.ASYMMETRIC}, new SizeCalc() {
         public int maxSize(int s) {
-            return s / 8;
+            return s / 8 - 1;
         }
     } ),
     PKCS1           ( 1001, "PKCS1Padding", new AlgorithmType[]{AlgorithmType.ASYMMETRIC}, new SizeCalc() {

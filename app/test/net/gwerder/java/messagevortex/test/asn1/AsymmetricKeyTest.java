@@ -232,8 +232,13 @@ public class AsymmetricKeyTest {
                             byte[] b = new byte[maximumPayload];
                             LOGGER.log( Level.INFO, "    Algorithm " + ak.getAlgorithm() +"[keySize="+ak.getKeySize()+"]/" + ak.getMode() + "/"+ak.toString().toString()+"/maxPayload="+maximumPayload  );
                             sr.nextBytes( b );
-                            byte[] b2 = ak.decrypt( ak.encrypt( b ) );
-                            assertTrue( "byte arrays mus be equal after redecryption", Arrays.equals( b, b2 ) );
+                            try {
+                                byte[] b2 = ak.decrypt(ak.encrypt(b));
+                                assertTrue("byte arrays mus be equal after redecryption", Arrays.equals(b, b2));
+                            } catch(Exception e) {
+                                e.printStackTrace();
+                                fail("Exception while using "+b.length+" bytes on "+ak.toString());
+                            }
                         }
                     }
                     LOGGER.log( Level.INFO, "  done " + a + "/" + p + " with level "+sl );
