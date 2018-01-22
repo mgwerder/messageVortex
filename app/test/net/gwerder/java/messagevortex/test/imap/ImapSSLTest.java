@@ -193,6 +193,7 @@ public class ImapSSLTest {
             LOGGER.log(Level.INFO,"closing client");
             ic.shutdown();
             LOGGER.log(Level.INFO,"done");
+            Thread.sleep(100);
             assertTrue("error searching for hangig threads",verifyHangingThreads(threadSet).size()==0);
         } catch(Exception ioe) {
             LOGGER.log(Level.WARNING,"Unexpected Exception",ioe);

@@ -31,6 +31,7 @@ import java.util.*;
  */
 public enum Padding implements Serializable {
 
+    // Commented out as without padding the reencryption test falis naturally ... chould be eventually deleted
     NONE            ( 1000, "NoPadding", new AlgorithmType[]{AlgorithmType.ASYMMETRIC}, new SizeCalc() {
         public int maxSize(int s) {
             return s / 8 - 1;
