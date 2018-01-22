@@ -77,7 +77,7 @@ public enum Algorithm implements Serializable {
         }
     };
 
-    private static java.util.logging.Logger LOGGER=MessageVortexLogger.getLogger( (new Throwable()).getStackTrace()[0].getClassName() );
+    private java.util.logging.Logger LOGGER;
 
     private final int id;
     private final AlgorithmType t;
@@ -86,6 +86,7 @@ public enum Algorithm implements Serializable {
     private final Map<SecurityLevel,AlgorithmParameter> secLevel;
 
     Algorithm(int id, AlgorithmType t, String txt, String provider, SecurityLevel level) {
+        LOGGER=MessageVortexLogger.getLogger( (new Throwable()).getStackTrace()[0].getClassName() );
         this.secLevel = new ConcurrentHashMap<>();
         synchronized(secLevel) {
             this.id = id;
@@ -101,6 +102,7 @@ public enum Algorithm implements Serializable {
     }
 
     Algorithm(int id, AlgorithmType t, String txt, String provider, Map<SecurityLevel, AlgorithmParameter> parameters) {
+        LOGGER=MessageVortexLogger.getLogger( (new Throwable()).getStackTrace()[0].getClassName() );
         this.id = id;
         this.t = t;
         this.txt = txt;
@@ -115,7 +117,7 @@ public enum Algorithm implements Serializable {
             if(kv.length==2) {
                 ret.put(kv[0], kv[1]);
             } else {
-                LOGGER.log(Level.WARNING, "split of \""+s+"\" failed");
+                MessageVortexLogger.getLogger( (new Throwable()).getStackTrace()[0].getClassName() ).log(Level.WARNING, "split of \""+s+"\" failed");
             }
         }
         return ret;

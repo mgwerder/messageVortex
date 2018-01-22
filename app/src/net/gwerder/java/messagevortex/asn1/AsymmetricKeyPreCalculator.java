@@ -155,8 +155,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
                     double lowest=cache.getLowestCacheSize();
                     if(lowest<0.4) {
                         load(f.getAbsolutePath(), true);
-                        f.delete();
-                        ret=true;
+                        ret=f.delete();
                     } else {
                         // abort as soon as lowest cache element is above 40%
                         return ret;
@@ -164,7 +163,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
                 }catch(IOException|ClassNotFoundException e) {
                     LOGGER.log(Level.WARNING,"Error merging file "+f.getAbsolutePath(),e);
                 }
-                f.delete();
+                ret&=f.delete();
             }
             return ret;
         }

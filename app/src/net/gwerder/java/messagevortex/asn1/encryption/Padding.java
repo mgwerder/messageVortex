@@ -31,11 +31,11 @@ import java.util.*;
  */
 public enum Padding implements Serializable {
 
-    /*NONE            ( 1000, "NoPadding", new AlgorithmType[]{AlgorithmType.ASYMMETRIC}, new SizeCalc() {
+    NONE            ( 1000, "NoPadding", new AlgorithmType[]{AlgorithmType.ASYMMETRIC}, new SizeCalc() {
         public int maxSize(int s) {
             return s / 8;
         }
-    } ),*/
+    } ),
     PKCS1           ( 1001, "PKCS1Padding", new AlgorithmType[]{AlgorithmType.ASYMMETRIC}, new SizeCalc() {
         public int maxSize(int s) {
             return (s / 8) - 11;
@@ -64,12 +64,7 @@ public enum Padding implements Serializable {
 
     public static final long serialVersionUID = 100000000038L;
 
-    private static final Map<AlgorithmType,Padding> DEFAULT_PADDING =new HashMap<AlgorithmType,Padding>(  ) {
-        {
-            put( AlgorithmType.ASYMMETRIC, Padding.PKCS1 );
-            put( AlgorithmType.SYMMETRIC,  Padding.PKCS7 );
-        }
-    };
+    private static final Map<AlgorithmType,Padding> DEFAULT_PADDING =new HashMap<AlgorithmType,Padding>( );
 
     private int id;
     private String txt;
@@ -115,6 +110,15 @@ public enum Padding implements Serializable {
     }
 
     public static Padding getDefault(AlgorithmType at) {
+        // init hashmap if necesary
+        synchronized(DEFAULT_PADDING) {
+            if (DEFAULT_PADDING.isEmpty()) {
+                DEFAULT_PADDING.put(AlgorithmType.ASYMMETRIC, Padding.PKCS1);
+                DEFAULT_PADDING.put(AlgorithmType.SYMMETRIC, Padding.PKCS7);
+            }
+        }
+
+        // return padding
         Padding p=DEFAULT_PADDING.get(at);
         if(p==null) {
             throw new NullPointerException("no default padding for "+at);

@@ -198,16 +198,25 @@ public class InternalPayload {
 
     private boolean isCircularDependent(Operation op,int id) {
         Operation top=internalOperationOutput.get(id);
-        if (top != null) {
-            for (int tid : top.getInputID()) {
-                // this operation generates that id
-                if (Arrays.binarySearch(op.getOutputID(), tid) >= 0) {
-                    return true;
-                } else if (isCircularDependent(op, tid)) {
-                    return true;
-                }
-            }
+
+        if (top == null) {
+            return false;
         }
+
+        for (int tid : top.getInputID()) {
+
+            // this operation generates that id
+            if (Arrays.binarySearch(op.getOutputID(), tid) >= 0) {
+                return true;
+            }
+
+            // recurse to determine
+            if( isCircularDependent( op, tid ) ) {
+                return true;
+            }
+
+        }
+
         return false;
     }
 
