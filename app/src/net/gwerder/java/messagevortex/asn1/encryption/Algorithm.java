@@ -32,6 +32,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
+import static javax.swing.UIManager.put;
+
 /**
  * Represents all supported crypto algorithms.
  *
@@ -69,14 +71,7 @@ public enum Algorithm implements Serializable {
 
     public static final long serialVersionUID = 100000000039L;
 
-    private static Map<AlgorithmType, Algorithm> def = new ConcurrentHashMap<AlgorithmType, Algorithm>() {
-        {
-            put(AlgorithmType.ASYMMETRIC, RSA);
-            put(AlgorithmType.SYMMETRIC,  AES256);
-            put(AlgorithmType.HASHING,    SHA384);
-        }
-    };
-
+    private static Map<AlgorithmType, Algorithm> def = new ConcurrentHashMap<AlgorithmType, Algorithm>();
     private java.util.logging.Logger LOGGER;
 
     private final int id;
@@ -188,6 +183,13 @@ public enum Algorithm implements Serializable {
      * @return     the default type
      */
     public static Algorithm getDefault(AlgorithmType at) {
+        // init map if not yet done
+        if( def.isEmpty() ) {
+            put(AlgorithmType.ASYMMETRIC, RSA);
+            put(AlgorithmType.SYMMETRIC,  AES256);
+            put(AlgorithmType.HASHING,    SHA384);
+        };
+
         return def.get( at );
     }
 
