@@ -1,0 +1,14 @@
+
+Isquid:EmptyStatementUsageCheck"Remove this empty statement.(ôŸŽìúÿÿÿÿ
+Hsquid:S2864"4Iterate over the "entrySet" instead of the "keySet".(¬ù§K
+Qsquid:S2629"7Use the built-in formatting to construct this argument.(»¦Õõÿÿÿÿÿ
+Lsquid:S2629"7Use the built-in formatting to construct this argument.(ý‡±Ö
+qsquid:S2629"\Invoke method(s) only conditionally. Use the built-in formatting to construct this argument.(ý±ÐÛ
+Lsquid:S2629"7Use the built-in formatting to construct this argument.(¨¸ÛÀ
+nsquid:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(£Êèˆ
+ssquid:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(ÅüØÃúÿÿÿÿ
+Wsquid:S3518"=Make sure "maxSize" can't be zero before doing this division.(”œ©…ûÿÿÿÿ
+psquid:S1488"[Immediately return this expression instead of assigning it to the temporary variable "ret".(¦•“¢
+psquid:S1488"[Immediately return this expression instead of assigning it to the temporary variable "ret".(µœžš
+Ssquid:S1155">Use isEmpty() to check whether the collection is empty or not.(×îŽØ
+Ssquid:S1155">Use isEmpty() to check whether the collection is empty or not.(×îŽØ

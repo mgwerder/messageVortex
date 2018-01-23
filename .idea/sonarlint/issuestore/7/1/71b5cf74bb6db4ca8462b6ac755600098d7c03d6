@@ -1,0 +1,16 @@
+
+nsquid:S3008"TRename this field "SYMMETRIC" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ñ—‘‡ùÿÿÿÿ
+osquid:S3008"URename this field "ASYMMETRIC" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¼Ìø‰úÿÿÿÿ
+bsquid:S3008"NRename this field "MAC" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¬¦
+jsquid:S3008"PRename this field "USAGE" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(çÆ¿¹üÿÿÿÿ
+Lsquid:S1068"2Remove this unused "asymmetricSpec" private field.(¡Ÿ¾úÿÿÿÿ
+Ksquid:S1068"1Remove this unused "symmetricSpec" private field.(•¥ääşÿÿÿÿ
+Esquid:S1068"+Remove this unused "macSpec" private field.(ØÑ¢üÿÿÿÿÿ
+Csquid:S1068")Remove this unused "usage" private field.(˜„ÜÇúÿÿÿÿ
+wsquid:S1450"]Remove the "asymmetricSpec" field and declare it as a local variable in the relevant methods.(¡Ÿ¾úÿÿÿÿ
+vsquid:S1450"\Remove the "symmetricSpec" field and declare it as a local variable in the relevant methods.(•¥ääşÿÿÿÿ
+psquid:S1450"VRemove the "macSpec" field and declare it as a local variable in the relevant methods.(ØÑ¢üÿÿÿÿÿ
+Ysquid:S1134"DTake the required action to fix the issue indicated by this comment.(÷èÍ×
+^squid:S1134"DTake the required action to fix the issue indicated by this comment.(¬öÜÿÿÿÿÿ
+{squid:S1845"aRename field "usage" to prevent any misunderstanding/clash with field "USAGE" defined on line 42.(˜„ÜÇúÿÿÿÿ
+Osquid:S1854"5Remove this useless assignment to local variable "i".(îŞºÿÿÿÿÿ
