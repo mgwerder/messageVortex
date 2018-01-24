@@ -55,5 +55,4 @@ public abstract class AbstractOperation implements Operation {
     public abstract int[] execute(int[] id);
 
     public abstract String toString();
-
 }

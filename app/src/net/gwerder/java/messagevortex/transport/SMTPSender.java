@@ -1,7 +1,5 @@
 package net.gwerder.java.messagevortex.transport;
 
-import com.sun.deploy.util.StringUtils;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -52,7 +50,7 @@ public class SMTPSender extends LineSender implements TransportSender {
         write( "EHLO " + InetAddress.getLocalHost().getHostName() + CRLF );
         String[] ehloReply=getReply();
         if( ! ehloReply[ ehloReply.length - 1 ].startsWith( "250 " ) ) {
-            throw new IOException( "Invalid EHLO reply  (Reply was '" + StringUtils.join(Arrays.asList(ehloReply),"\n") +"' )");
+            throw new IOException( "Invalid EHLO reply  (Reply was '" + Arrays.toString(ehloReply).replaceAll(",","\n") +"' )");
         }
 
         // start tls (if required)
@@ -66,7 +64,7 @@ public class SMTPSender extends LineSender implements TransportSender {
             write( "EHLO " + InetAddress.getLocalHost().getHostName() + CRLF );
             ehloReply=getReply();
             if( ! ehloReply[ ehloReply.length - 1 ].startsWith( "250 " ) ) {
-                throw new IOException( "Invalid EHLO reply  (Reply was '" + StringUtils.join(Arrays.asList(ehloReply),"\n") +"' )");
+                throw new IOException( "Invalid EHLO reply  (Reply was '" + Arrays.toString(ehloReply).replaceAll(",","\n") +"' )");
             }
         }
 
