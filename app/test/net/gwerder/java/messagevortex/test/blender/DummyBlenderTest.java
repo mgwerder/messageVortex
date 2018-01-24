@@ -6,8 +6,8 @@ import net.gwerder.java.messagevortex.asn1.encryption.Algorithm;
 import net.gwerder.java.messagevortex.asn1.encryption.SecurityLevel;
 import net.gwerder.java.messagevortex.blending.BlenderListener;
 import net.gwerder.java.messagevortex.blending.DummyBlender;
-import net.gwerder.java.messagevortex.transport.DummyTransport;
-import net.gwerder.java.messagevortex.transport.TransportListener;
+import net.gwerder.java.messagevortex.transport.DummyTransportSender;
+import net.gwerder.java.messagevortex.transport.TransportReceiver;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -24,7 +24,7 @@ import static org.junit.Assert.*;
  * Created by martin.gwerder on 19.04.2017.
  */
 @RunWith(JUnit4.class)
-public class DummyBlenderTest implements BlenderListener,TransportListener {
+public class DummyBlenderTest implements BlenderListener,TransportReceiver {
 
     private static final java.util.logging.Logger LOGGER;
 
@@ -56,8 +56,8 @@ public class DummyBlenderTest implements BlenderListener,TransportListener {
             // this is expected behaviour
         }
         try {
-            new DummyTransport("martin@example.com0",this);
-            fail("duplicate addition of ID to DummyTransport unexpectedly succeeded");
+            new DummyTransportSender("martin@example.com0",this);
+            fail("duplicate addition of ID to DummyTransportSender unexpectedly succeeded");
         } catch(IOException ioe) {
             // this is expected behaviour
         }

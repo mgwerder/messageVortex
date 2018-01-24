@@ -234,7 +234,7 @@ public class AsymmetricKeyTest {
                             sr.nextBytes( b );
                             try {
                                 byte[] b2 = ak.decrypt(ak.encrypt(b));
-                                assertTrue("byte arrays mus be equal after redecryption", Arrays.equals(b, b2));
+                                assertTrue("byte arrays must be equal after re-decryption ("+b.length+"!="+b2.length+";padding:"+ak.getPadding()+";max_payload:"+ak.getPadding().getMaxSize(ak.getKeySize())+")", Arrays.equals(b, b2));
                             } catch(Exception e) {
                                 e.printStackTrace();
                                 fail("Exception while using "+b.length+" bytes on "+ak.toString());

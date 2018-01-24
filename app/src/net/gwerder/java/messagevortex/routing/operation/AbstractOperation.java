@@ -22,12 +22,14 @@ package net.gwerder.java.messagevortex.routing.operation;
 // ************************************************************************************
 
 import net.gwerder.java.messagevortex.asn1.IdentityBlock;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
+import java.util.Date;
 
 public abstract class AbstractOperation implements Operation {
 
     IdentityBlock identity;
     InternalPayload payload;
+    Date submissionTime=new Date();
 
 
     public void setInternalPayload(InternalPayload payload) {
@@ -47,7 +49,7 @@ public abstract class AbstractOperation implements Operation {
     }
 
     public boolean isInUsagePeriod() {
-        throw new NotImplementedException(); // FIXME implementation missing
+        return identity.getUsagePeriod().inUsagePeriod();
     }
 
     public abstract int[] execute(int[] id);

@@ -25,15 +25,15 @@ import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.asn1.BlendingSpec;
 import net.gwerder.java.messagevortex.asn1.VortexMessage;
 import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
-import net.gwerder.java.messagevortex.transport.DummyTransport;
-import net.gwerder.java.messagevortex.transport.TransportListener;
+import net.gwerder.java.messagevortex.transport.DummyTransportSender;
+import net.gwerder.java.messagevortex.transport.TransportReceiver;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
 
-public class DummyBlender extends AbstractBlender implements TransportListener {
+public class DummyBlender extends AbstractBlender implements TransportReceiver {
 
     private static final java.util.logging.Logger LOGGER;
     static {
@@ -42,12 +42,12 @@ public class DummyBlender extends AbstractBlender implements TransportListener {
     }
 
     String identity;
-    DummyTransport transport;
+    DummyTransportSender transport;
     BlenderListener router;
 
     public DummyBlender(String identity, BlenderListener router) throws IOException {
         this.identity=identity;
-        this.transport=new DummyTransport(identity,this);
+        this.transport=new DummyTransportSender(identity,this);
         this.router=router;
     }
 
@@ -59,7 +59,8 @@ public class DummyBlender extends AbstractBlender implements TransportListener {
     public boolean blendMessage(BlendingSpec target, VortexMessage msg) {
         // FIXME encode message in clear readable and send it
         try {
-            return transport.sendMessage(target.getRecipientAddress(), new ByteArrayInputStream(msg.toBytes(DumpType.PUBLIC_ONLY)));
+            transport.sendMessage(target.getRecipientAddress(), new ByteArrayInputStream(msg.toBytes(DumpType.PUBLIC_ONLY)));
+            return true;
         } catch(IOException ioe) {
             LOGGER.log(Level.SEVERE,"Unable to send to transport endpoint "+target.toString(),ioe);
             return false;

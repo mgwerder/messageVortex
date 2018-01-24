@@ -53,6 +53,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
                     // force saving of cache on shutdown
                     lastSaved=-1;
                     save();
+                    runner.shutdown();
                 } catch(IOException |RuntimeException|ClassNotFoundException ioe) {
                     LOGGER.log(Level.WARNING,"Error while writing cache",ioe);
                 }

@@ -9,14 +9,14 @@ package net.gwerder.java.messagevortex.test;
 import junit.framework.JUnit4TestAdapter;
 import junit.framework.TestSuite;
 import net.gwerder.java.messagevortex.asn1.AsymmetricKey;
-import net.gwerder.java.messagevortex.test.transport.DummyTransportTest;
+import net.gwerder.java.messagevortex.test.transport.DummyTransportSenderTest;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        DummyTransportTest.class
+        DummyTransportSenderTest.class
 })
 
 public class MainTransportSuite {
@@ -28,7 +28,7 @@ public class MainTransportSuite {
 
     public static junit.framework.Test suite() {
         final TestSuite s = new TestSuite();
-        s.addTest(new JUnit4TestAdapter(DummyTransportTest.class));
+        s.addTest(new JUnit4TestAdapter(DummyTransportSenderTest.class));
         return s;
     }
 

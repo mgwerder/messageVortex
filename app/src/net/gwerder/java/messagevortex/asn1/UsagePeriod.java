@@ -31,6 +31,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
+//FIXME implement relative UsagePeriod
+
 /**
  * Represents a usage period.
  */
@@ -180,6 +182,11 @@ public class UsagePeriod extends AbstractBlock  implements Serializable {
         }
         sb.append(prefix+"}");
         return sb.toString();
+    }
+
+    public boolean inUsagePeriod() {
+        // FIXME implement relative usage periods
+        return new Date().getTime()>=notBefore.getTime() && new Date().getTime()<=notAfter.getTime();
     }
 
     @Override

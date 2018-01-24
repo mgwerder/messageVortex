@@ -23,12 +23,12 @@ package net.gwerder.java.messagevortex.blending;
 
 import net.gwerder.java.messagevortex.accounting.HeaderVerifier;
 import net.gwerder.java.messagevortex.routing.IncomingMessageRouterListener;
-import net.gwerder.java.messagevortex.transport.TransportListener;
+import net.gwerder.java.messagevortex.transport.TransportReceiver;
 
 /**
  * Abstract blender class unifying required interfaces and offers basic functionality.
  */
-public abstract class AbstractBlender implements Blender,TransportListener {
+public abstract class AbstractBlender implements Blender,TransportReceiver {
 
     IncomingMessageRouterListener listener=null;
     HeaderVerifier verifyer=null;

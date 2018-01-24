@@ -111,7 +111,7 @@ public class ImapSSLTest {
             ic.shutdown();
 
             // Selftest
-            // This selftest ought to be removed Socket s=SSLSocketFactory.getDefault().createSocket(InetAddress.getByString("localhost"),ss.getLocalPort());
+            Thread.sleep(100);
             assertTrue("error searching for hangig threads",verifyHangingThreads(threadSet).size()==0);
         } catch(Exception ioe) {
             LOGGER.log(Level.WARNING,"Unexpected Exception",ioe);
@@ -193,7 +193,7 @@ public class ImapSSLTest {
             LOGGER.log(Level.INFO,"closing client");
             ic.shutdown();
             LOGGER.log(Level.INFO,"done");
-            Thread.sleep(100);
+            Thread.sleep(300);
             assertTrue("error searching for hangig threads",verifyHangingThreads(threadSet).size()==0);
         } catch(Exception ioe) {
             LOGGER.log(Level.WARNING,"Unexpected Exception",ioe);
