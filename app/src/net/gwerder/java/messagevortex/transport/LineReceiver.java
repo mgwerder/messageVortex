@@ -14,7 +14,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.GeneralSecurityException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.Vector;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,9 +28,11 @@ public class LineReceiver implements Runnable {
 
     private static final ExtendedSecureRandom esr=new ExtendedSecureRandom();
 
+    static final String CRLF = "\r\n";
+
     private boolean shutdown=false;
 
-    private static final Logger LOGGER;
+    static final Logger LOGGER;
     static {
         LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
     }
@@ -39,18 +43,25 @@ public class LineReceiver implements Runnable {
 
     private static int id = 1;
 
-    final SSLContext context;
+    SSLContext context=null;
     int port;
     ServerSocket serverSocket=null;
-    Set<LineConnection> conn=new ConcurrentSkipListSet<>();
+    List<LineConnection> conn=new Vector<>();
     boolean encrypted=false;
     private Set<String> suppCiphers = new HashSet<>();
     private Thread runner=null;
     private ServerAuthenticator auth=null;
+    private LineConnection connectionTemplate=null;
 
-    public LineReceiver(final int port,boolean encrypted) throws IOException {
+    public LineReceiver() {
+        // Do not do anything here as this constructor is required for generator Objects
+    }
+
+
+    LineReceiver(final int port,boolean encrypted, LineConnection conn) throws IOException {
         this.port=port;
         this.encrypted=encrypted;
+        this.connectionTemplate=conn;
 
         try{
             context=SSLContext.getInstance("TLS");
@@ -177,11 +188,13 @@ public class LineReceiver implements Runnable {
             while(!shutdown) {
                 // FIXME <- Insert garbage collector here (should only run from time to time)
                 socket = serverSocket.accept();
+                LOGGER.log(Level.INFO,"Got connection from "+ socket.getInetAddress().getHostName());
                 LineConnection lc=null;
-                lc=new LineConnection(socket,context);
+                lc=connectionTemplate.createConnection(socket,context);
                 lc.setAuthenticator(auth);
                 lc.setName(runner.getName()+"-CONNECT-"+i);
                 conn.add(lc);
+                lc.start();
                 i++;
             }
             serverSocket.close();

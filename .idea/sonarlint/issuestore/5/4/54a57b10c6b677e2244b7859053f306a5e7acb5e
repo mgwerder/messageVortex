@@ -1,9 +1,0 @@
-
-hsquid:S2975"SRemove this "clone" implementation; use a copy constructor or copy factory instead.(ƒ…Øğ
-«%squid:RedundantThrowsDeclarationCheck"|Remove the declaration of thrown exception 'javax.crypto.NoSuchPaddingException', as it cannot be thrown from method's body.(ÿ¾•
-®%squid:RedundantThrowsDeclarationCheck"zRemove the declaration of thrown exception 'java.security.InvalidKeyException', as it cannot be thrown from method's body.(ºßüŸúÿÿÿÿ
-nsquid:S3008"YRename this field "PUBLIC_KEY_TAG" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ò« Ø
-tsquid:S3008"ZRename this field "PRIVATE_KEY_TAG" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(÷µÎùÿÿÿÿ
->squid:S1172")Remove this unused method parameter "dt".(÷ÌÇ
-]squid:S1182"HUse super.clone() to create and seed the cloned instance to be returned.(ƒ…Øğ
-Osquid:S1854"5Remove this useless assignment to local variable "i".(¤Çêêıÿÿÿÿ

@@ -1,30 +1,0 @@
-
-`squid:UnusedPrivateMethod"=Remove this unused private "waitForCalculationThread" method.(ÿ˜®
-¨%squid:RedundantThrowsDeclarationCheck"yRemove the declaration of thrown exception 'java.lang.ClassNotFoundException', as it cannot be thrown from method's body.(ô™
-¨%squid:RedundantThrowsDeclarationCheck"yRemove the declaration of thrown exception 'java.lang.ClassNotFoundException', as it cannot be thrown from method's body.(¸ªÇâ
-vsquid:S2629"\Invoke method(s) only conditionally. Use the built-in formatting to construct this argument.(¡ü¦úÿÿÿÿ
-vsquid:S2629"\Invoke method(s) only conditionally. Use the built-in formatting to construct this argument.(ëôôöúÿÿÿÿ
-vsquid:S2629"\Invoke method(s) only conditionally. Use the built-in formatting to construct this argument.(—ù±¥ÿÿÿÿÿ
-Lsquid:S2629"7Use the built-in formatting to construct this argument.(Ñô’
-Qsquid:S2629"7Use the built-in formatting to construct this argument.(¸êÜßúÿÿÿÿ
-qsquid:S2629"\Invoke method(s) only conditionally. Use the built-in formatting to construct this argument.(ßÏÍë
-Qsquid:S2629"7Use the built-in formatting to construct this argument.(’ ïùÿÿÿÿ
-9squid:S3010"$Remove this assignment of "tempdir".(À“Û½
-9squid:S3010"$Remove this assignment of "tempdir".(À“Û½
-isquid:S1192"UDefine a constant instead of duplicating this literal "MessageVortexPrecalc" 3 times.(Æøf
-csquid:S4042"IUse "java.nio.Files#delete" here for better messages on error conditions.(é‘‚©úÿÿÿÿ
-csquid:S4042"IUse "java.nio.Files#delete" here for better messages on error conditions.(é‘‚©úÿÿÿÿ
-csquid:S4042"IUse "java.nio.Files#delete" here for better messages on error conditions.(ĞÊ”ÿÿÿÿÿ
-Psquid:S2696"6Make the enclosing method "static" or remove this set.(¹ÿ‘£øÿÿÿÿ
-Psquid:S2696"6Make the enclosing method "static" or remove this set.(ÍÄÛæøÿÿÿÿ
-,squid:S2438""t" is a "Thread".(¿Î¾ÿÿÿÿÿ
-gsquid:S3776"RRefactor this method to reduce its Cognitive Complexity from 20 to the 15 allowed.(“–ış
-=squid:S1172"(Remove this unused method parameter "p".(ÿ˜®
-gsquid:S00117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(íêªÜ
-T
-squid:S899";Do something with the "boolean" value returned by "delete".(é‘‚©úÿÿÿÿ
-T
-squid:S899";Do something with the "boolean" value returned by "delete".(é‘‚©úÿÿÿÿ
-Osquid:S1161":Add the "@Override" annotation above this method signature(“–ış
-Osquid:S1161":Add the "@Override" annotation above this method signature(“–ış
-Osquid:S1161":Add the "@Override" annotation above this method signature(“–ış

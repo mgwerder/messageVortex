@@ -16,6 +16,8 @@ import java.util.logging.Level;
  */
 public class LineSender {
 
+    static final String CRLF ="\r\n";
+
     static final java.util.logging.Logger LOGGER;
     static {
         LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());

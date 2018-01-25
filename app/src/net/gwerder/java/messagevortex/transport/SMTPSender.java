@@ -1,5 +1,7 @@
 package net.gwerder.java.messagevortex.transport;
 
+import org.bouncycastle.util.encoders.Base64;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,7 +11,6 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Level;
-import java.util.regex.Pattern;
 
 import static net.gwerder.java.messagevortex.transport.SecurityRequirement.STARTTLS;
 
@@ -38,7 +39,7 @@ public class SMTPSender extends LineSender implements TransportSender {
     public void sendMessage(String address, InputStream is) throws IOException {
 
         // connect to server
-        connect(new InetSocketAddress(server, port), credentials.getSecurityRequirement() );
+        connect(new InetSocketAddress(server, port), credentials!=null?credentials.getSecurityRequirement():SecurityRequirement.PLAIN );
 
         // reading server greeting
         String serverGreeting = read();
@@ -54,7 +55,7 @@ public class SMTPSender extends LineSender implements TransportSender {
         }
 
         // start tls (if required)
-        if(credentials.getSecurityRequirement()== STARTTLS || credentials.getSecurityRequirement()==SecurityRequirement.UNTRUSTED_STARTTLS ) {
+        if( credentials!=null && ( credentials.getSecurityRequirement()== STARTTLS || credentials.getSecurityRequirement()==SecurityRequirement.UNTRUSTED_STARTTLS ) ) {
             write( "STARTTLS" + CRLF );
             String reply=read();
             if( ! reply.startsWith( "220 " ) ) {
@@ -69,9 +70,8 @@ public class SMTPSender extends LineSender implements TransportSender {
         }
 
         // Log into system
-        if( credentials.getUsername()!=null ) {
+        if( credentials!=null && credentials.getUsername()!=null ) {
             sendAuth();
-            //sendPlain();
         }
 
         String reply;
@@ -79,21 +79,21 @@ public class SMTPSender extends LineSender implements TransportSender {
         // send envelope from
         write( "MAIL FROM: " + senderAddress + CRLF );
         reply=read();
-        if( ! reply.startsWith( "250 " ) ) {
+        if( reply==null || ! reply.startsWith( "250 " ) ) {
             throw new IOException( "Invalid MAIL FROM reply  (Reply was '" + reply +"')" );
         }
 
         // send envelope to
         write( "RCPT TO: " + address + CRLF );
         reply=read();
-        if( ! reply.startsWith( "250 " ) ) {
+        if( reply==null || ! reply.startsWith( "250 " ) ) {
             throw new IOException( "Invalid RCPT reply  (Reply was '" + reply +"')" );
         }
 
         // send data
         write( "DATA" + CRLF );
         reply=read();
-        if( ! reply.startsWith( "354 " ) ) {
+        if( reply==null || ! reply.startsWith( "354 " ) ) {
             throw new IOException( "Invalid DATA reply  (Reply was '" + reply +"')" );
         }
         java.util.Scanner s = new Scanner( is, "UTF-8" ).useDelimiter("\\A");
@@ -102,7 +102,7 @@ public class SMTPSender extends LineSender implements TransportSender {
 
         // get delivery confirmed or denied
         reply=read();
-        if( ! reply.startsWith( "250 " ) ) {
+        if( reply==null || ! reply.startsWith( "250 " ) ) {
             throw new IOException( "Invalid EOD reply (Reply was '" + reply +"')" );
         } else {
             LOGGER.log(Level.INFO,"data sent: "+reply );
@@ -111,7 +111,7 @@ public class SMTPSender extends LineSender implements TransportSender {
         // close connection
         write( "QUIT" + CRLF );
         reply=read();
-        if( ! reply.startsWith( "221 " ) ) {
+        if( reply==null || ! reply.startsWith( "221 " ) ) {
             throw new IOException( "Invalid QUIT reply  (Reply was '" + reply +"')" );
         }
         close();
@@ -121,14 +121,14 @@ public class SMTPSender extends LineSender implements TransportSender {
         write( "AUTH login" + CRLF );
         String reply=read();
         if( ! reply.startsWith( "334 " ) ) {
-            throw new IOException( "Invalid AUTH[1] reply  (Reply was '" + reply.substring(0,4)+Base64.getDecoder().decode( reply.substring(4) ) +"')" );
+            throw new IOException( "Invalid AUTH[1] reply  (Reply was '" + reply.substring(0,4)+Base64.decode( reply.substring(4) ) +"')" );
         }
-        write(new String(Base64.getEncoder().encode(credentials.getUsername().getBytes()))+CRLF);
+        write(new String(Base64.encode(credentials.getUsername().getBytes()))+CRLF);
         reply=read();
         if( ! reply.startsWith( "334 " ) ) {
-            throw new IOException( "Invalid AUTH[2] reply  (Reply was '" + reply.substring(0,4)+Base64.getDecoder().decode( reply.substring(4) ) +"')" );
+            throw new IOException( "Invalid AUTH[2] reply  (Reply was '" + reply.substring(0,4)+Base64.decode( reply.substring(4) ) +"')" );
         }
-        write(new String(Base64.getEncoder().encode(credentials.getPassword().getBytes()))+CRLF);
+        write(new String(Base64.encode(credentials.getPassword().getBytes()))+CRLF);
         reply=read();
         if( ! reply.startsWith( "235 " ) ) {
             throw new IOException( "Invalid AUTH[3] reply  (Reply was '" + reply +"')" );
@@ -139,11 +139,11 @@ public class SMTPSender extends LineSender implements TransportSender {
 
     private void sendPlain() throws IOException {
         String txt=credentials.getUsername()+"\0"+credentials.getUsername()+"\0"+credentials.getPassword();
-        txt=new String(Base64.getEncoder().encode(txt.getBytes()))+CRLF;
+        txt=new String(Base64.encode(txt.getBytes()))+CRLF;
         write( "AUTH plain " + txt + CRLF );
         String reply=read();
         if( ! reply.startsWith( "235 " ) ) {
-            throw new IOException( "Invalid AUTH[1] reply  (Reply was '" + reply.substring(0,4)+Base64.getDecoder().decode( reply.substring(4) ) +"')" );
+            throw new IOException( "Invalid AUTH[1] reply  (Reply was '" + reply.substring(0,4)+Base64.decode( reply.substring(4) ) +"')" );
         } else {
             LOGGER.log(Level.INFO,"Login successful: "+ reply );
         }
@@ -152,7 +152,6 @@ public class SMTPSender extends LineSender implements TransportSender {
     private String[] getReply() throws IOException{
         ArrayList<String> replies=new ArrayList<String>();
         String line=null;
-        Pattern p = Pattern.compile("^[0-9][0-9][0-9] ");
         while( line == null || line.charAt(3) != ' ' ) {
             line = read();
             replies.add(line);
