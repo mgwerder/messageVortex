@@ -53,8 +53,9 @@ public class AlgorithmParameter extends AbstractBlock implements Serializable,Co
     }
 
     public AlgorithmParameter(AlgorithmParameter p) {
+        this();
         for(Map.Entry<Integer,String> e:p.parameter.entrySet()) {
-            put(e.getKey(),new String (e.getValue()));
+            put(e.getKey().intValue(),e.getValue());
         }
     }
 
