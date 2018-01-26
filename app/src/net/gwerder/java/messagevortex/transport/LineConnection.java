@@ -28,23 +28,29 @@ public abstract class LineConnection extends Thread {
     private Object lock=new Object();
 
     boolean shutdown=false;
-    long timeout = 90*1000;
+    long timeout = 90L*1000;
     Socket s=null;
     SSLContext context;
     ServerAuthenticator auth=null;
     BufferedReader inStream=null;
     BufferedWriter outStream=null;
+    TransportReceiver receiver=null;
 
     LineConnection() {}
 
-    public LineConnection createConnection(Socket s, SSLContext context) throws IOException {
+    public LineConnection createConnection(Socket s) throws IOException {
         throw new UnsupportedOperationException("createConnection must be overloaded");
     }
 
 
-    LineConnection(Socket s, SSLContext context) throws IOException {
-        this.s=s;
+    LineConnection(SSLContext context,TransportReceiver receiver) throws IOException {
         this.context = context;
+        this.receiver=receiver;
+        setSocket(s);
+    }
+
+    void setSocket(Socket s) throws IOException {
+        this.s=s;
         if(this.s!=null) {
             s.setSoTimeout(100);
             inStream = new BufferedReader(new InputStreamReader(s.getInputStream(), StandardCharsets.UTF_8));

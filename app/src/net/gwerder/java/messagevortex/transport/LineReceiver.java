@@ -17,14 +17,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
-import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  * Created by Martin on 23.01.2018.
  */
-public class LineReceiver implements Runnable {
+public abstract class LineReceiver implements Runnable {
 
     private static final ExtendedSecureRandom esr=new ExtendedSecureRandom();
 
@@ -52,9 +51,11 @@ public class LineReceiver implements Runnable {
     private Thread runner=null;
     private ServerAuthenticator auth=null;
     private LineConnection connectionTemplate=null;
+    TransportReceiver receiver=null;
 
-    public LineReceiver() {
-        // Do not do anything here as this constructor is required for generator Objects
+    public LineReceiver(SSLContext context,TransportReceiver receiver) {
+        this.receiver=receiver;
+        this.context=context;
     }
 
 
@@ -190,7 +191,7 @@ public class LineReceiver implements Runnable {
                 socket = serverSocket.accept();
                 LOGGER.log(Level.INFO,"Got connection from "+ socket.getInetAddress().getHostName());
                 LineConnection lc=null;
-                lc=connectionTemplate.createConnection(socket,context);
+                lc=connectionTemplate.createConnection(socket);
                 lc.setAuthenticator(auth);
                 lc.setName(runner.getName()+"-CONNECT-"+i);
                 conn.add(lc);

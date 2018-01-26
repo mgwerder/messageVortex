@@ -16,15 +16,14 @@ import java.util.logging.Level;
  */
 public class SMTPConnection extends LineConnection {
 
-    @Override
-    public LineConnection createConnection(Socket s, SSLContext context) throws IOException {
-        return new SMTPConnection(s, context);
+    public LineConnection createConnection(Socket s) throws IOException {
+        LineConnection ret=new SMTPConnection(context,receiver);
+        ret.setSocket(s);
+        return ret;
     }
 
-    public SMTPConnection() {}
-
-    private SMTPConnection(Socket s, SSLContext context) throws IOException {
-        super(s,context);
+    SMTPConnection( SSLContext context, TransportReceiver receiver ) throws IOException {
+        super( context, receiver );
     }
 
     @Override
@@ -69,8 +68,16 @@ public class SMTPConnection extends LineConnection {
                         String line = null;
                         StringBuilder sb = new StringBuilder();
                         while (line == null || ! ".".equals(line)) {
+                            if(line!=null) {
+                                sb.append(line + CRLF);
+                            }
                             line = read();
-                            sb.append(line + CRLF);
+                        }
+                        if(receiver!=null) {
+                            LOGGER.log(Level.INFO, "Message passed to blender layer");
+                            receiver.gotMessage(new ByteArrayInputStream(sb.toString().getBytes()));
+                        } else {
+                            LOGGER.log(Level.WARNING, "blender layer unknown ... message discarded");
                         }
                         write("250 OK"+CRLF);
                     } else {

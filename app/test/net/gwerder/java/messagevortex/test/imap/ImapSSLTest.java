@@ -111,7 +111,7 @@ public class ImapSSLTest {
             ic.shutdown();
 
             // Selftest
-            Thread.sleep(100);
+            Thread.sleep(700);
             assertTrue("error searching for hangig threads",verifyHangingThreads(threadSet).size()==0);
         } catch(Exception ioe) {
             LOGGER.log(Level.WARNING,"Unexpected Exception",ioe);
