@@ -22,6 +22,7 @@ package net.gwerder.java.messagevortex.routing.operation;
 // ************************************************************************************
 
 import net.gwerder.java.messagevortex.asn1.IdentityBlock;
+import net.gwerder.java.messagevortex.asn1.UsagePeriod;
 
 import java.util.Date;
 
@@ -30,7 +31,7 @@ public abstract class AbstractOperation implements Operation {
     IdentityBlock identity;
     InternalPayload payload;
     Date submissionTime=new Date();
-
+    UsagePeriod period=null;
 
     public void setInternalPayload(InternalPayload payload) {
         if(payload==null) {
@@ -46,6 +47,16 @@ public abstract class AbstractOperation implements Operation {
 
     public IdentityBlock getIdentity() {
         return identity;
+    }
+
+    public UsagePeriod getUsagePeriod() {
+        return period;
+    }
+
+    public UsagePeriod setUsagePeriod(UsagePeriod period) {
+        UsagePeriod ret=this.period;
+        this.period=period;
+        return ret;
     }
 
     public boolean isInUsagePeriod() {

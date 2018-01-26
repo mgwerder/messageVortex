@@ -120,7 +120,7 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
             for (int i = 0; i < out.getY(); i++) {
                 int plid = operation.getOutputId() + i;
                 byte[] b=operation.getkeys()[i].encrypt(out.getRowAsByteArray(i));
-                payload.setCalculatedPayload(plid, new PayloadChunk( plid, b, payload.getPayload(plid).getUsagePeriod() ));
+                payload.setCalculatedPayload(plid, new PayloadChunk( plid, b, getUsagePeriod() ));
                 tot+=b.length;
             }
         } catch(IOException ioe) {
