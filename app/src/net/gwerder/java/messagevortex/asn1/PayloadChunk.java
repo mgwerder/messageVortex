@@ -57,6 +57,7 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
     int    id = 0;
     byte[] payload=null;
     PayloadType payloadType = PayloadType.PAYLOAD;
+    UsagePeriod period;
 
     /***
      * Creates an empty payload block.
@@ -65,18 +66,21 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
         id=0;
         payload=new byte[0];
         payloadType=PayloadType.PAYLOAD;
+        period=new UsagePeriod(24L*3600);
     }
 
     /***
      * Creates a payload block from a ASN1 stream.
      */
-    public PayloadChunk(ASN1Encodable to) throws IOException {
+    public PayloadChunk(ASN1Encodable to, UsagePeriod period) throws IOException {
         parse(to);
+        this.period=period;
     }
 
-    public PayloadChunk(int id,byte[] payload) throws IOException {
+    public PayloadChunk(int id,byte[] payload, UsagePeriod period) throws IOException {
         setId(id);
         setPayload(payload);
+        this.period=period;
     }
 
     /***
@@ -157,6 +161,16 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
         return payload.clone();
     }
 
+    public UsagePeriod getUsagePeriod() {
+        return period;
+    }
+
+    public UsagePeriod setUsagePeriod(UsagePeriod period) {
+        UsagePeriod ret=period;
+        this.period=period;
+        return ret;
+    }
+
     @Override
     protected void parse(ASN1Encodable to) throws IOException {
         ASN1Sequence s1 = ASN1Sequence.getInstance(to);
@@ -224,7 +238,11 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
     }
 
     public boolean isInUsagePeriod(Date reference) {
-        throw new NotImplementedException(); // FIXME implementation missing
+        if(period==null) {
+            return true;
+        }
+
+        return period.inUsagePeriod(reference);
     }
 
     @Override

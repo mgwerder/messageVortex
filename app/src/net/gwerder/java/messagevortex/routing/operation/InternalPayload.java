@@ -329,7 +329,7 @@ public class InternalPayload {
             for(int i:expiredPayloadIds) {
                 LOGGER.log(Level.INFO,"clearing expired payload "+i+" of identity "+getIdentity());
                 try {
-                    setPayload(new PayloadChunk(i, null));
+                    setPayload( new PayloadChunk(i, null,null ));
                 }catch(IOException ioe) {
                     // ignore this exception
                 }

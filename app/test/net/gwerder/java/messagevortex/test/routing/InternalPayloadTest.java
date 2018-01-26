@@ -89,7 +89,7 @@ public class InternalPayloadTest {
     public void payloadSpaceSetAndGetTest() throws Exception {
         InternalPayload p=space[0].getInternalPayload(identity[0]);
         String pl=RandomString.nextString((int)(Math.random()*1024*10+1));
-        PayloadChunk pc =new PayloadChunk(100,pl.getBytes());
+        PayloadChunk pc =new PayloadChunk(100,pl.getBytes(),null);
         assertTrue("payload space previously unexpetedly not empty",p.setPayload(pc)==null);
         assertTrue("payload space previously unexpetedly not equal",pl.equals(new String(p.getPayload(100).getPayload())));
     }
@@ -111,13 +111,13 @@ public class InternalPayloadTest {
     private void payloadSpaceProcessingTest(String s) throws Exception {
         LOGGER.log(Level.INFO,"Testing payload handling with "+s.getBytes().length+" bytes");
         InternalPayload p=space[0].getInternalPayload(identity[0]);
-        PayloadChunk pc =new PayloadChunk(200,s.getBytes());
+        PayloadChunk pc =new PayloadChunk(200,s.getBytes(),null);
         Operation op=new IdMapOperation(200,201,1);
         assertTrue("payload space previously unexpetedly not empty",p.setPayload(pc)==null);
         assertTrue("addin of operation unexpectedly rejected",p.addOperation(op)==true);
         assertTrue("target  payload should not be null",p.getPayload(201)!=null);
         assertTrue("target  payload should be identical",s.equals(new String(p.getPayload(201).getPayload())));
-        p.setPayload(new PayloadChunk(200,null)); //remove the payload chunk from store
+        p.setPayload(new PayloadChunk(200, null,null)); //remove the payload chunk from store
         assertTrue("source payload should be null",p.getPayload(200)==null);
         assertTrue("target payload should be null",p.getPayload(201)==null);
         assertTrue("removal of operation "+op.toString()+" unexpectedly failed",p.removeOperation(op)==true);

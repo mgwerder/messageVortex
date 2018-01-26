@@ -89,7 +89,7 @@ public class OperationProcessingTest {
         LOGGER.log(Level.INFO,"  fuzzing with dataStipes:"+dataStripes+"/redundancyStripes:"+redundancy+"/GF("+gfSize+")/dataSize:"+inBuffer.length+"");
         Operation iop = new AddRedundancy(new AddRedundancyOperation(1, dataStripes, redundancy, Arrays.asList(keys), 1000,gfSize));
         assertTrue("add operation not added",p.addOperation(iop));
-        assertTrue("payload not added",p.setPayload(new PayloadChunk(1,inBuffer))==null);
+        assertTrue("payload not added",p.setPayload(new PayloadChunk(1,inBuffer,null))==null);
 
         // straight operation
         Operation oop=new RemoveRedundancy(new RemoveRedundancyOperation(1000, dataStripes, redundancy, Arrays.asList(keys), 2000,gfSize));
@@ -123,7 +123,7 @@ public class OperationProcessingTest {
 
         assertTrue("unable to successfully remove add operation",p.removeOperation(iop));
         assertTrue("unable to successfully remove remove redundancy operation",p.removeOperation(oop));
-        assertTrue("unable remove payload data",p.setPayload(new PayloadChunk(1,null))!=null);
+        assertTrue("unable remove payload data",p.setPayload(new PayloadChunk(1,null, null))!=null);
 
     }
 

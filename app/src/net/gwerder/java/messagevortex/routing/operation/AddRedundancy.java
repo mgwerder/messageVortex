@@ -22,10 +22,7 @@ package net.gwerder.java.messagevortex.routing.operation;
 // ************************************************************************************
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
-import net.gwerder.java.messagevortex.asn1.AbstractRedundancyOperation;
-import net.gwerder.java.messagevortex.asn1.AddRedundancyOperation;
-import net.gwerder.java.messagevortex.asn1.PayloadChunk;
-import net.gwerder.java.messagevortex.asn1.VortexMessage;
+import net.gwerder.java.messagevortex.asn1.*;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -47,7 +44,7 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
 
     AbstractRedundancyOperation operation;
 
-    public AddRedundancy(AddRedundancyOperation op) {
+    public AddRedundancy(AddRedundancyOperation op ) {
         this.operation=op;
     }
 
@@ -123,7 +120,7 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
             for (int i = 0; i < out.getY(); i++) {
                 int plid = operation.getOutputId() + i;
                 byte[] b=operation.getkeys()[i].encrypt(out.getRowAsByteArray(i));
-                payload.setCalculatedPayload(plid, new PayloadChunk(plid, b));
+                payload.setCalculatedPayload(plid, new PayloadChunk( plid, b, payload.getPayload(plid).getUsagePeriod() ));
                 tot+=b.length;
             }
         } catch(IOException ioe) {

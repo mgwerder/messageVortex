@@ -205,10 +205,21 @@ public class RoutingBlock extends AbstractBlock  implements Serializable {
     }
 
     public long getFirstProcessTime() {
+        return minProcessTime;
+    }
+
+    public long setFistProcessTime(long minProcessTime) {
+        long old = minProcessTime;
+        encrypted=null;
+        this.minProcessTime=minProcessTime;
+        return old;
+    }
+
+    public long getLastProcessTime() {
         return maxProcessTime;
     }
 
-    public long setFistProcessTime(long maxProcessTime) {
+    public long setLastProcessTime(long maxProcessTime) {
         long old = maxProcessTime;
         encrypted=null;
         this.maxProcessTime=maxProcessTime;

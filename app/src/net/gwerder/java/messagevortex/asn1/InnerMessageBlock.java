@@ -29,10 +29,7 @@ import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
 
 /***
@@ -140,7 +137,6 @@ public class InnerMessageBlock extends AbstractBlock  implements Serializable {
                 throw new IOException( "got unexpected tag (expect: " + PREFIX_PLAIN + " or "+PREFIX_ENCRYPTED+"; got: " + ato.getTagNo() + ")" );
         }
 
-
         // get signature
         identitySignature=ASN1OctetString.getInstance(s1.getObjectAt( i++ ) ).getOctets();
         if(!identity.getIdentityKey().verify(identityEncoded,identitySignature)) {
@@ -168,7 +164,7 @@ public class InnerMessageBlock extends AbstractBlock  implements Serializable {
         List<PayloadChunk> p2=new ArrayList<PayloadChunk>();
         for (Iterator<ASN1Encodable> iter= ASN1Sequence.getInstance( s1.getObjectAt( i++ ) ).iterator(); iter.hasNext(); ) {
             ASN1Encodable tr = iter.next();
-            p2.add(new PayloadChunk(tr));
+            p2.add(new PayloadChunk(tr,new UsagePeriod(new Date(new Date().getTime()+routing.getLastProcessTime()),new Date(new Date().getTime()+routing.getFirstProcessTime()))));
         }
         payload = p2.toArray(new PayloadChunk[p2.size()]);
 

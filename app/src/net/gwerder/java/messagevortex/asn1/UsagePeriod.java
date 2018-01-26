@@ -46,14 +46,35 @@ public class UsagePeriod extends AbstractBlock  implements Serializable {
     protected Date notBefore ;
     protected Date notAfter  ;
 
+    protected Date reference = new Date();
+
+    protected UsagePeriodType type;
+
     /***
      * Creates a new object valid from this point in time for a duration of the specified amount of seconds.
+     *
+     * The validity time is created as relative time to the objects creation.
      *
      * @param seconds The number of seconds to be valid
      */
     public UsagePeriod(long seconds) {
         notBefore= new Date();
         notAfter = new Date( notBefore.getTime()+seconds*1000L);
+        type=UsagePeriodType.RELATIVE;
+    }
+
+    /***
+     * Creates a new object valid from this point in time for a duration of the specified amount of seconds.
+     *
+     * The validity time is created as absolute time.
+     *
+     * @param from  the moment the object gains validity
+     * @param to    the moment the object validity ends
+     */
+    public UsagePeriod( Date from, Date to ) {
+        notBefore= from;
+        notAfter = to;
+        type=UsagePeriodType.ABSOLUTE;
     }
 
     /***
@@ -124,8 +145,8 @@ public class UsagePeriod extends AbstractBlock  implements Serializable {
      */
     public Date setNotBefore(Date validityStart) {
         Date d2=notBefore;
-
         notBefore=(Date)validityStart.clone();
+        type=UsagePeriodType.ABSOLUTE;
         return d2;
     }
 
@@ -147,6 +168,7 @@ public class UsagePeriod extends AbstractBlock  implements Serializable {
     public Date setNotAfter(Date pointInTime) {
         Date d2=notAfter;
         notAfter=(Date)pointInTime.clone();
+        type=UsagePeriodType.ABSOLUTE;
         return d2;
     }
 
@@ -185,8 +207,16 @@ public class UsagePeriod extends AbstractBlock  implements Serializable {
     }
 
     public boolean inUsagePeriod() {
-        // FIXME implement relative usage periods
-        return new Date().getTime()>=notBefore.getTime() && new Date().getTime()<=notAfter.getTime();
+        return inUsagePeriod(reference);
+    }
+
+    public boolean inUsagePeriod(Date reference) {
+        long now=new Date().getTime();
+        if(type==UsagePeriodType.ABSOLUTE ) {
+            return now >= notBefore.getTime() && now <= notAfter.getTime();
+        } else {
+            return now>=reference.getTime() && now <= reference.getTime() + (notAfter.getTime()-notBefore.getTime());
+        }
     }
 
     @Override

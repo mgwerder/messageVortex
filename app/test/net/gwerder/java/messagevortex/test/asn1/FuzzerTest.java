@@ -81,7 +81,7 @@ public class FuzzerTest {
                 assertTrue( "PayloadChunk may not be null", s != null );
                 byte[] b1 = s.toBytes(DumpType.ALL_UNENCRYPTED);
                 assertTrue( "Byte representation may not be null", b1 != null );
-                byte[] b2 = (new PayloadChunk( new ASN1InputStream(b1).readObject() )).toBytes(DumpType.ALL_UNENCRYPTED);
+                byte[] b2 = (new PayloadChunk( new ASN1InputStream(b1).readObject(),null )).toBytes(DumpType.ALL_UNENCRYPTED);
                 assertTrue( "Byte arrays should be equal when reencoding", Arrays.equals( b1, b2 ) );
             }
         } catch (Exception e) {
