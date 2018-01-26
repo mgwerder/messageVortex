@@ -40,9 +40,9 @@ public class SMTPTransportSenderTest implements TransportReceiver {
     @Test
     public void basicSMTPTest() throws IOException  {
         LOGGER.log(Level.INFO,"Setup receiver");
-        SMTPReceiver receiver=new SMTPReceiver(587,null,false,this);
+        SMTPReceiver receiver=new SMTPReceiver(0,null,false,this);
         LOGGER.log(Level.INFO,"Setup sender");
-        SMTPSender send=new SMTPSender("SMTPSender_of_MessageVortex@gwerder.net", "localhost", 587, null );
+        SMTPSender send=new SMTPSender("SMTPSender_of_MessageVortex@gwerder.net", "localhost", receiver.getPort(), null );
         LOGGER.log(Level.INFO,"Sending message");
         try {
             SimpleDateFormat dt1 = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
@@ -51,8 +51,8 @@ public class SMTPTransportSenderTest implements TransportReceiver {
         } catch (IOException ioe) {
             LOGGER.log(Level.SEVERE, "got unexpected exception while sending message",ioe );
         }
-        assertTrue("Message not arrived (yet?)",msgs.size()==1);
         receiver.shutdown();
+        assertTrue("Message not arrived (yet?)",msgs.size()==1);
     }
 
 

@@ -59,7 +59,7 @@ public abstract class LineReceiver implements Runnable {
     }
 
 
-    LineReceiver(final int port,boolean encrypted, LineConnection conn) throws IOException {
+    LineReceiver( int port,boolean encrypted, LineConnection conn) throws IOException {
         this.port=port;
         this.encrypted=encrypted;
         this.connectionTemplate=conn;
