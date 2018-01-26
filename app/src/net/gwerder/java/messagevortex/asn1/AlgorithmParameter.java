@@ -52,6 +52,12 @@ public class AlgorithmParameter extends AbstractBlock implements Serializable,Co
         }
     }
 
+    public AlgorithmParameter(AlgorithmParameter p) {
+        for(Map.Entry<Integer,String> e:p.parameter.entrySet()) {
+            put(e.getKey(),new String (e.getValue()));
+        }
+    }
+
     public String put(String id,String value) {
         return put(Parameter.getByString(id).getId(),value);
     }
@@ -131,15 +137,6 @@ public class AlgorithmParameter extends AbstractBlock implements Serializable,Co
             }
         }
         return new DERSequence(v);
-    }
-
-    @Override
-    public AlgorithmParameter clone() {
-        AlgorithmParameter ap=new AlgorithmParameter();
-        for(Map.Entry<Integer,String> e:this.parameter.entrySet()) {
-            ap.put(e.getKey(),new String (e.getValue()));
-        }
-        return ap;
     }
 
     @Override

@@ -576,7 +576,7 @@ public class AsymmetricKey extends Key  implements Serializable {
      *
      * @return the algorithm parameters used for generation
      */
-    public AlgorithmParameter getAlgorithmParameter() {return parameters.clone(); }
+    public AlgorithmParameter getAlgorithmParameter() {return new AlgorithmParameter(parameters); }
 
     /***
      * Gets the padding used for encryption.

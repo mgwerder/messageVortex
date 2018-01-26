@@ -185,7 +185,7 @@ public class IdentityBlock extends AbstractBlock  implements Serializable {
      * @return    the previously set validity period
      */
     public UsagePeriod getUsagePeriod() {
-        return valid.clone();
+        return new UsagePeriod(valid);
     }
 
     /***
@@ -194,9 +194,9 @@ public class IdentityBlock extends AbstractBlock  implements Serializable {
      * @param valid the new usage period to be set
      * @return      the previously set usage period
      */
-    public UsagePeriod setUsagePeriod(UsagePeriod valid) {
+    public UsagePeriod setUsagePeriod( UsagePeriod valid ) {
         UsagePeriod old= getUsagePeriod();
-        this.valid = valid.clone();
+        this.valid = new UsagePeriod( valid );
         return old;
     }
 

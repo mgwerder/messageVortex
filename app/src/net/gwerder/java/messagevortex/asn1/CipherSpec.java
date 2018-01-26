@@ -46,15 +46,15 @@ public class CipherSpec extends AbstractBlock implements Serializable {
     private AsymmetricAlgorithmSpec asymmetricSpec = null;
     private SymmetricAlgorithmSpec symmetricSpec = null;
     private MacAlgorithmSpec macSpec = null;
-    private CipherUsage usage = CipherUsage.ENCRYPT;
+    private CipherUsage cipherUsage = CipherUsage.ENCRYPT;
 
     /* constructor */
     public CipherSpec(ASN1Encodable to) throws IOException {
         parse(to);
     }
 
-    public CipherSpec(CipherUsage usage) {
-        this.usage = usage;
+    public CipherSpec(CipherUsage cipherUsage) {
+        this.cipherUsage = cipherUsage;
     }
 
     protected void parse(ASN1Encodable to) throws IOException {
@@ -78,7 +78,7 @@ public class CipherSpec extends AbstractBlock implements Serializable {
         if(to1.getTagNo()!=USAGE) {
             throw new IOException("expected USAGE ("+USAGE+") but got "+to1.getTagNo()+" when parsing CipherSpec" );
         }
-        usage=CipherUsage.getById(ASN1Enumerated.getInstance(to1.getObject()).getValue().intValue());
+        cipherUsage =CipherUsage.getById(ASN1Enumerated.getInstance(to1.getObject()).getValue().intValue());
 
     }
 

@@ -63,6 +63,11 @@ public class UsagePeriod extends AbstractBlock  implements Serializable {
         type=UsagePeriodType.RELATIVE;
     }
 
+    public UsagePeriod(UsagePeriod p) {
+        notAfter=p.notAfter;
+        notBefore=p.notBefore;
+    }
+
     /***
      * Creates a new object valid from this point in time for a duration of the specified amount of seconds.
      *
@@ -217,14 +222,6 @@ public class UsagePeriod extends AbstractBlock  implements Serializable {
         } else {
             return now>=reference.getTime() && now <= reference.getTime() + (notAfter.getTime()-notBefore.getTime());
         }
-    }
-
-    @Override
-    public UsagePeriod clone() {
-        UsagePeriod ret=new UsagePeriod(0);
-        ret.notAfter=notAfter;
-        ret.notBefore=notBefore;
-        return ret;
     }
 
 }

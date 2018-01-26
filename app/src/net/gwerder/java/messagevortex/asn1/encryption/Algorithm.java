@@ -298,7 +298,7 @@ public enum Algorithm implements Serializable {
                     sl = sl.next();
                 }
             }
-            return params.clone();
+            return new AlgorithmParameter( params );
         }
     }
 
@@ -311,7 +311,7 @@ public enum Algorithm implements Serializable {
         synchronized(secLevel) {
             Map<SecurityLevel,AlgorithmParameter> ret=new HashMap<>();
             for(Map.Entry<SecurityLevel,AlgorithmParameter> e:secLevel.entrySet()) {
-                ret.put(e.getKey(),e.getValue().clone());
+                ret.put(e.getKey(),new AlgorithmParameter(e.getValue()));
             }
             return ret;
         }

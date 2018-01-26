@@ -38,8 +38,9 @@ public class RedundancyMatrix extends VandermondeMatrix {
         MessageVortexLogger.setGlobalLogLevel( Level.ALL);
     }
 
-    public RedundancyMatrix(RedundancyMatrix m) {
-        super(m);
+    public RedundancyMatrix( RedundancyMatrix r ) {
+        this(r.dimension[0],r.dimension[1],r.mode,true,true);
+        matrix=Arrays.copyOf(r.matrix,r.matrix.length);
     }
 
     /***
@@ -117,11 +118,4 @@ public class RedundancyMatrix extends VandermondeMatrix {
         return ret;
     }
 
-    @Override
-    public RedundancyMatrix clone() {
-        RedundancyMatrix ret=new RedundancyMatrix(dimension[0],dimension[1],mode,true,true);
-        ret.matrix=Arrays.copyOf(this.matrix,this.matrix.length);
-        assert ret.equals(this);
-        return ret;
-    }
 }

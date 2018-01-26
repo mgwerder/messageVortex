@@ -114,7 +114,7 @@ public class MatrixTest {
 
                 RedundancyMatrix m1 = new RedundancyMatrix(data.getY(), tot, mm);
                 LOGGER.log(Level.INFO, "  Got redundancy matrix for GF(2^" + galois + ")\r\n" + m1.toString());
-                RedundancyMatrix dataRowsOfRedundancyMatrix = m1.clone();
+                RedundancyMatrix dataRowsOfRedundancyMatrix = new RedundancyMatrix(m1);
                 while (dataRowsOfRedundancyMatrix.getX() != dataRowsOfRedundancyMatrix.getY()) {
                     dataRowsOfRedundancyMatrix.removeRow(dataRowsOfRedundancyMatrix.getX());
                 }

@@ -224,8 +224,8 @@ class AsymmetricKeyPreCalculator implements Serializable {
                     LOGGER.log(Level.FINE, "precalculating key " + param.toString() + "");
                     try {
                         long start=System.currentTimeMillis();
-                        AsymmetricKey ak = new AsymmetricKey(param.clone(), false);
-                        cache.setCalcTime(param.clone(),System.currentTimeMillis()-start);
+                        AsymmetricKey ak = new AsymmetricKey(new AlgorithmParameter(param), false);
+                        cache.setCalcTime(new AlgorithmParameter(param),System.currentTimeMillis()-start);
 
                         // put in cache
                         assert ak != null;
@@ -350,7 +350,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
     }
 
     private static AlgorithmParameter prepareParameters(AlgorithmParameter ap) {
-        AlgorithmParameter ret=ap.clone();
+        AlgorithmParameter ret=new AlgorithmParameter( ap );
 
         // clear IV parameters as they are not relevant
         ret.put(Parameter.IV,null);

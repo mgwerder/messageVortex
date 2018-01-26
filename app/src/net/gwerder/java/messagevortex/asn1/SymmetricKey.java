@@ -121,7 +121,7 @@ public class SymmetricKey extends Key implements Serializable {
     }
 
     public AlgorithmParameter getParameter() {
-        return parameters.clone();
+        return new AlgorithmParameter(parameters);
     }
 
     public Padding getPadding() {
