@@ -60,6 +60,9 @@ public abstract class AbstractOperation implements Operation {
     }
 
     public boolean isInUsagePeriod() {
+        if(identity.getUsagePeriod()==null) {
+            return true;
+        }
         return identity.getUsagePeriod().inUsagePeriod();
     }
 

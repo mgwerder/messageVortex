@@ -25,11 +25,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class Config {
+public abstract class Config {
 
-    private static final Config DEFAULT_CFG=new Config();
+    static Config defaultConfig=null;
 
     private final Map<String,Object> configurationData= new ConcurrentHashMap<>();
+    private final Map<String,String> configurationDescription= new ConcurrentHashMap<>();
 
     /* Gets a boolean value from the application config.
      *
@@ -40,11 +41,11 @@ public class Config {
      * @throws ClassCastException if key is not of type boolean
      ***/
     public static Config getDefault() {
-        return DEFAULT_CFG;
+        return defaultConfig;
     }
 
     public static Config copy(Config src) {
-        Config dst=new Config();
+        Config dst=src.createConfig();
         synchronized(src.configurationData) {
             Set<Map.Entry<String,Object>> it = src.configurationData.entrySet();
             for(Map.Entry<String,Object> p:it) {
@@ -61,13 +62,17 @@ public class Config {
         return dst;
     }
 
-    public boolean createBooleanConfigValue(String id, boolean dval) {
+    public abstract Config createConfig();
+
+    public void createBooleanConfigValue(String id, String description,boolean dval) {
         synchronized (configurationData) {
-            if (configurationData.get(id.toLowerCase()) == null) {
-                configurationData.put(id.toLowerCase(), dval);
-                return true;
+            if (configurationData.get( id.toLowerCase()) == null ) {
+                configurationData.put( id.toLowerCase(), dval );
+                if( description != null ) {
+                    configurationDescription.put(id.toLowerCase(), description);
+                }
             } else {
-                return false;
+                throw new IllegalArgumentException( "id \"" + id + "\" is already defined" );
             }
         }
     }
