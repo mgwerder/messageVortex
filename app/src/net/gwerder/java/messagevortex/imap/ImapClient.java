@@ -85,17 +85,8 @@ public class ImapClient implements Runnable {
         LOGGER.log(Level.INFO,"doing SSL handshake by client");
         java.security.Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
         KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
-        FileInputStream is=null;
-        try{
-            is=new FileInputStream("keystore.jks");
+        try(FileInputStream is=new FileInputStream("keystore.jks") ) {
             trustStore.load(is, "changeme".toCharArray());
-            is.close();
-        } catch(IOException ioe) {
-            throw ioe;
-        } finally {
-            if(is!=null) {
-                is.close();
-            }
         }
         TrustManagerFactory trustFactory =  TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
         trustFactory.init(trustStore);

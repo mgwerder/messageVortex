@@ -114,14 +114,8 @@ public class IdentityStore extends AbstractBlock  implements Serializable {
     }
 
     protected void parse(byte[] p) throws IOException {
-        ASN1InputStream aIn=null;
-        try {
-            aIn = new ASN1InputStream(p);
+        try ( ASN1InputStream aIn = new ASN1InputStream(p)) {
             parse(aIn.readObject());
-        } finally {
-            if(aIn!=null) {
-                aIn.close();
-            }
         }
     }
 

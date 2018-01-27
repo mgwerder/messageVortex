@@ -26,6 +26,8 @@ class AsymmetricKeyPreCalculator implements Serializable {
 
     public static final long serialVersionUID = 100000000031L;
 
+    private static final String TMP_PREFIX="MessageVortexPrecalc";
+
     private static final java.util.logging.Logger LOGGER;
     static {
         LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
@@ -144,7 +146,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
             for (File tfile:(new File(System.getProperty("java.io.tmpdir"))).listFiles()) {
                 if (tfile.isFile()) {
                     target_file = tfile.getName();
-                    if (target_file.startsWith("MessageVortexPrecalc") && target_file.endsWith(".key")) {
+                    if (target_file.startsWith(TMP_PREFIX) && target_file.endsWith(".key")) {
                         listOfFiles.add(tfile);
                     }
                 }
@@ -272,7 +274,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
         if(detached) {
             try {
                 // create temporary file
-                t = File.createTempFile("MessageVortexPrecalc", ".keydir");
+                t = File.createTempFile(TMP_PREFIX, ".keydir");
             } catch (IOException ioe) {
                 LOGGER.log(Level.WARNING, "Unable to create temp file", ioe);
             } finally {
@@ -441,7 +443,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
                 lastSaved = System.currentTimeMillis();
                 if(cache.getCacheFillGrade()>0.1 && tempdir!=null) {
                     // move file as temp file and clear cache
-                    String fn=File.createTempFile("MessageVortexPrecalc", ".key").getAbsolutePath();
+                    String fn=File.createTempFile(TMP_PREFIX, ".key").getAbsolutePath();
                     LOGGER.log(Level.INFO,"stored chunk to file \""+fn+"\" to pick up");
                     Files.move(Paths.get(filename + ".tmp"), Paths.get(fn), StandardCopyOption.REPLACE_EXISTING);
                     cache.clear();
