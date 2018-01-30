@@ -31,6 +31,7 @@ public class ConfigTest {
         } catch(NullPointerException npe) {
             // all OK this is expected
         } catch(Exception e) {
+            e.printStackTrace();
             fail("should raise NPE but a different exception is raised ("+e+")");
         }
 
@@ -63,8 +64,8 @@ public class ConfigTest {
 
         try{
             // String
-            assertTrue("Should return true on first creation", MessageVortexConfig.getDefault().createStringConfigValue("stringConfigHandling","def"));
-            assertFalse("Should return false on recreation",MessageVortexConfig.getDefault().createStringConfigValue("stringConfigHandling","otherdef"));
+            assertTrue("Should return true on first creation", MessageVortexConfig.getDefault().createStringConfigValue("stringConfigHandling","def","def"));
+            assertFalse("Should return false on recreation",MessageVortexConfig.getDefault().createStringConfigValue("stringConfigHandling","otherdef","otherdef"));
             assertTrue("Should return true as default value","def".equals(MessageVortexConfig.getDefault().getStringValue("stringConfigHandling")));
             assertTrue("Should return true as last value","def".equals(MessageVortexConfig.getDefault().setStringValue("stringConfigHandling","otherval")));
             assertTrue("Should return false as last value","otherval".equals(MessageVortexConfig.getDefault().setStringValue("stringConfigHandling","thirdval")));
@@ -90,7 +91,11 @@ public class ConfigTest {
             assertFalse("Should return false as last value",MessageVortexConfig.getDefault().setBooleanValue("booleanConfigHandling",true));
             assertTrue("Should return true as last value",MessageVortexConfig.getDefault().setBooleanValue("booleanConfigHandling",true));
             assertTrue("Should return true as last value",MessageVortexConfig.getDefault().getBooleanValue("booleanConfigHandling"));
+
+            // check predefined ressources of vortexConfig
+            assertTrue("Should return null as default value",MessageVortexConfig.getDefault().getStringValue( "smtp_incomming_username" ) == null );
         } catch(Exception e) {
+            e.printStackTrace();
             fail("should not raise an exception but did ("+e+")");
         }
 

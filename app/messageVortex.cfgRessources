@@ -1,0 +1,8 @@
+// Incomming SMTP connection listener settings
+String, smtp_incomming_username,,The username to be used if authenticating a client to the MessageVortex outgoing SMTP node
+string, smtp_incomming_password,, The password to be used if authenticating a client to the MessageVortex outgoing SMTP node
+boolean, smtp_incomming_ssl,false, True if the incomming smtp port is ssl wrapped.
+numeric, smtp_incomming_port, 587, The port number for incomming smtp connects
+
+
+

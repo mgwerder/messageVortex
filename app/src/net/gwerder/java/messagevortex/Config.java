@@ -21,16 +21,141 @@ package net.gwerder.java.messagevortex;
 // * SOFTWARE.
 // ************************************************************************************
 
-import java.util.Map;
-import java.util.Set;
+import java.io.IOException;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
 
 public abstract class Config {
 
-    static Config defaultConfig=null;
+    private static final java.util.logging.Logger LOGGER;
+    static {
+        LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+    }
 
-    private final Map<String,Object> configurationData= new ConcurrentHashMap<>();
-    private final Map<String,String> configurationDescription= new ConcurrentHashMap<>();
+    private enum ConfigType {
+        BOOLEAN,
+        STRING;
+
+        public static ConfigType getById( String id ) {
+            for( ConfigType c:values() ) {
+                if(c.name().toLowerCase().equals( id.toLowerCase() ) ) {
+                    return c;
+                }
+            }
+            return null;
+        }
+    }
+
+    private class ConfigElement implements Comparator<ConfigElement> {
+
+        private String id;
+        private String type;
+        private String description;
+        private String defaultValue;
+        private String currentValue;
+
+        public ConfigElement( String id, String type ) {
+            setId( id );
+            setType( type );
+            setDefaultValue( null );
+            setDescription( null );
+        }
+
+        public ConfigElement( String id, String type, String description ) {
+            this( id, type );
+            setDescription( description );
+        }
+
+        public ConfigElement copy() {
+            ConfigElement ret = new ConfigElement( id, type, description );
+            setDefaultValue( defaultValue );
+            setValue( currentValue );
+            return ret;
+        }
+
+        public void setId(String id) {
+            if( id==null ) {
+                throw new NullPointerException("id must not be null");
+            }
+            this.id=id.toLowerCase();
+        }
+
+        public void setType(String type) {
+            if( type == null ) {
+                throw new NullPointerException("type must not be null");
+            } else if( ConfigType.getById( type ) == null ) {
+                throw new IllegalArgumentException( "type "+type+" is not a known config type" );
+            } else {
+                this.type = type.toLowerCase();
+            }
+        }
+
+        public ConfigType getType() {
+            return ConfigType.getById( this.type );
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public String getStringValue() {
+            if( currentValue != null ) {
+                return currentValue;
+            } else {
+                return defaultValue;
+            }
+        }
+
+        public String setStringValue( String value ) {
+            String ret = getStringValue();
+            currentValue=value;
+            return ret;
+        }
+
+        public boolean getBooleanValue() {
+            String ret=getStringValue();
+            return ret != null && ("true".equals(ret.toLowerCase()) || "yes".equals(ret.toLowerCase()));
+        }
+
+        public boolean setBooleanValue( boolean value ) {
+            boolean ret=getBooleanValue();
+            if(value) {
+                currentValue="true";
+            } else {
+                currentValue="false";
+            }
+            return ret;
+        }
+
+        public String unset() {
+            return setValue( null );
+        }
+
+        private String setValue( String value ) {
+            String ret=getStringValue();
+            if( defaultValue != null && defaultValue.equals(value) ) {
+                ret = unset();
+            } else {
+                this.currentValue = value;
+            }
+            return ret;
+        }
+
+        @Override
+        public int compare(ConfigElement o1, ConfigElement o2) {
+            return o1.id.compareToIgnoreCase(o2.id);
+        }
+
+        public void setDefaultValue(String defaultValue) {
+            this.defaultValue = defaultValue;
+        }
+
+    }
+
+    static Config defaultConfig=null;
+    private final Map<String,ConfigElement> configurationData= new ConcurrentHashMap<>();
+    private final List<ConfigElement> orderedListOfConfigElements = new Vector<>();
 
     /* Gets a boolean value from the application config.
      *
@@ -40,37 +165,30 @@ public abstract class Config {
      * @throws NullPointerException if key does not exist in configurationData
      * @throws ClassCastException if key is not of type boolean
      ***/
-    public static Config getDefault() {
+    public static Config getDefault() throws IOException {
         return defaultConfig;
     }
 
-    public static Config copy(Config src) {
+    public static Config copy(Config src) throws IOException {
         Config dst=src.createConfig();
         synchronized(src.configurationData) {
-            Set<Map.Entry<String,Object>> it = src.configurationData.entrySet();
-            for(Map.Entry<String,Object> p:it) {
-                //noinspection ChainOfInstanceofChecks
-                if(p.getValue() instanceof Boolean) {
-                    dst.configurationData.put(p.getKey(),p.getValue());
-                } else if(p.getValue() instanceof String) {
-                    dst.configurationData.put(p.getKey(),p.getValue());
-                } else {
-                    throw new ClassCastException("unknown value in config data");
-                }
+            Set<Map.Entry<String,ConfigElement>> it = src.configurationData.entrySet();
+            for(Map.Entry<String,ConfigElement> p:it) {
+                dst.configurationData.put(p.getKey(),p.getValue().copy());
             }
         }
         return dst;
     }
 
-    public abstract Config createConfig();
+    public abstract Config createConfig() throws IOException;
 
     public void createBooleanConfigValue(String id, String description,boolean dval) {
         synchronized (configurationData) {
             if (configurationData.get( id.toLowerCase()) == null ) {
-                configurationData.put( id.toLowerCase(), dval );
-                if( description != null ) {
-                    configurationDescription.put(id.toLowerCase(), description);
-                }
+                ConfigElement ele = new ConfigElement( id,"boolean", description );
+                configurationData.put( id.toLowerCase(), ele );
+                ele.setDefaultValue(dval?"true":"false");
+                LOGGER.log(Level.FINE,"Created boolean config variable "+id.toLowerCase());
             } else {
                 throw new IllegalArgumentException( "id \"" + id + "\" is already defined" );
             }
@@ -80,7 +198,7 @@ public abstract class Config {
     /***
      * Returns a deep copy of this config store.
      ***/
-    public Config copy() {
+    public Config copy() throws IOException {
         return copy(this);
     }
 
@@ -93,15 +211,16 @@ public abstract class Config {
      * @throws NullPointerException if key does not exist in configurationData
      * @throws ClassCastException if key is not of type boolean
      ***/
-    public boolean setBooleanValue(String id,boolean value) {
+    public boolean setBooleanValue(String id,boolean value) throws IOException {
         boolean ret;
-        if(getDefault().configurationData.get(id.toLowerCase())==null) {
-            throw new NullPointerException();
-        } else if(!(getDefault().configurationData.get(id.toLowerCase()) instanceof Boolean)) {
-            throw new ClassCastException();
+        ConfigElement ele = configurationData.get(id.toLowerCase());
+        if( ele == null ) {
+            throw new NullPointerException( "id "+id+" is not known to the config subsystem" );
+        } else if( ele.getType() != ConfigType.BOOLEAN ) {
+            throw new ClassCastException("config type missmatch when accessing ID "+id+" (expected: boolean; is: "+ele.getType().name()+")" );
         } else {
-            ret=getBooleanValue(id);
-            getDefault().configurationData.put(id.toLowerCase(),value);
+            ret=ele.getBooleanValue();
+            ele.setBooleanValue( value );
         }
         return ret;
     }
@@ -114,14 +233,15 @@ public abstract class Config {
      * @throws NullPointerException if key does not exist in configurationData
      * @throws ClassCastException if key is not of type boolean
      ***/
-    public boolean getBooleanValue(String id) {
+    public boolean getBooleanValue(String id) throws IOException {
         boolean ret;
-        if(getDefault().configurationData.get(id.toLowerCase())==null) {
-            throw new NullPointerException();
-        } else if(!(getDefault().configurationData.get(id.toLowerCase()) instanceof Boolean)) {
-            throw new ClassCastException();
+        ConfigElement ele = configurationData.get(id.toLowerCase());
+        if( ele == null ) {
+            throw new NullPointerException( "id "+id+" is not known to the config subsystem" );
+        } else if( ele.getType() != ConfigType.BOOLEAN ) {
+            throw new ClassCastException("config type missmatch when accessing ID "+id+" (expected: boolean; is: "+ele.getType().name()+")" );
         } else {
-            ret=(Boolean)(getDefault().configurationData.get(id.toLowerCase()));
+            ret=ele.getBooleanValue();
         }
         return ret;
     }
@@ -133,14 +253,18 @@ public abstract class Config {
      * The content of the item may not be null.
      *
      * @param id    Name of config item (case insensitive)
+     * @param description Description of value to be written
      * @param dval  Default content if not set
      *
      * @return     True if item did not exist and was successfully created
      ***/
-    public boolean createStringConfigValue(String id,String dval) {
+    public boolean createStringConfigValue( String id, String description, String dval ) {
         synchronized(configurationData) {
-            if(configurationData.get(id.toLowerCase())==null && dval!=null) {
-                configurationData.put(id.toLowerCase(),dval);
+            if( configurationData.get(id.toLowerCase()) == null ) {
+                ConfigElement ele = new ConfigElement( id, "STRING", description );
+                configurationData.put( id.toLowerCase(), ele );
+                ele.setDefaultValue( dval );
+                LOGGER.log(Level.INFO,"Created String config variable "+id.toLowerCase() );
                 return true;
             } else {
                 return false;
@@ -149,18 +273,19 @@ public abstract class Config {
     }
 
     /***
-     * @throws NullPointerException when id is unknown
+     * @throws NullPointerException when id is unknown or value is null
      * @throws ClassCastException   when id is not a String setting
      ***/
     public String setStringValue(String id,String value) {
         String ret;
-        if(configurationData.get(id.toLowerCase())==null || value==null) {
-            throw new NullPointerException();
-        } else if(!(configurationData.get(id.toLowerCase()) instanceof String)) {
-            throw new ClassCastException();
+        ConfigElement ele = configurationData.get(id.toLowerCase());
+        if( ele == null || value==null) {
+            throw new NullPointerException( "unable to get id "+id+" from config subsystem");
+        } else if( ele.getType() != ConfigType.STRING) {
+            throw new ClassCastException("Unable to cast type to correct class (expected: string; is: "+ele.getType().name()+")" );
         } else {
-            ret=getStringValue(id);
-            configurationData.put(id.toLowerCase(),value);
+            ret=ele.getStringValue();
+            ele.setStringValue( value );
         }
         return ret;
     }
@@ -171,12 +296,13 @@ public abstract class Config {
      ***/
     public String getStringValue(String id) {
         String ret;
-        if(configurationData.get(id.toLowerCase())==null) {
-            throw new NullPointerException();
-        } else if(!(configurationData.get(id.toLowerCase()) instanceof String)) {
-            throw new ClassCastException();
+        ConfigElement ele = configurationData.get( id.toLowerCase() );
+        if( ele == null ) {
+            throw new NullPointerException( "unable to get id "+id+" from config subsystem");
+        } else if( ele.getType() != ConfigType.STRING) {
+            throw new ClassCastException("Unable to cast type to correct class (expected: string; is: "+ele.getType().name()+")" );
         } else {
-            ret=(String)(configurationData.get(id.toLowerCase()));
+            ret=ele.getStringValue();
         }
         return ret;
     }
