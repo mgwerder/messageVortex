@@ -133,7 +133,7 @@
           <classpath path="${basedir}/lib/jacoco/lib/jacocoant.jar"/>
       </taskdef>
       <jacoco:coverage destfile="${build.home}/jacoco.exec">
-            <junit  fork="yes" forkmode="once" haltonfailure="yes" dir="${build.home}/classes/"> <!-- showoutput="yes" printsummary="withOutAndErr" -->
+            <junit  fork="yes" forkmode="once" haltonfailure="yes" dir="${basedir}/app"> <!-- showoutput="yes" printsummary="withOutAndErr" -->
                 <!--<sysproperty key="net.sourceforge.cobertura.datafile" file="${build.home}/cobertura.ser" />-->
                 <jvmarg value="-XX:-UseSplitVerifier"/>
                 <classpath refid="test.classpath"/>
