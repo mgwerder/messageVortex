@@ -52,9 +52,6 @@ public class MessageVortexConfig extends Config {
                             } else if ("numeric".equals( token.toLowerCase() ) ) {
                                 String name = scanner.next().trim();
                                 int val = Integer.parseInt( scanner.next().trim() );
-                                if( "".equals(val) ) {
-                                    val=0;
-                                }
                                 String desc = scanner.next().trim();
                                 createNumericConfigValue(name, desc, val);
                             } else {
