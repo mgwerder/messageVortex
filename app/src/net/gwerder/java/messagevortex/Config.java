@@ -35,6 +35,7 @@ public abstract class Config {
 
     private enum ConfigType {
         BOOLEAN,
+        NUMERIC,
         STRING;
 
         public static ConfigType getById( String id ) {
@@ -128,6 +129,17 @@ public abstract class Config {
             return ret;
         }
 
+        public int getNumericValue() {
+            int ret=Integer.parseInt( getStringValue() );
+            return ret;
+        }
+
+        public int setNumericValue( int value ) {
+            int ret=getNumericValue();
+            setValue( ""+value );
+            return ret;
+        }
+
         public String unset() {
             return setValue( null );
         }
@@ -196,13 +208,6 @@ public abstract class Config {
     }
 
     /***
-     * Returns a deep copy of this config store.
-     ***/
-    public Config copy() throws IOException {
-        return copy(this);
-    }
-
-    /***
      * Gets a boolean value from the application config.
      *
      * @param id key which should be set
@@ -242,6 +247,63 @@ public abstract class Config {
             throw new ClassCastException("config type missmatch when accessing ID "+id+" (expected: boolean; is: "+ele.getType().name()+")" );
         } else {
             ret=ele.getBooleanValue();
+        }
+        return ret;
+    }
+
+    public void createNumericConfigValue(String id, String description,int dval) {
+        synchronized (configurationData) {
+            if (configurationData.get( id.toLowerCase()) == null ) {
+                ConfigElement ele = new ConfigElement( id,"numeric", description );
+                configurationData.put( id.toLowerCase(), ele );
+                ele.setDefaultValue( ""+dval );
+                LOGGER.log(Level.FINE,"Created numeric config variable "+id.toLowerCase());
+            } else {
+                throw new IllegalArgumentException( "id \"" + id + "\" is already defined" );
+            }
+        }
+    }
+
+    /***
+     * Gets a numeric value from the application config.
+     *
+     * @param id key which should be set
+     * @param value Value to be set in key
+     * @return old value before setting to new value
+     * @throws NullPointerException if key does not exist in configurationData
+     * @throws ClassCastException if key is not of type boolean
+     ***/
+    public int setNumericValue(String id,int value) throws IOException {
+        int ret;
+        ConfigElement ele = configurationData.get(id.toLowerCase());
+        if( ele == null ) {
+            throw new NullPointerException( "id "+id+" is not known to the config subsystem" );
+        } else if( ele.getType() != ConfigType.NUMERIC ) {
+            throw new ClassCastException("config type missmatch when accessing ID "+id+" (expected: numeric; is: "+ele.getType().name()+")" );
+        } else {
+            ret=ele.getNumericValue();
+            ele.setNumericValue( value );
+        }
+        return ret;
+    }
+
+    /***
+     * Gets a numeric value from the application config.
+     *
+     * @param id          key which should be set
+     * @return                current value of the specified key
+     * @throws NullPointerException if key does not exist in configurationData
+     * @throws ClassCastException if key is not of type boolean
+     ***/
+    public int getNumericValue(String id) throws IOException {
+        int ret;
+        ConfigElement ele = configurationData.get(id.toLowerCase());
+        if( ele == null ) {
+            throw new NullPointerException( "id "+id+" is not known to the config subsystem" );
+        } else if( ele.getType() != ConfigType.NUMERIC ) {
+            throw new ClassCastException("config type missmatch when accessing ID "+id+" (expected: numeric; is: "+ele.getType().name()+")" );
+        } else {
+            ret=ele.getNumericValue();
         }
         return ret;
     }
@@ -291,6 +353,10 @@ public abstract class Config {
     }
 
     /***
+     * Sets the value of a string type.
+     *
+     * @param id    the id of the value to be retrieved
+     *
      * @throws NullPointerException when id is unknown
      * @throws ClassCastException   when id is not a String setting
      ***/
@@ -305,6 +371,15 @@ public abstract class Config {
             ret=ele.getStringValue();
         }
         return ret;
+    }
+
+    /***
+     * Returns a deep copy of this config store.
+     *
+     * @return the copy
+     ***/
+    public Config copy() throws IOException {
+        return copy(this);
     }
 
 }

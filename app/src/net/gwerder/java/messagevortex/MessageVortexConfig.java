@@ -1,7 +1,6 @@
 package net.gwerder.java.messagevortex;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
@@ -31,7 +30,7 @@ public class MessageVortexConfig extends Config {
                 if(Pattern.matches("\\s*//.*",line)) {
                     // ignore comment lines
                 } else if( Pattern.matches( "\\s*",line) ) {
-                    // ignore empty lines
+                    // ignore  empty lines
                 } else {
                     try (Scanner scanner = new Scanner(line)) {
                         scanner.useDelimiter("\\s*,\\s*");
@@ -42,7 +41,7 @@ public class MessageVortexConfig extends Config {
                                 boolean val = "true".equals(scanner.next().toLowerCase().trim());
                                 String desc = scanner.next().trim();
                                 createBooleanConfigValue(name, desc, val);
-                            } else if ("string".equals(token.toLowerCase()) || "numeric".equals(token.toLowerCase())) {
+                            } else if ("string".equals(token.toLowerCase()) ) {
                                 String name = scanner.next().trim();
                                 String val = scanner.next().trim();
                                 if( "".equals(val) ) {
@@ -50,6 +49,14 @@ public class MessageVortexConfig extends Config {
                                 }
                                 String desc = scanner.next().trim();
                                 createStringConfigValue(name, desc, val);
+                            } else if ("numeric".equals( token.toLowerCase() ) ) {
+                                String name = scanner.next().trim();
+                                int val = Integer.parseInt( scanner.next().trim() );
+                                if( "".equals(val) ) {
+                                    val=0;
+                                }
+                                String desc = scanner.next().trim();
+                                createNumericConfigValue(name, desc, val);
                             } else {
                                 throw new IOException("encountered unknown field type: " + token +" (line was \""+line+"\")");
                             }
