@@ -645,7 +645,7 @@ public class AsymmetricKey extends Key  implements Serializable {
         }
 
         //make sure object is of right type
-        if(! (key instanceof AsymmetricKey)) {
+        if( key.getClass() !=  this.getClass() ) {
             return false;
         }
 

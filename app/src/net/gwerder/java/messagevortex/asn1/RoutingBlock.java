@@ -334,7 +334,7 @@ public class RoutingBlock extends AbstractBlock  implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if(! (o instanceof RoutingBlock)) {
+        if( o.getClass() != this.getClass() ) {
             return false;
         }
         RoutingBlock rb=(RoutingBlock)o;

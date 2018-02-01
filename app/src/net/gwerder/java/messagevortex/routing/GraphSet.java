@@ -285,7 +285,7 @@ public class GraphSet implements Comparator<GraphSet>,Comparable<GraphSet>,Itera
         if(g==null) {
             return false;
         }
-        if(g instanceof GraphSet) {
+        if( g.getClass() != this.getClass()  ) {
             GraphSet t=(GraphSet)g;
             if( t.store.size()!=store.size()) {
                 return false;

@@ -276,7 +276,7 @@ public class IdentityStoreBlock extends AbstractBlock  implements Serializable {
         if(t==null) {
             return false;
         }
-        if(!(t instanceof IdentityStoreBlock)) {
+        if( t.getClass() != this.getClass() ) {
             return false;
         }
         IdentityStoreBlock isb=(IdentityStoreBlock)t;

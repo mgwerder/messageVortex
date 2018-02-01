@@ -251,7 +251,7 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
             return false;
         }
 
-        if(! (o instanceof PayloadChunk)) {
+        if( o.getClass() != this.getClass() ) {
             return false;
         }
         PayloadChunk pl=(PayloadChunk)o;

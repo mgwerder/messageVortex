@@ -348,7 +348,7 @@ public class VortexMessage extends AbstractBlock implements Serializable {
     @Override
     public boolean equals(Object o) {
         if(o==null) return false;
-        if(!(o instanceof VortexMessage)) {
+        if( o.getClass() != this.getClass() ) {
             return false;
         }
         VortexMessage vm=(VortexMessage)o;

@@ -261,7 +261,7 @@ public class SymmetricKey extends Key implements Serializable {
         }
 
         //make sure object is of right type
-        if(! (t instanceof SymmetricKey)) {
+        if( t.getClass() != this.getClass() ) {
             return false;
         }
 

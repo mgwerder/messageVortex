@@ -91,7 +91,7 @@ public class InnerMessageBlock extends AbstractBlock  implements Serializable {
     }
 
     protected void parse(ASN1Encodable o ) throws IOException {
-        parse(o);
+        parse( o, null );
     }
 
     protected void parse(ASN1Encodable o,AsymmetricKey decryptionKey ) throws IOException {
@@ -300,7 +300,7 @@ public class InnerMessageBlock extends AbstractBlock  implements Serializable {
         if(o==null) {
             return false;
         }
-        if(! (o instanceof InnerMessageBlock)) {
+        if( o.getClass() != this.getClass() ) {
             return false;
         }
         InnerMessageBlock ib=(InnerMessageBlock)o;

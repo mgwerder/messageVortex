@@ -103,7 +103,7 @@ public class Edge {
         if(t==null) {
             return false;
         }
-        if(! (t instanceof Edge)) {
+        if( t.getClass() != this.getClass() ) {
             return false;
         }
         Edge g=(Edge)t;

@@ -146,24 +146,18 @@ public class AsymmetricKeyCache implements Serializable {
     }
 
     public void load(String filename) throws IOException {
-        ObjectInputStream f=new ObjectInputStream(new FileInputStream(filename));
-        try {
+        try (ObjectInputStream f=new ObjectInputStream(new FileInputStream(filename)) ){
             load(f, false);
-        } finally {
-            f.close();
         }
         LOGGER.log(Level.INFO, "loaded cache from file \""+filename+"\"");
         showStats();
     }
 
     public void merge(String filename) throws IOException {
-        ObjectInputStream f=new ObjectInputStream(new FileInputStream(filename));
-        try {
+        try (ObjectInputStream f=new ObjectInputStream(new FileInputStream(filename))) {
             load(f, true);
         } catch(ClassCastException cce) {
             throw new IOException("Error deserializing file \""+filename+"\"",cce);
-        } finally {
-            f.close();
         }
     }
 

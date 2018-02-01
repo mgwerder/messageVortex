@@ -119,8 +119,4 @@ public abstract class LineConnection extends Thread {
         }
     }
 
-
-    @Override
-    public abstract void run();
-
 }

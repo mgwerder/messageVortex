@@ -404,7 +404,7 @@ public class IdentityBlock extends AbstractBlock  implements Serializable {
         if(t==null) {
             return false;
         }
-        if(! (t instanceof IdentityBlock) ) {
+        if( t.getClass() != this.getClass() ) {
             return false;
         }
         IdentityBlock o=(IdentityBlock)t;

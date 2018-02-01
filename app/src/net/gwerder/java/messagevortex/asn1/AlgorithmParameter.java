@@ -159,7 +159,7 @@ public class AlgorithmParameter extends AbstractBlock implements Serializable,Co
         if(o==null) {
             return false;
         }
-        if(! (o instanceof AlgorithmParameter)) {
+        if( ! (o.getClass() == this.getClass()) ) {
             return false;
         }
         return ((AlgorithmParameter)(o)).compareTo(this)==0;

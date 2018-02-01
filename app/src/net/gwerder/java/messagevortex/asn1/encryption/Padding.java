@@ -32,11 +32,11 @@ import java.util.*;
 public enum Padding implements Serializable {
 
     // Commented out as without padding the reencryption test falis ... could be eventually deleted
-    /*NONE            ( 1000, "NoPadding", new AlgorithmType[]{AlgorithmType.ASYMMETRIC}, new SizeCalc() {
+    NONE            ( 1000, "NoPadding", new AlgorithmType[]{AlgorithmType.SYMMETRIC}, new SizeCalc() {
         public int maxSize(int s) {
-            return s / 8 - 1;
+            return s / 8;
         }
-    } ),*/
+    } ),
     PKCS1           ( 1001, "PKCS1Padding", new AlgorithmType[]{AlgorithmType.ASYMMETRIC}, new SizeCalc() {
         public int maxSize(int s) {
             return (s / 8) - 11;
