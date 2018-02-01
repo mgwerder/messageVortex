@@ -142,6 +142,8 @@ public class AsymmetricKey extends Key  implements Serializable {
             throw new NullPointerException("parameters may not be null");
         }
         this.parameters=params;
+        assert Integer.parseInt(parameters.get(Parameter.KEYSIZE) ) <1024 || Integer.parseInt(parameters.get(Parameter.KEYSIZE) ) == Integer.parseInt(parameters.get(Parameter.BLOCKSIZE) );
+
 
         if(params.get(Parameter.ALGORITHM)==null) {
             throw new IOException( "Algorithm null is not encodable by the system" );

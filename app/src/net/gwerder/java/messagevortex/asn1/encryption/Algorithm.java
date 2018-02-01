@@ -32,8 +32,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
-import static org.bouncycastle.asn1.ua.DSTU4145NamedCurves.params;
-
 /**
  * Represents all supported crypto algorithms.
  *
@@ -310,10 +308,10 @@ public enum Algorithm implements Serializable {
             // get requested parameters
             AlgorithmParameter params = getParameters(sl);
 
-            String bsparam = params.get(Parameter.BLOCKSIZE);
+            String bsparam = params.get( Parameter.BLOCKSIZE );
             if (bsparam != null) {
                 // get kesize from parameters
-                return Integer.parseInt(bsparam);
+                return Integer.parseInt( bsparam );
             } else {
                 return getKeySize();
             }

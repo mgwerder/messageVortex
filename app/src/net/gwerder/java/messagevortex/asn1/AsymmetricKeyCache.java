@@ -28,8 +28,8 @@ public class AsymmetricKeyCache implements Serializable {
 
         public static final long serialVersionUID = 100000000080L;
 
-        private static final int MAX_NUMBER_OF_CALC_TIMES =  100;
-        private static final int MAX_CACHE_SIZE           = 4000;
+        private static final int MAX_NUMBER_OF_CALC_TIMES =   100;
+        private static final int MAX_CACHE_SIZE           = 40000;
 
         private int maxSize = 1;
         private long averageCalcTime=100;

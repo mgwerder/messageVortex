@@ -45,6 +45,7 @@ public class AsymmetricKeyTest {
             try {
                 AlgorithmParameter p=alg.getParameters( SecurityLevel.LOW );
                 p.put(Parameter.KEYSIZE.getId(),""+size);
+                p.put(Parameter.BLOCKSIZE.getId(),""+size);
                 s = new AsymmetricKey(p);
             } catch (IOException ioe) {
                 LOGGER.log(Level.WARNING, "unexpected exception", ioe);
