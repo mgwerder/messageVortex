@@ -430,9 +430,11 @@ class AsymmetricKeyPreCalculator implements Serializable {
 
     private static void save() throws IOException,ClassNotFoundException {
         // do not allow saving more often than every minute
-        synchronized(runner) {
-            if (lastSaved + 60000 > System.currentTimeMillis()) {
-                return;
+        if( runner!=null ) {
+            synchronized (runner) {
+                if (lastSaved + 60000 > System.currentTimeMillis()) {
+                    return;
+                }
             }
         }
 
