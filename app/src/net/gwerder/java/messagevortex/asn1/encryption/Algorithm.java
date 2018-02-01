@@ -32,6 +32,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
+import static org.bouncycastle.asn1.ua.DSTU4145NamedCurves.params;
+
 /**
  * Represents all supported crypto algorithms.
  *
@@ -86,7 +88,16 @@ public enum Algorithm implements Serializable {
             this.t = t;
             this.txt = txt;
             this.provider = provider;
-            secLevel.putAll(getSecLevelList( level, getParameterList( new String[] { Parameter.ALGORITHM+"="+id,Parameter.KEYSIZE+"="+getKeySize()} ) ) );
+            int blockSize=getKeySize();
+            if( txt.toLowerCase().startsWith("aes") || txt.toLowerCase().startsWith("camellia") || txt.toLowerCase().startsWith("twofish") ) {
+                // CAMELLIA, TWOFISH and AES do always have 128 bit block size
+                blockSize=128;
+            }
+            secLevel.putAll(getSecLevelList( level, getParameterList( new String[] {
+                    Parameter.ALGORITHM+"="+id,
+                    Parameter.KEYSIZE+"="+getKeySize(),
+                    Parameter.BLOCKSIZE+"="+blockSize
+            } ) ) );
             if(t==AlgorithmType.SYMMETRIC) {
                 secLevel.get(level).put(Parameter.PADDING.getId(),Padding.getDefault(t).toString());
                 secLevel.get(level).put(Parameter.MODE.getId(),Mode.getDefault(t).toString());
@@ -249,6 +260,15 @@ public enum Algorithm implements Serializable {
     }
 
     /***
+     * Get the default key size for this algorithm.
+     *
+     * @return the default key size in bits
+     */
+    public int getBlockSize() {
+        return getBlockSize(SecurityLevel.getDefault());
+    }
+
+    /***
      * Get the key size for this algorithm and security level.
      *
      * @param sl   the security level
@@ -275,6 +295,27 @@ public enum Algorithm implements Serializable {
                 return Integer.parseInt(params.get(Parameter.CURVETYPE).substring(4, 7));
             } else {
                 return Integer.parseInt(params.get(Parameter.KEYSIZE));
+            }
+        }
+    }
+
+    /***
+     * Get the block size for this algorithm and security level.
+     *
+     * @param sl   the security level
+     * @return     the key size in bits for the security level specified
+     */
+    public int getBlockSize(SecurityLevel sl) {
+        synchronized(secLevel) {
+            // get requested parameters
+            AlgorithmParameter params = getParameters(sl);
+
+            String bsparam = params.get(Parameter.BLOCKSIZE);
+            if (bsparam != null) {
+                // get kesize from parameters
+                return Integer.parseInt(bsparam);
+            } else {
+                return getKeySize();
             }
         }
     }

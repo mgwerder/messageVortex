@@ -135,8 +135,8 @@ public enum Padding implements Serializable {
         return txt;
     }
 
-    public int getMaxSize(int keysize) {
-        return s.maxSize( keysize );
+    public int getMaxSize(int blockSize) {
+        return s.maxSize( blockSize );
     }
 
     /***

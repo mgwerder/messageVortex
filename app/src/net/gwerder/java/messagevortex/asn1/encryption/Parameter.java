@@ -84,6 +84,16 @@ public enum Parameter implements Serializable {
         public ASN1Encodable toASN1(String s) {
             return new DEROctetString(s.getBytes());
         }
+    }),
+    BLOCKSIZE (10100,"blockSize",new Transcoder() {
+        @Override
+        public String fromASN1(ASN1Object o) {
+            return ASN1Integer.getInstance(o).getPositiveValue().toString();
+        }
+        @Override
+        public ASN1Encodable toASN1(String s) {
+            return new ASN1Integer(Integer.parseInt(s));
+        }
     });
 
     private interface Transcoder {

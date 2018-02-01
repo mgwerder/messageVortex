@@ -103,7 +103,7 @@ public class AsymmetricKeyReencodingTest {
                 s2 = new AsymmetricKey( s1.toBytes(DumpType.ALL) );
                 LOGGER.log( Level.INFO, "  dumping object");
                 currentObject = s1.dumpValueNotation( "", DumpType.ALL );
-                byte[] b1 = new byte[sr.nextInt( Math.min( s1.getPadding().getMaxSize( Integer.parseInt(parameter.get(Parameter.KEYSIZE)) ), 1024 ) )];
+                byte[] b1 = new byte[sr.nextInt( Math.min( s1.getPadding().getMaxSize( Integer.parseInt(parameter.get(Parameter.BLOCKSIZE)) ), 1024 ) )];
                 sr.nextBytes( b1 );
                 LOGGER.log( Level.INFO, "  running encryption/decryption test with " + parameter.get(Parameter.ALGORITHM) + "/" + parameter.get(Parameter.MODE) + "/" + parameter.get(Parameter.PADDING) + "" );
                 byte[] b2 = s1.decrypt( s1.encrypt( b1 ) );

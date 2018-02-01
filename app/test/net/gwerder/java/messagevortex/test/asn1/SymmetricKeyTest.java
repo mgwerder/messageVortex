@@ -129,7 +129,7 @@ public class SymmetricKeyTest {
                     int size = 0;
                     SecurityLevel sl = SecurityLevel.LOW;
                     while (maximumPayload < 0 && maximumPayload != -100000) {
-                        size = a.getKeySize( sl );
+                        size = a.getBlockSize( sl );
                         maximumPayload = p.getMaxSize( size );
                         if (maximumPayload < 0 && sl == SecurityLevel.QUANTUM) {
                             LOGGER.log( Level.INFO, "  skipping test for " + a + "/" + p + " due to insufficient key length" );
@@ -138,18 +138,24 @@ public class SymmetricKeyTest {
                             sl = sl.next();
                         }
                     }
+                    if( "aes".equals(a.getAlgorithmFamily().toLowerCase() ) ) {
+                        // AES has a fixed block size of 128 bits
+                        maximumPayload=16;
+                    }
                     if (maximumPayload == -100000) {
                         LOGGER.log( Level.INFO, "  What is going on here??" );
                         break;
                     }
-                    LOGGER.log( Level.INFO, "  testing " + a + "/" + p + " with level "+sl );
+                    LOGGER.log( Level.INFO, "  testing " + a + "/" + p + " with level "+sl+" (size: "+maximumPayload+")" );
                     for (int i = 0; i < 100; i++) {
                         SymmetricKey ak = new SymmetricKey( a, p, Mode.getDefault( AlgorithmType.SYMMETRIC ) );
                         assertTrue( "negative maximum payload for " + a.toString() + "/" + size + "/" + p.toString(), maximumPayload > 1 );
                         byte[] b = new byte[maximumPayload];
-                        sr.nextBytes( b );
-                        byte[] b2 = ak.decrypt( ak.encrypt( b ) );
-                        assertTrue( "byte arrays mus be equal after redecryption", Arrays.equals( b, b2 ) );
+                        sr.nextBytes(b);
+                        byte[] b2 = ak.decrypt(ak.encrypt(b));
+
+                        assertTrue("byte arrays must be of equal size after redecryption (b: "+b.length+"; b2: "+b2.length+")", b.length==b2.length );
+                        assertTrue("byte arrays must be equal after redecryption", Arrays.equals(b, b2));
                     }
                     LOGGER.log( Level.INFO, "  done " + a + "/" + p + " with level "+sl );
 
