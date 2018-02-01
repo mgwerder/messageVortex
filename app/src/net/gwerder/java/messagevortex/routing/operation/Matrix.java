@@ -221,7 +221,7 @@ public class Matrix {
 
     @Override
     public boolean equals(Object o) {
-        if( o.getClass() != this.getClass() ) {
+        if( ! ( o instanceof Matrix ) ) {
             return false;
         }
         Matrix m=(Matrix)o;
