@@ -25,7 +25,7 @@ public class MessageVortexTransport {
         // setup receiver for mail relay
         inSMTP = new SMTPReceiver( cfg.getNumericValue("smtp_incomming_port"), null, cfg.getBooleanValue("smtp_incomming_ssl"), receiver );
 
-        // setup receiver for IMAP requasts
+        // setup receiver for IMAP requests
 
     }
 

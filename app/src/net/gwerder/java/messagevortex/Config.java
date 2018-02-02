@@ -75,14 +75,14 @@ public abstract class Config {
             return ret;
         }
 
-        public void setId(String id) {
+        public final void setId(String id) {
             if( id==null ) {
                 throw new NullPointerException("id must not be null");
             }
             this.id=id.toLowerCase();
         }
 
-        public void setType(String type) {
+        public final void setType(String type) {
             if( type == null ) {
                 throw new NullPointerException("type must not be null");
             } else if( ConfigType.getById( type ) == null ) {
@@ -92,15 +92,15 @@ public abstract class Config {
             }
         }
 
-        public ConfigType getType() {
+        public final ConfigType getType() {
             return ConfigType.getById( this.type );
         }
 
-        public void setDescription(String description) {
+        public final void setDescription(String description) {
             this.description = description;
         }
 
-        public String getStringValue() {
+        public final String getStringValue() {
             if( currentValue != null ) {
                 return currentValue;
             } else {
@@ -108,18 +108,18 @@ public abstract class Config {
             }
         }
 
-        public String setStringValue( String value ) {
+        public final String setStringValue( String value ) {
             String ret = getStringValue();
             currentValue=value;
             return ret;
         }
 
-        public boolean getBooleanValue() {
+        public final boolean getBooleanValue() {
             String ret=getStringValue();
             return ret != null && ("true".equals(ret.toLowerCase()) || "yes".equals(ret.toLowerCase()));
         }
 
-        public boolean setBooleanValue( boolean value ) {
+        public final boolean setBooleanValue( boolean value ) {
             boolean ret=getBooleanValue();
             if(value) {
                 currentValue="true";
@@ -129,18 +129,17 @@ public abstract class Config {
             return ret;
         }
 
-        public int getNumericValue() {
-            int ret=Integer.parseInt( getStringValue() );
-            return ret;
+        public final int getNumericValue() {
+            return Integer.parseInt( getStringValue() );
         }
 
-        public int setNumericValue( int value ) {
+        public final int setNumericValue( int value ) {
             int ret=getNumericValue();
             setValue( ""+value );
             return ret;
         }
 
-        public String unset() {
+        public final String unset() {
             return setValue( null );
         }
 
@@ -167,7 +166,6 @@ public abstract class Config {
 
     static Config defaultConfig=null;
     private final Map<String,ConfigElement> configurationData= new ConcurrentHashMap<>();
-    private final List<ConfigElement> orderedListOfConfigElements = new Vector<>();
 
     /* Gets a boolean value from the application config.
      *

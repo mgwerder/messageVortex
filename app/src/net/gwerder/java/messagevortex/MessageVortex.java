@@ -21,9 +21,10 @@ package net.gwerder.java.messagevortex;
 // * SOFTWARE.
 // ************************************************************************************
 
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
- 
+
 public class MessageVortex {
 
     private static final Logger LOGGER;
@@ -31,14 +32,30 @@ public class MessageVortex {
         LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
     }
 
+    static MessageVortexTransport  transport  = null;
+    static MessageVortexBlending   blending   = null;
+    static MessageVortexRouting    routing    = null;
+    static MessageVortexAccounting accounting = null;
+
     private MessageVortex() {
         super();
     }
 
     public static int main(String[] args) {
-      if(args!=null && args.length>0 && "--help".equals(args[0])) {
-        LOGGER.log(Level.INFO, "MailVortex V"+Version.getBuild());
-      }    
-      return 0;
+          if(args!=null && args.length>0 && "--help".equals(args[0])) {
+            LOGGER.log(Level.INFO, "MailVortex V"+Version.getBuild());
+          }
+
+          try {
+              accounting = new MessageVortexAccounting();
+              routing   = new MessageVortexRouting();
+              blending  = new MessageVortexBlending();
+              transport = new MessageVortexTransport();
+          }catch (IOException ioe) {
+              LOGGER.log(Level.SEVERE, "Exception while setting up transport infrastructure",ioe);
+          }
+
+          transport.shutdown();
+          return 0;
     }
 }
