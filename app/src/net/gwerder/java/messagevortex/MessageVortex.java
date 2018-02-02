@@ -50,7 +50,7 @@ public class MessageVortex {
               accounting = new MessageVortexAccounting();
               routing   = new MessageVortexRouting();
               blending  = new MessageVortexBlending();
-              transport = new MessageVortexTransport();
+              transport = new MessageVortexTransport(blending);
           }catch (IOException ioe) {
               LOGGER.log(Level.SEVERE, "Exception while setting up transport infrastructure",ioe);
           }
