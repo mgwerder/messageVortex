@@ -65,9 +65,12 @@ public class MessageVortexConfig extends Config {
         }
     }
 
-    @Override
-    public Config createConfig()throws IOException {
-        return new MessageVortexConfig();
+    public static Config createConfig()throws IOException {
+        Config cfg=new MessageVortexConfig();
+        if(defaultConfig==null) {
+            defaultConfig=cfg;
+        }
+        return cfg;
     }
 
 }

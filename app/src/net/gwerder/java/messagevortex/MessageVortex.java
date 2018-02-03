@@ -32,30 +32,43 @@ public class MessageVortex {
         LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
     }
 
-    static MessageVortexTransport  transport  = null;
-    static MessageVortexBlending   blending   = null;
-    static MessageVortexRouting    routing    = null;
-    static MessageVortexAccounting accounting = null;
+    private static MessageVortexTransport  transport  = null;
+    private static MessageVortexBlending   blending   = null;
+    private static MessageVortexRouting    routing    = null;
+    private static MessageVortexAccounting accounting = null;
 
     private MessageVortex() {
         super();
     }
 
+    public static void help() {
+        System.out.println("no help text so far"); // FIXME
+    }
+
     public static int main(String[] args) {
-          if(args!=null && args.length>0 && "--help".equals(args[0])) {
-            LOGGER.log(Level.INFO, "MailVortex V"+Version.getBuild());
-          }
+        LOGGER.log(Level.INFO, "MailVortex V"+Version.getBuild());
+        if(args!=null && args.length>0 && "--help".equals(args[0])) {
+            // output help here
+            help();
+        }
 
-          try {
-              accounting = new MessageVortexAccounting();
-              routing   = new MessageVortexRouting();
-              blending  = new MessageVortexBlending();
-              transport = new MessageVortexTransport(blending);
-          }catch (IOException ioe) {
-              LOGGER.log(Level.SEVERE, "Exception while setting up transport infrastructure",ioe);
-          }
+        // create config store
+        try {
+            MessageVortexConfig.createConfig();
+        } catch( IOException ioe ) {
+            LOGGER.log( Level.SEVERE, "Unable to parse config file", ioe );
+        }
 
-          transport.shutdown();
-          return 0;
+        try {
+            accounting = new MessageVortexAccounting();
+            routing   = new MessageVortexRouting();
+            blending  = new MessageVortexBlending();
+            transport = new MessageVortexTransport( blending );
+        }catch ( IOException ioe ) {
+            LOGGER.log( Level.SEVERE, "Exception while setting up transport infrastructure", ioe );
+        }
+
+        transport.shutdown();
+        return 0;
     }
 }

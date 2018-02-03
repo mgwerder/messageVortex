@@ -26,7 +26,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
-public abstract class Config {
+public class Config {
 
     private static final java.util.logging.Logger LOGGER;
     static {
@@ -190,8 +190,6 @@ public abstract class Config {
         return dst;
     }
 
-    public abstract Config createConfig() throws IOException;
-
     public void createBooleanConfigValue(String id, String description,boolean dval) {
         synchronized (configurationData) {
             if (configurationData.get( id.toLowerCase()) == null ) {
@@ -203,6 +201,10 @@ public abstract class Config {
                 throw new IllegalArgumentException( "id \"" + id + "\" is already defined" );
             }
         }
+    }
+
+    public static Config createConfig() throws IOException {
+        return new Config();
     }
 
     /***
