@@ -78,7 +78,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
             setPriority(MIN_PRIORITY);
 
             // we start the daemon as soon as we can
-            setName("AsymmetricKey cache manager "+(counter++));
+            setName( TMP_PREFIX + " manager " + ( counter++ ) );
             start();
             LOGGER.log(Level.INFO,"cache manager \""+getName()+"\" started");
         }
@@ -175,8 +175,9 @@ class AsymmetricKeyPreCalculator implements Serializable {
             try {
                 // prepare thread
                 Thread t=runCalculatorThread(p);
-                t.setName("cache precalculation thread");
+                t.setName( TMP_PREFIX + " precalculation");
                 t.setPriority(Thread.MIN_PRIORITY);
+                t.setDaemon(true);
                 pool.execute(t);
                 LOGGER.log(Level.INFO, "Added key precalculator for "+p+" (pool size:"+pool.getQueue().size()+"; thread count (min/current/max):"+pool.getCorePoolSize()+"/"+pool.getActiveCount()+"/"+pool.getMaximumPoolSize()+")");
 
@@ -251,7 +252,16 @@ class AsymmetricKeyPreCalculator implements Serializable {
                 return tryTransfer(e);
             }
         };
-        pool = new ThreadPoolExecutor(1, numThreads, 1, TimeUnit.SECONDS, queue);
+        ThreadFactory factory = new ThreadFactory() {
+            public Thread newThread(Runnable r) {
+                Thread t=new Thread(r);
+                t.setName(TMP_PREFIX + " worker");
+                t.setDaemon(true);
+                return t;
+            }
+        };
+
+        pool = new ThreadPoolExecutor(1, numThreads, 1, TimeUnit.SECONDS, queue, factory );
         pool.setRejectedExecutionHandler(new RejectedExecutionHandler() {
             @Override
             public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {

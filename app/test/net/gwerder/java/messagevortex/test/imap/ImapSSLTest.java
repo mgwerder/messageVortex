@@ -24,7 +24,7 @@ import static org.junit.Assert.fail;
 
 
 /**
- * Tests for {@link net.gwerder.java.messagevortex.MailVortex}.
+ * Tests for {@link net.gwerder.java.messagevortex.MessageVortex}.
  *
  * @author martin@gwerder.net (Martin GWERDER)
  */
@@ -120,7 +120,15 @@ public class ImapSSLTest {
     }
 
     protected static Set<Thread> getThreadList() {
-        return Thread.getAllStackTraces().keySet();
+        Set<Thread> cThread = Thread.getAllStackTraces().keySet();
+        ArrayList<Thread> al=new ArrayList<>();
+        for(Thread t:cThread) {
+            if( ! t.isAlive() || t.isDaemon() || t.getState() == Thread.State.TERMINATED ) {
+                al.add(t);
+            }
+        }
+        cThread.removeAll(al);
+        return cThread;
     }
 
     protected static Set<Thread> verifyHangingThreads(Set<Thread> pThread) {
@@ -128,8 +136,8 @@ public class ImapSSLTest {
         cThread.removeAll(pThread);
         ArrayList<Thread> al=new ArrayList<>();
         for(Thread t:cThread) {
-            if(t.isAlive() && ! t.isDaemon()) {
-                LOGGER.log(Level.SEVERE, "Error got new thread " + t.getName());
+            if( t.isAlive() && ! t.isDaemon() && t.getState() != Thread.State.TERMINATED && ! pThread.contains(t) ) {
+                LOGGER.log( Level.SEVERE, "Error got new thread " + t.getName() );
             } else {
                 al.add(t);
             }
