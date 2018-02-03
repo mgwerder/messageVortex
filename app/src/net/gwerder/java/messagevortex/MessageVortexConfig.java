@@ -11,13 +11,6 @@ import java.util.regex.Pattern;
  */
 public class MessageVortexConfig extends Config {
 
-    public static Config getDefault() throws IOException {
-        if(defaultConfig==null) {
-            defaultConfig = new MessageVortexConfig();
-        }
-        return defaultConfig;
-    }
-
     private MessageVortexConfig() throws IOException{
         // This constructor hides a default constructor
         this("messageVortex.cfgRessources");

@@ -158,7 +158,7 @@ public class Config {
             return o1.id.compareToIgnoreCase(o2.id);
         }
 
-        public void setDefaultValue(String defaultValue) {
+        public final void setDefaultValue(String defaultValue) {
             this.defaultValue = defaultValue;
         }
 
@@ -167,15 +167,7 @@ public class Config {
     static Config defaultConfig=null;
     private final Map<String,ConfigElement> configurationData= new ConcurrentHashMap<>();
 
-    /* Gets a boolean value from the application config.
-     *
-     * @param id key which should be set
-     * @param value Vlue to be set in key
-     * @returns old value before setting to new value
-     * @throws NullPointerException if key does not exist in configurationData
-     * @throws ClassCastException if key is not of type boolean
-     ***/
-    public static Config getDefault() throws IOException {
+    public static Config getDefault() {
         return defaultConfig;
     }
 
@@ -208,26 +200,24 @@ public class Config {
     }
 
     /***
-     * Gets a boolean value from the application config.
+     * Sets a boolean value in the application config.
      *
      * @param id key which should be set
      * @param value Vlue to be set in key
      * @return old value before setting to new value
+     *
      * @throws NullPointerException if key does not exist in configurationData
      * @throws ClassCastException if key is not of type boolean
      ***/
-    public boolean setBooleanValue(String id,boolean value) throws IOException {
+    public boolean setBooleanValue(String id,boolean value)  {
         boolean ret;
         ConfigElement ele = configurationData.get(id.toLowerCase());
         if( ele == null ) {
             throw new NullPointerException( "id "+id+" is not known to the config subsystem" );
         } else if( ele.getType() != ConfigType.BOOLEAN ) {
             throw new ClassCastException("config type missmatch when accessing ID "+id+" (expected: boolean; is: "+ele.getType().name()+")" );
-        } else {
-            ret=ele.getBooleanValue();
-            ele.setBooleanValue( value );
         }
-        return ret;
+        return ele.setBooleanValue( value );
     }
 
     /***
@@ -238,17 +228,14 @@ public class Config {
      * @throws NullPointerException if key does not exist in configurationData
      * @throws ClassCastException if key is not of type boolean
      ***/
-    public boolean getBooleanValue(String id) throws IOException {
-        boolean ret;
+    public boolean getBooleanValue(String id) {
         ConfigElement ele = configurationData.get(id.toLowerCase());
         if( ele == null ) {
             throw new NullPointerException( "id "+id+" is not known to the config subsystem" );
         } else if( ele.getType() != ConfigType.BOOLEAN ) {
             throw new ClassCastException("config type missmatch when accessing ID "+id+" (expected: boolean; is: "+ele.getType().name()+")" );
-        } else {
-            ret=ele.getBooleanValue();
         }
-        return ret;
+        return ele.getBooleanValue();
     }
 
     public void createNumericConfigValue(String id, String description,int dval) {
@@ -265,7 +252,7 @@ public class Config {
     }
 
     /***
-     * Gets a numeric value from the application config.
+     * Sets a numeric value in the application config.
      *
      * @param id key which should be set
      * @param value Value to be set in key
@@ -274,17 +261,13 @@ public class Config {
      * @throws ClassCastException if key is not of type boolean
      ***/
     public int setNumericValue(String id,int value) throws IOException {
-        int ret;
         ConfigElement ele = configurationData.get(id.toLowerCase());
         if( ele == null ) {
             throw new NullPointerException( "id "+id+" is not known to the config subsystem" );
         } else if( ele.getType() != ConfigType.NUMERIC ) {
             throw new ClassCastException("config type missmatch when accessing ID "+id+" (expected: numeric; is: "+ele.getType().name()+")" );
-        } else {
-            ret=ele.getNumericValue();
-            ele.setNumericValue( value );
         }
-        return ret;
+        return ele.setNumericValue( value );
     }
 
     /***
@@ -296,16 +279,13 @@ public class Config {
      * @throws ClassCastException if key is not of type boolean
      ***/
     public int getNumericValue(String id) throws IOException {
-        int ret;
         ConfigElement ele = configurationData.get(id.toLowerCase());
         if( ele == null ) {
             throw new NullPointerException( "id "+id+" is not known to the config subsystem" );
         } else if( ele.getType() != ConfigType.NUMERIC ) {
             throw new ClassCastException("config type missmatch when accessing ID "+id+" (expected: numeric; is: "+ele.getType().name()+")" );
-        } else {
-            ret=ele.getNumericValue();
         }
-        return ret;
+        return ele.getNumericValue();
     }
 
     /***
@@ -339,17 +319,13 @@ public class Config {
      * @throws ClassCastException   when id is not a String setting
      ***/
     public String setStringValue(String id,String value) {
-        String ret;
         ConfigElement ele = configurationData.get(id.toLowerCase());
         if( ele == null || value==null) {
             throw new NullPointerException( "unable to get id "+id+" from config subsystem");
         } else if( ele.getType() != ConfigType.STRING) {
             throw new ClassCastException("Unable to cast type to correct class (expected: string; is: "+ele.getType().name()+")" );
-        } else {
-            ret=ele.getStringValue();
-            ele.setStringValue( value );
         }
-        return ret;
+        return ele.setStringValue( value );
     }
 
     /***
@@ -361,16 +337,13 @@ public class Config {
      * @throws ClassCastException   when id is not a String setting
      ***/
     public String getStringValue(String id) {
-        String ret;
         ConfigElement ele = configurationData.get( id.toLowerCase() );
         if( ele == null ) {
             throw new NullPointerException( "unable to get id "+id+" from config subsystem");
         } else if( ele.getType() != ConfigType.STRING) {
-            throw new ClassCastException("Unable to cast type to correct class (expected: string; is: "+ele.getType().name()+")" );
-        } else {
-            ret=ele.getStringValue();
+            throw new ClassCastException("Unable to cast type to correct class (expected: string; is: " + ele.getType().name() + ")");
         }
-        return ret;
+        return ele.getStringValue();
     }
 
     /***

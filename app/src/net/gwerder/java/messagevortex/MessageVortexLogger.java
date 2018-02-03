@@ -68,10 +68,10 @@ public class MessageVortexLogger extends Logger {
             StringBuilder sb = new StringBuilder();
 
             sb.append(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()))
-                .append(" ")
+                .append(' ')
                 .append(record.getLevel().getLocalizedName())
                 .append(": ")
-                .append("[")
+                .append('[')
                 .append(Thread.currentThread().getName())
                 .append("] ")
                 .append(formatMessage(record))
@@ -85,7 +85,7 @@ public class MessageVortexLogger extends Logger {
                     //noinspection ThrowableResultOfMethodCallIgnored
                     record.getThrown().printStackTrace(pw);
                     pw.close();
-                    sb.append(sw.toString());
+                    sb.append(sw);
                 } catch (Exception ex) {
                     assert true:"Never throw assertion"+ex;
                 }
