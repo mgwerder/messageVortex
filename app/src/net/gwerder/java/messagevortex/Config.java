@@ -171,10 +171,15 @@ public class Config {
         return defaultConfig;
     }
 
-    public static Config copy(Config src) throws IOException {
-        Config dst=src.createConfig();
-        synchronized(src.configurationData) {
-            Set<Map.Entry<String,ConfigElement>> it = src.configurationData.entrySet();
+    /***
+     * Returns a deep copy of this config store.
+     *
+     * @return the copy
+     ***/
+    public Config copy() throws IOException {
+        Config dst=createConfig();
+        synchronized(configurationData) {
+            Set<Map.Entry<String,ConfigElement>> it = configurationData.entrySet();
             for(Map.Entry<String,ConfigElement> p:it) {
                 dst.configurationData.put(p.getKey(),p.getValue().copy());
             }
@@ -210,12 +215,13 @@ public class Config {
      * @throws ClassCastException if key is not of type boolean
      ***/
     public boolean setBooleanValue(String id,boolean value)  {
-        boolean ret;
         ConfigElement ele = configurationData.get(id.toLowerCase());
         if( ele == null ) {
             throw new NullPointerException( "id "+id+" is not known to the config subsystem" );
-        } else if( ele.getType() != ConfigType.BOOLEAN ) {
-            throw new ClassCastException("config type missmatch when accessing ID "+id+" (expected: boolean; is: "+ele.getType().name()+")" );
+        }
+        ConfigType type = ele.getType();
+        if( type != ConfigType.BOOLEAN ) {
+            throw new ClassCastException( "config type missmatch when accessing ID " + id + " (expected: boolean; is: " + type.name() + ")" );
         }
         return ele.setBooleanValue( value );
     }
@@ -232,8 +238,10 @@ public class Config {
         ConfigElement ele = configurationData.get(id.toLowerCase());
         if( ele == null ) {
             throw new NullPointerException( "id "+id+" is not known to the config subsystem" );
-        } else if( ele.getType() != ConfigType.BOOLEAN ) {
-            throw new ClassCastException("config type missmatch when accessing ID "+id+" (expected: boolean; is: "+ele.getType().name()+")" );
+        }
+        ConfigType type = ele.getType();
+        if( type != ConfigType.BOOLEAN ) {
+            throw new ClassCastException("config type missmatch when accessing ID "+id+" (expected: boolean; is: "+type.name()+")" );
         }
         return ele.getBooleanValue();
     }
@@ -322,8 +330,10 @@ public class Config {
         ConfigElement ele = configurationData.get(id.toLowerCase());
         if( ele == null || value==null) {
             throw new NullPointerException( "unable to get id "+id+" from config subsystem");
-        } else if( ele.getType() != ConfigType.STRING) {
-            throw new ClassCastException("Unable to cast type to correct class (expected: string; is: "+ele.getType().name()+")" );
+        }
+        ConfigType type = ele.getType();
+        if( type != ConfigType.STRING) {
+            throw new ClassCastException("Unable to cast type to correct class (expected: string; is: "+type.name()+")" );
         }
         return ele.setStringValue( value );
     }
@@ -340,19 +350,12 @@ public class Config {
         ConfigElement ele = configurationData.get( id.toLowerCase() );
         if( ele == null ) {
             throw new NullPointerException( "unable to get id "+id+" from config subsystem");
-        } else if( ele.getType() != ConfigType.STRING) {
-            throw new ClassCastException("Unable to cast type to correct class (expected: string; is: " + ele.getType().name() + ")");
+        }
+        ConfigType type = ele.getType();
+        if( type != ConfigType.STRING) {
+            throw new ClassCastException( "Unable to cast type to correct class (expected: string; is: " + type.name() + ")" );
         }
         return ele.getStringValue();
-    }
-
-    /***
-     * Returns a deep copy of this config store.
-     *
-     * @return the copy
-     ***/
-    public Config copy() throws IOException {
-        return copy(this);
     }
 
 }

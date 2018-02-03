@@ -58,7 +58,7 @@ public class MessageVortexConfig extends Config {
         }
     }
 
-    public static Config createConfig()throws IOException {
+    public static Config createConfig() throws IOException {
         Config cfg=new MessageVortexConfig();
         if(defaultConfig==null) {
             defaultConfig=cfg;
