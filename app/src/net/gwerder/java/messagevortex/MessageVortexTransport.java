@@ -12,7 +12,7 @@ public class MessageVortexTransport {
 
     private TransportReceiver receiver;
     private SMTPReceiver      inSMTP;
-    private Config cfg;
+    private Config            cfg;
 
     public MessageVortexTransport(TransportReceiver receiver) throws IOException {
         if( receiver == null ) {
@@ -28,6 +28,16 @@ public class MessageVortexTransport {
 
         // setup receiver for IMAP requests
 
+    }
+
+    public TransportReceiver getReceiver() {
+        return receiver;
+    }
+
+    public TransportReceiver setReceiver(TransportReceiver receiver) {
+        TransportReceiver ret=getReceiver();
+        this.receiver=receiver;
+        return ret;
     }
 
     public void shutdown() {

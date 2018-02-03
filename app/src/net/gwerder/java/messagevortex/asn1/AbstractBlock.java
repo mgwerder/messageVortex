@@ -73,12 +73,13 @@ public abstract class AbstractBlock implements Block {
         if(i%8==0) {
             return toHex(bs.getOctets());
         }
-        String ret="'";
+        StringBuilder ret=new StringBuilder();
+        ret.append('\'');
         int j=0;
         byte k=0;
         byte[] b=bs.getBytes();
         while(i>0) {
-            ret+=""+(((b[j]>>(7-k))&1)>0?"1":"0");
+            ret.append(((b[j]>>(7-k))&1)>0?'1':'0');
             k++;
             if(k>7) {
                 k=0;
@@ -86,7 +87,7 @@ public abstract class AbstractBlock implements Block {
             }
             i--;
         }
-        return ret+"'B";
+        return ret.append("'B").toString();
     }
 
     protected void parse(byte[] b) throws IOException {
