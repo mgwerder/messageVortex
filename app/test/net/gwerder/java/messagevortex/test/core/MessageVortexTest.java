@@ -1,12 +1,16 @@
 package net.gwerder.java.messagevortex.test.core;
 
+import net.gwerder.java.messagevortex.Config;
+import net.gwerder.java.messagevortex.MessageVortexConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import javax.crypto.Cipher;
-
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -19,15 +23,31 @@ import static org.junit.Assert.fail;
 @RunWith(JUnit4.class)
 public class MessageVortexTest {
 
+    private static final Logger LOGGER;
+    static {
+        LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+    }
+
+    static {
+        try {
+            Config cfg=MessageVortexConfig.createConfig();
+            cfg.setNumericValue("smtp_incomming_port",588);
+        } catch( IOException ioe ) {
+            LOGGER.log( Level.SEVERE, "Unable to parse config file", ioe );
+        }
+
+
+    }
+
     @Test
     public void getHelp() {
         assertTrue("Errorcode for --help is not 0",net.gwerder.java.messagevortex.MessageVortex.main(new String[] {"--help"})==0);
-    }    
+    }
 
     @Test
     public void getRunRegularlyAndShutdown() {
         assertTrue("Errorcode is not 0",net.gwerder.java.messagevortex.MessageVortex.main(new String[0])==0);
-    }    
+    }
     @Test
     public void getRunRegularlyAndShutdownNull() {
         assertTrue("Errorcode is not 0",net.gwerder.java.messagevortex.MessageVortex.main(null)==0);
