@@ -68,7 +68,9 @@ public class MessageVortex {
             LOGGER.log( Level.SEVERE, "Exception while setting up transport infrastructure", ioe );
         }
 
-        transport.shutdown();
+        if(transport!=null) {
+            transport.shutdown();
+        }
         return 0;
     }
 }
