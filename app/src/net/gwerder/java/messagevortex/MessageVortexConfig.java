@@ -1,8 +1,9 @@
 package net.gwerder.java.messagevortex;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -17,7 +18,7 @@ public class MessageVortexConfig extends Config {
     }
 
     private MessageVortexConfig(String ressourceFile) throws IOException {
-        try (BufferedReader reader = new BufferedReader(new FileReader(ressourceFile)) ) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(ressourceFile),"UTF-8")) ) {
             String line=reader.readLine();
             while(line!=null) {
                 if(Pattern.matches("\\s*//.*",line)) {

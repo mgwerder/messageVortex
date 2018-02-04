@@ -10,17 +10,14 @@ import java.io.IOException;
  */
 public class MessageVortexTransport {
 
-    private TransportReceiver receiver;
     private SMTPReceiver      inSMTP;
-    private Config            cfg;
 
     public MessageVortexTransport(TransportReceiver receiver) throws IOException {
         if( receiver == null ) {
             throw new NullPointerException( "TransportReceiver may not be null" );
         }
-        this.receiver = receiver;
 
-        cfg = Config.getDefault();
+        Config cfg = Config.getDefault();
         assert cfg!=null;
 
         // setup receiver for mail relay
@@ -30,14 +27,12 @@ public class MessageVortexTransport {
 
     }
 
-    public TransportReceiver getReceiver() {
-        return receiver;
+    public TransportReceiver getTransportReceiver() {
+        return this.inSMTP.getReceiver();
     }
 
-    public TransportReceiver setReceiver(TransportReceiver receiver) {
-        TransportReceiver ret=getReceiver();
-        this.receiver=receiver;
-        return ret;
+    public TransportReceiver setTransportReceiver(TransportReceiver receiver) {
+        return this.inSMTP.setReceiver( receiver );
     }
 
     public void shutdown() {

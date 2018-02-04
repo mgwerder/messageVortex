@@ -129,6 +129,16 @@ public abstract class LineReceiver implements Runnable {
         return old;
     }
 
+    public TransportReceiver setReceiver( TransportReceiver receiver ) {
+        TransportReceiver ret = this.receiver;
+        this.receiver = receiver;
+        return ret;
+    }
+
+    public TransportReceiver getReceiver() {
+        return receiver;
+    }
+
     private void shutdownRunner() {
         // initiate shutdown of runner
         shutdown=true;

@@ -40,17 +40,7 @@ public class ExtendedSecureRandom {
 
     public double nextGauss() {
         //calculate value
-        double d=Math.sqrt(-2*Math.log(nextDouble()))*Math.cos(2*Math.PI*nextDouble());
-
-        // convert to boundaries
-        d+=Math.E;
-        d=d/(2*Math.E);
-
-        // get rid of rounding problems
-        d=Math.min(1,d);
-        d=Math.max(0,d);
-
-        return d;
+        return Math.min(1,Math.max(0,(Math.sqrt(-2*Math.log(nextDouble()))*Math.cos(2*Math.PI*nextDouble())+Math.E)/(2*Math.E)));
     }
 
 }

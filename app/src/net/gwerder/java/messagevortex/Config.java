@@ -272,8 +272,10 @@ public class Config {
         ConfigElement ele = configurationData.get(id.toLowerCase());
         if( ele == null ) {
             throw new NullPointerException( "id "+id+" is not known to the config subsystem" );
-        } else if( ele.getType() != ConfigType.NUMERIC ) {
-            throw new ClassCastException("config type missmatch when accessing ID "+id+" (expected: numeric; is: "+ele.getType().name()+")" );
+        }
+        ConfigType type = ele.getType();
+        if( type != ConfigType.NUMERIC ) {
+            throw new ClassCastException("config type missmatch when accessing ID "+id+" (expected: numeric; is: "+type.name()+")" );
         }
         return ele.setNumericValue( value );
     }
@@ -290,8 +292,10 @@ public class Config {
         ConfigElement ele = configurationData.get(id.toLowerCase());
         if( ele == null ) {
             throw new NullPointerException( "id "+id+" is not known to the config subsystem" );
-        } else if( ele.getType() != ConfigType.NUMERIC ) {
-            throw new ClassCastException("config type missmatch when accessing ID "+id+" (expected: numeric; is: "+ele.getType().name()+")" );
+        }
+        ConfigType type = ele.getType();
+        if( type != ConfigType.NUMERIC ) {
+            throw new ClassCastException( "config type missmatch when accessing ID " + id + " (expected: numeric; is: " + type.name() + ")" );
         }
         return ele.getNumericValue();
     }
@@ -309,7 +313,7 @@ public class Config {
      * @return     True if item did not exist and was successfully created
      ***/
     public boolean createStringConfigValue( String id, String description, String dval ) {
-        synchronized(configurationData) {
+        synchronized( configurationData ) {
             if( configurationData.get(id.toLowerCase()) == null ) {
                 ConfigElement ele = new ConfigElement( id, "STRING", description );
                 configurationData.put( id.toLowerCase(), ele );
