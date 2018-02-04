@@ -56,7 +56,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
                     lastSaved=-1;
                     save();
                     runner.shutdown();
-                } catch(IOException |RuntimeException|ClassNotFoundException ioe) {
+                } catch(IOException |RuntimeException ioe) {
                     LOGGER.log(Level.WARNING,"Error while writing cache",ioe);
                 }
             }
@@ -115,13 +115,13 @@ class AsymmetricKeyPreCalculator implements Serializable {
                     if(tempdir==null && mergePrecalculatedKeys()) {
                         try {
                             save();
-                        } catch(IOException|ClassNotFoundException e) {
+                        } catch(IOException e) {
                             LOGGER.log(Level.WARNING, "Error saving cache (1)",e);
                         }
                     } else if( tempdir!=null ) {
                         try {
                             save();
-                        } catch(IOException|ClassNotFoundException e) {
+                        } catch(IOException e) {
                             LOGGER.log(Level.WARNING, "Error saving cache (2)",e);
                         }
                     }
@@ -163,7 +163,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
                         // abort as soon as lowest cache element is above 40%
                         return ret;
                     }
-                }catch(IOException|ClassNotFoundException e) {
+                }catch(IOException e) {
                     LOGGER.log(Level.WARNING,"Error merging file "+f.getAbsolutePath(),e);
                 }
                 ret&=f.delete();
@@ -202,7 +202,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
                     save();
                 }
 
-            } catch (IOException | ClassNotFoundException ioe) {
+            } catch (IOException ioe) {
                 LOGGER.log(Level.INFO, "exception while storing file", ioe);
             } catch (InterruptedException ie) {
                 // (Re-)Cancel if current thread also interrupted
@@ -224,7 +224,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
         private Thread runCalculatorThread(final AlgorithmParameter param) {
             return new Thread() {
                 public void run() {
-                    LOGGER.log(Level.FINE, "precalculating key " + param.toString() + "");
+                    LOGGER.log(Level.FINE, "precalculating key " + param + "");
                     try {
                         long start=System.currentTimeMillis();
                         AsymmetricKey ak = new AsymmetricKey(new AlgorithmParameter(param), false);
@@ -420,8 +420,8 @@ class AsymmetricKeyPreCalculator implements Serializable {
                     if(cache.isEmpty()) {
                         load(filename,false);
                     }
-                } catch (IOException | ClassNotFoundException|ExceptionInInitializerError e) {
-                    LOGGER.log(Level.INFO, "error loading cache file (will be recreated)", e);
+                } catch ( IOException | ExceptionInInitializerError e ) {
+                    LOGGER.log( Level.INFO, "error loading cache file (will be recreated)", e );
                 }
                 // start runner
                 runner = new InternalThread();
@@ -430,7 +430,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
 
     }
 
-    private static void load(String inFile,boolean merge) throws IOException,ClassNotFoundException {
+    private static void load(String inFile,boolean merge) throws IOException {
         if(!merge) {
             cache.load(inFile);
         } else {
@@ -438,7 +438,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
         }
     }
 
-    private static void save() throws IOException,ClassNotFoundException {
+    private static void save() throws IOException {
         // do not allow saving more often than every minute
         if( runner!=null ) {
             synchronized (runner) {
@@ -453,7 +453,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
             synchronized (cache) {
                 cache.store(filename+".tmp");
                 lastSaved = System.currentTimeMillis();
-                if(cache.getCacheFillGrade()>0.1 && tempdir!=null) {
+                if( tempdir!=null && cache.getCacheFillGrade()>0.1 ) {
                     // move file as temp file and clear cache
                     String fn=File.createTempFile(TMP_PREFIX, ".key").getAbsolutePath();
                     LOGGER.log(Level.INFO,"stored chunk to file \""+fn+"\" to pick up");

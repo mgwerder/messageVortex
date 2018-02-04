@@ -423,7 +423,7 @@ public class AsymmetricKey extends Key  implements Serializable {
             signature.initSign( key.getPrivate() );
             signature.update( b );
             return signature.sign();
-        } catch( SignatureException | InvalidKeySpecException | NoSuchAlgorithmException | NoSuchPaddingException | NoSuchProviderException | InvalidKeyException e) {
+        } catch( SignatureException | InvalidKeySpecException | NoSuchAlgorithmException | NoSuchProviderException | InvalidKeyException e) {
             throw new IOException( "Exception while encrypting", e );
         }
     }
@@ -457,7 +457,7 @@ public class AsymmetricKey extends Key  implements Serializable {
             signature.initVerify( key.getPublic() );
             signature.update( b );
             return signature.verify( sig );
-        } catch (SignatureException | InvalidKeySpecException | NoSuchAlgorithmException | NoSuchPaddingException | NoSuchProviderException | InvalidKeyException e) {
+        } catch (SignatureException | InvalidKeySpecException | NoSuchAlgorithmException | NoSuchProviderException | InvalidKeyException e) {
             throw new IOException( "Exception while verifying signature", e );
         }
     }
@@ -516,13 +516,14 @@ public class AsymmetricKey extends Key  implements Serializable {
         }
     }
 
-    private Signature getSignature(Algorithm a) throws NoSuchPaddingException, NoSuchAlgorithmException, NoSuchProviderException {
+    private Signature getSignature(Algorithm a) throws NoSuchAlgorithmException, NoSuchProviderException {
         Algorithm alg=getAlgorithm();
+
         if ( alg==Algorithm.EC ) {
             return Signature.getInstance( a + "WithECDSA", alg.getProvider() );
         } else {
             return Signature.getInstance( a + "With" + alg, alg.getProvider() );
-        }
+     }
     }
 
     /***
@@ -532,7 +533,7 @@ public class AsymmetricKey extends Key  implements Serializable {
      * @return the previously set public key
      * @throws NullPointerException if key was tried to set to null
      */
-    public byte[] setPublicKey(byte[] b) throws InvalidKeyException {
+    public byte[] setPublicKey(byte[] b) {
         if(b==null) {
             throw new NullPointerException( "Public key may not be null" );
         }

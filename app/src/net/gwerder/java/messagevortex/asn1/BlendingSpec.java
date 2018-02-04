@@ -69,7 +69,7 @@ public class BlendingSpec extends AbstractBlock implements Serializable {
 
         // get Blending Parameter
         s2=ASN1Sequence.getInstance(s1.getObjectAt(i++));
-        List<BlendingParameter> al=new ArrayList<>();
+        List<BlendingParameter> al=new ArrayList<>(s2.size());
         for(ASN1Encodable e:s2) {
             al.add(new BlendingParameter(e));
         }
@@ -103,49 +103,49 @@ public class BlendingSpec extends AbstractBlock implements Serializable {
 
     @Override
     public String dumpValueNotation(String prefix,DumpType dumpType) throws IOException {
-        StringBuilder sb=new StringBuilder();
-        sb.append(" {").append(CRLF);
-        sb.append(prefix).append("  target '"+media+recipientAddress+"',").append(CRLF);
-        sb.append(prefix).append("  blendingType '"+blendingType+"',").append(CRLF);
-        sb.append(prefix).append("  blendingParameter {");
-        if(blendingParameter!=null && blendingParameter.length>0) {
-            int i=0;
-            for(BlendingParameter p:blendingParameter) {
-                if(i>0) {
-                    sb.append(",");
+        StringBuilder sb = new StringBuilder();
+        sb.append( " {" ).append( CRLF );
+        sb.append( prefix ).append( "  target '" ).append( media ).append( recipientAddress ).append( "',").append( CRLF );
+        sb.append( prefix ).append( "  blendingType '" ).append( blendingType ).append( "',").append(CRLF);
+        sb.append( prefix ).append( "  blendingParameter {" );
+        if( blendingParameter != null && blendingParameter.length > 0 ) {
+            int i = 0;
+            for( BlendingParameter p: blendingParameter ) {
+                if( i > 0 ) {
+                    sb.append( ',' );
                 }
-                sb.append(CRLF);
-                sb.append(prefix).append(p.dumpValueNotation("",dumpType));
+                sb.append( CRLF );
+                sb.append( prefix ).append( p.dumpValueNotation( "", dumpType ) );
                 i++;
             }
-            sb.append(CRLF);
+            sb.append( CRLF );
         }
-        sb.append(prefix).append("  }").append(CRLF);
-        sb.append(prefix).append("}");
+        sb.append( prefix ).append( "  }" ).append( CRLF );
+        sb.append( prefix ).append( "}" );
         return sb.toString();
     }
 
     public String getRecipientAddress() { return recipientAddress; }
 
-    public String setRecipientAddress(String recipientAddress) {
-        String old=this.recipientAddress;
-        this.recipientAddress=recipientAddress;
+    public String setRecipientAddress( String recipientAddress ) {
+        String old = this.recipientAddress;
+        this.recipientAddress = recipientAddress;
         return old;
     }
 
     public String getMedia() { return media; }
 
-    public String setMedia(String media) {
-        String old=this.media;
-        this.media=media;
+    public String setMedia( String media ) {
+        String old = this.media;
+        this.media = media;
         return old;
     }
 
     public String getBlendingType() { return blendingType; }
 
     public String setBlendingType(String blendingType) {
-        String old=this.blendingType;
-        this.blendingType=blendingType;
+        String old = this.blendingType;
+        this.blendingType = blendingType;
         return old;
     }
 

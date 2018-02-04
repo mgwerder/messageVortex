@@ -55,15 +55,15 @@ public class AlgorithmParameter extends AbstractBlock implements Serializable,Co
     public AlgorithmParameter(AlgorithmParameter p) {
         this();
         for(Map.Entry<Integer,String> e:p.parameter.entrySet()) {
-            put(e.getKey().intValue(),e.getValue());
+            put( e.getKey(), e.getValue() );
         }
     }
 
-    public String put(String id,String value) {
+    public final String put(String id,String value) {
         return put(Parameter.getByString(id).getId(),value);
     }
 
-    public String put(int id,String value) {
+    public final String put(int id,String value) {
         if(value==null) {
             String ret=get(id);
             parameter.remove(id);
@@ -121,7 +121,7 @@ public class AlgorithmParameter extends AbstractBlock implements Serializable,Co
                 if(i>0) {
                     sb.append( ',' ).append( CRLF );
                 }
-                sb.append( prefix ).append( "  " ).append( p ).append( " \"" ).append( e.getValue() ).append( "\"" );
+                sb.append( prefix ).append( "  " ).append( p ).append( " \"" ).append( e.getValue() ).append( '\"' );
                 i++;
             }
         }
