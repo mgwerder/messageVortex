@@ -163,7 +163,7 @@ public abstract class AbstractRedundancyOperation extends Operation implements A
             i--;
             sb.append(sk.dumpValueNotation(prefix+"  ",dumpType));
             if(i>0) {
-                sb.append(",");
+                sb.append(',');
             }
             sb.append(CRLF);
         }

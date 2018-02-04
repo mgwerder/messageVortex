@@ -15,22 +15,22 @@ public class AsymmetricAlgorithmSpec extends AbstractBlock implements Serializab
 
     public static final long serialVersionUID = 100000000003L;
 
-    public AsymmetricAlgorithmSpec(ASN1Encodable to) throws IOException {
+    public AsymmetricAlgorithmSpec( ASN1Encodable to ) throws IOException {
         parse(to);
     }
 
     @Override
-    protected void parse(ASN1Encodable to) throws IOException {
+    protected void parse( ASN1Encodable to ) throws IOException {
         throw new NotImplementedException(); // FIXME implementation missing
     }
 
     @Override
-    public String dumpValueNotation(String prefix, DumpType dumptype) throws IOException {
+    public String dumpValueNotation( String prefix, DumpType dumptype ) throws IOException {
         throw new NotImplementedException(); // FIXME implementation missing
     }
 
     @Override
-    public ASN1Object toASN1Object(DumpType dumpType) throws IOException {
+    public ASN1Object toASN1Object( DumpType dumpType ) throws IOException {
         throw new NotImplementedException(); // FIXME implementation missing
     }
 }

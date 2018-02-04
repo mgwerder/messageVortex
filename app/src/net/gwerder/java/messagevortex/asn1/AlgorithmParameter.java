@@ -120,11 +120,11 @@ public class AlgorithmParameter extends AbstractBlock implements Serializable,Co
                 if(i>0) {
                     sb.append( ","+CRLF);
                 }
-                sb.append(prefix + "  "+ p.toString()+" \""+e.getValue()+"\"");
+                sb.append(prefix ).append( "  " ).append( p.toString() ).append( " \"" ).append( e.getValue() ).append( "\"" );
                 i++;
             }
         }
-        sb.append(prefix).append(CRLF+prefix+"}");
+        sb.append( prefix ).append( CRLF ).append( prefix ).append( '}' );
         return sb.toString();
     }
 
@@ -144,11 +144,11 @@ public class AlgorithmParameter extends AbstractBlock implements Serializable,Co
     public String toString() {
         StringBuilder sb=new StringBuilder();
         int i=0;
-        for(Map.Entry<Integer,String> e:this.parameter.entrySet()) {
+        for( Map.Entry<Integer,String> e: this.parameter.entrySet() ) {
             if(i>0) {
-                sb.append(", ");
+                sb.append( ", " );
             }
-            sb.append(Parameter.getById(e.getKey()).toString()).append("=\"").append(e.getValue().toString()).append("\"");
+            sb.append( Parameter.getById( e.getKey() ) ).append( "=\"" ).append( e.getValue() ).append( '"' );
             i++;
         }
         return sb.toString();

@@ -159,16 +159,16 @@ public class AsymmetricKey extends Key  implements Serializable {
     }
 
     private void selftest() throws IOException {
-        if(publicKey==null) {
-            throw new IOException( "selftest failed: Public key may not be null");
+        if( publicKey == null ) {
+            throw new IOException( "selftest failed: Public key may not be null" );
         }
     }
 
     private void createKey(boolean allowPrecomputed) throws IOException {
         // Selfcheck
-        assert parameters!=null;
-        Algorithm alg=Algorithm.getByString(parameters.get(Parameter.ALGORITHM));
-        assert alg!=null;
+        assert parameters != null;
+        Algorithm alg = Algorithm.getByString(parameters.get(Parameter.ALGORITHM));
+        assert alg != null;
 
         // check for precomputed key
         if(allowPrecomputed) {
@@ -182,12 +182,12 @@ public class AsymmetricKey extends Key  implements Serializable {
             }
         }
         // create key pair
-        if("RSA".equals(alg.name()) ) {
+        if( "RSA".equals( alg.name() ) ) {
             createRSAKey();
-        } else if (alg==Algorithm.EC) {
+        } else if ( alg==Algorithm.EC ) {
             createECKey();
         } else {
-            throw new IOException("Encountered unsupported algorithm \""+alg.toString()+"\"");
+            throw new IOException( "Encountered unsupported algorithm \"" + alg + "\"" );
         }
     }
 
@@ -202,27 +202,27 @@ public class AsymmetricKey extends Key  implements Serializable {
             publicKey = pair.getPublic().getEncoded();
             privateKey = pair.getPrivate().getEncoded();
         } catch (IllegalStateException ise) {
-            throw new IllegalStateException("unable to generate keys with " + alg.toString() + "/" + parameters.get(Parameter.MODE) + "/" + parameters.get(Parameter.PADDING) + " (size " + keySize + ")", ise);
+            throw new IllegalStateException("unable to generate keys with " + alg + "/" + parameters.get(Parameter.MODE) + "/" + parameters.get(Parameter.PADDING) + " (size " + keySize + ")", ise );
         } catch(NoSuchAlgorithmException|NoSuchProviderException e) {
-            throw new IOException("Exception while generating key pair",e);
+            throw new IOException( "Exception while generating key pair", e );
         }
     }
 
 
     private void createECKey() throws IOException {
-        Algorithm alg=Algorithm.getByString(parameters.get(Parameter.ALGORITHM));
+        Algorithm alg = Algorithm.getByString( parameters.get( Parameter.ALGORITHM ) );
         try {
-            if (parameters.get(Parameter.CURVETYPE) == null) {
-                throw new IOException("curve type is not set");
+            if ( parameters.get( Parameter.CURVETYPE ) == null ) {
+                throw new IOException( "curve type is not set" );
             }
-            ECParameterSpec ecpara = ECNamedCurveTable.getParameterSpec(parameters.get(Parameter.CURVETYPE));
-            KeyPairGenerator g = KeyPairGenerator.getInstance(alg.getAlgorithmFamily(), "BC");
-            g.initialize(ecpara, esr.getSecureRandom());
+            ECParameterSpec ecpara = ECNamedCurveTable.getParameterSpec( parameters.get( Parameter.CURVETYPE ) );
+            KeyPairGenerator g = KeyPairGenerator.getInstance( alg.getAlgorithmFamily(), "BC" );
+            g.initialize( ecpara, esr.getSecureRandom() );
             KeyPair pair = g.generateKeyPair();
             publicKey = pair.getPublic().getEncoded();
             privateKey = pair.getPrivate().getEncoded();
-        } catch(InvalidAlgorithmParameterException|NoSuchAlgorithmException|NoSuchProviderException e) {
-            throw new IOException("Exception while initializing key generation",e);
+        } catch( InvalidAlgorithmParameterException|NoSuchAlgorithmException|NoSuchProviderException e ) {
+            throw new IOException( "Exception while initializing key generation", e );
         }
     }
 
@@ -237,17 +237,17 @@ public class AsymmetricKey extends Key  implements Serializable {
         //parse public key
         DERTaggedObject tagged=(DERTaggedObject)(s1.getObjectAt(i++));
         if(tagged.getTagNo()!= PUBLIC_KEY_TAG) {
-            throw new IOException("encountered wrong tag number when parsing public key (expected: "+ PUBLIC_KEY_TAG +"; got:"+tagged.getTagNo()+")");
+            throw new IOException( "encountered wrong tag number when parsing public key (expected: " + PUBLIC_KEY_TAG + "; got:" + tagged.getTagNo() + ")" );
         }
-        publicKey=ASN1OctetString.getInstance(tagged.getObject()).getOctets();
+        publicKey=ASN1OctetString.getInstance( tagged.getObject() ).getOctets();
 
         // parse private key
-        if(s1.size()>i) {
-            tagged=(DERTaggedObject)(s1.getObjectAt(i++));
-            if(tagged.getTagNo()!= PRIVATE_KEY_TAG) {
-                throw new IOException("encountered wrong tag number when parsing private key (expected: "+ PRIVATE_KEY_TAG +"; got:"+tagged.getTagNo()+")");
+        if( s1.size()>i ) {
+            tagged = (DERTaggedObject)( s1.getObjectAt( i++ ) );
+            if( tagged.getTagNo() != PRIVATE_KEY_TAG ) {
+                throw new IOException( "encountered wrong tag number when parsing private key (expected: " + PRIVATE_KEY_TAG + "; got:" + tagged.getTagNo() + ")" );
             }
-            privateKey=ASN1OctetString.getInstance(tagged.getObject()).getOctets();
+            privateKey = ASN1OctetString.getInstance(tagged.getObject()).getOctets();
         }
 
     }
@@ -257,7 +257,7 @@ public class AsymmetricKey extends Key  implements Serializable {
      *
      * @return true if the object contains a private key
      */
-    public boolean hasPrivateKey() { return privateKey!=null; }
+    public boolean hasPrivateKey() { return privateKey != null; }
 
     /***
      * Generates the ASN1 notation of the object.
@@ -266,7 +266,7 @@ public class AsymmetricKey extends Key  implements Serializable {
      * @return the string representation of the ASN1 dump
      */
     public String dumpValueNotation(String prefix) {
-        return dumpValueNotation(prefix,DumpType.PUBLIC_ONLY);
+        return dumpValueNotation( prefix, DumpType.PUBLIC_ONLY );
     }
 
     /***
@@ -278,11 +278,11 @@ public class AsymmetricKey extends Key  implements Serializable {
      */
     public String dumpValueNotation(String prefix,DumpType dumpType) {
         StringBuilder sb=new StringBuilder();
-        sb.append("{"+CRLF);
+        sb.append( '{' ).append( CRLF );
         sb.append( dumpKeyTypeValueNotation( prefix,dumpType ) );
-        sb.append( "," ).append(CRLF);
+        sb.append( "," ).append( CRLF );
         String s = toHex( publicKey );
-        sb.append( prefix ).append( "  publicKey " + s );
+        sb.append( prefix ).append( "  publicKey " ).append( s );
         switch(dumpType) {
             case ALL:
             case ALL_UNENCRYPTED:
@@ -294,21 +294,21 @@ public class AsymmetricKey extends Key  implements Serializable {
                 sb.append( CRLF );
         }
 
-        sb.append(prefix).append("}");
+        sb.append(prefix).append( '}' );
         return sb.toString();
     }
 
     private void dumpPrivateKey(StringBuilder sb, DumpType dumpType,String prefix) {
-        if(dumpType!=DumpType.PRIVATE_COMMENTED) {
-            sb.append( "," );
+        if( dumpType != DumpType.PRIVATE_COMMENTED ) {
+            sb.append( ',' );
         }
         sb.append( CRLF );
-        String s=toHex(privateKey);
-        sb.append(prefix).append("  ");
-        if(dumpType==DumpType.PRIVATE_COMMENTED) {
-            sb.append("-- ");
+        String s=toHex( privateKey );
+        sb.append( prefix ).append( "  " );
+        if( dumpType == DumpType.PRIVATE_COMMENTED ) {
+            sb.append( "-- " );
         }
-        sb.append("privateKey ").append(s).append(CRLF);
+        sb.append( "privateKey " ).append( s ).append( CRLF );
     }
 
     /***
@@ -320,19 +320,19 @@ public class AsymmetricKey extends Key  implements Serializable {
      */
     public ASN1Object toASN1Object(DumpType dt) throws IOException {
         // at least a public key must be set
-        if(publicKey==null) {
-            throw new IOException("publicKey may not be null when dumping");
+        if( publicKey == null ) {
+            throw new IOException( "publicKey may not be null when dumping" );
         }
-        ASN1EncodableVector v =new ASN1EncodableVector();
+        ASN1EncodableVector v = new ASN1EncodableVector();
 
         // add key parameters
-        addToASN1Parameter(v,dt);
+        addToASN1Parameter( v, dt );
 
         // add public key
-        addToASN1PublicKey(v,dt);
+        addToASN1PublicKey( v, dt );
 
         // add private key
-        addToASN1PrivateKey(v,dt);
+        addToASN1PrivateKey( v, dt );
 
         return new DERSequence( v );
     }
@@ -341,13 +341,13 @@ public class AsymmetricKey extends Key  implements Serializable {
         v.add(encodeKeyParameter(dumpType));
     }
 
-    private void addToASN1PublicKey(ASN1EncodableVector v, DumpType dt ) {
-        v.add(new DERTaggedObject( true, PUBLIC_KEY_TAG,new DEROctetString( publicKey )));
+    private void addToASN1PublicKey( ASN1EncodableVector v, DumpType dt ) {
+        v.add( new DERTaggedObject( true, PUBLIC_KEY_TAG, new DEROctetString( publicKey ) ) );
     }
 
     private void addToASN1PrivateKey(ASN1EncodableVector v, DumpType dt ) {
-        if (privateKey != null && (dt==DumpType.ALL || dt==DumpType.ALL_UNENCRYPTED)) {
-            v.add(new DERTaggedObject( true, PRIVATE_KEY_TAG,new DEROctetString( privateKey )));
+        if( privateKey != null && ( dt == DumpType.ALL || dt == DumpType.ALL_UNENCRYPTED ) ) {
+            v.add( new DERTaggedObject( true, PRIVATE_KEY_TAG, new DEROctetString( privateKey ) ) );
         }
     }
 
@@ -365,11 +365,11 @@ public class AsymmetricKey extends Key  implements Serializable {
             java.security.Key k = key.getPublic();
             cipher.init( Cipher.ENCRYPT_MODE, k );
             return cipher.doFinal( b );
-        } catch (InvalidKeySpecException e) {
+        } catch ( InvalidKeySpecException e ) {
             throw new IOException( "Exception while getting key pair", e );
-        } catch (NoSuchAlgorithmException|NoSuchPaddingException|NoSuchProviderException|IllegalBlockSizeException|BadPaddingException e) {
-            throw new IOException( "Exception while encrypting (len: "+b.length+")", e );
-        } catch (InvalidKeyException e) {
+        } catch ( NoSuchAlgorithmException|NoSuchPaddingException|NoSuchProviderException|IllegalBlockSizeException|BadPaddingException e ) {
+            throw new IOException( "Exception while encrypting (len: " + b.length + ")", e );
+        } catch ( InvalidKeyException e ) {
             throw new IOException( "Exception while init of cipher ", e );
         }
     }
@@ -423,7 +423,7 @@ public class AsymmetricKey extends Key  implements Serializable {
             signature.initSign( key.getPrivate() );
             signature.update( b );
             return signature.sign();
-        } catch (SignatureException | InvalidKeySpecException | NoSuchAlgorithmException | NoSuchPaddingException | NoSuchProviderException | InvalidKeyException e) {
+        } catch( SignatureException | InvalidKeySpecException | NoSuchAlgorithmException | NoSuchPaddingException | NoSuchProviderException | InvalidKeyException e) {
             throw new IOException( "Exception while encrypting", e );
         }
     }
@@ -462,12 +462,12 @@ public class AsymmetricKey extends Key  implements Serializable {
         }
     }
 
-    private KeyFactory getKeyFactory() throws NoSuchAlgorithmException,NoSuchProviderException {
-        if(parameters.get(Parameter.ALGORITHM).startsWith( Algorithm.EC.toString() )) {
+    private KeyFactory getKeyFactory() throws NoSuchAlgorithmException, NoSuchProviderException {
+        if( parameters.get( Parameter.ALGORITHM ).startsWith( Algorithm.EC.toString() ) ) {
             return KeyFactory.getInstance( "ECDSA", "BC" );
         } else {
-            Algorithm alg=Algorithm.getByString(parameters.get(Parameter.ALGORITHM));
-            return KeyFactory.getInstance( alg.toString(),alg.getProvider() );
+            Algorithm alg = Algorithm.getByString( parameters.get( Parameter.ALGORITHM ) );
+            return KeyFactory.getInstance( alg.toString(), alg.getProvider() );
         }
     }
 
