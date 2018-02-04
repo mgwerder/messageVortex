@@ -173,9 +173,9 @@ public class IdentityBlock extends AbstractBlock  implements Serializable {
      * @param maxReplay the maximum nuber of replays to be set
      * @return          the previously set maximum
      */
-    public int setReplay(int maxReplay) {
+    public int setReplay( int maxReplay ) {
         int old = getReplay();
-        this.maxReplays=maxReplay;
+        this.maxReplays = maxReplay;
         return old;
     }
 
@@ -185,7 +185,7 @@ public class IdentityBlock extends AbstractBlock  implements Serializable {
      * @return    the previously set validity period
      */
     public UsagePeriod getUsagePeriod() {
-        return new UsagePeriod(valid);
+        return new UsagePeriod( valid );
     }
 
     /***
@@ -195,7 +195,7 @@ public class IdentityBlock extends AbstractBlock  implements Serializable {
      * @return      the previously set usage period
      */
     public UsagePeriod setUsagePeriod( UsagePeriod valid ) {
-        UsagePeriod old= getUsagePeriod();
+        UsagePeriod old = getUsagePeriod();
         this.valid = new UsagePeriod( valid );
         return old;
     }

@@ -4,6 +4,8 @@ import net.gwerder.java.messagevortex.MessageVortexLogger;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.SecureRandom;
 import java.util.*;
 import java.util.logging.Level;
@@ -136,9 +138,9 @@ public class AsymmetricKeyCache implements Serializable {
     }
 
     public void store(String filename) throws IOException {
-        File f = new File( filename );
+        Path p = Paths.get(filename);
         try (
-                ObjectOutputStream os=new ObjectOutputStream(Files.newOutputStream( f.toPath() ) );
+                ObjectOutputStream os=new ObjectOutputStream(Files.newOutputStream( p ) );
         ) {
             os.writeObject(this);
         }
@@ -147,16 +149,17 @@ public class AsymmetricKeyCache implements Serializable {
     }
 
     public void load(String filename) throws IOException {
-        try (ObjectInputStream f=new ObjectInputStream(new FileInputStream(filename)) ){
-            load(f, false);
+        Path p = Paths.get(filename);
+        try (ObjectInputStream is=new ObjectInputStream(Files.newInputStream(p)) ){
+            load(is, false);
         }
         LOGGER.log(Level.INFO, "loaded cache from file \""+filename+"\"");
         showStats();
     }
 
     public void merge(String filename) throws IOException {
-        File f = new File( filename );
-        try( ObjectInputStream is=new ObjectInputStream( Files.newInputStream( f.toPath() ) ) ) {
+        Path p = Paths.get(filename);
+        try( ObjectInputStream is=new ObjectInputStream( Files.newInputStream( p ) ) ) {
             load( is, true );
         } catch(ClassCastException cce) {
             throw new IOException( "Error deserializing file \"" + filename + "\"", cce );

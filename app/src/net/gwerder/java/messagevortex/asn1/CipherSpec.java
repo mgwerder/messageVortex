@@ -44,9 +44,9 @@ public class CipherSpec extends AbstractBlock implements Serializable {
 
     /* The endpoint address to be used */
     private AsymmetricAlgorithmSpec asymmetricSpec = null;
-    private SymmetricAlgorithmSpec symmetricSpec = null;
-    private MacAlgorithmSpec macSpec = null;
-    private CipherUsage cipherUsage = CipherUsage.ENCRYPT;
+    private SymmetricAlgorithmSpec  symmetricSpec  = null;
+    private MacAlgorithmSpec        macSpec        = null;
+    private CipherUsage             cipherUsage    = CipherUsage.ENCRYPT;
 
     /* constructor */
     public CipherSpec(ASN1Encodable to) throws IOException {
@@ -80,6 +80,22 @@ public class CipherSpec extends AbstractBlock implements Serializable {
         }
         cipherUsage =CipherUsage.getById(ASN1Enumerated.getInstance(to1.getObject()).getValue().intValue());
 
+    }
+
+    public AsymmetricAlgorithmSpec getAsymmetricSpec() {
+        return asymmetricSpec;
+    }
+
+    public SymmetricAlgorithmSpec getSymmetricSpec() {
+        return symmetricSpec;
+    }
+
+    public MacAlgorithmSpec getMacSpec() {
+        return macSpec;
+    }
+
+    public CipherUsage getCipherUsage() {
+        return cipherUsage;
     }
 
     @Override

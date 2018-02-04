@@ -70,20 +70,20 @@ public class HeaderRequestIncreaseMessageQuota extends HeaderRequest  implements
         StringBuilder sb=new StringBuilder();
         sb.append("{"+CRLF);
         if(identity!=null) {
-            sb.append( prefix+"  identity "+identity.dumpValueNotation( prefix+"  ", dumpType )+(quota>-1?",":"")+ CRLF );
+            sb.append( prefix ).append( "  identity " ).append( identity.dumpValueNotation( prefix+"  ", dumpType ) ).append( ( quota >- 1? ',': "" ) ).append( CRLF );
         }
         if(quota>-1) {
-            sb.append( prefix+"  quota "+quota+ CRLF );
+            sb.append( prefix ).append( "  quota " ).append( quota ).append( CRLF );
         }
-        sb.append(prefix+"}");
+        sb.append(prefix ).append( '}' );
         return sb.toString();
     }
 
     @Override
-    public ASN1Object toASN1Object(DumpType dumpType) throws IOException {
-        ASN1EncodableVector s1=new ASN1EncodableVector();
-        s1.add(identity.toASN1Object(dumpType));
-        s1.add(new ASN1Integer(quota));
-        return new DERSequence(s1);
+    public ASN1Object toASN1Object( DumpType dumpType ) throws IOException {
+        ASN1EncodableVector s1 = new ASN1EncodableVector();
+        s1.add( identity.toASN1Object( dumpType ) );
+        s1.add( new ASN1Integer( quota ) );
+        return new DERSequence( s1 );
     }
 }

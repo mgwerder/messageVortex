@@ -60,20 +60,21 @@ public class HeaderRequestCapability extends HeaderRequest implements Serializab
     public int getId() {return 1;}
 
     @Override
-    public String dumpValueNotation(String prefix, DumpType dumpType) {
-        StringBuilder sb=new StringBuilder();
-        sb.append("{"+ CRLF);
-        if (period != null) {
-            sb.append(prefix).append("  period ").append(period.dumpValueNotation(prefix + "  ",dumpType )).append(CRLF);
+    public String dumpValueNotation( String prefix, DumpType dumpType ) {
+        StringBuilder sb = new StringBuilder();
+        sb.append( '{' ).append( CRLF );
+        if ( period != null ) {
+            sb.append( prefix ).append( "  period " ).append( period.dumpValueNotation( prefix + "  ", dumpType ) ).append( CRLF );
         }
-        sb.append(prefix).append("}");
+        sb.append( prefix ).append( '}' );
         return sb.toString();
     }
 
     @Override
-    public ASN1Object toASN1Object(DumpType dumpType) throws IOException {
-        ASN1EncodableVector s1=new ASN1EncodableVector();
-        s1.add(period.toASN1Object(dumpType));
-        return new DERSequence(s1);
+    public ASN1Object toASN1Object( DumpType dumpType ) throws IOException {
+        ASN1EncodableVector s1 = new ASN1EncodableVector();
+        s1.add( period.toASN1Object( dumpType ) );
+        return new DERSequence( s1 );
     }
+
 }

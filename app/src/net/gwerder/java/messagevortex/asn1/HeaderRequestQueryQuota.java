@@ -62,16 +62,16 @@ public class HeaderRequestQueryQuota extends HeaderRequest  implements Serializa
         StringBuilder sb=new StringBuilder();
         sb.append("{"+ CRLF);
         if(identity!=null) {
-            sb.append( prefix+"  identity "+identity.dumpValueNotation( prefix+"  ", DumpType.PRIVATE_COMMENTED ) );
+            sb.append( prefix ).append( "  identity " ).append( identity.dumpValueNotation( prefix+"  ", DumpType.PRIVATE_COMMENTED ) );
         }
-        sb.append(prefix+"}");
+        sb.append( prefix ).append( '}' );
         return sb.toString();
     }
 
     @Override
-    public ASN1Object toASN1Object(DumpType dumpType) throws IOException {
-        ASN1EncodableVector s1=new ASN1EncodableVector();
-        s1.add(identity.toASN1Object(dumpType));
-        return new DERSequence(s1);
+    public ASN1Object toASN1Object( DumpType dumpType ) throws IOException {
+        ASN1EncodableVector s1 = new ASN1EncodableVector();
+        s1.add( identity.toASN1Object( dumpType ) );
+        return new DERSequence( s1 );
     }
 }

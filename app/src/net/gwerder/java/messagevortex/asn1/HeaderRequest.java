@@ -44,7 +44,7 @@ public abstract class HeaderRequest extends AbstractBlock implements Serializabl
 
     private static final java.util.logging.Logger LOGGER;
     static {
-        LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+        LOGGER = MessageVortexLogger.getLogger( (new Throwable()).getStackTrace()[0].getClassName() );
     }
 
 
@@ -77,7 +77,7 @@ public abstract class HeaderRequest extends AbstractBlock implements Serializabl
 
     public String dumpValueNotation(String prefix) {
         StringBuilder sb=new StringBuilder();
-        sb.append(prefix+"-- FIXME dumping of Request object not yet supported"+CRLF);
+        sb.append( prefix ).append( "-- FIXME dumping of Request object not yet supported" ).append( CRLF); // FIXME implementaion missing
         return sb.toString();
     }
 
