@@ -347,33 +347,33 @@ public class IdentityBlock extends AbstractBlock  implements Serializable {
         StringBuilder sb=new StringBuilder();
         sb.append("{"+CRLF);
         if (encryptedHeaderKey != null) {
-            sb.append( prefix + "  headerKey " + toHex( encryptedHeaderKey ) );
+            sb.append( prefix ).append( "  headerKey " ).append( toHex( encryptedHeaderKey ) );
         }
-        if (encryptedIdentityBlock != null) {
-            sb.append( prefix + "  blocks encrypted " + toHex( encryptedIdentityBlock ) );
+        if ( encryptedIdentityBlock != null ) {
+            sb.append( prefix ).append( "  blocks encrypted " ).append( toHex( encryptedIdentityBlock ) );
         } else {
-            sb.append( prefix + "  blocks plain {" + CRLF);
-            sb.append( prefix + "    identityKey " + identityKey.dumpValueNotation( prefix + "  ", DumpType.PRIVATE_COMMENTED ) + "," + CRLF );
-            sb.append( prefix + "    serial " + serial + "," + CRLF );
-            sb.append( prefix + "    maxReplays " + maxReplays + "," + CRLF );
-            sb.append( prefix + "    valid " + valid.dumpValueNotation( prefix + "  ",dumpType ) + "," + CRLF );
-            sb.append( prefix + "    forwardSecret "+forwardSecret + CRLF );
-            sb.append( prefix + "    decryptionKey ''B," + CRLF );
-            sb.append( prefix + "    requests {" + CRLF );
+            sb.append( prefix ).append( "  blocks plain {" ).append( CRLF);
+            sb.append( prefix ).append( "    identityKey " ).append( identityKey.dumpValueNotation( prefix + "  ", DumpType.PRIVATE_COMMENTED ) ).append( ',' ).append( CRLF );
+            sb.append( prefix ).append( "    serial " ).append( serial ).append( ',' ).append( CRLF );
+            sb.append( prefix ).append( "    maxReplays " ).append( maxReplays ).append( ',' ).append( CRLF );
+            sb.append( prefix ).append( "    valid " ).append( valid.dumpValueNotation( prefix + "  ", dumpType ) ).append( ',' ).append( CRLF );
+            sb.append( prefix ).append( "    forwardSecret " ).append( forwardSecret ).append( CRLF );
+            sb.append( prefix ).append( "    decryptionKey ''B," ).append( CRLF );
+            sb.append( prefix ).append( "    requests {" ).append( CRLF );
             for (HeaderRequest r : requests) {
-                sb.append( valid.dumpValueNotation( prefix + "  ",dumpType ) + CRLF );
-                sb.append( r.dumpValueNotation( prefix + "  " ) + CRLF );
+                sb.append( valid.dumpValueNotation( prefix + "  ",dumpType ) ).append( CRLF );
+                sb.append( r.dumpValueNotation( prefix + "  " ) ).append( CRLF );
             }
             sb.append( prefix + "    }" );
-            if (padding != null) {
-                sb.append( "," + CRLF );
-                sb.append( prefix + "    padding " + toHex( padding ) + CRLF );
+            if ( padding != null ) {
+                sb.append( ',' ).append( CRLF );
+                sb.append( prefix ).append( "    padding " ).append( toHex( padding ) ).append( CRLF );
             } else {
                 sb.append( CRLF );
             }
-            sb.append( prefix + "  }," );
+            sb.append( prefix ).append( "  }," );
         }
-        sb.append(prefix+"}");
+        sb.append( prefix ).append( '}' );
         return sb.toString();
     }
 
@@ -391,26 +391,26 @@ public class IdentityBlock extends AbstractBlock  implements Serializable {
      *
      * @return the previously set serial number
      */
-    public long setSerial(long serial) {
-        long ret=getSerial();
-        this.serial=serial;
+    public long setSerial( long serial ) {
+        long ret = getSerial();
+        this.serial = serial;
         return ret;
     }
 
 
 
     @Override
-    public boolean equals(Object t) {
-        if(t==null) {
+    public boolean equals( Object t ) {
+        if( t==null ) {
             return false;
         }
         if( t.getClass() != this.getClass() ) {
             return false;
         }
-        IdentityBlock o=(IdentityBlock)t;
+        IdentityBlock o = (IdentityBlock)t;
         try {
-            return dumpValueNotation("", DumpType.ALL).equals(o.dumpValueNotation("", DumpType.ALL));
-        } catch(IOException ioe) {
+            return dumpValueNotation( "", DumpType.ALL ).equals( o.dumpValueNotation( "", DumpType.ALL ) );
+        } catch( IOException ioe ) {
             return false;
         }
     }
@@ -419,14 +419,14 @@ public class IdentityBlock extends AbstractBlock  implements Serializable {
     public int hashCode() {
         // this methode is required for code sanity
         try{
-            return dumpValueNotation("",DumpType.ALL).hashCode();
-        } catch(IOException ioe) {
+            return dumpValueNotation( "", DumpType.ALL ).hashCode();
+        } catch( IOException ioe ) {
             return "FAILED".hashCode();
         }
     }
 
     public String toString() {
-        return "Identity"+id;
+        return "Identity" + id;
     }
 
 }

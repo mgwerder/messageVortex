@@ -157,20 +157,20 @@ public class IdentityStore extends AbstractBlock  implements Serializable {
     @Override
     public String dumpValueNotation(String prefix,DumpType dumpType) throws IOException {
         StringBuilder sb=new StringBuilder();
-        sb.append( prefix + "i IdentityStore ::= {" + CRLF );
-        sb.append( prefix + "  identities {" +CRLF );
+        sb.append( prefix ).append( "i IdentityStore ::= {" ).append( CRLF );
+        sb.append( prefix ).append( "  identities {" ).append( CRLF );
         int i=0;
-        for(Map.Entry<String,IdentityStoreBlock> e:blocks.entrySet()) {
-            if(i>0) {
-                sb.append(","+CRLF);
+        for( Map.Entry<String,IdentityStoreBlock> e: blocks.entrySet() ) {
+            if( i > 0 ) {
+                sb.append( ',' ).append( CRLF);
             }
-            sb.append( prefix + "    -- Dumping IdentityBlock "+e.getKey() + CRLF );
-            sb.append( prefix + "    "+e.getValue().dumpValueNotation( prefix+"    ",dumpType ) );
+            sb.append( prefix ).append( "    -- Dumping IdentityBlock " ).append( e.getKey() ).append( CRLF );
+            sb.append( prefix ).append( "    " ).append( e.getValue().dumpValueNotation( prefix+"    ",dumpType ) );
             i++;
         }
         sb.append( CRLF );
-        sb.append( prefix + "  }" + CRLF );
-        sb.append( prefix + "}" + CRLF );
+        sb.append( prefix ).append( "  }" ).append( CRLF );
+        sb.append( prefix ).append( '}' ).append( CRLF );
         return sb.toString();
     }
 
