@@ -36,10 +36,10 @@ public abstract class AbstractCryptPayloadOperation extends Operation implements
     public String dumpValueNotation(String prefix, DumpType dumptype) throws IOException {
         StringBuilder sb=new StringBuilder();
         sb.append("{"+CRLF);
-        sb.append(prefix+"  originalId "+originalId+","+CRLF);
-        sb.append(prefix+"  key "+key.dumpValueNotation(prefix+"  ",dumptype)+","+CRLF);
-        sb.append(prefix+"  newId "+newId+CRLF);
-        sb.append(prefix+"}");
+        sb.append(prefix).append("  originalId ").append(originalId).append(",").append(CRLF);
+        sb.append(prefix).append("  key ").append(key.dumpValueNotation(prefix+"  ",dumptype)).append(",").append(CRLF);
+        sb.append(prefix).append("  newId ").append(newId).append(CRLF);
+        sb.append(prefix).append("}");
         return sb.toString();
     }
 
