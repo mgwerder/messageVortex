@@ -27,7 +27,6 @@ import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.*;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.Files;
@@ -188,7 +187,7 @@ public class IdentityStore extends AbstractBlock  implements Serializable {
         LOGGER.log( Level.INFO, ";;;   getting DER stream" );
         byte[] b1 = m.toBytes(DumpType.ALL_UNENCRYPTED);
         LOGGER.log( Level.INFO, ";;;   storing to DER stream to " + System.getProperty( "java.io.tmpdir" ) );
-        DEROutputStream f = new DEROutputStream( new FileOutputStream( System.getProperty( "java.io.tmpdir" ) + "/temp.der" ) );
+        DEROutputStream f = new DEROutputStream( Files.newOutputStream( Paths.get( System.getProperty( "java.io.tmpdir" ) + "/temp.der" ) ) );
         f.writeObject( m.toASN1Object(DumpType.ALL_UNENCRYPTED) );
         f.close();
         LOGGER.log( Level.INFO, ";;;   parsing DER stream" );

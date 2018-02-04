@@ -23,7 +23,6 @@ package net.gwerder.java.messagevortex.asn1;
 
 import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.*;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -219,17 +218,17 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
     @Override
     public String dumpValueNotation(String prefix,DumpType dumpType) throws IOException {
         StringBuilder sb=new StringBuilder();
-        sb.append(" {"+CRLF);
-        sb.append(prefix+"  id "+id+","+CRLF);
-        sb.append(prefix+"  content ");
+        sb.append( " {" ).append( CRLF );
+        sb.append( prefix ).append( "  id " ).append( id ).append( ',' ).append( CRLF );
+        sb.append( prefix ).append( "  content " );
         if(payloadType==PayloadType.PAYLOAD) {
-            sb.append("payload " + toHex(payload) + CRLF);
+            sb.append( "payload " ).append( toHex(payload) ).append( CRLF );
         } else if(payloadType==PayloadType.REPLY) {
-            sb.append("reply " + toHex(payload) + CRLF);
+            sb.append("reply " ).append( toHex(payload) ).append( CRLF);
         } else {
             throw new IOException( "unable to determine payload type (expected:"+PayloadType.REPLY.getId()+" or "+PayloadType.PAYLOAD.getId()+";got:"+payloadType+")" );
         }
-        sb.append(prefix+"}");
+        sb.append( prefix ).append( '}' );
         return sb.toString();
     }
 

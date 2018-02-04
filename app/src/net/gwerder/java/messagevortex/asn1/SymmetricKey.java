@@ -278,10 +278,10 @@ public class SymmetricKey extends Key implements Serializable {
     @Override
     public String dumpValueNotation(String prefix,DumpType dumpType) {
         StringBuilder sb=new StringBuilder();
-        sb.append("{"+CRLF);
-        sb.append(dumpKeyTypeValueNotation(prefix+"  ",dumpType)+","+CRLF);
-        sb.append(prefix+"  key "+toHex(key)+CRLF);
-        sb.append(prefix+"}");
+        sb.append( '{' ).append( CRLF );
+        sb.append( dumpKeyTypeValueNotation( prefix+"  ", dumpType ) ).append( ',' ).append( CRLF );
+        sb.append( prefix ).append( "  key " ).append( toHex(key) ).append( CRLF );
+        sb.append( prefix ).append( '}' );
         return sb.toString();
     }
 
@@ -291,7 +291,7 @@ public class SymmetricKey extends Key implements Serializable {
      */
     @Override
     public String toString() {
-        return "([SymmetricKey]hash="+(key!=null? Arrays.hashCode(key):"null")+";"+parameters.toString()+")";
+        return "([SymmetricKey]hash=" + ( key != null? Arrays.hashCode(key): "null" ) + ";" + parameters.toString() + ")";
     }
 
 

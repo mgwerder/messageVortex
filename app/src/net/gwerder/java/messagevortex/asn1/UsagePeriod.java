@@ -195,12 +195,12 @@ public class UsagePeriod extends AbstractBlock  implements Serializable {
         final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddkkmmss");
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
         if(notBefore!=null) {
-            sb.append(prefix+"  notBefore \""+sdf.format(notBefore)+"Z\""+(notAfter!=null?",":"")+CRLF);
+            sb.append( prefix ).append( "  notBefore \"" ).append( sdf.format(notBefore) ).append( "Z\"" ).append( ( notAfter!=null?',':"") ).append( CRLF );
         }
         if(notAfter!=null)  {
-            sb.append(prefix+"  notAfter  \""+sdf.format(notAfter )+"Z\""+CRLF);
+            sb.append( prefix ).append( "  notAfter  \"" ).append( sdf.format(notAfter ) ).append( "Z\"" ).append( CRLF );
         }
-        sb.append(prefix+"}");
+        sb.append( prefix ).append( '}' );
         return sb.toString();
     }
 

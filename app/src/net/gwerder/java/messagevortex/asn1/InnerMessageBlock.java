@@ -71,7 +71,7 @@ public class InnerMessageBlock extends AbstractBlock  implements Serializable {
         this(new PrefixBlock(new SymmetricKey(sym)),new IdentityBlock(asym), new RoutingBlock() );
     }
 
-    public InnerMessageBlock(PrefixBlock prefix,IdentityBlock i, RoutingBlock routing) throws IOException {
+    public InnerMessageBlock(PrefixBlock prefix,IdentityBlock i, RoutingBlock routing) {
         this.prefix=prefix;
         identity=i;
         this.routing=routing;
@@ -262,36 +262,37 @@ public class InnerMessageBlock extends AbstractBlock  implements Serializable {
     @Override
     public String dumpValueNotation(String prefix, DumpType dt) throws IOException {
         StringBuilder sb=new StringBuilder();
-        sb.append(  "  {" + CRLF );
-        sb.append( prefix +"  padding "+toHex(padding)+CRLF);
+        sb.append( "  {" ).append( CRLF );
+        sb.append( prefix ).append( "  padding " ).append( toHex(padding) ).append( CRLF );
 
-        sb.append( prefix + "  -- Dumping IdentityBlock" + CRLF );
-        sb.append( prefix + "  identity ");
+        sb.append( prefix ).append( "  -- Dumping IdentityBlock" ).append( CRLF );
+        sb.append( prefix ).append( "  identity ");
         if(DumpType.ALL_UNENCRYPTED.equals(dt)) {
             // dumping plain identity
-            sb.append( "plain " + identity.dumpValueNotation( prefix + "  ",DumpType.ALL_UNENCRYPTED ) + "," + CRLF );
+            sb.append( "plain " ).append( identity.dumpValueNotation( prefix + "  ",DumpType.ALL_UNENCRYPTED ) ).append( ',' ).append( CRLF );
         } else {
             // dumping encrypted identity
-            sb.append( "encrypted " + identity.dumpValueNotation( prefix + "  ", dt ) + "," + CRLF );
+            sb.append( "encrypted " ).append( identity.dumpValueNotation( prefix + "  ", dt ) ).append( ',' ).append( CRLF );
         }
 
-        sb.append( prefix + "  routing "+routing.dumpValueNotation( prefix+"  ",dt)+","+CRLF);
+        sb.append( prefix ).append( "  routing " ).append( routing.dumpValueNotation( prefix+"  ",dt) ).append( ',' ).append( CRLF );
 
-        sb.append( prefix + "  payload {" );
+        sb.append( prefix ).append( "  payload {" );
         int i=0;
         if(payload!=null){
             for(PayloadChunk p:payload) {
                 if(i>0) {
-                    sb.append( "," );
+                    sb.append( ',' );
                 }
                 sb.append( CRLF );
-                p.dumpValueNotation( prefix+"  ",dt);
+                p.dumpValueNotation( prefix + "  ", dt );
                 i++;
             }
         }
-        sb.append( CRLF + prefix + "  }" + CRLF );
+        sb.append( CRLF );
+        sb.append( prefix + "  }" ).append( CRLF );
 
-        sb.append( prefix + "}"  );
+        sb.append( prefix ).append( '}' );
         return sb.toString();
     }
 

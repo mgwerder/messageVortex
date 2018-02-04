@@ -60,8 +60,8 @@ public abstract class Key extends AbstractBlock  implements Serializable {
 
     String dumpKeyTypeValueNotation(String prefix, DumpType dumpType) {
         StringBuilder sb=new StringBuilder();
-        sb.append(prefix).append("keyType " + Algorithm.getByString( parameters.get( Parameter.ALGORITHM.getId() ) ).toString() + ",").append(CRLF);
-        sb.append(prefix).append("parameter "+parameters.dumpValueNotation(prefix+"",dumpType));
+        sb.append(prefix).append( "keyType " ).append( Algorithm.getByString( parameters.get( Parameter.ALGORITHM.getId() ) ) ).append( ',' ).append(CRLF);
+        sb.append(prefix).append( "parameter " ).append( parameters.dumpValueNotation( prefix,dumpType ) );
         return sb.toString();
     }
 

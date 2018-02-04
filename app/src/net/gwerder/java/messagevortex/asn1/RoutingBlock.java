@@ -326,9 +326,9 @@ public class RoutingBlock extends AbstractBlock  implements Serializable {
     @Override
     public String dumpValueNotation(String prefix,DumpType dumpType) {
         StringBuilder sb=new StringBuilder();
-        sb.append("{"+CRLF);
-        sb.append(prefix+"  "+CRLF);
-        sb.append(prefix+"}");
+        sb.append( '{' ).append( CRLF );
+        sb.append( prefix ).append( "  " ).append( CRLF );
+        sb.append(prefix ).append( '}' );
         return sb.toString();
     }
 

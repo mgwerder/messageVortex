@@ -241,61 +241,61 @@ public class IdentityStoreBlock extends AbstractBlock  implements Serializable {
     @Override
     public String dumpValueNotation(String prefix,DumpType dumpType) throws IOException {
         StringBuilder sb=new StringBuilder();
-        sb.append( "{" ).append( CRLF );
+        sb.append( '{' ).append( CRLF );
         sb.append( prefix ).append( "  valid " ).append(valid.dumpValueNotation( prefix+"    ",dumpType )  ).append("," ).append(CRLF );
-        sb.append( prefix ).append( "  messageQuota " ).append(messageQuota ).append("," ).append(CRLF );
-        sb.append( prefix ).append( "  transferQuota " ).append(transferQuota );
+        sb.append( prefix ).append( "  messageQuota " ).append( messageQuota ).append( ',' ).append( CRLF );
+        sb.append( prefix ).append( "  transferQuota " ).append( transferQuota );
         if(identityKey!=null) {
-            sb.append( "," ).append(CRLF);
-            sb.append(prefix ).append( "  identity " ).append( identityKey.dumpValueNotation( prefix+"    ",dumpType ) );
+            sb.append( ',' ).append( CRLF );
+            sb.append( prefix ).append( "  identity " ).append( identityKey.dumpValueNotation( prefix + "    ", dumpType ) );
         }
         if(nodeAddress!=null) {
-            sb.append( "," ).append(CRLF);
-            sb.append(prefix ).append( "  nodeAddress \"" ).append(nodeAddress ).append("\"" );
+            sb.append( ',' ).append( CRLF );
+            sb.append( prefix ).append( "  nodeAddress \"" ).append( nodeAddress ).append( "\"" );
         }
-        if(nodeKey!=null)     {
-            sb.append( "," ).append(CRLF);
-            sb.append(prefix ).append( "  nodeKey " ).append( nodeKey.dumpValueNotation( prefix+"    ",dumpType ) );
+        if( nodeKey != null )     {
+            sb.append( ',' ).append( CRLF );
+            sb.append( prefix ).append( "  nodeKey " ).append( nodeKey.dumpValueNotation( prefix + "    ", dumpType ) );
         }
         sb.append( CRLF );
-        sb.append( prefix ).append( "}" );
+        sb.append( prefix ).append( '}' );
         return sb.toString();
     }
 
     public IdentityType getType() {
-        if(iType!=null) {
+        if( iType != null ) {
             return iType;
         }
-        if(nodeKey==null) {
+        if( nodeKey == null ) {
             return IdentityType.OWNED_IDENTITY;
         }
-        return identityKey==null?IdentityType.NODE_IDENTITY:IdentityType.RECIPIENT_IDENTITY;
+        return identityKey == null? IdentityType.NODE_IDENTITY: IdentityType.RECIPIENT_IDENTITY;
     }
 
-    public boolean equals(Object t) {
-        if(t==null) {
+    public boolean equals( Object t ) {
+        if( t == null ) {
             return false;
         }
         if( t.getClass() != this.getClass() ) {
             return false;
         }
-        IdentityStoreBlock isb=(IdentityStoreBlock)t;
-        if(!valid.equals(isb.valid)) {
+        IdentityStoreBlock isb = (IdentityStoreBlock)t;
+        if( ! valid.equals( isb.valid ) ) {
             return false;
         }
-        if(messageQuota!=isb.messageQuota) {
+        if( messageQuota != isb.messageQuota ) {
             return false;
         }
-        if(transferQuota!=isb.transferQuota) {
+        if( transferQuota != isb.transferQuota ) {
             return false;
         }
-        if((identityKey==null && isb.identityKey!=null) || (identityKey!=null && !identityKey.equals(isb.identityKey))) {
+        if( ( identityKey == null && isb.identityKey != null ) || ( identityKey != null && ! identityKey.equals( isb.identityKey ) ) ) {
             return false;
         }
-        if((nodeAddress!=null && !nodeAddress.equals(isb.nodeAddress)) || (nodeAddress==null && isb.nodeAddress!=null)) {
+        if( ( nodeAddress != null && ! nodeAddress.equals( isb.nodeAddress ) ) || ( nodeAddress == null && isb.nodeAddress != null ) ) {
             return false;
         }
-        return nodeKey.equals(isb.nodeKey);
+        return nodeKey.equals( isb.nodeKey );
     }
 
 }

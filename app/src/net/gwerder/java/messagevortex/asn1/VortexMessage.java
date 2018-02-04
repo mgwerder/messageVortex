@@ -281,14 +281,14 @@ public class VortexMessage extends AbstractBlock implements Serializable {
      * @throws IOException if message i not encodable due to an incomplete/invalid object state
      */
     public String dumpValueNotation(String prefix, DumpType dt) throws IOException {
-        String ret;
-        ret =prefix+"m VortexMessage ::= {"+CRLF ;
-        ret+=prefix+"  -- Dumping prefix"+CRLF;
-        ret+=prefix+"  prefix " + getPrefix().dumpValueNotation( prefix + "  ",dt ) + "," + CRLF;
-        ret+=prefix+"  -- Dumping innerMessage" + CRLF ;
-        ret+=prefix+"  innerMessage " + getInnerMessage().dumpValueNotation( prefix + "  ",dt ) + "," + CRLF;
-        ret+=prefix+"}"+CRLF;
-        return ret;
+        StringBuilder ret=new StringBuilder();
+        ret.append( prefix ).append( "m VortexMessage ::= {" ).append( CRLF );
+        ret.append( prefix ).append( "  -- Dumping prefix" ).append( CRLF );
+        ret.append( prefix ).append( "  prefix " ).append( getPrefix().dumpValueNotation( prefix + "  ",dt ) ).append( ',' ).append( CRLF );
+        ret.append( prefix ).append( "  -- Dumping innerMessage" ).append( CRLF );
+        ret.append( prefix ).append( "  innerMessage " ).append( getInnerMessage().dumpValueNotation( prefix + "  ",dt ) ).append( ',' ).append( CRLF );
+        ret.append( prefix ).append( '}' ).append( CRLF );
+        return ret.toString();
     }
 
     /***

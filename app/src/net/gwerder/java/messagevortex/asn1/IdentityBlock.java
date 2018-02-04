@@ -364,7 +364,7 @@ public class IdentityBlock extends AbstractBlock  implements Serializable {
                 sb.append( valid.dumpValueNotation( prefix + "  ",dumpType ) ).append( CRLF );
                 sb.append( r.dumpValueNotation( prefix + "  " ) ).append( CRLF );
             }
-            sb.append( prefix + "    }" );
+            sb.append( prefix ).append( "    }" );
             if ( padding != null ) {
                 sb.append( ',' ).append( CRLF );
                 sb.append( prefix ).append( "    padding " ).append( toHex( padding ) ).append( CRLF );

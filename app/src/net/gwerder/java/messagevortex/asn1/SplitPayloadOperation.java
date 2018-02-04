@@ -37,12 +37,12 @@ public class SplitPayloadOperation extends Operation implements Serializable {
     @Override
     public String dumpValueNotation(String prefix, DumpType dumptype) throws IOException {
         StringBuilder sb=new StringBuilder();
-        sb.append("{"+CRLF);
-        sb.append(prefix+"  originalFirstId "+originalFirstId+","+CRLF);
-        sb.append(prefix+"  originalSecondId "+originalSecondId+","+CRLF);
-        sb.append(prefix+"  originalSize "+originalSize.dumpValueNotation(prefix+"  ",dumptype)+","+CRLF);
-        sb.append(prefix+"  newId "+newId+CRLF);
-        sb.append(prefix+"}");
+        sb.append( '{' ).append( CRLF );
+        sb.append( prefix ).append( "  originalFirstId " ).append( originalFirstId ).append( ',' ).append( CRLF );
+        sb.append( prefix ).append( "  originalSecondId " ).append( originalSecondId ).append( ',' ).append( CRLF );
+        sb.append( prefix ).append( "  originalSize " ).append( originalSize.dumpValueNotation( prefix+"  ", dumptype ) ).append( ',' ).append( CRLF );
+        sb.append( prefix ).append( "  newId " ).append( newId ).append( CRLF );
+        sb.append( prefix ).append( '}' );
         return sb.toString();
     }
 

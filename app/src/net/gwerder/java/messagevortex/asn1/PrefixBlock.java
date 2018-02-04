@@ -169,12 +169,12 @@ public class PrefixBlock extends AbstractBlock  implements Serializable {
         StringBuilder sb=new StringBuilder();
         if(DumpType.ALL==dumpType || DumpType.PUBLIC_ONLY==dumpType) {
             // dump standard block as octet string
-            sb.append( "encrypted "+toHex(toEncBytes()) );
+            sb.append( "encrypted " ).append( toHex( toEncBytes() ) );
         } else {
             // dump as unecrypted structure
-            sb.append( "plain  {"+CRLF );
-            sb.append( prefix+"  key "+key.dumpValueNotation(prefix+"  ",dumpType)+CRLF);
-            sb.append( prefix+"}" );
+            sb.append( "plain  {" ).append( CRLF );
+            sb.append( prefix ).append( "  key " ).append( key.dumpValueNotation( prefix+"  ", dumpType ) ).append( CRLF );
+            sb.append( prefix ).append( '}' );
         }
         return sb.toString();
     }
