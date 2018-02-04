@@ -280,7 +280,7 @@ public class AsymmetricKey extends Key  implements Serializable {
         StringBuilder sb=new StringBuilder();
         sb.append( '{' ).append( CRLF );
         sb.append( dumpKeyTypeValueNotation( prefix,dumpType ) );
-        sb.append( "," ).append( CRLF );
+        sb.append( ',' ).append( CRLF );
         String s = toHex( publicKey );
         sb.append( prefix ).append( "  publicKey " ).append( s );
         switch(dumpType) {
@@ -507,21 +507,21 @@ public class AsymmetricKey extends Key  implements Serializable {
         return new KeyPair( lPublicKey,lPrivateKey );
     }
 
-    private Cipher getCipher() throws NoSuchPaddingException,NoSuchAlgorithmException,NoSuchProviderException {
-        Algorithm alg=getAlgorithm();
-        if(alg==Algorithm.EC) {
-            return Cipher.getInstance( alg.getAlgorithmFamily(),alg.getProvider());
+    private Cipher getCipher() throws NoSuchPaddingException, NoSuchAlgorithmException, NoSuchProviderException {
+        Algorithm alg = getAlgorithm();
+        if( alg == Algorithm.EC ) {
+            return Cipher.getInstance( alg.getAlgorithmFamily(), alg.getProvider() );
         } else {
-            return Cipher.getInstance(alg+"/"+getMode()+"/"+getPadding().toString(),alg.getProvider());
+            return Cipher.getInstance( alg + "/" + getMode() + "/" + getPadding(), alg.getProvider() );
         }
     }
 
     private Signature getSignature(Algorithm a) throws NoSuchPaddingException, NoSuchAlgorithmException, NoSuchProviderException {
         Algorithm alg=getAlgorithm();
         if ( alg==Algorithm.EC ) {
-            return Signature.getInstance( a.toString() + "WithECDSA", alg.getProvider() );
+            return Signature.getInstance( a + "WithECDSA", alg.getProvider() );
         } else {
-            return Signature.getInstance( a.toString() + "With" + alg.toString(),alg.getProvider() );
+            return Signature.getInstance( a + "With" + alg, alg.getProvider() );
         }
     }
 
@@ -671,7 +671,7 @@ public class AsymmetricKey extends Key  implements Serializable {
      */
     @Override
     public String toString() {
-        return "([AsymmetricKey]hash="+(privateKey!=null?Arrays.hashCode(privateKey):"null")+"/"+(publicKey!=null?Arrays.hashCode(publicKey):"null")+";"+parameters.toString()+")";
+        return "([AsymmetricKey]hash=" + ( privateKey != null? Arrays.hashCode( privateKey ): "null" ) + "/" + ( publicKey !=null? Arrays.hashCode( publicKey ): "null" ) + ";" + parameters + ")";
     }
 
 }

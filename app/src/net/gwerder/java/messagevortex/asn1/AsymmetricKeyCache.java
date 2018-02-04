@@ -3,6 +3,7 @@ package net.gwerder.java.messagevortex.asn1;
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.security.SecureRandom;
 import java.util.*;
 import java.util.logging.Level;
@@ -118,13 +119,13 @@ public class AsymmetricKeyCache implements Serializable {
         }
 
         private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-            maxSize = (Integer) in.readObject();
-            averageCalcTime = (long)(in.readObject());
-            numberOfCalcTimes = (Integer) in.readObject();
-            cache=new ArrayDeque<AsymmetricKey>();
-            int i   = (Integer) in.readObject();
-            for (int j = 0; j < i; j++) {
-                cache.add((AsymmetricKey) in.readObject());
+            maxSize = (Integer)in.readObject();
+            averageCalcTime = (long)( in.readObject() );
+            numberOfCalcTimes = (Integer)in.readObject();
+            int i   = (Integer)in.readObject();
+            cache=new ArrayDeque<>( i );
+            for ( int j = 0; j < i; j++ ) {
+                cache.add( (AsymmetricKey)in.readObject() );
             }
         }
 
@@ -135,11 +136,11 @@ public class AsymmetricKeyCache implements Serializable {
     }
 
     public void store(String filename) throws IOException {
-        ObjectOutputStream f=new ObjectOutputStream(new FileOutputStream(filename));
-        try {
-            f.writeObject(this);
-        } finally {
-            f.close();
+        File f = new File( filename );
+        try (
+                ObjectOutputStream os=new ObjectOutputStream(Files.newOutputStream( f.toPath() ) );
+        ) {
+            os.writeObject(this);
         }
         LOGGER.log(Level.INFO, "stored cache to file \""+filename+"\"");
         showStats();
@@ -154,17 +155,18 @@ public class AsymmetricKeyCache implements Serializable {
     }
 
     public void merge(String filename) throws IOException {
-        try (ObjectInputStream f=new ObjectInputStream(new FileInputStream(filename))) {
-            load(f, true);
+        File f = new File( filename );
+        try( ObjectInputStream is=new ObjectInputStream( Files.newInputStream( f.toPath() ) ) ) {
+            load( is, true );
         } catch(ClassCastException cce) {
-            throw new IOException("Error deserializing file \""+filename+"\"",cce);
+            throw new IOException( "Error deserializing file \"" + filename + "\"", cce );
         }
     }
 
-    public void setCalcTime(AlgorithmParameter ap,long millis) {
-        CacheElement ce=cache.get(ap);
-        if(ce!=null) {
-            ce.setCalcTime(millis);
+    public void setCalcTime( AlgorithmParameter ap, long millis ) {
+        CacheElement ce=cache.get( ap );
+        if( ce != null ) {
+            ce.setCalcTime( millis );
         }
     }
 
@@ -328,46 +330,48 @@ public class AsymmetricKeyCache implements Serializable {
     private void readObject(ObjectInputStream in) throws IOException {
         try{
             int i=in.readInt();
-            cache=new HashMap<>();
-            for(int j=0;j<i;j++) {
-                cache.put((AlgorithmParameter)in.readObject(),(CacheElement)in.readObject());
+            cache=new HashMap<>( i );
+            for( int j = 0; j < i ; j++ ) {
+                cache.put( (AlgorithmParameter)in.readObject(), (CacheElement)in.readObject() );
             }
-        }catch(ClassNotFoundException cnfe) {
-            throw new IOException("Exception while reading cache file",cnfe);
+        }catch( ClassNotFoundException cnfe ) {
+            throw new IOException( "Exception while reading cache file", cnfe );
         }
     }
 
     public static String percentBar(double percent, int size) {
         StringBuilder sb=new StringBuilder();
-        sb.append("|");
+        sb.append( '|' );
         for(int i=1;i<Math.min(size,percent*size);i++) {
-            sb.append("#");
+            sb.append( '#' );
         }
         while(sb.length()<size) {
-            sb.append(".");
+            sb.append( '.' );
         }
-        sb.append("|");
+        sb.append( '|' );
         return sb.toString();
     }
 
     public void showStats() {
-        final String sepLine="-----------------------------------------------------------";
-        synchronized(cache) {
-            LOGGER.log(Level.INFO, sepLine);
-            LOGGER.log(Level.INFO, "| cache stats ");
-            LOGGER.log(Level.INFO, sepLine);
+        final String sepLine = "-----------------------------------------------------------";
+        synchronized( cache ) {
+            LOGGER.log( Level.INFO, sepLine );
+            LOGGER.log( Level.INFO, "| cache stats " );
+            LOGGER.log( Level.INFO, sepLine );
             int sum = 0;
             int tot = 0;
-            for (AlgorithmParameter q : cache.keySet()) {
-                CacheElement ce=cache.get(q);
-                LOGGER.log(Level.INFO, "| " + String.format("%4s",ce.size()) + "/" + String.format("%4s",ce.getMaxSize())+" "+percentBar((double)(ce.size())/ce.getMaxSize(),20)+" "+ q.toString());
-                sum += ce.size();
-                tot += ce.getMaxSize();
+            for (Map.Entry<AlgorithmParameter,CacheElement> e : cache.entrySet()) {
+                CacheElement ce=e.getValue();
+                long s = ce.size();
+                long ms = ce.getMaxSize();
+                LOGGER.log(Level.INFO, "| " + String.format( "%4s", s ) + "/" + String.format( "%4s", ms )+" "+percentBar((double)(s)/ms, 20 ) + " " + e.getKey() );
+                sum += s;
+                tot += ms;
 
             }
-            LOGGER.log(Level.INFO, sepLine);
-            LOGGER.log(Level.INFO, "| Total: "+sum+"/"+tot+"");
-            LOGGER.log(Level.INFO, sepLine);
+            LOGGER.log(Level.INFO, sepLine );
+            LOGGER.log(Level.INFO, "| Total: " + sum + "/" + tot + "" );
+            LOGGER.log(Level.INFO, sepLine );
         }
     }
 

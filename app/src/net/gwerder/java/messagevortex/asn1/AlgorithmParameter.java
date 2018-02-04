@@ -73,14 +73,15 @@ public class AlgorithmParameter extends AbstractBlock implements Serializable,Co
         }
     }
 
-    public String put(Parameter parameter,String value) {
-        // this assertion catches rewritten keysizes (different values)
-        assert parameter!=Parameter.KEYSIZE || (get(parameter.getId())==null || (get(parameter.getId()).equals(value)));
+    public final String put( Parameter parameter, String value ) {
 
-        return put(parameter.getId(),value);
+        // this assertion catches rewritten keysizes (different values)
+        assert parameter != Parameter.KEYSIZE || ( get( parameter.getId() ) == null || ( get( parameter.getId() ).equals( value ) ) );
+
+        return put( parameter.getId(), value );
     }
 
-    public String get(String id) {
+    public final String get(String id) {
         Parameter p=Parameter.getByString(id);
         if(p==null) {
             throw new IllegalArgumentException("got unknown parameter id to map ("+id+")");
@@ -110,17 +111,17 @@ public class AlgorithmParameter extends AbstractBlock implements Serializable,Co
     }
 
     @Override
-    public String dumpValueNotation(String prefix,DumpType dumpType) {
-        StringBuilder sb=new StringBuilder();
-        sb.append("{"+ CRLF);
+    public String dumpValueNotation( String prefix, DumpType dumpType ) {
+        StringBuilder sb = new StringBuilder();
+        sb.append( '{' ).append( CRLF );
         int i=0;
         for(Map.Entry<Integer,String> e:parameter.entrySet()) {
             Parameter p=Parameter.getById(e.getKey());
             if(p!=null && p.isEncodable()) {
                 if(i>0) {
-                    sb.append( ","+CRLF);
+                    sb.append( ',' ).append( CRLF );
                 }
-                sb.append(prefix ).append( "  " ).append( p.toString() ).append( " \"" ).append( e.getValue() ).append( "\"" );
+                sb.append( prefix ).append( "  " ).append( p ).append( " \"" ).append( e.getValue() ).append( "\"" );
                 i++;
             }
         }

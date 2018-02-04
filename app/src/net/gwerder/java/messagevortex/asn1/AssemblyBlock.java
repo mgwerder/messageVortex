@@ -38,7 +38,7 @@ public class AssemblyBlock extends AbstractBlock implements Serializable {
     @Override
     public String dumpValueNotation(String prefix, DumpType dumptype) throws IOException {
         StringBuilder sb=new StringBuilder();
-        sb.append( "{" ).append( CRLF );
+        sb.append( '{' ).append( CRLF );
         sb.append( prefix ).append( "  routingBlockIndex " ).append( routingBlockIndex ).append( CRLF );
         sb.append( prefix ).append( "  payloadBlockIndex { ");
         int j=0;
