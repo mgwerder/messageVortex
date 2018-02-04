@@ -49,16 +49,16 @@ public enum Algorithm implements Serializable {
     TWOFISH256 ( 1202, AlgorithmType.SYMMETRIC, "TWOFISH256" , "BC", SecurityLevel.QUANTUM ),
 
     RSA        (2000, AlgorithmType.ASYMMETRIC, "RSA", "BC", getSecLevelList( getSecLevelList( getSecLevelList( getSecLevelList(
-              SecurityLevel.LOW,     getParameterList(new String[] { Parameter.ALGORITHM+"=RSA",Parameter.KEYSIZE.toString()+"=1024",Parameter.BLOCKSIZE.toString()+"=1024",Parameter.MODE.toString()+"="+Mode.getDefault(AlgorithmType.ASYMMETRIC).toString(),Parameter.PADDING.toString()+"="+Padding.getDefault(AlgorithmType.ASYMMETRIC).toString()})),
-              SecurityLevel.MEDIUM,  getParameterList(new String[] { Parameter.ALGORITHM+"=RSA",Parameter.KEYSIZE.toString()+"=2048",Parameter.BLOCKSIZE.toString()+"=2048",Parameter.MODE.toString()+"="+Mode.getDefault(AlgorithmType.ASYMMETRIC).toString(),Parameter.PADDING.toString()+"="+Padding.getDefault(AlgorithmType.ASYMMETRIC).toString()})),
-              SecurityLevel.HIGH,    getParameterList(new String[] { Parameter.ALGORITHM+"=RSA",Parameter.KEYSIZE.toString()+"=4096",Parameter.BLOCKSIZE.toString()+"=4096",Parameter.MODE.toString()+"="+Mode.getDefault(AlgorithmType.ASYMMETRIC).toString(),Parameter.PADDING.toString()+"="+Padding.getDefault(AlgorithmType.ASYMMETRIC).toString()})),
-              SecurityLevel.QUANTUM, getParameterList(new String[] { Parameter.ALGORITHM+"=RSA",Parameter.KEYSIZE.toString()+"=8192",Parameter.BLOCKSIZE.toString()+"=8192",Parameter.MODE.toString()+"="+Mode.getDefault(AlgorithmType.ASYMMETRIC).toString(),Parameter.PADDING.toString()+"="+Padding.getDefault(AlgorithmType.ASYMMETRIC).toString()}))
+              SecurityLevel.LOW,     getParameterList(new String[] { Parameter.ALGORITHM+"=RSA",Parameter.KEYSIZE+"=1024",Parameter.BLOCKSIZE+"=1024",Parameter.MODE+"="+Mode.getDefault( AlgorithmType.ASYMMETRIC ),Parameter.PADDING+"="+Padding.getDefault( AlgorithmType.ASYMMETRIC ) } ) ),
+              SecurityLevel.MEDIUM,  getParameterList(new String[] { Parameter.ALGORITHM+"=RSA",Parameter.KEYSIZE+"=2048",Parameter.BLOCKSIZE+"=2048",Parameter.MODE+"="+Mode.getDefault( AlgorithmType.ASYMMETRIC ),Parameter.PADDING+"="+Padding.getDefault( AlgorithmType.ASYMMETRIC ) } ) ),
+              SecurityLevel.HIGH,    getParameterList(new String[] { Parameter.ALGORITHM+"=RSA",Parameter.KEYSIZE+"=4096",Parameter.BLOCKSIZE+"=4096",Parameter.MODE+"="+Mode.getDefault( AlgorithmType.ASYMMETRIC ),Parameter.PADDING+"="+Padding.getDefault( AlgorithmType.ASYMMETRIC ) } ) ),
+              SecurityLevel.QUANTUM, getParameterList(new String[] { Parameter.ALGORITHM+"=RSA",Parameter.KEYSIZE+"=8192",Parameter.BLOCKSIZE+"=8192",Parameter.MODE+"="+Mode.getDefault( AlgorithmType.ASYMMETRIC ),Parameter.PADDING+"="+Padding.getDefault( AlgorithmType.ASYMMETRIC ) } ) )
 
     ),
     EC         ( 2100, AlgorithmType.ASYMMETRIC, "ECIES"    , "BC", getSecLevelList( getSecLevelList( getSecLevelList(
-            ECCurveType.SECP384R1.getSecurityLevel(), getParameterList(new String[] { Parameter.ALGORITHM+"=ECIES",Parameter.KEYSIZE.toString()+"=384",Parameter.BLOCKSIZE.toString()+"=384",Parameter.CURVETYPE.toString()+"="+ECCurveType.SECP384R1.toString(),Parameter.MODE.toString()+"="+Mode.getDefault(AlgorithmType.ASYMMETRIC).toString(),Parameter.PADDING.toString()+"="+Padding.getDefault(AlgorithmType.ASYMMETRIC).toString()})),
-            ECCurveType.SECT409K1.getSecurityLevel(), getParameterList(new String[] { Parameter.ALGORITHM+"=ECIES",Parameter.KEYSIZE.toString()+"=409",Parameter.BLOCKSIZE.toString()+"=409",Parameter.CURVETYPE.toString()+"="+ECCurveType.SECT409K1.toString(),Parameter.MODE.toString()+"="+Mode.getDefault(AlgorithmType.ASYMMETRIC).toString(),Parameter.PADDING.toString()+"="+Padding.getDefault(AlgorithmType.ASYMMETRIC).toString()})),
-            ECCurveType.SECP521R1.getSecurityLevel(), getParameterList(new String[] { Parameter.ALGORITHM+"=ECIES",Parameter.KEYSIZE.toString()+"=521",Parameter.BLOCKSIZE.toString()+"=521",Parameter.CURVETYPE.toString()+"="+ECCurveType.SECP521R1.toString(),Parameter.MODE.toString()+"="+Mode.getDefault(AlgorithmType.ASYMMETRIC).toString(),Parameter.PADDING.toString()+"="+Padding.getDefault(AlgorithmType.ASYMMETRIC).toString()}))
+            ECCurveType.SECP384R1.getSecurityLevel(), getParameterList(new String[] { Parameter.ALGORITHM+"=ECIES",Parameter.KEYSIZE+"=384",Parameter.BLOCKSIZE+"=384",Parameter.CURVETYPE+"="+ECCurveType.SECP384R1,Parameter.MODE+"="+Mode.getDefault( AlgorithmType.ASYMMETRIC ),Parameter.PADDING+"="+Padding.getDefault( AlgorithmType.ASYMMETRIC) } ) ),
+            ECCurveType.SECT409K1.getSecurityLevel(), getParameterList(new String[] { Parameter.ALGORITHM+"=ECIES",Parameter.KEYSIZE+"=409",Parameter.BLOCKSIZE+"=409",Parameter.CURVETYPE+"="+ECCurveType.SECT409K1,Parameter.MODE+"="+Mode.getDefault( AlgorithmType.ASYMMETRIC ),Parameter.PADDING+"="+Padding.getDefault( AlgorithmType.ASYMMETRIC) } ) ),
+            ECCurveType.SECP521R1.getSecurityLevel(), getParameterList(new String[] { Parameter.ALGORITHM+"=ECIES",Parameter.KEYSIZE+"=521",Parameter.BLOCKSIZE+"=521",Parameter.CURVETYPE+"="+ECCurveType.SECP521R1,Parameter.MODE+"="+Mode.getDefault( AlgorithmType.ASYMMETRIC ),Parameter.PADDING+"="+Padding.getDefault( AlgorithmType.ASYMMETRIC) } ) )
     ),
     SHA384     ( 3000, AlgorithmType.HASHING, "sha384"   , "BC", SecurityLevel.HIGH ),
     SHA512     ( 3001, AlgorithmType.HASHING, "sha512"   , "BC", SecurityLevel.QUANTUM ),
@@ -113,13 +113,13 @@ public enum Algorithm implements Serializable {
     }
 
     private static AlgorithmParameter getParameterList(String[] txt) {
-        AlgorithmParameter ret=new AlgorithmParameter();
-        for(String s:txt) {
-            String[] kv=s.split("=");
-            if(kv.length==2) {
-                ret.put(kv[0], kv[1]);
+        AlgorithmParameter ret = new AlgorithmParameter();
+        for( String s : txt ) {
+            String[] kv=s.split( "=" );
+            if( kv.length == 2 ) {
+                ret.put( kv[0], kv[1] );
             } else {
-                MessageVortexLogger.getLogger( (new Throwable()).getStackTrace()[0].getClassName() ).log(Level.WARNING, "split of \""+s+"\" failed");
+                MessageVortexLogger.getLogger( (new Throwable()).getStackTrace()[0].getClassName() ).log( Level.WARNING, "split of \"" + s + "\" failed" );
             }
         }
         return ret;
@@ -127,13 +127,13 @@ public enum Algorithm implements Serializable {
 
     private static  Map<SecurityLevel,AlgorithmParameter> getSecLevelList(SecurityLevel level ,AlgorithmParameter o) {
         Map<SecurityLevel,AlgorithmParameter> ret=new ConcurrentHashMap<>();
-        return getSecLevelList(ret, level, o);
+        return getSecLevelList( ret, level, o );
     }
 
     private static  Map<SecurityLevel,AlgorithmParameter> getSecLevelList(Map<SecurityLevel,AlgorithmParameter> lst, SecurityLevel level ,AlgorithmParameter o) {
-        Map<SecurityLevel,AlgorithmParameter> ret=new HashMap<>();
-        ret.putAll(lst);
-        ret.put(level,o);
+        Map<SecurityLevel,AlgorithmParameter> ret = new HashMap<>();
+        ret.putAll( lst );
+        ret.put( level, o );
         return ret;
     }
 
@@ -144,13 +144,14 @@ public enum Algorithm implements Serializable {
      * @return     the list of algorithms
      */
     public static Algorithm[] getAlgorithms(AlgorithmType at) {
-        List<Algorithm> v=new ArrayList<>();
-        for(Algorithm e : values()) {
-            if(e.t==at) {
-                v.add(e);
+        Algorithm[] a= values();
+        List<Algorithm> v = new ArrayList<>( a.length );
+        for(Algorithm e : a ) {
+            if( e.t == at ) {
+                v.add( e );
             }
         }
-        return v.toArray(new Algorithm[v.size()]);
+        return v.toArray( new Algorithm[ v.size() ] );
     }
 
     /***
@@ -160,7 +161,7 @@ public enum Algorithm implements Serializable {
      * @return       the algorithm or null if not known
      */
     public static Algorithm getById(int id) {
-        for(Algorithm e : values()) {
+        for(Algorithm e : values() ) {
             if(e.id==id) {
                 return e;
             }
@@ -189,14 +190,13 @@ public enum Algorithm implements Serializable {
      * @param at   the type of algorithm to be looked for
      * @return     the default type
      */
-    public static Algorithm getDefault(AlgorithmType at) {
+    public static Algorithm getDefault( AlgorithmType at ) {
         // init map if not yet done
         if( def.isEmpty() ) {
-            def.put(AlgorithmType.ASYMMETRIC, RSA);
-            def.put(AlgorithmType.SYMMETRIC,  AES256);
-            def.put(AlgorithmType.HASHING,    SHA384);
+            def.put( AlgorithmType.ASYMMETRIC, RSA );
+            def.put( AlgorithmType.SYMMETRIC,  AES256 );
+            def.put( AlgorithmType.HASHING,    SHA384 );
         };
-
         return def.get( at );
     }
 
@@ -254,7 +254,7 @@ public enum Algorithm implements Serializable {
      * @return the default key size in bits
      */
     public int getKeySize() {
-        return getKeySize(SecurityLevel.getDefault());
+        return getKeySize( SecurityLevel.getDefault() );
     }
 
     /***
@@ -263,7 +263,7 @@ public enum Algorithm implements Serializable {
      * @return the default key size in bits
      */
     public int getBlockSize() {
-        return getBlockSize(SecurityLevel.getDefault());
+        return getBlockSize( SecurityLevel.getDefault() );
     }
 
     /***
@@ -273,26 +273,26 @@ public enum Algorithm implements Serializable {
      * @return     the key size in bits for the security level specified
      */
     public int getKeySize(SecurityLevel sl) {
-        for(String i: new String[] { "aes","sha","camellia","twofish","ripemd"}) {
-            if( txt.toLowerCase().startsWith(i)) {
+        for(String i: new String[] { "aes", "sha", "camellia", "twofish", "ripemd" } ) {
+            if( txt.toLowerCase().startsWith( i ) ) {
                 return Integer.parseInt( txt.substring( i.length(), i.length()+3 ) );
             }
         }
 
-        synchronized(secLevel) {
+        synchronized( secLevel ) {
             // get requested parameters
             AlgorithmParameter params = getParameters(sl);
 
             // get kesize from parameters
-            if (params == null || (Integer.parseInt(params.get(Parameter.KEYSIZE.getId())) < 10)) {
-                LOGGER.log(Level.SEVERE, "Error fetching keysize for " + txt + "/" + sl.toString() + " (" + secLevel.get(sl) + ")");
-                throw new IllegalArgumentException("Error fetching key size for " + txt + "/" + sl.toString() + " (" + secLevel.get(sl) + ")");
+            if( params == null || ( Integer.parseInt( params.get( Parameter.KEYSIZE.getId() ) ) < 10 ) ) {
+                LOGGER.log( Level.SEVERE, "Error fetching keysize for " + txt + "/" + sl + " (" + secLevel.get( sl ) + ")" );
+                throw new IllegalArgumentException( "Error fetching key size for " + txt + "/" + sl + " (" + secLevel.get( sl ) + ")" );
             }
-            if (params.get(Parameter.ALGORITHM).toLowerCase().startsWith("ecies")) {
+            if( params.get( Parameter.ALGORITHM ).toLowerCase().startsWith( "ecies" ) ) {
                 // Extract key size from EC courve name
-                return Integer.parseInt(params.get(Parameter.CURVETYPE).substring(4, 7));
+                return Integer.parseInt( params.get( Parameter.CURVETYPE ).substring( 4, 7 ) );
             } else {
-                return Integer.parseInt(params.get(Parameter.KEYSIZE));
+                return Integer.parseInt( params.get( Parameter.KEYSIZE ) );
             }
         }
     }
@@ -304,12 +304,12 @@ public enum Algorithm implements Serializable {
      * @return     the key size in bits for the security level specified
      */
     public int getBlockSize(SecurityLevel sl) {
-        synchronized(secLevel) {
+        synchronized( secLevel ) {
             // get requested parameters
-            AlgorithmParameter params = getParameters(sl);
+            AlgorithmParameter params = getParameters( sl );
 
             String bsparam = params.get( Parameter.BLOCKSIZE );
-            if (bsparam != null) {
+            if ( bsparam != null ) {
                 // get kesize from parameters
                 return Integer.parseInt( bsparam );
             } else {
@@ -325,15 +325,15 @@ public enum Algorithm implements Serializable {
      * @return    the default set of parameters for the security level specified
      */
     public AlgorithmParameter getParameters(SecurityLevel sl) {
-        synchronized(secLevel) {
+        synchronized( secLevel ) {
             AlgorithmParameter params = null;
 
             // get next higher security level if not available
-            while (params == null) {
-                params = secLevel.get(sl);
+            while ( params == null ) {
+                params = secLevel.get( sl );
 
                 // if required repeat with next higher SecurityLevel
-                if(params==null) {
+                if( params==null ) {
                     sl = sl.next();
                 }
             }
@@ -347,14 +347,13 @@ public enum Algorithm implements Serializable {
      * @return The map containing the default parameters
      */
     public Map<SecurityLevel,AlgorithmParameter> getParameters() {
-        synchronized(secLevel) {
-            Map<SecurityLevel,AlgorithmParameter> ret=new HashMap<>();
-            for(Map.Entry<SecurityLevel,AlgorithmParameter> e:secLevel.entrySet()) {
-                ret.put(e.getKey(),new AlgorithmParameter(e.getValue()));
+        synchronized( secLevel ) {
+            Map<SecurityLevel,AlgorithmParameter> ret = new HashMap<>( secLevel.size() );
+            for( Map.Entry<SecurityLevel,AlgorithmParameter> e : secLevel.entrySet() ) {
+                ret.put( e.getKey(), new AlgorithmParameter( e.getValue() ) );
             }
             return ret;
         }
     }
 
 }
-

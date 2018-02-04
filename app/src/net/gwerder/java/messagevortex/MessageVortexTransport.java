@@ -24,7 +24,7 @@ public class MessageVortexTransport {
         inSMTP = new SMTPReceiver( cfg.getNumericValue("smtp_incomming_port"), null, cfg.getBooleanValue("smtp_incomming_ssl"), receiver );
 
         // setup receiver for IMAP requests
-
+        // FIXME
     }
 
     public TransportReceiver getTransportReceiver() {

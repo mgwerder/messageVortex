@@ -29,7 +29,10 @@ import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 
 /***
@@ -50,17 +53,16 @@ public class InnerMessageBlock extends AbstractBlock  implements Serializable {
     public static final int ROUTING_PLAIN     = 11031;
     public static final int ROUTING_ENCRYPTED = 11032;
 
-    private byte[] padding=new byte[0];
-    private PrefixBlock prefix;
-    private IdentityBlock identity;
-    private byte[] identitySignature=null;
-    private RoutingBlock routing;
-    private PayloadChunk[] payload=new PayloadChunk[0];
+    private byte[]         padding           = new byte[0];
+    private PrefixBlock    prefix;
+    private IdentityBlock  identity;
+    private byte[]         identitySignature = null;
+    private RoutingBlock   routing;
+    private PayloadChunk[] payload           = new PayloadChunk[0];
 
     private static final java.util.logging.Logger LOGGER;
     static {
         LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-        MessageVortexLogger.setGlobalLogLevel( Level.ALL);
     }
 
     public InnerMessageBlock() throws IOException {
@@ -83,19 +85,19 @@ public class InnerMessageBlock extends AbstractBlock  implements Serializable {
 
     protected void parse(byte[] p, AsymmetricKey decryptionKey ) throws IOException {
         try ( ASN1InputStream aIn = new ASN1InputStream(p) ) {
-            parse(aIn.readObject(),decryptionKey);
-            if( identity==null ) {
+            parse( aIn.readObject(), decryptionKey );
+            if( identity == null ) {
                 throw new NullPointerException( "IdentityBlock may not be null" );
             }
         }
     }
 
-    protected void parse(ASN1Encodable o ) throws IOException {
+    protected void parse( ASN1Encodable o ) throws IOException {
         parse( o, null );
     }
 
-    protected void parse(ASN1Encodable o,AsymmetricKey decryptionKey ) throws IOException {
-        LOGGER.log(Level.FINER,"Executing parse()");
+    protected void parse( ASN1Encodable o, AsymmetricKey decryptionKey ) throws IOException {
+        LOGGER.log( Level.FINER, "Executing parse()" );
         int i = 0;
         ASN1Sequence s1 = ASN1Sequence.getInstance( o );
 
@@ -132,9 +134,9 @@ public class InnerMessageBlock extends AbstractBlock  implements Serializable {
         }
 
         // get signature
-        identitySignature=ASN1OctetString.getInstance(s1.getObjectAt( i++ ) ).getOctets();
-        if(!identity.getIdentityKey().verify(identityEncoded,identitySignature)) {
-            throw new IOException( "failed verifying signature (signature length:"+identitySignature.length+"; signedBlock:"+identityEncoded+")" );
+        identitySignature = ASN1OctetString.getInstance( s1.getObjectAt( i++ ) ).getOctets();
+        if( ! identity.getIdentityKey().verify( identityEncoded, identitySignature ) ) {
+            throw new IOException( "failed verifying signature (signature length:" + identitySignature.length + "; signedBlock:" + toHex( identityEncoded ) + ")" );
         }
 
         // getting routing block
@@ -155,13 +157,13 @@ public class InnerMessageBlock extends AbstractBlock  implements Serializable {
         }
 
         // getting payload blocks
-        List<PayloadChunk> p2=new ArrayList<PayloadChunk>();
-        for (Iterator<ASN1Encodable> iter= ASN1Sequence.getInstance( s1.getObjectAt( i++ ) ).iterator(); iter.hasNext(); ) {
-            ASN1Encodable tr = iter.next();
-            p2.add(new PayloadChunk(tr,new UsagePeriod(new Date(new Date().getTime()+routing.getLastProcessTime()),new Date(new Date().getTime()+routing.getFirstProcessTime()))));
+        ASN1Sequence seq = ASN1Sequence.getInstance( s1.getObjectAt( i++ ) );
+        List<PayloadChunk> p2=new ArrayList<>( seq.size() );
+        for( ASN1Encodable tr : seq ) {
+            long cTime = new Date().getTime();
+            p2.add( new PayloadChunk( tr, new UsagePeriod( new Date( cTime + routing.getLastProcessTime() ), new Date( cTime + routing.getFirstProcessTime() ) ) ) );
         }
-        payload = p2.toArray(new PayloadChunk[p2.size()]);
-
+        payload = p2.toArray( new PayloadChunk[ p2.size() ] );
     }
 
     public ASN1Object toASN1Object() throws IOException {
@@ -264,10 +266,9 @@ public class InnerMessageBlock extends AbstractBlock  implements Serializable {
         StringBuilder sb=new StringBuilder();
         sb.append( "  {" ).append( CRLF );
         sb.append( prefix ).append( "  padding " ).append( toHex(padding) ).append( CRLF );
-
         sb.append( prefix ).append( "  -- Dumping IdentityBlock" ).append( CRLF );
         sb.append( prefix ).append( "  identity ");
-        if(DumpType.ALL_UNENCRYPTED.equals(dt)) {
+        if( dt == DumpType.ALL_UNENCRYPTED ) {
             // dumping plain identity
             sb.append( "plain " ).append( identity.dumpValueNotation( prefix + "  ",DumpType.ALL_UNENCRYPTED ) ).append( ',' ).append( CRLF );
         } else {
@@ -290,7 +291,7 @@ public class InnerMessageBlock extends AbstractBlock  implements Serializable {
             }
         }
         sb.append( CRLF );
-        sb.append( prefix + "  }" ).append( CRLF );
+        sb.append( prefix ).append( "  }" ).append( CRLF );
 
         sb.append( prefix ).append( '}' );
         return sb.toString();

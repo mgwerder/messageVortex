@@ -36,6 +36,6 @@ public interface TransportSender {
      * @return        true if the message has been successfully sent
      * @throws IOException if transport layer was unable to satisfy the request
      */
-    void sendMessage(String address, InputStream os) throws IOException;
+    void sendMessage( String address, InputStream os ) throws IOException;
 
 }

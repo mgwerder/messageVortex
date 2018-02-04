@@ -62,8 +62,11 @@ public class MessageVortex {
         try {
             accounting = new MessageVortexAccounting();
             routing   = new MessageVortexRouting();
-            blending  = new MessageVortexBlending();
+            blending  = new MessageVortexBlending( null, routing.getRoutingSender() );
             transport = new MessageVortexTransport( blending );
+
+            blending.setTransportReceiver( transport.getTransportReceiver() );
+
         }catch ( IOException ioe ) {
             LOGGER.log( Level.SEVERE, "Exception while setting up transport infrastructure", ioe );
         }

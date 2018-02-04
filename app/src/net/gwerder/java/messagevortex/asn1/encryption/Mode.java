@@ -41,11 +41,11 @@ public enum Mode {
     OFB       (10007,"OFB" ,true ,new String[] { "CAMELLIA128", "CAMELLIA192","CAMELLIA256", "Twofish128", "Twofish192","Twofish256"},new Padding[] { Padding.PKCS7 }),
     NONE      (10100,"NONE",false,new String[] { "ECIES","RSA" }, new Padding[] { Padding.PKCS7 });
 
-    private static Map<AlgorithmType,Mode> def=new HashMap<>();
+    private static Map<AlgorithmType,Mode> def=new HashMap<>(2);
 
     static {
-        def.put(AlgorithmType.ASYMMETRIC,Mode.ECB);
-        def.put(AlgorithmType.SYMMETRIC,Mode.CBC);
+        def.put( AlgorithmType.ASYMMETRIC, Mode.ECB );
+        def.put( AlgorithmType.SYMMETRIC, Mode.CBC );
     }
 
     final int id;

@@ -33,6 +33,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -101,17 +102,17 @@ public class SymmetricKey extends Key implements Serializable {
     }
 
     public byte[] setIV(byte[] b) {
-        String s=parameters.get(Parameter.IV);
+        String s=parameters.get( Parameter.IV );
         byte[] old;
-        if(s==null) {
+        if( s == null ) {
             old = null;
         } else {
-            old=s.getBytes();
+            old = s.getBytes( StandardCharsets.UTF_8 );
         }
-        if(b==null || b.length==0) {
-            parameters.put(Parameter.IV,toHex(secureRandom.generateSeed(16)));
+        if( b == null || b.length == 0 ) {
+            parameters.put( Parameter.IV, toHex( secureRandom.generateSeed( 16 ) ) );
         } else {
-            parameters.put(Parameter.IV,toHex(b));
+            parameters.put( Parameter.IV, toHex( b ) );
         }
         return old;
     }
@@ -181,9 +182,9 @@ public class SymmetricKey extends Key implements Serializable {
     private Cipher getCipher() throws NoSuchAlgorithmException,NoSuchPaddingException {
         setIV( getIV() );
         try {
-            return Cipher.getInstance(getAlgorithm().getAlgorithmFamily().toUpperCase() + "/" + getMode().toString() + "/" + getPadding().toString(), getAlgorithm().getProvider());
+            return Cipher.getInstance( getAlgorithm().getAlgorithmFamily().toUpperCase() + "/" + getMode() + "/" + getPadding().toString(), getAlgorithm().getProvider());
         } catch(NoSuchProviderException e) {
-            throw new NoSuchAlgorithmException("unknown provider",e);
+            throw new NoSuchAlgorithmException( "unknown provider", e );
         }
     }
 
@@ -194,7 +195,7 @@ public class SymmetricKey extends Key implements Serializable {
             SecretKeySpec ks = new SecretKeySpec( key, getAlgorithm().getAlgorithmFamily().toUpperCase() );
             if(getMode().getRequiresIV()) {
                 setIV( getIV() );
-                c.init( Cipher.ENCRYPT_MODE, ks, new IvParameterSpec( getIV()) );
+                c.init( Cipher.ENCRYPT_MODE, ks, new IvParameterSpec( getIV() ) );
             } else {
                 c.init( Cipher.ENCRYPT_MODE, ks );
             }
@@ -291,9 +292,7 @@ public class SymmetricKey extends Key implements Serializable {
      */
     @Override
     public String toString() {
-        return "([SymmetricKey]hash=" + ( key != null? Arrays.hashCode(key): "null" ) + ";" + parameters.toString() + ")";
+        return "([SymmetricKey]hash=" + ( key != null? Arrays.hashCode( key ): "null" ) + ";" + parameters + ")";
     }
-
-
 
 }

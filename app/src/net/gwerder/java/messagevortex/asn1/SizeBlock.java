@@ -21,16 +21,16 @@ public class SizeBlock extends AbstractBlock  implements Serializable {
 
     @Override
     protected void parse(ASN1Encodable to) throws IOException {
-        throw new NotImplementedException();
+        throw new NotImplementedException(); // FIXME
     }
 
     @Override
     public String dumpValueNotation(String prefix, DumpType dumptype) throws IOException {
-        throw new NotImplementedException();
+        throw new NotImplementedException(); // FIXME
     }
 
     @Override
     public ASN1Object toASN1Object(DumpType dumpType) throws IOException {
-        throw new NotImplementedException();
+        throw new NotImplementedException(); // FIXME
     }
 }

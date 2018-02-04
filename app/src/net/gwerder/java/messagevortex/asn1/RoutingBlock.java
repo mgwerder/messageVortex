@@ -96,63 +96,65 @@ public class RoutingBlock extends AbstractBlock  implements Serializable {
 
     private PrefixBlock[] getPrefix(ASN1Primitive seq) throws IOException {
         // if it is encrypted we have no decryption key for it anyway
-        List<PrefixBlock> ap = new ArrayList<>();
-        for (ASN1Encodable e : ASN1Sequence.getInstance(seq)) {
-            ap.add(new PrefixBlock(e.toASN1Primitive(), null));
+        ASN1Sequence seq1 = ASN1Sequence.getInstance( seq );
+        List<PrefixBlock> ap = new ArrayList<>( seq1.size() );
+        for (ASN1Encodable e : seq1 ) {
+            ap.add( new PrefixBlock( e.toASN1Primitive(), null ) );
         }
-        return ap.toArray(new PrefixBlock[ap.size()]);
+        return ap.toArray( new PrefixBlock[ ap.size() ] );
     }
 
     @Override
     protected void parse(ASN1Encodable to) throws IOException {
         Operation.init();
-        if(isEncrypted()) {
+        if( isEncrypted() ) {
             throw new IOException("Unable to encode to asn encrypted stream");
         }
 
         ASN1Sequence s1 = ASN1Sequence.getInstance(to);
-        int i=0;
+        int i = 0;
 
         // get recipient
-        recipient=new BlendingSpec(s1.getObjectAt(i++));
+        recipient = new BlendingSpec( s1.getObjectAt( i++ ) );
 
         // get times
-        minProcessTime=ASN1Integer.getInstance(s1.getObjectAt(i++)).getValue().intValue();
-        maxProcessTime=ASN1Integer.getInstance(s1.getObjectAt(i++)).getValue().intValue();
+        minProcessTime = ASN1Integer.getInstance( s1.getObjectAt( i++ ) ).getValue().intValue();
+        maxProcessTime = ASN1Integer.getInstance( s1.getObjectAt( i++ ) ).getValue().intValue();
 
         // get prefix block
         // FIXME check thorougly. How is this tag preserved when reencoding
-        ASN1TaggedObject ae=ASN1TaggedObject.getInstance(s1.getObjectAt(i++));
-        switch(ae.getTagNo()) {
+        ASN1TaggedObject ae = ASN1TaggedObject.getInstance( s1.getObjectAt( i++ ) );
+        switch( ae.getTagNo() ) {
             case PREFIX_PLAIN:
-                LOGGER.log(Level.INFO,"parsing plain prefix");
-                prefix=getPrefix(ae.getObject().toASN1Primitive());
+                LOGGER.log( Level.INFO, "parsing plain prefix" );
+                prefix = getPrefix( ae.getObject().toASN1Primitive() );
                 break;
             case PREFIX_ENCRYPTED:
-                LOGGER.log(Level.INFO,"parsing encrypted prefix");
-                prefix=getPrefix(ae.getObject().toASN1Primitive());
+                LOGGER.log( Level.INFO, "parsing encrypted prefix" );
+                prefix = getPrefix( ae.getObject().toASN1Primitive() );
                 break;
             default:
-                throw new IOException( "Error parsing prefix (expected: "+PREFIX_PLAIN+" or "+PREFIX_ENCRYPTED+";got:"+ae.getTagNo()+")");
+                throw new IOException( "Error parsing prefix (expected: " + PREFIX_PLAIN + " or " + PREFIX_ENCRYPTED + ";got:" + ae.getTagNo() + ")" );
         }
-        if(prefix==null) {
-            throw new NullPointerException("prefix should not parse to null (decoding)");
+        if( prefix == null ) {
+            throw new NullPointerException( "prefix should not parse to null (decoding)" );
         }
 
         // parse nextHop
-        ae=ASN1TaggedObject.getInstance(s1.getObjectAt(i++));
-        switch(ae.getTagNo()) {
+        ae = ASN1TaggedObject.getInstance( s1.getObjectAt( i++ ) );
+        switch( ae.getTagNo() ) {
             case ROUTING_PLAIN:
             case ROUTING_ENCRYPTED:
                 // if it is encrypted we have no decryption key for it anyway
-                List<RoutingBlock> p2=new ArrayList<>();
-                for (ASN1Encodable b :ASN1Sequence.getInstance( ae.getObject() ) ) {
-                    p2.add(new RoutingBlock(b));
+                ASN1Sequence seq = ASN1Sequence.getInstance( ae.getObject() );
+                List<RoutingBlock> p2 = new ArrayList<>( seq.size() );
+                for (ASN1Encodable b : seq ) {
+                    p2.add( new RoutingBlock( b ) );
                 }
-                if(p2.size()!=prefix.length) {
-                    throw new IOException( "missmatch in length of prefix and routing block");
+                if( p2.size() != prefix.length ) {
+                    throw new IOException( "missmatch in length of prefix and routing block" );
                 } else {
-                    nextHop=p2.toArray(new RoutingBlock[p2.size()]);
+                    nextHop = p2.toArray( new RoutingBlock[ p2.size() ] );
                 }
                 break;
             default:
@@ -160,47 +162,48 @@ public class RoutingBlock extends AbstractBlock  implements Serializable {
         }
 
         // parse forward secret
-        forwardSecret=ASN1Integer.getInstance(s1.getObjectAt(i++)).getValue().longValue();
+        forwardSecret = ASN1Integer.getInstance( s1.getObjectAt( i++ ) ).getValue().longValue();
 
         // parse reply block
         ae = ASN1TaggedObject.getInstance(s1.getObjectAt(i++));
-        if (ae.getTagNo() == MURB) {
-            ASN1Sequence s2=ASN1Sequence.getInstance(ae.getObject());
-            if(s2.size()!=3) {
-                throw new IOException("invalid sequence size for reply block (got: "+s2.size()+"; expected: 3)");
+        if ( ae.getTagNo() == MURB ) {
+            ASN1Sequence s2 = ASN1Sequence.getInstance( ae.getObject() );
+            if( s2.size() != 3 ) {
+                throw new IOException( "invalid sequence size for reply block (got: " + s2.size() + "; expected: 3)" );
             }
-            murbReplyBlock=new RoutingBlock(s2.getObjectAt(0));
-            murbMaxReplay=ASN1Integer.getInstance(s2.getObjectAt(1)).getPositiveValue().intValue();
-            murbValidity=new UsagePeriod(s2.getObjectAt(2));
-        } else if(ae.getTagNo()==OPERATIONS) {
+            murbReplyBlock = new RoutingBlock( s2.getObjectAt( 0 ) );
+            murbMaxReplay= ASN1Integer.getInstance( s2.getObjectAt( 1 ) ).getPositiveValue().intValue();
+            murbValidity=new UsagePeriod( s2.getObjectAt( 2 ) );
+        } else if( ae.getTagNo() == OPERATIONS ) {
             i--;
         } else {
-            throw new IOException("Got unknown tag number (got: "+ae.getTagNo()+"; expected: "+MURB+" or "+OPERATIONS+")");
+            throw new IOException( "Got unknown tag number (got: " + ae.getTagNo() + "; expected: " + MURB + " or " + OPERATIONS + ")" );
         }
 
         // parse operations
         ae = ASN1TaggedObject.getInstance(s1.getObjectAt(i++));
-        if (ae.getTagNo() == OPERATIONS) {
-            ASN1Sequence s2=ASN1Sequence.getInstance(ae.getObject());
-            List<Operation> o=new ArrayList<>();
-            if(s2.size()>0) {
-                for (ASN1Encodable obj : s2) {
-                    Operation op=Operation.getInstance(obj);
-                    o.add(op);
+        if ( ae.getTagNo() == OPERATIONS ) {
+            ASN1Sequence s2 = ASN1Sequence.getInstance( ae.getObject() );
+            List<Operation> o = new ArrayList<>();
+            if( s2.size() > 0 ) {
+                for( ASN1Encodable obj : s2 ) {
+                    Operation op = Operation.getInstance( obj );
+                    o.add( op );
                 }
                 operation.clear();
-                operation.addAll(o);
+                operation.addAll( o );
             }
         } else {
-            throw new IOException("Got unknown tag number (got: "+ae.getTagNo()+"; expected: "+OPERATIONS+")");
+            throw new IOException( "Got unknown tag number (got: " + ae.getTagNo() + "; expected: " + OPERATIONS + ")" );
         }
 
         // parse assembly
-        ASN1Sequence s2=ASN1Sequence.getInstance(s1.getObjectAt(i++));
-        List<AssemblyBlock> o=new ArrayList<>();
-        for(ASN1Encodable obj:s2) {
-            o.add(new AssemblyBlock(obj));
+        ASN1Sequence s2 = ASN1Sequence.getInstance( s1.getObjectAt( i++ ) );
+        List<AssemblyBlock> o=new ArrayList<>( s2.size() );
+        for( ASN1Encodable obj : s2 ) {
+            o.add( new AssemblyBlock( obj ) );
         }
+        assembly = o.toArray( new AssemblyBlock[ s2.size() ] );
     }
 
     public boolean isEncrypted() {
@@ -213,8 +216,8 @@ public class RoutingBlock extends AbstractBlock  implements Serializable {
 
     public long setFistProcessTime(long minProcessTime) {
         long old = minProcessTime;
-        encrypted=null;
-        this.minProcessTime=minProcessTime;
+        encrypted = null;
+        this.minProcessTime = minProcessTime;
         return old;
     }
 
@@ -224,93 +227,93 @@ public class RoutingBlock extends AbstractBlock  implements Serializable {
 
     public long setLastProcessTime(long maxProcessTime) {
         long old = maxProcessTime;
-        encrypted=null;
-        this.maxProcessTime=maxProcessTime;
+        encrypted = null;
+        this.maxProcessTime = maxProcessTime;
         return old;
     }
 
     @Override
     public ASN1Object toASN1Object(DumpType dumpType) throws IOException{
-        if(prefix==null) {
-            throw new NullPointerException("prefix may not be null when encoding");
+        if( prefix == null ) {
+            throw new NullPointerException( "prefix may not be null when encoding" );
         }
-        ASN1EncodableVector v=new ASN1EncodableVector();
+        ASN1EncodableVector v = new ASN1EncodableVector();
 
         // add recipient
-        v.add(recipient.toASN1Object(dumpType));
+        v.add( recipient.toASN1Object( dumpType ) );
 
-        v.add(new ASN1Integer(minProcessTime));
-        v.add(new ASN1Integer(maxProcessTime));
+        v.add( new ASN1Integer( minProcessTime ) );
+        v.add( new ASN1Integer( maxProcessTime ) );
 
         // add prefix
-        switch(dumpType) {
+        switch( dumpType ) {
             case ALL_UNENCRYPTED:
-                ASN1EncodableVector v2=new ASN1EncodableVector();
-                for(PrefixBlock p:prefix) {
-                    v2.add(p.toASN1Object(dumpType));
+                ASN1EncodableVector v2 = new ASN1EncodableVector();
+                for( PrefixBlock p : prefix ) {
+                    v2.add( p.toASN1Object( dumpType ) );
                 }
-                v.add(new DERTaggedObject(PREFIX_PLAIN,new DERSequence(v2)));
+                v.add( new DERTaggedObject( PREFIX_PLAIN, new DERSequence( v2 ) ) );
                 break;
             case PRIVATE_COMMENTED:
             case PUBLIC_ONLY:
             case ALL:
-                ASN1EncodableVector v3=new ASN1EncodableVector();
-                for(PrefixBlock p:prefix) {
-                    v3.add(new DEROctetString(p.toEncBytes()));
+                ASN1EncodableVector v3 = new ASN1EncodableVector();
+                for( PrefixBlock p : prefix ) {
+                    v3.add( new DEROctetString( p.toEncBytes() ) );
                 }
-                v.add(new DERTaggedObject(PREFIX_ENCRYPTED,new DERSequence(v3)));
+                v.add( new DERTaggedObject( PREFIX_ENCRYPTED, new DERSequence( v3 ) ) );
                 break;
             default:
-                throw new IOException( "Error encoding prefix (unknown dump type "+dumpType.name()+")");
+                throw new IOException( "Error encoding prefix (unknown dump type " + dumpType.name() + ")" );
         }
 
         // add nextHop
-        switch(dumpType) {
+        switch( dumpType ) {
             case ALL_UNENCRYPTED:
-                ASN1EncodableVector v2=new ASN1EncodableVector();
-                for(RoutingBlock p:nextHop) {
-                    v2.add(p.toASN1Object(dumpType));
+                ASN1EncodableVector v2 = new ASN1EncodableVector();
+                for( RoutingBlock p : nextHop ) {
+                    v2.add( p.toASN1Object( dumpType ) );
                 }
-                v.add(new DERTaggedObject(ROUTING_PLAIN,new DERSequence(v2)));
+                v.add( new DERTaggedObject( ROUTING_PLAIN, new DERSequence( v2 ) ) );
                 break;
             case PRIVATE_COMMENTED:
             case PUBLIC_ONLY:
             case ALL:
-                ASN1EncodableVector v3=new ASN1EncodableVector();
-                for(RoutingBlock p:nextHop) {
-                    v3.add(new DEROctetString(p.toEncBytes()));
+                ASN1EncodableVector v3 = new ASN1EncodableVector();
+                for( RoutingBlock p : nextHop ) {
+                    v3.add( new DEROctetString( p.toEncBytes() ) );
                 }
-                v.add(new DERTaggedObject(ROUTING_ENCRYPTED,new DERSequence(v3)));
+                v.add( new DERTaggedObject( ROUTING_ENCRYPTED, new DERSequence( v3 ) ) );
                 break;
             default:
-                throw new IOException( "Error encoding prefix (unknown dump type "+dumpType.name()+")");
+                throw new IOException( "Error encoding prefix (unknown dump type " + dumpType.name() + ")" );
         }
 
-        v.add(new ASN1Integer(forwardSecret));
+        v.add( new ASN1Integer( forwardSecret ) );
 
-        if(murbMaxReplay>0) {
-            ASN1EncodableVector v2=new ASN1EncodableVector();
-            v2.add(murbReplyBlock.toASN1Object(dumpType));
-            v2.add(new ASN1Integer(murbMaxReplay));
-            v2.add(murbValidity.toASN1Object(dumpType));
-            v.add(new DERTaggedObject(MURB,new DERSequence(v2)));
+        if( murbMaxReplay > 0 ) {
+            ASN1EncodableVector v2 = new ASN1EncodableVector();
+            v2.add( murbReplyBlock.toASN1Object( dumpType ) );
+            v2.add( new ASN1Integer( murbMaxReplay ) );
+            v2.add( murbValidity.toASN1Object( dumpType ) );
+            v.add( new DERTaggedObject( MURB, new DERSequence( v2 ) ) );
         }
 
-        ASN1EncodableVector v2=new ASN1EncodableVector();
-        if(operation!=null && !operation.isEmpty()) {
-            for (Operation o : operation) {
-                v2.add(o.toASN1Object(dumpType));
+        ASN1EncodableVector v2 = new ASN1EncodableVector();
+        if( operation!=null && ! operation.isEmpty() ) {
+            for( Operation o : operation ) {
+                v2.add( o.toASN1Object( dumpType ) );
             }
         }
-        v.add(new DERTaggedObject(OPERATIONS,new DERSequence(v2)));
+        v.add( new DERTaggedObject( OPERATIONS, new DERSequence( v2 ) ) );
 
-        v2=new ASN1EncodableVector();
-        if(assembly!=null && assembly.length>0) {
-            for (AssemblyBlock a : assembly) {
-                v2.add(a.toASN1Object(dumpType));
+        v2 = new ASN1EncodableVector();
+        if( assembly != null && assembly.length > 0 ) {
+            for( AssemblyBlock a : assembly ) {
+                v2.add( a.toASN1Object( dumpType ) );
             }
         }
-        v.add(new DERSequence(v2));
+        v.add( new DERSequence( v2 ) );
 
         return new DERSequence(v);
     }
@@ -325,7 +328,7 @@ public class RoutingBlock extends AbstractBlock  implements Serializable {
 
     @Override
     public String dumpValueNotation(String prefix,DumpType dumpType) {
-        StringBuilder sb=new StringBuilder();
+        StringBuilder sb = new StringBuilder();
         sb.append( '{' ).append( CRLF );
         sb.append( prefix ).append( "  " ).append( CRLF );
         sb.append(prefix ).append( '}' );
@@ -339,7 +342,7 @@ public class RoutingBlock extends AbstractBlock  implements Serializable {
         }
         RoutingBlock rb=(RoutingBlock)o;
         try {
-            return Arrays.equals(rb.toBytes(DumpType.ALL_UNENCRYPTED), toBytes(DumpType.ALL_UNENCRYPTED));
+            return Arrays.equals( rb.toBytes( DumpType.ALL_UNENCRYPTED), toBytes( DumpType.ALL_UNENCRYPTED ) );
         } catch(IOException ioe) {
             return false;
         }
@@ -347,7 +350,7 @@ public class RoutingBlock extends AbstractBlock  implements Serializable {
 
     @Override
     public int hashCode() {
-        return prepareDump(dumpValueNotation("",DumpType.ALL_UNENCRYPTED)).hashCode();
+        return prepareDump( dumpValueNotation( "", DumpType.ALL_UNENCRYPTED ) ).hashCode();
     }
 
 }

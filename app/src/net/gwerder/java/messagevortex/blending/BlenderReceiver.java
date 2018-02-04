@@ -1,4 +1,4 @@
-package net.gwerder.java.messagevortex.transport;
+package net.gwerder.java.messagevortex.blending;
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -21,22 +21,18 @@ package net.gwerder.java.messagevortex.transport;
 // * SOFTWARE.
 // ************************************************************************************
 
-import java.io.InputStream;
+import net.gwerder.java.messagevortex.asn1.VortexMessage;
 
 /**
- * Interface for all blending layers listening to transport layer messages
+ * Created by Martin on 21.04.2017.
  */
-public interface TransportReceiver {
+public interface BlenderReceiver {
 
     /***
-     * This Method is called by the TransportSender layer if a possible vmessage has arrived.
+     * This Method is called by the Blending layer if a vmessage has been extracted.
      *
-     * The message (if any) is decoded, verified and (if successful) passed on to the routing layer in a separate
-     * thread (@see IncommingMessageRouterListener).
-     *
-     * @param is the InputStream containing a possible message
-     * @return true if message got accepted
+     * @param message the vortex message to be processed
      */
-    boolean gotMessage(InputStream is);
+    boolean gotMessage(VortexMessage message);
 
 }

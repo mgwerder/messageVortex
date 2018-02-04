@@ -39,6 +39,6 @@ public interface HeaderVerifier {
      * @param header the header to be verified
      * @return the maximum nuber of bytes allowed for processing
      */
-    int verifyHeaderForProcessing(IdentityBlock header);
+    int verifyHeaderForProcessing( IdentityBlock header );
 
 }

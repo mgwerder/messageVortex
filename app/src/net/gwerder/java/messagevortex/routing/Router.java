@@ -23,14 +23,14 @@ package net.gwerder.java.messagevortex.routing;
 
 import net.gwerder.java.messagevortex.accounting.Accountant;
 import net.gwerder.java.messagevortex.blending.Blender;
-import net.gwerder.java.messagevortex.blending.BlenderListener;
+import net.gwerder.java.messagevortex.blending.BlenderReceiver;
 
 import java.util.List;
 
 /**
  * Created by martin.gwerder on 03.04.2017.
  */
-public interface Router extends BlenderListener {
+public interface Router extends BlenderReceiver {
 
     /***
      * Adds a blending layer to the routing infrastructure.

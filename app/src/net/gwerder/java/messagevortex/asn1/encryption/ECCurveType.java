@@ -77,6 +77,10 @@ public enum ECCurveType {
         return secLevel;
     }
 
+    public Algorithm getAlgorithm() {
+        return alg;
+    }
+
     public int getKeySize() { return Integer.parseInt( txt.substring( 4,7 ) ); }
 
     public static ECCurveType getDefault() {

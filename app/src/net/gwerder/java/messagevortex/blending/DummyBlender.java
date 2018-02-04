@@ -27,6 +27,7 @@ import net.gwerder.java.messagevortex.asn1.VortexMessage;
 import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import net.gwerder.java.messagevortex.transport.DummyTransportSender;
 import net.gwerder.java.messagevortex.transport.TransportReceiver;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -43,12 +44,13 @@ public class DummyBlender extends AbstractBlender implements TransportReceiver {
 
     String identity;
     DummyTransportSender transport;
-    BlenderListener router;
+    BlenderReceiver router;
 
-    public DummyBlender(String identity, BlenderListener router) throws IOException {
-        this.identity=identity;
-        this.transport=new DummyTransportSender(identity,this);
-        this.router=router;
+    public DummyBlender(String identity, BlenderReceiver router) throws IOException {
+        super( router, null );
+        this.identity = identity;
+        this.transport = new DummyTransportSender( identity, this );
+        this.router = router;
     }
 
     @Override
@@ -68,7 +70,7 @@ public class DummyBlender extends AbstractBlender implements TransportReceiver {
     }
 
     @Override
-    public void gotMessage(InputStream is) {
-        router.gotMessage(is);
+    public boolean gotMessage(InputStream is) {
+        throw new NotImplementedException(); // FIXME
     }
 }

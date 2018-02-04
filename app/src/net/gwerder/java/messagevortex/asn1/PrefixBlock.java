@@ -121,7 +121,7 @@ public class PrefixBlock extends AbstractBlock  implements Serializable {
         key = new SymmetricKey( toDER(s1.getObjectAt(i++).toASN1Primitive()) ,null );
     }
 
-    public AsymmetricKey setDecryptionKey(AsymmetricKey dk) throws IOException {
+    public final AsymmetricKey setDecryptionKey(AsymmetricKey dk) throws IOException {
         AsymmetricKey old=getDecryptionKey();
         decryptionKey=dk;
         if(isEncrypted()) {

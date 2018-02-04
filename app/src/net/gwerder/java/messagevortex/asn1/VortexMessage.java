@@ -55,8 +55,7 @@ public class VortexMessage extends AbstractBlock implements Serializable {
 
     private static final Logger LOGGER;
     static {
-        LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-        MessageVortexLogger.setGlobalLogLevel( Level.ALL);
+        LOGGER = MessageVortexLogger.getLogger( (new Throwable()).getStackTrace()[0].getClassName() );
     }
 
     /***
@@ -65,9 +64,9 @@ public class VortexMessage extends AbstractBlock implements Serializable {
      * @throws IOException if the constructor was unable to build a message skeleton from the default values
      * @throws NoSuchAlgorithmException if the default values for symmetric encryption keys are invalid
      */
-    private VortexMessage()  throws IOException {
-        prefix=new PrefixBlock();
-        innerMessage=new InnerMessageBlock();
+    private VortexMessage() throws IOException {
+        prefix = new PrefixBlock();
+        innerMessage = new InnerMessageBlock();
         decryptionKey =null;
     }
 
@@ -80,8 +79,8 @@ public class VortexMessage extends AbstractBlock implements Serializable {
      * @throws ParseException if there was a problem parsing the object
      * @throws NoSuchAlgorithmException if there was a problem decrypting the object
      */
-    public VortexMessage(byte[] b,AsymmetricKey dk) throws IOException {
-        setDecryptionKey(dk);
+    public VortexMessage( byte[] b, AsymmetricKey dk ) throws IOException {
+        setDecryptionKey( dk );
         parse( b );
     }
 
@@ -93,14 +92,14 @@ public class VortexMessage extends AbstractBlock implements Serializable {
      * @throws IOException if there was an error generating the kay
      * @throws NoSuchAlgorithmException if the default values of a symmetric decryptionKey point to an invalid algorithm
      */
-    public VortexMessage(PrefixBlock pre, InnerMessageBlock im)  throws IOException {
+    public VortexMessage( PrefixBlock pre, InnerMessageBlock im )  throws IOException {
         this();
-        if(pre==null) {
+        if( pre == null ) {
             setPrefix( new PrefixBlock( new SymmetricKey() ) );
         } else {
             setPrefix( pre );
         }
-        setInnerMessage(im);
+        setInnerMessage( im );
     }
 
     /***
@@ -108,13 +107,16 @@ public class VortexMessage extends AbstractBlock implements Serializable {
      *
      * @return the message block
      */
-    public InnerMessageBlock getInnerMessage() {return innerMessage;}
-    public InnerMessageBlock setInnerMessage(InnerMessageBlock im) {
+    public InnerMessageBlock getInnerMessage() {
+        return innerMessage;
+    }
+
+    public InnerMessageBlock setInnerMessage( InnerMessageBlock im ) {
         if( im==null ) {
             throw new NullPointerException( "InnerMessage may not be null" );
         }
-        InnerMessageBlock old=getInnerMessage();
-        innerMessage=im;
+        InnerMessageBlock old = getInnerMessage();
+        innerMessage = im;
         return old;
     }
 
@@ -123,7 +125,9 @@ public class VortexMessage extends AbstractBlock implements Serializable {
      *
      * @return the prefix block
      */
-    public PrefixBlock getPrefix() {return prefix;}
+    public final PrefixBlock getPrefix() {
+        return prefix;
+    }
 
     /***
      * Sets the embedded prefix block.
@@ -131,12 +135,12 @@ public class VortexMessage extends AbstractBlock implements Serializable {
      * @param pre the new prefix block
      * @return the prefix block which was set prior to the operation
      */
-    public PrefixBlock setPrefix(PrefixBlock pre) {
+    public final PrefixBlock setPrefix(PrefixBlock pre) {
         if( pre==null ) {
             throw new NullPointerException( "Prefix may not be null" );
         }
-        PrefixBlock old=getPrefix();
-        prefix=pre;
+        PrefixBlock old = getPrefix();
+        prefix = pre;
         return old;
     }
 
@@ -145,7 +149,7 @@ public class VortexMessage extends AbstractBlock implements Serializable {
      *
      * @return the decryptionKey or null if not set
      */
-    public AsymmetricKey getDecryptionKey() {
+    public final AsymmetricKey getDecryptionKey() {
         return decryptionKey;
     }
 
@@ -154,7 +158,7 @@ public class VortexMessage extends AbstractBlock implements Serializable {
      *
      * @return the decryptionKey which has been set previously or null if the decryptionKey ha not been set
      */
-    public AsymmetricKey setDecryptionKey(AsymmetricKey dk) throws IOException {
+    public final AsymmetricKey setDecryptionKey(AsymmetricKey dk) throws IOException {
         AsymmetricKey old=getDecryptionKey();
         this.decryptionKey = dk!=null?new AsymmetricKey(dk):null;
         if(prefix!=null) {
@@ -245,7 +249,7 @@ public class VortexMessage extends AbstractBlock implements Serializable {
         if (o == null) {
             throw new IOException( "returned prefix object may not be null" );
         }
-        if(dumpType==DumpType.ALL_UNENCRYPTED || getPrefix().getDecryptionKey()==null) {
+        if( dumpType == DumpType.ALL_UNENCRYPTED || getPrefix().getDecryptionKey() == null ) {
             v.add(new DERTaggedObject(PREFIX_PLAIN, o));
         } else {
             v.add(new DERTaggedObject(PREFIX_ENCRYPTED, new DEROctetString(getPrefix().toEncBytes())));
@@ -253,11 +257,11 @@ public class VortexMessage extends AbstractBlock implements Serializable {
     }
 
     private void addInnerMessageBlockToASN1(ASN1EncodableVector v, DumpType dt) throws IOException {
-        if(prefix.getKey()==null || DumpType.ALL_UNENCRYPTED.equals(dt)) {
-            v.add( new DERTaggedObject( INNER_MESSAGE_PLAIN,getInnerMessage().toASN1Object(dt) ));
+        if( prefix.getKey() == null || DumpType.ALL_UNENCRYPTED == dt ) {
+            v.add( new DERTaggedObject( INNER_MESSAGE_PLAIN, getInnerMessage().toASN1Object( dt ) ));
         } else {
-            byte[] b=toDER(getInnerMessage().toASN1Object(dt));
-            v.add( new DERTaggedObject( INNER_MESSAGE_ENCRYPTED,new DEROctetString( prefix.getKey().encrypt( b ))));
+            byte[] b = toDER( getInnerMessage().toASN1Object( dt ) );
+            v.add( new DERTaggedObject( INNER_MESSAGE_ENCRYPTED, new DEROctetString( prefix.getKey().encrypt( b ) ) ) );
         }
     }
 

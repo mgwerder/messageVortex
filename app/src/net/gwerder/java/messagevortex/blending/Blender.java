@@ -24,22 +24,35 @@ package net.gwerder.java.messagevortex.blending;
 import net.gwerder.java.messagevortex.accounting.HeaderVerifier;
 import net.gwerder.java.messagevortex.asn1.BlendingSpec;
 import net.gwerder.java.messagevortex.asn1.VortexMessage;
-import net.gwerder.java.messagevortex.routing.IncomingMessageRouterListener;
+import net.gwerder.java.messagevortex.transport.TransportReceiver;
 
 /**
  * Interface specifying a blender.
  */
-public interface Blender {
+public abstract class Blender implements TransportReceiver {
+
+    private BlenderReceiver blenderReceiver=null;
+    private HeaderVerifier  hVerifier = null;
+
+    public Blender( BlenderReceiver receiver, HeaderVerifier verifier ) {
+        setBlenderReceiver(receiver);
+        setHeaderVerifyer(verifier);
+    }
+
 
     /***
      * Sets the listening routing layer.
      *
      * All future messages sucessfully extracted and authorized by the header verifyer are passed to this object.
      *
-     * @param listener The listening routing layer
+     * @param receiver The listening routing layer
      * @return The old/previous routing layer
      */
-    IncomingMessageRouterListener setIncomingMessageListener(IncomingMessageRouterListener listener);
+    public final BlenderReceiver setBlenderReceiver(BlenderReceiver receiver) {
+        BlenderReceiver ret = blenderReceiver;
+        this.blenderReceiver = receiver;
+        return ret;
+    }
 
     /***
      * Sets the verifier which is called after decoding the header block.
@@ -49,7 +62,11 @@ public interface Blender {
      * @param verifier The verifier to be used
      * @return previous/old verifier
      */
-    HeaderVerifier setHeaderVerifyer(HeaderVerifier verifier);
+    public final HeaderVerifier setHeaderVerifyer(HeaderVerifier verifier) {
+        HeaderVerifier ret = hVerifier;
+        this.hVerifier = verifier;
+        return ret;
+    }
 
     /***
      * This method is called by the routing layer to blend a message.
@@ -57,7 +74,7 @@ public interface Blender {
      * @param message the message to be blended
      * @return true if blended successfully and sent by the transport layer
      */
-    boolean blendMessage(BlendingSpec target, VortexMessage message);
+    public abstract boolean blendMessage(BlendingSpec target, VortexMessage message);
 
     /***
      * Returns the address supported for blending.
@@ -66,6 +83,6 @@ public interface Blender {
      *
      * @return The vortex adress.
      */
-    String getBlendingAddress();
+    public abstract String getBlendingAddress();
 
 }

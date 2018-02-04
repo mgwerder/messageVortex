@@ -57,9 +57,10 @@ public class SMTPTransportSenderTest implements TransportReceiver {
 
 
     @Override
-    public void gotMessage(InputStream is) {
+    public boolean gotMessage(InputStream is) {
         synchronized(msgs) {
             msgs.add(is);
         }
+        return true;
     }
 }

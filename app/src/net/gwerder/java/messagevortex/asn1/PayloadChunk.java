@@ -112,7 +112,7 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
      * @param b the payload to be set
      * @return the previously set payload (may have been a reply block)
      */
-    public byte[] setPayload(byte[] b) {
+    public final byte[] setPayload(byte[] b) {
         byte[] opl=payload;
         payload=b;
         payloadType=PayloadType.PAYLOAD;
@@ -124,7 +124,7 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
      *
      * @return the payload as byte array or null if a replyblock has been set
      */
-    public byte[] getPayload() {
+    public final byte[] getPayload() {
         if(payloadType!=PayloadType.PAYLOAD) {
             return null;
         }
@@ -141,7 +141,7 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
      * @param reply the reply block to be set
      * @return the previously set reply block (may have been a payload block)
      */
-    public byte[] setReplyBlock(byte[] reply) throws IOException{
+    public final byte[] setReplyBlock(byte[] reply) throws IOException{
         byte[] opl=payload;
         payload=reply;
         payloadType=PayloadType.REPLY;
@@ -153,18 +153,18 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
      *
      * @return the reply block as byte array or null if a payload block has been set
      */
-    public byte[] getReplyBlock() {
+    public final byte[] getReplyBlock() {
         if(payloadType!=PayloadType.REPLY) {
             return null;
         }
         return payload.clone();
     }
 
-    public UsagePeriod getUsagePeriod() {
+    public final UsagePeriod getUsagePeriod() {
         return period;
     }
 
-    public UsagePeriod setUsagePeriod(UsagePeriod period) {
+    public final UsagePeriod setUsagePeriod(UsagePeriod period) {
         UsagePeriod ret=period;
         this.period=period;
         return ret;
@@ -192,7 +192,7 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
      * @param id the id to be set
      * @return the previously set id
      */
-    public int setId(int id) {
+    public final int setId(int id) {
         int ret=this.id;
         this.id=id;
         return ret;
@@ -203,7 +203,7 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
      *
      * @return the id currently set
      */
-    public int getId() {
+    public final int getId() {
         return this.id;
     }
 
@@ -216,7 +216,7 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
      * @throws IOException if the payload id is below MIN_VALID_ID or no payload/reply block has been set
      */
     @Override
-    public String dumpValueNotation(String prefix,DumpType dumpType) throws IOException {
+    public String dumpValueNotation( String prefix, DumpType dumpType ) throws IOException {
         StringBuilder sb=new StringBuilder();
         sb.append( " {" ).append( CRLF );
         sb.append( prefix ).append( "  id " ).append( id ).append( ',' ).append( CRLF );
@@ -236,17 +236,16 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
         return isInUsagePeriod(new Date());
     }
 
-    public boolean isInUsagePeriod(Date reference) {
-        if(period==null) {
+    public boolean isInUsagePeriod( Date reference ) {
+        if( period == null ) {
             return true;
         }
-
-        return period.inUsagePeriod(reference);
+        return period.inUsagePeriod( reference );
     }
 
     @Override
-    public boolean equals(Object o) {
-        if(o==null) {
+    public boolean equals( Object o ) {
+        if( o==null ) {
             return false;
         }
 
@@ -256,7 +255,7 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
         PayloadChunk pl=(PayloadChunk)o;
 
         try {
-            return dumpValueNotation("",DumpType.ALL_UNENCRYPTED).equals(pl.dumpValueNotation("",DumpType.ALL_UNENCRYPTED));
+            return dumpValueNotation( "", DumpType.ALL_UNENCRYPTED ).equals( pl.dumpValueNotation( "", DumpType.ALL_UNENCRYPTED ) );
         } catch(IOException ioe) {
             return false;
         }
