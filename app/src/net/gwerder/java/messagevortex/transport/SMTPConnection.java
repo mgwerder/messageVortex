@@ -73,7 +73,7 @@ public class SMTPConnection extends LineConnection {
                     write("334 "+new String(Base64.encode("Username:".getBytes( StandardCharsets.UTF_8 )))+CRLF);
                     String username=new String(Base64.decode(read()));
                     Config.getDefault().getStringValue("smtp_incomming_username");
-                    write("334 "+new String(Base64.encode("Password:".getBytes()))+CRLF);
+                    write("334 "+new String(Base64.encode("Password:".getBytes(StandardCharsets.UTF_8)))+CRLF);
                     String password=new String(Base64.decode(read()));
                     Config.getDefault().getStringValue("smtp_incomming_password");
                 }else if(command.toLowerCase().startsWith("mail from")) {

@@ -35,6 +35,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
 
 import static junit.framework.TestCase.assertTrue;
@@ -89,9 +90,9 @@ public class InternalPayloadTest {
     public void payloadSpaceSetAndGetTest() throws Exception {
         InternalPayload p=space[0].getInternalPayload(identity[0]);
         String pl=RandomString.nextString((int)(Math.random()*1024*10+1));
-        PayloadChunk pc =new PayloadChunk(100,pl.getBytes(),null);
+        PayloadChunk pc =new PayloadChunk(100,pl.getBytes(StandardCharsets.UTF_8),null);
         assertTrue("payload space previously unexpetedly not empty",p.setPayload(pc)==null);
-        assertTrue("payload space previously unexpetedly not equal",pl.equals(new String(p.getPayload(100).getPayload())));
+        assertTrue("payload space previously unexpetedly not equal",pl.equals(new String(p.getPayload(100).getPayload(), StandardCharsets.UTF_8)));
     }
 
     @Test
@@ -109,14 +110,14 @@ public class InternalPayloadTest {
     }
 
     private void payloadSpaceProcessingTest(String s) throws Exception {
-        LOGGER.log(Level.INFO,"Testing payload handling with "+s.getBytes().length+" bytes");
+        LOGGER.log(Level.INFO,"Testing payload handling with "+s.getBytes(StandardCharsets.UTF_8).length+" bytes");
         InternalPayload p=space[0].getInternalPayload(identity[0]);
-        PayloadChunk pc =new PayloadChunk(200,s.getBytes(),null);
+        PayloadChunk pc =new PayloadChunk(200,s.getBytes(StandardCharsets.UTF_8),null);
         Operation op=new IdMapOperation(200,201,1);
         assertTrue("payload space previously unexpetedly not empty",p.setPayload(pc)==null);
         assertTrue("addin of operation unexpectedly rejected",p.addOperation(op)==true);
         assertTrue("target  payload should not be null",p.getPayload(201)!=null);
-        assertTrue("target  payload should be identical",s.equals(new String(p.getPayload(201).getPayload())));
+        assertTrue("target  payload should be identical",s.equals(new String(p.getPayload(201).getPayload(),StandardCharsets.UTF_8)));
         p.setPayload(new PayloadChunk(200, null,null)); //remove the payload chunk from store
         assertTrue("source payload should be null",p.getPayload(200)==null);
         assertTrue("target payload should be null",p.getPayload(201)==null);
