@@ -1,6 +1,7 @@
 package net.gwerder.java.messagevortex.test.core;
 
 import net.gwerder.java.messagevortex.Config;
+import net.gwerder.java.messagevortex.MessageVortex;
 import net.gwerder.java.messagevortex.MessageVortexConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,16 +42,16 @@ public class MessageVortexTest {
 
     @Test
     public void getHelp() {
-        assertTrue("Errorcode for --help is not 0",net.gwerder.java.messagevortex.MessageVortex.main(new String[] {"--help"})==0);
+        assertTrue("Errorcode for --help is not 100", MessageVortex.main(new String[] {"--help"}) == 100 );
     }
 
     @Test
     public void getRunRegularlyAndShutdown() {
-        assertTrue("Errorcode is not 0",net.gwerder.java.messagevortex.MessageVortex.main(new String[0])==0);
+        assertTrue("Errorcode is not 0", MessageVortex.main(new String[0]) == 0 );
     }
     @Test
     public void getRunRegularlyAndShutdownNull() {
-        assertTrue("Errorcode is not 0",net.gwerder.java.messagevortex.MessageVortex.main(null)==0);
+        assertTrue("Errorcode is not 0", MessageVortex.main(null) == 0 );
     }
 
     @Test

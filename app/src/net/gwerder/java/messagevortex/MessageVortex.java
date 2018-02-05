@@ -21,6 +21,8 @@ package net.gwerder.java.messagevortex;
 // * SOFTWARE.
 // ************************************************************************************
 
+import net.gwerder.java.messagevortex.accounting.DummyAccountant;
+
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,15 +43,18 @@ public class MessageVortex {
         super();
     }
 
-    public static void help() {
-        System.out.println("no help text so far"); // FIXME
+    public static int help() {
+        System.err.println( "MessageVortex V" + Version.getBuild() );
+        System.err.println( "===============================================================" );
+        System.err.println( "usage: messageVortex -conf <configfile>" );
+        return 100;
     }
 
     public static int main(String[] args) {
-        LOGGER.log(Level.INFO, "MailVortex V"+Version.getBuild());
+        LOGGER.log(Level.INFO, "MessageVortex V"+Version.getBuild());
         if(args!=null && args.length>0 && "--help".equals(args[0])) {
             // output help here
-            help();
+            return help();
         }
 
         // create config store
@@ -60,13 +65,16 @@ public class MessageVortex {
         }
 
         try {
-            accounting = new MessageVortexAccounting();
-            routing   = new MessageVortexRouting();
+            accounting = new MessageVortexAccounting( null );
+            routing   = new MessageVortexRouting( accounting.getAccountant(), null );
             blending  = new MessageVortexBlending( null, routing.getRoutingSender() );
             transport = new MessageVortexTransport( blending );
 
             blending.setTransportReceiver( transport.getTransportReceiver() );
+            routing.setRoutingSender( blending.getRoutingSender() );
 
+            // FIXME Use sensible accountant
+            accounting.setAccountant( new DummyAccountant() );
         }catch ( IOException ioe ) {
             LOGGER.log( Level.SEVERE, "Exception while setting up transport infrastructure", ioe );
         }
