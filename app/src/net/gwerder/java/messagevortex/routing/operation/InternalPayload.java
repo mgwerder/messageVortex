@@ -26,10 +26,7 @@ import net.gwerder.java.messagevortex.asn1.IdentityBlock;
 import net.gwerder.java.messagevortex.asn1.PayloadChunk;
 
 import java.security.InvalidParameterException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
@@ -51,7 +48,7 @@ public class InternalPayload {
     final Map<Integer,PayloadChunk> internalPayload=new ConcurrentHashMap<>();
     final Map<Integer,PayloadChunk> internalPayloadCache=new ConcurrentHashMap<>();
     final Map<Integer,Operation> internalOperationOutput=new ConcurrentHashMap<>();
-    final Map<Integer,List<Operation>> internalOperationInput=new ConcurrentHashMap<>();
+    final Map<Integer,Set<Operation>> internalOperationInput=new ConcurrentHashMap<>();
 
     private long lastcompact=System.currentTimeMillis();
 
@@ -66,9 +63,7 @@ public class InternalPayload {
     }
 
     private PayloadChunk getPayloadCache(int id) {
-        synchronized(internalPayloadCache) {
-            return internalPayloadCache.get(id);
-        }
+        return internalPayloadCache.get(id);
     }
 
     public PayloadChunk getPayload(int id) {
@@ -178,11 +173,11 @@ public class InternalPayload {
 
             //register input ids
             id = op.getInputID();
-            for (int i = 0; i < id.length; i++) {
-                synchronized (internalOperationInput) {
-                    List<Operation> l = internalOperationInput.get(id[i]);
+            synchronized (internalOperationInput) {
+                for (int i = 0; i < id.length; i++) {
+                    Set<Operation> l = internalOperationInput.get(id[i]);
                     if (l == null) {
-                        l = new ArrayList<>();
+                        l = new HashSet<>();
                         internalOperationInput.put(id[i], l);
                     }
                     l.add(op);
@@ -236,7 +231,7 @@ public class InternalPayload {
             id = op.getInputID();
             synchronized (internalOperationInput) {
                 for (int i = 0; i < id.length; i++) {
-                    List<Operation> l = internalOperationInput.get(id[i]);
+                    Set<Operation> l = internalOperationInput.get(id[i]);
                     if (l != null && l.isEmpty()) {
                         l.remove(op);
                         if (l.isEmpty()) {
@@ -256,7 +251,7 @@ public class InternalPayload {
         // check for conflicting operations
         for( int id:op.getOutputID()) {
             if(internalOperationOutput.get(id)!=null) {
-                LOGGER.log(Level.WARNING,"addin of operation "+op.toString()+" due to conflicting outputs (conflicting op is:"+internalOperationOutput.get(id).toString()+")");
+                LOGGER.log(Level.WARNING,"addin of operation "+op+" due to conflicting outputs (conflicting op is:"+internalOperationOutput.get(id).toString()+")");
                 return false;
             }
         }
@@ -332,7 +327,7 @@ public class InternalPayload {
 
             // remove subsequent payloadcaches
             for(int i:expiredPayloadIds) {
-                List<Operation> ops=internalOperationInput.get(i);
+                Set<Operation> ops=internalOperationInput.get(i);
                 if(ops!=null && !ops.isEmpty()) {
                     for(Operation op:ops) {
                         for(int j:op.getOutputID()) {

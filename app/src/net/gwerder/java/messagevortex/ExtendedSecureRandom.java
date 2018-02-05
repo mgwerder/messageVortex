@@ -30,15 +30,17 @@ public class ExtendedSecureRandom {
 
     private static final SecureRandom sr=new SecureRandom();
 
-    public int nextInt(int bound) { return sr.nextInt( bound );}
-    public void nextBytes(byte[] bound) { sr.nextBytes( bound );}
-    public byte[] generateSeed(int i) { return sr.generateSeed( i );}
+    public static final int nextInt(int bound) { return sr.nextInt( bound );}
 
-    public double nextDouble() { return sr.nextDouble();}
+    public static final void nextBytes(byte[] bound) { sr.nextBytes( bound );}
 
-    public SecureRandom getSecureRandom() { return sr; }
+    public static final byte[] generateSeed(int i) { return sr.generateSeed( i );}
 
-    public double nextGauss() {
+    public static final double nextDouble() { return sr.nextDouble();}
+
+    public static final SecureRandom getSecureRandom() { return sr; }
+
+    public static final double nextGauss() {
         //calculate value
         return Math.min(1,Math.max(0,(Math.sqrt(-2*Math.log(nextDouble()))*Math.cos(2*Math.PI*nextDouble())+Math.E)/(2*Math.E)));
     }
