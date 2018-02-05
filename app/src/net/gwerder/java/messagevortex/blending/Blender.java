@@ -24,6 +24,7 @@ package net.gwerder.java.messagevortex.blending;
 import net.gwerder.java.messagevortex.accounting.HeaderVerifier;
 import net.gwerder.java.messagevortex.asn1.BlendingSpec;
 import net.gwerder.java.messagevortex.asn1.VortexMessage;
+import net.gwerder.java.messagevortex.routing.IncomingMessageRouterListener;
 import net.gwerder.java.messagevortex.transport.TransportReceiver;
 
 /**
@@ -31,14 +32,37 @@ import net.gwerder.java.messagevortex.transport.TransportReceiver;
  */
 public abstract class Blender implements TransportReceiver {
 
+    private IncomingMessageRouterListener listener=null;
+    private HeaderVerifier verifyer=null;
     private BlenderReceiver blenderReceiver=null;
-    private HeaderVerifier  hVerifier = null;
+
 
     public Blender( BlenderReceiver receiver, HeaderVerifier verifier ) {
         setBlenderReceiver(receiver);
-        setHeaderVerifyer(verifier);
+        setVerifier(verifier);
     }
 
+
+    /***
+     * Sets the listener for incomming messages to the routing listener.
+     * @param listener the listening routing layer
+     * @return the previously set listener
+     */
+    public IncomingMessageRouterListener setIncomingMessageListener(IncomingMessageRouterListener listener) {
+        IncomingMessageRouterListener old=this.listener;
+        this.listener=listener;
+        return old;
+    }
+
+    public final HeaderVerifier getVerifier() {
+        return verifyer;
+    }
+
+    public final HeaderVerifier setVerifier( HeaderVerifier verifyer ) {
+        HeaderVerifier ret = this.verifyer;
+        this.verifyer = verifyer;
+        return ret;
+    }
 
     /***
      * Sets the listening routing layer.
@@ -51,20 +75,6 @@ public abstract class Blender implements TransportReceiver {
     public final BlenderReceiver setBlenderReceiver(BlenderReceiver receiver) {
         BlenderReceiver ret = blenderReceiver;
         this.blenderReceiver = receiver;
-        return ret;
-    }
-
-    /***
-     * Sets the verifier which is called after decoding the header block.
-     *
-     * All decoded headers will be verified using this verifier.
-     *
-     * @param verifier The verifier to be used
-     * @return previous/old verifier
-     */
-    public final HeaderVerifier setHeaderVerifyer(HeaderVerifier verifier) {
-        HeaderVerifier ret = hVerifier;
-        this.hVerifier = verifier;
         return ret;
     }
 

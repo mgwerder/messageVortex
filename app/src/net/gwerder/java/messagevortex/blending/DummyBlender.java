@@ -34,7 +34,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
 
-public class DummyBlender extends AbstractBlender implements TransportReceiver {
+public class DummyBlender extends Blender implements TransportReceiver {
 
     private static final java.util.logging.Logger LOGGER;
     static {

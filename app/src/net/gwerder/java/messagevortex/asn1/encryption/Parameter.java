@@ -55,7 +55,7 @@ public enum Parameter implements Serializable {
     }),
     IV        (10002,"initialisationVector",new Transcoder() {
         public String fromASN1( ASN1Object o ) {
-            return new String(ASN1OctetString.getInstance( o ).getOctets() );
+            return new String( ASN1OctetString.getInstance( o ).getOctets(), StandardCharsets.UTF_8 );
         }
         public ASN1Encodable toASN1( String s ) {
             return new DEROctetString( s.getBytes( StandardCharsets.UTF_8 ) );
@@ -63,7 +63,7 @@ public enum Parameter implements Serializable {
     }),
     NONCE     (10003,"nonce",new Transcoder() {
         public String fromASN1( ASN1Object o ) {
-            return new String( ASN1OctetString.getInstance( o ).getOctets() );
+            return new String( ASN1OctetString.getInstance( o ).getOctets(), StandardCharsets.UTF_8 );
         }
         public ASN1Encodable toASN1( String s ) {
             return new DEROctetString( s.getBytes( StandardCharsets.UTF_8 ) );
@@ -71,7 +71,7 @@ public enum Parameter implements Serializable {
     }),
     MODE      (10004,"mode",new Transcoder() {
         public String fromASN1( ASN1Object o ) {
-            return new String( ASN1OctetString.getInstance( o ).getOctets() );
+            return new String( ASN1OctetString.getInstance( o ).getOctets(), StandardCharsets.UTF_8 );
         }
         public ASN1Encodable toASN1( String s ) {
             return new DEROctetString( s.getBytes( StandardCharsets.UTF_8 ) );
@@ -79,7 +79,7 @@ public enum Parameter implements Serializable {
     }),
     PADDING   (10005,"padding",new Transcoder() {
         public String fromASN1( ASN1Object o ) {
-            return new String( ASN1OctetString.getInstance( o ).getOctets() );
+            return new String( ASN1OctetString.getInstance( o ).getOctets(), StandardCharsets.UTF_8 );
         }
         public ASN1Encodable toASN1( String s ) {
             return new DEROctetString( s.getBytes( StandardCharsets.UTF_8 ) );
