@@ -51,29 +51,28 @@ public class CustomKeyManager implements X509KeyManager {
      * Convenience constructor.
      *
      * @param keyStoreFile      name of the JKS keystore file
-     * @param password          password to open the kestore file 
+     * @param password          password to open the kestore file
      * @param alias              alias of the certificate to be used
      ***/
     public CustomKeyManager(String keyStoreFile, String password, String alias) throws GeneralSecurityException {
         this(keyStoreFile,password.toCharArray(),alias);
     }
-    
+
     /**
      * Default constructor.
      *
      * @param keyStoreFile      name of the JKS keystore file
-     * @param password          password to open the kestore file 
+     * @param password          password to open the kestore file
      * @param alias              alias of the certificate to be used
      ***/
     CustomKeyManager(String keyStoreFile, char[] password, String alias) throws GeneralSecurityException {
         this.password=password;
         this.alias = alias;
         keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-        FileInputStream is;
         try{
-          is=new FileInputStream(keyStoreFile);
-          keyStore.load(is, password);
-            is.close();
+            try ( FileInputStream is=new FileInputStream(keyStoreFile); ) {
+                keyStore.load(is, password);
+            }
         } catch(IOException ioe) {
             throw new GeneralSecurityException("IOException while loading keystore", ioe);
         }
@@ -107,9 +106,9 @@ public class CustomKeyManager implements X509KeyManager {
             java.security.cert.Certificate[] certs = keyStore.getCertificateChain(alias);
             if (certs == null || certs.length == 0)    {
                 // was a null return val documentation is unclear
-                return new X509Certificate[0]; 
+                return new X509Certificate[0];
             }
-            
+
             // copy and typcast array
             X509Certificate[] x509 = new X509Certificate[certs.length];
             for (int i = 0; i < certs.length; i++) {
@@ -119,8 +118,8 @@ public class CustomKeyManager implements X509KeyManager {
         } catch (Exception e) {
             LOGGER.log(Level.WARNING,"unknown key requested \""+alias+"\"",e);
             // was a null return val documentation is unclear
-            return new X509Certificate[0]; 
-        }          
+            return new X509Certificate[0];
+        }
     }
 
     /**

@@ -116,14 +116,13 @@ public class VortexMessageTest {
             PrefixBlock randomPrefixBlock=new PrefixBlock();
             VortexMessage s = new VortexMessage(randomOuterPrefixBlock,new InnerMessageBlock( randomPrefixBlock,randomIdentityBlock,randomRoutingBlock));
             File f = new File("testfile_VortexMessage_encrypted.der");
-            FileOutputStream o = new FileOutputStream(f);
-            o.write(s.toBytes(DumpType.ALL_UNENCRYPTED));
-            o.close();
+            try ( FileOutputStream o = new FileOutputStream(f); ) {
+                o.write(s.toBytes(DumpType.ALL_UNENCRYPTED));
+            }
 
-            f = new File("testfile_VortexMessage_plain.der");
-            o = new FileOutputStream(f);
-            o.write(s.toASN1Object(DumpType.ALL_UNENCRYPTED).getEncoded());
-            o.close();
+            try ( FileOutputStream o = new FileOutputStream( new File("testfile_VortexMessage_plain.der" ) ) ) {
+                o.write(s.toASN1Object(DumpType.ALL_UNENCRYPTED).getEncoded());
+            }
         } catch (Exception e) {
             Assert.fail("unexpected exception");
         }

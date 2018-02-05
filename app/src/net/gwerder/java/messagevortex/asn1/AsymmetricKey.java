@@ -546,7 +546,9 @@ public class AsymmetricKey extends Key  implements Serializable {
      * Gets the public key in binary representation.
      * @return the public key
      */
-    public byte[] getPublicKey() {return publicKey; }
+    public byte[] getPublicKey() {
+        return Arrays.copyOf( publicKey, publicKey.length );
+    }
 
     /***
      * Sets the private key of this object.
@@ -565,7 +567,9 @@ public class AsymmetricKey extends Key  implements Serializable {
      *
      * @return the pyte representation of the private key
      */
-    public byte[] getPrivateKey() {return privateKey; }
+    public byte[] getPrivateKey() {
+        return Arrays.copyOf( privateKey, privateKey.length );
+    }
 
     /***
      * Gets the algorithm of this key type.

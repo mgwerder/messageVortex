@@ -1,4 +1,25 @@
 package net.gwerder.java.messagevortex.transport;
+// ************************************************************************************
+// * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
+// *
+// * Permission is hereby granted, free of charge, to any person obtaining a copy
+// * of this software and associated documentation files (the "Software"), to deal
+// * in the Software without restriction, including without limitation the rights
+// * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// * copies of the Software, and to permit persons to whom the Software is
+// * furnished to do so, subject to the following conditions:
+// *
+// * The above copyright notice and this permission notice shall be included in all
+// * copies or substantial portions of the Software.
+// *
+// * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// * SOFTWARE.
+// ************************************************************************************
 
 import net.gwerder.java.messagevortex.Config;
 import org.bouncycastle.util.encoders.Base64;
@@ -9,6 +30,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
 
 /**
@@ -39,7 +61,7 @@ public class SMTPConnection extends LineConnection {
         try {
             String envelopeFrom=null;
             String envelopeTo=null;
-            while (command == null || ! "quit".equals(command!=null?command.toLowerCase():"")) {
+            while ( command == null || ! "quit".equals( command.toLowerCase() ) ) {
                 command = read();
                 if(command.toLowerCase().startsWith("helo ")) {
                     write("250 Hi " + command.toLowerCase().substring(6) + " nice meeting you");
@@ -47,8 +69,8 @@ public class SMTPConnection extends LineConnection {
                     write("250-Hi "+command.toLowerCase().substring(6)+" nice meeting you");
                     write("250-ENHANCEDSTATUSCODES"+CRLF);
                     write("250 AUTH login"+CRLF);
-                }else if(command.toLowerCase().equals("auth login")) {
-                    write("334 "+new String(Base64.encode("Username:".getBytes()))+CRLF);
+                }else if( "auth login".equals( command.toLowerCase() ) ) {
+                    write("334 "+new String(Base64.encode("Username:".getBytes( StandardCharsets.UTF_8 )))+CRLF);
                     String username=new String(Base64.decode(read()));
                     Config.getDefault().getStringValue("smtp_incomming_username");
                     write("334 "+new String(Base64.encode("Password:".getBytes()))+CRLF);
@@ -62,7 +84,7 @@ public class SMTPConnection extends LineConnection {
                     envelopeTo=command.substring(8).trim();
                     write("250 OK"+CRLF);
                     // FIXME reject if not apropriate
-                }else if(command.toLowerCase().equals("data")) {
+                }else if( "data".equals( command.toLowerCase() ) ) {
                     if( envelopeFrom!=null && envelopeTo!=null ) {
                         write("354 send the mail data, end with ."+CRLF);
                         String line = null;
@@ -83,13 +105,13 @@ public class SMTPConnection extends LineConnection {
                     } else {
                         write("554 ERROR"+CRLF);
                     }
-                }else if(command.toLowerCase().trim().equals("rset")) {
+                }else if( "rset".equals( command.toLowerCase().trim() ) ) {
                     envelopeFrom=null;
                     envelopeTo=null;
                     write("250 OK"+CRLF);
-                }else if(command.toLowerCase().trim().equals("noop")) {
+                }else if( "noop".equals( command.toLowerCase().trim() ) ) {
                     write("250 OK"+CRLF);
-                }else if(command.toLowerCase().trim().equals("quit")) {
+                }else if( "quit".equals( command.toLowerCase().trim() ) ) {
                     write("221 bye"+CRLF);
                     command="quit";
                 } else {

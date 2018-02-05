@@ -1,4 +1,25 @@
 package net.gwerder.java.messagevortex.asn1;
+// ************************************************************************************
+// * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
+// *
+// * Permission is hereby granted, free of charge, to any person obtaining a copy
+// * of this software and associated documentation files (the "Software"), to deal
+// * in the Software without restriction, including without limitation the rights
+// * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// * copies of the Software, and to permit persons to whom the Software is
+// * furnished to do so, subject to the following conditions:
+// *
+// * The above copyright notice and this permission notice shall be included in all
+// * copies or substantial portions of the Software.
+// *
+// * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// * SOFTWARE.
+// ************************************************************************************
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.asn1.encryption.Algorithm;
@@ -9,6 +30,8 @@ import java.io.IOException;
 import java.io.Serializable;
 
 /**
+ * Specification for AsymmetricAlgorithmSpec.
+ *
  * Created by martin.gwerder on 29.12.2017.
  */
 public class AsymmetricAlgorithmSpec extends AbstractBlock implements Serializable {
@@ -23,10 +46,22 @@ public class AsymmetricAlgorithmSpec extends AbstractBlock implements Serializab
     Algorithm algorithm;
     AlgorithmParameter parameter;
 
+    /***
+     * Copy constructor
+     *
+     * @param  to           object to clone
+     * @throws IOException  when failing to copy source object
+     */
     public AsymmetricAlgorithmSpec( AsymmetricAlgorithmSpec to ) throws IOException {
         parse( to.toASN1Object(DumpType.ALL) );
     }
 
+    /***
+     * Constructor to build from ASN1 object
+     *
+     * @param  to           Object to be parsed
+     * @throws IOException when failing to parse ASN1 object
+     */
     public AsymmetricAlgorithmSpec( ASN1Encodable to ) throws IOException {
         parse( to );
     }
@@ -46,10 +81,20 @@ public class AsymmetricAlgorithmSpec extends AbstractBlock implements Serializab
         }
     }
 
+    /***
+     * Gets the algorithm (@see Algorithm).
+     *
+     * @return the current algorithm
+     */
     public Algorithm getAlgorithm() {
         return algorithm;
     }
 
+    /***
+     * Get the algorithm parameters (@see AlgorithmParameter).
+     *
+     * @return the current algorithm parameters
+     */
     public AlgorithmParameter getAlgorithmParameter() {
         return parameter;
     }
@@ -57,7 +102,7 @@ public class AsymmetricAlgorithmSpec extends AbstractBlock implements Serializab
     @Override
     public String dumpValueNotation( String prefix, DumpType dumptype ) throws IOException {
         StringBuilder sb=new StringBuilder();
-        sb.append( "{" ).append( CRLF );
+        sb.append( '{' ).append( CRLF );
         sb.append( prefix ).append( "  " ).append( "algorithm " ).append( algorithm.name().toLowerCase() );
         if ( parameter != null ) {
             sb.append(',').append(CRLF);

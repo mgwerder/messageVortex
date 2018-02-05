@@ -74,13 +74,13 @@ public class IdentityBlock extends AbstractBlock  implements Serializable {
         this.maxReplays = 1;
         this.valid = new UsagePeriod(3600);
         this.requests = IdentityBlock.NULLREQUESTS;
-        id=nextID++;
+        id = nextID++;
     }
 
     public IdentityBlock(byte[] b, AsymmetricKey ownIdentity) throws IOException {
         this.ownIdentity = ownIdentity;
         ASN1Encodable s = ASN1Sequence.getInstance( b );
-        id=nextID++;
+        id = nextID++;
         parse( s );
     }
 
@@ -98,7 +98,7 @@ public class IdentityBlock extends AbstractBlock  implements Serializable {
         super();
         this.ownIdentity = ownIdentity;
         parse( to );
-        id=nextID++;
+        id = nextID++;
     }
 
     public void setRequests(HeaderRequest[] hr) {

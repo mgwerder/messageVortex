@@ -24,10 +24,18 @@ package net.gwerder.java.messagevortex.accounting;
 import net.gwerder.java.messagevortex.asn1.IdentityBlock;
 
 /**
+ * A dummy accountant always agreeing to all transactions.
+ *
  * Created by Martin on 03.05.2017.
  */
 public class DummyAccountant implements Accountant,HeaderVerifier {
 
+    /***
+     * Dummy Verifier always returning for all requests an unlimited quota.
+     *
+     * @param header the header to be verified
+     * @return Number of bytes allowed to be processed
+     */
     @Override
     public int verifyHeaderForProcessing(IdentityBlock header) {
         // this verifier accepts all identities
