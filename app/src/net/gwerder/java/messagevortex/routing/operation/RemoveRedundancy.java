@@ -36,7 +36,6 @@ import java.util.logging.Level;
  * This is the core of the redundancy remove operation.
  *
  * It rebuilds the data stream from the existing data blocks.
- * FIXME add decryption
  */
 public class RemoveRedundancy extends AbstractOperation  implements Serializable {
 

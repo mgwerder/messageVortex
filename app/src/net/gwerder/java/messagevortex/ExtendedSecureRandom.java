@@ -41,8 +41,18 @@ public class ExtendedSecureRandom {
     public static final SecureRandom getSecureRandom() { return sr; }
 
     public static final double nextGauss() {
-        //calculate value
-        return Math.min(1,Math.max(0,(Math.sqrt(-2*Math.log(nextDouble()))*Math.cos(2*Math.PI*nextDouble())+Math.E)/(2*Math.E)));
+        double v1, v2, s;
+        double result = -1;
+        while( result<0 || result >1 ) {
+            do {
+                v1 = 2 * nextDouble() - 1;   // between -1.0 and 1.0
+                v2 = 2 * nextDouble() - 1;   // between -1.0 and 1.0
+                s = v1 * v1 + v2 * v2;
+            } while (s >= 1 || s == 0);
+            double multiplier = StrictMath.sqrt(-2 * StrictMath.log(s) / s);
+            result = (v1 * multiplier + Math.E) / 2 / Math.E;
+        }
+        return result;
     }
 
 }
