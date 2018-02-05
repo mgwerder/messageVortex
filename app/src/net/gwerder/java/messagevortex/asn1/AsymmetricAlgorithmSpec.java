@@ -7,7 +7,6 @@ import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.logging.Level;
 
 /**
  * Created by martin.gwerder on 29.12.2017.
@@ -34,7 +33,6 @@ public class AsymmetricAlgorithmSpec extends AbstractBlock implements Serializab
 
     @Override
     protected void parse( ASN1Encodable to ) throws IOException {
-        LOGGER.log( Level.FINER,"Executing parse()");
         int i = 0;
         ASN1Sequence s1 = ASN1Sequence.getInstance( to );
 
@@ -61,7 +59,7 @@ public class AsymmetricAlgorithmSpec extends AbstractBlock implements Serializab
         StringBuilder sb=new StringBuilder();
         sb.append( "{" ).append( CRLF );
         sb.append( prefix ).append( "  " ).append( "algorithm " ).append( algorithm.name().toLowerCase() );
-        if ( parameter == null ) {
+        if ( parameter != null ) {
             sb.append(',').append(CRLF);
             sb.append( prefix ).append( "  " ).append( "parameter " ).append( parameter.dumpValueNotation( prefix+"  ", dumptype ) ).append(CRLF);
         } else {
