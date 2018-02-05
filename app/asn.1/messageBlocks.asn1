@@ -164,8 +164,8 @@ BEGIN
   }
 
   PercentSizeBlock ::= SEQUENCE {
-    fromPercent         REAL (0..100),
-    toPercent           REAL (0..100)
+    fromPercent         INTEGER (0..100),
+    toPercent           INTEGER (0..100)
   }
 
   AbsoluteSizeBlock ::= SEQUENCE {

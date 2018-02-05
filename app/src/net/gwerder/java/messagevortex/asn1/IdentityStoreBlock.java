@@ -242,7 +242,7 @@ public class IdentityStoreBlock extends AbstractBlock  implements Serializable {
     public String dumpValueNotation(String prefix,DumpType dumpType) throws IOException {
         StringBuilder sb=new StringBuilder();
         sb.append( '{' ).append( CRLF );
-        sb.append( prefix ).append( "  valid " ).append(valid.dumpValueNotation( prefix+"    ",dumpType )  ).append("," ).append(CRLF );
+        sb.append( prefix ).append( "  valid " ).append(valid.dumpValueNotation( prefix+"    ",dumpType )  ).append( ',' ).append(CRLF );
         sb.append( prefix ).append( "  messageQuota " ).append( messageQuota ).append( ',' ).append( CRLF );
         sb.append( prefix ).append( "  transferQuota " ).append( transferQuota );
         if(identityKey!=null) {
@@ -251,7 +251,7 @@ public class IdentityStoreBlock extends AbstractBlock  implements Serializable {
         }
         if(nodeAddress!=null) {
             sb.append( ',' ).append( CRLF );
-            sb.append( prefix ).append( "  nodeAddress \"" ).append( nodeAddress ).append( "\"" );
+            sb.append( prefix ).append( "  nodeAddress \"" ).append( nodeAddress ).append( '"' );
         }
         if( nodeKey != null )     {
             sb.append( ',' ).append( CRLF );

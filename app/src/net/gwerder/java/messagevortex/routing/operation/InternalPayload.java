@@ -25,7 +25,6 @@ import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.asn1.IdentityBlock;
 import net.gwerder.java.messagevortex.asn1.PayloadChunk;
 
-import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -328,11 +327,7 @@ public class InternalPayload {
             // remove expired payloads
             for(int i:expiredPayloadIds) {
                 LOGGER.log(Level.INFO,"clearing expired payload "+i+" of identity "+getIdentity());
-                try {
-                    setPayload( new PayloadChunk(i, null,null ));
-                }catch(IOException ioe) {
-                    // ignore this exception
-                }
+                setPayload( new PayloadChunk(i, null,null ));
             }
 
             // remove subsequent payloadcaches

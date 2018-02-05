@@ -145,13 +145,7 @@ public class RemoveRedundancy extends AbstractOperation  implements Serializable
 
         // set output
         LOGGER.log(Level.INFO, "  setting output" );
-        try {
-            payload.setCalculatedPayload(getOutputID()[0], new PayloadChunk(getOutputID()[0], out2,getUsagePeriod()));
-        } catch(IOException ioe) {
-            payload.setCalculatedPayload(getOutputID()[0],null);
-            LOGGER.log(Level.WARNING, "failed to set output of remove redundancy operation" );
-            return new int[0];
-        }
+        payload.setCalculatedPayload(getOutputID()[0], new PayloadChunk(getOutputID()[0], out2,getUsagePeriod()));
 
         LOGGER.log(Level.INFO, "  done" );
         return getOutputID();

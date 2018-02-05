@@ -129,7 +129,7 @@ public class PrefixBlock extends AbstractBlock  implements Serializable {
         return old;
     }
 
-    public AsymmetricKey getDecryptionKey() {
+    public final AsymmetricKey getDecryptionKey() {
         return decryptionKey;
     }
 

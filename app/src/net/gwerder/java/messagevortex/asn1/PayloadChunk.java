@@ -76,7 +76,7 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
         this.period=period;
     }
 
-    public PayloadChunk(int id,byte[] payload, UsagePeriod period) throws IOException {
+    public PayloadChunk(int id,byte[] payload, UsagePeriod period) {
         setId(id);
         setPayload(payload);
         this.period=period;
@@ -141,7 +141,7 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
      * @param reply the reply block to be set
      * @return the previously set reply block (may have been a payload block)
      */
-    public final byte[] setReplyBlock(byte[] reply) throws IOException{
+    public final byte[] setReplyBlock(byte[] reply) {
         byte[] opl=payload;
         payload=reply;
         payloadType=PayloadType.REPLY;

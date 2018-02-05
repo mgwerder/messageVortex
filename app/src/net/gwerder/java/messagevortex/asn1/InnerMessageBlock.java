@@ -159,9 +159,11 @@ public class InnerMessageBlock extends AbstractBlock  implements Serializable {
         // getting payload blocks
         ASN1Sequence seq = ASN1Sequence.getInstance( s1.getObjectAt( i++ ) );
         List<PayloadChunk> p2=new ArrayList<>( seq.size() );
+        long cTime = new Date().getTime();
+        long last = routing.getLastProcessTime();
+        long first = routing.getFirstProcessTime();
         for( ASN1Encodable tr : seq ) {
-            long cTime = new Date().getTime();
-            p2.add( new PayloadChunk( tr, new UsagePeriod( new Date( cTime + routing.getLastProcessTime() ), new Date( cTime + routing.getFirstProcessTime() ) ) ) );
+            p2.add( new PayloadChunk( tr, new UsagePeriod( new Date( cTime + last ), new Date( cTime + first ) ) ) );
         }
         payload = p2.toArray( new PayloadChunk[ p2.size() ] );
     }

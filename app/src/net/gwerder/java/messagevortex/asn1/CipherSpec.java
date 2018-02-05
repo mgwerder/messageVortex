@@ -67,7 +67,7 @@ public class CipherSpec extends AbstractBlock implements Serializable {
             to1 = ASN1TaggedObject.getInstance(s1.getObjectAt(i++));
         }
         if (to1.getTagNo() == SYMMETRIC) {
-            symmetricSpec=new SymmetricAlgorithmSpec(to1.getObject());
+            symmetricSpec=new SymmetricAlgorithmSpec( to1.getObject() );
             to1 = ASN1TaggedObject.getInstance(s1.getObjectAt(i++));
         }
         if (to1.getTagNo() == MAC) {
