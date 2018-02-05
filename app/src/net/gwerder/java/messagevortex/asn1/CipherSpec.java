@@ -24,7 +24,6 @@ package net.gwerder.java.messagevortex.asn1;
 import net.gwerder.java.messagevortex.asn1.encryption.CipherUsage;
 import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.*;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -86,25 +85,76 @@ public class CipherSpec extends AbstractBlock implements Serializable {
         return asymmetricSpec;
     }
 
+    public AsymmetricAlgorithmSpec setAsymmetricSpec( AsymmetricAlgorithmSpec spec ) {
+        AsymmetricAlgorithmSpec ret = this.asymmetricSpec;
+        this.asymmetricSpec = spec;
+        return ret;
+    }
+
     public SymmetricAlgorithmSpec getSymmetricSpec() {
         return symmetricSpec;
+    }
+
+    public SymmetricAlgorithmSpec setSymmetricSpec( SymmetricAlgorithmSpec spec ) {
+        SymmetricAlgorithmSpec ret = this.symmetricSpec;
+        this.symmetricSpec = spec;
+        return ret;
     }
 
     public MacAlgorithmSpec getMacSpec() {
         return macSpec;
     }
 
+    public MacAlgorithmSpec setMacSpec( MacAlgorithmSpec spec ) {
+        MacAlgorithmSpec ret = this.macSpec;
+        this.macSpec = spec;
+        return ret;
+    }
+
     public CipherUsage getCipherUsage() {
         return cipherUsage;
     }
 
+    public CipherUsage setCipherUsage( CipherUsage usage ) {
+        CipherUsage ret = cipherUsage;
+        this.cipherUsage = usage;
+        return ret;
+    }
+
     @Override
     public String dumpValueNotation(String prefix, DumpType dumpType) throws IOException {
-        throw new NotImplementedException(); // FIXME implementation missing
+        StringBuilder sb=new StringBuilder();
+        sb.append( "{" ).append( CRLF );
+        if( asymmetricSpec != null ) {
+            sb.append(prefix).append("  ").append("asymmetric ").append( asymmetricSpec.dumpValueNotation(prefix + "  ", dumpType ) ).append( ',' ).append( CRLF );
+        }
+        if( symmetricSpec != null ) {
+            sb.append(prefix).append("  ").append("symmetric ").append( symmetricSpec.dumpValueNotation( prefix + "  ", dumpType ) ).append( ',' ).append( CRLF );
+        }
+        if( macSpec != null ) {
+            sb.append(prefix).append("  ").append("mac ").append( macSpec.dumpValueNotation( prefix + "  ", dumpType ) ).append( ',' ).append( CRLF );
+        }
+        sb.append(prefix).append("  ").append("cipherUsage ").append( cipherUsage.getUsageString() ).append( CRLF );
+        sb.append( prefix ).append( '}' );
+        return sb.toString();
     }
 
     @Override
     public ASN1Object toASN1Object(DumpType dumpType) throws IOException {
-        throw new NotImplementedException(); // FIXME implementation missing
+        if ( cipherUsage == null) {
+            throw new IOException("CipherSpec is empty .. unable to create CipherSpec");
+        }
+        ASN1EncodableVector v = new ASN1EncodableVector();
+        if( asymmetricSpec != null ) {
+            v.add( new DERTaggedObject( ASYMMETRIC, asymmetricSpec.toASN1Object( dumpType ) ) );
+        }
+        if( symmetricSpec != null ) {
+            v.add( new DERTaggedObject( SYMMETRIC, symmetricSpec.toASN1Object( dumpType ) ) );
+        }
+        if( macSpec != null ) {
+            v.add( new DERTaggedObject( MAC, macSpec.toASN1Object( dumpType ) ) );
+        }
+        v.add( new DERTaggedObject( USAGE, new ASN1Enumerated( cipherUsage.getId() ) ) );
+        return new DERSequence(v);
     }
 }

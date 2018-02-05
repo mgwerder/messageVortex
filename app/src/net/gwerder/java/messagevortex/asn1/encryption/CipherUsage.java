@@ -37,6 +37,14 @@ public enum CipherUsage {
         this.txt=txt;
     }
 
+    public int getId() {
+        return this.id;
+    }
+
+    public String getUsageString() {
+        return this.txt;
+    }
+
     public static CipherUsage getByString(String name) {
         if(name==null) {
             return null;

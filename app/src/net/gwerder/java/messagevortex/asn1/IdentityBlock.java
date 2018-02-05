@@ -138,7 +138,7 @@ public class IdentityBlock extends AbstractBlock  implements Serializable {
             ASN1Sequence s2 = ASN1Sequence.getInstance( s1.getObjectAt( i++ ) );
             requests = new HeaderRequest[s2.size()];
             for (int y = 0; y < s2.size(); y++) {
-                requests[y] = HeaderRequest.createRequest( s2.getObjectAt( y ) );
+                requests[y] = HeaderRequest.getInstance( s2.getObjectAt( y ) );
             }
             while (s1.size() > i) {
                 to = ASN1TaggedObject.getInstance( s1.getObjectAt( i++ ) );
@@ -303,7 +303,7 @@ public class IdentityBlock extends AbstractBlock  implements Serializable {
             v.add( hash.toASN1Object(dumpType) );
             ASN1EncodableVector s = new ASN1EncodableVector();
             for (HeaderRequest r : requests) {
-                s.add( r.toASN1Object() );
+                s.add( r.toASN1Object( dumpType ) );
             }
             v.add( new DERSequence( s ) );
             if (identifier > -1) {

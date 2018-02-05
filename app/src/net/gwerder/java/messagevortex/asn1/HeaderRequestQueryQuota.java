@@ -34,8 +34,6 @@ public class HeaderRequestQueryQuota extends HeaderRequest  implements Serializa
 
     public static final long serialVersionUID = 100000000025L;
 
-    protected AsymmetricKey identity = null;
-
     public HeaderRequestQueryQuota() {super();}
 
     public HeaderRequestQueryQuota(ASN1Encodable ae) throws IOException {
@@ -48,7 +46,6 @@ public class HeaderRequestQueryQuota extends HeaderRequest  implements Serializa
     protected void parse(ASN1Encodable ae) throws IOException {
         ASN1Sequence s1 = ASN1Sequence.getInstance(ae);
         int i=0;
-        identity=new AsymmetricKey(toDER(s1.getObjectAt(i++).toASN1Primitive()));
     }
 
     protected HeaderRequest getRequest(ASN1Encodable ae) throws IOException {
@@ -60,18 +57,12 @@ public class HeaderRequestQueryQuota extends HeaderRequest  implements Serializa
     @Override
     public String dumpValueNotation(String prefix,DumpType dumpType) {
         StringBuilder sb=new StringBuilder();
-        sb.append("{"+ CRLF);
-        if(identity!=null) {
-            sb.append( prefix ).append( "  identity " ).append( identity.dumpValueNotation( prefix+"  ", DumpType.PRIVATE_COMMENTED ) );
-        }
-        sb.append( prefix ).append( '}' );
+        sb.append( "{}" );
         return sb.toString();
     }
 
     @Override
-    public ASN1Object toASN1Object( DumpType dumpType ) throws IOException {
-        ASN1EncodableVector s1 = new ASN1EncodableVector();
-        s1.add( identity.toASN1Object( dumpType ) );
-        return new DERSequence( s1 );
+    ASN1Object intToASN1Object( DumpType dumpType ) throws IOException {
+        return new DERSequence( new ASN1EncodableVector() );
     }
 }

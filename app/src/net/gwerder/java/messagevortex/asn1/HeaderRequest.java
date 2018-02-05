@@ -22,10 +22,11 @@ package net.gwerder.java.messagevortex.asn1;
 // ************************************************************************************
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
+import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1Object;
 import org.bouncycastle.asn1.ASN1TaggedObject;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import org.bouncycastle.asn1.DERTaggedObject;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -42,11 +43,43 @@ public abstract class HeaderRequest extends AbstractBlock implements Serializabl
 
     public static final long serialVersionUID = 100000000007L;
 
+    private enum Type {
+        IDENTITY( 0, HeaderRequestIdentity.class ),
+        CAPABILITIES( 1, HeaderRequestCapability.class ),
+        MESSAGE_QUOTA( 2, HeaderRequestIncreaseMessageQuota.class ),
+        TRANSFER_QUOTA( 3, HeaderRequestIncreaseTransferQuota.class ),
+        QUOTA_QUERY( 4, HeaderRequestQueryQuota.class );
+
+        int id;
+        Class c;
+
+        Type( int id, Class c ) {
+            this.id = id;
+            this.c = c;
+        }
+
+        public int getId() {
+            return this.id;
+        }
+
+        public Class getTemplateClass() {
+            return this.c;
+        }
+
+        public static Type getByClass( Class c ) {
+            for(Type e : values()) {
+                if( e.getTemplateClass() == c ) {
+                    return e;
+                }
+            }
+            return null;
+        }
+    }
+
     private static final java.util.logging.Logger LOGGER;
     static {
         LOGGER = MessageVortexLogger.getLogger( (new Throwable()).getStackTrace()[0].getClassName() );
     }
-
 
     private static final List<HeaderRequest> req = new ArrayList<>();
 
@@ -62,18 +95,24 @@ public abstract class HeaderRequest extends AbstractBlock implements Serializabl
     protected HeaderRequest() {
     }
 
-    public static HeaderRequest createRequest(ASN1Encodable ae) throws IOException {
+    public static HeaderRequest getInstance( ASN1Encodable ae ) throws IOException {
         for(HeaderRequest hr:req) {
-            if(hr.getId()==((ASN1TaggedObject)(ae)).getTagNo()) {
+            if( Type.getByClass( hr.getClass() ).getId() == ((ASN1TaggedObject)(ae)).getTagNo() ) {
                 return hr.getRequest(ae);
             }
         }
         return null;
     }
 
-    public ASN1Object toASN1Object() throws IOException {
-        throw new NotImplementedException(); // FIXME implementation missing
+    public ASN1Object toASN1Object( DumpType dt ) throws IOException {
+        Type tag = Type.getByClass( this.getClass() );
+        if( tag == null ) {
+            throw new IOException( "Unknown Header Request type \"" + this.getClass().getCanonicalName() + "\"" );
+        }
+        return new DERTaggedObject( tag.getId(), intToASN1Object( dt ) );
     }
+
+    abstract ASN1Object intToASN1Object( DumpType dt ) throws IOException;
 
     public String dumpValueNotation(String prefix) {
         StringBuilder sb=new StringBuilder();
@@ -81,9 +120,5 @@ public abstract class HeaderRequest extends AbstractBlock implements Serializabl
         return sb.toString();
     }
 
-
     protected abstract HeaderRequest getRequest(ASN1Encodable ae) throws IOException;
-
-    public abstract int getId();
-
 }

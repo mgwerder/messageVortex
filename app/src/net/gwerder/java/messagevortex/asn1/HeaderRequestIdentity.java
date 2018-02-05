@@ -35,7 +35,6 @@ public class HeaderRequestIdentity extends HeaderRequest  implements Serializabl
     public static final long serialVersionUID = 100000000027L;
 
     protected UsagePeriod   period   = null;
-    protected AsymmetricKey identity = null;
 
     public HeaderRequestIdentity() {
         super();
@@ -51,7 +50,6 @@ public class HeaderRequestIdentity extends HeaderRequest  implements Serializabl
     protected void parse( ASN1Encodable ae ) throws IOException {
         ASN1Sequence s1 = ASN1Sequence.getInstance(ae);
         int i = 0;
-        identity = new AsymmetricKey( toDER( s1.getObjectAt( i++ ).toASN1Primitive() ) );
         period = new UsagePeriod( s1.getObjectAt( i++ ) );
     }
 
@@ -67,20 +65,16 @@ public class HeaderRequestIdentity extends HeaderRequest  implements Serializabl
     public String dumpValueNotation( String prefix, DumpType dumpType ) {
         StringBuilder sb=new StringBuilder();
         sb.append( '{' ).append( CRLF );
-        if( identity !=null ) {
-            sb.append( prefix ).append( "  identity " ).append( identity.dumpValueNotation( prefix+"  ", dumpType ) ).append( CRLF );
-        }
         if(period!=null) {
-            sb.append( prefix ).append( "  period " ).append( period.dumpValueNotation( prefix+"  ",dumpType ) ).append( (identity != null? ',' : "" )+ CRLF );
+            sb.append( prefix ).append( "  period " ).append( period.dumpValueNotation( prefix+"  ",dumpType ) ).append( CRLF );
         }
         sb.append( prefix ).append( '}' );
         return sb.toString();
     }
 
     @Override
-    public ASN1Object toASN1Object( DumpType dumpType ) throws IOException {
+    public ASN1Object intToASN1Object( DumpType dumpType ) throws IOException {
         ASN1EncodableVector s1 = new ASN1EncodableVector();
-        s1.add( identity.toASN1Object( dumpType ) );
         s1.add( period.toASN1Object(dumpType) );
         return new DERSequence( s1 );
     }

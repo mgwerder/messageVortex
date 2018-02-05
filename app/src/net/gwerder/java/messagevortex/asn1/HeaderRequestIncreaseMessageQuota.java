@@ -36,7 +36,6 @@ public class HeaderRequestIncreaseMessageQuota extends HeaderRequest  implements
 
     public static final long serialVersionUID = 100000000026L;
 
-    private AsymmetricKey identity = null;
     private long quota = -1;
 
     public HeaderRequestIncreaseMessageQuota() {super();}
@@ -51,7 +50,6 @@ public class HeaderRequestIncreaseMessageQuota extends HeaderRequest  implements
     protected void parse(ASN1Encodable ae) throws IOException{
         ASN1Sequence s1 = ASN1Sequence.getInstance(ae);
         int i=0;
-        identity=new AsymmetricKey(toDER(s1.getObjectAt(i++).toASN1Primitive()));
         quota = ASN1Integer.getInstance( s1.getObjectAt( i++ ) ).getValue().intValue();
     }
 
@@ -69,9 +67,6 @@ public class HeaderRequestIncreaseMessageQuota extends HeaderRequest  implements
     public String dumpValueNotation(String prefix,DumpType dumpType) {
         StringBuilder sb=new StringBuilder();
         sb.append("{"+CRLF);
-        if(identity!=null) {
-            sb.append( prefix ).append( "  identity " ).append( identity.dumpValueNotation( prefix+"  ", dumpType ) ).append( ( quota >- 1? ',': "" ) ).append( CRLF );
-        }
         if(quota>-1) {
             sb.append( prefix ).append( "  quota " ).append( quota ).append( CRLF );
         }
@@ -80,9 +75,8 @@ public class HeaderRequestIncreaseMessageQuota extends HeaderRequest  implements
     }
 
     @Override
-    public ASN1Object toASN1Object( DumpType dumpType ) throws IOException {
+    public ASN1Object intToASN1Object( DumpType dumpType ) throws IOException {
         ASN1EncodableVector s1 = new ASN1EncodableVector();
-        s1.add( identity.toASN1Object( dumpType ) );
         s1.add( new ASN1Integer( quota ) );
         return new DERSequence( s1 );
     }

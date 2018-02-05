@@ -301,7 +301,6 @@ BEGIN
   }
 
   HeaderRequestIdentity ::= SEQUENCE {
-    identity AsymmetricKey,
     period UsagePeriod
   }
 
@@ -313,16 +312,13 @@ BEGIN
   }
 
   HeaderRequestQueryQuota ::= SEQUENCE {
-    identity AsymmetricKey
   }
 
   HeaderRequestIncreaseMessageQuota ::= SEQUENCE {
-    identity AsymmetricKey,
     messages INTEGER (0..4294967295)
   }
 
   HeaderRequestIncreaseTransferQuota ::= SEQUENCE {
-    identity AsymmetricKey,
     size     INTEGER (0..4294967295)
   }
 
