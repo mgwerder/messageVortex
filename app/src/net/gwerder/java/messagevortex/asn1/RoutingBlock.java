@@ -45,7 +45,6 @@ public class RoutingBlock extends AbstractBlock  implements Serializable {
     private static final java.util.logging.Logger LOGGER;
     static {
         LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-        MessageVortexLogger.setGlobalLogLevel( Level.ALL);
     }
 
     private static AsymmetricKey dummyKey;

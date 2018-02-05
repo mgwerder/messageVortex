@@ -142,31 +142,31 @@ public class SMTPSender extends LineSender implements TransportSender {
         write( "AUTH login" + CRLF );
         String reply=read();
         if( ! reply.startsWith( "334 " ) ) {
-            throw new IOException( "Invalid AUTH[1] reply  (Reply was '" + reply.substring(0,4)+Base64.decode( reply.substring(4) ) +"')" );
+            throw new IOException( "Invalid AUTH[1] reply  (Reply was '" + reply.substring(0,4) + Base64.decode( reply.substring(4) ) + "')" );
         }
         write( new String( Base64.encode( credentials.getUsername().getBytes( StandardCharsets.UTF_8 ) ), StandardCharsets.UTF_8 )+CRLF);
         reply=read();
         if( ! reply.startsWith( "334 " ) ) {
-            throw new IOException( "Invalid AUTH[2] reply  (Reply was '" + reply.substring(0,4)+Base64.decode( reply.substring(4) ) +"')" );
+            throw new IOException( "Invalid AUTH[2] reply  (Reply was '" + reply.substring( 0, 4 ) + Base64.decode( reply.substring(4) ) + "')" );
         }
-        write(new String(Base64.encode(credentials.getPassword().getBytes()))+CRLF);
+        write( new String( Base64.encode( credentials.getPassword().getBytes() ) ) + CRLF );
         reply=read();
         if( ! reply.startsWith( "235 " ) ) {
-            throw new IOException( "Invalid AUTH[3] reply  (Reply was '" + reply +"')" );
+            throw new IOException( "Invalid AUTH[3] reply  (Reply was '" + reply + "')" );
         } else {
-            LOGGER.log(Level.INFO,"Login successful: "+ reply );
+            LOGGER.log( Level.INFO, "Login successful: " + reply );
         }
     }
 
     private void sendPlain() throws IOException {
-        String txt=credentials.getUsername()+"\0"+credentials.getUsername()+"\0"+credentials.getPassword();
-        txt=new String(Base64.encode(txt.getBytes(StandardCharsets.UTF_8)),StandardCharsets.UTF_8)+CRLF;
+        String txt = credentials.getUsername() + "\0" + credentials.getUsername() + "\0" + credentials.getPassword();
+        txt = new String( Base64.encode( txt.getBytes( StandardCharsets.UTF_8 ) ), StandardCharsets.UTF_8 ) + CRLF;
         write( "AUTH plain " + txt + CRLF );
-        String reply=read();
+        String reply = read();
         if( ! reply.startsWith( "235 " ) ) {
-            throw new IOException( "Invalid AUTH[1] reply  (Reply was '" + reply.substring(0,4)+Base64.decode( reply.substring(4) ) +"')" );
+            throw new IOException( "Invalid AUTH[1] reply  (Reply was '" + reply.substring( 0, 4 ) + Base64.decode( reply.substring( 4 ) ) + "')" );
         } else {
-            LOGGER.log(Level.INFO,"Login successful: "+ reply );
+            LOGGER.log( Level.INFO, "Login successful: " + reply );
         }
     }
 

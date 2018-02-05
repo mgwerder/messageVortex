@@ -22,43 +22,67 @@ package net.gwerder.java.messagevortex.asn1;
 // ************************************************************************************
 
 import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
-import org.bouncycastle.asn1.ASN1Encodable;
-import org.bouncycastle.asn1.ASN1Object;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import net.gwerder.java.messagevortex.asn1.encryption.PrngType;
+import org.bouncycastle.asn1.*;
 
 import java.io.IOException;
 import java.io.Serializable;
 
 /**
+ * XorSplitPayloadOperation block.
+ *
  * Created by martin.gwerder on 23.05.2017.
  */
 public class XorSplitPayloadOperation extends Operation implements Serializable {
 
     public static final long serialVersionUID = 100000000021L;
 
+    int      originalId;
+    PrngType prngSpec;
+    int      newFirstBlockId;
+    int      newSecondBlockId;
+
+
     XorSplitPayloadOperation() {}
 
-    public XorSplitPayloadOperation(ASN1Encodable object) throws IOException {
+    public XorSplitPayloadOperation( ASN1Encodable object ) throws IOException {
         parse(object);
     }
 
     @Override
-    protected void parse(ASN1Encodable to) throws IOException {
-        throw new NotImplementedException();
+    protected void parse( ASN1Encodable to ) throws IOException {
+        ASN1Sequence s1 = ASN1Sequence.getInstance(to);
+        int i=0;
+        originalId = ASN1Integer.getInstance(s1.getObjectAt( i++ ) ).getValue().intValue();
+        prngSpec = PrngType.getById( ASN1Enumerated.getInstance( s1.getObjectAt( i++ ) ).getValue().intValue() );
+        newFirstBlockId = ASN1Integer.getInstance(s1.getObjectAt( i++ ) ).getValue().intValue();
+        newSecondBlockId = ASN1Integer.getInstance(s1.getObjectAt( i++ ) ).getValue().intValue();
     }
 
     @Override
-    public String dumpValueNotation(String prefix, DumpType dumptype) throws IOException {
-        throw new NotImplementedException();
+    public String dumpValueNotation( String prefix, DumpType dumptype ) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        sb.append( '{' ).append( CRLF );
+        sb.append( prefix ).append( "  originalId " ).append( originalId ).append( ',' ).append( CRLF );
+        sb.append( prefix ).append( "  prngSpec " ).append( prngSpec.name().toLowerCase() ).append( ',' ).append( CRLF );
+        sb.append( prefix ).append( "  newFirstBlockId " ).append( newFirstBlockId ).append( ',' ).append( CRLF );
+        sb.append( prefix ).append( "  newSecondBlockId " ).append( newSecondBlockId ).append( CRLF );
+        sb.append( prefix ).append( '}' );
+        return sb.toString();
     }
 
     @Override
-    public ASN1Object toASN1Object(DumpType dumpType) throws IOException {
-        throw new NotImplementedException();
+    public ASN1Object toASN1Object( DumpType dumpType ) throws IOException {
+        ASN1EncodableVector v = new ASN1EncodableVector();
+        v.add( new ASN1Integer( originalId ) );
+        v.add( new ASN1Enumerated( prngSpec.getId() ) );
+        v.add( new ASN1Integer( newFirstBlockId ) );
+        v.add( new ASN1Integer( newSecondBlockId ) );
+        return new DERSequence( v );
     }
 
     @Override
-    public Operation getNewInstance(ASN1Encodable object) throws IOException {
+    public Operation getNewInstance( ASN1Encodable object ) throws IOException {
         return new XorSplitPayloadOperation(object);
     }
 }

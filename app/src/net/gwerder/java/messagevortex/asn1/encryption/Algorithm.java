@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Represents all supported crypto algorithms.
@@ -113,13 +114,14 @@ public enum Algorithm implements Serializable {
     }
 
     private static AlgorithmParameter getParameterList(String[] txt) {
+        final Logger LOGGER = MessageVortexLogger.getLogger( (new Throwable()).getStackTrace()[0].getClassName() );
         AlgorithmParameter ret = new AlgorithmParameter();
         for( String s : txt ) {
             String[] kv=s.split( "=" );
             if( kv.length == 2 ) {
                 ret.put( kv[0], kv[1] );
             } else {
-                MessageVortexLogger.getLogger( (new Throwable()).getStackTrace()[0].getClassName() ).log( Level.WARNING, "split of \"" + s + "\" failed" );
+                LOGGER.log( Level.WARNING, "split of \"" + s + "\" failed" );
             }
         }
         return ret;
@@ -273,7 +275,8 @@ public enum Algorithm implements Serializable {
      * @return     the key size in bits for the security level specified
      */
     public int getKeySize(SecurityLevel sl) {
-        for(String i: new String[] { "aes", "sha", "camellia", "twofish", "ripemd" } ) {
+        final String[] KEYS = new String[] { "aes", "sha", "camellia", "twofish", "ripemd" };
+        for( String i: KEYS ) {
             if( txt.toLowerCase().startsWith( i ) ) {
                 return Integer.parseInt( txt.substring( i.length(), i.length()+3 ) );
             }
@@ -281,7 +284,7 @@ public enum Algorithm implements Serializable {
 
         synchronized( secLevel ) {
             // get requested parameters
-            AlgorithmParameter params = getParameters(sl);
+            AlgorithmParameter params = getParameters( sl );
 
             // get kesize from parameters
             if( params == null || ( Integer.parseInt( params.get( Parameter.KEYSIZE.getId() ) ) < 10 ) ) {
@@ -303,7 +306,7 @@ public enum Algorithm implements Serializable {
      * @param sl   the security level
      * @return     the key size in bits for the security level specified
      */
-    public int getBlockSize(SecurityLevel sl) {
+    public int getBlockSize( SecurityLevel sl ) {
         synchronized( secLevel ) {
             // get requested parameters
             AlgorithmParameter params = getParameters( sl );

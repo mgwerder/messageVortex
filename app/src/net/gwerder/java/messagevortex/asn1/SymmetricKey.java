@@ -182,7 +182,7 @@ public class SymmetricKey extends Key implements Serializable {
     private Cipher getCipher() throws NoSuchAlgorithmException,NoSuchPaddingException {
         setIV( getIV() );
         try {
-            return Cipher.getInstance( getAlgorithm().getAlgorithmFamily().toUpperCase() + "/" + getMode() + "/" + getPadding().toString(), getAlgorithm().getProvider());
+            return Cipher.getInstance( getAlgorithm().getAlgorithmFamily().toUpperCase() + "/" + getMode() + "/" + getPadding(), getAlgorithm().getProvider() );
         } catch(NoSuchProviderException e) {
             throw new NoSuchAlgorithmException( "unknown provider", e );
         }

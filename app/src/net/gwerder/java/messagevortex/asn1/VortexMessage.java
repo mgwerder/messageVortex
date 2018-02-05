@@ -55,7 +55,7 @@ public class VortexMessage extends AbstractBlock implements Serializable {
 
     private static final Logger LOGGER;
     static {
-        LOGGER = MessageVortexLogger.getLogger( (new Throwable()).getStackTrace()[0].getClassName() );
+        LOGGER = MessageVortexLogger.getLogger( (new Exception()).getStackTrace()[0].getClassName() );
     }
 
     /***
@@ -107,11 +107,11 @@ public class VortexMessage extends AbstractBlock implements Serializable {
      *
      * @return the message block
      */
-    public InnerMessageBlock getInnerMessage() {
+    public final InnerMessageBlock getInnerMessage() {
         return innerMessage;
     }
 
-    public InnerMessageBlock setInnerMessage( InnerMessageBlock im ) {
+    public final InnerMessageBlock setInnerMessage( InnerMessageBlock im ) {
         if( im==null ) {
             throw new NullPointerException( "InnerMessage may not be null" );
         }

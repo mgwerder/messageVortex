@@ -124,7 +124,7 @@ public class CipherSpec extends AbstractBlock implements Serializable {
     @Override
     public String dumpValueNotation(String prefix, DumpType dumpType) throws IOException {
         StringBuilder sb=new StringBuilder();
-        sb.append( "{" ).append( CRLF );
+        sb.append( '{' ).append( CRLF );
         if( asymmetricSpec != null ) {
             sb.append(prefix).append("  ").append("asymmetric ").append( asymmetricSpec.dumpValueNotation(prefix + "  ", dumpType ) ).append( ',' ).append( CRLF );
         }

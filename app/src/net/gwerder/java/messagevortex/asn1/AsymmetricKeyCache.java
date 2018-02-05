@@ -60,7 +60,7 @@ public class AsymmetricKeyCache implements Serializable {
         private int maxSize = 1;
         private long averageCalcTime=100;
         private int numberOfCalcTimes=0;
-        private Queue<AsymmetricKey> cache=new ArrayDeque<AsymmetricKey>();
+        private Queue<AsymmetricKey> cache=new ArrayDeque<>();
 
         public int getMaxSize() {
             return maxSize;
@@ -205,10 +205,8 @@ public class AsymmetricKeyCache implements Serializable {
                 @SuppressWarnings("unchecked")
                 AsymmetricKeyCache tc = (AsymmetricKeyCache) f.readObject();
                 if (!merge) {
-                    synchronized (cache) {
-                        cache.clear();
-                        cache.putAll(tc.cache);
-                    }
+                    cache.clear();
+                    cache.putAll(tc.cache);
                 } else {
                     for (Map.Entry<AlgorithmParameter, CacheElement> ce : tc.cache.entrySet()) {
                         CacheElement t = cache.get(ce.getKey());
