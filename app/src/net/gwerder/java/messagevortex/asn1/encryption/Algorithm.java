@@ -70,7 +70,7 @@ public enum Algorithm implements Serializable {
 
     public static final long serialVersionUID = 100000000039L;
 
-    private static Map<AlgorithmType, Algorithm> def = new ConcurrentHashMap<AlgorithmType, Algorithm>();
+    private static Map<AlgorithmType, Algorithm> def = new ConcurrentHashMap<>();
     private java.util.logging.Logger LOGGER;
 
     private final int id;

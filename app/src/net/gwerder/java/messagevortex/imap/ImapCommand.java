@@ -71,8 +71,8 @@ public abstract class ImapCommand implements Cloneable {
     /***
      * Processes the imap lie prefixed by a command returned by getCommandIdentifier().
      *
-     * @param line
-     * @return
+     * @param line the line containing the command to be processed
+     * @return multilined server reply (if any)
      * @throws ImapException
      */
     public abstract String[] processCommand(ImapLine line) throws ImapException;

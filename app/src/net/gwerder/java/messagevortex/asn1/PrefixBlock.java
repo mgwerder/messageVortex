@@ -59,7 +59,7 @@ public class PrefixBlock extends AbstractBlock  implements Serializable {
     /***
      * Creates a prefix with the given key.
      *
-     * @param sk
+     * @param sk symmetrik key to embedd in the prefix block
      */
     public PrefixBlock(SymmetricKey sk) throws IOException {
         if(sk==null) {
@@ -77,7 +77,7 @@ public class PrefixBlock extends AbstractBlock  implements Serializable {
      * @throws IOException if parsing fails
      */
     public PrefixBlock(ASN1Primitive to, AsymmetricKey ak) throws IOException {
-        this(toDER(to),ak);
+        this( toDER(to), ak );
     }
 
     /***
@@ -86,9 +86,7 @@ public class PrefixBlock extends AbstractBlock  implements Serializable {
      * @param to the ASN1 OCTET STRING containing the encrypted prefix
      * @param ak the host key
      *
-     * @throws IOException
-     * @throws NoSuchAlgorithmException
-     * @throws ParseException
+     * @throws IOException  if parsing of the prefix block fails
      */
     public PrefixBlock(byte[] to, AsymmetricKey ak) throws IOException {
         if(ak!=null) {

@@ -176,7 +176,7 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
     }
 
     public int compareTo(ImapConnection i) {
-        return new Integer(hashCode()).compareTo(i.hashCode());
+        return Integer.valueOf( hashCode() ).compareTo(i.hashCode());
     }
 
     public boolean equals(Object i) {
@@ -190,7 +190,7 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
     /***
      * Closes all connections and terminate all subsequent runners.
      *
-     * @fix.me Implementation of shudown in ImapConnection should be improved
+     * FIXME Implementation of shudown in ImapConnection should be improved
      ***/
     public int shutdown() {
         // flag runner to shutdown

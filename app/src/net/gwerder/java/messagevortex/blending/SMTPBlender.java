@@ -38,12 +38,12 @@ public class SMTPBlender extends Blender {
         super(receiver, verifier);
     }
 
-    @Override
     /***
      * receives an SMTP message from the transport layer and extracts the message.
      *
      * @return true if message has been accepted as vortex message
      */
+    @Override
     public boolean gotMessage(InputStream is) {
 
         return false;

@@ -65,7 +65,7 @@ public enum Padding implements Serializable {
 
     public static final long serialVersionUID = 100000000038L;
 
-    private static final Map<AlgorithmType,Padding> DEFAULT_PADDING =new HashMap<AlgorithmType,Padding>( );
+    private static final Map<AlgorithmType,Padding> DEFAULT_PADDING =new HashMap<>( );
 
     private int id;
     private String txt;

@@ -136,9 +136,9 @@ public class InternalPayload {
     }
 
     /***
+     * registers an operation in the payload space
      *
-     *
-     * @param op
+     * @param op the operation to be registered
      * @throws InvalidParameterException if dependency is circular
      */
     private void registerOperation(Operation op) {

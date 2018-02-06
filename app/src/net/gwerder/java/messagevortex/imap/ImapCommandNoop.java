@@ -28,7 +28,7 @@ public class ImapCommandNoop extends ImapCommand {
     }
     
     /***
-     * @fix.me return proper status
+     * FIXME return proper status
      ***/
     public String[] processCommand(ImapLine line) throws ImapException {
         

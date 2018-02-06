@@ -387,9 +387,12 @@ class AsymmetricKeyPreCalculator implements Serializable {
     }
 
     /***
+     * Set name of cache file.
      *
-     * @param name
-     * @return
+     * If set to null the Precalculator is disabled.
+     *
+     * @param name file name of the cache file
+     * @return String representing the previously set name
      * @throws IllegalThreadStateException if the previous thread has not yet shutdown but a new thread was tried to be started
      */
     public static String setCacheFileName(String name) {

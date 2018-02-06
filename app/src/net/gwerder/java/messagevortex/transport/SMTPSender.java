@@ -171,7 +171,7 @@ public class SMTPSender extends LineSender implements TransportSender {
     }
 
     private String[] getReply() throws IOException{
-        ArrayList<String> replies=new ArrayList<String>();
+        ArrayList<String> replies=new ArrayList<>();
         String line=null;
         while( line == null || line.charAt(3) != ' ' ) {
             line = read();

@@ -49,6 +49,7 @@ public class IdentityStore extends AbstractBlock  implements Serializable {
     }
 
     private static IdentityStore demo=null;
+    private AsymmetricKey hostIdentity = null;
     private Map<String, IdentityStoreBlock> blocks = new TreeMap<>();
 
     public IdentityStore() {
@@ -88,6 +89,16 @@ public class IdentityStore extends AbstractBlock  implements Serializable {
             tmp.add( IdentityStoreBlock.getIdentityStoreBlockDemo( IdentityStoreBlock.IdentityType.RECIPIENT_IDENTITY, complete ) );
         }
         return tmp;
+    }
+
+    public AsymmetricKey getHostIdentity() {
+        return hostIdentity;
+    }
+
+    public AsymmetricKey setHostIdentity( AsymmetricKey identity ) {
+        AsymmetricKey ret=hostIdentity;
+        this.hostIdentity=identity;
+        return ret;
     }
 
     public List<IdentityStoreBlock> getAnonSet(int size) throws IOException {

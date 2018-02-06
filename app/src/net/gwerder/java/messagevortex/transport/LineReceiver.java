@@ -208,7 +208,6 @@ public abstract class LineReceiver implements Runnable {
      *
      * This Task listens for new connections and forks them off as needed.
      *
-     * @to.do Garbage collector should clean up closed connections from time to time
      ***/
     public void run() {
         Socket socket=null;

@@ -350,13 +350,13 @@ public class AsymmetricKey extends Key  implements Serializable {
         }
     }
 
-    @Override
     /***
      * Encrypts a byte array using the key contained in this object.
      *
      * @param b the plain text byte array to encrypt
      * @return the encrypted byte array including padding
      */
+    @Override
     public byte[] encrypt(byte[] b) throws IOException {
         try {
             KeyPair key = getKeyPair();
@@ -373,13 +373,13 @@ public class AsymmetricKey extends Key  implements Serializable {
         }
     }
 
-    @Override
     /***
      * Decrypts a byte array using the key contained in this object.
      *
      * @param b the encrypted byte array
      * @return the plain text byte array
      */
+    @Override
     public byte[] decrypt(byte[] b) throws IOException {
         try {
             KeyPair key = getKeyPair();
