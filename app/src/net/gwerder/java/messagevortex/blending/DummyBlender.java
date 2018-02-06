@@ -47,13 +47,14 @@ public class DummyBlender extends Blender implements TransportReceiver {
     String identity;
     DummyTransportSender transport;
     BlenderReceiver router;
-    IdentityStore identityStore = null;
+    IdentityStore identityStore;
 
-    public DummyBlender(String identity, BlenderReceiver router) throws IOException {
+    public DummyBlender(String identity, BlenderReceiver router, IdentityStore identityStore ) throws IOException {
         super( router, null );
         this.identity = identity;
         this.transport = new DummyTransportSender( identity, this );
         this.router = router;
+        this.identityStore=identityStore;
     }
 
     @Override

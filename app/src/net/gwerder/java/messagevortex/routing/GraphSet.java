@@ -48,8 +48,10 @@ public class GraphSet implements Comparator<GraphSet>,Comparable<GraphSet>,Itera
         anonymitySet = new Vector<>();
     }
 
-    public void setIdentityStore(IdentityStore is) {
+    public IdentityStore setIdentityStore( IdentityStore is ) {
+        IdentityStore ret=this.identityStore;
         this.identityStore=is;
+        return ret;
     }
 
     public IdentityStoreBlock[] getAnonymitySet() {

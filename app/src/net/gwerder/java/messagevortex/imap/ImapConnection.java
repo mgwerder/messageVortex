@@ -176,7 +176,7 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
     }
 
     public int compareTo(ImapConnection i) {
-        return Integer.valueOf( hashCode() ).compareTo(i.hashCode());
+        return Integer.compare( hashCode(), i.hashCode() );
     }
 
     public boolean equals(Object i) {
