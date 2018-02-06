@@ -83,22 +83,45 @@ public class Edge {
         return to;
     }
 
+    /***
+     * Gets the start time of the edge relative to the graphsets start.
+     *
+     * @return the currently set start time
+     */
     public long getStartTime() { return startTime; }
 
+    /***
+     * Sets the start time of the edge relative to the start time of the graphset.
+     *
+     * @param newStartTime the time to be set in millis
+     * @return the previously set time
+     */
     public long setStartTime( long newStartTime ) {
         long old=startTime;
         this.startTime=newStartTime;
         return old;
     }
 
+    /***
+     * Gets the maximum delay time a router may choose to delay the edge starting at the start time.
+     *
+     * @return the currently set maximum delay time
+     */
     public long getDelayTime() { return maxDelay; }
 
+    /***
+     * Sets the maximum delay time a router may choose to delay the edge starting at the start time.
+     *
+     * @param newMaxDelay the new maximum time to be set
+     * @return the previously set maximum delay time
+     */
     public long setDelayTime( long newMaxDelay ) {
         long old=maxDelay;
         this.maxDelay=newMaxDelay;
         return old;
     }
 
+    @Override
     public boolean equals(Object t) {
         if(t==null) {
             return false;

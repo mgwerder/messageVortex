@@ -36,7 +36,6 @@ public class GraphSet implements Comparator<GraphSet>,Comparable<GraphSet>,Itera
     private static final long serialVersionUID = 16134223345689L;
 
     private List<Edge> store = new ArrayList<>();
-    private IdentityStore            identityStore=null;
     private List<IdentityStoreBlock> anonymitySet;
     private IdentityStoreBlock       source=null;
     private IdentityStoreBlock       target=null;
@@ -44,14 +43,11 @@ public class GraphSet implements Comparator<GraphSet>,Comparable<GraphSet>,Itera
     private Object                   cacheLock=new Object();
     private GraphSet[]               cache=null;
 
+    /***
+     * Creates a new empty graph set.
+     */
     public GraphSet() {
         anonymitySet = new Vector<>();
-    }
-
-    public IdentityStore setIdentityStore( IdentityStore is ) {
-        IdentityStore ret=this.identityStore;
-        this.identityStore=is;
-        return ret;
     }
 
     public IdentityStoreBlock[] getAnonymitySet() {

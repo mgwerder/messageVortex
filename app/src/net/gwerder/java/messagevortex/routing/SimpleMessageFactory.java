@@ -39,7 +39,6 @@ public class SimpleMessageFactory extends MessageFactory {
     protected SimpleMessageFactory(String msg, int source, int target, IdentityStoreBlock[] anonGroupMembers, IdentityStore is) {
         this.msg = msg;
 
-        graph.setIdentityStore(is);
         graph.setAnonymitySet( anonGroupMembers );
         graph.setSource(anonGroupMembers[source]);
         graph.setTarget(anonGroupMembers[target]);
