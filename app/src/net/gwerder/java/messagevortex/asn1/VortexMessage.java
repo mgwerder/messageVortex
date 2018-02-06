@@ -303,8 +303,8 @@ public class VortexMessage extends AbstractBlock implements Serializable {
      * @param dt specifies the type of dump. for sending use PUBLIC_ONLY
      * @return the binary representation of the vortexMessage
      */
-    public byte[] toBinary(DumpType dt) {
-        throw new NotImplementedException(); // FIXME implementation missing
+    public byte[] toBinary(DumpType dt) throws IOException {
+        return toASN1Object( dt ).getEncoded();
     }
 
     /***

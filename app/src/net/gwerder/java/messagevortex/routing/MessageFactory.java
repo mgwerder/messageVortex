@@ -56,7 +56,13 @@ public abstract class MessageFactory {
         return fullmsg;
     }
 
-    private VortexMessage getMessage() {
+    public IdentityStore setIdentityStore( IdentityStore is ) {
+        IdentityStore ret= this.identityStore;
+        this.identityStore=is;
+        return ret;
+    }
+
+    public VortexMessage getMessage() {
         if(this.fullmsg==null) {
             build();
         }

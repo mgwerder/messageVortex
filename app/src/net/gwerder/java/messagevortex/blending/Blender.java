@@ -26,6 +26,7 @@ import net.gwerder.java.messagevortex.asn1.BlendingSpec;
 import net.gwerder.java.messagevortex.asn1.VortexMessage;
 import net.gwerder.java.messagevortex.routing.IncomingMessageRouterListener;
 import net.gwerder.java.messagevortex.transport.TransportReceiver;
+import net.gwerder.java.messagevortex.transport.TransportSender;
 
 /**
  * Interface specifying a blender.
@@ -35,7 +36,7 @@ public abstract class Blender implements TransportReceiver {
     private IncomingMessageRouterListener listener=null;
     private HeaderVerifier verifyer=null;
     private BlenderReceiver blenderReceiver=null;
-
+    private TransportSender sender = null;
 
     public Blender( BlenderReceiver receiver, HeaderVerifier verifier ) {
         setBlenderReceiver(receiver);
@@ -44,7 +45,7 @@ public abstract class Blender implements TransportReceiver {
 
 
     /***
-     * Sets the listener for incomming messages to the routing listener.
+     * Sets the listener for incoming messages to the routing listener.
      * @param listener the listening routing layer
      * @return the previously set listener
      */
@@ -67,7 +68,7 @@ public abstract class Blender implements TransportReceiver {
     /***
      * Sets the listening routing layer.
      *
-     * All future messages sucessfully extracted and authorized by the header verifyer are passed to this object.
+     * All future messages successfully extracted and authorized by the header verifyer are passed to this object.
      *
      * @param receiver The listening routing layer
      * @return The old/previous routing layer
@@ -76,6 +77,29 @@ public abstract class Blender implements TransportReceiver {
         BlenderReceiver ret = blenderReceiver;
         this.blenderReceiver = receiver;
         return ret;
+    }
+
+    /***
+     * Sets the transport sending layer.
+     *
+     * All future messages successfully blended are passed to this object.
+     *
+     * @param sender The listening transport layer
+     * @return The old/previous routing layer
+     */
+    public final TransportSender setTransportSender( TransportSender sender ) {
+        TransportSender ret = sender;
+        this.sender = sender;
+        return ret;
+    }
+
+    /***
+     * Gets the currently set transport layer.
+     *
+     * @return The old/previous routing layer
+     */
+    public final TransportSender getTransportSender() {
+        return sender;
     }
 
     /***

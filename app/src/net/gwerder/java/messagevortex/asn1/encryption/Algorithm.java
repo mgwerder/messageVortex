@@ -56,7 +56,7 @@ public enum Algorithm implements Serializable {
               SecurityLevel.QUANTUM, getParameterList(new String[] { Parameter.ALGORITHM+"=RSA",Parameter.KEYSIZE+"=8192",Parameter.BLOCKSIZE+"=8192",Parameter.MODE+"="+Mode.getDefault( AlgorithmType.ASYMMETRIC ),Parameter.PADDING+"="+Padding.getDefault( AlgorithmType.ASYMMETRIC ) } ) )
 
     ),
-    EC         ( 2100, AlgorithmType.ASYMMETRIC, "ECIES"    , "BC", getSecLevelList( getSecLevelList( getSecLevelList(
+    EC         ( 2100, AlgorithmType.ASYMMETRIC, "ECIES", "BC", getSecLevelList( getSecLevelList( getSecLevelList(
             ECCurveType.SECP384R1.getSecurityLevel(), getParameterList(new String[] { Parameter.ALGORITHM+"=ECIES",Parameter.KEYSIZE+"=384",Parameter.BLOCKSIZE+"=384",Parameter.CURVETYPE+"="+ECCurveType.SECP384R1,Parameter.MODE+"="+Mode.getDefault( AlgorithmType.ASYMMETRIC ),Parameter.PADDING+"="+Padding.getDefault( AlgorithmType.ASYMMETRIC) } ) ),
             ECCurveType.SECT409K1.getSecurityLevel(), getParameterList(new String[] { Parameter.ALGORITHM+"=ECIES",Parameter.KEYSIZE+"=409",Parameter.BLOCKSIZE+"=409",Parameter.CURVETYPE+"="+ECCurveType.SECT409K1,Parameter.MODE+"="+Mode.getDefault( AlgorithmType.ASYMMETRIC ),Parameter.PADDING+"="+Padding.getDefault( AlgorithmType.ASYMMETRIC) } ) ),
             ECCurveType.SECP521R1.getSecurityLevel(), getParameterList(new String[] { Parameter.ALGORITHM+"=ECIES",Parameter.KEYSIZE+"=521",Parameter.BLOCKSIZE+"=521",Parameter.CURVETYPE+"="+ECCurveType.SECP521R1,Parameter.MODE+"="+Mode.getDefault( AlgorithmType.ASYMMETRIC ),Parameter.PADDING+"="+Padding.getDefault( AlgorithmType.ASYMMETRIC) } ) )
@@ -291,7 +291,7 @@ public enum Algorithm implements Serializable {
                 LOGGER.log( Level.SEVERE, "Error fetching keysize for " + txt + "/" + sl + " (" + secLevel.get( sl ) + ")" );
                 throw new IllegalArgumentException( "Error fetching key size for " + txt + "/" + sl + " (" + secLevel.get( sl ) + ")" );
             }
-            if( params.get( Parameter.ALGORITHM ).toLowerCase().startsWith( "ecies" ) ) {
+            if( params.get( Parameter.ALGORITHM ).toUpperCase().startsWith( "ECIES" ) ) {
                 // Extract key size from EC courve name
                 return Integer.parseInt( params.get( Parameter.CURVETYPE ).substring( 4, 7 ) );
             } else {

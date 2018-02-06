@@ -59,7 +59,7 @@ public class DummyBlender extends Blender implements TransportReceiver {
     }
 
     public boolean blendMessage(BlendingSpec target, VortexMessage msg) {
-        // FIXME encode message in clear readable and send it
+        // encode message in clear readable and send it
         try {
             transport.sendMessage( target.getRecipientAddress(), new ByteArrayInputStream( msg.toBytes( DumpType.PUBLIC_ONLY ) ) );
             return true;

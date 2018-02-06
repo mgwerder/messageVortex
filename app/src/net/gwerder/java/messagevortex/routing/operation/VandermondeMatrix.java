@@ -24,7 +24,7 @@ package net.gwerder.java.messagevortex.routing.operation;
 /**
  * Van der mode matrices.
  *
- * This class initializes a matrix with van der Monde values (F_{x,y}=y^x)
+ * This class initializes a matrixContent with van der Monde values (F_{x,y}=y^x)
  */
 public class VandermondeMatrix extends Matrix {
 
@@ -34,7 +34,7 @@ public class VandermondeMatrix extends Matrix {
 
     public VandermondeMatrix(int x, int y,MathMode mode) {
         super(x,y,mode);
-        // init matrix with given math mode
+        // init matrixContent with given math mode
         for(int yl=0;yl<y;yl++) {
             setField(0,yl,1);
             if(x>1) {

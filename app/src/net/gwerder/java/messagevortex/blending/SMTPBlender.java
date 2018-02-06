@@ -24,6 +24,7 @@ package net.gwerder.java.messagevortex.blending;
 import net.gwerder.java.messagevortex.accounting.HeaderVerifier;
 import net.gwerder.java.messagevortex.asn1.BlendingSpec;
 import net.gwerder.java.messagevortex.asn1.VortexMessage;
+import net.gwerder.java.messagevortex.transport.TransportSender;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.InputStream;
@@ -32,8 +33,6 @@ import java.io.InputStream;
  * Created by Martin on 04.02.2018.
  */
 public class SMTPBlender extends Blender {
-
-    HeaderVerifier hVerifier = null;
 
     public SMTPBlender(BlenderReceiver receiver, HeaderVerifier verifier) {
         super(receiver, verifier);

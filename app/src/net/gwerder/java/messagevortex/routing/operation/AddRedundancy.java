@@ -103,12 +103,12 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
 
         // do the redundancy calc
         MathMode mm=GaloisFieldMathMode.getGaloisFieldMathMode(operation.getGFSize());
-        LOGGER.log(Level.INFO, "  preparing data matrix");
+        LOGGER.log(Level.INFO, "  preparing data matrixContent");
         Matrix data=new Matrix(in2.length/operation.getDataStripes(),operation.getDataStripes(),mm,in2);
-        LOGGER.log(Level.INFO, "  data matrix is "+data.getX()+"x"+data.getY());
-        LOGGER.log(Level.INFO, "  preparing redundancy matrix");
+        LOGGER.log(Level.INFO, "  data matrixContent is "+data.getX()+"x"+data.getY());
+        LOGGER.log(Level.INFO, "  preparing redundancy matrixContent");
         RedundancyMatrix r=new RedundancyMatrix(operation.getDataStripes(),operation.getDataStripes()+operation.getRedundancy(),mm);
-        LOGGER.log(Level.INFO, "  redundancy matrix is "+r.getX()+"x"+r.getY());
+        LOGGER.log(Level.INFO, "  redundancy matrixContent is "+r.getX()+"x"+r.getY());
         LOGGER.log(Level.INFO, "  calculating");
         Matrix out=r.mul(data);
 
