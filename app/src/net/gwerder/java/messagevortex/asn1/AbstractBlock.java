@@ -79,7 +79,8 @@ public abstract class AbstractBlock implements Block {
         byte k=0;
         byte[] b=bs.getBytes();
         while(i>0) {
-            ret.append(((b[j]>>(7-k))&1)>0?'1':'0');
+            int bit=((b[j]>>(7-k))&1);
+            ret.append(bit>0?'1':'0');
             k++;
             if(k>7) {
                 k=0;

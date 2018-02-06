@@ -51,8 +51,6 @@ public class IdentityStoreBlock extends AbstractBlock  implements Serializable {
         MessageVortexLogger.setGlobalLogLevel( Level.ALL);
     }
 
-    private static ExtendedSecureRandom secureRandom = new ExtendedSecureRandom();
-
     private UsagePeriod   valid         = null;
     private int           messageQuota  = 0;
     private int           transferQuota = 0;
@@ -79,16 +77,16 @@ public class IdentityStoreBlock extends AbstractBlock  implements Serializable {
     public static IdentityStoreBlock getIdentityStoreBlockDemo(IdentityType it,boolean complete) throws IOException {
         IdentityStoreBlock ret= new IdentityStoreBlock();
         ret.setValid(new UsagePeriod(3600*24*30));
-        ret.setTransferQuota( secureRandom.nextInt( 1024 * 1024 * 1024 ) );
-        ret.setMessageQuota( secureRandom.nextInt( 1024 * 1024 ) );
+        ret.setTransferQuota( ExtendedSecureRandom.nextInt( 1024 * 1024 * 1024 ) );
+        ret.setMessageQuota( ExtendedSecureRandom.nextInt( 1024 * 1024 ) );
         ret.iType=it;
         switch(it) {
             case OWNED_IDENTITY:
                 // my own identity to decrypt everything
                 try {
                     ret.setIdentityKey( new AsymmetricKey(Algorithm.RSA.getParameters(SecurityLevel.LOW)) );
-                    byte[] b = new byte[secureRandom.nextInt( 20 ) + 3];
-                    secureRandom.nextBytes( b );
+                    byte[] b = new byte[ExtendedSecureRandom.nextInt( 20 ) + 3];
+                    ExtendedSecureRandom.nextBytes( b );
                     ret.setNodeAddress( "smtp:"+toHex( b )+"@localhost" );
                     ret.setNodeKey(null);
                 } catch(Exception e) {
@@ -99,9 +97,9 @@ public class IdentityStoreBlock extends AbstractBlock  implements Serializable {
                 // My identities I have on remote nodes
                 try {
                     ret.setIdentityKey( null );
-                    byte[] b = new byte[secureRandom.nextInt( 20 ) + 3];
-                    secureRandom.nextBytes( b );
-                    ret.setNodeAddress( "smtp:" + toHex( b ) + "@demo" + secureRandom.nextInt( 3 ) );
+                    byte[] b = new byte[ExtendedSecureRandom.nextInt( 20 ) + 3];
+                    ExtendedSecureRandom.nextBytes( b );
+                    ret.setNodeAddress( "smtp:" + toHex( b ) + "@demo" + ExtendedSecureRandom.nextInt( 3 ) );
                     AsymmetricKey ak=new AsymmetricKey();
                     if(!complete) {
                         ak.setPrivateKey(null);
@@ -119,9 +117,9 @@ public class IdentityStoreBlock extends AbstractBlock  implements Serializable {
                         ak.setPrivateKey(null);
                     }
                     ret.setIdentityKey( ak );
-                    byte[] b = new byte[secureRandom.nextInt( 20 ) + 3];
-                    secureRandom.nextBytes( b );
-                    ret.setNodeAddress( "smtp:" + toHex( b ) + "@demo" + secureRandom.nextInt( 3 ) );
+                    byte[] b = new byte[ExtendedSecureRandom.nextInt( 20 ) + 3];
+                    ExtendedSecureRandom.nextBytes( b );
+                    ret.setNodeAddress( "smtp:" + toHex( b ) + "@demo" + ExtendedSecureRandom.nextInt( 3 ) );
                     ak=new AsymmetricKey();
                     if(!complete) {
                         ak.setPrivateKey(null);

@@ -75,7 +75,7 @@ public class Config {
             return ret;
         }
 
-        public final void setId(String id) {
+        public final void setId( String id ) {
             if( id==null ) {
                 throw new NullPointerException("id must not be null");
             }

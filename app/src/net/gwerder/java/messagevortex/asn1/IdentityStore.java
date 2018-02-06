@@ -48,8 +48,6 @@ public class IdentityStore extends AbstractBlock  implements Serializable {
         MessageVortexLogger.setGlobalLogLevel( Level.ALL );
     }
 
-    private static ExtendedSecureRandom secureRandom = new ExtendedSecureRandom();
-
     private static IdentityStore demo=null;
     private Map<String, IdentityStoreBlock> blocks = new TreeMap<>();
 
@@ -99,7 +97,7 @@ public class IdentityStore extends AbstractBlock  implements Serializable {
         int i=0;
         while(ret.size()<size && i<10000) {
             i++;
-            IdentityStoreBlock isb=blocks.get(keys[secureRandom.nextInt(keys.length)]);
+            IdentityStoreBlock isb=blocks.get(keys[ExtendedSecureRandom.nextInt(keys.length)]);
             if(isb!=null && isb.getType()==IdentityStoreBlock.IdentityType.RECIPIENT_IDENTITY && !ret.contains( isb ) ) {
                 ret.add(isb);
                 LOGGER.log( Level.FINER, "adding to anonSet "+Arrays.hashCode(isb.getIdentityKey().getPublicKey()) );

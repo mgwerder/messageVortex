@@ -53,7 +53,6 @@ public class AsymmetricKey extends Key  implements Serializable {
 
     public static final long serialVersionUID = 100000000032L;
 
-    private static ExtendedSecureRandom esr = new ExtendedSecureRandom();
     private static int PUBLIC_KEY_TAG  = 2;
     private static int PRIVATE_KEY_TAG = 3;
 
@@ -217,7 +216,7 @@ public class AsymmetricKey extends Key  implements Serializable {
             }
             ECParameterSpec ecpara = ECNamedCurveTable.getParameterSpec( parameters.get( Parameter.CURVETYPE ) );
             KeyPairGenerator g = KeyPairGenerator.getInstance( alg.getAlgorithmFamily(), "BC" );
-            g.initialize( ecpara, esr.getSecureRandom() );
+            g.initialize( ecpara, ExtendedSecureRandom.getSecureRandom() );
             KeyPair pair = g.generateKeyPair();
             publicKey = pair.getPublic().getEncoded();
             privateKey = pair.getPrivate().getEncoded();

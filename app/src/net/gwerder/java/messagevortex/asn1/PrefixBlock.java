@@ -179,7 +179,11 @@ public class PrefixBlock extends AbstractBlock  implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals( Object o ) {
+        if(o==null) {
+            return false;
+        }
+
         // must be equivalent in type
         if( o.getClass() != this.getClass() ) {
             return false;

@@ -233,15 +233,6 @@ class AsymmetricKeyPreCalculator implements Serializable {
             }
         }
 
-        private void waitForCalculationThread(AlgorithmParameter p,Thread t) {
-            try {
-                t.join();
-            } catch (InterruptedException ie) {
-                LOGGER.log(Level.SEVERE, "got unexpected exception", ie);
-                Thread.currentThread().interrupt();
-            }
-        }
-
         private Thread runCalculatorThread(final AlgorithmParameter param) {
             return new Thread() {
                 public void run() {
