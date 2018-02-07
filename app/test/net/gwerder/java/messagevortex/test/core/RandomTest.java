@@ -104,7 +104,7 @@ public class RandomTest {
             }
         }
         int maxY=0;
-        double interval = classes.length/X;
+        double interval = (double)(classes.length)/X;
         for( int i=0; i<X; i++ ) {
             int avg=0;
             int cnt=0;

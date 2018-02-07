@@ -1,7 +1,7 @@
 package net.gwerder.java.messagevortex.test.imap;
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
-import net.gwerder.java.messagevortex.imap.*;
+import net.gwerder.java.messagevortex.transport.imap.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -13,7 +13,7 @@ import java.util.logging.Level;
 import static org.junit.Assert.*;
 
 /**
- * Tests for {@link net.gwerder.java.messagevortex.imap.ImapCommand}.
+ * Tests for {@link net.gwerder.java.messagevortex.transport.imap.ImapCommand}.
  *
  * @author martin@gwerder.net (Martin GWERDER)
  */

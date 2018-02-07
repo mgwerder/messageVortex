@@ -64,33 +64,15 @@ public class SimpleMessageFactory extends MessageFactory {
         // set times
         // FIXME: THIS SECTION IS BROKEN!!!!!!
         long fullTime=maxMessageTransferTime*ExtendedSecureRandom.nextInt(1000)/1000;
-        for(int i=0;i<graph.size();i++) {
+        for( int i=0; i < graph.size(); i++ ) {
             Edge g=graph.get(i);
-            double nea=ExtendedSecureRandom.nextGauss();
-            double mirr=0.1;
-            double range=0.5;
-            double q1=0.5-mirr;
-            double q3=0.5+mirr;
-            long start=0;
-            long delay=0;
-            for(int j=0;j<2;j++) {
-                double lin=(0.0+fullTime)/(graph.size()-i);
-                long tmp=0;
-                if(nea<q1) {
-                    tmp=(long)(nea/q1*range*lin);
-                } else {
-                    tmp=(long)(lin+(fullTime-lin)*0.5+(nea-q3)/(1-q3)*range*(fullTime-lin));
-                }
-                if(j==0) {
-                    start = tmp;
-                } else {
-                    delay = tmp;
-                }
-                fullTime -= tmp;
-            }
+            long start = (long)ExtendedSecureRandom.nextRandomTime( 30000, 60000,90000 );
+            long avg   = fullTime/(graph.size()-i);
+            long delay = (long)ExtendedSecureRandom.nextRandomTime( 30000, 30000+avg, 30000+2*avg );
             System.out.println( "setting times to "+start+"/"+delay);
             g.setStartTime( start );
             g.setDelayTime( delay );
+            fullTime+=start+delay;
         }
 
         // determine message route

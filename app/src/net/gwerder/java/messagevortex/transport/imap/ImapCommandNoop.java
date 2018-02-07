@@ -1,4 +1,4 @@
-package net.gwerder.java.messagevortex;
+package net.gwerder.java.messagevortex.transport.imap;
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -21,43 +21,40 @@ package net.gwerder.java.messagevortex;
 // * SOFTWARE.
 // ************************************************************************************
 
-import net.gwerder.java.messagevortex.transport.smtp.SMTPReceiver;
-import net.gwerder.java.messagevortex.transport.TransportReceiver;
+public class ImapCommandNoop extends ImapCommand {
 
-import java.io.IOException;
+    public void init() {
+        ImapCommand.registerCommand(this);
+    }
 
-/**
- * Created by Martin on 30.01.2018.
- */
-public class MessageVortexTransport {
+    /***
+     * FIXME return proper status
+     ***/
+    public String[] processCommand(ImapLine line) throws ImapException {
 
-    private SMTPReceiver      inSMTP;
+        // skip space
+        // WRNING this is "non-strict"
+        line.skipSP(-1);
 
-    public MessageVortexTransport(TransportReceiver receiver) throws IOException {
-        if( receiver == null ) {
-            throw new NullPointerException( "TransportReceiver may not be null" );
+        // skip lineend
+        if(!line.skipCRLF()) {
+            throw new ImapException(line,"error parsing command");
         }
 
-        Config cfg = Config.getDefault();
-        assert cfg!=null;
-
-        // setup receiver for mail relay
-        inSMTP = new SMTPReceiver( cfg.getNumericValue("smtp_incomming_port"), null, cfg.getBooleanValue("smtp_incomming_ssl"), receiver );
-
-        // setup receiver for IMAP requests
-        // FIXME
+        // Example:
+        //// * 22 EXPUNGE
+        //// * 23 EXISTS
+        //// * 3 RECENT
+        //// * 14 FETCH (FLAGS (\Seen \Deleted))
+        return new String[] {line.getTag()+" OK\r\n" };
     }
 
-    public TransportReceiver getTransportReceiver() {
-        return this.inSMTP.getReceiver();
+    public String[] getCommandIdentifier() {
+        return new String[] {"NOOP"};
     }
 
-    public TransportReceiver setTransportReceiver(TransportReceiver receiver) {
-        return this.inSMTP.setReceiver( receiver );
-    }
-
-    public void shutdown() {
-        inSMTP.shutdown();
+    public String[] getCapabilities() {
+        return new String[] {};
     }
 
 }

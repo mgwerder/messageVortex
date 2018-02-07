@@ -1,4 +1,4 @@
-package net.gwerder.java.messagevortex.transport;
+package net.gwerder.java.messagevortex.transport.smtp;
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -22,10 +22,14 @@ package net.gwerder.java.messagevortex.transport;
 // ************************************************************************************
 
 import net.gwerder.java.messagevortex.Config;
+import net.gwerder.java.messagevortex.MessageVortexLogger;
+import net.gwerder.java.messagevortex.transport.LineConnection;
+import net.gwerder.java.messagevortex.transport.TransportReceiver;
 import org.bouncycastle.util.encoders.Base64;
 
 import javax.net.ssl.SSLContext;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
@@ -38,20 +42,25 @@ import java.util.logging.Level;
  */
 public class SMTPConnection extends LineConnection {
 
+    static final java.util.logging.Logger LOGGER;
+    static {
+        LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+    }
+
     public LineConnection createConnection(Socket s) throws IOException {
-        LineConnection ret=new SMTPConnection(context,receiver);
+        LineConnection ret=new SMTPConnection( getSSLContext(), getReceiver() );
         ret.setSocket(s);
         return ret;
     }
 
-    SMTPConnection( SSLContext context, TransportReceiver receiver ) throws IOException {
+    public SMTPConnection( SSLContext context, TransportReceiver receiver ) throws IOException {
         super( context, receiver );
     }
 
     @Override
     public void run() {
         try {
-            write("220 " + InetAddress.getLocalHost().getHostName() + " ESMTP"+CRLF);
+            write("220 " + InetAddress.getLocalHost().getHostName() + " ESMTP" + CRLF );
         } catch(UnknownHostException uhe) {
             LOGGER.log(Level.SEVERE, "Unable to determine local hostname",uhe);
         } catch(IOException ioe) {
@@ -67,8 +76,8 @@ public class SMTPConnection extends LineConnection {
                     write("250 Hi " + command.toLowerCase().substring(6) + " nice meeting you");
                 }else if(command.toLowerCase().startsWith("ehlo ")) {
                     write("250-Hi "+command.toLowerCase().substring(6)+" nice meeting you");
-                    write("250-ENHANCEDSTATUSCODES"+CRLF);
-                    write("250 AUTH login"+CRLF);
+                    write("250-ENHANCEDSTATUSCODES" + CRLF );
+                    write("250 AUTH login" + CRLF );
                 }else if( "auth login".equals( command.toLowerCase() ) ) {
                     write("334 "+new String(Base64.encode("Username:".getBytes( StandardCharsets.UTF_8 )))+CRLF);
                     String username=new String(Base64.decode(read()));
@@ -95,9 +104,9 @@ public class SMTPConnection extends LineConnection {
                             }
                             line = read();
                         }
-                        if(receiver!=null) {
+                        if(getReceiver()!=null) {
                             LOGGER.log(Level.INFO, "Message passed to blender layer");
-                            receiver.gotMessage(new ByteArrayInputStream(sb.toString().getBytes()));
+                            getReceiver().gotMessage(new ByteArrayInputStream(sb.toString().getBytes()));
                         } else {
                             LOGGER.log(Level.WARNING, "blender layer unknown ... message discarded");
                         }
@@ -121,17 +130,11 @@ public class SMTPConnection extends LineConnection {
         }catch (SocketTimeoutException ste) {
             LOGGER.log(Level.WARNING, "Connection closed due to timeout", ste);
         }catch (IOException ioe) {
-            if(!shutdown) {
+            if(!isShutdown()) {
                 LOGGER.log(Level.WARNING, "error while communicating", ioe);
             }
         } finally {
-            if(s.isConnected()) {
-                try {
-                    s.close();
-                } catch (IOException ioe) {
-                    // may be safely ignored
-                }
-            }
+            shutdown();
         }
     }
 }

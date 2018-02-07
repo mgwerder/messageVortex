@@ -1,7 +1,7 @@
 package net.gwerder.java.messagevortex.test.imap;
 
-import net.gwerder.java.messagevortex.imap.ImapAuthenticationDummyProxy;
-import net.gwerder.java.messagevortex.imap.ImapConnection;
+import net.gwerder.java.messagevortex.transport.imap.ImapAuthenticationDummyProxy;
+import net.gwerder.java.messagevortex.transport.imap.ImapConnection;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;

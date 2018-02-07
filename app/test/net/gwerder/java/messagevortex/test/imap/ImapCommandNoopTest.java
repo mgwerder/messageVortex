@@ -1,9 +1,9 @@
 package net.gwerder.java.messagevortex.test.imap;
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
-import net.gwerder.java.messagevortex.imap.ImapCommand;
-import net.gwerder.java.messagevortex.imap.ImapException;
-import net.gwerder.java.messagevortex.imap.ImapLine;
+import net.gwerder.java.messagevortex.transport.imap.ImapCommand;
+import net.gwerder.java.messagevortex.transport.imap.ImapException;
+import net.gwerder.java.messagevortex.transport.imap.ImapLine;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;

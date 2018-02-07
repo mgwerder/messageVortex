@@ -1,4 +1,4 @@
-package net.gwerder.java.messagevortex.transport;
+package net.gwerder.java.messagevortex.transport.smtp;
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -21,6 +21,11 @@ package net.gwerder.java.messagevortex.transport;
 // * SOFTWARE.
 // ************************************************************************************
 
+import net.gwerder.java.messagevortex.MessageVortexLogger;
+import net.gwerder.java.messagevortex.transport.Credentials;
+import net.gwerder.java.messagevortex.transport.LineSender;
+import net.gwerder.java.messagevortex.transport.SecurityRequirement;
+import net.gwerder.java.messagevortex.transport.TransportSender;
 import org.bouncycastle.util.encoders.Base64;
 
 import java.io.ByteArrayInputStream;
@@ -30,7 +35,10 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Scanner;
 import java.util.logging.Level;
 
 import static net.gwerder.java.messagevortex.transport.SecurityRequirement.STARTTLS;
@@ -41,6 +49,11 @@ import static net.gwerder.java.messagevortex.transport.SecurityRequirement.START
 public class SMTPSender extends LineSender implements TransportSender {
 
     private static final String CRLF = "\r\n";
+
+    static final java.util.logging.Logger LOGGER;
+    static {
+        LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+    }
 
     String server=null;
     int    port=587;
@@ -60,7 +73,7 @@ public class SMTPSender extends LineSender implements TransportSender {
     public void sendMessage(String address, InputStream is) throws IOException {
 
         // connect to server
-        connect(new InetSocketAddress(server, port), credentials!=null?credentials.getSecurityRequirement():SecurityRequirement.PLAIN );
+        connect(new InetSocketAddress(server, port), credentials!=null?credentials.getSecurityRequirement(): SecurityRequirement.PLAIN );
 
         // reading server greeting
         String serverGreeting = read();

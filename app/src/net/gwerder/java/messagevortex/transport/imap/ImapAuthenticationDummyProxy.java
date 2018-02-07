@@ -1,4 +1,4 @@
-package net.gwerder.java.messagevortex;
+package net.gwerder.java.messagevortex.transport.imap;
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -21,43 +21,31 @@ package net.gwerder.java.messagevortex;
 // * SOFTWARE.
 // ************************************************************************************
 
-import net.gwerder.java.messagevortex.transport.smtp.SMTPReceiver;
-import net.gwerder.java.messagevortex.transport.TransportReceiver;
+import java.util.HashMap;
+import java.util.Map;
 
-import java.io.IOException;
+public class ImapAuthenticationDummyProxy extends ImapAuthenticationProxy{
 
-/**
- * Created by Martin on 30.01.2018.
- */
-public class MessageVortexTransport {
+    private final Map<String,String> users = new HashMap<>();
 
-    private SMTPReceiver      inSMTP;
+    public void addUser(String username,String password) {
+        users.put(username.toLowerCase(),password);
+    }
 
-    public MessageVortexTransport(TransportReceiver receiver) throws IOException {
-        if( receiver == null ) {
-            throw new NullPointerException( "TransportReceiver may not be null" );
+    public boolean login(String username,String password) {
+        // Always require a username or password
+        if(username==null || password==null) {
+            return false;
         }
 
-        Config cfg = Config.getDefault();
-        assert cfg!=null;
+        // check if user exists
+        if(users.get(username.toLowerCase())==null) {
+            return false;
+        }
 
-        // setup receiver for mail relay
-        inSMTP = new SMTPReceiver( cfg.getNumericValue("smtp_incomming_port"), null, cfg.getBooleanValue("smtp_incomming_ssl"), receiver );
-
-        // setup receiver for IMAP requests
-        // FIXME
+        // check if password is correct
+        return users.get(username.toLowerCase()).equals(password);
     }
 
-    public TransportReceiver getTransportReceiver() {
-        return this.inSMTP.getReceiver();
-    }
-
-    public TransportReceiver setTransportReceiver(TransportReceiver receiver) {
-        return this.inSMTP.setReceiver( receiver );
-    }
-
-    public void shutdown() {
-        inSMTP.shutdown();
-    }
 
 }

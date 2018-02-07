@@ -1,4 +1,4 @@
-package net.gwerder.java.messagevortex;
+package net.gwerder.java.messagevortex.transport.imap;
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -21,43 +21,46 @@ package net.gwerder.java.messagevortex;
 // * SOFTWARE.
 // ************************************************************************************
 
-import net.gwerder.java.messagevortex.transport.smtp.SMTPReceiver;
-import net.gwerder.java.messagevortex.transport.TransportReceiver;
+import net.gwerder.java.messagevortex.MessageVortexLogger;
 
-import java.io.IOException;
+import java.util.logging.Level;
 
-/**
- * Created by Martin on 30.01.2018.
- */
-public class MessageVortexTransport {
 
-    private SMTPReceiver      inSMTP;
+public class ImapCommandLogout extends ImapCommand {
 
-    public MessageVortexTransport(TransportReceiver receiver) throws IOException {
-        if( receiver == null ) {
-            throw new NullPointerException( "TransportReceiver may not be null" );
+    private static final java.util.logging.Logger LOGGER;
+
+    static {
+        LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+    }
+
+    public void init() {
+        ImapCommand.registerCommand(this);
+    }
+
+    public String[] processCommand(ImapLine line) throws ImapException {
+        // skip space
+        // WRNING this is "non-strict"
+        line.skipSP(-1);
+
+        // skip lineend
+        if(!line.skipCRLF()) {
+            throw new ImapException(line,"error parsing command");
         }
 
-        Config cfg = Config.getDefault();
-        assert cfg!=null;
-
-        // setup receiver for mail relay
-        inSMTP = new SMTPReceiver( cfg.getNumericValue("smtp_incomming_port"), null, cfg.getBooleanValue("smtp_incomming_ssl"), receiver );
-
-        // setup receiver for IMAP requests
-        // FIXME
+        if(line.getConnection()!=null) {
+            line.getConnection().setImapState(ImapConnection.CONNECTION_NOT_AUTHENTICATED);
+        }
+        LOGGER.log(Level.INFO,Thread.currentThread().getName()+" is now in state NOT_AUTHENTICATED");
+        return new String[] {"* BYE IMAP4rev1 Server logged out\r\n",line.getTag()+" OK\r\n",null };
     }
 
-    public TransportReceiver getTransportReceiver() {
-        return this.inSMTP.getReceiver();
+    public String[] getCommandIdentifier() {
+        return new String[] {"LOGOUT"};
     }
 
-    public TransportReceiver setTransportReceiver(TransportReceiver receiver) {
-        return this.inSMTP.setReceiver( receiver );
-    }
-
-    public void shutdown() {
-        inSMTP.shutdown();
+    public String[] getCapabilities() {
+        return new String[] {};
     }
 
 }

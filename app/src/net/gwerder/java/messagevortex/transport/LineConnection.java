@@ -38,7 +38,7 @@ import java.util.logging.Level;
  */
 public abstract class LineConnection extends Thread {
 
-    static String CRLF= "\r\n";
+    public static String CRLF= "\r\n";
 
     static final java.util.logging.Logger LOGGER;
     static {
@@ -57,20 +57,27 @@ public abstract class LineConnection extends Thread {
     BufferedWriter outStream=null;
     TransportReceiver receiver=null;
 
-    LineConnection() {}
+    public LineConnection() {}
 
     public LineConnection createConnection(Socket s) throws IOException {
         throw new UnsupportedOperationException("createConnection must be overloaded");
     }
 
+    public TransportReceiver getReceiver() {
+        return receiver;
+    }
 
-    LineConnection(SSLContext context,TransportReceiver receiver) throws IOException {
+    public SSLContext getSSLContext() {
+        return context;
+    }
+
+    public LineConnection(SSLContext context,TransportReceiver receiver) throws IOException {
         this.context = context;
         this.receiver=receiver;
         setSocket(s);
     }
 
-    void setSocket(Socket s) throws IOException {
+    public  void setSocket(Socket s) throws IOException {
         this.s=s;
         if(this.s!=null) {
             s.setSoTimeout(100);
@@ -81,6 +88,10 @@ public abstract class LineConnection extends Thread {
 
     public void shutdown() {
         shutdown=true;
+    }
+
+    public boolean isShutdown() {
+        return shutdown;
     }
 
     public ServerAuthenticator setAuthenticator(ServerAuthenticator auth) {

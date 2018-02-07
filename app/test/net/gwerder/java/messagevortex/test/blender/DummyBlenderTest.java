@@ -41,7 +41,7 @@ public class DummyBlenderTest implements BlenderReceiver {
             try {
                 dt[i] = new DummyBlender( "martin@example.com" + i, this,null );
             }catch ( IOException ioe ) {
-                fail( "failed to add martin@example.com" );
+                fail( "failed to add martin@example.com"+i );
             }
         }
 

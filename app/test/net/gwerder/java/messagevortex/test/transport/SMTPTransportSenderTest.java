@@ -1,8 +1,8 @@
 package net.gwerder.java.messagevortex.test.transport;
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
-import net.gwerder.java.messagevortex.transport.SMTPReceiver;
-import net.gwerder.java.messagevortex.transport.SMTPSender;
+import net.gwerder.java.messagevortex.transport.smtp.SMTPReceiver;
+import net.gwerder.java.messagevortex.transport.smtp.SMTPSender;
 import net.gwerder.java.messagevortex.transport.TransportReceiver;
 import org.junit.Test;
 import org.junit.runner.RunWith;

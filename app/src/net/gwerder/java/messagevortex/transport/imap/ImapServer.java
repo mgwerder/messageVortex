@@ -1,4 +1,4 @@
-package net.gwerder.java.messagevortex.transport;
+package net.gwerder.java.messagevortex.transport.imap;
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -23,9 +23,6 @@ package net.gwerder.java.messagevortex.transport;
 
 import net.gwerder.java.messagevortex.ExtendedSecureRandom;
 import net.gwerder.java.messagevortex.MessageVortexLogger;
-import net.gwerder.java.messagevortex.transport.imap.AllTrustManager;
-import net.gwerder.java.messagevortex.transport.imap.CustomKeyManager;
-import net.gwerder.java.messagevortex.transport.imap.SocketDeblocker;
 
 import javax.net.ServerSocketFactory;
 import javax.net.SocketFactory;
@@ -35,66 +32,52 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.GeneralSecurityException;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.Vector;
+import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * Created by Martin on 23.01.2018.
- */
-public abstract class LineReceiver implements Runnable {
 
-    static final String CRLF = "\r\n";
+public class ImapServer extends StoppableThread  {
 
-    private boolean shutdown=false;
+    private static final Logger LOGGER;
+    private static int id = 1;
 
-    static final Logger LOGGER;
     static {
         LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
     }
 
-    static {
-        java.security.Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
-    }
-
-    private static int id = 1;
-
-    SSLContext context=null;
+    final SSLContext context;
     int port;
     ServerSocket serverSocket=null;
-    List<LineConnection> conn=new Vector<>();
+    Set<ImapConnection> conn=new ConcurrentSkipListSet<>();
     boolean encrypted=false;
     private Set<String> suppCiphers = new HashSet<>();
     private Thread runner=null;
-    private ServerAuthenticator auth=null;
-    private LineConnection connectionTemplate=null;
-    TransportReceiver receiver=null;
+    private ImapAuthenticationProxy auth=null;
 
-    public LineReceiver(SSLContext context,TransportReceiver receiver) {
-        this.receiver=receiver;
-        this.context=context;
+    public ImapServer(boolean encrypted) throws IOException {
+        this(encrypted?993:143,encrypted);
     }
 
-
-    public LineReceiver( int port,boolean encrypted, LineConnection conn) throws IOException {
+    public ImapServer(final int port,boolean encrypted) throws IOException {
+        java.security.Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
         this.port=port;
         this.encrypted=encrypted;
-        this.connectionTemplate=conn;
-
         try{
-            context=SSLContext.getInstance("TLS");
+          context=SSLContext.getInstance("TLS");
         } catch(GeneralSecurityException gse) {
-            throw new IOException("error obtaining valid security context",gse);
+          throw new IOException("error obtaining valid security context",gse);
         }
 
-        // Determine valid ciphers
+        setName("AUTOIDSERVER-"+(id++));
+
+        // Determine valid cyphers
         String ks="keystore.jks";
         try{
-            context.init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, new TrustManager[] {new AllTrustManager()}, ExtendedSecureRandom.getSecureRandom() );
+          context.init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, new TrustManager[] {new AllTrustManager()}, ExtendedSecureRandom.getSecureRandom() );
         } catch(GeneralSecurityException gse) {
-            throw new IOException("Error initializing security context for connection",gse);
+          throw new IOException("Error initializing security context for connection",gse);
         }
         SSLContext.setDefault(context);
         String[] arr=((SSLServerSocketFactory)SSLServerSocketFactory.getDefault()).getSupportedCipherSuites();
@@ -133,8 +116,7 @@ public abstract class LineReceiver implements Runnable {
         // open socket
         this.serverSocket = ServerSocketFactory.getDefault().createServerSocket(this.port);
         this.port=serverSocket.getLocalPort();
-        runner=new Thread(this,"LineReceiverConnectionListener");
-        runner.setName("AUTOIDSERVER-"+(id++));
+        runner=new Thread(this,"ImapServerConnectionListener");
         runner.start();
     }
 
@@ -142,24 +124,10 @@ public abstract class LineReceiver implements Runnable {
         return serverSocket.getLocalPort();
     }
 
-    public SSLContext getSSLContext() {
-        return context;
-    }
-
-    public ServerAuthenticator setAuthenticator(ServerAuthenticator ap) {
-        ServerAuthenticator old=auth;
+    public ImapAuthenticationProxy setAuth(ImapAuthenticationProxy ap) {
+        ImapAuthenticationProxy old=auth;
         auth=ap;
         return old;
-    }
-
-    public TransportReceiver setReceiver( TransportReceiver receiver ) {
-        TransportReceiver ret = this.receiver;
-        this.receiver = receiver;
-        return ret;
-    }
-
-    public TransportReceiver getReceiver() {
-        return receiver;
     }
 
     private void shutdownRunner() {
@@ -193,7 +161,7 @@ public abstract class LineReceiver implements Runnable {
 
     private void shutdownConnections() {
         // close all connections
-        for(LineConnection ic:conn) {
+        for(ImapConnection ic:conn) {
             ic.shutdown();
         }
     }
@@ -210,8 +178,9 @@ public abstract class LineReceiver implements Runnable {
     /***
      * Main server task (Do not call).
      *
-     * This Task listens for new connections and forks them off as needed.
+     * This Task listens for new connections and forkes them off as needed.
      *
+     * FIXME Garbage collector should clean up closed connections from time to time
      ***/
     public void run() {
         Socket socket=null;
@@ -219,15 +188,14 @@ public abstract class LineReceiver implements Runnable {
         LOGGER.log(Level.INFO,"Server listener ready..." + serverSocket);
         try {
             while(!shutdown) {
-                // FIXME <- Insert garbage collector here (should only run from time to time)
+                // <- Insert garbage collector here (should only run from time to time)
                 socket = serverSocket.accept();
-                LOGGER.log(Level.INFO,"Got connection from "+ socket.getInetAddress().getHostName());
-                LineConnection lc=null;
-                lc=connectionTemplate.createConnection(socket);
-                lc.setAuthenticator(auth);
-                lc.setName(runner.getName()+"-CONNECT-"+i);
-                conn.add(lc);
-                lc.start();
+                ImapConnection imc=null;
+                imc=new ImapConnection(socket,context,suppCiphers,encrypted);
+                imc.setAuth(auth);
+                imc.setId(getName()+"-CONNECT-"+i);
+                conn.add(imc);
+                socket=null;
                 i++;
             }
             serverSocket.close();
@@ -236,3 +204,5 @@ public abstract class LineReceiver implements Runnable {
         }
     }
 }
+
+

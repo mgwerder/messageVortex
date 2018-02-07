@@ -1,4 +1,4 @@
-package net.gwerder.java.messagevortex.transport;
+package net.gwerder.java.messagevortex.transport.imap;
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -21,16 +21,11 @@ package net.gwerder.java.messagevortex.transport;
 // * SOFTWARE.
 // ************************************************************************************
 
-import javax.net.ssl.SSLContext;
-import java.io.IOException;
+public class ImapBlankLineException extends ImapException {
 
-/**
- * Created by martin.gwerder on 24.01.2018.
- */
-public class SMTPReceiver extends LineReceiver {
+    private static final long serialVersionUID = 43L;
 
-    public SMTPReceiver(int port, SSLContext context, boolean encrypted, TransportReceiver receiver ) throws IOException {
-        super(port,encrypted,new SMTPConnection(context,receiver));
+    public ImapBlankLineException(ImapLine line) {
+        super(line,"Received blank line");
     }
-
 }

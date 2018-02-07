@@ -1,4 +1,4 @@
-package net.gwerder.java.messagevortex;
+package net.gwerder.java.messagevortex.transport.imap;
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -21,43 +21,11 @@ package net.gwerder.java.messagevortex;
 // * SOFTWARE.
 // ************************************************************************************
 
-import net.gwerder.java.messagevortex.transport.smtp.SMTPReceiver;
-import net.gwerder.java.messagevortex.transport.TransportReceiver;
+public class ImapNullLineException extends ImapException {
 
-import java.io.IOException;
+    private static final long serialVersionUID = 44L;
 
-/**
- * Created by Martin on 30.01.2018.
- */
-public class MessageVortexTransport {
-
-    private SMTPReceiver      inSMTP;
-
-    public MessageVortexTransport(TransportReceiver receiver) throws IOException {
-        if( receiver == null ) {
-            throw new NullPointerException( "TransportReceiver may not be null" );
-        }
-
-        Config cfg = Config.getDefault();
-        assert cfg!=null;
-
-        // setup receiver for mail relay
-        inSMTP = new SMTPReceiver( cfg.getNumericValue("smtp_incomming_port"), null, cfg.getBooleanValue("smtp_incomming_ssl"), receiver );
-
-        // setup receiver for IMAP requests
-        // FIXME
+    public ImapNullLineException(ImapLine line) {
+        super(line,"Received blank line (null)");
     }
-
-    public TransportReceiver getTransportReceiver() {
-        return this.inSMTP.getReceiver();
-    }
-
-    public TransportReceiver setTransportReceiver(TransportReceiver receiver) {
-        return this.inSMTP.setReceiver( receiver );
-    }
-
-    public void shutdown() {
-        inSMTP.shutdown();
-    }
-
 }
