@@ -58,6 +58,26 @@ public class Credentials {
         return ret;
     }
 
+    public X509Certificate getServerCert() {
+        return serverCert;
+    }
+
+    public X509Certificate setServerCert( X509Certificate serverCert ) {
+        X509Certificate ret=this.serverCert;
+        this.serverCert=serverCert;
+        return ret;
+    }
+
+    public X509Certificate getClientCert() {
+        return clientCert;
+    }
+
+    public X509Certificate setClientCert( X509Certificate clientCert ) {
+        X509Certificate ret=this.clientCert;
+        this.clientCert=clientCert;
+        return ret;
+    }
+
     public String getPassword() {
         return password;
     }

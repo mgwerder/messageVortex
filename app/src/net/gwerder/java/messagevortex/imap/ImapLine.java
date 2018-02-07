@@ -36,9 +36,9 @@ import java.util.logging.Logger;
  *
  * @author Martin Gwerder
  *
- * @fix.me Limit strings and literals to a certain length (otherwise it is litterally unlimited)
- * @known.bug Code will fail i Line.length()>Maxint or out of memory
- * @known.bug Encrypted connects are failing
+ * FIXME Limit strings and literals to a certain length (otherwise it is litterally unlimited)
+ * FIXME Code will fail if Line.length()>Maxint or out of memory
+ * FIXME Encrypted connects are failing
  ***/
 public class ImapLine {
 

@@ -31,7 +31,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
 /**
- * Offers matrix calculations in different fields.
+ * Offers matrixContent calculations in different fields.
  */
 public class Matrix {
 
@@ -44,85 +44,85 @@ public class Matrix {
         MessageVortexLogger.setGlobalLogLevel( Level.ALL);
     }
 
-    final static int X = 0;
-    final static int Y = 1;
+    static final int X = 0;
+    static final int Y = 1;
 
     static Map<String,Matrix> matrixCache=new ConcurrentHashMap<>();
 
 
-    int[] matrix;
+    int[] matrixContent;
     int[] dimension=new int[2];
     int modulo=Integer.MAX_VALUE;
     MathMode mode;
 
     public Matrix(Matrix m) {
-        this(m.getX(),m.getY(),m.mode,m.matrix);
+        this(m.getX(),m.getY(),m.mode,m.matrixContent);
     }
 
     /***
-     * creates a matrix (x,y) with the specified MathMode.
+     * creates a matrixContent (x,y) with the specified MathMode.
      *
-     * @param x      the number of columns of the matrix
-     * @param y      the number of rows of the matrix
+     * @param x      the number of columns of the matrixContent
+     * @param y      the number of rows of the matrixContent
      * @param mode   the math mode to be applied
      */
     public Matrix(int x,int y,MathMode mode) {
         dimension[X]=x;
         dimension[Y]=y;
-        matrix=new int[x*y];
+        matrixContent =new int[x*y];
         if(mode!=null) {
             this.mode=mode;
         }
     }
 
     /***
-     * creates a two dimensional matrix (x,y) with the specified MathMode.
+     * creates a two dimensional matrixContent (x,y) with the specified MathMode.
      *
-     * @param x       the number of columns of the matrix
-     * @param y       the number of rows of the matrix
+     * @param x       the number of columns of the matrixContent
+     * @param y       the number of rows of the matrixContent
      * @param mode    the math mode to be applied
      * @param content the content as one dimensional array (sequence of rows)
      */
     public Matrix(int x,int y,MathMode mode,int[] content) {
         this(x,y,mode);
-        matrix=Arrays.copyOf(content,content.length);
+        matrixContent =Arrays.copyOf(content,content.length);
     }
 
     /***
-     * creates a two dimensional matrix (x,y) with the specified MathMode.
+     * creates a two dimensional matrixContent (x,y) with the specified MathMode.
      *
-     * @param x       the number of columns of the matrix
-     * @param y       the number of rows of the matrix
+     * @param x       the number of columns of the matrixContent
+     * @param y       the number of rows of the matrixContent
      * @param mode    the math mode to be applied
      * @param content the content as one dimensional array (sequence of rows)
      */
     public Matrix(int x,int y,MathMode mode,byte[] content) {
         this(x,y,mode);
-        matrix=new int[content.length];
+        matrixContent =new int[content.length];
         for(int i=0;i<content.length;i++) {
-            matrix[i]=content[i] &0xFF;
+            matrixContent[i]=content[i] &0xFF;
         }
     }
 
     /***
-     * creates a two dimensional matrix (x,y) with the specified MathMode.
+     * creates a two dimensional matrixContent (x,y) with the specified MathMode.
      *
-     * @param x       the number of columns of the matrix
-     * @param y       the number of rows of the matrix
+     * @param x       the number of columns of the matrixContent
+     * @param y       the number of rows of the matrixContent
      * @param mode    the math mode to be applied
      * @param content the value to be set in all fields
      */
     public Matrix(int x,int y,MathMode mode,int content) {
         this(x,y,mode);
         for(int i=0;i<x*y;i++) {
-            matrix[i]=content;
+            matrixContent[i]=content;
         }
     }
 
     /***
-     * creates a two dimensional unit matrix (size,size) with the specified MathMode.
+     * creates a two dimensional unit matrixContent (size,size) with the specified MathMode.
      *
-     * @param size    the number of columns of the matrix
+     * @param size    the number of columns of the matrixContent
      * @param mode    the math mode to be applied
      */
     public static Matrix unitMatrix(int size,MathMode mode) {
@@ -136,9 +136,9 @@ public class Matrix {
         for(int x=0;x<size;x++) {
             for(int y=0;y<size;y++) {
                 if (x!=y) {
-                    ret.matrix[y * size + x] = 0;
+                    ret.matrixContent[y * size + x] = 0;
                 } else {
-                    ret.matrix[y * size + x] = 1;
+                    ret.matrixContent[y * size + x] = 1;
                 }
             }
         }
@@ -165,59 +165,59 @@ public class Matrix {
     }
 
     /***
-     * Removes the specified row from the matrix.
+     * Removes the specified row from the matrixContent.
      *
      * @param index the index of the row to be removed (starting with 0)
      */
     public void removeRow(int index) {
-        int[] newMatrix= Arrays.copyOf(matrix,getX()*(getY()-1));
-        for(int i=(1+index)*getX();i<matrix.length;i++){
-            newMatrix[i-getX()]=matrix[i];
+        int[] newMatrix= Arrays.copyOf(matrixContent,getX()*(getY()-1));
+        for(int i = (1+index)*getX(); i< matrixContent.length; i++){
+            newMatrix[i-getX()]= matrixContent[i];
         }
         dimension[Y]--;
-        matrix=newMatrix;
+        matrixContent =newMatrix;
     }
 
     /***
-     * Returns a matrix with the specified dimension initialised with random values.
+     * Returns a matrixContent with the specified dimension initialised with random values.
      *
-     * @param x       the number of columns of the matrix
-     * @param y       the number of rows of the matrix
+     * @param x       the number of columns of the matrixContent
+     * @param y       the number of rows of the matrixContent
      * @param mode    the math mode to be applied
-     * @return        the generated matrix
+     * @return        the generated matrixContent
      */
     public static Matrix randomMatrix(int x,int y,MathMode mode) {
         Matrix ret=new Matrix(x,y,mode);
         for(int xl=0;xl<x;xl++) {
             for(int yl=0;yl<y;yl++) {
-                ret.matrix[x * yl + xl] = (int)( ExtendedSecureRandom.nextInt( Integer.MAX_VALUE ) );
+                ret.matrixContent[x * yl + xl] =  ExtendedSecureRandom.nextInt( Integer.MAX_VALUE );
             }
         }
         return ret;
     }
 
     /***
-     * Multiplies the current matrix with the specified matrix.
+     * Multiplies the current matrixContent with the specified matrixContent.
      *
-     * @param m                    the matrix to multitply with
-     * @return                     the resulting matrix
+     * @param m                    the matrixContent to multitply with
+     * @return                     the resulting matrixContent
      * @throws ArithmeticException if multiplication may not be caried out
      */
     public Matrix mul(Matrix m) {
         if(! this.mode.equals(m.mode)) {
-            throw new ArithmeticException( "illegal matrix math mode" );
+            throw new ArithmeticException( "illegal matrixContent math mode" );
         }
         if(this.getX()!=m.getY()) {
-            throw new ArithmeticException( "illegal matrix size" );
+            throw new ArithmeticException( "illegal matrixContent size" );
         }
         Matrix ret=new Matrix(m.getX(),getY(),mode);
         for(int x=0;x<m.dimension[X];x++) {
             for(int y=0;y<this.dimension[Y];y++) {
-                ret.matrix[y*ret.dimension[X]+x]=0;
+                ret.matrixContent[y*ret.dimension[X]+x]=0;
                 for (int i=0;i<m.dimension[Y];i++) {
-                    ret.matrix[y*ret.dimension[X]+x]=mode.add(ret.matrix[y*ret.dimension[X]+x],mode.mul(this.matrix[y*this.dimension[X]+i],m.matrix[i*m.dimension[X]+x]));
+                    ret.matrixContent[y*ret.dimension[X]+x]=mode.add(ret.matrixContent[y*ret.dimension[X]+x],mode.mul(this.matrixContent[y*this.dimension[X]+i],m.matrixContent[i*m.dimension[X]+x]));
                 }
-                ret.matrix[y*ret.dimension[X]+x]=ret.matrix[y*ret.dimension[X]+x]%modulo;
+                ret.matrixContent[y*ret.dimension[X]+x]=ret.matrixContent[y*ret.dimension[X]+x]%modulo;
             }
         }
         return ret;
@@ -237,8 +237,8 @@ public class Matrix {
                 return false;
             }
         }
-        for(int i=0;m.matrix.length>i;i++) {
-            if(matrix[i]!=m.matrix[i]) {
+        for(int i = 0; m.matrixContent.length>i; i++) {
+            if(matrixContent[i]!=m.matrixContent[i]) {
                 return false;
             }
         }
@@ -259,7 +259,7 @@ public class Matrix {
                 if (x > 0) {
                     sb.append( "," );
                 }
-                sb.append( matrix[y * dimension[X] + x] );
+                sb.append( matrixContent[y * dimension[X] + x] );
             }
             sb.append( "}" );
             if (y < dimension[Y] - 1) {
@@ -271,7 +271,7 @@ public class Matrix {
     }
 
     /***
-     * Sets a modulo value of the matrix for all operations.
+     * Sets a modulo value of the matrixContent for all operations.
      *
      * @param i   the value to be used as modulo
      * @return    the previously set modulo
@@ -286,7 +286,7 @@ public class Matrix {
     }
 
     /***
-     * Get a row of the matrix as array.
+     * Get a row of the matrixContent as array.
      *
      * @param i  the index of the row to be extracted as array
      * @return   the row representation as array
@@ -303,7 +303,7 @@ public class Matrix {
     }
 
     /***
-     * Extracts the value of a specified matrix field.
+     * Extracts the value of a specified matrixContent field.
      *
      * @param x  the column of the field
      * @param y  the row of the field
@@ -316,11 +316,11 @@ public class Matrix {
         if(y<0 || y>=dimension[Y]) {
             throw new ArithmeticException("row index out of range 0<=row["+y+"]<"+dimension[Y]);
         }
-        return matrix[y*getX()+x];
+        return matrixContent[y*getX()+x];
     }
 
     /***
-     * Sets the value of a specified matrix field.
+     * Sets the value of a specified matrixContent field.
      *
      * @param x     the column of the field
      * @param y     the row of the field
@@ -335,19 +335,19 @@ public class Matrix {
             throw new ArithmeticException("row index out of range 0<=row["+y+"]<"+dimension[Y]);
         }
         int old=getField(x,y);
-        matrix[y*getX()+x]=value;
+        matrixContent[y*getX()+x]=value;
         return old;
     }
 
     /***
      * Calculates the inverse by aplying the Gauss-Jordan-algorithm.
      *
-     * @return the inverse of the matrix
-     * @throws ArithmeticException if matrix is not square in dimensions or the algorithm was unable to compute an inverse
+     * @return the inverse of the matrixContent
+     * @throws ArithmeticException if matrixContent is not square in dimensions or the algorithm was unable to compute an inverse
      */
     public Matrix getInverse() {
         if(dimension[X]!=dimension[Y]) {
-            throw new ArithmeticException("matrix to inverse must have square dimensions (dimension is "+getX()+"/"+getY()+")");
+            throw new ArithmeticException("matrixContent to inverse must have square dimensions (dimension is "+getX()+"/"+getY()+")");
         }
         Matrix red=new Matrix(this);
         Matrix ret = Matrix.unitMatrix(dimension[X], mode);
@@ -361,11 +361,11 @@ public class Matrix {
                     flipRow++;
                 }
                 if(flipRow==getY()) {
-                    throw new ArithmeticException("unable to inverse matrix (in flip row)");
+                    throw new ArithmeticException("unable to inverse matrixContent (in flip row)");
                 }
 
                 // flip rows
-                LOGGER.log(Level.FINEST, "  processing flip row with row=" + row + "; row2=" + flipRow );
+                LOGGER.log(Level.FINEST, "  processing flip row",new Object[] {row,flipRow} );
                 red.flipRow(row,flipRow);
                 ret.flipRow(row,flipRow);
             }
@@ -418,9 +418,9 @@ public class Matrix {
     }
 
     /***
-     * Get the content of the matrix as byte array.
+     * Get the content of the matrixContent as byte array.
      *
-     * @return the byte array representing the matrix values (row by row)
+     * @return the byte array representing the matrixContent values (row by row)
      */
     public byte[] getAsByteArray() {
         byte[] ret=new byte[getX()*getY()];
@@ -489,7 +489,7 @@ public class Matrix {
     }
 
     /***
-     * Divides all values of the specified row in the matrix by the scalar specified.
+     * Divides all values of the specified row in the matrixContent by the scalar specified.
      *
      * @param row     the index of the row (starting with 0)
      * @param scalar  the scalar to be used as divisor
@@ -505,7 +505,7 @@ public class Matrix {
     }
 
     /***
-     * Flips two rows of the current matrix.
+     * Flips two rows of the current matrixContent.
      *
      * @param row1 index of the first row (starting with 0)
      * @param row2 index of the second row (starting with 0)
@@ -520,9 +520,9 @@ public class Matrix {
     }
 
     /***
-     * Enables or disables the matrix  cache.
+     * Enables or disables the matrixContent  cache.
      *
-     * @param enable  set to true if matrix cache should be enabled
+     * @param enable  set to true if matrixContent cache should be enabled
      * @return        the previously set value
      */
     public static boolean enableMatrixCache(boolean enable) {

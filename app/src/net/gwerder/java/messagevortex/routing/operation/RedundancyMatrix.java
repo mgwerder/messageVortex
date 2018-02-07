@@ -28,7 +28,7 @@ import java.util.Arrays;
 import java.util.logging.Level;
 
 /**
- * Creates a redundancy matrix or a recovery matrix for the redundancy operations.
+ * Creates a redundancy matrixContent or a recovery matrixContent for the redundancy operations.
  */
 public class RedundancyMatrix extends VandermondeMatrix {
 
@@ -40,11 +40,11 @@ public class RedundancyMatrix extends VandermondeMatrix {
 
     public RedundancyMatrix( RedundancyMatrix r ) {
         this(r.dimension[0],r.dimension[1],r.mode,true,true);
-        matrix=Arrays.copyOf(r.matrix,r.matrix.length);
+        matrixContent =Arrays.copyOf(r.matrixContent,r.matrixContent.length);
     }
 
     /***
-     * Creates a redundancy matrix based on vnadermonde matrices.
+     * Creates a redundancy matrixContent based on vnadermonde matrices.
      *
      * @param dataRows the number of data rows
      * @param total    the number of total rows (redundancy + data rows)
@@ -55,7 +55,7 @@ public class RedundancyMatrix extends VandermondeMatrix {
     }
 
     /***
-     * Creates a redundancy matrix based on vnadermonde matrices.
+     * Creates a redundancy matrixContent based on vnadermonde matrices.
      *
      * @param dataRows the number of data rows
      * @param total    the number of total rows (redundancy + data rows)
@@ -70,7 +70,7 @@ public class RedundancyMatrix extends VandermondeMatrix {
             Matrix m = matrixCache.get("rm" + dataRows + "/" + total + "/" + mode.toString());
             if (!noCache && m != null) {
                 m = new Matrix(m);
-                this.matrix = m.matrix;
+                this.matrixContent = m.matrixContent;
                 return;
             }
         }
@@ -100,10 +100,10 @@ public class RedundancyMatrix extends VandermondeMatrix {
 
 
     /***
-     * calculates a matrix to recover all data rows given the missing rows.
+     * calculates a matrixContent to recover all data rows given the missing rows.
      *
      * @param missingRowIndex Index of the rows missing data
-     * @return a square matrix rebuilding the data vector
+     * @return a square matrixContent rebuilding the data vector
      */
     public Matrix getRecoveryMatrix(int[] missingRowIndex) {
         RedundancyMatrix red=new RedundancyMatrix(this);

@@ -55,8 +55,8 @@ public class ImapCommandAuthenticate extends ImapCommand {
      * process authentication command.
      *
      * @param  line           The context of the line triggered
-     * @throws ImapException
-     * @todo add capabilities to successful login
+     * @throws ImapException  when problem processing the command
+     * FIXME add capabilities to successful login
      ***/
     public String[] processCommand(ImapLine line) throws ImapException {
 

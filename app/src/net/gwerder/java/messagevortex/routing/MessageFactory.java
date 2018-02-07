@@ -33,8 +33,6 @@ import net.gwerder.java.messagevortex.asn1.VortexMessage;
  */
 public abstract class MessageFactory {
 
-    protected static final ExtendedSecureRandom esr = new ExtendedSecureRandom();
-
     protected VortexMessage fullmsg = null;
 
     protected String msg = "";
@@ -51,14 +49,23 @@ public abstract class MessageFactory {
         MessageFactory fullmsg = new SimpleMessageFactory( msg, source, target, anonGroupMembers, is );
 
         // selecting hotspot
-        fullmsg.hotspot = anonGroupMembers[esr.nextInt( anonGroupMembers.length )];
+        fullmsg.hotspot = anonGroupMembers[ExtendedSecureRandom.nextInt( anonGroupMembers.length )];
 
         fullmsg.build();
 
         return fullmsg;
     }
 
-    private VortexMessage getMessage() {
+    public IdentityStore setIdentityStore( IdentityStore is ) {
+        IdentityStore ret= this.identityStore;
+        this.identityStore=is;
+        return ret;
+    }
+
+    public VortexMessage getMessage() {
+        if(this.fullmsg==null) {
+            build();
+        }
         return this.fullmsg;
     }
 

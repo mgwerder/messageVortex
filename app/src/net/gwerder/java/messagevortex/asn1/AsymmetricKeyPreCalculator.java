@@ -200,7 +200,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
                 t.setPriority(Thread.MIN_PRIORITY);
                 t.setDaemon(true);
                 pool.execute(t);
-                LOGGER.log(Level.INFO, "Added key precalculator for "+p+" (pool size:"+pool.getQueue().size()+"; thread count (min/current/max):"+pool.getCorePoolSize()+"/"+pool.getActiveCount()+"/"+pool.getMaximumPoolSize()+")");
+                LOGGER.log(Level.FINE, "Added key precalculator for "+p+" (pool size:"+pool.getQueue().size()+"; thread count (min/current/max):"+pool.getCorePoolSize()+"/"+pool.getActiveCount()+"/"+pool.getMaximumPoolSize()+")");
 
                 // Wait a while for existing tasks to terminate
                 if(pool.getQueue().size()>Math.max(incrementor*2,numThreads)) {
@@ -229,15 +229,6 @@ class AsymmetricKeyPreCalculator implements Serializable {
                 // (Re-)Cancel if current thread also interrupted
                 pool.shutdownNow();
                 // Preserve interrupt status
-                Thread.currentThread().interrupt();
-            }
-        }
-
-        private void waitForCalculationThread(AlgorithmParameter p,Thread t) {
-            try {
-                t.join();
-            } catch (InterruptedException ie) {
-                LOGGER.log(Level.SEVERE, "got unexpected exception", ie);
                 Thread.currentThread().interrupt();
             }
         }
@@ -396,9 +387,12 @@ class AsymmetricKeyPreCalculator implements Serializable {
     }
 
     /***
+     * Set name of cache file.
      *
-     * @param name
-     * @return
+     * If set to null the Precalculator is disabled.
+     *
+     * @param name file name of the cache file
+     * @return String representing the previously set name
      * @throws IllegalThreadStateException if the previous thread has not yet shutdown but a new thread was tried to be started
      */
     public static String setCacheFileName(String name) {

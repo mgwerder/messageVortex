@@ -119,13 +119,13 @@ public class RemoveRedundancy extends AbstractOperation  implements Serializable
         }
         MathMode mm=GaloisFieldMathMode.getGaloisFieldMathMode(operation.getGFSize());
         Matrix data=new Matrix(in2.length/(operation.getDataStripes()+operation.getRedundancy()-missingIds.length),operation.getDataStripes()+operation.getRedundancy()-missingIds.length,mm,in2);
-        LOGGER.log(Level.INFO, "  created "+data.getX()+"x"+data.getY()+" data matrix" );
+        LOGGER.log(Level.INFO, "  created "+data.getX()+"x"+data.getY()+" data matrixContent" );
 
         // do the redundancy calc
         RedundancyMatrix r=new RedundancyMatrix(operation.getDataStripes(),operation.getDataStripes()+operation.getRedundancy(),mm);
-        LOGGER.log(Level.INFO, "  created "+r.getX()+"x"+r.getY()+" redundancy matrix" );
+        LOGGER.log(Level.INFO, "  created "+r.getX()+"x"+r.getY()+" redundancy matrixContent" );
         Matrix recovery=r.getRecoveryMatrix(missingIds);
-        LOGGER.log(Level.INFO, "  created "+recovery.getX()+"x"+recovery.getY()+" recovery matrix" );
+        LOGGER.log(Level.INFO, "  created "+recovery.getX()+"x"+recovery.getY()+" recovery matrixContent" );
         LOGGER.log(Level.INFO, "  reconstructing data" );
         Matrix out=recovery.mul(data);
 

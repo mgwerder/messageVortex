@@ -62,7 +62,6 @@ public class VortexMessage extends AbstractBlock implements Serializable {
      * Creates an empty message with a new symmetric encrypption decryptionKey in the prefix.
      *
      * @throws IOException if the constructor was unable to build a message skeleton from the default values
-     * @throws NoSuchAlgorithmException if the default values for symmetric encryption keys are invalid
      */
     private VortexMessage() throws IOException {
         prefix = new PrefixBlock();
@@ -77,7 +76,6 @@ public class VortexMessage extends AbstractBlock implements Serializable {
      * @param dk the decryptionKey required to decrypt the prefix
      * @throws IOException if there was a problem parsing or decrypting the object
      * @throws ParseException if there was a problem parsing the object
-     * @throws NoSuchAlgorithmException if there was a problem decrypting the object
      */
     public VortexMessage( byte[] b, AsymmetricKey dk ) throws IOException {
         setDecryptionKey( dk );
@@ -90,7 +88,6 @@ public class VortexMessage extends AbstractBlock implements Serializable {
      * @param pre the prefix block to use
      * @param im  the inner message block to use
      * @throws IOException if there was an error generating the kay
-     * @throws NoSuchAlgorithmException if the default values of a symmetric decryptionKey point to an invalid algorithm
      */
     public VortexMessage( PrefixBlock pre, InnerMessageBlock im )  throws IOException {
         this();
@@ -303,8 +300,8 @@ public class VortexMessage extends AbstractBlock implements Serializable {
      * @param dt specifies the type of dump. for sending use PUBLIC_ONLY
      * @return the binary representation of the vortexMessage
      */
-    public byte[] toBinary(DumpType dt) {
-        throw new NotImplementedException(); // FIXME implementation missing
+    public byte[] toBinary(DumpType dt) throws IOException {
+        return toASN1Object( dt ).getEncoded();
     }
 
     /***

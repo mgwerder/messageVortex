@@ -46,8 +46,6 @@ import java.util.logging.Logger;
  */
 public abstract class LineReceiver implements Runnable {
 
-    private static final ExtendedSecureRandom esr=new ExtendedSecureRandom();
-
     static final String CRLF = "\r\n";
 
     private boolean shutdown=false;
@@ -94,7 +92,7 @@ public abstract class LineReceiver implements Runnable {
         // Determine valid ciphers
         String ks="keystore.jks";
         try{
-            context.init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, new TrustManager[] {new AllTrustManager()}, esr.getSecureRandom() );
+            context.init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, new TrustManager[] {new AllTrustManager()}, ExtendedSecureRandom.getSecureRandom() );
         } catch(GeneralSecurityException gse) {
             throw new IOException("Error initializing security context for connection",gse);
         }
@@ -210,7 +208,6 @@ public abstract class LineReceiver implements Runnable {
      *
      * This Task listens for new connections and forks them off as needed.
      *
-     * @to.do Garbage collector should clean up closed connections from time to time
      ***/
     public void run() {
         Socket socket=null;

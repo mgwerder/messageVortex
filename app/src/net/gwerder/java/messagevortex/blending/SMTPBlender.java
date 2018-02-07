@@ -24,6 +24,7 @@ package net.gwerder.java.messagevortex.blending;
 import net.gwerder.java.messagevortex.accounting.HeaderVerifier;
 import net.gwerder.java.messagevortex.asn1.BlendingSpec;
 import net.gwerder.java.messagevortex.asn1.VortexMessage;
+import net.gwerder.java.messagevortex.transport.TransportSender;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.InputStream;
@@ -33,18 +34,16 @@ import java.io.InputStream;
  */
 public class SMTPBlender extends Blender {
 
-    HeaderVerifier hVerifier = null;
-
     public SMTPBlender(BlenderReceiver receiver, HeaderVerifier verifier) {
         super(receiver, verifier);
     }
 
-    @Override
     /***
      * receives an SMTP message from the transport layer and extracts the message.
      *
      * @return true if message has been accepted as vortex message
      */
+    @Override
     public boolean gotMessage(InputStream is) {
 
         return false;

@@ -40,8 +40,6 @@ import java.util.logging.Logger;
 
 public class ImapServer extends StoppableThread  {
 
-    private static final ExtendedSecureRandom esr=new ExtendedSecureRandom();
-
     private static final Logger LOGGER;
     private static int id = 1;
 
@@ -77,7 +75,7 @@ public class ImapServer extends StoppableThread  {
         // Determine valid cyphers
         String ks="keystore.jks";
         try{
-          context.init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, new TrustManager[] {new AllTrustManager()}, esr.getSecureRandom() );
+          context.init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, new TrustManager[] {new AllTrustManager()}, ExtendedSecureRandom.getSecureRandom() );
         } catch(GeneralSecurityException gse) {
           throw new IOException("Error initializing security context for connection",gse);
         }
@@ -182,7 +180,7 @@ public class ImapServer extends StoppableThread  {
      *
      * This Task listens for new connections and forkes them off as needed.
      *
-     * @to.do Garbage collector should clean up closed connections from time to time
+     * FIXME Garbage collector should clean up closed connections from time to time
      ***/
     public void run() {
         Socket socket=null;
@@ -195,7 +193,7 @@ public class ImapServer extends StoppableThread  {
                 ImapConnection imc=null;
                 imc=new ImapConnection(socket,context,suppCiphers,encrypted);
                 imc.setAuth(auth);
-                imc.setID(getName()+"-CONNECT-"+i);
+                imc.setId(getName()+"-CONNECT-"+i);
                 conn.add(imc);
                 socket=null;
                 i++;

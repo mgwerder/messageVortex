@@ -114,11 +114,5 @@ public abstract class HeaderRequest extends AbstractBlock implements Serializabl
 
     abstract ASN1Object intToASN1Object( DumpType dt ) throws IOException;
 
-    public String dumpValueNotation(String prefix) {
-        StringBuilder sb=new StringBuilder();
-        sb.append( prefix ).append( "-- FIXME dumping of Request object not yet supported" ).append( CRLF); // FIXME implementaion missing
-        return sb.toString();
-    }
-
     protected abstract HeaderRequest getRequest(ASN1Encodable ae) throws IOException;
 }

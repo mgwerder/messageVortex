@@ -30,7 +30,6 @@ public abstract class AbstractOperation implements Operation {
 
     IdentityBlock identity;
     InternalPayload payload;
-    Date submissionTime=new Date();
     UsagePeriod period=null;
 
     public void setInternalPayload(InternalPayload payload) {

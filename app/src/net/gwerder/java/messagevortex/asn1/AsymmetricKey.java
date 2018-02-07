@@ -53,7 +53,6 @@ public class AsymmetricKey extends Key  implements Serializable {
 
     public static final long serialVersionUID = 100000000032L;
 
-    private static ExtendedSecureRandom esr = new ExtendedSecureRandom();
     private static int PUBLIC_KEY_TAG  = 2;
     private static int PRIVATE_KEY_TAG = 3;
 
@@ -217,7 +216,7 @@ public class AsymmetricKey extends Key  implements Serializable {
             }
             ECParameterSpec ecpara = ECNamedCurveTable.getParameterSpec( parameters.get( Parameter.CURVETYPE ) );
             KeyPairGenerator g = KeyPairGenerator.getInstance( alg.getAlgorithmFamily(), "BC" );
-            g.initialize( ecpara, esr.getSecureRandom() );
+            g.initialize( ecpara, ExtendedSecureRandom.getSecureRandom() );
             KeyPair pair = g.generateKeyPair();
             publicKey = pair.getPublic().getEncoded();
             privateKey = pair.getPrivate().getEncoded();
@@ -351,13 +350,13 @@ public class AsymmetricKey extends Key  implements Serializable {
         }
     }
 
-    @Override
     /***
      * Encrypts a byte array using the key contained in this object.
      *
      * @param b the plain text byte array to encrypt
      * @return the encrypted byte array including padding
      */
+    @Override
     public byte[] encrypt(byte[] b) throws IOException {
         try {
             KeyPair key = getKeyPair();
@@ -374,13 +373,13 @@ public class AsymmetricKey extends Key  implements Serializable {
         }
     }
 
-    @Override
     /***
      * Decrypts a byte array using the key contained in this object.
      *
      * @param b the encrypted byte array
      * @return the plain text byte array
      */
+    @Override
     public byte[] decrypt(byte[] b) throws IOException {
         try {
             KeyPair key = getKeyPair();

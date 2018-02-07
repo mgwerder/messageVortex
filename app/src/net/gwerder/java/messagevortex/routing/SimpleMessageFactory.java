@@ -21,6 +21,7 @@ package net.gwerder.java.messagevortex.routing;
 // * SOFTWARE.
 // ************************************************************************************
 
+import net.gwerder.java.messagevortex.ExtendedSecureRandom;
 import net.gwerder.java.messagevortex.asn1.IdentityStore;
 import net.gwerder.java.messagevortex.asn1.IdentityStoreBlock;
 
@@ -38,7 +39,6 @@ public class SimpleMessageFactory extends MessageFactory {
     protected SimpleMessageFactory(String msg, int source, int target, IdentityStoreBlock[] anonGroupMembers, IdentityStore is) {
         this.msg = msg;
 
-        graph.setIdentityStore(is);
         graph.setAnonymitySet( anonGroupMembers );
         graph.setSource(anonGroupMembers[source]);
         graph.setTarget(anonGroupMembers[target]);
@@ -53,20 +53,20 @@ public class SimpleMessageFactory extends MessageFactory {
             IdentityStoreBlock from = null;
             IdentityStoreBlock to = null;
             while (from == null || !graph.targetReached( from )) {
-                from = graph.getAnonIdentity( esr.nextInt( graph.getAnonymitySetSize() ) );
+                from = graph.getAnonIdentity( ExtendedSecureRandom.nextInt( graph.getAnonymitySetSize() ) );
             }
             while (to == null || to == from || to.equals( from )) {
-                to = graph.getAnonIdentity( esr.nextInt( graph.getAnonymitySetSize() ) );
+                to = graph.getAnonIdentity( ExtendedSecureRandom.nextInt( graph.getAnonymitySetSize() ) );
             }
             graph.add( new Edge( from, to , graph.size(),0 ) );
         }
 
         // set times
         // FIXME: THIS SECTION IS BROKEN!!!!!!
-        long fullTime=maxMessageTransferTime*esr.nextInt(1000)/1000;
+        long fullTime=maxMessageTransferTime*ExtendedSecureRandom.nextInt(1000)/1000;
         for(int i=0;i<graph.size();i++) {
             Edge g=graph.get(i);
-            double nea=esr.nextGauss();
+            double nea=ExtendedSecureRandom.nextGauss();
             double mirr=0.1;
             double range=0.5;
             double q1=0.5-mirr;

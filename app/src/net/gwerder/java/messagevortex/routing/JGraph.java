@@ -27,12 +27,16 @@ import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.DEROutputStream;
 
 import javax.swing.*;
+import javax.tools.Tool;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.geom.Ellipse2D;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by martin.gwerder on 13.06.2016.
@@ -47,14 +51,19 @@ public class JGraph extends JPanel implements MouseListener  {
     private static final int BOX_HEIGHT   = 15;
     private static final int BOX_WIDTH    = 20;
 
+    private Map<Shape,String> tooltipps = new HashMap<>();
+
     private int route   = 0;
 
     private GraphSet graph;
 
     public JGraph(GraphSet gs) {
         addMouseListener( this );
+        ToolTipManager.sharedInstance().registerComponent( this );
         this.graph=gs;
         update();
+        ToolTipManager.sharedInstance().setInitialDelay(1);
+        ToolTipManager.sharedInstance().setLightWeightPopupEnabled(true);
     }
 
     private void update() {
@@ -63,17 +72,12 @@ public class JGraph extends JPanel implements MouseListener  {
         setMinimumSize( d );
     }
 
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2=(Graphics2D)(g.create());
-        Stroke s=g2.getStroke();
-        Stroke s2=new BasicStroke(3);
-        double ySpace=(0.0+getHeight()-2*Y_OFFSET-2*BOX_HEIGHT-ROUTE_BORDER)/(graph.size());
+    private void drawTopLabels( Graphics g ) {
         double xSpace=(0.0+getWidth()-2*X_OFFSET-BOX_WIDTH)/(graph.getAnonymitySetSize()-1);
-
-        // draw boxes
         for(int i=0;i<graph.getAnonymitySetSize();i++) {
             int x=(int)(X_OFFSET+i*xSpace);
+
+            // draw top boxes
             if(graph.getAnonymity(i)==graph.getSource()) {
                 g.setColor(Color.GREEN);
                 g.fillRect(x,Y_OFFSET,BOX_WIDTH,BOX_HEIGHT);
@@ -84,21 +88,31 @@ public class JGraph extends JPanel implements MouseListener  {
             }
             g.setColor(Color.BLACK);
             g.drawRect( x,Y_OFFSET,BOX_WIDTH,BOX_HEIGHT );
+
             // Center Text in box
             FontMetrics metrics = g.getFontMetrics(g.getFont());
             int hgt = metrics.getHeight();
             int adv = metrics.stringWidth(""+i);
             g.setColor(Color.BLACK);
             g.drawString(""+i,x+BOX_WIDTH/2-(adv)/2,Y_OFFSET+BOX_HEIGHT/2+(hgt+2)/2-2);
+
             // draw vertical lines
             Graphics2D g3 = (Graphics2D) g.create();
             g3.setStroke(new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{9}, 0));
             g3.drawLine(x+BOX_WIDTH/2,Y_OFFSET+BOX_HEIGHT,x+BOX_WIDTH/2,getHeight()-Y_OFFSET-2*ROUTE_BORDER);
             g3.dispose();
         }
+    }
 
-        // draw arrows
+    private void drawArrows( Graphics g ) {
         GraphSet[] routes=graph.getRoutes();
+
+        double xSpace=(0.0+getWidth()-2*X_OFFSET-BOX_WIDTH)/(graph.getAnonymitySetSize()-1);
+        double ySpace=(0.0+getHeight()-2*Y_OFFSET-2*BOX_HEIGHT-ROUTE_BORDER)/(graph.size());
+        Graphics2D g2=(Graphics2D)(g.create());
+        Stroke s=g2.getStroke();
+        Stroke s2=new BasicStroke(3);
+
         int lastY=0;
         System.out.println("## displaying route "+this.route+" ("+routes[this.route].size()+")");
         for(int i=0;i<graph.size();i++) {
@@ -126,8 +140,13 @@ public class JGraph extends JPanel implements MouseListener  {
             g2.drawLine(x2,y,x2-xh,y-xh/4);
             g2.drawLine(x2,y,x2-xh,y+xh/4);
         }
+    }
 
-        // draw route buttons
+    private void drawRouteButtons( Graphics g ) {
+        GraphSet[] routes=graph.getRoutes();
+
+        double xSpace=(0.0+getWidth()-2*X_OFFSET-BOX_WIDTH)/(graph.getAnonymitySetSize()-1);
+
         xSpace=(double)(getWidth()-2*X_OFFSET)/(routes.length*2-1);
         for(int i=0;i<routes.length;i++) {
             int x1=(int)((getWidth()-(routes.length*2-1)*xSpace)/2+i*xSpace*2);
@@ -139,6 +158,44 @@ public class JGraph extends JPanel implements MouseListener  {
             g.setColor(Color.BLACK);
             g.drawRect( x1,y,(int)xSpace,ROUTE_BORDER );
         }
+    }
+
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        drawTopLabels( g );
+        // draw arrows
+        drawArrows( g );
+
+        // draw route buttons
+        drawRouteButtons( g );
+    }
+
+    /**
+     * This method is called automatically when the mouse is over the component.
+     * Based on the location of the event, we detect if we are over one of
+     * the circles. If so, we display some information relative to that circle
+     * If the mouse is not over any circle we return the tooltip of the
+     * component.
+     */
+    @Override
+    public String getToolTipText(MouseEvent event) {
+        Point p = new Point(event.getX(), event.getY());
+        String t = tooltipForCircle(p, new Ellipse2D.Double(0, 0, 20, 20) );
+        if (t != null) {
+            return t;
+        }
+        return "No location effective tooltip (x="+event.getX()+"/y="+event.getY()+""+super.getToolTipText(event);
+    }
+
+    private String tooltipForCircle(Point p, Ellipse2D circle) {
+        // Test to check if the point  is inside circle
+        if (circle.contains(p)) {
+            // p is inside the circle, we return some information
+            // relative to that circle.
+            return "Circle: (" + circle.getX() + " " + circle.getY() + ")";
+        }
+        return null;
     }
 
     public int setRoute(int r) {

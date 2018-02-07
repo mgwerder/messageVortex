@@ -93,7 +93,7 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
         // create and start runner
         runner=new Thread(this);
         int a=id++;
-        this.setID("AID-"+a);
+        this.setId("AID-"+a);
         runner.start();
     }
 
@@ -123,7 +123,7 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
         return this.authProxy;
     }
 
-    public void setID(String id) {
+    public void setId(String id) {
         runner.setName(id);
     }
 
@@ -176,7 +176,7 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
     }
 
     public int compareTo(ImapConnection i) {
-        return (new Integer(hashCode())).compareTo(new Integer(i.hashCode()));
+        return Integer.compare( hashCode(), i.hashCode() );
     }
 
     public boolean equals(Object i) {
@@ -190,7 +190,7 @@ public class ImapConnection extends StoppableThread implements Comparable<ImapCo
     /***
      * Closes all connections and terminate all subsequent runners.
      *
-     * @fix.me Implementation of shudown in ImapConnection should be improved
+     * FIXME Implementation of shudown in ImapConnection should be improved
      ***/
     public int shutdown() {
         // flag runner to shutdown

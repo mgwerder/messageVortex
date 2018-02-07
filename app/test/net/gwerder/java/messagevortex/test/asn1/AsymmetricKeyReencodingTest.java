@@ -103,7 +103,7 @@ public class AsymmetricKeyReencodingTest {
                 s2 = new AsymmetricKey( s1.toBytes(DumpType.ALL) );
                 LOGGER.log( Level.INFO, "  dumping object");
                 currentObject = s1.dumpValueNotation( "", DumpType.ALL );
-                byte[] b1 = new byte[sr.nextInt( Math.min( s1.getPadding().getMaxSize( Integer.parseInt(parameter.get(Parameter.BLOCKSIZE)) ), 1024 ) )];
+                byte[] b1 = new byte[sr.nextInt( Math.min( s1.getPadding().getMaxSize( s1.getAlgorithm().getBlockSize() ) , 1024 ) )];
                 sr.nextBytes( b1 );
                 LOGGER.log( Level.INFO, "  running encryption/decryption test with " + parameter.get(Parameter.ALGORITHM) + "/" + parameter.get(Parameter.MODE) + "/" + parameter.get(Parameter.PADDING) + "" );
                 byte[] b2 = s1.decrypt( s1.encrypt( b1 ) );
@@ -111,7 +111,7 @@ public class AsymmetricKeyReencodingTest {
                 b2 = s1.decrypt( s1.encrypt( b1 ) );
                 assertTrue( "error in encrypt/decrypt cycle with " + parameter.get(Parameter.ALGORITHM) + " (same object; with keys specified for signature)", Arrays.equals( b1, b2 ) );
                 assertTrue( "error in encrypt/decrypt cycle with reencoded " + parameter.get(Parameter.ALGORITHM) + " (same object; with keys specified for signature)", Arrays.equals( b1, s2.decrypt(s1.encrypt(b1)) ) );
-                // PKCS1 padding is suposed to change on every encryption round)
+                // PKCS1 padding is supposed to change on every encryption round)
                 if(!parameter.get(Parameter.PADDING).equals("PKCS1Padding") && s1.getAlgorithm()!=Algorithm.EC) {
                     assertTrue("error in encrypt/decrypt cycle with comparing encrypted byte array " + parameter.toString() + " (s1 only)", Arrays.equals(s1.encrypt(b1), s1.encrypt(b1)));
                     assertTrue("error in encrypt/decrypt cycle with comparing encrypted byte array " + parameter.toString() + " (s2 only)", Arrays.equals(s2.encrypt(b1), s2.encrypt(b1)));

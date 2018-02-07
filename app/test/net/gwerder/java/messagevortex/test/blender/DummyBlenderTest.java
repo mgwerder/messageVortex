@@ -39,7 +39,7 @@ public class DummyBlenderTest implements BlenderReceiver {
         for( int i = 0; i < dt.length; i++ ) {
             LOGGER.log( Level.INFO, "  Setting up endpoint " + i );
             try {
-                dt[i] = new DummyBlender( "martin@example.com" + i, this );
+                dt[i] = new DummyBlender( "martin@example.com" + i, this,null );
             }catch ( IOException ioe ) {
                 fail( "failed to add martin@example.com" );
             }
@@ -47,13 +47,13 @@ public class DummyBlenderTest implements BlenderReceiver {
 
         // Test duplicate id generation for transport media
         try {
-            new DummyBlender( "martin@example.com0", this );
+            new DummyBlender( "martin@example.com0", this,null );
             fail("duplicate addition of ID to DummyBlender unexpectedly succeeded");
         } catch(IOException ioe) {
             // this is expected behaviour
         }
         try {
-            new DummyBlender( "martin@example.com0", this );
+            new DummyBlender( "martin@example.com0", this,null );
             fail("duplicate addition of ID to DummyTransportSender unexpectedly succeeded");
         } catch(IOException ioe) {
             // this is expected behaviour

@@ -33,7 +33,6 @@ public interface TransportSender {
      *
      * @param address the string representation of the target address on the transport layer
      * @param os      the outputstream providing the message
-     * @return        true if the message has been successfully sent
      * @throws IOException if transport layer was unable to satisfy the request
      */
     void sendMessage( String address, InputStream os ) throws IOException;
