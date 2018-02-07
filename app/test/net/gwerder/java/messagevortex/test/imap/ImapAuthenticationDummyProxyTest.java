@@ -12,7 +12,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Tests for {@link net.gwerder.java.messagevortex.MailVortex}.
+ * Tests for {@link net.gwerder.java.messagevortex.MessageVortex}.
  *
  * @author martin@gwerder.net (Martin GWERDER)
  */

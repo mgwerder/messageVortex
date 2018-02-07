@@ -1,6 +1,5 @@
 package net.gwerder.java.messagevortex.test.imap;
 
-import net.gwerder.java.messagevortex.ExtendedSecureRandom;
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.imap.CustomKeyManager;
 import org.junit.Test;
@@ -13,7 +12,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 /**
- * booleanConfigHandlings for {@link net.gwerder.java.messagevortex.MailVortex}.
+ * booleanConfigHandlings for {@link net.gwerder.java.messagevortex.MessageVortex}.
  *
  * @author martin@gwerder.net (Martin GWERDER)
  */

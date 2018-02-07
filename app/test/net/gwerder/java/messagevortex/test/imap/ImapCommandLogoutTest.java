@@ -13,7 +13,7 @@ import java.util.logging.Level;
 import static org.junit.Assert.fail;
 
 /**
- * Tests for {@link net.gwerder.java.messagevortex.MailVortex}.
+ * Tests for {@link net.gwerder.java.messagevortex.MessageVortex}.
  *
  * @author martin@gwerder.net (Martin GWERDER)
  */
