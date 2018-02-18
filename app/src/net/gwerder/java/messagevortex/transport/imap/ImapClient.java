@@ -28,6 +28,8 @@ import javax.net.ssl.*;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.nio.charset.Charset;
 import java.security.KeyStore;
 import java.util.ArrayList;
@@ -114,6 +116,13 @@ public class ImapClient implements Runnable {
     public long setTimeout(long timeout) {
         long ot=this.timeout;
         this.timeout=timeout;
+        if( this.socket != null ) {
+            try {
+                socket.setSoTimeout((int) (this.timeout));
+            } catch(SocketException so) {
+                LOGGER.log(Level.INFO,"Erroro while setting timeout",so);
+            }
+        }
         return ot;
     }
 
@@ -274,6 +283,7 @@ public class ImapClient implements Runnable {
         try {
             // initialize socket
             socket = SocketFactory.getDefault().createSocket(targetHost,targetPort);
+            setTimeout( getDefaultTimeout() );
             if(encrypted) {
                 socket=startTLS(socket);
             }

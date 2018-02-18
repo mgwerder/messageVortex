@@ -23,32 +23,28 @@ package net.gwerder.java.messagevortex.transport;
 
 import net.gwerder.java.messagevortex.ExtendedSecureRandom;
 import net.gwerder.java.messagevortex.MessageVortexLogger;
-import net.gwerder.java.messagevortex.transport.imap.AllTrustManager;
-import net.gwerder.java.messagevortex.transport.imap.CustomKeyManager;
-import net.gwerder.java.messagevortex.transport.imap.SocketDeblocker;
 
 import javax.net.ServerSocketFactory;
 import javax.net.SocketFactory;
 import javax.net.ssl.*;
-import java.io.IOException;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.Vector;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  * Created by Martin on 23.01.2018.
  */
-public abstract class LineReceiver implements Runnable {
+public abstract class LineReceiver  implements Runnable, StoppableThread {
 
     static final String CRLF = "\r\n";
 
     private boolean shutdown=false;
+    private long gcLastRun = 0;
 
     static final Logger LOGGER;
     static {
@@ -65,22 +61,21 @@ public abstract class LineReceiver implements Runnable {
     int port;
     ServerSocket serverSocket=null;
     List<LineConnection> conn=new Vector<>();
-    boolean encrypted=false;
     private Set<String> suppCiphers = new HashSet<>();
     private Thread runner=null;
     private ServerAuthenticator auth=null;
     private LineConnection connectionTemplate=null;
     TransportReceiver receiver=null;
+    private String protocol = "unknown";
+    private int timeout=-1;
 
     public LineReceiver(SSLContext context,TransportReceiver receiver) {
         this.receiver=receiver;
         this.context=context;
     }
 
-
-    public LineReceiver( int port,boolean encrypted, LineConnection conn) throws IOException {
+    public LineReceiver( int port, LineConnection conn) throws IOException {
         this.port=port;
-        this.encrypted=encrypted;
         this.connectionTemplate=conn;
 
         try{
@@ -138,13 +133,39 @@ public abstract class LineReceiver implements Runnable {
         runner.start();
     }
 
-    public int getPort() {
-        return serverSocket.getLocalPort();
+    public String setName( String name) {
+        String ret = getName();
+        runner.setName( name );
+        return ret;
+    }
+
+    public String getName() {
+        return runner.getName();
+    }
+
+    public String setProtocol( String protocol ) {
+        String ret = this.protocol;
+        this.protocol=protocol;
+        return ret;
+    }
+
+    public String getProtocol() {
+        return protocol;
+    }
+
+    public SSLContext setSSLContext( SSLContext  context ) {
+        SSLContext ret = getSSLContext();
+        this.context=context;
+        return ret;
     }
 
     public SSLContext getSSLContext() {
         return context;
     }
+    public int getPort() {
+        return serverSocket.getLocalPort();
+    }
+
 
     public ServerAuthenticator setAuthenticator(ServerAuthenticator ap) {
         ServerAuthenticator old=auth;
@@ -162,13 +183,23 @@ public abstract class LineReceiver implements Runnable {
         return receiver;
     }
 
+    public int setTimeout(int to) {
+        int ret=timeout;
+        this.timeout=to;
+        return ret;
+    }
+
+    public int getTimeout() {
+        return this.timeout;
+    }
+
     private void shutdownRunner() {
         // initiate shutdown of runner
         shutdown=true;
 
         // wakeup runner if necesary
         try{
-            if(encrypted) {
+            if( connectionTemplate.isTLS() ) {
                 (SSLSocketFactory.getDefault().createSocket("localhost",this.serverSocket.getLocalPort())).close();
             } else {
                 (SocketFactory.getDefault().createSocket("localhost",this.serverSocket.getLocalPort())).close();
@@ -196,22 +227,28 @@ public abstract class LineReceiver implements Runnable {
         for(LineConnection ic:conn) {
             ic.shutdown();
         }
+        // wait for termination
+        for(LineConnection ic:conn) {
+            ic.waitShutdown();
+        }
     }
 
-    public int shutdown() {
+    public void shutdown() {
         LOGGER.log(Level.INFO,"Server runner shutdown");
         shutdownRunner();
         LOGGER.log(Level.INFO,"Server connections shutdown");
         shutdownConnections();
         LOGGER.log(Level.INFO,"Server shutdown done");
-        return 0;
+    }
+
+    public boolean isShutdown() {
+        return shutdown && runner.getState()== Thread.State.TERMINATED;
     }
 
     /***
      * Main server task (Do not call).
      *
      * This Task listens for new connections and forks them off as needed.
-     *
      ***/
     public void run() {
         Socket socket=null;
@@ -219,20 +256,49 @@ public abstract class LineReceiver implements Runnable {
         LOGGER.log(Level.INFO,"Server listener ready..." + serverSocket);
         try {
             while(!shutdown) {
-                // FIXME <- Insert garbage collector here (should only run from time to time)
+                connectionCleanup();
                 socket = serverSocket.accept();
                 LOGGER.log(Level.INFO,"Got connection from "+ socket.getInetAddress().getHostName());
                 LineConnection lc=null;
-                lc=connectionTemplate.createConnection(socket);
-                lc.setAuthenticator(auth);
-                lc.setName(runner.getName()+"-CONNECT-"+i);
-                conn.add(lc);
-                lc.start();
-                i++;
+                try {
+                    lc = connectionTemplate.createConnection(socket);
+                    if(timeout>-1) {
+                        lc.setTimeout(timeout);
+                    }
+                    lc.setAuthenticator(auth);
+                    lc.setName(runner.getName() + "-CONNECT-" + i);
+                    conn.add(lc);
+                    lc.setProtocol(getProtocol());
+                    lc.start();
+                    i++;
+                } catch (IOException ioe) {
+                    LOGGER.log(Level.SEVERE,"Error exception on creating and running connection socket",ioe);
+                    if( lc != null ) {
+                        lc.shutdown();
+                    }
+                }
             }
             serverSocket.close();
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE,"Error exception on server socket",e);
+            shutdown();
         }
     }
+
+    /***
+     * Garbage collector for list of open connections.
+     */
+    private void connectionCleanup() {
+        if(System.currentTimeMillis()-gcLastRun > 30000 ) {
+            gcLastRun=System.currentTimeMillis();
+            List<LineConnection> removalList = new ArrayList<>();
+            for(LineConnection lc:conn) {
+                if(lc.isShutdown() ) {
+                    removalList.add(lc);
+                }
+            }
+            conn.removeAll(removalList);
+        }
+    }
+
 }

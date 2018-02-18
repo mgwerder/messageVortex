@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.io.IOException;
 import java.util.Set;
 
 import static org.junit.Assert.assertFalse;
@@ -20,7 +21,7 @@ import static org.junit.Assert.assertTrue;
 public class ImapAuthenticationDummyProxyTest {
 
     @Test
-    public void setGetConnection() {
+    public void setGetConnection() throws IOException {
         Set<Thread> threadSet = ImapSSLTest.getThreadList();
         ImapAuthenticationDummyProxy ap=new ImapAuthenticationDummyProxy();
         ap.addUser("Test","Testpw");
@@ -55,7 +56,8 @@ public class ImapAuthenticationDummyProxyTest {
     }
 
     private static class ImapConnectionDummy extends ImapConnection {
-        public ImapConnectionDummy() {
+        public ImapConnectionDummy() throws IOException {
+            super( null,null,null, false );
             // This is a dummy constructor for test cases do not use it for anything else
         }
     }

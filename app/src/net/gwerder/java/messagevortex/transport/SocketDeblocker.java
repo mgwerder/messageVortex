@@ -1,4 +1,4 @@
-package net.gwerder.java.messagevortex.transport.imap;
+package net.gwerder.java.messagevortex.transport;
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *

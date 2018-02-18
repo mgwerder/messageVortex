@@ -48,17 +48,17 @@ public class SMTPConnection extends LineConnection {
     }
 
     public LineConnection createConnection(Socket s) throws IOException {
-        LineConnection ret=new SMTPConnection( getSSLContext(), getReceiver() );
+        LineConnection ret=new SMTPConnection( getSSLContext(), getReceiver(), isTLS() );
         ret.setSocket(s);
         return ret;
     }
 
-    public SMTPConnection( SSLContext context, TransportReceiver receiver ) throws IOException {
-        super( context, receiver );
+    public SMTPConnection( SSLContext context, TransportReceiver receiver, boolean encrypted  ) throws IOException {
+        super( context, receiver, encrypted );
     }
 
     @Override
-    public void run() {
+    public void gotLine( String line ) {
         try {
             write("220 " + InetAddress.getLocalHost().getHostName() + " ESMTP" + CRLF );
         } catch(UnknownHostException uhe) {
@@ -66,12 +66,12 @@ public class SMTPConnection extends LineConnection {
         } catch(IOException ioe) {
             LOGGER.log(Level.SEVERE, "Unable to communicate",ioe);
         }
-        String command=null;
+        String command=line;
         try {
             String envelopeFrom=null;
             String envelopeTo=null;
             while ( command == null || ! "quit".equals( command.toLowerCase() ) ) {
-                command = read();
+                command = read( false );
                 if(command.toLowerCase().startsWith("helo ")) {
                     write("250 Hi " + command.toLowerCase().substring(6) + " nice meeting you");
                 }else if(command.toLowerCase().startsWith("ehlo ")) {
@@ -80,10 +80,10 @@ public class SMTPConnection extends LineConnection {
                     write("250 AUTH login" + CRLF );
                 }else if( "auth login".equals( command.toLowerCase() ) ) {
                     write("334 "+new String(Base64.encode("Username:".getBytes( StandardCharsets.UTF_8 )))+CRLF);
-                    String username=new String(Base64.decode(read()));
+                    String username=new String(Base64.decode(read( false )));
                     Config.getDefault().getStringValue("smtp_incomming_username");
                     write("334 "+new String(Base64.encode("Password:".getBytes(StandardCharsets.UTF_8)))+CRLF);
-                    String password=new String(Base64.decode(read()));
+                    String password=new String(Base64.decode(read( false )));
                     Config.getDefault().getStringValue("smtp_incomming_password");
                 }else if(command.toLowerCase().startsWith("mail from")) {
                     envelopeFrom=command.substring(10).trim();
@@ -96,13 +96,13 @@ public class SMTPConnection extends LineConnection {
                 }else if( "data".equals( command.toLowerCase() ) ) {
                     if( envelopeFrom!=null && envelopeTo!=null ) {
                         write("354 send the mail data, end with ."+CRLF);
-                        String line = null;
+                        String l = null;
                         StringBuilder sb = new StringBuilder();
-                        while (line == null || ! ".".equals(line)) {
+                        while ( l == null || ! ".".equals(l)) {
                             if(line!=null) {
-                                sb.append(line + CRLF);
+                                sb.append(l + CRLF);
                             }
-                            line = read();
+                            l = read(false );
                         }
                         if(getReceiver()!=null) {
                             LOGGER.log(Level.INFO, "Message passed to blender layer");

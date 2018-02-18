@@ -264,8 +264,7 @@ public class JGraph extends JPanel implements MouseListener  {
     }
 
     private void createAndShowGUI() {
-        System.out.println("Created GUI on EDT? "+
-                SwingUtilities.isEventDispatchThread());
+        System.out.println("Created GUI on event dispatching thread? " + SwingUtilities.isEventDispatchThread());
         JFrame f = new JFrame("Edge Demo");
         f.add(this);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

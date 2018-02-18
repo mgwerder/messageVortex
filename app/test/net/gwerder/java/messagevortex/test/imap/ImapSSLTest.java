@@ -2,6 +2,9 @@ package net.gwerder.java.messagevortex.test.imap;
 
 import net.gwerder.java.messagevortex.ExtendedSecureRandom;
 import net.gwerder.java.messagevortex.MessageVortexLogger;
+import net.gwerder.java.messagevortex.transport.AllTrustManager;
+import net.gwerder.java.messagevortex.transport.CustomKeyManager;
+import net.gwerder.java.messagevortex.transport.SocketDeblocker;
 import net.gwerder.java.messagevortex.transport.imap.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -155,21 +158,21 @@ public class ImapSSLTest {
             LOGGER.log(Level.INFO,"setting up server");
             Set<Thread> threadSet = getThreadList();
             ImapServer is=new ImapServer(0,true);
+            is.setTimeout(1000);
             LOGGER.log(Level.INFO,"setting up pseudo client");
             final Socket s=SSLSocketFactory.getDefault().createSocket(InetAddress.getByName("localhost"),is.getPort());
             s.setSoTimeout(500);
-            LOGGER.log(Level.INFO,"sending command");
+            LOGGER.log(Level.INFO,"sending command to  port "+is.getPort() );
             s.getOutputStream().write("a1 capability\r\n".getBytes(Charset.defaultCharset()));
+            s.getOutputStream().flush();
             byte b[]=new byte[7];
             int start=0;
             int len=b.length;
-            int numread=0;
             while(len>0) {
-                numread=s.getInputStream().read(b,start,len);
+                int numread=s.getInputStream().read(b,start,len);
                 if(numread>0) {
                     start+=numread;
                     len-=numread;
-                    numread=0;
                 }
             }
             LOGGER.log(Level.INFO,"got sequence \""+(new String(b,java.nio.charset.Charset.defaultCharset()))+"\"");
@@ -190,7 +193,9 @@ public class ImapSSLTest {
             LOGGER.log(Level.INFO,"************************************************************************");
             Set<Thread> threadSet = getThreadList();
             ImapServer is=new ImapServer(0,true);
+            is.setTimeout(1000);
             ImapClient ic=new ImapClient("localhost",is.getPort(),true);
+            ic.setTimeout(1000);
             ImapClient.setDefaultTimeout(300);
             String[] s=ic.sendCommand("a1 capability\r\n");
             for(String v:s) {

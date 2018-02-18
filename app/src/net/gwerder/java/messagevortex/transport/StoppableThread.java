@@ -1,4 +1,4 @@
-package net.gwerder.java.messagevortex.transport.imap;
+package net.gwerder.java.messagevortex.transport;
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -22,15 +22,22 @@ package net.gwerder.java.messagevortex.transport.imap;
 // ************************************************************************************
 
 /***
- * Stoppable Thread
+ * Interface for a stoppable thread.
+ * 
+ * Threads of this type must provide facility to stop at request gracefully.
  ***/
-abstract class StoppableThread extends Thread implements Runnable {
-
-    protected boolean shutdown=false;
+public interface StoppableThread {
 
     /***
      * Shuts the thread gracefully down.
      ***/
-    abstract int shutdown();
+    void shutdown();
+
+    /***
+     * Query if the process is marked for shutdown
+     *
+     * @return true if the thread is marked for shutdown
+     */
+    boolean isShutdown();
 
 }

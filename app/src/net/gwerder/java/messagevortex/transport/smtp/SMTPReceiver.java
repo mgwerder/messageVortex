@@ -33,7 +33,7 @@ import java.io.IOException;
 public class SMTPReceiver extends LineReceiver {
 
     public SMTPReceiver(int port, SSLContext context, boolean encrypted, TransportReceiver receiver ) throws IOException {
-        super(port,encrypted,new SMTPConnection(context,receiver));
+        super(port,new SMTPConnection(context,receiver,encrypted));
     }
 
 }

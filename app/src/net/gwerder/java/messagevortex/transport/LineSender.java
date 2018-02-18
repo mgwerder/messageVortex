@@ -49,14 +49,15 @@ public class LineSender {
     Socket s=null;
     BufferedReader inStream=null;
     BufferedWriter outStream=null;
-    String protocol=null;
+    String protocol="unknown";
+
+    boolean isTLS = false;
 
     public void connect(InetSocketAddress addr,SecurityRequirement req ) throws IOException {
         synchronized( lock ) {
             if(s!=null) {
                 s.close();
             }
-            protocol="SMTP";
             s = new Socket(addr.getHostString(), addr.getPort());
             if(req==SecurityRequirement.SSLTLS || req==SecurityRequirement.UNTRUSTED_SSLTLS) {
                 // open encrypted tcp connect
@@ -68,15 +69,21 @@ public class LineSender {
     }
 
     public void starttls() throws IOException {
-        synchronized (lock) {
-            s = ((SSLSocketFactory) SSLSocketFactory.getDefault()).createSocket(s,
-                    s.getInetAddress().getHostAddress(),
-                    s.getPort(),
-                    true);
-            inStream  = new BufferedReader(new InputStreamReader(s.getInputStream(), StandardCharsets.UTF_8));
-            outStream = new BufferedWriter(new OutputStreamWriter(s.getOutputStream(), StandardCharsets.UTF_8));
+        if(!isTLS()) {
+            synchronized (lock) {
+                s = ((SSLSocketFactory) SSLSocketFactory.getDefault()).createSocket(s,
+                        s.getInetAddress().getHostAddress(),
+                        s.getPort(),
+                        true);
+                inStream = new BufferedReader(new InputStreamReader(s.getInputStream(), StandardCharsets.UTF_8));
+                outStream = new BufferedWriter(new OutputStreamWriter(s.getOutputStream(), StandardCharsets.UTF_8));
+            }
+            protocol += "S";
         }
-        protocol="SMTPS";
+    }
+
+    public boolean isTLS() {
+        return isTLS;
     }
 
     public String read() throws IOException {
@@ -93,6 +100,10 @@ public class LineSender {
             LOGGER.log(Level.FINER,protocol+" C:"+txt);
             outStream.flush();
         }
+    }
+
+    public void writeln(String txt) throws IOException {
+        write(txt + CRLF );
     }
 
     public void close() throws IOException {

@@ -49,7 +49,7 @@ public class ImapCommandCapability extends ImapCommand {
     public String[] processCommand(ImapLine line) throws ImapException {
 
         // skip space
-        // WRNING this is "non-strict"
+        // WARNING this is "non-strict"
         line.skipSP(-1);
 
         // skip lineend
