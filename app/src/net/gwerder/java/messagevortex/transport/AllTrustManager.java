@@ -21,21 +21,35 @@ package net.gwerder.java.messagevortex.transport;
 // * SOFTWARE.
 // ************************************************************************************
 
-import javax.net.ssl.X509TrustManager;
+import javax.net.ssl.SSLEngine;
+import javax.net.ssl.X509ExtendedTrustManager;
+import java.net.Socket;
+import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
-public class AllTrustManager implements X509TrustManager {
+public class AllTrustManager extends X509ExtendedTrustManager {
 
+    @Override
+    public void checkClientTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
+    }
+    @Override
+    public void checkServerTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
+    }
+    @Override
     public X509Certificate[] getAcceptedIssuers() {
-        return new X509Certificate[0];
+        return null;
     }
-
-    public void checkClientTrusted(X509Certificate[] certs, String authType) {
-        // no certificate to be verified as we trust all certs
+    @Override
+    public void checkClientTrusted(X509Certificate[] x509Certificates, String s, Socket socket) throws CertificateException {
     }
-
-    public void checkServerTrusted( X509Certificate[] certs, String authType) {
-        // no certificate to be verified as we trust all certs
+    @Override
+    public void checkServerTrusted(X509Certificate[] x509Certificates, String s, Socket socket) throws CertificateException {
+    }
+    @Override
+    public void checkClientTrusted(X509Certificate[] x509Certificates, String s, SSLEngine sslEngine) throws CertificateException {
+    }
+    @Override
+    public void checkServerTrusted(X509Certificate[] x509Certificates, String s, SSLEngine sslEngine) throws CertificateException {
     }
 
 }

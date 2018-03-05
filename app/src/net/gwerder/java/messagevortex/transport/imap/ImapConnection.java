@@ -23,6 +23,7 @@ package net.gwerder.java.messagevortex.transport.imap;
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.transport.LineConnection;
+import net.gwerder.java.messagevortex.transport.SecurityRequirement;
 import net.gwerder.java.messagevortex.transport.StoppableThread;
 
 import javax.net.ssl.SSLContext;
@@ -57,13 +58,13 @@ public class ImapConnection extends LineConnection implements Comparable<ImapCon
     /***
      * Creates an imapConnection
      ***/
-    public ImapConnection(Socket sock,SSLContext context,Set<String> suppCiphers, boolean encrypted) throws IOException {
+    public ImapConnection(Socket sock,SSLContext context,Set<String> suppCiphers, SecurityRequirement encrypted) throws IOException {
         super( sock, context,suppCiphers, encrypted  );
     }
 
     @Override
     public LineConnection createConnection( Socket sock ) throws IOException {
-        return new ImapConnection( sock, getSSLContext(), getSupportedCiphers(), isTLS() );
+        return new ImapConnection( sock, getSSLContext(), getSupportedCiphers(), getSecurityRequirement() );
     }
 
     public static int setDefaultTimeout(int timeout) {
@@ -93,7 +94,9 @@ public class ImapConnection extends LineConnection implements Comparable<ImapCon
     }
 
     public void setId(String id) {
-        runner.setName(id);
+        if( runner != null ) {
+            runner.setName(id);
+        }
     }
 
     public int setImapState(int status) {

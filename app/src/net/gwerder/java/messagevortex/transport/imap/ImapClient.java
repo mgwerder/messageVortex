@@ -22,67 +22,45 @@ package net.gwerder.java.messagevortex.transport.imap;
 // ************************************************************************************
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
+import net.gwerder.java.messagevortex.transport.LineSender;
+import net.gwerder.java.messagevortex.transport.SecurityRequirement;
 
-import javax.net.SocketFactory;
-import javax.net.ssl.*;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.Socket;
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
-import java.nio.charset.Charset;
-import java.security.KeyStore;
+import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class ImapClient implements Runnable {
+public class ImapClient extends LineSender {
 
     private static final String REGEXP_IMAP_OK ="\\s+OK.*";
     private static final String REGEXP_IMAP_BAD="\\s+BAD.*";
 
     private static final Logger LOGGER;
 
-    private static int ccount=0;
-
     static {
         LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
         LOGGER.setLevel(Level.FINEST);
+
+        java.security.Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
     }
 
-    /* set default timeout of thread to 30s */
-    private static final int DEFAULT_TIMEOUT=30*1000;
 
-    private String targetHost="localhost";
-    private final Object sync=new Object();
-    private final Object notifyThread=new Object();
-    private int targetPort = 143;
-    private boolean encrypted;
-    private boolean shutdown=false;
-    private String currentCommand=null;
-    private String[] currentCommandReply=null;
-    private boolean currentCommandCompleted=false;
-    Socket socket=null;
-    private Thread runner=null;
-    private static long defaultTimeout=DEFAULT_TIMEOUT;
-    private long timeout=defaultTimeout;
-    private boolean terminated=false;
+    private final  Object   sync                    = new Object();
+    private final  Object   notifyThread            = new Object();
 
-    public ImapClient(String targetHost,int targetPort,boolean encrypted) {
-        this.targetHost=targetHost;
-        this.targetPort=targetPort;
-        this.encrypted=encrypted;
+    private        String   currentCommand          = null;
+    private        String[] currentCommandReply     = null;
+    private        boolean  currentCommandCompleted = false;
 
-        // set up the client runner
-        runner=new Thread(this,"ImapClient command processor");
-        ccount++;
-        runner.setName("Client-"+ccount);
-        runner.setDaemon(true);
-        runner.start();
+    public ImapClient( InetSocketAddress addr, SecurityRequirement req ) throws IOException {
+        connect( addr, req );
+        setProtocol("IMAP");
     }
 
+    /*
     private Socket startTLS(Socket sock) throws IOException,java.security.NoSuchAlgorithmException,java.security.KeyManagementException,java.security.KeyStoreException,java.security.cert.CertificateException {
         LOGGER.log(Level.INFO,"doing SSL handshake by client");
         java.security.Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
@@ -100,48 +78,17 @@ public class ImapClient implements Runnable {
         SSLSocket sslSocket = (SSLSocket)((SSLSocketFactory)(SSLSocketFactory.getDefault())).createSocket(sock,sock.getInetAddress().getHostAddress(),sock.getPort(), false);
         sslSocket.setUseClientMode(true);
         LOGGER.log(Level.INFO,"Starting client side SSL");
-        sslSocket.setSoTimeout(sock.getSoTimeout());
+        sslSocket.setSoTimeout( getTimeout() );
         sslSocket.startHandshake();
         LOGGER.log(Level.INFO,"CLientTLS Started");
         encrypted=true;
         LOGGER.log(Level.INFO,"SSL handshake by client done");
         return sslSocket;
     }
-
-    private void interruptedCatcher(InterruptedException ie) {
-        assert false:"This Point should never be reached ("+ie.toString()+")";
-        Thread.currentThread().interrupt();
-    }
-
-    public long setTimeout(long timeout) {
-        long ot=this.timeout;
-        this.timeout=timeout;
-        if( this.socket != null ) {
-            try {
-                socket.setSoTimeout((int) (this.timeout));
-            } catch(SocketException so) {
-                LOGGER.log(Level.INFO,"Erroro while setting timeout",so);
-            }
-        }
-        return ot;
-    }
-
-    public long getTimeout() {
-        return this.timeout;
-    }
-
-    public static long setDefaultTimeout(long timeout) {
-        long ot=defaultTimeout;
-        defaultTimeout=timeout;
-        return ot;
-    }
-
-    public static long getDefaultTimeout() {
-        return defaultTimeout;
-    }
+*/
 
     public String[] sendCommand(String command) throws TimeoutException {
-        return sendCommand(command,timeout);
+        return sendCommand( command, getTimeout() );
     }
 
     public String[] sendCommand(String command,long millisTimeout) throws TimeoutException {
@@ -153,17 +100,18 @@ public class ImapClient implements Runnable {
             synchronized(notifyThread) {
                 notifyThread.notifyAll();
             }
-            while(!currentCommandCompleted && System.currentTimeMillis()<start+millisTimeout) {
-                try{
-                    sync.wait(100);
-                } catch(InterruptedException e) {
+            while( !currentCommandCompleted && System.currentTimeMillis() < start + millisTimeout ) {
+                try {
+                    processRunnerCommand();
+                    // sync.wait(10);
+                } catch(IOException e) {
                     LOGGER.log(Level.SEVERE,"this point should never be reached",e);
                     Thread.currentThread().interrupt();
                 }
             }
-            LOGGER.log(Level.FINEST,"wakeup succeeded");
-            if(!currentCommandCompleted && System.currentTimeMillis()>=start+millisTimeout) {
-                throw new TimeoutException("Timeout reached while sending \""+ImapLine.commandEncoder(command)+"\"");
+            LOGGER.log( Level.FINEST, "wakeup succeeded" );
+            if( ! currentCommandCompleted && System.currentTimeMillis() > start + millisTimeout ) {
+                throw new TimeoutException( "Timeout reached while sending \"" + ImapLine.commandEncoder( command ) + "\"" );
             }
         }
         currentCommand=null;
@@ -175,10 +123,7 @@ public class ImapClient implements Runnable {
         return currentCommandReply;
     }
 
-    public boolean isTLS() {
-        return encrypted;
-    }
-
+    /*
     private void terminateSocket() {
         try{
             synchronized(notifyThread) {
@@ -207,7 +152,12 @@ public class ImapClient implements Runnable {
     }
 
     public boolean isTerminated() {
-        return terminated;
+        return runner.getState() == Thread.State.TERMINATED;
+    }
+*/
+    private void interruptedCatcher(InterruptedException ie) {
+        assert false:"This Point should never be reached ("+ie.toString()+")";
+        Thread.currentThread().interrupt();
     }
 
     private void waitForWakeupRunner() {
@@ -221,85 +171,71 @@ public class ImapClient implements Runnable {
     }
 
     private void processRunnerCommand() throws IOException  {
-        LOGGER.log(Level.FINEST,"IMAP-> C: "+ImapLine.commandEncoder(currentCommand));
-        socket.getOutputStream().write((currentCommand+"\r\n").getBytes(Charset.defaultCharset()));
-        socket.getOutputStream().flush();
+        LOGGER.log( Level.INFO, "IMAP C->S: " + ImapLine.commandEncoder( currentCommand ) );
+        writeln( currentCommand );
 
-        String tag=null;
-        ImapLine il=null;
+        String tag = null;
+        ImapLine il = null;
         try{
-            il=new ImapLine(null,currentCommand);
-            tag=il.getTag();
-        } catch(ImapException ie) {
+            il = new ImapLine(null,currentCommand);
+            tag = il.getTag();
+        } catch( ImapException ie ) {
             // intentionally ignored
-            LOGGER.log(Level.INFO,"ImapParsing of \""+ImapLine.commandEncoder(currentCommand)+"\" (may be safelly ignored)",ie);
+            LOGGER.log( Level.INFO, "ImapParsing of \"" + ImapLine.commandEncoder( currentCommand ) + "\" (may be safelly ignored)", ie );
         }
-        String reply="";
-        String lastReply="";
-        List<String> l=new ArrayList<>();
-        int i=0;
-        do{
-            i=socket.getInputStream().read();
-            if(i>=0) {
-                reply+=(char)i;
-            }
-            if(reply.endsWith("\r\n")) {
-                l.add(reply);
-                LOGGER.log(Level.FINEST,"IMAP<- C: "+ImapLine.commandEncoder(reply));
-                currentCommandReply=l.toArray(new String[0]);
-                lastReply=reply.substring(0,reply.length()-2);
-                reply="";
-            }
-        } while(!lastReply.matches(tag+REGEXP_IMAP_BAD+"|"+tag+REGEXP_IMAP_OK ) && i>=0);
-        currentCommandCompleted=lastReply.matches(tag+REGEXP_IMAP_OK+"|"+tag+REGEXP_IMAP_BAD );
-        currentCommand=null;
-        if(il!=null && "logout".equalsIgnoreCase(il.getCommand()) && lastReply.matches(tag+REGEXP_IMAP_OK )) {
+        String lastReply = "";
+        List<String> l = new ArrayList<>();
+        LOGGER.log( Level.INFO, "waiting for incoming reply of command " + tag );
+        while( ( !lastReply.matches( tag + REGEXP_IMAP_BAD + "|" + tag + REGEXP_IMAP_OK ) ) ) {
+            String reply = read();
+            LOGGER.log( Level.INFO, "wakeup (remaining: " + System.currentTimeMillis() );
+            lastReply = reply.substring( 0, reply.length() - 2 );
+            l.add( lastReply );
+            LOGGER.log( Level.INFO, "IMAP C<-S: " + ImapLine.commandEncoder( lastReply ) );
+            currentCommandReply=l.toArray( new String[ l.size() ] );
+        }
+        currentCommandCompleted = lastReply.matches( tag + REGEXP_IMAP_OK + "|" + tag + REGEXP_IMAP_BAD );
+        currentCommand = null;
+        if( il != null && "logout".equalsIgnoreCase( il.getCommand() ) && lastReply.matches( tag + REGEXP_IMAP_OK ) ) {
             // Terminate connection on successful logout
-            shutdown=true;
+            shutdown();
         }
-        synchronized(sync) {
+        synchronized( sync ) {
             sync.notifyAll();
         }
 
-        LOGGER.log(Level.FINEST,"command has been completely processed");
+        LOGGER.log( Level.FINEST, "command has been completely processed" );
     }
 
     private void runStep() throws IOException {
         try{
+            LOGGER.log( Level.INFO, "Waiting for command to process" );
             waitForWakeupRunner();
             if(currentCommand!=null && !"".equals(currentCommand)) {
+                LOGGER.log( Level.INFO, "Processing command" );
                 processRunnerCommand();
             }
         } catch(java.net.SocketException se) {
             LOGGER.log(Level.WARNING,"Connection closed by server",se);
-            shutdown=true;
-            terminated=true;
+            shutdown();
         }
-        LOGGER.log(Level.FINEST,"Client looping (shutdown="+shutdown+"/socket.closed()="+(socket==null?"null":socket.isClosed())+")");
+        LOGGER.log(Level.FINEST,"Client looping (shutdown=" + isShutdown() + ")");
     }
 
     public void run() {
 
         try {
-            // initialize socket
-            socket = SocketFactory.getDefault().createSocket(targetHost,targetPort);
-            setTimeout( getDefaultTimeout() );
-            if(encrypted) {
-                socket=startTLS(socket);
-            }
-
-            // running socket
-            while(!shutdown && !socket.isClosed() && !socket.isInputShutdown() && !socket.isOutputShutdown()) {
+            while(!isShutdown() && !isClosed() ) {
                 runStep();
             }
         } catch (Exception e) {
-            LOGGER.log(Level.SEVERE,"Uncaught exception in ImapClient",e);
-            terminated=true;
+            LOGGER.log(Level.WARNING,"Uncaught exception in ImapClient",e);
+            shutdown();
         } finally {
             try{
-                socket.close();
+                shutdown();
             } catch(Exception e2) {
-                LOGGER.log(Level.INFO,"socket close did fail when shutting down (may be safelly ignored)",e2);
+                LOGGER.log(Level.INFO,"socket close did fail when shutting down (may be safely ignored)",e2);
             }
         }
     }

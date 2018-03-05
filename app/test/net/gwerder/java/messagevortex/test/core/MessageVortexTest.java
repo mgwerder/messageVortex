@@ -58,6 +58,7 @@ public class MessageVortexTest {
     public void testJREReadiness() {
         try {
             int i=Cipher.getMaxAllowedKeyLength("AES");
+            LOGGER.log( Level.INFO , "Max keylength for AES is "+ i ) ;
             assertTrue("Looks like JRE is not having a unlimited JCE installed (AES max allowed key length is = "+i+")",i > 128);
         } catch (NoSuchAlgorithmException nsa) {
             fail("should not throw exception in test ("+nsa.getMessage()+")");

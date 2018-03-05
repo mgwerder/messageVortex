@@ -26,22 +26,29 @@ import net.gwerder.java.messagevortex.MessageVortexLogger;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 /**
- * Created by Martin on 23.01.2018.
+ * Open clients connections.
  */
 public abstract class LineConnection extends Thread implements StoppableThread {
 
-    public static String CRLF= "\r\n";
+    static {
+        java.security.Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+    }
+
+    public static final String CRLF= "\r\n";
 
     static final java.util.logging.Logger LOGGER;
     static {
@@ -54,25 +61,26 @@ public abstract class LineConnection extends Thread implements StoppableThread {
     private String protocol = "unknown";
 
     boolean shutdown=false;
-    long timeout = 90L*1000;
+    private int timeout = 90*1000;
     private Socket s=null;
-    private Reader r=null;
     private SSLContext context;
     private ServerAuthenticator auth=null;
     private TransportReceiver receiver=null;
     private Byte buffer = null;
+    private SecurityRequirement encrypted;
 
     private Set<String> supportedCiphers = new HashSet<>();
 
     private boolean isTLS=false;
 
-    public LineConnection( Socket s, SSLContext context, Set<String> supportedCiphers, boolean encrypted ) throws IOException  {
+    public LineConnection( Socket s, SSLContext context, Set<String> supportedCiphers, SecurityRequirement encrypted ) throws IOException  {
+        this.encrypted=encrypted;
         setSocket( s );
         this.context = context;
         if( supportedCiphers != null ) {
             this.supportedCiphers.addAll( supportedCiphers );
         }
-        if( encrypted ) {
+        if( encrypted == SecurityRequirement.SSLTLS || encrypted == SecurityRequirement.UNTRUSTED_SSLTLS ) {
             if( s != null ) {
                 startTLS();
             } else {
@@ -84,15 +92,19 @@ public abstract class LineConnection extends Thread implements StoppableThread {
         }
     }
 
-    public LineConnection(SSLContext context,TransportReceiver receiver, boolean encrypted) throws IOException {
+    public LineConnection(SSLContext context,TransportReceiver receiver, SecurityRequirement encrypted) throws IOException {
         this.context = context;
         this.receiver=receiver;
         setSocket(null);
-        isTLS = encrypted;
+        isTLS = encrypted == SecurityRequirement.SSLTLS || encrypted == SecurityRequirement.UNTRUSTED_SSLTLS;
     }
 
     public LineConnection createConnection(Socket s) throws IOException {
         throw new UnsupportedOperationException("createConnection must be overloaded");
+    }
+
+    public SecurityRequirement getSecurityRequirement() {
+        return encrypted;
     }
 
     public TransportReceiver getReceiver() {
@@ -118,8 +130,7 @@ public abstract class LineConnection extends Thread implements StoppableThread {
     public  final void setSocket(Socket s) throws IOException {
         this.s=s;
         if( this.s != null ) {
-            s.setSoTimeout(100);
-            r = new InputStreamReader( s.getInputStream() );
+            this.s.setSoTimeout( (int)getTimeout() );
         }
     }
 
@@ -139,7 +150,7 @@ public abstract class LineConnection extends Thread implements StoppableThread {
     }
 
     public boolean isShutdown() {
-        return shutdown && getState() != State.TERMINATED;
+        return getState() != State.TERMINATED;
     }
 
     public ServerAuthenticator setAuthenticator(ServerAuthenticator auth) {
@@ -148,12 +159,12 @@ public abstract class LineConnection extends Thread implements StoppableThread {
         return ret;
     }
 
-    public long getTimeout() {
+    public int getTimeout() {
         return timeout;
     }
 
-    public long setTimeout( long timeout ) {
-        long ret=this.timeout;
+    public int setTimeout( int timeout ) {
+        int ret=this.timeout;
         this.timeout=timeout;
         return ret;
     }
@@ -161,14 +172,16 @@ public abstract class LineConnection extends Thread implements StoppableThread {
     public void startTLS() throws IOException {
         synchronized (lock) {
             if( s != null ) {
+                LOGGER.log(Level.INFO, "Starting server TLS");
                 setSocket( ((SSLSocketFactory) SSLSocketFactory.getDefault()).createSocket(s,
                         s.getInetAddress().getHostAddress(),
                         s.getPort(),
                         true) );
-                s.setSoTimeout(100);
-                ((SSLSocket) (s)).setUseClientMode(false);
-                ((SSLSocket) (s)).startHandshake();
+                s.setSoTimeout( (int)getTimeout() );
+                ((SSLSocket)(s)).setUseClientMode(false);
+                ((SSLSocket)(s)).startHandshake();
                 isTLS = true;
+                LOGGER.log(Level.INFO, "Server TLS completed successfully");
             } else {
                 LOGGER.log( Level.WARNING, "Skipped starttls", new Object[] { this} );
             }
@@ -220,10 +233,10 @@ public abstract class LineConnection extends Thread implements StoppableThread {
             if( ! addCRLF ) {
                 // strip off crlf
                 if( txt.endsWith( "\n") ) {
-                    txt.substring( 0, txt.length()-2 );
+                    txt = txt.substring( 0, txt.length()-2 );
                 }
                 if( txt.endsWith( "\r") ) {
-                    txt.substring( 0, txt.length()-2 );
+                    txt = txt.substring( 0, txt.length()-2 );
                 }
             }
             LOGGER.log(Level.INFO,"C:"+txt);
@@ -238,7 +251,7 @@ public abstract class LineConnection extends Thread implements StoppableThread {
                 gotLine(line);
             }
         } catch(IOException ioe) {
-            LOGGER.log( Level.WARNING, "Got IOException while communicating",ioe );
+            LOGGER.log( Level.WARNING, "Got Exception while communicating",ioe );
         }
         shutdown();
     }
@@ -252,7 +265,7 @@ public abstract class LineConnection extends Thread implements StoppableThread {
     public void write(String txt) throws IOException  {
         synchronized( lock ) {
             OutputStream os = s.getOutputStream();
-            os.write( txt.getBytes( StandardCharsets.UTF_8 ) );
+            os.write( txt.getBytes( UTF_8 ) );
             LOGGER.log(Level.INFO,"S:"+txt);
             os.flush();
         }
@@ -262,7 +275,7 @@ public abstract class LineConnection extends Thread implements StoppableThread {
         synchronized( lock ) {
             OutputStream os = s.getOutputStream();
             for(String l : txt) {
-                os.write( l.getBytes( StandardCharsets.UTF_8 ) );
+                os.write( l.getBytes( UTF_8 ) );
                 LOGGER.log(Level.INFO, "S:" + l);
             }
             os.flush();

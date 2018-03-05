@@ -24,6 +24,7 @@ package net.gwerder.java.messagevortex.transport.smtp;
 import net.gwerder.java.messagevortex.Config;
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.transport.LineConnection;
+import net.gwerder.java.messagevortex.transport.SecurityRequirement;
 import net.gwerder.java.messagevortex.transport.TransportReceiver;
 import org.bouncycastle.util.encoders.Base64;
 
@@ -48,12 +49,12 @@ public class SMTPConnection extends LineConnection {
     }
 
     public LineConnection createConnection(Socket s) throws IOException {
-        LineConnection ret=new SMTPConnection( getSSLContext(), getReceiver(), isTLS() );
+        LineConnection ret=new SMTPConnection( getSSLContext(), getReceiver(), getSecurityRequirement() );
         ret.setSocket(s);
         return ret;
     }
 
-    public SMTPConnection( SSLContext context, TransportReceiver receiver, boolean encrypted  ) throws IOException {
+    public SMTPConnection( SSLContext context, TransportReceiver receiver, SecurityRequirement encrypted  ) throws IOException {
         super( context, receiver, encrypted );
     }
 

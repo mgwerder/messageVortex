@@ -30,4 +30,16 @@ public enum SecurityRequirement {
     STARTTLS,
     UNTRUSTED_SSLTLS,
     SSLTLS;
+
+    public static SecurityRequirement getByName(String s) {
+        if( s == null ) {
+            return null;
+        }
+        for(SecurityRequirement e : values()) {
+            if(e.toString().toLowerCase().equals(s.toLowerCase())) {
+                return e;
+            }
+        }
+        return null;
+    }
 }

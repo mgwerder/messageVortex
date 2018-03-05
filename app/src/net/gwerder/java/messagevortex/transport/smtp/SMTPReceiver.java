@@ -22,6 +22,7 @@ package net.gwerder.java.messagevortex.transport.smtp;
 // ************************************************************************************
 
 import net.gwerder.java.messagevortex.transport.LineReceiver;
+import net.gwerder.java.messagevortex.transport.SecurityRequirement;
 import net.gwerder.java.messagevortex.transport.TransportReceiver;
 
 import javax.net.ssl.SSLContext;
@@ -32,7 +33,7 @@ import java.io.IOException;
  */
 public class SMTPReceiver extends LineReceiver {
 
-    public SMTPReceiver(int port, SSLContext context, boolean encrypted, TransportReceiver receiver ) throws IOException {
+    public SMTPReceiver(int port, SSLContext context, SecurityRequirement encrypted, TransportReceiver receiver ) throws IOException {
         super(port,new SMTPConnection(context,receiver,encrypted));
     }
 

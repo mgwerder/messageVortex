@@ -27,6 +27,7 @@ import javax.net.ssl.SSLSocketFactory;
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
 
@@ -45,15 +46,21 @@ public class LineSender {
         MessageVortexLogger.setGlobalLogLevel( Level.ALL);
     }
 
-    Object lock=new Object();
-    Socket s=null;
+    private final Object lock=new Object();
+    private Socket s=null;
     BufferedReader inStream=null;
     BufferedWriter outStream=null;
     String protocol="unknown";
 
+    /* set default timeout of thread to 30s */
+    private static final int     DEFAULT_TIMEOUT = 30*1000;
+    private static       int     defaultTimeout  = DEFAULT_TIMEOUT;
+    private              int     timeout         = defaultTimeout;
+    private              boolean shutdown        = false;
+
     boolean isTLS = false;
 
-    public void connect(InetSocketAddress addr,SecurityRequirement req ) throws IOException {
+    public void connect( InetSocketAddress addr, SecurityRequirement req ) throws IOException {
         synchronized( lock ) {
             if(s!=null) {
                 s.close();
@@ -86,6 +93,43 @@ public class LineSender {
         return isTLS;
     }
 
+    public int setTimeout( int timeout ) {
+        int ot=this.timeout;
+        this.timeout=timeout;
+        if( this.s != null ) {
+            try {
+                s.setSoTimeout( timeout );
+            } catch(SocketException so) {
+                LOGGER.log(Level.INFO,"Erroro while setting timeout",so);
+            }
+        }
+        return ot;
+    }
+
+    public String getProtocol() {
+        return this.protocol;
+    }
+
+    public String setProtocol( String protocol ) {
+        String ot=this.protocol;
+        this.protocol=protocol;
+        return ot;
+    }
+
+    public int getTimeout() {
+        return this.timeout;
+    }
+
+    public static int setDefaultTimeout( int timeout ) {
+        int ot = defaultTimeout;
+        defaultTimeout = timeout;
+        return ot;
+    }
+
+    public static int getDefaultTimeout() {
+        return defaultTimeout;
+    }
+
     public String read() throws IOException {
         synchronized( lock ) {
             String txt=inStream.readLine();
@@ -104,6 +148,18 @@ public class LineSender {
 
     public void writeln(String txt) throws IOException {
         write(txt + CRLF );
+    }
+
+    public void shutdown() {
+        shutdown=true;
+    }
+
+    public boolean isShutdown() {
+        return shutdown;
+    }
+
+    public boolean isClosed() {
+        return s.isInputShutdown() && s.isOutputShutdown() || s.isClosed();
     }
 
     public void close() throws IOException {

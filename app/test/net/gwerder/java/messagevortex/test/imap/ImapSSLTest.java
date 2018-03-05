@@ -4,6 +4,7 @@ import net.gwerder.java.messagevortex.ExtendedSecureRandom;
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.transport.AllTrustManager;
 import net.gwerder.java.messagevortex.transport.CustomKeyManager;
+import net.gwerder.java.messagevortex.transport.SecurityRequirement;
 import net.gwerder.java.messagevortex.transport.SocketDeblocker;
 import net.gwerder.java.messagevortex.transport.imap.*;
 import org.junit.Test;
@@ -14,6 +15,7 @@ import javax.net.ssl.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.Charset;
@@ -107,7 +109,7 @@ public class ImapSSLTest {
                 }
             }).start();
 
-            ImapClient ic =new ImapClient("localhost",ss.getLocalPort(),true);
+            ImapClient ic =new ImapClient(new InetSocketAddress( "localhost", ss.getLocalPort() ), SecurityRequirement.UNTRUSTED_SSLTLS );
             ic.setTimeout(2000);
             ic.sendCommand("a1 test");
             assertTrue("check client socket state",ic.isTLS());
@@ -157,7 +159,7 @@ public class ImapSSLTest {
             LOGGER.log(Level.INFO,"************************************************************************");
             LOGGER.log(Level.INFO,"setting up server");
             Set<Thread> threadSet = getThreadList();
-            ImapServer is=new ImapServer(0,true);
+            ImapServer is=new ImapServer(0,SecurityRequirement.UNTRUSTED_SSLTLS);
             is.setTimeout(1000);
             LOGGER.log(Level.INFO,"setting up pseudo client");
             final Socket s=SSLSocketFactory.getDefault().createSocket(InetAddress.getByName("localhost"),is.getPort());
@@ -192,10 +194,10 @@ public class ImapSSLTest {
             LOGGER.log(Level.INFO,"Testing initial SSL handshake for both components");
             LOGGER.log(Level.INFO,"************************************************************************");
             Set<Thread> threadSet = getThreadList();
-            ImapServer is=new ImapServer(0,true);
-            is.setTimeout(1000);
-            ImapClient ic=new ImapClient("localhost",is.getPort(),true);
-            ic.setTimeout(1000);
+            ImapServer is=new ImapServer(0,SecurityRequirement.UNTRUSTED_SSLTLS);
+            is.setTimeout(5000);
+            ImapClient ic=new ImapClient( new InetSocketAddress( "localhost", is.getPort() ), SecurityRequirement.UNTRUSTED_SSLTLS );
+            ic.setTimeout(5000);
             ImapClient.setDefaultTimeout(300);
             String[] s=ic.sendCommand("a1 capability\r\n");
             for(String v:s) {

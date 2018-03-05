@@ -21,6 +21,7 @@ package net.gwerder.java.messagevortex;
 // * SOFTWARE.
 // ************************************************************************************
 
+import net.gwerder.java.messagevortex.transport.SecurityRequirement;
 import net.gwerder.java.messagevortex.transport.smtp.SMTPReceiver;
 import net.gwerder.java.messagevortex.transport.TransportReceiver;
 
@@ -42,7 +43,7 @@ public class MessageVortexTransport {
         assert cfg!=null;
 
         // setup receiver for mail relay
-        inSMTP = new SMTPReceiver( cfg.getNumericValue("smtp_incomming_port"), null, cfg.getBooleanValue("smtp_incomming_ssl"), receiver );
+        inSMTP = new SMTPReceiver( cfg.getNumericValue("smtp_incomming_port"), null, SecurityRequirement.getByName( cfg.getStringValue("smtp_incomming_ssl") ), receiver );
 
         // setup receiver for IMAP requests
         // FIXME

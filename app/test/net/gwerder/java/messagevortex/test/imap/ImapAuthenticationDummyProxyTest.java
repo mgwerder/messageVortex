@@ -1,5 +1,6 @@
 package net.gwerder.java.messagevortex.test.imap;
 
+import net.gwerder.java.messagevortex.transport.SecurityRequirement;
 import net.gwerder.java.messagevortex.transport.imap.ImapAuthenticationDummyProxy;
 import net.gwerder.java.messagevortex.transport.imap.ImapConnection;
 import org.junit.Test;
@@ -57,7 +58,7 @@ public class ImapAuthenticationDummyProxyTest {
 
     private static class ImapConnectionDummy extends ImapConnection {
         public ImapConnectionDummy() throws IOException {
-            super( null,null,null, false );
+            super( null,null,null, SecurityRequirement.PLAIN );
             // This is a dummy constructor for test cases do not use it for anything else
         }
     }

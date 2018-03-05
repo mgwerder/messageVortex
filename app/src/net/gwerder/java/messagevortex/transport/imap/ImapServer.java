@@ -25,16 +25,13 @@ import net.gwerder.java.messagevortex.ExtendedSecureRandom;
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.transport.*;
 
-import javax.net.ServerSocketFactory;
-import javax.net.SocketFactory;
-import javax.net.ssl.*;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509KeyManager;
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.security.GeneralSecurityException;
-import java.util.*;
+import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
@@ -52,12 +49,12 @@ public class ImapServer extends LineReceiver implements StoppableThread {
     private Thread runner=null;
     private ImapAuthenticationProxy auth=null;
 
-    public ImapServer(boolean encrypted) throws IOException {
-        this(encrypted?993:143,encrypted);
+    public ImapServer(SecurityRequirement encrypted) throws IOException {
+        this((encrypted == SecurityRequirement.UNTRUSTED_SSLTLS || encrypted == SecurityRequirement.SSLTLS)?993:143,encrypted);
     }
 
-    public ImapServer(final int port,boolean encrypted) throws IOException {
-        super(port,new ImapConnection( null,null,null, encrypted) );
+    public ImapServer(final int port,SecurityRequirement enc) throws IOException {
+        super(port,new ImapConnection( null,null,null, enc) );
         java.security.Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
         try{
           setSSLContext( SSLContext.getInstance("TLS") );

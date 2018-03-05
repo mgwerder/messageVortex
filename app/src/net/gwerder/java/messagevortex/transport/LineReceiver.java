@@ -27,10 +27,9 @@ import net.gwerder.java.messagevortex.MessageVortexLogger;
 import javax.net.ServerSocketFactory;
 import javax.net.SocketFactory;
 import javax.net.ssl.*;
-import java.io.*;
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.util.*;
 import java.util.logging.Level;
@@ -39,7 +38,7 @@ import java.util.logging.Logger;
 /**
  * Created by Martin on 23.01.2018.
  */
-public abstract class LineReceiver  implements Runnable, StoppableThread {
+public class LineReceiver  implements Runnable, StoppableThread {
 
     static final String CRLF = "\r\n";
 

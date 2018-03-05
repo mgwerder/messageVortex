@@ -1,6 +1,7 @@
 package net.gwerder.java.messagevortex.test.imap;
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
+import net.gwerder.java.messagevortex.transport.SecurityRequirement;
 import net.gwerder.java.messagevortex.transport.imap.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,6 +10,7 @@ import org.junit.runners.JUnit4;
 import javax.net.SocketFactory;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.util.Set;
 import java.util.concurrent.TimeoutException;
@@ -114,9 +116,9 @@ public class ImapClientTest {
             LOGGER.log(Level.INFO,"IMAP Client Encrypted Test");
             LOGGER.log(Level.INFO,"************************************************************************");
             Set<Thread> threadSet = ImapSSLTest.getThreadList();
-            ImapServer is =new ImapServer(0,true);
+            ImapServer is =new ImapServer(0,SecurityRequirement.UNTRUSTED_SSLTLS);
             ImapConnection.setDefaultTimeout(1000);
-            ImapClient ic =new ImapClient("localhost",is.getPort(),true);
+            ImapClient ic =new ImapClient( new InetSocketAddress( "localhost", is.getPort() ), SecurityRequirement.UNTRUSTED_SSLTLS );
             ic.setTimeout(1000);
             assertTrue("TLS is not as expected",ic.isTLS());
             is.shutdown();
@@ -128,13 +130,13 @@ public class ImapClientTest {
     }
 
     @Test
-    public void ImapClientTimeoutTest() {
+    public void ImapClientTimeoutTest() throws IOException {
         LOGGER.log(Level.INFO,"************************************************************************");
         LOGGER.log(Level.INFO,"IMAP Client Timeout Test");
         LOGGER.log(Level.INFO,"************************************************************************");
         Set<Thread> threadSet = ImapSSLTest.getThreadList();
         DeadSocket ds=new DeadSocket(0,-1);
-        ImapClient ic =new ImapClient("localhost",ds.getPort(),false);
+        ImapClient ic =new ImapClient( new InetSocketAddress( "localhost",ds.getPort() ), SecurityRequirement.PLAIN );
         assertTrue("TLS is not as expected",!ic.isTLS());
         long start=System.currentTimeMillis();
         (new ImapCommandIWantATimeout()).init();
