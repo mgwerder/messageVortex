@@ -3,7 +3,6 @@ package net.gwerder.java.messagevortex.transport;
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 
-import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -17,26 +16,31 @@ import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class ListenerConnection extends AbstractConnection {
+public class SendingSocket extends AbstractConnection {
 
     private static final Logger LOGGER;
     static {
         LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
     }
     private Selector          selector;
-    protected ByteBuffer      myAppData;
-    protected ByteBuffer      remoteData;
 
-
-    public ListenerConnection( InetSocketAddress localAddress, SSLContext context ) throws Exception {
+    public SendingSocket( InetSocketAddress localAddress, SecurityContext context ) throws IOException {
         super( localAddress );
 
-        SSLSession dummySession = context.createSSLEngine().getSession();
-        myAppData = ByteBuffer.allocate(dummySession.getApplicationBufferSize());
-        outboundEncryptedData = ByteBuffer.allocate(dummySession.getPacketBufferSize());
-        remoteData = ByteBuffer.allocate(dummySession.getApplicationBufferSize());
-        inboundEncryptedData = ByteBuffer.allocate(dummySession.getPacketBufferSize());
-        dummySession.invalidate();
+        if( context!=null && context.getContext()!=null ) {
+            setSSLEngine(context.getContext().createSSLEngine());
+            SSLSession dummySession = getEngine().getSession();
+            outboundAppData = ByteBuffer.allocate(dummySession.getApplicationBufferSize());
+            outboundEncryptedData = ByteBuffer.allocate(dummySession.getPacketBufferSize());
+            inboundAppData = ByteBuffer.allocate(dummySession.getApplicationBufferSize());
+            inboundEncryptedData = ByteBuffer.allocate(dummySession.getPacketBufferSize());
+            dummySession.invalidate();
+        } else {
+            outboundAppData = ByteBuffer.allocate( 2048 );
+            outboundEncryptedData = ByteBuffer.allocate( 2048 );
+            inboundAppData = ByteBuffer.allocate( 2048 );
+            inboundEncryptedData = ByteBuffer.allocate( 2048 );
+        }
 
         selector = SelectorProvider.provider().openSelector();
         ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();

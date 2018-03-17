@@ -1,12 +1,14 @@
 package net.gwerder.java.messagevortex.test.imap;
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
+import net.gwerder.java.messagevortex.transport.SecurityContext;
 import net.gwerder.java.messagevortex.transport.SecurityRequirement;
 import net.gwerder.java.messagevortex.transport.imap.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.Set;
 import java.util.concurrent.TimeoutException;
@@ -59,8 +61,8 @@ public class ImapCommandTest {
             LOGGER.log(Level.INFO,"Check set client timeout");
             LOGGER.log(Level.INFO,"************************************************************************");
             Set<Thread> threadSet = ImapSSLTest.getThreadList();
-            ImapServer is=new ImapServer(0,SecurityRequirement.UNTRUSTED_SSLTLS);
-            ImapClient ic=new ImapClient( new InetSocketAddress( "localhost", is.getPort() ), SecurityRequirement.PLAIN );
+            ImapServer is=new ImapServer(0,new SecurityContext(SecurityRequirement.UNTRUSTED_SSLTLS));
+            ImapClient ic=new ImapClient( new InetSocketAddress( "localhost", is.getPort() ), new SecurityContext(SecurityRequirement.PLAIN) );
             assertTrue("test default Timeout", ImapClient.getDefaultTimeout() == ImapClient.setDefaultTimeout(123) );
             assertTrue("test default Timeout", ImapClient.getDefaultTimeout() == 123 );
             ImapClient.setDefaultTimeout( 3600*1000 );
@@ -77,7 +79,7 @@ public class ImapCommandTest {
     }
 
     @Test
-    public void checkServerTimeout() {
+    public void checkServerTimeout() throws IOException {
         ImapServer is=null;
         ImapClient ic=null;
         Set<Thread> threadSet = ImapSSLTest.getThreadList();
@@ -86,8 +88,8 @@ public class ImapCommandTest {
             LOGGER.log(Level.INFO,"Check server default timeout");
             LOGGER.log(Level.INFO,"************************************************************************");
             ImapConnection.setDefaultTimeout(300);
-            is=new ImapServer(0,SecurityRequirement.UNTRUSTED_SSLTLS);
-            ic=new ImapClient( new InetSocketAddress( "localhost", is.getPort() ), SecurityRequirement.PLAIN );
+            is=new ImapServer(0,new SecurityContext(SecurityRequirement.UNTRUSTED_SSLTLS));
+            ic=new ImapClient( new InetSocketAddress( "localhost", is.getPort() ), new SecurityContext(SecurityRequirement.PLAIN) );
             ic.sendCommand( "a0 IWantATimeout", 300 );
             ic.setTimeout( 3600*1000 );
             Thread.sleep( 1000 );
@@ -110,7 +112,7 @@ public class ImapCommandTest {
     }
 
     @Test
-    public void checkClientTimeout() {
+    public void checkClientTimeout() throws IOException {
         Set<Thread> threadSet = ImapSSLTest.getThreadList();
         ImapServer is=null;
         ImapClient ic=null;
@@ -118,8 +120,8 @@ public class ImapCommandTest {
             LOGGER.log(Level.INFO,"************************************************************************");
             LOGGER.log(Level.INFO,"Check client timeout");
             LOGGER.log(Level.INFO,"************************************************************************");
-            is=new ImapServer(0,SecurityRequirement.UNTRUSTED_SSLTLS);
-            ic=new ImapClient( new InetSocketAddress( "localhost", is.getPort() ), SecurityRequirement.PLAIN );
+            is=new ImapServer(0,new SecurityContext(SecurityRequirement.UNTRUSTED_SSLTLS));
+            ic=new ImapClient( new InetSocketAddress( "localhost", is.getPort() ), new SecurityContext(SecurityRequirement.PLAIN) );
             ic.sendCommand( "a0 IWantATimeout", 300 );
             ic.setTimeout( 300 );
             Thread.sleep(300);
@@ -139,7 +141,7 @@ public class ImapCommandTest {
     }
 
     @Test
-    public void checkClientDefaultTimeout() {
+    public void checkClientDefaultTimeout() throws IOException {
         Set<Thread> threadSet = ImapSSLTest.getThreadList();
         ImapClient ic=null;
         ImapServer is=null;
@@ -148,8 +150,8 @@ public class ImapCommandTest {
             LOGGER.log(Level.INFO,"Check client default timeout");
             LOGGER.log(Level.INFO,"************************************************************************");
             ImapClient.setDefaultTimeout(300);
-            is=new ImapServer(0,SecurityRequirement.UNTRUSTED_SSLTLS);
-            ic=new ImapClient( new InetSocketAddress( "localhost", is.getPort() ), SecurityRequirement.PLAIN );
+            is=new ImapServer(0,new SecurityContext(SecurityRequirement.UNTRUSTED_SSLTLS));
+            ic=new ImapClient( new InetSocketAddress( "localhost", is.getPort() ), new SecurityContext(SecurityRequirement.PLAIN) );
             Thread.sleep(300);
             ic.sendCommand("a0 IWantATimeout",300);
             Thread.sleep(1000);
@@ -171,11 +173,11 @@ public class ImapCommandTest {
     public void checkFullLogout() {
         Set<Thread> threadSet = ImapSSLTest.getThreadList();
         try{
-            ImapServer s=new ImapServer( 0, SecurityRequirement.SSLTLS );
+            ImapServer s=new ImapServer( 0, new SecurityContext(SecurityRequirement.SSLTLS) );
             LOGGER.log(Level.INFO,"************************************************************************");
-            LOGGER.log(Level.INFO,"Check full Login Logout ("+s.getName()+")");
+            LOGGER.log(Level.INFO,"Check full Login Logout");
             LOGGER.log(Level.INFO,"************************************************************************");
-            ImapClient c=new ImapClient( new InetSocketAddress( "localhost", s.getPort() ), SecurityRequirement.UNTRUSTED_SSLTLS );
+            ImapClient c=new ImapClient( new InetSocketAddress( "localhost", s.getPort() ), new SecurityContext(SecurityRequirement.UNTRUSTED_SSLTLS) );
             c.setTimeout(2000);
             ImapConnection.setDefaultTimeout(2000);
             String tag=ImapLine.getNextTag();
@@ -195,9 +197,9 @@ public class ImapCommandTest {
         boolean encrypted=false;
         do{
             try{
-                ImapServer s=new ImapServer(0,SecurityRequirement.STARTTLS);
+                ImapServer s=new ImapServer(0,new SecurityContext(SecurityRequirement.STARTTLS));
                 LOGGER.log(Level.INFO,"************************************************************************");
-                LOGGER.log(Level.INFO,"Check full Login Logout ("+encrypted+"/"+s.getName()+")");
+                LOGGER.log(Level.INFO,"Check full Login Logout ("+encrypted+")");
                 LOGGER.log(Level.INFO,"************************************************************************");
                 ImapConnection.setDefaultTimeout(2000);
                 ImapAuthenticationDummyProxy ap=new ImapAuthenticationDummyProxy();
@@ -211,7 +213,7 @@ public class ImapCommandTest {
                 assertTrue("check for success if username casing does not match",ap.login("User","password"));
 
                 s.setAuth(ap);
-                ImapClient c=new ImapClient(new InetSocketAddress("localhost",s.getPort()),SecurityRequirement.UNTRUSTED_STARTTLS);
+                ImapClient c=new ImapClient(new InetSocketAddress("localhost",s.getPort()),new SecurityContext(SecurityRequirement.UNTRUSTED_STARTTLS));
                 c.setTimeout(2000);
                 assertTrue("check encryption ("+encrypted+"/"+c.isTLS()+")", encrypted==c.isTLS());
                 String tag=ImapLine.getNextTag();

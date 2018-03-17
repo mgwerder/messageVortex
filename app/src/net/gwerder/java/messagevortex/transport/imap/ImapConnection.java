@@ -22,19 +22,17 @@ package net.gwerder.java.messagevortex.transport.imap;
 // ************************************************************************************
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
-import net.gwerder.java.messagevortex.transport.LineConnection;
-import net.gwerder.java.messagevortex.transport.SecurityRequirement;
+import net.gwerder.java.messagevortex.transport.AbstractConnection;
+import net.gwerder.java.messagevortex.transport.SecurityContext;
 import net.gwerder.java.messagevortex.transport.StoppableThread;
 
-import javax.net.ssl.SSLContext;
 import java.io.IOException;
-import java.net.Socket;
-import java.util.Set;
+import java.nio.channels.SocketChannel;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-public class ImapConnection extends LineConnection implements Comparable<ImapConnection>, StoppableThread  {
+public class ImapConnection extends AbstractConnection implements Comparable<ImapConnection>, StoppableThread  {
 
     public static final int CONNECTION_NOT_AUTHENTICATED = 1;
     public static final int CONNECTION_AUTHENTICATED = 2;
@@ -58,13 +56,14 @@ public class ImapConnection extends LineConnection implements Comparable<ImapCon
     /***
      * Creates an imapConnection
      ***/
-    public ImapConnection(Socket sock,SSLContext context,Set<String> suppCiphers, SecurityRequirement encrypted) throws IOException {
-        super( sock, context,suppCiphers, encrypted  );
+    public ImapConnection(SocketChannel sock, SecurityContext secContext) throws IOException {
+        super( sock );
+        // FIXME handle context here
     }
 
-    @Override
-    public LineConnection createConnection( Socket sock ) throws IOException {
-        return new ImapConnection( sock, getSSLContext(), getSupportedCiphers(), getSecurityRequirement() );
+    /*@Override
+    public AbstractConnection createConnection( SocketChannel sock ) throws IOException {
+        return new ImapConnection( sock, getSecurityContext() );
     }
 
     public static int setDefaultTimeout(int timeout) {
@@ -75,7 +74,7 @@ public class ImapConnection extends LineConnection implements Comparable<ImapCon
 
     public static long getDefaultTimeout() {
         return defaultTimeout;
-    }
+    }*/
 
     public ImapAuthenticationProxy setAuth(ImapAuthenticationProxy authProxy) {
         ImapAuthenticationProxy oldProxyAuth=getAuth();
@@ -147,28 +146,15 @@ public class ImapConnection extends LineConnection implements Comparable<ImapCon
         if(c==null) {
             throw new ImapException(il,"Command \""+il.getCommand()+"\" is not implemented");
         }
-        LOGGER.log(Level.FINEST,"found command in connection "+this.getName()+".");
+        LOGGER.log(Level.FINEST,"found command in connection "+Thread.currentThread().getName()+".");
         String[] s=c.processCommand(il);
 
         LOGGER.log(Level.INFO,"got command \""+il.getTag()+" "+il.getCommand()+"\". Reply is \""+ImapLine.commandEncoder(s==null?"null":s[s.length-1])+"\".");
         return s;
     }
 
-    @Override
-    public void gotLine( String line ) throws IOException {
-        line = line + CRLF;
-        try{
-            if( line == null ) {
-                shutdown();
-                LOGGER.log(Level.FINE,"Connection shutdown initated."    );
-            } else {
-                write( processCommand( line ) );
-                LOGGER.log(Level.INFO,"IMAP-> S: "+ImapLine.commandEncoder( line ));
-            }
-            LOGGER.finest("command is processed");
-        } catch(ImapException ie) {
-            LOGGER.log(Level.WARNING,"error while parsing imap command",ie);
-        }
+    public void gotLine( String line ) {
+        // FIXME
     }
 
 }

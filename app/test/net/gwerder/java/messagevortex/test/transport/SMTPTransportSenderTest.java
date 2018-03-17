@@ -1,6 +1,7 @@
 package net.gwerder.java.messagevortex.test.transport;
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
+import net.gwerder.java.messagevortex.transport.SecurityContext;
 import net.gwerder.java.messagevortex.transport.SecurityRequirement;
 import net.gwerder.java.messagevortex.transport.smtp.SMTPReceiver;
 import net.gwerder.java.messagevortex.transport.smtp.SMTPSender;
@@ -41,9 +42,9 @@ public class SMTPTransportSenderTest implements TransportReceiver {
     @Test
     public void basicSMTPTest() throws IOException  {
         LOGGER.log(Level.INFO,"Setup receiver");
-        SMTPReceiver receiver=new SMTPReceiver(0,null, SecurityRequirement.PLAIN,this);
+        SMTPReceiver receiver=new SMTPReceiver( 0, new SecurityContext( SecurityRequirement.PLAIN ), this );
         LOGGER.log(Level.INFO,"Setup sender");
-        SMTPSender send=new SMTPSender("SMTPSender_of_MessageVortex@gwerder.net", "localhost", receiver.getPort(), null );
+        SMTPSender send=new SMTPSender("SMTPSender_of_MessageVortex@gwerder.net", "localhost",0, null,null );
         LOGGER.log(Level.INFO,"Sending message");
         try {
             SimpleDateFormat dt1 = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");

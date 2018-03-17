@@ -25,17 +25,17 @@ import net.gwerder.java.messagevortex.ExtendedSecureRandom;
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.transport.*;
 
-import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509KeyManager;
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.security.GeneralSecurityException;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.logging.Logger;
 
 
-public class ImapServer extends LineReceiver implements StoppableThread {
+public class ImapServer extends ListeningSocketChannel implements StoppableThread, SocketListener {
 
     private static final Logger LOGGER;
     private static int id = 1;
@@ -49,38 +49,43 @@ public class ImapServer extends LineReceiver implements StoppableThread {
     private Thread runner=null;
     private ImapAuthenticationProxy auth=null;
 
-    public ImapServer(SecurityRequirement encrypted) throws IOException {
-        this((encrypted == SecurityRequirement.UNTRUSTED_SSLTLS || encrypted == SecurityRequirement.SSLTLS)?993:143,encrypted);
+    public ImapServer( SecurityContext secContext ) throws IOException {
+        this( ( secContext.getRequirement() == SecurityRequirement.UNTRUSTED_SSLTLS || secContext.getRequirement() == SecurityRequirement.SSLTLS)?993:143, secContext );
     }
 
-    public ImapServer(final int port,SecurityRequirement enc) throws IOException {
-        super(port,new ImapConnection( null,null,null, enc) );
+    public ImapServer( int port, SecurityContext enc ) throws IOException {
+        super( new InetSocketAddress( "0.0.0.0", port ),null );
+        setSocketListener( this );
         java.security.Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
-        try{
-          setSSLContext( SSLContext.getInstance("TLS") );
-        } catch(GeneralSecurityException gse) {
-          throw new IOException("error obtaining valid security context",gse);
-        }
 
-        setProtocol("imap");
+        setProtocol( "imap" );
 
-        setName("AUTOIDSERVER-"+(id++));
+        setName( "AUTOIDSERVER-"+(id++) );
 
         // Determine valid cyphers
         String ks="keystore.jks";
         try{
             // FIXME always installs all trust manager ... should be done selectively
-            getSSLContext().init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, new TrustManager[] {new AllTrustManager()}, ExtendedSecureRandom.getSecureRandom() );
+            enc.getContext().init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, new TrustManager[] {new AllTrustManager()}, ExtendedSecureRandom.getSecureRandom() );
         } catch(GeneralSecurityException gse) {
             throw new IOException("Error initializing security context for connection",gse);
         }
-        SSLContext.setDefault(getSSLContext());
     }
 
     public ImapAuthenticationProxy setAuth(ImapAuthenticationProxy ap) {
         ImapAuthenticationProxy old=auth;
         auth=ap;
         return old;
+    }
+
+    @Override
+    public void gotConnect(AbstractConnection ac) {
+
+    }
+
+    @Override
+    public boolean isShutdown() {
+        return false;
     }
 }
 

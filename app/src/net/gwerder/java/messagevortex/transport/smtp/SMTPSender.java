@@ -22,22 +22,16 @@ package net.gwerder.java.messagevortex.transport.smtp;
 // ************************************************************************************
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
-import net.gwerder.java.messagevortex.transport.Credentials;
-import net.gwerder.java.messagevortex.transport.LineSender;
-import net.gwerder.java.messagevortex.transport.SecurityRequirement;
-import net.gwerder.java.messagevortex.transport.TransportSender;
+import net.gwerder.java.messagevortex.transport.*;
 import org.bouncycastle.util.encoders.Base64;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.Scanner;
 import java.util.logging.Level;
 
@@ -46,7 +40,7 @@ import static net.gwerder.java.messagevortex.transport.SecurityRequirement.START
 /**
  * Created by Martin on 23.01.2018.
  */
-public class SMTPSender extends LineSender implements TransportSender {
+public class SMTPSender extends SendingSocket implements TransportSender {
 
     private static final String CRLF = "\r\n";
 
@@ -60,7 +54,8 @@ public class SMTPSender extends LineSender implements TransportSender {
     Credentials credentials=null;
     String senderAddress;
 
-    public SMTPSender( String senderAddress, String server,int port,Credentials creds) {
+    public SMTPSender( String senderAddress, String server,int port,Credentials creds, SecurityContext context ) throws IOException {
+        super( new InetSocketAddress( server, port ), context );
         this.senderAddress=senderAddress;
         this.server=server;
         if(port>0) {
@@ -73,7 +68,11 @@ public class SMTPSender extends LineSender implements TransportSender {
     public void sendMessage(String address, InputStream is) throws IOException {
 
         // connect to server
-        connect(new InetSocketAddress(server, port), credentials!=null?credentials.getSecurityRequirement(): SecurityRequirement.PLAIN );
+        // FIXME set SSLEngine first
+        connect();
+
+        // startTLS if required
+        if( credentials!=null && ( credentials.getSecurityRequirement()==SecurityRequirement.SSLTLS || credentials.getSecurityRequirement()==SecurityRequirement.UNTRUSTED_SSLTLS ) ) startTLS();
 
         // reading server greeting
         String serverGreeting = read();
@@ -95,7 +94,7 @@ public class SMTPSender extends LineSender implements TransportSender {
             if( ! reply.startsWith( "220 " ) ) {
                 throw new IOException( "Invalid STARTTLS reply  (Reply was '" + reply +"')" );
             }
-            starttls();
+            startTLS();
             write( "EHLO " + InetAddress.getLocalHost().getHostName() + CRLF );
             ehloReply=getReply();
             if( ! ehloReply[ ehloReply.length - 1 ].startsWith( "250 " ) ) {
@@ -148,7 +147,7 @@ public class SMTPSender extends LineSender implements TransportSender {
         if( reply==null || ! reply.startsWith( "221 " ) ) {
             throw new IOException( "Invalid QUIT reply  (Reply was '" + reply +"')" );
         }
-        close();
+        closeConnection();
     }
 
     private void sendAuth() throws IOException {
@@ -193,13 +192,4 @@ public class SMTPSender extends LineSender implements TransportSender {
         return replies.toArray( new String[ replies.size() ] );
     }
 
-    public static void main(String[] args) throws Exception {
-        LOGGER.log(Level.INFO,"Creating sender");
-        SMTPSender s=new SMTPSender("SMTPSender_of_MessageVortex@gwerder.net", args[2], Integer.parseInt(args[3]), new Credentials(args[0],args[1], STARTTLS));
-        LOGGER.log(Level.INFO,"Sending message");
-        SimpleDateFormat dt1 = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
-        String txt="Date:" + dt1.format(new Date()) +CRLF + "From: SMTPSender_of_MessageVortex@gwerder.net"+CRLF+"To: Martin@gwerder.net"+CRLF+"Subject: Testmail"+CRLF+CRLF+"Testmail"+CRLF;
-        s.sendMessage("martin@gwerder.net",new ByteArrayInputStream(txt.getBytes(StandardCharsets.UTF_8.name())));
-        LOGGER.log(Level.INFO,"Message sent");
-    }
 }

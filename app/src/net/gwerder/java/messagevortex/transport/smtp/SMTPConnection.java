@@ -23,42 +23,44 @@ package net.gwerder.java.messagevortex.transport.smtp;
 
 import net.gwerder.java.messagevortex.Config;
 import net.gwerder.java.messagevortex.MessageVortexLogger;
-import net.gwerder.java.messagevortex.transport.LineConnection;
-import net.gwerder.java.messagevortex.transport.SecurityRequirement;
+import net.gwerder.java.messagevortex.transport.ClientConnection;
+import net.gwerder.java.messagevortex.transport.SecurityContext;
 import net.gwerder.java.messagevortex.transport.TransportReceiver;
 import org.bouncycastle.util.encoders.Base64;
 
-import javax.net.ssl.SSLContext;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.Socket;
+import java.net.InetSocketAddress;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
 
 /**
- * Created by martin.gwerder on 24.01.2018.
+ * Creates a connection to a SMTP Server Socket.
  */
-public class SMTPConnection extends LineConnection {
+public class SMTPConnection extends ClientConnection {
 
     static final java.util.logging.Logger LOGGER;
     static {
         LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
     }
 
-    public LineConnection createConnection(Socket s) throws IOException {
-        LineConnection ret=new SMTPConnection( getSSLContext(), getReceiver(), getSecurityRequirement() );
-        ret.setSocket(s);
-        return ret;
-    }
+    TransportReceiver receiver = null;
 
-    public SMTPConnection( SSLContext context, TransportReceiver receiver, SecurityRequirement encrypted  ) throws IOException {
-        super( context, receiver, encrypted );
-    }
-
+    /*
     @Override
+    public ClientConnection createConnection(SocketChannel s) throws IOException {
+        ClientConnection ret=new SMTPConnection( s, null );
+        return ret;
+    }*/
+
+    public SMTPConnection(InetSocketAddress address, SecurityContext secContext ) throws IOException {
+        super( address, secContext );
+
+    }
+
     public void gotLine( String line ) {
         try {
             write("220 " + InetAddress.getLocalHost().getHostName() + " ESMTP" + CRLF );
@@ -72,7 +74,7 @@ public class SMTPConnection extends LineConnection {
             String envelopeFrom=null;
             String envelopeTo=null;
             while ( command == null || ! "quit".equals( command.toLowerCase() ) ) {
-                command = read( false );
+                command = readln();
                 if(command.toLowerCase().startsWith("helo ")) {
                     write("250 Hi " + command.toLowerCase().substring(6) + " nice meeting you");
                 }else if(command.toLowerCase().startsWith("ehlo ")) {
@@ -80,11 +82,11 @@ public class SMTPConnection extends LineConnection {
                     write("250-ENHANCEDSTATUSCODES" + CRLF );
                     write("250 AUTH login" + CRLF );
                 }else if( "auth login".equals( command.toLowerCase() ) ) {
-                    write("334 "+new String(Base64.encode("Username:".getBytes( StandardCharsets.UTF_8 )))+CRLF);
-                    String username=new String(Base64.decode(read( false )));
+                    writeln("334 "+new String(Base64.encode("Username:".getBytes( StandardCharsets.UTF_8 ))));
+                    String username=new String(Base64.decode(readln()));
                     Config.getDefault().getStringValue("smtp_incomming_username");
                     write("334 "+new String(Base64.encode("Password:".getBytes(StandardCharsets.UTF_8)))+CRLF);
-                    String password=new String(Base64.decode(read( false )));
+                    String password=new String(Base64.decode(readln()));
                     Config.getDefault().getStringValue("smtp_incomming_password");
                 }else if(command.toLowerCase().startsWith("mail from")) {
                     envelopeFrom=command.substring(10).trim();
@@ -103,7 +105,7 @@ public class SMTPConnection extends LineConnection {
                             if(line!=null) {
                                 sb.append(l + CRLF);
                             }
-                            l = read(false );
+                            l = readln();
                         }
                         if(getReceiver()!=null) {
                             LOGGER.log(Level.INFO, "Message passed to blender layer");
@@ -135,7 +137,21 @@ public class SMTPConnection extends LineConnection {
                 LOGGER.log(Level.WARNING, "error while communicating", ioe);
             }
         } finally {
-            shutdown();
+            try {
+                shutdown();
+            } catch( IOException ioe ) {
+                LOGGER.log(Level.WARNING, "error while shutting down", ioe);
+            }
         }
+    }
+
+    public TransportReceiver getReceiver() {
+        return receiver;
+    }
+
+    public TransportReceiver setReceiver( TransportReceiver receiver ) {
+        TransportReceiver ret = this.receiver;
+        this.receiver = receiver;
+        return ret;
     }
 }

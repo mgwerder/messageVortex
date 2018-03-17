@@ -2,10 +2,7 @@ package net.gwerder.java.messagevortex.test.imap;
 
 import net.gwerder.java.messagevortex.ExtendedSecureRandom;
 import net.gwerder.java.messagevortex.MessageVortexLogger;
-import net.gwerder.java.messagevortex.transport.AllTrustManager;
-import net.gwerder.java.messagevortex.transport.CustomKeyManager;
-import net.gwerder.java.messagevortex.transport.SecurityRequirement;
-import net.gwerder.java.messagevortex.transport.SocketDeblocker;
+import net.gwerder.java.messagevortex.transport.*;
 import net.gwerder.java.messagevortex.transport.imap.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -104,18 +101,18 @@ public class ImapSSLTest {
                         ss.close();
                     } catch(IOException ioe) {
                         LOGGER.log(Level.WARNING,"Unexpected Exception",ioe);
-                        fail("Exception rised in server ("+ioe+") while communicating");
+                        fail("Exception risen in server ("+ioe+") while communicating");
                     }
                 }
             }).start();
 
-            ImapClient ic =new ImapClient(new InetSocketAddress( "localhost", ss.getLocalPort() ), SecurityRequirement.UNTRUSTED_SSLTLS );
+            ImapClient ic =new ImapClient(new InetSocketAddress( "localhost", ss.getLocalPort() ), new SecurityContext( SecurityRequirement.UNTRUSTED_SSLTLS ) );
             ic.setTimeout(2000);
             ic.sendCommand("a1 test");
             assertTrue("check client socket state",ic.isTLS());
             ic.shutdown();
 
-            // Selftest
+            // Self test
             Thread.sleep(700);
             assertTrue("error searching for hangig threads",verifyHangingThreads(threadSet).size()==0);
         } catch(Exception ioe) {
@@ -159,8 +156,8 @@ public class ImapSSLTest {
             LOGGER.log(Level.INFO,"************************************************************************");
             LOGGER.log(Level.INFO,"setting up server");
             Set<Thread> threadSet = getThreadList();
-            ImapServer is=new ImapServer(0,SecurityRequirement.UNTRUSTED_SSLTLS);
-            is.setTimeout(1000);
+            ImapServer is=new ImapServer(0,new SecurityContext(SecurityRequirement.UNTRUSTED_SSLTLS));
+            // FIXME is.setTimeout(1000);
             LOGGER.log(Level.INFO,"setting up pseudo client");
             final Socket s=SSLSocketFactory.getDefault().createSocket(InetAddress.getByName("localhost"),is.getPort());
             s.setSoTimeout(500);
@@ -194,9 +191,9 @@ public class ImapSSLTest {
             LOGGER.log(Level.INFO,"Testing initial SSL handshake for both components");
             LOGGER.log(Level.INFO,"************************************************************************");
             Set<Thread> threadSet = getThreadList();
-            ImapServer is=new ImapServer(0,SecurityRequirement.UNTRUSTED_SSLTLS);
-            is.setTimeout(5000);
-            ImapClient ic=new ImapClient( new InetSocketAddress( "localhost", is.getPort() ), SecurityRequirement.UNTRUSTED_SSLTLS );
+            ImapServer is=new ImapServer(0,new SecurityContext(SecurityRequirement.UNTRUSTED_SSLTLS));
+            // FIXME is.setTimeout(5000);
+            ImapClient ic=new ImapClient( new InetSocketAddress( "localhost", is.getPort() ), new SecurityContext(SecurityRequirement.UNTRUSTED_SSLTLS) );
             ic.setTimeout(5000);
             ImapClient.setDefaultTimeout(300);
             String[] s=ic.sendCommand("a1 capability\r\n");

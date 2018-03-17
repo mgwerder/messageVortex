@@ -21,20 +21,41 @@ package net.gwerder.java.messagevortex.transport.smtp;
 // * SOFTWARE.
 // ************************************************************************************
 
-import net.gwerder.java.messagevortex.transport.LineReceiver;
-import net.gwerder.java.messagevortex.transport.SecurityRequirement;
-import net.gwerder.java.messagevortex.transport.TransportReceiver;
+import net.gwerder.java.messagevortex.transport.*;
 
-import javax.net.ssl.SSLContext;
 import java.io.IOException;
 
 /**
  * Created by martin.gwerder on 24.01.2018.
  */
-public class SMTPReceiver extends LineReceiver {
+public class SMTPReceiver implements SocketListener {
 
-    public SMTPReceiver(int port, SSLContext context, SecurityRequirement encrypted, TransportReceiver receiver ) throws IOException {
-        super(port,new SMTPConnection(context,receiver,encrypted));
+    private ListeningSocketChannel listener;
+
+    public SMTPReceiver(int port, SecurityContext secContext, TransportReceiver receiver ) throws IOException {
+
     }
 
+    @Override
+    public void gotConnect(AbstractConnection ac) {
+        // FIXME handle incomming connect
+    }
+
+    public TransportReceiver getTransportReceiver() {
+        // FIXME this is a stub
+        return null;
+    }
+
+    public TransportReceiver setTransportReceiver( TransportReceiver receiver ) {
+        // FIXME this is a stub
+        return null;
+    }
+
+    public void shutdown() {
+        listener.shutdown();
+    }
+
+    public int getPort() {
+        return listener.getPort();
+    }
 }

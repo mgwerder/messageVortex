@@ -5,6 +5,7 @@ import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.transport.AllTrustManager;
 import net.gwerder.java.messagevortex.transport.ClientConnection;
 import net.gwerder.java.messagevortex.transport.CustomKeyManager;
+import net.gwerder.java.messagevortex.transport.SecurityContext;
 import org.junit.Test;
 
 import javax.net.ssl.*;
@@ -287,10 +288,13 @@ public class LineTRXTest {
             trustFactory.init(trustStore);
 
             SSLContext trustContext = SSLContext.getInstance("TLS");
-            trustContext.init( kmf.getKeyManagers(), trustFactory.getTrustManagers(), new SecureRandom() );
+            trustContext.init( kmf.getKeyManagers(), new TrustManager[] { new AllTrustManager() }, new SecureRandom() );
+
+            SecurityContext sc = new SecurityContext();
+            sc.setContext(trustContext);
 
             LOGGER.log(Level.INFO, "  creating client connection");
-            ClientConnection ss = new ClientConnection( new InetSocketAddress( "127.0.0.1", t.getLocalPort() ), trustContext );
+            ClientConnection ss = new ClientConnection( new InetSocketAddress( "127.0.0.1", t.getLocalPort() ), sc );
             //ClientConnection ss = new ClientConnection( new InetSocketAddress( "www.gwerder.net", 443 ), trustContext );
 
             LOGGER.log(Level.INFO, "  client connecting");
@@ -305,7 +309,6 @@ public class LineTRXTest {
             ss.shutdown();
 
             LOGGER.log(Level.INFO, "  client shutdown completed");
-
             t.isFailed();
 
         } catch(Exception ioe) {
@@ -323,7 +326,7 @@ public class LineTRXTest {
             for( String test: new String[] {"Hello I am your Server", "AEIOUÄÖÜ", "\0\n\r" } ) {
                 LOGGER.log(Level.INFO, "Testing a encrypted connect with " + test );
                 // creating a listening Socket which is immediately closing
-                SenderThread t = new SenderThread( test, null, true );
+                SenderThread t = new SenderThread( test, "\0\r\n", true );
                 t.start();
 
                 // creating SSL context for client
@@ -332,8 +335,11 @@ public class LineTRXTest {
                 assertTrue("Keystore check",(new File(ks)).exists());
                 c.init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, new TrustManager[] {new AllTrustManager()}, esr.getSecureRandom() );
 
+                SecurityContext sc = new SecurityContext();
+                sc.setContext(c);
+
                 LOGGER.log(Level.INFO, "  creating client connection");
-                ClientConnection ss = new ClientConnection(new InetSocketAddress("127.0.0.1", t.getLocalPort()), c );
+                ClientConnection ss = new ClientConnection(new InetSocketAddress("127.0.0.1", t.getLocalPort()), sc );
 
                 LOGGER.log(Level.INFO, "  client connecting");
                 ss.connect();
@@ -341,15 +347,17 @@ public class LineTRXTest {
                 LOGGER.log(Level.INFO, "  doing TLS handshake");
                 ss.startTLS();
 
+                ss.writeln( "\0" );
+
                 LOGGER.log(Level.INFO, "  Reading server reply");
                 String result = ss.read();
+                LOGGER.log(Level.INFO, "    result is " + result );
                 assertTrue("failed to read text (result: " + result + ")", result == null ? false : test.equals(result));
 
                 LOGGER.log(Level.INFO, "  initiating client shutdown");
                 ss.shutdown();
 
                 LOGGER.log(Level.INFO, "  client shutdown completed");
-
                 t.isFailed();
             }
         } catch(Exception ioe) {
@@ -358,5 +366,24 @@ public class LineTRXTest {
         }
     }
 
+    @Test
+    public void lineReceiverPlainTest() {
+        LOGGER.log(Level.INFO, "**************************************************************" );
+        LOGGER.log(Level.INFO, "*** line receiver plain test" );
+        LOGGER.log(Level.INFO, "**************************************************************" );
+        /*
+        try {
+            LineConnection templateConnection = new LineSender();
+            ListeningSocketChannel listener = new ListeningSocketChannel(new InetSocketAddress( InetAddress.getLoopbackAddress(),0 ), templateConnection,);
+
+            SSLContext trustContext = SSLContext.getInstance("TLS");
+            trustContext.init(null, new TrustManager[]{new AllTrustManager()}, new SecureRandom());
+            ClientConnection t = new ClientConnection(new InetSocketAddress("127.0.0.1", 0), trustContext);
+        } catch(IOException|NoSuchAlgorithmException|KeyManagementException ioe) {
+            ioe.printStackTrace();
+            fail( "got Exception while handling the client side" );
+        }
+        */
+    }
 
 }

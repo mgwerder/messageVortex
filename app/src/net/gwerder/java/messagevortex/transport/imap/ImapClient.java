@@ -22,8 +22,8 @@ package net.gwerder.java.messagevortex.transport.imap;
 // ************************************************************************************
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
-import net.gwerder.java.messagevortex.transport.LineSender;
-import net.gwerder.java.messagevortex.transport.SecurityRequirement;
+import net.gwerder.java.messagevortex.transport.ClientConnection;
+import net.gwerder.java.messagevortex.transport.SecurityContext;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -33,7 +33,7 @@ import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class ImapClient extends LineSender {
+public class ImapClient extends ClientConnection {
 
     private static final String REGEXP_IMAP_OK ="\\s+OK.*";
     private static final String REGEXP_IMAP_BAD="\\s+BAD.*";
@@ -55,37 +55,10 @@ public class ImapClient extends LineSender {
     private        String[] currentCommandReply     = null;
     private        boolean  currentCommandCompleted = false;
 
-    public ImapClient( InetSocketAddress addr, SecurityRequirement req ) throws IOException {
-        connect( addr, req );
+    public ImapClient(InetSocketAddress addr, SecurityContext secContext ) throws IOException {
+        super( addr, secContext );
         setProtocol("IMAP");
     }
-
-    /*
-    private Socket startTLS(Socket sock) throws IOException,java.security.NoSuchAlgorithmException,java.security.KeyManagementException,java.security.KeyStoreException,java.security.cert.CertificateException {
-        LOGGER.log(Level.INFO,"doing SSL handshake by client");
-        java.security.Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
-        KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
-        try(FileInputStream is=new FileInputStream("keystore.jks") ) {
-            trustStore.load(is, "changeme".toCharArray());
-        }
-        TrustManagerFactory trustFactory =  TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-        trustFactory.init(trustStore);
-        TrustManager[] trustManagers = trustFactory.getTrustManagers();
-        SSLContext trustContext = SSLContext.getInstance("SSL");
-        trustContext.init(null, trustManagers, null);
-        SSLContext.setDefault(trustContext);
-        LOGGER.log(Level.INFO,"Getting socket");
-        SSLSocket sslSocket = (SSLSocket)((SSLSocketFactory)(SSLSocketFactory.getDefault())).createSocket(sock,sock.getInetAddress().getHostAddress(),sock.getPort(), false);
-        sslSocket.setUseClientMode(true);
-        LOGGER.log(Level.INFO,"Starting client side SSL");
-        sslSocket.setSoTimeout( getTimeout() );
-        sslSocket.startHandshake();
-        LOGGER.log(Level.INFO,"CLientTLS Started");
-        encrypted=true;
-        LOGGER.log(Level.INFO,"SSL handshake by client done");
-        return sslSocket;
-    }
-*/
 
     public String[] sendCommand(String command) throws TimeoutException {
         return sendCommand( command, getTimeout() );
@@ -100,14 +73,17 @@ public class ImapClient extends LineSender {
             synchronized(notifyThread) {
                 notifyThread.notifyAll();
             }
-            while( !currentCommandCompleted && System.currentTimeMillis() < start + millisTimeout ) {
-                try {
-                    processRunnerCommand();
-                    // sync.wait(10);
-                } catch(IOException e) {
-                    LOGGER.log(Level.SEVERE,"this point should never be reached",e);
-                    Thread.currentThread().interrupt();
+            try {
+                while (!currentCommandCompleted && System.currentTimeMillis() < start + millisTimeout) {
+                    gotLine(command);
+                    try{
+                        sync.wait(10);
+                    } catch(InterruptedException ie) {
+                        // may be safely ignored
+                    }
                 }
+            } catch( IOException ioe ) {
+                LOGGER.log( Level.WARNING, "got IO exception while processing command", ioe );
             }
             LOGGER.log( Level.FINEST, "wakeup succeeded" );
             if( ! currentCommandCompleted && System.currentTimeMillis() > start + millisTimeout ) {
@@ -170,7 +146,8 @@ public class ImapClient extends LineSender {
         }
     }
 
-    private void processRunnerCommand() throws IOException  {
+    public void gotLine( String line ) throws IOException  {
+        currentCommand=line;
         LOGGER.log( Level.INFO, "IMAP C->S: " + ImapLine.commandEncoder( currentCommand ) );
         writeln( currentCommand );
 
@@ -187,11 +164,11 @@ public class ImapClient extends LineSender {
         List<String> l = new ArrayList<>();
         LOGGER.log( Level.INFO, "waiting for incoming reply of command " + tag );
         while( ( !lastReply.matches( tag + REGEXP_IMAP_BAD + "|" + tag + REGEXP_IMAP_OK ) ) ) {
-            String reply = read();
+            String reply = readln();
             LOGGER.log( Level.INFO, "wakeup (remaining: " + System.currentTimeMillis() );
-            lastReply = reply.substring( 0, reply.length() - 2 );
-            l.add( lastReply );
-            LOGGER.log( Level.INFO, "IMAP C<-S: " + ImapLine.commandEncoder( lastReply ) );
+            l.add( reply );
+            lastReply = reply;
+            LOGGER.log( Level.INFO, "IMAP C<-S: " + ImapLine.commandEncoder( reply ) );
             currentCommandReply=l.toArray( new String[ l.size() ] );
         }
         currentCommandCompleted = lastReply.matches( tag + REGEXP_IMAP_OK + "|" + tag + REGEXP_IMAP_BAD );
@@ -208,16 +185,11 @@ public class ImapClient extends LineSender {
     }
 
     private void runStep() throws IOException {
-        try{
-            LOGGER.log( Level.INFO, "Waiting for command to process" );
-            waitForWakeupRunner();
-            if(currentCommand!=null && !"".equals(currentCommand)) {
-                LOGGER.log( Level.INFO, "Processing command" );
-                processRunnerCommand();
-            }
-        } catch(java.net.SocketException se) {
-            LOGGER.log(Level.WARNING,"Connection closed by server",se);
-            shutdown();
+        LOGGER.log( Level.INFO, "Waiting for command to process" );
+        waitForWakeupRunner();
+        if(currentCommand!=null && !"".equals(currentCommand)) {
+            LOGGER.log( Level.INFO, "Processing command" );
+            //FIXME processRunnerCommand();
         }
         LOGGER.log(Level.FINEST,"Client looping (shutdown=" + isShutdown() + ")");
     }
@@ -225,12 +197,16 @@ public class ImapClient extends LineSender {
     public void run() {
 
         try {
-            while(!isShutdown() && !isClosed() ) {
+            while(!isShutdown() ) {
                 runStep();
             }
         } catch (Exception e) {
             LOGGER.log(Level.WARNING,"Uncaught exception in ImapClient",e);
-            shutdown();
+            try {
+                shutdown();
+            } catch (IOException ioe ) {
+                LOGGER.log( Level.WARNING,"Uncaught exception while shutting down", ioe );
+            }
         } finally {
             try{
                 shutdown();

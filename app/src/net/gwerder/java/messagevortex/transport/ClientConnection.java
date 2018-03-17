@@ -2,7 +2,6 @@ package net.gwerder.java.messagevortex.transport;
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 
-import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLEngine;
 import javax.net.ssl.SSLSession;
 import java.io.IOException;
@@ -17,18 +16,12 @@ public class ClientConnection extends AbstractConnection {
         LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
     }
 
-    public ClientConnection(InetSocketAddress socketAddress, SSLContext context) throws IOException  {
+    public ClientConnection(InetSocketAddress socketAddress, SecurityContext context) throws IOException  {
         super(socketAddress);
 
         if( context != null ) {
-            SSLEngine engine = context.createSSLEngine( getHostName(), getPort() );
+            SSLEngine engine = context.getContext().createSSLEngine( getHostName(), getPort() );
             engine.setUseClientMode( true );
-            //engine.setEnableSessionCreation( true );
-            //SSLParameters sslParams = engine.getSSLParameters();
-            //sslParams.setEndpointIdentificationAlgorithm(null);
-            //engine.setSSLParameters(sslParams);
-            //engine.setNeedClientAuth( false );
-            //engine.setWantClientAuth( false );
             setSSLEngine( engine );
             SSLSession session = engine.getSession();
             outboundEncryptedData = ByteBuffer.allocate(session.getPacketBufferSize());

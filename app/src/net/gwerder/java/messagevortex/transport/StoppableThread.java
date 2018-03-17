@@ -21,9 +21,11 @@ package net.gwerder.java.messagevortex.transport;
 // * SOFTWARE.
 // ************************************************************************************
 
+import java.io.IOException;
+
 /***
  * Interface for a stoppable thread.
- * 
+ *
  * Threads of this type must provide facility to stop at request gracefully.
  ***/
 public interface StoppableThread {
@@ -31,7 +33,7 @@ public interface StoppableThread {
     /***
      * Shuts the thread gracefully down.
      ***/
-    void shutdown();
+    void shutdown() throws IOException;
 
     /***
      * Query if the process is marked for shutdown
