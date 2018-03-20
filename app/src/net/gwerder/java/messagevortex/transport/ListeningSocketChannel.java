@@ -29,7 +29,7 @@ public class ListeningSocketChannel {
 
         private  SocketListener listener = null;
 
-        volatile boolean shutdown = false;
+        private volatile boolean shutdown = false;
 
         public InternalThread( ServerSocketChannel channel ) throws IOException {
             channel.configureBlocking( false );
@@ -66,14 +66,14 @@ public class ListeningSocketChannel {
 
                     if (socketChannel != null) {
                         if( listener!=null ) {
-                            listener.gotConnect( null ); // FIXME pass proper SocketChannel
+                            LOGGER.log(Level.INFO, "calling SocketChannel listener" );
+                            listener.gotConnect( new ServerConnection( socketChannel,null ) );
                         } else {
                             LOGGER.log(Level.SEVERE, "socketchannel listener is missing" );
                         }
-                        // FIXME got a socketChannel
                     } else {
                         try{
-                            Thread.sleep( 50 );
+                            Thread.sleep( 10 );
                         } catch( InterruptedException ie ) {
                             // safe to ignore
                         }
@@ -85,9 +85,10 @@ public class ListeningSocketChannel {
         }
     }
 
-    public ListeningSocketChannel(InetSocketAddress socket, SocketListener listener ) throws IOException {
+    public ListeningSocketChannel(InetSocketAddress address, SocketListener listener ) throws IOException {
+        super();
         ServerSocketChannel channel = ServerSocketChannel.open();
-        channel.socket().bind(socket);
+        channel.socket().bind(address);
 
         thread = new InternalThread(channel);
         thread.setSocketListener(listener);
@@ -100,6 +101,10 @@ public class ListeningSocketChannel {
 
     public void setName( String name ) {
         thread.setName( name );
+    }
+
+    public String getName() {
+        return thread.getName();
     }
 
     public SocketListener getSocketListener() {

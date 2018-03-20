@@ -39,7 +39,7 @@ public class SocketDeblocker extends Thread {
 
     private int timeout;
     private int port;
-    private boolean shutdown=false;
+    private volatile boolean shutdown=false;
 
     public SocketDeblocker(int port,int timeout) {
         this.port=port;

@@ -22,8 +22,8 @@ package net.gwerder.java.messagevortex.transport.imap;
 // ************************************************************************************
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
-import net.gwerder.java.messagevortex.transport.AbstractConnection;
 import net.gwerder.java.messagevortex.transport.SecurityContext;
+import net.gwerder.java.messagevortex.transport.ServerConnection;
 import net.gwerder.java.messagevortex.transport.StoppableThread;
 
 import java.io.IOException;
@@ -32,14 +32,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-public class ImapConnection extends AbstractConnection implements Comparable<ImapConnection>, StoppableThread  {
+public class ImapConnection extends ServerConnection implements Comparable<ImapConnection>, StoppableThread {
 
     public static final int CONNECTION_NOT_AUTHENTICATED = 1;
     public static final int CONNECTION_AUTHENTICATED = 2;
     public static final int CONNECTION_SELECTED = 3;
     private static final Logger LOGGER;
     private static int id = 1;
-    private static int defaultTimeout = 3 * 60 * 1000;
 
     static {
         LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
@@ -57,24 +56,8 @@ public class ImapConnection extends AbstractConnection implements Comparable<Ima
      * Creates an imapConnection
      ***/
     public ImapConnection(SocketChannel sock, SecurityContext secContext) throws IOException {
-        super( sock );
-        // FIXME handle context here
+        super( sock, secContext );
     }
-
-    /*@Override
-    public AbstractConnection createConnection( SocketChannel sock ) throws IOException {
-        return new ImapConnection( sock, getSecurityContext() );
-    }
-
-    public static int setDefaultTimeout(int timeout) {
-        int ot = defaultTimeout;
-        defaultTimeout = timeout;
-        return ot;
-    }
-
-    public static long getDefaultTimeout() {
-        return defaultTimeout;
-    }*/
 
     public ImapAuthenticationProxy setAuth(ImapAuthenticationProxy authProxy) {
         ImapAuthenticationProxy oldProxyAuth=getAuth();
@@ -154,7 +137,13 @@ public class ImapConnection extends AbstractConnection implements Comparable<Ima
     }
 
     public void gotLine( String line ) {
-        // FIXME
+        try {
+            for(String s: processCommand( line )) {
+                writeln(s);
+            }
+        } catch(IOException|ImapException e ) {
+            LOGGER.log(Level.WARNING, "exception while sending reply",e);
+        }
     }
 
 }

@@ -21,34 +21,54 @@ package net.gwerder.java.messagevortex.transport.smtp;
 // * SOFTWARE.
 // ************************************************************************************
 
+import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.transport.*;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.util.logging.Level;
 
-/**
- * Created by martin.gwerder on 24.01.2018.
- */
 public class SMTPReceiver implements SocketListener {
 
-    private ListeningSocketChannel listener;
+    static private final java.util.logging.Logger LOGGER;
+    static {
+        LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+    }
 
-    public SMTPReceiver(int port, SecurityContext secContext, TransportReceiver receiver ) throws IOException {
+    private volatile static int gid = 1;
+    private volatile int id =1;
 
+    private final ListeningSocketChannel listener;
+    private TransportReceiver receiver = null;
+    private SecurityContext context = null;
+
+    public SMTPReceiver(InetSocketAddress address, SecurityContext secContext, TransportReceiver lreceiver ) throws IOException {
+        setTransportReceiver( lreceiver );
+        listener = new ListeningSocketChannel( address, this );
+        listener.setName( "SMTPlist"+(gid++));
+        this.context = secContext;
     }
 
     @Override
-    public void gotConnect(AbstractConnection ac) {
-        // FIXME handle incomming connect
+    public void gotConnect(ServerConnection ac) {
+        LOGGER.log( Level.INFO, "called gotConnection()" );
+        try {
+            SMTPConnection s = new SMTPConnection( ac.getSocketChannel(), context );
+            s.setName( listener.getName()+"-"+(id++) );
+            s.setReceiver( this.receiver );
+        } catch( IOException ioe ) {
+            LOGGER.log( Level.WARNING, "Exception while creating SMTPConnection object",ioe );
+        }
     }
 
     public TransportReceiver getTransportReceiver() {
-        // FIXME this is a stub
-        return null;
+        return receiver;
     }
 
-    public TransportReceiver setTransportReceiver( TransportReceiver receiver ) {
-        // FIXME this is a stub
-        return null;
+    public TransportReceiver setTransportReceiver( TransportReceiver lreceiver ) {
+        TransportReceiver ret=this.receiver;
+        this.receiver=lreceiver;
+        return ret;
     }
 
     public void shutdown() {

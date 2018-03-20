@@ -16,6 +16,7 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -108,6 +109,7 @@ public class ImapSSLTest {
 
             ImapClient ic =new ImapClient(new InetSocketAddress( "localhost", ss.getLocalPort() ), new SecurityContext( SecurityRequirement.UNTRUSTED_SSLTLS ) );
             ic.setTimeout(2000);
+            ic.connect();
             ic.sendCommand("a1 test");
             assertTrue("check client socket state",ic.isTLS());
             ic.shutdown();
@@ -157,13 +159,14 @@ public class ImapSSLTest {
             LOGGER.log(Level.INFO,"setting up server");
             Set<Thread> threadSet = getThreadList();
             ImapServer is=new ImapServer(0,new SecurityContext(SecurityRequirement.UNTRUSTED_SSLTLS));
-            // FIXME is.setTimeout(1000);
+            is.setTimeout(2000);
             LOGGER.log(Level.INFO,"setting up pseudo client");
-            final Socket s=SSLSocketFactory.getDefault().createSocket(InetAddress.getByName("localhost"),is.getPort());
-            s.setSoTimeout(500);
+            Socket s=SSLSocketFactory.getDefault().createSocket(InetAddress.getByName("localhost"),is.getPort());
+            s.setSoTimeout(2000);
             LOGGER.log(Level.INFO,"sending command to  port "+is.getPort() );
-            s.getOutputStream().write("a1 capability\r\n".getBytes(Charset.defaultCharset()));
+            s.getOutputStream().write("a1 capability\r\n".getBytes(StandardCharsets.UTF_8));
             s.getOutputStream().flush();
+            LOGGER.log( Level.INFO,"sent... waiting for reply" );
             byte b[]=new byte[7];
             int start=0;
             int len=b.length;
@@ -172,6 +175,7 @@ public class ImapSSLTest {
                 if(numread>0) {
                     start+=numread;
                     len-=numread;
+                    LOGGER.log( Level.INFO,"got "+start+" bytes; waiting for "+len+" more" );
                 }
             }
             LOGGER.log(Level.INFO,"got sequence \""+(new String(b,java.nio.charset.Charset.defaultCharset()))+"\"");
@@ -192,10 +196,11 @@ public class ImapSSLTest {
             LOGGER.log(Level.INFO,"************************************************************************");
             Set<Thread> threadSet = getThreadList();
             ImapServer is=new ImapServer(0,new SecurityContext(SecurityRequirement.UNTRUSTED_SSLTLS));
-            // FIXME is.setTimeout(5000);
+            is.setTimeout(5000);
             ImapClient ic=new ImapClient( new InetSocketAddress( "localhost", is.getPort() ), new SecurityContext(SecurityRequirement.UNTRUSTED_SSLTLS) );
             ic.setTimeout(5000);
             ImapClient.setDefaultTimeout(300);
+            ic.connect();
             String[] s=ic.sendCommand("a1 capability\r\n");
             for(String v:s) {
                 LOGGER.log(Level.INFO,"IMAP<- C: "+ImapLine.commandEncoder(v));

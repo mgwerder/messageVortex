@@ -28,7 +28,7 @@ public class SecurityContext {
 
     public SecurityContext( SecurityRequirement requirement ) {
         this();
-        this.requirement = requirement;
+        setRequirement( requirement );
     }
 
     public SSLContext getContext() {

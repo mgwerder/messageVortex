@@ -88,8 +88,9 @@ public class ImapCommandTest {
             LOGGER.log(Level.INFO,"Check server default timeout");
             LOGGER.log(Level.INFO,"************************************************************************");
             ImapConnection.setDefaultTimeout(300);
-            is=new ImapServer(0,new SecurityContext(SecurityRequirement.UNTRUSTED_SSLTLS));
+            is=new ImapServer(0,new SecurityContext(SecurityRequirement.PLAIN));
             ic=new ImapClient( new InetSocketAddress( "localhost", is.getPort() ), new SecurityContext(SecurityRequirement.PLAIN) );
+            ic.connect();
             ic.sendCommand( "a0 IWantATimeout", 300 );
             ic.setTimeout( 3600*1000 );
             Thread.sleep( 1000 );
@@ -120,8 +121,9 @@ public class ImapCommandTest {
             LOGGER.log(Level.INFO,"************************************************************************");
             LOGGER.log(Level.INFO,"Check client timeout");
             LOGGER.log(Level.INFO,"************************************************************************");
-            is=new ImapServer(0,new SecurityContext(SecurityRequirement.UNTRUSTED_SSLTLS));
+            is=new ImapServer(0,new SecurityContext(SecurityRequirement.PLAIN));
             ic=new ImapClient( new InetSocketAddress( "localhost", is.getPort() ), new SecurityContext(SecurityRequirement.PLAIN) );
+            ic.connect();
             ic.sendCommand( "a0 IWantATimeout", 300 );
             ic.setTimeout( 300 );
             Thread.sleep(300);
@@ -150,8 +152,9 @@ public class ImapCommandTest {
             LOGGER.log(Level.INFO,"Check client default timeout");
             LOGGER.log(Level.INFO,"************************************************************************");
             ImapClient.setDefaultTimeout(300);
-            is=new ImapServer(0,new SecurityContext(SecurityRequirement.UNTRUSTED_SSLTLS));
+            is=new ImapServer(0,new SecurityContext(SecurityRequirement.PLAIN));
             ic=new ImapClient( new InetSocketAddress( "localhost", is.getPort() ), new SecurityContext(SecurityRequirement.PLAIN) );
+            ic.connect();
             Thread.sleep(300);
             ic.sendCommand("a0 IWantATimeout",300);
             Thread.sleep(1000);
@@ -173,12 +176,13 @@ public class ImapCommandTest {
     public void checkFullLogout() {
         Set<Thread> threadSet = ImapSSLTest.getThreadList();
         try{
-            ImapServer s=new ImapServer( 0, new SecurityContext(SecurityRequirement.SSLTLS) );
+            ImapServer s=new ImapServer( 0, new SecurityContext(SecurityRequirement.PLAIN) );
             LOGGER.log(Level.INFO,"************************************************************************");
             LOGGER.log(Level.INFO,"Check full Login Logout");
             LOGGER.log(Level.INFO,"************************************************************************");
-            ImapClient c=new ImapClient( new InetSocketAddress( "localhost", s.getPort() ), new SecurityContext(SecurityRequirement.UNTRUSTED_SSLTLS) );
+            ImapClient c=new ImapClient( new InetSocketAddress( "localhost", s.getPort() ), new SecurityContext(SecurityRequirement.PLAIN) );
             c.setTimeout(2000);
+            c.connect();
             ImapConnection.setDefaultTimeout(2000);
             String tag=ImapLine.getNextTag();
             assertTrue("command logut failed BYE-check",sendCommand(c,tag+" LOGOUT",tag+" OK")[0].startsWith("* BYE"));
@@ -197,7 +201,7 @@ public class ImapCommandTest {
         boolean encrypted=false;
         do{
             try{
-                ImapServer s=new ImapServer(0,new SecurityContext(SecurityRequirement.STARTTLS));
+                ImapServer s=new ImapServer(0,new SecurityContext(SecurityRequirement.PLAIN));
                 LOGGER.log(Level.INFO,"************************************************************************");
                 LOGGER.log(Level.INFO,"Check full Login Logout ("+encrypted+")");
                 LOGGER.log(Level.INFO,"************************************************************************");
@@ -213,8 +217,9 @@ public class ImapCommandTest {
                 assertTrue("check for success if username casing does not match",ap.login("User","password"));
 
                 s.setAuth(ap);
-                ImapClient c=new ImapClient(new InetSocketAddress("localhost",s.getPort()),new SecurityContext(SecurityRequirement.UNTRUSTED_STARTTLS));
+                ImapClient c=new ImapClient(new InetSocketAddress("localhost",s.getPort()),new SecurityContext(SecurityRequirement.PLAIN));
                 c.setTimeout(2000);
+                c.connect();
                 assertTrue("check encryption ("+encrypted+"/"+c.isTLS()+")", encrypted==c.isTLS());
                 String tag=ImapLine.getNextTag();
                 String[] ret=sendCommand(c,tag+" NOOP",tag+" OK");

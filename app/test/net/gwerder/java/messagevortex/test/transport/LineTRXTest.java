@@ -2,21 +2,21 @@ package net.gwerder.java.messagevortex.test.transport;
 
 import net.gwerder.java.messagevortex.ExtendedSecureRandom;
 import net.gwerder.java.messagevortex.MessageVortexLogger;
-import net.gwerder.java.messagevortex.transport.AllTrustManager;
-import net.gwerder.java.messagevortex.transport.ClientConnection;
-import net.gwerder.java.messagevortex.transport.CustomKeyManager;
-import net.gwerder.java.messagevortex.transport.SecurityContext;
+import net.gwerder.java.messagevortex.transport.*;
 import org.junit.Test;
 
 import javax.net.ssl.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.security.KeyManagementException;
 import java.security.KeyStore;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,6 +32,17 @@ public class LineTRXTest {
         LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
         java.security.Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
         ClientConnection.setDefaultTimeout( 10000 );
+    }
+
+    private class Listener implements SocketListener {
+
+        public volatile int numConnects = 0;
+
+        @Override
+        public void gotConnect(ServerConnection ac) {
+            LOGGER.log(Level.INFO, "listener gotConnection()" );
+            numConnects++;
+        }
     }
 
     private class SenderThread extends Thread {
@@ -367,23 +378,27 @@ public class LineTRXTest {
     }
 
     @Test
-    public void lineReceiverPlainTest() {
+    public void lineReceiverPlainTest() throws InterruptedException {
         LOGGER.log(Level.INFO, "**************************************************************" );
         LOGGER.log(Level.INFO, "*** line receiver plain test" );
         LOGGER.log(Level.INFO, "**************************************************************" );
-        /*
         try {
-            LineConnection templateConnection = new LineSender();
-            ListeningSocketChannel listener = new ListeningSocketChannel(new InetSocketAddress( InetAddress.getLoopbackAddress(),0 ), templateConnection,);
-
+            Listener l=new Listener();
+            ListeningSocketChannel listener = new ListeningSocketChannel( new InetSocketAddress( InetAddress.getLoopbackAddress(),0 ),l);
             SSLContext trustContext = SSLContext.getInstance("TLS");
             trustContext.init(null, new TrustManager[]{new AllTrustManager()}, new SecureRandom());
-            ClientConnection t = new ClientConnection(new InetSocketAddress("127.0.0.1", 0), trustContext);
-        } catch(IOException|NoSuchAlgorithmException|KeyManagementException ioe) {
+            SecurityContext context = new SecurityContext();
+            context.setContext(trustContext);
+            ClientConnection t = new ClientConnection(new InetSocketAddress("127.0.0.1", listener.getPort()), context );
+            t.connect();
+            Thread.sleep( 50 );
+            t.shutdown();
+            listener.shutdown();
+            assertTrue( "illegal number of connects (is: "+l.numConnects+")",l.numConnects==1);
+        } catch(IOException|NoSuchAlgorithmException |KeyManagementException ioe) {
             ioe.printStackTrace();
             fail( "got Exception while handling the client side" );
         }
-        */
     }
 
 }

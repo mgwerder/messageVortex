@@ -5,6 +5,6 @@ package net.gwerder.java.messagevortex.transport;
  */
 public interface SocketListener {
 
-    // FIXME check connection type
-    void gotConnect( AbstractConnection ac );
+    void gotConnect( ServerConnection ac );
+
 }

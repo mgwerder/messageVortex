@@ -89,7 +89,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
 
         private static int counter=0;
 
-        private boolean shutdown=false;
+        private volatile boolean shutdown=false;
 
         InternalThread() {
             // This thread may die safely

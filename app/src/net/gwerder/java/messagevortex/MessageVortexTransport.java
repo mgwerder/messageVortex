@@ -27,6 +27,7 @@ import net.gwerder.java.messagevortex.transport.TransportReceiver;
 import net.gwerder.java.messagevortex.transport.smtp.SMTPReceiver;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 
 /**
  * Created by Martin on 30.01.2018.
@@ -44,7 +45,7 @@ public class MessageVortexTransport {
         assert cfg!=null;
 
         // setup receiver for mail relay
-        inSMTP = new SMTPReceiver( cfg.getNumericValue("smtp_incomming_port"), new SecurityContext( SecurityRequirement.getByName( cfg.getStringValue("smtp_incomming_ssl") ) ), receiver );
+        inSMTP = new SMTPReceiver( new InetSocketAddress( cfg.getStringValue("smtp_incomming_address"), cfg.getNumericValue("smtp_incomming_port")), new SecurityContext( SecurityRequirement.getByName( cfg.getStringValue( "smtp_incomming_address") ) ), receiver );
 
         // setup receiver for IMAP requests
         // FIXME

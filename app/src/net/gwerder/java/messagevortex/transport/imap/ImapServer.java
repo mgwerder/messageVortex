@@ -32,6 +32,7 @@ import java.net.InetSocketAddress;
 import java.security.GeneralSecurityException;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
@@ -40,6 +41,7 @@ public class ImapServer extends ListeningSocketChannel implements StoppableThrea
     private static final Logger LOGGER;
     private static int id = 1;
     private long gcLastRun=0;
+    private SecurityContext context = null;
 
     static {
         LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
@@ -48,6 +50,8 @@ public class ImapServer extends ListeningSocketChannel implements StoppableThrea
     Set<ImapConnection> conn=new ConcurrentSkipListSet<>();
     private Thread runner=null;
     private ImapAuthenticationProxy auth=null;
+    private static long defaultTimeout = 10000;
+    private long timeout = defaultTimeout;
 
     public ImapServer( SecurityContext secContext ) throws IOException {
         this( ( secContext.getRequirement() == SecurityRequirement.UNTRUSTED_SSLTLS || secContext.getRequirement() == SecurityRequirement.SSLTLS)?993:143, secContext );
@@ -56,11 +60,12 @@ public class ImapServer extends ListeningSocketChannel implements StoppableThrea
     public ImapServer( int port, SecurityContext enc ) throws IOException {
         super( new InetSocketAddress( "0.0.0.0", port ),null );
         setSocketListener( this );
+        setSecurityContext( enc );
         java.security.Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
 
         setProtocol( "imap" );
 
-        setName( "AUTOIDSERVER-"+(id++) );
+        setName( "IMAPlisten-"+(id++) );
 
         // Determine valid cyphers
         String ks="keystore.jks";
@@ -78,14 +83,43 @@ public class ImapServer extends ListeningSocketChannel implements StoppableThrea
         return old;
     }
 
-    @Override
-    public void gotConnect(AbstractConnection ac) {
+    public SecurityContext setSecurityContext( SecurityContext context ){
+        SecurityContext ret=this.context;
+        this.context= context;
+        return ret;
+    }
 
+    @Override
+    public void gotConnect(ServerConnection ac) {
+        try {
+            LOGGER.log( Level.INFO, "got new connection" );
+            ac.setSecurityContext( context );
+            ac.setTimeout(getTimeout());
+            if (context != null && (context.getRequirement() == SecurityRequirement.SSLTLS || context.getRequirement() == SecurityRequirement.UNTRUSTED_SSLTLS)) {
+                LOGGER.log( Level.INFO, "starting handshake" );
+                ac.startTLS();
+            }
+            LOGGER.log( Level.INFO, "inbound connection ready for use" );
+            // FIXME handle incomming imap connection
+            ac.shutdown();
+        } catch(IOException ioe ) {
+            LOGGER.log( Level.WARNING, "got exception while initial Handshake", ioe );
+        }
     }
 
     @Override
     public boolean isShutdown() {
         return false;
+    }
+
+    public long getTimeout() {
+        return timeout;
+    }
+
+    public long setTimeout( long timeout ) {
+        long ret = this.timeout;
+        this.timeout = timeout;
+        return ret;
     }
 }
 

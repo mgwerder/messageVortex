@@ -13,6 +13,7 @@ import org.junit.runners.JUnit4;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -42,9 +43,11 @@ public class SMTPTransportSenderTest implements TransportReceiver {
     @Test
     public void basicSMTPTest() throws IOException  {
         LOGGER.log(Level.INFO,"Setup receiver");
-        SMTPReceiver receiver=new SMTPReceiver( 0, new SecurityContext( SecurityRequirement.PLAIN ), this );
+        SMTPReceiver receiver=new SMTPReceiver( new InetSocketAddress( "localhost", 0), new SecurityContext( SecurityRequirement.PLAIN ), this );
+
         LOGGER.log(Level.INFO,"Setup sender");
-        SMTPSender send=new SMTPSender("SMTPSender_of_MessageVortex@gwerder.net", "localhost",0, null,null );
+        SMTPSender send=new SMTPSender("SMTPSender_of_MessageVortex@gwerder.net", "localhost", receiver.getPort(), null, null );
+
         LOGGER.log(Level.INFO,"Sending message");
         try {
             SimpleDateFormat dt1 = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");

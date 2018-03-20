@@ -75,7 +75,7 @@ public class ImapClient extends ClientConnection {
             }
             try {
                 while (!currentCommandCompleted && System.currentTimeMillis() < start + millisTimeout) {
-                    gotLine(command);
+                    gotLine(command, millisTimeout-(System.currentTimeMillis()-start));
                     try{
                         sync.wait(10);
                     } catch(InterruptedException ie) {
@@ -147,9 +147,14 @@ public class ImapClient extends ClientConnection {
     }
 
     public void gotLine( String line ) throws IOException  {
+        gotLine( line, getTimeout() );
+    }
+
+    public void gotLine( String line,long timeout ) throws IOException  {
         currentCommand=line;
         LOGGER.log( Level.INFO, "IMAP C->S: " + ImapLine.commandEncoder( currentCommand ) );
-        writeln( currentCommand );
+        long start = System.currentTimeMillis();
+        writeln( currentCommand, timeout );
 
         String tag = null;
         ImapLine il = null;
@@ -163,13 +168,14 @@ public class ImapClient extends ClientConnection {
         String lastReply = "";
         List<String> l = new ArrayList<>();
         LOGGER.log( Level.INFO, "waiting for incoming reply of command " + tag );
-        while( ( !lastReply.matches( tag + REGEXP_IMAP_BAD + "|" + tag + REGEXP_IMAP_OK ) ) ) {
-            String reply = readln();
-            LOGGER.log( Level.INFO, "wakeup (remaining: " + System.currentTimeMillis() );
-            l.add( reply );
-            lastReply = reply;
-            LOGGER.log( Level.INFO, "IMAP C<-S: " + ImapLine.commandEncoder( reply ) );
-            currentCommandReply=l.toArray( new String[ l.size() ] );
+        while( ( !lastReply.matches( tag + REGEXP_IMAP_BAD + "|" + tag + REGEXP_IMAP_OK ) ) && System.currentTimeMillis()-start < timeout ) {
+            String reply = readln( timeout-(System.currentTimeMillis()-start) );
+            if(reply != null ) {
+                l.add(reply);
+                lastReply = reply;
+                LOGGER.log(Level.INFO, "IMAP C<-S: " + ImapLine.commandEncoder(reply));
+                currentCommandReply = l.toArray(new String[l.size()]);
+            }
         }
         currentCommandCompleted = lastReply.matches( tag + REGEXP_IMAP_OK + "|" + tag + REGEXP_IMAP_BAD );
         currentCommand = null;
@@ -189,7 +195,7 @@ public class ImapClient extends ClientConnection {
         waitForWakeupRunner();
         if(currentCommand!=null && !"".equals(currentCommand)) {
             LOGGER.log( Level.INFO, "Processing command" );
-            //FIXME processRunnerCommand();
+            gotLine( currentCommand );
         }
         LOGGER.log(Level.FINEST,"Client looping (shutdown=" + isShutdown() + ")");
     }

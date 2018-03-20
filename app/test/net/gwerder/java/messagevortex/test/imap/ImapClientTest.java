@@ -117,15 +117,28 @@ public class ImapClientTest {
             LOGGER.log(Level.INFO,"IMAP Client Encrypted Test");
             LOGGER.log(Level.INFO,"************************************************************************");
             Set<Thread> threadSet = ImapSSLTest.getThreadList();
-            ImapServer is =new ImapServer(0,new SecurityContext(SecurityRequirement.UNTRUSTED_SSLTLS));
-            ImapConnection.setDefaultTimeout(1000);
-            ImapClient ic =new ImapClient( new InetSocketAddress( "localhost", is.getPort() ), new SecurityContext(SecurityRequirement.UNTRUSTED_SSLTLS) );
-            ic.setTimeout(1000);
-            assertTrue("TLS is not as expected",ic.isTLS());
+            LOGGER.log(Level.INFO,"starting imap server");
+            ImapServer is = new ImapServer(0,new SecurityContext(SecurityRequirement.UNTRUSTED_SSLTLS));
+            try {
+                LOGGER.log(Level.INFO, "creating imap client");
+                ImapClient ic = new ImapClient(new InetSocketAddress("localhost", is.getPort()), new SecurityContext(SecurityRequirement.UNTRUSTED_SSLTLS));
+                ic.setTimeout(1000);
+                LOGGER.log(Level.INFO, "connecting imap client to server");
+                ic.connect();
+                LOGGER.log(Level.INFO, "checking TLS status of connection");
+                assertTrue("TLS is not as expected", ic.isTLS());
+                LOGGER.log(Level.INFO, "closing client");
+                ic.shutdown();
+            } catch(IOException ioe ) {
+                ioe.printStackTrace();
+                fail("IOException while handling client");
+            }
+
+            LOGGER.log(Level.INFO, "shutting down server");
             is.shutdown();
-            ic.shutdown();
-            assertTrue("error searching for hangig threads",ImapSSLTest.verifyHangingThreads(threadSet).size()==0);
+            assertTrue("error searching for hangig threads", ImapSSLTest.verifyHangingThreads(threadSet).size() == 0);
         } catch(IOException e) {
+            e.printStackTrace();
             fail("IOException while creating server");
         }
     }
@@ -138,6 +151,7 @@ public class ImapClientTest {
         Set<Thread> threadSet = ImapSSLTest.getThreadList();
         DeadSocket ds=new DeadSocket(0,-1);
         ImapClient ic =new ImapClient( new InetSocketAddress( "localhost",ds.getPort() ), new SecurityContext(SecurityRequirement.PLAIN) );
+        ic.connect();
         assertTrue("TLS is not as expected",!ic.isTLS());
         long start=System.currentTimeMillis();
         (new ImapCommandIWantATimeout()).init();
@@ -158,7 +172,7 @@ public class ImapClientTest {
         } catch(TimeoutException te) {
             long el=(System.currentTimeMillis()-start);
             assertTrue("Did not wait until end of timeout was reached (just "+el+")",el>=300);
-            assertFalse("Did wait too long",el>1000);
+            assertFalse("Did wait too long ("+el+" ms; expected: 300)",el>1000);
             // assertTrue("Connection was not terminated",ic.isTerminated());
         }
         ImapCommand.deregisterCommand("IWantATimeout");

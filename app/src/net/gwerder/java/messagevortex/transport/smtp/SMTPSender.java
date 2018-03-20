@@ -40,19 +40,19 @@ import static net.gwerder.java.messagevortex.transport.SecurityRequirement.START
 /**
  * Created by Martin on 23.01.2018.
  */
-public class SMTPSender extends SendingSocket implements TransportSender {
+public class SMTPSender extends ClientConnection implements TransportSender {
 
     private static final String CRLF = "\r\n";
 
-    static final java.util.logging.Logger LOGGER;
+    static private final java.util.logging.Logger LOGGER;
     static {
         LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
     }
 
-    String server=null;
-    int    port=587;
-    Credentials credentials=null;
-    String senderAddress;
+    String      server        = null;
+    int         port          = 587;
+    Credentials credentials   = null;
+    String      senderAddress ;
 
     public SMTPSender( String senderAddress, String server,int port,Credentials creds, SecurityContext context ) throws IOException {
         super( new InetSocketAddress( server, port ), context );
@@ -62,35 +62,37 @@ public class SMTPSender extends SendingSocket implements TransportSender {
             this.port=port;
         }
         this.credentials=creds;
+        connect();
+        // startTLS if required
+        if( credentials!=null && !isTLS() && ( credentials.getSecurityRequirement()==SecurityRequirement.SSLTLS || credentials.getSecurityRequirement()==SecurityRequirement.UNTRUSTED_SSLTLS ) ) {
+            LOGGER.log( Level.INFO, "doing TLS handshake" );
+            startTLS();
+        }
     }
 
     @Override
     public void sendMessage(String address, InputStream is) throws IOException {
 
-        // connect to server
-        // FIXME set SSLEngine first
-        connect();
-
-        // startTLS if required
-        if( credentials!=null && ( credentials.getSecurityRequirement()==SecurityRequirement.SSLTLS || credentials.getSecurityRequirement()==SecurityRequirement.UNTRUSTED_SSLTLS ) ) startTLS();
-
         // reading server greeting
-        String serverGreeting = read();
+        LOGGER.log( Level.INFO, "waiting for server greeting" );
+        String serverGreeting = readln();
         if( ! serverGreeting.startsWith( "220 " ) ) {
             throw new IOException( "Unable to communicate with server  (Greeting was '" + serverGreeting +"' )");
         }
 
         // send ehlo
+        LOGGER.log( Level.INFO, "got greeting ... sending ehlo" );
         write( "EHLO " + InetAddress.getLocalHost().getHostName() + CRLF );
         String[] ehloReply=getReply();
         if( ! ehloReply[ ehloReply.length - 1 ].startsWith( "250 " ) ) {
             throw new IOException( "Invalid EHLO reply  (Reply was '" + Arrays.toString(ehloReply).replaceAll(",","\n") +"' )");
         }
 
-        // start tls (if required)
+        // start tls (if required/possible)
         if( credentials!=null && ( credentials.getSecurityRequirement()== STARTTLS || credentials.getSecurityRequirement()==SecurityRequirement.UNTRUSTED_STARTTLS ) ) {
+            LOGGER.log( Level.INFO, "issuing STARTTLS command" );
             write( "STARTTLS" + CRLF );
-            String reply=read();
+            String reply=readln();
             if( ! reply.startsWith( "220 " ) ) {
                 throw new IOException( "Invalid STARTTLS reply  (Reply was '" + reply +"')" );
             }
@@ -104,28 +106,30 @@ public class SMTPSender extends SendingSocket implements TransportSender {
 
         // Log into system
         if( credentials!=null && credentials.getUsername()!=null ) {
+            LOGGER.log( Level.INFO, "sending credentials" );
             sendAuth();
         }
 
         String reply;
 
         // send envelope from
+        LOGGER.log( Level.INFO, "sending message" );
         write( "MAIL FROM: " + senderAddress + CRLF );
-        reply=read();
+        reply=readln();
         if( reply==null || ! reply.startsWith( "250 " ) ) {
             throw new IOException( "Invalid MAIL FROM reply  (Reply was '" + reply +"')" );
         }
 
         // send envelope to
         write( "RCPT TO: " + address + CRLF );
-        reply=read();
+        reply=readln();
         if( reply==null || ! reply.startsWith( "250 " ) ) {
             throw new IOException( "Invalid RCPT reply  (Reply was '" + reply +"')" );
         }
 
         // send data
         write( "DATA" + CRLF );
-        reply=read();
+        reply=readln();
         if( reply==null || ! reply.startsWith( "354 " ) ) {
             throw new IOException( "Invalid DATA reply  (Reply was '" + reply +"')" );
         }
@@ -134,7 +138,7 @@ public class SMTPSender extends SendingSocket implements TransportSender {
         write( txt + CRLF + "." + CRLF );
 
         // get delivery confirmed or denied
-        reply=read();
+        reply=readln();
         if( reply==null || ! reply.startsWith( "250 " ) ) {
             throw new IOException( "Invalid EOD reply (Reply was '" + reply +"')" );
         } else {
@@ -143,7 +147,7 @@ public class SMTPSender extends SendingSocket implements TransportSender {
 
         // close connection
         write( "QUIT" + CRLF );
-        reply=read();
+        reply=readln();
         if( reply==null || ! reply.startsWith( "221 " ) ) {
             throw new IOException( "Invalid QUIT reply  (Reply was '" + reply +"')" );
         }
@@ -152,17 +156,17 @@ public class SMTPSender extends SendingSocket implements TransportSender {
 
     private void sendAuth() throws IOException {
         write( "AUTH login" + CRLF );
-        String reply=read();
+        String reply=readln();
         if( ! reply.startsWith( "334 " ) ) {
             throw new IOException( "Invalid AUTH[1] reply  (Reply was '" + reply.substring(0,4) + Arrays.toString(Base64.decode( reply.substring(4) )) + "')" );
         }
-        write( new String( Base64.encode( credentials.getUsername().getBytes( StandardCharsets.UTF_8 ) ), StandardCharsets.UTF_8 )+CRLF);
-        reply=read();
+        writeln( new String( Base64.encode( credentials.getUsername().getBytes( StandardCharsets.UTF_8 ) ), StandardCharsets.UTF_8 ) );
+        reply=readln();
         if( ! reply.startsWith( "334 " ) ) {
             throw new IOException( "Invalid AUTH[2] reply  (Reply was '" + reply.substring( 0, 4 ) + Arrays.toString( Base64.decode( reply.substring(4) ) ) + "')" );
         }
-        write( new String( Base64.encode( credentials.getPassword().getBytes() ), StandardCharsets.UTF_8 ) + CRLF );
-        reply=read();
+        writeln( new String( Base64.encode( credentials.getPassword().getBytes(StandardCharsets.UTF_8) ), StandardCharsets.UTF_8 ) );
+        reply=readln();
         if( ! reply.startsWith( "235 " ) ) {
             throw new IOException( "Invalid AUTH[3] reply  (Reply was '" + reply + "')" );
         } else {
@@ -174,7 +178,7 @@ public class SMTPSender extends SendingSocket implements TransportSender {
         String txt = credentials.getUsername() + "\0" + credentials.getUsername() + "\0" + credentials.getPassword();
         txt = new String( Base64.encode( txt.getBytes( StandardCharsets.UTF_8 ) ), StandardCharsets.UTF_8 ) + CRLF;
         write( "AUTH plain " + txt + CRLF );
-        String reply = read();
+        String reply = readln();
         if( ! reply.startsWith( "235 " ) ) {
             throw new IOException( "Invalid AUTH[1] reply  (Reply was '" + reply.substring( 0, 4 ) + Arrays.toString( Base64.decode( reply.substring( 4 ) ) ) + "')" );
         } else {
@@ -185,8 +189,8 @@ public class SMTPSender extends SendingSocket implements TransportSender {
     private String[] getReply() throws IOException{
         ArrayList<String> replies=new ArrayList<>();
         String line=null;
-        while( line == null || line.charAt(3) != ' ' ) {
-            line = read();
+        while( line == null || ( line.length()<4 || line.charAt(3) != ' ' ) ) {
+            line = readln();
             replies.add(line);
         }
         return replies.toArray( new String[ replies.size() ] );
