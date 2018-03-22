@@ -26,7 +26,7 @@ public class ClientConnection extends AbstractConnection {
     }
 
     private void initConnection() {
-        if( getSecurityContext() != null ) {
+        if( getSecurityContext() != null && getSecurityContext().getContext()!=null ) {
             SSLEngine engine = getSecurityContext().getContext().createSSLEngine( getHostName(), getPort() );
             engine.setUseClientMode( true );
             setEngine( engine );

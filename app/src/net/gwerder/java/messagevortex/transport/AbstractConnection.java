@@ -35,9 +35,9 @@ public abstract class AbstractConnection {
     private static long defaultTimeout = 10*1000;
     private        long timeout        = defaultTimeout;
 
-    private ByteBuffer outboundEncryptedData   = ByteBuffer.allocate(1024);;
+    private ByteBuffer outboundEncryptedData   = (ByteBuffer)ByteBuffer.allocate(1024).clear();
     private ByteBuffer inboundEncryptedData    = (ByteBuffer)ByteBuffer.allocate(1024).clear().flip();
-    private ByteBuffer outboundAppData         = ByteBuffer.allocate(1024);
+    private ByteBuffer outboundAppData         = (ByteBuffer)ByteBuffer.allocate(1024).clear();
     private ByteBuffer inboundAppData          = (ByteBuffer)ByteBuffer.allocate(1024).clear().flip();
 
     private String    protocol                = null;
@@ -47,7 +47,7 @@ public abstract class AbstractConnection {
     private   SecurityContext   context       = null;
     private   boolean           isTLS         = false;
     private   SocketChannel     socketChannel = null;
-    private   InetSocketAddress remoteAddress;
+    private   InetSocketAddress remoteAddress = null;
     private   SSLEngine         engine        = null;
 
     private volatile boolean shutdown = false;
@@ -60,7 +60,6 @@ public abstract class AbstractConnection {
     public AbstractConnection( SocketChannel sock, SecurityContext context ) throws IOException {
         if( sock!=null ) {
             setSocketChannel(sock);
-            this.remoteAddress = (InetSocketAddress) sock.getRemoteAddress();
         }
         setSecurityContext( context );
     }
@@ -79,6 +78,7 @@ public abstract class AbstractConnection {
         if( s!= null ) {
             try {
                 s.configureBlocking(false);
+                this.remoteAddress = (InetSocketAddress) s.getRemoteAddress();
             } catch(IOException ioe){
                 LOGGER.log(Level.SEVERE, "got unexpected exception", ioe );
             }
@@ -114,13 +114,14 @@ public abstract class AbstractConnection {
     }
 
     public void connect() throws IOException {
-        socketChannel = SocketChannel.open();
-        socketChannel.configureBlocking(false);
-        LOGGER.log(Level.INFO, "connecting socket channel to " + remoteAddress);
-        socketChannel.connect(remoteAddress);
-        isClient=true;
-        setSocketChannel( socketChannel );
+        if(socketChannel == null) {
+            socketChannel = SocketChannel.open();
+            socketChannel.configureBlocking(false);
+            LOGGER.log(Level.INFO, "connecting socket channel to " + remoteAddress);
+        }
 
+        socketChannel.connect( remoteAddress );
+        isClient=true;
         // wait for conection to complete handshake
         while (!socketChannel.finishConnect()) {
             try {
@@ -249,6 +250,11 @@ public abstract class AbstractConnection {
         // get handshake status
         HandshakeStatus handshakeStatus = getEngine().getHandshakeStatus();
 
+        LOGGER.log( Level.INFO, "status (1) outboundEncryptedData Buffer "+outboundEncryptedData+"" );
+        LOGGER.log( Level.INFO, "status (1) outboundAppData Buffer "+outboundAppData );
+        LOGGER.log( Level.INFO, "status (1) inboundEncryptedData Buffer "+inboundEncryptedData );
+        LOGGER.log( Level.INFO, "status (1) inboundAppData Buffer "+inboundAppData );
+
         while ( handshakeStatus != SSLEngineResult.HandshakeStatus.FINISHED && handshakeStatus != NOT_HANDSHAKING && timeout - ( System.currentTimeMillis() - start ) > 0 ) {
 
             // Checking handshake status of SSL engine
@@ -323,9 +329,11 @@ public abstract class AbstractConnection {
                     outboundAppData.flip();
                     SSLEngineResult result = null;
                     try {
+                        LOGGER.log( Level.INFO, "outboundAppData (flipped)="+outboundAppData);
                         LOGGER.log( Level.INFO, "outboundEncryptedData="+outboundEncryptedData);
                         result = getEngine().wrap( outboundAppData, outboundEncryptedData );
                         handshakeStatus = result.getHandshakeStatus();
+                        LOGGER.log( Level.INFO, "outboundAppData (flipped)="+outboundAppData);
                         LOGGER.log( Level.INFO, "outboundEncryptedData="+outboundEncryptedData+"/"+result );
                     } catch (SSLException se) {
                         LOGGER.log( Level.WARNING, "Exception while reading data", se );
@@ -343,24 +351,26 @@ public abstract class AbstractConnection {
                         case OK :
                             writeRawSocket( timeout - ( System.currentTimeMillis()-start ) );
                             outboundEncryptedData.flip();
-                            LOGGER.log( Level.INFO, "wrap done with status OK (writeable bytes:"+outboundEncryptedData.remaining()+")");
+                            LOGGER.log( Level.INFO, "wrap done with status OK (remaining bytes:"+outboundEncryptedData.remaining()+")");
                             outboundEncryptedData.compact();
-                            handshakeStatus = getEngine().getHandshakeStatus();
+                            handshakeStatus = result.getHandshakeStatus();
                             break;
                         case CLOSED:
                             try {
                                 writeRawSocket( timeout - ( System.currentTimeMillis()-start ) );
                             } catch( IOException e) {
                                 LOGGER.log( Level.WARNING, "Failed to close channel");
-                                handshakeStatus = getEngine().getHandshakeStatus();
+                                handshakeStatus = result.getHandshakeStatus();
                             }
                             break;
                         case BUFFER_UNDERFLOW:
                             LOGGER.log( Level.SEVERE, "Buffer underflow should not happen", new SSLException("unknown reason for buffer underflow") );
+                            handshakeStatus = result.getHandshakeStatus();
                             break;
                         case BUFFER_OVERFLOW:
+                            outboundEncryptedData.flip();
                             outboundEncryptedData = enlargePacketBuffer(getEngine(), outboundEncryptedData);
-                            handshakeStatus = getEngine().getHandshakeStatus();
+                            handshakeStatus = result.getHandshakeStatus();
                             outboundEncryptedData.flip();
                             LOGGER.log( Level.INFO, "wrap done (OVERFLOW; outboundEncryptedData Buffer "+outboundEncryptedData.remaining()+"/"+outboundEncryptedData.capacity()+")" );
                             outboundEncryptedData.compact();
@@ -371,12 +381,28 @@ public abstract class AbstractConnection {
                     break;
                 case NEED_TASK:
                     LOGGER.log( Level.INFO, "running tasks" );
-                    Runnable task;
-                    while ( ( task = getEngine().getDelegatedTask() ) != null ) {
-                        LOGGER.log( Level.WARNING, "running task " + task );
-                        Thread t = new Thread(task);
-                        t.start();
-                    }
+                    Runnable task = getEngine().getDelegatedTask() ;
+                    do {
+                        if( task != null ) {
+                            LOGGER.log(Level.INFO, "running task " + task);
+                            Thread t = new Thread(task);
+                            t.start();
+                            try {
+                                t.join();
+                            } catch (InterruptedException ie) {
+                                // safe to ignore
+                            }
+                        } else {
+                            try {
+                                Thread.sleep( 20 );
+                            } catch (InterruptedException ie) {
+                                // safe to ignore
+                            }
+                        }
+                        task = getEngine().getDelegatedTask();
+
+                    } while ( task != null );
+
                     LOGGER.log( Level.INFO, "running tasks done" );
                     handshakeStatus = getEngine().getHandshakeStatus();
                     break;

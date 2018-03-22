@@ -92,16 +92,15 @@ public class ImapServer extends ListeningSocketChannel implements StoppableThrea
     @Override
     public void gotConnect(ServerConnection ac) {
         try {
+            // FIXME keep a list of open imap connections
             LOGGER.log( Level.INFO, "got new connection" );
-            ac.setSecurityContext( context );
+            ac=new ImapConnection( ac.getSocketChannel(), context );
             ac.setTimeout(getTimeout());
             if (context != null && (context.getRequirement() == SecurityRequirement.SSLTLS || context.getRequirement() == SecurityRequirement.UNTRUSTED_SSLTLS)) {
                 LOGGER.log( Level.INFO, "starting handshake" );
                 ac.startTLS();
             }
             LOGGER.log( Level.INFO, "inbound connection ready for use" );
-            // FIXME handle incomming imap connection
-            ac.shutdown();
         } catch(IOException ioe ) {
             LOGGER.log( Level.WARNING, "got exception while initial Handshake", ioe );
         }
