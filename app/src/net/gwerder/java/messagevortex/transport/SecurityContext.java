@@ -1,8 +1,6 @@
 package net.gwerder.java.messagevortex.transport;
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
-import sun.security.tools.keytool.CertAndKeyGen;
-import sun.security.x509.X500Name;
 
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
@@ -11,8 +9,6 @@ import javax.net.ssl.TrustManagerFactory;
 import java.io.IOException;
 import java.security.*;
 import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
@@ -85,7 +81,7 @@ public class SecurityContext {
             keyStore = KeyStore.getInstance("JKS");
             keyStore.load(null, null);
 
-            CertAndKeyGen keypair = new CertAndKeyGen("RSA", "SHA256WithRSA", null);
+            /*CertAndKeyGen keypair = new CertAndKeyGen("RSA", "SHA256WithRSA", null);
 
             X500Name x500Name = new X500Name(commonName, organizationalUnit, organization, city, state, country);
 
@@ -98,7 +94,8 @@ public class SecurityContext {
 
             keyStore.setKeyEntry(alias, privKey, keyPass, chain);
 
-        }catch (KeyStoreException|NoSuchAlgorithmException|IOException|CertificateException|NoSuchProviderException|InvalidKeyException|SignatureException e) {
+            */ //FIXME undocumented API ... solve properly
+        }catch (KeyStoreException|NoSuchAlgorithmException|IOException|CertificateException e) {
             LOGGER.log( Level.WARNING, "Exception while creating keystore", e );
         }
         return keyStore;
