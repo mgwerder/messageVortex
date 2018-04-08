@@ -25,6 +25,8 @@ import net.gwerder.java.messagevortex.MessageVortexLogger;
 
 import java.util.logging.Level;
 
+import static net.gwerder.java.messagevortex.transport.imap.ImapConnectionState.CONNECTION_NOT_AUTHENTICATED;
+
 
 public class ImapCommandLogout extends ImapCommand {
 
@@ -49,7 +51,7 @@ public class ImapCommandLogout extends ImapCommand {
         }
 
         if(line.getConnection()!=null) {
-            line.getConnection().setImapState(ImapConnection.CONNECTION_NOT_AUTHENTICATED);
+            line.getConnection().setImapState(CONNECTION_NOT_AUTHENTICATED);
         }
         LOGGER.log(Level.INFO,Thread.currentThread().getName()+" is now in state NOT_AUTHENTICATED");
         return new String[] {"* BYE IMAP4rev1 Server logged out\r\n",line.getTag()+" OK\r\n",null };

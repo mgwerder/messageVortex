@@ -21,19 +21,20 @@ package net.gwerder.java.messagevortex.transport.imap;
 // * SOFTWARE.
 // ************************************************************************************
 
-import net.gwerder.java.messagevortex.ExtendedSecureRandom;
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.transport.*;
 
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509KeyManager;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.security.GeneralSecurityException;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static net.gwerder.java.messagevortex.transport.SecurityRequirement.SSLTLS;
+import static net.gwerder.java.messagevortex.transport.SecurityRequirement.UNTRUSTED_SSLTLS;
 
 
 public class ImapServer extends ListeningSocketChannel implements StoppableThread, SocketListener {
@@ -41,7 +42,7 @@ public class ImapServer extends ListeningSocketChannel implements StoppableThrea
     private static final Logger LOGGER;
     private static int id = 1;
     private long gcLastRun=0;
-    private SecurityContext context = null;
+    private Set<ImapConnection> connSet = new ConcurrentSkipListSet<>();
 
     static {
         LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
@@ -54,27 +55,19 @@ public class ImapServer extends ListeningSocketChannel implements StoppableThrea
     private long timeout = defaultTimeout;
 
     public ImapServer( SecurityContext secContext ) throws IOException {
-        this( ( secContext.getRequirement() == SecurityRequirement.UNTRUSTED_SSLTLS || secContext.getRequirement() == SecurityRequirement.SSLTLS)?993:143, secContext );
+        super( new InetSocketAddress(InetAddress.getByAddress( new byte[] {0,0,0,0} ), (secContext.getRequirement()==UNTRUSTED_SSLTLS || secContext.getRequirement()==SSLTLS?993: 143 ) ),null );
+        setSocketListener( this );
+        setSecurityContext( secContext );
+        setProtocol( "imap" );
+        setName( "IMAPlisten-"+(id++) );
     }
 
     public ImapServer( int port, SecurityContext enc ) throws IOException {
         super( new InetSocketAddress( "0.0.0.0", port ),null );
         setSocketListener( this );
         setSecurityContext( enc );
-        java.security.Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
-
         setProtocol( "imap" );
-
         setName( "IMAPlisten-"+(id++) );
-
-        // Determine valid cyphers
-        String ks="keystore.jks";
-        try{
-            // FIXME always installs all trust manager ... should be done selectively
-            enc.getContext().init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, new TrustManager[] {new AllTrustManager()}, ExtendedSecureRandom.getSecureRandom() );
-        } catch(GeneralSecurityException gse) {
-            throw new IOException("Error initializing security context for connection",gse);
-        }
     }
 
     public ImapAuthenticationProxy setAuth(ImapAuthenticationProxy ap) {
@@ -83,32 +76,55 @@ public class ImapServer extends ListeningSocketChannel implements StoppableThrea
         return old;
     }
 
-    public SecurityContext setSecurityContext( SecurityContext context ){
-        SecurityContext ret=this.context;
-        this.context= context;
-        return ret;
-    }
-
     @Override
     public void gotConnect(ServerConnection ac) {
         try {
-            // FIXME keep a list of open imap connections
+            doGarbageCollection( false );
             LOGGER.log( Level.INFO, "got new connection" );
-            ac=new ImapConnection( ac.getSocketChannel(), context );
-            ac.setTimeout(getTimeout());
-            if (context != null && (context.getRequirement() == SecurityRequirement.SSLTLS || context.getRequirement() == SecurityRequirement.UNTRUSTED_SSLTLS)) {
-                LOGGER.log( Level.INFO, "starting handshake" );
-                ac.startTLS();
-            }
+            ImapConnection ic=new ImapConnection( ac,auth );
+            ic.setTimeout( getTimeout() );
+            connSet.add(ic);
             LOGGER.log( Level.INFO, "inbound connection ready for use" );
         } catch(IOException ioe ) {
             LOGGER.log( Level.WARNING, "got exception while initial Handshake", ioe );
         }
     }
 
+    private void doGarbageCollection( boolean force ) {
+        if( force || gcLastRun + 10000 < System.currentTimeMillis() ) {
+            LOGGER.log( Level.INFO, "Running garbage collector for connections" );
+            // running GC on set of connections
+            Set<ImapConnection> tmp=new HashSet<>();
+            for(ImapConnection ic:connSet) {
+                if( ic.isShutdown() ) {
+                    tmp.add(ic);
+                }
+            }
+            connSet.removeAll( tmp );
+            LOGGER.log( Level.INFO, "garbage collector removed "+tmp.size()+" connections ("+connSet.size()+" remaining)" );
+            gcLastRun=System.currentTimeMillis();
+        }
+    }
+
     @Override
     public boolean isShutdown() {
-        return false;
+        doGarbageCollection( true );
+        return super.isShutdown() && connSet.size() == 0;
+    }
+
+    @Override
+    public void shutdown() {
+        super.shutdown();
+        doGarbageCollection( true );
+        for( ImapConnection ic:connSet ) {
+            try{
+                ic.shutdown();
+            } catch(IOException ioe ) {
+                // safe to ignore as we shut dow all connects anyway
+            }
+        }
+        // cleanup set
+        doGarbageCollection( true );
     }
 
     public long getTimeout() {

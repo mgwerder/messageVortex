@@ -22,31 +22,29 @@ package net.gwerder.java.messagevortex.transport.imap;
 // ************************************************************************************
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
-import net.gwerder.java.messagevortex.transport.SecurityContext;
+import net.gwerder.java.messagevortex.transport.AbstractConnection;
 import net.gwerder.java.messagevortex.transport.ServerConnection;
 import net.gwerder.java.messagevortex.transport.StoppableThread;
 
 import java.io.IOException;
-import java.nio.channels.SocketChannel;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static net.gwerder.java.messagevortex.transport.imap.ImapConnectionState.CONNECTION_NOT_AUTHENTICATED;
 
-public class ImapConnection extends ServerConnection implements Comparable<ImapConnection>, StoppableThread {
 
-    public static final int CONNECTION_NOT_AUTHENTICATED = 1;
-    public static final int CONNECTION_AUTHENTICATED = 2;
-    public static final int CONNECTION_SELECTED = 3;
+public class ImapConnection extends ServerConnection implements Comparable<ImapConnection>, StoppableThread, Runnable {
+
     private static final Logger LOGGER;
     private static int id = 1;
+    private volatile boolean shutdown=false;
 
     static {
         LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-
     }
 
     /* Status of the connection (according to RFC */
-    private int status=CONNECTION_NOT_AUTHENTICATED;
+    private ImapConnectionState status=CONNECTION_NOT_AUTHENTICATED;
 
     /* Authentication authority for this connection */
     private ImapAuthenticationProxy authProxy = null;
@@ -55,8 +53,19 @@ public class ImapConnection extends ServerConnection implements Comparable<ImapC
     /***
      * Creates an imapConnection
      ***/
-    public ImapConnection(SocketChannel sock, SecurityContext secContext) throws IOException {
-        super( sock, secContext );
+    public ImapConnection( AbstractConnection ac, ImapAuthenticationProxy proxy ) throws IOException {
+        super( ac );
+        setAuth( proxy );
+        init();
+    }
+
+    /***
+     * Creates an imapConnection
+     ***/
+    private void init() throws IOException {
+        runner=new Thread(this);
+        setId( Thread.currentThread().getName()+"-conn"+id );
+        runner.start();
     }
 
     public ImapAuthenticationProxy setAuth(ImapAuthenticationProxy authProxy) {
@@ -81,16 +90,13 @@ public class ImapConnection extends ServerConnection implements Comparable<ImapC
         }
     }
 
-    public int setImapState(int status) {
-        if(status>3 || status<1) {
-            return -status;
-        }
-        int old = this.status;
+    public ImapConnectionState setImapState(ImapConnectionState status) {
+        ImapConnectionState old = this.status;
         this.status=status;
         return old;
     }
 
-    public int getImapState() {
+    public ImapConnectionState getImapState() {
         return this.status;
     }
 
@@ -113,7 +119,7 @@ public class ImapConnection extends ServerConnection implements Comparable<ImapC
         // Extract first word (command) and fetch respective command object
         ImapLine il=null;
         try    {
-            il=new ImapLine(this,command );
+            il=new ImapLine( this,command );
         } catch(ImapBlankLineException ie) {
             // just ignore blank lines
             LOGGER.log(Level.INFO,"got a blank line as command",ie);
@@ -136,13 +142,57 @@ public class ImapConnection extends ServerConnection implements Comparable<ImapC
         return s;
     }
 
-    public void gotLine( String line ) {
+    public void run() {
         try {
-            for(String s: processCommand( line )) {
-                writeln(s);
+            while( !shutdown && !isShutdown() ) {
+                String line = readln();
+                if( line==null ) {
+                    // timeout reached
+                    shutdown = true;
+                    getSocketChannel().close();
+                    runner=null;
+                } else {
+                    String[] reply=processCommand(line+CRLF);
+                    if( reply != null ) {
+                        for(String r:reply) {
+                            LOGGER.log(Level.INFO,"sending reply to client \""+ImapLine.commandEncoder(r)+"\"");
+                            write( r );
+                        }
+                    }
+                    if( reply==null || reply[reply.length-1] == null ) {
+                        // process command requested connection close
+                        shutdown = true;
+                        //super.shutdown();
+                        getSocketChannel().close();
+                        runner=null;
+                    } else {
+                        for (String s : reply) {
+                            writeln(s);
+                        }
+                    }
+                }
             }
-        } catch(IOException|ImapException e ) {
-            LOGGER.log(Level.WARNING, "exception while sending reply",e);
+        } catch(IOException|ImapException ioe) {
+            LOGGER.log( Level.WARNING, "got exception while waiting for lines ("+shutdown+")", ioe );
+        }
+    }
+
+    public void shutdown() throws IOException {
+        shutdown=true;
+        super.shutdown();
+        if( runner != null ) {
+            synchronized (runner) {
+                while (runner != null && runner.isAlive()) {
+                    // runner.interrupt();
+                    try {
+                        runner.join();
+                    } catch (InterruptedException ie) {
+                        // ignore and reloop
+                    }
+                }
+                // LOGGER.log( Level.INFO, "shut down connection "+runner.getName()+" completed");
+                runner = null;
+            }
         }
     }
 

@@ -1,37 +1,113 @@
 package net.gwerder.java.messagevortex.transport;
 
+import net.gwerder.java.messagevortex.MessageVortexLogger;
+import sun.security.tools.keytool.CertAndKeyGen;
+import sun.security.x509.X500Name;
+
+import javax.net.ssl.KeyManager;
+import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
+import javax.net.ssl.TrustManagerFactory;
+import java.io.IOException;
+import java.security.*;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by Martin on 11.03.2018.
  */
 public class SecurityContext {
 
+    private static final Logger LOGGER;
+    static {
+        LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+    }
+
+
     private SecurityRequirement requirement = SecurityRequirement.STARTTLS;
-    private SSLContext context;
-    private Set<String> supportedCiphers = new HashSet<>();
+    private SSLContext  context             = null;
+    private Set<String> supportedCiphers    = new HashSet<>();
 
     public SecurityContext() {
-        try {
-            context = SSLContext.getInstance("TLS");
-            context.init(null, new TrustManager[]{new AllTrustManager()}, new SecureRandom());
-        } catch( NoSuchAlgorithmException|KeyManagementException e ) {
-            // should never happen
-        }
     }
 
     public SecurityContext( SecurityRequirement requirement ) {
-        this();
         setRequirement( requirement );
     }
 
+    public SecurityContext( SSLContext context ) {
+        setRequirement( null );
+        setContext( context );
+    }
+
+    public SecurityContext( SSLContext context,SecurityRequirement req ) {
+        setRequirement( req );
+        setContext( context );
+    }
+
+    private void init() {
+        try {
+            if( context==null ) {
+                context = SSLContext.getInstance("TLS");
+                KeyManagerFactory keyManager = KeyManagerFactory.getInstance("SunX509");
+                KeyStore keyStore = getSelfsignedKeyStore();
+                keyManager.init(keyStore, "changeme".toCharArray());
+                TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance("SunX509");
+                trustManagerFactory.init(keyStore);
+                context.init(new KeyManager[] { new CustomKeyManager("keystore.jks","changeme", "mykey3")}, trustManagerFactory.getTrustManagers(), new SecureRandom()); //new TrustManager[]{new AllTrustManager()}
+            }
+        } catch( GeneralSecurityException e ) {
+            LOGGER.log( Level.WARNING, "Exception while creating SecurityContext", e );
+        }
+    }
+
+    private KeyStore getSelfsignedKeyStore()  {
+        KeyStore keyStore = null;
+        try {
+            String commonName = "MessageVortex";
+            String organizationalUnit = "MessageVortex";
+            String organization = "none";
+            String city = "none";
+            String state = "none";
+            String country = "none";
+            int keysize = 2048;
+
+            String alias = "selfsigned";
+            char[] keyPass = "changeme".toCharArray();
+
+            int validity = 356 * 10;
+
+            keyStore = KeyStore.getInstance("JKS");
+            keyStore.load(null, null);
+
+            CertAndKeyGen keypair = new CertAndKeyGen("RSA", "SHA256WithRSA", null);
+
+            X500Name x500Name = new X500Name(commonName, organizationalUnit, organization, city, state, country);
+
+            keypair.generate(keysize);
+            PrivateKey privKey = keypair.getPrivateKey();
+
+            X509Certificate[] chain = new X509Certificate[] {
+                    keypair.getSelfCertificate( x500Name, new Date(), (long) validity * 24 * 60 * 60 )
+            };
+
+            keyStore.setKeyEntry(alias, privKey, keyPass, chain);
+
+        }catch (KeyStoreException|NoSuchAlgorithmException|IOException|CertificateException|NoSuchProviderException|InvalidKeyException|SignatureException e) {
+            LOGGER.log( Level.WARNING, "Exception while creating keystore", e );
+        }
+        return keyStore;
+    }
+
     public SSLContext getContext() {
+        if( context == null ) {
+            init();
+        }
         return context;
     }
 

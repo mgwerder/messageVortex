@@ -177,6 +177,7 @@ public class SymmetricKeyTest {
                     o.write(ak.toBytes(DumpType.ALL_UNENCRYPTED));
                     o.close();
                 } catch (Exception e) {
+                    e.printStackTrace();
                     fail("unexpected exception");
                 }
             }

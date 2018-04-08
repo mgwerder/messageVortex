@@ -32,6 +32,8 @@ public class MessageVortexLogger extends Logger {
 
     static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
+    static final Handler consoleHandler = new ConsoleHandler();;
+
     static {
         // remove all existing console handler
         Handler[] handlers = getGlobalLogger().getParent().getHandlers();
@@ -42,9 +44,8 @@ public class MessageVortexLogger extends Logger {
         }
 
         // set log formater
-        Handler console = new ConsoleHandler();
-        console.setFormatter( new MyLogFormatter() );
-        getGlobalLogger().getParent().addHandler( console );
+        consoleHandler.setFormatter( new MyLogFormatter() );
+        getGlobalLogger().getParent().addHandler( consoleHandler );
     }
 
     private MessageVortexLogger() {
@@ -93,6 +94,10 @@ public class MessageVortexLogger extends Logger {
 
             return sb.toString();
         }
+    }
+
+    public static void flush() {
+        consoleHandler.flush();
     }
 
 }

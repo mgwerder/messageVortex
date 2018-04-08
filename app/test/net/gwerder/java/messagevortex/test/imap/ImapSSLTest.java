@@ -1,15 +1,39 @@
 package net.gwerder.java.messagevortex.test.imap;
+// ************************************************************************************
+// * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
+// *
+// * Permission is hereby granted, free of charge, to any person obtaining a copy
+// * of this software and associated documentation files (the "Software"), to deal
+// * in the Software without restriction, including without limitation the rights
+// * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// * copies of the Software, and to permit persons to whom the Software is
+// * furnished to do so, subject to the following conditions:
+// *
+// * The above copyright notice and this permission notice shall be included in all
+// * copies or substantial portions of the Software.
+// *
+// * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// * SOFTWARE.
+// ************************************************************************************
 
 import net.gwerder.java.messagevortex.ExtendedSecureRandom;
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.transport.*;
-import net.gwerder.java.messagevortex.transport.imap.*;
+import net.gwerder.java.messagevortex.transport.imap.ImapClient;
+import net.gwerder.java.messagevortex.transport.imap.ImapLine;
+import net.gwerder.java.messagevortex.transport.imap.ImapServer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import javax.net.ssl.*;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -17,11 +41,13 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.security.KeyStore;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
 
+import static net.gwerder.java.messagevortex.test.transport.SMTPTransportSenderTest.CRLF;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -48,10 +74,21 @@ public class ImapSSLTest {
             LOGGER.log(Level.INFO,"************************************************************************");
             LOGGER.log(Level.INFO,"Testing SSL handshake by client");
             LOGGER.log(Level.INFO,"************************************************************************");
-            final SSLContext context=SSLContext.getInstance("TLS");
+
             String ks="keystore.jks";
             assertTrue("Keystore check",(new File(ks)).exists());
-            context.init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, new TrustManager[] {new AllTrustManager()}, esr.getSecureRandom() );
+            KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+            FileInputStream f = new FileInputStream(ks);
+            keyStore.load( f, "changeme".toCharArray() );
+            f.close();
+            TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+            tmf.init(keyStore);
+            final SSLContext context = SSLContext.getInstance("TLS");
+            KeyManagerFactory kmf = KeyManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+            kmf.init(keyStore,"changeme".toCharArray());
+            //context.init(null, tmf.getTrustManagers(), null);
+            //context.init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, new TrustManager[] {new AllTrustManager()}, esr.getSecureRandom() );
+            context.init( kmf.getKeyManagers(), tmf.getTrustManagers(), esr.getSecureRandom() );
             SSLContext.setDefault(context);
 
             Set<String> suppCiphers=new HashSet<>();
@@ -67,13 +104,14 @@ public class ImapSSLTest {
                     SocketDeblocker t=new SocketDeblocker(serverSocket.getLocalPort(),30);
                     t.start();
                     SSLSocket s=(SSLSocket)serverSocket.accept();
+                    s.setSoTimeout( 1000 );
                     s.close();
                     serverSocket.close();
                     serverSocket=null;
                     t.shutdown();
                     LOGGER.log(Level.INFO,"Cipher suite \""+arr[i]+"\" seems to be supported");
                 } catch(SSLException e) {
-                    LOGGER.log(Level.FINER,"Cipher suite \""+arr[i]+"\" seems to be unsupported",e);
+                    LOGGER.log(Level.INFO,"Cipher suite \""+arr[i]+"\" seems to be unsupported",e);
                     supported=false;
                     try{
                         serverSocket.close();
@@ -87,11 +125,12 @@ public class ImapSSLTest {
                 }
             }
             final ServerSocket ss=SSLServerSocketFactory.getDefault().createServerSocket(0);
-            ((SSLServerSocket)(ss)).setEnabledCipherSuites(suppCiphers.toArray(new String[0]));
+            ((SSLServerSocket)(ss)).setEnabledCipherSuites(suppCiphers.toArray(new String[suppCiphers.size()]));
             (new Thread() {
                 public void run() {
                     try{
-                        SSLContext.setDefault(context);
+                        SSLContext.setDefault( context );
+                        LOGGER.log(Level.INFO,"pseudoserver waiting for connect");
                         Socket s=ss.accept();
                         LOGGER.log(Level.INFO,"pseudoserver waiting for command");
                         s.getInputStream().skip(9);
@@ -107,8 +146,8 @@ public class ImapSSLTest {
                 }
             }).start();
 
-            ImapClient ic =new ImapClient(new InetSocketAddress( "localhost", ss.getLocalPort() ), new SecurityContext( SecurityRequirement.UNTRUSTED_SSLTLS ) );
-            ic.setTimeout(2000);
+            ImapClient ic =new ImapClient(new InetSocketAddress( "localhost", ss.getLocalPort() ), new SecurityContext( context,SecurityRequirement.UNTRUSTED_SSLTLS ) );
+            ic.setTimeout(1000);
             ic.connect();
             ic.sendCommand("a1 test");
             assertTrue("check client socket state",ic.isTLS());
@@ -120,6 +159,8 @@ public class ImapSSLTest {
         } catch(Exception ioe) {
             LOGGER.log(Level.WARNING,"Unexpected Exception",ioe);
             fail("Exception rised  in client("+ioe+") while communicating");
+        } finally {
+            MessageVortexLogger.flush();
         }
     }
 
@@ -158,28 +199,36 @@ public class ImapSSLTest {
             LOGGER.log(Level.INFO,"************************************************************************");
             LOGGER.log(Level.INFO,"setting up server");
             Set<Thread> threadSet = getThreadList();
-            ImapServer is=new ImapServer(0,new SecurityContext(SecurityRequirement.UNTRUSTED_SSLTLS));
-            is.setTimeout(2000);
+
+            final SSLContext context=SSLContext.getInstance("TLS");
+            String ks="keystore.jks";
+            assertTrue("Keystore check",(new File(ks)).exists());
+            context.init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, new TrustManager[] {new AllTrustManager()}, esr.getSecureRandom() );
+            SSLContext.setDefault(context);
+
+            SecurityContext secContext = new SecurityContext( context,SecurityRequirement.UNTRUSTED_SSLTLS );
+            ImapServer is=new ImapServer(0, secContext );
+            is.setTimeout(4000);
             LOGGER.log(Level.INFO,"setting up pseudo client");
             Socket s=SSLSocketFactory.getDefault().createSocket(InetAddress.getByName("localhost"),is.getPort());
-            s.setSoTimeout(2000);
+            s.setSoTimeout(4000);
             LOGGER.log(Level.INFO,"sending command to  port "+is.getPort() );
             s.getOutputStream().write("a1 capability\r\n".getBytes(StandardCharsets.UTF_8));
             s.getOutputStream().flush();
             LOGGER.log( Level.INFO,"sent... waiting for reply" );
-            byte b[]=new byte[7];
+            StringBuilder sb = new StringBuilder();
             int start=0;
-            int len=b.length;
-            while(len>0) {
-                int numread=s.getInputStream().read(b,start,len);
+            while( !sb.toString().endsWith( "a1 OK" + CRLF ) ) {
+                byte[] b=new byte[1];
+                int numread=s.getInputStream().read(b,0,b.length);
                 if(numread>0) {
                     start+=numread;
-                    len-=numread;
-                    LOGGER.log( Level.INFO,"got "+start+" bytes; waiting for "+len+" more" );
+                    sb.append( (char)(b[0]) );
+                    LOGGER.log( Level.INFO,"got "+start+" bytes ("+sb.toString()+")" );
                 }
             }
-            LOGGER.log(Level.INFO,"got sequence \""+(new String(b,java.nio.charset.Charset.defaultCharset()))+"\"");
-            LOGGER.log(Level.INFO,"done");
+            LOGGER.log(Level.INFO,"got sequence \""+sb.toString()+"\"");
+            s.close();
             is.shutdown();
             assertTrue("error searching for hangig threads",verifyHangingThreads(threadSet).size()==0);
         } catch(Exception ioe) {
@@ -195,13 +244,17 @@ public class ImapSSLTest {
             LOGGER.log(Level.INFO,"Testing initial SSL handshake for both components");
             LOGGER.log(Level.INFO,"************************************************************************");
             Set<Thread> threadSet = getThreadList();
-            ImapServer is=new ImapServer(0,new SecurityContext(SecurityRequirement.UNTRUSTED_SSLTLS));
+            final SSLContext context = SSLContext.getInstance("TLS");
+            String ks="keystore.jks";
+            assertTrue("Keystore check",(new File(ks)).exists());
+            context.init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, new TrustManager[] {new AllTrustManager()}, esr.getSecureRandom() );
+            ImapServer is=new ImapServer(0,new SecurityContext(context,SecurityRequirement.UNTRUSTED_SSLTLS));
             is.setTimeout(5000);
-            ImapClient ic=new ImapClient( new InetSocketAddress( "localhost", is.getPort() ), new SecurityContext(SecurityRequirement.UNTRUSTED_SSLTLS) );
+            ImapClient ic=new ImapClient( new InetSocketAddress( "localhost", is.getPort() ), new SecurityContext( context,SecurityRequirement.UNTRUSTED_SSLTLS) );
             ic.setTimeout(5000);
             ImapClient.setDefaultTimeout(300);
             ic.connect();
-            String[] s=ic.sendCommand("a1 capability\r\n");
+            String[] s=ic.sendCommand("a1 capability");
             for(String v:s) {
                 LOGGER.log(Level.INFO,"IMAP<- C: "+ImapLine.commandEncoder(v));
             }
@@ -214,6 +267,7 @@ public class ImapSSLTest {
             assertTrue("error searching for hangig threads",verifyHangingThreads(threadSet).size()==0);
         } catch(Exception ioe) {
             LOGGER.log(Level.WARNING,"Unexpected Exception",ioe);
+            ioe.printStackTrace();
             fail("Exception rised  in client("+ioe+") while communicating");
         }
     }

@@ -9,6 +9,9 @@ import java.nio.channels.SocketChannel;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static net.gwerder.java.messagevortex.transport.SecurityRequirement.SSLTLS;
+import static net.gwerder.java.messagevortex.transport.SecurityRequirement.UNTRUSTED_SSLTLS;
+
 /**
  * Created by Martin on 10.03.2018.
  */
@@ -22,6 +25,8 @@ public class ListeningSocketChannel {
     final InternalThread thread ;
 
     private String protocol = "unknown";
+    private SecurityContext context = null;
+
 
     private class InternalThread extends Thread {
 
@@ -67,7 +72,11 @@ public class ListeningSocketChannel {
                     if (socketChannel != null) {
                         if( listener!=null ) {
                             LOGGER.log(Level.INFO, "calling SocketChannel listener" );
-                            listener.gotConnect( new ServerConnection( socketChannel,null ) );
+                            ServerConnection sc = new ServerConnection( socketChannel,getSecurityContext() );
+                            if(getSecurityContext() != null && getSecurityContext().getRequirement()!=null  && ( getSecurityContext().getRequirement()==UNTRUSTED_SSLTLS || getSecurityContext().getRequirement()==SSLTLS) ) {
+                                sc.startTLS();
+                            }
+                            listener.gotConnect( sc );
                         } else {
                             LOGGER.log(Level.SEVERE, "socketchannel listener is missing" );
                         }
@@ -80,7 +89,7 @@ public class ListeningSocketChannel {
                     }
                 }
             } catch (IOException ioe) {
-                LOGGER.log(Level.WARNING, "IOException while handling incomming connects" );
+                LOGGER.log(Level.WARNING, "IOException while handling incomming connects", ioe );
             }
         }
     }
@@ -117,6 +126,16 @@ public class ListeningSocketChannel {
         return ret;
     }
 
+    public SecurityContext setSecurityContext( SecurityContext context ){
+        SecurityContext ret=this.context;
+        this.context= context;
+        return ret;
+    }
+
+    public SecurityContext getSecurityContext() {
+        return context;
+    }
+
     public int getPort() {
         return thread.getPort();
     }
@@ -134,6 +153,10 @@ public class ListeningSocketChannel {
                 // safe to ignore
             }
         }
+    }
+
+    public boolean isShutdown() {
+        return thread.isAlive();
     }
 
 }

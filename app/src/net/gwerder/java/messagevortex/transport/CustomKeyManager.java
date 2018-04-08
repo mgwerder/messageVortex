@@ -21,6 +21,9 @@ package net.gwerder.java.messagevortex.transport;
 // * SOFTWARE.
 // ************************************************************************************
 
+import javax.net.ssl.KeyManager;
+import javax.net.ssl.SSLEngine;
+import javax.net.ssl.X509ExtendedKeyManager;
 import javax.net.ssl.X509KeyManager;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -36,7 +39,7 @@ import java.util.logging.Logger;
 /***
  * Keymanager enables specification of key alias to be used.
  ***/
-public class CustomKeyManager implements X509KeyManager {
+public class CustomKeyManager extends X509ExtendedKeyManager implements KeyManager,X509KeyManager {
 
     private static final Logger LOGGER;
     static {
@@ -89,6 +92,7 @@ public class CustomKeyManager implements X509KeyManager {
      ***/
     public PrivateKey getPrivateKey(String alias) {
         try {
+            LOGGER.log(Level.INFO,"key for \""+alias+"\" requested ",new Object[] {keyStore.getKey(alias, password)});
             return (PrivateKey) keyStore.getKey(alias, password);
         } catch (Exception e) {
             LOGGER.log(Level.WARNING,"unknown key requested \""+alias+"\"",e);
@@ -104,6 +108,7 @@ public class CustomKeyManager implements X509KeyManager {
     public X509Certificate[] getCertificateChain(String alias) {
         try {
             java.security.cert.Certificate[] certs = keyStore.getCertificateChain(alias);
+            LOGGER.log(Level.INFO,"key chain for \""+alias+"\" requested ",new Object[] {certs});
             if (certs == null || certs.length == 0)    {
                 // was a null return val documentation is unclear
                 return new X509Certificate[0];
@@ -123,35 +128,34 @@ public class CustomKeyManager implements X509KeyManager {
     }
 
     /**
-     * Alias choser always returning the desired alias.
-     *
-     * @param keyType        type of key to be looked for
-     * @param issuers         issuers accepted
-     * @param socket        socket requiring the certificate
-     ***/
-    public String chooseServerAlias(String keyType, Principal[] issuers, Socket socket) {
-        return alias;
-    }
-
-    /**
-     * Dummy methode returning UnsupportedOperationException (as this is a "server only" implementation)
+     * Dummy method always returning the preselected alias
      *
      * @param param1    dummy
      * @param param2    dummy
      ***/
     public String[] getClientAliases(String param1, Principal[] param2) {
-        throw new UnsupportedOperationException("Method getClientAliases() not implemented. Server Socket only Manager");
+        LOGGER.log(Level.INFO,"client alias list for  \""+alias+"\" requested ");
+        return new String[] { alias };
+    }
+
+    public String chooseEngineClientAlias(String[] keyType, Principal[] issuers, SSLEngine engine) {
+        return chooseClientAlias( null, null ,null );
+    }
+
+    public String chooseEngineServerAlias(String keyType, Principal[] issuers, SSLEngine engine) {
+       return chooseServerAlias( null, null, null );
     }
 
     /**
-     * Dummy methode returning UnsupportedOperationException (as this is a "server only" implementation)
+     * Dummy method always returning the preselected alias
      *
      * @param param1    dummy
      * @param param2    dummy
      * @param param3    dummy
      ***/
     public String chooseClientAlias(String[] param1, Principal[] param2, Socket param3) {
-        throw new UnsupportedOperationException("Method chooseClientAlias() not implemented. Server Socket only Manager");
+        LOGGER.log(Level.INFO,"client alias for  \""+alias+"\" requested ");
+        return alias;
     }
 
     /**
@@ -161,7 +165,20 @@ public class CustomKeyManager implements X509KeyManager {
      * @param param2    dummy
      ***/
     public String[] getServerAliases(String param1, Principal[] param2) {
+        LOGGER.log(Level.INFO,"server alias list for  \""+alias+"\" requested ");
         return new String[] { alias };
+    }
+
+    /**
+     * Alias choser always returning the desired alias.
+     *
+     * @param keyType        type of key to be looked for
+     * @param issuers         issuers accepted
+     * @param socket        socket requiring the certificate
+     ***/
+    public String chooseServerAlias(String keyType, Principal[] issuers, Socket socket) {
+        LOGGER.log(Level.INFO,"server alias (1) for \""+alias+"\" requested ");
+        return alias;
     }
 
     /**
@@ -171,6 +188,7 @@ public class CustomKeyManager implements X509KeyManager {
      * @param param2    dummy
      ***/
     public String chooseServerAlias(@SuppressWarnings("UnusedParameters") String param1, @SuppressWarnings("UnusedParameters") Principal[] param2) {
+        LOGGER.log(Level.INFO,"server alias (2) for \""+alias+"\" requested ");
         return alias;
     }
 }

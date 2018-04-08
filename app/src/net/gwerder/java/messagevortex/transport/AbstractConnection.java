@@ -41,7 +41,7 @@ public abstract class AbstractConnection {
     private ByteBuffer inboundAppData          = (ByteBuffer)ByteBuffer.allocate(1024).clear().flip();
 
     private String    protocol                = null;
-    private boolean   isClient                = false;
+    private boolean   isClient                ;
 
     private   ExecutorService   executor      = Executors.newSingleThreadExecutor();
     private   SecurityContext   context       = null;
@@ -57,19 +57,49 @@ public abstract class AbstractConnection {
         setSecurityContext( context );
     }
 
-    public AbstractConnection( SocketChannel sock, SecurityContext context ) throws IOException {
+    public AbstractConnection( AbstractConnection ac ) throws IOException {
+        if(ac!=null) {
+            setSecurityContext(ac.getSecurityContext());
+            setEngine(ac.getEngine());
+            this.isTLS = ac.isTLS;
+            this.socketChannel = ac.socketChannel;
+            this.remoteAddress = ac.remoteAddress;
+            this.protocol = ac.protocol;
+            this.isClient = ac.isClient;
+            this.timeout = ac.timeout;
+            this.outboundEncryptedData = ac.outboundEncryptedData;
+            this.outboundAppData = ac.outboundAppData;
+            this.inboundEncryptedData = ac.inboundEncryptedData;
+            this.inboundAppData = ac.inboundAppData;
+        }
+    }
+
+    public AbstractConnection( SocketChannel sock, SecurityContext context, boolean isClient ) throws IOException {
+        this.isClient=isClient;
         if( sock!=null ) {
             setSocketChannel(sock);
         }
         setSecurityContext( context );
     }
 
+    public AbstractConnection( SocketChannel sock, SecurityContext context ) throws IOException {
+        this( sock,context,true );
+    }
+
     public String getHostName() {
-        return remoteAddress.getHostName();
+        if(remoteAddress==null) {
+            return null;
+        } else {
+            return remoteAddress.getHostName();
+        }
     }
 
     public int getPort() {
-        return remoteAddress.getPort();
+        if( remoteAddress == null ) {
+            return -1;
+        } else {
+            return remoteAddress.getPort();
+        }
     }
 
     protected SocketChannel setSocketChannel( SocketChannel s ) {
@@ -88,7 +118,7 @@ public abstract class AbstractConnection {
 
     public SocketChannel getSocketChannel() throws IOException {
         if( socketChannel==null || !socketChannel.isConnected() ) {
-            throw new IOException( "socket is unexpectedly not connected" );
+            throw new IOException( "socket is unexpectedly not connected ("+socketChannel+")" );
         }
         return this.socketChannel;
     }
@@ -150,14 +180,21 @@ public abstract class AbstractConnection {
     }
 
     public void startTLS( long timeout ) throws IOException {
-        if( getEngine() == null && getSecurityContext().getContext()!=null ) {
+        if( isTLS() ) {
+            LOGGER.log(Level.INFO, "refused to renegotiate TLS (already encrypted)");
+            return;
+        }
+        if( getEngine() == null && getSecurityContext()!=null && getSecurityContext().getContext()!=null ) {
             // init engine if not yet done
             InetSocketAddress ia=(InetSocketAddress)socketChannel.getLocalAddress();
+            LOGGER.log(Level.INFO, "created SSLEngine for " + ia +" (name="+ia.getHostName()+"; client="+isClient+")");
             setEngine( getSecurityContext().getContext().createSSLEngine( ia.getHostName(),ia.getPort() ) );
             getEngine().setUseClientMode( isClient );
         } else if( getEngine() == null ) {
             throw new IOException( "no securtity context available but startTLS called" );
         }
+
+        LOGGER.log(Level.INFO, "starting TLS handshake (clientMode="+isClient+")");
 
         // set connection to TLS mode
         isTLS = true;
@@ -193,18 +230,18 @@ public abstract class AbstractConnection {
     private int readRawSocket( long timeout ) throws IOException {
         // read bytes from socket
         boolean loopOnce = inboundEncryptedData.remaining()>0;
+        int bytesRead = 0;
         inboundEncryptedData.compact();
         try {
-            LOGGER.log( Level.INFO, "starting reading raw socket (loopOnce is "+loopOnce+")" );
-            int bytesRead = 0;
+            LOGGER.log(Level.INFO, "starting reading raw socket (loopOnce is " + loopOnce + ")");
             long start = System.currentTimeMillis();
-            while (bytesRead == 0 && timeout - (System.currentTimeMillis() - start) > 0) {
-                bytesRead = getSocketChannel().read( inboundEncryptedData );
-                LOGGER.log( Level.INFO, "tried to read (got "+bytesRead+")" );
+            while ( !shutdown && bytesRead == 0 && timeout - (System.currentTimeMillis() - start) > 0) {
+                bytesRead = getSocketChannel().read(inboundEncryptedData);
+                LOGGER.log(Level.INFO, "tried to read (got " + bytesRead + ")");
                 if (bytesRead == 0) {
                     if (loopOnce) {
                         // abort if precondition might be fulfilled already
-                        LOGGER.log( Level.INFO, "done reading raw socket (loop once gave no new input)" );
+                        LOGGER.log(Level.INFO, "done reading raw socket (loop once gave no new input)");
                         break;
                     } else {
                         try {
@@ -215,15 +252,20 @@ public abstract class AbstractConnection {
                     }
                 }
             }
-            LOGGER.log( Level.INFO, "done reading raw socket (took "+ (System.currentTimeMillis()-start) + "ms; read "+bytesRead+" bytes)" );
-            return bytesRead;
-        } finally {
+            LOGGER.log(Level.INFO, "done reading raw socket (took " + (System.currentTimeMillis() - start) + "ms; read " + bytesRead + " bytes)");
+        } catch( IOException ioe) {
             inboundEncryptedData.flip();
+            LOGGER.log( Level.WARNING, "got exception while reading (propagated)", ioe );
+            throw ioe;
         }
+        inboundEncryptedData.flip();
+        LOGGER.log(Level.INFO, "reverting inbound buffer (new size is "+inboundEncryptedData.remaining()+")");
+        return bytesRead;
     }
 
     private int writeRawSocket( long timeout ) throws IOException {
         outboundEncryptedData.flip();
+        LOGGER.log( Level.INFO, "trying to send outboundEncryptedData Buffer "+outboundEncryptedData.remaining()+"" );
         try{
             long start = System.currentTimeMillis();
             int bytesWritten = 0;
@@ -232,6 +274,7 @@ public abstract class AbstractConnection {
             }
             return bytesWritten;
         } finally {
+            LOGGER.log( Level.INFO, "sending outboundEncryptedData Buffer done ("+outboundEncryptedData.remaining()+")" );
             outboundEncryptedData.compact();
         }
     }
@@ -255,13 +298,13 @@ public abstract class AbstractConnection {
         LOGGER.log( Level.INFO, "status (1) inboundEncryptedData Buffer "+inboundEncryptedData );
         LOGGER.log( Level.INFO, "status (1) inboundAppData Buffer "+inboundAppData );
 
-        while ( handshakeStatus != SSLEngineResult.HandshakeStatus.FINISHED && handshakeStatus != NOT_HANDSHAKING && timeout - ( System.currentTimeMillis() - start ) > 0 ) {
+        while ( !shutdown && handshakeStatus != SSLEngineResult.HandshakeStatus.FINISHED && handshakeStatus != NOT_HANDSHAKING && timeout - ( System.currentTimeMillis() - start ) > 0 && getEngine() != null ) {
 
             // Checking handshake status of SSL engine
             LOGGER.log( Level.INFO, "relooping (handshake status is "+handshakeStatus+")" );
             switch (handshakeStatus) {
                 case NEED_UNWRAP:
-                    LOGGER.log( Level.INFO, "doing unwrap (reading)" );
+                    LOGGER.log( Level.INFO, "doing unwrap (reading; buffer is "+inboundEncryptedData.remaining()+")" );
 
                     int bytesRead = readRawSocket( timeout - ( System.currentTimeMillis()-start ) );
 
@@ -296,27 +339,27 @@ public abstract class AbstractConnection {
                     handshakeStatus = getEngine().getHandshakeStatus();
                     switch( res.getStatus() ) {
                         case OK:
-                            LOGGER.log( Level.INFO, "unwrap done (OK)" );
+                            LOGGER.log( Level.INFO, "unwrap done (OK;inboundAppData="+inboundAppData.remaining()+";inboundEncryptedData="+inboundEncryptedData.remaining()+")" );
                             break;
                         case CLOSED:
-                            if (getEngine().isOutboundDone()) {
+                            if ( getEngine().isOutboundDone() ) {
                                 throw new IOException( "engine reports closed status" );
                             } else {
                                 getEngine().closeOutbound();
                                 handshakeStatus = getEngine().getHandshakeStatus();
                                 LOGGER.log( Level.INFO, "unwrap done (CLOSED)" );
+                                isTLS=false;
+                                setEngine( null );
                                 break;
                             }
                         case BUFFER_UNDERFLOW:
                             inboundEncryptedData = handleBufferUnderflow(getEngine(), inboundEncryptedData);
-                            inboundEncryptedData.flip();
                             handshakeStatus = getEngine().getHandshakeStatus();
                             LOGGER.log( Level.INFO, "unwrap done (UNDERFLOW; inboundEncryptedData Buffer "+inboundEncryptedData.remaining()+"/"+inboundEncryptedData.capacity()+")" );
                             break;
                         case BUFFER_OVERFLOW:
                             inboundAppData = enlargeApplicationBuffer( getEngine(), inboundAppData);
                             handshakeStatus = getEngine().getHandshakeStatus();
-                            inboundAppData.flip();
                             LOGGER.log( Level.INFO, "unwrap done (OVERFLOW; inboundAppData Buffer "+inboundAppData.remaining()+"/"+inboundAppData.capacity()+")" );
                             break;
                         default:
@@ -359,9 +402,11 @@ public abstract class AbstractConnection {
                             try {
                                 writeRawSocket( timeout - ( System.currentTimeMillis()-start ) );
                             } catch( IOException e) {
-                                LOGGER.log( Level.WARNING, "Failed to close channel");
-                                handshakeStatus = result.getHandshakeStatus();
+                                // LOGGER.log( Level.WARNING, "Failed to close channel", e );
                             }
+                            isTLS=false;
+                            setEngine( null );
+                            handshakeStatus = result.getHandshakeStatus();
                             break;
                         case BUFFER_UNDERFLOW:
                             LOGGER.log( Level.SEVERE, "Buffer underflow should not happen", new SSLException("unknown reason for buffer underflow") );
@@ -370,10 +415,9 @@ public abstract class AbstractConnection {
                         case BUFFER_OVERFLOW:
                             outboundEncryptedData.flip();
                             outboundEncryptedData = enlargePacketBuffer(getEngine(), outboundEncryptedData);
-                            handshakeStatus = result.getHandshakeStatus();
-                            outboundEncryptedData.flip();
                             LOGGER.log( Level.INFO, "wrap done (OVERFLOW; outboundEncryptedData Buffer "+outboundEncryptedData.remaining()+"/"+outboundEncryptedData.capacity()+")" );
                             outboundEncryptedData.compact();
+                            handshakeStatus = result.getHandshakeStatus();
                             break;
                         default:
                             throw new IllegalStateException( "Invalid SSL status: " + result.getStatus() );
@@ -425,7 +469,7 @@ public abstract class AbstractConnection {
             LOGGER.log( Level.INFO, "status inboundAppData Buffer "+inboundAppData.remaining()+"/"+inboundAppData.capacity()+"" );
         }
 
-        if( timeout - ( System.currentTimeMillis() - start ) <= 0 && handshakeStatus != SSLEngineResult.HandshakeStatus.FINISHED ) {
+        if( !shutdown && timeout - ( System.currentTimeMillis() - start ) <= 0 && handshakeStatus != SSLEngineResult.HandshakeStatus.FINISHED ) {
             throw new IOException( "SSL/TLS handshake abborted due to timeout" );
         } else {
             LOGGER.log( Level.INFO, "******* HANDSHAKE SUCCESS" );
@@ -452,10 +496,14 @@ public abstract class AbstractConnection {
                     case CLOSED:
                         break;
                     case BUFFER_UNDERFLOW:
+                        outboundAppData.flip();
                         outboundAppData = handleBufferUnderflow( getEngine(), outboundAppData );
+                        outboundAppData.compact();
                         break;
                     case BUFFER_OVERFLOW:
+                        outboundEncryptedData.flip();
                         outboundEncryptedData = enlargePacketBuffer( getEngine(), outboundEncryptedData);
+                        outboundEncryptedData.compact();
                         break;
                     default:
                         throw new IllegalStateException("Invalid SSL status: " + res.getStatus());
@@ -495,13 +543,15 @@ public abstract class AbstractConnection {
     private void writeSocket( String message, long timeout ) throws IOException {
         long start = System.currentTimeMillis();
         // add message to output buffer and prepare for reading
-        int msgSize = message.getBytes(StandardCharsets.UTF_8).length;
+        int msgSize = message==null?0:message.getBytes(StandardCharsets.UTF_8).length;
         if( outboundAppData.limit()< msgSize ) {
             outboundAppData = enlargeBuffer( outboundAppData, outboundAppData.capacity() + msgSize );
         }
-        outboundAppData.put( message.getBytes( StandardCharsets.UTF_8 ) );
+        if(message!=null) {
+            outboundAppData.put( message.getBytes( StandardCharsets.UTF_8 ) );
+        }
         outboundAppData.flip();
-        while (outboundAppData.remaining() > 0 && start + timeout > System.currentTimeMillis() ) {
+        while ( !shutdown && outboundAppData.remaining() > 0 && start + timeout > System.currentTimeMillis() ) {
             outboundAppData.compact();
             if( isTLS() ) {
                 outboundAppData.flip();
@@ -512,7 +562,9 @@ public abstract class AbstractConnection {
                         writeRawSocket( timeout - ( System.currentTimeMillis() - start ) );
                         break;
                     case BUFFER_OVERFLOW:
+                        outboundAppData.flip();
                         outboundEncryptedData = enlargePacketBuffer(getEngine(), outboundEncryptedData);
+                        outboundAppData.compact();
                         break;
                     case BUFFER_UNDERFLOW:
                         throw new SSLException("Buffer underflow occured after a wrap. I don't think we should ever get here.");
@@ -561,16 +613,17 @@ public abstract class AbstractConnection {
                     // safe to ignore as we do not rely on timing here
                 }
             }
-            if( bytesRead > 0  ) {
+            if( inboundEncryptedData.remaining() > 0  ) {
                 if (isTLS()) {
                     bytesRead = -inboundAppData.remaining();
                     inboundAppData.compact();
+                    LOGGER.log(Level.INFO, "decrypting (occupied inbound buffer space: " + inboundEncryptedData.remaining() + "; counter: " + bytesRead + ")", new Object[]{ inboundEncryptedData,inboundAppData });
                     SSLEngineResult result = getEngine().unwrap(inboundEncryptedData, inboundAppData);
                     inboundAppData.flip();
                     bytesRead += inboundAppData.remaining();
                     LOGGER.log(Level.INFO, "decryption done (occupied buffer space: " + inboundAppData.remaining() + "; counter: " + bytesRead + ")");
                     if (getEngine().getHandshakeStatus() != HandshakeStatus.FINISHED && getEngine().getHandshakeStatus() != HandshakeStatus.NOT_HANDSHAKING) {
-                        LOGGER.log(Level.WARNING, "Handshake status is " + getEngine().getHandshakeStatus());
+                        LOGGER.log(Level.INFO, "Handshake status is " + getEngine().getHandshakeStatus());
                         processEngineRequirements(timeout - (System.currentTimeMillis() - start));
                     }
                     switch (result.getStatus()) {
@@ -578,11 +631,9 @@ public abstract class AbstractConnection {
                             break;
                         case BUFFER_OVERFLOW:
                             inboundAppData = enlargeApplicationBuffer(getEngine(), inboundAppData);
-                            inboundAppData.flip();
                             break;
                         case BUFFER_UNDERFLOW:
                             inboundEncryptedData = handleBufferUnderflow(getEngine(), inboundEncryptedData);
-                            inboundEncryptedData.flip();
                             break;
                         case CLOSED:
                             closeConnection();
@@ -595,6 +646,7 @@ public abstract class AbstractConnection {
                     if (inboundAppData.limit() < bytesRead) {
                         inboundAppData.flip();
                         inboundAppData = enlargeBuffer(inboundAppData, inboundEncryptedData.remaining() + inboundAppData.capacity());
+                        inboundAppData.compact();
                     }
                     inboundAppData.put( inboundEncryptedData );
                     inboundAppData.flip();
@@ -608,7 +660,7 @@ public abstract class AbstractConnection {
             }
 
             timeoutReached = System.currentTimeMillis()-start > timeout;
-        } while( totBytesRead == 0 && !timeoutReached && timeout > 0 );
+        } while( !shutdown && bytesRead>=0 && totBytesRead == 0 && !timeoutReached && timeout > 0 );
 
         if( bytesRead < 0 ) {
             LOGGER.log( Level.INFO, "Loop aborted due to closed connection" );
@@ -672,7 +724,7 @@ public abstract class AbstractConnection {
     public String readln( long timeout ) throws IOException {
         StringBuilder ret = new StringBuilder();
         long start = System.currentTimeMillis();
-        while( ! ret.toString().endsWith( "\r\n" ) && timeout - (System.currentTimeMillis() - start) > 0 ) {
+        while( !shutdown && ! ret.toString().endsWith( "\r\n" ) && timeout - (System.currentTimeMillis() - start) > 0 ) {
             if( ! inboundAppData.hasRemaining() ) {
                 readSocket( timeout - (System.currentTimeMillis() - start));
             }
@@ -713,6 +765,7 @@ public abstract class AbstractConnection {
             nBuffer = ByteBuffer.allocate(buffer.capacity() * 2);
         }
         nBuffer.put( buffer );
+        nBuffer.flip();
         return nBuffer;
     }
 
@@ -721,14 +774,12 @@ public abstract class AbstractConnection {
             return buffer;
         } else {
             ByteBuffer replaceBuffer = enlargePacketBuffer(engine, buffer);
-            buffer.flip();
-            replaceBuffer.put(buffer);
             return replaceBuffer;
         }
     }
 
     protected void closeConnection() throws IOException  {
-        if( getEngine()!=null ) {
+        if( getEngine()!=null && isTLS() ) {
             do_teardown( 1000 );
         }
         if( socketChannel != null ) {

@@ -24,6 +24,8 @@ package net.gwerder.java.messagevortex.transport.imap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static net.gwerder.java.messagevortex.transport.imap.ImapConnectionState.CONNECTION_AUTHENTICATED;
+
 public class ImapCommandLogin extends ImapCommand {
 
     private static final Logger LOGGER;
@@ -81,10 +83,10 @@ public class ImapCommandLogin extends ImapCommand {
             LOGGER.log(Level.SEVERE, "no TLS but logging in with username and password");
             reply=new String[] {line.getTag()+" BAD authentication with username and password refused due current security strength\r\n" };
         } else if(line.getConnection().getAuth()==null) {
-            LOGGER.log(Level.SEVERE, "no Authenticator or connection found while calling login");
+            LOGGER.log(Level.SEVERE, "no Authenticator found while calling login (1)");
             reply=new String[] {line.getTag()+" BAD server configuration error\r\n" };
         } else if(line.getConnection().getAuth().login(userid,password)) {
-            line.getConnection().setImapState(ImapConnection.CONNECTION_AUTHENTICATED);
+            line.getConnection().setImapState( CONNECTION_AUTHENTICATED );
             reply=new String[] {line.getTag()+" OK LOGIN completed\r\n" };
         } else {
             reply=new String[] {line.getTag()+" NO bad username or password\r\n" };

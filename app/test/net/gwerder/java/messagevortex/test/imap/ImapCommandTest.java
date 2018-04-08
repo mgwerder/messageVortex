@@ -1,6 +1,9 @@
 package net.gwerder.java.messagevortex.test.imap;
 
+import net.gwerder.java.messagevortex.ExtendedSecureRandom;
 import net.gwerder.java.messagevortex.MessageVortexLogger;
+import net.gwerder.java.messagevortex.transport.AllTrustManager;
+import net.gwerder.java.messagevortex.transport.CustomKeyManager;
 import net.gwerder.java.messagevortex.transport.SecurityContext;
 import net.gwerder.java.messagevortex.transport.SecurityRequirement;
 import net.gwerder.java.messagevortex.transport.imap.*;
@@ -8,12 +11,18 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509KeyManager;
+import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.Set;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 
+import static net.gwerder.java.messagevortex.transport.SecurityRequirement.PLAIN;
+import static net.gwerder.java.messagevortex.transport.SecurityRequirement.SSLTLS;
 import static org.junit.Assert.*;
 
 /**
@@ -25,6 +34,7 @@ import static org.junit.Assert.*;
 public class ImapCommandTest {
 
     private final static boolean  DO_NOT_TEST_ENCRYPTION=false;
+    private ExtendedSecureRandom esr = new ExtendedSecureRandom();
 
     private static final java.util.logging.Logger LOGGER;
 
@@ -201,7 +211,11 @@ public class ImapCommandTest {
         boolean encrypted=false;
         do{
             try{
-                ImapServer s=new ImapServer(0,new SecurityContext(SecurityRequirement.PLAIN));
+                final SSLContext context=SSLContext.getInstance("TLS");
+                String ks="keystore.jks";
+                assertTrue("Keystore check",(new File(ks)).exists());
+                context.init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, new TrustManager[] {new AllTrustManager()}, esr.getSecureRandom() );
+                ImapServer s=new ImapServer(0,new SecurityContext(context,encrypted?SSLTLS:PLAIN));
                 LOGGER.log(Level.INFO,"************************************************************************");
                 LOGGER.log(Level.INFO,"Check full Login Logout ("+encrypted+")");
                 LOGGER.log(Level.INFO,"************************************************************************");
@@ -217,7 +231,7 @@ public class ImapCommandTest {
                 assertTrue("check for success if username casing does not match",ap.login("User","password"));
 
                 s.setAuth(ap);
-                ImapClient c=new ImapClient(new InetSocketAddress("localhost",s.getPort()),new SecurityContext(SecurityRequirement.PLAIN));
+                ImapClient c=new ImapClient(new InetSocketAddress("localhost",s.getPort()),new SecurityContext( context,encrypted?SSLTLS:PLAIN ));
                 c.setTimeout(2000);
                 c.connect();
                 assertTrue("check encryption ("+encrypted+"/"+c.isTLS()+")", encrypted==c.isTLS());

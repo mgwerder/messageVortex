@@ -33,6 +33,7 @@ public class ImapAuthenticationDummyProxyTest {
         assertTrue("ImapConnection should return set value",ap.getImapConnection()==ic);
         assertTrue("ImapConnection should return set value",ap.setImapConnection(null)==ic);
         assertTrue("ImapConnection should be null if set to null",ap.getImapConnection()==null);
+        ic.shutdown();
         assertTrue("error searching for hangig threads",ImapSSLTest.verifyHangingThreads(threadSet).size()==0);
     }
 
@@ -59,7 +60,8 @@ public class ImapAuthenticationDummyProxyTest {
 
     private static class ImapConnectionDummy extends ImapConnection {
         public ImapConnectionDummy() throws IOException {
-            super( null, new SecurityContext(SecurityRequirement.PLAIN) );
+            super( null,null );
+            setSecurityContext( new SecurityContext(SecurityRequirement.PLAIN) );
             // This is a dummy constructor for test cases do not use it for anything else
         }
     }

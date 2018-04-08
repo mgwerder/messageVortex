@@ -30,6 +30,9 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static net.gwerder.java.messagevortex.transport.imap.ImapConnectionState.CONNECTION_AUTHENTICATED;
+import static net.gwerder.java.messagevortex.transport.imap.ImapConnectionState.CONNECTION_NOT_AUTHENTICATED;
+
 /***
 * Provides the the Authenticate command to the IMAP server.
 *
@@ -81,10 +84,10 @@ public class ImapCommandAuthenticate extends ImapCommand {
             LOGGER.log(Level.SEVERE, "no TLS but logging in with username and password");
             reply=new String[] {line.getTag()+" BAD authentication with username and password refused due current security strength\r\n" };
         } else if(line.getConnection().getAuth()==null) {
-            LOGGER.log(Level.SEVERE, "no Authenticator or connection found while calling login");
+            LOGGER.log(Level.SEVERE, "no Authenticator or connection found while calling login (2)");
             reply=new String[] {line.getTag()+" BAD server configuration error\r\n" };
         } else if(auth(mech,line)) { // line.getConnection().getAuth().login(userid,password)
-            line.getConnection().setImapState(ImapConnection.CONNECTION_AUTHENTICATED);
+            line.getConnection().setImapState(CONNECTION_AUTHENTICATED);
             reply=new String[] {line.getTag()+" OK LOGIN completed\r\n" };
         } else {
             reply=new String[] {line.getTag()+" NO bad username or password\r\n" };
@@ -135,7 +138,7 @@ public class ImapCommandAuthenticate extends ImapCommand {
 
 
     private String[] getCapabilities(ImapConnection ic) {
-        if(ic==null || ic.getImapState()==ImapConnection.CONNECTION_NOT_AUTHENTICATED) {
+        if(ic==null || ic.getImapState()==CONNECTION_NOT_AUTHENTICATED) {
             return new String[] { "AUTH=GSSAPI","AUTH=DIGEST-MD5","AUTH=CRAM-MD5","AUTH=PLAIN" };
         } else {
             return new String[0];

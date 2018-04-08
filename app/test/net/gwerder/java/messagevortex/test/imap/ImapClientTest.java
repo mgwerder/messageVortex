@@ -1,6 +1,9 @@
 package net.gwerder.java.messagevortex.test.imap;
 
+import net.gwerder.java.messagevortex.ExtendedSecureRandom;
 import net.gwerder.java.messagevortex.MessageVortexLogger;
+import net.gwerder.java.messagevortex.transport.AllTrustManager;
+import net.gwerder.java.messagevortex.transport.CustomKeyManager;
 import net.gwerder.java.messagevortex.transport.SecurityContext;
 import net.gwerder.java.messagevortex.transport.SecurityRequirement;
 import net.gwerder.java.messagevortex.transport.imap.*;
@@ -9,6 +12,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import javax.net.SocketFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509KeyManager;
+import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -35,6 +42,8 @@ public class ImapClientTest {
         LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
         MessageVortexLogger.setGlobalLogLevel(Level.ALL);
     }
+
+    private ExtendedSecureRandom esr = new ExtendedSecureRandom();
 
     private static class DeadSocket implements Runnable {
         private boolean shutdown=false;
@@ -117,11 +126,15 @@ public class ImapClientTest {
             LOGGER.log(Level.INFO,"IMAP Client Encrypted Test");
             LOGGER.log(Level.INFO,"************************************************************************");
             Set<Thread> threadSet = ImapSSLTest.getThreadList();
-            LOGGER.log(Level.INFO,"starting imap server");
-            ImapServer is = new ImapServer(0,new SecurityContext(SecurityRequirement.UNTRUSTED_SSLTLS));
             try {
+                LOGGER.log(Level.INFO,"starting imap server");
+                final SSLContext context=SSLContext.getInstance("TLS");
+                String ks="keystore.jks";
+                assertTrue("Keystore check",(new File(ks)).exists());
+                context.init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, new TrustManager[] {new AllTrustManager()}, esr.getSecureRandom() );
+                ImapServer is = new ImapServer(0,new SecurityContext(context,SecurityRequirement.UNTRUSTED_SSLTLS));
                 LOGGER.log(Level.INFO, "creating imap client");
-                ImapClient ic = new ImapClient(new InetSocketAddress("localhost", is.getPort()), new SecurityContext(SecurityRequirement.UNTRUSTED_SSLTLS));
+                ImapClient ic = new ImapClient(new InetSocketAddress("localhost", is.getPort()), new SecurityContext(context,SecurityRequirement.UNTRUSTED_SSLTLS));
                 ic.setTimeout(1000);
                 LOGGER.log(Level.INFO, "connecting imap client to server");
                 ic.connect();
@@ -129,17 +142,17 @@ public class ImapClientTest {
                 assertTrue("TLS is not as expected", ic.isTLS());
                 LOGGER.log(Level.INFO, "closing client");
                 ic.shutdown();
+                is.shutdown();
             } catch(IOException ioe ) {
                 ioe.printStackTrace();
                 fail("IOException while handling client");
             }
 
             LOGGER.log(Level.INFO, "shutting down server");
-            is.shutdown();
             assertTrue("error searching for hangig threads", ImapSSLTest.verifyHangingThreads(threadSet).size() == 0);
-        } catch(IOException e) {
+        } catch(Exception e) {
             e.printStackTrace();
-            fail("IOException while creating server");
+            fail("Exception while creating server");
         }
     }
 

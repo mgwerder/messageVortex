@@ -15,11 +15,11 @@ public class ServerConnection extends AbstractConnection {
     }
 
     public ServerConnection(SocketChannel channel, SecurityContext context ) throws IOException {
-        super( channel,context );
-        if( context!=null && context.getContext()!=null ) {
-            setEngine(context.getContext().createSSLEngine( getHostName(), getPort() ));
-            getEngine().setUseClientMode( false );
-        }
+        super( channel,context,false );
+    }
+
+    public ServerConnection(AbstractConnection ac ) throws IOException {
+        super( ac );
     }
 
 }
