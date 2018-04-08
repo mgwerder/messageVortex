@@ -25,7 +25,7 @@ import static javax.net.ssl.SSLEngineResult.HandshakeStatus.NOT_HANDSHAKING;
  */
 public abstract class AbstractConnection {
 
-    protected final String CRLF = "\r\n";
+    protected final static String CRLF = "\r\n";
 
     private static final Logger LOGGER;
     static {

@@ -48,8 +48,6 @@ public class ImapServer extends ListeningSocketChannel implements StoppableThrea
         LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
     }
 
-    Set<ImapConnection> conn=new ConcurrentSkipListSet<>();
-    private Thread runner=null;
     private ImapAuthenticationProxy auth=null;
     private static long defaultTimeout = 10000;
     private long timeout = defaultTimeout;

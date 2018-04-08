@@ -49,18 +49,12 @@ public class SMTPSender extends ClientConnection implements TransportSender {
         LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
     }
 
-    String      server        = null;
-    int         port          = 587;
     Credentials credentials   = null;
     String      senderAddress ;
 
     public SMTPSender( String senderAddress, String server,int port,Credentials creds, SecurityContext context ) throws IOException {
         super( new InetSocketAddress( server, port ), context );
         this.senderAddress=senderAddress;
-        this.server=server;
-        if(port>0) {
-            this.port=port;
-        }
         this.credentials=creds;
         connect();
         // startTLS if required
