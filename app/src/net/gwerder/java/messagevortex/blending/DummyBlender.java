@@ -28,7 +28,6 @@ import net.gwerder.java.messagevortex.asn1.VortexMessage;
 import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import net.gwerder.java.messagevortex.transport.DummyTransportSender;
 import net.gwerder.java.messagevortex.transport.TransportReceiver;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -54,6 +53,9 @@ public class DummyBlender extends Blender implements TransportReceiver {
         this.identity = identity;
         this.transport = new DummyTransportSender( identity, this );
         this.router = router;
+        if( identityStore == null ) {
+            throw new NullPointerException( "identitystore may not be null" );
+        }
         this.identityStore=identityStore;
     }
 
@@ -68,7 +70,7 @@ public class DummyBlender extends Blender implements TransportReceiver {
             transport.sendMessage( target.getRecipientAddress(), new ByteArrayInputStream( msg.toBytes( DumpType.PUBLIC_ONLY ) ) );
             return true;
         } catch(IOException ioe) {
-            LOGGER.log( Level.SEVERE, "Unable to send to transport endpoint " + target, ioe );
+            LOGGER.log( Level.SEVERE, "Unable to send to transport endpoint " + target.getRecipientAddress(), ioe );
             return false;
         }
     }
