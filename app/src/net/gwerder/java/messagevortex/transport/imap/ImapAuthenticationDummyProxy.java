@@ -21,15 +21,21 @@ package net.gwerder.java.messagevortex.transport.imap;
 // * SOFTWARE.
 // ************************************************************************************
 
+import net.gwerder.java.messagevortex.transport.Credentials;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class ImapAuthenticationDummyProxy extends ImapAuthenticationProxy{
 
-    private final Map<String,String> users = new HashMap<>();
+    private final Map<String, Credentials> users = new HashMap<>();
 
     public void addUser(String username,String password) {
-        users.put(username.toLowerCase(),password);
+        users.put( username.toLowerCase(),new Credentials( username, password ) );
+    }
+
+    public void addCredentials( Credentials creds ) {
+        users.put( creds.getUsername().toLowerCase(), creds );
     }
 
     public boolean login(String username,String password) {
@@ -44,7 +50,7 @@ public class ImapAuthenticationDummyProxy extends ImapAuthenticationProxy{
         }
 
         // check if password is correct
-        return users.get(username.toLowerCase()).equals(password);
+        return users.get( username.toLowerCase() ).getPassword().equals( password );
     }
 
 

@@ -53,7 +53,7 @@ public class ImapCommandNoop extends ImapCommand {
         return new String[] {"NOOP"};
     }
 
-    public String[] getCapabilities() {
+    public String[] getCapabilities( ImapConnection conn ) {
         return new String[] {};
     }
 

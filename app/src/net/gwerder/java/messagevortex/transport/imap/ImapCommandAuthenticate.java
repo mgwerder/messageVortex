@@ -76,7 +76,6 @@ public class ImapCommandAuthenticate extends ImapCommand {
         }
 
         String[] reply=null;
-
         if(line.getConnection()==null) {
             LOGGER.log(Level.SEVERE, "no connection found while calling login");
             reply=new String[] {line.getTag()+" BAD server configuration error\r\n" };
@@ -93,15 +92,6 @@ public class ImapCommandAuthenticate extends ImapCommand {
             reply=new String[] {line.getTag()+" NO bad username or password\r\n" };
         }
         return reply;
-    }
-
-    /***
-     * Returns the capabilities to be reported by the CAPABILITIES command.
-     *
-     * @return A list of capabilities
-     ***/
-    public String[] getCapabilities() {
-        return getCapabilities(null);
     }
 
     /***
@@ -136,10 +126,14 @@ public class ImapCommandAuthenticate extends ImapCommand {
         return true;
     }
 
-
-    private String[] getCapabilities(ImapConnection ic) {
+    @Override
+    public String[] getCapabilities( ImapConnection ic ) {
         if(ic==null || ic.getImapState()==CONNECTION_NOT_AUTHENTICATED) {
-            return new String[] { "AUTH=GSSAPI","AUTH=DIGEST-MD5","AUTH=CRAM-MD5","AUTH=PLAIN" };
+            if( ic.isTLS() ) {
+                return new String[]{"AUTH=CRAM-MD5", "AUTH=PLAIN"};
+            } else {
+                return new String[]{"AUTH=CRAM-MD5", "LOGINDISABLED"};
+            }
         } else {
             return new String[0];
         }

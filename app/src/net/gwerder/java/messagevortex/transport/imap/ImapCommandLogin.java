@@ -95,7 +95,15 @@ public class ImapCommandLogin extends ImapCommand {
     }
 
     public String[] getCapabilities() {
-        return new String[] { "LOGIN" };
+        return getCapabilities(null);
+    }
+
+    public String[] getCapabilities( ImapConnection ic ) {
+        if ( ic != null && ic.isTLS() ) {
+            return new String[]{"LOGIN"};
+        } else {
+            return new String[]{"LOGINDISABLED"};
+        }
     }
 
     public String[] getCommandIdentifier() {

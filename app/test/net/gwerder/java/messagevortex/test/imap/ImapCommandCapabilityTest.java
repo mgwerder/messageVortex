@@ -2,6 +2,7 @@ package net.gwerder.java.messagevortex.test.imap;
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.transport.imap.ImapCommand;
+import net.gwerder.java.messagevortex.transport.imap.ImapConnection;
 import net.gwerder.java.messagevortex.transport.imap.ImapException;
 import net.gwerder.java.messagevortex.transport.imap.ImapLine;
 import org.junit.Test;
@@ -59,7 +60,7 @@ public class ImapCommandCapabilityTest {
         }
 
         @Override
-        public String[] getCapabilities() {
+        public String[] getCapabilities( ImapConnection conn ) {
             return new String[] {"CapabilityParser=one","CapabilityParser=two"};
         }
 

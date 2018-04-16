@@ -86,8 +86,6 @@ public class ImapSSLTest {
             final SSLContext context = SSLContext.getInstance("TLS");
             KeyManagerFactory kmf = KeyManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
             kmf.init(keyStore,"changeme".toCharArray());
-            //context.init(null, tmf.getTrustManagers(), null);
-            //context.init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, new TrustManager[] {new AllTrustManager()}, esr.getSecureRandom() );
             context.init( kmf.getKeyManagers(), tmf.getTrustManagers(), esr.getSecureRandom() );
             SSLContext.setDefault(context);
 
@@ -207,7 +205,7 @@ public class ImapSSLTest {
             SSLContext.setDefault(context);
 
             SecurityContext secContext = new SecurityContext( context,SecurityRequirement.UNTRUSTED_SSLTLS );
-            ImapServer is=new ImapServer(0, secContext );
+            ImapServer is=new ImapServer( new InetSocketAddress( "0.0.0.0", 0 ), secContext );
             is.setTimeout(4000);
             LOGGER.log(Level.INFO,"setting up pseudo client");
             Socket s=SSLSocketFactory.getDefault().createSocket(InetAddress.getByName("localhost"),is.getPort());
@@ -248,7 +246,7 @@ public class ImapSSLTest {
             String ks="keystore.jks";
             assertTrue("Keystore check",(new File(ks)).exists());
             context.init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, new TrustManager[] {new AllTrustManager()}, esr.getSecureRandom() );
-            ImapServer is=new ImapServer(0,new SecurityContext(context,SecurityRequirement.UNTRUSTED_SSLTLS));
+            ImapServer is=new ImapServer( new InetSocketAddress( "0.0.0.0", 0 ), new SecurityContext( context,SecurityRequirement.UNTRUSTED_SSLTLS ) );
             is.setTimeout(5000);
             ImapClient ic=new ImapClient( new InetSocketAddress( "localhost", is.getPort() ), new SecurityContext( context,SecurityRequirement.UNTRUSTED_SSLTLS) );
             ic.setTimeout(5000);

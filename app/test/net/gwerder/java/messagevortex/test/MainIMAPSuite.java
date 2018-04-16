@@ -21,7 +21,8 @@ import org.junit.runners.Suite;
   ImapCommandCapabilityTest.class,
   ImapCommandLoginTest.class,
   ImapCommandLogoutTest.class,
-  ImapAuthenticationDummyProxyTest.class
+  ImapAuthenticationDummyProxyTest.class,
+  ImapURLParser.class
 })
 
 public class MainIMAPSuite {
@@ -45,6 +46,7 @@ public class MainIMAPSuite {
         s.addTest(new JUnit4TestAdapter(ImapCommandLoginTest.class));
         s.addTest(new JUnit4TestAdapter(ImapCommandLogoutTest.class));
         s.addTest(new JUnit4TestAdapter(ImapAuthenticationDummyProxyTest.class));
+        s.addTest(new JUnit4TestAdapter(ImapURLParser.class));
 
         return s;
   }

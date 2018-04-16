@@ -65,20 +65,21 @@ public class ImapClient extends ClientConnection {
     }
 
     public String[] sendCommand(String command,long millisTimeout) throws TimeoutException {
-        synchronized(sync) {
-            currentCommand=command;
-            LOGGER.log(Level.INFO,"sending \""+ImapLine.commandEncoder(currentCommand)+"\" to server");
+        synchronized( sync ) {
+            currentCommand = command;
+            LOGGER.log( Level.INFO, "sending \"" + ImapLine.commandEncoder(currentCommand) + "\" to server" );
             long start = System.currentTimeMillis();
-            currentCommandCompleted=false;
-            synchronized(notifyThread) {
+            currentCommandCompleted = false;
+            currentCommandReply = new String[0];
+            synchronized( notifyThread ) {
                 notifyThread.notifyAll();
             }
             try {
-                while (!currentCommandCompleted && System.currentTimeMillis() < start + millisTimeout) {
-                    gotLine(command, millisTimeout-(System.currentTimeMillis()-start));
+                while( !currentCommandCompleted && System.currentTimeMillis() < start + millisTimeout ) {
+                    processLine( command, millisTimeout - ( System.currentTimeMillis() - start ) );
                     try{
-                        sync.wait(10);
-                    } catch(InterruptedException ie) {
+                        sync.wait( 10 );
+                    } catch( InterruptedException ie ) {
                         // may be safely ignored
                     }
                 }
@@ -90,47 +91,15 @@ public class ImapClient extends ClientConnection {
                 throw new TimeoutException( "Timeout reached while sending \"" + ImapLine.commandEncoder( command ) + "\"" );
             }
         }
-        currentCommand=null;
-        if(currentCommandReply==null) {
-            currentCommandReply=new String[0];
+        currentCommand = null;
+        if( currentCommandReply == null ) {
+            currentCommandReply = new String[0];
         } else {
-            LOGGER.log(Level.INFO,"got \""+ImapLine.commandEncoder(currentCommandReply[currentCommandReply.length-1])+"\" as reply from server");
+            LOGGER.log( Level.INFO, "got \"" + ImapLine.commandEncoder( currentCommandReply[ currentCommandReply.length - 1 ] ) + "\" as reply from server (" + currentCommandReply.length + ")" );
         }
         return currentCommandReply;
     }
 
-    /*
-    private void terminateSocket() {
-        try{
-            synchronized(notifyThread) {
-                notifyThread.notifyAll();
-                if(socket!=null) {
-                    socket.close();
-                }
-            }
-        } catch(IOException ioe) {
-            LOGGER.log(Level.INFO,"Error tearing down socket on client shutdown (may be safely ignored)",ioe);
-        }
-    }
-
-    public void shutdown() {
-        shutdown = true;
-        boolean success = false;
-        while (!success) {
-            try {
-                terminateSocket();
-                runner.join();
-                success = true;
-            } catch (InterruptedException ie) {
-                interruptedCatcher(ie);
-            }
-        }
-    }
-
-    public boolean isTerminated() {
-        return runner.getState() == Thread.State.TERMINATED;
-    }
-*/
     private void interruptedCatcher(InterruptedException ie) {
         assert false:"This Point should never be reached ("+ie.toString()+")";
         Thread.currentThread().interrupt();
@@ -146,11 +115,11 @@ public class ImapClient extends ClientConnection {
         }
     }
 
-    public void gotLine( String line ) throws IOException  {
-        gotLine( line, getTimeout() );
+    public void processLine( String line ) throws IOException  {
+        processLine( line, getTimeout() );
     }
 
-    public void gotLine( String line,long timeout ) throws IOException  {
+    public void processLine( String line,long timeout ) throws IOException  {
         currentCommand=line;
         LOGGER.log( Level.INFO, "IMAP C->S: " + ImapLine.commandEncoder( currentCommand ) );
         long start = System.currentTimeMillis();
@@ -167,14 +136,14 @@ public class ImapClient extends ClientConnection {
         }
         String lastReply = "";
         List<String> l = new ArrayList<>();
-        LOGGER.log( Level.INFO, "waiting for incoming reply of command " + tag );
+        LOGGER.log( Level.INFO, "waiting for incoming reply of command " + tag  + " (" + l.size() + ")" );
         while( ( !lastReply.matches( tag + REGEXP_IMAP_BAD + "|" + tag + REGEXP_IMAP_OK ) ) && System.currentTimeMillis()-start < timeout ) {
             String reply = readln( timeout-(System.currentTimeMillis()-start) );
             if(reply != null ) {
-                l.add(reply);
+                l.add( reply );
                 lastReply = reply;
-                LOGGER.log(Level.INFO, "IMAP C<-S: " + ImapLine.commandEncoder(reply));
-                currentCommandReply = l.toArray(new String[l.size()]);
+                LOGGER.log( Level.INFO, "IMAP C<-S: " + ImapLine.commandEncoder( reply ) + " (" + l.size() + ")" );
+                currentCommandReply = l.toArray( new String[ l.size() ] );
             }
         }
         currentCommandCompleted = lastReply.matches( tag + REGEXP_IMAP_OK + "|" + tag + REGEXP_IMAP_BAD );
@@ -195,7 +164,7 @@ public class ImapClient extends ClientConnection {
         waitForWakeupRunner();
         if(currentCommand!=null && !"".equals(currentCommand)) {
             LOGGER.log( Level.INFO, "Processing command" );
-            gotLine( currentCommand );
+            processLine( currentCommand );
         }
         LOGGER.log(Level.FINEST,"Client looping (shutdown=" + isShutdown() + ")");
     }

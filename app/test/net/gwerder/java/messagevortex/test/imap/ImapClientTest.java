@@ -24,6 +24,8 @@ import java.util.Set;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 
+import static net.gwerder.java.messagevortex.transport.SecurityRequirement.PLAIN;
+import static net.gwerder.java.messagevortex.transport.SecurityRequirement.UNTRUSTED_SSLTLS;
 import static org.junit.Assert.*;
 
 /**
@@ -114,7 +116,7 @@ public class ImapClientTest {
             return new String[] {"IWantATimeout"};
         }
 
-        public String[] getCapabilities() {
+        public String[] getCapabilities( ImapConnection conn ) {
             return new String[] {};
         }
     }
@@ -132,7 +134,7 @@ public class ImapClientTest {
                 String ks="keystore.jks";
                 assertTrue("Keystore check",(new File(ks)).exists());
                 context.init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, new TrustManager[] {new AllTrustManager()}, esr.getSecureRandom() );
-                ImapServer is = new ImapServer(0,new SecurityContext(context,SecurityRequirement.UNTRUSTED_SSLTLS));
+                ImapServer is=new ImapServer(new InetSocketAddress( "0.0.0.0", 0 ), new SecurityContext( context, UNTRUSTED_SSLTLS ) );
                 LOGGER.log(Level.INFO, "creating imap client");
                 ImapClient ic = new ImapClient(new InetSocketAddress("localhost", is.getPort()), new SecurityContext(context,SecurityRequirement.UNTRUSTED_SSLTLS));
                 ic.setTimeout(1000);
@@ -163,7 +165,7 @@ public class ImapClientTest {
         LOGGER.log(Level.INFO,"************************************************************************");
         Set<Thread> threadSet = ImapSSLTest.getThreadList();
         DeadSocket ds=new DeadSocket(0,-1);
-        ImapClient ic =new ImapClient( new InetSocketAddress( "localhost",ds.getPort() ), new SecurityContext(SecurityRequirement.PLAIN) );
+        ImapClient ic =new ImapClient( new InetSocketAddress( "localhost",ds.getPort() ), new SecurityContext(PLAIN) );
         ic.connect();
         assertTrue("TLS is not as expected",!ic.isTLS());
         long start=System.currentTimeMillis();

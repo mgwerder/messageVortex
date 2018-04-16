@@ -60,8 +60,8 @@ public class ImapServer extends ListeningSocketChannel implements StoppableThrea
         setName( "IMAPlisten-"+(id++) );
     }
 
-    public ImapServer( int port, SecurityContext enc ) throws IOException {
-        super( new InetSocketAddress( "0.0.0.0", port ),null );
+    public ImapServer( InetSocketAddress addr, SecurityContext enc ) throws IOException {
+        super( addr, null );
         setSocketListener( this );
         setSecurityContext( enc );
         setProtocol( "imap" );

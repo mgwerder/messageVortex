@@ -138,7 +138,7 @@ public class ImapConnection extends ServerConnection implements Comparable<ImapC
         LOGGER.log(Level.FINEST,"found command in connection "+Thread.currentThread().getName()+".");
         String[] s=c.processCommand(il);
 
-        LOGGER.log(Level.INFO,"got command \""+il.getTag()+" "+il.getCommand()+"\". Reply is \""+ImapLine.commandEncoder(s==null?"null":s[s.length-1])+"\".");
+        LOGGER.log(Level.INFO,"got command \""+il.getTag()+" "+il.getCommand()+"\". Reply is \""+ImapLine.commandEncoder(s==null?"null":s[s.length-1])+"\" ("+(s!=null ? s.length : "Null") +").");
         return s;
     }
 
@@ -165,10 +165,6 @@ public class ImapConnection extends ServerConnection implements Comparable<ImapC
                         //super.shutdown();
                         getSocketChannel().close();
                         runner=null;
-                    } else {
-                        for (String s : reply) {
-                            writeln(s);
-                        }
                     }
                 }
             }

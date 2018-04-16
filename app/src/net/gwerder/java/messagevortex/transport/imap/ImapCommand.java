@@ -62,7 +62,7 @@ public abstract class ImapCommand implements Cloneable {
         return COMMANDS.get(name.toLowerCase());
     }
 
-    public abstract String[] getCapabilities();
+    public abstract String[] getCapabilities( ImapConnection conn );
 
     public abstract void init();
 
