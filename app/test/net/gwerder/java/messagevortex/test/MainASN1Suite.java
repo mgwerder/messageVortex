@@ -11,6 +11,7 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+        CipherSpecTest.class,
         FuzzerTest.class,
         VortexMessageTest.class,
         AbstractBlockTest.class,
@@ -35,6 +36,7 @@ public class MainASN1Suite {
 
     public static junit.framework.Test suite() {
         final TestSuite s = new TestSuite();
+        s.addTest(new JUnit4TestAdapter(CipherSpecTest.class));
         s.addTest(new JUnit4TestAdapter(FuzzerTest.class));
         s.addTest(new JUnit4TestAdapter(VortexMessageTest.class));
         s.addTest(new JUnit4TestAdapter(AbstractBlockTest.class));

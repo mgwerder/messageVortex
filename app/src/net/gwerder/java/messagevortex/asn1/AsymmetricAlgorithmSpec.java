@@ -56,6 +56,11 @@ public class AsymmetricAlgorithmSpec extends AbstractBlock implements Serializab
         parse( to.toASN1Object(DumpType.ALL) );
     }
 
+    public AsymmetricAlgorithmSpec( Algorithm alg, AlgorithmParameter params ) {
+        this.algorithm = alg;
+        this.parameter = params;
+    }
+
     /***
      * Constructor to build from ASN1 object
      *

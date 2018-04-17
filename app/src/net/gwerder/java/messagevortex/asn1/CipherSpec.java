@@ -157,4 +157,31 @@ public class CipherSpec extends AbstractBlock implements Serializable {
         v.add( new DERTaggedObject( USAGE, new ASN1Enumerated( cipherUsage.getId() ) ) );
         return new DERSequence(v);
     }
+
+    @Override
+    public boolean equals( Object t ) {
+        if( t==null ) {
+            return false;
+        }
+        if( t.getClass() != this.getClass() ) {
+            return false;
+        }
+        CipherSpec o = (CipherSpec)t;
+        try {
+            return dumpValueNotation( "", DumpType.ALL ).equals( o.dumpValueNotation( "", DumpType.ALL ) );
+        } catch( IOException ioe ) {
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        // this methode is required for code sanity
+        try{
+            return dumpValueNotation( "", DumpType.ALL ).hashCode();
+        } catch( IOException ioe ) {
+            return "FAILED".hashCode();
+        }
+    }
+
 }
