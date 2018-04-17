@@ -1,22 +1,25 @@
 package net.gwerder.java.messagevortex.transport;
 
-/**
- * Created by martin.gwerder on 17.04.2018.
- */
 public enum SaslMechanisms {
 
-    PLAIN( "PLAIN" ),
-    DIGEST_MD5( "DIGEST-MD5" ),
-    CRAM_MD5( "CRAM-MD5" );
+    PLAIN( "PLAIN", 0 ),
+    CRAM_MD5( "CRAM-MD5", 16 ),
+    DIGEST_MD5( "DIGEST-MD5", 32 );
 
     String value;
+    int strength;
 
-    SaslMechanisms( String value ) {
+    SaslMechanisms( String value,int strength ) {
         this.value = value;
+        this.strength = strength;
     }
 
     @Override
     public String toString()  {
         return this.value;
+    }
+
+    public int getStrength() {
+        return strength;
     }
 }

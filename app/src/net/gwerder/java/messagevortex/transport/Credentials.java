@@ -21,6 +21,7 @@ package net.gwerder.java.messagevortex.transport;
 // * SOFTWARE.
 // ************************************************************************************
 
+import java.security.KeyStore;
 import java.security.cert.X509Certificate;
 
 import static net.gwerder.java.messagevortex.transport.SecurityRequirement.SSLTLS;
@@ -30,17 +31,23 @@ import static net.gwerder.java.messagevortex.transport.SecurityRequirement.SSLTL
  */
 public class Credentials {
 
+    String realm= null;
     String username=null;
     String password=null;
 
     SecurityRequirement requirement=SSLTLS;
 
-    X509Certificate clientCert=null;
-    X509Certificate serverCert=null;
+    KeyStore trustStore=null;
+    X509Certificate identityCert=null;
 
     public Credentials( String username, String password ) {
         this.username=username;
         this.password=password;
+    }
+
+    public Credentials( String username, String password, String realm ) {
+        this( username,password );
+        this.realm=realm;
     }
 
     public Credentials(String username, String password, SecurityRequirement requirement ) {
@@ -58,23 +65,23 @@ public class Credentials {
         return ret;
     }
 
-    public X509Certificate getServerCert() {
-        return serverCert;
+    public X509Certificate getIdentityCert() {
+        return identityCert;
     }
 
-    public X509Certificate setServerCert( X509Certificate serverCert ) {
-        X509Certificate ret=this.serverCert;
-        this.serverCert=serverCert;
+    public X509Certificate setIdentityCert( X509Certificate identityCert ) {
+        X509Certificate ret=this.identityCert;
+        this.identityCert=identityCert;
         return ret;
     }
 
-    public X509Certificate getClientCert() {
-        return clientCert;
+    public KeyStore getTrustStore() {
+        return trustStore;
     }
 
-    public X509Certificate setClientCert( X509Certificate clientCert ) {
-        X509Certificate ret=this.clientCert;
-        this.clientCert=clientCert;
+    public KeyStore setClientCert( KeyStore trustStore ) {
+        KeyStore ret = this.trustStore;
+        this.trustStore = trustStore;
         return ret;
     }
 
@@ -85,6 +92,16 @@ public class Credentials {
     public String setPassword(String password) {
         String ret=this.password;
         this.password=password;
+        return ret;
+    }
+
+    public String getRealm() {
+        return realm;
+    }
+
+    public String setRealm( String realm ) {
+        String ret=this.realm;
+        this.realm=realm;
         return ret;
     }
 

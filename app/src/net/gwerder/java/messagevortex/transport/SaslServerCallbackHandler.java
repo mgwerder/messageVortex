@@ -1,6 +1,7 @@
 package net.gwerder.java.messagevortex.transport;
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
+import net.gwerder.java.messagevortex.transport.imap.AuthenticationDummyProxy;
 
 import javax.security.auth.callback.*;
 import javax.security.sasl.AuthorizeCallback;
@@ -19,9 +20,11 @@ public class SaslServerCallbackHandler implements CallbackHandler{
         LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
     }
 
-    AuthenticationProxy proxy;
+    private AuthenticationDummyProxy proxy;
 
-    public SaslServerCallbackHandler( AuthenticationProxy creds ) {
+    private String authzid = null;
+
+    public SaslServerCallbackHandler( AuthenticationDummyProxy creds ) {
         this.proxy = creds;
     }
 
@@ -31,17 +34,23 @@ public class SaslServerCallbackHandler implements CallbackHandler{
             if (cb instanceof AuthorizeCallback) {
                 // Authorization may be checked here
                 AuthorizeCallback ac = (AuthorizeCallback)cb;
+                // we authorize all users
                 ac.setAuthorized(true);
             } else if (cb instanceof NameCallback) {
                 NameCallback nc = (NameCallback)cb;
-                nc.setName("username");
+                authzid = nc.getName()==null?nc.getDefaultName():nc.getName();
+                LOGGER.log( Level.INFO, "Server sets authzid to "+authzid+" ("+nc.getName()+")");
+                nc.setName(authzid);
+                if( proxy.getCredentials(authzid)==null) {
+                    LOGGER.log(Level.WARNING, "Server did not find credentials for " + authzid);
+                }
             } else if (cb instanceof PasswordCallback) {
                 PasswordCallback pc = (PasswordCallback)cb;
-                pc.setPassword("password".toCharArray());
+                pc.setPassword( proxy.getCredentials( authzid ).getPassword().toCharArray() );
             } else if (cb instanceof RealmCallback) {
                 RealmCallback pc = (RealmCallback)cb;
                 // must match hostname or listed in prop com.sun.security.sasl.digest.realm
-                pc.setText("theRealm");
+                pc.setText( proxy.getCredentials( authzid ).getRealm() );
             } else {
                 LOGGER.log(Level.SEVERE, "Server - unknown callback "+cb );
             }

@@ -54,5 +54,8 @@ public class AuthenticationDummyProxy extends AuthenticationProxy {
         return users.get( username.toLowerCase() ).getPassword().equals( password );
     }
 
+    public Credentials getCredentials( String authzid ) {
+        return users.get( authzid );
+    }
 
 }

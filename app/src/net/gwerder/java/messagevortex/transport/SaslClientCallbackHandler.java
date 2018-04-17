@@ -28,13 +28,13 @@ public class SaslClientCallbackHandler implements CallbackHandler {
         for (Callback cb : cbs) {
             if (cb instanceof NameCallback) {
                 NameCallback nc = (NameCallback)cb;
-                nc.setName("username");
-            } else if (cb instanceof PasswordCallback) {
+                nc.setName( credentials.getUsername() );
+            } else if ( cb instanceof PasswordCallback ) {
                 PasswordCallback pc = (PasswordCallback)cb;
-                pc.setPassword("password".toCharArray());
-            } else if (cb instanceof RealmCallback) {
+                pc.setPassword( credentials.getPassword().toCharArray() );
+            } else if ( cb instanceof RealmCallback ) {
                 RealmCallback pc = (RealmCallback)cb;
-                pc.setText("theRealm");
+                pc.setText( credentials.getRealm() );
             } else {
                 LOGGER.log(Level.SEVERE, "Server - unknown callback "+cb );
             }

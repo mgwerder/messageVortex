@@ -284,9 +284,9 @@ public class ImapCommandTest {
 
 
         AuthenticationDummyProxy ap=new AuthenticationDummyProxy();
-        ap.addUser("USER","password");
+        ap.addCredentials( new Credentials("USER","password", "theRealm" ) );
 
-        CallbackHandler clientHandler = new SaslClientCallbackHandler( new Credentials("user","password") );
+        CallbackHandler clientHandler = new SaslClientCallbackHandler( new Credentials("user","password", "theRealm" ) );
         CallbackHandler serverHandler = new SaslServerCallbackHandler( ap );
 
         for(SaslMechanisms mech : SaslMechanisms.values() ) {
