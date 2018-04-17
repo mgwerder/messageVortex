@@ -129,10 +129,10 @@ public class ImapCommandAuthenticate extends ImapCommand {
     @Override
     public String[] getCapabilities( ImapConnection ic ) {
         if(ic==null || ic.getImapState()==CONNECTION_NOT_AUTHENTICATED) {
-            if( ic.isTLS() ) {
+            if( ic != null && ic.isTLS() ) {
                 return new String[]{"AUTH=CRAM-MD5", "AUTH=PLAIN"};
             } else {
-                return new String[]{"AUTH=CRAM-MD5", "LOGINDISABLED"};
+                return new String[]{"AUTH=CRAM-MD5" };
             }
         } else {
             return new String[0];
