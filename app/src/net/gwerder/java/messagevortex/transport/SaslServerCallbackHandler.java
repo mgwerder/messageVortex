@@ -52,7 +52,7 @@ public class SaslServerCallbackHandler implements CallbackHandler{
                 if( pc.getPassword()!=null ) {
                     password = new String(pc.getPassword());
                 }
-                LOGGER.log( Level.INFO, "got password " + password+" (correct password is "+creds.getPassword()+")" );
+                LOGGER.log( Level.INFO, "got password " + password+" (correct password is "+(creds==null?null:creds.getPassword())+")" );
                 pc.setPassword( creds.getPassword().toCharArray() );
                 if( creds==null || ( password!=null && !creds.getPassword().equals(password))) {
                     throw new SaslException( "unknown user or bad password" );
