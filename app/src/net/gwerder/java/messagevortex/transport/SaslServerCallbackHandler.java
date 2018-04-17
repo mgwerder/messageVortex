@@ -53,9 +53,10 @@ public class SaslServerCallbackHandler implements CallbackHandler{
                     password = new String(pc.getPassword());
                 }
                 LOGGER.log( Level.INFO, "got password " + password+" (correct password is "+(creds==null?null:creds.getPassword())+")" );
-                pc.setPassword( creds.getPassword().toCharArray() );
                 if( creds==null || ( password!=null && !creds.getPassword().equals(password))) {
                     throw new SaslException( "unknown user or bad password" );
+                } else {
+                    pc.setPassword( creds.getPassword().toCharArray() );
                 }
             } else if (cb instanceof RealmCallback) {
                 RealmCallback pc = (RealmCallback)cb;
