@@ -49,6 +49,7 @@ public class SecurityContext {
     private void init() {
         try {
             if( context==null ) {
+                // FIXME broken part ... replace with selfsigned host cert
                 context = SSLContext.getInstance("TLS");
                 KeyManagerFactory keyManager = KeyManagerFactory.getInstance("SunX509");
                 KeyStore keyStore = getSelfsignedKeyStore();
@@ -57,7 +58,7 @@ public class SecurityContext {
                 trustManagerFactory.init(keyStore);
                 context.init(new KeyManager[] { new CustomKeyManager("keystore.jks","changeme", "mykey3")}, trustManagerFactory.getTrustManagers(), new SecureRandom()); //new TrustManager[]{new AllTrustManager()}
             }
-        } catch( GeneralSecurityException e ) {
+        } catch( Exception e ) {
             LOGGER.log( Level.WARNING, "Exception while creating SecurityContext", e );
         }
     }
@@ -103,7 +104,7 @@ public class SecurityContext {
 
     public SSLContext getContext() {
         if( context == null ) {
-            init();
+            // init is broken init();
         }
         return context;
     }

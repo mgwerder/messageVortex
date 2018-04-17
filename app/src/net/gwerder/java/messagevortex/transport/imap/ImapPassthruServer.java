@@ -2,6 +2,7 @@ package net.gwerder.java.messagevortex.transport.imap;
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.MessageVortexStatus;
+import net.gwerder.java.messagevortex.transport.AuthenticationProxy;
 import net.gwerder.java.messagevortex.transport.Credentials;
 import net.gwerder.java.messagevortex.transport.SecurityContext;
 import net.gwerder.java.messagevortex.transport.SecurityRequirement;
@@ -35,7 +36,7 @@ public class ImapPassthruServer implements SignalHandler {
 
     public ImapPassthruServer(InetSocketAddress listeningAddress, SecurityContext context, Credentials listeningCredentials, InetSocketAddress forwardingServer, Credentials forwardingCredentials ) throws IOException {
         localServer = new ImapServer( listeningAddress, context );
-        AuthenticationDummyProxy authProxy = new AuthenticationDummyProxy();
+        AuthenticationProxy authProxy = new AuthenticationProxy();
         authProxy.addCredentials( listeningCredentials );
         localServer.setAuth( authProxy );
         remoteServer = new ImapClient( forwardingServer, context );

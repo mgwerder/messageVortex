@@ -1,6 +1,7 @@
 package net.gwerder.java.messagevortex.transport;
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
+import net.gwerder.java.messagevortex.transport.imap.ImapLine;
 
 import javax.net.ssl.SSLEngine;
 import javax.net.ssl.SSLEngineResult;
@@ -686,7 +687,7 @@ public abstract class AbstractConnection {
     }
 
     public void writeln( String message ) throws IOException {
-        writeln( message + "\r\n",getTimeout() );
+        writeln( message ,getTimeout() );
     }
 
     public void writeln( String message, long timeout ) throws IOException {
@@ -698,6 +699,7 @@ public abstract class AbstractConnection {
     }
 
     public void write( String message,long timeout ) throws IOException {
+        LOGGER.log( Level.INFO, "writing message with write ("+ ImapLine.commandEncoder(message)+"; size " + ( message != null ? message.length() : -1 )+")" );
         writeSocket( message, getTimeout() );
     }
 
@@ -744,6 +746,7 @@ public abstract class AbstractConnection {
             inboundAppData.compact().flip();
             return null;
         } else {
+            LOGGER.log( Level.INFO, "got line from readline ("+ret.toString().substring(0, ret.length() - 2)+"; size "+ret.length()+")" );
             inboundAppData.compact().flip();
             return ret.toString().substring(0, ret.length() - 2);
         }

@@ -32,6 +32,7 @@ public abstract class ImapCommand implements Cloneable {
         COMMANDS=new ConcurrentHashMap<>();
         (new ImapCommandCapability()).init();
         (new ImapCommandLogin()).init();
+        (new ImapCommandAuthenticate()).init();
         (new ImapCommandLogout()).init();
         (new ImapCommandNoop()).init();
     }

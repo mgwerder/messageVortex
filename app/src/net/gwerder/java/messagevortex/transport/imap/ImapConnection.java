@@ -124,11 +124,11 @@ public class ImapConnection extends ServerConnection implements Comparable<ImapC
         } catch(ImapBlankLineException ie) {
             // just ignore blank lines
             LOGGER.log(Level.INFO,"got a blank line as command",ie);
-            return new String[0];
+            return new String[] {"* BAD empty line"};
         } catch(ImapException ie) {
             // If line violates the form <tag> <command> refuse processing
             LOGGER.log(Level.WARNING,"got invalid line",ie);
-            return new String[] {"* BAD "+ie.toString()};
+            return new String[] {"* BAD invalid line" };
         }
 
         LOGGER.log(Level.INFO,"got command \""+il.getTag()+" "+il.getCommand()+"\".");
@@ -153,14 +153,18 @@ public class ImapConnection extends ServerConnection implements Comparable<ImapC
                     getSocketChannel().close();
                     runner=null;
                 } else {
+                    LOGGER.log(Level.INFO,"processing command \""+ImapLine.commandEncoder( line )+"\"");
+
                     String[] reply=processCommand(line+CRLF);
                     if( reply != null ) {
                         for(String r:reply) {
                             LOGGER.log(Level.INFO,"sending reply to client \""+ImapLine.commandEncoder(r)+"\"");
-                            write( r );
+                            if(r != null ) {
+                                write( r );
+                            }
                         }
                     }
-                    if( reply==null || reply[reply.length-1] == null ) {
+                    if( reply==null || reply[ reply.length-1 ] == null ) {
                         // process command requested connection close
                         shutdown = true;
                         //super.shutdown();

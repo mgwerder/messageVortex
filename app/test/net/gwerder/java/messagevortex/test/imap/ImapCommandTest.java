@@ -33,6 +33,7 @@ import java.util.logging.Level;
 
 import static net.gwerder.java.messagevortex.transport.SecurityRequirement.PLAIN;
 import static net.gwerder.java.messagevortex.transport.SecurityRequirement.SSLTLS;
+import static net.gwerder.java.messagevortex.transport.SecurityRequirement.UNTRUSTED_SSLTLS;
 import static org.junit.Assert.*;
 
 /**
@@ -230,7 +231,7 @@ public class ImapCommandTest {
                 LOGGER.log(Level.INFO,"Check full Login Logout ("+encrypted+")");
                 LOGGER.log(Level.INFO,"************************************************************************");
                 ImapConnection.setDefaultTimeout(200000);
-                AuthenticationDummyProxy ap=new AuthenticationDummyProxy();
+                AuthenticationProxy ap=new AuthenticationProxy();
                 ap.addUser("USER","password");
 
                 assertFalse("check for fail if user is null",ap.login(null,"a"));
@@ -283,13 +284,13 @@ public class ImapCommandTest {
         Security.addProvider( new SaslPlainServer.SecurityProvider() );
 
 
-        AuthenticationDummyProxy ap=new AuthenticationDummyProxy();
+        AuthenticationProxy ap=new AuthenticationProxy();
         ap.addCredentials( new Credentials("USER","password", "theRealm" ) );
 
-        CallbackHandler clientHandler = new SaslClientCallbackHandler( new Credentials("user","password", "theRealm" ) );
-        CallbackHandler serverHandler = new SaslServerCallbackHandler( ap );
 
         for(SaslMechanisms mech : SaslMechanisms.values() ) {
+            CallbackHandler clientHandler = new SaslClientCallbackHandler( new Credentials("user","password", "theRealm" ) );
+            CallbackHandler serverHandler = new SaslServerCallbackHandler( ap );
             LOGGER.log(Level.INFO, "Testing SASL mechanism " + mech );
             Map<String, String> props = new HashMap<>();
 
@@ -319,55 +320,73 @@ public class ImapCommandTest {
             try {
                 LOGGER.log(Level.INFO, "evaluating response for SASL " + mech );
                 ss.evaluateResponse(response);
-            } catch (SaslException se) {
-                se.printStackTrace();
-            } finally {
-                assertTrue( ss.isComplete() );
+                assertTrue( "logon unexpectedly failed when using "+mech, ss.isComplete() );
                 if (ss.isComplete()) {
                     LOGGER.log(Level.INFO, "Authentication successful.");
                 } else {
                     LOGGER.log(Level.INFO, "Authentication failed.");
-                }
+                }            } catch (SaslException se) {
+                se.printStackTrace();
+            }
+            try {
+                serverHandler = new SaslServerCallbackHandler(ap);
+                CallbackHandler badClientHandler = new SaslClientCallbackHandler(new Credentials("user", "password1", "theRealm"));
+                sc = Sasl.createSaslClient(new String[]{mech.toString()}, "username", "IMAP", "FQHN", props, badClientHandler);
+                ss = Sasl.createSaslServer(mech.toString(), "IMAP", "FQHN", props, serverHandler);
+                challenge = ss.evaluateResponse(new byte[0]);
+                response = sc.evaluateChallenge(challenge);
+                ss.evaluateResponse(response);
+                assertTrue("logon unexpectedly succeeded with bad password using mech " + mech, !ss.isComplete());
+            } catch(IOException e) {
+                LOGGER.log(Level.INFO, "Authentication failed due to exception (this is expected)", e );
             }
         }
     }
 
     @Test
-    @Ignore
-    public void loginCramMd5() {
+    public void loginSasl() {
         try{
-            Map<String,String> m = new HashMap<>();
-            m.put( "PDBFOTRCMUMwMkY5NDFFEFU2QkM5MjVFMUITFCMjZAbG9naW5wcm94eTZiLLmFsaWNlLml0Pg==", " dXNlcm5hbWUgM2VlZWRmNWRmZGJmMDhlNzI4YWMwMjdiMTVkZjAxY2Q=" );
-            m.put( "PDE4OTYuNjk3MTcwOTUyQHBvc3RvZmZpY2UucmVzdG9uLm1jaS5uZXQ+", "");
             final SSLContext context=SSLContext.getInstance("TLS");
             String ks="keystore.jks";
             assertTrue("Keystore check",(new File(ks)).exists());
             context.init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, new TrustManager[] {new AllTrustManager()}, esr.getSecureRandom() );
-            ImapServer s=new ImapServer(new InetSocketAddress("localhost",0),new SecurityContext(context,PLAIN));
-            LOGGER.log(Level.INFO,"************************************************************************");
-            LOGGER.log(Level.INFO,"Check CRAM MD5-Login");
-            LOGGER.log(Level.INFO,"************************************************************************");
-            ImapConnection.setDefaultTimeout(2000);
-            AuthenticationDummyProxy ap=new AuthenticationDummyProxy();
+            ImapServer s=new ImapServer(new InetSocketAddress("localhost",0),new SecurityContext(context,UNTRUSTED_SSLTLS));
+            AuthenticationProxy ap=new AuthenticationProxy();
             ap.addUser("USER","password");
             s.setAuth(ap);
-            ImapClient c=new ImapClient(new InetSocketAddress("localhost",s.getPort()),new SecurityContext( context,PLAIN ));
-            c.setTimeout(2000);
-            c.connect();
-            assertTrue("check encryption", false==c.isTLS());
-            String tag=ImapLine.getNextTag();
-            tag=ImapLine.getNextTag();
-            String[] ret=sendCommand(c,tag+" CAPABILITY",tag+" OK");
-            tag=ImapLine.getNextTag();
-            ret=sendCommand(c,tag+" Authenticate",tag+" OK");
-            tag=ImapLine.getNextTag();
-            ret=sendCommand(c,tag+" CAPABILITY",tag+" OK");
-            tag=ImapLine.getNextTag();
-            ret=sendCommand(c,tag+" NOOP",tag+" OK");
-            tag=ImapLine.getNextTag();
-            ret=sendCommand(c,tag+" LOGOUT",tag+" OK");
+
+            for( SaslMechanisms mech : SaslMechanisms.values() ) {
+                LOGGER.log(Level.INFO, "************************************************************************");
+                LOGGER.log(Level.INFO, "Check " + mech + " login");
+                LOGGER.log(Level.INFO, "************************************************************************");
+                ImapConnection.setDefaultTimeout(2000);
+                ImapClient c = new ImapClient(new InetSocketAddress("localhost", s.getPort()), new SecurityContext(context, UNTRUSTED_SSLTLS ));
+                c.setTimeout(2000);
+                c.connect();
+                assertTrue("check encryption", c.isTLS());
+                String tag = ImapLine.getNextTag();
+                tag = ImapLine.getNextTag();
+                String[] ret;
+                sendCommand(c, tag + " CAPABILITY", tag + " OK");
+                assertTrue("authentication unexpectedly failed when using "+mech,c.authenticate(new Credentials("user", "password", "theRealm" ), mech ));
+                tag = ImapLine.getNextTag();
+                sendCommand(c, tag + " LOGOUT", tag + " OK");
+                c.shutdown();
+                LOGGER.log(Level.INFO, "************************************************************************");
+                LOGGER.log(Level.INFO, "Check " + mech + " login (BAD CREDS)");
+                LOGGER.log(Level.INFO, "************************************************************************");
+                c = new ImapClient(new InetSocketAddress("localhost", s.getPort()), new SecurityContext(context, UNTRUSTED_SSLTLS ));
+                c.setTimeout(2000);
+                c.connect();
+                assertTrue("check encryption", c.isTLS());
+                tag = ImapLine.getNextTag();
+                sendCommand(c, tag + " CAPABILITY", tag + " OK");
+                assertTrue("authentication unexpectedly succeeded when using "+mech,!c.authenticate(new Credentials("user", "password1", "theRealm" ), mech ));
+                tag = ImapLine.getNextTag();
+                sendCommand(c, tag + " LOGOUT", tag + " OK");
+                c.shutdown();
+            }
             s.shutdown();
-            c.shutdown();
         } catch (Exception toe) {
             LOGGER.log(Level.WARNING,"Unexpected exception",toe);
             fail("exception thrown ("+toe.toString()+") while testing (at "+toe.getStackTrace()[0]+")");

@@ -23,11 +23,12 @@ package net.gwerder.java.messagevortex.transport;
 
 import net.gwerder.java.messagevortex.transport.imap.ImapConnection;
 
-public abstract class AuthenticationProxy {
+import java.util.HashMap;
+import java.util.Map;
+
+public class AuthenticationProxy {
 
     private ImapConnection conn=null;
-
-    public abstract boolean login(String username,String password);
 
     public ImapConnection setImapConnection(ImapConnection conn) {
         ImapConnection oc=this.conn;
@@ -42,6 +43,36 @@ public abstract class AuthenticationProxy {
      ***/
     public ImapConnection getImapConnection() {
         return this.conn;
+    }
+
+
+    private final Map<String, Credentials> users = new HashMap<>();
+
+    public void addUser(String username,String password) {
+        users.put( username.toLowerCase(),new Credentials( username, password ) );
+    }
+
+    public void addCredentials( Credentials creds ) {
+        users.put( creds.getUsername().toLowerCase(), creds );
+    }
+
+    public boolean login( String username,String password ) {
+        // Always require a username or password
+        if(username==null || password==null) {
+            return false;
+        }
+
+        // check if user exists
+        if(users.get(username.toLowerCase())==null) {
+            return false;
+        }
+
+        // check if password is correct
+        return users.get( username.toLowerCase() ).getPassword().equals( password );
+    }
+
+    public Credentials getCredentials( String authzid ) {
+        return users.get( authzid );
     }
 
 }
