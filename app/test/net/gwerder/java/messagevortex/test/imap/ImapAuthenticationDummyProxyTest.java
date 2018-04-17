@@ -2,7 +2,7 @@ package net.gwerder.java.messagevortex.test.imap;
 
 import net.gwerder.java.messagevortex.transport.SecurityContext;
 import net.gwerder.java.messagevortex.transport.SecurityRequirement;
-import net.gwerder.java.messagevortex.transport.imap.ImapAuthenticationDummyProxy;
+import net.gwerder.java.messagevortex.transport.imap.AuthenticationDummyProxy;
 import net.gwerder.java.messagevortex.transport.imap.ImapConnection;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,7 +25,7 @@ public class ImapAuthenticationDummyProxyTest {
     @Test
     public void setGetConnection() throws IOException {
         Set<Thread> threadSet = ImapSSLTest.getThreadList();
-        ImapAuthenticationDummyProxy ap=new ImapAuthenticationDummyProxy();
+        AuthenticationDummyProxy ap=new AuthenticationDummyProxy();
         ap.addUser("Test","Testpw");
         ImapConnection ic=new ImapConnectionDummy() {};
         assertTrue("ImapConnection should be null if uninited",ap.getImapConnection()==null);
@@ -39,7 +39,7 @@ public class ImapAuthenticationDummyProxyTest {
 
     public void plainAuthTest() {
         Set<Thread> threadSet = ImapSSLTest.getThreadList();
-        ImapAuthenticationDummyProxy ap=new ImapAuthenticationDummyProxy();
+        AuthenticationDummyProxy ap=new AuthenticationDummyProxy();
         ap.addUser("Test","Testpw");
         assertFalse("UserID is null (1)",ap.login(null,"Testpw"));
         assertFalse("password is null (1)",ap.login("Test",null));

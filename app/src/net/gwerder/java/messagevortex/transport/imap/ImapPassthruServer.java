@@ -35,7 +35,7 @@ public class ImapPassthruServer implements SignalHandler {
 
     public ImapPassthruServer(InetSocketAddress listeningAddress, SecurityContext context, Credentials listeningCredentials, InetSocketAddress forwardingServer, Credentials forwardingCredentials ) throws IOException {
         localServer = new ImapServer( listeningAddress, context );
-        ImapAuthenticationDummyProxy authProxy = new ImapAuthenticationDummyProxy();
+        AuthenticationDummyProxy authProxy = new AuthenticationDummyProxy();
         authProxy.addCredentials( listeningCredentials );
         localServer.setAuth( authProxy );
         remoteServer = new ImapClient( forwardingServer, context );

@@ -23,6 +23,7 @@ package net.gwerder.java.messagevortex.transport.imap;
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.transport.AbstractConnection;
+import net.gwerder.java.messagevortex.transport.AuthenticationProxy;
 import net.gwerder.java.messagevortex.transport.ServerConnection;
 import net.gwerder.java.messagevortex.transport.StoppableThread;
 
@@ -47,13 +48,13 @@ public class ImapConnection extends ServerConnection implements Comparable<ImapC
     private ImapConnectionState status=CONNECTION_NOT_AUTHENTICATED;
 
     /* Authentication authority for this connection */
-    private ImapAuthenticationProxy authProxy = null;
+    private AuthenticationProxy authProxy = null;
     private Thread runner=null;
 
     /***
      * Creates an imapConnection
      ***/
-    public ImapConnection( AbstractConnection ac, ImapAuthenticationProxy proxy ) throws IOException {
+    public ImapConnection( AbstractConnection ac, AuthenticationProxy proxy ) throws IOException {
         super( ac );
         setAuth( proxy );
         init();
@@ -68,8 +69,8 @@ public class ImapConnection extends ServerConnection implements Comparable<ImapC
         runner.start();
     }
 
-    public ImapAuthenticationProxy setAuth(ImapAuthenticationProxy authProxy) {
-        ImapAuthenticationProxy oldProxyAuth=getAuth();
+    public AuthenticationProxy setAuth(AuthenticationProxy authProxy) {
+        AuthenticationProxy oldProxyAuth=getAuth();
         this.authProxy=authProxy;
         if(authProxy!=null) {
             this.authProxy.setImapConnection(this);
@@ -80,7 +81,7 @@ public class ImapConnection extends ServerConnection implements Comparable<ImapC
     /***
      * Get the authenticator of the connection.
      ***/
-    public ImapAuthenticationProxy getAuth() {
+    public AuthenticationProxy getAuth() {
         return this.authProxy;
     }
 

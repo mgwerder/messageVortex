@@ -21,25 +21,38 @@ package net.gwerder.java.messagevortex.transport.imap;
 // * SOFTWARE.
 // ************************************************************************************
 
-public abstract class ImapAuthenticationProxy {
+import net.gwerder.java.messagevortex.transport.AuthenticationProxy;
+import net.gwerder.java.messagevortex.transport.Credentials;
 
-    private ImapConnection conn=null;
+import java.util.HashMap;
+import java.util.Map;
 
-    public abstract boolean login(String username,String password);
+public class AuthenticationDummyProxy extends AuthenticationProxy {
 
-    public ImapConnection setImapConnection(ImapConnection conn) {
-        ImapConnection oc=this.conn;
-        this.conn=conn;
-        return oc;
+    private final Map<String, Credentials> users = new HashMap<>();
+
+    public void addUser(String username,String password) {
+        users.put( username.toLowerCase(),new Credentials( username, password ) );
     }
 
-    /***
-     * Get the ImapConnection object which belongs to this proxy
-     *
-     * @return A Connection object which is connected to this proxy
-     ***/
-    public ImapConnection getImapConnection() {
-        return this.conn;
+    public void addCredentials( Credentials creds ) {
+        users.put( creds.getUsername().toLowerCase(), creds );
     }
+
+    public boolean login(String username,String password) {
+        // Always require a username or password
+        if(username==null || password==null) {
+            return false;
+        }
+
+        // check if user exists
+        if(users.get(username.toLowerCase())==null) {
+            return false;
+        }
+
+        // check if password is correct
+        return users.get( username.toLowerCase() ).getPassword().equals( password );
+    }
+
 
 }

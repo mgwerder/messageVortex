@@ -21,10 +21,18 @@ package net.gwerder.java.messagevortex.transport.imap;
 // * SOFTWARE.
 // ************************************************************************************
 
+import net.gwerder.java.messagevortex.transport.RandomString;
+
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.sasl.Sasl;
 import javax.security.sasl.SaslException;
 import javax.security.sasl.SaslServer;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -52,6 +60,32 @@ public class ImapCommandAuthenticate extends ImapCommand {
      ***/
     public void init() {
         ImapCommand.registerCommand(this);
+    }
+
+    public static String getChallenge( int length ) {
+        return RandomString.nextString( length );
+    }
+
+    public static String MD5HMAC( String msg, String keyString ) {
+        String digest = null;
+        try {
+            SecretKeySpec key = new SecretKeySpec((keyString).getBytes(StandardCharsets.US_ASCII), "MD5");
+            Mac mac = Mac.getInstance("MD5");
+            mac.init(key);
+            byte[] bytes = mac.doFinal( msg.getBytes( StandardCharsets.US_ASCII ) );
+            StringBuffer hash = new StringBuffer();
+            for (int i = 0; i < bytes.length; i++) {
+                String hex = Integer.toHexString(0xFF & bytes[i]);
+                if (hex.length() == 1) {
+                    hash.append('0');
+                }
+                hash.append(hex);
+            }
+            digest = hash.toString();
+        } catch (InvalidKeyException e) {
+        } catch (NoSuchAlgorithmException e) {
+        }
+        return digest;
     }
 
     /***
@@ -113,10 +147,10 @@ public class ImapCommandAuthenticate extends ImapCommand {
 
     private boolean auth(String mech,ImapLine line) {
         Map<String,Object> props=new HashMap<>();
-        if(line.getConnection().isTLS()) {
+        if( line.getConnection().isTLS() ) {
             props.put("Sasl.POLICY_NOPLAINTEXT","false");
         }
-        CallbackHandler cbh=new ImapCommandAuthenticateCallbackHandler();
+        CallbackHandler cbh=new ImapCommandAuthenticateCallbackHandler("user","password");
         try{
             SaslServer ss=Sasl.createSaslServer(mech, "imap", "localhost", props, cbh);
         } catch(SaslException se) {

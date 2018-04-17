@@ -48,7 +48,7 @@ public class ImapServer extends ListeningSocketChannel implements StoppableThrea
         LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
     }
 
-    private ImapAuthenticationProxy auth=null;
+    private AuthenticationProxy auth=null;
     private static long defaultTimeout = 10000;
     private long timeout = defaultTimeout;
 
@@ -68,8 +68,8 @@ public class ImapServer extends ListeningSocketChannel implements StoppableThrea
         setName( "IMAPlisten-"+(id++) );
     }
 
-    public ImapAuthenticationProxy setAuth(ImapAuthenticationProxy ap) {
-        ImapAuthenticationProxy old=auth;
+    public AuthenticationProxy setAuth(AuthenticationProxy ap) {
+        AuthenticationProxy old=auth;
         auth=ap;
         return old;
     }

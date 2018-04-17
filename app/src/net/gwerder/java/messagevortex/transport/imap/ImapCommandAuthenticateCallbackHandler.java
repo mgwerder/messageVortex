@@ -21,13 +21,21 @@ package net.gwerder.java.messagevortex.transport.imap;
 // * SOFTWARE.
 // ************************************************************************************
 
-import javax.security.auth.callback.Callback;
-import javax.security.auth.callback.CallbackHandler;
-import javax.security.auth.callback.UnsupportedCallbackException;
+import javax.security.auth.callback.*;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ImapCommandAuthenticateCallbackHandler implements CallbackHandler {
+
+    private String username;
+    private String password;
+
+    public ImapCommandAuthenticateCallbackHandler( String username, String password ) {
+        this.username=username;
+        this.password=password;
+    }
 
     private static final Logger LOGGER;
     static {
@@ -35,7 +43,38 @@ public class ImapCommandAuthenticateCallbackHandler implements CallbackHandler {
     }
 
     public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException {
+        for (int i = 0; i < callbacks.length; i++) {
+            if (callbacks[i] instanceof TextOutputCallback) {
+                // display the message according to the specified type
+                Level l;
+                TextOutputCallback toc = (TextOutputCallback)callbacks[i];
+                switch (toc.getMessageType()) {
+                    case TextOutputCallback.INFORMATION:
+                        l=Level.INFO;
+                        break;
+                    case TextOutputCallback.ERROR:
+                        l=Level.SEVERE;
+                        break;
+                    case TextOutputCallback.WARNING:
+                        l=Level.WARNING;
+                        break;
+                    default:
+                        throw new IOException("Unsupported message type: " + toc.getMessageType());
+                }
 
+                LOGGER.log( l, "SASL message: " + toc.getMessage() );
+            } else if (callbacks[i] instanceof NameCallback) {
+                // provide username
+                NameCallback nc = (NameCallback)callbacks[i];
+                nc.setName(username);
+            } else if (callbacks[i] instanceof PasswordCallback) {
+                // provide password
+                PasswordCallback pc = (PasswordCallback)callbacks[i];
+                pc.setPassword( password.toCharArray() );
+            } else {
+                throw new UnsupportedCallbackException(callbacks[i], "Unrecognized Callback");
+            }
+        }
     }
 
     // AuthorizeCallback

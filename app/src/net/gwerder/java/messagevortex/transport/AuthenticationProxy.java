@@ -1,4 +1,4 @@
-package net.gwerder.java.messagevortex.transport.imap;
+package net.gwerder.java.messagevortex.transport;
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -21,37 +21,27 @@ package net.gwerder.java.messagevortex.transport.imap;
 // * SOFTWARE.
 // ************************************************************************************
 
-import net.gwerder.java.messagevortex.transport.Credentials;
+import net.gwerder.java.messagevortex.transport.imap.ImapConnection;
 
-import java.util.HashMap;
-import java.util.Map;
+public abstract class AuthenticationProxy {
 
-public class ImapAuthenticationDummyProxy extends ImapAuthenticationProxy{
+    private ImapConnection conn=null;
 
-    private final Map<String, Credentials> users = new HashMap<>();
+    public abstract boolean login(String username,String password);
 
-    public void addUser(String username,String password) {
-        users.put( username.toLowerCase(),new Credentials( username, password ) );
+    public ImapConnection setImapConnection(ImapConnection conn) {
+        ImapConnection oc=this.conn;
+        this.conn=conn;
+        return oc;
     }
 
-    public void addCredentials( Credentials creds ) {
-        users.put( creds.getUsername().toLowerCase(), creds );
+    /***
+     * Get the ImapConnection object which belongs to this proxy
+     *
+     * @return A Connection object which is connected to this proxy
+     ***/
+    public ImapConnection getImapConnection() {
+        return this.conn;
     }
-
-    public boolean login(String username,String password) {
-        // Always require a username or password
-        if(username==null || password==null) {
-            return false;
-        }
-
-        // check if user exists
-        if(users.get(username.toLowerCase())==null) {
-            return false;
-        }
-
-        // check if password is correct
-        return users.get( username.toLowerCase() ).getPassword().equals( password );
-    }
-
 
 }

@@ -2,11 +2,9 @@ package net.gwerder.java.messagevortex.test.imap;
 
 import net.gwerder.java.messagevortex.ExtendedSecureRandom;
 import net.gwerder.java.messagevortex.MessageVortexLogger;
-import net.gwerder.java.messagevortex.transport.AllTrustManager;
-import net.gwerder.java.messagevortex.transport.CustomKeyManager;
-import net.gwerder.java.messagevortex.transport.SecurityContext;
-import net.gwerder.java.messagevortex.transport.SecurityRequirement;
+import net.gwerder.java.messagevortex.transport.*;
 import net.gwerder.java.messagevortex.transport.imap.*;
+import org.bouncycastle.util.encoders.Base64;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -14,11 +12,19 @@ import org.junit.runners.JUnit4;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509KeyManager;
+import javax.security.auth.callback.CallbackHandler;
+import javax.security.sasl.Sasl;
+import javax.security.sasl.SaslClient;
+import javax.security.sasl.SaslException;
+import javax.security.sasl.SaslServer;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.security.Security;
 import java.util.Arrays;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 import java.util.concurrent.TimeoutException;
@@ -223,7 +229,7 @@ public class ImapCommandTest {
                 LOGGER.log(Level.INFO,"Check full Login Logout ("+encrypted+")");
                 LOGGER.log(Level.INFO,"************************************************************************");
                 ImapConnection.setDefaultTimeout(200000);
-                ImapAuthenticationDummyProxy ap=new ImapAuthenticationDummyProxy();
+                AuthenticationDummyProxy ap=new AuthenticationDummyProxy();
                 ap.addUser("USER","password");
 
                 assertFalse("check for fail if user is null",ap.login(null,"a"));
@@ -269,5 +275,102 @@ public class ImapCommandTest {
         } while(encrypted && !DO_NOT_TEST_ENCRYPTION);
         assertTrue("error searching for hangig threads",ImapSSLTest.verifyHangingThreads(threadSet).size()==0);
     }
+
+
+    @Test
+    public void SaslImplementationTests() throws SaslException {
+        Security.addProvider( new SaslPlainServer.SecurityProvider() );
+
+
+        AuthenticationDummyProxy ap=new AuthenticationDummyProxy();
+        ap.addUser("USER","password");
+
+        CallbackHandler clientHandler = new SaslClientCallbackHandler( new Credentials("user","password") );
+        CallbackHandler serverHandler = new SaslServerCallbackHandler( ap );
+
+        for(SaslMechanisms mech : SaslMechanisms.values() ) {
+            LOGGER.log(Level.INFO, "Testing SASL mechanism " + mech );
+            Map<String, String> props = new HashMap<>();
+
+            if( ! SaslMechanisms.PLAIN.equals( mech ) ) {
+                props.put(Sasl.POLICY_NOPLAINTEXT, "true");
+            }
+            // required for server only
+            props.put("com.sun.security.sasl.digest.realm", "theRealm");
+
+            LOGGER.log(Level.INFO, "Getting client and server for SASL " + mech );
+            SaslClient sc = Sasl.createSaslClient(new String[]{mech.toString()}, "username", "IMAP", "FQHN", props, clientHandler);
+            SaslServer ss = Sasl.createSaslServer(mech.toString(), "IMAP", "FQHN", props, serverHandler);
+            assertTrue( "No Sasl server found for "+mech,ss!=null );
+            assertTrue( "No Sasl client found for "+mech,sc!=null );
+
+            // get Challenge
+            LOGGER.log(Level.INFO, "Getting challenge for SASL " + mech );
+            byte[] challenge = ss.evaluateResponse(new byte[0]);
+            LOGGER.log(Level.INFO, "Challenge is " + new String(Base64.encode(challenge)) + " (" + new String(challenge) + ")");
+
+            // get client reponse
+            LOGGER.log(Level.INFO, "Getting client response for SASL " + mech );
+            byte[] response = sc.evaluateChallenge(challenge);
+            LOGGER.log(Level.INFO, "Response is " + new String(Base64.encode(response)) + " (" + new String(response) + ")");
+
+            // check authentication
+            try {
+                LOGGER.log(Level.INFO, "evaluating response for SASL " + mech );
+                ss.evaluateResponse(response);
+            } catch (SaslException se) {
+                se.printStackTrace();
+            } finally {
+                assertTrue( ss.isComplete() );
+                if (ss.isComplete()) {
+                    LOGGER.log(Level.INFO, "Authentication successful.");
+                } else {
+                    LOGGER.log(Level.INFO, "Authentication failed.");
+                }
+            }
+        }
+    }
+
+    @Test
+    public void loginCramMd5() {
+        try{
+            Map<String,String> m = new HashMap<>();
+            m.put( "PDBFOTRCMUMwMkY5NDFFEFU2QkM5MjVFMUITFCMjZAbG9naW5wcm94eTZiLLmFsaWNlLml0Pg==", " dXNlcm5hbWUgM2VlZWRmNWRmZGJmMDhlNzI4YWMwMjdiMTVkZjAxY2Q=" );
+            m.put( "PDE4OTYuNjk3MTcwOTUyQHBvc3RvZmZpY2UucmVzdG9uLm1jaS5uZXQ+", "");
+            final SSLContext context=SSLContext.getInstance("TLS");
+            String ks="keystore.jks";
+            assertTrue("Keystore check",(new File(ks)).exists());
+            context.init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, new TrustManager[] {new AllTrustManager()}, esr.getSecureRandom() );
+            ImapServer s=new ImapServer(new InetSocketAddress("localhost",0),new SecurityContext(context,PLAIN));
+            LOGGER.log(Level.INFO,"************************************************************************");
+            LOGGER.log(Level.INFO,"Check CRAM MD5-Login");
+            LOGGER.log(Level.INFO,"************************************************************************");
+            ImapConnection.setDefaultTimeout(2000);
+            AuthenticationDummyProxy ap=new AuthenticationDummyProxy();
+            ap.addUser("USER","password");
+            s.setAuth(ap);
+            ImapClient c=new ImapClient(new InetSocketAddress("localhost",s.getPort()),new SecurityContext( context,PLAIN ));
+            c.setTimeout(2000);
+            c.connect();
+            assertTrue("check encryption", false==c.isTLS());
+            String tag=ImapLine.getNextTag();
+            tag=ImapLine.getNextTag();
+            String[] ret=sendCommand(c,tag+" CAPABILITY",tag+" OK");
+            tag=ImapLine.getNextTag();
+            ret=sendCommand(c,tag+" Authenticate",tag+" OK");
+            tag=ImapLine.getNextTag();
+            ret=sendCommand(c,tag+" CAPABILITY",tag+" OK");
+            tag=ImapLine.getNextTag();
+            ret=sendCommand(c,tag+" NOOP",tag+" OK");
+            tag=ImapLine.getNextTag();
+            ret=sendCommand(c,tag+" LOGOUT",tag+" OK");
+            s.shutdown();
+            c.shutdown();
+        } catch (Exception toe) {
+            LOGGER.log(Level.WARNING,"Unexpected exception",toe);
+            fail("exception thrown ("+toe.toString()+") while testing (at "+toe.getStackTrace()[0]+")");
+        }
+    }
+
 
 }
