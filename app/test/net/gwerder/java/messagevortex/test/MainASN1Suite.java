@@ -4,6 +4,7 @@ package net.gwerder.java.messagevortex.test;
 import junit.framework.JUnit4TestAdapter;
 import junit.framework.TestSuite;
 import net.gwerder.java.messagevortex.asn1.AsymmetricKey;
+import net.gwerder.java.messagevortex.asn1.BlendingParameter;
 import net.gwerder.java.messagevortex.test.asn1.*;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -11,6 +12,7 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+        BlendingParameterTest.class,
         CipherSpecTest.class,
         FuzzerTest.class,
         VortexMessageTest.class,
@@ -36,6 +38,7 @@ public class MainASN1Suite {
 
     public static junit.framework.Test suite() {
         final TestSuite s = new TestSuite();
+        s.addTest(new JUnit4TestAdapter(BlendingParameterTest.class));
         s.addTest(new JUnit4TestAdapter(CipherSpecTest.class));
         s.addTest(new JUnit4TestAdapter(FuzzerTest.class));
         s.addTest(new JUnit4TestAdapter(VortexMessageTest.class));

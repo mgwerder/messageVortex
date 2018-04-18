@@ -38,10 +38,9 @@ public class BlendingParameter extends AbstractBlock implements Serializable {
 
     public static final long serialVersionUID = 100000000004L;
 
-    enum BlendingParameterChoice {
+    public enum BlendingParameterChoice {
         OFFSET( 1 ),
-        SYMMETRIC_KEY( 2 ),
-        ASYMMETRIC_KEY( 3 );
+        F5( 2 );
 
         final int id;
 
@@ -65,10 +64,17 @@ public class BlendingParameter extends AbstractBlock implements Serializable {
 
     int offset = -1;
     SymmetricKey symmetricKey = null;
-    AsymmetricKey asymmetricKey = null;
 
     public BlendingParameter(ASN1Encodable e ) throws IOException {
         parse( e );
+    }
+
+    public BlendingParameter( BlendingParameterChoice choice ) throws IOException {
+        if( choice==OFFSET ) {
+            offset=0;
+        } else {
+            symmetricKey=new SymmetricKey();
+        }
     }
 
     @Override
@@ -85,10 +91,7 @@ public class BlendingParameter extends AbstractBlock implements Serializable {
             case OFFSET:
                 offset = ASN1Integer.getInstance( t.getObject() ).getValue().intValue();
                 break;
-            case ASYMMETRIC_KEY:
-                asymmetricKey = new AsymmetricKey( t.getObject().getEncoded() );
-                break;
-            case SYMMETRIC_KEY:
+            case F5:
                 symmetricKey = new SymmetricKey( t.getObject().getEncoded() );
                 break;
             default:
@@ -100,9 +103,7 @@ public class BlendingParameter extends AbstractBlock implements Serializable {
         if(offset>-1) {
             return OFFSET;
         } else if( symmetricKey != null ) {
-            return SYMMETRIC_KEY;
-        } else if( asymmetricKey != null ) {
-            return ASYMMETRIC_KEY;
+            return F5;
         }
         return null;
     }
@@ -114,11 +115,8 @@ public class BlendingParameter extends AbstractBlock implements Serializable {
             case OFFSET:
                 sb.append( "offset " ).append( offset );
                 break;
-            case SYMMETRIC_KEY:
+            case F5:
                 sb.append( "symmetricKey " ).append( symmetricKey.dumpValueNotation( prefix, dumptype) );
-                break;
-            case ASYMMETRIC_KEY:
-                sb.append( "asymmetricKey " ).append( asymmetricKey.dumpValueNotation( prefix, dumptype ) );
                 break;
             default:
                 throw new IOException( "unable to dump " + getChoice() );
@@ -131,12 +129,34 @@ public class BlendingParameter extends AbstractBlock implements Serializable {
         switch ( getChoice() ) {
             case OFFSET:
                 return new DERTaggedObject( getChoice().getId(), new ASN1Integer(offset) );
-            case SYMMETRIC_KEY:
+            case F5:
                 return new DERTaggedObject( getChoice().getId(), symmetricKey.toASN1Object( dumpType ) );
-            case ASYMMETRIC_KEY:
-                return new DERTaggedObject( getChoice().getId(), asymmetricKey.toASN1Object( dumpType ) );
             default:
                 throw new IOException( "unable to convert to ASN.1 (" + getChoice() + ")" );
         }
     }
+
+    @Override
+    public boolean equals( Object t ) {
+        if( t==null || t.getClass() != this.getClass() ) {
+            return false;
+        }
+        BlendingParameter o = (BlendingParameter) t;
+        try {
+            return dumpValueNotation( "", DumpType.ALL ).equals( o.dumpValueNotation( "", DumpType.ALL ) );
+        } catch( IOException ioe ) {
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        // this methode is required for code sanity
+        try{
+            return dumpValueNotation( "", DumpType.ALL ).hashCode();
+        } catch( IOException ioe ) {
+            return "FAILED".hashCode();
+        }
+    }
+
 }
