@@ -32,7 +32,10 @@ import java.nio.charset.StandardCharsets;
  * Created by martin.gwerder on 31.05.2016.
  */
 public enum Parameter implements Serializable {
+    /* dummy id for internal use (store algorithm with parameter for key cache) */
     ALGORITHM (1,    "algorithm",null),
+
+    /* Keysize parameter specifying the size of an encryption key in bits */
     KEYSIZE   (10000,"keySize",new Transcoder() {
         @Override
         public String fromASN1(ASN1Object o) {
@@ -43,6 +46,8 @@ public enum Parameter implements Serializable {
             return new ASN1Integer(Integer.parseInt(s));
         }
     }),
+
+    /* Parameter for courve type name when using ECC */
     CURVETYPE(10001, "curveType", new Transcoder() {
         @Override
         public String fromASN1(ASN1Object o) {
@@ -53,6 +58,8 @@ public enum Parameter implements Serializable {
             return new ASN1Enumerated(ECCurveType.getByString(s).getId());
         }
     }),
+
+    /* Initialisation vector specification for IV based encryption modes */
     IV        (10002,"initialisationVector",new Transcoder() {
         public String fromASN1( ASN1Object o ) {
             return new String( ASN1OctetString.getInstance( o ).getOctets(), StandardCharsets.UTF_8 );
@@ -61,6 +68,8 @@ public enum Parameter implements Serializable {
             return new DEROctetString( s.getBytes( StandardCharsets.UTF_8 ) );
         }
     }),
+
+    /* nonce required for certain CR algorithms */
     NONCE     (10003,"nonce",new Transcoder() {
         public String fromASN1( ASN1Object o ) {
             return new String( ASN1OctetString.getInstance( o ).getOctets(), StandardCharsets.UTF_8 );
@@ -69,6 +78,8 @@ public enum Parameter implements Serializable {
             return new DEROctetString( s.getBytes( StandardCharsets.UTF_8 ) );
         }
     }),
+
+    /* Name of encryption mode to be used */
     MODE      (10004,"mode",new Transcoder() {
         public String fromASN1( ASN1Object o ) {
             return new String( ASN1OctetString.getInstance( o ).getOctets(), StandardCharsets.UTF_8 );
@@ -77,6 +88,8 @@ public enum Parameter implements Serializable {
             return new DEROctetString( s.getBytes( StandardCharsets.UTF_8 ) );
         }
     }),
+
+    /* name of padding to be used for encryption */
     PADDING   (10005,"padding",new Transcoder() {
         public String fromASN1( ASN1Object o ) {
             return new String( ASN1OctetString.getInstance( o ).getOctets(), StandardCharsets.UTF_8 );
@@ -85,6 +98,8 @@ public enum Parameter implements Serializable {
             return new DEROctetString( s.getBytes( StandardCharsets.UTF_8 ) );
         }
     }),
+
+    /* size of encryption block (When different from key size in Bit). The size is measured in bits */
     BLOCKSIZE (10100,"blockSize",new Transcoder() {
         @Override
         public String fromASN1( ASN1Object o ) {
