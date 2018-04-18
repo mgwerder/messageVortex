@@ -27,17 +27,11 @@ import net.gwerder.java.messagevortex.transport.SaslPlainServer;
 import net.gwerder.java.messagevortex.transport.SaslServerCallbackHandler;
 import org.bouncycastle.util.encoders.Base64;
 
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.sasl.Sasl;
 import javax.security.sasl.SaslException;
 import javax.security.sasl.SaslServer;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.security.Security;
 import java.util.HashMap;
 import java.util.Map;
@@ -186,21 +180,6 @@ public class ImapCommandAuthenticate extends ImapCommand {
             throw new ImapException(line,"error parsing command (getting userid)");
         }
         return userid;
-    }
-
-    private boolean auth(String mech,ImapLine line) {
-        Map<String,Object> props=new HashMap<>();
-        if( line.getConnection().isTLS() ) {
-            props.put("Sasl.POLICY_NOPLAINTEXT","false");
-        }
-        CallbackHandler cbh=new ImapCommandAuthenticateCallbackHandler("user","password");
-        try{
-            SaslServer ss=Sasl.createSaslServer(mech, "imap", "localhost", props, cbh);
-        } catch(SaslException se) {
-            LOGGER.log(Level.WARNING, "Got Exception",se);
-            return false;
-        }
-        return true;
     }
 
     @Override
