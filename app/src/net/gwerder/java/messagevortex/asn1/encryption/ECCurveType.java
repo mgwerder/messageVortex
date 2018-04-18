@@ -23,8 +23,6 @@ package net.gwerder.java.messagevortex.asn1.encryption;
 
 /**
  * Represents all supported EC named curves.
- *
- * Created by martin.gwerder on 31.05.2016.
  */
 public enum ECCurveType {
 

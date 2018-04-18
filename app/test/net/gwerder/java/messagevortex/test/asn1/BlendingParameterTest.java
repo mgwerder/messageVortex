@@ -1,12 +1,7 @@
 package net.gwerder.java.messagevortex.test.asn1;
 
 import net.gwerder.java.messagevortex.MessageVortexLogger;
-import net.gwerder.java.messagevortex.asn1.AlgorithmParameter;
-import net.gwerder.java.messagevortex.asn1.AsymmetricAlgorithmSpec;
 import net.gwerder.java.messagevortex.asn1.BlendingParameter;
-import net.gwerder.java.messagevortex.asn1.CipherSpec;
-import net.gwerder.java.messagevortex.asn1.encryption.Algorithm;
-import net.gwerder.java.messagevortex.asn1.encryption.CipherUsage;
 import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.junit.Test;
 import org.junit.runner.RunWith;

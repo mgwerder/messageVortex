@@ -38,17 +38,20 @@ import java.util.logging.Logger;
  *
  */
 public enum Algorithm implements Serializable {
-
+    /* AES fixed (block sized) enumerations */
     AES128     ( 1000, AlgorithmType.SYMMETRIC, "aes128"     , "BC", SecurityLevel.LOW ),
     AES192     ( 1001, AlgorithmType.SYMMETRIC, "aes192"     , "BC", SecurityLevel.MEDIUM ),
     AES256     ( 1002, AlgorithmType.SYMMETRIC, "aes256"     , "BC", SecurityLevel.QUANTUM ),
+    /* CAMELLIA fixed (block sized) enumerations */
     CAMELLIA128( 1100, AlgorithmType.SYMMETRIC, "CAMELLIA128", "BC", SecurityLevel.LOW ),
     CAMELLIA192( 1101, AlgorithmType.SYMMETRIC, "CAMELLIA192", "BC", SecurityLevel.MEDIUM ),
     CAMELLIA256( 1102, AlgorithmType.SYMMETRIC, "CAMELLIA256", "BC", SecurityLevel.QUANTUM ),
+    /* TWOFISH fixed (block sized) enumerations */
     TWOFISH128 ( 1200, AlgorithmType.SYMMETRIC, "TWOFISH128" , "BC", SecurityLevel.LOW ),
     TWOFISH192 ( 1201, AlgorithmType.SYMMETRIC, "TWOFISH192" , "BC", SecurityLevel.MEDIUM ),
     TWOFISH256 ( 1202, AlgorithmType.SYMMETRIC, "TWOFISH256" , "BC", SecurityLevel.QUANTUM ),
 
+    /* RSA (variable sized) enumerations */
     RSA        (2000, AlgorithmType.ASYMMETRIC, "RSA", "BC", getSecLevelList( getSecLevelList( getSecLevelList( getSecLevelList(
               SecurityLevel.LOW,     getParameterList(new String[] { Parameter.ALGORITHM+"=RSA",Parameter.KEYSIZE+"=1024",Parameter.BLOCKSIZE+"=1024",Parameter.MODE+"="+Mode.getDefault( AlgorithmType.ASYMMETRIC ),Parameter.PADDING+"="+Padding.getDefault( AlgorithmType.ASYMMETRIC ) } ) ),
               SecurityLevel.MEDIUM,  getParameterList(new String[] { Parameter.ALGORITHM+"=RSA",Parameter.KEYSIZE+"=2048",Parameter.BLOCKSIZE+"=2048",Parameter.MODE+"="+Mode.getDefault( AlgorithmType.ASYMMETRIC ),Parameter.PADDING+"="+Padding.getDefault( AlgorithmType.ASYMMETRIC ) } ) ),
@@ -56,11 +59,13 @@ public enum Algorithm implements Serializable {
               SecurityLevel.QUANTUM, getParameterList(new String[] { Parameter.ALGORITHM+"=RSA",Parameter.KEYSIZE+"=8192",Parameter.BLOCKSIZE+"=8192",Parameter.MODE+"="+Mode.getDefault( AlgorithmType.ASYMMETRIC ),Parameter.PADDING+"="+Padding.getDefault( AlgorithmType.ASYMMETRIC ) } ) )
 
     ),
+    /* Elliptic curve (name represented) enumerations */
     EC         ( 2100, AlgorithmType.ASYMMETRIC, "ECIES", "BC", getSecLevelList( getSecLevelList( getSecLevelList(
             ECCurveType.SECP384R1.getSecurityLevel(), getParameterList(new String[] { Parameter.ALGORITHM+"=ECIES",Parameter.KEYSIZE+"=384",Parameter.BLOCKSIZE+"=384",Parameter.CURVETYPE+"="+ECCurveType.SECP384R1,Parameter.MODE+"="+Mode.getDefault( AlgorithmType.ASYMMETRIC ),Parameter.PADDING+"="+Padding.getDefault( AlgorithmType.ASYMMETRIC) } ) ),
             ECCurveType.SECT409K1.getSecurityLevel(), getParameterList(new String[] { Parameter.ALGORITHM+"=ECIES",Parameter.KEYSIZE+"=409",Parameter.BLOCKSIZE+"=409",Parameter.CURVETYPE+"="+ECCurveType.SECT409K1,Parameter.MODE+"="+Mode.getDefault( AlgorithmType.ASYMMETRIC ),Parameter.PADDING+"="+Padding.getDefault( AlgorithmType.ASYMMETRIC) } ) ),
             ECCurveType.SECP521R1.getSecurityLevel(), getParameterList(new String[] { Parameter.ALGORITHM+"=ECIES",Parameter.KEYSIZE+"=521",Parameter.BLOCKSIZE+"=521",Parameter.CURVETYPE+"="+ECCurveType.SECP521R1,Parameter.MODE+"="+Mode.getDefault( AlgorithmType.ASYMMETRIC ),Parameter.PADDING+"="+Padding.getDefault( AlgorithmType.ASYMMETRIC) } ) )
     ),
+    /* Hash algorithm enumerations */
     SHA384     ( 3000, AlgorithmType.HASHING, "sha384"   , "BC", SecurityLevel.HIGH ),
     SHA512     ( 3001, AlgorithmType.HASHING, "sha512"   , "BC", SecurityLevel.QUANTUM ),
     RIPEMD160  ( 3100, AlgorithmType.HASHING, "ripemd160", "BC", SecurityLevel.LOW ),
@@ -70,17 +75,43 @@ public enum Algorithm implements Serializable {
 
     public static final long serialVersionUID = 100000000039L;
 
+    /* provides a map for default selections or Algorihm sets (including parameters)
+       for each AlgorithnmType class */
     private static Map<AlgorithmType, Algorithm> def = new ConcurrentHashMap<>();
-    private java.util.logging.Logger LOGGER;
 
+    /* cresate a class specific logger */
+    private static java.util.logging.Logger LOGGER;
+    static {
+        LOGGER=MessageVortexLogger.getLogger( (new Throwable()).getStackTrace()[0].getClassName() );
+    }
+
+    /* contains the ASN.1 based ID for the algorithm */
     private final int id;
+
+    /* contains the class of the algorithm */
     private final AlgorithmType t;
+
+    /* contains a textual representation */
     private final String txt;
+
+    /* contains a textual representation of the security provider to be used */
     private final String provider;
+
+    /* contains a representative parameter set for the security levels */
     private final Map<SecurityLevel,AlgorithmParameter> secLevel;
 
+    /***
+     * constructor for the internal loading of parameters for the Algorithm enum.
+     *
+     * This contructor is required for block sized Algorithms without parameter sets.
+     *
+     * @param id        the ASN.1 based numerical ID
+     * @param t         the class the algorithm belongs to
+     * @param txt       a textual representation
+     * @param provider  the name of the cryptographic provider to be used
+     * @param level     the security level of this Algorithm type
+     */
     Algorithm(int id, AlgorithmType t, String txt, String provider, SecurityLevel level) {
-        LOGGER=MessageVortexLogger.getLogger( (new Throwable()).getStackTrace()[0].getClassName() );
         this.secLevel = new ConcurrentHashMap<>();
         synchronized(secLevel) {
             this.id = id;
@@ -104,8 +135,16 @@ public enum Algorithm implements Serializable {
         }
     }
 
+    /***
+     * constructor for the internal loading of parameters for the Algorithm enum.
+     *
+     * @param id            the ASN.1 based numerical ID
+     * @param t             the class the algorithm belongs to
+     * @param txt           a textual representation
+     * @param provider      the name of the cryptographic provider to be used
+     * @param parameters    set of parameter sets including the respective security level
+     */
     Algorithm(int id, AlgorithmType t, String txt, String provider, Map<SecurityLevel, AlgorithmParameter> parameters) {
-        LOGGER=MessageVortexLogger.getLogger( (new Throwable()).getStackTrace()[0].getClassName() );
         this.id = id;
         this.t = t;
         this.txt = txt;

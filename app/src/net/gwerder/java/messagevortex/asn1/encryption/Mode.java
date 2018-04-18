@@ -68,6 +68,12 @@ public enum Mode {
         return this.requiresIV;
     }
 
+    /**
+     * Get enumeration element by its ASN.1 ID.
+     *
+     * @param id    the ID of the element to be obtained
+     * @return      the element or null if the ID is unknown
+     */
     public static Mode getById(int id) {
         for(Mode e : values()) {
             if(e.id==id) {
@@ -77,6 +83,13 @@ public enum Mode {
         return null;
     }
 
+
+    /**
+     * Get enumeration element by its name.
+     *
+     * @param name    the name of the element to be obtained
+     * @return        the element or null if the name is unknown
+     */
     public static Mode getByString(String name) {
         for(Mode e : values()) {
             if(e.txt.equals(name)) {
@@ -108,6 +121,11 @@ public enum Mode {
         return old;
     }
 
+    /***
+     * Gets the ASN.1 numerical ID.
+     *
+     * @return the numerical ID
+     */
     public int getId() {
         return id;
     }
