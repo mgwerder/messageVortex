@@ -73,4 +73,5 @@ public enum StatusCode {
     public ASN1Enumerated toASN1() {
         return asn;
     }
+
 }

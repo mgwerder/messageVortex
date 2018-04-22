@@ -24,6 +24,8 @@ package net.gwerder.java.messagevortex.asn1.encryption;
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.asn1.AlgorithmParameter;
 
+import java.awt.image.ImagingOpException;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -112,6 +114,9 @@ public enum Algorithm implements Serializable {
      * @param level     the security level of this Algorithm type
      */
     Algorithm(int id, AlgorithmType t, String txt, String provider, SecurityLevel level) {
+        if( txt == null ) {
+            throw new NullPointerException( " textual representation may not be null" );
+        }
         this.secLevel = new ConcurrentHashMap<>();
         synchronized(secLevel) {
             this.id = id;
@@ -149,7 +154,16 @@ public enum Algorithm implements Serializable {
         this.t = t;
         this.txt = txt;
         this.provider = provider;
-        this.secLevel = parameters;
+
+        // make a deep copy of the hashmap to avoid later modification of the content
+        this.secLevel = new HashMap<>();
+        for( Map.Entry<SecurityLevel,AlgorithmParameter> e : parameters.entrySet() ) {
+            try {
+                this.secLevel.put(e.getKey(), new AlgorithmParameter(e.getValue().toASN1Object(DumpType.INTERNAL)));
+            } catch( IOException ex ) {
+                throw new IllegalAccessError( "unable to clone parameter map" );
+            }
+        }
     }
 
     private static AlgorithmParameter getParameterList(String[] txt) {
@@ -379,7 +393,11 @@ public enum Algorithm implements Serializable {
                     sl = sl.next();
                 }
             }
-            return new AlgorithmParameter( params );
+            try {
+                return new AlgorithmParameter( params.toASN1Object( DumpType.ALL ) );
+            } catch( IOException exception ) {
+                return null;
+            }
         }
     }
 

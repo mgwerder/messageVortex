@@ -25,6 +25,8 @@ package net.gwerder.java.messagevortex.asn1.encryption;
  * Enumeration representing the type of dump requested or parsed.
  */
 public enum DumpType {
+    /* Dump all information for internal use only (includes non dumpable values) */
+    INTERNAL,
     /* Dump all information to the maximum possible */
     ALL,
     /* Dump all information to the maximum possible in unecrypted default manor */
