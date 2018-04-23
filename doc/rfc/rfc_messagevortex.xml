@@ -12,7 +12,7 @@
 <?rfc subcompact="no" ?>
 
 <!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
-        <!--<!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">-->
+        <!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
         <!ENTITY RFC3501 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3501.xml">
         <!ENTITY RFC5321 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5321.xml">
         ]>
