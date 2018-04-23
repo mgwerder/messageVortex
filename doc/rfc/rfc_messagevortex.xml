@@ -339,7 +339,7 @@ main(int argc, char *argv[])
         <!-- References split into informative and normative -->
         <!-- There are 2 ways to insert reference entries from the citation libraries:
         1. define an ENTITY at the top, and use "ampersand character"RFC2629; here (as shown)
-        2. simply use a PI <?rfc include="reference.RFC.2119.xml"?> here
+        2. simply use a PI "less than"?rfc include="reference.RFC.2119.xml"?> here
            (for I-Ds: include="reference.I-D.narten-iana-considerations-rfc2434bis.xml")
 
         Both are cited textually in the same manner: by using xref elements.
