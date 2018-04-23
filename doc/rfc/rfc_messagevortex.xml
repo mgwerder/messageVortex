@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="US-ASCII"?>
-<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
-        <!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"><!-- Use of MUST, MAY, ETC --> 
-        ]>
-
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
-<!-- used by XSLT processors -->
-<!-- For a complete list and description of processing instructions (PIs), 
+
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+        <!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"><!-- Use of MUST, MAY, ETC -->
+]>
+
+<!-- For a complete list and description of processing instructions (PIs),
     please see http://xml.resource.org/authoring/README.html. -->
 <?rfc strict="yes" ?>
 <?rfc toc="yes"?>
@@ -15,284 +15,276 @@
 <?rfc compact="yes" ?>
 <?rfc subcompact="no" ?>
 
-<rfc category="exp" docName="draft-ietf-xml2rfc-template-06" ipr="trust200902">
+<rfc category="exp" docName="draft-ietf-messagevortex-protocol-01" ipr="trust200902">
 <!-- category values: std, bcp, info, exp, and historic
     ipr values: trust200902, noModificationTrust200902, noDerivativesTrust200902, or pre5378Trust200902 you can add the attributes updates="NNNN" and obsoletes="NNNN" they will automatically be output with "(if approved)"
 -->
 
- <front>
-   <!-- The abbreviated title is used in the page header - it is only necessary if the full title is longer than 39 characters -->
+    <front>
+        <!-- The abbreviated title is used in the page header - it is only necessary if the full title is longer than 39 characters -->
 
-   <title abbrev="MessageVortex">MessageVortex Protocol</title>
-   <!-- add 'role="editor"' below for the editors if appropriate -->
-   <!-- Another author who claims to be an editor -->
-   <author fullname="Martin Gwerder" initials="M.G." role="editor" surname="Gwerder">
-     <!--<organization>Folly Consulting</organization>-->
+        <title>MessageVortex Protocol</title>
+        <!-- add 'role="editor"' below for the editors if appropriate -->
+        <!-- Another author who claims to be an editor -->
+        <author fullname="Martin Gwerder" initials="M.G." role="editor" surname="Gwerder">
+            <!--<organization>Folly Consulting</organization>-->
 
-     <address>
-       <postal>
-         <street>Untere Parkstrasse 9</street>
+            <address>
+                <postal>
+                    <street>Untere Parkstrasse 9</street>
+                    <!-- Reorder these if your country does things differently -->
+                    <code>5212</code><city>Hausen</city><region>AG</region>
+                    <country>Switzerland</country>
+                </postal>
 
-         <!-- Reorder these if your country does things differently -->
+                <phone>+41 56 202 76 81</phone>
 
-         <code>5212</code><city>Hausen</city><region>AG</region>
-         <country>Switzerland</country>
-       </postal>
+                <email>rfc@gwerder.net</email>
 
-       <phone>+41 56 202 76 81</phone>
+            </address>
+            </author>
 
-       <email>rfc@gwerder.net</email>
+        <date year="2018"/>
 
-       <!-- uri and facsimile elements may also be added -->
-     </address>
-   </author>
+        <!-- Meta-data Declarations -->
 
-   <date year="2018"/>
+        <area>General</area>
 
-   <!-- If the month and year are both specified and are the current ones, xml2rfc will fill 
-        in the current day for you. If only the current year is specified, xml2rfc will fill 
-	 in the current day and month for you. If the year is not the current one, it is 
-	 necessary to specify at least a month (xml2rfc assumes day="1" if not specified for the 
-	 purpose of calculating the expiry date).  With drafts it is normally sufficient to 
-	 specify just the year. -->
+        <workgroup>Internet Engineering Task Force</workgroup>
 
-   <!-- Meta-data Declarations -->
+        <!-- WG name at the upperleft corner of the doc,
+             IETF is fine for individual submissions.
+          If this element is not present, the default is "Network Working Group",
+             which is used by the RFC Editor as a nod to the history of the IETF. -->
 
-   <area>General</area>
+        <keyword>SMTP</keyword>
+        <keyword>XMPP</keyword>
+        <keyword>IMAPrev4</keyword>
+        <keyword>MessageVortex</keyword>
+        <keyword>Anonymity</keyword>
 
-   <workgroup>Internet Engineering Task Force</workgroup>
+        <abstract>
+            <t>
+                MessageVortex Protocol specifies messages that may be embedded into existing message transfer protocols such
+                as SMTP or XMPP in order to send them anonymously from peer to peer.
+            </t>
+            <t>
+                The protocol outperforms other protocols by completely decoupling transport from the final transmitter and
+                receiver party. There is no trust put into any infrastructure except for the infrastructure of the sending
+                and receiving party of a message. Message flow is entirely selected by the creator of the routing block.
+                Participating routing nodes gain no unobvious knowledge about messages even when collaborating. Third party
+                anonymity may be always achieved. Furthermore one out of sender, and receiver anonymity may be achieved as
+                well.
+            </t>
+        </abstract>
+    </front>
 
-   <!-- WG name at the upperleft corner of the doc,
-        IETF is fine for individual submissions.  
-	 If this element is not present, the default is "Network Working Group",
-        which is used by the RFC Editor as a nod to the history of the IETF. -->
+    <middle>
+        <section title="Introduction">
+            <t>Anaonymization is hard to achieve. Many attempts have been made but most of them do rely on either a trust upon a dedicated infrastructure, or a specialized networking protocol.  MessageVortex is a protocol which allows to send </t>
 
-   <keyword>SMTP</keyword>
-   <keyword>XMPP</keyword>
-   <keyword>IMAP</keyword>
-   <keyword>MessageVortex</keyword>
-   <keyword>Anonymity</keyword>
-
-   <!-- Keywords will be incorporated into HTML output
-        files in a meta tag but they have no effect on text or nroff
-        output. If you submit your draft to the RFC Editor, the
-        keywords will be used for the search engine. -->
-
-   <abstract>
-     <t>MessageVortex Protocol specifies messages that may be embedded into existing message transfer protocols such as SMTP or XMPP in order to send them anonymously from peer to peer.</t>
-     <t>The protocol outperforms other protocols by completely decoupling transport from the final transmitter and receiver party. There is no trust put into any infrastructure except for the infrastructure of the sending and receiving party of a message. Message flow is entirely selected by the creator of the routing block. Participating routing nodes gain no knowledge about messages even when collaborating. Third party anonymity may be always achieved. Furthermore one out of sender, and receiver anonymity may be achieved as well.</t>
-   </abstract>
- </front>
-
- <middle>
-   <section title="Introduction">
-     <t>The original specification of xml2rfc format is in <xref target="RFC2629">RFC&nbsp;2629</xref>.</t>
-
-     <section title="Requirements Language">
-       <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in <xref target="RFC2119">RFC 2119</xref>.</t>
-     </section>
-   </section>
+            <section title="Requirements Language">
+                <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in <xref target="RFC2119">RFC 2119</xref>.</t>
+            </section>
+        </section>
    
-   <section anchor="entities_overview" title="Entities Overview">
-      <t>Within these document we refer to the entities as defined below. </t>
-	  <section anchor="entities_node" title="Node">
-	      <t>We use the term 'node' to  describe any system connected to other nodes, and supporting the MessageVortex Protocol.</t> 
-	  </section>
-	  <section anchor="entities_peer" title="Peer Partner">
-	      <t>We use the term 'peer partner' as two or more message sending or receiving entities. One of these peer partners is the sends a message and all other peer partner do receive a message. Peer partners are message specific. Every peer partner is connected to a node.</t> 
-	  </section>
-	  <section anchor="entities_packet" title="Packets">
-	      <t>We use the term packet for a single transmission between two nodes. A packet may have any size and must not be confused with network packets.</t> 
-	  </section>
-   </section>
+        <section anchor="entities_overview" title="Entities Overview">
+            <t>Within these document we refer to the entities as defined below. </t>
+	        <section anchor="entities_node" title="Node">
+	            <t>We use the term 'node' to  describe any system connected to other nodes, and supporting the MessageVortex Protocol.</t>
+	        </section>
+	        <section anchor="entities_peer" title="Peer Partner">
+	            <t>We use the term 'peer partner' as two or more message sending or receiving entities. One of these peer partners is the sends a message and all other peer partner do receive a message. Peer partners are message specific. Every peer partner is connected to a node.</t>
+        	</section>
+	        <section anchor="entities_packet" title="Packets">
+	            <t>We use the term packet for a single transmission between two nodes.  A packet may have any size and must not be confused with network packets.</t>
+	        </section>
+        </section>
 
-   <section anchor="layer_overview" title="Layer Overview">
-       <t>The protocol is designed in four layers as shown in <xref target="fig_layer_overview" /></t>
+        <section anchor="layer_overview" title="Layer Overview">
+            <t>The protocol is designed in four layers as shown in <xref target="fig_layer_overview" /></t>
 	   
-       <figure align="center" anchor="fig_layer_overview">
-          <artwork align="left"><![CDATA[
+            <figure align="center" anchor="fig_layer_overview">
+                <artwork align="left"><![CDATA[
 +--------------------------+
 | Put layers overview here |
 |__________________________|
-           ]]></artwork>
-     </figure>
+               ]]></artwork>
+            </figure>
 	 
-	 <t>Every participating node MUST impement the layers 'Blending', 'Routing', and 'Accounting'. There MUST be at least one incomming and one outgoing transport layer available to a node. All transport layers SHOULD be supported incomming and outgoing.</t>
+	        <t>Every participating node MUST impement the layers 'Blending', 'Routing', and 'Accounting'. There MUST be at least one incomming and one outgoing transport layer available to a node. All transport layers SHOULD be supported incomming and outgoing.</t>
 	 
-	 <section anchor="layer_overview_transport" title="Transport Layer">
-	    <t>The transport layer embedds MessageVortex packets into the data stream.</t>
-	 </section>	
-	 <section anchor="layer_overview_blending" title="Blending Layer">
-	    <t>The blending layer embedds MessageVortex packets into the transport layer data stream and extracts MessageVortex packets from the transport layer.</t>
-	 </section>	
-	 <section anchor="layer_overview_routing" title="Routing Layer">
-	    <t>The Routing Layer expands information contained in MessageVortex packets, processes them, and passes generated  packets to the respective Blending Layer.</t>
-	 </section>	
-	 <section anchor="layer_overview_accounting" title="Accounting Layer">
-	    <t>The accounting layer keeps track of all ephemeral identities authorized to use a MessageVortex node. Especially it verifies the available quotas to an ephemeral identities.</t>
-	 </section>	
-   </section>
+            <section anchor="layer_overview_transport" title="Transport Layer">
+	            <t>The transport layer embedds MessageVortex packets into the data stream.</t>
+	        </section>
+
+            <section anchor="layer_overview_blending" title="Blending Layer">
+	            <t>The blending layer embedds MessageVortex packets into the transport layer data stream and extracts MessageVortex packets from the transport layer.</t>
+	        </section>
+	        <section anchor="layer_overview_routing" title="Routing Layer">
+	            <t>The Routing Layer expands information contained in MessageVortex packets, processes them, and passes generated  packets to the respective Blending Layer.</t>
+	        </section>
+	        <section anchor="layer_overview_accounting" title="Accounting Layer">
+	            <t>The accounting layer keeps track of all ephemeral identities authorized to use a MessageVortex node.
+                    Especially it verifies the available quotas to an ephemeral identities.
+                </t>
+	        </section>
+        </section>
 
 
-   <section anchor="list_styles" title="list styles">
-   <t>List styles: 'empty', 'symbols', 'letters', 'numbers', 'hanging',
-     'format'.</t>
+        <section anchor="list_styles" title="list styles">
+            <t>List styles: 'empty', 'symbols', 'letters', 'numbers', 'hanging',
+            'format'.</t>
 
-     <t><list style="symbols">
-         <t>First bullet</t>
+            <t><list style="symbols">
+                <t>First bullet</t>
 
-         <t>Second bullet</t>
-       </list> You can write text here as well.</t>
-   </section>
+                <t>Second bullet</t>
+            </list> You can write text here as well.</t>
+        </section>
 
-   <section title="Figures">
-     <t>Figures should not exceed 69 characters wide to allow for the indent
-     of sections.</t>
+        <section title="Figures">
+            <t>Figures should not exceed 69 characters wide to allow for the indent
+            of sections.</t>
 
-     <figure align="center" anchor="xml_happy">
-       <preamble>Preamble text - can be omitted or empty.</preamble>
+            <figure align="center" anchor="xml_happy">
+                <preamble>Preamble text - can be omitted or empty.</preamble>
 
-       <artwork align="left"><![CDATA[
+                <artwork align="left"><![CDATA[
 +-----------------------+
 | Use XML, be Happy :-) |
 |_______________________|
-           ]]></artwork>
+               ]]></artwork>
 
-       <postamble>Cross-references allowed in pre- and postamble. <xref
-       target="min_ref" />.</postamble>
-     </figure>
+               <postamble>Cross-references allowed in pre- and postamble. <xref target="min_ref" />.</postamble>
+            </figure>
 
-     <t>The CDATA means you don't need to escape meta-characters (especially
-     &lt;&nbsp;(&amp;lt;) and &amp;&nbsp;(&amp;amp;)) but is not essential.
-     Figures may also have a title attribute but it won't be displayed unless
-     there is also an anchor. White space, both horizontal and vertical, is
-     significant in figures even if you don't use CDATA.</t>
-   </section>
+            <t>The CDATA means you don't need to escape meta-characters (especially
+            &lt;&nbsp;(&amp;lt;) and &amp;&nbsp;(&amp;amp;)) but is not essential.
+            Figures may also have a title attribute but it won't be displayed unless
+            there is also an anchor. White space, both horizontal and vertical, is
+            significant in figures even if you don't use CDATA.</t>
+        </section>
 
-   <!-- This PI places the pagebreak correctly (before the section title) in the text output. -->
+        <!-- This PI places the pagebreak correctly (before the section title) in the text output. -->
 
-   <?rfc needLines="8" ?>
+        <?rfc needLines="8" ?>
 
-   <section title="Subsections and Tables">
-     <section title="A Subsection">
-       <t>By default 3 levels of nesting show in table of contents but that
-       can be adjusted with the value of the "tocdepth" processing
-       instruction.</t>
-     </section>
+        <section title="Subsections and Tables">
+            <section title="A Subsection">
+                <t>By default 3 levels of nesting show in table of contents but that
+                can be adjusted with the value of the "tocdepth" processing
+                instruction.</t>
+            </section>
 
-     <section title="Tables">
-       <t>.. are very similar to figures:</t>
+            <section title="Tables">
+                <t>.. are very similar to figures:</t>
 
-       <texttable anchor="table_example" title="A Very Simple Table">
-         <preamble>Tables use ttcol to define column headers and widths.
-         Every cell then has a "c" element for its content.</preamble>
+                <texttable anchor="table_example" title="A Very Simple Table">
+                    <preamble>Tables use ttcol to define column headers and widths.
+                    Every cell then has a "c" element for its content.</preamble>
 
-         <ttcol align="center">ttcol #1</ttcol>
+                    <ttcol align="center">ttcol #1</ttcol>
 
-         <ttcol align="center">ttcol #2</ttcol>
+                    <ttcol align="center">ttcol #2</ttcol>
 
-         <c>c #1</c>
+                    <c>c #1</c>
 
-         <c>c #2</c>
+                    <c>c #2</c>
 
-         <c>c #3</c>
+                    <c>c #3</c>
 
-         <c>c #4</c>
+                    <c>c #4</c>
 
-         <c>c #5</c>
+                    <c>c #5</c>
 
-         <c>c #6</c>
+                    <c>c #6</c>
 
-         <postamble>which is a very simple example.</postamble>
-       </texttable>
-     </section>
-   </section>
+                    <postamble>which is a very simple example.</postamble>
+                </texttable>
+            </section>
+        </section>
 
-   <section anchor="nested_lists" title="More about Lists">
-     <t>Lists with 'hanging labels': the list item is indented the amount of
-     the hangIndent: <list hangIndent="8" style="hanging">
-         <t hangText="short">With a label shorter than the hangIndent.</t>
+        <section anchor="nested_lists" title="More about Lists">
+            <t>Lists with 'hanging labels': the list item is indented the amount of
+            the hangIndent: <list hangIndent="8" style="hanging">
+                <t hangText="short">With a label shorter than the hangIndent.</t>
 
-         <t hangText="fantastically long label">With a label longer than the
-         hangIndent.</t>
+                <t hangText="fantastically long label">With a label longer than the
+                hangIndent.</t>
 
-         <t hangText="vspace_trick"><vspace blankLines="0" />Forces the new
-         item to start on a new line.</t>
-       </list></t>
+                <t hangText="vspace_trick"><vspace blankLines="0" />Forces the new
+                item to start on a new line.</t>
+            </list></t>
 
-     <!-- It would be nice to see the next piece (12 lines) all on one page. -->
+            <!-- It would be nice to see the next piece (12 lines) all on one page. -->
 
-     <?rfc needLines="12" ?>
+            <?rfc needLines="12" ?>
 
-     <t>Simulating more than one paragraph in a list item using
-     &lt;vspace&gt;: <list style="letters">
-         <t>First, a short item.</t>
+            <t>Simulating more than one paragraph in a list item using
+            &lt;vspace&gt;: <list style="letters">
+                    <t>First, a short item.</t>
+                    <t>Second, a longer list item.<vspace blankLines="1" /> And
+                    something that looks like a separate pararaph..</t>
+            </list></t>
 
-         <t>Second, a longer list item.<vspace blankLines="1" /> And
-         something that looks like a separate pararaph..</t>
-       </list></t>
+            <t>Simple indented paragraph using the "empty" style: <list hangIndent="10" style="empty">
+                    <t>The quick, brown fox jumped over the lazy dog and lived to fool
+                    many another hunter in the great wood in the west.</t>
+            </list></t>
 
-     <t>Simple indented paragraph using the "empty" style: <list
-         hangIndent="10" style="empty">
-         <t>The quick, brown fox jumped over the lazy dog and lived to fool
-         many another hunter in the great wood in the west.</t>
-       </list></t>
+            <section title="Numbering Lists across Lists and Sections">
+                <t>Numbering items continuously although they are in separate
+                &lt;list&gt; elements, maybe in separate sections using the "format"
+                style and a "counter" variable.</t>
 
-     <section title="Numbering Lists across Lists and Sections">
-       <t>Numbering items continuously although they are in separate
-       &lt;list&gt; elements, maybe in separate sections using the "format"
-       style and a "counter" variable.</t>
+                <t>First list: <list counter="reqs" hangIndent="4" style="format R%d">
+                    <t>#1</t>
+                    <t>#2</t>
+                    <t>#3</t>
+                </list> Specify the indent explicitly so that all the items line up
+                nicely.</t>
 
-       <t>First list: <list counter="reqs" hangIndent="4" style="format R%d">
-           <t>#1</t>
+                <t>Second list: <list counter="reqs" hangIndent="4" style="format R%d">
+                    <t>#4</t>
 
-           <t>#2</t>
+                    <t>#5</t>
 
-           <t>#3</t>
-         </list> Specify the indent explicitly so that all the items line up
-       nicely.</t>
+                    <t>#6</t>
+                </list></t>
+            </section>
 
-       <t>Second list: <list counter="reqs" hangIndent="4" style="format R%d">
-           <t>#4</t>
+            <section title="Where the List Numbering Continues">
+                <t>List continues here.</t>
 
-           <t>#5</t>
+                <t>Third list: <list counter="reqs" hangIndent="4" style="format R%d">
+                    <t>#7</t>
 
-           <t>#6</t>
-         </list></t>
-     </section>
+                    <t>#8</t>
 
-     <section title="Where the List Numbering Continues">
-       <t>List continues here.</t>
+                    <t>#9</t>
 
-       <t>Third list: <list counter="reqs" hangIndent="4" style="format R%d">
-           <t>#7</t>
+                    <t>#10</t>
+                </list> The end of the list.</t>
+            </section>
+        </section>
 
-           <t>#8</t>
+        <section anchor="codeExample" title="Example of Code or MIB Module To Be Extracted">
+            <figure>
+                <preamble>The &lt;artwork&gt; element has a number of extra attributes
+                that can be used to substitute a more aesthetically pleasing rendition
+                into HTML output while continuing to use the ASCII art version in the
+                text and nroff outputs (see the xml2rfc README for details). It also
+                has a "type" attribute. This is currently ignored except in the case
+                'type="abnf"'. In this case the "artwork" is expected to contain a
+                piece of valid Augmented Backus-Naur Format (ABNF) grammar. This will
+                be syntax checked by xml2rfc and any errors will cause a fatal error
+                if the "strict" processing instruction is set to "yes". The ABNF will
+                also be colorized in HTML output to highlight the syntactic
+                components. Checking of additional "types" may be provided in future
+                versions of xml2rfc.</preamble>
 
-           <t>#9</t>
-
-           <t>#10</t>
-         </list> The end of the list.</t>
-     </section>
-   </section>
-
-   <section anchor="codeExample"
-            title="Example of Code or MIB Module To Be Extracted">
-     <figure>
-       <preamble>The &lt;artwork&gt; element has a number of extra attributes
-       that can be used to substitute a more aesthetically pleasing rendition
-       into HTML output while continuing to use the ASCII art version in the
-       text and nroff outputs (see the xml2rfc README for details). It also
-       has a "type" attribute. This is currently ignored except in the case
-       'type="abnf"'. In this case the "artwork" is expected to contain a
-       piece of valid Augmented Backus-Naur Format (ABNF) grammar. This will
-       be syntax checked by xml2rfc and any errors will cause a fatal error
-       if the "strict" processing instruction is set to "yes". The ABNF will
-       also be colorized in HTML output to highlight the syntactic
-       components. Checking of additional "types" may be provided in future
-       versions of xml2rfc.</preamble>
-
-       <artwork><![CDATA[
+                <artwork><![CDATA[
 
 /**** an example C program */
 
@@ -313,113 +305,91 @@ main(int argc, char *argv[])
 
 /* end of file */
 
-           ]]></artwork>
-     </figure>
-   </section>
+                ]]></artwork>
+            </figure>
+        </section>
 
-   <section anchor="Acknowledgements" title="Acknowledgements">
-     <t>This template was derived from an initial version written by Pekka Savola and contributed by him to the xml2rfc project.</t>
+        <section anchor="Acknowledgements" title="Acknowledgements">
+            <t>This template was derived from an initial version written by Pekka Savola and contributed by him to the xml2rfc project.</t>
 
-     <t>This document is part of a plan to make xml2rfc indispensable <xref target="DOMINATION"></xref>.</t>
-   </section>
+            <t>This document is part of a plan to make xml2rfc indispensable <xref target="DOMINATION"></xref>.</t>
+        </section>
 
-   <!-- Possibly a 'Contributors' section ... -->
+        <!-- Possibly a 'Contributors' section ... -->
 
-   <section anchor="IANA" title="IANA Considerations">
-     <t>This memo includes no request to IANA.</t>
+        <section anchor="IANA" title="IANA Considerations">
+            <t>This memo includes no request to IANA.</t>
 
-     <t>All drafts are required to have an IANA considerations section (see
-      Guidelines for Writing an IANA Considerations Section in RFCs [RFC 5226] for a guide). If the draft does not require IANA to do
-     anything, the section contains an explicit statement that this is the
-     case (as above). If there are no requirements for IANA, the section will
-     be removed during conversion into an RFC by the RFC Editor.</t>
-   </section>
+            <t>All drafts are required to have an IANA considerations section (see
+                Guidelines for Writing an IANA Considerations Section in RFCs [RFC 5226] for a guide). If the draft does not require IANA to do
+                anything, the section contains an explicit statement that this is the
+                case (as above). If there are no requirements for IANA, the section will
+                be removed during conversion into an RFC by the RFC Editor.</t>
+        </section>
 
-   <section anchor="Security" title="Security Considerations">
-     <t>All drafts are required to have a security considerations section.
-     See RFC 3552 for a guide.</t>
-   </section>
- </middle>
+        <section anchor="Security" title="Security Considerations">
+            <t>All drafts are required to have a security considerations section.
+            See RFC 3552 for a guide.</t>
+        </section>
+    </middle>
 
- <!--  *****BACK MATTER ***** -->
+    <!--  *****BACK MATTER ***** -->
 
- <back>
-   <!-- References split into informative and normative -->
+    <back>
+        <!-- References split into informative and normative -->
+        <!-- There are 2 ways to insert reference entries from the citation libraries:
+        1. define an ENTITY at the top, and use "ampersand character"RFC2629; here (as shown)
+        2. simply use a PI "less than character"?rfc include="reference.RFC.2119.xml"?> here
+           (for I-Ds: include="reference.I-D.narten-iana-considerations-rfc2434bis.xml")
 
-   <!-- There are 2 ways to insert reference entries from the citation libraries:
-    1. define an ENTITY at the top, and use "ampersand character"RFC2629; here (as shown)
-    2. simply use a PI "less than character"?rfc include="reference.RFC.2119.xml"?> here
-       (for I-Ds: include="reference.I-D.narten-iana-considerations-rfc2434bis.xml")
+        Both are cited textually in the same manner: by using xref elements.
+        If you use the PI option, xml2rfc will, by default, try to find included files in the same
+        directory as the including file. You can also define the XML_LIBRARY environment variable
+        with a value containing a set of directories to search.  These can be either in the local
+        filing system or remote ones accessed by http (http://domain/dir/... ).-->
 
-    Both are cited textually in the same manner: by using xref elements.
-    If you use the PI option, xml2rfc will, by default, try to find included files in the same
-    directory as the including file. You can also define the XML_LIBRARY environment variable
-    with a value containing a set of directories to search.  These can be either in the local
-    filing system or remote ones accessed by http (http://domain/dir/... ).-->
+        <references title="Normative References">
+            <!--?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"?-->
+            &RFC2119;
 
-   <references title="Normative References">
-     <!--?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"?-->
-     &RFC2119;
+            <reference anchor="min_ref">
+                <!-- the following is the minimum to make xml2rfc happy -->
 
-     <reference anchor="min_ref">
-       <!-- the following is the minimum to make xml2rfc happy -->
+                <front>
+                    <title>Minimal Reference</title>
+                    <author initials="authInitials" surname="authSurName">
+                        <organization></organization>
+                    </author>
 
-       <front>
-         <title>Minimal Reference</title>
+                    <date year="2006" />
+                </front>
+            </reference>
+        </references>
 
-         <author initials="authInitials" surname="authSurName">
-           <organization></organization>
-         </author>
+        <references title="Informative References">
+            <!-- Here we use entities that we defined at the beginning. -->
 
-         <date year="2006" />
-       </front>
-     </reference>
-   </references>
+            &RFC2119;
 
-   <references title="Informative References">
-     <!-- Here we use entities that we defined at the beginning. -->
+            <!-- A reference written by by an organization not a person. -->
+            <reference anchor="DOMINATION" target="http://www.example.com/dominator.html">
+                <front>
+                    <title>Ultimate Plan for Taking Over the World</title>
+                    <author>
+                        <organization>Mad Dominators, Inc.</organization>
+                    </author>
+                    <date year="1984" />
+                </front>
+            </reference>
+        </references>
 
-     &RFC2119;
+        <section anchor="app-additional" title="Additional Stuff">
+            <t>This becomes an Appendix.</t>
+        </section>
+        <!-- Change Log
 
-     <!-- A reference written by by an organization not a person. -->
+            v00 2018-04-19  GwM   Initial version
 
-     <reference anchor="DOMINATION"
-                target="http://www.example.com/dominator.html">
-       <front>
-         <title>Ultimate Plan for Taking Over the World</title>
-
-         <author>
-           <organization>Mad Dominators, Inc.</organization>
-         </author>
-
-         <date year="1984" />
-       </front>
-     </reference>
-   </references>
-
-   <section anchor="app-additional" title="Additional Stuff">
-     <t>This becomes an Appendix.</t>
-   </section>
-
-   <!-- Change Log
-
-v00 2006-03-15  EBD   Initial version
-
-v01 2006-04-03  EBD   Moved PI location back to position 1 -
-                     v3.1 of XMLmind is better with them at this location.
-v02 2007-03-07  AH    removed extraneous nested_list attribute,
-                     other minor corrections
-v03 2007-03-09  EBD   Added comments on null IANA sections and fixed heading capitalization.
-                     Modified comments around figure to reflect non-implementation of
-                     figure indent control.  Put in reference using anchor="DOMINATION".
-                     Fixed up the date specification comments to reflect current truth.
-v04 2007-03-09 AH     Major changes: shortened discussion of PIs,
-                     added discussion of rfc include.
-v05 2007-03-10 EBD    Added preamble to C program example to tell about ABNF and alternative 
-                     images. Removed meta-characters from comments (causes problems).
-
-v06 2010-04-01 TT     Changed ipr attribute values to latest ones. Changed date to
-                     year only, to be consistent with the comments. Updated the 
-                     IANA guidelines reference from the I-D to the finished RFC.  -->
- </back>
+        -->
+    </back>
 </rfc>
