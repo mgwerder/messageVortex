@@ -249,7 +249,7 @@ public class VortexMessage extends AbstractBlock implements Serializable {
         if( dumpType == DumpType.ALL_UNENCRYPTED || getPrefix().getDecryptionKey() == null ) {
             v.add(new DERTaggedObject(PREFIX_PLAIN, o));
         } else {
-            v.add(new DERTaggedObject(PREFIX_ENCRYPTED, new DEROctetString(getPrefix().toEncBytes())));
+            v.add( new DERTaggedObject( PREFIX_ENCRYPTED, new DEROctetString( getPrefix().toEncBytes() ) ) );
         }
     }
 

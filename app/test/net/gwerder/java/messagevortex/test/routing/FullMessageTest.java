@@ -38,7 +38,7 @@ public class FullMessageTest {
         IdentityBlock blockIdentity = message.getInnerMessage().getIdentity();
         blockIdentity.setSerial(42);
         blockIdentity.setReplay(84);
-        blockIdentity.setUsagePeriod(new UsagePeriod(100));
+        blockIdentity.setUsagePeriod( new UsagePeriod(100) );
         RoutingBlock routing=message.getInnerMessage().getRouting();
         List<SymmetricKey> sk=new ArrayList<>();
         for(int i=0;i<20;i++) {
@@ -51,7 +51,7 @@ public class FullMessageTest {
 
     private void testMessageEncoding(VortexMessage original) throws IOException {
         for(DumpType dt:DumpType.values()) {
-            VortexMessage b=new VortexMessage(original.toBytes(dt),original.getDecryptionKey());
+            VortexMessage b=new VortexMessage(original.toBytes(dt),original.getDecryptionKey() );
             LOGGER.log(Level.INFO, "Testing of object with " + dt.name() + " ("+b.getDecryptionKey()+")");
             LOGGER.log(Level.INFO, "  encoding objects");
             VortexMessage m2=new VortexMessage( b.toBytes(dt),b.getDecryptionKey());

@@ -118,11 +118,20 @@ public class PrefixBlock extends AbstractBlock  implements Serializable {
         key = new SymmetricKey( toDER(s1.getObjectAt(i++).toASN1Primitive()) ,null );
     }
 
+    /***
+     * Sets the decryption key for the prefix block
+     *
+     * If the prefixblock is already encrypted a decryption is attempted.
+     *
+     * @param dk   the decryption key to be used when decrypting the block
+     * @return the previous decryption key
+     * @throws IOException if decryption tails
+     */
     public final AsymmetricKey setDecryptionKey(AsymmetricKey dk) throws IOException {
         AsymmetricKey old=getDecryptionKey();
         decryptionKey=dk;
         if(isEncrypted()) {
-            parse(dk.decrypt(encrypted));
+            parse( dk.decrypt( encrypted ) );
         }
         return old;
     }
@@ -131,6 +140,12 @@ public class PrefixBlock extends AbstractBlock  implements Serializable {
         return decryptionKey;
     }
 
+    /***
+     * Sets the symmetric key contained in the block
+     *
+     * @param dk the decryption key for all subsequent blocks
+     * @return the key set before the change
+     */
     public SymmetricKey setKey(SymmetricKey dk) {
         if(dk==null) {
             throw new NullPointerException("symmetric key may not be null");
@@ -202,13 +217,29 @@ public class PrefixBlock extends AbstractBlock  implements Serializable {
         return getKey().hashCode();
     }
 
+    /***
+     * get the encryption status of the prefix block
+     *
+     * @return true if the block is encrypted
+     */
     public boolean isEncrypted() {
         return encrypted!=null;
     }
 
+    /***
+     * Get the ASN.1 encoded prefix block in encrypted form
+     *
+     * @return the encrypted ASN.1 rncoded block
+     * @throws IOException if encoding fails
+     */
     public byte[] toEncBytes() throws IOException {
-        if(decryptionKey != null && encrypted == null) {
-            return decryptionKey.encrypt(toBytes(DumpType.PUBLIC_ONLY));
+        if( decryptionKey != null && encrypted == null && decryptionKey.hasPrivateKey() ) {
+            int maxSize = decryptionKey.getPadding().getMaxSize( decryptionKey.getBlockSize() );
+            byte[] b = toBytes( DumpType.PUBLIC_ONLY );
+            if( maxSize<b.length ) {
+                throw new IOException( "unable to encrypt current prefix block (prefixSize: "+b.length+"; maxSize: "+ maxSize + ")" );
+            }
+            return decryptionKey.encrypt( b );
         } else {
             return encrypted;
         }
