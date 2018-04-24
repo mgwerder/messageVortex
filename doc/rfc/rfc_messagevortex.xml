@@ -98,9 +98,24 @@
 	        <section anchor="entities_peer" title="Peer Partner">
 	            <t>We use the term 'peer partner' as two or more message sending or receiving entities. One of these peer partners is the sends a message and all other peer partner do receive a message. Peer partners are message specific. Every peer partner is connected to a node.</t>
         	</section>
-	        <section anchor="entities_packet" title="Packets">
-	            <t>We use the term packet for a single transmission between two nodes.  A packet may have any size and must not be confused with network packets.</t>
-	        </section>
+            <section anchor="entities_vortex_message" title="Vortex Message">
+                <t>We use the term 'Vortex message' for a single transmission between two routing layers. A 'blended Vortex message' describes a Vortex message which has been adapted to the transport layer by the blending layer (see <xref target="layer_overview"/></t>
+            </section>
+            <section anchor="entities_blocks" title="Blocks">
+                <t>We use the term 'block' for an ASN.1 sequence in a packet.  A packet may have any size and and is embedded in the transport protocol. It must not be confused with network packets.</t>
+            </section>
+            <section anchor="entities_transport_address" title="Transport Address">
+                <t>We use the term 'transport adress' for the address required to address the next immediate node on the transport layer.  An email transport layer would have SMTP addresses such as vortex@example.com as transport address.</t>
+            </section>
+            <section anchor="entities_identity" title="Identity">
+                <t>The official identity of a peer partner. An Identity may contain the following information:
+                    <list style="symbols">
+                        <t>Transport address and public key of this identity (if no recipient anonymity is given)</t>
+                        <t>Reply blocks for contacting the identity (optional; usually in case of recipient annonymity)</t>
+                        <t>Private key (only known by owner of the identity)</t>
+                    </list>
+                </t>
+            </section>
         </section>
 
         <section anchor="layer_overview" title="Layer Overview">
@@ -108,29 +123,31 @@
 	   
             <figure align="center" anchor="fig_layer_overview">
                 <artwork align="left"><![CDATA[
-+----------------------------------------------------------------------+
-| Vortex Node                                                          |
-|+--------------------------------------------------------------------+|
-||                            Accounting                              ||
-||____________________________________________________________________||
-|+--------------------------------------------------------------------+|
-||                             Routing                                ||
-||____________________________________________________________________||
-|+--------------------------------++----------------------------------+|
-||            Blending            ||             Blending             ||
-||________________________________++__________________________________||
-|______________________________________________________________________|
- +--------------------------------++----------------++----------------+
- |            Transport           ||  Transport in  ||  Transport out |
- |________________________________++________________||________________|
++-------------------------------------------------------------------+
+| Vortex Node                                                       |
+| +---------------------------------------------------------------+ |
+| |                        Accounting                             | |
+| |_______________________________________________________________| |
+|                                                                   |
+| +---------------------------------------------------------------+ |
+| |                          Routing                              | |
+| |_______________________________________________________________| |
+|                                                                   |
+| +----------------------------+ +--------------------------------+ |
+| |           Blending         | |             Blending           | |
+| |____________________________+ +________________________________| |
+|___________________________________________________________________|
+  +----------------------------+ +--------------+ +---------------+
+  |          Transport         | | Transport in | | Transport out |
+  |____________________________| |______________| |_______________|
                ]]></artwork>
             </figure>
 	 
-	        <t>Every participating node MUST impement the layers 'Blending', 'Routing', and 'Accounting'. There MUST be at least one incomming and one outgoing transport layer available to a node. All transport layers SHOULD support incomming and outgoing packets.</t>
+	        <t>Every participating node MUST impement the layers 'Blending', 'Routing', and 'Accounting'.  There MUST be at least one incomming and one outgoing transport layer available to a node. All blending layers SHOULD be connected to respective Transport layers for sending and receiving packets.</t>
 	 
             <section anchor="layer_overview_transport" title="Transport Layer">
-	            <t>The transport layer embedds the blended MessageVortex packets into the data stream.</t>
-                <t>The transport layer infrastructure SHOULD NOT be specific to anonymous communication and should contain significant parts of </t>
+	            <t>The transport layer embedds the blended MessageVortex packets into the data stream of the existing transport layer protocol.</t>
+                <t>The transport layer infrastructure SHOULD NOT be specific to anonymous communication and should contain significant parts of non-MessageVortex traffic.</t>
 	        </section>
 
             <section anchor="layer_overview_blending" title="Blending Layer">
@@ -396,7 +413,7 @@ main(int argc, char *argv[])
             </reference>
         </references>
 
-        <section anchor="app-additional" title="Additional Stuff">
+        <section anchor="asn_one" title="The ASN.1 schema for Vortex messages">
             <t>This becomes an Appendix.</t>
         </section>
         <!-- Change Log
