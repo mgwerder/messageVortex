@@ -108,16 +108,29 @@
 	   
             <figure align="center" anchor="fig_layer_overview">
                 <artwork align="left"><![CDATA[
-+--------------------------+
-| Put layers overview here |
-|__________________________|
++----------------------------------------------------------------------+
+| Vortex Node                                                          |
+|+--------------------------------------------------------------------+|
+||                            Accounting                              ||
+||____________________________________________________________________||
+|+--------------------------------------------------------------------+|
+||                             Routing                                ||
+||____________________________________________________________________||
+|+--------------------------------++----------------------------------+|
+||            Blending            ||             Blending             ||
+||________________________________++__________________________________||
+|______________________________________________________________________|
+ +--------------------------------++----------------++----------------+
+ |            Transport           ||  Transport in  ||  Transport out |
+ |________________________________++________________||________________|
                ]]></artwork>
             </figure>
 	 
-	        <t>Every participating node MUST impement the layers 'Blending', 'Routing', and 'Accounting'. There MUST be at least one incomming and one outgoing transport layer available to a node. All transport layers SHOULD be supported incomming and outgoing.</t>
+	        <t>Every participating node MUST impement the layers 'Blending', 'Routing', and 'Accounting'. There MUST be at least one incomming and one outgoing transport layer available to a node. All transport layers SHOULD support incomming and outgoing packets.</t>
 	 
             <section anchor="layer_overview_transport" title="Transport Layer">
-	            <t>The transport layer embedds MessageVortex packets into the data stream.</t>
+	            <t>The transport layer embedds the blended MessageVortex packets into the data stream.</t>
+                <t>The transport layer infrastructure SHOULD NOT be specific to anonymous communication and should contain significant parts of </t>
 	        </section>
 
             <section anchor="layer_overview_blending" title="Blending Layer">
@@ -127,8 +140,7 @@
 	            <t>The Routing Layer expands information contained in MessageVortex packets, processes them, and passes generated  packets to the respective Blending Layer.</t>
 	        </section>
 	        <section anchor="layer_overview_accounting" title="Accounting Layer">
-	            <t>The accounting layer keeps track of all ephemeral identities authorized to use a MessageVortex node.
-                    Especially it verifies the available quotas to an ephemeral identities.
+	            <t>The accounting layer keeps track of all ephemeral identities authorized to use a MessageVortex node. Especially it verifies the available quotas to an ephemeral identity.
                 </t>
 	        </section>
         </section>
