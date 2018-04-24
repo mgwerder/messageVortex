@@ -8,95 +8,119 @@
 
 MessageBlocks DEFINITIONS EXPLICIT TAGS ::=
 BEGIN
+  ------------------------------------------------------------------
+  -- Constant definitions
+  ------------------------------------------------------------------
+  -- maximum serial number
+  maxSerial                 INTEGER ::= 4294967295
+  -- maximum size of a message chunk
+  maxChunkSize              INTEGER ::= 4294967295
+  -- minimum size of a message chunk (should be -maxChunkSize)
+  minChunkSize              INTEGER ::= -maxChunkSize
+  -- maximum size of transfer quota in bytes of an identity
+  maxTransferQuota          INTEGER ::= 4294967295
+  -- maximum size of message quota in messages of an identity
+  maxMessageQuota           INTEGER ::= 4294967295
+  -- maximum number a block may be replayed
+  maxNumberOfReplays        INTEGER ::= 127
+  -- maximum number of administrative requests
+  maxNumberOfRequests       INTEGER ::= 8
+  -- maximum number of seconds which the message might be delayed in
+  -- the local queue (starting from startOffset)
+  maxDurationOfProcessing   INTEGER ::= 86400
+  -- maximum id of an operation
+  maxID                     INTEGER ::= 32767
+  -- maximum number of routing blocks in a message
+  maxRoutingBlocks          INTEGER ::= 127
+  -- maximum number of payload blocks in a message
+  maxPayloadBlocks          INTEGER ::= 127
+  -- maximum number of seconds a proof of non revocation may be old
+  maxTimeCachedProof        INTEGER ::= 86400
+  -- maximum omega of the Galois field used
+  maxGFSize                 INTEGER ::= 16
+  -- the maximum number of parameters that might be embedded
+  maxNumberOfParameter      INTEGER ::= 127
 
-  -- define constants
-  maxSerial                 INTEGER ::= 4294967295      -- maximum serial number
-  maxChunkSize              INTEGER ::= 4294967295      -- maximum size of a message chunk
-  minChunkSize              INTEGER ::= -4294967295     -- minimum size of a message chunk (should always be -maxChunkSize)
-  maxTransferQuota          INTEGER ::= 4294967295      -- maximum size of transfer quota in bytes of an identity
-  maxMessageQuota           INTEGER ::= 4294967295      -- maximum size of message quota in messages of an identity
-  maxNumberOfReplays        INTEGER ::= 127             -- maximum number a block may be replayed
-  maxNumberOfRequests       INTEGER ::= 8               -- maximum number of administrative requests
-  maxDurationOfProcessing   INTEGER ::= 86400           -- maximum number of seconds which the message might be delayed in the local queue (starting from startOffset)
-  maxID                     INTEGER ::= 32767           -- maximum id of an operation
-  maxRoutingBlocks          INTEGER ::= 127             -- maximum number of routing blocks in a message
-  maxPayloadBlocks          INTEGER ::= 127             -- maximum number of payload blocks in a message
-  maxTimeCachedProof        INTEGER ::= 86400           -- maximum number of seconds a proof of non revocation may be old
-  maxGFSize                 INTEGER ::= 16              -- maximum omega of the Galois field used
-  maxNumberOfParameter      INTEGER ::= 127             -- the maximum number of parameters that might be embedded
-
-  PuzzleIdentifier          ::= OCTET STRING ( SIZE(0..16) ) --
-
+  ------------------------------------------------------------------
+  -- Block Definitions
+  ------------------------------------------------------------------
   RoutingBlock ::= SEQUENCE {
-
     -- contains the next recipient in sequence
     recipient BlendingSpec,
-
     -- contains the period when the payload should be processed
     -- Router might refuse to long queue retention
     -- Recommended support for retention >=1h
     minProcessTime INTEGER (0..maxDurationOfProcessing),
     maxProcessTime INTEGER (0..maxDurationOfProcessing),
-
     -- contains the prefix to be used
     identityPrefix    CHOICE {
-      plain             [331] SEQUENCE (SIZE (0..maxRoutingBlocks)) OF PrefixBlock,
-      encrypted         [332] SEQUENCE (SIZE (0..maxRoutingBlocks)) OF OCTET STRING
+      -- debug/internal use only
+      plain             [331] SEQUENCE (SIZE (0..maxRoutingBlocks))
+                              OF PrefixBlock,
+      encrypted         [332] SEQUENCE (SIZE (0..maxRoutingBlocks))
+                              OF OCTET STRING
     },
-
+    -- contains the idenity block to be used with this block
     identity            CHOICE{
-        plain            [335] IdentityBlock,
-        encrypted        [336] OCTET STRING
+      -- debug/internal use only
+      plain            [335] IdentityBlock,
+      encrypted        [336] OCTET STRING
     },
-
+    -- contains the routing block to be used with this block
     routingPrefix    CHOICE {
-      plain             [331] SEQUENCE (SIZE (0..maxRoutingBlocks)) OF PrefixBlock,
-      encrypted         [332] SEQUENCE (SIZE (0..maxRoutingBlocks)) OF OCTET STRING
+      -- debug/internal use only
+      plain             [331] SEQUENCE (SIZE (0..maxRoutingBlocks))
+                              OF PrefixBlock,
+      encrypted         [332] SEQUENCE (SIZE (0..maxRoutingBlocks))
+                              OF OCTET STRING
     },
-
     -- routing blocks for the next operation
     nextHop           CHOICE {
-      plain             [333] SEQUENCE (SIZE (0..maxRoutingBlocks)) OF RoutingBlock,
-      encrypted         [334] SEQUENCE (SIZE (0..maxRoutingBlocks)) OF OCTET STRING
+      plain             [333] SEQUENCE (SIZE (0..maxRoutingBlocks))
+                              OF RoutingBlock,
+      encrypted         [334] SEQUENCE (SIZE (0..maxRoutingBlocks))
+                              OF OCTET STRING
     },
-
     -- contains the secret of the identity block
     forwardSecret     ChainSecret,
-
-    -- contains a routing block which may be used when sending error messages back to the quota owner
+    -- contains a routing block which may be used when sending
+    -- error messages back to the quota owner
     -- this routing block may be cached for future use
     replyBlock [131]   SEQUENCE {
          murb           RoutingBlock,
          maxReplay      INTEGER,
          validity       UsagePeriod
     } OPTIONAL,
-
-    -- contains information for building replys (when used as MURB ID 1 denotes original message; ID 100-999 denotes target message)
-    operations           [132] SEQUENCE (SIZE (0..255)) OF PayloadOperation,
-    assembly             SEQUENCE (SIZE (0..maxRoutingBlocks)) OF AssemblyBlock
-
+    -- contains information for building replys (when used as MURB
+    -- ID 1 denotes original message; ID 100-999 denotes target
+    -- message)
+    operations           [132] SEQUENCE (SIZE (0..255))
+                               OF PayloadOperation,
+    assembly             SEQUENCE (SIZE (0..maxRoutingBlocks))
+                         OF AssemblyBlock
   }
 
   InnerMessageBlock ::= SEQUENCE {
     padding   OCTET STRING,
-
     prefix    CHOICE {
         plain           [11011] PrefixBlock,
-        encrypted       [11012] OCTET STRING -- contains prefix encrypted with receivers public key
+        -- contains prefix encrypted with receivers public key
+        encrypted       [11012] OCTET STRING
     },
-
     identity  CHOICE  {
-      plain     [11021] IdentityBlock ,
-      encyrpted [11022] OCTET STRING -- contains encrypted identity block
+      -- debug/internal use only
+      plain     [11021] IdentityBlock,
+      -- contains encrypted identity block
+      encyrpted [11022] OCTET STRING
     },
-    identitySignature OCTET STRING,   -- contains signature of Identity [as stored in identityBlock;signed unencrypted identityBlock without Tag]
-
+    -- contains signature of Identity [as stored in
+    -- identityBlock; signed unencrypted identityBlock without Tag]
+    identitySignature OCTET STRING,
     -- contains routing information (next hop) for the payloads
     routing     CHOICE {
       plain     [11031] SEQUENCE (SIZE (1..maxRoutingBlocks)) OF RoutingBlock ,
       encyrpted [11032] OCTET STRING -- contains encrypted routing block
     },
-
     -- contains the actual payload
     payload     SEQUENCE (SIZE (0..maxPayloadBlocks)) OF PayloadChunk
   }
@@ -104,11 +128,14 @@ BEGIN
   VortexMessage ::= SEQUENCE {
     prefix        CHOICE {
         plain           [10011] PrefixBlock,
-        encrypted       [10012] OCTET STRING -- contains prefix encrypted with receivers public key
+        -- contains prefix encrypted with receivers public key
+        encrypted       [10012] OCTET STRING
     },
     innerMessage  CHOICE {
         plain     [10021] InnerMessageBlock,
-        encrypted [10022] OCTET STRING -- contains inner message encrypted with Symmetric key from Prefix
+        -- contains inner message encrypted with Symmetric key from
+        -- Prefix
+        encrypted [10022] OCTET STRING
     }
   }
 
@@ -116,41 +143,40 @@ BEGIN
     key             SymmetricKey
   }
 
+  PuzzleIdentifier          ::= OCTET STRING ( SIZE(0..16) )
+
   IdentityBlock ::= SEQUENCE {
     -- Public key of the identity representing this transmission
-    identityKey       AsymmetricKey,
-
+    identityKey        AsymmetricKey,
     -- serial identifying this block
-    serial            INTEGER (0..maxSerial),
-
-    -- number of times this block may be replayed (Tuple is identityKey,serial while
-    maxReplays        INTEGER (0..maxNumberOfReplays),
-
+    serial             INTEGER (0..maxSerial),
+    -- number of times this block may be replayed (Tuple is
+    -- identityKey, serial while UsagePeriod of block)
+    maxReplays         INTEGER (0..maxNumberOfReplays),
     -- subsequent Blocks are not processed before valid time.
-    -- Host may reject too long retention. Recomended validity support >=1Mt.
-    valid             UsagePeriod,
-
-    -- represents the chained secret which has to be found in subsequent blocks
+    -- Host may reject too long retention. Recomended validity
+    -- support >=1Mt.
+    valid              UsagePeriod,
+    -- represents the chained secret which has to be found in
+    -- subsequent blocks
     -- prevents reassembly attack
-    forwardSecret     ChainSecret,
-
+    forwardSecret       ChainSecret,
     --  contains the MAC-Algorithm used for signing
-    hash              MacAlgorithm,
-
+    hash                MacAlgorithm,
     -- contains administrative requests such as quota requests
-    requests          SEQUENCE (SIZE (0..maxNumberOfRequests)) OF HeaderRequest ,
-
+    requests            SEQUENCE (SIZE (0..maxNumberOfRequests))
+                        OF HeaderRequest ,
     -- padding and identitifier required to solve the cryptopuzzle
-    identifier    [12201] PuzzleIdentifier OPTIONAL,
-    proofOfWork   [12202] OCTET STRING OPTIONAL  -- This is for solving crypto puzzles
+    identifier  [12201] PuzzleIdentifier OPTIONAL,
+    -- This is for solving crypto puzzles
+    proofOfWork [12202] OCTET STRING OPTIONAL
   }
 
   -- represents the building and sending process for the next hop
-   AssemblyBlock ::= SEQUENCE {
-      routingBlockIndex    INTEGER (0..maxRoutingBlocks),
-      payloadBlockIndex    SEQUENCE (SIZE (1..maxPayloadBlocks)) OF INTEGER (0..maxID)
-    }
-
+  AssemblyBlock ::= SEQUENCE {
+    routingBlockIndex    INTEGER (0..maxRoutingBlocks),
+    payloadBlockIndex    SEQUENCE (SIZE (1..maxPayloadBlocks)) OF INTEGER (0..maxID)
+  }
 
   PayloadOperation ::= CHOICE {
     splitPayload    [150] SplitPayloadOperation,
@@ -170,7 +196,6 @@ BEGIN
 
   AbsoluteSizeBlock ::= SEQUENCE {
     fromAbsolute        INTEGER (0..maxChunkSize),
-
     toAbsolute          INTEGER (minChunkSize..maxChunkSize)
     -- negative toAbsolute denominates end in absolute value specified from the end of block
   }
@@ -348,7 +373,6 @@ BEGIN
   Protocol ::= ENUMERATED {
     smtp  (100),
     xmmp  (110),
-    ...
   }
 
   StatusBlock ::= SEQUENCE {
@@ -426,19 +450,19 @@ BEGIN
   }
 
   SymmetricAlgorithm ::= ENUMERATED {
-    aes128          (1000),
+    aes128          (1000),  -- required
     aes192          (1001),  -- optional support
-    aes256          (1002),
-    camellia128     (1100),
+    aes256          (1002),  -- required
+    camellia128     (1100),  -- required
     camellia192     (1101),  -- optional support
-    camellia256     (1102),
+    camellia256     (1102),  -- required
     twofish128      (1200),  -- optional support
     twofish192      (1201),  -- optional support
     twofish256      (1202)   -- optional support
   }
 
   CipherMode ::= ENUMERATED {
-    ecb             (10000), --- ECB is a bad choice. Do not use unless really necessary
+    ecb             (10000), -- ECB is a bad choice. Do not use unless really necessary
     cbc             (10001),
     eax             (10002),
     ctr             (10003),
@@ -461,8 +485,9 @@ BEGIN
   }
 
   MacAlgorithm ::= ENUMERATED {
-    sha384          (3000),
-    sha512          (3001),
+    sha256          (3000),
+    sha384          (3001),
+    sha512          (3002),
     ripemd160       (3100),
     ripemd256       (3101),
     ripemd320       (3102)
@@ -472,7 +497,6 @@ BEGIN
     secp384r1       (2500),
     sect409k1       (2501),
     secp521r1       (2502),
-    ...
   }
 
   AlgorithmParameters ::= SEQUENCE {
@@ -497,8 +521,6 @@ BEGIN
     publicKey     [2] OCTET STRING,
     privateKey    [3] OCTET STRING OPTIONAL
   }
-
-  -- reserved OID primeCalc GmbH 1.3.6.1.4.1.50057 OBJECT
 
 END
 
