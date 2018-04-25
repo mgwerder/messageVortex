@@ -258,7 +258,7 @@
             <!-- Here we use entities that we defined at the beginning. -->
             &RFC6120;
             &RFC5321;
-            
+
             <!-- A reference written by by an organization not a person. -->
             <reference anchor="MessageVortexAnalysis" target="https://www.gwerder.net/phd/phd/doc/messageVortex.pdf">
                 <front>
