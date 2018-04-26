@@ -100,7 +100,19 @@
 	            <t>We use the term 'peer partner' as two or more message sending or receiving entities. One of these peer partners is the sends a message and all other peer partner do receive a message. Peer partners are message specific. Every peer partner is connected to a node.</t>
         	</section>
             <section anchor="entities_vortex_message" title="Vortex Message">
-                <t>We use the term 'Vortex message' for a single transmission between two routing layers. A 'blended Vortex message' describes a Vortex message which has been adapted to the transport layer by the blending layer (see <xref target="layer_overview"/></t>
+                <t>
+                    We use the term 'Vortex message' for a single transmission between two routing layers. A 'blended Vortex message' describes a Vortex message which has been adapted to the transport layer by the blending layer (see <xref target="layer_overview"/>
+                </t>
+                <t>
+                    A Vortex message may be sent anonymously. There are however different degrees of anonymity.
+
+                    <list style="symbols">
+                        <t>If the sender of a message is not known to anyone else except the sender we refer to that as sender anonymity.</t>
+                        <t>If the receiver of a message is not known to anyone else except the receiver we refer to that as receiver anonymity.</t>
+                        <t>If neither sender nor receiver can be determined by any other party we refer to that as thrd party anonymity.</t>
+                        <t>If a sender or a receiver may be determined as "one aout of a set of &lt;k&gt; entities we refer to it as k-anonymity (for more about this see <xref target="KANON"/>).</t>
+                    </list>
+                </t>
             </section>
             <section anchor="entities_blocks" title="Blocks">
                 <t>We use the term 'block' for an ASN.1 sequence in a packet.  A packet may have any size and and is embedded in the transport protocol. It must not be confused with network packets.</t>
@@ -208,25 +220,25 @@
                 </section>
             </section>
             <section anchor="routing_header" title="Header Requests">
-                <section anchor="routing_header" title="Request New Ephemeral Identity">
+                <section anchor="routing_header_eid" title="Request New Ephemeral Identity">
                     <t>FIXME</t>
                 </section>
-                <section anchor="routing_header" title="Request Message Quota">
+                <section anchor="routing_header_req_msg_quota" title="Request Message Quota">
                     <t>FIXME</t>
                 </section>
-                <section anchor="routing_header" title="Request Transfer Quota">
+                <section anchor="routing_header_req_trans_quota" title="Request Transfer Quota">
                     <t>FIXME</t>
                 </section>
-                <section anchor="routing_header" title="Query  Quota">
+                <section anchor="routing_header_qry_quota" title="Query Quota">
                     <t>FIXME</t>
                 </section>
-                <section anchor="routing_header" title="Request Capabilities">
+                <section anchor="routing_header_req_cap" title="Request Capabilities">
                     <t>FIXME</t>
                 </section>
-                <section anchor="routing_header" title="Request Nodes">
+                <section anchor="routing_header_req_nodes" title="Request Nodes">
                     <t>FIXME</t>
                 </section>
-                <section anchor="routing_header" title="Request Routing Block Replace">
+                <section anchor="routing_header_req_rb_replace" title="Request Routing Block Replace">
                     <t>FIXME</t>
                 </section>
             </section>
@@ -240,7 +252,17 @@
 
         <section anchor="accounting" title="Accounting">
             <section anchor="accounting_create_identity" title="Ephemeral identity creation">
-                <t>FIXME</t>
+                <t>The accounting layer has two major kinds of operations:
+                    <list style="symbols">
+                        <t>Time based operations (cleanup jobs and initiation of routing)</t>
+                        <t>Routing triggered operations (updating quotas)</t>
+                    </list>
+
+                    Implementations MUST provide sufficient locking mechanisms to guarantee integrity of accounting information and workspace at any time.
+                </t>
+                <section anchor="accounting_timed" title="">
+                    <t>FIXME</t>
+                </section>
             </section>
         </section>
 
@@ -257,7 +279,25 @@
         </section>
 
         <section anchor="Security" title="Security Considerations">
-            <t>The MessageVortex protocol may be understood more as a toolset than a fixed product. Depending on the usage of the product anonymity and security are affected. For a detailed analysis see <xref target="MessageVortexAnalysis"/>.</t>
+            <t>The MessageVortex protocol may be understood more as a toolset than a fixed product. Depending on the usage of the tool set anonymity and security are affected. For a detailed analysis see <xref target="MessageVortexAnalysis"/>.
+            </t>
+            <t>
+                The primary goals for security with in this protocol did rely on the following focus areas:
+                <list style="symbols">
+                    <t>Confidentiality</t>
+                    <t>Integrity</t>
+                    <t>Availability</t>
+                    <t>Anonymity
+                        <list style="symbols">
+                            <t>3rd party anonymity</t>
+                            <t>3rd party anonymity</t>
+                        </list>
+                    </t>
+                </list>
+
+                All these factors are affected by the usage of the protocol. The following sections provide a list of factors affecting the primary goals.
+            </t>
+
         </section>
     </middle>
 
@@ -317,6 +357,22 @@
                         <organization></organization>
                     </author>
                     <date year="2018" />
+                </front>
+            </reference>
+
+            <reference anchor="KANON">
+                <front>
+                    <title>k-Anonymous Message Transmission</title>
+                    <author initials="L" surname="Ahn">
+                        <organization>Carnegie Mellon University</organization>
+                    </author>
+                    <author initials="A" surname="Bortz">
+                        <organization>Carnegie Mellon University</organization>
+                    </author>
+                    <author initials="NJ" surname="Hopper">
+                        <organization>Carnegie Mellon University</organization>
+                    </author>
+                    <date year="2003" />
                 </front>
             </reference>
 
