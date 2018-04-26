@@ -197,10 +197,38 @@
 
         <section anchor="routing" title="Routing">
             <section anchor="routing_message" title="Vortex Message">
-                <t>FIXME</t>
+                <section anchor="routing_incomming" title="Processing of incomming Vortex Messages">
+                    <t>FIXME</t>
+                </section>
+                <section anchor="routing_workspace" title="Processing of Routing Blocks in Workspace">
+                    <t>FIXME</t>
+                </section>
+                <section anchor="routing_outgoing" title="Processing of Outgoing Routing Blocks">
+                    <t>FIXME</t>
+                </section>
             </section>
             <section anchor="routing_header" title="Header Requests">
-                <t>FIXME</t>
+                <section anchor="routing_header" title="Request New Ephemeral Identity">
+                    <t>FIXME</t>
+                </section>
+                <section anchor="routing_header" title="Request Message Quota">
+                    <t>FIXME</t>
+                </section>
+                <section anchor="routing_header" title="Request Transfer Quota">
+                    <t>FIXME</t>
+                </section>
+                <section anchor="routing_header" title="Query  Quota">
+                    <t>FIXME</t>
+                </section>
+                <section anchor="routing_header" title="Request Capabilities">
+                    <t>FIXME</t>
+                </section>
+                <section anchor="routing_header" title="Request Nodes">
+                    <t>FIXME</t>
+                </section>
+                <section anchor="routing_header" title="Request Routing Block Replace">
+                    <t>FIXME</t>
+                </section>
             </section>
             <section anchor="routing_operations" title="Routing Operations">
                 <t>FIXME</t>
@@ -252,6 +280,28 @@
             <!--?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"?-->
             &RFC2119;
 
+            <reference anchor="CCITT.X208.1988">
+                <front>
+                    <title>Specification of Abstract Syntax Notation One (ASN.1)</title>
+                    <author>
+                        <organization>International Telephone and Telegraph Consultative Committee</organization>
+                    </author>
+                    <date year="1998" month="11"/>
+                </front>
+                <seriesInfo name="CCITT Recommendation" value="X.208"/>
+            </reference>
+
+            <reference anchor="CCITT.X680.2002">
+                <front>
+                    <title>Abstract Syntax Notation One (ASN.1): Specification of basic notation</title>
+                    <author>
+                        <organization>International Telephone and Telegraph Consultative Committee</organization>
+                    </author>
+                    <date year="2002" month="11"/>
+                </front>
+                <seriesInfo name="CCITT Recommendation" value="X.680"/>
+            </reference>
+
         </references>
 
         <references title="Informative References">
@@ -269,6 +319,7 @@
                     <date year="2018" />
                 </front>
             </reference>
+
         </references>
 
         <section anchor="asn_one" title="The ASN.1 schema for Vortex messages">

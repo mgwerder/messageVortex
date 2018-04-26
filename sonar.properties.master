@@ -1,5 +1,5 @@
 sonar.working.directory=app/build/sonar
-sonar.projectKey=net.gwerder.java:mailvortex
+sonar.projectKey=net.gwerder.java:messagevortex
 sonar.projectName=MessageVortex
 sonar.projectVersion=@version@
 sonar.language=java
