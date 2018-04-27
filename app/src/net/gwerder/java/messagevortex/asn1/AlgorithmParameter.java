@@ -134,7 +134,7 @@ public class AlgorithmParameter extends AbstractBlock implements Serializable,Co
         ASN1EncodableVector v =new ASN1EncodableVector();
         for(Map.Entry<Integer,String> e:parameter.entrySet()) {
             Parameter p=Parameter.getById(e.getKey());
-            if(p!=null && p.isEncodable()) {
+            if(p!=null && p.isEncodable() || dt == DumpType.INTERNAL ) {
                 v.add(new DERTaggedObject(p.getId(),p.toASN1Object(e.getValue())));
             }
         }

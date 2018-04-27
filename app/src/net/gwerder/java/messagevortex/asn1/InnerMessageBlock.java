@@ -180,6 +180,7 @@ public class InnerMessageBlock extends AbstractBlock  implements Serializable {
         ASN1EncodableVector v=new ASN1EncodableVector();
         v.add( new DEROctetString(padding));
         switch(dumpType) {
+            case INTERNAL:
             case ALL_UNENCRYPTED:
                 v.add( new DERTaggedObject(PREFIX_PLAIN,prefix.toASN1Object(dumpType)));
                 break;
@@ -193,6 +194,7 @@ public class InnerMessageBlock extends AbstractBlock  implements Serializable {
                 }
                 break;
             default:
+                throw new IllegalStateException( "unable to handle dump type "+dumpType );
         }
         if(identity==null) {
             throw new IOException("identity may not be null when encoding");
@@ -200,6 +202,7 @@ public class InnerMessageBlock extends AbstractBlock  implements Serializable {
         LOGGER.log(Level.FINER,"adding identity");
         byte[] o=null;
         switch(dumpType) {
+            case INTERNAL:
             case ALL_UNENCRYPTED:
                 ASN1Object t=identity.toASN1Object(dumpType);
                 o= toDER(t);
@@ -212,6 +215,7 @@ public class InnerMessageBlock extends AbstractBlock  implements Serializable {
                 v.add( new DERTaggedObject(IDENTITY_ENCRYPTED,new DEROctetString(o)) );
                 break;
             default:
+                throw new IllegalStateException( "unable to handle dump type "+dumpType );
         }
         LOGGER.log(Level.FINER,"adding signature");
         if(identity.getIdentityKey()==null || ! identity.getIdentityKey().hasPrivateKey()) {
@@ -228,6 +232,7 @@ public class InnerMessageBlock extends AbstractBlock  implements Serializable {
             throw new NullPointerException("routing may not be null when encoding");
         }
         switch(dumpType) {
+            case INTERNAL:
             case ALL_UNENCRYPTED:
                 v.add( new DERTaggedObject( true,ROUTING_PLAIN ,routing.toASN1Object(dumpType)));
                 break;
@@ -270,12 +275,20 @@ public class InnerMessageBlock extends AbstractBlock  implements Serializable {
         sb.append( prefix ).append( "  padding " ).append( toHex(padding) ).append( CRLF );
         sb.append( prefix ).append( "  -- Dumping IdentityBlock" ).append( CRLF );
         sb.append( prefix ).append( "  identity ");
-        if( dt == DumpType.ALL_UNENCRYPTED ) {
-            // dumping plain identity
-            sb.append( "plain " ).append( identity.dumpValueNotation( prefix + "  ",DumpType.ALL_UNENCRYPTED ) ).append( ',' ).append( CRLF );
-        } else {
-            // dumping encrypted identity
-            sb.append( "encrypted " ).append( identity.dumpValueNotation( prefix + "  ", dt ) ).append( ',' ).append( CRLF );
+        switch( dt ) {
+            case ALL_UNENCRYPTED:
+            case INTERNAL:
+                // dumping plain identity
+                sb.append( "plain " ).append( identity.dumpValueNotation( prefix + "  ",DumpType.ALL_UNENCRYPTED ) ).append( ',' ).append( CRLF );
+                break;
+            case ALL:
+            case PRIVATE_COMMENTED:
+            case PUBLIC_ONLY:
+                // dumping encrypted identity
+                sb.append( "encrypted " ).append( identity.dumpValueNotation( prefix + "  ", dt ) ).append( ',' ).append( CRLF );
+                break;
+            default:
+                throw new IOException( "unable to handle dump type " + dt );
         }
 
         sb.append( prefix ).append( "  routing " ).append( routing.dumpValueNotation( prefix+"  ",dt) ).append( ',' ).append( CRLF );

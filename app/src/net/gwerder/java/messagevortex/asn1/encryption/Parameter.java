@@ -33,8 +33,16 @@ import java.nio.charset.StandardCharsets;
  */
 public enum Parameter implements Serializable {
     /* dummy id for internal use (store algorithm with parameter for key cache) */
-    ALGORITHM (1,    "algorithm",null),
+    ALGORITHM (1,    "algorithm",new Transcoder() {
+        // this is a dummy transcoder only transfering parameter name (internally used only)
 
+        public String fromASN1( ASN1Object o ) {
+            return new String( ASN1OctetString.getInstance( o ).getOctets(), StandardCharsets.UTF_8 );
+        }
+        public ASN1Encodable toASN1( String s ) {
+            return new DEROctetString( s.getBytes( StandardCharsets.UTF_8 ) );
+        }
+    }),
     /* Keysize parameter specifying the size of an encryption key in bits */
     KEYSIZE   (10000,"keySize",new Transcoder() {
         @Override
@@ -120,17 +128,17 @@ public enum Parameter implements Serializable {
     final String txt;
     final Transcoder transcoder;
 
-    Parameter(int id,String txt,Transcoder transcoder) {
+    private Parameter(int id,String txt,Transcoder transcoder) {
         this.id=id;
         this.txt=txt;
         this.transcoder=transcoder;
     }
 
     /***
-     * Get a paraameter by ASN.1 ID
+     * Retrieve parameter by ASN.1 id
      *
-     * @param id    the ASN.1 ID
-     * @return      the parameter or null if not known
+     * @param id    the ASN.1 id
+     * @return      the apropriate parameter or null if an illegal nuber is provided
      */
     public static Parameter getById(int id) {
         for(Parameter e : values()) {
@@ -142,10 +150,10 @@ public enum Parameter implements Serializable {
     }
 
     /***
-     * Get a paraameter by ASN.1 name
+     * Retrieve parameter by name
      *
-     * @param s     the ASN.1 name
-     * @return      the parameter or null if not known
+     * @param s     the name to be looked up
+     * @return      the apropriate parameter or null if an illegal name is provided
      */
     public static Parameter getByString(String s) {
         for(Parameter e : values()) {
@@ -157,26 +165,26 @@ public enum Parameter implements Serializable {
     }
 
     /***
-     * Get the ASN.1 ID
+     * Retrieve the ASN.1 id of the parameter
      *
-     * @return  the ID
+     * @return the numeric ASN.1 id
      */
     public int getId() {return id;}
 
     /***
-     * Whether the parameter is encodable or not.
+     * Check if Parameter may be encoded in an ASN.1 file
      *
-     * @return returns true if the parameter is ASN.1 encodable
+     * @return true if parameter is valid for encoding in ASN.1 structure
      */
     public boolean isEncodable() {
         return transcoder!=null;
     }
 
     /***
-     * Obtain a string representation of the ASN.1 object
+     * Create string representation from ASN.1 object
      *
-     * @param o the ASN.1 encoded parameter content
-     * @return  the string representation of the parameter
+     * @param o     the object to be decoded
+     * @return      a string representation of the parameter
      */
     public String fromASN1Object(ASN1Object o) {
         return transcoder.fromASN1(o);
@@ -192,6 +200,11 @@ public enum Parameter implements Serializable {
         return transcoder.toASN1(s);
     }
 
+    /***
+     * retrieve the name of the parameter
+     *
+     * @return the name
+     */
     public String toString() {
         return txt;
     }

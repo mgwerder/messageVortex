@@ -61,7 +61,7 @@ public class DummyBlenderTest implements BlenderReceiver {
         }
         try {
             VortexMessage v = new VortexMessage( new PrefixBlock(), new InnerMessageBlock( new PrefixBlock(), new IdentityBlock(), new RoutingBlock() ) );
-            v.setDecryptionKey( new AsymmetricKey( Algorithm.RSA.getParameters( SecurityLevel.LOW ) ) );
+            v.setDecryptionKey( new AsymmetricKey( Algorithm.RSA.getParameters( SecurityLevel.getDefault() ) ) );
             assertTrue( "Failed sending message to different endpoint", dt[0].blendMessage( new BlendingSpec("martin@example.com1"), v));
             assertFalse( "Failed sending message to unknown endpoint (unexpectedly succeeded)", dt[0].blendMessage( new BlendingSpec("martin@example.com-1"), v));
         } catch (Exception ioe) {

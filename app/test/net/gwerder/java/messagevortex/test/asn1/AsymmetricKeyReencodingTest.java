@@ -53,9 +53,9 @@ public class AsymmetricKeyReencodingTest {
         List<Object[]> ret = new Vector<>();
         for(Algorithm alg: Algorithm.getAlgorithms( AlgorithmType.ASYMMETRIC )) {
             for (Map.Entry<SecurityLevel,AlgorithmParameter> params : alg.getParameters().entrySet() ) {
-                int ks=Integer.parseInt(params.getValue().get(Parameter.KEYSIZE));
+                int ks = Integer.parseInt( params.getValue().get( Parameter.KEYSIZE ) );
                 int j = Math.min( (int) Math.pow( 2, ksDisc / ks ), 100 );
-                ret.add( new Object[]{"" + params.getValue().get(Parameter.ALGORITHM) + "/" + ks, params.getValue(),j } );
+                ret.add( new Object[]{"" + params.getValue().get( Parameter.KEYSIZE ) + "/" + ks, params.getValue(),j } );
             }
         }
         LOGGER.log( Level.INFO,"Prepared for fuzzer "+ret.size()+" tests");
@@ -95,17 +95,38 @@ public class AsymmetricKeyReencodingTest {
         AsymmetricKey s2;
         String currentObject = null;
         try {
-            LOGGER.log( Level.INFO, "Running encryption test with " + parameter.get(Parameter.ALGORITHM) + "/" + parameter.get(Parameter.MODE) + "/" + parameter.get(Parameter.PADDING) + "" );
+            LOGGER.log( Level.INFO, "Running encryption test with " + parameter.get( Parameter.ALGORITHM ) + parameter.get( Parameter.KEYSIZE ) + "/" + parameter.get(Parameter.MODE) + "/" + parameter.get(Parameter.PADDING) + "" );
             for (int i = 0; i < repeat; i++) {
                 LOGGER.log( Level.INFO, "  Running encryption test "+i+"/"+repeat );
                 LOGGER.log( Level.INFO, "  generating key");
                 s1 = new AsymmetricKey( parameter );
+                LOGGER.log( Level.INFO, "  got key ... now reencoding (keysize="+s1.getKeySize()+";blocksize="+s1.getBlockSize()+")");
                 s2 = new AsymmetricKey( s1.toBytes(DumpType.ALL) );
-                LOGGER.log( Level.INFO, "  dumping object");
+                LOGGER.log( Level.INFO, "  reencoding done (keysize="+s1.getKeySize()+";blocksize="+s1.getBlockSize()+")");
+                LOGGER.log( Level.INFO, "  dumping object (keysize="+s1.getKeySize()+";blocksize="+s1.getBlockSize()+")");
                 currentObject = s1.dumpValueNotation( "", DumpType.ALL );
-                byte[] b1 = new byte[sr.nextInt( Math.min( s1.getPadding().getMaxSize( s1.getAlgorithm().getBlockSize() ) , 1024 ) )];
+                int maxSize = s1.getPadding().getMaxSize( s1.getBlockSize() );
+                int size;
+                switch(i) {
+                    case 0:
+                        size = maxSize-1;
+                        break;
+                    case 1:
+                        size = maxSize;
+                        break;
+                    case 2:
+                        size=0;
+                        break;
+                    case 3:
+                        size = 1;
+                        break;
+                    default:
+                        size = sr.nextInt( maxSize );
+                        break;
+                }
+                byte[] b1 = new byte[size];
                 sr.nextBytes( b1 );
-                LOGGER.log( Level.INFO, "  running encryption/decryption test with " + parameter.get(Parameter.ALGORITHM) + "/" + parameter.get(Parameter.MODE) + "/" + parameter.get(Parameter.PADDING) + "" );
+                LOGGER.log( Level.INFO, "  running encryption/decryption test with " + parameter.get(Parameter.ALGORITHM) + "/" + parameter.get(Parameter.MODE) + "/" + parameter.get(Parameter.PADDING) + " (" + size + ")" );
                 byte[] b2 = s1.decrypt( s1.encrypt( b1 ) );
                 assertTrue( "error in encrypt/decrypt cycle with " + parameter.get(Parameter.ALGORITHM) + " (same object)", Arrays.equals( b1, b2 ) );
                 b2 = s1.decrypt( s1.encrypt( b1 ) );
@@ -124,8 +145,8 @@ public class AsymmetricKeyReencodingTest {
             }
             LOGGER.log( Level.INFO, "done with " + parameter.get(Parameter.ALGORITHM)  + "/unspecified/" + parameter.get(Parameter.PADDING)  + " (" + parameter.get(Parameter.KEYSIZE)   + ")" );
         } catch(Exception e) {
-            LOGGER.log(Level.WARNING,"Unexpected exception",e);
-            fail("fuzzer encountered exception in Symmetric en/decryption test with algorithm " + parameter.get(Parameter.ALGORITHM)  + "\n" + currentObject);
+            LOGGER.log( Level.WARNING,"Unexpected exception", e );
+            fail("fuzzer encountered exception in asymmetric en/decryption test with algorithm " + parameter.get(Parameter.ALGORITHM)  + "\n" + currentObject);
         } finally {
             System.err.flush();
             System.out.flush();

@@ -247,6 +247,7 @@ public class RoutingBlock extends AbstractBlock  implements Serializable {
         // add prefix
         switch( dumpType ) {
             case ALL_UNENCRYPTED:
+            case INTERNAL:
                 ASN1EncodableVector v2 = new ASN1EncodableVector();
                 for( PrefixBlock p : prefix ) {
                     v2.add( p.toASN1Object( dumpType ) );
@@ -269,6 +270,7 @@ public class RoutingBlock extends AbstractBlock  implements Serializable {
         // add nextHop
         switch( dumpType ) {
             case ALL_UNENCRYPTED:
+            case INTERNAL:
                 ASN1EncodableVector v2 = new ASN1EncodableVector();
                 for( RoutingBlock p : nextHop ) {
                     v2.add( p.toASN1Object( dumpType ) );

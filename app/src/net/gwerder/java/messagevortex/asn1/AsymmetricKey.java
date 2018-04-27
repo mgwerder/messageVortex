@@ -124,7 +124,7 @@ public class AsymmetricKey extends Key  implements Serializable {
      * @throws IOException if the key can not be generated with the given parameters
      */
     public AsymmetricKey(AlgorithmParameter params) throws IOException {
-        this(params,true);
+        this( params,true );
     }
 
     /***
@@ -140,15 +140,13 @@ public class AsymmetricKey extends Key  implements Serializable {
         if(params==null) {
             throw new NullPointerException("parameters may not be null");
         }
-        this.parameters=params;
-        assert Integer.parseInt(parameters.get(Parameter.KEYSIZE) ) <1024 || Integer.parseInt(parameters.get(Parameter.KEYSIZE) ) == Integer.parseInt(parameters.get(Parameter.BLOCKSIZE) );
+        this.parameters = new AlgorithmParameter( params.toASN1Object( DumpType.INTERNAL ) );
 
-
-        if(params.get(Parameter.ALGORITHM)==null) {
+        if( params.get( Parameter.ALGORITHM ) == null ) {
             throw new IOException( "Algorithm null is not encodable by the system" );
         }
 
-        createKey(allowPrecalculated);
+        createKey( allowPrecalculated );
 
         selftest();
     }
@@ -171,7 +169,7 @@ public class AsymmetricKey extends Key  implements Serializable {
 
         // check for precomputed key
         if(allowPrecomputed) {
-            AsymmetricKey tk = AsymmetricKeyPreCalculator.getPrecomputedAsymmetricKey(parameters);
+            AsymmetricKey tk = AsymmetricKeyPreCalculator.getPrecomputedAsymmetricKey( parameters );
             if (tk != null) {
                 // set precomputed values
                 assert getKeySize()==tk.getKeySize();
@@ -194,8 +192,8 @@ public class AsymmetricKey extends Key  implements Serializable {
         Algorithm alg=Algorithm.getByString(parameters.get(Parameter.ALGORITHM));
         int keySize = getKeySize();
         try {
-            KeyPairGenerator keyGen = KeyPairGenerator.getInstance(alg.toString(), alg.getProvider());
-            keyGen.initialize(keySize);
+            KeyPairGenerator keyGen = KeyPairGenerator.getInstance( alg.toString(), alg.getProvider());
+            keyGen.initialize( keySize );
             KeyPair pair;
             pair = keyGen.genKeyPair();
             publicKey = pair.getPublic().getEncoded();
@@ -582,7 +580,13 @@ public class AsymmetricKey extends Key  implements Serializable {
      *
      * @return the algorithm parameters used for generation
      */
-    public AlgorithmParameter getAlgorithmParameter() {return new AlgorithmParameter(parameters); }
+    public AlgorithmParameter getAlgorithmParameter() {
+        try {
+            return new AlgorithmParameter(parameters.toASN1Object( DumpType.INTERNAL ) );
+        } catch( IOException ex ) {
+            throw new IllegalStateException( "parameter structure not clonable", ex );
+        }
+    }
 
     /***
      * Gets the padding used for encryption.
@@ -590,8 +594,8 @@ public class AsymmetricKey extends Key  implements Serializable {
      * @return the padding which is used for encryption
      */
     public Padding getPadding() {
-        Padding padding=Padding.getByString(parameters.get(Parameter.PADDING));
-        return padding==null?Padding.getDefault( AlgorithmType.ASYMMETRIC ):padding;
+        Padding padding = Padding.getByString( parameters.get( Parameter.PADDING ) );
+        return padding == null ? Padding.getDefault( AlgorithmType.ASYMMETRIC ) : padding;
     }
 
     /***
@@ -608,10 +612,32 @@ public class AsymmetricKey extends Key  implements Serializable {
 
     /***
      * Gets the size of the key stored in this object.
+     *
      * @return the key size in bits
      */
     public int getKeySize() {
-        return Integer.parseInt(parameters.get(Parameter.KEYSIZE));
+        return Integer.parseInt( parameters.get( Parameter.KEYSIZE ) );
+    }
+
+    /***
+     * Gets the size of the key stored in this object.
+     *
+     * @return the key size in bits
+     */
+    public int getBlockSize() {
+        int bs = 0;
+        try{
+            bs = Integer.parseInt( parameters.get( Parameter.BLOCKSIZE ) );
+
+            // get keysize if blocksize is to small/invalid
+            if( bs<128 ) throw new NumberFormatException();
+        } catch( NumberFormatException nfe ) {
+            bs = Integer.parseInt( parameters.get( Parameter.KEYSIZE ) );
+            if( bs<128 ) {
+                bs = -1;
+            };
+        }
+        return bs;
     }
 
     /***
