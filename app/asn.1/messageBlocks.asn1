@@ -294,18 +294,19 @@ BEGIN
   -- At the moment either smtp:<email> or xmpp:<jabber>
   BlendingSpec ::= SEQUENCE {
     target            NodeSpec,
-    blendingType      UTF8String, -- 'F5' or 'atttach'
+    blendingType      UTF8String,
     parameter         SEQUENCE ( SIZE (0..maxNumberOfParameter) ) OF BlendingParameter
   }
 
   BlendingParameter ::= CHOICE {
     offset          [1] INTEGER,
     symmetricKey    [2] SymmetricKey,
-    asymmetricKey   [3] AsymmetricKey
-  }
+    asymmetricKey   [3] AsymmetricKey,
+    blendingType    [4] UTF8String
+   }
 
   NodeSpec ::= SEQUENCE {
-    media             UTF8String,  -- defined so far are 'xmpp' and 'smtp'
+    Transportprotocol Protocol,
     recipientAddress  UTF8String
   }
 
@@ -355,7 +356,7 @@ BEGIN
     cipher            SEQUENCE (SIZE (2..256)) OF CipherSpec,
     maxTransferQuota  INTEGER (0..4294967295),
     maxMessageQuota   INTEGER (0..4294967295),
-    supportedProtocol SEQUENCE OF Protocol
+    supportedBlendingIn SEQUENCE OF BlendingSpec
   }
 
   CipherSpec ::= SEQUENCE {
