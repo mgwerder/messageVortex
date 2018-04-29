@@ -98,14 +98,32 @@
                 <t>We use the term 'peer partner' as two or more message sending or receiving entities. One of these peer partners is the sends a message and all other peer partner do receive a message. Peer partners are message specific. Every peer partner is connected to a node.</t>
         	</section>
         	<section anchor="entities_keys" title="Encryption keys">
-        	   <section anchor="etities_node_peer" title="Identity Keys">
-        	       <t>FIXME</t>
+        	   <t>
+        	       There are several keys required for a Vortex message. Some of them are used as an Identity and some are message specific.
+        	   </t>
+        	   <section anchor="etities_node_identity" title="Identity Keys">
+        	       <t>
+        	           Every participant of the network has a asymmetric key. These keys SHOULD be either EC keys with a minimum length of 384 bits or RSA keys with a minimum length of 2048 bits. 
+        	       </t>
+        	       <t>
+        	           The public key needs to be known by all parties writing to or through that node.
+        	       </t>
         	   </section>
         	   <section anchor="etities_keys_peer" title="Peer Key">
-        	       <t>FIXME (symmetric known to two peer partners)</t>
+        	       <t>
+        	           Peer keys are symetrical keys transmitted with a Vortex message. Peer keys are always known to two nodes sending directly messages to each other and to the creator of the routing block.
+        	       </t>
+        	       <t>
+        	           A peer key is included in the identity block of a Vortex message and in the building instructions for a Vortex message.
+        	       </t>    
         	   </section>
         	   <section anchor="etities_keys_sender" title="Sender Key">
-        	       <t>FIXME (symmetric known to sender and processing node)</t>
+        	       <t>
+        	           The sender key is a symmetrical key protecting the identity block of a Vortex message. It is encrypted with the receiving peer key and prefixed to the identity block. This key decouples further identiity and processing information from the previous key.
+        	       </t>
+        	       <t>
+        	           A sender key is known to exactly one peer of a Vortex message and the creator of the routing block.
+        	       </t>
         	   </section>
         	</section>
             <section anchor="entities_vortex_message" title="Vortex Message">
@@ -125,8 +143,12 @@
                 <t>
                     A full vortex message is built out of the following items:
                     <list style="symbols">
-                        <t>A symmetrical key (encrypted with a nodes host key)</t>
-                        <t>FIXME</t>
+                        <t>The peer key (encrypted with a nodes host key) protecting the inner Vortex message.</t>
+                        <t>A short padding guaranteeing that a replayed routing block with different content does not look alike.</t>
+                        <t>The sender key (encrypted with a nodes host key) protecting the identity and routing block.</t>
+                        <t>The identity block (protected by the sender key) containing informations about the ephemeral identity of the sender, replay protection information, header requests (optional), and proofOfWork (optional).</t>
+                        <t>The routing block (protected by the sender key) containing informations how subsequent messages are processed, assembled, and blended.</t>
+                        <t>The payload block (protected ba the peer key) containing payload chunks to be processed.</t>
                     </list>
                 </t>
             </section>
@@ -173,7 +195,7 @@
         <section anchor="layer_overview" title="Layer Overview">
             <t>The protocol is designed in four layers as shown in <xref target="fig_layer_overview" /></t>
 
-            <figure align="center" anchor="fig_layer_overview">
+            <figure align="center" anchor="fig_layer_overview" title="Layer overview">
                 <artwork align="center"><![CDATA[
 +-------------------------------------------------------------------+
 | Vortex Node                                                       |
@@ -221,16 +243,72 @@
                 The  MessageVortex protocol is modular built. It allows to use different encryption algorithms. For good operation a Vortex node SHOULD always support at least two completely different types of algorithms, paddings, or modes.
             </t>    
             <section title="Supported Symmetric Ciphres">
-                <t>FIXME</t>
+                <t>
+                    The following symmetric ciphres MUST be supported by a node:
+                    <list style="symbols">
+                        <t>AES128</t>
+                        <t>AES256</t>
+                        <t>CAMELLIA128</t>
+                        <t>CAMELLIA256</t>
+                    </list>
+                    Any standardized key size bigger than the smallest key above SHOULD be supported.
+                </t>
+                <t>The Twofish cipher MAY be supported.</t>
             </section>
             <section title="Supported Asymmetric Ciphres">
-                <t>FIXME</t>
+                <t>
+                    The following symmetric ciphres MUST be supported by a node:
+                    <list style="symbols">
+                        <t>RSA (key sizes bigger or equal to 2048)</t>
+                        <t>ECC (named curves secp384r1, sect409k1, secp521r1)</t>
+                    </list>
+                </t>
+            </section>
+            <section title="Supported MACs">
+                <t>
+                    The following Message Authentication Codes (MAC)  MUST be supported by a node:
+                    <list style="symbols">
+                        <t>SHA256</t>
+                        <t>RipeMD160</t>
+                    </list>
+                </t>
+                <t>
+                    The following MACs SHOULD be supported by a node:
+                    <list style="symbols">
+                        <t>SHA512</t>
+                        <t>RipeMD256</t>
+                        <t>RipeMD512</t>
+                    </list>
+                </t>
             </section>
             <section title="Supported Paddings">
-                <t>FIXME</t>
+                <t>
+                    The following symmetric ciphres MUST be supported by a node:
+                    <list style="symbols">
+                        <t>PKCS1</t>
+                        <t>PKCS7</t>
+                    </list>
+                </t>
             </section>
             <section title="Supported Modes">
-                <t>FIXME</t>
+                <t>
+                    The following modes  MUST be supported by a node:
+                    <list style="symbols">
+                        <t>CBC</t>
+                        <t>EAX</t>
+                        <t>GCM</t>
+                    </list>
+                    ECB and NONE SHOULD NOT be used.
+                </t>
+                <t>
+                    The following MACs SHOULD be supported by a node:
+                    <list style="symbols">
+                        <t>CTR</t>
+                        <t>CCM</t>
+                        <t>OCB</t>
+                        <t>OFB</t>
+                    </list>
+                </t>
             </section>
         </section>
 
@@ -254,7 +332,8 @@
                     Email messages containig messages must be encoded with Multipurpose Internet Mail extensions (MIME) as specified in <xref target="RFC2045">RFC 2045</xref>. Encoding mechanism BASE64 MUST be supported. All sections of an email are tested for the presence of a Vortex message. 
                 </t>
                 <t>
-                    A vortex message is present if a block at the FIXME</t>
+                    A vortex message is present if a block containing the peer key at the known offset of any MIME part decodes correctly.
+                </t>
                 <section anchor="blending_smtp_plain" title="PLAIN Blending">
                 	<t>FIXME</t>
                 </section>
