@@ -13,7 +13,7 @@
 <?rfc compact="yes" ?>
 <?rfc subcompact="no" ?>
 
-<rfc category="exp" docName="draft-ietf-messagevortex_protocol-00" ipr="trust200902" xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang='en'>
+<rfc category="exp" docName="draft-ietf-messagevortex_protocol-00" ipr="trust200902" xml:lang='en'>
 <!-- category values: std, bcp, info, exp, and historic
     ipr values: trust200902, noModificationTrust200902, noDerivativesTrust200902, or pre5378Trust200902 you can add the attributes updates="NNNN" and obsoletes="NNNN" they will automatically be output with "(if approved)"
 -->
@@ -364,8 +364,7 @@
     <back>
         <references title="Normative References">
             
-        	<xi:include href='http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml'/>
-            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"?>
+        	<?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"?>
             
             <!--&RFC2119;-->
 
@@ -395,8 +394,9 @@
         
         <references title="Informative References">
             
-            <!--&RFC6120;
-            &RFC5321;-->
+        	<?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2045.xml"?>
+            &RFC6120;
+            &RFC5321;
             
             <reference anchor="MessageVortexAnalysis" target="https://www.gwerder.net/phd/phd/doc/messageVortex.pdf">
                 <front>
