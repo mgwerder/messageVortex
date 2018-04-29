@@ -395,10 +395,15 @@
         <references title="Informative References">
             
         	<?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2045.xml"?>
+<<<<<<< HEAD
         	<?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.6120.xml"?>
         	<?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.5321.xml"?>
             <!--&RFC6120;
             &RFC5321;-->
+=======
+            &RFC6120;
+            &RFC5321;
+>>>>>>> e74daecfaf6f2bdf1af3bbc7dfd07f716e23a238
             
             <reference anchor="MessageVortexAnalysis" target="https://www.gwerder.net/phd/phd/doc/messageVortex.pdf">
                 <front>
