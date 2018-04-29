@@ -125,6 +125,7 @@ BEGIN
     payload     SEQUENCE (SIZE (0..maxPayloadBlocks)) OF PayloadChunk
   }
 
+  -- do not use this for encoding (internal structure only)
   VortexMessage ::= SEQUENCE {
     prefix        CHOICE {
         plain           [10011] PrefixBlock,
