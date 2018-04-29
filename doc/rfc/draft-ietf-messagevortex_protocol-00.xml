@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="US-ASCII"?>
-
-<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
-        <!-- Key words for use in RFCs to Indicate Requirement Levels -->
-        <!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
-        <!-- IMAPrev4 -->
-        <!ENTITY RFC3501 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.3501.xml">
-        <!-- SMTP -->
-        <!ENTITY RFC5321 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.5321.xml">
-        <!-- XMPP -->
-        <!ENTITY RFC6120 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6120.xml">
-        ]>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd" >
 
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
@@ -23,7 +13,7 @@
 <?rfc compact="yes" ?>
 <?rfc subcompact="no" ?>
 
-<rfc category="exp" docName="draft-ietf-messagevortex-protocol-00" ipr="trust200902">
+<rfc category="exp" docName="draft-ietf-messagevortex_protocol-00" ipr="trust200902" xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang='en'>
 <!-- category values: std, bcp, info, exp, and historic
     ipr values: trust200902, noModificationTrust200902, noDerivativesTrust200902, or pre5378Trust200902 you can add the attributes updates="NNNN" and obsoletes="NNNN" they will automatically be output with "(if approved)"
 -->
@@ -93,19 +83,34 @@
             <section title="Requirements Language">
                 <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in <xref target="RFC2119">RFC 2119</xref>.</t>
             </section>
+            
+            <section title="Protocol Specification">
+            	<t>The protocol is specified as in <xref target="asn_one"/> in ASN.1 (see <xref target="CCITT.X680.2002"/> and <xref target="CCITT.X208.1988"/>). The blocks are if not otherwise mentioned DER encoded.</t> 
+            </section>
         </section>
 
         <section anchor="entities_overview" title="Entities Overview">
             <t>Within these document we refer to the entities as defined below. </t>
-	        <section anchor="entities_node" title="Node">
-	            <t>We use the term 'node' to  describe any system connected to other nodes, and supporting the MessageVortex Protocol.</t>
-	        </section>
-	        <section anchor="entities_peer" title="Peer Partner">
-	            <t>We use the term 'peer partner' as two or more message sending or receiving entities. One of these peer partners is the sends a message and all other peer partner do receive a message. Peer partners are message specific. Every peer partner is connected to a node.</t>
+            <section anchor="entities_node" title="Node">
+                <t>We use the term 'node' to  describe any system connected to other nodes, and supporting the MessageVortex Protocol.</t>
+            </section>
+            <section anchor="entities_peer" title="Peer Partner">
+                <t>We use the term 'peer partner' as two or more message sending or receiving entities. One of these peer partners is the sends a message and all other peer partner do receive a message. Peer partners are message specific. Every peer partner is connected to a node.</t>
+        	</section>
+        	<section anchor="entities_keys" title="Encryption keys">
+        	   <section anchor="etities_node_peer" title="Identity Keys">
+        	       <t>FIXME</t>
+        	   </section>
+        	   <section anchor="etities_keys_peer" title="Peer Key">
+        	       <t>FIXME (symmetric known to two peer partners)</t>
+        	   </section>
+        	   <section anchor="etities_keys_sender" title="Sender Key">
+        	       <t>FIXME (symmetric known to sender and processing node)</t>
+        	   </section>
         	</section>
             <section anchor="entities_vortex_message" title="Vortex Message">
                 <t>
-                    We use the term 'Vortex message' for a single transmission between two routing layers. A 'blended Vortex message' describes a Vortex message which has been adapted to the transport layer by the blending layer (see <xref target="layer_overview"/>
+                    We use the term 'Vortex message' for a single transmission between two routing layers. A 'blended Vortex message' describes a Vortex message which has been adapted to the transport layer by the blending layer (see <xref target="layer_overview"/>).
                 </t>
                 <t>
                     A Vortex message may be sent anonymously. There are however different degrees of anonymity.
@@ -115,6 +120,13 @@
                         <t>If the receiver of a message is not known to anyone else except the receiver we refer to that as receiver anonymity.</t>
                         <t>If neither sender nor receiver can be determined by any other party we refer to that as thrd party anonymity.</t>
                         <t>If a sender or a receiver may be determined as "one aout of a set of &lt;k&gt; entities we refer to it as k-anonymity (for more about this see <xref target="KAnon"/>).</t>
+                    </list>
+                </t>
+                <t>
+                    A full vortex message is built out of the following items:
+                    <list style="symbols">
+                        <t>A symmetrical key (encrypted with a nodes host key)</t>
+                        <t>FIXME</t>
                     </list>
                 </t>
             </section>
@@ -203,16 +215,54 @@
                 </t>
 	        </section>
         </section>
+        
+        <section title="General notes">
+            <t>
+                The  MessageVortex protocol is modular built. It allows to use different encryption algorithms. For good operation a Vortex node SHOULD always support at least two completely different types of algorithms, paddings, or modes.
+            </t>    
+            <section title="Supported Symmetric Ciphres">
+                <t>FIXME</t>
+            </section>
+            <section title="Supported Asymmetric Ciphres">
+                <t>FIXME</t>
+            </section>
+            <section title="Supported Paddings">
+                <t>FIXME</t>
+            </section>
+            <section title="Supported Modes">
+                <t>FIXME</t>
+            </section>
+        </section>
 
         <section anchor="blending" title="Blending">
             <t>Each node supports a fixed set of belnding capabilities. They may be different for incomming and outgoing messages.
             </t>
-            <t>The following sections describe the blending mechanism. There are currently two blending layers specified. One layer specification for the simple mail transfer protocol (SMTP; See <xref target="RFC5321"/>) and one for the Extensible Messaging and Presence Protocol (XMPP; See <xref target="RFC6120"/>).
+            <t>The following sections describe the blending mechanism. There are currently two blending layers specified. One layer specification for the simple mail transfer protocol (SMTP; See <xref target="RFC5321">RFC 5321</xref>) and one for the Extensible Messaging and Presence Protocol (XMPP; See <xref target="RFC6120">RFC6120</xref>).
             </t>
             <section anchor="blending_smtp" title="Blending into an SMTP layer">
-                <t>For interoperability this layer MUST be implemented. </t>
+                <t>There are two types of blending supported when using SMTP
+                    <list style="symbols">
+                        <t>Plain binary encoding with offset (PLAIN)</t>
+                        <t>Embedding with F5 in image (F5)</t>
+                    </list>
+                </t>
+                
+                <t>
+                	For interoperability PLAIN blending MUST be supported. Blending using F5 MAY be supported.
+                </t>
+                <t>
+                    Email messages containig messages must be encoded with Multipurpose Internet Mail extensions (MIME) as specified in <xref target="RFC2045">RFC 2045</xref>. Encoding mechanism BASE64 MUST be supported. All sections of an email are tested for the presence of a Vortex message. 
+                </t>
+                <t>
+                    A vortex message is present if a block at the FIXME</t>
+                <section anchor="blending_smtp_plain" title="PLAIN Blending">
+                	<t>FIXME</t>
+                </section>
+                <section anchor="blending_smtp_f5" title="F5 Blending">
+                	<t>FIXME</t>
+                </section>
             </section>
-            <section anchor="blending_xmmp" title="Blending into an XMPP layer">
+            <section anchor="blending_xmpp" title="Blending into an XMPP layer">
                 <t>For interoperability this layer SHOULD be implemented</t>
             </section>
         </section>
@@ -313,8 +363,11 @@
 
     <back>
         <references title="Normative References">
-            <!--?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"?-->
-            &RFC2119;
+            
+        	<xi:include href='http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml'/>
+            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"?>
+            
+            <!--&RFC2119;-->
 
             <reference anchor="CCITT.X208.1988">
                 <front>
@@ -337,14 +390,14 @@
                 </front>
                 <seriesInfo name="CCITT Recommendation" value="X.680"/>
             </reference>
-
+            
         </references>
-
+        
         <references title="Informative References">
-
-            &RFC6120;
-            &RFC5321;
-
+            
+            <!--&RFC6120;
+            &RFC5321;-->
+            
             <reference anchor="MessageVortexAnalysis" target="https://www.gwerder.net/phd/phd/doc/messageVortex.pdf">
                 <front>
                     <title>MessageVortex</title>
