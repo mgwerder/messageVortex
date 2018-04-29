@@ -317,17 +317,25 @@
             </t>
             <t>The following sections describe the blending mechanism. There are currently two blending layers specified. One layer specification for the simple mail transfer protocol (SMTP; See <xref target="RFC5321">RFC 5321</xref>) and one for the Extensible Messaging and Presence Protocol (XMPP; See <xref target="RFC6120">RFC6120</xref>).
             </t>
-            <section anchor="blending_smtp" title="Blending into an SMTP layer">
-                <t>There are two types of blending supported when using SMTP
+            <section anchor="blending_general" title="Blending in Attachments">
+                <t>
+                    There are two types of blending supported when using attachments.
                     <list style="symbols">
                         <t>Plain binary encoding with offset (PLAIN)</t>
                         <t>Embedding with F5 in image (F5)</t>
                     </list>
                 </t>
-                
-                <t>
+                 <t>
                 	For interoperability PLAIN blending MUST be supported. Blending using F5 MAY be supported.
                 </t>
+                <section anchor="blending_general_plain" title="PLAIN embedding into attachments">
+                    <t>FIXME</t>
+                </section>
+                <section anchor="blending_general_F5" title="F5 embedding into attachments">
+                    <t>FIXME</t>
+                </section>
+            </section>
+            <section anchor="blending_smtp" title="Blending into an SMTP layer">
                 <t>
                     Email messages containig messages must be encoded with Multipurpose Internet Mail extensions (MIME) as specified in <xref target="RFC2045">RFC 2045</xref>. Encoding mechanism BASE64 MUST be supported. All sections of an email are tested for the presence of a Vortex message. 
                 </t>
@@ -342,7 +350,12 @@
                 </section>
             </section>
             <section anchor="blending_xmpp" title="Blending into an XMPP layer">
-                <t>For interoperability this layer SHOULD be implemented</t>
+                <t>For interoperability this layer SHOULD be implemented.</t>
+                <t>
+                  Blending into XMPP traffic is done using the <xref target="XEP-0234"/> extension of the XMPP protocol.
+                </t>  
+                <t>
+                    All rules for embedding within the protocol may be taken from the general section.
             </section>
         </section>
 
@@ -390,7 +403,7 @@
         </section>
 
         <section anchor="accounting" title="Accounting">
-            <section anchor="accounting_create_identity" title="Ephemeral identity creation">
+            <section anchor="accounting_create_identity" title="Ephemeral Identity Creation">
                 <t>The accounting layer has two major kinds of operations:
                     <list style="symbols">
                         <t>Time based operations (cleanup jobs and initiation of routing)</t>
@@ -399,7 +412,16 @@
 
                     Implementations MUST provide sufficient locking mechanisms to guarantee integrity of accounting information and workspace at any time.
                 </t>
-                <section anchor="accounting_timed" title="">
+                <section anchor="accounting_timed" title="Time Based Garbage Collection">
+                    <t>FIXME</t>
+                </section>
+                <section anchor="accounting_timed" title="Time Based Routing Initiation">
+                    <t>FIXME</t>
+                </section>
+                <section anchor="accounting_timed" title="Routing Based Quota Updates">
+                    <t>FIXME</t>
+                </section>
+                <section anchor="accounting_timed" title="Routing Based Authorization">
                     <t>FIXME</t>
                 </section>
             </section>
@@ -427,14 +449,17 @@
                     <t>Anonymity
                         <list style="symbols">
                             <t>3rd party anonymity</t>
-                            <t>3rd party anonymity</t>
+                            <t>sender anonymity</t>
+                            <t>receiver anonymity</t>
                         </list>
                     </t>
                 </list>
 
                 All these factors are affected by the usage of the protocol. The following sections provide a list of factors affecting the primary goals.
             </t>
-
+            <t>
+                Protocol does not rely on any encryption on the transport layer. Vortex messages are already encrypted. 
+            </t>
         </section>
     </middle>
 
@@ -442,11 +467,8 @@
 
     <back>
         <references title="Normative References">
-            
         	<?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"?>
             
-            <!--&RFC2119;-->
-
             <reference anchor="CCITT.X208.1988">
                 <front>
                     <title>Specification of Abstract Syntax Notation One (ASN.1)</title>
@@ -473,24 +495,32 @@
         
         <references title="Informative References">
             
+            <!-- MIME -->
         	<?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2045.xml"?>
-
+        	<!-- IRC -->
+        	<?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2802.xml"?>
+        	<!-- XMPP -->
         	<?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.6120.xml"?>
+        	<!-- SMTP -->
         	<?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.5321.xml"?>
-            <!--&RFC6120;
-            &RFC5321;-->
-
+        	
+            <reference anchor="XEP-0234">
+                <front>
+                    <title>XEP-0234: Jingle File Transfer</title>
+                    <author surname="Peter" initials="S.A"/>
+                    <author surname="Stout" initials="L"/>
+                </front>
+                <date year="2017" month="08" day="24"/>
+            </reference>
             
             <reference anchor="MessageVortexAnalysis" target="https://www.gwerder.net/phd/phd/doc/messageVortex.pdf">
                 <front>
                     <title>MessageVortex</title>
-                    <author initials="M" surname="Gwerder">
-                        <organization></organization>
-                    </author>
+                    <author initials="M" surname="Gwerder"/>
                     <date year="2018" />
                 </front>
             </reference>
-
+            
             <reference anchor="KAnon">
                 <front>
                     <title>k-Anonymous Message Transmission</title>
