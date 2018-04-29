@@ -83,9 +83,9 @@
             <section title="Requirements Language">
                 <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in <xref target="RFC2119">RFC 2119</xref>.</t>
             </section>
-            
+
             <section title="Protocol Specification">
-            	<t>The protocol is specified as in <xref target="asn_one"/> in ASN.1 (see <xref target="CCITT.X680.2002"/> and <xref target="CCITT.X208.1988"/>). The blocks are if not otherwise mentioned DER encoded.</t> 
+            	<t>The protocol is specified as in <xref target="asn_one"/> in ASN.1 (see <xref target="CCITT.X680.2002"/> and <xref target="CCITT.X208.1988"/>). The blocks are if not otherwise mentioned DER encoded.</t>
             </section>
         </section>
 
@@ -103,7 +103,7 @@
         	   </t>
         	   <section anchor="etities_node_identity" title="Identity Keys">
         	       <t>
-        	           Every participant of the network has a asymmetric key. These keys SHOULD be either EC keys with a minimum length of 384 bits or RSA keys with a minimum length of 2048 bits. 
+        	           Every participant of the network has a asymmetric key. These keys SHOULD be either EC keys with a minimum length of 384 bits or RSA keys with a minimum length of 2048 bits.
         	       </t>
         	       <t>
         	           The public key needs to be known by all parties writing to or through that node.
@@ -115,7 +115,7 @@
         	       </t>
         	       <t>
         	           A peer key is included in the identity block of a Vortex message and in the building instructions for a Vortex message.
-        	       </t>    
+        	       </t>
         	   </section>
         	   <section anchor="etities_keys_sender" title="Sender Key">
         	       <t>
@@ -237,11 +237,11 @@
                 </t>
 	        </section>
         </section>
-        
+
         <section title="General notes">
             <t>
                 The  MessageVortex protocol is modular built. It allows to use different encryption algorithms. For good operation a Vortex node SHOULD always support at least two completely different types of algorithms, paddings, or modes.
-            </t>    
+            </t>
             <section title="Supported Symmetric Ciphres">
                 <t>
                     The following symmetric ciphres MUST be supported by a node:
@@ -337,7 +337,7 @@
             </section>
             <section anchor="blending_smtp" title="Blending into an SMTP layer">
                 <t>
-                    Email messages containig messages must be encoded with Multipurpose Internet Mail extensions (MIME) as specified in <xref target="RFC2045">RFC 2045</xref>. Encoding mechanism BASE64 MUST be supported. All sections of an email are tested for the presence of a Vortex message. 
+                    Email messages containig messages must be encoded with Multipurpose Internet Mail extensions (MIME) as specified in <xref target="RFC2045">RFC 2045</xref>. Encoding mechanism BASE64 MUST be supported. All sections of an email are tested for the presence of a Vortex message.
                 </t>
                 <t>
                     A vortex message is present if a block containing the peer key at the known offset of any MIME part decodes correctly.
@@ -353,9 +353,11 @@
                 <t>For interoperability this layer SHOULD be implemented.</t>
                 <t>
                   Blending into XMPP traffic is done using the <xref target="XEP-0234"/> extension of the XMPP protocol.
-                </t>  
+                </t>
                 <t>
                     All rules for embedding within the protocol may be taken from the general section.
+                </t>
+
             </section>
         </section>
 
@@ -412,16 +414,16 @@
 
                     Implementations MUST provide sufficient locking mechanisms to guarantee integrity of accounting information and workspace at any time.
                 </t>
-                <section anchor="accounting_timed" title="Time Based Garbage Collection">
+                <section anchor="accounting_timed_gc" title="Time Based Garbage Collection">
                     <t>FIXME</t>
                 </section>
-                <section anchor="accounting_timed" title="Time Based Routing Initiation">
+                <section anchor="accounting_timed_routing" title="Time Based Routing Initiation">
                     <t>FIXME</t>
                 </section>
-                <section anchor="accounting_timed" title="Routing Based Quota Updates">
+                <section anchor="accounting_timed_quota" title="Routing Based Quota Updates">
                     <t>FIXME</t>
                 </section>
-                <section anchor="accounting_timed" title="Routing Based Authorization">
+                <section anchor="accounting_routhing_auth" title="Routing Based Authorization">
                     <t>FIXME</t>
                 </section>
             </section>
@@ -458,7 +460,7 @@
                 All these factors are affected by the usage of the protocol. The following sections provide a list of factors affecting the primary goals.
             </t>
             <t>
-                Protocol does not rely on any encryption on the transport layer. Vortex messages are already encrypted. 
+                Protocol does not rely on any encryption on the transport layer. Vortex messages are already encrypted.
             </t>
         </section>
     </middle>
@@ -468,7 +470,7 @@
     <back>
         <references title="Normative References">
         	<?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"?>
-            
+
             <reference anchor="CCITT.X208.1988">
                 <front>
                     <title>Specification of Abstract Syntax Notation One (ASN.1)</title>
@@ -490,11 +492,11 @@
                 </front>
                 <seriesInfo name="CCITT Recommendation" value="X.680"/>
             </reference>
-            
+
         </references>
-        
+
         <references title="Informative References">
-            
+
             <!-- MIME -->
         	<?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2045.xml"?>
         	<!-- IRC -->
@@ -503,16 +505,16 @@
         	<?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.6120.xml"?>
         	<!-- SMTP -->
         	<?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.5321.xml"?>
-        	
+
             <reference anchor="XEP-0234">
                 <front>
                     <title>XEP-0234: Jingle File Transfer</title>
                     <author surname="Peter" initials="S.A"/>
                     <author surname="Stout" initials="L"/>
+                    <date year="2017" month="08" day="24"/>
                 </front>
-                <date year="2017" month="08" day="24"/>
             </reference>
-            
+
             <reference anchor="MessageVortexAnalysis" target="https://www.gwerder.net/phd/phd/doc/messageVortex.pdf">
                 <front>
                     <title>MessageVortex</title>
@@ -520,7 +522,7 @@
                     <date year="2018" />
                 </front>
             </reference>
-            
+
             <reference anchor="KAnon">
                 <front>
                     <title>k-Anonymous Message Transmission</title>
