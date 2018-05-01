@@ -620,15 +620,15 @@
 -- FIXME ADAPT NeoScrypt
 
 -- encryption: as specified in the key. If not specified default mode is
--- ECB and
--- default padding is PKCS1Padding
+-- ECB and default padding is PKCS1Padding
 
 -- States: Tuple()=Value() [vallidity; allowed operations] {Store}
 -- - Tuple(identity)=Value(messageQuota,transferQuota,sequence of
 --   Routingblocks for Error Message Routing) [validity; Requested at
 --   creation; may be extended upon request] {identityStore}
 -- - Tuple(Identity,Serial)=maxReplays ['valid' from Identity Block;
---   from First Identity Block; may only be reduced] {IdentityReplayStore}
+--   from First Identity Block; may only be reduced]
+--   {IdentityReplayStore}
 
 MessageBlocks DEFINITIONS EXPLICIT TAGS ::=
 BEGIN
@@ -742,8 +742,10 @@ BEGIN
     identitySignature OCTET STRING,
     -- contains routing information (next hop) for the payloads
     routing     CHOICE {
-      plain     [11031] SEQUENCE (SIZE (1..maxRoutingBlocks)) OF RoutingBlock ,
-      encyrpted [11032] OCTET STRING -- contains encrypted routing block
+      plain     [11031] SEQUENCE (SIZE (1..maxRoutingBlocks))
+                        OF RoutingBlock ,
+      -- contains encrypted routing block
+      encyrpted [11032] OCTET STRING
     },
     -- contains the actual payload
     payload     SEQUENCE (SIZE (0..maxPayloadBlocks)) OF PayloadChunk
@@ -823,8 +825,8 @@ BEGIN
   AbsoluteSizeBlock ::= SEQUENCE {
     fromAbsolute        INTEGER (0..maxChunkSize),
     toAbsolute          INTEGER (minChunkSize..maxChunkSize)
-    -- negative toAbsolute denominates end in absolute value specified from
-    -- the end of block
+    -- negative toAbsolute denominates end in absolute value specified
+    -- from the end of block
   }
 
   SizeBlock ::= SEQUENCE{
@@ -838,7 +840,8 @@ BEGIN
     inputId            [16000] INTEGER (0..maxID),
     dataStripes        [16001] INTEGER (1..254),
     redundancy         [16002] INTEGER (1..254),
-    keys               [16003] SEQUENCE (SIZE (2..512)) OF SymmetricKey,
+    keys               [16003] SEQUENCE (SIZE (2..512))
+                               OF SymmetricKey,
     outputId           [16004] INTEGER (1..maxID),
     gfSize             [16005] INTEGER (2..maxGFSize)
   }
@@ -847,7 +850,8 @@ BEGIN
     inputId            [16000] INTEGER (0..maxID),
     dataStripes        [16001] INTEGER (1..254),
     redundancy         [16002] INTEGER (1..254),
-    keys               [16003] SEQUENCE (SIZE (2..512)) OF SymmetricKey,
+    keys               [16003] SEQUENCE (SIZE (2..512))
+                               OF SymmetricKey,
     outputId           [16004] INTEGER (1..maxID),
     gfSize             [16005] INTEGER (2..maxGFSize)
   }
@@ -913,7 +917,8 @@ BEGIN
     identity            [1001] AsymmetricKey OPTIONAL,
     -- if ommited own identity key
     nodeAddress         [1002] NodeSpec      OPTIONAL,
-    -- Contains the identity of the owning node; May be ommited if local node
+    -- Contains the identity of the owning node;
+    -- May be ommited if local node
     nodeKey             [1003] SEQUENCE OF AsymmetricKey OPTIONAL,
     routingBlocks       [1004] SEQUENCE OF RoutingBlock OPTIONAL,
     replayStore         [1005] IdentityReplayStore,
@@ -1019,7 +1024,7 @@ BEGIN
     ok                          (2000),
     transferQuotaStatus         (2101),
     messageQuotaStatus          (2102),
-	puzleRequired               (2201),
+    puzleRequired               (2201),
 
     -- protocol usage failures
     transferQuotaExceeded       (3001),
@@ -1145,7 +1150,7 @@ BEGIN
   -- Symmetric key
   SymmetricKey ::= SEQUENCE {
     keyType SymmetricAlgorithmIdentifier,
-	parameter AlgorithmParameters,
+    parameter AlgorithmParameters,
     key     OCTET STRING (SIZE(1..512))
   }
 
@@ -1157,6 +1162,7 @@ BEGIN
   }
 
 END
+
                 ]]></artwork>
             </figure>
         </section>
