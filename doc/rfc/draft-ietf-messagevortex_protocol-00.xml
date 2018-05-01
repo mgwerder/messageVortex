@@ -240,7 +240,26 @@
 
         <section title="Vortex Message">
             <section title="Overview">
-                <t>FIXME</t>
+                <t>
+                    <xref target="fig_message_overview"/> shows a Vortex message. The enclosed sections denote encrypted blocks. The three to four letter abreviations denote the key required for decryption. The abreviation k_h stands for the asymmetic host key. sk_s is the symmetric sender key which is obtained by decrypting the block immediately following the padding. The Header and routing blocks are protected by the sender key. This key makes sure that the node assembling the message has no knowledge about all upcomming identities, operations and requests. The peer key protects the message including structure from any third party observer.
+                    <figure align="center" anchor="fig_message_overview" title="Vortex message overview">
+                        <artwork align="center"><![CDATA[
++-+---+-+-+---+-+---+-+-+---+-+-+---+-+-------+-+
+| |   | | |   | |   | | |   | | | R | |       | |
+| |   | | |   | |   | | | H | | | o | |       | |
+| |   | | | P | |   | | | e | | | u | |   P   | |
+| | P | | | A | | s | | | a | | | t | |   a   | |
+| | R | | | D | | k | | | d | | | i | |   y   | |
+| | E | | | D | | _ | | | e | | | n | |   l   | |
+| | F | | | I | | s | | | r | | | g | |   o   | |
+| | I | | | N | +---+ | |___| | |___| |   a   | |
+| | X | | | G |  k_h  | sk_s  | sk_s  |   d   | |
+| |___| | |___|_______|_______|_______|_______| |
+|  k_h  |                  sk_p                 |
+|_______|_______________________________________|
+                        ]]></artwork>
+                    </figure>
+                </t>
             </section>
             <section title="Prefix Block">
                 <t>FIXME</t>
