@@ -85,7 +85,7 @@
             </section>
 
             <section title="Protocol Specification">
-            	<t>The protocol is specified as in <xref target="asn_one"/> in ASN.1 (see <xref target="CCITT.X680.2002"/> and <xref target="CCITT.X208.1988"/>). The blocks are if not otherwise mentioned DER encoded.</t>
+                <t>The protocol is specified as in <xref target="asn_one"/> in ASN.1 (see <xref target="CCITT.X680.2002"/> and <xref target="CCITT.X208.1988"/>). The blocks are if not otherwise mentioned DER encoded.</t>
             </section>
         </section>
 
@@ -96,36 +96,36 @@
             </section>
             <section anchor="entities_peer" title="Peer Partner">
                 <t>We use the term 'peer partner' as two or more message sending or receiving entities. One of these peer partners is the sends a message and all other peer partner do receive a message. Peer partners are message specific. Every peer partner is connected to a node.</t>
-        	</section>
-        	<section anchor="entities_keys" title="Encryption keys">
-        	   <t>
-        	       There are several keys required for a Vortex message. Some of them are used as an Identity and some are message specific.
-        	   </t>
-        	   <section anchor="etities_node_identity" title="Identity Keys">
-        	       <t>
-        	           Every participant of the network has a asymmetric key. These keys SHOULD be either EC keys with a minimum length of 384 bits or RSA keys with a minimum length of 2048 bits.
-        	       </t>
-        	       <t>
-        	           The public key needs to be known by all parties writing to or through that node.
-        	       </t>
-        	   </section>
-        	   <section anchor="etities_keys_peer" title="Peer Key">
-        	       <t>
-        	           Peer keys are symetrical keys transmitted with a Vortex message. Peer keys are always known to two nodes sending directly messages to each other and to the creator of the routing block.
-        	       </t>
-        	       <t>
-        	           A peer key is included in the identity block of a Vortex message and in the building instructions for a Vortex message.
-        	       </t>
-        	   </section>
-        	   <section anchor="etities_keys_sender" title="Sender Key">
-        	       <t>
-        	           The sender key is a symmetrical key protecting the identity block of a Vortex message. It is encrypted with the receiving peer key and prefixed to the identity block. This key decouples further identiity and processing information from the previous key.
-        	       </t>
-        	       <t>
-        	           A sender key is known to exactly one peer of a Vortex message and the creator of the routing block.
-        	       </t>
-        	   </section>
-        	</section>
+            </section>
+            <section anchor="entities_keys" title="Encryption keys">
+               <t>
+                   There are several keys required for a Vortex message. Some of them are used as an Identity and some are message specific.
+               </t>
+               <section anchor="etities_node_identity" title="Identity Keys">
+                   <t>
+                       Every participant of the network has a asymmetric key. These keys SHOULD be either EC keys with a minimum length of 384 bits or RSA keys with a minimum length of 2048 bits.
+                   </t>
+                   <t>
+                       The public key needs to be known by all parties writing to or through that node.
+                   </t>
+               </section>
+               <section anchor="etities_keys_peer" title="Peer Key">
+                   <t>
+                       Peer keys are symetrical keys transmitted with a Vortex message. Peer keys are always known to two nodes sending directly messages to each other and to the creator of the routing block.
+                   </t>
+                   <t>
+                       A peer key is included in the identity block of a Vortex message and in the building instructions for a Vortex message.
+                   </t>
+               </section>
+               <section anchor="etities_keys_sender" title="Sender Key">
+                   <t>
+                       The sender key is a symmetrical key protecting the identity block of a Vortex message. It is encrypted with the receiving peer key and prefixed to the identity block. This key decouples further identiity and processing information from the previous key.
+                   </t>
+                   <t>
+                       A sender key is known to exactly one peer of a Vortex message and the creator of the routing block.
+                   </t>
+               </section>
+            </section>
             <section anchor="entities_vortex_message" title="Vortex Message">
                 <t>
                     We use the term 'Vortex message' for a single transmission between two routing layers. A 'blended Vortex message' describes a Vortex message which has been adapted to the transport layer by the blending layer (see <xref target="layer_overview"/>).
@@ -217,25 +217,45 @@
                ]]></artwork>
             </figure>
 
-	        <t>
+            <t>
                 Every participating node MUST implement the layers 'Blending', 'Routing', and 'Accounting'.  There MUST be at least one incomming and one outgoing transport layer available to a node. All blending layers SHOULD be connected to respective Transport layers for sending and receiving packets.
             </t>
 
             <section anchor="layer_overview_transport" title="Transport Layer">
-	            <t>The transport layer embedds the blended MessageVortex packets into the data stream of the existing transport layer protocol.</t>
+                <t>The transport layer embedds the blended MessageVortex packets into the data stream of the existing transport layer protocol.</t>
                 <t>The transport layer infrastructure SHOULD NOT be specific to anonymous communication and should contain significant parts of non-MessageVortex traffic.</t>
-	        </section>
+            </section>
 
             <section anchor="layer_overview_blending" title="Blending Layer">
-	            <t>The blending layer embedds MessageVortex packets into the transport layer data stream and extracts MessageVortex packets from the transport layer.</t>
-	        </section>
-	        <section anchor="layer_overview_routing" title="Routing Layer">
-	            <t>The Routing Layer expands information contained in MessageVortex packets, processes them, and passes generated  packets to the respective Blending Layer.</t>
-	        </section>
-	        <section anchor="layer_overview_accounting" title="Accounting Layer">
-	            <t>The accounting layer keeps track of all ephemeral identities authorized to use a MessageVortex node. Especially it verifies the available quotas to an ephemeral identity.
+                <t>The blending layer embedds MessageVortex packets into the transport layer data stream and extracts MessageVortex packets from the transport layer.</t>
+            </section>
+            <section anchor="layer_overview_routing" title="Routing Layer">
+                <t>The Routing Layer expands information contained in MessageVortex packets, processes them, and passes generated  packets to the respective Blending Layer.</t>
+            </section>
+            <section anchor="layer_overview_accounting" title="Accounting Layer">
+                <t>The accounting layer keeps track of all ephemeral identities authorized to use a MessageVortex node. Especially it verifies the available quotas to an ephemeral identity.
                 </t>
-	        </section>
+            </section>
+        </section>
+        
+        <section title="Vortex Message">
+            <section title="Overview">
+                <t>FIXME</t>
+            </section>
+            <section title="Prefix Block">
+                <t>FIXME</t>
+            </section>
+            <section title="Inner Message Block">
+                <section title="Header Block">
+                    <t>FIXME</t>
+                </section>
+                <section title="Routing Block">
+                    <t>FIXME</t>
+                </section>
+                <section title="Payload Block">
+                    <t>FIXME</t>
+                </section>
+            </section>
         </section>
 
         <section title="General notes">
@@ -313,7 +333,7 @@
         </section>
 
         <section anchor="blending" title="Blending">
-            <t>Each node supports a fixed set of belnding capabilities. They may be different for incomming and outgoing messages.
+            <t>Each node supports a fixed set of blending capabilities. They may be different for incomming and outgoing messages.
             </t>
             <t>
                 The following sections describe the blending mechanism. There are currently two blending layers specified. One layer specification for the simple mail transfer protocol (SMTP; See <xref target="RFC5321">RFC 5321</xref>) and one for the Extensible Messaging and Presence Protocol (XMPP; See <xref target="RFC6120">RFC6120</xref>).
@@ -327,7 +347,7 @@
                     </list>
                 </t>
                  <t>
-                	For interoperability PLAIN blending MUST be supported. Blending using F5 MAY be supported.
+                    For interoperability PLAIN blending MUST be supported. Blending using F5 MAY be supported.
                 </t>
                 <section anchor="blending_general_plain" title="PLAIN embedding into attachments">
                     <t>
@@ -351,7 +371,7 @@
                     A vortex message is present if a block containing the peer key at the known offset of any MIME part decodes correctly.
                 </t>
                 <t>
-                    In order to work properly when blending protocols for sending and receiving SHOULD be supported. For sending SMTP as specified in <xref target="RFC5321">RFC 5321</xref> must be used. TLS protection as specified in <xref  target="RFC3207">RFC 3207</xref> SHOULD be applied. For obtaining any messages protocols such as POP3 (as specified in <xref target="RFC1939">RFC3501</xref> and <xref target="RFC2595">RFC 2595</xref>) or IMAP (as specified in <xref target="RFC3501">RFC3501</xref>) SHOULD be always secured by TLS layers.
+                    In order to work properly when blending protocols for sending and receiving SHOULD be supported. For sending SMTP as specified in <xref target="RFC5321">RFC&nbsp;5321</xref> must be used. TLS protection as specified in <xref  target="RFC3207">RFC&nbsp;3207</xref> SHOULD be applied. For obtaining any messages protocols such as POP3 (as specified in <xref target="RFC1939">RFC&nbsp;1939</xref> and <xref target="RFC2595">RFC&nbsp;2595</xref>) or IMAP (as specified in <xref target="RFC3501">RFC&nbsp;3501</xref>) SHOULD be always secured by TLS layers.
                 </t>
             </section>
             <section anchor="blending_xmpp" title="Blending into an XMPP layer">
@@ -479,19 +499,23 @@
                 The two layers routing and accounting have the deepest insight into a Vortex message's inner working. They know the immediate peer sender and the peer recipients of all payload chunks. As decoy traffic is generated by combining chunks and applying redundancy calculations upon them a node may never know whether a malfunction (e.g. when doing a recovery calculation) was intended or not. Therefore a node may not know what traffic was intended to fail or not. It furthermore cannot tell content from decoy traffic apart.
              </t> 
              <t> 
-                A routing block builder should therfore follow the following rules in order not to compromize a Vortex message's anonymity:
+                A routing block builder SHOULD therfore follow the following rules in order not to compromize a Vortex message's anonymity:
                 <list style="symbols">
-                    <t>All operations applied should be credible to be invloved in a message transfer.</t>
+                    <t>All operations applied SHOULD be credible to be invloved in a message transfer.</t>
                     <t>There should be always a sufficient subset of the result of an addRedundancy operation sent to peers in order to allow recovery of the data built.</t>
                     <t>The anonymity set of a message should be sufficiently large in order to witstain legal prosecution of all juridictional entities involved. It has even to witstain if a certain ammount of the anonymity set cooperates.</t>
-                    <t>Encryption and decryption should follow when ever possible the logic. Avoid encrypting a block on a node with one key and decrypting it with a different key on the same or another node.</t>
-                    <t>Distribute traffic peaks uniformly within the whole anonymity set.</t>
-                    <t>A routing block should be used for a limmited  number of messages. If used as a message block for the node itself it should be used only once. If created as a reply block in case of recipient anonymity the block should be used a very limited number of times. A block builder SHOULD use the identity replace header request to update reply blocks on a regular base.</t>
+                    <t>Encryption and decryption SHOULD follow when ever possible the logic. Avoid encrypting a block on a node with one key and decrypting it with a different key on the same or another node.</t>
+                    <t>Traffic peaks SHOULD be uniformly distributed within the whole anonymity set.</t>
+                    <t>A routing block SHOULD be used for a limmited  number of messages. If used as a message block for the node itself it should be used only once. A block builder SHOULD use the identity replace header request to update reply blocks on a regular base. Implementers shold always keep in mind that the same routing block is identifiable as such by many means.</t>
                     <t>A block builder SHOULD always relay on the newest possible research when chosing Cipher types, paddings, and modes in order to stay secure</t>
                 </list>
              </t>
              <t>
-                A peer node may try to exhaust a routers quota by sending multiple times the same block. A block builder should therefore take care that a block may not be resent in the intervall where the previous blocks for the transaction are still valid. This guarantees that replayed blocks will stop at the next peer node. This provides good protection against replay based attacks.</t> 
+                A active adversary can not use other blocks for its own purposes. He may however falsify the result by injecting wrong message chunks or by not sending a message. Such message disruptions may be detected by intentionally routing some information to the routing block builders node. If the Vortex message does not carry the informatin expected the node may safely assume that one of the involved nodes is missbehaving. A block building node MAY calculate reputation for involved nodes over time. A block building node MAY build redundancy paths into a routing block to withstand such malicious nodes.
+            </t>
+            <t>
+                A peer node may try to exhaust a routers quota by sending multiple times the same block. A block builder should therefore take care that a block may not be resent in the intervall where the previous blocks for the transaction are still valid. This guarantees that replayed blocks will stop at the next peer node. This provides good protection against replay based attacks.
+            </t> 
         </section>
     </middle>
 
@@ -500,7 +524,7 @@
     <back>
         <references title="Normative References">
             <!-- Use of words -->
-        	<?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"?>
+            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"?>
 
             <reference anchor="CCITT.X208.1988">
                 <front>
@@ -548,21 +572,21 @@
         <references title="Informative References">
 
             <!-- MIME -->
-        	<?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2045.xml"?>
-        	<!-- IRC -->
-        	<?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2802.xml"?>
-        	<!-- XMPP -->
-        	<?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.6120.xml"?>
-        	<!-- SMTP -->
-        	<?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.5321.xml"?>
-        	<!-- SMTP STARTTLS-->
-        	<?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.3207.xml"?>
-        	<!-- IMAP -->
-        	<?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.3501.xml"?>
-        	<!-- POP3 -->
-        	<?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.1939.xml"?>
-        	<!-- POP3 STARTTLS -->
-        	<?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2595.xml"?>
+            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2045.xml"?>
+            <!-- IRC -->
+            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2802.xml"?>
+            <!-- XMPP -->
+            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.6120.xml"?>
+            <!-- SMTP -->
+            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.5321.xml"?>
+            <!-- SMTP STARTTLS-->
+            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.3207.xml"?>
+            <!-- IMAP -->
+            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.3501.xml"?>
+            <!-- POP3 -->
+            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.1939.xml"?>
+            <!-- POP3 STARTTLS -->
+            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2595.xml"?>
 
             <reference anchor="MessageVortexAnalysis" target="https://www.gwerder.net/phd/phd/doc/messageVortex.pdf">
                 <front>
