@@ -619,11 +619,15 @@
                 <artwork><![CDATA[
 -- FIXME ADAPT NeoScrypt
 
--- encryption: as specified in the key. If not specified default mode is ECB and default padding is PKCS1Padding
+-- encryption: as specified in the key. If not specified default mode is ECB and 
+-- default padding is PKCS1Padding
 
 -- States: Tuple()=Value() [vallidity; allowed operations] {Store}
--- - Tuple(identity)=Value(messageQuota,transferQuota,sequence of Routingblocks for Error Message Routing) [validity; Requested at creation; may be extended upon request] {identityStore}
--- - Tuple(Identity,Serial)=maxReplays ['valid' from Identity Block; from First Identity Block; may only be reduced] {IdentityReplayStore}
+-- - Tuple(identity)=Value(messageQuota,transferQuota,sequence of Routingblocks 
+--   for Error Message Routing) [validity; Requested at creation; may be 
+--   extended upon request] {identityStore}
+-- - Tuple(Identity,Serial)=maxReplays ['valid' from Identity Block; from First 
+--   Identity Block; may only be reduced] {IdentityReplayStore}
 
 MessageBlocks DEFINITIONS EXPLICIT TAGS ::=
 BEGIN
@@ -795,7 +799,8 @@ BEGIN
   -- represents the building and sending process for the next hop
   AssemblyBlock ::= SEQUENCE {
     routingBlockIndex    INTEGER (0..maxRoutingBlocks),
-    payloadBlockIndex    SEQUENCE (SIZE (1..maxPayloadBlocks)) OF INTEGER (0..maxID)
+    payloadBlockIndex    SEQUENCE (SIZE (1..maxPayloadBlocks)) 
+                         OF INTEGER (0..maxID)
   }
 
   PayloadOperation ::= CHOICE {
@@ -817,7 +822,8 @@ BEGIN
   AbsoluteSizeBlock ::= SEQUENCE {
     fromAbsolute        INTEGER (0..maxChunkSize),
     toAbsolute          INTEGER (minChunkSize..maxChunkSize)
-    -- negative toAbsolute denominates end in absolute value specified from the end of block
+    -- negative toAbsolute denominates end in absolute value specified from 
+    -- the end of block
   }
 
   SizeBlock ::= SEQUENCE{
@@ -902,9 +908,12 @@ BEGIN
     valid               UsagePeriod,
     messageQuota        INTEGER (0..maxMessageQuota),
     transferQuota       INTEGER (0..maxTransferQuota),
-    identity            [1001] AsymmetricKey OPTIONAL,    -- if omitted this is a node identity
-    nodeAddress         [1002] NodeSpec      OPTIONAL,    -- if ommited own identity key
-    nodeKey             [1003] SEQUENCE OF AsymmetricKey OPTIONAL,    -- Contains the identity of the owning node; May be ommited if local node
+    -- if omitted this is a node identity
+    identity            [1001] AsymmetricKey OPTIONAL,    
+    -- if ommited own identity key
+    nodeAddress         [1002] NodeSpec      OPTIONAL,    
+    -- Contains the identity of the owning node; May be ommited if local node
+    nodeKey             [1003] SEQUENCE OF AsymmetricKey OPTIONAL,    
     routingBlocks       [1004] SEQUENCE OF RoutingBlock OPTIONAL,
     replayStore         [1005] IdentityReplayStore,
     puzzle              [1006] ReplyPuzzleRequired OPTIONAL
@@ -915,7 +924,8 @@ BEGIN
   BlendingSpec ::= SEQUENCE {
     target            NodeSpec,
     blendingType      UTF8String,
-    parameter         SEQUENCE ( SIZE (0..maxNumberOfParameter) ) OF BlendingParameter
+    parameter         SEQUENCE ( SIZE (0..maxNumberOfParameter) ) 
+                      OF BlendingParameter
   }
 
   BlendingParameter ::= CHOICE {
@@ -951,7 +961,8 @@ BEGIN
   }
 
   ReplyPuzzleRequired ::= SEQUENCE {
-    challenge     BIT STRING, -- bit sequence at beginning of hash from encrypted identity block
+    -- bit sequence at beginning of hash from encrypted identity block
+    challenge     BIT STRING, 
     hash          MacAlgorithmIdentifier,
     valid         UsagePeriod,
     identifier    INTEGER (0..4294967295)
@@ -1083,7 +1094,8 @@ BEGIN
   }
 
   CipherMode ::= ENUMERATED {
-    ecb             (10000), -- ECB is a bad choice. Do not use unless really necessary
+    -- ECB is a really bad choice. Do not use unless really necessary
+    ecb             (10000), 
     cbc             (10001),
     eax             (10002),
     ctr             (10003),
@@ -1144,7 +1156,7 @@ BEGIN
   }
 
 END
-               ]]></artwork>
+                ]]></artwork>
             </figure>
         </section>
         <!-- Change Log
