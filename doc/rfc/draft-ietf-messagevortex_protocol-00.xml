@@ -615,7 +615,537 @@
         </references>
 
         <section anchor="asn_one" title="The ASN.1 schema for Vortex messages">
-            <t>This becomes an Appendix.</t>
+            <figure align="left" anchor="app_asnOne">
+                <artwork><![CDATA[
+-- FIXME ADAPT NeoScrypt
+
+-- encryption: as specified in the key. If not specified default mode is ECB and default padding is PKCS1Padding
+
+-- States: Tuple()=Value() [vallidity; allowed operations] {Store}
+-- - Tuple(identity)=Value(messageQuota,transferQuota,sequence of Routingblocks for Error Message Routing) [validity; Requested at creation; may be extended upon request] {identityStore}
+-- - Tuple(Identity,Serial)=maxReplays ['valid' from Identity Block; from First Identity Block; may only be reduced] {IdentityReplayStore}
+
+MessageBlocks DEFINITIONS EXPLICIT TAGS ::=
+BEGIN
+  ------------------------------------------------------------------
+  -- Constant definitions
+  ------------------------------------------------------------------
+  -- maximum serial number
+  maxSerial                 INTEGER ::= 4294967295
+  -- maximum size of a message chunk
+  maxChunkSize              INTEGER ::= 4294967295
+  -- minimum size of a message chunk (should be -maxChunkSize)
+  minChunkSize              INTEGER ::= -maxChunkSize
+  -- maximum size of transfer quota in bytes of an identity
+  maxTransferQuota          INTEGER ::= 4294967295
+  -- maximum size of message quota in messages of an identity
+  maxMessageQuota           INTEGER ::= 4294967295
+  -- maximum number a block may be replayed
+  maxNumberOfReplays        INTEGER ::= 127
+  -- maximum number of administrative requests
+  maxNumberOfRequests       INTEGER ::= 8
+  -- maximum number of seconds which the message might be delayed in
+  -- the local queue (starting from startOffset)
+  maxDurationOfProcessing   INTEGER ::= 86400
+  -- maximum id of an operation
+  maxID                     INTEGER ::= 32767
+  -- maximum number of routing blocks in a message
+  maxRoutingBlocks          INTEGER ::= 127
+  -- maximum number of payload blocks in a message
+  maxPayloadBlocks          INTEGER ::= 127
+  -- maximum number of seconds a proof of non revocation may be old
+  maxTimeCachedProof        INTEGER ::= 86400
+  -- maximum omega of the Galois field used
+  maxGFSize                 INTEGER ::= 16
+  -- the maximum number of parameters that might be embedded
+  maxNumberOfParameter      INTEGER ::= 127
+
+  ------------------------------------------------------------------
+  -- Block Definitions
+  ------------------------------------------------------------------
+  RoutingBlock ::= SEQUENCE {
+    -- contains the next recipient in sequence
+    recipient BlendingSpec,
+    -- contains the period when the payload should be processed
+    -- Router might refuse to long queue retention
+    -- Recommended support for retention >=1h
+    minProcessTime INTEGER (0..maxDurationOfProcessing),
+    maxProcessTime INTEGER (0..maxDurationOfProcessing),
+    -- contains the prefix to be used
+    identityPrefix    CHOICE {
+      -- debug/internal use only
+      plain             [331] SEQUENCE (SIZE (0..maxRoutingBlocks))
+                              OF PrefixBlock,
+      encrypted         [332] SEQUENCE (SIZE (0..maxRoutingBlocks))
+                              OF OCTET STRING
+    },
+    -- contains the idenity block to be used with this block
+    identity            CHOICE{
+      -- debug/internal use only
+      plain            [335] IdentityBlock,
+      encrypted        [336] OCTET STRING
+    },
+    -- contains the routing block to be used with this block
+    routingPrefix    CHOICE {
+      -- debug/internal use only
+      plain             [331] SEQUENCE (SIZE (0..maxRoutingBlocks))
+                              OF PrefixBlock,
+      encrypted         [332] SEQUENCE (SIZE (0..maxRoutingBlocks))
+                              OF OCTET STRING
+    },
+    -- routing blocks for the next operation
+    nextHop           CHOICE {
+      plain             [333] SEQUENCE (SIZE (0..maxRoutingBlocks))
+                              OF RoutingBlock,
+      encrypted         [334] SEQUENCE (SIZE (0..maxRoutingBlocks))
+                              OF OCTET STRING
+    },
+    -- contains the secret of the identity block
+    forwardSecret     ChainSecret,
+    -- contains a routing block which may be used when sending
+    -- error messages back to the quota owner
+    -- this routing block may be cached for future use
+    replyBlock [131]   SEQUENCE {
+         murb           RoutingBlock,
+         maxReplay      INTEGER,
+         validity       UsagePeriod
+    } OPTIONAL,
+    -- contains information for building replys (when used as MURB
+    -- ID 1 denotes original message; ID 100-999 denotes target
+    -- message)
+    operations           [132] SEQUENCE (SIZE (0..255))
+                               OF PayloadOperation,
+    assembly             SEQUENCE (SIZE (0..maxRoutingBlocks))
+                         OF AssemblyBlock
+  }
+
+  InnerMessageBlock ::= SEQUENCE {
+    padding   OCTET STRING,
+    prefix    CHOICE {
+        plain           [11011] PrefixBlock,
+        -- contains prefix encrypted with receivers public key
+        encrypted       [11012] OCTET STRING
+    },
+    identity  CHOICE  {
+      -- debug/internal use only
+      plain     [11021] IdentityBlock,
+      -- contains encrypted identity block
+      encyrpted [11022] OCTET STRING
+    },
+    -- contains signature of Identity [as stored in
+    -- identityBlock; signed unencrypted identityBlock without Tag]
+    identitySignature OCTET STRING,
+    -- contains routing information (next hop) for the payloads
+    routing     CHOICE {
+      plain     [11031] SEQUENCE (SIZE (1..maxRoutingBlocks)) OF RoutingBlock ,
+      encyrpted [11032] OCTET STRING -- contains encrypted routing block
+    },
+    -- contains the actual payload
+    payload     SEQUENCE (SIZE (0..maxPayloadBlocks)) OF PayloadChunk
+  }
+
+  -- do not use this for encoding (internal structure only)
+  VortexMessage ::= SEQUENCE {
+    prefix        CHOICE {
+        plain           [10011] PrefixBlock,
+        -- contains prefix encrypted with receivers public key
+        encrypted       [10012] OCTET STRING
+    },
+    innerMessage  CHOICE {
+        plain     [10021] InnerMessageBlock,
+        -- contains inner message encrypted with Symmetric key from
+        -- Prefix
+        encrypted [10022] OCTET STRING
+    }
+  }
+
+  PrefixBlock ::= SEQUENCE {
+    key             SymmetricKey
+  }
+
+  PuzzleIdentifier          ::= OCTET STRING ( SIZE(0..16) )
+
+  IdentityBlock ::= SEQUENCE {
+    -- Public key of the identity representing this transmission
+    identityKey        AsymmetricKey,
+    -- serial identifying this block
+    serial             INTEGER (0..maxSerial),
+    -- number of times this block may be replayed (Tuple is
+    -- identityKey, serial while UsagePeriod of block)
+    maxReplays         INTEGER (0..maxNumberOfReplays),
+    -- subsequent Blocks are not processed before valid time.
+    -- Host may reject too long retention. Recomended validity
+    -- support >=1Mt.
+    valid              UsagePeriod,
+    -- represents the chained secret which has to be found in
+    -- subsequent blocks
+    -- prevents reassembly attack
+    forwardSecret       ChainSecret,
+    --  contains the MAC-Algorithm used for signing
+    hash                MacAlgorithm,
+    -- contains administrative requests such as quota requests
+    requests            SEQUENCE (SIZE (0..maxNumberOfRequests))
+                        OF HeaderRequest ,
+    -- padding and identitifier required to solve the cryptopuzzle
+    identifier  [12201] PuzzleIdentifier OPTIONAL,
+    -- This is for solving crypto puzzles
+    proofOfWork [12202] OCTET STRING OPTIONAL
+  }
+
+  -- represents the building and sending process for the next hop
+  AssemblyBlock ::= SEQUENCE {
+    routingBlockIndex    INTEGER (0..maxRoutingBlocks),
+    payloadBlockIndex    SEQUENCE (SIZE (1..maxPayloadBlocks)) OF INTEGER (0..maxID)
+  }
+
+  PayloadOperation ::= CHOICE {
+    splitPayload    [150] SplitPayloadOperation,
+    mergePayload    [160] MergePayloadOperation,
+    xorSplitPayload [250] XorSplitPayloadOperation,
+    xorMergePayload [260] XorMergePayloadOperation,
+    encryptPayload  [300] EncryptPayloadOperation,
+    decryptPayload  [310] DecryptPayloadOperation,
+    addRedundancy   [400] AddRedundancyOperation,
+    removeRedundancy[410] RemoveRedundancyOperation
+  }
+
+  PercentSizeBlock ::= SEQUENCE {
+    fromPercent         INTEGER (0..100),
+    toPercent           INTEGER (0..100)
+  }
+
+  AbsoluteSizeBlock ::= SEQUENCE {
+    fromAbsolute        INTEGER (0..maxChunkSize),
+    toAbsolute          INTEGER (minChunkSize..maxChunkSize)
+    -- negative toAbsolute denominates end in absolute value specified from the end of block
+  }
+
+  SizeBlock ::= SEQUENCE{
+    size CHOICE {
+      percent     [15001] PercentSizeBlock,
+      absolute    [15101] AbsoluteSizeBlock
+    }
+  }
+
+  AddRedundancyOperation ::= SEQUENCE {
+    inputId            [16000] INTEGER (0..maxID),
+    dataStripes        [16001] INTEGER (1..254),
+    redundancy         [16002] INTEGER (1..254),
+    keys               [16003] SEQUENCE (SIZE (2..512)) OF SymmetricKey,
+    outputId           [16004] INTEGER (1..maxID),
+    gfSize             [16005] INTEGER (2..maxGFSize)
+  }
+
+  RemoveRedundancyOperation ::= SEQUENCE {
+    inputId            [16000] INTEGER (0..maxID),
+    dataStripes        [16001] INTEGER (1..254),
+    redundancy         [16002] INTEGER (1..254),
+    keys               [16003] SEQUENCE (SIZE (2..512)) OF SymmetricKey,
+    outputId           [16004] INTEGER (1..maxID),
+    gfSize             [16005] INTEGER (2..maxGFSize)
+  }
+
+  SplitPayloadOperation ::= SEQUENCE {
+    originalId         INTEGER (0..maxID),
+    firstSize          SizeBlock,
+    newFirstId         INTEGER (1..maxID),
+    newSecondId        INTEGER (1..maxID)
+  }
+
+  MergePayloadOperation ::= SEQUENCE {
+    originalFirstId      INTEGER (0..maxID),
+    originalSecondId     INTEGER (0..maxID),
+    newId                INTEGER (1..maxID)
+  }
+
+  XorMergePayloadOperation ::= SEQUENCE {
+    originalFirstId      INTEGER (0..maxID),
+    originalSecondId     INTEGER (-1..maxID),
+    originalSize         SizeBlock,
+    newId                INTEGER (1..maxID)
+  }
+
+  XorSplitPayloadOperation ::= SEQUENCE {
+    originalId           INTEGER (0..maxID),
+    prngSpec             PRNGAlgorithmIdentifier,
+    newFirstBlockId      INTEGER (1..maxID),
+    newSecondBlockId     INTEGER (1..maxID)
+  }
+
+  EncryptPayloadOperation ::= SEQUENCE {
+    originalId            INTEGER (0..maxID),
+    key                   SymmetricKey,
+    newId                 INTEGER (1..maxID)
+  }
+
+  DecryptPayloadOperation ::= SEQUENCE {
+    originalId            INTEGER (0..maxID),
+    key                   SymmetricKey,
+    newId                 INTEGER (1..maxID)
+  }
+
+  IdentityReplayStore ::= SEQUENCE {
+    replays   SEQUENCE (SIZE (0..4294967295)) OF IdentityReplayBlock
+  }
+
+  IdentityReplayBlock ::= SEQUENCE {
+    identity            AsymmetricKey,
+    valid               UsagePeriod,
+    replaysRemaining  INTEGER (0..4294967295)
+  }
+
+  IdentityStore ::= SEQUENCE {
+    identities SEQUENCE (SIZE (0..4294967295)) OF IdentityStoreBlock
+  }
+
+  IdentityStoreBlock ::= SEQUENCE {
+    valid               UsagePeriod,
+    messageQuota        INTEGER (0..maxMessageQuota),
+    transferQuota       INTEGER (0..maxTransferQuota),
+    identity            [1001] AsymmetricKey OPTIONAL,    -- if omitted this is a node identity
+    nodeAddress         [1002] NodeSpec      OPTIONAL,    -- if ommited own identity key
+    nodeKey             [1003] SEQUENCE OF AsymmetricKey OPTIONAL,    -- Contains the identity of the owning node; May be ommited if local node
+    routingBlocks       [1004] SEQUENCE OF RoutingBlock OPTIONAL,
+    replayStore         [1005] IdentityReplayStore,
+    puzzle              [1006] ReplyPuzzleRequired OPTIONAL
+  }
+
+  -- contains a node spec of a routing point
+  -- At the moment either smtp:<email> or xmpp:<jabber>
+  BlendingSpec ::= SEQUENCE {
+    target            NodeSpec,
+    blendingType      UTF8String,
+    parameter         SEQUENCE ( SIZE (0..maxNumberOfParameter) ) OF BlendingParameter
+  }
+
+  BlendingParameter ::= CHOICE {
+    offset          [1] INTEGER,
+    symmetricKey    [2] SymmetricKey,
+    asymmetricKey   [3] AsymmetricKey,
+    blendingType    [4] UTF8String
+   }
+
+  NodeSpec ::= SEQUENCE {
+    Transportprotocol Protocol,
+    recipientAddress  UTF8String
+  }
+
+  ChainSecret ::= INTEGER (0..4294967295)
+
+  HeaderRequest ::= CHOICE {
+    identity      [0] HeaderRequestIdentity,
+    capabilities  [1] HeaderRequestCapability,
+    messageQuota  [2] HeaderRequestIncreaseMessageQuota,
+    transferQuota [3] HeaderRequestIncreaseTransferQuota,
+    quotaQuery    [4] HeaderRequestQueryQuota
+  }
+
+  ReplyBlock ::= CHOICE {
+    capabilities  [1]  ReplyCapability,
+    puzzle        [2]  ReplyPuzzleRequired,
+    status        [99] StatusBlock
+  }
+
+  HeaderRequestIdentity ::= SEQUENCE {
+    period UsagePeriod
+  }
+
+  ReplyPuzzleRequired ::= SEQUENCE {
+    challenge     BIT STRING, -- bit sequence at beginning of hash from encrypted identity block
+    hash          MacAlgorithmIdentifier,
+    valid         UsagePeriod,
+    identifier    INTEGER (0..4294967295)
+  }
+
+  HeaderRequestQueryQuota ::= SEQUENCE {
+  }
+
+  HeaderRequestIncreaseMessageQuota ::= SEQUENCE {
+    messages INTEGER (0..4294967295)
+  }
+
+  HeaderRequestIncreaseTransferQuota ::= SEQUENCE {
+    size     INTEGER (0..4294967295)
+  }
+
+  HeaderRequestCapability ::= SEQUENCE {
+    period UsagePeriod
+  }
+
+  ReplyCapability ::= SEQUENCE {
+    cipher            SEQUENCE (SIZE (2..256)) OF CipherSpec,
+    maxTransferQuota  INTEGER (0..4294967295),
+    maxMessageQuota   INTEGER (0..4294967295),
+    supportedBlendingIn SEQUENCE OF BlendingSpec
+  }
+
+  CipherSpec ::= SEQUENCE {
+      asymmetric [16001] AsymmetricAlgorithmSpec OPTIONAL,
+      symmetric  [16002] SymmetricAlgorithmSpec OPTIONAL,
+      mac        [16003] MacAlgorithmSpec OPTIONAL,
+      cipherUsage[16004] CipherUsage
+  }
+
+  CipherUsage ::= ENUMERATED {
+    sign     (200),
+    encrypt  (210)
+  }
+
+  Protocol ::= ENUMERATED {
+    smtp  (100),
+    xmmp  (110),
+  }
+
+  StatusBlock ::= SEQUENCE {
+    code            StatusCode,
+    request         HeaderRequest
+  }
+
+  StatusCode ::= ENUMERATED {
+
+    -- System messages
+    ok                          (2000),
+    transferQuotaStatus         (2101),
+    messageQuotaStatus          (2102),
+	puzleRequired               (2201),
+
+    -- protocol usage failures
+    transferQuotaExceeded       (3001),
+    messageQuotaExceeded        (3002),
+    identityUnknown             (3101),
+    messageChunkMissing         (3201),
+    messageLifeExpired          (3202),
+    puzzleUnknown               (3301),
+
+    -- capability errors
+    macAlgorithmUnknown         (3801),
+    symmetricAlgorithmUnknown   (3802),
+    asymmetricAlgorithmUnknown  (3803),
+    prngAlgorithmUnknown        (3804),
+    missingParameters           (3820),
+    badParameters               (3821),
+
+    -- Mayor host specific errors
+    hostError                   (5001),
+    ...
+  }
+
+  PayloadChunk ::= SEQUENCE {
+    id                        INTEGER (0..maxID),
+    payload                   CHOICE {
+      payload                   [100] OCTET STRING,
+      replyBlock                [101] ReplyBlock
+    }
+  }
+
+  UsagePeriod ::= SEQUENCE {
+    notBefore       [0]     GeneralizedTime OPTIONAL,
+    notAfter        [1]     GeneralizedTime OPTIONAL
+  }
+
+  SymmetricAlgorithmSpec  ::=  SEQUENCE  {
+    algorithm               SymmetricAlgorithm,
+    padding                 CipherPadding,
+    mode                    CipherMode,
+    parameter               AlgorithmParameters OPTIONAL
+  }
+
+  AsymmetricAlgorithmSpec  ::=  SEQUENCE  {
+    algorithm               AsymmetricAlgorithm,
+    parameter               AlgorithmParameters OPTIONAL
+  }
+
+  MacAlgorithmSpec  ::=  SEQUENCE  {
+    algorithm               MacAlgorithm,
+    parameter               AlgorithmParameters
+  }
+
+  PRNGAlgorithmSpec ::= SEQUENCE {
+    type                    PRNGType,
+    seed                    OCTET STRING
+  }
+
+  PRNGType ::= ENUMERATED {
+    xsadd           (1000),
+    blumMicali      (1001)
+  }
+
+  SymmetricAlgorithm ::= ENUMERATED {
+    aes128          (1000),  -- required
+    aes192          (1001),  -- optional support
+    aes256          (1002),  -- required
+    camellia128     (1100),  -- required
+    camellia192     (1101),  -- optional support
+    camellia256     (1102),  -- required
+    twofish128      (1200),  -- optional support
+    twofish192      (1201),  -- optional support
+    twofish256      (1202)   -- optional support
+  }
+
+  CipherMode ::= ENUMERATED {
+    ecb             (10000), -- ECB is a bad choice. Do not use unless really necessary
+    cbc             (10001),
+    eax             (10002),
+    ctr             (10003),
+    ccm             (10004),
+    gcm             (10005),
+    ocb             (10006),
+    ofb             (10007),
+    none            (10100)
+  }
+
+  CipherPadding ::= ENUMERATED {
+    pkcs7           (1000),
+    pkcs1           (1001)
+  }
+
+  AsymmetricAlgorithm ::= ENUMERATED {
+    rsa             (2000),
+    dsa             (2100),
+    ec              (2500)
+  }
+
+  MacAlgorithm ::= ENUMERATED {
+    sha256          (3000),
+    sha384          (3001),
+    sha512          (3002),
+    ripemd160       (3100),
+    ripemd256       (3101),
+    ripemd320       (3102)
+  }
+
+  ECCurveType ::= ENUMERATED{
+    secp384r1       (2500),
+    sect409k1       (2501),
+    secp521r1       (2502),
+  }
+
+  AlgorithmParameters ::= SEQUENCE {
+    keySize              [10000] INTEGER (0..65535) OPTIONAL,
+    curveType            [10001] ECCurveType   OPTIONAL,
+    initialisationVector [10002] OCTET STRING  OPTIONAL,
+    nonce                [10003] OCTET STRING  OPTIONAL,
+    mode                 [10004] CipherMode    OPTIONAL,
+    padding              [10005] CipherPadding OPTIONAL
+  }
+
+  -- Symmetric key
+  SymmetricKey ::= SEQUENCE {
+    keyType SymmetricAlgorithmIdentifier,
+	parameter AlgorithmParameters,
+    key     OCTET STRING (SIZE(1..512))
+  }
+
+  -- Asymmetric Key
+  AsymmetricKey ::= SEQUENCE {
+    keyType       AsymmetricAlgorithmIdentifier,
+    publicKey     [2] OCTET STRING,
+    privateKey    [3] OCTET STRING OPTIONAL
+  }
+
+END
+               ]]></artwork>
+            </figure>
         </section>
         <!-- Change Log
 
