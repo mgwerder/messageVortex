@@ -315,7 +315,8 @@
         <section anchor="blending" title="Blending">
             <t>Each node supports a fixed set of belnding capabilities. They may be different for incomming and outgoing messages.
             </t>
-            <t>The following sections describe the blending mechanism. There are currently two blending layers specified. One layer specification for the simple mail transfer protocol (SMTP; See <xref target="RFC5321">RFC 5321</xref>) and one for the Extensible Messaging and Presence Protocol (XMPP; See <xref target="RFC6120">RFC6120</xref>).
+            <t>
+                The following sections describe the blending mechanism. There are currently two blending layers specified. One layer specification for the simple mail transfer protocol (SMTP; See <xref target="RFC5321">RFC 5321</xref>) and one for the Extensible Messaging and Presence Protocol (XMPP; See <xref target="RFC6120">RFC6120</xref>).
             </t>
             <section anchor="blending_general" title="Blending in Attachments">
                 <t>
@@ -329,25 +330,29 @@
                 	For interoperability PLAIN blending MUST be supported. Blending using F5 MAY be supported.
                 </t>
                 <section anchor="blending_general_plain" title="PLAIN embedding into attachments">
-                    <t>FIXME</t>
+                    <t>
+                        Within this document refer to PLAIN blending if a Vortex message is embedded in a carrier file with an offset. An offset of 0 means that the beginning of the payload file is replaced. The routing node MUST choose what payload file is used for the message. A routing node SHOULD use a credible payload type with a high entropy. It furthermore SHOULD prefix a valid header structure to avoid easy detection of the Vortex message. A routing node MAY attach a valid footer to a payload file to improve blending.
+                    </t>
+                    <t>
+                        A node SHOULD offer at least one PLAIN blending method for incomming Vortex messages. A node may offer multiple offsets for incomming Vortex messages.
+                    </t>
                 </section>
                 <section anchor="blending_general_F5" title="F5 embedding into attachments">
-                    <t>FIXME</t>
+                    <t>
+                        Within this document we refer to F5 blending if a Vortex message is blended into a JPEG image according to algorithms specified in <xref target="F5"/>. The password for blending may be publicly known. A routing node may advertize multiple passwords. It should be understood that this blending mechanism adds a tenfold of transfervolume to the message. Only small message chunks SHOULD be blended with F5.
+                    </t>
                 </section>
             </section>
             <section anchor="blending_smtp" title="Blending into an SMTP layer">
                 <t>
-                    Email messages containig messages must be encoded with Multipurpose Internet Mail extensions (MIME) as specified in <xref target="RFC2045">RFC 2045</xref>. Encoding mechanism BASE64 MUST be supported. All sections of an email are tested for the presence of a Vortex message.
+                    Email messages containig messages MUST be encoded with Multipurpose Internet Mail extensions (MIME) as specified in <xref target="RFC2045">RFC 2045</xref>. Encoding mechanism BASE64 MUST be supported. All sections of an email are tested for the presence of a Vortex message.
                 </t>
                 <t>
                     A vortex message is present if a block containing the peer key at the known offset of any MIME part decodes correctly.
                 </t>
-                <section anchor="blending_smtp_plain" title="PLAIN Blending">
-                	<t>FIXME</t>
-                </section>
-                <section anchor="blending_smtp_f5" title="F5 Blending">
-                	<t>FIXME</t>
-                </section>
+                <t>
+                    In order to work properly when blending protocols for sending and receiving SHOULD be supported. For sending SMTP as specified in <xref target="RFC5321">RFC 5321</xref> must be used. TLS protection as specified in <xref target="RFC3207">RFC 3207</txref> SHOULD be applied. For obtaining any messages protocols such as POP3 (as specified in <xref target="RFC1939">RFC3501</xref> and <xref target="RFC2595">RFC 2595</xref>) or IMAP (as specified in <xref target="RFC3501">RFC3501</xref>) SHOULD be always secured by TLS layers.
+                </t>
             </section>
             <section anchor="blending_xmpp" title="Blending into an XMPP layer">
                 <t>For interoperability this layer SHOULD be implemented.</t>
@@ -355,9 +360,8 @@
                   Blending into XMPP traffic is done using the <xref target="XEP-0234"/> extension of the XMPP protocol.
                 </t>
                 <t>
-                    All rules for embedding within the protocol may be taken from the general section.
+                    All rules for embedding within the protocol may be taken from the general section. PLAIN and F5 blending is acceptable for this transport layer.
                 </t>
-
             </section>
         </section>
 
@@ -392,7 +396,7 @@
                 <section anchor="routing_header_req_nodes" title="Request Nodes">
                     <t>FIXME</t>
                 </section>
-                <section anchor="routing_header_req_rb_replace" title="Request Routing Block Replace">
+                <section anchor="routing_header_req_identity_replace" title="Request Identity Replace">
                     <t>FIXME</t>
                 </section>
             </section>
@@ -460,8 +464,34 @@
                 All these factors are affected by the usage of the protocol. The following sections provide a list of factors affecting the primary goals.
             </t>
             <t>
-                Protocol does not rely on any encryption on the transport layer. Vortex messages are already encrypted.
+                The Vortex protocol does not rely on any encryption on the transport layer. Vortex messages are already encrypted. Confidetiality is not affected by protection mechanisms of the transport layer.
             </t>
+            <t>
+                If a transport Layer supports encryption a Vortex node SHOULD use it to improve privacy of the message.
+            </t>
+            <t>
+                Anonymity is affected by the inner workings of the blending layer in many ways. A Vortex message can not be read by anyone exept the peer nodes and the routing block builde, but the presence of a vortex node message may be detected. This may be done either by detecting the typical high entropy of an encrypted file, broken structures of a carrier file, meaningless content of a carrier file, or the contextless communication of the bleding layer with its peer partner. A blending layer SHOULD minimize the possibility of easy detection by minimizing these effects.
+             </t>
+             <t>
+                A blending layer SHOULD use carrier files with high compression or encryption. Carrier files SHOULD NOT have inner structures so that the payload is comparable to valid content. To achieve undetectability by a human reviewer a routing block builder should use F5 blending instead of PLAIN blending.
+             </t>
+             <t>
+                The two layers routing and accounting have the deepest insight into a Vortex message's inner working. They know the immediate peer sender and the peer recipients of all payload chunks. As decoy traffic is generated by combining chunks and applying redundancy calculations upon them a node may never know whether a malfunction (e.g. when doing a recovery calculation) was intended or not. Therefore a node may not know what traffic was intended to fail or not. It furthermore cannot tell content from decoy traffic apart.
+             </t> 
+             <t> 
+                A routing block builder should therfore follow the following rules in order not to compromize a Vortex message's anonymity:
+                <list style="symbols">
+                    <t>All operations applied should be credible to be invloved in a message transfer.</t>
+                    <t>There should be always a sufficient subset of the result of an addRedundancy operation sent to peers in order to allow recovery of the data built.</t>
+                    <t>The anonymity set of a message should be sufficiently large in order to witstain legal prosecution of all juridictional entities involved. It has even to witstain if a certain ammount of the anonymity set cooperates.</t>
+                    <t>Encryption and decryption should follow when ever possible the logic. Avoid encrypting a block on a node with one key and decrypting it with a different key on the same or another node.</t>
+                    <t>Distribute traffic peaks uniformly within the whole anonymity set.</t>
+                    <t>A routing block should be used for a limmited  number of messages. If used as a message block for the node itself it should be used only once. If created as a reply block in case of recipient anonymity the block should be used a very limited number of times. A block builder SHOULD use the identity replace header request to update reply blocks on a regular base.</t>
+                    <t>A block builder SHOULD always relay on the newest possible research when chosing Cipher types, paddings, and modes in order to stay secure</t>
+                </list>
+             </t>
+             <t>
+                A peer node may try to exhaust a routers quota by sending multiple times the same block. A block builder should therefore take care that a block may not be resent in the intervall where the previous blocks for the transaction are still valid. This guarantees that replayed blocks will stop at the next peer node. This provides good protection against replay based attacks.</t> 
         </section>
     </middle>
 
@@ -469,6 +499,7 @@
 
     <back>
         <references title="Normative References">
+            <!-- Use of words -->
         	<?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"?>
 
             <reference anchor="CCITT.X208.1988">
@@ -493,6 +524,24 @@
                 <seriesInfo name="CCITT Recommendation" value="X.680"/>
             </reference>
 
+            <reference anchor="XEP-0234">
+                <front>
+                    <title>XEP-0234: Jingle File Transfer</title>
+                    <author surname="Peter" initials="S.A"/>
+                    <author surname="Stout" initials="L"/>
+                    <date year="2017" month="08" day="24"/>
+                </front>
+            </reference>
+
+            <reference anchor="F5">
+                <front>
+                    <title>F5 - A Steganographic Algorithm - High Capacity Despite Better Steganalysis</title>
+                    <author initials="A" surname="Westfeld">
+                        <organization>TU Dresden</organization>
+                    </author>
+                </front>
+            </reference>
+            
         </references>
 
         <references title="Informative References">
@@ -505,15 +554,14 @@
         	<?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.6120.xml"?>
         	<!-- SMTP -->
         	<?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.5321.xml"?>
-
-            <reference anchor="XEP-0234">
-                <front>
-                    <title>XEP-0234: Jingle File Transfer</title>
-                    <author surname="Peter" initials="S.A"/>
-                    <author surname="Stout" initials="L"/>
-                    <date year="2017" month="08" day="24"/>
-                </front>
-            </reference>
+        	<!-- SMTP STARTTLS-->
+        	<?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.3207.xml"?>
+        	<!-- IMAP -->
+        	<?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.3501.xml"?>
+        	<!-- POP3 -->
+        	<?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.1939.xml"?>
+        	<!-- POP3 STARTTLS -->
+        	<?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2595.xml"?>
 
             <reference anchor="MessageVortexAnalysis" target="https://www.gwerder.net/phd/phd/doc/messageVortex.pdf">
                 <front>
@@ -522,7 +570,7 @@
                     <date year="2018" />
                 </front>
             </reference>
-
+            
             <reference anchor="KAnon">
                 <front>
                     <title>k-Anonymous Message Transmission</title>
