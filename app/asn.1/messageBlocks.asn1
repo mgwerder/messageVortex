@@ -1,10 +1,15 @@
 -- FIXME ADAPT NeoScrypt
 
--- encryption: as specified in the key. If not specified default mode is ECB and default padding is PKCS1Padding
+-- encryption: as specified in the key. If not specified default mode is
+-- ECB and default padding is PKCS1Padding
 
 -- States: Tuple()=Value() [vallidity; allowed operations] {Store}
--- - Tuple(identity)=Value(messageQuota,transferQuota,sequence of Routingblocks for Error Message Routing) [validity; Requested at creation; may be extended upon request] {identityStore}
--- - Tuple(Identity,Serial)=maxReplays ['valid' from Identity Block; from First Identity Block; may only be reduced] {IdentityReplayStore}
+-- - Tuple(identity)=Value(messageQuota,transferQuota,sequence of
+--   Routingblocks for Error Message Routing) [validity; Requested at
+--   creation; may be extended upon request] {identityStore}
+-- - Tuple(Identity,Serial)=maxReplays ['valid' from Identity Block;
+--   from First Identity Block; may only be reduced]
+--   {IdentityReplayStore}
 
 MessageBlocks DEFINITIONS EXPLICIT TAGS ::=
 BEGIN
@@ -118,8 +123,10 @@ BEGIN
     identitySignature OCTET STRING,
     -- contains routing information (next hop) for the payloads
     routing     CHOICE {
-      plain     [11031] SEQUENCE (SIZE (1..maxRoutingBlocks)) OF RoutingBlock ,
-      encyrpted [11032] OCTET STRING -- contains encrypted routing block
+      plain     [11031] SEQUENCE (SIZE (1..maxRoutingBlocks))
+                        OF RoutingBlock ,
+      -- contains encrypted routing block
+      encyrpted [11032] OCTET STRING
     },
     -- contains the actual payload
     payload     SEQUENCE (SIZE (0..maxPayloadBlocks)) OF PayloadChunk
@@ -176,7 +183,8 @@ BEGIN
   -- represents the building and sending process for the next hop
   AssemblyBlock ::= SEQUENCE {
     routingBlockIndex    INTEGER (0..maxRoutingBlocks),
-    payloadBlockIndex    SEQUENCE (SIZE (1..maxPayloadBlocks)) OF INTEGER (0..maxID)
+    payloadBlockIndex    SEQUENCE (SIZE (1..maxPayloadBlocks))
+                         OF INTEGER (0..maxID)
   }
 
   PayloadOperation ::= CHOICE {
@@ -198,7 +206,8 @@ BEGIN
   AbsoluteSizeBlock ::= SEQUENCE {
     fromAbsolute        INTEGER (0..maxChunkSize),
     toAbsolute          INTEGER (minChunkSize..maxChunkSize)
-    -- negative toAbsolute denominates end in absolute value specified from the end of block
+    -- negative toAbsolute denominates end in absolute value specified
+    -- from the end of block
   }
 
   SizeBlock ::= SEQUENCE{
@@ -212,7 +221,8 @@ BEGIN
     inputId            [16000] INTEGER (0..maxID),
     dataStripes        [16001] INTEGER (1..254),
     redundancy         [16002] INTEGER (1..254),
-    keys               [16003] SEQUENCE (SIZE (2..512)) OF SymmetricKey,
+    keys               [16003] SEQUENCE (SIZE (2..512))
+                               OF SymmetricKey,
     outputId           [16004] INTEGER (1..maxID),
     gfSize             [16005] INTEGER (2..maxGFSize)
   }
@@ -221,7 +231,8 @@ BEGIN
     inputId            [16000] INTEGER (0..maxID),
     dataStripes        [16001] INTEGER (1..254),
     redundancy         [16002] INTEGER (1..254),
-    keys               [16003] SEQUENCE (SIZE (2..512)) OF SymmetricKey,
+    keys               [16003] SEQUENCE (SIZE (2..512))
+                               OF SymmetricKey,
     outputId           [16004] INTEGER (1..maxID),
     gfSize             [16005] INTEGER (2..maxGFSize)
   }
@@ -283,9 +294,13 @@ BEGIN
     valid               UsagePeriod,
     messageQuota        INTEGER (0..maxMessageQuota),
     transferQuota       INTEGER (0..maxTransferQuota),
-    identity            [1001] AsymmetricKey OPTIONAL,    -- if omitted this is a node identity
-    nodeAddress         [1002] NodeSpec      OPTIONAL,    -- if ommited own identity key
-    nodeKey             [1003] SEQUENCE OF AsymmetricKey OPTIONAL,    -- Contains the identity of the owning node; May be ommited if local node
+    -- if omitted this is a node identity
+    identity            [1001] AsymmetricKey OPTIONAL,
+    -- if ommited own identity key
+    nodeAddress         [1002] NodeSpec      OPTIONAL,
+    -- Contains the identity of the owning node;
+    -- May be ommited if local node
+    nodeKey             [1003] SEQUENCE OF AsymmetricKey OPTIONAL,
     routingBlocks       [1004] SEQUENCE OF RoutingBlock OPTIONAL,
     replayStore         [1005] IdentityReplayStore,
     puzzle              [1006] ReplyPuzzleRequired OPTIONAL
@@ -296,7 +311,8 @@ BEGIN
   BlendingSpec ::= SEQUENCE {
     target            NodeSpec,
     blendingType      UTF8String,
-    parameter         SEQUENCE ( SIZE (0..maxNumberOfParameter) ) OF BlendingParameter
+    parameter         SEQUENCE ( SIZE (0..maxNumberOfParameter) )
+                      OF BlendingParameter
   }
 
   BlendingParameter ::= CHOICE {
@@ -332,7 +348,8 @@ BEGIN
   }
 
   ReplyPuzzleRequired ::= SEQUENCE {
-    challenge     BIT STRING, -- bit sequence at beginning of hash from encrypted identity block
+    -- bit sequence at beginning of hash from encrypted identity block
+    challenge     BIT STRING,
     hash          MacAlgorithmIdentifier,
     valid         UsagePeriod,
     identifier    INTEGER (0..4294967295)
@@ -388,7 +405,7 @@ BEGIN
     ok                          (2000),
     transferQuotaStatus         (2101),
     messageQuotaStatus          (2102),
-	puzleRequired               (2201),
+    puzleRequired               (2201),
 
     -- protocol usage failures
     transferQuotaExceeded       (3001),
@@ -464,7 +481,8 @@ BEGIN
   }
 
   CipherMode ::= ENUMERATED {
-    ecb             (10000), -- ECB is a bad choice. Do not use unless really necessary
+    -- ECB is a really bad choice. Do not use unless really necessary
+    ecb             (10000),
     cbc             (10001),
     eax             (10002),
     ctr             (10003),
@@ -513,7 +531,7 @@ BEGIN
   -- Symmetric key
   SymmetricKey ::= SEQUENCE {
     keyType SymmetricAlgorithmIdentifier,
-	parameter AlgorithmParameters,
+    parameter AlgorithmParameters,
     key     OCTET STRING (SIZE(1..512))
   }
 
@@ -525,4 +543,3 @@ BEGIN
   }
 
 END
-
