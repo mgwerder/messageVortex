@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="US-ASCII"?>
-<!DOCTYPE rfc SYSTEM "rfc2629.dtd" >
-
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
-<!-- For a complete list and description of processing instructions (PIs),
-    please see http://xml.resource.org/authoring/README.html. -->
 <?rfc strict="yes" ?>
 <?rfc toc="yes"?>
 <?rfc tocdepth="4"?>
@@ -14,12 +10,7 @@
 <?rfc subcompact="no" ?>
 
 <rfc category="exp" docName="draft-ietf-messagevortex_protocol-00" ipr="trust200902" xml:lang='en'>
-<!-- category values: std, bcp, info, exp, and historic
-    ipr values: trust200902, noModificationTrust200902, noDerivativesTrust200902, or pre5378Trust200902 you can add the attributes updates="NNNN" and obsoletes="NNNN" they will automatically be output with "(if approved)"
--->
-
     <front>
-        <!-- The abbreviated title is used in the page header - it is only necessary if the full title is longer than 39 characters -->
 
         <title>MessageVortex Protocol</title>
 
@@ -34,18 +25,13 @@
                 <email>rfc@messagevortex.net</email>
 
             </address>
-            </author>
+        </author>
 
         <date year="2018"/>
 
         <area>General</area>
 
         <workgroup>Internet Engineering Task Force</workgroup>
-
-        <!-- WG name at the upperleft corner of the doc,
-             IETF is fine for individual submissions.
-          If this element is not present, the default is "Network Working Group",
-             which is used by the RFC Editor as a nod to the history of the IETF. -->
 
         <keyword>SMTP</keyword>
         <keyword>XMPP</keyword>
@@ -92,16 +78,20 @@
         <section anchor="entities_overview" title="Entities Overview">
             <t>Within these document we refer to the entities as defined below. </t>
             <section anchor="entities_node" title="Node">
-                <t>We use the term 'node' to  describe any system connected to other nodes, and supporting the MessageVortex Protocol.</t>
+                <t>
+                    We use the term 'node' to  describe any system connected to other nodes, and supporting the MessageVortex Protocol. As the protocol is typically linked to a transport layer address a 'node' is typically an email address, a XMPP address, or any other transport protocol identity supporting the MessageVortex protocol.
+                </t>
             </section>
             <section anchor="entities_peer" title="Peer Partner">
-                <t>We use the term 'peer partner' as two or more message sending or receiving entities. One of these peer partners is the sends a message and all other peer partner do receive a message. Peer partners are message specific. Every peer partner is connected to a node.</t>
+                <t>
+                    We use the term 'peer partner' as two or more message sending or receiving entities. One of these peer partners is the sends a message and all other peer partner do receive a message. Peer partners are message specific. Every peer partner is connected to a node.
+                </t>
             </section>
             <section anchor="entities_keys" title="Encryption keys">
                <t>
                    There are several keys required for a Vortex message. Some of them are used as an Identity and some are message specific.
                </t>
-               <section anchor="etities_node_identity" title="Identity Keys">
+               <section anchor="entities_node_identity" title="Identity Keys">
                    <t>
                        Every participant of the network has a asymmetric key. These keys SHOULD be either EC keys with a minimum length of 384 bits or RSA keys with a minimum length of 2048 bits.
                    </t>
@@ -109,7 +99,7 @@
                        The public key needs to be known by all parties writing to or through that node.
                    </t>
                </section>
-               <section anchor="etities_keys_peer" title="Peer Key">
+               <section anchor="entities_keys_peer" title="Peer Key">
                    <t>
                        Peer keys are symetrical keys transmitted with a Vortex message. Peer keys are always known to two nodes sending directly messages to each other and to the creator of the routing block.
                    </t>
@@ -117,7 +107,7 @@
                        A peer key is included in the identity block of a Vortex message and in the building instructions for a Vortex message.
                    </t>
                </section>
-               <section anchor="etities_keys_sender" title="Sender Key">
+               <section anchor="entities_keys_sender" title="Sender Key">
                    <t>
                        The sender key is a symmetrical key protecting the identity block of a Vortex message. It is encrypted with the receiving peer key and prefixed to the identity block. This key decouples further identiity and processing information from the previous key.
                    </t>
@@ -245,15 +235,15 @@
                     <figure align="center" anchor="fig_message_overview" title="Vortex message overview">
                         <artwork align="center"><![CDATA[
 +-+---+-+-+---+-+---+-+-+---+-+-+---+-+-------+-+
-| |   | | |   | |   | | |   | | | R | |       | |
-| |   | | |   | |   | | | H | | | o | |       | |
-| |   | | | P | |   | | | e | | | u | |   P   | |
-| | P | | | A | | s | | | a | | | t | |   a   | |
-| | R | | | D | | k | | | d | | | i | |   y   | |
-| | E | | | D | | _ | | | e | | | n | |   l   | |
-| | F | | | I | | s | | | r | | | g | |   o   | |
-| | I | | | N | +---+ | |___| | |___| |   a   | |
-| | X | | | G |  k_h  | sk_s  | sk_s  |   d   | |
+| |   | | |   | | C | | |   | | | R | |       | |
+| |   | | |   | | P | | | H | | | O | |       | |
+| | M | | | P | | R | | | E | | | U | |   P   | |
+| | P | | | A | | E | | | A | | | T | |   A   | |
+| | R | | | D | | F | | | D | | | I | |   Y   | |
+| | E | | | D | | I | | | E | | | N | |   L   | |
+| | F | | | I | | X | | | R | | | G | |   O   | |
+| | I | | | N | +---+ | |___| | |___| |   A   | |
+| | X | | | G |  k_h  | sk_s  | sk_s  |   D   | |
 | |___| | |___|_______|_______|_______|_______| |
 |  k_h  |                  sk_p                 |
 |_______|_______________________________________|
@@ -261,18 +251,30 @@
                     </figure>
                 </t>
             </section>
-            <section title="Prefix Block">
-                <t>FIXME</t>
+            <section title="Message Prefix Block">
+                <t>The PrefixBlock contains a symmetrical key as defined in <xref target="app_asnOne"/> and is encrypted using the host key of the receiving peer host. The symmetric key used MUST be one out of the set advertised by a CapabilitiesReplyBlock. Parameters omitted in the CapabilitiesReplyBlock MAY be freely chosen. A PrefixBlock SHOULD always be encrypted with the hosts public key. A host MAY reply to a message with an unencrypted message block. Any reply to a message SHOULD be encrypted.</t>
             </section>
             <section title="Inner Message Block">
-                <section title="Header Block">
+                <t>
+                    The InnerMessageBlock MUST be encrypted with the symmetric key of the PrefixBlock. The encryption hides the inner structure of the message. The InnerMessageBlock SHOULD always accommodate four or more payload chunks.
+                </t>
+                <t>
+                    An InnerMessageBlock always starts with a padding. This padding guarantees that when using the same routing block multiple times. The padding consists out of the first 16 bytes of the first four PayloadChunks. A PayloadChunk is shorter than 16 bytes the content of the padding should be filled with zero valued bytes (00h) at the end up to the required number of bytes.
+                </t>
+                <section title="Control Prefix Block">
                     <t>FIXME</t>
                 </section>
-                <section title="Routing Block">
+                <section title="Control Blocks">
                     <t>FIXME</t>
-                </section>
-                <section title="Payload Block">
-                    <t>FIXME</t>
+                    <section title="Header Block">
+                        <t>The HeaderBlock contains the identity of the routing block builder. FIXME</t>
+                    </section>
+                    <section title="Routing Block">
+                        <t>FIXME</t>
+                    </section>
+                    <section title="Payload Block">
+                        <t>Each InnerMessageBlock should contain at least three PayloadChunks.</t>
+                    </section>
                 </section>
             </section>
         </section>
