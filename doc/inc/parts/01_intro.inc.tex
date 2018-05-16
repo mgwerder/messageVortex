@@ -18,17 +18,15 @@ According to these documents (verified by \href{http://www.nrc.nl/nieuws/2013/11
 
 This list of events shows that big players are collecting and storing vast amounts of data for analysis or possibly future use. The list of events shows also that the use of this data has in the past been at least partially questionable. As a part of possible counter measures this work analyses the possibility of using state of the art technology to minimize the information footprint of a person on the internet. 
 
-We leave a vast information footprint in our daily communication. On a regular email we disclose everything in an ``postcard'' to any entity on its way. Even when encrypting a message perfectly with today's technology (S/MIME\cite{RFC2045} or PGP\cite{RFC2015}) leaves at least the originating and the receiving entity disclosed or we rely on the promises of a third party provider which offers a proprietary solution. Even in those cases we leak informations such as ``message subject'', ``frequency of exchanged messages'', ``size of messages'', or ``client beeing used''. A good anonymity protocol has therefore far more attributes to cover than the message itself. It includes beside the message itself, all metadata, and all the traffic flows. Furthermore a protocol anonymising messages should not rely on the trust of infrastructure other than the infrastructure under control of the sending or receiving entity as a trust in any third party might be misleading.  
+We leave a vast information footprint in our daily communication. On a regular email we disclose everything in an ``postcard'' to any entity on its way. Even when encrypting a message perfectly with today's technology (S/MIME\cite{RFC2045} or PGP\cite{RFC2015}) it still leaves at least the originating and the receiving entity disclosed or we rely on the promises of a third party provider which offers a proprietary solution. Even in those cases we leak informations such as ``message subject'', ``frequency of exchanged messages'', ``size of messages'', or ``client beeing used''. A good anonymity protocol has therefore far more attributes to cover than the message itself. It includes beside the message itself, all metadata, and all the traffic flows. Furthermore a protocol anonymising messages should not rely on the trust of infrastructure other than the infrastructure under control of the sending or receiving entity as a trust in any third party might be misleading.  
 
-Furthermore -- Any central infrastructure is bound to be of special interest to anyone gathering data concerning the using entities of such a protocol. It furthermore may be manipulated in order to attack the messages or their flow. So central infrastructure has to be avoided.
+Furthermore -- Any central infrastructure is bound to be of special interest to anyone gathering data concerning the using entities of such a protocol. It furthermore may be manipulated in order to attack the messages or their flow. So central infrastructure have to be avoided.
 
-In this work a new protocol is designed to allow message transfer through existing communication channels. These messages should be unobservable to any third party. This unobservability does not only cover the message itself but all metadata and flows associated with it. We called this protocol ``Message Vortex'' or in short just ``Vortex''. The protocol is designed in such a way so that it is capable to use a wide variety of transfer protocols. It is even possible to switch protocols while the messages are in transfer. This allows media breaches (at least on a protocol level) and makes analysis even harder.
+In this work a new protocol is designed to allow message transfer through existing communication channels. These messages are next to unobservable to any third party. This unobservability does not only cover the message itself but all metadata and flows associated with it. We called this protocol ``MessageVortex'' or in short just ``Vortex''. The protocol is designed in such a way so that it is capable to use a wide variety of transfer protocols. It is even possible to switch protocols while the messages are in transfer. This allows media breaches (at least on a protocol level) and makes analysis even harder.
 
-The new protocol should allow safe communication without the need of trusting the underlying transport media. Furthermore it is desirable that the usage of the protocol itself is possible without altering the immediate behaviour of the transport layer. That way it is possible to use the transport layers normal traffic to increase the noise in which information has to be searched. 
+The new protocol allows safe communication without the need of trusting the underlying transport media. Furthermore the usage of the protocol itself is possible without altering the immediate behaviour of the transport layer. That way it is possible to use the transport layers normal traffic to increase the noise in which information has to be searched. 
 
-This work splits into multiple parts. In the first part we are collecting available researches and technologies. We emphasize in all technologies on the strength and weaknesses relevant to this work. In the second part we reassemble the parts to a new protocol. In the third part we analyse the protocol for fitness of the purpose. We try to find weaknesses and work out recommendations for the protocol usage. In the last part we discuss the results and try to summarize the findings. Try to elaborate to what extend the protocol fulfils the requirements of this work.
-
-\fxfatal{We achieved almost all goals propagated here. Make text sound like that.}
+This work splits into multiple parts. In the first part we collect available researches and technologies. We emphasize in all technologies on the strength and weaknesses relevant to this work. In the second part we reassemble the parts to a new protocol. In the third part we analyse the protocol for fitness of the purpose. We try to find weaknesses and work out recommendations for the protocol usage. In the last part we discuss the results and try to summarize the findings. We furthermore elaborate to what extend the protocol fulfils the requirements mentioned in the previous sections.
 
 \section{Contributions}
 This thesis contributes to the topic in the following senses:
@@ -98,18 +96,19 @@ Based on this main question there are several sub questions grouped around vario
 
 \begin{enumerate}
 	\item What technologies and methods may be used to provide sender and receiver anonymity and unlinkability when sending messages against a potential adverser? (SQ1)
-	\item How can entities utilizing these technologies and methods be attacked and what measures are  available to circumvent such attacks? (SQ2)
-	\item How can attacks targeting anonymity of a sending or receiving entity be mitigated by design? (SQ3)
+	\item How can entities utilizing MessageVortex be attacked and what measures are  available to circumvent such attacks? (SQ2)
+	\item How can attacks targeting anonymity of a sending or receiving entity be mitigated by design within MessageVortex? (SQ3)
 \end{enumerate}
 
 \section{SQ1: Sending messages maintaining unlikability against an adverser}
-This question covers the principal part of the work. We try to elaborate first rough criteria for the protocol. We then create a list of suitable technologies. Based on this list we define a protocol combining these technologies and researches to a solution. This solution will be implemented and analysed for suitability based on the criteria defined.
+This question covers the principal part of the work. We try to elaborate first rough criteria for the MessageVortex protocol. We then create a list of suitable technologies. Based on this list we define a protocol combining these technologies and researches to a solution. This solution will be implemented and analysed for suitability based on the criteria defined.
 
 \section{SQ2: Attacking unlinkability and circumvention}
 Within this questions we look at common attacks and test resistance of the protocol based on the definition of the protocol. We do this by first collecting well known attacks (either generic or specific to a technology used in the protocol). We then try to elaborate if these attacks might be successful (and if so under what circumstances).
 
 \section{SQ3: Attack Mitigation by design}
-Within this question we define baselines in order to mitigate attacks by defining guidelines for using the protocol. We analyse the effectiveness of the guidelines and try to elaborate the general achievement level of the protocol by looking at the criteria defined in SQ1.
+Within this question we define baselines in order to mitigate attacks by defining guidelines for using the protocol. We analyse the effectiveness of the guidelines and try to elaborate the general achievement level of the protocol by looking at the criteria defined in SQ1. 
 
-\fxfatal{add more here}
+This question will mainly be answered in part \ref{sec:discussion}
+
 \fxfatal{add 5Ws}
