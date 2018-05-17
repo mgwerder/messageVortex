@@ -331,7 +331,7 @@
             </section>
             <section title="Supported Paddings">
                 <t>
-                    The following symmetric ciphers MUST be supported by a node:
+                    The following paddings MUST be supported by a node:
                     <list style="symbols">
                         <t>PKCS1</t>
                         <t>PKCS7</t>
