@@ -44,7 +44,7 @@
                 MessageVortex Protocol specifies messages embedded within existing transfer protocols such  as SMTP (<xref target="RFC5321">RFC 5321</xref>) or XMPP (<xref target="RFC6120">RFC 6120</xref>) to send them anonymously from peer to peer.
             </t>
             <t>
-                The protocol outperforms other protocols by decoupling transport from the final transmitter and receiver party. There is no trust put into any infrastructure except for the infrastructure of the sending and receiving party of a message. The Message flow is entirely selected by the creator of the routing block. Routing nodes gain no unobvious knowledge about messages even when collaborating. Third party anonymity is always achieved. Furthermore, one out of sender, and receiver anonymity may be achieved.
+                The protocol outperforms other protocols by decoupling transport from the final transmitter and receiver party. There is no trust put into any infrastructure except for the infrastructure of the sending and receiving party of a message. The Message flow is entirely selected by the creator of the routing block. Routing nodes gain no unobvious knowledge about messages even when collaborating. Third-party anonymity is always achieved. Furthermore, one out of sender, and receiver anonymity may be achieved.
             </t>
         </abstract>
     </front>
@@ -63,7 +63,7 @@
                 Any Receiver knows after processing whether a message is destined for it or other nodes.
             </t>
             <t>
-                This RFC is structured in such a way that first the terminology is introduced (see <xref target="entities_overview"/>). Next, a general overview over the process is given (see <xref target="layer_overview"/>). Lastly, the protocol is described in details in the subsequent sections.
+                This RFC is structured in such a way that first the terminology is introduced (see <xref target="entities_overview"/>). Next, a general overview of the process is given (see <xref target="layer_overview"/>). Lastly, the protocol is described in details in the subsequent sections.
             </t>
 
             <section title="Requirements Language">
@@ -79,7 +79,7 @@
             <t>Within this document, we refer to the entities as defined below. </t>
             <section anchor="entities_node" title="Node">
                 <t>
-                    We use the term 'node' to  describe any system connected to other nodes, and supporting the MessageVortex Protocol. As the protocol is typically linked to a transport layer address a 'node' is typically an email address, a XMPP address, or any other transport protocol identity supporting the MessageVortex protocol.
+                    We use the term 'node' to  describe any system connected to other nodes, and supporting the MessageVortex Protocol. As the protocol is typically linked to a transport layer address, a 'node' is typically an email address, an XMPP address, or any other transport protocol identity supporting the MessageVortex protocol.
                 </t>
             </section>
             <section anchor="entities_peer" title="Peer Partner">
@@ -89,7 +89,7 @@
             </section>
             <section anchor="entities_keys" title="Encryption keys">
                <t>
-                   There are several keys required for a Vortex message. Some of them are used as an Identity and some are message specific.
+                   There are several keys required for a Vortex message. Some of them are used as an identity, and some are message specific.
                </t>
                <section anchor="entities_node_identity" title="Identity Keys">
                    <t>
@@ -112,7 +112,7 @@
                        The sender key is a symmetrical key protecting the identity and routing block of a Vortex message. It is encrypted with the receiving peer key and prefixed to the identity block. This key decouples further identity and processing information from the previous key.
                    </t>
                    <t>
-                       A sender key is known to exactly one peer of a Vortex message and the creator of the routing block.
+                       A sender key is known to precisely one peer of a Vortex message and the creator of the routing block.
                    </t>
                </section>
             </section>
@@ -126,18 +126,18 @@
                     <list style="symbols">
                         <t>If the sender of a message is not known to anyone else except the sender, we refer to that as 'sender anonymity.'</t>
                         <t>If the receiver of a message is not known to anyone else except the receiver, we refer to that as 'receiver anonymity.'</t>
-                        <t>If neither sender nor receiver can be determined by any other party we refer to that as third party anonymity.</t>
-                        <t>If a sender or a receiver may be determined as "one out of a set of &lt;k&gt; entities we refer to it as k-anonymity (for more about this see <xref target="KAnon"/>).</t>
+                        <t>If neither sender nor receiver can be determined by any other party, we refer to that as third-party anonymity.</t>
+                        <t>If a sender or a receiver may be determined as "one of a set of &lt;k&gt; entities we refer to it as k-anonymity (for more about this see <xref target="KAnon"/>).</t>
                     </list>
                 </t>
                 <t>
-                    A full vortex message is built out of the following items:
+                    A full vortex message is built of the following items:
                     <list style="symbols">
                         <t>The peer key (encrypted with the host key of the node) protecting the inner Vortex message.</t>
-                        <t>A short padding guaranteeing that a replayed routing block with different content does not look alike.</t>
+                        <t>The short padding guarantees that a replayed routing block with different content does not look alike.</t>
                         <t>The sender key (encrypted with the host key of the node) protecting the identity and routing block.</t>
-                        <t>The identity block (protected by the sender key) containing information about the ephemeral identity of the sender, replay protection information, header requests (optional) and proofOfWork (optional).</t>
-                        <t>The routing block (protected by the sender key) containing information how subsequent messages are processed, assembled and blended.</t>
+                        <t>The identity block (protected by the sender key) containing information about the ephemeral identity of the sender, replay protection information, header requests (optional) and a requirement reply (optional).</t>
+                        <t>The routing block (protected by the sender key) containing information on how subsequent messages are processed, assembled and blended.</t>
                         <t>The payload block (protected by the peer key) containing payload chunks to be processed.</t>
                     </list>
                 </t>
@@ -208,16 +208,16 @@
             </figure>
 
             <t>
-                Every participating node MUST implement the layers 'Blending', 'Routing', and 'Accounting'.  There MUST be at least one incoming and one outgoing transport layer available to a node. All blending layers SHOULD be connected to respective Transport layers for sending and receiving packets.
+                Every participating node MUST implement the layers blending, routing, and accounting.  There MUST be at least one incoming and one outgoing transport layer available to a node. All blending layers SHOULD be connected to respective Transport layers for sending and receiving packets.
             </t>
 
             <section anchor="layer_overview_transport" title="Transport Layer">
-                <t>The transport layer embedds the blended MessageVortex packets into the data stream of the existing transport layer protocol.</t>
+                <t>The transport layer embeds the blended MessageVortex packets into the data stream of the existing transport layer protocol.</t>
                 <t>The transport layer infrastructure SHOULD NOT be specific to anonymous communication and should contain significant parts of non-MessageVortex traffic.</t>
             </section>
 
             <section anchor="layer_overview_blending" title="Blending Layer">
-                <t>The blending layer embedds MessageVortex packets into the transport layer data stream and extracts MessageVortex packets from the transport layer.</t>
+                <t>The blending layer embeds MessageVortex packets into the transport layer data stream and extracts MessageVortex packets from the transport layer.</t>
             </section>
             <section anchor="layer_overview_routing" title="Routing Layer">
                 <t>The Routing Layer expands information contained in MessageVortex packets, processes them, and passes generated  packets to the respective Blending Layer.</t>
@@ -231,7 +231,7 @@
         <section title="Vortex Message">
             <section title="Overview">
                 <t>
-                    <xref target="fig_message_overview"/> shows a Vortex message. The enclosed sections denote encrypted blocks. The three to four letter abbreviations denote the key required for decryption. The abbreviation k_h stands for the asymmetric host key. s_kp is the symmetric peer key. This key is obtained by the receiving node by decrypting MPREFIX with its host key k_h. sk_s is the symmetric sender key. This key is obtained by decrypting the MPREFIX block. The header and routing blocks are protected by the sender key. This key makes sure that the node assembling the message has no knowledge about all upcomming identities, operations and requests. The peer key protects the message including structure from any third party observer.
+                    <xref target="fig_message_overview"/> shows a Vortex message. The enclosed sections denote encrypted blocks. The three to four letter abbreviations denote the key required for decryption. The abbreviation k_h stands for the asymmetric host key. s_kp is the symmetric peer key. This key is obtained by the receiving node by decrypting MPREFIX with its host key k_h. sk_s is the symmetric sender key. This key is obtained by decrypting the MPREFIX block. The header and routing blocks are protected by the sender key. This key makes sure that the node assembling the message has no knowledge about all upcoming identities, operations, and requests. The peer key protects the message including structure from any third party observer.
                     <figure align="center" anchor="fig_message_overview" title="Vortex message overview">
                         <artwork align="center"><![CDATA[
 +-+---+-+-+---+-+---+-+-+---+-+-+---+-+-------+-+
@@ -256,7 +256,7 @@
                     The PrefixBlock contains a symmetrical key as defined in <xref target="app_asnOne"/> and is encrypted using the host key of the receiving peer host. The symmetric key used MUST be one out of the set advertised by a CapabilitiesReplyBlock (see target="routing_header_req_cap"/>). Parameters omitted in the CapabilitiesReplyBlock MAY be freely chosen. A PrefixBlock SHOULD always be encrypted with the hosts public key. A host MAY reply to a message with an unencrypted message block. Any reply to a message SHOULD be encrypted.
                 </t>
                 <t>
-                    The sender MUST choose a key which may be encrypted with the host key using the padding advertized by the CapabilitiesReplyBlock.
+                    The sender MUST choose a key which may be encrypted with the host key using the padding advertised by the CapabilitiesReplyBlock.
                 </t>
             </section>
             <section title="Inner Message Block">
@@ -264,10 +264,10 @@
                     The InnerMessageBlock MUST be encrypted with the symmetric key of the PrefixBlock. The encryption hides the inner structure of the message. The InnerMessageBlock SHOULD always accommodate four or more payload chunks.
                 </t>
                 <t>
-                    An InnerMessageBlock always starts with a padding. This padding guarantees that when using the same routing block multiple times. The padding MUST be the the first 16 bytes of the first four PayloadChunks. If a PayloadChunk is shorter than 16 bytes or not existent the content of the padding should be filled with zero valued bytes (00h) at very end up to the required number of bytes. An InnerMessageBlock SHOULD contain at least four PayloadChunks sized 16 bytes or bigger.
+                    An InnerMessageBlock always starts with a padding block. This padding guarantees that when using the same routing block multiple times. The padding MUST be the first 16 bytes of the first four PayloadChunks. If a PayloadChunk is shorter than 16 bytes or not existent the content of the padding should be filled with zero-valued bytes (00h) at very end up to the required number of bytes. An InnerMessageBlock SHOULD contain at least four PayloadChunks sized 16 bytes or bigger.
                 </t>
                 <section title="Control Prefix Block">
-                    <t>The control prefix block (CPREFIX) is built exactly as the MPREFIX block. It contains the sender key  sk_s. This block may be ommited if the MPREFIX block was unencrypted. The control blocks (HeaderBlock and RoutingBlock) are unencrypted if CPREFIX is ommited.</t>
+                    <t>The control prefix block (CPREFIX) is built exactly as the MPREFIX block. It contains the sender key  sk_s. This block may be omitted if the MPREFIX block was unencrypted. The control blocks (HeaderBlock and RoutingBlock) are unencrypted if CPREFIX is omitted.</t>
                 </section>
                 <section title="Control Blocks">
                     <t>
@@ -288,11 +288,11 @@
 
         <section title="General notes">
             <t>
-                The  MessageVortex protocol is modular built. It allows to use different encryption algorithms. For good operation a Vortex node SHOULD always support at least two completely different types of algorithms, paddings, or modes.
+                The  MessageVortex protocol is modularly built. It allows using different encryption algorithms. For operation, a Vortex node SHOULD always support at least two completely different types of algorithms, paddings, or modes.
             </t>
             <section title="Supported Symmetric Ciphers">
                 <t>
-                    The following symmetric ciphess MUST be supported by a node:
+                    The following symmetric ciphres MUST be supported by a node:
                     <list style="symbols">
                         <t>AES128</t>
                         <t>AES256</t>
@@ -371,15 +371,15 @@
                     There are two types of blending supported when using attachments.
                     <list style="symbols">
                         <t>Plain binary encoding with offset (PLAIN)</t>
-                        <t>Embedding with F5 in image (F5)</t>
+                        <t>Embedding with F5 in an image (F5)</t>
                     </list>
                 </t>
                  <t>
-                    For interoperability PLAIN blending MUST be supported. Blending using F5 MAY be supported.
+                    For interoperability, PLAIN blending MUST be supported. Blending using F5 MAY be supported.
                 </t>
                 <section anchor="blending_general_plain" title="PLAIN embedding into attachments">
                     <t>
-                        Within this document refer to PLAIN blending if a Vortex message is embedded in a carrier file with an offset. An offset of 0 means that the beginning of the payload file is replaced. The routing node MUST choose what payload file is used for the message. A routing node SHOULD use a credible payload type with a high entropy. It furthermore SHOULD prefix a valid header structure to avoid easy detection of the Vortex message. A routing node MAY attach a valid footer to a payload file to improve blending.
+                        Within this document refer to PLAIN blending if a Vortex message is embedded in a carrier file with an offset. An offset of 0 means that the beginning of the payload file is replaced. The routing node MUST choose what payload file is used for the message. A routing node SHOULD use a credible payload type with high entropy. It furthermore SHOULD prefix a valid header structure to avoid easy detection of the Vortex message. A routing node MAY attach a valid footer to a payload file to improve blending.
                     </t>
                     <t>
                         A node SHOULD offer at least one PLAIN blending method for incoming Vortex messages. A node may offer multiple offsets for incoming Vortex messages.
@@ -387,23 +387,23 @@
                 </section>
                 <section anchor="blending_general_F5" title="F5 embedding into attachments">
                     <t>
-                        Within this document we refer to F5 blending if a Vortex message is blended into a JPEG image according to algorithms specified in <xref target="F5"/>. The password for blending may be publicly known. A routing node may advertize multiple passwords. It should be understood that this blending mechanism adds a tenfold of transfervolume to the message. Only small message chunks SHOULD be blended with F5.
+                        Within this document, we refer to F5 blending if a Vortex message is blended into a JPEG image according to algorithms specified in <xref target="F5"/>. The password for blending may be publicly known. A routing node may advertise multiple passwords. It should be understood that this blending mechanism adds a tenfold of transfer volume to the message. Only small message chunks SHOULD be blended with F5.
                     </t>
                 </section>
             </section>
             <section anchor="blending_smtp" title="Blending into an SMTP layer">
                 <t>
-                    Email messages containig messages MUST be encoded with Multipurpose Internet Mail extensions (MIME) as specified in <xref target="RFC2045">RFC 2045</xref>. Encoding mechanism BASE64 MUST be supported. All sections of an email are tested for the presence of a Vortex message.
+                    Email messages containing messages MUST be encoded with Multipurpose Internet Mail Extensions (MIME) as specified in <xref target="RFC2045">RFC 2045</xref>. Encoding mechanism BASE64 MUST be supported. All sections of an email are tested for the presence of a Vortex message.
                 </t>
                 <t>
                     A vortex message is present if a block containing the peer key at the known offset of any MIME part decodes correctly.
                 </t>
                 <t>
-                    In order to work properly when blending protocols for sending and receiving SHOULD be supported. For sending SMTP as specified in <xref target="RFC5321">RFC 5321</xref> must be used. TLS protection as specified in <xref  target="RFC3207">RFC 3207</xref> SHOULD be applied. For obtaining any messages protocols such as POP3 (as specified in <xref target="RFC1939">RFC 1939</xref> and <xref target="RFC2595">RFC 2595</xref>) or IMAP (as specified in <xref target="RFC3501">RFC 3501</xref>) SHOULD be always secured by TLS layers.
+                    To work correctly, when blending protocols for sending and receiving SHOULD be supported. For sending SMTP as specified in <xref target="RFC5321">RFC 5321</xref> must be used. TLS protection as specified in <xref  target="RFC3207">RFC 3207</xref> SHOULD be applied. For obtaining any messages protocols such as POP3 (as specified in <xref target="RFC1939">RFC 1939</xref> and <xref target="RFC2595">RFC 2595</xref>) or IMAP (as specified in <xref target="RFC3501">RFC 3501</xref>) SHOULD always be secured by TLS layers.
                 </t>
             </section>
             <section anchor="blending_xmpp" title="Blending into an XMPP layer">
-                <t>For interoperability this layer SHOULD be implemented.</t>
+                <t>For interoperability, this layer SHOULD be implemented.</t>
                 <t>
                   Blending into XMPP traffic is done using the <xref target="XEP-0234"/> extension of the XMPP protocol.
                 </t>
@@ -460,16 +460,16 @@
             <section anchor="accounting_create_identity" title="Ephemeral Identity Creation">
                 <t>The accounting layer has two major kinds of operations:
                     <list style="symbols">
-                        <t>Time based operations (cleanup jobs and initiation of routing)</t>
-                        <t>Routing triggered operations (updating quotas, authorizing operations, and pickup of incomming messages.)</t>
+                        <t>Time-based operations (cleanup jobs and initiation of routing)</t>
+                        <t>Routing triggered operations (updating quotas, authorizing operations, and pickup of incoming messages.)</t>
                     </list>
 
-                    Implementations MUST provide sufficient locking mechanisms to guarantee integrity of accounting information and workspace at any time.
+                    Implementations MUST provide sufficient locking mechanisms to guarantee the integrity of accounting information and workspace at any time.
                 </t>
-                <section anchor="accounting_timed_gc" title="Time Based Garbage Collection">
+                <section anchor="accounting_timed_gc" title="Time-Based Garbage Collection">
                     <t>FIXME</t>
                 </section>
-                <section anchor="accounting_timed_routing" title="Time Based Routing Initiation">
+                <section anchor="accounting_timed_routing" title="Time-Based Routing Initiation">
                     <t>FIXME</t>
                 </section>
                 <section anchor="accounting_timed_quota" title="Routing Based Quota Updates">
@@ -488,14 +488,14 @@
         <section anchor="IANA" title="IANA Considerations">
             <t>This memo includes no request to IANA.</t>
 
-            <t>Additional encryption algorithms, paddings, modes, blendinmg layers, or puzzles MUST be added writing an extension to this or a subsequent RFC. For testing purposes IDs above 1,000,000 should be used.</t>
+            <t>Additional encryption algorithms, paddings, modes, blending layers, or puzzles MUST be added by writing an extension to this or a subsequent RFC. For testing purposes, IDs above 1,000,000 should be used.</t>
         </section>
 
         <section anchor="Security" title="Security Considerations">
-            <t>The MessageVortex protocol may be understood more as a toolset than a fixed product. Depending on the usage of the tool set anonymity and security are affected. For a detailed analysis see <xref target="MessageVortexAnalysis"/>.
+            <t>The MessageVortex protocol may be understood more as a toolset than a fixed product. Depending on the usage of the toolset anonymity and security are affected. For a detailed analysis see <xref target="MessageVortexAnalysis"/>.
             </t>
             <t>
-                The primary goals for security with in this protocol did rely on the following focus areas:
+                The primary goals for security within this protocol did rely on the following focus areas:
                 <list style="symbols">
                     <t>Confidentiality</t>
                     <t>Integrity</t>
@@ -512,37 +512,37 @@
                 All these factors are affected by the usage of the protocol. The following sections provide a list of factors affecting the primary goals.
             </t>
             <t>
-                The Vortex protocol does not rely on any encryption on the transport layer. Vortex messages are already encrypted. Confidetiality is not affected by protection mechanisms of the transport layer.
+                The Vortex protocol does not rely on any encryption on the transport layer. Vortex messages are already encrypted. Confidentiality is not affected by protection mechanisms of the transport layer.
             </t>
             <t>
-                If a transport Layer supports encryption a Vortex node SHOULD use it to improve privacy of the message.
+                If a transport Layer supports encryption, a Vortex node SHOULD use it to improve the privacy of the message.
             </t>
             <t>
-                Anonymity is affected by the inner workings of the blending layer in many ways. A Vortex message can not be read by anyone exept the peer nodes and the routing block builde, but the presence of a vortex node message may be detected. This may be done either by detecting the typical high entropy of an encrypted file, broken structures of a carrier file, meaningless content of a carrier file, or the contextless communication of the bleding layer with its peer partner. A blending layer SHOULD minimize the possibility of easy detection by minimizing these effects.
+                Anonymity is affected by the inner workings of the blending layer in many ways. A Vortex message cannot be read by anyone except the peer nodes and the routing block builder, but the presence of a vortex node message may be detected. This may be done either by detecting the typical high entropy of an encrypted file, broken structures of a carrier file, a meaningless content of a carrier file, or the contextless communication of the blending layer with its peer partner. A blending layer SHOULD minimize the possibility of easy detection by minimizing these effects.
              </t>
              <t>
-                A blending layer SHOULD use carrier files with high compression or encryption. Carrier files SHOULD NOT have inner structures so that the payload is comparable to valid content. To achieve undetectability by a human reviewer a routing block builder should use F5 blending instead of PLAIN blending.
+                A blending layer SHOULD use carrier files with high compression or encryption. Carrier files SHOULD NOT have inner structures so that the payload is comparable to valid content. To achieve undetectability by a human reviewer, a routing block builder should use F5 blending instead of PLAIN blending.
              </t>
              <t>
-                The two layers routing and accounting have the deepest insight into a Vortex message's inner working. They know the immediate peer sender and the peer recipients of all payload chunks. As decoy traffic is generated by combining chunks and applying redundancy calculations upon them a node may never know whether a malfunction (e.g. when doing a recovery calculation) was intended or not. Therefore a node may not know what traffic was intended to fail or not. It furthermore cannot tell content from decoy traffic apart.
+                The two layers routing and accounting have the deepest insight into a Vortex message's inner working. They know the immediate peer sender and the peer recipients of all payload chunks. As decoy traffic is generated by combining chunks and applying redundancy calculations upon them, a node may never know whether a malfunction (e.g. when doing a recovery calculation) was intended or not. Therefore a node may not know what traffic was intended to fail or not. It furthermore cannot tell content from decoy traffic apart.
              </t>
              <t>
-                A routing block builder SHOULD therfore follow the following rules in order not to compromize a Vortex message's anonymity:
+                A routing block builder SHOULD follow the following rules in order not to compromise a Vortex message's anonymity:
                 <list style="symbols">
-                    <t>All operations applied SHOULD be credible to be invloved in a message transfer.</t>
-                    <t>There should be always a sufficient subset of the result of an addRedundancy operation sent to peers in order to allow recovery of the data built.</t>
-                    <t>The anonymity set of a message should be sufficiently large in order to witstain legal prosecution of all juridictional entities involved. It has even to witstain if a certain ammount of the anonymity set cooperates.</t>
-                    <t>Encryption and decryption SHOULD follow when ever possible the logic. Avoid encrypting a block on a node with one key and decrypting it with a different key on the same or another node.</t>
+                    <t>All operations applied SHOULD be credible to be involved in a message transfer.</t>
+                    <t>There should always be a sufficient subset of the result of an addRedundancy operation sent to peers to allow recovery of the data built.</t>
+                    <t>The anonymity set of a message should be sufficiently large to avoid legal prosecution of all jurisdictional entities involved. It has even to be large enough if a certain amount of the anonymity set cooperates with an adverser.</t>
+                    <t>Encryption and decryption SHOULD follow whenever possible the logic. Avoid encrypting a block on a node with one key and decrypting it with a different key on the same or another node.</t>
                     <t>Traffic peaks SHOULD be uniformly distributed within the whole anonymity set.</t>
-                    <t>A routing block SHOULD be used for a limmited  number of messages. If used as a message block for the node itself it should be used only once. A block builder SHOULD use the identity replace header request to update reply blocks on a regular base. Implementers shold always keep in mind that the same routing block is identifiable as such by many means.</t>
-                    <t>A block builder SHOULD always relay on the newest possible research when chosing Cipher types, paddings, and modes in order to stay secure</t>
+                    <t>A routing block SHOULD be used for a limited  number of messages. If used as a message block for the node itself it should be used only once. A block builder SHOULD use the identity replace header request to update reply blocks on a regular base. Implementers should always keep in mind that the same routing block is identifiable as such by its structure.</t>
+                    <t>A block builder SHOULD always rely on the newest possible research when choosing Cipher types, paddings, and modes in order to stay secure</t>
                 </list>
              </t>
              <t>
-                A active adversary can not use other blocks for its own purposes. He may however falsify the result by injecting wrong message chunks or by not sending a message. Such message disruptions may be detected by intentionally routing some information to the routing block builders node. If the Vortex message does not carry the informatin expected the node may safely assume that one of the involved nodes is missbehaving. A block building node MAY calculate reputation for involved nodes over time. A block building node MAY build redundancy paths into a routing block to withstand such malicious nodes.
+                An active adverser cannot use other blocks for its own purposes. He may however falsify the result by injecting wrong message chunks or by not sending a message. Such message disruptions may be detected by intentionally routing some information to the routing block builders node. If the Vortex message does not carry the information expected the node may safely assume that one of the involved nodes is misbehaving. A block building node MAY calculate reputation for involved nodes over time. A block building node MAY build redundancy paths into a routing block to withstand such malicious nodes.
             </t>
             <t>
-                A peer node may try to exhaust a routers quota by sending multiple times the same block. A block builder should therefore take care that a block may not be resent in the intervall where the previous blocks for the transaction are still valid. This guarantees that replayed blocks will stop at the next peer node. This provides good protection against replay based attacks.
+                A peer node may try to exhaust a routers quota by sending multiple times the same block. A block builder should therefore take care that a block may not be resent in the interval where the previous blocks for the transaction are still valid. This guarantees that replayed blocks will stop at the next peer node. This provides good protection against replay based attacks.
             </t>
         </section>
     </middle>
