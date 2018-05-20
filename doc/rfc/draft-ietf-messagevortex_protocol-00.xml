@@ -399,7 +399,7 @@
                     A vortex message is present if a block containing the peer key at the known offset of any MIME part decodes correctly.
                 </t>
                 <t>
-                    In order to work properly when blending protocols for sending and receiving SHOULD be supported. For sending SMTP as specified in <xref target="RFC5321">RFC&nbsp;5321</xref> must be used. TLS protection as specified in <xref  target="RFC3207">RFC&nbsp;3207</xref> SHOULD be applied. For obtaining any messages protocols such as POP3 (as specified in <xref target="RFC1939">RFC&nbsp;1939</xref> and <xref target="RFC2595">RFC&nbsp;2595</xref>) or IMAP (as specified in <xref target="RFC3501">RFC&nbsp;3501</xref>) SHOULD be always secured by TLS layers.
+                    In order to work properly when blending protocols for sending and receiving SHOULD be supported. For sending SMTP as specified in <xref target="RFC5321">RFC 5321</xref> must be used. TLS protection as specified in <xref  target="RFC3207">RFC 3207</xref> SHOULD be applied. For obtaining any messages protocols such as POP3 (as specified in <xref target="RFC1939">RFC 1939</xref> and <xref target="RFC2595">RFC 2595</xref>) or IMAP (as specified in <xref target="RFC3501">RFC 3501</xref>) SHOULD be always secured by TLS layers.
                 </t>
             </section>
             <section anchor="blending_xmpp" title="Blending into an XMPP layer">
