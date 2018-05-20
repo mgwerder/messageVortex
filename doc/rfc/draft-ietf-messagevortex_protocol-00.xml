@@ -51,16 +51,16 @@
 
     <middle>
         <section title="Introduction">
-            <t>Anonymization is hard to achieve. Many attempts have been made but most of them do rely on either a trust upon a dedicated infrastructure or a specialized networking protocol.</t>
+            <t>Anonymization is hard to achieve. Most of the attempts in the past rely on either a trust upon a dedicated infrastructure or a specialized networking protocol.</t>
             <t>
                 MessageVortex is a protocol which allows to send and receive messages by using a routing block instead of a destination address.
                 The routing block is built in such a way that it gives the sender full control over a path a message follows.
             </t>
             <t>
-                During transmission, a message is continuously split and reassembled. The operations are built in such a way that they generate either valid traffic or decoy traffic. A routing node is, therefore, unable to differentiate between the message and decoy traffic.
+                During transmission, a message is continuously split and reassembled. The operations are built in such a way that they generate either valid traffic or decoy traffic. A routing node is unable to differentiate between the message and decoy traffic.
             </t>
             <t>
-                Any Receiver knows after processing whether a message is destined for it or for other nodes.
+                Any Receiver knows after processing whether a message is destined for it or other nodes.
             </t>
             <t>
                 This RFC is structured in such a way that first the terminology is introduced (see <xref target="entities_overview"/>). Next, a general overview over the process is given (see <xref target="layer_overview"/>). Lastly, the protocol is described in details in the subsequent sections.
@@ -274,7 +274,7 @@
                         The control blocks contain the core information to process the payload. It contains a HeaderBlock and a RoutingBlock.
                     </t>
                     <section title="Header Block">
-                        <t>The HeaderBlock contains the identity of the routing block builder. FIXME</t>
+                        <t>The HeaderBlock contains the always the local ephemeral identity of the routing block builder. FIXME</t>
                     </section>
                     <section title="Routing Block">
                         <t>FIXME</t>
