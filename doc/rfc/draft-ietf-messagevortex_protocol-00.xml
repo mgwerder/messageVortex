@@ -417,7 +417,7 @@
         <section anchor="routing" title="Routing">
             <section anchor="routing_message" title="Vortex Message Processing">
                 <section anchor="routing_incoming" title="Processing of incoming Vortex Messages">
-                    <t>FIXME</t>
+                    <t>An incoming message is first authenticated. A message is authenticated as soon as the ephemeral identity is known and is not temporary. A node MUST not process payload requests from unauthenticated sources.</t>
                 </section>
                 <section anchor="routing_workspace" title="Processing of Routing Blocks in Workspace">
                     <t>FIXME</t>
