@@ -467,7 +467,7 @@
                         A message is authenticated as soon as the identity used in the header block is known and not temporary. For authenticated messages the following rules apply:
                         <list style="symbols">
                             <t>A node MUST ignore identity creation requests.</t>
-							<t>A node MUST replace the current reply block with the reply block provided in the routing block (if any). Th node MUST keep the reply block if no reply block is provided.
+							<t>A node MUST replace the current reply block with the reply block provided in the routing block (if any). Th node MUST keep the reply block if no reply block is provided.</t>
                             <t>A node SHOULD process all header requests.</t>
                             <t>A node SHOULD add all routing blocks to the workspace.</t>
                             <t>A node SHOULD add all payload blocks to the workspace.</t>
