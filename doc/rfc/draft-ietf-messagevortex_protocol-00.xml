@@ -74,6 +74,12 @@
             <section title="Protocol Specification">
                 <t><xref target="asn_one"/> specifies all relevant parts of the protocol in ASN.1 (see <xref target="CCITT.X680.2002"/> and <xref target="CCITT.X208.1988"/>). The blocks are if not otherwise mentioned DER encoded.</t>
             </section>
+
+            <section title="Number Specification">
+                <t>
+					all numbers within this document are if not suffixed decimal numbers. Octets are written in capitalized hex numbers suffixed with a small letter 'h'. So a blank in ASCII (' ') is written as 20h and a capital 'K' in ASCII as 4Bh.
+				</t>
+            </section>
         </section>
 
         <section anchor="entities_overview" title="Entities Overview">
@@ -461,6 +467,7 @@
                         A message is authenticated as soon as the identity used in the header block is known and not temporary. For authenticated messages the following rules apply:
                         <list style="symbols">
                             <t>A node MUST ignore identity creation requests.</t>
+							<t>A node MUST replace the current reply block with the reply block provided in the routing block (if any). Th node MUST keep the reply block if no reply block is provided.
                             <t>A node SHOULD process all header requests.</t>
                             <t>A node SHOULD add all routing blocks to the workspace.</t>
                             <t>A node SHOULD add all payload blocks to the workspace.</t>
@@ -476,35 +483,46 @@
 							<t>The routing combos (RoutingCombo) linked to it.</t>
 							<t>The payload chunk space. This space is divided into multiple subspaces:
 								<list style="symbols">
-									<t>ID 0 represents a message to be embedded (when read) or a message to be extracted to the user (when written).</t>
+									<t>ID 0 represents a message to be embedded (when reading) or a message to be extracted to the user (when written).</t>
 									<t>ID 1 to ID maxPayloadBlocks represents the payload chunk slots in the target message.</t>
-									<t>ID maxPayloadBlocks+1 to ID 32767 may be used as temporary space spcific to the routing block.</t>
+									<t>ID maxPayloadBlocks+1 to ID 32767 may be used as temporary space specific to the routing block.</t>
 									<t>ID 32768 to ID 65535 represent the shared space available to all operations of this identity.</t>
 								</list>
 							</t>
 						</list>
 					</t>
 					<t>
-						Processing is typically triggered by the accounting layer. It represents either a cleanup action where all exired payloads, Routing combos, and identities are deleted or a routing event where a routing combo is processed. A cleanup event deletes all the following information:
+						Processing is typically triggered by the accounting layer. It represents either a cleanup action where all expired payloads, Routing combos, and identities are deleted or a routing event where a routing combo is processed. A cleanup event deletes the following information:
 						<list style="symbols">
 							<t>The routing combo if it has been processed.</t>
-							<t>The routing combo if the usagePeriod specified at creation of the identity is expired.</t>
+							<t>The routing combo if the usagePeriod specified at the creation of the identity is expired.</t>
 							<t>The payload chunk if the maxProcess time of the routing block is reached.</t>
+							<t>All objects if their validity is expired.</t>
 							<t>All objects if the maxProcessTime of its routing block has been reached.</t>
 						</list>
-						It is imprtant to understand that maxProcessTime reflects the number of seconds since the arrival of the last octet of the message at the transport layer facility. Additional processing time should not be taken into account on this calculation.
+						Note that maxProcessTime reflects the number of seconds since the arrival of the last octet of the message at the transport layer facility. Additional processing time should not be taken into account in this calculation.
 					</t>	
 					<t>
-						A routing event is triggered by the accounting layer. The trigger has to chosen in such a mannor that it occures at least minProcessTime after the last octet of the message arrived at the routing layer. The latest possible moment should be chosen in such a way that the last octet of the assembled message is transferred to the peer node before maxProcessTime is reached. This is assuming that the peer node is working properly. The time should be chosen random. Multiple routing combos MAY be triggered by the same event. If at least one payload chunk can successfully be built for transmission a message is composed and passed to the blending layer.
+						A routing event is triggered by the accounting layer. The trigger has to be chosen in such a manner that it occurs at least minProcessTime after the last octet of the message arrived at the routing layer. The latest possible moment should be chosen in such a way that the last octet of the assembled message is transferred to the peer node before maxProcessTime is reached. This is assuming that the peer node is working. The time should be chosen randomly. Multiple routing combos MAY be triggered by the same event. 
+					</t>
+					<t>
+						First, the payload chunk at ID 0 is escaped if needed (non-special block starting with a backslash). Next, all processing instructions of a routing combo are execcuted in the sequence specified in the combo. If an instruction fails, it will be ignored and the target ID of the operation remains unchanged. For detailed description of the operations see <xref target="routing_operations"/>. If at least one payload chunk can successfully be built for transmission, a message is composed and passed to the blending layer.
 					</t>
                 </section>
                 <section anchor="routing_outgoing" title="Processing of Outgoing MessageVortex Messages">
-                    <t>FIXME</t>
+                    <t>
+						If a message can be composed for a routing combo, the message is passed to the blending layer. The blending layer MUST compose then a transport layer message according to the specification provided in the routing combo. Any decoy message or steganographic carrier SHOULD be chosen in such a way that the dead parrot syndrom as specified in <xref target="DeadParrot"/> is avoided.
+					</t>
                 </section>
             </section>
             <section anchor="routing_header" title="Header Requests">
                 <section anchor="routing_header_eid" title="Request New Ephemeral Identity">
-                    <t>FIXME</t>
+                    <t>
+						Requesting a new ephemeral identity is done by sending a message containing a header block with the new identity and an identity creation request (HeaderRequestIdentity) to a node. The node MAY send an error block (see <xref target="routing_special_error"/>) if the request is rejected.
+					</t>
+					<t>
+						If a node accepts an identity creation request, it MUST send a reply. This reply may be an error block containing "no error", or a requirement block.
+					</t>	
                 </section>
                 <section anchor="routing_header_req_msg_quota" title="Request Message Quota">
                     <t>FIXME</t>
@@ -525,6 +543,17 @@
                     <t>FIXME</t>
                 </section>
             </section>
+			<section anchor="routing_special" title="Special Blocks">
+				<t>
+					Special blocks are payload messages. They reflect messages of one node to another and are not visible to the user. A special block starts with the character sequence '\special' (or 5Ch 73h 70h 65h 63h 69h 61h 6Ch) followed by a der encoded special block (SpecialBlock). Any non-special message decoding to ID 0 in a workspace starting with backslash (5Ch) MUST escape all backslashes within the payload chunk with a backslash.
+				</t>
+				<section anchor="routing_special_error" title="Error Block">
+					<t>FIXME</t>
+				</section>
+				<section anchor="routing_special_requirement" title="Requirement Block">
+					<t>FIXME</t>
+				</section>
+			</section>
             <section anchor="routing_operations" title="Routing Operations">
                 <t>FIXME</t>
             </section>
@@ -601,7 +630,7 @@
                 A blending layer SHOULD use carrier files with high compression or encryption. Carrier files SHOULD NOT have inner structures so that the payload is comparable to valid content. To achieve undetectability by a human reviewer, a routing block builder should use F5 blending instead of PLAIN blending.
              </t>
              <t>
-                The two layers routing and accounting have the deepest insight into a Vortex message's inner working. They know the immediate peer sender and the peer recipients of all payload chunks. As decoy traffic is generated by combining chunks and applying redundancy calculations upon them, a node may never know whether a malfunction (e.g., when doing a recovery calculation) was intended or not. Therefore a node may not know what traffic was intended to fail or not. It furthermore cannot tell content from decoy traffic apart.
+                The two layers routing and accounting have the most in-depth insight into a Vortex message's inner working. They know the immediate peer sender and the peer recipients of all payload chunks. As decoy traffic is generated by combining chunks and applying redundancy calculations upon them, a node may never know whether a malfunction (e.g., when doing a recovery calculation) was intended or not. Therefore a node may not know what traffic was intended to fail or not. It furthermore cannot tell content from decoy traffic apart.
              </t>
              <t>
                 A routing block builder SHOULD follow the following rules in order not to compromise a Vortex message's anonymity:
@@ -619,7 +648,7 @@
                 An active adverser cannot use blocks from other routing block builders for his own purposes. He may falsify the result by injecting wrong message chunks or by not sending a message. Such message disruptions may be detected by intentionally routing some information to the routing block builders node. If the Vortex message does not carry the information expected the node may safely assume that one of the involved nodes is misbehaving. A block building node MAY calculate reputation for involved nodes over time. A block building node MAY build redundancy paths into a routing block to withstand such malicious nodes.
             </t>
             <t>
-                A peer node may try to exhaust a routers quota by sending multiple times the same block. A block builder should take care that a block may not be resent in the interval where the previous blocks for the transaction are still valid. This guarantees that replayed blocks will stop at the next peer node. This provides good protection against replay based attacks.
+                A peer node may try to exhaust a routers quota by sending multiple times the same block. A block builder should take care that a block may not be resent in the interval where the previous blocks for the transaction are still valid. This guarantees that replayed blocks will stop at the next peer node. This provides better protection against replay based attacks.
             </t>
         </section>
     </middle>
@@ -691,11 +720,21 @@
             <!-- POP3 STARTTLS -->
             <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2595.xml"?>
 
-            <reference anchor="MessageVortexAnalysis" target="https://www.gwerder.net/phd/phd/doc/messageVortex.pdf">
+            <reference anchor="MessageVortexAnalysis" target="https://messagevortex.org/devel/messageVortex.pdf">
                 <front>
                     <title>MessageVortex</title>
                     <author initials="M" surname="Gwerder"/>
                     <date year="2018" />
+                </front>
+            </reference>
+
+            <reference anchor="DeadParrot" target="https://people.cs.umass.edu/~amir/papers/parrot.pdf">
+                <front>
+                    <title>The Parrot is Dead: Observing Unobservable Network Communications</title>
+                    <author initials="A" surname="Houmansadr"/>
+                    <author initials="C" surname="Burbaker"/>
+                    <author initials="V" surname="Shmatikov"/>
+                    <date year="2013" />
                 </front>
             </reference>
 
@@ -720,6 +759,8 @@
         <section anchor="asn_one" title="The ASN.1 schema for Vortex messages">
             <figure align="left" anchor="app_asnOne">
                 <artwork><![CDATA[
+-- FIXME ADAPT NeoScrypt
+
 -- encryption: as specified in the key. If not specified default 
 -- mode is CBC and default padding is PKCS1Padding
 
@@ -731,17 +772,19 @@
 --   Block; from First Identity Block; may only be reduced]
 --   {IdentityReplayStore}
 
-MessageBlocks DEFINITIONS EXPLICIT TAGS ::=
+MessageVortex-Schema DEFINITIONS EXPLICIT TAGS ::= 
 BEGIN
-  -----------------------------------------------------------------
+
+  --***************************************************************
   -- Constant definitions
-  -----------------------------------------------------------------
+  --***************************************************************
+
   -- maximum serial number
   maxSerial                 INTEGER ::= 4294967295
   -- maximum size of a message chunk
   maxChunkSize              INTEGER ::= 4294967295
   -- minimum size of a message chunk (should be -maxChunkSize)
-  minChunkSize              INTEGER ::= -maxChunkSize
+  minChunkSize              INTEGER ::= -4294967295
   -- maximum size of transfer quota in bytes of an identity
   maxTransferQuota          INTEGER ::= 4294967295
   -- maximum size of message quota in messages of an identity
@@ -770,15 +813,10 @@ BEGIN
   -- The maximum number of assembly instructions per combo
   maxAssemblyInstructions   INTEGER ::= 255
 
-  -----------------------------------------------------------------
+  --***************************************************************
   -- Block Definitions
-  -----------------------------------------------------------------
+  --***************************************************************
   RoutingBlock ::= SEQUENCE {
-    -- contains the period when the payload should be processed
-    -- Router might refuse to long queue retention
-    -- Recommended support for retention >=1h
-    minProcessTime INTEGER (0..maxDurationOfProcessing),
-    maxProcessTime INTEGER (0..maxDurationOfProcessing),
     -- contains the prefix to be used
     routing    CHOICE {
       -- debug/internal use only
@@ -793,32 +831,37 @@ BEGIN
     -- error messages back to the quota owner
     -- this routing block may be cached for future use
     replyBlock [131]   SEQUENCE {
-         murb           RoutingBlock,
+         murb           RoutingCombo,
          maxReplay      INTEGER,
          validity       UsagePeriod
-    } OPTIONAL,
+    } OPTIONAL
   }
   
   RoutingCombo ::= SEQUENCE {
+    -- contains the period when the payload should be processed
+    -- Router might refuse to long queue retention
+    -- Recommended support for retention >=1h
+    minProcessTime INTEGER (0..maxDurationOfProcessing),
+    maxProcessTime INTEGER (0..maxDurationOfProcessing),
     -- The message key to encrypt the message
     messageKey    [401] SymmetricKey OPTIONAL,
     -- contains the next recipient
-    recipient BlendingSpec OPTIONAL, 
+    recipient     [402] BlendingSpec OPTIONAL, 
     -- PrefixBlock encrypted with message key
-    mPrefix       OCTET STRING OPTIONAL, 
+    mPrefix       [403] OCTET STRING OPTIONAL, 
     -- PrefixBlock encrypted with sender key
-    cPrefix       OCTET STRING OPTIONAL, 
+    cPrefix       [404] OCTET STRING OPTIONAL, 
     -- HeaderBlock encrypted with sender key
-    header        OCTET STRING OPTIONAL, 
+    header        [405] OCTET STRING OPTIONAL, 
     -- RoutingBlock encrypted with sender key
-    routing       OCTET STRING OPTIONAL, 
+    routing       [406] OCTET STRING OPTIONAL, 
     -- contains information for building messages (when used as MURB
     -- ID 0 denotes original message; ID 1-maxPayloadBlocks denotes 
     -- target message; 32768-maxWorkspaceId shared workspace for all 
     -- blocks of this identity)
-    assembly      SEQUENCE (SIZE (0..maxAssemblyInstructions))
+    assembly      [407] SEQUENCE (SIZE (0..maxAssemblyInstructions))
                   OF PayloadOperation,
-    validity      UsagePeriod
+    validity      [408] UsagePeriod
   }
 
   InnerMessageBlock ::= SEQUENCE {
@@ -839,14 +882,13 @@ BEGIN
     identitySignature OCTET STRING,
     -- contains routing information (next hop) for the payloads
     routing     CHOICE {
-      plain     [11031] SEQUENCE (SIZE (1..maxRoutingBlocks))
-                        OF RoutingBlock,
+      plain     [11031] RoutingBlock,
       -- contains encrypted routing block
       encyrpted [11032] OCTET STRING
     },
     -- contains the actual payload
     payload     SEQUENCE (SIZE (0..maxPayloadBlocks)) 
-                OF PayloadChunk
+                OF OCTET STRING
   }
 
   -- do not use this for encoding (internal structure only)
@@ -865,6 +907,7 @@ BEGIN
   }
 
   PrefixBlock ::= SEQUENCE {
+    forwardsecret	ChainSecret,
     key             SymmetricKey
   }
 
@@ -887,7 +930,7 @@ BEGIN
     -- prevents reassembly attack
     forwardSecret       ChainSecret,
     --  contains the MAC-Algorithm used for signing
-    signAlgorithm       MacAlgorithm,
+    signAlgorithm       MacAlgorithmSpec,
     -- contains administrative requests such as quota requests
     requests            SEQUENCE (SIZE (0..maxNumberOfRequests))
                         OF HeaderRequest ,
@@ -969,7 +1012,7 @@ BEGIN
 
   XorSplitPayloadOperation ::= SEQUENCE {
     originalId           INTEGER (0..maxID),
-    prngSpec             PRNGAlgorithmIdentifier,
+    prngSpec             PRNGAlgorithmSpec,
     newFirstBlockId      INTEGER (1..maxID),
     newSecondBlockId     INTEGER (1..maxID)
   }
@@ -1021,22 +1064,22 @@ BEGIN
   -- contains a node spec of a routing point
   -- At the moment either smtp:<email> or xmpp:<jabber>
   BlendingSpec ::= SEQUENCE {
-    target            NodeSpec,
-    blendingType      UTF8String,
-    parameter         SEQUENCE ( SIZE (0..maxNumberOfParameter) )
-                      OF BlendingParameter
+    target            [1] NodeSpec,
+    blendingType      [2] IA5String,
+    parameter         [3] SEQUENCE ( SIZE (0..maxNumberOfParameter) )
+                          OF BlendingParameter
   }
 
   BlendingParameter ::= CHOICE {
     offset          [1] INTEGER,
     symmetricKey    [2] SymmetricKey,
     asymmetricKey   [3] AsymmetricKey,
-    blendingType    [4] UTF8String
+    blendingType    [4] IA5String
    }
 
   NodeSpec ::= SEQUENCE {
-    Transportprotocol Protocol,
-    recipientAddress  UTF8String
+    transportProtocol [1] Protocol,
+    recipientAddress  [2] IA5String
   }
 
   ChainSecret ::= INTEGER (0..4294967295)
@@ -1049,9 +1092,10 @@ BEGIN
     quotaQuery    [4] HeaderRequestQueryQuota
   }
 
-  ReplyBlock ::= CHOICE {
+  SpecialBlock ::= CHOICE {
     capabilities  [1]  ReplyCapability,
     puzzle        [2]  RequirementPuzzleRequired,
+    payment       [3]  RequirementPaymentRequired,
     status        [99] StatusBlock
   }
 
@@ -1063,9 +1107,25 @@ BEGIN
     -- bit sequence at beginning of hash from encrypted identity 
     -- block
     challenge     BIT STRING,
-    hash          MacAlgorithmIdentifier,
+    hash          MacAlgorithmSpec,
     valid         UsagePeriod,
     identifier    INTEGER (0..4294967295)
+  }
+  
+  RequirementPaymentRequired ::= SEQUENCE {
+    account       OCTET STRING,
+    ammount       REAL,
+    currency      Currency
+  }
+  
+  Currency ::= ENUMERATED {
+	btc      (8001),
+	eth      (8002),
+	zec      (8003)
+  }
+  
+  ReplyBlock ::= CHOICE {
+	puzzle [1] RequirementPuzzleRequired
   }
 
   HeaderRequestQueryQuota ::= SEQUENCE {
@@ -1104,12 +1164,12 @@ BEGIN
 
   Protocol ::= ENUMERATED {
     smtp  (100),
-    xmmp  (110),
+    xmmp  (110)
   }
 
   StatusBlock ::= SEQUENCE {
     code            StatusCode,
-    request         HeaderRequest
+    reply           ReplyBlock
   }
 
   StatusCode ::= ENUMERATED {
@@ -1137,16 +1197,13 @@ BEGIN
     badParameters               (3821),
 
     -- Mayor host specific errors
-    hostError                   (5001),
-    ...
+    hostError                   (5001)
   }
 
-  PayloadChunk ::= SEQUENCE {
+  MemoryPayloadChunk ::= SEQUENCE {
     id                        INTEGER (0..maxID),
-    payload                   CHOICE {
-      payload                   [100] OCTET STRING,
-      replyBlock                [101] ReplyBlock
-    }
+    payload                   [100] OCTET STRING,
+	validity				  UsagePeriod
   }
 
   UsagePeriod ::= SEQUENCE {
@@ -1230,7 +1287,7 @@ BEGIN
   ECCurveType ::= ENUMERATED{
     secp384r1       (2500),
     sect409k1       (2501),
-    secp521r1       (2502),
+    secp521r1       (2502)
   }
 
   AlgorithmParameters ::= SEQUENCE {
@@ -1244,14 +1301,14 @@ BEGIN
 
   -- Symmetric key
   SymmetricKey ::= SEQUENCE {
-    keyType SymmetricAlgorithmIdentifier,
+    keyType SymmetricAlgorithm,
     parameter AlgorithmParameters,
     key     OCTET STRING (SIZE(1..512))
   }
 
   -- Asymmetric Key
   AsymmetricKey ::= SEQUENCE {
-    keyType       AsymmetricAlgorithmIdentifier,
+    keyType       AsymmetricAlgorithm,
     publicKey     [2] OCTET STRING,
     privateKey    [3] OCTET STRING OPTIONAL
   }
