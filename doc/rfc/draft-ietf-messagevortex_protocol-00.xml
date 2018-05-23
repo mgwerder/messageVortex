@@ -265,7 +265,7 @@
                     The InnerMessageBlock MUST be encrypted with the symmetric key of the PrefixBlock. The encryption hides the inner structure of the message. The InnerMessageBlock SHOULD always accommodate four or more payload chunks.
                 </t>
                 <t>
-                    An InnerMessageBlock always starts with a padding block. This padding guarantees that when using the same routing block multiple times. The padding MUST be the first 16 bytes of the first four PayloadChunks. If a PayloadChunk is shorter than 16 bytes or not existent the content of the padding should be filled with zero-valued bytes (00h) at very end up to the required number of bytes. An InnerMessageBlock SHOULD contain at least four PayloadChunks sized 16 bytes or bigger.
+                    An InnerMessageBlock always starts with a padding block. This padding guarantees that when using the same routing block multiple times. The padding MUST be the first 16 bytes of the first four PayloadChunks. If a PayloadChunk is shorter than 16 bytes the content of the padding SHOULD be filled with zero-valued bytes (00h) at very end up to the required number of bytes. An InnerMessageBlock SHOULD contain at least four PayloadChunks sized 16 bytes or bigger. If there are less than four paylod chunks the padding MUST contain a random sequence of 16 bytes for the missing payload chunks. Random sequences SHOULD NOT be reused.
                 </t>
                 <section title="Control Prefix Block">
                     <t>The control prefix block (CPREFIX) is built exactly as the MPREFIX block. It contains the sender key  sk_s. This block may be omitted if the MPREFIX block was unencrypted. The control blocks (HeaderBlock and RoutingBlock) are unencrypted if CPREFIX is omitted.</t>
@@ -275,14 +275,31 @@
                         The control blocks contain the core information to process the payload. It contains a HeaderBlock and a RoutingBlock.
                     </t>
                     <section title="Header Block">
-                        <t>The HeaderBlock contains the always the local ephemeral identity of the routing block builder. </t>
+                        <t>
+							The header block (see HeaderBlock in <xref target="asn_one"/>) contains the following information:
+							<list style="symbols">
+								<t>It MUST contain the local ephemeral identity of the routing block builder.</t>
+								<t>It MAY contain header requests.</t>
+								<t>It MAY solve a requirement previously opposed to a header request.</t>
+							</list>
+						</t>
+						<t>
+							The list of header requests MAY be empty, or contain a single identity create request (HeaderRequestIdentity), or MUST not contain more than one increase quota request. If header block violates these rules, then a node MUST NOT reply to any header requests. Payload and routing blocks SHOULD still be added to workspace and processed, given the message quota is not exceeded.
+						</t>	
                     </section>
                     <section title="Routing Block">
-                        <t>FIXME</t>
+                        <t>
+							The routing block (see RoutingBlock in <xref target="asn_one"/>) contains the following information:
+							<list style="symbols">
+								<t></t>
+								<t>It MAY contain header requests.</t>
+								<t>It MAY solve a requirement previously opposed to a header request.</t>
+							</list>
+						</t>
                     </section>
                 </section>
                 <section title="Payload Block">
-                    <t>Each InnerMessageBlock should contain at least three PayloadChunks.</t>
+                    <t>Each InnerMessageBlock SHOULD contain at least four PayloadChunks.</t>
                 </section>
             </section>
         </section>
@@ -668,22 +685,22 @@
                 <artwork><![CDATA[
 -- FIXME ADAPT NeoScrypt
 
--- encryption: as specified in the key. If not specified default mode is
--- ECB and default padding is PKCS1Padding
+-- encryption: as specified in the key. If not specified default 
+-- mode is CBC and default padding is PKCS1Padding
 
 -- States: Tuple()=Value() [vallidity; allowed operations] {Store}
 -- - Tuple(identity)=Value(messageQuota,transferQuota,sequence of
---   Routingblocks for Error Message Routing) [validity; Requested at
---   creation; may be extended upon request] {identityStore}
--- - Tuple(Identity,Serial)=maxReplays ['valid' from Identity Block;
---   from First Identity Block; may only be reduced]
+--   Routingblocks for Error Message Routing) [validity; Requested
+--   at creation; may be extended upon request] {identityStore}
+-- - Tuple(Identity,Serial)=maxReplays ['valid' from Identity 
+--   Block; from First Identity Block; may only be reduced]
 --   {IdentityReplayStore}
 
 MessageBlocks DEFINITIONS EXPLICIT TAGS ::=
 BEGIN
-  ------------------------------------------------------------------
+  -----------------------------------------------------------------
   -- Constant definitions
-  ------------------------------------------------------------------
+  -----------------------------------------------------------------
   -- maximum serial number
   maxSerial                 INTEGER ::= 4294967295
   -- maximum size of a message chunk
@@ -698,14 +715,14 @@ BEGIN
   maxNumberOfReplays        INTEGER ::= 127
   -- maximum number of administrative requests
   maxNumberOfRequests       INTEGER ::= 8
-  -- maximum number of seconds which the message might be delayed in
-  -- the local queue (starting from startOffset)
+  -- maximum number of seconds which the message might be delayed 
+  -- in the local queue (starting from startOffset)
   maxDurationOfProcessing   INTEGER ::= 86400
   -- maximum id of an operation
   maxID                     INTEGER ::= 32767
   -- maximum number of routing blocks in a message
   maxRoutingBlocks          INTEGER ::= 127
-  -- maximum number of payload blocks in a message
+  -- maximum number of payload chunks in a message
   maxPayloadBlocks          INTEGER ::= 127
   -- maximum number of seconds a proof of non revocation may be old
   maxTimeCachedProof        INTEGER ::= 86400
@@ -713,48 +730,29 @@ BEGIN
   maxGFSize                 INTEGER ::= 16
   -- the maximum number of parameters that might be embedded
   maxNumberOfParameter      INTEGER ::= 127
+  -- The maximum ID of the workspace 
+  maxWorkspaceId            INTEGER ::= 65535
+  -- The maximum number of assembly instructions per combo
+  maxAssemblyInstructions   INTEGER ::= 255
 
-  ------------------------------------------------------------------
+  -----------------------------------------------------------------
   -- Block Definitions
-  ------------------------------------------------------------------
+  -----------------------------------------------------------------
   RoutingBlock ::= SEQUENCE {
-    -- contains the next recipient in sequence
-    recipient BlendingSpec,
     -- contains the period when the payload should be processed
     -- Router might refuse to long queue retention
     -- Recommended support for retention >=1h
     minProcessTime INTEGER (0..maxDurationOfProcessing),
     maxProcessTime INTEGER (0..maxDurationOfProcessing),
     -- contains the prefix to be used
-    identityPrefix    CHOICE {
+    routing    CHOICE {
       -- debug/internal use only
       plain             [331] SEQUENCE (SIZE (0..maxRoutingBlocks))
-                              OF PrefixBlock,
+                              OF RoutingCombo,
       encrypted         [332] SEQUENCE (SIZE (0..maxRoutingBlocks))
                               OF OCTET STRING
     },
-    -- contains the idenity block to be used with this block
-    identity            CHOICE{
-      -- debug/internal use only
-      plain            [335] IdentityBlock,
-      encrypted        [336] OCTET STRING
-    },
-    -- contains the routing block to be used with this block
-    routingPrefix    CHOICE {
-      -- debug/internal use only
-      plain             [331] SEQUENCE (SIZE (0..maxRoutingBlocks))
-                              OF PrefixBlock,
-      encrypted         [332] SEQUENCE (SIZE (0..maxRoutingBlocks))
-                              OF OCTET STRING
-    },
-    -- routing blocks for the next operation
-    nextHop           CHOICE {
-      plain             [333] SEQUENCE (SIZE (0..maxRoutingBlocks))
-                              OF RoutingBlock,
-      encrypted         [334] SEQUENCE (SIZE (0..maxRoutingBlocks))
-                              OF OCTET STRING
-    },
-    -- contains the secret of the identity block
+    -- contains the secret of the header block
     forwardSecret     ChainSecret,
     -- contains a routing block which may be used when sending
     -- error messages back to the quota owner
@@ -764,13 +762,28 @@ BEGIN
          maxReplay      INTEGER,
          validity       UsagePeriod
     } OPTIONAL,
-    -- contains information for building replys (when used as MURB
-    -- ID 1 denotes original message; ID 100-999 denotes target
-    -- message)
-    operations           [132] SEQUENCE (SIZE (0..255))
-                               OF PayloadOperation,
-    assembly             SEQUENCE (SIZE (0..maxRoutingBlocks))
-                         OF AssemblyBlock
+  }
+  
+  RoutingCombo ::= SEQUENCE {
+	-- The message key to encrypt the message
+	messageKey	  [401] SymmetricKey OPTIONAL,
+	-- contains the next recipient
+    recipient BlendingSpec OPTIONAL, 
+	-- PrefixBlock encrypted with message key
+	mPrefix       OCTET STRING OPTIONAL, 
+	-- PrefixBlock encrypted with sender key
+	cPrefix       OCTET STRING OPTIONAL, 
+	-- HeaderBlock encrypted with sender key
+	header		  OCTET STRING OPTIONAL, 
+	-- RoutingBlock encrypted with sender key
+	routing		  OCTET STRING OPTIONAL, 
+    -- contains information for building messages (when used as MURB
+    -- ID 0 denotes original message; ID 1-maxPayloadBlocks denotes 
+	-- target message; 32768-maxWorkspaceId shared workspace for all 
+	-- blocks of this identity)
+    assembly      SEQUENCE (SIZE (0..maxAssemblyInstructions))
+                  OF PayloadOperation,
+	validity	  UsagePeriod
   }
 
   InnerMessageBlock ::= SEQUENCE {
@@ -782,22 +795,23 @@ BEGIN
     },
     identity  CHOICE  {
       -- debug/internal use only
-      plain     [11021] IdentityBlock,
+      plain     [11021] HeaderBlock,
       -- contains encrypted identity block
       encyrpted [11022] OCTET STRING
     },
     -- contains signature of Identity [as stored in
-    -- identityBlock; signed unencrypted identityBlock without Tag]
+    -- HeaderBlock; signed unencrypted HeaderBlock without Tag]
     identitySignature OCTET STRING,
     -- contains routing information (next hop) for the payloads
     routing     CHOICE {
       plain     [11031] SEQUENCE (SIZE (1..maxRoutingBlocks))
-                        OF RoutingBlock ,
+                        OF RoutingBlock,
       -- contains encrypted routing block
       encyrpted [11032] OCTET STRING
     },
     -- contains the actual payload
-    payload     SEQUENCE (SIZE (0..maxPayloadBlocks)) OF PayloadChunk
+    payload     SEQUENCE (SIZE (0..maxPayloadBlocks)) 
+	            OF PayloadChunk
   }
 
   -- do not use this for encoding (internal structure only)
@@ -821,7 +835,7 @@ BEGIN
 
   PuzzleIdentifier          ::= OCTET STRING ( SIZE(0..16) )
 
-  IdentityBlock ::= SEQUENCE {
+  HeaderBlock ::= SEQUENCE {
     -- Public key of the identity representing this transmission
     identityKey        AsymmetricKey,
     -- serial identifying this block
@@ -838,7 +852,7 @@ BEGIN
     -- prevents reassembly attack
     forwardSecret       ChainSecret,
     --  contains the MAC-Algorithm used for signing
-    hash                MacAlgorithm,
+    signAlgorithm       MacAlgorithm,
     -- contains administrative requests such as quota requests
     requests            SEQUENCE (SIZE (0..maxNumberOfRequests))
                         OF HeaderRequest ,
@@ -846,13 +860,6 @@ BEGIN
     identifier  [12201] PuzzleIdentifier OPTIONAL,
     -- This is for solving crypto puzzles
     proofOfWork [12202] OCTET STRING OPTIONAL
-  }
-
-  -- represents the building and sending process for the next hop
-  AssemblyBlock ::= SEQUENCE {
-    routingBlockIndex    INTEGER (0..maxRoutingBlocks),
-    payloadBlockIndex    SEQUENCE (SIZE (1..maxPayloadBlocks))
-                         OF INTEGER (0..maxID)
   }
 
   PayloadOperation ::= CHOICE {
@@ -874,8 +881,8 @@ BEGIN
   AbsoluteSizeBlock ::= SEQUENCE {
     fromAbsolute        INTEGER (0..maxChunkSize),
     toAbsolute          INTEGER (minChunkSize..maxChunkSize)
-    -- negative toAbsolute denominates end in absolute value specified
-    -- from the end of block
+    -- negative toAbsolute denominates end in absolute value 
+    -- specified from the end of block
   }
 
   SizeBlock ::= SEQUENCE{
@@ -945,7 +952,8 @@ BEGIN
   }
 
   IdentityReplayStore ::= SEQUENCE {
-    replays   SEQUENCE (SIZE (0..4294967295)) OF IdentityReplayBlock
+    replays   SEQUENCE (SIZE (0..4294967295)) 
+	          OF IdentityReplayBlock
   }
 
   IdentityReplayBlock ::= SEQUENCE {
@@ -955,7 +963,8 @@ BEGIN
   }
 
   IdentityStore ::= SEQUENCE {
-    identities SEQUENCE (SIZE (0..4294967295)) OF IdentityStoreBlock
+    identities SEQUENCE (SIZE (0..4294967295)) 
+	           OF IdentityStoreBlock
   }
 
   IdentityStoreBlock ::= SEQUENCE {
@@ -971,7 +980,7 @@ BEGIN
     nodeKey             [1003] SEQUENCE OF AsymmetricKey OPTIONAL,
     routingBlocks       [1004] SEQUENCE OF RoutingBlock OPTIONAL,
     replayStore         [1005] IdentityReplayStore,
-    puzzle              [1006] ReplyPuzzleRequired OPTIONAL
+    puzzle              [1006] RequirementPuzzleRequired OPTIONAL
   }
 
   -- contains a node spec of a routing point
@@ -1007,7 +1016,7 @@ BEGIN
 
   ReplyBlock ::= CHOICE {
     capabilities  [1]  ReplyCapability,
-    puzzle        [2]  ReplyPuzzleRequired,
+    puzzle        [2]  RequirementPuzzleRequired,
     status        [99] StatusBlock
   }
 
@@ -1015,8 +1024,9 @@ BEGIN
     period UsagePeriod
   }
 
-  ReplyPuzzleRequired ::= SEQUENCE {
-    -- bit sequence at beginning of hash from encrypted identity block
+  RequirementPuzzleRequired ::= SEQUENCE {
+    -- bit sequence at beginning of hash from encrypted identity 
+	-- block
     challenge     BIT STRING,
     hash          MacAlgorithmIdentifier,
     valid         UsagePeriod,
@@ -1149,7 +1159,8 @@ BEGIN
   }
 
   CipherMode ::= ENUMERATED {
-    -- ECB is a really bad choice. Do not use unless really necessary
+    -- ECB is a really bad choice. Do not use unless really 
+	-- necessary
     ecb             (10000),
     cbc             (10001),
     eax             (10002),
@@ -1211,7 +1222,6 @@ BEGIN
   }
 
 END
-
                 ]]></artwork>
             </figure>
         </section>
