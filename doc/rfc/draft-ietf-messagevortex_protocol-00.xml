@@ -373,7 +373,7 @@
 					A node SHOULD NOT use the following ciphers:
                     <list style="symbols">
                         <t>NONE</t>
-                        <t>ECB/t>
+                        <t>ECB</t>
                     </list>
                 </t>
                 <t>
