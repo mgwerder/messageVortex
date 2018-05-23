@@ -55,10 +55,10 @@
             <t>Anonymization is hard to achieve. Most of the attempts in the past rely on either a trust upon a dedicated infrastructure or a specialized networking protocol.</t>
             <t>
                 MessageVortex is a protocol which allows to send and receive messages by using a routing block instead of a destination address.
-                The routing block is built in such a way that it gives the sender full control over a path a message follows.
+                The sender has full control over all parameters of the message flow.
             </t>
             <t>
-                During transmission, a message is continuously split and reassembled. The operations are built in such a way that they generate either valid traffic or decoy traffic. A routing node is unable to differentiate between the message and decoy traffic.
+                A message may be split and reassembled during transmission. Chunks of the message may carry redundant information to avoid service interruptions of the message transit. Decoy traffic and message traffic are not differentiable as the nature of the addRedundancy operation allows each generated part to be a message part or decoy. Any routing node is thus unable to differentiate between the message and decoy traffic.
             </t>
             <t>
                 Any Receiver knows after processing whether a message is destined for it or other nodes.
@@ -105,7 +105,7 @@
                        Peer keys are symmetrical keys transmitted with a Vortex message. Peer keys are always known to the node sending a message, the node receiving the message from the sender, and to the creator of the routing block.
                    </t>
                    <t>
-                       A peer key is included in the identity block of a Vortex message and in the building instructions for a Vortex message.
+                       A peer key is included in the identity block of a Vortex message and in the building instructions for a Vortex message (see RoutingCombo in <xref target="asn_one"/>).
                    </t>
                </section>
                <section anchor="entities_keys_sender" title="Sender Key">
@@ -232,7 +232,7 @@
         <section title="Vortex Message">
             <section title="Overview">
                 <t>
-                    <xref target="fig_message_overview"/> shows a Vortex message. The enclosed sections denote encrypted blocks. The three to four letter abbreviations denote the key required for decryption. The abbreviation k_h stands for the asymmetric host key. s_kp is the symmetric peer key. This key is obtained by the receiving node by decrypting MPREFIX with its host key k_h. sk_s is the symmetric sender key. This key is obtained by decrypting the MPREFIX block. The header and routing blocks are protected by the sender key. This key makes sure that the node assembling the message has no knowledge about all upcoming identities, operations, and requests. The peer key protects the message including structure from any third party observer.
+                    <xref target="fig_message_overview"/> shows a Vortex message. The enclosed sections denote encrypted blocks. The three to four letter abbreviations denote the key required for decryption. The abbreviation k_h stands for the asymmetric host key. s_kp is the symmetric peer key. This key is obtained by the receiving node by decrypting MPREFIX with its host key k_h. sk_s is the symmetric sender key. This key is obtained by decrypting the MPREFIX block. The header and routing blocks are protected by the sender key. This key makes sure that the node assembling the message dos not have knowledge about upcoming identities, operations, and requests. The peer key protects the message including structure from any third party observer.
                     <figure align="center" anchor="fig_message_overview" title="Vortex message overview">
                         <artwork align="center"><![CDATA[
 +-+---+-+-+---+-+---+-+-+---+-+-+---+-+-------+-+
@@ -254,7 +254,7 @@
             </section>
             <section title="Message Prefix Block (MPREFIX)">
                 <t>
-                    The PrefixBlock contains a symmetrical key as defined in <xref target="app_asnOne"/> and is encrypted using the host key of the receiving peer host. The symmetric key used MUST be one out of the set advertised by a CapabilitiesReplyBlock (see <xref target="routing_header_req_cap"/>). Parameters omitted in the CapabilitiesReplyBlock MAY be freely chosen. A PrefixBlock SHOULD always be encrypted with the hosts public key. A prefix block MUST contain the same forwardsecret as the other prefix, the routing block, and the header block. A host MAY reply to a message with an unencrypted message block. Any reply to a message SHOULD be encrypted.
+                    The PrefixBlock contains a symmetrical key as defined in <xref target="app_asnOne"/> and is encrypted using the host key of the receiving peer host. The symmetric key used MUST be one out of the set advertised by a CapabilitiesReplyBlock (see <xref target="routing_header_req_cap"/>). Parameters omitted in the CapabilitiesReplyBlock MAY be freely chosen. A PrefixBlock SHOULD always be encrypted with the hosts public key. A prefix block MUST contain the same forward-secret as the other prefix, the routing block, and the header block. A host MAY reply to a message with an unencrypted message block. Any reply to a message SHOULD be encrypted.
                 </t>
                 <t>
                     The sender MUST choose a key which may be encrypted with the host key using the padding advertised by the CapabilitiesReplyBlock.
@@ -265,12 +265,12 @@
                     The InnerMessageBlock MUST be encrypted with the symmetric key of the PrefixBlock. The encryption hides the inner structure of the message. The InnerMessageBlock SHOULD always accommodate four or more payload chunks.
                 </t>
                 <t>
-                    An InnerMessageBlock always starts with a padding block. This padding guarantees that when using the same routing block multiple times. The padding MUST be the first 16 bytes of the first four PayloadChunks. If a PayloadChunk is shorter than 16 bytes the content of the padding SHOULD be filled with zero-valued bytes (00h) at very end up to the required number of bytes. An InnerMessageBlock SHOULD contain at least four PayloadChunks sized 16 bytes or bigger. If there are less than four paylod chunks the padding MUST contain a random sequence of 16 bytes for the missing payload chunks. Random sequences SHOULD NOT be reused.
+                    An InnerMessageBlock always starts with a padding block. This padding guarantees that when using the same routing block multiple times. The padding MUST be the first 16 bytes of the first four PayloadChunks. If a PayloadChunk is shorter than 16 bytes, the content of the padding SHOULD be filled with zero-valued bytes (00h) at very end up to the required number of bytes. An InnerMessageBlock SHOULD contain at least four PayloadChunks sized 16 bytes or bigger. If there are less than four payload chunks, then the padding MUST contain a random sequence of 16 bytes for the missing payload chunks. Random sequences SHOULD NOT be reused.
                 </t>
                 <section title="Control Prefix Block">
                     <t>The control prefix block (CPREFIX) is built exactly as the MPREFIX block. It contains the sender key  sk_s. This block may be omitted if the MPREFIX block was unencrypted. The control blocks (HeaderBlock and RoutingBlock) are unencrypted if CPREFIX is omitted.</t>
 					<t>
-						A prefix block MUST contain the same forwardsecret as the other prefix, the routing block, and the header block. 
+						A prefix block MUST contain the same forward-secret as the other prefix, the routing block, and the header block. 
 					</t>	
                 </section>
                 <section title="Control Blocks">
@@ -287,7 +287,7 @@
                             </list>
                         </t>
                         <t>
-                            The list of header requests MAY be empty, or contain a single identity create request (HeaderRequestIdentity), or MUST not contain more than one increase quota request. If header block violates these rules, then a node MUST NOT reply to any header requests. Payload and routing blocks SHOULD still be added to workspace and processed, given the message quota is not exceeded.
+                            The list of header requests MAY be empty, contain a single identity create request (HeaderRequestIdentity), or MUST not contain more than one increase quota request. If header block violates these rules, then a node MUST NOT reply to any header requests. Payload and routing blocks SHOULD still be added to the workspace and processed, given the message quota is not exceeded.
                         </t>    
                     </section>
                     <section title="Routing Block">
@@ -568,7 +568,7 @@
                 A blending layer SHOULD use carrier files with high compression or encryption. Carrier files SHOULD NOT have inner structures so that the payload is comparable to valid content. To achieve undetectability by a human reviewer, a routing block builder should use F5 blending instead of PLAIN blending.
              </t>
              <t>
-                The two layers routing and accounting have the deepest insight into a Vortex message's inner working. They know the immediate peer sender and the peer recipients of all payload chunks. As decoy traffic is generated by combining chunks and applying redundancy calculations upon them, a node may never know whether a malfunction (e.g. when doing a recovery calculation) was intended or not. Therefore a node may not know what traffic was intended to fail or not. It furthermore cannot tell content from decoy traffic apart.
+                The two layers routing and accounting have the deepest insight into a Vortex message's inner working. They know the immediate peer sender and the peer recipients of all payload chunks. As decoy traffic is generated by combining chunks and applying redundancy calculations upon them, a node may never know whether a malfunction (e.g., when doing a recovery calculation) was intended or not. Therefore a node may not know what traffic was intended to fail or not. It furthermore cannot tell content from decoy traffic apart.
              </t>
              <t>
                 A routing block builder SHOULD follow the following rules in order not to compromise a Vortex message's anonymity:
@@ -579,11 +579,11 @@
                     <t>Encryption and decryption SHOULD follow whenever possible the logic. Avoid encrypting a block on a node with one key and decrypting it with a different key on the same or another node.</t>
                     <t>Traffic peaks SHOULD be uniformly distributed within the whole anonymity set.</t>
                     <t>A routing block SHOULD be used for a limited  number of messages. If used as a message block for the node itself it should be used only once. A block builder SHOULD use the identity replace header request to update reply blocks on a regular base. Implementers should always keep in mind that the same routing block is identifiable as such by its structure.</t>
-                    <t>A block builder SHOULD always rely on the newest possible research when choosing Cipher types, paddings, and modes in order to stay secure.</t>
+                    <t>A block builder SHOULD always rely on the newest possible research when choosing Cipher types, paddings, and modes to stay secure.</t>
                 </list>
              </t>
              <t>
-                An active adverser cannot use other blocks for its own purposes. He may falsify the result by injecting wrong message chunks or by not sending a message. Such message disruptions may be detected by intentionally routing some information to the routing block builders node. If the Vortex message does not carry the information expected the node may safely assume that one of the involved nodes is misbehaving. A block building node MAY calculate reputation for involved nodes over time. A block building node MAY build redundancy paths into a routing block to withstand such malicious nodes.
+                An active adverser cannot use foreign blocks for his purposes. He may falsify the result by injecting wrong message chunks or by not sending a message. Such message disruptions may be detected by intentionally routing some information to the routing block builders node. If the Vortex message does not carry the information expected the node may safely assume that one of the involved nodes is misbehaving. A block building node MAY calculate reputation for involved nodes over time. A block building node MAY build redundancy paths into a routing block to withstand such malicious nodes.
             </t>
             <t>
                 A peer node may try to exhaust a routers quota by sending multiple times the same block. A block builder should take care that a block may not be resent in the interval where the previous blocks for the transaction are still valid. This guarantees that replayed blocks will stop at the next peer node. This provides good protection against replay based attacks.
