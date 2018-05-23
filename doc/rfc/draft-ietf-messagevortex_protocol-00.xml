@@ -64,7 +64,7 @@
                 Any Receiver knows after processing whether a message is destined for it or other nodes.
             </t>
             <t>
-                This RFC is structured in such a way that first the terminology is introduced (see <xref target="entities_overview"/>). Next, a general overview of the process is given (see <xref target="layer_overview"/>). Lastly, the protocol is described in details in the subsequent sections.
+                This RFC is structured in such a way that first the terminology is introduced (see <xref target="entities_overview"/>). Next, a general overview of the process is given (see <xref target="layer_overview"/>). Lastly, the subsequent sections describe the protocol in details.
             </t>
 
             <section title="Requirements Language">
@@ -72,7 +72,7 @@
             </section>
 
             <section title="Protocol Specification">
-                <t>The protocol is specified as in <xref target="asn_one"/> in ASN.1 (see <xref target="CCITT.X680.2002"/> and <xref target="CCITT.X208.1988"/>). The blocks are if not otherwise mentioned DER encoded.</t>
+                <t><xref target="asn_one"/> specifies all relevant parts of the protocol in ASN.1 (see <xref target="CCITT.X680.2002"/> and <xref target="CCITT.X208.1988"/>). The blocks are if not otherwise mentioned DER encoded.</t>
             </section>
         </section>
 
@@ -232,7 +232,7 @@
         <section title="Vortex Message">
             <section title="Overview">
                 <t>
-                    <xref target="fig_message_overview"/> shows a Vortex message. The enclosed sections denote encrypted blocks. The three to four letter abbreviations denote the key required for decryption. The abbreviation k_h stands for the asymmetric host key. s_kp is the symmetric peer key. This key is obtained by the receiving node by decrypting MPREFIX with its host key k_h. sk_s is the symmetric sender key. This key is obtained by decrypting the MPREFIX block. The header and routing blocks are protected by the sender key. This key makes sure that the node assembling the message dos not have knowledge about upcoming identities, operations, and requests. The peer key protects the message including structure from any third party observer.
+                    <xref target="fig_message_overview"/> shows a Vortex message. The enclosed sections denote encrypted blocks. The three to four letter abbreviations denote the key required for decryption. The abbreviation k_h stands for the asymmetric host key. s_kp is the symmetric peer key. This key is obtained by the receiving node by decrypting MPREFIX with its host key k_h. sk_s is the symmetric sender key. This key is obtained by decrypting the MPREFIX block. The header and routing blocks are protected by the sender key. This key makes sure that the node assembling the message does not know about upcoming identities, operations, and requests. The peer key protects the message including structure from any third party observer.
                     <figure align="center" anchor="fig_message_overview" title="Vortex message overview">
                         <artwork align="center"><![CDATA[
 +-+---+-+-+---+-+---+-+-+---+-+-+---+-+-------+-+
@@ -265,10 +265,12 @@
                     The InnerMessageBlock MUST be encrypted with the symmetric key of the PrefixBlock. The encryption hides the inner structure of the message. The InnerMessageBlock SHOULD always accommodate four or more payload chunks.
                 </t>
                 <t>
-                    An InnerMessageBlock always starts with a padding block. This padding guarantees that when using the same routing block multiple times. The padding MUST be the first 16 bytes of the first four PayloadChunks. If a PayloadChunk is shorter than 16 bytes, the content of the padding SHOULD be filled with zero-valued bytes (00h) at very end up to the required number of bytes. An InnerMessageBlock SHOULD contain at least four PayloadChunks sized 16 bytes or bigger. If there are less than four payload chunks, then the padding MUST contain a random sequence of 16 bytes for the missing payload chunks. Random sequences SHOULD NOT be reused.
+                    An InnerMessageBlock always starts with a padding block. This padding guarantees that when using the same routing block multiple times. The padding MUST be the first 16 bytes of the first four non-empty payload chunk (PayloadChunks). If a payload chunk is shorter than 16 bytes, the content of the padding SHOULD be filled with zero-valued bytes (00h) at very end up to the required number of bytes. An inner message block (InnerMessageBlock) SHOULD contain at least four payload chunks sized 16 bytes or bigger. If there are less than four payload chunks, then the padding MUST contain a random sequence of 16 bytes for the missing payload chunks. Random sequences SHOULD NOT be reused.
                 </t>
                 <section title="Control Prefix Block">
-                    <t>The control prefix block (CPREFIX) is built exactly as the MPREFIX block. It contains the sender key  sk_s. This block may be omitted if the MPREFIX block was unencrypted. The control blocks (HeaderBlock and RoutingBlock) are unencrypted if CPREFIX is omitted.</t>
+                    <t>
+						The control prefix block (CPREFIX) is built exactly as the MPREFIX block. It contains the sender key  sk_s. This block may be omitted if the MPREFIX block was unencrypted. The control blocks (HeaderBlock and RoutingBlock) are unencrypted if CPREFIX is omitted.
+					</t>
 					<t>
 						A prefix block MUST contain the same forward-secret as the other prefix, the routing block, and the header block. 
 					</t>	
@@ -321,9 +323,9 @@
                         <t>CAMELLIA128</t>
                         <t>CAMELLIA256</t>
                     </list>
-                    Any standardized key size bigger than the smallest key above SHOULD be supported.
+                    A node SHOULD support any standardized, bigger key size than the smallest key.
                 </t>
-                <t>The Twofish cipher MAY be supported.</t>
+                <t>A node MAY support Twofish ciphers.</t>
             </section>
             <section title="Supported Asymmetric Ciphers">
                 <t>
@@ -368,7 +370,11 @@
                         <t>EAX</t>
                         <t>GCM</t>
                     </list>
-                    ECB and NONE SHOULD NOT be used.
+					A node SHOULD NOT use the following ciphers:
+                    <list style="symbols">
+                        <t>NONE</t>
+                        <t>ECB/t>
+                    </list>
                 </t>
                 <t>
                     A node SHOULD support the following modes:
@@ -397,11 +403,11 @@
                     </list>
                 </t>
                  <t>
-                    For interoperability, PLAIN blending MUST be supported. Blending using F5 MAY be supported.
+                    A node MUST support PLAIN blending for reasons of interoperability. A node MAY support blending using F5.
                 </t>
                 <section anchor="blending_general_plain" title="PLAIN embedding into attachments">
                     <t>
-                        Within this document refer to PLAIN blending if a Vortex message is embedded in a carrier file with an offset. An offset of 0 means that the beginning of the payload file is replaced. The routing node MUST choose what payload file is used for the message. A routing node SHOULD use a credible payload type with high entropy. It furthermore SHOULD prefix a valid header structure to avoid easy detection of the Vortex message. A routing node MAY attach a valid footer to a payload file to improve blending.
+                        Within this document refer to PLAIN blending if a Vortex message is embedded in a carrier file with an offset. An offset of 0 means that the beginning of the payload file is replaced. The routing node MUST choose the payload file for the message. A routing node SHOULD use a credible payload type with high entropy. It furthermore SHOULD prefix a valid header structure to avoid easy detection of the Vortex message. A routing node MAY attach a valid footer to a payload file to improve blending.
                     </t>
                     <t>
                         A node SHOULD offer at least one PLAIN blending method for incoming Vortex messages. A node may offer multiple offsets for incoming Vortex messages.
@@ -463,9 +469,36 @@
                     </t>
                 </section>
                 <section anchor="routing_workspace" title="Processing of Routing Blocks in Workspace">
-                    <t>FIXME</t>
+                    <t>
+						A routing workspace consists of the following items:
+						<list style="symbols">
+							<t>The identity linked to it (This determines the lifetime of the workspace).</t>
+							<t>The routing combos (RoutingCombo) linked to it.</t>
+							<t>The payload chunk space. This space is divided into multiple subspaces:
+								<list style="symbols">
+									<t>ID 0 represents a message to be embedded (when read) or a message to be extracted to the user (when written).</t>
+									<t>ID 1 to ID maxPayloadBlocks represents the payload chunk slots in the target message.</t>
+									<t>ID maxPayloadBlocks+1 to ID 32767 may be used as temporary space spcific to the routing block.</t>
+									<t>ID 32768 to ID 65535 represent the shared space available to all operations of this identity.</t>
+								</list>
+							</t>
+						</list>
+					</t>
+					<t>
+						Processing is typically triggered by the accounting layer. It represents either a cleanup action where all exired payloads, Routing combos, and identities are deleted or a routing event where a routing combo is processed. A cleanup event deletes all the following information:
+						<list style="symbols">
+							<t>The routing combo if it has been processed.</t>
+							<t>The routing combo if the usagePeriod specified at creation of the identity is expired.</t>
+							<t>The payload chunk if the maxProcess time of the routing block is reached.</t>
+							<t>All objects if the maxProcessTime of its routing block has been reached.</t>
+						</list>
+						It is imprtant to understand that maxProcessTime reflects the number of seconds since the arrival of the last octet of the message at the transport layer facility. Additional processing time should not be taken into account on this calculation.
+					</t>	
+					<t>
+						A routing event is triggered by the accounting layer. The trigger has to chosen in such a mannor that it occures at least minProcessTime after the last octet of the message arrived at the routing layer. The latest possible moment should be chosen in such a way that the last octet of the assembled message is transferred to the peer node before maxProcessTime is reached. This is assuming that the peer node is working properly. The time should be chosen random. Multiple routing combos MAY be triggered by the same event. If at least one payload chunk can successfully be built for transmission a message is composed and passed to the blending layer.
+					</t>
                 </section>
-                <section anchor="routing_outgoing" title="Processing of Outgoing Routing Blocks">
+                <section anchor="routing_outgoing" title="Processing of Outgoing MessageVortex Messages">
                     <t>FIXME</t>
                 </section>
             </section>
@@ -583,7 +616,7 @@
                 </list>
              </t>
              <t>
-                An active adverser cannot use foreign blocks for his purposes. He may falsify the result by injecting wrong message chunks or by not sending a message. Such message disruptions may be detected by intentionally routing some information to the routing block builders node. If the Vortex message does not carry the information expected the node may safely assume that one of the involved nodes is misbehaving. A block building node MAY calculate reputation for involved nodes over time. A block building node MAY build redundancy paths into a routing block to withstand such malicious nodes.
+                An active adverser cannot use blocks from other routing block builders for his own purposes. He may falsify the result by injecting wrong message chunks or by not sending a message. Such message disruptions may be detected by intentionally routing some information to the routing block builders node. If the Vortex message does not carry the information expected the node may safely assume that one of the involved nodes is misbehaving. A block building node MAY calculate reputation for involved nodes over time. A block building node MAY build redundancy paths into a routing block to withstand such malicious nodes.
             </t>
             <t>
                 A peer node may try to exhaust a routers quota by sending multiple times the same block. A block builder should take care that a block may not be resent in the interval where the previous blocks for the transaction are still valid. This guarantees that replayed blocks will stop at the next peer node. This provides good protection against replay based attacks.
