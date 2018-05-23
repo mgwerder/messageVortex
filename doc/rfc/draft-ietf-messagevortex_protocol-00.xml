@@ -276,26 +276,26 @@
                     </t>
                     <section title="Header Block">
                         <t>
-							The header block (see HeaderBlock in <xref target="asn_one"/>) contains the following information:
-							<list style="symbols">
-								<t>It MUST contain the local ephemeral identity of the routing block builder.</t>
-								<t>It MAY contain header requests.</t>
-								<t>It MAY solve a requirement previously opposed to a header request.</t>
-							</list>
-						</t>
-						<t>
-							The list of header requests MAY be empty, or contain a single identity create request (HeaderRequestIdentity), or MUST not contain more than one increase quota request. If header block violates these rules, then a node MUST NOT reply to any header requests. Payload and routing blocks SHOULD still be added to workspace and processed, given the message quota is not exceeded.
-						</t>	
+                            The header block (see HeaderBlock in <xref target="asn_one"/>) contains the following information:
+                            <list style="symbols">
+                                <t>It MUST contain the local ephemeral identity of the routing block builder.</t>
+                                <t>It MAY contain header requests.</t>
+                                <t>It MAY solve a requirement previously opposed to a header request.</t>
+                            </list>
+                        </t>
+                        <t>
+                            The list of header requests MAY be empty, or contain a single identity create request (HeaderRequestIdentity), or MUST not contain more than one increase quota request. If header block violates these rules, then a node MUST NOT reply to any header requests. Payload and routing blocks SHOULD still be added to workspace and processed, given the message quota is not exceeded.
+                        </t>    
                     </section>
                     <section title="Routing Block">
                         <t>
-							The routing block (see RoutingBlock in <xref target="asn_one"/>) contains the following information:
-							<list style="symbols">
-								<t></t>
-								<t>It MAY contain header requests.</t>
-								<t>It MAY solve a requirement previously opposed to a header request.</t>
-							</list>
-						</t>
+                            The routing block (see RoutingBlock in <xref target="asn_one"/>) contains the following information:
+                            <list style="symbols">
+                                <t></t>
+                                <t>It MAY contain header requests.</t>
+                                <t>It MAY solve a requirement previously opposed to a header request.</t>
+                            </list>
+                        </t>
                     </section>
                 </section>
                 <section title="Payload Block">
@@ -765,25 +765,25 @@ BEGIN
   }
   
   RoutingCombo ::= SEQUENCE {
-	-- The message key to encrypt the message
-	messageKey	  [401] SymmetricKey OPTIONAL,
-	-- contains the next recipient
+    -- The message key to encrypt the message
+    messageKey    [401] SymmetricKey OPTIONAL,
+    -- contains the next recipient
     recipient BlendingSpec OPTIONAL, 
-	-- PrefixBlock encrypted with message key
-	mPrefix       OCTET STRING OPTIONAL, 
-	-- PrefixBlock encrypted with sender key
-	cPrefix       OCTET STRING OPTIONAL, 
-	-- HeaderBlock encrypted with sender key
-	header		  OCTET STRING OPTIONAL, 
-	-- RoutingBlock encrypted with sender key
-	routing		  OCTET STRING OPTIONAL, 
+    -- PrefixBlock encrypted with message key
+    mPrefix       OCTET STRING OPTIONAL, 
+    -- PrefixBlock encrypted with sender key
+    cPrefix       OCTET STRING OPTIONAL, 
+    -- HeaderBlock encrypted with sender key
+    header        OCTET STRING OPTIONAL, 
+    -- RoutingBlock encrypted with sender key
+    routing       OCTET STRING OPTIONAL, 
     -- contains information for building messages (when used as MURB
     -- ID 0 denotes original message; ID 1-maxPayloadBlocks denotes 
-	-- target message; 32768-maxWorkspaceId shared workspace for all 
-	-- blocks of this identity)
+    -- target message; 32768-maxWorkspaceId shared workspace for all 
+    -- blocks of this identity)
     assembly      SEQUENCE (SIZE (0..maxAssemblyInstructions))
                   OF PayloadOperation,
-	validity	  UsagePeriod
+    validity      UsagePeriod
   }
 
   InnerMessageBlock ::= SEQUENCE {
@@ -811,7 +811,7 @@ BEGIN
     },
     -- contains the actual payload
     payload     SEQUENCE (SIZE (0..maxPayloadBlocks)) 
-	            OF PayloadChunk
+                OF PayloadChunk
   }
 
   -- do not use this for encoding (internal structure only)
@@ -953,7 +953,7 @@ BEGIN
 
   IdentityReplayStore ::= SEQUENCE {
     replays   SEQUENCE (SIZE (0..4294967295)) 
-	          OF IdentityReplayBlock
+              OF IdentityReplayBlock
   }
 
   IdentityReplayBlock ::= SEQUENCE {
@@ -964,7 +964,7 @@ BEGIN
 
   IdentityStore ::= SEQUENCE {
     identities SEQUENCE (SIZE (0..4294967295)) 
-	           OF IdentityStoreBlock
+               OF IdentityStoreBlock
   }
 
   IdentityStoreBlock ::= SEQUENCE {
@@ -1026,7 +1026,7 @@ BEGIN
 
   RequirementPuzzleRequired ::= SEQUENCE {
     -- bit sequence at beginning of hash from encrypted identity 
-	-- block
+    -- block
     challenge     BIT STRING,
     hash          MacAlgorithmIdentifier,
     valid         UsagePeriod,
@@ -1160,7 +1160,7 @@ BEGIN
 
   CipherMode ::= ENUMERATED {
     -- ECB is a really bad choice. Do not use unless really 
-	-- necessary
+    -- necessary
     ecb             (10000),
     cbc             (10001),
     eax             (10002),
