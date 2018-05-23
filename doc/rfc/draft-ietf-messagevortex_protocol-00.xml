@@ -153,9 +153,9 @@
                 <section anchor="entities_identity_peer" title="Peer Identity">
                     <t>The peer identity may contain the following information of a peer partner:
                         <list style="symbols">
-                            <t>Transport address (always) and the public key of this identity (if no recipient anonymity is given)</t>
-                            <t>Routing blocks for contacting the identity (optional; usually in the case of recipient anonymity)</t>
-                            <t>Private key (only known by the owner of the identity)</t>
+                            <t>The transport address (always) and the public key of this identity (if no recipient anonymity is given)</t>
+                            <t>The routing blocks for contacting the identity (optional; usually in the case of recipient anonymity)</t>
+                            <t>The private key (only known by the owner of the identity)</t>
                         </list>
                     </t>
                 </section>
@@ -174,7 +174,7 @@
                 </section>
             </section>
             <section anchor="entities_workspace" title="Workspace">
-                <t>Every official or ephemeral identity has a workspace. A workspace consists out of the following elements:
+                <t>Every official or ephemeral identity has a workspace. A workspace consists of the following elements:
                     <list style="symbols">
                         <t>Zero or more routing blocks to be processed</t>
                         <t>Slots for payload block sequentially numbered</t>
@@ -254,7 +254,7 @@
             </section>
             <section title="Message Prefix Block (MPREFIX)">
                 <t>
-                    The PrefixBlock contains a symmetrical key as defined in <xref target="app_asnOne"/> and is encrypted using the host key of the receiving peer host. The symmetric key used MUST be one out of the set advertised by a CapabilitiesReplyBlock (see target="routing_header_req_cap"/>). Parameters omitted in the CapabilitiesReplyBlock MAY be freely chosen. A PrefixBlock SHOULD always be encrypted with the hosts public key. A host MAY reply to a message with an unencrypted message block. Any reply to a message SHOULD be encrypted.
+                    The PrefixBlock contains a symmetrical key as defined in <xref target="app_asnOne"/> and is encrypted using the host key of the receiving peer host. The symmetric key used MUST be one out of the set advertised by a CapabilitiesReplyBlock (see <xref target="routing_header_req_cap"/>). Parameters omitted in the CapabilitiesReplyBlock MAY be freely chosen. A PrefixBlock SHOULD always be encrypted with the hosts public key. A host MAY reply to a message with an unencrypted message block. Any reply to a message SHOULD be encrypted.
                 </t>
                 <t>
                     The sender MUST choose a key which may be encrypted with the host key using the padding advertised by the CapabilitiesReplyBlock.
@@ -293,7 +293,7 @@
             </t>
             <section title="Supported Symmetric Ciphers">
                 <t>
-                    The following symmetric ciphres MUST be supported by a node:
+                    The following symmetric ciphers MUST be supported by a node:
                     <list style="symbols">
                         <t>AES128</t>
                         <t>AES256</t>
@@ -421,13 +421,13 @@
                         An incoming message is first unauthenticated. A message is authenticated as soon as the ephemeral identity is known and is not temporary.
                     </t>
                     <t>
-                        For a uanthenticated message the following rules apply:
+                        For an unauthenticated message the following rules apply:
                         <list style="symbols">
                             <t>A node MUST ignore all Routing blocks.</t>
                             <t>A node MUST ignore all Payload blocks.</t>
                             <t>A node SHOULD accept identity creation requests in unauthenticated messages.</t>
                             <t>A node MUST ignore any other header request except identity creation requests.</t>
-                            <t>A node MUST ignore all identity creation requests which bleong to an already existing identity.</t>
+                            <t>A node MUST ignore all identity creation requests which belong to an already existing identity.</t>
                         </list>
                     </t>
                     <t>
@@ -438,7 +438,7 @@
                             <t>A node SHOULD add all routing blocks to the workspace.</t>
                             <t>A node SHOULD add all payload blocks to the workspace.</t>
                         </list>
-                        A routing node MUST decrement the message quota by 1 if a received message is authenticated and contains at least one payload block. 
+                        A routing node MUST decrement the message quota by one if a received message is authenticated and contains at least one payload block.
                     </t>
                 </section>
                 <section anchor="routing_workspace" title="Processing of Routing Blocks in Workspace">
@@ -504,7 +504,7 @@
             </section>
         </section>
 
-        <section anchor="Acknowledgements" title="Acknowledgements">
+        <section anchor="Acknowledgments" title="Acknowledgments">
             <t>FIXME</t>
         </section>
 
@@ -558,14 +558,14 @@
                     <t>Encryption and decryption SHOULD follow whenever possible the logic. Avoid encrypting a block on a node with one key and decrypting it with a different key on the same or another node.</t>
                     <t>Traffic peaks SHOULD be uniformly distributed within the whole anonymity set.</t>
                     <t>A routing block SHOULD be used for a limited  number of messages. If used as a message block for the node itself it should be used only once. A block builder SHOULD use the identity replace header request to update reply blocks on a regular base. Implementers should always keep in mind that the same routing block is identifiable as such by its structure.</t>
-                    <t>A block builder SHOULD always rely on the newest possible research when choosing Cipher types, paddings, and modes in order to stay secure</t>
+                    <t>A block builder SHOULD always rely on the newest possible research when choosing Cipher types, paddings, and modes in order to stay secure.</t>
                 </list>
              </t>
              <t>
-                An active adverser cannot use other blocks for its own purposes. He may however falsify the result by injecting wrong message chunks or by not sending a message. Such message disruptions may be detected by intentionally routing some information to the routing block builders node. If the Vortex message does not carry the information expected the node may safely assume that one of the involved nodes is misbehaving. A block building node MAY calculate reputation for involved nodes over time. A block building node MAY build redundancy paths into a routing block to withstand such malicious nodes.
+                An active adverser cannot use other blocks for its own purposes. He may falsify the result by injecting wrong message chunks or by not sending a message. Such message disruptions may be detected by intentionally routing some information to the routing block builders node. If the Vortex message does not carry the information expected the node may safely assume that one of the involved nodes is misbehaving. A block building node MAY calculate reputation for involved nodes over time. A block building node MAY build redundancy paths into a routing block to withstand such malicious nodes.
             </t>
             <t>
-                A peer node may try to exhaust a routers quota by sending multiple times the same block. A block builder should therefore take care that a block may not be resent in the interval where the previous blocks for the transaction are still valid. This guarantees that replayed blocks will stop at the next peer node. This provides good protection against replay based attacks.
+                A peer node may try to exhaust a routers quota by sending multiple times the same block. A block builder should take care that a block may not be resent in the interval where the previous blocks for the transaction are still valid. This guarantees that replayed blocks will stop at the next peer node. This provides good protection against replay based attacks.
             </t>
         </section>
     </middle>
