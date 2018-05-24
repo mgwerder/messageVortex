@@ -8,7 +8,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="<#if (content.rootpath)??>${content.rootpath}<#else></#if>"><img src="<#if (content.rootpath)??>${content.rootpath}<#else></#if>images/MessageVortexLogo.png" style="width: 24px;"/>MessageVortex</a>
+          <a class="navbar-brand" href="<#if (content.rootpath)??>${content.rootpath}<#else></#if>"><img src="<#if (content.rootpath)??>${content.rootpath}<#else></#if>images/MessageVortexLogo.png" alt="MessageVortex Logo" style="width: 24px;"/>MessageVortex</a>
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
