@@ -77,8 +77,8 @@
 
             <section title="Number Specification">
                 <t>
-					all numbers within this document are if not suffixed decimal numbers. Octets are written in capitalized hex numbers suffixed with a small letter 'h'. So a blank in ASCII (' ') is written as 20h and a capital 'K' in ASCII as 4Bh.
-				</t>
+                    All numbers within this document are if not suffixed decimal numbers. Octets are written in capitalized hex numbers suffixed with a small letter 'h'. So a blank in ASCII (' ') is written as 20h and a capital 'K' in ASCII as 4Bh.
+                </t>
             </section>
         </section>
 
@@ -275,11 +275,11 @@
                 </t>
                 <section title="Control Prefix Block">
                     <t>
-						The control prefix block (CPREFIX) is built exactly as the MPREFIX block. It contains the sender key  sk_s. This block may be omitted if the MPREFIX block was unencrypted. The control blocks (HeaderBlock and RoutingBlock) are unencrypted if CPREFIX is omitted.
-					</t>
-					<t>
-						A prefix block MUST contain the same forward-secret as the other prefix, the routing block, and the header block. 
-					</t>	
+                        The control prefix block (CPREFIX) is built exactly as the MPREFIX block. It contains the sender key  sk_s. This block may be omitted if the MPREFIX block was unencrypted. The control blocks (HeaderBlock and RoutingBlock) are unencrypted if CPREFIX is omitted.
+                    </t>
+                    <t>
+                        A prefix block MUST contain the same forward-secret as the other prefix, the routing block, and the header block.
+                    </t>
                 </section>
                 <section title="Control Blocks">
                     <t>
@@ -296,16 +296,16 @@
                         </t>
                         <t>
                             The list of header requests MAY be empty, contain a single identity create request (HeaderRequestIdentity), or MUST not contain more than one increase quota request. If header block violates these rules, then a node MUST NOT reply to any header requests. Payload and routing blocks SHOULD still be added to the workspace and processed, given the message quota is not exceeded.
-                        </t>    
+                        </t>
                     </section>
                     <section title="Routing Block">
                         <t>
                             The routing block (see RoutingBlock in <xref target="asn_one"/>) contains the following information:
                             <list style="symbols">
-								<t>It MUST contain a serial number uniquely identifying the routing block of this user</t>
-								<t>It MUST contain the same forward secret as the two prefix and the header block.</t>
+                                <t>It MUST contain a serial number uniquely identifying the routing block of this user</t>
+                                <t>It MUST contain the same forward secret as the two prefix and the header block.</t>
                                 <t>It MAY contain assembly and processing instructions for subsequent messages</t>
-								<t>It MAY contain a reply block for messages assigned to the owner of the identity.</t>
+                                <t>It MAY contain a reply block for messages assigned to the owner of the identity.</t>
                             </list>
                         </t>
                     </section>
@@ -376,7 +376,7 @@
                         <t>EAX</t>
                         <t>GCM</t>
                     </list>
-					A node SHOULD NOT use the following ciphers:
+                    A node SHOULD NOT use the following ciphers:
                     <list style="symbols">
                         <t>NONE</t>
                         <t>ECB</t>
@@ -467,7 +467,7 @@
                         A message is authenticated as soon as the identity used in the header block is known and not temporary. For authenticated messages the following rules apply:
                         <list style="symbols">
                             <t>A node MUST ignore identity creation requests.</t>
-							<t>A node MUST replace the current reply block with the reply block provided in the routing block (if any). Th node MUST keep the reply block if no reply block is provided.</t>
+                            <t>A node MUST replace the current reply block with the reply block provided in the routing block (if any). Th node MUST keep the reply block if no reply block is provided.</t>
                             <t>A node SHOULD process all header requests.</t>
                             <t>A node SHOULD add all routing blocks to the workspace.</t>
                             <t>A node SHOULD add all payload blocks to the workspace.</t>
@@ -477,52 +477,52 @@
                 </section>
                 <section anchor="routing_workspace" title="Processing of Routing Blocks in Workspace">
                     <t>
-						A routing workspace consists of the following items:
-						<list style="symbols">
-							<t>The identity linked to it (This determines the lifetime of the workspace).</t>
-							<t>The routing combos (RoutingCombo) linked to it.</t>
-							<t>The payload chunk space. This space is divided into multiple subspaces:
-								<list style="symbols">
-									<t>ID 0 represents a message to be embedded (when reading) or a message to be extracted to the user (when written).</t>
-									<t>ID 1 to ID maxPayloadBlocks represents the payload chunk slots in the target message.</t>
-									<t>ID maxPayloadBlocks+1 to ID 32767 may be used as temporary space specific to the routing block.</t>
-									<t>ID 32768 to ID 65535 represent the shared space available to all operations of this identity.</t>
-								</list>
-							</t>
-						</list>
-					</t>
-					<t>
-						Processing is typically triggered by the accounting layer. It represents either a cleanup action where all expired payloads, Routing combos, and identities are deleted or a routing event where a routing combo is processed. A cleanup event deletes the following information:
-						<list style="symbols">
-							<t>The routing combo if it has been processed.</t>
-							<t>The routing combo if the usagePeriod specified at the creation of the identity is expired.</t>
-							<t>The payload chunk if the maxProcess time of the routing block is reached.</t>
-							<t>All objects if their validity is expired.</t>
-							<t>All objects if the maxProcessTime of its routing block has been reached.</t>
-						</list>
-						Note that maxProcessTime reflects the number of seconds since the arrival of the last octet of the message at the transport layer facility. Additional processing time should not be taken into account in this calculation.
-					</t>	
-					<t>
-						A routing event is triggered by the accounting layer. The trigger has to be chosen in such a manner that it occurs at least minProcessTime after the last octet of the message arrived at the routing layer. The latest possible moment should be chosen in such a way that the last octet of the assembled message is transferred to the peer node before maxProcessTime is reached. This is assuming that the peer node is working. The time should be chosen randomly. Multiple routing combos MAY be triggered by the same event. 
-					</t>
-					<t>
-						First, the payload chunk at ID 0 is escaped if needed (non-special block starting with a backslash). Next, all processing instructions of a routing combo are execcuted in the sequence specified in the combo. If an instruction fails, it will be ignored and the target ID of the operation remains unchanged. For detailed description of the operations see <xref target="routing_operations"/>. If at least one payload chunk can successfully be built for transmission, a message is composed and passed to the blending layer.
-					</t>
+                        A routing workspace consists of the following items:
+                        <list style="symbols">
+                            <t>The identity linked to it (This determines the lifetime of the workspace).</t>
+                            <t>The routing combos (RoutingCombo) linked to it.</t>
+                            <t>The payload chunk space. This space is divided into multiple subspaces:
+                                <list style="symbols">
+                                    <t>ID 0 represents a message to be embedded (when reading) or a message to be extracted to the user (when written).</t>
+                                    <t>ID 1 to ID maxPayloadBlocks represents the payload chunk slots in the target message.</t>
+                                    <t>ID maxPayloadBlocks+1 to ID 32767 may be used as temporary space specific to the routing block.</t>
+                                    <t>ID 32768 to ID 65535 represent the shared space available to all operations of this identity.</t>
+                                </list>
+                            </t>
+                        </list>
+                    </t>
+                    <t>
+                        Processing is typically triggered by the accounting layer. It represents either a cleanup action where all expired payloads, Routing combos, and identities are deleted or a routing event where a routing combo is processed. A cleanup event deletes the following information:
+                        <list style="symbols">
+                            <t>The routing combo if it has been processed.</t>
+                            <t>The routing combo if the usagePeriod specified at the creation of the identity is expired.</t>
+                            <t>The payload chunk if the maxProcess time of the routing block is reached.</t>
+                            <t>All objects if their validity is expired.</t>
+                            <t>All objects if the maxProcessTime of its routing block has been reached.</t>
+                        </list>
+                        Note that maxProcessTime reflects the number of seconds since the arrival of the last octet of the message at the transport layer facility. Additional processing time should not be taken into account in this calculation.
+                    </t>
+                    <t>
+                        A routing event is triggered by the accounting layer. The trigger has to be chosen in such a manner that it occurs at least minProcessTime after the last octet of the message arrived at the routing layer. The latest possible moment should be chosen in such a way that the last octet of the assembled message is transferred to the peer node before maxProcessTime is reached. This is assuming that the peer node is working. The time should be chosen randomly. Multiple routing combos MAY be triggered by the same event.
+                    </t>
+                    <t>
+                        First, the payload chunk at ID 0 is escaped if needed (non-special block starting with a backslash). Next, all processing instructions of a routing combo are execcuted in the sequence specified in the combo. If an instruction fails, it will be ignored and the target ID of the operation remains unchanged. For detailed description of the operations see <xref target="routing_operations"/>. If at least one payload chunk can successfully be built for transmission, a message is composed and passed to the blending layer.
+                    </t>
                 </section>
                 <section anchor="routing_outgoing" title="Processing of Outgoing MessageVortex Messages">
                     <t>
-						If a message can be composed for a routing combo, the message is passed to the blending layer. The blending layer MUST compose then a transport layer message according to the specification provided in the routing combo. Any decoy message or steganographic carrier SHOULD be chosen in such a way that the dead parrot syndrom as specified in <xref target="DeadParrot"/> is avoided.
-					</t>
+                        If a message can be composed for a routing combo, the message is passed to the blending layer. The blending layer MUST compose then a transport layer message according to the specification provided in the routing combo. Any decoy message or steganographic carrier SHOULD be chosen in such a way that the dead parrot syndrom as specified in <xref target="DeadParrot"/> is avoided.
+                    </t>
                 </section>
             </section>
             <section anchor="routing_header" title="Header Requests">
                 <section anchor="routing_header_eid" title="Request New Ephemeral Identity">
                     <t>
-						Requesting a new ephemeral identity is done by sending a message containing a header block with the new identity and an identity creation request (HeaderRequestIdentity) to a node. The node MAY send an error block (see <xref target="routing_special_error"/>) if the request is rejected.
-					</t>
-					<t>
-						If a node accepts an identity creation request, it MUST send a reply. This reply may be an error block containing "no error", or a requirement block.
-					</t>	
+                        Requesting a new ephemeral identity is done by sending a message containing a header block with the new identity and an identity creation request (HeaderRequestIdentity) to a node. The node MAY send an error block (see <xref target="routing_special_error"/>) if the request is rejected.
+                    </t>
+                    <t>
+                        If a node accepts an identity creation request, it MUST send a reply. This reply may be an error block containing "no error", or a requirement block.
+                    </t>
                 </section>
                 <section anchor="routing_header_req_msg_quota" title="Request Message Quota">
                     <t>FIXME</t>
@@ -543,17 +543,17 @@
                     <t>FIXME</t>
                 </section>
             </section>
-			<section anchor="routing_special" title="Special Blocks">
-				<t>
-					Special blocks are payload messages. They reflect messages of one node to another and are not visible to the user. A special block starts with the character sequence '\special' (or 5Ch 73h 70h 65h 63h 69h 61h 6Ch) followed by a der encoded special block (SpecialBlock). Any non-special message decoding to ID 0 in a workspace starting with backslash (5Ch) MUST escape all backslashes within the payload chunk with a backslash.
-				</t>
-				<section anchor="routing_special_error" title="Error Block">
-					<t>FIXME</t>
-				</section>
-				<section anchor="routing_special_requirement" title="Requirement Block">
-					<t>FIXME</t>
-				</section>
-			</section>
+            <section anchor="routing_special" title="Special Blocks">
+                <t>
+                    Special blocks are payload messages. They reflect messages of one node to another and are not visible to the user. A special block starts with the character sequence '\special' (or 5Ch 73h 70h 65h 63h 69h 61h 6Ch) followed by a der encoded special block (SpecialBlock). Any non-special message decoding to ID 0 in a workspace starting with backslash (5Ch) MUST escape all backslashes within the payload chunk with a backslash.
+                </t>
+                <section anchor="routing_special_error" title="Error Block">
+                    <t>FIXME</t>
+                </section>
+                <section anchor="routing_special_requirement" title="Requirement Block">
+                    <t>FIXME</t>
+                </section>
+            </section>
             <section anchor="routing_operations" title="Routing Operations">
                 <t>FIXME</t>
             </section>
@@ -761,18 +761,18 @@
                 <artwork><![CDATA[
 -- FIXME ADAPT NeoScrypt
 
--- encryption: as specified in the key. If not specified default 
+-- encryption: as specified in the key. If not specified default
 -- mode is CBC and default padding is PKCS1Padding
 
 -- States: Tuple()=Value() [vallidity; allowed operations] {Store}
 -- - Tuple(identity)=Value(messageQuota,transferQuota,sequence of
 --   Routingblocks for Error Message Routing) [validity; Requested
 --   at creation; may be extended upon request] {identityStore}
--- - Tuple(Identity,Serial)=maxReplays ['valid' from Identity 
+-- - Tuple(Identity,Serial)=maxReplays ['valid' from Identity
 --   Block; from First Identity Block; may only be reduced]
 --   {IdentityReplayStore}
 
-MessageVortex-Schema DEFINITIONS EXPLICIT TAGS ::= 
+MessageVortex-Schema DEFINITIONS EXPLICIT TAGS ::=
 BEGIN
 
   --***************************************************************
@@ -793,7 +793,7 @@ BEGIN
   maxNumberOfReplays        INTEGER ::= 127
   -- maximum number of administrative requests
   maxNumberOfRequests       INTEGER ::= 8
-  -- maximum number of seconds which the message might be delayed 
+  -- maximum number of seconds which the message might be delayed
   -- in the local queue (starting from startOffset)
   maxDurationOfProcessing   INTEGER ::= 86400
   -- maximum id of an operation
@@ -808,7 +808,7 @@ BEGIN
   maxGFSize                 INTEGER ::= 16
   -- the maximum number of parameters that might be embedded
   maxNumberOfParameter      INTEGER ::= 127
-  -- The maximum ID of the workspace 
+  -- The maximum ID of the workspace
   maxWorkspaceId            INTEGER ::= 65535
   -- The maximum number of assembly instructions per combo
   maxAssemblyInstructions   INTEGER ::= 255
@@ -836,7 +836,7 @@ BEGIN
          validity       UsagePeriod
     } OPTIONAL
   }
-  
+
   RoutingCombo ::= SEQUENCE {
     -- contains the period when the payload should be processed
     -- Router might refuse to long queue retention
@@ -846,18 +846,18 @@ BEGIN
     -- The message key to encrypt the message
     messageKey    [401] SymmetricKey OPTIONAL,
     -- contains the next recipient
-    recipient     [402] BlendingSpec OPTIONAL, 
+    recipient     [402] BlendingSpec OPTIONAL,
     -- PrefixBlock encrypted with message key
-    mPrefix       [403] OCTET STRING OPTIONAL, 
+    mPrefix       [403] OCTET STRING OPTIONAL,
     -- PrefixBlock encrypted with sender key
-    cPrefix       [404] OCTET STRING OPTIONAL, 
+    cPrefix       [404] OCTET STRING OPTIONAL,
     -- HeaderBlock encrypted with sender key
-    header        [405] OCTET STRING OPTIONAL, 
+    header        [405] OCTET STRING OPTIONAL,
     -- RoutingBlock encrypted with sender key
-    routing       [406] OCTET STRING OPTIONAL, 
+    routing       [406] OCTET STRING OPTIONAL,
     -- contains information for building messages (when used as MURB
-    -- ID 0 denotes original message; ID 1-maxPayloadBlocks denotes 
-    -- target message; 32768-maxWorkspaceId shared workspace for all 
+    -- ID 0 denotes original message; ID 1-maxPayloadBlocks denotes
+    -- target message; 32768-maxWorkspaceId shared workspace for all
     -- blocks of this identity)
     assembly      [407] SEQUENCE (SIZE (0..maxAssemblyInstructions))
                   OF PayloadOperation,
@@ -887,7 +887,7 @@ BEGIN
       encyrpted [11032] OCTET STRING
     },
     -- contains the actual payload
-    payload     SEQUENCE (SIZE (0..maxPayloadBlocks)) 
+    payload     SEQUENCE (SIZE (0..maxPayloadBlocks))
                 OF OCTET STRING
   }
 
@@ -959,7 +959,7 @@ BEGIN
   AbsoluteSizeBlock ::= SEQUENCE {
     fromAbsolute        INTEGER (0..maxChunkSize),
     toAbsolute          INTEGER (minChunkSize..maxChunkSize)
-    -- negative toAbsolute denominates end in absolute value 
+    -- negative toAbsolute denominates end in absolute value
     -- specified from the end of block
   }
 
@@ -1030,7 +1030,7 @@ BEGIN
   }
 
   IdentityReplayStore ::= SEQUENCE {
-    replays   SEQUENCE (SIZE (0..4294967295)) 
+    replays   SEQUENCE (SIZE (0..4294967295))
               OF IdentityReplayBlock
   }
 
@@ -1041,7 +1041,7 @@ BEGIN
   }
 
   IdentityStore ::= SEQUENCE {
-    identities SEQUENCE (SIZE (0..4294967295)) 
+    identities SEQUENCE (SIZE (0..4294967295))
                OF IdentityStoreBlock
   }
 
@@ -1104,28 +1104,28 @@ BEGIN
   }
 
   RequirementPuzzleRequired ::= SEQUENCE {
-    -- bit sequence at beginning of hash from encrypted identity 
+    -- bit sequence at beginning of hash from encrypted identity
     -- block
     challenge     BIT STRING,
     hash          MacAlgorithmSpec,
     valid         UsagePeriod,
     identifier    INTEGER (0..4294967295)
   }
-  
+
   RequirementPaymentRequired ::= SEQUENCE {
     account       OCTET STRING,
     ammount       REAL,
     currency      Currency
   }
-  
+
   Currency ::= ENUMERATED {
-	btc      (8001),
-	eth      (8002),
-	zec      (8003)
+    btc      (8001),
+    eth      (8002),
+    zec      (8003)
   }
-  
+
   ReplyBlock ::= CHOICE {
-	puzzle [1] RequirementPuzzleRequired
+    puzzle [1] RequirementPuzzleRequired
   }
 
   HeaderRequestQueryQuota ::= SEQUENCE {
@@ -1203,7 +1203,7 @@ BEGIN
   MemoryPayloadChunk ::= SEQUENCE {
     id                        INTEGER (0..maxID),
     payload                   [100] OCTET STRING,
-	validity				  UsagePeriod
+    validity				  UsagePeriod
   }
 
   UsagePeriod ::= SEQUENCE {
@@ -1251,7 +1251,7 @@ BEGIN
   }
 
   CipherMode ::= ENUMERATED {
-    -- ECB is a really bad choice. Do not use unless really 
+    -- ECB is a really bad choice. Do not use unless really
     -- necessary
     ecb             (10000),
     cbc             (10001),
