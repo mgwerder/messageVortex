@@ -12,6 +12,7 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+        BuildSamplesTest.class,
         BlendingParameterTest.class,
         CipherSpecTest.class,
         FuzzerTest.class,
@@ -38,6 +39,7 @@ public class MainASN1Suite {
 
     public static junit.framework.Test suite() {
         final TestSuite s = new TestSuite();
+        s.addTest(new JUnit4TestAdapter(BuildSamplesTest.class));
         s.addTest(new JUnit4TestAdapter(BlendingParameterTest.class));
         s.addTest(new JUnit4TestAdapter(CipherSpecTest.class));
         s.addTest(new JUnit4TestAdapter(FuzzerTest.class));
