@@ -44,3 +44,8 @@ cobertura
 /SAMPLE_*.der
 /SAMPLE_*.txt
 
+/app/asn.1/*.asn1~
+/doc/rfc/rfc2629-other.ent
+/doc/rfc/rfc2629-xhtml.ent
+/doc/rfc/rfc2629.dtd
+/doc/rfc/rfc2629.xsd
