@@ -1,17 +1,17 @@
 -- FIXME ADAPT NeoScrypt
 
--- encryption: as specified in the key. If not specified default 
+-- encryption: as specified in the key. If not specified default
 -- mode is CBC and default padding is PKCS1Padding
 
 -- States: Tuple()=Value() [vallidity; allowed operations] {Store}
 -- - Tuple(identity)=Value(messageQuota,transferQuota,sequence of
 --   Routingblocks for Error Message Routing) [validity; Requested
 --   at creation; may be extended upon request] {identityStore}
--- - Tuple(Identity,Serial)=maxReplays ['valid' from Identity 
+-- - Tuple(Identity,Serial)=maxReplays ['valid' from Identity
 --   Block; from First Identity Block; may only be reduced]
 --   {IdentityReplayStore}
 
-MessageVortex-Schema DEFINITIONS EXPLICIT TAGS ::= 
+MessageVortex-Schema DEFINITIONS EXPLICIT TAGS ::=
 BEGIN
 
   --***************************************************************
@@ -32,7 +32,7 @@ BEGIN
   maxNumberOfReplays        INTEGER ::= 127
   -- maximum number of administrative requests
   maxNumberOfRequests       INTEGER ::= 8
-  -- maximum number of seconds which the message might be delayed 
+  -- maximum number of seconds which the message might be delayed
   -- in the local queue (starting from startOffset)
   maxDurationOfProcessing   INTEGER ::= 86400
   -- maximum id of an operation
@@ -47,7 +47,7 @@ BEGIN
   maxGFSize                 INTEGER ::= 16
   -- the maximum number of parameters that might be embedded
   maxNumberOfParameter      INTEGER ::= 127
-  -- The maximum ID of the workspace 
+  -- The maximum ID of the workspace
   maxWorkspaceId            INTEGER ::= 65535
   -- The maximum number of assembly instructions per combo
   maxAssemblyInstructions   INTEGER ::= 255
@@ -75,7 +75,7 @@ BEGIN
          validity       UsagePeriod
     } OPTIONAL
   }
-  
+
   RoutingCombo ::= SEQUENCE {
     -- contains the period when the payload should be processed
     -- Router might refuse to long queue retention
@@ -85,22 +85,24 @@ BEGIN
     -- The message key to encrypt the message
     messageKey    [401] SymmetricKey OPTIONAL,
     -- contains the next recipient
-    recipient     [402] BlendingSpec OPTIONAL, 
+    recipient     [402] BlendingSpec OPTIONAL,
     -- PrefixBlock encrypted with message key
-    mPrefix       [403] OCTET STRING OPTIONAL, 
+    mPrefix       [403] OCTET STRING OPTIONAL,
     -- PrefixBlock encrypted with sender key
-    cPrefix       [404] OCTET STRING OPTIONAL, 
+    cPrefix       [404] OCTET STRING OPTIONAL,
     -- HeaderBlock encrypted with sender key
-    header        [405] OCTET STRING OPTIONAL, 
+    header        [405] OCTET STRING OPTIONAL,
     -- RoutingBlock encrypted with sender key
-    routing       [406] OCTET STRING OPTIONAL, 
+    routing       [406] OCTET STRING OPTIONAL,
     -- contains information for building messages (when used as MURB
-    -- ID 0 denotes original message; ID 1-maxPayloadBlocks denotes 
-    -- target message; 32768-maxWorkspaceId shared workspace for all 
+    -- ID 0 denotes original message; ID 1-maxPayloadBlocks denotes
+    -- target message; 32768-maxWorkspaceId shared workspace for all
     -- blocks of this identity)
     assembly      [407] SEQUENCE (SIZE (0..maxAssemblyInstructions))
                   OF PayloadOperation,
-    validity      [408] UsagePeriod
+    validity      [408] UsagePeriod,
+    -- optional integer to identify the sender of a message when received
+    id            [409] INTEGER OPTIONAL
   }
 
   InnerMessageBlock ::= SEQUENCE {
@@ -126,7 +128,7 @@ BEGIN
       encyrpted [11032] OCTET STRING
     },
     -- contains the actual payload
-    payload     SEQUENCE (SIZE (0..maxPayloadBlocks)) 
+    payload     SEQUENCE (SIZE (0..maxPayloadBlocks))
                 OF OCTET STRING
   }
 
@@ -174,6 +176,8 @@ BEGIN
     -- contains administrative requests such as quota requests
     requests            SEQUENCE (SIZE (0..maxNumberOfRequests))
                         OF HeaderRequest ,
+    -- Reply Block for the requests
+    requestReplyBlock   RoutingCombo,
     -- padding and identitifier required to solve the cryptopuzzle
     identifier  [12201] PuzzleIdentifier OPTIONAL,
     -- This is for solving crypto puzzles
@@ -199,7 +203,7 @@ BEGIN
   AbsoluteSizeBlock ::= SEQUENCE {
     fromAbsolute        INTEGER (0..maxChunkSize),
     toAbsolute          INTEGER (minChunkSize..maxChunkSize)
-    -- negative toAbsolute denominates end in absolute value 
+    -- negative toAbsolute denominates end in absolute value
     -- specified from the end of block
   }
 
@@ -270,7 +274,7 @@ BEGIN
   }
 
   IdentityReplayStore ::= SEQUENCE {
-    replays   SEQUENCE (SIZE (0..4294967295)) 
+    replays   SEQUENCE (SIZE (0..4294967295))
               OF IdentityReplayBlock
   }
 
@@ -281,7 +285,7 @@ BEGIN
   }
 
   IdentityStore ::= SEQUENCE {
-    identities SEQUENCE (SIZE (0..4294967295)) 
+    identities SEQUENCE (SIZE (0..4294967295))
                OF IdentityStoreBlock
   }
 
@@ -328,13 +332,14 @@ BEGIN
     capabilities  [1] HeaderRequestCapability,
     messageQuota  [2] HeaderRequestIncreaseMessageQuota,
     transferQuota [3] HeaderRequestIncreaseTransferQuota,
-    quotaQuery    [4] HeaderRequestQueryQuota
+    quotaQuery    [4] HeaderRequestQuota
   }
 
   SpecialBlock ::= CHOICE {
     capabilities  [1]  ReplyCapability,
-    puzzle        [2]  RequirementPuzzleRequired,
-    payment       [3]  RequirementPaymentRequired,
+    requirement   [2]  SEQUENCE (SIZE (1..127))
+                       OF RequirementBlock,
+    quota         [4]  ReplyCurrentQuota,
     status        [99] StatusBlock
   }
 
@@ -343,31 +348,37 @@ BEGIN
   }
 
   RequirementPuzzleRequired ::= SEQUENCE {
-    -- bit sequence at beginning of hash from encrypted identity 
+    -- bit sequence at beginning of hash from encrypted identity
     -- block
     challenge     BIT STRING,
     hash          MacAlgorithmSpec,
     valid         UsagePeriod,
     identifier    INTEGER (0..4294967295)
   }
-  
+
   RequirementPaymentRequired ::= SEQUENCE {
     account       OCTET STRING,
     ammount       REAL,
     currency      Currency
   }
-  
+
   Currency ::= ENUMERATED {
     btc      (8001),
     eth      (8002),
     zec      (8003)
   }
-  
-  ReplyBlock ::= CHOICE {
-    puzzle [1] RequirementPuzzleRequired
+
+  RequirementBlock ::= CHOICE {
+    puzzle  [1] RequirementPuzzleRequired,
+    payment [2] RequirementPaymentRequired
   }
 
-  HeaderRequestQueryQuota ::= SEQUENCE {
+  HeaderRequestQuota ::= SEQUENCE {
+  }
+
+  ReplyCurrentQuota ::= SEQUENCE {
+    messages INTEGER (0..4294967295),
+    size     INTEGER (0..4294967295)
   }
 
   HeaderRequestIncreaseMessageQuota ::= SEQUENCE {
@@ -407,21 +418,20 @@ BEGIN
   }
 
   StatusBlock ::= SEQUENCE {
-    code            StatusCode,
-    reply           ReplyBlock
+    code            StatusCode
   }
 
   StatusCode ::= ENUMERATED {
 
     -- System messages
     ok                          (2000),
-    transferQuotaStatus         (2101),
-    messageQuotaStatus          (2102),
-    puzleRequired               (2201),
+    quotaStatus                 (2101),
+    puzzleRequired              (2201),
 
     -- protocol usage failures
     transferQuotaExceeded       (3001),
     messageQuotaExceeded        (3002),
+    requestedQuotaOutOfBand     (3003),
     identityUnknown             (3101),
     messageChunkMissing         (3201),
     messageLifeExpired          (3202),
@@ -490,7 +500,7 @@ BEGIN
   }
 
   CipherMode ::= ENUMERATED {
-    -- ECB is a really bad choice. Do not use unless really 
+    -- ECB is a really bad choice. Do not use unless really
     -- necessary
     ecb             (10000),
     cbc             (10001),
