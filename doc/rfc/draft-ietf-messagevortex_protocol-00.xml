@@ -324,21 +324,21 @@
                 <t>
                     A node MUST support the following symmetric ciphers:
                     <list style="symbols">
-                        <t>AES128</t>
+                        <t>AES128 (see <xref target="FIPS-AES"/> for AES implementation details)</t>
                         <t>AES256</t>
-                        <t>CAMELLIA128</t>
-                        <t>CAMELLIA256</t>
+                        <t>CAMELIA128 (see <xref target="RFC3657"/> chapter 3 for Camelia implementation details)</t>
+                        <t>CAMELIA256</t>
                     </list>
                     A node SHOULD support any standardized, bigger key size than the smallest key.
                 </t>
-                <t>A node MAY support Twofish ciphers.</t>
+                <t>A node MAY support Twofish ciphers (see <xref target="TWOFISH"/>).</t>
             </section>
             <section title="Supported Asymmetric Ciphers">
                 <t>
                     A node MUST support the following asymmetric ciphers:
                     <list style="symbols">
-                        <t>RSA (key sizes bigger or equal to 2048)</t>
-                        <t>ECC (named curves secp384r1, sect409k1, secp521r1)</t>
+                        <t>RSA (key sizes bigger or equal to 2048) (FIXME add reference)</t>
+                        <t>ECC (named curves secp384r1, sect409k1, secp521r1) (see <xref target="SEC1"/>)</t>
                     </list>
                 </t>
             </section>
@@ -346,8 +346,8 @@
                 <t>
                     A node MUST support the following Message Authentication Codes (MAC):
                     <list style="symbols">
-                        <t>SHA256</t>
-                        <t>RipeMD160</t>
+                        <t>SHA256 (see <xref target="ISO-10118-3"/> for SHA implementation details)</t>
+                        <t>RipeMD160 (see <xref target="ISO-10118-3"/> for RIPEMD implementation details)</t>
                     </list>
                 </t>
                 <t>
@@ -363,8 +363,8 @@
                 <t>
                     A node MUST support the following paddings:
                     <list style="symbols">
-                        <t>PKCS1</t>
-                        <t>PKCS7</t>
+                        <t>PKCS1 (see <xref target="RFC8017"/>)</t>
+                        <t>PKCS7 (see <xref target="RFC5958"/>)</t>
                     </list>
                 </t>
             </section>
@@ -372,30 +372,31 @@
                 <t>
                     A node MUST support the following modes:
                     <list style="symbols">
-                        <t>CBC</t>
-                        <t>EAX</t>
-                        <t>GCM</t>
+                        <t>CBC (FIXME add reference)</t>
+                        <t>EAX (FIXME add reference)</t>
+                        <t>GCM (FIXME add reference)</t>
                     </list>
                     A node SHOULD NOT use the following ciphers:
                     <list style="symbols">
-                        <t>NONE</t>
-                        <t>ECB</t>
+                        <t>NONE (FIXME add reference)</t>
+                        <t>ECB (FIXME add reference)</t>
                     </list>
                 </t>
                 <t>
                     A node SHOULD support the following modes:
                     <list style="symbols">
-                        <t>CTR</t>
-                        <t>CCM</t>
-                        <t>OCB</t>
-                        <t>OFB</t>
+                        <t>CTR (FIXME add reference)</t>
+                        <t>CCM (FIXME add reference)</t>
+                        <t>OCB (FIXME add reference)</t>
+                        <t>OFB (FIXME add reference)</t>
                     </list>
                 </t>
             </section>
         </section>
 
         <section anchor="blending" title="Blending">
-            <t>Each node supports a fixed set of blending capabilities. They may be different for incoming and outgoing messages.
+            <t>
+                Each node supports a fixed set of blending capabilities. They may be different for incoming and outgoing messages.
             </t>
             <t>
                 The following sections describe the blending mechanism. There are currently two blending layers specified. One layer specification for the simple mail transfer protocol (SMTP; See <xref target="RFC5321"/>) and one for the Extensible Messaging and Presence Protocol (XMPP; See <xref target="RFC6120"/>).
@@ -516,6 +517,9 @@
                 </section>
             </section>
             <section anchor="routing_header" title="Header Requests">
+                <t>
+                    Header requests are control requests for the anonymization system. Messages with requests or replys only MUST NOT affect any quota.
+                </t>
                 <section anchor="routing_header_eid" title="Request New Ephemeral Identity">
                     <t>
                         Requesting a new ephemeral identity is done by sending a message containing a header block with the new identity and an identity creation request (HeaderRequestIdentity) to a node. The node MAY send an error block (see <xref target="routing_special_error"/>) if the request is rejected.
@@ -525,16 +529,36 @@
                     </t>
                 </section>
                 <section anchor="routing_header_req_msg_quota" title="Request Message Quota">
-                    <t>FIXME</t>
+                    <t>
+                        Any valid ephemeral identity may request to raise the current message quota to a specific value at any time. The request MUST include a reply block in the header. The request may contain other parts. If a requested value is lower than the current quota the node SHOULD NOT refuse the quota request and SHOULD send a "No Error" status.
+                    </t>
+                    <t>
+                        A node SHOULD reply to a HeaderRequestIncreaseMessageQuota request (see <xref target="asn_one"/>) of a valid ephemeral identity. The reply MUST include a requirement, an error message, or a "No Error" status message.
+                    </t>
                 </section>
                 <section anchor="routing_header_req_trans_quota" title="Request Transfer Quota">
-                    <t>FIXME</t>
+                    <t>
+                        Any valid ephemeral identity may request to raise the current transfer quota to a specific value at any time. The request MUST include a reply block in the header. The request may contain other parts. If a requested value is lower than the current quota the node SHOULD NOT refuse the quota request and SHOULD send a "No Error" status.
+                    </t>
+                    <t>
+                        A node SHOULD reply to a HeaderRequestIncreaseTransferQuota request (see <xref target="asn_one"/>) of a valid ephemeral identity. The reply MUST include a requirement, an error message, or a "No Error" status message.
+                    </t>
                 </section>
                 <section anchor="routing_header_qry_quota" title="Query Quota">
-                    <t>FIXME</t>
+                    <t>
+                        Any valid ephemeral identity may request the current message and trannsfer quota. The request MUST include a reply block in the header. The request may contain other parts.
+                    </t>
+                    <t>
+                        A node MUST reply to a HeaderRequestQueryQuota request (see <xref target="asn_one"/>). The reply must include the current message quota and the curent message transfer quota. The reply to this request MUST NOT include a requirement.
+                    </t>
                 </section>
                 <section anchor="routing_header_req_cap" title="Request Capabilities">
-                    <t>FIXME</t>
+                    <t>
+                        Any node MAY request the capabilities of another node. The capabilities include all information neccesary to create a parseable VortexMessage. Any node SHOULD reply to any encrypted HeaderRequestCapability.
+                    </t>
+                    <t>
+                        FIXME sample required for interpretation of data
+                    </t>
                 </section>
                 <section anchor="routing_header_req_nodes" title="Request Nodes">
                     <t>FIXME</t>
@@ -624,7 +648,7 @@
                 If a transport Layer supports encryption, a Vortex node SHOULD use it to improve the privacy of the message.
             </t>
             <t>
-                Anonymity is affected by the inner workings of the blending layer in many ways. A Vortex message cannot be read by anyone except the peer nodes and the routing block builder, but the presence of a vortex node message may be detected. This may be done either by detecting the typical high entropy of an encrypted file, broken structures of a carrier file, a meaningless content of a carrier file, or the contextless communication of the blending layer with its peer partner. A blending layer SHOULD minimize the possibility of easy detection by minimizing these effects.
+                Anonymity is affected by the inner workings of the blending layer in many ways. A Vortex message cannot be read by anyone except the peer nodes and the routing block builder, but the presence of a vortex node message may be detected. This may be done either by detecting the typical high entropy of an encrypted file, broken structures of a carrier file, a meaningless content of a carrier file, or the contextless communication of the transport layer with its peer partner. A blending layer SHOULD minimize the possibility of easy detection by minimizing these effects.
              </t>
              <t>
                 A blending layer SHOULD use carrier files with high compression or encryption. Carrier files SHOULD NOT have inner structures so that the payload is comparable to valid content. To achieve undetectability by a human reviewer, a routing block builder should use F5 blending instead of PLAIN blending.
@@ -659,6 +683,24 @@
         <references title="Normative References">
             <!-- Use of words -->
             <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"?>
+            <!-- Camelia -->
+            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.3657.xml"?>
+            <!-- SHA -->
+            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.6234.xml"?>
+            <!-- PKCS#1 -->
+            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.8017.xml"?>
+            <!-- PKCS#8 -->
+            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.5958.xml"?>
+
+            <reference anchor="ISO10118-3">
+                <front>
+                    <title>ISO/IEC 10118-3:2004 -- Information technology -- Security techniques -- Hash-functions -- Part 3: Dedicated hash-functions</title>
+                    <author>
+                        <organization>International Organization for Standardization</organization>
+                    </author>
+                    <date year="2004" month="3"/>
+                </front>
+            </reference>
 
             <reference anchor="CCITT.X208.1988">
                 <front>
@@ -698,6 +740,36 @@
                         <organization>TU Dresden</organization>
                     </author>
                     <date year="2001" month="10" day="24"/>
+                </front>
+            </reference>
+
+            <reference anchor="TWOFISH">
+                <front>
+                    <title>The Twofish Encryptions Algorithm: A 128-Bit Block Cipher, 1st Edition</title>
+                    <author initials="B" surname="Schneier"/>
+                    <date year="1999" month="03"/>
+                </front>
+            </reference>
+
+            <reference anchor="SEC1">
+                <front>
+                    <title>SEC 1: Elliptic Curve Cryptography</title>
+                    <author>
+                        <organization>Certicom Research</organization>
+                    </author>
+                    <date year="2009" month="05" day="21"/>
+                </front>
+            </reference>
+
+            <reference anchor="FIPS-AES">
+                <front>
+                    <title>Specification for the ADVANCED ENCRYPTION STANDARD
+                        (AES)</title>
+                    <author>
+                        <organization>Federal Information Processing Standard (FIPS)</organization>
+                    </author>
+                    <seriesInfo name="Publication" value="197"/>
+                    <date year="2011" month="11" />
                 </front>
             </reference>
 
