@@ -650,7 +650,7 @@
                            This padding guarantees that each resulting block is exactly as big as the subsequent encryption operation and does not require any padding therefore.
                         </t>
                     </section>
-                    <section anchor="routing_operations_redundancy_padding" title="Apply Matrix">
+                    <section anchor="routing_operations_redundancy_matrix" title="Apply Matrix">
                         <t>
                             Next the inblock is organized in a data matrix D of dimensions inrows,incols where incols=(&lt;number of data blocks&gt;-&lt;number of redundancy blocks&gt;) and inrows=L/(&lt;number of data blocks&gt;-&lt;number of redundancy blocks&gt;). The inblock data is distributed in this matrix first across, then down.
                         </t>
@@ -658,7 +658,7 @@
                             Next we multiply the data matrix D a Vandermonde matrix V. The V matrix has the number of rows equal to the incols calculated and columns are equal to the &lt;number of data blocks&gt;. The content of the matrix is formed by  v(i,j)=pow(i,j), whereas i reflects the row number starting at 0, and j reflects the column number starting at 0. Please note that calculations noted here have to be carried out in the GF noted in the operation in order to be successful. The operation results in a matrix A.
                         </t>
                     </section>
-                    <section anchor="routing_operations_redundancy_padding" title="Encrypt Target Block">
+                    <section anchor="routing_operations_redundancy_encrypt" title="Encrypt Target Block">
                         <t>
                             Each row vector of A is a new data block which is then encrypted with the corresponding encryption key noted in keys of the addRedundancyOperation. If there are not sufficient keys available the keys used for encryption are reused from the beginning after the last key has been used. A routing block builder SHOULD provide enough keys so that all target blocks may be encrypted with a unique key. All encryptions SHOULD NOT use padding.
                         </t>
