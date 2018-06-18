@@ -337,7 +337,7 @@
                 <t>
                     A node MUST support the following asymmetric ciphers:
                     <list style="symbols">
-                        <t>RSA (key sizes bigger or equal to 2048) (FIXME add reference)</t>
+                        <t>RSA (key sizes bigger or equal to 2048) (<xref target="RFC8017"/>)</t>
                         <t>ECC (named curves secp384r1, sect409k1, secp521r1) (see <xref target="SEC1"/>)</t>
                     </list>
                 </t>
@@ -372,23 +372,23 @@
                 <t>
                     A node MUST support the following modes:
                     <list style="symbols">
-                        <t>CBC (FIXME add reference)</t>
-                        <t>EAX (FIXME add reference)</t>
-                        <t>GCM (FIXME add reference)</t>
+                        <t>CBC (see <xref target="RFC1423"/>). The used IV must be of equal length as the key)</t>
+                        <t>EAX (see <xref target="EAX"/>)</t>
+                        <t>GCM (see <xref target="RFC5288"/>)</t>
                     </list>
                     A node SHOULD NOT use the following ciphers:
                     <list style="symbols">
-                        <t>NONE (FIXME add reference)</t>
-                        <t>ECB (FIXME add reference)</t>
+                        <t>NONE (Except as stated when using the addRedundancy function</t>
+                        <t>ECB </t>
                     </list>
                 </t>
                 <t>
                     A node SHOULD support the following modes:
                     <list style="symbols">
-                        <t>CTR (FIXME add reference)</t>
-                        <t>CCM (FIXME add reference)</t>
-                        <t>OCB (FIXME add reference)</t>
-                        <t>OFB (FIXME add reference)</t>
+                        <t>CTR (<xref target="RFC3686"/>)</t>
+                        <t>CCM (<xref target="RFC3610"/>)</t>
+                        <t>OCB (<xref target="RFC7253"/>)</t>
+                        <t>OFB (<xref target="MODES"/>)</t>
                     </list>
                 </t>
             </section>
@@ -549,7 +549,7 @@
                         Any valid ephemeral identity may request the current message and trannsfer quota. The request MUST include a reply block in the header. The request may contain other parts.
                     </t>
                     <t>
-                        A node MUST reply to a HeaderRequestQueryQuota request (see <xref target="asn_one"/>). The reply must include the current message quota and the curent message transfer quota. The reply to this request MUST NOT include a requirement.
+                        A node MUST reply to a HeaderRequestQueryQuota request (see <xref target="asn_one"/>). The reply must include the current message quota and the current message transfer quota. The reply to this request MUST NOT include a requirement.
                     </t>
                 </section>
                 <section anchor="routing_header_req_cap" title="Request Capabilities">
@@ -561,28 +561,117 @@
                     </t>
                 </section>
                 <section anchor="routing_header_req_nodes" title="Request Nodes">
-                    <t>FIXME</t>
+                    <t>
+                        A node may ask another node for a list of routing node adresses and keys. This request may be used to bootstrap a new node and to add routing nodes increasing the anonymisation of a node. The receiving node of such a request SHOULD reply with a requirement (Eg. RequirementPuzzleRequired).
+                    </t>
+                    <t>
+                        A node SHOULD reply to a HeaderRequest request (see <xref target="asn_one"/>) of a valid ephemeral identity. The reply MUST include a requirement, an error message, or a "No Error" status message.
+                    </t>
                 </section>
                 <section anchor="routing_header_req_identity_replace" title="Request Identity Replace">
-                    <t>FIXME</t>
+                    <t>
+                        This request allows a receiving node to replace an identity with the identity provided in the message. This request is required if an adverser managed to deny the usage of a node (eg. by deleting the corresponding transport account). Any sending node may recover from such an attack by sending a validly authenticated message to another identity providing the new transport and key details.
+                    </t>
+                    <t>
+                        A node SHOULD reply to a such a request of a valid known identity. The reply MUST include an error message, or a "No Error" status message.
+                    </t>
                 </section>
             </section>
             <section anchor="routing_special" title="Special Blocks">
                 <t>
-                    Special blocks are payload messages. They reflect messages of one node to another and are not visible to the user. A special block starts with the character sequence '\special' (or 5Ch 73h 70h 65h 63h 69h 61h 6Ch) followed by a der encoded special block (SpecialBlock). Any non-special message decoding to ID 0 in a workspace starting with backslash (5Ch) MUST escape all backslashes within the payload chunk with a backslash.
+                    Special blocks are payload messages. They reflect messages of one node to another and are not visible to the user. A special block starts with the character sequence '\special' (or 5Ch 73h 70h 65h 63h 69h 61h 6Ch) followed by a DER encoded special block (SpecialBlock). Any non-special message decoding to ID 0 in a workspace starting with backslash (5Ch) MUST escape all backslashes within the payload chunk with an additional backslash.
                 </t>
                 <section anchor="routing_special_error" title="Error Block">
-                    <t>FIXME</t>
+                    <t>
+                        An error block may be sent as a reply where specified as a payload. The error block is embedded in a special block and sent with any kind of provided reply block. Error messages SHOULD contain the serial number of the offending header block, and MAY contain a human readable text providing additional messages about the error.
+                    </t>
                 </section>
                 <section anchor="routing_special_requirement" title="Requirement Block">
-                    <t>FIXME</t>
+                    <t>
+                        A requirement block means that the request block has been accepted, has not been processed yet, and will be processed if the contained requirement is met. The requirement MUST be processed as soon as the requirement is fulfilled and proofed by the requiring node.
+                    </t>
+                    <t>
+                        FIXME explain how puzzle works
+                    </t>
                 </section>
             </section>
             <section anchor="routing_operations" title="Routing Operations">
-                <t>FIXME</t>
+                <t>
+                    Routing operations are contained in a routing block and processed either on arrival on a message ,or when a new message is compiled. All Operations are reversable. No Operation is available for generating decoy traffic. For decoy traffic either encryption of an unpadded block may be used,  or the addReundancy operation.
+                </t>
+                <t>
+                    All payload chunk blocks inherit the validity time from the message routing combos (arrival time + max(maxProcessTime)) is inherited.
+                </t>
+                <t>
+                    When applying an operation to a source block, the resulting target block inherits the expiry of the of the source block. When having multiple different expiry times, the expiry in the furthermost future will be allied to the target block. If the operation fails the target expiry rem,ains unchanged.
+                </t>
+                <section anchor="routing_operations_mapping" title="Mapping Operation">
+                    <t>
+                        A mapping operation is a straight forward operation mainly used in inOperations of a routing block to map the routing block specific blocks to a permanent workspace
+                    </t>
+                </section>
+                <section anchor="routing_operations_mergesplit" title="Split and Merge Operations">
+                    <t>
+                        The split and merge operations allow to split and recombine message chunks.to make these operations reproduceible the following constraints need to be followed.
+                        <list style="symbols">
+                            <t>The operation must be applied absolute (measuring in bytes) or relative (measured as a floating value ranging 0&gt;value&gt;100.</t>
+                            <t>If a relative value is a non integer result the number of bytes is determined with the floor operation.</t>
+                            <t>If an absolute value is negative the size reflected applies to the second part (instead of the first.</t>
+                            <t>If an absolute value is bigger than the size bytes in the block, all bytes are mapped to the respective target block and the other tarhet block becomes a null byte sized block.</t>
+                        </list>
+                    </t>
+                    <t>
+                        An operation MUST fail if relative values are equal to, or below zero. An operation MUST fail if a relative value is equal to or above 100. All floating point operations must be carried out according to <xref target="IEEE754"/> and in 64 bit precision.
+                    </t>
+                </section>
+                <section anchor="routing_operations_crypt" title="Encrypt and Decrypt Operations">
+                    <t>
+                        Encryption and decryption are executed according to the afore mentioned standards. An encryption operation encrypts a block symmetrically and places the result in the target block. Parameters such as IV, encryption key, or cipher modes must be provided by the operation parameter. An encryption operation without a valid parameter set MUST fail.
+                    </t>
+                </section>
+                <section anchor="routing_operations_redundancy" title="Add and Remove Redundancy Operations">
+                    <t>
+                        The addRdundancy and removeRedundancy operations are the core operations of the protocol. They may be used to split messages and distribute message content across multiple routing nodes. The operation is executed in multiple steps
+                        <list style="numerals">
+                            <t>Pad a block to multitudes of the key size in the resulting blocks.</t>
+                            <t>Apply a Vandermonde matrix with the given sizes.</t>
+                            <t>Encrypt each resulting block with a separate key</t>
+                        </list>
+                        The following sections describe the order of the operations in an addRedundancy operation. for a removeRedundancy operation just inverse functtions and order.
+                    </t>
+                    <section anchor="routing_operations_redundancy_padding" title="Padding Operation">
+                        <t>
+                            First the length of all output blocks including redundancy is calculated. This is done by L=roof((&lt;inblock size in bytes&gt;+4)/&lt;encryption block size in bytes&gt;)*&lt;block size in bytes&gt;. The block is prepended with a 32 bit length indicator in bytes at the beginning (little-endian). This length indicator i is calculated by i=&lt;inblock size in bytes&gt;*randominteger()*L. The rest of the inblock up to length L is padded with random data. If GF(16) is applied numbers are treated as little-endian representations.
+                        </t>
+                        <t>
+                            For padding removal first the padding i at the start is removed as little-endian integer. Then, the length of the resulting block (outblock) is calculated by applying &lt;outblock size in bytes&gt;=i mod &lt;inblock size in bytes&gt;
+                        </t>
+                        <t>
+                           This padding guarantees that each resulting block is exactly as big as the subsequent encryption operation and does not require any padding therefore.
+                        </t>
+                    </section>
+                    <section anchor="routing_operations_redundancy_padding" title="Apply Matrix">
+                        <t>
+                            Next the inblock is organized in a data matrix D of dimensions inrows,incols where incols=(&lt;number of data blocks&gt;-&lt;number of redundancy blocks&gt;) and inrows=L/(&lt;number of data blocks&gt;-&lt;number of redundancy blocks&gt;). The inblock data is distributed in this matrix first across, then down.
+                        </t>
+                        <t>
+                            Next we multiply the data matrix D a Vandermonde matrix V. The V matrix has the number of rows equal to the incols calculated and columns are equal to the &lt;number of data blocks&gt;. The content of the matrix is formed by  v(i,j)=pow(i,j), whereas i reflects the row number starting at 0, and j reflects the column number starting at 0. Please note that calculations noted here have to be carried out in the GF noted in the operation in order to be successful. The operation results in a matrix A.
+                        </t>
+                    </section>
+                    <section anchor="routing_operations_redundancy_padding" title="Encrypt Target Block">
+                        <t>
+                            Each row vector of A is a new data block which is then encrypted with the corresponding encryption key noted in keys of the addRedundancyOperation. If there are not sufficient keys available the keys used for encryption are reused from the beginning after the last key has been used. A routing block builder SHOULD provide enough keys so that all target blocks may be encrypted with a unique key. All encryptions SHOULD NOT use padding.
+                        </t>
+                    </section>
+                </section>
             </section>
             <section anchor="routing_processing" title="Processing of Vortex Messages">
-                <t>FIXME</t>
+                <t>
+                    Processing of routing mechanisms are triggered by accounting layer according to informations contained in a routing block in the workspace. All operations MUST be executed in the sequence provided in the routing block. Any failing operation must leave the result block unmodified.
+                </t>
+                <t>
+                    All workspace blocks resulting in IDs 1 to maxPayloadBlock are then added to the message and passed to the blending layer with apropriate instructions.
+                </t>
             </section>
         </section>
 
@@ -597,16 +686,24 @@
                     Implementations MUST provide sufficient locking mechanisms to guarantee the integrity of accounting information and workspace at any time.
                 </t>
                 <section anchor="accounting_timed_gc" title="Time-Based Garbage Collection">
-                    <t>FIXME</t>
+                    <t>
+                        The accounting layer SHOULD keep a list of expiry times. As soon as an entry (eg. payload block, or identity) expires the respective structure should be removed from workspace. Alternatively an implementation MAY choose to remove expired items periodic or when encountering them during normal operation. It should be considered that this MAY leak additional information about the nodes inner working in the past when analyzed.
+                    </t>
                 </section>
                 <section anchor="accounting_timed_routing" title="Time-Based Routing Initiation">
-                    <t>FIXME</t>
+                    <t>
+                        The accounting layer MAY keep a list of any time a routing block is activated. For improved privacy the accounting layer should use a sloted model where, whenever possible, multiple routing blocks are handled in a time close manor and the requests to the blending layers are mixed between the transactions.
+                    </t>
                 </section>
                 <section anchor="accounting_timed_quota" title="Routing Based Quota Updates">
-                    <t>FIXME</t>
+                    <t>
+                        Quota updates MUST be done on the repective operations. Message quotas MUST be decreased before processing routing blocks in the workspace. Increase of a message quota MUST be done after a quota increase was successful and before applying any decrease of the quota. Transfer quotas MUST be increased as soon as the header is processed and before the message quota is checked. The message quota MUST be decreased afterprocessing of any header requests of an incomming message.
+                    </t>
                 </section>
                 <section anchor="accounting_routhing_auth" title="Routing Based Authorization">
-                    <t>FIXME</t>
+                    <t>
+                        The transfer quota MUST be checked and decreased by the number of data bytes in the payload chunks after all header requests have been processed. The message quota MUST be decreased by one on each routing block triggering processing in the workspace.
+                    </t>
                 </section>
             </section>
         </section>
@@ -691,6 +788,12 @@
             <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.8017.xml"?>
             <!-- PKCS#8 -->
             <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.5958.xml"?>
+            <!-- GCM -->
+            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.5288.xml"?>
+            <!-- CTR -->
+            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.3686.xml"?>
+            <!-- CCM -->
+            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.3610.xml"?>
 
             <reference anchor="ISO-10118-3">
                 <front>
@@ -770,6 +873,28 @@
                     </author>
                     <seriesInfo name="Publication" value="197"/>
                     <date year="2011" month="11" />
+                </front>
+            </reference>
+
+            <reference anchor="EAX">
+                <front>
+                    <title>The EAX mode of operation</title>
+                    <author initials="M" surname="Bellare"/>
+                    <author initials="P" surname="Rogaway"/>
+                    <author initials="D" surname="Wagner"/>
+                    <seriesInfo name="LNCS" value="3017"/>
+                    <date year="2011"/>
+                </front>
+            </reference>
+
+            <reference anchor="MODES">
+                <front>
+                    <title>Recommendation for Block Cipher Modes of Operation: Methods and Techniques</title>
+                    <author>
+                        <organization>National Institute for Standards and Technology (NIST)</organization>
+                    </author>
+                    <seriesInfo name="NIST Special Publication" value="800-38A"/>
+                    <date year="2001" month="12" />
                 </front>
             </reference>
 
@@ -892,20 +1017,23 @@ BEGIN
     -- contains the prefix to be used
     routing    CHOICE {
       -- debug/internal use only
-      plain             [331] SEQUENCE (SIZE (0..maxRoutingBlocks))
-                              OF RoutingCombo,
-      encrypted         [332] SEQUENCE (SIZE (0..maxRoutingBlocks))
-                              OF OCTET STRING
+      plain         [331] SEQUENCE (SIZE (0..maxRoutingBlocks))
+                          OF RoutingCombo,
+      encrypted     [332] SEQUENCE (SIZE (0..maxRoutingBlocks))
+                          OF OCTET STRING
     },
     -- contains the secret of the header block
-    forwardSecret     ChainSecret,
+    forwardSecret         ChainSecret,
+    -- contains incomming instructions to map information to workspace
+    inOperations          SEQUENCE (SIZE (0..maxAssemblyInstructions))
+                          OF PayloadOperation,
     -- contains a routing block which may be used when sending
     -- error messages back to the quota owner
     -- this routing block may be cached for future use
-    replyBlock [131]   SEQUENCE {
-         murb           RoutingCombo,
-         maxReplay      INTEGER,
-         validity       UsagePeriod
+    replyBlock      [334] SEQUENCE {
+         murb       RoutingCombo,
+         maxReplay  INTEGER,
+         validity   UsagePeriod
     } OPTIONAL
   }
 
@@ -960,7 +1088,12 @@ BEGIN
     },
     -- contains the actual payload
     payload     SEQUENCE (SIZE (0..maxPayloadBlocks))
-                OF OCTET STRING
+                OF PayloadChunk
+  }
+
+  PayloadChunk ::= SEQUENCE {
+    id   INTEGER (1..maxPayloadBlocks),
+    data OCTET STRING
   }
 
   -- do not use this for encoding (internal structure only)
@@ -1015,8 +1148,6 @@ BEGIN
   PayloadOperation ::= CHOICE {
     splitPayload    [150] SplitPayloadOperation,
     mergePayload    [160] MergePayloadOperation,
-    xorSplitPayload [250] XorSplitPayloadOperation,
-    xorMergePayload [260] XorMergePayloadOperation,
     encryptPayload  [300] EncryptPayloadOperation,
     decryptPayload  [310] DecryptPayloadOperation,
     addRedundancy   [400] AddRedundancyOperation,
@@ -1043,12 +1174,18 @@ BEGIN
   }
 
   AddRedundancyOperation ::= SEQUENCE {
+    -- id of the input block
     inputId            [16000] INTEGER (0..maxID),
+    -- number of data blocks resulting (including redundancy blocks)
     dataStripes        [16001] INTEGER (1..254),
+    -- number of blocks which may be missing from the target set (when still able to recover)
     redundancy         [16002] INTEGER (1..254),
+    -- the keys required to encrypt
     keys               [16003] SEQUENCE (SIZE (2..512))
                                OF SymmetricKey,
+    -- ID of the first block (all others in ascending order)
     outputId           [16004] INTEGER (1..maxID),
+    -- Gauloise filed size in bits (must be either 8 or 16)
     gfSize             [16005] INTEGER (2..maxGFSize)
   }
 
@@ -1073,20 +1210,6 @@ BEGIN
     originalFirstId      INTEGER (0..maxID),
     originalSecondId     INTEGER (0..maxID),
     newId                INTEGER (1..maxID)
-  }
-
-  XorMergePayloadOperation ::= SEQUENCE {
-    originalFirstId      INTEGER (0..maxID),
-    originalSecondId     INTEGER (-1..maxID),
-    originalSize         SizeBlock,
-    newId                INTEGER (1..maxID)
-  }
-
-  XorSplitPayloadOperation ::= SEQUENCE {
-    originalId           INTEGER (0..maxID),
-    prngSpec             PRNGAlgorithmSpec,
-    newFirstBlockId      INTEGER (1..maxID),
-    newSecondBlockId     INTEGER (1..maxID)
   }
 
   EncryptPayloadOperation ::= SEQUENCE {
@@ -1241,7 +1364,9 @@ BEGIN
 
   StatusBlock ::= SEQUENCE {
     code            StatusCode,
-    reply           ReplyBlock
+    reply           ReplyBlock,
+    serial          INTEGER (0..maxSerial) OPTIONAL,
+    text            IA5String OPTIONAL -- human readable text allowing additional information
   }
 
   StatusCode ::= ENUMERATED {
