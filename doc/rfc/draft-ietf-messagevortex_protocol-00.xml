@@ -141,16 +141,16 @@
                     A full vortex message contains the following items:
                     <list style="symbols">
                         <t>The peer key (encrypted with the host key of the node; stored in a PrefixBlock) protecting the inner Vortex message (innerMessageBlock).</t>
-                        <t>A short padding. It guarantees that a replayed routing block with different content does not look alike.</t>
+                        <t> The short padding guarantees, that a replayed routing block with different content does not look alike.</t>
                         <t>The sender key (encrypted with the host key of the node) protecting the identity and routing block.</t>
                         <t>The identity block (protected by the sender key) containing information about the ephemeral identity of the sender, replay protection information, header requests (optional) and a requirement reply (optional).</t>
                         <t>The routing block (protected by the sender key) containing information on how subsequent messages are processed, assembled and blended.</t>
-                        <t>The payload block (protected by the peer key) containing payload chunks to be processed.</t>
+                        <t>The payload block (protected by the peer key) contains payload chunks for processing.</t>
                     </list>
                 </t>
             </section>
             <section anchor="entities_blocks" title="Blocks">
-                <t>We use the term 'block' for an ASN.1 sequence in a packet.  A packet may have any size and is embedded in the transport protocol. It must not be confused with network packets.</t>
+                <t>We use the term 'block' for an ASN.1 sequence in a transmitted message. We embed messages in the transport protocol. It may have any size.</t>
             </section>
             <section anchor="entities_transport_address" title="Transport Address">
                 <t>We use the term 'transport address' for the token required to address the next immediate node on the transport layer.  An email transport layer would have SMTP addresses such as 'vortex@example.com' as transport address.</t>
@@ -159,14 +159,15 @@
                 <section anchor="entities_identity_peer" title="Peer Identity">
                     <t>The peer identity may contain the following information of a peer partner:
                         <list style="symbols">
-                            <t>The transport address (always) and the public key of this identity (if no recipient anonymity is given)</t>
+                            <t>A transport address (always) and the public key of this identity (given there is no recipient anonymity)</t>
                             <t>The routing blocks for contacting the identity (optional; usually in the case of recipient anonymity)</t>
                             <t>The private key (only known by the owner of the identity)</t>
                         </list>
                     </t>
                 </section>
                 <section anchor="entities_identity_ephemeral" title="Ephemeral Identity">
-                    <t>Ephemeral identities are temporary identities created on a single node. These identities MUST NOT be connected to any other identity. They allow bookkeeping for a node. To each ephemeral identity is a workspace assigned. Every ephemeral identity may have multiple quotas assigned.
+                    <t>
+                        Ephemeral identities are temporary identities created on a single node. These identities MUST NOT relate to any other identity. They allow bookkeeping for a node. To each ephemeral identity is a workspace assigned. Every ephemeral identity may have multiple quotas assigned.
                     </t>
                 </section>
                 <section anchor="entities_identity_official" title="Official Identity">
@@ -215,7 +216,7 @@
             </figure>
 
             <t>
-                Every participating node MUST implement the layers blending, routing, and accounting.  There MUST be at least one incoming and one outgoing transport layer available to a node. All blending layers SHOULD be connected to respective Transport layers for sending and receiving packets.
+                Every participating node MUST implement the layers blending, routing, and accounting.  There MUST be at least one incoming and one outgoing transport layer available to a node. All blending layers SHOULD connect to respective Transport layers for sending and receiving packets.
             </t>
 
             <section anchor="layer_overview_transport" title="Transport Layer">
@@ -238,7 +239,7 @@
         <section title="Vortex Message">
             <section title="Overview">
                 <t>
-                    <xref target="fig_message_overview"/> shows a Vortex message. The enclosed sections denote encrypted blocks. The three to four letter abbreviations denote the key required for decryption. The abbreviation k_h stands for the asymmetric host key. s_kp is the symmetric peer key. This key is obtained by the receiving node by decrypting MPREFIX with its host key k_h. sk_s is the symmetric sender key. This key is obtained by decrypting the MPREFIX block. The header and routing blocks are protected by the sender key. This key makes sure that the node assembling the message does not know about upcoming identities, operations, and requests. The peer key protects the message including structure from any third party observer.
+                    <xref target="fig_message_overview"/> shows a Vortex message. The enclosed sections denote encrypted blocks. The three to four letter abbreviations denote the key required for decryption. The abbreviation k_h stands for the asymmetric host key. s_kp is the symmetric peer key. TThe receiving node obtains this key  by decrypting MPREFIX with its host key k_h. sk_s is the symmetric sender key. When decrypting the MPREFIX block the node obtains this key. The sender key protects the header and the routing blocks. This key guarantees that the node assembling the message does not know about upcoming identities, operations, and requests. The peer key protects the message including structure from any third party observer.
                     <figure align="center" anchor="fig_message_overview" title="Vortex message overview">
                         <artwork align="center"><![CDATA[
 +-+---+-+-+---+-+---+-+-+---+-+-+---+-+-------+-+
@@ -504,10 +505,10 @@
                         Note that maxProcessTime reflects the number of seconds since the arrival of the last octet of the message at the transport layer facility. Additional processing time should not be taken into account in this calculation.
                     </t>
                     <t>
-                        A routing event is triggered by the accounting layer. The trigger has to be chosen in such a manner that it occurs at least minProcessTime after the last octet of the message arrived at the routing layer. The latest possible moment should be chosen in such a way that the last octet of the assembled message is transferred to the peer node before maxProcessTime is reached. This is assuming that the peer node is working. The time should be chosen randomly. Multiple routing combos MAY be triggered by the same event.
+                        The accounting layer triggers routing events. The trigger occurs at least minProcessTime after the last octet of the message arrived at the routing layer. The latest possible moment should be chosen in such a way that the last octet of the assembled message is transferred to the peer node before maxProcessTime is reached. This is assuming that the peer node is working. The time should be chosen randomly. Multiple routing combos MAY be triggered by the same event.
                     </t>
                     <t>
-                        First, the payload chunk at ID 0 is escaped if needed (non-special block starting with a backslash). Next, all processing instructions of a routing combo are executed in the sequence specified in the combo. If an instruction fails, it will be ignored, and the block at the target ID of the operation remains unchanged. For a detailed description of the operations see <xref target="routing_operations"/>. If at least one payload chunk can successfully be built for transmission, a message is composed and passed to the blending layer.
+                        First, the payload chunk at ID 0 is escaped if needed (non-special block starting with a backslash). Next, all processing instructions of a routing combo are executed in the sequence specified in the combo. If an instruction fails, the block at the target ID of the operation remains unchanged. The routing layer proceeds subsequent processing instructions, ignoring the error. For a detailed description of the operations see <xref target="routing_operations"/>. If at least one payload chunk can successfully be built for transmission, a message is composed and passed to the blending layer.
                     </t>
                 </section>
                 <section anchor="routing_outgoing" title="Processing of Outgoing MessageVortex Messages">
@@ -554,7 +555,7 @@
                 </section>
                 <section anchor="routing_header_req_cap" title="Request Capabilities">
                     <t>
-                        Any node MAY request the capabilities of another node. The capabilities include all information necesary to create a parseable VortexMessage. Any node SHOULD reply to any encrypted HeaderRequestCapability.
+                        Any node MAY request the capabilities of another node. The capabilities include all information necessary to create a parseable VortexMessage. Any node SHOULD reply to any encrypted HeaderRequestCapability.
                     </t>
                     <t>
                         FIXME sample required for interpretation of data
@@ -751,7 +752,7 @@
                 A blending layer SHOULD use carrier files with high compression or encryption. Carrier files SHOULD NOT have inner structures so that the payload is comparable to valid content. To achieve undetectability by a human reviewer, a routing block builder should use F5 blending instead of PLAIN blending.
              </t>
              <t>
-                The two layers routing and accounting have the deepest insight into a Vortex message's inner working. They know the immediate peer sender and the peer recipients of all payload chunks. As decoy traffic is generated by combining chunks and applying redundancy calculations upon them, a node may never know whether a malfunction (e.g., when doing a recovery calculation) was intended or not. Therefore a node may not know what traffic was intended to fail or not. It furthermore cannot tell content from decoy traffic apart.
+                 The two layers 'routing' and 'accounting' have the deepest insight into a Vortex message's inner working. They know the immediate peer sender and the peer recipients of all payload chunks. As decoy traffic is generated by combining chunks and applying redundancy calculations upon them, a node may never know whether a malfunction (e.g., when doing a recovery calculation) was intended or not. Therefore a node may not know what traffic was intended to fail or not. It furthermore cannot tell content from decoy traffic apart.
              </t>
              <t>
                 A routing block builder SHOULD follow the following rules in order not to compromise a Vortex message's anonymity:
@@ -782,8 +783,8 @@
             <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml"?>
             <!-- Camelia -->
             <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.3657.xml"?>
-            <!-- SHA -->
-            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.6234.xml"?>
+            <!-- SHA (no longer needed -->
+            <!--<?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.6234.xml"?>-->
             <!-- PKCS#1 -->
             <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.8017.xml"?>
             <!-- PKCS#8 -->
@@ -1294,22 +1295,26 @@ BEGIN
   ChainSecret ::= INTEGER (0..4294967295)
 
   HeaderRequest ::= CHOICE {
-    identity      [0] HeaderRequestIdentity,
-    capabilities  [1] HeaderRequestCapability,
-    messageQuota  [2] HeaderRequestIncreaseMessageQuota,
-    transferQuota [3] HeaderRequestIncreaseTransferQuota,
-    quotaQuery    [4] HeaderRequestQueryQuota
+    identity        [0] HeaderRequestIdentity,
+    capabilities    [1] HeaderRequestCapability,
+    messageQuota    [2] HeaderRequestIncreaseMessageQuota,
+    transferQuota   [3] HeaderRequestIncreaseTransferQuota,
+    quotaQuery      [4] HeaderRequestQueryQuota,
+    replaceIdentity [5] HeaderRequestReplaceIdentity
   }
 
-  SpecialBlock ::= CHOICE {
-    capabilities  [1]  ReplyCapability,
-    puzzle        [2]  RequirementPuzzleRequired,
-    payment       [3]  RequirementPaymentRequired,
-    status        [99] StatusBlock
+  HeaderRequestReplaceIdentity ::= SEQUENCE {
+    newIdentity      AsymmetricKey,
+    newBlending      BlendingSpec
   }
 
   HeaderRequestIdentity ::= SEQUENCE {
     period UsagePeriod
+  }
+
+  RequirementBlock ::= CHOICE {
+    puzzle  [1] RequirementPuzzleRequired,
+    payment [2] RequirementPaymentRequired
   }
 
   RequirementPuzzleRequired ::= SEQUENCE {
@@ -1334,10 +1339,17 @@ BEGIN
   }
 
   ReplyBlock ::= CHOICE {
-    puzzle [1] RequirementPuzzleRequired
+    requirement[1] RequirementBlock,
+    capability [2] ReplyCapability,
+    quota      [3] ReplyQuota
   }
 
   HeaderRequestQueryQuota ::= SEQUENCE {
+  }
+
+  ReplyQuota ::= SEQUENCE {
+    messageQuota  INTEGER (0..4294967295),
+    transferQuota INTEGER (0..4294967295)
   }
 
   HeaderRequestIncreaseMessageQuota ::= SEQUENCE {
@@ -1379,8 +1391,10 @@ BEGIN
   StatusBlock ::= SEQUENCE {
     code            StatusCode,
     reply           ReplyBlock,
+    -- serial number of the routing block
     serial          INTEGER (0..maxSerial) OPTIONAL,
-    text            IA5String OPTIONAL -- human readable text allowing additional information
+    -- human readable text allowing additional information
+    text            IA5String OPTIONAL
   }
 
   StatusCode ::= ENUMERATED {
@@ -1525,7 +1539,7 @@ BEGIN
   }
 
 END
-                ]]></artwork>
+]]></artwork>
             </figure>
         </section>
         <!-- Change Log

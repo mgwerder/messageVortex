@@ -322,22 +322,26 @@ BEGIN
   ChainSecret ::= INTEGER (0..4294967295)
 
   HeaderRequest ::= CHOICE {
-    identity      [0] HeaderRequestIdentity,
-    capabilities  [1] HeaderRequestCapability,
-    messageQuota  [2] HeaderRequestIncreaseMessageQuota,
-    transferQuota [3] HeaderRequestIncreaseTransferQuota,
-    quotaQuery    [4] HeaderRequestQueryQuota
+    identity        [0] HeaderRequestIdentity,
+    capabilities    [1] HeaderRequestCapability,
+    messageQuota    [2] HeaderRequestIncreaseMessageQuota,
+    transferQuota   [3] HeaderRequestIncreaseTransferQuota,
+    quotaQuery      [4] HeaderRequestQueryQuota,
+    replaceIdentity [5] HeaderRequestReplaceIdentity
   }
 
-  SpecialBlock ::= CHOICE {
-    capabilities  [1]  ReplyCapability,
-    puzzle        [2]  RequirementPuzzleRequired,
-    payment       [3]  RequirementPaymentRequired,
-    status        [99] StatusBlock
+  HeaderRequestReplaceIdentity ::= SEQUENCE {
+    newIdentity      AsymmetricKey,
+    newBlending      BlendingSpec
   }
 
   HeaderRequestIdentity ::= SEQUENCE {
     period UsagePeriod
+  }
+
+  RequirementBlock ::= CHOICE {
+    puzzle  [1] RequirementPuzzleRequired,
+    payment [2] RequirementPaymentRequired
   }
 
   RequirementPuzzleRequired ::= SEQUENCE {
@@ -362,10 +366,17 @@ BEGIN
   }
 
   ReplyBlock ::= CHOICE {
-    puzzle [1] RequirementPuzzleRequired
+    requirement[1] RequirementBlock,
+    capability [2] ReplyCapability,
+    quota      [3] ReplyQuota
   }
 
   HeaderRequestQueryQuota ::= SEQUENCE {
+  }
+
+  ReplyQuota ::= SEQUENCE {
+    messageQuota  INTEGER (0..4294967295),
+    transferQuota INTEGER (0..4294967295)
   }
 
   HeaderRequestIncreaseMessageQuota ::= SEQUENCE {
@@ -407,8 +418,10 @@ BEGIN
   StatusBlock ::= SEQUENCE {
     code            StatusCode,
     reply           ReplyBlock,
+    -- serial number of the routing block
     serial          INTEGER (0..maxSerial) OPTIONAL,
-    text            IA5String OPTIONAL -- human readable text allowing additional information
+    -- human readable text allowing additional information
+    text            IA5String OPTIONAL
   }
 
   StatusCode ::= ENUMERATED {
