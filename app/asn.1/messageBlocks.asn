@@ -1,17 +1,17 @@
 -- FIXME ADAPT NeoScrypt
 
--- encryption: as specified in the key. If not specified default 
+-- encryption: as specified in the key. If not specified default
 -- mode is CBC and default padding is PKCS1Padding
 
 -- States: Tuple()=Value() [vallidity; allowed operations] {Store}
 -- - Tuple(identity)=Value(messageQuota,transferQuota,sequence of
 --   Routingblocks for Error Message Routing) [validity; Requested
 --   at creation; may be extended upon request] {identityStore}
--- - Tuple(Identity,Serial)=maxReplays ['valid' from Identity 
+-- - Tuple(Identity,Serial)=maxReplays ['valid' from Identity
 --   Block; from First Identity Block; may only be reduced]
 --   {IdentityReplayStore}
 
-MessageVortex-Schema DEFINITIONS EXPLICIT TAGS ::= 
+MessageVortex-Schema DEFINITIONS EXPLICIT TAGS ::=
 BEGIN
 
   --***************************************************************
@@ -32,7 +32,7 @@ BEGIN
   maxNumberOfReplays        INTEGER ::= 127
   -- maximum number of administrative requests
   maxNumberOfRequests       INTEGER ::= 8
-  -- maximum number of seconds which the message might be delayed 
+  -- maximum number of seconds which the message might be delayed
   -- in the local queue (starting from startOffset)
   maxDurationOfProcessing   INTEGER ::= 86400
   -- maximum id of an operation
@@ -47,7 +47,7 @@ BEGIN
   maxGFSize                 INTEGER ::= 16
   -- the maximum number of parameters that might be embedded
   maxNumberOfParameter      INTEGER ::= 127
-  -- The maximum ID of the workspace 
+  -- The maximum ID of the workspace
   maxWorkspaceId            INTEGER ::= 65535
   -- The maximum number of assembly instructions per combo
   maxAssemblyInstructions   INTEGER ::= 255
@@ -59,23 +59,26 @@ BEGIN
     -- contains the prefix to be used
     routing    CHOICE {
       -- debug/internal use only
-      plain             [331] SEQUENCE (SIZE (0..maxRoutingBlocks))
-                              OF RoutingCombo,
-      encrypted         [332] SEQUENCE (SIZE (0..maxRoutingBlocks))
-                              OF OCTET STRING
+      plain         [331] SEQUENCE (SIZE (0..maxRoutingBlocks))
+                          OF RoutingCombo,
+      encrypted     [332] SEQUENCE (SIZE (0..maxRoutingBlocks))
+                          OF OCTET STRING
     },
     -- contains the secret of the header block
-    forwardSecret     ChainSecret,
+    forwardSecret         ChainSecret,
+    -- contains incomming instructions to map information to workspace
+    inOperations          SEQUENCE (SIZE (0..maxAssemblyInstructions))
+                          OF PayloadOperation,
     -- contains a routing block which may be used when sending
     -- error messages back to the quota owner
     -- this routing block may be cached for future use
-    replyBlock [131]   SEQUENCE {
-         murb           RoutingCombo,
-         maxReplay      INTEGER,
-         validity       UsagePeriod
+    replyBlock      [334] SEQUENCE {
+         murb       RoutingCombo,
+         maxReplay  INTEGER,
+         validity   UsagePeriod
     } OPTIONAL
   }
-  
+
   RoutingCombo ::= SEQUENCE {
     -- contains the period when the payload should be processed
     -- Router might refuse to long queue retention
@@ -85,18 +88,18 @@ BEGIN
     -- The message key to encrypt the message
     messageKey    [401] SymmetricKey OPTIONAL,
     -- contains the next recipient
-    recipient     [402] BlendingSpec OPTIONAL, 
+    recipient     [402] BlendingSpec OPTIONAL,
     -- PrefixBlock encrypted with message key
-    mPrefix       [403] OCTET STRING OPTIONAL, 
+    mPrefix       [403] OCTET STRING OPTIONAL,
     -- PrefixBlock encrypted with sender key
-    cPrefix       [404] OCTET STRING OPTIONAL, 
+    cPrefix       [404] OCTET STRING OPTIONAL,
     -- HeaderBlock encrypted with sender key
-    header        [405] OCTET STRING OPTIONAL, 
+    header        [405] OCTET STRING OPTIONAL,
     -- RoutingBlock encrypted with sender key
-    routing       [406] OCTET STRING OPTIONAL, 
+    routing       [406] OCTET STRING OPTIONAL,
     -- contains information for building messages (when used as MURB
-    -- ID 0 denotes original message; ID 1-maxPayloadBlocks denotes 
-    -- target message; 32768-maxWorkspaceId shared workspace for all 
+    -- ID 0 denotes original message; ID 1-maxPayloadBlocks denotes
+    -- target message; 32768-maxWorkspaceId shared workspace for all
     -- blocks of this identity)
     assembly      [407] SEQUENCE (SIZE (0..maxAssemblyInstructions))
                   OF PayloadOperation,
@@ -126,8 +129,13 @@ BEGIN
       encyrpted [11032] OCTET STRING
     },
     -- contains the actual payload
-    payload     SEQUENCE (SIZE (0..maxPayloadBlocks)) 
-                OF OCTET STRING
+    payload     SEQUENCE (SIZE (0..maxPayloadBlocks))
+                OF PayloadChunk
+  }
+
+  PayloadChunk ::= SEQUENCE {
+    id   INTEGER (1..maxPayloadBlocks),
+    data OCTET STRING
   }
 
   -- do not use this for encoding (internal structure only)
@@ -146,9 +154,8 @@ BEGIN
   }
 
   PrefixBlock ::= SEQUENCE {
-    forwardsecret   ChainSecret,
-    key             SymmetricKey,
-	version			INTEGER OPTIONAL
+    forwardsecret	ChainSecret,
+    key             SymmetricKey
   }
 
   PuzzleIdentifier          ::= OCTET STRING ( SIZE(0..16) )
@@ -183,8 +190,6 @@ BEGIN
   PayloadOperation ::= CHOICE {
     splitPayload    [150] SplitPayloadOperation,
     mergePayload    [160] MergePayloadOperation,
-    xorSplitPayload [250] XorSplitPayloadOperation,
-    xorMergePayload [260] XorMergePayloadOperation,
     encryptPayload  [300] EncryptPayloadOperation,
     decryptPayload  [310] DecryptPayloadOperation,
     addRedundancy   [400] AddRedundancyOperation,
@@ -199,7 +204,7 @@ BEGIN
   AbsoluteSizeBlock ::= SEQUENCE {
     fromAbsolute        INTEGER (0..maxChunkSize),
     toAbsolute          INTEGER (minChunkSize..maxChunkSize)
-    -- negative toAbsolute denominates end in absolute value 
+    -- negative toAbsolute denominates end in absolute value
     -- specified from the end of block
   }
 
@@ -211,12 +216,18 @@ BEGIN
   }
 
   AddRedundancyOperation ::= SEQUENCE {
+    -- id of the input block
     inputId            [16000] INTEGER (0..maxID),
+    -- number of data blocks resulting (including redundancy blocks)
     dataStripes        [16001] INTEGER (1..254),
+    -- number of blocks which may be missing from the target set (when still able to recover)
     redundancy         [16002] INTEGER (1..254),
+    -- the keys required to encrypt
     keys               [16003] SEQUENCE (SIZE (2..512))
                                OF SymmetricKey,
+    -- ID of the first block (all others in ascending order)
     outputId           [16004] INTEGER (1..maxID),
+    -- Gauloise filed size in bits (must be either 8 or 16)
     gfSize             [16005] INTEGER (2..maxGFSize)
   }
 
@@ -243,20 +254,6 @@ BEGIN
     newId                INTEGER (1..maxID)
   }
 
-  XorMergePayloadOperation ::= SEQUENCE {
-    originalFirstId      INTEGER (0..maxID),
-    originalSecondId     INTEGER (-1..maxID),
-    originalSize         SizeBlock,
-    newId                INTEGER (1..maxID)
-  }
-
-  XorSplitPayloadOperation ::= SEQUENCE {
-    originalId           INTEGER (0..maxID),
-    prngSpec             PRNGAlgorithmSpec,
-    newFirstBlockId      INTEGER (1..maxID),
-    newSecondBlockId     INTEGER (1..maxID)
-  }
-
   EncryptPayloadOperation ::= SEQUENCE {
     originalId            INTEGER (0..maxID),
     key                   SymmetricKey,
@@ -270,7 +267,7 @@ BEGIN
   }
 
   IdentityReplayStore ::= SEQUENCE {
-    replays   SEQUENCE (SIZE (0..4294967295)) 
+    replays   SEQUENCE (SIZE (0..4294967295))
               OF IdentityReplayBlock
   }
 
@@ -281,7 +278,7 @@ BEGIN
   }
 
   IdentityStore ::= SEQUENCE {
-    identities SEQUENCE (SIZE (0..4294967295)) 
+    identities SEQUENCE (SIZE (0..4294967295))
                OF IdentityStoreBlock
   }
 
@@ -313,8 +310,9 @@ BEGIN
   BlendingParameter ::= CHOICE {
     offset          [1] INTEGER,
     symmetricKey    [2] SymmetricKey,
-    asymmetricKey   [3] AsymmetricKey
-  }
+    asymmetricKey   [3] AsymmetricKey,
+    blendingType    [4] IA5String
+   }
 
   NodeSpec ::= SEQUENCE {
     transportProtocol [1] Protocol,
@@ -343,26 +341,26 @@ BEGIN
   }
 
   RequirementPuzzleRequired ::= SEQUENCE {
-    -- bit sequence at beginning of hash from encrypted identity 
+    -- bit sequence at beginning of hash from encrypted identity
     -- block
     challenge     BIT STRING,
     hash          MacAlgorithmSpec,
     valid         UsagePeriod,
     identifier    INTEGER (0..4294967295)
   }
-  
+
   RequirementPaymentRequired ::= SEQUENCE {
     account       OCTET STRING,
     ammount       REAL,
     currency      Currency
   }
-  
+
   Currency ::= ENUMERATED {
     btc      (8001),
     eth      (8002),
     zec      (8003)
   }
-  
+
   ReplyBlock ::= CHOICE {
     puzzle [1] RequirementPuzzleRequired
   }
@@ -408,7 +406,9 @@ BEGIN
 
   StatusBlock ::= SEQUENCE {
     code            StatusCode,
-    reply           ReplyBlock
+    reply           ReplyBlock,
+    serial          INTEGER (0..maxSerial) OPTIONAL,
+    text            IA5String OPTIONAL -- human readable text allowing additional information
   }
 
   StatusCode ::= ENUMERATED {
@@ -442,7 +442,7 @@ BEGIN
   MemoryPayloadChunk ::= SEQUENCE {
     id                        INTEGER (0..maxID),
     payload                   [100] OCTET STRING,
-    validity                  UsagePeriod
+    validity				  UsagePeriod
   }
 
   UsagePeriod ::= SEQUENCE {
@@ -490,7 +490,7 @@ BEGIN
   }
 
   CipherMode ::= ENUMERATED {
-    -- ECB is a really bad choice. Do not use unless really 
+    -- ECB is a really bad choice. Do not use unless really
     -- necessary
     ecb             (10000),
     cbc             (10001),
@@ -542,17 +542,14 @@ BEGIN
   SymmetricKey ::= SEQUENCE {
     keyType SymmetricAlgorithm,
     parameter AlgorithmParameters,
-    key     OCTET STRING (SIZE(16..512))
+    key     OCTET STRING (SIZE(1..512))
   }
 
   -- Asymmetric Key
   AsymmetricKey ::= SEQUENCE {
     keyType       AsymmetricAlgorithm,
-    parameter AlgorithmParameters,
-	-- public key encoded as X.509/SubjectPublicKeyInfo
-    publicKey     OCTET STRING,
-	-- private key encoded as PKCS#8/PrivateKeyInfo
-    privateKey    OCTET STRING OPTIONAL
+    publicKey     [2] OCTET STRING,
+    privateKey    [3] OCTET STRING OPTIONAL
   }
 
 END

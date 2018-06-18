@@ -52,7 +52,7 @@
 
     <middle>
         <section title="Introduction">
-            <t>Anonymization is hard to achieve. Most of the attempts in the past rely on either a trust upon a dedicated infrastructure or a specialized networking protocol.</t>
+            <t>Anonymization is hard to achieve. Most of the attempts in the past rely on either trust in a dedicated infrastructure, or a specialized networking protocol.</t>
             <t>
                 MessageVortex is a protocol which allows to send and receive messages by using a routing block instead of a destination address.
                 The sender has full control over all parameters of the message flow.
@@ -77,7 +77,7 @@
 
             <section title="Number Specification">
                 <t>
-                    All numbers within this document are if not suffixed decimal numbers. Octets are written in capitalized hex numbers suffixed with a small letter 'h'. So a blank in ASCII (' ') is written as 20h and a capital 'K' in ASCII as 4Bh.
+                    All numbers within this document are if not suffixed decimal numbers. Numbers suffixed with a small letter 'h' followed by two hex digits are octets in hex writing. A blank in ASCII (' ') is written as 20h and a capital 'K' in ASCII as 4Bh.
                 </t>
             </section>
         </section>
@@ -86,17 +86,17 @@
             <t>Within this document, we refer to the entities as defined below. </t>
             <section anchor="entities_node" title="Node">
                 <t>
-                    We use the term 'node' to  describe any system connected to other nodes, and supporting the MessageVortex Protocol. As the protocol is typically linked to a transport layer address, a 'node' is typically an email address, an XMPP address, or any other transport protocol identity supporting the MessageVortex protocol.
+                    We use the term 'node' to  describe any system connected to other nodes, and supporting the MessageVortex Protocol. A 'node address' is typically an email address, an XMPP address, or any other transport protocol identity supporting the MessageVortex protocol. One or more addresses do address the same node.
                 </t>
             </section>
             <section anchor="entities_peer" title="Peer Partner">
                 <t>
-                    We use the term 'peer partner' as two or more message sending or receiving entities. One of these peer partners is the sends a message and all other peer partner receive one or more messages. Peer partners are message specific. Every peer partner is connected to a node.
+                    We use the term 'peer partner' as two or more message sending or receiving entities. One of these peer partners is the sends a message and all other peer partner receive one or more messages. Peer partners are message specific. Every peer partner always connects directly to a node.
                 </t>
             </section>
             <section anchor="entities_keys" title="Encryption keys">
                <t>
-                   There are several keys required for a Vortex message. Some of them are used as an identity, and some are message specific.
+                   There are several keys required for a Vortex message. For identities and ephemeral identities (see below) we use asymmetric keys. For message encryption, we use symmetric keys.
                </t>
                <section anchor="entities_node_identity" title="Identity Keys">
                    <t>
@@ -128,20 +128,20 @@
                     We use the term 'Vortex message' for a single transmission between two routing layers. A 'blended Vortex message' describes a Vortex message which has been adapted to the transport layer by the blending layer (see <xref target="layer_overview"/>).
                 </t>
                 <t>
-                    A Vortex message may be sent anonymously. There are however different degrees of anonymity.
+                    A Vortex message may be anonymous. There are however different degrees of anonymity.
 
                     <list style="symbols">
                         <t>If the sender of a message is not known to anyone else except the sender, we refer to that as 'sender anonymity.'</t>
                         <t>If the receiver of a message is not known to anyone else except the receiver, we refer to that as 'receiver anonymity.'</t>
-                        <t>If neither sender nor receiver can be determined by any other party, we refer to that as third-party anonymity.</t>
+                        <t>If an attacker is unable to determine content, sender, and receiver, we refer to that as third-party anonymity.</t>
                         <t>If a sender or a receiver may be determined as "one of a set of &lt;k&gt; entities we refer to it as k-anonymity (for more about this see <xref target="KAnon"/>).</t>
                     </list>
                 </t>
                 <t>
-                    A full vortex message is built of the following items:
+                    A full vortex message contains the following items:
                     <list style="symbols">
-                        <t>The peer key (encrypted with the host key of the node) protecting the inner Vortex message.</t>
-                        <t>The short padding guarantees that a replayed routing block with different content does not look alike.</t>
+                        <t>The peer key (encrypted with the host key of the node; stored in a PrefixBlock) protecting the inner Vortex message (innerMessageBlock).</t>
+                        <t>A short padding. It guarantees that a replayed routing block with different content does not look alike.</t>
                         <t>The sender key (encrypted with the host key of the node) protecting the identity and routing block.</t>
                         <t>The identity block (protected by the sender key) containing information about the ephemeral identity of the sender, replay protection information, header requests (optional) and a requirement reply (optional).</t>
                         <t>The routing block (protected by the sender key) containing information on how subsequent messages are processed, assembled and blended.</t>
@@ -507,18 +507,18 @@
                         A routing event is triggered by the accounting layer. The trigger has to be chosen in such a manner that it occurs at least minProcessTime after the last octet of the message arrived at the routing layer. The latest possible moment should be chosen in such a way that the last octet of the assembled message is transferred to the peer node before maxProcessTime is reached. This is assuming that the peer node is working. The time should be chosen randomly. Multiple routing combos MAY be triggered by the same event.
                     </t>
                     <t>
-                        First, the payload chunk at ID 0 is escaped if needed (non-special block starting with a backslash). Next, all processing instructions of a routing combo are execcuted in the sequence specified in the combo. If an instruction fails, it will be ignored and the target ID of the operation remains unchanged. For detailed description of the operations see <xref target="routing_operations"/>. If at least one payload chunk can successfully be built for transmission, a message is composed and passed to the blending layer.
+                        First, the payload chunk at ID 0 is escaped if needed (non-special block starting with a backslash). Next, all processing instructions of a routing combo are executed in the sequence specified in the combo. If an instruction fails, it will be ignored, and the block at the target ID of the operation remains unchanged. For a detailed description of the operations see <xref target="routing_operations"/>. If at least one payload chunk can successfully be built for transmission, a message is composed and passed to the blending layer.
                     </t>
                 </section>
                 <section anchor="routing_outgoing" title="Processing of Outgoing MessageVortex Messages">
                     <t>
-                        If a message can be composed for a routing combo, the message is passed to the blending layer. The blending layer MUST compose then a transport layer message according to the specification provided in the routing combo. Any decoy message or steganographic carrier SHOULD be chosen in such a way that the dead parrot syndrom as specified in <xref target="DeadParrot"/> is avoided.
+                        If a message can be composed for a routing combo, the message is passed to the blending layer. The blending layer MUST then compose a transport layer message according to the specification provided in the routing combo. Any decoy message or steganographic carrier SHOULD be chosen in such a way that the dead parrot syndrome as specified in <xref target="DeadParrot"/> is avoided.
                     </t>
                 </section>
             </section>
             <section anchor="routing_header" title="Header Requests">
                 <t>
-                    Header requests are control requests for the anonymization system. Messages with requests or replys only MUST NOT affect any quota.
+                    Header requests are control requests for the anonymization system. Messages with requests or replies only MUST NOT affect any quota.
                 </t>
                 <section anchor="routing_header_eid" title="Request New Ephemeral Identity">
                     <t>
@@ -530,15 +530,15 @@
                 </section>
                 <section anchor="routing_header_req_msg_quota" title="Request Message Quota">
                     <t>
-                        Any valid ephemeral identity may request to raise the current message quota to a specific value at any time. The request MUST include a reply block in the header. The request may contain other parts. If a requested value is lower than the current quota the node SHOULD NOT refuse the quota request and SHOULD send a "No Error" status.
+                        Any valid ephemeral identity may request to raise the current message quota to a specific value at any time. The request MUST include a reply block in the header. The request may contain other parts. If a requested value is lower than the current quota, the node SHOULD NOT refuse the quota request and SHOULD send a "No Error" status.
                     </t>
                     <t>
-                        A node SHOULD reply to a HeaderRequestIncreaseMessageQuota request (see <xref target="asn_one"/>) of a valid ephemeral identity. The reply MUST include a requirement, an error message, or a "No Error" status message.
+                        A node SHOULD reply to a HeaderRequestIncreaseMessageQuota request (see <xref target="asn_one"/>) of a valid ephemeral identity. The reply MUST include a requirement, an error message or a "No Error" status message.
                     </t>
                 </section>
                 <section anchor="routing_header_req_trans_quota" title="Request Transfer Quota">
                     <t>
-                        Any valid ephemeral identity may request to raise the current transfer quota to a specific value at any time. The request MUST include a reply block in the header. The request may contain other parts. If a requested value is lower than the current quota the node SHOULD NOT refuse the quota request and SHOULD send a "No Error" status.
+                        Any valid ephemeral identity may request to raise the current transfer quota to a specific value at any time. The request MUST include a reply block in the header. The request may contain other parts. If a requested value is lower than the current quota, the node SHOULD NOT refuse the quota request and SHOULD send a "No Error" status.
                     </t>
                     <t>
                         A node SHOULD reply to a HeaderRequestIncreaseTransferQuota request (see <xref target="asn_one"/>) of a valid ephemeral identity. The reply MUST include a requirement, an error message, or a "No Error" status message.
@@ -546,7 +546,7 @@
                 </section>
                 <section anchor="routing_header_qry_quota" title="Query Quota">
                     <t>
-                        Any valid ephemeral identity may request the current message and trannsfer quota. The request MUST include a reply block in the header. The request may contain other parts.
+                        Any valid ephemeral identity may request the current message and transfer quota. The request MUST include a reply block in the header. The request may contain other parts.
                     </t>
                     <t>
                         A node MUST reply to a HeaderRequestQueryQuota request (see <xref target="asn_one"/>). The reply must include the current message quota and the current message transfer quota. The reply to this request MUST NOT include a requirement.
@@ -554,7 +554,7 @@
                 </section>
                 <section anchor="routing_header_req_cap" title="Request Capabilities">
                     <t>
-                        Any node MAY request the capabilities of another node. The capabilities include all information neccesary to create a parseable VortexMessage. Any node SHOULD reply to any encrypted HeaderRequestCapability.
+                        Any node MAY request the capabilities of another node. The capabilities include all information necesary to create a parseable VortexMessage. Any node SHOULD reply to any encrypted HeaderRequestCapability.
                     </t>
                     <t>
                         FIXME sample required for interpretation of data
@@ -562,7 +562,7 @@
                 </section>
                 <section anchor="routing_header_req_nodes" title="Request Nodes">
                     <t>
-                        A node may ask another node for a list of routing node adresses and keys. This request may be used to bootstrap a new node and to add routing nodes increasing the anonymisation of a node. The receiving node of such a request SHOULD reply with a requirement (Eg. RequirementPuzzleRequired).
+                        A node may ask another node for a list of routing node addresses and keys. This request may be used to bootstrap a new node and to add routing nodes increasing the anonymization of a node. The receiving node of such a request SHOULD reply with a requirement (e.g. RequirementPuzzleRequired).
                     </t>
                     <t>
                         A node SHOULD reply to a HeaderRequest request (see <xref target="asn_one"/>) of a valid ephemeral identity. The reply MUST include a requirement, an error message, or a "No Error" status message.
@@ -570,7 +570,7 @@
                 </section>
                 <section anchor="routing_header_req_identity_replace" title="Request Identity Replace">
                     <t>
-                        This request allows a receiving node to replace an identity with the identity provided in the message. This request is required if an adverser managed to deny the usage of a node (eg. by deleting the corresponding transport account). Any sending node may recover from such an attack by sending a validly authenticated message to another identity providing the new transport and key details.
+                        This request allows a receiving node to replace an identity with the identity provided in the message. This request is required if an adverser managed to deny the usage of a node (e.g. by deleting the corresponding transport account). Any sending node may recover from such an attack by sending a validly authenticated message to another identity providing the new transport and key details.
                     </t>
                     <t>
                         A node SHOULD reply to a such a request of a valid known identity. The reply MUST include an error message, or a "No Error" status message.
@@ -579,11 +579,11 @@
             </section>
             <section anchor="routing_special" title="Special Blocks">
                 <t>
-                    Special blocks are payload messages. They reflect messages of one node to another and are not visible to the user. A special block starts with the character sequence '\special' (or 5Ch 73h 70h 65h 63h 69h 61h 6Ch) followed by a DER encoded special block (SpecialBlock). Any non-special message decoding to ID 0 in a workspace starting with backslash (5Ch) MUST escape all backslashes within the payload chunk with an additional backslash.
+                    Special blocks are payload messages. They reflect messages from one node to another and are not visible to the user. A special block starts with the character sequence '\special' (or 5Ch 73h 70h 65h 63h 69h 61h 6Ch) followed by a DER encoded special block (SpecialBlock). Any non-special message decoding to ID 0 in a workspace starting with a backslash (5Ch) MUST escape all backslashes within the payload chunk with an additional backslash.
                 </t>
                 <section anchor="routing_special_error" title="Error Block">
                     <t>
-                        An error block may be sent as a reply where specified as a payload. The error block is embedded in a special block and sent with any kind of provided reply block. Error messages SHOULD contain the serial number of the offending header block, and MAY contain a human readable text providing additional messages about the error.
+                        An error block may be sent as a reply where specified as a payload. The error block is embedded in a special block and sent with any provided reply block. Error messages SHOULD contain the serial number of the offending header block and MAY contain a human-readable text providing additional messages about the error.
                     </t>
                 </section>
                 <section anchor="routing_special_requirement" title="Requirement Block">
@@ -591,71 +591,71 @@
                         A requirement block means that the request block has been accepted, has not been processed yet, and will be processed if the contained requirement is met. The requirement MUST be processed as soon as the requirement is fulfilled and proofed by the requiring node.
                     </t>
                     <t>
-                        FIXME explain how puzzle works
+                        FIXME explain how a puzzle works
                     </t>
                 </section>
             </section>
             <section anchor="routing_operations" title="Routing Operations">
                 <t>
-                    Routing operations are contained in a routing block and processed either on arrival on a message ,or when a new message is compiled. All Operations are reversable. No Operation is available for generating decoy traffic. For decoy traffic either encryption of an unpadded block may be used,  or the addReundancy operation.
+                    Routing operations are contained in a routing block and processed either on arrival on a message, or when a new message is compiled. All Operations are reversible. No Operation is available for generating decoy traffic. For decoy traffic, either encryption of an unpadded block may be used,  or the addReundancy operation.
                 </t>
                 <t>
                     All payload chunk blocks inherit the validity time from the message routing combos (arrival time + max(maxProcessTime)) is inherited.
                 </t>
                 <t>
-                    When applying an operation to a source block, the resulting target block inherits the expiry of the of the source block. When having multiple different expiry times, the expiry in the furthermost future will be allied to the target block. If the operation fails the target expiry rem,ains unchanged.
+                    When applying an operation to a source block, the resulting target block inherits the expiry of the of the source block. When having multiple different expiry times, the expiry in the furthermost future will be allied to the target block. If the operation fails, the target expiry remains unchanged.
                 </t>
                 <section anchor="routing_operations_mapping" title="Mapping Operation">
                     <t>
-                        A mapping operation is a straight forward operation mainly used in inOperations of a routing block to map the routing block specific blocks to a permanent workspace
+                        A mapping operation is a straightforward operation mainly used in inOperations of a routing block to map the routing block specific blocks to a permanent workspace
                     </t>
                 </section>
                 <section anchor="routing_operations_mergesplit" title="Split and Merge Operations">
                     <t>
-                        The split and merge operations allow to split and recombine message chunks.to make these operations reproduceible the following constraints need to be followed.
+                        The split and merge operations allow to split and recombine message chunks. To make these operations reproducible, the following constraints need to be followed.
                         <list style="symbols">
                             <t>The operation must be applied absolute (measuring in bytes) or relative (measured as a floating value ranging 0&gt;value&gt;100.</t>
-                            <t>If a relative value is a non integer result the number of bytes is determined with the floor operation.</t>
-                            <t>If an absolute value is negative the size reflected applies to the second part (instead of the first.</t>
-                            <t>If an absolute value is bigger than the size bytes in the block, all bytes are mapped to the respective target block and the other tarhet block becomes a null byte sized block.</t>
+                            <t>If a relative value is a non-integer result, the number of bytes is determined with the floor operation.</t>
+                            <t>If an absolute value is negative, the size reflected applies to the second part (instead of the first.</t>
+                            <t>If an absolute value is bigger than the size bytes in the block, all bytes are mapped to the respective target block, and the other target block becomes a null byte sized block.</t>
                         </list>
                     </t>
                     <t>
-                        An operation MUST fail if relative values are equal to, or below zero. An operation MUST fail if a relative value is equal to or above 100. All floating point operations must be carried out according to <xref target="IEEE754"/> and in 64 bit precision.
+                        An operation MUST fail if relative values are equal to, or below zero. An operation MUST fail if a relative value is equal to or above 100. All floating point operations must be carried out according to <xref target="IEEE754"/> and in 64-bit precision.
                     </t>
                 </section>
                 <section anchor="routing_operations_crypt" title="Encrypt and Decrypt Operations">
                     <t>
-                        Encryption and decryption are executed according to the afore mentioned standards. An encryption operation encrypts a block symmetrically and places the result in the target block. Parameters such as IV, encryption key, or cipher modes must be provided by the operation parameter. An encryption operation without a valid parameter set MUST fail.
+                        Encryption and decryption are executed according to the aforementioned standards. An encryption operation encrypts a block symmetrically and places the result in the target block. Parameters such as IV, encryption key, or cipher modes must be provided by the operation parameter. An encryption operation without a valid parameter set MUST fail.
                     </t>
                 </section>
                 <section anchor="routing_operations_redundancy" title="Add and Remove Redundancy Operations">
                     <t>
-                        The addRdundancy and removeRedundancy operations are the core operations of the protocol. They may be used to split messages and distribute message content across multiple routing nodes. The operation is executed in multiple steps
-                        <list style="numerals">
-                            <t>Pad a block to multitudes of the key size in the resulting blocks.</t>
+                        The addRedundancy and removeRedundancy operations are the core operations of the protocol. They may be used to split messages and distribute message content across multiple routing nodes. The operation is executed in multiple steps
+                        <list style="numbers">
+                            <t>Pad the inblock to multitudes of the key block size in the resulting outblocks.</t>
                             <t>Apply a Vandermonde matrix with the given sizes.</t>
                             <t>Encrypt each resulting block with a separate key</t>
                         </list>
-                        The following sections describe the order of the operations in an addRedundancy operation. for a removeRedundancy operation just inverse functtions and order.
+                        The following sections describe the order of the operations in an addRedundancy operation. For a removeRedundancy operation just inverse functions and order.
                     </t>
                     <section anchor="routing_operations_redundancy_padding" title="Padding Operation">
                         <t>
-                            First the length of all output blocks including redundancy is calculated. This is done by L=roof((&lt;inblock size in bytes&gt;+4)/&lt;encryption block size in bytes&gt;)*&lt;block size in bytes&gt;. The block is prepended with a 32 bit length indicator in bytes at the beginning (little-endian). This length indicator i is calculated by i=&lt;inblock size in bytes&gt;*randominteger()*L. The rest of the inblock up to length L is padded with random data. If GF(16) is applied numbers are treated as little-endian representations.
+                            First, the length of all output blocks including redundancy is calculated. This is done by L=roof((&lt;inblock size in bytes&gt;+4)/&lt;encryption block size in bytes&gt;)*&lt;block size in bytes&gt;. The block is prepended with a 32-bit length indicator in bytes at the beginning (little-endian). This length indicator i is calculated by i=&lt;inblock size in bytes&gt;*randominteger()*L. The rest of the inblock up to length L is padded with random data. If GF(16) is applied, numbers are treated as little-endian representations.
                         </t>
                         <t>
-                            For padding removal first the padding i at the start is removed as little-endian integer. Then, the length of the resulting block (outblock) is calculated by applying &lt;outblock size in bytes&gt;=i mod &lt;inblock size in bytes&gt;
+                            For padding removal, first the padding i at the start is removed as a little-endian integer. Then, the length of the resulting block (outblock) is calculated by applying &lt;outblock size in bytes&gt;=i mod &lt;inblock size in bytes&gt;
                         </t>
                         <t>
-                           This padding guarantees that each resulting block is exactly as big as the subsequent encryption operation and does not require any padding therefore.
+                           This padding guarantees that each resulting block is exactly as big as the subsequent encryption operation and does not require any padding.
                         </t>
                     </section>
                     <section anchor="routing_operations_redundancy_matrix" title="Apply Matrix">
                         <t>
-                            Next the inblock is organized in a data matrix D of dimensions inrows,incols where incols=(&lt;number of data blocks&gt;-&lt;number of redundancy blocks&gt;) and inrows=L/(&lt;number of data blocks&gt;-&lt;number of redundancy blocks&gt;). The inblock data is distributed in this matrix first across, then down.
+                            Next, the inblock is organized in a data matrix D of dimensions inrows,incols where incols=(&lt;number of data blocks&gt;-&lt;number of redundancy blocks&gt;) and inrows=L/(&lt;number of data blocks&gt;-&lt;number of redundancy blocks&gt;). The inblock data is distributed in this matrix first across, then down.
                         </t>
                         <t>
-                            Next we multiply the data matrix D a Vandermonde matrix V. The V matrix has the number of rows equal to the incols calculated and columns are equal to the &lt;number of data blocks&gt;. The content of the matrix is formed by  v(i,j)=pow(i,j), whereas i reflects the row number starting at 0, and j reflects the column number starting at 0. Please note that calculations noted here have to be carried out in the GF noted in the operation in order to be successful. The operation results in a matrix A.
+                            Next, we multiply the data matrix D a Vandermonde matrix V. The V matrix has the number of rows equal to the incols calculated, and columns are equal to the &lt;number of data blocks&gt;. The content of the matrix is formed by  v(i,j)=pow(i,j), whereas i reflects the row number starting at 0, and j reflects the column number starting at 0. Please note that calculations noted here have to be carried out in the GF noted in the respective operation to be successful. The operation results in a matrix A.
                         </t>
                     </section>
                     <section anchor="routing_operations_redundancy_encrypt" title="Encrypt Target Block">
@@ -667,10 +667,10 @@
             </section>
             <section anchor="routing_processing" title="Processing of Vortex Messages">
                 <t>
-                    Processing of routing mechanisms are triggered by accounting layer according to informations contained in a routing block in the workspace. All operations MUST be executed in the sequence provided in the routing block. Any failing operation must leave the result block unmodified.
+                    Processing of routing mechanism is triggered by the accounting layer according to information contained in a routing block in the workspace. All operations MUST be executed in the sequence provided in the routing block. Any failing operation must leave the result block unmodified.
                 </t>
                 <t>
-                    All workspace blocks resulting in IDs 1 to maxPayloadBlock are then added to the message and passed to the blending layer with apropriate instructions.
+                    All workspace blocks resulting in IDs 1 to maxPayloadBlock are then added to the message and passed to the blending layer with appropriate instructions.
                 </t>
             </section>
         </section>
@@ -687,17 +687,17 @@
                 </t>
                 <section anchor="accounting_timed_gc" title="Time-Based Garbage Collection">
                     <t>
-                        The accounting layer SHOULD keep a list of expiry times. As soon as an entry (eg. payload block, or identity) expires the respective structure should be removed from workspace. Alternatively an implementation MAY choose to remove expired items periodic or when encountering them during normal operation. It should be considered that this MAY leak additional information about the nodes inner working in the past when analyzed.
+                        The accounting layer SHOULD keep a list of expiry times. As soon as an entry (e.g. payload block, or identity) expires, the respective structure should be removed from the workspace. An implementation MAY choose to remove expired items periodic or when encountering them during normal operation. It should be considered that this MAY leak additional information about the nodes inner working in the past when analyzed.
                     </t>
                 </section>
                 <section anchor="accounting_timed_routing" title="Time-Based Routing Initiation">
                     <t>
-                        The accounting layer MAY keep a list of any time a routing block is activated. For improved privacy the accounting layer should use a sloted model where, whenever possible, multiple routing blocks are handled in a time close manor and the requests to the blending layers are mixed between the transactions.
+                        The accounting layer MAY keep a list of any time a routing block is activated. For improved privacy, the accounting layer should use a slotted model where, whenever possible, multiple routing blocks are handled in a time close manor and the requests to the blending layers are mixed between the transactions.
                     </t>
                 </section>
                 <section anchor="accounting_timed_quota" title="Routing Based Quota Updates">
                     <t>
-                        Quota updates MUST be done on the repective operations. Message quotas MUST be decreased before processing routing blocks in the workspace. Increase of a message quota MUST be done after a quota increase was successful and before applying any decrease of the quota. Transfer quotas MUST be increased as soon as the header is processed and before the message quota is checked. The message quota MUST be decreased afterprocessing of any header requests of an incomming message.
+                        Quota updates MUST be done on the respective operations. Message quotas MUST be decreased before processing routing blocks in the workspace. The increase of a message quota MUST be done after a quota increase was successful and before applying any decrease of the quota. Transfer quotas MUST be increased as soon as the header is processed and before the message quota is checked. The message quota MUST be decreased after processing of any header requests of an incoming message.
                     </t>
                 </section>
                 <section anchor="accounting_routhing_auth" title="Routing Based Authorization">
@@ -766,7 +766,7 @@
                 </list>
              </t>
              <t>
-                An active adverser cannot use blocks from other routing block builders for his own purposes. He may falsify the result by injecting wrong message chunks or by not sending a message. Such message disruptions may be detected by intentionally routing some information to the routing block builders node. If the Vortex message does not carry the information expected the node may safely assume that one of the involved nodes is misbehaving. A block building node MAY calculate reputation for involved nodes over time. A block building node MAY build redundancy paths into a routing block to withstand such malicious nodes.
+                An active adverser cannot use blocks from other routing block builders for his purposes. He may falsify the result by injecting wrong message chunks or by not sending a message. Such message disruptions may be detected by intentionally routing some information to the routing block builders node. If the Vortex message does not carry the information expected the node may safely assume that one of the involved nodes is misbehaving. A block building node MAY calculate reputation for involved nodes over time. A block building node MAY build redundancy paths into a routing block to withstand such malicious nodes.
             </t>
             <t>
                 A peer node may try to exhaust a routers quota by sending multiple times the same block. A block builder should take care that a block may not be resent in the interval where the previous blocks for the transaction are still valid. This guarantees that replayed blocks will stop at the next peer node. This provides better protection against replay based attacks.
