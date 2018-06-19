@@ -835,8 +835,8 @@
             <reference anchor="XEP-0234" target="https://xmpp.org/extensions/xep-0234.html">
                 <front>
                     <title>XEP-0234: Jingle File Transfer</title>
-                    <author surname="Peter" initials="S.A"/>
-                    <author surname="Stout" initials="L"/>
+                    <author surname="Peter" initials="S.A."/>
+                    <author surname="Stout" initials="L."/>
                     <date year="2017" month="08" day="24"/>
                 </front>
             </reference>
@@ -844,7 +844,7 @@
             <reference anchor="F5">
                 <front>
                     <title>F5 - A Steganographic Algorithm - High Capacity Despite Better Steganalysis</title>
-                    <author initials="A" surname="Westfeld">
+                    <author initials="A." surname="Westfeld">
                         <organization>TU Dresden</organization>
                     </author>
                     <date year="2001" month="10" day="24"/>
@@ -854,7 +854,7 @@
             <reference anchor="TWOFISH">
                 <front>
                     <title>The Twofish Encryptions Algorithm: A 128-Bit Block Cipher, 1st Edition</title>
-                    <author initials="B" surname="Schneier"/>
+                    <author initials="B." surname="Schneier"/>
                     <date year="1999" month="03"/>
                 </front>
             </reference>
@@ -884,9 +884,9 @@
             <reference anchor="EAX">
                 <front>
                     <title>The EAX mode of operation</title>
-                    <author initials="M" surname="Bellare"/>
-                    <author initials="P" surname="Rogaway"/>
-                    <author initials="D" surname="Wagner"/>
+                    <author initials="M." surname="Bellare"/>
+                    <author initials="P." surname="Rogaway"/>
+                    <author initials="D." surname="Wagner"/>
                     <!--<seriesInfo name="LNCS" value="3017"/>-->
                     <date year="2011"/>
                 </front>
@@ -935,7 +935,7 @@
             <reference anchor="MVAnalysis" target="https://messagevortex.org/devel/messageVortex.pdf">
                 <front>
                     <title>MessageVortex</title>
-                    <author initials="M" surname="Gwerder"/>
+                    <author initials="M." surname="Gwerder"/>
                     <date year="2018" />
                 </front>
             </reference>
@@ -943,9 +943,9 @@
             <reference anchor="DeadParrot" target="https://people.cs.umass.edu/~amir/papers/parrot.pdf">
                 <front>
                     <title>The Parrot is Dead: Observing Unobservable Network Communications</title>
-                    <author initials="A" surname="Houmansadr"/>
-                    <author initials="C" surname="Burbaker"/>
-                    <author initials="V" surname="Shmatikov"/>
+                    <author initials="A." surname="Houmansadr"/>
+                    <author initials="C." surname="Burbaker"/>
+                    <author initials="V." surname="Shmatikov"/>
                     <date year="2013" />
                 </front>
             </reference>
@@ -953,13 +953,13 @@
             <reference anchor="KAnon">
                 <front>
                     <title>k-Anonymous Message Transmission</title>
-                    <author initials="L" surname="Ahn">
+                    <author initials="L." surname="Ahn">
                         <organization>Carnegie Mellon University</organization>
                     </author>
-                    <author initials="A" surname="Bortz">
+                    <author initials="A." surname="Bortz">
                         <organization>Carnegie Mellon University</organization>
                     </author>
-                    <author initials="NJ" surname="Hopper">
+                    <author initials="N.J." surname="Hopper">
                         <organization>Carnegie Mellon University</organization>
                     </author>
                     <date year="2003" />
@@ -971,8 +971,6 @@
         <section anchor="asn_one" title="The ASN.1 schema for Vortex messages">
             <figure align="left" anchor="app_asnOne">
                 <artwork><![CDATA[
--- FIXME ADAPT NeoScrypt
-
 -- encryption: as specified in the key. If not specified default
 -- mode is CBC and default padding is PKCS1Padding
 

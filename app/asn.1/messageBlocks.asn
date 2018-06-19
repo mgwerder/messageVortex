@@ -220,7 +220,8 @@ BEGIN
     inputId            [16000] INTEGER (0..maxID),
     -- number of data blocks resulting (including redundancy blocks)
     dataStripes        [16001] INTEGER (1..254),
-    -- number of blocks which may be missing from the target set (when still able to recover)
+    -- number of blocks which may be missing from the target set
+    -- (when still able to recover)
     redundancy         [16002] INTEGER (1..254),
     -- the keys required to encrypt
     keys               [16003] SEQUENCE (SIZE (2..512))
