@@ -194,7 +194,7 @@
             <t>The protocol is designed in four layers as shown in <xref target="fig_layer_overview" /></t>
 
             <figure align="center" anchor="fig_layer_overview" title="Layer overview">
-                <artwork align="center"><![CDATA[
+                <artwork align="center" src="../inc/fixme.png"><![CDATA[
 +-------------------------------------------------------------------+
 | Vortex Node                                                       |
 | +---------------------------------------------------------------+ |
@@ -720,7 +720,7 @@
         </section>
 
         <section anchor="Security" title="Security Considerations">
-            <t>The MessageVortex protocol may be understood more as a toolset than a fixed product. Depending on the usage of the toolset anonymity and security are affected. For a detailed analysis see <xref target="MessageVortexAnalysis"/>.
+            <t>The MessageVortex protocol may be understood more as a toolset than a fixed product. Depending on the usage of the toolset anonymity and security are affected. For a detailed analysis see <xref target="MVAnalysis"/>.
             </t>
             <t>
                 The primary goals for security within this protocol did rely on the following focus areas:
@@ -815,7 +815,7 @@
                     <title>Specification of Abstract Syntax Notation One (ASN.1)</title>
                     <author>
                         <organization>International Telephone and Telegraph Consultative Committee</organization>
-                    </author>
+                </author>
                     <date year="1998" month="11"/>
                 </front>
                 <seriesInfo name="CCITT Recommendation" value="X.208"/>
@@ -832,7 +832,7 @@
                 <!--<seriesInfo name="CCITT Recommendation" value="X.680"/>-->
             </reference>
 
-            <reference anchor="XEP-0234">
+            <reference anchor="XEP-0234" target="https://xmpp.org/extensions/xep-0234.html">
                 <front>
                     <title>XEP-0234: Jingle File Transfer</title>
                     <author surname="Peter" initials="S.A"/>
@@ -932,7 +932,7 @@
             <!-- POP3 STARTTLS -->
             <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2595.xml"?>
 
-            <reference anchor="MessageVortexAnalysis" target="https://messagevortex.org/devel/messageVortex.pdf">
+            <reference anchor="MVAnalysis" target="https://messagevortex.org/devel/messageVortex.pdf">
                 <front>
                     <title>MessageVortex</title>
                     <author initials="M" surname="Gwerder"/>
@@ -1193,7 +1193,8 @@ BEGIN
     inputId            [16000] INTEGER (0..maxID),
     -- number of data blocks resulting (including redundancy blocks)
     dataStripes        [16001] INTEGER (1..254),
-    -- number of blocks which may be missing from the target set (when still able to recover)
+    -- number of blocks which may be missing from the target set
+    -- (when still able to recover)
     redundancy         [16002] INTEGER (1..254),
     -- the keys required to encrypt
     keys               [16003] SEQUENCE (SIZE (2..512))
