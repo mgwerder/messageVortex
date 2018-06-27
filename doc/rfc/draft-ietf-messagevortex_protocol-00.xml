@@ -149,6 +149,43 @@
                     </list>
                 </t>
             </section>
+            <section anchor="keys" title="Key and MAC specifications and usages">
+                <t>
+                    MessageVortex uses an unique encoding for keys. It is designed to be small and flexible while maintaining a certain base structure
+                </t>
+                <t>
+                    Key structures are divided into the following structures:
+                    <list style="symbols">
+                        <t>SymmetricKey</t>
+                        <t>AsymmetricKey</t>
+                    </list>
+                </t>
+                <t>
+                    MAC do not need a complete structure containing specs and a value. Instead only a  MacAlgorithmSpec is available. The following sections outline the constraints when specifying parameters for these structures. A node MUST NOT specify any parameter more than once.
+                </t>
+                <t>
+                    If a crypto mode is specified requiring an IV, a node MUST provide the IV when specifying the key.
+                </t>
+                <section anchor="asymmetricKey" title="Asymmetric Keys">
+                    <t>
+                        Asymmetric keys are used for identifying nodes (identities) and encrypting symmetric keys (for later de-/encryption of payload or blocks). All asymmetric keys MUST contain a key type specifying a strictly normed key. They MUST contain a public part of the key encoded as X.509 container and a private key as specified in PKCS#8 wherever possible.
+                    </t>
+                    <t>
+                        RSA and EC keys must contain a keysize parameter. All asymmetric keys SHOULD contain a padding. A node SHOULD assume PKCS#1 if no padding is specified.
+                    </t>
+                    <t>
+                        NTRU spezification MUST provide parameters "n", "p", and "q". Mceliece specification MUST contain parameters "n", "k", and "t".
+                    </t>
+                </section>
+                <section anchor="symmetricKey" title="Symmetric Keys">
+                    <t>
+                        Symmetric keys are used for encrypting paload and blocks. All Symmetric keys MUST contain a key type specifying a strictly normed key. They MUST contain a key encoded .
+                    </t>
+                    <t>
+                        Keysize MUST be provided if it is not standardised.
+                    </t>
+                </section>
+            </section>
             <section anchor="entities_blocks" title="Blocks">
                 <t>We use the term 'block' for an ASN.1 sequence in a transmitted message. We embed messages in the transport protocol. It may have any size.</t>
             </section>
@@ -261,7 +298,7 @@
             </section>
             <section title="Message Prefix Block (MPREFIX)">
                 <t>
-                    The PrefixBlock contains a symmetrical key as defined in <xref target="app_asnOne"/> and is encrypted using the host key of the receiving peer host. The symmetric key used MUST be one out of the set advertised by a CapabilitiesReplyBlock (see <xref target="routing_header_req_cap"/>). Parameters omitted in the CapabilitiesReplyBlock MAY be freely chosen (unless stated otherwise in <xref target="routing_header_req_cap"/>). A PrefixBlock SHOULD always be encrypted with the hosts public key. A prefix block MUST contain the same forward-secret as the other prefix, the routing block, and the header block. A host MAY reply to a message with an unencrypted message block. Any reply to a message SHOULD be encrypted.
+                    The PrefixBlock contains a symmetrical key as defined in <xref target="app_asnOne"/> and is encrypted using the host key of the receiving peer host. The symmetric key used MUST be one out of the set advertised by a CapabilitiesReplyBlock (see <xref target="routing_header_req_cap"/>). A node MAY choose any parameters omitted in the CapabilitiesReplyBlock freely (unless stated otherwise in <xref target="routing_header_req_cap"/>). A node SHOULD avoid sending unencrypted PrefixBlocks. A prefix block MUST contain the same forward-secret as the other prefix, the routing block, and the header block. A host MAY reply to a message with an unencrypted message block. Any reply to a message SHOULD be encrypted.
                 </t>
                 <t>
                     The sender MUST choose a key which may be encrypted with the host key using the padding advertised by the CapabilitiesReplyBlock.
@@ -269,10 +306,10 @@
             </section>
             <section title="Inner Message Block">
                 <t>
-                    The InnerMessageBlock MUST be encrypted with the symmetric key of the PrefixBlock. The encryption hides the inner structure of the message. The InnerMessageBlock SHOULD always accommodate four or more payload chunks.
+                    A node MUST always encrypt (with the symmetric key of the PrefixBlock) MUST always be applied to an InnerMessageBlock. The encryption hides the inner structure of the message. The InnerMessageBlock SHOULD always accommodate four or more payload chunks.
                 </t>
                 <t>
-                    An InnerMessageBlock always starts with a padding block. This padding guarantees that when using the same routing block multiple times. The padding MUST be the first 16 bytes of the first four non-empty payload chunk (PayloadChunks). If a payload chunk is shorter than 16 bytes, the content of the padding SHOULD be filled with zero-valued bytes (00h) at very end up to the required number of bytes. An inner message block (InnerMessageBlock) SHOULD contain at least four payload chunks sized 16 bytes or bigger. If there are less than four payload chunks, then the padding MUST contain a random sequence of 16 bytes for the missing payload chunks. Random sequences SHOULD NOT be reused.
+                    An InnerMessageBlock always starts with a padding block. This padding guarantees that when using the same routing block multiple times. The padding MUST be the first 16 bytes of the first four non-empty payload chunk (PayloadChunks). If a payload chunk is shorter than 16 bytes, the content of the padding SHOULD be filled with zero-valued bytes (00h) at very end up to the required number of bytes. An inner message block (InnerMessageBlock) SHOULD contain at least four payload chunks sized 16 bytes or bigger. If there are less than four payload chunks, then the padding MUST contain a random sequence of 16 bytes for the missing payload chunks. A node MUST NOT reuse random sequences.
                 </t>
                 <t>
                     An InnerMessageBlockcontains so called forwardSecrets. This random number MUST be the same in the HeaderBlock, the RoutingBlock, and the PrefixBlock. Nodes receiving Messages containing non-matching forwardSecrets MUST discard these messages, and SHOULD NOT send an error message.
@@ -616,10 +653,10 @@
                 </section>
                 <section anchor="routing_operations_mergesplit" title="Split and Merge Operations">
                     <t>
-                        The split and merge operations allow to split and recombine message chunks. To make these operations reproducible, the following constraints need to be followed.
+                        The split and merge operations allow to split and recombine message chunks. A node MUST adhere to these constraints:
                         <list style="symbols">
                             <t>The operation must be applied absolute (measuring in bytes) or relative (measured as a floating value ranging 0&gt;value&gt;100.</t>
-                            <t>If a relative value is a non-integer result, the number of bytes is determined with the floor operation.</t>
+                            <t>If a relative value is a non-integer result, a floor operation (cutting of all non-integer parts) determines the number off bytes.</t>
                             <t>If an absolute value is negative, the size reflected applies to the second part (instead of the first.</t>
                             <t>If an absolute value is bigger than the size bytes in the block, all bytes are mapped to the respective target block, and the other target block becomes a null byte sized block.</t>
                         </list>
@@ -765,8 +802,7 @@
                     <t>The anonymity set of a message should be sufficiently large to avoid legal prosecution of all jurisdictional entities involved. It has even to be large enough if a certain amount of the anonymity set cooperates with an adverser.</t>
                     <t>Encryption and decryption SHOULD follow whenever possible the logic. Avoid encrypting a block on a node with one key and decrypting it with a different key on the same or another node.</t>
                     <t>Traffic peaks SHOULD be uniformly distributed within the whole anonymity set.</t>
-                    <t>A routing block SHOULD be used for a limited  number of messages. If used as a message block for the node itself it should be used only once. A block builder SHOULD use the identity replace header request to update reply blocks on a regular base. Implementers should always keep in mind that the same routing block is identifiable as such by its structure.</t>
-                    <t>A block builder SHOULD always rely on the newest possible research when choosing Cipher types, paddings, and modes to stay secure.</t>
+                    <t>A routing block SHOULD be used for a limited  number of messages. If used as a message block for the node itself it should be used only once. A block builder SHOULD use the HeaderRequestReplaceIdentity block to update reply routing blocks on a regular base. Implementers should always keep in mind that the same routing block is identifiable as such by its structure.</t>
                 </list>
              </t>
              <t>
