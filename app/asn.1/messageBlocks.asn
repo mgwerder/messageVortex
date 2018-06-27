@@ -524,8 +524,9 @@ BEGIN
 
   AsymmetricAlgorithm ::= ENUMERATED {
     rsa             (2000),
-    dsa             (2100),
-    ec              (2500)
+    ec              (2500),
+    ntru            (2600),
+    mceliece        (2700)
   }
 
   MacAlgorithm ::= ENUMERATED {
@@ -549,7 +550,12 @@ BEGIN
     initialisationVector [10002] OCTET STRING  OPTIONAL,
     nonce                [10003] OCTET STRING  OPTIONAL,
     mode                 [10004] CipherMode    OPTIONAL,
-    padding              [10005] CipherPadding OPTIONAL
+    padding              [10005] CipherPadding OPTIONAL,
+    n                    [10010] INTEGER       OPTIONAL,
+    p                    [10011] INTEGER       OPTIONAL,
+    q                    [10012] INTEGER       OPTIONAL,
+    k                    [10013] INTEGER       OPTIONAL,
+    t                    [10013] INTEGER       OPTIONAL
   }
 
   -- Symmetric key

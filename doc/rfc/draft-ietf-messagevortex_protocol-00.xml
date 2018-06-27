@@ -86,7 +86,7 @@
             <t>Within this document, we refer to the entities as defined below. </t>
             <section anchor="entities_node" title="Node">
                 <t>
-                    We use the term 'node' to  describe any system connected to other nodes, and supporting the MessageVortex Protocol. A 'node address' is typically an email address, an XMPP address, or any other transport protocol identity supporting the MessageVortex protocol. One or more addresses do address the same node.
+                    We use the term 'node' to  describe any system connected to other nodes, and supporting the MessageVortex Protocol. A 'node address' is typically an email address, an XMPP address, or any other transport protocol identity supporting the MessageVortex protocol and is normally seconded by a 'identity key' allowing to transmit messages safely. One or more addresses do address the same node.
                 </t>
             </section>
             <section anchor="entities_peer" title="Peer Partner">
@@ -194,7 +194,7 @@
             <t>The protocol is designed in four layers as shown in <xref target="fig_layer_overview" /></t>
 
             <figure align="center" anchor="fig_layer_overview" title="Layer overview">
-                <artwork align="center" src="../inc/fixme.png"><![CDATA[
+                <artwork align="center"><![CDATA[
 +-------------------------------------------------------------------+
 | Vortex Node                                                       |
 | +---------------------------------------------------------------+ |
@@ -261,7 +261,7 @@
             </section>
             <section title="Message Prefix Block (MPREFIX)">
                 <t>
-                    The PrefixBlock contains a symmetrical key as defined in <xref target="app_asnOne"/> and is encrypted using the host key of the receiving peer host. The symmetric key used MUST be one out of the set advertised by a CapabilitiesReplyBlock (see <xref target="routing_header_req_cap"/>). Parameters omitted in the CapabilitiesReplyBlock MAY be freely chosen. A PrefixBlock SHOULD always be encrypted with the hosts public key. A prefix block MUST contain the same forward-secret as the other prefix, the routing block, and the header block. A host MAY reply to a message with an unencrypted message block. Any reply to a message SHOULD be encrypted.
+                    The PrefixBlock contains a symmetrical key as defined in <xref target="app_asnOne"/> and is encrypted using the host key of the receiving peer host. The symmetric key used MUST be one out of the set advertised by a CapabilitiesReplyBlock (see <xref target="routing_header_req_cap"/>). Parameters omitted in the CapabilitiesReplyBlock MAY be freely chosen (unless stated otherwise in <xref target="routing_header_req_cap"/>). A PrefixBlock SHOULD always be encrypted with the hosts public key. A prefix block MUST contain the same forward-secret as the other prefix, the routing block, and the header block. A host MAY reply to a message with an unencrypted message block. Any reply to a message SHOULD be encrypted.
                 </t>
                 <t>
                     The sender MUST choose a key which may be encrypted with the host key using the padding advertised by the CapabilitiesReplyBlock.
@@ -273,6 +273,9 @@
                 </t>
                 <t>
                     An InnerMessageBlock always starts with a padding block. This padding guarantees that when using the same routing block multiple times. The padding MUST be the first 16 bytes of the first four non-empty payload chunk (PayloadChunks). If a payload chunk is shorter than 16 bytes, the content of the padding SHOULD be filled with zero-valued bytes (00h) at very end up to the required number of bytes. An inner message block (InnerMessageBlock) SHOULD contain at least four payload chunks sized 16 bytes or bigger. If there are less than four payload chunks, then the padding MUST contain a random sequence of 16 bytes for the missing payload chunks. Random sequences SHOULD NOT be reused.
+                </t>
+                <t>
+                    An InnerMessageBlockcontains so called forwardSecrets. This random number MUST be the same in the HeaderBlock, the RoutingBlock, and the PrefixBlock. Nodes receiving Messages containing non-matching forwardSecrets MUST discard these messages, and SHOULD NOT send an error message.
                 </t>
                 <section title="Control Prefix Block">
                     <t>

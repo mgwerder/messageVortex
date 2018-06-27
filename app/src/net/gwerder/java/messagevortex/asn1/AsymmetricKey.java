@@ -27,6 +27,8 @@ import net.gwerder.java.messagevortex.asn1.encryption.*;
 import org.bouncycastle.asn1.*;
 import org.bouncycastle.jce.ECNamedCurveTable;
 import org.bouncycastle.jce.spec.ECParameterSpec;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.pqc.jcajce.provider.BouncyCastlePQCProvider;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -57,7 +59,9 @@ public class AsymmetricKey extends Key  implements Serializable {
     private static int PRIVATE_KEY_TAG = 3;
 
     static {
-        Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+        Security.addProvider(new BouncyCastleProvider());
+
+        Security.addProvider(new BouncyCastlePQCProvider());
     }
 
     private static final java.util.logging.Logger LOGGER;

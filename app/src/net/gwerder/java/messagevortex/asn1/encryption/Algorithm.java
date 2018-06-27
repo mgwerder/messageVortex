@@ -62,11 +62,15 @@ public enum Algorithm implements Serializable {
 
     ),
     /* Elliptic curve (name represented) enumerations */
-    EC         ( 2100, AlgorithmType.ASYMMETRIC, "ECIES", "BC", getSecLevelList( getSecLevelList( getSecLevelList(
+    EC         ( 2600, AlgorithmType.ASYMMETRIC, "ECIES", "BC", getSecLevelList( getSecLevelList( getSecLevelList(
             ECCurveType.SECP384R1.getSecurityLevel(), getParameterList(new String[] { Parameter.ALGORITHM+"=ECIES",Parameter.KEYSIZE+"=384",Parameter.BLOCKSIZE+"=384",Parameter.CURVETYPE+"="+ECCurveType.SECP384R1,Parameter.MODE+"="+Mode.getDefault( AlgorithmType.ASYMMETRIC ),Parameter.PADDING+"="+Padding.getDefault( AlgorithmType.ASYMMETRIC) } ) ),
             ECCurveType.SECT409K1.getSecurityLevel(), getParameterList(new String[] { Parameter.ALGORITHM+"=ECIES",Parameter.KEYSIZE+"=409",Parameter.BLOCKSIZE+"=409",Parameter.CURVETYPE+"="+ECCurveType.SECT409K1,Parameter.MODE+"="+Mode.getDefault( AlgorithmType.ASYMMETRIC ),Parameter.PADDING+"="+Padding.getDefault( AlgorithmType.ASYMMETRIC) } ) ),
             ECCurveType.SECP521R1.getSecurityLevel(), getParameterList(new String[] { Parameter.ALGORITHM+"=ECIES",Parameter.KEYSIZE+"=521",Parameter.BLOCKSIZE+"=521",Parameter.CURVETYPE+"="+ECCurveType.SECP521R1,Parameter.MODE+"="+Mode.getDefault( AlgorithmType.ASYMMETRIC ),Parameter.PADDING+"="+Padding.getDefault( AlgorithmType.ASYMMETRIC) } ) )
     ),
+    /* NTRU */
+    /*NTRU      ( 2500, AlgorithmType.ASYMMETRIC, "NTRU", "BC", getSecLevelList(
+            SecurityLevel.QUANTUM, getParameterList(new String[] { Parameter.ALGORITHM+"=NTRU",Parameter.KEYSIZE+"=256",Parameter.BLOCKSIZE+"=8192",Parameter.MODE+"="+Mode.getDefault( AlgorithmType.ASYMMETRIC ),Parameter.PADDING+"="+Padding.getDefault( AlgorithmType.ASYMMETRIC ) } ) )
+    ),*/
     /* Hash algorithm enumerations */
     SHA384     ( 3000, AlgorithmType.HASHING, "sha384"   , "BC", SecurityLevel.HIGH ),
     SHA512     ( 3001, AlgorithmType.HASHING, "sha512"   , "BC", SecurityLevel.QUANTUM ),
