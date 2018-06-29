@@ -10,7 +10,7 @@
 <?rfc compact="yes" ?>
 <?rfc subcompact="no" ?>
 
-<rfc category="exp" docName="draft-ietf-messagevortex_protocol-00" ipr="trust200902" xml:lang='en'>
+<rfc category="exp" docName="draft-ietf-MessageVortexProtocol-00" ipr="trust200902" xml:lang='en'>
     <front>
 
         <title>MessageVortex Protocol</title>
@@ -42,7 +42,7 @@
 
         <abstract>
             <t>
-                MessageVortex Protocol specifies messages embedded within existing transfer protocols such  as SMTP (<xref target="RFC5321"/>) or XMPP (<xref target="RFC6120"/>) to send them anonymously from peer to peer.
+                MessageVortex Protocol specifies messages embedded within existing transfer protocols such  as SMTP or XMPP to send them anonymously from peer to peer.
             </t>
             <t>
                 The protocol outperforms other protocols by decoupling transport from the final transmitter and receiver party. There is no trust put into any infrastructure except for the infrastructure of the sending and receiving party of a message. The Message flow is entirely selected by the creator of the routing block. Routing nodes gain no unobvious knowledge about messages even when collaborating. Third-party anonymity is always achieved. Furthermore, one out of sender, and receiver anonymity may be achieved.
