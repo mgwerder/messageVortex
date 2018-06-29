@@ -312,7 +312,7 @@ BEGIN
     offset          [1] INTEGER,
     symmetricKey    [2] SymmetricKey,
     asymmetricKey   [3] AsymmetricKey,
-    blendingType    [4] IA5String
+    password        [4] IA5String
    }
 
   NodeSpec ::= SEQUENCE {
