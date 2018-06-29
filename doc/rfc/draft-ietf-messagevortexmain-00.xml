@@ -10,7 +10,7 @@
 <?rfc compact="yes" ?>
 <?rfc subcompact="no" ?>
 
-<rfc category="exp" docName="draft-ietf-MessageVortexProtocol-00" ipr="trust200902" xml:lang='en'>
+<rfc category="exp" docName="draft-ietf-messagevortexmain-00" ipr="trust200902" xml:lang='en'>
     <front>
 
         <title>MessageVortex Protocol</title>
@@ -86,7 +86,7 @@
             <t>Within this document, we refer to the entities as defined below. </t>
             <section anchor="entities_node" title="Node">
                 <t>
-                    We use the term 'node' to  describe any system connected to other nodes, and supporting the MessageVortex Protocol. A 'node address' is typically an email address, an XMPP address, or any other transport protocol identity supporting the MessageVortex protocol. This address is normally seconded by the public part of an 'identity key' allowing to transmit messages safely. One or more addresses do address the same node.
+                    We use the term 'node' to  describe any system connected to other nodes, and supporting the MessageVortex Protocol. A 'node address' is typically an email address, an XMPP address, or any other transport protocol identity supporting the MessageVortex protocol. Any address SHOULD include a public part of an 'identity key' allowing to transmit messages safely. One or more addresses MAY belong to the same node.
                 </t>
             </section>
             <section anchor="entities_peer" title="Peer Partner">
@@ -316,7 +316,7 @@
                 </t>
                 <section title="Control Prefix Block">
                     <t>
-                        Control prefix block (CPREFIX) and MPREFIX block share the same structure and logic. It contains the sender key  sk_s. If an MPREFIX block was unencrypted, a node  MAY ommit the CPREFIX block. An omitted CPREFIX block results in unencrypted control blocks (HeaderBlock and RoutingBlock).
+                        Control prefix block (CPREFIX) and MPREFIX block share the same structure and logic. It contains the sender key  sk_s. If an MPREFIX block was unencrypted, a node  MAY omit the CPREFIX block. An omitted CPREFIX block results in unencrypted control blocks (HeaderBlock and RoutingBlock).
                     </t>
                     <t>
                         A prefix block MUST contain the same forward-secret as the other prefix, the routing block, and the header block.
@@ -506,10 +506,10 @@
                         </list>
                     </t>
                     <t>
-                        A message is authenticated as soon as the identity used in the header block is known and not temporary. For authenticated messages the following rules apply:
+                        A message is considered authenticated as soon as the identity used in the header block is known and not temporary. For authenticated messages the following rules apply:
                         <list style="symbols">
                             <t>A node MUST ignore identity creation requests.</t>
-                            <t>A node MUST replace the current reply block with the reply block provided in the routing block (if any). Th node MUST keep the reply block if no reply block is provided.</t>
+                            <t>A node MUST replace the current reply block with the reply block provided in the routing block (if any). The node MUST keep the reply block if no reply block is provided.</t>
                             <t>A node SHOULD process all header requests.</t>
                             <t>A node SHOULD add all routing blocks to the workspace.</t>
                             <t>A node SHOULD add all payload blocks to the workspace.</t>
@@ -523,26 +523,28 @@
                         <list style="symbols">
                             <t>The identity linked to it (This determines the lifetime of the workspace).</t>
                             <t>The routing combos (RoutingCombo) linked to it.</t>
-                            <t>The payload chunk space. This space is divided into multiple subspaces:
+                            <t>A payload chunk space. Multiple subspaces are available within this space:
                                 <list style="symbols">
                                     <t>ID 0 represents a message to be embedded (when reading) or a message to be extracted to the user (when written).</t>
                                     <t>ID 1 to ID maxPayloadBlocks represents the payload chunk slots in the target message.</t>
-                                    <t>ID maxPayloadBlocks+1 to ID 32767 may be used as temporary space specific to the routing block.</t>
-                                    <t>ID 32768 to ID 65535 represent the shared space available to all operations of this identity.</t>
+                                    <t>All blocks between ID maxPayloadBlocks+1 to ID 32767 belong to a temporary routing block specific space.</t>
+                                    <t>All blocks between ID 32768 to ID 65535 belong to a shared space available to all operations of this identity.</t>
                                 </list>
                             </t>
                         </list>
                     </t>
                     <t>
-                        Processing is typically triggered by the accounting layer. It represents either a cleanup action where all expired payloads, Routing combos, and identities are deleted or a routing event where a routing combo is processed. A cleanup event deletes the following information:
+                        The accounting layer typically triggers processing. It represents either a cleanup action or a routing event. A cleanup event deletes the following information from all workspaces:
                         <list style="symbols">
-                            <t>The routing combo if it has been processed.</t>
-                            <t>The routing combo if the usagePeriod specified at the creation of the identity is expired.</t>
-                            <t>The payload chunk if the maxProcess time of the routing block is reached.</t>
-                            <t>All objects if their validity is expired.</t>
-                            <t>All objects if the maxProcessTime of its routing block has been reached.</t>
+                            <t>All processed routing combos.</t>
+                            <t>All routing combos with  expired usagePeriod.</t>
+                            <t>All payload chunks whn exceeded their maxProcess time.</t>
+                            <t>All expired objects.</t>
+                            <t>All expired puzzles.</t>
+                            <t>All expired identities.</t>
+                        <t>All expired replay protections</t>
                         </list>
-                        Note that maxProcessTime reflects the number of seconds since the arrival of the last octet of the message at the transport layer facility. Additional processing time should not be taken into account in this calculation.
+                        Note that maxProcessTime reflects the number of seconds since the arrival of the last octet of the message at the transport layer facility. A node SHOULD NOT take additional processing time (e.g., for anti-UBE or anti-virus) take into account.
                     </t>
                     <t>
                         The accounting layer triggers routing events. The trigger occurs at least minProcessTime after the last octet of the message arrived at the routing layer. The latest possible moment should be chosen in such a way that the last octet of the assembled message is transferred to the peer node before maxProcessTime is reached. This is assuming that the peer node is working. The time should be chosen randomly. Multiple routing combos MAY be triggered by the same event.
@@ -614,7 +616,7 @@
                         This request allows a receiving node to replace an identity with the identity provided in the message. This request is required if an adverser managed to deny the usage of a node (e.g., by deleting the corresponding transport account). Any sending node may recover from such an attack by sending a validly authenticated message to another identity providing the new transport and key details.
                     </t>
                     <t>
-                        A node SHOULD reply to a such a request of a valid known identity. The reply MUST include an error message, or a "No Error" status message.
+                        A node SHOULD reply to a such a request of a valid known identity. The reply MUST include an error message or a "No Error" status message.
                     </t>
                 </section>
             </section>
