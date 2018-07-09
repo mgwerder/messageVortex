@@ -638,7 +638,7 @@
                     </t>
                     <section anchor="routing_spezial_requirement_puzzle" title="Puzzle Requirement">
                         <t>
-                            If a node requests a puzzle it MUST send a RequirementPuzzleRequired block.
+                            If a node requests a puzzle it MUST send a RequirementPuzzleRequired block. The puzzle requirement is solved, if the node receiving the puzzle is replying with a header block containing the puzzle block and the hash of the encoded block starts with the bit sequence mentioned in the puzzle.
                         </t>
                     </section>
                 </section>
