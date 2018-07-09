@@ -58,10 +58,10 @@
                 The sender has full control over all parameters of the message flow.
             </t>
             <t>
-                A message may be split and reassembled during transmission. Chunks of the message may carry redundant information to avoid service interruptions of the message transit. Decoy traffic and message traffic are not differentiable as the nature of the addRedundancy operation allows each generated part to be a message part or decoy. Any routing node is thus unable to differentiate between the message and decoy traffic.
+                A message is split and reassembled during transmission. Chunks of the message may carry redundant information to avoid service interruptions of the message transit. Decoy traffic and message traffic are not differentiable as the nature of the addRedundancy operation allows each generated part to be a message part or decoy. Any routing node is thus unable to differentiate between the message and decoy traffic.
             </t>
             <t>
-                Any Receiver knows after processing whether a message is destined for it or other nodes.
+                Any Receiver knows after processing whether a message is destined for it or other nodes. Due to the missing keys no other node may do this processing.
             </t>
             <t>
                 This RFC starts with the general terminology (see <xref target="entities_overview"/>). Next, a general overview of the process is given (see <xref target="layer_overview"/>). Lastly, the subsequent sections describe the details of the protocol.
@@ -336,7 +336,7 @@
                             </list>
                         </t>
                         <t>
-                            The list of header requests MAY be empty, contain a single identity create request (HeaderRequestIdentity), or MUST not contain more than one increase quota request. If header block violates these rules, then a node MUST NOT reply to any header requests. Payload and routing blocks SHOULD still be added to the workspace and processed, given the message quota is not exceeded.
+                            The list of header requests MAY be empty, contain a single identity create request (HeaderRequestIdentity), or MUST not contain more than one increase quota request. If a header block violates these rules, then a node MUST NOT reply to any header requests. Payload and routing blocks SHOULD still be added to the workspace and processed, given the message quota is not exceeded.
                         </t>
                     </section>
                     <section title="Routing Block">
@@ -538,24 +538,24 @@
                         <list style="symbols">
                             <t>All processed routing combos.</t>
                             <t>All routing combos with  expired usagePeriod.</t>
-                            <t>All payload chunks whn exceeded their maxProcess time.</t>
+                            <t>All payload chunks when exceeded their maxProcess time.</t>
                             <t>All expired objects.</t>
                             <t>All expired puzzles.</t>
                             <t>All expired identities.</t>
-                        <t>All expired replay protections</t>
+                        <t>All expired replay protections.</t>
                         </list>
                         Note that maxProcessTime reflects the number of seconds since the arrival of the last octet of the message at the transport layer facility. A node SHOULD NOT take additional processing time (e.g., for anti-UBE or anti-virus) take into account.
                     </t>
                     <t>
-                        The accounting layer triggers routing events. The trigger occurs at least minProcessTime after the last octet of the message arrived at the routing layer. The latest possible moment should be chosen in such a way that the last octet of the assembled message is transferred to the peer node before maxProcessTime is reached. This is assuming that the peer node is working. The time should be chosen randomly. Multiple routing combos MAY be triggered by the same event.
+                        The accounting layer triggers routing events. The trigger occurs at least minProcessTime after the last octet of the message arrived at the routing layer. A node SHOULD choose the latest possible moment in such a way that the last octet of the assembled message is received by the peer node before maxProcessTime is reached. The calculation of the last point in time where a message may be set SHOULD always assume that the target node is working. A sending node SHOULD choose the time within these bounds randomly. An accounting layer MAY trigger multiple routing combos in bulk to further obfuscate identity of a single transport message.
                     </t>
                     <t>
-                        First, the payload chunk at ID 0 is escaped if needed (non-special block starting with a backslash). Next, all processing instructions of a routing combo are executed in the sequence specified in the combo. If an instruction fails, the block at the target ID of the operation remains unchanged. The routing layer proceeds subsequent processing instructions, ignoring the error. For a detailed description of the operations see <xref target="routing_operations"/>. If at least one payload chunk can successfully be built for transmission, a message is composed and passed to the blending layer.
+                        First, the payload chunk at ID 0 is escaped if needed (non-special block starting with a backslash). Next, all processing instructions of a routing combo are executed in the sequence specified in the combo. If an instruction fails, the block at the target ID of the operation remains unchanged. The routing layer proceeds subsequent processing instructions, ignoring the error. For a detailed description of the operations see <xref target="routing_operations"/>. If a node succeeds in building at least one payload chunk, a VortexMessage is composed and passed to the blending layer.
                     </t>
                 </section>
                 <section anchor="routing_outgoing" title="Processing of Outgoing MessageVortex Messages">
                     <t>
-                        If a message can be composed for a routing combo, the message is passed to the blending layer. The blending layer MUST then compose a transport layer message according to the specification provided in the routing combo. Any decoy message or steganographic carrier SHOULD be chosen in such a way that the dead parrot syndrome as specified in <xref target="DeadParrot"/> is avoided.
+                        The blending layer MUST then compose a transport layer message according to the specification provided in the routing combo. Any decoy message or steganographic carrier SHOULD be chosen in such a way that the dead parrot syndrome as specified in <xref target="DeadParrot"/> is avoided.
                     </t>
                 </section>
             </section>
@@ -565,7 +565,7 @@
                 </t>
                 <section anchor="routing_header_eid" title="Request New Ephemeral Identity">
                     <t>
-                        Requesting a new ephemeral identity is done by sending a message containing a header block with the new identity and an identity creation request (HeaderRequestIdentity) to a node. The node MAY send an error block (see <xref target="routing_special_error"/>) if the request is rejected.
+                        Requesting a new ephemeral identity is done by sending a message containing a header block with the new identity and an identity creation request (HeaderRequestIdentity) to a node. The node MAY send an error block (see <xref target="routing_special_error"/>) if rejecting the request.
                     </t>
                     <t>
                         If a node accepts an identity creation request, it MUST send a reply. This reply may be an error block containing "no error", or a requirement block.
@@ -631,11 +631,16 @@
                 </section>
                 <section anchor="routing_special_requirement" title="Requirement Block">
                     <t>
-                        A requirement block means that the request block has been accepted, has not been processed yet, and will be processed if the contained requirement is met. The requirement MUST be processed as soon as the requirement is fulfilled and proofed by the requiring node.
+                        If a node is receiving a requirements block, it MUST assume that the request block has been accepted, has not been processed yet, and will be processed if the contained requirement is met. The requirement MUST be processed as soon as the requirement is fulfilled and proofed by the requiring node.
                     </t>
                     <t>
-                        FIXME explain how a puzzle works
+                        A node MAY reject a request, accept a request without a requirement, accept a request upon payment (RequirementPaymentRequired), or accept a request upon solving a proof of work puzzle (RequirementPuzzleRequired).
                     </t>
+                    <section anchor="routing_spezial_requirement_puzzle" title="Puzzle Requirement">
+                        <t>
+                            If a node requests a puzzle it MUST send a RequirementPuzzleRequired block.
+                        </t>
+                    </section>
                 </section>
             </section>
             <section anchor="routing_operations" title="Routing Operations">
@@ -740,7 +745,7 @@
                 </section>
                 <section anchor="accounting_timed_quota" title="Routing Based Quota Updates">
                     <t>
-                        Quota updates MUST be done on the respective operations. Message quotas MUST be decreased before processing routing blocks in the workspace. The increase of a message quota MUST be done after a quota increase was successful and before applying any decrease of the quota. Transfer quotas MUST be increased as soon as the header is processed and before the message quota is checked. The message quota MUST be decreased after processing of any header requests of an incoming message.
+                        Quota updates MUST be done on the respective operations. Message quotas MUST be decreased before processing routing blocks in the workspace. The increase of a message quota MUST be done after a quota increase was successful and before applying any decrease of the quota. Transfer quotas MUST be increased as soon as the header is processed and before the message quota is checked. The message quota MUST be decreased after the processing of any header requests of an incoming message.
                     </t>
                 </section>
                 <section anchor="accounting_routhing_auth" title="Routing Based Authorization">
@@ -782,7 +787,7 @@
                 All these factors are affected by the usage of the protocol. The following sections provide a list of factors affecting the primary goals.
             </t>
             <t>
-                The Vortex protocol does not rely on any encryption on the transport layer. Vortex messages are already encrypted. Confidentiality is not affected by protection mechanisms of the transport layer.
+                The Vortex protocol does not rely on any encryption on the transport layer. Vortex messages are already encrypted. Confidentiality is not affected by the protection mechanisms of the transport layer.
             </t>
             <t>
                 If a transport Layer supports encryption, a Vortex node SHOULD use it to improve the privacy of the message.
