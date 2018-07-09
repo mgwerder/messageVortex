@@ -61,7 +61,7 @@
                 A message is split and reassembled during transmission. Chunks of the message may carry redundant information to avoid service interruptions of the message transit. Decoy traffic and message traffic are not differentiable as the nature of the addRedundancy operation allows each generated part to be a message part or decoy. Any routing node is thus unable to differentiate between the message and decoy traffic.
             </t>
             <t>
-                Any Receiver knows after processing whether a message is destined for it or other nodes. Due to the missing keys no other node may do this processing.
+                Any Receiver knows after processing whether a message is destined for it or other nodes. Due to the missing keys, no other node may do this processing.
             </t>
             <t>
                 This RFC starts with the general terminology (see <xref target="entities_overview"/>). Next, a general overview of the process is given (see <xref target="layer_overview"/>). Lastly, the subsequent sections describe the details of the protocol.
@@ -547,15 +547,15 @@
                         Note that maxProcessTime reflects the number of seconds since the arrival of the last octet of the message at the transport layer facility. A node SHOULD NOT take additional processing time (e.g., for anti-UBE or anti-virus) take into account.
                     </t>
                     <t>
-                        The accounting layer triggers routing events. The trigger occurs at least minProcessTime after the last octet of the message arrived at the routing layer. A node SHOULD choose the latest possible moment in such a way that the last octet of the assembled message is received by the peer node before maxProcessTime is reached. The calculation of the last point in time where a message may be set SHOULD always assume that the target node is working. A sending node SHOULD choose the time within these bounds randomly. An accounting layer MAY trigger multiple routing combos in bulk to further obfuscate identity of a single transport message.
+                        The accounting layer triggers routing events. The trigger occurs at least minProcessTime after the last octet of the message arrived at the routing layer. A node SHOULD choose the latest possible moment in such a way that the peer node receives the last octet of the assembled message before maxProcessTime is reached. The calculation of the last point in time where a message may be set SHOULD always assume that the target node is working. A sending node SHOULD choose the time within these bounds randomly. An accounting layer MAY trigger multiple routing combos in bulk to further obfuscate identity of a single transport message.
                     </t>
                     <t>
-                        First, the payload chunk at ID 0 is escaped if needed (non-special block starting with a backslash). Next, all processing instructions of a routing combo are executed in the sequence specified in the combo. If an instruction fails, the block at the target ID of the operation remains unchanged. The routing layer proceeds subsequent processing instructions, ignoring the error. For a detailed description of the operations see <xref target="routing_operations"/>. If a node succeeds in building at least one payload chunk, a VortexMessage is composed and passed to the blending layer.
+                        First, the processing node escapes the payload chunk at ID 0 if needed (non-special block starting with a backslash). Next, it executes all processing instructions of a routing combo in the sequence specified. If an instruction fails, the block at the target ID of the operation remains unchanged. The routing layer proceeds subsequent processing instructions, ignoring the error. For a detailed description of the operations see <xref target="routing_operations"/>. If a node succeeds in building at least one payload chunk, a VortexMessage is composed and passed to the blending layer.
                     </t>
                 </section>
                 <section anchor="routing_outgoing" title="Processing of Outgoing MessageVortex Messages">
                     <t>
-                        The blending layer MUST then compose a transport layer message according to the specification provided in the routing combo. Any decoy message or steganographic carrier SHOULD be chosen in such a way that the dead parrot syndrome as specified in <xref target="DeadParrot"/> is avoided.
+                        The blending layer MUST then compose a transport layer message according to the specification provided in the routing combo. It SHOULD choose any decoy message or steganographic carrier in such a way that the dead parrot syndrome as specified in <xref target="DeadParrot"/> is avoided.
                     </t>
                 </section>
             </section>
@@ -638,14 +638,14 @@
                     </t>
                     <section anchor="routing_spezial_requirement_puzzle" title="Puzzle Requirement">
                         <t>
-                            If a node requests a puzzle it MUST send a RequirementPuzzleRequired block. The puzzle requirement is solved, if the node receiving the puzzle is replying with a header block containing the puzzle block and the hash of the encoded block starts with the bit sequence mentioned in the puzzle.
+                            If a node requests a puzzle, it MUST send a RequirementPuzzleRequired block. The puzzle requirement is solved, if the node receiving the puzzle is replying with a header block containing the puzzle block and the hash of the encoded block starts with the bit sequence mentioned in the puzzle within the period specified in the field 'valid'.
                         </t>
                     </section>
                 </section>
             </section>
             <section anchor="routing_operations" title="Routing Operations">
                 <t>
-                    Routing operations are contained in a routing block and processed either on arrival on a message, or when a new message is compiled. All Operations are reversible. No Operation is available for generating decoy traffic. For decoy traffic, either encryption of an unpadded block may be used,  or the addReundancy operation.
+                    Routing operations are contained in a routing block and processed either on arrival on a message, or when a compiling new message. All Operations are reversible. No Operation is available for generating decoy traffic. For decoy traffic, either encryption of an unpadded block may be used,  or the addReundancy operation.
                 </t>
                 <t>
                     All payload chunk blocks inherit the validity time from the message routing combos (arrival time + max(maxProcessTime)) is inherited.
@@ -674,12 +674,12 @@
                 </section>
                 <section anchor="routing_operations_crypt" title="Encrypt and Decrypt Operations">
                     <t>
-                        Encryption and decryption are executed according to the aforementioned standards. An encryption operation encrypts a block symmetrically and places the result in the target block. Parameters such as IV, encryption key, or cipher modes must be provided by the operation parameter. An encryption operation without a valid parameter set MUST fail.
+                        Encryption and decryption are executed according to the standards mentioned before. An encryption operation encrypts a block symmetrically and places the result in the target block. THe parameters MUST contain required parameters such as IV, padding, or cipher modes. An encryption operation without a valid parameter set MUST fail.
                     </t>
                 </section>
                 <section anchor="routing_operations_redundancy" title="Add and Remove Redundancy Operations">
                     <t>
-                        The addRedundancy and removeRedundancy operations are the core operations of the protocol. They may be used to split messages and distribute message content across multiple routing nodes. The operation is executed in multiple steps.
+                        The addRedundancy and removeRedundancy operations are the core operations of the protocol. They may be used to split messages and distribute message content across multiple routing nodes. The operation is split into three steps.
                         <list style="numbers">
                             <t>Pad the inblock to multitudes of the key block size in the resulting outblocks.</t>
                             <t>Apply a Vandermonde matrix with the given sizes.</t>
@@ -715,7 +715,7 @@
             </section>
             <section anchor="routing_processing" title="Processing of Vortex Messages">
                 <t>
-                    Processing of routing mechanism is triggered by the accounting layer according to information contained in a routing block in the workspace. All operations MUST be executed in the sequence provided in the routing block. Any failing operation must leave the result block unmodified.
+                    The accounting layer triggers processing according to information contained in a routing block in the workspace. All operations MUST be executed in the sequence provided in the routing block. Any failing operation must leave the result block unmodified.
                 </t>
                 <t>
                     All workspace blocks resulting in IDs 1 to maxPayloadBlock are then added to the message and passed to the blending layer with appropriate instructions.
@@ -745,7 +745,7 @@
                 </section>
                 <section anchor="accounting_timed_quota" title="Routing Based Quota Updates">
                     <t>
-                        Quota updates MUST be done on the respective operations. Message quotas MUST be decreased before processing routing blocks in the workspace. The increase of a message quota MUST be done after a quota increase was successful and before applying any decrease of the quota. Transfer quotas MUST be increased as soon as the header is processed and before the message quota is checked. The message quota MUST be decreased after the processing of any header requests of an incoming message.
+                        Quota updates MUST be done on the respective operations. A node MUST decrease message quota before processing routing blocks in the workspace. Transfer quotas MUST be increased as soon as the header is processed and before the message quota is checked. The message quota MUST be decreased after the processing of any header requests of an incoming message.
                     </t>
                 </section>
                 <section anchor="accounting_routhing_auth" title="Routing Based Authorization">
