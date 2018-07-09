@@ -59,23 +59,23 @@ BEGIN
     -- contains the prefix to be used
     routing    CHOICE {
       -- debug/internal use only
-      plain         [331] SEQUENCE (SIZE (0..maxRoutingBlocks))
-                          OF RoutingCombo,
-      encrypted     [332] SEQUENCE (SIZE (0..maxRoutingBlocks))
-                          OF OCTET STRING
+      plain        [331] SEQUENCE (SIZE (0..maxRoutingBlocks))
+                         OF RoutingCombo,
+      encrypted    [332] SEQUENCE (SIZE (0..maxRoutingBlocks))
+                         OF OCTET STRING
     },
     -- contains the secret of the header block
-    forwardSecret         ChainSecret,
-    -- contains incomming instructions to map information to workspace
-    inOperations          SEQUENCE (SIZE (0..maxAssemblyInstructions))
-                          OF PayloadOperation,
+    forwardSecret        ChainSecret,
+    -- contains incomming instructions to map blocks to workspace
+    inOperations         SEQUENCE (SIZE (0..maxAssemblyInstructions))
+                         OF PayloadOperation,
     -- contains a routing block which may be used when sending
     -- error messages back to the quota owner
     -- this routing block may be cached for future use
-    replyBlock      [334] SEQUENCE {
-         murb       RoutingCombo,
-         maxReplay  INTEGER,
-         validity   UsagePeriod
+    replyBlock     [334] SEQUENCE {
+         murb            RoutingCombo,
+         maxReplay       INTEGER,
+         validity        UsagePeriod
     } OPTIONAL
   }
 

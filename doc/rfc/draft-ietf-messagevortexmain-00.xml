@@ -592,7 +592,7 @@
                         Any valid ephemeral identity may request the current message and transfer quota. The request MUST include a reply block in the header. The request may contain other parts.
                     </t>
                     <t>
-                        A node MUST reply to a HeaderRequestQueryQuota request (see <xref target="asn_one"/>). The reply must include the current message quota and the current message transfer quota. The reply to this request MUST NOT include a requirement.
+                        A node MUST reply to a HeaderRequestQueryQuota request (see <xref target="asn_one"/>). The reply MUST include the current message quota and the current message transfer quota. The reply to this request MUST NOT include a requirement.
                     </t>
                 </section>
                 <section anchor="routing_header_req_cap" title="Request Capabilities">
@@ -1012,6 +1012,8 @@
         <section anchor="asn_one" title="The ASN.1 schema for Vortex messages">
             <figure align="left" anchor="app_asnOne">
                 <artwork><![CDATA[
+-- FIXME ADAPT NeoScrypt
+
 -- encryption: as specified in the key. If not specified default
 -- mode is CBC and default padding is PKCS1Padding
 
@@ -1071,23 +1073,23 @@ BEGIN
     -- contains the prefix to be used
     routing    CHOICE {
       -- debug/internal use only
-      plain         [331] SEQUENCE (SIZE (0..maxRoutingBlocks))
-                          OF RoutingCombo,
-      encrypted     [332] SEQUENCE (SIZE (0..maxRoutingBlocks))
-                          OF OCTET STRING
+      plain        [331] SEQUENCE (SIZE (0..maxRoutingBlocks))
+                         OF RoutingCombo,
+      encrypted    [332] SEQUENCE (SIZE (0..maxRoutingBlocks))
+                         OF OCTET STRING
     },
     -- contains the secret of the header block
-    forwardSecret         ChainSecret,
-    -- contains incomming instructions to map information to workspace
-    inOperations          SEQUENCE (SIZE (0..maxAssemblyInstructions))
-                          OF PayloadOperation,
+    forwardSecret        ChainSecret,
+    -- contains incomming instructions to map blocks to workspace
+    inOperations         SEQUENCE (SIZE (0..maxAssemblyInstructions))
+                         OF PayloadOperation,
     -- contains a routing block which may be used when sending
     -- error messages back to the quota owner
     -- this routing block may be cached for future use
-    replyBlock      [334] SEQUENCE {
-         murb       RoutingCombo,
-         maxReplay  INTEGER,
-         validity   UsagePeriod
+    replyBlock     [334] SEQUENCE {
+         murb            RoutingCombo,
+         maxReplay       INTEGER,
+         validity        UsagePeriod
     } OPTIONAL
   }
 
@@ -1324,7 +1326,7 @@ BEGIN
     offset          [1] INTEGER,
     symmetricKey    [2] SymmetricKey,
     asymmetricKey   [3] AsymmetricKey,
-    blendingType    [4] IA5String
+    password        [4] IA5String
    }
 
   NodeSpec ::= SEQUENCE {
@@ -1536,8 +1538,9 @@ BEGIN
 
   AsymmetricAlgorithm ::= ENUMERATED {
     rsa             (2000),
-    dsa             (2100),
-    ec              (2500)
+    ec              (2500),
+    ntru            (2600),
+    mceliece        (2700)
   }
 
   MacAlgorithm ::= ENUMERATED {
@@ -1561,7 +1564,12 @@ BEGIN
     initialisationVector [10002] OCTET STRING  OPTIONAL,
     nonce                [10003] OCTET STRING  OPTIONAL,
     mode                 [10004] CipherMode    OPTIONAL,
-    padding              [10005] CipherPadding OPTIONAL
+    padding              [10005] CipherPadding OPTIONAL,
+    n                    [10010] INTEGER       OPTIONAL,
+    p                    [10011] INTEGER       OPTIONAL,
+    q                    [10012] INTEGER       OPTIONAL,
+    k                    [10013] INTEGER       OPTIONAL,
+    t                    [10013] INTEGER       OPTIONAL
   }
 
   -- Symmetric key
