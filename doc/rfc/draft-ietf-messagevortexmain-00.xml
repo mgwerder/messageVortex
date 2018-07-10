@@ -230,7 +230,7 @@
         <section anchor="layer_overview" title="Layer Overview">
             <t>The protocol is designed in four layers as shown in <xref target="fig_layer_overview" /></t>
 
-            <figure align="center" anchor="fig_layer_overview" title="Layer overview">
+            <figure anchor="fig_layer_overview" title="Layer overview">
                 <artwork align="center"><![CDATA[
 +-------------------------------------------------------------------+
 | Vortex Node                                                       |
@@ -277,7 +277,7 @@
             <section title="Overview">
                 <t>
                     <xref target="fig_message_overview"/> shows a Vortex message. The enclosed sections denote encrypted blocks. The three to four letter abbreviations denote the key required for decryption. The abbreviation k_h stands for the asymmetric host key. s_kp is the symmetric peer key. TThe receiving node obtains this key  by decrypting MPREFIX with its host key k_h. sk_s is the symmetric sender key. When decrypting the MPREFIX block, the node obtains this key. The sender key protects the header and the routing blocks. This key guarantees that the node assembling the message does not know about upcoming identities, operations, and requests. The peer key protects the message including structure from any third party observer.
-                    <figure align="center" anchor="fig_message_overview" title="Vortex message overview">
+                    <figure anchor="fig_message_overview" title="Vortex message overview">
                         <artwork align="center"><![CDATA[
 +-+---+-+-+---+-+---+-+-+---+-+-+---+-+-------+-+
 | |   | | |   | | C | | |   | | | R | |       | |
@@ -343,7 +343,7 @@
                         <t>
                             The routing block (see RoutingBlock in <xref target="asn_one"/>) contains the following information:
                             <list style="symbols">
-                                <t>It MUST contain a serial number uniquely identifying the routing block of this user. A serial MUST be unique during the livetime of a routing block.</t>
+                                <t>It MUST contain a serial number uniquely identifying the routing block of this user. A serial MUST be unique during the lifetime of a routing block.</t>
                                 <t>It MUST contain the same forward secret as the two prefix and the header block.</t>
                                 <t>It MAY contain assembly and processing instructions for subsequent messages.</t>
                                 <t>It MAY contain a reply block for messages assigned to the owner of the identity.</t>
@@ -599,9 +599,6 @@
                     <t>
                         Any node MAY request the capabilities of another node. The capabilities include all information necessary to create a parseable VortexMessage. Any node SHOULD reply to any encrypted HeaderRequestCapability.
                     </t>
-                    <t>
-                        FIXME sample required for interpretation of data
-                    </t>
                 </section>
                 <section anchor="routing_header_req_nodes" title="Request Nodes">
                     <t>
@@ -643,7 +640,7 @@
                     </section>
                     <section anchor="routing_spezial_requirement_payment" title="Payment Requirement">
                         <t>
-                            If a node requests a payment, it MUST send a RequirementPaymenteRequired block. As soon as the requested fee is paid and confirmed the requesting node MUST send a "No Error" status message. The usage period 'valid' describes the period in which a payment may be carried out. A node MUST accept a payment if carried out within the 'valid period but confirmed later. All unsolicited payments SHOULD be returned to the paying address.
+                            If a node requests a payment, it MUST send a RequirementPaymenteRequired block. As soon as the requested fee is paid and confirmed, the requesting node MUST send a "No Error" status message. The usage period 'valid' describes the period in which a payment may be carried out. A node MUST accept a payment if carried out within the 'valid period but confirmed later. All unsolicited payments SHOULD be returned to the paying address.
                         </t>
                     </section>
                 </section>
@@ -750,7 +747,7 @@
                 </section>
                 <section anchor="accounting_timed_quota" title="Routing Based Quota Updates">
                     <t>
-                        A node MUST update quotas on the respective operations. It MUST decrease message quota before processing routing blocks in the workspace. Transfer quotas MUST be increased as soon as the header is processed and before the message quota is checked. A node MUST decrease the message quota after the processing of any header requests.
+                        A node MUST update quotas on the respective operations. It MUST decrease message quota before processing routing blocks in the workspace. A node MUST decrease the message quota after the processing of any header requests.
                     </t>
                 </section>
                 <section anchor="accounting_routhing_auth" title="Routing Based Authorization">
@@ -974,8 +971,6 @@
             <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.6120.xml"?>
             <!-- SMTP -->
             <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.5321.xml"?>
-            <!-- SMTP STARTTLS-->
-            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.3207.xml"?>
             <!-- IMAP -->
             <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.3501.xml"?>
             <!-- POP3 -->
@@ -1020,7 +1015,7 @@
         </references>
 
         <section anchor="asn_one" title="The ASN.1 schema for Vortex messages">
-            <figure align="left" anchor="app_asnOne">
+            <figure anchor="app_asnOne">
                 <artwork><![CDATA[
 -- States: Tuple()=Value() [vallidity; allowed operations] {Store}
 -- - Tuple(identity)=Value(messageQuota,transferQuota,sequence of
