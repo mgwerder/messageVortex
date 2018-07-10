@@ -357,7 +357,8 @@ BEGIN
   RequirementPaymentRequired ::= SEQUENCE {
     account       OCTET STRING,
     ammount       REAL,
-    currency      Currency
+    currency      Currency,
+    valid         UsagePeriod
   }
 
   Currency ::= ENUMERATED {
@@ -555,7 +556,7 @@ BEGIN
     p                    [10011] INTEGER       OPTIONAL,
     q                    [10012] INTEGER       OPTIONAL,
     k                    [10013] INTEGER       OPTIONAL,
-    t                    [10013] INTEGER       OPTIONAL
+    t                    [10014] INTEGER       OPTIONAL
   }
 
   -- Symmetric key

@@ -343,9 +343,9 @@
                         <t>
                             The routing block (see RoutingBlock in <xref target="asn_one"/>) contains the following information:
                             <list style="symbols">
-                                <t>It MUST contain a serial number uniquely identifying the routing block of this user</t>
+                                <t>It MUST contain a serial number uniquely identifying the routing block of this user. A serial MUST be unique during the livetime of a routing block.</t>
                                 <t>It MUST contain the same forward secret as the two prefix and the header block.</t>
-                                <t>It MAY contain assembly and processing instructions for subsequent messages</t>
+                                <t>It MAY contain assembly and processing instructions for subsequent messages.</t>
                                 <t>It MAY contain a reply block for messages assigned to the owner of the identity.</t>
                             </list>
                         </t>
@@ -631,7 +631,7 @@
                 </section>
                 <section anchor="routing_special_requirement" title="Requirement Block">
                     <t>
-                        If a node is receiving a requirements block, it MUST assume that the request block has been accepted, has not been processed yet, and will be processed if the contained requirement is met. The requirement MUST be processed as soon as the requirement is fulfilled and proofed by the requiring node.
+                        If a node is receiving a requirements block, it MUST assume that the request block has been accepted, has not been processed yet, and will be processed if the contained requirement is met. A node MUST process a request as soon as the requirement is fulfilled.
                     </t>
                     <t>
                         A node MAY reject a request, accept a request without a requirement, accept a request upon payment (RequirementPaymentRequired), or accept a request upon solving a proof of work puzzle (RequirementPuzzleRequired).
@@ -641,11 +641,16 @@
                             If a node requests a puzzle, it MUST send a RequirementPuzzleRequired block. The puzzle requirement is solved, if the node receiving the puzzle is replying with a header block containing the puzzle block and the hash of the encoded block starts with the bit sequence mentioned in the puzzle within the period specified in the field 'valid'.
                         </t>
                     </section>
+                    <section anchor="routing_spezial_requirement_payment" title="Payment Requirement">
+                        <t>
+                            If a node requests a payment, it MUST send a RequirementPaymenteRequired block. As soon as the requested fee is paid and confirmed the requesting node MUST send a "No Error" status message. The usage period 'valid' describes the period in which a payment may be carried out. A node MUST accept a payment if carried out within the 'valid period but confirmed later. All unsolicited payments SHOULD be returned to the paying address.
+                        </t>
+                    </section>
                 </section>
             </section>
             <section anchor="routing_operations" title="Routing Operations">
                 <t>
-                    Routing operations are contained in a routing block and processed either on arrival on a message, or when a compiling new message. All Operations are reversible. No Operation is available for generating decoy traffic. For decoy traffic, either encryption of an unpadded block may be used,  or the addReundancy operation.
+                    Routing operations are contained in a routing block and processed either on arrival on a message or when a compiling new message. All Operations are reversible. No Operation is available for generating decoy traffic. For decoy traffic, either encryption of an unpadded block may be used, or the addReundancy operation.
                 </t>
                 <t>
                     All payload chunk blocks inherit the validity time from the message routing combos (arrival time + max(maxProcessTime)) is inherited.
@@ -674,7 +679,7 @@
                 </section>
                 <section anchor="routing_operations_crypt" title="Encrypt and Decrypt Operations">
                     <t>
-                        Encryption and decryption are executed according to the standards mentioned before. An encryption operation encrypts a block symmetrically and places the result in the target block. THe parameters MUST contain required parameters such as IV, padding, or cipher modes. An encryption operation without a valid parameter set MUST fail.
+                        Encryption and decryption are executed according to the standards mentioned before. An encryption operation encrypts a block symmetrically and places the result in the target block. The parameters MUST contain required parameters such as IV, padding, or cipher modes. An encryption operation without a valid parameter set MUST fail.
                     </t>
                 </section>
                 <section anchor="routing_operations_redundancy" title="Add and Remove Redundancy Operations">
@@ -735,7 +740,7 @@
                 </t>
                 <section anchor="accounting_timed_gc" title="Time-Based Garbage Collection">
                     <t>
-                        The accounting layer SHOULD keep a list of expiry times. As soon as an entry (e.g., payload block, or identity) expires, the respective structure should be removed from the workspace. An implementation MAY choose to remove expired items periodic or when encountering them during normal operation. It should be considered that this MAY leak additional information about the nodes inner working in the past when analyzed.
+                        The accounting layer SHOULD keep a list of expiry times. As soon as an entry (e.g., payload block, or identity) expires, the respective structure should be removed from the workspace. An implementation MAY choose to remove expired items periodic or when encountering them during normal operation.
                     </t>
                 </section>
                 <section anchor="accounting_timed_routing" title="Time-Based Routing Initiation">
@@ -745,7 +750,7 @@
                 </section>
                 <section anchor="accounting_timed_quota" title="Routing Based Quota Updates">
                     <t>
-                        Quota updates MUST be done on the respective operations. A node MUST decrease message quota before processing routing blocks in the workspace. Transfer quotas MUST be increased as soon as the header is processed and before the message quota is checked. The message quota MUST be decreased after the processing of any header requests of an incoming message.
+                        A node MUST update quotas on the respective operations. It MUST decrease message quota before processing routing blocks in the workspace. Transfer quotas MUST be increased as soon as the header is processed and before the message quota is checked. A node MUST decrease the message quota after the processing of any header requests.
                     </t>
                 </section>
                 <section anchor="accounting_routhing_auth" title="Routing Based Authorization">
@@ -756,9 +761,9 @@
             </section>
         </section>
 
-        <section anchor="Acknowledgments" title="Acknowledgments">
+        <!--<section anchor="Acknowledgments" title="Acknowledgments">
             <t>FIXME</t>
-        </section>
+        </section>-->
 
         <section anchor="IANA" title="IANA Considerations">
             <t>This memo includes no request to IANA.</t>
@@ -1017,15 +1022,10 @@
         <section anchor="asn_one" title="The ASN.1 schema for Vortex messages">
             <figure align="left" anchor="app_asnOne">
                 <artwork><![CDATA[
--- FIXME ADAPT NeoScrypt
-
--- encryption: as specified in the key. If not specified default
--- mode is CBC and default padding is PKCS1Padding
-
 -- States: Tuple()=Value() [vallidity; allowed operations] {Store}
 -- - Tuple(identity)=Value(messageQuota,transferQuota,sequence of
 --   Routingblocks for Error Message Routing) [validity; Requested
---   at creation; may be extended upon request] {identityStore}
+--   at creation] {identityStore}
 -- - Tuple(Identity,Serial)=maxReplays ['valid' from Identity
 --   Block; from First Identity Block; may only be reduced]
 --   {IdentityReplayStore}
@@ -1376,7 +1376,8 @@ BEGIN
   RequirementPaymentRequired ::= SEQUENCE {
     account       OCTET STRING,
     ammount       REAL,
-    currency      Currency
+    currency      Currency,
+    valid         UsagePeriod
   }
 
   Currency ::= ENUMERATED {
@@ -1574,7 +1575,7 @@ BEGIN
     p                    [10011] INTEGER       OPTIONAL,
     q                    [10012] INTEGER       OPTIONAL,
     k                    [10013] INTEGER       OPTIONAL,
-    t                    [10013] INTEGER       OPTIONAL
+    t                    [10014] INTEGER       OPTIONAL
   }
 
   -- Symmetric key
@@ -1591,8 +1592,7 @@ BEGIN
     privateKey    [3] OCTET STRING OPTIONAL
   }
 
-END
-]]></artwork>
+END]]></artwork>
             </figure>
         </section>
         <!-- Change Log
