@@ -402,7 +402,7 @@
             </section>
             <section title="Supported Paddings">
                 <t>
-                    A node MUST support the following paddings:
+                    A node MUST support the following paddings specified in <xref target="RFC8017"/>:
                     <list style="symbols">
                         <t>PKCS1 (see <xref target="RFC8017"/>)</t>
                         <t>PKCS7 (see <xref target="RFC5958"/>)</t>
@@ -416,6 +416,7 @@
                         <t>CBC (see <xref target="RFC1423"/>). The used IV must be of equal length as the key)</t>
                         <t>EAX (see <xref target="EAX"/>)</t>
                         <t>GCM (see <xref target="RFC5288"/>)</t>
+                        <t>NONE (only used in special cases. See <xref target="security"/>)</t>
                     </list>
                     A node SHOULD NOT use the following ciphers:
                     <list style="symbols">
@@ -568,7 +569,7 @@
                         Requesting a new ephemeral identity is done by sending a message containing a header block with the new identity and an identity creation request (HeaderRequestIdentity) to a node. The node MAY send an error block (see <xref target="routing_special_error"/>) if rejecting the request.
                     </t>
                     <t>
-                        If a node accepts an identity creation request, it MUST send a reply. This reply may be an error block containing "no error", or a requirement block.
+                        If a node accepts an identity creation request, it MUST send a reply. To accept a request without a requirement, an accepting node MUST send back a special block containing "no error". To accept a block with a requirement, an accepting node MUST send a special block containing a requirement block.
                     </t>
                 </section>
                 <section anchor="routing_header_req_msg_quota" title="Request Message Quota">
@@ -577,6 +578,16 @@
                     </t>
                     <t>
                         A node SHOULD reply to a HeaderRequestIncreaseMessageQuota request (see <xref target="asn_one"/>) of a valid ephemeral identity. The reply MUST include a requirement, an error message or a "No Error" status message.
+                    </t>
+                <section anchor="routing_header_req_msg_quota" title="Request Increase of Message Quota">
+                    <t>
+                        A node may request to increase the current message quota. The increase is requested by sending a HeaderRequestIncreaseMessageQuota request to the routing node. The value specified within the node is the new quota. HeaderRequestIncreaseMessageQuota requests MUST include a reply block. A node SHOULD NOT use a previously sent MURB to reply.
+                    </t>
+                    <t>
+                        If the requested quota is higher than the current quota, then the node SHOULD send a "no error" reply. If the requested qouta is not accepted, the node SHOULD send a requestedQuotaOutOfBand reply.
+                    </t>
+                    <t>
+                        A node accepting the request MUST send a RequirementBlock or a "no error block".
                     </t>
                 </section>
                 <section anchor="routing_header_req_trans_quota" title="Request Transfer Quota">
@@ -714,6 +725,24 @@
                         </t>
                     </section>
                 </section>
+                <section anchor="routing_operations_encrypt" title="Encrypt Operation">
+                    <t>FIXME</t>
+                </section>
+                <section anchor="routing_operations_decrypt" title="Decrypt Operation">
+                    <t>FIXME</t>
+                </section>
+                <section anchor="routing_operations_add_redundant" title="AddRedundancy Operation">
+                    <t>FIXME</t>
+                </section>
+                <section anchor="routing_operations_remove_redundant" title="RemoveRedundancy Operation">
+                    <t>FIXME</t>
+                </section>
+                <section anchor="routing_operations_split" title="Split Operation">
+                    <t>FIXME</t>
+                </section>
+                <section anchor="routing_operations_merge" title="Merge Operation">
+                    <t>FIXME</t>
+                </section>
             </section>
             <section anchor="routing_processing" title="Processing of Vortex Messages">
                 <t>
@@ -729,10 +758,13 @@
             <section anchor="accounting_create_identity" title="Ephemeral Identity Creation">
                 <t>The accounting layer has two major kinds of operations:
                     <list style="symbols">
-                        <t>Time-based operations (cleanup jobs and initiation of routing)</t>
-                        <t>Routing triggered operations (updating quotas, authorizing operations, and pickup of incoming messages.)</t>
+                        <t>
+                            Time-based operations (cleanup jobs and initiation of routing)
+                        </t>
+                        <t>
+                            Routing triggered operations (updating quotas, authorizing operations, and pickup of incoming messages.)
+                        </t>
                     </list>
-
                     Implementations MUST provide sufficient locking mechanisms to guarantee the integrity of accounting information and workspace at any time.
                 </t>
                 <section anchor="accounting_timed_gc" title="Time-Based Garbage Collection">
@@ -768,7 +800,8 @@
             <t>Additional encryption algorithms, paddings, modes, blending layers, or puzzles MUST be added by writing an extension to this or a subsequent RFC. For testing purposes, IDs above 1,000,000 should be used.</t>
         </section>
 
-        <section anchor="Security" title="Security Considerations">
+        <section anchor="security" title="Security Considerations">
+            <t>FIXME add usage of Cipher mode NONE</t>
             <t>The MessageVortex protocol may be understood more as a toolset than a fixed product. Depending on the usage of the toolset anonymity and security are affected. For a detailed analysis see <xref target="MVAnalysis"/>.
             </t>
             <t>
@@ -977,6 +1010,8 @@
             <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.1939.xml"?>
             <!-- POP3 STARTTLS -->
             <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2595.xml"?>
+            <!-- PKCS#1 -->
+            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.8017.xml"?>
 
             <reference anchor="MVAnalysis" target="https://messagevortex.org/devel/messageVortex.pdf">
                 <front>
