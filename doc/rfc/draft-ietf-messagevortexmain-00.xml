@@ -100,7 +100,7 @@
                         </t>
 
                     </section>
-                    <section anchor="entities_node_spec" title="Node Spec">
+                    <section anchor="entities_node_spec_spec" title="Node Spec">
                         <t>
                             Every adressable node is adressed in an unified format stored in a nodeSpec block. This RFC specifies transport layers for XMPP and SMTP. More transport layers might be introduced in extensions to this RFC.
                         </t>

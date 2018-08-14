@@ -101,7 +101,7 @@ BEGIN
     assembly      [407] SEQUENCE (SIZE (0..maxAssemblyInstructions))
                   OF PayloadOperation,
     validity      [408] UsagePeriod,
-    -- optional integer to identify the sender of a message when received
+    -- optional - to identify the sender of a message when received
     id            [409] INTEGER OPTIONAL
   }
 
