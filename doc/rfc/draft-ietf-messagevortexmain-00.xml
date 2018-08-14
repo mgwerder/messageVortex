@@ -647,14 +647,6 @@
                         A node SHOULD reply to a such a request of a valid known identity. The reply MUST include an error message or a "No Error" status message.
                     </t>
                 </section>
-                <section anchor="routing_header_req_nodes" title="Request Routing Nodes">
-                    <t>
-                        This request allows to query for additional routing nodes. A node should assign a hign price to this request to discurrage large scale harvesting. A node should always choose the nodes from a permanent subset of known nodes. This subset should be smaller or equal to 5% of all known NodeSpec of a queried node.
-                    </t>
-                    <t>
-                        A node SHOULD reply to a such a request of a valid known identity. The reply MUST include an error message, a requirement, or a ReplyNodes block.
-                    </t>
-                </section>
             </section>
             <section anchor="routing_special" title="Special Blocks">
                 <t>
@@ -704,6 +696,7 @@
                         The split and merge operations allow to split and recombine message chunks. A node MUST adhere to these constraints:
                         <list style="symbols">
                             <t>The operation must be applied absolute (measuring in bytes) or relative (measured as a floating value ranging 0&gt;value&gt;100.</t>
+                            <t>All calculations must be done according to <xref target="IEEE754">IEEE 754</xref> and in 64 Bit precision.</t>
                             <t>If a relative value is a non-integer result, a floor operation (cutting off all non-integer parts) determines the number of bytes.</t>
                             <t>If an absolute value is negative, the size reflected applies to the second part (instead of the first.</t>
                             <t>If an absolute value is bigger than the size bytes in the block, all bytes are mapped to the respective target block, and the other target block becomes a null byte sized block.</t>
@@ -752,24 +745,6 @@
                             Each row vector of A is a new data block which is then encrypted with the corresponding encryption key noted in keys of the addRedundancyOperation. If there are not sufficient keys available the keys used for encryption are reused from the beginning after the last key has been used. A routing block builder SHOULD provide enough keys so that all target blocks may be encrypted with a unique key. All encryptions SHOULD NOT use padding.
                         </t>
                     </section>
-                </section>
-                <section anchor="routing_operations_encrypt" title="Encrypt Operation">
-                    <t>FIXME</t>
-                </section>
-                <section anchor="routing_operations_decrypt" title="Decrypt Operation">
-                    <t>FIXME</t>
-                </section>
-                <section anchor="routing_operations_add_redundant" title="AddRedundancy Operation">
-                    <t>FIXME</t>
-                </section>
-                <section anchor="routing_operations_remove_redundant" title="RemoveRedundancy Operation">
-                    <t>FIXME</t>
-                </section>
-                <section anchor="routing_operations_split" title="Split Operation">
-                    <t>FIXME</t>
-                </section>
-                <section anchor="routing_operations_merge" title="Merge Operation">
-                    <t>FIXME</t>
                 </section>
             </section>
             <section anchor="routing_processing" title="Processing of Vortex Messages">
@@ -829,7 +804,6 @@
         </section>
 
         <section anchor="security" title="Security Considerations">
-            <t>FIXME add usage of Cipher mode NONE</t>
             <t>The MessageVortex protocol may be understood more as a toolset than a fixed product. Depending on the usage of the toolset anonymity and security are affected. For a detailed analysis see <xref target="MVAnalysis"/>.
             </t>
             <t>
