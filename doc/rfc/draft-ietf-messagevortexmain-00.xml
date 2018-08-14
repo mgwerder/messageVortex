@@ -10,6 +10,8 @@
 <?rfc compact="yes" ?>
 <?rfc subcompact="no" ?>
 
+<!-- FIXME add reference to ntru (https://standards.ieee.org/findstds/standard/1363.1-2008.html) -->
+
 <rfc category="exp" docName="draft-ietf-messagevortexmain-00" ipr="trust200902" xml:lang='en'>
     <front>
 
@@ -88,6 +90,23 @@
                 <t>
                     We use the term 'node' to  describe any system connected to other nodes, and supporting the MessageVortex Protocol. A 'node address' is typically an email address, an XMPP address, or any other transport protocol identity supporting the MessageVortex protocol. Any address SHOULD include a public part of an 'identity key' allowing to transmit messages safely. One or more addresses MAY belong to the same node.
                 </t>
+                <section anchor="entities_node_spec" title="NodeSpec">
+                    <t>
+                        Every adressable node is adressed in an unified format stored in a nodeSpec block. This RFC specifies transport layers for XMPP and SMTP. More transport layers might be introduced in extensions to this RFC.
+                    </t>
+                    <section anchor="entities_node_spec_smtp" title="NodeSpec for SMTP nodes">
+                        <t>
+                            Every adressable node is adressed in an unified format stored in a nodeSpec block. This RFC specifies transport layers for XMPP and SMTP. More transport layers might be introduced in extensions to this RFC.
+                        </t>
+
+                    </section>
+                    <section anchor="entities_node_spec" title="Node Spec">
+                        <t>
+                            Every adressable node is adressed in an unified format stored in a nodeSpec block. This RFC specifies transport layers for XMPP and SMTP. More transport layers might be introduced in extensions to this RFC.
+                        </t>
+
+                    </section>
+                </section>
             </section>
             <section anchor="entities_peer" title="Peer Partner">
                 <t>
@@ -579,7 +598,8 @@
                     <t>
                         A node SHOULD reply to a HeaderRequestIncreaseMessageQuota request (see <xref target="asn_one"/>) of a valid ephemeral identity. The reply MUST include a requirement, an error message or a "No Error" status message.
                     </t>
-                <section anchor="routing_header_req_msg_quota" title="Request Increase of Message Quota">
+                </section>
+                <section anchor="routing_header_inc_msg_quota" title="Request Increase of Message Quota">
                     <t>
                         A node may request to increase the current message quota. The increase is requested by sending a HeaderRequestIncreaseMessageQuota request to the routing node. The value specified within the node is the new quota. HeaderRequestIncreaseMessageQuota requests MUST include a reply block. A node SHOULD NOT use a previously sent MURB to reply.
                     </t>
@@ -625,6 +645,14 @@
                     </t>
                     <t>
                         A node SHOULD reply to a such a request of a valid known identity. The reply MUST include an error message or a "No Error" status message.
+                    </t>
+                </section>
+                <section anchor="routing_header_req_nodes" title="Request Routing Nodes">
+                    <t>
+                        This request allows to query for additional routing nodes. A node should assign a hign price to this request to discurrage large scale harvesting. A node should always choose the nodes from a permanent subset of known nodes. This subset should be smaller or equal to 5% of all known NodeSpec of a queried node.
+                    </t>
+                    <t>
+                        A node SHOULD reply to a such a request of a valid known identity. The reply MUST include an error message, a requirement, or a ReplyNodes block.
                     </t>
                 </section>
             </section>
@@ -694,7 +722,7 @@
                     <t>
                         The addRedundancy and removeRedundancy operations are the core operations of the protocol. They may be used to split messages and distribute message content across multiple routing nodes. The operation is split into three steps.
                         <list style="numbers">
-                            <t>Pad the inblock to multitudes of the key block size in the resulting outblocks.</t>
+                            <t>Pad the input block to multitudes of the key block size in the resulting output blocks.</t>
                             <t>Apply a Vandermonde matrix with the given sizes.</t>
                             <t>Encrypt each resulting block with a separate key</t>
                         </list>
@@ -702,10 +730,10 @@
                     </t>
                     <section anchor="routing_operations_redundancy_padding" title="Padding Operation">
                         <t>
-                            First, the length of all output blocks including redundancy is calculated. This is done by L=roof((&lt;inblock size in bytes&gt;+4)/&lt;encryption block size in bytes&gt;)*&lt;block size in bytes&gt;. The block is prepended with a 32-bit length indicator in bytes at the beginning (little-endian). This length indicator i is calculated by i=&lt;inblock size in bytes&gt;*randominteger()*L. The rest of the inblock up to length L is padded with random data. If GF(16) is applied, numbers are treated as little-endian representations.
+                            First, the length of all output blocks including redundancy is calculated. This is done by L=roof((&lt;input block size in bytes&gt;+4)/&lt;encryption block size in bytes&gt;)*&lt;block size in bytes&gt;. The block is prepended with a 32-bit length indicator in bytes at the beginning (little-endian). This length indicator i is calculated by i=&lt;input block size in bytes&gt;*randominteger()*L. The rest of the input block up to length L is padded with random data. If GF(16) is applied, numbers are treated as little-endian representations.
                         </t>
                         <t>
-                            For padding removal, first, the padding i at the start is removed as a little-endian integer. Then, the length of the resulting block (outblock) is calculated by applying &lt;outblock size in bytes&gt;=i mod &lt;inblock size in bytes&gt;
+                            For padding removal, first, the padding i at the start is removed as a little-endian integer. Then, the length of the output block is calculated by applying &lt;output block size in bytes&gt;=i mod &lt;input block size in bytes&gt;
                         </t>
                         <t>
                            This padding guarantees that each resulting block is as big as the subsequent encryption operation and does not require any padding.
@@ -713,7 +741,7 @@
                     </section>
                     <section anchor="routing_operations_redundancy_matrix" title="Apply Matrix">
                         <t>
-                            Next, the inblock is organized in a data matrix D of dimensions inrows,incols where incols=(&lt;number of data blocks&gt;-&lt;number of redundancy blocks&gt;) and inrows=L/(&lt;number of data blocks&gt;-&lt;number of redundancy blocks&gt;). The inblock data is distributed in this matrix first across, then down.
+                            Next, the input block is organized in a data matrix D of dimensions inrows,incols where incols=(&lt;number of data blocks&gt;-&lt;number of redundancy blocks&gt;) and inrows=L/(&lt;number of data blocks&gt;-&lt;number of redundancy blocks&gt;). The input block data is distributed in this matrix first across, then down.
                         </t>
                         <t>
                             Next, we multiply the data matrix D a Vandermonde matrix V. The V matrix has the number of rows equal to the incols calculated, and columns are equal to the &lt;number of data blocks&gt;. The content of the matrix is formed by  v(i,j)=pow(i,j), whereas i reflects the row number starting at 0, and j reflects the column number starting at 0. Please note that calculations noted here have to be carried out in the GF noted in the respective operation to be successful. The operation results in a matrix A.
@@ -1052,10 +1080,13 @@
         <section anchor="asn_one" title="The ASN.1 schema for Vortex messages">
             <figure anchor="app_asnOne">
                 <artwork><![CDATA[
+-- encryption: as specified in the key. If not specified default
+-- mode is CBC and default padding is PKCS1Padding
+
 -- States: Tuple()=Value() [vallidity; allowed operations] {Store}
 -- - Tuple(identity)=Value(messageQuota,transferQuota,sequence of
 --   Routingblocks for Error Message Routing) [validity; Requested
---   at creation] {identityStore}
+--   at creation; may be extended upon request] {identityStore}
 -- - Tuple(Identity,Serial)=maxReplays ['valid' from Identity
 --   Block; from First Identity Block; may only be reduced]
 --   {IdentityReplayStore}
@@ -1108,23 +1139,20 @@ BEGIN
     -- contains the prefix to be used
     routing    CHOICE {
       -- debug/internal use only
-      plain        [331] SEQUENCE (SIZE (0..maxRoutingBlocks))
-                         OF RoutingCombo,
-      encrypted    [332] SEQUENCE (SIZE (0..maxRoutingBlocks))
-                         OF OCTET STRING
+      plain             [331] SEQUENCE (SIZE (0..maxRoutingBlocks))
+                              OF RoutingCombo,
+      encrypted         [332] SEQUENCE (SIZE (0..maxRoutingBlocks))
+                              OF OCTET STRING
     },
     -- contains the secret of the header block
-    forwardSecret        ChainSecret,
-    -- contains incomming instructions to map blocks to workspace
-    inOperations         SEQUENCE (SIZE (0..maxAssemblyInstructions))
-                         OF PayloadOperation,
+    forwardSecret     ChainSecret,
     -- contains a routing block which may be used when sending
     -- error messages back to the quota owner
     -- this routing block may be cached for future use
-    replyBlock     [334] SEQUENCE {
-         murb            RoutingCombo,
-         maxReplay       INTEGER,
-         validity        UsagePeriod
+    replyBlock [131]   SEQUENCE {
+         murb           RoutingCombo,
+         maxReplay      INTEGER,
+         validity       UsagePeriod
     } OPTIONAL
   }
 
@@ -1152,7 +1180,9 @@ BEGIN
     -- blocks of this identity)
     assembly      [407] SEQUENCE (SIZE (0..maxAssemblyInstructions))
                   OF PayloadOperation,
-    validity      [408] UsagePeriod
+    validity      [408] UsagePeriod,
+    -- optional integer to identify the sender of a message when received
+    id            [409] INTEGER OPTIONAL
   }
 
   InnerMessageBlock ::= SEQUENCE {
@@ -1179,12 +1209,7 @@ BEGIN
     },
     -- contains the actual payload
     payload     SEQUENCE (SIZE (0..maxPayloadBlocks))
-                OF PayloadChunk
-  }
-
-  PayloadChunk ::= SEQUENCE {
-    id   INTEGER (1..maxPayloadBlocks),
-    data OCTET STRING
+                OF OCTET STRING
   }
 
   -- do not use this for encoding (internal structure only)
@@ -1203,8 +1228,9 @@ BEGIN
   }
 
   PrefixBlock ::= SEQUENCE {
-    forwardsecret	ChainSecret,
-    key             SymmetricKey
+    forwardsecret   ChainSecret,
+    key             SymmetricKey,
+	version			INTEGER OPTIONAL
   }
 
   PuzzleIdentifier          ::= OCTET STRING ( SIZE(0..16) )
@@ -1230,6 +1256,8 @@ BEGIN
     -- contains administrative requests such as quota requests
     requests            SEQUENCE (SIZE (0..maxNumberOfRequests))
                         OF HeaderRequest ,
+    -- Reply Block for the requests
+    requestReplyBlock   RoutingCombo,
     -- padding and identitifier required to solve the cryptopuzzle
     identifier  [12201] PuzzleIdentifier OPTIONAL,
     -- This is for solving crypto puzzles
@@ -1239,6 +1267,8 @@ BEGIN
   PayloadOperation ::= CHOICE {
     splitPayload    [150] SplitPayloadOperation,
     mergePayload    [160] MergePayloadOperation,
+    xorSplitPayload [250] XorSplitPayloadOperation,
+    xorMergePayload [260] XorMergePayloadOperation,
     encryptPayload  [300] EncryptPayloadOperation,
     decryptPayload  [310] DecryptPayloadOperation,
     addRedundancy   [400] AddRedundancyOperation,
@@ -1265,19 +1295,12 @@ BEGIN
   }
 
   AddRedundancyOperation ::= SEQUENCE {
-    -- id of the input block
     inputId            [16000] INTEGER (0..maxID),
-    -- number of data blocks resulting (including redundancy blocks)
     dataStripes        [16001] INTEGER (1..254),
-    -- number of blocks which may be missing from the target set
-    -- (when still able to recover)
     redundancy         [16002] INTEGER (1..254),
-    -- the keys required to encrypt
     keys               [16003] SEQUENCE (SIZE (2..512))
                                OF SymmetricKey,
-    -- ID of the first block (all others in ascending order)
     outputId           [16004] INTEGER (1..maxID),
-    -- Gauloise filed size in bits (must be either 8 or 16)
     gfSize             [16005] INTEGER (2..maxGFSize)
   }
 
@@ -1302,6 +1325,20 @@ BEGIN
     originalFirstId      INTEGER (0..maxID),
     originalSecondId     INTEGER (0..maxID),
     newId                INTEGER (1..maxID)
+  }
+
+  XorMergePayloadOperation ::= SEQUENCE {
+    originalFirstId      INTEGER (0..maxID),
+    originalSecondId     INTEGER (-1..maxID),
+    originalSize         SizeBlock,
+    newId                INTEGER (1..maxID)
+  }
+
+  XorSplitPayloadOperation ::= SEQUENCE {
+    originalId           INTEGER (0..maxID),
+    prngSpec             PRNGAlgorithmSpec,
+    newFirstBlockId      INTEGER (1..maxID),
+    newSecondBlockId     INTEGER (1..maxID)
   }
 
   EncryptPayloadOperation ::= SEQUENCE {
@@ -1360,38 +1397,37 @@ BEGIN
   BlendingParameter ::= CHOICE {
     offset          [1] INTEGER,
     symmetricKey    [2] SymmetricKey,
-    asymmetricKey   [3] AsymmetricKey,
-    password        [4] IA5String
-   }
+    asymmetricKey   [3] AsymmetricKey
+  }
 
   NodeSpec ::= SEQUENCE {
     transportProtocol [1] Protocol,
-    recipientAddress  [2] IA5String
+    recipientAddress  [2] IA5String,
+    recipientKey      [3] OPTIONAL AsymmetricKey
   }
 
   ChainSecret ::= INTEGER (0..4294967295)
 
   HeaderRequest ::= CHOICE {
-    identity        [0] HeaderRequestIdentity,
-    capabilities    [1] HeaderRequestCapability,
-    messageQuota    [2] HeaderRequestIncreaseMessageQuota,
-    transferQuota   [3] HeaderRequestIncreaseTransferQuota,
-    quotaQuery      [4] HeaderRequestQueryQuota,
-    replaceIdentity [5] HeaderRequestReplaceIdentity
+    identity      [0] HeaderRequestIdentity,
+    capabilities  [1] HeaderRequestCapability,
+    messageQuota  [2] HeaderRequestIncreaseMessageQuota,
+    transferQuota [3] HeaderRequestIncreaseTransferQuota,
+    quotaQuery    [4] HeaderRequestQuota,
+    nodeQuery     [5] HeaderRequestNodes
   }
 
-  HeaderRequestReplaceIdentity ::= SEQUENCE {
-    newIdentity      AsymmetricKey,
-    newBlending      BlendingSpec
+  SpecialBlock ::= CHOICE {
+    capabilities  [1]  ReplyCapability,
+    requirement   [2]  SEQUENCE (SIZE (1..127))
+                       OF RequirementBlock,
+    quota         [4]  ReplyCurrentQuota,
+    nodes         [5]  ReplyNodes,
+    status        [99] StatusBlock
   }
 
   HeaderRequestIdentity ::= SEQUENCE {
     period UsagePeriod
-  }
-
-  RequirementBlock ::= CHOICE {
-    puzzle  [1] RequirementPuzzleRequired,
-    payment [2] RequirementPaymentRequired
   }
 
   RequirementPuzzleRequired ::= SEQUENCE {
@@ -1406,8 +1442,7 @@ BEGIN
   RequirementPaymentRequired ::= SEQUENCE {
     account       OCTET STRING,
     ammount       REAL,
-    currency      Currency,
-    valid         UsagePeriod
+    currency      Currency
   }
 
   Currency ::= ENUMERATED {
@@ -1416,18 +1451,26 @@ BEGIN
     zec      (8003)
   }
 
-  ReplyBlock ::= CHOICE {
-    requirement[1] RequirementBlock,
-    capability [2] ReplyCapability,
-    quota      [3] ReplyQuota
+  RequirementBlock ::= CHOICE {
+    puzzle  [1] RequirementPuzzleRequired,
+    payment [2] RequirementPaymentRequired
   }
 
-  HeaderRequestQueryQuota ::= SEQUENCE {
+  HeaderRequestQuota ::= SEQUENCE {
   }
 
-  ReplyQuota ::= SEQUENCE {
-    messageQuota  INTEGER (0..4294967295),
-    transferQuota INTEGER (0..4294967295)
+  HeaderRequestNodes ::= SEQUENCE {
+    numberOfNodes   INTEGER
+  }
+
+  ReplyCurrentQuota ::= SEQUENCE {
+    messages INTEGER (0..4294967295),
+    size     INTEGER (0..4294967295)
+  }
+
+  ReplyNodes ::= SEQUENCE {
+      node   SEQUENCE (SIZE (1..5))
+             OF NodeSpec
   }
 
   HeaderRequestIncreaseMessageQuota ::= SEQUENCE {
@@ -1467,25 +1510,20 @@ BEGIN
   }
 
   StatusBlock ::= SEQUENCE {
-    code            StatusCode,
-    reply           ReplyBlock,
-    -- serial number of the routing block
-    serial          INTEGER (0..maxSerial) OPTIONAL,
-    -- human readable text allowing additional information
-    text            IA5String OPTIONAL
+    code            StatusCode
   }
 
   StatusCode ::= ENUMERATED {
 
     -- System messages
     ok                          (2000),
-    transferQuotaStatus         (2101),
-    messageQuotaStatus          (2102),
-    puzleRequired               (2201),
+    quotaStatus                 (2101),
+    puzzleRequired              (2201),
 
     -- protocol usage failures
     transferQuotaExceeded       (3001),
     messageQuotaExceeded        (3002),
+    requestedQuotaOutOfBand     (3003),
     identityUnknown             (3101),
     messageChunkMissing         (3201),
     messageLifeExpired          (3202),
@@ -1506,7 +1544,7 @@ BEGIN
   MemoryPayloadChunk ::= SEQUENCE {
     id                        INTEGER (0..maxID),
     payload                   [100] OCTET STRING,
-    validity				  UsagePeriod
+    validity                  UsagePeriod
   }
 
   UsagePeriod ::= SEQUENCE {
@@ -1574,9 +1612,8 @@ BEGIN
 
   AsymmetricAlgorithm ::= ENUMERATED {
     rsa             (2000),
-    ec              (2500),
-    ntru            (2600),
-    mceliece        (2700)
+    dsa             (2100),
+    ec              (2500)
   }
 
   MacAlgorithm ::= ENUMERATED {
@@ -1600,29 +1637,27 @@ BEGIN
     initialisationVector [10002] OCTET STRING  OPTIONAL,
     nonce                [10003] OCTET STRING  OPTIONAL,
     mode                 [10004] CipherMode    OPTIONAL,
-    padding              [10005] CipherPadding OPTIONAL,
-    n                    [10010] INTEGER       OPTIONAL,
-    p                    [10011] INTEGER       OPTIONAL,
-    q                    [10012] INTEGER       OPTIONAL,
-    k                    [10013] INTEGER       OPTIONAL,
-    t                    [10014] INTEGER       OPTIONAL
+    padding              [10005] CipherPadding OPTIONAL
   }
 
   -- Symmetric key
   SymmetricKey ::= SEQUENCE {
     keyType SymmetricAlgorithm,
     parameter AlgorithmParameters,
-    key     OCTET STRING (SIZE(1..512))
+    key     OCTET STRING (SIZE(16..512))
   }
 
   -- Asymmetric Key
   AsymmetricKey ::= SEQUENCE {
     keyType       AsymmetricAlgorithm,
+	-- private key encoded as PKCS#8/PrivateKeyInfo
     publicKey     [2] OCTET STRING,
+	-- private key encoded as X.509/SubjectPublicKeyInfo
     privateKey    [3] OCTET STRING OPTIONAL
   }
 
-END]]></artwork>
+END
+]]></artwork>
             </figure>
         </section>
         <!-- Change Log

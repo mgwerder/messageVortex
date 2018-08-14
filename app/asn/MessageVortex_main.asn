@@ -322,7 +322,8 @@ BEGIN
 
   NodeSpec ::= SEQUENCE {
     transportProtocol [1] Protocol,
-    recipientAddress  [2] IA5String
+    recipientAddress  [2] IA5String,
+    recipientKey      [3] AsymmetricKey OPTIONAL
   }
 
   ChainSecret ::= INTEGER (0..4294967295)
@@ -332,7 +333,8 @@ BEGIN
     capabilities  [1] HeaderRequestCapability,
     messageQuota  [2] HeaderRequestIncreaseMessageQuota,
     transferQuota [3] HeaderRequestIncreaseTransferQuota,
-    quotaQuery    [4] HeaderRequestQuota
+    quotaQuery    [4] HeaderRequestQuota,
+    nodeQuery     [5] HeaderRequestNodes
   }
 
   SpecialBlock ::= CHOICE {
@@ -340,6 +342,7 @@ BEGIN
     requirement   [2]  SEQUENCE (SIZE (1..127))
                        OF RequirementBlock,
     quota         [4]  ReplyCurrentQuota,
+    nodes         [5]  ReplyNodes,
     status        [99] StatusBlock
   }
 
@@ -376,9 +379,18 @@ BEGIN
   HeaderRequestQuota ::= SEQUENCE {
   }
 
+  HeaderRequestNodes ::= SEQUENCE {
+    numberOfNodes   INTEGER
+  }
+
   ReplyCurrentQuota ::= SEQUENCE {
     messages INTEGER (0..4294967295),
     size     INTEGER (0..4294967295)
+  }
+
+  ReplyNodes ::= SEQUENCE {
+      node   SEQUENCE (SIZE (1..5))
+             OF NodeSpec
   }
 
   HeaderRequestIncreaseMessageQuota ::= SEQUENCE {
@@ -514,14 +526,16 @@ BEGIN
   }
 
   CipherPadding ::= ENUMERATED {
-    pkcs7           (1000),
-    pkcs1           (1001)
+    none            (1000),
+    pkcs1           (1001),
+    pkcs7           (1002)
   }
 
   AsymmetricAlgorithm ::= ENUMERATED {
     rsa             (2000),
     dsa             (2100),
-    ec              (2500)
+    ec              (2200),
+    ntru            (2300)
   }
 
   MacAlgorithm ::= ENUMERATED {
@@ -545,7 +559,12 @@ BEGIN
     initialisationVector [10002] OCTET STRING  OPTIONAL,
     nonce                [10003] OCTET STRING  OPTIONAL,
     mode                 [10004] CipherMode    OPTIONAL,
-    padding              [10005] CipherPadding OPTIONAL
+    padding              [10005] CipherPadding OPTIONAL,
+    n                    [10010] INTEGER       OPTIONAL,
+    p                    [10011] INTEGER       OPTIONAL,
+    q                    [10012] INTEGER       OPTIONAL,
+    k                    [10013] INTEGER       OPTIONAL,
+    t                    [10014] INTEGER       OPTIONAL
   }
 
   -- Symmetric key
