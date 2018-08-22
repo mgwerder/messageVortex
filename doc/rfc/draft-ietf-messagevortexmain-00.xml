@@ -245,7 +245,13 @@
                 <t>Every official or ephemeral identity has a workspace. A workspace consists of the following elements:
                     <list style="symbols">
                         <t>Zero or more routing blocks to be processed</t>
-                        <t>Slots for payload block sequentially numbered</t>
+                        <t>Slots for payload block sequentially numbered. Every slot...
+                            <list style="symbols">
+                                <t>MUST contain a numerical ID identifying the slot</t>
+                                <t>MAY contain a payload content</t>
+                                <t>If a block contains a payload, it MUST contain a validity period.</t>
+                            </list>
+                        </t>
                     </list>
                 </t>
             </section>
@@ -255,7 +261,7 @@
             <t>The protocol is designed in four layers as shown in <xref target="fig_layer_overview" /></t>
 
             <figure anchor="fig_layer_overview" title="Layer overview">
-                <artwork align="center"><![CDATA[
+                <artwork align="center" src="https://messagevortex.net/devel/images/blockLayoutSimplified.png"><![CDATA[
 +-------------------------------------------------------------------+
 | Vortex Node                                                       |
 | +---------------------------------------------------------------+ |
