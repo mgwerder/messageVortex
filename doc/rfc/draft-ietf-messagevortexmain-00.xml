@@ -758,7 +758,7 @@
         </section>
 
         <section anchor="accounting" title="Accounting">
-            <section anchor="accounting_create_identity" title="Ephemeral Identity Creation">
+            <section anchor="accounting_operations" title="Accounting Operations">
                 <t>The accounting layer has two major kinds of operations:
                     <list style="symbols">
                         <t>
@@ -790,6 +790,11 @@
                         The transfer quota MUST be checked and decreased by the number of data bytes in the payload chunks after all header requests have been processed. The message quota MUST be decreased by one on each routing block triggering processing in the workspace.
                     </t>
                 </section>
+                <section anchor="accounting_create_identity" title="Ephemeral Identity Creation">
+                    <t>
+                        Any packet may request creation of an ephemeral identity. A node SHOULD NOT accept such a request without a costly requirement. The request includes a lifetime of the ephemeral identity. The costs for creating the ephemeral identity SHOULD raise if a longer lifetime is requested.
+                    </t>
+                </section>
             </section>
         </section>
 
@@ -804,7 +809,8 @@
         </section>
 
         <section anchor="security" title="Security Considerations">
-            <t>The MessageVortex protocol may be understood more as a toolset than a fixed product. Depending on the usage of the toolset anonymity and security are affected. For a detailed analysis see <xref target="MVAnalysis"/>.
+            <t>
+                The MessageVortex protocol may be understood more as a toolset than a fixed product. Depending on the usage of the toolset anonymity and security are affected. For a detailed analysis see <xref target="MVAnalysis"/>.
             </t>
             <t>
                 The primary goals for security within this protocol did rely on the following focus areas:
@@ -1013,7 +1019,7 @@
             <!-- POP3 STARTTLS -->
             <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2595.xml"?>
 
-            <reference anchor="MVAnalysis" target="https://messagevortex.org/devel/messageVortex.pdf">
+            <reference anchor="MVAnalysis" target="https://messagevortex.net/devel/messageVortex.pdf">
                 <front>
                     <title>MessageVortex</title>
                     <author initials="M." surname="Gwerder"/>
