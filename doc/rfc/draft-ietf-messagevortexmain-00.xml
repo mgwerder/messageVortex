@@ -261,7 +261,7 @@
             <t>The protocol is designed in four layers as shown in <xref target="fig_layer_overview" /></t>
 
             <figure anchor="fig_layer_overview" title="Layer overview">
-                <artwork align="center" src="https://messagevortex.net/devel/images/blockLayoutSimplified.png"><![CDATA[
+                <artwork align="center" src="blockLayoutSimplified.png"><![CDATA[
 +-------------------------------------------------------------------+
 | Vortex Node                                                       |
 | +---------------------------------------------------------------+ |
