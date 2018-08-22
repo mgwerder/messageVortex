@@ -54,7 +54,12 @@
 
     <middle>
         <section title="Introduction">
-            <t>Anonymization is hard to achieve. Most of the attempts in the past rely on either trust in a dedicated infrastructure or a specialized networking protocol.</t>
+            <t>
+                Anonymization is hard to achieve. Most of the attempts in the past rely on either trust in a dedicated infrastructure or a specialized networking protocol.
+            </t>
+            <t>
+                Instead of defining an own transport layer, MessageVortex pigibacks other transport protocols. Messages are being transported alongside with ordinary messages of that transport protocol. A blending layer picks the messages up, applies local operations to it and resends the new chunks to the next recipients. A processing node learns as little as possible from the message due to the nature of the operations processed. The onionized structure of the protocol makes it impossible to follow the trace of a message without having control over the processing node itself.
+            </t>
             <t>
                 MessageVortex is a protocol which allows to send and receive messages by using a routing block instead of a destination address.
                 The sender has full control over all parameters of the message flow.
