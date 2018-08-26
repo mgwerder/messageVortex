@@ -105,8 +105,8 @@
                             To allow addressing of a vortex node with an ordinary clientan alternative representation SHOULD be supported as defined below as smtpAlternateSpec (specification noted in ABNF as specified in <xref target="RFC4234"/>).
                             <figure>
                                 <artwork type="abnf"><![CDATA[
-email             = &lt; local part of email&gt; "@" &lt;domain part of email&gt;
-keySpec           = &lt; BASE64 encoded AsymmetriKey representation in DER representation &gt;
+email             = <local part of email> "@" <domain part of email>
+keySpec           = <BASE64 encoded AsymmetriKey in DER representation>;
 smtpAlternateSpec = localPart ":" keySpec "@" domain
                                 ]]></artwork>
                             </figure>
