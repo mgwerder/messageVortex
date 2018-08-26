@@ -1079,9 +1079,49 @@
         </references>
 
         <section anchor="asn_one" title="The ASN.1 schema for Vortex messages">
-            <figure anchor="app_asnOne_schema">
-                <artwork src="asn/MessageVortex-Schema.asn"/>
-            </figure>
+            <t>
+                The following sections contain the ASN.1 modules specifying the MessageVortex Protocol
+            </t>
+            <section  anchor="asn_one_schema" title="The main VortexMessageBlocks">
+                <figure anchor="app_asnOne_schema">
+                    <artwork src="asn/MessageVortex-Schema.asn"/>
+                </figure>
+            </section>
+            <section  anchor="asn_one_operations" title="The VortexMessage Operation Structures">
+                <figure anchor="app_asnOne_operations">
+                    <artwork src="asn/MessageVortex-Operations.asn"/>
+                </figure>
+            </section>
+            <section  anchor="asn_one_Ciphers" title="The VortexMessage Ciphers Structures">
+                <figure anchor="app_asnOne_ciphers">
+                    <artwork src="asn/MessageVortex-Ciphers.asn"/>
+                </figure>
+            </section>
+            <section  anchor="asn_one_requests" title="The VortexMessage Request Structures">
+                <figure anchor="app_asnOne_requests">
+                    <artwork src="asn/MessageVortex-Requests.asn"/>
+                </figure>
+            </section>
+            <section  anchor="asn_one_replies" title="The VortexMessage Replies Structures">
+                <figure anchor="app_asnOne_replies">
+                    <artwork src="asn/MessageVortex-Replies.asn"/>
+                </figure>
+            </section>
+            <section  anchor="asn_one_requirements" title="The VortexMessage Requirements Structures">
+                <figure anchor="app_asnOne_requirements">
+                    <artwork src="asn/MessageVortex-Requirements.asn"/>
+                </figure>
+            </section>
+            <section  anchor="asn_one_helpers" title="The VortexMessage Helpers Structures">
+                <figure anchor="app_asnOne_helpers">
+                    <artwork src="asn/MessageVortex-Helpers.asn"/>
+                </figure>
+            </section>
+            <section  anchor="asn_one_additional" title="The VortexMessage Additional Structures">
+                <figure anchor="app_asnOne_additional">
+                    <artwork src="asn/MessageVortex-NonProtocolBlocks.asn"/>
+                </figure>
+            </section>
         </section>
         <!-- Change Log
 
