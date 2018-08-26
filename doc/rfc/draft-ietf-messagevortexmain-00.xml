@@ -58,7 +58,10 @@
                 Anonymization is hard to achieve. Most of the attempts in the past rely on either trust in a dedicated infrastructure or a specialized networking protocol.
             </t>
             <t>
-                Instead of defining an own transport layer, MessageVortex pigibacks other transport protocols. Messages are being transported alongside with ordinary messages of that transport protocol. A blending layer picks the messages up, applies local operations to it and resends the new chunks to the next recipients. A processing node learns as little as possible from the message due to the nature of the operations processed. The onionized structure of the protocol makes it impossible to follow the trace of a message without having control over the processing node itself.
+                Instead of defining an own transport layer, MessageVortex pigibacks other transport protocols. Messages are being transported alongside with ordinary messages of that transport protocol. A blending layer picks the messages up, applies local operations to it and resends the new chunks to the next recipients.
+            </t>
+            <t>
+                A processing node learns as little as possible from the message due to the nature of the operations processed. The onionized structure of the protocol makes it impossible to follow the trace of a message without having control over the processing node itself.
             </t>
             <t>
                 MessageVortex is a protocol which allows to send and receive messages by using a routing block instead of a destination address.
@@ -1083,49 +1086,65 @@ smtpAlternateSpec = localPart ":" keySpec "@" domain
                 The following sections contain the ASN.1 modules specifying the MessageVortex Protocol
             </t>
             <section  anchor="asn_one_schema" title="The main VortexMessageBlocks">
-                <figure anchor="app_asnOne_schema">
-                    <artwork src="asn/MessageVortex-Schema.asn"/>
-                </figure>
+                <t>
+                    <figure>
+                        <artwork src="asn/MessageVortex-Schema.asn"/>
+                    </figure>
+                </t>
             </section>
             <section  anchor="asn_one_operations" title="The VortexMessage Operation Structures">
-                <figure anchor="app_asnOne_operations">
-                    <artwork src="asn/MessageVortex-Operations.asn"/>
-                </figure>
+                <t>
+                    <figure>
+                        <artwork src="asn/MessageVortex-Operations.asn"/>
+                    </figure>
+                </t>
             </section>
             <section  anchor="asn_one_Ciphers" title="The VortexMessage Ciphers Structures">
-                <figure anchor="app_asnOne_ciphers">
-                    <artwork src="asn/MessageVortex-Ciphers.asn"/>
-                </figure>
+                <t>
+                    <figure>
+                        <artwork src="asn/MessageVortex-Ciphers.asn"/>
+                    </figure>
+                </t>
             </section>
             <section  anchor="asn_one_requests" title="The VortexMessage Request Structures">
-                <figure anchor="app_asnOne_requests">
-                    <artwork src="asn/MessageVortex-Requests.asn"/>
-                </figure>
+                <t>
+                    <figure>
+                        <artwork src="asn/MessageVortex-Requests.asn"/>
+                    </figure>
+                </t>
             </section>
             <section  anchor="asn_one_replies" title="The VortexMessage Replies Structures">
-                <figure anchor="app_asnOne_replies">
-                    <artwork src="asn/MessageVortex-Replies.asn"/>
-                </figure>
+                <t>
+                    <figure>
+                        <artwork src="asn/MessageVortex-Replies.asn"/>
+                    </figure>
+                </t>
             </section>
             <section  anchor="asn_one_requirements" title="The VortexMessage Requirements Structures">
-                <figure anchor="app_asnOne_requirements">
-                    <artwork src="asn/MessageVortex-Requirements.asn"/>
-                </figure>
+                <t>
+                    <figure>
+                        <artwork src="asn/MessageVortex-Requirements.asn"/>
+                    </figure>
+                </t>
             </section>
             <section  anchor="asn_one_helpers" title="The VortexMessage Helpers Structures">
-                <figure anchor="app_asnOne_helpers">
-                    <artwork src="asn/MessageVortex-Helpers.asn"/>
-                </figure>
+                <t>
+                    <figure>
+                        <artwork src="asn/MessageVortex-Helpers.asn"/>
+                    </figure>
+                </t>
             </section>
             <section  anchor="asn_one_additional" title="The VortexMessage Additional Structures">
-                <figure anchor="app_asnOne_additional">
-                    <artwork src="asn/MessageVortex-NonProtocolBlocks.asn"/>
-                </figure>
+                <t>
+                    <figure>
+                        <artwork src="asn/MessageVortex-NonProtocolBlocks.asn"/>
+                    </figure>
+                </t>
             </section>
         </section>
         <!-- Change Log
 
-            v00 2018-04-19  GwM   Initial version
+            v010 2018-08-19  GwM   Initial version
 
         -->
     </back>
