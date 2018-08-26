@@ -104,24 +104,36 @@
                     </t>
                     <section anchor="entities_node_spec_smtp" title="NodeSpec for SMTP nodes">
                         <t>
-                            Typically a node specification is specified with the ASN.1 block NodeSpec.
-                            To allow addressing of a vortex node with an ordinary clientan alternative representation SHOULD be supported as defined below as smtpAlternateSpec (specification noted in ABNF as specified in <xref target="RFC4234"/>).
+                            Typically a node specification is specified with the ASN.1 block NodeSpec (see <xref target="asn_one_helpers"/>).
+                            To allow addressing of a vortex node with an ordinary client an alternative representation SHOULD be supported as defined below as smtpAlternateSpec (specification noted in ABNF as specified in <xref target="RFC4234"/>).
                             <figure>
                                 <artwork type="abnf"><![CDATA[
-email             = <local part of email> "@" <domain part of email>
+localPart         = <local part of address>
+domain            = <domain part of address>
+email             = localPart "@" domain
 keySpec           = <BASE64 encoded AsymmetriKey in DER representation>;
 smtpAlternateSpec = localPart ":" keySpec "@" domain
                                 ]]></artwork>
                             </figure>
                         </t>
-
-
                     </section>
                     <section anchor="entities_node_spec_spec" title="NodeSpec for XMPP nodes">
                         <t>
-                            Every adressable node is adressed in an unified format stored in a nodeSpec block. This RFC specifies transport layers for XMPP and SMTP. More transport layers might be introduced in extensions to this RFC.
+                            Typically a node specification is specified with the ASN.1 block NodeSpec.
+                            To allow addressing of a vortex node with an ordinary clientan alternative representation SHOULD be supported as defined below as jidAlternateSpec (specification noted in ABNF as specified in <xref target="RFC4234"/>).
+                            <figure>
+                                <artwork type="abnf"><![CDATA[
+localPart         = <local part of address>
+domain            = <domain part of address>
+jid               = localPart "@" domain [ "/" resourcepart ]
+keySpec           = <BASE64 encoded AsymmetriKey in DER representation>;
+jidAlternateSpec = localPart ":" keySpec "@" domain [ "/" resourcepart
+                                ]]></artwork>
+                            </figure>
                         </t>
-
+                        <t>
+                            Please note that the ":" character (3Ah) is explicitely excluded in <xref target="RFC7622"/> in the localpart.
+                        </t>
                     </section>
                 </section>
             </section>
@@ -1044,6 +1056,8 @@ smtpAlternateSpec = localPart ":" keySpec "@" domain
             <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.1939.xml"?>
             <!-- POP3 STARTTLS -->
             <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2595.xml"?>
+            <!-- XMPP Adress -->
+            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.7622.xml"?>
 
             <reference anchor="MVAnalysis" target="https://messagevortex.net/devel/messageVortex.pdf">
                 <front>
