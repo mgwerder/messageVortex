@@ -3,15 +3,43 @@ date=2018-05-02
 type=page
 status=published
 ~~~~~~
-<img src="/images/MessageVortexLogo_big.png" style="float:left;max-width:400px;min-width:50%;"/>
-MessageVortex is a protocol which is aimed to maintain the anonymity of sender and 
-recipient of a message towards third parties. Unlike other protocols, it does not 
-provide an own transport protocol. Instead, it hides in common transport 
-facilities such as email (SMTP/IMAP) or chat (XMPP).
-<br/>  
-Currently published is only the draft of the RFC document. If you are interested in the project, feel free to contact the website owner.
-<br/>  
-A reference implementation in Java will be available in the download section soon. Just give it a try.
-<br/>  
-In the meantime feel free to read the RFC draft or the other docs.
-<br style="float:clear;"/>
+<h1>What is it?</h1>
+<p>
+  <img src="/images/MessageVortexLogo_big.png" style="float:right;max-width:200px;min-width:30%;background-color:#fff;border: 2px solid black;"/>
+  MessageVortex is a protocol which is aimed to maintain the anonymity of sender and 
+  recipient of a message towards third parties. Unlike other protocols, it does not 
+  provide an own transport protocol. Instead, it hides in common transport 
+  facilities such as email (SMTP/IMAP) or chat (XMPP).
+</p>
+<p>
+  This is done by something you might call as onionized mixing. 
+  &quot;Mixing&quot; is not entirely true as the protocol does more.
+  It adds redundancy information to the protocol while sending the message in chunks.
+  This redundancy makes it next to impossible for someone to follow the message flow.
+</p>
+<h1 style="float:clear;">Why should we use just another protocol?</h1>
+<p>
+What is so special about the protocol you might ask. 
+First, it has some unique properties due to the fact that it hides within other protocols. 
+Therefore, all &quot;ordinary users&quot; of the protocol do improve hiding as they increase the mass to be analyzed. 
+Another unique property is that it relays not on any trust into a central infrastructure. 
+Infact, we assume malicious nodes.
+Third, any message transferring account may be used to send VortexMessages. 
+No need to buid specialized servers. 
+A smartphone or an ordinary PC can do it.
+</p>
+<h1>Where should I start?</h1>
+<p>
+Currently published is only the draft of the RFC document. 
+If you are interested in the projects source code, feel free to contact the website owner. 
+There is already a working (but not yet complete) implementation available.
+</p>
+<p>
+A reference implementation in Java will be available in the download section soon. 
+Just give it a try.
+</p>
+<p>
+In the meantime feel free to read the RFC draft or the other docs. 
+They are becomming more and more stable. The protocol may be considered as final.
+<style="float:clear;"/>
+</p>
