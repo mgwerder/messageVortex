@@ -1080,7 +1080,7 @@
 
         <section anchor="asn_one" title="The ASN.1 schema for Vortex messages">
             <figure anchor="app_asnOne_schema">
-                <artwork src="file://asn/MessageVortex-Schema.asn"/>
+                <artwork src="file:asn/MessageVortex-Schema.asn"/>
             </figure>
         </section>
         <!-- Change Log
