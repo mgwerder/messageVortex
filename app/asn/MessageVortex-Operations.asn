@@ -1,0 +1,91 @@
+MessageVortex-Operations DEFINITIONS EXPLICIT TAGS ::=
+BEGIN
+  EXPORTS PayloadOperation;
+  IMPORTS maxID
+                FROM MessageVortex-Schema
+          SymmetricKey, AsymmetricKey, MacAlgorithmSpec, CipherSpec
+                FROM MessageVortex-Ciphers
+          UsagePeriod, BlendingSpec
+                FROM MessageVortex-Helpers;
+
+  -- maximum omega of the Galois field used
+  maxGFSize                 INTEGER ::= 16
+  -- maximum size of a message chunk
+  maxChunkSize              INTEGER ::= 4294967295
+  -- minimum size of a message chunk (should be -maxChunkSize)
+  minChunkSize              INTEGER ::= -4294967295
+
+  PayloadOperation ::= CHOICE {
+    splitPayload    [150] SplitPayloadOperation,
+    mergePayload    [160] MergePayloadOperation,
+    encryptPayload  [300] EncryptPayloadOperation,
+    decryptPayload  [310] DecryptPayloadOperation,
+    addRedundancy   [400] AddRedundancyOperation,
+    removeRedundancy[410] RemoveRedundancyOperation
+  }
+
+  PercentSizeBlock ::= SEQUENCE {
+    fromPercent         INTEGER (0..100),
+    toPercent           INTEGER (0..100)
+  }
+
+  AbsoluteSizeBlock ::= SEQUENCE {
+    fromAbsolute        INTEGER (0..maxChunkSize),
+    toAbsolute          INTEGER (minChunkSize..maxChunkSize)
+    -- negative toAbsolute denominates end in absolute value
+    -- specified from the end of block
+  }
+
+  SizeBlock ::= SEQUENCE{
+    size CHOICE {
+      percent     [15001] PercentSizeBlock,
+      absolute    [15101] AbsoluteSizeBlock
+    }
+  }
+
+  AddRedundancyOperation ::= SEQUENCE {
+    inputId            [16000] INTEGER (0..maxID),
+    dataStripes        [16001] INTEGER (1..254),
+    redundancy         [16002] INTEGER (1..254),
+    keys               [16003] SEQUENCE (SIZE (2..512))
+                               OF SymmetricKey,
+    outputId           [16004] INTEGER (1..maxID),
+    gfSize             [16005] INTEGER (2..maxGFSize)
+  }
+
+  RemoveRedundancyOperation ::= SEQUENCE {
+    inputId            [16000] INTEGER (0..maxID),
+    dataStripes        [16001] INTEGER (1..254),
+    redundancy         [16002] INTEGER (1..254),
+    keys               [16003] SEQUENCE (SIZE (2..512))
+                               OF SymmetricKey,
+    outputId           [16004] INTEGER (1..maxID),
+    gfSize             [16005] INTEGER (2..maxGFSize)
+  }
+
+  SplitPayloadOperation ::= SEQUENCE {
+    originalId         INTEGER (0..maxID),
+    firstSize          SizeBlock,
+    newFirstId         INTEGER (1..maxID),
+    newSecondId        INTEGER (1..maxID)
+  }
+
+  MergePayloadOperation ::= SEQUENCE {
+    originalFirstId      INTEGER (0..maxID),
+    originalSecondId     INTEGER (0..maxID),
+    newId                INTEGER (1..maxID)
+  }
+
+  EncryptPayloadOperation ::= SEQUENCE {
+    originalId            INTEGER (0..maxID),
+    key                   SymmetricKey,
+    newId                 INTEGER (1..maxID)
+  }
+
+  DecryptPayloadOperation ::= SEQUENCE {
+    originalId            INTEGER (0..maxID),
+    key                   SymmetricKey,
+    newId                 INTEGER (1..maxID)
+  }
+
+END

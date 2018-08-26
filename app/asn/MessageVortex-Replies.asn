@@ -1,0 +1,60 @@
+MessageVortex-Replies DEFINITIONS EXPLICIT TAGS ::=
+BEGIN
+  EXPORTS StatusBlock, ReplyCurrentQuota, ReplyCapability,
+          ReplyNodes;
+  IMPORTS BlendingSpec, NodeSpec
+                FROM MessageVortex-Helpers
+          CipherSpec
+                FROM MessageVortex-Ciphers;
+
+  StatusBlock ::= SEQUENCE {
+    code            StatusCode
+  }
+
+  StatusCode ::= ENUMERATED {
+
+    -- System messages
+    ok                          (2000),
+    quotaStatus                 (2101),
+    puzzleRequired              (2201),
+
+    -- protocol usage failures
+    transferQuotaExceeded       (3001),
+    messageQuotaExceeded        (3002),
+    requestedQuotaOutOfBand     (3003),
+    identityUnknown             (3101),
+    messageChunkMissing         (3201),
+    messageLifeExpired          (3202),
+    puzzleUnknown               (3301),
+
+    -- capability errors
+    macAlgorithmUnknown         (3801),
+    symmetricAlgorithmUnknown   (3802),
+    asymmetricAlgorithmUnknown  (3803),
+    prngAlgorithmUnknown        (3804),
+    missingParameters           (3820),
+    badParameters               (3821),
+
+    -- Mayor host specific errors
+    hostError                   (5001)
+  }
+
+  ReplyNodes ::= SEQUENCE {
+      node   SEQUENCE (SIZE (1..5))
+             OF NodeSpec
+  }
+
+  ReplyCapability ::= SEQUENCE {
+    cipher            SEQUENCE (SIZE (2..256)) OF CipherSpec,
+    maxTransferQuota  INTEGER (0..4294967295),
+    maxMessageQuota   INTEGER (0..4294967295),
+    supportedBlendingIn SEQUENCE OF BlendingSpec
+  }
+
+  ReplyCurrentQuota ::= SEQUENCE {
+    messages INTEGER (0..4294967295),
+    size     INTEGER (0..4294967295)
+  }
+
+END
+

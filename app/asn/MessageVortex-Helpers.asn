@@ -1,0 +1,42 @@
+MessageVortex-Helpers DEFINITIONS EXPLICIT TAGS ::=
+BEGIN
+  EXPORTS UsagePeriod, BlendingSpec, NodeSpec;
+  IMPORTS AsymmetricKey, SymmetricKey
+                FROM MessageVortex-Ciphers;
+
+  -- the maximum number of parameters that might be embedded
+  maxNumberOfParameter      INTEGER ::= 127
+
+  UsagePeriod ::= SEQUENCE {
+    notBefore       [0]     GeneralizedTime OPTIONAL,
+    notAfter        [1]     GeneralizedTime OPTIONAL
+  }
+
+  -- contains a node spec of a routing point
+  -- At the moment either smtp:<email> or xmpp:<jabber>
+  BlendingSpec ::= SEQUENCE {
+    target            [1] NodeSpec,
+    blendingType      [2] IA5String,
+    parameter         [3] SEQUENCE ( SIZE (0..maxNumberOfParameter) )
+                          OF BlendingParameter
+  }
+
+  BlendingParameter ::= CHOICE {
+    offset          [1] INTEGER,
+    symmetricKey    [2] SymmetricKey,
+    asymmetricKey   [3] AsymmetricKey
+  }
+
+  NodeSpec ::= SEQUENCE {
+    transportProtocol [1] Protocol,
+    recipientAddress  [2] IA5String,
+    recipientKey      [3] AsymmetricKey OPTIONAL
+  }
+
+  Protocol ::= ENUMERATED {
+    smtp  (100),
+    xmmp  (110)
+  }
+
+END
+

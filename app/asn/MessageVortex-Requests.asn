@@ -1,0 +1,52 @@
+MessageVortex-Requests DEFINITIONS EXPLICIT TAGS ::=
+BEGIN
+  IMPORTS StatusBlock, ReplyNodes, ReplyCurrentQuota, ReplyCapability
+                FROM MessageVortex-Replies
+          RequirementBlock
+                FROM MessageVortex-Requirements
+          UsagePeriod
+                FROM MessageVortex-Helpers;
+
+  HeaderRequest ::= CHOICE {
+    identity      [0] HeaderRequestIdentity,
+    capabilities  [1] HeaderRequestCapability,
+    messageQuota  [2] HeaderRequestIncreaseMessageQuota,
+    transferQuota [3] HeaderRequestIncreaseTransferQuota,
+    quotaQuery    [4] HeaderRequestQuota,
+    nodeQuery     [5] HeaderRequestNodes
+  }
+
+  SpecialBlock ::= CHOICE {
+    capabilities  [1]  ReplyCapability,
+    requirement   [2]  SEQUENCE (SIZE (1..127))
+                       OF RequirementBlock,
+    quota         [4]  ReplyCurrentQuota,
+    nodes         [5]  ReplyNodes,
+    status        [99] StatusBlock
+  }
+
+  HeaderRequestIdentity ::= SEQUENCE {
+    period UsagePeriod
+  }
+
+  HeaderRequestQuota ::= SEQUENCE {
+  }
+
+  HeaderRequestNodes ::= SEQUENCE {
+    numberOfNodes   INTEGER
+  }
+
+  HeaderRequestIncreaseMessageQuota ::= SEQUENCE {
+    messages INTEGER (0..4294967295)
+  }
+
+  HeaderRequestIncreaseTransferQuota ::= SEQUENCE {
+    size     INTEGER (0..4294967295)
+  }
+
+  HeaderRequestCapability ::= SEQUENCE {
+    period UsagePeriod
+  }
+
+
+END

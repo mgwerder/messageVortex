@@ -1,0 +1,131 @@
+MessageVortex-Ciphers DEFINITIONS EXPLICIT TAGS ::=
+BEGIN
+  EXPORTS SymmetricKey, AsymmetricKey, MacAlgorithmSpec, CipherSpec;
+
+  CipherSpec ::= SEQUENCE {
+      asymmetric [16001] AsymmetricAlgorithmSpec OPTIONAL,
+      symmetric  [16002] SymmetricAlgorithmSpec OPTIONAL,
+      mac        [16003] MacAlgorithmSpec OPTIONAL,
+      cipherUsage[16004] CipherUsage
+  }
+
+  CipherUsage ::= ENUMERATED {
+    sign     (200),
+    encrypt  (210)
+  }
+
+  SymmetricAlgorithmSpec  ::=  SEQUENCE  {
+    algorithm               [16101]SymmetricAlgorithm,
+    -- if ommited: pkcs1
+    padding                 [16102]CipherPadding OPTIONAL,
+    -- if ommited: cbc
+    mode                    [16103]CipherMode OPTIONAL,
+    parameter               [16104]AlgorithmParameters OPTIONAL
+  }
+
+  AsymmetricAlgorithmSpec  ::=  SEQUENCE  {
+    algorithm               AsymmetricAlgorithm,
+    parameter               AlgorithmParameters OPTIONAL
+  }
+
+  MacAlgorithmSpec  ::=  SEQUENCE  {
+    algorithm               MacAlgorithm,
+    parameter               AlgorithmParameters
+  }
+
+  PRNGAlgorithmSpec ::= SEQUENCE {
+    type                    PRNGType,
+    seed                    OCTET STRING
+  }
+
+  PRNGType ::= ENUMERATED {
+    xsadd           (1000),
+    blumMicali      (1001)
+  }
+
+  SymmetricAlgorithm ::= ENUMERATED {
+    aes128          (1000),  -- required
+    aes192          (1001),  -- optional support
+    aes256          (1002),  -- required
+    camellia128     (1100),  -- required
+    camellia192     (1101),  -- optional support
+    camellia256     (1102),  -- required
+    twofish128      (1200),  -- optional support
+    twofish192      (1201),  -- optional support
+    twofish256      (1202)   -- optional support
+  }
+
+  CipherMode ::= ENUMERATED {
+    -- ECB is a really bad choice. Do not use unless really
+    -- necessary
+    ecb             (10000),
+    cbc             (10001),
+    eax             (10002),
+    ctr             (10003),
+    ccm             (10004),
+    gcm             (10005),
+    ocb             (10006),
+    ofb             (10007),
+    none            (10100)
+  }
+
+  CipherPadding ::= ENUMERATED {
+    none            (1000),
+    pkcs1           (1001),
+    pkcs7           (1002)
+  }
+
+  AsymmetricAlgorithm ::= ENUMERATED {
+    rsa             (2000),
+    dsa             (2100),
+    ec              (2200),
+    ntru            (2300)
+  }
+
+  MacAlgorithm ::= ENUMERATED {
+    sha256          (3000),
+    sha384          (3001),
+    sha512          (3002),
+    ripemd160       (3100),
+    ripemd256       (3101),
+    ripemd320       (3102)
+  }
+
+  ECCurveType ::= ENUMERATED{
+    secp384r1       (2500),
+    sect409k1       (2501),
+    secp521r1       (2502)
+  }
+
+  AlgorithmParameters ::= SEQUENCE {
+    keySize              [10000] INTEGER (0..65535) OPTIONAL,
+    curveType            [10001] ECCurveType   OPTIONAL,
+    initialisationVector [10002] OCTET STRING  OPTIONAL,
+    nonce                [10003] OCTET STRING  OPTIONAL,
+    mode                 [10004] CipherMode    OPTIONAL,
+    padding              [10005] CipherPadding OPTIONAL,
+    n                    [10010] INTEGER       OPTIONAL,
+    p                    [10011] INTEGER       OPTIONAL,
+    q                    [10012] INTEGER       OPTIONAL,
+    k                    [10013] INTEGER       OPTIONAL,
+    t                    [10014] INTEGER       OPTIONAL
+  }
+
+  -- Symmetric key
+  SymmetricKey ::= SEQUENCE {
+    keyType SymmetricAlgorithm,
+    parameter AlgorithmParameters,
+    key     OCTET STRING (SIZE(16..512))
+  }
+
+  -- Asymmetric Key
+  AsymmetricKey ::= SEQUENCE {
+    keyType       AsymmetricAlgorithm,
+	-- private key encoded as PKCS#8/PrivateKeyInfo
+    publicKey     [2] OCTET STRING,
+	-- private key encoded as X.509/SubjectPublicKeyInfo
+    privateKey    [3] OCTET STRING OPTIONAL
+  }
+
+END
+
