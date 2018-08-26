@@ -101,11 +101,20 @@
                     </t>
                     <section anchor="entities_node_spec_smtp" title="NodeSpec for SMTP nodes">
                         <t>
-                            Every adressable node is adressed in an unified format stored in a nodeSpec block. This RFC specifies transport layers for XMPP and SMTP. More transport layers might be introduced in extensions to this RFC.
+                            Typically a node specification is specified with the ASN.1 block NodeSpec.
+                            To allow addressing of a vortex node with an ordinary clientan alternative representation SHOULD be supported as defined below as smtpAlternateSpec (specification noted in ABNF as specified in <xref target="RFC4234"/>).
+                            <figure>
+                                <artwork type="abnf">
+                                    email             = &lt; local part of email&gt; "@" &lt;domain part of email&gt;
+                                    keySpec           = &lt; BASE64 encoded AsymmetriKey representation in DER representation &gt;
+                                    smtpAlternateSpec = localPart ":" keySpec "@" domain
+                                </artwork>
+                            </figure>
                         </t>
 
+
                     </section>
-                    <section anchor="entities_node_spec_spec" title="Node Spec">
+                    <section anchor="entities_node_spec_spec" title="NodeSpec for XMPP nodes">
                         <t>
                             Every adressable node is adressed in an unified format stored in a nodeSpec block. This RFC specifies transport layers for XMPP and SMTP. More transport layers might be introduced in extensions to this RFC.
                         </t>
@@ -899,6 +908,9 @@
             <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.7253.xml"?>
             <!-- CBC -->
             <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.1423.xml"?>
+            <!-- ABNF -->
+            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.4234.xml"?>
+
 
             <reference anchor="ISO-10118-3">
                 <front>
