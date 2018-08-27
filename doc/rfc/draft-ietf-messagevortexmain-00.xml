@@ -104,7 +104,7 @@
                     </t>
                     <section anchor="entities_node_spec_smtp" title="NodeSpec for SMTP nodes">
                         <t>
-                            Typically a node specification is specified with the ASN.1 block NodeSpec (see <xref target="asn_one_helpers"/>).
+                            Typically a node specification is specified with the ASN.1 block NodeSpec (see <xref target="asnOne_helpers"/>).
                             To allow addressing of a vortex node with an ordinary client an alternative representation SHOULD be supported as defined below as smtpAlternateSpec (specification noted in ABNF as specified in <xref target="RFC4234"/>).
                             <figure>
                                 <artwork type="abnf"><![CDATA[
@@ -352,7 +352,7 @@ jidAlternateSpec = localPart ":" keySpec "@" domain [ "/" resourcepart
             </section>
             <section title="Message Prefix Block (MPREFIX)">
                 <t>
-                    The PrefixBlock contains a symmetrical key as defined in <xref target="app_asnOne_schema"/> and is encrypted using the host key of the receiving peer host. The symmetric key used MUST be one out of the set advertised by a CapabilitiesReplyBlock (see <xref target="routing_header_req_cap"/>). A node MAY choose any parameters omitted in the CapabilitiesReplyBlock freely (unless stated otherwise in <xref target="routing_header_req_cap"/>). A node SHOULD avoid sending unencrypted PrefixBlocks. A prefix block MUST contain the same forward-secret as the other prefix, the routing block, and the header block. A host MAY reply to a message with an unencrypted message block. Any reply to a message SHOULD be encrypted.
+                    The PrefixBlock contains a symmetrical key as defined in <xref target="asnOne_schema"/> and is encrypted using the host key of the receiving peer host. The symmetric key used MUST be one out of the set advertised by a CapabilitiesReplyBlock (see <xref target="routing_header_req_cap"/>). A node MAY choose any parameters omitted in the CapabilitiesReplyBlock freely (unless stated otherwise in <xref target="routing_header_req_cap"/>). A node SHOULD avoid sending unencrypted PrefixBlocks. A prefix block MUST contain the same forward-secret as the other prefix, the routing block, and the header block. A host MAY reply to a message with an unencrypted message block. Any reply to a message SHOULD be encrypted.
                 </t>
                 <t>
                     The sender MUST choose a key which may be encrypted with the host key using the padding advertised by the CapabilitiesReplyBlock.
@@ -1099,56 +1099,56 @@ jidAlternateSpec = localPart ":" keySpec "@" domain [ "/" resourcepart
             <t>
                 The following sections contain the ASN.1 modules specifying the MessageVortex Protocol
             </t>
-            <section  anchor="asn_one_schema" title="The main VortexMessageBlocks">
+            <section  anchor="asnOne_schema" title="The main VortexMessageBlocks">
                 <t>
                     <figure>
                         <artwork src="asn/MessageVortex-Schema.asn"/>
                     </figure>
                 </t>
             </section>
-            <section  anchor="asn_one_operations" title="The VortexMessage Operation Structures">
+            <section  anchor="asnOne_operations" title="The VortexMessage Operation Structures">
                 <t>
                     <figure>
                         <artwork src="asn/MessageVortex-Operations.asn"/>
                     </figure>
                 </t>
             </section>
-            <section  anchor="asn_one_Ciphers" title="The VortexMessage Ciphers Structures">
+            <section  anchor="asnOne_Ciphers" title="The VortexMessage Ciphers Structures">
                 <t>
                     <figure>
                         <artwork src="asn/MessageVortex-Ciphers.asn"/>
                     </figure>
                 </t>
             </section>
-            <section  anchor="asn_one_requests" title="The VortexMessage Request Structures">
+            <section  anchor="asnOne_requests" title="The VortexMessage Request Structures">
                 <t>
                     <figure>
                         <artwork src="asn/MessageVortex-Requests.asn"/>
                     </figure>
                 </t>
             </section>
-            <section  anchor="asn_one_replies" title="The VortexMessage Replies Structures">
+            <section  anchor="asnOne_replies" title="The VortexMessage Replies Structures">
                 <t>
                     <figure>
                         <artwork src="asn/MessageVortex-Replies.asn"/>
                     </figure>
                 </t>
             </section>
-            <section  anchor="asn_one_requirements" title="The VortexMessage Requirements Structures">
+            <section  anchor="asnOne_requirements" title="The VortexMessage Requirements Structures">
                 <t>
                     <figure>
                         <artwork src="asn/MessageVortex-Requirements.asn"/>
                     </figure>
                 </t>
             </section>
-            <section  anchor="asn_one_helpers" title="The VortexMessage Helpers Structures">
+            <section  anchor="asnOne_helpers" title="The VortexMessage Helpers Structures">
                 <t>
                     <figure>
                         <artwork src="asn/MessageVortex-Helpers.asn"/>
                     </figure>
                 </t>
             </section>
-            <section  anchor="asn_one_additional" title="The VortexMessage Additional Structures">
+            <section  anchor="asnOne_additional" title="The VortexMessage Additional Structures">
                 <t>
                     <figure>
                         <artwork src="asn/MessageVortex-NonProtocolBlocks.asn"/>
