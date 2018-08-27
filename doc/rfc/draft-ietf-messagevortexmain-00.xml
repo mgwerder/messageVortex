@@ -1144,7 +1144,7 @@ jidAlternateSpec = localPart ":" keySpec "@" domain [ "/" resourcepart
             <section  anchor="asnOne_helpers" title="The VortexMessage Helpers Structures">
                 <t>
                     <figure>
-                        <artwork src="asn/MessageVortex-Helpers.asn"/>
+                        <artwork src="asn/MessageVortex-Helpers.asn"/> 
                     </figure>
                 </t>
             </section>
