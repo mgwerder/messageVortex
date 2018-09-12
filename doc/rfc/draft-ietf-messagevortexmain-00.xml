@@ -13,6 +13,8 @@
 <!-- FIXME add reference to ntru (https://standards.ieee.org/findstds/standard/1363.1-2008.html) -->
 
 <rfc category="exp" docName="draft-ietf-messagevortexmain-00" ipr="trust200902" xml:lang="en">
+    <!-- FIXME add message content outline (mime message with selected header lines) -->
+    <!-- FIXME explain routing and ephemeral entities better -->
     <front>
 
         <title>MessageVortex Protocol</title>
@@ -176,16 +178,6 @@ jidAlternateSpec = localPart ":" keySpec "@" domain [ "/" resourcepart
                     We use the term 'Vortex message' for a single transmission between two routing layers. A 'blended Vortex message' describes a Vortex message which has been adapted to the transport layer by the blending layer (see <xref target="layer_overview"/>).
                 </t>
                 <t>
-                    A Vortex message may be anonymous. There are however different degrees of anonymity.
-
-                    <list style="symbols">
-                        <t>If the sender of a message is not known to anyone else except the sender, we refer to that as 'sender anonymity.'</t>
-                        <t>If the receiver of a message is not known to anyone else except the receiver, we refer to that as 'receiver anonymity.'</t>
-                        <t>If an attacker is unable to determine content, sender, and receiver, we refer to that as third-party anonymity.</t>
-                        <t>If a sender or a receiver may be determined as "one of a set of &lt;k&gt; entities we refer to it as k-anonymity (for more about this see <xref target="KAnon"/>).</t>
-                    </list>
-                </t>
-                <t>
                     A full vortex message contains the following items:
                     <list style="symbols">
                         <t>The peer key (encrypted with the host key of the node; stored in a PrefixBlock) protecting the inner Vortex message (innerMessageBlock).</t>
@@ -194,6 +186,18 @@ jidAlternateSpec = localPart ":" keySpec "@" domain [ "/" resourcepart
                         <t>The identity block (protected by the sender key) containing information about the ephemeral identity of the sender, replay protection information, header requests (optional) and a requirement reply (optional).</t>
                         <t>The routing block (protected by the sender key) containing information on how subsequent messages are processed, assembled and blended.</t>
                         <t>The payload block (protected by the peer key) contains payload chunks for processing.</t>
+                    </list>
+                </t>
+            </section>
+            <section anchor="entities_message" title="Mesage">
+                <t>
+                    A Message is the content to be transmitted from one sender to the recipient. The Sender uses a routing block to achieve this which is either built by him or provided by the receiver. A Message may be anonymous. There are however different degrees of anonymity:
+
+                    <list style="symbols">
+                        <t>If the sender of a message is not known to anyone else except the sender, we refer to that as 'sender anonymity.'</t>
+                        <t>If the receiver of a message is not known to anyone else except the receiver, we refer to that as 'receiver anonymity.'</t>
+                        <t>If an attacker is unable to determine content, original sender, and final receiver, we refer to that as third-party anonymity.</t>
+                        <t>If a sender or a receiver may be determined as "one of a set of &lt;k&gt; entities we refer to it as k-anonymity (for more about this see <xref target="KAnon"/>).</t>
                     </list>
                 </t>
             </section>
@@ -412,14 +416,14 @@ jidAlternateSpec = localPart ":" keySpec "@" domain [ "/" resourcepart
                     </section>
                 </section>
                 <section title="Payload Block">
-                    <t>Each InnerMessageBlock SHOULD contain at least four PayloadChunks.</t>
+                    <t>Each InnerMessageBlock containing routing information SHOULD contain at least four PayloadChunks.</t>
                 </section>
             </section>
         </section>
 
         <section title="General notes">
             <t>
-                The MessageVortex protocol is a modular protocol. It allows using different encryption algorithms. For operation, a Vortex node SHOULD always support at least two completely different (in terms of relying on two different mathmatical problems) types of algorithms, paddings, or modes.
+                The MessageVortex protocol is a modular protocol. It allows using different encryption algorithms. For operation, a Vortex node SHOULD always support at least two completely different (in terms of relying on two different mathematical problems) types of algorithms, paddings, or modes.
             </t>
             <section title="Supported Symmetric Ciphers">
                 <t>
@@ -839,9 +843,9 @@ jidAlternateSpec = localPart ":" keySpec "@" domain [ "/" resourcepart
             </section>
         </section>
 
-        <!--<section anchor="Acknowledgments" title="Acknowledgments">
-            <t>FIXME</t>
-        </section>-->
+        <section anchor="Acknowledgments" title="Acknowledgments">
+            <t>Thanks go to my fammily which did support me with patience and countless hoursand to Mark Zeman for his feedback and quizzive approach, challanging my thoughts and peace.</t>
+        </section>
 
         <section anchor="IANA" title="IANA Considerations">
             <t>This memo includes no request to IANA.</t>
@@ -1165,6 +1169,7 @@ jidAlternateSpec = localPart ":" keySpec "@" domain [ "/" resourcepart
         <!-- Change Log
 
             v010 2018-08-19  GwM   Initial version
+            v011 2018-09-12  GwM   Added some Feedback from Marc
 
         -->
     </back>
