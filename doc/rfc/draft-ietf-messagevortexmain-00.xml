@@ -10,8 +10,6 @@
 <?rfc compact="yes" ?>
 <?rfc subcompact="no" ?>
 
-<!-- FIXME add reference to ntru (https://standards.ieee.org/findstds/standard/1363.1-2008.html) -->
-
 <rfc category="exp" docName="draft-ietf-messagevortexmain-00" ipr="trust200902" xml:lang="en">
     <!-- FIXME add message content outline (mime message with selected header lines) -->
     <!-- FIXME explain routing and ephemeral entities better -->
@@ -60,7 +58,7 @@
                 Anonymization is hard to achieve. Most of the attempts in the past rely on either trust in a dedicated infrastructure or a specialized networking protocol.
             </t>
             <t>
-                Instead of defining its own transport layer, MessageVortex piggybacks on other transport protocols. Messages are being transported alongside ordinary messages of that transport protocol. A blending layer picks the messages up, applies local operations to it and resends the new chunks to the next recipients.
+                Instead of defining a transport layer, MessageVortex piggybacks on other transport protocols. Messages are being transported alongside ordinary messages of that transport protocol. A blending layer picks the messages up, applies local operations to it and resends the new chunks to the next recipients.
             </t>
             <t>
                 A processing node learns as little as possible from the message due to the nature of the operations processed. The onionized structure of the protocol makes it impossible to follow the trace of a message without having control over the processing node itself.
@@ -106,7 +104,7 @@
                 </t>
                 <section anchor="entities_node_spec" title="NodeSpec">
                     <t>
-                        Every adressable node is adressed in an unified format stored in a nodeSpec block. This RFC specifies transport layers for XMPP and SMTP. More transport layers might be introduced in extensions to this RFC.
+                        Every addressable node is addressed in a unified format stored in a nodeSpec block. This RFC specifies transport layers for XMPP and SMTP. Adding transport layers requires to write an extension to this RFC.
                     </t>
                     <section anchor="entities_node_spec_smtp" title="NodeSpec for SMTP nodes">
                         <t>
@@ -138,14 +136,14 @@ jidAlternateSpec = localPart ":" keySpec "@" domain [ "/" resourcepart
                             </figure>
                         </t>
                         <t>
-                            Please note that the ":" character (3Ah) is explicitely excluded in <xref target="RFC7622"/> in the localpart.
+                            Please note that the ":" character (3Ah) is explicitly excluded in <xref target="RFC7622"/> in the localpart.
                         </t>
                     </section>
                 </section>
             </section>
             <section anchor="entities_peer" title="Peer Partner">
                 <t>
-                    We use the term 'peer partner' as two or more message sending or receiving entities. One of these peer partners sends a message and all other peer partner receive one or more messages. Peer partners are message specific. Every peer partner always connects directly to a node.
+                    We use the term 'peer partner' as two or more message sending or receiving entities. One of these peer partners sends a message, and all other peer partners receive one or more messages. Peer partners are message specific. Every peer partner always connects directly to a node.
                 </t>
             </section>
             <section anchor="entities_keys" title="Encryption keys">
@@ -195,7 +193,7 @@ jidAlternateSpec = localPart ":" keySpec "@" domain [ "/" resourcepart
             </section>
             <section anchor="entities_message" title="Message">
                 <t>
-                    A Message is the content to be transmitted from one sender to the recipient. The Sender uses a routing block to achieve this which is either built by him or provided by the receiver. A Message may be anonymous. There are however different degrees of anonymity:
+                    A Message is a content to be transmitted from one sender to the recipient. The Sender uses a routing block to achieve this which is either built by him or provided by the receiver. A Message may be anonymous. There are however different degrees of anonymity:
 
                     <list style="symbols">
                         <t>If the sender of a message is not known to anyone else except the sender, we refer to that as 'sender anonymity.'</t>
@@ -220,7 +218,7 @@ jidAlternateSpec = localPart ":" keySpec "@" domain [ "/" resourcepart
                     </list>
                 </t>
                 <t>
-                    MAC do not need a complete structure containing specs and value. Instead only a  MacAlgorithmSpec is available. The following sections outline the constraints when specifying parameters for these structures. A node MUST NOT specify any parameter more than once.
+                    MAC does not need a complete structure containing specs and value. Instead only a  MacAlgorithmSpec is available. The following sections outline the constraints when specifying parameters for these structures. A node MUST NOT specify any parameter more than once.
                 </t>
                 <t>
                     If a crypto mode is specified requiring an IV, a node MUST provide the IV when specifying the key.
@@ -374,7 +372,7 @@ jidAlternateSpec = localPart ":" keySpec "@" domain [ "/" resourcepart
                     A node MUST always encrypt (with the symmetric key of the PrefixBlock) an InnerMessageBlock. The encryption hides the inner structure of the message. The InnerMessageBlock SHOULD always accommodate four or more payload chunks.
                 </t>
                 <t>
-                    An InnerMessageBlock always starts with a padding block. This padding guarantees that when using the same routing block multiple times its binary structure is not repeated throughout the messages with the same routing block. The padding MUST be the first 16 bytes of the first four non-empty payload chunks (PayloadChunks). If a payload chunk is shorter than 16 bytes, the content of the padding SHOULD be filled with zero-valued bytes (00h) at very end up to the required number of bytes. An inner message block (InnerMessageBlock) SHOULD contain at least four payload chunks sized 16 bytes or bigger. If there are less than four payload chunks, then the padding MUST contain a random sequence of 16 bytes for the missing payload chunks. A node MUST NOT reuse random sequences.
+                    An InnerMessageBlock always starts with a padding block. This padding guarantees that when using the same routing block multiple times, its binary structure is not repeated throughout the messages with the same routing block. The padding MUST be the first 16 bytes of the first four non-empty payload chunks (PayloadChunks). If a payload chunk is shorter than 16 bytes, the content of the padding SHOULD be filled with zero-valued bytes (00h) at very end up to the required number of bytes. An inner message block (InnerMessageBlock) SHOULD contain at least four payload chunks sized 16 bytes or bigger. If there are less than four payload chunks, then the padding MUST contain a random sequence of 16 bytes for the missing payload chunks. A node MUST NOT reuse random sequences.
                 </t>
                 <t>
                     An InnerMessageBlock contains so-called forwardSecrets. This random number MUST be the same in the HeaderBlock, the RoutingBlock, and the PrefixBlock. Nodes receiving Messages containing non-matching forwardSecrets MUST discard these messages, and SHOULD NOT send an error message.
@@ -430,7 +428,7 @@ jidAlternateSpec = localPart ":" keySpec "@" domain [ "/" resourcepart
 
         <section title="General notes">
             <t>
-                The MessageVortex protocol is a modular protocol. It allows using different encryption algorithms. For operation, a Vortex node SHOULD always support at least two completely different (in terms of relying on two different mathematical problems) types of algorithms, paddings, or modes.
+                The MessageVortex protocol is a modular protocol. It allows using different encryption algorithms. For operation, a Vortex node SHOULD always support at least two completely different (i.e. relying on two different mathematical problems) types of algorithms, paddings, or modes.
             </t>
             <section title="Supported Symmetric Ciphers">
                 <t>
@@ -547,7 +545,7 @@ jidAlternateSpec = localPart ":" keySpec "@" domain [ "/" resourcepart
                     A vortex message is present if a block containing the peer key at the known offset of any MIME part decodes correctly.
                 </t>
                 <t>
-                    To work correctly, SMTP blending SHOULD be supported for sending and receiving. For sending SMTP as specified in <xref target="RFC5321"/> must be used. For obtaining any messages protocols such as POP3 (as specified in <xref target="RFC1939"/> and <xref target="RFC2595"/>) or IMAP (as specified in <xref target="RFC3501"/>) MUST always be secured by TLS layers. Any SMTP connection MUST employ a TLS encryption when passing any credentials.
+                    A node SHOULD support SMTP blending for sending and receiving. For sending SMTP as specified in <xref target="RFC5321"/> must be used. TLS layers MUST always be applied when obtaining messages using POP3 (as specified in <xref target="RFC1939"/> and <xref target="RFC2595"/>) or IMAP (as specified in <xref target="RFC3501"/>). Any SMTP connection MUST employ a TLS encryption when passing any credentials.
                 </t>
             </section>
             <section anchor="blending_xmpp" title="Blending into an XMPP layer">
@@ -656,7 +654,7 @@ jidAlternateSpec = localPart ":" keySpec "@" domain [ "/" resourcepart
                         A node may request to increase the current message quota. The increase is requested by sending a HeaderRequestIncreaseMessageQuota request to the routing node. The value specified within the node is the new quota. HeaderRequestIncreaseMessageQuota requests MUST include a reply block. A node SHOULD NOT use a previously sent MURB to reply.
                     </t>
                     <t>
-                        If the requested quota is higher than the current quota, then the node SHOULD send a "no error" reply. If the requested qouta is not accepted, the node SHOULD send a requestedQuotaOutOfBand reply.
+                        If the requested quota is higher than the current quota, then the node SHOULD send a "no error" reply. If the requested quota is not accepted, the node SHOULD send a requestedQuotaOutOfBand reply.
                     </t>
                     <t>
                         A node accepting the request MUST send a RequirementBlock or a "no error block".
@@ -711,7 +709,7 @@ jidAlternateSpec = localPart ":" keySpec "@" domain [ "/" resourcepart
                 </section>
                 <section anchor="routing_special_requirement" title="Requirement Block">
                     <t>
-                        If a node is receiving a requirements block, it MUST assume that the request block has been accepted, has not been processed yet, and will be processed if the contained requirement is met. A node MUST process a request as soon as the requirement is fulfilled.
+                        If a node is receiving a requirements block, it MUST assume that the request block has been accepted, has not been processed yet, and will be processed if the contained requirement is met. A node MUST process a request as soon as the requirement is fulfilled. A node MUST resend the request as soon as the requirement is met.
                     </t>
                     <t>
                         A node MAY reject a request, accept a request without a requirement, accept a request upon payment (RequirementPaymentRequired), or accept a request upon solving a proof of work puzzle (RequirementPuzzleRequired).
@@ -721,12 +719,12 @@ jidAlternateSpec = localPart ":" keySpec "@" domain [ "/" resourcepart
                             If a node requests a puzzle, it MUST send a RequirementPuzzleRequired block. The puzzle requirement is solved, if the node receiving the puzzle is replying with a header block containing the puzzle block and the hash of the encoded block starts with the bit sequence mentioned in the puzzle within the period specified in the field 'valid'.
                         </t>
                         <t>
-                            To solve a puzzle posed by a node a Vortex Message needs to be sent to the requesting node. This Vortex Message MUST contain a header block which includes the puzzle block and MUST have a MAC fingerprint starting with the bit sequence as specified in challenge. The MAC is calculated from the DER encoded Header after decryption with the algorithm specified by the node. This may be achieved by adding a proofOfWork field to the HeaderBlock.
+                            To solve a puzzle posed by a node a Vortex Message needs to be sent to the requesting node. This Vortex Message MUST contain a header block which includes the puzzle block and MUST have a MAC fingerprint starting with the bit sequence as specified in the challenge. A node calculates the MAC from the unencrypted DER encoded HeaderBlock with the algorithm specified by the node. To meet this requirement, a node adds a proofOfWork field to the HeaderBlock.
                         </t>
                     </section>
                     <section anchor="routing_spezial_requirement_payment" title="Payment Requirement">
                         <t>
-                            If a node requests a payment, it MUST send a RequirementPaymentRequired block. As soon as the requested fee is paid and confirmed, the requesting node MUST send a "No Error" status message. The usage period 'valid' describes the period in which a payment may be carried out. A node MUST accept a payment if carried out within the 'valid' period but confirmed later. All unsolicited payments SHOULD be returned to the paying address.
+                            If a node requests a payment, it MUST send a RequirementPaymentRequired block. As soon as the requested fee is paid and confirmed, the requesting node MUST send a "No Error" status message. The usage period 'valid' describes the period in which the payment may be carried out. A node MUST accept the payment if carried out within the 'valid' period but confirmed later. A node SHOULD return allunsolicited payments to the sending address.
                         </t>
                     </section>
                 </section>
@@ -774,7 +772,7 @@ jidAlternateSpec = localPart ":" keySpec "@" domain [ "/" resourcepart
                             <t>Apply a Vandermonde matrix with the given sizes.</t>
                             <t>Encrypt each resulting block with a separate key.</t>
                         </list>
-                        The following sections describe the order of the operations in an addRedundancy operation. For a removeRedundancy operation just invert the functions and order.
+                        The following sections describe the order of the operations in an addRedundancy operation. For a removeRedundancy operation invert the functions and order.
                     </t>
                     <section anchor="routing_operations_redundancy_padding" title="Padding Operation">
                         <t>
@@ -832,7 +830,7 @@ jidAlternateSpec = localPart ":" keySpec "@" domain [ "/" resourcepart
                 </section>
                 <section anchor="accounting_timed_routing" title="Time-Based Routing Initiation">
                     <t>
-                        The accounting layer MAY keep a list of any time a routing block is activated. For improved privacy, the accounting layer should use a slotted model where, whenever possible, multiple routing blocks are handled in the same period of time and the requests to the blending layers are mixed between the transactions.
+                        The accounting layer MAY keep a list of any time a routing block is activated. For improved privacy, the accounting layer should use a slotted model where, whenever possible, multiple routing blocks are handled in the same period of time, and the requests to the blending layers are mixed between the transactions.
                     </t>
                 </section>
                 <section anchor="accounting_timed_quota" title="Routing Based Quota Updates">
@@ -847,14 +845,14 @@ jidAlternateSpec = localPart ":" keySpec "@" domain [ "/" resourcepart
                 </section>
                 <section anchor="accounting_create_identity" title="Ephemeral Identity Creation">
                     <t>
-                        Any packet may request creation of an ephemeral identity. A node SHOULD NOT accept such a request without a costly requirement. The request includes a lifetime of the ephemeral identity. The costs for creating the ephemeral identity SHOULD raise if a longer lifetime is requested.
+                        Any packet may request the creation of an ephemeral identity. A node SHOULD NOT accept such a request without a costly requirement. The request includes a lifetime of the ephemeral identity. The costs for creating the ephemeral identity SHOULD raise if a longer lifetime is requested.
                     </t>
                 </section>
             </section>
         </section>
 
         <section anchor="Acknowledgments" title="Acknowledgments">
-            <t>Thanks go to my fammily which did support me with patience and countless hoursand to Mark Zeman for his feedback and quizzive approach, challanging my thoughts and peace.</t>
+            <t>Thanks go to my family which did support me with patience and countless hours and to Mark Zeman for his feedback challenging my thoughts and peace.</t>
         </section>
 
         <section anchor="IANA" title="IANA Considerations">
@@ -917,7 +915,7 @@ jidAlternateSpec = localPart ":" keySpec "@" domain [ "/" resourcepart
                 A peer node may try to exhaust a routers quota by sending the same block multiple times. A block builder should take care that a block may not be resent in the interval where the previous blocks for the transaction are still valid. This guarantees that replayed blocks will stop at the next peer node. This provides better protection against replay based attacks.
             </t>
             <t>
-                Receiver anonymity is in danger if handling of message header and content is not done with care. An attacker might send a bugged message (e.g., with a DKIM or DMARC header) to deanonymize a recipient. Great care has to be taken when handling any other than local references when opening a message.
+                Receiver anonymity is in danger if the handling of message header and content is not done with care. An attacker might send a bugged message (e.g., with a DKIM or DMARC header) to deanonymize a recipient. Great care has to be taken when handling any other than local references when processing, verifying, or rendering a message.
             </t>
         </section>
     </middle>
