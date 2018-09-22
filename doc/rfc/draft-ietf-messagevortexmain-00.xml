@@ -80,11 +80,15 @@
             </t>
 
             <section title="Requirements Language">
-                <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in <xref target="RFC2119"/>.</t>
+                <t>
+                    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in <xref target="RFC2119"/>.
+                </t>
             </section>
 
             <section title="Protocol Specification">
-                <t><xref target="asn_one"/> specifies all relevant parts of the protocol in ASN.1 (see <xref target="CCITT.X680.2002"/> and <xref target="CCITT.X208.1988"/>). The blocks are, if not otherwise mentioned, DER encoded.</t>
+                <t>
+                    <xref target="asn_one"/> specifies all relevant parts of the protocol in ASN.1 (see <xref target="CCITT.X680.2002"/> and <xref target="CCITT.X208.1988"/>). The blocks are, if not otherwise mentioned, DER encoded.
+                </t>
             </section>
 
             <section title="Number Specification">
@@ -189,7 +193,7 @@ jidAlternateSpec = localPart ":" keySpec "@" domain [ "/" resourcepart
                     </list>
                 </t>
             </section>
-            <section anchor="entities_message" title="Mesage">
+            <section anchor="entities_message" title="Message">
                 <t>
                     A Message is the content to be transmitted from one sender to the recipient. The Sender uses a routing block to achieve this which is either built by him or provided by the receiver. A Message may be anonymous. There are however different degrees of anonymity:
 
@@ -199,6 +203,9 @@ jidAlternateSpec = localPart ":" keySpec "@" domain [ "/" resourcepart
                         <t>If an attacker is unable to determine content, original sender, and final receiver, we refer to that as third-party anonymity.</t>
                         <t>If a sender or a receiver may be determined as "one of a set of &lt;k&gt; entities we refer to it as k-anonymity (for more about this see <xref target="KAnon"/>).</t>
                     </list>
+                </t>
+                <t>
+                    A message is always MIME encoded as specified in <xref target="RFC2045"/>.
                 </t>
             </section>
             <section anchor="keys" title="Key and MAC specifications and usages">
@@ -226,7 +233,7 @@ jidAlternateSpec = localPart ":" keySpec "@" domain [ "/" resourcepart
                         RSA and EC keys must contain a keysize parameter. All asymmetric keys SHOULD contain a padding parameter. A node SHOULD assume PKCS#1 if no padding is specified.
                     </t>
                     <t>
-                        NTRU spezification MUST provide parameters "n", "p", and "q". McEliece specification MUST contain parameters "n", "k", and "t".
+                        NTRU specification MUST provide parameters "n", "p", and "q". McEliece specification MUST contain parameters "n", "k", and "t".
                     </t>
                 </section>
                 <section anchor="symmetricKey" title="Symmetric Keys">
@@ -609,7 +616,7 @@ jidAlternateSpec = localPart ":" keySpec "@" domain [ "/" resourcepart
                             <t>All expired identities.</t>
                             <t>All expired replay protections.</t>
                         </list>
-                        Note that maxProcessTime reflects the number of seconds since the arrival of the last octet of the message at the transport layer facility. A node SHOULD NOT take additional processing time (e.g., for anti-UBE or anti-virus) into account. 
+                        Note that maxProcessTime reflects the number of seconds since the arrival of the last octet of the message at the transport layer facility. A node SHOULD NOT take additional processing time (e.g., for anti-UBE or anti-virus) into account.
                     </t>
                     <t>
                         The accounting layer triggers routing events. The trigger occurs at least minProcessTime after the last octet of the message arrived at the routing layer. A node SHOULD choose the latest possible moment in such a way that the peer node receives the last octet of the assembled message before maxProcessTime is reached. The calculation of the last point in time where a message may be set SHOULD always assume that the target node is working. A sending node SHOULD choose the time within these bounds randomly. An accounting layer MAY trigger multiple routing combos in bulk to further obfuscate identity of a single transport message.
@@ -713,6 +720,9 @@ jidAlternateSpec = localPart ":" keySpec "@" domain [ "/" resourcepart
                         <t>
                             If a node requests a puzzle, it MUST send a RequirementPuzzleRequired block. The puzzle requirement is solved, if the node receiving the puzzle is replying with a header block containing the puzzle block and the hash of the encoded block starts with the bit sequence mentioned in the puzzle within the period specified in the field 'valid'.
                         </t>
+                        <t>
+                            To solve a puzzle posed by a node a Vortex Message needs to be sent to the requesting node. This Vortex Message MUST contain a header block which includes the puzzle block and MUST have a MAC fingerprint starting with the bit sequence as specified in challenge. The MAC is calculated from the DER encoded Header after decryption with the algorithm specified by the node. This may be achieved by adding a proofOfWork field to the HeaderBlock.
+                        </t>
                     </section>
                     <section anchor="routing_spezial_requirement_payment" title="Payment Requirement">
                         <t>
@@ -743,7 +753,7 @@ jidAlternateSpec = localPart ":" keySpec "@" domain [ "/" resourcepart
                             <t>The operation must be applied at an absolute (measuring in bytes) or relative (measured as a float value in the range 0&gt;value&gt;100) position.</t>
                             <t>All calculations must be done according to <xref target="IEEE754">IEEE 754</xref> and in 64 Bit precision.</t>
                             <t>If a relative value is a non-integer result, a floor operation (cutting off all non-integer parts) determines the number of bytes.</t>
-                            <t>If an absolute value is negative, the size reflected applies to the number of bytes counted from the end of the message chunk.</t> 
+                            <t>If an absolute value is negative, the size reflected applies to the number of bytes counted from the end of the message chunk.</t>
                             <t>If an absolute value is bigger than the number of bytes in a block, all bytes are mapped to the respective target block, and the other target block becomes a zero byte sized block.</t>
                         </list>
                     </t>
@@ -884,7 +894,7 @@ jidAlternateSpec = localPart ":" keySpec "@" domain [ "/" resourcepart
                 Anonymity is affected by the inner workings of the blending layer in many ways. A Vortex message cannot be read by anyone except the peer nodes and the routing block builder, but the presence of a vortex node message may be detected. This may be done either by detecting the typical high entropy of an encrypted file, broken structures of a carrier file, a meaningless content of a carrier file, or the contextless communication of the transport layer with its peer partner. A blending layer SHOULD minimize the possibility of easy detection by minimizing these effects.
              </t>
              <t>
-                A blending layer SHOULD use carrier files with high compression or encryption. Carrier files SHOULD NOT have inner structures so that the payload is comparable to valid content. To achieve undetectability by a human reviewer, a routing block builder should use F5 blending instead of PLAIN blending.
+                A blending layer SHOULD use carrier files with high compression or encryption. Carrier files SHOULD NOT have inner structures so that the payload is comparable to valid content. To achieve undetectability by a human reviewer, a routing block builder should use F5 blending instead of PLAIN blending. This, however, increases the protocol overhead roughly by a tenfold.
              </t>
              <t>
                  The two layers 'routing' and 'accounting' have the deepest insight into a Vortex message's inner working. They know the immediate peer sender and the peer recipients of all payload chunks. As decoy traffic is generated by combining chunks and applying redundancy calculations upon them, a node can never know whether a malfunction (e.g., when doing a recovery calculation) was intended or not. Therefore a node is unable to tell a failed transaction apart from a terminated transaction. It furthermore cannot tell content apart from decoy traffic.
@@ -905,6 +915,9 @@ jidAlternateSpec = localPart ":" keySpec "@" domain [ "/" resourcepart
             </t>
             <t>
                 A peer node may try to exhaust a routers quota by sending the same block multiple times. A block builder should take care that a block may not be resent in the interval where the previous blocks for the transaction are still valid. This guarantees that replayed blocks will stop at the next peer node. This provides better protection against replay based attacks.
+            </t>
+            <t>
+                Receiver anonymity is in danger if handling of message header and content is not done with care. An attacker might send a bugged message (e.g., with a DKIM or DMARC header) to deanonymize a recipient. Great care has to be taken when handling any other than local references when opening a message.
             </t>
         </section>
     </middle>

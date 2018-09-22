@@ -15,7 +15,7 @@ BEGIN
     -- bit sequence at beginning of hash from encrypted identity
     -- block
     challenge     BIT STRING,
-    hash          MacAlgorithmSpec,
+    mac           MacAlgorithmSpec,
     valid         UsagePeriod,
     identifier    INTEGER (0..4294967295)
   }
