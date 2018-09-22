@@ -22,7 +22,7 @@ BEGIN
   -- maximum size of message quota in messages of an identity
   maxMessageQuota           INTEGER ::= 4294967295
 
-  -- do not use these blocks for protocol encoding (internal structure only)
+  -- do not use these blocks for protocol encoding (internal only)
   VortexMessage ::= SEQUENCE {
     prefix        CHOICE {
         plain           [10011] PrefixBlock,

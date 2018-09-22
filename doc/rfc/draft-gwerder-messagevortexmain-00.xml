@@ -109,13 +109,13 @@
                     <section anchor="entities_node_spec_smtp" title="NodeSpec for SMTP nodes">
                         <t>
                             Typically a node specification is specified with the ASN.1 block NodeSpec (see <xref target="asnOne_helpers"/>).
-                            To allow addressing of a vortex node with an ordinary client an alternative representation SHOULD be supported as defined below as smtpAlternateSpec (specification noted in ABNF as specified in <xref target="RFC4234"/>).
+                            To allow addressing of a vortex node with an ordinary client an alternative representation SHOULD be supported as defined below as smtpAlternateSpec (specification noted in ABNF as specified in <xref target="RFC5234"/>).
                             <figure>
                                 <artwork type="abnf"><![CDATA[
 localPart         = <local part of address>
 domain            = <domain part of address>
 email             = localPart "@" domain
-keySpec           = <BASE64 encoded AsymmetricKey in DER representation>;
+keySpec           = <BASE64 encoded AsymmetricKey; DER representation>;
 smtpAlternateSpec = localPart ":" keySpec "@" domain
                                 ]]></artwork>
                             </figure>
@@ -124,13 +124,13 @@ smtpAlternateSpec = localPart ":" keySpec "@" domain
                     <section anchor="entities_node_spec_spec" title="NodeSpec for XMPP nodes">
                         <t>
                             Typically a node specification is specified with the ASN.1 block NodeSpec.
-                            To allow addressing of a vortex node with an ordinary client, an alternative representation SHOULD be supported as defined below as jidAlternateSpec (specification noted in ABNF as specified in <xref target="RFC4234"/>).
+                            To allow addressing of a vortex node with an ordinary client, an alternative representation SHOULD be supported as defined below as jidAlternateSpec (specification noted in ABNF as specified in <xref target="RFC5234"/>).
                             <figure>
                                 <artwork type="abnf"><![CDATA[
 localPart         = <local part of address>
 domain            = <domain part of address>
 jid               = localPart "@" domain [ "/" resourcepart ]
-keySpec           = <BASE64 encoded AsymmetricKey in DER representation>;
+keySpec           = <BASE64 encoded AsymmetricKey; DER representation>;
 jidAlternateSpec = localPart ":" keySpec "@" domain [ "/" resourcepart
                                 ]]></artwork>
                             </figure>
@@ -945,7 +945,7 @@ jidAlternateSpec = localPart ":" keySpec "@" domain [ "/" resourcepart
             <!-- CBC -->
             <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.1423.xml"?>
             <!-- ABNF -->
-            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.4234.xml"?>
+            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.5234.xml"?>
 
 
             <reference anchor="ISO-10118-3">
