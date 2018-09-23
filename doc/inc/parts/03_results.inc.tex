@@ -400,7 +400,7 @@ All SMTP nodes responding to clear text should at least support $encoding=plain:
 \fxfatal{add more content here}
 
 \section{Client}
-We did not create a Vortex client for sending messages. Instead we used a standard Thunderbird email client pointing to a local SMTP and IMAP Server provided by Vortex. On the SMTP side Vortex does encapsulate where possible mails into a Vortex message and builds automated route to the recipient. The SMTP part of vortex may be used to encapsulate automatically all messages with a known Vortex identity into a vortex message. On the IMAP side it merges a local Vortex message store with the standard Email repository building a combined view.
+We did not create a Vortex client for sending messages. Instead we used a standard Thunderbird email client pointing to a local SMTP and IMAP Server provided by a Vortex proxy. On the SMTP side Vortex does encapsulate where possible mails into a Vortex message and builds automated route to the recipient. The SMTP part of vortex may be used to encapsulate automatically all messages with a known Vortex identity into a vortex message. On the IMAP side it merges a local Vortex message store with the standard Email repository building a combined view.
 
 Using Vortex like this offers us the advantages of a known client with the anonymity Vortex offers.
 
@@ -447,7 +447,7 @@ As decoy traffic is generated with the same operations as the true content is sp
 \fxfatal{add content here}
 
 \section{Block Structure}
-\lstinputlisting[language=ASN1, caption={Header Block}, backgroundcolor=\color{gray!10},linerange={29-71},firstnumber=29]{../app/asn.1/messageBlocks.asn1} 
+%\lstinputlisting[language=ASN1, caption={Header Block}, backgroundcolor=\color{gray!10},linerange={29-71},firstnumber=29]{../app/asn.1/messageBlocks.asn1} 
 
 \subsection{Header Block}
 \fxfatal{add content here}
