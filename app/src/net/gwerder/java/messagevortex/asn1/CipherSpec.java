@@ -34,154 +34,154 @@ import java.io.Serializable;
  */
 public class CipherSpec extends AbstractBlock implements Serializable {
 
-    public static final long serialVersionUID = 100000000006L;
+  public static final long serialVersionUID = 100000000006L;
 
-    private static int SYMMETRIC  = 16001;
-    private static int ASYMMETRIC = 16002;
-    private static int MAC        = 16003;
-    private static int USAGE      = 16004;
+  private static int SYMMETRIC = 16001;
+  private static int ASYMMETRIC = 16002;
+  private static int MAC = 16003;
+  private static int USAGE = 16004;
 
-    /* The endpoint address to be used */
-    private AsymmetricAlgorithmSpec asymmetricSpec = null;
-    private SymmetricAlgorithmSpec  symmetricSpec  = null;
-    private MacAlgorithmSpec        macSpec        = null;
-    private CipherUsage             cipherUsage    = CipherUsage.ENCRYPT;
+  /* The endpoint address to be used */
+  private AsymmetricAlgorithmSpec asymmetricSpec = null;
+  private SymmetricAlgorithmSpec symmetricSpec = null;
+  private MacAlgorithmSpec macSpec = null;
+  private CipherUsage cipherUsage = CipherUsage.ENCRYPT;
 
-    /* constructor */
-    public CipherSpec(ASN1Encodable to) throws IOException {
-        parse(to);
+  /* constructor */
+  public CipherSpec(ASN1Encodable to) throws IOException {
+    parse(to);
+  }
+
+  public CipherSpec(CipherUsage cipherUsage) {
+    this.cipherUsage = cipherUsage;
+  }
+
+  protected void parse(ASN1Encodable to) throws IOException {
+    ASN1Sequence s1 = ASN1Sequence.getInstance(to);
+    int i = 0;
+
+    // parse optional fields sequence
+    ASN1TaggedObject to1 = ASN1TaggedObject.getInstance(s1.getObjectAt(i++));
+    if (to1.getTagNo() == ASYMMETRIC) {
+      asymmetricSpec = new AsymmetricAlgorithmSpec(to1.getObject());
+      to1 = ASN1TaggedObject.getInstance(s1.getObjectAt(i++));
     }
-
-    public CipherSpec(CipherUsage cipherUsage) {
-        this.cipherUsage = cipherUsage;
+    if (to1.getTagNo() == SYMMETRIC) {
+      symmetricSpec = new SymmetricAlgorithmSpec(to1.getObject());
+      to1 = ASN1TaggedObject.getInstance(s1.getObjectAt(i++));
     }
-
-    protected void parse(ASN1Encodable to) throws IOException {
-        ASN1Sequence s1 = ASN1Sequence.getInstance(to);
-        int i = 0;
-
-        // parse optional fields sequence
-        ASN1TaggedObject to1 = ASN1TaggedObject.getInstance(s1.getObjectAt(i++));
-        if (to1.getTagNo() == ASYMMETRIC) {
-            asymmetricSpec=new AsymmetricAlgorithmSpec(to1.getObject());
-            to1 = ASN1TaggedObject.getInstance(s1.getObjectAt(i++));
-        }
-        if (to1.getTagNo() == SYMMETRIC) {
-            symmetricSpec=new SymmetricAlgorithmSpec( to1.getObject() );
-            to1 = ASN1TaggedObject.getInstance(s1.getObjectAt(i++));
-        }
-        if (to1.getTagNo() == MAC) {
-            macSpec=new MacAlgorithmSpec(to1.getObject());
-            to1 = ASN1TaggedObject.getInstance(s1.getObjectAt(i++));
-        }
-        if(to1.getTagNo()!=USAGE) {
-            throw new IOException("expected USAGE ("+USAGE+") but got "+to1.getTagNo()+" when parsing CipherSpec" );
-        }
-        cipherUsage =CipherUsage.getById(ASN1Enumerated.getInstance(to1.getObject()).getValue().intValue());
-
+    if (to1.getTagNo() == MAC) {
+      macSpec = new MacAlgorithmSpec(to1.getObject());
+      to1 = ASN1TaggedObject.getInstance(s1.getObjectAt(i++));
     }
-
-    public AsymmetricAlgorithmSpec getAsymmetricSpec() {
-        return asymmetricSpec;
+    if (to1.getTagNo() != USAGE) {
+      throw new IOException("expected USAGE (" + USAGE + ") but got " + to1.getTagNo() + " when parsing CipherSpec");
     }
+    cipherUsage = CipherUsage.getById(ASN1Enumerated.getInstance(to1.getObject()).getValue().intValue());
 
-    public AsymmetricAlgorithmSpec setAsymmetricSpec( AsymmetricAlgorithmSpec spec ) {
-        AsymmetricAlgorithmSpec ret = this.asymmetricSpec;
-        this.asymmetricSpec = spec;
-        return ret;
-    }
+  }
 
-    public SymmetricAlgorithmSpec getSymmetricSpec() {
-        return symmetricSpec;
-    }
+  public AsymmetricAlgorithmSpec getAsymmetricSpec() {
+    return asymmetricSpec;
+  }
 
-    public SymmetricAlgorithmSpec setSymmetricSpec( SymmetricAlgorithmSpec spec ) {
-        SymmetricAlgorithmSpec ret = this.symmetricSpec;
-        this.symmetricSpec = spec;
-        return ret;
-    }
+  public AsymmetricAlgorithmSpec setAsymmetricSpec(AsymmetricAlgorithmSpec spec) {
+    AsymmetricAlgorithmSpec ret = this.asymmetricSpec;
+    this.asymmetricSpec = spec;
+    return ret;
+  }
 
-    public MacAlgorithmSpec getMacSpec() {
-        return macSpec;
-    }
+  public SymmetricAlgorithmSpec getSymmetricSpec() {
+    return symmetricSpec;
+  }
 
-    public MacAlgorithmSpec setMacSpec( MacAlgorithmSpec spec ) {
-        MacAlgorithmSpec ret = this.macSpec;
-        this.macSpec = spec;
-        return ret;
-    }
+  public SymmetricAlgorithmSpec setSymmetricSpec(SymmetricAlgorithmSpec spec) {
+    SymmetricAlgorithmSpec ret = this.symmetricSpec;
+    this.symmetricSpec = spec;
+    return ret;
+  }
 
-    public CipherUsage getCipherUsage() {
-        return cipherUsage;
-    }
+  public MacAlgorithmSpec getMacSpec() {
+    return macSpec;
+  }
 
-    public CipherUsage setCipherUsage( CipherUsage usage ) {
-        CipherUsage ret = cipherUsage;
-        this.cipherUsage = usage;
-        return ret;
-    }
+  public MacAlgorithmSpec setMacSpec(MacAlgorithmSpec spec) {
+    MacAlgorithmSpec ret = this.macSpec;
+    this.macSpec = spec;
+    return ret;
+  }
 
-    @Override
-    public String dumpValueNotation(String prefix, DumpType dumpType) throws IOException {
-        StringBuilder sb=new StringBuilder();
-        sb.append( '{' ).append( CRLF );
-        if( asymmetricSpec != null ) {
-            sb.append(prefix).append("  ").append("asymmetric ").append( asymmetricSpec.dumpValueNotation(prefix + "  ", dumpType ) ).append( ',' ).append( CRLF );
-        }
-        if( symmetricSpec != null ) {
-            sb.append(prefix).append("  ").append("symmetric ").append( symmetricSpec.dumpValueNotation( prefix + "  ", dumpType ) ).append( ',' ).append( CRLF );
-        }
-        if( macSpec != null ) {
-            sb.append(prefix).append("  ").append("mac ").append( macSpec.dumpValueNotation( prefix + "  ", dumpType ) ).append( ',' ).append( CRLF );
-        }
-        sb.append(prefix).append("  ").append("cipherUsage ").append( cipherUsage.getUsageString() ).append( CRLF );
-        sb.append( prefix ).append( '}' );
-        return sb.toString();
-    }
+  public CipherUsage getCipherUsage() {
+    return cipherUsage;
+  }
 
-    @Override
-    public ASN1Object toASN1Object(DumpType dumpType) throws IOException {
-        if ( cipherUsage == null) {
-            throw new IOException("CipherSpec is empty .. unable to create CipherSpec");
-        }
-        ASN1EncodableVector v = new ASN1EncodableVector();
-        if( asymmetricSpec != null ) {
-            v.add( new DERTaggedObject( ASYMMETRIC, asymmetricSpec.toASN1Object( dumpType ) ) );
-        }
-        if( symmetricSpec != null ) {
-            v.add( new DERTaggedObject( SYMMETRIC, symmetricSpec.toASN1Object( dumpType ) ) );
-        }
-        if( macSpec != null ) {
-            v.add( new DERTaggedObject( MAC, macSpec.toASN1Object( dumpType ) ) );
-        }
-        v.add( new DERTaggedObject( USAGE, new ASN1Enumerated( cipherUsage.getId() ) ) );
-        return new DERSequence(v);
-    }
+  public CipherUsage setCipherUsage(CipherUsage usage) {
+    CipherUsage ret = cipherUsage;
+    this.cipherUsage = usage;
+    return ret;
+  }
 
-    @Override
-    public boolean equals( Object t ) {
-        if( t==null ) {
-            return false;
-        }
-        if( t.getClass() != this.getClass() ) {
-            return false;
-        }
-        CipherSpec o = (CipherSpec)t;
-        try {
-            return dumpValueNotation( "", DumpType.ALL ).equals( o.dumpValueNotation( "", DumpType.ALL ) );
-        } catch( IOException ioe ) {
-            return false;
-        }
+  @Override
+  public String dumpValueNotation(String prefix, DumpType dumpType) throws IOException {
+    StringBuilder sb = new StringBuilder();
+    sb.append('{').append(CRLF);
+    if (asymmetricSpec != null) {
+      sb.append(prefix).append("  ").append("asymmetric ").append(asymmetricSpec.dumpValueNotation(prefix + "  ", dumpType)).append(',').append(CRLF);
     }
+    if (symmetricSpec != null) {
+      sb.append(prefix).append("  ").append("symmetric ").append(symmetricSpec.dumpValueNotation(prefix + "  ", dumpType)).append(',').append(CRLF);
+    }
+    if (macSpec != null) {
+      sb.append(prefix).append("  ").append("mac ").append(macSpec.dumpValueNotation(prefix + "  ", dumpType)).append(',').append(CRLF);
+    }
+    sb.append(prefix).append("  ").append("cipherUsage ").append(cipherUsage.getUsageString()).append(CRLF);
+    sb.append(prefix).append('}');
+    return sb.toString();
+  }
 
-    @Override
-    public int hashCode() {
-        // this methode is required for code sanity
-        try{
-            return dumpValueNotation( "", DumpType.ALL ).hashCode();
-        } catch( IOException ioe ) {
-            return "FAILED".hashCode();
-        }
+  @Override
+  public ASN1Object toAsn1Object(DumpType dumpType) throws IOException {
+    if (cipherUsage == null) {
+      throw new IOException("CipherSpec is empty .. unable to create CipherSpec");
     }
+    ASN1EncodableVector v = new ASN1EncodableVector();
+    if (asymmetricSpec != null) {
+      v.add(new DERTaggedObject(ASYMMETRIC, asymmetricSpec.toAsn1Object(dumpType)));
+    }
+    if (symmetricSpec != null) {
+      v.add(new DERTaggedObject(SYMMETRIC, symmetricSpec.toAsn1Object(dumpType)));
+    }
+    if (macSpec != null) {
+      v.add(new DERTaggedObject(MAC, macSpec.toAsn1Object(dumpType)));
+    }
+    v.add(new DERTaggedObject(USAGE, new ASN1Enumerated(cipherUsage.getId())));
+    return new DERSequence(v);
+  }
+
+  @Override
+  public boolean equals(Object t) {
+    if (t == null) {
+      return false;
+    }
+    if (t.getClass() != this.getClass()) {
+      return false;
+    }
+    CipherSpec o = (CipherSpec) t;
+    try {
+      return dumpValueNotation("", DumpType.ALL).equals(o.dumpValueNotation("", DumpType.ALL));
+    } catch (IOException ioe) {
+      return false;
+    }
+  }
+
+  @Override
+  public int hashCode() {
+    // this methode is required for code sanity
+    try {
+      return dumpValueNotation("", DumpType.ALL).hashCode();
+    } catch (IOException ioe) {
+      return "FAILED".hashCode();
+    }
+  }
 
 }

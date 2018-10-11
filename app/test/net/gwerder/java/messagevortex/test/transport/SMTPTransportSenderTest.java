@@ -4,7 +4,7 @@ import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.transport.SecurityContext;
 import net.gwerder.java.messagevortex.transport.SecurityRequirement;
 import net.gwerder.java.messagevortex.transport.smtp.SMTPReceiver;
-import net.gwerder.java.messagevortex.transport.smtp.SMTPSender;
+import net.gwerder.java.messagevortex.transport.smtp.SmtpSender;
 import net.gwerder.java.messagevortex.transport.TransportReceiver;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,7 +46,7 @@ public class SMTPTransportSenderTest implements TransportReceiver {
         SMTPReceiver receiver=new SMTPReceiver( new InetSocketAddress( "localhost", 0), new SecurityContext( SecurityRequirement.PLAIN ), this );
 
         LOGGER.log(Level.INFO,"Setup sender");
-        SMTPSender send=new SMTPSender("SMTPSender_of_MessageVortex@gwerder.net", "localhost", receiver.getPort(), null, null );
+        SmtpSender send=new SmtpSender("SMTPSender_of_MessageVortex@gwerder.net", "localhost", receiver.getPort(), null, null );
 
         LOGGER.log(Level.INFO,"Sending message");
         try {

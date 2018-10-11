@@ -31,104 +31,105 @@ import java.io.Serializable;
 
 /**
  * Specification for AsymmetricAlgorithmSpec.
- *
+ * <p>
  * Created by martin.gwerder on 29.12.2017.
  */
 public class AsymmetricAlgorithmSpec extends AbstractBlock implements Serializable {
 
-    public static final long serialVersionUID = 100000000003L;
+  public static final long serialVersionUID = 100000000003L;
 
-    private static final java.util.logging.Logger LOGGER;
-    static {
-        LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+  private static final java.util.logging.Logger LOGGER;
+
+  static {
+    LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+  }
+
+  Algorithm algorithm;
+  AlgorithmParameter parameter;
+
+  /***
+   * Copy constructor
+   *
+   * @param  to           object to clone
+   * @throws IOException  when failing to copy source object
+   */
+  public AsymmetricAlgorithmSpec(AsymmetricAlgorithmSpec to) throws IOException {
+    parse(to.toAsn1Object(DumpType.ALL));
+  }
+
+  public AsymmetricAlgorithmSpec(Algorithm alg, AlgorithmParameter params) {
+    this.algorithm = alg;
+    this.parameter = params;
+  }
+
+  /***
+   * Constructor to build from ASN1 object
+   *
+   * @param  to           Object to be parsed
+   * @throws IOException when failing to parse ASN1 object
+   */
+  public AsymmetricAlgorithmSpec(ASN1Encodable to) throws IOException {
+    parse(to);
+  }
+
+  @Override
+  protected void parse(ASN1Encodable to) throws IOException {
+    int i = 0;
+    ASN1Sequence s1 = ASN1Sequence.getInstance(to);
+
+    // getting algorithm
+    ASN1Enumerated en = ASN1Enumerated.getInstance(s1.getObjectAt(i++));
+    algorithm = Algorithm.getById(en.getValue().intValue());
+
+    // get optional parameters
+    if (s1.size() > 1) {
+      parameter = new AlgorithmParameter(s1.getObjectAt(i++));
     }
+  }
 
-    Algorithm algorithm;
-    AlgorithmParameter parameter;
+  /***
+   * Gets the algorithm (@see Algorithm).
+   *
+   * @return the current algorithm
+   */
+  public Algorithm getAlgorithm() {
+    return algorithm;
+  }
 
-    /***
-     * Copy constructor
-     *
-     * @param  to           object to clone
-     * @throws IOException  when failing to copy source object
-     */
-    public AsymmetricAlgorithmSpec( AsymmetricAlgorithmSpec to ) throws IOException {
-        parse( to.toASN1Object(DumpType.ALL) );
+  /***
+   * Get the algorithm parameters (@see AlgorithmParameter).
+   *
+   * @return the current algorithm parameters
+   */
+  public AlgorithmParameter getAlgorithmParameter() {
+    return parameter;
+  }
+
+  @Override
+  public String dumpValueNotation(String prefix, DumpType dumptype) throws IOException {
+    StringBuilder sb = new StringBuilder();
+    sb.append('{').append(CRLF);
+    sb.append(prefix).append("  ").append("algorithm ").append(algorithm.name().toLowerCase());
+    if (parameter != null) {
+      sb.append(',').append(CRLF);
+      sb.append(prefix).append("  ").append("parameter ").append(parameter.dumpValueNotation(prefix + "  ", dumptype)).append(CRLF);
+    } else {
+      sb.append(CRLF);
     }
+    sb.append(prefix).append('}');
+    return sb.toString();
+  }
 
-    public AsymmetricAlgorithmSpec( Algorithm alg, AlgorithmParameter params ) {
-        this.algorithm = alg;
-        this.parameter = params;
+  @Override
+  public ASN1Object toAsn1Object(DumpType dumpType) throws IOException {
+    if (algorithm == null) {
+      throw new IOException("Algorithm is empty .. unable to create AsymmetricAlgorithmSpec");
     }
-
-    /***
-     * Constructor to build from ASN1 object
-     *
-     * @param  to           Object to be parsed
-     * @throws IOException when failing to parse ASN1 object
-     */
-    public AsymmetricAlgorithmSpec( ASN1Encodable to ) throws IOException {
-        parse( to );
+    ASN1EncodableVector v = new ASN1EncodableVector();
+    v.add(new ASN1Enumerated(algorithm.getId()));
+    if (parameter != null) {
+      v.add(parameter.toAsn1Object(dumpType));
     }
-
-    @Override
-    protected void parse( ASN1Encodable to ) throws IOException {
-        int i = 0;
-        ASN1Sequence s1 = ASN1Sequence.getInstance( to );
-
-        // getting algorithm
-        ASN1Enumerated en = ASN1Enumerated.getInstance(s1.getObjectAt(i++));
-        algorithm = Algorithm.getById( en.getValue().intValue() );
-
-        // get optional parameters
-        if( s1.size() >1 ) {
-            parameter = new AlgorithmParameter(s1.getObjectAt(i++));
-        }
-    }
-
-    /***
-     * Gets the algorithm (@see Algorithm).
-     *
-     * @return the current algorithm
-     */
-    public Algorithm getAlgorithm() {
-        return algorithm;
-    }
-
-    /***
-     * Get the algorithm parameters (@see AlgorithmParameter).
-     *
-     * @return the current algorithm parameters
-     */
-    public AlgorithmParameter getAlgorithmParameter() {
-        return parameter;
-    }
-
-    @Override
-    public String dumpValueNotation( String prefix, DumpType dumptype ) throws IOException {
-        StringBuilder sb=new StringBuilder();
-        sb.append( '{' ).append( CRLF );
-        sb.append( prefix ).append( "  " ).append( "algorithm " ).append( algorithm.name().toLowerCase() );
-        if ( parameter != null ) {
-            sb.append(',').append(CRLF);
-            sb.append( prefix ).append( "  " ).append( "parameter " ).append( parameter.dumpValueNotation( prefix+"  ", dumptype ) ).append(CRLF);
-        } else {
-            sb.append(CRLF);
-        }
-        sb.append( prefix ).append( '}' );
-        return sb.toString();
-    }
-
-    @Override
-    public ASN1Object toASN1Object( DumpType dumpType ) throws IOException {
-        if (algorithm == null) {
-            throw new IOException("Algorithm is empty .. unable to create AsymmetricAlgorithmSpec");
-        }
-        ASN1EncodableVector v = new ASN1EncodableVector();
-        v.add(new ASN1Enumerated(algorithm.getId()));
-        if ( parameter != null) {
-            v.add( parameter.toASN1Object( dumpType ) );
-        }
-        return new DERSequence(v);
-    }
+    return new DERSequence(v);
+  }
 }

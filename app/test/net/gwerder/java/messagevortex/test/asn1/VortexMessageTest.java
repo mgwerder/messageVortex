@@ -121,7 +121,7 @@ public class VortexMessageTest {
             }
 
             try ( FileOutputStream o = new FileOutputStream( new File("testfile_VortexMessage_plain.der" ) ) ) {
-                o.write(s.toASN1Object(DumpType.ALL_UNENCRYPTED).getEncoded());
+                o.write(s.toAsn1Object(DumpType.ALL_UNENCRYPTED).getEncoded());
             }
         } catch (Exception e) {
             Assert.fail("unexpected exception");

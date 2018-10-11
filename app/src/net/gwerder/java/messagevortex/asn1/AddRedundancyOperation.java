@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.asn1;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -30,43 +31,43 @@ import java.util.List;
 
 /**
  * Represents a addRedundancy operation on a routing block.
- *
  */
-public class AddRedundancyOperation extends AbstractRedundancyOperation  implements Serializable {
+public class AddRedundancyOperation extends AbstractRedundancyOperation implements Serializable {
 
-    public static final long serialVersionUID = 100000000032L;
+  public static final long serialVersionUID = 100000000032L;
 
-    AddRedundancyOperation() {}
+  AddRedundancyOperation() {
+  }
 
-    public AddRedundancyOperation(int inputId, int dataStripes, int redundancy, List<SymmetricKey> keys, int outputId, int gfSize) {
-        super(inputId,dataStripes,redundancy,keys,outputId,gfSize);
+  public AddRedundancyOperation(int inputId, int dataStripes, int redundancy, List<SymmetricKey> keys, int outputId, int gfSize) {
+    super(inputId, dataStripes, redundancy, keys, outputId, gfSize);
+  }
+
+  public AddRedundancyOperation(ASN1Encodable to) throws IOException {
+    super(to);
+  }
+
+  public static AddRedundancyOperation getInstance(Object obj) throws IOException {
+    if (obj == null || obj instanceof AddRedundancyOperation) {
+      return (AddRedundancyOperation) obj;
+    } else if (obj instanceof ASN1TaggedObject) {
+      ASN1TaggedObject to = ASN1TaggedObject.getInstance(obj);
+      return new AddRedundancyOperation(to.getObject());
     }
 
-    public AddRedundancyOperation(ASN1Encodable to) throws IOException {
-        super(to);
-    }
+    throw new IllegalArgumentException("unknown object in getInstance");
+  }
 
-    public static AddRedundancyOperation getInstance(Object obj) throws IOException {
-        if (obj == null || obj instanceof AddRedundancyOperation) {
-            return (AddRedundancyOperation) obj;
-        } else if (obj instanceof ASN1TaggedObject) {
-            ASN1TaggedObject to=ASN1TaggedObject.getInstance(obj);
-            return new AddRedundancyOperation(to.getObject());
-        }
+  @Override
+  public ASN1Object toAsn1Object(DumpType dumpType) throws IOException {
+    return new DERTaggedObject(true, ADD_REDUNDANCY, super.toAsn1Object(dumpType));
+  }
 
-        throw new IllegalArgumentException("unknown object in getInstance");
-    }
+  public ASN1Primitive toASN1Primitive() throws IOException {
+    return toAsn1Object(DumpType.PUBLIC_ONLY).toASN1Primitive();
+  }
 
-    @Override
-    public ASN1Object toASN1Object(DumpType dumpType) throws IOException {
-        return new DERTaggedObject(true, ADD_REDUNDANCY ,super.toASN1Object(dumpType));
-    }
-
-    public ASN1Primitive toASN1Primitive() throws IOException {
-        return toASN1Object(DumpType.PUBLIC_ONLY).toASN1Primitive();
-    }
-
-    public Operation getNewInstance(ASN1Encodable object) throws IOException {
-        return new AddRedundancyOperation(object);
-    }
+  public Operation getNewInstance(ASN1Encodable object) throws IOException {
+    return new AddRedundancyOperation(object);
+  }
 }

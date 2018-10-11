@@ -42,157 +42,158 @@ import static net.gwerder.java.messagevortex.transport.imap.ImapConnectionState.
 import static net.gwerder.java.messagevortex.transport.imap.ImapConnectionState.CONNECTION_NOT_AUTHENTICATED;
 
 /***
-* Provides the the Authenticate command to the IMAP server.
-*
-* @author  Martin Gwerder
-* @version 1.0
-* @since   2014-12-09
-***/
+ * Provides the the Authenticate command to the IMAP server.
+ *
+ * @author Martin Gwerder
+ * @version 1.0
+ * @since 2014-12-09
+ ***/
 public class ImapCommandAuthenticate extends ImapCommand {
 
-    private static final Logger LOGGER;
-    static {
-        LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+  private static final Logger LOGGER;
+
+  static {
+    LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+  }
+
+  /***
+   * Initializer called by the static constructor of ImapCommand.
+   ***/
+  public void init() {
+    ImapCommand.registerCommand(this);
+  }
+
+  public static String getChallenge(int length) {
+    return RandomString.nextString(length);
+  }
+
+  /***
+   * process authentication command.
+   *
+   * @param  line           The context of the line triggered
+   * @throws ImapException  when problem processing the command
+   ***/
+  public String[] processCommand(ImapLine line) throws ImapException {
+    // register plain server provider
+    Security.addProvider(new SaslPlainServer.SecurityProvider());
+
+    // get mech
+    String mech = line.getATag();
+    LOGGER.log(Level.INFO, "authenticate has read mec " + mech);
+
+    // skip space
+    // WARNING this is "non-strict"
+    line.skipSP(-1);
+
+    String context = line.getATag();
+    LOGGER.log(Level.INFO, "authenticate has read context information (PLAIN only) \"" + context + "\"");
+
+    // skip line end
+    if (!line.skipCRLF()) {
+      throw new ImapException(line, "error parsing command");
     }
+    LOGGER.log(Level.INFO, "has parsed last character of line");
 
-    /***
-     * Initializer called by the static constructor of ImapCommand.
-     ***/
-    public void init() {
-        ImapCommand.registerCommand(this);
+    if (line.getConnection() == null) {
+      LOGGER.log(Level.SEVERE, "no connection found while calling login");
+      return new String[]{line.getTag() + " BAD server configuration error\r\n"};
+    } else if (line.getConnection().getAuth() == null) {
+      LOGGER.log(Level.SEVERE, "no Authenticator or connection found while calling login (2)");
+      return new String[]{line.getTag() + " BAD server configuration error\r\n"};
     }
+    // create sasl server
+    CallbackHandler serverHandler = new SaslServerCallbackHandler(line.getConnection().getAuth());
 
-    public static String getChallenge( int length ) {
-        return RandomString.nextString( length );
+    SaslServer ss = null;
+    try {
+      Map<String, String> props = new HashMap<>();
+      if (!line.getConnection().isTls()) {
+        props.put(Sasl.POLICY_NOPLAINTEXT, "true");
+      }
+      // FIXME add possibility to add realm
+      props.put("com.sun.security.sasl.digest.realm", "theRealm");
+      ss = Sasl.createSaslServer(mech.toString(), "IMAP", "FQHN", props, serverHandler);
+    } catch (SaslException e) {
+      LOGGER.log(Level.WARNING, "unsuported sasl mech " + mech + " requested by client (2)", e);
+      return new String[]{line.getTag() + " BAD server configuration error\r\n"};
+    } catch (Exception e) {
+      LOGGER.log(Level.WARNING, "got unexpected exception", e);
+      throw e;
     }
-
-    /***
-     * process authentication command.
-     *
-     * @param  line           The context of the line triggered
-     * @throws ImapException  when problem processing the command
-     ***/
-    public String[] processCommand(ImapLine line) throws ImapException {
-        // register plain server provider
-        Security.addProvider( new SaslPlainServer.SecurityProvider() );
-
-        // get mech
-        String mech=line.getATag();
-        LOGGER.log(Level.INFO, "authenticate has read mec "+mech );
-
-        // skip space
-        // WARNING this is "non-strict"
-        line.skipSP(-1);
-
-        String context = line.getATag();
-        LOGGER.log(Level.INFO, "authenticate has read context information (PLAIN only) \""+context+"\"" );
-
-        // skip line end
-        if(!line.skipCRLF()) {
-            throw new ImapException(line,"error parsing command");
-        }
-        LOGGER.log(Level.INFO, "has parsed last character of line" );
-
-        if(line.getConnection()==null) {
-            LOGGER.log(Level.SEVERE, "no connection found while calling login");
-            return new String[] {line.getTag()+" BAD server configuration error\r\n" };
-        } else if(line.getConnection().getAuth()==null) {
-            LOGGER.log(Level.SEVERE, "no Authenticator or connection found while calling login (2)");
-            return new String[] {line.getTag()+" BAD server configuration error\r\n" };
-        }
-        // create sasl server
-        CallbackHandler serverHandler = new SaslServerCallbackHandler( line.getConnection().getAuth() );
-
-        SaslServer ss = null;
-        try{
-            Map<String, String> props = new HashMap<>();
-            if( !line.getConnection().isTLS() ) {
-                props.put(Sasl.POLICY_NOPLAINTEXT, "true");
-            }
-            // FIXME add possibility to add realm
-            props.put("com.sun.security.sasl.digest.realm", "theRealm");
-            ss=Sasl.createSaslServer(mech.toString(), "IMAP", "FQHN", props, serverHandler);
-        } catch (SaslException e) {
-            LOGGER.log(Level.WARNING, "unsuported sasl mech "+mech+" requested by client (2)", e );
-            return new String[] {line.getTag()+" BAD server configuration error\r\n" };
-        } catch (Exception e) {
-            LOGGER.log(Level.WARNING, "got unexpected exception", e );
-            throw e;
-        }
-        if(ss==null) {
-            LOGGER.log(Level.WARNING, "unsuported sasl mech "+mech+" requested by client (1)");
-            return new String[] {line.getTag()+" BAD server configuration error\r\n" };
-        }
-        // send challenge
-        LOGGER.log(Level.INFO, "preparing challenge");
-        byte[] saslChallenge = null;
-        byte[] saslReply = null;
-        try {
-            if (SaslMechanisms.PLAIN.toString().equals(mech) && context != null) {
-                saslReply = Base64.decode(context);
-            } else {
-                saslChallenge = ss.evaluateResponse(new byte[0]);
-                LOGGER.log(Level.INFO, "sending challenge");
-                if( saslChallenge.length > 0 ) {
-                    LOGGER.log(Level.INFO, "sending challenge ("+saslChallenge.length+" bytes; "+new String( Base64.encode(saslChallenge) )+")");
-                    line.getConnection().writeln( "+ " + new String( Base64.encode(saslChallenge) ));
-                } else {
-                    LOGGER.log(Level.INFO, "sending empty challenge");
-                    line.getConnection().writeln( "+ " );
-                }
-                LOGGER.log( Level.INFO, "getting reply" );
-                String reply = line.getConnection().readln(300000);
-                LOGGER.log( Level.INFO, "got reply (" + reply + ")" );
-                saslReply = Base64.decode( reply );
-            }
-
-            // verify reply
-            LOGGER.log(Level.INFO, "evaluating reply");
-            ss.evaluateResponse(saslReply);
-            LOGGER.log(Level.INFO, "reply evaluated" );
-
-            if( ss.isComplete() ) {
-                LOGGER.log(Level.INFO, "Sucessfully authenticated" );
-                line.getConnection().setImapState(CONNECTION_AUTHENTICATED);
-                return  new String[]{line.getTag() + " OK LOGIN completed\r\n"};
-            } else {
-                LOGGER.log(Level.INFO, "Bad username or password" );
-                return new String[] {line.getTag()+" BAD login failed\r\n" };
-            }
-        }catch(IOException e) {
-            LOGGER.log(Level.WARNING, "failed processing sasl reply");
-            return new String[] {line.getTag()+" BAD login failed\r\n" };
-        }
+    if (ss == null) {
+      LOGGER.log(Level.WARNING, "unsuported sasl mech " + mech + " requested by client (1)");
+      return new String[]{line.getTag() + " BAD server configuration error\r\n"};
     }
-
-    /***
-     * Returns the Identifier (IMAP command) which are processed by this class.
-     *
-     * @return A list of identifiers
-     ***/
-    public String[] getCommandIdentifier() {
-        return new String[] {"AUTHENTICATE"};
-    }
-
-    private String getAuthToken(ImapLine line) throws ImapException {
-        String userid = line.getAString();
-        if(userid==null) {
-            throw new ImapException(line,"error parsing command (getting userid)");
-        }
-        return userid;
-    }
-
-    @Override
-    public String[] getCapabilities( ImapConnection ic ) {
-        if(ic==null || ic.getImapState()==CONNECTION_NOT_AUTHENTICATED) {
-            if( ic != null && ic.isTLS() ) {
-                return new String[]{"AUTH=CRAM-MD5", "AUTH=PLAIN"};
-            } else {
-                return new String[]{"AUTH=CRAM-MD5" };
-            }
+    // send challenge
+    LOGGER.log(Level.INFO, "preparing challenge");
+    byte[] saslChallenge = null;
+    byte[] saslReply = null;
+    try {
+      if (SaslMechanisms.PLAIN.toString().equals(mech) && context != null) {
+        saslReply = Base64.decode(context);
+      } else {
+        saslChallenge = ss.evaluateResponse(new byte[0]);
+        LOGGER.log(Level.INFO, "sending challenge");
+        if (saslChallenge.length > 0) {
+          LOGGER.log(Level.INFO, "sending challenge (" + saslChallenge.length + " bytes; " + new String(Base64.encode(saslChallenge)) + ")");
+          line.getConnection().writeln("+ " + new String(Base64.encode(saslChallenge)));
         } else {
-            return new String[0];
+          LOGGER.log(Level.INFO, "sending empty challenge");
+          line.getConnection().writeln("+ ");
         }
+        LOGGER.log(Level.INFO, "getting reply");
+        String reply = line.getConnection().readln(300000);
+        LOGGER.log(Level.INFO, "got reply (" + reply + ")");
+        saslReply = Base64.decode(reply);
+      }
+
+      // verify reply
+      LOGGER.log(Level.INFO, "evaluating reply");
+      ss.evaluateResponse(saslReply);
+      LOGGER.log(Level.INFO, "reply evaluated");
+
+      if (ss.isComplete()) {
+        LOGGER.log(Level.INFO, "Sucessfully authenticated");
+        line.getConnection().setImapState(CONNECTION_AUTHENTICATED);
+        return new String[]{line.getTag() + " OK LOGIN completed\r\n"};
+      } else {
+        LOGGER.log(Level.INFO, "Bad username or password");
+        return new String[]{line.getTag() + " BAD login failed\r\n"};
+      }
+    } catch (IOException e) {
+      LOGGER.log(Level.WARNING, "failed processing sasl reply");
+      return new String[]{line.getTag() + " BAD login failed\r\n"};
     }
+  }
+
+  /***
+   * Returns the Identifier (IMAP command) which are processed by this class.
+   *
+   * @return A list of identifiers
+   ***/
+  public String[] getCommandIdentifier() {
+    return new String[]{"AUTHENTICATE"};
+  }
+
+  private String getAuthToken(ImapLine line) throws ImapException {
+    String userid = line.getAString();
+    if (userid == null) {
+      throw new ImapException(line, "error parsing command (getting userid)");
+    }
+    return userid;
+  }
+
+  @Override
+  public String[] getCapabilities(ImapConnection ic) {
+    if (ic == null || ic.getImapState() == CONNECTION_NOT_AUTHENTICATED) {
+      if (ic != null && ic.isTls()) {
+        return new String[]{"AUTH=CRAM-MD5", "AUTH=PLAIN"};
+      } else {
+        return new String[]{"AUTH=CRAM-MD5"};
+      }
+    } else {
+      return new String[0];
+    }
+  }
 
 }

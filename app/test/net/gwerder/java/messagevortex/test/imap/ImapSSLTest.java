@@ -148,7 +148,7 @@ public class ImapSSLTest {
             ic.setTimeout(1000);
             ic.connect();
             ic.sendCommand("a1 test");
-            assertTrue("check client socket state",ic.isTLS());
+            assertTrue("check client socket state",ic.isTls());
             ic.shutdown();
 
             // Self test

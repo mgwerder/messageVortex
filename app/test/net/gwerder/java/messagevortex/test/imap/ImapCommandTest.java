@@ -5,7 +5,6 @@ import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.transport.*;
 import net.gwerder.java.messagevortex.transport.imap.*;
 import org.bouncycastle.util.encoders.Base64;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -245,7 +244,7 @@ public class ImapCommandTest {
                 ImapClient c=new ImapClient(new InetSocketAddress("localhost",s.getPort()),new SecurityContext( context,encrypted?SSLTLS:PLAIN ));
                 c.setTimeout(2000);
                 c.connect();
-                assertTrue("check encryption ("+encrypted+"/"+c.isTLS()+")", encrypted==c.isTLS());
+                assertTrue("check encryption ("+encrypted+"/"+c.isTls()+")", encrypted==c.isTls());
                 String tag=ImapLine.getNextTag();
                 String[] ret=sendCommand(c,tag+" NOOP",tag+" OK");
                 LOGGER.log( Level.INFO, "reply to NOOP " + Arrays.toString( ret ) );
@@ -254,7 +253,7 @@ public class ImapCommandTest {
                 LOGGER.log( Level.INFO, "reply to CAPABILITY " + Arrays.toString( ret ) );
                 List<String> l = new Vector<>( Arrays.asList( ret ) );
                 // check that PLAIN IS not offered when doing unencrypted auth
-                assertTrue( "Capabilities not as expected (left=" + Arrays.toString( ret ) + ")", ( l.get(0).contains( "LOGINDISABLED" ) && ! c.isTLS() ) || ( ! l.get(0).contains( "LOGINDISABLED" ) && c.isTLS() ) );
+                assertTrue( "Capabilities not as expected (left=" + Arrays.toString( ret ) + ")", ( l.get(0).contains( "LOGINDISABLED" ) && ! c.isTls() ) || ( ! l.get(0).contains( "LOGINDISABLED" ) && c.isTls() ) );
                 tag=ImapLine.getNextTag();
                 if(encrypted) {
                     sendCommand(c,tag+" LOGIN user password",tag+" OK");
@@ -363,7 +362,7 @@ public class ImapCommandTest {
                 ImapClient c = new ImapClient(new InetSocketAddress("localhost", s.getPort()), new SecurityContext(context, UNTRUSTED_SSLTLS ));
                 c.setTimeout(2000);
                 c.connect();
-                assertTrue("check encryption", c.isTLS());
+                assertTrue("check encryption", c.isTls());
                 String tag = ImapLine.getNextTag();
                 tag = ImapLine.getNextTag();
                 String[] ret;
@@ -378,7 +377,7 @@ public class ImapCommandTest {
                 c = new ImapClient(new InetSocketAddress("localhost", s.getPort()), new SecurityContext(context, UNTRUSTED_SSLTLS ));
                 c.setTimeout(2000);
                 c.connect();
-                assertTrue("check encryption", c.isTLS());
+                assertTrue("check encryption", c.isTls());
                 tag = ImapLine.getNextTag();
                 sendCommand(c, tag + " CAPABILITY", tag + " OK");
                 assertTrue("authentication unexpectedly succeeded when using "+mech,!c.authenticate(new Credentials("user", "password1", "theRealm" ), mech ));

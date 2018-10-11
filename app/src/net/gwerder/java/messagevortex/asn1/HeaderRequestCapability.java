@@ -29,52 +29,56 @@ import java.io.Serializable;
 
 /**
  * ASN1 parser block for the capability request.
- *
+ * <p>
  * Created by martin.gwerder on 25.04.2016.
  */
 public class HeaderRequestCapability extends HeaderRequest implements Serializable {
 
-    public static final long serialVersionUID = 100000000028L;
+  public static final long serialVersionUID = 100000000028L;
 
-    protected UsagePeriod period = null;
+  protected UsagePeriod period = null;
 
-    public HeaderRequestCapability() {super();}
+  public HeaderRequestCapability() {
+    super();
+  }
 
-    public HeaderRequestCapability(ASN1Encodable ae) throws IOException {
-        this();
-        if (ae!=null) {
-            parse(ae);
-        }
+  public HeaderRequestCapability(ASN1Encodable ae) throws IOException {
+    this();
+    if (ae != null) {
+      parse(ae);
     }
+  }
 
-    protected void parse(ASN1Encodable ae) throws IOException{
-        ASN1Sequence s1 = ASN1Sequence.getInstance(ae);
-        int i=0;
-        period = new UsagePeriod( s1.getObjectAt( i++ ) );
+  protected void parse(ASN1Encodable ae) throws IOException {
+    ASN1Sequence s1 = ASN1Sequence.getInstance(ae);
+    int i = 0;
+    period = new UsagePeriod(s1.getObjectAt(i++));
+  }
+
+  protected HeaderRequest getRequest(ASN1Encodable ae) throws IOException {
+    return new HeaderRequestCapability(ae);
+  }
+
+  public int getId() {
+    return 1;
+  }
+
+  @Override
+  public String dumpValueNotation(String prefix, DumpType dumpType) {
+    StringBuilder sb = new StringBuilder();
+    sb.append('{').append(CRLF);
+    if (period != null) {
+      sb.append(prefix).append("  period ").append(period.dumpValueNotation(prefix + "  ", dumpType)).append(CRLF);
     }
+    sb.append(prefix).append('}');
+    return sb.toString();
+  }
 
-    protected HeaderRequest getRequest(ASN1Encodable ae) throws IOException {
-        return new HeaderRequestCapability(ae);
-    }
-
-    public int getId() {return 1;}
-
-    @Override
-    public String dumpValueNotation( String prefix, DumpType dumpType ) {
-        StringBuilder sb = new StringBuilder();
-        sb.append( '{' ).append( CRLF );
-        if ( period != null ) {
-            sb.append( prefix ).append( "  period " ).append( period.dumpValueNotation( prefix + "  ", dumpType ) ).append( CRLF );
-        }
-        sb.append( prefix ).append( '}' );
-        return sb.toString();
-    }
-
-    @Override
-    ASN1Object intToASN1Object( DumpType dt ) throws IOException {
-        ASN1EncodableVector s1 = new ASN1EncodableVector();
-        s1.add( period.toASN1Object( dt ) );
-        return new DERSequence( s1 );
-    }
+  @Override
+  ASN1Object intToASN1Object(DumpType dt) throws IOException {
+    ASN1EncodableVector s1 = new ASN1EncodableVector();
+    s1.add(period.toAsn1Object(dt));
+    return new DERSequence(s1);
+  }
 
 }

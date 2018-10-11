@@ -35,265 +35,280 @@ import java.util.logging.Level;
 /**
  * This class represents one block of an identity store for storage.
  */
-public class IdentityStoreBlock extends AbstractBlock  implements Serializable {
+public class IdentityStoreBlock extends AbstractBlock implements Serializable {
 
-    public static final long serialVersionUID = 10000000024L;
+  public static final long serialVersionUID = 10000000024L;
 
-    public enum IdentityType {
-        OWNED_IDENTITY,
-        NODE_IDENTITY,
-        RECIPIENT_IDENTITY
+  public enum IdentityType {
+    OWNED_IDENTITY,
+    NODE_IDENTITY,
+    RECIPIENT_IDENTITY
+  }
+
+  private static final java.util.logging.Logger LOGGER;
+
+  static {
+    LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+    MessageVortexLogger.setGlobalLogLevel(Level.ALL);
+  }
+
+  private UsagePeriod valid = null;
+  private int messageQuota = 0;
+  private int transferQuota = 0;
+  private AsymmetricKey identityKey = null;
+  private String nodeAddress = null;
+  private AsymmetricKey nodeKey = null;
+  private IdentityType iType = null;
+
+  public IdentityStoreBlock() {
+    super();
+  }
+
+  public IdentityStoreBlock(ASN1Encodable ae) throws IOException {
+    parse(ae);
+  }
+
+  @Override
+  public int hashCode() {
+    try {
+      return dumpValueNotation("", DumpType.ALL_UNENCRYPTED).hashCode();
+    } catch (IOException e) {
+      return "".hashCode();
     }
+  }
 
-    private static final java.util.logging.Logger LOGGER;
-    static {
-        LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-        MessageVortexLogger.setGlobalLogLevel( Level.ALL);
-    }
-
-    private UsagePeriod   valid         = null;
-    private int           messageQuota  = 0;
-    private int           transferQuota = 0;
-    private AsymmetricKey identityKey   = null;
-    private String        nodeAddress   = null;
-    private AsymmetricKey nodeKey       = null;
-    private IdentityType  iType         = null;
-
-    public IdentityStoreBlock() {super();}
-
-    public IdentityStoreBlock(ASN1Encodable ae) throws IOException {
-        parse(ae);
-    }
-
-    @Override
-    public int hashCode() {
+  public static IdentityStoreBlock getIdentityStoreBlockDemo(IdentityType it, boolean complete) throws IOException {
+    IdentityStoreBlock ret = new IdentityStoreBlock();
+    ret.setValid(new UsagePeriod(3600 * 24 * 30));
+    ret.setTransferQuota(ExtendedSecureRandom.nextInt(1024 * 1024 * 1024));
+    ret.setMessageQuota(ExtendedSecureRandom.nextInt(1024 * 1024));
+    ret.iType = it;
+    switch (it) {
+      case OWNED_IDENTITY:
+        // my own identity to decrypt everything
         try {
-            return dumpValueNotation("", DumpType.ALL_UNENCRYPTED).hashCode();
-        } catch(IOException e) {
-            return "".hashCode();
+          ret.setIdentityKey(new AsymmetricKey(Algorithm.RSA.getParameters(SecurityLevel.LOW)));
+          byte[] b = new byte[ExtendedSecureRandom.nextInt(20) + 3];
+          ExtendedSecureRandom.nextBytes(b);
+          ret.setNodeAddress("smtp:" + toHex(b) + "@localhost");
+          ret.setNodeKey(null);
+        } catch (Exception e) {
+          throw new IOException("Exception while generating owned identity", e);
         }
+        break;
+      case NODE_IDENTITY:
+        // My identities I have on remote nodes
+        try {
+          ret.setIdentityKey(null);
+          byte[] b = new byte[ExtendedSecureRandom.nextInt(20) + 3];
+          ExtendedSecureRandom.nextBytes(b);
+          ret.setNodeAddress("smtp:" + toHex(b) + "@demo" + ExtendedSecureRandom.nextInt(3));
+          AsymmetricKey ak = new AsymmetricKey();
+          if (!complete) {
+            ak.setPrivateKey(null);
+          }
+          ret.setNodeKey(ak);
+        } catch (Exception e) {
+          throw new IOException("Exception while generating node identity", e);
+        }
+        break;
+      case RECIPIENT_IDENTITY:
+        // Identities for receiving mails
+        try {
+          AsymmetricKey ak = new AsymmetricKey(Algorithm.EC.getParameters(SecurityLevel.LOW));
+          if (!complete) {
+            ak.setPrivateKey(null);
+          }
+          ret.setIdentityKey(ak);
+          byte[] b = new byte[ExtendedSecureRandom.nextInt(20) + 3];
+          ExtendedSecureRandom.nextBytes(b);
+          ret.setNodeAddress("smtp:" + toHex(b) + "@demo" + ExtendedSecureRandom.nextInt(3));
+          ak = new AsymmetricKey();
+          if (!complete) {
+            ak.setPrivateKey(null);
+          }
+          ret.setNodeKey(ak);
+        } catch (Exception e) {
+          throw new IOException("Exception while generating recipient identity", e);
+        }
+        break;
+      default:
+        // Unknown type just ignore it
+        return null;
+    }
+    return ret;
+  }
+
+  public AsymmetricKey setIdentityKey(AsymmetricKey k) {
+    AsymmetricKey old = identityKey;
+    identityKey = k;
+    return old;
+  }
+
+  public AsymmetricKey getIdentityKey() {
+    return identityKey;
+  }
+
+  public UsagePeriod setValid(UsagePeriod np) {
+    UsagePeriod old = valid;
+    valid = np;
+    return old;
+  }
+
+  public UsagePeriod getValid() {
+    return valid;
+  }
+
+  public int setMessageQuota(int nq) {
+    int old = messageQuota;
+    messageQuota = nq;
+    return old;
+  }
+
+  public int getMessageQuota() {
+    return messageQuota;
+  }
+
+  public int setTransferQuota(int tq) {
+    int old = transferQuota;
+    transferQuota = tq;
+    return old;
+  }
+
+  public int getTransferQuota() {
+    return transferQuota;
+  }
+
+  public String setNodeAddress(String na) {
+    String old = nodeAddress;
+    nodeAddress = na;
+    return old;
+  }
+
+  public String getNodeAddress() {
+    return nodeAddress;
+  }
+
+  public AsymmetricKey setNodeKey(AsymmetricKey k) {
+    AsymmetricKey old = nodeKey;
+    nodeKey = k;
+    return old;
+  }
+
+  public AsymmetricKey getNodeKey() {
+    return nodeKey;
+  }
+
+  protected void parse(ASN1Encodable p) throws IOException {
+    LOGGER.log(Level.FINER, "Executing parse()");
+    ASN1Sequence s1 = ASN1Sequence.getInstance(p);
+    int i = 0;
+    valid = new UsagePeriod(s1.getObjectAt(i++));
+    messageQuota = ASN1Integer.getInstance(s1.getObjectAt(i++)).getValue().intValue();
+    transferQuota = ASN1Integer.getInstance(s1.getObjectAt(i++)).getValue().intValue();
+    LOGGER.log(Level.FINER, "Finished parse()");
+    for (; i < s1.size(); i++) {
+      ASN1TaggedObject to = ASN1TaggedObject.getInstance(s1.getObjectAt(i));
+      switch (to.getTagNo()) {
+        case 1001:
+          identityKey = new AsymmetricKey(toDer(to.getObject()));
+          break;
+        case 1002:
+          nodeAddress = ((ASN1String) (to.getObject())).getString();
+          break;
+        case 1003:
+          nodeKey = new AsymmetricKey(toDer(to.getObject()));
+          break;
+        default:
+          throw new IOException("unknown tag encountered");
+      }
+    }
+  }
+
+  @Override
+  public ASN1Object toAsn1Object(DumpType dumpType) throws IOException {
+    // Prepare encoding
+    LOGGER.log(Level.FINER, "Executing toAsn1Object()");
+
+    ASN1EncodableVector v = new ASN1EncodableVector();
+
+    v.add(valid.toAsn1Object(dumpType));
+    v.add(new ASN1Integer(messageQuota));
+    v.add(new ASN1Integer(transferQuota));
+
+    if (identityKey != null) {
+      v.add(new DERTaggedObject(true, 1001, identityKey.toAsn1Object(dumpType)));
+    }
+    if (nodeAddress != null) {
+      v.add(new DERTaggedObject(true, 1002, new DERUTF8String(nodeAddress)));
+    }
+    if (nodeKey != null) {
+      v.add(new DERTaggedObject(true, 1003, nodeKey.toAsn1Object(dumpType)));
     }
 
-    public static IdentityStoreBlock getIdentityStoreBlockDemo(IdentityType it,boolean complete) throws IOException {
-        IdentityStoreBlock ret= new IdentityStoreBlock();
-        ret.setValid(new UsagePeriod(3600*24*30));
-        ret.setTransferQuota( ExtendedSecureRandom.nextInt( 1024 * 1024 * 1024 ) );
-        ret.setMessageQuota( ExtendedSecureRandom.nextInt( 1024 * 1024 ) );
-        ret.iType=it;
-        switch(it) {
-            case OWNED_IDENTITY:
-                // my own identity to decrypt everything
-                try {
-                    ret.setIdentityKey( new AsymmetricKey(Algorithm.RSA.getParameters(SecurityLevel.LOW)) );
-                    byte[] b = new byte[ExtendedSecureRandom.nextInt( 20 ) + 3];
-                    ExtendedSecureRandom.nextBytes( b );
-                    ret.setNodeAddress( "smtp:"+toHex( b )+"@localhost" );
-                    ret.setNodeKey(null);
-                } catch(Exception e) {
-                    throw new IOException("Exception while generating owned identity",e);
-                }
-                break;
-            case NODE_IDENTITY:
-                // My identities I have on remote nodes
-                try {
-                    ret.setIdentityKey( null );
-                    byte[] b = new byte[ExtendedSecureRandom.nextInt( 20 ) + 3];
-                    ExtendedSecureRandom.nextBytes( b );
-                    ret.setNodeAddress( "smtp:" + toHex( b ) + "@demo" + ExtendedSecureRandom.nextInt( 3 ) );
-                    AsymmetricKey ak=new AsymmetricKey();
-                    if(!complete) {
-                        ak.setPrivateKey(null);
-                    }
-                    ret.setNodeKey(ak);
-                } catch(Exception e) {
-                    throw new IOException("Exception while generating node identity",e);
-                }
-                break;
-            case RECIPIENT_IDENTITY:
-                // Identities for receiving mails
-                try {
-                    AsymmetricKey ak=new AsymmetricKey(Algorithm.EC.getParameters(SecurityLevel.LOW));
-                    if(!complete) {
-                        ak.setPrivateKey(null);
-                    }
-                    ret.setIdentityKey( ak );
-                    byte[] b = new byte[ExtendedSecureRandom.nextInt( 20 ) + 3];
-                    ExtendedSecureRandom.nextBytes( b );
-                    ret.setNodeAddress( "smtp:" + toHex( b ) + "@demo" + ExtendedSecureRandom.nextInt( 3 ) );
-                    ak=new AsymmetricKey();
-                    if(!complete) {
-                        ak.setPrivateKey(null);
-                    }
-                    ret.setNodeKey(ak);
-                } catch(Exception e) {
-                    throw new IOException("Exception while generating recipient identity",e);
-                }
-                break;
-            default:
-                // Unknown type just ignore it
-                return null;
-        }
-        return ret;
+    ASN1Sequence seq = new DERSequence(v);
+    LOGGER.log(Level.FINER, "done toAsn1Object()");
+    return seq;
+  }
+
+  @Override
+  public String dumpValueNotation(String prefix, DumpType dumpType) throws IOException {
+    StringBuilder sb = new StringBuilder();
+    sb.append('{').append(CRLF);
+    sb.append(prefix).append("  valid ").append(valid.dumpValueNotation(prefix + "    ", dumpType)).append(',').append(CRLF);
+    sb.append(prefix).append("  messageQuota ").append(messageQuota).append(',').append(CRLF);
+    sb.append(prefix).append("  transferQuota ").append(transferQuota);
+    if (identityKey != null) {
+      sb.append(',').append(CRLF);
+      sb.append(prefix).append("  identity ").append(identityKey.dumpValueNotation(prefix + "    ", dumpType));
     }
-
-    public AsymmetricKey setIdentityKey(AsymmetricKey k) {
-        AsymmetricKey old=identityKey;
-        identityKey=k;
-        return old;
+    if (nodeAddress != null) {
+      sb.append(',').append(CRLF);
+      sb.append(prefix).append("  nodeAddress \"").append(nodeAddress).append('"');
     }
-
-    public AsymmetricKey getIdentityKey() { return identityKey; }
-
-    public UsagePeriod setValid(UsagePeriod np) {
-        UsagePeriod old=valid;
-        valid=np;
-        return old;
+    if (nodeKey != null) {
+      sb.append(',').append(CRLF);
+      sb.append(prefix).append("  nodeKey ").append(nodeKey.dumpValueNotation(prefix + "    ", dumpType));
     }
+    sb.append(CRLF);
+    sb.append(prefix).append('}');
+    return sb.toString();
+  }
 
-    public UsagePeriod getValid() { return valid; }
-
-    public int setMessageQuota(int nq) {
-        int old=messageQuota;
-        messageQuota=nq;
-        return old;
+  public IdentityType getType() {
+    if (iType != null) {
+      return iType;
     }
-
-    public int getMessageQuota() { return messageQuota; }
-
-    public int setTransferQuota(int tq) {
-        int old=transferQuota;
-        transferQuota=tq;
-        return old;
+    if (nodeKey == null) {
+      return IdentityType.OWNED_IDENTITY;
     }
+    return identityKey == null ? IdentityType.NODE_IDENTITY : IdentityType.RECIPIENT_IDENTITY;
+  }
 
-    public int getTransferQuota() { return transferQuota; }
-
-    public String setNodeAddress(String na) {
-        String old=nodeAddress;
-        nodeAddress=na;
-        return old;
+  public boolean equals(Object t) {
+    if (t == null) {
+      return false;
     }
-
-    public String getNodeAddress() { return nodeAddress; }
-
-    public AsymmetricKey setNodeKey(AsymmetricKey k) {
-        AsymmetricKey old=nodeKey;
-        nodeKey=k;
-        return old;
+    if (t.getClass() != this.getClass()) {
+      return false;
     }
-
-    public AsymmetricKey getNodeKey() { return nodeKey; }
-
-    protected void parse(ASN1Encodable p) throws IOException {
-        LOGGER.log( Level.FINER, "Executing parse()" );
-        ASN1Sequence s1 = ASN1Sequence.getInstance( p );
-        int i=0;
-        valid = new UsagePeriod( s1.getObjectAt( i++ ) );
-        messageQuota=ASN1Integer.getInstance( s1.getObjectAt( i++ ) ).getValue().intValue();
-        transferQuota=ASN1Integer.getInstance( s1.getObjectAt( i++ ) ).getValue().intValue();
-        LOGGER.log( Level.FINER, "Finished parse()" );
-        for(;i<s1.size();i++) {
-            ASN1TaggedObject to = ASN1TaggedObject.getInstance( s1.getObjectAt( i ) );
-            switch(to.getTagNo()) {
-                case 1001:
-                    identityKey=new AsymmetricKey( toDER(to.getObject()) );
-                    break;
-                case 1002:
-                    nodeAddress=((ASN1String)(to.getObject())).getString();
-                    break;
-                case 1003:
-                    nodeKey=new AsymmetricKey( toDER(to.getObject()) );
-                    break;
-                default:
-                    throw new IOException("unknown tag encountered");
-            }
-        }
+    IdentityStoreBlock isb = (IdentityStoreBlock) t;
+    if (!valid.equals(isb.valid)) {
+      return false;
     }
-
-    @Override
-    public ASN1Object toASN1Object(DumpType dumpType) throws IOException {
-        // Prepare encoding
-        LOGGER.log( Level.FINER,"Executing toASN1Object()");
-
-        ASN1EncodableVector v=new ASN1EncodableVector();
-
-        v.add(valid.toASN1Object(dumpType));
-        v.add(new ASN1Integer( messageQuota ));
-        v.add(new ASN1Integer( transferQuota ));
-
-        if (identityKey != null) {
-            v.add( new DERTaggedObject( true, 1001, identityKey.toASN1Object( dumpType ) ) );
-        }
-        if(nodeAddress!=null) {
-            v.add( new DERTaggedObject( true, 1002, new DERUTF8String(nodeAddress)));
-        }
-        if (nodeKey != null){
-            v.add( new DERTaggedObject( true, 1003, nodeKey.toASN1Object( dumpType ) ) );
-        }
-
-        ASN1Sequence seq=new DERSequence(v);
-        LOGGER.log(Level.FINER,"done toASN1Object()");
-        return seq;
+    if (messageQuota != isb.messageQuota) {
+      return false;
     }
-
-    @Override
-    public String dumpValueNotation(String prefix,DumpType dumpType) throws IOException {
-        StringBuilder sb=new StringBuilder();
-        sb.append( '{' ).append( CRLF );
-        sb.append( prefix ).append( "  valid " ).append(valid.dumpValueNotation( prefix+"    ",dumpType )  ).append( ',' ).append(CRLF );
-        sb.append( prefix ).append( "  messageQuota " ).append( messageQuota ).append( ',' ).append( CRLF );
-        sb.append( prefix ).append( "  transferQuota " ).append( transferQuota );
-        if(identityKey!=null) {
-            sb.append( ',' ).append( CRLF );
-            sb.append( prefix ).append( "  identity " ).append( identityKey.dumpValueNotation( prefix + "    ", dumpType ) );
-        }
-        if(nodeAddress!=null) {
-            sb.append( ',' ).append( CRLF );
-            sb.append( prefix ).append( "  nodeAddress \"" ).append( nodeAddress ).append( '"' );
-        }
-        if( nodeKey != null )     {
-            sb.append( ',' ).append( CRLF );
-            sb.append( prefix ).append( "  nodeKey " ).append( nodeKey.dumpValueNotation( prefix + "    ", dumpType ) );
-        }
-        sb.append( CRLF );
-        sb.append( prefix ).append( '}' );
-        return sb.toString();
+    if (transferQuota != isb.transferQuota) {
+      return false;
     }
-
-    public IdentityType getType() {
-        if( iType != null ) {
-            return iType;
-        }
-        if( nodeKey == null ) {
-            return IdentityType.OWNED_IDENTITY;
-        }
-        return identityKey == null? IdentityType.NODE_IDENTITY: IdentityType.RECIPIENT_IDENTITY;
+    if ((identityKey == null && isb.identityKey != null) || (identityKey != null && !identityKey.equals(isb.identityKey))) {
+      return false;
     }
-
-    public boolean equals( Object t ) {
-        if( t == null ) {
-            return false;
-        }
-        if( t.getClass() != this.getClass() ) {
-            return false;
-        }
-        IdentityStoreBlock isb = (IdentityStoreBlock)t;
-        if( ! valid.equals( isb.valid ) ) {
-            return false;
-        }
-        if( messageQuota != isb.messageQuota ) {
-            return false;
-        }
-        if( transferQuota != isb.transferQuota ) {
-            return false;
-        }
-        if( ( identityKey == null && isb.identityKey != null ) || ( identityKey != null && ! identityKey.equals( isb.identityKey ) ) ) {
-            return false;
-        }
-        if( ( nodeAddress != null && ! nodeAddress.equals( isb.nodeAddress ) ) || ( nodeAddress == null && isb.nodeAddress != null ) ) {
-            return false;
-        }
-        return nodeKey.equals( isb.nodeKey );
+    if ((nodeAddress != null && !nodeAddress.equals(isb.nodeAddress)) || (nodeAddress == null && isb.nodeAddress != null)) {
+      return false;
     }
+    return nodeKey.equals(isb.nodeKey);
+  }
 
 }

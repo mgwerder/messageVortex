@@ -107,7 +107,7 @@ public class SymmetricKeyTest {
                     SymmetricKey k1 = new SymmetricKey(alg, Padding.getDefault(AlgorithmType.SYMMETRIC),Mode.getDefault( AlgorithmType.SYMMETRIC ));
                     SymmetricKey k2 = new SymmetricKey(alg, Padding.getDefault(AlgorithmType.SYMMETRIC),Mode.getDefault( AlgorithmType.SYMMETRIC ));
                     k2.setKey( k1.getKey() );
-                    k2.setIV( k1.getIV() );
+                    k2.setIv( k1.getIv() );
                     assertTrue( "error in key transfer cycle with "+alg+" ",k1.equals( k2 ));
                     assertTrue( "reencode error in key transfer cycle with "+alg+" ",Arrays.equals(k1.toBytes(DumpType.ALL_UNENCRYPTED),k2.toBytes(DumpType.ALL_UNENCRYPTED)));
                 }

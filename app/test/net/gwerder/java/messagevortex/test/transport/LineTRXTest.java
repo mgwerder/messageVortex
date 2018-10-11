@@ -313,7 +313,7 @@ public class LineTRXTest {
             ss.connect();
 
             LOGGER.log(Level.INFO, "  doing TLS handshake");
-            ss.startTLS();
+            ss.startTls();
             ss.write( "\0" );
 
             LOGGER.log(Level.INFO, "  initiating client shutdown");
@@ -356,7 +356,7 @@ public class LineTRXTest {
                 ss.connect();
 
                 LOGGER.log(Level.INFO, "  doing TLS handshake");
-                ss.startTLS();
+                ss.startTls();
 
                 ss.writeln( "\0" );
 

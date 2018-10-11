@@ -31,10 +31,10 @@ import java.io.IOException;
  */
 public interface Block {
 
-    String dumpValueNotation(String prefix,DumpType dumpType) throws IOException;
+  String dumpValueNotation(String prefix, DumpType dumpType) throws IOException;
 
-    ASN1Object toASN1Object(DumpType dumpType) throws IOException;
+  ASN1Object toAsn1Object(DumpType dumpType) throws IOException;
 
-    byte[] toBytes(DumpType dumpType) throws IOException;
+  byte[] toBytes(DumpType dumpType) throws IOException;
 
 }

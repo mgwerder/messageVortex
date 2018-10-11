@@ -46,7 +46,7 @@ public class MessageFactoryTest {
         } catch (Exception ioe) {
             is = IdentityStore.getNewIdentityStoreDemo( false );
             DEROutputStream f = new DEROutputStream( new FileOutputStream( System.getProperty( "java.io.tmpdir" ) + "/IdentityStoreExample1.der" ) );
-            f.writeObject( is.toASN1Object(DumpType.ALL_UNENCRYPTED) );
+            f.writeObject( is.toAsn1Object(DumpType.ALL_UNENCRYPTED) );
             f.close();
         }
         int maxTests=10;

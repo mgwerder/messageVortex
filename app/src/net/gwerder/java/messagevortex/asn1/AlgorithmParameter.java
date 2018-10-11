@@ -32,147 +32,147 @@ import java.util.concurrent.ConcurrentSkipListMap;
 
 /**
  * ASN1 parser block for algorithm parameters.
- *
+ * <p>
  * Created by martin.gwerder on 25.04.2016.
  */
-public class AlgorithmParameter extends AbstractBlock implements Serializable,Comparable<AlgorithmParameter> {
+public class AlgorithmParameter extends AbstractBlock implements Serializable, Comparable<AlgorithmParameter> {
 
-    public static final long serialVersionUID = 100000000001L;
+  public static final long serialVersionUID = 100000000001L;
 
-    private Map<Integer,String> parameter;
+  private Map<Integer, String> parameter;
 
-    public AlgorithmParameter() {
-        parameter=new ConcurrentSkipListMap<>();
+  public AlgorithmParameter() {
+    parameter = new ConcurrentSkipListMap<>();
+  }
+
+  public AlgorithmParameter(ASN1Encodable ae) throws IOException {
+    this();
+    if (ae != null) {
+      parse(ae);
     }
+  }
 
-    public AlgorithmParameter(ASN1Encodable ae) throws IOException {
-        this();
-        if (ae!=null) {
-            parse(ae);
+  public AlgorithmParameter(AlgorithmParameter p) {
+    this();
+    for (Map.Entry<Integer, String> e : p.parameter.entrySet()) {
+      put(e.getKey(), e.getValue());
+    }
+  }
+
+  public final String put(String id, String value) {
+    return put(Parameter.getByString(id).getId(), value);
+  }
+
+  public final String put(int id, String value) {
+    if (value == null) {
+      String ret = get(id);
+      parameter.remove(id);
+      return ret;
+    } else {
+      return parameter.put(id, value);
+    }
+  }
+
+  public final String put(Parameter parameter, String value) {
+
+    // this assertion catches rewritten keysizes (different values)
+    assert parameter != Parameter.KEYSIZE || (get(parameter.getId()) == null || (get(parameter.getId()).equals(value)));
+
+    return put(parameter.getId(), value);
+  }
+
+  public final String get(String id) {
+    Parameter p = Parameter.getByString(id);
+    if (p == null) {
+      throw new IllegalArgumentException("got unknown parameter id to map (" + id + ")");
+    }
+    return get(p.getId());
+  }
+
+  public String get(Parameter p) {
+    return get(p.getId());
+  }
+
+  public String get(int id) {
+    return parameter.get(id);
+  }
+
+  protected void parse(ASN1Encodable ae) throws IOException {
+    ASN1Sequence s1 = ASN1Sequence.getInstance(ae);
+    for (ASN1Encodable o : s1) {
+      ASN1TaggedObject to = ASN1TaggedObject.getInstance(o);
+      Parameter p = Parameter.getById(to.getTagNo());
+      if (p.isEncodable()) {
+        parameter.put(to.getTagNo(), p.fromASN1Object(to.getObject()));
+      } else {
+        throw new IOException("unknown der tagged object when parsing parameter (" + to.getTagNo() + ")");
+      }
+    }
+  }
+
+  @Override
+  public String dumpValueNotation(String prefix, DumpType dumpType) {
+    StringBuilder sb = new StringBuilder();
+    sb.append('{').append(CRLF);
+    int i = 0;
+    for (Map.Entry<Integer, String> e : parameter.entrySet()) {
+      Parameter p = Parameter.getById(e.getKey());
+      if (p != null && p.isEncodable()) {
+        if (i > 0) {
+          sb.append(',').append(CRLF);
         }
+        sb.append(prefix).append("  ").append(p).append(" \"").append(e.getValue()).append('\"');
+        i++;
+      }
     }
+    sb.append(prefix).append(CRLF).append(prefix).append('}');
+    return sb.toString();
+  }
 
-    public AlgorithmParameter(AlgorithmParameter p) {
-        this();
-        for(Map.Entry<Integer,String> e:p.parameter.entrySet()) {
-            put( e.getKey(), e.getValue() );
-        }
+  @Override
+  public ASN1Object toAsn1Object(DumpType dt) throws IOException {
+    ASN1EncodableVector v = new ASN1EncodableVector();
+    for (Map.Entry<Integer, String> e : parameter.entrySet()) {
+      Parameter p = Parameter.getById(e.getKey());
+      if (p != null && p.isEncodable() || dt == DumpType.INTERNAL) {
+        v.add(new DERTaggedObject(p.getId(), p.toASN1Object(e.getValue())));
+      }
     }
+    return new DERSequence(v);
+  }
 
-    public final String put(String id,String value) {
-        return put(Parameter.getByString(id).getId(),value);
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    int i = 0;
+    for (Map.Entry<Integer, String> e : this.parameter.entrySet()) {
+      if (i > 0) {
+        sb.append(", ");
+      }
+      sb.append(Parameter.getById(e.getKey())).append("=\"").append(e.getValue()).append('"');
+      i++;
     }
+    return sb.toString();
+  }
 
-    public final String put(int id,String value) {
-        if(value==null) {
-            String ret=get(id);
-            parameter.remove(id);
-            return ret;
-        } else {
-            return parameter.put(id,value);
-        }
+  @Override
+  public boolean equals(Object o) {
+    if (o == null) {
+      return false;
     }
-
-    public final String put( Parameter parameter, String value ) {
-
-        // this assertion catches rewritten keysizes (different values)
-        assert parameter != Parameter.KEYSIZE || ( get( parameter.getId() ) == null || ( get( parameter.getId() ).equals( value ) ) );
-
-        return put( parameter.getId(), value );
+    if (!(o.getClass() == this.getClass())) {
+      return false;
     }
+    return ((AlgorithmParameter) (o)).compareTo(this) == 0;
+  }
 
-    public final String get(String id) {
-        Parameter p=Parameter.getByString(id);
-        if(p==null) {
-            throw new IllegalArgumentException("got unknown parameter id to map ("+id+")");
-        }
-        return get(p.getId());
-    }
+  @Override
+  public int hashCode() {
+    return toString().hashCode();
+  }
 
-    public String get(Parameter p) {
-        return get(p.getId());
-    }
-
-    public String get(int id) {
-        return parameter.get(id);
-    }
-
-    protected void parse(ASN1Encodable ae) throws IOException{
-        ASN1Sequence s1 = ASN1Sequence.getInstance(ae);
-        for(ASN1Encodable o:s1) {
-            ASN1TaggedObject to=ASN1TaggedObject.getInstance(o);
-            Parameter p=Parameter.getById(to.getTagNo());
-            if(p.isEncodable()) {
-                parameter.put(to.getTagNo(),p.fromASN1Object(to.getObject()));
-            } else {
-                throw new IOException("unknown der tagged object when parsing parameter ("+to.getTagNo()+")");
-            }
-        }
-    }
-
-    @Override
-    public String dumpValueNotation( String prefix, DumpType dumpType ) {
-        StringBuilder sb = new StringBuilder();
-        sb.append( '{' ).append( CRLF );
-        int i=0;
-        for(Map.Entry<Integer,String> e:parameter.entrySet()) {
-            Parameter p=Parameter.getById(e.getKey());
-            if(p!=null && p.isEncodable()) {
-                if(i>0) {
-                    sb.append( ',' ).append( CRLF );
-                }
-                sb.append( prefix ).append( "  " ).append( p ).append( " \"" ).append( e.getValue() ).append( '\"' );
-                i++;
-            }
-        }
-        sb.append( prefix ).append( CRLF ).append( prefix ).append( '}' );
-        return sb.toString();
-    }
-
-    @Override
-    public ASN1Object toASN1Object(DumpType dt) throws IOException {
-        ASN1EncodableVector v =new ASN1EncodableVector();
-        for(Map.Entry<Integer,String> e:parameter.entrySet()) {
-            Parameter p=Parameter.getById(e.getKey());
-            if(p!=null && p.isEncodable() || dt == DumpType.INTERNAL ) {
-                v.add(new DERTaggedObject(p.getId(),p.toASN1Object(e.getValue())));
-            }
-        }
-        return new DERSequence(v);
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder sb=new StringBuilder();
-        int i=0;
-        for( Map.Entry<Integer,String> e: this.parameter.entrySet() ) {
-            if(i>0) {
-                sb.append( ", " );
-            }
-            sb.append( Parameter.getById( e.getKey() ) ).append( "=\"" ).append( e.getValue() ).append( '"' );
-            i++;
-        }
-        return sb.toString();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if(o==null) {
-            return false;
-        }
-        if( ! (o.getClass() == this.getClass()) ) {
-            return false;
-        }
-        return ((AlgorithmParameter)(o)).compareTo(this)==0;
-    }
-
-    @Override
-    public int hashCode() {
-        return toString().hashCode();
-    }
-
-    @Override
-    public int compareTo(AlgorithmParameter o) {
-        return toString().compareTo(o.toString());
-    }
+  @Override
+  public int compareTo(AlgorithmParameter o) {
+    return toString().compareTo(o.toString());
+  }
 }

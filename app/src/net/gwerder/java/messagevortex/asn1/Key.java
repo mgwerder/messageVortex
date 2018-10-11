@@ -32,40 +32,40 @@ import java.io.Serializable;
 import java.security.Security;
 
 /**
- *Abstract class for all encryption key types
+ * Abstract class for all encryption key types
  */
-public abstract class Key extends AbstractBlock  implements Serializable {
+public abstract class Key extends AbstractBlock implements Serializable {
 
-    public static final long serialVersionUID = 100000000009L;
+  public static final long serialVersionUID = 100000000009L;
 
-    static {
-        Security.addProvider(new BouncyCastleProvider());
-    }
+  static {
+    Security.addProvider(new BouncyCastleProvider());
+  }
 
 
-    AlgorithmParameter parameters = new AlgorithmParameter();
+  AlgorithmParameter parameters = new AlgorithmParameter();
 
-    void parseKeyParameter(ASN1Sequence s) throws IOException {
-        Algorithm alg=Algorithm.getById(ASN1Enumerated.getInstance(s.getObjectAt( 0 )).getValue().intValue());
-        parameters=new AlgorithmParameter(s.getObjectAt( 1 ));
-        parameters.put(Parameter.ALGORITHM.getId(),alg.toString());
-    }
+  void parseKeyParameter(ASN1Sequence s) throws IOException {
+    Algorithm alg = Algorithm.getById(ASN1Enumerated.getInstance(s.getObjectAt(0)).getValue().intValue());
+    parameters = new AlgorithmParameter(s.getObjectAt(1));
+    parameters.put(Parameter.ALGORITHM.getId(), alg.toString());
+  }
 
-    ASN1Encodable encodeKeyParameter(DumpType dumpType) throws IOException {
-        ASN1EncodableVector v=new ASN1EncodableVector();
-        v.add(new ASN1Enumerated( Algorithm.getByString( parameters.get( Parameter.ALGORITHM.getId() ) ).getId()));
-        v.add(parameters.toASN1Object(dumpType));
-        return new DERSequence( v );
-    }
+  ASN1Encodable encodeKeyParameter(DumpType dumpType) throws IOException {
+    ASN1EncodableVector v = new ASN1EncodableVector();
+    v.add(new ASN1Enumerated(Algorithm.getByString(parameters.get(Parameter.ALGORITHM.getId())).getId()));
+    v.add(parameters.toAsn1Object(dumpType));
+    return new DERSequence(v);
+  }
 
-    String dumpKeyTypeValueNotation(String prefix, DumpType dumpType) {
-        StringBuilder sb=new StringBuilder();
-        sb.append(prefix).append( "keyType " ).append( Algorithm.getByString( parameters.get( Parameter.ALGORITHM.getId() ) ) ).append( ',' ).append(CRLF);
-        sb.append(prefix).append( "parameter " ).append( parameters.dumpValueNotation( prefix,dumpType ) );
-        return sb.toString();
-    }
+  String dumpKeyTypeValueNotation(String prefix, DumpType dumpType) {
+    StringBuilder sb = new StringBuilder();
+    sb.append(prefix).append("keyType ").append(Algorithm.getByString(parameters.get(Parameter.ALGORITHM.getId()))).append(',').append(CRLF);
+    sb.append(prefix).append("parameter ").append(parameters.dumpValueNotation(prefix, dumpType));
+    return sb.toString();
+  }
 
-    public abstract byte[] decrypt(byte[] encrypted) throws IOException;
+  public abstract byte[] decrypt(byte[] encrypted) throws IOException;
 
-    public abstract byte[] encrypt(byte[] decrypted) throws IOException;
+  public abstract byte[] encrypt(byte[] decrypted) throws IOException;
 }

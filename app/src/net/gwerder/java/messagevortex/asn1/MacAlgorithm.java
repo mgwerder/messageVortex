@@ -36,74 +36,74 @@ import java.io.Serializable;
  */
 public class MacAlgorithm extends AbstractBlock implements Serializable {
 
-    public static final long serialVersionUID = 100000000010L;
+  public static final long serialVersionUID = 100000000010L;
 
-    Algorithm alg = null;
+  Algorithm alg = null;
 
-    public MacAlgorithm() {
-        alg = Algorithm.getDefault( AlgorithmType.HASHING );
+  public MacAlgorithm() {
+    alg = Algorithm.getDefault(AlgorithmType.HASHING);
+  }
+
+  /***
+   * constructor to creates a mac algorith from an ASN.1 encoded object.
+   *
+   * @param to            the object description in ASN.1 notation
+   * @throws IOException  if an error occures during parsing
+   * @throws NullPointerException if object is null
+   */
+  public MacAlgorithm(ASN1Encodable to) throws IOException {
+    if (to == null) {
+      throw new NullPointerException("object may not be null");
     }
+    parse(to);
+  }
 
-    /***
-     * constructor to creates a mac algorith from an ASN.1 encoded object.
-     *
-     * @param to            the object description in ASN.1 notation
-     * @throws IOException  if an error occures during parsing
-     * @throws NullPointerException if object is null
-     */
-    public MacAlgorithm(ASN1Encodable to) throws IOException {
-        if (to == null) {
-            throw new NullPointerException( "object may not be null" );
-        }
-        parse( to );
+  /***
+   * constructor to creates a mac algorith from an ASN.1 encoded object.
+   *
+   * @param a             the object description in ASN.1 notation
+   * @throws IOException  if an error occures during parsing
+   * @throws NullPointerException if object is null
+   */
+  public MacAlgorithm(Algorithm a) throws IOException {
+    if (a == null) {
+      throw new NullPointerException("object may not be null");
     }
+    if (a.getAlgorithmType() != AlgorithmType.HASHING) {
+      throw new IOException("Algorithm must be of type hashing");
+    }
+    alg = a;
+  }
 
-    /***
-     * constructor to creates a mac algorith from an ASN.1 encoded object.
-     *
-     * @param a             the object description in ASN.1 notation
-     * @throws IOException  if an error occures during parsing
-     * @throws NullPointerException if object is null
-     */
-    public MacAlgorithm(Algorithm a) throws IOException {
-        if (a == null ) {
-            throw new NullPointerException( "object may not be null" );
-        }
-        if( a.getAlgorithmType() != AlgorithmType.HASHING) {
-            throw new IOException( "Algorithm must be of type hashing" );
-        }
-        alg = a;
+  protected void parse(ASN1Encodable to) throws IOException {
+    Algorithm a = Algorithm.getById(ASN1Integer.getInstance(to).getValue().intValue());
+    if (a == null || a.getAlgorithmType() != AlgorithmType.HASHING) {
+      throw new IOException("Only hashing algorithms may be parsed");
     }
+    alg = a;
+  }
 
-    protected void parse(ASN1Encodable to) throws IOException {
-        Algorithm a = Algorithm.getById( ASN1Integer.getInstance( to ).getValue().intValue() );
-        if (a == null || a.getAlgorithmType() != AlgorithmType.HASHING){
-            throw new IOException( "Only hashing algorithms may be parsed" );
-        }
-        alg = a;
-    }
+  @Override
+  public ASN1Object toAsn1Object(DumpType dumpType) {
+    return new ASN1Integer(alg.getId());
+  }
 
-    @Override
-    public ASN1Object toASN1Object(DumpType dumpType) {
-        return new ASN1Integer( alg.getId() );
-    }
+  @Override
+  public String dumpValueNotation(String prefix, DumpType dumpType) {
+    return "" + alg.getId();
+  }
 
-    @Override
-    public String dumpValueNotation(String prefix,DumpType dumpType) {
-        return "" + alg.getId();
+  public Algorithm setAlgorithm(Algorithm alg) throws IOException {
+    if (alg.getAlgorithmType() != AlgorithmType.HASHING) {
+      throw new IOException("Algorithm must be of type hashing");
     }
+    Algorithm old = this.alg;
+    this.alg = alg;
+    return old;
+  }
 
-    public Algorithm setAlgorithm(Algorithm alg) throws IOException {
-        if (alg.getAlgorithmType() != AlgorithmType.HASHING) {
-            throw new IOException( "Algorithm must be of type hashing" );
-        }
-        Algorithm old = this.alg;
-        this.alg = alg;
-        return old;
-    }
-
-    public Algorithm getAlgorithm() {
-        return alg;
-    }
+  public Algorithm getAlgorithm() {
+    return alg;
+  }
 
 }

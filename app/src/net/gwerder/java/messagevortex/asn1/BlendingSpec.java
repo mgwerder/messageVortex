@@ -31,122 +31,127 @@ import java.util.List;
 
 /**
  * Represents a the Blending specification of the routing block.
- *
  */
 public class BlendingSpec extends AbstractBlock implements Serializable {
 
-    public static final long serialVersionUID = 100000000005L;
+  public static final long serialVersionUID = 100000000005L;
 
-    /* The endpoint address to be used */
-    private String recipientAddress=null;
-    private String media ="smtp:";
-    private String blendingType = "attach";
-    private BlendingParameter[] blendingParameter = new BlendingParameter[0];
+  /* The endpoint address to be used */
+  private String recipientAddress = null;
+  private String media = "smtp:";
+  private String blendingType = "attach";
+  private BlendingParameter[] blendingParameter = new BlendingParameter[0];
 
-    /* constructor */
-    public BlendingSpec(ASN1Encodable to)throws IOException  {
-        parse(to);
+  /* constructor */
+  public BlendingSpec(ASN1Encodable to) throws IOException {
+    parse(to);
+  }
+
+  public BlendingSpec(String blendingEndpointAddress) {
+    this.recipientAddress = blendingEndpointAddress;
+  }
+
+  protected void parse(ASN1Encodable to) throws IOException {
+    ASN1Sequence s1 = ASN1Sequence.getInstance(to);
+    int i = 0;
+
+    // parse target sequence
+    ASN1Sequence s2 = ASN1Sequence.getInstance(s1.getObjectAt(i++));
+    int i2 = 0;
+    // get media
+    media = DERUTF8String.getInstance(s2.getObjectAt(i2++)).getString();
+    // get recipient address
+    recipientAddress = DERUTF8String.getInstance(s2.getObjectAt(i2++)).getString();
+
+    //get blending type
+    blendingType = DERUTF8String.getInstance(s1.getObjectAt(i++)).getString();
+
+    // get Blending Parameter
+    s2 = ASN1Sequence.getInstance(s1.getObjectAt(i++));
+    List<BlendingParameter> al = new ArrayList<>(s2.size());
+    for (ASN1Encodable e : s2) {
+      al.add(new BlendingParameter(e));
     }
+    blendingParameter = al.toArray(new BlendingParameter[al.size()]);
+  }
 
-    public BlendingSpec(String blendingEndpointAddress) {
-        this.recipientAddress = blendingEndpointAddress;
+  @Override
+  public ASN1Object toAsn1Object(DumpType dumpType) throws IOException {
+    ASN1EncodableVector v = new ASN1EncodableVector();
+
+    // encode target sequence
+    ASN1EncodableVector v2 = new ASN1EncodableVector();
+    v2.add(new DERUTF8String(media));
+    v2.add(new DERUTF8String(recipientAddress));
+    v.add(new DERSequence(v2));
+
+    // encode blending type
+    v.add(new DERUTF8String(blendingType));
+
+    // encode BlendingParameter
+    v2 = new ASN1EncodableVector();
+    if (blendingParameter != null && blendingParameter.length > 0) {
+      for (BlendingParameter p : blendingParameter) {
+        v2.add(p.toAsn1Object(dumpType));
+      }
     }
+    v.add(new DERSequence(v2));
 
-    protected void parse(ASN1Encodable to) throws IOException {
-        ASN1Sequence s1 = ASN1Sequence.getInstance(to);
-        int i=0;
+    return new DERSequence(v);
+  }
 
-        // parse target sequence
-        ASN1Sequence s2 = ASN1Sequence.getInstance(s1.getObjectAt(i++));
-        int i2=0;
-        // get media
-        media= DERUTF8String.getInstance(s2.getObjectAt(i2++)).getString();
-        // get recipient address
-        recipientAddress= DERUTF8String.getInstance(s2.getObjectAt(i2++)).getString();
-
-        //get blending type
-        blendingType= DERUTF8String.getInstance(s1.getObjectAt(i++)).getString();
-
-        // get Blending Parameter
-        s2=ASN1Sequence.getInstance(s1.getObjectAt(i++));
-        List<BlendingParameter> al=new ArrayList<>(s2.size());
-        for(ASN1Encodable e:s2) {
-            al.add(new BlendingParameter(e));
+  @Override
+  public String dumpValueNotation(String prefix, DumpType dumpType) throws IOException {
+    StringBuilder sb = new StringBuilder();
+    sb.append(" {").append(CRLF);
+    sb.append(prefix).append("  target '").append(media).append(recipientAddress).append("',").append(CRLF);
+    sb.append(prefix).append("  blendingType '").append(blendingType).append("',").append(CRLF);
+    sb.append(prefix).append("  blendingParameter {");
+    if (blendingParameter != null && blendingParameter.length > 0) {
+      int i = 0;
+      for (BlendingParameter p : blendingParameter) {
+        if (i > 0) {
+          sb.append(',');
         }
-        blendingParameter=al.toArray(new BlendingParameter[al.size()]);
+        sb.append(CRLF);
+        sb.append(prefix).append(p.dumpValueNotation("", dumpType));
+        i++;
+      }
+      sb.append(CRLF);
     }
+    sb.append(prefix).append("  }").append(CRLF);
+    sb.append(prefix).append('}');
+    return sb.toString();
+  }
 
-    @Override
-    public ASN1Object toASN1Object(DumpType dumpType) throws IOException{
-        ASN1EncodableVector v=new ASN1EncodableVector();
+  public String getRecipientAddress() {
+    return recipientAddress;
+  }
 
-        // encode target sequence
-        ASN1EncodableVector v2=new ASN1EncodableVector();
-        v2.add(new DERUTF8String(media));
-        v2.add(new DERUTF8String(recipientAddress));
-        v.add(new DERSequence(v2));
+  public String setRecipientAddress(String recipientAddress) {
+    String old = this.recipientAddress;
+    this.recipientAddress = recipientAddress;
+    return old;
+  }
 
-        // encode blending type
-        v.add(new DERUTF8String(blendingType));
+  public String getMedia() {
+    return media;
+  }
 
-        // encode BlendingParameter
-        v2=new ASN1EncodableVector();
-        if(blendingParameter!=null && blendingParameter.length>0) {
-            for(BlendingParameter p:blendingParameter) {
-                v2.add(p.toASN1Object(dumpType));
-            }
-        }
-        v.add(new DERSequence(v2));
+  public String setMedia(String media) {
+    String old = this.media;
+    this.media = media;
+    return old;
+  }
 
-        return new DERSequence(v);
-    }
+  public String getBlendingType() {
+    return blendingType;
+  }
 
-    @Override
-    public String dumpValueNotation(String prefix,DumpType dumpType) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        sb.append( " {" ).append( CRLF );
-        sb.append( prefix ).append( "  target '" ).append( media ).append( recipientAddress ).append( "',").append( CRLF );
-        sb.append( prefix ).append( "  blendingType '" ).append( blendingType ).append( "',").append(CRLF);
-        sb.append( prefix ).append( "  blendingParameter {" );
-        if( blendingParameter != null && blendingParameter.length > 0 ) {
-            int i = 0;
-            for( BlendingParameter p: blendingParameter ) {
-                if( i > 0 ) {
-                    sb.append( ',' );
-                }
-                sb.append( CRLF );
-                sb.append( prefix ).append( p.dumpValueNotation( "", dumpType ) );
-                i++;
-            }
-            sb.append( CRLF );
-        }
-        sb.append( prefix ).append( "  }" ).append( CRLF );
-        sb.append( prefix ).append( '}' );
-        return sb.toString();
-    }
-
-    public String getRecipientAddress() { return recipientAddress; }
-
-    public String setRecipientAddress( String recipientAddress ) {
-        String old = this.recipientAddress;
-        this.recipientAddress = recipientAddress;
-        return old;
-    }
-
-    public String getMedia() { return media; }
-
-    public String setMedia( String media ) {
-        String old = this.media;
-        this.media = media;
-        return old;
-    }
-
-    public String getBlendingType() { return blendingType; }
-
-    public String setBlendingType(String blendingType) {
-        String old = this.blendingType;
-        this.blendingType = blendingType;
-        return old;
-    }
+  public String setBlendingType(String blendingType) {
+    String old = this.blendingType;
+    this.blendingType = blendingType;
+    return old;
+  }
 
 }

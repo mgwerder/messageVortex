@@ -1,6 +1,5 @@
 package net.gwerder.java.messagevortex.test.asn1;
 
-import net.gwerder.java.messagevortex.ExtendedSecureRandom;
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.asn1.AlgorithmParameter;
 import net.gwerder.java.messagevortex.asn1.AsymmetricAlgorithmSpec;
@@ -37,7 +36,7 @@ public class CipherSpecTest {
             CipherSpec s = new CipherSpec(CipherUsage.ENCRYPT);
             AsymmetricAlgorithmSpec aas = new AsymmetricAlgorithmSpec(Algorithm.AES256, new AlgorithmParameter());
             s.setAsymmetricSpec(aas);
-            CipherSpec s2 = new CipherSpec(s.toASN1Object(DumpType.ALL));
+            CipherSpec s2 = new CipherSpec(s.toAsn1Object(DumpType.ALL));
             assertTrue( "Reencoded CipherSpec is not equal", s2.equals(s) );
         }catch( Exception e) {
             e.printStackTrace();

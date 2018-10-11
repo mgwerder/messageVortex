@@ -29,7 +29,7 @@ public class BlendingParameterTest {
     public void reencodingBlendingParameter() {
         try {
             BlendingParameter s = new BlendingParameter( BlendingParameter.BlendingParameterChoice.OFFSET );
-            BlendingParameter s2 = new BlendingParameter(s.toASN1Object(DumpType.ALL));
+            BlendingParameter s2 = new BlendingParameter(s.toAsn1Object(DumpType.ALL));
             assertTrue( "Reencoded BlendingParameter is not equal", s2.equals(s) );
         }catch( Exception e) {
             e.printStackTrace();

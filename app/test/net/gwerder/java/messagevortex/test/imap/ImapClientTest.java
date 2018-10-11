@@ -141,7 +141,7 @@ public class ImapClientTest {
                 LOGGER.log(Level.INFO, "connecting imap client to server");
                 ic.connect();
                 LOGGER.log(Level.INFO, "checking TLS status of connection");
-                assertTrue("TLS is not as expected", ic.isTLS());
+                assertTrue("TLS is not as expected", ic.isTls());
                 LOGGER.log(Level.INFO, "closing client");
                 ic.shutdown();
                 is.shutdown();
@@ -167,7 +167,7 @@ public class ImapClientTest {
         DeadSocket ds=new DeadSocket(0,-1);
         ImapClient ic =new ImapClient( new InetSocketAddress( "localhost",ds.getPort() ), new SecurityContext(PLAIN) );
         ic.connect();
-        assertTrue("TLS is not as expected",!ic.isTLS());
+        assertTrue("TLS is not as expected",!ic.isTls());
         long start=System.currentTimeMillis();
         (new ImapCommandIWantATimeout()).init();
         try{

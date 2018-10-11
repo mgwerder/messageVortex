@@ -36,83 +36,84 @@ import java.util.logging.Level;
 
 /**
  * ASN1 parser class for header request.
- *
+ * <p>
  * Created by martin.gwerder on 25.04.2016.
  */
 public abstract class HeaderRequest extends AbstractBlock implements Serializable {
 
-    public static final long serialVersionUID = 100000000007L;
+  public static final long serialVersionUID = 100000000007L;
 
-    private enum Type {
-        IDENTITY( 0, HeaderRequestIdentity.class ),
-        CAPABILITIES( 1, HeaderRequestCapability.class ),
-        MESSAGE_QUOTA( 2, HeaderRequestIncreaseMessageQuota.class ),
-        TRANSFER_QUOTA( 3, HeaderRequestIncreaseTransferQuota.class ),
-        QUOTA_QUERY( 4, HeaderRequestQueryQuota.class );
+  private enum Type {
+    IDENTITY(0, HeaderRequestIdentity.class),
+    CAPABILITIES(1, HeaderRequestCapability.class),
+    MESSAGE_QUOTA(2, HeaderRequestIncreaseMessageQuota.class),
+    TRANSFER_QUOTA(3, HeaderRequestIncreaseTransferQuota.class),
+    QUOTA_QUERY(4, HeaderRequestQueryQuota.class);
 
-        int id;
-        Class c;
+    int id;
+    Class c;
 
-        Type( int id, Class c ) {
-            this.id = id;
-            this.c = c;
-        }
-
-        public int getId() {
-            return this.id;
-        }
-
-        public Class getTemplateClass() {
-            return this.c;
-        }
-
-        public static Type getByClass( Class c ) {
-            for(Type e : values()) {
-                if( e.getTemplateClass() == c ) {
-                    return e;
-                }
-            }
-            return null;
-        }
+    Type(int id, Class c) {
+      this.id = id;
+      this.c = c;
     }
 
-    private static final java.util.logging.Logger LOGGER;
-    static {
-        LOGGER = MessageVortexLogger.getLogger( (new Throwable()).getStackTrace()[0].getClassName() );
+    public int getId() {
+      return this.id;
     }
 
-    private static final List<HeaderRequest> req = new ArrayList<>();
+    public Class getTemplateClass() {
+      return this.c;
+    }
 
-    static {
-        try {
-            req.add( new HeaderRequestIdentity() );
-            req.add( new HeaderRequestQueryQuota() );
-        } catch(Exception e) {
-            LOGGER.log(Level.SEVERE,"Unexpected exception when adding Header Requests in static constructor",e);
+    public static Type getByClass(Class c) {
+      for (Type e : values()) {
+        if (e.getTemplateClass() == c) {
+          return e;
         }
+      }
+      return null;
     }
+  }
 
-    protected HeaderRequest() {
+  private static final java.util.logging.Logger LOGGER;
+
+  static {
+    LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+  }
+
+  private static final List<HeaderRequest> req = new ArrayList<>();
+
+  static {
+    try {
+      req.add(new HeaderRequestIdentity());
+      req.add(new HeaderRequestQueryQuota());
+    } catch (Exception e) {
+      LOGGER.log(Level.SEVERE, "Unexpected exception when adding Header Requests in static constructor", e);
     }
+  }
 
-    public static HeaderRequest getInstance( ASN1Encodable ae ) throws IOException {
-        for(HeaderRequest hr:req) {
-            if( Type.getByClass( hr.getClass() ).getId() == ((ASN1TaggedObject)(ae)).getTagNo() ) {
-                return hr.getRequest(ae);
-            }
-        }
-        return null;
+  protected HeaderRequest() {
+  }
+
+  public static HeaderRequest getInstance(ASN1Encodable ae) throws IOException {
+    for (HeaderRequest hr : req) {
+      if (Type.getByClass(hr.getClass()).getId() == ((ASN1TaggedObject) (ae)).getTagNo()) {
+        return hr.getRequest(ae);
+      }
     }
+    return null;
+  }
 
-    public ASN1Object toASN1Object( DumpType dt ) throws IOException {
-        Type tag = Type.getByClass( this.getClass() );
-        if( tag == null ) {
-            throw new IOException( "Unknown Header Request type \"" + this.getClass().getCanonicalName() + "\"" );
-        }
-        return new DERTaggedObject( tag.getId(), intToASN1Object( dt ) );
+  public ASN1Object toAsn1Object(DumpType dt) throws IOException {
+    Type tag = Type.getByClass(this.getClass());
+    if (tag == null) {
+      throw new IOException("Unknown Header Request type \"" + this.getClass().getCanonicalName() + "\"");
     }
+    return new DERTaggedObject(tag.getId(), intToASN1Object(dt));
+  }
 
-    abstract ASN1Object intToASN1Object( DumpType dt ) throws IOException;
+  abstract ASN1Object intToASN1Object(DumpType dt) throws IOException;
 
-    protected abstract HeaderRequest getRequest(ASN1Encodable ae) throws IOException;
+  protected abstract HeaderRequest getRequest(ASN1Encodable ae) throws IOException;
 }

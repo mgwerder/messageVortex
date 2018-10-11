@@ -30,52 +30,52 @@ import java.io.Serializable;
 /**
  * ASN1 parser for identity request.
  */
-public class HeaderRequestIdentity extends HeaderRequest  implements Serializable {
+public class HeaderRequestIdentity extends HeaderRequest implements Serializable {
 
-    public static final long serialVersionUID = 100000000027L;
+  public static final long serialVersionUID = 100000000027L;
 
-    protected UsagePeriod   period   = null;
+  protected UsagePeriod period = null;
 
-    public HeaderRequestIdentity() {
-        super();
+  public HeaderRequestIdentity() {
+    super();
+  }
+
+  public HeaderRequestIdentity(ASN1Encodable ae) throws IOException {
+    this();
+    if (ae != null) {
+      parse(ae);
     }
+  }
 
-    public HeaderRequestIdentity(ASN1Encodable ae) throws IOException {
-        this();
-        if ( ae != null ) {
-            parse( ae );
-        }
-    }
+  protected void parse(ASN1Encodable ae) throws IOException {
+    ASN1Sequence s1 = ASN1Sequence.getInstance(ae);
+    int i = 0;
+    period = new UsagePeriod(s1.getObjectAt(i++));
+  }
 
-    protected void parse( ASN1Encodable ae ) throws IOException {
-        ASN1Sequence s1 = ASN1Sequence.getInstance(ae);
-        int i = 0;
-        period = new UsagePeriod( s1.getObjectAt( i++ ) );
-    }
+  protected HeaderRequest getRequest(ASN1Encodable ae) throws IOException {
+    return new HeaderRequestIdentity(ae);
+  }
 
-    protected HeaderRequest getRequest(ASN1Encodable ae) throws IOException {
-        return new HeaderRequestIdentity(ae);
-    }
+  public int getId() {
+    return 0;
+  }
 
-    public int getId() {
-        return 0;
+  @Override
+  public String dumpValueNotation(String prefix, DumpType dumpType) {
+    StringBuilder sb = new StringBuilder();
+    sb.append('{').append(CRLF);
+    if (period != null) {
+      sb.append(prefix).append("  period ").append(period.dumpValueNotation(prefix + "  ", dumpType)).append(CRLF);
     }
+    sb.append(prefix).append('}');
+    return sb.toString();
+  }
 
-    @Override
-    public String dumpValueNotation( String prefix, DumpType dumpType ) {
-        StringBuilder sb=new StringBuilder();
-        sb.append( '{' ).append( CRLF );
-        if(period!=null) {
-            sb.append( prefix ).append( "  period " ).append( period.dumpValueNotation( prefix+"  ",dumpType ) ).append( CRLF );
-        }
-        sb.append( prefix ).append( '}' );
-        return sb.toString();
-    }
-
-    @Override
-    public ASN1Object intToASN1Object( DumpType dumpType ) throws IOException {
-        ASN1EncodableVector s1 = new ASN1EncodableVector();
-        s1.add( period.toASN1Object(dumpType) );
-        return new DERSequence( s1 );
-    }
+  @Override
+  public ASN1Object intToASN1Object(DumpType dumpType) throws IOException {
+    ASN1EncodableVector s1 = new ASN1EncodableVector();
+    s1.add(period.toAsn1Object(dumpType));
+    return new DERSequence(s1);
+  }
 }
