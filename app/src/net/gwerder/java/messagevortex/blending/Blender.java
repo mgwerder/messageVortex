@@ -61,9 +61,15 @@ public abstract class Blender implements TransportReceiver {
     return verifyer;
   }
 
-  public final HeaderVerifier setVerifier(HeaderVerifier verifyer) {
+  /***
+   * <p>Sets the header verifier of the accounting layer.</p>
+   *
+   * @param verifier the header verifier which is called upon incomming messages
+   * @return the previously set verifier
+   */
+  public final HeaderVerifier setVerifier(HeaderVerifier verifier) {
     HeaderVerifier ret = this.verifyer;
-    this.verifyer = verifyer;
+    this.verifyer = verifier;
     return ret;
   }
 

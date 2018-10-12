@@ -31,6 +31,12 @@ public class AuthenticationProxy {
 
   private ImapConnection conn = null;
 
+  /***
+   * <p>Sets the ImapConnection object which belongs to this proxy.</p>
+   *
+   * @param conn the connection to be set
+   * @return the previously set connection
+   */
   public ImapConnection setImapConnection(ImapConnection conn) {
     ImapConnection oc = this.conn;
     this.conn = conn;
@@ -57,6 +63,13 @@ public class AuthenticationProxy {
     users.put(creds.getUsername().toLowerCase(), creds);
   }
 
+  /***
+   * <p>Process a login request.</p>
+   *
+   * @param username the username to be checked
+   * @param password the password to be checked
+   * @return true if th user is known and the password matches this account
+   */
   public boolean login(String username, String password) {
     // Always require a username or password
     if (username == null || password == null) {

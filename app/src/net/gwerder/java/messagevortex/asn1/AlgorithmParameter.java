@@ -82,6 +82,14 @@ public class AlgorithmParameter extends AbstractBlock
     return put(Parameter.getByString(id).getId(), value);
   }
 
+  /***
+   * <p>Puts a key/value pair into the list.</p>
+   *
+   * @param id the key (must be known to the
+   *           subsystem @see net.gwerder.java.messagevortex.asn1.encryption.Parameter)
+   * @param value the value to be stored
+   * @return the perviously set value if it had been set before
+   */
   public final String put(int id, String value) {
     if (value == null) {
       String ret = get(id);
@@ -92,6 +100,13 @@ public class AlgorithmParameter extends AbstractBlock
     }
   }
 
+  /***
+   * <p>Puts a key/value pair into the list.</p>
+   *
+   * @param parameter the key
+   * @param value the value to be stored
+   * @return the perviously set value if it had been set before
+   */
   public final String put(Parameter parameter, String value) {
 
     // this assertion catches rewritten keysizes (different values)
@@ -101,9 +116,16 @@ public class AlgorithmParameter extends AbstractBlock
     return put(parameter.getId(), value);
   }
 
+  /***
+   * <p>Gets a value identified by a key from the list.</p>
+   *
+   * @param id the key
+   * @return the value or null if not found
+   */
   public final String get(String id) {
     Parameter p = Parameter.getByString(id);
     if (p == null) {
+      // This should not happe if the parameter is working correctly
       throw new IllegalArgumentException("got unknown parameter id to map (" + id + ")");
     }
     return get(p.getId());
