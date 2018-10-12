@@ -40,6 +40,7 @@ public class ImapCommandLogout extends ImapCommand {
     ImapCommand.registerCommand(this);
   }
 
+  @Override
   public String[] processCommand(ImapLine line) throws ImapException {
     // skip space
     // WRNING this is "non-strict"

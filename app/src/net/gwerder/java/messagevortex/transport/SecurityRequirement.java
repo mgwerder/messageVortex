@@ -21,9 +21,6 @@ package net.gwerder.java.messagevortex.transport;
 // * SOFTWARE.
 // ************************************************************************************
 
-/**
- * Created by Martin on 23.01.2018.
- */
 public enum SecurityRequirement {
   PLAIN,
   UNTRUSTED_STARTTLS,
@@ -31,6 +28,12 @@ public enum SecurityRequirement {
   UNTRUSTED_SSLTLS,
   SSLTLS;
 
+  /***
+   * <p>Gets the security requirement reflectted by the name.</p>
+   *
+   * @param s the name of the security requirement
+   * @return the requested security requirement or null if not found
+   */
   public static SecurityRequirement getByName(String s) {
     if (s == null) {
       return null;

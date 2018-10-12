@@ -111,6 +111,13 @@ public abstract class HeaderRequest extends AbstractBlock implements Serializabl
     return null;
   }
 
+  /***
+   * <p>Dumps the respective header request.</p>
+   *
+   * @param dt            the dump type to be used
+   * @return              an ASN.1 object of the request
+   * @throws IOException  if dumping fails due to illegal internal state
+   */
   public ASN1Object toAsn1Object(DumpType dt) throws IOException {
     Type tag = Type.getByClass(this.getClass());
     if (tag == null) {

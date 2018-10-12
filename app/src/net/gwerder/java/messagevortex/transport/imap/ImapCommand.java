@@ -38,6 +38,12 @@ public abstract class ImapCommand implements Cloneable {
     (new ImapCommandNoop()).init();
   }
 
+  /***
+   * <p>register a command so that process command is able to identify it and call the apropriate
+   * handler.</p>
+   *
+   * @param command the command to be registered as known command
+   */
   public static void registerCommand(ImapCommand command) {
     String[] arr = command.getCommandIdentifier();
     for (String a : arr) {

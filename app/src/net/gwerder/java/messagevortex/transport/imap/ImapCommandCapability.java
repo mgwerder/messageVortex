@@ -45,7 +45,7 @@ public class ImapCommandCapability extends ImapCommand {
     return t;
   }
 
-
+  @Override
   public String[] processCommand(ImapLine line) throws ImapException {
 
     // skip space

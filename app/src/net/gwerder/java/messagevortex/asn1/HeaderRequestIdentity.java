@@ -44,6 +44,12 @@ public class HeaderRequestIdentity extends HeaderRequest implements Serializable
     super();
   }
 
+  /***
+   * <p>Creates a class from the given ASN.1 object.</p>
+   *
+   * @param ae            the ASN.1 object to be translated
+   * @throws IOException  if parsing of the ASN.1 fails
+   */
   public HeaderRequestIdentity(ASN1Encodable ae) throws IOException {
     this();
     if (ae != null) {

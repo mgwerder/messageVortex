@@ -46,6 +46,9 @@ public class SimpleMessageFactory extends MessageFactory {
     graph.setTarget(anonGroupMembers[target]);
   }
 
+  /***
+   * <p>build a simple message path.</p>
+   */
   public void build() {
 
     // building vector graphs
@@ -82,6 +85,10 @@ public class SimpleMessageFactory extends MessageFactory {
 
   }
 
+  /***
+   * <p>Gets the previously built message path.</p>
+   * @return the message path or null if the previous build has failed
+   */
   public GraphSet getGraph() {
     return graph;
   }

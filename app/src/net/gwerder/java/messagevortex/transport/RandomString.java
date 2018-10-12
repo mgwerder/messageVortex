@@ -45,10 +45,21 @@ public class RandomString {
     // dummy constructor to overrule the default constructor
   }
 
+  /***
+   * <p>Returns a random string with the symbol set [0-9a-z].</p>
+   * @param length       the length in characters the string is requested
+   * @return             the requested random string
+   */
   public static String nextString(int length) {
     return nextString(length, new String(symbols));
   }
 
+  /***
+   * <p>Returns a random string.</p>
+   * @param length       the length in characters the string is requested
+   * @param symbolString the allowed symbols for the string
+   * @return             the requested random string
+   */
   public static String nextString(int length, String symbolString) {
     if (length < 1) {
       throw new IllegalArgumentException("length < 1: " + length);
