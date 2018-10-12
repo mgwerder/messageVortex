@@ -36,6 +36,7 @@ import javax.security.sasl.Sasl;
 import javax.security.sasl.SaslClient;
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.transport.ClientConnection;
+import net.gwerder.java.messagevortex.transport.Credentials;
 import net.gwerder.java.messagevortex.transport.SaslClientCallbackHandler;
 import net.gwerder.java.messagevortex.transport.SaslMechanisms;
 import net.gwerder.java.messagevortex.transport.SecurityContext;
