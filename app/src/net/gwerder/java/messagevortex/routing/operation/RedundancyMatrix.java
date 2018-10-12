@@ -44,7 +44,7 @@ public class RedundancyMatrix extends VandermondeMatrix {
   }
 
   /***
-   * Creates a redundancy matrixContent based on vnadermonde matrices.
+   * <p>Creates a redundancy matrixContent based on vnadermonde matrices.</p>
    *
    * @param dataRows the number of data rows
    * @param total    the number of total rows (redundancy + data rows)
@@ -55,7 +55,7 @@ public class RedundancyMatrix extends VandermondeMatrix {
   }
 
   /***
-   * Creates a redundancy matrixContent based on vnadermonde matrices.
+   * <p>Creates a redundancy matrixContent based on vnadermonde matrices.</p>
    *
    * @param dataRows the number of data rows
    * @param total    the number of total rows (redundancy + data rows)
@@ -100,7 +100,7 @@ public class RedundancyMatrix extends VandermondeMatrix {
 
 
   /***
-   * calculates a matrixContent to recover all data rows given the missing rows.
+   * <p>Calculates a matrixContent to recover all data rows given the missing rows.</p>
    *
    * @param missingRowIndex Index of the rows missing data
    * @return a square matrixContent rebuilding the data vector

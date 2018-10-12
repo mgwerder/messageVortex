@@ -49,7 +49,8 @@ public class DummyBlender extends Blender implements TransportReceiver {
   BlenderReceiver router;
   IdentityStore identityStore;
 
-  public DummyBlender(String identity, BlenderReceiver router, IdentityStore identityStore) throws IOException {
+  public DummyBlender(String identity, BlenderReceiver router, IdentityStore identityStore)
+          throws IOException {
     super(router, null);
     this.identity = identity;
     this.transport = new DummyTransportSender(identity, this);
@@ -68,10 +69,12 @@ public class DummyBlender extends Blender implements TransportReceiver {
   public boolean blendMessage(BlendingSpec target, VortexMessage msg) {
     // encode message in clear readable and send it
     try {
-      transport.sendMessage(target.getRecipientAddress(), new ByteArrayInputStream(msg.toBytes(DumpType.PUBLIC_ONLY)));
+      transport.sendMessage(target.getRecipientAddress(),
+              new ByteArrayInputStream(msg.toBytes(DumpType.PUBLIC_ONLY)));
       return true;
     } catch (IOException ioe) {
-      LOGGER.log(Level.SEVERE, "Unable to send to transport endpoint " + target.getRecipientAddress(), ioe);
+      LOGGER.log(Level.SEVERE, "Unable to send to transport endpoint "
+              + target.getRecipientAddress(), ioe);
       return false;
     }
   }
@@ -86,7 +89,8 @@ public class DummyBlender extends Blender implements TransportReceiver {
         buffer.write(data, 0, numBytesRead);
       }
       buffer.flush();
-      return router.gotMessage(new VortexMessage(buffer.toByteArray(), identityStore.getHostIdentity()));
+      return router.gotMessage(new VortexMessage(buffer.toByteArray(),
+              identityStore.getHostIdentity()));
     } catch (IOException ioe) {
       return false;
     }

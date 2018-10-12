@@ -83,7 +83,8 @@ public class AlgorithmParameter extends AbstractBlock
   public final String put(Parameter parameter, String value) {
 
     // this assertion catches rewritten keysizes (different values)
-    assert parameter != Parameter.KEYSIZE || (get(parameter.getId()) == null || (get(parameter.getId()).equals(value)));
+    assert parameter != Parameter.KEYSIZE || (get(parameter.getId()) == null
+            || (get(parameter.getId()).equals(value)));
 
     return put(parameter.getId(), value);
   }
@@ -110,9 +111,10 @@ public class AlgorithmParameter extends AbstractBlock
       ASN1TaggedObject to = ASN1TaggedObject.getInstance(o);
       Parameter p = Parameter.getById(to.getTagNo());
       if (p.isEncodable()) {
-        parameter.put(to.getTagNo(), p.fromASN1Object(to.getObject()));
+        parameter.put(to.getTagNo(), p.fromAsn1Object(to.getObject()));
       } else {
-        throw new IOException("unknown der tagged object when parsing parameter (" + to.getTagNo() + ")");
+        throw new IOException("unknown der tagged object when parsing parameter ("
+                + to.getTagNo() + ")");
       }
     }
   }
@@ -142,7 +144,7 @@ public class AlgorithmParameter extends AbstractBlock
     for (Map.Entry<Integer, String> e : parameter.entrySet()) {
       Parameter p = Parameter.getById(e.getKey());
       if (p != null && p.isEncodable() || dt == DumpType.INTERNAL) {
-        v.add(new DERTaggedObject(p.getId(), p.toASN1Object(e.getValue())));
+        v.add(new DERTaggedObject(p.getId(), p.toAsn1Object(e.getValue())));
       }
     }
     return new DERSequence(v);

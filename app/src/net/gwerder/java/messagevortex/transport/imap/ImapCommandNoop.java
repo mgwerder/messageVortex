@@ -28,6 +28,10 @@ public class ImapCommandNoop extends ImapCommand {
   }
 
   /***
+   * <p>Process NOOP command.</p>
+   *
+   * @param line the full line to be processed.
+   * @return the server reply
    * @FIXME return proper status
    */
   public String[] processCommand(ImapLine line) throws ImapException {

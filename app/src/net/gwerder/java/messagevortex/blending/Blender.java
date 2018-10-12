@@ -50,7 +50,8 @@ public abstract class Blender implements TransportReceiver {
    * @param listener the listening routing layer
    * @return the previously set listener
    */
-  public IncomingMessageRouterListener setIncomingMessageListener(IncomingMessageRouterListener listener) {
+  public IncomingMessageRouterListener setIncomingMessageListener(
+          IncomingMessageRouterListener listener) {
     IncomingMessageRouterListener old = this.listener;
     this.listener = listener;
     return old;
@@ -69,7 +70,8 @@ public abstract class Blender implements TransportReceiver {
   /***
    * <p>Sets the listening routing layer.</p>
    *
-   * <p>All future messages successfully extracted and authorized by the header verifyer are passed to this object.</p>
+   * <p>All future messages successfully extracted and authorized by the header verifyer are
+   * passed to this object.</p>
    *
    * @param receiver The listening routing layer
    * @return The old/previous routing layer

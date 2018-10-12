@@ -92,12 +92,18 @@ public class IdentityStore extends AbstractBlock implements Serializable {
 
   public static IdentityStore getNewIdentityStoreDemo(boolean complete) throws IOException {
     IdentityStore tmp = new IdentityStore();
-    tmp.add(IdentityStoreBlock.getIdentityStoreBlockDemo(IdentityStoreBlock.IdentityType.OWNED_IDENTITY, complete));
+    tmp.add(IdentityStoreBlock.getIdentityStoreBlockDemo(
+            IdentityStoreBlock.IdentityType.OWNED_IDENTITY, complete)
+    );
     for (int i = 0; i < 100; i++) {
-      tmp.add(IdentityStoreBlock.getIdentityStoreBlockDemo(IdentityStoreBlock.IdentityType.NODE_IDENTITY, complete));
+      tmp.add(IdentityStoreBlock.getIdentityStoreBlockDemo(
+              IdentityStoreBlock.IdentityType.NODE_IDENTITY, complete)
+      );
     }
     for (int i = 0; i < 40; i++) {
-      tmp.add(IdentityStoreBlock.getIdentityStoreBlockDemo(IdentityStoreBlock.IdentityType.RECIPIENT_IDENTITY, complete));
+      tmp.add(IdentityStoreBlock.getIdentityStoreBlockDemo(
+              IdentityStoreBlock.IdentityType.RECIPIENT_IDENTITY, complete)
+      );
     }
     return tmp;
   }
@@ -120,13 +126,16 @@ public class IdentityStore extends AbstractBlock implements Serializable {
     while (ret.size() < size && i < 10000) {
       i++;
       IdentityStoreBlock isb = blocks.get(keys[ExtendedSecureRandom.nextInt(keys.length)]);
-      if (isb != null && isb.getType() == IdentityStoreBlock.IdentityType.RECIPIENT_IDENTITY && !ret.contains(isb)) {
+      if (isb != null && isb.getType() == IdentityStoreBlock.IdentityType.RECIPIENT_IDENTITY
+              && !ret.contains(isb)) {
         ret.add(isb);
-        LOGGER.log(Level.FINER, "adding to anonSet " + Arrays.hashCode(isb.getIdentityKey().getPublicKey()));
+        LOGGER.log(Level.FINER, "adding to anonSet "
+                + Arrays.hashCode(isb.getIdentityKey().getPublicKey()));
       }
     }
     if (ret.size() < size) {
-      throw new IOException("unable to get anon set (size " + size + " too big; achieved: " + ret.size() + ")?");
+      throw new IOException("unable to get anon set (size " + size + " too big; achieved: "
+              + ret.size() + ")?");
     }
     LOGGER.log(Level.FINE, "done getAnonSet()");
     return ret;
@@ -184,7 +193,8 @@ public class IdentityStore extends AbstractBlock implements Serializable {
         sb.append(',').append(CRLF);
       }
       sb.append(prefix).append("    -- Dumping IdentityBlock ").append(e.getKey()).append(CRLF);
-      sb.append(prefix).append("    ").append(e.getValue().dumpValueNotation(prefix + "    ", dumpType));
+      sb.append(prefix).append("    ")
+              .append(e.getValue().dumpValueNotation(prefix + "    ", dumpType));
       i++;
     }
     sb.append(CRLF);

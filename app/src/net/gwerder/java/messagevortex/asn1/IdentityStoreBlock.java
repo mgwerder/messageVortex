@@ -86,7 +86,8 @@ public class IdentityStoreBlock extends AbstractBlock implements Serializable {
     }
   }
 
-  public static IdentityStoreBlock getIdentityStoreBlockDemo(IdentityType it, boolean complete) throws IOException {
+  public static IdentityStoreBlock getIdentityStoreBlockDemo(IdentityType it, boolean complete)
+          throws IOException {
     IdentityStoreBlock ret = new IdentityStoreBlock();
     ret.setValid(new UsagePeriod(3600 * 24 * 30));
     ret.setTransferQuota(ExtendedSecureRandom.nextInt(1024 * 1024 * 1024));
@@ -264,12 +265,14 @@ public class IdentityStoreBlock extends AbstractBlock implements Serializable {
   public String dumpValueNotation(String prefix, DumpType dumpType) throws IOException {
     StringBuilder sb = new StringBuilder();
     sb.append('{').append(CRLF);
-    sb.append(prefix).append("  valid ").append(valid.dumpValueNotation(prefix + "    ", dumpType)).append(',').append(CRLF);
+    sb.append(prefix).append("  valid ").append(valid.dumpValueNotation(prefix + "    ", dumpType))
+            .append(',').append(CRLF);
     sb.append(prefix).append("  messageQuota ").append(messageQuota).append(',').append(CRLF);
     sb.append(prefix).append("  transferQuota ").append(transferQuota);
     if (identityKey != null) {
       sb.append(',').append(CRLF);
-      sb.append(prefix).append("  identity ").append(identityKey.dumpValueNotation(prefix + "    ", dumpType));
+      sb.append(prefix).append("  identity ")
+              .append(identityKey.dumpValueNotation(prefix + "    ", dumpType));
     }
     if (nodeAddress != null) {
       sb.append(',').append(CRLF);
@@ -277,7 +280,8 @@ public class IdentityStoreBlock extends AbstractBlock implements Serializable {
     }
     if (nodeKey != null) {
       sb.append(',').append(CRLF);
-      sb.append(prefix).append("  nodeKey ").append(nodeKey.dumpValueNotation(prefix + "    ", dumpType));
+      sb.append(prefix).append("  nodeKey ")
+              .append(nodeKey.dumpValueNotation(prefix + "    ", dumpType));
     }
     sb.append(CRLF);
     sb.append(prefix).append('}');
@@ -311,10 +315,12 @@ public class IdentityStoreBlock extends AbstractBlock implements Serializable {
     if (transferQuota != isb.transferQuota) {
       return false;
     }
-    if ((identityKey == null && isb.identityKey != null) || (identityKey != null && !identityKey.equals(isb.identityKey))) {
+    if ((identityKey == null && isb.identityKey != null) || (identityKey != null
+            && !identityKey.equals(isb.identityKey))) {
       return false;
     }
-    if ((nodeAddress != null && !nodeAddress.equals(isb.nodeAddress)) || (nodeAddress == null && isb.nodeAddress != null)) {
+    if ((nodeAddress != null && !nodeAddress.equals(isb.nodeAddress)) || (nodeAddress == null
+            && isb.nodeAddress != null)) {
       return false;
     }
     return nodeKey.equals(isb.nodeKey);

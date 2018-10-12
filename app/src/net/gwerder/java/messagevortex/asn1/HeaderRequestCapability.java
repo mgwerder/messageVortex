@@ -70,7 +70,8 @@ public class HeaderRequestCapability extends HeaderRequest implements Serializab
     StringBuilder sb = new StringBuilder();
     sb.append('{').append(CRLF);
     if (period != null) {
-      sb.append(prefix).append("  period ").append(period.dumpValueNotation(prefix + "  ", dumpType)).append(CRLF);
+      sb.append(prefix).append("  period ")
+              .append(period.dumpValueNotation(prefix + "  ", dumpType)).append(CRLF);
     }
     sb.append(prefix).append('}');
     return sb.toString();

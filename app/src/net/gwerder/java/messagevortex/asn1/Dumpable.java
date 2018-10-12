@@ -32,7 +32,8 @@ public interface Dumpable {
    *
    * @param dt            the dump type to be used
    * @return              the ASN.1 string representation of the object
-   * @throws IOException  if dumping of the object fails due to an illegal internal state of the object
+   * @throws IOException  if dumping of the object fails due to an illegal internal state of the
+   *                      object
    */
   ASN1Object toAsn1Object(DumpType dt) throws IOException;
 }

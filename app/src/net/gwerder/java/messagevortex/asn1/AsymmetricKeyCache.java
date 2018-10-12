@@ -131,9 +131,11 @@ public class AsymmetricKeyCache implements Serializable {
         cache.addAll(element.cache);
         maxSize = Math.max(maxSize, element.maxSize);
         if ((numberOfCalcTimes + element.numberOfCalcTimes) > 0) {
-          averageCalcTime = (averageCalcTime * numberOfCalcTimes + element.averageCalcTime * element.numberOfCalcTimes) / (numberOfCalcTimes + element.numberOfCalcTimes);
+          averageCalcTime = (averageCalcTime * numberOfCalcTimes + element.averageCalcTime
+                  * element.numberOfCalcTimes) / (numberOfCalcTimes + element.numberOfCalcTimes);
         }
-        numberOfCalcTimes = Math.max(numberOfCalcTimes + element.numberOfCalcTimes, MAX_NUMBER_OF_CALC_TIMES);
+        numberOfCalcTimes = Math.max(numberOfCalcTimes + element.numberOfCalcTimes,
+                MAX_NUMBER_OF_CALC_TIMES);
       }
     }
 
@@ -397,7 +399,8 @@ public class AsymmetricKeyCache implements Serializable {
         CacheElement ce = e.getValue();
         long s = ce.size();
         long ms = ce.getMaxSize();
-        LOGGER.log(Level.INFO, "| " + String.format("%4s", s) + "/" + String.format("%4s", ms) + " " + percentBar((double) (s) / ms, 20) + " " + e.getKey());
+        LOGGER.log(Level.INFO, "| " + String.format("%4s", s) + "/" + String.format("%4s", ms)
+                + " " + percentBar((double) (s) / ms, 20) + " " + e.getKey());
         sum += s;
         tot += ms;
 

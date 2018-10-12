@@ -46,17 +46,30 @@ public class ImapLine {
   /* These are character subsets specified in RFC3501 */
   private static final String ABNF_SP = " ";
   private static final String ABNF_CTL = charlistBuilder(0, 31);
-  private static final String ABNF_LIST_WILDCARDS = "*%";
+  private static final String ABNF_LIST_WILDCARDS  = "*%";
   private static final String ABNF_QUOTED_SPECIALS = "\"\\";
-  private static final String ABNF_RESP_SPECIALS = "[";
-  private static final String ABNF_ATOM_SPECIALS = "(){" + ABNF_SP + ABNF_CTL + ABNF_LIST_WILDCARDS + ABNF_QUOTED_SPECIALS + ABNF_RESP_SPECIALS;
-  private static final String ABNF_ATOM_CHAR = charlistDifferencer(charlistBuilder(1, 127), ABNF_ATOM_SPECIALS);
-  private static final String ABNF_TEXT_CHAR = charlistDifferencer(charlistBuilder(1, 127), "\r\n");
-  private static final String ABNF_QUOTED_CHAR = charlistDifferencer(ABNF_TEXT_CHAR, ABNF_QUOTED_SPECIALS);
+  private static final String ABNF_RESP_SPECIALS   = "[";
+  private static final String ABNF_ATOM_SPECIALS   = "(){" + ABNF_SP + ABNF_CTL
+                                                     + ABNF_LIST_WILDCARDS
+                                                     + ABNF_QUOTED_SPECIALS
+                                                     + ABNF_RESP_SPECIALS;
+  private static final String ABNF_ATOM_CHAR = charlistDifferencer(
+                                                    charlistBuilder(1, 127),
+                                                    ABNF_ATOM_SPECIALS
+                                                );
+  private static final String ABNF_TEXT_CHAR = charlistDifferencer(
+                                                    charlistBuilder(1, 127),
+                                                    "\r\n"
+                                                );
+  private static final String ABNF_QUOTED_CHAR = charlistDifferencer(
+                                                    ABNF_TEXT_CHAR,
+                                                    ABNF_QUOTED_SPECIALS
+                                                 );
   private static final String ABNF_TAG = charlistDifferencer(ABNF_ATOM_CHAR, "+");
 
   /* a Logger  for logging purposes */
-  private static final Logger LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+  private static final Logger LOGGER = MessageVortexLogger.getLogger(
+          (new Throwable()).getStackTrace()[0].getClassName());
   private static final Object TAG_ENUMERATOR_LOCK = new Object();
   private static int tagEnumerator = 0;
   /* this holds the past context for the case that an exception is risen */
@@ -110,7 +123,8 @@ public class ImapLine {
 
     prefillCommandFields();
 
-    if ("BAD".equalsIgnoreCase(commandToken) || "OK".equalsIgnoreCase(commandToken) || "*".equals(tagToken)) {
+    if ("BAD".equalsIgnoreCase(commandToken) || "OK".equalsIgnoreCase(commandToken)
+        || "*".equals(tagToken)) {
       LOGGER.log(Level.INFO, "Parsing command " + tagToken + " " + commandToken);
     }
 
@@ -130,13 +144,14 @@ public class ImapLine {
   }
 
   /***
-   * <p>Builds a set of chracters ranging from the ASCII code of start until the ASCII code of end.</p>
+   * <p>Builds a set of chracters ranging from the ASCII code of start until the ASCII code
+   * of end.</p>
    *
    * <p>This helper is mainly used to build ABNF strings.</p>
    *
    * @param start The first ASCII code to be used
    * @param end   The last ASCII code to be used
-   ***/
+   */
   public static String charlistBuilder(int start, int end) {
     // reject chain building if start is not within 0..255
     if (start < 0 || start > 255) {
@@ -166,7 +181,7 @@ public class ImapLine {
    *
    * @param superset    The set where character should be removed from
    * @param subset      The set of characters to be removed
-   ***/
+   */
   public static String charlistDifferencer(String superset, String subset) {
     String ret = superset;
     for (int i = 0; i < subset.length(); i++) {
@@ -180,7 +195,7 @@ public class ImapLine {
    * <p>Encodes a command so that newlines are visible.</p>
    *
    * @return a printable string representation
-   ***/
+   */
   public static String commandEncoder(String command) {
     if (command == null) {
       return "<null>";
@@ -211,7 +226,8 @@ public class ImapLine {
     return ret;
   }
 
-  private void prepareStorage(ImapConnection con, String line, InputStream input) throws ImapException {
+  private void prepareStorage(ImapConnection con, String line, InputStream input)
+          throws ImapException {
     // make sure that a line is never null when reaching the parsing section
     if (buffer == null) {
       buffer = "";
@@ -243,7 +259,8 @@ public class ImapLine {
 
     int i = skipWhitespace(1);
     if (i != 1) {
-      throw new ImapException(this, "error skipping to command (line=\"" + context + "\"; tag=" + tagToken + "; buffer=" + buffer + "; skipped=" + i + ")");
+      throw new ImapException(this, "error skipping to command (line=\"" + context + "\"; tag="
+              + tagToken + "; buffer=" + buffer + "; skipped=" + i + ")");
     }
 
     // get command
@@ -352,7 +369,7 @@ public class ImapLine {
    * <p>Returns the current buffer (including position) and some of the already read characters.</p>
    *
    * @return String representation of the current context
-   ***/
+   */
   public String getContext() {
     return context + "^^^" + buffer;
   }
@@ -362,7 +379,7 @@ public class ImapLine {
    *
    * @param   num number of characters to be skipped
    * @return String representation of the skipped characters
-   ***/
+   */
   public String skipBytes(long num) {
     return skipBytes(num, true);
   }
@@ -399,7 +416,7 @@ public class ImapLine {
    *
    * @param   num number of spaces to be skipped
    * @return number of skipped spaces
-   ***/
+   */
   public int skipWhitespace(int num) {
     // count number of spaces found
     int count = 0;
@@ -424,7 +441,7 @@ public class ImapLine {
    * <p>Skips a CRLF combo in the buffer.</p>
    *
    * @return True if a combo has been skipped
-   ***/
+   */
   public boolean skipLineEnd() {
     LOGGER.log(Level.FINER, "Skipping CRLF");
     if (snoopBytes(2) != null && "\r\n".equals(snoopBytes(2))) {
@@ -440,7 +457,7 @@ public class ImapLine {
    * <p>Skips up to a CRLF combo in the buffer.</p>
    *
    * @return True if a combo has been skipped (false if buffer ended before a CRLF combo was read
-   ***/
+   */
   public boolean skipUntilLineEnd() {
     while (snoopBytes(2) != null && !"\r\n".equals(snoopBytes(2))) {
       skipBytes(1, false);
@@ -497,7 +514,8 @@ public class ImapLine {
     // get a quoted string
     skipBytes(1);
     StringBuilder ret = new StringBuilder();
-    while (snoopBytes(1) != null && (ABNF_QUOTED_CHAR.contains(snoopBytes(1)) || snoopEscQuotes())) {
+    while (snoopBytes(1) != null && (ABNF_QUOTED_CHAR.contains(snoopBytes(1))
+           || snoopEscQuotes())) {
       if ("\\".contains(snoopBytes(1))) {
         ret.append(skipBytes(2).substring(1, 2));
       } else {
@@ -515,7 +533,7 @@ public class ImapLine {
    * <p>Get an IMAP String from the buffer (quoted or prefixed).</p>
    *
    * @return The String or null if no string is at the current position
-   ***/
+   */
   public String getString() {
     String start = snoopBytes(1);
     String ret = null;

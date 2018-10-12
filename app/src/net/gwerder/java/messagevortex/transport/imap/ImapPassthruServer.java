@@ -1,5 +1,27 @@
 package net.gwerder.java.messagevortex.transport.imap;
 
+// ************************************************************************************
+// * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
+// *
+// * Permission is hereby granted, free of charge, to any person obtaining a copy
+// * of this software and associated documentation files (the "Software"), to deal
+// * in the Software without restriction, including without limitation the rights
+// * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// * copies of the Software, and to permit persons to whom the Software is
+// * furnished to do so, subject to the following conditions:
+// *
+// * The above copyright notice and this permission notice shall be included in all
+// * copies or substantial portions of the Software.
+// *
+// * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// * SOFTWARE.
+// ************************************************************************************
+
 import static java.lang.System.exit;
 
 import java.io.IOException;
@@ -17,9 +39,6 @@ import net.gwerder.java.messagevortex.transport.SecurityRequirement;
 import sun.misc.Signal;
 import sun.misc.SignalHandler;
 
-/**
- * Created by Martin on 13.04.2018.
- */
 public class ImapPassthruServer implements SignalHandler {
 
   private static final java.util.logging.Logger LOGGER;
@@ -28,12 +47,16 @@ public class ImapPassthruServer implements SignalHandler {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
 
-  private static final String imapURL = "(?<protocol>imap[s]?)://(?:(?<username>[\\p{Alnum}\\-\\.]+):(?<password>[\\p{ASCII}&&[^@]]+)@)?(?<server>[\\p{Alnum}\\.\\-]+)(?::(?<port>[\\digit]{1,5}))?";
+  private static final String imapUrl = "(?<protocol>imap[s]?)://"
+          + "(?:(?<username>[\\p{Alnum}\\-\\.]+):(?<password>[\\p{ASCII}&&[^@]]+)@)?"
+          + "(?<server>[\\p{Alnum}\\.\\-]+)(?::(?<port>[\\digit]{1,5}))?";
 
   private ImapServer localServer;
   private ImapClient remoteServer;
 
-  public ImapPassthruServer(InetSocketAddress listeningAddress, SecurityContext context, Credentials listeningCredentials, InetSocketAddress forwardingServer, Credentials forwardingCredentials) throws IOException {
+  public ImapPassthruServer(InetSocketAddress listeningAddress, SecurityContext context,
+                            Credentials listeningCredentials, InetSocketAddress forwardingServer,
+                            Credentials forwardingCredentials) throws IOException {
     localServer = new ImapServer(listeningAddress, context);
     AuthenticationProxy authProxy = new AuthenticationProxy();
     authProxy.addCredentials(listeningCredentials);
@@ -67,7 +90,10 @@ public class ImapPassthruServer implements SignalHandler {
 
   public static void main(String[] args) throws Exception {
     if (args.length != 2) {
-      System.err.println("usage: java -jar messageVortex.jar net.gwerder.java.messagevortex.transport.imap.ImapPassthruServer imap(s)://<accepted_username>:<accepted_password>@<local_interface>:<port> imap(s)://<fetch_username>:<fetch_password>@<sever>:<port>");
+      System.err.println("usage: java -jar "
+          + "messageVortex.jar net.gwerder.java.messagevortex.transport.imap.ImapPassthruServer "
+          + "imap(s)://<accepted_username>:<accepted_password>@<local_interface>:<port> "
+          + "imap(s)://<fetch_username>:<fetch_password>@<sever>:<port>");
       exit(100);
     }
 
@@ -75,7 +101,9 @@ public class ImapPassthruServer implements SignalHandler {
 
     InetSocketAddress listener = getSocketAdressFromUrl(args[0]);
     Credentials creds = new Credentials(getUsernameFromUrl(args[0]), getPasswordFromUrl(args[0]));
-    ImapPassthruServer s = new ImapPassthruServer(listener, new SecurityContext(SecurityRequirement.STARTTLS), creds, getSocketAdressFromUrl(args[1]), null);
+    ImapPassthruServer s = new ImapPassthruServer(listener,
+            new SecurityContext(SecurityRequirement.STARTTLS), creds,
+            getSocketAdressFromUrl(args[1]), null);
     MessageVortexStatus.displayMessage(null, "Passthru Server started as standalone");
   }
 
@@ -83,7 +111,7 @@ public class ImapPassthruServer implements SignalHandler {
     if (url == null) {
       throw new NullPointerException("Address may not be null");
     }
-    Pattern p = Pattern.compile(imapURL);
+    Pattern p = Pattern.compile(imapUrl);
     Matcher m = p.matcher(url);
     if (!m.matches()) {
       throw new ParseException("Unable to parse imap URL \"" + url + "\"", -1);
@@ -95,7 +123,7 @@ public class ImapPassthruServer implements SignalHandler {
     if (url == null) {
       throw new NullPointerException("Address may not be null");
     }
-    Pattern p = Pattern.compile(imapURL);
+    Pattern p = Pattern.compile(imapUrl);
     Matcher m = p.matcher(url);
     if (!m.matches()) {
       throw new ParseException("Unable to parse imap URL \"" + url + "\"", -1);
@@ -107,7 +135,7 @@ public class ImapPassthruServer implements SignalHandler {
     if (url == null) {
       throw new NullPointerException("Address may not be null");
     }
-    Pattern p = Pattern.compile(imapURL);
+    Pattern p = Pattern.compile(imapUrl);
     Matcher m = p.matcher(url);
     if (!m.matches()) {
       throw new ParseException("Unable to parse imap URL \"" + url + "\"", -1);
@@ -119,7 +147,7 @@ public class ImapPassthruServer implements SignalHandler {
     if (url == null) {
       throw new NullPointerException("Address may not be null");
     }
-    Pattern p = Pattern.compile(imapURL);
+    Pattern p = Pattern.compile(imapUrl);
     Matcher m = p.matcher(url);
     if (!m.matches()) {
       throw new ParseException("Unable to parse imap URL \"" + url + "\"", -1);
@@ -131,7 +159,7 @@ public class ImapPassthruServer implements SignalHandler {
     if (url == null) {
       throw new NullPointerException("Address may not be null");
     }
-    Pattern p = Pattern.compile(imapURL);
+    Pattern p = Pattern.compile(imapUrl);
     Matcher m = p.matcher(url);
     if (!m.matches()) {
       throw new ParseException("Unable to parse imap URL \"" + url + "\"", -1);

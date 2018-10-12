@@ -88,7 +88,8 @@ public class InternalPayload {
       // build if payload cache is empty
       Operation op = internalOperationOutput.get(id);
       if (op != null && op.canRun()) {
-        LOGGER.log(Level.INFO, "executing operation " + op + " of identity " + getIdentity() + " to populate payload id " + id);
+        LOGGER.log(Level.INFO, "executing operation " + op + " of identity " + getIdentity()
+                + " to populate payload id " + id);
         op.execute(new int[]{id});
       }
 
@@ -163,7 +164,8 @@ public class InternalPayload {
     // check for self dependency
     for (int id : op.getOutputId()) {
       if (Arrays.binarySearch(op.getInputId(), id) > -1) {
-        throw new InvalidParameterException("circular dependency detected between the in and outputs of this function on id " + id);
+        throw new InvalidParameterException("circular dependency detected between the in and "
+                + "outputs of this function on id " + id);
       }
     }
 
@@ -257,7 +259,8 @@ public class InternalPayload {
     // check for conflicting operations
     for (int id : op.getOutputId()) {
       if (internalOperationOutput.get(id) != null) {
-        LOGGER.log(Level.WARNING, "addin of operation " + op + " due to conflicting outputs (conflicting op is:" + internalOperationOutput.get(id).toString() + ")");
+        LOGGER.log(Level.WARNING, "addin of operation " + op + " due to conflicting outputs "
+                + "(conflicting op is:" + internalOperationOutput.get(id).toString() + ")");
         return false;
       }
     }
@@ -307,7 +310,8 @@ public class InternalPayload {
         }
       }
       for (Operation op : ops) {
-        LOGGER.log(Level.INFO, "clearing expired operation " + op + " of identity " + getIdentity());
+        LOGGER.log(Level.INFO, "clearing expired operation " + op + " of identity "
+                + getIdentity());
         deregisterOperation(op);
       }
     }

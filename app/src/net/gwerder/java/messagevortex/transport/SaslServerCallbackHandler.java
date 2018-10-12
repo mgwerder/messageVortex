@@ -84,7 +84,9 @@ public class SaslServerCallbackHandler implements CallbackHandler {
       } else if (cb instanceof RealmCallback) {
         RealmCallback pc = (RealmCallback) cb;
         // must match hostname or listed in prop com.sun.security.sasl.digest.realm
-        if (creds != null) pc.setText(creds.getRealm());
+        if (creds != null) {
+          pc.setText(creds.getRealm());
+        }
       } else {
         LOGGER.log(Level.SEVERE, "Server - unknown callback " + cb);
       }

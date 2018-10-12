@@ -35,7 +35,8 @@ public class GaloisFieldMathMode implements MathMode {
   private final int[] gfLog;
   private final int[] gfInverseLog;
 
-  static final int[] PRIM_POLYNOM = new int[]{3, 7, 11, 19, 37, 67, 137, 285, 529, 1033, 2053, 4179, 8219, 17475, 32771, 69643};
+  static final int[] PRIM_POLYNOM = new int[]{3, 7, 11, 19, 37, 67, 137, 285, 529, 1033, 2053,
+                                              4179, 8219, 17475, 32771, 69643};
   static final Map<Integer, GaloisFieldMathMode> cachedMathMode = new ConcurrentHashMap<>();
 
   private GaloisFieldMathMode(int omega) {

@@ -44,9 +44,7 @@ public class PrefixBlock extends AbstractBlock implements Serializable {
   byte[] encrypted = null;
   AsymmetricKey decryptionKey = null;
 
-  /**
-   * The key used for decryption of the rest of the VortexMessage
-   **/
+  /* The key used for decryption of the rest of the VortexMessage. */
   SymmetricKey key = null;
 
   private static final java.util.logging.Logger LOGGER;

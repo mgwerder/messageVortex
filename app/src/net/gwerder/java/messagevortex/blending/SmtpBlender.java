@@ -28,9 +28,9 @@ import net.gwerder.java.messagevortex.asn1.BlendingSpec;
 import net.gwerder.java.messagevortex.asn1.VortexMessage;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-public class SMTPBlender extends Blender {
+public class SmtpBlender extends Blender {
 
-  public SMTPBlender(BlenderReceiver receiver, HeaderVerifier verifier) {
+  public SmtpBlender(BlenderReceiver receiver, HeaderVerifier verifier) {
     super(receiver, verifier);
   }
 

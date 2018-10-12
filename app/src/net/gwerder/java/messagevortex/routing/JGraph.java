@@ -78,12 +78,14 @@ public class JGraph extends JPanel implements MouseListener {
 
   private void update() {
     GraphSet[] routes = graph.getRoutes();
-    Dimension d = new Dimension(graph.getAnonymitySetSize() * (BOX_WIDTH + 1) + 2 * X_OFFSET, 2 * Y_OFFSET + 2 * ROUTE_BORDER + routes.length * 4);
+    Dimension d = new Dimension(graph.getAnonymitySetSize() * (BOX_WIDTH + 1) + 2 * X_OFFSET,
+            2 * Y_OFFSET + 2 * ROUTE_BORDER + routes.length * 4);
     setMinimumSize(d);
   }
 
   private void drawTopLabels(Graphics g) {
-    double horizontalSpace = (0.0 + getWidth() - 2 * X_OFFSET - BOX_WIDTH) / (graph.getAnonymitySetSize() - 1);
+    double horizontalSpace = (0.0 + getWidth() - 2 * X_OFFSET - BOX_WIDTH)
+                             / (graph.getAnonymitySetSize() - 1);
     for (int i = 0; i < graph.getAnonymitySetSize(); i++) {
       int x = (int) (X_OFFSET + i * horizontalSpace);
 
@@ -104,12 +106,15 @@ public class JGraph extends JPanel implements MouseListener {
       int hgt = metrics.getHeight();
       int adv = metrics.stringWidth("" + i);
       g.setColor(Color.BLACK);
-      g.drawString("" + i, x + BOX_WIDTH / 2 - (adv) / 2, Y_OFFSET + BOX_HEIGHT / 2 + (hgt + 2) / 2 - 2);
+      g.drawString("" + i, x + BOX_WIDTH / 2 - (adv) / 2, Y_OFFSET + BOX_HEIGHT / 2 + (hgt + 2)
+                   / 2 - 2);
 
       // draw vertical lines
       Graphics2D g3 = (Graphics2D) g.create();
-      g3.setStroke(new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{9}, 0));
-      g3.drawLine(x + BOX_WIDTH / 2, Y_OFFSET + BOX_HEIGHT, x + BOX_WIDTH / 2, getHeight() - Y_OFFSET - 2 * ROUTE_BORDER);
+      g3.setStroke(new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0,
+              new float[]{9}, 0));
+      g3.drawLine(x + BOX_WIDTH / 2, Y_OFFSET + BOX_HEIGHT, x + BOX_WIDTH / 2, getHeight()
+                  - Y_OFFSET - 2 * ROUTE_BORDER);
       g3.dispose();
     }
   }
@@ -117,8 +122,10 @@ public class JGraph extends JPanel implements MouseListener {
   private void drawArrows(Graphics g) {
     GraphSet[] routes = graph.getRoutes();
 
-    double horizontalSpace = (0.0 + getWidth() - 2 * X_OFFSET - BOX_WIDTH) / (graph.getAnonymitySetSize() - 1);
-    double verticalSpace = (0.0 + getHeight() - 2 * Y_OFFSET - 2 * BOX_HEIGHT - ROUTE_BORDER) / (graph.size());
+    double horizontalSpace = (0.0 + getWidth() - 2 * X_OFFSET - BOX_WIDTH)
+                             / (graph.getAnonymitySetSize() - 1);
+    double verticalSpace   = (0.0 + getHeight() - 2 * Y_OFFSET - 2 * BOX_HEIGHT - ROUTE_BORDER)
+                             / (graph.size());
     Graphics2D g2 = (Graphics2D) (g.create());
     Stroke s = g2.getStroke();
     Stroke s2 = new BasicStroke(3);
@@ -127,12 +134,15 @@ public class JGraph extends JPanel implements MouseListener {
     System.out.println("## displaying route " + this.route + " (" + routes[this.route].size() + ")");
     for (int i = 0; i < graph.size(); i++) {
       Edge gr = graph.get(i);
-      int x1 = (int) (X_OFFSET + (double) BOX_WIDTH / 2 + graph.getAnonymityIndex(gr.getFrom()) * horizontalSpace);
-      int x2 = (int) (X_OFFSET + (double) BOX_WIDTH / 2 + graph.getAnonymityIndex(gr.getTo()) * horizontalSpace);
+      int x1 = (int) (X_OFFSET + (double) BOX_WIDTH / 2 + graph.getAnonymityIndex(gr.getFrom())
+               * horizontalSpace);
+      int x2 = (int) (X_OFFSET + (double) BOX_WIDTH / 2 + graph.getAnonymityIndex(gr.getTo())
+               * horizontalSpace);
       int y = (int) (Y_OFFSET + 2 * BOX_HEIGHT + i * verticalSpace);
 
       if (routes[this.route].contains(gr)) {
-        System.out.println("##   route " + this.route + " contains " + i + " (" + routes[this.route].size() + "/" + gr.getStartTime() + ")");
+        System.out.println("##   route " + this.route + " contains " + i + " ("
+                + routes[this.route].size() + "/" + gr.getStartTime() + ")");
         g2.setColor(Color.GREEN);
         g2.setStroke(s2);
         if (lastY > 0) {

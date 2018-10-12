@@ -33,7 +33,8 @@ import net.gwerder.java.messagevortex.transport.AuthenticationProxy;
 import net.gwerder.java.messagevortex.transport.ServerConnection;
 import net.gwerder.java.messagevortex.transport.StoppableThread;
 
-public class ImapConnection extends ServerConnection implements Comparable<ImapConnection>, StoppableThread, Runnable {
+public class ImapConnection extends ServerConnection
+                            implements Comparable<ImapConnection>, StoppableThread, Runnable {
 
   private static final Logger LOGGER;
   private static int id = 1;
@@ -135,10 +136,13 @@ public class ImapConnection extends ServerConnection implements Comparable<ImapC
     if (c == null) {
       throw new ImapException(il, "Command \"" + il.getCommand() + "\" is not implemented");
     }
-    LOGGER.log(Level.FINEST, "found command in connection " + Thread.currentThread().getName() + ".");
+    LOGGER.log(Level.FINEST, "found command in connection " + Thread.currentThread().getName()
+            + ".");
     String[] s = c.processCommand(il);
 
-    LOGGER.log(Level.INFO, "got command \"" + il.getTag() + " " + il.getCommand() + "\". Reply is \"" + ImapLine.commandEncoder(s == null ? "null" : s[s.length - 1]) + "\" (" + (s != null ? s.length : "Null") + ").");
+    LOGGER.log(Level.INFO, "got command \"" + il.getTag() + " " + il.getCommand()
+            + "\". Reply is \"" + ImapLine.commandEncoder(s == null ? "null" : s[s.length - 1])
+            + "\" (" + (s != null ? s.length : "Null") + ").");
     return s;
   }
 
@@ -157,7 +161,8 @@ public class ImapConnection extends ServerConnection implements Comparable<ImapC
           String[] reply = processCommand(line + CRLF);
           if (reply != null) {
             for (String r : reply) {
-              LOGGER.log(Level.INFO, "sending reply to client \"" + ImapLine.commandEncoder(r) + "\"");
+              LOGGER.log(Level.INFO, "sending reply to client \"" + ImapLine.commandEncoder(r)
+                      + "\"");
               if (r != null) {
                 write(r);
               }

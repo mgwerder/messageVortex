@@ -51,7 +51,8 @@ public class ExtendedSecureRandom {
   }
 
   /***
-   * <p>Returns the given number of seed bytes, computed using the seed generation algorithm that this class uses to seed itself.</p>
+   * <p>Returns the given number of seed bytes, computed using the seed generation algorithm
+   * that this class uses to seed itself.</p>
    *
    * @param i  the number of bytes to be generated
    * @return the seed bytes
@@ -61,7 +62,8 @@ public class ExtendedSecureRandom {
   }
 
   /***
-   * <p>Returns the next pseudorandom, uniformly distributed double value between 0.0 and 1.0 from this random number generator's sequence.</p>
+   * <p>Returns the next pseudorandom, uniformly distributed double value between 0.0 and 1.0 from
+   * this random number generator's sequence.</p>
    *
    * <p>The general contract of nextDouble is that one double value, chosen (approximately)
    * uniformly from the range 0.0d (inclusive) to 1.0d (exclusive), is pseudorandomly
@@ -78,8 +80,9 @@ public class ExtendedSecureRandom {
    * a perfect source of randomly chosen bits, then the algorithm shown would choose double
    * values from the stated range with perfect uniformity.</p>
    *
+   * @return the next pseudorandom, uniformly distributed double value between 0.0 and 1.0 from
+   *         this random number generator's sequence
    * @FIXME Where is that from?
-   * @return the next pseudorandom, uniformly distributed double value between 0.0 and 1.0 from this random number generator's sequence
    */
   public static final double nextDouble() {
     return sr.nextDouble();

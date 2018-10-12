@@ -115,7 +115,8 @@ public class AsymmetricAlgorithmSpec extends AbstractBlock implements Serializab
     sb.append(prefix).append("  ").append("algorithm ").append(algorithm.name().toLowerCase());
     if (parameter != null) {
       sb.append(',').append(CRLF);
-      sb.append(prefix).append("  ").append("parameter ").append(parameter.dumpValueNotation(prefix + "  ", dumptype)).append(CRLF);
+      sb.append(prefix).append("  ").append("parameter ")
+              .append(parameter.dumpValueNotation(prefix + "  ", dumptype)).append(CRLF);
     } else {
       sb.append(CRLF);
     }

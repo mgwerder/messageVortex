@@ -155,7 +155,9 @@ class AsymmetricKeyPreCalculator implements Serializable {
           }
         } else {
           try {
-            LOGGER.log(Level.INFO, "cache is idle (" + String.format("%f2.3", cache.getCacheFillGrade() * 100) + "%) ... sleeping for a short while and waiting for requests");
+            LOGGER.log(Level.INFO, "cache is idle (" + String.format("%f2.3",
+                    cache.getCacheFillGrade() * 100) + "%) ... sleeping for a short while "
+                    + "and waiting for requests");
             Thread.sleep(10000);
           } catch (InterruptedException ie) {
             Thread.currentThread().interrupt();
@@ -207,18 +209,23 @@ class AsymmetricKeyPreCalculator implements Serializable {
         t.setPriority(Thread.MIN_PRIORITY);
         t.setDaemon(true);
         pool.execute(t);
-        LOGGER.log(Level.FINE, "Added key precalculator for " + p + " (pool size:" + pool.getQueue().size() + "; thread count (min/current/max):" + pool.getCorePoolSize() + "/" + pool.getActiveCount() + "/" + pool.getMaximumPoolSize() + ")");
+        LOGGER.log(Level.FINE, "Added key precalculator for " + p + " (pool size:"
+                + pool.getQueue().size() + "; thread count (min/current/max):"
+                + pool.getCorePoolSize() + "/" + pool.getActiveCount() + "/"
+                + pool.getMaximumPoolSize() + ")");
 
         // Wait a while for existing tasks to terminate
         if (pool.getQueue().size() > Math.max(incrementor * 2, numThreads)) {
           pool.awaitTermination(10, TimeUnit.SECONDS);
           if (tempdir != null) {
             cache.showStats();
-            LOGGER.log(Level.INFO, "|Running threads " + pool.getActiveCount() + " of " + pool.getQueue().size());
+            LOGGER.log(Level.INFO, "|Running threads " + pool.getActiveCount() + " of "
+                    + pool.getQueue().size());
           }
 
           // calculate new incrementor
-          if (pool.getQueue().size() > incrementor && pool.getQueue().size() < incrementor * 2 && tempdir != null) {
+          if (pool.getQueue().size() > incrementor
+                  && pool.getQueue().size() < incrementor * 2 && tempdir != null) {
             incrementor = Math.max(1, incrementor / 2);
             LOGGER.log(Level.INFO, "lowered incrementor to " + incrementor);
           } else if (pool.getQueue().size() < numThreads && tempdir != null) {
@@ -399,9 +406,10 @@ class AsymmetricKeyPreCalculator implements Serializable {
    *
    * <p>If set to null the Precalculator is disabled.</p>
    *
-   * @param name file name of the cache file
-   * @return String representing the previously set name
-   * @throws IllegalThreadStateException if the previous thread has not yet shutdown but a new thread was tried to be started
+   * @param name                         file name of the cache file
+   * @return                             String representing the previously set name
+   * @throws IllegalThreadStateException if the previous thread has not yet shutdown but a new
+   *                                     thread was tried to be started
    */
   public static String setCacheFileName(String name) {
     // if the same name is set again do nothing
@@ -480,11 +488,13 @@ class AsymmetricKeyPreCalculator implements Serializable {
           // move file as temp file and clear cache
           String fn = File.createTempFile(TMP_PREFIX, ".key").getAbsolutePath();
           LOGGER.log(Level.INFO, "stored chunk to file \"" + fn + "\" to pick up");
-          Files.move(Paths.get(filename + ".tmp"), Paths.get(fn), StandardCopyOption.REPLACE_EXISTING);
+          Files.move(Paths.get(filename + ".tmp"), Paths.get(fn),
+                  StandardCopyOption.REPLACE_EXISTING);
           cache.clear();
         } else {
           LOGGER.log(Level.INFO, "stored cache");
-          Files.move(Paths.get(filename + ".tmp"), Paths.get(filename), StandardCopyOption.REPLACE_EXISTING);
+          Files.move(Paths.get(filename + ".tmp"), Paths.get(filename),
+                  StandardCopyOption.REPLACE_EXISTING);
         }
       }
     } catch (Exception e) {
@@ -493,14 +503,16 @@ class AsymmetricKeyPreCalculator implements Serializable {
     }
   }
 
-  public static void main(String[] args) throws InterruptedException, ClassNotFoundException, IOException {
+  public static void main(String[] args)
+          throws InterruptedException, ClassNotFoundException, IOException {
     MessageVortexLogger.setGlobalLogLevel(Level.ALL);
     new AsymmetricKeyPreCalculator(true);
     if (cache.isEmpty()) {
       try {
         load("AsymmetricKey.cache", true);
       } catch (IOException ioe) {
-        throw new IOException("unable to load existing asymmetric key cache file ... aborting execution", ioe);
+        throw new IOException("unable to load existing asymmetric key cache file"
+                              + "... aborting execution", ioe);
       }
       cache.clear();
       cache.showStats();

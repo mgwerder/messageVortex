@@ -58,7 +58,12 @@ public class ImapServer extends ListeningSocketChannel implements StoppableThrea
   private long timeout = defaultTimeout;
 
   public ImapServer(SecurityContext secContext) throws IOException {
-    super(new InetSocketAddress(InetAddress.getByAddress(new byte[]{0, 0, 0, 0}), (secContext.getRequirement() == UNTRUSTED_SSLTLS || secContext.getRequirement() == SSLTLS ? 993 : 143)), null);
+    super(new InetSocketAddress(InetAddress.getByAddress(new byte[]{0, 0, 0, 0}),
+            (
+                    secContext.getRequirement() == UNTRUSTED_SSLTLS
+                    || secContext.getRequirement() == SSLTLS ? 993 : 143)
+            ), null);
+
     setSocketListener(this);
     setSecurityContext(secContext);
     setProtocol("imap");
@@ -104,7 +109,8 @@ public class ImapServer extends ListeningSocketChannel implements StoppableThrea
         }
       }
       connSet.removeAll(tmp);
-      LOGGER.log(Level.INFO, "garbage collector removed " + tmp.size() + " connections (" + connSet.size() + " remaining)");
+      LOGGER.log(Level.INFO, "garbage collector removed " + tmp.size() + " connections ("
+              + connSet.size() + " remaining)");
       gcLastRun = System.currentTimeMillis();
     }
   }

@@ -109,7 +109,8 @@ public class BlendingSpec extends AbstractBlock implements Serializable, Dumpabl
   public String dumpValueNotation(String prefix, DumpType dumpType) throws IOException {
     StringBuilder sb = new StringBuilder();
     sb.append(" {").append(CRLF);
-    sb.append(prefix).append("  target '").append(media).append(recipientAddress).append("',").append(CRLF);
+    sb.append(prefix).append("  target '").append(media).append(recipientAddress).append("',")
+                     .append(CRLF);
     sb.append(prefix).append("  blendingType '").append(blendingType).append("',").append(CRLF);
     sb.append(prefix).append("  blendingParameter {");
     if (blendingParameter != null && blendingParameter.length > 0) {

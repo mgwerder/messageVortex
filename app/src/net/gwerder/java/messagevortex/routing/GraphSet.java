@@ -232,7 +232,9 @@ public class GraphSet implements Comparator<GraphSet>, Comparable<GraphSet>, Ite
       boolean vis = false;
       for (Edge v : visited) {
         if (v == null) {
-          throw new NullPointerException("OUCH got an null visited graph ... thats impossible (size is " + visited.length + ";v[0]=" + visited[0] + ";v[1]=" + visited[1] + ")");
+          throw new NullPointerException("OUCH got an null visited graph ... "
+                  + "thats impossible (size is " + visited.length + ";v[0]=" + visited[0]
+                  + ";v[1]=" + visited[1] + ")");
         }
         if (tmp.getTo().equals(v.getFrom()) || tmp.getTo().equals(v.getTo())) {
           vis = true;
@@ -309,7 +311,8 @@ public class GraphSet implements Comparator<GraphSet>, Comparable<GraphSet>, Ite
   public String dump() {
     StringBuilder sb = new StringBuilder();
     for (Edge g : store) {
-      sb.append("  " + anonymitySet.indexOf(g.getFrom()) + " -> " + anonymitySet.indexOf(g.getTo()));
+      sb.append("  " + anonymitySet.indexOf(g.getFrom()) + " -> "
+              + anonymitySet.indexOf(g.getTo()));
     }
     sb.append("}");
     return sb.toString();

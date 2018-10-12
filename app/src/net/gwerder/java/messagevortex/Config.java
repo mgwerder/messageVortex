@@ -225,7 +225,8 @@ public class Config {
     }
     ConfigType type = ele.getType();
     if (type != ConfigType.BOOLEAN) {
-      throw new ClassCastException("config type missmatch when accessing ID " + id + " (expected: boolean; is: " + type.name() + ")");
+      throw new ClassCastException("config type missmatch when accessing ID " + id
+              + " (expected: boolean; is: " + type.name() + ")");
     }
     return ele.setBooleanValue(value);
   }
@@ -245,7 +246,8 @@ public class Config {
     }
     ConfigType type = ele.getType();
     if (type != ConfigType.BOOLEAN) {
-      throw new ClassCastException("config type missmatch when accessing ID " + id + " (expected: boolean; is: " + type.name() + ")");
+      throw new ClassCastException("config type missmatch when accessing ID " + id
+              + " (expected: boolean; is: " + type.name() + ")");
     }
     return ele.getBooleanValue();
   }
@@ -279,7 +281,8 @@ public class Config {
     }
     ConfigType type = ele.getType();
     if (type != ConfigType.NUMERIC) {
-      throw new ClassCastException("config type missmatch when accessing ID " + id + " (expected: numeric; is: " + type.name() + ")");
+      throw new ClassCastException("config type missmatch when accessing ID " + id
+              + " (expected: numeric; is: " + type.name() + ")");
     }
     return ele.setNumericValue(value);
   }
@@ -299,7 +302,8 @@ public class Config {
     }
     ConfigType type = ele.getType();
     if (type != ConfigType.NUMERIC) {
-      throw new ClassCastException("config type missmatch when accessing ID " + id + " (expected: numeric; is: " + type.name() + ")");
+      throw new ClassCastException("config type missmatch when accessing ID " + id
+              + " (expected: numeric; is: " + type.name() + ")");
     }
     return ele.getNumericValue();
   }
@@ -343,7 +347,8 @@ public class Config {
     }
     ConfigType type = ele.getType();
     if (type != ConfigType.STRING) {
-      throw new ClassCastException("Unable to cast type to correct class (expected: string; is: " + type.name() + ")");
+      throw new ClassCastException("Unable to cast type to correct class (expected: string; is: "
+              + type.name() + ")");
     }
     return ele.setStringValue(value);
   }
@@ -363,7 +368,8 @@ public class Config {
     }
     ConfigType type = ele.getType();
     if (type != ConfigType.STRING) {
-      throw new ClassCastException("Unable to cast type to correct class (expected: string; is: " + type.name() + ")");
+      throw new ClassCastException("Unable to cast type to correct class (expected: string; is: "
+              + type.name() + ")");
     }
     return ele.getStringValue();
   }

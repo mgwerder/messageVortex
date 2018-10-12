@@ -74,7 +74,6 @@ public class RemoveRedundancy extends AbstractOperation implements Serializable 
       return new int[0];
     }
     LOGGER.log(Level.INFO, "executing add redundancy operation");
-    int paddingSize = 4;
 
     // generate list of missing rows
     LOGGER.log(Level.INFO, "  analysing stripes");
@@ -131,6 +130,7 @@ public class RemoveRedundancy extends AbstractOperation implements Serializable 
     Matrix out = recovery.mul(data);
 
     // remove padding
+    int paddingSize = 4;
     LOGGER.log(Level.INFO, "  removing padding");
     byte[] out1 = out.getAsByteArray();
     byte[] len = new byte[paddingSize];

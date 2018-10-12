@@ -86,7 +86,8 @@ public class ImapCommandAuthenticate extends ImapCommand {
     line.skipWhitespace(-1);
 
     String context = line.getATag();
-    LOGGER.log(Level.INFO, "authenticate has read context information (PLAIN only) \"" + context + "\"");
+    LOGGER.log(Level.INFO, "authenticate has read context information (PLAIN only) \"" + context
+            + "\"");
 
     // skip line end
     if (!line.skipLineEnd()) {
@@ -135,7 +136,8 @@ public class ImapCommandAuthenticate extends ImapCommand {
         saslChallenge = ss.evaluateResponse(new byte[0]);
         LOGGER.log(Level.INFO, "sending challenge");
         if (saslChallenge.length > 0) {
-          LOGGER.log(Level.INFO, "sending challenge (" + saslChallenge.length + " bytes; " + new String(Base64.encode(saslChallenge)) + ")");
+          LOGGER.log(Level.INFO, "sending challenge (" + saslChallenge.length + " bytes; "
+                  + new String(Base64.encode(saslChallenge)) + ")");
           line.getConnection().writeln("+ " + new String(Base64.encode(saslChallenge)));
         } else {
           LOGGER.log(Level.INFO, "sending empty challenge");

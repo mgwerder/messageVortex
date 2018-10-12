@@ -33,22 +33,22 @@ import net.gwerder.java.messagevortex.transport.ServerConnection;
 import net.gwerder.java.messagevortex.transport.SocketListener;
 import net.gwerder.java.messagevortex.transport.TransportReceiver;
 
-public class SMTPReceiver implements SocketListener {
+public class SmtpReceiver implements SocketListener {
 
-  private final static Logger LOGGER;
+  private static final Logger LOGGER;
 
   static {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
 
-  private volatile static int gid = 1;
+  private static volatile int gid = 1;
   private volatile int id = 1;
 
   private final ListeningSocketChannel listener;
   private TransportReceiver receiver = null;
   private SecurityContext context = null;
 
-  public SMTPReceiver(InetSocketAddress address, SecurityContext secContext, TransportReceiver lreceiver) throws IOException {
+  public SmtpReceiver(InetSocketAddress address, SecurityContext secContext, TransportReceiver lreceiver) throws IOException {
     setTransportReceiver(lreceiver);
     listener = new ListeningSocketChannel(address, this);
     listener.setName("SMTPlist" + (gid++));
@@ -59,11 +59,11 @@ public class SMTPReceiver implements SocketListener {
   public void gotConnect(ServerConnection ac) {
     LOGGER.log(Level.INFO, "called gotConnection()");
     try {
-      SMTPConnection s = new SMTPConnection(ac.getSocketChannel(), context);
+      SmtpConnection s = new SmtpConnection(ac.getSocketChannel(), context);
       s.setName(listener.getName() + "-" + (id++));
       s.setReceiver(this.receiver);
     } catch (IOException ioe) {
-      LOGGER.log(Level.WARNING, "Exception while creating SMTPConnection object", ioe);
+      LOGGER.log(Level.WARNING, "Exception while creating SmtpConnection object", ioe);
     }
   }
 

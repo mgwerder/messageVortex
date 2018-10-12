@@ -34,7 +34,8 @@ import org.bouncycastle.asn1.ASN1Object;
 import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.DERSequence;
 
-public abstract class AbstractCryptPayloadOperation extends Operation implements Serializable, Dumpable {
+public abstract class AbstractCryptPayloadOperation extends Operation
+                implements Serializable, Dumpable {
 
   public static final long serialVersionUID = 100000000033L;
 

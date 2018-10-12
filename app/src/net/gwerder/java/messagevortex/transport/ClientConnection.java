@@ -42,14 +42,16 @@ public class ClientConnection extends AbstractConnection {
     initConnection();
   }
 
-  public ClientConnection(InetSocketAddress socketAddress, SecurityContext context) throws IOException {
+  public ClientConnection(InetSocketAddress socketAddress, SecurityContext context)
+          throws IOException {
     super(socketAddress, context);
     initConnection();
   }
 
   private void initConnection() {
     if (getSecurityContext() != null && getSecurityContext().getContext() != null) {
-      SSLEngine engine = getSecurityContext().getContext().createSSLEngine(getHostName(), getPort());
+      SSLEngine engine = getSecurityContext().getContext()
+              .createSSLEngine(getHostName(), getPort());
       engine.setUseClientMode(true);
       setEngine(engine);
     }

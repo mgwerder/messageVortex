@@ -74,7 +74,9 @@ public class IdentityBlock extends AbstractBlock implements Serializable, Dumpab
   private AsymmetricKey ownIdentity = null;
 
   public IdentityBlock() throws IOException {
-    this(new AsymmetricKey(Algorithm.getDefault(AlgorithmType.ASYMMETRIC).getParameters(SecurityLevel.MEDIUM)));
+    this(new AsymmetricKey(
+            Algorithm.getDefault(AlgorithmType.ASYMMETRIC).getParameters(SecurityLevel.MEDIUM))
+    );
   }
 
   public IdentityBlock(AsymmetricKey key) throws IOException {
@@ -277,7 +279,8 @@ public class IdentityBlock extends AbstractBlock implements Serializable, Dumpab
    * @return the block as der encodable object
    * @throws IOException   if the block is not encodable
    */
-  public ASN1Object toAsn1Object(DumpType dumpType, AsymmetricKey targetIdentity) throws IOException {
+  public ASN1Object toAsn1Object(DumpType dumpType, AsymmetricKey targetIdentity)
+          throws IOException {
     sanitizeHeaderKey();
     if (headerKey == null && encryptedHeaderKey == null) {
       throw new NullPointerException("headerKey may not be null");
@@ -285,10 +288,18 @@ public class IdentityBlock extends AbstractBlock implements Serializable, Dumpab
     ASN1EncodableVector v1 = new ASN1EncodableVector();
     boolean encryptIdentity = false;
     if (headerKey != null && targetIdentity != null) {
-      v1.add(new DERTaggedObject(true, ENCRYPTED_HEADER_KEY, new DEROctetString(targetIdentity.encrypt(headerKey.toBytes(dumpType)))));
+      v1.add(new DERTaggedObject(
+              true,
+              ENCRYPTED_HEADER_KEY,
+              new DEROctetString(targetIdentity.encrypt(headerKey.toBytes(dumpType))))
+      );
       encryptIdentity = true;
     } else if (encryptedHeaderKey != null) {
-      v1.add(new DERTaggedObject(true, ENCRYPTED_HEADER_KEY, new DEROctetString(encryptedHeaderKey)));
+      v1.add(new DERTaggedObject(
+              true,
+              ENCRYPTED_HEADER_KEY,
+              new DEROctetString(encryptedHeaderKey))
+      );
       encryptIdentity = true;
     }
     ASN1Encodable ae;
@@ -362,10 +373,13 @@ public class IdentityBlock extends AbstractBlock implements Serializable, Dumpab
       sb.append(prefix).append("  blocks encrypted ").append(toHex(encryptedIdentityBlock));
     } else {
       sb.append(prefix).append("  blocks plain {").append(CRLF);
-      sb.append(prefix).append("    identityKey ").append(identityKey.dumpValueNotation(prefix + "  ", DumpType.PRIVATE_COMMENTED)).append(',').append(CRLF);
+      sb.append(prefix).append("    identityKey ")
+              .append(identityKey.dumpValueNotation(prefix + "  ", DumpType.PRIVATE_COMMENTED))
+              .append(',').append(CRLF);
       sb.append(prefix).append("    serial ").append(serial).append(',').append(CRLF);
       sb.append(prefix).append("    maxReplays ").append(maxReplays).append(',').append(CRLF);
-      sb.append(prefix).append("    valid ").append(valid.dumpValueNotation(prefix + "  ", dumpType)).append(',').append(CRLF);
+      sb.append(prefix).append("    valid ")
+              .append(valid.dumpValueNotation(prefix + "  ", dumpType)).append(',').append(CRLF);
       sb.append(prefix).append("    forwardSecret ").append(forwardSecret).append(CRLF);
       sb.append(prefix).append("    decryptionKey ''B,").append(CRLF);
       sb.append(prefix).append("    requests {").append(CRLF);

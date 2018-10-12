@@ -39,7 +39,7 @@ import org.bouncycastle.util.encoders.Base64;
 /**
  * <p>Creates a connection to a SMTP Server Socket.</p>
  */
-public class SMTPConnection extends ClientConnection {
+public class SmtpConnection extends ClientConnection {
 
   static final java.util.logging.Logger LOGGER;
 
@@ -137,7 +137,7 @@ public class SMTPConnection extends ClientConnection {
 
   }
 
-  public SMTPConnection(SocketChannel channel, SecurityContext secContext) throws IOException {
+  public SmtpConnection(SocketChannel channel, SecurityContext secContext) throws IOException {
     super(channel, secContext);
     setProtocol("smtp");
     handler.start();

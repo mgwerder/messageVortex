@@ -82,9 +82,11 @@ public class CipherSpec extends AbstractBlock implements Serializable {
       to1 = ASN1TaggedObject.getInstance(s1.getObjectAt(i++));
     }
     if (to1.getTagNo() != USAGE) {
-      throw new IOException("expected USAGE (" + USAGE + ") but got " + to1.getTagNo() + " when parsing CipherSpec");
+      throw new IOException("expected USAGE (" + USAGE + ") but got " + to1.getTagNo()
+              + " when parsing CipherSpec");
     }
-    cipherUsage = CipherUsage.getById(ASN1Enumerated.getInstance(to1.getObject()).getValue().intValue());
+    cipherUsage = CipherUsage.getById(ASN1Enumerated.getInstance(to1.getObject()).getValue()
+            .intValue());
 
   }
 
@@ -133,15 +135,22 @@ public class CipherSpec extends AbstractBlock implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append('{').append(CRLF);
     if (asymmetricSpec != null) {
-      sb.append(prefix).append("  ").append("asymmetric ").append(asymmetricSpec.dumpValueNotation(prefix + "  ", dumpType)).append(',').append(CRLF);
+      sb.append(prefix).append("  ").append("asymmetric ")
+              .append(asymmetricSpec.dumpValueNotation(prefix + "  ", dumpType))
+              .append(',').append(CRLF);
     }
     if (symmetricSpec != null) {
-      sb.append(prefix).append("  ").append("symmetric ").append(symmetricSpec.dumpValueNotation(prefix + "  ", dumpType)).append(',').append(CRLF);
+      sb.append(prefix).append("  ").append("symmetric ")
+              .append(symmetricSpec.dumpValueNotation(prefix + "  ", dumpType))
+              .append(',').append(CRLF);
     }
     if (macSpec != null) {
-      sb.append(prefix).append("  ").append("mac ").append(macSpec.dumpValueNotation(prefix + "  ", dumpType)).append(',').append(CRLF);
+      sb.append(prefix).append("  ").append("mac ")
+              .append(macSpec.dumpValueNotation(prefix + "  ", dumpType))
+              .append(',').append(CRLF);
     }
-    sb.append(prefix).append("  ").append("cipherUsage ").append(cipherUsage.getUsageString()).append(CRLF);
+    sb.append(prefix).append("  ").append("cipherUsage ")
+            .append(cipherUsage.getUsageString()).append(CRLF);
     sb.append(prefix).append('}');
     return sb.toString();
   }

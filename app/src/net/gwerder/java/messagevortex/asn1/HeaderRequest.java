@@ -50,11 +50,11 @@ public abstract class HeaderRequest extends AbstractBlock implements Serializabl
     QUOTA_QUERY(4, HeaderRequestQueryQuota.class);
 
     int id;
-    Class c;
+    Class templateClass;
 
-    Type(int id, Class c) {
+    Type(int id, Class templateClass) {
       this.id = id;
-      this.c = c;
+      this.templateClass = templateClass;
     }
 
     public int getId() {
@@ -62,7 +62,7 @@ public abstract class HeaderRequest extends AbstractBlock implements Serializabl
     }
 
     public Class getTemplateClass() {
-      return this.c;
+      return this.templateClass;
     }
 
     public static Type getByClass(Class c) {
@@ -88,13 +88,20 @@ public abstract class HeaderRequest extends AbstractBlock implements Serializabl
       req.add(new HeaderRequestIdentity());
       req.add(new HeaderRequestQueryQuota());
     } catch (Exception e) {
-      LOGGER.log(Level.SEVERE, "Unexpected exception when adding Header Requests in static constructor", e);
+      LOGGER.log(Level.SEVERE, "Exception when adding Requests in static constructor", e);
     }
   }
 
   protected HeaderRequest() {
   }
 
+  /***
+   * <p>Conversion helper for header request.</p>
+   *
+   * @param ae            asn.1 representation of the class
+   * @return              the respective header object if parseable or null
+   * @throws IOException  if parsing fails
+   */
   public static HeaderRequest getInstance(ASN1Encodable ae) throws IOException {
     for (HeaderRequest hr : req) {
       if (Type.getByClass(hr.getClass()).getId() == ((ASN1TaggedObject) (ae)).getTagNo()) {
@@ -107,7 +114,8 @@ public abstract class HeaderRequest extends AbstractBlock implements Serializabl
   public ASN1Object toAsn1Object(DumpType dt) throws IOException {
     Type tag = Type.getByClass(this.getClass());
     if (tag == null) {
-      throw new IOException("Unknown Header Request type \"" + this.getClass().getCanonicalName() + "\"");
+      throw new IOException("Unknown Header Request type \"" + this.getClass().getCanonicalName()
+              + "\"");
     }
     return new DERTaggedObject(tag.getId(), intToAsn1Object(dt));
   }

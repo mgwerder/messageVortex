@@ -75,15 +75,15 @@ public enum Padding implements Serializable {
   private int id;
   private String txt;
   private Set<AlgorithmType> at;
-  private SizeCalc s;
+  private SizeCalc sizeCalculator;
   final ASN1Enumerated asn;
 
-  Padding(int id, String txt, AlgorithmType[] at, SizeCalc s) {
+  Padding(int id, String txt, AlgorithmType[] at, SizeCalc sizeCalculator) {
     this.id = id;
     this.txt = txt;
     this.at = new HashSet<>();
     this.at.addAll(Arrays.asList(at));
-    this.s = s;
+    this.sizeCalculator = sizeCalculator;
     this.asn = new ASN1Enumerated(id);
   }
 
@@ -167,7 +167,7 @@ public enum Padding implements Serializable {
   }
 
   /***
-   * </p>Get the textual representation of the padding for the cryptographic provider.<p>
+   * <p>Get the textual representation of the padding for the cryptographic provider.</p>
    *
    * @return the name used within the cryptographic provider
    */
@@ -184,7 +184,7 @@ public enum Padding implements Serializable {
    * @return the number of bytes a single block may hold including the padding information.
    */
   public int getMaxSize(int blockSize) {
-    return s.maxSize(blockSize);
+    return sizeCalculator.maxSize(blockSize);
   }
 
   /***
@@ -192,7 +192,7 @@ public enum Padding implements Serializable {
    *
    * @return the ASN1 enumeration representing this padding
    */
-  public ASN1Enumerated toASN1() {
+  public ASN1Enumerated toAsn1() {
     return asn;
   }
 

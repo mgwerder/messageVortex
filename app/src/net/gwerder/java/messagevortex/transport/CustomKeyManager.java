@@ -59,7 +59,8 @@ public class CustomKeyManager extends X509ExtendedKeyManager implements KeyManag
    * @param password     password to open the kestore file
    * @param alias        alias of the certificate to be used
    */
-  public CustomKeyManager(String keyStoreFile, String password, String alias) throws GeneralSecurityException {
+  public CustomKeyManager(String keyStoreFile, String password, String alias)
+          throws GeneralSecurityException {
     this(keyStoreFile, password.toCharArray(), alias);
   }
 
@@ -70,7 +71,8 @@ public class CustomKeyManager extends X509ExtendedKeyManager implements KeyManag
    * @param password     password to open the kestore file
    * @param alias        alias of the certificate to be used
    */
-  CustomKeyManager(String keyStoreFile, char[] password, String alias) throws GeneralSecurityException {
+  CustomKeyManager(String keyStoreFile, char[] password, String alias)
+          throws GeneralSecurityException {
     this.password = password;
     this.alias = alias;
     keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
@@ -94,7 +96,8 @@ public class CustomKeyManager extends X509ExtendedKeyManager implements KeyManag
    */
   public PrivateKey getPrivateKey(String alias) {
     try {
-      LOGGER.log(Level.INFO, "key for \"" + alias + "\" requested ", new Object[]{keyStore.getKey(alias, password)});
+      LOGGER.log(Level.INFO, "key for \"" + alias + "\" requested ",
+              new Object[]{keyStore.getKey(alias, password)});
       return (PrivateKey) keyStore.getKey(alias, password);
     } catch (Exception e) {
       LOGGER.log(Level.WARNING, "unknown key requested \"" + alias + "\"", e);
@@ -189,7 +192,8 @@ public class CustomKeyManager extends X509ExtendedKeyManager implements KeyManag
    * @param param1 dummy
    * @param param2 dummy
    */
-  public String chooseServerAlias(@SuppressWarnings("UnusedParameters") String param1, @SuppressWarnings("UnusedParameters") Principal[] param2) {
+  public String chooseServerAlias(@SuppressWarnings("UnusedParameters") String param1,
+                                  @SuppressWarnings("UnusedParameters") Principal[] param2) {
     LOGGER.log(Level.INFO, "server alias (2) for \"" + alias + "\" requested ");
     return alias;
   }

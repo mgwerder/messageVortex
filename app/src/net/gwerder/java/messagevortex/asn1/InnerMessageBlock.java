@@ -120,10 +120,12 @@ public class InnerMessageBlock extends AbstractBlock implements Serializable {
         prefix = new PrefixBlock(ato.getObject(), null);
         break;
       case PREFIX_ENCRYPTED:
-        prefix = new PrefixBlock(ASN1OctetString.getInstance(ato.getObject()).getOctets(), decryptionKey);
+        prefix = new PrefixBlock(ASN1OctetString.getInstance(ato.getObject()).getOctets(),
+                decryptionKey);
         break;
       default:
-        throw new IOException("got unexpected tag (expect: " + PREFIX_PLAIN + " or " + PREFIX_ENCRYPTED + "; got: " + ato.getTagNo() + ")");
+        throw new IOException("got unexpected tag (expect: " + PREFIX_PLAIN + " or "
+                + PREFIX_ENCRYPTED + "; got: " + ato.getTagNo() + ")");
     }
 
     // get identity
@@ -139,13 +141,15 @@ public class InnerMessageBlock extends AbstractBlock implements Serializable {
         identity = new IdentityBlock(prefix.getKey().decrypt(identityEncoded));
         break;
       default:
-        throw new IOException("got unexpected tag (expect: " + PREFIX_PLAIN + " or " + PREFIX_ENCRYPTED + "; got: " + ato.getTagNo() + ")");
+        throw new IOException("got unexpected tag (expect: " + PREFIX_PLAIN + " or "
+                + PREFIX_ENCRYPTED + "; got: " + ato.getTagNo() + ")");
     }
 
     // get signature
     identitySignature = ASN1OctetString.getInstance(s1.getObjectAt(i++)).getOctets();
     if (!identity.getIdentityKey().verify(identityEncoded, identitySignature)) {
-      throw new IOException("failed verifying signature (signature length:" + identitySignature.length + "; signedBlock:" + toHex(identityEncoded) + ")");
+      throw new IOException("failed verifying signature (signature length:"
+              + identitySignature.length + "; signedBlock:" + toHex(identityEncoded) + ")");
     }
 
     // getting routing block
@@ -156,13 +160,16 @@ public class InnerMessageBlock extends AbstractBlock implements Serializable {
         break;
       case ROUTING_ENCRYPTED:
         try {
-          routing = new RoutingBlock(ASN1Sequence.getInstance(prefix.getKey().decrypt(ASN1OctetString.getInstance(ae.getObject()).getOctets())));
+          routing = new RoutingBlock(ASN1Sequence.getInstance(prefix.getKey()
+                  .decrypt(ASN1OctetString.getInstance(ae.getObject()).getOctets())));
         } catch (IOException ioe) {
           throw new IOException("error while decrypting routing block", ioe);
         }
         break;
       default:
-        throw new IOException("got unexpected tag (expect: " + ROUTING_PLAIN + " or " + ROUTING_ENCRYPTED + "; got: " + ASN1TaggedObject.getInstance(ae).getTagNo() + ")");
+        throw new IOException("got unexpected tag (expect: " + ROUTING_PLAIN + " or "
+                + ROUTING_ENCRYPTED + "; got: " + ASN1TaggedObject.getInstance(ae).getTagNo()
+                + ")");
     }
 
     // getting payload blocks
@@ -172,7 +179,8 @@ public class InnerMessageBlock extends AbstractBlock implements Serializable {
     long last = routing.getLastProcessTime();
     long first = routing.getFirstProcessTime();
     for (ASN1Encodable tr : seq) {
-      p2.add(new PayloadChunk(tr, new UsagePeriod(new Date(creationTime + last), new Date(creationTime + first))));
+      p2.add(new PayloadChunk(tr, new UsagePeriod(new Date(creationTime + last),
+              new Date(creationTime + first))));
     }
     payload = p2.toArray(new PayloadChunk[p2.size()]);
   }
@@ -199,7 +207,8 @@ public class InnerMessageBlock extends AbstractBlock implements Serializable {
         try {
           v.add(new DERTaggedObject(PREFIX_ENCRYPTED, new DEROctetString(prefix.toEncBytes())));
         } catch (IOException | NullPointerException e) {
-          throw new IOException("need a decryption key to encrypt prefix block (" + prefix.getDecryptionKey() + ")", e);
+          throw new IOException("need a decryption key to encrypt prefix block ("
+                  + prefix.getDecryptionKey() + ")", e);
         }
         break;
       default:
@@ -228,7 +237,8 @@ public class InnerMessageBlock extends AbstractBlock implements Serializable {
     }
     LOGGER.log(Level.FINER, "adding signature");
     if (identity.getIdentityKey() == null || !identity.getIdentityKey().hasPrivateKey()) {
-      throw new IOException("identity needs private key to sign request (" + identity.getIdentityKey() + ")");
+      throw new IOException("identity needs private key to sign request ("
+              + identity.getIdentityKey() + ")");
     }
     try {
       v.add(new DEROctetString(identity.getIdentityKey().sign(o)));
@@ -248,7 +258,9 @@ public class InnerMessageBlock extends AbstractBlock implements Serializable {
       case ALL:
       case PUBLIC_ONLY:
       case PRIVATE_COMMENTED:
-        v.add(new DERTaggedObject(true, ROUTING_ENCRYPTED, new DEROctetString(prefix.getKey().encrypt(toDer(routing.toAsn1Object(dumpType))))));
+        v.add(new DERTaggedObject(true, ROUTING_ENCRYPTED,
+                new DEROctetString(prefix.getKey().encrypt(toDer(routing.toAsn1Object(dumpType)))))
+        );
         break;
       default:
         throw new IOException("got unknown dump type " + dumpType.name());
@@ -296,19 +308,23 @@ public class InnerMessageBlock extends AbstractBlock implements Serializable {
       case ALL_UNENCRYPTED:
       case INTERNAL:
         // dumping plain identity
-        sb.append("plain ").append(identity.dumpValueNotation(prefix + "  ", DumpType.ALL_UNENCRYPTED)).append(',').append(CRLF);
+        sb.append("plain ")
+                .append(identity.dumpValueNotation(prefix + "  ", DumpType.ALL_UNENCRYPTED))
+                .append(',').append(CRLF);
         break;
       case ALL:
       case PRIVATE_COMMENTED:
       case PUBLIC_ONLY:
         // dumping encrypted identity
-        sb.append("encrypted ").append(identity.dumpValueNotation(prefix + "  ", dt)).append(',').append(CRLF);
+        sb.append("encrypted ").append(identity.dumpValueNotation(prefix + "  ", dt))
+                .append(',').append(CRLF);
         break;
       default:
         throw new IOException("unable to handle dump type " + dt);
     }
 
-    sb.append(prefix).append("  routing ").append(routing.dumpValueNotation(prefix + "  ", dt)).append(',').append(CRLF);
+    sb.append(prefix).append("  routing ").append(routing.dumpValueNotation(prefix + "  ", dt))
+            .append(',').append(CRLF);
 
     sb.append(prefix).append("  payload {");
     int i = 0;

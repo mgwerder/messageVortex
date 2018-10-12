@@ -106,7 +106,8 @@ public class Edge {
   }
 
   /***
-   * <p>Gets the maximum delay time a router may choose to delay the edge starting at the start time.</p>
+   * <p>Gets the maximum delay time a router may choose to delay the edge starting at the
+   * start time.</p>
    *
    * @return the currently set maximum delay time
    */
@@ -115,7 +116,8 @@ public class Edge {
   }
 
   /***
-   * <p>Sets the maximum delay time a router may choose to delay the edge starting at the start time.</p>
+   * <p>Sets the maximum delay time a router may choose to delay the edge starting at the
+   * start time.</p>
    *
    * @param newMaxDelay the new maximum time to be set
    * @return the previously set maximum delay time
@@ -135,7 +137,8 @@ public class Edge {
       return false;
     }
     Edge g = (Edge) t;
-    return g.to.equals(this.to) && g.from.equals(this.from) && (g.startTime == this.startTime) && (g.maxDelay == this.maxDelay);
+    return g.to.equals(this.to) && g.from.equals(this.from) && (g.startTime == this.startTime)
+            && (g.maxDelay == this.maxDelay);
   }
 
   @Override

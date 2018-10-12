@@ -74,7 +74,8 @@ public class ImapClient extends ClientConnection {
     try {
       String[] ret = sendCommand(tag + " STARTTLS");
       // check if result was  OK
-      if (ret != null && ret.length >= 1 && ret[ret.length - 1] != null && ret[ret.length - 1].startsWith(tag + " OK")) {
+      if (ret != null && ret.length >= 1 && ret[ret.length - 1] != null
+              && ret[ret.length - 1].startsWith(tag + " OK")) {
         startTls();
       }
     } catch (TimeoutException te) {
@@ -100,7 +101,8 @@ public class ImapClient extends ClientConnection {
     try {
       String tag = ImapLine.getNextTag();
       writeln(tag + " AUTHENTICATE " + mech.toString());
-      SaslClient sc = Sasl.createSaslClient(new String[]{mech.toString()}, "username", "IMAP", "FQHN", props, clientHandler);
+      SaslClient sc = Sasl.createSaslClient(new String[]{mech.toString()}, "username", "IMAP",
+              "FQHN", props, clientHandler);
       if (sc == null) {
         LOGGER.log(Level.WARNING, "requested unsupported sasl mech (" + mech + ")");
         return false;
@@ -117,12 +119,14 @@ public class ImapClient extends ClientConnection {
       }
       byte[] c = new byte[0];
       if (saslchallenge.length() > 2) {
-        LOGGER.log(Level.INFO, "Got a challenge from server (" + saslchallenge.length() + " bytes)");
+        LOGGER.log(Level.INFO, "Got a challenge from server (" + saslchallenge.length()
+                + " bytes)");
         c = Base64.decode(saslchallenge.substring(2));
       }
       byte[] saslReply = sc.evaluateChallenge(c);
       String reply = new String(Base64.encode(saslReply));
-      LOGGER.log(Level.INFO, "sending reply to server (" + saslReply.length + " bytes;" + reply + ")");
+      LOGGER.log(Level.INFO, "sending reply to server (" + saslReply.length + " bytes;" + reply
+              + ")");
       writeln(reply);
       String imapReply = readln();
       return imapReply != null && imapReply.toLowerCase().startsWith(tag.toLowerCase() + " ok");
@@ -139,7 +143,8 @@ public class ImapClient extends ClientConnection {
   public String[] sendCommand(String command, long millisTimeout) throws TimeoutException {
     synchronized (sync) {
       currentCommand = command;
-      LOGGER.log(Level.INFO, "sending \"" + ImapLine.commandEncoder(currentCommand) + "\" to server");
+      LOGGER.log(Level.INFO, "sending \"" + ImapLine.commandEncoder(currentCommand)
+              + "\" to server");
       long start = System.currentTimeMillis();
       currentCommandCompleted = false;
       currentCommandReply = new String[0];
@@ -160,14 +165,17 @@ public class ImapClient extends ClientConnection {
       }
       LOGGER.log(Level.FINEST, "wakeup succeeded");
       if (!currentCommandCompleted && System.currentTimeMillis() > start + millisTimeout) {
-        throw new TimeoutException("Timeout reached while sending \"" + ImapLine.commandEncoder(command) + "\"");
+        throw new TimeoutException("Timeout reached while sending \""
+                + ImapLine.commandEncoder(command) + "\"");
       }
     }
     currentCommand = null;
     if (currentCommandReply == null) {
       currentCommandReply = new String[0];
     } else {
-      LOGGER.log(Level.INFO, "got \"" + ImapLine.commandEncoder(currentCommandReply[currentCommandReply.length - 1]) + "\" as reply from server (" + currentCommandReply.length + ")");
+      LOGGER.log(Level.INFO, "got \""
+              + ImapLine.commandEncoder(currentCommandReply[currentCommandReply.length - 1])
+              + "\" as reply from server (" + currentCommandReply.length + ")");
     }
     return currentCommandReply;
   }
@@ -204,23 +212,27 @@ public class ImapClient extends ClientConnection {
       tag = il.getTag();
     } catch (ImapException ie) {
       // intentionally ignored
-      LOGGER.log(Level.INFO, "ImapParsing of \"" + ImapLine.commandEncoder(currentCommand) + "\" (may be safelly ignored)", ie);
+      LOGGER.log(Level.INFO, "ImapParsing of \"" + ImapLine.commandEncoder(currentCommand)
+              + "\" (may be safelly ignored)", ie);
     }
     String lastReply = "";
     List<String> l = new ArrayList<>();
     LOGGER.log(Level.INFO, "waiting for incoming reply of command " + tag + " (" + l.size() + ")");
-    while ((!lastReply.matches(tag + REGEXP_IMAP_BAD + "|" + tag + REGEXP_IMAP_OK)) && System.currentTimeMillis() - start < timeout) {
+    while ((!lastReply.matches(tag + REGEXP_IMAP_BAD + "|" + tag + REGEXP_IMAP_OK))
+            && System.currentTimeMillis() - start < timeout) {
       String reply = readln(timeout - (System.currentTimeMillis() - start));
       if (reply != null) {
         l.add(reply);
         lastReply = reply;
-        LOGGER.log(Level.INFO, "IMAP C<-S: " + ImapLine.commandEncoder(reply) + " (" + l.size() + ")");
+        LOGGER.log(Level.INFO, "IMAP C<-S: " + ImapLine.commandEncoder(reply) + " (" + l.size()
+                + ")");
         currentCommandReply = l.toArray(new String[l.size()]);
       }
     }
     currentCommandCompleted = lastReply.matches(tag + REGEXP_IMAP_OK + "|" + tag + REGEXP_IMAP_BAD);
     currentCommand = null;
-    if (il != null && "logout".equalsIgnoreCase(il.getCommand()) && lastReply.matches(tag + REGEXP_IMAP_OK)) {
+    if (il != null && "logout".equalsIgnoreCase(il.getCommand())
+            && lastReply.matches(tag + REGEXP_IMAP_OK)) {
       // Terminate connection on successful logout
       shutdown();
     }
@@ -259,7 +271,8 @@ public class ImapClient extends ClientConnection {
       try {
         shutdown();
       } catch (Exception e2) {
-        LOGGER.log(Level.INFO, "socket close did fail when shutting down (may be safely ignored)", e2);
+        LOGGER.log(Level.INFO, "socket close did fail when shutting down (may be safely ignored)",
+                e2);
       }
     }
   }

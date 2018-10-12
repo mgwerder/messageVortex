@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.asn1;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -67,7 +68,7 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
   UsagePeriod period;
 
   /***
-   * Creates an empty payload block.
+   * <p>Creates an empty payload block.</p>
    */
   public PayloadChunk() {
     id = 0;
@@ -77,7 +78,7 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
   }
 
   /***
-   * Creates a payload block from a ASN1 stream.
+   * <p>Creates a payload block from a ASN1 stream.</p>
    */
   public PayloadChunk(ASN1Encodable to, UsagePeriod period) throws IOException {
     parse(to);
@@ -91,7 +92,7 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
   }
 
   /***
-   * Creates a der encoded ASN1 representation of the payload chunk.
+   * <p>Creates a der encoded ASN1 representation of the payload chunk.</p>
    *
    * @param  dumpType    the dump type to be used
    * @return the ASN.1 object
@@ -115,7 +116,7 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
   }
 
   /***
-   * set a byte array as payload.
+   * <p>Set a byte array as payload.</p>
    *
    * @param b the payload to be set
    * @return the previously set payload (may have been a reply block)
@@ -128,7 +129,7 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
   }
 
   /***
-   * Gets the the currently set payload.
+   * <p>Gets the the currently set payload.</p>
    *
    * @return the payload as byte array or null if a replyblock has been set
    */
@@ -144,7 +145,7 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
   }
 
   /***
-   * set a byte array as reply block.
+   * <p>Set a byte array as reply block.</p>
    *
    * @param reply the reply block to be set
    * @return the previously set reply block (may have been a payload block)
@@ -157,7 +158,7 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
   }
 
   /***
-   * Gets the the currently set reply block.
+   * <p>Gets the the currently set reply block.</p>
    *
    * @return the reply block as byte array or null if a payload block has been set
    */
@@ -195,7 +196,7 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
   }
 
   /***
-   * Sets the id of the payload chunk.
+   * <p>Sets the id of the payload chunk.</p>
    *
    * @param id the id to be set
    * @return the previously set id
@@ -207,7 +208,7 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
   }
 
   /***
-   * Gets the id of the payload chunk.
+   * <p>Gets the id of the payload chunk.</p>
    *
    * @return the id currently set
    */
@@ -216,7 +217,7 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
   }
 
   /***
-   * Dumps the current object as a value representation.
+   * <p>Dumps the current object as a value representation.</p>
    *
    * @param prefix       the prefix to be used (normally used for indentation)
    * @param dumpType     the dump type to be used (@see DumpType)
@@ -263,7 +264,8 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
     PayloadChunk pl = (PayloadChunk) o;
 
     try {
-      return dumpValueNotation("", DumpType.ALL_UNENCRYPTED).equals(pl.dumpValueNotation("", DumpType.ALL_UNENCRYPTED));
+      return dumpValueNotation("", DumpType.ALL_UNENCRYPTED)
+              .equals(pl.dumpValueNotation("", DumpType.ALL_UNENCRYPTED));
     } catch (IOException ioe) {
       return false;
     }
