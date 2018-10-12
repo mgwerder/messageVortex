@@ -73,6 +73,12 @@ public class IdentityStoreBlock extends AbstractBlock implements Serializable {
     super();
   }
 
+  /***
+   * <p>Create object from ASN.1 code.</p>
+   *
+   * @param ae the ASN.1 code
+   * @throws IOException if parsing of ASN.1 code fails
+   */
   public IdentityStoreBlock(ASN1Encodable ae) throws IOException {
     parse(ae);
   }

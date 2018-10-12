@@ -101,6 +101,12 @@ public class IdentityBlock extends AbstractBlock implements Serializable, Dumpab
     parse(s);
   }
 
+  /***
+   * <p>Create object from ASN.1 code.</p>
+   *
+   * @param to the ASN.1 code
+   * @throws IOException if parsing of ASN.1 code fails
+   */
   public IdentityBlock(ASN1Encodable to) throws IOException {
     this(to, null);
   }

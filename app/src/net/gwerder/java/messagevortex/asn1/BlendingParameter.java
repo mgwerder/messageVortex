@@ -68,6 +68,12 @@ public class BlendingParameter extends AbstractBlock implements Serializable, Du
   int offset = -1;
   SymmetricKey symmetricKey = null;
 
+  /***
+   * <p>Create object from ASN.1 code.</p>
+   *
+   * @param e the ASN.1 code
+   * @throws IOException if parsing of ASN.1 code fails
+   */
   public BlendingParameter(ASN1Encodable e) throws IOException {
     parse(e);
   }

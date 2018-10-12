@@ -54,7 +54,12 @@ public class CipherSpec extends AbstractBlock implements Serializable {
   private MacAlgorithmSpec macSpec = null;
   private CipherUsage cipherUsage = CipherUsage.ENCRYPT;
 
-  /* constructor */
+  /***
+   * <p>Create object from ASN.1 code.</p>
+   *
+   * @param to the ASN.1 code
+   * @throws IOException if parsing of ASN.1 code fails
+   */
   public CipherSpec(ASN1Encodable to) throws IOException {
     parse(to);
   }

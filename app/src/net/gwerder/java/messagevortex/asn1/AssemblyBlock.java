@@ -42,6 +42,12 @@ public class AssemblyBlock extends AbstractBlock implements Serializable, Dumpab
   int routingBlockIndex = -1;
   int[] payloadBlockIndex = new int[0];
 
+  /***
+   * <p>Create object from ASN.1 code.</p>
+   *
+   * @param object the ASN.1 code
+   * @throws IOException if parsing of ASN.1 code fails
+   */
   public AssemblyBlock(ASN1Encodable object) throws IOException {
     parse(object);
   }

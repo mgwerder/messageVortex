@@ -48,6 +48,12 @@ public class AddRedundancyOperation extends AbstractRedundancyOperation
     super(inputId, dataStripes, redundancy, keys, outputId, gfSize);
   }
 
+  /***
+   * <p>Create object from ASN.1 code.</p>
+   *
+   * @param to the ASN.1 code
+   * @throws IOException if parsing of ASN.1 code fails
+   */
   public AddRedundancyOperation(ASN1Encodable to) throws IOException {
     super(to);
   }

@@ -46,6 +46,7 @@ public class HeaderRequestCapability extends HeaderRequest implements Serializab
 
   /***
    * <p>Creates a class from the given ASN.1 object.</p>
+   *
    * @param ae            the ASN.1 object to be translated
    * @throws IOException  if parsing of the ASN.1 fails
    */

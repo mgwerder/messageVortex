@@ -47,7 +47,12 @@ public class BlendingSpec extends AbstractBlock implements Serializable, Dumpabl
   private String blendingType = "attach";
   private BlendingParameter[] blendingParameter = new BlendingParameter[0];
 
-  /* constructor */
+  /***
+   * <p>Create object from ASN.1 code.</p>
+   *
+   * @param to the ASN.1 code
+   * @throws IOException if parsing of ASN.1 code fails
+   */
   public BlendingSpec(ASN1Encodable to) throws IOException {
     parse(to);
   }

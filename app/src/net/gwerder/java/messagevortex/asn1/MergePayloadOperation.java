@@ -48,6 +48,12 @@ public class MergePayloadOperation extends Operation implements Serializable {
   MergePayloadOperation() {
   }
 
+  /***
+   * <p>Create object from ASN.1 code.</p>
+   *
+   * @param object the ASN.1 code
+   * @throws IOException if parsing of ASN.1 code fails
+   */
   public MergePayloadOperation(ASN1Encodable object) throws IOException {
     parse(object);
   }

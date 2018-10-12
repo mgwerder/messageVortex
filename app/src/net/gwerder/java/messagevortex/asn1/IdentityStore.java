@@ -72,6 +72,12 @@ public class IdentityStore extends AbstractBlock implements Serializable {
     parse(b);
   }
 
+  /***
+   * <p>Create object from ASN.1 encoded file.</p>
+   *
+   * @param f the file to be parsed
+   * @throws IOException if parsing of ASN.1 code fails
+   */
   public IdentityStore(File f) throws IOException {
     this();
     Path asn1DataPath = Paths.get(f.getAbsolutePath());

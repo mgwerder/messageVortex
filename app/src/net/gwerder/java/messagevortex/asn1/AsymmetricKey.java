@@ -94,8 +94,6 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
 
-
-
   static {
     // start key precalculator
     try {
@@ -136,6 +134,12 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
     }
   }
 
+  /***
+   * <p>Create object from ASN.1 code.</p>
+   *
+   * @param to the ASN.1 code
+   * @throws IOException if parsing of ASN.1 code fails
+   */
   private AsymmetricKey(ASN1Encodable to) throws IOException  {
     parse(to);
     selftest();

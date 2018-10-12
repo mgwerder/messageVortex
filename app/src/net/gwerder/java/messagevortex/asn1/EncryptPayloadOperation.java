@@ -33,6 +33,12 @@ public class EncryptPayloadOperation extends AbstractCryptPayloadOperation imple
   EncryptPayloadOperation() {
   }
 
+  /***
+   * <p>Create object from ASN.1 code.</p>
+   *
+   * @param object the ASN.1 code
+   * @throws IOException if parsing of ASN.1 code fails
+   */
   public EncryptPayloadOperation(ASN1Encodable object) throws IOException {
     super(object);
   }

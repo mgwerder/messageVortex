@@ -34,6 +34,12 @@ public class MacAlgorithmSpec extends SymmetricAlgorithmSpec implements Serializ
     super(to);
   }
 
+  /***
+   * <p>Create object from ASN.1 code.</p>
+   *
+   * @param to the ASN.1 code
+   * @throws IOException if parsing of ASN.1 code fails
+   */
   public MacAlgorithmSpec(ASN1Encodable to) throws IOException {
     super(to);
   }

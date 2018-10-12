@@ -52,6 +52,12 @@ public class AlgorithmParameter extends AbstractBlock
     parameter = new ConcurrentSkipListMap<>();
   }
 
+  /***
+   * <p>Create object from ASN.1 code.</p>
+   *
+   * @param ae the ASN.1 code
+   * @throws IOException if parsing of ASN.1 code fails
+   */
   public AlgorithmParameter(ASN1Encodable ae) throws IOException {
     this();
     if (ae != null) {
@@ -59,6 +65,12 @@ public class AlgorithmParameter extends AbstractBlock
     }
   }
 
+  /***
+   * <p>Copy constructor.</p>
+   *
+   * @param p the ASN.1 code
+   * @throws IOException if parsing of ASN.1 code fails
+   */
   public AlgorithmParameter(AlgorithmParameter p) {
     this();
     for (Map.Entry<Integer, String> e : p.parameter.entrySet()) {
