@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.transport.imap;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -23,9 +24,9 @@ package net.gwerder.java.messagevortex.transport.imap;
 
 public class ImapBlankLineException extends ImapException {
 
-    private static final long serialVersionUID = 43L;
+  private static final long serialVersionUID = 43L;
 
-    public ImapBlankLineException(ImapLine line) {
-        super(line,"Received blank line");
-    }
+  public ImapBlankLineException(ImapLine line) {
+    super(line, "Received blank line");
+  }
 }

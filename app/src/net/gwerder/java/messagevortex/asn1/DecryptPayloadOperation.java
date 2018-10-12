@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.asn1;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -21,25 +22,25 @@ package net.gwerder.java.messagevortex.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
-import org.bouncycastle.asn1.ASN1Encodable;
-
 import java.io.IOException;
 import java.io.Serializable;
 
-/**
- * Created by martin.gwerder on 23.05.2017.
- */
-public class DecryptPayloadOperation extends AbstractCryptPayloadOperation  implements Serializable {
+import org.bouncycastle.asn1.ASN1Encodable;
 
-    public static final long serialVersionUID = 100000000030L;
+public class DecryptPayloadOperation extends AbstractCryptPayloadOperation implements Serializable {
 
-    DecryptPayloadOperation() {}
+  public static final long serialVersionUID = 100000000030L;
 
-    DecryptPayloadOperation(ASN1Encodable object) throws IOException {super(object);}
+  DecryptPayloadOperation() {
+  }
 
-    @Override
-    public Operation getNewInstance(ASN1Encodable object) throws IOException {
-        return new DecryptPayloadOperation(object);
-    }
+  DecryptPayloadOperation(ASN1Encodable object) throws IOException {
+    super(object);
+  }
+
+  @Override
+  public Operation getNewInstance(ASN1Encodable object) throws IOException {
+    return new DecryptPayloadOperation(object);
+  }
 
 }

@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.transport;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -26,15 +27,15 @@ import java.io.InputStream;
 
 public interface TransportSender {
 
-    /***
-     * sends a message on the transport layer.
-     *
-     * This method is called by the blending layer to send a message.
-     *
-     * @param address the string representation of the target address on the transport layer
-     * @param os      the outputstream providing the message
-     * @throws IOException if transport layer was unable to satisfy the request
-     */
-    void sendMessage( String address, InputStream os ) throws IOException;
+  /***
+   * sends a message on the transport layer.
+   *
+   * This method is called by the blending layer to send a message.
+   *
+   * @param address the string representation of the target address on the transport layer
+   * @param os      the outputstream providing the message
+   * @throws IOException if transport layer was unable to satisfy the request
+   */
+  void sendMessage(String address, InputStream os) throws IOException;
 
 }

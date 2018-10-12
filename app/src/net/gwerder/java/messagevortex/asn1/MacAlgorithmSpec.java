@@ -31,14 +31,14 @@ import java.io.Serializable;
  */
 public class MacAlgorithmSpec extends SymmetricAlgorithmSpec implements Serializable {
 
-    public static final long serialVersionUID = 100000000011L;
+  public static final long serialVersionUID = 100000000011L;
 
-    public MacAlgorithmSpec(AsymmetricAlgorithmSpec to) throws IOException {
-        super(to);
-    }
+  public MacAlgorithmSpec(AsymmetricAlgorithmSpec to) throws IOException {
+    super(to);
+  }
 
-    public MacAlgorithmSpec(ASN1Encodable to) throws IOException {
-        super(to);
-    }
+  public MacAlgorithmSpec(ASN1Encodable to) throws IOException {
+    super(to);
+  }
 
 }

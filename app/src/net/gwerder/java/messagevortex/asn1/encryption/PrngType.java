@@ -2,28 +2,28 @@ package net.gwerder.java.messagevortex.asn1.encryption;
 
 /**
  * Specifies random number generator.
- *
+ * <p>
  * Created by Martin on 05.02.2018.
  */
 public enum PrngType {
-    FIXME( -1 );
+  FIXME(-1);
 
-    int id;
+  int id;
 
-    PrngType( int id ) {
-        this.id = id;
+  PrngType(int id) {
+    this.id = id;
+  }
+
+  public int getId() {
+    return this.id;
+  }
+
+  public static PrngType getById(int id) {
+    for (PrngType e : values()) {
+      if (e.id == id) {
+        return e;
+      }
     }
-
-    public int getId() {
-        return this.id;
-    }
-
-    public static PrngType getById(int id) {
-        for( PrngType e : values() ) {
-            if( e.id == id ) {
-                return e;
-            }
-        }
-        return null;
-    }
+    return null;
+  }
 }

@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.asn1;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -31,61 +32,62 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Represents a the Blending specification of the routing block.
- *
  */
-public abstract class Operation extends AbstractBlock  implements Serializable {
+public abstract class Operation extends AbstractBlock implements Serializable {
 
-    public static final long serialVersionUID = 100000000012L;
+  public static final long serialVersionUID = 100000000012L;
 
-    public static final int SPLIT_PAYLOAD     = 150;
-    public static final int MERGE_PAYLOAD     = 160;
-    public static final int XOR_SPLIT_PAYLOAD = 250;
-    public static final int XOR_MERGE_PAYLOAD = 260;
-    public static final int ENCRYPT_PAYLOAD   = 300;
-    public static final int DECRYPT_PAYLOAD   = 310;
-    public static final int ADD_REDUNDANCY    = 400;
-    public static final int REMOVE_REDUNDANCY = 410;
+  public static final int SPLIT_PAYLOAD = 150;
+  public static final int MERGE_PAYLOAD = 160;
+  public static final int XOR_SPLIT_PAYLOAD = 250;
+  public static final int XOR_MERGE_PAYLOAD = 260;
+  public static final int ENCRYPT_PAYLOAD = 300;
+  public static final int DECRYPT_PAYLOAD = 310;
+  public static final int ADD_REDUNDANCY = 400;
+  public static final int REMOVE_REDUNDANCY = 410;
 
-    private static final Map<Integer,Operation> operations=new ConcurrentHashMap<>();
-    private static boolean initInProgress=false;
+  private static final Map<Integer, Operation> operations = new ConcurrentHashMap<>();
+  private static boolean initInProgress = false;
 
-    /* constructor */
-    Operation() {init();}
+  /* constructor */
+  Operation() {
+    init();
+  }
 
-    public static Operation getInstance(ASN1Encodable object) throws IOException {
-        if(operations.isEmpty()) throw new IOException("init() not called");
-        int tag=ASN1TaggedObject.getInstance(object).getTagNo();
-        if(operations.get(tag)==null) {
-            throw new IOException("unknown tag for choice detected");
-        }
-        return operations.get(tag).getNewInstance(ASN1TaggedObject.getInstance(object).getObject());
+  public static Operation getInstance(ASN1Encodable object) throws IOException {
+    if (operations.isEmpty()) throw new IOException("init() not called");
+    int tag = ASN1TaggedObject.getInstance(object).getTagNo();
+    if (operations.get(tag) == null) {
+      throw new IOException("unknown tag for choice detected");
     }
+    return operations.get(tag).getNewInstance(ASN1TaggedObject.getInstance(object).getObject());
+  }
 
-    public static void init() {
-        synchronized(operations) {
-            if (operations.isEmpty() && ! initInProgress) {
-                initInProgress=true;
-                operations.put(SPLIT_PAYLOAD, new SplitPayloadOperation());
-                operations.put(MERGE_PAYLOAD, new MergePayloadOperation());
-                operations.put(XOR_SPLIT_PAYLOAD, new XorSplitPayloadOperation());
-                operations.put(XOR_MERGE_PAYLOAD, new XorMergePayloadOperation());
-                operations.put(ENCRYPT_PAYLOAD, new EncryptPayloadOperation());
-                operations.put(DECRYPT_PAYLOAD, new DecryptPayloadOperation());
-                operations.put(ADD_REDUNDANCY, new AddRedundancyOperation());
-                operations.put(REMOVE_REDUNDANCY, new RemoveRedundancyOperation());
-                initInProgress=false;
-            }
-        }
+  public static void init() {
+    synchronized (operations) {
+      if (operations.isEmpty() && !initInProgress) {
+        initInProgress = true;
+        operations.put(SPLIT_PAYLOAD, new SplitPayloadOperation());
+        operations.put(MERGE_PAYLOAD, new MergePayloadOperation());
+        operations.put(XOR_SPLIT_PAYLOAD, new XorSplitPayloadOperation());
+        operations.put(XOR_MERGE_PAYLOAD, new XorMergePayloadOperation());
+        operations.put(ENCRYPT_PAYLOAD, new EncryptPayloadOperation());
+        operations.put(DECRYPT_PAYLOAD, new DecryptPayloadOperation());
+        operations.put(ADD_REDUNDANCY, new AddRedundancyOperation());
+        operations.put(REMOVE_REDUNDANCY, new RemoveRedundancyOperation());
+        initInProgress = false;
+      }
     }
+  }
 
-    public static Operation parseInstance(ASN1TaggedObject object) throws IOException {
-        if(operations.isEmpty()) throw new IOException("init() not called");
-        if(operations.get(object.getTagNo())==null) {
-            throw new IOException("got unknown tag number for operation ("+object.getTagNo());
-        }
-        return operations.get(object.getTagNo()).getInstance(object.getObject());
+  public static Operation parseInstance(ASN1TaggedObject object) throws IOException {
+    if (operations.isEmpty()) throw new IOException("init() not called");
+    if (operations.get(object.getTagNo()) == null) {
+      throw new IOException("got unknown tag number for operation (" + object.getTagNo());
     }
+    return operations.get(object.getTagNo()).getInstance(object.getObject());
+  }
 
-    public abstract Operation getNewInstance(ASN1Encodable object) throws IOException;
+  public abstract Operation getNewInstance(ASN1Encodable object) throws IOException;
 
 }

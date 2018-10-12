@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.routing.operation;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -24,47 +25,45 @@ package net.gwerder.java.messagevortex.routing.operation;
 import net.gwerder.java.messagevortex.asn1.IdentityBlock;
 import net.gwerder.java.messagevortex.asn1.UsagePeriod;
 
-import java.util.Date;
-
 public abstract class AbstractOperation implements Operation {
 
-    IdentityBlock identity;
-    InternalPayload payload;
-    UsagePeriod period=null;
+  IdentityBlock identity;
+  InternalPayload payload;
+  UsagePeriod period = null;
 
-    public void setInternalPayload(InternalPayload payload) {
-        if(payload==null) {
-            this.identity=null;
-            this.payload=null;
-        } else {
-            this.identity = payload.getIdentity();
-            this.payload = payload;
-        }
+  public void setInternalPayload(InternalPayload payload) {
+    if (payload == null) {
+      this.identity = null;
+      this.payload = null;
+    } else {
+      this.identity = payload.getIdentity();
+      this.payload = payload;
     }
+  }
 
-    public abstract boolean canRun();
+  public abstract boolean canRun();
 
-    public IdentityBlock getIdentity() {
-        return identity;
+  public IdentityBlock getIdentity() {
+    return identity;
+  }
+
+  public UsagePeriod getUsagePeriod() {
+    return period;
+  }
+
+  public UsagePeriod setUsagePeriod(UsagePeriod period) {
+    UsagePeriod ret = this.period;
+    this.period = period;
+    return ret;
+  }
+
+  public boolean isInUsagePeriod() {
+    if (identity == null || identity.getUsagePeriod() == null) {
+      return true;
     }
+    return identity.getUsagePeriod().inUsagePeriod();
+  }
 
-    public UsagePeriod getUsagePeriod() {
-        return period;
-    }
-
-    public UsagePeriod setUsagePeriod(UsagePeriod period) {
-        UsagePeriod ret=this.period;
-        this.period=period;
-        return ret;
-    }
-
-    public boolean isInUsagePeriod() {
-        if( identity == null || identity.getUsagePeriod() == null ) {
-            return true;
-        }
-        return identity.getUsagePeriod().inUsagePeriod();
-    }
-
-    public abstract int[] execute(int[] id);
+  public abstract int[] execute(int[] id);
 
 }

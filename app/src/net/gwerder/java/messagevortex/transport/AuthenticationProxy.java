@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.transport;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -21,58 +22,58 @@ package net.gwerder.java.messagevortex.transport;
 // * SOFTWARE.
 // ************************************************************************************
 
-import net.gwerder.java.messagevortex.transport.imap.ImapConnection;
-
 import java.util.HashMap;
 import java.util.Map;
 
+import net.gwerder.java.messagevortex.transport.imap.ImapConnection;
+
 public class AuthenticationProxy {
 
-    private ImapConnection conn=null;
+  private ImapConnection conn = null;
 
-    public ImapConnection setImapConnection(ImapConnection conn) {
-        ImapConnection oc=this.conn;
-        this.conn=conn;
-        return oc;
+  public ImapConnection setImapConnection(ImapConnection conn) {
+    ImapConnection oc = this.conn;
+    this.conn = conn;
+    return oc;
+  }
+
+  /***
+   * <p>Get the ImapConnection object which belongs to this proxy.</p>
+   *
+   * @return A Connection object which is connected to this proxy
+   */
+  public ImapConnection getImapConnection() {
+    return this.conn;
+  }
+
+
+  private final Map<String, Credentials> users = new HashMap<>();
+
+  public void addUser(String username, String password) {
+    users.put(username.toLowerCase(), new Credentials(username, password));
+  }
+
+  public void addCredentials(Credentials creds) {
+    users.put(creds.getUsername().toLowerCase(), creds);
+  }
+
+  public boolean login(String username, String password) {
+    // Always require a username or password
+    if (username == null || password == null) {
+      return false;
     }
 
-    /***
-     * Get the ImapConnection object which belongs to this proxy
-     *
-     * @return A Connection object which is connected to this proxy
-     ***/
-    public ImapConnection getImapConnection() {
-        return this.conn;
+    // check if user exists
+    if (users.get(username.toLowerCase()) == null) {
+      return false;
     }
 
+    // check if password is correct
+    return users.get(username.toLowerCase()).getPassword().equals(password);
+  }
 
-    private final Map<String, Credentials> users = new HashMap<>();
-
-    public void addUser(String username,String password) {
-        users.put( username.toLowerCase(),new Credentials( username, password ) );
-    }
-
-    public void addCredentials( Credentials creds ) {
-        users.put( creds.getUsername().toLowerCase(), creds );
-    }
-
-    public boolean login( String username,String password ) {
-        // Always require a username or password
-        if(username==null || password==null) {
-            return false;
-        }
-
-        // check if user exists
-        if(users.get(username.toLowerCase())==null) {
-            return false;
-        }
-
-        // check if password is correct
-        return users.get( username.toLowerCase() ).getPassword().equals( password );
-    }
-
-    public Credentials getCredentials( String authzid ) {
-        return users.get( authzid );
-    }
+  public Credentials getCredentials(String authzid) {
+    return users.get(authzid);
+  }
 
 }

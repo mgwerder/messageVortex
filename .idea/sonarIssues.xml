@@ -58,7 +58,92 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/Config.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/ExtendedSecureRandom.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/MessageVortex.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/MessageVortexAccounting.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/MessageVortexBlending.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/MessageVortexConfig.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/MessageVortexLogger.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/MessageVortexRouting.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/MessageVortexStatus.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/MessageVortexTransport.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/Version.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/accounting/DummyAccountant.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/accounting/HeaderVerifier.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/asn1/AbstractRedundancyOperation.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/asn1/AddRedundancyOperation.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/asn1/AlgorithmParameter.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/asn1/AssemblyBlock.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/asn1/AsymmetricAlgorithmSpec.java">
           <value>
             <set />
           </value>
@@ -74,6 +159,471 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/asn1/AsymmetricKeyPreCalculator.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/asn1/BlendingParameter.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/asn1/BlendingSpec.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/asn1/Block.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/asn1/CipherSpec.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/asn1/DecryptPayloadOperation.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/asn1/EncryptPayloadOperation.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/asn1/HeaderRequest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/asn1/HeaderRequestCapability.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/asn1/HeaderRequestIdentity.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/asn1/HeaderRequestIncreaseMessageQuota.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/asn1/HeaderRequestIncreaseTransferQuota.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/asn1/HeaderRequestQueryQuota.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/asn1/IdentityBlock.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/asn1/IdentityStore.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/asn1/IdentityStoreBlock.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/asn1/MacAlgorithmSpec.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/asn1/Operation.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/asn1/RemoveRedundancyOperation.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/asn1/ReplyBlock.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/asn1/SymmetricAlgorithmSpec.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/asn1/encryption/Algorithm.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/asn1/encryption/AlgorithmType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/asn1/encryption/CipherUsage.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/asn1/encryption/ECCurveType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/asn1/encryption/EllipticCurveType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/asn1/encryption/Mode.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/asn1/encryption/Padding.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/asn1/encryption/Parameter.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/asn1/encryption/PrngType.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/asn1/encryption/SizeCalc.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/asn1/encryption/StatusCode.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/blending/Blender.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/blending/BlenderReceiver.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/blending/DummyBlender.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/blending/SMTPBlender.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/blending/package-info.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/routing/Edge.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/routing/GraphSet.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/routing/IncomingMessageRouterListener.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/routing/MessageFactory.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/routing/Router.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/routing/SimpleMessageFactory.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/routing/operation/AbstractOperation.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/routing/operation/AddRedundancy.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/routing/operation/BitShifter.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/routing/operation/GaloisFieldMathMode.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/routing/operation/IdMapOperation.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/routing/operation/InternalPayload.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/routing/operation/InternalPayloadSpace.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/routing/operation/MathMode.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/routing/operation/Matrix.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/routing/operation/Operation.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/routing/operation/RealMathMode.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/routing/operation/RedundancyMatrix.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/routing/operation/RemoveRedundancy.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/routing/operation/RoutingSender.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/routing/operation/VandermondeMatrix.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/transport/AllTrustManager.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/transport/AuthenticationProxy.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/transport/ByteArrayBuilder.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/transport/ClientConnection.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/transport/Credentials.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/transport/CustomKeyManager.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/transport/DummyTransportSender.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/transport/RandomString.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/transport/SaslClientCallbackHandler.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/transport/SaslMechanisms.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/transport/SaslPlainServer.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/transport/SaslServerCallbackHandler.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/transport/SecurityContext.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/transport/SecurityRequirement.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/transport/ServerConnection.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/transport/SocketDeblocker.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/transport/SocketListener.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/transport/StoppableThread.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/transport/TransportReceiver.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/transport/TransportSender.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/transport/imap/ImapBlankLineException.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/transport/imap/ImapClient.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/transport/imap/ImapCommand.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/transport/imap/ImapCommandAuthenticate.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/transport/imap/ImapCommandCapability.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/transport/imap/ImapCommandLogin.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/transport/imap/ImapCommandLogout.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/transport/imap/ImapCommandNoop.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/transport/imap/ImapConnection.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/transport/imap/ImapException.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/transport/imap/ImapLine.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/transport/imap/ImapNullLineException.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/transport/imap/ImapPassthruServer.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/transport/imap/ImapServer.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/transport/smtp/SMTPConnection.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/net/gwerder/java/messagevortex/transport/smtp/SMTPReceiver.java">
           <value>
             <set />
           </value>

@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.routing.operation;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -26,47 +27,47 @@ package net.gwerder.java.messagevortex.routing.operation;
  */
 public interface MathMode {
 
-    /***
-     * Multiplys  c1 ith c2.
-     *
-     * @param c1 the first operand
-     * @param c2 the second operand
-     * @return   the result of the multiplication
-     */
-    int mul(int c1,int c2);
+  /***
+   * Multiplys  c1 ith c2.
+   *
+   * @param c1 the first operand
+   * @param c2 the second operand
+   * @return the result of the multiplication
+   */
+  int mul(int c1, int c2);
 
-    /***
-     * Divides c1 by c2 (without remainder).
-     *
-     * @param c1 the dividend
-     * @param c2 the divisor
-     * @return   the result of the division
-     */
-    int div(int c1,int c2);
+  /***
+   * Divides c1 by c2 (without remainder).
+   *
+   * @param c1 the dividend
+   * @param c2 the divisor
+   * @return the result of the division
+   */
+  int div(int c1, int c2);
 
-    /***
-     * Add c1 with c2.
-     *
-     * @param c1 the first operand
-     * @param c2 the second operand
-     * @return   the result of the addition
-     */
-    int add(int c1,int c2);
+  /***
+   * Add c1 with c2.
+   *
+   * @param c1 the first operand
+   * @param c2 the second operand
+   * @return the result of the addition
+   */
+  int add(int c1, int c2);
 
-    /***
-     * Subtract c2 from c1.
-     *
-     * @param c1 the base value
-     * @param c2 the the value to subtract from the base value
-     * @return   the result of the subtraction
-     */
-    int sub(int c1,int c2);
+  /***
+   * Subtract c2 from c1.
+   *
+   * @param c1 the base value
+   * @param c2 the the value to subtract from the base value
+   * @return the result of the subtraction
+   */
+  int sub(int c1, int c2);
 
-    /***
-     * get the identitfication representation.
-     *
-     * @return th identification string
-     */
-    String toString();
+  /***
+   * get the identitfication representation.
+   *
+   * @return th identification string
+   */
+  String toString();
 
 }

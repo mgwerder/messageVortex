@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.asn1.encryption;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -31,163 +32,163 @@ import java.util.*;
  */
 public enum Padding implements Serializable {
 
-    NONE(1000, "NoPadding", new AlgorithmType[]{AlgorithmType.SYMMETRIC}, new SizeCalc() {
-        public int maxSize(int s) {
-            return s / 8;
-        }
-    }),
-    PKCS1(1001, "PKCS1Padding", new AlgorithmType[]{AlgorithmType.ASYMMETRIC}, new SizeCalc() {
-        public int maxSize(int s) {
-            return (s / 8) - 11;
-        }
-    }),
-    OAEP_SHA256_MGF1(1100, "OAEPWithSHA256AndMGF1Padding", new AlgorithmType[]{AlgorithmType.ASYMMETRIC}, new SizeCalc() {
-        public int maxSize(int s) {
-            return (s / 8) - 2 - (256 / 4);
-        }
-    }),
-    OAEP_SHA384_MGF1(1101, "OAEPWithSHA384AndMGF1Padding", new AlgorithmType[]{AlgorithmType.ASYMMETRIC}, new SizeCalc() {
-        public int maxSize(int s) {
-            return s / 8 - 2 - 384 / 4;
-        }
-    }),
-    OAEP_SHA512_MGF1(1102, "OAEPWithSHA512AndMGF1Padding", new AlgorithmType[]{AlgorithmType.ASYMMETRIC}, new SizeCalc() {
-        public int maxSize(int s) {
-            return s / 8 - 2 - 512 / 4;
-        }
-    }),
-    PKCS7(1007, "PKCS7Padding", new AlgorithmType[]{AlgorithmType.SYMMETRIC}, new SizeCalc() {
-        public int maxSize(int s) {
-            return s / 8 - 1;
-        }
-    });
+  NONE(1000, "NoPadding", new AlgorithmType[]{AlgorithmType.SYMMETRIC}, new SizeCalc() {
+    public int maxSize(int s) {
+      return s / 8;
+    }
+  }),
+  PKCS1(1001, "PKCS1Padding", new AlgorithmType[]{AlgorithmType.ASYMMETRIC}, new SizeCalc() {
+    public int maxSize(int s) {
+      return (s / 8) - 11;
+    }
+  }),
+  OAEP_SHA256_MGF1(1100, "OAEPWithSHA256AndMGF1Padding", new AlgorithmType[]{AlgorithmType.ASYMMETRIC}, new SizeCalc() {
+    public int maxSize(int s) {
+      return (s / 8) - 2 - (256 / 4);
+    }
+  }),
+  OAEP_SHA384_MGF1(1101, "OAEPWithSHA384AndMGF1Padding", new AlgorithmType[]{AlgorithmType.ASYMMETRIC}, new SizeCalc() {
+    public int maxSize(int s) {
+      return s / 8 - 2 - 384 / 4;
+    }
+  }),
+  OAEP_SHA512_MGF1(1102, "OAEPWithSHA512AndMGF1Padding", new AlgorithmType[]{AlgorithmType.ASYMMETRIC}, new SizeCalc() {
+    public int maxSize(int s) {
+      return s / 8 - 2 - 512 / 4;
+    }
+  }),
+  PKCS7(1007, "PKCS7Padding", new AlgorithmType[]{AlgorithmType.SYMMETRIC}, new SizeCalc() {
+    public int maxSize(int s) {
+      return s / 8 - 1;
+    }
+  });
 
-    public static final long serialVersionUID = 100000000038L;
+  public static final long serialVersionUID = 100000000038L;
 
-    private static final Map<AlgorithmType, Padding> DEFAULT_PADDING = new HashMap<>();
+  private static final Map<AlgorithmType, Padding> DEFAULT_PADDING = new HashMap<>();
 
-    private int id;
-    private String txt;
-    private Set<AlgorithmType> at;
-    private SizeCalc s;
-    final ASN1Enumerated asn;
+  private int id;
+  private String txt;
+  private Set<AlgorithmType> at;
+  private SizeCalc s;
+  final ASN1Enumerated asn;
 
-    Padding(int id, String txt, AlgorithmType[] at, SizeCalc s) {
-        this.id = id;
-        this.txt = txt;
-        this.at = new HashSet<>();
-        this.at.addAll(Arrays.asList(at));
-        this.s = s;
-        this.asn = new ASN1Enumerated(id);
+  Padding(int id, String txt, AlgorithmType[] at, SizeCalc s) {
+    this.id = id;
+    this.txt = txt;
+    this.at = new HashSet<>();
+    this.at.addAll(Arrays.asList(at));
+    this.s = s;
+    this.asn = new ASN1Enumerated(id);
+  }
+
+  /***
+   * Get applicable padding sets for a given Algorithm type.
+   *
+   * @param at        the type of algorithm
+   * @return an array of supported paddings
+   */
+  public static Padding[] getAlgorithms(AlgorithmType at) {
+    List<Padding> v = new ArrayList<>();
+    for (Padding val : values()) {
+      if (val.at.contains(at)) {
+        v.add(val);
+      }
+    }
+    return v.toArray(new Padding[v.size()]);
+  }
+
+
+  /***
+   * Get a padding by its ASN.1 ID.
+   *
+   * @param id    the ASN.1 numericcal ID
+   * @return the padding or null if ID is unknown
+   */
+  public static Padding getById(int id) {
+    for (Padding e : values()) {
+      if (e.id == id) {
+        return e;
+      }
+    }
+    return null;
+  }
+
+  /***
+   * Get a padding by its name.
+   *
+   * @param name  the name used by the cryptographic provider
+   * @return the padding or null if name is unknown
+   */
+  public static Padding getByString(String name) {
+    for (Padding e : values()) {
+      if (e.txt.equals(name)) {
+        return e;
+      }
+    }
+    return null;
+  }
+
+  /***
+   * Get the default padding for a given AlgorithmType
+   *
+   * @param at    the algorithm type
+   * @return the default padding for the given algorithm type
+   */
+  public static Padding getDefault(AlgorithmType at) {
+    // init hashmap if necesary
+    synchronized (DEFAULT_PADDING) {
+      if (DEFAULT_PADDING.isEmpty()) {
+        DEFAULT_PADDING.put(AlgorithmType.ASYMMETRIC, Padding.PKCS1);
+        DEFAULT_PADDING.put(AlgorithmType.SYMMETRIC, Padding.PKCS7);
+      }
     }
 
-    /***
-     * Get applicable padding sets for a given Algorithm type.
-     *
-     * @param at        the type of algorithm
-     * @return an array of supported paddings
-     */
-    public static Padding[] getAlgorithms(AlgorithmType at) {
-        List<Padding> v = new ArrayList<>();
-        for (Padding val : values()) {
-            if (val.at.contains(at)) {
-                v.add(val);
-            }
-        }
-        return v.toArray(new Padding[v.size()]);
+    // return padding
+    Padding p = DEFAULT_PADDING.get(at);
+    if (p == null) {
+      throw new NullPointerException("no default padding for " + at);
     }
+    return p;
+  }
 
+  /***
+   * Get the numeric ASN.1 id of the padding
+   *
+   * @return the id of the padding
+   */
+  public int getId() {
+    return id;
+  }
 
-    /***
-     * Get a padding by its ASN.1 ID.
-     *
-     * @param id    the ASN.1 numericcal ID
-     * @return the padding or null if ID is unknown
-     */
-    public static Padding getById(int id) {
-        for (Padding e : values()) {
-            if (e.id == id) {
-                return e;
-            }
-        }
-        return null;
-    }
+  /***
+   * Get the textual representation of the padding for the cryptographic provider.
+   *
+   * @return the name used within the cryptographic provider
+   */
+  public String toString() {
+    return txt;
+  }
 
-    /***
-     * Get a padding by its name.
-     *
-     * @param name  the name used by the cryptographic provider
-     * @return the padding or null if name is unknown
-     */
-    public static Padding getByString(String name) {
-        for (Padding e : values()) {
-            if (e.txt.equals(name)) {
-                return e;
-            }
-        }
-        return null;
-    }
+  /***
+   * Gets the maximum payload size,
+   *
+   * The payload size is calculated by &lt;block size&gt;-&lt;padding overhead&gt;.
+   *
+   * @param blockSize   the block size of the cryptographic algorithm (usually equals the key size)
+   * @return the number of bytes a single block may hold including the padding information.
+   */
+  public int getMaxSize(int blockSize) {
+    return s.maxSize(blockSize);
+  }
 
-    /***
-     * Get the default padding for a given AlgorithmType
-     *
-     * @param at    the algorithm type
-     * @return the default padding for the given algorithm type
-     */
-    public static Padding getDefault(AlgorithmType at) {
-        // init hashmap if necesary
-        synchronized (DEFAULT_PADDING) {
-            if (DEFAULT_PADDING.isEmpty()) {
-                DEFAULT_PADDING.put(AlgorithmType.ASYMMETRIC, Padding.PKCS1);
-                DEFAULT_PADDING.put(AlgorithmType.SYMMETRIC, Padding.PKCS7);
-            }
-        }
-
-        // return padding
-        Padding p = DEFAULT_PADDING.get(at);
-        if (p == null) {
-            throw new NullPointerException("no default padding for " + at);
-        }
-        return p;
-    }
-
-    /***
-     * Get the numeric ASN.1 id of the padding
-     *
-     * @return the id of the padding
-     */
-    public int getId() {
-        return id;
-    }
-
-    /***
-     * Get the textual representation of the padding for the cryptographic provider.
-     *
-     * @return the name used within the cryptographic provider
-     */
-    public String toString() {
-        return txt;
-    }
-
-    /***
-     * Gets the maximum payload size,
-     *
-     * The payload size is calculated by &lt;block size&gt;-&lt;padding overhead&gt;.
-     *
-     * @param blockSize   the block size of the cryptographic algorithm (usually equals the key size)
-     * @return the number of bytes a single block may hold including the padding information.
-     */
-    public int getMaxSize(int blockSize) {
-        return s.maxSize(blockSize);
-    }
-
-    /***
-     * Get the corresponding ASN1 enumeration
-     *
-     * @return the ASN1 enumeration representing this padding
-     */
-    public ASN1Enumerated toASN1() {
-        return asn;
-    }
+  /***
+   * Get the corresponding ASN1 enumeration
+   *
+   * @return the ASN1 enumeration representing this padding
+   */
+  public ASN1Enumerated toASN1() {
+    return asn;
+  }
 
 }

@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.asn1;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -21,63 +22,69 @@ package net.gwerder.java.messagevortex.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
-import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
-import org.bouncycastle.asn1.*;
-
 import java.io.IOException;
 import java.io.Serializable;
+import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
+import org.bouncycastle.asn1.ASN1Encodable;
+import org.bouncycastle.asn1.ASN1EncodableVector;
+import org.bouncycastle.asn1.ASN1Integer;
+import org.bouncycastle.asn1.ASN1Object;
+import org.bouncycastle.asn1.ASN1Sequence;
+import org.bouncycastle.asn1.DERSequence;
 
 /**
- * ASN1 parser for increasing message quota.
- *
- * Created by martin.gwerder on 25.04.2016.
+ * <p>ASN1 parser for increasing message quota.</p>
  */
-public class HeaderRequestIncreaseMessageQuota extends HeaderRequest  implements Serializable {
+public class HeaderRequestIncreaseMessageQuota extends HeaderRequest implements Serializable {
 
-    public static final long serialVersionUID = 100000000026L;
+  public static final long serialVersionUID = 100000000026L;
 
-    private long quota = -1;
+  private long quota = -1;
 
-    public HeaderRequestIncreaseMessageQuota() {super();}
+  public HeaderRequestIncreaseMessageQuota() {
+    super();
+  }
 
-    public HeaderRequestIncreaseMessageQuota(ASN1Encodable ae) throws IOException {
-        this();
-        if (ae!=null) {
-            parse(ae);
-        }
+  public HeaderRequestIncreaseMessageQuota(ASN1Encodable ae) throws IOException {
+    this();
+    if (ae != null) {
+      parse(ae);
     }
+  }
 
-    protected void parse(ASN1Encodable ae) throws IOException{
-        ASN1Sequence s1 = ASN1Sequence.getInstance(ae);
-        int i=0;
-        quota = ASN1Integer.getInstance( s1.getObjectAt( i++ ) ).getValue().intValue();
+  protected void parse(ASN1Encodable ae) throws IOException {
+    ASN1Sequence s1 = ASN1Sequence.getInstance(ae);
+    int i = 0;
+    quota = ASN1Integer.getInstance(s1.getObjectAt(i++)).getValue().intValue();
+  }
+
+  protected HeaderRequest getRequest(ASN1Encodable ae) throws IOException {
+    return new HeaderRequestIncreaseMessageQuota(ae);
+  }
+
+  public long getQuota() {
+    return quota;
+  }
+
+  public int getId() {
+    return 0;
+  }
+
+  @Override
+  public String dumpValueNotation(String prefix, DumpType dumpType) {
+    StringBuilder sb = new StringBuilder();
+    sb.append("{" + CRLF);
+    if (quota > -1) {
+      sb.append(prefix).append("  quota ").append(quota).append(CRLF);
     }
+    sb.append(prefix).append('}');
+    return sb.toString();
+  }
 
-    protected HeaderRequest getRequest(ASN1Encodable ae) throws IOException {
-        return new HeaderRequestIncreaseMessageQuota(ae);
-    }
-
-    public long getQuota() {
-        return quota;
-    }
-
-    public int getId() {return 0;}
-
-    @Override
-    public String dumpValueNotation(String prefix,DumpType dumpType) {
-        StringBuilder sb=new StringBuilder();
-        sb.append("{"+CRLF);
-        if(quota>-1) {
-            sb.append( prefix ).append( "  quota " ).append( quota ).append( CRLF );
-        }
-        sb.append(prefix ).append( '}' );
-        return sb.toString();
-    }
-
-    @Override
-    public ASN1Object intToASN1Object( DumpType dumpType ) throws IOException {
-        ASN1EncodableVector s1 = new ASN1EncodableVector();
-        s1.add( new ASN1Integer( quota ) );
-        return new DERSequence( s1 );
-    }
+  @Override
+  public ASN1Object intToASN1Object(DumpType dumpType) throws IOException {
+    ASN1EncodableVector s1 = new ASN1EncodableVector();
+    s1.add(new ASN1Integer(quota));
+    return new DERSequence(s1);
+  }
 }

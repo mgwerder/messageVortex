@@ -30,16 +30,16 @@ import java.io.IOException;
  ***/
 public interface StoppableThread {
 
-    /***
-     * Shuts the thread gracefully down.
-     ***/
-    void shutdown() throws IOException;
+  /***
+   * Shuts the thread gracefully down.
+   ***/
+  void shutdown() throws IOException;
 
-    /***
-     * Query if the process is marked for shutdown
-     *
-     * @return true if the thread is marked for shutdown
-     */
-    boolean isShutdown();
+  /***
+   * Query if the process is marked for shutdown
+   *
+   * @return true if the thread is marked for shutdown
+   */
+  boolean isShutdown();
 
 }

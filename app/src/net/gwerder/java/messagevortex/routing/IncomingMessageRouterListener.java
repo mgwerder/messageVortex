@@ -28,12 +28,12 @@ import net.gwerder.java.messagevortex.asn1.VortexMessage;
  */
 public interface IncomingMessageRouterListener {
 
-    /***
-     * This method is called by the blending layer when an incomming message has
-     * been received and the verifier acknowledged its processing.
-     *
-     * @param message the message received
-     */
-    void processMessage(VortexMessage message);
+  /***
+   * This method is called by the blending layer when an incomming message has
+   * been received and the verifier acknowledged its processing.
+   *
+   * @param message the message received
+   */
+  void processMessage(VortexMessage message);
 
 }

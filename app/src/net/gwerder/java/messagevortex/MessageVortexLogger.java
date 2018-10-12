@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -30,74 +31,75 @@ import java.util.logging.*;
 
 public class MessageVortexLogger extends Logger {
 
-    static final String LINE_SEPARATOR = System.getProperty("line.separator");
+  static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
-    static final Handler consoleHandler = new ConsoleHandler();;
+  static final Handler consoleHandler = new ConsoleHandler();
+  ;
 
-    static {
-        // remove all existing console handler
-        Handler[] handlers = getGlobalLogger().getParent().getHandlers();
-        if (handlers != null) {
-            for (Handler h : handlers) {
-                getGlobalLogger().getParent().removeHandler( h );
-            }
+  static {
+    // remove all existing console handler
+    Handler[] handlers = getGlobalLogger().getParent().getHandlers();
+    if (handlers != null) {
+      for (Handler h : handlers) {
+        getGlobalLogger().getParent().removeHandler(h);
+      }
+    }
+
+    // set log formater
+    consoleHandler.setFormatter(new MyLogFormatter());
+    getGlobalLogger().getParent().addHandler(consoleHandler);
+  }
+
+  private MessageVortexLogger() {
+    super(null, null);
+  }
+
+  public static void setGlobalLogLevel(Level l) {
+    getGlobalLogger().setLevel(l);
+  }
+
+  public static Logger getGlobalLogger() {
+    return LogManager.getLogManager().getLogger(Logger.GLOBAL_LOGGER_NAME);
+  }
+
+  static final class MyLogFormatter extends Formatter {
+
+
+    @Override
+    public String format(LogRecord record) {
+
+      StringBuilder sb = new StringBuilder();
+
+      sb.append(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()))
+              .append(' ')
+              .append(record.getLevel().getLocalizedName())
+              .append(": ")
+              .append('[')
+              .append(Thread.currentThread().getName())
+              .append("] ")
+              .append(formatMessage(record))
+              .append(LINE_SEPARATOR);
+
+      //noinspection ThrowableResultOfMethodCallIgnored
+      if (record.getThrown() != null) {
+        try {
+          StringWriter sw = new StringWriter();
+          PrintWriter pw = new PrintWriter(sw);
+          //noinspection ThrowableResultOfMethodCallIgnored
+          record.getThrown().printStackTrace(pw);
+          pw.close();
+          sb.append(sw);
+        } catch (Exception ex) {
+          assert true : "Never throw assertion" + ex;
         }
+      }
 
-        // set log formater
-        consoleHandler.setFormatter( new MyLogFormatter() );
-        getGlobalLogger().getParent().addHandler( consoleHandler );
+      return sb.toString();
     }
+  }
 
-    private MessageVortexLogger() {
-        super( null, null );
-    }
-
-    public static void setGlobalLogLevel(Level l) {
-        getGlobalLogger().setLevel( l );
-    }
-
-    public static Logger getGlobalLogger() {
-        return LogManager.getLogManager().getLogger( Logger.GLOBAL_LOGGER_NAME );
-    }
-
-    static final class MyLogFormatter extends Formatter {
-
-
-        @Override
-        public String format(LogRecord record) {
-
-            StringBuilder sb = new StringBuilder();
-
-            sb.append(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()))
-                .append(' ')
-                .append(record.getLevel().getLocalizedName())
-                .append(": ")
-                .append('[')
-                .append(Thread.currentThread().getName())
-                .append("] ")
-                .append(formatMessage(record))
-                .append(LINE_SEPARATOR);
-
-            //noinspection ThrowableResultOfMethodCallIgnored
-            if (record.getThrown() != null) {
-                try {
-                    StringWriter sw = new StringWriter();
-                    PrintWriter pw = new PrintWriter(sw);
-                    //noinspection ThrowableResultOfMethodCallIgnored
-                    record.getThrown().printStackTrace(pw);
-                    pw.close();
-                    sb.append(sw);
-                } catch (Exception ex) {
-                    assert true:"Never throw assertion"+ex;
-                }
-            }
-
-            return sb.toString();
-        }
-    }
-
-    public static void flush() {
-        consoleHandler.flush();
-    }
+  public static void flush() {
+    consoleHandler.flush();
+  }
 
 }

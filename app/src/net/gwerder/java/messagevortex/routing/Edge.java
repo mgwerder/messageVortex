@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.routing;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -24,122 +25,126 @@ package net.gwerder.java.messagevortex.routing;
 import net.gwerder.java.messagevortex.asn1.IdentityStoreBlock;
 
 /**
- * Represents a graph between two identity blocks inclusive senders operation and time.
- *
- * Created by martin.gwerder on 13.06.2016.
+ * <p>Represents a graph between two identity blocks inclusive senders operation and time.</p>
  */
 public class Edge {
 
-    private static final long serialVersionUID = 9070431563L;
+  private static final long serialVersionUID = 9070431563L;
 
-    private IdentityStoreBlock from;
-    private IdentityStoreBlock to;
-    private long               startTime = 0;
-    private long               maxDelay  = 10000;
+  private IdentityStoreBlock from;
+  private IdentityStoreBlock to;
+  private long startTime = 0;
+  private long maxDelay = 10000;
 
-    /***
-     * Represents a routing graph during sending.
-     *
-     * @param  from       The starting point of the graph
-     * @param  to         The ending point of the graph
-     * @param  startTime  The starting time relative to the GraphSet start (in ms)
-     * @param  maxDelay   The maximum delay after the start of this graph (in ms)
-     * @throws IllegalArgumentException if from and two are equal
-     * @throws NullPointerException if one of the parameters is null
-     */
-    public Edge(IdentityStoreBlock from, IdentityStoreBlock to, long startTime, long maxDelay) {
+  /***
+   * <p>Represents a routing graph during sending.</p>
+   *
+   * @param  from       The starting point of the graph
+   * @param  to         The ending point of the graph
+   * @param  startTime  The starting time relative to the GraphSet start (in ms)
+   * @param  maxDelay   The maximum delay after the start of this graph (in ms)
+   * @throws IllegalArgumentException if from and two are equal
+   * @throws NullPointerException if one of the parameters is null
+   */
+  public Edge(IdentityStoreBlock from, IdentityStoreBlock to, long startTime, long maxDelay) {
 
-        if(from==null) {
-            throw new NullPointerException( "from may not be null in an edge" );
-        }
-
-        if(to==null) {
-            throw new NullPointerException( "from may not be null in an edge" );
-        }
-
-        if( from == to || from.equals(to) ) {
-            throw new IllegalArgumentException( "an edge may not have the same start and ending point" );
-        }
-
-        this.from = from;
-        this.to = to;
-        this.startTime= startTime;
-        this.maxDelay= maxDelay;
+    if (from == null) {
+      throw new NullPointerException("from may not be null in an edge");
     }
 
-    /***
-     * Get the sending entity.
-     *
-     * @return The sending entity
-     */
-    public IdentityStoreBlock getFrom() { return from; }
-
-    /***
-     * Get the receiving entity.
-     *
-     * @return The receiving entity
-     */
-    public IdentityStoreBlock getTo() {
-        return to;
+    if (to == null) {
+      throw new NullPointerException("from may not be null in an edge");
     }
 
-    /***
-     * Gets the start time of the edge relative to the graphsets start.
-     *
-     * @return the currently set start time
-     */
-    public long getStartTime() { return startTime; }
-
-    /***
-     * Sets the start time of the edge relative to the start time of the graphset.
-     *
-     * @param newStartTime the time to be set in millis
-     * @return the previously set time
-     */
-    public long setStartTime( long newStartTime ) {
-        long old=startTime;
-        this.startTime=newStartTime;
-        return old;
+    if (from == to || from.equals(to)) {
+      throw new IllegalArgumentException("an edge may not have the same start and ending point");
     }
 
-    /***
-     * Gets the maximum delay time a router may choose to delay the edge starting at the start time.
-     *
-     * @return the currently set maximum delay time
-     */
-    public long getDelayTime() { return maxDelay; }
+    this.from = from;
+    this.to = to;
+    this.startTime = startTime;
+    this.maxDelay = maxDelay;
+  }
 
-    /***
-     * Sets the maximum delay time a router may choose to delay the edge starting at the start time.
-     *
-     * @param newMaxDelay the new maximum time to be set
-     * @return the previously set maximum delay time
-     */
-    public long setDelayTime( long newMaxDelay ) {
-        long old=maxDelay;
-        this.maxDelay=newMaxDelay;
-        return old;
-    }
+  /***
+   * <p>Get the sending entity.</p>
+   *
+   * @return The sending entity
+   */
+  public IdentityStoreBlock getFrom() {
+    return from;
+  }
 
-    @Override
-    public boolean equals(Object t) {
-        if(t==null) {
-            return false;
-        }
-        if( t.getClass() != this.getClass() ) {
-            return false;
-        }
-        Edge g=(Edge)t;
-        return g.to.equals(this.to) && g.from.equals(this.from) && (g.startTime==this.startTime) && (g.maxDelay==this.maxDelay);
-    }
+  /***
+   * <p>Get the receiving entity.</p>
+   *
+   * @return The receiving entity
+   */
+  public IdentityStoreBlock getTo() {
+    return to;
+  }
 
-    @Override
-    public int hashCode() {
-        return toString().hashCode();
-    }
+  /***
+   * <p>Gets the start time of the edge relative to the graphsets start.</p>
+   *
+   * @return the currently set start time
+   */
+  public long getStartTime() {
+    return startTime;
+  }
 
-    @Override
-    public String toString() {
-        return from + " -"+startTime+"/"+maxDelay+"-> "+ to;
+  /***
+   * <p>Sets the start time of the edge relative to the start time of the graph set.</p>
+   *
+   * @param newStartTime the time to be set in millis
+   * @return the previously set time
+   */
+  public long setStartTime(long newStartTime) {
+    long old = startTime;
+    this.startTime = newStartTime;
+    return old;
+  }
+
+  /***
+   * <p>Gets the maximum delay time a router may choose to delay the edge starting at the start time.</p>
+   *
+   * @return the currently set maximum delay time
+   */
+  public long getDelayTime() {
+    return maxDelay;
+  }
+
+  /***
+   * <p>Sets the maximum delay time a router may choose to delay the edge starting at the start time.</p>
+   *
+   * @param newMaxDelay the new maximum time to be set
+   * @return the previously set maximum delay time
+   */
+  public long setDelayTime(long newMaxDelay) {
+    long old = maxDelay;
+    this.maxDelay = newMaxDelay;
+    return old;
+  }
+
+  @Override
+  public boolean equals(Object t) {
+    if (t == null) {
+      return false;
     }
+    if (t.getClass() != this.getClass()) {
+      return false;
+    }
+    Edge g = (Edge) t;
+    return g.to.equals(this.to) && g.from.equals(this.from) && (g.startTime == this.startTime) && (g.maxDelay == this.maxDelay);
+  }
+
+  @Override
+  public int hashCode() {
+    return toString().hashCode();
+  }
+
+  @Override
+  public String toString() {
+    return from + " -" + startTime + "/" + maxDelay + "-> " + to;
+  }
 }

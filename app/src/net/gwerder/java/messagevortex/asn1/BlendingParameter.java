@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.asn1;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -21,18 +22,20 @@ package net.gwerder.java.messagevortex.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
-import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
-import org.bouncycastle.asn1.*;
+import static net.gwerder.java.messagevortex.asn1.BlendingParameter.BlendingParameterChoice.F5;
+import static net.gwerder.java.messagevortex.asn1.BlendingParameter.BlendingParameterChoice.OFFSET;
 
 import java.io.IOException;
 import java.io.Serializable;
-
-import static net.gwerder.java.messagevortex.asn1.BlendingParameter.BlendingParameterChoice.*;
+import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
+import org.bouncycastle.asn1.ASN1Encodable;
+import org.bouncycastle.asn1.ASN1Integer;
+import org.bouncycastle.asn1.ASN1Object;
+import org.bouncycastle.asn1.ASN1TaggedObject;
+import org.bouncycastle.asn1.DERTaggedObject;
 
 /**
- * Blending Parameter Block representation.
- * <p>
- * Created by martin.gwerder on 15.05.2017.
+ * <p>Blending Parameter Block representation.</p>
  */
 public class BlendingParameter extends AbstractBlock implements Serializable {
 

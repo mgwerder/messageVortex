@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -29,59 +30,60 @@ import java.util.logging.Logger;
 
 public class MessageVortex {
 
-    private static final Logger LOGGER;
-    static {
-        LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+  private static final Logger LOGGER;
+
+  static {
+    LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+  }
+
+  private static MessageVortexTransport transport = null;
+  private static MessageVortexBlending blending = null;
+  private static MessageVortexRouting routing = null;
+  private static MessageVortexAccounting accounting = null;
+
+  private MessageVortex() {
+    super();
+  }
+
+  public static int help() {
+    System.err.println("MessageVortex V" + Version.getBuild());
+    System.err.println("===============================================================");
+    System.err.println("usage: messageVortex -conf <configfile>");
+    return 100;
+  }
+
+  public static int main(String[] args) {
+    LOGGER.log(Level.INFO, "MessageVortex V" + Version.getBuild());
+    if (args != null && args.length > 0 && "--help".equals(args[0])) {
+      // output help here
+      return help();
     }
 
-    private static MessageVortexTransport  transport  = null;
-    private static MessageVortexBlending   blending   = null;
-    private static MessageVortexRouting    routing    = null;
-    private static MessageVortexAccounting accounting = null;
-
-    private MessageVortex() {
-        super();
+    // create config store
+    try {
+      MessageVortexConfig.createConfig();
+    } catch (IOException ioe) {
+      LOGGER.log(Level.SEVERE, "Unable to parse config file", ioe);
     }
 
-    public static int help() {
-        System.err.println( "MessageVortex V" + Version.getBuild() );
-        System.err.println( "===============================================================" );
-        System.err.println( "usage: messageVortex -conf <configfile>" );
-        return 100;
+    try {
+      accounting = new MessageVortexAccounting(null);
+      routing = new MessageVortexRouting(accounting.getAccountant(), null);
+      blending = new MessageVortexBlending(null, routing.getRoutingSender());
+      transport = new MessageVortexTransport(blending);
+
+      blending.setTransportReceiver(transport.getTransportReceiver());
+      routing.setRoutingSender(blending.getRoutingSender());
+
+      // FIXME Use sensible accountant
+      accounting.setAccountant(new DummyAccountant());
+    } catch (IOException ioe) {
+      LOGGER.log(Level.SEVERE, "Exception while setting up transport infrastructure", ioe);
     }
 
-    public static int main(String[] args) {
-        LOGGER.log(Level.INFO, "MessageVortex V"+Version.getBuild());
-        if(args!=null && args.length>0 && "--help".equals(args[0])) {
-            // output help here
-            return help();
-        }
-
-        // create config store
-        try {
-            MessageVortexConfig.createConfig();
-        } catch( IOException ioe ) {
-            LOGGER.log( Level.SEVERE, "Unable to parse config file", ioe );
-        }
-
-        try {
-            accounting = new MessageVortexAccounting( null );
-            routing   = new MessageVortexRouting( accounting.getAccountant(), null );
-            blending  = new MessageVortexBlending( null, routing.getRoutingSender() );
-            transport = new MessageVortexTransport( blending );
-
-            blending.setTransportReceiver( transport.getTransportReceiver() );
-            routing.setRoutingSender( blending.getRoutingSender() );
-
-            // FIXME Use sensible accountant
-            accounting.setAccountant( new DummyAccountant() );
-        }catch ( IOException ioe ) {
-            LOGGER.log( Level.SEVERE, "Exception while setting up transport infrastructure", ioe );
-        }
-
-        if(transport!=null) {
-            transport.shutdown();
-        }
-        return 0;
+    if (transport != null) {
+      transport.shutdown();
     }
+    return 0;
+  }
 }

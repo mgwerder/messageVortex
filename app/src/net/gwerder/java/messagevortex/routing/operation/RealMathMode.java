@@ -26,36 +26,37 @@ package net.gwerder.java.messagevortex.routing.operation;
  */
 public class RealMathMode implements MathMode {
 
-    private static final RealMathMode real=new RealMathMode();
+  private static final RealMathMode real = new RealMathMode();
 
-    private RealMathMode() {}
+  private RealMathMode() {
+  }
 
-    public static RealMathMode getRealMathMode() {
-        return real;
-    }
+  public static RealMathMode getRealMathMode() {
+    return real;
+  }
 
-    @Override
-    public int mul(int c1, int c2) {
-        return c1*c2;
-    }
+  @Override
+  public int mul(int c1, int c2) {
+    return c1 * c2;
+  }
 
-    @Override
-    public int div(int c1, int c2) {
-        return c1/c2;
-    }
+  @Override
+  public int div(int c1, int c2) {
+    return c1 / c2;
+  }
 
-    @Override
-    public int add(int c1, int c2) {
-        return c1+c2;
-    }
+  @Override
+  public int add(int c1, int c2) {
+    return c1 + c2;
+  }
 
-    @Override
-    public int sub(int c1, int c2) {
-        return c1-c2;
-    }
+  @Override
+  public int sub(int c1, int c2) {
+    return c1 - c2;
+  }
 
-    @Override
-    public String toString() {
-        return "Real";
-    }
+  @Override
+  public String toString() {
+    return "Real";
+  }
 }

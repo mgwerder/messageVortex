@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.asn1;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -21,18 +22,20 @@ package net.gwerder.java.messagevortex.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
+import java.io.IOException;
+import java.io.Serializable;
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.asn1.encryption.Algorithm;
 import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
-import org.bouncycastle.asn1.*;
-
-import java.io.IOException;
-import java.io.Serializable;
+import org.bouncycastle.asn1.ASN1Encodable;
+import org.bouncycastle.asn1.ASN1EncodableVector;
+import org.bouncycastle.asn1.ASN1Enumerated;
+import org.bouncycastle.asn1.ASN1Object;
+import org.bouncycastle.asn1.ASN1Sequence;
+import org.bouncycastle.asn1.DERSequence;
 
 /**
- * Specification for AsymmetricAlgorithmSpec.
- * <p>
- * Created by martin.gwerder on 29.12.2017.
+ * <p>Specification for AsymmetricAlgorithmSpec.</p>
  */
 public class AsymmetricAlgorithmSpec extends AbstractBlock implements Serializable {
 
@@ -48,7 +51,7 @@ public class AsymmetricAlgorithmSpec extends AbstractBlock implements Serializab
   AlgorithmParameter parameter;
 
   /***
-   * Copy constructor
+   * <p>Copy constructor.</p>
    *
    * @param  to           object to clone
    * @throws IOException  when failing to copy source object
@@ -63,7 +66,7 @@ public class AsymmetricAlgorithmSpec extends AbstractBlock implements Serializab
   }
 
   /***
-   * Constructor to build from ASN1 object
+   * <p>Constructor to build from ASN1 object.</p>
    *
    * @param  to           Object to be parsed
    * @throws IOException when failing to parse ASN1 object
@@ -88,7 +91,7 @@ public class AsymmetricAlgorithmSpec extends AbstractBlock implements Serializab
   }
 
   /***
-   * Gets the algorithm (@see Algorithm).
+   * <p>Gets the algorithm (@see Algorithm).</p>
    *
    * @return the current algorithm
    */
@@ -97,7 +100,7 @@ public class AsymmetricAlgorithmSpec extends AbstractBlock implements Serializab
   }
 
   /***
-   * Get the algorithm parameters (@see AlgorithmParameter).
+   * <p>Get the algorithm parameters (@see AlgorithmParameter).</p>
    *
    * @return the current algorithm parameters
    */

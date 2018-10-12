@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.transport.imap;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -21,33 +22,32 @@ package net.gwerder.java.messagevortex.transport.imap;
 // * SOFTWARE.
 // ************************************************************************************
 
-import net.gwerder.java.messagevortex.transport.RandomString;
-import net.gwerder.java.messagevortex.transport.SaslMechanisms;
-import net.gwerder.java.messagevortex.transport.SaslPlainServer;
-import net.gwerder.java.messagevortex.transport.SaslServerCallbackHandler;
-import org.bouncycastle.util.encoders.Base64;
+import static net.gwerder.java.messagevortex.transport.imap.ImapConnectionState.CONNECTION_AUTHENTICATED;
+import static net.gwerder.java.messagevortex.transport.imap.ImapConnectionState.CONNECTION_NOT_AUTHENTICATED;
 
-import javax.security.auth.callback.CallbackHandler;
-import javax.security.sasl.Sasl;
-import javax.security.sasl.SaslException;
-import javax.security.sasl.SaslServer;
 import java.io.IOException;
 import java.security.Security;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import static net.gwerder.java.messagevortex.transport.imap.ImapConnectionState.CONNECTION_AUTHENTICATED;
-import static net.gwerder.java.messagevortex.transport.imap.ImapConnectionState.CONNECTION_NOT_AUTHENTICATED;
+import javax.security.auth.callback.CallbackHandler;
+import javax.security.sasl.Sasl;
+import javax.security.sasl.SaslException;
+import javax.security.sasl.SaslServer;
+import net.gwerder.java.messagevortex.transport.RandomString;
+import net.gwerder.java.messagevortex.transport.SaslMechanisms;
+import net.gwerder.java.messagevortex.transport.SaslPlainServer;
+import net.gwerder.java.messagevortex.transport.SaslServerCallbackHandler;
+import org.bouncycastle.util.encoders.Base64;
 
 /***
- * Provides the the Authenticate command to the IMAP server.
+ * <p>Provides the the Authenticate command to the IMAP server.</p>
  *
  * @author Martin Gwerder
  * @version 1.0
  * @since 2014-12-09
- ***/
+ */
 public class ImapCommandAuthenticate extends ImapCommand {
 
   private static final Logger LOGGER;
@@ -57,8 +57,8 @@ public class ImapCommandAuthenticate extends ImapCommand {
   }
 
   /***
-   * Initializer called by the static constructor of ImapCommand.
-   ***/
+   * <p>Initializer called by the static constructor of ImapCommand.</p>
+   */
   public void init() {
     ImapCommand.registerCommand(this);
   }
@@ -68,11 +68,11 @@ public class ImapCommandAuthenticate extends ImapCommand {
   }
 
   /***
-   * process authentication command.
+   * <p>process authentication command.</p>
    *
    * @param  line           The context of the line triggered
    * @throws ImapException  when problem processing the command
-   ***/
+   */
   public String[] processCommand(ImapLine line) throws ImapException {
     // register plain server provider
     Security.addProvider(new SaslPlainServer.SecurityProvider());

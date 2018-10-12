@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.routing.operation;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -29,87 +30,91 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class GaloisFieldMathMode implements MathMode {
 
-    private final int gfFieldSize;
-    private final int omega;
-    private final int[] gfLog;
-    private final int[] gfInverseLog;
+  private final int gfFieldSize;
+  private final int omega;
+  private final int[] gfLog;
+  private final int[] gfInverseLog;
 
-    static final int[] PRIM_POLYNOM =new int[] {3,7,11,19,37,67,137,285,529,1033,2053,4179,8219,17475,32771,69643};
-    static final Map<Integer,GaloisFieldMathMode> cachedMathMode=new ConcurrentHashMap<>();
+  static final int[] PRIM_POLYNOM = new int[]{3, 7, 11, 19, 37, 67, 137, 285, 529, 1033, 2053, 4179, 8219, 17475, 32771, 69643};
+  static final Map<Integer, GaloisFieldMathMode> cachedMathMode = new ConcurrentHashMap<>();
 
-    private GaloisFieldMathMode(int omega) {
-        if(omega<2 ||omega>16) {
-            throw new ArithmeticException( "illegal GF size "+omega+" (PRIM_POLYNOM unknown)" );
-        }
-        this.omega=omega;
-        gfFieldSize = (int)Math.pow(2,omega);
-        gfLog =new int[gfFieldSize];
-        gfInverseLog =new int[gfFieldSize];
-        int b=1;
-        for(int log = 0; log< gfFieldSize -1; log++) {
-            gfLog[b% gfFieldSize]=log;
-            gfInverseLog[log% gfFieldSize]=b;
-            b=BitShifter.lshift(b,1,(byte)33);
-            if((b & gfFieldSize)!=0) {
-                b=b^PRIM_POLYNOM[omega-1];
-            }
-        }
-        // initialize undefined values with 0
-        gfLog[0]=-1;
-        gfInverseLog[gfFieldSize -1]=-1;
+  private GaloisFieldMathMode(int omega) {
+    if (omega < 2 || omega > 16) {
+      throw new ArithmeticException("illegal GF size " + omega + " (PRIM_POLYNOM unknown)");
     }
-
-    public static GaloisFieldMathMode getGaloisFieldMathMode(int omega) {
-        GaloisFieldMathMode ret=cachedMathMode.get(omega);
-        if(ret==null) {
-            ret=new GaloisFieldMathMode(omega);
-            cachedMathMode.put(omega,ret);
-        }
-        return ret;
+    this.omega = omega;
+    gfFieldSize = (int) Math.pow(2, omega);
+    gfLog = new int[gfFieldSize];
+    gfInverseLog = new int[gfFieldSize];
+    int b = 1;
+    for (int log = 0; log < gfFieldSize - 1; log++) {
+      gfLog[b % gfFieldSize] = log;
+      gfInverseLog[log % gfFieldSize] = b;
+      b = BitShifter.lshift(b, 1, (byte) 33);
+      if ((b & gfFieldSize) != 0) {
+        b = b ^ PRIM_POLYNOM[omega - 1];
+      }
     }
+    // initialize undefined values with 0
+    gfLog[0] = -1;
+    gfInverseLog[gfFieldSize - 1] = -1;
+  }
 
-    @Override
-    public int mul(int c1, int c2) {
-        if (c1 == 0 || c2 == 0) {
-            return 0;
-        }
-        int sumLog = gfLog[c1] + gfLog[c2];
-        if(sumLog>= gfFieldSize -1) {
-            sumLog-= gfFieldSize -1;
-        }
-        return gfInverseLog[sumLog];
+  public static GaloisFieldMathMode getGaloisFieldMathMode(int omega) {
+    GaloisFieldMathMode ret = cachedMathMode.get(omega);
+    if (ret == null) {
+      ret = new GaloisFieldMathMode(omega);
+      cachedMathMode.put(omega, ret);
     }
+    return ret;
+  }
 
-    public int div(int c1, int divisor) {
-        if (c1 == 0) {
-            return 0;
-        }
-        if (divisor == 0) {
-            throw new ArithmeticException("Divisionby 0");
-        }
-        int diffLog = gfLog[c1] - gfLog[divisor];
-        while(diffLog<0) {
-            diffLog+= gfFieldSize -1;
-        }
-        return gfInverseLog[diffLog];
+  @Override
+  public int mul(int c1, int c2) {
+    if (c1 == 0 || c2 == 0) {
+      return 0;
     }
-
-    @Override
-    public int add(int c1, int c2) {
-        return c1^c2;
+    int sumLog = gfLog[c1] + gfLog[c2];
+    if (sumLog >= gfFieldSize - 1) {
+      sumLog -= gfFieldSize - 1;
     }
+    return gfInverseLog[sumLog];
+  }
 
-    @Override
-    public int sub(int c1, int c2) {
-        return add(c1,c2);
+  public int div(int c1, int divisor) {
+    if (c1 == 0) {
+      return 0;
     }
-
-    public int[] getGFLog() { return gfLog; }
-
-    public int[] getGFILog() { return gfInverseLog; }
-
-    @Override
-    public String toString() {
-        return "GF(2^"+omega+")";
+    if (divisor == 0) {
+      throw new ArithmeticException("Divisionby 0");
     }
+    int diffLog = gfLog[c1] - gfLog[divisor];
+    while (diffLog < 0) {
+      diffLog += gfFieldSize - 1;
+    }
+    return gfInverseLog[diffLog];
+  }
+
+  @Override
+  public int add(int c1, int c2) {
+    return c1 ^ c2;
+  }
+
+  @Override
+  public int sub(int c1, int c2) {
+    return add(c1, c2);
+  }
+
+  public int[] getGfLog() {
+    return gfLog;
+  }
+
+  public int[] getGfIlog() {
+    return gfInverseLog;
+  }
+
+  @Override
+  public String toString() {
+    return "GF(2^" + omega + ")";
+  }
 }

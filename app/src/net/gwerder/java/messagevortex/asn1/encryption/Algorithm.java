@@ -50,30 +50,30 @@ public enum Algorithm implements Serializable {
   CAMELLIA256(1102, AlgorithmType.SYMMETRIC, "CAMELLIA256", "BC", SecurityLevel.QUANTUM),
   EC(2600, AlgorithmType.ASYMMETRIC, "ECIES", "BC",
           getSecLevelList(getSecLevelList(getSecLevelList(
-            ECCurveType.SECP384R1.getSecurityLevel(), getParameterList(
+            EllipticCurveType.SECP384R1.getSecurityLevel(), getParameterList(
                     new String[]{
                       Parameter.ALGORITHM + "=ECIES",
                       Parameter.KEYSIZE + "=384",
                       Parameter.BLOCKSIZE + "=384",
-                      Parameter.CURVETYPE + "=" + ECCurveType.SECP384R1,
+                      Parameter.CURVETYPE + "=" + EllipticCurveType.SECP384R1,
                       Parameter.MODE + "=" + Mode.getDefault(AlgorithmType.ASYMMETRIC),
                       Parameter.PADDING + "=" + Padding.getDefault(AlgorithmType.ASYMMETRIC)
                     })),
-            ECCurveType.SECT409K1.getSecurityLevel(), getParameterList(
+            EllipticCurveType.SECT409K1.getSecurityLevel(), getParameterList(
                     new String[]{
                       Parameter.ALGORITHM + "=ECIES",
                       Parameter.KEYSIZE + "=409",
                       Parameter.BLOCKSIZE + "=409",
-                      Parameter.CURVETYPE + "=" + ECCurveType.SECT409K1,
+                      Parameter.CURVETYPE + "=" + EllipticCurveType.SECT409K1,
                       Parameter.MODE + "=" + Mode.getDefault(AlgorithmType.ASYMMETRIC),
                       Parameter.PADDING + "=" + Padding.getDefault(AlgorithmType.ASYMMETRIC)
                     })),
-            ECCurveType.SECP521R1.getSecurityLevel(), getParameterList(
+            EllipticCurveType.SECP521R1.getSecurityLevel(), getParameterList(
                     new String[]{
                       Parameter.ALGORITHM + "=ECIES",
                       Parameter.KEYSIZE + "=521",
                       Parameter.BLOCKSIZE + "=521",
-                      Parameter.CURVETYPE + "=" + ECCurveType.SECP521R1,
+                      Parameter.CURVETYPE + "=" + EllipticCurveType.SECP521R1,
                       Parameter.MODE + "=" + Mode.getDefault(AlgorithmType.ASYMMETRIC),
                       Parameter.PADDING + "=" + Padding.getDefault(AlgorithmType.ASYMMETRIC)
                     })
@@ -158,7 +158,7 @@ public enum Algorithm implements Serializable {
   private final int id;
 
   /* contains the class of the algorithm */
-  private final AlgorithmType t;
+  private final AlgorithmType algType;
 
   /* contains a textual representation */
   private final String txt;
@@ -175,19 +175,19 @@ public enum Algorithm implements Serializable {
    * <p>This contructor is required for block sized Algorithms without parameter sets.</p>
    *
    * @param id        the ASN.1 based numerical ID
-   * @param t         the class the algorithm belongs to
+   * @param algType         the class the algorithm belongs to
    * @param txt       a textual representation
    * @param provider  the name of the cryptographic provider to be used
    * @param level     the security level of this Algorithm type
    */
-  Algorithm(int id, AlgorithmType t, String txt, String provider, SecurityLevel level) {
+  Algorithm(int id, AlgorithmType algType, String txt, String provider, SecurityLevel level) {
     if (txt == null) {
       throw new NullPointerException(" textual representation may not be null");
     }
     this.secLevel = new ConcurrentHashMap<>();
     synchronized (secLevel) {
       this.id = id;
-      this.t = t;
+      this.algType = algType;
       this.txt = txt;
       this.provider = provider;
       int blockSize = getKeySize();
@@ -201,11 +201,11 @@ public enum Algorithm implements Serializable {
           Parameter.KEYSIZE + "=" + getKeySize(),
           Parameter.BLOCKSIZE + "=" + blockSize
       })));
-      if (t == AlgorithmType.SYMMETRIC) {
+      if (algType == AlgorithmType.SYMMETRIC) {
         secLevel.get(level).put(Parameter.PADDING.getId(),
-                Padding.getDefault(t).toString());
+                Padding.getDefault(algType).toString());
         secLevel.get(level).put(Parameter.MODE.getId(),
-                Mode.getDefault(t).toString());
+                Mode.getDefault(algType).toString());
       }
     }
   }
@@ -214,15 +214,15 @@ public enum Algorithm implements Serializable {
    * <p>constructor for the internal loading of parameters for the Algorithm enum.</p>
    *
    * @param id            the ASN.1 based numerical ID
-   * @param t             the class the algorithm belongs to
+   * @param algType             the class the algorithm belongs to
    * @param txt           a textual representation
    * @param provider      the name of the cryptographic provider to be used
    * @param parameters    set of parameter sets including the respective security level
    */
-  Algorithm(int id, AlgorithmType t, String txt, String provider,
+  Algorithm(int id, AlgorithmType algType, String txt, String provider,
             Map<SecurityLevel, AlgorithmParameter> parameters) {
     this.id = id;
-    this.t = t;
+    this.algType = algType;
     this.txt = txt;
     this.provider = provider;
 
@@ -277,7 +277,7 @@ public enum Algorithm implements Serializable {
     Algorithm[] a = values();
     List<Algorithm> v = new ArrayList<>(a.length);
     for (Algorithm e : a) {
-      if (e.t == at) {
+      if (e.algType == at) {
         v.add(e);
       }
     }
@@ -366,7 +366,7 @@ public enum Algorithm implements Serializable {
    * @return the type of algorithm
    */
   public AlgorithmType getAlgorithmType() {
-    return t;
+    return algType;
   }
 
   /***

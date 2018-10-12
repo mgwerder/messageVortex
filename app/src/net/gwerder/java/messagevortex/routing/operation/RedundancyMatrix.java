@@ -32,90 +32,91 @@ import java.util.logging.Level;
  */
 public class RedundancyMatrix extends VandermondeMatrix {
 
-    private static final java.util.logging.Logger LOGGER;
-    static {
-        LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-        MessageVortexLogger.setGlobalLogLevel( Level.ALL);
+  private static final java.util.logging.Logger LOGGER;
+
+  static {
+    LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+    MessageVortexLogger.setGlobalLogLevel(Level.ALL);
+  }
+
+  public RedundancyMatrix(RedundancyMatrix r) {
+    this(r.dimension[0], r.dimension[1], r.mode, true, true);
+    matrixContent = Arrays.copyOf(r.matrixContent, r.matrixContent.length);
+  }
+
+  /***
+   * Creates a redundancy matrixContent based on vnadermonde matrices.
+   *
+   * @param dataRows the number of data rows
+   * @param total    the number of total rows (redundancy + data rows)
+   * @param mode     the math mode to be used
+   */
+  public RedundancyMatrix(int dataRows, int total, MathMode mode) {
+    this(dataRows, total, mode, true, false);
+  }
+
+  /***
+   * Creates a redundancy matrixContent based on vnadermonde matrices.
+   *
+   * @param dataRows the number of data rows
+   * @param total    the number of total rows (redundancy + data rows)
+   * @param mode     the math mode to be used
+   * @param noInit  if set precached values are ignored
+   */
+  private RedundancyMatrix(int dataRows, int total, MathMode mode, boolean noCache, boolean noInit) {
+    super(dataRows, total, mode);
+
+    // get value from cache
+    if (!matrixCacheDisabled) {
+      Matrix m = matrixCache.get("rm" + dataRows + "/" + total + "/" + mode.toString());
+      if (!noCache && m != null) {
+        m = new Matrix(m);
+        this.matrixContent = m.matrixContent;
+        return;
+      }
     }
 
-    public RedundancyMatrix( RedundancyMatrix r ) {
-        this(r.dimension[0],r.dimension[1],r.mode,true,true);
-        matrixContent =Arrays.copyOf(r.matrixContent,r.matrixContent.length);
-    }
-
-    /***
-     * Creates a redundancy matrixContent based on vnadermonde matrices.
-     *
-     * @param dataRows the number of data rows
-     * @param total    the number of total rows (redundancy + data rows)
-     * @param mode     the math mode to be used
-     */
-    public RedundancyMatrix(int dataRows, int total, MathMode mode) {
-        this(dataRows,total,mode,true,false);
-    }
-
-    /***
-     * Creates a redundancy matrixContent based on vnadermonde matrices.
-     *
-     * @param dataRows the number of data rows
-     * @param total    the number of total rows (redundancy + data rows)
-     * @param mode     the math mode to be used
-     * @param noInit  if set precached values are ignored
-     */
-    private RedundancyMatrix(int dataRows, int total, MathMode mode,boolean noCache,boolean noInit) {
-        super(dataRows, total, mode);
-
-        // get value from cache
-        if(!matrixCacheDisabled) {
-            Matrix m = matrixCache.get("rm" + dataRows + "/" + total + "/" + mode.toString());
-            if (!noCache && m != null) {
-                m = new Matrix(m);
-                this.matrixContent = m.matrixContent;
-                return;
-            }
+    if (!noInit) {
+      for (int col = 1; col < getX(); col++) {
+        // make x=y a unit field
+        if (getField(col, col) != 1) {
+          int scalar = getField(col, col);
+          transformColumn(col, -1, scalar);
+          assert getField(col, col) == 1;
         }
 
-        if(!noInit) {
-            for (int col = 1; col < getX(); col++) {
-                // make x=y a unit field
-                if (getField(col, col) != 1) {
-                    int scalar = getField(col, col);
-                    transformColumn(col, -1, scalar);
-                    assert getField(col, col) == 1;
-                }
-
-                // nullify other columns in this row
-                for (int col2 = 0; col2 < getX(); col2++) {
-                    int scalar = getField(col2, col);
-                    if (col != col2 && scalar != 0) {
-                        transformColumn(col2, col, scalar);
-                        assert getField(col2, col) == 0;
-                    }
-                }
-
-            }
-            matrixCache.put("rm" + dataRows + "/" + total + "/" + mode.toString(), new Matrix(this));
-       }
-    }
-
-
-    /***
-     * calculates a matrixContent to recover all data rows given the missing rows.
-     *
-     * @param missingRowIndex Index of the rows missing data
-     * @return a square matrixContent rebuilding the data vector
-     */
-    public Matrix getRecoveryMatrix(int[] missingRowIndex) {
-        RedundancyMatrix red=new RedundancyMatrix(this);
-        Arrays.sort(missingRowIndex);
-        for(int i=missingRowIndex.length-1;i>=0;i--) {
-            red.removeRow(missingRowIndex[i]);
+        // nullify other columns in this row
+        for (int col2 = 0; col2 < getX(); col2++) {
+          int scalar = getField(col2, col);
+          if (col != col2 && scalar != 0) {
+            transformColumn(col2, col, scalar);
+            assert getField(col2, col) == 0;
+          }
         }
-        while (red.getX() < red.getY()) {
-            red.removeRow(red.getY() - 1);
-        }
-        Matrix ret=red.getInverse();
-        return ret;
+
+      }
+      matrixCache.put("rm" + dataRows + "/" + total + "/" + mode.toString(), new Matrix(this));
     }
+  }
+
+
+  /***
+   * calculates a matrixContent to recover all data rows given the missing rows.
+   *
+   * @param missingRowIndex Index of the rows missing data
+   * @return a square matrixContent rebuilding the data vector
+   */
+  public Matrix getRecoveryMatrix(int[] missingRowIndex) {
+    RedundancyMatrix red = new RedundancyMatrix(this);
+    Arrays.sort(missingRowIndex);
+    for (int i = missingRowIndex.length - 1; i >= 0; i--) {
+      red.removeRow(missingRowIndex[i]);
+    }
+    while (red.getX() < red.getY()) {
+      red.removeRow(red.getY() - 1);
+    }
+    Matrix ret = red.getInverse();
+    return ret;
+  }
 
 }

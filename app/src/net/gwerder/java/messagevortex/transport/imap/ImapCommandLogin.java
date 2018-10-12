@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.transport.imap;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -21,10 +22,10 @@ package net.gwerder.java.messagevortex.transport.imap;
 // * SOFTWARE.
 // ************************************************************************************
 
+import static net.gwerder.java.messagevortex.transport.imap.ImapConnectionState.CONNECTION_AUTHENTICATED;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import static net.gwerder.java.messagevortex.transport.imap.ImapConnectionState.CONNECTION_AUTHENTICATED;
 
 public class ImapCommandLogin extends ImapCommand {
 
@@ -47,7 +48,7 @@ public class ImapCommandLogin extends ImapCommand {
   }
 
   /***
-   * Process the login command.
+   * <p>Process the login command.</p>
    *
    * @param line The Imap line representing a login command
    * @return array of lines representing the server reply

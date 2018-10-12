@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.transport.smtp;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -30,52 +31,53 @@ import java.util.logging.Level;
 
 public class SMTPReceiver implements SocketListener {
 
-    static private final java.util.logging.Logger LOGGER;
-    static {
-        LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+  static private final java.util.logging.Logger LOGGER;
+
+  static {
+    LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+  }
+
+  private volatile static int gid = 1;
+  private volatile int id = 1;
+
+  private final ListeningSocketChannel listener;
+  private TransportReceiver receiver = null;
+  private SecurityContext context = null;
+
+  public SMTPReceiver(InetSocketAddress address, SecurityContext secContext, TransportReceiver lreceiver) throws IOException {
+    setTransportReceiver(lreceiver);
+    listener = new ListeningSocketChannel(address, this);
+    listener.setName("SMTPlist" + (gid++));
+    this.context = secContext;
+  }
+
+  @Override
+  public void gotConnect(ServerConnection ac) {
+    LOGGER.log(Level.INFO, "called gotConnection()");
+    try {
+      SMTPConnection s = new SMTPConnection(ac.getSocketChannel(), context);
+      s.setName(listener.getName() + "-" + (id++));
+      s.setReceiver(this.receiver);
+    } catch (IOException ioe) {
+      LOGGER.log(Level.WARNING, "Exception while creating SMTPConnection object", ioe);
     }
+  }
 
-    private volatile static int gid = 1;
-    private volatile int id =1;
+  public TransportReceiver getTransportReceiver() {
+    return receiver;
+  }
 
-    private final ListeningSocketChannel listener;
-    private TransportReceiver receiver = null;
-    private SecurityContext context = null;
+  public TransportReceiver setTransportReceiver(TransportReceiver lreceiver) {
+    TransportReceiver ret = this.receiver;
+    this.receiver = lreceiver;
+    return ret;
+  }
 
-    public SMTPReceiver(InetSocketAddress address, SecurityContext secContext, TransportReceiver lreceiver ) throws IOException {
-        setTransportReceiver( lreceiver );
-        listener = new ListeningSocketChannel( address, this );
-        listener.setName( "SMTPlist"+(gid++));
-        this.context = secContext;
-    }
+  public void shutdown() {
+    listener.shutdown();
+  }
 
-    @Override
-    public void gotConnect(ServerConnection ac) {
-        LOGGER.log( Level.INFO, "called gotConnection()" );
-        try {
-            SMTPConnection s = new SMTPConnection( ac.getSocketChannel(), context );
-            s.setName( listener.getName()+"-"+(id++) );
-            s.setReceiver( this.receiver );
-        } catch( IOException ioe ) {
-            LOGGER.log( Level.WARNING, "Exception while creating SMTPConnection object",ioe );
-        }
-    }
-
-    public TransportReceiver getTransportReceiver() {
-        return receiver;
-    }
-
-    public TransportReceiver setTransportReceiver( TransportReceiver lreceiver ) {
-        TransportReceiver ret=this.receiver;
-        this.receiver=lreceiver;
-        return ret;
-    }
-
-    public void shutdown() {
-        listener.shutdown();
-    }
-
-    public int getPort() {
-        return listener.getPort();
-    }
+  public int getPort() {
+    return listener.getPort();
+  }
 }

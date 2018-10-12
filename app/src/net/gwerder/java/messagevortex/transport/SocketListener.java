@@ -5,6 +5,6 @@ package net.gwerder.java.messagevortex.transport;
  */
 public interface SocketListener {
 
-    void gotConnect( ServerConnection ac );
+  void gotConnect(ServerConnection ac);
 
 }

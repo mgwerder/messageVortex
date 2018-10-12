@@ -9,17 +9,18 @@ import java.util.logging.Logger;
 
 public class ServerConnection extends AbstractConnection {
 
-    private static final Logger LOGGER;
-    static {
-        LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-    }
+  private static final Logger LOGGER;
 
-    public ServerConnection(SocketChannel channel, SecurityContext context ) throws IOException {
-        super( channel,context,false );
-    }
+  static {
+    LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+  }
 
-    public ServerConnection(AbstractConnection ac ) throws IOException {
-        super( ac );
-    }
+  public ServerConnection(SocketChannel channel, SecurityContext context) throws IOException {
+    super(channel, context, false);
+  }
+
+  public ServerConnection(AbstractConnection ac) throws IOException {
+    super(ac);
+  }
 
 }

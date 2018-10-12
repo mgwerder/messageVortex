@@ -1,4 +1,5 @@
-package net.gwerder.java.messagevortex.transport;
+package net.gwerder.java.messagevortex.asn1.encryption;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -22,24 +23,69 @@ package net.gwerder.java.messagevortex.transport;
 // ************************************************************************************
 
 /**
- * Created by Martin on 23.01.2018.
+ * <p>Represents all supported EC named curves.</p>
  */
-public enum SecurityRequirement {
-  PLAIN,
-  UNTRUSTED_STARTTLS,
-  STARTTLS,
-  UNTRUSTED_SSLTLS,
-  SSLTLS;
+public enum EllipticCurveType {
 
-  public static SecurityRequirement getByName(String s) {
-    if (s == null) {
-      return null;
-    }
-    for (SecurityRequirement e : values()) {
-      if (e.toString().toLowerCase().equals(s.toLowerCase())) {
+  SECP384R1(2500, "secp384r1", Algorithm.EC, SecurityLevel.MEDIUM),
+  SECT409K1(2501, "sect409k1", Algorithm.EC, SecurityLevel.HIGH),
+  SECP521R1(2502, "secp521r1", Algorithm.EC, SecurityLevel.QUANTUM);
+
+  static EllipticCurveType def = SECP521R1;
+
+  private int id;
+  private EllipticCurveType courveType;
+  private String txt;
+  private Algorithm alg;
+  private SecurityLevel secLevel;
+
+  EllipticCurveType(int id, String txt, Algorithm alg, SecurityLevel level) {
+    this.id = id;
+    this.txt = txt;
+    this.alg = alg;
+    this.secLevel = level;
+  }
+
+  public static EllipticCurveType getById(int id) {
+    for (EllipticCurveType e : values()) {
+      if (e.id == id) {
         return e;
       }
     }
     return null;
   }
+
+  public static EllipticCurveType getByString(String s) {
+    for (EllipticCurveType e : values()) {
+      if (e.toString().equals(s)) {
+        return e;
+      }
+    }
+    return null;
+  }
+
+  public int getId() {
+    return id;
+  }
+
+  public String toString() {
+    return txt;
+  }
+
+  public SecurityLevel getSecurityLevel() {
+    return secLevel;
+  }
+
+  public Algorithm getAlgorithm() {
+    return alg;
+  }
+
+  public int getKeySize() {
+    return Integer.parseInt(txt.substring(4, 7));
+  }
+
+  public static EllipticCurveType getDefault() {
+    return def;
+  }
 }
+

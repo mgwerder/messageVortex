@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.asn1;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -21,19 +22,28 @@ package net.gwerder.java.messagevortex.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
-import net.gwerder.java.messagevortex.ExtendedSecureRandom;
-import net.gwerder.java.messagevortex.MessageVortexLogger;
-import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
-import org.bouncycastle.asn1.*;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.logging.Level;
+import net.gwerder.java.messagevortex.ExtendedSecureRandom;
+import net.gwerder.java.messagevortex.MessageVortexLogger;
+import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
+import org.bouncycastle.asn1.ASN1Encodable;
+import org.bouncycastle.asn1.ASN1EncodableVector;
+import org.bouncycastle.asn1.ASN1InputStream;
+import org.bouncycastle.asn1.ASN1Object;
+import org.bouncycastle.asn1.ASN1Sequence;
+import org.bouncycastle.asn1.DEROutputStream;
+import org.bouncycastle.asn1.DERSequence;
 
 /**
  * Stores all known identities of a node. Identities are stored as IdentityStoreBlocks.
@@ -128,14 +138,6 @@ public class IdentityStore extends AbstractBlock implements Serializable {
     }
   }
 
-  public void add(IdentityStoreBlock isb) {
-    String ident = "";
-    if (isb.getIdentityKey() != null) {
-      ident = toHex(isb.getIdentityKey().getPublicKey());
-    }
-    blocks.put(ident, isb);
-  }
-
   protected void parse(ASN1Encodable p) throws IOException {
     LOGGER.log(Level.FINER, "Executing parse()");
 
@@ -145,6 +147,14 @@ public class IdentityStore extends AbstractBlock implements Serializable {
       add(sb);
     }
     LOGGER.log(Level.FINER, "Finished parse()");
+  }
+
+  public void add(IdentityStoreBlock isb) {
+    String ident = "";
+    if (isb.getIdentityKey() != null) {
+      ident = toHex(isb.getIdentityKey().getPublicKey());
+    }
+    blocks.put(ident, isb);
   }
 
   @Override

@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.blending;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -23,16 +24,13 @@ package net.gwerder.java.messagevortex.blending;
 
 import net.gwerder.java.messagevortex.asn1.VortexMessage;
 
-/**
- * Created by Martin on 21.04.2017.
- */
 public interface BlenderReceiver {
 
-    /***
-     * This Method is called by the Blending layer if a vmessage has been extracted.
-     *
-     * @param message the vortex message to be processed
-     */
-    boolean gotMessage(VortexMessage message);
+  /***
+   * <p>This Method is called by the Blending layer if a vmessage has been extracted.</p>
+   *
+   * @param message the vortex message to be processed
+   */
+  boolean gotMessage(VortexMessage message);
 
 }

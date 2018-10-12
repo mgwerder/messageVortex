@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.transport;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -28,15 +29,15 @@ import java.io.InputStream;
  */
 public interface TransportReceiver {
 
-    /***
-     * This Method is called by the TransportSender layer if a possible vmessage has arrived.
-     *
-     * The message (if any) is decoded, verified and (if successful) passed on to the routing layer in a separate
-     * thread (@see IncommingMessageRouterListener).
-     *
-     * @param is the InputStream containing a possible message
-     * @return true if message got accepted
-     */
-    boolean gotMessage(InputStream is);
+  /***
+   * This Method is called by the TransportSender layer if a possible vmessage has arrived.
+   *
+   * The message (if any) is decoded, verified and (if successful) passed on to the routing layer in a separate
+   * thread (@see IncommingMessageRouterListener).
+   *
+   * @param is the InputStream containing a possible message
+   * @return true if message got accepted
+   */
+  boolean gotMessage(InputStream is);
 
 }

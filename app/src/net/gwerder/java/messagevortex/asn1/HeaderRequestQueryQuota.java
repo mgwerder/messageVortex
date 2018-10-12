@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.asn1;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -21,48 +22,55 @@ package net.gwerder.java.messagevortex.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
-import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
-import org.bouncycastle.asn1.*;
-
 import java.io.IOException;
 import java.io.Serializable;
+import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
+import org.bouncycastle.asn1.ASN1Encodable;
+import org.bouncycastle.asn1.ASN1EncodableVector;
+import org.bouncycastle.asn1.ASN1Object;
+import org.bouncycastle.asn1.ASN1Sequence;
+import org.bouncycastle.asn1.DERSequence;
 
 /**
  * ASN1 parser to request status of current quota.
  */
-public class HeaderRequestQueryQuota extends HeaderRequest  implements Serializable {
+public class HeaderRequestQueryQuota extends HeaderRequest implements Serializable {
 
-    public static final long serialVersionUID = 100000000025L;
+  public static final long serialVersionUID = 100000000025L;
 
-    public HeaderRequestQueryQuota() {super();}
+  public HeaderRequestQueryQuota() {
+    super();
+  }
 
-    public HeaderRequestQueryQuota(ASN1Encodable ae) throws IOException {
-        this();
-        if (ae!=null) {
-            parse(ae);
-        }
+  public HeaderRequestQueryQuota(ASN1Encodable ae) throws IOException {
+    this();
+    if (ae != null) {
+      parse(ae);
     }
+  }
 
-    protected void parse(ASN1Encodable ae) throws IOException {
-        ASN1Sequence s1 = ASN1Sequence.getInstance(ae);
-        int i=0;
-    }
+  protected void parse(ASN1Encodable ae) throws IOException {
+    ASN1Sequence s1 = ASN1Sequence.getInstance(ae);
+    int i = 0;
+  }
 
-    protected HeaderRequest getRequest(ASN1Encodable ae) throws IOException {
-        return new HeaderRequestQueryQuota(ae);
-    }
+  protected HeaderRequest getRequest(ASN1Encodable ae) throws IOException {
+    return new HeaderRequestQueryQuota(ae);
+  }
 
-    public int getId() {return 4;}
+  public int getId() {
+    return 4;
+  }
 
-    @Override
-    public String dumpValueNotation(String prefix,DumpType dumpType) {
-        StringBuilder sb=new StringBuilder();
-        sb.append( "{}" );
-        return sb.toString();
-    }
+  @Override
+  public String dumpValueNotation(String prefix, DumpType dumpType) {
+    StringBuilder sb = new StringBuilder();
+    sb.append("{}");
+    return sb.toString();
+  }
 
-    @Override
-    ASN1Object intToASN1Object( DumpType dumpType ) throws IOException {
-        return new DERSequence( new ASN1EncodableVector() );
-    }
+  @Override
+  ASN1Object intToASN1Object(DumpType dumpType) throws IOException {
+    return new DERSequence(new ASN1EncodableVector());
+  }
 }

@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.transport;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -21,98 +22,95 @@ package net.gwerder.java.messagevortex.transport;
 // * SOFTWARE.
 // ************************************************************************************
 
+import static net.gwerder.java.messagevortex.transport.SecurityRequirement.SSLTLS;
+
 import java.security.KeyStore;
 import java.security.cert.X509Certificate;
 
-import static net.gwerder.java.messagevortex.transport.SecurityRequirement.SSLTLS;
-
-/**
- * Created by Martin on 23.01.2018.
- */
 public class Credentials {
 
-    String realm= null;
-    String username=null;
-    String password=null;
+  String realm = null;
+  String username = null;
+  String password = null;
 
-    SecurityRequirement requirement=SSLTLS;
+  SecurityRequirement requirement = SSLTLS;
 
-    KeyStore trustStore=null;
-    X509Certificate identityCert=null;
+  KeyStore trustStore = null;
+  X509Certificate identityCert = null;
 
-    public Credentials( String username, String password ) {
-        this.username=username;
-        this.password=password;
-    }
+  public Credentials(String username, String password) {
+    this.username = username;
+    this.password = password;
+  }
 
-    public Credentials( String username, String password, String realm ) {
-        this( username,password );
-        this.realm=realm;
-    }
+  public Credentials(String username, String password, String realm) {
+    this(username, password);
+    this.realm = realm;
+  }
 
-    public Credentials(String username, String password, SecurityRequirement requirement ) {
-        this( username, password );
-        this.requirement=requirement;
-    }
+  public Credentials(String username, String password, SecurityRequirement requirement) {
+    this(username, password);
+    this.requirement = requirement;
+  }
 
-    public String getUsername() {
-        return username;
-    }
+  public String getUsername() {
+    return username;
+  }
 
-    public String setUsername(String username) {
-        String ret=this.username;
-        this.username=username;
-        return ret;
-    }
+  public String setUsername(String username) {
+    String ret = this.username;
+    this.username = username;
+    return ret;
+  }
 
-    public X509Certificate getIdentityCert() {
-        return identityCert;
-    }
+  public X509Certificate getIdentityCert() {
+    return identityCert;
+  }
 
-    public X509Certificate setIdentityCert( X509Certificate identityCert ) {
-        X509Certificate ret=this.identityCert;
-        this.identityCert=identityCert;
-        return ret;
-    }
+  public X509Certificate setIdentityCert(X509Certificate identityCert) {
+    X509Certificate ret = this.identityCert;
+    this.identityCert = identityCert;
+    return ret;
+  }
 
-    public KeyStore getTrustStore() {
-        return trustStore;
-    }
+  public KeyStore getTrustStore() {
+    return trustStore;
+  }
 
-    public KeyStore setClientCert( KeyStore trustStore ) {
-        KeyStore ret = this.trustStore;
-        this.trustStore = trustStore;
-        return ret;
-    }
+  public KeyStore setClientCert(KeyStore trustStore) {
+    KeyStore ret = this.trustStore;
+    this.trustStore = trustStore;
+    return ret;
+  }
 
-    public String getPassword() {
-        return password;
-    }
+  public String getPassword() {
+    return password;
+  }
 
-    public String setPassword(String password) {
-        String ret=this.password;
-        this.password=password;
-        return ret;
-    }
+  public String setPassword(String password) {
+    String ret = this.password;
+    this.password = password;
+    return ret;
+  }
 
-    public String getRealm() {
-        return realm;
-    }
+  public String getRealm() {
+    return realm;
+  }
 
-    public String setRealm( String realm ) {
-        String ret=this.realm;
-        this.realm=realm;
-        return ret;
-    }
+  public String setRealm(String realm) {
+    String ret = this.realm;
+    this.realm = realm;
+    return ret;
+  }
 
-    public SecurityRequirement setSecurityRequirement( SecurityRequirement req ) {
-        SecurityRequirement ret=this.requirement;
-        this.requirement=req;
-        return ret;
-    }
+  public SecurityRequirement setSecurityRequirement(SecurityRequirement req) {
+    SecurityRequirement ret = this.requirement;
+    this.requirement = req;
+    return ret;
+  }
 
-    public SecurityRequirement getSecurityRequirement() {
-        return this.requirement;
-    }
+  public SecurityRequirement getSecurityRequirement() {
+    return this.requirement;
+  }
 
 }

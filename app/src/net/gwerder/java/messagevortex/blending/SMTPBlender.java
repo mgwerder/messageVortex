@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.blending;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -21,41 +22,39 @@ package net.gwerder.java.messagevortex.blending;
 // * SOFTWARE.
 // ************************************************************************************
 
+import java.io.InputStream;
 import net.gwerder.java.messagevortex.accounting.HeaderVerifier;
 import net.gwerder.java.messagevortex.asn1.BlendingSpec;
 import net.gwerder.java.messagevortex.asn1.VortexMessage;
-import net.gwerder.java.messagevortex.transport.TransportSender;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
-import java.io.InputStream;
 
 /**
  * Created by Martin on 04.02.2018.
  */
 public class SMTPBlender extends Blender {
 
-    public SMTPBlender(BlenderReceiver receiver, HeaderVerifier verifier) {
-        super(receiver, verifier);
-    }
+  public SMTPBlender(BlenderReceiver receiver, HeaderVerifier verifier) {
+    super(receiver, verifier);
+  }
 
-    /***
-     * receives an SMTP message from the transport layer and extracts the message.
-     *
-     * @return true if message has been accepted as vortex message
-     */
-    @Override
-    public boolean gotMessage(InputStream is) {
+  /***
+   * receives an SMTP message from the transport layer and extracts the message.
+   *
+   * @return true if message has been accepted as vortex message
+   */
+  @Override
+  public boolean gotMessage(InputStream is) {
 
-        return false;
-    }
+    return false;
+  }
 
-    @Override
-    public boolean blendMessage(BlendingSpec target, VortexMessage message) {
-        throw new NotImplementedException(); // FIXME
-    }
+  @Override
+  public boolean blendMessage(BlendingSpec target, VortexMessage message) {
+    throw new NotImplementedException(); // FIXME
+  }
 
-    @Override
-    public String getBlendingAddress() {
-        return null;
-    }
+  @Override
+  public String getBlendingAddress() {
+    return null;
+  }
 }

@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.asn1;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -21,22 +22,29 @@ package net.gwerder.java.messagevortex.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
-import net.gwerder.java.messagevortex.MessageVortexLogger;
-import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
-import net.gwerder.java.messagevortex.routing.operation.BitShifter;
-import org.bouncycastle.asn1.*;
-
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
+import net.gwerder.java.messagevortex.MessageVortexLogger;
+import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
+import net.gwerder.java.messagevortex.routing.operation.BitShifter;
+import org.bouncycastle.asn1.ASN1Choice;
+import org.bouncycastle.asn1.ASN1Encodable;
+import org.bouncycastle.asn1.ASN1EncodableVector;
+import org.bouncycastle.asn1.ASN1Integer;
+import org.bouncycastle.asn1.ASN1Object;
+import org.bouncycastle.asn1.ASN1Sequence;
+import org.bouncycastle.asn1.ASN1TaggedObject;
+import org.bouncycastle.asn1.DERSequence;
+import org.bouncycastle.asn1.DERTaggedObject;
 
 /**
  * Represents a the Blending specification of the routing block.
  */
-public abstract class AbstractRedundancyOperation extends Operation implements ASN1Choice, Serializable {
-
+public abstract class AbstractRedundancyOperation
+                extends Operation implements ASN1Choice, Serializable {
 
   public static final long serialVersionUID = 100000000032L;
 
@@ -65,10 +73,20 @@ public abstract class AbstractRedundancyOperation extends Operation implements A
   AbstractRedundancyOperation() {
   }
 
-  /* constructor */
-  public AbstractRedundancyOperation(int inputId, int dataStripes, int redundancy, List<SymmetricKey> stripeKeys, int newFirstId, int gfSize) {
+  /***
+   * <p>Creates an apropriate operation with the given GF size and properties.</p>
+   *
+   * @param inputId       first ID of the input workspace
+   * @param dataStripes   number of data stripes contained in operation
+   * @param redundancy    number of redundancy stripes
+   * @param stripeKeys    keys for the resiulting stripes (number should be dataStripes+redundancy)
+   * @param newFirstId    first output ID
+   * @param gfSize        Size of the Galoise Field in bits
+   */
+  public AbstractRedundancyOperation(int inputId, int dataStripes, int redundancy,
+                                     List<SymmetricKey> stripeKeys, int newFirstId, int gfSize) {
     this.inputId = inputId;
-    setGFSize(gfSize);
+    setGfSize(gfSize);
     setDataStripes(dataStripes);
     setRedundancy(redundancy);
     setKeys(stripeKeys);
@@ -86,8 +104,10 @@ public abstract class AbstractRedundancyOperation extends Operation implements A
     ASN1Sequence s1 = ASN1Sequence.getInstance(p);
 
     inputId = parseIntval(ASN1TaggedObject.getInstance(s1.getObjectAt(i++)), INPUT_ID, "inputId");
-    dataStripes = parseIntval(ASN1TaggedObject.getInstance(s1.getObjectAt(i++)), DATA_STRIPES, "dataStripes");
-    redundancyStripes = parseIntval(ASN1TaggedObject.getInstance(s1.getObjectAt(i++)), REDUNDANCY, "redundancy");
+    dataStripes = parseIntval(ASN1TaggedObject.getInstance(s1.getObjectAt(i++)), DATA_STRIPES,
+                              "dataStripes");
+    redundancyStripes = parseIntval(ASN1TaggedObject.getInstance(s1.getObjectAt(i++)), REDUNDANCY,
+                                    "redundancy");
 
     // reading keys
     ASN1TaggedObject to = ASN1TaggedObject.getInstance(s1.getObjectAt(i++));
@@ -102,7 +122,8 @@ public abstract class AbstractRedundancyOperation extends Operation implements A
       }
     }
 
-    outputId = parseIntval(ASN1TaggedObject.getInstance(s1.getObjectAt(i++)), OUTPUT_ID, "outputId");
+    outputId = parseIntval(ASN1TaggedObject.getInstance(s1.getObjectAt(i++)), OUTPUT_ID,
+                           "outputId");
     gfSize = parseIntval(ASN1TaggedObject.getInstance(s1.getObjectAt(i++)), GF_SIZE, "gfSize");
 
     LOGGER.log(Level.FINER, "Finished parse()");
@@ -150,7 +171,8 @@ public abstract class AbstractRedundancyOperation extends Operation implements A
   }
 
   /***
-   * Dumps the ASN1 value representation of the removeRedundancy operation.
+   * <p>Dumps the ASN1 value representation of the removeRedundancy operation.</p>
+   *
    * @return the representation of the object
    */
   @Override
@@ -178,7 +200,7 @@ public abstract class AbstractRedundancyOperation extends Operation implements A
   }
 
   /***
-   * Sets the id of the first input id of the payload.
+   * <p>Sets the id of the first input id of the payload.</p>
    *
    * @param id the new first input id
    * @return the previously set first input id
@@ -194,7 +216,7 @@ public abstract class AbstractRedundancyOperation extends Operation implements A
   }
 
   /***
-   * Sets the number of data stripes for this operation.
+   * <p>Sets the number of data stripes for this operation.</p>
    *
    * @param stripes The number of data stripes to be used for the redundancy operation
    * @return the previously set number of stripes
@@ -214,7 +236,7 @@ public abstract class AbstractRedundancyOperation extends Operation implements A
   }
 
   /***
-   * sets the number of redundancy stripes.
+   * <p>sets the number of redundancy stripes.</p>
    *
    * @param stripes the number of redundancy stripes to be set
    * @return the previous number of redundancy stripes
@@ -236,7 +258,7 @@ public abstract class AbstractRedundancyOperation extends Operation implements A
   }
 
   /***
-   * sets the keys to be used to encrypt all input respective output fields.
+   * <p>Sets the keys to be used to encrypt all input respective output fields.</p>
    *
    * @param keys a list of teys
    * @return the old list of keys
@@ -257,7 +279,7 @@ public abstract class AbstractRedundancyOperation extends Operation implements A
   }
 
   /***
-   * Gets the omega parameter of the Galoise field.
+   * <p>Gets the omega parameter of the Galoise field.</p>
    *
    * @return the omega parameter of the GF.
    */
@@ -266,14 +288,16 @@ public abstract class AbstractRedundancyOperation extends Operation implements A
   }
 
   /***
-   * Sets the omega parameter of the Galoise field.
+   * <p>Sets the omega parameter of the Galoise field.</p>
    *
    * @param omega the omega of the new GF
    * @return the previous omega parameter of the GF.
-   * @throws ArithmeticException if the number of all stripes in total (data and redundancy) exceeds the address space of the GF
+   * @throws ArithmeticException if the number of all stripes in total (
+   *                             data and redundancy) exceeds the address space of the GF
    */
-  public final int setGFSize(int omega) {
-    if (omega < 2 || omega > 16 || this.redundancyStripes + this.dataStripes > BitShifter.lshift(2, omega, (byte) 33)) {
+  public final int setGfSize(int omega) {
+    if (omega < 2 || omega > 16
+        || this.redundancyStripes + this.dataStripes > BitShifter.lshift(2, omega, (byte) 33)) {
       throw new ArithmeticException("galois field too small for the stripes to be acomodated");
     }
     int old = this.gfSize;
@@ -281,12 +305,12 @@ public abstract class AbstractRedundancyOperation extends Operation implements A
     return old;
   }
 
-  public final int getGFSize() {
+  public final int getGfSize() {
     return this.gfSize;
   }
 
   /***
-   * Sets the id of the first output block of the function.
+   * <p>Sets the id of the first output block of the function.</p>
    *
    * @param id the first id to ber ised
    * @return old first value (before the write
@@ -298,7 +322,7 @@ public abstract class AbstractRedundancyOperation extends Operation implements A
   }
 
   /***
-   * gets the id of the first output payload block.
+   * <p>gets the id of the first output payload block.</p>
    *
    * @return id of the respective block
    */

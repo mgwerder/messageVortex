@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -30,56 +31,56 @@ import java.io.InputStream;
 /**
  * Created by Martin on 01.02.2018.
  */
-public class MessageVortexBlending implements TransportReceiver, RoutingSender  {
+public class MessageVortexBlending implements TransportReceiver, RoutingSender {
 
-    private TransportReceiver receiver = null;
-    private RoutingSender     sender   = null;
-    private Blender           blender  = null;
+  private TransportReceiver receiver = null;
+  private RoutingSender sender = null;
+  private Blender blender = null;
 
 
-    public MessageVortexBlending( TransportReceiver blend, RoutingSender sender ) {
-        receiver = blend;
-        this.sender = sender;
-    }
+  public MessageVortexBlending(TransportReceiver blend, RoutingSender sender) {
+    receiver = blend;
+    this.sender = sender;
+  }
 
-    public TransportReceiver setTransportReceiver( TransportReceiver receiver ) {
-        TransportReceiver ret = receiver;
-        this.receiver = receiver;
-        return ret;
-    }
+  public TransportReceiver setTransportReceiver(TransportReceiver receiver) {
+    TransportReceiver ret = receiver;
+    this.receiver = receiver;
+    return ret;
+  }
 
-    public TransportReceiver getTransportReceiver() {
-        return receiver;
-    }
+  public TransportReceiver getTransportReceiver() {
+    return receiver;
+  }
 
-    public RoutingSender setRoutingSender( RoutingSender sender ) {
-        RoutingSender ret = sender;
-        this.sender = sender;
-        return ret;
-    }
+  public RoutingSender setRoutingSender(RoutingSender sender) {
+    RoutingSender ret = sender;
+    this.sender = sender;
+    return ret;
+  }
 
-    public RoutingSender getRoutingSender() {
-        return sender;
-    }
+  public RoutingSender getRoutingSender() {
+    return sender;
+  }
 
-    public Blender setBlender( Blender blender ) {
-        Blender ret = blender;
-        this.blender = blender;
-        return ret;
-    }
+  public Blender setBlender(Blender blender) {
+    Blender ret = blender;
+    this.blender = blender;
+    return ret;
+  }
 
-    public Blender getBlender() {
-        return blender;
-    }
+  public Blender getBlender() {
+    return blender;
+  }
 
-    @Override
-    public boolean gotMessage(InputStream is) {
-        // extra
-        return receiver.gotMessage(is);
-    }
+  @Override
+  public boolean gotMessage(InputStream is) {
+    // extra
+    return receiver.gotMessage(is);
+  }
 
-    @Override
-    public boolean sendMessage(String target, MessageVortex msg) {
-        return sender.sendMessage( target, msg );
-    }
+  @Override
+  public boolean sendMessage(String target, MessageVortex msg) {
+    return sender.sendMessage(target, msg);
+  }
 }

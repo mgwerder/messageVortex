@@ -23,38 +23,38 @@ package net.gwerder.java.messagevortex.transport.imap;
 
 public class ImapCommandNoop extends ImapCommand {
 
-    public void init() {
-        ImapCommand.registerCommand(this);
+  public void init() {
+    ImapCommand.registerCommand(this);
+  }
+
+  /***
+   * FIXME return proper status
+   ***/
+  public String[] processCommand(ImapLine line) throws ImapException {
+
+    // skip space
+    // WRNING this is "non-strict"
+    line.skipSP(-1);
+
+    // skip lineend
+    if (!line.skipCRLF()) {
+      throw new ImapException(line, "error parsing command");
     }
 
-    /***
-     * FIXME return proper status
-     ***/
-    public String[] processCommand(ImapLine line) throws ImapException {
+    // Example:
+    //// * 22 EXPUNGE
+    //// * 23 EXISTS
+    //// * 3 RECENT
+    //// * 14 FETCH (FLAGS (\Seen \Deleted))
+    return new String[]{line.getTag() + " OK\r\n"};
+  }
 
-        // skip space
-        // WRNING this is "non-strict"
-        line.skipSP(-1);
+  public String[] getCommandIdentifier() {
+    return new String[]{"NOOP"};
+  }
 
-        // skip lineend
-        if(!line.skipCRLF()) {
-            throw new ImapException(line,"error parsing command");
-        }
-
-        // Example:
-        //// * 22 EXPUNGE
-        //// * 23 EXISTS
-        //// * 3 RECENT
-        //// * 14 FETCH (FLAGS (\Seen \Deleted))
-        return new String[] {line.getTag()+" OK\r\n" };
-    }
-
-    public String[] getCommandIdentifier() {
-        return new String[] {"NOOP"};
-    }
-
-    public String[] getCapabilities( ImapConnection conn ) {
-        return new String[] {};
-    }
+  public String[] getCapabilities(ImapConnection conn) {
+    return new String[]{};
+  }
 
 }

@@ -28,30 +28,30 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class InternalPayloadSpace {
 
-    private Map<IdentityBlock,InternalPayload> internalPayloadMap = new ConcurrentHashMap<>();
+  private Map<IdentityBlock, InternalPayload> internalPayloadMap = new ConcurrentHashMap<>();
 
-    public InternalPayload setInternalPayload(IdentityBlock identity, InternalPayload payload) {
-        InternalPayload ret=null;
-        synchronized(internalPayloadMap) {
-            ret=internalPayloadMap.get(identity);
-            if(payload!=null) {
-                internalPayloadMap.put(identity, payload);
-            } else {
-                internalPayloadMap.remove(identity);
-            }
-        }
-        return ret;
+  public InternalPayload setInternalPayload(IdentityBlock identity, InternalPayload payload) {
+    InternalPayload ret = null;
+    synchronized (internalPayloadMap) {
+      ret = internalPayloadMap.get(identity);
+      if (payload != null) {
+        internalPayloadMap.put(identity, payload);
+      } else {
+        internalPayloadMap.remove(identity);
+      }
     }
+    return ret;
+  }
 
-    public InternalPayload getInternalPayload(IdentityBlock identity) {
-        InternalPayload ret;
-        synchronized(internalPayloadMap) {
-            ret=internalPayloadMap.get(identity);
-            if(ret==null) {
-                ret=new InternalPayload(this,identity);
-            }
-        }
-        return ret;
+  public InternalPayload getInternalPayload(IdentityBlock identity) {
+    InternalPayload ret;
+    synchronized (internalPayloadMap) {
+      ret = internalPayloadMap.get(identity);
+      if (ret == null) {
+        ret = new InternalPayload(this, identity);
+      }
     }
+    return ret;
+  }
 
 }

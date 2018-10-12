@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.routing.operation;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -28,53 +29,53 @@ import net.gwerder.java.messagevortex.asn1.IdentityBlock;
  */
 public interface Operation {
 
-    IdentityBlock getIdentity();
+  IdentityBlock getIdentity();
 
-    /***
-     * Checks if all prerequisiting fields do exist or can be provided by a subsequent operation.
-     *
-     * @return true if all prerequisits can potentially be satisfied
-     */
-    boolean canRun();
+  /***
+   * Checks if all prerequisiting fields do exist or can be provided by a subsequent operation.
+   *
+   * @return true if all prerequisits can potentially be satisfied
+   */
+  boolean canRun();
 
-    /***
-     * Checks if this operation is still valid or might be purged from the identities working space
-     *
-     * @return true if the operation should remain in the payload space
-     */
-    boolean isInUsagePeriod();
+  /***
+   * Checks if this operation is still valid or might be purged from the identities working space
+   *
+   * @return true if the operation should remain in the payload space
+   */
+  boolean isInUsagePeriod();
 
-    /***
-     * Gets all ids which are written by this operation.
-     *
-     * @return array representing all ids which will be potentially set by this operation
-     */
-    int[] getOutputID();
+  /***
+   * Gets all ids which are written by this operation.
+   *
+   * @return array representing all ids which will be potentially set by this operation
+   */
+  int[] getOutputID();
 
-    /***
-     * Gets all ids which are required to execute this operation.
-     *
-     * @return array representing all ids which will be potentially set by this operation
-     */
-    int[] getInputID();
+  /***
+   * Gets all ids which are required to execute this operation.
+   *
+   * @return array representing all ids which will be potentially set by this operation
+   */
+  int[] getInputID();
 
-    /***
-     * Executes the operation and sets at least the provided set of id.
-     *
-     * this operation might trigger to execute prerequisiting operations.
-     *
-     * @param id the namespace id to be set minimally
-     * @return array representing all ids which have been set
-     */
-    int[] execute(int[] id);
+  /***
+   * Executes the operation and sets at least the provided set of id.
+   *
+   * this operation might trigger to execute prerequisiting operations.
+   *
+   * @param id the namespace id to be set minimally
+   * @return array representing all ids which have been set
+   */
+  int[] execute(int[] id);
 
-    /***
-     * sets the internal payload and associated identity.
-     *
-     * This method is called from the InternalPayload when registering.
-     *
-     * @param payload the internal payload of an identity to be registered within
-     */
-    void setInternalPayload(InternalPayload payload);
+  /***
+   * sets the internal payload and associated identity.
+   *
+   * This method is called from the InternalPayload when registering.
+   *
+   * @param payload the internal payload of an identity to be registered within
+   */
+  void setInternalPayload(InternalPayload payload);
 
 }

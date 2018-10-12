@@ -22,48 +22,48 @@ package net.gwerder.java.messagevortex.asn1.encryption;
 // ************************************************************************************
 
 /**
- * Enumeration for representing types of operation
+ * <p>Enumeration for representing types of operation.</p>
  */
 public enum CipherUsage {
 
-    SIGN     (200,"sign"),
-    ENCRYPT  (210,"encrypt");
+  SIGN(200, "sign"),
+  ENCRYPT(210, "encrypt");
 
-    private int id;
-    private String txt;
+  private int id;
+  private String txt;
 
-    CipherUsage(int id,String txt) {
-        this.id=id;
-        this.txt=txt;
+  CipherUsage(int id, String txt) {
+    this.id = id;
+    this.txt = txt;
+  }
+
+  public int getId() {
+    return this.id;
+  }
+
+  public String getUsageString() {
+    return this.txt;
+  }
+
+  public static CipherUsage getByString(String name) {
+    if (name == null) {
+      return null;
     }
-
-    public int getId() {
-        return this.id;
+    for (CipherUsage e : values()) {
+      if (e.txt.equals(name.toLowerCase())) {
+        return e;
+      }
     }
+    return null;
+  }
 
-    public String getUsageString() {
-        return this.txt;
+  public static CipherUsage getById(int id) {
+    for (CipherUsage e : values()) {
+      if (e.id == id) {
+        return e;
+      }
     }
-
-    public static CipherUsage getByString(String name) {
-        if(name==null) {
-            return null;
-        }
-        for(CipherUsage e : values()) {
-            if(e.txt.equals(name.toLowerCase())) {
-                return e;
-            }
-        }
-        return null;
-    }
-
-    public static CipherUsage getById(int id) {
-        for(CipherUsage e : values()) {
-            if(e.id==id) {
-                return e;
-            }
-        }
-        return null;
-    }
+    return null;
+  }
 
 }

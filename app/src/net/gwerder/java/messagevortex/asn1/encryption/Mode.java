@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.asn1.encryption;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -31,145 +32,145 @@ import java.util.Map;
  * Enumeration to list available encryption modes.
  */
 public enum Mode {
-    ECB       (10000,"ECB" ,false,new String[] { "ECIES","RSA","CAMELLIA128","CAMELLIA192","CAMELLIA256", "Twofish128", "Twofish192","Twofish256" }, new Padding[] { Padding.PKCS7 }),
-    CBC       (10001,"CBC" ,true ,new String[] { "aes128", "aes192","aes256","CAMELLIA128", "CAMELLIA192","CAMELLIA256", "Twofish128", "Twofish192","Twofish256" }, new Padding[] { Padding.PKCS7 }),
-    EAX       (10002,"EAX" ,true ,new String[] { "CAMELLIA128", "CAMELLIA192","CAMELLIA256", "Twofish128", "Twofish192","Twofish256"},new Padding[] { Padding.PKCS7 }),
-    CTR       (10003,"CTR" ,true ,new String[] { "aes128", "aes192","aes256","CAMELLIA128", "CAMELLIA192","CAMELLIA256", "Twofish128", "Twofish192","Twofish256" },new Padding[] { Padding.PKCS7 }),
-    CCM       (10004,"CCM" ,true ,new String[] { "aes128", "aes192","aes256","CAMELLIA128", "CAMELLIA192","CAMELLIA256", "Twofish128", "Twofish192","Twofish256" },new Padding[] { Padding.PKCS7 }),
-    GCM       (10005,"GCM" ,true ,new String[] { "aes128", "aes192","AES256","CAMELLIA128", "CAMELLIA192","CAMELLIA256", "Twofish128", "Twofish192","Twofish256" },new Padding[] { Padding.PKCS7 }),
-    OCB       (10006,"OCB" ,true ,new String[] { "aes128", "aes192","AES256","CAMELLIA128", "CAMELLIA192","CAMELLIA256", "Twofish128", "Twofish192","Twofish256" },new Padding[] { Padding.PKCS7 }),
-    OFB       (10007,"OFB" ,true ,new String[] { "CAMELLIA128", "CAMELLIA192","CAMELLIA256", "Twofish128", "Twofish192","Twofish256"},new Padding[] { Padding.PKCS7 }),
-    NONE      (10100,"NONE",false,new String[] { "ECIES","RSA" }, new Padding[] { Padding.PKCS7 });
+  ECB(10000, "ECB", false, new String[]{"ECIES", "RSA", "CAMELLIA128", "CAMELLIA192", "CAMELLIA256", "Twofish128", "Twofish192", "Twofish256"}, new Padding[]{Padding.PKCS7}),
+  CBC(10001, "CBC", true, new String[]{"aes128", "aes192", "aes256", "CAMELLIA128", "CAMELLIA192", "CAMELLIA256", "Twofish128", "Twofish192", "Twofish256"}, new Padding[]{Padding.PKCS7}),
+  EAX(10002, "EAX", true, new String[]{"CAMELLIA128", "CAMELLIA192", "CAMELLIA256", "Twofish128", "Twofish192", "Twofish256"}, new Padding[]{Padding.PKCS7}),
+  CTR(10003, "CTR", true, new String[]{"aes128", "aes192", "aes256", "CAMELLIA128", "CAMELLIA192", "CAMELLIA256", "Twofish128", "Twofish192", "Twofish256"}, new Padding[]{Padding.PKCS7}),
+  CCM(10004, "CCM", true, new String[]{"aes128", "aes192", "aes256", "CAMELLIA128", "CAMELLIA192", "CAMELLIA256", "Twofish128", "Twofish192", "Twofish256"}, new Padding[]{Padding.PKCS7}),
+  GCM(10005, "GCM", true, new String[]{"aes128", "aes192", "AES256", "CAMELLIA128", "CAMELLIA192", "CAMELLIA256", "Twofish128", "Twofish192", "Twofish256"}, new Padding[]{Padding.PKCS7}),
+  OCB(10006, "OCB", true, new String[]{"aes128", "aes192", "AES256", "CAMELLIA128", "CAMELLIA192", "CAMELLIA256", "Twofish128", "Twofish192", "Twofish256"}, new Padding[]{Padding.PKCS7}),
+  OFB(10007, "OFB", true, new String[]{"CAMELLIA128", "CAMELLIA192", "CAMELLIA256", "Twofish128", "Twofish192", "Twofish256"}, new Padding[]{Padding.PKCS7}),
+  NONE(10100, "NONE", false, new String[]{"ECIES", "RSA"}, new Padding[]{Padding.PKCS7});
 
-    private static Map<AlgorithmType,Mode> def=new HashMap<>(2);
+  private static Map<AlgorithmType, Mode> def = new HashMap<>(2);
 
-    static {
-        def.put( AlgorithmType.ASYMMETRIC, Mode.ECB );
-        def.put( AlgorithmType.SYMMETRIC, Mode.CBC );
+  static {
+    def.put(AlgorithmType.ASYMMETRIC, Mode.ECB);
+    def.put(AlgorithmType.SYMMETRIC, Mode.CBC);
+  }
+
+  final int id;
+  final String txt;
+  final boolean requiresIV;
+  final String[] alg;
+  final Padding[] pad;
+  final ASN1Enumerated asn;
+
+  Mode(int id, String txt, boolean iv, String[] alg, Padding[] pad) {
+    this.id = id;
+    this.txt = txt;
+    this.requiresIV = iv;
+    this.alg = alg;
+    this.pad = pad;
+    this.asn = new ASN1Enumerated(id);
+  }
+
+  public boolean getRequiresIV() {
+    return this.requiresIV;
+  }
+
+  /**
+   * Get enumeration element by its ASN.1 ID.
+   *
+   * @param id the ID of the element to be obtained
+   * @return the element or null if the ID is unknown
+   */
+  public static Mode getById(int id) {
+    for (Mode e : values()) {
+      if (e.id == id) {
+        return e;
+      }
     }
+    return null;
+  }
 
-    final int id;
-    final String txt;
-    final boolean requiresIV;
-    final String[] alg;
-    final Padding[] pad;
-    final ASN1Enumerated asn;
 
-    Mode(int id,String txt, boolean iv,String[] alg,Padding[] pad) {
-        this.id=id;
-        this.txt=txt;
-        this.requiresIV=iv;
-        this.alg=alg;
-        this.pad=pad;
-        this.asn=new ASN1Enumerated(id);
+  /**
+   * Get enumeration element by its name.
+   *
+   * @param name the name of the element to be obtained
+   * @return the element or null if the name is unknown
+   */
+  public static Mode getByString(String name) {
+    for (Mode e : values()) {
+      if (e.txt.equals(name)) {
+        return e;
+      }
     }
+    return null;
+  }
 
-    public boolean getRequiresIV() {
-        return this.requiresIV;
-    }
+  /***
+   * Gets the currently set default value for the given type
+   * @param type the type for which the default value is required
+   * @return the default value requested
+   */
+  public static Mode getDefault(AlgorithmType type) {
+    return def.get(type);
+  }
 
-    /**
-     * Get enumeration element by its ASN.1 ID.
-     *
-     * @param id    the ID of the element to be obtained
-     * @return      the element or null if the ID is unknown
-     */
-    public static Mode getById(int id) {
-        for(Mode e : values()) {
-            if(e.id==id) {
-                return e;
-            }
+  /***
+   * Sets the default encryption mode for a specific algorithm type.
+   *
+   * @param t     the type for which the default value should be set
+   * @param ndef  the new default value
+   * @return the previously set default value
+   */
+  public static Mode setDefault(AlgorithmType t, Mode ndef) {
+    Mode old = def.get(t);
+    def.put(t, ndef);
+    return old;
+  }
+
+  /***
+   * Gets the ASN.1 numerical ID.
+   *
+   * @return the numerical ID
+   */
+  public int getId() {
+    return id;
+  }
+
+  /***
+   * Gets the mode identifier as required by the encryption provider.
+   *
+   * This value is returned regardless of the support of the provider classes.
+   *
+   * @return the mode identifier
+   */
+  public String toString() {
+    return txt;
+  }
+
+  /***
+   * Gets all known paddings regardless of their support.
+   *
+   * @return an array of all paddings
+   */
+  public Padding[] getPaddings() {
+    return pad;
+  }
+
+  public static Mode[] getModes(Algorithm alg) {
+    ArrayList<Mode> l = new ArrayList<>();
+    for (Mode m : values()) {
+      for (String a : m.alg) {
+        if (alg == Algorithm.getByString(a)) {
+          l.add(m);
         }
-        return null;
+      }
     }
+    return l.toArray(new Mode[0]);
+  }
 
-
-    /**
-     * Get enumeration element by its name.
-     *
-     * @param name    the name of the element to be obtained
-     * @return        the element or null if the name is unknown
-     */
-    public static Mode getByString(String name) {
-        for(Mode e : values()) {
-            if(e.txt.equals(name)) {
-                return e;
-            }
-        }
-        return null;
-    }
-
-    /***
-     * Gets the currently set default value for the given type
-     * @param type the type for which the default value is required
-     * @return     the default value requested
-     */
-    public static Mode getDefault(AlgorithmType type) {
-        return def.get(type);
-    }
-
-    /***
-     * Sets the default encryption mode for a specific algorithm type.
-     *
-     * @param t     the type for which the default value should be set
-     * @param ndef  the new default value
-     * @return      the previously set default value
-     */
-    public static Mode setDefault(AlgorithmType t,Mode ndef) {
-        Mode old=def.get(t);
-        def.put(t,ndef);
-        return old;
-    }
-
-    /***
-     * Gets the ASN.1 numerical ID.
-     *
-     * @return the numerical ID
-     */
-    public int getId() {
-        return id;
-    }
-
-    /***
-     * Gets the mode identifier as required by the encryption provider.
-     *
-     * This value is returned regardless of the support of the provider classes.
-     *
-     * @return the mode identifier
-     */
-    public String toString() {
-        return txt;
-    }
-
-    /***
-     * Gets all known paddings regardless of their support.
-     *
-     * @return an array of all paddings
-     */
-    public Padding[] getPaddings() {
-        return pad;
-    }
-
-    public static Mode[] getModes(Algorithm alg) {
-        ArrayList<Mode> l=new ArrayList<>();
-        for(Mode m:values()) {
-            for(String a:m.alg) {
-                if(alg==Algorithm.getByString(a)) {
-                    l.add(m);
-                }
-            }
-        }
-        return l.toArray(new Mode[0]);
-    }
-
-    /**
-     * Gets the corresponding ASN1 enumeration.
-     *
-     * @return the corresponding ASN1 enumeration
-     */
-    public ASN1Enumerated toASN1() {
-        return asn;
-    }
+  /**
+   * Gets the corresponding ASN1 enumeration.
+   *
+   * @return the corresponding ASN1 enumeration
+   */
+  public ASN1Enumerated toASN1() {
+    return asn;
+  }
 
 }
 

@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.accounting;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -24,21 +25,24 @@ package net.gwerder.java.messagevortex.accounting;
 import net.gwerder.java.messagevortex.asn1.IdentityBlock;
 
 /**
- * Interface for an Accountant to verify the header for further processing.
+ * <p>Interface for an Accountant to verify the header for further processing.</p>
  */
 public interface HeaderVerifier {
 
-    /***
-     * checks the given IdentityBlock for validity of processing.
-     *
-     * One of the following criteria must be met:
-     * 1. The identity is known and the serial has not yet reached its replay limit and is not replayed too early
-     * 2. The identity is not known but has a RequestIdentityBlock
-     * 3. The IdentityBlock is not known but has a request capability block
-     *
-     * @param header the header to be verified
-     * @return the maximum nuber of bytes allowed for processing
-     */
-    int verifyHeaderForProcessing( IdentityBlock header );
+  /***
+   * <p>checks the given IdentityBlock for validity of processing.</p>
+   *
+   * </p>One of the following criteria must be met:
+   * <ul>
+   *   <li>The identity is known and the serial has not yet reached its replay limit and is not replayed too early</li>
+   *   <li>The identity is not known but has a RequestIdentityBlock</li>
+   *   <li>The IdentityBlock is not known but has a request capability block</li>
+   * </ul>
+   * </p>
+   *
+   * @param header the header to be verified
+   * @return the maximum nuber of bytes allowed for processing
+   */
+  int verifyHeaderForProcessing(IdentityBlock header);
 
 }

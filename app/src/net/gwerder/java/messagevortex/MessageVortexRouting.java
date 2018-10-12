@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -31,37 +32,37 @@ import net.gwerder.java.messagevortex.routing.operation.RoutingSender;
  */
 public class MessageVortexRouting implements BlenderReceiver {
 
-    private RoutingSender routingSender;
-    private Accountant accountant;
+  private RoutingSender routingSender;
+  private Accountant accountant;
 
-    public MessageVortexRouting( Accountant accountant, RoutingSender routingSender ) {
-        setRoutingSender( routingSender );
-        setAccountant( accountant );
-    }
+  public MessageVortexRouting(Accountant accountant, RoutingSender routingSender) {
+    setRoutingSender(routingSender);
+    setAccountant(accountant);
+  }
 
-    public final RoutingSender getRoutingSender() {
-        return routingSender;
-    }
+  public final RoutingSender getRoutingSender() {
+    return routingSender;
+  }
 
-    public final RoutingSender setRoutingSender( RoutingSender routingSender ) {
-        RoutingSender ret = routingSender;
-        this.routingSender = routingSender;
-        return ret;
-    }
+  public final RoutingSender setRoutingSender(RoutingSender routingSender) {
+    RoutingSender ret = routingSender;
+    this.routingSender = routingSender;
+    return ret;
+  }
 
-    public final Accountant getAccountant() {
-        return accountant;
-    }
+  public final Accountant getAccountant() {
+    return accountant;
+  }
 
-    public final Accountant setAccountant( Accountant accountant ) {
-        Accountant ret = this.accountant;
-        this.accountant = accountant;
-        return ret;
-    }
+  public final Accountant setAccountant(Accountant accountant) {
+    Accountant ret = this.accountant;
+    this.accountant = accountant;
+    return ret;
+  }
 
-    @Override
-    public boolean gotMessage( VortexMessage message ) {
+  @Override
+  public boolean gotMessage(VortexMessage message) {
 
-        return false;
-    }
+    return false;
+  }
 }

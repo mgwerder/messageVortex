@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -28,20 +29,20 @@ import net.gwerder.java.messagevortex.accounting.Accountant;
  */
 public class MessageVortexAccounting {
 
-    private Accountant accountant = null;
+  private Accountant accountant = null;
 
-    public MessageVortexAccounting( Accountant accountant ) {
-        this.accountant = accountant;
-    }
+  public MessageVortexAccounting(Accountant accountant) {
+    this.accountant = accountant;
+  }
 
-    public final Accountant getAccountant() {
-        return accountant;
-    }
+  public final Accountant getAccountant() {
+    return accountant;
+  }
 
-    public final Accountant setAccountant( Accountant accountant) {
-        Accountant ret = this.accountant;
-        this.accountant = accountant;
-        return ret;
-    }
+  public final Accountant setAccountant(Accountant accountant) {
+    Accountant ret = this.accountant;
+    this.accountant = accountant;
+    return ret;
+  }
 
 }

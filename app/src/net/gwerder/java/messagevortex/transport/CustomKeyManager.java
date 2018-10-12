@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.transport;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -21,10 +22,6 @@ package net.gwerder.java.messagevortex.transport;
 // * SOFTWARE.
 // ************************************************************************************
 
-import javax.net.ssl.KeyManager;
-import javax.net.ssl.SSLEngine;
-import javax.net.ssl.X509ExtendedKeyManager;
-import javax.net.ssl.X509KeyManager;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.Socket;
@@ -35,160 +32,165 @@ import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.net.ssl.KeyManager;
+import javax.net.ssl.SSLEngine;
+import javax.net.ssl.X509ExtendedKeyManager;
+import javax.net.ssl.X509KeyManager;
 
 /***
- * Keymanager enables specification of key alias to be used.
+ * <p>Keymanager enables specification of key alias to be used.</p>
  ***/
-public class CustomKeyManager extends X509ExtendedKeyManager implements KeyManager,X509KeyManager {
+public class CustomKeyManager extends X509ExtendedKeyManager implements KeyManager, X509KeyManager {
 
-    private static final Logger LOGGER;
-    static {
-        LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+  private static final Logger LOGGER;
+
+  static {
+    LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+  }
+
+  private KeyStore keyStore;
+  private String alias;
+  char[] password;
+
+  /**
+   * <p>Convenience constructor.</p>
+   *
+   * @param keyStoreFile name of the JKS keystore file
+   * @param password     password to open the kestore file
+   * @param alias        alias of the certificate to be used
+   */
+  public CustomKeyManager(String keyStoreFile, String password, String alias) throws GeneralSecurityException {
+    this(keyStoreFile, password.toCharArray(), alias);
+  }
+
+  /**
+   * <p>Default constructor.</p>
+   *
+   * @param keyStoreFile name of the JKS keystore file
+   * @param password     password to open the kestore file
+   * @param alias        alias of the certificate to be used
+   */
+  CustomKeyManager(String keyStoreFile, char[] password, String alias) throws GeneralSecurityException {
+    this.password = password;
+    this.alias = alias;
+    keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+    try {
+      try (FileInputStream is = new FileInputStream(keyStoreFile);) {
+        keyStore.load(is, password);
+      }
+    } catch (IOException ioe) {
+      throw new GeneralSecurityException("IOException while loading keystore", ioe);
     }
 
-    private KeyStore keyStore;
-    private String alias;
-    char[] password;
-
-    /**
-     * Convenience constructor.
-     *
-     * @param keyStoreFile      name of the JKS keystore file
-     * @param password          password to open the kestore file
-     * @param alias              alias of the certificate to be used
-     ***/
-    public CustomKeyManager(String keyStoreFile, String password, String alias) throws GeneralSecurityException {
-        this(keyStoreFile,password.toCharArray(),alias);
+    if (getPrivateKey(alias) == null) {
+      throw new GeneralSecurityException("requested alias not found in keystore");
     }
+  }
 
-    /**
-     * Default constructor.
-     *
-     * @param keyStoreFile      name of the JKS keystore file
-     * @param password          password to open the kestore file
-     * @param alias              alias of the certificate to be used
-     ***/
-    CustomKeyManager(String keyStoreFile, char[] password, String alias) throws GeneralSecurityException {
-        this.password=password;
-        this.alias = alias;
-        keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-        try{
-            try ( FileInputStream is=new FileInputStream(keyStoreFile); ) {
-                keyStore.load(is, password);
-            }
-        } catch(IOException ioe) {
-            throw new GeneralSecurityException("IOException while loading keystore", ioe);
-        }
-
-        if(getPrivateKey(alias)==null) {
-            throw new GeneralSecurityException("requested alias not found in keystore");
-        }
+  /**
+   * <p>Obtain private key from keystore.</p>
+   *
+   * @param alias alias of the certificate to be used
+   */
+  public PrivateKey getPrivateKey(String alias) {
+    try {
+      LOGGER.log(Level.INFO, "key for \"" + alias + "\" requested ", new Object[]{keyStore.getKey(alias, password)});
+      return (PrivateKey) keyStore.getKey(alias, password);
+    } catch (Exception e) {
+      LOGGER.log(Level.WARNING, "unknown key requested \"" + alias + "\"", e);
+      return null;
     }
+  }
 
-    /**
-     * Obtain private key from keystore
-     *
-     * @param alias              alias of the certificate to be used
-     ***/
-    public PrivateKey getPrivateKey(String alias) {
-        try {
-            LOGGER.log(Level.INFO,"key for \""+alias+"\" requested ",new Object[] {keyStore.getKey(alias, password)});
-            return (PrivateKey) keyStore.getKey(alias, password);
-        } catch (Exception e) {
-            LOGGER.log(Level.WARNING,"unknown key requested \""+alias+"\"",e);
-            return null;
-        }
+  /**
+   * <p>Obtain certificate chain of a certificate from keystore.</p>
+   *
+   * @param alias alias of the certificate to be used
+   */
+  public X509Certificate[] getCertificateChain(String alias) {
+    try {
+      java.security.cert.Certificate[] certs = keyStore.getCertificateChain(alias);
+      LOGGER.log(Level.INFO, "key chain for \"" + alias + "\" requested ", new Object[]{certs});
+      if (certs == null || certs.length == 0) {
+        // was a null return val documentation is unclear
+        return new X509Certificate[0];
+      }
+
+      // copy and typcast array
+      X509Certificate[] x509 = new X509Certificate[certs.length];
+      for (int i = 0; i < certs.length; i++) {
+        x509[i] = (X509Certificate) certs[i];
+      }
+      return x509;
+    } catch (Exception e) {
+      LOGGER.log(Level.WARNING, "unknown key requested \"" + alias + "\"", e);
+      // was a null return val documentation is unclear
+      return new X509Certificate[0];
     }
+  }
 
-    /**
-     * Obtain certificate chain of a certificate from keystore
-     *
-     * @param alias              alias of the certificate to be used
-     ***/
-    public X509Certificate[] getCertificateChain(String alias) {
-        try {
-            java.security.cert.Certificate[] certs = keyStore.getCertificateChain(alias);
-            LOGGER.log(Level.INFO,"key chain for \""+alias+"\" requested ",new Object[] {certs});
-            if (certs == null || certs.length == 0)    {
-                // was a null return val documentation is unclear
-                return new X509Certificate[0];
-            }
+  /**
+   * </p>Dummy method always returning the preselected alias.</p>
+   *
+   * @param param1 dummy
+   * @param param2 dummy
+   */
+  public String[] getClientAliases(String param1, Principal[] param2) {
+    LOGGER.log(Level.INFO, "client alias list for  \"" + alias + "\" requested ");
+    return new String[]{alias};
+  }
 
-            // copy and typcast array
-            X509Certificate[] x509 = new X509Certificate[certs.length];
-            for (int i = 0; i < certs.length; i++) {
-                x509[i] = (X509Certificate)certs[i];
-            }
-            return x509;
-        } catch (Exception e) {
-            LOGGER.log(Level.WARNING,"unknown key requested \""+alias+"\"",e);
-            // was a null return val documentation is unclear
-            return new X509Certificate[0];
-        }
-    }
+  public String chooseEngineClientAlias(String[] keyType, Principal[] issuers, SSLEngine engine) {
+    return chooseClientAlias(null, null, null);
+  }
 
-    /**
-     * Dummy method always returning the preselected alias
-     *
-     * @param param1    dummy
-     * @param param2    dummy
-     ***/
-    public String[] getClientAliases(String param1, Principal[] param2) {
-        LOGGER.log(Level.INFO,"client alias list for  \""+alias+"\" requested ");
-        return new String[] { alias };
-    }
+  public String chooseEngineServerAlias(String keyType, Principal[] issuers, SSLEngine engine) {
+    return chooseServerAlias(null, null, null);
+  }
 
-    public String chooseEngineClientAlias(String[] keyType, Principal[] issuers, SSLEngine engine) {
-        return chooseClientAlias( null, null ,null );
-    }
+  /***
+   * <p>Dummy method always returning the preselected alias.</p>
+   *
+   * @param param1 dummy
+   * @param param2 dummy
+   * @param param3 dummy
+   */
+  public String chooseClientAlias(String[] param1, Principal[] param2, Socket param3) {
+    LOGGER.log(Level.INFO, "client alias for  \"" + alias + "\" requested ");
+    return alias;
+  }
 
-    public String chooseEngineServerAlias(String keyType, Principal[] issuers, SSLEngine engine) {
-       return chooseServerAlias( null, null, null );
-    }
+  /**
+   * <p>Dummy method always returning the preselected alias.</p>
+   *
+   * @param param1 dummy
+   * @param param2 dummy
+   */
+  public String[] getServerAliases(String param1, Principal[] param2) {
+    LOGGER.log(Level.INFO, "server alias list for  \"" + alias + "\" requested ");
+    return new String[]{alias};
+  }
 
-    /**
-     * Dummy method always returning the preselected alias
-     *
-     * @param param1    dummy
-     * @param param2    dummy
-     * @param param3    dummy
-     ***/
-    public String chooseClientAlias(String[] param1, Principal[] param2, Socket param3) {
-        LOGGER.log(Level.INFO,"client alias for  \""+alias+"\" requested ");
-        return alias;
-    }
+  /**
+   * <p>Alias choser always returning the desired alias.</p>
+   *
+   * @param keyType type of key to be looked for
+   * @param issuers issuers accepted
+   * @param socket  socket requiring the certificate
+   */
+  public String chooseServerAlias(String keyType, Principal[] issuers, Socket socket) {
+    LOGGER.log(Level.INFO, "server alias (1) for \"" + alias + "\" requested ");
+    return alias;
+  }
 
-    /**
-     * Dummy method always returning the preselected alias
-     *
-     * @param param1    dummy
-     * @param param2    dummy
-     ***/
-    public String[] getServerAliases(String param1, Principal[] param2) {
-        LOGGER.log(Level.INFO,"server alias list for  \""+alias+"\" requested ");
-        return new String[] { alias };
-    }
-
-    /**
-     * Alias choser always returning the desired alias.
-     *
-     * @param keyType        type of key to be looked for
-     * @param issuers         issuers accepted
-     * @param socket        socket requiring the certificate
-     ***/
-    public String chooseServerAlias(String keyType, Principal[] issuers, Socket socket) {
-        LOGGER.log(Level.INFO,"server alias (1) for \""+alias+"\" requested ");
-        return alias;
-    }
-
-    /**
-     * Dummy method always returning the preselected alias
-     *
-     * @param param1    dummy
-     * @param param2    dummy
-     ***/
-    public String chooseServerAlias(@SuppressWarnings("UnusedParameters") String param1, @SuppressWarnings("UnusedParameters") Principal[] param2) {
-        LOGGER.log(Level.INFO,"server alias (2) for \""+alias+"\" requested ");
-        return alias;
-    }
+  /**
+   * <p>Dummy method always returning the preselected alias.</p>
+   *
+   * @param param1 dummy
+   * @param param2 dummy
+   */
+  public String chooseServerAlias(@SuppressWarnings("UnusedParameters") String param1, @SuppressWarnings("UnusedParameters") Principal[] param2) {
+    LOGGER.log(Level.INFO, "server alias (2) for \"" + alias + "\" requested ");
+    return alias;
+  }
 }

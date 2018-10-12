@@ -12,34 +12,35 @@ import java.util.logging.Level;
  */
 public class SaslClientCallbackHandler implements CallbackHandler {
 
-    private static final java.util.logging.Logger LOGGER;
-    static {
-        LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-    }
+  private static final java.util.logging.Logger LOGGER;
 
-    Credentials credentials;
+  static {
+    LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+  }
 
-    public SaslClientCallbackHandler( Credentials creds ) {
-        this.credentials = creds;
-    }
+  Credentials credentials;
 
-    @Override
-    public void handle(Callback[] cbs) throws IOException, UnsupportedCallbackException {
-        for (Callback cb : cbs) {
-            if (cb instanceof NameCallback) {
-                NameCallback nc = (NameCallback)cb;
-                nc.setName( credentials.getUsername() );
-            } else if ( cb instanceof PasswordCallback ) {
-                PasswordCallback pc = (PasswordCallback)cb;
-                pc.setPassword( credentials.getPassword().toCharArray() );
-            } else if ( cb instanceof RealmCallback ) {
-                RealmCallback pc = (RealmCallback)cb;
-                pc.setText( credentials.getRealm() );
-            } else {
-                LOGGER.log(Level.SEVERE, "Server - unknown callback "+cb );
-            }
-            System.out.flush();
-        }
+  public SaslClientCallbackHandler(Credentials creds) {
+    this.credentials = creds;
+  }
+
+  @Override
+  public void handle(Callback[] cbs) throws IOException, UnsupportedCallbackException {
+    for (Callback cb : cbs) {
+      if (cb instanceof NameCallback) {
+        NameCallback nc = (NameCallback) cb;
+        nc.setName(credentials.getUsername());
+      } else if (cb instanceof PasswordCallback) {
+        PasswordCallback pc = (PasswordCallback) cb;
+        pc.setPassword(credentials.getPassword().toCharArray());
+      } else if (cb instanceof RealmCallback) {
+        RealmCallback pc = (RealmCallback) cb;
+        pc.setText(credentials.getRealm());
+      } else {
+        LOGGER.log(Level.SEVERE, "Server - unknown callback " + cb);
+      }
+      System.out.flush();
     }
+  }
 
 }

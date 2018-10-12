@@ -30,56 +30,58 @@ import net.gwerder.java.messagevortex.asn1.IdentityStoreBlock;
  */
 public class SimpleMessageFactory extends MessageFactory {
 
-    /* Edge set to be honored */
-    GraphSet graph = new GraphSet();
+  /* Edge set to be honored */
+  GraphSet graph = new GraphSet();
 
-    /* number of ms for the graph to be completed */
-    long     maxMessageTransferTime = 600L*1000L;
+  /* number of ms for the graph to be completed */
+  long maxMessageTransferTime = 600L * 1000L;
 
-    protected SimpleMessageFactory(String msg, int source, int target, IdentityStoreBlock[] anonGroupMembers, IdentityStore is) {
-        this.msg = msg;
+  protected SimpleMessageFactory(String msg, int source, int target, IdentityStoreBlock[] anonGroupMembers, IdentityStore is) {
+    this.msg = msg;
 
-        graph.setAnonymitySet( anonGroupMembers );
-        graph.setSource(anonGroupMembers[source]);
-        graph.setTarget(anonGroupMembers[target]);
+    graph.setAnonymitySet(anonGroupMembers);
+    graph.setSource(anonGroupMembers[source]);
+    graph.setTarget(anonGroupMembers[target]);
+  }
+
+  public void build() {
+
+    // building vector graphs
+    int numberOfGraphs = (int) (graph.getAnonymitySetSize() * 2.5);
+
+    while (graph.size() < numberOfGraphs || !graph.allTargetsReached()) {
+      IdentityStoreBlock from = null;
+      IdentityStoreBlock to = null;
+      while (from == null || !graph.targetReached(from)) {
+        from = graph.getAnonIdentity(ExtendedSecureRandom.nextInt(graph.getAnonymitySetSize()));
+      }
+      while (to == null || to == from || to.equals(from)) {
+        to = graph.getAnonIdentity(ExtendedSecureRandom.nextInt(graph.getAnonymitySetSize()));
+      }
+      graph.add(new Edge(from, to, graph.size(), 0));
     }
 
-    public void build() {
-
-        // building vector graphs
-        int numberOfGraphs = (int) (graph.getAnonymitySetSize() * 2.5);
-
-        while (graph.size() < numberOfGraphs || !graph.allTargetsReached()) {
-            IdentityStoreBlock from = null;
-            IdentityStoreBlock to = null;
-            while (from == null || !graph.targetReached( from )) {
-                from = graph.getAnonIdentity( ExtendedSecureRandom.nextInt( graph.getAnonymitySetSize() ) );
-            }
-            while (to == null || to == from || to.equals( from )) {
-                to = graph.getAnonIdentity( ExtendedSecureRandom.nextInt( graph.getAnonymitySetSize() ) );
-            }
-            graph.add( new Edge( from, to , graph.size(),0 ) );
-        }
-
-        // set times
-        // FIXME: THIS SECTION IS BROKEN!!!!!!
-        long fullTime=maxMessageTransferTime*ExtendedSecureRandom.nextInt(1000)/1000;
-        for( int i=0; i < graph.size(); i++ ) {
-            Edge g=graph.get(i);
-            long start = (long)ExtendedSecureRandom.nextRandomTime( 30000, 60000,90000 );
-            long avg   = fullTime/(graph.size()-i);
-            long delay = (long)ExtendedSecureRandom.nextRandomTime( 30000, 30000+avg, 30000+2*avg );
-            System.out.println( "setting times to "+start+"/"+delay);
-            g.setStartTime( start );
-            g.setDelayTime( delay );
-            fullTime+=start+delay;
-        }
-
-        // determine message route
-        // FIXME select operation
-
+    // set times
+    // FIXME: THIS SECTION IS BROKEN!!!!!!
+    long fullTime = maxMessageTransferTime * ExtendedSecureRandom.nextInt(1000) / 1000;
+    for (int i = 0; i < graph.size(); i++) {
+      Edge g = graph.get(i);
+      long start = (long) ExtendedSecureRandom.nextRandomTime(30000, 60000, 90000);
+      long avg = fullTime / (graph.size() - i);
+      long delay = (long) ExtendedSecureRandom.nextRandomTime(30000, 30000 + avg, 30000 + 2 * avg);
+      System.out.println("setting times to " + start + "/" + delay);
+      g.setStartTime(start);
+      g.setDelayTime(delay);
+      fullTime += start + delay;
     }
 
-    public GraphSet getGraph() {return graph;}
+    // determine message route
+    // FIXME select operation
+
+  }
+
+  public GraphSet getGraph() {
+    return graph;
+  }
 
 }

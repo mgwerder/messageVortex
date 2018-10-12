@@ -21,48 +21,47 @@ package net.gwerder.java.messagevortex.transport.imap;
 // * SOFTWARE.
 // ************************************************************************************
 
-import net.gwerder.java.messagevortex.MessageVortexLogger;
+import static net.gwerder.java.messagevortex.transport.imap.ImapConnectionState.CONNECTION_NOT_AUTHENTICATED;
 
 import java.util.logging.Level;
-
-import static net.gwerder.java.messagevortex.transport.imap.ImapConnectionState.CONNECTION_NOT_AUTHENTICATED;
+import net.gwerder.java.messagevortex.MessageVortexLogger;
 
 
 public class ImapCommandLogout extends ImapCommand {
 
-    private static final java.util.logging.Logger LOGGER;
+  private static final java.util.logging.Logger LOGGER;
 
-    static {
-        LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+  static {
+    LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+  }
+
+  public void init() {
+    ImapCommand.registerCommand(this);
+  }
+
+  public String[] processCommand(ImapLine line) throws ImapException {
+    // skip space
+    // WRNING this is "non-strict"
+    line.skipSP(-1);
+
+    // skip lineend
+    if (!line.skipCRLF()) {
+      throw new ImapException(line, "error parsing command");
     }
 
-    public void init() {
-        ImapCommand.registerCommand(this);
+    if (line.getConnection() != null) {
+      line.getConnection().setImapState(CONNECTION_NOT_AUTHENTICATED);
     }
+    LOGGER.log(Level.INFO, Thread.currentThread().getName() + " is now in state NOT_AUTHENTICATED");
+    return new String[]{"* BYE IMAP4rev1 Server logged out\r\n", line.getTag() + " OK\r\n", null};
+  }
 
-    public String[] processCommand(ImapLine line) throws ImapException {
-        // skip space
-        // WRNING this is "non-strict"
-        line.skipSP(-1);
+  public String[] getCommandIdentifier() {
+    return new String[]{"LOGOUT"};
+  }
 
-        // skip lineend
-        if(!line.skipCRLF()) {
-            throw new ImapException(line,"error parsing command");
-        }
-
-        if(line.getConnection()!=null) {
-            line.getConnection().setImapState(CONNECTION_NOT_AUTHENTICATED);
-        }
-        LOGGER.log(Level.INFO,Thread.currentThread().getName()+" is now in state NOT_AUTHENTICATED");
-        return new String[] {"* BYE IMAP4rev1 Server logged out\r\n",line.getTag()+" OK\r\n",null };
-    }
-
-    public String[] getCommandIdentifier() {
-        return new String[] {"LOGOUT"};
-    }
-
-    public String[] getCapabilities( ImapConnection conn ) {
-        return new String[] {};
-    }
+  public String[] getCapabilities(ImapConnection conn) {
+    return new String[]{};
+  }
 
 }

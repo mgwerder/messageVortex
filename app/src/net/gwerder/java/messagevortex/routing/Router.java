@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.routing;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -32,43 +33,43 @@ import java.util.List;
  */
 public interface Router extends BlenderReceiver {
 
-    /***
-     * Adds a blending layer to the routing infrastructure.
-     *
-     * @param blendingLayer the blending layer to be added
-     * @return true if the blending layer has been accepted
-     *         (only one blending layer per transport scheme is accepted)
-     */
-    boolean addBlendingLayer(Blender blendingLayer);
+  /***
+   * Adds a blending layer to the routing infrastructure.
+   *
+   * @param blendingLayer the blending layer to be added
+   * @return true if the blending layer has been accepted
+   *         (only one blending layer per transport scheme is accepted)
+   */
+  boolean addBlendingLayer(Blender blendingLayer);
 
-    /***
-     * Removes a previously added blending layer.
-     *
-     * @param blendingLayer the blending layer to be removed
-     * @return true if the blending layer was found (and removed)
-     */
-    boolean removeBlendingLayer(Blender blendingLayer);
+  /***
+   * Removes a previously added blending layer.
+   *
+   * @param blendingLayer the blending layer to be removed
+   * @return true if the blending layer was found (and removed)
+   */
+  boolean removeBlendingLayer(Blender blendingLayer);
 
-    /***
-     * Get a list of all currently known blending layers.
-     *
-     * @return a list of a registered blending layers
-     */
-    List<Blender> getAllBlendingLayer();
+  /***
+   * Get a list of all currently known blending layers.
+   *
+   * @return a list of a registered blending layers
+   */
+  List<Blender> getAllBlendingLayer();
 
-    /***
-     * Sets the accounting layer for the routing layer.
-     *
-     * @param accountant the accounting layer to be used
-     * @return the previously set accounting layer
-     */
-    Accountant setAccountant(Accountant accountant);
+  /***
+   * Sets the accounting layer for the routing layer.
+   *
+   * @param accountant the accounting layer to be used
+   * @return the previously set accounting layer
+   */
+  Accountant setAccountant(Accountant accountant);
 
-    /***
-     * Get the currently set accounting layer.
-     *
-     * @return the accounting layer or null if none
-     */
-    Accountant getAccountant();
+  /***
+   * Get the currently set accounting layer.
+   *
+   * @return the accounting layer or null if none
+   */
+  Accountant getAccountant();
 
 }

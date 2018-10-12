@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.asn1;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -32,21 +33,22 @@ import java.util.List;
  */
 public class RemoveRedundancyOperation extends AbstractRedundancyOperation implements Serializable {
 
-    public static final long serialVersionUID = 100000000023L;
+  public static final long serialVersionUID = 100000000023L;
 
-    RemoveRedundancyOperation() {}
+  RemoveRedundancyOperation() {
+  }
 
-    @Override
-    public Operation getNewInstance(ASN1Encodable object) throws IOException {
-        return new RemoveRedundancyOperation(object);
-    }
+  @Override
+  public Operation getNewInstance(ASN1Encodable object) throws IOException {
+    return new RemoveRedundancyOperation(object);
+  }
 
-    public RemoveRedundancyOperation(int inputId, int dataStripes, int redundancy, List<SymmetricKey> keys, int outputId, int gfSize) {
-        super(inputId,dataStripes,redundancy,keys,outputId,gfSize);
-    }
+  public RemoveRedundancyOperation(int inputId, int dataStripes, int redundancy, List<SymmetricKey> keys, int outputId, int gfSize) {
+    super(inputId, dataStripes, redundancy, keys, outputId, gfSize);
+  }
 
-    public RemoveRedundancyOperation(ASN1Encodable to) throws IOException {
-        super(to);
-    }
+  public RemoveRedundancyOperation(ASN1Encodable to) throws IOException {
+    super(to);
+  }
 
 }

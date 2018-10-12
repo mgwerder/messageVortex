@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.asn1.encryption;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -26,13 +27,13 @@ package net.gwerder.java.messagevortex.asn1.encryption;
  */
 interface SizeCalc {
 
-    /***
-     *  Calculates the maximum payload size in bytes for a fiven asymmetric Algorithm
-     *
-     * @param keySize   The size of the key in bits
-     * @return          The maximum payload size in octets
-     */
-    int maxSize(int keySize);
+  /***
+   *  Calculates the maximum payload size in bytes for a fiven asymmetric Algorithm
+   *
+   * @param keySize   The size of the key in bits
+   * @return The maximum payload size in octets
+   */
+  int maxSize(int keySize);
 
 }
 

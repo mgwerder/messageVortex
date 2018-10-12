@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.transport;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -25,17 +26,17 @@ import java.util.Arrays;
 
 public class ByteArrayBuilder {
 
-    byte[] values=new byte[0];
+  byte[] values = new byte[0];
 
-    ByteArrayBuilder append(byte[] bytes,int length) {
-        int offset = values.length;
-        values = Arrays.copyOf(values, offset+length);
-        System.arraycopy(bytes, 0, values, offset,length);
-        return this;
-    }
+  ByteArrayBuilder append(byte[] bytes, int length) {
+    int offset = values.length;
+    values = Arrays.copyOf(values, offset + length);
+    System.arraycopy(bytes, 0, values, offset, length);
+    return this;
+  }
 
-    byte[] toBytes() {
-        return values;
-    }
+  byte[] toBytes() {
+    return values;
+  }
 
 }

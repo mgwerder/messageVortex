@@ -7,6 +7,6 @@ import net.gwerder.java.messagevortex.MessageVortex;
  */
 public interface RoutingSender {
 
-    boolean sendMessage( String target, MessageVortex msg );
+  boolean sendMessage(String target, MessageVortex msg);
 
 }

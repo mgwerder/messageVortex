@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.routing;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -28,50 +29,50 @@ import net.gwerder.java.messagevortex.asn1.VortexMessage;
 
 /**
  * Factory class to build full message (anonymizing structure)
- *
+ * <p>
  * Created by martin.gwerder on 06.06.2016.
  */
 public abstract class MessageFactory {
 
-    protected VortexMessage fullmsg = null;
+  protected VortexMessage fullmsg = null;
 
-    protected String msg = "";
-    protected IdentityStoreBlock source = null;
-    protected IdentityStoreBlock target = null;
-    protected IdentityStoreBlock hotspot = null;
-    protected IdentityStore identityStore = null;
+  protected String msg = "";
+  protected IdentityStoreBlock source = null;
+  protected IdentityStoreBlock target = null;
+  protected IdentityStoreBlock hotspot = null;
+  protected IdentityStore identityStore = null;
 
-    protected MessageFactory() {
+  protected MessageFactory() {
 
+  }
+
+  public static MessageFactory buildMessage(String msg, int source, int target, IdentityStoreBlock[] anonGroupMembers, IdentityStore is) {
+
+    MessageFactory fullmsg = new SimpleMessageFactory(msg, source, target, anonGroupMembers, is);
+
+    // selecting hotspot
+    fullmsg.hotspot = anonGroupMembers[ExtendedSecureRandom.nextInt(anonGroupMembers.length)];
+
+    fullmsg.build();
+
+    return fullmsg;
+  }
+
+  public IdentityStore setIdentityStore(IdentityStore is) {
+    IdentityStore ret = this.identityStore;
+    this.identityStore = is;
+    return ret;
+  }
+
+  public VortexMessage getMessage() {
+    if (this.fullmsg == null) {
+      build();
     }
+    return this.fullmsg;
+  }
 
-    public static MessageFactory buildMessage(String msg, int source, int target, IdentityStoreBlock[] anonGroupMembers, IdentityStore is) {
+  public abstract void build();
 
-        MessageFactory fullmsg = new SimpleMessageFactory( msg, source, target, anonGroupMembers, is );
-
-        // selecting hotspot
-        fullmsg.hotspot = anonGroupMembers[ExtendedSecureRandom.nextInt( anonGroupMembers.length )];
-
-        fullmsg.build();
-
-        return fullmsg;
-    }
-
-    public IdentityStore setIdentityStore( IdentityStore is ) {
-        IdentityStore ret= this.identityStore;
-        this.identityStore=is;
-        return ret;
-    }
-
-    public VortexMessage getMessage() {
-        if(this.fullmsg==null) {
-            build();
-        }
-        return this.fullmsg;
-    }
-
-    public abstract void build();
-
-    public abstract GraphSet getGraph();
+  public abstract GraphSet getGraph();
 
 }

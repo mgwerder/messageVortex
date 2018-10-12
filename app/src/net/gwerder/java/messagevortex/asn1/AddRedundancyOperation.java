@@ -22,12 +22,15 @@ package net.gwerder.java.messagevortex.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
-import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
-import org.bouncycastle.asn1.*;
-
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
+import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
+import org.bouncycastle.asn1.ASN1Encodable;
+import org.bouncycastle.asn1.ASN1Object;
+import org.bouncycastle.asn1.ASN1Primitive;
+import org.bouncycastle.asn1.ASN1TaggedObject;
+import org.bouncycastle.asn1.DERTaggedObject;
 
 /**
  * Represents a addRedundancy operation on a routing block.
@@ -39,7 +42,8 @@ public class AddRedundancyOperation extends AbstractRedundancyOperation implemen
   AddRedundancyOperation() {
   }
 
-  public AddRedundancyOperation(int inputId, int dataStripes, int redundancy, List<SymmetricKey> keys, int outputId, int gfSize) {
+  public AddRedundancyOperation(int inputId, int dataStripes, int redundancy,
+                                List<SymmetricKey> keys, int outputId, int gfSize) {
     super(inputId, dataStripes, redundancy, keys, outputId, gfSize);
   }
 
@@ -47,6 +51,13 @@ public class AddRedundancyOperation extends AbstractRedundancyOperation implemen
     super(to);
   }
 
+  /***
+   * <p>Static conversion method.</p>
+   *
+   * @param obj   the object to be converted
+   * @return      the converted object
+   * @throws IOException if conversion fails
+   */
   public static AddRedundancyOperation getInstance(Object obj) throws IOException {
     if (obj == null || obj instanceof AddRedundancyOperation) {
       return (AddRedundancyOperation) obj;
@@ -63,7 +74,7 @@ public class AddRedundancyOperation extends AbstractRedundancyOperation implemen
     return new DERTaggedObject(true, ADD_REDUNDANCY, super.toAsn1Object(dumpType));
   }
 
-  public ASN1Primitive toASN1Primitive() throws IOException {
+  public ASN1Primitive toAsn1Primitive() throws IOException {
     return toAsn1Object(DumpType.PUBLIC_ONLY).toASN1Primitive();
   }
 

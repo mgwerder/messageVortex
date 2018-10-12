@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.transport.imap;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -26,56 +27,56 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class ImapCommand implements Cloneable {
 
-    private static final Map<String,ImapCommand> COMMANDS;
+  private static final Map<String, ImapCommand> COMMANDS;
 
-    static  {
-        COMMANDS=new ConcurrentHashMap<>();
-        (new ImapCommandCapability()).init();
-        (new ImapCommandLogin()).init();
-        (new ImapCommandAuthenticate()).init();
-        (new ImapCommandLogout()).init();
-        (new ImapCommandNoop()).init();
+  static {
+    COMMANDS = new ConcurrentHashMap<>();
+    (new ImapCommandCapability()).init();
+    (new ImapCommandLogin()).init();
+    (new ImapCommandAuthenticate()).init();
+    (new ImapCommandLogout()).init();
+    (new ImapCommandNoop()).init();
+  }
+
+  public static void registerCommand(ImapCommand command) {
+    String[] arr = command.getCommandIdentifier();
+    for (String a : arr) {
+      COMMANDS.put(a.toLowerCase(), command);
     }
+  }
 
-    public static void registerCommand(ImapCommand command) {
-        String[] arr=command.getCommandIdentifier();
-        for(String a:arr) {
-            COMMANDS.put(a.toLowerCase(),command);
-        }
-    }
+  public static void deregisterCommand(String command) {
+    COMMANDS.remove(command.toLowerCase());
+  }
 
-    public static void deregisterCommand(String command) {
-        COMMANDS.remove(command.toLowerCase());
-    }
+  /***
+   * <p>Returns a list of all supported ImapCommands in no particular order.</p>
+   *
+   * <p>The returned list is independent of any state.</p>
+   *
+   * @return an array containing all ImapCommands available at any state
+   */
+  public static ImapCommand[] getCommands() {
+    return COMMANDS.values().toArray(new ImapCommand[COMMANDS.size()]);
+  }
 
-    /***
-     * Returns a list of all supported ImapCommands in no particular order.
-     *
-     * The returned list is independent of any state.
-     *
-     * @return an array containing all ImapCommands available at any state
-     */
-    public static ImapCommand[] getCommands() {
-        return COMMANDS.values().toArray(new ImapCommand[COMMANDS.size()]);
-    }
+  public static ImapCommand getCommand(String name) {
+    return COMMANDS.get(name.toLowerCase());
+  }
 
-    public static ImapCommand getCommand(String name) {
-        return COMMANDS.get(name.toLowerCase());
-    }
+  public abstract String[] getCapabilities(ImapConnection conn);
 
-    public abstract String[] getCapabilities( ImapConnection conn );
+  public abstract void init();
 
-    public abstract void init();
+  public abstract String[] getCommandIdentifier();
 
-    public abstract String[] getCommandIdentifier();
-
-    /***
-     * Processes the imap lie prefixed by a command returned by getCommandIdentifier().
-     *
-     * @param line the line containing the command to be processed
-     * @return multilined server reply (if any)
-     * @throws ImapException
-     */
-    public abstract String[] processCommand(ImapLine line) throws ImapException;
+  /***
+   * <p>Processes the imap lie prefixed by a command returned by getCommandIdentifier().</p>
+   *
+   * @param line the line containing the command to be processed
+   * @return multilined server reply (if any)
+   * @throws ImapException
+   */
+  public abstract String[] processCommand(ImapLine line) throws ImapException;
 
 }

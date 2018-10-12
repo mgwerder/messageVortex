@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.blending;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -21,6 +22,11 @@ package net.gwerder.java.messagevortex.blending;
 // * SOFTWARE.
 // ************************************************************************************
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.logging.Level;
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.asn1.BlendingSpec;
 import net.gwerder.java.messagevortex.asn1.IdentityStore;
@@ -29,65 +35,60 @@ import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import net.gwerder.java.messagevortex.transport.DummyTransportSender;
 import net.gwerder.java.messagevortex.transport.TransportReceiver;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.logging.Level;
-
 public class DummyBlender extends Blender implements TransportReceiver {
 
-    private static final java.util.logging.Logger LOGGER;
-    static {
-        LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-        MessageVortexLogger.setGlobalLogLevel( Level.ALL);
-    }
+  private static final java.util.logging.Logger LOGGER;
 
-    String identity;
-    DummyTransportSender transport;
-    BlenderReceiver router;
-    IdentityStore identityStore;
+  static {
+    LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+    MessageVortexLogger.setGlobalLogLevel(Level.ALL);
+  }
 
-    public DummyBlender(String identity, BlenderReceiver router, IdentityStore identityStore ) throws IOException {
-        super( router, null );
-        this.identity = identity;
-        this.transport = new DummyTransportSender( identity, this );
-        this.router = router;
-        if( identityStore == null ) {
-            throw new NullPointerException( "identitystore may not be null" );
-        }
-        this.identityStore=identityStore;
-    }
+  String identity;
+  DummyTransportSender transport;
+  BlenderReceiver router;
+  IdentityStore identityStore;
 
-    @Override
-    public String getBlendingAddress() {
-        return this.identity;
+  public DummyBlender(String identity, BlenderReceiver router, IdentityStore identityStore) throws IOException {
+    super(router, null);
+    this.identity = identity;
+    this.transport = new DummyTransportSender(identity, this);
+    this.router = router;
+    if (identityStore == null) {
+      throw new NullPointerException("identitystore may not be null");
     }
+    this.identityStore = identityStore;
+  }
 
-    public boolean blendMessage(BlendingSpec target, VortexMessage msg) {
-        // encode message in clear readable and send it
-        try {
-            transport.sendMessage( target.getRecipientAddress(), new ByteArrayInputStream( msg.toBytes( DumpType.PUBLIC_ONLY ) ) );
-            return true;
-        } catch(IOException ioe) {
-            LOGGER.log( Level.SEVERE, "Unable to send to transport endpoint " + target.getRecipientAddress(), ioe );
-            return false;
-        }
-    }
+  @Override
+  public String getBlendingAddress() {
+    return this.identity;
+  }
 
-    @Override
-    public boolean gotMessage(InputStream is) {
-        try {
-            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-            int nRead;
-            byte[] data = new byte[16384];
-            while ((nRead = is.read(data, 0, data.length)) != -1) {
-                buffer.write(data, 0, nRead);
-            }
-            buffer.flush();
-            return router.gotMessage( new VortexMessage( buffer.toByteArray(), identityStore.getHostIdentity() ) );
-        } catch(IOException ioe) {
-            return false;
-        }
+  public boolean blendMessage(BlendingSpec target, VortexMessage msg) {
+    // encode message in clear readable and send it
+    try {
+      transport.sendMessage(target.getRecipientAddress(), new ByteArrayInputStream(msg.toBytes(DumpType.PUBLIC_ONLY)));
+      return true;
+    } catch (IOException ioe) {
+      LOGGER.log(Level.SEVERE, "Unable to send to transport endpoint " + target.getRecipientAddress(), ioe);
+      return false;
     }
+  }
+
+  @Override
+  public boolean gotMessage(InputStream is) {
+    try {
+      ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+      int numBytesRead;
+      byte[] data = new byte[16384];
+      while ((numBytesRead = is.read(data, 0, data.length)) != -1) {
+        buffer.write(data, 0, numBytesRead);
+      }
+      buffer.flush();
+      return router.gotMessage(new VortexMessage(buffer.toByteArray(), identityStore.getHostIdentity()));
+    } catch (IOException ioe) {
+      return false;
+    }
+  }
 }

@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.asn1;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -21,17 +22,25 @@ package net.gwerder.java.messagevortex.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
+import java.io.IOException;
+import java.io.Serializable;
 import net.gwerder.java.messagevortex.asn1.encryption.Algorithm;
 import net.gwerder.java.messagevortex.asn1.encryption.AlgorithmType;
 import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import net.gwerder.java.messagevortex.asn1.encryption.SecurityLevel;
-import org.bouncycastle.asn1.*;
-
-import java.io.IOException;
-import java.io.Serializable;
+import org.bouncycastle.asn1.ASN1Encodable;
+import org.bouncycastle.asn1.ASN1EncodableVector;
+import org.bouncycastle.asn1.ASN1Integer;
+import org.bouncycastle.asn1.ASN1Object;
+import org.bouncycastle.asn1.ASN1OctetString;
+import org.bouncycastle.asn1.ASN1Sequence;
+import org.bouncycastle.asn1.ASN1TaggedObject;
+import org.bouncycastle.asn1.DEROctetString;
+import org.bouncycastle.asn1.DERSequence;
+import org.bouncycastle.asn1.DERTaggedObject;
 
 /***
- * represents an identity block of a vortexMessage.
+ * <p>Represents an identity block of a vortexMessage.</p>
  */
 public class IdentityBlock extends AbstractBlock implements Serializable {
 
@@ -159,7 +168,7 @@ public class IdentityBlock extends AbstractBlock implements Serializable {
   }
 
   /***
-   * Gets the maximum number of replays for this block.
+   * <p>Gets the maximum number of replays for this block.</p>
    *
    * @return the currently set maximum number of replays
    */
@@ -168,7 +177,7 @@ public class IdentityBlock extends AbstractBlock implements Serializable {
   }
 
   /***
-   * Sets the maximum number of replays for this block.
+   * <p>Sets the maximum number of replays for this block.</p>
    *
    * @param maxReplay the maximum nuber of replays to be set
    * @return the previously set maximum
@@ -180,7 +189,7 @@ public class IdentityBlock extends AbstractBlock implements Serializable {
   }
 
   /***
-   * Gets the currently set validity period of the block.
+   * <p>Gets the currently set validity period of the block.</p>
    *
    * @return the previously set validity period
    */
@@ -189,7 +198,7 @@ public class IdentityBlock extends AbstractBlock implements Serializable {
   }
 
   /***
-   * Sets the maximum usage period of the block.
+   * <p>Sets the maximum usage period of the block.</p>
    *
    * @param valid the new usage period to be set
    * @return the previously set usage period
@@ -201,7 +210,7 @@ public class IdentityBlock extends AbstractBlock implements Serializable {
   }
 
   /***
-   * Gets the identity representation (asymmetric key) of the block.
+   * <p>Gets the identity representation (asymmetric key) of the block.</p>
    *
    * @return the previously set identity
    */
@@ -210,7 +219,7 @@ public class IdentityBlock extends AbstractBlock implements Serializable {
   }
 
   /***
-   * Sets the identity representation (asymmetric key) of the block.
+   * <p>Sets the identity representation (asymmetric key) of the block.</p>
    *
    * @param oid the identity key
    * @return the previously set identity
@@ -336,7 +345,7 @@ public class IdentityBlock extends AbstractBlock implements Serializable {
   }
 
   /***
-   * Dumps the current block state in ASN.1 value notation.
+   * <p>Dumps the current block state in ASN.1 value notation.</p>
    *
    * @param prefix the prefix to be prepended to each line (whitespaces for indentation)
    * @param dumpType     the type of dump to be used
@@ -378,7 +387,7 @@ public class IdentityBlock extends AbstractBlock implements Serializable {
   }
 
   /***
-   * Get the serial of the identity block.
+   * <p>Get the serial of the identity block.</p>
    *
    * @return the currently set serial number
    */
@@ -387,7 +396,7 @@ public class IdentityBlock extends AbstractBlock implements Serializable {
   }
 
   /***
-   * Set the serial of the identity block.
+   * <p>Set the serial of the identity block.</p>
    *
    * @return the previously set serial number
    */
