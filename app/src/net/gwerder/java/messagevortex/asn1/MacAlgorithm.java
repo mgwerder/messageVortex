@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.asn1;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -21,6 +22,8 @@ package net.gwerder.java.messagevortex.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
+import java.io.IOException;
+import java.io.Serializable;
 import net.gwerder.java.messagevortex.asn1.encryption.Algorithm;
 import net.gwerder.java.messagevortex.asn1.encryption.AlgorithmType;
 import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
@@ -28,11 +31,8 @@ import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1Integer;
 import org.bouncycastle.asn1.ASN1Object;
 
-import java.io.IOException;
-import java.io.Serializable;
-
 /**
- * Represents a Mac Algorithm as ASN.1 structure.
+ * <p>Represents a Mac Algorithm as ASN.1 structure.</p>
  */
 public class MacAlgorithm extends AbstractBlock implements Serializable {
 
@@ -45,7 +45,7 @@ public class MacAlgorithm extends AbstractBlock implements Serializable {
   }
 
   /***
-   * constructor to creates a mac algorith from an ASN.1 encoded object.
+   * <p>constructor to creates a mac algorith from an ASN.1 encoded object.</p>
    *
    * @param to            the object description in ASN.1 notation
    * @throws IOException  if an error occures during parsing
@@ -59,7 +59,7 @@ public class MacAlgorithm extends AbstractBlock implements Serializable {
   }
 
   /***
-   * constructor to creates a mac algorith from an ASN.1 encoded object.
+   * <p>constructor to creates a mac algorith from an ASN.1 encoded object.</p>
    *
    * @param a             the object description in ASN.1 notation
    * @throws IOException  if an error occures during parsing

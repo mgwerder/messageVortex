@@ -41,7 +41,8 @@ import org.bouncycastle.asn1.DERTaggedObject;
 /**
  * <p>ASN1 parser block for algorithm parameters.</p>
  */
-public class AlgorithmParameter extends AbstractBlock implements Serializable, Comparable<AlgorithmParameter> {
+public class AlgorithmParameter extends AbstractBlock
+       implements Serializable, Comparable<AlgorithmParameter>, Dumpable {
 
   public static final long serialVersionUID = 100000000001L;
 

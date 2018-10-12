@@ -205,12 +205,12 @@ public class IdentityStore extends AbstractBlock implements Serializable {
     LOGGER.log(Level.INFO, ";;; dumping\r\n" + m2.dumpValueNotation("", DumpType.ALL_UNENCRYPTED));
     LOGGER.log(Level.INFO, ";;; reencode check");
     LOGGER.log(Level.INFO, ";;;   getting DER stream");
-    byte[] b1 = m.toBytes(DumpType.ALL_UNENCRYPTED);
     String tmpDir = System.getProperty("java.io.tmpdir");
     LOGGER.log(Level.INFO, ";;;   storing to DER stream to " + tmpDir);
     DEROutputStream f = new DEROutputStream(Files.newOutputStream(Paths.get(tmpDir + "/temp.der")));
     f.writeObject(m.toAsn1Object(DumpType.ALL_UNENCRYPTED));
     f.close();
+    byte[] b1 = m.toBytes(DumpType.ALL_UNENCRYPTED);
     LOGGER.log(Level.INFO, ";;;   parsing DER stream");
     IdentityStore m3 = new IdentityStore(b1);
     LOGGER.log(Level.INFO, ";;;   getting DER stream again");

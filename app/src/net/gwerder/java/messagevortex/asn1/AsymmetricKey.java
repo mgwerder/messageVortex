@@ -75,7 +75,7 @@ import org.bouncycastle.pqc.jcajce.provider.BouncyCastlePQCProvider;
  * <p>This class parses and encodes Asymmetric keys from/to ASN.1.
  * It furthermore handles encoding and decoding of encrypted material.</p>
  */
-public class AsymmetricKey extends Key  implements Serializable {
+public class AsymmetricKey extends Key  implements Serializable, Dumpable {
 
   public static final long serialVersionUID = 100000000032L;
 

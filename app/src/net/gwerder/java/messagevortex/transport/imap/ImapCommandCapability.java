@@ -50,10 +50,10 @@ public class ImapCommandCapability extends ImapCommand {
 
     // skip space
     // WARNING this is "non-strict"
-    line.skipSP(-1);
+    line.skipWhitespace(-1);
 
     // skip lineend
-    if (!line.skipCRLF()) {
+    if (!line.skipLineEnd()) {
       throw new ImapException(line, "error parsing command");
     }
 

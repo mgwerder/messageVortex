@@ -60,7 +60,8 @@ public enum StatusCode {
   }
 
   /***
-   * Gets the ASN1 constant for this status code
+   * <p>Gets the ASN1 constant for this status code.</p>
+   *
    * @return the requested constant for ASN1 encoding
    */
   public int getId() {
@@ -68,10 +69,11 @@ public enum StatusCode {
   }
 
   /***
-   * returns the corresponding ASN1 enumeration
+   * <p>Returns the corresponding ASN1 enumeration.</p>
+   *
    * @return the ASN1 enumeration representing this status
    */
-  public ASN1Enumerated toASN1() {
+  public ASN1Enumerated toAsn1() {
     return asn;
   }
 

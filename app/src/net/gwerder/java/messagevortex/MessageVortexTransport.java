@@ -22,20 +22,19 @@ package net.gwerder.java.messagevortex;
 // * SOFTWARE.
 // ************************************************************************************
 
+import java.io.IOException;
+import java.net.InetSocketAddress;
 import net.gwerder.java.messagevortex.transport.SecurityContext;
 import net.gwerder.java.messagevortex.transport.SecurityRequirement;
 import net.gwerder.java.messagevortex.transport.TransportReceiver;
 import net.gwerder.java.messagevortex.transport.smtp.SMTPReceiver;
-
-import java.io.IOException;
-import java.net.InetSocketAddress;
 
 /**
  * Created by Martin on 30.01.2018.
  */
 public class MessageVortexTransport {
 
-  private SMTPReceiver inSMTP;
+  private SMTPReceiver inSmtp;
 
   public MessageVortexTransport(TransportReceiver receiver) throws IOException {
     if (receiver == null) {
@@ -46,22 +45,22 @@ public class MessageVortexTransport {
     assert cfg != null;
 
     // setup receiver for mail relay
-    inSMTP = new SMTPReceiver(new InetSocketAddress(cfg.getStringValue("smtp_incomming_address"), cfg.getNumericValue("smtp_incomming_port")), new SecurityContext(SecurityRequirement.getByName(cfg.getStringValue("smtp_incomming_address"))), receiver);
+    inSmtp = new SMTPReceiver(new InetSocketAddress(cfg.getStringValue("smtp_incomming_address"), cfg.getNumericValue("smtp_incomming_port")), new SecurityContext(SecurityRequirement.getByName(cfg.getStringValue("smtp_incomming_address"))), receiver);
 
     // setup receiver for IMAP requests
     // FIXME
   }
 
   public TransportReceiver getTransportReceiver() {
-    return this.inSMTP.getTransportReceiver();
+    return this.inSmtp.getTransportReceiver();
   }
 
   public TransportReceiver setTransportReceiver(TransportReceiver receiver) {
-    return this.inSMTP.setTransportReceiver(receiver);
+    return this.inSmtp.setTransportReceiver(receiver);
   }
 
   public void shutdown() {
-    inSMTP.shutdown();
+    inSmtp.shutdown();
   }
 
 }

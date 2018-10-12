@@ -25,44 +25,44 @@ package net.gwerder.java.messagevortex.routing.operation;
 import net.gwerder.java.messagevortex.asn1.IdentityBlock;
 
 /**
- * This interface represents a standard operation in the payload space of an identity.
+ * <p>This interface represents a standard operation in the payload space of an identity.</p>
  */
 public interface Operation {
 
   IdentityBlock getIdentity();
 
   /***
-   * Checks if all prerequisiting fields do exist or can be provided by a subsequent operation.
+   * <p>Checks if all prerequisiting fields do exist or can be provided by a subsequent operation.</p>
    *
    * @return true if all prerequisits can potentially be satisfied
    */
   boolean canRun();
 
   /***
-   * Checks if this operation is still valid or might be purged from the identities working space
+   * <p>Checks if this operation is still valid or might be purged from the identities working space.</p>
    *
    * @return true if the operation should remain in the payload space
    */
   boolean isInUsagePeriod();
 
   /***
-   * Gets all ids which are written by this operation.
+   * <p>Gets all ids which are written by this operation.</p>
    *
    * @return array representing all ids which will be potentially set by this operation
    */
-  int[] getOutputID();
+  int[] getOutputId();
 
   /***
-   * Gets all ids which are required to execute this operation.
+   * <p>Gets all ids which are required to execute this operation.</p>
    *
    * @return array representing all ids which will be potentially set by this operation
    */
-  int[] getInputID();
+  int[] getInputId();
 
   /***
-   * Executes the operation and sets at least the provided set of id.
+   * <p>Executes the operation and sets at least the provided set of id.</p>
    *
-   * this operation might trigger to execute prerequisiting operations.
+   * <p>This operation might trigger to execute prerequisiting operations.</p>
    *
    * @param id the namespace id to be set minimally
    * @return array representing all ids which have been set
@@ -70,9 +70,9 @@ public interface Operation {
   int[] execute(int[] id);
 
   /***
-   * sets the internal payload and associated identity.
+   * <p>Sets the internal payload and associated identity.</p>
    *
-   * This method is called from the InternalPayload when registering.
+   * <p>This method is called from the InternalPayload when registering.</p>
    *
    * @param payload the internal payload of an identity to be registered within
    */

@@ -28,9 +28,7 @@ import net.gwerder.java.messagevortex.asn1.IdentityStoreBlock;
 import net.gwerder.java.messagevortex.asn1.VortexMessage;
 
 /**
- * Factory class to build full message (anonymizing structure)
- * <p>
- * Created by martin.gwerder on 06.06.2016.
+ * <p>Factory class to build full message (anonymizing structure).</p>
  */
 public abstract class MessageFactory {
 

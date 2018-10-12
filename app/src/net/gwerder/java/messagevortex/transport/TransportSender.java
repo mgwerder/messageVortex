@@ -28,9 +28,9 @@ import java.io.InputStream;
 public interface TransportSender {
 
   /***
-   * sends a message on the transport layer.
+   * <p>sends a message on the transport layer.</p>
    *
-   * This method is called by the blending layer to send a message.
+   * <p>This method is called by the blending layer to send a message.</p>
    *
    * @param address the string representation of the target address on the transport layer
    * @param os      the outputstream providing the message

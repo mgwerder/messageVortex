@@ -45,6 +45,12 @@ public class HeaderRequestIncreaseMessageQuota extends HeaderRequest implements 
     super();
   }
 
+  /***
+   * <p>Creates a request block from the ASN.1 structure.</p>
+   *
+   * @param ae            the structure to be parsed
+   * @throws IOException  if the structure does not parse to the respective block
+   */
   public HeaderRequestIncreaseMessageQuota(ASN1Encodable ae) throws IOException {
     this();
     if (ae != null) {
@@ -82,7 +88,7 @@ public class HeaderRequestIncreaseMessageQuota extends HeaderRequest implements 
   }
 
   @Override
-  public ASN1Object intToASN1Object(DumpType dumpType) throws IOException {
+  public ASN1Object intToAsn1Object(DumpType dumpType) throws IOException {
     ASN1EncodableVector s1 = new ASN1EncodableVector();
     s1.add(new ASN1Integer(quota));
     return new DERSequence(s1);

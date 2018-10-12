@@ -67,7 +67,7 @@ public class IdentityStoreBlock extends AbstractBlock implements Serializable {
   private AsymmetricKey identityKey = null;
   private String nodeAddress = null;
   private AsymmetricKey nodeKey = null;
-  private IdentityType iType = null;
+  private IdentityType idType = null;
 
   public IdentityStoreBlock() {
     super();
@@ -91,7 +91,7 @@ public class IdentityStoreBlock extends AbstractBlock implements Serializable {
     ret.setValid(new UsagePeriod(3600 * 24 * 30));
     ret.setTransferQuota(ExtendedSecureRandom.nextInt(1024 * 1024 * 1024));
     ret.setMessageQuota(ExtendedSecureRandom.nextInt(1024 * 1024));
-    ret.iType = it;
+    ret.idType = it;
     switch (it) {
       case OWNED_IDENTITY:
         // my own identity to decrypt everything
@@ -285,8 +285,8 @@ public class IdentityStoreBlock extends AbstractBlock implements Serializable {
   }
 
   public IdentityType getType() {
-    if (iType != null) {
-      return iType;
+    if (idType != null) {
+      return idType;
     }
     if (nodeKey == null) {
       return IdentityType.OWNED_IDENTITY;

@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.routing;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -23,14 +24,11 @@ package net.gwerder.java.messagevortex.routing;
 
 import net.gwerder.java.messagevortex.asn1.VortexMessage;
 
-/**
- * Created by martin.gwerder on 03.04.2017.
- */
 public interface IncomingMessageRouterListener {
 
   /***
-   * This method is called by the blending layer when an incomming message has
-   * been received and the verifier acknowledged its processing.
+   * <p>This method is called by the blending layer when an incomming message has
+   * been received and the verifier acknowledged its processing.</p>
    *
    * @param message the message received
    */

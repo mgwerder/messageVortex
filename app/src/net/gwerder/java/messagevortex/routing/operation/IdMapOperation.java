@@ -43,6 +43,13 @@ public class IdMapOperation extends AbstractOperation implements Serializable {
   private int[] outputId;
   private int[] inputId;
 
+  /***
+   * <p>Creates a simple operation mapping the input to the output ID.</p>
+   *
+   * @param sourceId  the first source ID to be mapped
+   * @param targetId  the first target ID to be mapped
+   * @param number    the number of subsequent blocks to be mapped
+   */
   public IdMapOperation(int sourceId, int targetId, int number) {
     inputId = new int[number];
     outputId = new int[number];
@@ -53,12 +60,12 @@ public class IdMapOperation extends AbstractOperation implements Serializable {
   }
 
   @Override
-  public int[] getOutputID() {
+  public int[] getOutputId() {
     return outputId;
   }
 
   @Override
-  public int[] getInputID() {
+  public int[] getInputId() {
     return inputId;
   }
 
@@ -69,11 +76,12 @@ public class IdMapOperation extends AbstractOperation implements Serializable {
 
   @Override
   public int[] execute(int[] id) {
-    LOGGER.log(Level.INFO, "running IDMapper " + inputId[0] + "/" + outputId[0] + "/" + inputId.length);
+    LOGGER.log(Level.INFO, "running IDMapper " + inputId[0] + "/" + outputId[0]
+               + "/" + inputId.length);
     for (int i = 0; i < inputId.length; i++) {
       payload.setCalculatedPayload(outputId[i], payload.getPayload(inputId[i]));
     }
-    return getOutputID();
+    return getOutputId();
   }
 
   @Override

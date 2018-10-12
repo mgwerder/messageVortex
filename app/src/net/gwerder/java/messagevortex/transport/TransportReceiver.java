@@ -25,15 +25,15 @@ package net.gwerder.java.messagevortex.transport;
 import java.io.InputStream;
 
 /**
- * Interface for all blending layers listening to transport layer messages
+ * <p>Interface for all blending layers listening to transport layer messages.</p>
  */
 public interface TransportReceiver {
 
   /***
-   * This Method is called by the TransportSender layer if a possible vmessage has arrived.
+   * <p>This Method is called by the TransportSender layer if a possible vmessage has arrived.</p>
    *
-   * The message (if any) is decoded, verified and (if successful) passed on to the routing layer in a separate
-   * thread (@see IncommingMessageRouterListener).
+   * <p>The message (if any) is decoded, verified and (if successful) passed on to the routing
+   * layer in a separate thread (@see IncommingMessageRouterListener).</p>
    *
    * @param is the InputStream containing a possible message
    * @return true if message got accepted

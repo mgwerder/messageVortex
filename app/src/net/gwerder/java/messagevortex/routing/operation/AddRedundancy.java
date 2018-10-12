@@ -59,7 +59,7 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
   }
 
   @Override
-  public int[] getOutputID() {
+  public int[] getOutputId() {
     int[] ret = new int[operation.getDataStripes() + operation.getRedundancy()];
     int id = operation.getOutputId();
     for (int i = 0; i < ret.length; i++) {
@@ -69,7 +69,7 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
   }
 
   @Override
-  public int[] getInputID() {
+  public int[] getInputId() {
     int[] ret = new int[1];
     for (int i = 0; i < ret.length; i++) {
       ret[i] = operation.getInputId() + i;
@@ -135,7 +135,7 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
         tot += b.length;
       }
     } catch (IOException ioe) {
-      for (int i : getOutputID()) {
+      for (int i : getOutputId()) {
         payload.setCalculatedPayload(i, null);
       }
       LOGGER.log(Level.INFO, "  failed");
@@ -144,11 +144,11 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
     LOGGER.log(Level.INFO, "  done (chunk size: " + out.getRowAsByteArray(0).length + "; total:"
                + tot + ")");
 
-    return getOutputID();
+    return getOutputId();
   }
 
   public String toString() {
-    return getInputID()[0] + "->addRedundancy(" + getOutputID().length + ")->" + getOutputID()[0];
+    return getInputId()[0] + "->addRedundancy(" + getOutputId().length + ")->" + getOutputId()[0];
   }
 
 }

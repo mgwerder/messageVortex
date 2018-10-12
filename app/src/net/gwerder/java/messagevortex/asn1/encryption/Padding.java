@@ -22,13 +22,18 @@ package net.gwerder.java.messagevortex.asn1.encryption;
 // * SOFTWARE.
 // ************************************************************************************
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import org.bouncycastle.asn1.ASN1Enumerated;
 
-import java.io.Serializable;
-import java.util.*;
-
 /**
- * Enumeration listing all available padding types for encryption.
+ * <p>Enumeration listing all available padding types for encryption.</p>
  */
 public enum Padding implements Serializable {
 
@@ -83,7 +88,7 @@ public enum Padding implements Serializable {
   }
 
   /***
-   * Get applicable padding sets for a given Algorithm type.
+   * <p>Get applicable padding sets for a given Algorithm type.</p>
    *
    * @param at        the type of algorithm
    * @return an array of supported paddings
@@ -100,7 +105,7 @@ public enum Padding implements Serializable {
 
 
   /***
-   * Get a padding by its ASN.1 ID.
+   * <p>Get a padding by its ASN.1 ID.</p>
    *
    * @param id    the ASN.1 numericcal ID
    * @return the padding or null if ID is unknown
@@ -115,7 +120,7 @@ public enum Padding implements Serializable {
   }
 
   /***
-   * Get a padding by its name.
+   * <p>Get a padding by its name.</p>
    *
    * @param name  the name used by the cryptographic provider
    * @return the padding or null if name is unknown
@@ -130,7 +135,7 @@ public enum Padding implements Serializable {
   }
 
   /***
-   * Get the default padding for a given AlgorithmType
+   * <p>Get the default padding for a given AlgorithmType.</p>
    *
    * @param at    the algorithm type
    * @return the default padding for the given algorithm type
@@ -153,7 +158,7 @@ public enum Padding implements Serializable {
   }
 
   /***
-   * Get the numeric ASN.1 id of the padding
+   * </p>Get the numeric ASN.1 id of the padding.</p>
    *
    * @return the id of the padding
    */
@@ -162,7 +167,7 @@ public enum Padding implements Serializable {
   }
 
   /***
-   * Get the textual representation of the padding for the cryptographic provider.
+   * </p>Get the textual representation of the padding for the cryptographic provider.<p>
    *
    * @return the name used within the cryptographic provider
    */
@@ -171,9 +176,9 @@ public enum Padding implements Serializable {
   }
 
   /***
-   * Gets the maximum payload size,
+   * <p>Gets the maximum payload size.</p>
    *
-   * The payload size is calculated by &lt;block size&gt;-&lt;padding overhead&gt;.
+   * <p>The payload size is calculated by &lt;block size&gt;-&lt;padding overhead&gt;.</p>
    *
    * @param blockSize   the block size of the cryptographic algorithm (usually equals the key size)
    * @return the number of bytes a single block may hold including the padding information.
@@ -183,7 +188,7 @@ public enum Padding implements Serializable {
   }
 
   /***
-   * Get the corresponding ASN1 enumeration
+   * <p>Get the corresponding ASN1 enumeration.</p>
    *
    * @return the ASN1 enumeration representing this padding
    */

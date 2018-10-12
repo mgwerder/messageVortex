@@ -22,11 +22,11 @@ package net.gwerder.java.messagevortex.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
+import java.io.IOException;
 import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1Object;
 
-import java.io.IOException;
 
 public abstract class ReplyBlock extends AbstractBlock {
   @Override

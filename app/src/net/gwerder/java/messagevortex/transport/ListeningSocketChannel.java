@@ -1,6 +1,7 @@
 package net.gwerder.java.messagevortex.transport;
 
-import net.gwerder.java.messagevortex.MessageVortexLogger;
+import static net.gwerder.java.messagevortex.transport.SecurityRequirement.SSLTLS;
+import static net.gwerder.java.messagevortex.transport.SecurityRequirement.UNTRUSTED_SSLTLS;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -8,9 +9,7 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import static net.gwerder.java.messagevortex.transport.SecurityRequirement.SSLTLS;
-import static net.gwerder.java.messagevortex.transport.SecurityRequirement.UNTRUSTED_SSLTLS;
+import net.gwerder.java.messagevortex.MessageVortexLogger;
 
 /**
  * Created by Martin on 10.03.2018.

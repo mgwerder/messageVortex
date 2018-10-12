@@ -77,7 +77,7 @@ public class HeaderRequestIdentity extends HeaderRequest implements Serializable
   }
 
   @Override
-  public ASN1Object intToASN1Object(DumpType dumpType) throws IOException {
+  public ASN1Object intToAsn1Object(DumpType dumpType) throws IOException {
     ASN1EncodableVector s1 = new ASN1EncodableVector();
     s1.add(period.toAsn1Object(dumpType));
     return new DERSequence(s1);

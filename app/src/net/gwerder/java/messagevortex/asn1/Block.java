@@ -24,17 +24,14 @@ package net.gwerder.java.messagevortex.asn1;
 
 import java.io.IOException;
 import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
-import org.bouncycastle.asn1.ASN1Object;
 
 
 /**
  * Common interface for any ASN.1 block.
  */
-public interface Block {
+public interface Block extends Dumpable {
 
   String dumpValueNotation(String prefix, DumpType dumpType) throws IOException;
-
-  ASN1Object toAsn1Object(DumpType dumpType) throws IOException;
 
   byte[] toBytes(DumpType dumpType) throws IOException;
 

@@ -22,15 +22,17 @@ package net.gwerder.java.messagevortex.asn1.encryption;
 // * SOFTWARE.
 // ************************************************************************************
 
-import org.bouncycastle.asn1.*;
-
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
+import org.bouncycastle.asn1.ASN1Encodable;
+import org.bouncycastle.asn1.ASN1Enumerated;
+import org.bouncycastle.asn1.ASN1Integer;
+import org.bouncycastle.asn1.ASN1Object;
+import org.bouncycastle.asn1.ASN1OctetString;
+import org.bouncycastle.asn1.DEROctetString;
 
 /**
- * Enumeration of all supported Parameters.
- * <p>
- * Created by martin.gwerder on 31.05.2016.
+ * <p>Enumeration of all supported Parameters.</p>
  */
 public enum Parameter implements Serializable {
   /* dummy id for internal use (store algorithm with parameter for key cache) */

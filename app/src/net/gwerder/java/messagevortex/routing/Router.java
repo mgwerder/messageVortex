@@ -22,19 +22,15 @@ package net.gwerder.java.messagevortex.routing;
 // * SOFTWARE.
 // ************************************************************************************
 
+import java.util.List;
 import net.gwerder.java.messagevortex.accounting.Accountant;
 import net.gwerder.java.messagevortex.blending.Blender;
 import net.gwerder.java.messagevortex.blending.BlenderReceiver;
 
-import java.util.List;
-
-/**
- * Created by martin.gwerder on 03.04.2017.
- */
 public interface Router extends BlenderReceiver {
 
   /***
-   * Adds a blending layer to the routing infrastructure.
+   * <p>Adds a blending layer to the routing infrastructure.</p>
    *
    * @param blendingLayer the blending layer to be added
    * @return true if the blending layer has been accepted
@@ -43,7 +39,7 @@ public interface Router extends BlenderReceiver {
   boolean addBlendingLayer(Blender blendingLayer);
 
   /***
-   * Removes a previously added blending layer.
+   * <p>Removes a previously added blending layer.</p>
    *
    * @param blendingLayer the blending layer to be removed
    * @return true if the blending layer was found (and removed)
@@ -51,14 +47,14 @@ public interface Router extends BlenderReceiver {
   boolean removeBlendingLayer(Blender blendingLayer);
 
   /***
-   * Get a list of all currently known blending layers.
+   * <p>Get a list of all currently known blending layers.</p>
    *
    * @return a list of a registered blending layers
    */
   List<Blender> getAllBlendingLayer();
 
   /***
-   * Sets the accounting layer for the routing layer.
+   * <p>Sets the accounting layer for the routing layer.</p>
    *
    * @param accountant the accounting layer to be used
    * @return the previously set accounting layer
@@ -66,7 +62,7 @@ public interface Router extends BlenderReceiver {
   Accountant setAccountant(Accountant accountant);
 
   /***
-   * Get the currently set accounting layer.
+   * <p>Get the currently set accounting layer.</p>
    *
    * @return the accounting layer or null if none
    */

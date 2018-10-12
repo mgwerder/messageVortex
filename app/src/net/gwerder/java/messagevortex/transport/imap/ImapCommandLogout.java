@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.transport.imap;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -42,10 +43,10 @@ public class ImapCommandLogout extends ImapCommand {
   public String[] processCommand(ImapLine line) throws ImapException {
     // skip space
     // WRNING this is "non-strict"
-    line.skipSP(-1);
+    line.skipWhitespace(-1);
 
     // skip lineend
-    if (!line.skipCRLF()) {
+    if (!line.skipLineEnd()) {
       throw new ImapException(line, "error parsing command");
     }
 

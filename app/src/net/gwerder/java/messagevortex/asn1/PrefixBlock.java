@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.asn1;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -21,16 +22,20 @@ package net.gwerder.java.messagevortex.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
-import net.gwerder.java.messagevortex.MessageVortexLogger;
-import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
-import org.bouncycastle.asn1.*;
-
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.logging.Level;
+import net.gwerder.java.messagevortex.MessageVortexLogger;
+import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
+import org.bouncycastle.asn1.ASN1Encodable;
+import org.bouncycastle.asn1.ASN1EncodableVector;
+import org.bouncycastle.asn1.ASN1Object;
+import org.bouncycastle.asn1.ASN1Primitive;
+import org.bouncycastle.asn1.ASN1Sequence;
+import org.bouncycastle.asn1.DERSequence;
 
 /**
- * ASN1 parser class for header reply.
+ * <p>ASN1 parser class for header reply.</p>
  */
 public class PrefixBlock extends AbstractBlock implements Serializable {
 
@@ -51,14 +56,14 @@ public class PrefixBlock extends AbstractBlock implements Serializable {
   }
 
   /**
-   * Creates an empty prefix
+   * <p>Creates an empty prefix.</p>
    */
   public PrefixBlock() throws IOException {
     this(null);
   }
 
   /***
-   * Creates a prefix with the given key.
+   * <p>Creates a prefix with the given key.</p>
    *
    * @param sk symmetrik key to embedd in the prefix block
    */
@@ -71,7 +76,7 @@ public class PrefixBlock extends AbstractBlock implements Serializable {
   }
 
   /***
-   * Creates a prefix by parsing to in plan (unencrypted)
+   * <p>Creates a prefix by parsing to in plan (unencrypted).</p>
    *
    * @param to The primitive to be parsed
    *
@@ -82,7 +87,7 @@ public class PrefixBlock extends AbstractBlock implements Serializable {
   }
 
   /***
-   * Creates a prefix from the provided byte array by decyphering it with the provided key.
+   * <p>Creates a prefix from the provided byte array by decyphering it with the provided key.</p>
    *
    * @param to the ASN1 OCTET STRING containing the encrypted prefix
    * @param ak the host key
@@ -120,9 +125,9 @@ public class PrefixBlock extends AbstractBlock implements Serializable {
   }
 
   /***
-   * Sets the decryption key for the prefix block
+   * <p>Sets the decryption key for the prefix block.</p>
    *
-   * If the prefixblock is already encrypted a decryption is attempted.
+   * <p>If the prefixblock is already encrypted a decryption is attempted.</p>
    *
    * @param dk   the decryption key to be used when decrypting the block
    * @return the previous decryption key
@@ -142,7 +147,7 @@ public class PrefixBlock extends AbstractBlock implements Serializable {
   }
 
   /***
-   * Sets the symmetric key contained in the block
+   * <p>Sets the symmetric key contained in the block.</p>
    *
    * @param dk the decryption key for all subsequent blocks
    * @return the key set before the change
@@ -219,7 +224,7 @@ public class PrefixBlock extends AbstractBlock implements Serializable {
   }
 
   /***
-   * get the encryption status of the prefix block
+   * <p>get the encryption status of the prefix block.</p>
    *
    * @return true if the block is encrypted
    */
@@ -228,7 +233,7 @@ public class PrefixBlock extends AbstractBlock implements Serializable {
   }
 
   /***
-   * Get the ASN.1 encoded prefix block in encrypted form
+   * <p>Get the ASN.1 encoded prefix block in encrypted form.</p>
    *
    * @return the encrypted ASN.1 rncoded block
    * @throws IOException if encoding fails

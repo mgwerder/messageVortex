@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.asn1;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -21,18 +22,21 @@ package net.gwerder.java.messagevortex.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
-import net.gwerder.java.messagevortex.asn1.encryption.Algorithm;
-import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
-import net.gwerder.java.messagevortex.asn1.encryption.Parameter;
-import org.bouncycastle.asn1.*;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-
 import java.io.IOException;
 import java.io.Serializable;
 import java.security.Security;
+import net.gwerder.java.messagevortex.asn1.encryption.Algorithm;
+import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
+import net.gwerder.java.messagevortex.asn1.encryption.Parameter;
+import org.bouncycastle.asn1.ASN1Encodable;
+import org.bouncycastle.asn1.ASN1EncodableVector;
+import org.bouncycastle.asn1.ASN1Enumerated;
+import org.bouncycastle.asn1.ASN1Sequence;
+import org.bouncycastle.asn1.DERSequence;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 /**
- * Abstract class for all encryption key types
+ * <p>Abstract class for all encryption key types.</p>
  */
 public abstract class Key extends AbstractBlock implements Serializable {
 

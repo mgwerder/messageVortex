@@ -42,6 +42,12 @@ public class HeaderRequestQueryQuota extends HeaderRequest implements Serializab
     super();
   }
 
+  /***
+   * <p>Creates a request block from the ASN.1 structure.</p>
+   *
+   * @param ae            the structure to be parsed
+   * @throws IOException  if the structure does not parse to the respective block
+   */
   public HeaderRequestQueryQuota(ASN1Encodable ae) throws IOException {
     this();
     if (ae != null) {
@@ -70,7 +76,7 @@ public class HeaderRequestQueryQuota extends HeaderRequest implements Serializab
   }
 
   @Override
-  ASN1Object intToASN1Object(DumpType dumpType) throws IOException {
+  ASN1Object intToAsn1Object(DumpType dumpType) throws IOException {
     return new DERSequence(new ASN1EncodableVector());
   }
 }

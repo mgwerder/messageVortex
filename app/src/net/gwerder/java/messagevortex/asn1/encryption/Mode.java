@@ -22,11 +22,10 @@ package net.gwerder.java.messagevortex.asn1.encryption;
 // * SOFTWARE.
 // ************************************************************************************
 
-import org.bouncycastle.asn1.ASN1Enumerated;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import org.bouncycastle.asn1.ASN1Enumerated;
 
 /**
  * Enumeration to list available encryption modes.
@@ -51,7 +50,7 @@ public enum Mode {
 
   final int id;
   final String txt;
-  final boolean requiresIV;
+  final boolean requiresInitVector;
   final String[] alg;
   final Padding[] pad;
   final ASN1Enumerated asn;
@@ -59,14 +58,14 @@ public enum Mode {
   Mode(int id, String txt, boolean iv, String[] alg, Padding[] pad) {
     this.id = id;
     this.txt = txt;
-    this.requiresIV = iv;
+    this.requiresInitVector = iv;
     this.alg = alg;
     this.pad = pad;
     this.asn = new ASN1Enumerated(id);
   }
 
-  public boolean getRequiresIV() {
-    return this.requiresIV;
+  public boolean getRequiresInitVector() {
+    return this.requiresInitVector;
   }
 
   /**
@@ -86,7 +85,7 @@ public enum Mode {
 
 
   /**
-   * Get enumeration element by its name.
+   * <p>Get enumeration element by its name.</p>
    *
    * @param name the name of the element to be obtained
    * @return the element or null if the name is unknown
@@ -101,7 +100,8 @@ public enum Mode {
   }
 
   /***
-   * Gets the currently set default value for the given type
+   * <p>Gets the currently set default value for the given type.</p>
+   *
    * @param type the type for which the default value is required
    * @return the default value requested
    */
@@ -110,7 +110,7 @@ public enum Mode {
   }
 
   /***
-   * Sets the default encryption mode for a specific algorithm type.
+   * <p>Sets the default encryption mode for a specific algorithm type.</p>
    *
    * @param t     the type for which the default value should be set
    * @param ndef  the new default value
@@ -123,7 +123,7 @@ public enum Mode {
   }
 
   /***
-   * Gets the ASN.1 numerical ID.
+   * <p>Gets the ASN.1 numerical ID.</p>
    *
    * @return the numerical ID
    */
@@ -132,9 +132,9 @@ public enum Mode {
   }
 
   /***
-   * Gets the mode identifier as required by the encryption provider.
+   * <p>Gets the mode identifier as required by the encryption provider.</p>
    *
-   * This value is returned regardless of the support of the provider classes.
+   * <p>This value is returned regardless of the support of the provider classes.</p>
    *
    * @return the mode identifier
    */
@@ -143,7 +143,7 @@ public enum Mode {
   }
 
   /***
-   * Gets all known paddings regardless of their support.
+   * <p>Gets all known paddings regardless of their support.</p>
    *
    * @return an array of all paddings
    */
@@ -164,11 +164,11 @@ public enum Mode {
   }
 
   /**
-   * Gets the corresponding ASN1 enumeration.
+   * <p>Gets the corresponding ASN1 enumeration.</p>
    *
    * @return the corresponding ASN1 enumeration
    */
-  public ASN1Enumerated toASN1() {
+  public ASN1Enumerated toAsn1() {
     return asn;
   }
 

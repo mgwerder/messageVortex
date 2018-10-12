@@ -187,7 +187,7 @@ public class SymmetricKey extends Key implements Serializable {
     Mode mode = getMode();
     byte[] keyBytes = new byte[keysize / 8];
     secureRandom.nextBytes(keyBytes);
-    if (mode.getRequiresIV() && (getIv() == null || getIv().length != 16)) {
+    if (mode.getRequiresInitVector() && (getIv() == null || getIv().length != 16)) {
       setIv(null);
     }
     SecretKeySpec aeskey = new SecretKeySpec(keyBytes, "AES");
@@ -198,7 +198,7 @@ public class SymmetricKey extends Key implements Serializable {
     Mode mode = getMode();
     byte[] keyBytes = new byte[keysize / 8];
     secureRandom.nextBytes(keyBytes);
-    if (mode.getRequiresIV()) {
+    if (mode.getRequiresInitVector()) {
       setIv(null);
     }
     SecretKeySpec camelliakey = new SecretKeySpec(keyBytes, "Camellia");
@@ -209,7 +209,7 @@ public class SymmetricKey extends Key implements Serializable {
     Mode mode = getMode();
     byte[] keyBytes = new byte[keysize / 8];
     secureRandom.nextBytes(keyBytes);
-    if (mode.getRequiresIV()) {
+    if (mode.getRequiresInitVector()) {
       setIv(null);
     }
     SecretKeySpec twofishkey = new SecretKeySpec(keyBytes, "Twofish");
@@ -232,7 +232,7 @@ public class SymmetricKey extends Key implements Serializable {
     try {
       Cipher c = getCipher();
       SecretKeySpec ks = new SecretKeySpec(key, getAlgorithm().getAlgorithmFamily().toUpperCase());
-      if (getMode().getRequiresIV()) {
+      if (getMode().getRequiresInitVector()) {
         setIv(getIv());
         c.init(Cipher.ENCRYPT_MODE, ks, new IvParameterSpec(getIv()));
       } else {
@@ -257,7 +257,7 @@ public class SymmetricKey extends Key implements Serializable {
     try {
       Cipher c = getCipher();
       SecretKeySpec ks = new SecretKeySpec(key, getAlgorithm().getAlgorithmFamily().toUpperCase());
-      if (getMode().getRequiresIV()) {
+      if (getMode().getRequiresInitVector()) {
         c.init(Cipher.DECRYPT_MODE, ks, new IvParameterSpec(getIv()));
       } else {
         c.init(Cipher.DECRYPT_MODE, ks);

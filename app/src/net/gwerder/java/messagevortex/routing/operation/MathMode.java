@@ -22,13 +22,10 @@ package net.gwerder.java.messagevortex.routing.operation;
 // * SOFTWARE.
 // ************************************************************************************
 
-/**
- * Created by martin.gwerder on 20.04.2017.
- */
 public interface MathMode {
 
   /***
-   * Multiplys  c1 ith c2.
+   * <p>Multiplys  c1 ith c2.</p>
    *
    * @param c1 the first operand
    * @param c2 the second operand
@@ -37,7 +34,7 @@ public interface MathMode {
   int mul(int c1, int c2);
 
   /***
-   * Divides c1 by c2 (without remainder).
+   * <p>Divides c1 by c2 (without remainder).</p>
    *
    * @param c1 the dividend
    * @param c2 the divisor
@@ -46,7 +43,7 @@ public interface MathMode {
   int div(int c1, int c2);
 
   /***
-   * Add c1 with c2.
+   * <p>Add c1 with c2.</p>
    *
    * @param c1 the first operand
    * @param c2 the second operand
@@ -55,7 +52,7 @@ public interface MathMode {
   int add(int c1, int c2);
 
   /***
-   * Subtract c2 from c1.
+   * <p>Subtract c2 from c1.</p>
    *
    * @param c1 the base value
    * @param c2 the the value to subtract from the base value
@@ -64,7 +61,7 @@ public interface MathMode {
   int sub(int c1, int c2);
 
   /***
-   * get the identitfication representation.
+   * <p>get the identitfication representation.</p>
    *
    * @return th identification string
    */

@@ -73,13 +73,13 @@ public class ImapPassthruServer implements SignalHandler {
 
     MessageVortexStatus.displayMessage(null, "IMAP passthru Sserver starting as standalone");
 
-    InetSocketAddress listener = getSocketAdressFromURL(args[0]);
-    Credentials creds = new Credentials(getUsernameFromURL(args[0]), getPasswordFromURL(args[0]));
-    ImapPassthruServer s = new ImapPassthruServer(listener, new SecurityContext(SecurityRequirement.STARTTLS), creds, getSocketAdressFromURL(args[1]), null);
+    InetSocketAddress listener = getSocketAdressFromUrl(args[0]);
+    Credentials creds = new Credentials(getUsernameFromUrl(args[0]), getPasswordFromUrl(args[0]));
+    ImapPassthruServer s = new ImapPassthruServer(listener, new SecurityContext(SecurityRequirement.STARTTLS), creds, getSocketAdressFromUrl(args[1]), null);
     MessageVortexStatus.displayMessage(null, "Passthru Server started as standalone");
   }
 
-  public static String getUsernameFromURL(String url) throws ParseException {
+  public static String getUsernameFromUrl(String url) throws ParseException {
     if (url == null) {
       throw new NullPointerException("Address may not be null");
     }
@@ -91,7 +91,7 @@ public class ImapPassthruServer implements SignalHandler {
     return m.group("username");
   }
 
-  public static String getPasswordFromURL(String url) throws ParseException {
+  public static String getPasswordFromUrl(String url) throws ParseException {
     if (url == null) {
       throw new NullPointerException("Address may not be null");
     }
@@ -103,7 +103,7 @@ public class ImapPassthruServer implements SignalHandler {
     return m.group("password");
   }
 
-  public static String getProtocolFromURL(String url) throws ParseException {
+  public static String getProtocolFromUrl(String url) throws ParseException {
     if (url == null) {
       throw new NullPointerException("Address may not be null");
     }
@@ -115,7 +115,7 @@ public class ImapPassthruServer implements SignalHandler {
     return m.group("protocol");
   }
 
-  public static int getPortFromURL(String url) throws ParseException {
+  public static int getPortFromUrl(String url) throws ParseException {
     if (url == null) {
       throw new NullPointerException("Address may not be null");
     }
@@ -127,7 +127,7 @@ public class ImapPassthruServer implements SignalHandler {
     return m.group("port") == null ? -1 : Integer.parseInt(m.group("port"));
   }
 
-  public static InetSocketAddress getSocketAdressFromURL(String url) throws ParseException {
+  public static InetSocketAddress getSocketAdressFromUrl(String url) throws ParseException {
     if (url == null) {
       throw new NullPointerException("Address may not be null");
     }

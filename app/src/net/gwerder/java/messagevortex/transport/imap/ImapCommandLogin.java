@@ -57,22 +57,22 @@ public class ImapCommandLogin extends ImapCommand {
   public String[] processCommand(ImapLine line) throws ImapException {
 
     // get userid
-    String userid = getAuthToken(line);
+    final String userid = getAuthToken(line);
 
     // skip space after command
-    if (line.skipSP(1) != 1) {
+    if (line.skipWhitespace(1) != 1) {
       throw new ImapException(line, "error parsing command (skipping to password)");
     }
 
     // get password
-    String password = getAuthToken(line);
+    final String password = getAuthToken(line);
 
     // skip space
     // WARNING this is "non-strict"
-    line.skipSP(-1);
+    line.skipWhitespace(-1);
 
     // skip line end
-    if (!line.skipCRLF()) {
+    if (!line.skipLineEnd()) {
       throw new ImapException(line, "error parsing command");
     }
 

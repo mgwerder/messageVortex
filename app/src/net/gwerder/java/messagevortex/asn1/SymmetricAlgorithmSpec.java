@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.asn1;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -21,14 +22,10 @@ package net.gwerder.java.messagevortex.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
-import org.bouncycastle.asn1.ASN1Encodable;
-
 import java.io.IOException;
 import java.io.Serializable;
+import org.bouncycastle.asn1.ASN1Encodable;
 
-/**
- * Created by martin.gwerder on 29.12.2017.
- */
 public class SymmetricAlgorithmSpec extends AsymmetricAlgorithmSpec implements Serializable {
 
   public static final long serialVersionUID = 100000000016L;

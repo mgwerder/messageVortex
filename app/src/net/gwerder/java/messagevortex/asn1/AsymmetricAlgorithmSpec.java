@@ -37,7 +37,7 @@ import org.bouncycastle.asn1.DERSequence;
 /**
  * <p>Specification for AsymmetricAlgorithmSpec.</p>
  */
-public class AsymmetricAlgorithmSpec extends AbstractBlock implements Serializable {
+public class AsymmetricAlgorithmSpec extends AbstractBlock implements Serializable, Dumpable {
 
   public static final long serialVersionUID = 100000000003L;
 

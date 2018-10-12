@@ -34,7 +34,8 @@ public interface HeaderVerifier {
    *
    * </p>One of the following criteria must be met:
    * <ul>
-   *   <li>The identity is known and the serial has not yet reached its replay limit and is not replayed too early</li>
+   *   <li>The identity is known and the serial has not yet reached its replay limit and is not
+   *   replayed too early</li>
    *   <li>The identity is not known but has a RequestIdentityBlock</li>
    *   <li>The IdentityBlock is not known but has a request capability block</li>
    * </ul>

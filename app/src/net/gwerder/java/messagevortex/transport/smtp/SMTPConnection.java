@@ -22,13 +22,6 @@ package net.gwerder.java.messagevortex.transport.smtp;
 // * SOFTWARE.
 // ************************************************************************************
 
-import net.gwerder.java.messagevortex.Config;
-import net.gwerder.java.messagevortex.MessageVortexLogger;
-import net.gwerder.java.messagevortex.transport.ClientConnection;
-import net.gwerder.java.messagevortex.transport.SecurityContext;
-import net.gwerder.java.messagevortex.transport.TransportReceiver;
-import org.bouncycastle.util.encoders.Base64;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -36,9 +29,15 @@ import java.net.SocketTimeoutException;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
+import net.gwerder.java.messagevortex.Config;
+import net.gwerder.java.messagevortex.MessageVortexLogger;
+import net.gwerder.java.messagevortex.transport.ClientConnection;
+import net.gwerder.java.messagevortex.transport.SecurityContext;
+import net.gwerder.java.messagevortex.transport.TransportReceiver;
+import org.bouncycastle.util.encoders.Base64;
 
 /**
- * Creates a connection to a SMTP Server Socket.
+ * <p>Creates a connection to a SMTP Server Socket.</p>
  */
 public class SMTPConnection extends ClientConnection {
 
@@ -48,7 +47,7 @@ public class SMTPConnection extends ClientConnection {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
 
-  private volatile static int id = 1;
+  private static volatile int id = 1;
 
   TransportReceiver receiver = null;
   InternalConnectionHandler handler = new InternalConnectionHandler();

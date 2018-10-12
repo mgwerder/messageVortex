@@ -22,13 +22,12 @@ package net.gwerder.java.messagevortex.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
-import org.bouncycastle.asn1.ASN1Encodable;
-import org.bouncycastle.asn1.ASN1TaggedObject;
-
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import org.bouncycastle.asn1.ASN1Encodable;
+import org.bouncycastle.asn1.ASN1TaggedObject;
 
 /**
  * Represents a the Blending specification of the routing block.
@@ -55,7 +54,9 @@ public abstract class Operation extends AbstractBlock implements Serializable {
   }
 
   public static Operation getInstance(ASN1Encodable object) throws IOException {
-    if (operations.isEmpty()) throw new IOException("init() not called");
+    if (operations.isEmpty()) {
+      throw new IOException("init() not called");
+    }
     int tag = ASN1TaggedObject.getInstance(object).getTagNo();
     if (operations.get(tag) == null) {
       throw new IOException("unknown tag for choice detected");
@@ -81,7 +82,9 @@ public abstract class Operation extends AbstractBlock implements Serializable {
   }
 
   public static Operation parseInstance(ASN1TaggedObject object) throws IOException {
-    if (operations.isEmpty()) throw new IOException("init() not called");
+    if (operations.isEmpty()) {
+      throw new IOException("init() not called");
+    }
     if (operations.get(object.getTagNo()) == null) {
       throw new IOException("got unknown tag number for operation (" + object.getTagNo());
     }

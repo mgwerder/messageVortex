@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.transport.imap;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -21,25 +22,22 @@ package net.gwerder.java.messagevortex.transport.imap;
 // * SOFTWARE.
 // ************************************************************************************
 
-import net.gwerder.java.messagevortex.MessageVortexLogger;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.gwerder.java.messagevortex.MessageVortexLogger;
 
 /***
- /**
- * A Imap conformant parser/scanner.
+ * <p>A Imap conformant parser/scanner.</p>
  *
  * @author Martin Gwerder
  *
- * FIXME Limit strings and literals to a certain length (otherwise it is litterally unlimited)
- * FIXME Code will fail if Line.length()>Maxint or out of memory
- * FIXME Encrypted connects are failing
- ***/
+ * @FIXME Limit strings and literals to a certain length (otherwise it is litterally unlimited)
+ * @FIXME Code will fail if Line.length()>Maxint or out of memory
+ */
 public class ImapLine {
 
   /* specifies the context range which is given when an exception arises during scanning */
@@ -79,17 +77,18 @@ public class ImapLine {
   private String buffer = "";
 
   /***
-   * Creates an imap line object with a parser for a command.
+   * <p>Creates an imap line object with a parser for a command.</p>
    *
-   * A passed input stream is appended to line. Reading takes place according to the ABNF-Rules defined in the respective RFC
+   * <p>A passed input stream is appended to line. Reading takes place according to the
+   * ABNF-Rules defined in the respective RFC.</p>
    *
    * @param con   The ImapConnection object which generated the Command line
    * @param line  The String which has already been read (as Read ahead)
    * @param input The Stream offering more data to read if required
    *
-   * @fix.me should be a ABNF implementation
-   * @fix.me extract reading from constructor
-   ***/
+   * @FIXME should be a ABNF implementation
+   * @FIXME extract reading from constructor
+   */
   public ImapLine(ImapConnection con, String line, InputStream input) throws ImapException {
     this.con = con;
     this.input = input;
@@ -115,25 +114,25 @@ public class ImapLine {
       LOGGER.log(Level.INFO, "Parsing command " + tagToken + " " + commandToken);
     }
 
-    skipSP(-1);
+    skipWhitespace(-1);
   }
 
   /***
-   * Trivial constructor omiting a stream.
+   * <p>Trivial constructor omiting a stream.</p>
    *
-   * This constructor is mainly meant for testing purposes
+   * <p>This constructor is mainly meant for testing purposes</p>
    *
    * @param con   The ImapConnection object which generated the Command line
    * @param line  The String which has already been read (as Read ahead)
-   ***/
+   */
   public ImapLine(ImapConnection con, String line) throws ImapException {
     this(con, line, null);
   }
 
   /***
-   * Builds a set of chracters ranging from the ASCII code of start until the ASCII code of end.
+   * <p>Builds a set of chracters ranging from the ASCII code of start until the ASCII code of end.</p>
    *
-   * This helper is mainly used to build ABNF strings.
+   * <p>This helper is mainly used to build ABNF strings.</p>
    *
    * @param start The first ASCII code to be used
    * @param end   The last ASCII code to be used
@@ -163,7 +162,7 @@ public class ImapLine {
   }
 
   /***
-   * Removes a given set of characters from a superset.
+   * <p>Removes a given set of characters from a superset.</p>
    *
    * @param superset    The set where character should be removed from
    * @param subset      The set of characters to be removed
@@ -178,7 +177,7 @@ public class ImapLine {
   }
 
   /***
-   * Encodes a command so that newlines are visible.
+   * <p>Encodes a command so that newlines are visible.</p>
    *
    * @return a printable string representation
    ***/
@@ -190,19 +189,19 @@ public class ImapLine {
   }
 
   /***
-   * Get a unique identifier as a tag.
+   * <p>Get a unique identifier as a tag.</p>
    *
    * @return A unique tag ("A" prefixed)
-   ***/
+   */
   public static String getNextTag() {
     return getNextTag("A");
   }
 
   /***
-   * Get a unique identifier as a tag.
+   * <p>Get a unique identifier as a tag.</p>
    *
    * @return A unique tag
-   ***/
+   */
   public static String getNextTag(String prefix) {
     String ret;
     synchronized (TAG_ENUMERATOR_LOCK) {
@@ -226,7 +225,7 @@ public class ImapLine {
   private void checkEmptyLine() throws ImapException {
     if ("\r\n".equals(snoopBytes(2)) || "".equals(snoopBytes(1)) || snoopBytes(1) == null) {
       if ("\r\n".equals(snoopBytes(2))) {
-        skipUntilCRLF();
+        skipUntilLineEnd();
         throw new ImapBlankLineException(this);
       }
       throw new ImapNullLineException(this);
@@ -238,11 +237,11 @@ public class ImapLine {
     tagToken = getATag();
 
     if (tagToken == null || "".equals(tagToken)) {
-      skipUntilCRLF();
+      skipUntilLineEnd();
       throw new ImapException(this, "error getting tag");
     }
 
-    int i = skipSP(1);
+    int i = skipWhitespace(1);
     if (i != 1) {
       throw new ImapException(this, "error skipping to command (line=\"" + context + "\"; tag=" + tagToken + "; buffer=" + buffer + "; skipped=" + i + ")");
     }
@@ -250,35 +249,35 @@ public class ImapLine {
     // get command
     commandToken = getATag();
     if (commandToken == null || "".equals(commandToken)) {
-      skipUntilCRLF();
+      skipUntilLineEnd();
       throw new ImapException(this, "error getting command");
     }
 
   }
 
   /***
-   * Getter for the Imap connection in Control of this command.
+   * <p>Getter for the Imap connection in Control of this command.</p>
    *
    * @return ImapConnection storing the context of this command
-   ***/
+   */
   public ImapConnection getConnection() {
     return con;
   }
 
   /***
-   * Getter for the command.
+   * </p>Getter for the command.</p>
    *
    * @return command token
-   ***/
+   */
   public String getCommand() {
     return commandToken;
   }
 
   /***
-   * Getter for the command tag.
+   * <p>Getter for the command tag.</p>
    *
    * @return command tag
-   ***/
+   */
   public String getTag() {
     return tagToken;
   }
@@ -303,24 +302,25 @@ public class ImapLine {
   }
 
   /***
-   * Returns true if escaped quotes are present at the current position.
+   * <p>Returns true if escaped quotes are present at the current position.</p>
    *
    * @return true if escaped quotes are present
-   ***/
+   */
   public boolean snoopEscQuotes() {
-    return "\\".contains(snoopBytes(1)) &&
-            snoopBytes(2).length() == 2 &&
-            ABNF_QUOTED_SPECIALS.contains(snoopBytes(2).substring(1, 2));
+    return "\\".contains(snoopBytes(1))
+            && snoopBytes(2).length() == 2
+            && ABNF_QUOTED_SPECIALS.contains(snoopBytes(2).substring(1, 2));
   }
 
   /***
-   * Get the specified number of characters without moving from the current position.
-   * if num is 0 or negative then null is returned. If the number
+   * <p>Get the specified number of characters without moving from the current position.</p>
+   *
+   * <p>if num is 0 or negative then null is returned. If the number
    * of available bytes is lower than the number of requested characters
-   * then the buffer content is returned.
+   * then the buffer content is returned.</p>
    *
    * @return The requested string
-   ***/
+   */
   public String snoopBytes(long num) {
     if (num <= 0) {
       return null;
@@ -349,7 +349,7 @@ public class ImapLine {
   }
 
   /***
-   * Returns the current buffer (including position) and some of the already read characters.
+   * <p>Returns the current buffer (including position) and some of the already read characters.</p>
    *
    * @return String representation of the current context
    ***/
@@ -358,7 +358,7 @@ public class ImapLine {
   }
 
   /***
-   * Skips the specified number of characters and adds them to the past context.
+   * <p>Skips the specified number of characters and adds them to the past context.</p>
    *
    * @param   num number of characters to be skipped
    * @return String representation of the skipped characters
@@ -395,12 +395,12 @@ public class ImapLine {
   }
 
   /***
-   * Skips the specified number of SPACES.
+   * <p>Skips the specified number of SPACES.</p>
    *
    * @param   num number of spaces to be skipped
    * @return number of skipped spaces
    ***/
-  public int skipSP(int num) {
+  public int skipWhitespace(int num) {
     // count number of spaces found
     int count = 0;
 
@@ -421,11 +421,11 @@ public class ImapLine {
   }
 
   /***
-   * Skips a CRLF combo in the buffer.
+   * <p>Skips a CRLF combo in the buffer.</p>
    *
    * @return True if a combo has been skipped
    ***/
-  public boolean skipCRLF() {
+  public boolean skipLineEnd() {
     LOGGER.log(Level.FINER, "Skipping CRLF");
     if (snoopBytes(2) != null && "\r\n".equals(snoopBytes(2))) {
       skipBytes(2);
@@ -437,11 +437,11 @@ public class ImapLine {
   }
 
   /***
-   * Skips up to a CRLF combo in the buffer.
+   * <p>Skips up to a CRLF combo in the buffer.</p>
    *
    * @return True if a combo has been skipped (false if buffer ended before a CRLF combo was read
    ***/
-  public boolean skipUntilCRLF() {
+  public boolean skipUntilLineEnd() {
     while (snoopBytes(2) != null && !"\r\n".equals(snoopBytes(2))) {
       skipBytes(1, false);
     }
@@ -481,7 +481,7 @@ public class ImapLine {
     }
 
     // skip crlf
-    skipCRLF();
+    skipLineEnd();
 
     // get String
     ret = skipBytes(num);
@@ -512,7 +512,7 @@ public class ImapLine {
   }
 
   /***
-   * Get an IMAP String from the buffer (quoted or prefixed).
+   * <p>Get an IMAP String from the buffer (quoted or prefixed).</p>
    *
    * @return The String or null if no string is at the current position
    ***/
@@ -534,10 +534,10 @@ public class ImapLine {
   }
 
   /***
-   * Get an IMAP AString (direct, quoted or prefixed) from the current buffer position.
+   * <p>Get an IMAP AString (direct, quoted or prefixed) from the current buffer position.</p>
    *
    * @return The String or null if no string at the current position
-   ***/
+   */
   public String getAString() {
 
     String start = snoopBytes(1);
@@ -563,10 +563,10 @@ public class ImapLine {
   }
 
   /***
-   * Get the tag at the current position.
+   * <p>Get the tag at the current position.</p>
    *
    * @return the tag or null if no valid is found
-   ***/
+   */
   public String getATag() {
     String ret = null;
 

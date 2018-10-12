@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.transport;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -23,9 +24,6 @@ package net.gwerder.java.messagevortex.transport;
 
 import java.util.Random;
 
-/**
- * Created by martin.gwerder on 10.03.2016.
- */
 public class RandomString {
 
   private static final char[] symbols;

@@ -28,9 +28,6 @@ import net.gwerder.java.messagevortex.asn1.BlendingSpec;
 import net.gwerder.java.messagevortex.asn1.VortexMessage;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-/**
- * Created by Martin on 04.02.2018.
- */
 public class SMTPBlender extends Blender {
 
   public SMTPBlender(BlenderReceiver receiver, HeaderVerifier verifier) {
@@ -38,7 +35,7 @@ public class SMTPBlender extends Blender {
   }
 
   /***
-   * receives an SMTP message from the transport layer and extracts the message.
+   * <p>Receives an SMTP message from the transport layer and extracts the message.</p>
    *
    * @return true if message has been accepted as vortex message
    */

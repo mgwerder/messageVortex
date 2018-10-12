@@ -22,23 +22,19 @@ package net.gwerder.java.messagevortex.routing.operation;
 // * SOFTWARE.
 // ************************************************************************************
 
-
-import net.gwerder.java.messagevortex.ExtendedSecureRandom;
-import net.gwerder.java.messagevortex.MessageVortexLogger;
-
 import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
+import net.gwerder.java.messagevortex.ExtendedSecureRandom;
+import net.gwerder.java.messagevortex.MessageVortexLogger;
 
 /**
- * Offers matrixContent calculations in different fields.
+ * <p>Offers matrixContent calculations in different fields.</p>
  */
 public class Matrix {
 
-  /**
-   * may be set to disable cache
-   **/
+  /* may be set to disable cache */
   static boolean matrixCacheDisabled = false;
 
   private static final java.util.logging.Logger LOGGER;
@@ -64,7 +60,7 @@ public class Matrix {
   }
 
   /***
-   * creates a matrixContent (x,y) with the specified MathMode.
+   * <p>Creates a matrixContent (x,y) with the specified MathMode.</p>
    *
    * @param x      the number of columns of the matrixContent
    * @param y      the number of rows of the matrixContent
@@ -80,7 +76,7 @@ public class Matrix {
   }
 
   /***
-   * creates a two dimensional matrixContent (x,y) with the specified MathMode.
+   * <p>Creates a two dimensional matrixContent (x,y) with the specified MathMode.</p>
    *
    * @param x       the number of columns of the matrixContent
    * @param y       the number of rows of the matrixContent
@@ -93,7 +89,7 @@ public class Matrix {
   }
 
   /***
-   * creates a two dimensional matrixContent (x,y) with the specified MathMode.
+   * <p>Creates a two dimensional matrixContent (x,y) with the specified MathMode.</p>
    *
    * @param x       the number of columns of the matrixContent
    * @param y       the number of rows of the matrixContent
@@ -109,7 +105,7 @@ public class Matrix {
   }
 
   /***
-   * creates a two dimensional matrixContent (x,y) with the specified MathMode.
+   * </p>Creates a two dimensional matrixContent (x,y) with the specified MathMode.</p>
    *
    * @param x       the number of columns of the matrixContent
    * @param y       the number of rows of the matrixContent
@@ -124,7 +120,7 @@ public class Matrix {
   }
 
   /***
-   * creates a two dimensional unit matrixContent (size,size) with the specified MathMode.
+   * </p>Creates a two dimensional unit matrixContent (size,size) with the specified MathMode.</p>
    *
    * @param size    the number of columns of the matrixContent
    * @param mode    the math mode to be applied
@@ -151,7 +147,7 @@ public class Matrix {
   }
 
   /***
-   * Get the number of columns.
+   * <p>Get the number of columns.</p>
    *
    * @return the nuber of columns as int value
    */
@@ -160,7 +156,7 @@ public class Matrix {
   }
 
   /***
-   * Set the number of rows.
+   * <p>Set the number of rows.</p>
    *
    * @return the nuber of rows as int value
    */
@@ -169,7 +165,7 @@ public class Matrix {
   }
 
   /***
-   * Removes the specified row from the matrixContent.
+   * <p>Removes the specified row from the matrixContent.</p>
    *
    * @param index the index of the row to be removed (starting with 0)
    */
@@ -183,7 +179,7 @@ public class Matrix {
   }
 
   /***
-   * Returns a matrixContent with the specified dimension initialised with random values.
+   * <p>Returns a matrixContent with the specified dimension initialised with random values.</p>
    *
    * @param x       the number of columns of the matrixContent
    * @param y       the number of rows of the matrixContent
@@ -201,7 +197,7 @@ public class Matrix {
   }
 
   /***
-   * Multiplies the current matrixContent with the specified matrixContent.
+   * <p>Multiplies the current matrixContent with the specified matrixContent.</p>
    *
    * @param m                    the matrixContent to multitply with
    * @return the resulting matrixContent
@@ -275,7 +271,7 @@ public class Matrix {
   }
 
   /***
-   * Sets a modulo value of the matrixContent for all operations.
+   * <p>Sets a modulo value of the matrixContent for all operations.</p>
    *
    * @param i   the value to be used as modulo
    * @return the previously set modulo
@@ -290,7 +286,7 @@ public class Matrix {
   }
 
   /***
-   * Get a row of the matrixContent as array.
+   * <p>Get a row of the matrixContent as array.</p>
    *
    * @param i  the index of the row to be extracted as array
    * @return the row representation as array
@@ -307,7 +303,7 @@ public class Matrix {
   }
 
   /***
-   * Extracts the value of a specified matrixContent field.
+   * <p>Extracts the value of a specified matrixContent field.</p>
    *
    * @param x  the column of the field
    * @param y  the row of the field
@@ -324,7 +320,7 @@ public class Matrix {
   }
 
   /***
-   * Sets the value of a specified matrixContent field.
+   * <p>Sets the value of a specified matrixContent field.</p>
    *
    * @param x     the column of the field
    * @param y     the row of the field
@@ -344,7 +340,7 @@ public class Matrix {
   }
 
   /***
-   * Calculates the inverse by aplying the Gauss-Jordan-algorithm.
+   * <p>Calculates the inverse by aplying the Gauss-Jordan-algorithm.</p>
    *
    * @return the inverse of the matrixContent
    * @throws ArithmeticException if matrixContent is not square in dimensions or the algorithm was unable to compute an inverse
@@ -408,7 +404,7 @@ public class Matrix {
   }
 
   /***
-   * Get the values of a row as byte arrays.
+   * <p>Get the values of a row as byte arrays.</p>
    *
    * @param row the index of the row to be used (starting with 0)
    * @return the array containing the calues of the row
@@ -422,7 +418,7 @@ public class Matrix {
   }
 
   /***
-   * Get the content of the matrixContent as byte array.
+   * <p>Get the content of the matrixContent as byte array.</p>
    *
    * @return the byte array representing the matrixContent values (row by row)
    */
@@ -437,7 +433,7 @@ public class Matrix {
   }
 
   /***
-   * Multiplies element by element the values of the second column by the specified scalar and subtracts the resulting value from the first element.
+   * <p>Multiplies element by element the values of the second column by the specified scalar and subtracts the resulting value from the first element.</p>
    *
    * @param col    the column to be recalculated/altered
    * @param col2   the column to be used for recalculation
@@ -464,7 +460,7 @@ public class Matrix {
   }
 
   /***
-   * Divides or multiplies element by element the values of the second row by the specified scalar and subtracts the resulting value from the first element.
+   * <p>Divides or multiplies element by element the values of the second row by the specified scalar and subtracts the resulting value from the first element.</p>
    *
    * @param row    the row o be recalculated/altered
    * @param row2   the row to be used for recalculation
@@ -481,19 +477,19 @@ public class Matrix {
     for (int col = 0; col < getX(); col++) {
       int value1 = getField(col, row);
       int value2 = getField(col, row2);
-      int tValue;
+      int tempValue;
       if (doDiv) {
-        tValue = mode.div(value2, scalar);
+        tempValue = mode.div(value2, scalar);
       } else {
-        tValue = mode.mul(value2, scalar);
+        tempValue = mode.mul(value2, scalar);
       }
-      int newValue = mode.sub(value1, tValue);
+      int newValue = mode.sub(value1, tempValue);
       setField(col, row, newValue);
     }
   }
 
   /***
-   * Divides all values of the specified row in the matrixContent by the scalar specified.
+   * <p>Divides all values of the specified row in the matrixContent by the scalar specified.</p>
    *
    * @param row     the index of the row (starting with 0)
    * @param scalar  the scalar to be used as divisor
@@ -509,7 +505,7 @@ public class Matrix {
   }
 
   /***
-   * Flips two rows of the current matrixContent.
+   * <p>Flips two rows of the current matrixContent.</p>
    *
    * @param row1 index of the first row (starting with 0)
    * @param row2 index of the second row (starting with 0)
@@ -524,7 +520,7 @@ public class Matrix {
   }
 
   /***
-   * Enables or disables the matrixContent  cache.
+   * <p>Enables or disables the matrixContent cache.</p>
    *
    * @param enable  set to true if matrixContent cache should be enabled
    * @return the previously set value

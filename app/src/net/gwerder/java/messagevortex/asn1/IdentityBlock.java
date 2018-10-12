@@ -42,7 +42,7 @@ import org.bouncycastle.asn1.DERTaggedObject;
 /***
  * <p>Represents an identity block of a vortexMessage.</p>
  */
-public class IdentityBlock extends AbstractBlock implements Serializable {
+public class IdentityBlock extends AbstractBlock implements Serializable, Dumpable {
 
   public static final long serialVersionUID = 100000000008L;
 
@@ -231,7 +231,7 @@ public class IdentityBlock extends AbstractBlock implements Serializable {
   }
 
   /***
-   * Gets the identity representation (asymmetric key) of the block.
+   * <p>Gets the identity representation (asymmetric key) of the block.</p>
    *
    * @return the previously set identity
    */
@@ -243,7 +243,7 @@ public class IdentityBlock extends AbstractBlock implements Serializable {
   }
 
   /***
-   * Sets the identity representation (asymmetric key) of the block.
+   * <p>Sets the identity representation (asymmetric key) of the block.</p>
    *
    * @param oid the identity key
    * @return the previously set identity
@@ -261,23 +261,23 @@ public class IdentityBlock extends AbstractBlock implements Serializable {
   }
 
   /***
-   * Dumps the identity block as ASN.1 der encoded object.
+   * <p>Dumps the identity block as ASN.1 der encoded object.</p>
    *
    * @return the block as der encodable object
    * @throws IOException   if the block is not encodable
    */
   public ASN1Object toAsn1Object(DumpType dumpType) throws IOException {
-    return toASN1Object(dumpType, null);
+    return toAsn1Object(dumpType, null);
   }
 
   /***
-   * Dumps the identity block as ASN.1 der encoded object.
+   * <p>Dumps the identity block as ASN.1 der encoded object.</p>
    *
    * @param targetIdentity the identity to be used to secure the Identity block (target identity)
    * @return the block as der encodable object
    * @throws IOException   if the block is not encodable
    */
-  public ASN1Object toASN1Object(DumpType dumpType, AsymmetricKey targetIdentity) throws IOException {
+  public ASN1Object toAsn1Object(DumpType dumpType, AsymmetricKey targetIdentity) throws IOException {
     sanitizeHeaderKey();
     if (headerKey == null && encryptedHeaderKey == null) {
       throw new NullPointerException("headerKey may not be null");

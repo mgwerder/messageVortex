@@ -44,7 +44,8 @@ import org.bouncycastle.asn1.DERTaggedObject;
  * Represents a the Blending specification of the routing block.
  */
 public abstract class AbstractRedundancyOperation
-                extends Operation implements ASN1Choice, Serializable {
+                extends Operation
+                implements ASN1Choice, Serializable, Dumpable {
 
   public static final long serialVersionUID = 100000000032L;
 

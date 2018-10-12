@@ -83,13 +83,13 @@ public class ImapCommandAuthenticate extends ImapCommand {
 
     // skip space
     // WARNING this is "non-strict"
-    line.skipSP(-1);
+    line.skipWhitespace(-1);
 
     String context = line.getATag();
     LOGGER.log(Level.INFO, "authenticate has read context information (PLAIN only) \"" + context + "\"");
 
     // skip line end
-    if (!line.skipCRLF()) {
+    if (!line.skipLineEnd()) {
       throw new ImapException(line, "error parsing command");
     }
     LOGGER.log(Level.INFO, "has parsed last character of line");
@@ -167,10 +167,10 @@ public class ImapCommandAuthenticate extends ImapCommand {
   }
 
   /***
-   * Returns the Identifier (IMAP command) which are processed by this class.
+   * <p>Returns the Identifier (IMAP command) which are processed by this class.</p>
    *
    * @return A list of identifiers
-   ***/
+   */
   public String[] getCommandIdentifier() {
     return new String[]{"AUTHENTICATE"};
   }

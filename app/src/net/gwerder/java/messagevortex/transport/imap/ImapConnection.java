@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.transport.imap;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -32,7 +33,6 @@ import net.gwerder.java.messagevortex.transport.AuthenticationProxy;
 import net.gwerder.java.messagevortex.transport.ServerConnection;
 import net.gwerder.java.messagevortex.transport.StoppableThread;
 
-
 public class ImapConnection extends ServerConnection implements Comparable<ImapConnection>, StoppableThread, Runnable {
 
   private static final Logger LOGGER;
@@ -51,7 +51,7 @@ public class ImapConnection extends ServerConnection implements Comparable<ImapC
   private Thread runner = null;
 
   /***
-   * Creates an imapConnection
+   * <p>Creates an imapConnection.</p>
    ***/
   public ImapConnection(AbstractConnection ac, AuthenticationProxy proxy) throws IOException {
     super(ac);
@@ -60,7 +60,7 @@ public class ImapConnection extends ServerConnection implements Comparable<ImapC
   }
 
   /***
-   * Creates an imapConnection
+   * <p>Creates an imapConnection.</p>
    ***/
   private void init() throws IOException {
     runner = new Thread(this);
@@ -78,7 +78,7 @@ public class ImapConnection extends ServerConnection implements Comparable<ImapC
   }
 
   /***
-   * Get the authenticator of the connection.
+   * <p>Get the authenticator of the connection.</p>
    ***/
   public AuthenticationProxy getAuth() {
     return this.authProxy;

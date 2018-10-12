@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.routing;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -21,13 +22,15 @@ package net.gwerder.java.messagevortex.routing;
 // * SOFTWARE.
 // ************************************************************************************
 
-import net.gwerder.java.messagevortex.asn1.IdentityStore;
-import net.gwerder.java.messagevortex.asn1.IdentityStoreBlock;
-import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
-import org.bouncycastle.asn1.DEROutputStream;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Shape;
+import java.awt.Stroke;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Ellipse2D;
@@ -36,6 +39,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import javax.swing.ToolTipManager;
+import net.gwerder.java.messagevortex.asn1.IdentityStore;
+import net.gwerder.java.messagevortex.asn1.IdentityStoreBlock;
+import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
+import org.bouncycastle.asn1.DEROutputStream;
 
 /**
  * Created by martin.gwerder on 13.06.2016.
@@ -72,9 +83,9 @@ public class JGraph extends JPanel implements MouseListener {
   }
 
   private void drawTopLabels(Graphics g) {
-    double xSpace = (0.0 + getWidth() - 2 * X_OFFSET - BOX_WIDTH) / (graph.getAnonymitySetSize() - 1);
+    double horizontalSpace = (0.0 + getWidth() - 2 * X_OFFSET - BOX_WIDTH) / (graph.getAnonymitySetSize() - 1);
     for (int i = 0; i < graph.getAnonymitySetSize(); i++) {
-      int x = (int) (X_OFFSET + i * xSpace);
+      int x = (int) (X_OFFSET + i * horizontalSpace);
 
       // draw top boxes
       if (graph.getAnonymity(i) == graph.getSource()) {
@@ -106,8 +117,8 @@ public class JGraph extends JPanel implements MouseListener {
   private void drawArrows(Graphics g) {
     GraphSet[] routes = graph.getRoutes();
 
-    double xSpace = (0.0 + getWidth() - 2 * X_OFFSET - BOX_WIDTH) / (graph.getAnonymitySetSize() - 1);
-    double ySpace = (0.0 + getHeight() - 2 * Y_OFFSET - 2 * BOX_HEIGHT - ROUTE_BORDER) / (graph.size());
+    double horizontalSpace = (0.0 + getWidth() - 2 * X_OFFSET - BOX_WIDTH) / (graph.getAnonymitySetSize() - 1);
+    double verticalSpace = (0.0 + getHeight() - 2 * Y_OFFSET - 2 * BOX_HEIGHT - ROUTE_BORDER) / (graph.size());
     Graphics2D g2 = (Graphics2D) (g.create());
     Stroke s = g2.getStroke();
     Stroke s2 = new BasicStroke(3);
@@ -116,9 +127,9 @@ public class JGraph extends JPanel implements MouseListener {
     System.out.println("## displaying route " + this.route + " (" + routes[this.route].size() + ")");
     for (int i = 0; i < graph.size(); i++) {
       Edge gr = graph.get(i);
-      int x1 = (int) (X_OFFSET + (double) BOX_WIDTH / 2 + graph.getAnonymityIndex(gr.getFrom()) * xSpace);
-      int x2 = (int) (X_OFFSET + (double) BOX_WIDTH / 2 + graph.getAnonymityIndex(gr.getTo()) * xSpace);
-      int y = (int) (Y_OFFSET + 2 * BOX_HEIGHT + i * ySpace);
+      int x1 = (int) (X_OFFSET + (double) BOX_WIDTH / 2 + graph.getAnonymityIndex(gr.getFrom()) * horizontalSpace);
+      int x2 = (int) (X_OFFSET + (double) BOX_WIDTH / 2 + graph.getAnonymityIndex(gr.getTo()) * horizontalSpace);
+      int y = (int) (Y_OFFSET + 2 * BOX_HEIGHT + i * verticalSpace);
 
       if (routes[this.route].contains(gr)) {
         System.out.println("##   route " + this.route + " contains " + i + " (" + routes[this.route].size() + "/" + gr.getStartTime() + ")");
@@ -135,7 +146,7 @@ public class JGraph extends JPanel implements MouseListener {
       // draw arrow
       g2.drawLine(x1, y, x2, y);
       // draw arrowhead
-      int xh = (int) ((double) (x2 - x1) / Math.abs(x2 - x1) * ySpace);
+      int xh = (int)((double) (x2 - x1) / Math.abs(x2 - x1) * verticalSpace);
       g2.drawLine(x2, y, x2 - xh, y - xh / 4);
       g2.drawLine(x2, y, x2 - xh, y + xh / 4);
     }
@@ -144,18 +155,18 @@ public class JGraph extends JPanel implements MouseListener {
   private void drawRouteButtons(Graphics g) {
     GraphSet[] routes = graph.getRoutes();
 
-    double xSpace = (0.0 + getWidth() - 2 * X_OFFSET - BOX_WIDTH) / (graph.getAnonymitySetSize() - 1);
+    double horizontalSpace = (0.0 + getWidth() - 2 * X_OFFSET - BOX_WIDTH) / (graph.getAnonymitySetSize() - 1);
 
-    xSpace = (double) (getWidth() - 2 * X_OFFSET) / (routes.length * 2 - 1);
+    horizontalSpace = (double) (getWidth() - 2 * X_OFFSET) / (routes.length * 2 - 1);
     for (int i = 0; i < routes.length; i++) {
-      int x1 = (int) ((getWidth() - (routes.length * 2 - 1) * xSpace) / 2 + i * xSpace * 2);
+      int x1 = (int) ((getWidth() - (routes.length * 2 - 1) * horizontalSpace) / 2 + i * horizontalSpace * 2);
       int y = getHeight() - Y_OFFSET - ROUTE_BORDER;
       if (this.route == i) {
         g.setColor(Color.BLUE);
-        g.fillRect(x1, y, (int) xSpace, ROUTE_BORDER);
+        g.fillRect(x1, y, (int) horizontalSpace, ROUTE_BORDER);
       }
       g.setColor(Color.BLACK);
-      g.drawRect(x1, y, (int) xSpace, ROUTE_BORDER);
+      g.drawRect(x1, y, (int) horizontalSpace, ROUTE_BORDER);
     }
   }
 
@@ -229,13 +240,13 @@ public class JGraph extends JPanel implements MouseListener {
   public void mouseClicked(MouseEvent e) {
     if (e != null) {
       GraphSet[] routes = graph.getRoutes();
-      double xSpace = (double) (getWidth() - 2 * X_OFFSET) / (routes.length * 2 - 1);
-      int offset = (int) (getWidth() - (routes.length * 2 - 1) * xSpace) / 2;
+      double horizontalSpace = (double) (getWidth() - 2 * X_OFFSET) / (routes.length * 2 - 1);
+      int offset = (int) (getWidth() - (routes.length * 2 - 1) * horizontalSpace) / 2;
       int tmp = e.getX() - offset;
-      int pos = (int) Math.min(Math.floor((0.0 + tmp) / (xSpace * 2)), routes.length);
+      int pos = (int) Math.min(Math.floor((0.0 + tmp) / (horizontalSpace * 2)), routes.length);
       int y = getHeight() - Y_OFFSET - ROUTE_BORDER;
-      tmp = tmp - (int) ((0.0 + pos) * 2 * xSpace);
-      if (e.getY() <= y + ROUTE_BORDER && e.getY() >= y && tmp < xSpace) {
+      tmp = tmp - (int) ((0.0 + pos) * 2 * horizontalSpace);
+      if (e.getY() <= y + ROUTE_BORDER && e.getY() >= y && tmp < horizontalSpace) {
         setRoute(Math.min(routes.length, pos));
       }
     }
@@ -257,12 +268,12 @@ public class JGraph extends JPanel implements MouseListener {
     final JGraph jg = new JGraph(smf.getGraph());
     SwingUtilities.invokeLater(new Runnable() {
       public void run() {
-        jg.createAndShowGUI();
+        jg.createAndShowUserInterface();
       }
     });
   }
 
-  private void createAndShowGUI() {
+  private void createAndShowUserInterface() {
     System.out.println("Created GUI on event dispatching thread? " + SwingUtilities.isEventDispatchThread());
     JFrame f = new JFrame("Edge Demo");
     f.add(this);

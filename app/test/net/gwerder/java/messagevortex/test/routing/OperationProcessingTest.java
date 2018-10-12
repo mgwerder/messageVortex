@@ -103,7 +103,7 @@ public class OperationProcessingTest {
         assertTrue("add operation for rebuild test not added",p.addOperation(oop2));
         // set random passthrus
         Map<Integer,Operation> l=new HashMap<>();
-        while(l.size()<iop.getOutputID().length) {
+        while(l.size()<iop.getOutputId().length) {
             int i=esr.nextInt(dataStripes+redundancy);
             if(!l.containsKey(i)) {
                 Operation o = new IdMapOperation(1000 + i, 3000 + i, 1);

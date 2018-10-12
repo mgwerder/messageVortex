@@ -22,13 +22,12 @@ package net.gwerder.java.messagevortex.transport;
 // * SOFTWARE.
 // ************************************************************************************
 
-import net.gwerder.java.messagevortex.MessageVortexLogger;
-
-import javax.net.ssl.SSLSocket;
-import javax.net.ssl.SSLSocketFactory;
 import java.net.ConnectException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
+import net.gwerder.java.messagevortex.MessageVortexLogger;
 
 public class SocketDeblocker extends Thread {
 
@@ -78,7 +77,7 @@ public class SocketDeblocker extends Thread {
         SSLSocket cs = (SSLSocket) SSLSocketFactory.getDefault().createSocket("localhost", port);
         cs.close();
       } catch (ConnectException e) {
-                /* there was nothing to deblock */
+        /* there was nothing to deblock */
         LOGGER.log(Level.FINEST, "Exception while running SocketDeblocker", e);
       } catch (Exception e) {
         LOGGER.log(Level.FINEST, "Exception while running SocketDeblocker", e);

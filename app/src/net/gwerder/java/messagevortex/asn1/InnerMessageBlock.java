@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.asn1;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -21,12 +22,6 @@ package net.gwerder.java.messagevortex.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
-
-import net.gwerder.java.messagevortex.MessageVortexLogger;
-import net.gwerder.java.messagevortex.asn1.encryption.Algorithm;
-import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
-import org.bouncycastle.asn1.*;
-
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -34,11 +29,24 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
+import net.gwerder.java.messagevortex.MessageVortexLogger;
+import net.gwerder.java.messagevortex.asn1.encryption.Algorithm;
+import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
+import org.bouncycastle.asn1.ASN1Encodable;
+import org.bouncycastle.asn1.ASN1EncodableVector;
+import org.bouncycastle.asn1.ASN1InputStream;
+import org.bouncycastle.asn1.ASN1Object;
+import org.bouncycastle.asn1.ASN1OctetString;
+import org.bouncycastle.asn1.ASN1Sequence;
+import org.bouncycastle.asn1.ASN1TaggedObject;
+import org.bouncycastle.asn1.DEROctetString;
+import org.bouncycastle.asn1.DERSequence;
+import org.bouncycastle.asn1.DERTaggedObject;
 
 /***
- * represents the inner encrypted part of a VortexMessage.
+ * <p>represents the inner encrypted part of a VortexMessage.</p>
  *
- * This part is specified as InnerMessageBlock in the file asn.1/messageBlocks.asn1
+ * <p>This part is specified as InnerMessageBlock in the file asn.1/messageBlocks.asn1</p>
  */
 public class InnerMessageBlock extends AbstractBlock implements Serializable {
 
@@ -160,16 +168,16 @@ public class InnerMessageBlock extends AbstractBlock implements Serializable {
     // getting payload blocks
     ASN1Sequence seq = ASN1Sequence.getInstance(s1.getObjectAt(i++));
     List<PayloadChunk> p2 = new ArrayList<>(seq.size());
-    long cTime = new Date().getTime();
+    long creationTime = new Date().getTime();
     long last = routing.getLastProcessTime();
     long first = routing.getFirstProcessTime();
     for (ASN1Encodable tr : seq) {
-      p2.add(new PayloadChunk(tr, new UsagePeriod(new Date(cTime + last), new Date(cTime + first))));
+      p2.add(new PayloadChunk(tr, new UsagePeriod(new Date(creationTime + last), new Date(creationTime + first))));
     }
     payload = p2.toArray(new PayloadChunk[p2.size()]);
   }
 
-  public ASN1Object toASN1Object() throws IOException {
+  public ASN1Object toAsn1Object() throws IOException {
     return toAsn1Object(DumpType.PUBLIC_ONLY);
   }
 

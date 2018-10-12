@@ -37,7 +37,7 @@ import org.bouncycastle.asn1.DERTaggedObject;
 /**
  * <p>Blending Parameter Block representation.</p>
  */
-public class BlendingParameter extends AbstractBlock implements Serializable {
+public class BlendingParameter extends AbstractBlock implements Serializable, Dumpable {
 
   public static final long serialVersionUID = 100000000004L;
 

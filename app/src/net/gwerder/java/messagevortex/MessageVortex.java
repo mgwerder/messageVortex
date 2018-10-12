@@ -22,11 +22,10 @@ package net.gwerder.java.messagevortex;
 // * SOFTWARE.
 // ************************************************************************************
 
-import net.gwerder.java.messagevortex.accounting.DummyAccountant;
-
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.gwerder.java.messagevortex.accounting.DummyAccountant;
 
 public class MessageVortex {
 

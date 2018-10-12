@@ -31,9 +31,6 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-/**
- * Created by Martin on 27.01.2018.
- */
 public class MessageVortexConfig extends Config {
 
   private MessageVortexConfig() throws IOException {

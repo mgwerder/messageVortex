@@ -69,7 +69,7 @@ public class ImapClient extends ClientConnection {
     setProtocol("IMAP");
   }
 
-  public void imapStartTLS() throws IOException {
+  public void imapStartTls() throws IOException {
     String tag = ImapLine.getNextTag();
     try {
       String[] ret = sendCommand(tag + " STARTTLS");
@@ -194,7 +194,7 @@ public class ImapClient extends ClientConnection {
   public void processLine(String line, long timeout) throws IOException {
     currentCommand = line;
     LOGGER.log(Level.INFO, "IMAP C->S: " + ImapLine.commandEncoder(currentCommand));
-    long start = System.currentTimeMillis();
+    final long start = System.currentTimeMillis();
     writeln(currentCommand, timeout);
 
     String tag = null;

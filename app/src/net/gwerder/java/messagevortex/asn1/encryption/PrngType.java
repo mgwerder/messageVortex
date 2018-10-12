@@ -1,9 +1,7 @@
 package net.gwerder.java.messagevortex.asn1.encryption;
 
 /**
- * Specifies random number generator.
- * <p>
- * Created by Martin on 05.02.2018.
+ * <p>Specifies random number generator.</p>
  */
 public enum PrngType {
   FIXME(-1);

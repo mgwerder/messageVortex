@@ -38,7 +38,7 @@ public class ImapURLParser {
         };
         for( String st:s ) {
             try {
-                assertTrue( "Error while checking " + st, new InetSocketAddress( "localhost", 143 ).equals( ImapPassthruServer.getSocketAdressFromURL(st) ) );
+                assertTrue( "Error while checking " + st, new InetSocketAddress( "localhost", 143 ).equals( ImapPassthruServer.getSocketAdressFromUrl(st) ) );
             } catch( ParseException ioe ) {
                 ioe.printStackTrace();
                 fail( "unexpected exception raised" );
@@ -52,7 +52,7 @@ public class ImapURLParser {
         };
         for( String st:s ) {
             try {
-                assertTrue( "Error while checking " + st, new InetSocketAddress( "localhost", 993 ).equals( ImapPassthruServer.getSocketAdressFromURL(st) ) );
+                assertTrue( "Error while checking " + st, new InetSocketAddress( "localhost", 993 ).equals( ImapPassthruServer.getSocketAdressFromUrl(st) ) );
             } catch( ParseException ioe ) {
                 ioe.printStackTrace();
                 fail( "unexpected exception raised" );
@@ -78,7 +78,7 @@ public class ImapURLParser {
         };
         for( String st:s ) {
             try {
-                ImapPassthruServer.getSocketAdressFromURL(st);
+                ImapPassthruServer.getSocketAdressFromUrl(st);
                 fail( "unexpectedly no exception raised when testing "+st );
             } catch( ParseException ioe ) {
                 // this is expected
@@ -88,7 +88,7 @@ public class ImapURLParser {
             }
         }
         try {
-            ImapPassthruServer.getSocketAdressFromURL( null );
+            ImapPassthruServer.getSocketAdressFromUrl( null );
             fail( "unexpectedly no exception raised" );
         } catch( NullPointerException npe ) {
             // this is expected

@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.transport;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -24,19 +25,19 @@ package net.gwerder.java.messagevortex.transport;
 import java.io.IOException;
 
 /***
- * Interface for a stoppable thread.
+ * <p>Interface for a stoppable thread.</p>
  *
- * Threads of this type must provide facility to stop at request gracefully.
+ * <p>Threads of this type must provide facility to stop at request gracefully.</p>
  ***/
 public interface StoppableThread {
 
   /***
-   * Shuts the thread gracefully down.
+   * <p>Shuts the thread gracefully down.</p>
    ***/
   void shutdown() throws IOException;
 
   /***
-   * Query if the process is marked for shutdown
+   * <p>Query if the process is marked for shutdown.</p>
    *
    * @return true if the thread is marked for shutdown
    */

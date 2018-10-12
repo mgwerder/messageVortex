@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.routing.operation;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -21,17 +22,21 @@ package net.gwerder.java.messagevortex.routing.operation;
 // * SOFTWARE.
 // ************************************************************************************
 
+import java.security.InvalidParameterException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
 import net.gwerder.java.messagevortex.MessageVortexLogger;
 import net.gwerder.java.messagevortex.asn1.IdentityBlock;
 import net.gwerder.java.messagevortex.asn1.PayloadChunk;
 
-import java.security.InvalidParameterException;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
-
 /**
- * Represents a payload space of an identity in memory for processing
+ * <p>Represents a payload space of an identity in memory for processing.</p>
  */
 public class InternalPayload {
 
@@ -117,8 +122,8 @@ public class InternalPayload {
     //invalidate all subsequent depending values
     synchronized (operations) {
       for (Operation op : operations) {
-        if (Arrays.binarySearch(op.getInputID(), id) >= 0) {
-          for (int i : op.getOutputID()) {
+        if (Arrays.binarySearch(op.getInputId(), id) >= 0) {
+          for (int i : op.getOutputId()) {
             invalidateInternalPayloadCache(i);
           }
         }
@@ -137,27 +142,27 @@ public class InternalPayload {
   }
 
   /***
-   * registers an operation in the payload space
+   * <p>registers an operation in the payload space.</p>
    *
    * @param op the operation to be registered
    * @throws InvalidParameterException if dependency is circular
    */
   private void registerOperation(Operation op) {
     // check for valid operation
-    if (op == null || op.getOutputID() == null || op.getOutputID().length == 0) {
+    if (op == null || op.getOutputId() == null || op.getOutputId().length == 0) {
       throw new NullPointerException();
     }
 
     // search for circular dependencies
-    for (int id : op.getOutputID()) {
+    for (int id : op.getOutputId()) {
       if (isCircularDependent(op, id)) {
         throw new InvalidParameterException("circular dependency detected on id " + id);
       }
     }
 
     // check for self dependency
-    for (int id : op.getOutputID()) {
-      if (Arrays.binarySearch(op.getInputID(), id) > -1) {
+    for (int id : op.getOutputId()) {
+      if (Arrays.binarySearch(op.getInputId(), id) > -1) {
         throw new InvalidParameterException("circular dependency detected between the in and outputs of this function on id " + id);
       }
     }
@@ -167,13 +172,13 @@ public class InternalPayload {
       op.setInternalPayload(this);
 
       // register output ids
-      int[] id = op.getOutputID();
+      int[] id = op.getOutputId();
       for (int i = 0; i < id.length; i++) {
         internalOperationOutput.put(id[i], op);
       }
 
       //register input ids
-      id = op.getInputID();
+      id = op.getInputId();
       synchronized (internalOperationInput) {
         for (int i = 0; i < id.length; i++) {
           Set<Operation> l = internalOperationInput.get(id[i]);
@@ -198,10 +203,10 @@ public class InternalPayload {
       return false;
     }
 
-    for (int tid : top.getInputID()) {
+    for (int tid : top.getInputId()) {
 
       // this operation generates that id
-      if (Arrays.binarySearch(op.getOutputID(), tid) >= 0) {
+      if (Arrays.binarySearch(op.getOutputId(), tid) >= 0) {
         return true;
       }
 
@@ -216,20 +221,20 @@ public class InternalPayload {
   }
 
   private void deregisterOperation(Operation op) {
-    if (op == null || op.getOutputID() == null) {
+    if (op == null || op.getOutputId() == null) {
       throw new NullPointerException();
     }
     synchronized (operations) {
       op.setInternalPayload(null);
 
       // remove output
-      int[] id = op.getOutputID();
+      int[] id = op.getOutputId();
       for (int i = 0; i < id.length; i++) {
         internalOperationOutput.remove(id[i]);
         setCalculatedPayload(id[i], null);
       }
       // remove inputs
-      id = op.getInputID();
+      id = op.getInputId();
       synchronized (internalOperationInput) {
         for (int i = 0; i < id.length; i++) {
           Set<Operation> l = internalOperationInput.get(id[i]);
@@ -250,7 +255,7 @@ public class InternalPayload {
     compact();
 
     // check for conflicting operations
-    for (int id : op.getOutputID()) {
+    for (int id : op.getOutputId()) {
       if (internalOperationOutput.get(id) != null) {
         LOGGER.log(Level.WARNING, "addin of operation " + op + " due to conflicting outputs (conflicting op is:" + internalOperationOutput.get(id).toString() + ")");
         return false;
@@ -331,7 +336,7 @@ public class InternalPayload {
         Set<Operation> ops = internalOperationInput.get(i);
         if (ops != null && !ops.isEmpty()) {
           for (Operation op : ops) {
-            for (int j : op.getOutputID()) {
+            for (int j : op.getOutputId()) {
               setCalculatedPayload(j, null);
             }
           }

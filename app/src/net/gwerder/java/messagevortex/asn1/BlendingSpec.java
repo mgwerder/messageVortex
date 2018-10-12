@@ -37,7 +37,7 @@ import org.bouncycastle.asn1.DERUTF8String;
 /**
  * <p>Represents a the Blending specification of the routing block.</p>
  */
-public class BlendingSpec extends AbstractBlock implements Serializable {
+public class BlendingSpec extends AbstractBlock implements Serializable, Dumpable {
 
   public static final long serialVersionUID = 100000000005L;
 

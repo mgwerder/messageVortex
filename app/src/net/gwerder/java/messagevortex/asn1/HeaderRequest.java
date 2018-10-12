@@ -38,7 +38,7 @@ import org.bouncycastle.asn1.DERTaggedObject;
 /**
  * <p>ASN1 parser class for header request.</p>
  */
-public abstract class HeaderRequest extends AbstractBlock implements Serializable {
+public abstract class HeaderRequest extends AbstractBlock implements Serializable, Dumpable {
 
   public static final long serialVersionUID = 100000000007L;
 
@@ -109,10 +109,10 @@ public abstract class HeaderRequest extends AbstractBlock implements Serializabl
     if (tag == null) {
       throw new IOException("Unknown Header Request type \"" + this.getClass().getCanonicalName() + "\"");
     }
-    return new DERTaggedObject(tag.getId(), intToASN1Object(dt));
+    return new DERTaggedObject(tag.getId(), intToAsn1Object(dt));
   }
 
-  abstract ASN1Object intToASN1Object(DumpType dt) throws IOException;
+  abstract ASN1Object intToAsn1Object(DumpType dt) throws IOException;
 
   protected abstract HeaderRequest getRequest(ASN1Encodable ae) throws IOException;
 }

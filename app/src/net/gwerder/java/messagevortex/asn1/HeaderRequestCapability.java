@@ -77,7 +77,7 @@ public class HeaderRequestCapability extends HeaderRequest implements Serializab
   }
 
   @Override
-  ASN1Object intToASN1Object(DumpType dt) throws IOException {
+  ASN1Object intToAsn1Object(DumpType dt) throws IOException {
     ASN1EncodableVector s1 = new ASN1EncodableVector();
     s1.add(period.toAsn1Object(dt));
     return new DERSequence(s1);

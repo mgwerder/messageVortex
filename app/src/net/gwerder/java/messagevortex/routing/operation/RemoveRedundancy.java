@@ -22,21 +22,20 @@ package net.gwerder.java.messagevortex.routing.operation;
 // * SOFTWARE.
 // ************************************************************************************
 
-import net.gwerder.java.messagevortex.MessageVortexLogger;
-import net.gwerder.java.messagevortex.asn1.PayloadChunk;
-import net.gwerder.java.messagevortex.asn1.RemoveRedundancyOperation;
-import net.gwerder.java.messagevortex.asn1.VortexMessage;
-
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
+import net.gwerder.java.messagevortex.MessageVortexLogger;
+import net.gwerder.java.messagevortex.asn1.PayloadChunk;
+import net.gwerder.java.messagevortex.asn1.RemoveRedundancyOperation;
+import net.gwerder.java.messagevortex.asn1.VortexMessage;
 
 /**
- * This is the core of the redundancy remove operation.
- * <p>
- * It rebuilds the data stream from the existing data blocks.
+ * <p>This is the core of the redundancy remove operation.</p>
+ *
+ * <p>It rebuilds the data stream from the existing data blocks.</p>
  */
 public class RemoveRedundancy extends AbstractOperation implements Serializable {
 
@@ -61,7 +60,7 @@ public class RemoveRedundancy extends AbstractOperation implements Serializable 
       return false;
     }
     int j = 0;
-    for (int i : getInputID()) {
+    for (int i : getInputId()) {
       if (payload.getPayload(i) != null) {
         j++;
       }
@@ -82,7 +81,7 @@ public class RemoveRedundancy extends AbstractOperation implements Serializable 
     List<Integer> l = new ArrayList<>();
     int stripeSize = -1;
     int stripesFound = 0;
-    for (int i : getInputID()) {
+    for (int i : getInputId()) {
       PayloadChunk p = payload.getPayload(i);
       if (p == null || stripesFound >= operation.getDataStripes()) {
         l.add(i);
@@ -108,9 +107,9 @@ public class RemoveRedundancy extends AbstractOperation implements Serializable 
     byte[] in2 = new byte[stripeSize * (operation.getDataStripes() + operation.getRedundancy() - missingIds.length)];
     try {
       int j = 0;
-      for (int i : getInputID()) {
+      for (int i : getInputId()) {
         if (!l.contains(i)) {
-          for (byte b : operation.getkeys()[i - getInputID()[0]].decrypt(payload.getPayload(i).getPayload())) {
+          for (byte b : operation.getkeys()[i - getInputId()[0]].decrypt(payload.getPayload(i).getPayload())) {
             in2[j++] = b;
           }
         }
@@ -146,14 +145,14 @@ public class RemoveRedundancy extends AbstractOperation implements Serializable 
 
     // set output
     LOGGER.log(Level.INFO, "  setting output");
-    payload.setCalculatedPayload(getOutputID()[0], new PayloadChunk(getOutputID()[0], out2, getUsagePeriod()));
+    payload.setCalculatedPayload(getOutputId()[0], new PayloadChunk(getOutputId()[0], out2, getUsagePeriod()));
 
     LOGGER.log(Level.INFO, "  done");
-    return getOutputID();
+    return getOutputId();
   }
 
   @Override
-  public int[] getOutputID() {
+  public int[] getOutputId() {
     int[] ret = new int[operation.getDataStripes() + operation.getRedundancy()];
     for (int i = 0; i < ret.length; i++) {
       ret[i] = operation.getOutputId() + i;
@@ -162,7 +161,7 @@ public class RemoveRedundancy extends AbstractOperation implements Serializable 
   }
 
   @Override
-  public int[] getInputID() {
+  public int[] getInputId() {
     int[] ret = new int[operation.getDataStripes() + operation.getRedundancy()];
     for (int i = 0; i < ret.length; i++) {
       ret[i] = operation.getInputId() + i;
@@ -171,7 +170,7 @@ public class RemoveRedundancy extends AbstractOperation implements Serializable 
   }
 
   public String toString() {
-    return getInputID()[0] + "->(" + getInputID().length + ")removeRedundancy(" + getOutputID().length + ")->" + getOutputID()[0];
+    return getInputId()[0] + "->(" + getInputId().length + ")removeRedundancy(" + getOutputId().length + ")->" + getOutputId()[0];
   }
 
 

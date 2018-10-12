@@ -48,11 +48,11 @@ public class ImapLineTest {
             ImapLine il=new ImapLine(null,"a b astring1 astring2 3ttti",null);
             String s=il.getAString();
             assertTrue("Error getting astring1 (got \""+s+"\")","astring1".equals(s));
-            int skip=il.skipSP(-1);
+            int skip=il.skipWhitespace(-1);
             assertTrue("Error skipping spaces ("+il.getContext()+"; skip="+skip+")",skip==1);
             s=il.getAString();
             assertTrue("Error getting astring2 (got \""+s+"\")","astring2".equals(s));
-            assertTrue("Error skipping spaces",il.skipSP(-1)==1);
+            assertTrue("Error skipping spaces",il.skipWhitespace(-1)==1);
             s=il.getAString();
             assertTrue("Error getting \"3ttti\" (got \""+s+"\")","3ttti".equals(s));
         } catch(ImapBlankLineException ble) {
@@ -72,14 +72,14 @@ public class ImapLineTest {
             assertTrue("Error getting command (got \""+il.getCommand()+"\")","login".equals(il.getCommand()));
             String s=il.getAString();
             assertTrue("Error getting user (got \""+s+"\" at "+il.getContext()+")","user\"".equals(s));
-            int skip=il.skipSP(-1);
+            int skip=il.skipWhitespace(-1);
             assertTrue("Error skipping spaces ("+il.getContext()+"; skip="+skip+")",skip==1);
             s=il.getAString();
             assertTrue("Error getting password (got \""+s+"\")","pass".equals(s));
-            assertTrue("Error skipping spaces",il.skipSP(-1)==1);
+            assertTrue("Error skipping spaces",il.skipWhitespace(-1)==1);
             s=il.getAString();
             assertTrue("Error getting \"t\" (got \""+s+"\")","t".equals(s));
-            assertTrue("Error skipping EOL",il.skipCRLF());
+            assertTrue("Error skipping EOL",il.skipLineEnd());
         } catch(ImapBlankLineException ble) {
             LOGGER.log(Level.WARNING,"Unexpected Exception",ble);
             fail("Blank Line Exception rised");

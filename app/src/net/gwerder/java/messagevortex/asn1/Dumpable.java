@@ -1,4 +1,5 @@
-package net.gwerder.java.messagevortex.transport.imap;
+package net.gwerder.java.messagevortex.asn1;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -21,40 +22,17 @@ package net.gwerder.java.messagevortex.transport.imap;
 // * SOFTWARE.
 // ************************************************************************************
 
-public class ImapCommandNoop extends ImapCommand {
+import java.io.IOException;
+import net.gwerder.java.messagevortex.asn1.encryption.DumpType;
+import org.bouncycastle.asn1.ASN1Object;
 
-  public void init() {
-    ImapCommand.registerCommand(this);
-  }
-
+public interface Dumpable {
   /***
-   * @FIXME return proper status
+   * <p>Dumps an ASN.1 representation of the object.</p>
+   *
+   * @param dt            the dump type to be used
+   * @return              the ASN.1 string representation of the object
+   * @throws IOException  if dumping of the object fails due to an illegal internal state of the object
    */
-  public String[] processCommand(ImapLine line) throws ImapException {
-
-    // skip space
-    // WRNING this is "non-strict"
-    line.skipWhitespace(-1);
-
-    // skip lineend
-    if (!line.skipLineEnd()) {
-      throw new ImapException(line, "error parsing command");
-    }
-
-    // Example:
-    //// * 22 EXPUNGE
-    //// * 23 EXISTS
-    //// * 3 RECENT
-    //// * 14 FETCH (FLAGS (\Seen \Deleted))
-    return new String[]{line.getTag() + " OK\r\n"};
-  }
-
-  public String[] getCommandIdentifier() {
-    return new String[]{"NOOP"};
-  }
-
-  public String[] getCapabilities(ImapConnection conn) {
-    return new String[]{};
-  }
-
+  ASN1Object toAsn1Object(DumpType dt) throws IOException;
 }

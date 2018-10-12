@@ -22,16 +22,20 @@ package net.gwerder.java.messagevortex.transport.smtp;
 // * SOFTWARE.
 // ************************************************************************************
 
-import net.gwerder.java.messagevortex.MessageVortexLogger;
-import net.gwerder.java.messagevortex.transport.*;
-
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.logging.Level;
+import java.util.logging.Logger;
+import net.gwerder.java.messagevortex.MessageVortexLogger;
+import net.gwerder.java.messagevortex.transport.ListeningSocketChannel;
+import net.gwerder.java.messagevortex.transport.SecurityContext;
+import net.gwerder.java.messagevortex.transport.ServerConnection;
+import net.gwerder.java.messagevortex.transport.SocketListener;
+import net.gwerder.java.messagevortex.transport.TransportReceiver;
 
 public class SMTPReceiver implements SocketListener {
 
-  static private final java.util.logging.Logger LOGGER;
+  private final static Logger LOGGER;
 
   static {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());

@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.routing.operation;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -21,10 +22,9 @@ package net.gwerder.java.messagevortex.routing.operation;
 // * SOFTWARE.
 // ************************************************************************************
 
-import net.gwerder.java.messagevortex.asn1.IdentityBlock;
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import net.gwerder.java.messagevortex.asn1.IdentityBlock;
 
 public class InternalPayloadSpace {
 

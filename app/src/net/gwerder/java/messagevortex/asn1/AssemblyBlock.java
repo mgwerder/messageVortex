@@ -35,7 +35,7 @@ import org.bouncycastle.asn1.DERSequence;
 /**
  * Contains all classes extending assembly blocks (Payload operations).
  */
-public class AssemblyBlock extends AbstractBlock implements Serializable {
+public class AssemblyBlock extends AbstractBlock implements Serializable, Dumpable {
 
   public static final long serialVersionUID = 100000000002L;
 

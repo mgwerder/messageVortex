@@ -1,4 +1,5 @@
 package net.gwerder.java.messagevortex.routing.operation;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -21,11 +22,9 @@ package net.gwerder.java.messagevortex.routing.operation;
 // * SOFTWARE.
 // ************************************************************************************
 
-
-import net.gwerder.java.messagevortex.MessageVortexLogger;
-
 import java.util.Arrays;
 import java.util.logging.Level;
+import net.gwerder.java.messagevortex.MessageVortexLogger;
 
 /**
  * Creates a redundancy matrixContent or a recovery matrixContent for the redundancy operations.

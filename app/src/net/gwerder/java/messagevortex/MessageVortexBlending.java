@@ -22,15 +22,11 @@ package net.gwerder.java.messagevortex;
 // * SOFTWARE.
 // ************************************************************************************
 
+import java.io.InputStream;
 import net.gwerder.java.messagevortex.blending.Blender;
 import net.gwerder.java.messagevortex.routing.operation.RoutingSender;
 import net.gwerder.java.messagevortex.transport.TransportReceiver;
 
-import java.io.InputStream;
-
-/**
- * Created by Martin on 01.02.2018.
- */
 public class MessageVortexBlending implements TransportReceiver, RoutingSender {
 
   private TransportReceiver receiver = null;

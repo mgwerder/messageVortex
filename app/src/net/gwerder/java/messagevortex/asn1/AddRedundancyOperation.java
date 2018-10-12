@@ -35,7 +35,8 @@ import org.bouncycastle.asn1.DERTaggedObject;
 /**
  * Represents a addRedundancy operation on a routing block.
  */
-public class AddRedundancyOperation extends AbstractRedundancyOperation implements Serializable {
+public class AddRedundancyOperation extends AbstractRedundancyOperation
+       implements Serializable, Dumpable {
 
   public static final long serialVersionUID = 100000000032L;
 
