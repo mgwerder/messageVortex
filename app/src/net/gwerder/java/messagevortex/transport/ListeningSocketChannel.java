@@ -24,7 +24,9 @@ public class ListeningSocketChannel {
 
   final InternalThread thread;
 
+  /* Identifies protocol by name for logging */
   private String protocol = "unknown";
+  /* The security context required to do encryption */
   private SecurityContext context = null;
 
 
@@ -37,22 +39,41 @@ public class ListeningSocketChannel {
     private volatile boolean shutdown = false;
 
     public InternalThread(ServerSocketChannel channel) throws IOException {
+      // make sure that channel is non blocking if provided externally
       channel.configureBlocking(false);
+
+      // store the socket channel for later use
       this.serverSocketChannel = channel;
     }
 
+    /***
+     * <p>Shuts the connection down.</p>
+     */
     public void shutdown() {
       shutdown = true;
     }
 
+    /***
+     * <p>Gets the local port of the channel.</p>
+     *
+     * @return the local port number or -1 if not yet bound
+     */
     public int getPort() {
+      // Extract port of socket channel
       try {
         return ((InetSocketAddress) (serverSocketChannel.getLocalAddress())).getPort();
       } catch (IOException ioe) {
+        //return -1 if no local address is available
         return -1;
       }
     }
 
+    /***
+     * <p>Sets a socket listener to handle incomming messages.</p>
+     *
+     * @param listener the socket listener to be used
+     * @return the previously set socket listener
+     */
     public SocketListener setSocketListener(SocketListener listener) {
       SocketListener ret = this.listener;
       this.listener = listener;

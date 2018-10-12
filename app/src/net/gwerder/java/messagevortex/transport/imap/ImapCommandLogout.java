@@ -43,7 +43,7 @@ public class ImapCommandLogout extends ImapCommand {
   @Override
   public String[] processCommand(ImapLine line) throws ImapException {
     // skip space
-    // WRNING this is "non-strict"
+    // WARNING this is "non-strict"
     line.skipWhitespace(-1);
 
     // skip lineend
@@ -51,10 +51,13 @@ public class ImapCommandLogout extends ImapCommand {
       throw new ImapException(line, "error parsing command");
     }
 
+    // set connection state to "not connected"
     if (line.getConnection() != null) {
       line.getConnection().setImapState(CONNECTION_NOT_AUTHENTICATED);
     }
     LOGGER.log(Level.INFO, Thread.currentThread().getName() + " is now in state NOT_AUTHENTICATED");
+
+    // Return standard message
     return new String[]{"* BYE IMAP4rev1 Server logged out\r\n", line.getTag() + " OK\r\n", null};
   }
 
