@@ -40,7 +40,7 @@ import static net.gwerder.java.messagevortex.transport.SecurityRequirement.START
 /**
  * Created by Martin on 23.01.2018.
  */
-public class SMTPSender extends ClientConnection implements TransportSender {
+public class SmtpSender extends ClientConnection implements TransportSender {
 
     private static final String CRLF = "\r\n";
 
@@ -52,15 +52,15 @@ public class SMTPSender extends ClientConnection implements TransportSender {
     Credentials credentials   = null;
     String      senderAddress ;
 
-    public SMTPSender( String senderAddress, String server,int port,Credentials creds, SecurityContext context ) throws IOException {
+    public SmtpSender( String senderAddress, String server,int port,Credentials creds, SecurityContext context ) throws IOException {
         super( new InetSocketAddress( server, port ), context );
         this.senderAddress=senderAddress;
         this.credentials=creds;
         connect();
         // startTLS if required
-        if( credentials!=null && !isTLS() && ( credentials.getSecurityRequirement()==SecurityRequirement.SSLTLS || credentials.getSecurityRequirement()==SecurityRequirement.UNTRUSTED_SSLTLS ) ) {
+        if( credentials!=null && !isTls() && ( credentials.getSecurityRequirement()==SecurityRequirement.SSLTLS || credentials.getSecurityRequirement()==SecurityRequirement.UNTRUSTED_SSLTLS ) ) {
             LOGGER.log( Level.INFO, "doing TLS handshake" );
-            startTLS();
+            startTls();
         }
     }
 
@@ -90,7 +90,7 @@ public class SMTPSender extends ClientConnection implements TransportSender {
             if( ! reply.startsWith( "220 " ) ) {
                 throw new IOException( "Invalid STARTTLS reply  (Reply was '" + reply +"')" );
             }
-            startTLS();
+            startTls();
             write( "EHLO " + InetAddress.getLocalHost().getHostName() + CRLF );
             ehloReply=getReply();
             if( ! ehloReply[ ehloReply.length - 1 ].startsWith( "250 " ) ) {
