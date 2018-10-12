@@ -34,6 +34,12 @@ public class MessageVortexTransport {
 
   private SmtpReceiver inSmtp;
 
+  /***
+   * <p>Creates a message vortex transport layer for local reception.</p>
+   *
+   * @param receiver      the receiver to be used
+   * @throws IOException  if anything fails in setting up the local handler
+   */
   public MessageVortexTransport(TransportReceiver receiver) throws IOException {
     if (receiver == null) {
       throw new NullPointerException("TransportReceiver may not be null");

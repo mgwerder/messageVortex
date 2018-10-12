@@ -46,6 +46,12 @@ public enum EllipticCurveType {
     this.secLevel = level;
   }
 
+  /***
+   * <p>Gets en elliptic curve by id.</p>
+   *
+   * @param id  the id to look up
+   * @return the enum or null if not found
+   */
   public static EllipticCurveType getById(int id) {
     for (EllipticCurveType e : values()) {
       if (e.id == id) {
@@ -55,6 +61,12 @@ public enum EllipticCurveType {
     return null;
   }
 
+  /***
+   * <p>Gets en elliptic enum curve by name.</p>
+   *
+   * @param s  the name to look up
+   * @return the enum or null if not found
+   */
   public static EllipticCurveType getByString(String s) {
     for (EllipticCurveType e : values()) {
       if (e.toString().equals(s)) {

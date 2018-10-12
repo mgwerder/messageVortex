@@ -191,6 +191,13 @@ public class Config {
     return dst;
   }
 
+  /***
+   * <p>Creates a new boolean config value in the store.</p>
+   *
+   * @param id           the name (id) of the new value
+   * @param description  the description for the value
+   * @param dval         the default value
+   */
   public void createBooleanConfigValue(String id, String description, boolean dval) {
     synchronized (configurationData) {
       if (configurationData.get(id.toLowerCase()) == null) {
@@ -252,6 +259,13 @@ public class Config {
     return ele.getBooleanValue();
   }
 
+  /***
+   * <p>Creates a new numeric config value in the store.</p>
+   *
+   * @param id           the name (id) of the new value
+   * @param description  the description for the value
+   * @param dval         the default value
+   */
   public void createNumericConfigValue(String id, String description, int dval) {
     synchronized (configurationData) {
       if (configurationData.get(id.toLowerCase()) == null) {

@@ -27,9 +27,6 @@ import net.gwerder.java.messagevortex.asn1.VortexMessage;
 import net.gwerder.java.messagevortex.blending.BlenderReceiver;
 import net.gwerder.java.messagevortex.routing.operation.RoutingSender;
 
-/**
- * Created by Martin on 01.02.2018.
- */
 public class MessageVortexRouting implements BlenderReceiver {
 
   private RoutingSender routingSender;
@@ -44,6 +41,12 @@ public class MessageVortexRouting implements BlenderReceiver {
     return routingSender;
   }
 
+  /***
+   * <p>Specifies the routing sender.</p>
+   *
+   * @param routingSender the sender to be set
+   * @return the previously set sender
+   */
   public final RoutingSender setRoutingSender(RoutingSender routingSender) {
     RoutingSender ret = routingSender;
     this.routingSender = routingSender;
@@ -54,6 +57,12 @@ public class MessageVortexRouting implements BlenderReceiver {
     return accountant;
   }
 
+  /***
+   * <p>Specifies the accounting layer to be used.</p>
+   *
+   * @param accountant the accounting layer to be set
+   * @return the previously set accounting layer
+   */
   public final Accountant setAccountant(Accountant accountant) {
     Accountant ret = this.accountant;
     this.accountant = accountant;

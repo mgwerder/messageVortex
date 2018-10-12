@@ -61,6 +61,12 @@ public class GaloisFieldMathMode implements MathMode {
     gfInverseLog[gfFieldSize - 1] = -1;
   }
 
+  /***
+   * <p>Gets a singleton math mode for the specified omega.</p>
+   *
+   * @param omega  the number of bits to be used
+   * @return the math mode (singleton)
+   */
   public static GaloisFieldMathMode getGaloisFieldMathMode(int omega) {
     GaloisFieldMathMode ret = cachedMathMode.get(omega);
     if (ret == null) {
@@ -82,6 +88,7 @@ public class GaloisFieldMathMode implements MathMode {
     return gfInverseLog[sumLog];
   }
 
+  @Override
   public int div(int c1, int divisor) {
     if (c1 == 0) {
       return 0;

@@ -49,6 +49,14 @@ public class DummyBlender extends Blender implements TransportReceiver {
   BlenderReceiver router;
   IdentityStore identityStore;
 
+  /***
+   * <p>Creates a passthru blender which abstracts a local transport media.</p>
+   *
+   * @param identity        the identity (receiver/sender address)
+   * @param router          the routing layer to be used
+   * @param identityStore   the identity store to be used (for decryption of headers)
+   * @throws IOException    if anything fails :-D
+   */
   public DummyBlender(String identity, BlenderReceiver router, IdentityStore identityStore)
           throws IOException {
     super(router, null);
@@ -66,6 +74,7 @@ public class DummyBlender extends Blender implements TransportReceiver {
     return this.identity;
   }
 
+  @Override
   public boolean blendMessage(BlendingSpec target, VortexMessage msg) {
     // encode message in clear readable and send it
     try {
