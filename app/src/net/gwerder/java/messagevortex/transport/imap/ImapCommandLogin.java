@@ -101,6 +101,7 @@ public class ImapCommandLogin extends ImapCommand {
     return getCapabilities(null);
   }
 
+  @Override
   public String[] getCapabilities(ImapConnection ic) {
     if (ic != null && ic.isTls()) {
       return new String[]{"LOGIN"};
@@ -109,6 +110,7 @@ public class ImapCommandLogin extends ImapCommand {
     }
   }
 
+  @Override
   public String[] getCommandIdentifier() {
     return new String[]{"LOGIN"};
   }

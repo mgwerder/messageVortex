@@ -99,6 +99,12 @@ public class CipherSpec extends AbstractBlock implements Serializable {
     return asymmetricSpec;
   }
 
+  /***
+   * <p>Sets the specification for an asymmetric key.</p>
+   *
+   * @param spec the specification to be set
+   * @return the previously set specification
+   */
   public AsymmetricAlgorithmSpec setAsymmetricSpec(AsymmetricAlgorithmSpec spec) {
     AsymmetricAlgorithmSpec ret = this.asymmetricSpec;
     this.asymmetricSpec = spec;
@@ -109,6 +115,12 @@ public class CipherSpec extends AbstractBlock implements Serializable {
     return symmetricSpec;
   }
 
+  /***
+   * <p>Sets the specification for an symmetric key.</p>
+   *
+   * @param spec the specification to be set
+   * @return the previously set specification
+   */
   public SymmetricAlgorithmSpec setSymmetricSpec(SymmetricAlgorithmSpec spec) {
     SymmetricAlgorithmSpec ret = this.symmetricSpec;
     this.symmetricSpec = spec;
@@ -119,6 +131,12 @@ public class CipherSpec extends AbstractBlock implements Serializable {
     return macSpec;
   }
 
+  /***
+   * <p>Sets the specification for an mac algorithm.</p>
+   *
+   * @param spec the specification to be set
+   * @return the previously set specification
+   */
   public MacAlgorithmSpec setMacSpec(MacAlgorithmSpec spec) {
     MacAlgorithmSpec ret = this.macSpec;
     this.macSpec = spec;
@@ -129,6 +147,12 @@ public class CipherSpec extends AbstractBlock implements Serializable {
     return cipherUsage;
   }
 
+  /***
+   * <p>Sets the usage type for the cypher specified in this set.</p>
+   *
+   * @param usage the usage to be set
+   * @return the previously set usage
+   */
   public CipherUsage setCipherUsage(CipherUsage usage) {
     CipherUsage ret = cipherUsage;
     this.cipherUsage = usage;

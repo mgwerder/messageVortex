@@ -167,6 +167,12 @@ public enum Mode {
     return pad;
   }
 
+  /***
+   * <p>Gets all cipher modes suitable for the specified algorithm.</p>
+   *
+   * @param alg the algorithm to be supported
+   * @return an array of modes supported
+   */
   public static Mode[] getModes(Algorithm alg) {
     ArrayList<Mode> l = new ArrayList<>();
     for (Mode m : values()) {

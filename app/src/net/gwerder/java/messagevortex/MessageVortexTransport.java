@@ -29,7 +29,7 @@ import net.gwerder.java.messagevortex.transport.SecurityRequirement;
 import net.gwerder.java.messagevortex.transport.TransportReceiver;
 import net.gwerder.java.messagevortex.transport.smtp.SmtpReceiver;
 
-
+// FIXME this class is not yet functional
 public class MessageVortexTransport {
 
   private SmtpReceiver inSmtp;

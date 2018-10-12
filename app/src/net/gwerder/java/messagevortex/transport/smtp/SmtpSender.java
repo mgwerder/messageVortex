@@ -54,6 +54,16 @@ public class SmtpSender extends ClientConnection implements TransportSender {
   Credentials credentials = null;
   String senderAddress;
 
+  /***
+   * <p>Creates an SMTP sending daemon transfering messages to a smart relay.</p>
+   *
+   * @param senderAddress  the sending email address to be used
+   * @param server         the server fully qualified domain name
+   * @param port           the server port to send the messages to
+   * @param creds          the credentials to be used
+   * @param context        the security context to be used
+   * @throws IOException   if failing to connect to the server
+   */
   public SmtpSender(String senderAddress, String server, int port, Credentials creds,
                     SecurityContext context) throws IOException {
     super(new InetSocketAddress(server, port), context);

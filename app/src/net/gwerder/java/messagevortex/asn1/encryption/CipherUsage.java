@@ -45,6 +45,12 @@ public enum CipherUsage {
     return this.txt;
   }
 
+  /***
+   * <p>Gets a usage by its name.</p>
+   *
+   * @param name the name to look up
+   * @return the enum or null if not found
+   */
   public static CipherUsage getByString(String name) {
     if (name == null) {
       return null;
@@ -57,6 +63,12 @@ public enum CipherUsage {
     return null;
   }
 
+  /***
+   * <p>Gets a usage by its Id.</p>
+   *
+   * @param id the id to look up
+   * @return the enum or null if not found
+   */
   public static CipherUsage getById(int id) {
     for (CipherUsage e : values()) {
       if (e.id == id) {

@@ -51,6 +51,12 @@ public class BlendingParameter extends AbstractBlock implements Serializable, Du
       id = i;
     }
 
+    /***
+     * <p>Gets a blending parameter enum by its Id.</p>
+     *
+     * @param i the id to be looked up
+     * @return the enum or null if not found
+     */
     public static BlendingParameterChoice getById(int i) {
       for (BlendingParameterChoice e : values()) {
         if (e.id == i) {
@@ -78,6 +84,12 @@ public class BlendingParameter extends AbstractBlock implements Serializable, Du
     parse(e);
   }
 
+  /***
+   * <p>Creates a blending parameter set.</p>
+   *
+   * @param choice       the type of blending
+   * @throws IOException if creation of the symmetric key failed
+   */
   public BlendingParameter(BlendingParameterChoice choice) throws IOException {
     if (choice == OFFSET) {
       offset = 0;
@@ -108,6 +120,11 @@ public class BlendingParameter extends AbstractBlock implements Serializable, Du
     }
   }
 
+  /***
+   * <p>Gets the choice type of the blending parameter.</p>
+   *
+   * @return the choice type
+   */
   public BlendingParameterChoice getChoice() {
     if (offset > -1) {
       return OFFSET;

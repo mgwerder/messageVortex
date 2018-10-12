@@ -139,6 +139,12 @@ public class BlendingSpec extends AbstractBlock implements Serializable, Dumpabl
     return recipientAddress;
   }
 
+  /***
+   * <p>sets the receiver address of the blending spec.</p>
+   *
+   * @param recipientAddress the encoded recipient address
+   * @return the previously set recipient address
+   */
   public String setRecipientAddress(String recipientAddress) {
     String old = this.recipientAddress;
     this.recipientAddress = recipientAddress;
@@ -149,6 +155,12 @@ public class BlendingSpec extends AbstractBlock implements Serializable, Dumpabl
     return media;
   }
 
+  /***
+   * <p>Sets the media type of the blending spec.</p>
+   *
+   * @param media the named media to set
+   * @return the previously set media
+   */
   public String setMedia(String media) {
     String old = this.media;
     this.media = media;
@@ -159,6 +171,12 @@ public class BlendingSpec extends AbstractBlock implements Serializable, Dumpabl
     return blendingType;
   }
 
+  /***
+   * <p>Sets the media type of the blending spec.</p>
+   *
+   * @param blendingType the blending type as string
+   * @return the previously set blending type
+   */
   public String setBlendingType(String blendingType) {
     String old = this.blendingType;
     this.blendingType = blendingType;

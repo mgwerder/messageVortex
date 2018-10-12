@@ -33,6 +33,13 @@ public class VandermondeMatrix extends Matrix {
     super(m);
   }
 
+  /***
+   * <p>Creates a standardized Van Der Monde matrix for distributiong data among multiple nodes.</p>
+   *
+   * @param x the number of columns
+   * @param y the number of rows
+   * @param mode the math mode (should be a Gauloise Field to be effective
+   */
   public VandermondeMatrix(int x, int y, MathMode mode) {
     super(x, y, mode);
     // init matrixContent with given math mode

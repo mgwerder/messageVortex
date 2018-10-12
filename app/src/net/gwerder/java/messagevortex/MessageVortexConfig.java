@@ -83,12 +83,20 @@ public class MessageVortexConfig extends Config {
     }
   }
 
+  /***
+   * <p>Gets a message vortex config object.</p>
+   *
+   * <p>The supported parameters are specified in the file messageVortex.cfgRessources</p>
+   *
+   * @return the config object
+   * @throws IOException if errors occurred during reading of messageVortex.cfgRessources
+   */
   public static Config createConfig() throws IOException {
-    Config cfg = new MessageVortexConfig();
     if (defaultConfig == null) {
+      Config cfg = new MessageVortexConfig();
       defaultConfig = cfg;
     }
-    return cfg;
+    return defaultConfig;
   }
 
 }

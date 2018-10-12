@@ -168,6 +168,12 @@ public class AsymmetricKeyCache implements Serializable {
 
   }
 
+  /***
+   * <p>Stores the cache to the specified filename for later usage.</p>
+   *
+   * @param filename     the filename to store to (will replace an existing file)
+   * @throws IOException if writing of file fails
+   */
   public void store(String filename) throws IOException {
     Path p = Paths.get(filename);
     try (
@@ -179,6 +185,12 @@ public class AsymmetricKeyCache implements Serializable {
     showStats();
   }
 
+  /***
+   * <p>Loads the cache from the specified filename.</p>
+   *
+   * @param filename     the filename to read from
+   * @throws IOException if reading of file fails
+   */
   public void load(String filename) throws IOException {
     Path p = Paths.get(filename);
     try (ObjectInputStream is = new ObjectInputStream(Files.newInputStream(p))) {
@@ -216,6 +228,12 @@ public class AsymmetricKeyCache implements Serializable {
     }
   }
 
+  /***
+   * <p>Adds the keys in the specified file to the cache.</p>
+   *
+   * @param filename     the filename of the cache to merge
+   * @throws IOException if reading of the file fails
+   */
   public void merge(String filename) throws IOException {
     Path p = Paths.get(filename);
     try (ObjectInputStream is = new ObjectInputStream(Files.newInputStream(p))) {
@@ -225,6 +243,12 @@ public class AsymmetricKeyCache implements Serializable {
     }
   }
 
+  /***
+   * <p>Sets the time for a calculation with the specified parameter.</p>
+   *
+   * @param ap      parameter set
+   * @param millis  the time in milliseconds it takes on average to calculate the key
+   */
   public void setCalcTime(AlgorithmParameter ap, long millis) {
     CacheElement ce = cache.get(ap);
     if (ce != null) {
@@ -232,6 +256,13 @@ public class AsymmetricKeyCache implements Serializable {
     }
   }
 
+  /***
+   * <p>Gets a precalculated key from the cache.</p>
+   *
+   * @param parameter the parameter set requested
+   * @return the key or null if no such key is available in the cache
+   * @FIXME solve concurrency with other cache access mecahisms
+   */
   public AsymmetricKey pull(AlgorithmParameter parameter) {
     CacheElement ce = cache.get(parameter);
     if (ce == null) {
@@ -242,6 +273,13 @@ public class AsymmetricKeyCache implements Serializable {
     return ret;
   }
 
+  /***
+   * <p>Gets a precalculated key from the cache without removing it.</p>
+   *
+   * @param parameter the parameter set requested
+   * @return the key or null if no such key is available in the cache
+   * @FIXME solve concurrency with other cache access mecahisms
+   */
   public AsymmetricKey peek(AlgorithmParameter parameter) {
     CacheElement ce = cache.get(parameter);
     if (ce == null) {
@@ -252,6 +290,12 @@ public class AsymmetricKeyCache implements Serializable {
     return ret;
   }
 
+  /***
+   * <p>store a precalculated key into the cache.</p>
+   *
+   * @param key the key to be stored
+   * @FIXME solve concurrency with other cache access mecahisms
+   */
   public void push(AsymmetricKey key) {
     AlgorithmParameter ap = key.getAlgorithmParameter();
     synchronized (cache) {
@@ -264,6 +308,11 @@ public class AsymmetricKeyCache implements Serializable {
     }
   }
 
+  /***
+   * <p>Increase the cache size for the specified parameter set.</p>
+   *
+   * @param parameter the parameter set to be increased
+   */
   public void requestCacheIncrease(AlgorithmParameter parameter) {
     synchronized (cache) {
       CacheElement ce = cache.get(parameter);
@@ -275,8 +324,12 @@ public class AsymmetricKeyCache implements Serializable {
     }
   }
 
+  /***
+   * <p>Gets a set of parameter which should be calculated next.</p>
+   *
+   * @return the parameter set
+   */
   public AlgorithmParameter getSpeculativeParameter() {
-
     // build a sorted list of total duration
     long l = 0;
     Map<Long, AlgorithmParameter> hm = new TreeMap<>();
@@ -313,6 +366,12 @@ public class AsymmetricKeyCache implements Serializable {
     return null;
   }
 
+
+  /***
+   * <p>Get the size of the lowest cache in fraction of percent.</p>
+   *
+   * @return the fill state of the lowest cache (bounds 0..1)
+   */
   public double getLowestCacheSize() {
     double lowest = 0;
     for (Map.Entry<AlgorithmParameter, CacheElement> e : cache.entrySet()) {
@@ -322,6 +381,11 @@ public class AsymmetricKeyCache implements Serializable {
     return lowest;
   }
 
+  /***
+   * <p>Get the total cache fill grade in percent.</p>
+   *
+   * @return the fill state of cache (bounds 0..1)
+   */
   public double getCacheFillGrade() {
     int maxSize = 0;
     int currSize = 0;
@@ -336,6 +400,9 @@ public class AsymmetricKeyCache implements Serializable {
     }
   }
 
+  /***
+   * <p>Remove all elements from the cache.</p>
+   */
   public void clear() {
     synchronized (cache) {
       for (CacheElement ce : cache.values()) {
@@ -344,6 +411,11 @@ public class AsymmetricKeyCache implements Serializable {
     }
   }
 
+  /***
+   * <p>Check if the cache is empty.</p>
+   *
+   * @return true if the cache is empty
+   */
   public boolean isEmpty() {
     double size = 0;
     for (Map.Entry<AlgorithmParameter, CacheElement> e : cache.entrySet()) {
@@ -374,7 +446,8 @@ public class AsymmetricKeyCache implements Serializable {
     }
   }
 
-  public static String percentBar(double percent, int size) {
+
+  private static String percentBar(double percent, int size) {
     StringBuilder sb = new StringBuilder();
     sb.append('|');
     for (int i = 1; i < Math.min(size, percent * size); i++) {
@@ -387,6 +460,9 @@ public class AsymmetricKeyCache implements Serializable {
     return sb.toString();
   }
 
+  /***
+   * <p>Dumps cache stats to the logger.</p>
+   */
   public void showStats() {
     final String sepLine = "-----------------------------------------------------------";
     synchronized (cache) {
@@ -410,6 +486,5 @@ public class AsymmetricKeyCache implements Serializable {
       LOGGER.log(Level.INFO, sepLine);
     }
   }
-
 
 }

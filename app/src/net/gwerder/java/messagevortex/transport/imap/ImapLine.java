@@ -384,6 +384,13 @@ public class ImapLine {
     return skipBytes(num, true);
   }
 
+  /***
+   * <p>Skips the specified number of bytes.</p>
+   *
+   * @param num        the number of bytes to be skipped
+   * @param modContext if true the context is updated by the operation
+   * @return the skipped bytes
+   */
   public String skipBytes(long num, boolean modContext) {
     // make sure that we have sufficient bytes in the buffer
     readBuffer(num);

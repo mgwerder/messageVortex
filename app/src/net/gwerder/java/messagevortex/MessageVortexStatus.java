@@ -106,6 +106,12 @@ public class MessageVortexStatus {
     }
   }
 
+  /***
+   * <p>Displays a ballon message at the tray icon.</p>
+   *
+   * @param title   the title of the message
+   * @param message the message to be displayed
+   */
   public static synchronized void displayMessage(final String title, final String message) {
     if (SystemTray.isSupported()) {
       LOGGER.log(Level.INFO, "(" + title + ")" + message);

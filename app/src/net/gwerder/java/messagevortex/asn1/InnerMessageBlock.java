@@ -82,6 +82,13 @@ public class InnerMessageBlock extends AbstractBlock implements Serializable {
     this(new PrefixBlock(new SymmetricKey(sym)), new IdentityBlock(asym), new RoutingBlock());
   }
 
+  /***
+   * <p>Creates an inner message with the specified components.</p>
+   *
+   * @param prefix  the prefix block to be used
+   * @param i       the header/identity block to be used
+   * @param routing the routing block to be used
+   */
   public InnerMessageBlock(PrefixBlock prefix, IdentityBlock i, RoutingBlock routing) {
     this.prefix = prefix;
     identity = i;
