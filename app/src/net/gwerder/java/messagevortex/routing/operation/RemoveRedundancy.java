@@ -100,15 +100,18 @@ public class RemoveRedundancy extends AbstractOperation implements Serializable 
     for (int i = 0; i < missingIds.length; i++) {
       missingIds[i] = l.get(i);
     }
-    LOGGER.log(Level.INFO, "  got " + stripesFound + "/" + (operation.getDataStripes() + operation.getRedundancy()) + " stripes. Stripe size is " + stripeSize);
+    LOGGER.log(Level.INFO, "  got " + stripesFound + "/" + (operation.getDataStripes()
+            + operation.getRedundancy()) + " stripes. Stripe size is " + stripeSize);
 
     // prepare data set
-    byte[] in2 = new byte[stripeSize * (operation.getDataStripes() + operation.getRedundancy() - missingIds.length)];
+    byte[] in2 = new byte[stripeSize * (operation.getDataStripes() + operation.getRedundancy()
+            - missingIds.length)];
     try {
       int j = 0;
       for (int i : getInputId()) {
         if (!l.contains(i)) {
-          for (byte b : operation.getkeys()[i - getInputId()[0]].decrypt(payload.getPayload(i).getPayload())) {
+          for (byte b : operation.getkeys()[i - getInputId()[0]]
+                        .decrypt(payload.getPayload(i).getPayload())) {
             in2[j++] = b;
           }
         }
@@ -118,14 +121,18 @@ public class RemoveRedundancy extends AbstractOperation implements Serializable 
       return new int[0];
     }
     MathMode mm = GaloisFieldMathMode.getGaloisFieldMathMode(operation.getGfSize());
-    Matrix data = new Matrix(in2.length / (operation.getDataStripes() + operation.getRedundancy() - missingIds.length), operation.getDataStripes() + operation.getRedundancy() - missingIds.length, mm, in2);
+    Matrix data = new Matrix(in2.length / (operation.getDataStripes() + operation.getRedundancy()
+            - missingIds.length), operation.getDataStripes() + operation.getRedundancy()
+            - missingIds.length, mm, in2);
     LOGGER.log(Level.INFO, "  created " + data.getX() + "x" + data.getY() + " data matrixContent");
 
     // do the redundancy calc
-    RedundancyMatrix r = new RedundancyMatrix(operation.getDataStripes(), operation.getDataStripes() + operation.getRedundancy(), mm);
+    RedundancyMatrix r = new RedundancyMatrix(operation.getDataStripes(),
+            operation.getDataStripes() + operation.getRedundancy(), mm);
     LOGGER.log(Level.INFO, "  created " + r.getX() + "x" + r.getY() + " redundancy matrixContent");
     Matrix recovery = r.getRecoveryMatrix(missingIds);
-    LOGGER.log(Level.INFO, "  created " + recovery.getX() + "x" + recovery.getY() + " recovery matrixContent");
+    LOGGER.log(Level.INFO, "  created " + recovery.getX() + "x" + recovery.getY()
+            + " recovery matrixContent");
     LOGGER.log(Level.INFO, "  reconstructing data");
     Matrix out = recovery.mul(data);
 
@@ -138,14 +145,16 @@ public class RemoveRedundancy extends AbstractOperation implements Serializable 
       len[i] = out1[i];
     }
     int outputLength = (int) VortexMessage.getBytesAsLong(len);
-    LOGGER.log(Level.INFO, "    message size is " + outputLength + " (padded: " + out1.length + ")");
+    LOGGER.log(Level.INFO, "    message size is " + outputLength + " (padded: " + out1.length
+            + ")");
     byte[] out2 = new byte[outputLength];
     System.arraycopy(out1, paddingSize, out2, 0, outputLength);
     // FIXME verify padding
 
     // set output
     LOGGER.log(Level.INFO, "  setting output");
-    payload.setCalculatedPayload(getOutputId()[0], new PayloadChunk(getOutputId()[0], out2, getUsagePeriod()));
+    payload.setCalculatedPayload(getOutputId()[0], new PayloadChunk(getOutputId()[0], out2,
+            getUsagePeriod()));
 
     LOGGER.log(Level.INFO, "  done");
     return getOutputId();
@@ -170,7 +179,8 @@ public class RemoveRedundancy extends AbstractOperation implements Serializable 
   }
 
   public String toString() {
-    return getInputId()[0] + "->(" + getInputId().length + ")removeRedundancy(" + getOutputId().length + ")->" + getOutputId()[0];
+    return getInputId()[0] + "->(" + getInputId().length + ")removeRedundancy("
+            + getOutputId().length + ")->" + getOutputId()[0];
   }
 
 

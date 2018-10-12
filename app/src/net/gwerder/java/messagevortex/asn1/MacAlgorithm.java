@@ -93,6 +93,12 @@ public class MacAlgorithm extends AbstractBlock implements Serializable {
     return "" + alg.getId();
   }
 
+  /***
+   * <p>Sets the algorithm.</p>
+   * @param alg the algorithm to be used
+   * @return the previously set algorithm
+   * @throws IOException if algorithm is not of the correct type
+   */
   public Algorithm setAlgorithm(Algorithm alg) throws IOException {
     if (alg.getAlgorithmType() != AlgorithmType.HASHING) {
       throw new IOException("Algorithm must be of type hashing");

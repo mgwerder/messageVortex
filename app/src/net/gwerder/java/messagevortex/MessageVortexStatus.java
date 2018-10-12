@@ -111,7 +111,8 @@ public class MessageVortexStatus {
       LOGGER.log(Level.INFO, "(" + title + ")" + message);
       SwingUtilities.invokeLater(new Runnable() {
         public void run() {
-          trayIcon.displayMessage("MessageVortex" + (title != null ? " " + title : ""), message, TrayIcon.MessageType.INFO);
+          trayIcon.displayMessage("MessageVortex" + (title != null ? " " + title : ""), message,
+                  TrayIcon.MessageType.INFO);
         }
       });
     }

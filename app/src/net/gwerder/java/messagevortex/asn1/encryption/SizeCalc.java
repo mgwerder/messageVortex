@@ -23,7 +23,8 @@ package net.gwerder.java.messagevortex.asn1.encryption;
 // ************************************************************************************
 
 /**
- * <p>Interface to be used by Algorithm for maximum payload size in asymmetric algotihms (depending on key size).</p>
+ * <p>Interface to be used by Algorithm for maximum payload size in asymmetric algotihms
+ * (depending on key size).</p>
  */
 interface SizeCalc {
 

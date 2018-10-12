@@ -73,7 +73,11 @@ public class ListeningSocketChannel {
             if (listener != null) {
               LOGGER.log(Level.INFO, "calling SocketChannel listener");
               ServerConnection sc = new ServerConnection(socketChannel, getSecurityContext());
-              if (getSecurityContext() != null && getSecurityContext().getRequirement() != null && (getSecurityContext().getRequirement() == UNTRUSTED_SSLTLS || getSecurityContext().getRequirement() == SSLTLS)) {
+              if (getSecurityContext() != null && getSecurityContext().getRequirement() != null
+                      && (
+                              getSecurityContext().getRequirement() == UNTRUSTED_SSLTLS
+                              || getSecurityContext().getRequirement() == SSLTLS
+                      )) {
                 sc.startTls();
               }
               listener.gotConnect(sc);
@@ -94,7 +98,8 @@ public class ListeningSocketChannel {
     }
   }
 
-  public ListeningSocketChannel(InetSocketAddress address, SocketListener listener) throws IOException {
+  public ListeningSocketChannel(InetSocketAddress address, SocketListener listener)
+          throws IOException {
     super();
     ServerSocketChannel channel = ServerSocketChannel.open();
     channel.socket().bind(address);

@@ -191,7 +191,8 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
     } else if (dto.getTagNo() == PayloadType.REPLY.getId()) {
       setReplyBlock(ASN1OctetString.getInstance(dto.getObject()).getOctets());
     } else {
-      throw new IOException("got bad tag number (expected:" + PayloadType.REPLY.getId() + " or " + PayloadType.PAYLOAD.getId() + ";got:" + dto.getTagNo() + ")");
+      throw new IOException("got bad tag number (expected:" + PayloadType.REPLY.getId()
+              + " or " + PayloadType.PAYLOAD.getId() + ";got:" + dto.getTagNo() + ")");
     }
   }
 
@@ -222,7 +223,8 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
    * @param prefix       the prefix to be used (normally used for indentation)
    * @param dumpType     the dump type to be used (@see DumpType)
    * @return the string representation of the ASN1 object
-   * @throws IOException if the payload id is below MIN_VALID_ID or no payload/reply block has been set
+   * @throws IOException if the payload id is below MIN_VALID_ID or no payload/reply block
+   *                     has been set
    */
   @Override
   public String dumpValueNotation(String prefix, DumpType dumpType) throws IOException {
@@ -235,7 +237,9 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
     } else if (payloadType == PayloadType.REPLY) {
       sb.append("reply ").append(toHex(payload)).append(CRLF);
     } else {
-      throw new IOException("unable to determine payload type (expected:" + PayloadType.REPLY.getId() + " or " + PayloadType.PAYLOAD.getId() + ";got:" + payloadType + ")");
+      throw new IOException("unable to determine payload type (expected:"
+              + PayloadType.REPLY.getId() + " or " + PayloadType.PAYLOAD.getId() + ";got:"
+              + payloadType + ")");
     }
     sb.append(prefix).append('}');
     return sb.toString();

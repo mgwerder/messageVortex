@@ -44,7 +44,9 @@ public abstract class MessageFactory {
 
   }
 
-  public static MessageFactory buildMessage(String msg, int source, int target, IdentityStoreBlock[] anonGroupMembers, IdentityStore is) {
+  public static MessageFactory buildMessage(String msg, int source, int target,
+                                            IdentityStoreBlock[] anonGroupMembers,
+                                            IdentityStore is) {
 
     MessageFactory fullmsg = new SimpleMessageFactory(msg, source, target, anonGroupMembers, is);
 

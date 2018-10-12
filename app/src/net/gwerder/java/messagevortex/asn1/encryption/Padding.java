@@ -47,26 +47,30 @@ public enum Padding implements Serializable {
       return (s / 8) - 11;
     }
   }),
-  OAEP_SHA256_MGF1(1100, "OAEPWithSHA256AndMGF1Padding", new AlgorithmType[]{AlgorithmType.ASYMMETRIC}, new SizeCalc() {
-    public int maxSize(int s) {
-      return (s / 8) - 2 - (256 / 4);
-    }
-  }),
-  OAEP_SHA384_MGF1(1101, "OAEPWithSHA384AndMGF1Padding", new AlgorithmType[]{AlgorithmType.ASYMMETRIC}, new SizeCalc() {
-    public int maxSize(int s) {
-      return s / 8 - 2 - 384 / 4;
-    }
-  }),
-  OAEP_SHA512_MGF1(1102, "OAEPWithSHA512AndMGF1Padding", new AlgorithmType[]{AlgorithmType.ASYMMETRIC}, new SizeCalc() {
-    public int maxSize(int s) {
-      return s / 8 - 2 - 512 / 4;
-    }
-  }),
-  PKCS7(1007, "PKCS7Padding", new AlgorithmType[]{AlgorithmType.SYMMETRIC}, new SizeCalc() {
-    public int maxSize(int s) {
-      return s / 8 - 1;
-    }
-  });
+  OAEP_SHA256_MGF1(1100, "OAEPWithSHA256AndMGF1Padding",
+          new AlgorithmType[]{AlgorithmType.ASYMMETRIC}, new SizeCalc() {
+            public int maxSize(int s) {
+              return (s / 8) - 2 - (256 / 4);
+            }
+          }),
+  OAEP_SHA384_MGF1(1101, "OAEPWithSHA384AndMGF1Padding",
+          new AlgorithmType[]{AlgorithmType.ASYMMETRIC}, new SizeCalc() {
+            public int maxSize(int s) {
+              return s / 8 - 2 - 384 / 4;
+            }
+          }),
+  OAEP_SHA512_MGF1(1102, "OAEPWithSHA512AndMGF1Padding",
+          new AlgorithmType[]{AlgorithmType.ASYMMETRIC}, new SizeCalc() {
+            public int maxSize(int s) {
+              return s / 8 - 2 - 512 / 4;
+            }
+          }),
+  PKCS7(1007, "PKCS7Padding",
+          new AlgorithmType[]{AlgorithmType.SYMMETRIC}, new SizeCalc() {
+            public int maxSize(int s) {
+              return s / 8 - 1;
+            }
+          });
 
   public static final long serialVersionUID = 100000000038L;
 

@@ -37,7 +37,8 @@ public class SimpleMessageFactory extends MessageFactory {
   /* number of ms for the graph to be completed */
   long maxMessageTransferTime = 600L * 1000L;
 
-  protected SimpleMessageFactory(String msg, int source, int target, IdentityStoreBlock[] anonGroupMembers, IdentityStore is) {
+  protected SimpleMessageFactory(String msg, int source, int target,
+                                 IdentityStoreBlock[] anonGroupMembers, IdentityStore is) {
     this.msg = msg;
 
     graph.setAnonymitySet(anonGroupMembers);

@@ -215,9 +215,16 @@ public class Matrix {
       for (int y = 0; y < this.dimension[Y]; y++) {
         ret.matrixContent[y * ret.dimension[X] + x] = 0;
         for (int i = 0; i < m.dimension[Y]; i++) {
-          ret.matrixContent[y * ret.dimension[X] + x] = mode.add(ret.matrixContent[y * ret.dimension[X] + x], mode.mul(this.matrixContent[y * this.dimension[X] + i], m.matrixContent[i * m.dimension[X] + x]));
+          ret.matrixContent[y * ret.dimension[X] + x] = mode.add(
+                  ret.matrixContent[y * ret.dimension[X] + x],
+                  mode.mul(
+                          this.matrixContent[y * this.dimension[X] + i],
+                          m.matrixContent[i * m.dimension[X] + x]
+                  )
+          );
         }
-        ret.matrixContent[y * ret.dimension[X] + x] = ret.matrixContent[y * ret.dimension[X] + x] % modulo;
+        ret.matrixContent[y * ret.dimension[X] + x] =
+                ret.matrixContent[y * ret.dimension[X] + x] % modulo;
       }
     }
     return ret;
@@ -343,11 +350,13 @@ public class Matrix {
    * <p>Calculates the inverse by aplying the Gauss-Jordan-algorithm.</p>
    *
    * @return the inverse of the matrixContent
-   * @throws ArithmeticException if matrixContent is not square in dimensions or the algorithm was unable to compute an inverse
+   * @throws ArithmeticException if matrixContent is not square in dimensions or the algorithm
+   *                             was unable to compute an inverse
    */
   public Matrix getInverse() {
     if (dimension[X] != dimension[Y]) {
-      throw new ArithmeticException("matrixContent to inverse must have square dimensions (dimension is " + getX() + "/" + getY() + ")");
+      throw new ArithmeticException("matrixContent to inverse must have square dimensions "
+              + "(dimension is " + getX() + "/" + getY() + ")");
     }
     Matrix red = new Matrix(this);
     Matrix ret = Matrix.unitMatrix(dimension[X], mode);
@@ -433,7 +442,8 @@ public class Matrix {
   }
 
   /***
-   * <p>Multiplies element by element the values of the second column by the specified scalar and subtracts the resulting value from the first element.</p>
+   * <p>Multiplies element by element the values of the second column by the specified scalar
+   * and subtracts the resulting value from the first element.</p>
    *
    * @param col    the column to be recalculated/altered
    * @param col2   the column to be used for recalculation
@@ -460,7 +470,8 @@ public class Matrix {
   }
 
   /***
-   * <p>Divides or multiplies element by element the values of the second row by the specified scalar and subtracts the resulting value from the first element.</p>
+   * <p>Divides or multiplies element by element the values of the second row by the specified
+   * scalar and subtracts the resulting value from the first element.</p>
    *
    * @param row    the row o be recalculated/altered
    * @param row2   the row to be used for recalculation

@@ -64,7 +64,8 @@ public enum Parameter implements Serializable {
   CURVETYPE(10001, "curveType", new Transcoder() {
     @Override
     public String fromAsn1(ASN1Object o) {
-      return EllipticCurveType.getById(ASN1Enumerated.getInstance(o).getValue().intValue()).toString();
+      return EllipticCurveType.getById(ASN1Enumerated.getInstance(o).getValue().intValue())
+              .toString();
     }
 
     @Override

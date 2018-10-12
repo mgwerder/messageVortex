@@ -61,11 +61,13 @@ public class SaslServerCallbackHandler implements CallbackHandler {
         // we authorize all users
         ac.setAuthorizedID(authnid);
         ac.setAuthorized(true);
-        //ac.setAuthorized( ac.getAuthenticationID()!=null && ac.getAuthenticationID().equals( ac.getAuthorizedID() ));
+        //ac.setAuthorized( ac.getAuthenticationID()!=null
+        //                  && ac.getAuthenticationID().equals( ac.getAuthorizedID() ));
       } else if (cb instanceof NameCallback) {
         NameCallback nc = (NameCallback) cb;
         authnid = nc.getName() == null ? nc.getDefaultName() : nc.getName();
-        LOGGER.log(Level.INFO, "Server sets authzid to " + authnid + " (" + nc.getName() + "/" + nc.getDefaultName() + ")");
+        LOGGER.log(Level.INFO, "Server sets authzid to " + authnid + " (" + nc.getName()
+                + "/" + nc.getDefaultName() + ")");
         nc.setName(authnid);
         if (proxy.getCredentials(authnid) == null) {
           LOGGER.log(Level.WARNING, "Server did not find credentials for " + authnid);
@@ -75,7 +77,8 @@ public class SaslServerCallbackHandler implements CallbackHandler {
         if (pc.getPassword() != null) {
           password = new String(pc.getPassword());
         }
-        LOGGER.log(Level.INFO, "got password " + password + " (correct password is " + (creds == null ? null : creds.getPassword()) + ")");
+        LOGGER.log(Level.INFO, "got password " + password + " (correct password is "
+                + (creds == null ? null : creds.getPassword()) + ")");
         if (creds == null || (password != null && !creds.getPassword().equals(password))) {
           throw new SaslException("unknown user or bad password");
         } else {

@@ -50,13 +50,16 @@ public class SaslPlainServer implements SaslServer {
   // Factory class
   public static class SaslPlainServerFactory implements SaslServerFactory {
     @Override
-    public SaslServer createSaslServer(String mech, String protocol, String serverName, Map<String, ?> props, CallbackHandler cbh) throws SaslException {
+    public SaslServer createSaslServer(String mech, String protocol, String serverName,
+                                       Map<String, ?> props, CallbackHandler cbh)
+            throws SaslException {
       return "PLAIN".equals(mech) ? new SaslPlainServer(cbh) : null;
     }
 
     @Override
     public String[] getMechanismNames(Map<String, ?> props) {
-      if (props == null || "false".equals(props.get(Sasl.POLICY_NOPLAINTEXT).toString().toLowerCase())) {
+      if (props == null || "false".equals(props.get(Sasl.POLICY_NOPLAINTEXT).toString()
+              .toLowerCase())) {
         return new String[]{"PLAIN"};
       } else {
         return new String[0];
@@ -92,7 +95,8 @@ public class SaslPlainServer implements SaslServer {
       String[] chunks = new String(response, StandardCharsets.UTF_8).split("\0", 3);
 
       if (chunks.length != 3) {
-        throw new IllegalArgumentException("error parsing response (got " + chunks.length + " chunks out of " + response.length + ")");
+        throw new IllegalArgumentException("error parsing response (got " + chunks.length
+                + " chunks out of " + response.length + ")");
       }
       if (chunks[0] == null || chunks[0].isEmpty()) {
         chunks[0] = chunks[1];

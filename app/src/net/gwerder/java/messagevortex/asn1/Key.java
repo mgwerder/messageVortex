@@ -50,21 +50,27 @@ public abstract class Key extends AbstractBlock implements Serializable {
   AlgorithmParameter parameters = new AlgorithmParameter();
 
   void parseKeyParameter(ASN1Sequence s) throws IOException {
-    Algorithm alg = Algorithm.getById(ASN1Enumerated.getInstance(s.getObjectAt(0)).getValue().intValue());
+    Algorithm alg = Algorithm.getById(
+            ASN1Enumerated.getInstance(s.getObjectAt(0)).getValue().intValue()
+    );
     parameters = new AlgorithmParameter(s.getObjectAt(1));
     parameters.put(Parameter.ALGORITHM.getId(), alg.toString());
   }
 
   ASN1Encodable encodeKeyParameter(DumpType dumpType) throws IOException {
     ASN1EncodableVector v = new ASN1EncodableVector();
-    v.add(new ASN1Enumerated(Algorithm.getByString(parameters.get(Parameter.ALGORITHM.getId())).getId()));
+    v.add(new ASN1Enumerated(Algorithm.getByString(
+            parameters.get(Parameter.ALGORITHM.getId())
+    ).getId()));
     v.add(parameters.toAsn1Object(dumpType));
     return new DERSequence(v);
   }
 
   String dumpKeyTypeValueNotation(String prefix, DumpType dumpType) {
     StringBuilder sb = new StringBuilder();
-    sb.append(prefix).append("keyType ").append(Algorithm.getByString(parameters.get(Parameter.ALGORITHM.getId()))).append(',').append(CRLF);
+    sb.append(prefix).append("keyType ")
+            .append(Algorithm.getByString(parameters.get(Parameter.ALGORITHM.getId())))
+            .append(',').append(CRLF);
     sb.append(prefix).append("parameter ").append(parameters.dumpValueNotation(prefix, dumpType));
     return sb.toString();
   }

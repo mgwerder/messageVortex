@@ -81,7 +81,10 @@ public class SecurityContext {
         keyManager.init(keyStore, "changeme".toCharArray());
         TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance("SunX509");
         trustManagerFactory.init(keyStore);
-        context.init(new KeyManager[]{new CustomKeyManager("keystore.jks", "changeme", "mykey3")}, trustManagerFactory.getTrustManagers(), new SecureRandom()); //new TrustManager[]{new AllTrustManager()}
+        context.init(
+                new KeyManager[]{new CustomKeyManager("keystore.jks", "changeme", "mykey3")},
+                trustManagerFactory.getTrustManagers(),
+                new SecureRandom()); //new TrustManager[]{new AllTrustManager()}
       }
     } catch (Exception e) {
       LOGGER.log(Level.WARNING, "Exception while creating SecurityContext", e);
@@ -109,7 +112,8 @@ public class SecurityContext {
 
       /*CertAndKeyGen keypair = new CertAndKeyGen("RSA", "SHA256WithRSA", null);
 
-      X500Name x500Name = new X500Name(commonName, organizationalUnit, organization, city, state, country);
+      X500Name x500Name = new X500Name(commonName, organizationalUnit, organization,
+                                       city, state, country);
 
       keypair.generate(keysize);
       PrivateKey privKey = keypair.getPrivateKey();

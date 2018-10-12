@@ -131,7 +131,8 @@ public class JGraph extends JPanel implements MouseListener {
     Stroke s2 = new BasicStroke(3);
 
     int lastY = 0;
-    System.out.println("## displaying route " + this.route + " (" + routes[this.route].size() + ")");
+    System.out.println("## displaying route " + this.route + " (" + routes[this.route].size()
+            + ")");
     for (int i = 0; i < graph.size(); i++) {
       Edge gr = graph.get(i);
       int x1 = (int) (X_OFFSET + (double) BOX_WIDTH / 2 + graph.getAnonymityIndex(gr.getFrom())
@@ -165,11 +166,13 @@ public class JGraph extends JPanel implements MouseListener {
   private void drawRouteButtons(Graphics g) {
     GraphSet[] routes = graph.getRoutes();
 
-    double horizontalSpace = (0.0 + getWidth() - 2 * X_OFFSET - BOX_WIDTH) / (graph.getAnonymitySetSize() - 1);
+    double horizontalSpace = (0.0 + getWidth() - 2 * X_OFFSET - BOX_WIDTH)
+                             / (graph.getAnonymitySetSize() - 1);
 
     horizontalSpace = (double) (getWidth() - 2 * X_OFFSET) / (routes.length * 2 - 1);
     for (int i = 0; i < routes.length; i++) {
-      int x1 = (int) ((getWidth() - (routes.length * 2 - 1) * horizontalSpace) / 2 + i * horizontalSpace * 2);
+      int x1 = (int) ((getWidth() - (routes.length * 2 - 1) * horizontalSpace)
+               / 2 + i * horizontalSpace * 2);
       int y = getHeight() - Y_OFFSET - ROUTE_BORDER;
       if (this.route == i) {
         g.setColor(Color.BLUE);
@@ -205,7 +208,8 @@ public class JGraph extends JPanel implements MouseListener {
     if (t != null) {
       return t;
     }
-    return "No location effective tooltip (x=" + event.getX() + "/y=" + event.getY() + "" + super.getToolTipText(event);
+    return "No location effective tooltip (x=" + event.getX() + "/y=" + event.getY() + ""
+           + super.getToolTipText(event);
   }
 
   private String tooltipForCircle(Point p, Ellipse2D circle) {
@@ -265,14 +269,20 @@ public class JGraph extends JPanel implements MouseListener {
   public static void main(String[] args) throws IOException {
     IdentityStore is = null;
     try {
-      is = new IdentityStore(new File(System.getProperty("java.io.tmpdir") + "/IdentityStoreExample1.der"));
+      is = new IdentityStore(new File(System.getProperty("java.io.tmpdir")
+              + "/IdentityStoreExample1.der"));
     } catch (IOException ioe) {
       is = IdentityStore.getNewIdentityStoreDemo(false);
-      DEROutputStream f = new DEROutputStream(new FileOutputStream(System.getProperty("java.io.tmpdir") + "/IdentityStoreExample1.der"));
+      DEROutputStream f = new DEROutputStream(
+              new FileOutputStream(
+                      System.getProperty("java.io.tmpdir") + "/IdentityStoreExample1.der"
+              )
+      );
       f.writeObject(is.toAsn1Object(DumpType.ALL_UNENCRYPTED));
       f.close();
     }
-    SimpleMessageFactory smf = new SimpleMessageFactory("", 0, 1, is.getAnonSet(7).toArray(new IdentityStoreBlock[0]), is);
+    SimpleMessageFactory smf = new SimpleMessageFactory("", 0, 1,
+            is.getAnonSet(7).toArray(new IdentityStoreBlock[0]), is);
     smf.build();
     System.out.println("got " + smf.getGraph().getRoutes().length + " routes");
     final JGraph jg = new JGraph(smf.getGraph());
@@ -284,7 +294,8 @@ public class JGraph extends JPanel implements MouseListener {
   }
 
   private void createAndShowUserInterface() {
-    System.out.println("Created GUI on event dispatching thread? " + SwingUtilities.isEventDispatchThread());
+    System.out.println("Created GUI on event dispatching thread? "
+            + SwingUtilities.isEventDispatchThread());
     JFrame f = new JFrame("Edge Demo");
     f.add(this);
     f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -39,7 +39,9 @@ public class MessageVortexConfig extends Config {
   }
 
   private MessageVortexConfig(String ressourceFile) throws IOException {
-    try (BufferedReader reader = new BufferedReader(new InputStreamReader(Files.newInputStream(Paths.get(ressourceFile)), StandardCharsets.UTF_8))) {
+    try (BufferedReader reader = new BufferedReader(
+            new InputStreamReader(Files.newInputStream(Paths.get(ressourceFile)),
+                    StandardCharsets.UTF_8))) {
       String line = reader.readLine();
       while (line != null) {
         if (Pattern.matches("\\s*//.*", line)) {
@@ -70,7 +72,8 @@ public class MessageVortexConfig extends Config {
                 String desc = scanner.next().trim();
                 createNumericConfigValue(name, desc, val);
               } else {
-                throw new IOException("encountered unknown field type: " + token + " (line was \"" + line + "\")");
+                throw new IOException("encountered unknown field type: " + token
+                        + " (line was \"" + line + "\")");
               }
             }
           }

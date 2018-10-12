@@ -58,7 +58,8 @@ public class SmtpConnection extends ClientConnection {
       String command = null;
       try {
         LOGGER.log(Level.INFO, "got new SMTP incomming connect... sending server greeting");
-        writeln("220 " + InetAddress.getLocalHost().getHostName() + " ESMTP MessageVortex receiver");
+        writeln("220 " + InetAddress.getLocalHost().getHostName()
+                + " ESMTP MessageVortex receiver");
         String envelopeFrom = null;
         String envelopeTo = null;
         while (command == null || !"quit".equals(command.toLowerCase())) {
@@ -72,10 +73,14 @@ public class SmtpConnection extends ClientConnection {
             write("250-ENHANCEDSTATUSCODES" + CRLF);
             write("250 AUTH login" + CRLF);
           } else if ("auth login".equals(command.toLowerCase())) {
-            writeln("334 " + new String(Base64.encode("Username:".getBytes(StandardCharsets.UTF_8))));
+            writeln("334 " + new String(
+                    Base64.encode("Username:".getBytes(StandardCharsets.UTF_8)))
+            );
             String username = new String(Base64.decode(readln()));
             Config.getDefault().getStringValue("smtp_incomming_username");
-            write("334 " + new String(Base64.encode("Password:".getBytes(StandardCharsets.UTF_8))) + CRLF);
+            write("334 " + new String(
+                    Base64.encode("Password:".getBytes(StandardCharsets.UTF_8))) + CRLF
+            );
             String password = new String(Base64.decode(readln()));
             Config.getDefault().getStringValue("smtp_incomming_password");
           } else if (command.toLowerCase().startsWith("mail from")) {

@@ -62,7 +62,8 @@ public class RedundancyMatrix extends VandermondeMatrix {
    * @param mode     the math mode to be used
    * @param noInit  if set precached values are ignored
    */
-  private RedundancyMatrix(int dataRows, int total, MathMode mode, boolean noCache, boolean noInit) {
+  private RedundancyMatrix(int dataRows, int total, MathMode mode, boolean noCache,
+                           boolean noInit) {
     super(dataRows, total, mode);
 
     // get value from cache

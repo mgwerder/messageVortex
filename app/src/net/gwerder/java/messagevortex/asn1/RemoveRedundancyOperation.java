@@ -42,7 +42,8 @@ public class RemoveRedundancyOperation extends AbstractRedundancyOperation imple
     return new RemoveRedundancyOperation(object);
   }
 
-  public RemoveRedundancyOperation(int inputId, int dataStripes, int redundancy, List<SymmetricKey> keys, int outputId, int gfSize) {
+  public RemoveRedundancyOperation(int inputId, int dataStripes, int redundancy,
+                                   List<SymmetricKey> keys, int outputId, int gfSize) {
     super(inputId, dataStripes, redundancy, keys, outputId, gfSize);
   }
 

@@ -66,7 +66,8 @@ public class MergePayloadOperation extends Operation implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append('{').append(CRLF);
     sb.append(prefix).append("  originalFirstId ").append(originalFirstId).append(',').append(CRLF);
-    sb.append(prefix).append("  originalSecondId ").append(originalSecondId).append(',').append(CRLF);
+    sb.append(prefix).append("  originalSecondId ").append(originalSecondId).append(',')
+            .append(CRLF);
     sb.append(prefix).append("  newId ").append(newId).append(CRLF);
     sb.append(prefix).append('}');
     return sb.toString();

@@ -32,14 +32,16 @@ public interface Operation {
   IdentityBlock getIdentity();
 
   /***
-   * <p>Checks if all prerequisiting fields do exist or can be provided by a subsequent operation.</p>
+   * <p>Checks if all prerequisiting fields do exist or can be provided by a subsequent
+   * operation.</p>
    *
    * @return true if all prerequisits can potentially be satisfied
    */
   boolean canRun();
 
   /***
-   * <p>Checks if this operation is still valid or might be purged from the identities working space.</p>
+   * <p>Checks if this operation is still valid or might be purged from the identities working
+   * space.</p>
    *
    * @return true if the operation should remain in the payload space
    */

@@ -48,7 +48,8 @@ public class SmtpReceiver implements SocketListener {
   private TransportReceiver receiver = null;
   private SecurityContext context = null;
 
-  public SmtpReceiver(InetSocketAddress address, SecurityContext secContext, TransportReceiver lreceiver) throws IOException {
+  public SmtpReceiver(InetSocketAddress address, SecurityContext secContext,
+                      TransportReceiver lreceiver) throws IOException {
     setTransportReceiver(lreceiver);
     listener = new ListeningSocketChannel(address, this);
     listener.setName("SMTPlist" + (gid++));
