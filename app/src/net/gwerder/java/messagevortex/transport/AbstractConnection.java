@@ -82,6 +82,14 @@ public abstract class AbstractConnection {
     }
   }
 
+  /***
+   * <p>Create a connection with the given context.</p>
+   *
+   * @param sock          the channel to connect to
+   * @param context       the predefined security context
+   * @param isClient      true if the connection is a client connnection
+   * @throws IOException  if channel initialisation fails
+   */
   public AbstractConnection(SocketChannel sock, SecurityContext context, boolean isClient)
           throws IOException {
     this.isClient = isClient;
@@ -91,10 +99,22 @@ public abstract class AbstractConnection {
     setSecurityContext(context);
   }
 
+  /***
+   * <p>Create a connection with the given context.</p>
+   *
+   * @param sock          the channel to connect to
+   * @param context       the predefined security context
+   * @throws IOException  if channel initialisation fails
+   */
   public AbstractConnection(SocketChannel sock, SecurityContext context) throws IOException {
     this(sock,context,true);
   }
 
+  /***
+   * <p>Get the hostname of the remote host.</p>
+   *
+   * @return the hostname
+   */
   public String getHostName() {
     if (remoteAddress == null) {
       return null;
@@ -103,6 +123,11 @@ public abstract class AbstractConnection {
     }
   }
 
+  /***
+   * <p>Gets the port of the remote host.</p>
+   *
+   * @return the remote port number (if known; otherwise -1)
+   */
   public int getPort() {
     if (remoteAddress == null) {
       return -1;
@@ -125,6 +150,12 @@ public abstract class AbstractConnection {
     return ret;
   }
 
+  /***
+   * <p>Returns the socket channel in use for this connection.</p>
+   *
+   * @return the socket channel of this connection
+   * @throws IOException if socket is not connected
+   */
   public SocketChannel getSocketChannel() throws IOException {
     if (socketChannel == null || !socketChannel.isConnected()) {
       throw new IOException("socket is unexpectedly not connected (" + socketChannel + ")");
@@ -132,12 +163,23 @@ public abstract class AbstractConnection {
     return this.socketChannel;
   }
 
+  /***
+   * <p>Sets the security context to be used with the socket channel.</p>
+   *
+   * @param context the security context to be used
+   * @return the previously set security context
+   */
   public SecurityContext setSecurityContext(SecurityContext context) {
     SecurityContext ret = this.context;
     this.context = context;
     return ret;
   }
 
+  /***
+   * <p>Gets the security context used with the socket channel.</p>
+   *
+   * @return the security context
+   */
   public SecurityContext getSecurityContext() {
     return context;
   }
@@ -152,6 +194,11 @@ public abstract class AbstractConnection {
     return ret;
   }
 
+  /***
+   * <p>Connects to the remote host with respective security context.</p>
+   *
+   * @throws IOException if connecting fails
+   */
   public void connect() throws IOException {
     if (socketChannel == null) {
       socketChannel = SocketChannel.open();
@@ -186,10 +233,21 @@ public abstract class AbstractConnection {
 
   }
 
+  /***
+   * <p>Make a TLS handshake on the connection with the default timeout.</p>
+   *
+   * @throws IOException if handshake fails
+   */
   public void startTls() throws IOException {
     startTls(getTimeout());
   }
 
+  /***
+   * <p>Make a TLS handshake on the connection with a sepcified timeout.</p>
+   *
+   * @param timeout       the timeout in miliseconds
+   * @throws IOException if handshake fails
+   */
   public void startTls(long timeout) throws IOException {
     if (isTls()) {
       LOGGER.log(Level.INFO, "refused to renegotiate TLS (already encrypted)");
@@ -216,12 +274,23 @@ public abstract class AbstractConnection {
     do_handshake(timeout);
   }
 
+  /***
+   * <p>Sets the protocol to be used (mainly for logger messages).</p>
+   *
+    * @param protocol the protocol name or abreviation
+   * @return  the previously set protocol name
+   */
   public String setProtocol(String protocol) {
     String ret = getProtocol();
     this.protocol = protocol;
     return ret;
   }
 
+  /***
+   * <p>Gets the protocol name used.</p>
+   *
+   * @return  the protocol name
+   */
   public String getProtocol() {
     return protocol;
   }
@@ -557,26 +626,53 @@ public abstract class AbstractConnection {
     LOGGER.log(Level.INFO, "TLS teardown done");
   }
 
+  /***
+   * <p>returns true if a TLS handshake has been successfully done.</p>
+   *
+   * @return the TLS state
+   */
   public boolean isTls() {
     return isTls;
   }
 
+  /***
+   * <p>Sets the default timeout for all connections not having an own timeout.</p>
+   *
+   * @param timeout the timeout in milliseconds
+   * @return the previously set timeout
+   */
   public static long setDefaultTimeout(long timeout) {
     long ret = defaultTimeout;
     defaultTimeout = timeout;
     return ret;
   }
 
+  /***
+   * <p>Gets the default timeout for all connections not having an own timeout.</p>
+   *
+   * @return the previously set timeout
+   */
   public static long getDefaultTimeout() {
     return defaultTimeout;
   }
 
+  /***
+   * <p>Sets the default timeout for this connection.</p>
+   *
+   * @param timeout the timeout in milliseconds
+   * @return the previously set timeout
+   */
   public long setTimeout(long timeout) {
     long ret = this.timeout;
     this.timeout = timeout;
     return ret;
   }
 
+  /***
+   * <p>Gets the default timeout for this connection.</p>
+   *
+   * @return the  timeout in milliseconds
+   */
   public long getTimeout() {
     return this.timeout;
   }
@@ -748,6 +844,13 @@ public abstract class AbstractConnection {
     write(message, getTimeout());
   }
 
+  /***
+   * <p>Write a message string to the peer partner.</p>
+   *
+   * @param message the message string to be sent
+   * @param timeout the timeout in milliseconds
+   * @throws IOException if communication or encryption fails
+   */
   public void write(String message,long timeout) throws IOException {
     LOGGER.log(Level.INFO, "writing message with write ("
             + ImapLine.commandEncoder(message) + "; size "
@@ -759,6 +862,13 @@ public abstract class AbstractConnection {
     return read(getTimeout());
   }
 
+  /***
+   * <p>Read a string from the socket channel.</p>
+   *
+   * @param timeout the timeout to be applied before unblocking
+   * @return the string read
+   * @throws IOException if decryption fails or host is unexpectedly disconnected
+   */
   public String read(long timeout) throws IOException {
     int numBytes = readSocket(timeout);
     if (numBytes > 0) {
@@ -775,6 +885,14 @@ public abstract class AbstractConnection {
     return readln(getTimeout());
   }
 
+
+  /***
+   * <p>Read a string up until CRLF from the socket channel.</p>
+   *
+   * @param timeout the timeout to be applied before unblocking
+   * @return the string read
+   * @throws IOException if decryption fails or host is unexpectedly disconnected
+   */
   public String readln(long timeout) throws IOException {
     StringBuilder ret = new StringBuilder();
     long start = System.currentTimeMillis();
