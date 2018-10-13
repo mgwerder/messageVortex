@@ -1,0 +1,421 @@
+<project name="MessageVortex" default="compile" basedir="../" xmlns:jacoco="antlib:org.jacoco.ant">
+    <property file="../system.properties"/>
+    <property file="../system.properties"/>
+    <property file="${user.home}/system.properties"/>
+    <property file="application.properties"/>
+
+  <property name="build.sysclasspath" value="ignore"/>
+
+  <property name="app.version"   value="${app.version.major}.${app.version.minor}.${app.version.revision}"/>
+  <property name="build.home"    value="${basedir}/app/build"/>
+  <property name="dist.home"     value="${basedir}/app/dist"/>
+  <property name="doc.home"      value="${basedir}/doc"/>
+  <property name="src.home"      value="${basedir}/app/src"/>
+  <property name="testsrc.home"  value="${basedir}/app/test"/>
+  <property name="rtlib.home"    value="${basedir}/app/rtlib"/>
+  <property name="app.source"    value="1.7"/>
+  <property name="app.target"    value="1.7"/>
+
+  <property name="compile.debug"       value="true"/>
+  <property name="compile.deprecation" value="false"/>
+  <property name="compile.optimize"    value="true"/>
+
+  <!-- ==================== Main Targets ================================== -->
+
+  <taskdef name="latex" classname="de.dokutransdata.antlatex.LaTeX">
+    <classpath>
+        <fileset dir="${basedir}/lib/"  includes="ant_latex_0.0.9.jar" />
+    </classpath>
+  </taskdef>
+
+  <target name="all" depends="compile,test,doc,javadoc" description="Clean build and dist directories, then compile"/>
+
+  <target name="clean" description="Delete old build and dist directories">
+    <delete dir="${build.home}"/>
+    <delete dir="${dist.home}"/>
+    <delete dir="${doc.home}/api"/>
+    <!--<delete dir="${doc.home}/cobertura"/>-->
+    <delete><fileset dir="${basedir}" includes="pom.xml"/></delete>
+    <delete><fileset dir="${doc.home}" includes="**/*.aux"/></delete>
+    <delete><fileset dir="${doc.home}" includes="**/*.bbl"/></delete>
+    <delete><fileset dir="${doc.home}" includes="**/*.aux"/></delete>
+    <delete><fileset dir="${doc.home}" includes="**/*.idx"/></delete>
+    <delete><fileset dir="${doc.home}" includes="**/*.out"/></delete>
+    <delete><fileset dir="${doc.home}" includes="**/*.log"/></delete>
+    <delete><fileset dir="${doc.home}" includes="**/*.lot"/></delete>
+    <delete><fileset dir="${doc.home}" includes="**/*.ilg"/></delete>
+    <delete><fileset dir="${doc.home}" includes="**/*.ind"/></delete>
+    <delete><fileset dir="${doc.home}" includes="**/*.lof"/></delete>
+    <delete><fileset dir="${doc.home}" includes="**/*.ist"/></delete>
+    <delete><fileset dir="${doc.home}" includes="**/*.bak"/></delete>
+    <delete><fileset dir="${doc.home}" includes="**/*.run.xml"/></delete>
+    <delete><fileset dir="${doc.home}" includes="**/*.synctex.gz"/></delete>
+    <delete><fileset dir="${doc.home}" includes="**/*.blg"/></delete>
+    <delete><fileset dir="${doc.home}" includes="**/*-blx.bib"/></delete>
+    <delete><fileset dir="${doc.home}" includes="**/*.toc"/></delete>
+  </target>
+
+  <target name="compile" depends="prepare" description="Compile Java sources">
+      <echo message="user.home=${user.home}"/>
+      <mkdir dir="${build.home}/src/${app.path}"/>
+      <mkdir dir="${build.home}/classes/${app.path}"/>
+      <touch file="${src.home}/net/gwerder/java/messagevortex/Version.java"/>
+      <copy  todir="${build.home}/src/">
+          <fileset dir="${src.home}/" includes="**/Version.java"/>
+      </copy>
+      <copy  todir="${build.home}/src/">
+          <fileset dir="${src.home}/" excludes="**/Version.java **/test/**/*.java **/test/*.java"/>
+      </copy>
+      <copy  todir="${build.home}/testsrc/">
+          <fileset dir="${testsrc.home}/" includes="**/test/*.java **/test/**/*.java"/>
+      </copy>
+
+      <mkdir dir="${build.home}/classes/${app.path}/images"/>
+      <replace file="${build.home}/src/${app.path}/Version.java">
+          <replacefilter token="@major@" value="${app.version.major}"/>
+          <replacefilter token="@minor@" value="${app.version.minor}"/>
+          <replacefilter token="@revision@" value="${app.version.revision}"/>
+          <replacefilter token="@build@" value="${DSTAMP}${TSTAMP}"/>
+      </replace>
+      <!-- writing sonar properties -->
+      <copy file="/old/sonar.properties.master" tofile="../sonar.properties"/>
+      <replace file="/old/sonar.properties">
+          <replacefilter token="@version@" value="${app.version}"/>
+          <replacefilter token="@java@" value="${app.source}"/>
+          <replacefilter token="@major@" value="${app.version.major}"/>
+          <replacefilter token="@minor@" value="${app.version.minor}"/>
+          <replacefilter token="@revision@" value="${app.version.revision}"/>
+          <replacefilter token="@build@" value="${DSTAMP}${TSTAMP}"/>
+      </replace>
+      <javac srcdir="${build.home}/src"
+          destdir="${build.home}/classes/"
+            debug="${compile.debug}"
+      deprecation="${compile.deprecation}"
+         optimize="${compile.optimize}">
+        <classpath refid="compile.classpath"/>
+        <compilerarg value="-Xlint"/>
+      </javac>
+      <javac srcdir="${build.home}/testsrc"
+          destdir="${build.home}/classes/"
+            debug="${compile.debug}"
+      deprecation="${compile.deprecation}"
+         optimize="${compile.optimize}">
+        <classpath refid="compile.classpath"/>
+        <compilerarg value="-Xlint"/>
+      </javac>
+      <copy  todir="${build.home}/classes/">
+          <fileset dir="${build.home}/src" excludes="**/*.java"/>
+      </copy>
+      <copy  todir="${build.home}/classes/">
+          <fileset dir="${basedir}/app" includes="*.jks"/>
+      </copy>
+  </target>
+
+  <target name="dist" depends="compile,test"  description="Create binary distribution">
+      <mkdir dir="${dist.home}/docs"/>
+      <copy todir="${dist.home}/docs">
+          <fileset dir="${src.home}"/>
+      </copy>
+      <jar jarfile="${dist.home}/${app.name}-${app.version}.war"
+         basedir="${build.home}"/>
+  </target>
+
+  <target name="run" depends="compile"  description="run application">
+      <java dir="${build.home}/classes/" classname="${app.package}.${app.mainclass}" fork="yes" classpathref="run.classpath">
+          <jvmarg line="-ea"/>
+          <arg line="-help"/>
+      </java>
+  </target>
+
+  <target name="test" depends="compile"  description="test application">
+      <taskdef classpathref="test.classpath" resource="tasks.properties" />
+      <taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
+          <classpath path="${basedir}/lib/jacoco/lib/jacocoant.jar"/>
+      </taskdef>
+      <jacoco:coverage destfile="${build.home}/jacoco.exec">
+            <junit  fork="yes" forkmode="once" haltonfailure="yes" dir="${basedir}/app"> <!-- showoutput="yes" printsummary="withOutAndErr" -->
+                <!--<sysproperty key="net.sourceforge.cobertura.datafile" file="${build.home}/cobertura.ser" />-->
+                <jvmarg value="-XX:-UseSplitVerifier"/>
+                <classpath refid="test.classpath"/>
+                <test name="${app.package}.test.MainCoreSuite" todir="${build.home}/testsrc" outfile="TEST-MainSuite"/>
+                <test name="${app.package}.test.MainIMAPSuite" todir="${build.home}/testsrc" outfile="TEST-IMAPSuite"/>
+                <test name="${app.package}.test.MainASN1Suite" todir="${build.home}/testsrc" outfile="TEST-ASN1Suite"/>
+                <test name="${app.package}.test.MainRoutingSuite" todir="${build.home}/testsrc" outfile="TEST-RoutingSuite"/>
+                <test name="${app.package}.test.MainBlenderSuite" todir="${build.home}/testsrc" outfile="TEST-BlenderSuite"/>
+                <test name="${app.package}.test.MainTransportSuite" todir="${build.home}/testsrc" outfile="TEST-TransportSuite"/>
+                <test name="${app.package}.test.MainAccountingSuite" todir="${build.home}/testsrc" outfile="TEST-AccountingSuite"/>
+                <formatter type="xml"/>
+                <formatter type="plain" usefile="false"/>
+            </junit>
+      </jacoco:coverage>
+      <mkdir dir="${build.home}/jacoco/"/>
+      <jacoco:report>
+          <executiondata>
+              <file file="${build.home}/jacoco.exec"/>
+          </executiondata>
+          <structure name="MessageVortex">
+              <classfiles>
+                  <fileset dir="${build.home}/classes/"/>
+              </classfiles>
+              <sourcefiles encoding="UTF-8">
+                  <fileset dir="${build.home}/src"/>
+                  <fileset dir="${build.home}/testsrc"/>
+              </sourcefiles>
+          </structure>
+          <html destdir="${build.home}/jacoco/"/>
+          <csv destfile="${build.home}/jacoco_report.csv"/>
+          <xml destfile="${build.home}/jacoco_report.xml"/>
+      </jacoco:report>
+      <taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask">
+          <classpath>
+              <fileset dir="${basedir}/lib/pmd-bin-5.3.7/lib" includes="*.jar"/>
+          </classpath>
+    </taskdef>
+    <pmd shortFilenames="true">
+          <sourceLanguage name="java" version="1.7"/>
+          <ruleset>rulesets/java/design.xml</ruleset>
+          <ruleset>java-basic</ruleset>
+          <formatter type="html" toFile="${build.home}/pmd_report.html">
+              <!--<param name="linkPrefix" value="http://pmd.sourceforge.net/xref/"/>-->
+          </formatter>
+          <formatter type="xml" toFile="${build.home}/pmd_report.xml">
+              <!--<param name="linkPrefix" value="http://pmd.sourceforge.net/xref/"/>-->
+          </formatter>
+          <fileset dir="${build.home}/src">
+              <include name="**/*.java"/>
+          </fileset>
+    </pmd>
+
+    <!--- directories for sonar build -->
+    <mkdir dir='${basedir}/target'/>
+    <mkdir dir='${basedir}/target/sonar'/>
+
+  </target>
+
+  <target name="ensure-test-name" unless="test">
+      <fail message="You must run this target with -Dtest=TestName"/>
+  </target>
+
+  <target name="singletest" depends="ensure-test-name,compile"  description="test a single test">
+      <junit  fork="yes" haltonfailure="yes" dir="${build.home}/classes/" showoutput="yes" printsummary="withOutAndErr" >
+          <sysproperty key="tests" value="${tests}"/>
+          <classpath refid="test.classpath"/>
+          <formatter type="xml"/>
+          <formatter type="plain" usefile="false"/>
+          <batchtest>
+              <fileset dir="${build.home}/testsrc/">
+                  <include name="**/${test}.java"/>
+              </fileset>
+          </batchtest>
+      </junit>
+  </target>
+
+  <target name="test-gui" depends="compile"  description="run application">
+      <java dir="${build.home}/classes/" classname="junit.swingui.TestRunner" fork="yes" classpathref="test.classpath">
+      <!--<jvmarg line="-Djavax.net.ssl.keyStore=keystore.jks -Djavax.net.ssl.keyStorePassword=changeme"/> -->
+          <arg line="${app.package}.test.MainCoreSuite"/>
+      </java>
+  </target>
+
+  <target name="doc" depends="compile,javadoc,pdf"  description="create app docs"/>
+  <target name="javadoc" depends="compile"  description="create api docs">
+      <mkdir dir='${doc.home}'/>
+      <mkdir dir='${doc.home}/api/'/>
+      <javadoc
+             destdir='${doc.home}/api'
+             author='true'
+             version='true'
+             linksource='true'
+             >
+          <classpath refid="compile.classpath"/>
+      <!--<link offline="false" href="http://java.sun.com/j2se/1.5.0/docs/api/" packagelistLoc="C:/temp/pl1"/>
+      <link offline="false" href="http://developer.java.sun.com/developer/products/xml/docs/api/" packagelistLoc="C:/temp/pl2"/>  -->
+          <tag name="known.bug" description="Known bugs:"/>
+          <tag name="to.do" description="TODOs:"/>
+          <tag name="fix.me" description="Fix me:"/>
+          <fileset dir="${build.home}/testsrc/" defaultexcludes="yes">
+              <include name="**/*.java"/>
+          </fileset>
+          <fileset dir="${build.home}/src" defaultexcludes="yes">
+              <include name="**/*.java"/>
+          </fileset>
+      </javadoc>
+  </target>
+
+  <target name="pdf" depends="pdf-uptodate,pdf-vortex,pdf-roadmap,pdf-plan">
+  </target>
+
+
+  <!-- =================================== Sub targets -->
+
+    <target name="pdf-plan" unless="messagevortexplan.uptodate" depends="pdf-uptodate">
+        <latex
+        path="${path.miktex}"
+            latexfile="${doc.home}/messagevortex_plan.tex"
+            verbose="on"
+            clean="off"
+            pdftex="on"
+            passThruLaTeXParameters="-synctex=1"
+            workingDir="${doc.home}">
+                <makeindex
+        path="${path.miktex}"
+                    run="on"
+                    workingDir="${doc.home}">
+                    <fileset dir="${doc.home}">
+                       <include name="*.nlo" />
+                    </fileset>
+                </makeindex>
+                <bibtex
+        path="${path.miktex}"
+                    run="on"
+                    workingDir="${doc.home}" />
+        </latex>
+    </target>
+
+  <target name="pdf-roadmap" unless="messagevortexrm.uptodate" depends="pdf-uptodate">
+    <latex
+  path="${path.miktex}"
+        latexfile="${doc.home}/messagevortex_Roadmap.tex"
+        verbose="on"
+        clean="off"
+        pdftex="on"
+        passThruLaTeXParameters="-synctex=1"
+        workingDir="${doc.home}">
+            <makeindex
+    path="${path.miktex}"
+                run="on"
+                workingDir="${doc.home}">
+                <fileset dir="${doc.home}">
+                   <include name="*.nlo" />
+                </fileset>
+            </makeindex>
+            <bibtex
+    path="${path.miktex}"
+                run="on"
+                workingDir="${doc.home}" />
+    </latex>
+  </target>
+
+  <target name="pdf-vortex" unless="messagevortexdoc.uptodate" depends="pdf-uptodate">
+    <latex
+    path="${path.miktex}"
+        latexfile="${doc.home}/messagevortex.tex"
+        verbose="on"
+        clean="off"
+        pdftex="on"
+        passThruLaTeXParameters="-synctex=1"
+        workingDir="${doc.home}">
+            <makeindex
+    path="${path.miktex}"
+                run="on"
+                workingDir="${doc.home}">
+                <fileset dir="${doc.home}">
+                   <include name="*.nlo" />
+                </fileset>
+            </makeindex>
+            <bibtex
+    path="${path.miktex}"
+                run="on"
+                workingDir="${doc.home}" />
+    </latex>
+  </target>
+
+  <target name="pdf-uptodate">
+  <condition property="messagevortexdoc.uptodate">
+    <uptodate targetfile="${doc.home}/messagevortex.pdf">
+      <srcfiles dir="${doc.home}" includes="inc/**/*.tex inc/**/*.inc **/*.bib messagevortex.tex **/*.fig **/*.png **/*.jpg"/>
+    </uptodate>
+  </condition>
+  <condition property="messagevortexrm.uptodate">
+    <uptodate targetfile="${doc.home}/messagevortex_Roadmap.pdf">
+      <srcfiles dir="${doc.home}" includes="messagevortex_Roadmap.tex"/>
+    </uptodate>
+  </condition>
+  <condition property="messagevortexplan.uptodate">
+    <uptodate targetfile="${doc.home}/messagevortex_Plan.pdf">
+      <srcfiles dir="${doc.home}/inc" includes="messagevortex_Plan.tex"/>
+    </uptodate>
+  </condition>
+  </target>
+
+  <target name="xml" depends="prepare">
+    <!-- build xml classes -->
+    <taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
+      <classpath>
+        <fileset dir="C:\vApps\jaxb-ri-20110412\lib"  includes="jaxb-xjc.jar" />
+    </classpath>
+    </taskdef>
+    <echo message="Building all xml classes ..." />
+    <mkdir dir="${build.home}/src/${app.path}/xml"/>
+    <xjc destdir="${build.home}/src" removeOldOutput="yes" package="${app.package}.xml">
+      <classpath refid="compile.classpath"/>
+      <arg line="-verbose -httpproxy www-proxy.admin.ch:8080"/>
+      <schema dir="${src.home}/xml" includes="test.xsd" />
+      <produces dir="${build.home}/src/${app.path}/xml" includes="* impl/*"/>
+    </xjc>
+    <copy todir="${build.home}/src/${app.path}/xml">
+      <fileset dir="${src.home}/xml" includes="*.index *.xsd"/>
+    </copy>
+  </target>
+
+  <target name="prepare_windows" if="isWindows" depends="pre_prepare">
+    <echo message="Reading windows specific properties ..." />
+    <property file="build.windows.properties"/>
+  </target>
+
+  <target name="prepare_unix" if="isUnix" depends="pre_prepare">
+    <echo message="Reading unix specific properties ..." />
+    <property file="build.unix.properties"/>
+  </target>
+
+  <target name="pre_prepare">
+    <condition property="isUnix">
+      <and>
+        <os family="unix"/>
+      </and>
+    </condition>
+    <condition property="isWindows">
+      <and>
+        <os family="windows"/>
+      </and>
+    </condition>
+  </target>
+
+  <target name="prepare" depends="prepare_windows,prepare_unix">
+    <tstamp/>
+    <mkdir  dir="${build.home}"/>
+    <mkdir  dir="${build.home}/src"/>
+    <mkdir  dir="${build.home}/testsrc"/>
+    <mkdir  dir="${build.home}/classes"/>
+    <mkdir  dir="${build.home}/classes/logs"/>
+    <!--<mkdir  dir="${build.home}/cobertura"/>-->
+
+    <path id="compile.classpath">
+      <pathelement location="c:/Programme/Java/lib/hsqldb/lib/hsqldb.jar"/>
+      <fileset dir="${rtlib.home}" includes="**/*.jar"/>
+      <fileset dir="${basedir}/lib/junit-4.12" includes="*.jar"/>
+      <pathelement location="${build.home}/classes" />
+    </path>
+
+    <path id="test.classpath">
+      <pathelement location="c:/Programme/Java/lib/hsqldb/lib/hsqldb.jar"/>
+      <fileset dir="${rtlib.home}" includes="**/*.jar"/>
+      <fileset dir="${basedir}/lib/" includes="junit*.jar"/>
+      <!--<fileset dir="${basedir}/lib/cobertura-2.0.3/lib" includes="*.jar"/>
+      <fileset dir="${basedir}/lib/cobertura-2.0.3" includes="cobertura-2.0.3.jar"/>-->
+      <fileset dir="${basedir}/lib/junit-4.12" includes="*.jar"/>
+      <!--<pathelement location="${build.home}/cobertura" />-->
+      <pathelement location="${build.home}/classes" />
+    </path>
+
+    <path id="run.classpath">
+      <pathelement location="c:/Programme/Java/lib/hsqldb/lib/hsqldb.jar"/>
+      <fileset dir="${rtlib.home}" includes="**/*.jar"/>
+      <pathelement location="${build.home}/classes" />
+    </path>
+
+  </target>
+
+
+
+</project>
