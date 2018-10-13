@@ -748,12 +748,102 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/MainASN1Suite.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/MainIMAPSuite.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/MainRoutingSuite.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/asn1/AsymmetricKeyReencodingTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/asn1/AsymmetricKeyTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/asn1/FuzzerTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/asn1/IdentityBlockTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/asn1/SymmetricKeyTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/asn1/VortexMessageTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/blender/DummyBlenderTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/core/ConfigTest.java">
           <value>
             <set />
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/core/MessageVortexTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/imap/ImapClientTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/imap/ImapCommandLoginTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/imap/ImapCommandTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/imap/ImapSSLTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/routing/FullMessageTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/routing/MatrixTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/routing/OperationProcessingTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/transport/LineTRXTest.java">
           <value>
             <set />
           </value>
