@@ -24,8 +24,8 @@ package net.gwerder.java.messagevortex;
 
 public class Version {
 
-  private static final int MAJOR = 1; //@major@
-  private static final int MINOR = 0; //@minor@
+  private static final int MAJOR = 0; //@major@
+  private static final int MINOR = 2; //@minor@
   private static final int REVISION = 0; //@revision@
   private static final String GIT_BUILD = "$Id$";
   private static final String BUILD = GIT_BUILD.substring(5, GIT_BUILD.length() - 2);
