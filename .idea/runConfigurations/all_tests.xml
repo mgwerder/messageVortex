@@ -1,6 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="all-tests" type="JUnit" factoryName="JUnit" activateToolWindowBeforeRun="false">
     <module name="application-core-library" />
+    <shortenClasspath name="MANIFEST" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
     <option name="ALTERNATIVE_JRE_PATH" />
     <option name="PACKAGE_NAME" value="net.gwerder.java.messagevortex.test" />
@@ -16,11 +17,18 @@
     </option>
     <dir value="$PROJECT_DIR$/application-core-library/target/test-classes/net/gwerder/java/messagevortex/test" />
     <patterns>
-      <pattern testClass="net.gwerder.java.messagevortex.test.*Suite" />
+      <pattern testClass="net.messagevortex.test.MainAccountingSuite" />
+      <pattern testClass="net.messagevortex.test.MainBlenderSuite" />
+      <pattern testClass="net.messagevortex.test.MainCoreSuite" />
+      <pattern testClass="net.messagevortex.test.MainIMAPSuite" />
+      <pattern testClass="net.messagevortex.test.MainRoutingSuite" />
+      <pattern testClass="net.messagevortex.test.MainTransportSuite" />
+      <pattern testClass="net.messagevortex.test.MainASN1Suite" />
     </patterns>
+    <fork_mode value="class" />
     <method>
       <option name="Make" enabled="false" />
-      <option name="Maven.BeforeRunTask" enabled="true" file="$PROJECT_DIR$/pom.xml" goal="test-compile" />
+      <option name="Maven.BeforeRunTask" enabled="true" file="$PROJECT_DIR$/pom.xml" goal="compile test-compile" />
     </method>
   </configuration>
 </component>

@@ -60,7 +60,7 @@ public class MessageVortex {
 
     // create config store
     try {
-      MessageVortexConfig.createConfig();
+      MessageVortexConfig.getDefault();
     } catch (IOException ioe) {
       LOGGER.log(Level.SEVERE, "Unable to parse config file", ioe);
     }

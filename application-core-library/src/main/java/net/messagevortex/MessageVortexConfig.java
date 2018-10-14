@@ -26,8 +26,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -40,7 +38,8 @@ public class MessageVortexConfig extends Config {
 
   private MessageVortexConfig(String ressourceFile) throws IOException {
     try (BufferedReader reader = new BufferedReader(
-            new InputStreamReader(Files.newInputStream(Paths.get(ressourceFile)),
+            new InputStreamReader(
+                    this.getClass().getClassLoader().getResourceAsStream(ressourceFile),
                     StandardCharsets.UTF_8))) {
       String line = reader.readLine();
       while (line != null) {
@@ -82,7 +81,11 @@ public class MessageVortexConfig extends Config {
       }
     }
   }
-
+  
+  public static Config getDefault() throws IOException {
+    return createConfig();
+  }
+  
   /***
    * <p>Gets a message vortex config object.</p>
    *
@@ -91,7 +94,7 @@ public class MessageVortexConfig extends Config {
    * @return the config object
    * @throws IOException if errors occurred during reading of messageVortex.cfgRessources
    */
-  public static Config createConfig() throws IOException {
+  private static synchronized Config createConfig() throws IOException {
     if (defaultConfig == null) {
       Config cfg = new MessageVortexConfig();
       defaultConfig = cfg;

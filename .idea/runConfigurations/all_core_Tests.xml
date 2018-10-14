@@ -14,7 +14,7 @@
     <option name="TEST_SEARCH_SCOPE">
       <value defaultName="singleModule" />
     </option>
-    <dir value="$PROJECT_DIR$/application-core-library/target/test-classes/net/gwerder/java/messagevortex/test/core" />
+    <dir value="$MODULE_DIR$/application-core-library/target/test-classes/net/messagevortex/test/core" />
     <patterns />
     <method>
       <option name="Make" enabled="false" />

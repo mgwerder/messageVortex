@@ -171,8 +171,8 @@ public class Config {
   static Config defaultConfig = null;
   private final Map<String, ConfigElement> configurationData = new ConcurrentHashMap<>();
 
-  public static Config getDefault() {
-    return defaultConfig;
+  public static Config getDefault() throws IOException {
+    return createConfig();
   }
 
   /***
@@ -211,8 +211,12 @@ public class Config {
     }
   }
 
-  public static Config createConfig() throws IOException {
-    return new Config();
+  private static synchronized Config createConfig() throws IOException {
+    if (defaultConfig == null) {
+      Config cfg = new Config();
+      defaultConfig = cfg;
+    }
+    return defaultConfig;
   }
 
   /***
@@ -378,7 +382,7 @@ public class Config {
   public String getStringValue(String id) {
     ConfigElement ele = configurationData.get(id.toLowerCase());
     if (ele == null) {
-      throw new NullPointerException("unable to get id " + id + " from config subsystem");
+      throw new NullPointerException("unable to get id " + id + " from config subsystem (unknown element)");
     }
     ConfigType type = ele.getType();
     if (type != ConfigType.STRING) {

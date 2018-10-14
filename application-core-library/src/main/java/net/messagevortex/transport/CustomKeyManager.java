@@ -22,8 +22,8 @@ package net.messagevortex.transport;
 // * SOFTWARE.
 // ************************************************************************************
 
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.Socket;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
@@ -77,7 +77,7 @@ public class CustomKeyManager extends X509ExtendedKeyManager implements KeyManag
     this.alias = alias;
     keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
     try {
-      try (FileInputStream is = new FileInputStream(keyStoreFile);) {
+      try (InputStream is = this.getClass().getClassLoader().getResourceAsStream(keyStoreFile);) {
         keyStore.load(is, password);
       }
     } catch (IOException ioe) {

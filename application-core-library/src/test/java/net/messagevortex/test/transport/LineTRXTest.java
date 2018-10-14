@@ -3,9 +3,8 @@ package net.messagevortex.test.transport;
 import static junit.framework.TestCase.assertTrue;
 import static junit.framework.TestCase.fail;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -32,6 +31,7 @@ import net.messagevortex.transport.ListeningSocketChannel;
 import net.messagevortex.transport.SecurityContext;
 import net.messagevortex.transport.ServerConnection;
 import net.messagevortex.transport.SocketListener;
+import org.junit.Assert;
 import org.junit.Test;
 
 public class LineTRXTest {
@@ -66,7 +66,7 @@ public class LineTRXTest {
             if( encrypted ) {
                 try {
                     KeyStore trustStore = KeyStore.getInstance( "JKS" );
-                    try(FileInputStream is=new FileInputStream("keystore.jks") ) {
+                    try(InputStream is=this.getClass().getClassLoader().getResourceAsStream("keystore.jks") ) {
                         trustStore.load(is, "changeme".toCharArray());
                     }
                     TrustManagerFactory trustFactory =  TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
@@ -299,7 +299,7 @@ public class LineTRXTest {
 
             // creating SSL context for client
             KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
-            try(FileInputStream is=new FileInputStream("keystore.jks") ) {
+            try(InputStream is=this.getClass().getClassLoader().getResourceAsStream("keystore.jks") ) {
                 trustStore.load(is, "changeme".toCharArray());
             }
             KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
@@ -353,7 +353,8 @@ public class LineTRXTest {
                 // creating SSL context for client
                 SSLContext c = SSLContext.getInstance("TLS");
                 String ks="keystore.jks";
-                assertTrue("Keystore check",(new File(ks)).exists());
+                InputStream stream = this.getClass().getClassLoader().getResourceAsStream(ks);
+                Assert.assertTrue("Keystore check", (stream != null));
                 c.init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, new TrustManager[] {new AllTrustManager()}, esr.getSecureRandom() );
 
                 SecurityContext sc = new SecurityContext();

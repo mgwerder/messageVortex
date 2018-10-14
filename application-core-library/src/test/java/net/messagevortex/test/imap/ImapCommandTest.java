@@ -7,8 +7,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.security.Security;
 import java.util.Arrays;
@@ -237,7 +237,8 @@ public class ImapCommandTest {
             try{
                 final SSLContext context=SSLContext.getInstance("TLS");
                 String ks="keystore.jks";
-                assertTrue("Keystore check",(new File(ks)).exists());
+                InputStream stream = this.getClass().getClassLoader().getResourceAsStream(ks);
+                assertTrue("Keystore check", (stream != null));
                 context.init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, new TrustManager[] {new AllTrustManager()}, esr.getSecureRandom() );
                 ImapServer s=new ImapServer( new InetSocketAddress( "0.0.0.0", 0 ), new SecurityContext( context, encrypted ? SSLTLS : PLAIN ) );
                 LOGGER.log(Level.INFO,"************************************************************************");
@@ -361,7 +362,8 @@ public class ImapCommandTest {
         try{
             final SSLContext context=SSLContext.getInstance("TLS");
             String ks="keystore.jks";
-            assertTrue("Keystore check",(new File(ks)).exists());
+            InputStream stream = this.getClass().getClassLoader().getResourceAsStream(ks);
+            assertTrue("Keystore check", (stream != null));
             context.init(new X509KeyManager[] {new CustomKeyManager(ks,"changeme", "mykey3") }, new TrustManager[] {new AllTrustManager()}, esr.getSecureRandom() );
             ImapServer s=new ImapServer(new InetSocketAddress("localhost",0),new SecurityContext(context,UNTRUSTED_SSLTLS));
             AuthenticationProxy ap=new AuthenticationProxy();

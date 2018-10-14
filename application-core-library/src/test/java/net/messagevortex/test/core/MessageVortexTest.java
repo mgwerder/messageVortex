@@ -1,20 +1,19 @@
 package net.messagevortex.test.core;
 
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.crypto.Cipher;
 import net.messagevortex.Config;
 import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
-import javax.crypto.Cipher;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 /**
  * Tests for {@link MessageVortex}.
@@ -31,7 +30,7 @@ public class MessageVortexTest {
 
     static {
         try {
-            Config cfg=MessageVortexConfig.createConfig();
+            Config cfg=MessageVortexConfig.getDefault();
             cfg.setNumericValue("smtp_incomming_port",588);
         } catch( IOException ioe ) {
             LOGGER.log( Level.SEVERE, "Unable to parse config file", ioe );
