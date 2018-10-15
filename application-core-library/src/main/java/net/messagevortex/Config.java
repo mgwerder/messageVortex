@@ -66,16 +66,21 @@ public class Config {
       setDefaultValue(null);
       setDescription(null);
     }
-
+  
     public ConfigElement(String id, String type, String description) {
       this(id, type);
       setDescription(description);
     }
-
+  
+    public ConfigElement(String id, String type, String description, String defValue) {
+      this(id, type, description);
+      setDefaultValue(defValue);
+    }
+  
     public ConfigElement copy() {
       ConfigElement ret = new ConfigElement(id, type, description);
-      setDefaultValue(defaultValue);
-      setValue(currentValue);
+      ret.defaultValue=defaultValue;
+      ret.currentValue=currentValue;
       return ret;
     }
 
@@ -134,7 +139,12 @@ public class Config {
     }
 
     public final int getNumericValue() {
-      return Integer.parseInt(getStringValue());
+      try {
+        return Integer.parseInt(getStringValue());
+      } catch (NumberFormatException nfe) {
+        LOGGER.log(Level.SEVERE, "Unable to parse " +id +"["+type+"]="+getStringValue()+" as int (def:"+defaultValue+"/curr:"+currentValue+")", nfe);
+        throw nfe;
+      }
     }
 
     public final int setNumericValue(int value) {
@@ -144,14 +154,16 @@ public class Config {
     }
 
     public final String unset() {
+      LOGGER.log(Level.FINE, "value for "+ id +" is deleted (unset called)");
       return setValue(null);
     }
 
     private String setValue(String value) {
       String ret = getStringValue();
-      if (defaultValue != null && defaultValue.equals(value)) {
-        ret = unset();
+      if (value == null) {
+        this.currentValue = value;
       } else {
+        LOGGER.log(Level.FINE, "value for "+ id +" is set to "+value);
         this.currentValue = value;
       }
       return ret;
@@ -162,8 +174,9 @@ public class Config {
       return o1.id.compareToIgnoreCase(o2.id);
     }
 
-    public final void setDefaultValue(String defaultValue) {
-      this.defaultValue = defaultValue;
+    public final void setDefaultValue(String newDefaultValue) {
+      this.defaultValue = newDefaultValue;
+      LOGGER.log(Level.INFO, "Default value set to "+id+"="+this.defaultValue);
     }
 
   }
@@ -181,7 +194,7 @@ public class Config {
    * @return the copy
    */
   public Config copy() throws IOException {
-    Config dst = createConfig();
+    Config dst = new Config();
     synchronized (configurationData) {
       Set<Map.Entry<String, ConfigElement>> it = configurationData.entrySet();
       for (Map.Entry<String, ConfigElement> p : it) {
@@ -273,10 +286,9 @@ public class Config {
   public void createNumericConfigValue(String id, String description, int dval) {
     synchronized (configurationData) {
       if (configurationData.get(id.toLowerCase()) == null) {
-        ConfigElement ele = new ConfigElement(id, "numeric", description);
+        ConfigElement ele = new ConfigElement(id, "numeric", description,"" + dval);
         configurationData.put(id.toLowerCase(), ele);
-        ele.setDefaultValue("" + dval);
-        LOGGER.log(Level.FINE, "Created numeric config variable " + id.toLowerCase());
+        LOGGER.log(Level.INFO, "Created numeric config variable " + id.toLowerCase()+"[numeric]="+dval);
       } else {
         throw new IllegalArgumentException("id \"" + id + "\" is already defined");
       }
