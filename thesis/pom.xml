@@ -4,7 +4,7 @@
                              http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.messagevortex</groupId>
+    <groupId>net.messagevortex</groupId>
     <artifactId>thesis</artifactId>
     <version>0.1.0</version>
 
@@ -14,17 +14,116 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
 
+    <!--<packaging>pdf</packaging>-->
 
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/com.github.fracpete/latex-maven-plugin -->
+        <dependency>
+            <groupId>com.github.fracpete</groupId>
+            <artifactId>latex-maven-plugin</artifactId>
+            <version>1.4.4</version>
+        </dependency>
     </dependencies>
 
     <build>
         <finalName>MessageVortex-thesis</finalName>
         <plugins>
+
             <plugin>
-                <groupId>com.agilejava.docbkx</groupId>
-                <artifactId>docbkx-maven-plugin</artifactId>
-                <version>2.0.17</version>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>copy-sources</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/latex-build</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/latex</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/latex-build</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/latex-resources</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <executions>
+                    <execution>
+                        <id>latex</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>compile</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <workingDirectory>target/latex-build</workingDirectory>
+                    <executable>pdflatex</executable>
+                    <commandlineArgs>MessageVortex.tex</commandlineArgs>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <executions>
+                    <execution>
+                        <id>bibtex</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>compile</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <workingDirectory>target/latex-build</workingDirectory>
+                    <executable>pdflatex</executable>
+                    <commandlineArgs>MessageVortex</commandlineArgs>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <executions>
+                    <execution>
+                        <id>latex</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>compile</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <workingDirectory>target/latex-build</workingDirectory>
+                    <executable>pdflatex</executable>
+                    <commandlineArgs>MessageVortex.tex</commandlineArgs>
+                </configuration>
             </plugin>
         </plugins>
     </build>

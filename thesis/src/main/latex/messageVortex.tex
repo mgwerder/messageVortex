@@ -1,0 +1,575 @@
+\documentclass[8pt,a4paper,appendixprefix,pdfusetitle,twocolumn,draft]{scrbook}
+
+\usepackage{svn}
+\SVN $Revision: 295 $
+\SVN $Author$
+\SVN $Date$
+\SVN $URL: https://qetesh.gwerder.net/svn/mailvortex/doc/mailvortex.tex $
+\SVN $Id$
+
+\makeatletter
+\def\title#1{\gdef\@title{#1}\gdef\thetitle{#1}}
+\usepackage{lipsum}
+
+\title{MessageVortex}
+\gdef\thesubtitle{Transport Independent Messaging Anonymous to \nth{3} Parties}
+\subtitle{\thesubtitle}
+\author{Martin Gwerder (06-073-787)}
+\date{\SVNDate}
+\gdef\myabstract{In this paper we introduce an unobservable message annonymisation protocol, named MessageVortex. It is based on the zero trust principle and a distributed peer-to-peer (P2P) architecture and avoids  central aspects such as fixed infrastructures within a global network. It scores over existing work by blending its traffic into suitable existing transport protocols, thus making it next to impossible to block it without significantly affecting regular users of the transport medium. It furthermore requires no protocol specific infrastructure in public networks and allows a sender to control all aspects of a message such as degree of anonymity, timing, and redundancy of the message transport without disclosing any of these details to the routing or transporting nodes.}
+\makeatother
+
+% enable graphics inclusion
+\usepackage[final]{graphicx}
+
+\usepackage{hyperxmp}
+
+\usepackage{xcolor}
+
+\usepackage{xstring}
+
+\usepackage{pdfsync} 
+
+\usepackage{MnSymbol} % required for the arrow
+
+%\usepackage{underscore}
+
+% titlepage geometry change
+\usepackage[paper=a4paper,top=2cm,bottom=2cm,inner=2cm,outer=2cm]{geometry}% http://ctan.org/pkg/geometry
+
+\usepackage{scrhack}
+
+\usepackage[autocite=superscript,
+            backref=true,
+            backend=bibtex,
+            hyperref=true,
+            url=true,
+            isbn=true,
+            maxcitenames=3,
+            maxbibnames=100,
+            block=none,
+            sorting=anyt]{biblatex}
+
+%\bibstyle{alphadin}
+\addbibresource{messageVortex}
+\addbibresource{inc/bib/unclassified/Anonbib/anonbib}
+\usepackage{csquotes}
+
+% For Multipage listing in appendix
+\usepackage[final]{listings}
+\usepackage{caption}
+\usepackage[framemethod=tikz]{mdframed}
+\usepackage[many]{tcolorbox}
+\tcbuselibrary{listings}
+
+% enable raggedright in tables
+\usepackage{array}
+% for diagonal divided cells in tables
+\usepackage{makecell}
+\renewcommand\theadfont{\bfseries}
+
+% footnotes for tables
+\usepackage{tablefootnote}
+%\makesavenoteenv{tabular}
+
+% enable placement of floating images
+\usepackage{float}
+
+%enable page spanning tables
+\usepackage{supertabular}
+
+% enable superscript  for 1st, 2nd, 3rd etc.
+\usepackage[super]{nth}
+
+%enable hypelinks
+\usepackage[pdftex]{hyperref}
+\makeatletter
+\hypersetup{
+  hidelinks,
+  pdftitle={\thetitle},
+  pdfpagelayout=TwoPageRight,
+  bookmarks=true,
+  hyperindex=true,
+  hyperfigures=true,
+  pdftex=true,
+  pdfpagelabels=true,
+  pdfstartview=Fit,
+  pdfauthor={\author},
+  pdftitle={\thetitle\\\small\thesubtitle},
+  pdflang=en,
+  pdfsubject={\myabstract},
+  pdfkeywords={Messaging, Anonymity, SMTP, MIME, S/MIME, POP3, IMAPv4, Message Vortex},
+  pdfcontactemail={martin.gwerder@fhnw.ch},
+  pdflicenseurl={http://creativecommons.org/licenses/by-nc-nd/3.0/ch/},
+  pdfcopyright={"Creative Commons Attribution-NonCommercial-NoDerivatives 3.0 Switzerland" (CC BY-NC-ND 3.0 CH)}
+}
+\makeatother
+
+% for PDF/A generation
+%\usepackage[a-3b]{pdfx}
+
+
+
+% Link above tables and figures
+%\usepackage[hypcap]{caption}
+
+% support repetitive footnotes
+\usepackage{fixfoot}
+
+% Document annotations
+\usepackage[nomargin]{fixme}
+\fxsetup{layout=pdfnote}
+
+%enable attached files
+\usepackage{attachfile}
+
+%enable word separation
+\usepackage[english]{babel}
+
+% enable nice references
+\usepackage{fancyref}
+
+% For abstracts
+\makeatletter
+\newenvironment{abstract}{%
+	\if@twocolumn
+	\section*{\abstractname}%
+	\else
+	\small
+	\begin{center}%
+		{\bfseries \abstractname\vspace{-.5em}\vspace{\z@}}%
+	\end{center}%
+	\quotation
+	\fi}
+{\if@twocolumn\else\endquotation\fi}
+\makeatother
+
+% Enable indexes
+\usepackage{makeidx}
+\makeindex 
+
+% format appendix
+\usepackage[titletoc,page,title]{appendix} %enable appendix 
+
+% citations
+%\usepackage{cite}
+
+% set numbering for subsubsections
+\usepackage{tocstyle}
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{4}
+
+% Sans serif font for the whole document
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage[T1]{fontenc}
+\usepackage{times}
+
+\usepackage{amsmath}
+
+% No paragraph indentation
+\setlength\parindent{0pt} 
+\setlength\parskip{6pt} 
+
+% For coments and similar
+\usepackage{verbatim}
+
+% For Page background color
+\usepackage{afterpage}
+\usepackage{xcolor} 
+
+
+\usepackage{tabularx}
+\usepackage{multirow}
+
+% XMP support 
+\RequirePackage{xmpincl}
+\includexmp{messageVortex}
+
+% Required for definitions environment
+\usepackage{hanging}
+\usepackage{ragged2e}
+\newenvironment{entry}{\par\leavevmode\hangpara{1.5mm}{1}\ignorespaces}{\RaggedRight\par}
+\newcommand*{\mainentry}[2]{{\bfseries{#1\label{def:#1}}}~#2\par}
+\newcommand*{\subentry}[2]{\par~\begin{tabular}{p{\textwidth-.6cm}@{}}{\bfseries{\itshape{#1\label{def:#1}}}}~#2\end{tabular}}
+
+\newcommand*{\defref}[1]{\hyperref[def:#1]{#1}}
+\title{MessageVortex}
+\subtitle{Transport Independent Messaging anonymous to \nth{3} Parties}
+\author{Martin Gwerder (06-073-787)}
+\date{\SVNDate}
+
+%\hypersetup{pdfinfo={
+%Subject={Privacy when using common internet transport protocols},
+%
+%}}
+
+\lstset{ %
+	backgroundcolor=\color{lightgray},   
+	language=java,
+	frame=single,
+	numbers=left,
+	numbersep=5pt,
+	numberstyle=\tiny,
+	basicstyle=\tiny
+}
+
+\lstdefinelanguage{ASN1}
+{
+	morekeywords=[1]{DEFINITIONS,AUTOMATIC,TAGS,BEGIN,END,%
+		SEQUENCE,OF,CHOICE,ENUMERATED,NULL,SIZE,OPTIONAL,%
+		OCTET,BIT,STRING,INTEGER,REAL,BOOLEAN,WITH,COMPONENTS},%
+	commentstyle=\itshape,%
+	morecomment=[l]{--},%
+	basicstyle=\tiny\sffamily,
+	breaklines=true,
+	prebreak={\mbox{\quad$\rhookswarrow$}},
+}
+
+\lstdefinestyle{BashInputStyle}{
+	language={},
+	basicstyle=\tiny\sffamily,
+	numbers=none,
+	frame=tb,
+	breaklines=true,
+	prebreak={\mbox{\quad$\rhookswarrow$}},
+	columns=fullflexible,
+	backgroundcolor=\color{gray!20},
+%	linewidth=0.9\linewidth,
+%	xleftmargin=0.1\linewidth
+}
+
+\usepackage{wrapfig}
+
+%% This package will make dealing with the ``requirements'' environment a lot easier:
+\usepackage{environ}
+\newcounter{requirements}\setcounter{requirements}{0}
+\makeatletter
+%% This is a macro that gets called by the .aux file to load in data.
+\gdef\savedreq#1#2{\expandafter\gdef\csname req#1\endcsname{#2}}
+%% This macro will save the given requirement to the .aux file so we will have it during the next LaTeX pass to put in the list:
+\def\recordrequirement#1{\immediate\write\@mainaux{\string\savedreq{\the\value{requirements}}{#1}}}
+\AtEndDocument{
+	\refstepcounter{requirements}
+	\immediate\write\@mainaux{\string\xdef\string\totalreqsplusone{\the\value{requirements}}}
+}
+\NewEnviron{requirement}[2]{
+	\noindent
+	\begingroup
+	%% Increment the requirement counter
+	\refstepcounter{requirements}
+	%% Here is the ``Req.'' text:
+	%\textbf{RQ\arabic{requirements} (#2)}:
+	%% Make a label that we can use to refer to this counter:
+	\label{req:\arabic{requirements}}
+	\protected@write \@auxout {}{\string \newlabel {req:#1}{{RQ\arabic{requirements} (#2)}{\thepage}{RQ\arabic{requirements} (#2)}{req:#1}{}} }\recordrequirement{\BODY}
+	
+	%% Next, save this requirement to the .aux file so we will have it during the next LaTeX pass to put in the list:
+	%% We will make the remainder italic:
+	\textbf{RQ\arabic{requirements} (#2):} \it
+	\BODY\hypertarget{req:#1}{}
+	\endgroup
+}
+\newcommand{\listofrequirements}{
+	\chapter*{List of Requirements}
+	%% First, we need to make sure that this is not the first LaTeX pass (i.e., that all of the information has already been recorded to the .aux file):
+	\expandafter\ifx\csname totalreqsplusone\endcsname\relax
+	Please run \LaTeX\ again to populate this list!
+	\else
+	\begingroup
+	%% This \reqi counter is what we are going to use to iterate over the requirements:
+	\newcount\reqi
+	\reqi=0
+	\loop
+	\advance\reqi by 1
+	\ifnum\reqi<\totalreqsplusone
+	%% The requirement numbered \reqi exists!
+	\noindent\textbf{RQ\the\reqi} \csname req\the\reqi\endcsname\leaders\hbox to 2em{\dotfill}\hfill\pageref{req:\the\reqi}\\
+	\repeat
+	\endgroup
+	\fi
+}
+
+\newcommand{\slistofrequirements}{
+	%% First, we need to make sure that this is not the first LaTeX pass (i.e., that all of the information has already been recorded to the .aux file):
+	\expandafter\ifx\csname totalreqsplusone\endcsname\relax
+	Please run \LaTeX\ again to populate this list!
+	\else
+	\begingroup
+	%% This \reqi counter is what we are going to use to iterate over the requirements:
+	\par
+	\newcount\reqi
+	\reqi=0
+%	\leftskip=25pt
+	\loop
+	\advance\reqi by 1
+	\ifnum\reqi<\totalreqsplusone
+	%% The requirement numbered \reqi exists!
+	\hangindent=30pt \parbox{30pt}{\textbf{RQ\the\reqi} }\csname req\the\reqi\endcsname\par
+	\repeat
+	\endgroup
+	\fi
+}
+\makeatother
+
+\captionsetup[lstlisting]{position=bottom}
+\captionsetup[lstinputlisting]{position=bottom}
+
+
+\usepackage[final]{pdfpages}
+
+\begin{document}%
+%
+\frontmatter%
+%
+% include title page
+\input{inc/parts/title.tex}
+%
+
+
+\begin{comment}
+\begin{acknowledgements}      %this creates the heading for the acknowlegments
+I would like to thank my wife Cornelia and my lovely three kids (Saphira, Florian and Aurelius) for their patience and their support. Without them I could never have done this work.\par
+
+FIXME Prof. Dr. C. Tschudin and the University of Basel for the possibility to write this work and for the challenges they oposed to me, allowing me to grow. \par
+FIXME Dr. Andreas Hueni for his thoughts and challenging outside-the-normal-box.
+FIXME Prof. Dr. Carlos Nicolas of the University of Northwestern Switzerland for being such a valuable sparring partner allowing me to test my thoughts.
+
+I would like to acknowledge the thousands of individuals who have coded for the LaTeX project for free. It is due to their efforts that we can generate professionally typeset PDFs now.
+\end{acknowledgements}
+\end{comment}
+
+\cleardoublepage
+\makeatletter\renewcommand{\l@subsubsection}{\@dottedtocline{3}{7.4em}{4.5em}}\makeatother
+\onecolumn
+\tableofcontents
+\listoftables
+\listoffigures
+\listofrequirements
+\twocolumn
+\mainmatter
+
+\input{inc/parts/01_intro.inc.tex}
+\input{inc/parts/02_methodes.inc.tex}
+\input{inc/parts/03_results.inc.tex}
+\input{inc/parts/04_discussion.inc.tex}
+
+\backmatter
+\pagenumbering{arabic}% resets `page` counter to 1
+\renewcommand*{\thepage}{A\arabic{page}}
+\appendix
+\part{Appendix}
+\makeatletter
+\g@addto@macro\appendix{%
+	\renewcommand*{\chapterformat}{%
+		{\chapapp\nobreakspace\thechapter\autodot\enskip}%
+	}
+	\renewcommand*{\chaptermarkformat}{%
+		{\chapapp\nobreakspace\thechapter\autodot\enskip}%
+	}
+	\let\oldaddcontentsline\addcontentsline
+	\newcommand\hackedaddcontentsline[3]{\oldaddcontentsline{#1}{#2}{\chapapp\nobreakspace#3}}
+	\let\oldchapter\chapter
+	\renewcommand*\chapter[1]{%
+		\let\addcontentsline\hackedaddcontentsline%
+		\oldchapter{#1}%
+		\let\addcontentsline\oldaddcontentsline%
+	}
+}
+\makeatother
+\onecolumn
+%\chapter{The RFC draft document\label{app:rfcMessageVortexMain}}
+%\includepdf[pages=-,frame=true,scale=0.5]{rfc/draft-gwerder-messagevortexmain-00.pdf}
+\includepdf[pages=1,frame=true,scale=0.8,pagecommand=\chapter{The RFC draft document\label{app:rfcMessageVortexMain}}, offset=0 -1cm]{rfc/draft-gwerder-messagevortexmain-00.pdf}
+\includepdf[pages=2-,frame=true,scale=0.8,pagecommand={}, offset=0 -1cm]{rfc/draft-gwerder-messagevortexmain-00.pdf}
+
+\twocolumn
+\chapter{Glossary}
+
+\begin{entry}
+  \mainentry{adverser}{FIXME}
+\end{entry}
+
+\begin{entry}
+  \mainentry{Agent}{FIXME}
+\end{entry}
+
+\begin{entry}
+  \mainentry{EWS}{FIXME}
+\end{entry}
+
+\begin{entry}
+  \mainentry{IMAP}{IMAP (currently IMAPv4) is a typical protocol to be used between a \defref{Client MRA} and a \defref{Remote MDA}. It has been specified in its current version in \cite{RFC3501}. The protocol is capable of fully maintaining a server based message store. This includes the capability of adding, modifying and deleting messages and folders of a mailstore. It does not include however sening mails to other destinations outside the server based store.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{Item of Interest (IoI)}{FIXME}
+\end{entry}
+
+\begin{entry}
+  \mainentry{LMTP}{FIXME}
+\end{entry}
+
+\begin{entry}
+  \mainentry{Local Mail Store}{A Local Mail Store offers a persistent store on a local non volatile memory in which messages are beeing stored. A store may be flat or structured (eg. supports folders). A Local Mail Store may be an authoritative store for mails or a ``Cache Only'' copy. It is typically not a queue.}
+\end{entry}
+
+\begin{entry}
+  \mainentry{mail server admin}{FIXME}
+\end{entry}
+
+\begin{entry}
+  \mainentry{MDA}{An MDA provides an uniform access to a \defref{Local Mail Store}.}
+  \subentry{Remote MDA}{A Remote MDA is typically supporting a specific access protocol to access the data stored within a \defref{Local Mail Store} .}
+  \subentry{Local MDA}{A Local MDA is typically giving local applications access to a server store. This may be done thru an API, a named socket or similar mechanisms.}
+\end{entry}
+
+\begin{entry}
+  \mainentry{MRA}{A Mail receiving Agent. This agent receives mails from a agent. Depending on the used protocol two subtypes of MRAs are available.}
+  \subentry{Client MRA}{A client MRA picks up mails in the server mail storage from a remote MDA. Client MRAs usually connect thru a standard protocol which was designed for client access. Examples for such protocols are \defref{POP} or \defref{IMAP}}
+  \subentry{Server MRA}{Unlike a Client MRA a server MRA listens passively for incomming connections and forwardes received Messages to a MTA for delivery and routing. A typical protocol supported by an Server MRA is \defref{SMTP}}
+\end{entry}
+
+\begin{entry}
+  \mainentry{MS-OXMAPIHTTP}{FIXME}
+\end{entry}
+
+\begin{entry}
+  \mainentry{MSA}{A Mail Sending Agent. This agent sends mails to a \defref{Server MRA}. }
+\end{entry}
+
+\begin{entry}
+  \mainentry{MTA}{A Mail Transfer Agent. This transfer agent routes mails between other components. Typically  an MTA receives mails from an MRA and forwardes them to a MDA or MSA. The main task of a MTA is to provide reliable queues and solid track of all mails as long as they are not forwarded to another MTA or local storage.}
+\end{entry}
+
+\begin{entry}
+  \mainentry{MTS}{A Mail Transfer Service. This is a set of agents which provide the functionallity tor send and receive Messages and forward them to a local or remote store.}
+\end{entry}
+
+\begin{entry}
+  \mainentry{MSS}{A Mail Storage Service. This is a set of agents providing a reliable store for local mail accounts. It also provides Interfacing which enables clients to access the users mail.}
+\end{entry}
+
+\begin{entry}
+  \mainentry{MUA}{A Mail User Agent. This user agent reads mails from a local storage and allows a user to read existing mails, create and modify mails.}
+\end{entry}
+
+\begin{entry}
+  \mainentry{Privacy}{From the Oxford English Dictionary: ``
+    \begin{enumerate}
+      \item The state or condition of beeing withdrawn from the society of others, or from the public intrest; seclusion. The state or condition of beeing alone, undisturbed, or free from public attention, as a matter of choice or right; freedom from interference or intrusion.
+      \item Private or retired place; private apartments; places of retreat.
+      \item Absence or avoidance of publicity or display; a condition approaching to secrecy or concealment. Keeping of a secret.
+      \item A private matter, a secret; private or personal matters or relations; The private parts.
+      \item Intimacy, confidential relations.
+      \item The state of being privy to some act.
+    \end{enumerate}''\cite[FIXME]{OXFORD}\\
+    In this work privacy is related to definition two. Mails should be able to be handled as a virtual private place where no one knows who is talking to whom and about what or how frequent (except for directly involved people).
+  }
+\end{entry}
+
+\begin{entry}
+  \mainentry{POP}{POP (currently in version 3) is a typical protocol to be used between a \defref{Client MRA} and a \defref{Remote MDA}. Unlike \defref{IMAP} it is not able to maintain a mail store. Its sole purpose is to fetch and delete mails in a server based store. Modifying Mails or even handling a complex folder structure is not doable with POP}
+\end{entry}
+
+\begin{entry}
+  \mainentry{Service}{FIXME}
+\end{entry}
+
+\begin{entry}
+  \mainentry{SMTP}{SMTP is the most commonly used protocol for sending mails across the internet. In its current version it has been specified in \cite{RFC5321}.}
+\end{entry}
+
+\begin{entry}
+  \mainentry{Storage}{A store to keep data. It is assumed to be temporary or persistent in its nature.}
+\end{entry}
+
+\begin{entry}
+  \mainentry{user}{FIXME}
+\end{entry}
+
+\begin{entry}
+  \mainentry{UBE}{FIXME}
+\end{entry}
+
+\chapter{Bibliography}
+{
+  %\def\filespliter#1{\expandafter\intfilespliter#1\relax}
+  %\def\intfilespliter#1 #2 #3\relax{ First: (#1), Second: (#2), Third: (#3) }
+  \DeclareFieldFormat{file}{\StrGobbleLeft{#1}{1}[\wtcGwM]\StrGobbleRight{\wtcGwM}{4}[\filename] \IfFileExists{\filename}{\attachfile{\filename}}{FIXME missing document link}}
+  \renewbibmacro{finentry}{\finentry\addspace \printfield{file}}
+  \renewcommand*{\bibfont}{\small}
+  \printbibliography[title={},heading=none]
+}
+
+% additional reference entries
+\index{Mail transport|see {Message Transport}}
+
+% add the index
+\printindex
+
+\begin{comment}
+% just a trick to make TexNicCenter Bibliography working
+\bibliography{messageVortex}
+\bibliography{inc/bib/unclassified/Anonbib/anonbib}
+\end{comment}
+
+
+
+\begin{comment}
+% Some Notes 
+http://www.rfc-editor.org/pubprocess.html
+RFC2223 Instructions to RFC Authors
+RFC3979 BCP79 Intellectual Property Rights in IETF Technology
+RFC5378 BCP78 Rights Contributors Provide to the IETF Trust
+
+
+http://tex.stackexchange.com/questions/36307/formatting-back-references-in-bibliography
+http://www.cs.columbia.edu/irt/software/l2x/ l2x -- conversion from LaTeX to other formats Version 1.13
+http://ftp.gwdg.de/pub/ctan/support/l2x/
+http://tools.ietf.org/tools/xml2rfc2
+
+http://www.zisc.ethz.ch/events/2003-2011/ISC2006Slides/FederrathZISCTalk.pdf
+
+Professorliste
+Dr. Christoph Sprenger (Part I)
+-Prof. David Basin
+Gregory Demay
+Peter Gazi
+Dr. Srdjan Marinovic
+Dr. Sasa Radomirovic
+Dr. Ralf Sasse
+
+T. Hoefler
+A. Perrig 
+-Dr. Jan Camenisch (Keine Berechtigung)
+
+-Srdjan Capkun (Keine Kapazität)
+-David Basin  (Keine Kapazität)
+\end{comment}
+
+\chapter{Short Biography}
+\begin{wrapfigure}[9]{r}[0pt]{0.3\columnwidth}
+	\includegraphics[width=0.29\columnwidth]{inc/biography/passphoto}
+\end{wrapfigure}
+\input{inc/biography/biotext.inc.tex}
+
+\begin{comment}
+\section*{Personal Details}
+\begin{tabular}{ll}
+Name:             	& Martin Gwerder\\
+Employer address: 	& Untere Parkstrasse 9,5212 Hausen AG, Switzerland\\
+Email: 				& martin.gwerder@fhnw.ch\\
+\end{tabular}
+\section*{Career Summary}
+Martin Gwerder started off with an apprenticeship as an electro mecanic. After concluding studies at the polytechnic he worked first as an engineer, later as seniorengineer, and architect for several companies in banking, industry and for the gvernment. 
+
+\section*{Education}
+Martin Gwerder is currently a doctoral Student at the University of Basel. After having concluded his studies at the polytechnic at Brugg in 1997, he did a postgraduate study as a master of business and engineering. Following that, he changed to the university track doing an MSc in Informatics at FernUniversit\"at in Hagen.
+
+\section*{Focus}
+The main focus of Martin Gwerder are in the fields of data protection, privacy, confidentiality, and anonymity.
+
+\fxfatal{more content to CV}
+\end{comment}
+
+\end{document}

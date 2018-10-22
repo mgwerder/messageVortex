@@ -1,0 +1,142 @@
+%!TeX program=pdflatex
+%!TeX encoding=utf8
+%!TeX spellcheck = en_GB
+%!TeX root = ../../messageVortex.tex
+
+\part{Discussion \label{sec:discussion}}
+In the following capters we analyze the protocol throughly for fitness of purpose. 
+
+We first apply a statical analysis of the protocol to identify all informations leaked at all levels.
+
+Then we apply a dynamic analysis of the protocol to identify all meta informations leaked during transmission of the protocol.
+
+We then sum up the achieved goals by looking at well known attacks and analyze the effectiveness of them to analyze the protocol.
+
+\chapter{Static analysis}
+In this section we analyze statically the protocol. Looking at a full message we get the following Protocol outline:
+
+\begin{eqnarray}
+Inhalt...
+\end{eqnarray}
+\section{Transport layer}
+\fxfatal{add text about all information which may be obtained on the routing layer: Namely presence of VortexMessages and lack of logical connections between messages (dead parrot)}
+
+\section{Senders routing layer}
+\fxfatal{A sender may have some knowledge about the Routing block size and may therefore guess the complexity of the routing path}
+
+\section{Intermediate node routing layer}
+\fxfatal{An intermediate node does know all the operations applied and the immediate next hop. It does learn an endpoint but is unable to use this endpoint.}
+\fxfatal{An intermediate node may determine the relative message size.}
+
+\section{Receivers routing layer}
+
+\chapter{Dynamic analysis}
+In the dynamic Analysis we reach out to an active adversary. An active adversary modifies traffic in a non protocol conformant way, or missuses available or obtained information to disrupt messages, nodes, or the system as a whole.
+
+\section{Attacks against the vortex system itself}
+An active adversary may attack the transport layer. Most of the transport layer are not able to reject message flooding. Therefore, it is easy to attack a transport layer with a flooding attack, such as a distributed denial of service (DDoS) attack. Due to the nature of the protocol we are unable to apply additional protection on the transport layer or below. The Vortex Message format itself is however crafted in such a way that only minimal effort is sufficient to get the involved parties. The Operations $ K_{msgN}=D^{K^{1}_{host}}\left(P\right)$ and $HEADER=D^{K_{msgN}}\left(H\right)$ are sufficient to identify message senders. Unknown Senders may be discarded without further processing. Known senders may be identified as legitimate and processed further. Known identities misbehaving may be discarded.
+
+\subsection{Illicit Behaving Nodes}
+An active adversary may not follow the protocol and modify any parts of the message. The following paragraphs reflect different kinds of behaviour and how they affeect the message and the system as a whole.
+
+An adversary may not follow the blending specification. If he uses a specification which is less secure an independent third party observer may follow traffic. This is not sensible as such a node may send all the knowledge to such a collaborating node directly. In the case of a  target node not supporting the chosen blending method, the partial message path becomes interrupted. A possible redundancy in the path may recover the message from such a case.
+
+\subsection{Diagnosability of traffic}
+Depending on the blending method, single messages might be identified as long as they are detectable. Detectability depends on various factors such as:
+
+\begin{itemize}
+	\item Broken internal file structure (due to plain blending)
+	\item Uncommon high entropy in a structureless file
+	\item Unrelated message flow (see \cite{oakland2013-parrot})
+\end{itemize}
+
+\subsubsection{Hijacking of Header and Routing Blocks}
+In order to Hijack a header or routing block, an attacker needs to know the forward secret which is contained within the encrypted data. Probability to generate such a
+
+\subsubsection{Traffic Replay}
+\fxfatal{add more text here}
+
+\subsubsection{Partial Implicit Routing Diagnosis}
+\fxfatal{Write something about diagnosis and binary diagnosis without compromising anonymity}
+
+\subsubsection{Partial Explicit Routing Diagnosis}
+\fxfatal{Write something about diagnosis paths and their dangers if failing on their way forth and back}
+
+\subsubsection{End-to-End Routing Diagnosis}
+\fxfatal{Write something about receipt and their dangers if failing on their way back}
+
+\subsubsection{Denial of Service by Exhausting Quotas or Limits}
+\fxfatal{add more text here}
+
+\section{Achieved Anonymity and Flaws}
+\subsection{Measuring Anonymity}
+\fxfatal{Write something about degree of anonymity and how to achieve or compromise}
+
+\subsection{Attacking Anonymity through Traffic Analysis}
+As traffic and decoy traffic and decoy traffic are chosen by the creator of the routing block frequency patterns can not be detected, unlike the router did create them. Same applies to message sizes and traffic hotspots. 
+\fxwarning{Write more here}
+
+\subsubsection{Attacking Anonymity through Timing Analysis}
+\fxfatal{add more text here}
+
+\subsubsection{Attacking Anonymity through Throughput Analysis}
+\fxfatal{add more text here}
+
+\subsection{Attacking Anonymity through Routing Block Analysis}
+\fxfatal{add more text here}
+
+\subsection{Attacking Anonymity through Header Analysis}
+\fxfatal{add more text here}
+
+\subsection{Attacking Anonymity through Payload Analysis}
+\fxfatal{add more text here}
+
+\subsection{Attacking Anonymity through Bugging}
+\fxfatal{add more text here}
+
+\subsection{Attacking Anonymity through Replay Analysis}
+\fxfatal{add more text here}
+
+\subsection{Attacking Anonymity through Tamper Replay Analysis}
+\fxfatal{add more text here}
+
+\chapter{Recommendations on using the Vortex Protocol}
+\fxfatal{add more text here}
+
+\chapter{Achieved Goals and Weaknesses}
+Although the protocol was carefully designed it has certain flaws. These flaws typically assume that parts of the underlying security has been severely broken to be exploited.
+
+
+\section{Message content}
+Although it is possible to embed any type of content into a Vortex message great care should be taken as content may allow to disclose a readers identity or location. For this reason only self contained messages should be used (such as plain text messages).
+
+\subsection{Splitting of message content}
+\fxfatal{add more text here}
+
+\subsection{Redundancy}
+\fxfatal{add more text here}
+
+\subsection{Redundancy Detection as Attack Pattern}
+\fxfatal{add more text here}
+
+\subsection{routing Considerations}
+\fxfatal{add more text here}
+
+\subsection{Hotspot Avoidance}
+\fxfatal{add more text here}
+
+
+\chapter{Anonymity}
+\fxfatal{add content here}
+
+\subsection{Size of the Anonymity Set}
+\fxfatal{add more text here}
+
+\subsection{Jurisdictional implications onto the Anonymity Set}
+\fxfatal{add more text here}
+
+\section{Effects of anonymous communication on behaveour}
+\fxfatal{\cite{postmes2001social}}
+
+\fxfatal{add content}
+

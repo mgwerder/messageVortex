@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                              http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.messagevortex</groupId>
+    <groupId>net.messagevortex</groupId>
     <artifactId>application-core-library</artifactId>
     <version>0.1.0</version>
 
@@ -32,17 +32,7 @@
             <artifactId>bcprov-jdk15on</artifactId>
             <version>1.60</version>
         </dependency>
-        <!--<dependency>
-            <groupId>org.jacoco</groupId>
-            <artifactId>jacoco-maven-plugin</artifactId>
-            <version>0.8.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-checkstyle-plugin</artifactId>
-            <version>3.0.0</version>
-        </dependency>-->
-    </dependencies>
+   </dependencies>
 
     <build>
         <finalName>messagevortex</finalName>
