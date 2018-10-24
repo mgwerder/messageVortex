@@ -36,10 +36,16 @@ In the dynamic Analysis we reach out to an active adversary. An active adversary
 \section{Attacks against the vortex system itself}
 An active adversary may attack the transport layer. Most of the transport layer are not able to reject message flooding. Therefore, it is easy to attack a transport layer with a flooding attack, such as a distributed denial of service (DDoS) attack. Due to the nature of the protocol we are unable to apply additional protection on the transport layer or below. The Vortex Message format itself is however crafted in such a way that only minimal effort is sufficient to get the involved parties. The Operations $ K_{msgN}=D^{K^{1}_{host}}\left(P\right)$ and $HEADER=D^{K_{msgN}}\left(H\right)$ are sufficient to identify message senders. Unknown Senders may be discarded without further processing. Known senders may be identified as legitimate and processed further. Known identities misbehaving may be discarded.
 
-\subsection{Illicit Behaving Nodes}
-An active adversary may not follow the protocol and modify any parts of the message. The following paragraphs reflect different kinds of behaviour and how they affeect the message and the system as a whole.
+
+\subsection{DoS Attacks against the System}
+An active adversary may not follow the protocol and modify any parts of the message. The following paragraphs reflect different kinds of behaviour and how they affect the messages and the system as a whole.
 
 An adversary may not follow the blending specification. If he uses a specification which is less secure an independent third party observer may follow traffic. This is not sensible as such a node may send all the knowledge to such a collaborating node directly. In the case of a  target node not supporting the chosen blending method, the partial message path becomes interrupted. A possible redundancy in the path may recover the message from such a case.
+
+\subsubsection{Traffic Replay}
+Traffic replay is a common way to highlight traffic in many systems by replaying the same traffic and increase through this the signal to noise ratio of the system. 
+
+Due to the replay protection of the vortex protocol it is not possible to of subsequent messages as the messages are terminated on the first conformal behaving node.
 
 \subsection{Diagnosability of traffic}
 Depending on the blending method, single messages might be identified as long as they are detectable. Detectability depends on various factors such as:
@@ -52,9 +58,6 @@ Depending on the blending method, single messages might be identified as long as
 
 \subsubsection{Hijacking of Header and Routing Blocks}
 In order to Hijack a header or routing block, an attacker needs to know the forward secret which is contained within the encrypted data. Probability to generate such a
-
-\subsubsection{Traffic Replay}
-\fxfatal{add more text here}
 
 \subsubsection{Partial Implicit Routing Diagnosis}
 \fxfatal{Write something about diagnosis and binary diagnosis without compromising anonymity}

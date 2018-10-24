@@ -576,7 +576,7 @@ jidAlternateSpec = localPart ":" keySpec "@" domain [ "/" resourcepart
                         </list>
                     </t>
                     <t>
-                        A message is considered authenticated as soon as the identity used in the header block is known and not temporary. For authenticated messages the following rules apply:
+                        A message is considered authenticated as soon as the identity used in the header block is known and not temporary. A node MUST NOT treat a message as authenticated if the specified maximum number of replays have been reached. For authenticated messages the following rules apply:
                         <list style="symbols">
                             <t>A node MUST ignore identity creation requests.</t>
                             <t>A node MUST replace the current reply block with the reply block provided in the routing block (if any). The node MUST keep the reply block if no reply block is provided.</t>
@@ -584,7 +584,7 @@ jidAlternateSpec = localPart ":" keySpec "@" domain [ "/" resourcepart
                             <t>A node SHOULD add all routing blocks to the workspace.</t>
                             <t>A node SHOULD add all payload blocks to the workspace.</t>
                         </list>
-                        A routing node MUST decrement the message quota by one if a received message is authenticated and contains at least one payload block.
+                        A routing node MUST decrement the message quota by one if a received message is authenticated and contains at least one payload block. If a message is identified as duplicate acording to the reply protection, a node MUST NOT decrement the message quota.
                     </t>
                 </section>
                 <section anchor="routing_workspace" title="Processing of Routing Blocks in Workspace">
@@ -910,9 +910,6 @@ jidAlternateSpec = localPart ":" keySpec "@" domain [ "/" resourcepart
              </t>
              <t>
                 An active adversary cannot use blocks from other routing block builders for his purposes. He may falsify the result by injecting wrong message chunks or by not sending a message. Such message disruptions may be detected by intentionally routing some information to the routing block builders' node. If the Vortex message does not carry the information expected the node may safely assume that one of the involved nodes is misbehaving. A block building node MAY calculate reputation for involved nodes over time. A block building node MAY build redundancy paths into a routing block to withstand such malicious nodes.
-            </t>
-            <t>
-                A peer node may try to exhaust a routers quota by sending the same block multiple times. A block builder should take care that a block may not be resent in the interval where the previous blocks for the transaction are still valid. This guarantees that replayed blocks will stop at the next peer node. This provides better protection against replay based attacks.
             </t>
             <t>
                 Receiver anonymity is in danger if the handling of message header and content is not done with care. An attacker might send a bugged message (e.g., with a DKIM or DMARC header) to deanonymize a recipient. Great care has to be taken when handling any other than local references when processing, verifying, or rendering a message.
