@@ -18,8 +18,21 @@ In this section we analyze statically the protocol. Looking at a full message we
 \begin{eqnarray}
 Inhalt...
 \end{eqnarray}
-\section{Transport layer}
-\fxfatal{add text about all information which may be obtained on the routing layer: Namely presence of VortexMessages and lack of logical connections between messages (dead parrot)}
+\section{Transport and Blending Layer}
+
+\subsection{Identifying a Vortex Message Endpoint}
+Depending on the blending method, single messages might be identified as long as they are detectable. Detectability depends on various factors such as:
+
+\begin{itemize}
+	\item Broken internal file structure (due to plain blending)
+	\item Uncommon high entropy in a structureless file
+	\item Unrelated message flow (see \cite{oakland2013-parrot})
+	\item Non-human behaviour on the transport layer (e.g., message traffic 24x7)
+\end{itemize}
+
+If an endpoint is successfully identified then all directly related endpoints of the same protocol may be identified as well by following the message flow. This does however not enable an adversary to inject messages as the hostkey is not leaked. 
+
+Assuming a global observer as an adversary, he might discover the originating routing layer and thus identifying it as a Vortex node by following traces of the transport layer.
 
 \section{Senders routing layer}
 \fxfatal{A sender may have some knowledge about the Routing block size and may therefore guess the complexity of the routing path}
@@ -48,13 +61,6 @@ Traffic replay is a common way to highlight traffic in many systems by replaying
 Due to the replay protection of the vortex protocol it is not possible to of subsequent messages as the messages are terminated on the first conformal behaving node.
 
 \subsection{Diagnosability of traffic}
-Depending on the blending method, single messages might be identified as long as they are detectable. Detectability depends on various factors such as:
-
-\begin{itemize}
-	\item Broken internal file structure (due to plain blending)
-	\item Uncommon high entropy in a structureless file
-	\item Unrelated message flow (see \cite{oakland2013-parrot})
-\end{itemize}
 
 \subsubsection{Hijacking of Header and Routing Blocks}
 In order to Hijack a header or routing block, an attacker needs to know the forward secret which is contained within the encrypted data. Probability to generate such a
