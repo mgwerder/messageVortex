@@ -1,11 +1,6 @@
-\documentclass[8pt,a4paper,appendixprefix,pdfusetitle,twocolumn,draft]{scrbook}
+\documentclass[a4paper,appendixprefix,pdfusetitle,twocolumn,draft]{scrbook}
 
-\usepackage{svn}
-\SVN $Revision: 295 $
-\SVN $Author$
-\SVN $Date$
-\SVN $URL: https://qetesh.gwerder.net/svn/mailvortex/doc/mailvortex.tex $
-\SVN $Id$
+\usepackage{gitinfo}
 
 \makeatletter
 \def\title#1{\gdef\@title{#1}\gdef\thetitle{#1}}
@@ -15,7 +10,7 @@
 \gdef\thesubtitle{Transport Independent Messaging Anonymous to \nth{3} Parties}
 \subtitle{\thesubtitle}
 \author{Martin Gwerder (06-073-787)}
-\date{\SVNDate}
+\date{\gitAuthorDate}
 \gdef\myabstract{In this paper we introduce an unobservable message annonymisation protocol, named MessageVortex. It is based on the zero trust principle and a distributed peer-to-peer (P2P) architecture and avoids  central aspects such as fixed infrastructures within a global network. It scores over existing work by blending its traffic into suitable existing transport protocols, thus making it next to impossible to block it without significantly affecting regular users of the transport medium. It furthermore requires no protocol specific infrastructure in public networks and allows a sender to control all aspects of a message such as degree of anonymity, timing, and redundancy of the message transport without disclosing any of these details to the routing or transporting nodes.}
 \makeatother
 
@@ -30,12 +25,18 @@
 
 \usepackage{pdfsync} 
 
-\usepackage{MnSymbol} % required for the arrow
+%\usepackage{MnSymbol} % required for the arrow
 
 %\usepackage{underscore}
 
 % titlepage geometry change
 \usepackage[paper=a4paper,top=2cm,bottom=2cm,inner=2cm,outer=2cm]{geometry}% http://ctan.org/pkg/geometry
+
+% For formulae in twocolumn
+\usepackage{mathtools}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{cuted}
 
 \usepackage{scrhack}
 
@@ -196,7 +197,7 @@
 \title{MessageVortex}
 \subtitle{Transport Independent Messaging anonymous to \nth{3} Parties}
 \author{Martin Gwerder (06-073-787)}
-\date{\SVNDate}
+\date{\gitAuthorDate}
 
 %\hypersetup{pdfinfo={
 %Subject={Privacy when using common internet transport protocols},
@@ -210,7 +211,7 @@
 	numbers=left,
 	numbersep=5pt,
 	numberstyle=\tiny,
-	basicstyle=\tiny
+	basicstyle=\tiny,
 }
 
 \lstdefinelanguage{ASN1}
@@ -222,18 +223,20 @@
 	morecomment=[l]{--},%
 	basicstyle=\tiny\sffamily,
 	breaklines=true,
-	prebreak={\mbox{\quad$\rhookswarrow$}},
+	prebreak={\mbox{\quad$\hookleftarrow$}},
 }
 
-\lstdefinestyle{BashInputStyle}{
+\lstdefinelanguage{bash}{
 	language={},
 	basicstyle=\tiny\sffamily,
 	numbers=none,
 	frame=tb,
 	breaklines=true,
-	prebreak={\mbox{\quad$\rhookswarrow$}},
+	prebreak={\mbox{\quad$\hookleftarrow$}},
 	columns=fullflexible,
 	backgroundcolor=\color{gray!20},
+    literate=~{$\sim$}2
+			{\$}{\$}1
 %	linewidth=0.9\linewidth,
 %	xleftmargin=0.1\linewidth
 }
@@ -265,7 +268,7 @@
 	
 	%% Next, save this requirement to the .aux file so we will have it during the next LaTeX pass to put in the list:
 	%% We will make the remainder italic:
-	\textbf{RQ\arabic{requirements} (#2):} \it
+	\textbf{RQ\arabic{requirements} (#2):} \itshape
 	\BODY\hypertarget{req:#1}{}
 	\endgroup
 }

@@ -13,11 +13,23 @@ Then we apply a dynamic analysis of the protocol to identify all meta informatio
 We then sum up the achieved goals by looking at well known attacks and analyze the effectiveness of them to analyze the protocol.
 
 \chapter{Static analysis}
-In this section we analyze statically the protocol. Looking at a full message we get the following Protocol outline:
+In this section we analyze statically the protocol. Looking at a full message we get the Protocol outline as shown in \eqref{eq:vortexMessage} on page~\pageref{eq:vortexMessage}.
 
-\begin{eqnarray}
-Inhalt...
-\end{eqnarray}
+\begin{figure*}[!h]
+	\begin{align}
+VortexMessage                     & = \langle \mathbf{P}^{K^{-1}_{hostN}}, \langle\mathbf{PAD}, \mathbf{CP}^{K^{-1}_{hostN}}, \mathbf{H}^{K_{senderN}}, \left[\mathbf{R}^{K_{senderN}}\right], \left[\mathbf{PL}\right]*\rangle^{K_{peerN}} \rangle\label{eq:vortexMessage}\\ 
+\mathbf{P}^{K^{-1}_{hostN}}       & = E^{K^{-1}_{hostN}}\left(\mathbf{PREFIX}\langle K_{peerN}\rangle \right)\\
+\mathbf{PAD}                      & = \langle \text{32 padding bytes from payload} \rangle\\
+\mathbf{CP}^{K^{-1}_{hostN}}      & = E^{K^{-1}_{hostN}}\left(\mathbf{CPREFIX}\langle K_{senderN}\rangle \right)\\
+\mathbf{H}^{K_{senderN}}          & = E^{K_{senderN}}\left(\mathbf{HEADER}\right)\\
+\mathbf{HEADER} 				  & = \\
+\mathbf{R}^{K_{senderN}}          & = E^{K_{senderN}}\left(\mathbf{ROUTING}\right)\\
+\mathbf{ROUTING}				  & = \\
+\mathbf{PL}                       & = 
+	\end{align}
+	\caption{Detailed representation of a VortexMessage}
+\end{figure*}\fxfatal{Add missing blocks}
+
 \section{Transport and Blending Layer}
 
 \subsection{Identifying a Vortex Message Endpoint}
@@ -30,9 +42,9 @@ Depending on the blending method, single messages might be identified as long as
 	\item Non-human behaviour on the transport layer (e.g., message traffic 24x7)
 \end{itemize}
 
-If an endpoint is successfully identified then all directly related endpoints of the same protocol may be identified as well by following the message flow. This does however not enable an adversary to inject messages as the hostkey is not leaked. 
+If an endpoint is successfully identified then all directly related endpoints of the same protocol may be identified as well by following the message flow. This does however not enable an adversary to inject messages as the host key is not leaked. 
 
-Assuming a global observer as an adversary, he might discover the originating routing layer and thus identifying it as a Vortex node by following traces of the transport layer.
+Assuming a global observer as an adversary and unencrypted traffic, he might discover the originating routing layer and thus identifying it as a Vortex node by following traces of the transport layer.
 
 \section{Senders routing layer}
 \fxfatal{A sender may have some knowledge about the Routing block size and may therefore guess the complexity of the routing path}

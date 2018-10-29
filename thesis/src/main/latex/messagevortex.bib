@@ -1,7 +1,3 @@
-% This file was created with JabRef 2.10.
-% Encoding: Cp1252
-
-
 @Article{abadi2005moderately,
   Title                    = {Moderately hard, memory-bound functions},
   Author                   = {Abadi, Martin and Burrows, Mike and Manasse, Mark and Wobber, Ted},
@@ -38,7 +34,7 @@
   Pages                    = {122--130},
   Publisher                = {ACM Press},
 
-  Abstract                 = {Informally, a communication protocol is sender k - anonymous if it can guarantee that anadversary, trying to determine the sender of a particular message, can only narrow down itssearch to a set of k suspects. Receiver k-anonymity places a similar guarantee on the receiver:an adversary, at best, can only narrow down the possible receivers to a set of size k. In this paperwe introduce the notions of sender and receiver k-anonymity and consider their applications.We show that there exist simple and efficient protocols which are k-anonymous for both thesender and the receiver in a model where a polynomial time adversary can see all traffic in thenetwork and can control up to a constant fraction of the participants. Our protocol is provablysecure, practical, and does not require the existence of trusted third parties. This paper alsoprovides a conceptually simple augmentation to Chaum’s DC-Nets that adds robustness againstadversaries who attempt to disrupt the protocol through perpetual transmission or selectivenon-participation.},
+  Abstract                 = {Informally, a communication protocol is sender k - anonymous if it can guarantee that anadversary, trying to determine the sender of a particular message, can only narrow down itssearch to a set of k suspects. Receiver k-anonymity places a similar guarantee on the receiver:an adversary, at best, can only narrow down the possible receivers to a set of size k. In this paperwe introduce the notions of sender and receiver k-anonymity and consider their applications.We show that there exist simple and efficient protocols which are k-anonymous for both thesender and the receiver in a model where a polynomial time adversary can see all traffic in thenetwork and can control up to a constant fraction of the participants. Our protocol is provablysecure, practical, and does not require the existence of trusted third parties. This paper alsoprovides a conceptually simple augmentation to Chaums DC-Nets that adds robustness againstadversaries who attempt to disrupt the protocol through perpetual transmission or selectivenon-participation.},
   Doi                      = {10.1145/948109.948128},
   File                     = {:inc\\bib\\unclassified\\Anonbib\\k-anonymous_ccs2003.pdf:PDF},
   Lastaccessed             = {2004-01-20 22:05:54},
@@ -90,7 +86,7 @@ TODO: Mathe begreifen},
   Booktitle                = {Proceedings of Second International Workshop on Security, (IWSEC 2007)},
   Year                     = {2007},
 
-  Abstract                 = {Anonymity is considered as a valuable property as far as everyday transactions in the Internet are concerned. Users care about their privacy and they seek for new ways to keep secret as much as of their personal information from third parties. Anonymizing systems exist nowadays that provide users with the technology, which is able to hide their origin when they use applications such as the World Wide Web or Instant Messaging. However, all these systems are vulnerable to a number of attacks and some of them may collapse under a low strength adversary. In this paper we explore anonymity from a di®erent perspective. Instead of building a new anonymizing system, we try to overload an existing file sharing system, Gnutella, and use it for a di®erent purpose. We develop a technique that transforms Gnutella as an Anonymizing System (GAS) for a single download from the World Wide Web.},
+  Abstract                 = {Anonymity is considered as a valuable property as far as everyday transactions in the Internet are concerned. Users care about their privacy and they seek for new ways to keep secret as much as of their personal information from third parties. Anonymizing systems exist nowadays that provide users with the technology, which is able to hide their origin when they use applications such as the World Wide Web or Instant Messaging. However, all these systems are vulnerable to a number of attacks and some of them may collapse under a low strength adversary. In this paper we explore anonymity from a different perspective. Instead of building a new anonymizing system, we try to overload an existing file sharing system, Gnutella, and use it for a different purpose. We develop a technique that transforms Gnutella as an Anonymizing System (GAS) for a single download from the World Wide Web.},
   File                     = {:inc\\bib\\unclassified\\Anonbib\\AthanRAM07.pdf:PDF},
   Keywords                 = {GAS},
   Lastaccessed             = {2007-10-18 03:18:39},
@@ -631,7 +627,7 @@ The technique can also be used to form rosters of untraceable digital pseudonyms
   Year                     = {2009},
   Month                    = aug,
 
-  Abstract                 = {In 2005, Murdoch and Danezis demonstrated the first practical congestion attack against a deployed anonymity network. They could identify which relays were on a target Tor user’s path by building paths one at a time through every Tor relay and introducing congestion. However, the original attack was performed on only 13 Tor relays on the nascent and lightly loaded Tor network. We show that the attack from their paper is no longer practical on today’s 1500-relay heavily loaded Tor network. The attack doesn’t scale because a) the attacker needs a tremendous amount of bandwidth to measure enough relays during the attack window, and b) there are too many false positives now that many other users are adding congestion at the same time as the attacks. We then strengthen the original congestion attack by combining it with a novel bandwidth amplification attack based on a flaw in the Tor design that lets us build long circuits that loop back on themselves. We show that this new combination attack is practical and effective by demonstrating a working attack on today’s deployed Tor network. By coming up with a model to better understand Tor’s routing behavior under congestion, we further provide a statistical analysis characterizing how effective our attack is in each case.},
+  Abstract                 = {In 2005, Murdoch and Danezis demonstrated the first practical congestion attack against a deployed anonymity network. They could identify which relays were on a target Tor users path by building paths one at a time through every Tor relay and introducing congestion. However, the original attack was performed on only 13 Tor relays on the nascent and lightly loaded Tor network. We show that the attack from their paper is no longer practical on todays 1500-relay heavily loaded Tor network. The attack doesnt scale because a) the attacker needs a tremendous amount of bandwidth to measure enough relays during the attack window, and b) there are too many false positives now that many other users are adding congestion at the same time as the attacks. We then strengthen the original congestion attack by combining it with a novel bandwidth amplification attack based on a flaw in the Tor design that lets us build long circuits that loop back on themselves. We show that this new combination attack is practical and effective by demonstrating a working attack on todays deployed Tor network. By coming up with a model to better understand Tors routing behavior under congestion, we further provide a statistical analysis characterizing how effective our attack is in each case.},
   File                     = {:inc\\bib\\unclassified\\Anonbib\\congestion-longpaths.pdf:PDF},
   Lastaccessed             = {2009-06-11 20:33:58},
   Ranking                  = {rank3},
@@ -882,7 +878,7 @@ This paper discusses the goals and desired properties of anonymous email in gene
   Month                    = may,
 
   Abstract                 = {Dining cryptographers networks (or DC-nets) are a privacypreserving primitive devised by Chaum for anonymous message publication. A very attractive feature of the basic DC-net is its non-interactivity. Subsequent to key establishment, players may publish their messages in a single broadcast round, with no player-to-player communication. This feature is not possible in other privacy-preserving tools like mixnets. A drawback to DC-nets, however, is that malicious players can easily jam them, i.e., corrupt or block the transmission of messages from honest parties, and may do so without being traced. 
-Several researchers have proposed valuable methods of detecting cheating players in DC-nets. This is usually at the cost, however, of multiple broadcast rounds, even in the optimistic case, and often of high computational and/or communications overhead, particularly for fault recovery. We present new DC-net constructions that simultaneously achieve noninteractivity and high-probability detection and identification of cheating players. Our proposals are quite e±cient, imposing a basic cost that is linear in the number of participating players. Moreover, even in the case of cheating in our proposed system, just one additional broadcast round su±ces for full fault recovery. Among other tools, our constructions employ bilinear maps, a recently popular cryptographic technique for reducing communication complexity.},
+Several researchers have proposed valuable methods of detecting cheating players in DC-nets. This is usually at the cost, however, of multiple broadcast rounds, even in the optimistic case, and often of high computational and/or communications overhead, particularly for fault recovery. We present new DC-net constructions that simultaneously achieve noninteractivity and high-probability detection and identification of cheating players. Our proposals are quite effcient, imposing a basic cost that is linear in the number of participating players. Moreover, even in the case of cheating in our proposed system, just one additional broadcast round suffces for full fault recovery. Among other tools, our constructions employ bilinear maps, a recently popular cryptographic technique for reducing communication complexity.},
   File                     = {:inc\\bib\\unclassified\\Anonbib\\golle_eurocrypt2004.pdf:PDF},
   Lastaccessed             = {2004-10-19 18:27:39},
   Ranking                  = {rank5},
@@ -983,9 +979,9 @@ Several researchers have proposed valuable methods of detecting cheating players
   Year                     = {2013},
   Month                    = may,
 
-  Abstract                 = {In response to the growing popularity of Tor and other censorship circumvention systems, censors in nondemocratic countries have increased their technical capabilities and can now recognize and block network traffic generated by these systems on a nationwide scale. New censorship-resistant communication systems such as SkypeMorph, StegoTorus, and CensorSpoofer aim to evade censors’ observations by imitating common protocols like Skype and HTTP. 
+  Abstract                 = {In response to the growing popularity of Tor and other censorship circumvention systems, censors in nondemocratic countries have increased their technical capabilities and can now recognize and block network traffic generated by these systems on a nationwide scale. New censorship-resistant communication systems such as SkypeMorph, StegoTorus, and CensorSpoofer aim to evade censors observations by imitating common protocols like Skype and HTTP.
 We demonstrate that these systems completely fail to achieve unobservability. Even a very weak, local censor can easily distinguish their traffic from the imitated protocols. We show dozens of passive and active methods that recognize even a single imitated session, without any need to correlate multiple network flows or perform sophisticated traffic analysis.
-We enumerate the requirements that a censorship-resistant system must satisfy to successfully mimic another protocol and conclude that “unobservability by imitation�? is a fundamentally flawed approach.We then present our recommendations for the design of unobservable communication systems.},
+We enumerate the requirements that a censorship-resistant system must satisfy to successfully mimic another protocol and conclude that unobservability by imitation is a fundamentally flawed approach. We then present our recommendations for the design of unobservable communication systems.},
   File                     = {:inc\\bib\\unclassified\\Anonbib\\oakland2013-parrot.pdf:PDF},
   Lastaccessed             = {2013-06-15 02:30:17},
   Ranking                  = {rank4},
@@ -1005,12 +1001,12 @@ We enumerate the requirements that a censorship-resistant system must satisfy to
 }
 
 @InProceedings{iwanik2005duo,
-  Title                    = {DUO-Onions and Hydra-Onions�failure and adversary resistant onion protocols},
+  Title                    = {DUO-Onions and Hydra-Onions-failure and adversary resistant onion protocols},
   Author                   = {Iwanik, Jan and Klonowski, Marek and Kuty{\l}owski, Miroslaw},
   Booktitle                = {Communications and Multimedia Security},
   Year                     = {2005},
   Organization             = {Springer},
-  Pages                    = {1--15},
+  Pages                    = {1-15},
 
   File                     = {:inc\\bib\\IwanikKK04.pdf:PDF},
   Url                      = {http://dl.ifip.org/db/conf/cms/cms2004/IwanikKK04.pdf}
@@ -1772,7 +1768,7 @@ This paper is intended for the systems programmer. It presents a complete specif
 
 @Book{ONLINERECHT,
   Title                    = {Online-Recht - juristische Probleme der Internet-Praxis erkennen und vermeiden (4. Aufl.).},
-  Author                   = {Tobias H. Str�mer},
+  Author                   = {Tobias H. Strömer},
   Publisher                = {dpunkt.verlag},
   Year                     = {2006},
 
