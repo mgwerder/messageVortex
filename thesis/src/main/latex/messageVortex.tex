@@ -1,4 +1,4 @@
-\documentclass[a4paper,appendixprefix,pdfusetitle,twocolumn,draft]{scrbook}
+\documentclass[a4paper,appendixprefix,pdfusetitle,twocolumn,draft,8pt]{scrbook}
 
 \usepackage{gitinfo}
 
@@ -191,11 +191,11 @@
 \usepackage{ragged2e}
 \newenvironment{entry}{\par\leavevmode\hangpara{1.5mm}{1}\ignorespaces}{\RaggedRight\par}
 \newcommand*{\mainentry}[2]{{\bfseries{#1\label{def:#1}}}~#2\par}
-\newcommand*{\subentry}[2]{\par~\begin{tabular}{p{\textwidth-.6cm}@{}}{\bfseries{\itshape{#1\label{def:#1}}}}~#2\end{tabular}}
+\newcommand*{\subentry}[2]{\par~\begin{minipage}{\columnwidth-0.6cm}{\bfseries{\itshape{#1\label{def:#1}}}}~#2\end{minipage}}
 
 \newcommand*{\defref}[1]{\hyperref[def:#1]{#1}}
 \title{MessageVortex}
-\subtitle{Transport Independent Messaging anonymous to \nth{3} Parties}
+\subtitle{Transport Independent and Unlinking Messaging}
 \author{Martin Gwerder (06-073-787)}
 \date{\gitAuthorDate}
 
@@ -389,15 +389,25 @@ I would like to acknowledge the thousands of individuals who have coded for the 
 \chapter{Glossary}
 
 \begin{entry}
-  \mainentry{adversary}{FIXME}
+  \mainentry{adversary}{\fxfatal{add content here}}
 \end{entry}
 
 \begin{entry}
-  \mainentry{Agent}{FIXME}
+	\mainentry{anonymity}{\fxfatal{add content here}}
+	\subentry{Sender Anonymity}{\fxfatal{add content here}}
+	\subentry{Receiver Anonymity}{\fxfatal{add content here}}
 \end{entry}
 
 \begin{entry}
-  \mainentry{EWS}{FIXME}
+	\mainentry{detectability}{\fxfatal{add content here}}
+\end{entry}
+
+\begin{entry}
+  \mainentry{Agent}{\fxfatal{add content here}}
+\end{entry}
+
+\begin{entry}
+  \mainentry{EWS}{\fxfatal{add content here}}
 \end{entry}
 
 \begin{entry}
@@ -405,11 +415,11 @@ I would like to acknowledge the thousands of individuals who have coded for the 
 \end{entry}
 
 \begin{entry}
-	\mainentry{Item of Interest (IoI)}{FIXME}
+	\mainentry{Item of Interest (IoI)}{\fxfatal{add content here}}
 \end{entry}
 
 \begin{entry}
-  \mainentry{LMTP}{FIXME}
+  \mainentry{LMTP}{\fxfatal{add content here}}
 \end{entry}
 
 \begin{entry}
@@ -417,7 +427,7 @@ I would like to acknowledge the thousands of individuals who have coded for the 
 \end{entry}
 
 \begin{entry}
-  \mainentry{mail server admin}{FIXME}
+  \mainentry{mail server admin}{\fxfatal{add content here}}
 \end{entry}
 
 \begin{entry}
@@ -433,7 +443,7 @@ I would like to acknowledge the thousands of individuals who have coded for the 
 \end{entry}
 
 \begin{entry}
-  \mainentry{MS-OXMAPIHTTP}{FIXME}
+  \mainentry{MS-OXMAPIHTTP}{\fxfatal{add content here}}
 \end{entry}
 
 \begin{entry}
@@ -475,7 +485,7 @@ I would like to acknowledge the thousands of individuals who have coded for the 
 \end{entry}
 
 \begin{entry}
-  \mainentry{Service}{FIXME}
+  \mainentry{Service}{\fxfatal{add content here}}
 \end{entry}
 
 \begin{entry}
@@ -487,11 +497,11 @@ I would like to acknowledge the thousands of individuals who have coded for the 
 \end{entry}
 
 \begin{entry}
-  \mainentry{user}{FIXME}
+  \mainentry{user}{\fxfatal{add content here}}
 \end{entry}
 
 \begin{entry}
-  \mainentry{UBE}{FIXME}
+  \mainentry{UBE}{\fxfatal{add content here}}
 \end{entry}
 
 \chapter{Bibliography}

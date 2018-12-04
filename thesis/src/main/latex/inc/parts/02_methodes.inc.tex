@@ -18,13 +18,7 @@ Technologies are always referenced through their respective standard. If applica
 
 Research are referenced by a paper. If applicable multiple related researches and papers are collected together into a bigger picture an then analysed for suitability concerning specific problem. If related to a standard technology links to that technology are provided where relevant.
 
-The chapters have been chosen by possible relevance. In chapter \ref{sec:genRequirements} we collect the requirements for the protocol. 
-
-Based on findings in this section we collect in chapter \ref{sec:existingTPP}. 
-
-In chapter \ref{sec:existingRD} we collect relevant research to the topic. 
-
-In chapter \ref{sec:appliedMethods} we summarize the identified  methods which will be used. We explain choices and give a rough outline of the protocol baselines.
+In chapter \ref{sec:genRequirements} we collect the requirements for the protocol. Based on findings in this section we collect in chapter \ref{sec:existingTPP}. In chapter \ref{sec:existingRD} we collect relevant research to the topic. In chapter \ref{sec:appliedMethods} we summarize the identified  methods which will be used. We explain choices and give a rough outline of the protocol baselines.
 
 \chapter{Requirements for an anonymising Protocol\label{sec:genRequirements}}
 In the following sections we try to elaborate the main characteristics of the anonymising protocol. 
@@ -40,11 +34,12 @@ and
 
 We imply that not all participants in the internet share this value. As of September \nth{1} 2016 Countries such as China (signatory), Cuba (signatory), Quatar, Saudi Arabia, Singapore, United Arab Emirates, or Myanmar did not ratify the ICCPR. Other countries such as United States or Russia did either put local laws in place superseding the ICCPR or made reservations rendering parts of it ineffective. We may therefore safely assume that freedom of speech is not given in the internet as a lot of countries explicitly supersede them.
 
-We always have to keep in mind that we have no control over the flow of data packets in the internet. Packets may pass though any point of the world. It is not even possible to detect what way has a packet taken. The common network diagnostic tool \verb|tracert| respectively \verb|traceroute| tries to figure that out. But neither can a route of a packet beeing sent forseen nor can it be measured while or after sending. This is due to the fact that all routers along the way only decide for the next hop of a packet.
+Network packets may pass though any point of the world. A sender has no control over it since every routing device decides on its own for the next hop. This decision may be based on static rules or influenced by third party nodes or circumstances (e.g., BGB, RIP, OSPF\ldots). It is furthermore not possible to detect what way has a packet taken. The common network diagnostic tool \verb|tracert| respectively \verb|traceroute| list a possible list of hops. This list is only correct under certain circumstances (e.g., stable route for multiple packets, or equal routing decisions regardless of other properties than source and destination address) and may not be used as prof of routing decisions. Neither can a route of a packet beeing sent forseen nor can it be measured while or after sending. 
 
 As an example of the problems analysing a packet route we may look at \verb|traceroute|. The mapage of traceroute of Linux tells us that \verb|traceroute| uses UDP, TCP, or ICMP packets with a short TTL and analyses the IP of the peer sending an TIME\_EXCEEDED (message of the ICMP protocol). This information is then collected and shown as a route. This route may be completely wrong. Some of the possible cases are described in the manpage.
 
-The output of \verb|traceroute| is therefore not a reliable indication of route. Since routes do not have to be static and may be changed or even be alternating the output represents in the best case a snapshot of the current routing situation. We cannot be sure that data packets we are sending are passing only through countries accepting the ICCPR to the full extend.
+We cannot be sure that data packets we are sending are passing only through countries accepting the ICCPR to the full extend.
+
 \begin{figure}[H]
 	\begin{lstlisting}[language=bash,breaklines=true,basicstyle=\tiny]
 $ traceroute www.ietf.org
@@ -68,9 +63,9 @@ traceroute to www.ietf.org.cdn.cloudflare-dnssec.net (104.20.0.85), 64 hops max
 \end{figure}
 
 \section{Anonymizing and Unlinking}
-If we are unable to limit the route of our packets through named jurisdictions we must protect ourselves from unintentionally breaking the law of a foreign country. Therefore we need to be anonymous when sending or receiving messages. Unfortunately most transport protocols (in fact almost all of them such as SMTP, SMS, XMPP or IP) use a globally unique identifier for senders and receivers which are readable by any party which is capable of reading the packets. 
+If we are unable to limit the route of our packets through named jurisdictions we must protect ourselves from unintentionally breaking the law of a foreign country. Therefore we need to be anonymous when sending or receiving messages. Unfortunately most transport protocols (in fact almost all of them such as SMTP, SMS, XMPP, or IP) use a globally unique identifier for senders and receivers which are readable by any party which is capable of reading the packets. 
 
-As a result anonymisation of a sender or a receiver is not simple. If messages are being sent through a relay at least the original sender might be concealed (Sender anonymity). By combining it with encryption we may even achieve a very simple form of sender and receiver pseudonymity. If cascading more relay like infrastructures and combining it with cryptography we might even achieve sender and receiver anonymity. This approach has however several downsides (see \ref{sec:remailer} and \ref{sec:mixnets} for details) and is easily attackable.
+As a result anonymisation of a sender or a receiver is not simple. If messages are being sent through a relay at least the original sender might be concealed (\defref{Sender anonymity}). By combining it with encryption we may even achieve a very simple form of sender and \defref{Receiver Pseudonymity}. If cascading more relay like infrastructures and combining it with cryptography we might even achieve sender and receiver anonymity. This approach has however several downsides (see \ref{sec:remailer} and \ref{sec:mixnets} for details) and is easily attackable.
 
 \section{Censorship Resistant}
 In our scenario in \ref{sec:genRequirements} we defined the adversary as someone with superior access to the internet and its infrastructure. Such an adversary might attack a message flow in several ways:
@@ -91,7 +86,7 @@ If we want to control trust we have to conclude that
 	\item trust in an infrastructure is given due to the fact that it is under full control of either the sender or the recipient.
 	\item trust in an infrastructure may not be necessary as the infrastructure is ideally unable to misuse data passed through it.
 \end{enumerate}
-In this thesis we work with both cases. We will however never trust a third party apart from sender and recipient (no even their providers of infrastructures).
+In this thesis we work with both cases. We will however never trust a third party apart from sender and recipient (not even their providers of infrastructures).
 
 \section{Reliable}
 Any message sending protocol needs to be reliable in its functionality. If means of message transport are unreliable users tend to use different means for communication. 
@@ -1784,7 +1779,7 @@ In the following sections we outline the handling of messages we split the handl
 A Block picked up in the blending layer is handled as shown in image \ref{fig:msgRecvProcessing}.
 
 \begin{figure*}[hbt]
-	\includegraphics[width=\textwidth]{inc/fixme}
+	\includegraphics[width=\textwidth]{inc/flowchart_message_receiving}
 	\caption{flow diagram showing processing of incomming messages}
 	\label{fig:msgRecvProcessing}
 \end{figure*}

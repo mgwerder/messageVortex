@@ -9,26 +9,34 @@ In the following capters we analyze the protocol throughly for fitness of purpos
 We first apply a statical analysis of the protocol to identify all informations leaked at all levels.
 
 Then we apply a dynamic analysis of the protocol to identify all meta informations leaked during transmission of the protocol.
+We distinguish between passive and active adversaries. Passive adversaries follow the MessageVortex protocol, have unlimited observation capabilities on the network up to layer 4 of the ISO/OSI protocol, and do have unlimmited observation capabilities on the transporting layer of MessageVortex. Active adversary share the capabilities of passive adversaries, but do not follow the MessageVortex protocol. Both adversaries try to obtain valuable information (e.g., message content, metadata such as the communicating peers or message frequencies).\fxwarning{ refer to adversary model}
+
+When analyzing the goals we focus 
 
 We then sum up the achieved goals by looking at well known attacks and analyze the effectiveness of them to analyze the protocol.
 
 \chapter{Static analysis}
-In this section we analyze statically the protocol. Looking at a full message we get the Protocol outline as shown in \eqref{eq:vortexMessage} on page~\pageref{eq:vortexMessage}.
+In this section we analyze statically the protocol. Looking at a full message we get the protocol outline as shown in \eqref{eq:vortexMessage} on page~\pageref{eq:vortexMessage}.
 
 \begin{figure*}[!h]
 	\begin{align}
-VortexMessage                     & = \langle \mathbf{P}^{K^{-1}_{hostN}}, \langle\mathbf{PAD}, \mathbf{CP}^{K^{-1}_{hostN}}, \mathbf{H}^{K_{senderN}}, \left[\mathbf{R}^{K_{senderN}}\right], \left[\mathbf{PL}\right]*\rangle^{K_{peerN}} \rangle\label{eq:vortexMessage}\\ 
-\mathbf{P}^{K^{-1}_{hostN}}       & = E^{K^{-1}_{hostN}}\left(\mathbf{PREFIX}\langle K_{peerN}\rangle \right)\\
-\mathbf{PAD}                      & = \langle \text{32 padding bytes from payload} \rangle\\
-\mathbf{CP}^{K^{-1}_{hostN}}      & = E^{K^{-1}_{hostN}}\left(\mathbf{CPREFIX}\langle K_{senderN}\rangle \right)\\
-\mathbf{H}^{K_{senderN}}          & = E^{K_{senderN}}\left(\mathbf{HEADER}\right)\\
-\mathbf{HEADER} 				  & = \\
-\mathbf{R}^{K_{senderN}}          & = E^{K_{senderN}}\left(\mathbf{ROUTING}\right)\\
-\mathbf{ROUTING}				  & = \\
-\mathbf{PL}                       & = 
+VortexMessage                = &\langle \mathbf{MP}^{K^{-1}_{hostN}}, \langle\mathbf{PAD}, \mathbf{CP}^{K^{-1}_{hostN}}, \mathbf{H}^{K_{senderN}}, E^{K^{-1}_{senderN}}\left(H\left(\mathbf{HEADER}\right)\right)  \nonumber \\
+                               & \left[\mathbf{R}^{K_{senderN}}\right], \left[\mathbf{PL}\right]*\rangle^{K_{peerN}} \rangle\label{eq:vortexMessage}\\ 
+\mathbf{MP}^{K^{-1}_{hostN}}  = &E^{K^{-1}_{hostN}}\left(\mathbf{PREFIX}\langle K_{peerN}\rangle \right)\\ 
+\mathbf{PAD}                 = &\langle \text{32 padding bytes from payload} \rangle\\ 
+\mathbf{CP}^{K^{-1}_{hostN}} = &E^{K^{-1}_{hostN}}\left(\mathbf{CPREFIX}\langle K_{senderN}\rangle \right)\\ 
+\mathbf{H}^{K_{senderN}}     = &E^{K_{senderN}}\left(\mathbf{HEADER}\right)\\  
+\mathbf{HEADER} 		     = &\langle K^{1}_{senderN}, serial, maxReplays, validity, [requests, requestRoutingBlock],\nonumber\\ 
+                               & [puzzleIdentifier, proofOfWork] \rangle \\  
+\mathbf{R}^{K_{senderN}}     = & E^{K_{senderN}}\left(\mathbf{ROUTING}\right)\\ 
+\mathbf{ROUTING}		     = & \langle [ \mathbf{ROUTINGCOMBO} ] *, forwardSecret, replyBlock \rangle\\  
+\mathbf{ROUTINGCOMBO}        = & \langle processIntervall, K_{peerN+1}, recipient, \mathbf{nextCP}, \mathbf{nextMP}, \nonumber \\
+                               & \mathbf{nextHEADER}, \mathbf{nextROUTING}, assemblyInstructions, id \rangle\\
+\mathbf{PL}                  = &\langle \text{payload octets} \rangle *\\ 
 	\end{align}
+	\captionsetup{labelformat=empty}
 	\caption{Detailed representation of a VortexMessage}
-\end{figure*}\fxfatal{Add missing blocks}
+\end{figure*}
 
 \section{Transport and Blending Layer}
 
