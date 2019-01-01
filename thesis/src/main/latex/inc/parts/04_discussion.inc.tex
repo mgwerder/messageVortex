@@ -67,7 +67,7 @@ Assuming a global observer as an adversary and unencrypted traffic, he might dis
 In the dynamic Analysis we reach out to an active adversary. An active adversary modifies traffic in a non protocol conformant way, or missuses available or obtained information to disrupt messages, nodes, or the system as a whole.
 
 \section{Attacks against the vortex system itself}
-An active adversary may attack the transport layer. Most of the transport layer are not able to reject message flooding. Therefore, it is easy to attack a transport layer with a flooding attack, such as a distributed denial of service (DDoS) attack. Due to the nature of the protocol we are unable to apply additional protection on the transport layer or below. The Vortex Message format itself is however crafted in such a way that only minimal effort is sufficient to get the involved parties. The Operations $ K_{msgN}=D^{K^{1}_{host}}\left(P\right)$ and $HEADER=D^{K_{msgN}}\left(H\right)$ are sufficient to identify message senders. Unknown Senders may be discarded without further processing. Known senders may be identified as legitimate and processed further. Known identities misbehaving may be discarded.
+An active adversary may attack the transport layer. Most of the transport layer are not able to reject message flooding. Therefore, it is easy to attack a transport layer with a flooding attack, such as a distributed denial of service (DDoS) attack. Due to the nature of the protocol we are unable to apply additional protection on the transport layer or below. The Vortex Message format itself is however crafted in such a way that only minimal effort is sufficient to get the involved parties of a transmission. The Operations $ K_{msgN}=D^{K^{1}_{host}}\left(P\right)$ and $HEADER=D^{K_{msgN}}\left(H\right)$ are sufficient to identify message senders. Unknown Senders may be discarded without further processing. Known senders may be identified as legitimate and processed further. Known identities misbehaving and message duplicates may be discarded. 
 
 
 \subsection{DoS Attacks against the System}
@@ -85,12 +85,15 @@ Due to the replay protection of the vortex protocol this is not possible. Any tr
 \subsubsection{Hijacking of Header and Routing Blocks}
 An attacker might try to recombine a header block of a third entity with a routing block crafted to get workspace content of a foreign node. To protect against this scenario every routing block and its corresponding header block have a common value called forward secret. As the content of a hijacked header block is not known he is unable to guess the forward secret within the block.
 
-To bruteforce the value is not possible due to the replay protection. 
+To bruteforce the value is not possible due to the replay protection. More precisely, the probability for hijacking a single identity block is $\frac{1}{2^{32}}$. If taking into account that a routing block may be replayed to the absolute maximum probability rises to $\frac{2^8-1}{2^{32}}\approx\frac{1}{2^{24}}$. Hijacking such a block allows onetime access to the working space and is visible to the owner due to the manipulated quotas. Failing of an attack will result in exhausting the ephemeral identities quotas and a new unlinked ephemeral identity will be created. 
+ 
 \subsubsection{Partial Implicit Routing Diagnosis}
-\fxfatal{Write something about diagnosis and binary diagnosis without compromising anonymity}
+Implicit diagnosis of message path can be done by sending message streams back to the route originator. The returning message allows the conclusion of a working loop to a certain extend. Even if receiving the expected message other parts of the message may have been manipulated. 
+
+As a processing node has no knowledge about what traffic serves diagnosis, decoy, or message transfer it may decide to partially process a message. Probability of detecting such a manipulation is heavily dependet on the routing block being processed and no qualitative or qualitative measures may be applied in general. However, assuming that a block has one diagnosis stream, two message, and one decoy streams without any redundancy, the probability of destroying the message without affecting the diagnosis path is 50\%. Probability of not identifying an illict behaving node is therefore dropping dramatically over time.
 
 \subsubsection{Partial Explicit Routing Diagnosis}
-\fxfatal{Write something about diagnosis paths and their dangers if failing on their way forth and back}
+Explicit routing diagnosis is done by sending a second uncoupled message picking up partial results in the workspace in a message loop of misbehaving nodes. As a routing node has no means to identify these messages as parts of the message, decoy, or diagnostic traffic, it may only misbehave always or in a probabilistic manor. As an immediate result detection of such a node is becomming next to certain when searched for it.
 
 \subsubsection{End-to-End Routing Diagnosis}
 \fxfatal{Write something about receipt and their dangers if failing on their way back}
@@ -133,6 +136,12 @@ As traffic and decoy traffic and decoy traffic are chosen by the creator of the 
 \chapter{Recommendations on using the Vortex Protocol}
 \fxfatal{add more text here}
 
+\section{Recommendations on Operations applied on Nodes}
+\fxfatal{add more text here}
+
+\section{Recommendations on Choosing involved Nodes}
+\fxfatal{add more text here}
+
 \chapter{Achieved Goals and Weaknesses}
 Although the protocol was carefully designed it has certain flaws. These flaws typically assume that parts of the underlying security has been severely broken to be exploited.
 
@@ -149,7 +158,10 @@ Although it is possible to embed any type of content into a Vortex message great
 \subsection{Redundancy Detection as Attack Pattern}
 \fxfatal{add more text here}
 
-\subsection{routing Considerations}
+\subsection{Routing Considerations}
+\fxfatal{add more text here}
+
+\subsection{Operaion Considerations}
 \fxfatal{add more text here}
 
 \subsection{Hotspot Avoidance}
