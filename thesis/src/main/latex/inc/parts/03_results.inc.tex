@@ -481,15 +481,11 @@ In table \ref{tab:protoReplyCrit} we show under what circumstances a reply to a 
 \fxfatal{add content here}
 
 \section{Blending layer}
-In our implementation the blending layer is a weak implementation. It attaches a message in non-obfuscated form with a mime type application/octet stream the application name is randomly chosen. Start offset is fixed to 200 and a valid header part is prepended. Text is not generated.
+Blending layer must be crafted in a careful manor. A blending layer is responsible for sensible content generation of the transport media plus embedding a VortexMessage into the transport layer according to specs provided by the original sender.
 
-\fxfatal{add text about why the sender may not control this layer completely}
-
-\fxfatal{add misuse to create virus attachment if headerless plain}
+The original sender has no control over the plain text messages to avoid possibilities of sending targeted messages over the transport layer using MessageVortex. This differentiates MessageVortex from other systems having ``exit nodes'' such as tor.
 
 \fxfatal{add parrot circumvention}
-
-\fxfatal{add content here}
 
 \subsection{Plain Inclusion}
 The data stream has of the MessageVortex protocol has no structure visible from the outside. This property allows embedding as structureless information in files with a similar entropy. We did an analysis on common file formats in the internet to figure out which file format is suitable for this type of inclusion.
@@ -498,8 +494,38 @@ It is improtant to understand that this is very weak form of information hiding.
 
 \subsubsection{File Type Candidates}
 
-We were unable to find any scientifically founded data 
-\fxfatal{add content here}
+We were unable to find any scientifical data regarding what type of traffic or attachment is common in the internet. We therefore tried to analyze mail logs (smtp) of a mail provider. We were scanning $567594$ emails for attachment properties after the spam elimination queue. $16.5\%$ of all scanned messages had an attachment. The top 20 attachment types distributions are shown in \ref{tab:emailAttachments}.
+\begin{table}[H]
+%	\centering\scriptsize
+
+\begin{tabular}{l|r}\hline
+	Type																		& \%\\\hline
+	image/jpeg                                                                  &	27.4\\
+	application/ms-tnef	                                                        &	13.7\\
+	image/png                                                                   &	13.3\\
+	application/pdf                                                             &	10.7\\
+	image/gif                                                                   &	7.4\\
+	application/x-pkcs7-signature                                               &	5.4\\
+	message/rfc822                                                              &	7.0\\
+	application/msword                                                          &	3.1\\
+	application/octet-stream                                                    &	3.0\\
+	application/pkcs7-signature                                                 &	2.3\\
+	application/vnd.\ldots.wordprocessingml.document	                        & 	1.4\\
+	message/disposition-notification                                            &	1.1\\
+	application/vnd.ms-excel                                                    &	0.8\\
+	application/vnd.\ldots.spreadsheetml.sheet                                  &	0.6\\
+	application/zip                                                             &	0.5\\
+	application/x-zip-compressed                                                &	0.5\\
+	image/pjpeg                                                                 &	0.4\\
+	application/pkcs7-mime                                                      &	0.4\\
+	video/mp4                                                                   &	0.4\\
+	text/calendar                                                               &	0.4\\\hline
+\end{tabular}
+	\caption{Distribution of 20 20 attachment types}
+\label{tab:emailAttachments}
+\end{table}
+
+As expected the amount of images within mail was very high ($\approx 50\%$). Unfortunately we were unable to analyze the content of ms-tnef attachments retrospectively. It seems that based on this figures information hiding within images in email traffic is a good choice.
 
 \subsection{F5 Steganography}
 
