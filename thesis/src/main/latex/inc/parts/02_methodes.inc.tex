@@ -336,29 +336,20 @@ This was defined  in such a way to distinguish the message flow from
 
 The use of a legitimate channel such as SMTP and hide information in this specific channel is not a usage of covert channel. This methode is commonly referenced as channel exploitation.
 
-\subsubsection{Spread Spectrum}
-\cite{viterbi1995cdma}
-\fxfatal{add content here}
-
 \subsubsection{Steganography}
-Steganography is the practice of hiding information in carrier data. Usually the distinction is taken between The carrier data is commonly called container. The modified container containing the hidden information is commonly called steganogram.
-
-\cite{subhedar2014current}
-\fxfatal{add more of this} 
-
-\fxfatal{add more content here}
+Steganography is an important part when it comes to unlinking information. In \cite{6828087} and \cite{subhedar2014current} we get a very rough overview. As some of the types and algorithms address specific topics of steganography (e.g., some hide from automatic detection and others address a human message stream auditor), we need to carefully choose. In our specific case the main idea is to hide within the sheer mass of common internet traffic. A human auditor is therfore regarded as minor thread.
 
 \paragraph{f5}
-\fxfatal{add more content here}
+F5 was first published in \cite{f5}. It is a reasonably well researched algorithm which attracted many researchers. The original F5 implementation had some detectable issues with artifacts\cite{F5broken} caused by the recompression. It was proven to be hardly detectable by a human and a computer observer.
+
+% We use https://github.com/matthewgao/F5-steganography
 
 \paragraph{YASS}
-\fxfatal{add more content here}
+Another string candidate was YASS as described in \cite{solanki2007yass}. Although less researched, Yass has failed in researches several times \cite{kodovsky2010modern}\cite{li2009steganalysis}. It was not considered a candidate.
 
 
 \subsubsection{Timing Channels}
-Timing channels are a specialised form of covert channels. In timing channels not the information itself is written into the channel but the usage of the channel is encoded in such a way that it is capable to reflect the data being transferred.
-
-\fxfatal{add more and better description here;}
+Timing channels are a specialised form of covert channels. In timing channels not the information itself is written into the channel but the usage of the channel is encoded in such a way that it is capable to reflect the data being transferred. As we do not have control over the  timing of the transport channel this is not an option for us.
 
 \section{Cryptography}
 Whenever dealing with hiding data and maintaining integrity of data cryptography is the first tool in the hand of an implementer. A vast amount of research in this area does already exist. For this work we did not collect a lot of information. We focussed on algorithms either well researched and implemented or research which seem very valuable when putting this work into place. 

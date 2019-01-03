@@ -4,7 +4,7 @@ BEGIN
                 FROM MessageVortex-Replies
           RequirementBlock
                 FROM MessageVortex-Requirements
-          UsagePeriod
+          UsagePeriod, NodeSpec
                 FROM MessageVortex-Helpers;
 
   HeaderRequest ::= CHOICE {
@@ -13,7 +13,8 @@ BEGIN
     messageQuota  [2] HeaderRequestIncreaseMessageQuota,
     transferQuota [3] HeaderRequestIncreaseTransferQuota,
     quotaQuery    [4] HeaderRequestQuota,
-    nodeQuery     [5] HeaderRequestNodes
+    nodeQuery     [5] HeaderRequestNodes,
+    replace       [6] HeaderRequestReplaceIdentity
   }
 
   SpecialBlock ::= CHOICE {
@@ -27,6 +28,11 @@ BEGIN
 
   HeaderRequestIdentity ::= SEQUENCE {
     period UsagePeriod
+  }
+
+  HeaderRequestReplaceIdentity ::= SEQUENCE {
+	old			   NodeSpec,
+	new            NodeSpec
   }
 
   HeaderRequestQuota ::= SEQUENCE {

@@ -1,0 +1,52 @@
+#FIG 3.2
+# Created by WinFIG version 7.5
+# METADATA <version>1.0</version>
+Portrait
+Flush left
+Metric
+A4
+100.00
+Single
+-2
+1200 2
+# METADATA <id>2</id>
+4 0 0 50 0 0 14 0.0000 4 243 1980 1665 1395 Incoming Message\001
+# METADATA <id>5</id>
+4 0 0 50 0 0 14 0.0000 4 243 3375 1695 3593 Unauthenticated VortexMessage\001
+# METADATA <id>7</id>
+4 0 0 50 0 0 14 0.0000 4 243 3120 1928 6047 Authenticated VortexMessage\001
+# METADATA <id>8</id>
+# METADATA <link srcPointIdx=0 targetObjId=21 targetLeftPointIdx=-1/>
+2 1 0 1 0 7 50 0 -1 4.000 0 0 0 1 0 2
+	1 1 1.00 60.00 120.00
+	 4456 2202 4440 2850
+# METADATA <id>11</id>
+# METADATA <link srcPointIdx=0 targetObjId=19 targetLeftPointIdx=-1/>
+# METADATA <link srcPointIdx=1 targetObjId=20 targetLeftPointIdx=-1/>
+2 1 0 1 0 7 50 0 -1 4.000 0 0 0 1 0 2
+	1 1 1.00 60.00 120.00
+	 4290 4461 4275 5205
+# METADATA <id>12</id>
+4 0 0 50 0 0 14 0.0000 4 243 3990 1920 3848 - process newIdentity request (if any)\001
+# METADATA <id>13</id>
+4 0 0 50 0 0 14 0.0000 4 243 5025 2153 6497 - process all remaining header requests (if any)\001
+# METADATA <id>14</id>
+4 0 0 50 0 0 14 0.0000 4 243 3810 2138 6737 - Replace current replyBlock (if any)\001
+# METADATA <id>15</id>
+4 0 0 50 0 0 14 0.0000 4 243 3660 2138 6992 - Add routing blocks to workspace\001
+# METADATA <id>16</id>
+4 0 0 50 0 0 14 0.0000 4 243 3600 2138 7217 - Add pyload blocks to workspace\001
+# METADATA <id>17</id>
+4 0 0 50 0 0 14 0.0000 4 243 3300 2138 6287 - Extract rest of VortexMessage\001
+# METADATA <id>18</id>
+4 0 0 50 0 0 14 0.0000 4 243 5610 1920 1665 - Extract start of VortexMessage (up to header block)\001
+# METADATA <id>19</id>
+1 2 0 1 0 7 50 0 -1 4.000 1 0.0000 4425 3660 3600 802 825 2858 8025 4463
+# METADATA <id>20</id>
+1 2 0 1 0 7 50 0 -1 4.000 1 0.0000 4230 6585 3157 1380 1073 5205 7388 7965
+# METADATA <id>21</id>
+1 2 0 1 0 7 50 0 -1 4.000 1 0.0000 4710 1402 3630 802 1080 600 8340 2205
+# METADATA <id>22</id>
+4 0 0 50 0 0 14 0.0000 4 243 1545 4380 4935 Authentication\001
+# METADATA <id>23</id>
+4 0 0 50 0 0 14 0.0000 4 243 1770 4515 2625 Header extration\001

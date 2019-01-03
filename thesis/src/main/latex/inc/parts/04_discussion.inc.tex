@@ -87,27 +87,33 @@ An attacker might try to recombine a header block of a third entity with a routi
 
 To bruteforce the value is not possible due to the replay protection. More precisely, the probability for hijacking a single identity block is $\frac{1}{2^{32}}$. If taking into account that a routing block may be replayed to the absolute maximum probability rises to $\frac{2^8-1}{2^{32}}\approx\frac{1}{2^{24}}$. Hijacking such a block allows onetime access to the working space and is visible to the owner due to the manipulated quotas. Failing of an attack will result in exhausting the ephemeral identities quotas and a new unlinked ephemeral identity will be created. 
  
-\subsubsection{Partial Implicit Routing Diagnosis}
-Implicit diagnosis of message path can be done by sending message streams back to the route originator. The returning message allows the conclusion of a working loop to a certain extend. Even if receiving the expected message other parts of the message may have been manipulated. 
 
-As a processing node has no knowledge about what traffic serves diagnosis, decoy, or message transfer it may decide to partially process a message. Probability of detecting such a manipulation is heavily dependet on the routing block being processed and no qualitative or qualitative measures may be applied in general. However, assuming that a block has one diagnosis stream, two message, and one decoy streams without any redundancy, the probability of destroying the message without affecting the diagnosis path is 50\%. Probability of not identifying an illict behaving node is therefore dropping dramatically over time.
+\subsubsection{Partial Implicit Routing Diagnosis}
+We are able to create data which is routed back to or through the original sending node. This traffic is well defined and may be used to certify that the loop processing the message is working as expected. By combining the messages and sending intermediate results through multiple paths it is even possible to extract the substatus of some loops and combine the result within transfer into a single message.
+
+As a special case, implicit routing diagnostic may be used to diagnose the full route by taking specific excerpts from a message and routing them from the recipient back to the sender. 
 
 \subsubsection{Partial Explicit Routing Diagnosis}
-Explicit routing diagnosis is done by sending a second uncoupled message picking up partial results in the workspace in a message loop of misbehaving nodes. As a routing node has no means to identify these messages as parts of the message, decoy, or diagnostic traffic, it may only misbehave always or in a probabilistic manor. As an immediate result detection of such a node is becomming next to certain when searched for it.
-
-\subsubsection{End-to-End Routing Diagnosis}
-\fxfatal{Write something about receipt and their dangers if failing on their way back}
+If a message fails to deliver according to implicity routing diagnosis, additional messages may be sent to pick up content of the workspace of ephemeral identities throughout the path. These messages are due to the only binding to the ephemeral identity not distinguishable from the original messages. Assuming that a node always behaves either according or not according to the rules of the system, a node may be identified.
 
 \subsubsection{Denial of Service by Exhausting Quotas or Limits}
-\fxfatal{add more text here}
+A malicious node may try to exhaust quotas or limits. As we do trust in sender and recipient, all other nodes have no knowledge about the forward secrets used in the message. The options for an adversary are then as follows:
+
+\begin{itemize}
+	\item Resend a MURB (with different content) as often as possible to exhaust message and transfer quota.
+	\item Create intentionally huge, incorrect message content to exhaust transfer quota.
+\end{itemize}
+
+\subsubsection{Traffic Highlighting}
+Traffic caused by a routing block may be observed by to a certain extent on a statistical base. A node may generate bad message content of exceptionally large or small nature this might potentionally highlight messages involved in message routing using no split or relative split operations as well as addRedundancy operations.
 
 \section{Achieved Anonymity and Flaws}
 \subsection{Measuring Anonymity}
+It is very hard to measure anonymity as it involves many uncontrollable factors. We may however control the degree of anonymity according to the number of involved parties. Assuming a sender knows the complete message path including all operations carried out on any untrusted node a message travels through, the anonymity is maxed to  the number of involved nodes $n$ excluding the sender nodes. This degree of $n-1$ may be further reduced if all well known outing only or at least ``routing mostly'' nodes are reduced. Under these harsh assumptions the set may be reduced to the potential set of ``well known'' recipients of a message.
 \fxfatal{Write something about degree of anonymity and how to achieve or compromise}
 
 \subsection{Attacking Anonymity through Traffic Analysis}
 As traffic and decoy traffic and decoy traffic are chosen by the creator of the routing block frequency patterns can not be detected, unlike the router did create them. Same applies to message sizes and traffic hotspots. 
-\fxwarning{Write more here}
 
 \subsubsection{Attacking Anonymity through Timing Analysis}
 \fxfatal{add more text here}
@@ -133,7 +139,13 @@ As traffic and decoy traffic and decoy traffic are chosen by the creator of the 
 \subsection{Attacking Anonymity through Tamper Replay Analysis}
 \fxfatal{add more text here}
 
-\chapter{Recommendations on using the Vortex Protocol}
+\chapter{Recommendations on Using the Vortex Protocol}
+\fxfatal{add more text here}
+
+\section{Reuse of Routing blocks}
+\fxfatal{add more text here}
+
+\section{Use of Ephemeral Identities}
 \fxfatal{add more text here}
 
 \section{Recommendations on Operations applied on Nodes}

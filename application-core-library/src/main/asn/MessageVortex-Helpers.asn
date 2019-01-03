@@ -24,7 +24,8 @@ BEGIN
   BlendingParameter ::= CHOICE {
     offset          [1] INTEGER,
     symmetricKey    [2] SymmetricKey,
-    asymmetricKey   [3] AsymmetricKey
+    asymmetricKey   [3] AsymmetricKey,
+    passphrase      [4] OCTET STRING
   }
 
   NodeSpec ::= SEQUENCE {

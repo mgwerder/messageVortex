@@ -6,7 +6,8 @@
 
 \makeatletter
 \def\title#1{\gdef\@title{#1}\gdef\thetitle{#1}}
-\usepackage{lipsum}
+
+%\usepackage{lipsum}
 
 \title{MessageVortex}
 \gdef\thesubtitle{Transport Independent Messaging Anonymous to \nth{3} Parties}
@@ -340,9 +341,9 @@
 
 \usepackage[final]{pdfpages}
 
+% extended width for toc page numbers
 \usepackage{tocloft}
-
-%\renewcommand\cftpnumwidth{2cm}
+\cftsetpnumwidth{3em}
 
 \begin{document}%
 %
