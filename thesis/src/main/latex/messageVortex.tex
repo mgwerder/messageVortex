@@ -345,6 +345,14 @@
 \usepackage{tocloft}
 \cftsetpnumwidth{3em}
 
+% Adapt bibtex to include documents
+  \makeatletter
+\@ifclasswith{scrbook}{attachdocs}{\DeclareFieldFormat{file}{\StrGobbleLeft{#1}{1}[\wtcGwM]\StrGobbleRight{\wtcGwM}{4}[\filename] \IfFileExists{\filename}{\attachfile{\filename}}{FIXME missing document link}}
+	\renewbibmacro{finentry}{\finentry\addspace \printfield{file}}
+}{}
+\makeatother
+\renewcommand*{\bibfont}{\small}
+
 \begin{document}%
 %
 \frontmatter%
@@ -668,9 +676,6 @@ The Multimedia Messaging Service (MMS) is maintained by 3GPP (\nth{3} Generation
 {
   %\def\filespliter#1{\expandafter\intfilespliter#1\relax}
   %\def\intfilespliter#1 #2 #3\relax{ First: (#1), Second: (#2), Third: (#3) }
-  \DeclareFieldFormat{file}{\StrGobbleLeft{#1}{1}[\wtcGwM]\StrGobbleRight{\wtcGwM}{4}[\filename] \IfFileExists{\filename}{\attachfile{\filename}}{FIXME missing document link}}
-  \renewbibmacro{finentry}{\finentry\addspace \printfield{file}}
-  \renewcommand*{\bibfont}{\small}
   \printbibliography[title={},heading=none]
 }
 
