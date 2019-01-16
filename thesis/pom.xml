@@ -84,7 +84,7 @@
                 <configuration>
                     <workingDirectory>target/main/latex-build</workingDirectory>
                     <executable>pdflatex</executable>
-                    <commandlineArgs>MessageVortex.tex</commandlineArgs>
+                    <commandlineArgs>messageVortex.tex</commandlineArgs>
                 </configuration>
             </plugin>
             <plugin>
@@ -122,7 +122,7 @@
                 <configuration>
                     <workingDirectory>target/main/latex-build</workingDirectory>
                     <executable>pdflatex</executable>
-                    <commandlineArgs>MessageVortex.tex</commandlineArgs>
+                    <commandlineArgs>messageVortex.tex</commandlineArgs>
                 </configuration>
             </plugin>
         </plugins>
