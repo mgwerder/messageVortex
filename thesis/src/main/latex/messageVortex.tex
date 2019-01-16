@@ -34,6 +34,12 @@
 
 %\usepackage{underscore}
 
+% No new page for chapters
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd{\chapter}{\if@openright\cleardoublepage\else\clearpage\fi}{}{}{}
+\makeatother
+
 % titlepage geometry change
 \usepackage[paper=a4paper,top=2cm,bottom=2cm,inner=2cm,outer=2cm]{geometry}% http://ctan.org/pkg/geometry
 
@@ -87,30 +93,6 @@
 % enable superscript  for 1st, 2nd, 3rd etc.
 \usepackage[super]{nth}
 
-%enable hypelinks
-\usepackage[pdftex]{hyperref}
-\makeatletter
-\hypersetup{
-  hidelinks,
-  pdftitle={\thetitle},
-  pdfpagelayout=TwoPageRight,
-  bookmarks=true,
-  hyperindex=true,
-  hyperfigures=true,
-  pdftex=true,
-  pdfpagelabels=true,
-  pdfstartview=Fit,
-  pdfauthor={\author},
-  pdftitle={\thetitle\\\small\thesubtitle},
-  pdflang=en,
-  pdfsubject={\myabstract},
-  pdfkeywords={Messaging, Anonymity, SMTP, MIME, S/MIME, POP3, IMAPv4, Message Vortex},
-  pdfcontactemail={martin.gwerder@fhnw.ch},
-  pdflicenseurl={http://creativecommons.org/licenses/by-nc-nd/3.0/ch/},
-  pdfcopyright={"Creative Commons Attribution-NonCommercial-NoDerivatives 3.0 Switzerland" (CC BY-NC-ND 3.0 CH)}
-}
-\makeatother
-
 % for PDF/A generation
 %\usepackage[a-3b]{pdfx}
 
@@ -127,7 +109,9 @@
 \fxsetup{layout=pdfnote}
 
 %enable attached files
-\usepackage{attachfile}
+%\usepackage[color=black]{attachfile2}
+\usepackage{embedfile}
+\usepackage{hypgotoe}
 
 %enable word separation
 \usepackage[english]{babel}
@@ -262,6 +246,17 @@
 %	xleftmargin=0.1\linewidth
 }
 
+\makeatletter
+\newcommand{\getfilename}[1]{%
+	\begingroup
+	% \lstname seems to change hyphens into \textendash
+	\def\textendash{-}%
+	\filename@parse{#1}%
+	\texttt{\filename@base.\filename@ext}%
+	\endgroup
+}
+\makeatother
+
 \usepackage{wrapfig}
 
 %% This package will make dealing with the ``requirements'' environment a lot easier:
@@ -344,6 +339,65 @@
 % extended width for toc page numbers
 \usepackage{tocloft}
 \cftsetpnumwidth{3em}
+
+%enable hyperlinks
+\usepackage[pdftex]{hyperref}
+\makeatletter
+\hypersetup{
+	hidelinks,
+	pdftitle={\thetitle},
+	pdfpagelayout=TwoPageRight,
+	bookmarks=true,
+	linktoc=all,
+	backref=true,
+	breaklinks=true,
+	hyperindex=true,
+	hyperfigures=true,
+	pdftex=true,
+	pdfpagelabels=true,
+	pdfstartview=Fit,
+	pdfauthor={\author},
+	pdftitle={\thetitle\\\small\thesubtitle},
+	pdflang=en,
+	pdfsubject={\myabstract},
+	pdfkeywords={Messaging, Anonymity, SMTP, Message Vortex},
+	pdfcontactemail={martin.gwerder@fhnw.ch},
+	pdflicenseurl={http://creativecommons.org/licenses/by-nc-nd/3.0/ch/},
+	pdfcopyright={"Creative Commons Attribution-NonCommercial-NoDerivatives 3.0 Switzerland" (CC BY-NC-ND 3.0 CH)}
+}
+\makeatother
+% How do I make an attached non-pdf file display like a link?
+% (http://tex.stackexchange.com/q/230581)
+\makeatletter
+\newcommand*{\embeddedfilelink}[2]{%
+	\begingroup
+	\leavevmode
+	\pdfstartlink
+	attr{%
+		\Hy@setpdfborder
+		\ifx\@pdfhighlight\@empty
+		\else
+		/H\@pdfhighlight
+		\fi
+		\ifx\@filebordercolor\relax
+		\else
+		/C[\@filebordercolor]%
+		\fi
+	}%
+	user{%
+		/Subtype/Link%
+		/A<<%
+		/Type/Action%
+		/S/JavaScript%
+		/JS(this.exportDataObject({cName: "#1", nLaunch: 2}))%
+		>>%
+	}%
+	\relax
+	\Hy@colorlink\@filebordercolor#2%
+	\close@pdflink
+	\endgroup
+}
+\makeatother
 
 % Adapt bibtex to include documents
   \makeatletter

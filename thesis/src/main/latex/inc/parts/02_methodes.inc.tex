@@ -417,7 +417,7 @@ The question of key sizes is a hard to answer as it depends on the current and f
 
 According to the equations proposed by \citeauthor{Lenstra04keylength.} in \cite{Lenstra04keylength.} an asymmetric key size of 2644 Bits respectively a symmetric key length of 95 Bits, or 190 Bits for elliptic curves and hashing should be sufficient for security up to the year 2048. 
 
-According to \cite{nsa-fact-sheet-B} data classified up to ``top secret'' should be secured asymmetric encryption based on factoring modulus (no proposed encryption standard).  For symmetric encryption they recommend 256 Bits, for Hashing at least SHA-384 and for Elliptic curves a 384 Bit sized key.
+According to \cite{CNSASuite} (superseeding well known and often used \cite{nsa-fact-sheet-B}) data classified up to ``top secret'' should be signed with RSA 3072+ or ECDSA P-384.  For symmetric encryption they recommend AES 256 Bits, for Hashing at least SHA-384 and for Elliptic curves a 384 Bit sized key.
 
 As it might seem not a wise idea to consider the recommendation of a potential state sponsored adversary and the Formulas proposed by \citeauthor{Lenstra04keylength.} do not explicitly take quantum computers into account we therefore follow the recommendations of ENCRYPT II.
 
