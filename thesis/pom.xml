@@ -40,7 +40,7 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${basedir}/target/latex-build</outputDirectory>
+                            <outputDirectory>${basedir}/target/main/latex-build</outputDirectory>
                             <resources>
                                 <resource>
                                     <directory>src/main/latex</directory>
@@ -56,7 +56,7 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${basedir}/target/latex-build</outputDirectory>
+                            <outputDirectory>${basedir}/target/main/latex-build</outputDirectory>
                             <resources>
                                 <resource>
                                     <directory>src/main/latex-resources</directory>
@@ -82,7 +82,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <workingDirectory>target/latex-build</workingDirectory>
+                    <workingDirectory>target/main/latex-build</workingDirectory>
                     <executable>pdflatex</executable>
                     <commandlineArgs>MessageVortex.tex</commandlineArgs>
                 </configuration>
@@ -101,7 +101,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <workingDirectory>target/latex-build</workingDirectory>
+                    <workingDirectory>target/main/latex-build</workingDirectory>
                     <executable>pdflatex</executable>
                     <commandlineArgs>MessageVortex</commandlineArgs>
                 </configuration>
@@ -120,7 +120,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <workingDirectory>target/latex-build</workingDirectory>
+                    <workingDirectory>target/main/latex-build</workingDirectory>
                     <executable>pdflatex</executable>
                     <commandlineArgs>MessageVortex.tex</commandlineArgs>
                 </configuration>
