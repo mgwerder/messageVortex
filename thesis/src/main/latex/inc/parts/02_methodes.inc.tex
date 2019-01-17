@@ -63,7 +63,26 @@ traceroute to www.ietf.org.cdn.cloudflare-dnssec.net (104.20.0.85), 64 hops max
 \end{figure}
 
 \section{Adversary model\label{sec:adversary}}
-\fxfatal{add text here}
+For an anonymizing adversary we need to assume someone of the capabilities of a state sponsored actor. State sponsored actors may work these days with allies but will not achieve dominance over all jurisdictional domains.
+
+For our adversary modell we assume the following properties:
+\begin{itemize}
+	\item An adversary will have technical knowhow to attack any infrastructure.
+	\item An adversary may have the capability to monitor traffic at any point in any network within a juridiction.
+	\item An adversary may have the capability to freely modify routing information within a juridiction.
+	\item An adversary may have the possibility to freely modify even cryptographically strong secured data where a single or a limited number of entities grant any kind of proof of authenticity or privacy.
+	\item An adversary may have the possibility to inject or modify any data on the network of a jurisdiction.
+	\item An adversary may create own nodes of a network and monitor their behaviour and data flow to the maximum possible extent.
+	\item An adversary may force other non-allied nodes to expose their data to him.
+	\item An adversary may have the same access to resources as within its jurisdiction in a limited number of other jurisdictions.
+\end{itemize}
+
+We assume the following goals for an adversary:
+\begin{itemize}
+	\item An adversary may want to disrupt non-authorized communication.
+	\item An adversary may want to read any information passing throughout the internet.
+	\item An adversary may want to build and conserve data about individuals or groups of individuals of their live. This data includes all activities in any part of their live regardless of their obvious fitness for any specific purpose.
+\end{itemize}
 
 \section{Required Properties}
 

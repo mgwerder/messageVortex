@@ -17,12 +17,58 @@
 \gdef\myabstract{In this paper we introduce an unobservable message annonymisation protocol, named MessageVortex. It is based on the zero trust principle and a distributed peer-to-peer (P2P) architecture and avoids  central aspects such as fixed infrastructures within a global network. It scores over existing work by blending its traffic into suitable existing transport protocols, thus making it next to impossible to block it without significantly affecting regular users of the transport medium. It furthermore requires no protocol specific infrastructure in public networks and allows a sender to control all aspects of a message such as degree of anonymity, timing, and redundancy of the message transport without disclosing any of these details to the routing or transporting nodes.}
 \makeatother
 
+% enable superscript  for 1st, 2nd, 3rd etc.
+\usepackage[super]{nth}
+
+% XMP support 
+\RequirePackage{xmpincl}
+\includexmp{messageVortex}
+\usepackage{hyperxmp}
+
+%enable hyperlinks
+\usepackage[hidelinks,bookmarks,hyperindex,hyperfigures,pdfpagelabels,pdftex,pdfa]{hyperref}
+\makeatletter
+\hypersetup{	
+	pdftitle={\thetitle},
+	pdfpagelayout=TwoPageRight,
+	linktoc=all,
+	breaklinks=true,
+	pdfstartview=Fit,
+	pdfauthor={\author},
+	pdftitle={\thetitle\\\small\thesubtitle},
+	pdflang=en,
+	pdfsubject={\myabstract},
+	pdfkeywords={Messaging, Anonymity, SMTP, Message Vortex},
+	pdfcontactemail={martin.gwerder@fhnw.ch},
+	pdflicenseurl={http://creativecommons.org/licenses/by-nc-nd/3.0/ch/},
+	pdfcopyright={"Creative Commons Attribution-NonCommercial-NoDerivatives 3.0 Switzerland" (CC BY-NC-ND 3.0 CH)}
+}
+\makeatother
+
 \usepackage[tocindentauto]{tocstyle}
+
+% PDF/a measures
+% embed color profile 
+\immediate\pdfobj stream attr{/N 3} file{ISOcoated_v2_300_bas.ICC}
+\pdfcatalog{%
+	/OutputIntents [ <<
+	/Type /OutputIntent
+	/S/GTS_PDFA1
+	/DestOutputProfile \the\pdflastobj\space 0 R
+	/OutputConditionIdentifier (ISOcoated v2 300 basic)
+	/Info(ISOcoated v2 300 basic)
+	>> ]
+}
+% map glyphs 
+\input{glyphtounicode.tex}
+\input{glyphtounicode-cmr.tex}
+\pdfgentounicode=1
+% deactivate LZW compression
+\pdfobjcompresslevel=0
+\pdfinclusioncopyfonts=1
 
 % enable graphics inclusion
 \usepackage[final]{graphicx}
-
-\usepackage{hyperxmp}
 
 \usepackage{xcolor}
 
@@ -89,9 +135,6 @@
 
 %enable page spanning tables
 \usepackage{supertabular}
-
-% enable superscript  for 1st, 2nd, 3rd etc.
-\usepackage[super]{nth}
 
 % for PDF/A generation
 %\usepackage[a-3b]{pdfx}
@@ -186,10 +229,6 @@
 
 \usepackage{tabularx}
 \usepackage{multirow}
-
-% XMP support 
-\RequirePackage{xmpincl}
-\includexmp{messageVortex}
 
 % Required for definitions environment
 \usepackage{hanging}
@@ -340,32 +379,6 @@
 \usepackage{tocloft}
 \cftsetpnumwidth{3em}
 
-%enable hyperlinks
-\usepackage[pdftex]{hyperref}
-\makeatletter
-\hypersetup{
-	hidelinks,
-	pdftitle={\thetitle},
-	pdfpagelayout=TwoPageRight,
-	bookmarks=true,
-	linktoc=all,
-	backref=true,
-	breaklinks=true,
-	hyperindex=true,
-	hyperfigures=true,
-	pdftex=true,
-	pdfpagelabels=true,
-	pdfstartview=Fit,
-	pdfauthor={\author},
-	pdftitle={\thetitle\\\small\thesubtitle},
-	pdflang=en,
-	pdfsubject={\myabstract},
-	pdfkeywords={Messaging, Anonymity, SMTP, Message Vortex},
-	pdfcontactemail={martin.gwerder@fhnw.ch},
-	pdflicenseurl={http://creativecommons.org/licenses/by-nc-nd/3.0/ch/},
-	pdfcopyright={"Creative Commons Attribution-NonCommercial-NoDerivatives 3.0 Switzerland" (CC BY-NC-ND 3.0 CH)}
-}
-\makeatother
 % How do I make an attached non-pdf file display like a link?
 % (http://tex.stackexchange.com/q/230581)
 \makeatletter
