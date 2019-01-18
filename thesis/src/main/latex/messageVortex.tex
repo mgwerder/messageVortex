@@ -25,6 +25,15 @@
 \includexmp{messageVortex}
 \usepackage{hyperxmp}
 
+% extended width for toc page numbers
+%\usepackage[titles]{tocloft}
+%\cftsetpnumwidth{3em}
+% Format appendix
+%\setlength{\cftchapnumwidth}{65pt}%
+%\renewcommand{\cftpartpresnum}{\partname\hspace{10pt}}
+%\renewcommand{\cftchappresnum}{\chaptername\hspace{5pt}}
+%\renewcommand{\cftchapaftersnum}{\hspace{5pt}}
+
 %enable hyperlinks
 \usepackage[hidelinks,bookmarks,hyperindex,hyperfigures,pdfpagelabels,pdftex,pdfa]{hyperref}
 \makeatletter
@@ -182,13 +191,8 @@
 \makeindex 
 
 % format appendix
-\usepackage{tocloft}
 \usepackage{bookmark}
 \usepackage[]{appendix} %enable appendix 
-\setlength{\cftchapnumwidth}{65pt}%
-\renewcommand{\cftpartpresnum}{\partname\hspace{10pt}}
-\renewcommand{\cftchappresnum}{\chaptername\hspace{5pt}}
-\renewcommand{\cftchapaftersnum}{\hspace{5pt}}
 
 \let\oldappendices\appendices
 \renewcommand{\appendices}{%
@@ -374,10 +378,6 @@
 
 
 \usepackage[final]{pdfpages}
-
-% extended width for toc page numbers
-\usepackage{tocloft}
-\cftsetpnumwidth{3em}
 
 % How do I make an attached non-pdf file display like a link?
 % (http://tex.stackexchange.com/q/230581)
