@@ -1,6 +1,6 @@
 %!TeX program=pdflatex
 %!TeX encoding=utf8
-%!TeX spellcheck = en_GB
+%!TeX spellcheck = en_US
 %!TeX root = ../../messageVortex.tex
 
 \part{Results}
@@ -269,17 +269,17 @@ len(pb_2) & \leq & len(pb_1)
 \end{eqnarray}
 
 \subsubsection{VortexMessage addRedundancy Operation}
-\fxfatal{add content here}
+\fxwarning{add content here}
 
 \subsubsection{VortexMessage removeRedundancy Operation}
-\fxfatal{add content here}
+\fxwarning{add content here}
 
 
 
 \section{VortexMessage Request Processing}
 Vortex message requests allow a Vortex node to gain knowledge about the Vortex network and, create new identities.
 
-\fxfatal{add content here}
+\fxwarning{add content here}
 
 \subsection{VortexMessage Requests}
 These requests are contained in the header portion of a Vortex message. These requests are purely for bootstrapping and maintaining the quota system and for requesting network capability.
@@ -315,7 +315,7 @@ As outlined in section \ref{sec:request} this request should be very costly and 
 
 It is at the same time worth mentioning that this limit may oppose a thread that traffic is concentrated on similar nodes within participating nodes using the same initial set of known addresses to bootstrap. This due to the fact that if using the same node to bootstrap for multiple participants within a group results in peer knowledge which is similar. tThus resulting in a similar network. It is however also worth mentioning that participants belonging to more than one group will evolve over time as their different peer partners will result in different anonymity sets over time even when applying exact the same anr reproducaible rules.
 
-\fxfatal{integrate sec query section from GIT here}
+\fxwarning{integrate sec query section from GIT here}
 
 \subsubsection{TransferQuota, MessageQuota,  and QueryQuota Request}
 This request may be accepted by a node if and only if the sender is a valid identity. It may be accepted even for a temporary identity.
@@ -345,10 +345,10 @@ A node may reject an operation for any reason including exceeding an unnatural a
 
 A reply containing a null length puzzle means that the requested operation is rejected.
                                  i
-\fxfatal{This block will change as new proof of work are introduced. The same applies to the respective header section}
+\fxwarning{This block will change as new proof of work are introduced. The same applies to the respective header section}
 
 \subsubsection{replyStatus block}
-\fxfatal{This block will possibly disapear}
+\fxwarning{This block will possibly disapear}
 
 \subsubsection{CtxleswhichsNewindentity block}                                                                                                                                            longer in service. It  is done by authenticating with a header block validly authenticating the old identity. It provides a new identity tuple containing a transport layer address and the corresponding ke
 Th new identity block is to propagate a newly generated, non-ephemeral identity of a user. This block should not be ignored by any node. It enables a user to strengthen its identity. 
@@ -360,10 +360,10 @@ It is however should ignore the request if its acceptance results in a reduced s
 \section{Hardware}
 No special Hardware is required for running Vortex nodes. The capabilities of Vortex are designed in such a way that ordinary mobile phones may act as vortex nodes. It is however recommended to have a node always connected to the internet. A mobile phone may disconnect from time to time based on the availability of the network. For our experiments we use a RaspberryPi Version 1. It is however recommended to use a faster, newer model due to the memory requirements of the proof of work.
 
-\fxfatal{add more content here}
+\fxwarning{add more content here}
 
 \subsection{Considerations Regarding Weak or Unsuitable Hardware}
-\fxfatal{add more content here}
+\fxwarning{add more content here}
 
 \section{Addresses}
 A Vortex address is built as follows: $vortexAddress=<transport>:<address>!<publicKey>$
@@ -399,7 +399,7 @@ All SMTP nodes responding to clear text should at least support $encoding=plain:
 \fxwarning{do layout here}
                P
 \subsection{XMMP}
-\fxfatal{add more content here}
+\fxwarning{add more content here}
 
 \section{Client}
 We did not create a Vortex client for sending messages. Instead we used a standard Thunderbird email client pointing to a local SMTP and IMAP Server provided by a Vortex proxy. On the SMTP side Vortex does encapsulate where possible mails into a Vortex message and builds automated route to the recipient. The SMTP part of vortex may be used to encapsulate automatically all messages with a known Vortex identity into a vortex message. On the IMAP side it merges a local Vortex message store with the standard Email repository building a combined view.
@@ -439,31 +439,31 @@ As decoy traffic is generated with the same operations as the true content is sp
 All nodes, regardless of endpoint or mix implement the same logic and fulfil the same functions which makes it impossible to deteremine the function. Exit nodes as in Tor or similar systems do not exist.
 
 
-%\fxfatal{add a lot more text here}
+%\fxwarning{add a lot more text here}
 %\begin{figure*}[h]
 %	\includegraphics[width=\textwidth]{inc/VortexModules.pdf}
 %	\caption{Overview of the Vortex modules}
 %	\label{fig:vortexModules}
 %\end{figure*}
-%\fxfatal{replace image with up to date representation; show implemented and not implemented parts; Maybe make it two column wide}
+%\fxwarning{replace image with up to date representation; show implemented and not implemented parts; Maybe make it two column wide}
 %
 \section{Protocol Implementation\label{protoImpl}}
-\fxfatal{add content here}
+\fxwarning{add content here}
 
 \section{Block Structure}
 %\lstinputlisting[language=ASN1, caption={Header Block}, backgroundcolor=\color{gray!10},linerange={29-71},firstnumber=29]{../app/asn.1/messageBlocks.asn1} 
 
 \subsection{Header Block}
-\fxfatal{add content here}
+\fxwarning{add content here}
 
 \subsection{Routing Blocks}
-\fxfatal{add content here}
+\fxwarning{add content here}
                  mm
 \subsection{Payload Blocks}
-\fxfatal{add content here}
+\fxwarning{add content here}
 
 \section{Message Building}
-\fxfatal{take care of percentage and floating point precision}
+\fxwarning{take care of percentage and floating point precision}
 
 
 \section{Accounting}
@@ -484,18 +484,18 @@ In table \ref{tab:protoReplyCrit} we show under what circumstances a reply to a 
 
 \section{Routing}
 
-\fxfatal{add text here and state machine of message}
+\fxwarning{add text here and state machine of message}
 
 
 
-\fxfatal{add content here}
+\fxwarning{add content here}
 
 \section{Blending layer}
 Blending layer must be crafted in a careful manor. A blending layer is responsible for sensible content generation of the transport media plus embedding a VortexMessage into the transport layer according to specs provided by the original sender.
 
 The original sender has no control over the plain text messages to avoid possibilities of sending targeted messages over the transport layer using MessageVortex. This differentiates MessageVortex from other systems having ``exit nodes'' such as tor.
 
-\fxfatal{add parrot circumvention}
+\fxwarning{add parrot circumvention}
 
 \subsection{Plain Inclusion}
 The data stream has of the MessageVortex protocol has no structure visible from the outside. This property allows embedding as structureless information in files with a similar entropy. We did an analysis on common file formats in the internet to figure out which file format is suitable for this type of inclusion.
@@ -539,39 +539,39 @@ As expected the amount of images within mail was very high ($\approx 50\%$). Unf
 
 \subsection{F5 Steganography}
 
-\fxfatal{add content here}
+\fxwarning{add content here}
 
 \section{Message Flows}
 
-\fxfatal{add content here}
+\fxwarning{add content here}
 
 \section{Considerations for Building Messages}
 In a worst case scenario we assume that an adversary is controlling most of the network utilized for anonymisation. While this is not necessarily a problem (as pointed out earlier) it allows an adversary to track a message while agents are being used under his control. So for simplicity and as a worst case assumption we always assume that an adversary has perfect knowledge of an associated message flow. This is however a worst case scenario. One missing agent disconnects the whole chain and as messages are not traceable in size.
 
-\fxfatal{add selffailing operations as checkpoint}
+\fxwarning{add selffailing operations as checkpoint}
 
 \subsection{Ephemeral identities}
-\fxfatal{expiring ephemeral identities should not only be replaced after their expiration but anytime during the livetime}
+\fxwarning{expiring ephemeral identities should not only be replaced after their expiration but anytime during the livetime}
 
 \subsection{Timing of messages}
-\fxfatal{add content here}
+\fxwarning{add content here}
 
 \subsection{Diagnostics}
-\fxfatal{add content here}
+\fxwarning{add content here}
 
-\fxfatal{add here why is there no hashing operation (makes traffic distinguishable)}
+\fxwarning{add here why is there no hashing operation (makes traffic distinguishable)}
 
 
 \subsubsection{Implicit Diagnostic}
-\fxfatal{Add comments about messages splitting and returning to sender}
+\fxwarning{Add comments about messages splitting and returning to sender}
 
 \subsubsection{Automatic Explicit Diagnostic}
-\fxfatal{Add comments about error and diagnosis messages officially spliting of messages}
+\fxwarning{Add comments about error and diagnosis messages officially spliting of messages}
                                         the following
 \subsubsection{On-Demand Explicit Diagnostic}
-\fxfatal{Add comments about normal, error, and diagnosis messages being picked up by a routing block}
+\fxwarning{Add comments about normal, error, and diagnosis messages being picked up by a routing block}
 
-\fxfatal{list all requirements}
+\fxwarning{list all requirements}
 
 
 
@@ -615,14 +615,14 @@ This requirement is therefore only partially fulfilled. However, the weakness is
 
 \paragraph*{\ref{req:boot}:} 
 
-\fxfatal{add content}
+\fxwarning{add content}
 \paragraph*{\ref{req:cryptVar}:} 
 
-\fxfatal{add content}
+\fxwarning{add content}
 
 \paragraph*{\ref{req:easy}:}
 
-\fxfatal{add content}
+\fxwarning{add content}
 
 \section{Considerations for Routing Messages}
 \subsection{Time of sending}
@@ -639,7 +639,7 @@ There was up until very late a routing log functionality in the protocol. This f
 \subsection{Very Limited Control Blending Layer for the sending node}
 
 \subsection{Message Content}
-\fxfatal{add content here}
+\fxwarning{add content here}
 
 \chapter{Security Analysis}
 In the following sections we emphasize on attacks targeting either sender recipient tuples or on identification of participants. 
@@ -666,58 +666,58 @@ We assume that the adversary is targeting the following informations:
 \end{itemize}
 
 \section{Attack on Users Identity}
-\fxfatal{add content here}
+\fxwarning{add content here}
 
 \subsection{Frequency and Bandwidth Analysis}
-\fxfatal{add content here}
+\fxwarning{add content here}
 
 \section{Attack on Message content}
-\fxfatal{add content here}
+\fxwarning{add content here}
 
 \subsection{Attacking Routing Blocks}
-\fxfatal{add content here; Routing block length analysis}
+\fxwarning{add content here; Routing block length analysis}
 
 \section{Attack on Message size}
 
-\fxfatal{add content here}
+\fxwarning{add content here}
 
 \chapter{Additional Considerations}
 \section{Man in the Middle Attacks to Conversations}
 
-\fxfatal{add content here}
+\fxwarning{add content here}
 
 \section{Identification of Participating Accounts}
 
-\fxfatal{add content here}
+\fxwarning{add content here}
 
 \subsection{Identification by Content}
 It is possible to identify a message by content. Assuming that an adversary knows the applied blending methode he may identify an ASN.1 structure of 
 
-\fxfatal{add content here}
+\fxwarning{add content here}
 
 \subsection{Identification by Query}
 
-\fxfatal{add content here}
+\fxwarning{add content here}
 
 \subsection{Identification by Traffic Type}
 
-\fxfatal{add content here}
+\fxwarning{add content here}
 
 \subsection{Identification by Bandwidth}
 
-\fxfatal{add content here}
+\fxwarning{add content here}
 
 \subsection{Identification by Behavioural Analysis}
 
-\fxfatal{add content here}
+\fxwarning{add content here}
 
 \section{Storage of Messages and queues}
 The storage of messages sent though MessageVortex should be handled with great care. It seems on the first sight a good idea to merge all messages in a globally available storage such as the IMAP account of the receiving entity. However -- In doing so we would discover the message content to the providing party of a mail account. Since we handled the message with great care and tremendous costs up until this point it would be careless doing so. 
 
 Storing them in a localized and receiving entity controlled storage is definitely a good idea but leaves security considerations like a backup possibly to an end user. This might be better, but in effect a questionable decision. There is however a third option. By leaving the message unhandled on the last entity of the MessageVortex chain we may safely backup the data without disclosing the message content. Merging the content then dynamically through a specialized proxy would allow the user to have a unified view on his without compromising the security.
 
-\fxfatal{implemented in prototype?}
+\fxwarning{implemented in prototype?}
 
 \section{Economy of transfer}
 
-\fxfatal{Write something about wasting bandwidth}
+\fxwarning{Write something about wasting bandwidth}

@@ -1,6 +1,6 @@
 %!TeX program=pdflatex
 %!TeX encoding=utf8
-%!TeX spellcheck = en_GB
+%!TeX spellcheck = en_US
 %!TeX root = ../../messageVortex.tex
 
 \part{Discussion \label{sec:discussion}}
@@ -55,11 +55,11 @@ If an endpoint is successfully identified then all directly related endpoints of
 Assuming a global observer as an adversary and unencrypted traffic, he might discover the originating routing layer and thus identifying it as a Vortex node by following traces of the transport layer.
 
 \section{Senders routing layer}
-\fxfatal{A sender may have some knowledge about the Routing block size and may therefore guess the complexity of the routing path}
+\fxwarning{A sender may have some knowledge about the Routing block size and may therefore guess the complexity of the routing path}
 
 \section{Intermediate node routing layer}
-\fxfatal{An intermediate node does know all the operations applied and the immediate next hop. It does learn an endpoint but is unable to use this endpoint.}
-\fxfatal{An intermediate node may determine the relative message size.}
+\fxwarning{An intermediate node does know all the operations applied and the immediate next hop. It does learn an endpoint but is unable to use this endpoint.}
+\fxwarning{An intermediate node may determine the relative message size.}
 
 \section{Receivers routing layer}
 
@@ -110,49 +110,49 @@ Traffic caused by a routing block may be observed by to a certain extent on a st
 \section{Achieved Anonymity and Flaws}
 \subsection{Measuring Anonymity}
 It is very hard to measure anonymity as it involves many uncontrollable factors. We may however control the degree of anonymity according to the number of involved parties. Assuming a sender knows the complete message path including all operations carried out on any untrusted node a message travels through, the anonymity is maxed to  the number of involved nodes $n$ excluding the sender nodes. This degree of $n-1$ may be further reduced if all well known outing only or at least ``routing mostly'' nodes are reduced. Under these harsh assumptions the set may be reduced to the potential set of ``well known'' recipients of a message.
-\fxfatal{Write something about degree of anonymity and how to achieve or compromise}
+\fxwarning{Write something about degree of anonymity and how to achieve or compromise}
 
 \subsection{Attacking Anonymity through Traffic Analysis}
 As traffic and decoy traffic and decoy traffic are chosen by the creator of the routing block frequency patterns can not be detected, unlike the router did create them. Same applies to message sizes and traffic hotspots. 
 
 \subsubsection{Attacking Anonymity through Timing Analysis}
-\fxfatal{add more text here}
+\fxwarning{add more text here}
 
 \subsubsection{Attacking Anonymity through Throughput Analysis}
-\fxfatal{add more text here}
+\fxwarning{add more text here}
 
 \subsection{Attacking Anonymity through Routing Block Analysis}
-\fxfatal{add more text here}
+\fxwarning{add more text here}
 
 \subsection{Attacking Anonymity through Header Analysis}
-\fxfatal{add more text here}
+\fxwarning{add more text here}
 
 \subsection{Attacking Anonymity through Payload Analysis}
-\fxfatal{add more text here}
+\fxwarning{add more text here}
 
 \subsection{Attacking Anonymity through Bugging}
-\fxfatal{add more text here}
+\fxwarning{add more text here}
 
 \subsection{Attacking Anonymity through Replay Analysis}
-\fxfatal{add more text here}
+\fxwarning{add more text here}
 
 \subsection{Attacking Anonymity through Tamper Replay Analysis}
-\fxfatal{add more text here}
+\fxwarning{add more text here}
 
 \chapter{Recommendations on Using the Vortex Protocol}
-\fxfatal{add more text here}
+\fxwarning{add more text here}
 
 \section{Reuse of Routing blocks}
-\fxfatal{add more text here}
+\fxwarning{add more text here}
 
 \section{Use of Ephemeral Identities}
-\fxfatal{add more text here}
+\fxwarning{add more text here}
 
 \section{Recommendations on Operations applied on Nodes}
-\fxfatal{add more text here}
+\fxwarning{add more text here}
 
 \section{Recommendations on Choosing involved Nodes}
-\fxfatal{add more text here}
+\fxwarning{add more text here}
 
 \chapter{Achieved Goals and Weaknesses}
 Although the protocol was carefully designed it has certain flaws. These flaws typically assume that parts of the underlying security has been severely broken to be exploited.
@@ -162,35 +162,35 @@ Although the protocol was carefully designed it has certain flaws. These flaws t
 Although it is possible to embed any type of content into a Vortex message great care should be taken as content may allow to disclose a readers identity or location. For this reason only self contained messages should be used (such as plain text messages).
 
 \subsection{Splitting of message content}
-\fxfatal{add more text here}
+\fxwarning{add more text here}
 
 \subsection{Redundancy}
-\fxfatal{add more text here}
+\fxwarning{add more text here}
 
 \subsection{Redundancy Detection as Attack Pattern}
-\fxfatal{add more text here}
+\fxwarning{add more text here}
 
 \subsection{Routing Considerations}
-\fxfatal{add more text here}
+\fxwarning{add more text here}
 
 \subsection{Operaion Considerations}
-\fxfatal{add more text here}
+\fxwarning{add more text here}
 
 \subsection{Hotspot Avoidance}
-\fxfatal{add more text here}
+\fxwarning{add more text here}
 
 
 \chapter{Anonymity}
-\fxfatal{add content here}
+\fxwarning{add content here}
 
 \subsection{Size of the Anonymity Set}
-\fxfatal{add more text here}
+\fxwarning{add more text here}
 
 \subsection{Jurisdictional implications onto the Anonymity Set}
-\fxfatal{add more text here}
+\fxwarning{add more text here}
 
 \section{Effects of anonymous communication on behaveour}
-\fxfatal{\cite{postmes2001social}}
+\fxwarning{\cite{postmes2001social}}
 
-\fxfatal{add content}
+\fxwarning{add content}
 
