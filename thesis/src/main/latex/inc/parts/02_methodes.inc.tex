@@ -472,7 +472,7 @@ We did an evaluation of the most common cipher modes for suitability. For Messag
 
 \subsubsection{OCB (Offset Codebook Mode):} This mode was first proposed in \cite{rogaway2003ocb} and later specified in \cite{krovetz-ocb-04}. OCB is specifically designed for AES128, AES192, and AES256. It supports authentication tag lengths of 128, 96 , or 64 bits for each specified encryption algorithm. OCB hashes the plaintext of a message with a specialised function $H_{OCB}(\mathbf{M})$. OCB is fully parallelizable due to its internal structure. All blocks except the first and the last may be encrypted or decrypted in parallel.
 
-\subsubsection{CTR:} CTR is specified in \cite{lipmaa2000ctr} and is a mixture between OFB and CBC. A nonce concatenated with a counter incrementing on every block is encrypted and then xor'ed with the plain text. This allows parallel decryption and encryption as well as random access.
+\subsubsection{CTR:} CTR is specified in \cite{lipmaa2000ctr} and is a mixture between OFB and CBC. A nonce concatenated with a counter incrementing on every block is encrypted and then xor'ed with the plain text. This allows parallel decryption and encryption as well as random access. Reusing IV/Key-pairs using CTR is a problem as we might derive the xor'ed product of two messages.
 
 \subsubsection{CCM:} Counter with CBC-MAC (CCM) is specified in \cite{RFC3610}. It allows to pad and authenticate encrypted and unencrypted data. It furthermore requires a nonce for its operation. The size of the nonce is dependent of the number of octets in the length field. In the first 16 bytes of the message the nonce and the message size is stored. For the encryption itself CTR is used. It therefore shares the same properties like CTR. 
 
@@ -493,27 +493,24 @@ Encryption and decryption can be paralleled in GCM. Random access is possible. H
 \begin{table}[h]
 	\centering\tiny
 	\begin{tabular}{|l|l|l|l|l|}\hline
-		\diaghead{\theadfont Mode Criteria}{Mode}{Criteria} 		& \thead{Requires IV} 			  & \thead{parallelisable} 	& \thead{random access}\\
+		\diaghead{\theadfont Mode Criteria}{Mode}{Criteria} 		& \thead{auth}  &\thead{Requires IV} 			  & \thead{parallelisable} 	& \thead{random access}\\
 		\hline
-		CBC 	                           							& $\checkmark$					  & $\times$				& $\times$\\              
-		CCM	                            							& $\checkmark$					  & $\times$			   	& $\times$\\
-		CFB	                            							& $\checkmark$					  & $\checkmark$			& $\checkmark$\\              
-		CTR	                            							& $\checkmark$					  & $\checkmark$		   	& $\checkmark$\\              
-		ECB 	                           							& $\times$						  & $\checkmark$			& $\checkmark$\\   
-		GCM	                            							& $\checkmark$					  & $\times$               	& $\times$\\              
-		OCB	                            							& $\times^{\text{includes auth}}$ & $\times$ 				& $\times$\\              
-		OFB	                            							& $\checkmark$					  & $\times$				& $\times$\\              
-		PCBC                            							& $\checkmark$					  & $\times$				& $\times$\\              
-		XTS															& $\checkmark$\footnote{Requires tweak instead of IV}&	$\checkmark$				& $\times$\\
+		CBC 	                           							& $\times$		& $\checkmark$					  & $\times$				& $\times$\\              
+		CCM	                            							& $\times$		& $\checkmark$					  & $\times$			   	& $\times$\\
+		CFB	                            							& $\times$		& $\checkmark$					  & $\checkmark$			& $\checkmark$\\              
+		CTR	                            							& $\times$		& $\checkmark$					  & $\checkmark$		   	& $\checkmark$\\              
+		ECB 	                           							& $\times$		& $\times$						  & $\checkmark$			& $\checkmark$\\   
+		GCM	                            							& $\checkmark$	& $\checkmark$					  & $\times$               	& $\times$\\              
+		OCB	                            							& $\checkmark$	& $\times^{\text{includes auth}}$ & $\times$ 				& $\times$\\              
+		OFB	                            							& $\times$		& $\checkmark$					  & $\times$				& $\times$\\              
+		PCBC                            							& $\times$		& $\checkmark$					  & $\times$				& $\times$\\              
+		XTS															& $\times$		& $\checkmark$\footnote{Requires tweak instead of IV}&	$\checkmark$				& $\times$\\
 		\hline          
 	\end{tabular}	
 	\caption{comparison of encryption modes in terms of the suitability criteria as transport layer}
 	\label{tab:ModeSuitCrit}
 \end{table}
 
-\fxwarning{Complete XTS; Standardized in IEEE P1619}
-
-\fxwarning{Add Auth column}
 
 \fxwarning{Add section about reusing IV anywhere (This is really bad)}
 
@@ -574,11 +571,9 @@ They concluded that in an ideal implementation a dynamic mix network where every
 \subsection{Onion Routing}
 Onion routing is a further development of the concept of mixes. In onion routers every mix gets a message which is asymmetrically encrypted. By decrypting the message he gets the name of the next hop and the content which he has to forward. The main difference in this approach is that in traditional mix cascades the mix decides about the next hop. In an onionised routing system the message decides about the route it is taking. 
 
-While tagging attacks are far harder (if we exclude side channel attacks to break sender anonymity) the traditional attacks on mixes are still possible. So when adversarys are operating entry and/or exit nodes it is very easy for them to match the respective traffic.
+While tagging attacks are far harder (if we exclude side channel attacks to break sender anonymity) the traditional attacks on mixes are still possible. So when an adversary is operating entry and exit nodes it is very easy for them to match the respective traffic.
 
-One very well known of onion routing networks is Tor (\href{https://www.torproject.org}{https://www.torproject.org}). For more information about tor see section \ref{sec:tor}.
-
-\fxwarning{\cite{onion-routing:pet2000}; Add reference that onion routers work "Connection based"}
+One very well known onion routing network is Tor (\href{https://www.torproject.org}{https://www.torproject.org}). For more information about tor see section \ref{sec:tor}.
 
 \subsection{Crowds}
 Crowds is a network which offers anonymity within a local group. It works as follows:
@@ -603,8 +598,6 @@ Several attempts have been made to strengthen the proposal of Chaum\cite{golle:e
 
 \subsubsection{Annonymous Remailer\label{sec:remailer}}
 Remailers have been in use for quite some time. There are serveral classes of remailers and all of them are somehow related to Mixnets. There are ``types'' of remailers defined. Although these ``types'' offer some kind of hierarchy none of the more advanced ``types'' seem to have more than one implementation in the wild. 
-
-\fxwarning{verify again if this claim is true}
 
 Pseudonymous Remailers (also called Nym Servers) take a message and replace all information pointing to the original sender with a pseudonym. This pseudonym may be used as an answer address. The most well known psydonymous remailer possibly was anon.penet.fi run by Johan Helsingius. This service has been forced several times to reveal a pseudonyms true identity before Johan Heösingius decided to shut it down. For a more in depth discussion of Pseudonymous Remailers see \ref{sec:remPseudo}
 
@@ -678,6 +671,9 @@ Attacking anonymisation has been done by several ways. First of all the most com
 Generally the effectiveness of monitoring of single or multiple networks is disputed. According to a study by \citeauthor{ccs2013-usersrouted} in \citeyear{ccs2013-usersrouted}\cite{ccs2013-usersrouted} a system in the scale of PRISM should be able to correlate traffic of 95\% of the users within a few days. Other sources based on the Snowden Papers claim that NSA was unable so far to De-Anonymize Tor users. However since these papers referenced to ``manual analysis'' the  statement may be disputed when looking at automated attacks as well.
 
 \fxwarning{add content here; focus more precise on the attacks as they give valuable infromation}
+
+\fxwarning{\cite{onion-routing:pet2000}; Add reference that onion routers work "Connection based"}
+
 
 \subsection{$I^2P$}
 The name $I^2P$ is an derived from  ``Invisible Internet Project'' according to \href{https://geti2p.net/}{geti2p.net}. The system itself is comparable to Tor for its capabilities. Mayor differences are:
