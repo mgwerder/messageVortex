@@ -89,7 +89,7 @@ We assume the following goals for an adversary:
 \subsection{Anonymizing and Unlinking}
 If we are unable to limit the route of our packets through named jurisdictions we must protect ourselves from unintentionally breaking the law of a foreign country. Therefore we need to be anonymous when sending or receiving messages. Unfortunately most transport protocols (in fact almost all of them such as SMTP, SMS, XMPP, or IP) use a globally unique identifier for senders and receivers which are readable by any party which is capable of reading the packets. 
 
-As a result anonymisation of a sender or a receiver is not simple. If messages are being sent through a relay at least the original sender might be concealed (\defref{Sender anonymity}). By combining it with encryption we may even achieve a very simple form of sender and \defref{Receiver Pseudonymity}. If cascading more relay like infrastructures and combining it with cryptography we might even achieve sender and receiver anonymity. This approach has however several downsides (see \ref{sec:remailer} and \ref{sec:mixnets} for details) and is easily attackable.
+As a result anonymisation of a sender or a receiver is not simple. If messages are being sent through a relay at least the original sender might be concealed. By combining it with encryption we may even achieve a very simple form of sender and Receiver Pseudonymity. If cascading more relay like infrastructures and combining it with cryptography we might even achieve sender and receiver anonymity. This approach has however several downsides (see \ref{sec:remailer} and \ref{sec:mixnets} for details) and is easily attackable.
 
 \subsection{Censorship Resistant}
 In our scenario in \ref{sec:genRequirements} we defined the adversary as someone with superior access to the internet and its infrastructure. Such an adversary might attack a message flow in several ways:
@@ -304,9 +304,9 @@ In this work we use accounting on various levels. While we are dealing with anon
 The key in this definition is the last point is crucial and at the same time hard to achieve.
 
 \section{Single Use Reply Blocks and Multi Use Reply Blocks}
-The use of single use reply blocks were first introduced by Chaum in \cite{CHAUM1}. A routing block in general is a structure allowing to send a message to someone without knowing the targets true address. It might be differentiated into ``Single Use Reply Bolcks'' (\defref{SURB}s) which may be used once and ``Multi Use Reply Blocks'' (\defref{MURB}s) which may be used a limited number of times. 
+The use of single use reply blocks were first introduced by Chaum in \cite{CHAUM1}. A routing block in general is a structure allowing to send a message to someone without knowing the targets true address. It might be differentiated into ``Single Use Reply Bolcks'' (SURBs) which may be used once and ``Multi Use Reply Blocks'' (MURBs) which may be used a limited number of times. 
 
-The concept is that we have in our case a routing block which might be used up to $n$ times ($0<n<127$). The number has been chosen for practical reasons. It is easily representable in a byte integer (signed or unsigned) on any system. It is big enough to support human communication in a sensible way and is big enough to add not too much overhead when rerequesting more \defref{MURB}s. The number should not be too big because if a \defref{MURB} is reused the same pattern of traffic is generated thus making the system susceptible to statistical attacks.
+The concept is that we have in our case a routing block which might be used up to $n$ times ($0<n<127$). The number has been chosen for practical reasons. It is easily representable in a byte integer (signed or unsigned) on any system. It is big enough to support human communication in a sensible way and is big enough to add not too much overhead when rerequesting more MURBs. The number should not be too big because if a MURB is reused the same pattern of traffic is generated thus making the system susceptible to statistical attacks.
 
 \section{Censorship}
 As definition for censorship we take
@@ -423,12 +423,13 @@ RSA is up until the day of writing this paper not publicly know to be broken (un
 The elliptic curves were independently suggestd by \cite{Miller1986} and \cite{Koblitz04guideto} in 1986. Elliptic curve Cryptography started to be widely deployed in the public space about in 2006. Since then it seems to compete very well with the well established RSA algorithm. While being similarly well researched ECC has the advantage of far shorter key sizes for the same grade of security.
 
 \subsection{Homomorphic encryption}
-\cite{feldman1987practical} % introduced homomorphic encryption
-\cite{Gentry:2009:FHE:1536414.1536440}
-\fxfatal{add content here}
+Homomorphic encryption as introduced in \cite{Gentry:2009:FHE:1536414.1536440} was from the beginning a strong candidate to be used within our work. Unfortunately we did not find a way to apply the core addRedundancy operation in homomorphic encryption. Transforming the original data to the GF space to apply matrices was not doable and thus rejected.
+\cite{Gentry:2009:FHE:1536414.1536440} %FIXME dangling reference
+
+\fxfatal{add content here; Is this still true}
 
 \subsection{Deniable Encryption and Deniable Steganography}
-\fxfatal{add content here; Is there a definition for this}
+Deniable encryption and deniable staganography have been considered out of bound for this work. The main reason is that the presence of encryption (which is not deniable in both cases) may be sufficient for a censor to block a message.
 
 \subsection{Key Sizes\label{sec:keySize}}
 The question of key sizes is a hard to answer as it depends on the current and future possibilities of an adversary which is again depending on not forseeable research. We tried to collect a couple of recommendatitions.
@@ -784,7 +785,7 @@ Only two of these components do have external interfaces. These are \defref{MSA}
 	\item Portnumber is 587 (specified in \cite{RFC4409}).\\
 	Allthough port numbers 25 and 465 are valid and do have usually the same capabilities, they are for mail routing between servers only. Mail endpoints should no longer use them.
 	\item Connections are authenticated.\\
-	Unlike a normal server-to-server (relay or final delivery) SMTP connections on port 25 clients should always be authenticated of some sort. This may be based on data provided by the user (eg. username/passsword or certificate) or data identifying the sending system (eg. IP address)\cite{RFC4409}. Failure in doing authentication may result in this port beeing misused as an sender for \defref{UBE}.
+	Unlike a normal server-to-server (relay or final delivery) SMTP connections on port 25 clients should always be authenticated of some sort. This may be based on data provided by the user (eg. username/passsword or certificate) or data identifying the sending system (eg. IP address)\cite{RFC4409}. Failure in doing authentication may result in this port beeing misused as an sender for UBE.
 \end{itemize}
 
 Mail User Agents (MUA) are the terminal endpoint of a mail delivery. Mail user agents may be implemented as fat clients on a desktop or mobile system or as an interface over a different generic protocol such as HTTP (Web Clients). \par
@@ -1016,7 +1017,7 @@ Scrypt was originally developed by \citeauthor{percival2009stronger} in \citeyea
 
 \cite{abliz2009guided}
 	
-\fxfatal{add table from \cite{amiri2015theoretical} here and extend with additional puzzles}
+\fxfatal{add table from amiri2015theoretical here and extend with additional puzzles}
 
 \fxfatal{isolated candidates: scrypt (memory hard) and sh-256 (cpu hard; beware of paralellisation)}
 
@@ -1088,7 +1089,7 @@ Another possibility is to only verify trusted proof of identities. By doing so t
 
 A third possibility is to relay the request to an other host either by using an anonymity structure such as Tor or by using its own infrastructure. Using Tor would violate the ``Zero Trust'' principle we are aiming for. Furthermore this measure would only conceal the source of the verification. It would not hide the fact that the message is being processed. 
 
-A fourth and most promising technology would be to force the sender of the certificate to include a ``proof of non revocation''. This could be a timestamped and signed partial \defref{CRL}. Such a mandatory proof of non-revocation would allow a node to verify the validity of a certificate without being forced to disclose itself by doing a verification. On the downside has to be mentioned that including a proof of non-revocation involves the requirement to accept a certain amount of caching time to be accepted. This allowed caching time reduces the value of the proof as it may be expired in the mean time. It is recommended to keep the maximum cache time as low as 1d in order to avoid that revoked certificates may be used. 
+A fourth and most promising technology would be to force the sender of the certificate to include a ``proof of non revocation''. This could be a timestamped and signed partial CRL. Such a mandatory proof of non-revocation would allow a node to verify the validity of a certificate without being forced to disclose itself by doing a verification. On the downside has to be mentioned that including a proof of non-revocation involves the requirement to accept a certain amount of caching time to be accepted. This allowed caching time reduces the value of the proof as it may be expired in the mean time. It is recommended to keep the maximum cache time as low as 1d in order to avoid that revoked certificates may be used. 
 
 \paragraph{Bugging through DNS traffic:} A widely common protocol in the internet is DNS. Almost all network related programs use it without thinking. Normally is the usage of such a protocol not a minor issue since the resolution of a lookup usually done by an ISP. In the case of a small ISP this might however already become a problem.
 
@@ -1149,10 +1150,10 @@ To avoid this problem we decided to apply a zero trust model. We do not trust an
 \end{requirement}	
 
 \subsection{Information leakage}
-Information of messages or their meta data should not be leaked. This means that in a normal message flow any hop should be a valid sender, a valid recipient, or a valid mix this implies some kind of peer-to-peer (\defref{P2P}) design. 
+Information of messages or their meta data should not be leaked. This means that in a normal message flow any hop should be a valid sender, a valid recipient, or a valid mix this implies some kind of peer-to-peer (P2P) design. 
 
 \subsubsection{P2P design}
-A main problem of the \defref{P2P} design is that usually port forwarding or a central infrastructure is required. Technologies such as ``\defref{hole punching}'' and ``\defref{hairpin translation}'' usually require central infrastructures to support at least the connection and may be depending on the client infrastructure being used fragile or ineffective. To avoid these problems we decided to rely on traditional centralistic transport infrastructures. As the proof of concept we decided to use SMTP. 
+A main problem of the P2P design is that usually port forwarding or a central infrastructure is required. Technologies such as ``hole punching'' and ``hairpin translation'' usually require central infrastructures to support at least the connection and may be depending on the client infrastructure being used fragile or ineffective. To avoid these problems we decided to rely on traditional centralistic transport infrastructures. As the proof of concept we decided to use SMTP. 
 
 The approach supports however even mixing transport media. This makes it harder for an attacker to trace a message as the message flow may go through any suitable transport protocol at any time of message transfer.
 
@@ -1408,7 +1409,7 @@ As a MURB is a routing block it generates the same pattern on the network each t
 \fxfatal{add something about murbs and the dangers of expiring quotas}
 
 \section{Protocol design}
-In this section we emphasize on the protocol blocks. These blocks are extracted from the blending layer and passed to the routing layer. A Vortex message is split into two main parts. The header block and the main block. The header block is divided into the two sub parts ``headerKey'' and ``identity block''. Although those blocks are described in \ref{app:asnone} as ASN.1 encoded structures they are not. In the message they are length prefixed fields.
+In this section we emphasize on the protocol blocks. These blocks are extracted from the blending layer and passed to the routing layer. A Vortex message is split into two main parts. The header block and the main block. The header block is divided into the two sub parts ``headerKey'' and ``identity block''. Although those blocks are described in \ref{app:rfcMessageVortexMainpp} as ASN.1 encoded structures they are not. In the message they are length prefixed fields.
 
 In reality the structure is as follows:
 \begin{itemize}

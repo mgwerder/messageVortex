@@ -4,7 +4,7 @@
 %!TeX root = ../../messageVortex.tex
 
 \part{Results}
-To verify the hypothesis made in this paper, and to analyse properties of the protocol in a real world scenario a library was implemented in Java which was capable of handling all message packets and the routing stack as a whole. The following paragraphs describe the protocol developed in general as a generic approach. Appendix \ref{app:asnone} gives the full ASN.1 representation of the protocol. 
+To verify the hypothesis made in this paper, and to analyse properties of the protocol in a real world scenario a library was implemented in Java which was capable of handling all message packets and the routing stack as a whole. The following paragraphs describe the protocol developed in general as a generic approach. Appendix \ref{app:rfcMessageVortexMain} gives the full ASN.1 representation of the protocol. 
 
 It is important to notice that ASN.1 has no mean to express encrypted structures. Due to this fact we defined all encrypted fields as \verb|OCTET STRING|. 
 
@@ -50,7 +50,7 @@ Redundancy may be built in a routing block as well as progress indication.
 \section{Vortex Message}
 The outline in figure \ref{fig:protocolOutline} is a simplified view onto the message block of MessageVortex.
 
-\begin{figure*}[hbt]
+\begin{figure*}[ht]
 	\includegraphics[width=\textwidth]{inc/blockLayoutSimplified}
 	\caption{Simplified protocol outline}
     \label{fig:protocolOutline}
@@ -114,7 +114,7 @@ Depending on the usecase (eg. unlikable signatures or scalable security) a user 
 An ephemeral identity key identifies the sender to a processing host. The ephemeral identity key must be hadled in such a way that it is not linkable. It is manly used to process accounting information.
 
 \subsection{VortexMessage Processing}
-In order to process messages some FP arithmetic is required. To make sure that all implementations on all platforms behave exactly the same we always use arithmetic as specified in \ref{IEEE754}.
+In order to process messages some FP arithmetic is required. To make sure that all implementations on all platforms behave exactly the same we always use arithmetic as specified in \cite{IEEE754}.
 
 \subsubsection{Receiving Messages}
 All messages are processed as follows:
