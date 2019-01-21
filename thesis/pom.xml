@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.messagevortex</groupId>
     <artifactId>thesis</artifactId>
-    <version>0.1.0</version>
+    <version>0.4.0</version>
 
     <properties>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -17,18 +17,11 @@
     <!--<packaging>pdf</packaging>-->
 
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/com.github.fracpete/latex-maven-plugin -->
-        <dependency>
-            <groupId>com.github.fracpete</groupId>
-            <artifactId>latex-maven-plugin</artifactId>
-            <version>1.4.4</version>
-        </dependency>
     </dependencies>
 
     <build>
         <finalName>MessageVortex-thesis</finalName>
         <plugins>
-
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>3.1.0</version>
@@ -65,13 +58,35 @@
                             </resources>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>copy-pdf-full</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/thesis</outputDirectory>
+                            <resources>
+								<resource>
+									<directory>target/main/latex-build</directory>
+									<includes>
+										<include>**/*.pdf</include>
+									</includes>
+									<excludes>
+										<exclude>inc/**/*</exclude>
+									</excludes>
+								</resource>
+								
+							</resources>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
 
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
-                <version>1.6.0</version>
+				<version>1.6.0</version>
                 <executions>
                     <execution>
                         <id>latex</id>
@@ -79,51 +94,52 @@
                             <goal>exec</goal>
                         </goals>
                         <phase>compile</phase>
+						<configuration>
+							<workingDirectory>target/main/latex-build</workingDirectory>
+							<executable>pdflatex</executable>
+							<commandlineArgs>messageVortex.tex</commandlineArgs>
+							<!-- 
+							  <commandlineArgs>jobname=messageVortex_embedded \PassOptionsToClass{attachdocs}{scrbook}\input{messageVortex.tex}</commandlineArgs> 
+							-->
+						</configuration>
                     </execution>
-                </executions>
-                <configuration>
-                    <workingDirectory>target/main/latex-build</workingDirectory>
-                    <executable>pdflatex</executable>
-                    <commandlineArgs>messageVortex.tex</commandlineArgs>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.6.0</version>
-                <executions>
                     <execution>
                         <id>bibtex</id>
                         <goals>
                             <goal>exec</goal>
                         </goals>
                         <phase>compile</phase>
+						<configuration>
+							<workingDirectory>target/main/latex-build</workingDirectory>
+							<executable>bibtex</executable>
+							<commandlineArgs>messageVortex.bib</commandlineArgs>
+						</configuration>
                     </execution>
-                </executions>
-                <configuration>
-                    <workingDirectory>target/main/latex-build</workingDirectory>
-                    <executable>pdflatex</executable>
-                    <commandlineArgs>MessageVortex</commandlineArgs>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.6.0</version>
-                <executions>
                     <execution>
-                        <id>latex</id>
+                        <id>makeindex</id>
                         <goals>
                             <goal>exec</goal>
                         </goals>
                         <phase>compile</phase>
+						<configuration>
+							<workingDirectory>target/main/latex-build</workingDirectory>
+							<executable>makeindex</executable>
+							<commandlineArgs>messageVortex.idx</commandlineArgs>
+						</configuration>
+                    </execution>
+                    <execution>
+                        <id>latex-secondrun</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>compile</phase>
+						<configuration>
+							<workingDirectory>target/main/latex-build</workingDirectory>
+							<executable>pdflatex</executable>
+							<commandlineArgs>messageVortex.tex</commandlineArgs>
+						</configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <workingDirectory>target/main/latex-build</workingDirectory>
-                    <executable>pdflatex</executable>
-                    <commandlineArgs>messageVortex.tex</commandlineArgs>
-                </configuration>
             </plugin>
         </plugins>
     </build>

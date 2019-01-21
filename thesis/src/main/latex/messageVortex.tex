@@ -1,6 +1,6 @@
 % !TeX spellcheck = en_US
 
-\documentclass[a4paper,appendixprefix,pdfusetitle,twocolumn,fontsize=8pt]{scrbook}
+\documentclass[a4paper,appendixprefix,pdfusetitle,twocolumn,fontsize=8pt,attachdocs]{scrbook}
 
 %\usepackage{gitinfo}
 
@@ -17,7 +17,7 @@
 \gdef\thesubtitle{Transport Independent Messaging Anonymous to Third Parties}
 \subtitle{\thesubtitle}
 \author{Martin Gwerder (06-073-787)}
-\date{\gitAuthorDate}
+%\date{\gitAuthorDate}
 \gdef\myabstract{In this paper we introduce an unobservable message anonymisation protocol, named MessageVortex. It is based on the zero trust principle and a distributed peer-to-peer (P2P) architecture and avoids  central aspects such as fixed infrastructures within a global network. It scores over existing work by blending its traffic into suitable existing transport protocols, thus making it next to impossible to block it without significantly affecting regular users of the transport medium. It furthermore requires no protocol specific infrastructure in public networks and allows a sender to control all aspects of a message such as degree of anonymity, timing, and redundancy of the message transport without disclosing any of these details to the routing or transporting nodes.}
 \makeatother
 
@@ -165,7 +165,7 @@
 \fxsetup{layout=pdfnote}
 
 %enable attached files
-%\usepackage[color=black]{attachfile2}
+\usepackage[color=black]{attachfile2}
 \usepackage{embedfile}
 \usepackage{hypgotoe}
 

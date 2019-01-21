@@ -472,8 +472,6 @@ We did an evaluation of the most common cipher modes for suitability. For Messag
 
 \subsubsection{OCB (Offset Codebook Mode):} This mode was first proposed in \cite{rogaway2003ocb} and later specified in \cite{krovetz-ocb-04}. OCB is specifically designed for AES128, AES192, and AES256. It supports authentication tag lengths of 128, 96 , or 64 bits for each specified encryption algorithm. OCB hashes the plaintext of a message with a specialised function $H_{OCB}(\mathbf{M})$. OCB is fully parallelizable due to its internal structure. All blocks except the first and the last may be encrypted or decrypted in parallel.
 
-\fxwarning{Add exact mode here}
-
 \subsubsection{CTR:} CTR is specified in \cite{lipmaa2000ctr} and is a mixture between OFB and CBC. A nonce concatenated with a counter incrementing on every block is encrypted and then xor'ed with the plain text. This allows parallel decryption and encryption as well as random access.
 
 \subsubsection{CCM:} Counter with CBC-MAC (CCM) is specified in \cite{RFC3610}. It allows to pad and authenticate encrypted and unencrypted data. It furthermore requires a nonce for its operation. The size of the nonce is dependent of the number of octets in the length field. In the first 16 bytes of the message the nonce and the message size is stored. For the encryption itself CTR is used. It therefore shares the same properties like CTR. 
@@ -485,9 +483,10 @@ It allows parallel decryption and encryption as well as random access.
 The mode has been analysed security wise in \citeyear{mcgrew2004security} and showed no weaknesses in the analysed fields \cite{mcgrew2004security}. 
 
 Encryption and decryption can be paralleled in GCM. Random access is possible. However authentication of a encryption is not parallelizable. The authentication makes it unsuitable for our purposes. Alternatively we could use a fixed authentication string.
-\subsubsection{XTS (XEX-based tweaked-codebook mode with ciphertext stealing):}
 
-\fxwarning{Does not detect alterations; standardized in IEEE Std 1619-2007}
+\subsubsection{XTS (XEX-based tweaked-codebook mode with ciphertext stealing):} This mode is standardized in IEE 1619-2007 (soon to be superseeded). A rough overview over XTS may be found at \cite{Martin2010}. It was originally developed for Disks offering random access and authentication at the same time. 
+
+%Threefish is a tweakable cipher
 
 \subsubsection{Summary of Cipher Modes}
 
@@ -505,7 +504,7 @@ Encryption and decryption can be paralleled in GCM. Random access is possible. H
 		OCB	                            							& $\times^{\text{includes auth}}$ & $\times$ 				& $\times$\\              
 		OFB	                            							& $\checkmark$					  & $\times$				& $\times$\\              
 		PCBC                            							& $\checkmark$					  & $\times$				& $\times$\\              
-		XTS															&								  &							& \\
+		XTS															& $\checkmark$\footnote{Requires tweak instead of IV}&	$\checkmark$				& $\times$\\
 		\hline          
 	\end{tabular}	
 	\caption{comparison of encryption modes in terms of the suitability criteria as transport layer}
