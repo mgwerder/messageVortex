@@ -8,15 +8,13 @@
 % *** Methodes
 % ********************************************************************************************************
 \part{Methodes}
-In this part of the thesis we collect requirements, definitions, methods, and existing research relevant to the topic of this thesis. We start with collecting requirements for the protocol. 
+In this part of the thesis we collect requirements, definitions, methods, and existing research relevant to the topic of this thesis. 
+
+We start with collecting requirements for the protocol.
 
 Having the requirements we collect numerous existing technologies on research and implementation level. Each of the technologies is quickly categorized and either further studied or rejected naming the reasons for rejection.
 
-The list of technologies and research collected is big in this chapter. All relevant technologies either widely adopted or thoroughly researched should be included in this chapter. All Technologies and research are categorized. 
-
-Technologies are always referenced through their respective standard. If applicable multiple standards may be part of the analysis. A very quick introduction into the protocol is given and then analysed for suitability for a specific problem addressed in this work.
-
-Research are referenced by a paper. If applicable multiple related researches and papers are collected together into a bigger picture an then analysed for suitability concerning specific problem. If related to a standard technology links to that technology are provided where relevant.
+The list of technologies and research collected is big in this chapter. All relevant technologies either widely adopted or thoroughly researched should be included in this chapter. All Technologies and research are categorized. Technologies are always referenced through their respective standard. If applicable multiple standards may be part of the analysis. A very quick introduction into the protocol is given and then analyzed for suitability for a specific problem addressed in this work. Research are referenced by a paper. If applicable multiple related researches and papers are collected together into a bigger picture and then analyzed for suitability concerning specific problem. If related to a standard technology, links to that technology are provided where relevant.
 
 In chapter \ref{sec:genRequirements} we collect the requirements for the protocol. Based on findings in this section we collect in chapter \ref{sec:existingTPP}. In chapter \ref{sec:existingRD} we collect relevant research to the topic. In chapter \ref{sec:appliedMethods} we summarize the identified  methods which will be used. We explain choices and give a rough outline of the protocol baselines.
 
@@ -65,11 +63,11 @@ traceroute to www.ietf.org.cdn.cloudflare-dnssec.net (104.20.0.85), 64 hops max
 \section{Adversary model\label{sec:adversary}}
 For an anonymizing adversary we need to assume someone of the capabilities of a state sponsored actor. State sponsored actors may work these days with allies but will not achieve dominance over all jurisdictional domains.
 
-For our adversary modell we assume the following properties:
+For our adversary model we assume the following properties:
 \begin{itemize}
-	\item An adversary will have technical knowhow to attack any infrastructure.
-	\item An adversary may have the capability to monitor traffic at any point in any network within a juridiction.
-	\item An adversary may have the capability to freely modify routing information within a juridiction.
+	\item An adversary will have elaborated technical know-how to attack any infrastructure.
+	\item An adversary may have the capability to monitor traffic at any point in any network within a jurisdiction.
+	\item An adversary may have the capability to freely modify routing information within a jurisdiction.
 	\item An adversary may have the possibility to freely modify even cryptographically strong secured data where a single or a limited number of entities grant any kind of proof of authenticity or privacy.
 	\item An adversary may have the possibility to inject or modify any data on the network of a jurisdiction.
 	\item An adversary may create own nodes of a network and monitor their behaviour and data flow to the maximum possible extent.
@@ -81,7 +79,7 @@ We assume the following goals for an adversary:
 \begin{itemize}
 	\item An adversary may want to disrupt non-authorized communication.
 	\item An adversary may want to read any information passing throughout the internet.
-	\item An adversary may want to build and conserve data about individuals or groups of individuals of their live. This data includes all activities in any part of their live regardless of their obvious fitness for any specific purpose.
+	\item An adversary may want to build and conserve data about individuals or groups of individuals of their live. This data includes all activities in any part of their live regardless of their obvious fitness for any specific purpose or their correctness.
 \end{itemize}
 
 \section{Required Properties}
@@ -89,10 +87,11 @@ We assume the following goals for an adversary:
 \subsection{Anonymizing and Unlinking}
 If we are unable to limit the route of our packets through named jurisdictions we must protect ourselves from unintentionally breaking the law of a foreign country. Therefore we need to be anonymous when sending or receiving messages. Unfortunately most transport protocols (in fact almost all of them such as SMTP, SMS, XMPP, or IP) use a globally unique identifier for senders and receivers which are readable by any party which is capable of reading the packets. 
 
-As a result anonymisation of a sender or a receiver is not simple. If messages are being sent through a relay at least the original sender might be concealed. By combining it with encryption we may even achieve a very simple form of sender and Receiver Pseudonymity. If cascading more relay like infrastructures and combining it with cryptography we might even achieve sender and receiver anonymity. This approach has however several downsides (see \ref{sec:remailer} and \ref{sec:mixnets} for details) and is easily attackable.
+As a result anonymisation of a sender or a receiver is not simple. If messages are being sent through a relay at least the original sender might be concealed. By combining it with encryption we may even achieve a very simple form of sender and Receiver Pseudonymity. If cascading more relay like infrastructures and combining it with cryptography we might even achieve sender and receiver anonymity. This approach is questionable as shown in \ref{sec:remailer} and \ref{sec:mixnets} and anonymity may be attacked relatively easy.
 
 \subsection{Censorship Resistant}
-In our scenario in \ref{sec:genRequirements} we defined the adversary as someone with superior access to the internet and its infrastructure. Such an adversary might attack a message flow in several ways:
+
+In our scenario in \ref{sec:genRequirements} we defined the adversary as someone with superior access to the network and its infrastructure. Such an adversary might attack a message flow in several ways:
 \begin{itemize}
 	\item Identify sender
 	\item Identify recipient
@@ -102,35 +101,47 @@ In our scenario in \ref{sec:genRequirements} we defined the adversary as someone
 
 We furthermore have to assume that all actions taken by a potential adversary are not subject to legal prosecution. This is due to the fact that an adversary trying to establish censorship may be part of a jurisdictions government. We may safely assume that there are legal exceptions in some jurisdiction for such entities.
 
-In order to be able to withstand an adversary outlined above the protocol needs certain attributes. The message content needs to be unidentifiable by attributes or content. Whereas ``Attributes'' include meta information such as frequency, timing, message size, sender, protocol, ports, or recipient (list not conclusive).
+In order to be able to withstand an adversary outlined above, the message content needs to be unidentifiable by attributes or content. Whereas ``Attributes'' include any meta information including, but not limited to, frequency, timing, message size, sender, protocol, ports, or recipient.
 
 \subsection{Controllable trust}
-If we want to control trust we have to conclude that
+
+If we want to control trust we have to conclude that:
+
 \begin{enumerate}
-	\item trust in an infrastructure is given due to the fact that it is under full control of either the sender or the recipient.
-	\item trust in an infrastructure may not be necessary as the infrastructure is ideally unable to misuse data passed through it.
+	\item Trust in an infrastructure is given due to the fact that it is under full control of either the sender or the recipient.
+	\item Trust in an infrastructure may not be necessary as the infrastructure is ideally unable to misuse data passed through it.
 \end{enumerate}
-In this thesis we work with both cases. We will however never trust a third party apart from sender and recipient (not even their providers of infrastructures).
+
+In this thesis we work with both cases. We will however never trust a third party apart from sender and recipient.
 
 \subsection{Reliable}
+
 Any message sending protocol needs to be reliable in its functionality. If means of message transport are unreliable users tend to use different means for communication. 
 
 \subsection{Diagnosable}
-Reliability is somehow linked to transparent behaviour. This due to the fact that if something is generating a constant behaviour but we are unable to determine the reason for it (i.e. if we are expecting a different behaviour) we normally assume a malfunction. Therefore ``Reliable'' means not only stable by its behaviour. It means also diagnosable. User perception will not be ``Reliable'' if he is not able to determine causes for differences in observed and expected behaviour.
+
+Reliability is somehow linked to transparent behavior. This due to the fact that if something is generating a constant behavior, but we are unable to determine the reason for it (i.e. if we are expecting a different behavior) we normally assume a malfunction. Therefore ``Reliable'' means not only stable by its behaviour. It means also diagnosable. User perception will not be ``Reliable'' if he is not able to determine causes for differences in observed and expected behavior.
 
 \subsection{Available}
+
 Availability has two meanings in this context which do differ. A technology is available if\ldots
+
 \begin{enumerate}
 	\item a sender and a recipient have (or may have) the means of using it.
 	\item the infrastructure is providing the service (as opposed to: ``is running in a degraded/faulty state unable to provide a service).
 \end{enumerate}
 
-The first meaning tells us that a protocol must run independently from infrastructure the user has commonly ready.
+The first meaning tells us that a protocol must run independently from an infrastructure the user has commonly ready.
 
 The second meaning tells us that messages must always be capable of flowing from the sender to the recipient. As infrastructure may fail at any time the protocol must offer the possibilities to send messages through alternate routes. This sounds easy and many protocols implement such redundancies already. However, taking into account that sender and recipient is not known to a routing node this is a goal hard to achieve.
 
+\subsection{Identifiable Sender}
+
+A message system offering unlinkability may offer sender anonymity. If so a sender should be identifiable so that a classification of senders is possible at any time.
+
 \section{Rough draft of Protocol Layers}
-In order to fulfil the criteria given above we define a very rough idea of the protocol and its layers. The rough overview is given in figure \ref{fig:roughProtocolDesign}. The protocol should work on the base of onion routing. Unlike Tor (see \ref{sec:tor}) it should not rely on central infrastructures. it furthermore should not be limited to onionize messages. It should be capable of splitting and reassemble messages at any layer 
+
+In order to fulfil the criteria given above, we define a very rough idea of the protocol and its layers. The rough overview is given in figure \ref{fig:roughProtocolDesign}. The protocol should work on the base of onion routing. Unlike Tor (see \ref{sec:tor}) it should not rely on central infrastructures. It furthermore should not be limited to onionized messages. It should be capable of splitting and reassemble messages at any layer.
 
 \begin{figure}[h]
 	\includegraphics[width=\columnwidth]{inc/roughProtocolDesign.pdf}
@@ -138,31 +149,29 @@ In order to fulfil the criteria given above we define a very rough idea of the p
 	\label{fig:roughProtocolDesign}
 \end{figure}	
 
-The protocol itself should send messages through a well known transport protocol (``Transport'') which will be used for our messages. 
+The protocol itself should send messages through a well known transport protocol (``Transport'') which will be used for our messages. The messages will be hidden within regular messages already using that transport layer. In an ideal implementation messages sent by our protocol should be indistinguishable from regular messages (by computers and humans). In order to achieve this particular task we introduce a ``blending layer''. This layer is normally specific to the underlying transport layer and may vary.
 
-The messages will be hidden within regular messages already using that transport layer. In an ideal implementation messages sent by our protocol should be indistinguishable from regular messages (by computers and humans). In order to achieve this particular task we introduce a ``Hiding / Blending'' layer. This layer is normally specific to the underlying transport layer and may vary.
+The ``routing layer'' is the layer that receives and sends messages. It parses only the core protocol and the data processed here is completely independent from the underlying transport layer.
 
-The ``Routing'' layer is the layer that receives and sends messages. It parses only the core protocol and the data processed here is completely independent from the underlying transport layer.
+The ``accounting layer'' disassembles the received messages into its parts. It then recomposes and stores the messages for further routing. In order to avoid spaming over this media some kind of accounting will be involved. 
 
-The ``Assembly / Accounting'' layer disassembles the received messages into its parts. It then recomposes and stores the messages for further routing. In order to avoid spaming over this media some kind of accounting will be involved. 
-
-The messages passed through such a protocol stack are ononised to offer anonymity from evil nodes. Furthermore a node should be unable to tell whether a message was intended for a specific node or not (so all nodes including sender and recipient should handle identically).
+The messages passed through such a protocol stack are ononised to offer anonymity from evil nodes. Furthermore a node should be unable to tell whether a message was intended for a specific node or not. This means in consequence: all nodes including sender and recipient should handle messages the same way.
 
 In order to mitigate size based attacks (an onionised packet looses permanently data on its way) we introduce operations which may be applied to a valid message as well as to decoy traffic. The operations should be able to increase and decrease in size without being able to tell if this message is destined to a target or not. Operations not carried out due to missing data might be either intentionally or a malfunction.
 
 The defined message operations are as follows:
+
 \begin{itemize}
-	\item Split a message block into two parts of variable size.\\
-	This operation may be used to fan out decoy traffic, to cut off decoy data, or to send multiple parts of a message through diffferent routing nodes.
-	\item Join two data blocks to a bigger block using an xor operation.\\
-	This operation may be used to minimise decoy traffic or to rejoin data which has been split earlier.
-	\item Fork off xor'ed data from a data block by applying an xor operation to a received block with a block of random data.\\
-	With this operation we may create decoy traffic, or split a message into two parts.
+	\item Split a message block into two parts of variable size or join them.\\
+	      This operation may be used to fan out decoy traffic, to cut off decoy data, or to send multiple parts of a message through different routing nodes.
 	\item Encrypt a block with a given key.      
 	\item Decrypt a block with a given key.
+	\item Add redundancy information to a stream and send it through multiple channels.
+	\item Recover a partially received message according to the redundancy operation.
 \end{itemize}
 
-To avoid making this system attractive to UBE an accounting system is introduced. The system works as follows:
+To avoid making this system attractive to UBE a control should be introduced making mass mailings more expensive. The system works as follows:
+
 \begin{itemize}
 	\item Routing nodes may offer their services at a cost. These ``costs'' are typically paid by solving crypto puzzles.
 	\item The following operations may be cost effective:
@@ -174,53 +183,46 @@ To avoid making this system attractive to UBE an accounting system is introduced
 		\item Offer information about the identities current quota.
 	\end{itemize}
 \end{itemize}
-All quotas require accounting. In order to minimise accounting all these quotas must be assigned a time interval in which they are effective. this guarantees that quota data is not growing indefinitely. It is up to the node to decide what time duration is still acceptable.
+All quotas require accounting. In order to minimize accounting all these quotas must be assigned a time interval in which they are effective. this guarantees that quota data is not growing indefinitely. It is up to the node to decide what time duration is still acceptable.
 
 In order to limit the possibility to Denial of Service (DoS) a node by overloading it the following precautions are taken:
 \begin{itemize}
 	\item The message is built in such a way that message building is far more complex than message routing.
-	\item Messages may be decrypted in parts to minimize the amount of work required to decide whether the full processing of the message will be done or the message is discarded anyway.
+	\item Messages may be decrypted in parts to minimize the amount of work required to decide whether the full processing of the message will be done or not.
 	\item The usage of inefficient operations (e.g. asymmetric encryption) is minimized.
 	\item The server may limit specific operations.
 \end{itemize}
 
 \section{Rough Draft of Messages}
+
 For our protocol we assume the following outline for a message:
+
 \begin{itemize}
 	\item Header block\\ 
-	This block contains an ephemeral identity of the sender on the message processing host. It allows the host to decide wether he is willing to process the rest of the message or not. It is important to know that the identity block contains a symmetric key for decryption of the main block and a secret repeated in the main block. This prevents that a malicious node may exchange the main block.
+	      This block contains an ephemeral identity of the sender on the message processing host. It allows the host to decide whether he is willing to process the rest of the message or not. It is important to know that the identity block contains a symmetric key for decryption of the main block and a secret repeated in the main block. This prevents that a malicious node may exchange the main block.
 	\item Main block\\
-	This block contains all information regarding routing and processing data. It furthermore contains the payload data which may or may not contain messages.
-	\begin{itemize}
-		\item Routing Blocks\\
-		This block contains information of which data block should be sent to what recipient. It furthermore may contain instruction for processing the data blocks and routing/reply blocks for subsequent processing. Another important thing to note is that routing blocks and payload data may arrive on two different paths to the target node.
-		\item Routing Log Block\\
-		This Block contains information about the already occurred routing in onionised form. It may be regarded as the onionised pendant of received header in an SMTP header.
-		\item Reply Block\\
-		This Block contains a Routing block which may be used to contact the original sender of a message (e.g. for an error message)
-		\item payload Block\\
-		These Blocks form the payload data. It might contain a message, parts of a message or decoy material.
-	\end{itemize}      
+	      This block contains all information regarding routing and processing data. It furthermore contains the payload data which may or may not contain messages.
+  	      \begin{itemize}
+		    \item Routing Blocks\\
+		          This block contains information of which data block should be sent to what recipient. It furthermore may contain instruction for processing the data blocks and routing/reply blocks for subsequent processing. Another important thing to note is that routing blocks and payload data may arrive on two different paths to the target node.
+		    \item payload Block\\
+		          These Blocks form the payload data. It might contain a message, parts of a message or decoy material.
+	      \end{itemize}      
 \end{itemize}
 
-The message is picked up from the transport layer and extracted in the blending layer. Processing is then split. First the Assembly/accounting layer is extracting the identity block and authorises further processing. The message building instructions are put into a identity specific list (with the expiration dates of the message). and the payload blocks are stored (again with the expiration date). 
-
-After having prepared the message in such a way the routing layer gets the routing blocks. Every routing block is then processed after a final approval by the accounting layer (he is in charge to keep the quotas for this identity in  sync). The routing layer assembles the new messages according to the (no authorized) instructions in the routing block and sends it to the next hop where the processing restarts with the new instructions. 
+The message is picked up from the transport layer and extracted in the blending layer. Processing is then split. First the message is authenticated extracting the identity block. The accounting layer checks for authorization of further processing. If authorized the routing layer adds the routing blocks to the identity specific  workspace. As soon as the time specified in the routing block arrises, the rooting block is processed and new messages are assembled according to the instructions. The accounting layer keeps track of the quotas regarding the new assembled messages. 
 
 \chapter{Existing Transport Layer Protocols \label{sec:existingTPP}}
+
 In this chapter we have a look at various available transport layer protocol. The main goal is to identify strong candidates as a transport layer. Main focus lies on the following criterias:
 \begin{itemize}
 	\item Widely adopted (Ct1)\\
-	The more widely adopted and used a protocol is the harder it is for an adversary to monitor (due to the sheer mass), filter or block the protocol (censorship resistance).
+	      The more widely adopted and used a protocol is the harder it is for an adversary to monitor (due to the sheer mass), filter or block the protocol (censorship resistance).
 	\item Reliable (Ct2)\\
-	Message transport between peers should be reliable. As messages may arrive anytime from everywhere we don not have means to synchronize the peer partners on a higher level without investing a considerable effort. In order to avoid this effort we do look for inherently reliable protocols.
+	      Message transport between peers should be reliable. As messages may arrive anytime from everywhere we don not have means to synchronize the peer partners on a higher level without investing a considerable effort. In order to avoid this effort we do look for inherently reliable protocols.
 	\item Symmetrical built (Ct3)\\
-	The transport layer should be built on a peer to peer base. All servers implement a generic routing which requires no prior knowledge of possible targets. This criteria neglects centralised infrastructures.
+	      The transport layer should be built on a peer to peer base. All servers implement a generic routing which requires no prior knowledge of possible targets. This criteria neglects centralised infrastructures. This criteria may be dropped, assuming that routing is done by the blending layer, or a specialized transport layer overlay
 \end{itemize}
-
-Ct3 may be dropped if assuming that routing is done by the blending layer, or a specialized transport layer.
-
-
 
 \section{Roundup for Transport Protocols}
 \begin{table}[h]
@@ -253,9 +255,12 @@ If assuming an implemented transport layer on the MessageVortex protocol side, H
 
 
 \chapter{Existing Research and Implementations on the Topic \label{sec:existingRD}}
-\section{Anonymity}
+
+\section{Anonymity Research and Protocols}
 \DeclareFixedFootnote{\omitted}{footnotes omitted in quote}
+
 As Anonymity we take the definition as specified in \cite{anon_terminology}.
+
 \begin{quote}
 	Anonymity of a subject means that the subject is not identifiable within a set of subjects, the anonymity set.\omitted
 \end{quote}
@@ -266,7 +271,7 @@ and
 
 Whereas the anonymity set is defined as the set of all possible subjects.
 
-Especially the anonymity of a subject from an attacker's is very important to this paper. 
+Especially the anonymity of a subject towards an observing third party is very important to this paper. 
 
 \subsection{$k$-Anonymity}
 $k$-anonymity is a term introduced in \cite{k-anonymous:ccs2003}. This work claims that no one might be held responsible for an action if the action itself can only be identified as an action which has been taken by one unidentifiable entity out of $k$ entities.
@@ -276,11 +281,9 @@ The Document distinguishes between \textit{Sender $k$-anonymity} where the sendi
 The size of $k$ is a key factor. One of the criteria might be the legal requirements of a jurisdiction. Depending on the jurisdiction it is normally not possible prosecute someone if an action is not directly coupled to one person. Another criteria might be the decreasing of $k$ over time. If a Vortex account is used we have to assume that some vortex identities go out of commission over time. If $k$ is chosen according to a legal requirement it should be taken into account that $k$ might be decreasing over time.
 
 \subsection{$\ell$-Diversity}
-In \cite{machanavajjhala2007diversity} an extended model of $k$-anonymity is introduced. In this paper the the authors emphasize that it is possible to break a $k$-anonymity set if there is additional Information available which may be merged into a data set so that a special entity can be filtered from the $k$-anonymity set. In other words if an anonymity set is to tightly specified a single additional background information might be sufficient to identify a specific entity in an anonymity set.
+In \cite{machanavajjhala2007diversity} an extended model of $k$-anonymity is introduced. In this paper the authors emphasize that it is possible to break a $k$-anonymity set if there is additional Information available which may be merged into a data set so that a special entity can be filtered from the $k$-anonymity set. In other words if an anonymity set is to tightly specified a single additional background information might be sufficient to identify a specific entity in an anonymity set.
 
-While it might be arguable that a $k$-anonymity in which a member is not implicitely $k$-anonymous still is sufficient for $k$-anonymity in its sense the point made in this work is definitely right and should be taken into account.
-
-Their approach is to introduce an amount of invisible diversity into $k$-anonymous sets so that simple background knowledge is no longer sufficient to isolate a single member.
+It might be arguable that a $k$-anonymity in which a member is not implicitely $k$-anonymous still is sufficient for $k$-anonymity in its sense. However, the point made in this work is definitely right and should be taken into account. Their approach is to introduce an amount of invisible diversity into $k$-anonymous sets so that simple background knowledge is no longer sufficient to isolate a single member.
 
 \subsection{$t$-Closeness}
 While $\ell$-diversity protects the identity of an entity it does not prevent information gain. A subject which is in a class has the same attributes. This is where $t$-closeness\cite{li2007t} comes into play. $t$-closeness is defined as follows:
@@ -290,6 +293,8 @@ While $\ell$-diversity protects the identity of an entity it does not prevent in
 \end{quote}
 
 \subsection{Ephemeral Identity}
+
+\fxerror{Move to different section}
 In this work we use accounting on various levels. While we are dealing with anonymity accounting has still to be linked to some kind of identity for this reason we are introducing a term called ``ephemeral identity''.
 
 \begin{quote}
@@ -321,20 +326,22 @@ In our more technical subsystem this means
 \end{quote}
 
 \subsection{Censorship Resistant}
-A censorship resistant system is a system which allows the users of the system and the data itself to be unaffected from censorship. Please note that this does not deny the possibility of censorship per se. It still exists outside the system. But it has some consequences for the system itself.
+A censorship resistant system is a system which allows the entities of the system and the data itself to be unaffected from censorship. Please note that this does not deny the possibility of censorship per se. It still exists outside the system. But it has some consequences for the system itself.
 
 \begin{itemize}
 	\item The system must be either undetectable or out of reach for an entity censoring.\\
-	The possibility of identifying a protocol or data allows a censoring entity to suppress the use of the protocol itself. 
+	      The possibility of identifying a protocol or data allows a censoring entity to suppress the use of the protocol itself. 
 	\item The entities involved in a system must be untraceable.\\
-	Traceable entities would result in means of suppressing real world entities participating in the system.
+	      Traceable entities would result in means of suppressing real world entities participating in the system.
 \end{itemize}
 
 \subsection{Parrot Circumvention}
-In \cite{oakland2013-parrot} \citeauthor{oakland2013-parrot} express that it is easy for a human to determine decoy traffic as the content is easily identifiable as automated content. While this is absolutely true there is a possibility here to generate ``human like'' data traffic to a certain extent. In our design this is the job covered by the blending layer.
+In \cite{oakland2013-parrot} \citeauthor{oakland2013-parrot} express that it is easy for a human to determine decoy traffic as the content is easily identifiable as automated content. While this is absolutely true there is a possibility here to generate ``human like'' data traffic to a certain extent. As an adversary may not assume that his messages are replied to, the problem is somewhat not boils down to a true turing test but remains on a passive observer turing test, enabling the potential nodes to choose their messages. In our design this is the job covered by the blending layer.
 
 \subsection{Censorship Circumvention}
+
 Several technical ways have been explored to circumvent censorship. All seem to boil down to two main ideas:
+
 \begin{itemize}
 	\item Hide data.
 	\item Copy data to a vast amount of places in order to improve the lifespan of data.
@@ -344,11 +351,13 @@ In the following section we look at technologies and ideas dealing with these ci
 
 \subsubsection{Covert Channel and Channel Exploitations}
 The original term of covert channels was defined by \citeauthor{Lampson73anote}\cite{Lampson73anote} as 
+
 \begin{quote}
 	not intended for information transfer at all, such as the service program's effect on system load.
 \end{quote}
 
 This was defined  in such a way to distinguish the message flow from 
+
 \begin{quote}
 	legitimate channels used by the confined service, such as the bill.
 \end{quote}
@@ -356,45 +365,56 @@ This was defined  in such a way to distinguish the message flow from
 The use of a legitimate channel such as SMTP and hide information in this specific channel is not a usage of covert channel. This methode is commonly referenced as channel exploitation.
 
 \subsubsection{Steganography}
+
 Steganography is an important part when it comes to unlinking information. In \cite{6828087} and \cite{subhedar2014current} we get a very rough overview. As some of the types and algorithms address specific topics of steganography (e.g., some hide from automatic detection and others address a human message stream auditor), we need to carefully choose. In our specific case the main idea is to hide within the sheer mass of common internet traffic. A human auditor is therfore regarded as minor thread.
 
-\paragraph{f5}
 F5 was first published in \cite{f5}. It is a reasonably well researched algorithm which attracted many researchers. The original F5 implementation had some detectable issues with artifacts\cite{F5broken} caused by the recompression. It was proven to be hardly detectable by a human and a computer observer.
 
 % We use https://github.com/matthewgao/F5-steganography
 
-\paragraph{YASS}
-Another string candidate was YASS as described in \cite{solanki2007yass}. Although less researched, Yass has failed in researches several times \cite{kodovsky2010modern}\cite{li2009steganalysis}. It was not considered a candidate.
+YASS, as described in \cite{solanki2007yass} was not considered a candidate. Although less researched, it has failed in researches several times \cite{kodovsky2010modern}\cite{li2009steganalysis}. 
+
+\fxerror{Add more steganography algorithms}
 
 
 \subsubsection{Timing Channels}
+
 Timing channels are a specialised form of covert channels. In timing channels not the information itself is written into the channel but the usage of the channel is encoded in such a way that it is capable to reflect the data being transferred. As we do not have control over the  timing of the transport channel this is not an option for us.
 
 \section{Cryptography}
+
 Whenever dealing with hiding data and maintaining integrity of data cryptography is the first tool in the hand of an implementer. A vast amount of research in this area does already exist. For this work we did not collect a lot of information. We focussed on algorithms either well researched and implemented or research which seem very valuable when putting this work into place. 
 
-\subsection{Symmetric Encryption}
-Symmetric encryption in this paper assumes always that
+In symmetric encryption in this paper assumes always that
 \begin{eqnarray}
 	D^{K_a}\left(E^{K_a}\left(\mathbf{M}\right)\right) & = & \mathbf{M}
 \end{eqnarray} 
 
 For a key $K_b\neq K_a$ this means
+
 \begin{eqnarray}
 	D^{K_a}\left(E^{K_b}\left(\mathbf{M}\right)\right) & \neq & \mathbf{M}\\
 	D^{K_b}\left(E^{K_a}\left(\mathbf{M}\right)\right) & \neq & \mathbf{M}
 \end{eqnarray} 
 
-\subsubsection{AES}
-AES was anounced by NIST in \citeyear{standard2001announcing} as a result of a contest. The algorithm works with four operations (subBytes, ShiftRows, mixColumns and addRoundKey). These operations are repeated depending on the key length 10 to 14 times. 
+The following candidates have been analyzed:
+\begin{itemize}
+	\item AES\\
+	      AES was anounced by NIST in \citeyear{standard2001announcing} as a result of a contest. The algorithm works with four operations (subBytes, ShiftRows, mixColumns and addRoundKey). These operations are repeated depending on the key length 10 to 14 times. 
+	
+	      AES is up until now (2018) unbroken. It has been weakened in the analysis described in \cite{tao2015improving} which reduces the complexity by roughly one to two bits. 
+	
+	\item Camellia\\
+	      The camellia algorithm is described in \cite{RFC3713}. The key sizes are 128, 192, and 256. Camellia is a Feinstel cipher with 18 to 24 rounds depending on the key size. Up until today the cipher is not known to be broken. 
+	\item Threefish\\
+	      \fxerror{add threefish as tweakable block cypher}
+\end{itemize}
 
-AES is up until now (2016) unbroken. It has been weakened in the analysis described in \cite{tao2015improving} which reduces the complexity by roughly one to two bits. 
 
 \subsubsection{Camellia}
-The camellia algorithm is described in \cite{RFC3713}. The key sizes are 128, 192, and 256. Camellia is a Feinstel cipher with 18 to 24 rounds depending on the key size. Up until today the cipher is not known to be broken. 
 
-\subsection{Asymmetric Encryption}
 For all asymmetric encryption algorithm in this paper we may assume that 
+
 \begin{eqnarray}
 	D^{K^{-1}_a}\left(E^{K^{1}_a}\left(\mathbf{M}\right)\right) & = & \mathbf{M}\\
 	D^{K^{1}_a}\left(E^{K^{-1}_a}\left(\mathbf{M}\right)\right) & = & \mathbf{M}
@@ -414,15 +434,22 @@ And for any other Keypair $K^{p}_a \neq K^{p}_b$
 	D^{K^{1}_b}\left(E^{K^{-1}_a}\left(\mathbf{M}\right)\right)  & \neq & \mathbf{M}
 \end{eqnarray} 
 
-\fxwarning{Add McEliece and NTRU}
+\begin{itemize}
+	\item RSA\\
+		  In \citeyear{Rivest:1978:MOD:359340.359342} the authors \citeauthor{Rivest:1978:MOD:359340.359342} published with \cite{Rivest:1978:MOD:359340.359342} a paper which did revolutionize cryptography for years. In their paper the authors described an encryption method later to be called RSA which required a key pair ($K_a$) referenced as public ($K^{1}_a$) and private keys ($K^{-1}_a$). The novelty of this system was that anything encrypted with the public key was only decryptable with the private key and vice versa.
 
-\subsubsection{RSA}
-In \citeyear{Rivest:1978:MOD:359340.359342} the authors \citeauthor{Rivest:1978:MOD:359340.359342} published with \cite{Rivest:1978:MOD:359340.359342} a paper which did revolutionize cryptography for years. In their paper the authors described an encryption method later to be called RSA which required a key pair ($K_a$) referenced as public ($K^{1}_a$) and private keys ($K^{-1}_a$). The novelty of this system was that anything encrypted with the public key was only decryptable with the private key and vice versa.
+	      RSA is up until the day of writing this paper not publicly know to be broken (unless a too small key size is used). However -- \citeauthor{Shor97polynomial-timealgorithms} described in \citeyear{Shor97polynomial-timealgorithms} an algorithm which should enable quantum computers to break RSA far faster than done with common computers. In the section \ref{sec:keySize} we do elaborate these effects further.
+	\item ECC\\
+	      The elliptic curves were independently suggestd by \cite{Miller1986} and \cite{Koblitz04guideto} in 1986. Elliptic curve Cryptography started to be widely deployed in the public space about in 2006. Since then it seems to compete very well with the well established RSA algorithm. While being similarly well researched ECC, has the advantage of far shorter key sizes for the same grade of security.
+	\item McElliece\\
+	      \fxerror{add McEliece}
+	\item NTRU\\
+	      \fxerror{add NTRU}
+	\item ElGammal\\
+	      \fxerror{add ElGammal}
+\end{itemize}
 
-RSA is up until the day of writing this paper not publicly know to be broken (unless a too small key size is used). However -- \citeauthor{Shor97polynomial-timealgorithms} described in \citeyear{Shor97polynomial-timealgorithms} an algorithm which should enable quantum computers to break RSA far faster than done with common computers. In the section \ref{sec:keySize} we do elaborate these effects further.
-
-\subsubsection{Elliptic Curve Cryptogaphy}
-The elliptic curves were independently suggestd by \cite{Miller1986} and \cite{Koblitz04guideto} in 1986. Elliptic curve Cryptography started to be widely deployed in the public space about in 2006. Since then it seems to compete very well with the well established RSA algorithm. While being similarly well researched ECC has the advantage of far shorter key sizes for the same grade of security.
+\fxerror{check for more valuable cryptosystems}
 
 \subsection{Homomorphic encryption}
 Homomorphic encryption as introduced in \cite{feldman1987practical} was from the beginning a strong candidate to be used within our work. Unfortunately we did not find a way to apply the core addRedundancy operation in homomorphic encryption. Transforming the original data to the GF space in an efficient way to apply matrices was not doable and thus rejected.
@@ -430,9 +457,11 @@ Homomorphic encryption as introduced in \cite{feldman1987practical} was from the
 %\cite{Gentry:2009:FHE:1536414.1536440} %FIXME dangling reference
 
 \subsection{Deniable Encryption and Deniable Steganography}
-Deniable encryption and deniable staganography have been considered out of bound for this work. The main reason is that the presence of encryption (which is not deniable in both cases) may be sufficient for a censor to block a message.
+
+Deniable encryption and deniable staganography have been considered out of bound for this work. The main reason is that the presence of encryption (which is not deniable in both cases) may be sufficient for a censor to block a message. Adding a layer to make sure that a encryption or steganography is deniable again, does not add valuable properties to our system as the sheer presence of encryption might be sufficient for censorship. 
 
 \subsection{Key Sizes\label{sec:keySize}}
+
 The question of key sizes is a hard to answer as it depends on the current and future possibilities of an adversary which is again depending on not forseeable research. We tried to collect a couple of recommendatitions.
 
 \href{http://www.ecrypt.eu.org/}{Encrypt II (http://www.ecrypt.eu.org/)} recommends currently for a ``forseeable future'' 256 Bits for symmetric encryption and for asymmetric encryption based on factoring modulus 15424 Bits. Elliptic Curve Cryptography and Hashing should be sufficient if used with at least 512 Bits. If the focus is reduced to the next $\approx$ 20 years then the key size recommendations is reduced to 128 Bit for symmetric encryption, 3248 Bits for factoring modulus operations and 256 Bits for elliptic curves and hashing.
@@ -446,49 +475,57 @@ As it might seem not a wise idea to consider the recommendation of a potential s
 Furthermore taking all recommendations together it seems that all involved parties assume the biggest trust into elliptic curves rather than asymmetric encryption based on factoring modulus.
 
 \subsection{Cipher Mode}
-The cipher mode defines how multiple blocks encrypted with the same key are handled. Main characterias of cipher suites are:
+
+The cipher mode defines how multiple blocks encrypted with the same key are handled. Main characteristics of cipher suites are:
 \begin{itemize}
 	\item Parallelisable\\ 
-	Can multiple parts of a plaintext be encrypted simultaneously This feature is important for multi CPU and multi core systems as they can handle parallelizable more efficiently by distributing them on multiple CPUs.
+	      Can multiple parts of a plaintext be encrypted simultaneously This feature is important for multi CPU and multi core systems as they can handle parallelizable more efficiently by distributing them on multiple CPUs.
 	\item Random access in decryption\\
-	Random access on decryption allows efficient partial encryption of a cipher text.
+	      Random access on decryption allows efficient partial encryption of a cipher text.
 	\item Initialisation vector\\
-	An initialisation vector has downsides and advantages. On the downsides is the fact that an initialisation vector must be shared with the message or prior distributing it. It is important to understand that the initialisation vector itself is normally not treated as a secret. It is not part of the key.
+	      An initialisation vector has downsides and advantages. On the downsides is the fact that an initialisation vector must be shared with the message or prior distributing it. It is important to understand that the initialisation vector itself is normally not treated as a secret. It is not part of the key.
 	\item Authentication\\
-	Authentication guarantees that the deciphered plaintext has been unmodified since encryption. It does not make a statement over the identity of the party encrypting the text. This would be referred as signcryption.
+	      Authentication guarantees that the deciphered plaintext has been unmodified since encryption. It does not make a statement over the identity of the party encrypting the text. This would be referred as signcryption.
 \end{itemize}
 
 We did an evaluation of the most common cipher modes for suitability. For MessageVortex we focussed on modes which have the properties parallelizable, random access and do not do authentication. Main focus beside the characteristics mentioned above was on question whether there is an implementation available in java which is reasonably tested.
 
-\subsubsection{ECB (Electronic Code Book):} This is the most basic operation. Each block is encrypted on its own. This results in a big flaw: blocks containing the same data will always transform to the same byte code. This makes it possible to see some structures of the plain text when looking at the cipher text. This solution allows parallelisation of encryption, decryption, and random access while decrypting.
+\begin{itemize}
+	\item ECB (Electronic Code Book)\\
+	      This is the most basic operation. Each block is encrypted on its own. This results in a big flaw: blocks containing the same data will always transform to the same byte code. This makes it possible to see some structures of the plain text when looking at the cipher text. This solution allows parallelisation of encryption, decryption, and random access while decrypting. We rejected therefore this mode.
+	\item CBC (Cypher Block Chaining)\\  
+	      CBC extends the encryption by xor'ing an initialisation vector into the first block before encrypting. For all subsequent blocks the ciphertext result of the preceding block is taken as xor input. This solution does not allow parallelisation of encryption, but decryption may be paralleled and random access is possible. As another downside CBC requires a shared initialisation vector. As with most IV bound modes an IV/key pair should not be used twice which has implications for our protocol.
+	\item PCBC (Propagation Cypher Block Chaining)\\
+	      CBC extends the encryption by xor'ing an initialisation vector into the first block before encrypting. For all subsequent blocks the ciphertext result of the preceding block xor'ed with its plain text is taken as xor input. This solution does not allow parallel decryption or encryption, nor does it allow random access. As another downside PCBC requires a shared initialisation vector (IV). 
+	\item EAX\\      
+	      EAX has been broken in 2012\cite{minematsu2013attacks} and is therefore rejected for our use.
+	\item CFB (Cypher Feedback)
+	      CFB is specified in \cite{dworkin2001recommendation} and works exactly as CBC with the difference that the plain text is xor'ed and the initialisation vector respectively the preceding cipher result is encrypted. CFB does not support parallel encryption as the ciphertext input from the preceeding operation is required for a round, it does however allow parallel decryption and random access.
+	\item OFB\\
+	      OFB is specified in \cite{dworkin2001recommendation} and works exactly as CFB except for the fact that not the cipher text result is taken as feedback but the result of the encryption before xor'ing the plain text. This denies parallel encryption and decryption as well as random access.
+	\item OCB (Offset Codebook Mode)\\
+	      This mode was first proposed in \cite{rogaway2003ocb} and later specified in \cite{krovetz-ocb-04}. OCB is specifically designed for AES128, AES192, and AES256. It supports authentication tag lengths of 128, 96, or 64 bits for each specified encryption algorithm. OCB hashes the plaintext of a message with a specialised function $H_{OCB}(\mathbf{M})$. OCB is fully parallelizable due to its internal structure. All blocks except the first and the last may be encrypted or decrypted in parallel.
+	\item CTR\\
+	      CTR is specified in \cite{lipmaa2000ctr} and is a mixture between OFB and CBC. A nonce concatenated with a counter incrementing on every block is encrypted and then xor'ed with the plain text. This allows parallel decryption and encryption as well as random access. Reusing IV/Key-pairs using CTR is a problem as we might derive the xor'ed product of two messages. This is only a problem where messages are not uniformly random such as in an already encrypted block.
+	\item CCM\\
+	      Counter with CBC-MAC (CCM) is specified in \cite{RFC3610}. It allows to pad and authenticate encrypted and unencrypted data. It furthermore requires a nonce for its operation. The size of the nonce is dependent of the number of octets in the length field. In the first 16 bytes of the message the nonce and the message size is stored. For the encryption itself CTR is used. It therefore shares the same properties like CTR. 
+	      
+	      It allows parallel decryption and encryption as well as random access.
+	\item GCM (Galois Counter Mode)\\
+	      GCM has been defined in \cite{mcgrew2004galois}, and is related to CTR but has some major differences. The nonce is not used (just the counter starting with value 1). In order to authenticate the encryption an authentication token $auth$ is hashed with $H_{GFmult}$ and then xor'ed with the first cipher block. All subsequent cipher blocks are xor'ed with the previous result and then hashed  again with $H_{GFmult}$. After the last block the output $o$ is processed  as follows: $H_{GFmult}(o\bigoplus (len(A)||len(B))) \bigoplus E^{K^0}(counter_0)$. As a result GCM is not parallelizable and does not support random access.
 
-\subsubsection{CBC (Cypher Block Chaining):}  CBC extends the encryption by xor'ing an initialisation vector into the first block before encrypting. For all subsequent blocks the ciphertext result of the preceding block is taken as xor input. This solution does not allow parallelisation of encryption, but decryption may be paralleled and random access is possible. As another downside CBC requires a shared initialisation vector. 
+          The mode has been analysed security wise in \citeyear{mcgrew2004security} and showed no weaknesses in the analysed fields \cite{mcgrew2004security}. 
 
-\subsubsection{PCBC (Propagation Cypher Block Chaining):}  CBC extends the encryption by xor'ing an initialisation vector into the first block before encrypting. For all subsequent blocks the ciphertext result of the preceding block xor'ed with its plain text is taken as xor input. This solution does not allow parallel decryption or encryption, nor does it allow random access. As another downside PCBC requires a shared initialisation vector (IV). 
-
-\subsubsection{EAX:} EAX has been broken in 2012\cite{minematsu2013attacks} and is therefore rejected for our use.
-
-\subsubsection{CFB (Cypher Feedback):} CFB is specified in \cite{dworkin2001recommendation} and works exactly as CBC with the difference that the plain text is xor'ed and the initialisation vector respectively the preceding cipher result is encrypted. CFB does not support parallel encryption as the ciphertext input from the preceeding operation is required for a round, it does however allow parallel decryption and random access.
-
-\subsubsection{OFB:} OFB is specified in \cite{dworkin2001recommendation} and works exactly as CFB except for the fact that not the cipher text result is taken as feedback but the result of the encryption before xor'ing the plain text. This denies parallel encryption and decryption as well as random access.
-
-\subsubsection{OCB (Offset Codebook Mode):} This mode was first proposed in \cite{rogaway2003ocb} and later specified in \cite{krovetz-ocb-04}. OCB is specifically designed for AES128, AES192, and AES256. It supports authentication tag lengths of 128, 96 , or 64 bits for each specified encryption algorithm. OCB hashes the plaintext of a message with a specialised function $H_{OCB}(\mathbf{M})$. OCB is fully parallelizable due to its internal structure. All blocks except the first and the last may be encrypted or decrypted in parallel.
-
-\subsubsection{CTR:} CTR is specified in \cite{lipmaa2000ctr} and is a mixture between OFB and CBC. A nonce concatenated with a counter incrementing on every block is encrypted and then xor'ed with the plain text. This allows parallel decryption and encryption as well as random access. Reusing IV/Key-pairs using CTR is a problem as we might derive the xor'ed product of two messages.
-
-\subsubsection{CCM:} Counter with CBC-MAC (CCM) is specified in \cite{RFC3610}. It allows to pad and authenticate encrypted and unencrypted data. It furthermore requires a nonce for its operation. The size of the nonce is dependent of the number of octets in the length field. In the first 16 bytes of the message the nonce and the message size is stored. For the encryption itself CTR is used. It therefore shares the same properties like CTR. 
-
-It allows parallel decryption and encryption as well as random access.
-
-\subsubsection{GCM (Galois Counter Mode):} GCM has been defined in \cite{mcgrew2004galois}, and is related to CTR but has some major differences. The nonce is not used (just the counter starting with value 1). In order to authenticate the encryption an authentication token $auth$ is hashed with $H_{GFmult}$ and then xor'ed with the first cipher block. All subsequent cipher blocks are xor'ed with the previos result and then hashed  again with $H_{GFmult}$. After the last block the output $o$ is processed  as follows: $H_{GFmult}(o\bigoplus (len(A)||len(B))) \bigoplus E^{K^0}(counter_0)$. 
-
-The mode has been analysed security wise in \citeyear{mcgrew2004security} and showed no weaknesses in the analysed fields \cite{mcgrew2004security}. 
-
-Encryption and decryption can be paralleled in GCM. Random access is possible. However authentication of a encryption is not parallelizable. The authentication makes it unsuitable for our purposes. Alternatively we could use a fixed authentication string.
-
-\subsubsection{XTS (XEX-based tweaked-codebook mode with ciphertext stealing):} This mode is standardized in IEE 1619-2007 (soon to be superseeded). A rough overview over XTS may be found at \cite{Martin2010}. It was originally developed for Disks offering random access and authentication at the same time. 
-
-%Threefish is a tweakable cipher
+          Encryption and decryption can be paralleled in GCM. Random access is possible. However authentication of a encryption is not parallelizable. The authentication makes it unsuitable for our purposes. Alternatively we could use a fixed authentication string.
+    \item XTS (XEX-based tweaked-codebook mode with ciphertext stealing)\\
+          This mode is standardized in IEE 1619-2007 (soon to be superseeded). A rough overview over XTS may be found at \cite{Martin2010}. It was originally developed for Disks offering random access and authentication at the same time. 
+    \item CMC and EME\\
+          \fxerror{Add CMC and EME and add to table}
+    \item LRW\\
+          \fxerror{Add LRW and add to table}
+    \item XEX\\      
+          \fxerror{Add XEX and add to table}
+\end{itemize}
 
 \subsubsection{Summary of Cipher Modes}
 
@@ -513,36 +550,37 @@ Encryption and decryption can be paralleled in GCM. Random access is possible. H
 	\label{tab:ModeSuitCrit}
 \end{table}
 
-
-\fxwarning{Add section about reusing IV anywhere (This is really bad)}
-
-\fxwarning{Add CMC}
-
-\fxwarning{Add EME}
-
-\fxwarning{Add CBC-ESSIV}
-
-\fxwarning{Add LRW}
-
-\fxwarning{Add XEX}
-
-\fxwarning{Reject IPAM; Patented}
-
 \subsection{Padding}
-A plan text stream may have any length. Since we always encrypt in blocks of a fixed size we need a mechanism to indicate how many bytes of the last encrypted block may be safely discarded. This mechanism is called padding. 
+A plan text stream may have any length. Since we always encrypt in blocks of a fixed size we need a mechanism to indicate how many bytes of the last encrypted block may be safely discarded. 
 
 Different paddings are used at the end of a cipher stream to indicate how many bytes belong to the decrypted stream.
-\subsubsection{PKCS1:}  
-\fxwarning{Add content here}
 
-\subsubsection{PKCS7:} This padding is the standard used in symmetric encryption up to 256 bits key length. The free bytes in the last cipher block indicate the number of bytes being used. This makes this padding very compact. It requires only 1 Byte of functional data at the end of the block. All other bytes are defined but not needed.
+\subsubsection{RSAES-PKCS1-v1\_5}
+This padding is the older of the paddings standardized for PKCS1. It is basically a prefix of two bytes followed by a padding set of non zero bytes and then terminated by a zero byte and then followed by the message. This patting may give a clue if decryption was successful or not.
 
-\subsubsection{OAEP with SHA and MGF1 padding:} This padding is closely related to PKCS1 padding. The hash size is however bigger and thus the required space for padding is much higher. OAEP with SHA and MGF1 Padding is used in asymetric encryption only. Due to its size it is important to note that the payload in the last block shrinks to $keySizeInBits/8-2-MacSize/4$.
+\subsubsection{RSAES-OAEP}
+RSAES-OAEP ist the newer of the two padding standards 
 
-In our approach we have chosen to allow these three paddings. The allowed sha sizes match the allowed hash sizes chosen above. It is important to note that padding costs space at the end of a stream. Since we are using always one block for signing we have to take care that the chosen signing mac plus the bytes required for padding do not exceed the key size of the asymmetric encryption. While this is normally not a problem for RSA as there are keys 1024+ Bits required it is a considerable problem for ECC algorithms as there are much shorter keys required to achieve an equivalent strength compared to RSA.
+\subsubsection{PKCS7:} This padding is the standard used in many places when applying symmetric encryption up to 256 bits key length. The free bytes in the last cipher block indicate the number of bytes being used. This makes this padding very compact. It requires only 1 Byte of functional data at the end of the block. All other bytes are defined but not needed.
+
+\subsubsection{OAEP with SHA and MGF1 padding:} This padding is closely related to RSAES-OAEP padding. The hash size is however bigger and thus the required space for padding is much higher. OAEP with SHA and MGF1 Padding is used in asymetric encryption only. Due to its size it is important to note that the payload in the last block shrinks to $keySizeInBits/8-2-MacSize/4$.
+
+In our approach we have chosen to allow these four paddings. The allowed sha sizes match the allowed hash sizes chosen above. It is important to note that padding costs space at the end of a stream. Since we are using always one block for signing we have to take care that the chosen signing mac plus the bytes required for padding do not exceed the key size of the asymmetric encryption. While this is normally not a problem for RSA as there are keys 1024+ Bits required it is a considerable problem for ECC algorithms as there are much shorter keys required to achieve an equivalent strength compared to RSA. 
+
+We have introduced an additional type of padding not related to these paddings. We required for the addRedundancy the following special properties, which could not be satisfied by any padding we were able to find:
+
+\begin{itemize}
+	\item Padding must not leak successful decryption\\
+	      For our addRedundancy operation we required a padding which has no detectable structure as a node should not be able to tell whether an removeRedundancy operation did generate valid content or decoy. 
+	\item Padding of more than one block\\
+	      Due to the nature of operation, It is required to be able to pad more than just one block.
+\end{itemize}
+
+Details of this padding are described in the section "Add and Remove Redundancy Operations'' in \ref{app:rfcMessageVortexMain}. 
 
 \section{Routing}
-If we can follow data from a source to a destination we may safely assume that the participants of this data exchange are no longer anonymous. So special care should be taken to this aspect. In the past several approaches have been made in order to avoid detection of data while routing. in the following sections we will look at some basic concepts which have been proposed up until today. We describe their concept and have a look at their weaknesses discovered so far.
+
+If we can follow data from a source to a destination we may safely assume that the participants of this data exchange are no longer anonymous. So special care should be taken to this aspect. In the past several approaches have been made in order to avoid detection of data while routing. In the following sections we will look at some basic concepts which have been proposed up until today. We describe their concept and have a look at their weaknesses discovered so far.
 
 In \nameref{sec:sysImpl} we the analyze some related real world systems regarding how they work and how they have been attacked in the past.
 
@@ -578,13 +616,16 @@ While tagging attacks are far harder (if we exclude side channel attacks to brea
 One very well known onion routing network is Tor (\href{https://www.torproject.org}{https://www.torproject.org}). For more information about tor see section \ref{sec:tor}.
 
 \subsection{Crowds}
+
 Crowds is a network which offers anonymity within a local group. It works as follows:
+
 \begin{itemize}
 	\item All users add themselfes to a group by registering on a so called ``blender''.
-	\item All users start a service (called jondo).
+	\item All users start a service (called johndo).
 	\item Every Johndo takes any received message (might be from him as well) and sends it with a 50\% chance either to the correct recipient or to a randomly chosen destination
 \end{itemize}
-While crowds do anonymize the sender from the recipient rather well the system offers no protection from someone capable of monitoring crowds traffic. The system may however be easily attacked from within by introducing collaborating jondos. 
+
+While crowds do anonymize the sender from the recipient rather well the system offers no protection from someone capable of monitoring crowds traffic. The system may however be easily attacked from within by introducing collaborating johndos. 
 
 \fxwarning{mention example Freenet; \cite{crowds:tissec};\cite{DBLP:conf/esorics/DanezisDKT09}}
 
@@ -731,7 +772,9 @@ This assumption is true for a local observer. Unfortunately it is not sufficient
 
 Related: \cite{ccs2008:mittal}
 
-\fxwarning{add content here}
+
+
+\fxwarning{Salsa was implemented 2006. No code was ever released. Never an elaborated protocol in the wild.}
 
 \subsection{AP3}
 

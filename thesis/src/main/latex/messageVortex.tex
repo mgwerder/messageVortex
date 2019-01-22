@@ -1,6 +1,6 @@
 % !TeX spellcheck = en_US
 
-\documentclass[a4paper,appendixprefix,pdfusetitle,twocolumn,fontsize=8pt,attachdocs]{scrbook}
+\documentclass[a4paper,appendixprefix,pdfusetitle,twocolumn,fontsize=8pt,attachdocs,draft,status=draft]{scrbook}
 
 %\usepackage{gitinfo}
 
@@ -424,6 +424,8 @@
 \makeatother
 \renewcommand*{\bibfont}{\small}
 
+\makeatletter\@ifclasswith{scrbook}{draft}{\gdef\indexes{\listoffixmes}}{\gdef\indexes{\listoftables\listoffigures\listofrequirements}}\makeatother
+	
 \begin{document}%
 %
 \frontmatter%
@@ -456,9 +458,7 @@ I would like to acknowledge the thousands of individuals who have coded for the 
 %\setlength\cftsectionnumwidth{3em}
 
 \tableofcontents
-\listoftables
-\listoffigures
-\listofrequirements
+\indexes
 \twocolumn
 \mainmatter
 
