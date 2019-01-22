@@ -414,10 +414,12 @@ And for any other Keypair $K^{p}_a \neq K^{p}_b$
 	D^{K^{1}_b}\left(E^{K^{-1}_a}\left(\mathbf{M}\right)\right)  & \neq & \mathbf{M}
 \end{eqnarray} 
 
+\fxwarning{Add McEliece and NTRU}
+
 \subsubsection{RSA}
 In \citeyear{Rivest:1978:MOD:359340.359342} the authors \citeauthor{Rivest:1978:MOD:359340.359342} published with \cite{Rivest:1978:MOD:359340.359342} a paper which did revolutionize cryptography for years. In their paper the authors described an encryption method later to be called RSA which required a key pair ($K_a$) referenced as public ($K^{1}_a$) and private keys ($K^{-1}_a$). The novelty of this system was that anything encrypted with the public key was only decryptable with the private key and vice versa.
 
-RSA is up until the day of writing this paper not publicly know to be broken (unless a too small key size is used). However -- \citeauthor{Shor97polynomial-timealgorithms} described in \citeyear{Shor97polynomial-timealgorithms} an algorithm which should enable quantum computers to break RSA far faster than done with common computers. In the section \ref{sec:keySize} we do elaborate this effects further.
+RSA is up until the day of writing this paper not publicly know to be broken (unless a too small key size is used). However -- \citeauthor{Shor97polynomial-timealgorithms} described in \citeyear{Shor97polynomial-timealgorithms} an algorithm which should enable quantum computers to break RSA far faster than done with common computers. In the section \ref{sec:keySize} we do elaborate these effects further.
 
 \subsubsection{Elliptic Curve Cryptogaphy}
 The elliptic curves were independently suggestd by \cite{Miller1986} and \cite{Koblitz04guideto} in 1986. Elliptic curve Cryptography started to be widely deployed in the public space about in 2006. Since then it seems to compete very well with the well established RSA algorithm. While being similarly well researched ECC has the advantage of far shorter key sizes for the same grade of security.
@@ -714,19 +716,13 @@ The transport layer problematic has been completely ignored. As there is no true
 \subsection{Gnutella}
 Gnutella is not a protocol to the anonymity world in special. It is a file sharing protocol on a Peer to peer base. This is the most intresting aspect of gnutella in this context. Gnutella has proven to be working with a large number of clients.
 
-The current protocol specification may be found under \href{http://rfc-gnutella.sourceforge.net/developer/stable/index.html}{http://rfc-gnutella.sourceforge.net/}
-
-extension: \cite{AthanRAM07}
-
-\fxwarning{add content here}
+The current protocol specification may be found under \href{http://rfc-gnutella.sourceforge.net/developer/stable/index.html}{http://rfc-gnutella.sourceforge.net/}. The Guntella network seems to be dead. This is suggested by the official gnutella developer formum. It lists in years 2001 until 2003 up to one thousand entries a month but the last entry is in 2014.
 
 \subsection{Gnutella2}
-Despite its name Gnutella2 is not the next generation of Gnutella. It was a fork in 2002 from the original Gnutella and has been developed in a different direction. The specification may be found on \href{http://g2.doxu.org}{http://g2.doxu.org}.
-
-\fxwarning{add content here}
+Despite its name Gnutella2 is not the next generation of Gnutella. It was a fork in 2002 from the original Gnutella and has been developed in a different direction. The specification may be found on \href{http://g2.doxu.org}{http://g2.doxu.org}. Just as its predecessor Gnutella2 seems to be dead. Last relevant update to the main site or its protocol is dated 4 years back.
 
 \subsection{Hordes}
-Hordes was specified in \cite{Levine:2002}. Hordes uses the abilities of handling multicast addresses of routers to generate a dynamic set of receivers and then sends messsages to them. It assumes that a single observer or router does not know all participating peers. 
+Hordes was multicast based protocol for anonymity specified in \cite{Levine:2002}. Hordes uses the abilities of handling multicast addresses of routers to generate a dynamic set of receivers and then sends messsages to them. It assumes that a single observer or router does not know all participating peers. 
 
 This assumption is true for a local observer. Unfortunately it is not sufficient assuming an adversary as defined in this paper.
 

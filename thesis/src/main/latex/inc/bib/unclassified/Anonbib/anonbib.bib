@@ -3644,16 +3644,18 @@ We study this trade-o in two P2P anonymous systems, Salsa and AP3. In both cases
   Lastaccessed             = {2007-07-02 15:29:14}
 }
 
-@Inproceedings{Salsa,
-  Title                    = {Salsa: A Structured Approach to Large-Scale Anonymity},
-  Author                   = {Arjun Nambiar and Matthew Wright},
-  Booktitle                = {Proceedings of CCS 2006},
-  Year                     = {2006},
-  Month                    = nov,
-  Url                      = {http://ranger.uta.edu/~mwright/papers/salsa-ccs06.pdf},
+@InProceedings{Salsa,
+  author       = {Arjun Nambiar and Matthew Wright},
+  title        = {Salsa: A Structured Approach to Large-Scale Anonymity},
+  booktitle    = {Proceedings of CCS 2006},
+  year         = {2006},
+  month        = nov,
+  url          = {http://ranger.uta.edu/~mwright/papers/salsa-ccs06.pdf},
+  abstract     = {Highly distributed anonymous communications systems have the promise of better distribution of trust and improved scalability over more centralized approaches. Existing distributed approaches, however, face security and scalability issues. Requiring nodes to have full knowledge of the other nodes in the system, as in Tor and Tarzan, limits scalability and leads to intersection attacks in peer-to-peer configurations. MorphMix avoids giving nodes complete system knowledge, but new research shows that a collaborating fraction of the peers can control the paths of many users. 
 
-  File                     = {Salsa.pdf::Djvu;Salsa.pdf:Salsa.pdf:PDF},
-  Lastaccessed             = {2008-06-26 10:04:52}
+To overcome these problems, we propose Salsa, a structured approach to organizing highly distributed anonymous communications systems for scalability and security. Salsa is designed to select nodes to be used in anonymous circuits randomly from the full set of nodes, even though each node has knowledge of only a small subset of the network. It uses a distributed hash table based on hashes of the nodes’ IP addresses to organize the nodes into groups. With a virtual tree structure, limited knowledge of other nodes is enough to route node lookups throughout the system. We use redundancy and bounds checking when performing lookups to prevent malicious nodes from returning false information without detection. We show that our scheme prevents attackers from biasing path selection, while incurring moderate overheads, as long as the fraction of malicious nodes is less than 20%. Additionally, the system prevents attackers from obtaining a snapshot of the entire system until the number of attackers grows too large (e.g. 15% of 10000 peers, given 256 groups). The number of groups can be used as a tunable parameter in the system, depending on the number of peers, that can be used to balance performance and security.},
+  file         = {Salsa.pdf:Salsa.pdf:PDF},
+  lastaccessed = {2008-06-26 10:04:52},
 }
 
 @Inproceedings{DBLP:conf/sp/NarayananS09,
