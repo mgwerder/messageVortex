@@ -97,7 +97,7 @@
 						<configuration>
 							<workingDirectory>target/main/latex-build</workingDirectory>
 							<executable>pdflatex</executable>
-							<commandlineArgs>messageVortex.tex</commandlineArgs>
+							<commandlineArgs>messageVortex</commandlineArgs>
 							<!-- 
 							  <commandlineArgs>jobname=messageVortex_embedded \PassOptionsToClass{attachdocs}{scrbook}\input{messageVortex.tex}</commandlineArgs> 
 							-->
@@ -112,7 +112,7 @@
 						<configuration>
 							<workingDirectory>target/main/latex-build</workingDirectory>
 							<executable>bibtex</executable>
-							<commandlineArgs>messageVortex.bib</commandlineArgs>
+							<commandlineArgs>messageVortex</commandlineArgs>
 						</configuration>
                     </execution>
                     <execution>
@@ -124,7 +124,7 @@
 						<configuration>
 							<workingDirectory>target/main/latex-build</workingDirectory>
 							<executable>makeindex</executable>
-							<commandlineArgs>messageVortex.idx</commandlineArgs>
+							<commandlineArgs>messageVortex</commandlineArgs>
 						</configuration>
                     </execution>
                     <execution>
@@ -136,7 +136,7 @@
 						<configuration>
 							<workingDirectory>target/main/latex-build</workingDirectory>
 							<executable>pdflatex</executable>
-							<commandlineArgs>messageVortex.tex</commandlineArgs>
+							<commandlineArgs>messageVortex</commandlineArgs>
 						</configuration>
                     </execution>
                 </executions>
