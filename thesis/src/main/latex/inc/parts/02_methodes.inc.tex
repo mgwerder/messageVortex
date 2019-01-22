@@ -621,13 +621,11 @@ Crowds is a network which offers anonymity within a local group. It works as fol
 
 \begin{itemize}
 	\item All users add themselfes to a group by registering on a so called ``blender''.
-	\item All users start a service (called johndo).
-	\item Every Johndo takes any received message (might be from him as well) and sends it with a 50\% chance either to the correct recipient or to a randomly chosen destination
+	\item All users start a service (called JonDo).
+	\item Every JonDo takes any received message (might be from him as well) and sends it with a 50\% chance either to the correct recipient or to a randomly chosen destination
 \end{itemize}
 
-While crowds do anonymize the sender from the recipient rather well the system offers no protection from someone capable of monitoring crowds traffic. The system may however be easily attacked from within by introducing collaborating johndos. 
-
-\fxwarning{mention example Freenet; \cite{crowds:tissec};\cite{DBLP:conf/esorics/DanezisDKT09}}
+While crowds as specified in \cite{crowds:tissec} does anonymize the sender from the recipient rather well, the system offers no protection from someone capable of monitoring crowds traffic. The system may however be easily attacked from within by introducing collaborating johndos. It has been further developed to D-Crowds \cite{DBLP:conf/esorics/DanezisDKT09}, ADU/RADU \cite{Munoz-Gea2008}, Freenet\cite{freenet} and many others. 
 
 \subsection{Mimic routes}
 Mimics are a set of statical mixes which maintain a constant message flow between the static routes. If legitimate traffic arrives the pseudo traffic is replaced by the legitimate traffic an outstanding observer is thus incapable of telling the difference between real traffic and dummy traffic.
@@ -666,7 +664,7 @@ The following sections emphasize on implementations of anonymising (and related)
 If a system shows strong similarities in parts then we emphasize on this parts and analyse the findings.
 
 \subsection{Pseudonymous Remailer\label{sec:remPseudo}}
-The basic idea of remailers were dicussed in \cite{CHAUM1}. The most well known remailer was probably anon.penet.fi which operated from 1993 to 1996. 
+The basic idea of remailers were dicussed in \cite{CHAUM1}. The most well known remailer was probably anon.penet.fi which operated from 1993 to 1996. This type of remailer is often referred as type-0 remailer.
 
 In principle an anonymous remailer works as an ordinary forwarding SMTP server. The only difference is that it strips off all header fields except for ``from'', ``to'', and ``subject'' and then replaces the sender and recipient address with pseudonyms (if any). 
 
@@ -675,25 +673,27 @@ As the example shows this kind of remailer is easily attackable by an authority.
 This remailer offers therefore no protection against an adversary defined in our problem.
 
 \subsection{Babel}
-Babel was an academic system defined in a paper by \citeauthor{babel} in \citeyear{babel}\cite{babel}.
-
-\fxwarning{add content here}
+Babel was an academic system defined in a paper by \citeauthor{babel} in \citeyear{babel}\cite{babel}. It has been developed at IBM Zurich Research Laboratory. It was a mix system using onionized addresses. The sender remains anonymous while he may provide a reply routing block called RPI. If both parties would like to remain anonymous the RPI of the initiator is deployed in a forum thread. Anyone using this block adds an RPI for its own address to the message.
 
 \subsection{Cypherpunk-Remailer\label{sec:remCypherpunk}}
-\fxwarning{add content here}
+With the failing of anon.penet.fi it became clear that the weakest spot of a single server infrastructure is the information stored on the server and the vulnerability of their owner. The new type-1 remailers score over the existing type-1 remailers by using encryption for the message. By combining multiple type-1 remailers an onionlike structure of the message was achievable. 
+
+This aproach was promissing but it was still observable in example by correlating the message sizes and timing information.
 
 \subsection{Mixmaster-Remailer\label{sec:remMixmaster}}
-\fxwarning{add content here}
+Like Cypherpunk remailers the Mixmaster remailers were working with onion like encrypted messages. In contrast to type-1 remailers the use of cascading mixes became systematic.
 
 \subsection{Mixminion-Remailer\label{sec:remMixminion}}
-\fxwarning{add content here}
-
-\subsection{Crowds}
-Crowds is an implementation of the crowds protocol.
-
-\fxwarning{add content here}
+Mixminion was the standard implementation of a type-3 remailer. It tried to address a lot of issues previously not solved. The messages were split in equally sized chunks, single use reply blocks were introduced, repay protection and key rotation were introduced. Unlike the previos remailer types, mixminion was no longer using SMTP as transport protocol. Instead a new protocol was introduced. The souces of this remailer were uploaded to github under https://github.com/mixminion/mixminion.
 
 \subsection{Tarzan}
+Tarzan is a P2P IP protocol using UDP to communicate. It is specified in \cite{tarzan:ccs02}. Tarzan nodes may be used to anonymize internet traffic in general. An initiator on the original sender machines encapsulates traffic into a layered UDP package and sends tis package through mixlike relayd's the last relayd is used as an exit node. Answers are built the oposite way. Each relayd knows its next and previous relayd. To minimize the impact of observation Tarzan forwards packets only every 20ms and features a replay protection.
+
+\subsection{AN.ON}
+AN.On as suggested in \cite{federrath2003system} is a mixing network. It generates messages in equally sized chunks and sends them in fixed time slots after random mixing. It's implementation is called JAP and may be found under https://anon.inf.tu-dresden.de/. JAP is in many ways similar to the capabilities of ToR. The network was at the time of writing a lot smaller (10 JonDos)
+\fxwarning{add content here}
+
+\subsection{MorphMix}
 \fxwarning{add content here}
 
 \subsection{Tor\label{sec:tor}}
