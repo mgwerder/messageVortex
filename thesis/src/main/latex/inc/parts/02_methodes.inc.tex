@@ -1737,9 +1737,20 @@ A Block picked up in the blending layer is handled as shown in image \ref{fig:ms
 
 \section{Sub Research Questions Roundup}
 \subsection{SQ1: Sending messages maintaining unlikability against an adversary}
-\fxwarning{add content here}
+
+If we assume that the constraints of trust (only trust in sender and recipient infrastructure) are valid, we can make the following statements regarding anonymity and unlinkability:
+
+\begin{itemize}
+	\item If an adversary is able to identify all involved nodes of a message and identify all the corresponding messages and controls all nodes except for senders and recipients node, he is able to determine message frequency, maximum message size and message peers.
+	\item If an adversary is able to identify all involved $i$ nodes of a sending party while controlling $j$ nodes then he is able to determine a $k$-anonymity set whereas $k=i-j$ for the message set and a maximum message frequency. 
+	\item If an adversary is running a node, he is able to identify other nodes participating in the network by analyzing peer messages.
+\end{itemize}
+
+We may safely assume that a carefully crafted message is therefore unlinked from the two message peers.
+
 \subsection{SQ2: Attacking unlinkability and circumvention}
 \fxwarning{add content here}
-\subsection{SQ3: Attack Mitigation by design}
-\fxwarning{add content here}
 
+\subsection{SQ3: Attack Mitigation by design}
+
+\fxwarning{add content here}
