@@ -656,8 +656,6 @@ Mixminion remailers extend the model of Mixmaster remailers. They still use SMTP
 \end{itemize}
 For a more in depth discussion of Mixminion remailers see \ref{sec:remMixminion}.
 
-\fxwarning{add citations here; be more precise as remailer are somehow related to our solution}
-
 \section{System Implementations\label{sec:sysImpl}}
 The following sections emphasize on implementations of anonymising (and related) protocols regardless of their usage in the domain of messaging. It is a list of system classes or their specific implementations together with a short analysis of strength and weaknesses. Wherever possible we try to refer to original sources. This is however not always possible since some of these systems are no longer in use.
 
@@ -690,11 +688,13 @@ Mixminion was the standard implementation of a type-3 remailer. It tried to addr
 Tarzan is a P2P IP protocol using UDP to communicate. It is specified in \cite{tarzan:ccs02}. Tarzan nodes may be used to anonymize internet traffic in general. An initiator on the original sender machines encapsulates traffic into a layered UDP package and sends tis package through mixlike relayd's the last relayd is used as an exit node. Answers are built the oposite way. Each relayd knows its next and previous relayd. To minimize the impact of observation Tarzan forwards packets only every 20ms and features a replay protection.
 
 \subsection{AN.ON}
-AN.On as suggested in \cite{federrath2003system} is a mixing network. It generates messages in equally sized chunks and sends them in fixed time slots after random mixing. It's implementation is called JAP and may be found under https://anon.inf.tu-dresden.de/. JAP is in many ways similar to the capabilities of ToR. The network was at the time of writing a lot smaller (10 JonDos)
-\fxwarning{add content here}
+AN.On as suggested in \cite{federrath2003system} is a mixing network. It generates messages in equally sized chunks and sends them in fixed time slots after random mixing. It's implementation is called JAP and may be found under https://anon.inf.tu-dresden.de/. JAP is in many ways similar to the capabilities of ToR. The network was at the time of writing a lot smaller (10 JonDos compared to 6500 relais in the ToR network).
 
 \subsection{MorphMix}
-\fxwarning{add content here}
+MorphMix is another  mix network. It is specified in \cite{morphmix:wpes2002}. it was a circuit based mix system  for networking anonymity. Core of the network was collusion detection. This detection has been circumvented by \cite{morphmix:pet2006}. Since then no new papers have been published and the project seems to be dead.
+
+\subsection{SOR (SSH-based onion routing)}
+\cite{egners2012introducing}\fxwarning{add content about SOR and try to find something about high latency networks}
 
 \subsection{Tor\label{sec:tor}}
 Tor is one of the most common onion router networks these days. It is specified in \cite{tor-spec}. It might be considered  one of the most advanced networks since a lot of research has been done here.
