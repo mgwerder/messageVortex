@@ -443,7 +443,7 @@ By definition any transport layer address may represent a Vortex identity. This 
 \subsection{Vortex Node Types}
 
 \subsubsection{Public Vortex Node}
-Public nodes are nodeswhich advertise themself as mixes. Just as all nodes they may be an endpoint or a mix. Typically they accept all requests exactly as outlined in \ref{tab:protoReplyCrit}. As an immediate result of the publicly available information about such a node the owner may be target of our adversary. Pressure may be oposed to close down such a node. However since we do not need a specific account we may safely close down one transport account and open up a different one (on the same or a different infrastructure).
+Public nodes are nodes, which advertise themself as normal mixes. Just as all nodes they may be an endpoint or a mix. Typically they accept all requests exactly as outlined in \ref{tab:protoReplyCrit}. As an immediate result of the publicly available information about such a node the owner may be target of our adversary. Pressure may be oposed to close down such a node. However since we do not need a specific account we may safely close down one transport account and open up a different one. This is even possible on the same infrastructure. To notify other users of the move and remain reachable, a user may send an \fxwarning{incomplete; Where is the contextless update?}
 
 \subsubsection{Stealth Vortex Node\label{sec:stealthNode}}
 This node does not answer any clear text requests. As an immediate result the node is only usable by other nodes knowing the public key of this node. The node is therefore on a known secret base only reachable.
