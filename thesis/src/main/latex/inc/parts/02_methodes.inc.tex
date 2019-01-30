@@ -300,13 +300,13 @@ In this work we use accounting on various levels. While we are dealing with anon
 \begin{quote}
 	A Ephemeral identity is a temporary identity which is defined by the following attributes:
 	\begin{itemize}
-		\item It is an artificial identity
-		\item It is only used for a short timespan
-		\item It is not linkable to another identity
+		\item It is an artificial identity represented by a public key.
+		\item It is only used for a short timespan.
+		\item It is not linkable to another identity.
 	\end{itemize}
 \end{quote}
 
-The key in this definition is the last point is crucial and at the same time hard to achieve.
+The key in this definition is the last point is crucial and at the same time hard to achieve. In the protocol any node may request from another node to accept a new ephemeral identity with a specified quota and a limited lifespan. The node accepting the identity may link its acceptance to the solving of a proof of work puzzle.
 
 \section{Single Use Reply Blocks and Multi Use Reply Blocks}
 The use of single use reply blocks were first introduced by Chaum in \cite{CHAUM1}. A routing block in general is a structure allowing to send a message to someone without knowing the targets true address. It might be differentiated into ``Single Use Reply Bolcks'' (SURBs) which may be used once and ``Multi Use Reply Blocks'' (MURBs) which may be used a limited number of times. 
@@ -318,11 +318,13 @@ As definition for censorship we take
 \begin{quote}
 	Censorship: the cyclical suppression, banning, expurgation, or editing by an individual, institution, group or government that enforce or influence its decision against members of the public -- of any written or pictorial materials which that individual, institution, group or government deems obscene and "utterly without redeeming social value," as determined by "contemporary community standards.".
 \end{quote}
+
 Which is attributed to Chuck Stone Professor at the School of Journalism and Mass Communication, University of North Carolina. Please note that ``Self Censorship'' (not expressing something in fear of consequences) is a form of censorship too.
 
-In our more technical subsystem this means
+In our more technical we reduce the definition to
+
 \begin{quote}
-	A systematic suppression, modification, or banning of data in the internet by either removal, or modification of the data, or systematic influencing of entities involved in the processing (e.g. by writing, routing, storing or reading) of this data.
+	Censorship: A systematic suppression, modification, or banning of data in the internet by either removal, or modification of the data, or systematic influencing of entities involved in the processing (e.g. by writing, routing, storing or reading) of this data.
 \end{quote}
 
 \subsection{Censorship Resistant}
@@ -336,15 +338,14 @@ A censorship resistant system is a system which allows the entities of the syste
 \end{itemize}
 
 \subsection{Parrot Circumvention}
-In \cite{oakland2013-parrot} \citeauthor{oakland2013-parrot} express that it is easy for a human to determine decoy traffic as the content is easily identifiable as automated content. While this is absolutely true there is a possibility here to generate ``human like'' data traffic to a certain extent. As an adversary may not assume that his messages are replied to, the problem is somewhat not boils down to a true turing test but remains on a passive observer turing test, enabling the potential nodes to choose their messages. In our design this is the job covered by the blending layer.
+In \cite{oakland2013-parrot} \citeauthor{oakland2013-parrot} express that it is easy for a human to determine decoy traffic as the content is easily identifiable as automated content. While this is absolutely true there is a possibility here to generate ``human like'' data traffic to a certain extent. As an adversary may not assume that his messages are replied to, the problem does not boil down to a true turing test. It remains on a ``passive observer turing test'', enabling the potential nodes to choose their messages. In our design this is the job covered by the blending layer.
 
 \subsection{Censorship Circumvention}
-
-Several technical ways have been explored to circumvent censorship. All seem to boil down to two main ideas:
-
+Several technical ways have been explored to circumvent censorship. All seem to boil down to the following main ideas:
 \begin{itemize}
 	\item Hide data.
 	\item Copy data to a vast amount of places in order to improve the lifespan of data.
+	\item Outcurve censorship measurements.
 \end{itemize}
 
 In the following section we look at technologies and ideas dealing with these circumvention technologies.
@@ -884,6 +885,8 @@ A good thing to learn from PGP is that there are peer based approaches offering 
 \fxwarning{add content here}
 
 \section{Proof of work}
+\fxerror{put into a separate document or skip it?}
+\begin{comment}
 Proof of work is one possibility to limit resource exhaustion on locally controlled resources. Traditional proofs are either CPU- or memory-bound. This means that they have to proof that they assigned a certain amount of their own CPU time or memory bandwidth to a problem posed by the receiving node.
 
 In \cite{amiri2015theoretical} is a good summary of proposed proof of work methods. Although they are used there for the defence of DDoS-attacks (Distributed Denial of Service) they might as well be used for defence against misuse for UBE and (D)DoS of the Vortex system. The list has been shortened with irrelevant algorithms for this work and extended with newer research in that field.
@@ -1097,6 +1100,7 @@ Scrypt was originally developed by \citeauthor{percival2009stronger} in \citeyea
 \fxwarning{add table from amiri2015theoretical here and extend with additional puzzles}
 
 \fxwarning{isolated candidates: scrypt (memory hard) and sh-256 (cpu hard; beware of paralellisation)}
+\end{comment}
 
 \section{Pseudo Random Number Generators \label{sec:prng}}
 \fxwarning{add content here}
