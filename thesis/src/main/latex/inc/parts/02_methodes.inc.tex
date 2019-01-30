@@ -374,7 +374,7 @@ F5 was first published in \cite{f5}. It is a reasonably well researched algorith
 
 YASS, as described in \cite{solanki2007yass} was not considered a candidate. Although less researched, it has failed in researches several times \cite{kodovsky2010modern}\cite{li2009steganalysis}. 
 
-\fxerror{Add more steganography algorithms}
+\fxwarning{Add more steganography algorithms}
 
 
 \subsubsection{Timing Channels}
@@ -406,10 +406,7 @@ The following candidates have been analyzed:
 	
 	\item Camellia\\
 	      The camellia algorithm is described in \cite{RFC3713}. The key sizes are 128, 192, and 256. Camellia is a Feinstel cipher with 18 to 24 rounds depending on the key size. Up until today the cipher is not known to be broken. 
-	\item Threefish\\
-	      \fxerror{add threefish as tweakable block cypher}
 \end{itemize}
-
 
 \subsubsection{Camellia}
 
@@ -923,6 +920,29 @@ The website coinwarz and \cite{cryptomining-blog.com} list the current mining sp
 	\caption{comparison of of Proof of Work algorithms}
 	\label{tab:hashSpeed}
 \end{table*}
+
+\subsection{Crypto Puzzle Types}
+Crypto Puzzles may be divided into multiple types of puzzles. The following classes of puzzles have been used as classifiers:
+\begin{itemize}
+	\item One Way function inversion puzzle\\
+	      These types of puzzzle the requester offers a nonce $N$ and one or more full or partial solutions $S$ of the one-way function $f()$. The solver then concatenates $N$ with a random value $rand$ until $f(N||rand)\in S$.
+	\item Discrete logarithm inversion puzzles\\
+	      
+	      
+\end{itemize}
+
+The following criteria have been defined to classify the puzzle:
+\begin{itemize}
+	\item Bounding type of puzzle
+	\item Parallelizable solution mining
+	\item Known simplifications over time
+\end{itemize}
+
+\begin{tabular}{|l|l|l|l|}
+Puzzle type                             & bounding type & Paralelizable & Simplifications \\
+\hline
+Hash based puzzle by Juels and Brainard & CPU           & yes           & \\
+\end{tabular}
 
 \subsection{CPU-Bound Proof of work}
 CPU bound proof of work tries to assign a task to a request. By presenting a result the sender proofs that he solved a puzzle. Normally these puzzles may only be solved by brute force.

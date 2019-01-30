@@ -17,6 +17,8 @@ The Protocol outlined here is the final product and has undergone many developme
 \chapter{Protocol Overview}
 The MessageVortex protocol described here is an onionizing protocol for asynchronus data transfer. The protocol itself is embbeded into a carrier protocol as binary information to avoid easy detection and make it hard to block traffic without blocking other legitimate traffic.
 
+The Protocol implementation is described in the RFC document in \ref{app:rfcMessageVortexMain}. It contains all necessary information to build the protocol. It is published on the website \url{https://messagevortex.net/} and on the official IETF channels. Beside the RFC document additional documents and a reference may be found.
+
 The data transferred is passed thru a number of mixes. The builder of a routing block (normally the sender) decides upon the following attributes:
 \begin{itemize}
 	\item Hops for the message and all decoy traffic.
@@ -470,24 +472,6 @@ All nodes, regardless of endpoint or mix implement the same logic and fulfil the
 %\end{figure*}
 %\fxwarning{replace image with up to date representation; show implemented and not implemented parts; Maybe make it two column wide}
 %
-\section{Protocol Implementation\label{protoImpl}}
-\fxwarning{add content here}
-
-\section{Block Structure}
-%\lstinputlisting[language=ASN1, caption={Header Block}, backgroundcolor=\color{gray!10},linerange={29-71},firstnumber=29]{../app/asn.1/messageBlocks.asn1} 
-
-\subsection{Header Block}
-\fxwarning{add content here}
-
-\subsection{Routing Blocks}
-\fxwarning{add content here}
-                 mm
-\subsection{Payload Blocks}
-\fxwarning{add content here}
-
-\section{Message Building}
-\fxwarning{take care of percentage and floating point precision}
-
 
 \section{Accounting}
 In table \ref{tab:protoReplyCrit} we show under what circumstances a reply to a header request should be sent. The capitalised words MAY, MUST, SHOULD and SHOULD NOT are used as defined in RFC2119\cite{RFC2119}.
@@ -688,14 +672,11 @@ We assume that the adversary is targeting the following informations:
 	\item Message size
 \end{itemize}
 
-\section{Attack on Users Identity}
-\fxwarning{add content here}
+Attacks on the users identity atre no longer possible as the identity used on the nodes is based on ephemeral identities instead of the users true identity. As the ephemeral identities may exist in parallel, overlapping or in a serial manor and are strictly unlinked to the true identity no statement can be made concerning the linking of ephemeral identities to the true identities. Frequency patterns or behavioral patterns may be split among multiple identities and distributed over multiple nodes. 
 
-\subsection{Frequency and Bandwidth Analysis}
-\fxwarning{add content here}
+Frequency and bandwidth analysis are not possible as frequency and bandwith of a single message is not trackable and the size of a message is generally not related to the message flow. An exception to this statement is when routing a different message through a vortex system using a reused routing block general statements such as ``the message is bigger than the previous one'' about the messages size is possible if the routing block makes use of relative split operations. In experiments, we were able to mimic any desired communication pattern we wanted for an adversary to be found.
 
-\section{Attack on Message content}
-\fxwarning{add content here}
+The message content remains cryptographically secured if the dual trust (sender and receiver node) is not broken, the message is encrypted on the senders node, the message is only decrypted on the receivers node, and remains at least wrapped in this encryption during the whole transfer. 
 
 \subsection{Attacking Routing Blocks}
 \fxwarning{add content here; Routing block length analysis}
@@ -709,12 +690,12 @@ We assume that the adversary is targeting the following informations:
 
 \fxwarning{add content here}
 
-\section{Identification of Participating Accounts}
+\section{Identification of Participating Nodes}
 
 \fxwarning{add content here}
 
 \subsection{Identification by Content}
-It is possible to identify a message by content. Assuming that an adversary knows the applied blending methode he may identify an ASN.1 structure of 
+It is possible to identify a message by content. Assuming that an adversary knows the applied blending method he may identify an ASN.1 structure of \fxerror{incomplete}
 
 \fxwarning{add content here}
 
@@ -741,6 +722,3 @@ Storing them in a localized and receiving entity controlled storage is definitel
 
 \fxwarning{implemented in prototype?}
 
-\section{Economy of transfer}
-
-\fxwarning{Write something about wasting bandwidth}
