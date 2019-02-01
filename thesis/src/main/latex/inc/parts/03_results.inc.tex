@@ -73,12 +73,12 @@ In the taxonomy of \cite{Shirazi2018} this protocol would be classified as follo
 \end{itemize}
 
 \section{Vortex Message}
-The outline in figure \ref{fig:protocolOutline} is a simplified view onto the message block of MessageVortex.
+The outline in figure \ref{fig:messageOutline} is a simplified view onto the message block of MessageVortex.
 
 \begin{figure*}[ht]
 	\includegraphics[width=\textwidth]{inc/blockLayoutSimplified}
-	\caption{Simplified protocol outline}
-    \label{fig:protocolOutline}
+	\caption{Simplified message outline}
+    \label{fig:messageOutline}
 \end{figure*}
 
 A vortex message is a message passed from one mix to another this message may or may not contain any valuable information. The message itself is embedded as binary data into a transfer protocol. Every Mix may decide for himself what kind of protocols and embedding mechanisms are supported.
@@ -182,6 +182,251 @@ The message is then built as follows:
 	\item Update accounting figures.
 	\item Blend into transport layer according to spec and send message.
 \end{enumerate}
+
+\section{Protocol design}
+In this section we emphasize on the protocol blocks. These blocks are extracted from the blending layer and passed to the routing layer. A Vortex message is split into two main parts. The header block and the main block. The header block is divided into the two sub parts ``headerKey'' and ``identity block''. Although those blocks are described in \ref{app:rfcMessageVortexMainpp} as ASN.1 encoded structures they are not. In the message they are length prefixed fields.
+
+In reality the structure of a message shown in \ref{fig:messageOutline} is as follows:
+\begin{itemize}
+	\item mPrefix size as 16 bit unsigned int (big endian)
+	\item mPrefix bytes
+	\item mainBlock size as 32 bit unsigned int (big endian)
+	\item mainBlock bytes
+\end{itemize}
+
+The reason for not using ASN.1 encoding is that it might be possible to identify the unencrypted message on the transport layer as vortex message due to the ASN.1 structure. By switching to a length prefixed structure we make it impossible for an adversary to identify the unencrypted structures of a vortex message.
+
+\subsection{Header block}
+The header block contains the identity and should contain all information required to decide whether subsequent blocks of the message should be handled.
+
+The header block contains the following data:
+\begin{itemize}
+	\item A symmetric header key (header key)\\
+	This key is encrypted with the receiving identities public key. This key guarantees an efficient handling of the header data. As the number of bytes in the header is limited a receiving node may assign all subsequent work to a known identity or discard it.
+	\item An identity block (identityBlock)\\
+	This block contains a number of data which reflects the identity of the sender and the use of this (and subsequent blocks).
+	\begin{itemize}
+		\item sending ephemeral identity public key (identityKey)
+		\item serial
+		\item maximum number of replays for the serial for this identity
+		\item Minimum number of seconds for replay protection.
+		\item validity period for this block (in seconds)
+		\item Symmetric decryption key for subsequent blocks
+		\item Chain secret for the forwarding block\\
+		If specified the specified secret should be named in all subsequent blocks.
+		\item Protocol requests to this node
+		\item Identifier and padding for proof of work
+	\end{itemize}
+	\item An identity signature (identitySignature)\\
+	Contains a signed hash (hash type is specified in identityBlock.hash) with the senders private key.
+\end{itemize}
+
+\subsubsection{Ephemeral Identity}
+The identity in this header block is an ephemeral identity. It exists for a limited amount of time (recommended <90d). Creating a new ephemeral identity is done with an identity request. This identity is mapped to all accounting figures.
+
+\subsubsection{Requests\label{sec:request}}
+Requests are always embedded in a header block. All requests are answered with a provided MURB (which is recommended to have a maximum replay value of 1).
+
+There are several header requests defined:
+
+\paragraph{newIdentity request:} This request may be answered with either a reject or a puzzle which is required to solve. Solving the puzzle results in the creation of the identity on the node. Identities may be rejected by the node for various reasons:
+
+\begin{itemize}
+	\item The node is not accepting newIdentity requests
+	\item The identity is already taken.
+	\item The identity is not strong enough (should be a longer key).
+	\item The used encryption scheme is not supported by the node.
+\end{itemize}
+
+An identity may be rejected if the wrong types of keys and key sizes are used. However it must accept at least the key types and sizes it uses for its own identity.
+
+If an identity is rejected the request may not be replayed by the same identity again. A sending party must generate a new identity for a new request. 
+
+This request should be by far the most expensive request. It must at any time be more expensive to request a new identity compared to raise the quota of an existing one.
+
+An identity is always ephemeral and expires after a given period of time. An identity may not be prolonged for security reasons. This oposes problems when using reply blocks. a reply block can only be valid as long as all included identities are valid. To counter this weakness without weakening security a ctxlessNewIdentity block may be sent to a reply block owner providing him with a new reply block.
+
+\paragraph{queryPeer request:} A peer request is a request for publicly known Vortex nodes. This request does offer the possibillity of harvesting the Vortex network. To counter this the following limitations should apply:
+\begin{itemize}
+	\item The request should be very costly
+	\item Only nodes avertising themselves as public are disclosed.
+	\item Only one or two nodes should be disclosed upon request.
+	\item The number of requests should be limited per identity.
+	\item A node should always pick random nodes out of a 5\% pool of known Vortex addresses.
+\end{itemize}
+
+These measures limit the effectivity of harvesting attacks while giving a normal node the possibility of bootstrapping itself.
+
+\paragraph{queryCapabillity request:} This request is the only request answered as a clear text request. To minimize probing possibilities this request should be only answered if the node owner agrees or generally by public nodes.
+
+\paragraph{messageQuota request:} This request raises the number of routing blocks which may be processed for an identity. A node may reject this request depending on the load of the node, personal preferences, or because this identity causes too much traffic.
+
+It is normally answered for all valid identities only. The node may answer it for recently expired identities. It is however not recommended to send a reply to an unknown identity as this behaviour might be used for probing of a node.
+
+\paragraph{transferQuota request:} This request raises the number of bytes which may be transferred for an identity. A node may reject this request depending on the load of the node, personal preferences, or because this identity causes too much traffic.
+
+It is normally answered for all valid identities only. The node may answer it for recently expired identities. It is however not recommended to send a reply to an unknown identity as this behaviour might be used for probing of a node.
+
+\paragraph{queryQuota request:} This request instructs the node to send information about the given identity.
+
+It is normally answered for all valid identities only. The node may answer it for recently expired identities. It is however not recommended to send a reply to an unknown identity as this behaviour might be used for probing of a node.
+
+\subsubsection{Replys to Clear Text Requests}
+It is up to the decision of the node whether it wants to answer a clear text request or not. Recommended for this behaviour is to discard plain text requests. 
+
+This should only be a problem when bootstrapping or when adding new identities to the own address book. 
+
+\subsection{Main block}
+The main two block types are routing blocks and payload blocks. 
+
+Routing blocks contain an onionised route chosen by the builder of the routing blocks and may contain instructions for building a message.
+
+Payload blocks contain an encrypted message, parts of it or simply decoy traffic.
+
+\subsubsection{Routing Blocks}
+Routing blocks contain the following information:
+\begin{itemize}
+	\item The node specification of the next hop (requires a full identity; may be not there if no next hop)
+	\item Purpose of routing block (May be normal/statusOK/statusError)
+	\item The moment of processing as a range in seconds since the time of arrival.
+	\item Retention time in seconds since the time of arrival.
+	\item The identity block for the next hop
+	\item The routing block for the next hop
+	\item Payload ID to be included
+	\item Payload building instructions (optional; only if MURB)
+	\item A signing key for the payload (optional; only if MURB)
+\end{itemize}
+
+\subsubsection{Payload Building Instructions\label{sec:buildInstr}}
+Payload is being built right before sending a block (processing a routing block). The building instructions are built as follows:
+\begin{equation*}
+srcIDs \xrightarrow{\text{build operation}} targetIDs
+\end{equation*}
+
+Every node maintains a list of received blocks including their IDs and building instructions for them. Any node must keep blocks and building instructions during the whole lifetime of a routing block. It may keep it longer. If a conflicting building instruction arrives all conflicting older rules are removed. Building instructions are always kept on a per-identity base. It is not possible to reference building instructions of a foreign identity.
+
+\paragraph{splitPayload:} Split a message block into two parts of variable size. The size is expressed in percent of the original block size.
+
+\paragraph{mergePayload:} Concatenates two messages of different or equal sizes.
+
+\paragraph{xorMergePayload:} Split a messsage block into two parts horizontally using an xor operation. Technically the operation works as follows:
+\begin{itemize}
+	\item The size of the source block is determined.
+	\item Create a new reproducable random pattern of data with the determined length.
+	\item The original block is xor'ed with the random pattern block generated in the previous step
+	\item Both blocks may be processed further and must be sent to different locations.
+\end{itemize}
+
+With this operation we may create decoy traffic, or split a message into two parts.
+
+\paragraph{xorSplitPayload:} This operation takes two payload chunk blocks and uses an xor operation to join them. Blocks with different sizes are processed.
+
+\paragraph{encryptPayload:} Encrypts a payload chunk block with a given symmetric key and algorithm. Please note that this operation changes the size of a message due to the keysize and the padding.
+
+\paragraph{decryptPayload:} Decrypts a payload chunk block with a given symmetric key and algorithm. Please note that this operation changes the size of a message due to the keysize and the padding.
+
+All the operations specified above have in common that they may be applied on decoy traffic as well as on real message data. The size of incomming and outgoing blocks do not relate as there are messages increasing the size as well as decreasing the size.
+
+\subsubsection{Reply Block\label{sec:replyBlock}}
+Reply blocks are specialized blocks embedded into payload blocks. There are very few reply blocks necessary. Unlike normal data blocks these messages are not accounted in quotas on the node generating the reply block. 
+
+It is up to the node to decide whether it wants to answer a request or not.
+
+Replys are being built as an ordinary message blocks. To identify a Vortex message it must begin with the string ``\textbackslash special'' encoded in ASCII followed by a valid reply block structure. No additional bytes may be appended. Blocks with additional data should be discarded. To express a block starting with ``\textbackslash special'' the token is repeated prefixed with a backslash.
+
+\paragraph{replyCapability block:}
+The reply contains the following information:
+\begin{itemize}
+	\item Supported Vortex transports including blending specification.
+	\item Maximum quota.
+	\item Supported ciphers and hashes.
+	\item Maximum number of simultaneous valid header serials.
+	\item Maximum number of simultaneous valid building operations.
+	\item Maximum identity lifespan in seconds.
+\end{itemize}
+It lists the capabilities a node advertises to the public. 
+
+\paragraph{requirement block:}
+Requirement blocks denote a requirement a requester has to fulfill before a previously sent request is processed. normally a proof of work puzzle has to be solved in order to allow a request to be processed. Alternatively a commercial supplier may request a payment in a digital currency. Currently supported digital currencies are Bitcon, Ethereum, and ZCash.
+
+\paragraph{replyStatus block:}
+General answer block signalling a a status. The block is limited in length in order to minimize misuse of bandwidth. The Block contains the following data:
+\begin{itemize}
+	\item Three digit status number
+	\item Sending node identity
+	\item Status text (optional)
+	\item Affected block ID (optional)
+\end{itemize}
+
+\paragraph{ctxlessNewidentity block:}
+This block may be used to signal the change of identity to a recipient. As this request is signed with the old known identity no means should exist to hijack such an identity.
+
+This request contains:
+\begin{itemize}
+	\item old Identity
+	\item new Identity
+	\item Signature (with old identity)
+\end{itemize}
+
+This message may arrive at any time. Any recipient might decide on its own whether it wants to accept the update or not.
+
+A node should not accept a identity update if the strength of the new identity has been lowered compared to the old identity. A client may make a difference on the fact whether the transport layer address or the key is exchanged. 
+
+\subsubsection{payload Block}
+The payload block contains the actual message or decoy traffic. Since this block is heavily modified in course of the transport of the block it is built very simple.
+
+It contains:
+\begin{itemize}
+	\item A block ID
+	\item The payload data
+	\item A payload signature (optional; required for vortex blocks)
+\end{itemize}
+
+It is important to understand that a block may be exchanged at any time by an evil node. This however does not affect the safety on the message. Any tagging introduced at this point does invalidate the stream. The output after the next hop is completely unpredictable.
+
+\subsection{Accounting\label{sec:accounting}}
+Accounting covers several purposes in this system:
+\begin{itemize}
+	\item It makes the system costly for nodes sending bulk messages.
+	\item It protects from replaying .
+	\item It offers an ephemeral identity with a limited lifespan.
+\end{itemize}
+
+As accounting data may be used to overfill a nodes accounting tables special care has been taken in order to limit the number of information which has to be maintained per identity. We furthermore tried to minimize the risk that someone might occupy accounting memory of a node without costs. Furthermore any node may cancel an illict behaving identity at any time.
+
+It is important that the accounting described here is for mixes. A node assembling messages needs to keep a lot more information.
+
+\subsubsection{Accounting Data of an Identity}
+For an ephemeral identity very little information has to be kept. This identity expires after a certain amount of time. The maximum time may be queried with a capability request. The choice of Encryption type and key size is left to the node requesting the identity. However, a node may reject the request if it considers the identity to be unsafe, it has no more capacity for new identities, or if it would create an identity clash on the current node.
+
+The following data has to be kept per identity:
+\begin{itemize}
+	\item $\mathbf{ID}\langle pubKey, expiry, messagesLeft, bytesLeft \rangle$
+	\item $\mathbf{Puzz[]}\langle expiry, request, puzzle \rangle$
+	\item $\mathbf{Build[]}\langle expiry, targetID, buildOperation \rangle$
+\end{itemize}
+The $\mathbf{ID}$ tuple is the longest living tuple. It reflects an identity and exists as long as the current identity is valid. All other tuples are short living lists. As the server decides if he accepts new identities or not the size of this data is controllable.
+
+$\mathbf{Puzz[]}$ is a list of not yet solved puzzles of this user. Every puzzle has a relatively short lifespan (typically below 1d). As the server may decide how many outstanding puzzles he accepts he controlls explicitely the size of this.
+
+$\mathbf{Build[]}$ is a list of building instructions for a message. The server may decide at any time to reject a too big list or a too long living message. Thus he may control the size of this list as well. However, controlling the size of this list will most likely result in the non-delivery of a message.
+
+\subsubsection{Accounting Data of a ``header'' Block}
+All accounting data of a header block is connected to the respective identity. All header blocks do expire latest with their respective identity. The following data has to be kept on a mix:
+\begin{itemize}
+	\item $\mathbf{HL}\langle identity, serial, remainingReplays, expiry\rangle$\\
+	This is the long term header list. It lists all headers of an identity, and how many replays are left until the requests are rejected.
+	\item $\mathbf{HS}\langle identity, serial, arrivalTime, hash, duration \rangle$\\
+	This is the short term replay protection. It protects a block with the same hash from being replayed.
+\end{itemize}
+
+\subsubsection{Accounting Data of a ``payload'' Block}
+All accounting data is connected to a header block and expires latest with its header block. The expiry time is however relative to the arrival time of the header block.
+\begin{itemize}
+	\item $\mathbf{PL}\langle identity, serial, id, hash, expiry, content\rangle$\\
+\end{itemize}
+
+The $content$ may either be stored as th content or as the building instructions of the content as it is not always clear what block will be required for sending. A block may be defined for diagnostic paths only.
 
 \subsection{VortexMessage Operations}
 All operations are expressed as described in section \ref{sec:buildInstr}. The following sections give important details about the implementation of the operations.
@@ -293,12 +538,21 @@ pb_2 & = & D_{spec}^{K_a}\left( pb_1 \right)\\\
 len(pb_2) & \leq & len(pb_1)
 \end{eqnarray}
 
-\subsubsection{VortexMessage addRedundancy Operation}
-\fxwarning{add content here}
+\subsubsection{VortexMessage addRedundancy and removeRedundancy Operation}
+These operations build the core of the mixing operations. The operation allows to add to a padded message redundancy information or to rebuild a block from a chosen set of information. 
 
-\subsubsection{VortexMessage removeRedundancy Operation}
-\fxwarning{add content here}
-
+The Operation itself is shown in \ref{fig:addRedundancyOperation}. 
+\begin{figure*}[h]
+	\includegraphics[width=\textwidth]{inc/addRedundancyOp}
+	\caption{Outline of the addRedundancy operation}
+	\label{fig:addRedundancyOperation}
+\end{figure*}
+It may be subdivided into the following operations:
+\begin{itemize}
+	\item Pad the original message block in such a way, that all resulting blocks are a multiple of the block size of the encrypting cypher.
+	\item Apply a reed solomon operation in a given GF space with a vanderMonde matrix.
+	\item Encrypt all resulting blocks with an unpadded symmetrical encryption.
+\end{itemize}
 
 
 \section{VortexMessage Request Processing}
