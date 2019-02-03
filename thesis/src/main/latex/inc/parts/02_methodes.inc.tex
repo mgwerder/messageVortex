@@ -193,6 +193,20 @@ In order to limit the possibility to Denial of Service (DoS) a node by overloadi
 	\item The server may limit specific operations.
 \end{itemize}
 
+\subsection{Ephemeral Identity}
+In this work we use accounting on various levels. While we are dealing with anonymity accounting has still to be linked to some kind of identity for this reason we are introducing a term called ``ephemeral identity''.
+
+\begin{quote}
+	A Ephemeral identity is a temporary identity which is defined by the following attributes:
+	\begin{itemize}
+		\item It is an artificial identity represented by a public key.
+		\item It is only used for a short timespan.
+		\item It is not linkable to another identity.
+	\end{itemize}
+\end{quote}
+
+The key in this definition is the last point is crucial and at the same time hard to achieve. In the protocol any node may request from another node to accept a new ephemeral identity with a specified quota and a limited lifespan. The node accepting the identity may link its acceptance to the solving of a proof of work puzzle.
+
 \section{Rough Draft of Messages}
 
 For our protocol we assume the following outline for a message:
@@ -292,22 +306,6 @@ While $\ell$-diversity protects the identity of an entity it does not prevent in
 	An equivalence class is said to have $t$-closeness if the distance between the distribution of a sensitive attribute in this class and the distribution of the attribute in the whole table is no more than a threshold. A table is said to have $t$-closeness if all equivalence classes have $t$-closeness.
 \end{quote}
 
-\subsection{Ephemeral Identity}
-
-\fxerror{Move to different section}
-In this work we use accounting on various levels. While we are dealing with anonymity accounting has still to be linked to some kind of identity for this reason we are introducing a term called ``ephemeral identity''.
-
-\begin{quote}
-	A Ephemeral identity is a temporary identity which is defined by the following attributes:
-	\begin{itemize}
-		\item It is an artificial identity represented by a public key.
-		\item It is only used for a short timespan.
-		\item It is not linkable to another identity.
-	\end{itemize}
-\end{quote}
-
-The key in this definition is the last point is crucial and at the same time hard to achieve. In the protocol any node may request from another node to accept a new ephemeral identity with a specified quota and a limited lifespan. The node accepting the identity may link its acceptance to the solving of a proof of work puzzle.
-
 \section{Single Use Reply Blocks and Multi Use Reply Blocks}
 The use of single use reply blocks were first introduced by Chaum in \cite{CHAUM1}. A routing block in general is a structure allowing to send a message to someone without knowing the targets true address. It might be differentiated into ``Single Use Reply Bolcks'' (SURBs) which may be used once and ``Multi Use Reply Blocks'' (MURBs) which may be used a limited number of times. 
 
@@ -369,7 +367,7 @@ The use of a legitimate channel such as SMTP and hide information in this specif
 
 Steganography is an important part when it comes to unlinking information. In \cite{6828087} and \cite{subhedar2014current} we get a very rough overview. As some of the types and algorithms address specific topics of steganography (e.g., some hide from automatic detection and others address a human message stream auditor), we need to carefully choose. In our specific case the main idea is to hide within the sheer mass of common internet traffic. A human auditor is therfore regarded as minor thread.
 
-F5 was first published in \cite{f5}. It is a reasonably well researched algorithm which attracted many researchers. The original F5 implementation had some detectable issues with artifacts\cite{F5broken} caused by the recompression. It was proven to be hardly detectable by a human and a computer observer.
+F5 was first published in \cite{f5}. It is a reasonably well researched algorithm which attracted many researchers. The original F5 implementation had some detectable issues with artifacts\cite{F5broken} caused by the recompression. This was however only due to  recompression issue in the reference implementation and a corrected reference implementation without the weakness has been provided by the researchers.
 
 % We use https://github.com/matthewgao/F5-steganography
 
@@ -692,14 +690,14 @@ AN.On as suggested in \cite{federrath2003system} is a mixing network. It generat
 MorphMix is another  mix network. It is specified in \cite{morphmix:wpes2002}. it was a circuit based mix system  for networking anonymity. Core of the network was collusion detection. This detection has been circumvented by \cite{morphmix:pet2006}. Since then no new papers have been published and the project seems to be dead.
 
 \subsection{SOR (SSH-based onion routing)}
-\cite{egners2012introducing}\fxwarning{add content about SOR and try to find something about high latency networks}
+SOR \cite{egners2012introducing} is blaming the complex and monocultural landscape of anonymizing  software and proclaims a simple aproach based on onionized SSH tunnels. While the approach is both simple and effective it is not suitable against a powerful adversary. First he may be able to snoop the forwarding when on the system. Second, due to the timing behavior, tunnels belonging to each other may be identified and third, the package size information does lleak as well.
 
 \subsection{Tor\label{sec:tor}}
-Tor is one of the most common onion router networks these days. It is specified in \cite{tor-spec}. It might be considered  one of the most advanced networks since a lot of research has been done here.
+Tor is one of the most common onion router networks these days and onionizes generic TCP streams. It is specified in \cite{tor-spec}. It might be considered  one of the most advanced networks since it has a considerable size and a lot of research has been done here.
 
-In short tor is a network consisting of multiple onion routers. Each client first picks an entry node. Then it establishes an identity, gets a listing of relay servers, and chooses a path through multiple onion routers. This path is linked to the temporary identity. This identity (and the path connected to it) should be changed at least once a day. 
+According to \cite{onion-routing:pet2000} tor is a network consisting of multiple onion routers. Each client first picks an entry node. Then it establishes an identity, gets a listing of relay servers, and chooses a path through multiple onion routers. This path is linked to the temporary identity. This identity should be changed on a regular base. The data itself is split into equally sized  cells of 512 bytes.
 
-There is centrally organized directory in the tor network knowing all tor relay servers. Any Tor relay server may be a directory server as well.
+There is centrally organized directory in the tor network knowing all tor relay servers. Any Tor relay server may be a directory server as well. 
 
 Many attacks involving the Tor networks have been discussed in the academic world such as \cite{hs-attack06,esorics13-cellflood,bauer:wpes2007,esorics12-torscan,oakland2013-trawling,danner-et-al:tissec12,congestion-longpaths} and some have even been exploited actively. In the best case the people discovering the attacks did propose mitigation to the attack an took care that these mitigations flowed back into the protocol. Some general thoughts of the attacks should be emphasized here for treatment in our protocol.
 
@@ -711,10 +709,9 @@ Attacking anonymisation has been done by several ways. First of all the most com
 
 Generally the effectiveness of monitoring of single or multiple networks is disputed. According to a study by \citeauthor{ccs2013-usersrouted} in \citeyear{ccs2013-usersrouted}\cite{ccs2013-usersrouted} a system in the scale of PRISM should be able to correlate traffic of 95\% of the users within a few days. Other sources based on the Snowden Papers claim that NSA was unable so far to De-Anonymize Tor users. However since these papers referenced to ``manual analysis'' the  statement may be disputed when looking at automated attacks as well.
 
-\fxwarning{add content here; focus more precise on the attacks as they give valuable infromation}
+According to \url{https://www.torproject.org/docs/pluggable-transports} ToR is blocked in at least China, Uzbekistan, Iran, and Kazakstan. In censored coutries ToR offers so called bridged Transports. Currently deployed transports in the standard ToR browser bundle package are obfs4, meek, FTE, and ScrambleSuit. Only meek is listed as working in China. This is because it hides its traffic in a common protocol (https).
 
-\fxwarning{\cite{onion-routing:pet2000}; Add reference that onion routers work "Connection based"}
-
+A good survey of the current ToR research may be found in \cite{saleh2018shedding}.
 
 \subsection{$I^2P$}
 The name $I^2P$ is an derived from  ``Invisible Internet Project'' according to \href{https://geti2p.net/}{geti2p.net}. The system itself is comparable to Tor for its capabilities. Mayor differences are:
@@ -766,29 +763,15 @@ Hordes was multicast based protocol for anonymity specified in \cite{Levine:2002
 This assumption is true for a local observer. Unfortunately it is not sufficient assuming an adversary as defined in this paper.
 
 \subsection{Salsa}
-\cite{Salsa}
-
+Salsa was proposed in \cite{Salsa} and describes a circuit based anonymization pattern based on distributed hash tables (DHT). An implementation for Salsa is available but it is not public.
+\begin{comment}
 Related: \cite{ccs2008:mittal}
-
-
-
-\fxwarning{Salsa was implemented 2006. No code was ever released. Never an elaborated protocol in the wild.}
+\end{comment}
 
 \subsection{AP3}
+AP3 as defined in \cite{mislove2004ap3} is an anonymous comunication system and very similar to crowds. It performs a random walk over a set of known nodes. Not all nodes are known to anyone and all nodes are aware of the final recipient. 
 
-\cite{mislove2004ap3}
-
-\fxwarning{add content here}
-
-\subsection{Hydra-Onion}
-\cite{iwanik2005duo}
-
-\fxwarning{add content here}
-
-\subsection{DUO-Onion}
-\cite{iwanik2005duo}
-
-\fxwarning{add content here}
+The system has been shown to be susceptible of numerous attacks by \cite{ccs2008:mittal} and does not withstand an adversary as defined in \ref{sec:adversary}.
 
 \subsection{Cashmere}
 Cashmere is specified in \cite{zhuang2005cashmere}. It defines a protocol for the use of chaum mixes. Unlike most of the protocols the chaum mixes in cashmere are virtual. They are represented by so called relay groups. Each mix in the relay group may be used as an equivalent mix to all other mixes in the same group. 
