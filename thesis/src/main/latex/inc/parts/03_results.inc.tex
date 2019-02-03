@@ -623,11 +623,6 @@ Every puzzle block will create an accounting entry as outlined in section \ref{s
 A node may reject an operation for any reason including exceeding an unnatural ammount of outstanding puzzles.
 
 A reply containing a null length puzzle means that the requested operation is rejected.
-                                 i
-\fxwarning{This block will change as new proof of work are introduced. The same applies to the respective header section}
-
-\subsubsection{replyStatus block}
-\fxwarning{This block will possibly disapear}
 
 \subsubsection{CtxleswhichsNewindentity block}                                                                                                                                            longer in service. It  is done by authenticating with a header block validly authenticating the old identity. It provides a new identity tuple containing a transport layer address and the corresponding ke
 Th new identity block is to propagate a newly generated, non-ephemeral identity of a user. This block should not be ignored by any node. It enables a user to strengthen its identity. 
@@ -724,6 +719,9 @@ All nodes, regardless of endpoint or mix implement the same logic and fulfil the
 %
 
 \section{Accounting}
+
+The Accounting layer maintains all local identities and controls overall load to the system. He processes requests from an ephemeral identity and generates replys to these requests. 
+
 In table \ref{tab:protoReplyCrit} we show under what circumstances a reply to a header request should be sent. The capitalised words MAY, MUST, SHOULD and SHOULD NOT are used as defined in RFC2119\cite{RFC2119}.
 \begin{table*}[h]
 	\centering\scriptsize
@@ -740,19 +738,12 @@ In table \ref{tab:protoReplyCrit} we show under what circumstances a reply to a 
 \end{table*}
 
 \section{Routing}
-
-\fxwarning{add text here and state machine of message}
-
-
-
-\fxwarning{add content here}
+Routing of a message is simple. A workspace of an ephemeral identity contains routing blocks and payload blocks. A routing block has an active time window. Anytime during that time window a routing layer processes the routing instructions contained in the assembly operations of the routing block. If successful the message will be sent using the specified blending layer and target address.
 
 \section{Blending layer}
 Blending layer must be crafted in a careful manor. A blending layer is responsible for sensible content generation of the transport media plus embedding a VortexMessage into the transport layer according to specs provided by the original sender.
 
-The original sender has no control over the plain text messages to avoid possibilities of sending targeted messages over the transport layer using MessageVortex. This differentiates MessageVortex from other systems having ``exit nodes'' such as tor.
-
-\fxwarning{add parrot circumvention}
+The original sender has no control over the plain text messages to avoid possibilities of sending targeted messages over the transport layer using MessageVortex. This differentiates MessageVortex from other systems having ``exit nodes'' such as Tor.
 
 \subsection{Plain Inclusion}
 The data stream has of the MessageVortex protocol has no structure visible from the outside. This property allows embedding as structureless information in files with a similar entropy. We did an analysis on common file formats in the internet to figure out which file format is suitable for this type of inclusion.
@@ -761,7 +752,7 @@ It is improtant to understand that this is very weak form of information hiding.
 
 \subsubsection{File Type Candidates}
 
-We were unable to find any scientifical data regarding what type of traffic or attachment is common in the internet. We therefore tried to analyze mail logs (smtp) of a mail provider. We were scanning $567594$ emails for attachment properties after the spam elimination queue. $16.5\%$ of all scanned messages had an attachment. The top 20 attachment types distributions are shown in \ref{tab:emailAttachments}.
+We were unable to find any scientifical data regarding what type of traffic or attachment is common in the internet. We therefore tried to analyze mail logs (smtp) of a mail provider. We were scanning $567594$ emails for attachment properties after the spam elimination queue. $16.5\%$ of all scanned messages had an attachment. The top 20 attachment types distributions are shown in table \ref{tab:emailAttachments}.
 \begin{table}[H]
 %	\centering\scriptsize
 
@@ -788,36 +779,25 @@ We were unable to find any scientifical data regarding what type of traffic or a
 	video/mp4                                                                   &	0.4\\
 	text/calendar                                                               &	0.4\\\hline
 \end{tabular}
-	\caption{Distribution of 20 20 attachment types}
+	\caption{Distribution of top 20 attachment types}
 \label{tab:emailAttachments}
 \end{table}
-                     about implementation 
+                    
 As expected the amount of images within mail was very high ($\approx 50\%$). Unfortunately we were unable to analyze the content of ms-tnef attachments retrospectively. It seems that based on this figures information hiding within images in email traffic is a good choice.
 
-\subsection{F5 Steganography}
-
-\fxwarning{add content here}
-
-\section{Message Flows}
-
-\fxwarning{add content here}
-
 \section{Considerations for Building Messages}
-In a worst case scenario we assume that an adversary is controlling most of the network utilized for anonymisation. While this is not necessarily a problem (as pointed out earlier) it allows an adversary to track a message while agents are being used under his control. So for simplicity and as a worst case assumption we always assume that an adversary has perfect knowledge of an associated message flow. This is however a worst case scenario. One missing agent disconnects the whole chain and as messages are not traceable in size.
-
-\fxwarning{add selffailing operations as checkpoint}
+In a worst case scenario we assume that an adversary is controlling most of the network utilized for anonymisation. While this is not necessarily a problem, it allows an adversary to track a message while agents are being used under his control. So for simplicity and as a worst case assumption we always assume that an adversary has perfect knowledge of an associated message flow. This is however a worst case scenario. One missing agent disconnects the whole chain and as messages are no longer traceable.
 
 \subsection{Ephemeral identities}
-\fxwarning{expiring ephemeral identities should not only be replaced after their expiration but anytime during the livetime}
+Any VortexMessage sender may maintain one or more ephemeral identites per node. These identities might be activee in parallel, overlapping, or even with interruptions. A routing block building node is advised to select a number of trustworthy nodes (such as known endpoints) and additionally some publicly available nodes or nodes obtained by bootstrapping. Those nodes are definitely not trustworthy and are ideally chosen from a list of different networks.
 
 \subsection{Timing of messages}
-\fxwarning{add content here}
+Messages are flowing in a timed manor through the network. As a routing block builder has to take into account that potential routing mechanisms of the transport layer consume time, a message is delayed in each hop.  The timing and duration for delivery is controlled by the routing block builder. Depending on the number of hops for the longest path of the message and the delay windows on every hop the total message has a delay which is controllable by the routing block builder.
 
 \subsection{Diagnostics}
-\fxwarning{add content here}
+To diagnose the flow of a message any part of the message may be sent directly or indirectly back to the routing block builder allowing him to judge upon the message progress and whether nodes are well behaving or not.
 
-\fxwarning{add here why is there no hashing operation (makes traffic distinguishable)}
-
+There is no fingerprinting operation available for doing such diagnosis as it would have made the traffic identifiable as diagnostic traffic.
 
 \subsubsection{Implicit Diagnostic}
 \fxwarning{Add comments about messages splitting and returning to sender}
