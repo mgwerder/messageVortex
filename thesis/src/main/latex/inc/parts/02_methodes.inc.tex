@@ -1167,6 +1167,17 @@ It must be taken into account that the transport layer will always do DNS lookup
 \subsubsection{Censorship}
 Where as traditional censorship is widely regarded as selective information filtering and alteration a very repressive censorship can even include denial of information flows in general. Any anonymity system not offering the possibility to hide in legitimate information flows is therefore not censorship resistant.
 
+\subsubsection{Denial of service}
+An adversary may flood the system in two ways.
+\begin{itemize}
+	\item He may flood the transport layer exhausting ressources of the transport system.\\
+	      This is a very simplistic attack. MessageVortex has no control over the existing transport protocol. Therefore, all flooding attacks on that layer are still effective. However, If an adversary attacks a node the redundancy of a message may still be sufficient. On the other hand, flooding disrupts at least all other services using the same transport layer on that node. This result may be inacceptable for an attacker. More probable would be censorship.
+	\item He may flood the routing layer with invalid messages.\\ 
+	      Identifying the messages is relatively easy for a node. Normally it should be sufficient to decode the CPREFIX block of a message. If the CPREFIX is valid then the header block either identifies a valid identity or processing may be aborted. 
+	\item He may flood an accounting layer with newIdentity or capabilities requests.\\
+	      \fxerror{add more text here}      
+\end{itemize}
+
 \subsubsection{Credibility Attack}
 Another type of DoS attack is the credibility attack. While not necessarily a technical attack it is very effective. A system not having a sufficiently big user base is offering thus a bad level of anonymity due to the fact that the anonymity set is too small or the traffic concealing message flow is insufficient. 
 

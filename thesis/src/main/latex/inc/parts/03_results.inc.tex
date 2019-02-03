@@ -305,21 +305,9 @@ srcIDs \xrightarrow{\text{build operation}} targetIDs
 
 Every node maintains a list of received blocks including their IDs and building instructions for them. Any node must keep blocks and building instructions during the whole lifetime of a routing block. It may keep it longer. If a conflicting building instruction arrives all conflicting older rules are removed. Building instructions are always kept on a per-identity base. It is not possible to reference building instructions of a foreign identity.
 
-\paragraph{splitPayload:} Split a message block into two parts of variable size. The size is expressed in percent of the original block size.
+\paragraph{splitPayload:} Split a message block into two parts of variable size. The size of the first chunk is expressed either absolute or in percent of the original block size.
 
-\paragraph{mergePayload:} Concatenates two messages of different or equal sizes.
-
-\paragraph{xorMergePayload:} Split a messsage block into two parts horizontally using an xor operation. Technically the operation works as follows:
-\begin{itemize}
-	\item The size of the source block is determined.
-	\item Create a new reproducable random pattern of data with the determined length.
-	\item The original block is xor'ed with the random pattern block generated in the previous step
-	\item Both blocks may be processed further and must be sent to different locations.
-\end{itemize}
-
-With this operation we may create decoy traffic, or split a message into two parts.
-
-\paragraph{xorSplitPayload:} This operation takes two payload chunk blocks and uses an xor operation to join them. Blocks with different sizes are processed.
+\paragraph{mergePayload:} Concatenates two payload blocks of different or equal sizes.
 
 \paragraph{encryptPayload:} Encrypts a payload chunk block with a given symmetric key and algorithm. Please note that this operation changes the size of a message due to the keysize and the padding.
 
@@ -606,7 +594,7 @@ The Message Quota is a quota not limiting the number of bytes but the number of 
 The queryQuota request enables the owner of an identity to query the current amount of remaining messages respectively bytes.
 
 \subsection{VortexMessage Reply Blocks}
-Reply blocks are as outlined in section \ref{sec:replyBlock} prefixed payload blocks. All reply blocks except the ctxless\ldots reply blocks are a result of a header request.
+Reply blocks are as outlined in section \ref{sec:replyBlock} prefixed payload blocks. 
 
 \subsubsection{ReplyCapability block}
 The replyCapabilityBlock is the reply block to a queryCapability Request. The information provided here is outlined in section \ref{sec:replyBlock}. It is important to note that this block is even when requested in plain is always onionized and thus unreadable for third parties. 
@@ -624,25 +612,19 @@ A node may reject an operation for any reason including exceeding an unnatural a
 
 A reply containing a null length puzzle means that the requested operation is rejected.
 
-\subsubsection{CtxleswhichsNewindentity block}                                                                                                                                            longer in service. It  is done by authenticating with a header block validly authenticating the old identity. It provides a new identity tuple containing a transport layer address and the corresponding ke
-Th new identity block is to propagate a newly generated, non-ephemeral identity of a user. This block should not be ignored by any node. It enables a user to strengthen its identity. 
-             A node                                                                             e
-It is however should ignore the request if its acceptance results in a reduced security lavel of the current identity.
-
-
 \chapter{Vortex Prerequisites}
 \section{Hardware}
-No special Hardware is required for running Vortex nodes. The capabilities of Vortex are designed in such a way that ordinary mobile phones may act as vortex nodes. It is however recommended to have a node always connected to the internet. A mobile phone may disconnect from time to time based on the availability of the network. For our experiments we use a RaspberryPi Version 1. It is however recommended to use a faster, newer model due to the memory requirements of the proof of work.
+No special Hardware is required for running Vortex nodes. The capabilities of Vortex are designed in such a way that ordinary mobile phones may act as vortex nodes. It is however recommended to have a node always connected to the internet. A mobile phone may disconnect from time to time based on the availability of the network. For our experiments we use a RaspberryPi Version 1. It is however recommended to use a faster, newer model due to the memory requirements of the proof of work algorithm.
 
-\fxwarning{add more content here}
-
-\subsection{Considerations Regarding Weak or Unsuitable Hardware}
-\fxwarning{add more content here}
+The hardware currently requires a network interface and a fully functional JSE VM to run the reference implementation.
 
 \section{Addresses}
+
+\fxerror{change to one representation}
+
 A Vortex address is built as follows: $vortexAddress=<transport>:<address>!<publicKey>$
 
-To allow storage of Vortex addresses sin standard messaging programs such as Outlook or Thunderbird. We define an alternate representation $encodedVortexAddress=base64(<transport>:<address>).<publicKey>@localhost$. 
+To allow storage of Vortex addresses in standard messaging programs such as Outlook or Thunderbird. We define an alternate representation $encodedVortexAddress=base64(<transport>:<address>).<publicKey>@localhost$. 
 
 The suffix ``@localhost'' makes sure that a message intended for Vortex is not routed by any non-participating server.
 
@@ -655,7 +637,7 @@ The public key of an address is encoded as follows:
 	\item The ASN.1 representation is then encoded using BASE64
 \end{enumerate}	
 
-\section{Transport Layers}                                          P
+\section{Transport Layers}                                          
 As transport layer protocols we specified the protocols SMTP and XMMP as valid transport layers. In the following sections we specify the transport properties for these protocols.
 
 \subsection{Embedding Spec}
@@ -690,13 +672,15 @@ By definition any transport layer address may represent a Vortex identity. This 
 \subsection{Vortex Node Types}
 
 \subsubsection{Public Vortex Node}
-Public nodes are nodes, which advertise themself as normal mixes. Just as all nodes they may be an endpoint or a mix. Typically they accept all requests exactly as outlined in \ref{tab:protoReplyCrit}. As an immediate result of the publicly available information about such a node the owner may be target of our adversary. Pressure may be oposed to close down such a node. However since we do not need a specific account we may safely close down one transport account and open up a different one. This is even possible on the same infrastructure. To notify other users of the move and remain reachable, a user may send an \fxwarning{incomplete; Where is the contextless update?}
+Public nodes are nodes, which advertise themself as normal mixes. Just as all nodes they may be an endpoint or a mix. Typically they accept all requests exactly as outlined in \ref{tab:protoReplyCrit}. As an immediate result of the publicly available information about such a node the owner may be target of our adversary. Pressure may be oposed to close down such a node. However since we do not need a specific account we may safely close down one transport account and open up a different one. This is even possible on the same infrastructure. To notify other users of the move and remain reachable, a user may send an newIdentity request using the old identity. That way. we can guarantee, that only the holder of the old address may request an address update.
 
 \subsubsection{Stealth Vortex Node\label{sec:stealthNode}}
 This node does not answer any clear text requests. As an immediate result the node is only usable by other nodes knowing the public key of this node. The node is therefore on a known secret base only reachable.
 
 \subsubsection{Hidden Vortex Node\label{sec:hiddenNode}}
 A hidden node is a special form to a stealth node it has a set of preset identities. Only these entities are processed. This behaveour has certain drawbacks. An identity may not be changed. As an immediate result traffic may become a pseudonymity. To counter this effect at least partially we may use the same local identity for multiple senders. As an immediate result the sender is only one of all senders knowing the private key of an identity.
+
+%===============================================================================================================
 
 \chapter{MessageVortex - Transport Independent Messaging anonymous to \nth{3} Parties\label{sec:spec}}
 This approach is different from all approaches discussed previously. Unlike them we put complete distrust into the infrastructure being used. Furthermore we do not rely on a custom server infrastructure in the internet. Instead we take advantage of the availability of internet connected devices such as internet connected mobile phones, tablets, or even commonly available SoC such as RaspberryPi or similar. It is still very hard to maintain a server in the internet and considering the vastly growing amount of automated attack carried out against internet connected servers it is not advisable or realistic to assume that a future user of this system owns either a server or connects to a service which is offering explicitly anonymizing services. These infrastructures would be suspectible to monitoring or even banning. Instead we take a different approach.
@@ -708,18 +692,7 @@ The basic idea is that a client generates all traffic (including decoy and diagn
 As decoy traffic is generated with the same operations as the true content is split it is impossible for an adversary running a node to determine whether he is generating noise or actually processing the true message.
 All nodes, regardless of endpoint or mix implement the same logic and fulfil the same functions which makes it impossible to deteremine the function. Exit nodes as in Tor or similar systems do not exist.
 
-
-%\fxwarning{add a lot more text here}
-%\begin{figure*}[h]
-%	\includegraphics[width=\textwidth]{inc/VortexModules.pdf}
-%	\caption{Overview of the Vortex modules}
-%	\label{fig:vortexModules}
-%\end{figure*}
-%\fxwarning{replace image with up to date representation; show implemented and not implemented parts; Maybe make it two column wide}
-%
-
 \section{Accounting}
-
 The Accounting layer maintains all local identities and controls overall load to the system. He processes requests from an ephemeral identity and generates replys to these requests. 
 
 In table \ref{tab:protoReplyCrit} we show under what circumstances a reply to a header request should be sent. The capitalised words MAY, MUST, SHOULD and SHOULD NOT are used as defined in RFC2119\cite{RFC2119}.
@@ -795,27 +768,24 @@ Any VortexMessage sender may maintain one or more ephemeral identites per node. 
 Messages are flowing in a timed manor through the network. As a routing block builder has to take into account that potential routing mechanisms of the transport layer consume time, a message is delayed in each hop.  The timing and duration for delivery is controlled by the routing block builder. Depending on the number of hops for the longest path of the message and the delay windows on every hop the total message has a delay which is controllable by the routing block builder.
 
 \subsection{Diagnostics}
-To diagnose the flow of a message any part of the message may be sent directly or indirectly back to the routing block builder allowing him to judge upon the message progress and whether nodes are well behaving or not.
+To diagnose the flow of a message any part of the message may be sent directly or indirectly back to the routing block builder. This allows him to judge upon the message progress and whether nodes are well behaving or not.
 
-There is no fingerprinting operation available for doing such diagnosis as it would have made the traffic identifiable as diagnostic traffic.
+There is no fingerprinting operation available for doing such diagnosis. Such operations would make the traffic identifiable as diagnostic traffic.
 
 \subsubsection{Implicit Diagnostic}
-\fxwarning{Add comments about messages splitting and returning to sender}
+When a message contains a routing block sending any parts back to the routing block builder, we call this implicit diagnostic. Any block built by the addRedundancy function may be seen as a kind of fingerprint over the whole message. A block sent back to the originating node may therefore reflect the message state up to this point and the way back.
 
-\subsubsection{Automatic Explicit Diagnostic}
-\fxwarning{Add comments about error and diagnosis messages officially spliting of messages}
-                                        the following
-\subsubsection{On-Demand Explicit Diagnostic}
-\fxwarning{Add comments about normal, error, and diagnosis messages being picked up by a routing block}
+\subsubsection{On-Demand Diagnostic}
+Whenever a message fails or supectedly failed, a new routing block may be composed picking up parts of the message in workspaces anywhere within the participating nodes. This kind of diagnostic we call On-Demand diagnostic.
 
-\fxwarning{list all requirements}
-
-
+On demand diagnostic allows error conditions identified by implicit diagnostic to be tracked and narrowed down to the first offending node.
 
 \section{Verification of requirements}
 In the previous sections we identified a list of requirements.
 
 In the following subsections we will iterate through all requirements and verify to what degree we achieved the goal.
+
+\fxwarning{list all requirements; possibly missing one}
 
 \paragraph*{\ref{req:zeroTrust}:} 
 We have not put any trust into an external infrastructure. While we do assume that all routing nodes act as defined. A misbehaving node may be identified and eliminated without putting any trust on other nodes. Analysis have shown no means for a misbehaving node which might be intentional or unintentional endangering anonymity at any time. We do not rely on any third party technology or infrastructure for our anonymity. 
@@ -828,7 +798,7 @@ No node has additional privileges or offers additional services. All are equal a
 This requirement is therefore fulfilled.
 
 \paragraph*{\ref{req:untagable}:} 
-Messages may not be tagged. All content is either strictly onionised or defined and linked with unknown hooks. Tampering with a message will cause the message delivery to fail at the next node.
+Messages may not be tagged. All content is either strictly onionised or defined and linked with unknown hooks. Tampering with a message will typically cause the message delivery to fail at the next node. Furthermore may tampering be detected.
 
 This requirement is therefore fulfilled.
  
