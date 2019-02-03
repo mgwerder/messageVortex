@@ -542,11 +542,11 @@ len(pb_2) & \leq & len(pb_1)
 These operations build the core of the mixing operations. The operation allows to add to a padded message redundancy information or to rebuild a block from a chosen set of information. 
 
 The Operation itself is shown in \ref{fig:addRedundancyOperation}. 
-\begin{figure*}[h]
-	\includegraphics[width=\textwidth]{inc/addRedundancyOp}
+\begin{figure}[h]
+	\includegraphics[width=\columnwidth]{inc/addRedundancyOp}
 	\caption{Outline of the addRedundancy operation}
 	\label{fig:addRedundancyOperation}
-\end{figure*}
+\end{figure}
 It may be subdivided into the following operations:
 \begin{itemize}
 	\item Pad the original message block in such a way, that all resulting blocks are a multiple of the block size of the encrypting cypher.
@@ -663,22 +663,18 @@ The public key of an address is encoded as follows:
 \section{Transport Layers}                                          P
 As transport layer protocols we specified the protocols SMTP and XMMP as valid transport layers. In the following sections we specify the transport properties for these protocols.
 
-\subsection{SMTP}
-In SMTP we defined ``smtp'' (lower case) to be the transport specifier. When using SMTP messages are always encoded as attachments. 
+\subsection{Embedding Spec}
+Messages are always encoded as attachments in SMTP and XMMP. 
 
 If not further specified by the receiving node an attachment should be the encoded message. 
 
 Valid properties may be:
 \begin{itemize}
-	\item Encoding $"encoding="("plain:"<numberOfBytesOfOffset>[,<numberOfBytesOfOffset>]*|"f5")$
+	\item $ plainEncoding="("plain:"<numberOfBytesOfOffset>[,<numberOfBytesOfOffset>]*")$
+	\item $ F5Encoding="(F5:"<passwordString>[,<PasswordString>]*")"
 \end{itemize}
 
-All SMTP nodes responding to clear text should at least support $encoding=plain:0,1024$.
-
-\fxwarning{do layout here}
-               P
-\subsection{XMMP}
-\fxwarning{add more content here}
+All nodes responding to clear text should at least support $encoding=plain:0,256$.
 
 \section{Client}
 We did not create a Vortex client for sending messages. Instead we used a standard Thunderbird email client pointing to a local SMTP and IMAP Server provided by a Vortex proxy. On the SMTP side Vortex does encapsulate where possible mails into a Vortex message and builds automated route to the recipient. The SMTP part of vortex may be used to encapsulate automatically all messages with a known Vortex identity into a vortex message. On the IMAP side it merges a local Vortex message store with the standard Email repository building a combined view.
