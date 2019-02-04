@@ -13,6 +13,7 @@
 <!-- FIXME: add validity to the requirement block -->
 <!-- FIXME: correct F5 encoding String according to spec in thesis ( do not forget escaping of "\", "," and ")" -->
 <!-- FIXME: add "All SMTP nodes responding to clear text should at least support $encoding=plain:0,256$." -->
+<!-- FIXME: Add header request peer -->
 
 <?rfc strict="yes" ?>
 <?rfc toc="yes"?>

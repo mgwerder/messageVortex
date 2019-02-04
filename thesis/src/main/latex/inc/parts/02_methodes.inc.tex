@@ -1120,7 +1120,9 @@ All attacks targeting users anonymity is a main focus of this work. Many informa
 In the following subsections we list a couple of attack classes which have been used against systems listed in \ref{sec:sysImpl} or the respective academic works. We list the counter measures which have been taken to deflect these attacks.
 
 \subsubsection{Probing Attacks}
-Identifying a node by probingand check their reaction is commonly done when fingerprinting a service. As a node is participating in a network and relaying messages probing may not be evaded. However, it may be made costly for an adversary to do systematic probing. This should be taken into account. 
+Identifying a node by probing and check their reaction is commonly done when fingerprinting a service. As a node is participating in a network and relaying messages probing may not be evaded. However, it may be made costly for an adversary to do systematic probing. This should be taken into account. Both currently specified transport protocol feature an indefinite number of possible accounts. Since not the server but the endpoint address is behaving as node probing is more complex than in other cases where probing of a service is sufficient. 
+
+A problem are clear text requests. These requests may be used on any transport layer account without previous knowledge of any host key. Thus the recommendation in table \ref{tab:protoReplyCrit} is 
 
 One strategy to avoid would be to put high costs onto clear text requests in such a way that a clear text request may have a long reply time (e.g. up to one day). An early retry of the same identity would lead to automatic blacklisting. This is however an insufficient strategy as a huge adversary may have lots identities in stock. Requesting a particularly long key as an plain text identity does not make sense either as these as well may be kept in stock. We may however force a plaintext request to have a hash following certain rules. We may for example put in a requirement that the first four bytes of the hash of a header block translates to the first four characters of the receiving address
 
@@ -1300,7 +1302,7 @@ The system must allow to boot strap from a zero knowledge or near zero knowledge
 In This Protocol a lot of encryption and hashing algorithms have to be used. This Choice should be explained. 
 
 From the requirements side we have to follow the following principle:
-\begin{requirement}{cryptVar}{encryption variety}
+\begin{requirement}{algtVar}{algorithmic variety}
 	The system must be able to use multiple symmetric, asymmetric, and hashing algorithms in order to immediately fall back to a secure algorithm for all new messages if required. 
 \end{requirement}
 
