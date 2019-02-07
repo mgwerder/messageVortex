@@ -817,9 +817,28 @@ All identities generated are not traceable as any identity is generated without 
 
 This requirement is therefore fulfilled.
 
-\paragraph*{\ref{req:anon}:} This point is the hardest to proof. We certainly achieved a high degree of anonymity. No node can tell by observing traffic if a node is a final recipient or just a mix. There are however some weaknesses in the protocol. As the implementation is currently connecting simultaneously to the true name (email or jabber account in the current implementation) and the Vortex account the user might be identified by that fact. Using a anonymisation proxy could solve the problem but it would violate the Zero trust principle.
+\paragraph*{\ref{req:anon}:} Anonymity is hard to proof. 
 
-\fxwarning{Write something about the sender being able to leak the receivers presence}
+The following statements are the findings of the previous chapters:
+\begin{itemize}
+	\item Routing nodes are identifiable by a deep inspection.\\
+	      A routing node features unique features which can be identifyed. 
+	      
+	      Identifyable properties discovered are:
+	      \begin{itemize}
+	      	\item The usage of the plain embedding is identifyable by a human and using probabilistic approaches even by a scanner.
+	      	\item A router is always connected and sends messages at any time of day
+	      	\item A router is connected to multiple accounts
+	      \end{itemize}
+	\item A routing node is able to link a message to an ephemeral identity\\
+	      This is a minor issue and is countered by the fact, that ephemeral identities have a very short lifespan and are unconnected.
+	\item A routing node learns about other nodes over time.\\
+	      A routing node is unable to communicate with the peers without a host key. It may however learn the endpoint address of its peer. Assuming a censoring adversary this may be a problem in a single case as the provider of the transport layer may be forced to block the account.
+\end{itemize}
+
+On the other hand, no node can tell by observing traffic if a node is a final recipient or just another router. There are however some weaknesses in the protocol. As the implementation is currently connecting simultaneously to the transport layer endpoint (email or jabber account in the current implementation) and the Vortex account the user might be identified by that fact. Using a anonymisation proxy could solve the problem but it would violate the Zero trust principle.
+
+A sender may leak a receivers presence.
 
 This requirement is therefore only partially fulfilled. However, the weakness is very faint.
 
