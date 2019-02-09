@@ -10,7 +10,7 @@ It is important to notice that ASN.1 has no mean to express encrypted structures
 
 The protocol is defined int the ASN.1 to support onionized information in an unencrypted form. This is meant for debugging purposes only. At no point should this possibility be used in a production environment.
 
-The protocol described in the next chapter is independent from routing. We built a blending layer for SMTP. Layers for other protocols such as XMMPP may be built similarly. The protocol may be extended by adding blending layers and their addressing schemes.
+The protocol described in the next chapter is independent from routing. We built a blending layer for SMTP. Layers for other protocols such as XMPP may be built similarly. The protocol may be extended by adding blending layers and their addressing schemes.
 
 The Protocol outlined here is the final product and has undergone many development cycles. A lot of really useful features and capabilities such as a mechanism analoguous to the SMTP received headers were dropped as they were very useful but threatened security or anonymity.
 
@@ -836,9 +836,11 @@ The following statements are the findings of the previous chapters:
 	      A routing node is unable to communicate with the peers without a host key. It may however learn the endpoint address of its peer. Assuming a censoring adversary this may be a problem in a single case as the provider of the transport layer may be forced to block the account.
 \end{itemize}
 
-On the other hand, no node can tell by observing traffic if a node is a final recipient or just another router. There are however some weaknesses in the protocol. As the implementation is currently connecting simultaneously to the transport layer endpoint (email or jabber account in the current implementation) and the Vortex account the user might be identified by that fact. Using a anonymisation proxy could solve the problem but it would violate the Zero trust principle.
+On the other hand, no node can tell by observing traffic if another node is a final recipient or just another router.
 
-A sender may leak a receivers presence.
+There are however some weaknesses in the protocol. As the implementation is currently connecting simultaneously to the transport layer endpoint (email or jabber account in the current implementation) and the Vortex account the user might be identified by that fact. Using a anonymisation proxy could solve the problem but it would violate the Zero trust principle.
+
+A sender is capable to leak a receivers presence to a global observer.
 
 This requirement is therefore only partially fulfilled. However, the weakness is very faint.
 
@@ -855,23 +857,15 @@ This requirement is therefore fulfilled.
 This requirement is therefore fulfilled.
 
 \section{Considerations for Routing Messages}
-\subsection{Time of sending}
 Messages should always be sent timewise nearby other messages. This means that the best moment for sending a message in a ready queue is at a time when sending of other messages is due. However no optimisation should be done to send as many messages as possible at the same time. this would lead to a forseeable behaviour of the routing layer and thus to misusable behaviour.
 
-\section{Real World Considerations}
-This approach is heavily dependent of the transport protocol and builds on top a new obfuscating/routing layer. For this system to become a real peer-to-peer approach some additional quirks are required. A message-Vortex-Account needs always an active routing handler. This routing handler may be introduced by new server capabilities or by having a device handling the routing from the client side. For this reason we built a RaspberryPi appliance capable of connecting to one (or more) accounts fetching incomming mails, analysing them and reroute them if necessary. Although the system is designed to be run on a RaspberryPi the software might be installed to any Java capable client. The RaspberryPi is just one affordable lightweight device which offers all required capabilities.
+The approach is furthermore heavily dependent of the transport protocol and builds on top a new obfuscating/routing layer. For this system to become a real peer-to-peer approach some additional quirks are required. A message-Vortex-Account needs always an active routing handler. This routing handler may be introduced by new server capabilities or by having a device handling the routing from the client side. For this reason we built a RaspberryPi appliance capable of connecting to one (or more) accounts fetching incomming mails, analysing them and reroute them if necessary. Although the system is designed to be run on a RaspberryPi the software might be installed to any Java capable client. The RaspberryPi is just one affordable lightweight device which offers all required capabilities.
 
-\subsection{No Routing Log}
 There was up until very late a routing log functionality in the protocol. This functionality did however have the disadvantage that it allowed bugging and could possibly  disclose intermediate mixes to a recipient which did not comply with the policy the mixes might have chosen. Therefore this feature was dropped and replaced with the fetch block behaviour.
 
-\subsection{No Verification Possibilities}
-\fxwarning{add content here}
+The routing block builder controls the type of blending. Besides that he has no control over it. If blending is done carelessly a message can be easily detected and thus disrupted.
 
-\subsection{Very Limited Control Blending Layer for the sending node}
-\fxwarning{add content here}
-
-\subsection{Message Content}
-\fxwarning{add content here}
+The message leakes the size when a routing block is reused. This is due to the version number and the ephemeral identity contained in the header. The message chunks reflect to a certain extend the message size in relation to the previous message sent.
 
 \chapter{Security Analysis}
 In the following sections we emphasize on attacks targeting either sender recipient tuples or on identification of participants. 
