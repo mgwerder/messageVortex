@@ -71,7 +71,7 @@ cp -u $dir/../application-core-library/src/main/asn/*.asn $dir/../thesis/target/
 
 ttmp=$(mktemp)
 
-for out in draft-gwerder.messagevortexmain-00 draft-gwerder-messagevortexmain-01
+for out in draft-gwerder-messagevortexmain-00 draft-gwerder-messagevortexmain-01
 do
 (
   echo "    creating xml flatified output"
