@@ -196,6 +196,7 @@ function addrow() {
         )
 }
 
+curl -s "https://get.sdkman.io" | bash &&  source "/root/.sdkman/bin/sdkman-init.sh" &&  sdk install jbake || exit 101
 jbake ${WWWDIR}/
 cp $dir/../thesis/src/main/latex/rfc/draft-gwerder-*.{xml,pdf,ps,epub,mobi,txt,html} ${WWWDIR}/devel/
 cp $dir/../thesis/src/main/latex/rfc/rfc2629.xslt ${WWWDIR}/devel/
