@@ -76,7 +76,7 @@ for out in draft-gwerder-messagevortexmain-*
 do
 (
   out=${out%%.*}
-  echo "    creating xml flatified output"
+  echo "    creating xml flatified output ($out)"
   echo "      injecting artwork"
   egrep "<artwork[^>]*src=\"[^\"]*.asn\"[^>]*/>" <$dir/../thesis/target/main/latex-build/rfc/$out.xml | while read l ; 
   do 
@@ -93,8 +93,8 @@ do
   echo "  creating html output"
   #perl -0777 -pe 's/<artwork ([^>]* src=[^>]*)>[^<]*<\/artwork>(\s?)/<artwork \1 \/>\2/gs' $dir/../thesis/target/main/latex-build/rfc/draft-gwerder-messagevortexmain-01.xmlflat >$dir/../thesis/target/main/latex-build/rfc/draft-gwerder-messagevortexmain-01.xmlflat.artfree
   $XML2RFC --v3 $dir/../thesis/target/main/latex-build/rfc/${out}.xmlflat --html -q -o $dir/../thesis/target/main/latex-build/rfc/$out.html 
-  echo "  creating nroff output"
-  $XML2RFC --v3 $dir/../thesis/target/main/latex-build/rfc/${out}.xmlflat --nroff -q -o $dir/../thesis/target/main/latex-build/rfc/$out.nroff || exit 101
+  #echo "  creating nroff output"
+  #$XML2RFC --v3 $dir/../thesis/target/main/latex-build/rfc/${out}.xmlflat --nroff -q -o $dir/../thesis/target/main/latex-build/rfc/$out.nroff || exit 101
   echo "  creating pdf"
   enscript -DDuplex:true --title "$out" -B -L 59 --margins=70:70:70:70 -p - $dir/../thesis/target/main/latex-build/rfc/${out}.txt | ps2pdf - - >$dir/../thesis/target/main/latex-build/rfc/$out.pdf   || exit 101
   #(cd  phd/thesis/src/main/latex/rfc/; ../../../xml2rfc/bin/mkpdf.sh $out.xmlflat  && mv $out.xmlflat.pdf $out.pdf )
