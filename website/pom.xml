@@ -42,11 +42,11 @@
                     <outputDirectory>${project.build.directory}/jbake</outputDirectory>
                 </configuration>
                 <dependencies>
-		        <dependency>
+		        <!--<dependency>
 				<groupId>org.jbake</groupId>
 				<artifactId>jbake-core</artifactId>
 				<version>2.6.4</version>
-			</dependency>
+			</dependency>-->
 			<dependency>
 				<groupId>com.vladsch.flexmark</groupId>
 				<artifactId>flexmark</artifactId>
@@ -72,12 +72,6 @@
 				<artifactId>thymeleaf</artifactId>
 				<version>3.0.11.RELEASE</version>
 			</dependency>
-                    <!-- for freemarker templates (.ftl) -->
-                    <!--<dependency>
-                        <groupId>org.freemarker</groupId>
-                        <artifactId>freemarker</artifactId>
-                        <version>2.3.20</version>
-                    </dependency>-->
                 </dependencies>
             </plugin>
         </plugins>
