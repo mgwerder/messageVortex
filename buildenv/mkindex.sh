@@ -31,10 +31,6 @@ rm -r ${WWWDIR}
 mkdir -p ${WWWDIR}
 mkdir ${WWWDIR}/devel/
 mkdir ${WWWDIR}/devel/images
-(
-	cd $dir/../thesis
-	mvn package | tee /var/tmp/thesis.build
-)
 echo "    <table class=\"basic\">">>$mtmp
 echo "      <tr><th style=\"text-align: left;\">Fixme type</th><th style=\"text-align: left;\">#</th></tr>">>$mtmp
 echo "      <tr><td>Fatal fixme</td><td style=\"text-align: right;\">$(grep "(FiXme)" /var/tmp/thesis.build | grep -i "of fatal error" |tail -n 1|sed 's/.*: *//gi;s/[\.,]$//')</td></tr>">>$mtmp
