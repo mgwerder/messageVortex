@@ -89,7 +89,7 @@ export out=draft-gwerder-messagevortexmain-01
   echo "  creating nroff output"
   $XML2RFC --v3 $dir/../thesis/src/main/latex/rfc/${out}.xmlflat --nroff -q -o $dir/../thesis/src/main/latex/rfc/$out.nroff || exit 101
   echo "  creating pdf"
-  enscript -DDuplex:true --title "$out" -B -L 59 --margins=70:70:70:70 -p - $dir/../thesis/src/main/latex/rfc/${out}.txt|ps2pdf - - >phd/thesis/src/main/latex/rfc/$out.pdf   || exit 101
+  enscript -DDuplex:true --title "$out" -B -L 59 --margins=70:70:70:70 -p - $dir/../thesis/src/main/latex/rfc/${out}.txt|ps2pdf - - >$dir/../thesis/src/main/latex/rfc/$out.pdf   || exit 101
   #(cd  phd/thesis/src/main/latex/rfc/; ../../../xml2rfc/bin/mkpdf.sh $out.xmlflat  && mv $out.xmlflat.pdf $out.pdf )
   echo "  creating ps"
   # (cd  phd/thesis/src/main/latex/rfc/; ../../../xml2rfc/bin/mkps.sh $out.xmlflat   && mv $out.xmlflat.ps  $out.ps )
