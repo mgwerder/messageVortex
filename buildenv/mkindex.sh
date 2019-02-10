@@ -33,10 +33,10 @@ mkdir ${WWWDIR}/devel/
 mkdir ${WWWDIR}/devel/images
 echo "    <table class=\"basic\">">>$mtmp
 echo "      <tr><th style=\"text-align: left;\">Fixme type</th><th style=\"text-align: left;\">#</th></tr>">>$mtmp
-echo "      <tr><td>Fatal fixme</td><td style=\"text-align: right;\">$(grep "(FiXme)" /var/tmp/thesis.build | grep -i "of fatal error" |tail -n 1|sed 's/.*: *//gi;s/[\.,]$//')</td></tr>">>$mtmp
-echo "      <tr><td>Error fixme</td><td style=\"text-align: right;\">$(grep "(FiXme)" /var/tmp/thesis.build | grep -i "of error" |tail -n 1|sed 's/.*: *//gi;s/[\.,]$//')</td></tr>">>$mtmp
-echo "      <tr><td>Warning fixme</td><td style=\"text-align: right;\">$(grep "(FiXme)" /var/tmp/thesis.build | grep -i "of warning" |tail -n 1|sed 's/.*: *//gi;s/[\.,]$//')</td></tr>">>$mtmp
-echo "      <tr><th>Total</th><th style=\"text-align: right;\">$(grep "(FiXme)" /var/tmp/thesis.build | grep "Total" |tail -n 1|sed 's/.*: *//gi;s/[\.,]$//')</th></tr>">>$mtmp
+echo "      <tr><td>Fatal fixme</td><td style=\"text-align: right;\">$(grep "(FiXme)" $dir/../thesis/target/main/latex-build/messageVortex.log | grep -i "of fatal error" |tail -n 1|sed 's/.*: *//gi;s/[\.,]$//')</td></tr>">>$mtmp
+echo "      <tr><td>Error fixme</td><td style=\"text-align: right;\">$(grep "(FiXme)" $dir/../thesis/target/main/latex-build/messageVortex.log | grep -i "of error" |tail -n 1|sed 's/.*: *//gi;s/[\.,]$//')</td></tr>">>$mtmp
+echo "      <tr><td>Warning fixme</td><td style=\"text-align: right;\">$(grep "(FiXme)" $dir/../thesis/target/main/latex-build/messageVortex.log | grep -i "of warning" |tail -n 1|sed 's/.*: *//gi;s/[\.,]$//')</td></tr>">>$mtmp
+echo "      <tr><th>Total</th><th style=\"text-align: right;\">$(grep "(FiXme)" $dir/../thesis/target/main/latex-build/messageVortex.log | grep "Total" |tail -n 1|sed 's/.*: *//gi;s/[\.,]$//')</th></tr>">>$mtmp
 echo "    </table><br/>">>$mtmp
 
 echo "    <table class=\"basic\">">>$mtmp
@@ -196,8 +196,10 @@ function addrow() {
         )
 }
 
-curl -s "https://get.sdkman.io" | bash &&  source "/root/.sdkman/bin/sdkman-init.sh" &&  sdk install jbake || exit 101
-jbake ${WWWDIR}/
+#Echoi "Baking page"
+#curl -s "https://get.sdkman.io" | bash &&  source "/root/.sdkman/bin/sdkman-init.sh" &&  sdk install jbake || exit 101
+#jbake ${WWWDIR}/
+cp -R website/target/jbake/* ${WWWDIR}/
 cp $dir/../thesis/src/main/latex/rfc/draft-gwerder-*.{xml,pdf,ps,epub,mobi,txt,html} ${WWWDIR}/devel/
 cp $dir/../thesis/src/main/latex/rfc/rfc2629.xslt ${WWWDIR}/devel/
 (cd $dir/../application-core-library/src/main/asn/;zip -9 ${WWWDIR}/devel/MessageVortex_definition.zip MessageVortex-*.asn)
