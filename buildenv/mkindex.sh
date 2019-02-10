@@ -70,10 +70,12 @@ mkdir -p $dir/../thesis/target/main/latex-build/rfc/asn 2>/dev/null
 cp -u $dir/../application-core-library/src/main/asn/*.asn $dir/../thesis/target/main/latex-build/rfc/asn
 
 ttmp=$(mktemp)
+actualfile=draft-gwerder-messagevortexmain-01
 
-for out in draft-gwerder-messagevortexmain-00 draft-gwerder-messagevortexmain-01
+for out in draft-gwerder-messagevortexmain-*
 do
 (
+  out=${out%%.*}
   echo "    creating xml flatified output"
   echo "      injecting artwork"
   egrep "<artwork[^>]*src=\"[^\"]*.asn\"[^>]*/>" <$dir/../thesis/target/main/latex-build/rfc/$out.xml| while read l ; 
@@ -81,7 +83,7 @@ do
   	src=$(echo "$l"|sed 's/.*src="//;s/".*//');
   	rep="${l%%/>}>"'<![CDATA['"$(cat $dir/../thesis/target/main/latex-build/rfc/$src)]]></artwork>";
   	file=$(cat $dir/../thesis/target/main/latex-build/rfc/$out.xml); 
-  	echo "${file/$l/$rep}" >$dir/../thesis/target/main/latex-build/rfc/$out.xml.tmp && mv $dir/../thesis/target/main/latex-build/rfc/$out.xml.tmp phd/thesis/src/main/latex/rfc/$out.xml && echo "      injected file $src (new size is $(stat --printf="%s"  $dir/..//thesis/target/main/latex-build/rfc/$out.xml))"
+  	echo "${file/$l/$rep}" >$dir/../thesis/target/main/latex-build/rfc/$out.xml.tmp && mv $dir/../thesis/target/main/latex-build/rfc/$out.xml.tmp $dir/../thesis/src/main/latex/rfc/$out.xml && echo "      injected file $src (new size is $(stat --printf="%s"  $dir/../thesis/target/main/latex-build/rfc/$out.xml))"
   done
   echo "      flatifying"
   $XML2RFC --exp $dir/../thesis/target/main/latex-build/rfc/${out}.xml -q -o $dir/../thesis/target/main/latex-build/rfc/$out.xmlflat || exit 101
@@ -107,9 +109,12 @@ do
   )  || exit $?
   #(cd  phd/thesis/src/main/latex/rfc/; ../../../xml2rfc/bin/mkepub.sh $out.xmlflat && mv $out.xmlflat     $out.epub )
   
-  cat $dir/../thesis/target/main/latex-build/rfc/${out}.txt |wc -l >$ttmp.lines
-  cat $dir/../thesis/target/main/latex-build/rfc/${out}.txt |wc -w >$ttmp.words
-  #enscript -DDuplex:true --title "$out" -B -L 59 --margins=70:70:70:70 -p - phd/thesis/src/main/latex/rfc/${out}.txt|ps2pdf - - >phd/thesis/src/main/latex/rfc/$out.pdf
+  if [[ "$out" == "$actualfile" ]]
+  then
+    cat $dir/../thesis/target/main/latex-build/rfc/${out}.txt |wc -l >$ttmp.lines
+    cat $dir/../thesis/target/main/latex-build/rfc/${out}.txt |wc -w >$ttmp.words
+    #enscript -DDuplex:true --title "$out" -B -L 59 --margins=70:70:70:70 -p - phd/thesis/src/main/latex/rfc/${out}.txt|ps2pdf - - >phd/thesis/src/main/latex/rfc/$out.pdf
+  fi  
 )
 
 done
