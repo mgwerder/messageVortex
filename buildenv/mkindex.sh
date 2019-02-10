@@ -105,9 +105,9 @@ do
       cd  $dir/../thesis/target/main/latex-build/rfc/
       echo "    epub"
       #pandoc -f html -t epub3 -o $out.epub $out.html || exit 101
-      ebook-convert $out.html $out.epub || exit 101
+      ebook-convert $out.html $out.epub 
       echo "    mobi"
-      ebook-convert $out.html $out.mobi || exit 101
+      ebook-convert $out.html $out.mobi 
   )  || exit $?
   #(cd  phd/thesis/src/main/latex/rfc/; ../../../xml2rfc/bin/mkepub.sh $out.xmlflat && mv $out.xmlflat     $out.epub )
   
