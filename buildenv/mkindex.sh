@@ -1,5 +1,5 @@
 #!/bin/bash
-XML2RFC=/usr/bin/xml2rfc
+XML2RFC=/usr/local/bin/xml2rfc
 dir=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 WWWDIR=$dir/../target/www
 

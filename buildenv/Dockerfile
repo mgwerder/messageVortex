@@ -9,7 +9,7 @@ RUN mkdir /var/tmp/messagevortex && \
                texlive-latex-base texlive-generic-recommended texlive-extra-utils texlive-latex-extra \
                texlive-bibtex-extra texlive-luatex \
                texlive-lang-german texlive-lang-english \
-               pandoc \
+               pandoc calibre \
                wget bc imagemagick \
                python-pip \
                openjdk-8-jdk-headless  \
