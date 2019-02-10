@@ -72,7 +72,7 @@ cp -u $dir/../application-core-library/src/main/asn/*.asn $dir/../thesis/target/
 ttmp=$(mktemp)
 actualfile=draft-gwerder-messagevortexmain-01
 
-(cd $dir/../thesis/target/main/latex-build/rfc/;find . -name  "draft-gwerder-messagevortexmain-*.xml" |while read out
+(cd $dir/../thesis/target/main/latex-build/rfc/;find . -name "draft-gwerder-messagevortexmain-*.xml" |while read out
 do
   out=${out%%.*}
   echo "    creating xml flatified output ($out)"
