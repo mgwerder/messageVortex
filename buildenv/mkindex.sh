@@ -74,7 +74,6 @@ actualfile=draft-gwerder-messagevortexmain-01
 
 (cd $dir/../thesis/target/main/latex-build/rfc/;find . -name "draft-gwerder-messagevortexmain-*.xml" |while read out
 do
-  echo "## $out"
   out=${out%%.xml}
   echo "    creating xml flatified output ($out)"
   echo "      injecting artwork"
@@ -92,7 +91,7 @@ do
   $XML2RFC $dir/../thesis/target/main/latex-build/rfc/${out}.xmlflat --text -q -o $dir/../thesis/target/main/latex-build/rfc/$out.txt || exit 101
   echo "  creating html output"
   #perl -0777 -pe 's/<artwork ([^>]* src=[^>]*)>[^<]*<\/artwork>(\s?)/<artwork \1 \/>\2/gs' $dir/../thesis/target/main/latex-build/rfc/draft-gwerder-messagevortexmain-01.xmlflat >$dir/../thesis/target/main/latex-build/rfc/draft-gwerder-messagevortexmain-01.xmlflat.artfree
-  $XML2RFC --v3 $dir/../thesis/target/main/latex-build/rfc/${out}.xmlflat --html -q -o $dir/../thesis/target/main/latex-build/rfc/$out.html 
+  $XML2RFC --v3 $dir/../thesis/target/main/latex-build/rfc/${out}.xml --html -q -o $dir/../thesis/target/main/latex-build/rfc/$out.html 
   #echo "  creating nroff output"
   #$XML2RFC --v3 $dir/../thesis/target/main/latex-build/rfc/${out}.xmlflat --nroff -q -o $dir/../thesis/target/main/latex-build/rfc/$out.nroff || exit 101
   echo "  creating pdf"
@@ -104,8 +103,10 @@ do
   echo "  creating epub"
   (
       cd  $dir/../thesis/target/main/latex-build/rfc/
-      pandoc -f html -t epub3 -o $out.epub $out.html || exit 101
+      echo "    epub"
+      #pandoc -f html -t epub3 -o $out.epub $out.html || exit 101
       ebook-convert $out.html $out.epub || exit 101
+      echo "    mobi"
       ebook-convert $out.html $out.mobi || exit 101
   )  || exit $?
   #(cd  phd/thesis/src/main/latex/rfc/; ../../../xml2rfc/bin/mkepub.sh $out.xmlflat && mv $out.xmlflat     $out.epub )
