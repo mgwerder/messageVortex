@@ -15,10 +15,7 @@ RUN mkdir /var/tmp/messagevortex && \
                openjdk-8-jdk-headless  \
                maven && \
     pip install xml2rfc && \
-    sed 's/domain="coder" rights="none"/domain="coder" rights="read|write"/' </etc/ImageMagick-6/policy.xml >/tmp/policy.xml && mv /tmp/policy.xml /etc/ImageMagick-6/policy.xml && \
-    curl -s "https://get.sdkman.io" | bash && \
-    source "/root/.sdkman/bin/sdkman-init.sh" && \
-    sdk install jbake
+    sed 's/domain="coder" rights="none"/domain="coder" rights="read|write"/' </etc/ImageMagick-6/policy.xml >/tmp/policy.xml && mv /tmp/policy.xml /etc/ImageMagick-6/policy.xml 
     
 VOLUME /var/tmp/messagevortex
 
