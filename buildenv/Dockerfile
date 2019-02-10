@@ -14,7 +14,7 @@ RUN mkdir /var/tmp/messagevortex && \
                python-pip \
                openjdk-8-jdk-headless  \
                maven && \
-    pip install xml2rfc
+    pip install xml2rfc && \
     sed 's/domain="coder" rights="none"/domain="coder" rights="read|write"/' </etc/ImageMagick-6/policy.xml >/tmp/policy.xml && mv /tmp/policy.xml/etc/ImageMagick-6/policy.xml
     
 VOLUME /var/tmp/messagevortex
