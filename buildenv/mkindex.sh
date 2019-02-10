@@ -72,7 +72,7 @@ cp -u $dir/../application-core-library/src/main/asn/*.asn $dir/../thesis/target/
 ttmp=$(mktemp)
 actualfile=draft-gwerder-messagevortexmain-01
 
-for out in draft-gwerder-messagevortexmain-*
+find . -name  "draft-gwerder-messagevortexmain-*"|while read out
 do
 (
   out=${out%%.*}
