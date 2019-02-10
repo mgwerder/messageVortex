@@ -74,7 +74,8 @@ actualfile=draft-gwerder-messagevortexmain-01
 
 (cd $dir/../thesis/target/main/latex-build/rfc/;find . -name "draft-gwerder-messagevortexmain-*.xml" |while read out
 do
-  out=${out%%.*}
+  echo "## $out"
+  out=${out%%.xml}
   echo "    creating xml flatified output ($out)"
   echo "      injecting artwork"
   egrep "<artwork[^>]*src=\"[^\"]*.asn\"[^>]*/>" <$dir/../thesis/target/main/latex-build/rfc/$out.xml | while read l ; 
