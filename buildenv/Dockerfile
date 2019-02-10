@@ -10,12 +10,12 @@ RUN mkdir /var/tmp/messagevortex && \
                texlive-bibtex-extra texlive-luatex \
                texlive-lang-german texlive-lang-english \
                pandoc calibre \
-               wget bc imagemagick \
+               wget joe bc imagemagick \
                python-pip \
                openjdk-8-jdk-headless  \
                maven && \
     pip install xml2rfc && \
-    sed 's/domain="coder" rights="none"/domain="coder" rights="read|write"/' </etc/ImageMagick-6/policy.xml >/tmp/policy.xml && mv /tmp/policy.xml/etc/ImageMagick-6/policy.xml
+    sed 's/domain="coder" rights="none"/domain="coder" rights="read|write"/' </etc/ImageMagick-6/policy.xml >/tmp/policy.xml && mv /tmp/policy.xml /etc/ImageMagick-6/policy.xml
     
 VOLUME /var/tmp/messagevortex
 
