@@ -72,7 +72,7 @@ cp -u $dir/../application-core-library/src/main/asn/*.asn $dir/../thesis/target/
 ttmp=$(mktemp)
 actualfile=draft-gwerder-messagevortexmain-01
 
-find . -name  "draft-gwerder-messagevortexmain-*"|while read out
+(cd $dir/../thesis/target/main/latex-build/rfc/;for out in draft-gwerder-messagevortexmain-*
 do
 (
   out=${out%%.*}
@@ -115,7 +115,7 @@ do
     cat $dir/../thesis/target/main/latex-build/rfc/${out}.txt |wc -l >$ttmp.lines
     cat $dir/../thesis/target/main/latex-build/rfc/${out}.txt |wc -w >$ttmp.words
   fi  
-)
+))
 
 done
 echo "      <tr>">>$mtmp
