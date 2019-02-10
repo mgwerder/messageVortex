@@ -111,7 +111,7 @@ do
   )  || exit $?
   #(cd  phd/thesis/src/main/latex/rfc/; ../../../xml2rfc/bin/mkepub.sh $out.xmlflat && mv $out.xmlflat     $out.epub )
   
-  if [[ "$out" == "$actualfile" ]]
+  if [[ "$out" == "./$actualfile" ]]
   then
     cat $dir/../thesis/target/main/latex-build/rfc/${out}.txt |wc -l >$ttmp.lines
     cat $dir/../thesis/target/main/latex-build/rfc/${out}.txt |wc -w >$ttmp.words
