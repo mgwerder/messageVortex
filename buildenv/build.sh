@@ -11,6 +11,6 @@ dir=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 	sudo docker stop messageVortexBuild
 	sudo docker rm messageVortexBuild
 
-	sudo docker run -it --name messageVortexBuild --mount type=bind,source="$dir/..",target=/var/tmp/messagevortex messagevortexbuild:latest "$@"
+	sudo docker run -it --name messageVortexBuild --mount type=bind,source="$dir/..",target=/var/tmp/messagevortex "$@" messagevortexbuild:latest
 )
 
