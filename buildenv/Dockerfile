@@ -10,10 +10,11 @@ RUN mkdir /var/tmp/messagevortex && \
                texlive-bibtex-extra texlive-luatex \
                texlive-lang-german texlive-lang-english \
                pandoc \
-               wget \
-               xml2rfc \
+               wget bc imagemagick \
+               python-pip \
                openjdk-8-jdk-headless  \
-               maven
+               maven && \
+    pip install xml2rfc
 VOLUME /var/tmp/messagevortex
 
 CMD [ "/var/tmp/messagevortex/buildenv/runDockerTasks.sh" ]
