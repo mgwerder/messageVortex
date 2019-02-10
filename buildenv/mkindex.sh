@@ -64,47 +64,55 @@ do
   echo  -n "+`(detex ${f} |wc -w)`">>$tmp
   echo "      </tr>">>$mtmp
 done)
+
+echo "adding inclusion files"
+mkdir -p $dir/../thesis/target/main/latex-build/rfc/asn 2>/dev/null
+cp -u $dir/../application-core-library/src/main/asn/*.asn $dir/../thesis/target/main/latex-build/rfc/asn
+
 ttmp=$(mktemp)
-export out=draft-gwerder-messagevortexmain-01
+
+for out in draft-gwerder.messagevortexmain-00 draft-gwerder-messagevortexmain-01
+do
 (
-  echo "adding inclusion files"
-  mkdir $dir/../thesis/src/main/latex/rfc/asn
-  cp $dir/../application-core-library/src/main/asn/*.asn $dir/../thesis/src/main/latex/rfc/asn
   echo "    creating xml flatified output"
   echo "      injecting artwork"
-  egrep "<artwork[^>]*src=\"[^\"]*.asn\"[^>]*/>" <$dir/../thesis/src/main/latex/rfc/$out.xml| while read l ; 
+  egrep "<artwork[^>]*src=\"[^\"]*.asn\"[^>]*/>" <$dir/../thesis/target/main/latex-build/rfc/$out.xml| while read l ; 
   do 
   	src=$(echo "$l"|sed 's/.*src="//;s/".*//');
-  	rep="${l%%/>}>"'<![CDATA['"$(cat $dir/../thesis/src/main/latex/rfc/$src)]]></artwork>";
-  	file=$(cat $dir/../thesis/src/main/latex/rfc/$out.xml); 
-  	echo "${file/$l/$rep}" >$dir/../thesis/src/main/latex/rfc/$out.xml.tmp && mv $dir/../thesis/src/main/latex/rfc/$out.xml.tmp phd/thesis/src/main/latex/rfc/$out.xml && echo "      injected file $src (new size is $(stat --printf="%s"  phd/thesis/src/main/latex/rfc/$out.xml))"
+  	rep="${l%%/>}>"'<![CDATA['"$(cat $dir/../thesis/target/main/latex-build/rfc/$src)]]></artwork>";
+  	file=$(cat $dir/../thesis/target/main/latex-build/rfc/$out.xml); 
+  	echo "${file/$l/$rep}" >$dir/../thesis/target/main/latex-build/rfc/$out.xml.tmp && mv $dir/../thesis/target/main/latex-build/rfc/$out.xml.tmp phd/thesis/src/main/latex/rfc/$out.xml && echo "      injected file $src (new size is $(stat --printf="%s"  $dir/..//thesis/target/main/latex-build/rfc/$out.xml))"
   done
   echo "      flatifying"
-  $XML2RFC --exp $dir/../thesis/src/main/latex/rfc/${out}.xml -q -o $dir/../thesis/src/main/latex/rfc/$out.xmlflat || exit 101
+  $XML2RFC --exp $dir/../thesis/target/main/latex-build/rfc/${out}.xml -q -o $dir/../thesis/target/main/latex-build/rfc/$out.xmlflat || exit 101
   
   echo "  creating txt output"
-  $XML2RFC $dir/../thesis/src/main/latex/rfc/${out}.xmlflat --text -q -o $dir/../thesis/src/main/latex/rfc/$out.txt || exit 101
+  $XML2RFC $dir/../thesis/target/main/latex-build/rfc/${out}.xmlflat --text -q -o $dir/../thesis/target/main/latex-build/rfc/$out.txt || exit 101
   echo "  creating html output"
-  $XML2RFC --v3 $dir/../thesis/src/main/latex/rfc/${out}.xmlflat --html -q -o $dir/../thesis/src/main/latex/rfc/$out.html || exit 101
+  $XML2RFC --v3 $dir/../thesis/target/main/latex-build/rfc/${out}.xmlflat --html -q -o $dir/../thesis/target/main/latex-build/rfc/$out.html || exit 101
   echo "  creating nroff output"
-  $XML2RFC --v3 $dir/../thesis/src/main/latex/rfc/${out}.xmlflat --nroff -q -o $dir/../thesis/src/main/latex/rfc/$out.nroff || exit 101
+  $XML2RFC --v3 $dir/../thesis/target/main/latex-build/rfc/${out}.xmlflat --nroff -q -o $dir/../thesis/target/main/latex-build/rfc/$out.nroff || exit 101
   echo "  creating pdf"
-  enscript -DDuplex:true --title "$out" -B -L 59 --margins=70:70:70:70 -p - $dir/../thesis/src/main/latex/rfc/${out}.txt|ps2pdf - - >$dir/../thesis/src/main/latex/rfc/$out.pdf   || exit 101
+  enscript -DDuplex:true --title "$out" -B -L 59 --margins=70:70:70:70 -p - $dir/../thesis/target/main/latex-build/rfc/${out}.txt|ps2pdf - - >$dir/../thesis/target/main/latex-build/rfc/$out.pdf   || exit 101
   #(cd  phd/thesis/src/main/latex/rfc/; ../../../xml2rfc/bin/mkpdf.sh $out.xmlflat  && mv $out.xmlflat.pdf $out.pdf )
   echo "  creating ps"
   # (cd  phd/thesis/src/main/latex/rfc/; ../../../xml2rfc/bin/mkps.sh $out.xmlflat   && mv $out.xmlflat.ps  $out.ps )
-  (cd  $dir/../thesis/src/main/latex/rfc/; pdf2ps $out.pdf $out.ps) 
+  (cd  $dir/../thesis/target/main/latex-build/rfc/; pdf2ps $out.pdf $out.ps) 
   echo "  creating epub"
-  (cd  $dir/../thesis/src/main/latex/rfc/; pandoc -f html -t epub3 -o $out.epub $out.html || exit 101)  || exit $?
-  (cd  $dir/../thesis/src/main/latex/rfc/; ebook-convert $out.html $out.epub || exit 101)  || exit $?
-  (cd  $dir/../thesis/src/main/latex/rfc/; ebook-convert $out.html $out.mobi || exit 101)  || exit $?
+  (
+      cd  $dir/../thesis/target/main/latex-build/rfc/
+      pandoc -f html -t epub3 -o $out.epub $out.html || exit 101
+      ebook-convert $out.html $out.epub || exit 101
+      ebook-convert $out.html $out.mobi || exit 101
+  )  || exit $?
   #(cd  phd/thesis/src/main/latex/rfc/; ../../../xml2rfc/bin/mkepub.sh $out.xmlflat && mv $out.xmlflat     $out.epub )
   
-  cat $dir/../thesis/src/main/latex/rfc/${out}.txt |wc -l >$ttmp.lines
-  cat $dir/../thesis/src/main/latex/rfc/${out}.txt |wc -w >$ttmp.words
+  cat $dir/../thesis/target/main/latex-build/rfc/${out}.txt |wc -l >$ttmp.lines
+  cat $dir/../thesis/target/main/latex-build/rfc/${out}.txt |wc -w >$ttmp.words
   #enscript -DDuplex:true --title "$out" -B -L 59 --margins=70:70:70:70 -p - phd/thesis/src/main/latex/rfc/${out}.txt|ps2pdf - - >phd/thesis/src/main/latex/rfc/$out.pdf
-  rm $ttmp 
 )
+
+done
 echo "      <tr>">>$mtmp
 echo  -n "+`(cat $ttmp.words)`">>$tmp
 echo "        <th style=\"text-align: left;\"><a href=\"phd/doc/rfc/${out}.xml\">$out.xml</a> (<a href=\"phd/doc/rfc/${out}.txt\">txt</a>, <a href=\"phd/doc/rfc/${out}.html\">html</a>, <a href=\"phd/doc/rfc/${out}.pdf\">pdf</a>)</th><td style=\"text-align: right;\">$(cat $ttmp.lines; rm $ttmp.lines)</td><td style=\"text-align: right;\">$(cat $ttmp.words; rm $ttmp.words)</td>">>$mtmp
@@ -200,8 +208,8 @@ function addrow() {
 #curl -s "https://get.sdkman.io" | bash &&  source "/root/.sdkman/bin/sdkman-init.sh" &&  sdk install jbake || exit 101
 #jbake ${WWWDIR}/
 cp -R $dir/../website/target/jbake/* ${WWWDIR}/
-cp $dir/../thesis/src/main/latex/rfc/draft-gwerder-*.{xml,pdf,ps,epub,mobi,txt,html} ${WWWDIR}/devel/
-cp $dir/../thesis/src/main/latex/rfc/rfc2629.xslt ${WWWDIR}/devel/
+cp $dir/../thesis/target/main/latex-build/rfc/draft-gwerder-*.{xml,pdf,ps,epub,mobi,txt,html} ${WWWDIR}/devel/
+cp $dir/../thesis/target/main/latex-build/rfc/rfc2629.xslt ${WWWDIR}/devel/
 (cd $dir/../application-core-library/src/main/asn/;zip -9 ${WWWDIR}/devel/MessageVortex_definition.zip MessageVortex-*.asn)
 for i in $dir/../application-core-library/src/main/asn/MessageVortex*.asn
 do
