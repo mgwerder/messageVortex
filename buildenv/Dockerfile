@@ -11,7 +11,7 @@ RUN mkdir /var/tmp/messagevortex && \
                texlive-lang-german texlive-lang-english \
                pandoc calibre enscript \
                wget curl joe bc imagemagick \
-               python-pip \
+               python-pip live-build linuxbrew-wrapper \
                openjdk-8-jdk-headless  \
                maven && \
     pip install xml2rfc && \
