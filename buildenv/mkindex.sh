@@ -195,3 +195,28 @@ function addrow() {
                 done
         )
 }
+
+jbake ${WWWDIR}/
+cp $dir/../thesis/src/main/latex/rfc/draft-gwerder-*.{xml,pdf,ps,epub,mobi,txt,html} ${WWWDIR}/devel/
+cp $dir/../thesis/src/main/latex/rfc/rfc2629.xslt ${WWWDIR}/devel/
+(cd $dir/../application-core-library/src/main/asn/;zip -9 ${WWWDIR}/devel/MessageVortex_definition.zip MessageVortex-*.asn)
+for i in $dir/../application-core-library/src/main/asn/MessageVortex*.asn
+do
+	cat $i
+	echo ""
+	echo ""
+done >${WWWDIR}/devel/MessageVortex_definition.asn
+tbl="<table>\r\n"
+tbl="$tbl<tr><th>Filename</th><th>Description</th><th>Derivatives</th></tr>\r\n"
+tbl="$tbl$(addrow devel 'draft-gwerder-*.xml' 'RFC draft document' )"
+tbl="$tbl$(addrow devel 'MessageVortex_definition*.asn' 'ASN.1 style definition of the MessageVortex messages' )"
+tbl="$tbl</table>\r\n"
+t=$(cat ${WWWDIR}/documentation.html)
+sedcom="${t/<!--development-->/$tbl}"
+echo -n -e "$sedcom" >${WWWDIR}/documentation.html.new
+if [ -s ${WWWDIR}/documentation.html.new ]
+then
+	mv ${WWWDIR}/documentation.html.new ${WWWDIR}/documentation.html
+else 
+	echo "ERROR: insert of table failed"
+fi	
