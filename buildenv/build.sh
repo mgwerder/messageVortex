@@ -7,11 +7,11 @@ dir=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 	# build the image if needed
 	sudo docker build -t messagevortexbuild .
 
-	id=$(sudo docker create --mount type=bind,source="$dir/..",target=/var/tmp/messagevortex messagevortexbuild:latest)
+	id=$(sudo docker create -t --mount type=bind,source="$dir/..",target=/var/tmp/messagevortex "$@" messagevortexbuild:latest)
 	echo "Created container with ID $id"
 	
 	
-	sudo docker start -it "$@" $id
+	sudo docker start -a $id
 	
 	sudo docker rm $id
 )
