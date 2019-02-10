@@ -118,6 +118,8 @@ do
   fi  
 done)
 
+
+echo "creating table"
 echo "      <tr>">>$mtmp
 echo  -n "+`(cat $ttmp.words)`">>$tmp
 echo "        <th style=\"text-align: left;\"><a href=\"phd/doc/rfc/${out}.xml\">$out.xml</a> (<a href=\"phd/doc/rfc/${out}.txt\">txt</a>, <a href=\"phd/doc/rfc/${out}.html\">html</a>, <a href=\"phd/doc/rfc/${out}.pdf\">pdf</a>)</th><td style=\"text-align: right;\">$(cat $ttmp.lines; rm $ttmp.lines)</td><td style=\"text-align: right;\">$(cat $ttmp.words; rm $ttmp.words)</td>">>$mtmp
