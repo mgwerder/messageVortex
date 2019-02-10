@@ -91,7 +91,7 @@ do
   echo "  creating txt output"
   $XML2RFC $dir/../thesis/target/main/latex-build/rfc/${out}.xmlflat --text -q -o $dir/../thesis/target/main/latex-build/rfc/$out.txt || exit 101
   echo "  creating html output"
-  perl -0777 -pe 's/<artwork ([^>]* src=[^>]*)>.*<\/artwork>\s?/<artwork \1 \/>/gs' $dir/../thesis/target/main/latex-build/rfc/draft-gwerder-messagevortexmain-01.xmlflat >$dir/../thesis/target/main/latex-build/rfc/draft-gwerder-messagevortexmain-01.xmlflat.artfree
+  perl -0777 -pe 's/<artwork ([^>]* src=[^>]*)>[^<]*<\/artwork>(\s?)/<artwork \1 \/>\2/gs' $dir/../thesis/target/main/latex-build/rfc/draft-gwerder-messagevortexmain-01.xmlflat >$dir/../thesis/target/main/latex-build/rfc/draft-gwerder-messagevortexmain-01.xmlflat.artfree
   $XML2RFC --v3 $dir/../thesis/target/main/latex-build/rfc/${out}.xmlflat.artfree --html -q -o $dir/../thesis/target/main/latex-build/rfc/$out.html || exit 101
   echo "  creating nroff output"
   $XML2RFC --v3 $dir/../thesis/target/main/latex-build/rfc/${out}.xmlflat --nroff -q -o $dir/../thesis/target/main/latex-build/rfc/$out.nroff || exit 101
