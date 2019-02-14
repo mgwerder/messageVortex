@@ -10,11 +10,14 @@ In the following capters we analyze the protocol throughly for fitness of purpos
 We first apply a statical analysis of the protocol to identify all informations leaked at all levels.
 
 Then we apply a dynamic analysis of the protocol to identify all meta informations leaked during transmission of the protocol.
+
 We distinguish between passive and active adversaries. Passive adversaries follow the MessageVortex protocol, have unlimited observation capabilities on the network up to layer 4 of the ISO/OSI protocol, and do have unlimmited observation capabilities on the transporting layer of MessageVortex. Active adversary share the capabilities of passive adversaries, but do not follow the MessageVortex protocol. Both adversaries try to obtain valuable information (e.g., message content, metadata such as the communicating peers or message frequencies).\fxwarning{ refer to adversary model}
 
 When analyzing the goals we focus \fxerror{incomplete}
 
 We then sum up the achieved goals by looking at well known attacks and analyze the effectiveness of them to analyze the protocol.
+
+At the very end of this chapter we identify the gaps uncovered by this work.
 
 \chapter{Static analysis}
 In this section we analyze statically the protocol. Looking at a full message we get the protocol outline as shown in \eqref{eq:vortexMessage} on page~\pageref{eq:vortexMessage}.
@@ -111,7 +114,11 @@ Traffic caused by a routing block may be observed by to a certain extent on a st
 \section{Achieved Anonymity and Flaws}
 \subsection{Measuring Anonymity}
 It is very hard to measure anonymity as it involves many uncontrollable factors. We may however control the degree of anonymity according to the number of involved parties. Assuming a sender knows the complete message path including all operations carried out on any untrusted node a message travels through, the anonymity is maxed to  the number of involved nodes $n$ excluding the sender nodes. This degree of $n-1$ may be further reduced if all well known outing only or at least ``routing mostly'' nodes are reduced. Under these harsh assumptions the set may be reduced to the potential set of ``well known'' recipients of a message.
-\fxwarning{Write something about degree of anonymity and how to achieve or compromise}
+
+We have to differentiate between several problems. An adversary has to identify the participants of an anonymity system. Then he has to identify members of a message or a communication anonymity set. Starting from there he has to identify message flows and detect senders and receivers of messages withing an anonymity set (which is not doable in all cases). If any adverary achieves this, we have to consisder the anonymity to be broken. Depending on the degree of anonymity required which is influenced by external factors the participation in any or a small enough set may be sufficient to suffer consequences.
+
+\subsection{Attacking Routing Participants}
+While very hard in our case as we do not have ``dedicated'' anonymization infrastructure, It might be possible to identify members of the routing network. This due to flawas in the blending layer. While it is possible to scare off or block members of a routing network. It is far harder in a network where the members are mobile. Any user may change at any time the identity including the endpoint without loosing its known peers.
 
 \subsection{Attacking Anonymity through Traffic Analysis}
 As traffic and decoy traffic and decoy traffic are chosen by the creator of the routing block frequency patterns can not be detected, unlike the router did create them. Same applies to message sizes and traffic hotspots. 
@@ -194,4 +201,16 @@ Although it is possible to embed any type of content into a Vortex message great
 \fxwarning{\cite{postmes2001social}}
 
 \fxwarning{add content}
+
+
+
+\chapter{Missing gaps to be covered in future analysis}
+\section{Blending and Transport Layer Gaps}
+The current blending layer is very simple. It creates context less messages based on an easy recoginzable scheme. An unsusppecting observer may have the impression that this is just a way of communicatiing but censor may byy observing the message flow easily conclude that these messages are not written by a human.
+
+To be truly undetectable all work done by the blending layer has to be undistingushable from a normal human communication. This applies not only to the message steganographic embedding of the message but to the message content as well. This is very much similar to the problems of chatterbots these days. Assuming that a blending layer is only communicating with other nodes correctly embedding messages we have a chatterbot problem. It is reduced as the chatterbot must only reply credibly and undetectably to generated messages of other chatterbots. If assuming that a blending layer replies to any non-MessageVortex-nodes the problem boils down to a turing test as stated in \cite{turing1950computing}. As we safely may assume that an adversary has huge but limmited ressources this blending is however sufficient if it is done ``good enough''. What criterias would apply here is a topic for further research. Applying any research to this topic would require to add a more precise adversary model.
+
+The currently applied choice of transport layer protocol is a snapshot of current internet traffic. While done with great care it must be adopted to the changing communication habits of humanity. Identifying new or depreciated communication protocols and blending schemes would be another field of research.
+
+A comprehensive survey over the newest trends and techniques in steganography is another topic to be covered. It would allow to identify new candidates of blending techniques.
 
