@@ -121,50 +121,47 @@ We have to differentiate between several problems. An adversary has to identify 
 While very hard in our case as we do not have ``dedicated'' anonymization infrastructure, It might be possible to identify members of the routing network. This due to flawas in the blending layer. While it is possible to scare off or block members of a routing network. It is far harder in a network where the members are mobile. Any user may change at any time the identity including the endpoint without loosing its known peers.
 
 \subsection{Attacking Anonymity through Traffic Analysis}
-As traffic and decoy traffic and decoy traffic are chosen by the creator of the routing block frequency patterns can not be detected, unlike the router did create them. Same applies to message sizes and traffic hotspots. 
+As traffic and decoy traffic and decoy traffic are chosen by the creator of the routing block frequency patterns can not be detected, unlike the router did create them. Same applies to message sizes and traffic hotspots. When reusing the same routing block eventually message sizes or general estimates such as ``bigger'' or ``smaller size'' can be made.
 
-\subsubsection{Attacking Anonymity through Timing Analysis}
-\fxwarning{add more text here}
+\subsection{Attacking Anonymity through Timing Analysis}
+Timing is under full control of the routing block builder. No information can be derived from timing. This is even the case if a routing block is reused.
 
-\subsubsection{Attacking Anonymity through Throughput Analysis}
-\fxwarning{add more text here}
+\subsection{Attacking Anonymity through Throughput Analysis}
+Increasing the throughput to highlight a message channel is not possible since the replay protection will block such requests.
 
 \subsection{Attacking Anonymity through Routing Block Analysis}
-\fxwarning{add more text here}
+The routing block is cryptographically secure. The size of the routing block may leak an estimate about its inner complexity. It dos not reveal any relevant informations like remaining hops to the message end or  target or similar.
 
 \subsection{Attacking Anonymity through Header Analysis}
-\fxwarning{add more text here}
+The header contains valuable data which is cryptographically secured and only visible to the immediate receiver. 
+
+To an adversary not knowing the key, the size of the prefix block may leak the key size. The size of the header block itself may leak the presence of any optional blocks. Besides that, no other information is leaked to such an adversary.
+
+To an adversary knowing the decryption key (evil routing node) the content of the header block is visible. This heder block leakes all routing information for the respective node and thus the ephemeral identity. This block leakes some information of very limmited value. It may leak the activity of an ephemeral identity including frequency. This activity is always matching the minimal activity of an endpoint identity. 
 
 \subsection{Attacking Anonymity through Payload Analysis}
-\fxwarning{add more text here}
+The payload itself does not leak any information about the message content. All content is cryptographically secured. Content may however leak the size of a key applied.
 
 \subsection{Attacking Anonymity through Bugging}
-\fxwarning{add more text here}
+Bugging is one of the most pressing problems. The protocol has been carefully crafted to not allow any bugging. The use of MIME messages in the final message however allows bugging of the message itself. A bugged message content may breach receiver anonymity to the sender of the message.
 
 \subsection{Attacking Anonymity through Replay Analysis}
-\fxwarning{add more text here}
-
-\subsection{Attacking Anonymity through Tamper Replay Analysis}
-\fxwarning{add more text here}
+Due to the replay protection no traffic may be generated or multiplied except for the traffic sent by the attacking node. As this information is already known to the node there is no value in doing so. 
 
 \chapter{Recommendations on Using the Vortex Protocol}
 \fxwarning{add more text here}
 
-\section{Reuse of Routing blocks}
-\fxwarning{add more text here}
+\section{Reuse of Routing blocks\label{sec:reuseRB}}
+Routing blocks should not be reused. The reuse of a routing block may leak some limited information to an adversary node such as approximate message size or message frequency of an unknown tupel using this network.
 
 \section{Use of Ephemeral Identities}
-\fxwarning{add more text here}
+Ephemeral identities should be used for a very limited number of messages. Using multiple identities with overlapping lifespans is considered a good practice. Using different ephemeral identities for the same message is acceptable and may be a good practice as long as operations do not leak the linking between those two identities.
 
 \section{Recommendations on Operations applied on Nodes}
-\fxwarning{add more text here}
+All operations carried out on a node have to be crafted in such a way that no information whether the operation is decoy or true message is leaked. Otherwise it becomes possible to narrow down the message flow.
 
 \section{Recommendations on Choosing involved Nodes}
-\fxwarning{add more text here}
-
-\chapter{Achieved Goals and Weaknesses}
-Although the protocol was carefully designed it has certain flaws. These flaws typically assume that parts of the underlying security has been severely broken to be exploited.
-
+Involved nodes should be trustworthy but not necessarily trusted. To avoid an adversary to control all nodes except for sender and receiver a message should always include a set of known recipients. It is regarded a good practice to use a minimal fixed anonymity set of known recipients as routers. Doing so does not leak any information unless always the same pattern of operations is applied (see \ref{sec:reuseRB}).
 
 \section{Message content}
 Although it is possible to embed any type of content into a Vortex message great care should be taken as content may allow to disclose a readers identity or location. For this reason only self contained messages should be used (such as plain text messages).
