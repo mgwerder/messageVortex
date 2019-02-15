@@ -149,7 +149,7 @@ Bugging is one of the most pressing problems. The protocol has been carefully cr
 Due to the replay protection no traffic may be generated or multiplied except for the traffic sent by the attacking node. As this information is already known to the node there is no value in doing so. 
 
 \chapter{Recommendations on Using the Vortex Protocol}
-\fxwarning{add more text here}
+The following sections list recommendations using the VortexProtocol it is a summary of previous sections.
 
 \section{Reuse of Routing blocks\label{sec:reuseRB}}
 Routing blocks should not be reused. The reuse of a routing block may leak some limited information to an adversary node such as approximate message size or message frequency of an unknown tupel using this network.
@@ -167,39 +167,23 @@ Involved nodes should be trustworthy but not necessarily trusted. To avoid an ad
 Although it is possible to embed any type of content into a Vortex message great care should be taken as content may allow to disclose a readers identity or location. For this reason only self contained messages should be used (such as plain text messages).
 
 \subsection{Splitting of message content}
-\fxwarning{add more text here}
+Message content should be splited and distibuted among routing nodes. Splitting should however not be done excessively to avoid failure due to too many failing nodes. It furthermore makes diagnostics complicated. 
+
+\section{Routing}
 
 \subsection{Redundancy}
-\fxwarning{add more text here}
-
-\subsection{Redundancy Detection as Attack Pattern}
-\fxwarning{add more text here}
-
-\subsection{Routing Considerations}
-\fxwarning{add more text here}
+Redundancy is a valuable feature of the protocol. It allows unsuspicious decoy generation and to compenstate message path disruption. A routing block should aways be crafted in such a way that redundancy is aligned with complexity of the routing block and the importance of a message.
 
 \subsection{Operation Considerations}
-\fxwarning{add more text here}
+Operations should be kept easy but at the same time guaratee anonymity. The following recommendations are kept to an absolute  minimum in order not to create any identifiable behaveor.
 
-\subsection{Hotspot Avoidance}
-\fxwarning{add more text here}
+A payload block should always have a single representation only once when travelling through routing nodes. A reocurring pattern would allow an evil router to identify and thus match an ephemeral identity of one router to an ephemeral identity of another router even if there are multiple routes in between. So, when applying encryption only operations betweeen  routing nodes the encryption should be onionized. A simplified onionizing routing pattern (only showing encryption steps on a single chunk) is OK. Pattern where encryption is removed and then a different encryption is applied are not.
 
+\subsection{Anonymity}
+Annonymity is greatly dependend on the quality of the routing block and the chosen anonymity set for a single message and for a communication tuple over time. 
 
-\chapter{Anonymity}
-\fxwarning{add content here}
-
-\subsection{Size of the Anonymity Set}
-\fxwarning{add more text here}
-
-\subsection{Jurisdictional implications onto the Anonymity Set}
-\fxwarning{add more text here}
-
-\section{Effects of anonymous communication on behaveour}
-\fxwarning{\cite{postmes2001social}}
-
-\fxwarning{add content}
-
-
+\subsubsection{Size of the Anonymity Set}
+The requirement for an anonymity set is dependet on juridictional restrictions. In some of the more restrictive countries no one can held guilty for an action which may not be credibly assigned to him alone. In other jurisditions it is possible to be held guilty for an action just because of an identified membership to a group. This makes it important that message traffic and the crafting of the blending is under the sole control of the sender. He needs to create an annonymity set sufficiently large and spanning enough jurisdictions to create sufficient anonymity for his situation.
 
 \chapter{Missing gaps to be covered in future analysis}
 \section{Blending and Transport Layer Gaps}
@@ -210,4 +194,7 @@ To be truly undetectable all work done by the blending layer has to be undisting
 The currently applied choice of transport layer protocol is a snapshot of current internet traffic. While done with great care it must be adopted to the changing communication habits of humanity. Identifying new or depreciated communication protocols and blending schemes would be another field of research.
 
 A comprehensive survey over the newest trends and techniques in steganography is another topic to be covered. It would allow to identify new candidates of blending techniques.
+
+Annonity has effects on behaviour of humans. We have found taht although there is some research in this field such as \cite{postmes2001social} evidence is very weak. Although the possibility for anonymity is undiputed among so called free countries there downsides (e.g., misuse for criminal acts) are obvious. More research in this filed is required as well.
+
 
