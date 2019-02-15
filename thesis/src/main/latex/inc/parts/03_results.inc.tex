@@ -544,9 +544,7 @@ It may be subdivided into the following operations:
 
 
 \section{VortexMessage Request Processing}
-Vortex message requests allow a Vortex node to gain knowledge about the Vortex network and, create new identities.
-
-\fxwarning{add content here}
+Vortex message requests allow a Vortex node to gain knowledge about the Vortex network and, create new identities. A request  may contain either a erequest for information such as current quota or capabilities of the router. It may contain a request for a new identity, or it may contain a request for raising the quotas. The following sections explain the different kinds of requests.
 
 \subsection{VortexMessage Requests}
 These requests are contained in the header portion of a Vortex message. These requests are purely for bootstrapping and maintaining the quota system and for requesting network capability.
@@ -580,9 +578,9 @@ Request with too high message or transfer quota requests should be answered with
 \subsubsection{QueryPeer Request}
 As outlined in section \ref{sec:request} this request should be very costly and harvesting of known addresses should be hard. Furthermore this request should always  disclose the nodes from a fixed subset of the nodes known to the queried mix. This maximizes the effort to harvest participating nodes.
 
-It is at the same time worth mentioning that this limit may oppose a thread that traffic is concentrated on similar nodes within participating nodes using the same initial set of known addresses to bootstrap. This due to the fact that if using the same node to bootstrap for multiple participants within a group results in peer knowledge which is similar. tThus resulting in a similar network. It is however also worth mentioning that participants belonging to more than one group will evolve over time as their different peer partners will result in different anonymity sets over time even when applying exact the same anr reproducaible rules.
+It is at the same time worth mentioning that this limit may oppose a thread that traffic is concentrated on similar nodes within participating nodes using the same initial set of known addresses to bootstrap. This due to the fact that if using the same node to bootstrap for multiple participants within a group results in peer knowledge which is similar. Thus resulting in a similar network. 
 
-\fxwarning{integrate sec query section from GIT here}
+Participants belonging to more than one group will evolve over time as their different peer partners will result in different anonymity sets over time even when applying exact the same reproducaible rules.
 
 \subsubsection{TransferQuota, MessageQuota,  and QueryQuota Request}
 This request may be accepted by a node if and only if the sender is a valid identity. It may be accepted even for a temporary identity.

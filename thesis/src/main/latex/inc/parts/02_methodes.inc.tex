@@ -365,16 +365,13 @@ The use of a legitimate channel such as SMTP and hide information in this specif
 
 \subsubsection{Steganography}
 
-Steganography is an important part when it comes to unlinking information. In \cite{6828087} and \cite{subhedar2014current} we get a very rough overview. As some of the types and algorithms address specific topics of steganography (e.g., some hide from automatic detection and others address a human message stream auditor), we need to carefully choose. In our specific case the main idea is to hide within the sheer mass of common internet traffic. A human auditor is therfore regarded as minor thread.
+Steganography is an important part when it comes to unlinking information. In \cite{6828087} and \cite{subhedar2014current} we get a very rough overview. As some of the types and algorithms address specific topics of steganography (e.g., some hide from automatic detection and others address a human message stream auditor), we need to carefully choose. In our specific case the main idea is to hide within the sheer mass of common internet traffic. A human auditor is therfore regarded as minor thread. As most of the images sent are jpg images we limmited our serach to algrithms capable of hiding binary data within these files. The number of academically researched options was surprisingly low.
 
-F5 was first published in \cite{f5}. It is a reasonably well researched algorithm which attracted many researchers. The original F5 implementation had some detectable issues with artifacts\cite{F5broken} caused by the recompression. This was however only due to  recompression issue in the reference implementation and a corrected reference implementation without the weakness has been provided by the researchers.
+After reviewing the options we decided to go for F5. F5 was first published in \cite{f5}. It is a reasonably well researched algorithm which attracted many researchers. The original F5 implementation had some detectable issues with artifacts\cite{F5broken} caused by the recompression. This was however only due to  recompression issue in the reference implementation and a corrected reference implementation without the weakness has been provided by the researchers.
 
 % We use https://github.com/matthewgao/F5-steganography
 
 YASS, as described in \cite{solanki2007yass} was not considered a candidate. Although less researched, it has failed in researches several times \cite{kodovsky2010modern}\cite{li2009steganalysis}. 
-
-\fxwarning{Add more steganography algorithms}
-
 
 \subsubsection{Timing Channels}
 
@@ -430,6 +427,8 @@ And for any other Keypair $K^{p}_a \neq K^{p}_b$
 	D^{K^{1}_b}\left(E^{K^{-1}_a}\left(\mathbf{M}\right)\right)  & \neq & \mathbf{M}
 \end{eqnarray} 
 
+The number of crypto algorithms was higher than the steganography options. When looking for well researched algorithms basing on different mathmatical prblems and having well defined outlines numbers dropped dramatically again.
+
 \begin{itemize}
 	\item RSA\\
 		  In \citeyear{Rivest:1978:MOD:359340.359342} the authors \citeauthor{Rivest:1978:MOD:359340.359342} published with \cite{Rivest:1978:MOD:359340.359342} a paper which did revolutionize cryptography for years. In their paper the authors described an encryption method later to be called RSA which required a key pair ($K_a$) referenced as public ($K^{1}_a$) and private keys ($K^{-1}_a$). The novelty of this system was that anything encrypted with the public key was only decryptable with the private key and vice versa.
@@ -438,14 +437,13 @@ And for any other Keypair $K^{p}_a \neq K^{p}_b$
 	\item ECC\\
 	      The elliptic curves were independently suggestd by \cite{Miller1986} and \cite{Koblitz04guideto} in 1986. Elliptic curve Cryptography started to be widely deployed in the public space about in 2006. Since then it seems to compete very well with the well established RSA algorithm. While being similarly well researched ECC, has the advantage of far shorter key sizes for the same grade of security.
 	\item McElliece\\
-	      \fxerror{add McEliece}
+	      McEliece was first implemented and then removed again. The key size to gain an aequivalent security was $\approx 1MB$. This was impractical and thus discarded again. This was done despite the fact that there is up until now no known quantum capable algorithm reducing the key size of McEliece.
 	\item NTRU\\
-	      \fxerror{add NTRU}
+	      In \cite{Hoffstein1998} \citeauthor{Hoffstein1998} describd the NTRU algorithm. Inclusion of this algorithm was disputed as it is pattented in the united states as US7031468. While not as well researched as RSA it has been arroud for more than 20 years without being significantly affected by successful attacks.
 	\item ElGammal\\
-	      \fxerror{add ElGammal}
+	      ElGamal was rejected as cryptosystem. It bases on the same mathmatical problems for cryptoanalysis as RSA (discreet logarithms) but is not as common as RSA.
 \end{itemize}
 
-\fxerror{check for more valuable cryptosystems}
 
 \subsection{Homomorphic encryption}
 Homomorphic encryption as introduced in \cite{feldman1987practical} was from the beginning a strong candidate to be used within our work. Unfortunately we did not find a way to apply the core addRedundancy operation in homomorphic encryption. Transforming the original data to the GF space in an efficient way to apply matrices was not doable and thus rejected.

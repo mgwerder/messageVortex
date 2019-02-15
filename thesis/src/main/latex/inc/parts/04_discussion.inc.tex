@@ -183,14 +183,15 @@ Annonymity is greatly dependend on the quality of the routing block and the chos
 The requirement for an anonymity set is dependet on juridictional restrictions. In some of the more restrictive countries no one can held guilty for an action which may not be credibly assigned to him alone. In other jurisditions it is possible to be held guilty for an action just because of an identified membership to a group. This makes it important that message traffic and the crafting of the blending is under the sole control of the sender. He needs to create an annonymity set sufficiently large and spanning enough jurisdictions to create sufficient anonymity for his situation.
 
 \chapter{Missing gaps to be covered in future analysis}
-\section{Blending and Transport Layer Gaps}
 The current blending layer is very simple. It creates context less messages based on an easy recoginzable scheme. An unsusppecting observer may have the impression that this is just a way of communicatiing but censor may byy observing the message flow easily conclude that these messages are not written by a human.
 
 To be truly undetectable all work done by the blending layer has to be undistingushable from a normal human communication. This applies not only to the message steganographic embedding of the message but to the message content as well. This is very much similar to the problems of chatterbots these days. Assuming that a blending layer is only communicating with other nodes correctly embedding messages we have a chatterbot problem. It is reduced as the chatterbot must only reply credibly and undetectably to generated messages of other chatterbots. If assuming that a blending layer replies to any non-MessageVortex-nodes the problem boils down to a turing test as stated in \cite{turing1950computing}. As we safely may assume that an adversary has huge but limmited ressources this blending is however sufficient if it is done ``good enough''. What criterias would apply here is a topic for further research. Applying any research to this topic would require to add a more precise adversary model.
 
 The currently applied choice of transport layer protocol is a snapshot of current internet traffic. While done with great care it must be adopted to the changing communication habits of humanity. Identifying new or depreciated communication protocols and blending schemes would be another field of research.
-
+ 
 A comprehensive survey over the newest trends and techniques in steganography is another topic to be covered. It would allow to identify new candidates of blending techniques.
+
+Another problem is the software update. Where censorship applies access to newer software is not or only with technical knowledge possible. To avoid this an updating mechanism should be implemented allowing  nodes to fetch verifiable software updates in an anonymous way while not limmiting the software to a single distribution.
 
 Annonity has effects on behaviour of humans. We have found taht although there is some research in this field such as \cite{postmes2001social} evidence is very weak. Although the possibility for anonymity is undiputed among so called free countries there downsides (e.g., misuse for criminal acts) are obvious. More research in this filed is required as well.
 
