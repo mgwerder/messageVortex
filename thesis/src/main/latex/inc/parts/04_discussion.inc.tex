@@ -9,11 +9,9 @@ In the following capters we analyze the protocol throughly for fitness of purpos
 
 We first apply a statical analysis of the protocol to identify all informations leaked at all levels.
 
-Then we apply a dynamic analysis of the protocol to identify all meta informations leaked during transmission of the protocol.
+Then we apply a dynamic analysis of the protocol to identify all meta informations leaked during transmission of the protocol such as timing or context beween messages.
 
-We distinguish between passive and active adversaries. Passive adversaries follow the MessageVortex protocol, have unlimited observation capabilities on the network up to layer 4 of the ISO/OSI protocol, and do have unlimmited observation capabilities on the transporting layer of MessageVortex. Active adversary share the capabilities of passive adversaries, but do not follow the MessageVortex protocol. Both adversaries try to obtain valuable information (e.g., message content, metadata such as the communicating peers or message frequencies).\fxwarning{ refer to adversary model}
-
-When analyzing the goals we focus \fxerror{incomplete}
+We distinguish between passive and active adversaries. Passive adversaries follow the MessageVortex protocol, have unlimited observation capabilities on the network up to layer 4 of the ISO/OSI protocol, and do have unlimmited observation capabilities on the transporting layer of MessageVortex. Active adversary share the capabilities of passive adversaries, but do not follow the MessageVortex protocol. Both adversaries try to obtain valuable information (e.g., message content, metadata such as the communicating peers or message frequencies). For a more precise model refer to \ref{sec:adversary}.
 
 We then sum up the achieved goals by looking at well known attacks and analyze the effectiveness of them to analyze the protocol.
 
@@ -56,16 +54,15 @@ Depending on the blending method, single messages might be identified as long as
 
 If an endpoint is successfully identified then all directly related endpoints of the same protocol may be identified as well by following the message flow. This does however not enable an adversary to inject messages as the host key is not leaked. 
 
-Assuming a global observer as an adversary and unencrypted traffic, he might discover the originating routing layer and thus identifying it as a Vortex node by following traces of the transport layer.
+Assuming a global observer as an adversary and unencrypted traffic, he might discover the originating routing layer and thus identifying it as a Vortex node by following traces of the transport layer. In most protocols however this address is spoofable and not a reliable source for the originating account.
 
 \section{Senders routing layer}
-\fxwarning{A sender may have some knowledge about the Routing block size and may therefore guess the complexity of the routing path}
+A sender may have some knowledge about the Routing block size and may therefore guess the complexity of the routing path. He is however unable to gain any additional information such as time of travel or number of hops until the target.
 
 \section{Intermediate node routing layer}
-\fxwarning{An intermediate node does know all the operations applied and the immediate next hop. It does learn an endpoint but is unable to use this endpoint.}
-\fxwarning{An intermediate node may determine the relative message size.}
+An intermediate node does know all the operations applied and the immediate next hop. It does learn the routing addresses of the immediately following endpoints but is unable to use these endpoints. This due to the fact that he has no mean to get the host key required to communicate.
 
-\section{Receivers routing layer}
+If a routing block is repeated a router may identify the routing block as repetition due to the serial number of the replay protection and give an rough estimate about the message size by comparing the payload chunks. This estimate is however very rough as it is bounded by the block size of the symmetrically applied encryption.
 
 \chapter{Dynamic analysis}
 In the dynamic Analysis we reach out to an active adversary. An active adversary modifies traffic in a non protocol conformant way, or missuses available or obtained information to disrupt messages, nodes, or the system as a whole.
