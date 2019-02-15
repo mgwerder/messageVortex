@@ -895,42 +895,22 @@ Frequency and bandwidth analysis are not possible as frequency and bandwith of a
 
 The message content remains cryptographically secured if the dual trust (sender and receiver node) is not broken, the message is encrypted on the senders node, the message is only decrypted on the receivers node, and remains at least wrapped in this encryption during the whole transfer. 
 
-\subsection{Attacking Routing Blocks}
-\fxwarning{add content here; Routing block length analysis}
-
-\section{Attack on Message size}
-
-\fxwarning{add content here}
-
 \chapter{Additional Considerations}
-\section{Man in the Middle Attacks to Conversations}
 
-\fxwarning{add content here}
+\section{Man in the Middle Attacks to Conversations}
+Traditional man in the middle attacks are not possible when using the message vortex protocol as the remote identity secures the recipient to a specific recipient. If however a recipient identity has been compromized either by stealing its private key or by injecting a wrong identity in the senders repository man in the middle attacks become possible. We do not cover this problem within this  work as a secure, verifiable way to exchange identities is not included in the protocol.
 
 \section{Identification of Participating Nodes}
-
-\fxwarning{add content here}
+Participating nodes may be identified when injecting  evil routing nodes. When suspecting such nodes first step should be moving outside the jurisdictional reach before reaching out to the final anonymity set. If the anonymity set is compromized identification of the participating nodes is however possible.
 
 \subsection{Identification by Content}
-It is possible to identify a message by content. Assuming that an adversary knows the applied blending method he may identify an ASN.1 structure of \fxerror{incomplete}
-
-\fxwarning{add content here}
+Message extraction by content is not generally possible even if knowing the blending type and respective blending keys. As the VortexMessage does not show an outer structure such as ASN.1 or similar. The message itself remains undetectable.
 
 \subsection{Identification by Query}
-
-\fxwarning{add content here}
+A vortex node may be identified by query if the node responds to unencrypted requests. An active node may be differentiated from an inactive node at any time if a valid blending specification is known. With such a specification an evil routing node is capable to create requests such as new identity requests and take a successful reply as indication for an active routing node.
 
 \subsection{Identification by Traffic Type}
-
-\fxwarning{add content here}
-
-\subsection{Identification by Bandwidth}
-
-\fxwarning{add content here}
-
-\subsection{Identification by Behavioural Analysis}
-
-\fxwarning{add content here}
+Vortex node show a specific behaveour in terms of supported protocols. Depending on the implementation this behaveour is detectable. At the moment supported protocols are POP/SMTP and XMPP. Since both protocols are very common among internet users this footprint is very low.
 
 \section{Storage of Messages and queues}
 The storage of messages sent though MessageVortex should be handled with great care. It seems on the first sight a good idea to merge all messages in a globally available storage such as the IMAP account of the receiving entity. However -- In doing so we would discover the message content to the providing party of a mail account. Since we handled the message with great care and tremendous costs up until this point it would be careless doing so. 
