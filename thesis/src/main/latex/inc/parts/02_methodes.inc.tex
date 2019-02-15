@@ -1083,10 +1083,9 @@ Scrypt was originally developed by \citeauthor{percival2009stronger} in \citeyea
 \end{comment}
 
 \section{Pseudo Random Number Generators \label{sec:prng}}
-\fxwarning{add content here}
+The following sections list two PRNG specifications to follow the recommendations of \cite{RFC1750}. These PRNGs are used to complete the padding specified in the addRedundancy opeartion.
 
-\fxwarning{refer to FC 1750: Randomness Recommendations for Security}
-
+We have chosen to support two kind of PRNG. These algorithms are not relevant for the security of the system but they guarantee a non-detectable padding when doing the addRedundancy operation. The two PRNGs selected were xorshift128+ and Blum Micail PRNG. Both PRNGs were quoted to pass BigCrush. However, recent development shows that this might not be true for xorshift128+ as shown in \cite{LEMIRE2019139}.
 
 \section{Known Attacks}
 In the following sections we emphasize on possible attacks to an anonymity preserving protocols. In the following sections we describe classes of attacks. These attacks may be used to attack the anonymity of any entity involved in the message channel. In a later stage we test the protocol for immunity against these classes of attacks.
@@ -1119,7 +1118,7 @@ In the following subsections we list a couple of attack classes which have been 
 \subsubsection{Probing Attacks}
 Identifying a node by probing and check their reaction is commonly done when fingerprinting a service. As a node is participating in a network and relaying messages probing may not be evaded. However, it may be made costly for an adversary to do systematic probing. This should be taken into account. Both currently specified transport protocol feature an indefinite number of possible accounts. Since not the server but the endpoint address is behaving as node probing is more complex than in other cases where probing of a service is sufficient. 
 
-A problem are clear text requests. These requests may be used on any transport layer account without previous knowledge of any host key. Thus the recommendation in table \ref{tab:protoReplyCrit} is 
+A problem are clear text requests. These requests may be used on any transport layer account without previous knowledge of any host key. Thus the recommendation in table \ref{tab:protoReplyCrit} is \fxwarning{ incomplete sentence}
 
 One strategy to avoid would be to put high costs onto clear text requests in such a way that a clear text request may have a long reply time (e.g. up to one day). An early retry of the same identity would lead to automatic blacklisting. This is however an insufficient strategy as a huge adversary may have lots identities in stock. Requesting a particularly long key as an plain text identity does not make sense either as these as well may be kept in stock. We may however force a plaintext request to have a hash following certain rules. We may for example put in a requirement that the first four bytes of the hash of a header block translates to the first four characters of the receiving address
 
@@ -1127,19 +1126,16 @@ One strategy to avoid would be to put high costs onto clear text requests in suc
 \fxwarning{add content here; Reduce attractiveness of cleartext probing attacks by discard 80\% of messages and blacklist on early retry?}
 
 \subsubsection{Hotspot Attacks}
-\fxwarning{add content here}
+Hotspot attacks aim to isolate high traffic sites within a network. By analyzing specific properties or the general throughput locations with outstanding traffic may be identified. These messages do qite often reveal senders or recipients. Sometimes a middle node in an anonymizing system. 
 
 \subsubsection{Message Tagging and Tracing}
-\fxwarning{add content here}
+When using an anonymization system a message may be either fully or partially traced or even tagged. Tagging allows to recognize a message at a later stage and map it to its predecessors. Protocols with tagable messages are not suitable for anonymizaation systems.
 
 \subsubsection{Side Channel Attacks}
-\fxwarning{add content here}
-
-\subsubsection{Timing Attacks}
-\fxwarning{add content here}
+Side channel attacks are numberous. Especially important to usare attacks related to either lookups in unrelated channels (e.g., downolading of auxiliary content of a message) or behaviour reöated to timing patterns.
 
 \subsubsection{Sizing Attacks}
-\fxwarning{add content here}
+There are two kinds of sizing attacks identified to be relevant for us. One is the possibility for matchng messages with related sizes and  the other one is to relate message size to the original messages. Both attacks may be considered as a tracing attack and will be analyzed acordingly.
 
 \subsubsection{Bugging Attacks}
 Numerous attacks are available through bugging of a protocol. In this chapter we outline some of the possibilities and how they may be countered:

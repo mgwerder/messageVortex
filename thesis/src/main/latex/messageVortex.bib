@@ -2401,4 +2401,52 @@ This paper is intended for the systems programmer. It presents a complete specif
   timestamp = {2019.01.30},
 }
 
+@Article{LEMIRE2019139,
+  author    = {Lemire, Daniel and O'Neill, Melissa E.},
+  title     = {Xorshift1024*, xorshift1024+, xorshift128+ and xoroshiro128+ fail statistical tests for linearity},
+  journal   = {Journal of Computational and Applied Mathematics},
+  year      = {2019},
+  volume    = {350},
+  pages     = {139 - 142},
+  issn      = {0377-0427},
+  abstract  = {Lâ€™Ecuyer & Simardâ€™s BigÂ Crush statistical test suite has revealed statistical flaws in many popular random number generators including Marsagliaâ€™s Xorshift generators. Vigna recently proposed some 64-bit variations on the Xorshift scheme that are further scrambled (i.e., xorshift1024*, xorshift1024+, xorshift128+, xoroshiro128+). Unlike their unscrambled counterparts, they pass BigÂ Crush when interleaving blocks of 32Â bits for each 64-bit word (most significant, least significant, most significant, least significant, etc.). We report that these scrambled generators systematically fail Big Crush â€“ specifically the linear-complexity and matrix-rank tests that detect linearity â€“ when taking the 32Â lowest-order bits in reverse order from each 64-bit word.},
+  doi       = {https://doi.org/10.1016/j.cam.2018.10.019},
+  file      = {:inc/bib/lemire2019139.pdf:PDF},
+  keywords  = {Random number generator, Statistical tests, Xorshift},
+  owner     = {martin.gwerder},
+  timestamp = {2019.02.15},
+  url       = {http://www.sciencedirect.com/science/article/pii/S0377042718306265},
+}
+
+@Misc{rfc1750,
+  author       = {Steve Crocker and Donald E. Eastlake 3rd and Jeffrey I. Schiller},
+  title        = {{Randomness Recommendations for Security}},
+  howpublished = {RFC 1750},
+  month        = dec,
+  year         = {1994},
+  abstract     = {Choosing random quantities to foil a resourceful and motivated adversary is surprisingly difficult. This paper points out many pitfalls in using traditional pseudo-random number generation techniques for choosing such quantities. It recommends the use of truly random hardware techniques and shows that the existing hardware on many systems can be used for this purpose. This memo provides information for the Internet community. This memo does not specify an Internet standard of any kind.},
+  doi          = {10.17487/RFC1750},
+  number       = {1750},
+  pagetotal    = {30},
+  publisher    = {RFC Editor},
+  series       = {Request for Comments},
+  url          = {https://rfc-editor.org/rfc/rfc1750.txt},
+}
+
+@Misc{rfc4880,
+  author       = {Hal Finney and Lutz Donnerhacke and Jon Callas and Rodney L. Thayer and David Shaw},
+  title        = {{OpenPGP Message Format}},
+  howpublished = {RFC 4880},
+  month        = nov,
+  year         = {2007},
+  abstract     = {This document is maintained in order to publish all necessary information needed to develop interoperable applications based on the OpenPGP format. It is not a step-by-step cookbook for writing an application. It describes only the format and methods needed to read, check, generate, and write conforming packets crossing any network. It does not deal with storage and implementation questions. It does, however, discuss implementation issues necessary to avoid security flaws. OpenPGP software uses a combination of strong public-key and symmetric cryptography to provide security services for electronic communications and data storage. These services include confidentiality, key management, authentication, and digital signatures. This document specifies the message formats used in OpenPGP. {[}STANDARDS-TRACK{]}},
+  doi          = {10.17487/RFC4880},
+  file         = {:inc/bib/rfc4880.pdf:PDF},
+  number       = {4880},
+  pagetotal    = {90},
+  publisher    = {RFC Editor},
+  series       = {Request for Comments},
+  url          = {https://rfc-editor.org/rfc/rfc4880.txt},
+}
+
 @Comment{jabref-meta: databaseType:bibtex;}

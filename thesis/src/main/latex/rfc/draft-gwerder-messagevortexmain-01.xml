@@ -1442,7 +1442,7 @@ BEGIN
   }
 
   PRNGType ::= ENUMERATED {
-    xsadd           (1000),
+    xorshift128     (1000),
     blumMicali      (1001)
   }
 
