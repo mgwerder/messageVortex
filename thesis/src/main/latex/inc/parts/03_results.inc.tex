@@ -257,17 +257,23 @@ An identity is always ephemeral and expires after a given period of time. An ide
 
 These measures limit the effectivity of harvesting attacks while giving a normal node the possibility of bootstrapping itself.
 
-\paragraph{queryCapabillity request:} This request is the only request answered as a clear text request. To minimize probing possibilities this request should be only answered if the node owner agrees or generally by public nodes.
+\begin{itemize}
+\item queryCapabillity request:\\
+      This request is the only request answered as a clear text request. To minimize probing possibilities this request should be only answered if the node owner agrees or generally by public nodes.
 
-\paragraph{messageQuota request:} This request raises the number of routing blocks which may be processed for an identity. A node may reject this request depending on the load of the node, personal preferences, or because this identity causes too much traffic.
+\item messageQuota request:\\ 
+      This request raises the number of routing blocks which may be processed for an identity. A node may reject this request depending on the load of the node, personal preferences, or because this identity causes too much traffic.
 
-It is normally answered for all valid identities only. The node may answer it for recently expired identities. It is however not recommended to send a reply to an unknown identity as this behaviour might be used for probing of a node.
+      It is normally answered for all valid identities only. The node may answer it for recently expired identities. It is however not recommended to send a reply to an unknown identity as this behaviour might be used for probing of a node.
 
-\paragraph{transferQuota request:} This request raises the number of bytes which may be transferred for an identity. A node may reject this request depending on the load of the node, personal preferences, or because this identity causes too much traffic.
+\item transferQuota request:\\
+      This request raises the number of bytes which may be transferred for an identity. A node may reject this request depending on the load of the node, personal preferences, or because this identity causes too much traffic.
 
-It is normally answered for all valid identities only. The node may answer it for recently expired identities. It is however not recommended to send a reply to an unknown identity as this behaviour might be used for probing of a node.
+      It is normally answered for all valid identities only. The node may answer it for recently expired identities. It is however not recommended to send a reply to an unknown identity as this behaviour might be used for probing of a node.
 
-\paragraph{queryQuota request:} This request instructs the node to send information about the given identity.
+\item queryQuota request:\\
+      This request instructs the node to send information about the given identity.
+\end{itemize}
 
 It is normally answered for all valid identities only. The node may answer it for recently expired identities. It is however not recommended to send a reply to an unknown identity as this behaviour might be used for probing of a node.
 
@@ -305,14 +311,14 @@ srcIDs \xrightarrow{\text{build operation}} targetIDs
 
 Every node maintains a list of received blocks including their IDs and building instructions for them. Any node must keep blocks and building instructions during the whole lifetime of a routing block. It may keep it longer. If a conflicting building instruction arrives all conflicting older rules are removed. Building instructions are always kept on a per-identity base. It is not possible to reference building instructions of a foreign identity.
 
-\paragraph{splitPayload:} Split a message block into two parts of variable size. The size of the first chunk is expressed either absolute or in percent of the original block size.
-
-\paragraph{mergePayload:} Concatenates two payload blocks of different or equal sizes.
-
-\paragraph{encryptPayload:} Encrypts a payload chunk block with a given symmetric key and algorithm. Please note that this operation changes the size of a message due to the keysize and the padding.
-
-\paragraph{decryptPayload:} Decrypts a payload chunk block with a given symmetric key and algorithm. Please note that this operation changes the size of a message due to the keysize and the padding.
-
+\begin{itemize}
+\item splitPayload and mergePayload: \\
+      Split a message block into two parts of variable size. The size of the first chunk is expressed either absolute or in percent of the original block size.
+\item encryptPayload and decryptPayload:\\ 
+      Encrypts and decrypts a payload chunk block with a given symmetric key and algorithm. Please note that this operation changes the size of a message due to the keysize and the padding.
+\item addRedundancy and removeRedundancy:\\
+      Splits a payload block into uniformous chunks and adds redundancy information or removes it respectively.
+\end{itemize}
 All the operations specified above have in common that they may be applied on decoy traffic as well as on real message data. The size of incomming and outgoing blocks do not relate as there are messages increasing the size as well as decreasing the size.
 
 \subsubsection{Reply Block\label{sec:replyBlock}}
@@ -322,43 +328,45 @@ It is up to the node to decide whether it wants to answer a request or not.
 
 Replys are being built as an ordinary message blocks. To identify a Vortex message it must begin with the string ``\textbackslash special'' encoded in ASCII followed by a valid reply block structure. No additional bytes may be appended. Blocks with additional data should be discarded. To express a block starting with ``\textbackslash special'' the token is repeated prefixed with a backslash.
 
-\paragraph{replyCapability block:}
-The reply contains the following information:
 \begin{itemize}
-	\item Supported Vortex transports including blending specification.
-	\item Maximum quota.
-	\item Supported ciphers and hashes.
-	\item Maximum number of simultaneous valid header serials.
-	\item Maximum number of simultaneous valid building operations.
-	\item Maximum identity lifespan in seconds.
+\item replyCapability block:\\
+      The reply contains the following information:
+      \begin{itemize}
+     	\item Supported Vortex transports including blending specification.
+     	\item Maximum quota.
+     	\item Supported ciphers and hashes.
+     	\item Maximum number of simultaneous valid header serials.
+      	\item Maximum number of simultaneous valid building operations.
+      	\item Maximum identity lifespan in seconds.
+      \end{itemize}
+      It lists the capabilities a node advertises to the public. 
+
+\item requirement block:\\
+      Requirement blocks denote a requirement a requester has to fulfill before a previously sent request is processed. normally a proof of work puzzle has to be solved in order to allow a request to be processed. Alternatively a commercial supplier may request a payment in a digital currency. Currently supported digital currencies are Bitcon, Ethereum, and ZCash.
+
+\item replyStatus block:\\
+      General answer block signalling a a status. The block is limited in length in order to minimize misuse of bandwidth. The Block contains the following data:
+      \begin{itemize}
+     	\item Three digit status number
+     	\item Sending node identity
+     	\item Status text (optional)
+     	\item Affected block ID (optional)
+      \end{itemize}
+
+\item ctxlessNewidentity block:\\
+      This block may be used to signal the change of identity to a recipient. As this request is signed with the old known identity no means should exist to hijack such an identity.
+
+      This request contains:
+      \begin{itemize}
+      	\item old Identity
+      	\item new Identity
+     	\item Signature (with old identity)
+     \end{itemize}
+
+     This message may arrive at any time. Any recipient might decide on its own whether it wants to accept the update or not.
+
+     A node should not accept a identity update if the strength of the new identity has been lowered compared to the old identity. A client may make a difference on the fact whether the transport layer address or the key is exchanged. 
 \end{itemize}
-It lists the capabilities a node advertises to the public. 
-
-\paragraph{requirement block:}
-Requirement blocks denote a requirement a requester has to fulfill before a previously sent request is processed. normally a proof of work puzzle has to be solved in order to allow a request to be processed. Alternatively a commercial supplier may request a payment in a digital currency. Currently supported digital currencies are Bitcon, Ethereum, and ZCash.
-
-\paragraph{replyStatus block:}
-General answer block signalling a a status. The block is limited in length in order to minimize misuse of bandwidth. The Block contains the following data:
-\begin{itemize}
-	\item Three digit status number
-	\item Sending node identity
-	\item Status text (optional)
-	\item Affected block ID (optional)
-\end{itemize}
-
-\paragraph{ctxlessNewidentity block:}
-This block may be used to signal the change of identity to a recipient. As this request is signed with the old known identity no means should exist to hijack such an identity.
-
-This request contains:
-\begin{itemize}
-	\item old Identity
-	\item new Identity
-	\item Signature (with old identity)
-\end{itemize}
-
-This message may arrive at any time. Any recipient might decide on its own whether it wants to accept the update or not.
-
-A node should not accept a identity update if the strength of the new identity has been lowered compared to the old identity. A client may make a difference on the fact whether the transport layer address or the key is exchanged. 
 
 \subsubsection{payload Block}
 The payload block contains the actual message or decoy traffic. Since this block is heavily modified in course of the transport of the block it is built very simple.
@@ -384,7 +392,7 @@ As accounting data may be used to overfill a nodes accounting tables special car
 
 It is important that the accounting described here is for mixes. A node assembling messages needs to keep a lot more information.
 
-\subsubsection{Accounting Data of an Identity}
+\subsubsection{Accounting Data of an Ephemeral Identity}
 For an ephemeral identity very little information has to be kept. This identity expires after a certain amount of time. The maximum time may be queried with a capability request. The choice of Encryption type and key size is left to the node requesting the identity. However, a node may reject the request if it considers the identity to be unsafe, it has no more capacity for new identities, or if it would create an identity clash on the current node.
 
 The following data has to be kept per identity:
@@ -895,27 +903,25 @@ Frequency and bandwidth analysis are not possible as frequency and bandwith of a
 
 The message content remains cryptographically secured if the dual trust (sender and receiver node) is not broken, the message is encrypted on the senders node, the message is only decrypted on the receivers node, and remains at least wrapped in this encryption during the whole transfer. 
 
-\chapter{Additional Considerations}
+\section{Additional Considerations}
 
-\section{Man in the Middle Attacks to Conversations}
+\subsection{Man in the Middle Attacks to Conversations}
 Traditional man in the middle attacks are not possible when using the message vortex protocol as the remote identity secures the recipient to a specific recipient. If however a recipient identity has been compromized either by stealing its private key or by injecting a wrong identity in the senders repository man in the middle attacks become possible. We do not cover this problem within this  work as a secure, verifiable way to exchange identities is not included in the protocol.
 
-\section{Identification of Participating Nodes}
+\subsection{Identification of Participating Nodes}
 Participating nodes may be identified when injecting  evil routing nodes. When suspecting such nodes first step should be moving outside the jurisdictional reach before reaching out to the final anonymity set. If the anonymity set is compromized identification of the participating nodes is however possible.
 
-\subsection{Identification by Content}
+\subsubsection{Identification by Content}
 Message extraction by content is not generally possible even if knowing the blending type and respective blending keys. As the VortexMessage does not show an outer structure such as ASN.1 or similar. The message itself remains undetectable.
 
-\subsection{Identification by Query}
+\subsubsection{Identification by Query}
 A vortex node may be identified by query if the node responds to unencrypted requests. An active node may be differentiated from an inactive node at any time if a valid blending specification is known. With such a specification an evil routing node is capable to create requests such as new identity requests and take a successful reply as indication for an active routing node.
 
-\subsection{Identification by Traffic Type}
+\subsubsection{Identification by Traffic Type}
 Vortex node show a specific behaveour in terms of supported protocols. Depending on the implementation this behaveour is detectable. At the moment supported protocols are POP/SMTP and XMPP. Since both protocols are very common among internet users this footprint is very low.
 
-\section{Storage of Messages and queues}
+\subsection{Storage of Messages and queues}
 The storage of messages sent though MessageVortex should be handled with great care. It seems on the first sight a good idea to merge all messages in a globally available storage such as the IMAP account of the receiving entity. However -- In doing so we would discover the message content to the providing party of a mail account. Since we handled the message with great care and tremendous costs up until this point it would be careless doing so. 
 
 Storing them in a localized and receiving entity controlled storage is definitely a good idea but leaves security considerations like a backup possibly to an end user. This might be better, but in effect a questionable decision. There is however a third option. By leaving the message unhandled on the last entity of the MessageVortex chain we may safely backup the data without disclosing the message content. Merging the content then dynamically through a specialized proxy would allow the user to have a unified view on his without compromising the security.
-
-\fxwarning{implemented in prototype?}
 

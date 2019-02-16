@@ -139,9 +139,9 @@ The second meaning tells us that messages must always be capable of flowing from
 
 A message system offering unlinkability may offer sender anonymity. If so a sender should be identifiable so that a classification of senders is possible at any time.
 
-\section{Rough draft of Protocol Layers}
+\section{Rough draft of Protocol}
 
-In order to fulfil the criteria given above, we define a very rough idea of the protocol and its layers. The rough overview is given in figure \ref{fig:roughProtocolDesign}. The protocol should work on the base of onion routing. Unlike Tor (see \ref{sec:tor}) it should not rely on central infrastructures. It furthermore should not be limited to onionized messages. It should be capable of splitting and reassemble messages at any layer.
+In order to fulfill the criteria given above, we define a very rough idea of the protocol and its layers. The rough overview is given in figure \ref{fig:roughProtocolDesign}. The protocol should work on the base of onion routing. Unlike Tor (see \ref{sec:tor}) it should not rely on central infrastructures. It furthermore should not be limited to onionized messages. It should be capable of splitting and reassemble messages at any intermediate router.
 
 \begin{figure}[h]
 	\includegraphics[width=\columnwidth]{inc/roughProtocolDesign.pdf}
@@ -403,8 +403,6 @@ The following candidates have been analyzed:
 	\item Camellia\\
 	      The camellia algorithm is described in \cite{RFC3713}. The key sizes are 128, 192, and 256. Camellia is a Feinstel cipher with 18 to 24 rounds depending on the key size. Up until today the cipher is not known to be broken. 
 \end{itemize}
-
-\subsubsection{Camellia}
 
 For all asymmetric encryption algorithm in this paper we may assume that 
 
@@ -780,12 +778,13 @@ This means that the failure of one mix does not result in the non-delivery of a 
 
 No client implementation could be found on the internet. The project homepage \href{http://current.cs.ucsb.edu/projects/cashmere/}{http://current.cs.ucsb.edu/projects/cashmere/} has not been updated since 2005. This suggests that this project is dead or sleeping.
 
-\subsection{SMTP\label{sec:mailTransport}}
-As SMTP is our trasport prototype we focus in depth onto this topic.
+\subsection{Email\label{sec:mailTransport}}
+As SMTP is one of our transport layers impleneted in the prototype, we focus in depth onto this topic.
 
-Todays mail transport is mostly done via SMTP\index{SMTP} protocol as specified in \cite{RFC5321}. This protocol has proven to be stable and reliable. Most of the messages are passed from a MUA to a SMTP relay of a provider. From there the message is directly sent to the SMTP server of the recipient and from there to a server based storage of the recipient. The recipient may at any time connect to his server based storage and may optionally relocate the message to a client based (local) storage. The delivery from the server storage to the MUA of the recipient may happen by message polling or by message push (where as the later is usually implemented by a push-pull mechanism).\par
+\subsubsection{SMTP and Client Protocols}
+Todays mail transport is mostly done via SMTP\index{SMTP} protocol as specified in \cite{RFC5321}. This protocol has proven to be stable and reliable. Most of the messages are passed from a MUA to a SMTP relay of a provider. From there the message is directly sent to the SMTP server of the recipient and from there to a server based storage of the recipient. The recipient may at any time connect to his server based storage and may optionally relocate the message to a client based (local) storage. The delivery from the server storage to the MUA of the recipient may happen by message polling or by message push (where as the later is usually implemented by a push-pull mechanism).
 
-To understand the routing of a mail it is essential to understand the whole chain starting from a user(-agent) until arriving at the target user (and being read!). To simplify this I used a consistent model which includes all components (server and clients). The figure \ref{fig:MailAgents} shows all involved parties of a typical Mail routing. It is important to understand that Mail routing remains the same regardless of the used client. However -- Availability of a mail at its destination changes drastically depending on the type of client used. Furthermore control of the mail flow and control is different depending on the client.\par
+To understand the routing of a mail it is essential to understand the whole chain starting from a user(-agent) until arriving at the target user (and being read!). To simplify this I used a consistent model which includes all components (server and clients). The figure \ref{fig:MailAgents} shows all involved parties of a typical Mail routing. It is important to understand that Mail routing remains the same regardless of the used client. However -- Availability of a mail at its destination changes drastically depending on the type of client used. Furthermore control of the mail flow and control is different depending on the client.
 
 The model has three main players storage (\defref{Storage}), agent (\defref{Agent}) and service (\defref{Service}). Storages are endpoint storages storing mails. Not explicitely shown are temporary storages such as spooler queues or state storages. Agents are simple programs taking care of a specific job. Agents may be exchangeable by other similar agents. A service is a bundle of agents which is responsible for a specific task or task sets.
 
@@ -806,9 +805,7 @@ A MTS consists generally out of three parts. For incoming connects there is a da
 
 A MSS consists out of a local storage and delivery agents which do offer uniform interfaces to access the local store. They do also deal with replication issues and grant should take care of the atomicity of transactions committed to the storage. Typically there are two different kind of \defref{MDA}s. \defref{Local MDA}s offer possibilities to access the store via efficient (non network based) mechanisms (eg IPC or named sockets). This is usually done with a stripped down protocol (eg. \defref{LMTP}). For remote agents there a publicly -- network based -- agent available. Common Protocols for this \defref{Remote MDA}\ include \defref{POP}, \defref{IMAP}, or \defref{MS-OXMAPIHTTP}.\par
 
-\subsection{Mail Endpoints}
-
-\fxwarning{Move this section to appropriate location}
+\subsection{Email Endpoint Types}
 
 Mail endpoints consist typically of the following components:
 \begin{itemize}

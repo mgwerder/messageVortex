@@ -14,7 +14,7 @@
 <!-- FIXME: correct F5 encoding String according to spec in thesis ( do not forget escaping of "\", "," and ")" -->
 <!-- FIXME: add "All SMTP nodes responding to clear text should at least support $encoding=plain:0,256$." -->
 <!-- FIXME: Add header request peer -->
-<!-- FIXME: Switch from XEP0096 to XERP0234 as XEP0096 has been depreciated -->
+<!-- FIXME: Switch from XEP0096 to anything else. XERP0234 is deferred (most valuable candidate) and XEP0096 has been depreciated -->
 <!-- FIXME: remove McEliece [impractical key size] -->
 
 <?rfc strict="yes" ?>
