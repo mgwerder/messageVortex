@@ -4,7 +4,7 @@
 %!TeX root = ../../messageVortex.tex
 
 \part{Introduction}
-\section{Foreword}
+\chapter{Foreword}
 Almon Brown Strowger was the owner of a funeral parlor in St. Petersburg. He filed a patent on March \nth{10}, 1891 for an ``Automatic Telephone Exchange'' \cite{pulseDialingPatent}. This patent built the base for modern automated telephone systems. According to several sources, he was annoyed by the fact that the local telephone operator was married to another undertaker. She diverted potential customers of Mr. Strowger to her husband instead, which caused Almon B. Strowger to lose business. In 1922, this telephone dialing system which is nowadays called pulse dialing became the standard dialing technology
 for more than 70 years until tone dialing replaced it.
 
@@ -52,8 +52,8 @@ This thesis contributes to the topic in the following senses:
 	\item It offers a client application implementing the proposed Protocol as IMAPv4 cache daemon and as SMTP relay.
 \end{itemize}
 
-\section{Notation}
-\subsection{Cryptography \label{sec:encNot}}
+\chapter{Notation}
+\section{Cryptography \label{sec:encNot}}
 The theory in this document is heavily based on symmetric encryption, asymmetric encryption and hashing. In order to use a uniformed notation I use $E^{K_a}(M)$ (where $a$ is an index to distinguish multiple keys) resulting in $\mathbf{M^{K_a}}$ as the encrypted message. If we are reflecting a tuple of information we write it in boldface. to express the tuples content we use angular brackets $\mathbf{L\langle normalAddress,vortexAddress\rangle }$. If we want Messages encrypted with multiple keys do list the used keys as a comma separated list in superscript $E^{K_b}\left(E^{K_a}\left(M\right)\right)=M^{{K_{a}},{K_b}}$.
 
 For a symmetric encryption of a message $\mathbf{M}$ with a key $K_a$ resulting in $\mathbf{M^{K_a}}$ where $a$ is an index to distinguish different keys. Decryption uses therefore $D^{K_a}(\mathbf{M^{K_a}})=\mathbf{M}$.
@@ -85,7 +85,7 @@ We refer to the components of a Vortex Message as follows:
 
 In general a decrypted Block is written as capitalized multi character boldface. An encrypted Block is written as capitalized single character boldface.
 
-\subsection{Code and commands}
+\section{Code and commands}
 Code blocks are always displayed as light grey block with line numbers:
 
 \begin{lstlisting}
@@ -108,7 +108,7 @@ $ java Hello "This is a very long command-line that had to be broken to fit into
 Hello. This is a very long command-line that had to be broken to fit into the code box displayed on this page.
 \end{lstlisting}
 
-\subsection{Hyperlinking}
+\section{Hyperlinking}
 The electronic version of this  document is hyperlinked. This means that references to the glossary or the literature may be clicked to find the respective entry. Chapter or table references are clickable too. 
 
 \chapter{Main Research Question}
