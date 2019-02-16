@@ -1137,23 +1137,28 @@ There are two kinds of sizing attacks identified to be relevant for us. One is t
 \subsubsection{Bugging Attacks}
 Numerous attacks are available through bugging of a protocol. In this chapter we outline some of the possibilities and how they may be countered:
 
-\paragraph{Bugging through certificate or identity lookup:} Almost all kind of proof of identities, such as certificates, offer some kind of revocation facility. While this is a perfect desirable property of these infrastructures they offer a flaw. Since the location of this revocation information is typically embedded in the proof of identity an evil attacker might use a falsified proof of identity with a recording revocation point.
+\begin{itemize}
+	\item Bugging through certificate or identity lookup:\\
+	      Almost all kind of proof of identities, such as certificates, offer some kind of revocation facility. While this is a perfect desirable property of these infrastructures they offer a flaw. Since the location of this revocation information is typically embedded in the proof of identity an evil attacker might use a falsified proof of identity with a recording revocation point.
 	      
-There are multiple possibilities to counter such an attack. The easiest one is to do no verification at all. This is however not desirable from the security point of view. 
+          There are multiple possibilities to counter such an attack. The easiest one is to do no verification at all. This is however not desirable from the security point of view. 
 
-Another possibility is to only verify trusted proof of identities. By doing so the only attacker could be someone having access to a trusted source of proof of identities. 
+          Another possibility is to only verify trusted proof of identities. By doing so the only attacker could be someone having access to a trusted source of proof of identities. 
 
-A third possibility is to relay the request to an other host either by using an anonymity structure such as Tor or by using its own infrastructure. Using Tor would violate the ``Zero Trust'' principle we are aiming for. Furthermore this measure would only conceal the source of the verification. It would not hide the fact that the message is being processed. 
+          A third possibility is to relay the request to an other host either by using an anonymity structure such as Tor or by using its own infrastructure. Using Tor would violate the ``Zero Trust'' principle we are aiming for. Furthermore this measure would only conceal the source of the verification. It would not hide the fact that the message is being processed. 
 
-A fourth and most promising technology would be to force the sender of the certificate to include a ``proof of non revocation''. This could be a timestamped and signed partial CRL. Such a mandatory proof of non-revocation would allow a node to verify the validity of a certificate without being forced to disclose itself by doing a verification. On the downside has to be mentioned that including a proof of non-revocation involves the requirement to accept a certain amount of caching time to be accepted. This allowed caching time reduces the value of the proof as it may be expired in the mean time. It is recommended to keep the maximum cache time as low as 1d in order to avoid that revoked certificates may be used. 
+          A fourth and most promising technology would be to force the sender of the certificate to include a ``proof of non revocation''. This could be a timestamped and signed partial CRL. Such a mandatory proof of non-revocation would allow a node to verify the validity of a certificate without being forced to disclose itself by doing a verification. On the downside has to be mentioned that including a proof of non-revocation involves the requirement to accept a certain amount of caching time to be accepted. This allowed caching time reduces the value of the proof as it may be expired in the mean time. It is recommended to keep the maximum cache time as low as 1d in order to avoid that revoked certificates may be used. 
 
-\paragraph{Bugging through DNS traffic:} A widely common protocol in the internet is DNS. Almost all network related programs use it without thinking. Normally is the usage of such a protocol not a minor issue since the resolution of a lookup usually done by an ISP. In the case of a small ISP this might however already become a problem.
+    \item Bugging through DNS traffic:\\
+          A widely common protocol in the internet is DNS. Almost all network related programs use it without thinking. Normally is the usage of such a protocol not a minor issue since the resolution of a lookup usually done by an ISP. In the case of a small ISP this might however already become a problem.
 
-The bugging in general attack works as follows: We include a unique DNS name to be resolved by a recipient. This can be done most easily by including an external resource such as an image. A recipient will process this resource and might therefore deliver information about the frequency of reading, or the type of client. 
+          The bugging in general attack works as follows: We include a unique DNS name to be resolved by a recipient. This can be done most easily by including an external resource such as an image. A recipient will process this resource and might therefore deliver information about the frequency of reading, or the type of client. 
 
-It must be taken into account that the transport layer will always do DNS lookups and that we may not avoid this attack completely. We may however minimise the possibilities of this attack.
+          It must be taken into account that the transport layer will always do DNS lookups and that we may not avoid this attack completely. We may however minimise the possibilities of this attack.
 
-\paragraph{Bugging through external resources:} An easy attack is always to include external resources into a message and wait until they are fetched. In order to avoid this kind of attack plain text or other self contained formats should be used when sending a message. As we may not govern the type of contained message we can make at least recomendations concering its structure
+    \item Bugging through external resources:\\
+          An easy attack is always to include external resources into a message and wait until they are fetched. In order to avoid this kind of attack plain text or other self contained formats should be used when sending a message. As we may not govern the type of contained message we can make at least recomendations concering its structure
+\end{itemize}
 
 \subsection{Denial of Service Attacks}
 \subsubsection{Censorship}

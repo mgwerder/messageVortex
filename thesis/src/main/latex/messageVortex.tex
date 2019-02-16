@@ -18,7 +18,8 @@
 \subtitle{\thesubtitle}
 \author{Martin Gwerder (06-073-787)}
 %\date{\gitAuthorDate}
-\gdef\myabstract{In this paper, we introduce an unobservable message anonymization protocol, named MessageVortex. It bases on the zero trust principle and a distributed peer-to-peer (P2P) architecture and avoids central aspects such as fixed infrastructures within a global network. 
+\gdef\myabstract{
+	In this paper, we introduce an unobservable message anonymization protocol, named MessageVortex. It bases on the zero trust principle and a distributed peer-to-peer (P2P) architecture and avoids central aspects such as fixed infrastructures within a global network. 
 	
 	It scores over existing work by blending its traffic into suitable existing transport protocols, thus making it next to impossible to block it without significantly affecting regular users of the transport medium. No additional protocol-specific infrastructure is required in public networks and allows a sender to control all aspects of a message such as the degree of anonymity, timing, and redundancy of the message transport without disclosing any of these details to the routing or transporting nodes. Part of this work is an RFC document attached in Appendix \ref{app:rfcMessageVortexMain} describing the protocol. It contains all the necessary information to build protocol nodes. The RFC draft is available through the official RFC channels. Additionally, the RFC document, additional documents, and a reference are available under \url{https://messagevortex.net/}.}
 \makeatother
@@ -435,17 +436,20 @@
 %
 
 
-\begin{comment}
+%\begin{comment}
+\section*{Acknowledgements}
 \begin{acknowledgements}      %this creates the heading for the acknowlegments
 I would like to thank my wife Cornelia and my lovely three kids (Saphira, Florian and Aurelius) for their patience and their support. Without them I could never have done this work.\par
 
-FIXME Prof. Dr. C. Tschudin and the University of Basel for the possibility to write this work and for the challenges they oposed to me, allowing me to grow. \par
-FIXME Dr. Andreas Hueni for his thoughts and challenging outside-the-normal-box.
-FIXME Prof. Dr. Carlos Nicolas of the University of Northwestern Switzerland for being such a valuable sparring partner allowing me to test my thoughts.
+I would like to thank Prof. Dr. C. Tschudin and the University of Basel for the possibility to write this work and for the challenges they opposed to me, allowing me to grow. 
 
-I would like to acknowledge the thousands of individuals who have coded for the LaTeX project for free. It is due to their efforts that we can generate professionally typeset PDFs now.
+Dr. Andreas Hueni for his thoughts and challenging outside-the-normal-box.
+
+Prof. Dr. Carlos Nicolas of the University of Northwestern Switzerland for being such a valuable sparring partner allowing me to test my thoughts.
+
+I would like to acknowledge all the individuals who have coded for the LaTeX project for free. It is due to their efforts that we can generate professionally typeset PDFs now.
 \end{acknowledgements}
-\end{comment}
+%\end{comment}
 
 \cleardoublepage
 \makeatletter
@@ -456,7 +460,7 @@ I would like to acknowledge the thousands of individuals who have coded for the 
 \onecolumn
 %\setpnumwidth{2em}
 %\setlength\cftsectionnumwidth{3em}
-
+\setcounter{tocdepth}{2}
 \tableofcontents
 \indexes
 \twocolumn
