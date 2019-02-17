@@ -4,6 +4,7 @@
 
 <!-- FIXME: replaceIdentity needs to be documented -->
 <!-- FIXME: content for end of padding needs to be repeatable PRNG output -->
+<!-- FIXME: replace xorshift128+ with somewhing more suited (no WELL or MT [MErsene twister]) -> candidate is umontreal-simul/ssj MRG32k3a -->
 <!-- FIXME: escaping of special blocks should only escape backslash at position 0 of payload -->
 <!-- FIXME: extend reply capability with the following properties:
 			- Maximum number of simultaneous valid header serials.
