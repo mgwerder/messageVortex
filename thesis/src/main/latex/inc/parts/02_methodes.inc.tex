@@ -30,7 +30,7 @@ and
 	Everyone shall have the right to freedom of expression; this right shall include freedom to seek, receive and impart information and ideas of all kinds, regardless of frontiers, either orally, in writing or in print, in the form of art, or through any other media of his choice.
 \end{quote}
 
-We imply that not all participants on the internet share this value. As of September \nd{1}, 2016 Countries such as China (signatory), Cuba (signatory), Qatar, Saudi Arabia, Singapore, United Arab Emirates, or Myanmar did not ratify the ICCPR. Other countries such as the United States or Russia did either put local laws in place superseding the ICCPR or made reservations rendering parts of it ineffective. We may therefore safely assume that freedom of speech is not given on the internet, as at least countries explicitly supersede them.
+We imply that not all participants on the internet share this value. As of September \th{1}, 2016 Countries such as China (signatory), Cuba (signatory), Qatar, Saudi Arabia, Singapore, United Arab Emirates, or Myanmar did not ratify the ICCPR. Other countries such as the United States or Russia did either put local laws in place superseding the ICCPR or made reservations rendering parts of it ineffective. We may therefore safely assume that freedom of speech is not given on the internet, as at least countries explicitly supersede them.
 
 Network packets may pass through any point of the world. A sender has no control over it. This lack of control is since every routing device decides on its own for the next hop. This decision may be based on static rules or influenced by third party nodes or circumstances (e.g., BGB, RIP, OSPF\ldots). It is furthermore not possible to detect what way has a packet taken. The common network diagnostic tool \verb|tracert| respectively \verb|traceroute| list a possible list of hops. This list is only correct under certain circumstances (e.g., a stable route for multiple packets or same routing decisions regardless of other properties than the source and destination address). Any Output of these tools may therefore not taken as a log of routing decisions. There is no possibility in standard IP routed networks to foresee a route for a packet nor can it be measured while or after sending. 
 
@@ -270,9 +270,8 @@ and
 
 We define the anonymity set as the set of all possible subjects within a supposed message. The anonymity of a subject towards an observing third party is a crucial factor as it relates directly to our adversary model.
 
-% start revising from here
 \subsection{$k$-Anonymity}
-$k$-anonymity is a term introduced in \cite{k-anonymous:ccs2003}. This work claims that no one might be held responsible for an action if the action itself can only be identified as an action which has been taken by one unidentifiable entity out of $k$ entities.
+$k$-anonymity is a term introduced in \cite{k-anonymous:ccs2003}. This work claims that entities are not responsible for an action if the action itself can be assigned to $k$ entities instead of a single entity.
 
 The Document distinguishes between \textit{Sender $k$-anonymity} where the sending entity can only be narrowed down to a set of $k$ entities and \textit{Receiver $k$-anonymity}. 
 
@@ -298,39 +297,41 @@ The concept is that we have in our case a routing block which might be used up t
 \section{Censorship}
 As definition for censorship we take
 \begin{quote}
-	Censorship: the cyclical suppression, banning, expurgation, or editing by an individual, institution, group or government that enforce or influence its decision against members of the public -- of any written or pictorial materials which that individual, institution, group or government deems obscene and "utterly without redeeming social value," as determined by "contemporary community standards.".
+	Censorship: the cyclical suppression, banning, expurgation, or editing by an individual, institution, group or government that enforce or influence its decision against members of the public -- of any written or pictorial materials which that individual, institution, group or government deems obscene and ``utterly without redeeming social value,'' as determined by ``contemporary community standards.''
 \end{quote}
 
 Which is attributed to Chuck Stone Professor at the School of Journalism and Mass Communication, University of North Carolina. Please note that ``Self Censorship'' (not expressing something in fear of consequences) is a form of censorship too.
 
 In our more technical we reduce the definition to
-
 \begin{quote}
-	Censorship: A systematic suppression, modification, or banning of data in the internet by either removal, or modification of the data, or systematic influencing of entities involved in the processing (e.g. by writing, routing, storing or reading) of this data.
+	Censorship: A systematic suppression, modification, or banning of data on the internet by either removal, or modification of the data, or systematic influencing of entities involved in the processing (e.g., by creating, routing, storing or reading) of this data.
 \end{quote}
+This simplified definition narrows down the location to the internet as it is the only relevant location to us.  Furthermore, it limits the definition to the maximum reach within that system.
 
 \subsection{Censorship Resistant}
-A censorship resistant system is a system which allows the entities of the system and the data itself to be unaffected from censorship. Please note that this does not deny the possibility of censorship per se. It still exists outside the system. But it has some consequences for the system itself.
+A censorship resistant system is a system which allows the entities of the system and the data itself to be unaffected from censorship. Please note that this does not deny the presence of censorship per se. It still exists outside the system. However, it has some consequences for the system itself.
 
 \begin{itemize}
 	\item The system must be either undetectable or out of reach for an entity censoring.\\
 	      The possibility of identifying a protocol or data allows a censoring entity to suppress the use of the protocol itself. 
 	\item The entities involved in a system must be untraceable.\\
-	      Traceable entities would result in means of suppressing real world entities participating in the system.
+	      Traceable entities would result in a mean of suppressing real-world entities participating in the system.
 \end{itemize}
 
 \subsection{Parrot Circumvention}
-In \cite{oakland2013-parrot} \citeauthor{oakland2013-parrot} express that it is easy for a human to determine decoy traffic as the content is easily identifiable as automated content. While this is absolutely true there is a possibility here to generate ``human like'' data traffic to a certain extent. As an adversary may not assume that his messages are replied to, the problem does not boil down to a true turing test. It remains on a ``passive observer turing test'', enabling the potential nodes to choose their messages. In our design this is the job covered by the blending layer.
+In \cite{oakland2013-parrot} \citeauthor{oakland2013-parrot} express that it is easy for a human to determine decoy traffic as the content is easily identifiable as automated content. While this is absolutely true there is a possibility here to generate ``human like'' data traffic to a certain extent. As an adversary may not assume that his messages are replied to, the problem does not boil down to a true Turing test. It remains on a ``passive observer turing test'', enabling the potential nodes to choose their messages. 
+
+In our design, this is the job covered by the blending layer. The blending layer generates these messages. These messages are context-less or remain in the context of previous conversations.
 
 \subsection{Censorship Circumvention}
 Several technical ways have been explored to circumvent censorship. All seem to boil down to the following main ideas:
 \begin{itemize}
 	\item Hide data.
-	\item Copy data to a vast amount of places in order to improve the lifespan of data.
+	\item Copy or distribute data to a vast amount of places in order to improve the lifespan of data.
 	\item Outcurve censorship measurements.
 \end{itemize}
 
-In the following section we look at technologies and ideas dealing with these circumvention technologies.
+In the following section, we look at technologies and ideas dealing with these circumvention technologies.
 
 \subsubsection{Covert Channel and Channel Exploitations}
 The original term of covert channels was defined by \citeauthor{Lampson73anote}\cite{Lampson73anote} as 
@@ -345,27 +346,27 @@ This was defined  in such a way to distinguish the message flow from
 	legitimate channels used by the confined service, such as the bill.
 \end{quote}
 
-The use of a legitimate channel such as SMTP and hide information in this specific channel is not a usage of covert channel. This methode is commonly referenced as channel exploitation.
+The use of a legitimate channel such as SMTP and hide information within this specific channel is not a usage of covert channel. We refer to this as channel exploitation.
 
 \subsubsection{Steganography}
 
-Steganography is an important part when it comes to unlinking information. In \cite{6828087} and \cite{subhedar2014current} we get a very rough overview. As some of the types and algorithms address specific topics of steganography (e.g., some hide from automatic detection and others address a human message stream auditor), we need to carefully choose. In our specific case the main idea is to hide within the sheer mass of common internet traffic. A human auditor is therfore regarded as minor thread. As most of the images sent are jpg images we limmited our serach to algrithms capable of hiding binary data within these files. The number of academically researched options was surprisingly low.
+Steganography is an important part when it comes to unlinking information. In \cite{6828087} and \cite{subhedar2014current} we get a very rough overview. As some of the types and algorithms address specific topics of steganography (e.g., some hide from automatic detection and others address a human message stream auditor), we need to carefully choose. In our specific case, the main idea is to hide within the sheer mass of internet traffic. As a human auditor screening all the messages is a minor thread, we focus on machine-based censorship. Most of the images sent in SMTP are jpg images (see table \ref{tab:emailAttachments} on page \pageref{tab:emailAttachments}). We limited our search to algorithms capable of hiding binary data within these files. The number of academically researched options was surprisingly low.
 
-After reviewing the options we decided to go for F5. F5 was first published in \cite{f5}. It is a reasonably well researched algorithm which attracted many researchers. The original F5 implementation had some detectable issues with artifacts\cite{F5broken} caused by the recompression. This was however only due to  recompression issue in the reference implementation and a corrected reference implementation without the weakness has been provided by the researchers.
+After reviewing the options, we decided to go for F5\cite{f5}. It is a reasonably well-researched algorithm which attracted many researchers. The original F5 implementation had a detectable issue with artifacts\cite{F5broken} caused by the recompression of the image. This issue was caused only due to an issue in the reference implementation, and the researchers have provided a corrected reference implementation without the weakness.
 
 % We use https://github.com/matthewgao/F5-steganography
 
-YASS, as described in \cite{solanki2007yass} was not considered a candidate. Although less researched, it has failed in researches several times \cite{kodovsky2010modern}\cite{li2009steganalysis}. 
+YASS, as described in \cite{solanki2007yass} was not considered a candidate. Although less researched, researchers found multiple weaknesses\cite{kodovsky2010modern,li2009steganalysis}. 
 
 \subsubsection{Timing Channels}
 
-Timing channels are a specialised form of covert channels. In timing channels not the information itself is written into the channel but the usage of the channel is encoded in such a way that it is capable to reflect the data being transferred. As we do not have control over the  timing of the transport channel this is not an option for us.
+Timing channels are a specialized form of covert channels. In timing channels, the information itself hides not within the data of the channel, but the usage of the channel is in such a way, that it is capable of reflecting the data. As we do not have control over the timing of the transport channel, this is not an option for us.
 
 \section{Cryptography}
 
-Whenever dealing with hiding data and maintaining integrity of data cryptography is the first tool in the hand of an implementer. A vast amount of research in this area does already exist. For this work we did not collect a lot of information. We focussed on algorithms either well researched and implemented or research which seem very valuable when putting this work into place. 
+Whenever dealing with obfuscating data and maintaining the integrity of data, cryptography is the first tool in the hand of an implementer. A vast amount of research in this area does already exist. For this work, we did not collect much information. We focussed on algorithms either very well researched and implemented or research which seem very valuable when putting this work into place. 
 
-In symmetric encryption in this paper assumes always that
+In symmetric encryption in this paper always assumes that
 \begin{eqnarray}
 	D^{K_a}\left(E^{K_a}\left(\mathbf{M}\right)\right) & = & \mathbf{M}
 \end{eqnarray} 
