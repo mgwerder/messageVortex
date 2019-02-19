@@ -5,7 +5,7 @@ BEGIN
                 FROM MessageVortex-Helpers
           RequirementBlock
                 FROM MessageVortex-Requirements
-          CipherSpec
+          CipherSpec, PRNGType, MacAlgorithm
                 FROM MessageVortex-Ciphers;
 
   SpecialBlock ::= CHOICE {

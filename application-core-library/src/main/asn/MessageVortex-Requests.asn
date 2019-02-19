@@ -1,6 +1,6 @@
 MessageVortex-Requests DEFINITIONS EXPLICIT TAGS ::=
 BEGIN
-  EXPORTS HeaderRequests;
+  EXPORTS HeaderRequest;
   IMPORTS RequirementBlock
                 FROM MessageVortex-Requirements
           UsagePeriod, NodeSpec

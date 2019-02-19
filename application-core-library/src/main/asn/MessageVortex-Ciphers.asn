@@ -1,6 +1,7 @@
 MessageVortex-Ciphers DEFINITIONS EXPLICIT TAGS ::=
 BEGIN
-  EXPORTS SymmetricKey, AsymmetricKey, MacAlgorithmSpec, CipherSpec;
+  EXPORTS SymmetricKey, AsymmetricKey, MacAlgorithmSpec, 
+          MacAlgorithm, CipherSpec, PRNGType;
 
   CipherSpec ::= SEQUENCE {
       asymmetric [16001] AsymmetricAlgorithmSpec OPTIONAL,
