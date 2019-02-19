@@ -653,11 +653,9 @@ If not further specified by the receiving node an attachment should be the encod
 
 Valid properties may be:
 \begin{itemize}
-	\item $ plainEncoding="("plain:"<numberOfBytesOfOffset>[,<numberOfBytesOfOffset>]*")$
-	\item $ F5Encoding="(F5:"<passwordString>[,<PasswordString>]*")"$
+	\item $plainEncoding="("plain:"<numberOfBytesOfOffset>[,<numberOfBytesOfOffset>]*")$
+	\item $F5Encoding="(F5:"<passwordString>[,<PasswordString>]*")"$
 \end{itemize}
-
-All nodes responding to clear text should at least support $encoding=plain:0,256$.
 
 \section{Client}
 We did not create a Vortex client for sending messages. Instead we used a standard Thunderbird email client pointing to a local SMTP and IMAP Server provided by a Vortex proxy. On the SMTP side Vortex does encapsulate where possible mails into a Vortex message and builds automated route to the recipient. The SMTP part of vortex may be used to encapsulate automatically all messages with a known Vortex identity into a vortex message. On the IMAP side it merges a local Vortex message store with the standard Email repository building a combined view.

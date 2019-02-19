@@ -39,7 +39,7 @@ BEGIN
   }
 
   PRNGType ::= ENUMERATED {
-    xsadd           (1000),
+    mrg32k3a        (1000),
     blumMicali      (1001)
   }
 
