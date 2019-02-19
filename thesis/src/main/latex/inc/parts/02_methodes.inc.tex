@@ -8,33 +8,33 @@
 % *** Methodes
 % ********************************************************************************************************
 \part{Methodes}
-In this part of the thesis we collect requirements, definitions, methods, and existing research relevant to the topic of this thesis. 
+In this part of the thesis, we collect requirements, definitions, methods, and existing research relevant to the topic of this thesis. 
 
-We start with collecting requirements for the protocol.
+We start by collecting requirements for the protocol.
 
-Having the requirements we collect numerous existing technologies on research and implementation level. Each of the technologies is quickly categorized and either further studied or rejected naming the reasons for rejection.
+Having the requirements, we collect numerous existing technologies on research and implementation level. Each of the technologies is quickly categorized and either further studied or rejected naming the reasons for rejection.
 
-The list of technologies and research collected is big in this chapter. All relevant technologies either widely adopted or thoroughly researched should be included in this chapter. All Technologies and research are categorized. Technologies are always referenced through their respective standard. If applicable multiple standards may be part of the analysis. A very quick introduction into the protocol is given and then analyzed for suitability for a specific problem addressed in this work. Research are referenced by a paper. If applicable multiple related researches and papers are collected together into a bigger picture and then analyzed for suitability concerning specific problem. If related to a standard technology, links to that technology are provided where relevant.
+The list of technologies and research collected is big. All relevant technologies either widely adopted or thoroughly researched should be included in this chapter. All Technologies and research are categorized. We reference technologies through their respective standard. If applicable, multiple standards may be part of the analysis. A short introduction into the protocol is given and then analyzed for suitability for a specific problem addressed in this work. Whenever quoting research, we refer to the respective papers. If appropriate, multiple related pieces of research are collected together into a bigger picture and then analyzed. When analyzing we focus on suitability concerning specific problems. If related to standard technology, we link to the respective standards. Transport layer protocols have been shortened to the outcommings in table \ref{tab:protoSuitCrit}. For an extensive analysis see Appendix \ref{app:transportProtocols}
 
-In chapter \ref{sec:genRequirements} we collect the requirements for the protocol. Based on findings in this section we collect in chapter \ref{sec:existingTPP}. In chapter \ref{sec:existingRD} we collect relevant research to the topic. In chapter \ref{sec:appliedMethods} we summarize the identified  methods which will be used. We explain choices and give a rough outline of the protocol baselines.
+In chapter \ref{sec:genRequirements}, we collect the requirements for the protocol. Based on findings in this section we collect in chapter \ref{sec:existingTPP}. In chapter \ref{sec:existingRD}, we collect relevant research about the topic. In chapter \ref{sec:appliedMethods}, we summarize the chosen methods. We explain choices and give a rough outline of the protocol baselines.
 
-\chapter{Requirements for an anonymising Protocol\label{sec:genRequirements}}
-In the following sections we try to elaborate the main characteristics of the anonymising protocol. 
+\chapter{Requirements for an Anonymizing Protocol\label{sec:genRequirements}}
+In the following sections, we elaborate on the main characteristics of the anonymizing protocol. 
 
-The main goal of the protocol is to enable Freedom of speech as defined in Article 19 of the International Covenant on Civil and Political Rights (ICCPR)\cite{iccpr}.
+The primary goal of the protocol is to enable Freedom of speech as defined in Article 19 of the International Covenant on Civil and Political Rights (ICCPR)\cite{iccpr}.
 \begin{quote}
 	everyone shall have the right to hold opinions without interference 
 \end{quote}
 and
 \begin{quote}
-	everyone shall have the right to freedom of expression; this right shall include freedom to seek, receive and impart information and ideas of all kinds, regardless of frontiers, either orally, in writing or in print, in the form of art, or through any other media of his choice.
+	Everyone shall have the right to freedom of expression; this right shall include freedom to seek, receive and impart information and ideas of all kinds, regardless of frontiers, either orally, in writing or in print, in the form of art, or through any other media of his choice.
 \end{quote}
 
-We imply that not all participants in the internet share this value. As of September \nth{1} 2016 Countries such as China (signatory), Cuba (signatory), Quatar, Saudi Arabia, Singapore, United Arab Emirates, or Myanmar did not ratify the ICCPR. Other countries such as United States or Russia did either put local laws in place superseding the ICCPR or made reservations rendering parts of it ineffective. We may therefore safely assume that freedom of speech is not given in the internet as a lot of countries explicitly supersede them.
+We imply that not all participants on the internet share this value. As of September \th{1}, 2016 Countries such as China (signatory), Cuba (signatory), Qatar, Saudi Arabia, Singapore, United Arab Emirates, or Myanmar did not ratify the ICCPR. Other countries such as the United States or Russia did either put local laws in place superseding the ICCPR or made reservations rendering parts of it ineffective. We may therefore safely assume that freedom of speech is not given on the internet, as at least countries explicitly supersede them.
 
-Network packets may pass though any point of the world. A sender has no control over it since every routing device decides on its own for the next hop. This decision may be based on static rules or influenced by third party nodes or circumstances (e.g., BGB, RIP, OSPF\ldots). It is furthermore not possible to detect what way has a packet taken. The common network diagnostic tool \verb|tracert| respectively \verb|traceroute| list a possible list of hops. This list is only correct under certain circumstances (e.g., stable route for multiple packets, or equal routing decisions regardless of other properties than source and destination address) and may not be used as prof of routing decisions. Neither can a route of a packet beeing sent forseen nor can it be measured while or after sending. 
+Network packets may pass through any point of the world. A sender has no control over it. This lack of control is since every routing device decides on its own for the next hop. This decision may be based on static rules or influenced by third party nodes or circumstances (e.g., BGB, RIP, OSPF\ldots). It is furthermore not possible to detect what way has a packet taken. The common network diagnostic tool \verb|tracert| respectively \verb|traceroute| list a possible list of hops. This list is only correct under certain circumstances (e.g., a stable route for multiple packets or same routing decisions regardless of other properties than the source and destination address). Any Output of these tools may therefore not taken as a log of routing decisions. There is no possibility in standard IP routed networks to foresee a route for a packet nor can it be measured while or after sending. 
 
-As an example of the problems analysing a packet route we may look at \verb|traceroute|. The mapage of traceroute of Linux tells us that \verb|traceroute| uses UDP, TCP, or ICMP packets with a short TTL and analyses the IP of the peer sending an TIME\_EXCEEDED (message of the ICMP protocol). This information is then collected and shown as a route. This route may be completely wrong. Some of the possible cases are described in the manpage.
+As an example of the problems analysing a packet route, we may look at \verb|traceroute|. The manpage of traceroute of Linux tells us that \verb|traceroute| uses UDP, TCP, or ICMP packets with a short TTL and analyses the IP of the peer sending an TIME\_EXCEEDED (message of the ICMP protocol). This information is then collected and shown as a route. This route may be completely wrong. Some of the possible cases are described in the manpage.
 
 We cannot be sure that data packets we are sending are passing only through countries accepting the ICCPR to the full extend.
 
@@ -61,17 +61,17 @@ traceroute to www.ietf.org.cdn.cloudflare-dnssec.net (104.20.0.85), 64 hops max
 \end{figure}
 
 \section{Adversary model\label{sec:adversary}}
-For an anonymizing adversary we need to assume someone of the capabilities of a state sponsored actor. State sponsored actors may work these days with allies but will not achieve dominance over all jurisdictional domains.
+For an anonymization adversary we need to assume someone of the capabilities of a state-sponsored actor. State-sponsored actors may work these days with allies but will not achieve dominance over all jurisdictional domains.
 
 For our adversary model we assume the following properties:
 \begin{itemize}
 	\item An adversary will have elaborated technical know-how to attack any infrastructure.
 	\item An adversary may have the capability to monitor traffic at any point in any network within a jurisdiction.
-	\item An adversary may have the capability to freely modify routing information within a jurisdiction.
-	\item An adversary may have the possibility to freely modify even cryptographically strong secured data where a single or a limited number of entities grant any kind of proof of authenticity or privacy.
+	\item An adversary may have the capability to modify routing information within a jurisdiction freely.
+	\item An adversary may have the possibility to freely modify even cryptographically weak secured data where a single or a limited number of entities grant proof of authenticity or privacy.
 	\item An adversary may have the possibility to inject or modify any data on the network of a jurisdiction.
-	\item An adversary may create own nodes of a network and monitor their behaviour and data flow to the maximum possible extent.
-	\item An adversary may force other non-allied nodes to expose their data to him.
+	\item An adversary may create own nodes of a network. He may furthermore monitor their behavior and data flow to the maximum possible extent.
+	\item An adversary may force a limited number of other non-allied nodes to expose their data to him.
 	\item An adversary may have the same access to resources as within its jurisdiction in a limited number of other jurisdictions.
 \end{itemize}
 
@@ -79,19 +79,19 @@ We assume the following goals for an adversary:
 \begin{itemize}
 	\item An adversary may want to disrupt non-authorized communication.
 	\item An adversary may want to read any information passing throughout the internet.
-	\item An adversary may want to build and conserve data about individuals or groups of individuals of their live. This data includes all activities in any part of their live regardless of their obvious fitness for any specific purpose or their correctness.
+	\item An adversary may want to build and conserve data about individuals or groups of individuals of their life. This data includes all activities in any part of their life regardless of their obvious fitness for any specific purpose or their correctness.
 \end{itemize}
 
 \section{Required Properties}
+In this section, we summarize the required properties of an anonymizing network.
 
 \subsection{Anonymizing and Unlinking}
-If we are unable to limit the route of our packets through named jurisdictions we must protect ourselves from unintentionally breaking the law of a foreign country. Therefore we need to be anonymous when sending or receiving messages. Unfortunately most transport protocols (in fact almost all of them such as SMTP, SMS, XMPP, or IP) use a globally unique identifier for senders and receivers which are readable by any party which is capable of reading the packets. 
+If we are unable to limit the route of our packets through named jurisdictions, we must protect ourselves from unintentionally breaking the law of a foreign country. Therefore we need to be anonymous when sending or receiving messages. Unfortunately, most transport protocols (in fact almost all of them such as SMTP, SMS, XMPP, or IP) use a globally unique identifier for senders and receivers which are readable by any party which is capable of reading the packets. 
 
-As a result anonymisation of a sender or a receiver is not simple. If messages are being sent through a relay at least the original sender might be concealed. By combining it with encryption we may even achieve a very simple form of sender and Receiver Pseudonymity. If cascading more relay like infrastructures and combining it with cryptography we might even achieve sender and receiver anonymity. This approach is questionable as shown in \ref{sec:remailer} and \ref{sec:mixnets} and anonymity may be attacked relatively easy.
+As a result, anonymization of a sender or a receiver is not simple. A relay may allow at least the anonymization of the original sender given trust into the proxy. By combining it with encryption, we may even achieve an elementary form of a sender and receiver pseudonymity. If cascading more relay like infrastructures and combining it with cryptography, we might even achieve sender and receiver anonymity. These are the standard approaches in remailers and mixes. Their approaches are questionable as shown in \ref{sec:remailer} and \ref{sec:mixnets}. Attacks onto such systems were carried out in the past. Some of them were successful.
 
 \subsection{Censorship Resistant}
-
-In our scenario in \ref{sec:genRequirements} we defined the adversary as someone with superior access to the network and its infrastructure. Such an adversary might attack a message flow in several ways:
+In our scenario in \ref{sec:genRequirements}, we defined the adversary as someone with superior access to the network and its infrastructure. Such an adversary might attack a message flow in several ways:
 \begin{itemize}
 	\item Identify sender
 	\item Identify recipient
@@ -99,32 +99,28 @@ In our scenario in \ref{sec:genRequirements} we defined the adversary as someone
 	\item Disrupt communication fully or partially
 \end{itemize}
 
-We furthermore have to assume that all actions taken by a potential adversary are not subject to legal prosecution. This is due to the fact that an adversary trying to establish censorship may be part of a jurisdictions government. We may safely assume that there are legal exceptions in some jurisdiction for such entities.
+We furthermore have to assume that all actions taken by a potential adversary are not subject to legal prosecution. This assumption based on the fact that an adversary trying to establish censorship may be part of a jurisdictions government. We may safely assume that there are legal exceptions in some jurisdiction for such entities.
 
-In order to be able to withstand an adversary outlined above, the message content needs to be unidentifiable by attributes or content. Whereas ``Attributes'' include any meta information including, but not limited to, frequency, timing, message size, sender, protocol, ports, or recipient.
+In order to be able to withstand an adversary outlined above, the message content needs to be unidentifiable by attributes or content. ``Attributes'' include any meta information including, but not limited to, frequency, timing, message size, sender, protocol, ports, or recipient.
 
 \subsection{Controllable trust}
-
 If we want to control trust we have to conclude that:
 
 \begin{enumerate}
-	\item Trust in an infrastructure is given due to the fact that it is under full control of either the sender or the recipient.
-	\item Trust in an infrastructure may not be necessary as the infrastructure is ideally unable to misuse data passed through it.
+	\item Trust in infrastructure is given because it is under full control of either the sender or the recipient.
+	\item Trust in infrastructure may not be necessary as it is ideally unable to misuse data passed through it.
 \end{enumerate}
 
-In this thesis we work with both cases. We will however never trust a third party apart from sender and recipient.
+In this thesis, we work with both cases. We will however never trust a third party apart from sender and recipient.
 
 \subsection{Reliable}
-
-Any message sending protocol needs to be reliable in its functionality. If means of message transport are unreliable users tend to use different means for communication. 
+Any message sending protocol needs to be reliable in its functionality. If means of message transport are unreliable users tend to use differentAny message-sending protocol needs to be reliable in its functionality. If the means of message transport are unreliable, users tend to use different means for communication. 
 
 \subsection{Diagnosable}
-
-Reliability is somehow linked to transparent behavior. This due to the fact that if something is generating a constant behavior, but we are unable to determine the reason for it (i.e. if we are expecting a different behavior) we normally assume a malfunction. Therefore ``Reliable'' means not only stable by its behaviour. It means also diagnosable. User perception will not be ``Reliable'' if he is not able to determine causes for differences in observed and expected behavior.
+Reliability is somehow linked to transparent behavior. This due to the fact that if something is generating a constant behavior, but we are unable to Transparent behavior is a prerequisite for reliability if there is no other trustworthy instance. If something is generating a  behavior, but we are unable to determine the reason for it (i.e., if we are expecting a different behavior), we usually assume a malfunction. Therefore ``reliable'' means not only stable by its behavior. It also means diagnosable. A users perception will not be ``reliable'' if he is not able to determine causes for differences in observed and expected behavior.
 
 \subsection{Available}
-
-Availability has two meanings in this context which do differ. A technology is available if\ldots
+Availability has two meanings in this context which do differ. Technology is available if\ldots
 
 \begin{enumerate}
 	\item a sender and a recipient have (or may have) the means of using it.
@@ -133,11 +129,10 @@ Availability has two meanings in this context which do differ. A technology is a
 
 The first meaning tells us that a protocol must run independently from an infrastructure the user has commonly ready.
 
-The second meaning tells us that messages must always be capable of flowing from the sender to the recipient. As infrastructure may fail at any time the protocol must offer the possibilities to send messages through alternate routes. This sounds easy and many protocols implement such redundancies already. However, taking into account that sender and recipient is not known to a routing node this is a goal hard to achieve.
+The second meaning tells us that messages must always be capable of flowing from the sender to the recipient. As infrastructure may fail at any time, the protocol must offer the possibilities to send messages through alternate routes. Alternative routes are simple to achieve, and many protocols implement such redundancies already. However, taking into account that sender and recipient are not known to a routing node this is a goal hard to achieve.
 
 \subsection{Identifiable Sender}
-
-A message system offering unlinkability may offer sender anonymity. If so a sender should be identifiable so that a classification of senders is possible at any time.
+A message system offering unlinkability may offer sender anonymity. If so a sender should be identifiable so that classification of senders is possible at any time.
 
 \section{Rough draft of Protocol}
 
@@ -149,68 +144,61 @@ In order to fulfill the criteria given above, we define a very rough idea of the
 	\label{fig:roughProtocolDesign}
 \end{figure}	
 
-The protocol itself should send messages through a well known transport protocol (``Transport'') which will be used for our messages. The messages will be hidden within regular messages already using that transport layer. In an ideal implementation messages sent by our protocol should be indistinguishable from regular messages (by computers and humans). In order to achieve this particular task we introduce a ``blending layer''. This layer is normally specific to the underlying transport layer and may vary.
+The protocol itself should send messages through a well-known transport protocol (``Transport''). We use this protocol for transporting our messages to the next peer. The messages will be hidden within regular messages already using that transport layer. In an ideal implementation, any messages sent by our protocol should be indistinguishable from regular messages (by computers and humans). In order to achieve this particular task, we introduce a ``blending layer''. This layer usually is specific to the underlying transport layer and may vary.
 
-The ``routing layer'' is the layer that receives and sends messages. It parses only the core protocol and the data processed here is completely independent from the underlying transport layer.
+The ``routing layer'' is the layer that receives and sends messages. It parses only the core protocol and the data processed here is entirely independent of the underlying transport layer.
 
-The ``accounting layer'' disassembles the received messages into its parts. It then recomposes and stores the messages for further routing. In order to avoid spaming over this media some kind of accounting will be involved. 
+The ``accounting layer'' disassembles the received messages into its parts. It then recomposes and stores the messages for further routing. In order to avoid spamming over this media, some accounting will be involved. 
 
-The messages passed through such a protocol stack are ononised to offer anonymity from evil nodes. Furthermore a node should be unable to tell whether a message was intended for a specific node or not. This means in consequence: all nodes including sender and recipient should handle messages the same way.
+The messages passed through such a protocol stack are onionised to offer anonymity from evil nodes. Furthermore, a node should be unable to tell whether a message was intended for a specific node or not. In consequence, we have to guarantee that all nodes including sender and recipient offer the same functions and are indistinguishable.
 
-In order to mitigate size based attacks (an onionised packet looses permanently data on its way) we introduce operations which may be applied to a valid message as well as to decoy traffic. The operations should be able to increase and decrease in size without being able to tell if this message is destined to a target or not. Operations not carried out due to missing data might be either intentionally or a malfunction.
+In order to mitigate size based attacks (an onionised packet typically loses data on its way), we introduce operations which may be applied to a valid message as well as to decoy traffic. The operations should be able to increase and decrease in size without being able to tell if this message is destined to a target or not. Operations not carried out due to missing data might be either intentionally or a malfunction.
 
 The defined message operations are as follows:
-
 \begin{itemize}
 	\item Split a message block into two parts of variable size or join them.\\
 	      This operation may be used to fan out decoy traffic, to cut off decoy data, or to send multiple parts of a message through different routing nodes.
-	\item Encrypt a block with a given key.      
-	\item Decrypt a block with a given key.
-	\item Add redundancy information to a stream and send it through multiple channels.
-	\item Recover a partially received message according to the redundancy operation.
+	\item Encrypt or decrypt a block with a given key.      
+	\item Add redundancy information to a stream and send it through multiple channels or recover a partially received message according to the redundancy operation.
 \end{itemize}
 
 To avoid making this system attractive to UBE a control should be introduced making mass mailings more expensive. The system works as follows:
 
 \begin{itemize}
-	\item Routing nodes may offer their services at a cost. These ``costs'' are typically paid by solving crypto puzzles.
+	\item Routing nodes may offer their services at a cost. A participating node may pay a fee or solve a crypto-puzzle to pay for these costs.
 	\item The following operations may be cost effective:
 	\begin{itemize}
-		\item Getting a discardable identity on a node (prerequisite for accounting).
-		\item Allowance to route a number of messages through the node (cost per outgoing message) in a specified interval. This allowance is always linked to a discardable identity.
-		\item Allowance to route a specific size of bytes through the node (cost per outgoing byte) in a specified time interval. This allowance is always linked to a discardable identity.
+		\item Getting a ephemeral identity on a node (prerequisite for accounting; See section \ref{sec:ephemeralIdentity}).
+		\item Allowance for an ephemeral identity to route a maximum number of messages and bytes in a specified interval through a node.
 		\item Offer information about the known routing network by the node.
-		\item Offer information about the identities current quota.
+		\item Offer information about the current quota of a ephemeral identity.
 	\end{itemize}
 \end{itemize}
-All quotas require accounting. In order to minimize accounting all these quotas must be assigned a time interval in which they are effective. this guarantees that quota data is not growing indefinitely. It is up to the node to decide what time duration is still acceptable.
+In order to minimize accounting, all quotas must are limited to a time interval. Such time-bound quotas guarantee that quota data of an accounting layer does not grow indefinitely. It is up to the node to decide what time duration is still acceptable.
 
 In order to limit the possibility to Denial of Service (DoS) a node by overloading it the following precautions are taken:
 \begin{itemize}
 	\item The message is built in such a way that message building is far more complex than message routing.
-	\item Messages may be decrypted in parts to minimize the amount of work required to decide whether the full processing of the message will be done or not.
-	\item The usage of inefficient operations (e.g. asymmetric encryption) is minimized.
+	\item Messages may be processed in parts to minimize the amount of work required to decide whether the full processing of the message will be done or not.
+	\item The usage of inefficient operations (e.g., asymmetric encryption) is minimized.
 	\item The server may limit specific operations.
 \end{itemize}
 
-\subsection{Ephemeral Identity}
-In this work we use accounting on various levels. While we are dealing with anonymity accounting has still to be linked to some kind of identity for this reason we are introducing a term called ``ephemeral identity''.
+\subsection{Ephemeral Identity\label{sec:ephemeralIdentity}}
+We use accounting on various levels. While we are dealing with anonymity accounting has still to be linked to some an ephemeral identity for this reason we are introducing a term called ``ephemeral identity''.
 
 \begin{quote}
-	A Ephemeral identity is a temporary identity which is defined by the following attributes:
+	An Ephemeral identity is a temporary identity which is defined by the following attributes:
 	\begin{itemize}
 		\item It is an artificial identity represented by a public key.
-		\item It is only used for a short timespan.
-		\item It is not linkable to another identity.
+		\item It is only used for a short, limited time-span.
+		\item It is not linkable to another identity of any kind.
 	\end{itemize}
 \end{quote}
-
-The key in this definition is the last point is crucial and at the same time hard to achieve. In the protocol any node may request from another node to accept a new ephemeral identity with a specified quota and a limited lifespan. The node accepting the identity may link its acceptance to the solving of a proof of work puzzle.
+The key in this definition is the last point. It is crucial and at the same time hard to achieve. In the protocol, any node may request from another node to accept a new ephemeral identity with a specified quota and a limited lifespan. The node accepting the identity may link its acceptance to the solving of a proof of work puzzle.
 
 \section{Rough Draft of Messages}
-
 For our protocol we assume the following outline for a message:
-
 \begin{itemize}
 	\item Header block\\ 
 	      This block contains an ephemeral identity of the sender on the message processing host. It allows the host to decide whether he is willing to process the rest of the message or not. It is important to know that the identity block contains a symmetric key for decryption of the main block and a secret repeated in the main block. This prevents that a malicious node may exchange the main block.
@@ -218,24 +206,23 @@ For our protocol we assume the following outline for a message:
 	      This block contains all information regarding routing and processing data. It furthermore contains the payload data which may or may not contain messages.
   	      \begin{itemize}
 		    \item Routing Blocks\\
-		          This block contains information of which data block should be sent to what recipient. It furthermore may contain instruction for processing the data blocks and routing/reply blocks for subsequent processing. Another important thing to note is that routing blocks and payload data may arrive on two different paths to the target node.
+		          This block contains routing information for all blocks. It furthermore may contain instruction for processing the data blocks and routing/reply blocks for subsequent processing. Routing blocks are not necessarily related to the payload in the same message. They may pick up payloads from other blocks.
 		    \item payload Block\\
-		          These Blocks form the payload data. It might contain a message, parts of a message or decoy material.
+		          These Blocks form the payload data. They might contain a message, parts of a message or decoy material.
 	      \end{itemize}      
 \end{itemize}
 
-The message is picked up from the transport layer and extracted in the blending layer. Processing is then split. First the message is authenticated extracting the identity block. The accounting layer checks for authorization of further processing. If authorized the routing layer adds the routing blocks to the identity specific  workspace. As soon as the time specified in the routing block arrises, the rooting block is processed and new messages are assembled according to the instructions. The accounting layer keeps track of the quotas regarding the new assembled messages. 
+The message is picked up from the transport layer by the blending layer. This layer extracts the contained data and passes it to the routing layer. The routing layer extracts the message by extracting the ephemeral identity block. The accounting layer is called to authorize further processing for the identity. If authorized, the routing layer adds the routing blocks to the identity-specific workspace. As soon as the time specified in the routing block arrises, the routing block is processed by following the operations specified within. New messages are assembled and sent. The accounting layer keeps track of the quota regarding the new assembled messages. 
 
 \chapter{Existing Transport Layer Protocols \label{sec:existingTPP}}
-
-In this chapter we have a look at various available transport layer protocol. The main goal is to identify strong candidates as a transport layer. Main focus lies on the following criterias:
+In this chapter, we look at the various transport layer protocols. The primary goal is to identify strong candidates as a transport layer. The main focus lies on the following criteria:
 \begin{itemize}
 	\item Widely adopted (Ct1)\\
 	      The more widely adopted and used a protocol is the harder it is for an adversary to monitor (due to the sheer mass), filter or block the protocol (censorship resistance).
 	\item Reliable (Ct2)\\
-	      Message transport between peers should be reliable. As messages may arrive anytime from everywhere we don not have means to synchronize the peer partners on a higher level without investing a considerable effort. In order to avoid this effort we do look for inherently reliable protocols.
+	      Message transport between peers should be reliable. As messages may arrive anytime from everywhere, we do not have means to synchronize the peer partners on a higher level without investing a considerable effort. In order to avoid this effort, we do look for inherently reliable protocols.
 	\item Symmetrical built (Ct3)\\
-	      The transport layer should be built on a peer to peer base. All servers implement a generic routing which requires no prior knowledge of possible targets. This criteria neglects centralised infrastructures. This criteria may be dropped, assuming that routing is done by the blending layer, or a specialized transport layer overlay
+	      The transport layer should rely on a peer to peer base. All servers implement a generic routing which requires no prior knowledge of all possible targets. This criterion neglects centralized infrastructures. This criterion may be dropped assuming that the routing layer or a specialized transport overlay is responsible for routing.
 \end{itemize}
 
 \section{Roundup for Transport Protocols}
@@ -259,21 +246,19 @@ In this chapter we have a look at various available transport layer protocol. Th
 	\label{tab:protoSuitCrit}
 \end{table}
 
-In table \ref{tab:protoSuitCrit} we sum up all previously analysed protocols. We use ``$\checkmark$'' for a fulfilled criteria, ``\textasciitilde'' for a partially fulfilled criteria, and ``$\times$'' for a not fulfilled criteria. This overview shows in compact form which protocols have been identified as strong candidates for use as a transport layer in terms of an anonymising protocol. 
+In table \ref{tab:protoSuitCrit} we sum up all previously analyzed protocols. We use ``$\checkmark$'' for a fulfilled criterion, ``\textasciitilde'' for a partially fulfilled criterion, and ``$\times$'' for a not fulfilled criterion. This overview shows in compact form protocols identified as strong candidates for use as a transport layer in terms of an anonymizing protocol. 
 
-This table shows that strong identified candidates are SMTP (being already a message sending protocol on asynchronous base) and XMPP (a real time chat protocol able to attach files. This protocol features furthermore end-to-end encryption and signing). Both have the advantages that they are really wide adopted in the internet and do support additionally advanced content (such as alternatives or attachments).
+This table shows that strong identified candidates are SMTP (being already a message sending protocol on asynchronous base) and XMPP (a real-time chat protocol able to attach files. This protocol features end-to-end encryption and signing furthermore). Both have the advantages that they are widely adopted on the internet and do additional support content (such as alternatives or attachments).
 
 \footnotetext[1]{omitted due to message size being too small}
 
-If assuming an implemented transport layer on the MessageVortex protocol side, HTTP and FTP may be considered valid candidates as well.
-
+If assuming an implemented transport layer overlay on the MessageVortex protocol side, HTTP and FTP are suitable candidates as well.
 
 \chapter{Existing Research and Implementations on the Topic \label{sec:existingRD}}
-
 \section{Anonymity Research and Protocols}
+\subsection{Definition of Anonymity}
 \DeclareFixedFootnote{\omitted}{footnotes omitted in quote}
-
-As Anonymity we take the definition as specified in \cite{anon_terminology}.
+As definition for Anonymity we take the definition as specified in \cite{anon_terminology}.
 
 \begin{quote}
 	Anonymity of a subject means that the subject is not identifiable within a set of subjects, the anonymity set.\omitted
@@ -283,12 +268,10 @@ and
 	Anonymity of a subject from an attacker's perspective means that the attacker cannot sufficiently identify the subject within a set of subjects, the anonymity set.\omitted
 \end{quote}
 
-Whereas the anonymity set is defined as the set of all possible subjects.
-
-Especially the anonymity of a subject towards an observing third party is very important to this paper. 
+We define the anonymity set as the set of all possible subjects within a supposed message. The anonymity of a subject towards an observing third party is a crucial factor as it relates directly to our adversary model.
 
 \subsection{$k$-Anonymity}
-$k$-anonymity is a term introduced in \cite{k-anonymous:ccs2003}. This work claims that no one might be held responsible for an action if the action itself can only be identified as an action which has been taken by one unidentifiable entity out of $k$ entities.
+$k$-anonymity is a term introduced in \cite{k-anonymous:ccs2003}. This work claims that entities are not responsible for an action if the action itself can be assigned to $k$ entities instead of a single entity.
 
 The Document distinguishes between \textit{Sender $k$-anonymity} where the sending entity can only be narrowed down to a set of $k$ entities and \textit{Receiver $k$-anonymity}. 
 
@@ -314,39 +297,41 @@ The concept is that we have in our case a routing block which might be used up t
 \section{Censorship}
 As definition for censorship we take
 \begin{quote}
-	Censorship: the cyclical suppression, banning, expurgation, or editing by an individual, institution, group or government that enforce or influence its decision against members of the public -- of any written or pictorial materials which that individual, institution, group or government deems obscene and "utterly without redeeming social value," as determined by "contemporary community standards.".
+	Censorship: the cyclical suppression, banning, expurgation, or editing by an individual, institution, group or government that enforce or influence its decision against members of the public -- of any written or pictorial materials which that individual, institution, group or government deems obscene and ``utterly without redeeming social value,'' as determined by ``contemporary community standards.''
 \end{quote}
 
 Which is attributed to Chuck Stone Professor at the School of Journalism and Mass Communication, University of North Carolina. Please note that ``Self Censorship'' (not expressing something in fear of consequences) is a form of censorship too.
 
 In our more technical we reduce the definition to
-
 \begin{quote}
-	Censorship: A systematic suppression, modification, or banning of data in the internet by either removal, or modification of the data, or systematic influencing of entities involved in the processing (e.g. by writing, routing, storing or reading) of this data.
+	Censorship: A systematic suppression, modification, or banning of data on the internet by either removal, or modification of the data, or systematic influencing of entities involved in the processing (e.g., by creating, routing, storing or reading) of this data.
 \end{quote}
+This simplified definition narrows down the location to the internet as it is the only relevant location to us.  Furthermore, it limits the definition to the maximum reach within that system.
 
 \subsection{Censorship Resistant}
-A censorship resistant system is a system which allows the entities of the system and the data itself to be unaffected from censorship. Please note that this does not deny the possibility of censorship per se. It still exists outside the system. But it has some consequences for the system itself.
+A censorship resistant system is a system which allows the entities of the system and the data itself to be unaffected from censorship. Please note that this does not deny the presence of censorship per se. It still exists outside the system. However, it has some consequences for the system itself.
 
 \begin{itemize}
 	\item The system must be either undetectable or out of reach for an entity censoring.\\
 	      The possibility of identifying a protocol or data allows a censoring entity to suppress the use of the protocol itself. 
 	\item The entities involved in a system must be untraceable.\\
-	      Traceable entities would result in means of suppressing real world entities participating in the system.
+	      Traceable entities would result in a mean of suppressing real-world entities participating in the system.
 \end{itemize}
 
 \subsection{Parrot Circumvention}
-In \cite{oakland2013-parrot} \citeauthor{oakland2013-parrot} express that it is easy for a human to determine decoy traffic as the content is easily identifiable as automated content. While this is absolutely true there is a possibility here to generate ``human like'' data traffic to a certain extent. As an adversary may not assume that his messages are replied to, the problem does not boil down to a true turing test. It remains on a ``passive observer turing test'', enabling the potential nodes to choose their messages. In our design this is the job covered by the blending layer.
+In \cite{oakland2013-parrot} \citeauthor{oakland2013-parrot} express that it is easy for a human to determine decoy traffic as the content is easily identifiable as automated content. While this is absolutely true there is a possibility here to generate ``human like'' data traffic to a certain extent. As an adversary may not assume that his messages are replied to, the problem does not boil down to a true Turing test. It remains on a ``passive observer turing test'', enabling the potential nodes to choose their messages. 
+
+In our design, this is the job covered by the blending layer. The blending layer generates these messages. These messages are context-less or remain in the context of previous conversations.
 
 \subsection{Censorship Circumvention}
 Several technical ways have been explored to circumvent censorship. All seem to boil down to the following main ideas:
 \begin{itemize}
 	\item Hide data.
-	\item Copy data to a vast amount of places in order to improve the lifespan of data.
+	\item Copy or distribute data to a vast amount of places in order to improve the lifespan of data.
 	\item Outcurve censorship measurements.
 \end{itemize}
 
-In the following section we look at technologies and ideas dealing with these circumvention technologies.
+In the following section, we look at technologies and ideas dealing with these circumvention technologies.
 
 \subsubsection{Covert Channel and Channel Exploitations}
 The original term of covert channels was defined by \citeauthor{Lampson73anote}\cite{Lampson73anote} as 
@@ -361,27 +346,27 @@ This was defined  in such a way to distinguish the message flow from
 	legitimate channels used by the confined service, such as the bill.
 \end{quote}
 
-The use of a legitimate channel such as SMTP and hide information in this specific channel is not a usage of covert channel. This methode is commonly referenced as channel exploitation.
+The use of a legitimate channel such as SMTP and hide information within this specific channel is not a usage of covert channel. We refer to this as channel exploitation.
 
 \subsubsection{Steganography}
 
-Steganography is an important part when it comes to unlinking information. In \cite{6828087} and \cite{subhedar2014current} we get a very rough overview. As some of the types and algorithms address specific topics of steganography (e.g., some hide from automatic detection and others address a human message stream auditor), we need to carefully choose. In our specific case the main idea is to hide within the sheer mass of common internet traffic. A human auditor is therfore regarded as minor thread. As most of the images sent are jpg images we limmited our serach to algrithms capable of hiding binary data within these files. The number of academically researched options was surprisingly low.
+Steganography is an important part when it comes to unlinking information. In \cite{6828087} and \cite{subhedar2014current} we get a very rough overview. As some of the types and algorithms address specific topics of steganography (e.g., some hide from automatic detection and others address a human message stream auditor), we need to carefully choose. In our specific case, the main idea is to hide within the sheer mass of internet traffic. As a human auditor screening all the messages is a minor thread, we focus on machine-based censorship. Most of the images sent in SMTP are jpg images (see table \ref{tab:emailAttachments} on page \pageref{tab:emailAttachments}). We limited our search to algorithms capable of hiding binary data within these files. The number of academically researched options was surprisingly low.
 
-After reviewing the options we decided to go for F5. F5 was first published in \cite{f5}. It is a reasonably well researched algorithm which attracted many researchers. The original F5 implementation had some detectable issues with artifacts\cite{F5broken} caused by the recompression. This was however only due to  recompression issue in the reference implementation and a corrected reference implementation without the weakness has been provided by the researchers.
+After reviewing the options, we decided to go for F5\cite{f5}. It is a reasonably well-researched algorithm which attracted many researchers. The original F5 implementation had a detectable issue with artifacts\cite{F5broken} caused by the recompression of the image. This issue was caused only due to an issue in the reference implementation, and the researchers have provided a corrected reference implementation without the weakness.
 
 % We use https://github.com/matthewgao/F5-steganography
 
-YASS, as described in \cite{solanki2007yass} was not considered a candidate. Although less researched, it has failed in researches several times \cite{kodovsky2010modern}\cite{li2009steganalysis}. 
+YASS, as described in \cite{solanki2007yass} was not considered a candidate. Although less researched, researchers found multiple weaknesses\cite{kodovsky2010modern,li2009steganalysis}. 
 
 \subsubsection{Timing Channels}
 
-Timing channels are a specialised form of covert channels. In timing channels not the information itself is written into the channel but the usage of the channel is encoded in such a way that it is capable to reflect the data being transferred. As we do not have control over the  timing of the transport channel this is not an option for us.
+Timing channels are a specialized form of covert channels. In timing channels, the information itself hides not within the data of the channel, but the usage of the channel is in such a way, that it is capable of reflecting the data. As we do not have control over the timing of the transport channel, this is not an option for us.
 
 \section{Cryptography}
 
-Whenever dealing with hiding data and maintaining integrity of data cryptography is the first tool in the hand of an implementer. A vast amount of research in this area does already exist. For this work we did not collect a lot of information. We focussed on algorithms either well researched and implemented or research which seem very valuable when putting this work into place. 
+Whenever dealing with obfuscating data and maintaining the integrity of data, cryptography is the first tool in the hand of an implementer. A vast amount of research in this area does already exist. For this work, we did not collect much information. We focussed on algorithms either very well researched and implemented or research which seem very valuable when putting this work into place. 
 
-In symmetric encryption in this paper assumes always that
+In symmetric encryption in this paper always assumes that
 \begin{eqnarray}
 	D^{K_a}\left(E^{K_a}\left(\mathbf{M}\right)\right) & = & \mathbf{M}
 \end{eqnarray} 
@@ -963,7 +948,6 @@ The downsides of this puzzles are that it may be calculated in parallel. This al
 \end{itemize}
 
 This puzzle is a typical CPU bound puzzle compensating a lot of the drawbacks of \cite{aura2000resistant} and \cite{juels1999client} mentioned in the sections before. First it offers a potential verification in batches under the assumption that all solutions within the batch are correct. Secondly it is non-parallelizable. There is very little information to be stored on the server side and non of the information has a lifetime which is longer than the puzzle.
-
 
 \subsubsection{Hinted Hash Puzzle} 
 In \cite{1498523} the authors \citeauthor{1498523} proposed a protocol and is closely related to \cite{aura2000resistant}. The protocol itself is working as follows:
