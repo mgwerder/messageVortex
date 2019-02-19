@@ -46,7 +46,7 @@
                 MessageVortex Protocol specifies messages embedded within existing transfer protocols such as SMTP or XMPP to send them anonymously from peer to peer.
             </t>
             <t>
-				The protocol outperforms other protocols by decoupling transport from  the final transmitter and receiver party. There is no trust put into any infrastructure except for the infrastructure of the sending and receiving party of a message. The creator of the routing block has full control over the message flow. Routing nodes gain no non-obvious knowledge about messages even when collaboratings. Third-party anonymity is always achieved. Furthermore, the protocol allows achieving either sender or receiver anonymity.
+        The protocol outperforms other protocols by decoupling transport from  the final transmitter and receiver party. There is no trust put into any infrastructure except for the infrastructure of the sending and receiving party of a message. The creator of the routing block has full control over the message flow. Routing nodes gain no non-obvious knowledge about messages even when collaboratings. Third-party anonymity is always achieved. Furthermore, the protocol allows achieving either sender or receiver anonymity.
             </t>
         </abstract>
     </front>
@@ -101,11 +101,11 @@
                 <t>
                     We use the term 'node' to describe any system connected to other nodes, and supporting the MessageVortex Protocol. A 'node address' is typically an email address, an XMPP address, or any other transport protocol identity supporting the MessageVortex protocol. Any address SHOULD include a public part of an 'identity key' allowing to transmit messages safely. One or more addresses MAY belong to the same node.
                 </t>
- 				<section anchor="entities_blocks" title="Blocks">
-					<t>
-						We use the term 'block' for an ASN.1 sequence in a transmitted message. We embed messages in the transport protocol. These messages may have any size. 
-					</t>
-				</section>
+        <section anchor="entities_blocks" title="Blocks">
+          <t>
+            We use the term 'block' for an ASN.1 sequence in a transmitted message. We embed messages in the transport protocol. These messages may have any size. 
+          </t>
+        </section>
                 <section anchor="entities_node_spec" title="NodeSpec">
                     <t>
                         A nodeSpec block as specified in <xref target="asnOne_helpers"/> expresses in a unified format an addressable node. The nodeSpec contains a reference to the routing protocol, the routing address within this protocol and the keys required for addressing the node. This RFC specifies transport layers for XMPP and SMTP. Adding transport layers requires to write an extension to this RFC.
@@ -125,8 +125,8 @@ smtpUrl           = "vortexsmtp://" smtpAlternateSpec
                             </figure>
                         </t>
                         <t>
-                        	This representation does not support quoted local part SMTP addresses.
-                        </t>	
+                          This representation does not support quoted local part SMTP addresses.
+                        </t>  
                     </section>
                     <section anchor="entities_node_spec_spec" title="NodeSpec for XMPP nodes">
                         <t>
@@ -256,7 +256,7 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
             </section>
             <section anchor="entities_transport_address" title="Transport Address">
                 <t>
-                	  We use the term 'transport address' for the token required to address the next immediate node on the transport layer.  An email transport layer would have SMTP addresses such as 'vortex@example.com' as transport address.
+                    We use the term 'transport address' for the token required to address the next immediate node on the transport layer.  An email transport layer would have SMTP addresses such as 'vortex@example.com' as transport address.
                 </t>
             </section>
             <section anchor="entities_identity" title="Identity">
@@ -278,15 +278,15 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
                     </t>
                     <t>
                         <list style="symbols">
-                        	<t>An asymmetric keypair to represent the identity</t>
-                        	<t>A validity time of the identity</t>
+                          <t>An asymmetric keypair to represent the identity</t>
+                          <t>A validity time of the identity</t>
                         </list>
                         
                     </t>
                 </section>
                 <section anchor="entities_identity_official" title="Official Identity">
                     <t>
-                      	An official identity may have the following items assigned:
+                        An official identity may have the following items assigned:
                     </t>
                     <t>
                         <list style="symbols">
@@ -315,15 +315,15 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
                 </t>
             </section>
             <section anchor="entities_murb" title="Multi-Use Reply Blocks">
-				<t>
-					We use the term 'multi-use reply blocks' (MURB) for a special routing block sent to a receiver of a message or request. A sender may use such a block once or several times to reply to the sender linked to the ephemeral identity. It is possible to achieve sender anonymity using these blocks.
-				</t>
-			</section>
+        <t>
+          We use the term 'multi-use reply blocks' (MURB) for a special routing block sent to a receiver of a message or request. A sender may use such a block once or several times to reply to the sender linked to the ephemeral identity. It is possible to achieve sender anonymity using these blocks.
+        </t>
+      </section>
         </section>
 
         <section anchor="layer_overview" title="Layer Overview">
             <t>
-            	The protocol is designed in four layers as shown in <xref target="fig_layer_overview" />.
+              The protocol is designed in four layers as shown in <xref target="fig_layer_overview" />.
             </t>
 
             <figure anchor="fig_layer_overview" title="Layer overview">
@@ -491,6 +491,8 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
                         <t>CAMELLIA128 (see <xref target="RFC3657"/> chapter 3 for Camellia implementation details)</t>
                         <t>CAMELLIA256</t>
                     </list>
+                </t>    
+                <t>
                     A node SHOULD support any standardized, bigger key size than the smallest key.
                 </t>
                 <t>A node MAY support Twofish ciphers (see <xref target="TWOFISH"/>).</t>
@@ -600,34 +602,34 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
                     <t>
                         A node SHOULD offer at least one PLAIN blending method for incoming Vortex messages. A node may offer multiple offsets for incoming Vortex messages.
                     </t>
-	                <t>
-						A plain blending is specified as follows: 
-					</t>
+                  <t>
+            A plain blending is specified as follows: 
+          </t>
                     <t>
-						<figure>
-							<sourcecode type="abnf"><![CDATA[
-								plainEncoding = "("plain:" <numberOfBytesOfOffset> [ "," <numberOfBytesOfOffset> ]* ")"
-							]]></sourcecode>
-						</figure>
-					</t>
+            <figure>
+              <sourcecode type="abnf"><![CDATA[
+                plainEncoding = "("plain:" <numberOfBytesOfOffset> [ "," <numberOfBytesOfOffset> ]* ")"
+              ]]></sourcecode>
+            </figure>
+          </t>
                 </section>
                 <section anchor="blending_general_F5" title="F5 embedding into attachments">
                     <t>
                         For F5, a blending layer embeds a VortexMessage into a jpeg file according to <xref target="F5"/>. The password for blending may be publicly known. A routing node MAY advertise multiple passwords. The use of F5 adds roughly a tenfold of transfer volume to the message. A routing block building node SHOULD only use F5 blending where appropriate.
                     </t>
-	                <t>
-	                	A blending in F5 is specified as follows: 
-                	</t>
+                  <t>
+                    A blending in F5 is specified as follows: 
+                  </t>
                     <t>
-                	    <figure>
-        		        	<sourcecode type="abnf"><![CDATA[
-        		        			f5Encoding = "(F5:" <passwordString> [ "," <PasswordString> ]* ")"
-        	    	    	]]></sourcecode>
-    	            	</figure>
-		            </t>
-	                <t>
-						Whereas commas or backslashes in passwords MUST be escaped with a backslash. Closing brackets are treated as normal password character unless they are the last character of the encoding specification string.
-					</t>
+                      <figure>
+                      <sourcecode type="abnf"><![CDATA[
+                          f5Encoding = "(F5:" <passwordString> [ "," <PasswordString> ]* ")"
+                      ]]></sourcecode>
+                    </figure>
+                </t>
+                  <t>
+            Whereas commas or backslashes in passwords MUST be escaped with a backslash. Closing brackets are treated as normal password character unless they are the last character of the encoding specification string.
+          </t>
                 </section>
             </section>
             <section anchor="blending_smtp" title="Blending into an SMTP layer">
@@ -717,6 +719,8 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
                             <t>All expired identities.</t>
                             <t>All expired replay protections.</t>
                         </list>
+                    </t>
+                    <t>    
                         Note that maxProcessTime reflects the number of seconds since the arrival of the last octet of the message at the transport layer facility. A node SHOULD NOT take additional processing time (e.g., for anti-UBE or anti-virus) into account.
                     </t>
                     <t>
@@ -879,6 +883,8 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
                             <t>Apply a Vandermonde matrix with the given sizes.</t>
                             <t>Encrypt each resulting block with a separate key.</t>
                         </list>
+                    </t>
+                    <t>    
                         The following sections describe the order of the operations in an addRedundancy operation. For a removeRedundancy operation invert the functions and order.
                     </t>
                     <section anchor="routing_operations_redundancy_padding" title="Padding Operation">
@@ -931,6 +937,8 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
                             Routing triggered operations (updating quotas, authorizing operations, and pickup of incoming messages)
                         </t>
                     </list>
+                </t>
+                <t>    
                     Implementations MUST provide sufficient locking mechanisms to guarantee the integrity of accounting information and workspace at any time.
                 </t>
                 <section anchor="accounting_timed_gc" title="Time-Based Garbage Collection">
