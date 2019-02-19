@@ -76,22 +76,24 @@ actualfile=draft-gwerder-messagevortexmain-01
 do
   out=${out%%.xml}
   echo "    creating xml flatified output ($out)"
-  echo "      injecting artwork"
-  egrep "<artwork[^>]*src=\"[^\"]*.asn\"[^>]*/>" <$dir/../thesis/target/main/latex-build/rfc/$out.xml | while read l ; 
+  echo "      injecting sourcecode"
+  egrep "<sourcecode[^>]*src=\"[^\"]*.asn\"[^>]*/>" <$dir/../thesis/target/main/latex-build/rfc/$out.xml | while read l ; 
   do 
   	src=$(echo "$l"|sed 's/.*src="//;s/".*//');
-  	rep="${l%%/>}>"'<![CDATA['"$(cat $dir/../thesis/target/main/latex-build/rfc/$src)]]></artwork>";
+  	rep="${l%%/>}>"'<![CDATA['"$(cat $dir/../thesis/target/main/latex-build/rfc/$src)]]></sourcecode>";
   	file=$(cat $dir/../thesis/target/main/latex-build/rfc/$out.xml); 
   	echo "${file/$l/$rep}" >$dir/../thesis/target/main/latex-build/rfc/$out.xml.tmp && mv $dir/../thesis/target/main/latex-build/rfc/$out.xml.tmp $dir/../thesis/src/main/latex/rfc/$out.xml && echo "      injected file $src (new size is $(stat --printf="%s"  $dir/../thesis/target/main/latex-build/rfc/$out.xml))"
   done
+  echo "      creating nouiversion"
+  sed -e 's~<artwork\([^>]*\) src="[^"]*"~<artwork \1~gi' <$dir/../thesis/target/main/latex-build/rfc/${out}.xml >$dir/../thesis/target/main/latex-build/rfc/${out}.nouixml
+  echo "      creating uiversion"
+  cat $dir/../thesis/target/main/latex-build/rfc/${out}.xml | awk 'BEGIN{ incdata=0;}; /^.*<artwork[^>]* src="[^"]*"[^>]*>.*/ { gsub(/<!\[CDATA\[/,"");print;incdata=1; }; incdata!=1 {print $0;};incdata==1 && /.*\]\]>.*/ {gsub(/.*\]\]>/,"");print;incdata=0;}'  >$dir/../thesis/target/main/latex-build/rfc/${out}.uixml
   echo "      flatifying"
-  $XML2RFC --exp $dir/../thesis/target/main/latex-build/rfc/${out}.xml -q -o $dir/../thesis/target/main/latex-build/rfc/$out.xmlflat || exit 101
-  
+  $XML2RFC --exp $dir/../thesis/target/main/latex-build/rfc/${out}.nouixml -q -o $dir/../thesis/target/main/latex-build/rfc/$out.xmlflat || exit 101
   echo "  creating txt output"
-  $XML2RFC $dir/../thesis/target/main/latex-build/rfc/${out}.xmlflat --text -q -o $dir/../thesis/target/main/latex-build/rfc/$out.txt || exit 101
+  $XML2RFC $dir/../thesis/target/main/latex-build/rfc/${out}.nouixml --text -q -o $dir/../thesis/target/main/latex-build/rfc/$out.txt || exit 101
   echo "  creating html output"
-  #perl -0777 -pe 's/<artwork ([^>]* src=[^>]*)>[^<]*<\/artwork>(\s?)/<artwork \1 \/>\2/gs' $dir/../thesis/target/main/latex-build/rfc/draft-gwerder-messagevortexmain-01.xmlflat >$dir/../thesis/target/main/latex-build/rfc/draft-gwerder-messagevortexmain-01.xmlflat.artfree
-  $XML2RFC --v3 $dir/../thesis/target/main/latex-build/rfc/${out}.xml --html -q -o $dir/../thesis/target/main/latex-build/rfc/$out.html 
+  $XML2RFC $dir/../thesis/target/main/latex-build/rfc/${out}.uixml --html -q -o $dir/../thesis/target/main/latex-build/rfc/$out.html 
   #echo "  creating nroff output"
   #$XML2RFC --v3 $dir/../thesis/target/main/latex-build/rfc/${out}.xmlflat --nroff -q -o $dir/../thesis/target/main/latex-build/rfc/$out.nroff || exit 101
   echo "  creating pdf"
