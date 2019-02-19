@@ -28,7 +28,7 @@
             </address>
         </author>
 
-        <date year="2019"/>
+        <date year="2019" month="03" day="30"/>
 
         <area>General</area>
 
@@ -349,7 +349,7 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
                 <t>The Routing Layer expands information contained in MessageVortex packets, processes them, and passes generated  packets to the respective Blending Layer.</t>
             </section>
             <section anchor="layer_overview_accounting" title="Accounting Layer">
-                <t>The accounting layer keeps track of all ephemeral identities authorized to use a MessageVortex node. Especially it verifies the available quotas to an ephemeral identity.
+                <t>The accounting layer keeps track of all ephemeral identities authorized to use a MessageVortex node. It verifies the available quotas to an ephemeral identity.
                 </t>
             </section>
         </section>

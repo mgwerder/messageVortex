@@ -407,6 +407,7 @@ $\mathbf{Puzz[]}$ is a list of not yet solved puzzles of this user. Every puzzle
 
 $\mathbf{Build[]}$ is a list of building instructions for a message. The server may decide at any time to reject a too big list or a too long living message. Thus he may control the size of this list as well. However, controlling the size of this list will most likely result in the non-delivery of a message.
 
+
 \subsubsection{Accounting Data of a ``header'' Block}
 All accounting data of a header block is connected to the respective identity. All header blocks do expire latest with their respective identity. The following data has to be kept on a mix:
 \begin{itemize}
@@ -462,27 +463,6 @@ pb_3.startsWith(pb_1)\\
 pb_3.endsWith(pb_2)\\
 len(pb_3) & = & len(pb_1) + len(pb_2)
 \end{eqnarray}
-
-\subsubsection{VortexMessage XorSplitPayload Operation}
-The xorSplitPayload operation forks payload block into two payload blocks. The parameters for this operation are:
-
-\begin{itemize}
-	\item Source payload block $pb_1$
-	\item fraction $f$
-	\item PRNG Initializer $pi$
-\end{itemize}
-
-If $len(pb)$ expresses the size of a payloadblock called $pb$ in bytes then resulting block of the MergePayload Operation $pb_3$ have to follow the following rules:
-
-\begin{eqnarray}
-xorSplit(pb_1, f, pi) & = & \langle pb_2,pb_3 \rangle \\
-pb_2 & = & prng( i, floor(len(pb_1)\cdot f) )\\
-pb_3 & = & pb_1 \oplus pb_2\\\
-len(pb_2) & = & floor(len(pb_1)\cdot f)\\
-len(pb_3) & = & max( len(pb_1), len(pb_2) )
-\end{eqnarray}
-
-For details about the implemented PRNGs see \ref{sec:prng}.
 
 \subsubsection{VortexMessage XorMergePayload Operation}
 The xorSplitPayload operation forks payload block into two payload blocks. The parameters for this operation are:
