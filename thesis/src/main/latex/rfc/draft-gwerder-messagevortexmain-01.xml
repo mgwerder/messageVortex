@@ -16,8 +16,8 @@
         <title>MessageVortex Protocol</title>
 
         <author fullname="Martin Gwerder" surname="Gwerder">
+            <organization abbrev="FHNW">University of Applied Sciences of Northwestern Switzerland</organization>
             <address>
-                <organization abbrev="FHNW">University of Applied Sciences of Northwestern Switzerland</organization>
                 <postal>
                     <street>Bahnhofstrasse 5</street>
                     <code>5210</code><city>Windisch</city><region>AG</region>
@@ -187,6 +187,8 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
                 </t>
                 <t>
                     A full vortex message contains the following items:
+                </t>
+                <t>
                     <list style="symbols">
                         <t>The peer key (encrypted with the host key of the node; stored in a PrefixBlock) protects the inner Vortex message (innerMessageBlock).</t>
                         <t>The small padding guarantees that a replayed routing block with different content does not look alike.</t>
@@ -200,7 +202,8 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
             <section anchor="entities_message" title="Message">
                 <t>
                     A Message is a content to be transmitted from one sender to the recipient. The Sender uses a routing block to achieve this which is either built by him or provided by the receiver. A Message may be anonymous. There are however different degrees of anonymity:
-
+                </t>
+                <t>
                     <list style="symbols">
                         <t>If the sender of a message is not known to anyone else except the sender, we refer to that as 'sender anonymity.'</t>
                         <t>If the receiver of a message is not known to anyone else except the receiver, we refer to that as 'receiver anonymity.'</t>
@@ -218,6 +221,8 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
                 </t>
                 <t>
                     The following key structures exist:
+                </t>
+                <t>
                     <list style="symbols">
                         <t>SymmetricKey</t>
                         <t>AsymmetricKey</t>
@@ -242,7 +247,7 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
                 </section>
                 <section anchor="symmetricKey" title="Symmetric Keys">
                     <t>
-						Nodes use symmetric keys for encrypting payload and control blocks. These symmetric keys MUST contain a key type specifying a key. They MUST contain a key in an encoded form.
+                        Nodes use symmetric keys for encrypting payload and control blocks. These symmetric keys MUST contain a key type specifying a key. They MUST contain a key in an encoded form.
                     </t>
                     <t>
                         A node MUST provide a keysize parameter if the key (or equivalently block) size is not standardized or encoded in the name. All symmetric key specification MUST contain a mode and padding parameter. A node MAY list multiple padding or mode parameters in a ReplyCapability block to give the recipient a free choice.
@@ -251,13 +256,15 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
             </section>
             <section anchor="entities_transport_address" title="Transport Address">
                 <t>
-                	We use the term 'transport address' for the token required to address the next immediate node on the transport layer.  An email transport layer would have SMTP addresses such as 'vortex@example.com' as transport address.
+                	  We use the term 'transport address' for the token required to address the next immediate node on the transport layer.  An email transport layer would have SMTP addresses such as 'vortex@example.com' as transport address.
                 </t>
             </section>
             <section anchor="entities_identity" title="Identity">
                 <section anchor="entities_identity_peer" title="Peer Identity">
                     <t>
-                    	The peer identity may contain the following information of a peer partner:
+                        The peer identity may contain the following information of a peer partner:
+                    </t>
+                    <t>
                         <list style="symbols">
                             <t>A transport address (always) and the public key of this identity (given there is no recipient anonymity)</t>
                             <t>A routing block. This block may be used to contact the sender (optional). If striving for recipient anonymity, this block is required.</t>
@@ -268,6 +275,8 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
                 <section anchor="entities_identity_ephemeral" title="Ephemeral Identity">
                     <t>
                         Ephemeral identities are temporary identities created on a single node. These identities MUST NOT relate to any other identity on any other node. They allow bookkeeping for a node. Each ephemeral identity has a workspace assigned. Every ephemeral identity may have the following items assigned:
+                    </t>
+                    <t>
                         <list style="symbols">
                         	<t>An asymmetric keypair to represent the identity</t>
                         	<t>A validity time of the identity</t>
@@ -277,7 +286,9 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
                 </section>
                 <section anchor="entities_identity_official" title="Official Identity">
                     <t>
-                    	An official identity may have the following items assigned:
+                      	An official identity may have the following items assigned:
+                    </t>
+                    <t>
                         <list style="symbols">
                             <t>Routing blocks to be used to reply to the node.</t>
                             <t>A list of assigned ephemeral identities on all other nodes and their projected quotas.</t>
@@ -287,7 +298,10 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
                 </section>
             </section>
             <section anchor="entities_workspace" title="Workspace">
-                <t>Every official or ephemeral identity has a workspace. A workspace consists of the following elements:
+                <t>
+                      Every official or ephemeral identity has a workspace. A workspace consists of the following elements:
+                </t>
+                <t>
                     <list style="symbols">
                         <t>Zero or more routing blocks to be processed</t>
                         <t>Slots for payload block sequentially numbered. Every slot...
@@ -339,18 +353,27 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
             </t>
 
             <section anchor="layer_overview_transport" title="Transport Layer">
-                <t>The transport layer embeds the blended MessageVortex packets into the data stream of the existing transport layer protocol.</t>
-                <t>The transport layer infrastructure SHOULD NOT be specific to anonymous communication and should contain significant parts of non-MessageVortex traffic.</t>
+                <t>
+                    The transport layer embeds the blended MessageVortex packets into the data stream of the existing transport layer protocol.
+                </t>
+                <t>
+                    The transport layer infrastructure SHOULD NOT be specific to anonymous communication and should contain significant parts of non-MessageVortex traffic.
+                </t>
             </section>
 
             <section anchor="layer_overview_blending" title="Blending Layer">
-                <t>The blending layer embeds MessageVortex packets into the transport layer data stream and extracts MessageVortex packets from the transport layer.</t>
+                <t>
+                    The blending layer embeds MessageVortex packets into the transport layer data stream and extracts MessageVortex packets from the transport layer.
+                </t>
             </section>
             <section anchor="layer_overview_routing" title="Routing Layer">
-                <t>The Routing Layer expands information contained in MessageVortex packets, processes them, and passes generated  packets to the respective Blending Layer.</t>
+                <t>
+                    The Routing Layer expands information contained in MessageVortex packets, processes them, and passes generated  packets to the respective Blending Layer.
+                </t>
             </section>
             <section anchor="layer_overview_accounting" title="Accounting Layer">
-                <t>The accounting layer keeps track of all ephemeral identities authorized to use a MessageVortex node. It verifies the available quotas to an ephemeral identity.
+                <t>
+                    The accounting layer keeps track of all ephemeral identities authorized to use a MessageVortex node. It verifies the available quotas to an ephemeral identity.
                 </t>
             </section>
         </section>
@@ -411,6 +434,8 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
                     <section title="Header Block">
                         <t>
                             The header block (see HeaderBlock in <xref target="asn_one"/>) contains the following information:
+                        </t>
+                        <t>
                             <list style="symbols">
                                 <t>It MUST contain the local ephemeral identity of the routing block builder.</t>
                                 <t>It MAY contain header requests.</t>
@@ -419,17 +444,23 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
                         </t>
                         <t>
                             The list of header requests MAY one of the following:
+                        </t>
+                        <t>
                             <list style="symbols">
                                 <t>be empty</t>
                                 <t>contain a single identity create request (HeaderRequestIdentity)</t>
                                 <t>contain a single increase quota request</t>
                             </list>
+                        </t>
+                        <t>
                             If a header block violates these rules, then a node MUST NOT reply to any header requests. Payload and routing blocks SHOULD still be added to the workspace and processed, given the message quota is not exceeded.
                         </t>
                     </section>
                     <section title="Routing Block">
                         <t>
                             The routing block (see RoutingBlock in <xref target="asn_one"/>) contains the following information:
+                        </t>
+                        <t>
                             <list style="symbols">
                                 <t>It MUST contain a serial number uniquely identifying the routing block of this user. A serial number MUST be unique during the lifetime of a routing block.</t>
                                 <t>It MUST contain the same forward secret as the two prefix blocks and the header block.</t>
@@ -452,6 +483,8 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
             <section title="Supported Symmetric Ciphers">
                 <t>
                     A node MUST support the following symmetric ciphers:
+                </t>
+                <t>
                     <list style="symbols">
                         <t>AES128 (see <xref target="FIPS-AES"/> for AES implementation details)</t>
                         <t>AES256</t>
@@ -465,6 +498,8 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
             <section title="Supported Asymmetric Ciphers">
                 <t>
                     A node MUST support the following asymmetric ciphers:
+                </t>
+                <t>
                     <list style="symbols">
                         <t>RSA (key sizes bigger or equal to 2048) (<xref target="RFC8017"/>)</t>
                         <t>ECC (named curves secp384r1, sect409k1, secp521r1) (see <xref target="SEC1"/>)</t>
@@ -474,6 +509,8 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
             <section title="Supported MACs">
                 <t>
                     A node MUST support the following Message Authentication Codes (MAC):
+                </t>
+                <t>
                     <list style="symbols">
                         <t>SHA256 (see <xref target="ISO-10118-3"/> for SHA implementation details)</t>
                         <t>RipeMD160 (see <xref target="ISO-10118-3"/> for RIPEMD implementation details)</t>
@@ -481,6 +518,8 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
                 </t>
                 <t>
                     A node SHOULD support the following MACs:
+                </t>
+                <t>
                     <list style="symbols">
                         <t>SHA512</t>
                         <t>RipeMD256</t>
@@ -491,6 +530,8 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
             <section title="Supported Paddings">
                 <t>
                     A node MUST support the following paddings specified in <xref target="RFC8017"/>:
+                </t>
+                <t>
                     <list style="symbols">
                         <t>PKCS1 (see <xref target="RFC8017"/>)</t>
                         <t>PKCS7 (see <xref target="RFC5958"/>)</t>
@@ -500,13 +541,19 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
             <section title="Supported Modes">
                 <t>
                     A node MUST support the following modes:
+                </t>
+                <t>
                     <list style="symbols">
                         <t>CBC (see <xref target="RFC1423"/>). The used IV must be of equal length as the key)</t>
                         <t>EAX (see <xref target="EAX"/>)</t>
                         <t>GCM (see <xref target="RFC5288"/>)</t>
                         <t>NONE (only used in special cases. See <xref target="security"/>)</t>
                     </list>
+                </t>
+                <t>
                     A node SHOULD NOT use the following modes:
+                </t>
+                <t>
                     <list style="symbols">
                         <t>NONE (Except as stated when using the addRedundancy function</t>
                         <t>ECB</t>
@@ -514,6 +561,8 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
                 </t>
                 <t>
                     A node SHOULD support the following modes:
+                </t>
+                <t>
                     <list style="symbols">
                         <t>CTR (<xref target="RFC3686"/>)</t>
                         <t>CCM (<xref target="RFC3610"/>)</t>
@@ -534,6 +583,8 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
             <section anchor="blending_general" title="Blending in Attachments">
                 <t>
                     There are two types of blending supported when using attachments.
+                </t>
+                <t>
                     <list style="symbols">
                         <t>Plain binary encoding with offset (PLAIN)</t>
                         <t>Embedding with F5 in an image (F5)</t>
@@ -609,6 +660,8 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
                     </t>
                     <t>
                         For an unauthenticated message the following rules apply:
+                    </t>
+                    <t>
                         <list style="symbols">
                             <t>A node MUST ignore all Routing blocks.</t>
                             <t>A node MUST ignore all Payload blocks.</t>
@@ -619,6 +672,8 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
                     </t>
                     <t>
                         A message is considered authenticated as soon as the identity used in the header block is known and not temporary. A node MUST NOT treat a message as authenticated if the specified maximum number of replays have been reached. For authenticated messages the following rules apply:
+                    </t>
+                    <t>
                         <list style="symbols">
                             <t>A node MUST ignore identity creation requests.</t>
                             <t>A node MUST replace the current reply block with the reply block provided in the routing block (if any). The node MUST keep the reply block if no reply block is provided.</t>
@@ -626,12 +681,16 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
                             <t>A node SHOULD add all routing blocks to the workspace.</t>
                             <t>A node SHOULD add all payload blocks to the workspace.</t>
                         </list>
+                    </t>
+                    <t>
                         A routing node MUST decrement the message quota by one if a received message is authenticated and contains at least one payload block. If a message is identified as duplicate according to the reply protection, a node MUST NOT decrement the message quota.
                     </t>
                 </section>
                 <section anchor="routing_workspace" title="Processing of Routing Blocks in Workspace">
                     <t>
                         A routing workspace consists of the following items:
+                    </t>
+                    <t>
                         <list style="symbols">
                             <t>The identity linked to it (This determines the lifetime of the workspace).</t>
                             <t>The routing combos (RoutingCombo) linked to it.</t>
@@ -647,6 +706,8 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
                     </t>
                     <t>
                         The accounting layer typically triggers processing. It represents either a cleanup action or a routing event. A cleanup event deletes the following information from all workspaces:
+                    </t>
+                    <t>
                         <list style="symbols">
                             <t>All processed routing combos.</t>
                             <t>All routing combos with  expired usagePeriod.</t>
@@ -789,6 +850,8 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
                 <section anchor="routing_operations_mergesplit" title="Split and Merge Operations">
                     <t>
                         The split and merge operations allow splitting and recombining message chunks. A node MUST adhere to these constraints:
+                    </t>
+                    <t>
                         <list style="symbols">
                             <t>The operation must be applied at an absolute (measuring in bytes) or relative (measured as a float value in the range 0&gt;value&gt;100) position.</t>
                             <t>All calculations must be done according to <xref target="IEEE754">IEEE 754</xref> and in 64 Bit precision.</t>
@@ -809,6 +872,8 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
                 <section anchor="routing_operations_redundancy" title="Add and Remove Redundancy Operations">
                     <t>
                         The addRedundancy and removeRedundancy operations are the core operations of the protocol. They may be used to split messages and distribute message content across multiple routing nodes. The operation is split into three steps.
+                    </t>
+                    <t>
                         <list style="numbers">
                             <t>Pad the input block to a multiple of the key block size in the resulting output blocks.</t>
                             <t>Apply a Vandermonde matrix with the given sizes.</t>
@@ -854,7 +919,10 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
 
         <section anchor="accounting" title="Accounting">
             <section anchor="accounting_operations" title="Accounting Operations">
-                <t>The accounting layer has two major kinds of operations:
+                <t>
+                    The accounting layer has two major kinds of operations:
+                </t>
+                <t>
                     <list style="symbols">
                         <t>
                             Time-based operations (cleanup jobs and initiation of routing)
@@ -909,6 +977,8 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
             </t>
             <t>
                 The primary goals for security within this protocol did rely on the following focus areas:
+            </t>
+            <t>
                 <list style="symbols">
                     <t>Confidentiality</t>
                     <t>Integrity</t>
@@ -921,7 +991,8 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
                         </list>
                     </t>
                 </list>
-
+            </t>
+            <t>
                 All these factors are affected by the usage of the protocol. The following sections provide a list of factors affecting the primary goals.
             </t>
             <t>
@@ -941,6 +1012,8 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
              </t>
              <t>
                 A routing block builder SHOULD follow the following rules in order not to compromise a Vortex message's anonymity:
+            </t>
+            <t>
                 <list style="symbols">
                     <t>All operations applied SHOULD be credibly involved in a message transfer.</t>
                     <t>There should always be a sufficient subset of the result of an addRedundancy operation sent to peers to allow recovery of the data built.</t>
