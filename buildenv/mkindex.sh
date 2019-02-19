@@ -1,5 +1,5 @@
 #!/bin/bash
-XML2RFC=/usr/local/bin/xml2rfc
+XML2RFC="/usr/local/bin/xml2rfc --v3 "
 dir=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 WWWDIR=$dir/../target/www
 
@@ -215,7 +215,7 @@ function addrow() {
 #curl -s "https://get.sdkman.io" | bash &&  source "/root/.sdkman/bin/sdkman-init.sh" &&  sdk install jbake || exit 101
 #jbake ${WWWDIR}/
 cp -R $dir/../website/target/jbake/* ${WWWDIR}/
-cp $dir/../thesis/target/main/latex-build/rfc/draft-gwerder-*.{xml,pdf,ps,epub,mobi,txt,html} ${WWWDIR}/devel/
+cp $dir/../thesis/target/main/latex-build/rfc/draft-gwerder-*.{xml,xmlflat,pdf,ps,epub,mobi,txt,html} ${WWWDIR}/devel/
 cp $dir/../thesis/target/main/latex-build/rfc/rfc2629.xslt ${WWWDIR}/devel/
 (cd $dir/../application-core-library/src/main/asn/;zip -9 ${WWWDIR}/devel/MessageVortex_definition.zip MessageVortex-*.asn)
 for i in $dir/../application-core-library/src/main/asn/MessageVortex*.asn
