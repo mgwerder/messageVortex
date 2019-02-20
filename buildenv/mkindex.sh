@@ -87,7 +87,7 @@ do
   echo "      creating nouiversion"
   sed -e 's~<artwork\([^>]*\) src="[^"]*"~<artwork \1~gi' <$dir/../thesis/target/main/latex-build/rfc/${out}.xml >$dir/../thesis/target/main/latex-build/rfc/${out}.nouixml
   echo "      creating uiversion"
-  cat $dir/../thesis/target/main/latex-build/rfc/${out}.xml | awk 'BEGIN{ incdata=0;}; /^.*<artwork[^>]* src="[^"]*"[^>]*>.*/ { gsub(/<!\[CDATA\[/,"");print;incdata=1; }; incdata!=1 {print $0;};incdata==1 && /.*\]\]>.*/ {gsub(/.*\]\]>/,"");print;incdata=0;}'  >$dir/../thesis/target/main/latex-build/rfc/${out}.uixml
+  cat $dir/../thesis/target/main/latex-build/rfc/${out}.xml | awk 'BEGIN{ incdata=0;}; /^.*<artwork[^>]* src="[^"]*"[^>/]*>.*/ { gsub(/<!\[CDATA\[/,"");print;incdata=1; }; incdata!=1 {print $0;};incdata==1 && /.*\]\]>.*/ {gsub(/.*\]\]>/,"");print;incdata=0;}'  >$dir/../thesis/target/main/latex-build/rfc/${out}.uixml
   echo "      flatifying"
   $XML2RFC --exp $dir/../thesis/target/main/latex-build/rfc/${out}.nouixml -q -o $dir/../thesis/target/main/latex-build/rfc/$out.xmlflat || exit 101
   echo "  creating txt output"
