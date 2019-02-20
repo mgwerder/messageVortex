@@ -1243,23 +1243,19 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
                 The following sections contain the ASN.1 modules specifying the MessageVortex Protocol
             </t>
             <section  anchor="asnOne_schema" title="The main VortexMessageBlocks">
-                <t>
-                    <figure>
-                        <sourcecode src="asn/MessageVortex-Schema.asn" type="asn.1" />
-                    </figure>
-                </t>
+                <sourcecode src="asn/MessageVortex-Schema.asn" type="asn.1" />
             </section>
             <section  anchor="asnOne_Ciphers" title="The VortexMessage Ciphers Structures">
                 <t>
                     <figure>
-                        <sourcecode src="asn/MessageVortex-Ciphers.asn" type="asn.1"/>
+                        <artwork src="asn/MessageVortex-Ciphers.asn" type="asn.1"/>
                     </figure>
                 </t>
             </section>
             <section  anchor="asnOne_replies" title="The VortexMessage Replies Structures">
                 <t>
                     <figure>
-                        <sourcecode src="asn/MessageVortex-Replies.asn" type="asn.1"/>
+                        <artwork src="asn/MessageVortex-Replies.asn" type="asn.1"/>
                     </figure>
                 </t>
             </section>
