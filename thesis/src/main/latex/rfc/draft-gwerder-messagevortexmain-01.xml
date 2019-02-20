@@ -10,6 +10,8 @@
 <?rfc compact="yes" ?>
 <?rfc subcompact="no" ?>
 
+<!-- FIXME be precise with the MAC identifier (e.g., sha3-512) -->
+
 <rfc category="exp" docName="draft-gwerder-messagevortexmain-01" ipr="trust200902" xml:lang="en">
     <front>
 
