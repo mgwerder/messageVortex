@@ -488,10 +488,10 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
                 </t>
                 <t>
                     <ul>
-                        <t>AES128 (see <xref target="FIPS-AES"/> for AES implementation details)</t>
-                        <t>AES256</t>
-                        <t>CAMELLIA128 (see <xref target="RFC3657"/> chapter 3 for Camellia implementation details)</t>
-                        <t>CAMELLIA256</t>
+                        <li>AES128 (see <xref target="FIPS-AES"/> for AES implementation details)</li>
+                        <li>AES256</li>
+                        <li>CAMELLIA128 (see <xref target="RFC3657"/> chapter 3 for Camellia implementation details)</li>
+                        <li>CAMELLIA256</li>
                     </ul>
                 </t>    
                 <t>
