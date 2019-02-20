@@ -116,14 +116,14 @@
                         <t>
                             To allow addressing of a vortex node with an ordinary client an alternative representation SHOULD be supported as defined below as smtpAlternateSpec (specification noted in ABNF as specified in <xref target="RFC5234"/>). For applications with QR code support, the smtpUrl representations should be used.
                             <figure>
-                                <sourcecode type="abnf"><![CDATA[
+                                <artwork type="abnf"><![CDATA[
 localPart         = <local part of address>
 domain            = <domain part of address>
 email             = localPart "@" domain
 keySpec           = <BASE64 encoded of ASN.1 AsymmetricKey; DER representation>
 smtpAlternateSpec = localPart ".." keySpec ".." domain "@localhost"
 smtpUrl           = "vortexsmtp://" smtpAlternateSpec
-                                ]]></sourcecode>
+                                ]]></artwork>
                             </figure>
                         </t>
                         <t>
@@ -135,7 +135,7 @@ smtpUrl           = "vortexsmtp://" smtpAlternateSpec
                             Typically a node specification is specified with the ASN.1 block NodeSpec.
                             To allow addressing of a vortex node with an ordinary XMPP client, the alternative representation SHOULD be supported as defined below as jidAlternateSpec (specification noted in ABNF as specified in <xref target="RFC5234"/>).
                             <figure>
-                                <sourcecode type="abnf"><![CDATA[
+                                <artwork type="abnf"><![CDATA[
 localPart         = <local part of address>
 domain            = <domain part of address>
 resourcePart      = <resource part of the address>
@@ -143,7 +143,7 @@ jid               = localPart "@" domain [ "/" resourcePart ]
 keySpec           = <BASE64 encoded AsymmetricKey; DER representation>;
 jidAlternateSpec  = localPart ".." keySpec ".." domain "@localhost" [ "/" resourcePart ]
 jidUrl            = "vortexxmpp://" jidAlternateSpec
-                                ]]></sourcecode>
+                                ]]></artwork>
                             </figure>
                         </t>
                     </section>
@@ -609,9 +609,9 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
           </t>
                     <t>
             <figure>
-              <sourcecode type="abnf"><![CDATA[
+              <artwork type="abnf"><![CDATA[
                 plainEncoding = "("plain:" <numberOfBytesOfOffset> [ "," <numberOfBytesOfOffset> ]* ")"
-              ]]></sourcecode>
+              ]]></artwork>
             </figure>
           </t>
                 </section>
@@ -624,9 +624,9 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
                   </t>
                     <t>
                       <figure>
-                      <sourcecode type="abnf"><![CDATA[
+                      <artwork type="abnf"><![CDATA[
                           f5Encoding = "(F5:" <passwordString> [ "," <PasswordString> ]* ")"
-                      ]]></sourcecode>
+                      ]]></artwork>
                     </figure>
                 </t>
                   <t>
@@ -1243,7 +1243,11 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
                 The following sections contain the ASN.1 modules specifying the MessageVortex Protocol
             </t>
             <section  anchor="asnOne_schema" title="The main VortexMessageBlocks">
-                <sourcecode src="asn/MessageVortex-Schema.asn" type="asn.1" />
+                <t>
+					<figure>
+                		<artwork src="asn/MessageVortex-Schema.asn" type="asn.1" />
+                	</figure>
+                </t>		
             </section>
             <section  anchor="asnOne_Ciphers" title="The VortexMessage Ciphers Structures">
                 <t>
@@ -1262,21 +1266,21 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
             <section  anchor="asnOne_requirements" title="The VortexMessage Requirements Structures">
                 <t>
                     <figure>
-                        <sourcecode src="asn/MessageVortex-Requirements.asn" type="asn.1"/>
+                        <artwork src="asn/MessageVortex-Requirements.asn" type="asn.1"/>
                     </figure>
                 </t>
             </section>
             <section  anchor="asnOne_helpers" title="The VortexMessage Helpers Structures">
                 <t>
                     <figure>
-                        <sourcecode src="asn/MessageVortex-Helpers.asn" type="asn.1"/>
+                        <artwork src="asn/MessageVortex-Helpers.asn" type="asn.1"/>
                     </figure>
                 </t>
             </section>
             <section  anchor="asnOne_additional" title="The VortexMessage Additional Structures">
                 <t>
                     <figure>
-                        <sourcecode src="asn/MessageVortex-NonProtocolBlocks.asn" type="asn.1"/>
+                        <artwork src="asn/MessageVortex-NonProtocolBlocks.asn" type="asn.1"/>
                     </figure>
                 </t>
             </section>
