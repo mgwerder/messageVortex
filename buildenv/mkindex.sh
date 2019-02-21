@@ -52,7 +52,8 @@ do
 	if [[ -f $dir/../thesis/src/main/latex/inc/$img.fig ]]
 	then
 		echo "  converting $img.fig -> $img.svg"
-		fig2dev -L svg $dir/../thesis/src/main/latex/inc/$img.fig ${WWWDIR}/devel/images/$img.svg
+		#fig2dev -L svg $dir/../thesis/src/main/latex/inc/$img.fig ${WWWDIR}/devel/images/$img.svg
+		convert $dir/../thesis/src/main/latex/inc/$img.png ${WWWDIR}/devel/images/$img.svg
 		cp ${WWWDIR}/devel/images/$img.svg $dir/../thesis/target/main/latex-build/rfc/
 	fi	
 done	
