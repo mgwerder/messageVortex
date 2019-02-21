@@ -49,6 +49,8 @@ do
 	img=${img%%.*}
 	echo "  converting $img.pdf -> $img.png"
 	convert $dir/../thesis/src/main/latex/inc/$img.pdf ${WWWDIR}/devel/images/$img.png
+	echo "  converting $img.pdf -> $img.svg"
+	fig2dev -L svg $dir/../thesis/src/main/latex/inc/$img.pdf ${WWWDIR}/devel/images/$img.svg
 	#cp ${WWWDIR}/devel/images/$img.png phd/thesis/src/main/latex/rfc/
 done	
 
@@ -75,6 +77,7 @@ actualfile=draft-gwerder-messagevortexmain-01
 (cd $dir/../thesis/target/main/latex-build/rfc/;find . -name "draft-gwerder-messagevortexmain-*.xml" |while read out
 do
   out=${out%%.xml}
+  cp ${WWWDIR}/devel/images/*.svg .
   echo "    creating xml flatified output ($out)"
   echo "      injecting sourcecode"
   egrep "<artwork[^>]*src=\"[^\"]*.asn\"[^>]*/>" <$dir/../thesis/target/main/latex-build/rfc/$out.xml | while read l ; 
