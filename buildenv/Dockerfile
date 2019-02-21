@@ -10,6 +10,7 @@ RUN mkdir /var/tmp/messagevortex && \
                texlive-bibtex-extra texlive-luatex \
                texlive-lang-german texlive-lang-english \
                pandoc calibre enscript \
+               fig2dev \
                wget curl joe bc imagemagick \
                python-pip live-build linuxbrew-wrapper \
                openjdk-8-jdk-headless  \
