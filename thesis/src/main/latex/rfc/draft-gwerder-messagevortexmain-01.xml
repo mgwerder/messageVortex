@@ -329,7 +329,7 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
             </t>
 
             <figure anchor="fig_layer_overview" title="Layer overview">
-                <artwork align="center"><![CDATA[
+                <artwork align="center" src="blockLayoutSimplifie.svg" type="svg"><![CDATA[
 +-------------------------------------------------------------------+
 | Vortex Node                                                       |
 | +---------------------------------------------------------------+ |
