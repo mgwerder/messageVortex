@@ -111,13 +111,12 @@
                             Typically a node specification is specified with the ASN.1 block NodeSpec (see <xref target="asnOne_helpers"/>).
                             To allow addressing of a vortex node with an ordinary client an alternative representation SHOULD be supported as defined below as smtpAlternateSpec (specification noted in ABNF as specified in <xref target="RFC5234"/>).
                             <figure>
-                                <artwork type="abnf"><![CDATA[
-localPart         = <local part of address>
+                                <artwork type="abnf"
+><![CDATA[localPart         = <local part of address>
 domain            = <domain part of address>
 email             = localPart "@" domain
 keySpec           = <BASE64 encoded AsymmetricKey; DER representation>;
-smtpAlternateSpec = localPart ":" keySpec "@" domain
-                                ]]></artwork>
+smtpAlternateSpec = localPart ":" keySpec "@" domain]]></artwork>
                             </figure>
                         </t>
                     </section>
@@ -126,13 +125,12 @@ smtpAlternateSpec = localPart ":" keySpec "@" domain
                             Typically a node specification is specified with the ASN.1 block NodeSpec.
                             To allow addressing of a vortex node with an ordinary client, an alternative representation SHOULD be supported as defined below as jidAlternateSpec (specification noted in ABNF as specified in <xref target="RFC5234"/>).
                             <figure>
-                                <artwork type="abnf"><![CDATA[
-localPart         = <local part of address>
+                                <artwork type="abnf"
+><![CDATA[localPart         = <local part of address>
 domain            = <domain part of address>
 jid               = localPart "@" domain [ "/" resourcepart ]
 keySpec           = <BASE64 encoded AsymmetricKey; DER representation>;
-jidAlternateSpec = localPart ":" keySpec "@" domain [ "/" resourcepart
-                                ]]></artwork>
+jidAlternateSpec = localPart ":" keySpec "@" domain [ "/" resourcepart]]></artwork>
                             </figure>
                         </t>
                         <t>
@@ -294,25 +292,24 @@ jidAlternateSpec = localPart ":" keySpec "@" domain [ "/" resourcepart
             <t>The protocol is designed in four layers as shown in <xref target="fig_layer_overview" /></t>
 
             <figure anchor="fig_layer_overview" title="Layer overview">
-                <artwork align="center" src="blockLayoutSimplified.png"><![CDATA[
-+-------------------------------------------------------------------+
-| Vortex Node                                                       |
-| +---------------------------------------------------------------+ |
-| |                        Accounting                             | |
-| |_______________________________________________________________| |
-|                                                                   |
-| +---------------------------------------------------------------+ |
-| |                          Routing                              | |
-| |_______________________________________________________________| |
-|                                                                   |
-| +----------------------------+ +--------------------------------+ |
-| |           Blending         | |             Blending           | |
-| |____________________________| |________________________________| |
-|___________________________________________________________________|
-  +----------------------------+ +--------------+ +---------------+
-  |          Transport         | | Transport in | | Transport out |
-  |____________________________| |______________| |_______________|
-               ]]></artwork>
+                <artwork align="center" 
+><![CDATA[+------------------------------------------------------------------+
+| Vortex Node                                                      |
+| +--------------------------------------------------------------+ |
+| |                       Accounting                             | |
+| |______________________________________________________________| |
+|                                                                  |
+| +--------------------------------------------------------------+ |
+| |                         Routing                              | |
+| |______________________________________________________________| |
+|                                                                  |
+| +---------------------------+ +--------------------------------+ |
+| |           Blending        | |             Blending           | |
+| |___________________________| |________________________________| |
+|__________________________________________________________________|
+  +---------------------------+ +--------------+ +---------------+
+  |          Transport        | | Transport in | | Transport out |
+  |___________________________| |______________| |_______________|]]></artwork>
             </figure>
 
             <t>
@@ -341,8 +338,8 @@ jidAlternateSpec = localPart ":" keySpec "@" domain [ "/" resourcepart
                 <t>
                     <xref target="fig_message_overview"/> shows a Vortex message. The enclosed sections denote encrypted blocks. The three to four letter abbreviations denote the key required for decryption. The abbreviation k_h stands for the asymmetric host key. sk_p is the symmetric peer key. The receiving node obtains this key by decrypting MPREFIX with its host key k_h. sk_s is the symmetric sender key. When decrypting the MPREFIX block, the node obtains this key. The sender key protects the header and the routing blocks. This key guarantees that the node assembling the message does not know about upcoming identities, operations, and requests. The peer key protects the message including structure from any third party observer.
                     <figure anchor="fig_message_overview" title="Vortex message overview">
-                        <artwork align="center"><![CDATA[
-+-+---+-+-+---+-+---+-+-+---+-+-+---+-+-------+-+
+                        <artwork align="center"
+><![CDATA[+-+---+-+-+---+-+---+-+-+---+-+-+---+-+-------+-+
 | |   | | |   | | C | | |   | | | R | |       | |
 | |   | | |   | | P | | | H | | | O | |       | |
 | | M | | | P | | R | | | E | | | U | |   P   | |
@@ -354,8 +351,7 @@ jidAlternateSpec = localPart ":" keySpec "@" domain [ "/" resourcepart
 | | X | | | G |  k_h  | sk_s  | sk_s  |   D   | |
 | |___| | |___|_______|_______|_______|_______| |
 |  k_h  |                  sk_p                 |
-|_______|_______________________________________|
-                        ]]></artwork>
+|_______|_______________________________________|]]></artwork>
                     </figure>
                 </t>
             </section>

@@ -116,14 +116,13 @@
                         <t>
                             To allow addressing of a vortex node with an ordinary client an alternative representation SHOULD be supported as defined below as smtpAlternateSpec (specification noted in ABNF as specified in <xref target="RFC5234"/>). For applications with QR code support, the smtpUrl representations should be used.
                             <figure>
-                                <artwork type="abnf"><![CDATA[
-localPart         = <local part of address>
+                                <artwork type="abnf"
+><![CDATA[localPart         = <local part of address>
 domain            = <domain part of address>
 email             = localPart "@" domain
 keySpec           = <BASE64 encoded of ASN.1 AsymmetricKey; DER representation>
 smtpAlternateSpec = localPart ".." keySpec ".." domain "@localhost"
-smtpUrl           = "vortexsmtp://" smtpAlternateSpec
-                                ]]></artwork>
+smtpUrl           = "vortexsmtp://" smtpAlternateSpec]]></artwork>
                             </figure>
                         </t>
                         <t>
@@ -135,15 +134,14 @@ smtpUrl           = "vortexsmtp://" smtpAlternateSpec
                             Typically a node specification is specified with the ASN.1 block NodeSpec.
                             To allow addressing of a vortex node with an ordinary XMPP client, the alternative representation SHOULD be supported as defined below as jidAlternateSpec (specification noted in ABNF as specified in <xref target="RFC5234"/>).
                             <figure>
-                                <artwork type="abnf"><![CDATA[
-localPart         = <local part of address>
+                                <artwork type="abnf"
+><![CDATA[localPart         = <local part of address>
 domain            = <domain part of address>
 resourcePart      = <resource part of the address>
 jid               = localPart "@" domain [ "/" resourcePart ]
 keySpec           = <BASE64 encoded AsymmetricKey; DER representation>;
 jidAlternateSpec  = localPart ".." keySpec ".." domain "@localhost" [ "/" resourcePart ]
-jidUrl            = "vortexxmpp://" jidAlternateSpec
-                                ]]></artwork>
+jidUrl            = "vortexxmpp://" jidAlternateSpec]]></artwork>
                             </figure>
                         </t>
                     </section>
@@ -332,25 +330,24 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
             	<artset>
                 	<!-- no appropriate SVG prep so far ... image SVGs not supported <artwork align="center" src="blockLayoutSimplified.svg" type="svg"/> -->
                 	<!-- No PNG support so far <artwork align="center" src="blockLayoutSimplified.png" type="png"/> -->
-                	<artwork align="center" type="ascii-art"><![CDATA[
-+-------------------------------------------------------------------+
-| Vortex Node                                                       |
-| +---------------------------------------------------------------+ |
-| |                        Accounting                             | |
-| |_______________________________________________________________| |
-|                                                                   |
-| +---------------------------------------------------------------+ |
-| |                          Routing                              | |
-| |_______________________________________________________________| |
-|                                                                   |
-| +----------------------------+ +--------------------------------+ |
-| |           Blending         | |             Blending           | |
-| |____________________________| |________________________________| |
-|___________________________________________________________________|
-  +----------------------------+ +--------------+ +---------------+
-  |          Transport         | | Transport in | | Transport out |
-  |____________________________| |______________| |_______________|
-	               ]]></artwork>
+                	<artwork align="center" type="ascii-art"
+><![CDATA[+------------------------------------------------------------------+
+| Vortex Node                                                      |
+| +--------------------------------------------------------------+ |
+| |                       Accounting                             | |
+| |______________________________________________________________| |
+|                                                                  |
+| +--------------------------------------------------------------+ |
+| |                         Routing                              | |
+| |______________________________________________________________| |
+|                                                                  |
+| +---------------------------+ +--------------------------------+ |
+| |           Blending        | |             Blending           | |
+| |___________________________| |________________________________| |
+|__________________________________________________________________|
+  +---------------------------+ +--------------+ +---------------+
+  |          Transport        | | Transport in | | Transport out |
+  |___________________________| |______________| |_______________|]]></artwork>
                </artset>
             </figure>
 
@@ -389,8 +386,8 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
                 <t>
                     <xref target="fig_message_overview"/> shows a Vortex message. The enclosed sections denote encrypted blocks. The three to four letter abbreviations denote the key required for decryption. The abbreviation k_h stands for the asymmetric host key. sk_p is the symmetric peer key. The receiving node obtains this key by decrypting MPREFIX with its host key k_h. sk_s is the symmetric sender key. When decrypting the MPREFIX block, the node obtains this key. The sender key protects the header and the routing blocks. This key guarantees that the node assembling the message does not know about upcoming identities, operations, and requests. The peer key protects the message including structure from any third party observer.
                     <figure anchor="fig_message_overview" title="Vortex message overview">
-                        <artwork align="center"><![CDATA[
-+-+---+-+-+---+-+---+-+-+---+-+-+---+-+-------+-+
+                        <artwork align="center"
+><![CDATA[+-+---+-+-+---+-+---+-+-+---+-+-+---+-+-------+-+
 | |   | | |   | | C | | |   | | | R | |       | |
 | |   | | |   | | P | | | H | | | O | |       | |
 | | M | | | P | | R | | | E | | | U | |   P   | |
@@ -402,8 +399,7 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
 | | X | | | G |  k_h  | sk_s  | sk_s  |   D   | |
 | |___| | |___|_______|_______|_______|_______| |
 |  k_h  |                  sk_p                 |
-|_______|_______________________________________|
-                        ]]></artwork>
+|_______|_______________________________________|]]></artwork>
                     </figure>
                 </t>
             </section>
@@ -613,9 +609,7 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
           </t>
                     <t>
             <figure>
-              <artwork type="abnf"><![CDATA[
-                plainEncoding = "("plain:" <numberOfBytesOfOffset> [ "," <numberOfBytesOfOffset> ]* ")"
-              ]]></artwork>
+              <artwork type="abnf"><![CDATA[plainEncoding = "("plain:" <numberOfBytesOfOffset> [ "," <numberOfBytesOfOffset> ]* ")"]]></artwork>
             </figure>
           </t>
                 </section>
@@ -628,9 +622,7 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
                   </t>
                     <t>
                       <figure>
-                      <artwork type="abnf"><![CDATA[
-                          f5Encoding = "(F5:" <passwordString> [ "," <PasswordString> ]* ")"
-                      ]]></artwork>
+                      <artwork type="abnf"><![CDATA[f5Encoding = "(F5:" <passwordString> [ "," <PasswordString> ]* ")"]]></artwork>
                     </figure>
                 </t>
                   <t>
