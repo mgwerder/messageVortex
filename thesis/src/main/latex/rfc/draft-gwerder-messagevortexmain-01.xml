@@ -489,7 +489,7 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec]]></artwork>
                         <t>AES256</t>
                         <t>CAMELLIA128 (see <xref target="RFC3657"/> chapter 3 for Camellia implementation details)</t>
                         <t>CAMELLIA256</t>
-                    </ul>
+                    </list>
                 </t>    
                 <t>
                     A node SHOULD support any standardized, bigger key size than the smallest key.
