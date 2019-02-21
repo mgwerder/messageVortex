@@ -330,8 +330,8 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
 
             <figure anchor="fig_layer_overview" title="Layer overview">
             	<artset>
-                	<artwork align="center" src="blockLayoutSimplified.svg" type="svg"/>
-                	<!-- No PNG support so far <artwork align="center" src="blockLayoutSimplified.png" type="png"/>-->
+                	<!-- no appropriate SVG prep so far ... image SVGs not supported <artwork align="center" src="blockLayoutSimplified.svg" type="svg"/> -->
+                	<!-- No PNG support so far <artwork align="center" src="blockLayoutSimplified.png" type="png"/> -->
                 	<artwork align="center" type="ascii-art"><![CDATA[
 +-------------------------------------------------------------------+
 | Vortex Node                                                       |
