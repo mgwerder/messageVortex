@@ -120,7 +120,7 @@
 ><![CDATA[localPart         = <local part of address>
 domain            = <domain part of address>
 email             = localPart "@" domain
-keySpec           = <BASE64 encoded of ASN.1 AsymmetricKey; DER representation>
+keySpec           = <BASE64 encoded AsymmetricKey [DER encoded]>
 smtpAlternateSpec = localPart ".." keySpec ".." domain "@localhost"
 smtpUrl           = "vortexsmtp://" smtpAlternateSpec]]></artwork>
                             </figure>
@@ -139,8 +139,9 @@ smtpUrl           = "vortexsmtp://" smtpAlternateSpec]]></artwork>
 domain            = <domain part of address>
 resourcePart      = <resource part of the address>
 jid               = localPart "@" domain [ "/" resourcePart ]
-keySpec           = <BASE64 encoded AsymmetricKey; DER representation>;
-jidAlternateSpec  = localPart ".." keySpec ".." domain "@localhost" [ "/" resourcePart ]
+keySpec           = <BASE64 encoded AsymmetricKey [DER encoded]>;
+jidAlternateSpec  = localPart ".." keySpec ".." 
+                    domain "@localhost" [ "/" resourcePart ]
 jidUrl            = "vortexxmpp://" jidAlternateSpec]]></artwork>
                             </figure>
                         </t>
@@ -327,9 +328,6 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec]]></artwork>
             </t>
 
             <figure anchor="fig_layer_overview" title="Layer overview">
-            	<artset>
-                	<!-- no appropriate SVG prep so far ... image SVGs not supported <artwork align="center" src="blockLayoutSimplified.svg" type="svg"/> -->
-                	<!-- No PNG support so far <artwork align="center" src="blockLayoutSimplified.png" type="png"/> -->
                 	<artwork align="center" type="ascii-art"
 ><![CDATA[+------------------------------------------------------------------+
 | Vortex Node                                                      |
@@ -348,7 +346,6 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec]]></artwork>
   +---------------------------+ +--------------+ +---------------+
   |          Transport        | | Transport in | | Transport out |
   |___________________________| |______________| |_______________|]]></artwork>
-               </artset>
             </figure>
 
             <t>
@@ -487,11 +484,11 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec]]></artwork>
                     A node MUST support the following symmetric ciphers:
                 </t>
                 <t>
-                    <ul>
-                        <li>AES128 (see <xref target="FIPS-AES"/> for AES implementation details)</li>
-                        <li>AES256</li>
-                        <li>CAMELLIA128 (see <xref target="RFC3657"/> chapter 3 for Camellia implementation details)</li>
-                        <li>CAMELLIA256</li>
+                    <list  style="symbols">
+                        <t>AES128 (see <xref target="FIPS-AES"/> for AES implementation details)</t>
+                        <t>AES256</t>
+                        <t>CAMELLIA128 (see <xref target="RFC3657"/> chapter 3 for Camellia implementation details)</t>
+                        <t>CAMELLIA256</t>
                     </ul>
                 </t>    
                 <t>
@@ -609,7 +606,8 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec]]></artwork>
           </t>
                     <t>
             <figure>
-              <artwork type="abnf"><![CDATA[plainEncoding = "("plain:" <numberOfBytesOfOffset> [ "," <numberOfBytesOfOffset> ]* ")"]]></artwork>
+              <artwork type="abnf"><![CDATA[plainEncoding = "("plain:" <numberOfBytesOfOffset> 
+              		                                      [ "," <numberOfBytesOfOffset> ]* ")"]]></artwork>
             </figure>
           </t>
                 </section>
