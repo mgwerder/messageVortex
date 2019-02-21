@@ -49,9 +49,9 @@ do
 	img=${img%%.*}
 	echo "  converting $img.pdf -> $img.png"
 	convert $dir/../thesis/src/main/latex/inc/$img.pdf ${WWWDIR}/devel/images/$img.png
-	if [[ -f $img.fig ]]
+	if [[ -f $dir/../thesis/src/main/latex/inc/$img.fig ]]
 	then
-		echo "  converting $img.pdf -> $img.svg"
+		echo "  converting $img.fig -> $img.svg"
 		fig2dev -L svg $dir/../thesis/src/main/latex/inc/$img.fig ${WWWDIR}/devel/images/$img.svg
 		cp ${WWWDIR}/devel/images/$img.svg phd/thesis/src/main/latex/rfc/
 	fi	
