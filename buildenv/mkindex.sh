@@ -216,7 +216,7 @@ function addrow() {
                         der=${fn##./}
                         echo -n "<tr><td><a href=\"$1/$der\">$der</a></td><td>$3</td><td>"
                         der=${der%%\.*}
-                        find . -name "$der*" |grep -v "$fn"|while read derivat
+                        find . -name "$der*" |grep -v "$fn"|sort|while read derivat
                         do
                                 derivat=${derivat##*\.}
                                 echo -n "<a href=\"$1/$der.$derivat\">$derivat</a>&nbsp;"
