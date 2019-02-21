@@ -329,7 +329,10 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
             </t>
 
             <figure anchor="fig_layer_overview" title="Layer overview">
-                <artwork align="center" src="blockLayoutSimplifie.svg" type="svg"><![CDATA[
+            	<artset>
+                	<artwork align="center" src="blockLayoutSimplifie.svg" type="svg"/>
+                	<artwork align="center" src="blockLayoutSimplifie.png" type="png"/>
+                	<artwork align="center" src="blockLayoutSimplifie.png" type="ascii-art"><![CDATA[
 +-------------------------------------------------------------------+
 | Vortex Node                                                       |
 | +---------------------------------------------------------------+ |
@@ -347,7 +350,8 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
   +----------------------------+ +--------------+ +---------------+
   |          Transport         | | Transport in | | Transport out |
   |____________________________| |______________| |_______________|
-               ]]></artwork>
+	               ]]></artwork>
+               </artset>
             </figure>
 
             <t>
@@ -1240,7 +1244,7 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
 
         <section anchor="asn_one" title="The ASN.1 schema for Vortex messages">
             <t>
-                The following sections contain the ASN.1 modules specifying the MessageVortex Protocol
+                The following sections contain the ASN.1 modules specifying the MessageVortex Protocol.
             </t>
             <section  anchor="asnOne_schema" title="The main VortexMessageBlocks">
                 <t>
