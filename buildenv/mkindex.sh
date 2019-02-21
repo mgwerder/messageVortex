@@ -77,7 +77,7 @@ do
   out=${out%%.xml}
   echo "    creating xml flatified output ($out)"
   echo "      injecting sourcecode"
-  egrep "<sourcecode[^>]*src=\"[^\"]*.asn\"[^>]*/>" <$dir/../thesis/target/main/latex-build/rfc/$out.xml | while read l ; 
+  egrep "<artwork[^>]*src=\"[^\"]*.asn\"[^>]*/>" <$dir/../thesis/target/main/latex-build/rfc/$out.xml | while read l ; 
   do 
   	src=$(echo "$l"|sed 's/.*src="//;s/".*//');
   	rep="${l%%/>}>"'<![CDATA['"$(cat $dir/../thesis/target/main/latex-build/rfc/$src)]]></sourcecode>";
