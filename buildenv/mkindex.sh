@@ -83,6 +83,7 @@ do
   egrep "<artwork[^>]*src=\"[^\"]*.asn\"[^>]*/>" <$dir/../thesis/target/main/latex-build/rfc/$out.xml | while read l ; 
   do 
   	src=$(echo "$l"|sed 's/.*src="//;s/".*//');
+  	l=$(echo "$l"|sed 's/ src="[^"]*"//')
   	rep="${l%%/>}>"'<![CDATA['"$(cat $dir/../thesis/target/main/latex-build/rfc/$src)]]></artwork>";
   	file=$(cat $dir/../thesis/target/main/latex-build/rfc/$out.xml); 
   	echo "${file/$l/$rep}" >$dir/../thesis/target/main/latex-build/rfc/$out.xml.tmp && mv $dir/../thesis/target/main/latex-build/rfc/$out.xml.tmp $dir/../thesis/target/main/latex-build/rfc/$out.xml && echo "      injected file $src (new size is $(stat --printf="%s"  $dir/../thesis/target/main/latex-build/rfc/$out.xml))"
