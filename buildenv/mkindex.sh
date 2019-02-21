@@ -1,5 +1,5 @@
 #!/bin/bash
-XML2RFC="/usr/local/bin/xml2rfc --v3 "
+XML2RFC="/usr/local/bin/xml2rfc"
 dir=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 WWWDIR=$dir/../target/www
 
@@ -53,7 +53,7 @@ do
 	then
 		echo "  converting $img.fig -> $img.svg"
 		fig2dev -L svg $dir/../thesis/src/main/latex/inc/$img.fig ${WWWDIR}/devel/images/$img.svg
-		cp ${WWWDIR}/devel/images/$img.svg phd/thesis/src/main/latex/rfc/
+		cp ${WWWDIR}/devel/images/$img.svg $dir/../thesis/target/main/latex-build/rfc/
 	fi	
 done	
 
@@ -80,6 +80,12 @@ actualfile=draft-gwerder-messagevortexmain-01
 (cd $dir/../thesis/target/main/latex-build/rfc/;find . -name "draft-gwerder-messagevortexmain-*.xml" |while read out
 do
   out=${out%%.xml}
+  if [[ "$out" =~ ^.*-00$ ]]
+  then
+  	unset X2R_OPTS
+  else
+  	X2R_OPTS="--v3"
+  fi	
   echo "    creating xml flatified output ($out)"
   echo "      injecting sourcecode"
   egrep "<artwork[^>]*src=\"[^\"]*.asn\"[^>]*/>" <$dir/../thesis/target/main/latex-build/rfc/$out.xml | while read l ; 
@@ -95,13 +101,13 @@ do
   echo "      creating uiversion"
   cat $dir/../thesis/target/main/latex-build/rfc/${out}.xml | awk 'BEGIN{ incdata=0;}; /^.*<artwork[^>]* src="[^"]*"[^>\/]*>.*/ { gsub(/<!\[CDATA\[/,"");print;incdata=1; }; incdata!=1 {print $0;};incdata==1 && /.*\]\]>.*/ {gsub(/.*\]\]>/,"");print;incdata=0;}'  >$dir/../thesis/target/main/latex-build/rfc/${out}.uixml
   echo "      flatifying"
-  $XML2RFC --exp $dir/../thesis/target/main/latex-build/rfc/${out}.nouixml -q -o $dir/../thesis/target/main/latex-build/rfc/$out.xmlflat || exit 101
+  $XML2RFC $X2R_OPTS --exp $dir/../thesis/target/main/latex-build/rfc/${out}.nouixml -q -o $dir/../thesis/target/main/latex-build/rfc/$out.xmlflat || exit 101
   echo "  creating txt output"
-  $XML2RFC $dir/../thesis/target/main/latex-build/rfc/${out}.nouixml --text -q -o $dir/../thesis/target/main/latex-build/rfc/$out.txt || exit 101
+  $XML2RFC $X2R_OPTS $dir/../thesis/target/main/latex-build/rfc/${out}.nouixml --text -q -o $dir/../thesis/target/main/latex-build/rfc/$out.txt || exit 101
   echo "  creating html output"
-  $XML2RFC $dir/../thesis/target/main/latex-build/rfc/${out}.uixml --html -q -o $dir/../thesis/target/main/latex-build/rfc/$out.html 
+  $XML2RFC $X2R_OPTS $dir/../thesis/target/main/latex-build/rfc/${out}.uixml --html -q -o $dir/../thesis/target/main/latex-build/rfc/$out.html 
   #echo "  creating nroff output"
-  #$XML2RFC --v3 $dir/../thesis/target/main/latex-build/rfc/${out}.xmlflat --nroff -q -o $dir/../thesis/target/main/latex-build/rfc/$out.nroff || exit 101
+  #$XML2RFC[A --v3 $dir/../thesis/target/main/latex-build/rfc/${out}.xmlflat --nroff -q -o $dir/../thesis/target/main/latex-build/rfc/$out.nroff || exit 101
   echo "  creating pdf"
   enscript -DDuplex:true --title "$out" -B -L 59 --margins=70:70:70:70 -p - $dir/../thesis/target/main/latex-build/rfc/${out}.txt | ps2pdf - - >$dir/../thesis/target/main/latex-build/rfc/$out.pdf   || exit 101
   #(cd  phd/thesis/src/main/latex/rfc/; ../../../xml2rfc/bin/mkpdf.sh $out.xmlflat  && mv $out.xmlflat.pdf $out.pdf )
