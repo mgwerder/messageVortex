@@ -82,7 +82,7 @@ do
   	src=$(echo "$l"|sed 's/.*src="//;s/".*//');
   	rep="${l%%/>}>"'<![CDATA['"$(cat $dir/../thesis/target/main/latex-build/rfc/$src)]]></sourcecode>";
   	file=$(cat $dir/../thesis/target/main/latex-build/rfc/$out.xml); 
-  	echo "${file/$l/$rep}" >$dir/../thesis/target/main/latex-build/rfc/$out.xml.tmp && mv $dir/../thesis/target/main/latex-build/rfc/$out.xml.tmp $dir/../thesis/src/main/latex/rfc/$out.xml && echo "      injected file $src (new size is $(stat --printf="%s"  $dir/../thesis/target/main/latex-build/rfc/$out.xml))"
+  	echo "${file/$l/$rep}" >$dir/../thesis/target/main/latex-build/rfc/$out.xml.tmp && mv $dir/../thesis/target/main/latex-build/rfc/$out.xml.tmp $dir/../thesis/target/main/latex/rfc/$out.xml && echo "      injected file $src (new size is $(stat --printf="%s"  $dir/../thesis/target/main/latex-build/rfc/$out.xml))"
   done
   echo "      creating nouiversion"
   sed -e 's~<artwork\([^>]*\) src="[^"]*"~<artwork \1~gi' <$dir/../thesis/target/main/latex-build/rfc/${out}.xml >$dir/../thesis/target/main/latex-build/rfc/${out}.nouixml
