@@ -104,7 +104,7 @@ do
   echo "      flatifying"
   $XML2RFC $X2R_OPTS --exp $dir/../thesis/target/main/latex-build/rfc/${out}.nouixml -q -o $dir/../thesis/target/main/latex-build/rfc/$out.xmlflat || exit 101
   echo "  creating txt output"
-  $XML2RFC $X2R_OPTS $dir/../thesis/target/main/latex-build/rfc/${out}.nouixml --text -q -o $dir/../thesis/target/main/latex-build/rfc/$out.txt || exit 101
+  $XML2RFC $X2R_OPTS $dir/../thesis/target/main/latex-build/rfc/${out}.xmlflat --text -q -o $dir/../thesis/target/main/latex-build/rfc/$out.txt || exit 101
   echo "  creating html output"
   $XML2RFC $X2R_OPTS $dir/../thesis/target/main/latex-build/rfc/${out}.uixml --html -q -o $dir/../thesis/target/main/latex-build/rfc/$out.html 
   #echo "  creating nroff output"
