@@ -107,8 +107,8 @@ do
   $XML2RFC $X2R_OPTS $dir/../thesis/target/main/latex-build/rfc/${out}.nouixml --text -q -o $dir/../thesis/target/main/latex-build/rfc/$out.txt || exit 101
   echo "  creating html output"
   $XML2RFC $X2R_OPTS $dir/../thesis/target/main/latex-build/rfc/${out}.uixml --html -q -o $dir/../thesis/target/main/latex-build/rfc/$out.html 
-  echo "  creating nroff output"
-  $XML2RFC $X2R_OPTS $dir/../thesis/target/main/latex-build/rfc/${out}.xmlflat --nroff -q -o $dir/../thesis/target/main/latex-build/rfc/$out.nroff || exit 101
+  #echo "  creating nroff output"
+  #$XML2RFC $X2R_OPTS $dir/../thesis/target/main/latex-build/rfc/${out}.xmlflat --nroff -q -o $dir/../thesis/target/main/latex-build/rfc/$out.nroff || exit 101
   echo "  creating pdf"
   #enscript -DDuplex:true --title "$out" -B -L 59 --margins=70:70:70:70 -p - $dir/../thesis/target/main/latex-build/rfc/${out}.txt | ps2pdf - - >$dir/../thesis/target/main/latex-build/rfc/$out.pdf   || exit 101
   #(cd  phd/thesis/src/main/latex/rfc/; ../../../xml2rfc/bin/mkpdf.sh $out.xmlflat  && mv $out.xmlflat.pdf $out.pdf )
