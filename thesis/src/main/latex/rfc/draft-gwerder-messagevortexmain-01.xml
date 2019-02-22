@@ -45,10 +45,10 @@
 
         <abstract>
             <t>
-                MessageVortex Protocol specifies messages embedded within existing transfer protocols such as SMTP or XMPP to send them anonymously from peer to peer.
+                MessageVortex Protocol is a protocol to achieve different degrees of anonymity. It specifies messages embedded within existing transfer protocols such as SMTP or XMPP to send them via peer nodes to one or more recipients.
             </t>
             <t>
-        The protocol outperforms other protocols by decoupling transport from  the final transmitter and receiver party. There is no trust put into any infrastructure except for the infrastructure of the sending and receiving party of a message. The creator of the routing block has full control over the message flow. Routing nodes gain no non-obvious knowledge about messages even when collaboratings. Third-party anonymity is always achieved. Furthermore, the protocol allows achieving either sender or receiver anonymity.
+              The protocol outperforms other protocols by decoupling transport from  the final transmitter and receiver party. There is no trust put into any infrastructure except for the infrastructure of the sending and receiving party of a message. The creator of the routing block has full control over the message flow. Routing nodes gain no non-obvious knowledge about messages even when collaborating. Third-party anonymity is always achieved. Furthermore, the protocol allows achieving either sender or receiver anonymity.
             </t>
         </abstract>
     </front>
@@ -92,7 +92,7 @@
 
             <section title="Number Specification">
                 <t>
-                    All numbers within this document are, if not suffixed, decimal numbers.  Numbers suffixed with a small letter 'h' followed by two hex digits are octets in hexadecimal writing.  A blank in ASCII (' ') is written as 20h and a capital 'K' in ASCII as 4Bh.
+                    All numbers within this document are, if not suffixed, decimal numbers.  Numbers suffixed with a small letter 'h' followed by two hexadecimal digits are octets in hexadecimal writing.  A blank in ASCII (' ') is written as 20h and a capital 'K' in ASCII as 4Bh.
                 </t>
             </section>
         </section>
@@ -114,7 +114,7 @@
                     </t>
                     <section anchor="entities_node_spec_smtp" title="NodeSpec for SMTP nodes">
                         <t>
-                            To allow addressing of a vortex node with an ordinary client an alternative representation SHOULD be supported as defined below as smtpAlternateSpec (specification noted in ABNF as specified in <xref target="RFC5234"/>). For applications with QR code support, the smtpUrl representations should be used.
+                            An alternative address representation is defined. This address allows a standard email client to address a vortex node. An alternative representation SHOULD be supported as defined below as smtpAlternateSpec (specification noted in ABNF as specified in <xref target="RFC5234"/>). For applications with QR code support, the smtpUrl representations SHOULD be used.
                             <figure>
                                 <artwork type="abnf"
 ><![CDATA[localPart         = <local part of address>
@@ -279,7 +279,7 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec]]></artwork>
                     </t>
                     <t>
                         <list style="symbols">
-                          <t>An asymmetric keypair to represent the identity</t>
+                          <t>An asymmetric key pair to represent the identity</t>
                           <t>A validity time of the identity</t>
                         </list>
                         
@@ -606,8 +606,9 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec]]></artwork>
           </t>
                     <t>
             <figure>
-              <artwork type="abnf"><![CDATA[plainEncoding = "("plain:" <numberOfBytesOfOffset> 
-              		                                      [ "," <numberOfBytesOfOffset> ]* ")"]]></artwork>
+              <artwork type="abnf"
+><![CDATA[plainEncoding = "("plain:" <numberOfBytesOfOffset> 
+                [ "," <numberOfBytesOfOffset> ]* ")"]]></artwork>
             </figure>
           </t>
                 </section>
@@ -885,13 +886,13 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec]]></artwork>
                     </t>
                     <section anchor="routing_operations_redundancy_padding" title="Padding Operation">
                         <t>
-                            First, the length of all output blocks including redundancy is calculated. This is done by L=roof((&lt;input block size in bytes&gt;+4)/&lt;encryption block size in bytes&gt;)*&lt;block size in bytes&gt;. The block is prepended with a 32-bit length indicator in bytes at the beginning (little-endian). This length indicator i is calculated by i=&lt;input block size in bytes&gt;*randominteger()*L. The rest of the input block up to length L is padded with random data. A routing block builder SHOULD specify a PRNG and a seed to be used for this padding. If GF(16) is applied, all numbers are treated as little-endian representations.
+                            A processing node calculates the final length of all output blocks including redundancy. This is done by L=roof((&lt;input block size in bytes&gt;+4)/&lt;encryption block size in bytes&gt;)*&lt;block size in bytes&gt;. The block is prepended with a 32-bit uint length indicator in bytes (little-endian). This length indicator i is calculated by i=&lt;input block size in bytes&gt;*randominteger()*L. The rest of the input block up to length L is padded with random data. A routing block builder SHOULD specify a PRNG and a seed to be used for this padding. If GF(16) is applied, all numbers are treated as little-endian representations. Only GF(8) and GF(16) are allowed fields.
                         </t>
                         <t>
                             For padding removal, first, the padding i at the start is removed as a little-endian integer. Then, the length of the output block is calculated by applying &lt;output block size in bytes&gt;=i mod &lt;input block size in bytes&gt;
                         </t>
                         <t>
-                           This padding guarantees that each resulting block is as big as the subsequent encryption operation and does not require any further padding.
+                           This padding guarantees that each resulting block matches the block size of the subsequent encryption operation and does not require any further padding.
                         </t>
                     </section>
                     <section anchor="routing_operations_redundancy_matrix" title="Apply Matrix">
