@@ -23,70 +23,9 @@
         <finalName>MessageVortex-thesis</finalName>
         <plugins>
             <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>3.1.0</version>
-                <executions>
-                    <execution>
-                        <id>copy-sources</id>
-                        <phase>process-sources</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${basedir}/target/main/latex-build</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>src/main/latex</directory>
-                                    <filtering>true</filtering>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>copy-resources</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${basedir}/target/main/latex-build</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>src/main/latex-resources</directory>
-                                    <filtering>true</filtering>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>copy-pdf-full</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${basedir}/target/thesis</outputDirectory>
-                            <resources>
-								<resource>
-									<directory>target/main/latex-build</directory>
-									<includes>
-										<include>**/*.pdf</include>
-									</includes>
-									<excludes>
-										<exclude>inc/**/*</exclude>
-									</excludes>
-								</resource>
-								
-							</resources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
-				<version>1.6.0</version>
+		<version>1.6.0</version>
                 <executions>
                     <execution>
                         <id>latex</id>
@@ -94,50 +33,12 @@
                             <goal>exec</goal>
                         </goals>
                         <phase>compile</phase>
-						<configuration>
-							<workingDirectory>target/main/latex-build</workingDirectory>
-							<executable>pdflatex</executable>
-							<commandlineArgs>messageVortex</commandlineArgs>
-							<!-- 
-							  <commandlineArgs>jobname=messageVortex_embedded \PassOptionsToClass{attachdocs}{scrbook}\input{messageVortex.tex}</commandlineArgs> 
-							-->
-						</configuration>
-                    </execution>
-                    <execution>
-                        <id>bibtex</id>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <phase>compile</phase>
-						<configuration>
-							<workingDirectory>target/main/latex-build</workingDirectory>
-							<executable>bibtex</executable>
-							<commandlineArgs>messageVortex</commandlineArgs>
-						</configuration>
-                    </execution>
-                    <execution>
-                        <id>makeindex</id>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <phase>compile</phase>
-						<configuration>
-							<workingDirectory>target/main/latex-build</workingDirectory>
-							<executable>makeindex</executable>
-							<commandlineArgs>messageVortex</commandlineArgs>
-						</configuration>
-                    </execution>
-                    <execution>
-                        <id>latex-secondrun</id>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <phase>compile</phase>
-						<configuration>
-							<workingDirectory>target/main/latex-build</workingDirectory>
-							<executable>pdflatex</executable>
-							<commandlineArgs>messageVortex</commandlineArgs>
-						</configuration>
+			<configuration>
+				<workingDirectory>.</workingDirectory>
+				<executable>./build.sh</executable>
+				<commandlineArgs>messageVortex</commandlineArgs>
+				  <commandlineArgs>jobname=messageVortex_embedded \PassOptionsToClass{attachdocs}{scrbook}\input{messageVortex.tex}</commandlineArgs> 
+			</configuration>
                     </execution>
                 </executions>
             </plugin>
