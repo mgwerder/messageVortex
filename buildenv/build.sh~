@@ -8,12 +8,10 @@ dir=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 	sudo docker build -t messagevortexbuild . && \
 	tmpdir=$(mktemp -d -p $dir/..)
 	echo "temp directory for build is $tmpdir"
-	mkdir -p $tmpdir/buildenv
+	mkdir -p $tmpdir/{application-core-library,thesis,website,buildenv}
 	cp $dir/../pom.xml $tmpdir
 	for i in application-core-library thesis website 
 	do
-		mkdir $tmpdir/$i
-		mkdir $tmpdir/$i/src
 		cp $dir/../$i/pom.xml $tmpdir/$i
 	done
 	ls -la $tmpdir/*
