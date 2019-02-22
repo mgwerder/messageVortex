@@ -3,6 +3,7 @@ FROM ubuntu:bionic
 MAINTAINER Martin Gwerder
 
 # install all packages
+COPY mavenfiles.tar /tmp
 RUN mkdir /var/tmp/messagevortex && \
     apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get -y install \
@@ -17,7 +18,10 @@ RUN mkdir /var/tmp/messagevortex && \
                openjdk-8-jdk-headless  \
                maven && \
     pip install xml2rfc 'weasyprint<=0.42.3' && \
-    sed 's/domain="coder" rights="none"/domain="coder" rights="read|write"/' </etc/ImageMagick-6/policy.xml >/tmp/policy.xml && mv /tmp/policy.xml /etc/ImageMagick-6/policy.xml 
+    sed 's/domain="coder" rights="none"/domain="coder" rights="read|write"/' </etc/ImageMagick-6/policy.xml >/tmp/policy.xml && mv /tmp/policy.xml /etc/ImageMagick-6/policy.xml && \
+    cd /var/tmp/messagevortex && \
+    tar -xvf /tmp/mavenfiles.tar && \
+    mvn dependency:go-offline
     
 VOLUME /var/tmp/messagevortex
 

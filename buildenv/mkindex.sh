@@ -28,9 +28,9 @@ echo "       <img src=\"https://www.gwerder.net/sonar/api/badges/measure?key=net
 echo "    </p>">>$mtmp
 echo "    <h2>Stats</h2>">>$mtmp
 rm -r ${WWWDIR}
-mkdir -p ${WWWDIR}
-mkdir ${WWWDIR}/devel/
-mkdir ${WWWDIR}/devel/images
+mkdir -p ${WWWDIR}  2>/dev/null
+mkdir ${WWWDIR}/devel/ 2>/dev/null
+mkdir ${WWWDIR}/devel/images 2>/dev/null
 echo "    <table class=\"basic\">">>$mtmp
 echo "      <tr><th style=\"text-align: left;\">Fixme type</th><th style=\"text-align: left;\">#</th></tr>">>$mtmp
 echo "      <tr><td>Fatal fixme</td><td style=\"text-align: right;\">$(grep "(FiXme)" $dir/../thesis/target/main/latex-build/messageVortex.log | grep -i "of fatal error" |tail -n 1|sed 's/.*: *//gi;s/[\.,]$//')</td></tr>">>$mtmp
@@ -49,13 +49,15 @@ do
 	img=${img%%.*}
 	echo "  converting $img.pdf -> $img.png"
 	convert $dir/../thesis/src/main/latex/inc/$img.pdf ${WWWDIR}/devel/images/$img.png
-	if [[ -f $dir/../thesis/src/main/latex/inc/$img.fig ]]
-	then
-		echo "  converting $img.fig -> $img.svg"
-		#fig2dev -L svg $dir/../thesis/src/main/latex/inc/$img.fig ${WWWDIR}/devel/images/$img.svg
-		convert ${WWWDIR}/devel/images/$img.png ${WWWDIR}/devel/images/$img.svg
-		cp ${WWWDIR}/devel/images/$img.svg $dir/../thesis/target/main/latex-build/rfc/
-	fi	
+	#if [[ -f $dir/../thesis/src/main/latex/inc/$img.fig ]]
+	#then
+	#	echo "  converting $img.fig -> $img.svg"
+	#	#fig2dev -L svg $dir/../thesis/src/main/latex/inc/$img.fig ${WWWDIR}/devel/images/$img.svg
+	#	convert ${WWWDIR}/devel/images/$img.png ${WWWDIR}/devel/images/$img.svg
+	#	mkdir $dir/../target/main/rfc/ 2>/dev/null
+	#	cp $dir/../thesis/src/main/latex/rfc/* $dir/../target/main/rfc/
+	#	cp ${WWWDIR}/devel/images/$img.svg $dir/../target/main/rfc/
+	#fi	
 done	
 
 tmp=`mktemp`
@@ -64,7 +66,7 @@ echo -n "0">$tmp
 do 
   echo "      <tr>">>$mtmp
   echo "        <th style=\"text-align: left;\"><a href=\"phd/doc/${f%%.tex}.pdf\">$f</a>(<a href=\"phd/doc/${f%%.tex}.odt\">odt</a>)</th>">>$mtmp
-  pandoc --data-dir=$(pwd) -f latex -t odt -o ${f%%.tex}.odt $f >/dev/null
+  pandoc --data-dir=$(pwd) -f latex -t odt -o $dir/../target/${f%%.tex}.odt $f >/dev/null
   echo "        <td style=\"text-align: right;\">`(detex ${f} |wc -l)`</td>">>$mtmp
   echo "        <td style=\"text-align: right;\">`(detex ${f} |wc -w)`</td>">>$mtmp
   echo  -n "+`(detex ${f} |wc -w)`">>$tmp
@@ -72,13 +74,13 @@ do
 done)
 
 echo "adding inclusion files"
-mkdir -p $dir/../thesis/target/main/latex-build/rfc/asn 2>/dev/null
-cp -u $dir/../application-core-library/src/main/asn/*.asn $dir/../thesis/target/main/latex-build/rfc/asn
+mkdir -p $dir/../target/main/rfc/asn 2>/dev/null
+cp -u $dir/../application-core-library/src/main/asn/*.asn $dir/../target/main/rfc/asn
 
 ttmp=$(mktemp)
 actualfile=draft-gwerder-messagevortexmain-01
 
-(cd $dir/../thesis/target/main/latex-build/rfc/;find . -name "draft-gwerder-messagevortexmain-*.xml" |while read out
+(cd $dir/../target/main/rfc/; find . -name "draft-gwerder-messagevortexmain-*.xml" |while read out
 do
   out=${out%%.xml}
   if [[ "$out" =~ ^.*-00$ ]]
@@ -89,36 +91,36 @@ do
   fi	
   echo "    creating xml flatified output ($out)"
   echo "      injecting sourcecode"
-  egrep "<artwork[^>]*src=\"[^\"]*.asn\"[^>]*/>" <$dir/../thesis/target/main/latex-build/rfc/$out.xml | while read l ; 
+  egrep "<artwork[^>]*src=\"[^\"]*.asn\"[^>]*/>" <$dir/../target/main/rfc/$out.xml | while read l ; 
   do 
   	src=$(echo "$l"|sed 's/.*src="//;s/".*//');
   	l=$(echo "$l"|sed 's/ src="[^"]*"//')
-  	rep="${l%%/>}>"'<![CDATA['"$(cat $dir/../thesis/target/main/latex-build/rfc/$src)]]></artwork>";
-  	file=$(cat $dir/../thesis/target/main/latex-build/rfc/$out.xml); 
-  	echo "${file/$l/$rep}" >$dir/../thesis/target/main/latex-build/rfc/$out.xml.tmp && mv $dir/../thesis/target/main/latex-build/rfc/$out.xml.tmp $dir/../thesis/target/main/latex-build/rfc/$out.xml && echo "      injected file $src (new size is $(stat --printf="%s"  $dir/../thesis/target/main/latex-build/rfc/$out.xml))"
+  	rep="${l%%/>}>"'<![CDATA['"$(cat $dir/../target/main/rfc/$src)]]></artwork>";
+  	file=$(cat $dir/../target/main/rfc/$out.xml); 
+  	echo "${file/$l/$rep}" >$dir/../target/main/rfc/$out.xml.tmp && mv $dir/../target/main/rfc/$out.xml.tmp $dir/../target/main/rfc/$out.xml && echo "      injected file $src (new size is $(stat --printf="%s"  $dir/../target/main/rfc/$out.xml))"
   done
   echo "      creating nouiversion"
-  sed -e 's~<artwork\([^>]*\) src="[^"]*"~<artwork \1~gi' <$dir/../thesis/target/main/latex-build/rfc/${out}.xml >$dir/../thesis/target/main/latex-build/rfc/${out}.nouixml
+  sed -e 's~<artwork\([^>]*\) src="[^"]*"~<artwork \1~gi' <$dir/../target/main/rfc/${out}.xml >$dir/../target/main/rfc/${out}.nouixml
   echo "      creating uiversion"
-  cat $dir/../thesis/target/main/latex-build/rfc/${out}.xml | awk 'BEGIN{ incdata=0;}; /^.*<artwork[^>]* src="[^"]*"[^>\/]*>.*/ { gsub(/<!\[CDATA\[/,"");print;incdata=1; }; incdata!=1 {print $0;};incdata==1 && /.*\]\]>.*/ {gsub(/.*\]\]>/,"");print;incdata=0;}'  >$dir/../thesis/target/main/latex-build/rfc/${out}.uixml
+  cat $dir/../target/main/rfc/${out}.xml | awk 'BEGIN{ incdata=0;}; /^.*<artwork[^>]* src="[^"]*"[^>\/]*>.*/ { gsub(/<!\[CDATA\[/,"");print;incdata=1; }; incdata!=1 {print $0;};incdata==1 && /.*\]\]>.*/ {gsub(/.*\]\]>/,"");print;incdata=0;}'  >$dir/../target/main/rfc/${out}.uixml
   echo "      flatifying"
-  $XML2RFC $X2R_OPTS --exp $dir/../thesis/target/main/latex-build/rfc/${out}.nouixml -q -o $dir/../thesis/target/main/latex-build/rfc/$out.xmlflat || exit 101
+  $XML2RFC $X2R_OPTS --exp $dir/../target/main/rfc/${out}.nouixml -q -o $dir/../target/main/rfc/$out.xmlflat || exit 101
   echo "  creating txt output"
-  $XML2RFC $X2R_OPTS $dir/../thesis/target/main/latex-build/rfc/${out}.xmlflat --text -q -o $dir/../thesis/target/main/latex-build/rfc/$out.txt || exit 101
+  $XML2RFC $X2R_OPTS $dir/../target/main/rfc/${out}.xmlflat --text -q -o $dir/../target/main/rfc/$out.txt || exit 101
   echo "  creating html output"
-  $XML2RFC $X2R_OPTS $dir/../thesis/target/main/latex-build/rfc/${out}.uixml --html -q -o $dir/../thesis/target/main/latex-build/rfc/$out.html 
+  $XML2RFC $X2R_OPTS $dir/../target/main/rfc/${out}.uixml --html -q -o $dir/../target/main/rfc/$out.html 
   #echo "  creating nroff output"
   #$XML2RFC $X2R_OPTS $dir/../thesis/target/main/latex-build/rfc/${out}.xmlflat --nroff -q -o $dir/../thesis/target/main/latex-build/rfc/$out.nroff || exit 101
   echo "  creating pdf"
   #enscript -DDuplex:true --title "$out" -B -L 59 --margins=70:70:70:70 -p - $dir/../thesis/target/main/latex-build/rfc/${out}.txt | ps2pdf - - >$dir/../thesis/target/main/latex-build/rfc/$out.pdf   || exit 101
   #(cd  phd/thesis/src/main/latex/rfc/; ../../../xml2rfc/bin/mkpdf.sh $out.xmlflat  && mv $out.xmlflat.pdf $out.pdf )
-  $XML2RFC $X2R_OPTS $dir/../thesis/target/main/latex-build/rfc/${out}.uixml --pdf -q -o $dir/../thesis/target/main/latex-build/rfc/$out.pdf
+  $XML2RFC $X2R_OPTS $dir/../target/main/rfc/${out}.uixml --pdf -q -o $dir/../target/main/rfc/$out.pdf
   echo "  creating ps"
   # (cd  phd/thesis/src/main/latex/rfc/; ../../../xml2rfc/bin/mkps.sh $out.xmlflat   && mv $out.xmlflat.ps  $out.ps )
-  (cd  $dir/../thesis/target/main/latex-build/rfc/; pdf2ps $out.pdf $out.ps) 
+  (cd  $dir/../target/main/rfc/; pdf2ps $out.pdf $out.ps) 
   echo "  creating epub"
   (
-      cd  $dir/../thesis/target/main/latex-build/rfc/
+      cd  $dir/../target/main/rfc/
       echo "    epub"
       #pandoc -f html -t epub3 -o $out.epub $out.html || exit 101
       ebook-convert $out.html $out.epub 
@@ -129,8 +131,8 @@ do
   
   if [[ "$out" == "./$actualfile" ]]
   then
-    cat $dir/../thesis/target/main/latex-build/rfc/${out}.txt |wc -l >$ttmp.lines
-    cat $dir/../thesis/target/main/latex-build/rfc/${out}.txt |wc -w >$ttmp.words
+    cat $dir/../target/main/rfc/${out}.txt |wc -l >$ttmp.lines
+    cat $dir/../target/main/rfc/${out}.txt |wc -w >$ttmp.words
   fi  
 done)
 
@@ -144,63 +146,63 @@ echo "    </table>">>$mtmp
 a=`((cat $tmp ;echo "")| bc)`
 echo "    <p>`(echo "scale=3;100.0*$a/60000"|bc)`% completed ($a words)</p>">>$mtmp
 echo "    <p>`find $dir/../application-core-library/src/main/java -name *.java |(echo -n "0";while read f; do echo -n "+$(wc -l <$f)";done;echo "")|bc` lines of code</p>">>$mtmp
-#echo "    <h2>History</h2>">>$mtmp
-#echo "    <table class=\"basic\">">>$mtmp
-#echo "      <tr><th>Release</th><th>User</th><th>Date</th><th>Change size</th><th>Changed files</th><th>Comment</th></tr>">
-#(cd phd;ssh-agent bash -c 'ssh-add ../github_readonly.key 2>/dev/null ; git log' )|gawk -e '
-#  BEGIN {
-#               FS="|";
-#               LASTREL="";
-#               REL="";
-#       }
-#  A==3 && /^ / {
-#               gsub("^ *","")
-#               COMMENT=COMMENT "<br/>" $0
-#       }
-#  A==2 && /Author: / {
-#               gsub("Author: ","");
-#               AUTHOR=$0;
-#       }
-#  A==2 && /Date: / {
-#               gsub("Date: ","");
-#               DATE=$0;
-#       }
-#  A==2 && /^$/ {
-#               A++
-#       }
-#  /^commit .*$/ && LASTREL!="" {
-#               A=2;
-#               LASTREL=REL;
-#               gsub("commit ","")
-#               REL=$0
-#               print "<tr><td>" LASTREL "</td><td>" AUTHOR "</td><td>" DATE "</td>";
-#               CMD="(cd phd;ssh-agent bash -c ''ssh-add ../github_readonly.key 2>/dev/null ;  git diff " LASTREL " " REL "'
-#               while ( ( CMD | getline result ) > 0 ) {
-#                 print  "<td>" int(result/1024+0.5) "</td>";
-#               }
-#               close(CMD);
-#               CMD="(cd phd;ssh-agent bash -c '\''ssh-add ../github_readonly.key 2>/dev/null ; git diff " LASTREL " " REL "
-#               print "<td><div id=\"" LASTREL "_full\" onclick=\"document.getElementById('\''" LASTREL "_full'\'').style.di
-#               C=0
-#               while ( ( CMD | getline result ) > 0 ) {
-#                 print result "<br/>"
-#                 C++
-#               }
-#               close(CMD);
-#               print "</div>"
-#               print "<div id=\"" LASTREL "_sum\" onclick=\"document.getElementById('\''" LASTREL "_sum'\'').style.display=
-#               print "Files: " C ;
-#               print "</div>"
-#               print "</td><td>" COMMENT "</td></tr>";
-#               COMMENT=""
-#       }
-#  /^commit .*$/ {
-#               A=2;
-#               LASTREL=REL;
-#               gsub("commit ","")
-#               REL=$0
-#       };
-#'  >>$mtmp
+echo "    <h2>History</h2>">>$mtmp
+echo "    <table class=\"basic\">">>$mtmp
+echo "      <tr><th>Release</th><th>User</th><th>Date</th><th>Change size</th><th>Changed files</th><th>Comment</th></tr>">
+(cd phd;ssh-agent bash -c 'ssh-add ../github_readonly.key 2>/dev/null ; git log' )|gawk -e '
+  BEGIN {
+               FS="|";
+               LASTREL="";
+               REL="";
+       }
+  A==3 && /^ / {
+               gsub("^ *","")
+               COMMENT=COMMENT "<br/>" $0
+       }
+  A==2 && /Author: / {
+               gsub("Author: ","");
+               AUTHOR=$0;
+       }
+  A==2 && /Date: / {
+               gsub("Date: ","");
+               DATE=$0;
+       }
+  A==2 && /^$/ {
+               A++
+       }
+  /^commit .*$/ && LASTREL!="" {
+               A=2;
+               LASTREL=REL;
+               gsub("commit ","")
+               REL=$0
+               print "<tr><td>" LASTREL "</td><td>" AUTHOR "</td><td>" DATE "</td>";
+               CMD="(cd phd;ssh-agent bash -c ''ssh-add ../github_readonly.key 2>/dev/null ;  git diff " LASTREL " " REL "'
+               while ( ( CMD | getline result ) > 0 ) {
+                 print  "<td>" int(result/1024+0.5) "</td>";
+               }
+               close(CMD);
+               CMD="(cd phd;ssh-agent bash -c '\''ssh-add ../github_readonly.key 2>/dev/null ; git diff " LASTREL " " REL "
+               print "<td><div id=\"" LASTREL "_full\" onclick=\"document.getElementById('\''" LASTREL "_full'\'').style.di
+               C=0
+               while ( ( CMD | getline result ) > 0 ) {
+                 print result "<br/>"
+                 C++
+               }
+               close(CMD);
+               print "</div>"
+               print "<div id=\"" LASTREL "_sum\" onclick=\"document.getElementById('\''" LASTREL "_sum'\'').style.display=
+               print "Files: " C ;
+               print "</div>"
+               print "</td><td>" COMMENT "</td></tr>";
+               COMMENT=""
+       }
+  /^commit .*$/ {
+               A=2;
+               LASTREL=REL;
+               gsub("commit ","")
+               REL=$0
+       };
+'  >>$mtmp
 #echo "    </table>">>$mtmp
 echo "  </body>">>$mtmp
 echo "</html>">>$mtmp
@@ -227,12 +229,9 @@ function addrow() {
         )
 }
 
-#Echoi "Baking page"
-#curl -s "https://get.sdkman.io" | bash &&  source "/root/.sdkman/bin/sdkman-init.sh" &&  sdk install jbake || exit 101
-#jbake ${WWWDIR}/
 cp -R $dir/../website/target/jbake/* ${WWWDIR}/
-cp $dir/../thesis/target/main/latex-build/rfc/draft-gwerder-*.{xml,xmlflat,pdf,ps,epub,mobi,txt,html} ${WWWDIR}/devel/
-cp $dir/../thesis/target/main/latex-build/rfc/rfc2629.xslt ${WWWDIR}/devel/
+cp $dir/../target/main/rfc/draft-gwerder-*.{xml,xmlflat,pdf,ps,epub,mobi,txt,html} ${WWWDIR}/devel/
+cp $dir/../target/main/rfc/rfc2629.xslt ${WWWDIR}/devel/
 (cd $dir/../application-core-library/src/main/asn/;zip -9 ${WWWDIR}/devel/MessageVortex_definition.zip MessageVortex-*.asn)
 for i in $dir/../application-core-library/src/main/asn/MessageVortex*.asn
 do

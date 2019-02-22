@@ -26,5 +26,5 @@ mkdir $dir/target $dir/target/main $dir/target/main/latex-build 2>/dev/null
 	pdflatex -output-directory=$dir/target/main/latex-build/  messageVortex.tex
 	
 	# cleaning output directory
-	find  $dir/target/main/latex-build | egrep -v "\.pdf$" |grep -v "latex-build$" |sort -r| xargs -i rm -r {}
+	find  $dir/target/main/latex-build | egrep -v "\.pdf$" |egrep -v "\.log$" |egrep -v "latex-build$" |sort -r| xargs -i rm -r {}
 )
