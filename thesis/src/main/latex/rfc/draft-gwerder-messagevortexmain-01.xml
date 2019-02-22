@@ -1240,42 +1240,42 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec]]></artwork>
             <section  anchor="asnOne_schema" title="The main VortexMessageBlocks">
                 <t>
 					<figure>
-                		<artwork src="asn/MessageVortex-Schema.asn" type="asn.1" />
+                		<artwork src="asn/MessageVortex-Schema.asn" />
                 	</figure>
                 </t>		
             </section>
             <section  anchor="asnOne_Ciphers" title="The VortexMessage Ciphers Structures">
                 <t>
                     <figure>
-                        <artwork src="asn/MessageVortex-Ciphers.asn" type="asn.1"/>
+                        <artwork src="asn/MessageVortex-Ciphers.asn" />
                     </figure>
                 </t>
             </section>
             <section  anchor="asnOne_replies" title="The VortexMessage Replies Structures">
                 <t>
                     <figure>
-                        <artwork src="asn/MessageVortex-Replies.asn" type="asn.1"/>
+                        <artwork src="asn/MessageVortex-Replies.asn"/>
                     </figure>
                 </t>
             </section>
             <section  anchor="asnOne_requirements" title="The VortexMessage Requirements Structures">
                 <t>
                     <figure>
-                        <artwork src="asn/MessageVortex-Requirements.asn" type="asn.1"/>
+                        <artwork src="asn/MessageVortex-Requirements.asn"/>
                     </figure>
                 </t>
             </section>
             <section  anchor="asnOne_helpers" title="The VortexMessage Helpers Structures">
                 <t>
                     <figure>
-                        <artwork src="asn/MessageVortex-Helpers.asn" type="asn.1"/>
+                        <artwork src="asn/MessageVortex-Helpers.asn"/>
                     </figure>
                 </t>
             </section>
             <section  anchor="asnOne_additional" title="The VortexMessage Additional Structures">
                 <t>
                     <figure>
-                        <artwork src="asn/MessageVortex-NonProtocolBlocks.asn" type="asn.1"/>
+                        <artwork src="asn/MessageVortex-NonProtocolBlocks.asn"/>
                     </figure>
                 </t>
             </section>
