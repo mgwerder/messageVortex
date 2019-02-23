@@ -27,7 +27,7 @@ dir=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 		mkdir -p $tmpdir/buildenv 
 		mkdir -p $tmpdir/.git
 		cp $dir/../pom.xml $tmpdir
-		for i in application-core-library thesis website 
+		for i in application-core-library thesis website rfc
 		do
 			mkdir $tmpdir/$i
 			mkdir $tmpdir/$i/src
@@ -42,6 +42,7 @@ dir=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 	     --mount type=bind,source="$dir/../.git/",target=/var/tmp/messagevortex/.git/ \
 	     --mount type=bind,source="$dir/../thesis/src/",target=/var/tmp/messagevortex/thesis/src/ \
 	     --mount type=bind,source="$dir/../website/src/",target=/var/tmp/messagevortex/website/src/ \
+	     --mount type=bind,source="$dir/../rfc/src/",target=/var/tmp/messagevortex/rfc/src/ \
 	     --mount type=bind,source="$dir/../buildenv/",target=/var/tmp/messagevortex/buildenv/ \
 	     --mount type=bind,source="$dir/../application-core-library/src/",target=/var/tmp/messagevortex/application-core-library/src/ \
 	     "$@" messagevortexbuild:latest) && \

@@ -1,0 +1,72 @@
+SHELL := /bin/bash
+
+OUTDIR  = target/xml2rfc
+INTERDIR= target/tmp
+SRCDIR  = src/xml2rfc
+XML2RFC = /usr/local/bin/xml2rfc
+X2R_OPTS= --v3
+ALLFILES= $(addprefix $(INTERDIR)/draft-gwerder-messagevortexmain-,00 01)
+ALLEXP  = $(addsuffix .xmlprep,$(ALLFILES)) $(addsuffix .uixml,$(ALLFILES)) $(addsuffix .nouixml,$(ALLFILES))
+
+.PHONY: all clean dirs
+
+.SECONDARY: $(ALLEXP)
+
+all: $(addprefix $(OUTDIR)/draft-gwerder-messagevortexmain-01,.pdf .ps .xmlflat .html .mobi .epub) $(OUTDIR)/draft-gwerder-messagevortexmain-00.pdf dirs 
+
+clean:
+	@rm -r target 2>/dev/null; /bin/true
+
+dirs:
+	@-mkdir -p $(OUTDIR) $(INTERDIR)/asn 2>/dev/null 
+
+$(INTERDIR)/%.xmlprep: $(SRCDIR)/%.xml 
+	@make dirs
+	@echo "building tmp source file $@"
+	@cp ../application-core-library/src/main/asn/* $(INTERDIR)/asn
+	@cp $< $@
+	@( \
+		egrep "<artwork[^>]*src=\"[^\"]*.asn\"[^>]*/>" <$@ | while read line; \
+		do \
+		 	src=$$(echo "$$line"|sed 's/.*src="//;s/".*//'); \
+		 	l=$$(echo "$$line"|sed 's/ src="[^"]*"//'); \
+		 	rep="$${l%%/>}>"'<![CDATA['"$$(cat $(INTERDIR)/$$src)]]></artwork>"; \
+		 	file=$$(cat $@); \
+		 	echo "$${file/$$line/$$rep}" >$@.tmp && \
+		 	mv $@.tmp $@ && \
+		 	echo "      injected file $$src (new size is $$(stat --printf="%s" $@))"; \
+		done \
+	)
+
+$(INTERDIR)/%.uixml: $(INTERDIR)/%.xmlprep
+	@echo "building tmp source file $@"
+	@cat $< | awk 'BEGIN{ incdata=0;}; /^.*<artwork[^>]* src="[^"]*"[^>\/]*>.*/ { gsub(/<!\[CDATA\[/,"");print;incdata=1; }; incdata!=1 {print $0;};incdata==1 && /.*\]\]>.*/ {gsub(/.*\]\]>/,"");print;incdata=0;}'  >$@
+
+$(INTERDIR)/%.nouixml: $(INTERDIR)/%.xmlprep
+	@echo "building tmp source file $@"
+	@sed -e 's~<artwork\([^>]*\) src="[^"]*"~<artwork \1~gi' <$< >$@
+	
+$(OUTDIR)/%.pdf: $(INTERDIR)/%.uixml 
+	@echo "building final file $@"
+	@( cd $(INTERDIR); $(XML2RFC) $(X2R_OPTS) $(basename $(<F)).uixml --pdf -q -o ../../$@ )	
+	
+$(OUTDIR)/%.xmlflat: $(INTERDIR)/%.nouixml 
+	@echo "building tmp source file $@"
+	@( cd $(INTERDIR); $(XML2RFC) $(X2R_OPTS) $(basename $(<F)).nouixml --exp -q -o ../../$@)
+	
+$(OUTDIR)/%.html: $(INTERDIR)/%.uixml 
+	@echo "building tmp source file $@"
+	@( cd $(INTERDIR); $(XML2RFC) $(X2R_OPTS) $(basename $(<F)).uixml --exp -q -o ../../$@)
+	
+$(OUTDIR)/%.mobi: $(OUTDIR)/%.html 
+	@echo "building final file $@"
+	@ebook-convert $< $@
+	
+$(OUTDIR)/%.epub: $(OUTDIR)/%.html
+	@echo "building final file $@"
+	@ebook-convert $< $@
+	
+$(OUTDIR)/%.ps: $(OUTDIR)/%.pdf
+	@echo "building final file $@"
+	@pdf2ps $< $@
+

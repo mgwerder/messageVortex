@@ -3,6 +3,11 @@ XML2RFC="/usr/local/bin/xml2rfc"
 dir=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 WWWDIR=$dir/../target/www
 
+
+exit
+
+## This part is taken over by website builder
+
 cd $dir
 mtmp=`mktemp`
 logger -t mkindex.sh "current revision is $crev" 
@@ -72,70 +77,6 @@ do
   echo  -n "+`(detex ${f} |wc -w)`">>$tmp
   echo "      </tr>">>$mtmp
 done)
-
-echo "adding inclusion files"
-mkdir -p $dir/../target/main/rfc/asn 2>/dev/null
-cp -u $dir/../application-core-library/src/main/asn/*.asn $dir/../target/main/rfc/asn
-
-ttmp=$(mktemp)
-actualfile=draft-gwerder-messagevortexmain-01
-
-(cd $dir/../target/main/rfc/; find . -name "draft-gwerder-messagevortexmain-*.xml" |while read out
-do
-  out=${out%%.xml}
-  if [[ "$out" =~ ^.*-00$ ]]
-  then
-  	unset X2R_OPTS
-  else
-  	X2R_OPTS="--v3"
-  fi	
-  echo "    creating xml flatified output ($out)"
-  echo "      injecting sourcecode"
-  egrep "<artwork[^>]*src=\"[^\"]*.asn\"[^>]*/>" <$dir/../target/main/rfc/$out.xml | while read l ; 
-  do 
-  	src=$(echo "$l"|sed 's/.*src="//;s/".*//');
-  	l=$(echo "$l"|sed 's/ src="[^"]*"//')
-  	rep="${l%%/>}>"'<![CDATA['"$(cat $dir/../target/main/rfc/$src)]]></artwork>";
-  	file=$(cat $dir/../target/main/rfc/$out.xml); 
-  	echo "${file/$l/$rep}" >$dir/../target/main/rfc/$out.xml.tmp && mv $dir/../target/main/rfc/$out.xml.tmp $dir/../target/main/rfc/$out.xml && echo "      injected file $src (new size is $(stat --printf="%s"  $dir/../target/main/rfc/$out.xml))"
-  done
-  echo "      creating nouiversion"
-  sed -e 's~<artwork\([^>]*\) src="[^"]*"~<artwork \1~gi' <$dir/../target/main/rfc/${out}.xml >$dir/../target/main/rfc/${out}.nouixml
-  echo "      creating uiversion"
-  cat $dir/../target/main/rfc/${out}.xml | awk 'BEGIN{ incdata=0;}; /^.*<artwork[^>]* src="[^"]*"[^>\/]*>.*/ { gsub(/<!\[CDATA\[/,"");print;incdata=1; }; incdata!=1 {print $0;};incdata==1 && /.*\]\]>.*/ {gsub(/.*\]\]>/,"");print;incdata=0;}'  >$dir/../target/main/rfc/${out}.uixml
-  echo "      flatifying"
-  $XML2RFC $X2R_OPTS --exp $dir/../target/main/rfc/${out}.nouixml -q -o $dir/../target/main/rfc/$out.xmlflat || exit 101
-  echo "  creating txt output"
-  $XML2RFC $X2R_OPTS $dir/../target/main/rfc/${out}.xmlflat --text -q -o $dir/../target/main/rfc/$out.txt || exit 101
-  echo "  creating html output"
-  $XML2RFC $X2R_OPTS $dir/../target/main/rfc/${out}.uixml --html -q -o $dir/../target/main/rfc/$out.html 
-  #echo "  creating nroff output"
-  #$XML2RFC $X2R_OPTS $dir/../thesis/target/main/latex-build/rfc/${out}.xmlflat --nroff -q -o $dir/../thesis/target/main/latex-build/rfc/$out.nroff || exit 101
-  echo "  creating pdf"
-  #enscript -DDuplex:true --title "$out" -B -L 59 --margins=70:70:70:70 -p - $dir/../thesis/target/main/latex-build/rfc/${out}.txt | ps2pdf - - >$dir/../thesis/target/main/latex-build/rfc/$out.pdf   || exit 101
-  #(cd  phd/thesis/src/main/latex/rfc/; ../../../xml2rfc/bin/mkpdf.sh $out.xmlflat  && mv $out.xmlflat.pdf $out.pdf )
-  $XML2RFC $X2R_OPTS $dir/../target/main/rfc/${out}.uixml --pdf -q -o $dir/../target/main/rfc/$out.pdf
-  echo "  creating ps"
-  # (cd  phd/thesis/src/main/latex/rfc/; ../../../xml2rfc/bin/mkps.sh $out.xmlflat   && mv $out.xmlflat.ps  $out.ps )
-  (cd  $dir/../target/main/rfc/; pdf2ps $out.pdf $out.ps) 
-  echo "  creating epub"
-  (
-      cd  $dir/../target/main/rfc/
-      echo "    epub"
-      #pandoc -f html -t epub3 -o $out.epub $out.html || exit 101
-      ebook-convert $out.html $out.epub 
-      echo "    mobi"
-      ebook-convert $out.html $out.mobi 
-  )  || exit $?
-  #(cd  phd/thesis/src/main/latex/rfc/; ../../../xml2rfc/bin/mkepub.sh $out.xmlflat && mv $out.xmlflat     $out.epub )
-  
-  if [[ "$out" == "./$actualfile" ]]
-  then
-    cat $dir/../target/main/rfc/${out}.txt |wc -l >$ttmp.lines
-    cat $dir/../target/main/rfc/${out}.txt |wc -w >$ttmp.words
-  fi  
-done)
-
 
 echo "creating table"
 echo "      <tr>">>$mtmp

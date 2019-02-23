@@ -9,7 +9,7 @@
     <version>0.1.0</version>
 
     <!-- Output to jar format -->
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
     <properties>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -39,7 +39,7 @@
                 </executions>
                 <configuration>
                     <inputDirectory>${project.basedir}/src/main/jbake</inputDirectory>
-                    <outputDirectory>${project.build.directory}/jbake</outputDirectory>
+                    <outputDirectory>${project.build.directory}/main/jbake-tmp</outputDirectory>
                 </configuration>
                 <dependencies>
 		        <!--<dependency>
@@ -73,6 +73,24 @@
 				<version>3.0.11.RELEASE</version>
 			</dependency>
                 </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+		<version>1.6.0</version>
+                <executions>
+                    <execution>
+                        <id>gnumake</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <phase>package</phase>
+			<configuration>
+				<workingDirectory>.</workingDirectory>
+				<executable>make</executable>
+			</configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
