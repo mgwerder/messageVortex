@@ -36,6 +36,7 @@ tbl="<table>\n"
 tbl="$tbl<tr><th>Filename</th><th>Description</th><th>Derivatives</th></tr>\n"
 find ${WWWDIR}/devel/ -name 'draft-gwerder-*.xml' |sort -r |while read rfc;
 do 
+	rfc=$(basename "$rfc")
 	tbl="$tbl$(addrow devel $rfc 'RFC draft document' )"
 done	
 tbl="$tbl$(addrow devel 'MessageVortex_definition*.asn' 'ASN.1 style definition of the MessageVortex messages' )"
