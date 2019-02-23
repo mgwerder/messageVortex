@@ -3,21 +3,25 @@
 dir=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 
 (
+	flist=$( cd $dir/..; find . \( -name '*.sh' -o -name 'Makefile' -o -name 'pom.xml' \) )
+	function maketar() {
+		(
+                        cd $dir/..
+                        tar -cf buildenv/mavenfiles.tar $flist
+                )
+	}
 	cd $dir
 	# build the image if needed
 	if [[ ! -f mavenfiles.tar ]]
 	then 
-		(
-			cd $dir/..
-			tar -cf buildenv/mavenfiles.tar $(find . -name 'pom.xml')
-		)	
+		maketar
 	fi
-	if [[ "$(find $dir/.. -newer mavenfiles.tar -name "pom.xml")" != "" ]]
+	#rebuild list
+	reb=$(find $dir/.. -newer mavenfiles.tar \( -name '*.sh' -o -name 'Makefile' -o -name 'pom.xml' \) )
+	if [[ "$reb" != "" ]]
 	then
-		(
-			cd $dir/..
-			tar -cf buildenv/mavenfiles.tar $(find . -name 'pom.xml')
-		)	
+		echo "got new tarfile due to $reb"
+		maketar
 	fi
 	sudo docker build -t messagevortexbuild . && \
 	tmpdir=$(mktemp -d -p $dir/..) && \
