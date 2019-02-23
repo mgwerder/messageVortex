@@ -14,7 +14,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
 
-    <!--<packaging>pdf</packaging>-->
+    <packaging>pom</packaging>
 
     <dependencies>
     </dependencies>
@@ -34,7 +34,7 @@
                         </goals>
                         <phase>compile</phase>
 			<configuration>
-				<workingDirectory>.</workingDirectory>
+				<workingDirectory>${basedir}</workingDirectory>
 				<executable>make</executable>
 			</configuration>
                     </execution>

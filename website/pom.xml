@@ -86,7 +86,7 @@
                         </goals>
                         <phase>package</phase>
 			<configuration>
-				<workingDirectory>.</workingDirectory>
+				<workingDirectory>${project.basedir}</workingDirectory>
 				<executable>make</executable>
 			</configuration>
                     </execution>

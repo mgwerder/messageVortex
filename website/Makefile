@@ -18,10 +18,10 @@ dirs:
 
 $(OUTDIR)/status.html: $(INTERDIR)/status.html
 	@make dirs
-	@-cp $< $@
+	./mkStatus.sh $< $@
         
 $(OUTDIR)/documentation.html: $(INTERDIR)/documentation.html
-	@cp $< $@
+	./mkDocumentation.sh $< $@
 
 
 

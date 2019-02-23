@@ -19,9 +19,9 @@
 
     <modules>
         <module>application-core-library</module>
-        <module>website</module>
-        <module>thesis</module>
         <module>rfc</module>
+        <module>thesis</module>
+        <module>website</module>
     </modules>
 
 </project>
