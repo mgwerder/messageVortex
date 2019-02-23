@@ -21,8 +21,7 @@ RUN mkdir /var/tmp/messagevortex && \
 COPY mavenfiles.tar /tmp/mavenfiles.tar
 RUN cd /var/tmp/messagevortex && \
     tar -xvf /tmp/mavenfiles.tar && \
-    mvn dependency:go-offline dependency:resolve-plugins
-    
-VOLUME /var/tmp/messagevortex
-
+    cat /etc/maven/settings.xml|sed 's~.xsd">~.xsd"><localRepository>/var/lib/maven</localRepository>~' >/etc/maven/settings.xml.new && mv /etc/maven/settings.xml.new /etc/maven/settings.xml && \
+    mkdir -p /var/lib/maven/.m2 && \
+    MAVEN_CONFIG=/var/lib/maven/ mvn dependency:go-offline dependency:resolve-plugins 
 CMD [ "/var/tmp/messagevortex/buildenv/runDockerTasks.sh" ]

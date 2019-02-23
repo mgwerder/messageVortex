@@ -8,6 +8,7 @@ dir=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 		(
                         cd $dir/..
                         tar -cf buildenv/mavenfiles.tar $flist
+                        touch buildenv/mavenfiles.tar
                 )
 	}
 	cd $dir
@@ -41,14 +42,15 @@ dir=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 		ls -la $tmpdir/*
 	) && \
 	trap "rm -rf $tmpdir" EXIT && \
+	( cd $tmpdir; tar -xvf $dir/mavenfiles.tar ) && \
 	id=$(sudo docker create -t \
 	     --mount type=bind,source="$tmpdir/",target=/var/tmp/messagevortex/ \
-	     --mount type=bind,source="$dir/../.git/",target=/var/tmp/messagevortex/.git/ \
-	     --mount type=bind,source="$dir/../thesis/src/",target=/var/tmp/messagevortex/thesis/src/ \
-	     --mount type=bind,source="$dir/../website/src/",target=/var/tmp/messagevortex/website/src/ \
-	     --mount type=bind,source="$dir/../rfc/src/",target=/var/tmp/messagevortex/rfc/src/ \
-	     --mount type=bind,source="$dir/../buildenv/",target=/var/tmp/messagevortex/buildenv/ \
-	     --mount type=bind,source="$dir/../application-core-library/src/",target=/var/tmp/messagevortex/application-core-library/src/ \
+	     --mount type=bind,readonly,source="$dir/../.git/",target=/var/tmp/messagevortex/.git/ \
+	     --mount type=bind,readonly,source="$dir/../thesis/src/",target=/var/tmp/messagevortex/thesis/src/ \
+	     --mount type=bind,readonly,source="$dir/../website/src/",target=/var/tmp/messagevortex/website/src/ \
+	     --mount type=bind,readonly,source="$dir/../rfc/src/",target=/var/tmp/messagevortex/rfc/src/ \
+	     --mount type=bind,readonly,source="$dir/../buildenv/",target=/var/tmp/messagevortex/buildenv/ \
+	     --mount type=bind,readonly,source="$dir/../application-core-library/src/",target=/var/tmp/messagevortex/application-core-library/src/ \
 	     "$@" messagevortexbuild:latest) && \
 	echo "Created container with ID $id" && \
 	sudo docker start -a $id && \

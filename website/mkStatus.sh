@@ -75,15 +75,15 @@ echo "      <tr><th>Release</th><th>User</th><th>Date</th><th>Change size</th><t
                  print  "<td>" int(result/1024+0.5) "</td>";
                }
                close(CMD);
-               CMD="(cd '$dir'/..;ssh-agent bash -c '\''ssh-add '$dir'/../../github_readonly.key 2>/dev/null ; git diff " LASTREL " " REL "'\'' )"
+               #CMD="(cd '$dir'/..;ssh-agent bash -c '\''ssh-add '$dir'/../../github_readonly.key 2>/dev/null ; git diff " LASTREL " " REL "'\'' )"
                #print "<td><div id=\"" LASTREL "_full\" onclick=\"document.getElementById('\''" LASTREL "_full'\'').style.di
-               C=0
-               while ( ( CMD | getline result ) > 0 ) {
-                 print result "<br/>"
-                 C++
-               }
-               close(CMD);
-               print "</div>"
+               #C=0
+               #while ( ( CMD | getline result ) > 0 ) {
+               #  print result "<br/>"
+               #  C++
+               #}
+               #close(CMD);
+               #print "</div>"
                #print "<div id=\"" LASTREL "_sum\" onclick=\"document.getElementById('\''" LASTREL "_sum'\'').style.display=
                #print "Files: " C ;
                #print "</div>"

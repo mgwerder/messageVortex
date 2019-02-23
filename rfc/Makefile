@@ -12,7 +12,7 @@ ALLEXP  = $(addsuffix .xmlprep,$(ALLFILES)) $(addsuffix .uixml,$(ALLFILES)) $(ad
 
 .SECONDARY: $(ALLEXP)
 
-all: $(addprefix $(OUTDIR)/draft-gwerder-messagevortexmain-01,.pdf .ps .xmlflat .html .mobi .epub) $(OUTDIR)/draft-gwerder-messagevortexmain-00.pdf dirs 
+all: $(addprefix $(OUTDIR)/draft-gwerder-messagevortexmain-01,.pdf .ps .xmlflat .html .mobi .epub .txt) $(OUTDIR)/draft-gwerder-messagevortexmain-00.pdf dirs 
 
 clean:
 	@rm -r target 2>/dev/null; /bin/true
@@ -53,6 +53,10 @@ $(OUTDIR)/%.pdf: $(INTERDIR)/%.uixml
 $(OUTDIR)/%.xmlflat: $(INTERDIR)/%.nouixml 
 	@echo "building tmp source file $@"
 	@( cd $(INTERDIR); $(XML2RFC) $(X2R_OPTS) $(basename $(<F)).nouixml --exp -q -o ../../$@)
+	
+$(OUTDIR)/%.txt: $(INTERDIR)/%.nouixml 
+	@echo "building tmp source file $@"
+	@( cd $(INTERDIR); $(XML2RFC) $(X2R_OPTS) $(basename $(<F)).nouixml --text -q -o ../../$@)
 	
 $(OUTDIR)/%.html: $(INTERDIR)/%.uixml 
 	@echo "building tmp source file $@"
