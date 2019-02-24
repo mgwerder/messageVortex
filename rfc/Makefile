@@ -60,7 +60,7 @@ $(OUTDIR)/%.txt: $(INTERDIR)/%.nouixml
 	
 $(OUTDIR)/%.html: $(INTERDIR)/%.uixml 
 	@echo "building tmp source file $@"
-	@( cd $(INTERDIR); $(XML2RFC) $(X2R_OPTS) $(basename $(<F)).uixml --exp -q -o ../../$@)
+	@( cd $(INTERDIR); $(XML2RFC) $(X2R_OPTS) $(basename $(<F)).uixml --html -q -o ../../$@)
 	
 $(OUTDIR)/%.mobi: $(OUTDIR)/%.html 
 	@echo "building final file $@"
