@@ -70,23 +70,23 @@ echo "      <tr><th>Release</th><th>User</th><th>Date</th><th>Change size</th><t
                gsub("commit ","")
                REL=$0
                print "<tr><td>" LASTREL "</td><td>" AUTHOR "</td><td>" DATE "</td>";
-               CMD="(cd '$dir'/..;ssh-agent bash -c '\''ssh-add ../github_readonly.key 2>/dev/null ;  git diff " LASTREL " " REL "'\'' )"
+               CMD="(cd '$dir'/..;ssh-agent bash -c '\''ssh-add ../github_readonly.key 2>/dev/null ;  git diff " LASTREL " " REL "'\'' )|wc -c "
                while ( ( CMD | getline result ) > 0 ) {
                  print  "<td>" int(result/1024+0.5) "</td>";
                }
                close(CMD);
-               #CMD="(cd '$dir'/..;ssh-agent bash -c '\''ssh-add '$dir'/../../github_readonly.key 2>/dev/null ; git diff " LASTREL " " REL "'\'' )"
-               #print "<td><div id=\"" LASTREL "_full\" onclick=\"document.getElementById('\''" LASTREL "_full'\'').style.di
-               #C=0
-               #while ( ( CMD | getline result ) > 0 ) {
-               #  print result "<br/>"
-               #  C++
-               #}
-               #close(CMD);
-               #print "</div>"
-               #print "<div id=\"" LASTREL "_sum\" onclick=\"document.getElementById('\''" LASTREL "_sum'\'').style.display=
-               #print "Files: " C ;
-               #print "</div>"
+               CMD="(cd '$dir'/..;ssh-agent bash -c '\''ssh-add '$dir'/../../github_readonly.key 2>/dev/null ; git diff " LASTREL " " REL "'\'' )| grep \"+++ b\" 2>/dev/null |sed \"s/+++ b//\"";
+               print "<td><div id=\"" LASTREL "_full\" onclick=\"document.getElementById('\''" LASTREL "_full'\'').style.display=true;\">";
+               C=0
+               while ( ( CMD | getline result ) > 0 ) {
+                 print result "<br/>"
+                 C++
+               }
+               close(CMD);
+               print "</div>"
+               print "<div id=\"" LASTREL "_sum\" onclick=\"document.getElementById('\''" LASTREL "_sum'\'').style.display=display=true\">"
+               print "Files: " C ;
+               print "</div>"
                print "</td><td>" COMMENT "</td></tr>";
                COMMENT=""
        }
@@ -97,7 +97,7 @@ echo "      <tr><th>Release</th><th>User</th><th>Date</th><th>Change size</th><t
                REL=$0
        };
 '  >>$mtmp
-#echo "    </table>">>$mtmp
+echo "    </table>">>$mtmp
 historyTable="$(cat $mtmp)"
 rm $mtmp
 

@@ -7,13 +7,14 @@ XML2RFC = /usr/local/bin/xml2rfc
 X2R_OPTS= --v3
 ALLFILES= $(addprefix $(INTERDIR)/draft-gwerder-messagevortexmain-,00 01)
 ALLEXP  = $(addsuffix .xmlprep,$(ALLFILES)) $(addsuffix .uixml,$(ALLFILES)) $(addsuffix .nouixml,$(ALLFILES))
-EXTS    = 
+EXTS    = .pdf .ps .xmlflat .html .mobi .epub .txt .rawtxt .legacytxt
+LEXTS   = .pdf .xmlflat .legacytxt
 
 .PHONY: all clean dirs
 
 .SECONDARY: $(ALLEXP)
 
-all: $(addprefix $(OUTDIR)/draft-gwerder-messagevortexmain-01,.pdf .ps .xmlflat .html .mobi .epub .txt .rawtxt .legacytxt) $(OUTDIR)/draft-gwerder-messagevortexmain-00.pdf $(OUTDIR)/draft-gwerder-messagevortexmain-00.txt $(OUTDIR)/draft-gwerder-messagevortexmain-00.legacytxt dirs 
+all: $(addprefix $(OUTDIR)/draft-gwerder-messagevortexmain-02,$(EXTS)) $(addprefix $(OUTDIR)/draft-gwerder-messagevortexmain-01,$(LEXTS)) $(addprefix $(OUTDIR)/draft-gwerder-messagevortexmain-00,$(LEXTS)) dirs 
 
 clean:
 	@rm -r target 2>/dev/null; /bin/true

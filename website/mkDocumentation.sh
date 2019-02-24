@@ -23,9 +23,11 @@ function addrow() {
 }
 
 mkdir -p ${WWWDIR}/devel/ 2>/dev/null
-(cd $dir/../application-core-library/target/apidocs; zip -9ur $dir/target/messageVortex_apidoc.zip .)
+(cd $dir/../application-core-library/target/apidocs; zip -9ur ${WWWDIR}/devel/messageVortex_apidoc.zip .)
+(cd $dir/../application-core-library/; zip -9ur ${WWWDIR}/devel/messageVortex_development_core.zip . -x target/**/* )
+cp $dir/../application-core-library/target/messagevortex.jar ${WWWDIR}/devel/messageVortex_development_core.jar
 cp $dir/../rfc/src/xml2rfc/draft-gwerder-*.xml  ${WWWDIR}/devel/
-cp $dir/target/messageVortex_apidoc.zip ${WWWDIR}/devel/
+#cp $dir/target/messageVortex_apidoc.zip ${WWWDIR}/devel/
 (cd ${WWWDIR}/devel/; mkdir apidoc 2>/dev/null; cd apidoc; unzip -qox ..//messageVortex_apidoc.zip)
 cp $dir/../rfc/target/xml2rfc/draft-gwerder-*.{xmlflat,pdf,ps,epub,mobi,txt,legacytxt,rawtxt,html} ${WWWDIR}/devel/
 cp $dir/../rfc/src/xml2rfc/rfc2629.xslt ${WWWDIR}/devel/
@@ -47,6 +49,8 @@ tbl="$tbl$(
 	done	
 )"
 tbl="$tbl$(addrow devel 'MessageVortex_definition*.asn' 'ASN.1 style definition of the MessageVortex messages' )"
+tbl="$tbl$(addrow devel 'messageVortex_development_core.zip' 'Development snapshot of the core library' )"
+tbl="$tbl$(addrow devel 'messageVortex_development_client.zip' 'Development snapshot of the client (includes core library)' )"
 tbl="$tbl<tr><td><a href=\"devel/apidoc\">Apidoc</a></td><td>Apidocs of the core library</td><td><a href=\"devel/messageVortex_apidoc.zip\">zip</a></td></tr>"
 tbl="$tbl</table>\n"
 t=$(cat $1)
