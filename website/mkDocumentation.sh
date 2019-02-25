@@ -25,13 +25,13 @@ function addrow() {
 mkdir -p ${WWWDIR}/devel/ 2>/dev/null
 (cd $dir/../application-core-library/target/apidocs; zip -9ur ${WWWDIR}/devel/messageVortex_apidoc.zip .)
 (cd $dir/../application-core-library/; zip -9ur ${WWWDIR}/devel/messageVortex_development_core.zip . -x target/**/* )
-cp $dir/../application-core-library/target/messagevortex.jar ${WWWDIR}/devel/messageVortex_development_core.jar
-cp $dir/../rfc/src/xml2rfc/draft-gwerder-*.xml  ${WWWDIR}/devel/
+cp -u $dir/../application-core-library/target/messagevortex.jar ${WWWDIR}/devel/messageVortex_development_core.jar
+cp -u $dir/../rfc/src/xml2rfc/draft-gwerder-*.xml  ${WWWDIR}/devel/
 #cp $dir/target/messageVortex_apidoc.zip ${WWWDIR}/devel/
 (cd ${WWWDIR}/devel/; mkdir apidoc 2>/dev/null; cd apidoc; unzip -qox ..//messageVortex_apidoc.zip)
-cp $dir/../rfc/target/xml2rfc/draft-gwerder-*.{xmlflat,pdf,ps,epub,mobi,txt,legacytxt,rawtxt,html} ${WWWDIR}/devel/
-cp $dir/../rfc/src/xml2rfc/rfc2629.xslt ${WWWDIR}/devel/
-cp $dir/../thesis/target/main/latex/messageVortex.pdf ${WWWDIR}/devel/
+cp -u $dir/../rfc/target/xml2rfc/draft-gwerder-*.{xmlflat,pdf,ps,epub,mobi,txt,legacytxt,rawtxt,html} ${WWWDIR}/devel/
+cp -u $dir/../rfc/src/xml2rfc/rfc2629.xslt ${WWWDIR}/devel/
+cp -u $dir/../thesis/target/main/latex/messageVortex.pdf ${WWWDIR}/devel/
 (cd $dir/../application-core-library/src/main/asn/;zip -9 ${WWWDIR}/devel/MessageVortex_definition.zip MessageVortex-*.asn)
 for i in $dir/../application-core-library/src/main/asn/MessageVortex*.asn
 do

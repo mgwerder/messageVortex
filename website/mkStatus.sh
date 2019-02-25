@@ -21,15 +21,16 @@ historyTable="FIXME"
 tmp=`mktemp`
 mtmp=`mktemp`
 echo -n "0">$tmp
-(cd $dir/../thesis/src/main/latex;ls *.tex papers/*.tex|while read f; 
+(cd $dir/../thesis/src/main/latex;ls *.tex papers/*.tex |while read f; 
 do 
   echo  -n "+`(detex ${f} |wc -w)`">>$tmp
   echo "      <tr>">>$mtmp
   echo "        <th style=\"text-align: left;\"><a href=\"devel/doc/${f%%.tex}.pdf\">$f</a>(<a href=\"phd/doc/${f%%.tex}.odt\">odt</a>)</th>">>$mtmp
-  pandoc --data-dir=$(pwd) -f latex -t odt -o $dir/../target/${f%%.tex}.odt $f >/dev/null
-  echo "        <td style=\"text-align: right;\">`(detex ${f} |wc -l)`</td>">>$mtmp
-  echo "        <td style=\"text-align: right;\">`(detex ${f} |wc -w)`</td>">>$mtmp
-  echo  -n "+`(detex ${f} |wc -w)`">>$tmp
+  pandoc --data-dir=$(pwd) -f latex -t odt -o $dir/target/devel/${f%%.tex}.odt $f >/dev/null
+  t="$(detex ${f})"
+  echo "        <td style=\"text-align: right;\">$(echo "$t" |wc -l)</td>">>$mtmp
+  echo "        <td style=\"text-align: right;\">$(echo "$t" |wc -w)</td>">>$mtmp
+  echo  -n "+$(echo "$t" |wc -w)">>$tmp
   echo "      </tr>">>$mtmp
 done)
 fileRows="$(cat $mtmp)"
@@ -112,5 +113,6 @@ f="${f/<!-- REPL:progressPercents -->/$progressPercents}"
 f="${f/<!-- REPL:progressWords -->/$progressWords}"
 f="${f/<!-- REPL:progressSourcecode -->/$progressSourcecode}"
 f="${f/<!-- REPL:historyTable -->/$historyTable}"
+f="${f/\$(date)/$(date)}"
 
 echo "$f" >$2

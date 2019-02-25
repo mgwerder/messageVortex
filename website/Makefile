@@ -14,13 +14,14 @@ clean:
 
 dirs:
 	@-mkdir -p $(OUTDIR) $(INTERDIR) 2>/dev/null 
-	@-cp -Ru $(INTERDIR)/* $(OUTDIR)
+	@-rsync -av --progress $(OUTDIR) $(INTERDIR) --exclude status.html --exclude documentation.html
 
 $(OUTDIR)/status.html: $(INTERDIR)/status.html
 	@make dirs
 	./mkStatus.sh $< $@
         
 $(OUTDIR)/documentation.html: $(INTERDIR)/documentation.html
+	@make dirs
 	./mkDocumentation.sh $< $@
 
 
