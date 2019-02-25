@@ -649,26 +649,28 @@ As the example shows this kind of remailer is easily attackable by an authority.
 
 This remailer offers, therefore, no protection against an adversary defined in our problem.
 
+\subsection{Babel}
+Babel was an academic system defined in a paper by \citeauthor{babel} in \citeyear{babel}\cite{babel}. It has been developed at IBM Zurich Research Laboratory. It was a mixing system using onionized addresses. The sender remains anonymous while he may provide a reply routing block called RPI. If both parties would like to remain anonymous, the RPI of the initiator is deployed in a forum thread. Anyone using this block adds an RPI for its own address to the message.
+
+This system has all the disadvantages of a system using MURBs. Traffic highlighting and similar attacks are possible.
+
+\subsection{Cypherpunk-Remailer\label{sec:remCypherpunk}}
+With the failing of anon.penet.fi, it became clear that the weakest spot of a single server infrastructure is the information stored on the server and the vulnerability of their owner. The new type-1 remailers score over the existing type-1 remailers by using encryption for the message. By combining multiple type-1 remailers an onionlike structure of the message was achievable. 
+
+This approach was promising, but it was still observable. An observation was possible in the example of correlating the message sizes and timing information.
+
+\subsection{Mixmaster-Remailer\label{sec:remMixmaster}}
+Like Cypherpunk remailers the Mixmaster remailers were working with onion-like encrypted messages. In contrast to type-1 remailers, the use of cascading mixes became systematic.
+
+\subsection{Mixminion-Remailer\label{sec:remMixminion}}
+Mixminion was the standard implementation of a type-3 remailer. It tried to address many issues previously not solved. A Mixminion router splits messages in equally sized chunks and supports SURBs. Furthermore,  replay protection and key rotation were available. Unlike the previous remailer types, Mixminion was no longer using SMTP as the transport protocol. Instead, Mixminion introduced a new transport protocol. The sources of this remailer are available on GitHub under https://github.com/mixminion/mixminion.
+
+\subsection{Tarzan}
+Tarzan is a P2P IP protocol using UDP to communicate. It is specified in \cite{tarzan:ccs02}. Tarzan nodes may be used to anonymize internet traffic in general. An initiator on the original sender machines encapsulates traffic into a layered UDP package and sends the package through mix like relayd's. The last relayd acts as an exit node. A replier may send answers the opposite way. Each relayd knows its next and previous relayd. To minimize the impact of observation Tarzan forwards packets only every 20ms and features replay protection.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % revise from this point on %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\subsection{Babel}
-Babel was an academic system defined in a paper by \citeauthor{babel} in \citeyear{babel}\cite{babel}. It has been developed at IBM Zurich Research Laboratory. It was a mix system using onionized addresses. The sender remains anonymous while he may provide a reply routing block called RPI. If both parties would like to remain anonymous the RPI of the initiator is deployed in a forum thread. Anyone using this block adds an RPI for its own address to the message.
-
-\subsection{Cypherpunk-Remailer\label{sec:remCypherpunk}}
-With the failing of anon.penet.fi it became clear that the weakest spot of a single server infrastructure is the information stored on the server and the vulnerability of their owner. The new type-1 remailers score over the existing type-1 remailers by using encryption for the message. By combining multiple type-1 remailers an onionlike structure of the message was achievable. 
-
-This aproach was promissing but it was still observable in example by correlating the message sizes and timing information.
-
-\subsection{Mixmaster-Remailer\label{sec:remMixmaster}}
-Like Cypherpunk remailers the Mixmaster remailers were working with onion like encrypted messages. In contrast to type-1 remailers the use of cascading mixes became systematic.
-
-\subsection{Mixminion-Remailer\label{sec:remMixminion}}
-Mixminion was the standard implementation of a type-3 remailer. It tried to address a lot of issues previously not solved. The messages were split in equally sized chunks, single use reply blocks were introduced, repay protection and key rotation were introduced. Unlike the previos remailer types, mixminion was no longer using SMTP as transport protocol. Instead a new protocol was introduced. The souces of this remailer were uploaded to github under https://github.com/mixminion/mixminion.
-
-\subsection{Tarzan}
-Tarzan is a P2P IP protocol using UDP to communicate. It is specified in \cite{tarzan:ccs02}. Tarzan nodes may be used to anonymize internet traffic in general. An initiator on the original sender machines encapsulates traffic into a layered UDP package and sends tis package through mixlike relayd's the last relayd is used as an exit node. Answers are built the oposite way. Each relayd knows its next and previous relayd. To minimize the impact of observation Tarzan forwards packets only every 20ms and features a replay protection.
 
 \subsection{AN.ON}
 AN.On as suggested in \cite{federrath2003system} is a mixing network. It generates messages in equally sized chunks and sends them in fixed time slots after random mixing. It's implementation is called JAP and may be found under https://anon.inf.tu-dresden.de/. JAP is in many ways similar to the capabilities of ToR. The network was at the time of writing a lot smaller (10 JonDos compared to 6500 relais in the ToR network).
