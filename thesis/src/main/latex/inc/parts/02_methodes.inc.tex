@@ -668,42 +668,38 @@ Mixminion was the standard implementation of a type-3 remailer. It tried to addr
 \subsection{Tarzan}
 Tarzan is a P2P IP protocol using UDP to communicate. It is specified in \cite{tarzan:ccs02}. Tarzan nodes may be used to anonymize internet traffic in general. An initiator on the original sender machines encapsulates traffic into a layered UDP package and sends the package through mix like relayd's. The last relayd acts as an exit node. A replier may send answers the opposite way. Each relayd knows its next and previous relayd. To minimize the impact of observation Tarzan forwards packets only every 20ms and features replay protection.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% revise from this point on %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \subsection{AN.ON}
-AN.On as suggested in \cite{federrath2003system} is a mixing network. It generates messages in equally sized chunks and sends them in fixed time slots after random mixing. It's implementation is called JAP and may be found under https://anon.inf.tu-dresden.de/. JAP is in many ways similar to the capabilities of ToR. The network was at the time of writing a lot smaller (10 JonDos compared to 6500 relais in the ToR network).
+AN.ON as suggested in \cite{federrath2003system} is a mixing network. It generates messages in equally sized chunks and sends them in fixed time slots after random mixing. Its implementation is called JAP and may be found under https://anon.inf.tu-dresden.de/. JAP is in many ways similar to the capabilities of ToR. The network was at the time of writing a lot smaller (10 JonDos compared to 6500 relays in the ToR network).
 
 \subsection{MorphMix}
-MorphMix is another  mix network. It is specified in \cite{morphmix:wpes2002}. it was a circuit based mix system  for networking anonymity. Core of the network was collusion detection. This detection has been circumvented by \cite{morphmix:pet2006}. Since then no new papers have been published and the project seems to be dead.
+MorphMix is another mix network. It is specified in \cite{morphmix:wpes2002}. It was a circuit based mix system for networking anonymity. The core of the network was collision detection. This detection has been circumvented by \cite{morphmix:pet2006}. Since then no new papers have been published, and the project seems to be dead.
 
 \subsection{SOR (SSH-based onion routing)}
-SOR \cite{Egners_2012} is blaming the complex and monocultural landscape of anonymizing  software and proclaims a simple aproach based on onionized SSH tunnels. While the approach is both simple and effective it is not suitable against a powerful adversary. First he may be able to snoop the forwarding when on the system. Second, due to the timing behavior, tunnels belonging to each other may be identified and third, the package size information does leak as well.
+SOR \cite{Egners_2012} is blaming the complex and monocultural landscape of anonymizing software and proclaims a simple approach based on onionized SSH tunnels. While the approach is both simple and effective, it is not suitable against a powerful adversary. First, he may be able to snoop the forwarding when on the system. Second, due to the timing behavior, tunnels belonging to each other may be identified, and third, the package size information does leak as well.
 
 \subsection{Tor\label{sec:tor}}
-Tor is one of the most common onion router networks these days and onionizes generic TCP streams. It is specified in \cite{tor-spec}. It might be considered  one of the most advanced networks since it has a considerable size and a lot of research has been done here.
+Tor is one of the most common onion router networks these days and onionizes generic TCP streams. It is specified in \cite{tor-spec}. It might be considered one of the most advanced networks since it has a considerable size and much research has been done here.
 
-According to \cite{onion-routing:pet2000} tor is a network consisting of multiple onion routers. Each client first picks an entry node. Then it establishes an identity, gets a listing of relay servers, and chooses a path through multiple onion routers. This path is linked to the temporary identity. This identity should be changed on a regular base. The data itself is split into equally sized  cells of 512 bytes.
+According to \cite{onion-routing:pet2000} tor is a network consisting of multiple onion routers. Each client first picks an entry node. Then it establishes an identity, gets a listing of relay servers, and chooses a path through multiple onion routers. The temporary identity links to such a path and should be changed on a regular base along with its identity. Transferring data works by splitting the data into equally sized cells of 512 bytes.
 
-There is centrally organized directory in the tor network knowing all tor relay servers. Any Tor relay server may be a directory server as well. 
+There is a centrally organized directory in the tor network knowing all tor relay servers. Any Tor relay server may be a directory server as well. 
 
-Many attacks involving the Tor networks have been discussed in the academic world such as \cite{hs-attack06,esorics13-cellflood,bauer:wpes2007,esorics12-torscan,oakland2013-trawling,danner-et-al:tissec12,congestion-longpaths} and some have even been exploited actively. In the best case the people discovering the attacks did propose mitigation to the attack. Some of these mitigations flowed back into the protocol. Some general thoughts of the attacks should be emphasized here for treatment in our protocol.
+Many attacks involving the Tor networks have been discussed in the academic world such as \cite{hs-attack06,esorics13-cellflood,bauer:wpes2007,esorics12-torscan,oakland2013-trawling,danner-et-al:tissec12,congestion-longpaths} and some have even been exploited actively. In the best case, the people discovering the attacks did propose mitigation to the attack. Some of these mitigations flowed back into the protocol. Some general thoughts of the attacks should be emphasized here for treatment in our protocol.
 
-Being an exit node may be a problem in some jurisdictions. In general, it seems to be accepted that routing traffic with unknown content (to the routing node) seems to be accepted as one might argue that users of Tor are not regarded bad in general. So by being unable to tell malicious or illegal traffic apart from legitimate traffic this is not a problem. However -- being an exit node can mean that unencrypted and illegal traffic is leaving the routing traffic. In this specific case operators of a relay node might fear legal prosecution. This is why tor nodes may be listed as ``non exit nodes'' 
+Being an exit node may be a problem in some jurisdictions. In general, it seems to be accepted that routing traffic with unknown content (to the routing node) as one might argue that users of Tor are not regarded bad in general. So by being unable to tell malicious or illegal traffic apart from legitimate traffic, this is not a problem. However -- being an exit node can mean that unencrypted and illegal traffic is leaving the routing traffic. In this specific case operators of a relay node might fear legal prosecution. Tor nodes may proclaim themselves as  `` non-exit nodes''  to avoid the possibility of legal prosecution.
 
-Furthermore several DoS-Attacks have been carried out in order to overload parts of the Tor network. Most of them do a bandwidth drain on the network layer.
+Furthermore, several DoS-Attacks have been carried out in order to overload parts of the Tor network. Most of them do a bandwidth drain on the network layer.
 
-Attacking anonymisation has been done by several ways. First of all the most common attack is a time wise correlation of packets if in control of an entry and an exit node. A huge attack of this kind was published in 2014 and has been published on the tor website (\href{https://blog.torproject.org/blog/tor-security-advisory-relay-early-traffic-confirmation-attack}{relay early traffic confirmation attack}). This has been possible because tor is a low latency network. Another attack is to identify routes through tor by statistically analyse the traffic density in the network between nodes. More theoretical attacks focus on the possibility of controlling the directory servers to guarantee that a entity may be deanonymised because it is using compromised routers.
+Attacking anonymization has been done in several ways. First of all the most common attack is a time-wise correlation of packets if in control of an entry and an exit node. A massive attack of this kind was published in 2014 and has been published on the tor website (\href{https://blog.torproject.org/blog/tor-security-advisory-relay-early-traffic-confirmation-attack}{relay early traffic confirmation attack}). This attack was possible because tor is a low latency network. Another attack is to identify routes through tor by statistically analyze the traffic density in the network between nodes. More theoretical attacks focus on the possibility of controlling the directory servers to guarantee that an entity may be deanonymized because it is using compromised routers.
 
-Generally the effectiveness of monitoring of single or multiple networks is disputed. According to a study by \citeauthor{ccs2013-usersrouted} in \citeyear{ccs2013-usersrouted}\cite{ccs2013-usersrouted} a system in the scale of PRISM should be able to correlate traffic of 95\% of the users within a few days. Other sources based on the Snowden Papers claim that NSA was unable so far to De-Anonymize Tor users. However since these papers referenced to ``manual analysis'' the  statement may be disputed when looking at automated attacks as well.
+Generally, the effectiveness of the monitoring of single nodes or whole networks is disputed. According to a study by \citeauthor{ccs2013-usersrouted} in \citeyear{ccs2013-usersrouted}\cite{ccs2013-usersrouted}, a system in the scale of PRISM should be able to correlate traffic of 95\% of the users within a ``few days''. Other sources based on the Snowden Papers claim that NSA was unable so far to de-anonymize users of  ToR. However since these papers referenced to ``manual analysis'', the statement may be disputed when looking at automated attacks as well.
 
-According to \url{https://www.torproject.org/docs/pluggable-transports} ToR is blocked in at least China, Uzbekistan, Iran, and Kazakstan. In censored coutries ToR offers so called bridged Transports. Currently deployed transports in the standard ToR browser bundle package are obfs4, meek, FTE, and ScrambleSuit. Only meek is listed as working in China. This is because it hides its traffic in a common protocol (https).
+It is, according to \url{https://www.torproject.org/docs/pluggable-transports}, impossible to use transborder ToR traffic in at least China, Uzbekistan, Iran, and Kazakstan. In censored countries, ToR offers so-called bridged Transports. Currently deployed transports in the standard ToR browser bundle package are obfs4, meek, FTE, and ScrambleSuit. Only meek is listed as working in China. Meek achieves this by hiding its traffic in a standard protocol (https).
 
-A good survey of the current ToR research may be found in \cite{saleh2018shedding}.
+\cite{saleh2018shedding} is a good survey listing recent developments and attacks within the ToR project.
 
 \subsection{$I^2P$}
-The name $I^2P$ is an derived from  ``Invisible Internet Project'' according to \href{https://geti2p.net/}{geti2p.net}. The system itself is comparable to Tor for its capabilities. Mayor differences are:
+The name $I^2P$ is a derived from  ``Invisible Internet Project'' according to \href{https://geti2p.net/}{geti2p.net}. The system itself is comparable to ToR for its capabilities. Mayor differences are:
 \begin{itemize}
 	\item P2P based
 	\item Packet switched routing (tor is ``circuit switched'')
@@ -712,21 +708,28 @@ The name $I^2P$ is an derived from  ``Invisible Internet Project'' according to 
 	\item Supports TCP and UDP
 \end{itemize}
 
-$I^2P$ has not attracted as much attention as Tor so far. So it is hard to judge upon its real qualities.
+$I^2P$ has not attracted as much attention as ToR so far. So it is hard to judge upon its real qualities.
 
-In \citeyear{pets2011-i2p} \citeauthor{pets2011-i2p} presented in \cite{pets2011-i2p} an attack. As $I^2P$s security model is chosen based on IP adresses the authors propose to use several cloud providers in different B-Class networks. By selectively flooding peers an adversary may extract statistical information. The paper proposes an attack based on the heuristic performance-based peer selection. The main critics of the paper were that the peer selection may be influenced by an adversary enabling him to recover data on a statistical base.
+In \citeyear{pets2011-i2p} \citeauthor{pets2011-i2p} presented in \cite{pets2011-i2p} an attack. As $I^2P$s security model is chosen based on IP adresses the authors propose to use several cloud providers in different B-Class networks. By selectively flooding peers an adversary may extract statistical information. The paper proposes an attack based on the heuristic performance-based peer selection. The main critics of the paper were that the peer selection may be influenced by an adversary enabling him to recover $I^2P$ has not attracted as much attention as ToR so far. So it is hard to judge upon its real qualities.
+
+In \citeyear{pets2011-i2p} \citeauthor{pets2011-i2p} presented in \cite{pets2011-i2p} an attack. As $I^2P$s security model is chosen based on IP addresses the authors propose to use several cloud providers in different B-Class networks. By selectively flooding peers an adversary may extract statistical information. The paper proposes an attack based on the heuristic performance-based peer selection. The main critics of the paper were that the peer selection might be influenced by an adversary enabling him to recover data on a statistical base.
+data on a statistical base.
 
 \subsection{Freenet}
-Freenet was originally designed to be a fully distributed data store\cite{freenet}. Documents are stored in an encrypted form. Downloaders must know a document descriptor called CHK containing the file hash, the key, and some background about the crypto being used. A file is stored more or less redundantly based on the number of accesses to a stored file. The main goal of Freenet is to decouple  authorship from a particular document. It furthermore provides a fault tolerant storage which improves caching of a document if requested more often.
+Freenet was initially designed to be a fully distributed data store\cite{freenet}. Documents are stored in an encrypted form. Downloaders must know a document descriptor called CHK containing the file hash, the key, and some background about the crypto being used. A file is stored more or less redundantly based on the number of accesses to a stored file. The primary goal of Freenet is to decouple authorship from a particular document. It furthermore provides a fault tolerant storage which improves caching of a document if requested more often.
 
-Exactly as $I^2P$ it is not analysed thoroughly by the scientific world. 
+Precisely as $I^2P$, Freenet is not analyzed thoroughly by the scientific world. 
 
-The Freenet features two protocols FCPv2 acts as the client protocol for participating in the control of the freenet storage. The freenet client protocol allows insert and retrieve data, query the network status and managing freenet nodes directly connected to an own node. FCPv2 operates on port 9481 and may be easily blocked as it is a dedicated port. 
+The Freenet features two protocols FCPv2 acts as the client protocol for participating in the control of the Freenet storage. The Freenet client protocol allows to insert and retrieve data, to query the network status, and to manage Freenet nodes directly connected to an own node. FCPv2 operates on port 9481 and blocking is thus easy, as it is a dedicated port. 
 
 The Freenet project seems to be under active development as pages about protocols were updated in the near past (Last update on the FCPv2 Page was July \nth{5} 2016 at the time of writing).
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% revise from this point on %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \subsection{Herbivore}
-Herbivore is a network protocol designed by \citeauthor{herbivore:tr} in \cite{herbivore:tr}. It is based on the dining cryptographers paper of Chaum. At the time of writing no herbivore client or an actual protocol implementation could be found on the internet. Wikipedia lists herbivore as ``dormant or defunct''.
+Herbivore is a network protocol designed by \citeauthor{herbivore:tr} in \cite{herbivore:tr}. It is based on the dining cryptographers paper of Chaum. At the time of writing no herbivore client or an actual protocol implementation could be found on the internet. Wikipedia lists Herbivore as ``dormant or defunct''.
 
 \subsection{Dissent}
 Dissent is defined in \cite{Corrigan-Gibbs:2010:DAA:1866307.1866346}. It is an anonymity network based on DC-nets. These DC-nets ar formed by a set of servers. at least one of the servers in the used net must be trustworthy and none may be misbehaving. A server failure results in the stall of all message delivery using this server.
