@@ -58,7 +58,7 @@ dir=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 		sudo docker rm $id
 		if [[ "$tmpdir" != "" ]]
 		then
-			rm -r $dir/../target
+			rm -r $dir/../target 
 			mv $tmpdir/target $dir/../target
 			rm -rf $tmpdir
 		fi	

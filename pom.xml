@@ -24,4 +24,30 @@
         <module>website</module>
     </modules>
 
+    <build>
+      <plugins>
+        <plugin>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>3.1.0</version>
+          <executions>
+            <execution>
+              <id>copy-resources</id>
+              <phase>package</phase>
+              <goals>
+                <goal>copy-www</goal>
+              </goals>
+              <configuration>
+                <outputDirectory>${basedir}/target/www/</outputDirectory>
+                <resources>          
+                  <resource>
+                    <directory>${basedir}/website/target/main/jbake/</directory>
+                    <filtering>true</filtering>
+                  </resource>
+                </resources>              
+              </configuration>            
+            </execution>
+          </executions>
+        </plugin>
+      </plugins>
+    </build>
 </project>
