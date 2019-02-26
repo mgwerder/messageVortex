@@ -34,7 +34,7 @@
               <id>copy-resources</id>
               <phase>package</phase>
               <goals>
-                <goal>copy-www</goal>
+                <goal>copy-resources</goal>
               </goals>
               <configuration>
                 <outputDirectory>${basedir}/target/www/</outputDirectory>
