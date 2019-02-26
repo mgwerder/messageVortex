@@ -11,7 +11,7 @@ RUN mkdir /var/tmp/messagevortex && \
                texlive-lang-german texlive-lang-english \
                pandoc calibre enscript \
                fig2dev \
-               wget curl joe bc imagemagick \
+               wget curl joe bc imagemagick rsync inkscape \
                python-pip live-build linuxbrew-wrapper \
                python-cairo-dev libcairo2 libpango-1.0-0 libpangocairo-1.0-0 libgdk-pixbuf2.0-0 libffi-dev shared-mime-info \
                openjdk-8-jdk-headless  \
