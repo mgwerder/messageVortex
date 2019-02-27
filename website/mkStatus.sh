@@ -26,7 +26,7 @@ do
   echo  -n "+`(detex ${f} |wc -w)`">>$tmp
   echo "      <tr>">>$mtmp
   echo "        <th style=\"text-align: left;\"><a href=\"devel/doc/${f%%.tex}.pdf\">$f</a>(<a href=\"phd/doc/${f%%.tex}.odt\">odt</a>)</th>">>$mtmp
-  pandoc --data-dir=$(pwd) -f latex -t odt -o $dir/target/devel/${f%%.tex}.odt $f >/dev/null
+  ( cd $(dirname "$f");pandoc --data-dir=$(pwd) -f latex -t odt -o $dir/target/devel/${f%%.tex}.odt $(basename $f) >/dev/null )
   t="$(detex ${f})"
   echo "        <td style=\"text-align: right;\">$(echo "$t" |wc -l)</td>">>$mtmp
   echo "        <td style=\"text-align: right;\">$(echo "$t" |wc -w)</td>">>$mtmp
@@ -102,17 +102,19 @@ echo "    </table>">>$mtmp
 historyTable="$(cat $mtmp)"
 rm $mtmp
 
+crev="$(echo -n "$(git log --format="%H" -n 1)")"
+echo "crev: \"$crev\""
+
 # replace occurences
 f="${f/<!-- REPL:fixmeFatal -->/$ffatal}"
 f="${f/<!-- REPL:fixmeError -->/$ferror}"
 f="${f/<!-- REPL:fixmeWarning -->/$fwarning}"
 f="${f/<!-- REPL:fixmeTotal -->/$ftotal}"
 f="${f/<!-- REPL:fileRows -->/$fileRows}"
-f="${f/<!-- REPL:cref -->/$crev}"
 f="${f/<!-- REPL:progressPercents -->/$progressPercents}"
 f="${f/<!-- REPL:progressWords -->/$progressWords}"
 f="${f/<!-- REPL:progressSourcecode -->/$progressSourcecode}"
 f="${f/<!-- REPL:historyTable -->/$historyTable}"
 f="${f/\$(date)/$(date)}"
 
-echo "$f" >$2
+echo "$f" |sed "s~<!-- REPL:cref -->~$crev<!-- crev:$crev -->~" >$2
