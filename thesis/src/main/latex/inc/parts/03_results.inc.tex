@@ -4,22 +4,22 @@
 %!TeX root = ../../messageVortex.tex
 
 \part{Results}
-To verify the hypothesis made in this paper, and to analyse properties of the protocol in a real world scenario a library was implemented in Java which was capable of handling all message packets and the routing stack as a whole. The following paragraphs describe the protocol developed in general as a generic approach. Appendix \ref{app:rfcMessageVortexMain} gives the full ASN.1 representation of the protocol. 
+To verify the hypothesis made in this paper, and to analyze properties of the protocol in a real world scenario a library was implemented in Java which was capable of handling all message packets and the routing stack as a whole. The following paragraphs describe the protocol developed in general as a generic approach. Appendix \ref{app:rfcMessageVortexMain} gives the full ASN.1 representation of the protocol. 
 
-It is important to notice that ASN.1 has no mean to express encrypted structures. Due to this fact we defined all encrypted fields as \verb|OCTET STRING|. 
+It is important to notice that ASN.1 has no mean to express encrypted structures. Due to this fact, we defined all encrypted fields as \verb|OCTET STRING|. 
 
-The protocol is defined int the ASN.1 to support onionized information in an unencrypted form. This is meant for debugging purposes only. At no point should this possibility be used in a production environment.
+The protocol is defined in ASN.1 to support onionized information in an unencrypted form. These unencrypted structures are for debugging purposes only. At no point should this possibility be used in a production environment.
 
-The protocol described in the next chapter is independent from routing. We built a blending layer for SMTP. Layers for other protocols such as XMPP may be built similarly. The protocol may be extended by adding blending layers and their addressing schemes.
+The protocol described in the next chapter is independent of routing. We built a blending layer for SMTP. Layers for other protocols such as XMPP may be built similarly. The extending the protocol is done by adding blending layers and their addressing schemes.
 
-The Protocol outlined here is the final product and has undergone many development cycles. A lot of really useful features and capabilities such as a mechanism analoguous to the SMTP received headers were dropped as they were very useful but threatened security or anonymity.
+The Protocol outlined here is the final product and has undergone many development cycles. A lot of advantageous features and capabilities such as a mechanism analogous to the SMTP received headers were dropped as they were beneficial but threatened security or anonymity.
 
 \chapter{Protocol Overview}
-The MessageVortex protocol described here is an onionizing protocol for asynchronus data transfer. The protocol itself is embbeded into a carrier protocol as binary information to avoid easy detection and make it hard to block traffic without blocking other legitimate traffic.
+The Protocol implementation is described in the RFC document in \ref{app:rfcMessageVortexMain}. It contains all the necessary information to build the protocol. The RFC is published on the website \url{https://messagevortex.net/} and through the official IETF channels. Beside the RFC document, additional documents and references may be found there.
 
-The Protocol implementation is described in the RFC document in \ref{app:rfcMessageVortexMain}. It contains all necessary information to build the protocol. It is published on the website \url{https://messagevortex.net/} and on the official IETF channels. Beside the RFC document additional documents and a reference may be found.
+The MessageVortex protocol described here is an onionizing protocol for asynchronous data transfer. The protocol itself is embedded into a carrier protocol as binary information to avoid easy detection and make it hard to block traffic without blocking other legitimate traffic.
 
-The data transferred is passed thru a number of mixes. The builder of a routing block (normally the sender) decides upon the following attributes:
+The data transferred is passed thru multiple routers. The builder of a routing block (normally the sender) decides upon the following attributes:
 \begin{itemize}
 	\item Hops for the message and all decoy traffic.
 	\item Timing behaviour respectively speed of the message.
@@ -29,7 +29,7 @@ The data transferred is passed thru a number of mixes. The builder of a routing 
 
 These decisions are compiled into a routing block structure which is onionized. This routing block may then be used to transfer a message of almost any size. This message is then sent to the involved mixes.
 
-A mix may be just an intermediate station or the final target of a message. Only the recipient of a message is able to tell whether a message was intended for him or not. Any mix does a certain number of operations on a message. Considering the message, the timing and the operations applied a mix may extract the following informations:
+A mix may be just an intermediate station or the final target of a message. Only the recipient of a message can tell whether a message was intended for him or not. Any mix does a certain number of operations on a message. Considering the message, the timing and the operations applied a mix may extract the following pieces of information:
 
 \begin{itemize}
 	\item IP of the sending mix.
@@ -73,7 +73,7 @@ In the taxonomy of \cite{Shirazi2018} this protocol would be classified as follo
 \end{itemize}
 
 \section{Vortex Message}
-The outline in figure \ref{fig:messageOutline} is a simplified view onto the message block of MessageVortex.
+The outline in figure \ref{fig:messageOutline} is a simplified view of the message block of MessageVortex.
 
 \begin{figure*}[ht]
 	\includegraphics[width=\textwidth]{inc/blockLayoutSimplified}
@@ -81,16 +81,16 @@ The outline in figure \ref{fig:messageOutline} is a simplified view onto the mes
     \label{fig:messageOutline}
 \end{figure*}
 
-A vortex message is a message passed from one mix to another this message may or may not contain any valuable information. The message itself is embedded as binary data into a transfer protocol. Every Mix may decide for himself what kind of protocols and embedding mechanisms are supported.
+A Vortex message is a message passed from one router to another this message may or may not contain any valuable information. Binary data represents the message content in the transfer protocol. Every router may decide for himself on the support of algorithms and embedding mechanisms.
 
-A vortex message is always built out of these blocks:
+The block structure of a Vortex message is as follows:
 \begin{itemize}
 	\item header
 	\begin{itemize}
 		\item Encrypted message key.\\
-			  Contains symmetrical key for decryption of follow up header information and payload blocks. Encrypted with host identity public key.
+			  Contains symmetrical key for decryption of follow up header information and payload blocks. All symmetric keys are encrypted with a receiving host's public key.
 		\item Identity and ``proof of work'' information\\
-		      Contains Requests, Proof of work sections, and header key
+		      This information contains requests, proof-of-work sections, and a header key.
 	\end{itemize}
 	\item Encrypted payload blocks (encrypted with header key)
 	\begin{itemize}
@@ -107,19 +107,23 @@ A vortex message is always built out of these blocks:
 	\end{itemize}
 \end{itemize}
 
-It is important to note that there are two symmetrical keys involved in encrypting and decrypting message headers. This is not a flaw in the protocol but necessary. 
+It is important to note that there are two symmetrical keys involved in encrypting and decrypting message headers. Having two keys is not a flaw in the protocol but necessary. 
 
-The first key which is in a Vortex message is the message key. This key is only accessible with the private key of the node receiving the message. It allows decryption of the routing blocks and the header information. The sender of a message block is therefore not able to tell if a message contains one or more routing blocks. It is important to note that no other node should have access to this information. 
+The first key of a Vortex message is the message key. This key is only accessible with the private key of the node receiving the message. It allows decryption of the routing blocks and the header information. The sender of a message block is therefore not able to tell if a message contains one or more routing blocks. It is important to note that no other node should have access to this information. 
 
-The second key is the header key located in the encrypted header. This key was chosen by the creator of the routing block containing the information. This key protects the inner structure of the Message. it makes it impossible for any node except the sending or the receiving node to detect the inner structure of the message. Without this key any independent observer with knowledge about the blending capabilities of a receiving node may;
+The second key is the header key located in the encrypted header. The RBB chooses the key. This key protects the inner structure of the Message. It makes it impossible for any node except the sending or the receiving peer node to detect the inner structure of the message. Without this key, any independent observer with knowledge about the blending capabilities of a receiving node may:
 \begin{itemize}
 	\item easier identify the block structure.\\ 
-	This remains the case regardless whether ASN.1 or length prefixed structures are used. If the structure of a vortex Message can be easily identified the messages may be logged or dropped.
+	      This remains the case regardless of whether ASN.1 or length prefixed structures are used. If the structure of a vortex Message can be easily identified the messages may be logged or dropped.
 	\item Identify the routing block size.\\
-	The value of this information is only very limited as it only reflects indierctly the complexity of thr remaining routing information.
+	      The value of this information is only minimal as it only reflects the complexity of the remaining routing information indirectly.
 	\item Identify the number of payload blocks and their respective sizes. \\
-	This is valuable information when following a traffic.
+	      This is valuable information when following traffic of a message.
 \end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% revise from this point on %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Key Usage}
 Several keys are being used during the life of a message. In the following section we emphasize on type, usage and their specialities.
