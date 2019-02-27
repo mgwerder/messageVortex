@@ -1102,9 +1102,9 @@ In the following subsections we list a couple of attack classes which have been 
 \subsubsection{Probing Attacks}
 Identifying a node by probing and check their reaction is commonly done when fingerprinting a service. As a node is participating in a network and relaying messages probing may not be evaded. However, it may be made costly for an adversary to do systematic probing. This should be taken into account. Both currently specified transport protocol feature an indefinite number of possible accounts. Since not the server but the endpoint address is behaving, node probing is more complicated than in other cases where probing of service is sufficient. 
 
-A minor problem are clear-text requests. These requests may be used on any transport layer account without previous knowledge of any host key. Thus the recommendation in table \ref{tab:protoReplyCrit} is \fxwarning{ incomplete sentence}
+One of the problems are clear-text requests. These requests may be used on any transport layer account without previous knowledge of any host key. Thus the recommendation in table \ref{tab:protoReplyCrit} is generally not to answer the requests. Routing nodes in jurisdictions not fearing legal repression or prosecution may reply to clear text requests, but it is generally discouraged as they allow harvesting of addresses.
 
-One strategy to avoid would be to put high costs onto clear-text requests in such a way that a clear-text request may have a long reply time (e.g., up to one day). A first retry of the same identity would lead to automatic blacklisting. This is an insufficient strategy as a big adversary may have lots of identities in stock. Requesting an unusually long key as a plain-text identity does not make sense either as these as well may be kept in stock. We may, however, force a plaintext request to have a hash following specific rules. We may for example put in a requirement that the first four bytes of the hash of a header block translate to the first four characters of the receiving address.
+One strategy to avoid would be to put high costs onto clear-text requests in such a way that a clear-text request may have a long reply time (e.g., up to one day). A first retry of the same identity would lead to automatic blacklisting. This is an insufficient strategy as a big adversary may have lots of identities in stock. Requesting an unusually long key as a plain-text identity does not make sense either as these as well may be kept in stock. We may, however, force a plaintext request to have a hash following specific rules. We may for example put in a requirement that the first four bytes of the hash of a header block translates to the first four characters of the receiving address.
 
 \fxwarning{Good idea. It is not yet in the protocol. Why?}
 
@@ -1471,9 +1471,12 @@ A Block picked up in the blending layer is handled as shown in image \ref{fig:ms
 The processing of a sending block is triggered by a routing block in the workspace. The assembly instructions are processed in order to collect the payload blocks. Then the encryption is applied on the message and passed on to the blending layer for processing.
 
 \section{Sub Research Questions Roundup}
-\subsection{SQ1: Sending messages maintaining unlikability against an adversary}
-If we assume that the constraints of trust (only trust in sender and recipient infrastructure whereas we always have multiple recipients) are valid, we can make the following statements regarding anonymity and unlinkability:
+We sum up the findings of the last part in regard to our three research questions anddescribe the next steps to be taken.
 
+\section{SQ1: Technologies for sending messages maintaining unlinkability against an adversary}
+We were unable to identify a single technology which withstands our adversary model entirely. The technologies were either too simple to withstand an adversary (e.g., remailers), have substantial flaws affecting their reliability (e.g., most mixes and DC networks), an active adversary could easily sabotage them or do not scale.
+
+We were able to describe a rough protocol which performs far better in almost all aspects of anonymity than the solutions described in the previous sections. This comparison was always done for the adversary model given. If we assume that the constraints of trust (only trust in sender and recipient infrastructure whereas we always have multiple recipients) are valid, we can make the following statements regarding anonymity and unlinkability:
 \begin{itemize}
 	\item If an adversary identifies all involved nodes of a message and identifies all the corresponding messages and controls, all nodes except for senders and recipients nodes, he can determine message frequency, maximum message size, and message peers.
 	\item If an adversary can identify all involved $i$ nodes of a sending party while controlling $j$ nodes, then he may determine a $k$-anonymity set whereas $k=i-j$ for the message set and a maximum message frequency. 
