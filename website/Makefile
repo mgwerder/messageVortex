@@ -14,7 +14,7 @@ clean:
 
 dirs:
 	@-mkdir -p $(OUTDIR) $(INTERDIR) 2>/dev/null 
-	@-rsync -av --progress $(OUTDIR) $(INTERDIR) --exclude status.html --exclude documentation.html
+	@-rsync -av --progress $(INTERDIR)/ $(OUTDIR)/ --exclude status.html --exclude documentation.html
 
 $(OUTDIR)/status.html: $(INTERDIR)/status.html
 	@make dirs
