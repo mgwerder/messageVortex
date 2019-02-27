@@ -1378,14 +1378,14 @@ For our protocol, we use the following terms:
 \end{itemize}
 
 \subsection{Vortex Communication model}
-In this section, we introduce a new consistent, transport independent model for representing the different protocols used by Vortex.
+In this section, we introduce a new consistent, transport independent model for representing the different protocols used by MessageVortex.
 
 \begin{figure}[ht!]
 	\centering\includegraphics[width=\columnwidth]{inc/roughProtocolDesign.pdf}
 	\caption{A rough protocol outline of the MessageVortex protocol}\label{fig:protocolOutline}
 \end{figure}
 
-We divide our prtocol in four different layers, whereas onl three are specific to the MessageVortex protocol. The lowest layer is the transport layer. As expressed earlier, dedicated protocols are easy to censor. Therefore we build our protocol on top of other suitable transport protocols. 
+We divide our protocol into four different layers, whereas only three are specific to the MessageVortex protocol. The lowest layer is the transport layer. As expressed earlier, dedicated protocols are easy to censor. Therefore we build our protocol on top of other suitable transport protocols. 
 
 The other Three layers are vortex specific and do not require any infrastructure on the internet. We elaborate further on these layers in the next section.
 
