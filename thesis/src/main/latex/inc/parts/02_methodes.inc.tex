@@ -1368,10 +1368,10 @@ The protocol is built on multiple layers. On the logic side the protocol is spli
 \begin{itemize}
 	\item \textbf{Sender:} The user or process originally composing the message.
 	\item \textbf{Recipient:} The user or process destined to receive the message in the end.
-	\item \textbf{Mix:} Any node processing the message. Please note all nodes are mixes.
-	\item \textbf{Message:} The ``real content'' to be transferred from the sender to the recipient
-	\item \textbf{Payload:} Any data transported between mixes regardless of the meaningfulness or relevance to the message.
-	\item \textbf{Decoy traffic:} Any data transported between mixes which has no relevance to the message at the final destination.
+	\item \textbf{Router:} Any node which is processing the message. Please note that all nodes are routers.
+	\item \textbf{Message:} The ``real content'' to be transferred from the sender to the recipient.
+	\item \textbf{Payload:} Any data transported between routers regardless of the meaningfulness or relevance to the message.
+	\item \textbf{Decoy traffic:} Any data transported between routers which has no relevance to the message at the final destination.
 	\item \textbf{Identity:} A tuple of a routable address, and a public key.
 	\item \textbf{Ephemeral Identity:} An identity created on any node with a limited lifetime anyone possessing the private key (proven by encrypting with it) is accepted as representative of that identity.
 \end{itemize}
@@ -1385,25 +1385,24 @@ In this section, we introduce a new consistent, transport independent model for 
 \fxwarning{add more}
 
 \subsection{Transport Layer}
-For our test we used a custom transport layer allowing us to monitor all traffic easily, and build structures in a very flexible way. This can be done with a minimum amount of work for setup  and deployment. It furthermore works across multiple hosts in a broadcast domain. The API may be used to support almost any kind of transport layer.
+For our first tests, we used a custom transport layer allowing us to monitor all traffic quickly, and build structures in a very flexible way. This transport layer works locally with a minimum amount of work for setup and deployment. It furthermore works across multiple hosts in a broadcast domain. The API may be used to support almost any kind of transport layer.
 
-We identified in the previous section the following protocols as suitable for transport:
+After that, we focussed on the protocols identified in the previous sections for transport:
 \begin{itemize}
 	\item SMTP
 	\item XMPP
 \end{itemize}
-
-For a prototype we will implement a SMTP-Transport agent.
+For the prototype, we have implemented an SMTP transport agent and the respective blending layer.
 
 \subsection{Blending Layer}
 The blending layer is taking care of multiple problems:
 \begin{itemize}
 	\item It is translating the message block into a suitable format for transport\\
-	      This includes jobs such as embedding a block as encoded text, as a binary attachment, or hide it within am message using steganography.
+	      This translation includes jobs such as embedding a block as encoded text, as a binary attachment or hide it within a message using steganography.
 	\item Extract incomming blocks\\
-	      Identify incomming messages containing a possible block and extract it from the message.
+          Identify incoming messages containing a possible block and extract it from the message.
 	\item Do housekeeping on the storage layer of the transport protocol\\
-	      It may be required that messages are deleted from time to time in order to stay below sizing quotas of an account.      
+	      Access protocols POP and IMAP require that messages are deleted from time to time in order to stay below the sizing quotas of an account.      
 \end{itemize}
 
 We define the blending layer to work as follows when receiving messages:
@@ -1411,7 +1410,7 @@ We define the blending layer to work as follows when receiving messages:
 \begin{enumerate}
 	\item Log arrival time (in UTC) on the transport layer.
 	\item Extract possible blocks.
-	\item Apply decryption on a suspected header block .
+	\item Apply decryption on a suspected header block.
 	\item Identify header block as valid by querying the accounting.
 	\item Extract and decrypt subsequent blocks.
 	\item Pass extracted blocks and information to the routing layer.
@@ -1423,13 +1422,13 @@ We define the blending layer to work as follows for sending messages:
 	\item Assemble message as passed on by the routing layer.
 	\item Using the blending method specified in the routing block build an empty message. 
 	\item Create a message decoy content.
-	\item Send the Message to the appropriate recipient using the transport layer protocol.
+	\item Send the message to the appropriate recipient using the transport layer protocol.
 \end{enumerate}
 
-There is no specification on the housekeeping part of the blending layer as this part is specific to the requirements of the account owner. We do however recommend to handle messages exactly as if the messages would be handled on a account handled by a human. 
+There is no specification on the housekeeping part of the blending layer as this part is specific to the requirements of the account owner. We do however recommend to handle messages precisely as if the messages would be handled on an account handled by a human. 
 
 \subsection{Routing Layer}
-The routing layer receives the message blocks in a decrypted and authorised form from the blending layer. and processes them as follows:
+The routing layer receives the message blocks in a decrypted and authorized form from the blending layer and processes them as follows:
 
 \begin{itemize}
 	\item Build structure representing the block building and the appropriate block IDs.
@@ -1440,30 +1439,28 @@ The routing layer receives the message blocks in a decrypted and authorised form
 \end{itemize}
 
 \subsubsection{Block Structure}
-The main block structure is defined as a sequence of blocks.
+A VortexMessages' main block structure is a sequence of blocks. This block sequence starts with a header containing a symmetric key encrypted with public key of the current node and a header block containing the immediate details to decrypt the subsequent blocks (if any).
 
-The block sequence starts with a header containing a symmetric key encrypted with public key of the current node and a header block containing the immediate details to decrypt the subsequent blocks (if any).
-
-The header block is followed by a routing block. This block contains information required for subsequent routing. According to this block currently valid data blocks may be assembled and sent to a different location. 
+A routing block follows the header block. This routing block contains the information required for subsequent routing. According to this block currently, valid data blocks may be assembled and sent to a different location. 
 
 The next block is the routing log block. This block protocols the routing information of a message and is somewhat similar to an onionized variant of the received headers in SMTP.
 
-The final sequence of blocks are data blocks. They contain the actual data or decoy traffic.
+The last part of the message is a sequence of data blocks. They contain the actual data or decoy traffic.
 
 \subsubsection{MURBs\label{sec:murb}}
-The protocol allows to use Mulit use reply Blocks (MURBs). This enables a user to send a limited amount of times a message to an anonymous receiver without having any knowledge about its identity, the location or infrastructure he is using.
+The protocol includes the capability of MURBs. Such MURBs enable a user to send a limited amount of times messages to an anonymous receiver. Such sending may be done without having any knowledge about its identity, the location or infrastructure he is using.
 
-A MURB in our term is a completely prepared routing instruction built by the recipient of a message. The sender has only the routing blocks and the instructions to assemble the initial message. It has no knowledge about the message path except for the first message hops.
+A MURB in our term is an entirely prepared routing instruction built by the recipient of a message. The sender has only the routing blocks and the instructions to assemble the initial message. It does not know the message path except for the first message hops.
 
-As a MURB is a routing block it generates the same pattern on the network each time it is used. In order to avoid statistical visibility we need to limit the number of uses per MURB. As a maximum number of usages the number 127 has been chosen. This number allows to be used for automated messages. A minute pattern would disappear latest after 2 hours and an hourly pattern after 5 days.
+As a MURB is a routing block, it generates the same pattern on the network each time a sender uses it. In order to avoid statistical visibility, we need to limit the number of uses per MURB. As a maximum number of usages, the protocol is limited to 127 usages. This number should be sufficiently sized for automated messages. A minute pattern would disappear latest after 2 hours and an hourly pattern after five days.
 
-\fxwarning{add something about murbs and the dangers of expiring quotas}
+In order for a MURB to work, the RBB has to take care that all quotas required to the route are sufficiently sized. Such sizing is hard to foresee in some cases. An RBB may query these identities from time to time to make sure that they do not deplete. Wherever possible MURBs should be dropped in favor of multiple SURBs to avoid the dangers of MURBs.
 
 \section{Protocol handling}
-In the following sections we outline the handling of messages we split the handling into incoming messages and outgoing messages. All handling assumes that we have a blending layer independently picking up messages as advertised in the capabilities messages.
+In the following sections, we outline the handling of messages we split the handling into incoming messages and outgoing messages. All handling assumes that we have a blending layer independently picking up messages as advertised in the capabilities messages.
 
-\subsection{Received Block Processing}
-A Block picked up in the blending layer is handled as shown in image \ref{fig:msgRecvProcessing}.
+\subsection{Block Processing}
+A Block picked up in the blending layer is handled as shown in image \ref{fig:msgRecvProcessing}. First we try to authenticate the message. If we are able to authenticate the message we process it and add the contained instructions to a processing workspace. Unauthenticated messages may be discarded at any point.
 
 \begin{figure*}[hbt]
 	\includegraphics[width=\textwidth]{inc/flowchart_message_receiving}
@@ -1471,23 +1468,23 @@ A Block picked up in the blending layer is handled as shown in image \ref{fig:ms
 	\label{fig:msgRecvProcessing}
 \end{figure*}
 
-\fxwarning{add content here}
-
-\subsection{Transmission Block Processing}
-\fxwarning{add content here}
+The processing of a sending block is triggered by a routing block in the workspace. The assembly instructions are processed in order to collect the payload blocks. Then the encryption is applied on the message and passed on to the blending layer for processing.
 
 \section{Sub Research Questions Roundup}
 \subsection{SQ1: Sending messages maintaining unlikability against an adversary}
-
-If we assume that the constraints of trust (only trust in sender and recipient infrastructure) are valid, we can make the following statements regarding anonymity and unlinkability:
+If we assume that the constraints of trust (only trust in sender and recipient infrastructure whereas we always have multiple recipients) are valid, we can make the following statements regarding anonymity and unlinkability:
 
 \begin{itemize}
-	\item If an adversary is able to identify all involved nodes of a message and identify all the corresponding messages and controls all nodes except for senders and recipients node, he is able to determine message frequency, maximum message size and message peers.
-	\item If an adversary is able to identify all involved $i$ nodes of a sending party while controlling $j$ nodes then he is able to determine a $k$-anonymity set whereas $k=i-j$ for the message set and a maximum message frequency. 
-	\item If an adversary is running a node, he is able to identify other nodes participating in the network by analyzing peer messages.
+	\item If an adversary identifies all involved nodes of a message and identifies all the corresponding messages and controls, all nodes except for senders and recipients nodes, he can determine message frequency, maximum message size, and message peers.
+	\item If an adversary can identify all involved $i$ nodes of a sending party while controlling $j$ nodes, then he may determine a $k$-anonymity set whereas $k=i-j$ for the message set and a maximum message frequency. 
+	\item If an adversary is running a node, he may identify other nodes participating in the network by analyzing peer messages.
 \end{itemize}
 
-We may safely assume that a carefully crafted message is therefore unlinked from the two message peers.
+We may safely assume that a carefully crafted message within a standard message flow is therefore unlinked from the two message peers. An adversary running a node may identify over time possibly participating nodes, but he will be unable to query or use such a node without the corresponding keys. He may be able to observe such nodes, possibly view their activity but he is unable to match messages generated.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% revise from this point on %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{SQ2: Attacking unlinkability and circumvention}
 \fxwarning{add content here}
