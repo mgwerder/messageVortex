@@ -1364,7 +1364,7 @@ The protocol is built on multiple layers. On the logic side the protocol is spli
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Protocol Terminology}
-
+For our protocol, we use the following terms:
 \begin{itemize}
 	\item \textbf{Sender:} The user or process originally composing the message.
 	\item \textbf{Recipient:} The user or process destined to receive the message in the end.
@@ -1372,17 +1372,22 @@ The protocol is built on multiple layers. On the logic side the protocol is spli
 	\item \textbf{Message:} The ``real content'' to be transferred from the sender to the recipient.
 	\item \textbf{Payload:} Any data transported between routers regardless of the meaningfulness or relevance to the message.
 	\item \textbf{Decoy traffic:} Any data transported between routers which has no relevance to the message at the final destination.
-	\item \textbf{Identity:} A tuple of a routable address, and a public key.
+	\item \textbf{Identity:} A tuple of a routable address, and a public key. This touple is a long living tuple but may be exchanged from time to time. 
 	\item \textbf{Ephemeral Identity:} An identity created on any node with a limited lifetime anyone possessing the private key (proven by encrypting with it) is accepted as representative of that identity.
+	\item \textbf{Routing Block Builder (RBB):} An entity building a routing block. Typically identical to either sender or receiver.
 \end{itemize}
-
-
-\fxwarning{add more}
 
 \subsection{Vortex Communication model}
 In this section, we introduce a new consistent, transport independent model for representing the different protocols used by Vortex.
 
-\fxwarning{add more}
+\begin{figure}[ht!]
+	\centering\includegraphics[width=\columnwidth]{inc/roughProtocolDesign.pdf}
+	\caption{A rough protocol outline of the MessageVortex protocol}\label{fig:protocolOutline}
+\end{figure}
+
+We divide our prtocol in four different layers, whereas onl three are specific to the MessageVortex protocol. The lowest layer is the transport layer. As expressed earlier, dedicated protocols are easy to censor. Therefore we build our protocol on top of other suitable transport protocols. 
+
+The other Three layers are vortex specific and do not require any infrastructure on the internet. We elaborate further on these layers in the next section.
 
 \subsection{Transport Layer}
 For our first tests, we used a custom transport layer allowing us to monitor all traffic quickly, and build structures in a very flexible way. This transport layer works locally with a minimum amount of work for setup and deployment. It furthermore works across multiple hosts in a broadcast domain. The API may be used to support almost any kind of transport layer.
@@ -1485,13 +1490,44 @@ We were able to describe a rough protocol which performs far better in almost al
 
 We may safely assume that a carefully crafted message within a standard message flow is therefore unlinked from the two message peers. An adversary running a node may identify over time possibly participating nodes, but he will be unable to query or use such a node without the corresponding keys. He may be able to observe such nodes, possibly view their activity but he is unable to match messages generated.
 
+In the next section, we will further elaborate on this protocol and analyze it. We will focus on the question of whether it is possible to create a protocol which withstands threads of the rough modern world.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % revise from this point on %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{SQ2: Attacking unlinkability and circumvention}
-\fxwarning{add content here}
+In the previous part we identified a lot of attack schemes used to attack anonymity of a protocol or infrastructure. While not all are technical, technicality plays a mayor part. We identified:
+\begin{itemize}
+	\item Anonymity attacks
+	\begin{itemize}
+		\item Hotspot
+		\item Side channel
+		\item Sizing
+		\item Bugging
+		\item Tagging and tracing
+		\begin{itemize}
+			\item Peer discovering attacks
+			\item Traffic flow attacks
+		\end{itemize}
+	\end{itemize}
+	\item Availability and reliability attacks
+	\begin{itemize}
+		\item Denial of service (DoS)
+		\item Censorship
+	\end{itemize}
+	\item Non-technical Attacks
+	\begin{itemize}
+		\item Credibility
+		\item Censorship
+	\end{itemize}
+\end{itemize}
+
+We idetified several possibilities to circumvent the attack classes listed above. Some of them, such as the bugging attack may be countered by design (e.g., by allowing only  simple messages). Other can only be countered partially in reality (e.g., DoS attacks). We will further elaborate the protocol and then analyze the impact of every single attack to the protocol.
 
 \subsection{SQ3: Attack Mitigation by design}
+This SQ is a part of the previous question to a certain extend. We identified that reliability and trust are key factors to a protocol. Therefore, allowing single point of failures (SPOF) or extending trust over central infrastructures is deadly for an anonymizing protocol. 
 
-\fxwarning{add content here}
+When elaborating the protocol in the next part we will focus on introducing designs which will prohibit actions aendangering anonymity.
+
+\fxwarning{Extend replies to all scientific questions and their follow up.}
