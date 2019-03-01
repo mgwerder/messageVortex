@@ -5,36 +5,36 @@
 
 \part{Discussion \label{sec:discussion}}
 
-In the following capters we analyze the protocol throughly for fitness of purpose. 
+In the following chapters, we analyze the protocol thoroughly for fitness of purpose. 
 
-We first apply a statical analysis of the protocol to identify all informations leaked at all levels.
+We first apply a statical analysis of the protocol to identify all pieces of information leaked at all levels.
 
-Then we apply a dynamic analysis of the protocol to identify all meta informations leaked during transmission of the protocol such as timing or context beween messages.
+Then we apply a dynamic analysis of the protocol to identify all meta pieces of information leaked during transmission of the protocol such as timing or context between messages.
 
-We distinguish between passive and active adversaries. Passive adversaries follow the MessageVortex protocol, have unlimited observation capabilities on the network up to layer 4 of the ISO/OSI protocol, and do have unlimmited observation capabilities on the transporting layer of MessageVortex. Active adversary share the capabilities of passive adversaries, but do not follow the MessageVortex protocol. Both adversaries try to obtain valuable information (e.g., message content, metadata such as the communicating peers or message frequencies). For a more precise model refer to \ref{sec:adversary}.
+We distinguish between passive and active adversaries. Passive adversaries follow the MessageVortex protocol, have unlimited observation capabilities on the network up to layer 4 of the ISO/OSI protocol, and do have unlimited observation capabilities on the transporting layer of MessageVortex. Active adversaries share the capabilities of passive adversaries, but do not follow the MessageVortex protocol. Both adversaries try to obtain valuable information (e.g., message content, metadata such as the communicating peers or message frequencies). For a more precise model refer to \ref{sec:adversary}.
 
-We then sum up the achieved goals by looking at well known attacks and analyze the effectiveness of them to analyze the protocol.
+We then sum up the achieved goals by looking at well-known attacks and analyze the effectiveness of them to analyze the protocol.
 
-At the very end of this chapter we identify the gaps uncovered by this work.
+At the very end of this chapter, we identify the gaps uncovered by this work.
 
 \chapter{Static analysis}
-In this section we analyze statically the protocol. Looking at a full message we get the protocol outline as shown in \eqref{eq:vortexMessage} on page~\pageref{eq:vortexMessage}.
+In this section, we analyze the protocol statically. Looking at a full message, we get the protocol outline as shown in \eqref{eq:vortexMessage} on page~\pageref{eq:vortexMessage}.
 
 \begin{figure*}[!h]
 	\begin{align}
-VortexMessage                = &\langle \mathbf{MP}^{K^{-1}_{hostN}}, \langle\mathbf{PAD}, \mathbf{CP}^{K^{-1}_{hostN}}, \mathbf{H}^{K_{senderN}}, E^{K^{-1}_{senderN}}\left(H\left(\mathbf{HEADER}\right)\right)  \nonumber \\
-                               & \left[\mathbf{R}^{K_{senderN}}\right], \left[\mathbf{PL}\right]*\rangle^{K_{peerN}} \rangle\label{eq:vortexMessage}\\ 
-\mathbf{MP}^{K^{-1}_{hostN}}  = &E^{K^{-1}_{hostN}}\left(\mathbf{PREFIX}\langle K_{peerN}\rangle \right)\\ 
-\mathbf{PAD}                 = &\langle \text{32 padding bytes from payload} \rangle\\ 
-\mathbf{CP}^{K^{-1}_{hostN}} = &E^{K^{-1}_{hostN}}\left(\mathbf{CPREFIX}\langle K_{senderN}\rangle \right)\\ 
-\mathbf{H}^{K_{senderN}}     = &E^{K_{senderN}}\left(\mathbf{HEADER}\right)\\  
-\mathbf{HEADER} 		     = &\langle K^{1}_{senderN}, serial, maxReplays, validity, [requests, requestRoutingBlock],\nonumber\\ 
-                               & [puzzleIdentifier, proofOfWork] \rangle \\  
-\mathbf{R}^{K_{senderN}}     = & E^{K_{senderN}}\left(\mathbf{ROUTING}\right)\\ 
-\mathbf{ROUTING}		     = & \langle [ \mathbf{ROUTINGCOMBO} ] *, forwardSecret, replyBlock \rangle\\  
-\mathbf{ROUTINGCOMBO}        = & \langle processIntervall, K_{peerN+1}, recipient, \mathbf{nextCP}, \mathbf{nextMP}, \nonumber \\
-                               & \mathbf{nextHEADER}, \mathbf{nextROUTING}, assemblyInstructions, id \rangle\\
-\mathbf{PL}                  = &\langle \text{payload octets} \rangle *\\ 
+	VortexMessage                = &\langle \mathbf{MP}^{K^{-1}_{hostN}}, \langle\mathbf{PAD}, \mathbf{CP}^{K^{-1}_{hostN}}, \mathbf{H}^{K_{senderN}}, E^{K^{-1}_{senderN}}\left(H\left(\mathbf{HEADER}\right)\right)  \nonumber \\
+	& \left[\mathbf{R}^{K_{senderN}}\right], \left[\mathbf{PL}\right]*\rangle^{K_{peerN}} \rangle\label{eq:vortexMessage}\\ 
+	\mathbf{MP}^{K^{-1}_{hostN}}  = &E^{K^{-1}_{hostN}}\left(\mathbf{PREFIX}\langle K_{peerN}\rangle \right)\\ 
+	\mathbf{PAD}                 = &\langle \text{32 padding bytes from payload} \rangle\\ 
+	\mathbf{CP}^{K^{-1}_{hostN}} = &E^{K^{-1}_{hostN}}\left(\mathbf{CPREFIX}\langle K_{senderN}\rangle \right)\\ 
+	\mathbf{H}^{K_{senderN}}     = &E^{K_{senderN}}\left(\mathbf{HEADER}\right)\\  
+	\mathbf{HEADER}              = &\langle K^{1}_{senderN}, serial, maxReplays, validity, [requests, requestRoutingBlock],\nonumber\\ 
+	& [puzzleIdentifier, proofOfWork] \rangle \\  
+	\mathbf{R}^{K_{senderN}}     = & E^{K_{senderN}}\left(\mathbf{ROUTING}\right)\\ 
+	\mathbf{ROUTING}             = & \langle [ \mathbf{ROUTINGCOMBO} ] *, forwardSecret, replyBlock \rangle\\  
+	\mathbf{ROUTINGCOMBO}        = & \langle processIntervall, K_{peerN+1}, recipient, \mathbf{nextCP}, \mathbf{nextMP}, \nonumber \\
+	& \mathbf{nextHEADER}, \mathbf{nextROUTING}, assemblyInstructions, id \rangle\\
+	\mathbf{PL}                  = &\langle \text{payload octets} \rangle *\\ 
 	\end{align}
 	\captionsetup{labelformat=empty}
 	\caption{Detailed representation of a VortexMessage}
@@ -52,53 +52,53 @@ Depending on the blending method, single messages might be identified as long as
 	\item Non-human behaviour on the transport layer (e.g., message traffic 24x7)
 \end{itemize}
 
-If an endpoint is successfully identified then all directly related endpoints of the same protocol may be identified as well by following the message flow. This does however not enable an adversary to inject messages as the host key is not leaked. 
+If an endpoint is successfully identified, then all directly related endpoints of the same protocol may be identified as well by following the message flow. This does however not enable an adversary to inject messages as the host key is not leaked. 
 
-Assuming a global observer as an adversary and unencrypted traffic, he might discover the originating routing layer and thus identifying it as a Vortex node by following traces of the transport layer. In most protocols however this address is spoofable and not a reliable source for the originating account.
+Assuming a global observer as an adversary and unencrypted traffic, he might discover the originating routing layer and thus identify it as Vortex node by following traces of the transport layer. In most protocols, however, this address is spoofable and not a reliable source for the originating account.
 
 \section{Senders routing layer}
-A sender may have some knowledge about the Routing block size and may therefore guess the complexity of the routing path. He is however unable to gain any additional information such as time of travel or number of hops until the target.
+A sender may have some knowledge about the Routing block size and may, therefore, guess the complexity of the routing path. He is, however, unable to gain any additional information such as time of travel or number of hops until the target.
 
 \section{Intermediate node routing layer}
-An intermediate node does know all the operations applied and the immediate next hop. It does learn the routing addresses of the immediately following endpoints but is unable to use these endpoints. This due to the fact that he has no mean to get the host key required to communicate.
+An intermediate node does know all the operations applied and the immediate next hop. It does learn the routing addresses of the immediately following endpoints but is unable to use these endpoints. This is because he has no mean to get the host key required to communicate.
 
-If a routing block is repeated a router may identify the routing block as repetition due to the serial number of the replay protection and give an rough estimate about the message size by comparing the payload chunks. This estimate is however very rough as it is bounded by the block size of the symmetrically applied encryption.
+If a routing block is repeated, a router may identify the routing block as repetition due to the serial number of the replay protection and give a rough estimate about the message size by comparing the payload chunks. This estimate is however very rough as it is bounded by the block size of the symmetrically applied encryption.
 
 \chapter{Dynamic analysis}
-In the dynamic Analysis we reach out to an active adversary. An active adversary modifies traffic in a non protocol conformant way, or missuses available or obtained information to disrupt messages, nodes, or the system as a whole.
+In the dynamic analysis, we reach out to an active adversary. An active adversary modifies traffic in a non-protocol conformant way, or missuses available or obtained information to disrupt messages, nodes, or the system as a whole.
 
 \section{Attacks against the vortex system itself}
-An active adversary may attack the transport layer. Most of the transport layer are not able to reject message flooding. Therefore, it is easy to attack a transport layer with a flooding attack, such as a distributed denial of service (DDoS) attack. Due to the nature of the protocol we are unable to apply additional protection on the transport layer or below. The Vortex Message format itself is however crafted in such a way that only minimal effort is sufficient to get the involved parties of a transmission. The Operations $ K_{msgN}=D^{K^{1}_{host}}\left(P\right)$ and $HEADER=D^{K_{msgN}}\left(H\right)$ are sufficient to identify message senders. Unknown Senders may be discarded without further processing. Known senders may be identified as legitimate and processed further. Known identities misbehaving and message duplicates may be discarded. 
+An active adversary may attack the transport layer. Most of the transport layers are not able to react upon message flooding. Therefore, it is easy to attack a transport layer with a flooding attack, such as a distributed denial of service (DDoS) attack. Due to the nature of the protocol, we are unable to apply for additional protection on the transport layer or below. The Vortex Message format itself is however crafted in such a way that only minimal effort is sufficient to get the involved parties of a transmission. The Operations $ K_{msgN}=D^{K^{1}_{host}}\left(P\right)$ and $HEADER=D^{K_{msgN}}\left(H\right)$ are sufficient to identify message senders. Unknown Senders may be discarded without further processing. Known senders may be identified as legitimate and processed further. Known misbehaving identities and message duplicates may be discarded. 
 
 
 \subsection{DoS Attacks against the System}
-An active adversary may not follow the protocol and modify any parts of the message. The following paragraphs reflect different kinds of behaviour and how they affect the messages and the system as a whole.
+An active adversary may not follow the protocol and modify any parts of the message. The following paragraphs reflect different kinds of behavior and how they affect the messages and the system as a whole.
 
 An adversary may not follow the blending specification. If he uses a specification which is less secure an independent third party observer may follow traffic. This is not sensible as such a node may send all the knowledge to such a collaborating node directly. In the case of a  target node not supporting the chosen blending method, the partial message path becomes interrupted. A possible redundancy in the path may recover the message from such a case.
 
 \subsubsection{Traffic Replay}
 Traffic replay is a common way to highlight traffic in many systems by replaying the same traffic and increase the signal to noise ratio of a system. 
 
-Due to the replay protection of the vortex protocol this is not possible. Any traffic generated by an attacking node is already known. Any subsequent messages of other nodes are only generated once even if a message is repeatedly received.
+Due to the replay protection of the vortex protocol, this is not possible. Any traffic generated by an attacking node is already known. Any subsequent messages of other nodes are only generated once even if a message is repeatedly received.
 
 \subsection{Diagnosability of traffic}
 
 \subsubsection{Hijacking of Header and Routing Blocks}
-An attacker might try to recombine a header block of a third entity with a routing block crafted to get workspace content of a foreign node. To protect against this scenario every routing block and its corresponding header block have a common value called forward secret. As the content of a hijacked header block is not known he is unable to guess the forward secret within the block.
+An attacker might try to recombine a header block of a third party with a routing block crafted to get workspace content of a different node. To protect against this scenario every routing block and its corresponding header block have a common value called forward secret. As the content of a hijacked header block is not known he is unable to guess the forward secret within the block.
 
-To bruteforce the value is not possible due to the replay protection. More precisely, the probability for hijacking a single identity block is $\frac{1}{2^{32}}$. If taking into account that a routing block may be replayed to the absolute maximum probability rises to $\frac{2^8-1}{2^{32}}\approx\frac{1}{2^{24}}$. Hijacking such a block allows onetime access to the working space and is visible to the owner due to the manipulated quotas. Failing of an attack will result in exhausting the ephemeral identities quotas and a new unlinked ephemeral identity will be created. 
- 
+It is not possible to brute-force the value, due to the replay protection. More precisely, the probability for hijacking a single identity block is $\frac{1}{2^{32}}$. If taking into account that a routing block may be replayed to the absolute maximum probability rises to $\frac{2^8-1}{2^{32}}\approx\frac{1}{2^{24}}$. Hijacking such a block allows onetime access to the working space and is visible to the owner due to the manipulated quotas. Failing of an attack will result in exhausting the ephemeral identities quotas, and a new unlinked ephemeral identity will be created. 
+
 
 \subsubsection{Partial Implicit Routing Diagnosis}
-We are able to create data which is routed back to or through the original sending node. This traffic is well defined and may be used to certify that the loop processing the message is working as expected. By combining the messages and sending intermediate results through multiple paths it is even possible to extract the substatus of some loops and combine the result within transfer into a single message.
+We can create data which is routed back to or through the original sending node. This traffic is well defined and may be used to certify that the loop processing the message is working as expected. By combining the messages and sending intermediate results through multiple paths, it is even possible to extract the sub status of some loops and combine the result within transfer into a single message.
 
 As a special case, implicit routing diagnostic may be used to diagnose the full route by taking specific excerpts from a message and routing them from the recipient back to the sender. 
 
 \subsubsection{Partial Explicit Routing Diagnosis}
-If a message fails to deliver according to implicity routing diagnosis, additional messages may be sent to pick up content of the workspace of ephemeral identities throughout the path. These messages are due to the only binding to the ephemeral identity not distinguishable from the original messages. Assuming that a node always behaves either according or not according to the rules of the system, a node may be identified.
+If a message fails to deliver according to implicitly routing diagnosis, additional messages may be sent to pick up the content of the workspace of ephemeral identities throughout the path. These messages are due to the only binding to the ephemeral identity not distinguishable from the original messages. Assuming that a node always behaves either according or not according to the rules of the system, a node may be identified.
 
 \subsubsection{Denial of Service by Exhausting Quotas or Limits}
-A malicious node may try to exhaust quotas or limits. As we do trust in sender and recipient, all other nodes have no knowledge about the forward secrets used in the message. The options for an adversary are then as follows:
+A malicious node may try to exhaust quotas or limits. As we do trust in sender and recipient, all other nodes do not know the forward secrets used in the message. The options for an adversary are then as follows:
 
 \begin{itemize}
 	\item Resend a MURB (with different content) as often as possible to exhaust message and transfer quota.
@@ -106,19 +106,19 @@ A malicious node may try to exhaust quotas or limits. As we do trust in sender a
 \end{itemize}
 
 \subsubsection{Traffic Highlighting}
-Traffic caused by a routing block may be observed by to a certain extent on a statistical base. A node may generate bad message content of exceptionally large or small nature this might potentionally highlight messages involved in message routing using no split or relative split operations as well as addRedundancy operations.
+Traffic caused by a routing block may be observed by to a certain extent on a statistical base. A node may generate bad message content of exceptionally large or small nature this might potentially highlight messages involved in message routing using no split or relative split operations as well as addRedundancy operations.
 
 \section{Achieved Anonymity and Flaws}
 \subsection{Measuring Anonymity}
-It is very hard to measure anonymity as it involves many uncontrollable factors. We may however control the degree of anonymity according to the number of involved parties. Assuming a sender knows the complete message path including all operations carried out on any untrusted node a message travels through, the anonymity is maxed to  the number of involved nodes $n$ excluding the sender nodes. This degree of $n-1$ may be further reduced if all well known outing only or at least ``routing mostly'' nodes are reduced. Under these harsh assumptions the set may be reduced to the potential set of ``well known'' recipients of a message.
+It is tough to measure anonymity as it involves many uncontrollable factors. We may, however, control the degree of anonymity according to the number of involved parties. Assuming a sender knows the complete message path including all operations carried out on any untrusted node a message travels through, the anonymity is maxed to the number of involved nodes $n$ excluding the sender nodes. This degree of $n-1$ may be further reduced if all well-known ``routing only'' or at least ``routing mostly'' nodes are reduced. Under these harsh assumptions, the set may be reduced to the potential set of ``well known'' recipients of a message.
 
-We have to differentiate between several problems. An adversary has to identify the participants of an anonymity system. Then he has to identify members of a message or a communication anonymity set. Starting from there he has to identify message flows and detect senders and receivers of messages withing an anonymity set (which is not doable in all cases). If any adverary achieves this, we have to consisder the anonymity to be broken. Depending on the degree of anonymity required which is influenced by external factors the participation in any or a small enough set may be sufficient to suffer consequences.
+We have to differentiate between several problems. An adversary has to identify the participants of an anonymity system. Then he has to identify members of a message or a communication anonymity set. Starting from there he has to identify message flows and detect senders and receivers of messages within an anonymity set (which is not doable in all cases). If any adversary achieves this, we have to consider the anonymity to be broken. Depending on the degree of anonymity required which is influenced by external factors the participation in any or a small enough set may be sufficient to suffer consequences.
 
 \subsection{Attacking Routing Participants}
-While very hard in our case as we do not have ``dedicated'' anonymization infrastructure, It might be possible to identify members of the routing network. This due to flawas in the blending layer. While it is possible to scare off or block members of a routing network. It is far harder in a network where the members are mobile. Any user may change at any time the identity including the endpoint without loosing its known peers.
+While very hard in our case as we do not have ``dedicated'' anonymization infrastructure, It might be possible to identify members of the routing network. This due to flaws in the blending layer. While it is possible to scare off or block members of a routing network. It is far harder in a network where the members are mobile. Any user may change at any time the identity including the endpoint without losing its known peers.
 
 \subsection{Attacking Anonymity through Traffic Analysis}
-As traffic and decoy traffic and decoy traffic are chosen by the creator of the routing block frequency patterns can not be detected, unlike the router did create them. Same applies to message sizes and traffic hotspots. When reusing the same routing block eventually message sizes or general estimates such as ``bigger'' or ``smaller size'' can be made.
+As traffic and decoy traffic and decoy traffic are chosen by the creator of the routing block frequency patterns cannot be detected, unlike the router did create them. Same applies to message sizes and traffic hotspots. When reusing the same routing block eventually message sizes or general estimates such as ``bigger'' or ``smaller size'' can be made.
 
 \subsection{Attacking Anonymity through Timing Analysis}
 Timing is under full control of the routing block builder. No information can be derived from timing. This is even the case if a routing block is reused.
@@ -127,23 +127,23 @@ Timing is under full control of the routing block builder. No information can be
 Increasing the throughput to highlight a message channel is not possible since the replay protection will block such requests.
 
 \subsection{Attacking Anonymity through Routing Block Analysis}
-The routing block is cryptographically secure. The size of the routing block may leak an estimate about its inner complexity. It dos not reveal any relevant informations like remaining hops to the message end or  target or similar.
+The routing block is cryptographically secure. The size of the routing block may leak an estimate about its inner complexity. It does not reveal any relevant pieces of information like remaining hops to the message end or target or similar.
 
 \subsection{Attacking Anonymity through Header Analysis}
-The header contains valuable data which is cryptographically secured and only visible to the immediate receiver. 
+The header contains valuable data which is cryptographically secured and only visible to the next receiver. 
 
 To an adversary not knowing the key, the size of the prefix block may leak the key size. The size of the header block itself may leak the presence of any optional blocks. Besides that, no other information is leaked to such an adversary.
 
-To an adversary knowing the decryption key (evil routing node) the content of the header block is visible. This heder block leakes all routing information for the respective node and thus the ephemeral identity. This block leakes some information of very limmited value. It may leak the activity of an ephemeral identity including frequency. This activity is always matching the minimal activity of an endpoint identity. 
+To an adversary knowing the decryption key (evil routing node), the content of the header block is visible. This header block leaks all routing information for the respective node and thus the ephemeral identity. This block leaks some information of minimal value. It may leak the activity of an ephemeral identity including frequency. This activity is always matching the minimal activity of an endpoint identity. 
 
 \subsection{Attacking Anonymity through Payload Analysis}
-The payload itself does not leak any information about the message content. All content is cryptographically secured. Content may however leak the size of a key applied.
+The payload itself does not leak any information about the message content. All content is cryptographically secured. Content may, however, leak the size of a key applied.
 
 \subsection{Attacking Anonymity through Bugging}
-Bugging is one of the most pressing problems. The protocol has been carefully crafted to not allow any bugging. The use of MIME messages in the final message however allows bugging of the message itself. A bugged message content may breach receiver anonymity to the sender of the message.
+Bugging is one of the most pressing problems. The protocol has been carefully crafted not to allow any bugging. The use of MIME messages in the final message, however, allows bugging of the message itself. A bugged message content may breach receiver anonymity to the sender of the message.
 
 \subsection{Attacking Anonymity through Replay Analysis}
-Due to the replay protection no traffic may be generated or multiplied except for the traffic sent by the attacking node. As this information is already known to the node there is no value in doing so. 
+Due to the replay protection, no traffic may be generated or multiplied except for the traffic sent by the attacking node. As this information is already known to the node, there is no value in doing so. 
 
 \chapter{Recommendations on Using the Vortex Protocol}
 The following sections list recommendations using the VortexProtocol it is a summary of previous sections.
@@ -152,47 +152,47 @@ The following sections list recommendations using the VortexProtocol it is a sum
 Routing blocks should not be reused. The reuse of a routing block may leak some limited information to an adversary node such as approximate message size or message frequency of an unknown tupel using this network.
 
 \section{Use of Ephemeral Identities}
-Ephemeral identities should be used for a very limited number of messages. Using multiple identities with overlapping lifespans is considered a good practice. Using different ephemeral identities for the same message is acceptable and may be a good practice as long as operations do not leak the linking between those two identities.
+Ephemeral identities should be used for a minimal number of messages. Using multiple identities with overlapping lifespans is considered a good practice. Using different ephemeral identities for the same message is acceptable and may be a good practice as long as operations do not leak the linking between those two identities.
 
 \section{Recommendations on Operations applied on Nodes}
-All operations carried out on a node have to be crafted in such a way that no information whether the operation is decoy or true message is leaked. Otherwise it becomes possible to narrow down the message flow.
+All operations, carried out on a single node, have to be crafted in such a way that no information whether the operation is a decoy or a real message is leaked. Otherwise, it becomes possible to narrow down the message flow.
 
 \section{Recommendations on Choosing involved Nodes}
-Involved nodes should be trustworthy but not necessarily trusted. To avoid an adversary to control all nodes except for sender and receiver a message should always include a set of known recipients. It is regarded a good practice to use a minimal fixed anonymity set of known recipients as routers. Doing so does not leak any information unless always the same pattern of operations is applied (see \ref{sec:reuseRB}).
+Involved nodes should be trustworthy but not necessarily trusted. To avoid an adversary to control all nodes except for sender and receiver a message should always include a set of known recipients. It is regarded as a good practice to use a minimal fixed anonymity set of known recipients as routers. Doing so does not leak any information unless always the same pattern of operations is applied (see \ref{sec:reuseRB}).
 
 \section{Message content}
-Although it is possible to embed any type of content into a Vortex message great care should be taken as content may allow to disclose a readers identity or location. For this reason only self contained messages should be used (such as plain text messages).
+Although it is possible to embed any content into a Vortex message great care should be taken as content may allow disclosing a readers identity or location. For this reason, only self-contained messages should be used (such as plain text messages).
 
 \subsection{Splitting of message content}
-Message content should be splited and distibuted among routing nodes. Splitting should however not be done excessively to avoid failure due to too many failing nodes. It furthermore makes diagnostics complicated. 
+Message content should be split and distributed among routing nodes. Splitting should however not be done excessively to avoid failure due to too many failing nodes. It furthermore makes diagnostics complicated. 
 
 \section{Routing}
 
 \subsection{Redundancy}
-Redundancy is a valuable feature of the protocol. It allows unsuspicious decoy generation and to compenstate message path disruption. A routing block should aways be crafted in such a way that redundancy is aligned with complexity of the routing block and the importance of a message.
+Redundancy is a valuable feature of the protocol. It allows unsuspicious decoy generation and to compensate message path disruption. A routing block should always be crafted in such a way that redundancy is aligned with the complexity of the routing block and the importance of a message.
 
 \subsection{Operation Considerations}
-Operations should be kept easy but at the same time guaratee anonymity. The following recommendations are kept to an absolute  minimum in order not to create any identifiable behaveor.
+Operations should be kept easy but at the same time guarantee anonymity. The following recommendations are kept to an absolute minimum in order not to create any identifiable behavior.
 
-A payload block should always have a single representation only once when travelling through routing nodes. A reocurring pattern would allow an evil router to identify and thus match an ephemeral identity of one router to an ephemeral identity of another router even if there are multiple routes in between. So, when applying encryption only operations betweeen  routing nodes the encryption should be onionized. A simplified onionizing routing pattern (only showing encryption steps on a single chunk) is OK. Pattern where encryption is removed and then a different encryption is applied are not.
+A payload block should always have a single representation only once when traveling through routing nodes. A recurring pattern would allow an evil router to identify and thus match an ephemeral identity of one router to an ephemeral identity of another router even if there are multiple routes in between. So, when applying encryption only operations between routing nodes, the encryption should be onionized. A clear onionizing routing pattern (only showing encryption steps on a single chunk) is OK. A pattern such as removing encryption and then reapply different encryption is not.
 
 \subsection{Anonymity}
-Annonymity is greatly dependend on the quality of the routing block and the chosen anonymity set for a single message and for a communication tuple over time. 
+Anonymity is greatly dependent on the quality of the routing block and the chosen anonymity set for a single message and a communication tuple over time. 
 
 \subsubsection{Size of the Anonymity Set}
-The requirement for an anonymity set is dependet on juridictional restrictions. In some of the more restrictive countries no one can held guilty for an action which may not be credibly assigned to him alone. In other jurisditions it is possible to be held guilty for an action just because of an identified membership to a group. This makes it important that message traffic and the crafting of the blending is under the sole control of the sender. He needs to create an annonymity set sufficiently large and spanning enough jurisdictions to create sufficient anonymity for his situation.
+The requirement for an anonymity set is dependent on jurisdictional restrictions. In some of the more restrictive countries, no one can be held guilty for an action which may not be credibly assigned to him alone. In other jurisdictions, it is possible to be held guilty for actions just because of an identified membership to a group. This makes it essential that message traffic and the crafting of the blending is under the sole control of the sender. He needs to create an anonymity-set sufficiently large and spanning enough jurisdictions to create sufficient anonymity for his situation.
 
 \chapter{Missing gaps to be covered in future analysis}
-The current blending layer is very simple. It creates context less messages based on an easy recoginzable scheme. An unsusppecting observer may have the impression that this is just a way of communicatiing but censor may byy observing the message flow easily conclude that these messages are not written by a human.
+The current blending layer is simple in its inner working. It creates context-less messages based on an easily recognizable scheme. An unsuspecting observer may have the impression that this is just a way of communicating but censor may by observing the message flow easily and conclude that these messages are not written by a human.
 
-To be truly undetectable all work done by the blending layer has to be undistingushable from a normal human communication. This applies not only to the message steganographic embedding of the message but to the message content as well. This is very much similar to the problems of chatterbots these days. Assuming that a blending layer is only communicating with other nodes correctly embedding messages we have a chatterbot problem. It is reduced as the chatterbot must only reply credibly and undetectably to generated messages of other chatterbots. If assuming that a blending layer replies to any non-MessageVortex-nodes the problem boils down to a turing test as stated in \cite{turing1950computing}. As we safely may assume that an adversary has huge but limmited ressources this blending is however sufficient if it is done ``good enough''. What criterias would apply here is a topic for further research. Applying any research to this topic would require to add a more precise adversary model.
+To be undetectable all work done by the blending layer has to be indistinguishable from regular human communication. This applies not only to the message steganographic embedding of the message but to the message content as well. This is very much similar to the problems of chatterbots these days. Assuming that a blending layer is only communicating with other nodes correctly embedding messages we have a chatterbot problem. It is reduced as the chatterbot must only reply credibly and undetectable to generated messages of other chatterbots. If assuming that a blending layer replies to any non-Vortex nodes the problem boils down to a Turing test as stated in \cite{turing1950computing}. As we safely may assume that an adversary has enormous but limited resources this blending is however sufficient if it is done ``good enough''. What criteria would apply here is a topic for further research. Applying any research to this topic would require to add a more precise adversary model.
 
-The currently applied choice of transport layer protocol is a snapshot of current internet traffic. While done with great care it must be adopted to the changing communication habits of humanity. Identifying new or depreciated communication protocols and blending schemes would be another field of research.
- 
-A comprehensive survey over the newest trends and techniques in steganography is another topic to be covered. It would allow to identify new candidates of blending techniques.
+The currently applied choice of transport layer protocol is a snapshot of current internet traffic. While done with great care it must be adapted to the changing communication habits of humanity. Identifying new or depreciated communication protocols and blending schemes would be another field of research.
 
-Another problem is the software update. Where censorship applies access to newer software is not or only with technical knowledge possible. To avoid this an updating mechanism should be implemented allowing  nodes to fetch verifiable software updates in an anonymous way while not limmiting the software to a single distribution.
+A comprehensive survey of the newest trends and techniques in steganography is another topic to be covered. It would allow identifying new candidates of blending techniques.
 
-Annonity has effects on behaviour of humans. We have found taht although there is some research in this field such as \cite{postmes2001social} evidence is very weak. Although the possibility for anonymity is undiputed among so called free countries there downsides (e.g., misuse for criminal acts) are obvious. More research in this filed is required as well.
+Another problem is the software update. Where censorship applies to access to newer software is not or only with technical knowledge possible. To allow a user to update his software, an updating mechanism should be implemented allowing nodes to fetch verifiable software updates anonymously while not limiting the software to a single distribution.
+
+Anonymity has effects on the behavior of humans. We have found that although there is some research in this field (such as \cite{postmes2001social}) evidence is very weak. Although the possibility for anonymity is undisputed among so-called free countries, the downsides (e.g., misuse for criminal acts) of anonymity are apparent. More research in this filed is required as well.
 
 
