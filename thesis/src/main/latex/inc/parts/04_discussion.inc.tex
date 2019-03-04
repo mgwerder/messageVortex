@@ -42,6 +42,46 @@ In this section, we analyze the protocol statically. Looking at a full message, 
 
 \section{Transport and Blending Layer}
 
+\subsection{Analysis of Plain Embedding}
+It is very obvoious why a file treated with plain embedding is easily idetifiable as a broken or tmpered file. While the file is still parseable, its content is no longer sensible to a human and thus at least supect. 
+
+We wanted to know if there is an easy methode to detect the mofiications aof such a file. While most of the analysis methodes require processing of large data sets we tried to find obvious, non-calcualtion-intense test mehods which were generic. We did not take any content based characteristics such as ``outline of an image'' or ``resulting spectrum of a soundfile'' in account. As our embedding is generic, we searched for a similar detection method.
+
+A property of encrypted ciphertext is the high entropy. We therefore used the calculation of the shanon entropy in bytes as a property and tried to show the shift of entropy within the files. This detection method depended very much on the type of file used for embedding. It showed an expected behavior, that filetypes having in the expected area a similar entropy were not detectable by this method. However, the following filetypes were identified to be unsuitable for plain blending due to their entropy structure:
+
+When blending into images, BMP showed a strongly varying entropy within a file. A sampling of ten blocks at random position resulted already resulted in a detection with a failure rate below 5\%. PNG and JPG files showed to be very robust within the sample. We did not succeed in identifyng the MessageVortex blending content. 
+
+We analyzed the files by calculating the entropy of blocks 256 bytes and did this with a sliding window over a randomly collected set of images (e.g., the topmost 100 entries of a filetype after saerching for ``mose'', ``cat'',or ``dog''). We did intentionally not filter or eliminate images. The finds were very surprising. We were able to identify tell filetypes apart, were able to identify files with thumbnails or an interlaced structure. We even identified certain specific pattern regarding the producer type of an image (e.g., we could differentiate between images scanned and images taken by a cammera). It was not so much surprising that we were able to identify these features, but the fact that we could see them in entropy data.
+
+\begin{figure*}[ht]
+	\includegraphics[width=\textwidth]{inc/statanalysis_graph}
+	\caption{distribution analysis of different common graphics formats}
+	\label{fig:statGraph}
+\end{figure*}
+
+We then carried out an analysis identifying the typical entropy and the inner structures. The graphs in \ref{fig:statGraph} show a typical analysis. In that case we looked at 100 images of each type. We graphed and analyzed their entropy and tested for suiability of a plain embedding. Table \ref{tab:fileEntropy} lists the average entropy of analyzed filetypes and makes remarks about the suitability for plain embedding. In practice we found that most suitable fileformats have an entropy of $\approx 7.2$ and an interquartile range (IQR) of 0.5 or less. Furthermore, files should have a big, uniformous, non structured range containing this characteristics so that they have a uniformous suitable space for embedding.
+
+\begin{table}[h]
+	\centering\tiny
+	\begin{tabular}{|l|l|l|l|}\hline
+		\diaghead{\theadfont protocol Criteria}{Protocol}{Criteria} & \thead{average Entropy} 	& \thead{IQR} & \thead{remarks}\\\hline
+		JPG	   & 7.008  & 0.097  & -- \\              
+		PNG	   & 7.116  & 0.086  & -- \\              
+		GIF	   &  &        & -- \\              
+		BMP	   & 2.997  & 4.964  & -- \\              
+		PDF	   & 		&        & Hard to embed due to a very complex inner structure \\\hline              
+		MP3	   & 		&        & -- \\              
+		wav	   & 		&        & -- \\              
+		ogg	   & 		&        & -- \\\hline              
+		mpg4   & 		&        & -- \\\hline              
+	\end{tabular}	
+	\caption{comparison of protocols in terms of the suitability criteria as transport layer}
+	\label{tab:fileEntropy}
+\end{table}
+
+\fxwarning{Fill entropy table with values}
+
+
 \subsection{Identifying a Vortex Message Endpoint}
 Depending on the blending method, single messages might be identified as long as they are detectable. Detectability depends on various factors such as:
 
