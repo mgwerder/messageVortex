@@ -43,13 +43,13 @@ In this section, we analyze the protocol statically. Looking at a full message, 
 \section{Transport and Blending Layer}
 
 \subsection{Analysis of Plain Embedding}
-It is very obvoious why a file treated with plain embedding is easily identifiable as a broken or tampered file. While the file is still parseable, its content is no longer sensible to a human and thus at least suspect. 
+It is very obvious why a file treated with plain embedding is easily identifiable as a broken or tampered file. While the file is still parseable, its content is no longer sensible to a human and thus at least suspect. 
 
-We wanted to know if there is an easy method to detect the modifications of such a file. While most of the analysis methode require processing of large data sets we tried to find obvious, non-calcualtion-intense test methods which were generic. We did not take any content based characteristics such as ``outline of an image'' or ``resulting spectrum of a soundfile'' in account. As our embedding is generic, we searched for a similar detection method.
+We wanted to know if there is an easy method to detect the modifications of such a file. While most of the analysis method requires processing of large data sets, we tried to find apparent, non-calculation-intense test methods which were generic. We did not take any content-based characteristics such as ``outline of an image'' or ``resulting spectrum of a sound file'' into account. As our embedding is generic, we searched for a similar detection method.
 
-A property of encrypted cipher text is the high entropy. We therefore used the calculation of the Shannon entropy in bytes as a property and tried to show the shift of entropy within the files. This detection method depended very much on the type of file used for embedding. It showed an expected behavior, that file types having in the expected area a similar entropy were not detectable by this method. However, the following file types were identified to be unsuitable for plain blending due to their entropy structure.
+A property of encrypted ciphertext is the high entropy. We, therefore, used the calculation of the Shannon entropy in bytes as property and tried to show the shift of entropy within the files. This detection method depended very much on the type of file used for embedding. It showed an expected behavior, that file types having in the expected area a similar entropy were not detectable by this method. However, the following file types were identified to be unsuitable for plain blending due to their entropy structure.
 
-We analyzed the files by calculating the entropy of blocks 256 bytes and did this with a sliding window over a randomly collected set of images (e.g., the topmost 100 entries of a file type after searching for ``mouse'', ``cat'', ``camel'', or ``dog''). We did intentionally not filter or eliminate images. The finds were very surprising. We were able to identify tell file types apart, were able to identify files with thumbnails or an interlaced structure. We even identified certain specific pattern regarding the producer type of an image (e.g., we could differentiate between images scanned and images taken by a camera). It was not so much surprising that we were able to identify these features, but the fact that we could see them in entropy data.
+We analyzed the files by calculating the entropy of blocks 256 bytes and did this with a sliding window over a randomly collected set of images (e.g., the first 100 entries of a file type after searching for ``mouse'', ``cat'', ``camel'', or ``dog''). We did intentionally not filter or eliminate images. The finds were very surprising. We were able to tell file types apart, were able to identify files with thumbnails or an interlaced structure. We even identified certain specific pattern regarding the producer type of an image (e.g., we could differentiate between images scanned and images taken by a camera). It was not so much surprising that we were able to identify these features, but the fact that we could see them in entropy data.
 
 \begin{figure*}[ht]
 	\includegraphics[width=\textwidth]{inc/statanalysis_graph}
@@ -57,31 +57,36 @@ We analyzed the files by calculating the entropy of blocks 256 bytes and did thi
 	\label{fig:statGraph}
 \end{figure*}
 
-We then carried out an analysis identifying the typical entropy and the inner structures. The graphs in \ref{fig:statGraph} show a typical analysis. In that case we looked at 100 images of each type. We graphed and analyzed their entropy and tested for suitability of a plain embedding. Table \ref{tab:fileEntropy} lists the average entropy of analyzed file types and makes remarks about the suitability for plain embedding. In practice we found that most suitable file formats have an entropy of $\approx 7.2$ and an interquartile range (IQR) of 0.5 or less. Furthermore, files should have a big, uniformous, non structured range containing this characteristics so that they have a uniformous suitable space for embedding.
+We then carried out an analysis identifying the typical entropy and the inner structures. The graphs in \ref{fig:statGraph} show a typical analysis. In that case, we looked at 100 images of each type. We graphed and analyzed their entropy and tested for suitability of a plain embedding. Table \ref{tab:fileEntropy} lists the average entropy of analyzed file types and makes remarks about the suitability for plain embedding. In practice, we found that most suitable file formats have an entropy of $\approx 7.2$ and an interquartile range (IQR) of 0.15 or less. Furthermore, files should have a big, uniform, non-structured range containing these characteristics. Such a file has a suitable space for embedding.
 
 \begin{table*}[h]
 	\centering\tiny
 	\begin{tabular}{|l|l|l|l|}\hline
-		\diaghead{\theadfont Type Criteria}{Type}{Criteria} & \thead{Avg. Entropy} 	& \thead{IQR} & \thead{Remarks}\\\hline
-		JPG	   & 7.008  & 0.097  & -- \\              
-		PNG	   & 7.116  & 0.086  & -- \\              
-		GIF	   & 6.978  & 0.194  & -- \\              
-		BMP	   & 2.997  & 4.964  & not suitable \\              
-		PDF	   & 		&        & Hard to embed due to a very complex inner structure \\\hline              
-		MP3	   & 7.076  & 0.091  & -- \\              
-		wav	   & 		&        & -- \\              
-		ogg	   & 7.104  & 0.093  & relatively easy to embedd. Hard not to break the structure. \\\hline              
-		mpg4   & 		&        & good to embedd. Steganography could be applied here easily too. \\\hline              
-		zip    & 		&        & easy to embedd when using ``password protected''  archives \\\hline              
-	\end{tabular}	
+		\diaghead{\theadfont Type Criteria}{Type}{Criteria} & \thead{Avg. Entropy}     & \thead{IQR} & \thead{Remarks}\\\hline
+		JPG       & 7.008  & 0.097 & -- \\              
+		PNG       & 7.116  & 0.086 & -- \\              
+		GIF       & 6.978  & 0.194 & -- \\              
+		BMP       & 2.997  & 4.964 & not suitable \\              
+		PDF       & 6.660  & 0.282 & Hard to embed due to a very complex inner structure but well suited \\\hline              
+		MP3       & 7.076  & 0.091 & -- \\              
+		WAV       & 4.777  & 0.927 & -- \\              
+		OGG       & 7.104  & 0.093 & relatively easy to embedd. Hard not to break the structure. \\\hline              
+		mpg4   & n/a    & n/a   & good to embedd. Steganography could be applied here easily too. \\\hline              
+		zip    & 7.148    & 0.080 & easy to embedd when using ``password protected''  archives \\\hline\hline
+		MVaes  & 7.176  & 0.072 & Without length padding as reference encrypted with AES 256 CBC\\
+		MVcam  & 7.175  & 0.070 & Without length padding as reference encrypted with Camellia 256 CBC\\\hline
+	\end{tabular}    
 	\caption{comparison of protocols in terms of the suitability criteria as transport layer}
 	\label{tab:fileEntropy}
 \end{table*}
 
-\fxwarning{Fill entropy table with values}
+When blending into images, BMP showed a strongly varying entropy within a file. A sampling of ten blocks at random position resulted already in detection with a failure rate below 5\%. PNG and JPG files showed to be very robust within the sample. We did not succeed in identifying the MessageVortex blending content based on entropy values. GIF images showed to be unsuitable. Archive formats such as zip files were extremely robust. We were able to embed into a zip file and marking it (generically) as an encrypted password file. This embedding was genuinely undetectable. However, such embedding may potentially lead to censorship based on blacklisting.
 
-When blending into images, BMP showed a strongly varying entropy within a file. A sampling of ten blocks at random position resulted already in a detection with a failure rate below 5\%. PNG and JPG files showed to be very robust within the sample. We did not succeed in identifying the MessageVortex blending content absed on entropy values. GIF images showed to be unsuitable. Archive formats such as zip files were extremely robust. We were able to embed into zip and marking it (generically) as a password encrypted file. This embedding was truly undetectable.
+OGG and MP3 are suitable. However, we were able to detect the entropy difference when taking extreme dense samples. These formats may, however, be suitable for not yet standardized forms of steganography. PDF should be mentioned as well. While it has low entropy and a high IQR, some parts of the files are very well suited for embedding.
 
+We could show that with an approach based on Shannon entropy we may identify plain embedded MessageVortex blocks in BMP and WAV files. Most of the file formats analyzed were performing well and required a multitude of samples to detect the presence based on the entropy property.
+
+All movie formats were performing similarly to jpg and PNG. However, due to the very complex structure with scattered blocks, they seem to be unsuitable for plain embedding. They are however strong candidates for steganography.
 
 \subsection{Identifying a Vortex Message Endpoint}
 Depending on the blending method, single messages might be identified as long as they are detectable. Detectability depends on various factors such as:
@@ -133,7 +138,7 @@ It is not possible to brute-force the value, due to the replay protection. More 
 \subsubsection{Partial Implicit Routing Diagnosis}
 We can create data which is routed back to or through the original sending node. This traffic is well defined and may be used to certify that the loop processing the message is working as expected. By combining the messages and sending intermediate results through multiple paths, it is even possible to extract the sub status of some loops and combine the result within transfer into a single message.
 
-As a special case, implicit routing diagnostic may be used to diagnose the full route by taking specific excerpts from a message and routing them from the recipient back to the sender. 
+As a special case, a sender may use implicit routing diagnostic to diagnose the full route. A sender may do this by taking specific excerpts of the received message at the recipients' node and route these blocks back from the recipient to the sender. 
 
 \subsubsection{Partial Explicit Routing Diagnosis}
 If a message fails to deliver according to implicitly routing diagnosis, additional messages may be sent to pick up the content of the workspace of ephemeral identities throughout the path. These messages are due to the only binding to the ephemeral identity not distinguishable from the original messages. Assuming that a node always behaves either according or not according to the rules of the system, a node may be identified.

@@ -14,6 +14,72 @@ The protocol described in the next chapter is independent of routing. We built a
 
 The Protocol outlined here is the final product and has undergone many development cycles. A lot of advantageous features and capabilities such as a mechanism analogous to the SMTP received headers were dropped as they were beneficial but threatened security or anonymity.
 
+\chapter{Vortex Prerequisites}
+\section{Hardware}
+No special Hardware is required for running Vortex nodes. The capabilities of Vortex are designed in such a way that ordinary mobile phones may act as vortex nodes. It is however recommended to have a node always connected to the internet. A mobile phone may disconnect from time to time based on the availability of the network. For our experiments, we use a RaspberryPi Version 1. It is however recommended to use a faster, newer model due to the memory requirements of the proof of work algorithm.
+
+The hardware currently requires a network interface and a fully functional JSE VM to run the reference implementation.
+
+\section{Addresses}
+
+\fxerror{change to one representation}
+
+A Vortex address is built as follows: $vortexAddress=<transport>:<address>!<publicKey>$
+
+To allow storage of Vortex addresses in standard messaging programs such as Outlook or Thunderbird. We define an alternate representation $encodedVortexAddress=base64(<transport>:<address>).<publicKey>@localhost$. 
+
+The suffix ``@localhost'' makes sure that any non-participating server does not route a message intended for Vortex.
+
+The main downside of vortex addresses is that they are no longer readable by a human. The main reason for this is the public key which is required. We may abstract this further by allowing clear-text requests on the primary email address for the public key. The vortex account must then answer such requests with the valid Vortex address.
+
+\subsection{Public Key Encoding in Address Representation}
+The public key of an address is encoded as follows:
+\begin{enumerate}
+	\item The asymmetric key is encoded as specified in the AsymmetricKey in ASN.1
+	\item The ASN.1 representation is then encoded using BASE64
+\end{enumerate}    
+
+\section{Transport Layers}                                          
+As transport layer protocols we specified the protocols SMTP and XMMP as valid transport layers. In the following sections, we specify the transport properties for these protocols.
+
+\subsection{Embedding Spec}
+Messages are always encoded as attachments in SMTP and XMMP. 
+
+If not further specified by the receiving node an attachment should be the encoded message. 
+
+Valid properties may be:
+\begin{itemize}
+	\item $plainEncoding="("plain:"<numberOfBytesOfOffset>[,<numberOfBytesOfOffset>]*")$
+	\item $F5Encoding="(F5:"<passwordString>[,<PasswordString>]*")"$
+\end{itemize}
+
+\section{Client}
+We did not create a Vortex client for sending messages. Instead, we used a standard Thunderbird email client pointing to a local SMTP and IMAP Server provided by a Vortex proxy. On the SMTP side Vortex does encapsulate where possible mails into a Vortex message and builds an automated route to the recipient. The SMTP part of vortex may be used to encapsulate all messages automatically with a known Vortex identity into a vortex message. On the IMAP side, it merges a local Vortex message store with the standard Email repository building a combined view.
+
+Using Vortex like this offers us the advantages of a known client with the anonymity Vortex offers.
+
+This has certain downsides. At the moment the vortex client has only a local store. This makes it impossible to handle multiple simultaneously connected clients to use Vortex. This is however just a lack of the current implementation and not of the protocol itself as we may safely use an IMAP storage for storing vortex mails centrally.
+
+\subsection{Vortex Accounts}
+By definition, any transport layer address may represent a Vortex identity. This fact may make people believe that their current email or jabber address is suitable as Vortex address. This is technically perfectly true, but should not be done for the following reasons:
+
+\begin{itemize}
+	\item If an address is identified as a vortex address it may be blocked (directly or indirectly) by an adversary.
+	\item If a vortex node is malfunctioning non-vortex messages should remain unaffected. This is more likely to happen if non-Vortex messages are kept in a separate account.
+	\item If a user wants no longer to maintain its Vortex address (hopefully there will be better technology in future) he may give up his Vortex accounts. If he had been using his normal messaging account for Vortex, he would receive mixing messages which he has to filter in the future.
+\end{itemize}
+
+\subsection{Vortex Node Types}
+
+\subsubsection{Public Vortex Node}
+Public nodes are nodes, which advertise themselves as normal mixes. Just as all nodes they may be an endpoint or a mix. Typically they accept all requests exactly as outlined in \ref{tab:protoReplyCrit}. As an immediate result of the publicly available information about such a node, the owner may be the target of our adversary. Pressure may be opposed to close down such a node. However, since we do not need a specific account, we may safely close down one transport account and open up a different one. This is even possible on the same infrastructure. To notify other users of the move and remain reachable, a user may send a newIdentity request using the old identity. That way, we can guarantee, that only the holder of the old address may request an address update.
+
+\subsubsection{Stealth Vortex Node\label{sec:stealthNode}}
+This node does not answer any clear text requests. As an immediate result, the node is only usable by other nodes knowing the public key of this node. The node is therefore on a known secret base only reachable.
+
+\subsubsection{Hidden Vortex Node\label{sec:hiddenNode}}
+A hidden node is a special form to a stealth node. It has a set of preset identities. Only these entities are processed. This behavior has certain drawbacks. An identity may not be changed. As an immediate result, traffic may become pseudonymity. To counter this effect at least partially we may use the same local identity for multiple senders. The sender is only one of all senders knowing the private key of an identity.
+
 \chapter{Protocol Overview}
 The Protocol implementation is described in the RFC document in \ref{app:rfcMessageVortexMain}. It contains all the necessary information to build the protocol. The RFC is published on the website \url{https://messagevortex.net/} and through the official IETF channels. Beside the RFC document, additional documents and references may be found there.
 
@@ -120,10 +186,6 @@ The second key is the header key located in the encrypted header. The RBB choose
 	\item Identify the number of payload blocks and their respective sizes. \\
 	      This is valuable information when following traffic of a message.
 \end{itemize}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% revise from this point on %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Key Usage}
 Several keys are being used during the life of a message. In the following section, we emphasize on the type, the usage, and their specialties.
@@ -601,74 +663,6 @@ Every puzzle block will create an accounting entry as outlined in section \ref{s
 A node may reject an operation for any reason including exceeding an unnatural amount of outstanding puzzles.
 
 A reply containing a null length puzzle means that the requested operation is rejected.
-
-\chapter{Vortex Prerequisites}
-\section{Hardware}
-No special Hardware is required for running Vortex nodes. The capabilities of Vortex are designed in such a way that ordinary mobile phones may act as vortex nodes. It is however recommended to have a node always connected to the internet. A mobile phone may disconnect from time to time based on the availability of the network. For our experiments, we use a RaspberryPi Version 1. It is however recommended to use a faster, newer model due to the memory requirements of the proof of work algorithm.
-
-The hardware currently requires a network interface and a fully functional JSE VM to run the reference implementation.
-
-\section{Addresses}
-
-\fxerror{change to one representation}
-
-A Vortex address is built as follows: $vortexAddress=<transport>:<address>!<publicKey>$
-
-To allow storage of Vortex addresses in standard messaging programs such as Outlook or Thunderbird. We define an alternate representation $encodedVortexAddress=base64(<transport>:<address>).<publicKey>@localhost$. 
-
-The suffix ``@localhost'' makes sure that any non-participating server does not route a message intended for Vortex.
-
-The main downside of vortex addresses is that they are no longer readable by a human. The main reason for this is the public key which is required. We may abstract this further by allowing clear-text requests on the primary email address for the public key. The vortex account must then answer such requests with the valid Vortex address.
-
-\subsection{Public Key Encoding in Address Representation}
-The public key of an address is encoded as follows:
-\begin{enumerate}
-	\item The asymmetric key is encoded as specified in the AsymmetricKey in ASN.1
-	\item The ASN.1 representation is then encoded using BASE64
-\end{enumerate}    
-
-\section{Transport Layers}                                          
-As transport layer protocols we specified the protocols SMTP and XMMP as valid transport layers. In the following sections, we specify the transport properties for these protocols.
-
-\subsection{Embedding Spec}
-Messages are always encoded as attachments in SMTP and XMMP. 
-
-If not further specified by the receiving node an attachment should be the encoded message. 
-
-Valid properties may be:
-\begin{itemize}
-	\item $plainEncoding="("plain:"<numberOfBytesOfOffset>[,<numberOfBytesOfOffset>]*")$
-	\item $F5Encoding="(F5:"<passwordString>[,<PasswordString>]*")"$
-\end{itemize}
-
-\section{Client}
-We did not create a Vortex client for sending messages. Instead, we used a standard Thunderbird email client pointing to a local SMTP and IMAP Server provided by a Vortex proxy. On the SMTP side Vortex does encapsulate where possible mails into a Vortex message and builds an automated route to the recipient. The SMTP part of vortex may be used to encapsulate all messages automatically with a known Vortex identity into a vortex message. On the IMAP side, it merges a local Vortex message store with the standard Email repository building a combined view.
-
-Using Vortex like this offers us the advantages of a known client with the anonymity Vortex offers.
-
-This has certain downsides. At the moment the vortex client has only a local store. This makes it impossible to handle multiple simultaneously connected clients to use Vortex. This is however just a lack of the current implementation and not of the protocol itself as we may safely use an IMAP storage for storing vortex mails centrally.
-
-\subsection{Vortex Accounts}
-By definition, any transport layer address may represent a Vortex identity. This fact may make people believe that their current email or jabber address is suitable as Vortex address. This is technically perfectly true, but should not be done for the following reasons:
-
-\begin{itemize}
-	\item If an address is identified as a vortex address it may be blocked (directly or indirectly) by an adversary.
-	\item If a vortex node is malfunctioning non-vortex messages should remain unaffected. This is more likely to happen if non-Vortex messages are kept in a separate account.
-	\item If a user wants no longer to maintain its Vortex address (hopefully there will be better technology in future) he may give up his Vortex accounts. If he had been using his normal messaging account for Vortex, he would receive mixing messages which he has to filter in the future.
-\end{itemize}
-
-\subsection{Vortex Node Types}
-
-\subsubsection{Public Vortex Node}
-Public nodes are nodes, which advertise themselves as normal mixes. Just as all nodes they may be an endpoint or a mix. Typically they accept all requests exactly as outlined in \ref{tab:protoReplyCrit}. As an immediate result of the publicly available information about such a node, the owner may be the target of our adversary. Pressure may be opposed to close down such a node. However, since we do not need a specific account, we may safely close down one transport account and open up a different one. This is even possible on the same infrastructure. To notify other users of the move and remain reachable, a user may send a newIdentity request using the old identity. That way, we can guarantee, that only the holder of the old address may request an address update.
-
-\subsubsection{Stealth Vortex Node\label{sec:stealthNode}}
-This node does not answer any clear text requests. As an immediate result, the node is only usable by other nodes knowing the public key of this node. The node is therefore on a known secret base only reachable.
-
-\subsubsection{Hidden Vortex Node\label{sec:hiddenNode}}
-A hidden node is a special form to a stealth node. It has a set of preset identities. Only these entities are processed. This behavior has certain drawbacks. An identity may not be changed. As an immediate result, traffic may become pseudonymity. To counter this effect at least partially we may use the same local identity for multiple senders. The sender is only one of all senders knowing the private key of an identity.
-
-%===============================================================================================================
 
 \chapter{MessageVortex - Transport Independent Messaging anonymous to \nth{3} Parties\label{sec:spec}}
 This approach is different from all approaches discussed previously. Unlike them, we put complete distrust into the infrastructure being used. Furthermore, we do not rely on a custom server infrastructure on the internet. Instead, we take advantage of the availability of internet-connected devices such as mobile phones, tablets, or even commonly available SoC such as RaspberryPi or similar. It is still tough to maintain a server on the internet. Considering the vastly growing amount of automated attacks carried out against internet-connected servers, it is not advisable or realistic to assume that a future user of this system owns either a server or connects to a service which is offering anonymizing services. These infrastructures would be susceptible to monitoring or even banning. Instead, we take a different approach.
