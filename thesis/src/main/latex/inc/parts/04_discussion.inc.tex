@@ -209,7 +209,9 @@ We can create data which is routed back to or through the original sending node.
 As a special case, a sender may use implicit routing diagnostic to diagnose the full route. A sender may do this by taking specific excerpts of the received message at the recipients' node and route these blocks back from the recipient to the sender. 
 
 \subsubsection{Partial Explicit Routing Diagnosis}
-If a message fails to deliver according to implicitly routing diagnosis, additional messages may be sent to pick up the content of the workspace of ephemeral identities throughout the path. These messages are due to the only binding to the ephemeral identity not distinguishable from the original messages. Assuming that a node always behaves either according or not according to the rules of the system, a node may be identified.
+If a message fails to deliver according to implicitly routing diagnosis, additional messages may be sent to pick up the content of the workspace of ephemeral identities throughout the path. These messages are due to the only binding to the ephemeral identity not distinguishable from the original messages. Assuming that a node always behaves either according or not according to the rules of the system, a node may be identified by capturing built blocks with a known content.
+
+If a node is identitfied as misbehaving node it may be excluded from subsequent routing request or reduced in its reliability or trustability ratings. A node may calculate such ratings locally to build a more reliable network over time avoiding misbehaving or non-conformant nodes. This does not violate our zero trust philosophy as the scoring is built locally and relies on own observations.
 
 \chapter{Recommendations on Using the Vortex Protocol}
 The following sections list recommendations using the VortexProtocol it is a summary of previous sections.
@@ -220,14 +222,27 @@ Routing blocks should not be reused. The reuse of a routing block may leak some 
 \section{Use of Ephemeral Identities}
 Ephemeral identities should be used for a minimal number of messages. Using multiple identities with overlapping lifespans is considered a good practice. Using different ephemeral identities for the same message is acceptable and may be a good practice as long as operations do not leak the linking between those two identities.
 
+Special care must be taken if using overlapping ephemeral identities accross nodes. While ephemeral identities may be completely unlinked on a single node the linking between multiple nodes may leave a trace from one identity to the next. To counter this phenomenon it is adviseable to recreate on a regular base all ephemeral identities from scratch. This guarantees an unlinking from previous ephemeral identities.
+
 \section{Recommendations on Operations applied on Nodes}
 All operations, carried out on a single node, have to be crafted in such a way that no information whether the operation is a decoy or a real message is leaked. Otherwise, it becomes possible to narrow down the message flow.
+
+Encryption operations should be either strictly encrypting or strictly decrypting. At no point in the path a previously applied encryption on an untrusted node should be removed as removal might lead to linking to the previous inverse operation.
+
+Similarly there are rules for adding and removing redundancy information. As these operations serve as decoy traffic generators, great care needs to be taken not to leak this information. We emphasize here again that it is possible to add redundancy information on one node, encrypt one or multiple block once or multiple blocks on a second node, and then remove the redundacy information again from the new set. This will lead to a payload data block than the original. However, this does not qualify the block as decoy traffic. The process may be reversed on the final recipient. Such an operation is however mathematically very demanding if the same operation is used for redundancy at the same time as multiple possible tuple need to be tried if one node has failed.
+
+Whenever possible the reapearence of a payload block in a single encoding it should be avoided or limited to an absolute minimum as such an occurence allows linking of two ephemeral identities.
+
+\section{Reuse of Keys, IVs or Routing paterns}
+An RBB should avoid reuse of any keys, IVs, routing patterns or PRNG seeds along its routing path of untrusted nodes. Reusing such values would allow an attacker to match ephemeral identities to a single identity. While this is a very limited risk and may be ignored in some cases, an RBB should avoid it as it may leak information to collaborating nodes.
 
 \section{Recommendations on Choosing involved Nodes}
 Involved nodes should be trustworthy but not necessarily trusted. To avoid an adversary to control all nodes except for sender and receiver a message should always include a set of known recipients. It is regarded as a good practice to use a minimal fixed anonymity set of known recipients as routers. Doing so does not leak any information unless always the same pattern of operations is applied (see \ref{sec:reuseRB}).
 
 \section{Message content}
 Although it is possible to embed any content into a Vortex message great care should be taken as content may allow disclosing a readers identity or location. For this reason, only self-contained messages should be used (such as plain text messages).
+
+Allowing a user to use more complex representation such as MIME offers a lot of possibilities for buging of the content. A client displaying such messages should always handle them with great care. Taping content by downloading external images or verifying the validity by OCSP or even doing a reverse lookup on an IP address may leak valuable information.
 
 \subsection{Splitting of message content}
 Message content should be split and distributed among routing nodes. Splitting should however not be done excessively to avoid failure due to too many failing nodes. It furthermore makes diagnostics complicated. 
@@ -248,16 +263,18 @@ Anonymity is greatly dependent on the quality of the routing block and the chose
 The requirement for an anonymity set is dependent on jurisdictional restrictions. In some of the more restrictive countries, no one can be held guilty for an action which may not be credibly assigned to him alone. In other jurisdictions, it is possible to be held guilty for actions just because of an identified membership to a group. This makes it essential that message traffic and the crafting of the blending is under the sole control of the sender. He needs to create an anonymity-set sufficiently large and spanning enough jurisdictions to create sufficient anonymity for his situation.
 
 \chapter{Missing gaps to be covered in future analysis}
-The current blending layer is simple in its inner working. It creates context-less messages based on an easily recognizable scheme. An unsuspecting observer may have the impression that this is just a way of communicating but censor may by observing the message flow easily and conclude that these messages are not written by a human.
+The current blending layer is simple in its inner working. It creates context-less messages based on an easily recognizable scheme. An unsuspecting observer may have the impression that this is just a way of communicating but censor may by observing the message flow easily and conclude that these messages are not written by a human. Such a detection could lead to censorship of the respective routing node and thus disrupt the message flow. It is easy to recover from such cenosrship by advertising a new identity to known peer partners but to minimize effects of censorship an improvment would definitely help.
 
 To be undetectable all work done by the blending layer has to be indistinguishable from regular human communication. This applies not only to the message steganographic embedding of the message but to the message content as well. This is very much similar to the problems of chatterbots these days. Assuming that a blending layer is only communicating with other nodes correctly embedding messages we have a chatterbot problem. It is reduced as the chatterbot must only reply credibly and undetectable to generated messages of other chatterbots. If assuming that a blending layer replies to any non-Vortex nodes the problem boils down to a Turing test as stated in \cite{turing1950computing}. As we safely may assume that an adversary has enormous but limited resources this blending is however sufficient if it is done ``good enough''. What criteria would apply here is a topic for further research. Applying any research to this topic would require to add a more precise adversary model.
 
 The currently applied choice of transport layer protocol is a snapshot of current internet traffic. While done with great care it must be adapted to the changing communication habits of humanity. Identifying new or depreciated communication protocols and blending schemes would be another field of research.
 
-A comprehensive survey of the newest trends and techniques in steganography is another topic to be covered. It would allow identifying new candidates of blending techniques.
+A comprehensive survey of the newest trends and techniques in steganography is another topic to be covered. It would allow identifying new candidates of blending techniques. Especially interesting are steganography algorithms covering movie file formats.
 
-Another problem is the software update. Where censorship applies to access to newer software is not or only with technical knowledge possible. To allow a user to update his software, an updating mechanism should be implemented allowing nodes to fetch verifiable software updates anonymously while not limiting the software to a single distribution.
+This is especially hard since true evidence of in depth protocol usage seems to be completely missing. While we were able to gather a lot of data which is collected by simple routers (such as bandwidth), comprehensive figures about client and content usage seemed to be completely missing or of very poor quality.
 
-Anonymity has effects on the behavior of humans. We have found that although there is some research in this field (such as \cite{postmes2001social}) evidence is very weak. Although the possibility for anonymity is undisputed among so-called free countries, the downsides (e.g., misuse for criminal acts) of anonymity are apparent. More research in this filed is required as well.
+Another problem is the software update. Where censorship applies to access to newer software is not or only with technical knowledge possible. To allow a user to update his software, an updating mechanism should be implemented allowing nodes to fetch verifiable software updates anonymously while not limiting the software to a single distribution point.
+
+Anonymity has effects on the behavior of humans. We have found that although there is some research in this field (such as \cite{postmes2001social}) evidence is very weak. Although the possibility for anonymity is undisputed among so-called free countries, the downsides (e.g., misuse for criminal acts) of anonymity are apparent. More research in this field is required. On the other hand a lack of awareness for anonymity especially in ``non-free'' jurisdiction has been observed, which would be another important field of research. 
 
 
