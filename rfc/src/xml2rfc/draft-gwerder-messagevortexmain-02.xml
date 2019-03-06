@@ -44,7 +44,7 @@
 
         <abstract>
             <t>
-                MessageVortex Protocol is a protocol to achieve different degrees of anonymity. It specifies messages embedded within existing transfer protocols such as SMTP or XMPP to send them via peer nodes to one or more recipients.
+                MessageVortex (short Vortex) protocol achieves different degrees of anonymity (sender, receiver, and third party anonymity). It specifies messages embedded within existing transfer protocols such as SMTP or XMPP to send them via peer nodes to one or more recipients.
             </t>
             <t>
               The protocol outperforms other protocols by decoupling transport from  the final transmitter and receiver party. There is no trust put into any infrastructure except for the infrastructure of the sending and receiving party of a message. The creator of the routing block has full control over the message flow. Routing nodes gain no non-obvious knowledge about messages even when collaborating. Third-party anonymity is always achieved. Furthermore, the protocol allows achieving either sender or receiver anonymity.
@@ -55,17 +55,16 @@
     <middle>
         <section title="Introduction">
             <t>
-                Anonymization is hard to achieve. Most of the attempts in the past rely on either trust in a dedicated infrastructure or a specialized networking protocol.
+                Anonymisation is hard to achieve. Most of the attempts in the past rely on either trust in a dedicated infrastructure or a specialized networking protocol.
             </t>
             <t>
-                Instead of defining a transport layer, MessageVortex piggybacks on other transport protocols.  A blending layer embeds Vortex messages into ordinary messages of that transport protocol.  A blending layer picks the messages up, applies local operations to it and resends the new chunks to the next recipients.
+                Instead of defining a transport layer, MessageVortex piggybacks on other transport protocols.  A blending layer embeds Vortex messages into ordinary messages of the respective transport protocol.  A blending layer picks the messages up, passes it to a routing layer which applies local operations to the message and resends the new chunks to the next recipients.
             </t>
             <t>
-                A processing node learns as little as possible from the message due to the nature of the operations processed. The onionized structure of the protocol makes it impossible to follow the trace of a message without having control over the processing node itself.
+                A processing node learns as little as possible from the message or the network being used due to the nature of the operations processed. The onionized structure of the protocol makes it impossible to follow the trace of a message without having control over the processing node itself.
             </t>
             <t>
-                MessageVortex is a protocol which allows sending and receiving messages by using a routing block instead of a destination address.
-                The sender has full control over all parameters of the message flow.
+                MessageVortex is a protocol which allows sending and receiving messages by using a routing block instead of a destination address. The sender has full control over all parameters of the message flow.
             </t>
             <t>
                 A message is split and reassembled during transmission. Chunks of the message may carry redundant information to avoid service interruptions of the message transit. Decoy traffic and message traffic are not differentiable as the nature of the addRedundancy operation allows each generated part to be a message part or decoy. Any routing node is thus unable to differentiate between the message and decoy traffic.
@@ -100,40 +99,39 @@
             <t>Within this document, we refer to the entities as defined below. </t>
             <section anchor="entities_node" title="Node">
                 <t>
-                    We use the term 'node' to describe any system connected to other nodes, and supporting the MessageVortex Protocol. A 'node address' is typically an email address, an XMPP address, or any other transport protocol identity supporting the MessageVortex protocol. Any address SHOULD include a public part of an 'identity key' allowing to transmit messages safely. One or more addresses MAY belong to the same node.
+                    We use the term 'node' to describe any computer system connected to other nodes, and supporting the MessageVortex Protocol. A 'node address' is typically an email address, an XMPP address, or any other transport protocol identity supporting the MessageVortex protocol. Any address SHOULD include a public part of an 'identity key' allowing to transmit messages safely. One or more addresses MAY belong to the same node.
                 </t>
-        <section anchor="entities_blocks" title="Blocks">
-          <t>
-            We use the term 'block' for an ASN.1 sequence in a transmitted message. We embed messages in the transport protocol. These messages may have any size. 
-          </t>
-        </section>
+                <section anchor="entities_blocks" title="Blocks">
+                  <t>
+                    We use the term 'block' for an ASN.1 sequence in a transmitted message. We embed messages in the transport protocol. These messages may have any size. 
+                  </t>
+                </section>
                 <section anchor="entities_node_spec" title="NodeSpec">
+                  <t>
+                    A nodeSpec block as specified in <xref target="asnOne_helpers"/> expresses in a unified format an addressable node. The nodeSpec contains a reference to the routing protocol, the routing address within this protocol and the keys required for addressing the node. This RFC specifies transport layers for XMPP and SMTP. Adding transport layers requires to write an extension to this RFC.
+                  </t>
+                  <section anchor="entities_node_spec_smtp" title="NodeSpec for SMTP nodes">
                     <t>
-                        A nodeSpec block as specified in <xref target="asnOne_helpers"/> expresses in a unified format an addressable node. The nodeSpec contains a reference to the routing protocol, the routing address within this protocol and the keys required for addressing the node. This RFC specifies transport layers for XMPP and SMTP. Adding transport layers requires to write an extension to this RFC.
-                    </t>
-                    <section anchor="entities_node_spec_smtp" title="NodeSpec for SMTP nodes">
-                        <t>
-                            An alternative address representation is defined. This address allows a standard email client to address a vortex node. An alternative representation SHOULD be supported as defined below as smtpAlternateSpec (specification noted in ABNF as specified in <xref target="RFC5234"/>). For applications with QR code support, the smtpUrl representations SHOULD be used.
-                            <figure>
-                                <artwork type="abnf"
+                      An alternative address representation is defined. This address allows a standard email client to address a vortex node. An alternative representation SHOULD be supported as defined below as smtpAlternateSpec (specification noted in ABNF as specified in <xref target="RFC5234"/>). For applications with QR code support, an implementation SHOULD use the smtpUrl representation.
+                      <figure>
+                        <artwork type="abnf"
 ><![CDATA[localPart         = <local part of address>
 domain            = <domain part of address>
 email             = localPart "@" domain
 keySpec           = <BASE64 encoded AsymmetricKey [DER encoded]>
 smtpAlternateSpec = localPart ".." keySpec ".." domain "@localhost"
 smtpUrl           = "vortexsmtp://" smtpAlternateSpec]]></artwork>
-                            </figure>
-                        </t>
-                        <t>
-                          This representation does not support quoted local part SMTP addresses.
-                        </t>  
-                    </section>
-                    <section anchor="entities_node_spec_spec" title="NodeSpec for XMPP nodes">
-                        <t>
-                            Typically a node specification is specified with the ASN.1 block NodeSpec.
-                            To allow addressing of a vortex node with an ordinary XMPP client, the alternative representation SHOULD be supported as defined below as jidAlternateSpec (specification noted in ABNF as specified in <xref target="RFC5234"/>).
-                            <figure>
-                                <artwork type="abnf"
+                      </figure>
+                    </t>
+                    <t>
+                      This representation does not support quoted local part SMTP addresses.
+                    </t>  
+                  </section>
+                  <section anchor="entities_node_spec_spec" title="NodeSpec for XMPP nodes">
+                    <t>
+                      Typically a node specification is specified with the ASN.1 block NodeSpec. For support of XMPP clients, an implementation SHOULD support the jidAlternateSpec as noted below (specification noted in ABNF as specified in <xref target="RFC5234"/>).
+                      <figure>
+                        <artwork type="abnf"
 ><![CDATA[localPart         = <local part of address>
 domain            = <domain part of address>
 resourcePart      = <resource part of the address>
@@ -142,117 +140,117 @@ keySpec           = <BASE64 encoded AsymmetricKey [DER encoded]>;
 jidAlternateSpec  = localPart ".." keySpec ".." 
                     domain "@localhost" [ "/" resourcePart ]
 jidUrl            = "vortexxmpp://" jidAlternateSpec]]></artwork>
-                            </figure>
-                        </t>
-                    </section>
+                      </figure>
+                    </t>
+                  </section>
                 </section>
             </section>
             <section anchor="entities_peer" title="Peer Partner">
-                <t>
-                    We use the term 'peer partner' as two or more message sending or receiving entities. One of these peer partners sends a message, and all other peer partners receive one or more messages. Peer partners are message specific. Every peer partner always connects directly to a node.
-                </t>
+              <t>
+                We use the term 'peer partner' as two or more message sending or receiving entities. One of these peer partners sends a message, and all other peer partners receive one or more messages. Peer partners are message specific. Every peer partner always connects directly to a node.
+              </t>
             </section>
             <section anchor="entities_keys" title="Encryption keys">
-               <t>
-                   There are several keys required for a Vortex message. For identities and ephemeral identities (see below) we use asymmetric keys. For message encryption, we use symmetric keys.
-               </t>
-               <section anchor="entities_node_identity" title="Identity Keys">
-                   <t>
-                       Every participant of the network has an asymmetric key. These keys SHOULD be either EC keys with a minimum length of 384 bits or RSA keys with a minimum length of 2048 bits.
-                   </t>
-                   <t>
-                       The public key needs to be known by all parties writing to or through that node.
-                   </t>
-               </section>
-               <section anchor="entities_keys_peer" title="Peer Key">
-                   <t>
-                       Peer keys are symmetrical keys transmitted with a Vortex message. Peer keys are always known to the node sending a message, the node receiving the message from the sender, and to the creator of the routing block.
-                   </t>
-                   <t>
-                       A peer key is included in the identity block of a Vortex message and the building instructions for a Vortex message (see RoutingCombo in <xref target="asn_one"/>).
-                   </t>
-               </section>
-               <section anchor="entities_keys_sender" title="Sender Key">
-                   <t>
-                       The sender key is a symmetrical key protecting the identity and routing block of a Vortex message. It is encrypted with the receiving peer key and prefixed to the identity block. This key decouples further identity and processing information from the previous key.
-                   </t>
-                   <t>
-                       A sender key is known to precisely one peer of a Vortex message and the creator of the routing block.
-                   </t>
-               </section>
+              <t>
+                There are several keys required for a Vortex message. For identities and ephemeral identities (see below) we use asymmetric keys. For message encryption, we use symmetric keys.
+              </t>
+              <section anchor="entities_node_identity" title="Identity Keys">
+                <t>
+                  Every participant of the network has an asymmetric key. These keys SHOULD be either EC keys with a minimum length of 384 bits or RSA keys with a minimum length of 2048 bits.
+                </t>
+                <t>
+                  The public key needs to be known by all parties writing to or through that node.
+                </t>
+              </section>
+              <section anchor="entities_keys_peer" title="Peer Key">
+                <t>
+                  Peer keys are symmetrical keys transmitted with a Vortex message. Peer keys are always known to the node sending a message, the node receiving the message from the sender, and to the creator of the routing block.
+                </t>
+                <t>
+                  A peer key is included in the Vortex message and the building instructions for subsequent Vortex messages (see RoutingCombo in <xref target="asn_one"/>).
+                </t>
+              </section>
+              <section anchor="entities_keys_sender" title="Sender Key">
+                <t>
+                  The sender key is a symmetrical key protecting the identity and routing block of a Vortex message. It is encrypted with the receiving peer key and prefixed to the identity block. This key decouples further identity and processing information from the previous key.
+                </t>
+                <t>
+                  A sender key is known to precisely one peer of a Vortex message and the creator of the routing block.
+                </t>
+              </section>
             </section>
             <section anchor="entities_vortex_message" title="Vortex Message">
-                <t>
-                    We use the term 'Vortex message' for a single transmission between two routing layers. A message adapted to the transport layer by the blending layer is called a 'blended Vortex message' (see <xref target="layer_overview"/>).
-                </t>
-                <t>
-                    A full vortex message contains the following items:
-                </t>
-                <t>
-                    <list style="symbols">
-                        <t>The peer key (encrypted with the host key of the node; stored in a PrefixBlock) protects the inner Vortex message (innerMessageBlock).</t>
-                        <t>The small padding guarantees that a replayed routing block with different content does not look alike.</t>
-                        <t>The sender key (encrypted with the host key of the node) protecting the identity and routing block.</t>
-                        <t>The identity block (protected by the sender key) contains information about the ephemeral identity of the sender, replay protection information, header requests (optional) and a requirement reply (optional).</t>
-                        <t>The routing block (protected by the sender key) containing information on how subsequent messages are processed, assembled and blended.</t>
-                        <t>The payload block (protected by the peer key) contains payload chunks for processing.</t>
-                    </list>
-                </t>
+              <t>
+                We use the term 'Vortex message' for a single transmission between two routing layers. A message adapted to the transport layer by the blending layer is called a 'blended Vortex message' (see <xref target="layer_overview"/>).
+              </t>
+              <t>
+                A full vortex message contains the following items:
+              </t>
+              <t>
+                <list style="symbols">
+                  <t>The peer key (encrypted with the host key of the node; stored in a PrefixBlock) protects the inner Vortex message (innerMessageBlock).</t>
+                  <t>The small padding guarantees that a replayed routing block with different content does not look alike.</t>
+                  <t>The sender key (encrypted with the host key of the node) protecting the identity and routing block.</t>
+                  <t>The identity block (protected by the sender key) contains information about the ephemeral identity of the sender, replay protection information, header requests (optional) and a requirement reply (optional).</t>
+                  <t>The routing block (protected by the sender key) containing information on how subsequent messages are processed, assembled and blended.</t>
+                  <t>The payload block (protected by the peer key) contains payload chunks for processing.</t>
+                </list>
+              </t>
             </section>
             <section anchor="entities_message" title="Message">
-                <t>
-                    A Message is a content to be transmitted from one sender to the recipient. The Sender uses a routing block to achieve this which is either built by him or provided by the receiver. A Message may be anonymous. There are however different degrees of anonymity:
-                </t>
-                <t>
-                    <list style="symbols">
-                        <t>If the sender of a message is not known to anyone else except the sender, we refer to that as 'sender anonymity.'</t>
-                        <t>If the receiver of a message is not known to anyone else except the receiver, we refer to that as 'receiver anonymity.'</t>
-                        <t>If an attacker is unable to determine content, original sender, and final receiver, we refer to that as third-party anonymity.</t>
-                        <t>If a sender or a receiver may be determined as "one of a set of &lt;k&gt; entities we refer to it as k-anonymity (for more about this see <xref target="KAnon"/>).</t>
-                    </list>
-                </t>
-                <t>
-                    A message is always MIME encoded as specified in <xref target="RFC2045"/>.
-                </t>
+              <t>
+                A Message is a content to be transmitted from one sender to the recipient. The Sender uses a routing block to achieve this which is either built by him or provided by the receiver. A Message may be anonymous. There are however different degrees of anonymity:
+              </t>
+              <t>
+                <list style="symbols">
+                  <t>If the sender of a message is not known to anyone else except the sender, we refer to that as 'sender anonymity.'</t>
+                  <t>If the receiver of a message is not known to anyone else except the receiver, we refer to that as 'receiver anonymity.'</t>
+                  <t>If an attacker is unable to determine content, original sender, and final receiver, we refer to that as third-party anonymity.</t>
+                  <t>If a sender or a receiver may be determined as "one of a set of &lt;k&gt; entities we refer to it as k-anonymity (for more about this see <xref target="KAnon"/>).</t>
+                </list>
+              </t>
+              <t>
+                A message is always MIME encoded as specified in <xref target="RFC2045"/>.
+              </t>
             </section>
             <section anchor="keys" title="Key and MAC specifications and usages">
+              <t>
+                MessageVortex uses a unique encoding for keys. It is designed to be small and flexible while maintaining a specific base structure.
+              </t>
+              <t>
+                The following key structures exist:
+              </t>
+              <t>
+                <list style="symbols">
+                  <t>SymmetricKey</t>
+                  <t>AsymmetricKey</t>
+                </list>
+              </t>
+              <t>
+                MAC does not need a complete structure containing specs and value. Instead only a  MacAlgorithmSpec is available. The following sections outline the constraints when specifying parameters for these structures. A node MUST NOT specify any parameter more than once.
+              </t>
+              <t>
+                If a crypto mode is specified requiring an IV, a node MUST provide the IV when specifying the key.
+              </t>
+              <section anchor="asymmetricKey" title="Asymmetric Keys">
                 <t>
-                    MessageVortex uses a unique encoding for keys. It is designed to be small and flexible while maintaining a specific base structure.
+                  Nodes use asymmetric keys for identifying peer nodes (identities) and encrypting symmetric keys (for later de-/encryption of payload or blocks). All asymmetric keys MUST contain a key type specifying a strictly normed key. They MUST contain a public part of the key encoded as X.509 container and a private key as specified in PKCS#8 wherever possible.
                 </t>
                 <t>
-                    The following key structures exist:
+                  RSA and EC keys must contain a keysize parameter. All asymmetric keys SHOULD contain a padding parameter. A node SHOULD assume PKCS#1 if no padding is specified.
                 </t>
                 <t>
-                    <list style="symbols">
-                        <t>SymmetricKey</t>
-                        <t>AsymmetricKey</t>
-                    </list>
+                  NTRU specification MUST provide parameters "n", "p", and "q".
+                </t>
+              </section>
+              <section anchor="symmetricKey" title="Symmetric Keys">
+                <t>
+                  Nodes use symmetric keys for encrypting payload and control blocks. These symmetric keys MUST contain a key type specifying a key. They MUST contain a key in an encoded form.
                 </t>
                 <t>
-                    MAC does not need a complete structure containing specs and value. Instead only a  MacAlgorithmSpec is available. The following sections outline the constraints when specifying parameters for these structures. A node MUST NOT specify any parameter more than once.
+                  A node MUST provide a keysize parameter if the key (or equivalently block) size is not standardized or encoded in the name. All symmetric key specification MUST contain a mode and padding parameter. A node MAY list multiple padding or mode parameters in a ReplyCapability block to give the recipient a free choice.
                 </t>
-                <t>
-                    If a crypto mode is specified requiring an IV, a node MUST provide the IV when specifying the key.
-                </t>
-                <section anchor="asymmetricKey" title="Asymmetric Keys">
-                    <t>
-                        Nodes use asymmetric keys for identifying peer nodes (identities) and encrypting symmetric keys (for later de-/encryption of payload or blocks). All asymmetric keys MUST contain a key type specifying a strictly normed key. They MUST contain a public part of the key encoded as X.509 container and a private key as specified in PKCS#8 wherever possible.
-                    </t>
-                    <t>
-                        RSA and EC keys must contain a keysize parameter. All asymmetric keys SHOULD contain a padding parameter. A node SHOULD assume PKCS#1 if no padding is specified.
-                    </t>
-                    <t>
-                        NTRU specification MUST provide parameters "n", "p", and "q".
-                    </t>
-                </section>
-                <section anchor="symmetricKey" title="Symmetric Keys">
-                    <t>
-                        Nodes use symmetric keys for encrypting payload and control blocks. These symmetric keys MUST contain a key type specifying a key. They MUST contain a key in an encoded form.
-                    </t>
-                    <t>
-                        A node MUST provide a keysize parameter if the key (or equivalently block) size is not standardized or encoded in the name. All symmetric key specification MUST contain a mode and padding parameter. A node MAY list multiple padding or mode parameters in a ReplyCapability block to give the recipient a free choice.
-                    </t>
-                </section>
+              </section>
             </section>
             <section anchor="entities_transport_address" title="Transport Address">
                 <t>
@@ -356,7 +354,7 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec]]></artwork>
                     The transport layer embeds the blended MessageVortex packets into the data stream of the existing transport layer protocol.
                 </t>
                 <t>
-                    The transport layer infrastructure SHOULD NOT be specific to anonymous communication and should contain significant parts of non-MessageVortex traffic.
+                    The transport layer infrastructure SHOULD NOT be specific to anonymous communication and should contain significant parts of non-Vortex traffic.
                 </t>
             </section>
 
@@ -412,10 +410,10 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec]]></artwork>
                     A node MUST always encrypt (with the symmetric key of the PrefixBlock) an InnerMessageBlock. The encryption hides the inner structure of the message. The InnerMessageBlock SHOULD always accommodate four or more payload chunks.
                 </t>
                 <t>
-                    An InnerMessageBlock always starts with a padding block. This padding guarantees that when using the same routing block multiple times, its binary structure is not repeated throughout the messages with the same routing block. The padding MUST be the first 16 bytes of the first four non-empty payload chunks (PayloadChunks). If a payload chunk is shorter than 16 bytes, the content of the padding SHOULD be filled with zero-valued bytes (00h) at very end up to the required number of bytes. An inner message block (InnerMessageBlock) SHOULD contain at least four payload chunks sized 16 bytes or bigger. If there are less than four payload chunks, then the padding MUST contain a random sequence of 16 bytes for the missing payload chunks. A node MUST NOT reuse random sequences.
+                    An InnerMessageBlock always starts with a padding block. This padding guarantees that when using the same routing block multiple times, its binary structure is not repeated throughout the messages with the same routing block. The padding MUST be the first 16 bytes of the first four non-empty payload chunks (PayloadChunks). If a payload chunk is shorter than 16 bytes, the content of the padding SHOULD be filled with zero-valued bytes (00h) at very end up to the required number of bytes. An inner message block (InnerMessageBlock) SHOULD contain at least four payload chunks sized 16 bytes or bigger. If there are less than four payload chunks then the padding MUST contain a random sequence of 16 bytes for the missing payload chunks. A node MUST NOT reuse random sequences.
                 </t>
                 <t>
-                    An InnerMessageBlock contains so-called forwardSecrets. This random number MUST be the same in the HeaderBlock, the RoutingBlock, and the PrefixBlock. Nodes receiving Messages containing non-matching forwardSecrets MUST discard these messages, and SHOULD NOT send an error message. If a node receives too many messages with illegal forward secrets, the node SHOULD then delete this indentity. A node receiving a message with a brocken forwardSecret SHOULD treat the block as valable for reply protection. Any replay within the replay protection time MUST be discarded regardless whether the forward secret is correct or not.
+                    An InnerMessageBlock contains so-called forwardSecrets. This random number MUST be the same in the HeaderBlock, the RoutingBlock, and the PrefixBlock. Nodes receiving Messages containing non-matching forwardSecrets MUST discard these messages, and SHOULD NOT send an error message. If a node receives too many messages with illegal forward secrets, the node SHOULD then delete this identity. A node receiving a message with a broken forwardSecret SHOULD treat the block as replayed block and discard it regardless of a valid forwardSecret. Any replay within the replay protection time MUST be discarded regardless whether the forward secret is correct or not.
                 </t>
                 <section title="Control Prefix Block">
                     <t>
@@ -598,20 +596,20 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec]]></artwork>
                         A blending layer embeds a VortexMessage in a carrier file with an offset for PLAIN blending. For replacing a file start, a node MUST use the offset 0. The routing node MUST choose the payload file for the message. A routing node SHOULD use a credible payload type (e.g., MIME type) with high entropy. It furthermore SHOULD prefix a valid header structure to avoid easy detection of the Vortex message. A routing node SHOULD use a valid footer, if any, to a payload file to improve blending.
                     </t>
                     <t>
-                    	The blended Vortex message is embedded in one or more message chunks. Each chunk starts with two variable length unsigned integers. The integer starts with the LSB. If bit 7 is set there is another byte following. There cannot be more than four bytes. the last fourth byte has always 8 bit. The three preceeding bytes have a payload of seven bits each. This results in a maximum number of 2^29 bits. The first of the extracted numbers reflects the number of bytes in the chunk after the lenght descriptors. The second reflects the number of bytes to be skipped get to the next chunk. There is no "last chunk" indicator.
+                    	The blended Vortex message is embedded in one or more message chunks. Each chunk starts with two variable length unsigned integers. The integer starts with the LSB. If bit 7 is set there is another byte following. There cannot be more than four bytes. The last, fourth byte has always 8 bit. The three preceding bytes have a payload of seven bits each. This results in a maximum number of 2^29 bits. The first of the extracted numbers reflect the number of bytes in the chunk after the length descriptors. The second contains the number of bytes to be skipped to get to the next chunk. There is no "last chunk" indicator.
                     </t>	
                     <t>
                       <figure>	
                     	<artwork type="ascii-art"
 ><![CDATA[
-position:00h   02h   04h   06h   08h ... 400h  401h
-value:   01 02 03 04 05 06 07 08 09  ... 01 05 0A 0B 0C 0D 0E 0F f0 03 12 13 14               		
+position:00h   02h   04h   06h   08h ... 400h  402h  404h  406h  408h  40Ah
+value:   01 02 03 04 05 06 07 08 09  ... 01 05 0A 0B 0C 0D 0E 0F f0 03 12 13 
 
 Embedding: "(plain:1024)"
 
-Result:  0A 13 14 (+ 493 ommited bytes; then 12 bytes to next chunk)
+Result:  0A 13 (+ 494 omited bytes; then skip 12 bytes to next chunk)
 ]]></artwork>
-                    </figure>
+                      </figure>
                     </t>	
                     <t>
                         A node SHOULD offer at least one PLAIN blending method for incoming Vortex messages. A node may offer multiple offsets for incoming Vortex messages.
@@ -700,17 +698,17 @@ Result:  0A 13 14 (+ 493 ommited bytes; then 12 bytes to next chunk)
                         A routing node MUST decrement the message quota by one if a received message is authenticated, valid and contains at least one payload block. If a message is identified as duplicate according to the reply protection, a node MUST NOT decrement the message quota.
                     </t>
                     <t>
-                    	Reflected in pseudo code message processing worrks as follows:
+                    	Reflected in pseudo code message processing works as follows:
                     	<figure>
                     		<artwork type="pseudocode"><![CDATA[function incomming_message(VortexMessage blendedMessage) {
   try{                    				
-	  message = unblend(blendedMessage);
-	  if( not message ) {
-    	// Abort processing
-	  	throw exception( "no embedded message found" )
+    message = unblend(blendedMessage);
+	if( not message ) {
+      // Abort processing
+      throw exception( "no embedded message found" )
     } else {
       header = get_header( message )
-      if( not known_identity( identity ) {
+      if( not known_identity( header.identity ) {
         if( get_requests( header ) contains HeaderRequestIdentity ) {
           create_new_identity( header ).set_temporary( true )
           send_message( create_requirement( header )  )
@@ -723,9 +721,9 @@ Result:  0A 13 14 (+ 493 ommited bytes; then 12 bytes to next chunk)
           // Abort processing
           throw exception "duplicate or replayed message" )
         } else {
-          if( get_accounting( identity ).is_temporary() ) {
-            if( not verify_requirement( identity, message) ) {
-              get_accounting( identity ).set_temporary( false )
+          if( get_accounting( header.identity ).is_temporary() ) {
+            if( not verify_requirement( header.identity, message ) ) {
+              get_accounting( header.identity ).set_temporary( false )
             } 
           }
           if( get_accounting( header ).is_temporary() ) {
@@ -733,20 +731,21 @@ Result:  0A 13 14 (+ 493 ommited bytes; then 12 bytes to next chunk)
           }
           
           // Message authenticated
+          get_accounting( header.identity ).register_for_replay_protection( message )
           if( not verify_mtching_forward_secrets( message ) ) {
             throw exception( "forward secret missmatch" )
           }
           if( contains_payload( message ) ) {
-            if( get_accounting( header ).decrement_message_quota() ) {
+            if( get_accounting( header.identity ).decrement_message_quota() ) {
               while index,nextPayloadBlock = get_next_payload_block( message ) {
-                add_workspace( index,nextPayloadBlock )
+                add_workspace( header.identity, index, nextPayloadBlock )
               }
               while nextRoutingBlock = get_next_routing_block( message ) {
-                add_workspace( add_routing_queue( nextRoutingBlock ) )
+                add_workspace( header.identity, add_routing_queue( nextRoutingBlock ) )
               }
               process_reserved_mapping_space( message )
               while nextRequirement = get_next_requirement( header ) {
-                add_workspace( add_process_queue( nextRequirement ) )
+                add_workspace( header.identity, nextRequirement )
               }
             } else {
               throw exception( "Message quota exceeded" )
