@@ -12,7 +12,7 @@
 \def\title#1{\gdef\@title{#1}\gdef\thetitle{#1}}
 \makeatother
 
-\usepackage{scrpage2}
+%\usepackage{scrpage2}
 
 \title{MessageVortex}
 \gdef\thesubtitle{Transport Independent Messaging Anonymous to Third Parties}
@@ -43,7 +43,7 @@
 %\renewcommand{\cftchapaftersnum}{\hspace{5pt}}
 
 %enable hyperlinks
-\usepackage[hidelinks,bookmarks,hyperindex,hyperfigures,pdfpagelabels,pdftex,pdfa,final]{hyperref}
+\usepackage[pdfencoding=auto, psdextra,hidelinks,bookmarks,hyperindex,hyperfigures,pdfpagelabels,pdftex,pdfa,final]{hyperref}
 \makeatletter
 \hypersetup{	
 	pdftitle={\thetitle},
@@ -52,7 +52,7 @@
 	breaklinks=true,
 	pdfstartview=Fit,
 	pdfauthor={\author},
-	pdftitle={\thetitle\\\small\thesubtitle},
+	pdftitle={\thetitle - \thesubtitle},
 	pdflang=en,
 	%pdfsubject={\myabstract},
 	pdfkeywords={Messaging, Anonymity, SMTP, Message Vortex},
@@ -448,7 +448,7 @@ Dr. Andreas Hueni for his thoughts and challenging outside-the-normal-box.
 
 Prof. Dr. Carlos Nicolas of the University of Northwestern Switzerland for being such a valuable sparring partner allowing me to test my thoughts.
 
-I would like to acknowledge all the individuals who have coded for the LaTeX project for free. It is due to their efforts that we can generate professionally typeset PDFs now.
+I would like to acknowledge all the individuals who have coded for the \LaTeX project for free. It is due to their efforts that we can generate professionally typeset PDFs now.
 \end{comment}
 
 \cleardoublepage

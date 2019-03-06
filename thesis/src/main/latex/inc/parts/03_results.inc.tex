@@ -250,7 +250,7 @@ The message is then built as follows:
 \end{enumerate}
 
 \section{Protocol design}
-In this section, we emphasize on the protocol blocks. These blocks are extracted from the blending layer and passed to the routing layer. A Vortex message is split into two main parts. The header block and the main block. The header block is divided into the two subparts ``headerKey'' and ``identity block''. Although these blocks are described in \ref{app:rfcMessageVortexMainpp} as ASN.1 encoded structures they are not. In the message, they are length-prefixed fields.
+In this section, we emphasize on the protocol blocks. These blocks are extracted from the blending layer and passed to the routing layer. A Vortex message is split into two main parts. The header block and the main block. The header block is divided into the two subparts ``headerKey'' and ``identity block''. Although these blocks are described in \ref{app:rfcMessageVortexMain} as ASN.1 encoded structures they are not. In the message, they are length-prefixed fields.
 
 In reality the structure of a message shown in \ref{fig:messageOutline} is as follows:
 \begin{itemize}
@@ -584,7 +584,7 @@ len(pb_2) & \leq & len(pb_1)
 These operations build the core of the mixing operations. The operation allows to add to a message redundancy information or to rebuild a block from a chosen set of information. 
 
 The Operation itself is shown in \ref{fig:addRedundancyOperation}. 
-\begin{figure}[h]
+\begin{figure}[ht]
 	\includegraphics[width=\columnwidth]{inc/addRedundancyOp}
 	\caption{Outline of the addRedundancy operation}
 	\label{fig:addRedundancyOperation}
@@ -664,7 +664,7 @@ A node may reject an operation for any reason including exceeding an unnatural a
 
 A reply containing a null length puzzle means that the requested operation is rejected.
 
-\chapter{MessageVortex - Transport Independent Messaging anonymous to \nth{3} Parties\label{sec:spec}}
+\chapter{MessageVortex - Transport Independent Messaging anonymous to \texorpdfstring{\nth{3}}{3rd} Parties\label{sec:spec}}
 This approach is different from all approaches discussed previously. Unlike them, we put complete distrust into the infrastructure being used. Furthermore, we do not rely on a custom server infrastructure on the internet. Instead, we take advantage of the availability of internet-connected devices such as mobile phones, tablets, or even commonly available SoC such as RaspberryPi or similar. It is still tough to maintain a server on the internet. Considering the vastly growing amount of automated attacks carried out against internet-connected servers, it is not advisable or realistic to assume that a future user of this system owns either a server or connects to a service which is offering anonymizing services. These infrastructures would be susceptible to monitoring or even banning. Instead, we take a different approach.
 
 We use common messaging protocols as transport layers and connect to them using the respective client protocols. The actual mixes are operated by the users on their ``always connected'' devices. Such a system is far less reliable than a traditionally run server as this hardware is typically cheap and generally connected to the internet using a bandwidth shared media.
@@ -678,7 +678,7 @@ All nodes, regardless of endpoint or mix implement the same logic and fulfill th
 The Accounting layer maintains all local identities and controls the overall load to the system. He processes requests from an ephemeral identity and generates replies to these requests. 
 
 In table \ref{tab:protoReplyCrit} we show under what circumstances a reply to a header request should be sent. The capitalized words MAY, MUST, SHOULD and SHOULD NOT are used as defined in RFC2119\cite{RFC2119}.
-\begin{table*}[h]
+\begin{table*}[ht]
 	\centering\scriptsize
 	\begin{tabular}{|l|l|l|l|l|}\hline
 		\diaghead{\theadfont Request Criteria}{Request}{Criteria} & \thead{unknown identity; cleartext} & \thead{unknown identity; encrypted} & \thead{expired identity; encrypted} & \thead{known identity; encrypted}\\\hline

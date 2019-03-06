@@ -43,13 +43,13 @@ In this section, we analyze the protocol statically. Looking at a full message, 
 \section{Transport and Blending Layer}
 
 \subsection{Analysis of Plain Embedding}
-It is very obvious why a file treated with plain embedding is easily identifiable as a broken or tampered file. While the file is still parseable, its content is no longer sensible to a human and thus at least suspect. 
+It is undeniable why a file treated with plain embedding is easily identifiable as a broken or tampered file. While the file is still parseable, its content is no longer sensible to a human and thus at least suspect. 
 
 We wanted to know if there is an easy method to detect the modifications of such a file. While most of the analysis method requires processing of large data sets, we tried to find apparent, non-calculation-intense test methods which were generic. We did not take any content-based characteristics such as ``outline of an image'' or ``resulting spectrum of a sound file'' into account. As our embedding is generic, we searched for a similar detection method.
 
 A property of encrypted ciphertext is the high entropy. We, therefore, used the calculation of the Shannon entropy in bytes as property and tried to show the shift of entropy within the files. This detection method depended very much on the type of file used for embedding. It showed an expected behavior, that file types having in the expected area a similar entropy were not detectable by this method. However, the following file types were identified to be unsuitable for plain blending due to their entropy structure.
 
-We analyzed the files by calculating the entropy of blocks 256 bytes and did this with a sliding window over a randomly collected set of images (e.g., the first 100 entries of a file type after searching for ``mouse'', ``cat'', ``camel'', or ``dog''). We did intentionally not filter or eliminate images. The finds were very surprising. We were able to tell file types apart, were able to identify files with thumbnails or an interlaced structure. We even identified certain specific pattern regarding the producer type of an image (e.g., we could differentiate between images scanned and images taken by a camera). It was not so much surprising that we were able to identify these features, but the fact that we could see them in entropy data.
+We analyzed the files by calculating the entropy of blocks 256 bytes and did this with a sliding window over a randomly collected set of images (e.g., the first 100 entries of a file type after searching for ``mouse'', ``cat'', ``camel'', or ``dog''). We did intentionally not filter or eliminate images. Surprisingly, we were able to tell file types apart, were able to identify files with thumbnails or an interlaced structure. We even identified certain specific pattern regarding the producer type of an image (e.g., we could differentiate between images scanned and images taken by a camera). It was not so much surprising that we were able to identify these features, but the fact that we could see them in entropy data.
 
 \begin{figure*}[ht]
 	\includegraphics[width=\textwidth]{inc/statanalysis_graph}
@@ -63,9 +63,9 @@ We analyzed the files by calculating the entropy of blocks 256 bytes and did thi
 	\label{fig:statMvGraph}
 \end{figure*}
 
-We then carried out an analysis identifying the typical entropy and the inner structures. The graphs in \ref{fig:statGraph} show a typical analysis. In that case, we looked at 100 images of each type. We graphed and analyzed their entropy and tested for suitability of a plain embedding. Table \ref{tab:fileEntropy} lists the average entropy of analyzed file types and makes remarks about the suitability for plain embedding. In practice, we found that most suitable file formats have an entropy of $\approx 7.2$ and an interquartile range (IQR) of 0.15 or less. Furthermore, files should have a big, uniform, non-structured range containing these characteristics. Such a file has a suitable space for embedding. For reference, Figure \ref{fig:statMvGraph} shows the distribution of typical MessageVortex blocks. The uniform enropy must be matched in the case of embedding.
+We then carried out an analysis identifying the typical entropy and the inner structures. The graphs in \ref{fig:statGraph} show a typical analysis. In that case, we looked at 100 images of each type. We graphed and analyzed their entropy and tested for suitability of a plain embedding. Table \ref{tab:fileEntropy} lists the average entropy of analyzed file types and makes remarks about the suitability for plain embedding. In practice, we found that most suitable file formats have an entropy of $\approx 7.2$ and an inter-quartile range (IQR) of 0.15 or less. Furthermore, files should have a big, uniform, non-structured range containing these characteristics. Such a file has a suitable space for embedding. For reference, Figure \ref{fig:statMvGraph} shows the distribution of typical MessageVortex blocks. The uniform entropy must be matched in the case of embedding.
 
-\begin{table*}[h]
+\begin{table*}[!ht]
 	\centering\tiny
 	\begin{tabular}{|l|l|l|l|}\hline
 		\diaghead{\theadfont Type Criteria}{Type}{Criteria} & \thead{Avg. Entropy}     & \thead{IQR} & \thead{Remarks}\\\hline
@@ -76,11 +76,11 @@ We then carried out an analysis identifying the typical entropy and the inner st
 		PDF       & 6.660  & 0.282 & Hard to embed due to a very complex inner structure but well suited \\\hline              
 		MP3       & 7.076  & 0.091 & -- \\              
 		WAV       & 4.777  & 0.927 & -- \\              
-		OGG       & 7.104  & 0.093 & relatively easy to embedd. Hard not to break the structure. \\\hline              
-		mpg4   & n/a    & n/a   & good to embedd. Steganography could be applied here easily too. \\\hline              
-		zip    & 7.148    & 0.080 & easy to embedd when using ``password protected''  archives \\\hline\hline
-		MVaes  & 7.176  & 0.072 & Without length padding as reference encrypted with AES 256 CBC\\
-		MVcam  & 7.175  & 0.070 & Without length padding as reference encrypted with Camellia 256 CBC\\\hline
+		OGG       & 7.104  & 0.093 & relatively easy to embedd. Hard not to break the file structure. \\\hline              
+		mpg4      & n/a    & n/a   & good to embedd. Steganography could be applied here easily too. \\\hline              
+		zip       & 7.148    & 0.080 & easy to embedd when using ``password protected''  archives \\\hline\hline
+		MVaes     & 7.176  & 0.072 & Without length padding as reference encrypted with AES 256 CBC\\
+		MVcam     & 7.175  & 0.070 & Without length padding as reference encrypted with Camellia 256 CBC\\\hline
 	\end{tabular}    
 	\caption{comparison of protocols in terms of the suitability criteria as transport layer}
 	\label{tab:fileEntropy}
@@ -129,12 +129,12 @@ An active adversary may not follow the protocol and modify any parts of the mess
 An adversary may not follow the blending specification. If he uses a specification which is less secure an independent third party observer may follow traffic. This is not sensible as such a node may send all the knowledge to such a collaborating node directly. In the case of a  target node not supporting the chosen blending method, the partial message path becomes interrupted. A possible redundancy in the path may recover the message from such a case.
 
 \subsubsection{DoS by Traffic Replay}
-Traffic replay is a common way to highlight traffic in many systems by replaying the same traffic and increase the signal to noise ratio of a system. In our case we can use the replay of a VortexMessage block to increase the traffic to a node. After decoding the header, an MessageVortex node identifies the block as repeated block and rejects further processing. 
+Traffic replay is a common way to highlight traffic in many systems by replaying the same traffic and increase the signal to noise ratio of a system. In our case, we can use the replay of a VortexMessage block to increase the traffic to a node. After decoding the header, a MessageVortex node identifies the block as a repeated block and rejects further processing. 
 
 \subsubsection{DoS by Traffic generation}
-An adversary may first collect identities and quotas and use them later in a coordinated attack to force the node processing. The adversary may increase the impact by using big payloads and processing them in a costly manner. A possibility is to make extensive use of addRedundancy or encryption operations. Furthermore an attacker may attack the memory by distributing the messsage throughout the workspace in order to exhaust the routers runtime memory.
+An adversary may first collect identities and quotas and use them later in a coordinated attack to force the node processing. The adversary may increase the impact by using big payloads and processing them in a costly manner. A possibility is to make extensive use of addRedundancy or encryption operations. Furthermore, an attacker may attack the memory by distributing the message throughout the workspace in order to exhaust the routers runtime memory.
 
-As a router is free to process the operations of an identity, he may discard an ephemeral identity and all associated resources at any time. Misbehaving or suspected misbehaving nodes may therefore be stopped. On the other hand we are unable to stop an adversary from allocating new identities. We may however work with multiple local host keys and distribute them according to the trust. A known party or someone trusted by them might receive a key different from a publicly advertised key. This identity key may be dropped at any time and distributed to further parties again with an identity update. We may even subdivide trusted parties into several groups by updating with different new host keys to identify misbehaving routers without knowing them. 
+As a router is free to process the operations of an identity, he may discard an ephemeral identity and all associated resources at any time. Misbehaving or suspected misbehaving nodes may, therefore, be stopped. On the other hand, we are unable to stop an adversary from allocating new identities. We may, however, work with multiple local host keys and distribute them according to the trust. A known party or someone trusted by them might receive a key different from a publicly advertised key. This identity key may be dropped at any time and distributed to further parties again with an identity update. We may even subdivide trusted parties into several groups by updating with different new host keys to identify misbehaving routers without knowing them. 
 
 \subsection{Attacking a single ephemeral Identity of a MessageVortex Node}
 
@@ -146,8 +146,8 @@ A malicious node may try to exhaust quotas or limits. As we do trust in sender a
 	\item Create intentionally huge, incorrect message content to exhaust transfer quota.
 \end{itemize}
 
-\subsection{Attacking Sending an Receiving Identities of the MessageVortex System}
-The most valuable goal of an adversary is breaking an entities anonymity or monitor their traffic by content or meta data. In the following sections we analyze the possibility of 
+\subsection{Attacking Sending and Receiving Identities of the MessageVortex System}
+The most valuable goal of an adversary is breaking an entities anonymity or monitor their traffic by the content or the metadata. In the following sections, we analyze the possibility of 
 
 
 \subsubsection{Traffic Highlighting}
@@ -160,22 +160,22 @@ It is tough to measure anonymity as it involves many uncontrollable factors. We 
 We have to differentiate between several problems. An adversary has to identify the participants of an anonymity system. Then he has to identify members of a message or a communication anonymity set. Starting from there he has to identify message flows and detect senders and receivers of messages within an anonymity set (which is not doable in all cases). If any adversary achieves this, we have to consider the anonymity to be broken. Depending on the degree of anonymity required which is influenced by external factors the participation in any or a small enough set may be sufficient to suffer consequences.
 
 \subsection{Attacking Routing Participants}
-While very hard in our case as we do not have ``dedicated'' anonymization infrastructure, It might be possible to identify members of the routing network. This due to flaws in the blending layer. While it is possible to scare off or block members of a routing network. It is far harder in a network where the members are mobile. Any user may change at any time the identity including the endpoint without losing its known peers. This unique property makes the participating entities very mobile and allows them to switch servers at any time without loosing contact to peers for subsequent communication.
+While very hard in our case as we do not have ``dedicated'' anonymization infrastructure, It might be possible to identify members of the routing network. This due to flaws in the blending layer. While it is possible to scare off or block members of a routing network. It is far harder in a network where the members are mobile. Any user may change at any time the identity including the endpoint without losing its known peers. This unique property makes the participating entities very mobile and allows them to switch servers at any time without losing contact to peers for subsequent communication.
 
-Routing participants may be identified either by publicly available information (e.g., published routing address) or by identifying unique properties of the protocol. Transport layer provider may then be forced to deanonymize the customer related to the accout (if possible) or the relating account on the transport layer may be blocked. 
+Routing participants may be identified either by publicly available information (e.g., published routing address) or by identifying unique properties of the protocol. Transport layer provider may then be forced to deanonymize the customer related to the account (if possible), or the relating account on the transport layer may be blocked. 
 
-To counter a possible threatening deanonymisation, a MessageVortex node owner must maintain anonymity towards the transport layer provider. This is easily done in the XMPP protocol as there are account usually not linked to any subsequent user information such as telephone or email. Email accounts are more restrictively regulated. Providers providing accounts without registration of phone numbers or subsequent email addresses do exist (e.g., Yandex) but are rare. In both cases a user might be identified by its IP address. This is why concealing its IP address while connecting to the transport layer is an advisable practice. Using ToR when accessing the transport layer may suffice to do so. The anonymising service has to be strong enough to conceal the IP. Protection of the traffic itself is not required.
+To counter a possible threatening deanonymization, a MessageVortex node owner must maintain anonymity towards the transport layer provider. This is easily done in the XMPP protocol as usually the account is not linked to any subsequent user information such as telephone or email. Email accounts are more restrictively regulated. Providers providing accounts without registration of phone numbers or subsequent email addresses do exist (e.g., Yandex) but are rare. In both cases, a user might be identified by its IP address. This is why concealing its IP address while connecting to the transport layer is an advisable practice. Using ToR when accessing the transport layer may suffice to do so. The anonymizing service has to be strong enough to conceal the IP. Protection of the traffic itself is not required.
 
 \subsection{Attacking Anonymity through Traffic Analysis}
 As traffic and decoy traffic and decoy traffic are chosen by the creator of the routing block frequency patterns cannot be detected, unlike the router did create them. Same applies to message sizes and traffic hotspots. When reusing the same routing block eventually message sizes or general estimates such as ``bigger'' or ``smaller size'' can be made.
 
-For an evil routing node, even paired with an global observer, it is hard to extract any useful information. An adversary might identify all messages folwing through it as messages of the same true identity. As ephemeral identities are short term identities this is of limited values. By monitoring the endpoints used ba an ephemeral identity we might calculate a ``likelyhood of matching'' for two ephemeral identities. Luckily this is not doable without allowing a great factor of uncertainity. This matching does not improve when combining multiple ephemeral identities over time. The factor might improfe silghtly when trying to match multiple ephemeral identities on different routing nodes but not significantly. Making solid statements about these likelyhood is not posssible as we did intentionally not define a specific behavior. We may safely say that likelhood of deanonymization is degrading if using short lived ephemeral identities.
+For an evil routing node, even paired with a global observer, it is hard to extract any useful information. An adversary might identify all messages following through it as messages of the same true identity. As ephemeral identities are short term identities, this is of limited values. By monitoring the endpoints used ba an ephemeral identity we might calculate a ``likelihood of matching'' for two ephemeral identities. Luckily this is not doable without allowing a high factor of uncertainty. This matching does not improve when combining multiple ephemeral identities over time. The matching might slightly improve when trying to match multiple ephemeral identities on different routing nodes. Making solid statements about those likelihoods is not possible as we did intentionally not define a specific behavior. We may safely say that the likelihood of deanonymization is degrading if using short-lived ephemeral identities.
 
 \subsection{Attacking Anonymity through Timing Analysis}
 Timing is under full control of the routing block builder. No information can be derived from timing. This is even the case if a routing block is reused. The true timing on the network is depending additionally on other factors, such as delaying through anti-UBE or anti-malware measures or delays through local delivery between multiple nodes.
 
 \subsection{Attacking Anonymity through Throughput Analysis}
-Increasing the throughput to highlight a message channel is not possible since the replay protection will block such requests. It may be possible for a limmited number of times by replaying a MURB. This is one of the reasons why usage of MURBs is discuraged unless necessary.
+Increasing the throughput to highlight a message channel is not possible since the replay protection will block such requests. It may be possible for a limited number of times by replaying a MURB. This is one of the reasons why the usage of MURBs is discouraged unless necessary.
 
 \subsection{Attacking Anonymity through Routing Block Analysis}
 The routing block is cryptographically secure. The size of the routing block may leak an estimate about its inner complexity. It does not reveal any relevant pieces of information like remaining hops to the message end or target or similar.
@@ -188,7 +188,7 @@ To an adversary not knowing the key, the size of the prefix block may leak the k
 To an adversary knowing the decryption key (evil routing node), the content of the header block is visible. This header block leaks all routing information for the respective node and thus the ephemeral identity. This block leaks some information of minimal value. It may leak the activity of an ephemeral identity including frequency. This activity is always matching the minimal activity of an endpoint identity. 
 
 \subsection{Attacking Anonymity through Payload Analysis}
-The payload itself does not leak any information about the message content. All content is cryptographically secured. Content may, however, leak the block size of the applied cypher.
+The payload itself does not leak any information about the message content. All content is cryptographically secured. Content may, however, leak the block size of the applied cipher.
 
 \subsection{Attacking Anonymity through Bugging}
 Bugging is one of the most pressing problems. The protocol has been carefully crafted not to allow any bugging. The use of MIME messages in the final message, however, allows bugging of the message itself. A bugged message content may breach receiver anonymity to the sender of the message.
@@ -201,7 +201,7 @@ Due to the replay protection, no traffic may be generated or multiplied except f
 \subsubsection{Hijacking of Header and Routing Blocks}
 An attacker might try to recombine a header block of a third party with a routing block crafted to get workspace content of a different node. To protect against this scenario every routing block and its corresponding header block have a common value called forward secret. As the content of a hijacked header block is not known he is unable to guess the forward secret within the block.
 
-It is not possible to brute-force the value, due to the replay protection. More precisely, the probability for hijacking a single identity block is $\frac{1}{2^{32}}$. Hijacking such a block allows onetime access to the working space and is visible to the owner due to the manipulated quotas. Failing of an attack will result in deleting the ephemeral identity and a new, unlinked ephemeral identity will be created. 
+It is not possible to brute-force the value, due to the replay protection. More precisely, the probability for hijacking a single identity block is $\frac{1}{2^{32}}$. Hijacking such a block allows onetime access to the working space and is visible to the owner due to the manipulated quotas. Failing of an attack will result in deleting the ephemeral identity, and a new, unlinked ephemeral identity will be created. 
 
 \subsubsection{Partial Implicit Routing Diagnosis}
 We can create data which is routed back to or through the original sending node. This traffic is well defined and may be used to certify that the loop processing the message is working as expected. By combining the messages and sending intermediate results through multiple paths, it is even possible to extract the sub status of some loops and combine the result within transfer into a single message.
@@ -209,9 +209,9 @@ We can create data which is routed back to or through the original sending node.
 As a special case, a sender may use implicit routing diagnostic to diagnose the full route. A sender may do this by taking specific excerpts of the received message at the recipients' node and route these blocks back from the recipient to the sender. 
 
 \subsubsection{Partial Explicit Routing Diagnosis}
-If a message fails to deliver according to implicitly routing diagnosis, additional messages may be sent to pick up the content of the workspace of ephemeral identities throughout the path. These messages are due to the only binding to the ephemeral identity not distinguishable from the original messages. Assuming that a node always behaves either according or not according to the rules of the system, a node may be identified by capturing built blocks with a known content.
+If a message fails to deliver according to implicitly routing diagnosis, additional messages may be sent to pick up the content of the workspace of ephemeral identities throughout the path. These messages are due to the only binding to the ephemeral identity not distinguishable from the original messages. Assuming that a node always behaves either according or not according to the rules of the system, a node may be identified by capturing built blocks with known content.
 
-If a node is identitfied as misbehaving node it may be excluded from subsequent routing request or reduced in its reliability or trustability ratings. A node may calculate such ratings locally to build a more reliable network over time avoiding misbehaving or non-conformant nodes. This does not violate our zero trust philosophy as the scoring is built locally and relies on own observations.
+If a node is identified as a misbehaving node, it may be excluded from subsequent routing request or reduced in its reliability or trustability ratings. A node may calculate such ratings locally to build a more reliable network over time avoiding misbehaving or non-conformant nodes. This does not violate our zero trust philosophy as the scoring is built locally and relies on our own observations.
 
 \chapter{Recommendations on Using the Vortex Protocol}
 The following sections list recommendations using the VortexProtocol it is a summary of previous sections.
@@ -222,19 +222,19 @@ Routing blocks should not be reused. The reuse of a routing block may leak some 
 \section{Use of Ephemeral Identities}
 Ephemeral identities should be used for a minimal number of messages. Using multiple identities with overlapping lifespans is considered a good practice. Using different ephemeral identities for the same message is acceptable and may be a good practice as long as operations do not leak the linking between those two identities.
 
-Special care must be taken if using overlapping ephemeral identities accross nodes. While ephemeral identities may be completely unlinked on a single node the linking between multiple nodes may leave a trace from one identity to the next. To counter this phenomenon it is adviseable to recreate on a regular base all ephemeral identities from scratch. This guarantees an unlinking from previous ephemeral identities.
+Special care must be taken if using overlapping ephemeral identities across nodes. While ephemeral identities may be completely unlinked on a single node the linking between multiple nodes may leave a trace from one identity to the next. To counter this phenomenon, it is advisable to recreate on a regular base all ephemeral identities from scratch. This guarantees an unlinking from previous ephemeral identities.
 
 \section{Recommendations on Operations applied on Nodes}
 All operations, carried out on a single node, have to be crafted in such a way that no information whether the operation is a decoy or a real message is leaked. Otherwise, it becomes possible to narrow down the message flow.
 
-Encryption operations should be either strictly encrypting or strictly decrypting. At no point in the path a previously applied encryption on an untrusted node should be removed as removal might lead to linking to the previous inverse operation.
+Encryption operations should be either strictly encrypting or strictly decrypting. At no point in the path, a previously applied encryption on an untrusted node should be removed as removal might lead to linking to the previous inverse operation.
 
-Similarly there are rules for adding and removing redundancy information. As these operations serve as decoy traffic generators, great care needs to be taken not to leak this information. We emphasize here again that it is possible to add redundancy information on one node, encrypt one or multiple block once or multiple blocks on a second node, and then remove the redundacy information again from the new set. This will lead to a payload data block than the original. However, this does not qualify the block as decoy traffic. The process may be reversed on the final recipient. Such an operation is however mathematically very demanding if the same operation is used for redundancy at the same time as multiple possible tuple need to be tried if one node has failed.
+Similarly, there are rules for adding and removing redundancy information. As these operations serve as decoy traffic generators, great care needs to be taken not to leak this information. We emphasize here again that it is possible to add redundancy information on one node, encrypt one or multiple blocks once or multiple blocks on a second node, and then remove the redundancy information again from the new set. This will lead to a payload data block than the original. However, this does not qualify the block as decoy traffic. The process may be reversed on the final recipient. Such an operation is however mathematically very demanding if the same operation is used for redundancy at the same time as multiple possible tuples need to be tried if one node has failed.
 
-Whenever possible the reapearence of a payload block in a single encoding it should be avoided or limited to an absolute minimum as such an occurence allows linking of two ephemeral identities.
+Whenever possible the reappearance of a payload block in a single encoding it should be avoided or limited to an absolute minimum as such an occurrence allows linking of two ephemeral identities.
 
 \section{Reuse of Keys, IVs or Routing patterns}
-An RBB should avoid reuse of any keys, IVs, routing patterns or PRNG seeds along its routing path of untrusted nodes. Reusing such values would allow an attacker to match ephemeral identities to a single identity. While this is a very limited risk and may be ignored in some cases, an RBB should avoid it as it may leak information to collaborating nodes.
+An RBB should avoid reuse of any keys, IVs, routing patterns or PRNG seeds along its routing path of untrusted nodes. Reusing such values would allow an attacker to match ephemeral identities to a single identity. While this is a minimal risk and may be ignored in some cases, an RBB should avoid it as it may leak information to collaborating nodes.
 
 \section{Recommendations on Choosing involved Nodes}
 Involved nodes should be trustworthy but not necessarily trusted. To avoid an adversary to control all nodes except for sender and receiver a message should always include a set of known recipients. It is regarded as a good practice to use a minimal fixed anonymity set of known recipients as routers. Doing so does not leak any information unless always the same pattern of operations is applied (see \ref{sec:reuseRB}).
@@ -242,7 +242,7 @@ Involved nodes should be trustworthy but not necessarily trusted. To avoid an ad
 \section{Message content}
 Although it is possible to embed any content into a Vortex message great care should be taken as content may allow disclosing a readers identity or location. For this reason, only self-contained messages should be used (such as plain text messages).
 
-Allowing a user to use more complex representation such as MIME offers a lot of possibilities for buging of the content. A client displaying such messages should always handle them with great care. Taping content by downloading external images or verifying the validity by OCSP or even doing a reverse lookup on an IP address may leak valuable information.
+Allowing a user to use more complex representation such as MIME offers many possibilities for bugging of the content. A client displaying such messages should always handle them with great care. Taping content by downloading external images or verifying the validity by OCSP or even doing a reverse lookup on an IP address may leak valuable information.
 
 \subsection{Splitting of message content}
 Message content should be split and distributed among routing nodes. Splitting should however not be done excessively to avoid failure due to too many failing nodes. It furthermore makes diagnostics complicated. 
@@ -263,7 +263,7 @@ Anonymity is greatly dependent on the quality of the routing block and the chose
 The requirement for an anonymity set is dependent on jurisdictional restrictions. In some of the more restrictive countries, no one can be held guilty for an action which may not be credibly assigned to him alone. In other jurisdictions, it is possible to be held guilty for actions just because of an identified membership to a group. This makes it essential that message traffic and the crafting of the blending is under the sole control of the sender. He needs to create an anonymity-set sufficiently large and spanning enough jurisdictions to create sufficient anonymity for his situation.
 
 \chapter{Missing gaps to be covered in future analysis}
-The current blending layer is simple in its inner working. It creates context-less messages based on an easily recognizable scheme. An unsuspecting observer may have the impression that this is just a way of communicating but censor may by observing the message flow easily and conclude that these messages are not written by a human. Such a detection could lead to censorship of the respective routing node and thus disrupt the message flow. It is easy to recover from such cenosrship by advertising a new identity to known peer partners but to minimize effects of censorship an improvment would definitely help.
+The current blending layer is simple in its inner working. It creates context-less messages based on an easily recognizable scheme. An unsuspecting observer may have the impression that this is just a way of communicating but censor may by observing the message flow easily and conclude that these messages are not written by a human. Such detection could lead to censorship of the respective routing node and thus disrupt the message flow. It is easy to recover from such censorship by advertising a new identity to known peer partners but to minimize effects of censorship an improvement would help.
 
 To be undetectable all work done by the blending layer has to be indistinguishable from regular human communication. This applies not only to the message steganographic embedding of the message but to the message content as well. This is very much similar to the problems of chatterbots these days. Assuming that a blending layer is only communicating with other nodes correctly embedding messages we have a chatterbot problem. It is reduced as the chatterbot must only reply credibly and undetectable to generated messages of other chatterbots. If assuming that a blending layer replies to any non-Vortex nodes the problem boils down to a Turing test as stated in \cite{turing1950computing}. As we safely may assume that an adversary has enormous but limited resources this blending is however sufficient if it is done ``good enough''. What criteria would apply here is a topic for further research. Applying any research to this topic would require to add a more precise adversary model.
 
@@ -271,10 +271,8 @@ The currently applied choice of transport layer protocol is a snapshot of curren
 
 A comprehensive survey of the newest trends and techniques in steganography is another topic to be covered. It would allow identifying new candidates of blending techniques. Especially interesting are steganography algorithms covering movie file formats.
 
-This is especially hard since true evidence of in depth protocol usage seems to be completely missing. While we were able to gather a lot of data which is collected by simple routers (such as bandwidth), comprehensive figures about client and content usage seemed to be completely missing or of very poor quality.
+This is especially hard since true evidence of in-depth protocol usage seems to be completely missing. While we were able to gather many data which is collected by simple routers (such as bandwidth), credible figures about client and content usage seemed to be completely missing or of very poor quality.
 
-Another problem is the software update. Where censorship applies to access to newer software is not or only with technical knowledge possible. To allow a user to update his software, an updating mechanism should be implemented allowing nodes to fetch verifiable software updates anonymously while not limiting the software to a single distribution point.
+Another problem is the software update. Where censorship applies to access to newer software is not or only with technical knowledge possible. To allow a user to update his own software, an updating mechanism should be implemented allowing nodes to fetch verifiable software updates anonymously while not limiting the software to a single distribution point.
 
-Anonymity has effects on the behavior of humans. We have found that although there is some research in this field (such as \cite{postmes2001social}) evidence is very weak. Although the possibility for anonymity is undisputed among so-called free countries, the downsides (e.g., misuse for criminal acts) of anonymity are apparent. More research in this field is required. On the other hand a lack of awareness for anonymity especially in ``non-free'' jurisdiction has been observed, which would be another important field of research. 
-
-
+Anonymity has effects on the behavior of humans. We have found that although there is some research in this field (such as \cite{postmes2001social}) evidence is very weak. Although the possibility for anonymity is undisputed among so-called free countries, the downsides (e.g., misuse for criminal acts) of anonymity are apparent. More research in this field is required. On the other hand, a lack of awareness for anonymity especially in ``non-free'' jurisdiction has been observed, which would be another relevant field of research. 

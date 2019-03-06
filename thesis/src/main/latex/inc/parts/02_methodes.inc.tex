@@ -272,19 +272,19 @@ and
 
 We define the anonymity set as the set of all possible subjects within a supposed message. The anonymity of a subject towards an observing third party is a crucial factor as it relates directly to our adversary model.
 
-\subsection{$k$-Anonymity}
+\subsection{\texorpdfstring{$k$}{k}-Anonymity}
 $k$-anonymity is a term introduced in \cite{k-anonymous:ccs2003}. This work claims that entities are not responsible for an action if an observer is unable to match a specific action to less than $k$ entities.
 
 The Document distinguishes between \textit{Sender $k$-anonymity}, where the sending entity can only be narrowed down to a set of $k$ entities and \textit{Receiver $k$-anonymity}. 
 
 The size of $k$ is a crucial factor. One of the criteria is the legal requirements of a jurisdiction. Depending on the jurisdiction it usually is not possible prosecute someone if an action is not directly coupled to one person. Another criterion might be the decreasing of $k$ over time. If a Vortex account is used, we have to assume that some vortex identities go out of commission over time. If $k$ is chosen according to a legal requirement, it should be taken into account that $k$ might be decreasing over time.
 
-\subsection{$\ell$-Diversity}
+\subsection{\texorpdfstring{$\ell$}{l}-Diversity}
 In \cite{machanavajjhala2007diversity} an extended model of $k$-anonymity is introduced. In this paper, the authors emphasize that it is possible to break a $k$-anonymity set if there is additional Information available which may be merged into a data set so that a special entity can be filtered from the $k$-anonymity set. In other words, if an anonymity set is to tightly specified, additional background information might be sufficient to identify a specific entity in an anonymity set.
 
 It might be arguable that a $k$-anonymity in which a member is not implicitly $k$-anonymous still is sufficient for $k$-anonymity in its sense. However, the point made in this work is right and is taken into account. Their approach is to introduce an amount of invisible diversity into $k$-anonymous sets, so that common background knowledge is no longer sufficient to isolate a single member.
 
-\subsection{$t$-Closeness}
+\subsection{\texorpdfstring{$t$}{t}-Closeness}
 While $\ell$-diversity protects the identity of an entity, it does not prevent information gain. A subject which is in a class has the same attributes. This is where $t$-closeness\cite{li2007t} comes into play. $t$-closeness is defined as follows:
 
 \begin{quote}
@@ -698,7 +698,7 @@ It is, according to \url{https://www.torproject.org/docs/pluggable-transports}, 
 
 \cite{saleh2018shedding} is a good survey listing recent developments and attacks within the ToR project.
 
-\subsection{$I^2P$}
+\subsection{\texorpdfstring{$I^2P$}{I2P}}
 The name $I^2P$ is a derived from  ``Invisible Internet Project'' according to \href{https://geti2p.net/}{geti2p.net}. The system itself is comparable to ToR for its capabilities. Mayor differences are:
 \begin{itemize}
 	\item P2P based
@@ -730,7 +730,7 @@ Herbivore is a network protocol designed by \citeauthor{herbivore:tr} in \cite{h
 \subsection{Dissent}
 Dissent is defined in \cite{Corrigan-Gibbs:2010:DAA:1866307.1866346}. It is an anonymity network based on DC-nets. A set of servers forms these DC-nets. At least one of the servers in the used net must be trustworthy, and none may be misbehaving. A server failure results in the stall of all message delivery using this server.
 
-\subsection{$\mathcal{P}^5$}
+\subsection{\texorpdfstring{$\mathcal{P}^5$}{P5}}
 The Peer-to-Peer Personal Privacy Protocol is defined in \cite{sherwood-protocol}. It provides sender-, receiver- and sender-receiver anonymity. According to the project page of $\mathcal{P}^5$ there is only a simulator available for the protocol.
 
 The transport layer problematic has been wholly ignored. As there is no precise protocol specification but only a rough outline about the messaging and the crypto operations, $\mathcal{P}^5$ offers minimal possibilities for analysis.
@@ -1468,7 +1468,7 @@ In the following sections, we outline the handling of messages we split the hand
 A Block picked up in the blending layer is handled as shown in image \ref{fig:msgRecvProcessing}. First we try to authenticate the message. If we are able to authenticate the message we process it and add the contained instructions to a processing workspace. Unauthenticated messages may be discarded at any point.
 
 \begin{figure*}[hbt]
-	\includegraphics[width=\textwidth]{inc/flowchart_message_receiving}
+	\includegraphics[width=0.90\textwidth]{inc/flowchart_message_receiving}
 	\caption{flow diagram showing processing of incomming messages}
 	\label{fig:msgRecvProcessing}
 \end{figure*}
