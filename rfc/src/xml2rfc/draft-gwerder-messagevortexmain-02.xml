@@ -385,7 +385,7 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec]]></artwork>
                 <t>
                     <xref target="fig_message_overview"/> shows a Vortex message. The enclosed sections denote encrypted blocks. The three to four letter abbreviations denote the key required for decryption. The abbreviation k_h stands for the asymmetric host key. sk_p is the symmetric peer key. The receiving node obtains this key by decrypting MPREFIX with its host key k_h. sk_s is the symmetric sender key. When decrypting the MPREFIX block, the node obtains this key. The sender key protects the header and the routing blocks. This key guarantees that the node assembling the message does not know about upcoming identities, operations, and requests. The peer key protects the message including structure from any third party observer.
                     <figure anchor="fig_message_overview" title="Vortex message overview">
-                        <artwork align="center"
+                        <artwork align="center" type="ascii-art"
 ><![CDATA[+-+---+-+-+---+-+---+-+-+---+-+-+---+-+-------+-+
 | |   | | |   | | C | | |   | | | R | |       | |
 | |   | | |   | | P | | | H | | | O | |       | |
