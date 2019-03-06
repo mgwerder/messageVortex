@@ -10,10 +10,7 @@
 <?rfc compact="yes" ?>
 <?rfc subcompact="no" ?>
 
-<!-- FIXME be precise with the MAC identifier (e.g., sha3-512) -->
-<!-- FIXME make sure that tbale tab:protoReplyCrit of thesis is in RFC -->
-<!-- FIXME introduce chunked embedding -->
-
+<!-- verify request section to match ASN.1 -->
 <rfc category="exp" docName="draft-gwerder-messagevortexmain-01" ipr="trust200902" xml:lang="en">
     <front>
 
@@ -418,7 +415,7 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec]]></artwork>
                     An InnerMessageBlock always starts with a padding block. This padding guarantees that when using the same routing block multiple times, its binary structure is not repeated throughout the messages with the same routing block. The padding MUST be the first 16 bytes of the first four non-empty payload chunks (PayloadChunks). If a payload chunk is shorter than 16 bytes, the content of the padding SHOULD be filled with zero-valued bytes (00h) at very end up to the required number of bytes. An inner message block (InnerMessageBlock) SHOULD contain at least four payload chunks sized 16 bytes or bigger. If there are less than four payload chunks, then the padding MUST contain a random sequence of 16 bytes for the missing payload chunks. A node MUST NOT reuse random sequences.
                 </t>
                 <t>
-                    An InnerMessageBlock contains so-called forwardSecrets. This random number MUST be the same in the HeaderBlock, the RoutingBlock, and the PrefixBlock. Nodes receiving Messages containing non-matching forwardSecrets MUST discard these messages, and SHOULD NOT send an error message.
+                    An InnerMessageBlock contains so-called forwardSecrets. This random number MUST be the same in the HeaderBlock, the RoutingBlock, and the PrefixBlock. Nodes receiving Messages containing non-matching forwardSecrets MUST discard these messages, and SHOULD NOT send an error message. If a node receives too many messages with illegal forward secrets, the node SHOULD then delete this indentity. A node receiving a message with a brocken forwardSecret SHOULD treat the block as valable for reply protection. Any replay within the replay protection time MUST be discarded regardless whether the forward secret is correct or not.
                 </t>
                 <section title="Control Prefix Block">
                     <t>
@@ -601,6 +598,22 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec]]></artwork>
                         A blending layer embeds a VortexMessage in a carrier file with an offset for PLAIN blending. For replacing a file start, a node MUST use the offset 0. The routing node MUST choose the payload file for the message. A routing node SHOULD use a credible payload type (e.g., MIME type) with high entropy. It furthermore SHOULD prefix a valid header structure to avoid easy detection of the Vortex message. A routing node SHOULD use a valid footer, if any, to a payload file to improve blending.
                     </t>
                     <t>
+                    	The blended Vortex message is embedded in one or more message chunks. Each chunk starts with two variable length unsigned integers. The integer starts with the LSB. If bit 7 is set there is another byte following. There cannot be more than four bytes. the last fourth byte has always 8 bit. The three preceeding bytes have a payload of seven bits each. This results in a maximum number of 2^29 bits. The first of the extracted numbers reflects the number of bytes in the chunk after the lenght descriptors. The second reflects the number of bytes to be skipped get to the next chunk. There is no "last chunk" indicator.
+                    </t>	
+                    <t>
+                      <figure>	
+                    	<artwork type="ascii-art"
+><![CDATA[
+position:00h   02h   04h   06h   08h ... 400h  401h
+value:   01 02 03 04 05 06 07 08 09  ... 01 05 0A 0B 0C 0D 0E 0F f0 03 12 13 14               		
+
+Embedding: "(plain:1024)"
+
+Result:  0A 13 14 (+ 493 ommited bytes; then 12 bytes to next chunk)
+]]></artwork>
+                    </figure>
+                    </t>	
+                    <t>
                         A node SHOULD offer at least one PLAIN blending method for incoming Vortex messages. A node may offer multiple offsets for incoming Vortex messages.
                     </t>
                   <t>
@@ -684,7 +697,69 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec]]></artwork>
                         </list>
                     </t>
                     <t>
-                        A routing node MUST decrement the message quota by one if a received message is authenticated and contains at least one payload block. If a message is identified as duplicate according to the reply protection, a node MUST NOT decrement the message quota.
+                        A routing node MUST decrement the message quota by one if a received message is authenticated, valid and contains at least one payload block. If a message is identified as duplicate according to the reply protection, a node MUST NOT decrement the message quota.
+                    </t>
+                    <t>
+                    	Reflected in pseudo code message processing worrks as follows:
+                    	<figure>
+                    		<artwork type="pseudocode"><![CDATA[function incomming_message(VortexMessage blendedMessage) {
+  try{                    				
+	  message = unblend(blendedMessage);
+	  if( not message ) {
+    	// Abort processing
+	  	throw exception( "no embedded message found" )
+    } else {
+      header = get_header( message )
+      if( not known_identity( identity ) {
+        if( get_requests( header ) contains HeaderRequestIdentity ) {
+          create_new_identity( header ).set_temporary( true )
+          send_message( create_requirement( header )  )
+        } else {
+          // Abort processing
+          throw exception( "identity unknown" )
+        }
+      } else {
+        if( is_duplicate_or_replayed( message ) ) {
+          // Abort processing
+          throw exception "duplicate or replayed message" )
+        } else {
+          if( get_accounting( identity ).is_temporary() ) {
+            if( not verify_requirement( identity, message) ) {
+              get_accounting( identity ).set_temporary( false )
+            } 
+          }
+          if( get_accounting( header ).is_temporary() ) {
+            throw exception( "unable to process messages on temporary identity" )
+          }
+          
+          // Message authenticated
+          if( not verify_mtching_forward_secrets( message ) ) {
+            throw exception( "forward secret missmatch" )
+          }
+          if( contains_payload( message ) ) {
+            if( get_accounting( header ).decrement_message_quota() ) {
+              while index,nextPayloadBlock = get_next_payload_block( message ) {
+                add_workspace( index,nextPayloadBlock )
+              }
+              while nextRoutingBlock = get_next_routing_block( message ) {
+                add_workspace( add_routing_queue( nextRoutingBlock ) )
+              }
+              process_reserved_mapping_space( message )
+              while nextRequirement = get_next_requirement( header ) {
+                add_workspace( add_process_queue( nextRequirement ) )
+              }
+            } else {
+              throw exception( "Message quota exceeded" )
+            }  
+          }
+        }
+      }
+  } catch( exception e ) {
+    // Message processing failed
+    throw e;
+  }
+}]]></artwork>
+                    	</figure>
                     </t>
                 </section>
                 <section anchor="routing_workspace" title="Processing of Routing Blocks in Workspace">
@@ -746,6 +821,9 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec]]></artwork>
                     <t>
                         If a node accepts an identity creation request, it MUST send a reply. To accept a request without a requirement, an accepting node MUST send back a special block containing "no error". To accept a block with a requirement, an accepting node MUST send a special block containing a requirement block.
                     </t>
+                    <t>
+                    	A node SHOULD NOT reply to clear-text requests if the node wants not officially disclose its identity as Vortex node. A node MUST reply with an error block if a valid identity is used for the request.
+                    </t>	
                 </section>
                 <section anchor="routing_header_req_msg_quota" title="Request Message Quota">
                     <t>
@@ -783,16 +861,19 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec]]></artwork>
                     </t>
                 </section>
                 <section anchor="routing_header_req_cap" title="Request Capabilities">
-                    <t>
-                        Any node MAY request the capabilities of another node. The capabilities include all information necessary to create a parseable VortexMessage. Any node SHOULD reply to any encrypted HeaderRequestCapability.
-                    </t>
+                  <t>
+                    Any node MAY request the capabilities of another node. The capabilities include all information necessary to create a parseable VortexMessage. Any node SHOULD reply to any encrypted HeaderRequestCapability.
+                  </t>
+                  <t>
+                     A node SHOULD NOT reply to clear-text requests if the node wants not officially disclose its identity as Vortex node. A node MUST reply if a valid identity is used for the request. A node MAY reply to unknown identities.
+                  </t>                
                 </section>
                 <section anchor="routing_header_req_nodes" title="Request Nodes">
                     <t>
                         A node may ask another node for a list of routing node addresses and keys. This request may be used to bootstrap a new node and to add routing nodes increasing the anonymization of a node. The receiving node of such a request SHOULD reply with a requirement (e.g., RequirementPuzzleRequired).
                     </t>
                     <t>
-                        A node SHOULD reply to a HeaderRequest request (see <xref target="asn_one"/>) of a valid ephemeral identity. The reply MUST include a requirement, an error message or a "No Error" status message.
+                        A node MAY reply to a HeaderRequest request (see <xref target="asn_one"/>) of a valid ephemeral identity. The reply MUST include a requirement, an error message or a "No Error" status message. A node MUT NOT reply to an unknown identity. A node SHOULD always reply with the same result set to the same identity.
                     </t>
                 </section>
                 <section anchor="routing_header_req_identity_replace" title="Request Identity Replace">
@@ -820,7 +901,7 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec]]></artwork>
                     <t>
                         A node MAY reject a request, accept a request without a requirement, accept a request upon payment (RequirementPaymentRequired), or accept a request upon solving a proof of work puzzle (RequirementPuzzleRequired).
                     </t>
-                    <section anchor="routing_spezial_requirement_puzzle" title="Puzzle Requirement">
+                    <section anchor="routing_special_requirement_puzzle" title="Puzzle Requirement">
                         <t>
                             If a node requests a puzzle, it MUST send a RequirementPuzzleRequired block. The puzzle requirement is solved, if the node receiving the puzzle is replying with a header block containing the puzzle block and the hash of the encoded block starts with the bit sequence mentioned in the puzzle within the period specified in the field 'valid'.
                         </t>
@@ -828,7 +909,7 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec]]></artwork>
                             To solve a puzzle posed by a node a Vortex Message needs to be sent to the requesting node. This Vortex Message MUST contain a header block which includes the puzzle block and MUST have a MAC fingerprint starting with the bit sequence as specified in the challenge. A node calculates the MAC from the unencrypted DER encoded HeaderBlock with the algorithm specified by the node. To meet this requirement, a node adds a proofOfWork field to the HeaderBlock.
                         </t>
                     </section>
-                    <section anchor="routing_spezial_requirement_payment" title="Payment Requirement">
+                    <section anchor="routing_special_requirement_payment" title="Payment Requirement">
                         <t>
                             If a node requests a payment, it MUST send a RequirementPaymentRequired block. As soon as the requested fee is paid and confirmed, the requesting node MUST send a "No Error" status message. The usage period 'valid' describes the period in which the payment may be carried out. A node MUST accept the payment if carried out within the 'valid' period but confirmed later. A node SHOULD return all unsolicited payments to the sending address.
                         </t>
@@ -884,7 +965,7 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec]]></artwork>
                         </list>
                     </t>
                     <t>    
-                        The following sections describe the order of the operations in an addRedundancy operation. For a removeRedundancy operation invert the functions and order.
+                        The following sections describe the order of the operations in an addRedundancy operation. For a removeRedundancy operation invert the functions and order. If the removeRedundancy has more than the required blocks to recover the information, it should take only the required number starting from the lowest. If a seed and PRNG is provided the removeRedundancy operation MAY test any combination until recovery is successful.
                     </t>
                     <section anchor="routing_operations_redundancy_padding" title="Padding Operation">
                         <t>

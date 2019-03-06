@@ -84,9 +84,9 @@ BEGIN
   }
 
   MacAlgorithm ::= ENUMERATED {
-    sha256          (3000),
-    sha384          (3001),
-    sha512          (3002),
+    sha3-256        (3000),
+    sha3-384        (3001),
+    sha3-512        (3002),
     ripemd160       (3100),
     ripemd256       (3101),
     ripemd320       (3102)

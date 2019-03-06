@@ -584,8 +584,8 @@ len(pb_2) & \leq & len(pb_1)
 These operations build the core of the mixing operations. The operation allows to add to a message redundancy information or to rebuild a block from a chosen set of information. 
 
 The Operation itself is shown in \ref{fig:addRedundancyOperation}. 
-\begin{figure}[ht]
-	\includegraphics[width=\columnwidth]{inc/addRedundancyOp}
+\begin{figure}[ht]\centering
+	\includegraphics[width=0.8\columnwidth]{inc/addRedundancyOp}
 	\caption{Outline of the addRedundancy operation}
 	\label{fig:addRedundancyOperation}
 \end{figure}
@@ -684,7 +684,7 @@ In table \ref{tab:protoReplyCrit} we show under what circumstances a reply to a 
 		\diaghead{\theadfont Request Criteria}{Request}{Criteria} & \thead{unknown identity; cleartext} & \thead{unknown identity; encrypted} & \thead{expired identity; encrypted} & \thead{known identity; encrypted}\\\hline
 		newIdentity         & SHOULD NOT    & MAY         & Invalid (Error)     & Invalid (Error)\\              
 		queryPeer           & MUST NOT      & MUST NOT    & MAY                 & MAY\\        
-		queryCapability     & SHOULD NOT    & MAY         & MUST                & MUST \\
+		queryCapability     & SHOULD NOT    & MAY         & MAY                 & MUST \\
 		messageQuota        & MUST NOT      & MUST NOT    & MAY                 & MUST \\              
 		transferQuota       & MUST NOT      & MUST NOT    & MAY                 & MUST \\\hline             
 	\end{tabular}    
@@ -851,7 +851,7 @@ In the following sections, we emphasize on attacks targeting either sender-recip
 
 Based on the protocol we may safely assume the following key points:
 \begin{itemize}
-	\item An adversary knows and controls a significant number of nodes (for our analysis we assume less than 80\%).
+	\item An adversary knows and controls a significant number of nodes.
 	\item An adversary may observe the traffic at any point without getting any information about the message content
 	\item An adversary is not capable of matching multiple messages on different nodes to one message.
 \end{itemize}
@@ -859,7 +859,7 @@ Based on the protocol we may safely assume the following key points:
 We always assume an adversary to have more knowledge than we think he may extract from the messages.
 \begin{itemize}
 	\item We assume that an adversary knows all messages of a transaction running over his nodes and matches them correctly to the same message.
-	\item 
+	\item FIXME
 \end{itemize}
 
 We assume that the adversary is targeting the following pieces of information:
@@ -868,6 +868,7 @@ We assume that the adversary is targeting the following pieces of information:
 	\item Recipient identity
 	\item Message content
 	\item Message size
+	\item Message frequency
 \end{itemize}
 
 Attacks on the users' identity are no longer possible as the identity used on the nodes is based on ephemeral identities instead of the users' true identity. As the ephemeral identities may exist in parallel, overlapping or in a serial manner and are strictly unlinked to the true identity no statement can be made concerning the linking of ephemeral identities to the real identities. Frequency patterns or behavioral patterns may be split among multiple identities and distributed over multiple nodes. 
