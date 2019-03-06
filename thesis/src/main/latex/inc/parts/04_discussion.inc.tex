@@ -188,7 +188,7 @@ To an adversary not knowing the key, the size of the prefix block may leak the k
 To an adversary knowing the decryption key (evil routing node), the content of the header block is visible. This header block leaks all routing information for the respective node and thus the ephemeral identity. This block leaks some information of minimal value. It may leak the activity of an ephemeral identity including frequency. This activity is always matching the minimal activity of an endpoint identity. 
 
 \subsection{Attacking Anonymity through Payload Analysis}
-The payload itself does not leak any information about the message content. All content is cryptographically secured. Content may, however, leak the size of a key applied.
+The payload itself does not leak any information about the message content. All content is cryptographically secured. Content may, however, leak the block size of the applied cypher.
 
 \subsection{Attacking Anonymity through Bugging}
 Bugging is one of the most pressing problems. The protocol has been carefully crafted not to allow any bugging. The use of MIME messages in the final message, however, allows bugging of the message itself. A bugged message content may breach receiver anonymity to the sender of the message.
@@ -233,7 +233,7 @@ Similarly there are rules for adding and removing redundancy information. As the
 
 Whenever possible the reapearence of a payload block in a single encoding it should be avoided or limited to an absolute minimum as such an occurence allows linking of two ephemeral identities.
 
-\section{Reuse of Keys, IVs or Routing paterns}
+\section{Reuse of Keys, IVs or Routing patterns}
 An RBB should avoid reuse of any keys, IVs, routing patterns or PRNG seeds along its routing path of untrusted nodes. Reusing such values would allow an attacker to match ephemeral identities to a single identity. While this is a very limited risk and may be ignored in some cases, an RBB should avoid it as it may leak information to collaborating nodes.
 
 \section{Recommendations on Choosing involved Nodes}

@@ -2,6 +2,7 @@
 
 \documentclass[a4paper,appendixprefix,pdfusetitle,twocolumn,fontsize=8pt,attachdocs,final,status=final]{scrbook}
 %add attachdocs to attach all documents
+% add openany to avoid empty pages
 %\usepackage{gitinfo}
 
 % Make C&P work
@@ -11,7 +12,7 @@
 \def\title#1{\gdef\@title{#1}\gdef\thetitle{#1}}
 \makeatother
 
-%\usepackage{lipsum}
+\usepackage{scrpage2}
 
 \title{MessageVortex}
 \gdef\thesubtitle{Transport Independent Messaging Anonymous to Third Parties}
@@ -419,14 +420,15 @@
 
 % Adapt bibtex to include documents
   \makeatletter
-\@ifclasswith{scrbook}{attachdocs}{\DeclareFieldFormat{file}{\StrGobbleLeft{#1}{1}[\wtcGwM]\StrGobbleRight{\wtcGwM}{4}[\filename] \IfFileExists{\filename}{\attachfile{\filename}}{FIXME missing document link}}
+\@ifclasswith{scrbook}{attachdocs}{\DeclareFieldFormat{file}{\StrGobbleLeft{#1}{1}[\wtcGwM]\StrGobbleRight{\wtcGwM}{4}[\filename] \IfFileExists{\filename}{\textattachfile{\filename}{}}{FIXME missing document link}}
 	\renewbibmacro{finentry}{\finentry\addspace \printfield{file}}
 }{}
 \makeatother
 \renewcommand*{\bibfont}{\small}
 
 \makeatletter\@ifclasswith{scrbook}{draft}{\gdef\indexes{\listoffixmes}}{\gdef\indexes{\listoftables\listoffigures\listofrequirements}}\makeatother
-	
+
+\RequirePackage[explicit]{titlesec}
 \begin{document}%
 %
 \frontmatter%
@@ -462,6 +464,27 @@ I would like to acknowledge all the individuals who have coded for the LaTeX pro
 \tableofcontents
 \indexes
 \twocolumn
+
+\makeatletter
+\newlength\mylena
+\newlength\mylenb
+\setlength\mylena{1.3cm}
+\setlength\mylenb{\dimexpr\columnwidth-\mylena\relax}
+
+\newcommand\PlaceNumber[1]{%
+	\makebox[\mylena][l]{#1}}
+
+\titleformat{\chapter}
+{\Large\sffamily\bfseries}
+{}
+{0em}
+{\PlaceNumber{\thechapter}\parbox[t]{\mylenb}{\raggedright#1}}
+
+\titlespacing*{\chapter}{0pc}{3ex \@plus4pt \@minus3pt}{5pt}
+
+\titleclass{\chapter}{straight}%% added
+\makeatother
+
 \mainmatter
 
 \input{inc/parts/01_intro.inc.tex}
@@ -487,7 +510,7 @@ I would like to acknowledge all the individuals who have coded for the LaTeX pro
 \includepdf[pages=1,frame=true,scale=0.70,pagecommand={\chapter{The RFC draft document\label{app:rfcMessageVortexMain}}}, offset=0 -1cm]{\rfc}
 \includepdf[pages=2-,frame=true,scale=0.8,pagecommand={}, offset=0 -1cm]{\rfc}
 
-\twocolumn
+\twocolumn\clearpage
 \chapter{Short analysis on common internet protocols\label{app:transportProtocols}}
 The following sections list common internet protocols.
 
@@ -580,7 +603,7 @@ Secondly the protocol is not widely adopted within the internet domain. There ar
 \section{MMS}
 The Multimedia Messaging Service (MMS) is maintained by 3GPP (\nth{3} Generation Partnership Project). This protocol is manly a mobile protocol based on telephone networks. This protocol is just like the SMS protocol accessible through the internet by using gateways but not directly usable within the internet.
 
-\chapter{Glossary}
+\clearpage\chapter{Glossary}
 
 \begin{entry}
   \mainentry{adversary}{In this work we are referring to an adverser to any entity oposing to the privacy of a message. For a mor throughout definition refer to \ref{sec:adversary}}
@@ -768,7 +791,7 @@ The Multimedia Messaging Service (MMS) is maintained by 3GPP (\nth{3} Generation
 
 
 
-\chapter{Short Biography}
+\clearpage\chapter{Short Biography}
 \begin{wrapfigure}{R}{0.3\columnwidth}
 	\includegraphics[width=0.29\columnwidth]{inc/biography/passphoto}
 \end{wrapfigure}
