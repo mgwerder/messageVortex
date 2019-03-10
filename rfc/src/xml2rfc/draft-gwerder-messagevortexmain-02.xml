@@ -11,7 +11,7 @@
 <?rfc subcompact="no" ?>
 
 <!-- verify request section to match ASN.1 -->
-<rfc category="exp" docName="draft-gwerder-messagevortexmain-02" ipr="trust200902" xml:lang="en">
+<rfc category="exp" docName="draft-gwerder-messagevortexmain-01" ipr="trust200902" xml:lang="en">
     <front>
 
         <title>MessageVortex Protocol</title>
@@ -61,7 +61,7 @@
                 Instead of defining a transport layer, Vortex piggybacks on other transport protocols.  A blending layer embeds Vortex messages (VortexMessage) into ordinary messages of the respective transport protocol.  This layer picks up the messages, passes them to a routing layer, which applies local operations to the messages, and resends the new message chunks to the next recipients.
             </t>
             <t>
-                A processing node learns as little as possible from the message or the network utilized due to the nature of the operations processed. The �onionized� structure of the protocol makes it impossible to follow the trace of a message without having control over the processing node.
+                A processing node learns as little as possible from the message or the network utilized due to the nature of the operations processed. The 'onionized' structure of the protocol makes it impossible to follow the trace of a message without having control over the processing node.
             </t>
             <t>
                 MessageVortex is a protocol which allows sending and receiving messages by using a routing block instead of a destination address. With this approach, the sender has full control over all parameters of the message flow.
@@ -205,7 +205,7 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec]]></artwork>
                 <list style="symbols">
                   <t>If the sender of a message is not known to anyone else except the sender, then this degree is referred to as 'sender anonymity.'</t>
                   <t>If the receiver of a message is not known to anyone else except the receiver, then the degree is 'receiver anonymity.'</t>
-                  <t>If an attacker is unable to determine the content, original sender, and final receiver, then the degree is considered �third-party anonymity.�</t>
+                  <t>If an attacker is unable to determine the content, original sender, and final receiver, then the degree is considered 'hird-party anonymity.'<t>
                   <t>If a sender or a receiver may be determined as one of a set of &lt;k&gt; entities, then it is referred to as k-anonymity. (For more about this degree, see <xref target="KAnon"/>.)</t>
                 </list>
               </t>
@@ -346,7 +346,7 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec]]></artwork>
             </figure>
 
             <t>
-                Every participating node MUST implement the layer�s blending, routing, and accounting.  There MUST be at least one incoming and one outgoing transport layer available to a node. All blending layers SHOULD connect to the respective transport layers for sending and receiving packets.
+                Every participating node MUST implement the layer's blending, routing, and accounting.  There MUST be at least one incoming and one outgoing transport layer available to a node. All blending layers SHOULD connect to the respective transport layers for sending and receiving packets.
             </t>
 
             <section anchor="layer_overview_transport" title="Transport Layer">
@@ -927,7 +927,7 @@ Result:  0A 13 (+ 494 omited bytes; then skip 12 bytes to next chunk)
                 </t>
                 <section anchor="routing_operations_mapping" title="Mapping Operation">
                     <t>
-                        The straightforward mapping operation is used in inOperations of a routing block to map the routing block�s specific blocks to a permanent workspace.
+                        The straightforward mapping operation is used in inOperations of a routing block to map the routing block's specific blocks to a permanent workspace.
                     </t>
                 </section>
                 <section anchor="routing_operations_mergesplit" title="Split and Merge Operations">
@@ -1111,7 +1111,7 @@ Result:  0A 13 (+ 494 omited bytes; then skip 12 bytes to next chunk)
                 </list>
              </t>
              <t>
-                An active adversary cannot use blocks from other routing block builders. While the adversary may falsify the result by injecting an incorrect message chunk or not sending a message, such message disruptions may be detected by intentionally routing information to the routing block builder�s node. If the Vortex message does not carry the information expected, then the node may safely assume that one of the involved nodes is misbehaving. A block building node MAY calculate reputation for involved nodes over time and MAY build redundancy paths into a routing block to withstand such malicious nodes.
+                An active adversary cannot use blocks from other routing block builders. While the adversary may falsify the result by injecting an incorrect message chunk or not sending a message, such message disruptions may be detected by intentionally routing information to the routing block builder'node. If the Vortex message does not carry the information expected, then the node may safely assume that one of the involved nodes is misbehaving. A block building node MAY calculate reputation for involved nodes over time and MAY build redundancy paths into a routing block to withstand such malicious nodes.
             </t>
             <t>
                 Receiver anonymity is at risk if the handling of the message header and content is not done with care. An attacker might send a bugged message (e.g., with a DKIM or DMARC header) to deanonymize a recipient. Careful attention is required when handling anything other than local references when processing, verifying or rendering a message.
