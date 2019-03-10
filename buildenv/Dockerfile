@@ -9,6 +9,7 @@ RUN mkdir /var/tmp/messagevortex && \
                texlive-latex-base texlive-generic-recommended texlive-extra-utils texlive-latex-extra \
                texlive-bibtex-extra texlive-luatex \
                texlive-lang-german texlive-lang-english \
+               ghostscript gsfonts gsfonts-other gsfonts-x11 \
                pandoc calibre enscript \
                fig2dev \
                wget curl joe bc imagemagick rsync inkscape \
@@ -23,5 +24,8 @@ RUN cd /var/tmp/messagevortex && \
     tar -xvf /tmp/mavenfiles.tar && \
     cat /etc/maven/settings.xml|sed 's~.xsd">~.xsd"><localRepository>/var/lib/maven</localRepository>~' >/etc/maven/settings.xml.new && mv /etc/maven/settings.xml.new /etc/maven/settings.xml && \
     mkdir -p /var/lib/maven/.m2 && \
+    wget http://download.adobe.com/pub/adobe/iccprofiles/win/AdobeICCProfilesWin_end-user.zip && \
+    unzip -c AdobeICCProfilesWin_end-user.zip  "Adobe ICC Profiles (end-user)/RGB Profiles/AdobeRGB1998.icc" >$(dirname $(find /usr/share/ghostscript/*.*/lib/ -type f|head -n 1) )/AdobeRGB1998.icc && \
+    sed "s~/ICCProfile (srgb.icc)~/ICCProfile ($( dirname $(find /usr/share/ghostscript/*.*/lib/ -type f|head -n 1) )/AdobeRGB1998.icc)~" </usr/share/ghostscript/*/lib/PDFA_def.ps >/tmp/PDFA_def.ps.new && mv /tmp/PDFA_def.ps.new $( dirname $(find /usr/share/ghostscript/*.*/lib/ -type f|head -n 1) )/AdobeRGB1998.icc && \
     MAVEN_CONFIG=/var/lib/maven/ mvn dependency:go-offline dependency:resolve-plugins 
 CMD [ "/var/tmp/messagevortex/buildenv/runDockerTasks.sh" ]
