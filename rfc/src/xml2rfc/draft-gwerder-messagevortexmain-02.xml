@@ -702,50 +702,50 @@ Result:  0A 13 (+ 494 omited bytes; then skip 12 bytes to next chunk)
                     	<figure>
                     		<artwork type="pseudocode"><![CDATA[function incomming_message(VortexMessage blendedMessage) {
   try{                    				
-    message = unblend(blendedMessage);
-	if( not message ) {
+    msg = unblend( blendedMessage );
+    if( not msg ) {
       // Abort processing
       throw exception( "no embedded message found" )
     } else {
-      header = get_header( message )
-      if( not known_identity( header.identity ) {
-        if( get_requests( header ) contains HeaderRequestIdentity ) {
-          create_new_identity( header ).set_temporary( true )
-          send_message( create_requirement( header )  )
+      hdr = get_header( msg )
+      if( not known_identity( hdr.identity ) {
+        if( get_requests( hdr ) contains HeaderRequestIdentity ) {
+          create_new_identity( hdr ).set_temporary( true )
+          send_message( create_requirement( hdr )  )
         } else {
           // Abort processing
           throw exception( "identity unknown" )
         }
       } else {
-        if( is_duplicate_or_replayed( message ) ) {
+        if( is_duplicate_or_replayed( msg ) ) {
           // Abort processing
           throw exception "duplicate or replayed message" )
         } else {
-          if( get_accounting( header.identity ).is_temporary() ) {
-            if( not verify_requirement( header.identity, message ) ) {
-              get_accounting( header.identity ).set_temporary( false )
+          if( get_accounting( hdr.identity ).is_temporary() ) {
+            if( not verify_requirement( hdr.identity, msg ) ) {
+              get_accounting( hdr.identity ).set_temporary( false )
             } 
           }
-          if( get_accounting( header ).is_temporary() ) {
-            throw exception( "unable to process messages on temporary identity" )
+          if( get_accounting( hdr ).is_temporary() ) {
+            throw exception( "no processing on temporary identity" )
           }
           
           // Message authenticated
-          get_accounting( header.identity ).register_for_replay_protection( message )
-          if( not verify_mtching_forward_secrets( message ) ) {
+          get_accounting( hdr.identity ).register_for_replay_protection( msg )
+          if( not verify_mtching_forward_secrets( msg ) ) {
             throw exception( "forward secret missmatch" )
           }
-          if( contains_payload( message ) ) {
-            if( get_accounting( header.identity ).decrement_message_quota() ) {
-              while index,nextPayloadBlock = get_next_payload_block( message ) {
+          if( contains_payload( msg ) ) {
+            if( get_accounting( hdr.identity ).decrement_message_quota() ) {
+              while index,nextPayloadBlock = get_next_payload_block( msg ) {
                 add_workspace( header.identity, index, nextPayloadBlock )
               }
-              while nextRoutingBlock = get_next_routing_block( message ) {
-                add_workspace( header.identity, add_routing_queue( nextRoutingBlock ) )
+              while nextRoutingBlock = get_next_routing_block( msg ) {
+                add_workspace( hdr.identity, add_routing( nextRoutingBlock ) )
               }
-              process_reserved_mapping_space( message )
-              while nextRequirement = get_next_requirement( header ) {
-                add_workspace( header.identity, nextRequirement )
+              process_reserved_mapping_space( msg )
+              while nextRequirement = get_next_requirement( hdr ) {
+                add_workspace( hdr.identity, nextRequirement )
               }
             } else {
               throw exception( "Message quota exceeded" )
