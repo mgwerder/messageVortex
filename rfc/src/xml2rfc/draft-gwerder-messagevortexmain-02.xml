@@ -205,8 +205,8 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec]]></artwork>
                 <list style="symbols">
                   <t>If the sender of a message is not known to anyone else except the sender, then this degree is referred to as 'sender anonymity.'</t>
                   <t>If the receiver of a message is not known to anyone else except the receiver, then the degree is 'receiver anonymity.'</t>
-                  <t>If an attacker is unable to determine the content, original sender, and final receiver, then the degree is considered 'hird-party anonymity.'<t>
-                  <t>If a sender or a receiver may be determined as one of a set of &lt;k&gt; entities, then it is referred to as k-anonymity. (For more about this degree, see <xref target="KAnon"/>.)</t>
+                  <t>If an attacker is unable to determine the content, original sender, and final receiver, then the degree is considered 'third-party anonymity.'</t>
+                  <t>If a sender or a receiver may be determined as one of a set of &lt;k&gt; entities, then it is referred to as k-anonymity<xref target="KAnon"/>.</t>
                 </list>
               </t>
               <t>
