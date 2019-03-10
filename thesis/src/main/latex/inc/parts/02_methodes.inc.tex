@@ -242,7 +242,7 @@ In this chapter, we look at the various transport layer protocols. The primary g
 		SMS\footnotemark[1] & 			& 					& \\
 		MMS		 & $\times$			    & $\checkmark$		& $\times$\\\hline
 	\end{tabular}	
-	\caption{comparison of protocols in terms of the suitability criteria as transport layer}
+	\caption{comparison of protocols in terms of the suitability as transport layer}
 	\label{tab:protoSuitCrit}
 \end{table}
 
@@ -525,7 +525,7 @@ We did an evaluation of the most common cipher modes for suitability. For Messag
 		EME 	                                                    & $\times$		& $\checkmark$\footnote{Requires tweak instead of IV}& $\checkmark$				    & $\checkmark$\\              
 		\hline          
 	\end{tabular}	
-	\caption{comparison of encryption modes in terms of the suitability criteria as transport layer}
+	\caption{comparison of encryption modes in terms of the suitability}
 	\label{tab:ModeSuitCrit}
 \end{table}
 
@@ -845,9 +845,6 @@ Exactly as S/MIME PGP\cite{RFC4880} builds upon the base of MIME. Although the t
 Like S/MIME PGP does not offer anonymity. Sender and endpoints are known to all routing nodes. Depending on the version of PGP some meta information or parts of the message content such as subject line, the real name of sender and receiver, message size is leaked.
 
 A good thing to learn from PGP is that peer-based approaches are offering limited possibilities for trust. The trust in PGP is based on the peer review of users. This peer review may give an idea of how well verified the key of a user is.
-
-\subsection{XMPP}
-XMPP also known as Jabber protocol is standardized in \cite{RFC6120} and \cite{RFC6121}. It is extended in so-called XEP (XMPP extension) documents. We used in this work the extension \cite{xep0234} for file transfer. Support of this extension is however not mandatory.
 
 \begin{comment}
 \section{Proof of work}
@@ -1180,8 +1177,10 @@ Based on the findings of the previous chapter we used the following methodology 
 	\item Build a protocol prototype.
 	\item Analyse the protocol for weaknesses using attack schemes.
 	\begin{enumerate}
-		\item Tagging/Bugging attacks
-		\item Tracing attacks
+		\item Tagging/Bugging attacks.
+		\item Tracing attacks.
+		\item Content and identification targeting attacks.
+		\item DoS attacks.
 	\end{enumerate}
 \end{enumerate}
 
@@ -1305,9 +1304,9 @@ Having these criteria for choice we chose to use the following keys and key size
 	\end{itemize}
 	\item Hashing
 	\begin{itemize}
-		\item sha256
-		\item sha384
-		\item sha512
+		\item sha3-256
+		\item sha3-384
+		\item sha3-512
 		\item tiger192
 	\end{itemize}
 \end{itemize}
@@ -1315,13 +1314,13 @@ Having these criteria for choice we chose to use the following keys and key size
 Within the implementation we assigned algorithms to a security strength level:
 \begin{itemize}
 	\item LOW\\
-	      AES128, RSA1024
+	      AES128, Camellia128, RSA1024, sha3-256
 	\item MEDIUM\\
-	      AES192, RSA2048, ECC secp384r1
+	      AES192, Camellia 192, RSA2048, ECC secp384r1, sha3-256
 	\item HIGH\\
-		  RSA4096, ECC sect409k1, sha384
+		  AES256, Camellia256, RSA4096, ECC sect409k1, sha3-384
 	\item QUANTUM\\
-	      AES256, RSA8192, ECC secp521r1, sha512
+	      AES256, Camellia256, RSA8192, ECC secp521r1, ntru, sha3-512
 \end{itemize}
 
 This allows categorizing the used algorithms to a strength. This list, however, should only serve the purpose of selecting algorithms for people without cryptological know how.

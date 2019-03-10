@@ -512,7 +512,13 @@ I would like to acknowledge all the individuals who have coded for the \LaTeX pr
 
 \twocolumn\clearpage
 \chapter{Short analysis on common internet protocols\label{app:transportProtocols}}
-The following sections list common internet protocols.
+The following sections list common internet protocols. We analyze those protocols for the fitness as transport layer of message vortex. The criteria applied are listed under section \ref{sec:existingTPP}.
+
+All sections are structured the same way. We first refer to the protocol or standard and describe it in the simplest possible form. We refer to subsequent standards where required to consider extensions where sensible. We then apply the previously referenced criteria and make a concise summary of the suiting of the protocol as a transport layer. The findings of this section is listed in table \ref{tab:protoSuitCrit}. The list here does not reflect the quality or maturity of the protocols. It is a simple analysis of suiting as a transport layer.
+
+
+All sections are structured the same way. We first refer to the protocol or standard and describe it in the simplest possible form. We refer to subsequent standards where required to consider extensions where sensible. We then apply the previously referenced criteria and make a concise summary of the suiting of the protocol as a transport layer. The findings of this section is listed in table \ref{tab:protoSuitCrit}. The list here does not reflect the quality or maturity of the protocols. It is a simple analysis of suiting as a transport layer.
+ does not reflect the quality or maturity of the protocols. It is a plain analysis for suiting as a transport layer.
 
 \section{HTTP}
 The HTTP protocol allows message transfer from and to a server and is specified in RFC2616 \cite{RFC2616}. It is not suitable as a communication protocol for messages due to the lack of notifications. There are some extensions which would allow such communications (such as WebDAV), but in general, even those are not suitable as they require a continuous connection to the server in order to get notifications. Having a ``rollup'' of notifications when connecting is not there by default but could be implemented on top of it. 
@@ -581,17 +587,17 @@ It has generic routing capabilities spanning between known and unknown servers. 
 The protocol itself seems to be a strong candidate as a transport layer as it is being used actively on the internet.
 
 \section{SMTP}
-The SMTP protocol is currently specified in \cite{RFC5321}. It specifies a method to deliver reliably asynchronous mail objects thru a specific transport medium (most of the time the internet). The document splits a mail object into a mail envelope and its content. The envelope contains the routing information which is the sender (one) and the recipient (one or more) in 7-Bit ASCII. The envelope may additionally contain optional protocol extension material. \par
+The SMTP protocol is currently specified in \cite{RFC5321}. It specifies a method to deliver reliably asynchronous mail objects thru a specific transport medium (most of the time the internet). The document splits a mail object into a mail envelope and its content. The envelope contains the routing information which is the sender (one) and the recipient (one or more) in 7-Bit ASCII. The envelope may additionally contain optional protocol extension material. 
 
-The content should be in 7-Bit-ASCII (8-Bit ASCII may be requested, but this feature is not widely adopted). It is split into two parts. These parts are the header (which does contain meta-information about the message such as subject, reply address or a comprehensive list of all recipients), and the body which contains the message itself. All lines of the content must be terminated with a CRLF and must not be longer than 998 characters excluding CRLF.\par
+The content should be in 7-Bit-ASCII (8-Bit ASCII may be requested, but this feature is not widely adopted). It is split into two parts. These parts are the header (which does contain meta-information about the message such as subject, reply address or a comprehensive list of all recipients), and the body which contains the message itself. All lines of the content must be terminated with a CRLF and must not be longer than 998 characters excluding CRLF.
 
 The header consists of a collection of header fields. Each of them is built by a header name, a colon, and the data. Exact outline of the header is specified in \cite{RFC5322} and is separated with a blank line from the body. 
 
-It \cite{RFC5321} furthermore introduces a simplistic model for SMTP message-based communication. A more comprehensive model is introduced in section \nameref{sec:mailTransport}. As the proposed model is not sufficient for a comprehensive end-to-end analysis.\par
+It \cite{RFC5321} furthermore introduces a simplistic model for SMTP message-based communication. A more comprehensive model is introduced in section \nameref{sec:mailTransport}. As the proposed model is not sufficient for a comprehensive end-to-end analysis.
 
 Traditionally the message itself is mime encoded. The MIME messages are mainly specified in \cite{RFC2045} and \cite{RFC2046}. MIME allows to send messages in multiple representations (alternates), and attach additional information (such as possibly inlined images or attached documents). 
 
-SMTP is one of the most common messaging protocols on the internet (Ct1: Widely Adopted), and it would be devastating for the business of a country if for censoring reasons this protocol would be cut off. The protocol is furthermore very reliable as it has built-in support for redundancy and a throughout message design making it relatively easy to diagnose problems (Ct2: Reliable). All SMTP servers usually are capable of routing and receiving messages. Messages going over several servers are common (Ct3: Symmetrically built), so the third criteria may be considered as fulfilled as well
+SMTP is one of the most common messaging protocols on the internet (Ct1: Widely Adopted), and it would be devastating for the business of a country if for censoring reasons this protocol would be cut off. The protocol is furthermore very reliable as it has built-in support for redundancy and a throughout message design making it relatively easy to diagnose problems (Ct2: Reliable). All SMTP servers usually are capable of routing and receiving messages. Messages going over several servers are common (Ct3: Symmetrically built), so the third criteria may be considered as fulfilled as well.
 
 SMTP is considered a strong candidate as a transport layer.  
 
