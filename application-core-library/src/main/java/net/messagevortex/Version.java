@@ -22,33 +22,90 @@ package net.messagevortex;
 // * SOFTWARE.
 // ************************************************************************************
 
+import java.io.InputStream;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Version {
 
-  private static final int MAJOR = 0; //@major@
-  private static final int MINOR = 2; //@minor@
-  private static final int REVISION = 0; //@revision@
+  private static final Logger LOGGER;
+
+  static {
+    LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+  }
+
+  private static String intVersion = null;
+
+  private static int MAJOR = -1; //@major@
+  private static int MINOR = -1; //@minor@
+  private static int REVISION = -1; //@revision@
   private static final String GIT_BUILD = "$Id$";
   private static final String BUILD = GIT_BUILD.substring(5, GIT_BUILD.length() - 2);
 
-  private static final String VERSION_STRING = MAJOR + "." + MINOR + "." + REVISION;
-  private static final String BUILDVER = VERSION_STRING + " (" + BUILD + ")";
-  private static final String DATE = "$Format: %cI$";
+  private static String VERSION_STRING = null;
+  private static String BUILDVER = null;
 
   private Version() {
     super();
   }
 
   public static String getBuild() {
+    init();
     return BUILDVER;
   }
 
   public static String getVersion() {
-    return ""+MessageVortex.class.getPackage().getImplementationVersion();
-    // return VERSION_STRING;
+    init();
+    return intVersion;
   }
 
-  public static String getGitCommitDate() {
-    return DATE;
+  private static synchronized void init() {
+    if (intVersion == null) {
+      String version = null;
+
+      // load from properties first
+      try (InputStream is = Config.class.getResourceAsStream(
+                      "/META-INF/messageVortex.properties");) {
+        Properties p = new Properties();
+        if (is != null) {
+          p.load(is);
+          version = p.getProperty("application.version", "");
+        }
+      } catch (Exception e) {
+        LOGGER.log(Level.WARNING, "unable to get version number from property file", e);
+      }
+      // fallback to using package API
+      if (version == null) {
+        Package pkg = Config.class.getPackage();
+        if (pkg != null) {
+          version = pkg.getImplementationVersion();
+          if (version == null) {
+            version = pkg.getSpecificationVersion();
+          }
+        }
+      }
+
+      if (version != null) {
+        intVersion = version;
+        Pattern versionPat = Pattern.compile("^\\s*([0-9]+)\\.([0-9]+)\\.([0-9]+)\\s*$");
+        Matcher m = versionPat.matcher(intVersion);
+        if (m.matches()) {
+          MAJOR    = Integer.parseInt(m.group(1));
+          MINOR    = Integer.parseInt(m.group(2));
+          REVISION = Integer.parseInt(m.group(3));
+          VERSION_STRING = MAJOR + "." + MINOR + "." + REVISION;
+          BUILDVER = VERSION_STRING + " (" + BUILD + ")";
+        } else {
+          LOGGER.log(Level.SEVERE, "Version " + intVersion
+                  + " does not match the required regular expression");
+        }
+      } else {
+        LOGGER.log(Level.SEVERE, "unable to get version number of application");
+      }
+    }
   }
 
 }

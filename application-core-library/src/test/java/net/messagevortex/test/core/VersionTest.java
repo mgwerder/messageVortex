@@ -25,7 +25,6 @@ public class VersionTest {
     @Test
     public void testBuild() {
         System.out.println("Build is "+ Version.getBuild());
-        System.out.println("Date  is "+ Version.getGitCommitDate() );
         assertTrue("Build String ("+Version.getBuild()+") does not match regexp.",Version.getBuild().matches("[0-9]+\\.[0-9]+\\.[0-9]+ \\([0-9a-f]+\\)"));
     }
 
