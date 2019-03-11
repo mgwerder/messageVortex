@@ -25,6 +25,7 @@ package net.messagevortex.transport.smtp;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.SocketTimeoutException;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
@@ -32,6 +33,7 @@ import java.util.logging.Level;
 import net.messagevortex.Config;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.transport.ClientConnection;
+import net.messagevortex.transport.Credentials;
 import net.messagevortex.transport.SecurityContext;
 import net.messagevortex.transport.TransportReceiver;
 import org.bouncycastle.util.encoders.Base64;
@@ -49,8 +51,28 @@ public class SmtpConnection extends ClientConnection {
 
   private static volatile int id = 1;
 
+  private String cfgSection;
+
   TransportReceiver receiver = null;
   InternalConnectionHandler handler = new InternalConnectionHandler();
+  Credentials creds;
+
+  public SmtpConnection(InetSocketAddress socketAddress, SecurityContext context, Credentials creds)
+          throws IOException {
+    super(socketAddress, context);
+    init(creds);
+  }
+
+  public SmtpConnection(SocketChannel channel, SecurityContext secContext, Credentials creds) throws IOException {
+    super(channel, secContext);
+    init(creds);
+  }
+
+  private void init(Credentials creds) {
+    setProtocol("smtp");
+    this.creds=creds;
+    handler.start();
+  }
 
   private class InternalConnectionHandler extends Thread {
     public void run() {
@@ -77,12 +99,12 @@ public class SmtpConnection extends ClientConnection {
                     Base64.encode("Username:".getBytes(StandardCharsets.UTF_8)))
             );
             String username = new String(Base64.decode(readln()));
-            Config.getDefault().getStringValue("smtp_incomming_username");
+            Config.getDefault().getStringValue(cfgSection,"smtp_incomming_username");
             write("334 " + new String(
                     Base64.encode("Password:".getBytes(StandardCharsets.UTF_8))) + CRLF
             );
             String password = new String(Base64.decode(readln()));
-            Config.getDefault().getStringValue("smtp_incomming_password");
+            Config.getDefault().getStringValue(cfgSection,"smtp_incomming_password");
           } else if (command.toLowerCase().startsWith("mail from")) {
             envelopeFrom = command.substring(10).trim();
             write("250 OK" + CRLF);
@@ -140,12 +162,6 @@ public class SmtpConnection extends ClientConnection {
       }
     }
 
-  }
-
-  public SmtpConnection(SocketChannel channel, SecurityContext secContext) throws IOException {
-    super(channel, secContext);
-    setProtocol("smtp");
-    handler.start();
   }
 
   public TransportReceiver getReceiver() {

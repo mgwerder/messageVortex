@@ -32,7 +32,7 @@ import net.messagevortex.asn1.BlendingSpec;
 import net.messagevortex.asn1.IdentityStore;
 import net.messagevortex.asn1.VortexMessage;
 import net.messagevortex.asn1.encryption.DumpType;
-import net.messagevortex.transport.DummyTransportSender;
+import net.messagevortex.transport.dummy.DummyTransportSender;
 import net.messagevortex.transport.TransportReceiver;
 
 public class DummyBlender extends Blender implements TransportReceiver {

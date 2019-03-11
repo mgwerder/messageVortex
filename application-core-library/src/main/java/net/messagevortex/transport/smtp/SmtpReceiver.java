@@ -60,7 +60,7 @@ public class SmtpReceiver implements SocketListener {
   public void gotConnect(ServerConnection ac) {
     LOGGER.log(Level.INFO, "called gotConnection()");
     try {
-      SmtpConnection s = new SmtpConnection(ac.getSocketChannel(), context);
+      SmtpConnection s = new SmtpConnection(ac.getSocketChannel(), context,null);
       s.setName(listener.getName() + "-" + (id++));
       s.setReceiver(this.receiver);
     } catch (IOException ioe) {

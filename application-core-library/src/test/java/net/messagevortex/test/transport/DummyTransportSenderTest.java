@@ -1,7 +1,7 @@
 package net.messagevortex.test.transport;
 
 import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.transport.DummyTransportSender;
+import net.messagevortex.transport.dummy.DummyTransportSender;
 import net.messagevortex.transport.TransportReceiver;
 import org.junit.Test;
 import org.junit.runner.RunWith;

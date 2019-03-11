@@ -28,14 +28,26 @@ public class ByteArrayBuilder {
 
   byte[] values = new byte[0];
 
-  ByteArrayBuilder append(byte[] bytes, int length) {
+  /**
+   * Builds a byte array.
+   *
+   * @param bytes  Array to be appended
+   * @param length Number of bytes to be attached
+   * @return A reference for daisy chaining operations
+   */
+  public ByteArrayBuilder append(byte[] bytes, int length) {
     int offset = values.length;
     values = Arrays.copyOf(values, offset + length);
     System.arraycopy(bytes, 0, values, offset, length);
     return this;
   }
 
-  byte[] toBytes() {
+  /**
+   * Get the current byte array.
+   *
+   * @return The requested byte array
+   */
+  public byte[] toBytes() {
     return values;
   }
 

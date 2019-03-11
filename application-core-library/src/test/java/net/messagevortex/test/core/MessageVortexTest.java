@@ -34,8 +34,8 @@ public class MessageVortexTest {
   public static void init() {
       try {
         Config cfg=MessageVortexConfig.getDefault();
-        cfg.setNumericValue("smtp_incomming_port",588);
-        int i = cfg.getNumericValue("smtp_incomming_port");
+        cfg.setNumericValue(null,"smtp_incoming_port",588);
+        int i = cfg.getNumericValue(null,"smtp_incoming_port");
         LOGGER.log( Level.SEVERE, "Did read value "+i+"(should be 588)" );
         assertTrue( "value is unexpected ("+i+")",i==588);
       } catch( IOException ioe ) {

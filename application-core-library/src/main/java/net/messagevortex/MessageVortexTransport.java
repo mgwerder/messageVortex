@@ -40,7 +40,7 @@ public class MessageVortexTransport {
    * @param receiver      the receiver to be used
    * @throws IOException  if anything fails in setting up the local handler
    */
-  public MessageVortexTransport(TransportReceiver receiver) throws IOException {
+  public MessageVortexTransport(String section, TransportReceiver receiver) throws IOException {
     if (receiver == null) {
       throw new NullPointerException("TransportReceiver may not be null");
     }
@@ -49,10 +49,10 @@ public class MessageVortexTransport {
     assert cfg != null;
 
     // setup receiver for mail relay
-    inSmtp = new SmtpReceiver(new InetSocketAddress(cfg.getStringValue("smtp_incomming_address"),
-            cfg.getNumericValue("smtp_incomming_port")),
+    inSmtp = new SmtpReceiver(new InetSocketAddress(cfg.getStringValue(section,"smtp_incoming_address"),
+            cfg.getNumericValue(section,"smtp_incoming_port")),
             new SecurityContext(
-                    SecurityRequirement.getByName(cfg.getStringValue("smtp_incomming_address"))
+                    SecurityRequirement.getByName(cfg.getStringValue(section,"smtp_incoming_address"))
             ), receiver);
 
     // setup receiver for IMAP requests

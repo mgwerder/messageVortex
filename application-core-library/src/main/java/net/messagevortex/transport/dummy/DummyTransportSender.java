@@ -1,4 +1,4 @@
-package net.messagevortex.transport;
+package net.messagevortex.transport.dummy;
 
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
@@ -28,10 +28,22 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import net.messagevortex.transport.ByteArrayBuilder;
+import net.messagevortex.transport.RandomString;
+import net.messagevortex.transport.TransportReceiver;
+import net.messagevortex.transport.TransportSender;
+
 public class DummyTransportSender implements TransportSender {
 
   static final Map<String, TransportReceiver> endpoints = new ConcurrentHashMap<>();
 
+  /**
+   * Constructor to create a new dummy transporter.
+   *
+   * @param id            id of this endpoint
+   * @param blender       reference to the respective blending layer
+   * @throws IOException  if id does already exist
+   */
   public DummyTransportSender(String id, TransportReceiver blender) throws IOException {
     synchronized (endpoints) {
       if (endpoints.containsKey(id)) {
@@ -41,6 +53,11 @@ public class DummyTransportSender implements TransportSender {
     }
   }
 
+  /**
+   * Constructor to create an endpoint with a random id.
+   *
+   * @param blender       reference to the respective blending layer
+   */
   public DummyTransportSender(TransportReceiver blender) {
     synchronized (endpoints) {
       String id = null;
@@ -51,6 +68,13 @@ public class DummyTransportSender implements TransportSender {
     }
   }
 
+  /**
+   * send a message to another dummy endpoint.
+   *
+   * @param address        the string representation of the target address on the transport layer
+   * @param is             the input stream to be sent
+   * @throws IOException   if requested endpoint id is unknown
+   */
   public void sendMessage(final String address, InputStream is) throws IOException {
     if (address == null || endpoints.get(address) == null) {
       throw new IOException("recipient address is unknown");

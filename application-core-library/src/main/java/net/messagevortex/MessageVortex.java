@@ -69,7 +69,7 @@ public class MessageVortex {
       accounting = new MessageVortexAccounting(null);
       routing = new MessageVortexRouting(accounting.getAccountant(), null);
       blending = new MessageVortexBlending(null, routing.getRoutingSender());
-      transport = new MessageVortexTransport(blending);
+      transport = new MessageVortexTransport(null, blending);
 
       blending.setTransportReceiver(transport.getTransportReceiver());
       routing.setRoutingSender(blending.getRoutingSender());

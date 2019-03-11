@@ -39,7 +39,7 @@ public class ConfigTest {
   @Test
   public void stringConfigHandling() {
     try {
-      MessageVortexConfig.getDefault().getStringValue("stringConfigHandling");
+      MessageVortexConfig.getDefault().getStringValue(null,"stringConfigHandling");
       fail("should raise NPE but nothing happened");
     } catch (NullPointerException npe) {
       // all OK this is expected
@@ -48,7 +48,7 @@ public class ConfigTest {
     }
     
     try {
-      MessageVortexConfig.getDefault().setStringValue("StringConfigHandling", "test");
+      MessageVortexConfig.getDefault().setStringValue(null,"StringConfigHandling", "test");
       fail("should raise NPE but nothing happened");
     } catch (NullPointerException npe) {
       // all OK this is expected
@@ -59,11 +59,11 @@ public class ConfigTest {
       // String
       assertTrue("Should return true on first creation", MessageVortexConfig.getDefault().createStringConfigValue("stringConfigHandling", "def", "def"));
       assertFalse("Should return false on recreation", MessageVortexConfig.getDefault().createStringConfigValue("stringConfigHandling", "otherdef", "otherdef"));
-      assertTrue("Should return true as default value", "def".equals(MessageVortexConfig.getDefault().getStringValue("stringConfigHandling")));
-      assertTrue("Should return true as last value", "def".equals(MessageVortexConfig.getDefault().setStringValue("stringConfigHandling", "otherval")));
-      assertTrue("Should return false as last value", "otherval".equals(MessageVortexConfig.getDefault().setStringValue("stringConfigHandling", "thirdval")));
-      assertTrue("Should return false as last value", "thirdval".equals(MessageVortexConfig.getDefault().getStringValue("stringConfigHandling")));
-      assertTrue("Should return false as last value", "thirdval".equals(MessageVortexConfig.getDefault().setStringValue("stringConfigHandling", "fourthval")));
+      assertTrue("Should return true as default value", "def".equals(MessageVortexConfig.getDefault().getStringValue(null,"stringConfigHandling")));
+      assertTrue("Should return true as last value", "def".equals(MessageVortexConfig.getDefault().setStringValue(null,"stringConfigHandling", "otherval")));
+      assertTrue("Should return false as last value", "otherval".equals(MessageVortexConfig.getDefault().setStringValue(null,"stringConfigHandling", "thirdval")));
+      assertTrue("Should return false as last value", "thirdval".equals(MessageVortexConfig.getDefault().getStringValue(null,"stringConfigHandling")));
+      assertTrue("Should return false as last value", "thirdval".equals(MessageVortexConfig.getDefault().setStringValue(null,"stringConfigHandling", "fourthval")));
       
     } catch (Exception e) {
       e.printStackTrace();
@@ -71,7 +71,7 @@ public class ConfigTest {
     }
     
     try {
-      MessageVortexConfig.getDefault().setBooleanValue("stringConfigHandling", true);
+      MessageVortexConfig.getDefault().setBooleanValue(null,"stringConfigHandling", true);
       fail("should raise CCE but nothing happened");
     } catch (ClassCastException npe) {
       // all OK this is expected
@@ -80,7 +80,7 @@ public class ConfigTest {
     }
     
     try {
-      MessageVortexConfig.getDefault().getBooleanValue("stringConfigHandling");
+      MessageVortexConfig.getDefault().getBooleanValue(null,"stringConfigHandling");
       fail("should raise CCE but nothing happened");
     } catch (ClassCastException npe) {
       // all OK this is expected
@@ -89,12 +89,29 @@ public class ConfigTest {
     }
     
   }
-  
-  
+
+
+  @Test
+  public void fileHandling() {
+    try {
+      // clear all unwanted rubish
+      MessageVortexConfig.getDefault().clear();
+
+      // read config file
+      MessageVortexConfig.getDefault().load("messageVortex.cfg");
+
+      // write config file
+      MessageVortexConfig.getDefault().store("messageVortex.cfgWritten");
+    } catch (Exception e) {
+      e.printStackTrace();
+      fail("should work but an exception is raised (" + e + ")");
+    }
+  }
+
   @Test
   public void numericConfigHandling() {
     try {
-      MessageVortexConfig.getDefault().getNumericValue("numericConfigHandling");
+      MessageVortexConfig.getDefault().getNumericValue(null,"numericConfigHandling");
       fail("should raise NPE but nothing happened");
     } catch (NullPointerException npe) {
       // all OK this is expected
@@ -104,7 +121,7 @@ public class ConfigTest {
     }
     
     try {
-      MessageVortexConfig.getDefault().setNumericValue("numericConfigHandling", 5);
+      MessageVortexConfig.getDefault().setNumericValue(null,"numericConfigHandling", 5);
       fail("should raise NPE but nothing happened");
     } catch (NullPointerException npe) {
       // all OK this is expected
@@ -128,11 +145,11 @@ public class ConfigTest {
         fail("got unexpected exception while creating numeric config");
       }
       
-      assertTrue("Should return true as default value", MessageVortexConfig.getDefault().getNumericValue("numericConfigHandling") == 5);
-      assertTrue("Should return true as last value", MessageVortexConfig.getDefault().setNumericValue("numericConfigHandling", 10) == 5);
-      assertTrue("Should return false as last value", MessageVortexConfig.getDefault().setNumericValue("numericConfigHandling", 15) == 10);
-      assertTrue("Should return false as last value", MessageVortexConfig.getDefault().getNumericValue("numericConfigHandling") == 15);
-      assertTrue("Should return false as last value", MessageVortexConfig.getDefault().setNumericValue("numericConfigHandling", 20) == 15);
+      assertTrue("Should return true as default value", MessageVortexConfig.getDefault().getNumericValue(null,"numericConfigHandling") == 5);
+      assertTrue("Should return true as last value", MessageVortexConfig.getDefault().setNumericValue(null,"numericConfigHandling", 10) == 5);
+      assertTrue("Should return false as last value", MessageVortexConfig.getDefault().setNumericValue(null,"numericConfigHandling", 15) == 10);
+      assertTrue("Should return false as last value", MessageVortexConfig.getDefault().getNumericValue(null,"numericConfigHandling") == 15);
+      assertTrue("Should return false as last value", MessageVortexConfig.getDefault().setNumericValue(null,"numericConfigHandling", 20) == 15);
       
     } catch (Exception e) {
       e.printStackTrace();
@@ -140,7 +157,7 @@ public class ConfigTest {
     }
     
     try {
-      MessageVortexConfig.getDefault().setBooleanValue("numericConfigHandling", true);
+      MessageVortexConfig.getDefault().setBooleanValue(null,"numericConfigHandling", true);
       fail("should raise CCE but nothing happened");
     } catch (ClassCastException npe) {
       // all OK this is expected
@@ -149,7 +166,7 @@ public class ConfigTest {
     }
     
     try {
-      MessageVortexConfig.getDefault().getBooleanValue("numericConfigHandling");
+      MessageVortexConfig.getDefault().getBooleanValue(null,"numericConfigHandling");
       fail("should raise CCE but nothing happened");
     } catch (ClassCastException npe) {
       // all OK this is expected
@@ -162,7 +179,7 @@ public class ConfigTest {
   @Test
   public void booleanConfigHandling() {
     try {
-      MessageVortexConfig.getDefault().getBooleanValue("booleanConfigHandling");
+      MessageVortexConfig.getDefault().getBooleanValue(null,"booleanConfigHandling");
       fail("should raise NPE but nothing happened");
     } catch (NullPointerException npe) {
       // all OK this is expected
@@ -172,7 +189,7 @@ public class ConfigTest {
     }
     
     try {
-      MessageVortexConfig.getDefault().setBooleanValue("booleanConfigHandling", true);
+      MessageVortexConfig.getDefault().setBooleanValue(null,"booleanConfigHandling", true);
       fail("should raise NPE but nothing happened");
     } catch (NullPointerException npe) {
       // all OK this is expected
@@ -193,23 +210,23 @@ public class ConfigTest {
       } catch (Exception e) {
         // this exception is intended
       }
-      assertTrue("Should return true as default value", MessageVortexConfig.getDefault().getBooleanValue("booleanConfigHandling"));
-      assertTrue("Should return true as last value", MessageVortexConfig.getDefault().setBooleanValue("booleanConfigHandling", false));
-      assertFalse("Should return false as last value", MessageVortexConfig.getDefault().setBooleanValue("booleanConfigHandling", false));
-      assertFalse("Should return false as last value", MessageVortexConfig.getDefault().getBooleanValue("booleanConfigHandling"));
-      assertFalse("Should return false as last value", MessageVortexConfig.getDefault().setBooleanValue("booleanConfigHandling", true));
-      assertTrue("Should return true as last value", MessageVortexConfig.getDefault().setBooleanValue("booleanConfigHandling", true));
-      assertTrue("Should return true as last value", MessageVortexConfig.getDefault().getBooleanValue("booleanConfigHandling"));
+      assertTrue("Should return true as default value", MessageVortexConfig.getDefault().getBooleanValue(null, "booleanConfigHandling"));
+      assertTrue("Should return true as last value",    MessageVortexConfig.getDefault().setBooleanValue(null, "booleanConfigHandling", false));
+      assertFalse("Should return false as last value",  MessageVortexConfig.getDefault().setBooleanValue(null, "booleanConfigHandling", false));
+      assertFalse("Should return false as last value",  MessageVortexConfig.getDefault().getBooleanValue(null, "booleanConfigHandling"));
+      assertFalse("Should return false as last value",  MessageVortexConfig.getDefault().setBooleanValue(null, "booleanConfigHandling", true));
+      assertTrue("Should return true as last value",    MessageVortexConfig.getDefault().setBooleanValue(null, "booleanConfigHandling", true));
+      assertTrue("Should return true as last value",    MessageVortexConfig.getDefault().getBooleanValue(null, "booleanConfigHandling"));
       
       // check predefined ressources of vortexConfig
-      assertTrue("Should return null as default value", MessageVortexConfig.getDefault().getStringValue("smtp_incomming_username") == null);
+      assertTrue("Should return null as default value", MessageVortexConfig.getDefault().getStringValue(null, "smtp_outgoing_username") == null);
     } catch (Exception e) {
       e.printStackTrace();
       fail("should not raise an exception but did (" + e + ")");
     }
     
     try {
-      MessageVortexConfig.getDefault().setStringValue("booleanConfigHandling", "test");
+      MessageVortexConfig.getDefault().setStringValue(null, "booleanConfigHandling", "test");
       fail("should raise CCE but nothing happened");
     } catch (ClassCastException npe) {
       // all OK this is expected
@@ -218,7 +235,7 @@ public class ConfigTest {
     }
     
     try {
-      MessageVortexConfig.getDefault().getStringValue("booleanConfigHandling");
+      MessageVortexConfig.getDefault().getStringValue(null, "booleanConfigHandling");
       fail("should raise CCE but nothing happened");
     } catch (ClassCastException npe) {
       // all OK this is expected
