@@ -43,7 +43,8 @@ public class Version {
   }
 
   public static String getVersion() {
-    return VERSION_STRING;
+    return ""+MessageVortex.class.getPackage().getImplementationVersion();
+    // return VERSION_STRING;
   }
 
   public static String getGitCommitDate() {

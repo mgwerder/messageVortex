@@ -62,6 +62,7 @@
                     <archive>
                         <manifest>
                             <mainClass>org.messagevortex.MessageVortex</mainClass>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                         </manifest>
                     </archive>
                 </configuration>
