@@ -27,7 +27,7 @@ pipeline {
 		}
         stage ('Package all') {
             steps {
-                sh 'mvn -DskipTests deploy' 
+                sh 'mvn -DskipTests -Durl=file:///var/www/messagevortex/devel/repo -DrepositoryId=messagevortex -Dfile=messagevortex-1.0.jar deploy' 
             }
         }
 		stage('SonarQube analysis') {
