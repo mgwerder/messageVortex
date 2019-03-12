@@ -11,12 +11,12 @@ pipeline {
         }
         stage ('Build') {
             steps {
-                sh 'mvn -DskipTests install' 
+                sh 'mvn -DskipTests compile' 
             }
         }
 		stage ('Test') {
 			steps{
-				sh 'mvn surefire:test'
+				sh 'mvn test'
 			}
             post {
                 success {
@@ -25,9 +25,14 @@ pipeline {
 				}
             }
 		}
+        stage ('Package all') {
+            steps {
+                sh 'mvn -DskipTests deploy' 
+            }
+        }
 		stage('SonarQube analysis') {
 			steps {
-				withSonarQubeEnv('My SonarQube Server') {
+				withSonarQubeEnv('local sonar instance') {
 					sh "/opt/sonar-scanner/bin/sonar-scanner/bin/sonar-scanner"
 				}
 			}
