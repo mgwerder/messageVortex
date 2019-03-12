@@ -98,4 +98,6 @@ public class DummyTransportSender implements TransportSender {
     }.start();
   }
 
+  public void shutdown() {}
+
 }

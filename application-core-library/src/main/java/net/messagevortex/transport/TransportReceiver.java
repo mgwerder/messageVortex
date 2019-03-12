@@ -40,4 +40,9 @@ public interface TransportReceiver {
    */
   boolean gotMessage(InputStream is);
 
+  /**
+   * <p>Terminates all processes after current activities. Does not acccept new activities.</p>
+   */
+  void shutdown();
+
 }

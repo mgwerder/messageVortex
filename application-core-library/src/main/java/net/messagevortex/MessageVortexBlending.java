@@ -79,4 +79,7 @@ public class MessageVortexBlending implements TransportReceiver, RoutingSender {
   public boolean sendMessage(String target, MessageVortex msg) {
     return sender.sendMessage(target, msg);
   }
+
+  public void shutdown() {}
+
 }

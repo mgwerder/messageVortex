@@ -216,4 +216,5 @@ public class SmtpSender extends ClientConnection implements TransportSender {
     return replies.toArray(new String[replies.size()]);
   }
 
+  public void shutdown() {}
 }

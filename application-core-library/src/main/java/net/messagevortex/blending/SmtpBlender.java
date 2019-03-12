@@ -55,4 +55,7 @@ public class SmtpBlender extends Blender {
   public String getBlendingAddress() {
     return null;
   }
+
+  public void shutdown() {}
+
 }

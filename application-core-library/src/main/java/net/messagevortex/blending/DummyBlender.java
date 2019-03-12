@@ -104,4 +104,7 @@ public class DummyBlender extends Blender implements TransportReceiver {
       return false;
     }
   }
+
+  public void shutdown() {}
+
 }

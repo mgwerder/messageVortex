@@ -32,6 +32,7 @@ import net.messagevortex.transport.SecurityContext;
 import net.messagevortex.transport.ServerConnection;
 import net.messagevortex.transport.SocketListener;
 import net.messagevortex.transport.TransportReceiver;
+import net.messagevortex.transport.TransportSender;
 
 public class SmtpReceiver implements SocketListener {
 

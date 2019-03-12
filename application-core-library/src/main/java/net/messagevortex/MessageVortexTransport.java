@@ -27,12 +27,14 @@ import java.net.InetSocketAddress;
 import net.messagevortex.transport.SecurityContext;
 import net.messagevortex.transport.SecurityRequirement;
 import net.messagevortex.transport.TransportReceiver;
+import net.messagevortex.transport.TransportSender;
 import net.messagevortex.transport.smtp.SmtpReceiver;
 
 // FIXME this class is not yet functional
 public class MessageVortexTransport {
 
-  private SmtpReceiver inSmtp;
+  private TransportReceiver receiver = null;
+  private TransportSender   sender   = null;
 
   /***
    * <p>Creates a message vortex transport layer for local reception.</p>
@@ -46,29 +48,33 @@ public class MessageVortexTransport {
     }
 
     Config cfg = Config.getDefault();
-    assert cfg != null;
 
-    // setup receiver for mail relay
-    inSmtp = new SmtpReceiver(new InetSocketAddress(cfg.getStringValue(section,"smtp_incoming_address"),
-            cfg.getNumericValue(section,"smtp_incoming_port")),
-            new SecurityContext(
-                    SecurityRequirement.getByName(cfg.getStringValue(section,"smtp_incoming_address"))
-            ), receiver);
+    String receiverClassName = cfg.getStringValue(section, "transport_endpoint_receiver");
+    String senderClassName = cfg.getStringValue(section, "transport_endpoint_Sender");
 
-    // setup receiver for IMAP requests
+    // setup sender and receiver
     // FIXME
   }
 
   public TransportReceiver getTransportReceiver() {
-    return this.inSmtp.getTransportReceiver();
+    return this.receiver;
   }
 
   public TransportReceiver setTransportReceiver(TransportReceiver receiver) {
-    return this.inSmtp.setTransportReceiver(receiver);
+    return this.receiver=receiver;
+  }
+
+  public TransportSender getTransportSender() {
+    return this.sender;
+  }
+
+  public TransportSender setTransportSender(TransportSender sender) {
+    return this.sender=sender;
   }
 
   public void shutdown() {
-    inSmtp.shutdown();
+    receiver.shutdown();
+    sender.shutdown();
   }
 
 }

@@ -21,8 +21,8 @@ pipeline {
             post {
                 success {
         			junit 'application-core-library/target/surefire-reports/TEST-*.xml' 
-		        	jacoco classPattern: 'application-core-library/target/classes', execPattern: 'application-core-library/target/*.exec', sourcePattern: 'application-core-library/src/main/java/**/*.java,application-core-library/src/test/java/**/*.java'
-                }
+					jacoco changeBuildStatus: true, classPattern: 'application-core-library/target/classes', execPattern: 'application-core-library/target/**.exec', inclusionPattern: '**/*.class', minimumBranchCoverage: '50', minimumClassCoverage: '50', minimumComplexityCoverage: '50', minimumLineCoverage: '70', minimumMethodCoverage: '50', sourcePattern: 'application-core-library/src/main/java,application-core-library/src/test/java'                
+				}
             }
 		}
     }

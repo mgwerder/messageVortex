@@ -38,4 +38,9 @@ public interface TransportSender {
    */
   void sendMessage(String address, InputStream os) throws IOException;
 
+  /**
+   * <p>Terminates all processes after current activities. Does not acccept new activities.</p>
+   */
+  void shutdown();
+
 }

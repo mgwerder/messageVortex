@@ -2,6 +2,10 @@
 String; transport_endpoint_setup; default; A comma separated list of transport endpoints sections (senders and receivers)
 string; credential_source_setup; default; The credential source setup section to be used
 
+// generic transport classes
+String; transport_endpoint_receiver; net.messagevortex.transport.pop.Pop3Receiver; The class name of the transport receiver
+String; transport_endpoint_Sender; net.messagevortex.transport.smtp.SmtpSender; The class name of the transport sender
+
 // Incoming SMTP connection listener settings
 numeric; smtp_incoming_port              ; 587      ; The port number for incoming SMTP connects.
 String ; smtp_incoming_address           ; 127.0.0.1; The listening Address to bind the server for incoming SMTP connects.

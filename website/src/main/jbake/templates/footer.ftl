@@ -4,7 +4,7 @@
     
     <div id="footer">
       <div class="container">
-        <p class="muted credit">&copy; 2018 | <img src="https://www.gwerder.net/jenkins/buildStatus/icon?job=messageVortex&style=plastic" alt="Build badge of the MessageVortex project"/> | Contact: <a href="mailto:info+hp_NO_at_SPAM_messagevortex_dot_com" id="email1">info+hp_NO_at_SPAM_messagevortex_dot_com</a> | 
+        <p class="muted credit">&copy; 2018 | <img src="https://www.gwerder.net/jenkins/buildStatus/icon?job=messageVortex_internal%2Fmaster" alt="Build badge of the MessageVortex project"/> | Contact: <a href="mailto:info+hp_NO_at_SPAM_messagevortex_dot_com" id="email1">info+hp_NO_at_SPAM_messagevortex_dot_com</a> | 
         </p>
       </div>
     </div>
