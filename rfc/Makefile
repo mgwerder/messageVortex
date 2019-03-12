@@ -15,7 +15,7 @@ LEXTS   = .pdf .xmlflat .legacytxt
 
 .SECONDARY: $(ALLEXP)
 
-all: $(addprefix $(OUTDIR)/draft-gwerder-messagevortexmain-02,$(EXTS)) $(addprefix $(OUTDIR)/draft-gwerder-messagevortexmain-01,$(LEXTS)) $(addprefix $(OUTDIR)/draft-gwerder-messagevortexmain-00,$(LEXTS)) dirs 
+all: $(addprefix $(OUTDIR)/draft-gwerder-messagevortexmain-03,$(EXTS)) $(addprefix $(OUTDIR)/draft-gwerder-messagevortexmain-02,$(LEXTS)) $(addprefix $(OUTDIR)/draft-gwerder-messagevortexmain-01,$(LEXTS)) $(addprefix $(OUTDIR)/draft-gwerder-messagevortexmain-00,$(LEXTS)) dirs 
 
 clean:
 	@rm -r target 2>/dev/null; /bin/true
