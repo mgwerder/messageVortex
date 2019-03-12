@@ -73,8 +73,12 @@ public class MessageVortexTransport {
   }
 
   public void shutdown() {
-    receiver.shutdown();
-    sender.shutdown();
+    if (receiver != null ) {
+      receiver.shutdown();
+    }
+    if (sender != null) {
+      sender.shutdown();
+    }
   }
 
 }

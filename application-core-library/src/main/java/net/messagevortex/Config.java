@@ -25,7 +25,6 @@ package net.messagevortex;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -40,7 +39,6 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -58,38 +56,52 @@ public class Config {
   private List<String> fields   = new ArrayList<>();
 
   interface Converters {
-    String objectToString( Object o ) throws IllegalArgumentException;
-    Object stringToObject( String s ) throws IllegalArgumentException;
+
+    String objectToString(Object o) throws IllegalArgumentException;
+
+    Object stringToObject(String s) throws IllegalArgumentException;
   }
 
   private static class StringConverters implements Converters {
     @Override
-    public String objectToString(Object o) {return (String)(o);}
+    public String objectToString(Object o) {
+      return (String)(o);
+    }
 
     @Override
-    public Object stringToObject(String s) {return s;}
+    public Object stringToObject(String s) {
+      return s;
+    }
   }
 
   private static class IntegerConverters implements Converters {
     @Override
-    public String objectToString(Object o) {return ""+((Integer)(o));}
+    public String objectToString(Object o) {
+      return "" + o;
+    }
 
     @Override
-    public Object stringToObject(String s) throws NumberFormatException {return Integer.parseInt(s);}
+    public Object stringToObject(String s) throws NumberFormatException {
+      return Integer.parseInt(s);
+    }
   }
 
   private static class BooleanConverters implements Converters {
     @Override
-    public String objectToString(Object o) {return ((Boolean)(o)?"true":"false");}
+    public String objectToString(Object o) {
+      return ((Boolean)(o) ? "true" : "false");
+    }
 
     @Override
-    public Object stringToObject(String s) {return s!=null && ("true".equals(s.toLowerCase()) || "yes".equals(s.toLowerCase()));}
+    public Object stringToObject(String s) {
+      return s != null && ("true".equals(s.toLowerCase()) || "yes".equals(s.toLowerCase()));
+    }
   }
 
   private enum ConfigSource {
     DEFAULT_VALUE,
     DEFAULT_SECTION,
-    SECTION;
+    SECTION
   }
 
   private enum ConfigType {
@@ -106,13 +118,15 @@ public class Config {
       return null;
     }
 
-    private Converters c;
+    private Converters converters;
 
-    ConfigType(Converters c) {
-      this.c=c;
+    ConfigType(Converters converters) {
+      this.converters = converters;
     }
 
-    public Converters getConverters() {return c;}
+    public Converters getConverters() {
+      return converters;
+    }
 
   }
 
@@ -145,7 +159,7 @@ public class Config {
       ConfigElement ret = new ConfigElement(id, type, description);
       ret.defaultValue = defaultValue;
       // make deep copy of hashmap
-      ret.currentValue = new HashMap();
+      ret.currentValue = new HashMap<>();
       for (Map.Entry<String,String> e : currentValue.entrySet()) {
         ret.currentValue.put(e.getKey(), e.getValue());
       }
@@ -186,13 +200,13 @@ public class Config {
       if (section == null) {
         section = DEFAULT;
       }
-      if(!sections.contains(section) && ! DEFAULT.toString().equals(section)) {
+      if (!sections.contains(section) && ! DEFAULT.equals(section)) {
         sections.add(section);
       }
 
       String ret = getValue(section);
 
-      if (value == null) {
+      if (ret == null) {
         LOGGER.log(Level.FINE, "value for " + id + " is set to " + value);
       } else {
         LOGGER.log(Level.FINE, "value for " + id + " is modified to " + value);
@@ -366,7 +380,7 @@ public class Config {
   }
 
   static Config defaultConfig = null;
-  private final Map<String, ConfigElement> configurationData = new ConcurrentHashMap<>();
+  private final Map<String, ConfigElement> configData = new ConcurrentHashMap<>();
 
   public static Config getDefault() throws IOException {
     return createConfig(null);
@@ -379,10 +393,10 @@ public class Config {
    */
   public Config copy() throws IOException {
     Config dst = new Config();
-    synchronized (configurationData) {
-      Set<Map.Entry<String, ConfigElement>> it = configurationData.entrySet();
+    synchronized (configData) {
+      Set<Map.Entry<String, ConfigElement>> it = configData.entrySet();
       for (Map.Entry<String, ConfigElement> p : it) {
-        dst.configurationData.put(p.getKey(), p.getValue().copy());
+        dst.configData.put(p.getKey(), p.getValue().copy());
       }
     }
     return dst;
@@ -392,27 +406,28 @@ public class Config {
    * <p>Reverts config store to all default values.</p>
    */
   public void clear() {
-    synchronized (configurationData) {
-      Set<Map.Entry<String, ConfigElement>> it = configurationData.entrySet();
+    synchronized (configData) {
+      Set<Map.Entry<String, ConfigElement>> it = configData.entrySet();
       for (Map.Entry<String, ConfigElement> p : it) {
         p.getValue().unset(null);
       }
     }
   }
 
-  public String setValue(String section, String id, String value) throws IOException {
-    ConfigElement c = configurationData.get(id.toLowerCase());
+  private String setValue(String section, String id, String value) throws IOException {
+    ConfigElement c = configData.get(id.toLowerCase());
     if (c == null) {
-      throw new IOException("unknown key \""+id+"\" when setting value");
+      throw new IOException("unknown key \"" + id + "\" when setting value");
     }
     String ret = c.getValue(section);
 
     if (c.getType() == ConfigType.NUMERIC) {
       setNumericValue(section,id,Integer.parseInt(value));
     } else if (c.getType() == ConfigType.BOOLEAN) {
-      setBooleanValue(section,id,value != null && ("yes".equals(value.toLowerCase()) || "true".equals(value.toLowerCase())));
+      setBooleanValue(section, id, value != null
+              && ("yes".equals(value.toLowerCase()) || "true".equals(value.toLowerCase())));
     } else if (c.getType() == ConfigType.STRING) {
-      setStringValue(section,id,value);
+      setStringValue(section, id, value);
     } else {
       throw new NotImplementedException();
     }
@@ -427,10 +442,10 @@ public class Config {
    * @param dval         the default value
    */
   public void createBooleanConfigValue(String id, String description, boolean dval) {
-    synchronized (configurationData) {
-      if (configurationData.get(id.toLowerCase()) == null) {
+    synchronized (configData) {
+      if (configData.get(id.toLowerCase()) == null) {
         ConfigElement ele = new ConfigElement(id, "boolean", description);
-        configurationData.put(id.toLowerCase(), ele);
+        configData.put(id.toLowerCase(), ele);
         ele.setDefaultValue(dval ? "true" : "false");
         LOGGER.log(Level.FINE, "Created boolean config variable " + id.toLowerCase());
         this.fields.add(id);
@@ -442,8 +457,7 @@ public class Config {
 
   private static synchronized Config createConfig(String res) throws IOException {
     if (defaultConfig == null) {
-      Config cfg = new Config(res);
-      defaultConfig = cfg;
+      defaultConfig = new Config(res);;
     }
     return defaultConfig;
   }
@@ -455,11 +469,11 @@ public class Config {
    * @param value Vlue to be set in key
    * @return old value before setting to new value
    *
-   * @throws NullPointerException if key does not exist in configurationData
+   * @throws NullPointerException if key does not exist in configData
    * @throws ClassCastException if key is not of type boolean
    */
   public boolean setBooleanValue(String section, String id, boolean value) {
-    ConfigElement ele = configurationData.get(id.toLowerCase());
+    ConfigElement ele = configData.get(id.toLowerCase());
     if (ele == null) {
       throw new NullPointerException("id " + id + " is not known to the config subsystem");
     }
@@ -476,11 +490,11 @@ public class Config {
    *
    * @param id          key which should be set
    * @return current value of the specified key
-   * @throws NullPointerException if key does not exist in configurationData
+   * @throws NullPointerException if key does not exist in configData
    * @throws ClassCastException if key is not of type boolean
    */
   public boolean getBooleanValue(String section, String id) {
-    ConfigElement ele = configurationData.get(id.toLowerCase());
+    ConfigElement ele = configData.get(id.toLowerCase());
     if (ele == null) {
       throw new NullPointerException("id " + id + " is not known to the config subsystem");
     }
@@ -500,10 +514,10 @@ public class Config {
    * @param dval         the default value
    */
   public void createNumericConfigValue(String id, String description, int dval) {
-    synchronized (configurationData) {
-      if (configurationData.get(id.toLowerCase()) == null) {
+    synchronized (configData) {
+      if (configData.get(id.toLowerCase()) == null) {
         ConfigElement ele = new ConfigElement(id, "numeric", description,"" + dval);
-        configurationData.put(id.toLowerCase(), ele);
+        configData.put(id.toLowerCase(), ele);
         LOGGER.log(Level.INFO,
                 "Created numeric config variable " + id.toLowerCase() + "[numeric]=" + dval
         );
@@ -521,11 +535,11 @@ public class Config {
    * @param id key which should be set
    * @param value Value to be set in key
    * @return old value before setting to new value
-   * @throws NullPointerException if key does not exist in configurationData
+   * @throws NullPointerException if key does not exist in configData
    * @throws ClassCastException if key is not of type boolean
    */
   public int setNumericValue(String section, String id, int value) throws IOException {
-    ConfigElement ele = configurationData.get(id.toLowerCase());
+    ConfigElement ele = configData.get(id.toLowerCase());
     if (ele == null) {
       throw new NullPointerException("id " + id + " is not known to the config subsystem");
     }
@@ -543,11 +557,11 @@ public class Config {
    * @param section section from which the value should be taken. null defaults to default section
    * @param id          key which should be set
    * @return current value of the specified key
-   * @throws NullPointerException if key does not exist in configurationData
+   * @throws NullPointerException if key does not exist in configData
    * @throws ClassCastException if key is not of type boolean
    */
   public int getNumericValue(String section, String id) throws IOException {
-    ConfigElement ele = configurationData.get(id.toLowerCase());
+    ConfigElement ele = configData.get(id.toLowerCase());
     if (ele == null) {
       throw new NullPointerException("id " + id + " is not known to the config subsystem");
     }
@@ -572,10 +586,10 @@ public class Config {
    * @return True if item did not exist and was successfully created
    */
   public boolean createStringConfigValue(String id, String description, String dval) {
-    synchronized (configurationData) {
-      if (configurationData.get(id.toLowerCase()) == null) {
+    synchronized (configData) {
+      if (configData.get(id.toLowerCase()) == null) {
         ConfigElement ele = new ConfigElement(id, "STRING", description);
-        configurationData.put(id.toLowerCase(), ele);
+        configData.put(id.toLowerCase(), ele);
         ele.setDefaultValue(dval);
         LOGGER.log(Level.INFO, "Created String config variable " + id.toLowerCase());
         this.fields.add(id);
@@ -589,12 +603,12 @@ public class Config {
   /***
    * <p>Set a String value to a config parameter.</p>
    *
-   * @param section section from which the value should be taken. null defaults to default section
+   * @param section               section from which the value should be taken. null defaults to default section
    * @throws NullPointerException when id is unknown or value is null
    * @throws ClassCastException   when id is not a String setting
    */
   public String setStringValue(String section, String id, String value) {
-    ConfigElement ele = configurationData.get(id.toLowerCase());
+    ConfigElement ele = configData.get(id.toLowerCase());
     if (ele == null || value == null) {
       throw new NullPointerException("unable to get id " + id + " from config subsystem");
     }
@@ -609,13 +623,13 @@ public class Config {
   /***
    * <p>Sets the value of a string type.</p>
    *
-   * @param id    the id of the value to be retrieved
+   * @param id                    the id of the value to be retrieved
    *
    * @throws NullPointerException when id is unknown
    * @throws ClassCastException   when id is not a String setting
    */
   public String getStringValue(String section, String id) {
-    ConfigElement ele = configurationData.get(id.toLowerCase());
+    ConfigElement ele = configData.get(id.toLowerCase());
     if (ele == null) {
       throw new NullPointerException(
               "unable to get id " + id + " from config subsystem (unknown element)"
@@ -630,7 +644,7 @@ public class Config {
   }
 
   public Map<String,ConfigElement> getMap() {
-    return configurationData;
+    return configData;
   }
 
   /***
@@ -661,13 +675,11 @@ public class Config {
           Matcher m = sectionPat.matcher(line);
 
           if (m.matches()) {
-
             // set current section
-            section = m.group(1).trim();
-            LOGGER.log(Level.INFO, "parsing section ["+section+"]");
+            section=m.group(1);
+            LOGGER.log(Level.INFO, "parsing section [" + section + "]");
 
           } else if (section != null) {
-
             //parse KV pair
             m = keyValuePat.matcher(line);
             if (m.matches()) {
@@ -675,7 +687,7 @@ public class Config {
               String value = m.group(2).trim();
 
               // add value to store
-              setValue(section,key,value);
+              setValue(section, key, value);
             }
           }
         }
@@ -702,15 +714,21 @@ public class Config {
       dumpSection(null,bw,true);
 
       // Dump all other sections
-      for(String section:sections) {
-        bw.write(System.lineSeparator()+"["+section+"]" + System.lineSeparator());
-        dumpSection(section, bw,false);
+      for (String section:sections) {
+        bw.write(System.lineSeparator() + "[" + section + "]" + System.lineSeparator());
+        dumpSection(section, bw, false);
       }
     }
   }
 
+  /**
+   * <p>Get the descriptive text of the named configuration item.</p>
+   *
+   * @param id identification of the configuration item
+   * @return   the configuration item description
+   */
   public String getDescription(String id) {
-    ConfigElement c=configurationData.get(id.toLowerCase());
+    ConfigElement c = configData.get(id.toLowerCase());
     if (c == null) {
       return null;
     } else {
@@ -719,7 +737,7 @@ public class Config {
   }
 
   private String getValue(String section, String id) {
-    ConfigElement c=configurationData.get(id.toLowerCase());
+    ConfigElement c = configData.get(id.toLowerCase());
     if (c == null) {
       return null;
     } else {
@@ -727,8 +745,14 @@ public class Config {
     }
   }
 
+  /**
+   * <p>Gets the default value of the named configuration item.</p>
+   *
+   * @param id identification of the configuration item
+   * @return   the configuration items' default value
+   */
   public String getDefaultValue(String id) {
-    ConfigElement c=configurationData.get(id.toLowerCase());
+    ConfigElement c = configData.get(id.toLowerCase());
     if (c == null) {
       return null;
     } else {
@@ -737,17 +761,20 @@ public class Config {
   }
 
   private void dumpSection(String section, Writer w,boolean withComments) throws IOException {
-    for(String field:fields) {
+    for (String field:fields) {
       if (withComments) {
-        w.write("// ********************************************************************************" + System.lineSeparator());
+        w.write("// ******************************************************************************"
+                + System.lineSeparator());
         w.write("// name: " + field + System.lineSeparator());
-        w.write("// ********************************************************************************" + System.lineSeparator());
-        w.write(wrap("// ", getDescription(field), 77)+ System.lineSeparator());
-        w.write("// ********************************************************************************" + System.lineSeparator());
+        w.write("// ******************************************************************************"
+                + System.lineSeparator());
+        w.write(wrap("// ", getDescription(field), 77) + System.lineSeparator());
+        w.write("// ******************************************************************************"
+                + System.lineSeparator());
         w.write("// default: " + getDefaultValue(field) + System.lineSeparator());
       }
-      if (configurationData.get(field.toLowerCase()).getValueSource(section) == ConfigSource.SECTION) {
-        w.write(field+" = "+getValue(section, field)+ System.lineSeparator() );
+      if (configData.get(field.toLowerCase()).getValueSource(section) == ConfigSource.SECTION) {
+        w.write(field + " = " + getValue(section, field) + System.lineSeparator());
       }
       if (withComments) {
         w.write(System.lineSeparator());
@@ -755,7 +782,7 @@ public class Config {
     }
   }
 
-  public static String wrap(String prefix, String string, int lineLength) {
+  private static String wrap(String prefix, String string, int lineLength) {
     StringBuilder b = new StringBuilder();
     for (String line : string.split(Pattern.quote(System.lineSeparator()))) {
       b.append(wrapLine(prefix, line, lineLength));
@@ -764,8 +791,12 @@ public class Config {
   }
 
   private static String wrapLine(String prefix, String line, int lineLength) {
-    if (line.length() == 0) return "";
-    if (line.length() <= lineLength) return prefix + line;
+    if (line.length() == 0) {
+      return "";
+    }
+    if (line.length() <= lineLength) {
+      return prefix + line;
+    }
     String[] words = line.split(" ");
     StringBuilder allLines = new StringBuilder();
     StringBuilder trimmedLine = new StringBuilder().append(prefix);
