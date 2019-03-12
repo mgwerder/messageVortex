@@ -78,6 +78,8 @@
                     <archive>
                         <manifest>
                             <mainClass>net.messagevortex.MessageVortex</mainClass>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
                         </manifest>
                     </archive>
                 </configuration>
