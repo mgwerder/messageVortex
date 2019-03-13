@@ -30,14 +30,15 @@ pipeline {
     stage ('Package all') {
       steps {
         sh 'mkdir /var/www/messagevortex/devel/repo || /bin/true'
-        sh 'mvn -DskipTests -DaltDeploymentrepository=messagevortex::::file:///var/www/messagevortex/devel/repo -Dfile=messagevortex-1.0.jar deploy'
+        sh 'mvn -DskipTests package'
       }
     }
     stage('SonarQube analysis') {
       steps {
-        withSonarQubeEnv('local sonar instance') {
+        /* withSonarQubeEnv('local sonar instance') {
           sh "/opt/sonar-scanner/bin/sonar-scanner/bin/sonar-scanner"
-        }
+        }*/
+        sh '/bin/true'
       }
     }
   }
