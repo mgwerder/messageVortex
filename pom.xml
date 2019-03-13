@@ -27,22 +27,21 @@
         <module>thesis</module>
         <module>website</module>
     </modules>
-    
-    <pluginManagement>
-      <plugin>
-        <groupId>org.jacoco</groupId>
-        <artifactId>jacoco-maven-plugin</artifactId>
-        <version>${jacoco.version}</version>
-      </plugin>
-      <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>${junit.version}</version>
-        <scope>test</scope>
-      </dependency>
-    </pluginManagement>
 
     <build>
+      <pluginManagement>
+        <plugin>
+          <groupId>org.jacoco</groupId>
+          <artifactId>jacoco-maven-plugin</artifactId>
+          <version>${jacoco.version}</version>
+        </plugin>
+        <dependency>
+          <groupId>junit</groupId>
+          <artifactId>junit</artifactId>
+          <version>${junit.version}</version>
+          <scope>test</scope>
+        </dependency>
+      </pluginManagement>
       <plugins>
         <plugin>
           <artifactId>maven-resources-plugin</artifactId>
