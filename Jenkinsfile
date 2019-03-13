@@ -8,6 +8,7 @@ pipeline {
     stage ('Initialize') {
       steps {
         git credentialsId: 'github_readonly', url: 'ssh://git@github.com/mgwerder/messageVortex_internal'
+        sh 'mvn clean' 
       }
     }
     stage ('Build') {
@@ -17,7 +18,7 @@ pipeline {
     }
     stage ('Test') {
       steps{
-        sh 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
+        sh 'mvn -pl application-core-library jacoco:prepare-agent package jacoco:report'
       }
       post {
         success {
