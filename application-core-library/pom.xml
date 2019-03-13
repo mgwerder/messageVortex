@@ -12,7 +12,7 @@
     <properties>
         <jdk.version>1.8</jdk.version>
         <junit.version>4.12</junit.version>
-        <jacoco.version>0.8.2</jacoco.version>
+        <jacoco.version>0.8.3</jacoco.version>
         <surefire.version>2.22.0</surefire.version>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

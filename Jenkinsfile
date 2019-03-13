@@ -17,17 +17,20 @@ pipeline {
     }
     stage ('Test') {
       steps{
-        sh 'mvn jacoco:prepare-agent test jacoco:report'
+        sh 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
       }
       post {
         success {
-          junit 'application-core-library/target/surefire-reports/TEST-*.xml' 
+          junit 'application-core-library/target/surefire-reports/TEST-*.xml'
+          jacoco changeBuildStatus: true, classPattern: 'application-core-library/target/classes', execPattern: 'application-core-library/target/**.exec', inclusionPattern: '**/*.class', minimumBranchCoverage: '50', minimumClassCoverage: '50', minimumComplexityCoverage: '50', minimumLineCoverage: '70', minimumMethodCoverage: '50', sourcePattern: 'application-core-library/src/main/java,application-core-library/src/test/java'
+
         }
       }
     }
     stage ('Package all') {
       steps {
-        sh 'mvn -DskipTests -Durl=file:///var/www/messagevortex/devel/repo -DrepositoryId=messagevortex -Dfile=messagevortex-1.0.jar deploy' 
+        sh 'mkdir /var/www/messagevortex/devel/repo || /bin/true'
+        sh 'mvn -DskipTests -DaltDeploymentrepository=messagevortex::::file:///var/www/messagevortex/devel/repo -Dfile=messagevortex-1.0.jar deploy'
       }
     }
     stage('SonarQube analysis') {
@@ -40,8 +43,11 @@ pipeline {
   }
   post {
     always {
-      archiveArtifacts artifacts: 'application-core-library/target/*.jar,thesis/target/main/latex/**/*.pdf', fingerprint: true
+    }
+    success {
       publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'application-core-library/target/surefire-reports', reportFiles: 'index.html', reportName: 'MessageVortex Report', reportTitles: 'MessageVortex'])
+      archiveArtifacts artifacts: 'application-core-library/target/*.jar,thesis/target/main/latex/**/*.pdf', fingerprint: true
+
     }
   }
 }
