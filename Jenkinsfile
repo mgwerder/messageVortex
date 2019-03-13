@@ -18,7 +18,7 @@ pipeline {
     }
     stage ('Test') {
       steps{
-        sh 'mvn -pl application-core-library jacoco:prepare-agent maven:test jacoco:report'
+        sh 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
       }
       post {
         success {
