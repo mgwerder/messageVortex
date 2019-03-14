@@ -7,7 +7,7 @@ MKFILEP := $(abspath $(lastword $(MAKEFILE_LIST)))
 
 .PHONY: all clean dirs
 
-all: $(OUTDIR)/messageVortex.pdf dirs
+all: $(OUTDIR)/messageVortex.pdf $(OUTDIR)/messageVortex_attachdocs.pdf $(OUTDIR)/messageVortex.pdfa dirs
 
 clean:
 	@rm -r target 2>/dev/null; /bin/true
@@ -25,9 +25,20 @@ $(INTERDIR)/messageVortex.pdf: $(SRCDIR)/messageVortex.tex $(SRCDIR)/messageVort
 	(cd $(INTERDIR)/; makeindex messageVortex )
 	(cd $(SRCDIR); TEXINPUTS=../../../$(INTERDIR):$${TEXINPUTS} pdflatex -output-directory=../../../$(INTERDIR) messageVortex.tex )
 	(cd $(SRCDIR); TEXINPUTS=../../../$(INTERDIR):$${TEXINPUTS} pdflatex -output-directory=../../../$(INTERDIR) messageVortex.tex )
+
+$(INTERDIR)/messageVortex_attachdocs.pdf: $(SRCDIR)/messageVortex.tex $(SRCDIR)/messageVortex.bib $(INTERDIR)/messageVortex.pdf
+	(cd $(SRCDIR); TEXINPUTS=.:../../../$(INTERDIR):$${TEXINPUTS} pdflatex -output-directory=../../../$(INTERDIR) -jobname=messageVortex_attachdocs "\PassOptionsToClass{attachdocs}{scrbook}\input{messageVortex.tex}")
+	(cd $(INTERDIR)/; bibtex messageVortex )
+	(cd $(INTERDIR)/; makeindex messageVortex )
+	(cd $(SRCDIR); TEXINPUTS=.:../../../$(INTERDIR):$${TEXINPUTS} pdflatex -output-directory=../../../$(INTERDIR) -jobname=messageVortex_attachdocs "\PassOptionsToClass{attachdocs}{scrbook}\input{messageVortex.tex}")
+	(cd $(SRCDIR); TEXINPUTS=.:../../../$(INTERDIR):$${TEXINPUTS} pdflatex -output-directory=../../../$(INTERDIR) -jobname=messageVortex_attachdocs "\PassOptionsToClass{attachdocs}{scrbook}\input{messageVortex.tex}")
         
 $(OUTDIR)/%.pdf: $(INTERDIR)/%.pdf
 	cp $< $@
+
+
+%.pdfa: %.pdf
+	gs -dPDFA -dBATCH -dNOPAUSE -sProcessColorModel=DeviceRGB -sDEVICE=pdfwrite -sPDFACompatibilityPolicy=1 -sOutputFile=$@ $<
 
 
 
