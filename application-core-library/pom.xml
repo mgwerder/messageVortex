@@ -18,6 +18,34 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <argLine>-ea</argLine>
+
+        <!-- sonar properties -->
+        <sonar.working.directory>target/sonar</sonar.working.directory>
+        <sonar.projectKey>net.gwerder.java:mailvortex</sonar.projectKey>
+        <sonar.projectName>MessageVortex</sonar.projectName>
+        <sonar.projectVersion>${project.version}</sonar.projectVersion>
+        <sonar.language>java</sonar.language>
+        <sonar.sources>src/main/java,application-core-library/src/test/java</sonar.sources>
+        <sonar.inclusions>**/*.java</sonar.inclusions>
+        <sonar.exclusions>src/test/java/**/*.java</sonar.exclusions>
+        <sonar.java.source>${jdk.version}</sonar.java.source>
+        <sonar.java.binaries>target/classes</sonar.java.binaries>
+        <sonar.jacoco.reportMissing.force.zero>true</sonar.jacoco.reportMissing.force.zero>
+        <sonar.jacoco.reportPaths>target/jacoco.exec</sonar.jacoco.reportPaths>
+        <sonar.junit.reportsPaths>target/surefire-reports</sonar.junit.reportsPaths>
+        <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+        <sonar.surefire.reportsPath>target/surefire-reports</sonar.surefire.reportsPath>
+        <sonar.tests>src/test/java</sonar.tests>
+        <sonar.doxygen.generateDocumentation>enable</sonar.doxygen.generateDocumentation>
+        <sonar.doxygen.generateClassGraphs>true</sonar.doxygen.generateClassGraphs>
+        <sonar.doxygen.generateCallerGraphs>true</sonar.doxygen.generateCallerGraphs>
+        <sonar.doxygen.generateCallGraphs>true</sonar.doxygen.generateCallGraphs>
+        <sonar.java.libraries>target/lib/*.jar</sonar.java.libraries>
+        <sonar.technicalDebt.developmentCost>5</sonar.technicalDebt.developmentCost>
+        <sonar.issues.defaultAssigneeLogin>mgwerder</sonar.issues.defaultAssigneeLogin>
+        <sonar.scm.disabled>true</sonar.scm.disabled>
+        <sonar.verbose>true</sonar.verbose>
+
     </properties>
 
     <dependencies>
@@ -42,6 +70,15 @@
                 <filtering>true</filtering>
             </resource>
         </resources>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.sonarsource.scanner.maven</groupId>
+                    <artifactId>sonar-maven-plugin</artifactId>
+                    <version>3.6.0.1398</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -124,17 +161,17 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>3.0.1</version>
-                    <configuration>
-                       	<failOnError>false</failOnError>
-                       	<failOnWarnings>false</failOnWarnings>
-                    </configuration>
+                <configuration>
+                    <failOnError>false</failOnError>
+                    <failOnWarnings>false</failOnWarnings>
+                </configuration>
                 <executions>
-                     <execution>
-                         <id>attach-javadoc</id>
-                         <goals>
-                             <goal>jar</goal>
-                         </goals>
-                     </execution>
+                    <execution>
+                        <id>attach-javadoc</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
                 </executions>
             </plugin>
         </plugins>

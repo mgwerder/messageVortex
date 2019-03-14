@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d11f21f3-1155-4924-86d1-bc99f93f8cdb" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../Jenkinsfile" beforeDir="false" afterPath="$PROJECT_DIR$/../Jenkinsfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/mavenProjectSettings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../pom.xml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -52,16 +55,16 @@
           <entry key="cfgRessources" value="2" />
           <entry key="cfgWritten" value="1" />
           <entry key="java" value="28" />
-          <entry key="properties" value="2" />
-          <entry key="xml" value="3" />
+          <entry key="properties" value="3" />
+          <entry key="xml" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="JAVA" value="28" />
           <entry key="PLAIN_TEXT" value="8" />
-          <entry key="Properties" value="2" />
-          <entry key="XML" value="3" />
+          <entry key="Properties" value="3" />
+          <entry key="XML" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
@@ -73,7 +76,7 @@
           <entry key="java" value="5736" />
           <entry key="properties" value="15" />
           <entry key="txt" value="17" />
-          <entry key="xml" value="139" />
+          <entry key="xml" value="501" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
@@ -82,7 +85,7 @@
           <entry key="Jenkins file" value="98" />
           <entry key="PLAIN_TEXT" value="1857" />
           <entry key="Properties" value="15" />
-          <entry key="XML" value="139" />
+          <entry key="XML" value="501" />
         </counts>
       </usages-collector>
     </session>
@@ -90,19 +93,28 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pom.xml">
+        <entry file="file://$PROJECT_DIR$/../pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="159">
-              <caret line="70" column="27" selection-start-line="70" selection-start-column="27" selection-end-line="70" selection-end-column="27" />
+            <state relative-caret-position="204">
+              <caret line="21" column="17" lean-forward="true" selection-start-line="21" selection-start-column="17" selection-end-line="21" selection-end-column="17" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/../Jenkinsfile">
+        <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="625">
-              <caret line="38" selection-start-line="38" selection-end-line="38" />
+            <state relative-caret-position="446">
+              <caret line="40" column="85" lean-forward="true" selection-start-line="40" selection-start-column="85" selection-end-line="40" selection-end-column="85" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../sonar.properties">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="340">
+              <caret line="20" column="20" selection-end-line="26" />
             </state>
           </provider>
         </entry>
@@ -169,9 +181,10 @@
         <option value="$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/VersionTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/Version.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/CustomKeyManager.java" />
-        <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/SmtpSender.java" />
         <option value="$PROJECT_DIR$/../Jenkinsfile" />
+        <option value="$PROJECT_DIR$/../pom.xml" />
+        <option value="$PROJECT_DIR$/pom.xml" />
       </list>
     </option>
   </component>
@@ -234,6 +247,17 @@
               <item name="application-core-library" type="b2602c69:ProjectViewProjectNode" />
               <item name="application-core-library" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="application-core-library" type="b2602c69:ProjectViewProjectNode" />
+              <item name="application-core-library" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="application-core-library" type="b2602c69:ProjectViewProjectNode" />
+              <item name="application-core-library" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -245,14 +269,14 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1552330150526" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/test/java/net/messagevortex/test" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1552564048467" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../sonar.properties" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="reference.settings.project.maven.testRunning" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -381,9 +405,6 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="VersionTest - 2019.03.11 at 19h 47m 20s.xml">
-      <configuration name="VersionTest" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="All_Tests - 2019.03.11 at 20h 24m 14s.xml">
       <configuration name="All Tests" configurationId="JUnit" />
     </history-entry>
@@ -411,9 +432,12 @@
     <history-entry file="All_Tests - 2019.03.11 at 22h 34m 50s.xml">
       <configuration name="All Tests" configurationId="JUnit" />
     </history-entry>
+    <history-entry file="All_Tests - 2019.03.14 at 12h 22m 21s.xml">
+      <configuration name="All Tests" configurationId="JUnit" />
+    </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="31965000" />
+    <option name="totallyTimeSpent" value="33506000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -437,7 +461,7 @@
       <window_info id="Capture Tool" order="6" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49946696" visible="true" weight="0.3293379" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49946696" visible="true" weight="0.32854405" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -722,17 +746,31 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="159">
-          <caret line="70" column="27" selection-start-line="70" selection-start-column="27" selection-end-line="70" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../Jenkinsfile">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="625">
           <caret line="38" selection-start-line="38" selection-end-line="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../sonar.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="20" column="20" selection-end-line="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="21" column="17" lean-forward="true" selection-start-line="21" selection-start-column="17" selection-end-line="21" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="446">
+          <caret line="40" column="85" lean-forward="true" selection-start-line="40" selection-start-column="85" selection-end-line="40" selection-end-column="85" />
         </state>
       </provider>
     </entry>
