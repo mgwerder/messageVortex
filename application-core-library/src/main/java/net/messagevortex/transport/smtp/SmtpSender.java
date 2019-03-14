@@ -217,4 +217,5 @@ public class SmtpSender extends ClientConnection implements TransportSender {
   }
 
   public void shutdown() {}
+
 }
