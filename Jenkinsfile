@@ -36,7 +36,7 @@ pipeline {
     }
     stage('SonarQube analysis') {
       steps {
-        withSonarQubeEnv('horus SonarQube Scanner') {
+        withSonarQubeEnv('SonarQube') {
           sh "cd  application-core-library;/opt/sonar-scanner/bin/sonar-scanner/bin/sonar-scanner"
         }
         sh '/bin/true'
