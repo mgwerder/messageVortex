@@ -36,9 +36,9 @@ pipeline {
     }
     stage('SonarQube analysis') {
       steps {
-        withSonarQubeEnv('SonarQube') {
-          sh "cd  application-core-library;/opt/sonar-scanner/bin/sonar-scanner/bin/sonar-scanner"
-        }
+        /* withSonarQubeEnv('SonarQube') {
+          sh "cd application-core-library/;/opt/sonar-scanner/bin/sonar-scanner"
+        }*/
         sh '/bin/true'
       }
     }
