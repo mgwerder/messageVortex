@@ -64,7 +64,7 @@ public class MessageVortexTest {
       assertTrue("Errorcode is not 0", MessageVortex.main(new String[0]) == 0);
     } catch (Exception e) {
       e.printStackTrace();
-      fail("got unexpected exception");
+      fail("got unexpected exception " + e + "\n" + e.getStackTrace()[0].toString() );
     }
   }
 
@@ -74,7 +74,7 @@ public class MessageVortexTest {
       assertTrue("Errorcode is not 0", MessageVortex.main(null) == 0);
     } catch (Exception e) {
       e.printStackTrace();
-      fail("got unexpected exception");
+      fail("got unexpected exception " + e + "\n" + e.getStackTrace()[0].toString() );
     }
   }
 

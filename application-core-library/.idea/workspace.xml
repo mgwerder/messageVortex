@@ -135,8 +135,8 @@
       <file leaf-file-name="MessageVortexTest.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/MessageVortexTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="680">
-              <caret line="61" column="18" selection-start-line="61" selection-start-column="18" selection-end-line="61" selection-end-column="18" />
+            <state relative-caret-position="735">
+              <caret line="67" selection-start-line="67" selection-end-line="67" />
             </state>
           </provider>
         </entry>
@@ -379,7 +379,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.MessageVortexTest.runRegularlyAndShutdownNull">
+  <component name="RunManager" selected="JUnit.All Tests">
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
       <method>
@@ -594,15 +594,6 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="All_Tests - 2019.03.16 at 16h 32m 26s.xml">
-      <configuration name="All Tests" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="All_Tests - 2019.03.16 at 16h 32m 52s.xml">
-      <configuration name="All Tests" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="All_Tests - 2019.03.16 at 16h 34m 59s.xml">
-      <configuration name="All Tests" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="All_Tests - 2019.03.16 at 16h 40m 13s.xml">
       <configuration name="All Tests" configurationId="JUnit" />
     </history-entry>
@@ -623,6 +614,15 @@
     </history-entry>
     <history-entry file="MessageVortexTest_getVersion - 2019.03.16 at 16h 47m 04s.xml">
       <configuration name="MessageVortexTest.getVersion" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="MessageVortexTest_runRegularlyAndShutdown - 2019.03.16 at 18h 05m 47s.xml">
+      <configuration name="MessageVortexTest.runRegularlyAndShutdown" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="MessageVortexTest_runRegularlyAndShutdownNull - 2019.03.16 at 18h 06m 01s.xml">
+      <configuration name="MessageVortexTest.runRegularlyAndShutdownNull" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="All_Tests - 2019.03.16 at 20h 00m 03s.xml">
+      <configuration name="All Tests" configurationId="JUnit" />
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
@@ -1067,8 +1067,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/MessageVortexTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="680">
-          <caret line="61" column="18" selection-start-line="61" selection-start-column="18" selection-end-line="61" selection-end-column="18" />
+        <state relative-caret-position="735">
+          <caret line="67" selection-start-line="67" selection-end-line="67" />
         </state>
       </provider>
     </entry>
