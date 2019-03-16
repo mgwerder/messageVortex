@@ -1,5 +1,5 @@
 // general settings
-String; transport_endpoint_setup; default; A comma separated list of transport endpoints sections (senders and receivers)
+section_list; transport_setup; default; A comma separated list of transport endpoints sections (senders and receivers)
 string; credential_source_setup; default; The credential source setup section to be used
 
 // generic transport classes

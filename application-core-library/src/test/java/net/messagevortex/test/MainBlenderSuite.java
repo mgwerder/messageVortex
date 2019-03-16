@@ -9,14 +9,14 @@ package net.messagevortex.test;
 import junit.framework.JUnit4TestAdapter;
 import junit.framework.TestSuite;
 import net.messagevortex.asn1.AsymmetricKey;
-import net.messagevortex.test.blender.DummyBlenderTest;
+import net.messagevortex.test.blender.DummyBlendingTest;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        DummyBlenderTest.class
+        DummyBlendingTest.class
 })
 
 public class MainBlenderSuite {
@@ -28,7 +28,7 @@ public class MainBlenderSuite {
 
     public static junit.framework.Test suite() {
         final TestSuite s = new TestSuite();
-        s.addTest(new JUnit4TestAdapter(DummyBlenderTest.class));
+        s.addTest(new JUnit4TestAdapter(DummyBlendingTest.class));
         return s;
     }
 

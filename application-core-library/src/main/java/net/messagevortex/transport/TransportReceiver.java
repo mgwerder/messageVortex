@@ -22,27 +22,24 @@ package net.messagevortex.transport;
 // * SOFTWARE.
 // ************************************************************************************
 
+import net.messagevortex.RunningDaemon;
+
 import java.io.InputStream;
 
 /**
- * <p>Interface for all blending layers listening to transport layer messages.</p>
+ * <p>Interface for all blender layers listening to transport layer messages.</p>
  */
-public interface TransportReceiver {
+public interface TransportReceiver extends RunningDaemon {
 
   /***
    * <p>This Method is called by the TransportSender layer if a possible vmessage has arrived.</p>
    *
-   * <p>The message (if any) is decoded, verified and (if successful) passed on to the routing
+   * <p>The message (if any) is decoded, verified and (if successful) passed on to the router
    * layer in a separate thread (@see IncommingMessageRouterListener).</p>
    *
    * @param is the InputStream containing a possible message
    * @return true if message got accepted
    */
   boolean gotMessage(InputStream is);
-
-  /**
-   * <p>Terminates all processes after current activities. Does not acccept new activities.</p>
-   */
-  void shutdown();
 
 }

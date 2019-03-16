@@ -52,7 +52,7 @@ public class BlendingParameter extends AbstractBlock implements Serializable, Du
     }
 
     /***
-     * <p>Gets a blending parameter enum by its Id.</p>
+     * <p>Gets a blender parameter enum by its Id.</p>
      *
      * @param i the id to be looked up
      * @return the enum or null if not found
@@ -85,9 +85,9 @@ public class BlendingParameter extends AbstractBlock implements Serializable, Du
   }
 
   /***
-   * <p>Creates a blending parameter set.</p>
+   * <p>Creates a blender parameter set.</p>
    *
-   * @param choice       the type of blending
+   * @param choice       the type of blender
    * @throws IOException if creation of the symmetric key failed
    */
   public BlendingParameter(BlendingParameterChoice choice) throws IOException {
@@ -102,11 +102,11 @@ public class BlendingParameter extends AbstractBlock implements Serializable, Du
   protected void parse(ASN1Encodable to) throws IOException {
     ASN1TaggedObject t = ASN1TaggedObject.getInstance(to);
     if (to == null || t == null) {
-      throw new IOException("unknown blending parameter choice detected (tagged object is null)");
+      throw new IOException("unknown blender parameter choice detected (tagged object is null)");
     }
     BlendingParameterChoice bpc = BlendingParameterChoice.getById(t.getTagNo());
     if (bpc == null) {
-      throw new IOException("unknown blending parameter choice detected (" + t.getTagNo() + ")");
+      throw new IOException("unknown blender parameter choice detected (" + t.getTagNo() + ")");
     }
     switch (bpc) {
       case OFFSET:
@@ -116,12 +116,12 @@ public class BlendingParameter extends AbstractBlock implements Serializable, Du
         symmetricKey = new SymmetricKey(t.getObject().getEncoded());
         break;
       default:
-        throw new IOException("unknown blending parameter choice detected (" + t.getTagNo() + ")");
+        throw new IOException("unknown blender parameter choice detected (" + t.getTagNo() + ")");
     }
   }
 
   /***
-   * <p>Gets the choice type of the blending parameter.</p>
+   * <p>Gets the choice type of the blender parameter.</p>
    *
    * @return the choice type
    */

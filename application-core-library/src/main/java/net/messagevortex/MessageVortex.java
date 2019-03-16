@@ -22,66 +22,74 @@ package net.messagevortex;
 // * SOFTWARE.
 // ************************************************************************************
 
+import net.messagevortex.accounting.Accountant;
+import net.messagevortex.blender.Blender;
+import net.messagevortex.router.Router;
+import net.messagevortex.transport.Transport;
+import picocli.CommandLine;
+
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import net.messagevortex.accounting.DummyAccountant;
 
-public class MessageVortex {
+@CommandLine.Command(description = "A MessageVortex implementation for the privacy aware person.",
+        name = "MessageVortex", mixinStandardHelpOptions = true, versionProvider = Version.class )
+public class MessageVortex implements Callable<Integer> {
 
   private static final Logger LOGGER;
+
+  private final static int CONFIG_FAIL = 101;
+  private final static int SETUP_FAIL  = 102;
+  private final static int HELP        = 100;
+
+  @CommandLine.Option(names = {"-c", "--config"}, description = "filename of the config to be used")
+  private String configFile = "messagevortex.cfg";
 
   static {
     LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
 
-  private static MessageVortexTransport transport = null;
-  private static MessageVortexBlending blending = null;
-  private static MessageVortexRouting routing = null;
-  private static MessageVortexAccounting accounting = null;
-
-  private MessageVortex() {
-    super();
-  }
-
-  public static int help() {
-    System.err.println("MessageVortex V" + Version.getBuild());
-    System.err.println("===============================================================");
-    System.err.println("usage: messageVortex -conf <configfile>");
-    return 100;
-  }
+  private static Map<String,Transport>  transport  = new ConcurrentHashMap<>();
+  private static Map<String,Blender>    blender    = new ConcurrentHashMap<>();
+  private static Map<String,Router>     router     = new ConcurrentHashMap<>();
+  private static Map<String,Accountant> accountant = new ConcurrentHashMap<>();
 
   public static int main(String[] args) {
     LOGGER.log(Level.INFO, "MessageVortex V" + Version.getBuild());
-    if (args != null && args.length > 0 && "--help".equals(args[0])) {
-      // output help here
-      return help();
-    }
+    Integer i = CommandLine.call(new MessageVortex(), args == null ? new String[0] : args);
+    return i != null ? i : 0;
+  }
 
+  public Integer call() {
     // create config store
     try {
-      MessageVortexConfig.getDefault();
+      LOGGER.log(Level.INFO, "Loading config file");
+      MessageVortexConfig.getDefault().load(configFile);
     } catch (IOException ioe) {
       LOGGER.log(Level.SEVERE, "Unable to parse config file", ioe);
+      return CONFIG_FAIL;
     }
 
     try {
-      accounting = new MessageVortexAccounting(null);
-      routing = new MessageVortexRouting(accounting.getAccountant(), null);
-      blending = new MessageVortexBlending(null, routing.getRoutingSender());
-      transport = new MessageVortexTransport(null, blending);
+      // FIXME setup according to config file
+      Config cfg = MessageVortexConfig.getDefault();
 
-      blending.setTransportReceiver(transport.getTransportReceiver());
-      routing.setRoutingSender(blending.getRoutingSender());
-
-      // FIXME Use sensible accountant
-      accounting.setAccountant(new DummyAccountant());
     } catch (IOException ioe) {
       LOGGER.log(Level.SEVERE, "Exception while setting up transport infrastructure", ioe);
+      return SETUP_FAIL;
     }
 
-    if (transport != null) {
-      transport.shutdown();
+    Map<String,RunningDaemon> tmap = new HashMap<>();
+    tmap.putAll(transport);
+    tmap.putAll(blender);
+    tmap.putAll(router);
+    tmap.putAll(accountant);
+    for (Map.Entry<String,RunningDaemon> es:tmap.entrySet() ) {
+     es.getValue().shutdownDaemon();
     }
     return 0;
   }

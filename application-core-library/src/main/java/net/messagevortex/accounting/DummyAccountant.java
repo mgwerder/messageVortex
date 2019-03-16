@@ -22,12 +22,13 @@ package net.messagevortex.accounting;
 // * SOFTWARE.
 // ************************************************************************************
 
+import net.messagevortex.AbstractDaemon;
 import net.messagevortex.asn1.IdentityBlock;
 
 /**
  * <p>A dummy accountant always agreeing to all transactions.</p>
  */
-public class DummyAccountant implements Accountant, HeaderVerifier {
+public class DummyAccountant extends AbstractDaemon implements Accountant, HeaderVerifier {
 
   /***
    * <p>Dummy Verifier always returning for all requests an unlimited quota.</p>

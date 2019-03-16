@@ -21,8 +21,10 @@ package net.messagevortex.accounting;
 // * SOFTWARE.
 // ************************************************************************************
 
+import net.messagevortex.RunningDaemon;
+
 /**
  * Created by martin.gwerder on 03.04.2017.
  */
-public interface Accountant {
+public interface Accountant extends RunningDaemon {
 }

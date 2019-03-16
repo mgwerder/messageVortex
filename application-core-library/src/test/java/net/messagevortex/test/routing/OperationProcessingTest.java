@@ -38,26 +38,26 @@ import net.messagevortex.asn1.IdentityBlock;
 import net.messagevortex.asn1.PayloadChunk;
 import net.messagevortex.asn1.RemoveRedundancyOperation;
 import net.messagevortex.asn1.SymmetricKey;
-import net.messagevortex.routing.operation.AddRedundancy;
-import net.messagevortex.routing.operation.IdMapOperation;
-import net.messagevortex.routing.operation.InternalPayload;
-import net.messagevortex.routing.operation.InternalPayloadSpace;
-import net.messagevortex.routing.operation.Operation;
-import net.messagevortex.routing.operation.RemoveRedundancy;
+import net.messagevortex.router.operation.AddRedundancy;
+import net.messagevortex.router.operation.IdMapOperation;
+import net.messagevortex.router.operation.InternalPayload;
+import net.messagevortex.router.operation.InternalPayloadSpace;
+import net.messagevortex.router.operation.Operation;
+import net.messagevortex.router.operation.RemoveRedundancy;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public class OperationProcessingTest {
-  
+
   private static final java.util.logging.Logger LOGGER;
-  
+
   static {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
     MessageVortexLogger.setGlobalLogLevel(Level.ALL);
   }
-  
+
   @Test
   public void redundancyOperationTest() {
     try {
@@ -72,10 +72,10 @@ public class OperationProcessingTest {
           int stripesRange = gfSize == 8 ? 220 : 500;
           int dataStripes = (int) (Math.random() * stripesRange) + 1;
           int redundancy = (int) (Math.random() * (stripesRange * 1.1 - dataStripes)) + 1;
-          
+
           LOGGER.log(Level.INFO, "running fuzzer " + ((gfSize / 8 - 1) * repeat + i) + "/" + (repeat * 2) + "");
           redundancyOperationTest(p, dataStripes, redundancy, gfSize);
-          
+
         }
       }
     } catch (IOException | NoSuchAlgorithmException ioe) {
@@ -83,29 +83,29 @@ public class OperationProcessingTest {
       fail("Exception while testing redundancy operation");
     }
   }
-  
+
   private void redundancyOperationTest(InternalPayload p, int dataStripes, int redundancy, int gfSize) throws IOException, NoSuchAlgorithmException {
     ExtendedSecureRandom esr = new ExtendedSecureRandom();
     // create symmetric keys for stripes
     SymmetricKey[] keys = new SymmetricKey[dataStripes + redundancy];
     for (int j = 0; j < keys.length; j++) keys[j] = new SymmetricKey();
-    
+
     // create random data
     byte[] inBuffer = new byte[dataStripes * 10 + (int) (Math.random() * (dataStripes * 10))];
     esr.nextBytes(inBuffer);
-    
+
     // do the test
     LOGGER.log(Level.INFO, "  fuzzing with dataStipes:" + dataStripes + "/redundancyStripes:" + redundancy + "/GF(" + gfSize + ")/dataSize:" + inBuffer.length + "");
     Operation iop = new AddRedundancy(new AddRedundancyOperation(1, dataStripes, redundancy, Arrays.asList(keys), 1000, gfSize));
     assertTrue("add operation not added", p.addOperation(iop));
     assertTrue("payload not added", p.setPayload(new PayloadChunk(1, inBuffer, null)) == null);
-    
+
     // straight operation
     Operation oop = new RemoveRedundancy(new RemoveRedundancyOperation(1000, dataStripes, redundancy, Arrays.asList(keys), 2000, gfSize));
     assertTrue("remove operation not added", p.addOperation(oop));
     byte[] b = p.getPayload(2000).getPayload();
     assertTrue("error testing straight redundancy calculation", b != null && Arrays.equals(inBuffer, b));
-    
+
     // redundancy operation
     LOGGER.log(Level.INFO, "  Recovery Test");
     Operation oop2 = new RemoveRedundancy(new RemoveRedundancyOperation(3000, dataStripes, redundancy, Arrays.asList(keys), 4000, gfSize));
@@ -129,11 +129,11 @@ public class OperationProcessingTest {
     for (Operation o : l.values()) {
       assertTrue("error removing passthru operation", p.removeOperation(o));
     }
-    
+
     assertTrue("unable to successfully remove add operation", p.removeOperation(iop));
     assertTrue("unable to successfully remove remove redundancy operation", p.removeOperation(oop));
     assertTrue("unable remove payload data", p.setPayload(new PayloadChunk(1, null, null)) != null);
-    
+
   }
-  
+
 }

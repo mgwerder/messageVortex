@@ -1,13 +1,5 @@
 package net.messagevortex.test.core;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.crypto.Cipher;
 import net.messagevortex.Config;
 import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexConfig;
@@ -16,6 +8,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import javax.crypto.Cipher;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 /**
  * Tests for {@link MessageVortex}.
  *
@@ -23,20 +24,20 @@ import org.junit.runners.JUnit4;
  */
 @RunWith(JUnit4.class)
 public class MessageVortexTest {
-  
+
   private static final Logger LOGGER;
-  
+
   static {
     LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
-  
+
   @BeforeClass
   public static void init() {
       try {
         Config cfg=MessageVortexConfig.getDefault();
-        cfg.setNumericValue(null,"smtp_incoming_port",588);
+        cfg.setNumericValue(null,"smtp_incoming_port",588,-1);
         int i = cfg.getNumericValue(null,"smtp_incoming_port");
-        LOGGER.log( Level.SEVERE, "Did read value "+i+"(should be 588)" );
+        LOGGER.log( Level.INFO, "Did read value "+i+"(should be 588)" );
         assertTrue( "value is unexpected ("+i+")",i==588);
       } catch( IOException ioe ) {
         LOGGER.log( Level.SEVERE, "Unable to parse config file", ioe );
@@ -44,12 +45,19 @@ public class MessageVortexTest {
         LOGGER.log( Level.SEVERE, "Unable to parse config file (generic)", ioe );
       }
   }
-  
+
   @Test
   public void getHelp() {
-    assertTrue("Errorcode for --help is not 100", MessageVortex.main(new String[]{"--help"}) == 100);
+    int e = MessageVortex.main(new String[]{"--help"});
+    assertTrue("Errorcode for --help is not 0 but " + e, e == 0);
   }
-  
+
+  @Test
+  public void getVersion() {
+    int e = MessageVortex.main(new String[]{"--version"});
+    assertTrue("Errorcode for --version is not 0 but " + e, e == 0);
+  }
+
   @Test
   public void getRunRegularlyAndShutdown() {
     try {
@@ -59,7 +67,7 @@ public class MessageVortexTest {
       fail("got unexpected exception");
     }
   }
-  
+
   @Test
   public void getRunRegularlyAndShutdownNull() {
     try {
@@ -69,7 +77,7 @@ public class MessageVortexTest {
       fail("got unexpected exception");
     }
   }
-  
+
   @Test
   public void testJREReadiness() {
     try {

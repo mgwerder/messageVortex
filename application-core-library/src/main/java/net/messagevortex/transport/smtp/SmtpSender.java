@@ -22,7 +22,9 @@ package net.messagevortex.transport.smtp;
 // * SOFTWARE.
 // ************************************************************************************
 
-import static net.messagevortex.transport.SecurityRequirement.STARTTLS;
+import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.transport.*;
+import org.bouncycastle.util.encoders.Base64;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,13 +35,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.logging.Level;
-import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.transport.ClientConnection;
-import net.messagevortex.transport.Credentials;
-import net.messagevortex.transport.SecurityContext;
-import net.messagevortex.transport.SecurityRequirement;
-import net.messagevortex.transport.TransportSender;
-import org.bouncycastle.util.encoders.Base64;
+
+import static net.messagevortex.transport.SecurityRequirement.STARTTLS;
 
 
 public class SmtpSender extends ClientConnection implements TransportSender {
@@ -216,6 +213,8 @@ public class SmtpSender extends ClientConnection implements TransportSender {
     return replies.toArray(new String[replies.size()]);
   }
 
-  public void shutdown() {}
+  public void shutdownDaemon() {}
+  public void startDaemon() {}
+  public void stopDaemon() {}
 
 }

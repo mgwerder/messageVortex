@@ -22,13 +22,10 @@ package net.messagevortex;
 // * SOFTWARE.
 // ************************************************************************************
 
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import net.messagevortex.transport.SecurityContext;
-import net.messagevortex.transport.SecurityRequirement;
 import net.messagevortex.transport.TransportReceiver;
 import net.messagevortex.transport.TransportSender;
-import net.messagevortex.transport.smtp.SmtpReceiver;
+
+import java.io.IOException;
 
 // FIXME this class is not yet functional
 public class MessageVortexTransport {
@@ -74,10 +71,10 @@ public class MessageVortexTransport {
 
   public void shutdown() {
     if (receiver != null ) {
-      receiver.shutdown();
+      receiver.shutdownDaemon();
     }
     if (sender != null) {
-      sender.shutdown();
+      sender.shutdownDaemon();
     }
   }
 

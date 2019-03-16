@@ -24,31 +24,31 @@ package net.messagevortex;
 
 import net.messagevortex.accounting.Accountant;
 import net.messagevortex.asn1.VortexMessage;
-import net.messagevortex.blending.BlenderReceiver;
-import net.messagevortex.routing.operation.RoutingSender;
+import net.messagevortex.blender.BlendingReceiver;
+import net.messagevortex.blender.BlendingSender;
 
-public class MessageVortexRouting implements BlenderReceiver {
+public class MessageVortexRouting extends AbstractDaemon implements BlendingReceiver {
 
-  private RoutingSender routingSender;
+  private BlendingSender routingSender;
   private Accountant accountant;
 
-  public MessageVortexRouting(Accountant accountant, RoutingSender routingSender) {
+  public MessageVortexRouting(Accountant accountant, BlendingSender routingSender) {
     setRoutingSender(routingSender);
     setAccountant(accountant);
   }
 
-  public final RoutingSender getRoutingSender() {
+  public final BlendingSender getRoutingSender() {
     return routingSender;
   }
 
   /***
-   * <p>Specifies the routing sender.</p>
+   * <p>Specifies the router sender.</p>
    *
    * @param routingSender the sender to be set
    * @return the previously set sender
    */
-  public final RoutingSender setRoutingSender(RoutingSender routingSender) {
-    RoutingSender ret = routingSender;
+  public final BlendingSender setRoutingSender(BlendingSender routingSender) {
+    BlendingSender ret = routingSender;
     this.routingSender = routingSender;
     return ret;
   }

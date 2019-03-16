@@ -33,7 +33,7 @@ import org.bouncycastle.asn1.ASN1TaggedObject;
 import org.bouncycastle.asn1.DERTaggedObject;
 
 /**
- * Represents a addRedundancy operation on a routing block.
+ * Represents a addRedundancy operation on a router block.
  */
 public class AddRedundancyOperation extends AbstractRedundancyOperation
        implements Serializable, Dumpable {

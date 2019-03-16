@@ -18,8 +18,8 @@ public class VersionTest {
 
     @Test
     public void testVersion() {
-        System.out.println("Version is "+ Version.getVersion());
-        assertTrue("Version String does not match regexp",Version.getVersion().matches("[0-9]+\\.[0-9]+\\.[0-9]+"));
+        System.out.println("Version is "+ Version.getStringVersion());
+        assertTrue("Version String does not match regexp",Version.getStringVersion().matches("[0-9]+\\.[0-9]+\\.[0-9]+"));
     }
 
     @Test

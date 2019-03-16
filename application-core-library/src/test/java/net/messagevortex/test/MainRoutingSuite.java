@@ -1,7 +1,7 @@
 package net.messagevortex.test;
 
 /**
- * Test all classes related to routing.
+ * Test all classes related to router.
  */
 
 import junit.framework.JUnit4TestAdapter;

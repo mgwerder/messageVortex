@@ -1,5 +1,6 @@
 package net.messagevortex.test.transport;
 
+import net.messagevortex.AbstractDaemon;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.transport.SecurityContext;
 import net.messagevortex.transport.SecurityRequirement;
@@ -29,7 +30,7 @@ import static org.junit.Assert.assertTrue;
  * Created by Martin on 26.01.2018.
  */
 @RunWith(JUnit4.class)
-public class SMTPTransportSenderTest implements TransportReceiver {
+public class SMTPTransportSenderTest extends AbstractDaemon implements TransportReceiver {
 
   public static final String CRLF = "\r\n";
 

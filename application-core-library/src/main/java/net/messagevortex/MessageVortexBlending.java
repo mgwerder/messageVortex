@@ -22,19 +22,20 @@ package net.messagevortex;
 // * SOFTWARE.
 // ************************************************************************************
 
-import java.io.InputStream;
-import net.messagevortex.blending.Blender;
-import net.messagevortex.routing.operation.RoutingSender;
+import net.messagevortex.blender.Blender;
+import net.messagevortex.blender.BlendingSender;
 import net.messagevortex.transport.TransportReceiver;
 
-public class MessageVortexBlending implements TransportReceiver, RoutingSender {
+import java.io.InputStream;
+
+public class MessageVortexBlending extends AbstractDaemon implements TransportReceiver, BlendingSender {
 
   private TransportReceiver receiver = null;
-  private RoutingSender sender = null;
+  private BlendingSender sender = null;
   private Blender blender = null;
 
 
-  public MessageVortexBlending(TransportReceiver blend, RoutingSender sender) {
+  public MessageVortexBlending(TransportReceiver blend, BlendingSender sender) {
     receiver = blend;
     this.sender = sender;
   }
@@ -49,13 +50,13 @@ public class MessageVortexBlending implements TransportReceiver, RoutingSender {
     return receiver;
   }
 
-  public RoutingSender setRoutingSender(RoutingSender sender) {
-    RoutingSender ret = sender;
+  public BlendingSender setBlendingSender(BlendingSender sender) {
+    BlendingSender ret = sender;
     this.sender = sender;
     return ret;
   }
 
-  public RoutingSender getRoutingSender() {
+  public BlendingSender getRoutingSender() {
     return sender;
   }
 
@@ -79,7 +80,5 @@ public class MessageVortexBlending implements TransportReceiver, RoutingSender {
   public boolean sendMessage(String target, MessageVortex msg) {
     return sender.sendMessage(target, msg);
   }
-
-  public void shutdown() {}
 
 }

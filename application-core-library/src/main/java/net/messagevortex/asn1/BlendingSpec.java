@@ -35,7 +35,7 @@ import org.bouncycastle.asn1.DERSequence;
 import org.bouncycastle.asn1.DERUTF8String;
 
 /**
- * <p>Represents a the Blending specification of the routing block.</p>
+ * <p>Represents a the Blending specification of the router block.</p>
  */
 public class BlendingSpec extends AbstractBlock implements Serializable, Dumpable {
 
@@ -73,7 +73,7 @@ public class BlendingSpec extends AbstractBlock implements Serializable, Dumpabl
     // get recipient address
     recipientAddress = DERUTF8String.getInstance(s2.getObjectAt(i2++)).getString();
 
-    //get blending type
+    //get blender type
     blendingType = DERUTF8String.getInstance(s1.getObjectAt(i++)).getString();
 
     // get Blending Parameter
@@ -95,7 +95,7 @@ public class BlendingSpec extends AbstractBlock implements Serializable, Dumpabl
     v2.add(new DERUTF8String(recipientAddress));
     v.add(new DERSequence(v2));
 
-    // encode blending type
+    // encode blender type
     v.add(new DERUTF8String(blendingType));
 
     // encode BlendingParameter
@@ -140,7 +140,7 @@ public class BlendingSpec extends AbstractBlock implements Serializable, Dumpabl
   }
 
   /***
-   * <p>sets the receiver address of the blending spec.</p>
+   * <p>sets the receiver address of the blender spec.</p>
    *
    * @param recipientAddress the encoded recipient address
    * @return the previously set recipient address
@@ -156,7 +156,7 @@ public class BlendingSpec extends AbstractBlock implements Serializable, Dumpabl
   }
 
   /***
-   * <p>Sets the media type of the blending spec.</p>
+   * <p>Sets the media type of the blender spec.</p>
    *
    * @param media the named media to set
    * @return the previously set media
@@ -172,10 +172,10 @@ public class BlendingSpec extends AbstractBlock implements Serializable, Dumpabl
   }
 
   /***
-   * <p>Sets the media type of the blending spec.</p>
+   * <p>Sets the media type of the blender spec.</p>
    *
-   * @param blendingType the blending type as string
-   * @return the previously set blending type
+   * @param blendingType the blender type as string
+   * @return the previously set blender type
    */
   public String setBlendingType(String blendingType) {
     String old = this.blendingType;

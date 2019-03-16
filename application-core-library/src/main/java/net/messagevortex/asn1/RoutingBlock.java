@@ -88,7 +88,7 @@ public class RoutingBlock extends AbstractBlock implements Serializable {
   private AssemblyBlock[] assembly = null;
 
   /***
-   * <p>Creates an empty routing block.</p>
+   * <p>Creates an empty router block.</p>
    */
   public RoutingBlock() {
     recipient = new BlendingSpec("");
@@ -97,9 +97,9 @@ public class RoutingBlock extends AbstractBlock implements Serializable {
   }
 
   /***
-   * <p>Creates a routing block from a DER representation.</p>
+   * <p>Creates a router block from a DER representation.</p>
    *
-   * <p>if a routing block is assumed encryptedand without decryption key) it stores the
+   * <p>if a router block is assumed encryptedand without decryption key) it stores the
    * block as binary blob without handling its inner workings</p>
    *
    * @param b             the binary representation of the DER encoded and possibly encrypted block
@@ -178,7 +178,7 @@ public class RoutingBlock extends AbstractBlock implements Serializable {
           p2.add(new RoutingBlock(b));
         }
         if (p2.size() != prefix.length) {
-          throw new IOException("missmatch in length of prefix and routing block");
+          throw new IOException("missmatch in length of prefix and router block");
         } else {
           nextHop = p2.toArray(new RoutingBlock[p2.size()]);
         }
@@ -245,7 +245,7 @@ public class RoutingBlock extends AbstractBlock implements Serializable {
   }
 
   /***
-   * <p>Sets time when routing block could be processed (earliest).</p>
+   * <p>Sets time when router block could be processed (earliest).</p>
    *
    * @param minProcessTime   the time to be set
    * @return                 the previously set time
@@ -262,7 +262,7 @@ public class RoutingBlock extends AbstractBlock implements Serializable {
   }
 
   /***
-   * <p>Sets time when routing block could be processed (latest).</p>
+   * <p>Sets time when router block could be processed (latest).</p>
    *
    * @param maxProcessTime   the time to be set
    * @return                 the previously set time

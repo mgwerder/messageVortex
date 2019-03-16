@@ -2,7 +2,7 @@ package net.messagevortex.test.routing;
 
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.IdentityStoreBlock;
-import net.messagevortex.routing.Edge;
+import net.messagevortex.router.Edge;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;

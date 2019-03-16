@@ -28,26 +28,26 @@ import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.logging.Level;
 import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.routing.operation.GaloisFieldMathMode;
-import net.messagevortex.routing.operation.MathMode;
-import net.messagevortex.routing.operation.Matrix;
-import net.messagevortex.routing.operation.RealMathMode;
-import net.messagevortex.routing.operation.RedundancyMatrix;
-import net.messagevortex.routing.operation.VandermondeMatrix;
+import net.messagevortex.router.operation.GaloisFieldMathMode;
+import net.messagevortex.router.operation.MathMode;
+import net.messagevortex.router.operation.Matrix;
+import net.messagevortex.router.operation.RealMathMode;
+import net.messagevortex.router.operation.RedundancyMatrix;
+import net.messagevortex.router.operation.VandermondeMatrix;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public class MatrixTest {
-  
+
   private static final java.util.logging.Logger LOGGER;
-  
+
   static {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
     MessageVortexLogger.setGlobalLogLevel(Level.ALL);
   }
-  
+
   @Test
   public void basicMatrixTest() {
     LOGGER.log(Level.INFO, "basic multiplication test (unit matrices)");
@@ -64,7 +64,7 @@ public class MatrixTest {
       }
     }
   }
-  
+
   @Test
   public void vandermondeMatrixTest() {
     LOGGER.log(Level.INFO, "VandermondeMatrix blackbox tests");
@@ -77,14 +77,14 @@ public class MatrixTest {
     assertTrue("Illegal row 1 of GF(2^4) VandermodeMatrix [" + Arrays.toString(m.getRow(4)) + "]", Arrays.equals(new int[]{1, 4, 3}, m.getRow(4)));
     assertTrue("Illegal row 2 of GF(2^4) VandermodeMatrix [" + Arrays.toString(m.getRow(5)) + "]", Arrays.equals(new int[]{1, 5, 2}, m.getRow(5)));
   }
-  
+
   @Test
   public void redundancyMatrixTest() {
     final int[] MAX_GALOIS = new int[]{4, 8, 16};
     SecureRandom sr = new SecureRandom();
     for (int galois : MAX_GALOIS) {
       MathMode mm = GaloisFieldMathMode.getGaloisFieldMathMode(galois);
-      
+
       for (int k = 0; k < 100; k++) {
         LOGGER.log(Level.INFO, "testing redundancy matrix for GF(2^" + galois + ") run " + k);
         // generate random data vector
@@ -94,7 +94,7 @@ public class MatrixTest {
         }
         // determine total blocks (including redundancy)
         int tot = sr.nextInt(7) + 1 + data.getY();
-        
+
         // determine bad/missing block indexes
         int[] missing = new int[sr.nextInt(tot - data.getY()) + 1];
         for (int i = 0; i < missing.length; i++) {
@@ -112,11 +112,11 @@ public class MatrixTest {
           }
         }
         Arrays.sort(missing);
-        
+
         LOGGER.log(Level.INFO, "  test parameter: dataRows=" + data.getY() + "; totalRows=" + tot + "; missingRows=" + missing.length);
-        
+
         LOGGER.log(Level.INFO, "  Got data vector\r\n" + data.toString());
-        
+
         RedundancyMatrix m1 = new RedundancyMatrix(data.getY(), tot, mm);
         LOGGER.log(Level.INFO, "  Got redundancy matrix for GF(2^" + galois + ")\r\n" + m1.toString());
         RedundancyMatrix dataRowsOfRedundancyMatrix = new RedundancyMatrix(m1);
@@ -124,10 +124,10 @@ public class MatrixTest {
           dataRowsOfRedundancyMatrix.removeRow(dataRowsOfRedundancyMatrix.getX());
         }
         assertTrue("data rows in redundancy matrix are not unit rows \n" + Matrix.unitMatrix(dataRowsOfRedundancyMatrix.getX(), mm).toString() + "\n" + dataRowsOfRedundancyMatrix.toString(), Matrix.unitMatrix(dataRowsOfRedundancyMatrix.getX(), mm).equals(dataRowsOfRedundancyMatrix));
-        
+
         Matrix red = m1.mul(data);
         LOGGER.log(Level.INFO, "  Got data with redundancy vector\r\n" + red.toString());
-        
+
         Matrix damaged = new Matrix(red);
         for (int i = missing.length - 1; i >= 0; i--) {
           red.removeRow(missing[i]);
@@ -137,10 +137,10 @@ public class MatrixTest {
           damaged.removeRow(data.getY());
         }
         LOGGER.log(Level.INFO, "  Got damaged vector\r\n" + damaged.toString());
-        
+
         Matrix m2 = m1.getRecoveryMatrix(missing);
         LOGGER.log(Level.INFO, "  Got recovery matrix\r\n" + m2.toString());
-        
+
         Matrix recovered = m2.mul(damaged);
         LOGGER.log(Level.INFO, "  Got recovered data\r\n" + recovered.toString());
         assertTrue("data and recovered data is not equal\r\n" + data.toString() + "\r\n" + recovered.toString(), recovered.equals(data));

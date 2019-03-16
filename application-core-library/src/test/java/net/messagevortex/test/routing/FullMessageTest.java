@@ -31,14 +31,14 @@ import org.junit.runners.JUnit4;
  */
 @RunWith(JUnit4.class)
 public class FullMessageTest {
-  
+
   private static final Logger LOGGER;
-  
+
   static {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
     MessageVortexLogger.setGlobalLogLevel(Level.ALL);
   }
-  
+
   @Test
   public void createAndDumpTest() throws Exception {
     // building a complex message
@@ -56,7 +56,7 @@ public class FullMessageTest {
     message.setDecryptionKey(new AsymmetricKey(Algorithm.RSA.getParameters(SecurityLevel.LOW)));
     testMessageEncoding(message);
   }
-  
+
   private void testMessageEncoding(VortexMessage original) throws IOException {
     for (DumpType dt : DumpType.values()) {
       VortexMessage b = new VortexMessage(original.toBytes(dt), original.getDecryptionKey());
@@ -84,7 +84,7 @@ public class FullMessageTest {
       assertTrue("test for equal() equality in prefix when aplying dump type " + dt, m2.getPrefix().equals(m3.getPrefix()));
       assertTrue("test for equal() equality in InnerMessage.prefix when aplying dump type " + dt, m2.getInnerMessage().getPrefix().equals(m3.getInnerMessage().getPrefix()));
       assertTrue("test for equal() equality in InnerMessage.identity when aplying dump type " + dt, m2.getInnerMessage().getIdentity().equals(m3.getInnerMessage().getIdentity()));
-      assertTrue("test for equal() equality in InnerMessage.routing when aplying dump type " + dt, m2.getInnerMessage().getRouting().equals(m3.getInnerMessage().getRouting()));
+      assertTrue("test for equal() equality in InnerMessage.router when aplying dump type " + dt, m2.getInnerMessage().getRouting().equals(m3.getInnerMessage().getRouting()));
       assertTrue("test for equal() equality in InnerMessage.payload when aplying dump type " + dt, Arrays.equals(m2.getInnerMessage().getPayload(), m3.getInnerMessage().getPayload()));
       assertTrue("test for byte equality of InnerMessage.prefix.key when aplying dump type " + dt, Arrays.equals(m2.getInnerMessage().getPrefix().getKey().toBytes(dt), m3.getInnerMessage().getPrefix().getKey().toBytes(dt)));
       assertTrue("test for byte equality of InnerMessage.prefix.decryptionKey when aplying dump type " + dt, Arrays.equals(m2.getInnerMessage().getPrefix().getDecryptionKey().toBytes(dt), m3.getInnerMessage().getPrefix().getDecryptionKey().toBytes(dt)));

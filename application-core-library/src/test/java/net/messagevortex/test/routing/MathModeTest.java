@@ -22,10 +22,10 @@ package net.messagevortex.test.routing;
  ***/
 
 import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.routing.operation.BitShifter;
-import net.messagevortex.routing.operation.GaloisFieldMathMode;
-import net.messagevortex.routing.operation.MathMode;
-import net.messagevortex.routing.operation.RealMathMode;
+import net.messagevortex.router.operation.BitShifter;
+import net.messagevortex.router.operation.GaloisFieldMathMode;
+import net.messagevortex.router.operation.MathMode;
+import net.messagevortex.router.operation.RealMathMode;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;

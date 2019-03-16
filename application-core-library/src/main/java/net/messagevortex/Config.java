@@ -107,6 +107,7 @@ public class Config {
   private enum ConfigType {
     BOOLEAN(new BooleanConverters()),
     NUMERIC(new IntegerConverters()),
+    SECTION_LIST(new StringConverters()),
     STRING(new StringConverters());
 
     public static ConfigType getById(String id) {
@@ -130,13 +131,35 @@ public class Config {
 
   }
 
+  private class ConfigValue {
+    private String value;
+    private int lineNumber = -1;
+
+    public ConfigValue(String value, int lineNumber) {
+      this.value = value;
+      this.lineNumber = lineNumber;
+    }
+
+    public String getValue() {
+      return value;
+    }
+
+    public int getLineNumber() {
+      return lineNumber;
+    }
+
+    public ConfigValue copy() {
+      return new ConfigValue(value, lineNumber);
+    }
+  }
+
   private class ConfigElement implements Comparator<ConfigElement> {
 
     private String id;
     private String type;
     private String description;
     private String defaultValue;
-    private Map<String,String> currentValue = new HashMap<>();
+    private Map<String,ConfigValue> currentValue = new HashMap<>();
 
     ConfigElement(String id, String type) {
       setId(id);
@@ -160,8 +183,8 @@ public class Config {
       ret.defaultValue = defaultValue;
       // make deep copy of hashmap
       ret.currentValue = new HashMap<>();
-      for (Map.Entry<String,String> e : currentValue.entrySet()) {
-        ret.currentValue.put(e.getKey(), e.getValue());
+      for (Map.Entry<String,ConfigValue> e : currentValue.entrySet()) {
+        ret.currentValue.put(e.getKey(), e.getValue().copy());
       }
       return ret;
     }
@@ -195,7 +218,7 @@ public class Config {
       return this.description;
     }
 
-    private String setValue(String section, String value) {
+    private String setValue(String section, String value, int lineNumber) {
       // make sure that we always have a section
       if (section == null) {
         section = DEFAULT;
@@ -212,7 +235,7 @@ public class Config {
         LOGGER.log(Level.FINE, "value for " + id + " is modified to " + value);
       }
       // set value
-      currentValue.put(section, value);
+      currentValue.put(section, new ConfigValue(value, lineNumber));
 
       return ret;
     }
@@ -226,9 +249,9 @@ public class Config {
       // get value
       String ret;
       if (currentValue.get(section) != null) {
-        ret = currentValue.get(section);
+        ret = currentValue.get(section).getValue();
       } else if (currentValue.get(DEFAULT) != null) {
-        ret = currentValue.get(DEFAULT);
+        ret = currentValue.get(DEFAULT).getValue();
       } else {
         ret = defaultValue;
       }
@@ -263,9 +286,19 @@ public class Config {
       return (String)(getType().getConverters().stringToObject(getValue(section)));
     }
 
-    public final String setStringValue(String section, String value) {
+    public final String setStringValue(String section, String value, int lineNumber) {
       String ret = getStringValue(section);
-      setValue(section,getType().getConverters().objectToString(value));
+      setValue(section,getType().getConverters().objectToString(value), lineNumber);
+      return ret;
+    }
+
+    public final String getSectionListValue(String section) {
+      return (String)(getType().getConverters().stringToObject(getValue(section)));
+    }
+
+    public final String setSectionListValue(String section, String value, int lineNumber) {
+      String ret = getStringValue(section);
+      setValue(section,getType().getConverters().objectToString(value), lineNumber);
       return ret;
     }
 
@@ -273,9 +306,9 @@ public class Config {
       return (Boolean)(getType().getConverters().stringToObject(getValue(section)));
     }
 
-    public final boolean setBooleanValue(String section, boolean value) {
+    public final boolean setBooleanValue(String section, boolean value, int lineNumber) {
       boolean ret = getBooleanValue(section);
-      setValue(section,getType().getConverters().objectToString(value));
+      setValue(section,getType().getConverters().objectToString(value), lineNumber);
       return ret;
     }
 
@@ -292,9 +325,9 @@ public class Config {
       }
     }
 
-    public final int setNumericValue(String section, int value) {
+    public final int setNumericValue(String section, int value, int lineNumber) {
       int ret = getNumericValue(section);
-      setValue(section,getType().getConverters().objectToString(value));
+      setValue(section,getType().getConverters().objectToString(value), lineNumber);
       return ret;
     }
 
@@ -302,11 +335,11 @@ public class Config {
       LOGGER.log(Level.FINE, "value for " + id + " is deleted (unset called)");
       if (section == null) {
         for (String s:currentValue.keySet()) {
-          setValue(s, null);
+          setValue(s, null, -1);
         }
         return null;
       } else {
-        return setValue(section, null);
+        return setValue(section, null,-1);
       }
     }
 
@@ -367,6 +400,14 @@ public class Config {
                 int val = Integer.parseInt(scanner.next().trim());
                 String desc = scanner.next().trim();
                 createNumericConfigValue(name, desc, val);
+              } else if ("section_list".equals(token.toLowerCase())) {
+                String name = scanner.next().trim();
+                String val = scanner.next().trim();
+                if ("".equals(val)) {
+                  val = null;
+                }
+                String desc = scanner.next().trim();
+                createSectionListConfigValue(name, desc, val);
               } else {
                 throw new IOException("encountered unknown field type: " + token
                         + " (line was \"" + line + "\")");
@@ -414,7 +455,7 @@ public class Config {
     }
   }
 
-  private String setValue(String section, String id, String value) throws IOException {
+  private String setValue(String section, String id, String value, int lineNumber) throws IOException {
     ConfigElement c = configData.get(id.toLowerCase());
     if (c == null) {
       throw new IOException("unknown key \"" + id + "\" when setting value");
@@ -422,12 +463,13 @@ public class Config {
     String ret = c.getValue(section);
 
     if (c.getType() == ConfigType.NUMERIC) {
-      setNumericValue(section,id,Integer.parseInt(value));
+      setNumericValue(section,id,Integer.parseInt(value), lineNumber);
     } else if (c.getType() == ConfigType.BOOLEAN) {
       setBooleanValue(section, id, value != null
-              && ("yes".equals(value.toLowerCase()) || "true".equals(value.toLowerCase())));
+              && ("yes".equals(value.toLowerCase()) || "true".equals(value.toLowerCase())),
+              lineNumber);
     } else if (c.getType() == ConfigType.STRING) {
-      setStringValue(section, id, value);
+      setStringValue(section, id, value, lineNumber);
     } else {
       throw new NotImplementedException();
     }
@@ -472,7 +514,7 @@ public class Config {
    * @throws NullPointerException if key does not exist in configData
    * @throws ClassCastException if key is not of type boolean
    */
-  public boolean setBooleanValue(String section, String id, boolean value) {
+  public boolean setBooleanValue(String section, String id, boolean value, int lineNumber) {
     ConfigElement ele = configData.get(id.toLowerCase());
     if (ele == null) {
       throw new NullPointerException("id " + id + " is not known to the config subsystem");
@@ -482,7 +524,7 @@ public class Config {
       throw new ClassCastException("config type missmatch when accessing ID " + id
               + " (expected: boolean; is: " + type.name() + ")");
     }
-    return ele.setBooleanValue(section, value);
+    return ele.setBooleanValue(section, value, lineNumber);
   }
 
   /***
@@ -538,7 +580,7 @@ public class Config {
    * @throws NullPointerException if key does not exist in configData
    * @throws ClassCastException if key is not of type boolean
    */
-  public int setNumericValue(String section, String id, int value) throws IOException {
+  public int setNumericValue(String section, String id, int value, int lineNumber) throws IOException {
     ConfigElement ele = configData.get(id.toLowerCase());
     if (ele == null) {
       throw new NullPointerException("id " + id + " is not known to the config subsystem");
@@ -548,7 +590,7 @@ public class Config {
       throw new ClassCastException("config type missmatch when accessing ID " + id
               + " (expected: numeric; is: " + type.name() + ")");
     }
-    return ele.setNumericValue(section, value);
+    return ele.setNumericValue(section, value, lineNumber);
   }
 
   /***
@@ -571,6 +613,76 @@ public class Config {
               + " (expected: numeric; is: " + type.name() + ")");
     }
     return ele.getNumericValue(section);
+  }
+
+  /***
+   * <p>Creates a section_list config item.</p>
+   *
+   * <p>Creates a config item with a case insensitive identifier.
+   * The content of the item may not be null.</p>
+   *
+   * @param id    Name of config item (case insensitive)
+   * @param description Description of value to be written
+   * @param dval  Default content if not set
+   *
+   * @return True if item did not exist and was successfully created
+   */
+  public boolean createSectionListConfigValue(String id, String description, String dval) {
+    synchronized (configData) {
+      if (configData.get(id.toLowerCase()) == null) {
+        ConfigElement ele = new ConfigElement(id, "SECTION_LIST", description);
+        configData.put(id.toLowerCase(), ele);
+        ele.setDefaultValue(dval);
+        LOGGER.log(Level.INFO, "Created section_list config variable " + id.toLowerCase());
+        this.fields.add(id);
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+
+  /***
+   * <p>Set a section_list value to a config parameter.</p>
+   *
+   * @param section               section from which the value should be taken. null defaults to default section
+   * @throws NullPointerException when id is unknown or value is null
+   * @throws ClassCastException   when id is not a String setting
+   */
+  public String setSectionListValue(String section, String id, String value, int lineNumber) {
+    ConfigElement ele = configData.get(id.toLowerCase());
+    if (ele == null || value == null) {
+      throw new NullPointerException("unable to get id " + id + " from config subsystem");
+    }
+    ConfigType type = ele.getType();
+    if (type != ConfigType.SECTION_LIST) {
+      throw new ClassCastException("Unable to cast type to correct class (expected: string; is: "
+              + type.name() + ")");
+    }
+    return ele.setSectionListValue(section, value, lineNumber);
+  }
+
+  /***
+   * <p>Sets the value of a section_list type.</p>
+   *
+   * @param section               section from which the value should be taken. Null defaults to default section
+   * @param id                    the id of the value to be retrieved
+   * @throws NullPointerException when id is unknown
+   * @throws ClassCastException   when id is not a String setting
+   */
+  public String[] getSectionListValue(String section, String id) {
+    ConfigElement ele = configData.get(id.toLowerCase());
+    if (ele == null) {
+      throw new NullPointerException(
+              "unable to get id " + id + " from config subsystem (unknown element)"
+      );
+    }
+    ConfigType type = ele.getType();
+    if (type != ConfigType.SECTION_LIST) {
+      throw new ClassCastException("Unable to cast type to correct class (expected: string; is: "
+              + type.name() + ")");
+    }
+    return ele.getSectionListValue(section).split("\\s*,\\s*");
   }
 
   /***
@@ -607,7 +719,7 @@ public class Config {
    * @throws NullPointerException when id is unknown or value is null
    * @throws ClassCastException   when id is not a String setting
    */
-  public String setStringValue(String section, String id, String value) {
+  public String setStringValue(String section, String id, String value, int lineNumber) {
     ConfigElement ele = configData.get(id.toLowerCase());
     if (ele == null || value == null) {
       throw new NullPointerException("unable to get id " + id + " from config subsystem");
@@ -617,7 +729,7 @@ public class Config {
       throw new ClassCastException("Unable to cast type to correct class (expected: string; is: "
               + type.name() + ")");
     }
-    return ele.setStringValue(section, value);
+    return ele.setStringValue(section, value, lineNumber);
   }
 
   /***
@@ -656,7 +768,7 @@ public class Config {
    */
   public void load(String filename) throws IOException {
 
-    Pattern sectionPat  = Pattern.compile("^\\s*\\[([^\\]]+)\\]\\s*$");
+    Pattern sectionPat  = Pattern.compile("^\\s*\\[([a-zA-Z0-9_\\-]]+)\\]\\s*$");
     Pattern keyValuePat = Pattern.compile("\\s*([^=]+)\\s*=\\s*(.*)\\s*$");
 
     try (BufferedReader br = new BufferedReader(
@@ -687,7 +799,7 @@ public class Config {
               String value = m.group(2).trim();
 
               // add value to store
-              setValue(section, key, value);
+              setValue(section, key, value, lineCounter);
             }
           }
         }

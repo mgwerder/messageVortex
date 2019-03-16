@@ -87,7 +87,7 @@ public class InnerMessageBlock extends AbstractBlock implements Serializable {
    *
    * @param prefix  the prefix block to be used
    * @param i       the header/identity block to be used
-   * @param routing the routing block to be used
+   * @param routing the router block to be used
    */
   public InnerMessageBlock(PrefixBlock prefix, IdentityBlock i, RoutingBlock routing) {
     this.prefix = prefix;
@@ -159,7 +159,7 @@ public class InnerMessageBlock extends AbstractBlock implements Serializable {
               + identitySignature.length + "; signedBlock:" + toHex(identityEncoded) + ")");
     }
 
-    // getting routing block
+    // getting router block
     ASN1TaggedObject ae = ASN1TaggedObject.getInstance(s1.getObjectAt(i++));
     switch (ae.getTagNo()) {
       case ROUTING_PLAIN:
@@ -170,7 +170,7 @@ public class InnerMessageBlock extends AbstractBlock implements Serializable {
           routing = new RoutingBlock(ASN1Sequence.getInstance(prefix.getKey()
                   .decrypt(ASN1OctetString.getInstance(ae.getObject()).getOctets())));
         } catch (IOException ioe) {
-          throw new IOException("error while decrypting routing block", ioe);
+          throw new IOException("error while decrypting router block", ioe);
         }
         break;
       default:
@@ -255,7 +255,7 @@ public class InnerMessageBlock extends AbstractBlock implements Serializable {
 
     // Writing encoded Routing Block
     if (routing == null) {
-      throw new NullPointerException("routing may not be null when encoding");
+      throw new NullPointerException("router may not be null when encoding");
     }
     switch (dumpType) {
       case INTERNAL:
@@ -330,7 +330,7 @@ public class InnerMessageBlock extends AbstractBlock implements Serializable {
         throw new IOException("unable to handle dump type " + dt);
     }
 
-    sb.append(prefix).append("  routing ").append(routing.dumpValueNotation(prefix + "  ", dt))
+    sb.append(prefix).append("  router ").append(routing.dumpValueNotation(prefix + "  ", dt))
             .append(',').append(CRLF);
 
     sb.append(prefix).append("  payload {");

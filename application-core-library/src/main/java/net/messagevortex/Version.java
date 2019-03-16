@@ -22,6 +22,8 @@ package net.messagevortex;
 // * SOFTWARE.
 // ************************************************************************************
 
+import picocli.CommandLine;
+
 import java.io.InputStream;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -29,7 +31,7 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Version {
+public class Version implements CommandLine.IVersionProvider {
 
   private static final Logger LOGGER;
 
@@ -57,9 +59,14 @@ public class Version {
     return BUILDVER;
   }
 
-  public static String getVersion() {
+  public static String getStringVersion() {
     init();
     return intVersion;
+  }
+
+  public String[] getVersion() {
+    init();
+    return new String[] { VERSION_STRING };
   }
 
   private static synchronized void init() {

@@ -219,7 +219,7 @@ public class FuzzerTest {
     public void fuzzingRoutingBlock() throws Exception {
         try{
             for (int i = 0; i < ksDisc/8192; i++) {;
-                LOGGER.log(Level.INFO,"creating routing block");
+                LOGGER.log(Level.INFO,"creating router block");
                 RoutingBlock routing=new RoutingBlock();
                 assertTrue( "Routing Block may not be null",routing!=null);
                 LOGGER.log(Level.INFO,"encoding binary");

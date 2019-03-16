@@ -30,7 +30,7 @@ import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1TaggedObject;
 
 /**
- * Represents a the Blending specification of the routing block.
+ * Represents a the Blending specification of the router block.
  */
 public abstract class Operation extends AbstractBlock implements Serializable {
 
