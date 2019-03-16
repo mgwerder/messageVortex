@@ -1,10 +1,22 @@
 // general settings
 section_list; transport_setup; default; A comma separated list of transport endpoints sections (senders and receivers)
-string; credential_source_setup; default; The credential source setup section to be used
+section_list; blender_setup; default; A comma separated list of  blender sections
+section_list; router_setup; default; A comma separated list of  router sections
+section_list; credential_source_setup; default; The credential source setup section to be used
+
+// router section specifics
+String; router_implementation; net.messagevortex.router.RouterImplementation; router class to be used
+String; accounting_implementation; net.messagevortex.accounting.AccountingImplementation; accounting class to be used
+
+// blnder section specifics
+string; blender_implementation;; blender class to be used
+string; router; router; the section name of the respective router implementation
 
 // generic transport classes
 String; transport_endpoint_receiver; net.messagevortex.transport.pop.Pop3Receiver; The class name of the transport receiver
 String; transport_endpoint_Sender; net.messagevortex.transport.smtp.SmtpSender; The class name of the transport sender
+string; transport_implementation; ; The class name of the transport impementation
+string; blender; blender; The section name of the upstream blender
 
 // Incoming SMTP connection listener settings
 numeric; smtp_incoming_port              ; 587      ; The port number for incoming SMTP connects.

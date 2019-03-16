@@ -470,6 +470,8 @@ public class Config {
               lineNumber);
     } else if (c.getType() == ConfigType.STRING) {
       setStringValue(section, id, value, lineNumber);
+    } else if (c.getType() == ConfigType.SECTION_LIST) {
+      setSectionListValue(section, id, value, lineNumber);
     } else {
       throw new NotImplementedException();
     }
@@ -651,8 +653,11 @@ public class Config {
    */
   public String setSectionListValue(String section, String id, String value, int lineNumber) {
     ConfigElement ele = configData.get(id.toLowerCase());
-    if (ele == null || value == null) {
+    if (ele == null) {
       throw new NullPointerException("unable to get id " + id + " from config subsystem");
+    }
+    if (value == null) {
+      throw new NullPointerException("unable to set id " + id + " of config subsystem (vlaue may not be null)");
     }
     ConfigType type = ele.getType();
     if (type != ConfigType.SECTION_LIST) {
@@ -768,7 +773,7 @@ public class Config {
    */
   public void load(String filename) throws IOException {
 
-    Pattern sectionPat  = Pattern.compile("^\\s*\\[([a-zA-Z0-9_\\-]]+)\\]\\s*$");
+    Pattern sectionPat  = Pattern.compile("^\\s*\\[([a-zA-Z0-9_\\-]+)\\]\\s*$");
     Pattern keyValuePat = Pattern.compile("\\s*([^=]+)\\s*=\\s*(.*)\\s*$");
 
     if ( this.getClass().getClassLoader().getResourceAsStream(filename) == null) {
@@ -781,7 +786,7 @@ public class Config {
                     StandardCharsets.UTF_8))) {
       String line;
       String section = null;
-      int lineCounter = 0;
+      int lineCounter = 1;
       while ((line = br.readLine()) != null) {
         if (Pattern.matches("\\s*//.*", line)) {
           // ignore comment lines
@@ -795,7 +800,7 @@ public class Config {
             section=m.group(1);
             LOGGER.log(Level.INFO, "parsing section [" + section + "]");
 
-          } else if (section != null) {
+          } else {
             //parse KV pair
             m = keyValuePat.matcher(line);
             if (m.matches()) {
@@ -804,6 +809,8 @@ public class Config {
 
               // add value to store
               setValue(section, key, value, lineCounter);
+            } else {
+              throw new IOException("unable to parse \"" + line + "\" (line:" + lineCounter + ")");
             }
           }
         }

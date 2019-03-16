@@ -29,6 +29,8 @@ import net.messagevortex.transport.Transport;
 import picocli.CommandLine;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -45,6 +47,12 @@ public class MessageVortex implements Callable<Integer> {
   private final static int CONFIG_FAIL = 101;
   private final static int SETUP_FAIL  = 102;
   private final static int HELP        = 100;
+
+  private enum DaemonType {
+    TRANSPORT,
+    BLEDING,
+    ROUTING;
+  }
 
   @CommandLine.Option(names = {"-c", "--config"}, description = "filename of the config to be used")
   private String configFile = "messageVortex.cfg";
@@ -75,8 +83,21 @@ public class MessageVortex implements Callable<Integer> {
     }
 
     try {
-      // FIXME setup according to config file
+      // setup according to config file
       Config cfg = MessageVortexConfig.getDefault();
+      for (String routerSection : cfg.getSectionListValue(null,"router_setup")) {
+        LOGGER.log(Level.INFO, "setting up routing layer \"" + routerSection + "\"");
+        // setup Accounting
+        // setup routers
+      }
+      for (String blendingSection : cfg.getSectionListValue(null,"blender_setup")) {
+        LOGGER.log(Level.INFO, "setting up blending layer \"" + blendingSection + "\"");
+        // setup blending
+      }
+      for (String transportSection : cfg.getSectionListValue(null,"transport_setup")) {
+        LOGGER.log(Level.INFO, "setting up transport layer \"" + transportSection + "\"");
+        // setup blending
+      }
 
     } catch (IOException ioe) {
       LOGGER.log(Level.SEVERE, "Exception while setting up transport infrastructure", ioe);
@@ -92,5 +113,27 @@ public class MessageVortex implements Callable<Integer> {
      es.getValue().shutdownDaemon();
     }
     return 0;
+  }
+
+  public static RunningDaemon getDaemon(String section,DaemonType type) throws ClassNotFoundException {
+    return getRunnerDaemonClass(section);
+  }
+
+  public static RunningDaemon getRunnerDaemonClass(String name) throws ClassNotFoundException {
+    Class<RunningDaemon> myClass = (Class<RunningDaemon>)(Class.forName(name));
+    Constructor<?> myConstructor;
+    try {
+      myConstructor = myClass.getConstructor(String.class);
+    } catch(NoSuchMethodException e) {
+      throw new ClassNotFoundException( "unable to get apropriate constructor from class \""+name+"\"", e);
+    }
+    if (! RunningDaemon.class.isAssignableFrom(myClass)) {
+      throw new ClassNotFoundException( "Class \"" + name + "\" does not implement required interfaces");
+    }
+    try {
+      return (RunningDaemon)(myConstructor.newInstance(new Object[]{name}));
+    } catch(IllegalAccessException|InvocationTargetException|InstantiationException e) {
+      throw new ClassNotFoundException( "Class \"" + name + "\" failed running the constructor",e);
+    }
   }
 }
