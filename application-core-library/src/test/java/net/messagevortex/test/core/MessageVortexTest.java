@@ -59,7 +59,7 @@ public class MessageVortexTest {
   }
 
   @Test
-  public void getRunRegularlyAndShutdown() {
+  public void runRegularlyAndShutdown() {
     try {
       assertTrue("Errorcode is not 0", MessageVortex.main(new String[0]) == 0);
     } catch (Exception e) {
@@ -69,7 +69,7 @@ public class MessageVortexTest {
   }
 
   @Test
-  public void getRunRegularlyAndShutdownNull() {
+  public void runRegularlyAndShutdownNull() {
     try {
       assertTrue("Errorcode is not 0", MessageVortex.main(null) == 0);
     } catch (Exception e) {
