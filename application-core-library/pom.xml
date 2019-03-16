@@ -20,12 +20,12 @@
         <argLine>-ea</argLine>
 
         <!-- sonar properties -->
+        <sonar.projectKey>net.gwerder.java:messagevortex</sonar.projectKey>
         <sonar.working.directory>target/sonar</sonar.working.directory>
-        <sonar.projectKey>net.gwerder.java:mailvortex</sonar.projectKey>
         <sonar.projectName>MessageVortex</sonar.projectName>
         <sonar.projectVersion>${project.version}</sonar.projectVersion>
         <sonar.language>java</sonar.language>
-        <sonar.sources>src/main/java,application-core-library/src/test/java</sonar.sources>
+        <sonar.sources>src/main/java,src/test/java</sonar.sources>
         <sonar.inclusions>**/*.java</sonar.inclusions>
         <sonar.exclusions>src/test/java/**/*.java</sonar.exclusions>
         <sonar.java.source>${jdk.version}</sonar.java.source>
@@ -45,7 +45,7 @@
         <sonar.issues.defaultAssigneeLogin>mgwerder</sonar.issues.defaultAssigneeLogin>
         <sonar.scm.disabled>true</sonar.scm.disabled>
         <sonar.verbose>true</sonar.verbose>
-
+	<sonar.sonargraph.report.path>target/sonargraph</sonar.sonargraph.report.path>
     </properties>
 
     <dependencies>
