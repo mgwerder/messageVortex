@@ -19,18 +19,21 @@ $(INTERDIR)/messageVortex.pdf: $(SRCDIR)/messageVortex.tex $(SRCDIR)/messageVort
 	@make dirs
 	@echo "building tmp pdf file $@"
 	@cp ../rfc/target/xml2rfc/*.pdf $(INTERDIR)/rfc
+	(cd $(SRCDIR); tar -cf - $$(find . -name '*.bib') inc/bib/ ) | (cd $(INTERDIR); tar -xvf -)
 	(cd $(SRCDIR); TEXINPUTS=../../../$(INTERDIR):$${TEXINPUTS} pdflatex -output-directory=../../../$(INTERDIR) messageVortex.tex )
-	(cd $(SRCDIR); tar -cf - $$(find . -name '*.bib')) | (cd $(INTERDIR); tar -xvf -)
 	(cd $(INTERDIR)/; bibtex messageVortex )
-	(cd $(INTERDIR)/; makeindex messageVortex )
 	(cd $(SRCDIR); TEXINPUTS=../../../$(INTERDIR):$${TEXINPUTS} pdflatex -output-directory=../../../$(INTERDIR) messageVortex.tex )
+	(cd $(SRCDIR); TEXINPUTS=../../../$(INTERDIR):$${TEXINPUTS} pdflatex -output-directory=../../../$(INTERDIR) messageVortex.tex )
+	(cd $(INTERDIR)/; makeindex messageVortex )
 	(cd $(SRCDIR); TEXINPUTS=../../../$(INTERDIR):$${TEXINPUTS} pdflatex -output-directory=../../../$(INTERDIR) messageVortex.tex )
 
 $(INTERDIR)/messageVortex_attachdocs.pdf: $(SRCDIR)/messageVortex.tex $(SRCDIR)/messageVortex.bib $(INTERDIR)/messageVortex.pdf
+	cp $(INTERDIR)/messageVortex.bib $(INTERDIR)/messageVortex_attachdocs.bib
 	(cd $(SRCDIR); TEXINPUTS=.:../../../$(INTERDIR):$${TEXINPUTS} pdflatex -output-directory=../../../$(INTERDIR) -jobname=messageVortex_attachdocs "\PassOptionsToClass{attachdocs}{scrbook}\input{messageVortex.tex}")
-	(cd $(INTERDIR)/; bibtex messageVortex )
-	(cd $(INTERDIR)/; makeindex messageVortex )
+	(cd $(INTERDIR)/; bibtex messageVortex_attachdocs )
 	(cd $(SRCDIR); TEXINPUTS=.:../../../$(INTERDIR):$${TEXINPUTS} pdflatex -output-directory=../../../$(INTERDIR) -jobname=messageVortex_attachdocs "\PassOptionsToClass{attachdocs}{scrbook}\input{messageVortex.tex}")
+	(cd $(SRCDIR); TEXINPUTS=.:../../../$(INTERDIR):$${TEXINPUTS} pdflatex -output-directory=../../../$(INTERDIR) -jobname=messageVortex_attachdocs "\PassOptionsToClass{attachdocs}{scrbook}\input{messageVortex.tex}")
+	(cd $(INTERDIR)/; makeindex messageVortex_attachdocs )
 	(cd $(SRCDIR); TEXINPUTS=.:../../../$(INTERDIR):$${TEXINPUTS} pdflatex -output-directory=../../../$(INTERDIR) -jobname=messageVortex_attachdocs "\PassOptionsToClass{attachdocs}{scrbook}\input{messageVortex.tex}")
         
 $(OUTDIR)/%.pdf: $(INTERDIR)/%.pdf
