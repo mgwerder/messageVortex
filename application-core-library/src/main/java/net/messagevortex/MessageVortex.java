@@ -47,7 +47,7 @@ public class MessageVortex implements Callable<Integer> {
   private final static int HELP        = 100;
 
   @CommandLine.Option(names = {"-c", "--config"}, description = "filename of the config to be used")
-  private String configFile = "messagevortex.cfg";
+  private String configFile = "messageVortex.cfg";
 
   static {
     LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());

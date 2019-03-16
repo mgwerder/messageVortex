@@ -771,6 +771,10 @@ public class Config {
     Pattern sectionPat  = Pattern.compile("^\\s*\\[([a-zA-Z0-9_\\-]]+)\\]\\s*$");
     Pattern keyValuePat = Pattern.compile("\\s*([^=]+)\\s*=\\s*(.*)\\s*$");
 
+    if ( this.getClass().getClassLoader().getResourceAsStream(filename) == null) {
+      throw new IOException( " unable to locate file \"" + filename +"\"");
+    }
+
     try (BufferedReader br = new BufferedReader(
             new InputStreamReader(
                     this.getClass().getClassLoader().getResourceAsStream(filename),

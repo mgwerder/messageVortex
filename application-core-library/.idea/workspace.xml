@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d11f21f3-1155-4924-86d1-bc99f93f8cdb" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/MessageVortexTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/MessageVortexTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/Config.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -96,8 +98,8 @@
       <file leaf-file-name="Config.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/Config.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3034">
-              <caret line="783" column="35" lean-forward="true" selection-start-line="783" selection-start-column="35" selection-end-line="783" selection-end-column="35" />
+            <state relative-caret-position="637">
+              <caret line="775" column="5" selection-start-line="775" selection-start-column="5" selection-end-line="775" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -120,11 +122,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MessageVortex.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="MessageVortex.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="820">
-              <caret line="65" selection-start-line="65" selection-end-line="65" />
+            <state relative-caret-position="721">
+              <caret line="49" column="39" selection-start-line="49" selection-start-column="39" selection-end-line="49" selection-end-column="39" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -132,11 +134,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MessageVortexTest.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="MessageVortexTest.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/MessageVortexTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="735">
-              <caret line="67" selection-start-line="67" selection-end-line="67" />
+            <state relative-caret-position="1007">
+              <caret line="83" column="37" selection-start-line="83" selection-start-column="37" selection-end-line="83" selection-end-column="37" />
             </state>
           </provider>
         </entry>
@@ -194,8 +196,8 @@
       <find>sona</find>
       <find>setString</find>
       <find>setNumer</find>
-      <find>store</find>
       <find>588</find>
+      <find>store</find>
     </findStrings>
     <replaceStrings>
       <replace>;</replace>
@@ -237,7 +239,6 @@
         <option value="$PROJECT_DIR$/src/test/java/net/messagevortex/test/transport/DummyTransportSenderTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/ConfigTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/net/messagevortex/test/transport/SMTPTransportSenderTest.java" />
-        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/Config.java" />
         <option value="$PROJECT_DIR$/src/main/resources/messageVortex.cfg" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/Transport.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/router/Router.java" />
@@ -245,9 +246,10 @@
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/accounting/DummyAccountant.java" />
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/VersionTest.java" />
-        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/Version.java" />
         <option value="$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/MessageVortexTest.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/Config.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java" />
       </list>
     </option>
   </component>
@@ -379,7 +381,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.All Tests">
+  <component name="RunManager" selected="JUnit.MessageVortexTest.runRegularlyAndShutdown">
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
       <method>
@@ -571,8 +573,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.MessageVortexTest.runRegularlyAndShutdownNull" />
         <item itemvalue="JUnit.MessageVortexTest.runRegularlyAndShutdown" />
+        <item itemvalue="JUnit.MessageVortexTest.runRegularlyAndShutdownNull" />
         <item itemvalue="JUnit.MessageVortexTest.getVersion" />
         <item itemvalue="JUnit.MessageVortexTest.getHelp" />
         <item itemvalue="Maven.application-core-library [sonar:sonar]" />
@@ -594,9 +596,6 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="All_Tests - 2019.03.16 at 16h 40m 13s.xml">
-      <configuration name="All Tests" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="MessageVortexTest_getVersion - 2019.03.16 at 16h 41m 02s.xml">
       <configuration name="MessageVortexTest.getVersion" configurationId="JUnit" />
     </history-entry>
@@ -624,6 +623,9 @@
     <history-entry file="All_Tests - 2019.03.16 at 20h 00m 03s.xml">
       <configuration name="All Tests" configurationId="JUnit" />
     </history-entry>
+    <history-entry file="MessageVortexTest_runRegularlyAndShutdown - 2019.03.16 at 22h 42m 55s.xml">
+      <configuration name="MessageVortexTest.runRegularlyAndShutdown" configurationId="JUnit" />
+    </history-entry>
   </component>
   <component name="TimeTrackingManager">
     <option name="totallyTimeSpent" value="33506000" />
@@ -649,7 +651,7 @@
       <window_info id="Image Layers" order="2" />
       <window_info anchor="right" id="Capture Analysis" order="4" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.50053304" side_tool="true" weight="0.32950193" />
-      <window_info anchor="right" id="Maven Projects" order="6" sideWeight="0.49857143" weight="0.19723183" />
+      <window_info anchor="right" id="Maven Projects" order="6" sideWeight="0.49857143" visible="true" weight="0.19723183" />
       <window_info anchor="bottom" id="Version Control" order="11" />
       <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49946696" visible="true" weight="0.32819635" />
       <window_info anchor="bottom" id="Terminal" order="7" />
@@ -968,13 +970,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/Config.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3034">
-          <caret line="783" column="35" lean-forward="true" selection-start-line="783" selection-start-column="35" selection-end-line="783" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/router/MessageFactory.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="383">
@@ -1041,16 +1036,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="820">
-          <caret line="65" selection-start-line="65" selection-end-line="65" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/Version.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1564">
@@ -1067,8 +1052,25 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/MessageVortexTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="735">
-          <caret line="67" selection-start-line="67" selection-end-line="67" />
+        <state relative-caret-position="1007">
+          <caret line="83" column="37" selection-start-line="83" selection-start-column="37" selection-end-line="83" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/Config.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="637">
+          <caret line="775" column="5" selection-start-line="775" selection-start-column="5" selection-end-line="775" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="721">
+          <caret line="49" column="39" selection-start-line="49" selection-start-column="39" selection-end-line="49" selection-end-column="39" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
