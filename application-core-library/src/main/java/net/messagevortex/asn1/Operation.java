@@ -22,12 +22,13 @@ package net.messagevortex.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
+import org.bouncycastle.asn1.ASN1Encodable;
+import org.bouncycastle.asn1.ASN1TaggedObject;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import org.bouncycastle.asn1.ASN1Encodable;
-import org.bouncycastle.asn1.ASN1TaggedObject;
 
 /**
  * Represents a the Blending specification of the router block.
@@ -38,8 +39,6 @@ public abstract class Operation extends AbstractBlock implements Serializable {
 
   public static final int SPLIT_PAYLOAD = 150;
   public static final int MERGE_PAYLOAD = 160;
-  public static final int XOR_SPLIT_PAYLOAD = 250;
-  public static final int XOR_MERGE_PAYLOAD = 260;
   public static final int ENCRYPT_PAYLOAD = 300;
   public static final int DECRYPT_PAYLOAD = 310;
   public static final int ADD_REDUNDANCY = 400;
@@ -70,8 +69,6 @@ public abstract class Operation extends AbstractBlock implements Serializable {
         initInProgress = true;
         operations.put(SPLIT_PAYLOAD, new SplitPayloadOperation());
         operations.put(MERGE_PAYLOAD, new MergePayloadOperation());
-        operations.put(XOR_SPLIT_PAYLOAD, new XorSplitPayloadOperation());
-        operations.put(XOR_MERGE_PAYLOAD, new XorMergePayloadOperation());
         operations.put(ENCRYPT_PAYLOAD, new EncryptPayloadOperation());
         operations.put(DECRYPT_PAYLOAD, new DecryptPayloadOperation());
         operations.put(ADD_REDUNDANCY, new AddRedundancyOperation());
