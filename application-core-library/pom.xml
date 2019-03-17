@@ -65,6 +65,12 @@
             <artifactId>picocli</artifactId>
             <version>3.9.5</version>
         </dependency>
+        <!-- Required for BasicSmtpReceiver -> FIXME get rid of it ASAP -->
+        <dependency>
+            <groupId>org.subethamail</groupId>
+            <artifactId>subethasmtp</artifactId>
+            <version>3.1.7</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -8,7 +8,7 @@ import java.io.InputStream;
 public class SmtpPopServer extends AbstractDaemon implements Transport {
 
   public SmtpPopServer(String section) {
-    // FIXME this is a dummy 
+    // FIXME this is a dummy
   }
 
   @Override

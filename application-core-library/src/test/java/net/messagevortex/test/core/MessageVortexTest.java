@@ -4,6 +4,7 @@ import net.messagevortex.Config;
 import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexConfig;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -46,22 +47,28 @@ public class MessageVortexTest {
       }
   }
 
+  @Ignore("Only for manual testing of setups intended")
+  @Test
+  public void runManualTest() {
+    int ret = MessageVortex.main(new String[] {"--timeoutAndDie=1800"});
+  }
+
   @Test
   public void getHelp() {
     int e = MessageVortex.main(new String[]{"--help"});
-    assertTrue("Errorcode for --help is not 0 but " + e, e == 0);
+    assertTrue("Errorcode for --help is not 103 but " + e, e == 103);
   }
 
   @Test
   public void getVersion() {
     int e = MessageVortex.main(new String[]{"--version"});
-    assertTrue("Errorcode for --version is not 0 but " + e, e == 0);
+    assertTrue("Errorcode for --version is not 103 but " + e, e == 103);
   }
 
   @Test
   public void runRegularlyAndShutdown() {
     try {
-      assertTrue("Errorcode is not 0", MessageVortex.main(new String[0]) == 0);
+      assertTrue("Errorcode is not 0", MessageVortex.main(new String[] {"--timeoutAndDie=0"}) == 0);
     } catch (Exception e) {
       e.printStackTrace();
       fail("got unexpected exception " + e + "\n" + e.getStackTrace()[0].toString() );
@@ -69,9 +76,13 @@ public class MessageVortexTest {
   }
 
   @Test
-  public void runRegularlyAndShutdownNull() {
+  public void runRegularlyWithTimeout() {
     try {
-      assertTrue("Errorcode is not 0", MessageVortex.main(null) == 0);
+      long start = System.currentTimeMillis();
+      int ret = MessageVortex.main(new String[] {"--timeoutAndDie=3"});
+      long duration = System.currentTimeMillis()-start;
+      assertTrue("Errorcode is not 0", ret == 0);
+      assertTrue("Duration was below 3s (duration:"+duration+")", duration >=3000);
     } catch (Exception e) {
       e.printStackTrace();
       fail("got unexpected exception " + e + "\n" + e.getStackTrace()[0].toString() );

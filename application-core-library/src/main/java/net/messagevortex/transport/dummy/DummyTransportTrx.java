@@ -23,6 +23,8 @@ package net.messagevortex.transport.dummy;
 // ************************************************************************************
 
 import net.messagevortex.AbstractDaemon;
+import net.messagevortex.Config;
+import net.messagevortex.MessageVortex;
 import net.messagevortex.transport.ByteArrayBuilder;
 import net.messagevortex.transport.RandomString;
 import net.messagevortex.transport.Transport;
@@ -33,13 +35,26 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DummyTransportTrx extends AbstractDaemon implements Transport {
 
+  private static final Logger LOGGER;
+
+  static {
+    LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+  }
+
   static final Map<String, TransportReceiver> endpoints = new HashMap<>();
 
-  public DummyTransportTrx(String section) {
-    // FIXME dummy constructor
+  public DummyTransportTrx(String section) throws IOException {
+    this(
+            Config.getDefault().getStringValue(section,"dummy_id"),
+            MessageVortex.getBlender(Config.getDefault().getStringValue(section,"blender"))
+    );
+    LOGGER.log(Level.INFO,"setup of dummy endpoint for section \""+section+"\" done");
+    LOGGER.log(Level.INFO,"id is \""+Config.getDefault().getStringValue(section,"blender")+"\" done");
   }
 
   /**
@@ -51,6 +66,7 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
    */
   public DummyTransportTrx(String id, TransportReceiver blender) throws IOException {
     synchronized (endpoints) {
+      LOGGER.log(Level.INFO,"setting up Dummy endpoint for id \""+id+"\"");
       if (endpoints.containsKey(id)) {
         throw new IOException("Duplicate transport endpoint identifier (" + id + ")");
       }
