@@ -123,6 +123,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/router/SimpleRouterImplementation.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/routing/Router.java">
           <value>
             <set />
@@ -134,6 +139,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/CustomKeyManager.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/SmtpPopServer.java">
           <value>
             <set />
           </value>
@@ -158,6 +168,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/dummy/DummyTransportTrx.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/SmtpSender.java">
           <value>
             <set />
@@ -169,6 +184,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/main/resources/messageVortex.cfgRessources">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/test/java/net/messagevortex/test/accounting/DummyAccountantTest.java">
           <value>
             <set />
           </value>

@@ -27,7 +27,7 @@ public class DummyAccountantTest {
 
     @Test
     public void basicDummyAccountantTest() {
-        HeaderVerifier a=new DummyAccountant();
+        HeaderVerifier a=new DummyAccountant("");
 
         assertTrue("wrong reply for header processing from dummy acountant",a.verifyHeaderForProcessing(null)==Integer.MAX_VALUE);
     }

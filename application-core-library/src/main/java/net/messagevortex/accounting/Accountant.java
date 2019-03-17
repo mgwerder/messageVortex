@@ -26,5 +26,5 @@ import net.messagevortex.RunningDaemon;
 /**
  * Created by martin.gwerder on 03.04.2017.
  */
-public interface Accountant extends RunningDaemon {
+public interface Accountant extends RunningDaemon, HeaderVerifier {
 }

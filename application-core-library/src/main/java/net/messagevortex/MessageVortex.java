@@ -44,14 +44,15 @@ public class MessageVortex implements Callable<Integer> {
 
   private static final Logger LOGGER;
 
-  private final static int CONFIG_FAIL = 101;
-  private final static int SETUP_FAIL  = 102;
-  private final static int HELP        = 100;
+  private final static int CONFIG_FAIL   = 101;
+  private final static int SETUP_FAIL    = 102;
+  private final static int ARGUMENT_FAIL = 103;
 
   private enum DaemonType {
     TRANSPORT,
     BLEDING,
-    ROUTING;
+    ROUTING,
+    ACCOUNTING;
   }
 
   @CommandLine.Option(names = {"-c", "--config"}, description = "filename of the config to be used")
@@ -69,7 +70,7 @@ public class MessageVortex implements Callable<Integer> {
   public static int main(String[] args) {
     LOGGER.log(Level.INFO, "MessageVortex V" + Version.getBuild());
     Integer i = CommandLine.call(new MessageVortex(), args == null ? new String[0] : args);
-    return i != null ? i : 0;
+    return i != null ? i : ARGUMENT_FAIL;
   }
 
   public Integer call() {
@@ -88,19 +89,26 @@ public class MessageVortex implements Callable<Integer> {
       for (String routerSection : cfg.getSectionListValue(null,"router_setup")) {
         LOGGER.log(Level.INFO, "setting up routing layer \"" + routerSection + "\"");
         // setup Accounting
+        accountant.put(routerSection.toLowerCase(), (Accountant)getDaemon(cfg.getStringValue(routerSection, "accounting_implementation"),DaemonType.ACCOUNTING));
         // setup routers
+        router.put(routerSection.toLowerCase(), (Router)getDaemon(cfg.getStringValue(routerSection, "router_implementation"),DaemonType.ROUTING));
       }
       for (String blendingSection : cfg.getSectionListValue(null,"blender_setup")) {
         LOGGER.log(Level.INFO, "setting up blending layer \"" + blendingSection + "\"");
         // setup blending
+        blender.put(blendingSection.toLowerCase(), (Blender)getDaemon(cfg.getStringValue(blendingSection, "blender_implementation"),DaemonType.BLEDING));
       }
       for (String transportSection : cfg.getSectionListValue(null,"transport_setup")) {
         LOGGER.log(Level.INFO, "setting up transport layer \"" + transportSection + "\"");
-        // setup blending
+        // setup transport
+        transport.put(transportSection.toLowerCase(), (Transport)getDaemon(cfg.getStringValue(transportSection, "transport_implementation"),DaemonType.TRANSPORT));
       }
 
     } catch (IOException ioe) {
-      LOGGER.log(Level.SEVERE, "Exception while setting up transport infrastructure", ioe);
+      LOGGER.log(Level.SEVERE, "Exception while setting up infrastructure", ioe);
+      return SETUP_FAIL;
+    } catch(ClassNotFoundException cnf) {
+      LOGGER.log(Level.SEVERE, "Bad class configured", cnf);
       return SETUP_FAIL;
     }
 
@@ -116,10 +124,13 @@ public class MessageVortex implements Callable<Integer> {
   }
 
   public static RunningDaemon getDaemon(String section,DaemonType type) throws ClassNotFoundException {
-    return getRunnerDaemonClass(section);
+    return (RunningDaemon)getConfiguredClass(section, RunningDaemon.class);
   }
 
-  public static RunningDaemon getRunnerDaemonClass(String name) throws ClassNotFoundException {
+  public static Object getConfiguredClass(String name, Class templateClass) throws ClassNotFoundException {
+    if (name == null) {
+      throw new ClassNotFoundException("unable to obtain class \""+ name + "\"");
+    }
     Class<RunningDaemon> myClass = (Class<RunningDaemon>)(Class.forName(name));
     Constructor<?> myConstructor;
     try {
@@ -127,13 +138,17 @@ public class MessageVortex implements Callable<Integer> {
     } catch(NoSuchMethodException e) {
       throw new ClassNotFoundException( "unable to get apropriate constructor from class \""+name+"\"", e);
     }
-    if (! RunningDaemon.class.isAssignableFrom(myClass)) {
+    if (! templateClass.isAssignableFrom(myClass)) {
       throw new ClassNotFoundException( "Class \"" + name + "\" does not implement required interfaces");
     }
     try {
-      return (RunningDaemon)(myConstructor.newInstance(new Object[]{name}));
+      return myConstructor.newInstance(new Object[]{name});
     } catch(IllegalAccessException|InvocationTargetException|InstantiationException e) {
       throw new ClassNotFoundException( "Class \"" + name + "\" failed running the constructor",e);
     }
+  }
+
+  public static Accountant getAccountant(String id) {
+    return accountant.get(id.toLowerCase());
   }
 }

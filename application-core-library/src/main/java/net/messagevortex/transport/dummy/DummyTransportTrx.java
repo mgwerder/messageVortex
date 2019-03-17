@@ -25,8 +25,8 @@ package net.messagevortex.transport.dummy;
 import net.messagevortex.AbstractDaemon;
 import net.messagevortex.transport.ByteArrayBuilder;
 import net.messagevortex.transport.RandomString;
+import net.messagevortex.transport.Transport;
 import net.messagevortex.transport.TransportReceiver;
-import net.messagevortex.transport.TransportSender;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -34,9 +34,13 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DummyTransportTrx extends AbstractDaemon implements TransportSender {
+public class DummyTransportTrx extends AbstractDaemon implements Transport {
 
   static final Map<String, TransportReceiver> endpoints = new HashMap<>();
+
+  public DummyTransportTrx(String section) {
+    // FIXME dummy constructor
+  }
 
   /**
    * Constructor to create a new dummy transporter.

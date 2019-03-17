@@ -27,8 +27,8 @@ import net.messagevortex.asn1.BlendingSpec;
 import net.messagevortex.asn1.IdentityStore;
 import net.messagevortex.asn1.VortexMessage;
 import net.messagevortex.asn1.encryption.DumpType;
+import net.messagevortex.transport.Transport;
 import net.messagevortex.transport.TransportReceiver;
-import net.messagevortex.transport.TransportSender;
 import net.messagevortex.transport.dummy.DummyTransportTrx;
 
 import java.io.ByteArrayInputStream;
@@ -47,9 +47,14 @@ public class DummyBlender extends Blender implements TransportReceiver {
   }
 
   String identity;
-  TransportSender transport;
+  Transport transport;
   BlendingReceiver router;
   IdentityStore identityStore;
+
+  public DummyBlender(String section) throws IOException {
+    // FIXME this is a duimmy constructor which breaks the implementation
+    this("", null,new IdentityStore());
+  }
 
   /***
    * <p>Creates a passthru blender which abstracts a local transport media.</p>
