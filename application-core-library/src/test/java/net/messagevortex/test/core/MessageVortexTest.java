@@ -66,7 +66,7 @@ public class MessageVortexTest {
   }
 
   @Test
-  public void runRegularlyAndShutdown() {
+  public void runRegularl1yAndShutdown() {
     try {
       assertTrue("Errorcode is not 0", MessageVortex.main(new String[] {"--timeoutAndDie=0"}) == 0);
     } catch (Exception e) {
