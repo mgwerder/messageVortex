@@ -3,6 +3,7 @@ package net.messagevortex.test.core;
 import net.messagevortex.Config;
 import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexConfig;
+import net.messagevortex.transport.dummy.DummyTransportTrx;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -66,8 +67,9 @@ public class MessageVortexTest {
   }
 
   @Test
-  public void runRegularl1yAndShutdown() {
+  public void runRegularlyAndShutdown() {
     try {
+      DummyTransportTrx.clearDummyEndpoints();
       assertTrue("Errorcode is not 0", MessageVortex.main(new String[] {"--timeoutAndDie=0"}) == 0);
     } catch (Exception e) {
       e.printStackTrace();

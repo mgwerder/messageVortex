@@ -235,7 +235,11 @@ public class Config {
         LOGGER.log(Level.FINE, "value for " + id + " is modified to " + value);
       }
       // set value
-      currentValue.put(section, new ConfigValue(value, lineNumber));
+      if (value != null) {
+        currentValue.put(section, new ConfigValue(value, lineNumber));
+      } else {
+        currentValue.remove(section);
+      }
 
       return ret;
     }
@@ -317,8 +321,8 @@ public class Config {
         return (Integer)(getType().getConverters().stringToObject(getValue(section)));
       } catch (IllegalArgumentException ae) {
         LOGGER.log(Level.SEVERE,
-                "Unable to parse " + id + "[" + type + "]=" + getValue(section)
-                        + " as int (def:" + defaultValue + "/curr:" + getValue(section) + ")",
+                "Unable to parse " + id + "[" + type + "; section:"+section+"]=" + getValue(section)
+                        + "] as int (def:" + defaultValue + "/curr:" + getValue(section) + ")",
                 ae
         );
         throw ae;
@@ -333,13 +337,15 @@ public class Config {
 
     public final String unset(String section) {
       LOGGER.log(Level.FINE, "value for " + id + " is deleted (unset called)");
-      if (section == null) {
-        for (String s:currentValue.keySet()) {
-          setValue(s, null, -1);
+      synchronized(currentValue) {
+        if (section == null) {
+          for (String s : currentValue.keySet().toArray(new String[0])) {
+            setValue(s, null, -1);
+          }
+          return null;
+        } else {
+          return setValue(section, null, -1);
         }
-        return null;
-      } else {
-        return setValue(section, null,-1);
       }
     }
 

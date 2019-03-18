@@ -57,7 +57,7 @@ public class DummyBlender extends Blender {
   public DummyBlender(String section) throws IOException {
     // This is a dummy constructor which breaks the implementation -> FIXME add sensible identity store
     this(
-            Config.getDefault().getStringValue(section, "transport_id"),
+            null,
             MessageVortex.getRouter(Config.getDefault().getStringValue(section, "router")),
             new IdentityStore()
     );
@@ -75,7 +75,11 @@ public class DummyBlender extends Blender {
           throws IOException {
     super(router, null);
     this.identity = identity;
-    this.transport = new DummyTransportTrx(identity, this);
+    if (identity != null) {
+      this.transport = new DummyTransportTrx(identity, this);
+    } else {
+      transport = null;
+    }
     this.router = router;
     if (identityStore == null) {
       throw new NullPointerException("identitystore may not be null");

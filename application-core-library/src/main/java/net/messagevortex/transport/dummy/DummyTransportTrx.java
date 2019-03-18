@@ -48,30 +48,29 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
 
   static final Map<String, TransportReceiver> endpoints = new HashMap<>();
 
+  /**
+   * <p>Constructor to set up a dummy endpoint with named id and blender.</p>
+   *
+   * @param section      section containing data to set up endpoint
+   * @throws IOException if endpoint id is already defined
+   */
   public DummyTransportTrx(String section) throws IOException {
-    this(
-            Config.getDefault().getStringValue(section,"transport_id"),
-            MessageVortex.getBlender(Config.getDefault().getStringValue(section,"blender"))
-    );
-    LOGGER.log(Level.INFO,"setup of dummy endpoint for section \""+section+"\" done");
-    LOGGER.log(Level.INFO,"id is \""+Config.getDefault().getStringValue(section,"blender")+"\" done");
+    LOGGER.log(Level.INFO, "setup of dummy endpoint for section \"" + section + "\" done");
+    String id = Config.getDefault().getStringValue(section, "transport_id");
+    LOGGER.log(Level.INFO, "  id is \"" + id + "\"");
+    TransportReceiver blender = MessageVortex.getBlender(Config.getDefault().getStringValue(section, "blender"));
+    init(id, blender);
   }
 
   /**
-   * Constructor to create a new dummy transporter.
+   * <p>Constructor to set up a dummy endpoint with named id and blender.</p>
    *
-   * @param id            id of this endpoint
-   * @param blender       reference to the respective blender layer
-   * @throws IOException  if id does already exist
+   * @param id           ID of the endpoint
+   * @param blender      blender to be used for received messages
+   * @throws IOException if endpoint id is already defined
    */
-  public DummyTransportTrx(String id, TransportReceiver blender) throws IOException {
-    synchronized (endpoints) {
-      LOGGER.log(Level.INFO,"setting up Dummy endpoint for id \""+id+"\"");
-      if (endpoints.containsKey(id)) {
-        throw new IOException("Duplicate transport endpoint identifier (" + id + ")");
-      }
-      endpoints.put(id, blender);
-    }
+  public DummyTransportTrx( String id, TransportReceiver blender ) throws IOException {
+    init(id, blender);
   }
 
   /**
@@ -79,11 +78,20 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
    *
    * @param blender       reference to the respective blender layer
    */
-  public DummyTransportTrx(TransportReceiver blender) {
+  public DummyTransportTrx(TransportReceiver blender) throws IOException {
     synchronized (endpoints) {
       String id = null;
       while (id == null || endpoints.containsKey(id)) {
         id = RandomString.nextString(5, "0123456789abcdef@example.com");
+      }
+      init(id, blender);
+    }
+  }
+
+  private void init(String id, TransportReceiver blender) throws IOException {
+    synchronized (endpoints) {
+      if (endpoints.containsKey(id)) {
+        throw new IOException("Duplicate transport endpoint identifier (id:" + id + ")");
       }
       endpoints.put(id, blender);
     }
@@ -121,4 +129,10 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
     }
   }
 
+  public static void clearDummyEndpoints() {
+    synchronized (endpoints) {
+      endpoints.clear();
+    }
+  }
 }
+

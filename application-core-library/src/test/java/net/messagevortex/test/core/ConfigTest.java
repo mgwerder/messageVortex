@@ -3,6 +3,7 @@ package net.messagevortex.test.core;
 import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexConfig;
 import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.transport.dummy.DummyTransportTrx;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -95,6 +96,7 @@ public class ConfigTest {
     try {
       // clear all unwanted rubish
       MessageVortexConfig.getDefault().clear();
+      DummyTransportTrx.clearDummyEndpoints();
 
       // read config file
       MessageVortexConfig.getDefault().load("messageVortex.cfg");

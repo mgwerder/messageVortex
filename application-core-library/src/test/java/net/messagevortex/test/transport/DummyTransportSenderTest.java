@@ -43,7 +43,12 @@ public class DummyTransportSenderTest extends AbstractDaemon implements Transpor
           fail("failed to add martin@example.com");
         }
       } else {
-        dt[i] = new DummyTransportTrx(this);
+        try {
+          dt[i] = new DummyTransportTrx(this);
+        } catch(IOException ioe) {
+          ioe.printStackTrace();
+          fail( "unexpected IOException ocurred when setting up entpoints");
+        }
       }
     }
 
@@ -69,5 +74,4 @@ public class DummyTransportSenderTest extends AbstractDaemon implements Transpor
   public void shutdown() {
   }
 
-  ;
 }
