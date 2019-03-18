@@ -22,6 +22,8 @@ package net.messagevortex.blender;
 // * SOFTWARE.
 // ************************************************************************************
 
+import net.messagevortex.Config;
+import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.BlendingSpec;
 import net.messagevortex.asn1.IdentityStore;
@@ -29,6 +31,7 @@ import net.messagevortex.asn1.VortexMessage;
 import net.messagevortex.asn1.encryption.DumpType;
 import net.messagevortex.transport.Transport;
 import net.messagevortex.transport.TransportReceiver;
+import net.messagevortex.transport.TransportSender;
 import net.messagevortex.transport.dummy.DummyTransportTrx;
 
 import java.io.ByteArrayInputStream;
@@ -37,7 +40,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
 
-public class DummyBlender extends Blender implements TransportReceiver {
+public class DummyBlender extends Blender {
 
   private static final java.util.logging.Logger LOGGER;
 
@@ -52,8 +55,12 @@ public class DummyBlender extends Blender implements TransportReceiver {
   IdentityStore identityStore;
 
   public DummyBlender(String section) throws IOException {
-    // FIXME this is a duimmy constructor which breaks the implementation
-    this("", null,new IdentityStore());
+    // This is a dummy constructor which breaks the implementation -> FIXME add sensible identity store
+    this(
+            Config.getDefault().getStringValue(section, "transport_id"),
+            MessageVortex.getRouter(Config.getDefault().getStringValue(section, "router")),
+            new IdentityStore()
+    );
   }
 
   /***
@@ -112,7 +119,14 @@ public class DummyBlender extends Blender implements TransportReceiver {
     }
   }
 
+  @Override
+  public boolean sendMessage(String target, MessageVortex msg) {
+    // FIXME missing implementation
+    return false;
+  }
+
   public void shutdownDaemon() {}
   public void startDaemon() {}
   public void stopDaemon() {}
+
 }

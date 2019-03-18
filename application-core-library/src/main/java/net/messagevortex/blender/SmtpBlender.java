@@ -24,6 +24,7 @@ package net.messagevortex.blender;
 
 import java.io.InputStream;
 
+import net.messagevortex.MessageVortex;
 import net.messagevortex.NotImplementedException;
 import net.messagevortex.accounting.HeaderVerifier;
 import net.messagevortex.asn1.BlendingSpec;
@@ -58,4 +59,9 @@ public class SmtpBlender extends Blender {
 
   public void shutdown() {}
 
+  @Override
+  public boolean sendMessage(String target, MessageVortex msg) {
+    // FIXME implementation missing
+    return false;
+  }
 }

@@ -33,7 +33,7 @@ import net.messagevortex.transport.TransportSender;
 /**
  * Interface specifying a blender.
  */
-public abstract class Blender extends AbstractDaemon implements TransportReceiver {
+public abstract class Blender extends AbstractDaemon implements TransportReceiver,BlendingSender {
 
   private IncomingMessageRouterListener listener = null;
   private HeaderVerifier verifyer = null;

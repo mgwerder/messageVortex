@@ -774,7 +774,7 @@ public class Config {
   public void load(String filename) throws IOException {
 
     Pattern sectionPat  = Pattern.compile("^\\s*\\[([a-zA-Z0-9_\\-]+)\\]\\s*$");
-    Pattern keyValuePat = Pattern.compile("\\s*([^=]+)\\s*=\\s*(.*)\\s*$");
+    Pattern keyValuePat = Pattern.compile("^\\s*([^=]+)\\s*=\\s*(.*)\\s*$");
 
     if ( this.getClass().getClassLoader().getResourceAsStream(filename) == null) {
       throw new IOException( " unable to locate file \"" + filename +"\"");

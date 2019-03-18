@@ -167,4 +167,8 @@ public class MessageVortex implements Callable<Integer> {
   public static Blender getBlender(String id) {
     return blender.get(id.toLowerCase());
   }
+
+  public static Router getRouter(String id) {
+    return router.get(id.toLowerCase());
+  }
 }

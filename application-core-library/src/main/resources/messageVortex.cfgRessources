@@ -17,6 +17,7 @@ String; transport_endpoint_receiver; net.messagevortex.transport.pop.Pop3Receive
 String; transport_endpoint_Sender; net.messagevortex.transport.smtp.SmtpSender; The class name of the transport sender
 string; transport_implementation; ; The class name of the transport impementation
 string; blender; blender; The section name of the upstream blender
+string; transport_id;; ID of the endpoint
 
 // Incoming SMTP connection listener settings
 numeric; smtp_incoming_port              ; 587      ; The port number for incoming SMTP connects.
@@ -43,9 +44,6 @@ numeric  ; pop3_outgoing_port              ; 995      ; The port number to bind 
 string   ; pop3_outgoing_address           ; 127.0.0.1; The address to bind to offer an endpoint to fetch vortexMessages.
 boolean  ; POP3_outgoing_encryption        ; true     ; True if endpoint is SSL wrapped
 boolean  ; POP3_outgoing_require_encryption; true     ; True if endpoint requires encryption (wrapped or STARTTLS) to fetch vortexMessages
-
-// Dummy transport settings
-string; dummy_id;; ID of the endpoint
 
 // credential provider settings
 string; static_username      ;; a static username as credential

@@ -67,11 +67,6 @@
         </dependency>
         <!-- Required for BasicSmtpReceiver -> FIXME get rid of it ASAP -->
         <dependency>
-            <groupId>org.subethamail</groupId>
-            <artifactId>subethasmtp</artifactId>
-            <version>3.1.7</version>
-        </dependency>
-        <dependency>
             <groupId>com.icegreen</groupId>
             <artifactId>greenmail</artifactId>
             <version>1.5.9</version>

@@ -50,7 +50,7 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
 
   public DummyTransportTrx(String section) throws IOException {
     this(
-            Config.getDefault().getStringValue(section,"dummy_id"),
+            Config.getDefault().getStringValue(section,"transport_id"),
             MessageVortex.getBlender(Config.getDefault().getStringValue(section,"blender"))
     );
     LOGGER.log(Level.INFO,"setup of dummy endpoint for section \""+section+"\" done");
