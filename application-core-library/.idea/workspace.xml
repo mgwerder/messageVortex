@@ -2,14 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d11f21f3-1155-4924-86d1-bc99f93f8cdb" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../Jenkinsfile" beforeDir="false" afterPath="$PROJECT_DIR$/../Jenkinsfile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/Config.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/DummyBlender.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/DummyBlender.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/dummy/DummyTransportTrx.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/dummy/DummyTransportTrx.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/ConfigTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/ConfigTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/MessageVortexTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/MessageVortexTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/net/messagevortex/test/transport/DummyTransportSenderTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/net/messagevortex/test/transport/DummyTransportSenderTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../thesis/src/main/latex/inc/parts/02_methodes.inc.tex" beforeDir="false" afterPath="$PROJECT_DIR$/../thesis/src/main/latex/inc/parts/02_methodes.inc.tex" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -55,6 +49,7 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
+          <entry key="Jenkinsfile" value="1" />
           <entry key="asn" value="3" />
           <entry key="cfg" value="3" />
           <entry key="cfgRessources" value="3" />
@@ -68,6 +63,7 @@
         <counts>
           <entry key="Ini" value="1" />
           <entry key="JAVA" value="39" />
+          <entry key="Jenkins file" value="1" />
           <entry key="PLAIN_TEXT" value="9" />
           <entry key="Properties" value="3" />
           <entry key="XML" value="5" />
@@ -75,7 +71,7 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="Jenkinsfile" value="98" />
+          <entry key="Jenkinsfile" value="206" />
           <entry key="cfg" value="467" />
           <entry key="cfgRessources" value="1409" />
           <entry key="cfgWritten" value="5" />
@@ -89,7 +85,7 @@
         <counts>
           <entry key="Ini" value="30" />
           <entry key="JAVA" value="8076" />
-          <entry key="Jenkins file" value="98" />
+          <entry key="Jenkins file" value="206" />
           <entry key="PLAIN_TEXT" value="1868" />
           <entry key="Properties" value="15" />
           <entry key="XML" value="502" />
@@ -112,11 +108,20 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/MessageVortexTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="216">
-              <caret line="71" column="46" selection-start-line="71" selection-start-column="46" selection-end-line="71" selection-end-column="46" />
+            <state relative-caret-position="935">
+              <caret line="74" column="26" lean-forward="true" selection-start-line="74" selection-start-column="26" selection-end-line="74" selection-end-column="26" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/../Jenkinsfile">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="537">
+              <caret line="52" column="46" selection-start-line="52" selection-start-column="46" selection-end-line="52" selection-end-column="46" />
             </state>
           </provider>
         </entry>
@@ -126,15 +131,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="148">
               <caret line="96" column="33" lean-forward="true" selection-start-line="96" selection-start-column="33" selection-end-line="96" selection-end-column="33" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1177">
-              <caret line="147" column="9" lean-forward="true" selection-start-line="147" selection-start-column="9" selection-end-line="147" selection-end-column="9" />
             </state>
           </provider>
         </entry>
@@ -257,7 +253,6 @@
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/Version.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/CustomKeyManager.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/SmtpSender.java" />
-        <option value="$PROJECT_DIR$/../Jenkinsfile" />
         <option value="$PROJECT_DIR$/../pom.xml" />
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/resources/messageVortex.cfg" />
@@ -272,6 +267,7 @@
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/dummy/DummyTransportTrx.java" />
         <option value="$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/ConfigTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/MessageVortexTest.java" />
+        <option value="$PROJECT_DIR$/../Jenkinsfile" />
       </list>
     </option>
   </component>
@@ -315,10 +311,10 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-8" />
+    <option name="x" value="200" />
     <option name="y" value="-8" />
-    <option name="width" value="1936" />
-    <option name="height" value="1176" />
+    <option name="width" value="1278" />
+    <option name="height" value="718" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -437,7 +433,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1552930314313" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1552986254764" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../sonar.properties" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -569,14 +565,11 @@
       <option name="presentableId" value="Default" />
       <updated>1552290503544</updated>
       <workItem from="1552290507005" duration="28708000" />
-      <workItem from="1552898686832" duration="14344000" />
+      <workItem from="1552898686832" duration="17624000" />
     </task>
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="All_Tests - 2019.03.18 at 17h 17m 28s.xml">
-      <configuration name="All Tests" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="ConfigTest - 2019.03.18 at 17h 41m 44s.xml">
       <configuration name="ConfigTest" configurationId="JUnit" />
     </history-entry>
@@ -604,9 +597,12 @@
     <history-entry file="MainCoreSuite - 2019.03.18 at 18h 31m 09s.xml">
       <configuration name="MainCoreSuite" configurationId="JUnit" />
     </history-entry>
+    <history-entry file="MainCoreSuite - 2019.03.18 at 18h 32m 05s.xml">
+      <configuration name="MainCoreSuite" configurationId="JUnit" />
+    </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="49048000" />
+    <option name="totallyTimeSpent" value="52328000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -877,13 +873,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../Jenkinsfile">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="625">
-          <caret line="38" selection-start-line="38" selection-end-line="38" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../pom.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
@@ -999,8 +988,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/MessageVortexTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="71" column="46" selection-start-line="71" selection-start-column="46" selection-end-line="71" selection-end-column="46" />
+        <state relative-caret-position="935">
+          <caret line="74" column="26" lean-forward="true" selection-start-line="74" selection-start-column="26" selection-end-line="74" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../Jenkinsfile">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="537">
+          <caret line="52" column="46" selection-start-line="52" selection-start-column="46" selection-end-line="52" selection-end-column="46" />
         </state>
       </provider>
     </entry>

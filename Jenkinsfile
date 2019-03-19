@@ -32,18 +32,28 @@ pipeline {
             }
           }
         }
-        stage ('Test on JDK9') {
+        stage ('Test on JDK10') {
           agent {
-            docker { image 'maven:3.6.0-jdk-9-slim' }
+            docker { image 'maven:3.6.0-jdk-10-slim' }
           }
           steps{
             sh 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
           }
-          post {
-            success {
-              junit 'application-core-library/target/surefire-reports/TEST-*.xml'
-              jacoco changeBuildStatus: true, classPattern: 'application-core-library/target/classes', execPattern: 'application-core-library/target/**.exec', inclusionPattern: '**/*.class', minimumBranchCoverage: '50', minimumClassCoverage: '50', minimumComplexityCoverage: '50', minimumLineCoverage: '70', minimumMethodCoverage: '50', sourcePattern: 'application-core-library/src/main/java,application-core-library/src/test/java'
-            }
+        }
+        stage ('Test on JDK11') {
+          agent {
+            docker { image 'maven:3.6.0-jdk-11-slim' }
+          }
+          steps{
+            sh 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
+          }
+        }
+        stage ('Test on JDK12') {
+          agent {
+            docker { image 'maven:3.6.0-jdk-12-alpine' }
+          }
+          steps{
+            sh 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
           }
         }
       }
