@@ -23,7 +23,7 @@ pipeline {
             docker { image 'maven:3.6.0-jdk-8-slim' }
           }
           steps{
-            sh 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
+            sh 'mvn -pl application-core-library -DforkCount=0 jacoco:prepare-agent test jacoco:report'
           }
           post {
             success {
@@ -37,7 +37,7 @@ pipeline {
             docker { image 'maven:3.6.0-jdk-10-slim' }
           }
           steps{
-            sh 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
+            sh 'mvn -pl application-core-library -DforkCount=0 jacoco:prepare-agent test jacoco:report'
           }
         }
         stage ('Test on JDK11') {
@@ -45,7 +45,7 @@ pipeline {
             docker { image 'maven:3.6.0-jdk-11-slim' }
           }
           steps{
-            sh 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
+            sh 'mvn -pl application-core-library -DforkCount=0 jacoco:prepare-agent test jacoco:report'
           }
         }
         stage ('Test on JDK12') {
@@ -53,7 +53,7 @@ pipeline {
             docker { image 'maven:3.6.0-jdk-12-alpine' }
           }
           steps{
-            sh 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
+            sh 'mvn -pl application-core-library -DforkCount=0 jacoco:prepare-agent test jacoco:report'
           }
         }
       }
