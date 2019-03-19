@@ -70,7 +70,14 @@ public class MessageVortex implements Callable<Integer> {
   private static Map<String,Router>     router     = new ConcurrentHashMap<>();
   private static Map<String,Accountant> accountant = new ConcurrentHashMap<>();
 
-  public static int main(String[] args) {
+  public static void main(String[] args) {
+    int retval = mainReturn(args);
+    if (retval>0) {
+      System.exit(retval);
+    }
+  }
+
+  public static int mainReturn(String[] args) {
     LOGGER.log(Level.INFO, "MessageVortex V" + Version.getBuild());
     Integer i = CommandLine.call(new MessageVortex(), args == null ? new String[0] : args);
     return i != null ? i : ARGUMENT_FAIL;

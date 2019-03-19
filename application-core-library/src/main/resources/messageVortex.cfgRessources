@@ -28,8 +28,9 @@ boolean; smtp_incoming_require_encryption; true     ; True if encryption is requ
 // outgoing SMTP connection handlers
 numeric; smtp_outgoing_port              ; 25       ; The port number for incoming SMTP connects.
 String ; smtp_outgoing_address           ; 127.0.0.1; The listening Address to bind the server for incoming SMTP connects.
-boolean; smtp_outgoing_ssl               ; false    ; True if the incoming SMTP port is ssl wrapped.
-String ; smtp_outgoing_username          ;          ;The username to be used if authenticating a client to the MessageVortex outgoing SMTP node
+boolean; smtp_outgoing_ssl               ; false    ; True if the SMTP port is ssl wrapped.
+boolean; smtp_outgoing_starttls          ; true     ; True if the a statls request should be raised before authenticating
+String ; smtp_outgoing_user              ;          ;The username to be used if authenticating a client to the MessageVortex outgoing SMTP node
 string ; smtp_outgoing_password          ;          ; The password to be used if authenticating a client to the MessageVortex outgoing SMTP node
 
 // incoming POP3 handlers
@@ -42,8 +43,21 @@ string ; pop3_incoming_password         ;          ; The password to be used if 
 // outgoing POP3 handlers
 numeric  ; pop3_outgoing_port              ; 995      ; The port number to bind to offer an endpoint to fetch vortexMessages
 string   ; pop3_outgoing_address           ; 127.0.0.1; The address to bind to offer an endpoint to fetch vortexMessages.
-boolean  ; POP3_outgoing_encryption        ; true     ; True if endpoint is SSL wrapped
-boolean  ; POP3_outgoing_require_encryption; true     ; True if endpoint requires encryption (wrapped or STARTTLS) to fetch vortexMessages
+boolean  ; pop3_outgoing_encryption        ; true     ; True if endpoint is SSL wrapped
+boolean  ; pop3_outgoing_require_encryption; true     ; True if endpoint requires encryption (wrapped or STARTTLS) to fetch vortexMessages
+
+// incoming IMAPv4 handlers
+numeric; imap_incoming_port             ; 995      ; The port number for incoming POP3 connects.
+String ; imap_incoming_address          ;          ; The listening Address to bind the server for incoming POP3 connects.
+boolean; imap_incoming_ssl              ; true     ; True if the incoming POP3 port is ssl wrapped.
+String ; imap_incoming_username         ;          ; The username to be used if authenticating a client to the MessageVortex incoming POP3 node
+string ; imap_incoming_password         ;          ; The password to be used if authenticating a client to the MessageVortex incoming POP3 node
+
+// outgoing IMAPv4 handlers
+numeric  ; imap_outgoing_port              ; 995      ; The port number to bind to offer an endpoint to fetch vortexMessages
+string   ; imap_outgoing_address           ; 127.0.0.1; The address to bind to offer an endpoint to fetch vortexMessages.
+boolean  ; imap_outgoing_encryption        ; true     ; True if endpoint is SSL wrapped
+boolean  ; imap_outgoing_require_encryption; true     ; True if endpoint requires encryption (wrapped or STARTTLS) to fetch vortexMessages
 
 // credential provider settings
 string; static_username      ;; a static username as credential
