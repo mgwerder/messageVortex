@@ -17,14 +17,34 @@ pipeline {
       }
     }
     stage ('Test') {
-      steps{
-        sh 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
-      }
-      post {
-        success {
-          junit 'application-core-library/target/surefire-reports/TEST-*.xml'
-          jacoco changeBuildStatus: true, classPattern: 'application-core-library/target/classes', execPattern: 'application-core-library/target/**.exec', inclusionPattern: '**/*.class', minimumBranchCoverage: '50', minimumClassCoverage: '50', minimumComplexityCoverage: '50', minimumLineCoverage: '70', minimumMethodCoverage: '50', sourcePattern: 'application-core-library/src/main/java,application-core-library/src/test/java'
-
+      parallel {
+        stage ('Test on JDK8') {
+          agent {
+            docker { image 'maven:3.6.0-jdk-8-slim' }
+          }
+          steps{
+            sh 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
+          }
+          post {
+            success {
+              junit 'application-core-library/target/surefire-reports/TEST-*.xml'
+              jacoco changeBuildStatus: true, classPattern: 'application-core-library/target/classes', execPattern: 'application-core-library/target/**.exec', inclusionPattern: '**/*.class', minimumBranchCoverage: '50', minimumClassCoverage: '50', minimumComplexityCoverage: '50', minimumLineCoverage: '70', minimumMethodCoverage: '50', sourcePattern: 'application-core-library/src/main/java,application-core-library/src/test/java'
+            }
+          }
+        }
+        stage ('Test on JDK9') {
+          agent {
+            docker { image 'maven:3.6.0-jdk-9-slim' }
+          }
+          steps{
+            sh 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
+          }
+          post {
+            success {
+              junit 'application-core-library/target/surefire-reports/TEST-*.xml'
+              jacoco changeBuildStatus: true, classPattern: 'application-core-library/target/classes', execPattern: 'application-core-library/target/**.exec', inclusionPattern: '**/*.class', minimumBranchCoverage: '50', minimumClassCoverage: '50', minimumComplexityCoverage: '50', minimumLineCoverage: '70', minimumMethodCoverage: '50', sourcePattern: 'application-core-library/src/main/java,application-core-library/src/test/java'
+            }
+          }
         }
       }
     }
