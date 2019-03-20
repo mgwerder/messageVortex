@@ -2,18 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d11f21f3-1155-4924-86d1-bc99f93f8cdb" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/SmtpImapServer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/imap/TestImapHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/pop3/TestPop3Handler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/TestSmtpHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Jenkinsfile" beforeDir="false" afterPath="$PROJECT_DIR$/../Jenkinsfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/BasicSmtpReceiver.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/messageVortex.cfg" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/messageVortex.cfg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/messageVortex.cfgRessources" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/messageVortex.cfgRessources" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/MessageVortexTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/MessageVortexTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/SmtpConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/SmtpConnection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/ConfigTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/ConfigTest.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -64,7 +55,7 @@
           <entry key="cfg" value="4" />
           <entry key="cfgRessources" value="4" />
           <entry key="cfgWritten" value="1" />
-          <entry key="java" value="44" />
+          <entry key="java" value="45" />
           <entry key="properties" value="3" />
           <entry key="xml" value="5" />
         </counts>
@@ -72,7 +63,7 @@
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="Ini" value="2" />
-          <entry key="JAVA" value="44" />
+          <entry key="JAVA" value="45" />
           <entry key="Jenkins file" value="1" />
           <entry key="PLAIN_TEXT" value="10" />
           <entry key="Properties" value="3" />
@@ -81,11 +72,11 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="Jenkinsfile" value="238" />
+          <entry key="Jenkinsfile" value="351" />
           <entry key="cfg" value="683" />
           <entry key="cfgRessources" value="1557" />
           <entry key="cfgWritten" value="5" />
-          <entry key="java" value="10616" />
+          <entry key="java" value="10617" />
           <entry key="properties" value="15" />
           <entry key="txt" value="17" />
           <entry key="xml" value="502" />
@@ -94,8 +85,8 @@
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="Ini" value="246" />
-          <entry key="JAVA" value="10616" />
-          <entry key="Jenkins file" value="238" />
+          <entry key="JAVA" value="10617" />
+          <entry key="Jenkins file" value="351" />
           <entry key="PLAIN_TEXT" value="2016" />
           <entry key="Properties" value="15" />
           <entry key="XML" value="502" />
@@ -108,8 +99,17 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/../Jenkinsfile">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="639">
-              <caret line="74" selection-start-line="74" selection-end-line="74" />
+            <state relative-caret-position="238">
+              <caret line="55" column="93" selection-start-line="55" selection-start-column="93" selection-end-line="55" selection-end-column="93" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/ConfigTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="216">
+              <caret line="222" column="129" selection-start-line="222" selection-start-column="129" selection-end-line="222" selection-end-column="129" />
             </state>
           </provider>
         </entry>
@@ -141,7 +141,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/pop3/TestPop3Handler.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="250">
-              <caret line="55" column="18" lean-forward="true" selection-start-line="55" selection-start-column="18" selection-end-line="55" selection-end-column="18" />
+              <caret line="55" column="18" selection-start-line="55" selection-start-column="18" selection-end-line="55" selection-end-column="18" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#1770#1771#0" expanded="true" />
@@ -168,7 +168,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/resources/messageVortex.cfgRessources">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="336">
-              <caret line="32" column="121" lean-forward="true" selection-start-line="32" selection-start-column="121" selection-end-line="32" selection-end-column="121" />
+              <caret line="32" column="121" selection-start-line="32" selection-start-column="121" selection-end-line="32" selection-end-column="121" />
             </state>
           </provider>
         </entry>
@@ -186,7 +186,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="323">
-              <caret line="84" lean-forward="true" selection-start-line="84" selection-end-line="84" />
+              <caret line="84" selection-start-line="84" selection-end-line="84" />
             </state>
           </provider>
         </entry>
@@ -223,10 +223,14 @@
       <find>resou</find>
       <find>transport_implementation</find>
       <find>unset</find>
+      <find>_username</find>
     </findStrings>
     <replaceStrings>
       <replace>;</replace>
     </replaceStrings>
+    <dirStrings>
+      <dir>F:\Git\messageVortex\application-core-library\src\main\java</dir>
+    </dirStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -257,7 +261,6 @@
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/Config.java" />
         <option value="$PROJECT_DIR$/src/test/java/net/messagevortex/test/transport/DummyTransportSenderTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/dummy/DummyTransportTrx.java" />
-        <option value="$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/ConfigTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java" />
         <option value="$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/MessageVortexTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/SmtpImapServer.java" />
@@ -266,6 +269,7 @@
         <option value="$PROJECT_DIR$/src/main/resources/messageVortex.cfgRessources" />
         <option value="$PROJECT_DIR$/src/main/resources/messageVortex.cfg" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/pop3/TestPop3Handler.java" />
+        <option value="$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/ConfigTest.java" />
         <option value="$PROJECT_DIR$/../Jenkinsfile" />
       </list>
     </option>
@@ -310,10 +314,10 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="200" />
-    <option name="y" value="-8" />
+    <option name="x" value="-130" />
+    <option name="y" value="-11" />
     <option name="width" value="1278" />
-    <option name="height" value="718" />
+    <option name="height" value="707" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -423,7 +427,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1553006926740" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1553066231944" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../sonar.properties" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -449,7 +453,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.MessageVortex">
+  <component name="RunManager" selected="JUnit.All Tests">
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
       <method v="2">
@@ -569,20 +573,11 @@
       <option name="presentableId" value="Default" />
       <updated>1552290503544</updated>
       <workItem from="1552290507005" duration="28708000" />
-      <workItem from="1552898686832" duration="30544000" />
+      <workItem from="1552898686832" duration="32907000" />
     </task>
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="MainCoreSuite - 2019.03.18 at 17h 42m 15s.xml">
-      <configuration name="MainCoreSuite" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="MainCoreSuite - 2019.03.18 at 18h 03m 51s.xml">
-      <configuration name="MainCoreSuite" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="MainCoreSuite - 2019.03.18 at 18h 07m 44s.xml">
-      <configuration name="MainCoreSuite" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="MainCoreSuite - 2019.03.18 at 18h 09m 45s.xml">
       <configuration name="MainCoreSuite" configurationId="JUnit" />
     </history-entry>
@@ -604,9 +599,18 @@
     <history-entry file="MainCoreSuite - 2019.03.19 at 10h 36m 54s.xml">
       <configuration name="MainCoreSuite" configurationId="JUnit" />
     </history-entry>
+    <history-entry file="All_Tests - 2019.03.20 at 07h 51m 20s.xml">
+      <configuration name="All Tests" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="All_Tests - 2019.03.20 at 08h 04m 12s.xml">
+      <configuration name="All Tests" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="All_Tests - 2019.03.20 at 08h 04m 51s.xml">
+      <configuration name="All Tests" configurationId="JUnit" />
+    </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="65248000" />
+    <option name="totallyTimeSpent" value="67611000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -621,7 +625,7 @@
     <frame x="-8" y="-8" width="1936" height="1176" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25692964" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25692964" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -630,7 +634,7 @@
       <window_info id="Capture Tool" order="6" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32950193" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49946696" visible="true" weight="0.32854405" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49946696" visible="true" weight="0.32854405" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -950,13 +954,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/ConfigTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="148">
-          <caret line="96" column="33" lean-forward="true" selection-start-line="96" selection-start-column="33" selection-end-line="96" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/MessageVortexTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1020">
@@ -978,7 +975,7 @@
     <entry file="file://$PROJECT_DIR$/src/main/resources/messageVortex.cfgRessources">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="336">
-          <caret line="32" column="121" lean-forward="true" selection-start-line="32" selection-start-column="121" selection-end-line="32" selection-end-column="121" />
+          <caret line="32" column="121" selection-start-line="32" selection-start-column="121" selection-end-line="32" selection-end-column="121" />
         </state>
       </provider>
     </entry>
@@ -992,7 +989,7 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="323">
-          <caret line="84" lean-forward="true" selection-start-line="84" selection-end-line="84" />
+          <caret line="84" selection-start-line="84" selection-end-line="84" />
         </state>
       </provider>
     </entry>
@@ -1011,7 +1008,7 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/pop3/TestPop3Handler.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="250">
-          <caret line="55" column="18" lean-forward="true" selection-start-line="55" selection-start-column="18" selection-end-line="55" selection-end-column="18" />
+          <caret line="55" column="18" selection-start-line="55" selection-start-column="18" selection-end-line="55" selection-end-column="18" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#1770#1771#0" expanded="true" />
@@ -1031,10 +1028,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/ConfigTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="222" column="129" selection-start-line="222" selection-start-column="129" selection-end-line="222" selection-end-column="129" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/../Jenkinsfile">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="639">
-          <caret line="74" selection-start-line="74" selection-end-line="74" />
+        <state relative-caret-position="238">
+          <caret line="55" column="93" selection-start-line="55" selection-start-column="93" selection-end-line="55" selection-end-column="93" />
         </state>
       </provider>
     </entry>

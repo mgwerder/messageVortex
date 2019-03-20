@@ -46,22 +46,30 @@ pipeline {
             sh 'mvn -pl application-core-library -DforkCount=0 jacoco:prepare-agent test jacoco:report'
           }
         }
-        /*stage ('Test on JDK11') {
+        stage ('Test on JDK11') {
           agent {
             docker { image 'maven:3.6.0-jdk-11-slim' }
           }
           steps{
-            sh 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
+            script {
+              if (env.BRANCH_NAME != 'master') {
+                sh 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
+              }
+            }
           }
         }
         stage ('Test on JDK12') {
           agent {
             docker { image 'maven:3.6.0-jdk-12-alpine' }
           }
-          steps{
-            sh 'mvn -pl application-core-library -DforkCount=0 jacoco:prepare-agent test jacoco:report'
+          steps {
+            script {
+              if (env.BRANCH_NAME != 'master') {
+                sh 'mvn -pl application-core-library -DforkCount=0 jacoco:prepare-agent test jacoco:report'
+              }
+            }
           }
-        }*/
+        }
       }
     }
     stage ('Package all') {

@@ -99,7 +99,7 @@ public class SmtpConnection extends ClientConnection {
                     Base64.encode("Username:".getBytes(StandardCharsets.UTF_8)))
             );
             String username = new String(Base64.decode(readln()));
-            Config.getDefault().getStringValue(cfgSection,"smtp_incomming_username");
+            Config.getDefault().getStringValue(cfgSection,"smtp_incomming_user");
             write("334 " + new String(
                     Base64.encode("Password:".getBytes(StandardCharsets.UTF_8))) + CRLF
             );

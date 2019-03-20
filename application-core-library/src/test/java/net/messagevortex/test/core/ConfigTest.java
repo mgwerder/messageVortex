@@ -220,7 +220,7 @@ public class ConfigTest {
       assertTrue("Should return true as last value",    MessageVortexConfig.getDefault().getBooleanValue(null, "booleanConfigHandling"));
 
       // check predefined ressources of vortexConfig
-      assertTrue("Should return null as default value", MessageVortexConfig.getDefault().getStringValue(null, "smtp_outgoing_username") == null);
+      assertTrue("Should return null as default value", MessageVortexConfig.getDefault().getStringValue(null, "smtp_outgoing_user") == null);
     } catch (Exception e) {
       e.printStackTrace();
       fail("should not raise an exception but did (" + e + ")");
