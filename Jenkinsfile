@@ -1,26 +1,29 @@
 pipeline {
   agent any
   options {
-    buildDiscarder(logRotator(numToKeepStr:'50')) 
-    disableConcurrentBuilds()
+    buildDiscarder(logRotator(numToKeepStr:'50'))
+    // disableConcurrentBuilds()
   }
   stages {
     stage ('Initialize') {
       steps {
         git credentialsId: 'github_readonly', url: 'ssh://git@github.com/mgwerder/messageVortex_internal'
-        sh 'mvn clean' 
+        sh 'mvn clean'
       }
     }
     stage ('Build') {
       steps {
-        sh 'mvn -DskipTests compile' 
+        sh 'mvn -DskipTests compile'
       }
     }
     stage ('Test') {
       parallel {
         stage ('Test on JDK8') {
           agent {
-            docker { image 'maven:3.6.0-jdk-8-slim' }
+            docker {
+                image 'maven:3.6.0-jdk-8-slim'
+                args '-v $HOME/.m2:/root/.m2'
+            }
           }
           options {
             timeout(time: 30, unit: 'MINUTES')
@@ -37,7 +40,10 @@ pipeline {
         }
         stage ('Test on JDK10') {
           agent {
-            docker { image 'maven:3.6.0-jdk-10-slim' }
+            docker {
+                image 'maven:3.6.0-jdk-10-slim'
+                args '-v $HOME/.m2:/root/.m2'
+            }
           }
           options {
             timeout(time: 30, unit: 'MINUTES')
@@ -48,7 +54,10 @@ pipeline {
         }
         stage ('Test on JDK11') {
           agent {
-            docker { image 'maven:3.6.0-jdk-11-slim' }
+            docker {
+                image 'maven:3.6.0-jdk-11-slim'
+                args '-v $HOME/.m2:/root/.m2'
+            }
           }
           steps{
             script {
@@ -60,7 +69,10 @@ pipeline {
         }
         stage ('Test on JDK12') {
           agent {
-            docker { image 'maven:3.6.0-jdk-12-alpine' }
+            docker {
+                image 'maven:3.6.0-jdk-12-alpine'
+                args '-v $HOME/.m2:/root/.m2'
+            }
           }
           steps {
             script {
