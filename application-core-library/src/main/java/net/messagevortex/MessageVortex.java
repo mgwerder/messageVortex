@@ -142,13 +142,38 @@ public class MessageVortex implements Callable<Integer> {
     return 0;
   }
 
+  /**
+   * <p>This is a wraper of the getConfiguredClass() methode.</p>
+   *
+   * <p>it modifyes the return type to a RunningDaemon.</p>
+   *
+   * @param section
+   * @param classname
+   * @param type
+   * @return
+   * @throws ClassNotFoundException
+   */
   public static RunningDaemon getDaemon(String section, String classname,DaemonType type) throws ClassNotFoundException {
     return (RunningDaemon)getConfiguredClass(section, classname, RunningDaemon.class);
   }
 
+  /**
+   * <p>Loads a class of the given type.</p>
+   *
+   * <p>The class must have the same or a subtype of the template class and must provide a String
+   * constructor, taking the name of the config section.</p>
+   *
+   * @param section         the configuration section where the class was mentioned
+   *                        (for information purposes in output and to load subsequent data)
+   * @param name            the Name of the class
+   * @param templateClass   a template class. The loaded class must be the same or a subtyppe of
+   *                        the template class
+   * @return                the loaded class
+   * @throws ClassNotFoundException
+   */
   public static Object getConfiguredClass(String section, String name, Class templateClass) throws ClassNotFoundException {
     if (name == null) {
-      throw new ClassNotFoundException("unable to obtain class \""+ name + "\"");
+      throw new ClassNotFoundException("unable to obtain class \"null\"");
     }
     Class<RunningDaemon> myClass = (Class<RunningDaemon>)(Class.forName(name));
     Constructor<?> myConstructor;

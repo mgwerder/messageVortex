@@ -47,15 +47,14 @@ public class TestSmtpHandler extends AbstractDaemon implements Transport, Runnab
     if (blender == null ) {
       throw new IOException("unable to fetch apropriate blender");
     }
-    server = new GreenMail(
-            new ServerSetup[] {
-                    new ServerSetup(
-                            cfg.getNumericValue(section, "smtp_incoming_port"),
-                            cfg.getStringValue(section, "smtp_incoming_address"),
-                            ServerSetup.PROTOCOL_SMTP
-                    )
-            }
+    ServerSetup setup = new ServerSetup(
+            cfg.getNumericValue(section, "smtp_incoming_port"),
+            cfg.getStringValue(section, "smtp_incoming_address"),
+            ServerSetup.PROTOCOL_SMTP
     );
+    setup.setServerStartupTimeout(5000);
+
+    server = new GreenMail(new ServerSetup[] {setup});
     this.section = section;
     startDaemon();
   }
