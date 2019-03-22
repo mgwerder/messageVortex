@@ -52,7 +52,7 @@ public class TestSmtpHandler extends AbstractDaemon implements Transport, Runnab
             cfg.getStringValue(section, "smtp_incoming_address"),
             ServerSetup.PROTOCOL_SMTP
     );
-    setup.setServerStartupTimeout(5000);
+    setup.setServerStartupTimeout(50000);
 
     server = new GreenMail(new ServerSetup[] {setup});
     this.section = section;
