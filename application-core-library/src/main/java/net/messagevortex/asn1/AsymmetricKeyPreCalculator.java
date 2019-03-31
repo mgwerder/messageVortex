@@ -22,6 +22,12 @@ package net.messagevortex.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
+import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.asn1.encryption.AlgorithmType;
+import net.messagevortex.asn1.encryption.Mode;
+import net.messagevortex.asn1.encryption.Padding;
+import net.messagevortex.asn1.encryption.Parameter;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -30,18 +36,8 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedTransferQueue;
-import java.util.concurrent.RejectedExecutionHandler;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.logging.Level;
-import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.asn1.encryption.AlgorithmType;
-import net.messagevortex.asn1.encryption.Mode;
-import net.messagevortex.asn1.encryption.Padding;
-import net.messagevortex.asn1.encryption.Parameter;
 
 /**
  * <p></p>This is a class to precalculate keys.</p>
@@ -155,7 +151,7 @@ class AsymmetricKeyPreCalculator implements Serializable {
           }
         } else {
           try {
-            LOGGER.log(Level.INFO, "cache is idle (" + String.format("%f2.3",
+            LOGGER.log(Level.INFO, "cache is idle (" + String.format("%2.3f",
                     cache.getCacheFillGrade() * 100) + "%) ... sleeping for a short while "
                     + "and waiting for requests");
             Thread.sleep(10000);
