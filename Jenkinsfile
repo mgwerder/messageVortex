@@ -1,3 +1,6 @@
+/***
+ * Jenkinsfile for pipeline build of all messagevortex paths
+ ***/
 pipeline {
   agent any
   options {

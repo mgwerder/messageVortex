@@ -5,7 +5,6 @@ import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexConfig;
 import net.messagevortex.transport.dummy.DummyTransportTrx;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -46,12 +45,6 @@ public class MessageVortexTest {
       } catch( Exception ioe ) {
         LOGGER.log( Level.SEVERE, "Unable to parse config file (generic)", ioe );
       }
-  }
-
-  @Ignore("Only for manual testing of setups intended")
-  @Test
-  public void runManualTest() {
-    int ret = MessageVortex.mainReturn(new String[] {"--timeoutAndDie=1800"});
   }
 
   @Test
