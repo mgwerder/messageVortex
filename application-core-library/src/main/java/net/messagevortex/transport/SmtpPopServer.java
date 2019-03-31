@@ -1,18 +1,26 @@
 package net.messagevortex.transport;
 
 import net.messagevortex.AbstractDaemon;
+import net.messagevortex.transport.smtp.TestSmtpHandler;
 
 import java.io.IOException;
 import java.io.InputStream;
 
 public class SmtpPopServer extends AbstractDaemon implements Transport {
 
-  public SmtpPopServer(String section) {
-    // FIXME this is a dummy
+  Transport smtp;
+
+  public SmtpPopServer(String section) throws IOException {
+    smtp = new TestSmtpHandler(section);
   }
 
   @Override
   public void sendMessage(String address, InputStream os) throws IOException {
 
+  }
+
+  @Override
+  public void shutdownDaemon() {
+    smtp.shutdownDaemon();
   }
 }

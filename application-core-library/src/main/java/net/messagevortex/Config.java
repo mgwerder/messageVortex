@@ -356,7 +356,7 @@ public class Config {
 
     public final void setDefaultValue(String newDefaultValue) {
       this.defaultValue = newDefaultValue;
-      LOGGER.log(Level.INFO, "Default value set to " + id + "=" + this.defaultValue);
+      LOGGER.log(Level.FINE, "Default value set to " + id + "=" + this.defaultValue);
     }
 
   }
@@ -568,7 +568,7 @@ public class Config {
       if (configData.get(id.toLowerCase()) == null) {
         ConfigElement ele = new ConfigElement(id, "numeric", description,"" + dval);
         configData.put(id.toLowerCase(), ele);
-        LOGGER.log(Level.INFO,
+        LOGGER.log(Level.FINE,
                 "Created numeric config variable " + id.toLowerCase() + "[numeric]=" + dval
         );
         this.fields.add(id);
@@ -641,7 +641,7 @@ public class Config {
         ConfigElement ele = new ConfigElement(id, "SECTION_LIST", description);
         configData.put(id.toLowerCase(), ele);
         ele.setDefaultValue(dval);
-        LOGGER.log(Level.INFO, "Created section_list config variable " + id.toLowerCase());
+        LOGGER.log(Level.FINE, "Created section_list config variable " + id.toLowerCase());
         this.fields.add(id);
         return true;
       } else {
@@ -714,7 +714,7 @@ public class Config {
         ConfigElement ele = new ConfigElement(id, "STRING", description);
         configData.put(id.toLowerCase(), ele);
         ele.setDefaultValue(dval);
-        LOGGER.log(Level.INFO, "Created String config variable " + id.toLowerCase());
+        LOGGER.log(Level.FINE, "Created String config variable " + id.toLowerCase());
         this.fields.add(id);
         return true;
       } else {
@@ -804,7 +804,7 @@ public class Config {
           if (m.matches()) {
             // set current section
             section=m.group(1);
-            LOGGER.log(Level.INFO, "parsing section [" + section + "]");
+            LOGGER.log(Level.FINE, "parsing section [" + section + "]");
 
           } else {
             //parse KV pair

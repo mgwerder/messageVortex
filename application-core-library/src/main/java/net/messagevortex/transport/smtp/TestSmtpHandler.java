@@ -45,7 +45,7 @@ public class TestSmtpHandler extends AbstractDaemon implements Transport, Runnab
     Config cfg = Config.getDefault();
     blender = MessageVortex.getBlender(cfg.getStringValue(section, "blender"));
     if (blender == null ) {
-      throw new IOException("unable to fetch apropriate blender");
+      throw new IOException("unable to fetch apropriate blender ("+cfg.getStringValue(section, "blender")+" from section "+section+")");
     }
     ServerSetup setup = new ServerSetup(
             cfg.getNumericValue(section, "smtp_incoming_port"),

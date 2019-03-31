@@ -18,4 +18,9 @@ public class SmtpImapServer extends AbstractDaemon implements Transport {
   public void sendMessage(String address, InputStream os) throws IOException {
 
   }
+
+  @Override
+  public void shutdownDaemon() {
+    smtp.shutdownDaemon();
+  }
 }

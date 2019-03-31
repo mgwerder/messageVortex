@@ -78,6 +78,12 @@ public class MessageVortexTest {
   }
 
   @Test
+  public void runRegularlyAndShutdownTwice() {
+    runRegularlyAndShutdown();
+    runRegularlyAndShutdown();
+  }
+
+  @Test
   public void runRegularlyWithTimeout() {
     try {
       long start = System.currentTimeMillis();
