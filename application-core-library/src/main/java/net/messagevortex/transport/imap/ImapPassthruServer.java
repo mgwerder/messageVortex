@@ -22,14 +22,6 @@ package net.messagevortex.transport.imap;
 // * SOFTWARE.
 // ************************************************************************************
 
-import static java.lang.System.exit;
-
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.text.ParseException;
-import java.util.logging.Level;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.MessageVortexStatus;
 import net.messagevortex.transport.AuthenticationProxy;
@@ -38,6 +30,15 @@ import net.messagevortex.transport.SecurityContext;
 import net.messagevortex.transport.SecurityRequirement;
 import sun.misc.Signal;
 import sun.misc.SignalHandler;
+
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static java.lang.System.exit;
 
 public class ImapPassthruServer implements SignalHandler {
 
@@ -79,7 +80,7 @@ public class ImapPassthruServer implements SignalHandler {
       // Force exit anyway
       System.exit(0);
     } else {
-      LOGGER.log(Level.WARNING, "Received unthandöed signal SIG" + sig.getName() + ". IGNORING");
+      LOGGER.log(Level.WARNING, "Received unthandled signal SIG" + sig.getName() + ". IGNORING");
     }
   }
 

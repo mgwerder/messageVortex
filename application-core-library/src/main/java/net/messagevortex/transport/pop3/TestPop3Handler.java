@@ -37,22 +37,22 @@ public class TestPop3Handler  implements Transport {
 
 
   public TestPop3Handler(String section) throws IOException {
+    this.section = section;
     Config cfg = Config.getDefault();
-    blender = MessageVortex.getBlender(cfg.getStringValue(section, "blender"));
+    blender = MessageVortex.getBlender(cfg.getStringValue(this.section, "blender"));
     if (blender == null ) {
       throw new IOException("unable to fetch apropriate blender");
     }
     server = new GreenMail(
             new ServerSetup[] {
                     new ServerSetup(
-                            cfg.getNumericValue(section, "pop3_incoming_port"),
-                            cfg.getStringValue(section, "pop3_incoming_address"),
+                            cfg.getNumericValue(section, "pop3_outgoing_port"),
+                            cfg.getStringValue(section, "pop3_outgoing_address"),
                             ServerSetup.PROTOCOL_POP3
                     )
             }
     );
     outUser = server.setUser(cfg.getStringValue(section, "pop3_outgoing_user"),cfg.getStringValue(section, "pop3_outgoing_password"));
-    this.section = section;
     startDaemon();
   }
 

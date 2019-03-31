@@ -1333,6 +1333,13 @@ Result:  0A 13 (+ 494 omited bytes; then skip 12 bytes to next chunk)
                     </figure>
                 </t>
             </section>
+            <section  anchor="asnOne_requests" title="The VortexMessage Request Structures">
+                <t>
+                    <figure>
+                        <artwork src="asn/MessageVortex-Requests.asn"/>
+                    </figure>
+                </t>
+            </section>
             <section  anchor="asnOne_replies" title="The VortexMessage Replies Structures">
                 <t>
                     <figure>

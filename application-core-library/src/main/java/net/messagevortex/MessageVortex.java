@@ -84,6 +84,7 @@ public class MessageVortex implements Callable<Integer> {
   }
 
   public Integer call() {
+    LOGGER.log(Level.INFO, "******* startup of MessageVortex *******");
     // create config store
     try {
       LOGGER.log(Level.INFO, "Loading config file");
@@ -121,6 +122,7 @@ public class MessageVortex implements Callable<Integer> {
       LOGGER.log(Level.SEVERE, "Bad class configured", cnf);
       return SETUP_FAIL;
     }
+    LOGGER.log(Level.INFO, "******* startup of MessageVortex complete *******");
 
 
     if (timeoutInSeconds>=0) {
@@ -129,16 +131,22 @@ public class MessageVortex implements Callable<Integer> {
       } catch(InterruptedException ie) {
         // may be safely ignored
       }
+    } else {
+      MessageVortexController controller = new MessageVortexController();
+      controller.waitForShutdown();
     }
 
+    LOGGER.log(Level.INFO, "******* shutting down MessageVortex *******");
     Map<String,RunningDaemon> tmap = new HashMap<>();
     tmap.putAll(transport);
     tmap.putAll(blender);
     tmap.putAll(router);
     tmap.putAll(accountant);
     for (Map.Entry<String,RunningDaemon> es:tmap.entrySet() ) {
-     es.getValue().shutdownDaemon();
+      LOGGER.log(Level.INFO,"shutting down "+es.getKey());
+      es.getValue().shutdownDaemon();
     }
+    LOGGER.log(Level.INFO, "******* shutdown complete *******");
     return 0;
   }
 
