@@ -42,7 +42,7 @@ dir=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 		ls -la $tmpdir/*
 	) && \
 	trap "rm -rf $tmpdir" EXIT && \
-	(mkdir /var/tmp/dockermavencache;/bin/true) && \
+	(mkdir /var/tmp/dockermavencache 2>/dev/null;/bin/true) && \
 	( cd $tmpdir; tar -xvf $dir/mavenfiles.tar ) && \
 	id=$(sudo docker create -t \
 	     --mount type=bind,source="$tmpdir/",target=/var/tmp/messagevortex/ \
