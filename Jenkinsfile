@@ -22,12 +22,6 @@ pipeline {
     stage ('Test') {
       parallel {
         stage ('Test on JDK8') {
-          agent {
-            docker {
-                image 'maven:3.6.0-jdk-8-slim'
-                args '-v $HOME/.m2:/root/.m2'
-            }
-          }
           options {
             timeout(time: 30, unit: 'MINUTES')
           }
