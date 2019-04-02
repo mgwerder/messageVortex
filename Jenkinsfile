@@ -32,7 +32,7 @@ pipeline {
             timeout(time: 30, unit: 'MINUTES')
           }
           steps{
-            sh 'mvn -pl application-core-library -DforkCount=0 jacoco:prepare-agent test jacoco:report'
+            sh 'mvn -pl application-core-library -DforkCount=0 site'
           }
           post {
             success {
