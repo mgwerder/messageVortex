@@ -64,7 +64,7 @@
                 <resources>          
                   <resource>
                     <directory>${basedir}/website/target/main/jbake/</directory>
-                    <filtering>true</filtering>
+                    <filtering>false</filtering>
                   </resource>
                 </resources>              
               </configuration>            
