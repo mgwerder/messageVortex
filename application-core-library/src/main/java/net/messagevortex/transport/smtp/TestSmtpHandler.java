@@ -22,7 +22,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * FIXME: This implementation uses a Greenmail SMTP server. It holds all in memory and gets thus slower and slower.
+ * FIXME: This implementation uses a Greenmail SMTP server.
+ * FIXME: It holds all in memory and gets thus slower and slower.
  *
  * NOT FOR PRODUCTION USE
  */
@@ -38,7 +39,8 @@ public class TestSmtpHandler extends AbstractDaemon implements Transport, Runnab
   private String section;
   private Thread mailHandler = new Thread (this);
   private TransportReceiver blender;
-  private Boolean isRunning = false;
+  private Object runningLock = new Object();
+  private boolean isRunning = false;
 
 
   public TestSmtpHandler(String section) throws IOException {
@@ -82,7 +84,7 @@ public class TestSmtpHandler extends AbstractDaemon implements Transport, Runnab
 
   @Override
   public void startDaemon() {
-    synchronized(isRunning) {
+    synchronized(runningLock) {
       isRunning = true;
       server.start();
       mailHandler.start();
@@ -91,15 +93,15 @@ public class TestSmtpHandler extends AbstractDaemon implements Transport, Runnab
 
   @Override
   public void shutdownDaemon() {
-    synchronized(isRunning) {
+    synchronized(runningLock) {
       isRunning = false;
       server.stop();
-      while (mailHandler.isAlive()) {
-        try {
-          Thread.sleep(100);
-        } catch(InterruptedException ie) {
-          // we do not care about this
-        }
+    }
+    while (mailHandler.isAlive()) {
+      try {
+        Thread.sleep(100);
+      } catch(InterruptedException ie) {
+        // we do not care about this
       }
     }
   }

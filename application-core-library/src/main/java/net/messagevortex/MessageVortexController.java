@@ -13,7 +13,8 @@ public class MessageVortexController  implements SignalHandler, Runnable {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
 
-  private Boolean shutdown = false;
+  private boolean shutdown = false;
+  private Object runningLock = new Object();
   private Thread runner = new Thread(this);
 
   public MessageVortexController() {
@@ -39,7 +40,7 @@ public class MessageVortexController  implements SignalHandler, Runnable {
       } catch(InterruptedException ie) {
         LOGGER.log(Level.FINEST, "ignoring interrupted exception while waiting for action", ie);
       }
-      synchronized(this.shutdown) {
+      synchronized(runningLock) {
         shutdown = this.shutdown;
       }
     }
@@ -57,7 +58,9 @@ public class MessageVortexController  implements SignalHandler, Runnable {
 
 
   public void shutdown() {
-    shutdown = true;
+    synchronized(runningLock) {
+      shutdown = true;
+    }
     waitForShutdown();
   }
 
