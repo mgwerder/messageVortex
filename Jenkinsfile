@@ -32,7 +32,7 @@ pipeline {
             timeout(time: 30, unit: 'MINUTES')
           }
           steps{
-            sh 'mvn -pl application-core-library -DforkCount=0 site'
+                sh 'mvn -pl application-core-library -DforkCount=0 jacoco:prepare-agent test jacoco:report site'
           }
           post {
             success {
@@ -52,7 +52,7 @@ pipeline {
             timeout(time: 30, unit: 'MINUTES')
           }
           steps{
-            sh 'mvn -pl application-core-library -DforkCount=0 jacoco:prepare-agent test jacoco:report'
+                sh 'mvn -pl application-core-library -DforkCount=0 jacoco:prepare-agent test jacoco:report site'
           }
         }
         stage ('Test on JDK11') {
@@ -65,7 +65,7 @@ pipeline {
           steps{
             script {
               if (env.BRANCH_NAME != 'master') {
-                sh 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
+                sh 'mvn -pl application-core-library -DforkCount=0 jacoco:prepare-agent test jacoco:report site'
               }
             }
           }
@@ -80,7 +80,7 @@ pipeline {
           steps {
             script {
               if (env.BRANCH_NAME != 'master') {
-                sh 'mvn -pl application-core-library -DforkCount=0 jacoco:prepare-agent test jacoco:report'
+                sh 'mvn -pl application-core-library -DforkCount=0 jacoco:prepare-agent test jacoco:report site'
               }
             }
           }
