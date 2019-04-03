@@ -26,7 +26,8 @@ pipeline {
             timeout(time: 30, unit: 'MINUTES')
           }
           steps{
-                sh 'mvn -pl application-core-library -DforkCount=0 jacoco:prepare-agent test jacoco:report site'
+                sh 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
+                sh 'mvn -pl application-core-library site'
           }
           post {
             success {
@@ -98,7 +99,7 @@ pipeline {
   }
   post {
     always {
-      publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'application-core-library/target/site', reportFiles: 'surefire-report.html', reportName: 'MessageVortex Report', reportTitles: 'MessageVortex'])
+      publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'application-core-library/target/site', reportFiles: 'index.html', reportName: 'MessageVortex Report', reportTitles: 'MessageVortex'])
     }
     success {
       archiveArtifacts artifacts: 'application-core-library/target/*.jar,thesis/target/main/latex/**/*.pdf*', fingerprint: true
