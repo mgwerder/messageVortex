@@ -22,14 +22,11 @@ package net.messagevortex.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
+import net.messagevortex.asn1.encryption.DumpType;
+import org.bouncycastle.asn1.*;
+
 import java.io.IOException;
 import java.io.Serializable;
-import net.messagevortex.asn1.encryption.DumpType;
-import org.bouncycastle.asn1.ASN1Encodable;
-import org.bouncycastle.asn1.ASN1EncodableVector;
-import org.bouncycastle.asn1.ASN1Object;
-import org.bouncycastle.asn1.ASN1Sequence;
-import org.bouncycastle.asn1.DERSequence;
 
 /**
  * ASN1 parser for identity request.
@@ -59,8 +56,7 @@ public class HeaderRequestIdentity extends HeaderRequest implements Serializable
 
   protected void parse(ASN1Encodable ae) throws IOException {
     ASN1Sequence s1 = ASN1Sequence.getInstance(ae);
-    int i = 0;
-    period = new UsagePeriod(s1.getObjectAt(i++));
+    period = new UsagePeriod(s1.getObjectAt(0));
   }
 
   protected HeaderRequest getRequest(ASN1Encodable ae) throws IOException {
