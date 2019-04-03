@@ -131,6 +131,9 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
     }
   }
 
+  /**
+   * <p>Remove all Dummy endpoints from the main listing.</p>
+   */
   public static void clearDummyEndpoints() {
     synchronized (endpoints) {
       endpoints.clear();

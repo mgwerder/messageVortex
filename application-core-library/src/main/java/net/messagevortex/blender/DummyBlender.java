@@ -52,6 +52,12 @@ public class DummyBlender extends Blender {
   BlendingReceiver router;
   IdentityStore identityStore;
 
+  /**
+   * <p>A dummy blender implementation.</p>
+   *
+   * @param section    the config foile section to be used to configure
+   * @throws IOException if anything fails :-D
+   */
   public DummyBlender(String section) throws IOException {
     // This is a dummy constructor which breaks the implementation ->
     // FIXME add sensible identity store
