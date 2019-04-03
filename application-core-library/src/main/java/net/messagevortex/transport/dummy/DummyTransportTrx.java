@@ -22,14 +22,6 @@ package net.messagevortex.transport.dummy;
 // * SOFTWARE.
 // ************************************************************************************
 
-import net.messagevortex.AbstractDaemon;
-import net.messagevortex.Config;
-import net.messagevortex.MessageVortex;
-import net.messagevortex.transport.ByteArrayBuilder;
-import net.messagevortex.transport.RandomString;
-import net.messagevortex.transport.Transport;
-import net.messagevortex.transport.TransportReceiver;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,6 +29,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import net.messagevortex.AbstractDaemon;
+import net.messagevortex.Config;
+import net.messagevortex.MessageVortex;
+import net.messagevortex.transport.ByteArrayBuilder;
+import net.messagevortex.transport.RandomString;
+import net.messagevortex.transport.Transport;
+import net.messagevortex.transport.TransportReceiver;
 
 public class DummyTransportTrx extends AbstractDaemon implements Transport {
 
@@ -51,32 +51,34 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
   /**
    * <p>Constructor to set up a dummy endpoint with named id and blender.</p>
    *
-   * @param section      section containing data to set up endpoint
+   * @param section section containing data to set up endpoint
    * @throws IOException if endpoint id is already defined
    */
   public DummyTransportTrx(String section) throws IOException {
     LOGGER.log(Level.INFO, "setup of dummy endpoint for section \"" + section + "\" done");
     String id = Config.getDefault().getStringValue(section, "transport_id");
     LOGGER.log(Level.INFO, "  id is \"" + id + "\"");
-    TransportReceiver blender = MessageVortex.getBlender(Config.getDefault().getStringValue(section, "blender"));
+    TransportReceiver blender = MessageVortex.getBlender(
+            Config.getDefault().getStringValue(section, "blender")
+    );
     init(id, blender);
   }
 
   /**
    * <p>Constructor to set up a dummy endpoint with named id and blender.</p>
    *
-   * @param id           ID of the endpoint
-   * @param blender      blender to be used for received messages
+   * @param id      ID of the endpoint
+   * @param blender blender to be used for received messages
    * @throws IOException if endpoint id is already defined
    */
-  public DummyTransportTrx( String id, TransportReceiver blender ) throws IOException {
+  public DummyTransportTrx(String id, TransportReceiver blender) throws IOException {
     init(id, blender);
   }
 
   /**
    * Constructor to create an endpoint with a random id.
    *
-   * @param blender       reference to the respective blender layer
+   * @param blender reference to the respective blender layer
    */
   public DummyTransportTrx(TransportReceiver blender) throws IOException {
     synchronized (endpoints) {
@@ -100,9 +102,9 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
   /**
    * send a message to another dummy endpoint.
    *
-   * @param address        the string representation of the target address on the transport layer
-   * @param is             the input stream to be sent
-   * @throws IOException   if requested endpoint id is unknown
+   * @param address the string representation of the target address on the transport layer
+   * @param is      the input stream to be sent
+   * @throws IOException if requested endpoint id is unknown
    */
   public void sendMessage(final String address, InputStream is) throws IOException {
     if (address == null || endpoints.get(address) == null) {
@@ -118,7 +120,7 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
 
     // send byte array as input stream to target
     final InputStream iso = new ByteArrayInputStream(bab.toBytes());
-    synchronized(endpoints) {
+    synchronized (endpoints) {
       new Thread() {
 
         @Override

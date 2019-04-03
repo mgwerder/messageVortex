@@ -22,9 +22,9 @@ package net.messagevortex.transport;
 // * SOFTWARE.
 // ************************************************************************************
 
-import net.messagevortex.RunningDaemon;
-
 import java.io.InputStream;
+
+import net.messagevortex.RunningDaemon;
 
 /**
  * <p>Interface for all blender layers listening to transport layer messages.</p>

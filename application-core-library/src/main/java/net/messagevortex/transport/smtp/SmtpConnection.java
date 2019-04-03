@@ -30,6 +30,7 @@ import java.net.SocketTimeoutException;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
+
 import net.messagevortex.Config;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.transport.ClientConnection;
@@ -63,14 +64,15 @@ public class SmtpConnection extends ClientConnection {
     init(creds);
   }
 
-  public SmtpConnection(SocketChannel channel, SecurityContext secContext, Credentials creds) throws IOException {
+  public SmtpConnection(SocketChannel channel, SecurityContext secContext, Credentials creds)
+          throws IOException {
     super(channel, secContext);
     init(creds);
   }
 
   private void init(Credentials creds) {
     setProtocol("smtp");
-    this.creds=creds;
+    this.creds = creds;
     handler.start();
   }
 
@@ -99,12 +101,12 @@ public class SmtpConnection extends ClientConnection {
                     Base64.encode("Username:".getBytes(StandardCharsets.UTF_8)))
             );
             String username = new String(Base64.decode(readln()));
-            Config.getDefault().getStringValue(cfgSection,"smtp_incomming_user");
+            Config.getDefault().getStringValue(cfgSection, "smtp_incomming_user");
             write("334 " + new String(
                     Base64.encode("Password:".getBytes(StandardCharsets.UTF_8))) + CRLF
             );
             String password = new String(Base64.decode(readln()));
-            Config.getDefault().getStringValue(cfgSection,"smtp_incomming_password");
+            Config.getDefault().getStringValue(cfgSection, "smtp_incomming_password");
           } else if (command.toLowerCase().startsWith("mail from")) {
             envelopeFrom = command.substring(10).trim();
             write("250 OK" + CRLF);

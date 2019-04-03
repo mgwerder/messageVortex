@@ -22,12 +22,6 @@ package net.messagevortex.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
-import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.asn1.encryption.AlgorithmType;
-import net.messagevortex.asn1.encryption.Mode;
-import net.messagevortex.asn1.encryption.Padding;
-import net.messagevortex.asn1.encryption.Parameter;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -36,8 +30,19 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedTransferQueue;
+import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
+
+import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.asn1.encryption.AlgorithmType;
+import net.messagevortex.asn1.encryption.Mode;
+import net.messagevortex.asn1.encryption.Padding;
+import net.messagevortex.asn1.encryption.Parameter;
 
 /**
  * <p></p>This is a class to precalculate keys.</p>
@@ -71,6 +76,40 @@ class AsymmetricKeyPreCalculator implements Serializable {
   private static String filename = null;
 
   private static int incrementor = 128;
+
+  /* nuber of threads to use */
+  private static int numThreads = Math.max(2, Runtime.getRuntime().availableProcessors() - 1);
+  private static ThreadPoolExecutor pool;
+
+
+  static {
+    BlockingQueue<Runnable> queue = new LinkedTransferQueue<Runnable>() {
+      @Override
+      public boolean offer(Runnable e) {
+        return tryTransfer(e);
+      }
+    };
+    ThreadFactory factory = new ThreadFactory() {
+      public Thread newThread(Runnable r) {
+        Thread t = new Thread(r);
+        t.setName(TMP_PREFIX + " worker");
+        t.setDaemon(true);
+        return t;
+      }
+    };
+
+    pool = new ThreadPoolExecutor(1, numThreads, 1, TimeUnit.SECONDS, queue, factory);
+    pool.setRejectedExecutionHandler(new RejectedExecutionHandler() {
+      @Override
+      public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
+        try {
+          executor.getQueue().put(r);
+        } catch (InterruptedException e) {
+          Thread.currentThread().interrupt();
+        }
+      }
+    });
+  }
 
   static {
     Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -262,39 +301,6 @@ class AsymmetricKeyPreCalculator implements Serializable {
 
       };
     }
-  }
-
-  /* nuber of threads to use */
-  private static int numThreads = Math.max(2, Runtime.getRuntime().availableProcessors() - 1);
-  private static ThreadPoolExecutor pool;
-
-  static {
-    BlockingQueue<Runnable> queue = new LinkedTransferQueue<Runnable>() {
-      @Override
-      public boolean offer(Runnable e) {
-        return tryTransfer(e);
-      }
-    };
-    ThreadFactory factory = new ThreadFactory() {
-      public Thread newThread(Runnable r) {
-        Thread t = new Thread(r);
-        t.setName(TMP_PREFIX + " worker");
-        t.setDaemon(true);
-        return t;
-      }
-    };
-
-    pool = new ThreadPoolExecutor(1, numThreads, 1, TimeUnit.SECONDS, queue, factory);
-    pool.setRejectedExecutionHandler(new RejectedExecutionHandler() {
-      @Override
-      public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
-        try {
-          executor.getQueue().put(r);
-        } catch (InterruptedException e) {
-          Thread.currentThread().interrupt();
-        }
-      }
-    });
   }
 
   private AsymmetricKeyPreCalculator() {

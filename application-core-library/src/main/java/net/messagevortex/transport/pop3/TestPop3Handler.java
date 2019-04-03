@@ -3,26 +3,26 @@ package net.messagevortex.transport.pop3;
 import com.icegreen.greenmail.user.GreenMailUser;
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.ServerSetup;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.logging.Logger;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+
 import net.messagevortex.Config;
 import net.messagevortex.MessageVortex;
 import net.messagevortex.transport.Transport;
 import net.messagevortex.transport.TransportReceiver;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.logging.Logger;
-
-/**
- * FIXME: This implementation uses a Greenmail POP3 server. It holds all data in memory and gets thus slower and slower.
- *
- * NOT FOR PRODUCTION USE
+/*
+ * FIXME: This implementation uses a Greenmail POP3 server.
+ * FIXME: It holds all data in memory and gets thus slower and slower.
  *
  * FIXME: still broken code
  */
 
-public class TestPop3Handler  implements Transport {
+public class TestPop3Handler implements Transport {
 
   private static final Logger LOGGER;
 
@@ -40,19 +40,17 @@ public class TestPop3Handler  implements Transport {
     this.section = section;
     Config cfg = Config.getDefault();
     blender = MessageVortex.getBlender(cfg.getStringValue(this.section, "blender"));
-    if (blender == null ) {
+    if (blender == null) {
       throw new IOException("unable to fetch apropriate blender");
     }
-    server = new GreenMail(
-            new ServerSetup[] {
-                    new ServerSetup(
-                            cfg.getNumericValue(section, "pop3_outgoing_port"),
-                            cfg.getStringValue(section, "pop3_outgoing_address"),
-                            ServerSetup.PROTOCOL_POP3
-                    )
-            }
-    );
-    outUser = server.setUser(cfg.getStringValue(section, "pop3_outgoing_user"),cfg.getStringValue(section, "pop3_outgoing_password"));
+    server = new GreenMail(new ServerSetup[]{new ServerSetup(
+            cfg.getNumericValue(section, "pop3_outgoing_port"),
+            cfg.getStringValue(section, "pop3_outgoing_address"),
+            ServerSetup.PROTOCOL_POP3)
+    });
+    outUser = server.setUser(
+            cfg.getStringValue(section, "pop3_outgoing_user"),
+            cfg.getStringValue(section, "pop3_outgoing_password"));
     startDaemon();
   }
 
@@ -63,7 +61,7 @@ public class TestPop3Handler  implements Transport {
     try {
       MimeMessage msg = new MimeMessage(null, os);
       outUser.deliver(msg);
-    } catch(MessagingException me) {
+    } catch (MessagingException me) {
       throw new IOException("exception while creating MimeMessage", me);
     }
   }

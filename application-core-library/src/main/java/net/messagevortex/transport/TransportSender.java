@@ -22,10 +22,10 @@ package net.messagevortex.transport;
 // * SOFTWARE.
 // ************************************************************************************
 
-import net.messagevortex.RunningDaemon;
-
 import java.io.IOException;
 import java.io.InputStream;
+
+import net.messagevortex.RunningDaemon;
 
 public interface TransportSender extends RunningDaemon {
 

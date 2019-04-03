@@ -1,11 +1,11 @@
 package net.messagevortex;
 
+import java.util.logging.Level;
+
 import sun.misc.Signal;
 import sun.misc.SignalHandler;
 
-import java.util.logging.Level;
-
-public class MessageVortexController  implements SignalHandler, Runnable {
+public class MessageVortexController implements SignalHandler, Runnable {
 
   private static final java.util.logging.Logger LOGGER;
 
@@ -33,24 +33,24 @@ public class MessageVortexController  implements SignalHandler, Runnable {
   }
 
   public void run() {
-    boolean  shutdown = false;
-    while( !shutdown ){
+    boolean shutdown = false;
+    while (!shutdown) {
       try {
         Thread.sleep(100);
-      } catch(InterruptedException ie) {
+      } catch (InterruptedException ie) {
         LOGGER.log(Level.FINEST, "ignoring interrupted exception while waiting for action", ie);
       }
-      synchronized(runningLock) {
+      synchronized (runningLock) {
         shutdown = this.shutdown;
       }
     }
   }
 
   public void waitForShutdown() {
-    while( runner.isAlive() ){
+    while (runner.isAlive()) {
       try {
         runner.join();
-      } catch(InterruptedException ie) {
+      } catch (InterruptedException ie) {
         LOGGER.log(Level.FINEST, "ignoring interrupted exception while waiting for shutdown", ie);
       }
     }
@@ -58,12 +58,11 @@ public class MessageVortexController  implements SignalHandler, Runnable {
 
 
   public void shutdown() {
-    synchronized(runningLock) {
+    synchronized (runningLock) {
       shutdown = true;
     }
     waitForShutdown();
   }
-
 
 
 }

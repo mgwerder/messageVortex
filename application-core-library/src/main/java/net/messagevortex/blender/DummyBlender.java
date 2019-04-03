@@ -22,6 +22,12 @@ package net.messagevortex.blender;
 // * SOFTWARE.
 // ************************************************************************************
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.logging.Level;
+
 import net.messagevortex.Config;
 import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexLogger;
@@ -30,15 +36,7 @@ import net.messagevortex.asn1.IdentityStore;
 import net.messagevortex.asn1.VortexMessage;
 import net.messagevortex.asn1.encryption.DumpType;
 import net.messagevortex.transport.Transport;
-import net.messagevortex.transport.TransportReceiver;
-import net.messagevortex.transport.TransportSender;
 import net.messagevortex.transport.dummy.DummyTransportTrx;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.logging.Level;
 
 public class DummyBlender extends Blender {
 
@@ -55,7 +53,8 @@ public class DummyBlender extends Blender {
   IdentityStore identityStore;
 
   public DummyBlender(String section) throws IOException {
-    // This is a dummy constructor which breaks the implementation -> FIXME add sensible identity store
+    // This is a dummy constructor which breaks the implementation ->
+    // FIXME add sensible identity store
     this(
             null,
             MessageVortex.getRouter(Config.getDefault().getStringValue(section, "router")),
@@ -130,7 +129,9 @@ public class DummyBlender extends Blender {
   }
 
   public void shutdownDaemon() {}
+
   public void startDaemon() {}
+
   public void stopDaemon() {}
 
 }

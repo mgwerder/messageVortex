@@ -22,12 +22,6 @@ package net.messagevortex;
 // * SOFTWARE.
 // ************************************************************************************
 
-import net.messagevortex.accounting.Accountant;
-import net.messagevortex.blender.Blender;
-import net.messagevortex.router.Router;
-import net.messagevortex.transport.Transport;
-import picocli.CommandLine;
-
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -38,15 +32,21 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import net.messagevortex.accounting.Accountant;
+import net.messagevortex.blender.Blender;
+import net.messagevortex.router.Router;
+import net.messagevortex.transport.Transport;
+import picocli.CommandLine;
+
 @CommandLine.Command(description = "A MessageVortex implementation for the privacy aware person.",
-        name = "MessageVortex", mixinStandardHelpOptions = true, versionProvider = Version.class )
+        name = "MessageVortex", mixinStandardHelpOptions = true, versionProvider = Version.class)
 public class MessageVortex implements Callable<Integer> {
 
-  private static final Logger LOGGER;
+  private static final int CONFIG_FAIL = 101;
+  private static final int SETUP_FAIL = 102;
+  private static final int ARGUMENT_FAIL = 103;
 
-  private final static int CONFIG_FAIL   = 101;
-  private final static int SETUP_FAIL    = 102;
-  private final static int ARGUMENT_FAIL = 103;
+  private static final Logger LOGGER;
 
   private enum DaemonType {
     TRANSPORT,
@@ -58,21 +58,22 @@ public class MessageVortex implements Callable<Integer> {
   @CommandLine.Option(names = {"-c", "--config"}, description = "filename of the config to be used")
   private String configFile = "messageVortex.cfg";
 
-  @CommandLine.Option(names = {"--timeoutAndDie"}, hidden = true, description = "timeout before aboorting execution (for test purposes only)")
+  @CommandLine.Option(names = {"--timeoutAndDie"}, hidden = true,
+          description = "timeout before aboorting execution (for test purposes only)")
   private int timeoutInSeconds = -1;
 
   static {
     LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
 
-  private static Map<String,Transport>  transport  = new ConcurrentHashMap<>();
-  private static Map<String,Blender>    blender    = new ConcurrentHashMap<>();
-  private static Map<String,Router>     router     = new ConcurrentHashMap<>();
-  private static Map<String,Accountant> accountant = new ConcurrentHashMap<>();
+  private static Map<String, Transport> transport = new ConcurrentHashMap<>();
+  private static Map<String, Blender> blender = new ConcurrentHashMap<>();
+  private static Map<String, Router> router = new ConcurrentHashMap<>();
+  private static Map<String, Accountant> accountant = new ConcurrentHashMap<>();
 
   public static void main(String[] args) {
     int retval = mainReturn(args);
-    if (retval>0) {
+    if (retval > 0) {
       System.exit(retval);
     }
   }
@@ -97,38 +98,46 @@ public class MessageVortex implements Callable<Integer> {
     try {
       // setup according to config file
       Config cfg = MessageVortexConfig.getDefault();
-      for (String routerSection : cfg.getSectionListValue(null,"router_setup")) {
+      for (String routerSection : cfg.getSectionListValue(null, "router_setup")) {
         LOGGER.log(Level.INFO, "setting up routing layer \"" + routerSection + "\"");
         // setup Accounting
-        accountant.put(routerSection.toLowerCase(), (Accountant)getDaemon(routerSection,cfg.getStringValue(routerSection, "accounting_implementation"),DaemonType.ACCOUNTING));
+        accountant.put(routerSection.toLowerCase(), (Accountant) getDaemon(routerSection,
+                cfg.getStringValue(routerSection, "accounting_implementation"),
+                DaemonType.ACCOUNTING));
         // setup routers
-        router.put(routerSection.toLowerCase(), (Router)getDaemon(routerSection,cfg.getStringValue(routerSection, "router_implementation"),DaemonType.ROUTING));
+        router.put(routerSection.toLowerCase(), (Router) getDaemon(routerSection,
+                cfg.getStringValue(routerSection, "router_implementation"),
+                DaemonType.ROUTING));
       }
-      for (String blendingSection : cfg.getSectionListValue(null,"blender_setup")) {
+      for (String blendingSection : cfg.getSectionListValue(null, "blender_setup")) {
         LOGGER.log(Level.INFO, "setting up blending layer \"" + blendingSection + "\"");
         // setup blending
-        blender.put(blendingSection.toLowerCase(), (Blender)getDaemon(blendingSection,cfg.getStringValue(blendingSection, "blender_implementation"),DaemonType.BLEDING));
+        blender.put(blendingSection.toLowerCase(), (Blender) getDaemon(blendingSection,
+                cfg.getStringValue(blendingSection, "blender_implementation"),
+                DaemonType.BLEDING));
       }
-      for (String transportSection : cfg.getSectionListValue(null,"transport_setup")) {
+      for (String transportSection : cfg.getSectionListValue(null, "transport_setup")) {
         LOGGER.log(Level.INFO, "setting up transport layer \"" + transportSection + "\"");
         // setup transport
-        transport.put(transportSection.toLowerCase(), (Transport)getDaemon(transportSection,cfg.getStringValue(transportSection, "transport_implementation"),DaemonType.TRANSPORT));
+        transport.put(transportSection.toLowerCase(), (Transport) getDaemon(transportSection,
+                cfg.getStringValue(transportSection, "transport_implementation"),
+                DaemonType.TRANSPORT));
       }
 
     } catch (IOException ioe) {
       LOGGER.log(Level.SEVERE, "Exception while setting up infrastructure", ioe);
       return SETUP_FAIL;
-    } catch(ClassNotFoundException cnf) {
+    } catch (ClassNotFoundException cnf) {
       LOGGER.log(Level.SEVERE, "Bad class configured", cnf);
       return SETUP_FAIL;
     }
     LOGGER.log(Level.INFO, "******* startup of MessageVortex complete *******");
 
 
-    if (timeoutInSeconds>=0) {
+    if (timeoutInSeconds >= 0) {
       try {
         Thread.sleep(timeoutInSeconds * 1000);
-      } catch(InterruptedException ie) {
+      } catch (InterruptedException ie) {
         // may be safely ignored
       }
     } else {
@@ -137,13 +146,13 @@ public class MessageVortex implements Callable<Integer> {
     }
 
     LOGGER.log(Level.INFO, "******* shutting down MessageVortex *******");
-    Map<String,RunningDaemon> tmap = new HashMap<>();
+    Map<String, RunningDaemon> tmap = new HashMap<>();
     tmap.putAll(transport);
     tmap.putAll(blender);
     tmap.putAll(router);
     tmap.putAll(accountant);
-    for (Map.Entry<String,RunningDaemon> es:tmap.entrySet() ) {
-      LOGGER.log(Level.INFO,"shutting down "+es.getKey());
+    for (Map.Entry<String, RunningDaemon> es : tmap.entrySet()) {
+      LOGGER.log(Level.INFO, "shutting down " + es.getKey());
       es.getValue().shutdownDaemon();
     }
     LOGGER.log(Level.INFO, "******* shutdown complete *******");
@@ -151,18 +160,19 @@ public class MessageVortex implements Callable<Integer> {
   }
 
   /**
-   * <p>This is a wraper of the getConfiguredClass() methode.</p>
+   * <p>This is a wrapper of the getConfiguredClass() methode.</p>
    *
-   * <p>it modifyes the return type to a RunningDaemon.</p>
+   * <p>It modifies the return type to a RunningDaemon.</p>
    *
-   * @param section
-   * @param classname
-   * @param type
-   * @return
-   * @throws ClassNotFoundException
-   */
-  public static RunningDaemon getDaemon(String section, String classname,DaemonType type) throws ClassNotFoundException {
-    return (RunningDaemon)getConfiguredClass(section, classname, RunningDaemon.class);
+   * @param section     the name of the section where the config should be taken from
+   * @param classname   the name of the class to be instantiated
+   * @param type        the type of daemon to be checked
+   * @return the specified object
+   * @throws ClassNotFoundException if classname not found
+   **/
+  public static RunningDaemon getDaemon(String section, String classname, DaemonType type)
+          throws ClassNotFoundException {
+    return (RunningDaemon) getConfiguredClass(section, classname, RunningDaemon.class);
   }
 
   /**
@@ -171,32 +181,35 @@ public class MessageVortex implements Callable<Integer> {
    * <p>The class must have the same or a subtype of the template class and must provide a String
    * constructor, taking the name of the config section.</p>
    *
-   * @param section         the configuration section where the class was mentioned
-   *                        (for information purposes in output and to load subsequent data)
-   * @param name            the Name of the class
-   * @param templateClass   a template class. The loaded class must be the same or a subtyppe of
-   *                        the template class
-   * @return                the loaded class
-   * @throws ClassNotFoundException
-   */
-  public static Object getConfiguredClass(String section, String name, Class templateClass) throws ClassNotFoundException {
+   * @param section       the configuration section where the class was mentioned
+   *                      (for information purposes in output and to load subsequent data)
+   * @param name          the Name of the class
+   * @param templateClass a template class. The loaded class must be the same or a subtyppe of
+   *                      the template class
+   * @return the loaded class
+   * @throws ClassNotFoundException if the named class cannot be found
+   **/
+  public static Object getConfiguredClass(String section, String name, Class templateClass)
+          throws ClassNotFoundException {
     if (name == null) {
       throw new ClassNotFoundException("unable to obtain class \"null\"");
     }
-    Class<RunningDaemon> myClass = (Class<RunningDaemon>)(Class.forName(name));
+    Class<RunningDaemon> myClass = (Class<RunningDaemon>) (Class.forName(name));
     Constructor<?> myConstructor;
     try {
       myConstructor = myClass.getConstructor(String.class);
-    } catch(NoSuchMethodException e) {
-      throw new ClassNotFoundException( "unable to get apropriate constructor from class \""+name+"\"", e);
+    } catch (NoSuchMethodException e) {
+      throw new ClassNotFoundException("unable to get apropriate constructor from class \""
+              + name + "\"", e);
     }
-    if (! templateClass.isAssignableFrom(myClass)) {
-      throw new ClassNotFoundException( "Class \"" + name + "\" does not implement required interfaces");
+    if (!templateClass.isAssignableFrom(myClass)) {
+      throw new ClassNotFoundException("Class \"" + name
+              + "\" does not implement required interfaces");
     }
     try {
       return myConstructor.newInstance(new Object[]{section});
-    } catch(IllegalAccessException|InvocationTargetException|InstantiationException e) {
-      throw new ClassNotFoundException( "Class \"" + name + "\" failed running the constructor",e);
+    } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
+      throw new ClassNotFoundException("Class \"" + name + "\" failed running the constructor", e);
     }
   }
 

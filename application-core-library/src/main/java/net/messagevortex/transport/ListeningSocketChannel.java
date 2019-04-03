@@ -6,6 +6,7 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import net.messagevortex.MessageVortexLogger;
 
 /**
@@ -92,10 +93,8 @@ public class ListeningSocketChannel {
               LOGGER.log(Level.INFO, "calling SocketChannel listener");
               ServerConnection sc = new ServerConnection(socketChannel, getSecurityContext());
               if (getSecurityContext() != null && getSecurityContext().getRequirement() != null
-                      && (
-                              getSecurityContext().getRequirement() == SecurityRequirement.UNTRUSTED_SSLTLS
-                              || getSecurityContext().getRequirement() == SecurityRequirement.SSLTLS
-                      )) {
+                      && (getSecurityContext().getRequirement() == SecurityRequirement.UNTRUSTED_SSLTLS
+                      || getSecurityContext().getRequirement() == SecurityRequirement.SSLTLS)) {
                 sc.startTls();
               }
               listener.gotConnect(sc);

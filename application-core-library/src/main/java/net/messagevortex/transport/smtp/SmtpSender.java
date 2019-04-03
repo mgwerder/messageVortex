@@ -22,9 +22,7 @@ package net.messagevortex.transport.smtp;
 // * SOFTWARE.
 // ************************************************************************************
 
-import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.transport.*;
-import org.bouncycastle.util.encoders.Base64;
+import static net.messagevortex.transport.SecurityRequirement.STARTTLS;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,8 +34,13 @@ import java.util.Arrays;
 import java.util.Scanner;
 import java.util.logging.Level;
 
-import static net.messagevortex.transport.SecurityRequirement.STARTTLS;
-
+import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.transport.ClientConnection;
+import net.messagevortex.transport.Credentials;
+import net.messagevortex.transport.SecurityContext;
+import net.messagevortex.transport.SecurityRequirement;
+import net.messagevortex.transport.TransportSender;
+import org.bouncycastle.util.encoders.Base64;
 
 public class SmtpSender extends ClientConnection implements TransportSender {
   private static final String CRLF = "\r\n";
@@ -214,7 +217,9 @@ public class SmtpSender extends ClientConnection implements TransportSender {
   }
 
   public void shutdownDaemon() {}
+
   public void startDaemon() {}
+
   public void stopDaemon() {}
 
 }

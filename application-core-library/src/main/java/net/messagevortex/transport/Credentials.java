@@ -55,6 +55,12 @@ public class Credentials {
     return username;
   }
 
+  /***
+   * <p>Sets the username to the specified String.</p>
+   *
+   * @param username    the username to be set
+   * @return            the previously set username
+   */
   public String setUsername(String username) {
     String ret = this.username;
     this.username = username;
@@ -65,6 +71,12 @@ public class Credentials {
     return identityCert;
   }
 
+  /***
+   * <p>Sets the certificate to be used with this identity.</p>
+   *
+   * @param identityCert  the certificate to be set
+   * @return              the previously set certificate
+   */
   public X509Certificate setIdentityCert(X509Certificate identityCert) {
     X509Certificate ret = this.identityCert;
     this.identityCert = identityCert;
@@ -75,6 +87,12 @@ public class Credentials {
     return trustStore;
   }
 
+  /***
+   * <p>Sets the trust store to be used when working with peer certificates.</p>
+   *
+   * @param trustStore      the truststore to be set
+   * @return                the previously set trust store
+   */
   public KeyStore setClientCert(KeyStore trustStore) {
     KeyStore ret = this.trustStore;
     this.trustStore = trustStore;

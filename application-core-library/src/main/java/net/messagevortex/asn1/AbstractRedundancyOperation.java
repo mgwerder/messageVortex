@@ -22,23 +22,31 @@ package net.messagevortex.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
-import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.asn1.encryption.DumpType;
-import net.messagevortex.router.operation.BitShifter;
-import org.bouncycastle.asn1.*;
-
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
+import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.asn1.encryption.DumpType;
+import net.messagevortex.router.operation.BitShifter;
+import org.bouncycastle.asn1.ASN1Choice;
+import org.bouncycastle.asn1.ASN1Encodable;
+import org.bouncycastle.asn1.ASN1EncodableVector;
+import org.bouncycastle.asn1.ASN1Integer;
+import org.bouncycastle.asn1.ASN1Object;
+import org.bouncycastle.asn1.ASN1Sequence;
+import org.bouncycastle.asn1.ASN1TaggedObject;
+import org.bouncycastle.asn1.DERSequence;
+import org.bouncycastle.asn1.DERTaggedObject;
+
 /**
  * Represents a the Blending specification of the router block.
  */
 public abstract class AbstractRedundancyOperation
-                extends Operation
-                implements ASN1Choice, Serializable, Dumpable {
+        extends Operation
+        implements ASN1Choice, Serializable, Dumpable {
 
   public static final long serialVersionUID = 100000000032L;
 
@@ -105,9 +113,9 @@ public abstract class AbstractRedundancyOperation
 
     inputId = parseIntval(ASN1TaggedObject.getInstance(s1.getObjectAt(i++)), INPUT_ID, "inputId");
     dataStripes = parseIntval(ASN1TaggedObject.getInstance(s1.getObjectAt(i++)), DATA_STRIPES,
-                              "dataStripes");
+            "dataStripes");
     redundancyStripes = parseIntval(ASN1TaggedObject.getInstance(s1.getObjectAt(i++)), REDUNDANCY,
-                                    "redundancy");
+            "redundancy");
 
     // reading keys
     ASN1TaggedObject to = ASN1TaggedObject.getInstance(s1.getObjectAt(i++));
@@ -123,7 +131,7 @@ public abstract class AbstractRedundancyOperation
     }
 
     outputId = parseIntval(ASN1TaggedObject.getInstance(s1.getObjectAt(i++)), OUTPUT_ID,
-                           "outputId");
+            "outputId");
     gfSize = parseIntval(ASN1TaggedObject.getInstance(s1.getObjectAt(i++)), GF_SIZE, "gfSize");
 
     LOGGER.log(Level.FINER, "Finished parse()");
@@ -296,7 +304,7 @@ public abstract class AbstractRedundancyOperation
    */
   public final int setGfSize(int omega) {
     if (omega < 2 || omega > 16
-        || this.redundancyStripes + this.dataStripes > BitShifter.lshift(2, omega, (byte) 33)) {
+            || this.redundancyStripes + this.dataStripes > BitShifter.lshift(2, omega, (byte) 33)) {
       throw new ArithmeticException("galois field too small for the stripes to be acomodated");
     }
     int old = this.gfSize;

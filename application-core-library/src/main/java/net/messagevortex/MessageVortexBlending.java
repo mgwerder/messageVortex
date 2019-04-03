@@ -22,13 +22,14 @@ package net.messagevortex;
 // * SOFTWARE.
 // ************************************************************************************
 
+import java.io.InputStream;
+
 import net.messagevortex.blender.Blender;
 import net.messagevortex.blender.BlendingSender;
 import net.messagevortex.transport.TransportReceiver;
 
-import java.io.InputStream;
-
-public class MessageVortexBlending extends AbstractDaemon implements TransportReceiver, BlendingSender {
+public class MessageVortexBlending extends AbstractDaemon
+        implements TransportReceiver, BlendingSender {
 
   private TransportReceiver receiver = null;
   private BlendingSender sender = null;

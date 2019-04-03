@@ -22,13 +22,13 @@ package net.messagevortex.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
-import org.bouncycastle.asn1.ASN1Encodable;
-import org.bouncycastle.asn1.ASN1TaggedObject;
-
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import org.bouncycastle.asn1.ASN1Encodable;
+import org.bouncycastle.asn1.ASN1TaggedObject;
 
 /**
  * Represents a the Blending specification of the router block.

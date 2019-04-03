@@ -1,7 +1,8 @@
 package net.messagevortex;
 
 /**
- * <p>This is an abstract class providing empty hulled methodes for all threadless implementations.</p>
+ * <p>This is an abstract class providing empty hulled methodes for all threadless
+ * implementations.</p>
  */
 public abstract class AbstractDaemon implements RunningDaemon {
 

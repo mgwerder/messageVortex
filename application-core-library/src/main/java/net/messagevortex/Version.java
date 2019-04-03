@@ -22,14 +22,14 @@ package net.messagevortex;
 // * SOFTWARE.
 // ************************************************************************************
 
-import picocli.CommandLine;
-
 import java.io.InputStream;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import picocli.CommandLine;
 
 public class Version implements CommandLine.IVersionProvider {
 

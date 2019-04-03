@@ -22,12 +22,12 @@ package net.messagevortex.router;
 // * SOFTWARE.
 // ************************************************************************************
 
+import java.util.List;
+
 import net.messagevortex.RunningDaemon;
 import net.messagevortex.accounting.Accountant;
 import net.messagevortex.blender.Blender;
 import net.messagevortex.blender.BlendingReceiver;
-
-import java.util.List;
 
 public interface Router extends BlendingReceiver, RunningDaemon {
 

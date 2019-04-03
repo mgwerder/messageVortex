@@ -22,10 +22,6 @@ package net.messagevortex.transport;
 // * SOFTWARE.
 // ************************************************************************************
 
-import javax.net.ssl.KeyManager;
-import javax.net.ssl.SSLEngine;
-import javax.net.ssl.X509ExtendedKeyManager;
-import javax.net.ssl.X509KeyManager;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
@@ -36,6 +32,10 @@ import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.net.ssl.KeyManager;
+import javax.net.ssl.SSLEngine;
+import javax.net.ssl.X509ExtendedKeyManager;
+import javax.net.ssl.X509KeyManager;
 
 /***
  * <p>Keymanager enables specification of key alias to be used.</p>
@@ -82,7 +82,8 @@ public class CustomKeyManager extends X509ExtendedKeyManager implements KeyManag
         keyStore.load(is, password);
       }
     } catch (IOException ioe) {
-      throw new GeneralSecurityException("IOException while loading keystore \""+keyStoreFile+"\" with password "+new String(password), ioe);
+      throw new GeneralSecurityException("IOException while loading keystore \"" + keyStoreFile
+              + "\" with password " + new String(password), ioe);
     }
 
     if (getPrivateKey(alias) == null) {

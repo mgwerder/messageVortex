@@ -22,24 +22,19 @@ package net.messagevortex;
 // * SOFTWARE.
 // ************************************************************************************
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.util.Scanner;
-import java.util.regex.Pattern;
 
 public class MessageVortexConfig extends Config {
 
   private MessageVortexConfig() throws IOException {
     // This constructor hides a default constructor
-    super( "messageVortex.cfgRessources" );
+    super("messageVortex.cfgRessources");
   }
 
   public static Config getDefault() throws IOException {
     return createConfig();
   }
-  
+
   /***
    * <p>Gets a message vortex config object.</p>
    *

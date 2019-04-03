@@ -3,6 +3,37 @@
   <component name="ChangeListManager">
     <list default="true" id="d11f21f3-1155-4924-86d1-bc99f93f8cdb" name="Default Changelist" comment="Default Changelist">
       <change beforePath="$PROJECT_DIR$/../Jenkinsfile" beforeDir="false" afterPath="$PROJECT_DIR$/../Jenkinsfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/AbstractDaemon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/AbstractDaemon.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/Config.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortexBlending.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortexBlending.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortexConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortexConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortexController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortexController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/Version.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/Version.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/accounting/Accountant.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/accounting/Accountant.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AbstractRedundancyOperation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AbstractRedundancyOperation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AsymmetricKeyPreCalculator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AsymmetricKeyPreCalculator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/HeaderRequestCapability.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/HeaderRequestCapability.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/HeaderRequestIdentity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/HeaderRequestIdentity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/Operation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/Operation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/DummyBlender.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/DummyBlender.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/router/Router.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/router/Router.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/router/SimpleRouterImplementation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/router/SimpleRouterImplementation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/Credentials.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/Credentials.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/CustomKeyManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/CustomKeyManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/ListeningSocketChannel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/ListeningSocketChannel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/SmtpImapServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/SmtpImapServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/SmtpPopServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/SmtpPopServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/TransportReceiver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/TransportReceiver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/TransportSender.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/TransportSender.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/dummy/DummyTransportTrx.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/dummy/DummyTransportTrx.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/imap/ImapPassthruServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/imap/ImapPassthruServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/pop3/TestPop3Handler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/pop3/TestPop3Handler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/SmtpConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/SmtpConnection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/SmtpSender.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/SmtpSender.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/TestSmtpHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/TestSmtpHandler.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -54,139 +85,70 @@
           <entry key="cfg" value="4" />
           <entry key="cfgRessources" value="4" />
           <entry key="cfgWritten" value="1" />
-          <entry key="java" value="45" />
+          <entry key="java" value="92" />
           <entry key="properties" value="3" />
-          <entry key="xml" value="5" />
+          <entry key="xml" value="6" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="Ini" value="2" />
-          <entry key="JAVA" value="45" />
+          <entry key="JAVA" value="92" />
           <entry key="Jenkins file" value="1" />
           <entry key="PLAIN_TEXT" value="10" />
           <entry key="Properties" value="3" />
-          <entry key="XML" value="5" />
+          <entry key="XML" value="6" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="Jenkinsfile" value="374" />
+          <entry key="Jenkinsfile" value="379" />
           <entry key="cfg" value="683" />
           <entry key="cfgRessources" value="1557" />
           <entry key="cfgWritten" value="5" />
-          <entry key="java" value="10617" />
+          <entry key="java" value="11589" />
           <entry key="properties" value="15" />
           <entry key="txt" value="17" />
-          <entry key="xml" value="502" />
+          <entry key="xml" value="504" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="Ini" value="246" />
-          <entry key="JAVA" value="10617" />
-          <entry key="Jenkins file" value="374" />
+          <entry key="JAVA" value="11589" />
+          <entry key="Jenkins file" value="379" />
           <entry key="PLAIN_TEXT" value="2016" />
           <entry key="Properties" value="15" />
-          <entry key="XML" value="502" />
+          <entry key="XML" value="504" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/imap/ImapPassthruServer.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="850">
-              <caret line="66" column="3" selection-start-line="44" selection-end-line="50" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../pom.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1054">
-              <caret line="62" column="41" selection-start-line="62" selection-start-column="41" selection-end-line="62" selection-end-column="41" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/../Jenkinsfile">
+        <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="829">
-              <caret line="101" column="156" selection-start-line="101" selection-start-column="156" selection-end-line="101" selection-end-column="156" />
+            <state relative-caret-position="99">
+              <caret line="211" selection-start-line="211" selection-end-line="211" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/ListeningSocketChannel.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/SmtpReceiver.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1972">
-              <caret line="126" selection-start-line="126" selection-end-line="126" />
+            <state relative-caret-position="373">
+              <caret line="75" column="3" selection-start-line="75" selection-start-column="3" selection-end-line="75" selection-end-column="3" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AbstractRedundancyOperation.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/pop3/TestPop3Handler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4488">
-              <caret line="264" column="25" selection-start-line="264" selection-start-column="25" selection-end-line="264" selection-end-column="25" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/HeaderRequestCapability.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="935">
-              <caret line="55" selection-start-line="55" selection-end-line="55" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/HeaderRequestIdentity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="667">
-              <caret line="55" selection-start-line="55" selection-end-line="55" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortexController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="765">
-              <caret line="48" selection-start-line="48" selection-end-line="48" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1649">
-              <caret line="111" column="47" selection-start-line="111" selection-start-column="47" selection-end-line="111" selection-end-column="47" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/TestSmtpHandler.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="26" column="2" selection-start-line="26" selection-start-column="2" selection-end-line="26" selection-end-column="2" />
+            <state relative-caret-position="246">
+              <caret line="52" column="12" selection-start-line="52" selection-start-column="12" selection-end-line="52" selection-end-column="12" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -231,6 +193,8 @@
       <find>smtp</find>
       <find>signal</find>
       <find>sync</find>
+      <find>pool</find>
+      <find>check</find>
     </findStrings>
     <replaceStrings>
       <replace>;</replace>
@@ -251,42 +215,52 @@
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/dummy/DummyTransportSender.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/blending/SmtpBlender.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/NotImplementedException.java" />
-        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortexConfig.java" />
         <option value="$PROJECT_DIR$/../../SMESEC/CySeC/src/main/java/eu/smesec/platform/config/Config.java" />
-        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/SmtpConnection.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/SmtpReceiver.java" />
         <option value="$PROJECT_DIR$/messageVortex.cfgWritten" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortexTransport.java" />
         <option value="$PROJECT_DIR$/src/main/resources/META-INF/messageVortex.properties" />
         <option value="$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/VersionTest.java" />
-        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/Version.java" />
-        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/CustomKeyManager.java" />
-        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/SmtpSender.java" />
         <option value="$PROJECT_DIR$/../pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/Blender.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/SmtpBlender.java" />
-        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/DummyBlender.java" />
-        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/Config.java" />
         <option value="$PROJECT_DIR$/src/test/java/net/messagevortex/test/transport/DummyTransportSenderTest.java" />
-        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/dummy/DummyTransportTrx.java" />
-        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/SmtpImapServer.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/BasicSmtpReceiver.java" />
         <option value="$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/ConfigTest.java" />
-        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AsymmetricKeyPreCalculator.java" />
-        <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/MessageVortexTest.java" />
-        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/SmtpPopServer.java" />
         <option value="$PROJECT_DIR$/src/main/resources/messageVortex.cfgRessources" />
         <option value="$PROJECT_DIR$/src/main/resources/messageVortex.cfg" />
-        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/pop3/TestPop3Handler.java" />
+        <option value="$PROJECT_DIR$/../Jenkinsfile" />
+        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/AbstractDaemon.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AbstractRedundancyOperation.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AsymmetricKeyPreCalculator.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/Credentials.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/HeaderRequestIdentity.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortexController.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/Operation.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/SmtpImapServer.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/SmtpPopServer.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/accounting/Accountant.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/Config.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/DummyBlender.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/dummy/DummyTransportTrx.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/HeaderRequestCapability.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/imap/ImapPassthruServer.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortexBlending.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortexConfig.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/router/Router.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/router/SimpleRouterImplementation.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/SmtpConnection.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/ListeningSocketChannel.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/CustomKeyManager.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/SmtpSender.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/TransportReceiver.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/TransportSender.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/Version.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/TestSmtpHandler.java" />
-        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortexController.java" />
-        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AbstractRedundancyOperation.java" />
-        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/HeaderRequestCapability.java" />
-        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/HeaderRequestIdentity.java" />
-        <option value="$PROJECT_DIR$/../Jenkinsfile" />
+        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/pop3/TestPop3Handler.java" />
       </list>
     </option>
   </component>
@@ -319,6 +293,12 @@
           <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
           <item name="application-core-library" type="9519ce18:MavenProjectsStructure$ProjectNode" />
           <item name="Plugins" type="7aea1407:MavenProjectsStructure$PluginsNode" />
+        </path>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="application-core-library" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+          <item name="Plugins" type="7aea1407:MavenProjectsStructure$PluginsNode" />
+          <item name="surefire" type="36feed69:MavenProjectsStructure$PluginNode" />
         </path>
         <path>
           <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
@@ -412,7 +392,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1553066231944" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1554279530223" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../sonar.properties" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -558,7 +538,7 @@
       <updated>1552290503544</updated>
       <workItem from="1552290507005" duration="28708000" />
       <workItem from="1552898686832" duration="32907000" />
-      <workItem from="1554275333733" duration="392000" />
+      <workItem from="1554275333733" duration="4835000" />
     </task>
     <servers />
   </component>
@@ -595,7 +575,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="68003000" />
+    <option name="totallyTimeSpent" value="72446000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -608,7 +588,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1176" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.282516" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -619,7 +598,7 @@
       <window_info id="Capture Tool" order="6" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.24714611" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4982699" weight="0.32267115" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4982699" visible="true" weight="0.3218391" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -639,7 +618,7 @@
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="right" id="Capture Analysis" order="4" />
       <window_info anchor="right" id="Database" order="5" sideWeight="0.49857143" weight="0.32995737" />
-      <window_info anchor="right" id="Maven Projects" order="6" sideWeight="0.49857143" weight="0.32958478" />
+      <window_info anchor="right" id="Maven Projects" order="6" sideWeight="0.49857143" visible="true" weight="0.32942432" />
       <window_info anchor="right" id="Palette&#9;" order="7" />
       <window_info anchor="right" id="Theme Preview" order="8" />
       <window_info anchor="right" id="Coverage" order="9" sideWeight="0.50142854" side_tool="true" weight="0.32995737" />
@@ -687,80 +666,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/ByteArrayBuilder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="149">
-          <caret line="17" column="80" lean-forward="true" selection-start-line="17" selection-start-column="80" selection-end-line="17" selection-end-column="80" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/SaslServerCallbackHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="44" selection-start-line="38" selection-end-line="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/SaslMechanisms.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="12" selection-start-line="2" selection-start-column="12" selection-end-line="2" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/dummy/DummyTransportSender.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/ClientConnection.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="45" column="17" selection-start-line="39" selection-end-line="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/SmtpReceiver.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="551">
-          <caret line="62" column="79" selection-start-line="62" selection-start-column="79" selection-end-line="62" selection-end-column="79" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/SmtpConnection.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="365">
-          <caret line="78" column="14" lean-forward="true" selection-start-line="78" selection-start-column="14" selection-end-line="78" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/asn.examples/messageBlocks.asn">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="3" selection-start-column="3" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/encryption/PrngType.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/asn.examples/messageBlocksExamples1.asn">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="578">
-          <caret line="28" column="14" lean-forward="true" selection-start-line="28" selection-start-column="14" selection-end-line="28" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../SMESEC/CySeC/src/main/java/eu/smesec/platform/config/Config.java" />
-    <entry file="file://$PROJECT_DIR$/messageVortex.cfgWritten" />
-    <entry file="file://$PROJECT_DIR$/../../SMESEC/CySeC/src/main/java/eu/smesec/platform/config/CysecConfig.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortexConfig.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="544">
-          <caret line="37" selection-start-line="37" selection-end-line="37" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/target/classes/META-INF/messageVortex.properties" />
     <entry file="file://$PROJECT_DIR$/src/main/resources/META-INF/messageVortex.properties">
       <provider selected="true" editor-type-id="text-editor">
@@ -776,13 +681,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/Version.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="801">
-          <caret line="98" column="57" selection-start-line="98" selection-start-column="57" selection-end-line="98" selection-end-column="57" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/net/messagevortex/test/imap/CustomKeyManagerTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="323">
@@ -794,27 +692,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="382">
           <caret line="241" selection-start-line="241" selection-end-line="241" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/CustomKeyManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="84" column="134" selection-start-line="84" selection-start-column="134" selection-end-line="84" selection-end-column="134" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/SmtpSender.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="754">
-          <caret line="219" column="2" selection-start-line="219" selection-start-column="2" selection-end-line="219" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortexBlending.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="737">
-          <caret line="83" selection-start-line="83" selection-end-line="83" />
         </state>
       </provider>
     </entry>
@@ -833,38 +710,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/blender/DummyBlender.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-493">
-          <caret line="6" column="23" lean-forward="true" selection-start-line="6" selection-start-column="23" selection-end-line="6" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/Config.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="342" column="34" lean-forward="true" selection-start-line="342" selection-start-column="34" selection-end-line="342" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/net/messagevortex/test/transport/DummyTransportSenderTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="565">
           <caret line="76" selection-start-line="76" selection-end-line="76" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/dummy/DummyTransportTrx.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="497">
-          <caret line="131" column="23" lean-forward="true" selection-start-line="131" selection-start-column="23" selection-end-line="131" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/SmtpImapServer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="13" selection-start-line="13" selection-end-line="13" />
         </state>
       </provider>
     </entry>
@@ -882,31 +731,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/SmtpPopServer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="19" column="11" selection-start-line="19" selection-start-column="11" selection-end-line="19" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/imap/TestImapHandler.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
           <caret line="2" column="28" selection-start-line="2" selection-start-column="28" selection-end-line="2" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="809">
-          <caret line="77" column="21" selection-start-line="77" selection-start-column="21" selection-end-line="77" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AsymmetricKeyPreCalculator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2839">
-          <caret line="182" column="23" selection-start-line="182" selection-start-column="23" selection-end-line="182" selection-end-column="23" />
         </state>
       </provider>
     </entry>
@@ -924,13 +752,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/pop3/TestPop3Handler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1088">
-          <caret line="80" column="11" selection-start-line="80" selection-start-column="11" selection-end-line="80" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortexTransport.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="619">
@@ -938,82 +759,325 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/imap/ImapPassthruServer.java">
+    <entry file="file://$PROJECT_DIR$/../Jenkinsfile">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="850">
-          <caret line="66" column="3" selection-start-line="44" selection-end-line="50" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="204">
+          <caret line="24" column="19" lean-forward="true" selection-start-line="24" selection-start-column="19" selection-end-line="24" selection-end-column="19" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1054">
+        <state relative-caret-position="340">
           <caret line="62" column="41" selection-start-line="62" selection-start-column="41" selection-end-line="62" selection-end-column="41" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/ListeningSocketChannel.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/AbstractDaemon.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1972">
-          <caret line="126" selection-start-line="126" selection-end-line="126" />
+        <state relative-caret-position="238">
+          <caret line="14" column="3" lean-forward="true" selection-start-line="14" selection-start-column="3" selection-end-line="14" selection-end-column="3" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AbstractRedundancyOperation.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4488">
-          <caret line="264" column="25" selection-start-line="264" selection-start-column="25" selection-end-line="264" selection-end-column="25" />
+        <state relative-caret-position="272">
+          <caret line="30" selection-start-line="30" selection-end-line="30" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/HeaderRequestCapability.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AsymmetricKeyPreCalculator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="935">
-          <caret line="55" selection-start-line="55" selection-end-line="55" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortexController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="765">
-          <caret line="48" selection-start-line="48" selection-end-line="48" />
+        <state relative-caret-position="356">
+          <caret line="100" column="56" lean-forward="true" selection-start-line="100" selection-start-column="56" selection-end-line="100" selection-end-column="56" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#3216#3355#0" expanded="true" />
+            <element signature="e#3354#3355#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/Credentials.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1649">
-          <caret line="111" column="47" selection-start-line="111" selection-start-column="47" selection-end-line="111" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/TestSmtpHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="26" column="2" selection-start-line="26" selection-start-column="2" selection-end-line="26" selection-end-column="2" />
+        <state relative-caret-position="212">
+          <caret line="77" column="3" selection-start-line="77" selection-start-column="3" selection-end-line="77" selection-end-column="3" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#2397#2398#0" expanded="true" />
+            <element signature="e#2426#2427#0" expanded="true" />
+            <element signature="e#2817#2818#0" expanded="true" />
+            <element signature="e#2844#2845#0" expanded="true" />
+            <element signature="e#3213#3214#0" expanded="true" />
+            <element signature="e#3238#3239#0" expanded="true" />
+            <element signature="e#3398#3399#0" expanded="true" />
+            <element signature="e#3420#3421#0" expanded="true" />
+            <element signature="e#3768#3769#0" expanded="true" />
+            <element signature="e#3801#3802#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/HeaderRequestIdentity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="667">
-          <caret line="55" selection-start-line="55" selection-end-line="55" />
+        <state relative-caret-position="789">
+          <caret line="89" column="16" lean-forward="true" selection-start-line="89" selection-start-column="16" selection-end-line="89" selection-end-column="16" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../Jenkinsfile">
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/IdentityBlock.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="829">
-          <caret line="101" column="156" selection-start-line="101" selection-start-column="156" selection-end-line="101" selection-end-column="156" />
+        <state relative-caret-position="219">
+          <caret line="75" column="3" selection-start-line="75" selection-start-column="3" selection-end-line="75" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortexController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" selection-start-line="7" selection-end-line="7" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/Operation.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="287">
+          <caret line="32" selection-start-line="32" selection-end-line="32" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/PayloadChunk.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="87" column="3" selection-start-line="87" selection-start-column="3" selection-end-line="87" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/SmtpImapServer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" selection-start-line="8" selection-end-line="8" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/SmtpPopServer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" selection-start-line="9" selection-end-line="9" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/accounting/Accountant.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="442">
+          <caret line="26" selection-start-line="26" selection-end-line="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/Config.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="297">
+          <caret line="685" column="41" selection-start-line="685" selection-start-column="41" selection-end-line="685" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/blender/DummyBlender.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="534">
+          <caret line="135" lean-forward="true" selection-start-line="135" selection-end-line="135" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/dummy/DummyTransportTrx.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="229">
+          <caret line="72" column="5" lean-forward="true" selection-start-line="72" selection-start-column="5" selection-end-line="72" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/HeaderRequestCapability.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="415">
+          <caret line="86" column="2" selection-start-line="86" selection-start-column="2" selection-end-line="86" selection-end-column="2" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/imap/ImapPassthruServer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="194">
+          <caret line="26" selection-start-line="26" selection-end-line="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortexBlending.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="296">
+          <caret line="31" column="8" selection-start-line="31" selection-start-column="8" selection-end-line="31" selection-end-column="8" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortexConfig.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="269">
+          <caret line="30" column="10" lean-forward="true" selection-start-line="30" selection-start-column="10" selection-end-line="30" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/router/Router.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="168">
+          <caret line="26" selection-start-line="26" selection-end-line="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/router/SimpleRouterImplementation.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" selection-start-line="4" selection-end-line="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/SmtpConnection.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="236">
+          <caret line="67" column="10" selection-start-line="67" selection-start-column="10" selection-end-line="67" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/CustomKeyManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="229">
+          <caret line="85" column="14" selection-start-line="85" selection-start-column="14" selection-end-line="85" selection-end-column="14" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/TransportReceiver.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="279">
+          <caret line="28" selection-start-line="28" selection-end-line="28" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/TransportSender.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="29" selection-start-line="29" selection-end-line="29" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/Version.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="561">
+          <caret line="33" selection-start-line="33" selection-end-line="33" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/TestSmtpHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="124" column="14" selection-start-line="124" selection-start-column="14" selection-end-line="124" selection-end-column="14" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#4052#4239#0" expanded="true" />
+            <element signature="e#4238#4239#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/SmtpSender.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="517">
+          <caret line="222" selection-start-line="222" selection-end-line="222" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortexAccounting.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="438">
+          <caret line="38" column="3" selection-start-line="38" selection-start-column="3" selection-end-line="38" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="211">
+          <caret line="202" column="32" lean-forward="true" selection-start-line="202" selection-start-column="32" selection-end-line="202" selection-end-column="32" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/ListeningSocketChannel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="212">
+          <caret line="95" selection-start-line="95" selection-end-line="95" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/SmtpReceiver.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="373">
+          <caret line="75" column="3" selection-start-line="75" selection-start-column="3" selection-end-line="75" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/pop3/TestPop3Handler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="246">
+          <caret line="52" column="12" selection-start-line="52" selection-start-column="12" selection-end-line="52" selection-end-column="12" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="99">
+          <caret line="211" selection-start-line="211" selection-end-line="211" />
         </state>
       </provider>
     </entry>

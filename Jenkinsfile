@@ -4,7 +4,7 @@
 pipeline {
   agent any
   options {
-    buildDiscarder(logRotator(numToKeepStr:'50'))
+    buildDiscarder(logRotator(numToKeepStr:'20'))
     disableConcurrentBuilds()
   }
   stages {
@@ -33,6 +33,7 @@ pipeline {
             success {
               junit 'application-core-library/target/surefire-reports/TEST-*.xml'
               jacoco changeBuildStatus: true, classPattern: 'application-core-library/target/classes', execPattern: 'application-core-library/target/**.exec', inclusionPattern: '**/*.class', minimumBranchCoverage: '50', minimumClassCoverage: '50', minimumComplexityCoverage: '50', minimumLineCoverage: '70', minimumMethodCoverage: '50', sourcePattern: 'application-core-library/src/main/java,application-core-library/src/test/java'
+              publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'application-core-library/target/site', reportFiles: 'index.html', reportName: 'MessageVortex Report', reportTitles: 'MessageVortex'])
             }
           }
         }
@@ -98,9 +99,6 @@ pipeline {
     }
   }
   post {
-    always {
-      publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'application-core-library/target/site', reportFiles: 'index.html', reportName: 'MessageVortex Report', reportTitles: 'MessageVortex'])
-    }
     success {
       archiveArtifacts artifacts: 'application-core-library/target/*.jar,thesis/target/main/latex/**/*.pdf*', fingerprint: true
 

@@ -1,4 +1,5 @@
 package net.messagevortex.accounting;
+
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
 // *
@@ -24,7 +25,7 @@ package net.messagevortex.accounting;
 import net.messagevortex.RunningDaemon;
 
 /**
- * Created by martin.gwerder on 03.04.2017.
+ * <p>Interface for Accountant classes.</p>
  */
 public interface Accountant extends RunningDaemon, HeaderVerifier {
 }
