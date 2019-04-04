@@ -24,6 +24,8 @@ package net.messagevortex;
 
 import java.io.InputStream;
 
+import net.messagevortex.asn1.BlendingSpec;
+import net.messagevortex.asn1.VortexMessage;
 import net.messagevortex.blender.Blender;
 import net.messagevortex.blender.BlendingSender;
 import net.messagevortex.transport.TransportReceiver;
@@ -78,8 +80,8 @@ public class MessageVortexBlending extends AbstractDaemon
   }
 
   @Override
-  public boolean sendMessage(String target, MessageVortex msg) {
-    return sender.sendMessage(target, msg);
+  public boolean blendMessage(BlendingSpec target, VortexMessage msg) {
+    // FIXME
+    return false;
   }
-
 }
