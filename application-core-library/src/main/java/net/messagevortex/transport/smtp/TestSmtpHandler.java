@@ -54,9 +54,19 @@ public class TestSmtpHandler extends AbstractDaemon implements Transport, Runnab
             cfg.getStringValue(section, "smtp_incoming_address"),
             ServerSetup.PROTOCOL_SMTP
     );
+    setup.setVerbose(true);
     setup.setServerStartupTimeout(50000);
 
     server = new GreenMail(new ServerSetup[]{setup});
+    String username = cfg.getStringValue(section, "smtp_incoming_user");
+    String password = cfg.getStringValue(section, "smtp_incoming_password");
+    if (username==null || "".equals(username)) {
+      throw new IOException("username for incoming smtp may not be null");
+    }
+    if (password==null || "".equals(password)) {
+      throw new IOException("password for incoming smtp may not be null");
+    }
+    server.setUser( username, password);
     this.section = section;
     startDaemon();
   }

@@ -103,22 +103,45 @@ public class Credentials {
     return password;
   }
 
+  /***
+   * <p>Sets the password to be used.</p>
+   *
+   * @param password the password to be set
+   * @return the previously set password
+   */
   public String setPassword(String password) {
     String ret = this.password;
     this.password = password;
     return ret;
   }
 
+  /***
+   * <p>Gets the realm to be used.</p>
+   *
+   * @return the ccurrently set realm for this user
+   */
   public String getRealm() {
     return realm;
   }
 
+  /***
+   * <p>Sets the realm for this user.</p>
+   *
+   * @param realm name of the realm to be set. Set to 'null' to unset.
+   * @return the previously set realm
+   */
   public String setRealm(String realm) {
     String ret = this.realm;
     this.realm = realm;
     return ret;
   }
 
+  /***
+   * <p>Sets the security requirement assiciated with these credentials.</p>
+   *
+   * @param req the requirements to be associated
+   * @return the previously set requirements
+   */
   public SecurityRequirement setSecurityRequirement(SecurityRequirement req) {
     SecurityRequirement ret = this.requirement;
     this.requirement = req;

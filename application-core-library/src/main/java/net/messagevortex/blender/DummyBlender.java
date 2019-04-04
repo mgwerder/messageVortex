@@ -22,12 +22,23 @@ package net.messagevortex.blender;
 // * SOFTWARE.
 // ************************************************************************************
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Properties;
 import java.util.logging.Level;
-
+import javax.activation.DataHandler;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Multipart;
+import javax.mail.Session;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+import javax.mail.util.ByteArrayDataSource;
+import jdk.nashorn.internal.runtime.Version;
 import net.messagevortex.Config;
 import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexLogger;
@@ -101,14 +112,39 @@ public class DummyBlender extends Blender {
   public boolean blendMessage(BlendingSpec target, VortexMessage msg) {
     // encode message in clear readable and send it
     try {
-      transport.sendMessage(target.getRecipientAddress(),
-              new ByteArrayInputStream(msg.toBytes(DumpType.PUBLIC_ONLY)));
+      Session session = Session.getDefaultInstance(new Properties(), null);
+      MimeMessage mimeMsg = new MimeMessage(session);
+      mimeMsg.setRecipient(Message.RecipientType.TO, new InternetAddress(target.getRecipientAddress()));
+      mimeMsg.setSubject("VortexMessage");
+      mimeMsg.setHeader("User-Agent:", "MessageVortex/"+ Version.fullVersion());
+      Multipart content = new MimeMultipart();
+
+      // create body
+      MimeBodyPart bodyPart = new MimeBodyPart();
+      bodyPart.setText("This is a VortexMessage");
+      content.addBodyPart(bodyPart);
+
+      //create attachment
+      MimeBodyPart attachment = new MimeBodyPart();
+      ByteArrayDataSource source = new ByteArrayDataSource(msg.toBytes(DumpType.PUBLIC_ONLY),"application/octet-stream");
+      attachment.setDataHandler(new DataHandler(source));
+      attachment.setFileName("messageVortex.raw");
+      content.addBodyPart(attachment);
+
+      mimeMsg.setContent(content);
+
+      // send
+      transport.sendMessage(target.getRecipientAddress(), mimeMsg.getRawInputStream());
       return true;
+    } catch (AddressException ae) {
+      LOGGER.log(Level.SEVERE, "Error when setting address", ae);
+    } catch (MessagingException me) {
+      LOGGER.log(Level.SEVERE, "Error when composing message", me);
     } catch (IOException ioe) {
       LOGGER.log(Level.SEVERE, "Unable to send to transport endpoint "
               + target.getRecipientAddress(), ioe);
-      return false;
     }
+    return false;
   }
 
   @Override
@@ -127,17 +163,5 @@ public class DummyBlender extends Blender {
       return false;
     }
   }
-
-  @Override
-  public boolean sendMessage(String target, MessageVortex msg) {
-    // FIXME missing implementation
-    return false;
-  }
-
-  public void shutdownDaemon() {}
-
-  public void startDaemon() {}
-
-  public void stopDaemon() {}
 
 }

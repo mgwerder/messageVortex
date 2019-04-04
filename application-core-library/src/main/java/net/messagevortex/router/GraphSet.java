@@ -41,9 +41,9 @@ public class GraphSet implements Comparator<GraphSet>, Comparable<GraphSet>, Ite
   private static final long serialVersionUID = 16134223345689L;
 
   private List<Edge> store = new ArrayList<>();
-  private List<IdentityStoreBlock> anonymitySet;
-  private IdentityStoreBlock source = null;
-  private IdentityStoreBlock target = null;
+  private List<net.messagevortex.asn1.IdentityStoreBlock> anonymitySet;
+  private net.messagevortex.asn1.IdentityStoreBlock source = null;
+  private net.messagevortex.asn1.IdentityStoreBlock target = null;
   private boolean hasChanged = true;
   private Object cacheLock = new Object();
   private GraphSet[] cache = null;
@@ -55,21 +55,26 @@ public class GraphSet implements Comparator<GraphSet>, Comparable<GraphSet>, Ite
     anonymitySet = new Vector<>();
   }
 
-  public IdentityStoreBlock[] getAnonymitySet() {
-    return anonymitySet.toArray(new IdentityStoreBlock[anonymitySet.size()]);
+  public net.messagevortex.asn1.IdentityStoreBlock[] getAnonymitySet() {
+    return anonymitySet.toArray(new net.messagevortex.asn1.IdentityStoreBlock[anonymitySet.size()]);
   }
 
-  public void setAnonymitySet(IdentityStoreBlock[] anonymitySet) {
-    List<IdentityStoreBlock> tmp = new ArrayList<>();
+  /***
+   * <p>Sets the list of identities to be used for the anonymity set.</p>
+   *
+   * @param anonymitySet a list of identities to be used
+   */
+  public void setAnonymitySet(net.messagevortex.asn1.IdentityStoreBlock[] anonymitySet) {
+    List<net.messagevortex.asn1.IdentityStoreBlock> tmp = new ArrayList<>();
     tmp.addAll(Arrays.asList(anonymitySet));
     this.anonymitySet = tmp;
   }
 
-  public IdentityStoreBlock getAnonymity(int i) {
+  public net.messagevortex.asn1.IdentityStoreBlock getAnonymity(int i) {
     return anonymitySet.get(i);
   }
 
-  public IdentityStoreBlock getSource() {
+  public net.messagevortex.asn1.IdentityStoreBlock getSource() {
     return source;
   }
 
@@ -80,7 +85,7 @@ public class GraphSet implements Comparator<GraphSet>, Comparable<GraphSet>, Ite
    * @throws IllegalArgumentException if the source is not part of the anonymity set
    * @throws NullPointerException     if the source is null
    */
-  public void setSource(IdentityStoreBlock source) {
+  public void setSource(net.messagevortex.asn1.IdentityStoreBlock source) {
     if (source == null) {
       throw new NullPointerException("source may not be null");
     }
@@ -91,7 +96,7 @@ public class GraphSet implements Comparator<GraphSet>, Comparable<GraphSet>, Ite
     this.source = source;
   }
 
-  public IdentityStoreBlock getTarget() {
+  public net.messagevortex.asn1.IdentityStoreBlock getTarget() {
     return target;
   }
 
@@ -102,7 +107,7 @@ public class GraphSet implements Comparator<GraphSet>, Comparable<GraphSet>, Ite
    * @throws IllegalArgumentException if the target is not part of the anonymity set
    * @throws NullPointerException     if the target is null
    */
-  public void setTarget(IdentityStoreBlock target) {
+  public void setTarget(net.messagevortex.asn1.IdentityStoreBlock target) {
     if (target == null) {
       throw new NullPointerException("target may not be null");
     }
@@ -117,7 +122,7 @@ public class GraphSet implements Comparator<GraphSet>, Comparable<GraphSet>, Ite
     return anonymitySet.size();
   }
 
-  public int getAnonymityIndex(IdentityStoreBlock isb) {
+  public int getAnonymityIndex(net.messagevortex.asn1.IdentityStoreBlock isb) {
     return anonymitySet.indexOf(isb);
   }
 
@@ -126,6 +131,11 @@ public class GraphSet implements Comparator<GraphSet>, Comparable<GraphSet>, Ite
     return store.add(g);
   }
 
+  /***
+   * <p>Check for a edge covering the mentioned points.</p>
+   * @param g the edge to be searched for
+   * @return true if the graph has been found at least once
+   */
   public boolean contains(Edge g) {
     for (Edge e : store) {
       if (e.equals(g)) {
@@ -147,15 +157,20 @@ public class GraphSet implements Comparator<GraphSet>, Comparable<GraphSet>, Ite
    * @return the identity store block specified
    * @throws ArrayIndexOutOfBoundsException if i is outside the bounds of the anonymity set
    */
-  public IdentityStoreBlock getAnonIdentity(int i) {
+  public net.messagevortex.asn1.IdentityStoreBlock getAnonIdentity(int i) {
     if (i < 0 || i >= anonymitySet.size()) {
       throw new ArrayIndexOutOfBoundsException("got invalid identity vector (" + i + ")");
     }
     return anonymitySet.get(i);
   }
 
+  /***
+   * <p>check if all members of the anonymity set hve been reached at least once.</p>
+   *
+   * @return true if all members have been reached
+   */
   public boolean allTargetsReached() {
-    for (IdentityStoreBlock is : anonymitySet) {
+    for (net.messagevortex.asn1.IdentityStoreBlock is : anonymitySet) {
       if (!targetReached(is)) {
         return false;
       }
@@ -170,7 +185,7 @@ public class GraphSet implements Comparator<GraphSet>, Comparable<GraphSet>, Ite
    * @return true if the identity store block has been reached already in the past
    * @throws NullPointerException if the specified identity stor block is null
    */
-  public boolean targetReached(IdentityStoreBlock is) {
+  public boolean targetReached(net.messagevortex.asn1.IdentityStoreBlock is) {
     if (is == null) {
       throw new NullPointerException();
     }
@@ -185,6 +200,11 @@ public class GraphSet implements Comparator<GraphSet>, Comparable<GraphSet>, Ite
     return false;
   }
 
+  /***
+   * <p>Get a set of all graphs determined.</p>
+   *
+   * @return the array of graphs generated
+   */
   public GraphSet[] getRoutes() {
     synchronized (cacheLock) {
       if (hasChanged) {
@@ -272,6 +292,13 @@ public class GraphSet implements Comparator<GraphSet>, Comparable<GraphSet>, Ite
     return ret.toArray(new Edge[ret.size()][]);
   }
 
+  /***
+   * <p> Compares two graph sets for equality.</p>
+   *
+   * @param g1 the first graph set required for comparison
+   * @param g2 the secondgraph set required for comparison
+   * @return 0 if both sets are equal
+   */
   public int compare(GraphSet g1, GraphSet g2) {
     if (g1.equals(g2)) {
       return 0;
@@ -279,6 +306,12 @@ public class GraphSet implements Comparator<GraphSet>, Comparable<GraphSet>, Ite
     return ("" + g1.hashCode()).compareTo("" + g2.hashCode());
   }
 
+  /***
+   * <p>Compares this graph set with another graph set.</p>
+   *
+   * @param gs the second graph set for comparison
+   * @return 0 if both sets are equal
+   */
   public int compareTo(GraphSet gs) {
     return compare(this, gs);
   }
@@ -288,6 +321,7 @@ public class GraphSet implements Comparator<GraphSet>, Comparable<GraphSet>, Ite
     return super.hashCode();
   }
 
+  @Override
   public boolean equals(Object g) {
     if (g == null) {
       return false;
@@ -308,6 +342,11 @@ public class GraphSet implements Comparator<GraphSet>, Comparable<GraphSet>, Ite
     }
   }
 
+  /***
+   * <p>Get a string representation of the graph set.</p>
+   *
+   * @return the requested string representation
+   */
   public String dump() {
     StringBuilder sb = new StringBuilder();
     for (Edge g : store) {
