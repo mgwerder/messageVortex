@@ -25,12 +25,19 @@ package net.messagevortex.blender;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import javax.activation.DataHandler;
+import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
+import javax.mail.Part;
+import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
@@ -38,10 +45,11 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
-import jdk.nashorn.internal.runtime.Version;
+
 import net.messagevortex.Config;
 import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.Version;
 import net.messagevortex.asn1.BlendingSpec;
 import net.messagevortex.asn1.IdentityStore;
 import net.messagevortex.asn1.VortexMessage;
@@ -112,17 +120,24 @@ public class DummyBlender extends Blender {
   public boolean blendMessage(BlendingSpec target, VortexMessage msg) {
     // encode message in clear readable and send it
     try {
-      Session session = Session.getDefaultInstance(new Properties(), null);
-      MimeMessage mimeMsg = new MimeMessage(session);
+      //Session session = Session.getDefaultInstance(new Properties(), null);
+      Session session = Session.getInstance(new Properties(),
+              new javax.mail.Authenticator() {
+                protected PasswordAuthentication getPasswordAuthentication() {
+                  return new PasswordAuthentication("username", "password");
+                }
+              });
+      final MimeMessage mimeMsg = new MimeMessage(session);
+      mimeMsg.setFrom(new InternetAddress("test@test.com"));
       mimeMsg.setRecipient(Message.RecipientType.TO, new InternetAddress(target.getRecipientAddress()));
       mimeMsg.setSubject("VortexMessage");
-      mimeMsg.setHeader("User-Agent:", "MessageVortex/"+ Version.fullVersion());
-      Multipart content = new MimeMultipart();
+      mimeMsg.setHeader("User-Agent:", "MessageVortex/" + Version.getStringVersion());
+      MimeMultipart content = new MimeMultipart("mixed");
 
-      // create body
-      MimeBodyPart bodyPart = new MimeBodyPart();
-      bodyPart.setText("This is a VortexMessage");
-      content.addBodyPart(bodyPart);
+      // body
+      MimeBodyPart body = new MimeBodyPart();
+      body.setText("This is a VortexMessage");
+      content.addBodyPart(body);
 
       //create attachment
       MimeBodyPart attachment = new MimeBodyPart();
@@ -132,9 +147,22 @@ public class DummyBlender extends Blender {
       content.addBodyPart(attachment);
 
       mimeMsg.setContent(content);
+      final PipedOutputStream os = new PipedOutputStream();
+      // FIXME catch error values
+      new Thread() {
+        public void run() {
+          try {
+            mimeMsg.writeTo(os);
+            os.close();
+          } catch( IOException|MessagingException ioe) {
+            LOGGER.log( Level.WARNING, "Error while sending message",ioe );
+          }
+        }
+      }.start();
+      PipedInputStream inp =new PipedInputStream(os);
 
       // send
-      transport.sendMessage(target.getRecipientAddress(), mimeMsg.getRawInputStream());
+      transport.sendMessage(target.getRecipientAddress(), inp);
       return true;
     } catch (AddressException ae) {
       LOGGER.log(Level.SEVERE, "Error when setting address", ae);
@@ -148,20 +176,70 @@ public class DummyBlender extends Blender {
   }
 
   @Override
-  public boolean gotMessage(InputStream is) {
+  public boolean gotMessage(final InputStream is) {
     try {
+      Session session = Session.getInstance(new Properties(),
+              new javax.mail.Authenticator() {
+                protected PasswordAuthentication getPasswordAuthentication() {
+                  return new PasswordAuthentication("username", "password");
+                }
+              });
+      MimeMessage msg = new MimeMessage(session, is);
       ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-      int numBytesRead;
-      byte[] data = new byte[16384];
-      while ((numBytesRead = is.read(data, 0, data.length)) != -1) {
-        buffer.write(data, 0, numBytesRead);
+      VortexMessage vmsg = null;
+      for(InputStream is : getAttachments(msg)) {
+        try {
+          vmsg = new VortexMessage(is, identityStore.getHostIdentity());
+        } catch(IOException io) {
+          // This exception will occure if no vortex message is contained
+        }
+
       }
-      buffer.flush();
-      return router.gotMessage(new VortexMessage(buffer.toByteArray(),
-              identityStore.getHostIdentity()));
-    } catch (IOException ioe) {
+      return router.gotMessage(vmsg);
+    } catch (IOException|MessagingException ioe) {
+      LOGGER.log(Level.WARNING, "Exception while getting and parsing message", ioe);
       return false;
     }
+  }
+
+  public List<InputStream> getAttachments(Message message) throws MessagingException, IOException {
+    Object content = message.getContent();
+    if (content instanceof String)
+      return null;
+
+    if (content instanceof Multipart) {
+      Multipart multipart = (Multipart) content;
+      List<InputStream> result = new ArrayList<InputStream>();
+
+      for (int i = 0; i < multipart.getCount(); i++) {
+        result.addAll(getAttachments(multipart.getBodyPart(i)));
+      }
+      return result;
+
+    }
+    return null;
+  }
+
+  private List<InputStream> getAttachments(BodyPart part) throws Exception {
+    List<InputStream> result = new ArrayList<InputStream>();
+    Object content = part.getContent();
+    if (content instanceof InputStream || content instanceof String) {
+      if (Part.ATTACHMENT.equalsIgnoreCase(part.getDisposition()) || StringUtils.isNotBlank(part.getFileName())) {
+        result.add(part.getInputStream());
+        return result;
+      } else {
+        return new ArrayList<InputStream>();
+      }
+    }
+
+    if (content instanceof Multipart) {
+      Multipart multipart = (Multipart) content;
+      for (int i = 0; i < multipart.getCount(); i++) {
+        BodyPart bodyPart = multipart.getBodyPart(i);
+        result.addAll(getAttachments(bodyPart));
+      }
+    }
+    return result;
   }
 
 }
