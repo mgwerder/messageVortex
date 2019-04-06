@@ -92,7 +92,7 @@ public class IdentityStore extends AbstractBlock implements Serializable {
    * <p>Creates a new complete dummy identity store suitable for testing purposes.</p>
    *
    * @return returns a reference identity store
-   * @throws IOException
+   * @throws IOException if building of the store fails
    */
   public static IdentityStore getIdentityStoreDemo() throws IOException {
     if (demo == null) {

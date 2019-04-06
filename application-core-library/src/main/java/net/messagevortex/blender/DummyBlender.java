@@ -64,10 +64,10 @@ public class DummyBlender extends Blender {
     MessageVortexLogger.setGlobalLogLevel(Level.ALL);
   }
 
-  String identity;
-  Transport transport;
-  BlendingReceiver router;
-  IdentityStore identityStore;
+  private String identity;
+  private Transport transport;
+  private BlendingReceiver router;
+  private IdentityStore identityStore;
 
   /**
    * <p>A dummy blender implementation.</p>

@@ -48,7 +48,7 @@ pipeline {
             timeout(time: 30, unit: 'MINUTES')
           }
           steps{
-                sh 'mvn -pl application-core-library -DforkCount=0 jacoco:prepare-agent test jacoco:report site'
+                sh 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
           }
         }
         stage ('Test on JDK11') {
@@ -58,11 +58,14 @@ pipeline {
                 args '-v $HOME/.m2:/root/.m2'
             }
           }
+          options {
+            timeout(time: 30, unit: 'MINUTES')
+          }
           steps{
             script {
-              if (env.BRANCH_NAME != 'master') {
-                sh 'mvn -pl application-core-library -DforkCount=0 jacoco:prepare-agent test jacoco:report site'
-              }
+              //if (env.BRANCH_NAME != 'master') {
+                sh 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
+              //}
             }
           }
         }
@@ -73,11 +76,14 @@ pipeline {
                 args '-v $HOME/.m2:/root/.m2'
             }
           }
+          options {
+            timeout(time: 30, unit: 'MINUTES')
+          }
           steps {
             script {
-              if (env.BRANCH_NAME != 'master') {
+              //if (env.BRANCH_NAME != 'master') {
                 sh 'mvn -pl application-core-library -DforkCount=0 jacoco:prepare-agent test jacoco:report site'
-              }
+              //}
             }
           }
         }
@@ -94,7 +100,6 @@ pipeline {
         withSonarQubeEnv('SonarQube') {
           sh "mvn sonar:sonar"
         }
-        sh '/bin/true'
       }
     }
   }
