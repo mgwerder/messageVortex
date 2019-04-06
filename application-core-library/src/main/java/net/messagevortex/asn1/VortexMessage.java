@@ -22,13 +22,14 @@ package net.messagevortex.asn1;
 // * SOFTWARE.
 // ************************************************************************************
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.ASN1Encodable;
@@ -76,6 +77,27 @@ public class VortexMessage extends AbstractBlock implements Serializable {
     prefix = new PrefixBlock();
     innerMessage = new InnerMessageBlock();
     decryptionKey = null;
+  }
+
+  /***
+   * <p>Parses a byte array to a  VortexMessage.</p>
+   *
+   * @param b  the byte array to be parsed
+   * @param dk the decryptionKey required to decrypt the prefix
+   * @throws IOException if there was a problem parsing or decrypting the object
+   * @throws ParseException if there was a problem parsing the object
+   */
+  public VortexMessage(InputStream is, AsymmetricKey dk) throws IOException {
+    setDecryptionKey(dk);
+    ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+    byte[] chunk = new byte[1024*1024];
+    int i  = is.read(chunk,0,chunk.length-1);
+    while( i>0 ) {
+      buffer.write(chunk, 0, i);
+      i  = is.read(chunk,0,chunk.length-1);
+    }
+    parse(buffer.toByteArray());
+    buffer.close();
   }
 
   /***

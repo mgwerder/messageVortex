@@ -22,7 +22,6 @@ package net.messagevortex.blender;
 // * SOFTWARE.
 // ************************************************************************************
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PipedInputStream;
@@ -45,7 +44,6 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
-
 import net.messagevortex.Config;
 import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexLogger;
@@ -185,13 +183,13 @@ public class DummyBlender extends Blender {
                 }
               });
       MimeMessage msg = new MimeMessage(session, is);
-      ByteArrayOutputStream buffer = new ByteArrayOutputStream();
       VortexMessage vmsg = null;
-      for(InputStream is : getAttachments(msg)) {
+      for(InputStream attaStream : getAttachments(msg)) {
         try {
-          vmsg = new VortexMessage(is, identityStore.getHostIdentity());
+          vmsg = new VortexMessage(attaStream, identityStore.getHostIdentity());
         } catch(IOException io) {
-          // This exception will occure if no vortex message is contained
+          // This exception will occur if no vortex message is contained
+          LOGGER.log(Level.INFO,"Found attachment with no VortexMessage contained",io);
         }
 
       }
@@ -220,11 +218,11 @@ public class DummyBlender extends Blender {
     return null;
   }
 
-  private List<InputStream> getAttachments(BodyPart part) throws Exception {
+  private List<InputStream> getAttachments(BodyPart part) throws IOException, MessagingException {
     List<InputStream> result = new ArrayList<InputStream>();
     Object content = part.getContent();
     if (content instanceof InputStream || content instanceof String) {
-      if (Part.ATTACHMENT.equalsIgnoreCase(part.getDisposition()) || StringUtils.isNotBlank(part.getFileName())) {
+      if (Part.ATTACHMENT.equalsIgnoreCase(part.getDisposition()) || ! "".equals(part.getFileName())) {
         result.add(part.getInputStream());
         return result;
       } else {
