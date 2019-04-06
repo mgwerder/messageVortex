@@ -72,7 +72,7 @@ public class DummyBlender extends Blender {
   /**
    * <p>A dummy blender implementation.</p>
    *
-   * @param section    the config foile section to be used to configure
+   * @param section the config foile section to be used to configure
    * @throws IOException if anything fails :-D
    */
   public DummyBlender(String section) throws IOException {
@@ -120,16 +120,19 @@ public class DummyBlender extends Blender {
     try {
       //Session session = Session.getDefaultInstance(new Properties(), null);
       Session session = Session.getInstance(new Properties(),
-              new javax.mail.Authenticator() {
-                protected PasswordAuthentication getPasswordAuthentication() {
-                  return new PasswordAuthentication("username", "password");
-                }
-              });
+          new javax.mail.Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+              return new PasswordAuthentication("username", "password");
+            }
+          }
+      );
       final MimeMessage mimeMsg = new MimeMessage(session);
       mimeMsg.setFrom(new InternetAddress("test@test.com"));
-      mimeMsg.setRecipient(Message.RecipientType.TO, new InternetAddress(target.getRecipientAddress()));
+      mimeMsg.setRecipient(Message.RecipientType.TO,
+              new InternetAddress(target.getRecipientAddress()));
       mimeMsg.setSubject("VortexMessage");
-      mimeMsg.setHeader("User-Agent:", "MessageVortex/" + Version.getStringVersion());
+      mimeMsg.setHeader("User-Agent:",
+              "MessageVortex/" + Version.getStringVersion());
       MimeMultipart content = new MimeMultipart("mixed");
 
       // body
@@ -139,7 +142,8 @@ public class DummyBlender extends Blender {
 
       //create attachment
       MimeBodyPart attachment = new MimeBodyPart();
-      ByteArrayDataSource source = new ByteArrayDataSource(msg.toBytes(DumpType.PUBLIC_ONLY),"application/octet-stream");
+      ByteArrayDataSource source = new ByteArrayDataSource(msg.toBytes(DumpType.PUBLIC_ONLY),
+              "application/octet-stream");
       attachment.setDataHandler(new DataHandler(source));
       attachment.setFileName("messageVortex.raw");
       content.addBodyPart(attachment);
@@ -152,12 +156,12 @@ public class DummyBlender extends Blender {
           try {
             mimeMsg.writeTo(os);
             os.close();
-          } catch( IOException|MessagingException ioe) {
-            LOGGER.log( Level.WARNING, "Error while sending message",ioe );
+          } catch (IOException | MessagingException ioe) {
+            LOGGER.log(Level.WARNING, "Error while sending message", ioe);
           }
         }
       }.start();
-      PipedInputStream inp =new PipedInputStream(os);
+      PipedInputStream inp = new PipedInputStream(os);
 
       // send
       transport.sendMessage(target.getRecipientAddress(), inp);
@@ -177,33 +181,35 @@ public class DummyBlender extends Blender {
   public boolean gotMessage(final InputStream is) {
     try {
       Session session = Session.getInstance(new Properties(),
-              new javax.mail.Authenticator() {
-                protected PasswordAuthentication getPasswordAuthentication() {
-                  return new PasswordAuthentication("username", "password");
-                }
-              });
+          new javax.mail.Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+              return new PasswordAuthentication("username", "password");
+            }
+          }
+      );
       MimeMessage msg = new MimeMessage(session, is);
       VortexMessage vmsg = null;
-      for(InputStream attaStream : getAttachments(msg)) {
+      for (InputStream attaStream : getAttachments(msg)) {
         try {
           vmsg = new VortexMessage(attaStream, identityStore.getHostIdentity());
-        } catch(IOException io) {
+        } catch (IOException io) {
           // This exception will occur if no vortex message is contained
-          LOGGER.log(Level.INFO,"Found attachment with no VortexMessage contained",io);
+          LOGGER.log(Level.INFO, "Found attachment with no VortexMessage contained", io);
         }
 
       }
       return router.gotMessage(vmsg);
-    } catch (IOException|MessagingException ioe) {
+    } catch (IOException | MessagingException ioe) {
       LOGGER.log(Level.WARNING, "Exception while getting and parsing message", ioe);
       return false;
     }
   }
 
-  public List<InputStream> getAttachments(Message message) throws MessagingException, IOException {
+  private List<InputStream> getAttachments(Message message) throws MessagingException, IOException {
     Object content = message.getContent();
-    if (content instanceof String)
+    if (content instanceof String) {
       return null;
+    }
 
     if (content instanceof Multipart) {
       Multipart multipart = (Multipart) content;
@@ -222,7 +228,8 @@ public class DummyBlender extends Blender {
     List<InputStream> result = new ArrayList<InputStream>();
     Object content = part.getContent();
     if (content instanceof InputStream || content instanceof String) {
-      if (Part.ATTACHMENT.equalsIgnoreCase(part.getDisposition()) || ! "".equals(part.getFileName())) {
+      if (Part.ATTACHMENT.equalsIgnoreCase(part.getDisposition())
+              || ! "".equals(part.getFileName())) {
         result.add(part.getInputStream());
         return result;
       } else {

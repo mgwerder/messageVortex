@@ -42,7 +42,6 @@ import org.bouncycastle.asn1.ASN1EncodableVector;
 import org.bouncycastle.asn1.ASN1InputStream;
 import org.bouncycastle.asn1.ASN1Object;
 import org.bouncycastle.asn1.ASN1Sequence;
-import org.bouncycastle.asn1.DEROutputStream;
 import org.bouncycastle.asn1.DERSequence;
 
 /**
@@ -89,6 +88,12 @@ public class IdentityStore extends AbstractBlock implements Serializable {
     demo = null;
   }
 
+  /***
+   * <p>Creates a new complete dummy identity store suitable for testing purposes.</p>
+   *
+   * @return returns a reference identity store
+   * @throws IOException
+   */
   public static IdentityStore getIdentityStoreDemo() throws IOException {
     if (demo == null) {
       demo = getNewIdentityStoreDemo(true);
@@ -96,6 +101,16 @@ public class IdentityStore extends AbstractBlock implements Serializable {
     return demo;
   }
 
+  /***
+   * <p>Creates a new dummy identity store suitable for testing purposes.</p>
+   *
+   * <p>the identity store contains an own identity, one hundred
+   * node idetities and 40 recipient identities.</p>
+   *
+   * @param complete if true the node and recipient identities contain the private key too
+   * @return the requested identity store
+   * @throws IOException if building of the store fails
+   */
   public static IdentityStore getNewIdentityStoreDemo(boolean complete) throws IOException {
     IdentityStore tmp = new IdentityStore();
     tmp.add(IdentityStoreBlock.getIdentityStoreBlockDemo(
@@ -114,16 +129,34 @@ public class IdentityStore extends AbstractBlock implements Serializable {
     return tmp;
   }
 
+  /***
+   * <p>Get the own identity key.</p>
+   *
+   * @return the requested key
+   */
   public AsymmetricKey getHostIdentity() {
     return hostIdentity;
   }
 
+  /***
+   * <p>Sets the owned key.</p>
+   *
+   * @param identity identity key to be set as own key
+   * @return the previously set key
+   */
   public AsymmetricKey setHostIdentity(AsymmetricKey identity) {
     AsymmetricKey ret = hostIdentity;
     this.hostIdentity = identity;
     return ret;
   }
 
+  /***
+   * <p>Gets a random set of known recipient identities.</p>
+   *
+   * @param size the size of the anonymity set
+   * @return the anonymity set
+   * @throws IOException if requested anonymity set size is too small
+   */
   public List<IdentityStoreBlock> getAnonSet(int size) throws IOException {
     LOGGER.log(Level.FINE, "Executing getAnonSet(" + size + ") from " + blocks.size());
     List<IdentityStoreBlock> ret = new ArrayList<>();
@@ -164,6 +197,11 @@ public class IdentityStore extends AbstractBlock implements Serializable {
     LOGGER.log(Level.FINER, "Finished parse()");
   }
 
+  /***
+   * <p>Adds an existing identity store block to the store.</p>
+   *
+   * @param isb the block to be added
+   */
   public void add(IdentityStoreBlock isb) {
     String ident = "";
     if (isb.getIdentityKey() != null) {
@@ -207,36 +245,6 @@ public class IdentityStore extends AbstractBlock implements Serializable {
     sb.append(prefix).append("  }").append(CRLF);
     sb.append(prefix).append('}').append(CRLF);
     return sb.toString();
-  }
-
-  public static void main(String[] args) throws Exception {
-    LOGGER.log(Level.INFO, "\n;;; -------------------------------------------");
-    LOGGER.log(Level.INFO, ";;; creating blank dump");
-    IdentityStore m = new IdentityStore();
-    LOGGER.log(Level.INFO, m.dumpValueNotation("", DumpType.ALL_UNENCRYPTED));
-
-    LOGGER.log(Level.INFO, "\n;;; -------------------------------------------");
-    LOGGER.log(Level.INFO, ";;; Demo Store Test");
-    IdentityStore m2 = IdentityStore.getIdentityStoreDemo();
-    LOGGER.log(Level.INFO, ";;; dumping\r\n" + m2.dumpValueNotation("", DumpType.ALL_UNENCRYPTED));
-    LOGGER.log(Level.INFO, ";;; reencode check");
-    LOGGER.log(Level.INFO, ";;;   getting DER stream");
-    String tmpDir = System.getProperty("java.io.tmpdir");
-    LOGGER.log(Level.INFO, ";;;   storing to DER stream to " + tmpDir);
-    DEROutputStream f = new DEROutputStream(Files.newOutputStream(Paths.get(tmpDir + "/temp.der")));
-    f.writeObject(m.toAsn1Object(DumpType.ALL_UNENCRYPTED));
-    f.close();
-    byte[] b1 = m.toBytes(DumpType.ALL_UNENCRYPTED);
-    LOGGER.log(Level.INFO, ";;;   parsing DER stream");
-    IdentityStore m3 = new IdentityStore(b1);
-    LOGGER.log(Level.INFO, ";;;   getting DER stream again");
-    byte[] b2 = m3.toBytes(DumpType.ALL_UNENCRYPTED);
-    LOGGER.log(Level.INFO, ";;;   comparing");
-    if (Arrays.equals(b1, b2)) {
-      LOGGER.log(Level.INFO, "Reencode success");
-    } else {
-      LOGGER.log(Level.INFO, "Reencode FAILED");
-    }
   }
 
 }

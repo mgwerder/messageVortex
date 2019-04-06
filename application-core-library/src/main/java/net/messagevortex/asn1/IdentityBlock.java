@@ -73,12 +73,28 @@ public class IdentityBlock extends AbstractBlock implements Serializable, Dumpab
 
   private AsymmetricKey ownIdentity = null;
 
+  /***
+   * <p>Creates a new IdentityBlock with a medium security default key.</p>
+   *
+   * <p>This is a convenience wrapper for @see IdentityBlock(AsymmetricKey)</p>
+   *
+   * @throws IOException if generation of the key fails
+   */
   public IdentityBlock() throws IOException {
     this(new AsymmetricKey(
             Algorithm.getDefault(AlgorithmType.ASYMMETRIC).getParameters(SecurityLevel.MEDIUM))
     );
   }
 
+  /***
+   * <p>Generates a new IdentityBlock for the given key.</p>$
+   *
+   * <p>The new identity block is characterized by 1 replay (not replayable),
+   * a random serial, a usage perod of 1 hour, and no requests.</p>
+   *
+   * @param key the key to be used
+   * @throws IOException if generation of the block fails
+   */
   public IdentityBlock(AsymmetricKey key) throws IOException {
     this.identityKey = key;
     this.serial = (long) (Math.random() * 4294967295L);
@@ -88,6 +104,13 @@ public class IdentityBlock extends AbstractBlock implements Serializable, Dumpab
     id = nextID++;
   }
 
+  /***
+   * <p>Parses the given identity block using the specified key.</p>
+   *
+   * @param b a byte array reflecting the encrypted IdentityBlock
+   * @param ownIdentity the identity to be used to decrypt the block
+   * @throws IOException if parsing fails for any reason
+   */
   public IdentityBlock(byte[] b, AsymmetricKey ownIdentity) throws IOException {
     this.ownIdentity = ownIdentity;
     ASN1Encodable s = ASN1Sequence.getInstance(b);
@@ -95,6 +118,13 @@ public class IdentityBlock extends AbstractBlock implements Serializable, Dumpab
     parse(s);
   }
 
+
+  /***
+   * <p>Parses the given unecrypted identity block.</p>
+   *
+   * @param b a byte array reflecting the IdentityBlock
+   * @throws IOException if parsing fails for any reason
+   */
   public IdentityBlock(byte[] b) throws IOException {
     ASN1Encodable s = ASN1Sequence.getInstance(b);
     id = nextID++;
@@ -111,6 +141,13 @@ public class IdentityBlock extends AbstractBlock implements Serializable, Dumpab
     this(to, null);
   }
 
+  /***
+   * <p>Create object from encrypted ASN.1 code.</p>
+   *
+   * @param to the ASN.1 code
+   * @param ownIdentity the identity to be used to decrypt the block
+   * @throws IOException if parsing of ASN.1 code fails
+   */
   public IdentityBlock(ASN1Encodable to, AsymmetricKey ownIdentity) throws IOException {
     super();
     this.ownIdentity = ownIdentity;
