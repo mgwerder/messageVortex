@@ -845,7 +845,7 @@ public class Config {
     // get list of sections
 
     try (BufferedWriter bw = new BufferedWriter(
-            new OutputStreamWriter(new FileOutputStream(filename)))) {
+            new OutputStreamWriter(new FileOutputStream(filename),StandardCharsets.UTF_8))) {
       // Dump default section (all values in definition order)
       bw.write("[default]" + System.lineSeparator());
       dumpSection(null, bw, true);
