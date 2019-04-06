@@ -92,6 +92,14 @@ public class IdentityStoreBlock extends AbstractBlock implements Serializable {
     }
   }
 
+  /***
+   * <p>Get a new, random IdentityStoreBlock of the specified type.</p>
+   *
+   * @param it Indetity type to be generated
+   * @param complete provide only the specified subset or a complete entry with private keys
+   * @return the requessted IdentityStoreBlock
+   * @throws IOException if generation fails
+   */
   public static IdentityStoreBlock getIdentityStoreBlockDemo(IdentityType it, boolean complete)
           throws IOException {
     IdentityStoreBlock ret = new IdentityStoreBlock();
@@ -155,22 +163,44 @@ public class IdentityStoreBlock extends AbstractBlock implements Serializable {
     return ret;
   }
 
+  /***
+   * <p>Set a new identity key.</p>
+   *
+   * @param k the new identity key
+   * @return the previously set identity key
+   */
   public AsymmetricKey setIdentityKey(AsymmetricKey k) {
     AsymmetricKey old = identityKey;
     identityKey = k;
     return old;
   }
 
+  /***
+   * <p>get the currently set identity key.</p>
+   *
+   * @return the identity key currently set
+   */
   public AsymmetricKey getIdentityKey() {
     return identityKey;
   }
 
+  /***
+   * <p>The usage period of the identity block.</p>
+   *
+   * @param np the validity period to be set
+   * @return the previously set validity period
+   */
   public UsagePeriod setValid(UsagePeriod np) {
     UsagePeriod old = valid;
     valid = np;
     return old;
   }
 
+  /***
+   * <p>Gets the currently set validity period.</p>
+   *
+   * @return the currently set validity period
+   */
   public UsagePeriod getValid() {
     return valid;
   }
