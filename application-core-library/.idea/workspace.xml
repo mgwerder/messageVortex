@@ -3,8 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="d11f21f3-1155-4924-86d1-bc99f93f8cdb" name="Default Changelist" comment="Default Changelist">
       <change beforePath="$PROJECT_DIR$/../Jenkinsfile" beforeDir="false" afterPath="$PROJECT_DIR$/../Jenkinsfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/IdentityStoreBlock.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/IdentityStoreBlock.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/imap/ImapClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/imap/ImapClient.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -102,15 +102,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="messageVortex.cfg" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/resources/messageVortex.cfg">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1023">
-              <caret line="73" column="34" selection-start-line="73" selection-start-column="34" selection-end-line="73" selection-end-column="34" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="DummyBlender.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/blender/DummyBlender.java">
           <provider selected="true" editor-type-id="text-editor">
@@ -132,11 +123,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Jenkinsfile" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Jenkinsfile" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../Jenkinsfile">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="442">
-              <caret line="46" column="17" lean-forward="true" selection-start-line="46" selection-start-column="17" selection-end-line="46" selection-end-column="17" />
+            <state relative-caret-position="1054">
+              <caret line="72" column="17" lean-forward="true" selection-start-line="72" selection-start-column="17" selection-end-line="72" selection-end-column="17" />
             </state>
           </provider>
         </entry>
@@ -171,22 +162,31 @@
       <file leaf-file-name="IdentityStoreBlock.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/IdentityStoreBlock.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="996">
-              <caret line="204" column="17" selection-start-line="204" selection-start-column="17" selection-end-line="204" selection-end-column="17" />
+            <state relative-caret-position="439">
+              <caret line="382" column="5" lean-forward="true" selection-start-line="382" selection-start-column="5" selection-end-line="382" selection-end-column="5" />
               <folding>
                 <element signature="e#6561#6562#0" expanded="true" />
                 <element signature="e#6589#6590#0" expanded="true" />
                 <element signature="e#7014#7015#0" expanded="true" />
                 <element signature="e#7036#7037#0" expanded="true" />
-                <element signature="e#7181#7182#0" expanded="true" />
-                <element signature="e#7210#7211#0" expanded="true" />
-                <element signature="e#7359#7360#0" expanded="true" />
-                <element signature="e#7389#7390#0" expanded="true" />
-                <element signature="e#7542#7543#0" expanded="true" />
-                <element signature="e#7570#7571#0" expanded="true" />
-                <element signature="e#7733#7734#0" expanded="true" />
-                <element signature="e#7757#7758#0" expanded="true" />
+                <element signature="e#7442#7443#0" expanded="true" />
+                <element signature="e#7471#7472#0" expanded="true" />
+                <element signature="e#7917#7918#0" expanded="true" />
+                <element signature="e#7947#7948#0" expanded="true" />
+                <element signature="e#8374#8375#0" expanded="true" />
+                <element signature="e#8402#8403#0" expanded="true" />
+                <element signature="e#8813#8814#0" expanded="true" />
+                <element signature="e#8837#8838#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ImapClient.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/imap/ImapClient.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="681">
+              <caret line="89" lean-forward="true" selection-start-line="89" selection-end-line="89" />
             </state>
           </provider>
         </entry>
@@ -291,7 +291,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/SmtpReceiver.java" />
         <option value="$PROJECT_DIR$/messageVortex.cfgWritten" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortexTransport.java" />
         <option value="$PROJECT_DIR$/src/main/resources/META-INF/messageVortex.properties" />
@@ -338,10 +337,11 @@
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/IdentityStore.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/DummyBlender.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/ListeningSocketChannel.java" />
-        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/IdentityStoreBlock.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/Config.java" />
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/../Jenkinsfile" />
+        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/IdentityStoreBlock.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/imap/ImapClient.java" />
       </list>
     </option>
   </component>
@@ -805,9 +805,9 @@
       <window_info anchor="right" id="Capture Analysis" order="4" />
       <window_info anchor="bottom" id="Version Control" order="11" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4982699" weight="0.32248858" />
-      <window_info anchor="bottom" id="CheckStyle" order="8" visible="true" weight="0.34189498" />
+      <window_info active="true" anchor="bottom" id="CheckStyle" order="8" visible="true" weight="0.34189498" />
       <window_info anchor="bottom" id="Terminal" order="7" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2949827" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2949827" />
       <window_info anchor="bottom" id="Analysis" order="14" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.24714611" />
       <window_info anchor="right" id="Theme Preview" order="8" />
@@ -888,13 +888,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AsymmetricKeyPreCalculator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="850">
-          <caret line="50" column="39" lean-forward="true" selection-start-line="49" selection-start-column="74" selection-end-line="50" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortexController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="748">
@@ -1272,27 +1265,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/IdentityStoreBlock.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="996">
-          <caret line="204" column="17" selection-start-line="204" selection-start-column="17" selection-end-line="204" selection-end-column="17" />
-          <folding>
-            <element signature="e#6561#6562#0" expanded="true" />
-            <element signature="e#6589#6590#0" expanded="true" />
-            <element signature="e#7014#7015#0" expanded="true" />
-            <element signature="e#7036#7037#0" expanded="true" />
-            <element signature="e#7181#7182#0" expanded="true" />
-            <element signature="e#7210#7211#0" expanded="true" />
-            <element signature="e#7359#7360#0" expanded="true" />
-            <element signature="e#7389#7390#0" expanded="true" />
-            <element signature="e#7542#7543#0" expanded="true" />
-            <element signature="e#7570#7571#0" expanded="true" />
-            <element signature="e#7733#7734#0" expanded="true" />
-            <element signature="e#7757#7758#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/Config.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="469">
@@ -1309,8 +1281,36 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../Jenkinsfile">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="46" column="17" lean-forward="true" selection-start-line="46" selection-start-column="17" selection-end-line="46" selection-end-column="17" />
+        <state relative-caret-position="1054">
+          <caret line="72" column="17" lean-forward="true" selection-start-line="72" selection-start-column="17" selection-end-line="72" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/IdentityStoreBlock.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="439">
+          <caret line="382" column="5" lean-forward="true" selection-start-line="382" selection-start-column="5" selection-end-line="382" selection-end-column="5" />
+          <folding>
+            <element signature="e#6561#6562#0" expanded="true" />
+            <element signature="e#6589#6590#0" expanded="true" />
+            <element signature="e#7014#7015#0" expanded="true" />
+            <element signature="e#7036#7037#0" expanded="true" />
+            <element signature="e#7442#7443#0" expanded="true" />
+            <element signature="e#7471#7472#0" expanded="true" />
+            <element signature="e#7917#7918#0" expanded="true" />
+            <element signature="e#7947#7948#0" expanded="true" />
+            <element signature="e#8374#8375#0" expanded="true" />
+            <element signature="e#8402#8403#0" expanded="true" />
+            <element signature="e#8813#8814#0" expanded="true" />
+            <element signature="e#8837#8838#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/imap/ImapClient.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="681">
+          <caret line="89" lean-forward="true" selection-start-line="89" selection-end-line="89" />
         </state>
       </provider>
     </entry>

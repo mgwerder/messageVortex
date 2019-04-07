@@ -69,6 +69,11 @@ public class ImapClient extends ClientConnection {
     setProtocol("IMAP");
   }
 
+  /***
+   * <p>Initiate a TLS handshake by issuing a STARTTLS command.</p>
+   *
+   * @throws IOException if handshake fails or a timeout is reached
+   */
   public void imapStartTls() throws IOException {
     String tag = ImapLine.getNextTag();
     try {

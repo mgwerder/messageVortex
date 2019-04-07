@@ -23,7 +23,7 @@ pipeline {
       parallel {
         stage ('Test on JDK8') {
           options {
-            timeout(time: 30, unit: 'MINUTES')
+            timeout(time: 40, unit: 'MINUTES')
           }
           steps{
                 sh 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
@@ -45,7 +45,7 @@ pipeline {
             }
           }
           options {
-            timeout(time: 30, unit: 'MINUTES')
+            timeout(time: 40, unit: 'MINUTES')
           }
           steps{
                 sh 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
@@ -59,7 +59,7 @@ pipeline {
             }
           }
           options {
-            timeout(time: 30, unit: 'MINUTES')
+            timeout(time: 40, unit: 'MINUTES')
           }
           steps{
             script {
@@ -77,7 +77,7 @@ pipeline {
             }
           }
           options {
-            timeout(time: 30, unit: 'MINUTES')
+            timeout(time: 40, unit: 'MINUTES')
           }
           steps {
             script {

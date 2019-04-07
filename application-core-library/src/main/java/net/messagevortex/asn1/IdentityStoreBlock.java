@@ -205,42 +205,87 @@ public class IdentityStoreBlock extends AbstractBlock implements Serializable {
     return valid;
   }
 
+  /***
+   * <p>Setting the limit for number of incoming messages.</p>
+   *
+   * @param nq the new quota
+   * @return the previously set quota
+   */
   public int setMessageQuota(int nq) {
     int old = messageQuota;
     messageQuota = nq;
     return old;
   }
 
+  /***
+   * <p>Getting the limit for number of incoming messages.</p>
+   *
+   * @return the currently set limit
+   */
   public int getMessageQuota() {
     return messageQuota;
   }
 
+
+  /***
+   * <p>Setting the limmit for the outgoing transfer quotas in bytes.</p>
+   *
+   * @param tq the new transfer quotas in bytes
+   * @return the previously set quota
+   */
   public int setTransferQuota(int tq) {
     int old = transferQuota;
     transferQuota = tq;
     return old;
   }
 
+  /***
+   * <p>Getting the transfer quota in bytes for outgoing messages.</p>
+   *
+   * @return the currently set transfer quota
+   */
   public int getTransferQuota() {
     return transferQuota;
   }
 
+  /***
+   * <p>Setting the node address.</p>
+   *
+   * @param na the new node address
+   * @return the previously set node address
+   */
   public String setNodeAddress(String na) {
     String old = nodeAddress;
     nodeAddress = na;
     return old;
   }
 
+  /***
+   * <p>Getting the currently set node address.</p>
+   *
+   * @return the currently set node address
+   */
   public String getNodeAddress() {
     return nodeAddress;
   }
 
+  /***
+   * <p>Setting the current node key.</p>
+   *
+   * @param k the new node key
+   * @return the previously set node key
+   */
   public AsymmetricKey setNodeKey(AsymmetricKey k) {
     AsymmetricKey old = nodeKey;
     nodeKey = k;
     return old;
   }
 
+  /***
+   * <p>Getting the currently set node key.</p>
+   *
+   * @return the currently set node key
+   */
   public AsymmetricKey getNodeKey() {
     return nodeKey;
   }
@@ -324,6 +369,14 @@ public class IdentityStoreBlock extends AbstractBlock implements Serializable {
     return sb.toString();
   }
 
+  /***
+   * <p>Getting the type of identity this key reflects.</p>
+   *
+   * <p>If the type has not been set this methode assumes for a public/private
+   * keypair a node key.</p>
+   *
+   * @return the type of identity
+   */
   public IdentityType getType() {
     if (idType != null) {
       return idType;
@@ -334,6 +387,7 @@ public class IdentityStoreBlock extends AbstractBlock implements Serializable {
     return identityKey == null ? IdentityType.NODE_IDENTITY : IdentityType.RECIPIENT_IDENTITY;
   }
 
+  @Override
   public boolean equals(Object t) {
     if (t == null) {
       return false;
