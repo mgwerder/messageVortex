@@ -88,6 +88,12 @@ public class ImapClient extends ClientConnection {
     }
   }
 
+  /***
+   * <p>Authenticate with the strongest offered authentication scheme.</p>
+   *
+   * @param creds The credentials to be used for the authentication
+   * @return true if successful
+   */
   public boolean authenticate(Credentials creds) {
     // FIXME this dummy always selects plain
     // get capabilities
@@ -95,6 +101,13 @@ public class ImapClient extends ClientConnection {
     return authenticate(creds, SaslMechanisms.DIGEST_MD5);
   }
 
+  /***
+   * <p>Authenticate with the specified SASL mechanism.</p>
+   *
+   * @param creds the credentials to be used
+   * @param mech the SASL mechanism to be used
+   * @return true if successful
+   */
   public boolean authenticate(Credentials creds, SaslMechanisms mech) {
     CallbackHandler clientHandler = new SaslClientCallbackHandler(creds);
 
@@ -141,10 +154,29 @@ public class ImapClient extends ClientConnection {
     }
   }
 
+  /***
+   * <p>Send a command to an IMAP server.</p>
+   *
+   * <p>This is a blocking command honoring timeouts. The Timeout used is the default timeout.</p>
+   *
+   * @param command the command to be issued
+   * @return an array of lines gotten in return of the command
+   * @throws TimeoutException if a timeout has bee reached
+   */
   public String[] sendCommand(String command) throws TimeoutException {
     return sendCommand(command, getTimeout());
   }
 
+  /***
+   * <p>Send a command to an IMAP server.</p>
+   *
+   * <p>This is a blocking command honoring timeouts. The Timeout used is the default timeout.</p>
+   *
+   * @param command the command to be issued
+   * @param millisTimeout The timeout in milliseconds
+   * @return an array of lines gotten in return of the command
+   * @throws TimeoutException if a timeout has bee reached
+   */
   public String[] sendCommand(String command, long millisTimeout) throws TimeoutException {
     synchronized (sync) {
       currentCommand = command;
@@ -204,7 +236,7 @@ public class ImapClient extends ClientConnection {
     processLine(line, getTimeout());
   }
 
-  public void processLine(String line, long timeout) throws IOException {
+  private void processLine(String line, long timeout) throws IOException {
     currentCommand = line;
     LOGGER.log(Level.INFO, "IMAP C->S: " + ImapLine.commandEncoder(currentCommand));
     final long start = System.currentTimeMillis();
@@ -259,6 +291,12 @@ public class ImapClient extends ClientConnection {
     LOGGER.log(Level.FINEST, "Client looping (shutdown=" + isShutdown() + ")");
   }
 
+  /***
+   * <p>the processing methode of the running thread.</p>
+   *
+   * <p>Do not call this method!</p>
+   * FIXME: move to a private runner.
+   */
   public void run() {
 
     try {

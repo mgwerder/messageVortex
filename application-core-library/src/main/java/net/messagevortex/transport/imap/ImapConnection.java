@@ -67,6 +67,12 @@ public class ImapConnection extends ServerConnection
     runner.start();
   }
 
+  /***
+   * <p>Setter for the authentication proxy handling incomming requests for authentication.</p>
+   *
+   * @param authProxy the proxy to be set
+   * @return the previously set proxy
+   */
   public AuthenticationProxy setAuth(AuthenticationProxy authProxy) {
     AuthenticationProxy oldProxyAuth = getAuth();
     this.authProxy = authProxy;
@@ -77,7 +83,7 @@ public class ImapConnection extends ServerConnection
   }
 
   /***
-   * <p>Get the authenticator of the connection.</p>
+   * <p>Get the authentication proxy of the connection.</p>
    ***/
   public AuthenticationProxy getAuth() {
     return this.authProxy;
@@ -89,6 +95,12 @@ public class ImapConnection extends ServerConnection
     }
   }
 
+  /***
+   * <p>Sets the current authentication state of the connection.</p>
+   *
+   * @param status the new connection state
+   * @return the previously set connection state
+   */
   public ImapConnectionState setImapState(ImapConnectionState status) {
     ImapConnectionState old = this.status;
     this.status = status;
