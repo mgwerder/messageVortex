@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d11f21f3-1155-4924-86d1-bc99f93f8cdb" name="Default Changelist" comment="Default Changelist">
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/Config.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Jenkinsfile" beforeDir="false" afterPath="$PROJECT_DIR$/../Jenkinsfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -130,11 +132,20 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Jenkinsfile" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Jenkinsfile" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/../Jenkinsfile">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="785">
-              <caret line="95" selection-start-line="95" selection-end-line="95" />
+            <state relative-caret-position="442">
+              <caret line="46" column="17" lean-forward="true" selection-start-line="46" selection-start-column="17" selection-end-line="46" selection-end-column="17" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pom.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="445">
+              <caret line="119" column="113" selection-start-line="119" selection-start-column="113" selection-end-line="119" selection-end-column="113" />
             </state>
           </provider>
         </entry>
@@ -152,7 +163,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/ListeningSocketChannel.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="983">
-              <caret line="177" lean-forward="true" selection-start-line="177" selection-end-line="177" />
+              <caret line="177" selection-start-line="177" selection-end-line="177" />
             </state>
           </provider>
         </entry>
@@ -161,7 +172,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/IdentityStoreBlock.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="996">
-              <caret line="204" column="17" lean-forward="true" selection-start-line="204" selection-start-column="17" selection-end-line="204" selection-end-column="17" />
+              <caret line="204" column="17" selection-start-line="204" selection-start-column="17" selection-end-line="204" selection-end-column="17" />
               <folding>
                 <element signature="e#6561#6562#0" expanded="true" />
                 <element signature="e#6589#6590#0" expanded="true" />
@@ -180,11 +191,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Config.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Config.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/Config.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="469">
-              <caret line="852" column="32" lean-forward="true" selection-start-line="852" selection-start-column="32" selection-end-line="852" selection-end-column="32" />
+              <caret line="852" column="32" selection-start-line="852" selection-start-column="32" selection-end-line="852" selection-end-column="32" />
             </state>
           </provider>
         </entry>
@@ -217,15 +228,6 @@
                 <element signature="e#13223#13224#0" expanded="true" />
                 <element signature="e#13260#13261#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="messageVortex.cfgRessources" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/resources/messageVortex.cfgRessources">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="459">
-              <caret line="27" selection-start-line="27" selection-end-line="27" />
             </state>
           </provider>
         </entry>
@@ -324,7 +326,6 @@
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/TransportSender.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/Version.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java" />
-        <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/pop3/TestPop3Handler.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/Credentials.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/router/GraphSet.java" />
@@ -337,9 +338,10 @@
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/IdentityStore.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/DummyBlender.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/ListeningSocketChannel.java" />
-        <option value="$PROJECT_DIR$/../Jenkinsfile" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/IdentityStoreBlock.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/Config.java" />
+        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/../Jenkinsfile" />
       </list>
     </option>
   </component>
@@ -1029,13 +1031,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="449">
-          <caret line="211" selection-start-line="211" selection-end-line="211" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/SmtpReceiver.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1071">
@@ -1270,24 +1265,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../Jenkinsfile">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="785">
-          <caret line="95" selection-start-line="95" selection-end-line="95" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/ListeningSocketChannel.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="983">
-          <caret line="177" lean-forward="true" selection-start-line="177" selection-end-line="177" />
+          <caret line="177" selection-start-line="177" selection-end-line="177" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/IdentityStoreBlock.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="996">
-          <caret line="204" column="17" lean-forward="true" selection-start-line="204" selection-start-column="17" selection-end-line="204" selection-end-column="17" />
+          <caret line="204" column="17" selection-start-line="204" selection-start-column="17" selection-end-line="204" selection-end-column="17" />
           <folding>
             <element signature="e#6561#6562#0" expanded="true" />
             <element signature="e#6589#6590#0" expanded="true" />
@@ -1308,7 +1296,21 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/Config.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="469">
-          <caret line="852" column="32" lean-forward="true" selection-start-line="852" selection-start-column="32" selection-end-line="852" selection-end-column="32" />
+          <caret line="852" column="32" selection-start-line="852" selection-start-column="32" selection-end-line="852" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="445">
+          <caret line="119" column="113" selection-start-line="119" selection-start-column="113" selection-end-line="119" selection-end-column="113" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../Jenkinsfile">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="442">
+          <caret line="46" column="17" lean-forward="true" selection-start-line="46" selection-start-column="17" selection-end-line="46" selection-end-column="17" />
         </state>
       </provider>
     </entry>

@@ -64,7 +64,7 @@ pipeline {
           steps{
             script {
               //if (env.BRANCH_NAME != 'master') {
-                sh 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
+                sh returnStatus: true, script: 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
               //}
             }
           }
@@ -82,7 +82,7 @@ pipeline {
           steps {
             script {
               //if (env.BRANCH_NAME != 'master') {
-                sh 'mvn -pl application-core-library -DforkCount=0 jacoco:prepare-agent test jacoco:report site'
+                sh returnStatus: true, script: 'mvn -pl application-core-library -DforkCount=0 jacoco:prepare-agent test jacoco:report site'
               //}
             }
           }

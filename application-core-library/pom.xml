@@ -117,6 +117,7 @@
                 <version>${surefire.version}</version>
                 <configuration>
                     <argLine>${argLine} @{argLine}</argLine>
+                    <useSystemClassLoader>false</useSystemClassLoader><!-- Required to run on JDK10 and JDK12 -->
                 </configuration>
             </plugin>
             <plugin>
