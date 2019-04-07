@@ -78,24 +78,36 @@ public class SmtpConnection extends ClientConnection {
 
   private class InternalConnectionHandler extends Thread {
     public void run() {
+      // set a default name for the connection handler
       setName("SMTP" + id++);
+
       String command = null;
       try {
         LOGGER.log(Level.INFO, "got new SMTP incomming connect... sending server greeting");
+        // write SMTP banner of server
         writeln("220 " + InetAddress.getLocalHost().getHostName()
                 + " ESMTP MessageVortex receiver");
+
+        // smtp state machine
         String envelopeFrom = null;
         String envelopeTo = null;
         while (command == null || !"quit".equals(command.toLowerCase())) {
           LOGGER.log(Level.INFO, "Waiting for SMTP command to arrive");
+
+          // wait for incomming command
           command = readln();
           LOGGER.log(Level.INFO, "got command '" + command + "'");
+
+          // check for helo command
           if (command.toLowerCase().startsWith("helo ")) {
             write("250 Hi " + command.toLowerCase().substring(6) + " nice meeting you");
+
+          // check for ehlo command
           } else if (command.toLowerCase().startsWith("ehlo ")) {
             write("250-Hi " + command.toLowerCase().substring(6) + " nice meeting you");
             write("250-ENHANCEDSTATUSCODES" + CRLF);
             write("250 AUTH login" + CRLF);
+          // check for login
           } else if ("auth login".equals(command.toLowerCase())) {
             writeln("334 " + new String(
                     Base64.encode("Username:".getBytes(StandardCharsets.UTF_8)))
@@ -107,17 +119,23 @@ public class SmtpConnection extends ClientConnection {
             );
             String password = new String(Base64.decode(readln()));
             Config.getDefault().getStringValue(cfgSection, "smtp_incomming_password");
+
+          // check for sender string
           } else if (command.toLowerCase().startsWith("mail from")) {
             envelopeFrom = command.substring(10).trim();
             write("250 OK" + CRLF);
             // FIXME reject if not apropriate
+          // check for receiver string
           } else if (command.toLowerCase().startsWith("rcpt to")) {
             envelopeTo = command.substring(8).trim();
             write("250 OK" + CRLF);
             // FIXME reject if not apropriate
+          // check for message body
           } else if ("data".equals(command.toLowerCase())) {
             if (envelopeFrom != null && envelopeTo != null) {
               write("354 send the mail data, end with ." + CRLF);
+
+              // get body until terminated with a line with a single dot
               String l = null;
               StringBuilder sb = new StringBuilder();
               while (l == null || !".".equals(l)) {
@@ -126,6 +144,8 @@ public class SmtpConnection extends ClientConnection {
                 }
                 l = readln();
               }
+
+              // send message to blending layer
               if (getReceiver() != null) {
                 LOGGER.log(Level.INFO, "Message passed to blender layer");
                 getReceiver().gotMessage(new ByteArrayInputStream(sb.toString().getBytes()));
@@ -136,16 +156,24 @@ public class SmtpConnection extends ClientConnection {
             } else {
               write("554 ERROR" + CRLF);
             }
+
+          // check for state rset
           } else if ("rset".equals(command.toLowerCase().trim())) {
             envelopeFrom = null;
             envelopeTo = null;
             write("250 OK" + CRLF);
+
+          // ignore NOP command
           } else if ("noop".equals(command.toLowerCase().trim())) {
             write("250 OK" + CRLF);
+
+          // check for client terminating the connection
           } else if ("quit".equals(command.toLowerCase().trim())) {
             write("221 bye" + CRLF);
             command = "quit";
           } else {
+
+            // on unknown command throw error message
             write("500 Syntax Error" + CRLF);
           }
         }
@@ -157,6 +185,8 @@ public class SmtpConnection extends ClientConnection {
         }
       } finally {
         try {
+
+          // on all cases of connection termination tear down connection handler
           shutdown();
         } catch (IOException ioe) {
           LOGGER.log(Level.WARNING, "error while shutting down", ioe);
@@ -166,17 +196,34 @@ public class SmtpConnection extends ClientConnection {
 
   }
 
+  /***
+   * <p>Gets the currently set transport receiver.</p>
+   *
+   * @return the currently set transport receiver
+   */
   public TransportReceiver getReceiver() {
     return receiver;
   }
 
+  /***
+   * <p>Sets the transport receiver.</p>
+   *
+   * @param receiver the transport receiver to be set
+   * @return the previously set transport receiver
+   */
   public TransportReceiver setReceiver(TransportReceiver receiver) {
     TransportReceiver ret = this.receiver;
     this.receiver = receiver;
     return ret;
   }
 
+  /***
+   * <p>Sets the thread name of the connection handler.</p>
+   *
+   * @param name the name to be set
+   */
   public void setName(String name) {
+    // set the name of the connection handler
     handler.setName(name);
   }
 }

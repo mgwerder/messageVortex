@@ -89,6 +89,11 @@ public class ImapConnection extends ServerConnection
     return this.authProxy;
   }
 
+  /***
+   * <p>Sets the thread name of the connection handler.</p>
+   *
+   * @param id the thread name to be set
+   */
   public void setId(String id) {
     if (runner != null) {
       runner.setName(id);
@@ -156,6 +161,10 @@ public class ImapConnection extends ServerConnection
     return s;
   }
 
+  /***
+   * <p>runner method for the connection handler.</p>
+   * FIXME: move to private inner class
+   */
   public void run() {
     try {
       while (!shutdown && !isShutdown()) {
@@ -192,6 +201,10 @@ public class ImapConnection extends ServerConnection
     }
   }
 
+  /***
+   * <p>Tear down connection handler thread.</p>
+   * @throws IOException if shutdown failed
+   */
   public void shutdown() throws IOException {
     shutdown = true;
     super.shutdown();

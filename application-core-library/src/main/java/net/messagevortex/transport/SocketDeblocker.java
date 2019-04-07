@@ -46,6 +46,9 @@ public class SocketDeblocker extends Thread {
     this.timeout = timeout;
   }
 
+  /***
+   * <p>Shutdown the running threads and wait for termination.</p>
+   */
   public void shutdown() {
     shutdown = true;
     while (this.isAlive()) {
@@ -59,6 +62,12 @@ public class SocketDeblocker extends Thread {
     }
   }
 
+  /***
+   * <p>Thread runner.</p>
+   *
+   * <p>Do not call this methode</p>
+   * FIXME: move to private class
+   */
   public void run() {
     int countdown = timeout / 10;
     while (!shutdown && countdown > 0) {

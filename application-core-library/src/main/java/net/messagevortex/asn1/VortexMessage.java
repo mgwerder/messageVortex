@@ -82,7 +82,7 @@ public class VortexMessage extends AbstractBlock implements Serializable {
   /***
    * <p>Parses a byte array to a  VortexMessage.</p>
    *
-   * @param b  the byte array to be parsed
+   * @param is  the input stream to be parsed
    * @param dk the decryptionKey required to decrypt the prefix
    * @throws IOException if there was a problem parsing or decrypting the object
    * @throws ParseException if there was a problem parsing the object
@@ -90,11 +90,11 @@ public class VortexMessage extends AbstractBlock implements Serializable {
   public VortexMessage(InputStream is, AsymmetricKey dk) throws IOException {
     setDecryptionKey(dk);
     ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-    byte[] chunk = new byte[1024*1024];
-    int i  = is.read(chunk,0,chunk.length-1);
-    while( i>0 ) {
+    byte[] chunk = new byte[1024 * 1024];
+    int i = is.read(chunk, 0, chunk.length - 1);
+    while (i > 0) {
       buffer.write(chunk, 0, i);
-      i  = is.read(chunk,0,chunk.length-1);
+      i = is.read(chunk, 0, chunk.length - 1);
     }
     parse(buffer.toByteArray());
     buffer.close();
@@ -237,11 +237,11 @@ public class VortexMessage extends AbstractBlock implements Serializable {
         break;
       case PREFIX_ENCRYPTED:
         prefix = new PrefixBlock(ASN1OctetString.getInstance(to.getObject()).getOctets(),
-                                 getDecryptionKey());
+                getDecryptionKey());
         break;
       default:
         throw new IOException("got unexpected tag number when reading prefix (" + to.getTagNo()
-                              + ")");
+                + ")");
     }
 
     // reading inner message
@@ -257,7 +257,7 @@ public class VortexMessage extends AbstractBlock implements Serializable {
         break;
       default:
         throw new IOException("got unexpected tag number when reading inner message ("
-                              + to.getTagNo() + ")");
+                + to.getTagNo() + ")");
     }
 
     // propagate decryption key to sub elements
@@ -307,7 +307,7 @@ public class VortexMessage extends AbstractBlock implements Serializable {
     } else {
       byte[] b = toDer(getInnerMessage().toAsn1Object(dt));
       v.add(new DERTaggedObject(INNER_MESSAGE_ENCRYPTED,
-                                new DEROctetString(prefix.getKey().encrypt(b))));
+              new DEROctetString(prefix.getKey().encrypt(b))));
     }
   }
 
@@ -335,10 +335,10 @@ public class VortexMessage extends AbstractBlock implements Serializable {
     ret.append(prefix).append("m VortexMessage ::= {").append(CRLF);
     ret.append(prefix).append("  -- Dumping prefix").append(CRLF);
     ret.append(prefix).append("  prefix ").append(getPrefix().dumpValueNotation(prefix + "  ", dt))
-                      .append(',').append(CRLF);
+            .append(',').append(CRLF);
     ret.append(prefix).append("  -- Dumping innerMessage").append(CRLF);
     ret.append(prefix).append("  innerMessage ").append(getInnerMessage()
-                      .dumpValueNotation(prefix + "  ", dt)).append(',').append(CRLF);
+            .dumpValueNotation(prefix + "  ", dt)).append(',').append(CRLF);
     ret.append(prefix).append('}').append(CRLF);
     return ret.toString();
   }
@@ -408,7 +408,7 @@ public class VortexMessage extends AbstractBlock implements Serializable {
     VortexMessage vm = (VortexMessage) o;
     try {
       return Arrays.equals(vm.toBytes(DumpType.ALL_UNENCRYPTED),
-                           this.toBytes(DumpType.ALL_UNENCRYPTED));
+              this.toBytes(DumpType.ALL_UNENCRYPTED));
     } catch (IOException ioe) {
       return false;
     }

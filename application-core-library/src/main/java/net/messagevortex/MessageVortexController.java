@@ -32,6 +32,12 @@ public class MessageVortexController implements SignalHandler, Runnable {
     }
   }
 
+  /***
+   * <p>Thread runner.</p>
+   *
+   * <p>Do not call this methode</p>
+   * FIXME: move to private class
+   */
   public void run() {
     boolean shutdown = false;
     while (!shutdown) {
@@ -46,6 +52,9 @@ public class MessageVortexController implements SignalHandler, Runnable {
     }
   }
 
+  /***
+   * <p>Wait for a previously initiated shutdown.</p>
+   */
   public void waitForShutdown() {
     while (runner.isAlive()) {
       try {
@@ -57,6 +66,9 @@ public class MessageVortexController implements SignalHandler, Runnable {
   }
 
 
+  /***
+   * <p>Shutdown Controller and wait for termination.</p>
+   */
   public void shutdown() {
     synchronized (runningLock) {
       shutdown = true;

@@ -3,7 +3,6 @@ package net.messagevortex.transport.smtp;
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.GreenMailUtil;
 import com.icegreen.greenmail.util.ServerSetup;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,7 +14,6 @@ import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
-
 import net.messagevortex.AbstractDaemon;
 import net.messagevortex.Config;
 import net.messagevortex.MessageVortex;
@@ -42,6 +40,12 @@ public class TestSmtpHandler extends AbstractDaemon implements Transport, Runnab
   private boolean isRunning = false;
 
 
+  /***
+   * <p>Coinstructor getting parameters from named config section.</p>
+   *
+   * @param section name of the config section
+   * @throws IOException if constructor fails to star SMTP server
+   */
   public TestSmtpHandler(String section) throws IOException {
     Config cfg = Config.getDefault();
     blender = MessageVortex.getBlender(cfg.getStringValue(section, "blender"));
@@ -60,17 +64,23 @@ public class TestSmtpHandler extends AbstractDaemon implements Transport, Runnab
     server = new GreenMail(new ServerSetup[]{setup});
     String username = cfg.getStringValue(section, "smtp_incoming_user");
     String password = cfg.getStringValue(section, "smtp_incoming_password");
-    if (username==null || "".equals(username)) {
+    if (username == null || "".equals(username)) {
       throw new IOException("username for incoming smtp may not be null");
     }
-    if (password==null || "".equals(password)) {
+    if (password == null || "".equals(password)) {
       throw new IOException("password for incoming smtp may not be null");
     }
-    server.setUser( username, password);
+    server.setUser(username, password);
     this.section = section;
     startDaemon();
   }
 
+  /***
+   * <p>Thread runner.</p>
+   *
+   * <p>Do not call this methode</p>
+   * FIXME: move to private class
+   */
   public void run() {
     int count = 1;
     while (isRunning) {
@@ -134,7 +144,7 @@ public class TestSmtpHandler extends AbstractDaemon implements Transport, Runnab
       props.put("mail.smtp.port",
               "" + Config.getDefault().getNumericValue(section, "smtp_outgoing_port"));
 
-      Session session = Session.getInstance(props,new javax.mail.Authenticator() {
+      Session session = Session.getInstance(props, new javax.mail.Authenticator() {
         protected PasswordAuthentication getPasswordAuthentication() {
           return new PasswordAuthentication(username, password);
         }

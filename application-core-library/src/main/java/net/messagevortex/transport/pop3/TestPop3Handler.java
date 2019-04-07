@@ -36,6 +36,12 @@ public class TestPop3Handler implements Transport {
   private GreenMailUser outUser;
 
 
+  /**
+   * <p>Constructor starting a POP3 server from the named config section.</p>
+   *
+   * @param section the configuration section to be used
+   * @throws IOException if server fails to start
+   */
   public TestPop3Handler(String section) throws IOException {
     this.section = section;
     Config cfg = Config.getDefault();

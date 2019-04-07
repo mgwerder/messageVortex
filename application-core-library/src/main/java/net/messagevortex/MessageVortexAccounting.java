@@ -32,10 +32,21 @@ public class MessageVortexAccounting {
     this.accountant = accountant;
   }
 
+  /***
+   * <p>Gets the currently set accountant.</p>
+   *
+   * @return the currently set accountant
+   */
   public final Accountant getAccountant() {
     return accountant;
   }
 
+  /***
+   * <p>set the accountant in charge off the workspace.</p>
+   *
+   * @param accountant the accountant to be set
+   * @return the previously set accountant
+   */
   public final Accountant setAccountant(Accountant accountant) {
     Accountant ret = this.accountant;
     this.accountant = accountant;

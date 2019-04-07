@@ -22,25 +22,17 @@ package net.messagevortex.transport.imap;
 // * SOFTWARE.
 // ************************************************************************************
 
-import static java.lang.System.exit;
-
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.text.ParseException;
-import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.MessageVortexStatus;
 import net.messagevortex.transport.AuthenticationProxy;
 import net.messagevortex.transport.Credentials;
 import net.messagevortex.transport.SecurityContext;
-import net.messagevortex.transport.SecurityRequirement;
-import sun.misc.Signal;
-import sun.misc.SignalHandler;
 
-public class ImapPassthruServer implements SignalHandler {
+public class ImapPassthruServer {
 
   private static final java.util.logging.Logger LOGGER;
 
@@ -55,6 +47,15 @@ public class ImapPassthruServer implements SignalHandler {
   private ImapServer localServer;
   private ImapClient remoteServer;
 
+  /***
+   * <p>Create an IMAP passthru proxy server.</p>
+   * @param listeningAddress listening address for the incomming proxy port
+   * @param context the security context for the proxy sever
+   * @param listeningCredentials credentials for the listening proxy
+   * @param forwardingServer IMAP address of the proxied server
+   * @param forwardingCredentials credentials for the proxied IMAP server
+   * @throws IOException if start of proxy fails
+   */
   public ImapPassthruServer(InetSocketAddress listeningAddress, SecurityContext context,
                             Credentials listeningCredentials, InetSocketAddress forwardingServer,
                             Credentials forwardingCredentials) throws IOException {
@@ -63,49 +64,11 @@ public class ImapPassthruServer implements SignalHandler {
     authProxy.addCredentials(listeningCredentials);
     localServer.setAuth(authProxy);
     remoteServer = new ImapClient(forwardingServer, context);
-    Signal.handle(new Signal("INT"), this);
-  }
-
-  public void handle(Signal sig) {
-
-    if ("INT".equals(sig.getName())) {
-      LOGGER.log(Level.INFO, "Received SIGINT signal. Will teardown.");
-
-      try {
-        shutdown();
-      } catch (IOException ioe) {
-        LOGGER.log(Level.WARNING, "caught exception while shutting down", ioe);
-      }
-
-      // Force exit anyway
-      System.exit(0);
-    } else {
-      LOGGER.log(Level.WARNING, "Received unthandled signal SIG" + sig.getName() + ". IGNORING");
-    }
   }
 
   public void shutdown() throws IOException {
-    remoteServer.shutdown();
     localServer.shutdown();
-  }
-
-  public static void main(String[] args) throws Exception {
-    if (args.length != 2) {
-      System.err.println("usage: java -jar "
-          + "messageVortex.jar ImapPassthruServer "
-          + "imap(s)://<accepted_username>:<accepted_password>@<local_interface>:<port> "
-          + "imap(s)://<fetch_username>:<fetch_password>@<sever>:<port>");
-      exit(100);
-    }
-
-    MessageVortexStatus.displayMessage(null, "IMAP passthru Sserver starting as standalone");
-
-    InetSocketAddress listener = getSocketAdressFromUrl(args[0]);
-    Credentials creds = new Credentials(getUsernameFromUrl(args[0]), getPasswordFromUrl(args[0]));
-    ImapPassthruServer s = new ImapPassthruServer(listener,
-            new SecurityContext(SecurityRequirement.STARTTLS), creds,
-            getSocketAdressFromUrl(args[1]), null);
-    MessageVortexStatus.displayMessage(null, "Passthru Server started as standalone");
+    remoteServer.shutdown();
   }
 
   public static String getUsernameFromUrl(String url) throws ParseException {
@@ -156,6 +119,12 @@ public class ImapPassthruServer implements SignalHandler {
     return m.group("port") == null ? -1 : Integer.parseInt(m.group("port"));
   }
 
+  /***
+   * <p></p>
+   * @param url
+   * @return
+   * @throws ParseException
+   */
   public static InetSocketAddress getSocketAdressFromUrl(String url) throws ParseException {
     if (url == null) {
       throw new NullPointerException("Address may not be null");
