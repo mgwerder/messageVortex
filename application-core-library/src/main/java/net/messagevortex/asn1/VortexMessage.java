@@ -30,6 +30,9 @@ import java.text.ParseException;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.sun.istack.internal.NotNull;
+import com.sun.istack.internal.Nullable;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.ASN1Encodable;
@@ -88,15 +91,24 @@ public class VortexMessage extends AbstractBlock implements Serializable {
    * @throws ParseException if there was a problem parsing the object
    */
   public VortexMessage(InputStream is, AsymmetricKey dk) throws IOException {
+    // set a decryption key (is any)
     setDecryptionKey(dk);
+
+    // Allocate a byte array output stream and an apropriate buffer
     ByteArrayOutputStream buffer = new ByteArrayOutputStream();
     byte[] chunk = new byte[1024 * 1024];
+
+    // read buffer chunks into output stream until all is read
     int i = is.read(chunk, 0, chunk.length - 1);
     while (i > 0) {
       buffer.write(chunk, 0, i);
       i = is.read(chunk, 0, chunk.length - 1);
     }
+
+    // convert and parse resulting byte array
     parse(buffer.toByteArray());
+
+    // tear down output buffer
     buffer.close();
   }
 
@@ -122,11 +134,18 @@ public class VortexMessage extends AbstractBlock implements Serializable {
    */
   public VortexMessage(PrefixBlock pre, InnerMessageBlock im) throws IOException {
     this();
+
+    // check for existing prefix block
     if (pre == null) {
+      // create prefix block with new key if missing
       setPrefix(new PrefixBlock(new SymmetricKey()));
     } else {
+
+      // set prefix block and extract key
       setPrefix(pre);
     }
+
+    // store inner Message Block
     setInnerMessage(im);
   }
 
@@ -145,7 +164,7 @@ public class VortexMessage extends AbstractBlock implements Serializable {
    * @param im the new inner message block
    * @return the previously set inner message block
    */
-  public final InnerMessageBlock setInnerMessage(InnerMessageBlock im) {
+  public final InnerMessageBlock setInnerMessage(@NotNull InnerMessageBlock im) {
     if (im == null) {
       throw new NullPointerException("InnerMessage may not be null");
     }
@@ -169,7 +188,7 @@ public class VortexMessage extends AbstractBlock implements Serializable {
    * @param pre the new prefix block
    * @return the prefix block which was set prior to the operation
    */
-  public final PrefixBlock setPrefix(PrefixBlock pre) {
+  public final PrefixBlock setPrefix(@NotNull PrefixBlock pre) {
     if (pre == null) {
       throw new NullPointerException("Prefix may not be null");
     }
@@ -193,7 +212,7 @@ public class VortexMessage extends AbstractBlock implements Serializable {
    * @return the decryptionKey which has been set previously or null if the decryptionKey ha not
    *         been set
    */
-  public final AsymmetricKey setDecryptionKey(AsymmetricKey dk) throws IOException {
+  public final AsymmetricKey setDecryptionKey(@Nullable AsymmetricKey dk) throws IOException {
     AsymmetricKey old = this.decryptionKey;
     this.decryptionKey = dk != null ? new AsymmetricKey(dk) : null;
     if (prefix != null) {
@@ -212,18 +231,21 @@ public class VortexMessage extends AbstractBlock implements Serializable {
   }
 
   protected void parse(byte[] p) throws IOException {
-    ASN1InputStream asnIn = null;
-    try {
-      asnIn = new ASN1InputStream(p);
+    try(ASN1InputStream asnIn = new ASN1InputStream(p);) {
       parse(asnIn.readObject());
-    } finally {
-      if (asnIn != null) {
-        asnIn.close();
-      }
     }
   }
 
-  protected void parse(ASN1Encodable p) throws IOException {
+  protected void parse(InputStream is) throws IOException {
+    try(ASN1InputStream asnIn = new ASN1InputStream(is);) {
+      parse(asnIn.readObject());
+    }
+  }
+
+  protected void parse(@NotNull ASN1Encodable p) throws IOException {
+    if (p == null) {
+      throw new NullPointerException("Encodable may not be null");
+    }
     LOGGER.log(Level.FINER, "Executing parse()");
     int i = 0;
     ASN1Sequence s1 = ASN1Sequence.getInstance(p);
