@@ -24,9 +24,8 @@ package net.messagevortex.asn1;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1TaggedObject;
 
@@ -44,7 +43,7 @@ public abstract class Operation extends AbstractBlock implements Serializable {
   public static final int ADD_REDUNDANCY = 400;
   public static final int REMOVE_REDUNDANCY = 410;
 
-  private static final Map<Integer, Operation> operations = new ConcurrentHashMap<>();
+  private static final Map<Integer, Operation> operations = new HashMap<>();
   private static boolean initInProgress = false;
 
   /* constructor */
@@ -53,14 +52,16 @@ public abstract class Operation extends AbstractBlock implements Serializable {
   }
 
   public static Operation getInstance(ASN1Encodable object) throws IOException {
-    if (operations.isEmpty()) {
-      throw new IOException("init() not called");
+    synchronized(operations) {
+      if (operations.isEmpty()) {
+        throw new IOException("init() not called");
+      }
+      int tag = ASN1TaggedObject.getInstance(object).getTagNo();
+      if (operations.get(tag) == null) {
+        throw new IOException("unknown tag for choice detected");
+      }
+      return operations.get(tag).getNewInstance(ASN1TaggedObject.getInstance(object).getObject());
     }
-    int tag = ASN1TaggedObject.getInstance(object).getTagNo();
-    if (operations.get(tag) == null) {
-      throw new IOException("unknown tag for choice detected");
-    }
-    return operations.get(tag).getNewInstance(ASN1TaggedObject.getInstance(object).getObject());
   }
 
   public static void init() {
@@ -79,13 +80,15 @@ public abstract class Operation extends AbstractBlock implements Serializable {
   }
 
   public static Operation parseInstance(ASN1TaggedObject object) throws IOException {
-    if (operations.isEmpty()) {
-      throw new IOException("init() not called");
+    synchronized(operations) {
+      if (operations.isEmpty()) {
+        throw new IOException("init() not called");
+      }
+      if (operations.get(object.getTagNo()) == null) {
+        throw new IOException("got unknown tag number for operation (" + object.getTagNo());
+      }
+      return operations.get(object.getTagNo()).getInstance(object.getObject());
     }
-    if (operations.get(object.getTagNo()) == null) {
-      throw new IOException("got unknown tag number for operation (" + object.getTagNo());
-    }
-    return operations.get(object.getTagNo()).getInstance(object.getObject());
   }
 
   public abstract Operation getNewInstance(ASN1Encodable object) throws IOException;

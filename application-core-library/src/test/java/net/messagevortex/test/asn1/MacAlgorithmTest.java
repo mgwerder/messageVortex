@@ -1,5 +1,13 @@
 package net.messagevortex.test.asn1;
 
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.logging.Level;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.MacAlgorithm;
 import net.messagevortex.asn1.encryption.Algorithm;
@@ -9,15 +17,6 @@ import org.bouncycastle.asn1.ASN1Encodable;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.logging.Level;
-
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 /**
  * General Test class for all unspecific Block tests.
@@ -65,7 +64,6 @@ public class MacAlgorithmTest {
         } catch(Exception e) {
             fail("got unexpected exception");
         }
-        assertTrue("Error AlgorithmType returns NULL instead of type",ma.getAlgorithm()!=null);
         assertTrue("error verifying AlgTypeSetting",ma.getAlgorithm().equals(Algorithm.SHA512));
         try {
             assertTrue("error verifying AlgTypeSetting (2)",ma.setAlgorithm(Algorithm.SHA384).equals(Algorithm.SHA512));
