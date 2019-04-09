@@ -1,27 +1,5 @@
 package net.messagevortex.blender;
 
-// ************************************************************************************
-// * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
-// *
-// * Permission is hereby granted, free of charge, to any person obtaining a copy
-// * of this software and associated documentation files (the "Software"), to deal
-// * in the Software without restriction, including without limitation the rights
-// * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// * copies of the Software, and to permit persons to whom the Software is
-// * furnished to do so, subject to the following conditions:
-// *
-// * The above copyright notice and this permission notice shall be included in all
-// * copies or substantial portions of the Software.
-// *
-// * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// * SOFTWARE.
-// ************************************************************************************
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PipedInputStream;
@@ -50,16 +28,14 @@ import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.Version;
 import net.messagevortex.asn1.BlendingSpec;
 import net.messagevortex.asn1.IdentityStore;
+import net.messagevortex.asn1.InnerMessageBlock;
+import net.messagevortex.asn1.PrefixBlock;
 import net.messagevortex.asn1.VortexMessage;
 import net.messagevortex.asn1.encryption.DumpType;
 import net.messagevortex.transport.Transport;
 import net.messagevortex.transport.dummy.DummyTransportTrx;
 
-/***
- * This Dummy blender supports only plain blending without an offset
- */
-public class DummyBlender extends Blender {
-
+public class InitialRecipesBlender extends Blender {
   private static final java.util.logging.Logger LOGGER;
 
   static {
@@ -73,12 +49,12 @@ public class DummyBlender extends Blender {
   private IdentityStore identityStore;
 
   /**
-   * <p>A dummy blender implementation.</p>
+   * <p>An initial blender implementation based on anonymity recipes.</p>
    *
    * @param section the config foile section to be used to configure
    * @throws IOException if anything fails :-D
    */
-  public DummyBlender(String section) throws IOException {
+  public InitialRecipesBlender(String section) throws IOException {
     // This is a dummy constructor which breaks the implementation ->
     // FIXME add sensible identity store
     this(
@@ -96,7 +72,7 @@ public class DummyBlender extends Blender {
    * @param identityStore   the identity store to be used (for decryption of headers)
    * @throws IOException    if anything fails :-D
    */
-  public DummyBlender(String identity, BlendingReceiver router, IdentityStore identityStore)
+  public InitialRecipesBlender(String identity, BlendingReceiver router, IdentityStore identityStore)
           throws IOException {
     super(router, null);
     this.identity = identity;
@@ -123,11 +99,11 @@ public class DummyBlender extends Blender {
     try {
       //Session session = Session.getDefaultInstance(new Properties(), null);
       Session session = Session.getInstance(new Properties(),
-          new javax.mail.Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-              return new PasswordAuthentication("username", "password");
-            }
-          }
+              new javax.mail.Authenticator() {
+                protected PasswordAuthentication getPasswordAuthentication() {
+                  return new PasswordAuthentication("username", "password");
+                }
+              }
       );
       final MimeMessage mimeMsg = new MimeMessage(session);
       mimeMsg.setFrom(new InternetAddress("test@test.com"));
@@ -184,30 +160,38 @@ public class DummyBlender extends Blender {
   public boolean gotMessage(final InputStream is) {
     try {
       Session session = Session.getInstance(new Properties(),
-          new javax.mail.Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-              return new PasswordAuthentication("username", "password");
-            }
-          }
+              new javax.mail.Authenticator() {
+                protected PasswordAuthentication getPasswordAuthentication() {
+                  return new PasswordAuthentication("username", "password");
+                }
+              }
       );
       MimeMessage msg = new MimeMessage(session, is);
-      VortexMessage vmsg = null;
-      List<InputStream> isl = getAttachments(msg);
-      if (isl == null) {
-        isl = new ArrayList<>();
-      }
-      for (InputStream attaStream : isl) {
-        try {
-          vmsg = new VortexMessage(attaStream, identityStore.getHostIdentity());
-          LOGGER.log(Level.INFO, "Found attachment WITH VortexMessage contained");
-        } catch (IOException io) {
-          // This exception will occur if no vortex message is contained
-          LOGGER.log(Level.INFO, "Found attachment with no VortexMessage contained", io);
-        }
 
-      }
+      // Convert Inputstream to byte array
+
+      // extract sender address
+      String from = msg.getHeader("from")[0];
+
+      // extract final recipient address
+      String to =  msg.getHeader("to")[0];
+      LOGGER.log(Level.INFO, "Got a message to blend from " + from + " to " + to);
+
+      // get anonymity set
+      // FIXME
+
+      // get receipes
+      // FIXME
+
+      // apply receipes
+      // FIXME
+      PrefixBlock pb = new PrefixBlock();
+      InnerMessageBlock im = new InnerMessageBlock();
+
+      // send to workspace
+      VortexMessage vmsg = new VortexMessage(pb, im);
       return router.gotMessage(vmsg);
-    } catch (IOException | MessagingException ioe) {
+    } catch (IOException|MessagingException ioe) {
       LOGGER.log(Level.WARNING, "Exception while getting and parsing message", ioe);
       return false;
     }
