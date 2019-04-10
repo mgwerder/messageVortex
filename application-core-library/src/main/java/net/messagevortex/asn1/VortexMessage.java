@@ -30,9 +30,6 @@ import java.text.ParseException;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.ASN1Encodable;
@@ -164,7 +161,7 @@ public class VortexMessage extends AbstractBlock implements Serializable {
    * @param im the new inner message block
    * @return the previously set inner message block
    */
-  public final InnerMessageBlock setInnerMessage(@NotNull InnerMessageBlock im) {
+  public final InnerMessageBlock setInnerMessage(InnerMessageBlock im) {
     if (im == null) {
       throw new NullPointerException("InnerMessage may not be null");
     }
@@ -188,7 +185,7 @@ public class VortexMessage extends AbstractBlock implements Serializable {
    * @param pre the new prefix block
    * @return the prefix block which was set prior to the operation
    */
-  public final PrefixBlock setPrefix(@NotNull PrefixBlock pre) {
+  public final PrefixBlock setPrefix(PrefixBlock pre) {
     if (pre == null) {
       throw new NullPointerException("Prefix may not be null");
     }
@@ -212,7 +209,7 @@ public class VortexMessage extends AbstractBlock implements Serializable {
    * @return the decryptionKey which has been set previously or null if the decryptionKey ha not
    *         been set
    */
-  public final AsymmetricKey setDecryptionKey(@Nullable AsymmetricKey dk) throws IOException {
+  public final AsymmetricKey setDecryptionKey(AsymmetricKey dk) throws IOException {
     AsymmetricKey old = this.decryptionKey;
     this.decryptionKey = dk != null ? new AsymmetricKey(dk) : null;
     if (prefix != null) {
@@ -242,7 +239,7 @@ public class VortexMessage extends AbstractBlock implements Serializable {
     }
   }
 
-  protected void parse(@NotNull ASN1Encodable p) throws IOException {
+  protected void parse(ASN1Encodable p) throws IOException {
     if (p == null) {
       throw new NullPointerException("Encodable may not be null");
     }
