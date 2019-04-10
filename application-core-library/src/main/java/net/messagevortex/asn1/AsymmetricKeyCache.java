@@ -54,7 +54,7 @@ public class AsymmetricKeyCache implements Serializable {
     MessageVortexLogger.setGlobalLogLevel(Level.ALL);
   }
 
-  private Map<AlgorithmParameter, CacheElement> cache = new HashMap<>();
+  private Map<AlgorithmParameter, CacheElement> cache = new TreeMap<>();
 
   private static class CacheElement implements Serializable {
 
@@ -475,7 +475,7 @@ public class AsymmetricKeyCache implements Serializable {
         CacheElement ce = e.getValue();
         long s = ce.size();
         long ms = ce.getMaxSize();
-        LOGGER.log(Level.INFO, "| " + String.format("%4s", s) + "/" + String.format("%4s", ms)
+        LOGGER.log(Level.INFO, "| " + String.format("%5s", s) + "/" + String.format("%5s", ms)
                 + " " + percentBar((double) (s) / ms, 20) + " " + e.getKey());
         sum += s;
         tot += ms;

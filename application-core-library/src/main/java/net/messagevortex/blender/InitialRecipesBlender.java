@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import javax.activation.DataHandler;
+import javax.mail.Address;
 import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -171,11 +172,11 @@ public class InitialRecipesBlender extends Blender {
       // Convert Inputstream to byte array
 
       // extract sender address
-      String from = msg.getHeader("from")[0];
+      Address[] from = msg.getFrom();
 
       // extract final recipient address
-      String to =  msg.getHeader("to")[0];
-      LOGGER.log(Level.INFO, "Got a message to blend from " + from + " to " + to);
+      Address[] to =  msg.getAllRecipients();
+      LOGGER.log(Level.INFO, "Got a message to blend from " + from[0] + " to " + to[0]);
 
       // get anonymity set
       // FIXME
