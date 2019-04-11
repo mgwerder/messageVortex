@@ -82,7 +82,7 @@ pipeline {
           steps {
             script {
               //if (env.BRANCH_NAME != 'master') {
-                sh script: 'timeout -s QUIT 30m mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
+                sh script: 'timeout --signal=QUIT 30m mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
               //}
             }
           }
