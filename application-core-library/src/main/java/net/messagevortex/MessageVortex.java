@@ -62,6 +62,10 @@ public class MessageVortex implements Callable<Integer> {
           description = "timeout before aboorting execution (for test purposes only)")
   private int timeoutInSeconds = -1;
 
+  @CommandLine.Option(names = {"--threadDumpInteval"}, hidden = true,
+          description = "timeout before aboorting execution (for test purposes only)")
+  private int threadDumpInterval = 300;
+
   static {
     LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
@@ -131,8 +135,13 @@ public class MessageVortex implements Callable<Integer> {
       LOGGER.log(Level.SEVERE, "Bad class configured", cnf);
       return SETUP_FAIL;
     }
-    LOGGER.log(Level.INFO, "******* startup of MessageVortex complete *******");
+    // enable thread dumper
+    if (threadDumpInterval>0) {
+      LOGGER.log(Level.INFO, "starting thread dumper with interval " + threadDumpInterval);
+      new ThreadDumper(threadDumpInterval);
+    }
 
+    LOGGER.log(Level.INFO, "******* startup of MessageVortex complete *******");
 
     if (timeoutInSeconds >= 0) {
       try {

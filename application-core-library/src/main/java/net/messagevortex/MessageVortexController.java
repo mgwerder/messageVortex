@@ -18,6 +18,7 @@ public class MessageVortexController implements SignalHandler, Runnable {
   private Thread runner = new Thread(this);
 
   public MessageVortexController() {
+    runner.setName( "MessageVortexShutdownController");
     runner.start();
   }
 
