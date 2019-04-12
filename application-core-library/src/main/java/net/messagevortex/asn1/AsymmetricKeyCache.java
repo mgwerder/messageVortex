@@ -111,7 +111,11 @@ public class AsymmetricKeyCache implements Serializable {
     }
 
     public double getCacheFillTime() {
-      return Math.max(0, maxSize - cache.size()) * getAverageCalcTime();
+      double avg = getAverageCalcTime();
+      if (avg <=0) {
+        avg = 2;
+      }
+      return Math.max(0, maxSize - cache.size()) * avg;
     }
 
     public int size() {
@@ -261,16 +265,17 @@ public class AsymmetricKeyCache implements Serializable {
    *
    * @param parameter the parameter set requested
    * @return the key or null if no such key is available in the cache
-   * @FIXME solve concurrency with other cache access mecahisms
    */
   public AsymmetricKey pull(AlgorithmParameter parameter) {
-    CacheElement ce = cache.get(parameter);
-    if (ce == null) {
-      ce = new CacheElement();
-      cache.put(parameter, ce);
+    synchronized (cache) {
+      CacheElement ce = cache.get(parameter);
+      if (ce == null) {
+        ce = new CacheElement();
+        cache.put(parameter, ce);
+      }
+      AsymmetricKey ret = ce.pull();
+      return ret;
     }
-    AsymmetricKey ret = ce.pull();
-    return ret;
   }
 
   /***
@@ -278,23 +283,23 @@ public class AsymmetricKeyCache implements Serializable {
    *
    * @param parameter the parameter set requested
    * @return the key or null if no such key is available in the cache
-   * @FIXME solve concurrency with other cache access mecahisms
    */
   public AsymmetricKey peek(AlgorithmParameter parameter) {
-    CacheElement ce = cache.get(parameter);
-    if (ce == null) {
-      ce = new CacheElement();
-      cache.put(parameter, ce);
+    synchronized (cache) {
+      CacheElement ce = cache.get(parameter);
+      if (ce == null) {
+        ce = new CacheElement();
+        cache.put(parameter, ce);
+      }
+      AsymmetricKey ret = ce.peek();
+      return ret;
     }
-    AsymmetricKey ret = ce.peek();
-    return ret;
   }
 
   /***
    * <p>store a precalculated key into the cache.</p>
    *
    * @param key the key to be stored
-   * @FIXME solve concurrency with other cache access mecahisms
    */
   public void push(AsymmetricKey key) {
     AlgorithmParameter ap = key.getAlgorithmParameter();
@@ -336,6 +341,10 @@ public class AsymmetricKeyCache implements Serializable {
     synchronized (cache) {
       for (Map.Entry<AlgorithmParameter, CacheElement> me : cache.entrySet()) {
         long ft = (long) (me.getValue().getCacheFillTime());
+        // make sure that all key sizes have a minimum time
+        if (ft <= 0) {
+          ft = 100;
+        }
         l += ft;
         if (ft > 0) {
           hm.put(l, me.getKey());
@@ -349,10 +358,9 @@ public class AsymmetricKeyCache implements Serializable {
     }
 
     // elect weighted element acording to number and estimated calc time
-
     long e;
     synchronized (esr) {
-      e = esr.nextLong() % (l + 1);
+      e = Math.abs(esr.nextLong() % (l + 1));
     }
 
 

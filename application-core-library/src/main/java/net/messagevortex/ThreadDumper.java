@@ -20,7 +20,7 @@ public class ThreadDumper {
   private static final Logger LOGGER;
 
   static {
-    LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+    LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
 
   private static final DateFormat df;

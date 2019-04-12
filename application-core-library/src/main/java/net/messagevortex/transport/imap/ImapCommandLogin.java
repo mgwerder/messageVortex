@@ -24,13 +24,14 @@ package net.messagevortex.transport.imap;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.messagevortex.MessageVortexLogger;
 
 public class ImapCommandLogin extends ImapCommand {
 
   private static final Logger LOGGER;
 
   static {
-    LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+    LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
 
   public void init() {

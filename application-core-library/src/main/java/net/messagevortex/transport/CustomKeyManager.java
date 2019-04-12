@@ -36,6 +36,7 @@ import javax.net.ssl.KeyManager;
 import javax.net.ssl.SSLEngine;
 import javax.net.ssl.X509ExtendedKeyManager;
 import javax.net.ssl.X509KeyManager;
+import net.messagevortex.MessageVortexLogger;
 
 /***
  * <p>Keymanager enables specification of key alias to be used.</p>
@@ -45,7 +46,7 @@ public class CustomKeyManager extends X509ExtendedKeyManager implements KeyManag
   private static final Logger LOGGER;
 
   static {
-    LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+    LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
 
   private KeyStore keyStore;

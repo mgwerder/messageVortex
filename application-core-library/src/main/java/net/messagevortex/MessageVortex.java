@@ -31,20 +31,27 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import net.messagevortex.accounting.Accountant;
+import net.messagevortex.asn1.AsymmetricKeyPreCalculator;
 import net.messagevortex.blender.Blender;
 import net.messagevortex.router.Router;
 import net.messagevortex.transport.Transport;
 import picocli.CommandLine;
 
-@CommandLine.Command(description = "A MessageVortex implementation for the privacy aware person.",
-        name = "MessageVortex", mixinStandardHelpOptions = true, versionProvider = Version.class)
+@CommandLine.Command(
+        description = "A MessageVortex implementation for the privacy aware person.",
+        name = "MessageVortex",
+        mixinStandardHelpOptions = true,
+        versionProvider = Version.class,
+        subcommands = {
+                AsymmetricKeyPreCalculator.class
+        }
+)
 public class MessageVortex implements Callable<Integer> {
 
-  private static final int CONFIG_FAIL = 101;
-  private static final int SETUP_FAIL = 102;
-  private static final int ARGUMENT_FAIL = 103;
+  public  static final int CONFIG_FAIL = 101;
+  public  static final int SETUP_FAIL = 102;
+  public  static final int ARGUMENT_FAIL = 103;
 
   private static final Logger LOGGER;
 
@@ -67,7 +74,7 @@ public class MessageVortex implements Callable<Integer> {
   private int threadDumpInterval = 300;
 
   static {
-    LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+    LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
 
   private static Map<String, Transport> transport = new ConcurrentHashMap<>();

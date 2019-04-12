@@ -2,7 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d11f21f3-1155-4924-86d1-bc99f93f8cdb" name="Default Changelist" comment="Default Changelist">
-      <change beforePath="$PROJECT_DIR$/../Jenkinsfile" beforeDir="false" afterPath="$PROJECT_DIR$/../Jenkinsfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarIssues.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarIssues.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/ThreadDumper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/ThreadDumper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/Version.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/Version.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AsymmetricKeyCache.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AsymmetricKeyCache.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AsymmetricKeyPreCalculator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AsymmetricKeyPreCalculator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/CustomKeyManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/CustomKeyManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/dummy/DummyTransportTrx.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/dummy/DummyTransportTrx.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/imap/ImapCommandAuthenticate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/imap/ImapCommandAuthenticate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/imap/ImapCommandLogin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/imap/ImapCommandLogin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/pop3/TestPop3Handler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/pop3/TestPop3Handler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/TestSmtpHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/TestSmtpHandler.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -100,26 +112,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="DummyBlender.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/blender/DummyBlender.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="645">
-              <caret line="220" lean-forward="true" selection-start-line="220" selection-end-line="220" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#4397#4398#0" expanded="true" />
-                <element signature="e#4427#4428#0" expanded="true" />
-                <element signature="e#4726#4932#0" expanded="true" />
-                <element signature="e#4931#4932#0" expanded="true" />
-                <element signature="e#6025#6304#0" expanded="true" />
-                <element signature="e#6303#6304#0" expanded="true" />
-                <element signature="e#7005#7211#0" expanded="true" />
-                <element signature="e#7210#7211#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="InitialRecipesBlender.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/blender/InitialRecipesBlender.java">
           <provider selected="true" editor-type-id="text-editor">
@@ -143,19 +135,13 @@
       <file leaf-file-name="AsymmetricKeyCache.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AsymmetricKeyCache.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="731">
-              <caret line="57" lean-forward="true" selection-start-line="57" selection-end-line="57" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="VortexMessage.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/VortexMessage.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3636">
-              <caret line="255" column="14" lean-forward="true" selection-start-line="255" selection-start-column="14" selection-end-line="255" selection-end-column="14" />
+            <state relative-caret-position="838">
+              <caret line="115" column="15" selection-start-line="115" selection-start-column="15" selection-end-line="115" selection-end-column="15" />
               <folding>
-                <element signature="imports" expanded="true" />
+                <element signature="e#2951#2952#0" expanded="true" />
+                <element signature="e#2979#2980#0" expanded="true" />
+                <element signature="e#3804#3805#0" expanded="true" />
+                <element signature="e#3840#3841#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -164,8 +150,29 @@
       <file leaf-file-name="MessageVortex.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="458">
-              <caret line="139" column="32" selection-start-line="139" selection-start-column="32" selection-end-line="139" selection-end-column="32" />
+            <state relative-caret-position="369">
+              <caret line="43" column="40" lean-forward="true" selection-start-line="43" selection-end-line="44" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AsymmetricKeyPreCalculator.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AsymmetricKeyPreCalculator.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="379">
+              <caret line="520" column="49" selection-start-line="520" selection-start-column="21" selection-end-line="520" selection-end-column="49" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Config.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/Config.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="452">
+              <caret line="48" column="10" lean-forward="true" selection-start-line="48" selection-start-column="10" selection-end-line="48" selection-end-column="10" />
             </state>
           </provider>
         </entry>
@@ -174,16 +181,16 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/TestSmtpHandler.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="696">
-              <caret line="107" column="23" lean-forward="true" selection-start-line="107" selection-start-column="23" selection-end-line="107" selection-end-column="23" />
+              <caret line="108" column="23" lean-forward="true" selection-start-line="108" selection-start-column="23" selection-end-line="108" selection-end-column="23" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Jenkinsfile" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Jenkinsfile" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../Jenkinsfile">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1024">
-              <caret line="102" column="41" lean-forward="true" selection-start-line="102" selection-start-column="41" selection-end-line="102" selection-end-column="41" />
+            <state relative-caret-position="327">
+              <caret line="61" column="25" lean-forward="true" selection-start-line="61" selection-start-column="25" selection-end-line="61" selection-end-column="25" />
             </state>
           </provider>
         </entry>
@@ -209,15 +216,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="messageVortex.cfg" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/resources/messageVortex.cfg">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="243">
-              <caret line="30" column="9" selection-start-line="30" selection-start-column="9" selection-end-line="30" selection-end-column="9" />
-            </state>
-          </provider>
-        </entry>
-      </file>
     </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
@@ -229,13 +227,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>setValue</find>
-      <find>load</find>
-      <find>load(</find>
-      <find>&quot;true</find>
-      <find>setValue(</find>
-      <find>ConfigType</find>
-      <find>.type</find>
       <find>sections.</find>
       <find>incomming</find>
       <find>-jar</find>
@@ -259,6 +250,13 @@
       <find>martin@e</find>
       <find>ByteArrayOutpu</find>
       <find>NotNull</find>
+      <find>LOGGER =</find>
+      <find>LOGGER = Lo</find>
+      <find>getSpec</find>
+      <find>ExtendedS</find>
+      <find>getSpecula</find>
+      <find>specula</find>
+      <find>getCacheFillTime</find>
     </findStrings>
     <replaceStrings>
       <replace>;</replace>
@@ -269,6 +267,7 @@
       <dir>C:\PHD\Documents\messageVortex\application-core-library\src\main\java</dir>
       <dir>F:\Git\messageVortex\application-core-library</dir>
       <dir>C:\PHD\Documents\messageVortex\application-core-library\src</dir>
+      <dir>C:\PHD\Documents\messageVortex\application-core-library\src\main</dir>
     </dirStrings>
   </component>
   <component name="Git.Settings">
@@ -284,7 +283,6 @@
         <option value="$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/MessageVortexTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/AbstractDaemon.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AbstractRedundancyOperation.java" />
-        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AsymmetricKeyPreCalculator.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/HeaderRequestIdentity.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/Operation.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/SmtpImapServer.java" />
@@ -323,11 +321,12 @@
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/VortexMessage.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/InitialRecipesBlender.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/TestSmtpHandler.java" />
-        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AsymmetricKeyCache.java" />
-        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/ThreadDumper.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortexController.java" />
         <option value="$PROJECT_DIR$/../Jenkinsfile" />
+        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AsymmetricKeyCache.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AsymmetricKeyPreCalculator.java" />
       </list>
     </option>
   </component>
@@ -376,9 +375,9 @@
       <select />
     </treeState>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="1" />
-    <option name="y" value="1" />
+  <component name="ProjectFrameBounds" extendedState="7">
+    <option name="x" value="1056" />
+    <option name="y" value="-19" />
     <option name="width" value="2066" />
     <option name="height" value="1888" />
   </component>
@@ -469,12 +468,24 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.MessageVortex">
+  <component name="RunManager" selected="Application.MessageVortex keycache">
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
       <method>
         <option name="Make" enabled="true" />
       </method>
+    </configuration>
+    <configuration name="MessageVortex --help" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="net.messagevortex.MessageVortex" />
+      <module name="application-core-library" />
+      <option name="PROGRAM_PARAMETERS" value="--help" />
+      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+    </configuration>
+    <configuration name="MessageVortex keycache" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="net.messagevortex.asn1.AsymmetricKeyPreCalculator" />
+      <module name="application-core-library" />
+      <option name="PROGRAM_PARAMETERS" value="keycache --stopIfFull" />
+      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
     </configuration>
     <configuration name="MessageVortex" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="net.messagevortex.MessageVortex" />
@@ -656,6 +667,8 @@
       </method>
     </configuration>
     <list>
+      <item itemvalue="Application.MessageVortex --help" />
+      <item itemvalue="Application.MessageVortex keycache" />
       <item itemvalue="Application.MessageVortex" />
       <item itemvalue="JUnit.All Tests" />
       <item itemvalue="JUnit.ConfigTest" />
@@ -736,33 +749,33 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="1" y="1" width="2066" height="1888" extended-state="0" />
-    <editor active="true" />
+    <frame x="1192" y="-8" width="1216" height="1936" extended-state="7" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
-      <window_info anchor="bottom" id="TODO" order="6" weight="0.32950193" />
       <window_info anchor="bottom" id="FindBugs-IDEA" order="13" weight="0.32996634" />
-      <window_info anchor="bottom" id="Messages" order="12" weight="0.32756633" />
-      <window_info anchor="right" id="Palette&#9;" order="7" />
-      <window_info id="Image Layers" order="3" />
-      <window_info anchor="right" id="Capture Analysis" order="4" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5017301" side_tool="true" weight="0.32819635" />
       <window_info anchor="right" id="Maven Projects" order="6" sideWeight="0.49857143" weight="0.20069204" />
-      <window_info anchor="bottom" id="Version Control" order="11" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4982699" visible="true" weight="0.3246828" />
-      <window_info anchor="bottom" id="CheckStyle" order="8" weight="0.34195402" />
-      <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Capture Tool" order="6" />
       <window_info id="Designer" order="2" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1674975" />
-      <window_info anchor="bottom" id="Analysis" order="14" />
       <window_info anchor="bottom" id="SonarQube" order="15" weight="0.32996634" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info id="UI Designer" order="4" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32950193" />
+      <window_info anchor="bottom" id="Messages" order="12" weight="0.32756633" />
+      <window_info anchor="right" id="Palette&#9;" order="7" />
+      <window_info id="Image Layers" order="3" />
+      <window_info anchor="right" id="Capture Analysis" order="4" />
+      <window_info anchor="bottom" id="Version Control" order="11" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4982699" visible="true" weight="0.31593716" />
+      <window_info anchor="bottom" id="CheckStyle" order="8" weight="0.34195402" />
+      <window_info anchor="bottom" id="Terminal" order="7" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.29065743" />
+      <window_info anchor="bottom" id="Analysis" order="14" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.24714611" />
       <window_info anchor="right" id="Theme Preview" order="8" />
       <window_info id="Favorites" order="5" side_tool="true" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="right" id="Palette&#9;" order="7" />
       <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4982699" visible="true" weight="0.28448275" />
@@ -788,7 +801,6 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info id="UI Designer" order="4" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.24714611" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Version Control" order="11" />
       <window_info anchor="bottom" id="Terminal" order="7" />
@@ -852,13 +864,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="663">
-          <caret line="39" column="41" selection-start-line="39" selection-start-column="41" selection-end-line="39" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/Credentials.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1068">
@@ -985,13 +990,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/Config.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="469">
-          <caret line="852" column="32" selection-start-line="852" selection-start-column="32" selection-end-line="852" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="449">
@@ -1024,6 +1022,15 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="367">
           <caret line="38" column="3" selection-start-line="38" selection-start-column="3" selection-end-line="38" selection-end-column="3" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2199#2200#0" expanded="true" />
+            <element signature="e#2223#2224#0" expanded="true" />
+            <element signature="e#2265#2266#0" expanded="true" />
+            <element signature="e#2288#2289#0" expanded="true" />
+            <element signature="e#2334#2335#0" expanded="true" />
+            <element signature="e#2356#2357#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1184,34 +1191,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AsymmetricKeyCache.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="731">
-          <caret line="57" lean-forward="true" selection-start-line="57" selection-end-line="57" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/net/messagevortex/test/transport/LineTRXTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="731">
           <caret line="75" column="59" selection-start-line="75" selection-start-column="59" selection-end-line="75" selection-end-column="59" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/VortexMessage.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3636">
-          <caret line="255" column="14" lean-forward="true" selection-start-line="255" selection-start-column="14" selection-end-line="255" selection-end-column="14" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="458">
-          <caret line="139" column="32" selection-start-line="139" selection-start-column="32" selection-end-line="139" selection-end-column="32" />
         </state>
       </provider>
     </entry>
@@ -1235,14 +1218,61 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/TestSmtpHandler.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="696">
-          <caret line="107" column="23" lean-forward="true" selection-start-line="107" selection-start-column="23" selection-end-line="107" selection-end-column="23" />
+          <caret line="108" column="23" lean-forward="true" selection-start-line="108" selection-start-column="23" selection-end-line="108" selection-end-column="23" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../Jenkinsfile">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1024">
-          <caret line="102" column="41" lean-forward="true" selection-start-line="102" selection-start-column="41" selection-end-line="102" selection-end-column="41" />
+        <state relative-caret-position="327">
+          <caret line="61" column="25" lean-forward="true" selection-start-line="61" selection-start-column="25" selection-end-line="61" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/Config.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="452">
+          <caret line="48" column="10" lean-forward="true" selection-start-line="48" selection-start-column="10" selection-end-line="48" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/VortexMessage.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3636">
+          <caret line="255" column="14" lean-forward="true" selection-start-line="255" selection-start-column="14" selection-end-line="255" selection-end-column="14" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="369">
+          <caret line="43" column="40" lean-forward="true" selection-start-line="43" selection-end-line="44" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AsymmetricKeyCache.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="838">
+          <caret line="115" column="15" selection-start-line="115" selection-start-column="15" selection-end-line="115" selection-end-column="15" />
+          <folding>
+            <element signature="e#2951#2952#0" expanded="true" />
+            <element signature="e#2979#2980#0" expanded="true" />
+            <element signature="e#3804#3805#0" expanded="true" />
+            <element signature="e#3840#3841#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AsymmetricKeyPreCalculator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="379">
+          <caret line="520" column="49" selection-start-line="520" selection-start-column="21" selection-end-line="520" selection-end-column="49" />
         </state>
       </provider>
     </entry>

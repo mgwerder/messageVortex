@@ -32,6 +32,7 @@ import javax.security.auth.callback.CallbackHandler;
 import javax.security.sasl.Sasl;
 import javax.security.sasl.SaslException;
 import javax.security.sasl.SaslServer;
+import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.transport.RandomString;
 import net.messagevortex.transport.SaslMechanisms;
 import net.messagevortex.transport.SaslPlainServer;
@@ -50,7 +51,7 @@ public class ImapCommandAuthenticate extends ImapCommand {
   private static final Logger LOGGER;
 
   static {
-    LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+    LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
 
   /***

@@ -29,10 +29,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import net.messagevortex.AbstractDaemon;
 import net.messagevortex.Config;
 import net.messagevortex.MessageVortex;
+import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.transport.ByteArrayBuilder;
 import net.messagevortex.transport.RandomString;
 import net.messagevortex.transport.Transport;
@@ -43,7 +43,7 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
   private static final Logger LOGGER;
 
   static {
-    LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+    LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
 
   static final Map<String, TransportReceiver> endpoints = new HashMap<>();

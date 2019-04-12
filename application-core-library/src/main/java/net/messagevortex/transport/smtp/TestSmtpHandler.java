@@ -17,6 +17,7 @@ import javax.mail.internet.MimeMessage;
 import net.messagevortex.AbstractDaemon;
 import net.messagevortex.Config;
 import net.messagevortex.MessageVortex;
+import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.transport.Transport;
 import net.messagevortex.transport.TransportReceiver;
 
@@ -29,7 +30,7 @@ public class TestSmtpHandler extends AbstractDaemon implements Transport, Runnab
   private static final Logger LOGGER;
 
   static {
-    LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+    LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
 
   private GreenMail server;

@@ -3,15 +3,14 @@ package net.messagevortex.transport.pop3;
 import com.icegreen.greenmail.user.GreenMailUser;
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.ServerSetup;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Logger;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-
 import net.messagevortex.Config;
 import net.messagevortex.MessageVortex;
+import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.transport.Transport;
 import net.messagevortex.transport.TransportReceiver;
 
@@ -27,7 +26,7 @@ public class TestPop3Handler implements Transport {
   private static final Logger LOGGER;
 
   static {
-    LOGGER = Logger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+    LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
 
   private GreenMail server;
