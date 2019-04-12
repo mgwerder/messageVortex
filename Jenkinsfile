@@ -72,7 +72,25 @@ pipeline {
         stage ('Test on JDK12') {
           agent {
             docker {
-                image 'maven:3.6.0-jdk-12-alpine'
+                image 'maven:3.6.0-jdk-12'
+                args '-v $HOME/.m2:/root/.m2'
+            }
+          }
+          options {
+            timeout(time: 120, unit: 'MINUTES')
+          }
+          steps {
+            script {
+              //if (env.BRANCH_NAME != 'master') {
+                sh script: 'timeout --signal=QUIT 30m mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
+              //}
+            }
+          }
+        }
+        stage ('Test on JDK13') {
+          agent {
+            docker {
+                image 'maven:3.6.0-jdk-13'
                 args '-v $HOME/.m2:/root/.m2'
             }
           }
