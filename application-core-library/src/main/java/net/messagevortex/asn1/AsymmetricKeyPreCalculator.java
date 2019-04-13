@@ -516,6 +516,9 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
           Files.move(Paths.get(filename + ".tmp"), Paths.get(fn),
                   StandardCopyOption.REPLACE_EXISTING);
           cache.clear();
+          if (stopIfFull) {
+            setCacheFileName(null);
+          }
         } else {
           LOGGER.log(Level.INFO, "stored cache");
           Files.move(Paths.get(filename + ".tmp"), Paths.get(filename),

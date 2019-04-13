@@ -41,30 +41,30 @@ pipeline {
           agent {
             docker {
                 image 'maven:3.6.0-jdk-10-slim'
-                args '-v $HOME/.m2:/root/.m2'
+                args '-v $HOME/.m2:/root/.m2 -v $HOME/MesageVortexKeyCache:keyCache'
             }
           }
           options {
-            timeout(time: 120, unit: 'MINUTES')
+            timeout(time: 30, unit: 'MINUTES')
           }
           steps{
-                sh 'timeout -s QUIT 30m mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
+                sh 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
           }
         }
         stage ('Test on JDK11') {
           agent {
             docker {
                 image 'maven:3.6.0-jdk-11-slim'
-                args '-v $HOME/.m2:/root/.m2'
+                args '-v $HOME/.m2:/root/.m2 -v $HOME/MesageVortexKeyCache:keyCache'
             }
           }
           options {
-            timeout(time: 120, unit: 'MINUTES')
+            timeout(time: 30, unit: 'MINUTES')
           }
           steps{
             script {
               //if (env.BRANCH_NAME != 'master') {
-                sh script: 'timeout -s QUIT 30m mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
+                sh script: 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
               //}
             }
           }
@@ -73,16 +73,16 @@ pipeline {
           agent {
             docker {
                 image 'maven:3.6.0-jdk-12'
-                args '-v $HOME/.m2:/root/.m2'
+                args '-v $HOME/.m2:/root/.m2 -v $HOME/MesageVortexKeyCache:keyCache'
             }
           }
           options {
-            timeout(time: 120, unit: 'MINUTES')
+            timeout(time: 30, unit: 'MINUTES')
           }
           steps {
             script {
               //if (env.BRANCH_NAME != 'master') {
-                sh script: 'timeout --signal=QUIT 30m mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
+                sh script: 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
               //}
             }
           }
@@ -91,16 +91,16 @@ pipeline {
           agent {
             docker {
                 image 'maven:3.6.0-jdk-13'
-                args '-v $HOME/.m2:/root/.m2'
+                args '-v $HOME/.m2:/root/.m2 -v $HOME/MesageVortexKeyCache:keyCache'
             }
           }
           options {
-            timeout(time: 120, unit: 'MINUTES')
+            timeout(time: 30, unit: 'MINUTES')
           }
           steps {
             script {
               //if (env.BRANCH_NAME != 'master') {
-                sh script: 'timeout --signal=QUIT 30m mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
+                sh script: 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
               //}
             }
           }
