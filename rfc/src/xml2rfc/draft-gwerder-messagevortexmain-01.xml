@@ -1183,17 +1183,17 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec]]></artwork>
         <references title="Informative References">
 
             <!-- MIME -->
-            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2045.xml"?>
+            <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2045.xml"?>
             <!-- XMPP -->
-            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.6120.xml"?>
+            <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6120.xml"?>
             <!-- SMTP -->
-            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.5321.xml"?>
+            <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5321.xml"?>
             <!-- IMAP -->
-            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.3501.xml"?>
+            <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.3501.xml"?>
             <!-- POP3 -->
-            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.1939.xml"?>
+            <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.1939.xml"?>
             <!-- POP3 STARTTLS -->
-            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2595.xml"?>
+            <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2595.xml"?>
             <!-- XMPP Adress -->
             <!--<?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.7622.xml"?>-->
 
