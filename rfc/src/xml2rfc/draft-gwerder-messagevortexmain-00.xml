@@ -1071,7 +1071,7 @@ jidAlternateSpec = localPart ":" keySpec "@" domain [ "/" resourcepart]]></artwo
             <!-- POP3 STARTTLS -->
             <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2595.xml"?>
             <!-- XMPP Adress -->
-            <!--<?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.7622.xml"?>-->
+            <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.7622.xml"?>
 
             <reference anchor="MVAnalysis" target="https://messagevortex.net/devel/messageVortex.pdf">
                 <front>
