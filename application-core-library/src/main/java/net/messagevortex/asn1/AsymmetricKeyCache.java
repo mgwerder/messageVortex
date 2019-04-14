@@ -72,6 +72,12 @@ public class AsymmetricKeyCache implements Serializable {
       return maxSize;
     }
 
+    public int setMaxSize(int size) {
+      int ret = maxSize;
+      maxSize = size;
+      return ret;
+    }
+
     public AsymmetricKey pull() {
       synchronized (cache) {
         if (cache.size() > 0) {
@@ -113,7 +119,7 @@ public class AsymmetricKeyCache implements Serializable {
     public double getCacheFillTime() {
       double avg = getAverageCalcTime();
       if (avg <=0) {
-        avg = 2;
+        avg = 10;
       }
       return Math.max(0, maxSize - cache.size()) * avg;
     }
@@ -260,6 +266,19 @@ public class AsymmetricKeyCache implements Serializable {
     }
   }
 
+  private AlgorithmParameter getCacheElementByIndex(int index) {
+    synchronized (cache) {
+      int i = 0;
+      for (Map.Entry<AlgorithmParameter,CacheElement> e:cache.entrySet()) {
+        i++;
+        if (i == index) {
+          return e.getKey();
+        }
+      }
+      return null;
+    }
+  }
+
   /***
    * <p>Gets a precalculated key from the cache.</p>
    *
@@ -342,9 +361,7 @@ public class AsymmetricKeyCache implements Serializable {
       for (Map.Entry<AlgorithmParameter, CacheElement> me : cache.entrySet()) {
         long ft = (long) (me.getValue().getCacheFillTime());
         // make sure that all key sizes have a minimum time
-        if (ft <= 0) {
-          ft = 100;
-        }
+
         l += ft;
         if (ft > 0) {
           hm.put(l, me.getKey());
@@ -468,6 +485,27 @@ public class AsymmetricKeyCache implements Serializable {
     return sb.toString();
   }
 
+  public void setCacheSize( int index, int value) throws IOException {
+    synchronized (cache) {
+      AlgorithmParameter ap = getCacheElementByIndex(index);
+      if (ap == null) {
+        throw new IOException("cache element " + index + " not found");
+      }
+      CacheElement ce = cache.get(ap);
+      ce.setMaxSize(value);
+    }
+  }
+
+  public void removeCacheElement( int index ) throws IOException {
+    synchronized (cache) {
+      AlgorithmParameter ap = getCacheElementByIndex(index);
+      if (ap == null) {
+        throw new IOException("cache element " + index + " not found");
+      }
+      cache.remove(ap);
+    }
+  }
+
   /***
    * <p>Dumps cache stats to the logger.</p>
    */
@@ -479,11 +517,13 @@ public class AsymmetricKeyCache implements Serializable {
       LOGGER.log(Level.INFO, sepLine);
       int sum = 0;
       int tot = 0;
+      int i = 0;
       for (Map.Entry<AlgorithmParameter, CacheElement> e : cache.entrySet()) {
+        i++;
         CacheElement ce = e.getValue();
         long s = ce.size();
         long ms = ce.getMaxSize();
-        LOGGER.log(Level.INFO, "| " + String.format("%5s", s) + "/" + String.format("%5s", ms)
+        LOGGER.log(Level.INFO, "|" + String.format("%2s", i) + ") " + String.format("%5s", s) + "/" + String.format("%5s", ms)
                 + " " + percentBar((double) (s) / ms, 20) + " " + e.getKey());
         sum += s;
         tot += ms;

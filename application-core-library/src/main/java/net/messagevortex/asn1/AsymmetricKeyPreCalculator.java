@@ -40,7 +40,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.Version;
 import net.messagevortex.asn1.encryption.AlgorithmType;
 import net.messagevortex.asn1.encryption.Mode;
 import net.messagevortex.asn1.encryption.Padding;
@@ -55,7 +54,7 @@ import picocli.CommandLine;
  */
 @CommandLine.Command(
         name = "keycache",
-        aliases = {"kc","cache"},
+        aliases = {"kc", "cache"},
         description = "Handle the asymmetric key cache",
         mixinStandardHelpOptions = true
 )
@@ -71,13 +70,13 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
 
-  @CommandLine.Option(names = {"--set"},
-          description = "number of elements for a key (requires --element)")
-  private int setValue = -1;
-
   @CommandLine.Option(names = {"--element"},
           description = "the affected element")
-  private int affectedElement = -1;
+  private int elementIndex = -1;
+
+  @CommandLine.Option(names = {"--value"},
+          description = "number of elements for a key (requires --element)")
+  private int value = -1;
 
   @CommandLine.Option(names = {"--stopIfFull"},
           description = "stop the cache calculation if the cache is full")
@@ -94,6 +93,9 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
   private static long lastSaved = 0;
   private static boolean firstWarning = true;
   private static InternalThread runner = null;
+
+  @CommandLine.Option(names = {"--cacheFileName" , "-f"},
+          description = "filename of the cache file", required = true)
   private static String filename = null;
 
   private static int incrementor = 128;
@@ -212,14 +214,14 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
           }
         } else {
           if (!stopIfFull)
-          try {
-            LOGGER.log(Level.INFO, "cache is idle (" + String.format("%2.3f",
-                    cache.getCacheFillGrade() * 100) + "%) ... sleeping for a short while "
-                    + "and waiting for requests");
-            Thread.sleep(10000);
-          } catch (InterruptedException ie) {
-            Thread.currentThread().interrupt();
-          }
+            try {
+              LOGGER.log(Level.INFO, "cache is idle (" + String.format("%2.3f",
+                      cache.getCacheFillGrade() * 100) + "%) ... sleeping for a short while "
+                      + "and waiting for requests");
+              Thread.sleep(10000);
+            } catch (InterruptedException ie) {
+              Thread.currentThread().interrupt();
+            }
         }
 
       }
@@ -432,7 +434,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
    * <p>If set to null the Precalculator is disabled.</p>
    *
    * @param name                         file name of the cache file
-   * @return                             String representing the previously set name
+   * @return String representing the previously set name
    * @throws IllegalThreadStateException if the previous thread has not yet shutdown but a new
    *                                     thread was tried to be started
    */
@@ -539,7 +541,6 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
   }
 
   public static int mainReturn(String[] args) {
-    LOGGER.log(Level.INFO, "MessageVortex V" + Version.getBuild());
     Integer i = CommandLine.call(new MessageVortex(), args == null ? new String[0] : args);
     return i != null ? i : MessageVortex.ARGUMENT_FAIL;
   }
@@ -550,7 +551,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
     new AsymmetricKeyPreCalculator(true);
     if (cache.isEmpty()) {
       try {
-        load("AsymmetricKey.cache", true);
+        load(filename, true);
       } catch (IOException ioe) {
         throw new IOException("unable to load existing asymmetric key cache file"
                 + "... aborting execution", ioe);
@@ -558,7 +559,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
       cache.clear();
       cache.showStats();
     }
-    if (setValue != -1) {
+    if (value != -1) {
       // setting the target value of the specified element
     } else {
       // just start the cache
@@ -567,9 +568,71 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
     try {
       runner.join();
     } catch (InterruptedException ie) {
-      throw new IOException("Exception while waiting for cache runner to finish",ie);
+      throw new IOException("Exception while waiting for cache runner to finish", ie);
     }
     return 0;
+  }
+
+  @CommandLine.Command(name = "set", description = "sets the size of a specific cache element")
+  public void setCacheSize() throws IOException {
+    LOGGER.log(Level.INFO, "SET called for element " + elementIndex);
+    if (elementIndex <= 0 || value <= 0) {
+      LOGGER.log(Level.SEVERE, "SET requires a valid element (" + elementIndex
+              + ") and an valid value to be set (" + value + ")");
+      System.exit(MessageVortex.ARGUMENT_FAIL);
+    } else {
+      setCacheSize(elementIndex, value);
+    }
+    setCacheFileName(null);
+    System.exit(0);
+  }
+
+  public void setCacheSize(int index, int size) throws IOException {
+    LOGGER.log(Level.INFO, "SET called for element " + index + " and size " + size);
+    if (cache.isEmpty()) {
+      try {
+        LOGGER.log(Level.INFO, "loading cache " + filename);
+        load(filename, true);
+      } catch (IOException ioe) {
+        throw new IOException("unable to load existing asymmetric key cache file"
+                + "... aborting execution", ioe);
+      }
+    }
+    LOGGER.log(Level.INFO, "chaning cache size");
+    cache.setCacheSize(elementIndex, value);
+    cache.showStats();
+    LOGGER.log(Level.INFO, "storing cache " + filename);
+    cache.store(filename);
+  }
+
+  @CommandLine.Command(name = "remove", description = "removes a specific cache element")
+  public void removeCacheElement() throws IOException {
+    LOGGER.log(Level.INFO, "removing element " + elementIndex);
+    if (elementIndex <= 0) {
+      LOGGER.log(Level.SEVERE, "REMOVE requires a valid element (" + elementIndex + ")" );
+      System.exit(MessageVortex.ARGUMENT_FAIL);
+    } else {
+      removeCacheElement(elementIndex);
+    }
+    setCacheFileName(null);
+    System.exit(0);
+  }
+
+  public void removeCacheElement(int index) throws IOException {
+    if (cache.isEmpty()) {
+      try {
+        LOGGER.log(Level.INFO, "loading cache " + filename);
+        load(filename, true);
+      } catch (IOException ioe) {
+        throw new IOException("unable to load existing asymmetric key cache file"
+                + "... aborting execution", ioe);
+      }
+    }
+    LOGGER.log(Level.INFO, "removing element");
+    cache.removeCacheElement(elementIndex);
+    cache.showStats();
+    LOGGER.log(Level.INFO, "storing cache " + filename);
+    cache.store(filename);
   }
 
 }
