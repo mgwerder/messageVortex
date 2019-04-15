@@ -14,6 +14,7 @@ import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.net.ssl.KeyManagerFactory;
@@ -24,6 +25,7 @@ import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509KeyManager;
 import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.test.imap.ImapSSLTest;
 import net.messagevortex.transport.AllTrustManager;
 import net.messagevortex.transport.ClientConnection;
 import net.messagevortex.transport.CustomKeyManager;
@@ -158,6 +160,7 @@ public class LineTRXTest {
 
     @Test
     public void plainConnectionTest() {
+        Set<Thread> threadSet = ImapSSLTest.getThreadList();
         LOGGER.log(Level.INFO, "**************************************************************" );
         LOGGER.log(Level.INFO, "*** Plain connection test" );
         LOGGER.log(Level.INFO, "**************************************************************" );
@@ -183,10 +186,12 @@ public class LineTRXTest {
             ioe.printStackTrace();
             fail( "got IOException while handling the client side" );
         }
+        Assert.assertTrue("error searching for hangig threads", ImapSSLTest.verifyHangingThreads(threadSet).size() == 0);
     }
 
     @Test
     public void plainConnectionReadTest() {
+        Set<Thread> threadSet = ImapSSLTest.getThreadList();
         LOGGER.log(Level.INFO, "**************************************************************" );
         LOGGER.log(Level.INFO, "*** Plain connection read test" );
         LOGGER.log(Level.INFO, "**************************************************************" );
@@ -219,10 +224,12 @@ public class LineTRXTest {
             ioe.printStackTrace();
             fail( "got IOException while handling the client side" );
         }
+        Assert.assertTrue("error searching for hangig threads", ImapSSLTest.verifyHangingThreads(threadSet).size() == 0);
     }
 
     @Test
     public void plainConnectionWriteTest() {
+        Set<Thread> threadSet = ImapSSLTest.getThreadList();
         LOGGER.log(Level.INFO, "**************************************************************" );
         LOGGER.log(Level.INFO, "*** Plain connection write test" );
         LOGGER.log(Level.INFO, "**************************************************************" );
@@ -253,10 +260,12 @@ public class LineTRXTest {
             ioe.printStackTrace();
             fail( "got IOException while handling the client side" );
         }
+        Assert.assertTrue("error searching for hangig threads", ImapSSLTest.verifyHangingThreads(threadSet).size() == 0);
     }
 
     @Test
     public void plainConnectionReadLineTest() {
+        Set<Thread> threadSet = ImapSSLTest.getThreadList();
         LOGGER.log(Level.INFO, "**************************************************************" );
         LOGGER.log(Level.INFO, "*** Plain connection readline test" );
         LOGGER.log(Level.INFO, "**************************************************************" );
@@ -287,10 +296,12 @@ public class LineTRXTest {
             ioe.printStackTrace();
             fail( "got IOException while handling the client side" );
         }
+        Assert.assertTrue("error searching for hangig threads", ImapSSLTest.verifyHangingThreads(threadSet).size() == 0);
     }
 
     @Test
     public void encryptedConnectionTest() {
+        Set<Thread> threadSet = ImapSSLTest.getThreadList();
         try {
             LOGGER.log(Level.INFO, "Testing a encrypted connect");
             // creating a listening Socket which is immediately closing
@@ -336,10 +347,12 @@ public class LineTRXTest {
             ioe.printStackTrace();
             fail( "got Exception while handling the client side" );
         }
+        Assert.assertTrue("error searching for hangig threads", ImapSSLTest.verifyHangingThreads(threadSet).size() == 0);
     }
 
     @Test
     public void encryptedConnectionReadTest() {
+        Set<Thread> threadSet = ImapSSLTest.getThreadList();
         LOGGER.log(Level.INFO, "**************************************************************" );
         LOGGER.log(Level.INFO, "*** encrypted connection read test" );
         LOGGER.log(Level.INFO, "**************************************************************" );
@@ -386,10 +399,12 @@ public class LineTRXTest {
             ioe.printStackTrace();
             fail( "got Exception while handling the client side" );
         }
+        Assert.assertTrue("error searching for hangig threads", ImapSSLTest.verifyHangingThreads(threadSet).size() == 0);
     }
 
     @Test
     public void lineReceiverPlainTest() throws InterruptedException {
+        Set<Thread> threadSet = ImapSSLTest.getThreadList();
         LOGGER.log(Level.INFO, "**************************************************************" );
         LOGGER.log(Level.INFO, "*** line receiver plain test" );
         LOGGER.log(Level.INFO, "**************************************************************" );
@@ -410,6 +425,7 @@ public class LineTRXTest {
             ioe.printStackTrace();
             fail( "got Exception while handling the client side" );
         }
+        Assert.assertTrue("error searching for hangig threads", ImapSSLTest.verifyHangingThreads(threadSet).size() == 0);
     }
 
 }

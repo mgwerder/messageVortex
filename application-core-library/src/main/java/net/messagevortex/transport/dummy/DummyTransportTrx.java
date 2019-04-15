@@ -115,12 +115,15 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
     ByteArrayBuilder bab = new ByteArrayBuilder();
     int n;
     byte[] buffer = new byte[1024];
-    while ((n = is.read(buffer)) > -1) {
+    while ((n = is.read(buffer, 0, buffer.length)) != -1) {
       bab.append(buffer, n);
     }
     is.close();
+
     // send byte array as input stream to target
-    final InputStream iso = new ByteArrayInputStream(bab.toBytes());
+    byte[] arr = bab.toBytes();
+    LOGGER.log(Level.INFO, "Dummy transport received " +arr.length + " sized message");
+    final InputStream iso = new ByteArrayInputStream(arr);
     synchronized (endpoints) {
       new Thread() {
 

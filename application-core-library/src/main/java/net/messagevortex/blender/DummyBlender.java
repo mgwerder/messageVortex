@@ -24,6 +24,7 @@ package net.messagevortex.blender;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.util.ArrayList;
@@ -71,6 +72,46 @@ public class DummyBlender extends Blender {
   private Transport transport;
   private BlendingReceiver router;
   private IdentityStore identityStore;
+
+  private class SenderThread extends Thread {
+
+    OutputStream output;
+    MimeMessage msg;
+
+    volatile boolean success = true;
+
+    public SenderThread(MimeMessage msg, OutputStream os) {
+      this.output = os;
+      this.msg = msg;
+    }
+
+    @Override
+    public void run() {
+      try {
+        LOGGER.log(Level.INFO, "streaming message to target");
+        msg.writeTo(output);
+        output.close();
+      } catch (IOException | MessagingException ioe) {
+        LOGGER.log(Level.WARNING, "streaming message to target failed", ioe);
+        success = false;
+        return;
+      }
+      LOGGER.log(Level.INFO, "streaming message to target done");
+    }
+
+    public boolean getSuccess(long millis) {
+      try {
+        join(millis);
+        if (isAlive()) {
+          interrupt();
+          return false;
+        }
+        return success;
+      } catch (InterruptedException ie) {
+        return false;
+      }
+    }
+  }
 
   /**
    * <p>A dummy blender implementation.</p>
@@ -123,12 +164,13 @@ public class DummyBlender extends Blender {
     try {
       //Session session = Session.getDefaultInstance(new Properties(), null);
       Session session = Session.getInstance(new Properties(),
-          new javax.mail.Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-              return new PasswordAuthentication("username", "password");
-            }
-          }
+              new javax.mail.Authenticator() {
+                protected PasswordAuthentication getPasswordAuthentication() {
+                  return new PasswordAuthentication("username", "password");
+                }
+              }
       );
+      session.setDebug(true);
       final MimeMessage mimeMsg = new MimeMessage(session);
       mimeMsg.setFrom(new InternetAddress("test@test.com"));
       mimeMsg.setRecipient(Message.RecipientType.TO,
@@ -153,26 +195,22 @@ public class DummyBlender extends Blender {
 
       mimeMsg.setContent(content);
       if (transport != null) {
-        final PipedOutputStream os = new PipedOutputStream();
-        // FIXME catch error values
-        Thread t = new Thread() {
-          public void run() {
-            try {
-              mimeMsg.writeTo(os);
-              os.close();
-            } catch (IOException | MessagingException ioe) {
-              LOGGER.log(Level.WARNING, "Error while sending message", ioe);
-            }
-          }
-        };
-        t.setName("MessageInDummyBlenderTransportThread");
+        PipedOutputStream os = new PipedOutputStream();
+        PipedInputStream is = new PipedInputStream(os);
+        SenderThread t = new SenderThread(mimeMsg, os);
         t.start();
-        PipedInputStream inp = new PipedInputStream(os);
-
-        // send
-        transport.sendMessage(target.getRecipientAddress(), inp);
-        return true;
+        try {
+          transport.sendMessage(target.getRecipientAddress(), is);
+        } catch (IOException ioe) {
+          LOGGER.log(Level.SEVERE, "Unable to send to transport endpoint "
+                  + target.getRecipientAddress(), ioe);
+          t.interrupt();
+        }
+        boolean res = t.getSuccess(30 * 1000);
+        LOGGER.log(Level.INFO, "message sent using dummy transport to " + target.getRecipientAddress() + " (result: " + res + ")");
+        return res;
       } else {
+        LOGGER.log(Level.SEVERE, "Transport endpoint not set");
         return false;
       }
     } catch (AddressException ae) {
@@ -190,11 +228,11 @@ public class DummyBlender extends Blender {
   public boolean gotMessage(final InputStream is) {
     try {
       Session session = Session.getInstance(new Properties(),
-          new javax.mail.Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-              return new PasswordAuthentication("username", "password");
-            }
-          }
+              new javax.mail.Authenticator() {
+                protected PasswordAuthentication getPasswordAuthentication() {
+                  return new PasswordAuthentication("username", "password");
+                }
+              }
       );
       MimeMessage msg = new MimeMessage(session, is);
       is.close();
@@ -244,7 +282,7 @@ public class DummyBlender extends Blender {
     Object content = part.getContent();
     if (content instanceof InputStream || content instanceof String) {
       if (Part.ATTACHMENT.equalsIgnoreCase(part.getDisposition())
-              || ! "".equals(part.getFileName())) {
+              || !"".equals(part.getFileName())) {
         result.add(part.getInputStream());
         return result;
       } else {

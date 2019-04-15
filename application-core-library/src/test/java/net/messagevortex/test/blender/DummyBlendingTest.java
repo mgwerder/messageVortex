@@ -6,6 +6,7 @@ import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Level;
 import net.messagevortex.MessageVortexLogger;
@@ -21,6 +22,8 @@ import net.messagevortex.asn1.encryption.Algorithm;
 import net.messagevortex.asn1.encryption.SecurityLevel;
 import net.messagevortex.blender.BlendingReceiver;
 import net.messagevortex.blender.DummyBlender;
+import net.messagevortex.test.imap.ImapSSLTest;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -42,6 +45,7 @@ public class DummyBlendingTest implements BlendingReceiver {
 
   @Test
   public void dummyBlenderEndpointTest() {
+    Set<Thread> threadSet = ImapSSLTest.getThreadList();
     LOGGER.log(Level.INFO, "Setting up dummy network");
     DummyBlender[] dt = new DummyBlender[10];
     IdentityStore store = new IdentityStore();
@@ -79,6 +83,7 @@ public class DummyBlendingTest implements BlendingReceiver {
     for (int i = 0; i < dt.length; i++) {
       dt[i].shutdownDaemon();
     }
+    Assert.assertTrue("error searching for hangig threads", ImapSSLTest.verifyHangingThreads(threadSet).size() == 0);
   }
 
 

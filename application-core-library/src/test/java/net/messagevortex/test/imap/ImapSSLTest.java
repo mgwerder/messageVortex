@@ -174,7 +174,7 @@ public class ImapSSLTest {
     }
   }
 
-  protected static Set<Thread> getThreadList() {
+  public static Set<Thread> getThreadList() {
     Set<Thread> cThread = Thread.getAllStackTraces().keySet();
     ArrayList<Thread> al = new ArrayList<>();
     for (Thread t : cThread) {
@@ -186,7 +186,7 @@ public class ImapSSLTest {
     return cThread;
   }
 
-  protected static Set<Thread> verifyHangingThreads(Set<Thread> pThread) {
+  public static Set<Thread> verifyHangingThreads(Set<Thread> pThread) {
     Set<Thread> cThread = Thread.getAllStackTraces().keySet();
     cThread.removeAll(pThread);
     ArrayList<Thread> al = new ArrayList<>();

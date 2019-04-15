@@ -23,6 +23,7 @@ package net.messagevortex.asn1;
 // ************************************************************************************
 
 import java.io.ByteArrayOutputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -103,7 +104,11 @@ public class VortexMessage extends AbstractBlock implements Serializable {
     }
 
     // convert and parse resulting byte array
-    parse(buffer.toByteArray());
+    try {
+      parse(buffer.toByteArray());
+    } catch (EOFException|IllegalArgumentException eex) {
+      throw new IOException( "Exception while parsing byte array", eex);
+    }
 
     // tear down output buffer
     buffer.close();
@@ -252,9 +257,11 @@ public class VortexMessage extends AbstractBlock implements Serializable {
     i++;
     switch (to.getTagNo()) {
       case PREFIX_PLAIN:
+        LOGGER.log(Level.INFO, "parsing unencrypted/plain prefix block");
         prefix = new PrefixBlock(to.getObject(), null);
         break;
       case PREFIX_ENCRYPTED:
+        LOGGER.log(Level.INFO, "parsing encrypted prefix block");
         prefix = new PrefixBlock(ASN1OctetString.getInstance(to.getObject()).getOctets(),
                 getDecryptionKey());
         break;
@@ -274,8 +281,21 @@ public class VortexMessage extends AbstractBlock implements Serializable {
         innerMessage = new InnerMessageBlock(toDer(to.getObject()), null);
         break;
       case INNER_MESSAGE_ENCRYPTED:
-        innerMessage = new InnerMessageBlock(prefix.getKey().decrypt(ASN1OctetString
-                .getInstance(to.getObject()).getOctets()), getDecryptionKey());
+        if (prefix.getKey() == null){
+          throw new IOException("unable to get key from prefix block");
+        }
+        byte[] stream =null ;
+        try {
+          byte[] derStream = ASN1OctetString.getInstance(to.getObject()).getOctets();
+          stream = prefix.getKey().decrypt(derStream);
+        } catch (IllegalArgumentException iae) {
+          throw new IOException("unable to get decrypted byte stream (1)",iae);
+        }
+        if (stream == null || stream.length == 0) {
+          throw new IOException("unable to get decrypted byte stream (2; stream is null or sized 0 bytes)");
+        }
+
+        innerMessage = new InnerMessageBlock(stream, getDecryptionKey());
         break;
       default:
         throw new IOException("got unexpected tag number when reading inner message ("
@@ -317,16 +337,20 @@ public class VortexMessage extends AbstractBlock implements Serializable {
       throw new IOException("returned prefix object may not be null");
     }
     if (dumpType == DumpType.ALL_UNENCRYPTED || getPrefix().getDecryptionKey() == null) {
+      LOGGER.log(Level.INFO, "Adding unencrypted prefix block to message");
       v.add(new DERTaggedObject(PREFIX_PLAIN, o));
     } else {
+      LOGGER.log(Level.INFO, "Adding encrypted prefix block to message");
       v.add(new DERTaggedObject(PREFIX_ENCRYPTED, new DEROctetString(getPrefix().toEncBytes())));
     }
   }
 
   private void addInnerMessageBlockToAsn1(ASN1EncodableVector v, DumpType dt) throws IOException {
     if (prefix.getKey() == null || DumpType.ALL_UNENCRYPTED == dt) {
+      LOGGER.log(Level.INFO, "Adding unencrypted inner message block to message");
       v.add(new DERTaggedObject(INNER_MESSAGE_PLAIN, getInnerMessage().toAsn1Object(dt)));
     } else {
+      LOGGER.log(Level.INFO, "Adding encrypted inner message block to message");
       byte[] b = toDer(getInnerMessage().toAsn1Object(dt));
       v.add(new DERTaggedObject(INNER_MESSAGE_ENCRYPTED,
               new DEROctetString(prefix.getKey().encrypt(b))));
