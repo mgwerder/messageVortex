@@ -107,7 +107,8 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
    * @throws IOException if requested endpoint id is unknown
    */
   public void sendMessage(final String address, InputStream is) throws IOException {
-    if (address == null || endpoints.get(address) == null) {
+    TransportReceiver ep = endpoints.get(address);
+    if (address == null || ep == null) {
       throw new IOException("recipient address is unknown");
     }
     // convert is to byte array
@@ -117,7 +118,7 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
     while ((n = is.read(buffer)) > -1) {
       bab.append(buffer, n);
     }
-
+    is.close();
     // send byte array as input stream to target
     final InputStream iso = new ByteArrayInputStream(bab.toBytes());
     synchronized (endpoints) {
@@ -125,7 +126,7 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
 
         @Override
         public void run() {
-          endpoints.get(address).gotMessage(iso);
+          ep.gotMessage(iso);
         }
       }.start();
     }

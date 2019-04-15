@@ -152,23 +152,29 @@ public class DummyBlender extends Blender {
       content.addBodyPart(attachment);
 
       mimeMsg.setContent(content);
-      final PipedOutputStream os = new PipedOutputStream();
-      // FIXME catch error values
-      new Thread() {
-        public void run() {
-          try {
-            mimeMsg.writeTo(os);
-            os.close();
-          } catch (IOException | MessagingException ioe) {
-            LOGGER.log(Level.WARNING, "Error while sending message", ioe);
+      if (transport != null) {
+        final PipedOutputStream os = new PipedOutputStream();
+        // FIXME catch error values
+        Thread t = new Thread() {
+          public void run() {
+            try {
+              mimeMsg.writeTo(os);
+              os.close();
+            } catch (IOException | MessagingException ioe) {
+              LOGGER.log(Level.WARNING, "Error while sending message", ioe);
+            }
           }
-        }
-      }.start();
-      PipedInputStream inp = new PipedInputStream(os);
+        };
+        t.setName("MessageInDummyBlenderTransportThread");
+        t.start();
+        PipedInputStream inp = new PipedInputStream(os);
 
-      // send
-      transport.sendMessage(target.getRecipientAddress(), inp);
-      return true;
+        // send
+        transport.sendMessage(target.getRecipientAddress(), inp);
+        return true;
+      } else {
+        return false;
+      }
     } catch (AddressException ae) {
       LOGGER.log(Level.SEVERE, "Error when setting address", ae);
     } catch (MessagingException me) {
@@ -191,6 +197,7 @@ public class DummyBlender extends Blender {
           }
       );
       MimeMessage msg = new MimeMessage(session, is);
+      is.close();
       VortexMessage vmsg = null;
       List<InputStream> isl = getAttachments(msg);
       if (isl == null) {
@@ -204,7 +211,7 @@ public class DummyBlender extends Blender {
           // This exception will occur if no vortex message is contained
           LOGGER.log(Level.INFO, "Found attachment with no VortexMessage contained", io);
         }
-
+        attaStream.close();
       }
       return router.gotMessage(vmsg);
     } catch (IOException | MessagingException ioe) {

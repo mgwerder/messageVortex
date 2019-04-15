@@ -231,9 +231,10 @@ public class ImapConnection extends ServerConnection
    */
   public void shutdown() throws IOException {
     if (runner != null) {
-      LOGGER.log(Level.INFO, "shut down for connection " + runner.getName() + " called");
+      String rname = runner.getName();
+      LOGGER.log(Level.INFO, "shut down for connection " + rname + " called");
       synchronized (runner) {
-        while (!super.isShutdown() || !(runner != null && runner.isShutdown())) {
+        while (runner != null && !runner.isShutdown()) {
 
           // isolate runner pointer for thread safety
           ImapConnectionRunner icr = runner;
@@ -242,7 +243,7 @@ public class ImapConnection extends ServerConnection
             icr.waitForShutdown();
           }
         }
-        LOGGER.log(Level.INFO, "shut down connection " + runner.getName() + " completed");
+        LOGGER.log(Level.INFO, "shut down connection " + rname + " completed");
         runner = null;
         super.shutdown();
       }
