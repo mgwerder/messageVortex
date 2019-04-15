@@ -54,7 +54,6 @@ public class ImapConnection extends ServerConnection
 
     /***
      * <p>runner method for the connection handler.</p>
-     * FIXME: move to private inner class
      */
     public void run() {
       try {
