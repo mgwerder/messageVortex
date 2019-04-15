@@ -86,10 +86,12 @@ public class ImapConnection extends ServerConnection
             }
           }
         }
-      } catch (IOException | ImapException ioe) {
+        LOGGER.log(Level.INFO, "left main loop (shutting down)" );
+     } catch (IOException | ImapException ioe) {
         LOGGER.log(Level.WARNING, "got exception while waiting for lines (" + shutdown + ")", ioe);
       }
       runner = null;
+      LOGGER.log(Level.INFO, "shutdown completed" );
     }
 
     @Override
@@ -99,11 +101,11 @@ public class ImapConnection extends ServerConnection
 
     @Override
     public boolean isShutdown() {
-      return (!isAlive()) && shutdown;
+      return (!this.isAlive()) && shutdown;
     }
 
     public void waitForShutdown() {
-      while (this.isAlive()) {
+      while (isShutdown()) {
         try {
           this.join(100);
         } catch (InterruptedException ie) {
