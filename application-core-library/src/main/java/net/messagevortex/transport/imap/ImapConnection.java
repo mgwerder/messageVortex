@@ -32,11 +32,10 @@ import net.messagevortex.transport.ServerConnection;
 import net.messagevortex.transport.StoppableThread;
 
 public class ImapConnection extends ServerConnection
-                            implements Comparable<ImapConnection>, StoppableThread, Runnable {
+                            implements Comparable<ImapConnection> {
 
   private static final Logger LOGGER;
   private static int id = 1;
-  private volatile boolean shutdown = false;
 
   static {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
@@ -47,7 +46,62 @@ public class ImapConnection extends ServerConnection
 
   /* Authentication authority for this connection */
   private AuthenticationProxy authProxy = null;
-  private Thread runner = null;
+  private ImapConnectionRunner runner = null;
+
+  private class ImapConnectionRunner extends Thread implements StoppableThread {
+
+    private volatile boolean shutdown = false;
+
+    /***
+     * <p>runner method for the connection handler.</p>
+     * FIXME: move to private inner class
+     */
+    public void run() {
+      try {
+        while (!shutdown && !isShutdown()) {
+          String line = readln();
+          if (line == null) {
+            // timeout reached
+            shutdown = true;
+            getSocketChannel().close();
+            runner = null;
+          } else {
+            LOGGER.log(Level.INFO, "processing command \"" + ImapLine.commandEncoder(line) + "\"");
+
+            String[] reply = processCommand(line + CRLF);
+            if (reply != null) {
+              for (String r : reply) {
+                LOGGER.log(Level.INFO, "sending reply to client \"" + ImapLine.commandEncoder(r)
+                        + "\"");
+                if (r != null) {
+                  write(r);
+                }
+              }
+            }
+            if (reply == null || reply[reply.length - 1] == null) {
+              // process command requested connection close
+              shutdown = true;
+              //super.shutdown();
+              getSocketChannel().close();
+              runner = null;
+            }
+          }
+        }
+      } catch (IOException | ImapException ioe) {
+        LOGGER.log(Level.WARNING, "got exception while waiting for lines (" + shutdown + ")", ioe);
+      }
+    }
+
+    @Override
+    public void shutdown() throws IOException {
+      shutdown=true;
+    }
+
+    @Override
+    public boolean isShutdown() {
+      return false;
+    }
+  }
 
   /***
    * <p>Creates an imapConnection.</p>
@@ -62,7 +116,7 @@ public class ImapConnection extends ServerConnection
    * <p>Creates an imapConnection.</p>
    ***/
   private void init() throws IOException {
-    runner = new Thread(this);
+    runner = new ImapConnectionRunner();
     setId(Thread.currentThread().getName() + "-conn" + id);
     runner.start();
   }
@@ -162,57 +216,17 @@ public class ImapConnection extends ServerConnection
   }
 
   /***
-   * <p>runner method for the connection handler.</p>
-   * FIXME: move to private inner class
-   */
-  public void run() {
-    try {
-      while (!shutdown && !isShutdown()) {
-        String line = readln();
-        if (line == null) {
-          // timeout reached
-          shutdown = true;
-          getSocketChannel().close();
-          runner = null;
-        } else {
-          LOGGER.log(Level.INFO, "processing command \"" + ImapLine.commandEncoder(line) + "\"");
-
-          String[] reply = processCommand(line + CRLF);
-          if (reply != null) {
-            for (String r : reply) {
-              LOGGER.log(Level.INFO, "sending reply to client \"" + ImapLine.commandEncoder(r)
-                      + "\"");
-              if (r != null) {
-                write(r);
-              }
-            }
-          }
-          if (reply == null || reply[reply.length - 1] == null) {
-            // process command requested connection close
-            shutdown = true;
-            //super.shutdown();
-            getSocketChannel().close();
-            runner = null;
-          }
-        }
-      }
-    } catch (IOException | ImapException ioe) {
-      LOGGER.log(Level.WARNING, "got exception while waiting for lines (" + shutdown + ")", ioe);
-    }
-  }
-
-  /***
    * <p>Tear down connection handler thread.</p>
    * @throws IOException if shutdown failed
    */
   public void shutdown() throws IOException {
-    shutdown = true;
     super.shutdown();
     if (runner != null) {
       synchronized (runner) {
         while (runner != null && runner.isAlive()) {
           // runner.interrupt();
           try {
+            runner.shutdown();
             runner.join();
           } catch (InterruptedException ie) {
             // ignore and reloop
