@@ -57,7 +57,7 @@ public class ImapConnection extends ServerConnection
      */
     public void run() {
       try {
-        while (!shutdown && !isShutdown()) {
+        while (!shutdown) {
           String line = readln();
           if (line == null) {
             // timeout reached
