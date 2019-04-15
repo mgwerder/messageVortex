@@ -107,6 +107,8 @@ public class ImapClientTest {
 
   private static class ImapCommandIWantATimeout extends ImapCommand {
 
+    private volatile boolean shutdown = false;
+
     public void init() {
       ImapCommand.registerCommand(this);
     }
@@ -115,11 +117,11 @@ public class ImapClientTest {
       int i = 0;
       do {
         try {
-          Thread.sleep(100000);
+          Thread.sleep(100);
         } catch (InterruptedException ie) {
         }
         i++;
-      } while (i < 11000);
+      } while (i < 11000000 || shutdown);
       return null;
     }
 
@@ -129,6 +131,10 @@ public class ImapClientTest {
 
     public String[] getCapabilities(ImapConnection conn) {
       return new String[]{};
+    }
+
+    public void shutdown() {
+      shutdown = true;
     }
   }
 
@@ -182,7 +188,8 @@ public class ImapClientTest {
     ic.connect();
     assertTrue("TLS is not as expected", !ic.isTls());
     long start = System.currentTimeMillis();
-    (new ImapCommandIWantATimeout()).init();
+    ImapCommandIWantATimeout ict = new ImapCommandIWantATimeout();
+    ict.init();
     try {
       ic.setTimeout(2000);
       System.out.println("Sending IWantATimeout");
@@ -208,6 +215,7 @@ public class ImapClientTest {
       assertTrue("Did not wait until end of timeout was reached (just " + el + ")", el >= 300);
       assertFalse("Did wait too long (" + el + " ms; expected: 300)", el > 1000);
       // assertTrue("Connection was not terminated",ic.isTerminated());
+      ict.shutdown();
     }
     ImapCommand.deregisterCommand("IWantATimeout");
     ic.shutdown();
