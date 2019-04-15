@@ -1,5 +1,12 @@
 package net.messagevortex.test.routing;
 
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.logging.Level;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.AsymmetricKey;
 import net.messagevortex.asn1.IdentityStore;
@@ -12,14 +19,6 @@ import org.bouncycastle.asn1.DEROutputStream;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.logging.Level;
-
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 /**
  * Created by martin.gwerder on 13.06.2016.
@@ -53,7 +52,7 @@ public class MessageFactoryTest {
         for (int i = 1; i <= maxTests; i++) {
             LOGGER.log( Level.INFO, "cycle "+i+" of "+maxTests );
             LOGGER.log( Level.INFO, "  building message ("+i+" of "+maxTests+")" );
-            MessageFactory smf = MessageFactory.buildMessage( "Subject: This is the message subject\n\nhello", 0, 1, is.getAnonSet( 30 ).toArray( new IdentityStoreBlock[0] ), is );
+            MessageFactory smf = MessageFactory.buildMessage( "Subject: This is the message subject\n\nhello", 0, 1, is.getAnonSet( 8 ).toArray( new IdentityStoreBlock[0] ), is );
             smf.build();
             GraphSet gs = smf.getGraph();
             for (Edge gt : gs) {

@@ -41,7 +41,7 @@ pipeline {
           agent {
             docker {
                 image 'maven:3.6.0-jdk-10-slim'
-                args '-v $HOME/.m2:/root/.m2 -v $HOME/MesageVortexKeyCache:keyCache'
+                args '-v $HOME/.m2:/root/.m2 -v $HOME/MesageVortexKeyCache:/root/keyCache'
             }
           }
           options {
@@ -55,7 +55,7 @@ pipeline {
           agent {
             docker {
                 image 'maven:3.6.0-jdk-11-slim'
-                args '-v $HOME/.m2:/root/.m2 -v $HOME/MesageVortexKeyCache:keyCache'
+                args '-v $HOME/.m2:/root/.m2 -v $HOME/MesageVortexKeyCache:/root/keyCache'
             }
           }
           options {
@@ -73,7 +73,7 @@ pipeline {
           agent {
             docker {
                 image 'maven:3.6.0-jdk-12'
-                args '-v $HOME/.m2:/root/.m2 -v $HOME/MesageVortexKeyCache:keyCache'
+                args '-v $HOME/.m2:/root/.m2 -v $HOME/MesageVortexKeyCache:/root/keyCache'
             }
           }
           options {
@@ -91,7 +91,7 @@ pipeline {
           agent {
             docker {
                 image 'maven:3.6.0-jdk-13'
-                args '-v $HOME/.m2:/root/.m2 -v $HOME/MesageVortexKeyCache:keyCache'
+                args '-v $HOME/.m2:/root/.m2 -v $HOME/MesageVortexKeyCache:/root/keyCache'
             }
           }
           options {
@@ -124,7 +124,6 @@ pipeline {
   post {
     success {
       archiveArtifacts artifacts: 'application-core-library/target/*.jar,thesis/target/main/latex/**/*.pdf*', fingerprint: true
-
     }
   }
 }

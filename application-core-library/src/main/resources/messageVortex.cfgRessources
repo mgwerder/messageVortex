@@ -8,9 +8,10 @@ section_list; credential_source_setup; default; The credential source setup sect
 String; router_implementation; net.messagevortex.router.SimpleRouterImplementation; router class to be used
 String; accounting_implementation; net.messagevortex.accounting.AccountingImplementation; accounting class to be used
 
-// blnder section specifics
+// belnder section specifics
 string; blender_implementation;; blender class to be used
 string; router; router; the section name of the respective router implementation
+string; forward_transport;; section of the forwarding transport client
 
 // generic transport classes
 String; transport_endpoint_receiver; net.messagevortex.transport.pop.Pop3Receiver; The class name of the transport receiver
@@ -39,6 +40,7 @@ string ; smtp_outgoing_password            ;          ; The password to be used 
 numeric; pop3_incoming_port                ; 995      ; The port number for incoming POP3 connects.
 String ; pop3_incoming_address             ;          ; The listening Address to bind the server for incoming POP3 connects.
 boolean; pop3_incoming_ssl                 ; true     ; True if the incoming POP3 port is ssl wrapped.
+boolean; pop3_incoming_starttls            ; true     ; True if the incoming POP3 port supports starttls.
 String ; pop3_incoming_user                ;          ; The username to be used if authenticating a client to the MessageVortex incoming POP3 node
 string ; pop3_incoming_password            ;          ; The password to be used if authenticating a client to the MessageVortex incoming POP3 node
 

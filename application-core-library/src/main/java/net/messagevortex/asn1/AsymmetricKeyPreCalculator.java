@@ -94,7 +94,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
   private static boolean firstWarning = true;
   private static InternalThread runner = null;
 
-  @CommandLine.Option(names = {"--cacheFileName" , "-f"},
+  @CommandLine.Option(names = {"--cacheFileName", "-f"},
           description = "filename of the cache file", required = true)
   private static String filename = null;
 
@@ -507,29 +507,31 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
     }
 
     // store data
-    try {
-      synchronized (cache) {
-        cache.store(filename + ".tmp");
-        lastSaved = System.currentTimeMillis();
-        if (tempdir != null && cache.getCacheFillGrade() > 0.9) {
-          // move file as temp file and clear cache
-          String fn = File.createTempFile(TMP_PREFIX, ".key").getAbsolutePath();
-          LOGGER.log(Level.INFO, "stored chunk to file \"" + fn + "\" to pick up");
-          Files.move(Paths.get(filename + ".tmp"), Paths.get(fn),
-                  StandardCopyOption.REPLACE_EXISTING);
-          cache.clear();
-          if (stopIfFull) {
-            setCacheFileName(null);
+    if (filename != null) {
+      try {
+        synchronized (cache) {
+          cache.store(filename + ".tmp");
+          lastSaved = System.currentTimeMillis();
+          if (tempdir != null && cache.getCacheFillGrade() > 0.9) {
+            // move file as temp file and clear cache
+            String fn = File.createTempFile(TMP_PREFIX, ".key").getAbsolutePath();
+            LOGGER.log(Level.INFO, "stored chunk to file \"" + fn + "\" to pick up");
+            Files.move(Paths.get(filename + ".tmp"), Paths.get(fn),
+                    StandardCopyOption.REPLACE_EXISTING);
+            cache.clear();
+            if (stopIfFull) {
+              setCacheFileName(null);
+            }
+          } else {
+            LOGGER.log(Level.INFO, "stored cache");
+            Files.move(Paths.get(filename + ".tmp"), Paths.get(filename),
+                    StandardCopyOption.REPLACE_EXISTING);
           }
-        } else {
-          LOGGER.log(Level.INFO, "stored cache");
-          Files.move(Paths.get(filename + ".tmp"), Paths.get(filename),
-                  StandardCopyOption.REPLACE_EXISTING);
         }
+      } catch (Exception e) {
+        LOGGER.log(Level.WARNING, "Exception while storing file", e);
+        throw e;
       }
-    } catch (Exception e) {
-      LOGGER.log(Level.WARNING, "Exception while storing file", e);
-      throw e;
     }
   }
 
@@ -609,7 +611,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
   public void removeCacheElement() throws IOException {
     LOGGER.log(Level.INFO, "removing element " + elementIndex);
     if (elementIndex <= 0) {
-      LOGGER.log(Level.SEVERE, "REMOVE requires a valid element (" + elementIndex + ")" );
+      LOGGER.log(Level.SEVERE, "REMOVE requires a valid element (" + elementIndex + ")");
       System.exit(MessageVortex.ARGUMENT_FAIL);
     } else {
       removeCacheElement(elementIndex);
@@ -635,4 +637,19 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
     cache.store(filename);
   }
 
+  @CommandLine.Command(name = "list", description = "Lists all elements of the cache")
+  public void listCache() throws IOException {
+    if (cache.isEmpty()) {
+      try {
+        LOGGER.log(Level.INFO, "loading cache " + filename);
+        load(filename, true);
+      } catch (IOException ioe) {
+        throw new IOException("unable to load existing asymmetric key cache file"
+                + "... aborting execution", ioe);
+      }
+    }
+    cache.showStats();
+    setCacheFileName(null);
+    System.exit(0);
+  }
 }

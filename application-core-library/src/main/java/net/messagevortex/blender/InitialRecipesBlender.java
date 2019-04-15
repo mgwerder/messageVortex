@@ -178,6 +178,9 @@ public class InitialRecipesBlender extends Blender {
       Address[] to =  msg.getAllRecipients();
       LOGGER.log(Level.INFO, "Got a message to blend from " + from[0] + " to " + to[0]);
 
+      // get identity store
+
+
       // get anonymity set
       // FIXME
 

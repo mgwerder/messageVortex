@@ -113,17 +113,20 @@ public class IdentityStore extends AbstractBlock implements Serializable {
    */
   public static IdentityStore getNewIdentityStoreDemo(boolean complete) throws IOException {
     IdentityStore tmp = new IdentityStore();
+    // creating own identity
     tmp.add(IdentityStoreBlock.getIdentityStoreBlockDemo(
-            IdentityStoreBlock.IdentityType.OWNED_IDENTITY, complete)
+            IdentityStoreBlock.IdentityType.OWNED_IDENTITY, "user1@localhost", complete)
     );
-    for (int i = 0; i < 100; i++) {
+    // creating ten dummy identities
+    for (int i = 0; i < 10; i++) {
       tmp.add(IdentityStoreBlock.getIdentityStoreBlockDemo(
-              IdentityStoreBlock.IdentityType.NODE_IDENTITY, complete)
+              IdentityStoreBlock.IdentityType.NODE_IDENTITY, "dummy" + i + "@localhost", complete)
       );
     }
-    for (int i = 0; i < 40; i++) {
+    // creating nine recipient identities
+    for (int i = 1; i < 10; i++) {
       tmp.add(IdentityStoreBlock.getIdentityStoreBlockDemo(
-              IdentityStoreBlock.IdentityType.RECIPIENT_IDENTITY, complete)
+              IdentityStoreBlock.IdentityType.RECIPIENT_IDENTITY, "user" + i + "@localhost", complete)
       );
     }
     return tmp;
