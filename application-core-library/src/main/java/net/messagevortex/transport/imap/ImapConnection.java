@@ -98,7 +98,7 @@ public class ImapConnection extends ServerConnection
 
     @Override
     public boolean isShutdown() {
-      return false;
+      return !isAlive() && shutdown;
     }
   }
 
