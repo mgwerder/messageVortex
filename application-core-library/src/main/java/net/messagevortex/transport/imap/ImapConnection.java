@@ -230,7 +230,6 @@ public class ImapConnection extends ServerConnection
    * @throws IOException if shutdown failed
    */
   public void shutdown() throws IOException {
-    super.shutdown();
     if (runner != null) {
       LOGGER.log(Level.INFO, "shut down for connection " + runner.getName() + " called");
       synchronized (runner) {
@@ -245,6 +244,7 @@ public class ImapConnection extends ServerConnection
         }
         LOGGER.log(Level.INFO, "shut down connection " + runner.getName() + " completed");
         runner = null;
+        super.shutdown();
       }
     }
   }
