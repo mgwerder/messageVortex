@@ -22,6 +22,8 @@ package net.messagevortex.transport.imap;
 // * SOFTWARE.
 // ************************************************************************************
 
+import static java.lang.Thread.yield;
+
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -222,14 +224,9 @@ public class ImapConnection extends ServerConnection
     super.shutdown();
     if (runner != null) {
       synchronized (runner) {
-        while (runner != null && runner.isAlive()) {
-          // runner.interrupt();
-          try {
-            runner.shutdown();
-            runner.join();
-          } catch (InterruptedException ie) {
-            // ignore and reloop
-          }
+        while (runner != null && runner.isShutdown()) {
+          runner.shutdown();
+          yield();
         }
         // LOGGER.log( Level.INFO, "shut down connection "+runner.getName()+" completed");
         runner = null;
