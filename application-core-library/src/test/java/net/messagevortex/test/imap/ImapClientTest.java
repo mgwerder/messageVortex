@@ -121,7 +121,7 @@ public class ImapClientTest {
         } catch (InterruptedException ie) {
         }
         i++;
-      } while (i < 11000000 || shutdown);
+      } while (i < 11000000 && !shutdown);
       return null;
     }
 
@@ -215,9 +215,9 @@ public class ImapClientTest {
       assertTrue("Did not wait until end of timeout was reached (just " + el + ")", el >= 300);
       assertFalse("Did wait too long (" + el + " ms; expected: 300)", el > 1000);
       // assertTrue("Connection was not terminated",ic.isTerminated());
-      ict.shutdown();
     }
     ImapCommand.deregisterCommand("IWantATimeout");
+    ict.shutdown();
     ic.shutdown();
     ds.shutdown();
     assertTrue("error searching for hangig threads", ImapSSLTest.verifyHangingThreads(threadSet).size() == 0);
