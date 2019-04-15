@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d11f21f3-1155-4924-86d1-bc99f93f8cdb" name="Default Changelist" comment="Default Changelist">
-      <change beforePath="$PROJECT_DIR$/src/test/java/net/messagevortex/test/imap/ImapClientTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/net/messagevortex/test/imap/ImapClientTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/VortexMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/VortexMessage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/imap/ImapConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/imap/ImapConnection.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -100,15 +101,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="TestSmtpHandler.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/TestSmtpHandler.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="475">
-              <caret line="68" selection-start-line="68" selection-end-line="68" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="messageVortex.cfgRessources" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/resources/messageVortex.cfgRessources">
           <provider selected="true" editor-type-id="text-editor">
@@ -151,11 +143,25 @@
       <file leaf-file-name="ImapConnection.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/imap/ImapConnection.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1851">
-              <caret line="70" column="43" selection-start-line="70" selection-start-column="29" selection-end-line="70" selection-end-column="43" />
+            <state relative-caret-position="852">
+              <caret line="240" column="15" selection-start-line="240" selection-start-column="15" selection-end-line="240" selection-end-column="15" />
               <folding>
                 <element signature="e#3914#3915#0" expanded="true" />
                 <element signature="e#3940#3941#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="VortexMessage.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/VortexMessage.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="970">
+              <caret line="265" column="60" selection-start-line="265" selection-start-column="60" selection-end-line="265" selection-end-column="60" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#13877#13878#0" expanded="true" />
+                <element signature="e#13914#13915#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -173,7 +179,7 @@
       <file leaf-file-name="ImapClientTest.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/java/net/messagevortex/test/imap/ImapClientTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="932">
+            <state relative-caret-position="306">
               <caret line="123" column="32" selection-start-line="123" selection-start-column="32" selection-end-line="123" selection-end-column="32" />
               <folding>
                 <element signature="e#2860#2861#0" expanded="true" />
@@ -290,7 +296,6 @@
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/SmtpConnection.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/imap/ImapPassthruServer.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/DummyBlender.java" />
-        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/VortexMessage.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/ThreadDumper.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortexController.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java" />
@@ -310,8 +315,9 @@
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/MailConnector.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/MailConnector.java" />
         <option value="$PROJECT_DIR$/src/test/java/net/messagevortex/test/imap/ImapSSLTest.java" />
-        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/imap/ImapConnection.java" />
         <option value="$PROJECT_DIR$/src/test/java/net/messagevortex/test/imap/ImapClientTest.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/VortexMessage.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/imap/ImapConnection.java" />
       </list>
     </option>
   </component>
@@ -746,9 +752,6 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="All_Tests - 2019.04.15 at 19h 19m 54s.xml">
-      <configuration name="All Tests" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="All_Tests - 2019.04.15 at 19h 22m 47s.xml">
       <configuration name="All Tests" configurationId="JUnit" />
     </history-entry>
@@ -774,6 +777,9 @@
       <configuration name="All Tests" configurationId="JUnit" />
     </history-entry>
     <history-entry file="All_Tests - 2019.04.15 at 20h 35m 50s.xml">
+      <configuration name="All Tests" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="All_Tests - 2019.04.16 at 06h 09m 49s.xml">
       <configuration name="All Tests" configurationId="JUnit" />
     </history-entry>
   </component>
@@ -810,10 +816,10 @@
       <window_info id="Image Layers" order="3" />
       <window_info anchor="right" id="Capture Analysis" order="4" />
       <window_info anchor="bottom" id="Version Control" order="11" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4982699" visible="true" weight="0.31593716" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4982699" visible="true" weight="0.31593716" />
       <window_info anchor="bottom" id="CheckStyle" order="8" weight="0.34195402" />
       <window_info anchor="bottom" id="Terminal" order="7" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.29065743" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.29065743" />
       <window_info anchor="bottom" id="Analysis" order="14" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.24691358" />
       <window_info anchor="right" id="Theme Preview" order="8" />
@@ -1127,16 +1133,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/VortexMessage.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3636">
-          <caret line="255" column="14" lean-forward="true" selection-start-line="255" selection-start-column="14" selection-end-line="255" selection-end-column="14" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/net/messagevortex/test/asn1/BuildSamplesTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="595">
@@ -1323,7 +1319,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/net/messagevortex/test/imap/ImapClientTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="932">
+        <state relative-caret-position="306">
           <caret line="123" column="32" selection-start-line="123" selection-start-column="32" selection-end-line="123" selection-end-column="32" />
           <folding>
             <element signature="e#2860#2861#0" expanded="true" />
@@ -1332,10 +1328,22 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/VortexMessage.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="970">
+          <caret line="265" column="60" selection-start-line="265" selection-start-column="60" selection-end-line="265" selection-end-column="60" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#13877#13878#0" expanded="true" />
+            <element signature="e#13914#13915#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/imap/ImapConnection.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1851">
-          <caret line="70" column="43" selection-start-line="70" selection-start-column="29" selection-end-line="70" selection-end-column="43" />
+        <state relative-caret-position="852">
+          <caret line="240" column="15" selection-start-line="240" selection-start-column="15" selection-end-line="240" selection-end-column="15" />
           <folding>
             <element signature="e#3914#3915#0" expanded="true" />
             <element signature="e#3940#3941#0" expanded="true" />

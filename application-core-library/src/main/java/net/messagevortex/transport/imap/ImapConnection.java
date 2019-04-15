@@ -22,8 +22,6 @@ package net.messagevortex.transport.imap;
 // * SOFTWARE.
 // ************************************************************************************
 
-import static java.lang.Thread.yield;
-
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,7 +32,7 @@ import net.messagevortex.transport.ServerConnection;
 import net.messagevortex.transport.StoppableThread;
 
 public class ImapConnection extends ServerConnection
-                            implements Comparable<ImapConnection> {
+        implements Comparable<ImapConnection> {
 
   private static final Logger LOGGER;
   private static int id = 1;
@@ -48,7 +46,7 @@ public class ImapConnection extends ServerConnection
 
   /* Authentication authority for this connection */
   private AuthenticationProxy authProxy = null;
-  private ImapConnectionRunner runner = null;
+  private volatile ImapConnectionRunner runner = null;
 
   private class ImapConnectionRunner extends Thread implements StoppableThread {
 
@@ -65,6 +63,7 @@ public class ImapConnection extends ServerConnection
             // timeout reached
             shutdown = true;
             getSocketChannel().close();
+            runner = null;
           } else {
             LOGGER.log(Level.INFO, "processing command \"" + ImapLine.commandEncoder(line) + "\"");
 
@@ -83,17 +82,19 @@ public class ImapConnection extends ServerConnection
               shutdown = true;
               //super.shutdown();
               getSocketChannel().close();
+              runner = null;
             }
           }
         }
       } catch (IOException | ImapException ioe) {
         LOGGER.log(Level.WARNING, "got exception while waiting for lines (" + shutdown + ")", ioe);
       }
+      runner = null;
     }
 
     @Override
     public void shutdown() throws IOException {
-      shutdown=true;
+      shutdown = true;
     }
 
     @Override
@@ -231,15 +232,18 @@ public class ImapConnection extends ServerConnection
   public void shutdown() throws IOException {
     super.shutdown();
     if (runner != null) {
-      LOGGER.log( Level.INFO, "shut down for connection "+runner.getName()+" called");
+      LOGGER.log(Level.INFO, "shut down for connection " + runner.getName() + " called");
       synchronized (runner) {
-        while (!super.isShutdown() || !(runner!=null && runner.isShutdown())) {
-          super.shutdown();
-          runner.shutdown();
-          runner.waitForShutdown();
-          yield();
+        while (!super.isShutdown() || !(runner != null && runner.isShutdown())) {
+
+          // isolate runner pointer for thread safety
+          ImapConnectionRunner icr = runner;
+          if (icr != null) {
+            icr.shutdown();
+            icr.waitForShutdown();
+          }
         }
-        LOGGER.log( Level.INFO, "shut down connection "+runner.getName()+" completed");
+        LOGGER.log(Level.INFO, "shut down connection " + runner.getName() + " completed");
         runner = null;
       }
     }

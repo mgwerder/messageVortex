@@ -24,16 +24,8 @@ package net.messagevortex.transport;
 
 import java.io.IOException;
 import java.nio.channels.SocketChannel;
-import java.util.logging.Logger;
-import net.messagevortex.MessageVortexLogger;
 
 public class ServerConnection extends AbstractConnection {
-
-  private static final Logger LOGGER;
-
-  static {
-    LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-  }
 
   public ServerConnection(SocketChannel channel, SecurityContext context) throws IOException {
     super(channel, context, false);

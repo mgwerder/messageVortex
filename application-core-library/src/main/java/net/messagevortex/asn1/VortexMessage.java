@@ -228,13 +228,13 @@ public class VortexMessage extends AbstractBlock implements Serializable {
   }
 
   protected void parse(byte[] p) throws IOException {
-    try(ASN1InputStream asnIn = new ASN1InputStream(p);) {
+    try (ASN1InputStream asnIn = new ASN1InputStream(p);) {
       parse(asnIn.readObject());
     }
   }
 
   protected void parse(InputStream is) throws IOException {
-    try(ASN1InputStream asnIn = new ASN1InputStream(is);) {
+    try (ASN1InputStream asnIn = new ASN1InputStream(is);) {
       parse(asnIn.readObject());
     }
   }
@@ -261,6 +261,9 @@ public class VortexMessage extends AbstractBlock implements Serializable {
       default:
         throw new IOException("got unexpected tag number when reading prefix (" + to.getTagNo()
                 + ")");
+    }
+    if (prefix == null) {
+      throw new IOException("unable to parse prefix block");
     }
 
     // reading inner message
