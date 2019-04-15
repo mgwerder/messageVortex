@@ -99,7 +99,7 @@ public class ImapConnection extends ServerConnection
 
     @Override
     public boolean isShutdown() {
-      return !this.isAlive() && shutdown;
+      return (!isAlive()) && shutdown;
     }
 
     public void waitForShutdown() {
@@ -241,6 +241,9 @@ public class ImapConnection extends ServerConnection
           if (icr != null) {
             icr.shutdown();
             icr.waitForShutdown();
+            if (icr.isShutdown()) {
+              runner = null;
+            }
           }
         }
         LOGGER.log(Level.INFO, "shut down connection " + rname + " completed");

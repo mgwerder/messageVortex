@@ -170,7 +170,7 @@ public class ImapClientTest {
 
       LOGGER.log(Level.INFO, "shutting down server");
       Set<Thread> tl = ImapSSLTest.verifyHangingThreads(threadSet);
-      assertTrue("error searching for hangig threads", tl.size() == 0);
+      assertTrue("error searching for hanging threads", tl.size() == 0);
     } catch (Exception e) {
       e.printStackTrace();
       fail("Exception while creating server");
