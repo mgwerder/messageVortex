@@ -65,7 +65,6 @@ public class ImapConnection extends ServerConnection
             // timeout reached
             shutdown = true;
             getSocketChannel().close();
-            runner = null;
           } else {
             LOGGER.log(Level.INFO, "processing command \"" + ImapLine.commandEncoder(line) + "\"");
 
@@ -84,7 +83,6 @@ public class ImapConnection extends ServerConnection
               shutdown = true;
               //super.shutdown();
               getSocketChannel().close();
-              runner = null;
             }
           }
         }
@@ -100,7 +98,17 @@ public class ImapConnection extends ServerConnection
 
     @Override
     public boolean isShutdown() {
-      return !isAlive() && shutdown;
+      return !this.isAlive() && shutdown;
+    }
+
+    public void waitForShutdown() {
+      while (this.isAlive()) {
+        try {
+          this.join(100);
+        } catch (InterruptedException ie) {
+          // safely ignore it
+        }
+      }
     }
   }
 
@@ -223,12 +231,15 @@ public class ImapConnection extends ServerConnection
   public void shutdown() throws IOException {
     super.shutdown();
     if (runner != null) {
+      LOGGER.log( Level.INFO, "shut down for connection "+runner.getName()+" called");
       synchronized (runner) {
-        while (runner != null && runner.isShutdown()) {
+        while (!super.isShutdown() || !(runner!=null && runner.isShutdown())) {
+          super.shutdown();
           runner.shutdown();
+          runner.waitForShutdown();
           yield();
         }
-        // LOGGER.log( Level.INFO, "shut down connection "+runner.getName()+" completed");
+        LOGGER.log( Level.INFO, "shut down connection "+runner.getName()+" completed");
         runner = null;
       }
     }
