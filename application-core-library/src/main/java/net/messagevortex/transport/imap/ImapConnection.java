@@ -235,12 +235,11 @@ public class ImapConnection extends ServerConnection
     if (runner != null) {
       String rname = runner.getName();
       LOGGER.log(Level.INFO, "shut down for connection " + rname + " called");
-      ImapConnectionRunner icr = null;
-      icr = runner;
+      ImapConnectionRunner icr = runner;
       while (icr != null && !icr.isShutdown()) {
         icr.shutdown();
         icr.waitForShutdown();
-        if (icr.isShutdown() && runner != null) {
+        if (runner != null) {
           runner = null;
           super.shutdown();
         }
