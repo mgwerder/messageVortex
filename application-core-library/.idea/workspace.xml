@@ -141,8 +141,8 @@
       <file leaf-file-name="ImapConnection.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/imap/ImapConnection.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="969">
-              <caret line="108" selection-start-line="108" selection-end-line="108" />
+            <state relative-caret-position="869">
+              <caret line="247" selection-start-line="247" selection-end-line="247" />
             </state>
           </provider>
         </entry>
@@ -167,7 +167,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>writeTo(</find>
       <find>message</find>
       <find>martin@ex</find>
       <find>martin@e</find>
@@ -197,6 +196,7 @@
       <find>hangin</find>
       <find>getThrea</find>
       <find>shutdown(</find>
+      <find>synchronized (runner</find>
     </findStrings>
     <replaceStrings>
       <replace>;</replace>
@@ -1321,8 +1321,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/imap/ImapConnection.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="969">
-          <caret line="108" selection-start-line="108" selection-end-line="108" />
+        <state relative-caret-position="869">
+          <caret line="247" selection-start-line="247" selection-end-line="247" />
         </state>
       </provider>
     </entry>

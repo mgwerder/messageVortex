@@ -105,7 +105,7 @@ public class ImapConnection extends ServerConnection
     }
 
     public void waitForShutdown() {
-      while (isShutdown()) {
+      while (isShutdown() && Thread.currentThread() != this) {
         try {
           this.join(100);
         } catch (InterruptedException ie) {
@@ -235,22 +235,21 @@ public class ImapConnection extends ServerConnection
     if (runner != null) {
       String rname = runner.getName();
       LOGGER.log(Level.INFO, "shut down for connection " + rname + " called");
+      ImapConnectionRunner icr = null;
       synchronized (runner) {
-        while (runner != null && !runner.isShutdown()) {
-
-          // isolate runner pointer for thread safety
-          ImapConnectionRunner icr = runner;
-          if (icr != null) {
-            icr.shutdown();
-            icr.waitForShutdown();
-            if (icr.isShutdown()) {
-              runner = null;
-            }
-          }
+        icr = runner;
+      }
+      while (icr != null && !icr.isShutdown()) {
+        icr.shutdown();
+        icr.waitForShutdown();
+        if (icr.isShutdown()) {
+          runner = null;
+          super.shutdown();
         }
         LOGGER.log(Level.INFO, "shut down connection " + rname + " completed");
-        runner = null;
-        super.shutdown();
+        synchronized (runner) {
+          icr = runner;
+        }
       }
     }
   }
