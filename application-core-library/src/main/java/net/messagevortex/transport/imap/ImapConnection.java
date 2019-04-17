@@ -236,20 +236,16 @@ public class ImapConnection extends ServerConnection
       String rname = runner.getName();
       LOGGER.log(Level.INFO, "shut down for connection " + rname + " called");
       ImapConnectionRunner icr = null;
-      synchronized (runner) {
-        icr = runner;
-      }
+      icr = runner;
       while (icr != null && !icr.isShutdown()) {
         icr.shutdown();
         icr.waitForShutdown();
-        if (icr.isShutdown()) {
+        if (icr.isShutdown() && runner != null) {
           runner = null;
           super.shutdown();
         }
         LOGGER.log(Level.INFO, "shut down connection " + rname + " completed");
-        synchronized (runner) {
-          icr = runner;
-        }
+        icr = runner;
       }
     }
   }
