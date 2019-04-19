@@ -5,17 +5,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import javax.activation.DataHandler;
 import javax.mail.Address;
-import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.Multipart;
-import javax.mail.Part;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.internet.AddressException;
@@ -217,48 +213,6 @@ public class InitialRecipesBlender extends Blender {
       LOGGER.log(Level.WARNING, "Exception while getting and parsing message", ioe);
       return false;
     }
-  }
-
-  private List<InputStream> getAttachments(Message message) throws MessagingException, IOException {
-    Object content = message.getContent();
-    if (content instanceof String) {
-      return null;
-    }
-
-    if (content instanceof Multipart) {
-      Multipart multipart = (Multipart) content;
-      List<InputStream> result = new ArrayList<InputStream>();
-
-      for (int i = 0; i < multipart.getCount(); i++) {
-        result.addAll(getAttachments(multipart.getBodyPart(i)));
-      }
-      return result;
-
-    }
-    return null;
-  }
-
-  private List<InputStream> getAttachments(BodyPart part) throws IOException, MessagingException {
-    List<InputStream> result = new ArrayList<InputStream>();
-    Object content = part.getContent();
-    if (content instanceof InputStream || content instanceof String) {
-      if (Part.ATTACHMENT.equalsIgnoreCase(part.getDisposition())
-              || !"".equals(part.getFileName())) {
-        result.add(part.getInputStream());
-        return result;
-      } else {
-        return new ArrayList<InputStream>();
-      }
-    }
-
-    if (content instanceof Multipart) {
-      Multipart multipart = (Multipart) content;
-      for (int i = 0; i < multipart.getCount(); i++) {
-        BodyPart bodyPart = multipart.getBodyPart(i);
-        result.addAll(getAttachments(bodyPart));
-      }
-    }
-    return result;
   }
 
 }

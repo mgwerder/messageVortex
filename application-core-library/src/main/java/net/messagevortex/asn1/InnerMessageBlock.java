@@ -66,6 +66,7 @@ public class InnerMessageBlock extends AbstractBlock implements Serializable {
   private IdentityBlock identity;
   private byte[] identitySignature = null;
   private RoutingBlock routing;
+  private Object payloadLock = new Object();
   private PayloadChunk[] payload = new PayloadChunk[0];
 
   private static final java.util.logging.Logger LOGGER;
@@ -377,7 +378,7 @@ public class InnerMessageBlock extends AbstractBlock implements Serializable {
       // no resizing required
       return;
     }
-    synchronized (payload) {
+    synchronized (payloadLock) {
       PayloadChunk[] newSpace = new PayloadChunk[i+1];
       int c = 0;
       for (PayloadChunk p:payload) {
