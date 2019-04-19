@@ -1,12 +1,12 @@
 package net.messagevortex.test.core;
 
+import static org.junit.Assert.assertTrue;
+
 import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortex;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
-import static org.junit.Assert.assertTrue;
 
 /**
  * booleanConfigHandlings for {@link MessageVortex}.
@@ -31,9 +31,9 @@ public class RandomTest {
         }
 
         System.out.println( plot( classes ) );
-        // check result (must be all within 5%)
+        // check result (must be all within 10%)
         for( int i = 0; i< classes.length; i++ ) {
-            assertTrue("failed at pos " + i + " (result:" + classes[i] + ")", classes[i] > (0.95 * mul) && classes[i] < (1.05 * mul) );
+            assertTrue("failed at pos " + i + " (result:" + classes[i] + ")", classes[i] > (0.90 * mul) && classes[i] < (1.1 * mul) );
         }
     }
 
@@ -53,7 +53,7 @@ public class RandomTest {
         }
 
         System.out.println( plot( classes ) );
-        // check result (must be all within 5%)
+        // check result (must be all within 20%)
         StringBuilder sb=new StringBuilder();
         sb.append('{');
         for( int i = 0; i< classes.length; i++ ) {
