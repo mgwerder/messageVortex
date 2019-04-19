@@ -73,7 +73,7 @@ public class DummyBlender extends Blender {
   private BlendingReceiver router;
   private IdentityStore identityStore;
 
-  private class SenderThread extends Thread {
+  private static class SenderThread extends Thread {
 
     OutputStream output;
     MimeMessage msg;

@@ -40,8 +40,8 @@ pipeline {
         stage ('Test on JDK10') {
           agent {
             docker {
-                image 'maven:3.6.0-jdk-10-slim'
-                args '-v $HOME/.m2:/root/.m2 -v $HOME/MesageVortexKeyCache:/root/keyCache'
+                image 'maven:3.6.0-jdk-10'
+                args '--mount type=bind,source="~/.m2",target="/root/.m2" --mount type=bind,source="~/MesageVortexKeyCache",target="/root/keyCache"'
             }
           }
           options {
@@ -55,7 +55,7 @@ pipeline {
           agent {
             docker {
                 image 'maven:3.6.0-jdk-11-slim'
-                args '-v $HOME/.m2:/root/.m2 -v $HOME/MesageVortexKeyCache:/root/keyCache'
+                args '--mount type=bind,source="~/.m2",target="/root/.m2" --mount type=bind,source="~/MesageVortexKeyCache",target="/root/keyCache"'
             }
           }
           options {
@@ -73,7 +73,7 @@ pipeline {
           agent {
             docker {
                 image 'maven:3.6.0-jdk-12'
-                args '-v $HOME/.m2:/root/.m2 -v $HOME/MesageVortexKeyCache:/root/keyCache'
+                args '--mount type=bind,source="~/.m2",target="/root/.m2" --mount type=bind,source="~/MesageVortexKeyCache",target="/root/keyCache"'
             }
           }
           options {
@@ -91,7 +91,7 @@ pipeline {
           agent {
             docker {
                 image 'maven:3.6.0-jdk-13'
-                args '-v $HOME/.m2:/root/.m2 -v $HOME/MesageVortexKeyCache:/root/keyCache'
+                args '--mount type=bind,source="~/.m2",target="/root/.m2" --mount type=bind,source="~/MesageVortexKeyCache",target="/root/keyCache"'
             }
           }
           options {
