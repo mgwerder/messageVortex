@@ -46,24 +46,24 @@ public class ImapConnection extends ServerConnection
 
   /* Authentication authority for this connection */
   private AuthenticationProxy authProxy = null;
-  private volatile ImapConnectionRunner runner = null;
+  private volatile ImapConnectionRunner imapConnectionRunner = null;
 
   private class ImapConnectionRunner extends Thread implements StoppableThread {
 
-    private volatile boolean shutdown = false;
+    private volatile boolean shutdownImapRunner = false;
 
     /***
      * <p>runner method for the connection handler.</p>
      */
     public void run() {
       try {
-        while (!shutdown) {
+        while (!shutdownImapRunner && imapConnectionRunner != null) {
           String line = readln();
           if (line == null) {
             // timeout reached
-            shutdown = true;
+            shutdownImapRunner = true;
             getSocketChannel().close();
-            runner = null;
+            imapConnectionRunner = null;
           } else {
             LOGGER.log(Level.INFO, "processing command \"" + ImapLine.commandEncoder(line) + "\"");
 
@@ -79,33 +79,34 @@ public class ImapConnection extends ServerConnection
             }
             if (reply == null || reply[reply.length - 1] == null) {
               // process command requested connection close
-              shutdown = true;
+              shutdownImapRunner = true;
               //super.shutdown();
               getSocketChannel().close();
-              runner = null;
+              imapConnectionRunner = null;
             }
           }
         }
-        LOGGER.log(Level.INFO, "left main loop (shutting down)" );
-     } catch (IOException | ImapException ioe) {
-        LOGGER.log(Level.WARNING, "got exception while waiting for lines (" + shutdown + ")", ioe);
+        LOGGER.log(Level.INFO, "left main loop (shutting down)");
+      } catch (IOException | ImapException ioe) {
+        LOGGER.log(Level.WARNING, "got exception while waiting for lines (" + shutdownImapRunner + ")", ioe);
       }
-      runner = null;
-      LOGGER.log(Level.INFO, "shutdown completed" );
+      imapConnectionRunner = null;
+      shutdownImapRunner = true;
+      LOGGER.log(Level.INFO, "shutdown of runner completed");
     }
 
     @Override
     public void shutdown() throws IOException {
-      shutdown = true;
+      shutdownImapRunner = true;
     }
 
     @Override
     public boolean isShutdown() {
-      return (!this.isAlive()) && shutdown;
+      return (!this.isAlive()) && shutdownImapRunner;
     }
 
     public void waitForShutdown() {
-      while (isShutdown() && Thread.currentThread() != this) {
+      while ((!isShutdown()) && Thread.currentThread() != this) {
         try {
           this.join(100);
         } catch (InterruptedException ie) {
@@ -128,9 +129,9 @@ public class ImapConnection extends ServerConnection
    * <p>Creates an imapConnection.</p>
    ***/
   private void init() throws IOException {
-    runner = new ImapConnectionRunner();
+    imapConnectionRunner = new ImapConnectionRunner();
     setId(Thread.currentThread().getName() + "-conn" + id);
-    runner.start();
+    imapConnectionRunner.start();
   }
 
   /***
@@ -161,8 +162,8 @@ public class ImapConnection extends ServerConnection
    * @param id the thread name to be set
    */
   public void setId(String id) {
-    if (runner != null) {
-      runner.setName(id);
+    if (imapConnectionRunner != null) {
+      imapConnectionRunner.setName(id);
     }
   }
 
@@ -232,20 +233,19 @@ public class ImapConnection extends ServerConnection
    * @throws IOException if shutdown failed
    */
   public void shutdown() throws IOException {
-    if (runner != null) {
-      String rname = runner.getName();
-      LOGGER.log(Level.INFO, "shut down for connection " + rname + " called");
-      ImapConnectionRunner icr = runner;
-      while (icr != null) {
-        icr.shutdown();
-        icr.waitForShutdown();
-        if (runner != null) {
-          runner = null;
-          super.shutdown();
-        }
-        LOGGER.log(Level.INFO, "shut down connection " + rname + " completed");
-        icr = runner;
-      }
+    boolean conRunner = false;
+    if (imapConnectionRunner != null) {
+      conRunner = true;
+      String rname = imapConnectionRunner.getName();
+      ImapConnectionRunner icr = imapConnectionRunner;
+      imapConnectionRunner = null;
+      LOGGER.log(Level.INFO, "shut down for connection " + rname + " runner called");
+      icr.shutdown();
+      LOGGER.log(Level.INFO, "shut down of abstract connection of " + rname + " called");
+      super.shutdown();
+      LOGGER.log(Level.INFO, "waiting for shutdown of " + rname + " runner");
+      icr.waitForShutdown();
+      LOGGER.log(Level.INFO, "shut down connection " + rname + " completed");
     }
   }
 

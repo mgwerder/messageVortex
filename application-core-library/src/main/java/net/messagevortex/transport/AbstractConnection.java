@@ -52,7 +52,7 @@ public abstract class AbstractConnection {
   private   InetSocketAddress remoteAddress = null;
   private   SSLEngine         engine        = null;
 
-  private volatile boolean shutdown = false;
+  private volatile boolean shutdownAbstractConnection = false;
 
   public AbstractConnection(InetSocketAddress remoteAddress, SecurityContext context) {
     this.remoteAddress = remoteAddress;
@@ -317,7 +317,7 @@ public abstract class AbstractConnection {
     try {
       LOGGER.log(Level.INFO, "starting reading raw socket (loopOnce is " + loopOnce + ")");
       long start = System.currentTimeMillis();
-      while (!shutdown && bytesRead == 0 && timeout - (System.currentTimeMillis() - start) > 0) {
+      while (!shutdownAbstractConnection && bytesRead == 0 && timeout - (System.currentTimeMillis() - start) > 0) {
         bytesRead = getSocketChannel().read(inboundEncryptedData);
         LOGGER.log(Level.INFO, "tried to read (got " + bytesRead + ")");
         if (bytesRead == 0) {
@@ -386,7 +386,7 @@ public abstract class AbstractConnection {
     // get handshake status
     HandshakeStatus handshakeStatus = getEngine().getHandshakeStatus();
 
-    while (!shutdown && handshakeStatus != SSLEngineResult.HandshakeStatus.FINISHED
+    while (!shutdownAbstractConnection && handshakeStatus != SSLEngineResult.HandshakeStatus.FINISHED
             && handshakeStatus != NOT_HANDSHAKING
             && timeout - (System.currentTimeMillis() - start) > 0 && getEngine() != null) {
 
@@ -578,7 +578,7 @@ public abstract class AbstractConnection {
               + "/" + inboundAppData.capacity() + "");
     }
 
-    if (!shutdown && timeout - (System.currentTimeMillis() - start) <= 0
+    if (!shutdownAbstractConnection && timeout - (System.currentTimeMillis() - start) <= 0
             && handshakeStatus != SSLEngineResult.HandshakeStatus.FINISHED) {
       throw new IOException("SSL/TLS handshake abborted due to timeout");
     } else {
@@ -688,7 +688,7 @@ public abstract class AbstractConnection {
       outboundAppData.put(message.getBytes(StandardCharsets.UTF_8));
     }
     outboundAppData.flip();
-    while (!shutdown && outboundAppData.remaining() > 0
+    while (!shutdownAbstractConnection && outboundAppData.remaining() > 0
             && start + timeout > System.currentTimeMillis()) {
       outboundAppData.compact();
       if (isTls()) {
@@ -808,7 +808,7 @@ public abstract class AbstractConnection {
       }
 
       timeoutReached = System.currentTimeMillis() - start > timeout;
-    } while (!shutdown && bytesRead >= 0 && totBytesRead == 0 && !timeoutReached && timeout > 0);
+    } while (!shutdownAbstractConnection && bytesRead >= 0 && totBytesRead == 0 && !timeoutReached && timeout > 0);
 
     if (bytesRead < 0) {
       LOGGER.log(Level.INFO, "Loop aborted due to closed connection");
@@ -896,7 +896,7 @@ public abstract class AbstractConnection {
   public String readln(long timeout) throws IOException {
     StringBuilder ret = new StringBuilder();
     long start = System.currentTimeMillis();
-    while (!shutdown && ! ret.toString().endsWith("\r\n")
+    while (!shutdownAbstractConnection && ! ret.toString().endsWith("\r\n")
             && timeout - (System.currentTimeMillis() - start) > 0) {
       if (! inboundAppData.hasRemaining()) {
         readSocket(timeout - (System.currentTimeMillis() - start));
@@ -975,12 +975,12 @@ public abstract class AbstractConnection {
   }
 
   public void shutdown() throws IOException {
-    shutdown = true;
+    shutdownAbstractConnection = true;
     executor.shutdown();
   }
 
   public boolean isShutdown() {
-    return shutdown;
+    return shutdownAbstractConnection;
   }
 
 }
