@@ -207,7 +207,7 @@ public class ImapClient extends ClientConnection {
       }
     }
     currentCommand = null;
-    if (currentCommandReply == null) {
+    if (currentCommandReply == null || currentCommandReply.length == 0) {
       currentCommandReply = new String[0];
     } else {
       LOGGER.log(Level.INFO, "got \""

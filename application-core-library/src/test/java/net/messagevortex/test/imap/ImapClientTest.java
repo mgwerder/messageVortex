@@ -27,7 +27,6 @@ import net.messagevortex.transport.SecurityRequirement;
 import net.messagevortex.transport.imap.ImapClient;
 import net.messagevortex.transport.imap.ImapCommand;
 import net.messagevortex.transport.imap.ImapConnection;
-import net.messagevortex.transport.imap.ImapLine;
 import net.messagevortex.transport.imap.ImapServer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -102,39 +101,6 @@ public class ImapClientTest {
         counter--;
         if (counter == 0) shutdown = true;
       }
-    }
-  }
-
-  private static class ImapCommandIWantATimeout extends ImapCommand {
-
-    private volatile boolean shutdown = false;
-
-    public void init() {
-      ImapCommand.registerCommand(this);
-    }
-
-    public String[] processCommand(ImapLine line) {
-      int i = 0;
-      do {
-        try {
-          Thread.sleep(100);
-        } catch (InterruptedException ie) {
-        }
-        i++;
-      } while (i < 11000000 && !shutdown);
-      return null;
-    }
-
-    public String[] getCommandIdentifier() {
-      return new String[]{"IWantATimeout"};
-    }
-
-    public String[] getCapabilities(ImapConnection conn) {
-      return new String[]{};
-    }
-
-    public void shutdown() {
-      shutdown = true;
     }
   }
 

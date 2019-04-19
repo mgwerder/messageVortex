@@ -1,5 +1,6 @@
 package net.messagevortex.blender;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PipedInputStream;
@@ -29,8 +30,10 @@ import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.Version;
 import net.messagevortex.asn1.BlendingSpec;
 import net.messagevortex.asn1.IdentityStore;
+import net.messagevortex.asn1.IdentityStoreBlock;
 import net.messagevortex.asn1.InnerMessageBlock;
 import net.messagevortex.asn1.PrefixBlock;
+import net.messagevortex.asn1.RoutingBlock;
 import net.messagevortex.asn1.VortexMessage;
 import net.messagevortex.asn1.encryption.DumpType;
 import net.messagevortex.transport.Transport;
@@ -48,6 +51,7 @@ public class InitialRecipesBlender extends Blender {
   private Transport transport;
   private BlendingReceiver router;
   private IdentityStore identityStore;
+  private int anonSetSize = 5;
 
   /**
    * <p>An initial blender implementation based on anonymity recipes.</p>
@@ -167,35 +171,49 @@ public class InitialRecipesBlender extends Blender {
                 }
               }
       );
+      int i = 0;
+
       MimeMessage msg = new MimeMessage(session, is);
 
       // Convert Inputstream to byte array
+      ByteArrayOutputStream os= new ByteArrayOutputStream();
+      msg.writeTo(os);
+      os.close();
+      byte[] barr = os.toByteArray();
 
       // extract sender address
       Address[] from = msg.getFrom();
 
       // extract final recipient address
-      Address[] to =  msg.getAllRecipients();
+      Address[] to = msg.getAllRecipients();
       LOGGER.log(Level.INFO, "Got a message to blend from " + from[0] + " to " + to[0]);
 
       // get identity store
-
+      IdentityStore istore = this.identityStore;
 
       // get anonymity set
-      // FIXME
+      List<IdentityStoreBlock> anonSet = istore.getAnonSet(anonSetSize);
 
       // get receipes
-      // FIXME
+      BlenderRecipe recipe = BlenderRecipe.getRecipe(anonSet);
 
       // apply receipes
-      // FIXME
-      PrefixBlock pb = new PrefixBlock();
-      InnerMessageBlock im = new InnerMessageBlock();
+      for (Address receiverAddress : to) {
+        RoutingBlock rb = recipe.applyRecipe(anonSet, istore.getIdentity(from[0].toString()), istore.getIdentity(receiverAddress.toString()));
 
-      // send to workspace
-      VortexMessage vmsg = new VortexMessage(pb, im);
-      return router.gotMessage(vmsg);
-    } catch (IOException|MessagingException ioe) {
+        PrefixBlock pb = new PrefixBlock();
+        InnerMessageBlock im = new InnerMessageBlock();
+        im.setRouting(rb);
+        im.setPayload(0, barr);
+
+        // send to workspace
+        VortexMessage vmsg = new VortexMessage(pb, im);
+        if(router.gotMessage(vmsg)) {
+          i++;
+        }
+      }
+      return i == to.length;
+    } catch (IOException | MessagingException ioe) {
       LOGGER.log(Level.WARNING, "Exception while getting and parsing message", ioe);
       return false;
     }
@@ -225,7 +243,7 @@ public class InitialRecipesBlender extends Blender {
     Object content = part.getContent();
     if (content instanceof InputStream || content instanceof String) {
       if (Part.ATTACHMENT.equalsIgnoreCase(part.getDisposition())
-              || ! "".equals(part.getFileName())) {
+              || !"".equals(part.getFileName())) {
         result.add(part.getInputStream());
         return result;
       } else {

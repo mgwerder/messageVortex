@@ -250,4 +250,7 @@ public class IdentityStore extends AbstractBlock implements Serializable {
     return sb.toString();
   }
 
+  public IdentityStoreBlock getIdentity(String id) {
+    return blocks.get(id);
+  }
 }

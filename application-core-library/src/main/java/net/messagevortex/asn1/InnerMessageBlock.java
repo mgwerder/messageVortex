@@ -352,6 +352,41 @@ public class InnerMessageBlock extends AbstractBlock implements Serializable {
     return sb.toString();
   }
 
+  /***
+   * <p>Sets the routing block.</p>
+   *
+   * @param newRouting the routing block to be set
+   * @return the previously set routing block
+   */
+  public RoutingBlock setRouting(RoutingBlock newRouting) {
+    RoutingBlock ret = routing;
+    routing = newRouting;
+    return ret;
+  }
+
+  public byte[] setPayload(int chunkNumber,byte[] payload) {
+    // enlarge payload space
+    enlargePayloadSpace(chunkNumber);
+    byte[] ret= this.payload[chunkNumber]!=null?this.payload[chunkNumber].getPayload():null;
+    this.payload[chunkNumber] = new PayloadChunk(chunkNumber,payload,null);
+    return ret;
+  }
+
+  private void enlargePayloadSpace(int i) {
+    if (i<payload.length) {
+      // no resizing required
+      return;
+    }
+    synchronized (payload) {
+      PayloadChunk[] newSpace = new PayloadChunk[i+1];
+      int c = 0;
+      for (PayloadChunk p:payload) {
+        newSpace[c++] = p;
+      }
+      payload = newSpace;
+    }
+  }
+
   @Override
   public boolean equals(Object o) {
     if (o == null) {
