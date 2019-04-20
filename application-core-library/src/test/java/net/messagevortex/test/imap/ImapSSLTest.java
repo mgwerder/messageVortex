@@ -271,8 +271,11 @@ public class ImapSSLTest {
       ImapClient ic = new ImapClient(new InetSocketAddress("localhost", is.getPort()), new SecurityContext(context, SecurityRequirement.UNTRUSTED_SSLTLS));
       ic.setTimeout(5000);
       ImapClient.setDefaultTimeout(300);
+      LOGGER.log(Level.INFO, "IMAP<- C: <CONNECTING>");
       ic.connect();
+      LOGGER.log(Level.INFO, "IMAP<- C: sending \"a1 capability\"");
       String[] s = ic.sendCommand("a1 capability");
+      LOGGER.log(Level.INFO, "IMAP<- C: <GOT COMPLETE REPLY>");
       for (String v : s) {
         LOGGER.log(Level.INFO, "IMAP<- C: " + ImapLine.commandEncoder(v));
       }

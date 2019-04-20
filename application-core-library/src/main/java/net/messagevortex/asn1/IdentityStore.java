@@ -158,7 +158,7 @@ public class IdentityStore extends AbstractBlock implements Serializable {
    *
    * @param size the size of the anonymity set
    * @return the anonymity set
-   * @throws IOException if requested anonymity set size is too small
+   * @throws IOException if requested anonymity set size is too big for this store
    */
   public List<IdentityStoreBlock> getAnonSet(int size) throws IOException {
     LOGGER.log(Level.FINE, "Executing getAnonSet(" + size + ") from " + blocks.size());

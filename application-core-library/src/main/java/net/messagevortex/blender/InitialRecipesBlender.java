@@ -48,6 +48,7 @@ public class InitialRecipesBlender extends Blender {
   private BlendingReceiver router;
   private IdentityStore identityStore;
   private int anonSetSize = 5;
+  private String recipes = null;
 
   /**
    * <p>An initial blender implementation based on anonymity recipes.</p>
@@ -191,7 +192,7 @@ public class InitialRecipesBlender extends Blender {
       List<IdentityStoreBlock> anonSet = istore.getAnonSet(anonSetSize);
 
       // get receipes
-      BlenderRecipe recipe = BlenderRecipe.getRecipe(anonSet);
+      BlenderRecipe recipe = BlenderRecipe.getRecipe(recipes,anonSet);
 
       // apply receipes
       for (Address receiverAddress : to) {

@@ -74,7 +74,7 @@ public class MessageVortexLogger extends Logger {
 
       StringBuilder sb = new StringBuilder();
 
-      sb.append(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()))
+      sb.append(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()))
               .append(' ')
               .append(record.getLevel().getLocalizedName())
               .append(": ")
