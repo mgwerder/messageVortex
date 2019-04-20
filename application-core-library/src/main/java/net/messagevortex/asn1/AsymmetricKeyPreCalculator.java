@@ -92,7 +92,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
 
   private static long lastSaved = 0;
   private static boolean firstWarning = true;
-  private static InternalThread runner = null;
+  private static volatile InternalThread runner = null;
 
   @CommandLine.Option(names = {"--cacheFileName", "-f"},
           description = "filename of the cache file", required = true)
@@ -141,7 +141,10 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
           // force saving of cache on shutdown
           lastSaved = -1;
           save();
-          runner.shutdown();
+          InternalThread it = runner;
+          if (it!=null) {
+            it.shutdown();
+          }
         } catch (IOException | RuntimeException ioe) {
           LOGGER.log(Level.WARNING, "Error while writing cache", ioe);
         }

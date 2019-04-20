@@ -22,6 +22,7 @@ package net.messagevortex;
 // * SOFTWARE.
 // ************************************************************************************
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -33,6 +34,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.messagevortex.accounting.Accountant;
 import net.messagevortex.asn1.AsymmetricKeyPreCalculator;
+import net.messagevortex.commandline.CommandLineHandlerIS;
+import net.messagevortex.asn1.IdentityStore;
 import net.messagevortex.blender.Blender;
 import net.messagevortex.router.Router;
 import net.messagevortex.transport.Transport;
@@ -44,7 +47,8 @@ import picocli.CommandLine;
         mixinStandardHelpOptions = true,
         versionProvider = Version.class,
         subcommands = {
-                AsymmetricKeyPreCalculator.class
+                AsymmetricKeyPreCalculator.class,
+                CommandLineHandlerIS.class
         }
 )
 public class MessageVortex implements Callable<Integer> {
@@ -81,6 +85,7 @@ public class MessageVortex implements Callable<Integer> {
   private static Map<String, Blender> blender = new ConcurrentHashMap<>();
   private static Map<String, Router> router = new ConcurrentHashMap<>();
   private static Map<String, Accountant> accountant = new ConcurrentHashMap<>();
+  private static Map<String, IdentityStore> identityStore = new ConcurrentHashMap<>();
 
   public static void main(String[] args) {
     int retval = mainReturn(args);
@@ -107,29 +112,44 @@ public class MessageVortex implements Callable<Integer> {
     }
 
     try {
+      // load IdentityStore
+      identityStore.put("default",new IdentityStore(new File(CommandLineHandlerIS.DEFAULT_FILENAME)));
+
       // setup according to config file
       Config cfg = MessageVortexConfig.getDefault();
+
+      //Setup routers and accounting
       for (String routerSection : cfg.getSectionListValue(null, "router_setup")) {
-        LOGGER.log(Level.INFO, "setting up routing layer \"" + routerSection + "\"");
+
         // setup Accounting
+        LOGGER.log(Level.INFO, "setting up accounting for routing layer \"" + routerSection + "\"");
         accountant.put(routerSection.toLowerCase(), (Accountant) getDaemon(routerSection,
                 cfg.getStringValue(routerSection, "accounting_implementation"),
                 DaemonType.ACCOUNTING));
+
         // setup routers
+        LOGGER.log(Level.INFO, "setting up routing layer \"" + routerSection + "\"");
         router.put(routerSection.toLowerCase(), (Router) getDaemon(routerSection,
                 cfg.getStringValue(routerSection, "router_implementation"),
                 DaemonType.ROUTING));
       }
+
+      // setup blending
       for (String blendingSection : cfg.getSectionListValue(null, "blender_setup")) {
-        LOGGER.log(Level.INFO, "setting up blending layer \"" + blendingSection + "\"");
+
         // setup blending
+        LOGGER.log(Level.INFO, "setting up blending layer \"" + blendingSection + "\"");
         blender.put(blendingSection.toLowerCase(), (Blender) getDaemon(blendingSection,
                 cfg.getStringValue(blendingSection, "blender_implementation"),
                 DaemonType.BLEDING));
+
       }
+
+      // Setup transport
       for (String transportSection : cfg.getSectionListValue(null, "transport_setup")) {
-        LOGGER.log(Level.INFO, "setting up transport layer \"" + transportSection + "\"");
+
         // setup transport
+        LOGGER.log(Level.INFO, "setting up transport layer \"" + transportSection + "\"");
         transport.put(transportSection.toLowerCase(), (Transport) getDaemon(transportSection,
                 cfg.getStringValue(transportSection, "transport_implementation"),
                 DaemonType.TRANSPORT));
@@ -239,5 +259,9 @@ public class MessageVortex implements Callable<Integer> {
 
   public static Router getRouter(String id) {
     return router.get(id.toLowerCase());
+  }
+
+  public static IdentityStore getIdentityStore(String id) {
+    return identityStore.get(id.toLowerCase());
   }
 }

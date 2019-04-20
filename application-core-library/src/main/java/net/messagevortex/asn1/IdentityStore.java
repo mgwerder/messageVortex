@@ -33,21 +33,32 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.encryption.DumpType;
+import net.messagevortex.commandline.CommandLineHandlerISCreate;
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1EncodableVector;
 import org.bouncycastle.asn1.ASN1InputStream;
 import org.bouncycastle.asn1.ASN1Object;
 import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.DERSequence;
+import picocli.CommandLine;
 
 /**
  * Stores all known identities of a node. Identities are stored as IdentityStoreBlocks.
  ***/
-public class IdentityStore extends AbstractBlock implements Serializable {
+@CommandLine.Command(
+        description = "Manipulator for IdentityStore",
+        name = "intentitystore",
+        aliases = { "store","is" },
+        subcommands = {
+                CommandLineHandlerISCreate.class
+        }
+ )
+public class IdentityStore extends AbstractBlock implements Serializable, Callable<Integer> {
 
   public static final long serialVersionUID = 100000000008L;
 
@@ -253,4 +264,9 @@ public class IdentityStore extends AbstractBlock implements Serializable {
   public IdentityStoreBlock getIdentity(String id) {
     return blocks.get(id);
   }
-}
+
+  public Integer call() {
+    return null;
+  }
+
+  }

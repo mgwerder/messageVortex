@@ -193,6 +193,34 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.doxia</groupId>
+                <artifactId>doxia-book</artifactId>
+                <version>1.2</version>
+                   <configuration>
+                    <books>
+                        <book>
+                            <directory>content/books/adminGuide</directory>
+                            <descriptor>content/books/adminGuide.xml</descriptor>
+                            <formats>
+                                <format>
+                                    <id>latex</id>
+                                </format>
+                                <format>
+                                    <id>xdoc</id>
+                                </format>
+                                <format>
+                                    <id>pdf</id>
+                                </format>
+                                <format>
+                                    <id>rtf</id>
+                                </format>
+                            </formats>
+                        </book>
+                    </books>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 

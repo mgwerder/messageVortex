@@ -28,6 +28,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/content/books/adminGuide.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/AbstractDaemon.java">
           <value>
             <set />
@@ -118,6 +123,16 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/CommandLineHandlerIS.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/CommandLineHandlerISCreate.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/HeaderRequestCapability.java">
           <value>
             <set />
@@ -199,6 +214,21 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/blending/DummyBlender.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/commandline/CommandLineHandlerIS.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/commandline/CommandLineHandlerISCreate.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/commandline/CommandLineHandlerISDump.java">
           <value>
             <set />
           </value>
