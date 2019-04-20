@@ -267,10 +267,10 @@ public class ImapSSLTest {
       assertTrue("Keystore check", (stream != null));
       context.init(new X509KeyManager[]{new CustomKeyManager(ks, "changeme", "mykey3")}, new TrustManager[]{new AllTrustManager()}, esr.getSecureRandom());
       ImapServer is = new ImapServer(new InetSocketAddress("0.0.0.0", 0), new SecurityContext(context, SecurityRequirement.UNTRUSTED_SSLTLS));
-      is.setTimeout(5000);
+      is.setTimeout(10000);
       ImapClient ic = new ImapClient(new InetSocketAddress("localhost", is.getPort()), new SecurityContext(context, SecurityRequirement.UNTRUSTED_SSLTLS));
-      ic.setTimeout(5000);
-      ImapClient.setDefaultTimeout(300);
+      ic.setTimeout(10000);
+      ImapClient.setDefaultTimeout(3000);
       LOGGER.log(Level.INFO, "IMAP<- C: <CONNECTING>");
       ic.connect();
       LOGGER.log(Level.INFO, "IMAP<- C: sending \"a1 capability\"");
