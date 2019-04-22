@@ -1,16 +1,53 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<installation version="5.0">
-    <info>
+<izpack:installation version="5.0"
+                     xmlns:izpack="http://izpack.org/schema/installation"
+                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:schemaLocation="http://izpack.org/schema/installation http://izpack.org/schema/5.0/izpack-installation-5.0.xsd">    <info>
         <appname>MessageVortex Core</appname>
         <appversion>1.0.0.123457</appversion>
         <url>https://messagevortex.net</url>
         <authors>
             <author name="Martin Gwerder" email="info@messagevortex.net"/>
         </authors>
+        <javaversion>1.8</javaversion>
+        <uninstaller name="uninstall.jar" path="${INSTALL_PATH}/uninstaller" write="yes"/>
+        <requiresjdk>no</requiresjdk>
     </info>
+    <locale>
+        <langpack iso3="eng"/>
+    </locale>
     <resources>
-        <res src="@{izpack.staging}/common_resources/img/install-sidebar.png" id="Installer.image"/>
+        <!--<res src="@{izpack.staging}/common_resources/img/install-sidebar.png" id="Installer.image"/>
         <res src="hello.html" id="HTMLHelloPanel.info"/>
-        <res src="license.html" id="HTMLLicencePanel.licence"/>
+        <res src="license.html" id="HTMLLicencePanel.licence"/>-->
     </resources>
-</installation>
+    <panels>
+
+        <!-- FIXME why doesn't HTMLHelloPanel work any more?  it is nice not to have the "Please read the following information" text ... -->
+        <panel classname="HTMLInfoPanel" id="welcome"/>
+
+        <!-- this is our custom panel, loaded from the izpack-panels.jar file -->
+        <!--<panel classname="com.izforge.izpack.panels.mypanels.MyHelloPanel" id="myHello"/>-->
+
+        <panel classname="TargetPanel" id="install_dir"/>
+        <panel classname="PacksPanel" id="sdk_pack_select"/>
+        <panel classname="InstallPanel" id="install"/>
+        <panel classname="FinishPanel" id="finish"/>
+    </panels>
+
+    <packs>
+        <pack name="MessageVortex Core" preselected="yes" required="yes">
+            <description>The MessageVortex core</description>
+            <fileset dir="" targetdir="$INSTALL_PATH/bin">
+                <include name="../messageVortex.jar" />
+            </fileset>
+            <fileset dir="" targetdir="$INSTALL_PATH/lib">
+                <include name="lib/*.jar"/>
+            </fileset>
+        </pack>
+        <pack name="MessageVortex javadoc" preselected="no" required="no">
+            <description>The MessageVortex Javadocs</description>
+            <file src="../MessageVortex-javadoc.jar" targetdir="$INSTALL_PATH/docs/javadoc" unpack="true"/>
+        </pack>
+    </packs>
+</izpack:installation>

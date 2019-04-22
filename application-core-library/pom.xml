@@ -49,7 +49,7 @@
 	    <sonar.sonargraph.report.path>target/sonargraph</sonar.sonargraph.report.path>
 
         <izpack.version>5.0.9</izpack.version>
-        <izpack.staging>${project.build.directory}/staging</izpack.staging>
+        <izpack.staging>${project.build.directory}/izpack-staging</izpack.staging>
     </properties>
 
     <licenses>
@@ -132,7 +132,7 @@
                 <version>3.1.1</version>
                 <executions>
                     <execution>
-                        <phase>prepare-package</phase>
+                        <phase>package</phase>
                         <goals>
                             <goal>jar</goal>
                         </goals>
@@ -177,17 +177,22 @@
             </plugin>
 
             <plugin>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.7.1</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>lt.velykis.maven.skins</groupId>
+                        <artifactId>reflow-velocity-tools</artifactId>
+                        <version>1.1.1</version>
+                    </dependency>
+                    <!-- Reflow skin requires Velocity >= 1.7  -->
+                    <dependency>
+                        <groupId>org.apache.velocity</groupId>
+                        <artifactId>velocity</artifactId>
+                        <version>1.7</version>
+                    </dependency>
+                </dependencies>
             </plugin>
 
             <plugin>
@@ -246,25 +251,6 @@
             </plugin>
 
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>
-                <version>3.7.1</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>lt.velykis.maven.skins</groupId>
-                        <artifactId>reflow-velocity-tools</artifactId>
-                        <version>1.1.1</version>
-                    </dependency>
-                    <!-- Reflow skin requires Velocity >= 1.7  -->
-                    <dependency>
-                        <groupId>org.apache.velocity</groupId>
-                        <artifactId>velocity</artifactId>
-                        <version>1.7</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-
-            <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
@@ -288,6 +274,8 @@
                             <!-- base for relative paths in izpack descriptor -->
                             <baseDir>${izpack.staging}</baseDir>
                             <installFile>${basedir}/src/main/izpack/install.xml</installFile>
+                            <outputDirectory>${basedir}/target/izpack</outputDirectory>
+                            <mkdirs>true</mkdirs>
                         </configuration>
                     </execution>
                 </executions>
@@ -298,6 +286,28 @@
                         <version>${izpack.version}</version>
                     </dependency>
                 </dependencies>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.1.1</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${izpack.staging}/lib</outputDirectory>
+                            <includeScope>runtime</includeScope>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>
@@ -315,7 +325,6 @@
                             <target>
                                 <copy todir="${izpack.staging}">
                                     <fileset dir="target" includes="messagevortex.jar"/>
-                                    <fileset dir="target/lib" includes="*.jar"/>
                                 </copy>
                             </target>
                         </configuration>
