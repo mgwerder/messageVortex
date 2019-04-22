@@ -34,9 +34,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.messagevortex.accounting.Accountant;
 import net.messagevortex.asn1.AsymmetricKeyPreCalculator;
-import net.messagevortex.commandline.CommandLineHandlerIS;
 import net.messagevortex.asn1.IdentityStore;
 import net.messagevortex.blender.Blender;
+import net.messagevortex.commandline.CommandLineHandlerIdentityStore;
 import net.messagevortex.router.Router;
 import net.messagevortex.transport.Transport;
 import picocli.CommandLine;
@@ -48,14 +48,14 @@ import picocli.CommandLine;
         versionProvider = Version.class,
         subcommands = {
                 AsymmetricKeyPreCalculator.class,
-                CommandLineHandlerIS.class
+                CommandLineHandlerIdentityStore.class
         }
 )
 public class MessageVortex implements Callable<Integer> {
 
-  public  static final int CONFIG_FAIL = 101;
-  public  static final int SETUP_FAIL = 102;
-  public  static final int ARGUMENT_FAIL = 103;
+  public static final int CONFIG_FAIL = 101;
+  public static final int SETUP_FAIL = 102;
+  public static final int ARGUMENT_FAIL = 103;
 
   private static final Logger LOGGER;
 
@@ -113,7 +113,8 @@ public class MessageVortex implements Callable<Integer> {
 
     try {
       // load IdentityStore
-      identityStore.put("default",new IdentityStore(new File(CommandLineHandlerIS.DEFAULT_FILENAME)));
+      identityStore.put("default", new IdentityStore(
+              new File(CommandLineHandlerIdentityStore.DEFAULT_FILENAME)));
 
       // setup according to config file
       Config cfg = MessageVortexConfig.getDefault();
@@ -163,7 +164,7 @@ public class MessageVortex implements Callable<Integer> {
       return SETUP_FAIL;
     }
     // enable thread dumper
-    if (threadDumpInterval>0) {
+    if (threadDumpInterval > 0) {
       LOGGER.log(Level.INFO, "starting thread dumper with interval " + threadDumpInterval);
       new ThreadDumper(threadDumpInterval);
     }
@@ -200,9 +201,9 @@ public class MessageVortex implements Callable<Integer> {
    *
    * <p>It modifies the return type to a RunningDaemon.</p>
    *
-   * @param section     the name of the section where the config should be taken from
-   * @param classname   the name of the class to be instantiated
-   * @param type        the type of daemon to be checked
+   * @param section   the name of the section where the config should be taken from
+   * @param classname the name of the class to be instantiated
+   * @param type      the type of daemon to be checked
    * @return the specified object
    * @throws ClassNotFoundException if classname not found
    **/

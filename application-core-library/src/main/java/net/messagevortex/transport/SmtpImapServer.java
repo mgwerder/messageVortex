@@ -20,8 +20,10 @@ public class SmtpImapServer extends AbstractDaemon implements Transport {
   Transport smtp = null;
 
   public SmtpImapServer(String section) throws IOException {
-    if ("-1".equals(MessageVortexConfig.getDefault().getStringValue(section, "smtp_incoming_address"))
-            || -1 == MessageVortexConfig.getDefault().getNumericValue(section, "smtp_incoming_port")) {
+    if ("-1".equals(MessageVortexConfig.getDefault().getStringValue(section,
+                      "smtp_incoming_address"))
+            || -1 == MessageVortexConfig.getDefault().getNumericValue(section,
+                      "smtp_incoming_port")) {
       LOGGER.log(Level.INFO, "skipped creation of smtp server enpoint");
     } else {
       smtp = new TestSmtpHandler(section);

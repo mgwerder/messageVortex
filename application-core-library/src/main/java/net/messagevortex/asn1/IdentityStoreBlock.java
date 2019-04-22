@@ -100,7 +100,8 @@ public class IdentityStoreBlock extends AbstractBlock implements Serializable {
    * @return the requessted IdentityStoreBlock
    * @throws IOException if generation fails
    */
-  public static IdentityStoreBlock getIdentityStoreBlockDemo(IdentityType it, String id, boolean complete)
+  public static IdentityStoreBlock getIdentityStoreBlockDemo(IdentityType it, String id,
+                                                             boolean complete)
           throws IOException {
     IdentityStoreBlock ret = new IdentityStoreBlock();
     ret.setValid(new UsagePeriod(3600 * 24 * 30));

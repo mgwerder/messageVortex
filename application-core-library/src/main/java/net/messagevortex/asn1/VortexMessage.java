@@ -106,8 +106,8 @@ public class VortexMessage extends AbstractBlock implements Serializable {
     // convert and parse resulting byte array
     try {
       parse(buffer.toByteArray());
-    } catch (EOFException|IllegalArgumentException eex) {
-      throw new IOException( "Exception while parsing byte array", eex);
+    } catch (EOFException | IllegalArgumentException eex) {
+      throw new IOException("Exception while parsing byte array", eex);
     }
 
     // tear down output buffer
@@ -281,18 +281,19 @@ public class VortexMessage extends AbstractBlock implements Serializable {
         innerMessage = new InnerMessageBlock(toDer(to.getObject()), null);
         break;
       case INNER_MESSAGE_ENCRYPTED:
-        if (prefix.getKey() == null){
+        if (prefix.getKey() == null) {
           throw new IOException("unable to get key from prefix block");
         }
-        byte[] stream =null ;
+        byte[] stream = null;
         try {
           byte[] derStream = ASN1OctetString.getInstance(to.getObject()).getOctets();
           stream = prefix.getKey().decrypt(derStream);
         } catch (IllegalArgumentException iae) {
-          throw new IOException("unable to get decrypted byte stream (1)",iae);
+          throw new IOException("unable to get decrypted byte stream (1)", iae);
         }
         if (stream == null || stream.length == 0) {
-          throw new IOException("unable to get decrypted byte stream (2; stream is null or sized 0 bytes)");
+          throw new IOException("unable to get decrypted byte stream "
+                + "(2; stream is null or sized 0 bytes)");
         }
 
         innerMessage = new InnerMessageBlock(stream, getDecryptionKey());

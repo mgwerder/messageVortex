@@ -17,6 +17,8 @@ import java.util.logging.Logger;
 
 public class ThreadDumper {
 
+  private static final String CRLF = System.lineSeparator();
+
   private static final Logger LOGGER;
 
   static {
@@ -31,16 +33,17 @@ public class ThreadDumper {
     df.setTimeZone(tz);
   }
 
-  private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1, new ThreadDumperThreadFactory());
+  private static final ScheduledExecutorService scheduler
+          = Executors.newScheduledThreadPool(1, new ThreadDumperThreadFactory());
 
-  private volatile static ThreadGroup rootTG = null;
+  private static volatile ThreadGroup rootTG = null;
 
   private static class ThreadDumperRunner implements Runnable {
     @Override
     public void run() {
       try {
         LOGGER.log(Level.INFO, "dumping threads");
-        for (String s : getThreadDump(false).split(System.lineSeparator())) {
+        for (String s : getThreadDump(false).split(CRLF)) {
           LOGGER.log(Level.INFO, s);
         }
         LOGGER.log(Level.INFO, "threads dumped");
@@ -67,24 +70,27 @@ public class ThreadDumper {
 
   public static String getThreadDump(boolean dumpDaemon) {
     StringBuilder tdump = new StringBuilder();
-    ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
-    ThreadInfo[] threadInfos = threadMXBean.getThreadInfo(threadMXBean.getAllThreadIds(), 100);
-    tdump.append("======================================================================" + System.lineSeparator());
+    tdump.append("======================================================================" + CRLF);
     synchronized (df) {
-      tdump.append("==== Thread Dump " + df.format(new Date()) + "                               =====" + System.lineSeparator());
+      tdump.append("==== Thread Dump " + df.format(new Date())
+              + "                               =====" + CRLF);
     }
-    tdump.append("======================================================================" + System.lineSeparator());
+    tdump.append("======================================================================" + CRLF);
+    ThreadMXBean tbean = ManagementFactory.getThreadMXBean();
+    ThreadInfo[] threadInfos = tbean.getThreadInfo(tbean.getAllThreadIds(), 100);
     for (ThreadInfo threadInfo : threadInfos) {
       Thread.State state = threadInfo.getThreadState();
       Thread t = getThread(threadInfo.getThreadId());
       if (dumpDaemon || !t.isDaemon()) {
-        tdump.append("\"" + threadInfo.getThreadName() + "\"" + System.lineSeparator());
-        tdump.append("   java.lang.Thread.State: " + state + (t.isDaemon() ? " DAEMON" : "") + System.lineSeparator());
+        tdump.append("\"" + threadInfo.getThreadName() + "\"" + CRLF);
+        tdump.append("   java.lang.Thread.State: " + state + (t.isDaemon() ? " DAEMON" : "normal")
+                + CRLF);
         final StackTraceElement[] stackTraceElements = threadInfo.getStackTrace();
         for (final StackTraceElement stackTraceElement : stackTraceElements) {
-          tdump.append("        at " + stackTraceElement + System.lineSeparator());
+          tdump.append("        at " + stackTraceElement).append(CRLF);
         }
-        tdump.append("======================================================================" + System.lineSeparator());
+        tdump.append("======================================================================");
+        tdump.append(CRLF);
       }
     }
     return tdump.toString();
@@ -100,18 +106,20 @@ public class ThreadDumper {
       }
       rootTG = root;
     }
-    int nAlloc = thbean.getThreadCount();
+    int nalloc = thbean.getThreadCount();
     int n = 0;
     Thread[] threads;
     do {
-      nAlloc *= 2;
-      threads = new Thread[nAlloc];
+      nalloc *= 2;
+      threads = new Thread[nalloc];
       n = root.enumerate(threads, true);
-    } while (n == nAlloc);
+    } while (n == nalloc);
 
-    for (Thread thread : Arrays.copyOf(threads, n))
-      if (thread.getId() == id)
+    for (Thread thread : Arrays.copyOf(threads, n)) {
+      if (thread.getId() == id) {
         return thread;
+      }
+    }
     return null;
   }
 

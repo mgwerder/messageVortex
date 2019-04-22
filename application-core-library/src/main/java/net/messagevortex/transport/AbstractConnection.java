@@ -317,7 +317,8 @@ public abstract class AbstractConnection {
     try {
       LOGGER.log(Level.INFO, "starting reading raw socket (loopOnce is " + loopOnce + ")");
       long start = System.currentTimeMillis();
-      while (!shutdownAbstractConnection && bytesRead == 0 && timeout - (System.currentTimeMillis() - start) > 0) {
+      while (!shutdownAbstractConnection && bytesRead == 0
+              && timeout - (System.currentTimeMillis() - start) > 0) {
         bytesRead = getSocketChannel().read(inboundEncryptedData);
         LOGGER.log(Level.INFO, "tried to read (got " + bytesRead + ")");
         if (bytesRead == 0) {
@@ -386,7 +387,7 @@ public abstract class AbstractConnection {
     // get handshake status
     HandshakeStatus handshakeStatus = getEngine().getHandshakeStatus();
 
-    while (!shutdownAbstractConnection && handshakeStatus != SSLEngineResult.HandshakeStatus.FINISHED
+    while (!shutdownAbstractConnection && handshakeStatus != HandshakeStatus.FINISHED
             && handshakeStatus != NOT_HANDSHAKING
             && timeout - (System.currentTimeMillis() - start) > 0 && getEngine() != null) {
 
@@ -808,7 +809,8 @@ public abstract class AbstractConnection {
       }
 
       timeoutReached = System.currentTimeMillis() - start > timeout;
-    } while (!shutdownAbstractConnection && bytesRead >= 0 && totBytesRead == 0 && !timeoutReached && timeout > 0);
+    } while (!shutdownAbstractConnection && bytesRead >= 0 && totBytesRead == 0
+            && !timeoutReached && timeout > 0);
 
     if (bytesRead < 0) {
       LOGGER.log(Level.INFO, "Loop aborted due to closed connection");

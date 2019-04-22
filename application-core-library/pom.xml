@@ -47,6 +47,9 @@
         <sonar.scm.disabled>true</sonar.scm.disabled>
         <sonar.verbose>true</sonar.verbose>
 	    <sonar.sonargraph.report.path>target/sonargraph</sonar.sonargraph.report.path>
+
+        <izpack.version>5.0.9</izpack.version>
+        <izpack.staging>${project.build.directory}/staging</izpack.staging>
     </properties>
 
     <licenses>
@@ -82,6 +85,11 @@
             <groupId>com.icegreen</groupId>
             <artifactId>greenmail</artifactId>
             <version>1.5.9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.izpack</groupId>
+            <artifactId>izpack-maven-plugin</artifactId>
+            <version>5.1.3</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -256,6 +264,31 @@
                     </dependency>
                 </dependencies>
             </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.izpack</groupId>
+                <artifactId>izpack-maven-plugin</artifactId>
+                <version>${izpack.version}</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals><goal>izpack</goal></goals>
+                        <configuration>
+                            <!-- base for relative paths in izpack descriptor -->
+                            <baseDir>${izpack.staging}</baseDir>
+                            <installFile>${basedir}/src/main/izpack/install.xml</installFile>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.codehaus.izpack</groupId>
+                        <artifactId>izpack-panel</artifactId>
+                        <version>${izpack.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
         </plugins>
     </build>
 

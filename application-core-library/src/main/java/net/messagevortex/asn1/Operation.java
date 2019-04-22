@@ -52,7 +52,7 @@ public abstract class Operation extends AbstractBlock implements Serializable {
   }
 
   public static Operation getInstance(ASN1Encodable object) throws IOException {
-    synchronized(operations) {
+    synchronized (operations) {
       if (operations.isEmpty()) {
         throw new IOException("init() not called");
       }
@@ -80,7 +80,7 @@ public abstract class Operation extends AbstractBlock implements Serializable {
   }
 
   public static Operation parseInstance(ASN1TaggedObject object) throws IOException {
-    synchronized(operations) {
+    synchronized (operations) {
       if (operations.isEmpty()) {
         throw new IOException("init() not called");
       }

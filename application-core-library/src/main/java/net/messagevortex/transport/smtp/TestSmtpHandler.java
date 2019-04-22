@@ -94,7 +94,8 @@ public class TestSmtpHandler extends AbstractDaemon implements Transport, Runnab
 
         // fetch mail and process
         String msg = GreenMailUtil.getWholeMessage(server.getReceivedMessages()[count - 1]);
-        LOGGER.log(Level.INFO, "got smtp mail in transport handler [" + section + "] (size:" + msg.length() + ")");
+        LOGGER.log(Level.INFO, "got smtp mail in transport handler [" + section
+                + "] (size:" + msg.length() + ")");
         blender.gotMessage(new ByteArrayInputStream(msg.getBytes(StandardCharsets.UTF_8)));
 
         // wait for one more mail

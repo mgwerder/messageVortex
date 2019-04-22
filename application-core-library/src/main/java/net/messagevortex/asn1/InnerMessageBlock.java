@@ -365,23 +365,23 @@ public class InnerMessageBlock extends AbstractBlock implements Serializable {
     return ret;
   }
 
-  public byte[] setPayload(int chunkNumber,byte[] payload) {
+  public byte[] setPayload(int chunkNumber, byte[] payload) {
     // enlarge payload space
     enlargePayloadSpace(chunkNumber);
-    byte[] ret= this.payload[chunkNumber]!=null?this.payload[chunkNumber].getPayload():null;
-    this.payload[chunkNumber] = new PayloadChunk(chunkNumber,payload,null);
+    byte[] ret = this.payload[chunkNumber] != null ? this.payload[chunkNumber].getPayload() : null;
+    this.payload[chunkNumber] = new PayloadChunk(chunkNumber, payload, null);
     return ret;
   }
 
   private void enlargePayloadSpace(int i) {
-    if (i<payload.length) {
+    if (i < payload.length) {
       // no resizing required
       return;
     }
     synchronized (payloadLock) {
-      PayloadChunk[] newSpace = new PayloadChunk[i+1];
+      PayloadChunk[] newSpace = new PayloadChunk[i + 1];
       int c = 0;
-      for (PayloadChunk p:payload) {
+      for (PayloadChunk p : payload) {
         newSpace[c++] = p;
       }
       payload = newSpace;

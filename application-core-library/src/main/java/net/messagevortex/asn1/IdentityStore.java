@@ -38,7 +38,7 @@ import java.util.logging.Level;
 import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.encryption.DumpType;
-import net.messagevortex.commandline.CommandLineHandlerISCreate;
+import net.messagevortex.commandline.CommandLineHandlerIdentityStoreCreate;
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1EncodableVector;
 import org.bouncycastle.asn1.ASN1InputStream;
@@ -55,7 +55,7 @@ import picocli.CommandLine;
         name = "intentitystore",
         aliases = { "store","is" },
         subcommands = {
-                CommandLineHandlerISCreate.class
+                CommandLineHandlerIdentityStoreCreate.class
         }
  )
 public class IdentityStore extends AbstractBlock implements Serializable, Callable<Integer> {
@@ -137,7 +137,8 @@ public class IdentityStore extends AbstractBlock implements Serializable, Callab
     // creating nine recipient identities
     for (int i = 1; i < 10; i++) {
       tmp.add(IdentityStoreBlock.getIdentityStoreBlockDemo(
-              IdentityStoreBlock.IdentityType.RECIPIENT_IDENTITY, "user" + i + "@localhost", complete)
+              IdentityStoreBlock.IdentityType.RECIPIENT_IDENTITY, "user" + i
+                      + "@localhost", complete)
       );
     }
     return tmp;
@@ -268,5 +269,4 @@ public class IdentityStore extends AbstractBlock implements Serializable, Callab
   public Integer call() {
     return null;
   }
-
-  }
+}

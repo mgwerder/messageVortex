@@ -118,7 +118,7 @@ public class AsymmetricKeyCache implements Serializable {
 
     public double getCacheFillTime() {
       double avg = getAverageCalcTime();
-      if (avg <=0) {
+      if (avg <= 0) {
         avg = 10;
       }
       return Math.max(0, maxSize - cache.size()) * avg;
@@ -269,7 +269,7 @@ public class AsymmetricKeyCache implements Serializable {
   private AlgorithmParameter getCacheElementByIndex(int index) {
     synchronized (cache) {
       int i = 0;
-      for (Map.Entry<AlgorithmParameter,CacheElement> e:cache.entrySet()) {
+      for (Map.Entry<AlgorithmParameter, CacheElement> e : cache.entrySet()) {
         i++;
         if (i == index) {
           return e.getKey();
@@ -485,7 +485,13 @@ public class AsymmetricKeyCache implements Serializable {
     return sb.toString();
   }
 
-  public void setCacheSize( int index, int value) throws IOException {
+  /***
+   * <p>Set the expected size of the cache.</p>
+   * @param index index of the cache to be set
+   * @param value the new size of the specified cache
+   * @throws IOException if the index is not known to the cache
+   */
+  public void setCacheSize(int index, int value) throws IOException {
     synchronized (cache) {
       AlgorithmParameter ap = getCacheElementByIndex(index);
       if (ap == null) {
@@ -496,7 +502,12 @@ public class AsymmetricKeyCache implements Serializable {
     }
   }
 
-  public void removeCacheElement( int index ) throws IOException {
+  /***
+   * <p>Remove the specified key type from cache.</p>
+   * @param index the index of the cache to be removed
+   * @throws IOException if the index does not belong to a known element
+   */
+  public void removeCacheElement(int index) throws IOException {
     synchronized (cache) {
       AlgorithmParameter ap = getCacheElementByIndex(index);
       if (ap == null) {
@@ -523,8 +534,9 @@ public class AsymmetricKeyCache implements Serializable {
         CacheElement ce = e.getValue();
         long s = ce.size();
         long ms = ce.getMaxSize();
-        LOGGER.log(Level.INFO, "|" + String.format("%2s", i) + ") " + String.format("%5s", s) + "/" + String.format("%5s", ms)
-                + " " + percentBar((double) (s) / ms, 20) + " " + e.getKey());
+        LOGGER.log(Level.INFO, "|" + String.format("%2s", i) + ") " + String.format("%5s", s)
+                + "/" + String.format("%5s", ms) + " "
+                + percentBar((double) (s) / ms, 20) + " " + e.getKey());
         sum += s;
         tot += ms;
 

@@ -15,7 +15,7 @@ import picocli.CommandLine;
         aliases = {"dp"},
         mixinStandardHelpOptions = true
 )
-public class CommandLineHandlerISDump implements Callable<Integer> {
+public class CommandLineHandlerIdentityStoreDump implements Callable<Integer> {
 
   private static final java.util.logging.Logger LOGGER;
 
@@ -27,7 +27,7 @@ public class CommandLineHandlerISDump implements Callable<Integer> {
           description = "filename of the IdentityStorage file",
           arity = "1"
   )
-  String filename = CommandLineHandlerIS.DEFAULT_FILENAME;
+  String filename = CommandLineHandlerIdentityStore.DEFAULT_FILENAME;
 
   @Override
   public Integer call() throws Exception {

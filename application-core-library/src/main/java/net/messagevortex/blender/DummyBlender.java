@@ -57,7 +57,7 @@ import net.messagevortex.transport.Transport;
 import net.messagevortex.transport.dummy.DummyTransportTrx;
 
 /***
- * This Dummy blender supports only plain blending without an offset
+ * <p>This Dummy blender supports only plain blending without an offset.</p>
  */
 public class DummyBlender extends Blender {
 
@@ -164,11 +164,11 @@ public class DummyBlender extends Blender {
     try {
       //Session session = Session.getDefaultInstance(new Properties(), null);
       Session session = Session.getInstance(new Properties(),
-              new javax.mail.Authenticator() {
-                protected PasswordAuthentication getPasswordAuthentication() {
-                  return new PasswordAuthentication("username", "password");
-                }
+            new javax.mail.Authenticator() {
+              protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication("username", "password");
               }
+            }
       );
       session.setDebug(true);
       final MimeMessage mimeMsg = new MimeMessage(session);
@@ -207,7 +207,8 @@ public class DummyBlender extends Blender {
           t.interrupt();
         }
         boolean res = t.getSuccess(30 * 1000);
-        LOGGER.log(Level.INFO, "message sent using dummy transport to " + target.getRecipientAddress() + " (result: " + res + ")");
+        LOGGER.log(Level.INFO, "message sent using dummy transport to "
+                + target.getRecipientAddress() + " (result: " + res + ")");
         return res;
       } else {
         LOGGER.log(Level.SEVERE, "Transport endpoint not set");
@@ -228,11 +229,11 @@ public class DummyBlender extends Blender {
   public boolean gotMessage(final InputStream is) {
     try {
       Session session = Session.getInstance(new Properties(),
-              new javax.mail.Authenticator() {
-                protected PasswordAuthentication getPasswordAuthentication() {
-                  return new PasswordAuthentication("username", "password");
-                }
-              }
+          new javax.mail.Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+              return new PasswordAuthentication("username", "password");
+            }
+          }
       );
       MimeMessage msg = new MimeMessage(session, is);
       is.close();

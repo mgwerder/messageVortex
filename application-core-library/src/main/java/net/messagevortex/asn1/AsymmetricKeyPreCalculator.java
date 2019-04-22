@@ -142,7 +142,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
           lastSaved = -1;
           save();
           InternalThread it = runner;
-          if (it!=null) {
+          if (it != null) {
             it.shutdown();
           }
         } catch (IOException | RuntimeException ioe) {
@@ -216,7 +216,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
             }
           }
         } else {
-          if (!stopIfFull)
+          if (!stopIfFull) {
             try {
               LOGGER.log(Level.INFO, "cache is idle (" + String.format("%2.3f",
                       cache.getCacheFillGrade() * 100) + "%) ... sleeping for a short while "
@@ -225,6 +225,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
             } catch (InterruptedException ie) {
               Thread.currentThread().interrupt();
             }
+          }
         }
 
       }
@@ -369,6 +370,11 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
     }
   }
 
+  /***
+   * <p>retrieves a precomputed key from the cache.</p>
+   * @param parameters the parameters reflecting the requested key
+   * @return the requested key
+   */
   public static AsymmetricKey getPrecomputedAsymmetricKey(AlgorithmParameter parameters) {
 
     AlgorithmParameter ap = prepareParameters(parameters);
@@ -405,11 +411,11 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
     }
   }
 
-  public static double getDequeueProbability() {
+  static double getDequeueProbability() {
     return dequeueProbability;
   }
 
-  public static double setDequeueProbability(double newProbability) {
+  static double setDequeueProbability(double newProbability) {
     if (newProbability > 1 || newProbability < 0) {
       throw new IllegalArgumentException("probablitiy must be in interval [0,1]");
     }

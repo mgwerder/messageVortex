@@ -48,7 +48,17 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/izpack/install.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/content/books/adminGuide.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/izpack/install.xml">
           <value>
             <set />
           </value>
@@ -253,6 +263,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/commandline/CommandLineHandlerIdentityStore.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/router/GraphSet.java">
           <value>
             <set />
@@ -309,6 +324,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/MailConnector.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/MailServer.java">
           <value>
             <set />
           </value>
@@ -489,6 +509,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/test/java/net/messagevortex/test/imap/ImapSSLTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/test/java/net/messagevortex/test/imap/ImapURLParser.java">
           <value>
             <set />
           </value>

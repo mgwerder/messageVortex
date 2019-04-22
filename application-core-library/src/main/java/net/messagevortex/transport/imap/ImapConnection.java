@@ -88,7 +88,8 @@ public class ImapConnection extends ServerConnection
         }
         LOGGER.log(Level.INFO, "left main loop (shutting down)");
       } catch (IOException | ImapException ioe) {
-        LOGGER.log(Level.WARNING, "got exception while waiting for lines (" + shutdownImapRunner + ")", ioe);
+        LOGGER.log(Level.WARNING, "got exception while waiting for lines ("
+                + shutdownImapRunner + ")", ioe);
       }
       imapConnectionRunner = null;
       shutdownImapRunner = true;

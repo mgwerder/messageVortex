@@ -1,18 +1,17 @@
 package net.messagevortex.test.imap;
 
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.net.InetSocketAddress;
+import java.text.ParseException;
+import java.util.logging.Level;
 import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.transport.imap.ImapPassthruServer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
-import java.net.InetSocketAddress;
-import java.text.ParseException;
-import java.util.logging.Level;
-
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 /**
  * Created by Martin on 13.04.2018.
@@ -38,7 +37,7 @@ public class ImapURLParser {
         };
         for( String st:s ) {
             try {
-                assertTrue( "Error while checking " + st, new InetSocketAddress( "localhost", 143 ).equals( ImapPassthruServer.getSocketAdressFromUrl(st) ) );
+                assertTrue( "Error while checking " + st, new InetSocketAddress( "localhost", 143 ).equals( ImapPassthruServer.getSocketAddressFromUrl(st) ) );
             } catch( ParseException ioe ) {
                 ioe.printStackTrace();
                 fail( "unexpected exception raised" );
@@ -52,7 +51,7 @@ public class ImapURLParser {
         };
         for( String st:s ) {
             try {
-                assertTrue( "Error while checking " + st, new InetSocketAddress( "localhost", 993 ).equals( ImapPassthruServer.getSocketAdressFromUrl(st) ) );
+                assertTrue( "Error while checking " + st, new InetSocketAddress( "localhost", 993 ).equals( ImapPassthruServer.getSocketAddressFromUrl(st) ) );
             } catch( ParseException ioe ) {
                 ioe.printStackTrace();
                 fail( "unexpected exception raised" );
@@ -78,7 +77,7 @@ public class ImapURLParser {
         };
         for( String st:s ) {
             try {
-                ImapPassthruServer.getSocketAdressFromUrl(st);
+                ImapPassthruServer.getSocketAddressFromUrl(st);
                 fail( "unexpectedly no exception raised when testing "+st );
             } catch( ParseException ioe ) {
                 // this is expected
@@ -88,7 +87,7 @@ public class ImapURLParser {
             }
         }
         try {
-            ImapPassthruServer.getSocketAdressFromUrl( null );
+            ImapPassthruServer.getSocketAddressFromUrl( null );
             fail( "unexpectedly no exception raised" );
         } catch( NullPointerException npe ) {
             // this is expected

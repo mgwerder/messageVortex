@@ -20,7 +20,8 @@ public abstract class BlenderRecipe {
 
   private static final String DEFAULT = "default";
 
-  static BlenderRecipe getRecipe(String identifier, List<IdentityStoreBlock> anonSet) throws IOException {
+  static BlenderRecipe getRecipe(String identifier, List<IdentityStoreBlock> anonSet)
+          throws IOException {
     if (identifier == null) {
       identifier = DEFAULT;
     }
@@ -64,6 +65,7 @@ public abstract class BlenderRecipe {
 
   abstract boolean isAppliable(List<IdentityStoreBlock> anonSet);
 
-  abstract RoutingBlock applyRecipe(List<IdentityStoreBlock> anonSet, IdentityStoreBlock from, IdentityStoreBlock to);
+  abstract RoutingBlock applyRecipe(List<IdentityStoreBlock> anonSet, IdentityStoreBlock from,
+                                    IdentityStoreBlock to);
 
 }

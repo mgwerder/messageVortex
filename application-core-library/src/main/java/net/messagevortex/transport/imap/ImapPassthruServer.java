@@ -120,12 +120,13 @@ public class ImapPassthruServer {
   }
 
   /***
-   * <p></p>
-   * @param url
-   * @return
-   * @throws ParseException
+   * <p>Convert an imap URL to a scket address with apropriate port.</p>
+   * @param url the URL to be cconvertde
+   * @return An equivalent socket address
+   * @throws ParseException if the pattern doeas not match a regular imap url
+   * @throws NullPointerException if the URL is null
    */
-  public static InetSocketAddress getSocketAdressFromUrl(String url) throws ParseException {
+  public static InetSocketAddress getSocketAddressFromUrl(String url) throws ParseException {
     if (url == null) {
       throw new NullPointerException("Address may not be null");
     }

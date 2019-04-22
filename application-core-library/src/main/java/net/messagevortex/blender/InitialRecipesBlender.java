@@ -74,7 +74,8 @@ public class InitialRecipesBlender extends Blender {
    * @param identityStore   the identity store to be used (for decryption of headers)
    * @throws IOException    if anything fails :-D
    */
-  public InitialRecipesBlender(String identity, BlendingReceiver router, IdentityStore identityStore)
+  public InitialRecipesBlender(String identity, BlendingReceiver router,
+                               IdentityStore identityStore)
           throws IOException {
     super(router, null);
     this.identity = identity;
@@ -101,11 +102,11 @@ public class InitialRecipesBlender extends Blender {
     try {
       //Session session = Session.getDefaultInstance(new Properties(), null);
       Session session = Session.getInstance(new Properties(),
-              new javax.mail.Authenticator() {
-                protected PasswordAuthentication getPasswordAuthentication() {
-                  return new PasswordAuthentication("username", "password");
-                }
+            new javax.mail.Authenticator() {
+              protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication("username", "password");
               }
+            }
       );
       final MimeMessage mimeMsg = new MimeMessage(session);
       mimeMsg.setFrom(new InternetAddress("test@test.com"));
@@ -162,18 +163,18 @@ public class InitialRecipesBlender extends Blender {
   public boolean gotMessage(final InputStream is) {
     try {
       Session session = Session.getInstance(new Properties(),
-              new javax.mail.Authenticator() {
-                protected PasswordAuthentication getPasswordAuthentication() {
-                  return new PasswordAuthentication("username", "password");
-                }
+            new javax.mail.Authenticator() {
+              protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication("username", "password");
               }
+            }
       );
       int i = 0;
 
       MimeMessage msg = new MimeMessage(session, is);
 
       // Convert Inputstream to byte array
-      ByteArrayOutputStream os= new ByteArrayOutputStream();
+      ByteArrayOutputStream os = new ByteArrayOutputStream();
       msg.writeTo(os);
       os.close();
       byte[] barr = os.toByteArray();
@@ -192,11 +193,12 @@ public class InitialRecipesBlender extends Blender {
       List<IdentityStoreBlock> anonSet = istore.getAnonSet(anonSetSize);
 
       // get receipes
-      BlenderRecipe recipe = BlenderRecipe.getRecipe(recipes,anonSet);
+      BlenderRecipe recipe = BlenderRecipe.getRecipe(recipes, anonSet);
 
       // apply receipes
       for (Address receiverAddress : to) {
-        RoutingBlock rb = recipe.applyRecipe(anonSet, istore.getIdentity(from[0].toString()), istore.getIdentity(receiverAddress.toString()));
+        RoutingBlock rb = recipe.applyRecipe(anonSet, istore.getIdentity(from[0].toString()),
+                istore.getIdentity(receiverAddress.toString()));
 
         PrefixBlock pb = new PrefixBlock();
         InnerMessageBlock im = new InnerMessageBlock();
@@ -205,7 +207,7 @@ public class InitialRecipesBlender extends Blender {
 
         // send to workspace
         VortexMessage vmsg = new VortexMessage(pb, im);
-        if(router.gotMessage(vmsg)) {
+        if (router.gotMessage(vmsg)) {
           i++;
         }
       }

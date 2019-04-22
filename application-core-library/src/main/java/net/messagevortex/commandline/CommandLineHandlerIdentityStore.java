@@ -10,11 +10,11 @@ import picocli.CommandLine;
         aliases = { "store","is" },
         mixinStandardHelpOptions = true,
         subcommands = {
-                CommandLineHandlerISCreate.class,
-                CommandLineHandlerISDump.class
+                CommandLineHandlerIdentityStoreCreate.class,
+                CommandLineHandlerIdentityStoreDump.class
         }
 )
-public class CommandLineHandlerIS implements Callable<Integer> {
+public class CommandLineHandlerIdentityStore implements Callable<Integer> {
   public static final String DEFAULT_FILENAME = "identityStore.cfg";
 
   public Integer call() throws Exception {
