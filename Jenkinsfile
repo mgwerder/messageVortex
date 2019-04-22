@@ -110,7 +110,12 @@ pipeline {
     stage ('Package all') {
       steps {
         sh 'mkdir /var/www/messagevortex/devel/repo || /bin/true'
-        sh 'mvn -DskipTests package'
+        sh 'mvn -DskipTests compile package'
+      }
+    }
+    stage ('Site build') {
+      steps {
+        sh 'mvn -DskipTests site'
       }
     }
     stage('SonarQube analysis') {

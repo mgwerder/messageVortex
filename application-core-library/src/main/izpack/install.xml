@@ -1,4 +1,13 @@
-<installation>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<installation version="5.0">
+    <info>
+        <appname>MessageVortex Core</appname>
+        <appversion>1.0.0.123457</appversion>
+        <url>https://messagevortex.net</url>
+        <authors>
+            <author name="Martin Gwerder" email="info@messagevortex.net"/>
+        </authors>
+    </info>
     <resources>
         <res src="@{izpack.staging}/common_resources/img/install-sidebar.png" id="Installer.image"/>
         <res src="hello.html" id="HTMLHelloPanel.info"/>
