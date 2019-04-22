@@ -174,39 +174,6 @@ public class ImapSSLTest {
     }
   }
 
-  public static Set<Thread> getThreadList() {
-    Set<Thread> cThread = Thread.getAllStackTraces().keySet();
-    ArrayList<Thread> al = new ArrayList<>();
-    for (Thread t : cThread) {
-      if (!t.isAlive() || t.isDaemon() || t.getState() == Thread.State.TERMINATED) {
-        al.add(t);
-      }
-    }
-    cThread.removeAll(al);
-    return cThread;
-  }
-
-  public static Set<Thread> verifyHangingThreads(Set<Thread> pThread) {
-    Set<Thread> cThread = Thread.getAllStackTraces().keySet();
-    cThread.removeAll(pThread);
-    ArrayList<Thread> al = new ArrayList<>();
-    for (Thread t : cThread) {
-      if (t.isAlive() && !t.isDaemon() && t.getState() != Thread.State.TERMINATED && !pThread.contains(t)) {
-        LOGGER.log(Level.SEVERE, "Error got new thread " + t.getName());
-      } else {
-        al.add(t);
-      }
-    }
-    cThread.removeAll(al);
-    for (Thread t : cThread) {
-      LOGGER.log(Level.WARNING, "" + t.getName() );
-      for (StackTraceElement ste : t.getStackTrace()) {
-        LOGGER.log(Level.WARNING, "  " + ste.toString() );
-      }
-    }
-    return cThread;
-  }
-
   @Test
   public void testInitalSSLServer() {
     try {
@@ -292,4 +259,47 @@ public class ImapSSLTest {
       fail("Exception rised  in client(" + ioe + ") while communicating");
     }
   }
+
+  public static Set<Thread> getThreadList() {
+    Set<Thread> cThread = Thread.getAllStackTraces().keySet();
+    ArrayList<Thread> al = new ArrayList<>();
+    for (Thread t : cThread) {
+      if (!t.isAlive() || t.isDaemon() || t.getState() == Thread.State.TERMINATED) {
+        al.add(t);
+      }
+    }
+    cThread.removeAll(al);
+    return cThread;
+  }
+
+  public static Set<Thread> verifyHangingThreads(Set<Thread> pThread) {
+    Set<Thread> cThread = Thread.getAllStackTraces().keySet();
+    cThread.removeAll(pThread);
+    ArrayList<Thread> al = new ArrayList<>();
+    for (Thread t : cThread) {
+      // protection from spurious non-daemon threads
+      boolean gotMessageVortex = false;
+      for (StackTraceElement ste : t.getStackTrace()) {
+        if (ste.toString().contains(" at net.messagevortex")) {
+          gotMessageVortex = true;
+        }
+      }
+      if (gotMessageVortex && t.isAlive() && !t.isDaemon() && t.getState() != Thread.State.TERMINATED && !pThread.contains(t)) {
+        // keep in set and issue logger message
+        LOGGER.log(Level.SEVERE, "Error got new thread " + t.getName());
+      } else {
+        // add for removal from set
+        al.add(t);
+      }
+    }
+    cThread.removeAll(al);
+    for (Thread t : cThread) {
+      LOGGER.log(Level.WARNING, "" + t.getName() );
+      for (StackTraceElement ste : t.getStackTrace()) {
+        LOGGER.log(Level.WARNING, "  " + ste.toString() );
+      }
+    }
+    return cThread;
+  }
+
 }

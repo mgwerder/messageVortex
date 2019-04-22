@@ -248,7 +248,7 @@ public class DummyBlender extends Blender {
           LOGGER.log(Level.INFO, "Found attachment WITH VortexMessage contained");
         } catch (IOException io) {
           // This exception will occur if no vortex message is contained
-          LOGGER.log(Level.INFO, "Found attachment with no VortexMessage contained", io);
+          LOGGER.log(Level.FINE, "Found attachment with no VortexMessage contained", io);
         }
         attaStream.close();
       }

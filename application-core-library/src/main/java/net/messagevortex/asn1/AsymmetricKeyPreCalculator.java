@@ -488,7 +488,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
             load(filename, false);
           }
         } catch (IOException | ExceptionInInitializerError e) {
-          LOGGER.log(Level.INFO, "error loading cache file (will be recreated)", e);
+          LOGGER.log(Level.FINE, "error loading cache file (will be recreated)", e);
         }
         // start runner
         runner = new InternalThread(stopIfFull);
