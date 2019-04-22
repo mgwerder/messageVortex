@@ -144,21 +144,27 @@ public class ImapClientTest {
   }
 
   @Test
-  public void ImapClientTimeoutTest() throws IOException {
+  public void ImapClientTimeoutTest() {
     LOGGER.log(Level.INFO, "************************************************************************");
     LOGGER.log(Level.INFO, "IMAP Client Timeout Test");
     LOGGER.log(Level.INFO, "************************************************************************");
     Set<Thread> threadSet = ImapSSLTest.getThreadList();
     DeadSocket ds = new DeadSocket(0, -1);
-    ImapClient ic = new ImapClient(new InetSocketAddress("localhost", ds.getPort()), new SecurityContext(PLAIN));
-    ic.connect();
+    ImapClient ic = null;
+    try {
+      ic = new ImapClient(new InetSocketAddress("localhost", ds.getPort()), new SecurityContext(PLAIN));
+      ic.connect();
+    } catch (IOException ioe) {
+      LOGGER.log(Level.SEVERE, "got unexpected IOException", ioe);
+      fail("got unexpected IOException");
+    }
+    assertTrue("ImapClient is unexpectedly null", ic != null);
     assertTrue("TLS is not as expected", !ic.isTls());
     long start = System.currentTimeMillis();
     ImapCommandIWantATimeout ict = new ImapCommandIWantATimeout();
     ict.init();
     try {
       ic.setTimeout(2000);
-      System.out.println("Sending IWantATimeout");
       for (String s : ic.sendCommand("a0 IWantATimeout", 300)) System.out.println("Reply was: " + s);
       fail("No timeoutException was raised");
     } catch (TimeoutException te) {
@@ -168,7 +174,6 @@ public class ImapClientTest {
     }
     try {
       ic.setTimeout(100);
-      System.out.println("Sending IWantATimeout");
       String[] sa = ic.sendCommand("a1 IWantATimeout", 300);
       if (sa != null) {
         for (String s : sa) {
@@ -184,7 +189,12 @@ public class ImapClientTest {
     }
     ImapCommand.deregisterCommand("IWantATimeout");
     ict.shutdown();
-    ic.shutdown();
+    try {
+      ic.shutdown();
+    } catch (IOException ioe) {
+      LOGGER.log(Level.SEVERE, "got unexpected IOException while shutting down connection", ioe);
+      fail("got unexpected IOException");
+    }
     ds.shutdown();
     assertTrue("error searching for hangig threads", ImapSSLTest.verifyHangingThreads(threadSet).size() == 0);
   }
