@@ -2,10 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d11f21f3-1155-4924-86d1-bc99f93f8cdb" name="Default Changelist" comment="Default Changelist">
-      <change beforePath="$PROJECT_DIR$/../Jenkinsfile" beforeDir="false" afterPath="$PROJECT_DIR$/../Jenkinsfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_codehaus_izpack_izpack_api_5_1_3.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_codehaus_izpack_izpack_api_5_1_2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_codehaus_izpack_izpack_compiler_5_1_3.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_codehaus_izpack_izpack_compiler_5_1_2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_codehaus_izpack_izpack_core_5_1_3.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_codehaus_izpack_izpack_core_5_1_2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_codehaus_izpack_izpack_event_5_1_3.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_codehaus_izpack_izpack_tools_5_1_2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_codehaus_izpack_izpack_gui_5_1_3.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_codehaus_izpack_izpack_gui_5_1_2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_codehaus_izpack_izpack_installer_5_1_3.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_codehaus_izpack_izpack_installer_5_1_2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_codehaus_izpack_izpack_maven_plugin_5_1_3.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_codehaus_izpack_izpack_native_5_1_3.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_codehaus_izpack_izpack_native_5_1_2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_codehaus_izpack_izpack_panel_5_1_3.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_codehaus_izpack_izpack_event_5_1_2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_codehaus_izpack_izpack_tools_5_1_3.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_codehaus_izpack_izpack_panel_5_1_2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_codehaus_izpack_izpack_uninstaller_5_1_3.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_codehaus_izpack_izpack_uninstaller_5_1_2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_codehaus_izpack_izpack_util_5_1_3.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_codehaus_izpack_izpack_util_5_1_2.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/izpack/install.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/izpack/install.xml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -106,8 +116,8 @@
       <file leaf-file-name="pom.xml" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="498">
-              <caret line="277" column="49" selection-start-line="277" selection-start-column="49" selection-end-line="277" selection-end-column="49" />
+            <state relative-caret-position="545">
+              <caret line="263" column="57" selection-start-line="263" selection-start-column="57" selection-end-line="263" selection-end-column="57" />
             </state>
           </provider>
         </entry>
@@ -141,10 +151,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>.tmp</find>
-      <find>plain_</find>
-      <find>isShut</find>
-      <find>shutdo</find>
       <find>runner =</find>
       <find>run</find>
       <find>target</find>
@@ -171,6 +177,10 @@
       <find>jar</find>
       <find>dependen</find>
       <find>staging</find>
+      <find>resources</find>
+      <find>maven-resou</find>
+      <find>maven-res</find>
+      <find>maven.re</find>
     </findStrings>
     <replaceStrings>
       <replace>;</replace>
@@ -283,7 +293,38 @@
         <path>
           <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
           <item name="application-core-library" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+          <item name="Plugins" type="7aea1407:MavenProjectsStructure$PluginsNode" />
+          <item name="antrun" type="36feed69:MavenProjectsStructure$PluginNode" />
+        </path>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="application-core-library" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+          <item name="Plugins" type="7aea1407:MavenProjectsStructure$PluginsNode" />
+          <item name="izpack" type="36feed69:MavenProjectsStructure$PluginNode" />
+        </path>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="application-core-library" type="9519ce18:MavenProjectsStructure$ProjectNode" />
           <item name="Dependencies" type="f4be9f2a:MavenProjectsStructure$DependenciesNode" />
+        </path>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="application-core-library" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+          <item name="Dependencies" type="f4be9f2a:MavenProjectsStructure$DependenciesNode" />
+          <item name="junit:junit:4.12" type="c0821a7e:MavenProjectsStructure$DependencyNode" />
+        </path>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="application-core-library" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+          <item name="Dependencies" type="f4be9f2a:MavenProjectsStructure$DependenciesNode" />
+          <item name="com.icegreen:greenmail:1.5.9" type="c0821a7e:MavenProjectsStructure$DependencyNode" />
+        </path>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="application-core-library" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+          <item name="Dependencies" type="f4be9f2a:MavenProjectsStructure$DependenciesNode" />
+          <item name="com.icegreen:greenmail:1.5.9" type="c0821a7e:MavenProjectsStructure$DependencyNode" />
+          <item name="com.sun.mail:javax.mail:1.5.6" type="c0821a7e:MavenProjectsStructure$DependencyNode" />
         </path>
       </expand>
       <select />
@@ -331,12 +372,6 @@
               <item name="application-core-library" type="462c0819:PsiDirectoryNode" />
               <item name="target" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="application-core-library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="application-core-library" type="462c0819:PsiDirectoryNode" />
-              <item name="target" type="462c0819:PsiDirectoryNode" />
-              <item name="staging" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -380,7 +415,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JAR Application.MessageVortex.jar">
+  <component name="RunManager" selected="Maven.application-core-library [izpack:izpack]">
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
       <method>
@@ -456,29 +491,6 @@
       </option>
       <patterns />
     </configuration>
-    <configuration name="MainTransportSuite" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="application-core-library" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="net.messagevortex.test.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="net.messagevortex.test" />
-      <option name="MAIN_CLASS_NAME" value="net.messagevortex.test.MainTransportSuite" />
-      <option name="METHOD_NAME" />
-      <option name="TEST_OBJECT" value="class" />
-      <option name="VM_PARAMETERS" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <patterns />
-    </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit">
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
@@ -503,6 +515,30 @@
     </configuration>
     <configuration name="MessageVortex.one-jar.jar" type="JarApplication" factoryName="JAR Application" temporary="true">
       <option name="JAR_PATH" value="$PROJECT_DIR$/target/MessageVortex.one-jar.jar" />
+    </configuration>
+    <configuration name="application-core-library [izpack:izpack]" type="MavenRunConfiguration" factoryName="Maven" temporary="true">
+      <MavenSettings>
+        <option name="myGeneralSettings" />
+        <option name="myRunnerSettings" />
+        <option name="myRunnerParameters">
+          <MavenRunnerParameters>
+            <option name="profiles">
+              <set />
+            </option>
+            <option name="goals">
+              <list>
+                <option value="izpack:izpack" />
+              </list>
+            </option>
+            <option name="pomFileName" value="pom.xml" />
+            <option name="profilesMap">
+              <map />
+            </option>
+            <option name="resolveToWorkspace" value="false" />
+            <option name="workingDirPath" value="$PROJECT_DIR$" />
+          </MavenRunnerParameters>
+        </option>
+      </MavenSettings>
     </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
@@ -544,18 +580,18 @@
       <item itemvalue="Application.MessageVortex" />
       <item itemvalue="JUnit.All Tests" />
       <item itemvalue="JUnit.MainCoreSuite" />
-      <item itemvalue="JUnit.MainTransportSuite" />
       <item itemvalue="JUnit.ImapClientTest.ImapClientTimeoutTest" />
       <item itemvalue="JAR Application.MessageVortex.one-jar.jar" />
       <item itemvalue="JAR Application.MessageVortex.jar" />
+      <item itemvalue="Maven.application-core-library [izpack:izpack]" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Maven.application-core-library [izpack:izpack]" />
         <item itemvalue="JAR Application.MessageVortex.jar" />
         <item itemvalue="JAR Application.MessageVortex.one-jar.jar" />
         <item itemvalue="JUnit.MainCoreSuite" />
         <item itemvalue="JUnit.ImapClientTest.ImapClientTimeoutTest" />
-        <item itemvalue="JUnit.MainTransportSuite" />
       </list>
     </recent_temporary>
   </component>
@@ -627,7 +663,7 @@
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="FindBugs-IDEA" order="13" weight="0.32996634" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5017301" side_tool="true" weight="0.32819635" />
-      <window_info anchor="right" id="Maven Projects" order="6" sideWeight="0.49857143" visible="true" weight="0.13494809" />
+      <window_info active="true" anchor="right" id="Maven Projects" order="6" sideWeight="0.49857143" visible="true" weight="0.23269896" />
       <window_info id="Capture Tool" order="6" />
       <window_info id="Designer" order="2" />
       <window_info anchor="bottom" id="SonarQube" order="15" weight="0.32996634" />
@@ -644,7 +680,7 @@
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4982699" visible="true" weight="0.31593716" />
       <window_info anchor="bottom" id="CheckStyle" order="8" weight="0.34175083" />
       <window_info anchor="bottom" id="Terminal" order="7" weight="0.32996634" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49916247" visible="true" weight="0.29065743" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49916247" visible="true" weight="0.29065743" />
       <window_info anchor="bottom" id="Analysis" order="14" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.24691358" />
       <window_info anchor="right" id="Theme Preview" order="8" />
@@ -1126,8 +1162,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="498">
-          <caret line="277" column="49" selection-start-line="277" selection-start-column="49" selection-end-line="277" selection-end-column="49" />
+        <state relative-caret-position="545">
+          <caret line="263" column="57" selection-start-line="263" selection-start-column="57" selection-end-line="263" selection-end-column="57" />
         </state>
       </provider>
     </entry>

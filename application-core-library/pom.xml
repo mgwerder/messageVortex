@@ -48,7 +48,7 @@
         <sonar.verbose>true</sonar.verbose>
 	    <sonar.sonargraph.report.path>target/sonargraph</sonar.sonargraph.report.path>
 
-        <izpack.version>5.0.9</izpack.version>
+        <izpack.version>5.1.2</izpack.version>
         <izpack.staging>${project.build.directory}/izpack-staging</izpack.staging>
     </properties>
 
@@ -80,16 +80,18 @@
             <artifactId>picocli</artifactId>
             <version>3.9.5</version>
         </dependency>
+        <dependency>
+            <groupId>org.codehaus.izpack</groupId>
+            <artifactId>izpack-maven-plugin</artifactId>
+            <version>${izpack.version}</version>
+            <type>pom</type>
+        </dependency>
+
         <!-- Required for TestSmtpHandler -> FIXME get rid of it ASAP -->
         <dependency>
             <groupId>com.icegreen</groupId>
             <artifactId>greenmail</artifactId>
             <version>1.5.9</version>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.izpack</groupId>
-            <artifactId>izpack-maven-plugin</artifactId>
-            <version>5.1.3</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -259,6 +261,7 @@
                         <nonFilteredFileExtension>jar</nonFilteredFileExtension>
                         <nonFilteredFileExtension>cfg</nonFilteredFileExtension>
                     </nonFilteredFileExtensions>
+                    <outputDirectory>${project.build.directory}/lib</outputDirectory>
                 </configuration>
             </plugin>
 
@@ -266,6 +269,7 @@
                 <groupId>org.codehaus.izpack</groupId>
                 <artifactId>izpack-maven-plugin</artifactId>
                 <version>${izpack.version}</version>
+                <extensions>true</extensions>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -274,8 +278,10 @@
                             <!-- base for relative paths in izpack descriptor -->
                             <baseDir>${izpack.staging}</baseDir>
                             <installFile>${basedir}/src/main/izpack/install.xml</installFile>
-                            <outputDirectory>${basedir}/target/izpack</outputDirectory>
                             <mkdirs>true</mkdirs>
+                            <finalName>MessageVortex-installer</finalName>
+                            <classifier>installer</classifier>
+                            <enableOverrideArtifact>false</enableOverrideArtifact>
                         </configuration>
                     </execution>
                 </executions>
