@@ -388,6 +388,7 @@
                                     <fileset dir="src/main/izpack/resources"/>
                                     <fileset dir="src/main/resources/images/" includes="MessageVortexLogo*.png"/>
                                     <fileset dir="src/main/resources/images/" includes="MessageVortexLogo*.ico"/>
+                                    <fileset dir="src/main/resources/images/" includes="MessageVortexLogo*.icns"/>
                                 </copy>
                             </target>
                         </configuration>
@@ -468,6 +469,7 @@
                 <configuration>
                     <mainClass>net.messagevortex.MessageVortex</mainClass>
                     <generateDiskImageFile>true</generateDiskImageFile>
+                    <iconFile>images/MessageVortexLogo_128.icns</iconFile>
                 </configuration>
                 <executions>
                     <execution>
