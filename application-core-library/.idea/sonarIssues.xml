@@ -3,6 +3,11 @@
   <component name="issues">
     <option name="index">
       <map>
+        <entry key="/Dummy.txt">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="/a.dummy">
           <value>
             <set />
@@ -58,7 +63,22 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/izpack/HTMLInfoPanel.info">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/izpack/install.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/izpack/resources/assembly.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/izpack/resources/hello.html">
           <value>
             <set />
           </value>
@@ -539,6 +559,16 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/test/java/net/messagevortex/test/transport/SMTPTransportSenderTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/target/classes/LICENSE.md">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/target/classes/messageVortex.cfg">
           <value>
             <set />
           </value>

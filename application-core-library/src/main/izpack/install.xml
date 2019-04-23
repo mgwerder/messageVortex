@@ -4,7 +4,7 @@
                      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:schemaLocation="http://izpack.org/schema/installation http://izpack.org/schema/5.0/izpack-installation-5.0.xsd">    <info>
         <appname>MessageVortex Core</appname>
-        <appversion>1.0.0.123457</appversion>
+        <appversion>${project.version}</appversion>
         <url>https://messagevortex.net</url>
         <authors>
             <author name="Martin Gwerder" email="info@messagevortex.net"/>
@@ -12,27 +12,47 @@
         <javaversion>1.8</javaversion>
         <uninstaller name="uninstall.jar" path="${INSTALL_PATH}/uninstaller" write="yes"/>
         <requiresjdk>no</requiresjdk>
+        <run-privileged/>
     </info>
+
     <locale>
         <langpack iso3="eng"/>
     </locale>
-    <resources>
-        <!--<res src="@{izpack.staging}/common_resources/img/install-sidebar.png" id="Installer.image"/>
-        <res src="hello.html" id="HTMLHelloPanel.info"/>
-        <res src="license.html" id="HTMLLicencePanel.licence"/>-->
-    </resources>
-    <panels>
 
+    <guiprefs width="800" height="600" resizable="no">
+        <splash>MessageVortexLogo.png</splash>
+        <laf name="substance">
+            <os family="windows" />
+            <os family="unix" />
+            <param name="variant" value="mist-silver" />
+        </laf>
+        <laf name="substance">
+            <os family="mac" />
+            <param name="variant" value="mist-aqua" />
+        </laf>
+        <modifier key="useSplashScreen" value="4000"/>
+        <modifier key="useHeadingPanel" value="yes" />
+    </guiprefs>
+
+    <resources>
+        <res src="resources/MessageVortexLogo_128.png" id="Installer.image"/>
+        <res src="resources/MessageVortexLogo_128.png" id="Splash.image"/>
+        <res src="resources/hello.html" id="HTMLHelloPanel.info"/>
+        <res src="LICENSE.md" id="HTMLLicencePanel.licence"/>-->
+    </resources>
+
+    <panels>
         <!-- FIXME why doesn't HTMLHelloPanel work any more?  it is nice not to have the "Please read the following information" text ... -->
-        <panel classname="HTMLInfoPanel" id="welcome"/>
+        <!--<panel classname="HTMLInfoPanel" id="welcome"/>-->
 
         <!-- this is our custom panel, loaded from the izpack-panels.jar file -->
         <!--<panel classname="com.izforge.izpack.panels.mypanels.MyHelloPanel" id="myHello"/>-->
 
+        <panel classname="HTMLHelloPanel" id="hello"/>
         <panel classname="TargetPanel" id="install_dir"/>
         <panel classname="PacksPanel" id="sdk_pack_select"/>
-        <panel classname="InstallPanel" id="install"/>
-        <panel classname="FinishPanel" id="finish"/>
+        <panel classname="InstallPanel" id="install" allowClose="true"/>
+        <panel classname="FinishPanel" allowClose="true" id="finish"/>
     </panels>
 
     <packs>
