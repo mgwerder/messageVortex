@@ -469,7 +469,9 @@
                 <configuration>
                     <mainClass>net.messagevortex.MessageVortex</mainClass>
                     <generateDiskImageFile>true</generateDiskImageFile>
+                    <!-- Removed as it caused problems when building in jenkins (drove me mad)
                     <iconFile>images/MessageVortexLogo_128.icns</iconFile>
+                    -->
                 </configuration>
                 <executions>
                     <execution>
