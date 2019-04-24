@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d11f21f3-1155-4924-86d1-bc99f93f8cdb" name="Default Changelist" comment="Default Changelist">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/net/messagevortex/test/imap/ImapSSLTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/net/messagevortex/test/imap/ImapSSLTest.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
@@ -103,7 +104,7 @@
       <file leaf-file-name="Jenkinsfile" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../Jenkinsfile">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="786">
+            <state relative-caret-position="1904">
               <caret line="112" selection-start-line="112" selection-end-line="113" />
             </state>
           </provider>
@@ -121,8 +122,8 @@
       <file leaf-file-name="ImapClientTest.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/java/net/messagevortex/test/imap/ImapClientTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="508">
-              <caret line="170" selection-start-line="170" selection-end-line="170" />
+            <state relative-caret-position="556">
+              <caret line="172" column="48" selection-start-line="172" selection-start-column="44" selection-end-line="172" selection-end-column="48" />
             </state>
           </provider>
         </entry>
@@ -130,8 +131,8 @@
       <file leaf-file-name="ImapSSLTest.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/test/java/net/messagevortex/test/imap/ImapSSLTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="600">
-              <caret line="159" column="21" selection-start-line="159" selection-start-column="21" selection-end-line="159" selection-end-column="21" />
+            <state relative-caret-position="821">
+              <caret line="166" column="1" selection-start-line="166" selection-start-column="1" selection-end-line="166" selection-end-column="1" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -740,7 +741,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1192" y="-8" width="1216" height="1936" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="FindBugs-IDEA" order="13" weight="0.32996634" />
@@ -759,7 +759,7 @@
       <window_info id="Image Layers" order="3" />
       <window_info anchor="right" id="Capture Analysis" order="4" />
       <window_info anchor="bottom" id="Version Control" order="11" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4982699" visible="true" weight="0.31593716" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4982699" weight="0.31593716" />
       <window_info anchor="bottom" id="CheckStyle" order="8" weight="0.34175083" />
       <window_info anchor="bottom" id="Terminal" order="7" weight="0.32996634" />
       <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49916247" visible="true" weight="0.29065743" />
@@ -1193,13 +1193,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../Jenkinsfile">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="786">
-          <caret line="112" selection-start-line="112" selection-end-line="113" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
@@ -1207,17 +1200,24 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/../Jenkinsfile">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1904">
+          <caret line="112" selection-start-line="112" selection-end-line="113" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/net/messagevortex/test/imap/ImapClientTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="508">
-          <caret line="170" selection-start-line="170" selection-end-line="170" />
+        <state relative-caret-position="556">
+          <caret line="172" column="48" selection-start-line="172" selection-start-column="44" selection-end-line="172" selection-end-column="48" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/net/messagevortex/test/imap/ImapSSLTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="600">
-          <caret line="159" column="21" selection-start-line="159" selection-start-column="21" selection-end-line="159" selection-end-column="21" />
+        <state relative-caret-position="821">
+          <caret line="166" column="1" selection-start-line="166" selection-start-column="1" selection-end-line="166" selection-end-column="1" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

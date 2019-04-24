@@ -157,14 +157,13 @@ public class ImapSSLTest {
       }).start();
 
       ImapClient ic = new ImapClient(new InetSocketAddress("localhost", ss.getLocalPort()), new SecurityContext(context, SecurityRequirement.UNTRUSTED_SSLTLS));
-      ic.setTimeout(5000);
+      ic.setTimeout(1000);
       ic.connect();
       ic.sendCommand("a1 test");
       assertTrue("check client socket state", ic.isTls());
       ic.shutdown();
 
       // Self test
-      Thread.sleep(700);
       assertTrue("error searching for hangig threads", verifyHangingThreads(threadSet).size() == 0);
     } catch (Exception ioe) {
       LOGGER.log(Level.WARNING, "Unexpected Exception", ioe);
