@@ -52,6 +52,7 @@
         <izpack.staging>${project.build.directory}/staging</izpack.staging>
 
         <git-commit-id-plugin.version>2.2.6</git-commit-id-plugin.version>
+        <git.commit.id>none</git.commit.id>
     </properties>
 
     <licenses>

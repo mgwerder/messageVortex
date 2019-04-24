@@ -115,7 +115,7 @@ pipeline {
     }
     stage ('Site build') {
       steps {
-        sh 'mvn -DskipTests compile javadoc:jar onejar:one-jar izpack:izpack site'
+        sh 'mvn -pl application-core-library -DskipTests site'
       }
     }
     stage('SonarQube analysis') {
