@@ -28,6 +28,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -834,11 +835,26 @@ public class Config {
   }
 
   /***
-   * <p>Loads a config file and validates input.</p>
+   * <p>Writes config to a string.</p>
    *
-   * <p>Loads and parses a file according to the resources configuration</p>
+   * <p>Writes a commented file according to the configuration</p>
    *
-   * @param filename name of the property file to be read
+   * @returns The configuration as string
+   *
+   */
+  public String store() throws IOException {
+    StringWriter bw = new StringWriter();
+    store(bw);
+    bw.close();
+    return bw.toString();
+  }
+
+  /***
+   * <p>Writes a config file.</p>
+   *
+   * <p>Writes a commented file according to the configuration</p>
+   *
+   * @param filename name of the property file to be written
    */
   public void store(String filename) throws IOException {
 
@@ -846,15 +862,19 @@ public class Config {
 
     try (BufferedWriter bw = new BufferedWriter(
             new OutputStreamWriter(new FileOutputStream(filename),StandardCharsets.UTF_8))) {
-      // Dump default section (all values in definition order)
-      bw.write("[default]" + System.lineSeparator());
-      dumpSection(null, bw, true);
+      store(bw);
+    }
+  }
 
-      // Dump all other sections
-      for (String section : sections) {
-        bw.write(System.lineSeparator() + "[" + section + "]" + System.lineSeparator());
-        dumpSection(section, bw, false);
-      }
+  private void store(Writer bw) throws IOException {
+    // Dump default section (all values in definition order)
+    bw.write("[default]" + System.lineSeparator());
+    dumpSection(null, bw, true);
+
+    // Dump all other sections
+    for (String section : sections) {
+      bw.write(System.lineSeparator() + "[" + section + "]" + System.lineSeparator());
+      dumpSection(section, bw, false);
     }
   }
 
