@@ -173,7 +173,7 @@ public class ImapClientTest {
       assertFalse("Did wait too long", el > 2100);
     }
     try {
-      ic.setTimeout(100);
+      ic.setTimeout(500);
       String[] sa = ic.sendCommand("a1 IWantATimeout", 300);
       if (sa != null) {
         for (String s : sa) {
