@@ -157,7 +157,7 @@ public class ImapSSLTest {
       }).start();
 
       ImapClient ic = new ImapClient(new InetSocketAddress("localhost", ss.getLocalPort()), new SecurityContext(context, SecurityRequirement.UNTRUSTED_SSLTLS));
-      ic.setTimeout(1000);
+      ic.setTimeout(5000);
       ic.connect();
       ic.sendCommand("a1 test");
       assertTrue("check client socket state", ic.isTls());
