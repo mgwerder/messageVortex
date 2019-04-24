@@ -41,7 +41,7 @@
         <sonar.doxygen.generateClassGraphs>true</sonar.doxygen.generateClassGraphs>
         <sonar.doxygen.generateCallerGraphs>true</sonar.doxygen.generateCallerGraphs>
         <sonar.doxygen.generateCallGraphs>true</sonar.doxygen.generateCallGraphs>
-        <sonar.java.libraries>target/lib/*.jar</sonar.java.libraries>
+        <sonar.java.libraries>${izpack.staging}/lib/*.jar</sonar.java.libraries>
         <sonar.technicalDebt.developmentCost>5</sonar.technicalDebt.developmentCost>
         <sonar.issues.defaultAssigneeLogin>mgwerder</sonar.issues.defaultAssigneeLogin>
         <sonar.scm.disabled>true</sonar.scm.disabled>
