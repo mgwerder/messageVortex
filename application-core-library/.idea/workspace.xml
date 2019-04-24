@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d11f21f3-1155-4924-86d1-bc99f93f8cdb" name="Default Changelist" comment="Default Changelist">
-      <change beforePath="$PROJECT_DIR$/../Jenkinsfile" beforeDir="false" afterPath="$PROJECT_DIR$/../Jenkinsfile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/Config.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -95,27 +94,27 @@
           <entry key="Jenkins file" value="383" />
           <entry key="PLAIN_TEXT" value="2016" />
           <entry key="Properties" value="15" />
-          <entry key="XML" value="504" />
+          <entry key="XML" value="515" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../Jenkinsfile">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="659">
-              <caret line="117" column="59" selection-start-line="117" selection-start-column="59" selection-end-line="117" selection-end-column="59" />
+            <state relative-caret-position="200">
+              <caret line="93" column="26" selection-start-line="93" selection-start-column="26" selection-end-line="93" selection-end-column="26" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4046">
-              <caret line="552" selection-start-line="552" selection-end-line="552" />
+            <state relative-caret-position="1479">
+              <caret line="455" column="72" selection-start-line="455" selection-start-column="72" selection-end-line="455" selection-end-column="72" />
             </state>
           </provider>
         </entry>
@@ -124,7 +123,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/Config.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="154">
-              <caret line="853" column="4" lean-forward="true" selection-start-line="853" selection-start-column="4" selection-end-line="853" selection-end-column="4" />
+              <caret line="853" column="4" selection-start-line="853" selection-start-column="4" selection-end-line="853" selection-end-column="4" />
             </state>
           </provider>
         </entry>
@@ -167,7 +166,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>reports</find>
       <find>System.lineSeparator()</find>
       <find>maven-resources-plugin</find>
       <find>will be</find>
@@ -186,7 +184,6 @@
       <find>depen</find>
       <find>jar</find>
       <find>oneja</find>
-      <find>izpack</find>
       <find>classi</find>
       <find>jar-plug</find>
       <find>jar-pl</find>
@@ -197,6 +194,8 @@
       <find>processC</find>
       <find>icn</find>
       <find>store(</find>
+      <find>stag</find>
+      <find>izpack</find>
     </findStrings>
     <replaceStrings>
       <replace>;</replace>
@@ -264,10 +263,10 @@
         <option value="$PROJECT_DIR$/src/main/izpack/resources/assembly.xml" />
         <option value="$PROJECT_DIR$/src/main/izpack/install.xml" />
         <option value="$PROJECT_DIR$/src/test/java/net/messagevortex/test/imap/ImapClientTest.java" />
-        <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/test/java/net/messagevortex/test/imap/ImapSSLTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/Config.java" />
         <option value="$PROJECT_DIR$/../Jenkinsfile" />
+        <option value="$PROJECT_DIR$/pom.xml" />
       </list>
     </option>
   </component>
@@ -306,12 +305,6 @@
           <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
           <item name="application-core-library" type="9519ce18:MavenProjectsStructure$ProjectNode" />
           <item name="Plugins" type="7aea1407:MavenProjectsStructure$PluginsNode" />
-        </path>
-        <path>
-          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
-          <item name="application-core-library" type="9519ce18:MavenProjectsStructure$ProjectNode" />
-          <item name="Plugins" type="7aea1407:MavenProjectsStructure$PluginsNode" />
-          <item name="onejar" type="36feed69:MavenProjectsStructure$PluginNode" />
         </path>
         <path>
           <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
@@ -462,7 +455,7 @@
     <property name="SearchEverywhereHistoryKey" value="final ret= new Boolean&#9;null&#9;null" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1554710566305" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1556119532414" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../sonar.properties" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -645,7 +638,7 @@
       <workItem from="1552898686832" duration="32907000" />
       <workItem from="1554275333733" duration="5536000" />
       <workItem from="1554284600550" duration="18296000" />
-      <workItem from="1556090945970" duration="1146000" />
+      <workItem from="1556090945970" duration="2151000" />
     </task>
     <servers />
   </component>
@@ -682,7 +675,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="92589000" />
+    <option name="totallyTimeSpent" value="93594000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -707,7 +700,7 @@
       <window_info anchor="bottom" id="Java Enterprise" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.24691358" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4982699" visible="true" weight="0.28448275" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4982699" weight="0.28448275" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -1034,13 +1027,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4046">
-          <caret line="552" selection-start-line="552" selection-end-line="552" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/net/messagevortex/test/imap/ImapClientTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2295">
@@ -1082,14 +1068,21 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/Config.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="154">
-          <caret line="853" column="4" lean-forward="true" selection-start-line="853" selection-start-column="4" selection-end-line="853" selection-end-column="4" />
+          <caret line="853" column="4" selection-start-line="853" selection-start-column="4" selection-end-line="853" selection-end-column="4" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../Jenkinsfile">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="659">
-          <caret line="117" column="59" selection-start-line="117" selection-start-column="59" selection-end-line="117" selection-end-column="59" />
+        <state relative-caret-position="200">
+          <caret line="93" column="26" selection-start-line="93" selection-start-column="26" selection-end-line="93" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1479">
+          <caret line="455" column="72" selection-start-line="455" selection-start-column="72" selection-end-line="455" selection-end-column="72" />
         </state>
       </provider>
     </entry>
