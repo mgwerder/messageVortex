@@ -2,50 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d11f21f3-1155-4924-86d1-bc99f93f8cdb" name="Default Changelist" comment="Default Changelist">
-      <change afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/router/operation/InternalPayloadSpaceStore.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/Config.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/ExtendedSecureRandom.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/ExtendedSecureRandom.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortexBlending.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortexBlending.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/ThreadDumper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/ThreadDumper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/accounting/HeaderVerifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/accounting/HeaderVerifier.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AlgorithmParameter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AlgorithmParameter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AsymmetricKeyPreCalculator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AsymmetricKeyPreCalculator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/IdentityBlock.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/IdentityBlock.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/IdentityStoreBlock.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/IdentityStoreBlock.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/InnerMessageBlock.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/InnerMessageBlock.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/PayloadChunk.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/PayloadChunk.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/PrefixBlock.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/PrefixBlock.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/VortexMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/VortexMessage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/encryption/Padding.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/encryption/Padding.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/BlendingReceiver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/BlendingReceiver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/router/JGraph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/router/JGraph.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/router/MessageFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/router/MessageFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/router/operation/AbstractOperation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/router/operation/AbstractOperation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/router/operation/InternalPayload.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/router/operation/InternalPayloadSpace.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/router/operation/InternalPayloadSpace.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/router/operation/Matrix.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/router/operation/Matrix.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/router/operation/Operation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/router/operation/Operation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/CustomKeyManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/CustomKeyManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/ListeningSocketChannel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/ListeningSocketChannel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/MailServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/MailServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/SmtpImapServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/SmtpImapServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/StoppableThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/StoppableThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/dummy/DummyTransportTrx.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/dummy/DummyTransportTrx.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/imap/ImapConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/imap/ImapConnection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/imap/ImapLine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/imap/ImapLine.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/imap/ImapPassthruServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/imap/ImapPassthruServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/imap/ImapServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/imap/ImapServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/SmtpReceiver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/SmtpReceiver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/net/messagevortex/test/MainRoutingSuite.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/net/messagevortex/test/MainRoutingSuite.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/net/messagevortex/test/imap/ImapLineTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/net/messagevortex/test/imap/ImapLineTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/net/messagevortex/test/routing/InternalPayloadTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/net/messagevortex/test/routing/InternalPayloadSpaceTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/net/messagevortex/test/routing/OperationProcessingTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/net/messagevortex/test/routing/OperationProcessingTest.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -141,49 +102,29 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/ListeningSocketChannel.java">
+      <file leaf-file-name="Config.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/Config.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="625">
-              <caret line="125" column="30" lean-forward="true" selection-start-line="125" selection-start-column="30" selection-end-line="125" selection-end-column="30" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#3903#3904#0" expanded="true" />
-                <element signature="e#3954#3955#0" expanded="true" />
-                <element signature="e#3992#3993#0" expanded="true" />
-                <element signature="e#4022#4023#0" expanded="true" />
-                <element signature="e#4051#4052#0" expanded="true" />
-                <element signature="e#4084#4085#0" expanded="true" />
-                <element signature="e#4131#4132#0" expanded="true" />
-                <element signature="e#4174#4175#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="17">
+              <caret line="894" column="4" selection-start-line="894" selection-start-column="4" selection-end-line="894" selection-end-column="4" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/router/MessageFactory.java">
+      <file leaf-file-name="MessageVortexTest.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/MessageVortexTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="54" column="59" selection-start-line="54" selection-start-column="59" selection-end-line="54" selection-end-column="59" />
+            <state relative-caret-position="372">
+              <caret line="42" column="10" selection-start-line="42" selection-start-column="10" selection-end-line="42" selection-end-column="10" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/java/net/messagevortex/test/routing/MessageFactoryTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="226">
-              <caret line="54" column="60" selection-start-line="54" selection-start-column="60" selection-end-line="54" selection-end-column="60" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
+      <file leaf-file-name="MessageVortex.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="408">
-              <caret line="100" lean-forward="true" selection-start-line="100" selection-end-line="100" />
+            <state relative-caret-position="606">
+              <caret line="102" lean-forward="true" selection-start-line="102" selection-end-line="102" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -191,72 +132,20 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortexBlending.java">
+      <file leaf-file-name="ImapClient.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/imap/ImapClient.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="629">
-              <caret line="121" lean-forward="true" selection-start-line="121" selection-end-line="121" />
-              <folding>
-                <element signature="e#2641#2642#0" expanded="true" />
-                <element signature="e#2666#2667#0" expanded="true" />
-                <element signature="e#2991#2992#0" expanded="true" />
-                <element signature="e#3014#3015#0" expanded="true" />
-                <element signature="e#3170#3171#0" expanded="true" />
-                <element signature="e#3194#3195#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="442">
+              <caret line="44" column="13" selection-start-line="44" selection-start-column="13" selection-end-line="44" selection-end-column="13" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/StoppableThread.java">
+      <file leaf-file-name="ImapConnection.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/imap/ImapConnection.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="312">
-              <caret line="32" lean-forward="true" selection-start-line="32" selection-end-line="32" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/ThreadDumper.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="245">
-              <caret line="86" column="60" selection-start-line="86" selection-start-column="60" selection-end-line="86" selection-end-column="60" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/SmtpImapServer.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="347">
-              <caret line="28" column="53" lean-forward="true" selection-start-line="28" selection-start-column="53" selection-end-line="28" selection-end-column="53" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/SmtpReceiver.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="425">
-              <caret line="87" column="46" selection-start-line="87" selection-start-column="46" selection-end-line="87" selection-end-column="46" />
-              <folding>
-                <element signature="e#3210#3211#0" expanded="true" />
-                <element signature="e#3235#3236#0" expanded="true" />
-                <element signature="e#3647#3648#0" expanded="true" />
-                <element signature="e#3676#3677#0" expanded="true" />
-                <element signature="e#3702#3703#0" expanded="true" />
-                <element signature="e#3737#3738#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/PayloadChunk.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="391">
-              <caret line="276" column="50" lean-forward="true" selection-start-line="276" selection-start-column="50" selection-end-line="276" selection-end-column="50" />
+            <state relative-caret-position="3621">
+              <caret line="238" column="3" selection-start-line="238" selection-start-column="3" selection-end-line="238" selection-end-column="3" />
             </state>
           </provider>
         </entry>
@@ -272,8 +161,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>getT</find>
-      <find>fail(</find>
       <find>IMAP Client</find>
       <find>dependen</find>
       <find>staging</find>
@@ -302,6 +189,8 @@
       <find>Config.</find>
       <find>javadoc</find>
       <find>.getPort</find>
+      <find>call</find>
+      <find>call(</find>
     </findStrings>
     <replaceStrings>
       <replace>;</replace>
@@ -366,13 +255,13 @@
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/router/JGraph.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/ListeningSocketChannel.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/router/MessageFactory.java" />
-        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortexBlending.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/StoppableThread.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/ThreadDumper.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/SmtpImapServer.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/smtp/SmtpReceiver.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/PayloadChunk.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java" />
       </list>
     </option>
   </component>
@@ -438,8 +327,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
+      <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -504,7 +392,7 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="messagevortex" type="462c0819:PsiDirectoryNode" />
-              <item name="router" type="462c0819:PsiDirectoryNode" />
+              <item name="asn1" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="application-core-library" type="b2602c69:ProjectViewProjectNode" />
@@ -513,27 +401,7 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="messagevortex" type="462c0819:PsiDirectoryNode" />
-              <item name="router" type="462c0819:PsiDirectoryNode" />
-              <item name="operation" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="application-core-library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="application-core-library" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="messagevortex" type="462c0819:PsiDirectoryNode" />
-              <item name="transport" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="application-core-library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="application-core-library" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="messagevortex" type="462c0819:PsiDirectoryNode" />
-              <item name="transport" type="462c0819:PsiDirectoryNode" />
-              <item name="imap" type="462c0819:PsiDirectoryNode" />
+              <item name="blender" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="application-core-library" type="b2602c69:ProjectViewProjectNode" />
@@ -595,6 +463,8 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -632,10 +502,10 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Maven.application-core-library [package]">
+  <component name="RunManager" selected="JUnit.All Tests">
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <method v="2">
+      <method>
         <option name="Make" enabled="true" />
       </method>
     </configuration>
@@ -644,30 +514,21 @@
       <module name="application-core-library" />
       <option name="PROGRAM_PARAMETERS" value="--help" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
     </configuration>
     <configuration name="MessageVortex keycache" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="net.messagevortex.asn1.AsymmetricKeyPreCalculator" />
       <module name="application-core-library" />
       <option name="PROGRAM_PARAMETERS" value="keycache -f AsymmetricKey.cache list" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
     </configuration>
     <configuration name="MessageVortex" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="net.messagevortex.MessageVortex" />
       <module name="application-core-library" />
       <option name="PROGRAM_PARAMETERS" value="--threadDumpInteval 10 is dp" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <method v="2">
+      <method>
         <option name="Make" enabled="true" />
       </method>
     </configuration>
@@ -679,32 +540,48 @@
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
       <option name="PACKAGE_NAME" value="net.messagevortex.test" />
       <option name="MAIN_CLASS_NAME" value="net.messagevortex.test.MainCoreSuite" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
       <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <patterns />
     </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit">
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
       <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <method v="2">
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <patterns />
+      <method>
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <configuration name="MessageVortex-package-installer.jar" type="JarApplication" factoryName="JAR Application" temporary="true">
       <option name="JAR_PATH" value="$PROJECT_DIR$/target/MessageVortex-package-installer.jar" />
-      <method v="2" />
     </configuration>
     <configuration name="MessageVortex.jar" type="JarApplication" factoryName="JAR Application" temporary="true">
       <option name="JAR_PATH" value="$PROJECT_DIR$/target/MessageVortex.jar" />
-      <method v="2" />
     </configuration>
     <configuration name="MessageVortex.one-jar.jar" type="JarApplication" factoryName="JAR Application" temporary="true">
       <option name="JAR_PATH" value="$PROJECT_DIR$/target/MessageVortex.one-jar.jar" />
-      <method v="2" />
     </configuration>
     <configuration name="application-core-library [package]" type="MavenRunConfiguration" factoryName="Maven">
       <MavenSettings>
@@ -736,14 +613,29 @@
           </MavenRunnerParameters>
         </option>
       </MavenSettings>
-      <method v="2" />
     </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="SUITE_NAME" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="GROUP_NAME" />
+      <option name="TEST_OBJECT" value="CLASS" />
       <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="OUTPUT_DIRECTORY" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <option name="USE_DEFAULT_REPORTERS" value="false" />
+      <option name="PROPERTIES_FILE" />
       <properties />
       <listeners />
-      <method v="2">
+      <method>
         <option name="Make" enabled="true" />
       </method>
     </configuration>
@@ -752,7 +644,7 @@
       <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
       <option name="PROGRAM_PARAMETERS" />
       <predefined_log_file id="idea.log" enabled="true" />
-      <method v="2">
+      <method>
         <option name="Make" enabled="true" />
       </method>
     </configuration>
@@ -840,81 +732,105 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="1912" y="-8" width="1936" height="1216" extended-state="6" />
+    <frame x="1192" y="-8" width="1216" height="1936" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20948827" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info id="Designer" order="2" />
-      <window_info id="Image Layers" order="3" />
-      <window_info id="UI Designer" order="4" />
-      <window_info id="Favorites" order="5" side_tool="true" />
+      <window_info anchor="right" id="Palette" order="3" />
+      <window_info anchor="bottom" id="FindBugs-IDEA" order="13" weight="0.32996634" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5017301" side_tool="true" weight="0.32819635" />
+      <window_info anchor="right" id="Maven Projects" order="6" sideWeight="0.49857143" visible="true" weight="0.18425606" />
       <window_info id="Capture Tool" order="6" />
+      <window_info id="Designer" order="2" />
+      <window_info anchor="bottom" id="SonarQube" order="15" weight="0.32996634" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info id="UI Designer" order="4" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32950193" />
+      <window_info anchor="bottom" id="Messages" order="12" visible="true" weight="0.3271605" />
+      <window_info anchor="right" id="Palette&#9;" order="7" />
+      <window_info id="Image Layers" order="3" />
+      <window_info anchor="right" id="Capture Analysis" order="4" />
+      <window_info anchor="bottom" id="Version Control" order="11" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4982699" weight="0.2738496" />
+      <window_info anchor="bottom" id="CheckStyle" order="8" weight="0.34195402" />
+      <window_info anchor="bottom" id="Terminal" order="7" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.29411766" />
+      <window_info anchor="bottom" id="Analysis" order="14" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.24691358" />
+      <window_info anchor="right" id="Theme Preview" order="8" />
+      <window_info id="Favorites" order="5" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="right" id="Palette&#9;" order="7" />
+      <window_info anchor="bottom" id="Version Control" order="11" />
+      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
+      <window_info anchor="right" id="Capture Analysis" order="4" />
+      <window_info id="Favorites" order="5" side_tool="true" />
+      <window_info anchor="right" id="Coverage" order="9" sideWeight="0.50142854" side_tool="true" weight="0.32995737" />
+      <window_info anchor="bottom" id="Java Enterprise" order="16" />
+      <window_info anchor="right" id="Theme Preview" order="8" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5017301" side_tool="true" weight="0.32819635" />
+      <window_info anchor="bottom" id="Analysis" order="14" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Terminal" order="7" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="bottom" id="SonarQube" order="15" weight="0.32996634" />
+      <window_info anchor="bottom" id="Database Changes" order="10" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info id="Image Layers" order="3" />
+      <window_info active="true" anchor="bottom" id="FindBugs-IDEA" order="13" visible="true" weight="0.32996634" />
+      <window_info anchor="right" id="Database" order="5" sideWeight="0.49857143" weight="0.32995737" />
+      <window_info id="Capture Tool" order="6" />
+      <window_info active="true" anchor="bottom" id="CheckStyle" order="8" visible="true" weight="0.3413284" />
+      <window_info anchor="right" id="CDI" order="10" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32950193" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20948827" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info id="UI Designer" order="4" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.24630997" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4982699" weight="0.46586716" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" weight="0.32950193" />
-      <window_info anchor="bottom" id="Terminal" order="7" />
-      <window_info active="true" anchor="bottom" id="CheckStyle" order="8" visible="true" weight="0.3413284" />
-      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5017301" side_tool="true" weight="0.32819635" />
-      <window_info anchor="bottom" id="Database Changes" order="10" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="11" />
-      <window_info anchor="bottom" id="Messages" order="12" weight="0.32749078" />
-      <window_info active="true" anchor="bottom" id="FindBugs-IDEA" order="13" visible="true" weight="0.32996634" />
-      <window_info anchor="bottom" id="Analysis" order="14" />
-      <window_info anchor="bottom" id="SonarQube" order="15" weight="0.32996634" />
-      <window_info anchor="bottom" id="Java Enterprise" order="16" />
-      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Palette" order="3" />
-      <window_info anchor="right" id="Capture Analysis" order="4" />
-      <window_info anchor="right" id="Database" order="5" sideWeight="0.49857143" weight="0.32995737" />
       <window_info anchor="right" id="Maven Projects" order="6" sideWeight="0.49857143" weight="0.18443497" />
-      <window_info anchor="right" id="Palette&#9;" order="7" />
-      <window_info anchor="right" id="Theme Preview" order="8" />
-      <window_info anchor="right" id="Coverage" order="9" sideWeight="0.50142854" side_tool="true" weight="0.32995737" />
-      <window_info anchor="right" id="CDI" order="10" />
+      <window_info anchor="right" id="Palette" order="3" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info id="Designer" order="2" />
     </layout>
     <layout-to-restore>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.28944564" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info active="true" anchor="bottom" id="FindBugs-IDEA" order="13" visible="true" weight="0.32996634" />
       <window_info id="Designer" order="2" />
+      <window_info anchor="bottom" id="Analysis" order="14" />
+      <window_info anchor="right" id="Palette" order="3" />
       <window_info id="Image Layers" order="3" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4982699" weight="0.46586716" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info id="UI Designer" order="4" />
       <window_info id="Favorites" order="5" side_tool="true" />
-      <window_info id="Capture Tool" order="6" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.24630997" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4982699" weight="0.46586716" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" weight="0.32950193" />
       <window_info anchor="bottom" id="Terminal" order="7" />
+      <window_info id="Capture Tool" order="6" />
+      <window_info anchor="right" id="Capture Analysis" order="4" />
+      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info active="true" anchor="bottom" id="CheckStyle" order="8" visible="true" weight="0.3413284" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5017301" side_tool="true" weight="0.32819635" />
+      <window_info anchor="bottom" id="Messages" order="12" weight="0.32792208" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="bottom" id="Java Enterprise" order="16" />
       <window_info anchor="bottom" id="Database Changes" order="10" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="11" />
-      <window_info anchor="bottom" id="Messages" order="12" weight="0.32792208" />
-      <window_info active="true" anchor="bottom" id="FindBugs-IDEA" order="13" visible="true" weight="0.32996634" />
-      <window_info anchor="bottom" id="Analysis" order="14" />
-      <window_info anchor="bottom" id="SonarQube" order="15" weight="0.32996634" />
-      <window_info anchor="bottom" id="Java Enterprise" order="16" />
-      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Palette" order="3" />
-      <window_info anchor="right" id="Capture Analysis" order="4" />
-      <window_info anchor="right" id="Database" order="5" sideWeight="0.49857143" weight="0.32995737" />
       <window_info anchor="right" id="Maven Projects" order="6" sideWeight="0.49857143" visible="true" weight="0.18443497" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.24630997" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.28944564" />
+      <window_info anchor="right" id="Database" order="5" sideWeight="0.49857143" weight="0.32995737" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32950193" />
       <window_info anchor="right" id="Palette&#9;" order="7" />
       <window_info anchor="right" id="Theme Preview" order="8" />
-      <window_info anchor="right" id="Coverage" order="9" sideWeight="0.50142854" side_tool="true" weight="0.32995737" />
+      <window_info anchor="bottom" id="SonarQube" order="15" weight="0.32996634" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="CDI" order="10" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="right" id="Coverage" order="9" sideWeight="0.50142854" side_tool="true" weight="0.32995737" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
     </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -928,9 +844,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/target/classes/messageVortex.cfg">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/VersionTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="425">
@@ -1039,8 +952,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/Config.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="358">
-          <caret line="868" column="44" lean-forward="true" selection-start-line="868" selection-start-column="44" selection-end-line="868" selection-end-column="44" />
+        <state relative-caret-position="17">
+          <caret line="894" column="4" selection-start-line="894" selection-start-column="4" selection-end-line="894" selection-end-column="4" />
         </state>
       </provider>
     </entry>
@@ -1111,10 +1024,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="336">
           <caret line="164" column="6" selection-start-line="164" selection-start-column="6" selection-end-line="164" selection-end-column="6" />
-          <folding>
-            <element signature="e#1887#1888#0" expanded="true" />
-            <element signature="e#1913#1914#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1162,10 +1071,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
           <caret line="46" selection-start-line="46" selection-end-line="46" />
-          <folding>
-            <element signature="e#11058#11059#0" expanded="true" />
-            <element signature="e#11107#11108#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1206,8 +1111,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/imap/ImapConnection.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="160" column="5" selection-start-line="160" selection-start-column="5" selection-end-line="160" selection-end-column="5" />
+        <state relative-caret-position="3621">
+          <caret line="238" column="3" selection-start-line="238" selection-start-column="3" selection-end-line="238" selection-end-column="3" />
         </state>
       </provider>
     </entry>
@@ -1240,16 +1145,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
           <caret line="54" column="59" selection-start-line="54" selection-start-column="59" selection-end-line="54" selection-end-column="59" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="100" lean-forward="true" selection-start-line="100" selection-end-line="100" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1293,14 +1188,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="425">
           <caret line="87" column="46" selection-start-line="87" selection-start-column="46" selection-end-line="87" selection-end-column="46" />
-          <folding>
-            <element signature="e#3210#3211#0" expanded="true" />
-            <element signature="e#3235#3236#0" expanded="true" />
-            <element signature="e#3647#3648#0" expanded="true" />
-            <element signature="e#3676#3677#0" expanded="true" />
-            <element signature="e#3702#3703#0" expanded="true" />
-            <element signature="e#3737#3738#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1308,6 +1195,23 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="391">
           <caret line="276" column="50" lean-forward="true" selection-start-line="276" selection-start-column="50" selection-end-line="276" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/MessageVortexTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="372">
+          <caret line="42" column="10" selection-start-line="42" selection-start-column="10" selection-end-line="42" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="606">
+          <caret line="102" lean-forward="true" selection-start-line="102" selection-end-line="102" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
