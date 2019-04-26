@@ -115,6 +115,13 @@ public class ListeningSocketChannel {
     }
   }
 
+  /***
+   * <p>Creates a listening socket channel.</p>
+   *
+   * @param address the socket to be bound
+   * @param listener the listener to be used for incomming connections
+   * @throws IOException if the address cannot be bound
+   */
   public ListeningSocketChannel(InetSocketAddress address, SocketListener listener)
           throws IOException {
     super();
@@ -142,22 +149,43 @@ public class ListeningSocketChannel {
     return thread.getSocketListener();
   }
 
+  /***
+   * <p>Set the protocol identifier of the channel.</p>
+   *
+   * @param protocol the identifier string to be set
+   * @return the previously set identifier
+   */
   public String setProtocol(String protocol) {
     String ret = this.protocol;
     this.protocol = protocol;
     return ret;
   }
 
+  /***
+   * <p>Sets the security context of the socket channel.</p>
+   *
+   * @param context the context to be set
+   * @return the previously set context
+   */
   public SecurityContext setSecurityContext(SecurityContext context) {
     SecurityContext ret = this.context;
     this.context = context;
     return ret;
   }
 
+  /***
+   * <p>Gets the security context of the channel.</p>
+   * @return the currently set security context
+   */
   public SecurityContext getSecurityContext() {
     return context;
   }
 
+  /***
+   * <p>Gets the currently used local  port.</p>
+   *
+   * @return the local port number
+   */
   public int getPort() {
     return thread.getPort();
   }
@@ -166,6 +194,9 @@ public class ListeningSocketChannel {
     return this.protocol;
   }
 
+  /***
+   * <p>Shutdown the socket channel.</p>
+   */
   public void shutdown() {
     thread.shutdown();
     while (thread.isAlive()) {

@@ -264,8 +264,16 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>3.0.1</version>
                 <configuration>
-                    <failOnError>false</failOnError>
-                    <failOnWarnings>false</failOnWarnings>
+                    <failOnError>true</failOnError>
+                    <failOnWarnings>true</failOnWarnings>
+                    <tags>
+                        <tag>
+                            <name>FIXME</name>
+                            <!-- todo tag for all places -->
+                            <placement>a</placement>
+                            <head>FIXME:</head>
+                        </tag>
+                    </tags>
                 </configuration>
                 <executions>
                     <execution>

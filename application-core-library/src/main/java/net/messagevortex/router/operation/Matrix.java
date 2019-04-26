@@ -105,7 +105,7 @@ public class Matrix {
   }
 
   /***
-   * </p>Creates a two dimensional matrixContent (x,y) with the specified MathMode.</p>
+   * <p>Creates a two dimensional matrixContent (x,y) with the specified MathMode.</p>
    *
    * @param x       the number of columns of the matrixContent
    * @param y       the number of rows of the matrixContent
@@ -120,10 +120,11 @@ public class Matrix {
   }
 
   /***
-   * </p>Creates a two dimensional unit matrixContent (size,size) with the specified MathMode.</p>
+   * <p>Creates a two dimensional unit matrixContent (size,size) with the specified MathMode.</p>
    *
    * @param size    the number of columns of the matrixContent
    * @param mode    the math mode to be applied
+   * @return the requested matrix
    */
   public static Matrix unitMatrix(int size, MathMode mode) {
     if (!matrixCacheDisabled) {

@@ -36,6 +36,7 @@ import javax.net.ssl.KeyManager;
 import javax.net.ssl.SSLEngine;
 import javax.net.ssl.X509ExtendedKeyManager;
 import javax.net.ssl.X509KeyManager;
+
 import net.messagevortex.MessageVortexLogger;
 
 /***
@@ -59,6 +60,7 @@ public class CustomKeyManager extends X509ExtendedKeyManager implements KeyManag
    * @param keyStoreFile name of the JKS keystore file
    * @param password     password to open the kestore file
    * @param alias        alias of the certificate to be used
+   * @throws GeneralSecurityException if keystore generation fails
    */
   public CustomKeyManager(String keyStoreFile, String password, String alias)
           throws GeneralSecurityException {
@@ -136,12 +138,14 @@ public class CustomKeyManager extends X509ExtendedKeyManager implements KeyManag
   }
 
   /**
-   * </p>Dummy method always returning the preselected alias.</p>
+   * <p>Dummy method always returning the preselected alias.</p>
    *
    * @param param1 dummy
    * @param param2 dummy
+   * @return always return a list of one with the preselected alias
    */
-  public String[] getClientAliases(String param1, Principal[] param2) {
+  public String[] getClientAliases(@SuppressWarnings("UnusedParameters") String param1,
+                                   @SuppressWarnings("UnusedParameters") Principal[] param2) {
     LOGGER.log(Level.INFO, "client alias list for  \"" + alias + "\" requested ");
     return new String[]{alias};
   }
@@ -194,6 +198,7 @@ public class CustomKeyManager extends X509ExtendedKeyManager implements KeyManag
    *
    * @param param1 dummy
    * @param param2 dummy
+   * @return always returns the preset alias
    */
   public String chooseServerAlias(@SuppressWarnings("UnusedParameters") String param1,
                                   @SuppressWarnings("UnusedParameters") Principal[] param2) {

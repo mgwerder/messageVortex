@@ -69,7 +69,6 @@ public class AlgorithmParameter extends AbstractBlock
    * <p>Copy constructor.</p>
    *
    * @param p the ASN.1 code
-   * @throws IOException if parsing of ASN.1 code fails
    */
   public AlgorithmParameter(AlgorithmParameter p) {
     this();

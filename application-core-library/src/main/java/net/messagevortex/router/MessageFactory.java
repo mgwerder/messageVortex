@@ -44,6 +44,18 @@ public abstract class MessageFactory {
 
   }
 
+  /***
+   * <p>Build a message with the specified parameters.</p>
+   *
+   * @param msg the message to be embedded
+   * @param source the indes of the source identity
+   * @param target the index of the target identity
+   * @param anonGroupMembers a set of all available targets in the group set
+   * @param is the identity store to be used
+   * @return the built message wrapped in a message factory
+   *
+   * @FIXME augment to plugable MessageFactory implementation
+   */
   public static MessageFactory buildMessage(String msg, int source, int target,
                                             IdentityStoreBlock[] anonGroupMembers,
                                             IdentityStore is) {
@@ -58,12 +70,23 @@ public abstract class MessageFactory {
     return fullmsg;
   }
 
+  /***
+   * <p>Sets the identity store to be used for creation of the message.</p>
+   *
+   * @param is the identity store to be set
+   * @return the previously set identity store
+   */
   public IdentityStore setIdentityStore(IdentityStore is) {
     IdentityStore ret = this.identityStore;
     this.identityStore = is;
     return ret;
   }
 
+  /***
+   * <p>Gets the current message as a VortexMessage.</p>
+   *
+   * @return the requested message
+   */
   public VortexMessage getMessage() {
     if (this.fullmsg == null) {
       build();

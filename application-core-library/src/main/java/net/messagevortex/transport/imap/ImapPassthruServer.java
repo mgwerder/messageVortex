@@ -71,6 +71,15 @@ public class ImapPassthruServer {
     remoteServer.shutdown();
   }
 
+  /***
+   * <p>Retrieves the username from an IMAPUrl string.</p>
+   *
+   * @param url the URL to extract the port
+   * @return the username or null if none
+   *
+   * @throws ParseException if URL does not follow specification
+   * @throws NullPointerException if url is null
+   */
   public static String getUsernameFromUrl(String url) throws ParseException {
     if (url == null) {
       throw new NullPointerException("Address may not be null");
@@ -83,6 +92,15 @@ public class ImapPassthruServer {
     return m.group("username");
   }
 
+  /***
+   * <p>Retrieves the password from an IMAPUrl string.</p>
+   *
+   * @param url the URL to extract the port
+   * @return the encoded password or null if none
+   *
+   * @throws ParseException if URL does not follow specification
+   * @throws NullPointerException if url is null
+   */
   public static String getPasswordFromUrl(String url) throws ParseException {
     if (url == null) {
       throw new NullPointerException("Address may not be null");
@@ -95,6 +113,16 @@ public class ImapPassthruServer {
     return m.group("password");
   }
 
+
+  /***
+   * <p>retrieves the protocol string from an IMAPUrl string.</p>
+   *
+   * @param url the URL to extract the port
+   * @return the protocol string
+   *
+   * @throws ParseException if URL does not follow specification
+   * @throws NullPointerException if url is null
+   */
   public static String getProtocolFromUrl(String url) throws ParseException {
     if (url == null) {
       throw new NullPointerException("Address may not be null");
@@ -107,6 +135,15 @@ public class ImapPassthruServer {
     return m.group("protocol");
   }
 
+  /***
+   * <p>retrieves the port number from an IMAPUrl string.</p>
+   *
+   * @param url the URL to extract the port
+   * @return the port number
+   *
+   * @throws ParseException if URL does not follow specification
+   * @throws NullPointerException if url is null
+   */
   public static int getPortFromUrl(String url) throws ParseException {
     if (url == null) {
       throw new NullPointerException("Address may not be null");
@@ -123,6 +160,7 @@ public class ImapPassthruServer {
    * <p>Convert an imap URL to a scket address with apropriate port.</p>
    * @param url the URL to be cconvertde
    * @return An equivalent socket address
+   *
    * @throws ParseException if the pattern doeas not match a regular imap url
    * @throws NullPointerException if the URL is null
    */

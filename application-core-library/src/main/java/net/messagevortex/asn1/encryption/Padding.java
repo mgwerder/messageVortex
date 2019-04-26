@@ -162,7 +162,7 @@ public enum Padding implements Serializable {
   }
 
   /***
-   * </p>Get the numeric ASN.1 id of the padding.</p>
+   * <p>Get the numeric ASN.1 id of the padding.</p>
    *
    * @return the id of the padding
    */

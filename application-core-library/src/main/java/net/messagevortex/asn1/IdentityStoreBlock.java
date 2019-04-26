@@ -95,7 +95,8 @@ public class IdentityStoreBlock extends AbstractBlock implements Serializable {
   /***
    * <p>Get a new, random IdentityStoreBlock of the specified type.</p>
    *
-   * @param it Indetity type to be generated
+   * @param it identity type to be generated
+   * @param id the id of the generated block
    * @param complete provide only the specified subset or a complete entry with private keys
    * @return the requessted IdentityStoreBlock
    * @throws IOException if generation fails

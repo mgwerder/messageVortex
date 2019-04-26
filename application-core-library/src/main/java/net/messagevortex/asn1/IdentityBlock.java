@@ -318,8 +318,10 @@ public class IdentityBlock extends AbstractBlock implements Serializable, Dumpab
   /***
    * <p>Dumps the identity block as ASN.1 der encoded object.</p>
    *
+   * @param dumpType the type of dump to be used
    * @param targetIdentity the identity to be used to secure the Identity block (target identity)
    * @return the block as der encodable object
+   *
    * @throws IOException   if the block is not encodable
    */
   public ASN1Object toAsn1Object(DumpType dumpType, AsymmetricKey targetIdentity)
@@ -404,6 +406,7 @@ public class IdentityBlock extends AbstractBlock implements Serializable, Dumpab
    * @param prefix the prefix to be prepended to each line (whitespaces for indentation)
    * @param dumpType     the type of dump to be used
    * @return a String representing the ASN.1 value notation of the Block
+   *
    * @throws IOException if the block is not encodable
    */
   public String dumpValueNotation(String prefix, DumpType dumpType) throws IOException {
@@ -455,6 +458,7 @@ public class IdentityBlock extends AbstractBlock implements Serializable, Dumpab
   /***
    * <p>Set the serial of the identity block.</p>
    *
+   * @param serial the serial to be set
    * @return the previously set serial number
    */
   public long setSerial(long serial) {

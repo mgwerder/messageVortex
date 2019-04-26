@@ -72,8 +72,8 @@ public class ExtendedSecureRandom {
    * <p>The method nextDouble is implemented by class Random as if by:</p>
    * <code>
    * public double nextDouble() {
-   *   return (((long)next(26) << 27) + next(27)) / (double)(1L << 53);
-   *   }
+   *   return (((long)next(26) &lt;&lt; 27) + next(27)) / (double)(1L &lt;&lt; 53);
+   * }
    * </code>
    * <p>The hedge "approximately" is used in the foregoing description only because the next
    * method is only approximately an unbiased source of independently chosen bits. If it were
@@ -112,6 +112,10 @@ public class ExtendedSecureRandom {
 
   /***
    * <p>Returns a random time.</p>
+   *
+   * @param start the earliest allowed time
+   * @param peak the peak time (50% chance)
+   * @param end the latest time
    *
    * @return a gaussian random value
    */

@@ -25,6 +25,7 @@ package net.messagevortex.asn1;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
+
 import net.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1EncodableVector;
@@ -79,12 +80,24 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
 
   /***
    * <p>Creates a payload block from a ASN1 stream.</p>
+   *
+   * @param to the ASN.1 object of the PayloadCunk to be parsed
+   * @param period the validity period to be associated with
+   *
+   * @throws IOException if parsing fails
    */
   public PayloadChunk(ASN1Encodable to, UsagePeriod period) throws IOException {
     parse(to);
     this.period = period;
   }
 
+  /***
+   * <p>Creates a payload block from raw data.</p>
+   *
+   * @param id the payload location
+   * @param payload the payload content
+   * @param period the validity period to be associated with
+   */
   public PayloadChunk(int id, byte[] payload, UsagePeriod period) {
     setId(id);
     setPayload(payload);
@@ -173,6 +186,12 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
     return period;
   }
 
+  /***
+   * <p>Sets the usage period of the payload cunk.</p>
+   *
+   * @param period the new usage period
+   * @return the previously set usage period
+   */
   public final UsagePeriod setUsagePeriod(UsagePeriod period) {
     UsagePeriod ret = period;
     this.period = period;
@@ -249,6 +268,12 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
     return isInUsagePeriod(new Date());
   }
 
+  /***
+   * <p>Checks if the usage period passed is fully embraced in the usage period.</p>
+   *
+   * @param reference the usage period to be embraced
+   * @return tre if embraced or no usage restriction
+   */
   public boolean isInUsagePeriod(Date reference) {
     if (period == null) {
       return true;

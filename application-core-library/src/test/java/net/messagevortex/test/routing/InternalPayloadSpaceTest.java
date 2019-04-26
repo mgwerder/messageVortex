@@ -25,8 +25,8 @@ import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.IdentityBlock;
 import net.messagevortex.asn1.PayloadChunk;
 import net.messagevortex.router.operation.IdMapOperation;
-import net.messagevortex.router.operation.InternalPayload;
 import net.messagevortex.router.operation.InternalPayloadSpace;
+import net.messagevortex.router.operation.InternalPayloadSpaceStore;
 import net.messagevortex.router.operation.Operation;
 import net.messagevortex.transport.RandomString;
 import org.junit.Before;
@@ -42,7 +42,7 @@ import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.fail;
 
 @RunWith(JUnit4.class)
-public class InternalPayloadTest {
+public class InternalPayloadSpaceTest {
 
     private static final java.util.logging.Logger LOGGER;
     static {
@@ -51,7 +51,7 @@ public class InternalPayloadTest {
     }
 
     IdentityBlock[] identity;
-    InternalPayloadSpace[] space;
+    InternalPayloadSpaceStore[] space;
 
     @Before
     public void setup() {
@@ -61,7 +61,7 @@ public class InternalPayloadTest {
             LOGGER.log(Level.SEVERE,"IOException while creating identities",ioe);
             fail("failure while setup phase");
         }
-        space=new InternalPayloadSpace[] { new InternalPayloadSpace(),new InternalPayloadSpace(),new InternalPayloadSpace() };
+        space=new InternalPayloadSpaceStore[] { new InternalPayloadSpaceStore(),new InternalPayloadSpaceStore(),new InternalPayloadSpaceStore() };
         space[0].getInternalPayload(identity[0]);
         space[0].getInternalPayload(identity[1]);
         space[0].getInternalPayload(identity[2]);
@@ -88,7 +88,7 @@ public class InternalPayloadTest {
 
     @Test
     public void payloadSpaceSetAndGetTest() throws Exception {
-        InternalPayload p=space[0].getInternalPayload(identity[0]);
+        InternalPayloadSpace p=space[0].getInternalPayload(identity[0]);
         String pl=RandomString.nextString((int)(Math.random()*1024*10+1));
         PayloadChunk pc =new PayloadChunk(100,pl.getBytes(StandardCharsets.UTF_8),null);
         assertTrue("payload space previously unexpetedly not empty",p.setPayload(pc)==null);
@@ -111,7 +111,7 @@ public class InternalPayloadTest {
 
     private void payloadSpaceProcessingTest(String s) throws Exception {
         LOGGER.log(Level.INFO,"Testing payload handling with "+s.getBytes(StandardCharsets.UTF_8).length+" bytes");
-        InternalPayload p=space[0].getInternalPayload(identity[0]);
+        InternalPayloadSpace p=space[0].getInternalPayload(identity[0]);
         PayloadChunk pc =new PayloadChunk(200,s.getBytes(StandardCharsets.UTF_8),null);
         Operation op=new IdMapOperation(200,201,1);
         assertTrue("payload space previously unexpetedly not empty",p.setPayload(pc)==null);

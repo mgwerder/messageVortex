@@ -49,6 +49,14 @@ public class SmtpReceiver implements SocketListener {
   private TransportReceiver receiver = null;
   private SecurityContext context = null;
 
+  /***
+   * <p>creates a local SMTP server.</p>
+   *
+   * @param address the adress to be bound
+   * @param secContext the security context to be used
+   * @param lreceiver the blending layer to be used
+   * @throws IOException if interfaces cannot be bound
+   */
   public SmtpReceiver(InetSocketAddress address, SecurityContext secContext,
                       TransportReceiver lreceiver) throws IOException {
     setTransportReceiver(lreceiver);
@@ -73,6 +81,12 @@ public class SmtpReceiver implements SocketListener {
     return receiver;
   }
 
+  /***
+   * <p>Sets the belnding layer to be used.</p>
+   *
+   * @param lreceiver the blending layer to be set
+   * @return the previously set blending layer
+   */
   public TransportReceiver setTransportReceiver(TransportReceiver lreceiver) {
     TransportReceiver ret = this.receiver;
     this.receiver = lreceiver;

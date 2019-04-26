@@ -440,7 +440,7 @@ public class Config {
    *
    * @return the copy
    */
-  public Config copy() throws IOException {
+  public Config copy() {
     Config dst = new Config();
     synchronized (configData) {
       Set<Map.Entry<String, ConfigElement>> it = configData.entrySet();
@@ -519,8 +519,10 @@ public class Config {
   /***
    * <p>Sets a boolean value in the application config.</p>
    *
+   * @param section the section of the config to be affected (null for default section)
    * @param id key which should be set
-   * @param value Vlue to be set in key
+   * @param value Value to be set in key
+   * @param lineNumber the line number of the respective file (for error messages)
    * @return old value before setting to new value
    *
    * @throws NullPointerException if key does not exist in configData
@@ -542,8 +544,10 @@ public class Config {
   /***
    * <p>Gets a boolean value from the application config.</p>
    *
+   * @param section the section of the config to be affected (null for default section)
    * @param id          key which should be set
    * @return current value of the specified key
+
    * @throws NullPointerException if key does not exist in configData
    * @throws ClassCastException if key is not of type boolean
    */
@@ -588,12 +592,13 @@ public class Config {
    * @param section section from which the value should be taken. null defaults to default section
    * @param id key which should be set
    * @param value Value to be set in key
+   * @param lineNumber the line number of the respective file (for error messages)
    * @return old value before setting to new value
+   *
    * @throws NullPointerException if key does not exist in configData
    * @throws ClassCastException if key is not of type boolean
    */
-  public int setNumericValue(String section, String id, int value, int lineNumber)
-          throws IOException {
+  public int setNumericValue(String section, String id, int value, int lineNumber) {
     ConfigElement ele = configData.get(id.toLowerCase());
     if (ele == null) {
       throw new NullPointerException("id " + id + " is not known to the config subsystem");
@@ -612,10 +617,11 @@ public class Config {
    * @param section section from which the value should be taken. null defaults to default section
    * @param id          key which should be set
    * @return current value of the specified key
+   *
    * @throws NullPointerException if key does not exist in configData
    * @throws ClassCastException if key is not of type boolean
    */
-  public int getNumericValue(String section, String id) throws IOException {
+  public int getNumericValue(String section, String id) {
     ConfigElement ele = configData.get(id.toLowerCase());
     if (ele == null) {
       throw new NullPointerException("id " + id + " is not known to the config subsystem");
@@ -660,6 +666,11 @@ public class Config {
    *
    * @param section               section from which the value should be taken. null defaults to
    *                              default section
+   * @param id key which should be set
+   * @param value Value to be set in key
+   * @param lineNumber the line number of the respective file (for error messages)
+   * @return the previously set value
+   *
    * @throws NullPointerException when id is unknown or value is null
    * @throws ClassCastException   when id is not a String setting
    */
@@ -686,6 +697,8 @@ public class Config {
    * @param section               section from which the value should be taken.
    *                              'Null' defaults to default section
    * @param id                    the id of the value to be retrieved
+   * @return a list of sections
+   *
    * @throws NullPointerException when id is unknown
    * @throws ClassCastException   when id is not a String setting
    */
@@ -736,6 +749,11 @@ public class Config {
    *
    * @param section               section from which the value should be taken.
    *                              'null' defaults to default section
+   * @param id    Name of config item (case insensitive)
+   * @param value Value to be set in key
+   * @param lineNumber the line number of the respective file (for error messages)
+   * @return the previously set value
+
    * @throws NullPointerException when id is unknown or value is null
    * @throws ClassCastException   when id is not a String setting
    */
@@ -755,7 +773,10 @@ public class Config {
   /***
    * <p>Sets the value of a string type.</p>
    *
+   * @param section               section from which the value should be taken.
+   *                              'null' defaults to default section
    * @param id                    the id of the value to be retrieved
+   * @return the previously set value
    *
    * @throws NullPointerException when id is unknown
    * @throws ClassCastException   when id is not a String setting
@@ -785,6 +806,8 @@ public class Config {
    * <p>Loads and parses a file according to the resources configuration</p>
    *
    * @param filename name of the property file to be read
+   *
+   * @throws IOException if the file is not parsed properly
    */
   public void load(String filename) throws IOException {
 
@@ -839,8 +862,9 @@ public class Config {
    *
    * <p>Writes a commented file according to the configuration</p>
    *
-   * @returns The configuration as string
+   * @return The configuration as string
    *
+   * @throws IOException if error writing file
    */
   public String store() throws IOException {
     StringWriter bw = new StringWriter();
@@ -855,6 +879,7 @@ public class Config {
    * <p>Writes a commented file according to the configuration</p>
    *
    * @param filename name of the property file to be written
+   * @throws IOException if error writing to file
    */
   public void store(String filename) throws IOException {
 

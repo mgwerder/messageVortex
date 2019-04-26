@@ -27,10 +27,10 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
-import java.text.ParseException;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.ASN1Encodable;
@@ -85,8 +85,8 @@ public class VortexMessage extends AbstractBlock implements Serializable {
    *
    * @param is  the input stream to be parsed
    * @param dk the decryptionKey required to decrypt the prefix
+   *
    * @throws IOException if there was a problem parsing or decrypting the object
-   * @throws ParseException if there was a problem parsing the object
    */
   public VortexMessage(InputStream is, AsymmetricKey dk) throws IOException {
     // set a decryption key (is any)
@@ -119,8 +119,8 @@ public class VortexMessage extends AbstractBlock implements Serializable {
    *
    * @param b  the byte array to be parsed
    * @param dk the decryptionKey required to decrypt the prefix
+   *
    * @throws IOException if there was a problem parsing or decrypting the object
-   * @throws ParseException if there was a problem parsing the object
    */
   public VortexMessage(byte[] b, AsymmetricKey dk) throws IOException {
     setDecryptionKey(dk);
@@ -211,8 +211,11 @@ public class VortexMessage extends AbstractBlock implements Serializable {
   /***
    * <p>Set the encryption/decryption decryptionKey.</p>
    *
+   * @param dk sets the decryption key
    * @return the decryptionKey which has been set previously or null if the decryptionKey ha not
    *         been set
+   *
+   * @throws IOException if setting fails
    */
   public final AsymmetricKey setDecryptionKey(AsymmetricKey dk) throws IOException {
     AsymmetricKey old = this.decryptionKey;
@@ -397,6 +400,8 @@ public class VortexMessage extends AbstractBlock implements Serializable {
    *
    * @param dt specifies the type of dump. for sending use PUBLIC_ONLY
    * @return the binary representation of the vortexMessage
+   *
+   * @throws IOException if dumping fails
    */
   public byte[] toBinary(DumpType dt) throws IOException {
     return toAsn1Object(dt).getEncoded();

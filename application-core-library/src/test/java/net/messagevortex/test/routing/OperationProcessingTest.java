@@ -40,8 +40,8 @@ import net.messagevortex.asn1.RemoveRedundancyOperation;
 import net.messagevortex.asn1.SymmetricKey;
 import net.messagevortex.router.operation.AddRedundancy;
 import net.messagevortex.router.operation.IdMapOperation;
-import net.messagevortex.router.operation.InternalPayload;
 import net.messagevortex.router.operation.InternalPayloadSpace;
+import net.messagevortex.router.operation.InternalPayloadSpaceStore;
 import net.messagevortex.router.operation.Operation;
 import net.messagevortex.router.operation.RemoveRedundancy;
 import org.junit.Test;
@@ -62,8 +62,8 @@ public class OperationProcessingTest {
   public void redundancyOperationTest() {
     try {
       IdentityBlock identity = new IdentityBlock();
-      InternalPayloadSpace ps = new InternalPayloadSpace();
-      InternalPayload p = ps.getInternalPayload(identity);
+      InternalPayloadSpaceStore ps = new InternalPayloadSpaceStore();
+      InternalPayloadSpace p = ps.getInternalPayload(identity);
       redundancyOperationTest(p, 3, 2, 8);
       int repeat = 5;
       for (int gfSize : new int[]{8, 16}) {
@@ -84,7 +84,7 @@ public class OperationProcessingTest {
     }
   }
 
-  private void redundancyOperationTest(InternalPayload p, int dataStripes, int redundancy, int gfSize) throws IOException, NoSuchAlgorithmException {
+  private void redundancyOperationTest(InternalPayloadSpace p, int dataStripes, int redundancy, int gfSize) throws IOException, NoSuchAlgorithmException {
     ExtendedSecureRandom esr = new ExtendedSecureRandom();
     // create symmetric keys for stripes
     SymmetricKey[] keys = new SymmetricKey[dataStripes + redundancy];

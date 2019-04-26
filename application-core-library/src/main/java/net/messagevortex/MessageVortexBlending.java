@@ -38,31 +38,65 @@ public class MessageVortexBlending extends AbstractDaemon
   private Blender blender = null;
 
 
+  /***
+   * <p>Creates a blender sending to the specified transport and routing layer.</p>
+   * @param blend the transport layer to be used
+   * @param sender the routing layer to be used
+   */
   public MessageVortexBlending(TransportReceiver blend, BlendingSender sender) {
     receiver = blend;
     this.sender = sender;
   }
 
+  /***
+   * <p>Sets the transport layer of the layer.</p>
+   *
+   * @param receiver the transport layer endpoint for sending messages
+   * @return the previously set transport layer
+   */
   public TransportReceiver setTransportReceiver(TransportReceiver receiver) {
     TransportReceiver ret = receiver;
     this.receiver = receiver;
     return ret;
   }
 
+  /***
+   * <p>The currently set transport layer.</p>
+   *
+   * @return the currently set transport layer
+   */
   public TransportReceiver getTransportReceiver() {
     return receiver;
   }
 
+  /***
+   * <p>Sets the routing layer receiving unblended messages.</p>
+   *
+   * @param sender the routing layer to be set
+   * @return the previously set routing layer
+   */
   public BlendingSender setBlendingSender(BlendingSender sender) {
     BlendingSender ret = sender;
     this.sender = sender;
     return ret;
   }
 
+  /***
+   * <p>Gets the currently set routing layer.</p>
+   *
+   * @return the currently set routing layer
+   */
   public BlendingSender getRoutingSender() {
     return sender;
   }
 
+
+  /***
+   * <p>Sets the routing layer receiving unblended messages.</p>
+   *
+   * @param blender the blender to be set
+   * @return the previously set blender
+   */
   public Blender setBlender(Blender blender) {
     Blender ret = blender;
     this.blender = blender;

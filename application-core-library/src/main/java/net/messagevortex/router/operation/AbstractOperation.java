@@ -28,7 +28,7 @@ import net.messagevortex.asn1.UsagePeriod;
 public abstract class AbstractOperation implements Operation {
 
   IdentityBlock identity;
-  InternalPayload payload;
+  InternalPayloadSpace payload;
   UsagePeriod period = null;
 
   /***
@@ -36,7 +36,7 @@ public abstract class AbstractOperation implements Operation {
    *
    * @param payload the internal payload of an identity to be registered within its workspace
    */
-  public void setInternalPayload(InternalPayload payload) {
+  public void setInternalPayload(InternalPayloadSpace payload) {
     if (payload == null) {
       this.identity = null;
       this.payload = null;

@@ -57,6 +57,13 @@ public class ImapServer extends ListeningSocketChannel implements StoppableThrea
   private static long defaultTimeout = 10000;
   private long timeout = defaultTimeout;
 
+  /***
+   * <p>Creates an IMAP server listening the default port on all interfaces of the server.</p>
+   *
+   * @param secContext the security context for the server
+   *
+   * @throws IOException if socket binding fails
+   */
   public ImapServer(SecurityContext secContext) throws IOException {
     super(new InetSocketAddress(InetAddress.getByAddress(new byte[]{0, 0, 0, 0}),
             (
@@ -70,6 +77,14 @@ public class ImapServer extends ListeningSocketChannel implements StoppableThrea
     setName("IMAPlisten-" + (id++));
   }
 
+  /***
+   * <p>Creates an IMAP server listening on the specified socket address.</p>
+   *
+   * @param addr the socket address to be used by the server
+   * @param enc the security context for the server
+   *
+   * @throws IOException if socket binding fails
+   */
   public ImapServer(InetSocketAddress addr, SecurityContext enc) throws IOException {
     super(addr, null);
     setSocketListener(this);
@@ -78,6 +93,12 @@ public class ImapServer extends ListeningSocketChannel implements StoppableThrea
     setName("IMAPlisten-" + (id++));
   }
 
+  /***
+   * <p>Sets the authentication proxy for incoming connections.</p>
+   *
+   * @param ap the new proxy
+   * @return the previously set proxy
+   */
   public AuthenticationProxy setAuth(AuthenticationProxy ap) {
     AuthenticationProxy old = auth;
     auth = ap;
@@ -136,10 +157,21 @@ public class ImapServer extends ListeningSocketChannel implements StoppableThrea
     doGarbageCollection(true);
   }
 
+  /***
+   * <p>Gets the timeout for new incoming connections.</p>
+   *
+   * @return the currently set timeout
+   */
   public long getTimeout() {
     return timeout;
   }
 
+  /***
+   * <p>Sets the timeout for new incoming connections.</p>
+   *
+   * @param timeout the timeout in milli seconds
+   * @return the previously set timeout
+   */
   public long setTimeout(long timeout) {
     long ret = this.timeout;
     this.timeout = timeout;

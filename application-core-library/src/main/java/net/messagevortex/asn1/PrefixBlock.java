@@ -54,7 +54,9 @@ public class PrefixBlock extends AbstractBlock implements Serializable {
   }
 
   /**
-   * <p>Creates an empty prefix.</p>
+   * <p>Creates a prefix with a random symmetric key.</p>
+   *
+   * @throws IOException if key generation fails
    */
   public PrefixBlock() throws IOException {
     this(null);
@@ -63,7 +65,9 @@ public class PrefixBlock extends AbstractBlock implements Serializable {
   /***
    * <p>Creates a prefix with the given key.</p>
    *
-   * @param sk symmetrik key to embedd in the prefix block
+   * @param sk symmetric key to embed in the prefix block
+   *
+   * @throws IOException if key generation fails
    */
   public PrefixBlock(SymmetricKey sk) throws IOException {
     if (sk == null) {
@@ -77,6 +81,7 @@ public class PrefixBlock extends AbstractBlock implements Serializable {
    * <p>Creates a prefix by parsing to in plan (unencrypted).</p>
    *
    * @param to The primitive to be parsed
+   * @param ak the asymmetric key required to decrypt the block
    *
    * @throws IOException if parsing fails
    */

@@ -21,6 +21,12 @@ public class MailServer extends AbstractDaemon implements Transport {
   Transport smtp = null;
   Transport pop = null;
 
+  /***
+   * <p>Creates a mail server according to the parameters specified.</p>
+   *
+   * @param section the name of the config section
+   * @throws IOException if creation of the mail server fails
+   */
   public MailServer(String section) throws IOException {
     if ("-1".equals(MessageVortexConfig.getDefault().getStringValue(section,
                     "smtp_incoming_address"))

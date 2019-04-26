@@ -365,6 +365,12 @@ public class InnerMessageBlock extends AbstractBlock implements Serializable {
     return ret;
   }
 
+  /***
+   * <p>Sets the payload block.</p>
+   * @param chunkNumber the workspace number
+   * @param payload the payload content
+   * @return the previously set payload
+   */
   public byte[] setPayload(int chunkNumber, byte[] payload) {
     // enlarge payload space
     enlargePayloadSpace(chunkNumber);

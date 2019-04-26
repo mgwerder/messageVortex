@@ -79,6 +79,9 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
    * Constructor to create an endpoint with a random id.
    *
    * @param blender reference to the respective blender layer
+   * @throws IOException if therad problems occure
+   *
+   * @FIXME constructor not thread safe
    */
   public DummyTransportTrx(TransportReceiver blender) throws IOException {
     synchronized (endpoints) {

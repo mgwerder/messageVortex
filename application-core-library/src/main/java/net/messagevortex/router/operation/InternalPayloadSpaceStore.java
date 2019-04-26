@@ -1,4 +1,4 @@
-package net.messagevortex.accounting;
+package net.messagevortex.router.operation;
 
 // ************************************************************************************
 // * Copyright (c) 2018 Martin Gwerder (martin@gwerder.net)
@@ -22,27 +22,49 @@ package net.messagevortex.accounting;
 // * SOFTWARE.
 // ************************************************************************************
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import net.messagevortex.asn1.IdentityBlock;
 
-/**
- * <p>Interface for an Accountant to verify the header for further processing.</p>
- */
-public interface HeaderVerifier {
+public class InternalPayloadSpaceStore {
+
+  private Map<IdentityBlock, InternalPayloadSpace> internalPayloadMap = new ConcurrentHashMap<>();
 
   /***
-   * <p>checks the given IdentityBlock for validity of processing.</p>
+   * <p>Sets a payload space into the payload space store.</p>
    *
-   * <p>One of the following criteria must be met:</p>
-   * <ul>
-   *   <li>The identity is known and the serial has not yet reached its replay limit and is not
-   *   replayed too early</li>
-   *   <li>The identity is not known but has a RequestIdentityBlock</li>
-   *   <li>The IdentityBlock is not known but has a request capability block</li>
-   * </ul>
-   *
-   * @param header the header to be verified
-   * @return the maximum nuber of bytes allowed for processing
+   * @param identity the identity o the requested payload space
+   * @param payload the payload space to be set
+   * @return the previously set payload
    */
-  int verifyHeaderForProcessing(IdentityBlock header);
+  public InternalPayloadSpace setInternalPayload(IdentityBlock identity,
+                                                 InternalPayloadSpace payload) {
+    InternalPayloadSpace ret = null;
+    synchronized (internalPayloadMap) {
+      ret = internalPayloadMap.get(identity);
+      if (payload != null) {
+        internalPayloadMap.put(identity, payload);
+      } else {
+        internalPayloadMap.remove(identity);
+      }
+    }
+    return ret;
+  }
 
+  /***
+   * <p>Gets a payload space from the payload space store.</p>
+   *
+   * @param identity the identity to be retrieved
+   * @return the requested payload space
+   */
+  public InternalPayloadSpace getInternalPayload(IdentityBlock identity) {
+    InternalPayloadSpace ret;
+    synchronized (internalPayloadMap) {
+      ret = internalPayloadMap.get(identity);
+      if (ret == null) {
+        ret = new InternalPayloadSpace(this, identity);
+      }
+    }
+    return ret;
+  }
 }

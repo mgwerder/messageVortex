@@ -43,6 +43,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
+
 import net.messagevortex.asn1.IdentityStore;
 import net.messagevortex.asn1.IdentityStoreBlock;
 import net.messagevortex.asn1.encryption.DumpType;
@@ -67,6 +68,11 @@ public class JGraph extends JPanel implements MouseListener {
 
   private GraphSet graph;
 
+  /***
+   * <p>Creates a graph with the specified set.</p>
+   *
+   * @param gs the set to be used
+   */
   public JGraph(GraphSet gs) {
     addMouseListener(this);
     ToolTipManager.sharedInstance().registerComponent(this);
@@ -222,6 +228,12 @@ public class JGraph extends JPanel implements MouseListener {
     return null;
   }
 
+  /***
+   * <p>Sets the highlighted route.</p>
+   *
+   * @param r the route to be highlighted
+   * @return the prviously set route
+   */
   public int setRoute(int r) {
     int s = graph.getRoutes().length;
     if (r < 0 || s <= r) {
@@ -235,22 +247,27 @@ public class JGraph extends JPanel implements MouseListener {
     return old;
   }
 
+  @Override
   public void mousePressed(MouseEvent e) {
     // dummy no event management
   }
 
+  @Override
   public void mouseReleased(MouseEvent e) {
     // dummy no event management
   }
 
+  @Override
   public void mouseEntered(MouseEvent e) {
     // dummy no event management
   }
 
+  @Override
   public void mouseExited(MouseEvent e) {
     // dummy no event management
   }
 
+  @Override
   public void mouseClicked(MouseEvent e) {
     if (e != null) {
       GraphSet[] routes = graph.getRoutes();
@@ -266,6 +283,14 @@ public class JGraph extends JPanel implements MouseListener {
     }
   }
 
+  /***
+   * <p>Commandline call to display a graph.</p>
+   *
+   * @param args command line arguments
+   * @throws IOException if the identity store is unavailable
+   *
+   * @FIXME replace hidden call
+   */
   public static void main(String[] args) throws IOException {
     IdentityStore is = null;
     try {

@@ -19,6 +19,12 @@ public class SmtpImapServer extends AbstractDaemon implements Transport {
 
   Transport smtp = null;
 
+  /***
+   * <p>Creates a comboo of local SMTP and IMAP server as listener for a client.</p>
+   *
+   * @param section the configuration section to be used
+   * @throws IOException if unable to bind interfaces
+   */
   public SmtpImapServer(String section) throws IOException {
     if ("-1".equals(MessageVortexConfig.getDefault().getStringValue(section,
                       "smtp_incoming_address"))

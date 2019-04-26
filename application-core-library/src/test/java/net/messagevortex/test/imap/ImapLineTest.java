@@ -18,7 +18,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 /**
- * Tests for {@link net.gwerder.java.messagevortex.imap.ImapLine}.
+ * Tests for {@link net.messagevortex.transport.imap.ImapLine}.
  *
  * @author martin@gwerder.net (Martin GWERDER)
  */

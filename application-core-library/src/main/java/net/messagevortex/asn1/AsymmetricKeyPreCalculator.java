@@ -47,7 +47,7 @@ import net.messagevortex.asn1.encryption.Parameter;
 import picocli.CommandLine;
 
 /**
- * <p></p>This is a class to precalculate keys.</p>
+ * <p>This is a class to precalculate keys.</p>
  *
  * <p>It is disabled by default. Enable it by setting a caching file Name.
  * To disable set the name to null.</p>
@@ -544,18 +544,6 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
     }
   }
 
-  public static void main(String[] args) {
-    int retval = mainReturn(args);
-    if (retval > 0) {
-      System.exit(retval);
-    }
-  }
-
-  public static int mainReturn(String[] args) {
-    Integer i = CommandLine.call(new MessageVortex(), args == null ? new String[0] : args);
-    return i != null ? i : MessageVortex.ARGUMENT_FAIL;
-  }
-
   @Override
   public Integer call() throws IOException {
     MessageVortexLogger.setGlobalLogLevel(Level.ALL);
@@ -584,6 +572,11 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
     return 0;
   }
 
+  /***
+   * <p>Command line helper to set the maximum cache size of a cached item.</p>
+   *
+   * @throws IOException if the specified file is not fond or there was an error when reading
+   */
   @CommandLine.Command(name = "set", description = "sets the size of a specific cache element")
   public void setCacheSize() throws IOException {
     LOGGER.log(Level.INFO, "SET called for element " + elementIndex);
@@ -598,6 +591,13 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
     System.exit(0);
   }
 
+  /***
+   * <p>Set the maximum cache size of a cached item.</p>
+   *
+   * @param index the index of the cached item
+   * @param size the size to be set
+   * @throws IOException if the specified file is not fond or there was an error when reading
+   */
   public void setCacheSize(int index, int size) throws IOException {
     LOGGER.log(Level.INFO, "SET called for element " + index + " and size " + size);
     if (cache.isEmpty()) {
@@ -616,6 +616,11 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
     cache.store(filename);
   }
 
+  /***
+   * <p>Command line helper to remove a cached item type from the cache.</p>
+   *
+   * @throws IOException if the specified file is not fond or there was an error when reading
+   */
   @CommandLine.Command(name = "remove", description = "removes a specific cache element")
   public void removeCacheElement() throws IOException {
     LOGGER.log(Level.INFO, "removing element " + elementIndex);
@@ -629,6 +634,12 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
     System.exit(0);
   }
 
+  /***
+   * <p>Remove a the specified item type from the cache.</p>
+   *
+   * @param index the index of the element to be removed
+   * @throws IOException if the specified file is not fond or there was an error when reading
+   */
   public void removeCacheElement(int index) throws IOException {
     if (cache.isEmpty()) {
       try {
@@ -646,6 +657,11 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
     cache.store(filename);
   }
 
+  /***
+   * <p>Command line helper to list cached items.</p>
+   *
+   * @throws IOException if the specified file is not fond or there was an error when reading
+   */
   @CommandLine.Command(name = "list", description = "Lists all elements of the cache")
   public void listCache() throws IOException {
     if (cache.isEmpty()) {

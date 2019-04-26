@@ -36,7 +36,7 @@ import net.messagevortex.MessageVortexLogger;
  * @author Martin Gwerder
  *
  * @FIXME Limit strings and literals to a certain length (otherwise it is litterally unlimited)
- * @FIXME Code will fail if Line.length()>Maxint or out of memory
+ * @FIXME Code will fail if Line.length()&gt;Maxint or out of memory
  */
 public class ImapLine {
 
@@ -99,6 +99,9 @@ public class ImapLine {
    * @param line  The String which has already been read (as Read ahead)
    * @param input The Stream offering more data to read if required
    *
+   * @throws ImapException if reading fails
+   * @throws NullPointerException if connection and line are null
+   *
    * @FIXME should be a ABNF implementation
    * @FIXME extract reading from constructor
    */
@@ -138,6 +141,9 @@ public class ImapLine {
    *
    * @param con   The ImapConnection object which generated the Command line
    * @param line  The String which has already been read (as Read ahead)
+   *
+   * @throws ImapException if reading fails
+   * @throws NullPointerException if connection and line are null
    */
   public ImapLine(ImapConnection con, String line) throws ImapException {
     this(con, line, null);
@@ -151,6 +157,7 @@ public class ImapLine {
    *
    * @param start The first ASCII code to be used
    * @param end   The last ASCII code to be used
+   * @return the generated character list
    */
   public static String charlistBuilder(int start, int end) {
     // reject chain building if start is not within 0..255
@@ -179,8 +186,9 @@ public class ImapLine {
   /***
    * <p>Removes a given set of characters from a superset.</p>
    *
-   * @param superset    The set where character should be removed from
-   * @param subset      The set of characters to be removed
+   * @param superset    the set where character should be removed from
+   * @param subset      the set of characters to be removed
+   * @return the difference of the two given charsets
    */
   public static String charlistDifferencer(String superset, String subset) {
     String ret = superset;
@@ -194,6 +202,7 @@ public class ImapLine {
   /***
    * <p>Encodes a command so that newlines are visible.</p>
    *
+   * @param command the command to be encoded for output on screen
    * @return a printable string representation
    */
   public static String commandEncoder(String command) {
@@ -215,6 +224,7 @@ public class ImapLine {
   /***
    * <p>Get a unique identifier as a tag.</p>
    *
+   * @param prefix the prefix prepended to the tag
    * @return A unique tag
    */
   public static String getNextTag(String prefix) {
@@ -282,7 +292,7 @@ public class ImapLine {
   }
 
   /***
-   * </p>Getter for the command.</p>
+   * <p>Getter for the command.</p>
    *
    * @return command token
    */
@@ -336,7 +346,8 @@ public class ImapLine {
    * of available bytes is lower than the number of requested characters
    * then the buffer content is returned.</p>
    *
-   * @return The requested string
+   * @param num the number of bytes to be snooped
+   * @return the requested string
    */
   public String snoopBytes(long num) {
     if (num <= 0) {

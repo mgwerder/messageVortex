@@ -118,8 +118,12 @@ public class ImapConnection extends ServerConnection
   }
 
   /***
-   * <p>Creates an imapConnection.</p>
-   ***/
+   * <p>Creates an ImapConnection.</p>
+   *
+   * @param ac the connection to be wrapped
+   * @param proxy the authentication proxy to be used for login
+   * @throws IOException if communication with peer fails
+   */
   public ImapConnection(AbstractConnection ac, AuthenticationProxy proxy) throws IOException {
     super(ac);
     setAuth(proxy);
@@ -152,7 +156,9 @@ public class ImapConnection extends ServerConnection
 
   /***
    * <p>Get the authentication proxy of the connection.</p>
-   ***/
+   *
+   * @return the currently set proxy
+   */
   public AuthenticationProxy getAuth() {
     return this.authProxy;
   }

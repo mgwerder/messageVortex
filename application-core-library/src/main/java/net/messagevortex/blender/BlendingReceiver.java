@@ -30,6 +30,7 @@ public interface BlendingReceiver {
    * <p>This Method is called by the Blending layer if a vmessage has been extracted.</p>
    *
    * @param message the vortex message to be processed
+   * @return true if processing was successful
    */
   boolean gotMessage(VortexMessage message);
 

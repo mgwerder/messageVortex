@@ -74,10 +74,10 @@ public interface Operation {
   /***
    * <p>Sets the internal payload and associated identity.</p>
    *
-   * <p>This method is called from the InternalPayload when registering.</p>
+   * <p>This method is called from the InternalPayloadSpace when registering.</p>
    *
    * @param payload the internal payload of an identity to be registered within
    */
-  void setInternalPayload(InternalPayload payload);
+  void setInternalPayload(InternalPayloadSpace payload);
 
 }

@@ -28,12 +28,14 @@ import java.io.IOException;
  * <p>Interface for a stoppable thread.</p>
  *
  * <p>Threads of this type must provide facility to stop at request gracefully.</p>
- ***/
+ */
 public interface StoppableThread {
 
   /***
    * <p>Shuts the thread gracefully down.</p>
-   ***/
+   *
+   * @throws IOException if stopping fails
+   */
   void shutdown() throws IOException;
 
   /***
