@@ -87,6 +87,11 @@ public class MessageVortex implements Callable<Integer> {
   private static Map<String, Accountant> accountant = new ConcurrentHashMap<>();
   private static Map<String, IdentityStore> identityStore = new ConcurrentHashMap<>();
 
+  /***
+   * <p>Main command line method.</p>
+   *
+   * @param args command line parameters
+   */
   public static void main(String[] args) {
     int retval = mainReturn(args);
     if (retval > 0) {
@@ -94,6 +99,12 @@ public class MessageVortex implements Callable<Integer> {
     }
   }
 
+  /***
+   * <p>Wrapper function as entry point for tests.</p>
+   *
+   * @param args command line arguments
+   * @return the errorlevel to be returned
+   */
   public static int mainReturn(String[] args) {
     LOGGER.log(Level.INFO, "MessageVortex V" + Version.getBuild());
     Integer i = CommandLine.call(new MessageVortex(), args == null ? new String[0] : args);
