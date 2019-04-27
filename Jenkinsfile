@@ -10,7 +10,8 @@ pipeline {
   stages {
     stage ('Initialize') {
       steps {
-        git credentialsId: 'github_readonly', url: 'ssh://git@github.com/mgwerder/messageVortex_internal'
+        //git credentialsId: 'github_readonly', url: 'ssh://git@github.com/mgwerder/messageVortex_internal'
+        checkout scm
         sh 'mvn clean'
       }
     }
