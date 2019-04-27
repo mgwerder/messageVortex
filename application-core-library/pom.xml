@@ -186,6 +186,24 @@
                             <outputDirectory>${project.build.directory}/lib</outputDirectory>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>publish-artifacts</id>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>/var/www/messagevortex/devel/artifacts/${git.branch}</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.build.directory}</directory>
+                                    <include>*.jar</include>
+                                    <include>*.exe</include>
+                                    <include>*.dmg</include>
+                                    <include>*.zip</include>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
 
