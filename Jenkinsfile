@@ -128,7 +128,7 @@ pipeline {
     }
     stage('Publish artifacts') {
       steps {
-        sh 'mvn -pl application-core-library -DskipTests resources:copy-resources@publish-artifacts'
+        sh 'mvn -pl application-core-library -DskipTests git-commit-id:revision@get-the-git-infos resources:copy-resources@publish-artifacts'
       }
     }
   }
