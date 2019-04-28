@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d11f21f3-1155-4924-86d1-bc99f93f8cdb" name="Default Changelist" comment="Default Changelist">
-      <change beforePath="$PROJECT_DIR$/../Jenkinsfile" beforeDir="false" afterPath="$PROJECT_DIR$/../Jenkinsfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarIssues.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarIssues.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
@@ -116,10 +116,25 @@
       <file leaf-file-name="pom.xml" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="714">
-              <caret line="194" column="101" selection-start-line="194" selection-start-column="90" selection-end-line="194" selection-end-column="101" />
+            <state relative-caret-position="286">
+              <caret line="109" selection-start-line="109" selection-end-line="109" />
             </state>
           </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="pom.properties" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/target/maven-archiver/pom.properties">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file leaf-file-name="messageVortex.properties" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/target/classes/META-INF/messageVortex.properties">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file leaf-file-name="messageVortex.properties" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/target/lib/META-INF/messageVortex.properties">
+          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
       <file leaf-file-name="RandomTest.java" pinned="false" current-in-tab="false">
@@ -140,15 +155,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="VersionTest.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/VersionTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="19" column="24" selection-start-line="19" selection-start-column="24" selection-end-line="19" selection-end-column="24" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="MessageVortex.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java">
           <provider selected="true" editor-type-id="text-editor">
@@ -157,15 +163,6 @@
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Operation.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/Operation.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1072">
-              <caret line="98" column="41" selection-start-line="98" selection-start-column="41" selection-end-line="98" selection-end-column="41" />
             </state>
           </provider>
         </entry>
@@ -194,15 +191,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RoutingBlock.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/RoutingBlock.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="382">
-              <caret line="133" selection-start-line="133" selection-end-line="133" />
-            </state>
-          </provider>
-        </entry>
-      </file>
     </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
@@ -214,9 +202,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>maven-res</find>
-      <find>maven.re</find>
-      <find>stagin</find>
       <find>resour</find>
       <find>depen</find>
       <find>jar</find>
@@ -244,6 +229,9 @@
       <find>82</find>
       <find>git-comm</find>
       <find>copy-res</find>
+      <find>archive</find>
+      <find>jar-</find>
+      <find>archiver</find>
     </findStrings>
     <replaceStrings>
       <replace>;</replace>
@@ -432,7 +420,14 @@
               <item name="application-core-library" type="b2602c69:ProjectViewProjectNode" />
               <item name="application-core-library" type="462c0819:PsiDirectoryNode" />
               <item name="target" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
+              <item name="classes" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="application-core-library" type="b2602c69:ProjectViewProjectNode" />
+              <item name="application-core-library" type="462c0819:PsiDirectoryNode" />
+              <item name="target" type="462c0819:PsiDirectoryNode" />
+              <item name="classes" type="462c0819:PsiDirectoryNode" />
+              <item name="META-INF" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -476,7 +471,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.All Tests">
+  <component name="RunManager" selected="Maven.application-core-library [package] (1)">
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
       <method>
@@ -580,6 +575,31 @@
     <configuration name="MessageVortex.one-jar.jar" type="JarApplication" factoryName="JAR Application" temporary="true">
       <option name="JAR_PATH" value="$PROJECT_DIR$/target/MessageVortex.one-jar.jar" />
     </configuration>
+    <configuration name="application-core-library [package] (1)" type="MavenRunConfiguration" factoryName="Maven">
+      <MavenSettings>
+        <option name="myGeneralSettings" />
+        <option name="myRunnerSettings" />
+        <option name="myRunnerParameters">
+          <MavenRunnerParameters>
+            <option name="profiles">
+              <set />
+            </option>
+            <option name="goals">
+              <list>
+                <option value="package" />
+                <option value="-DskipTests" />
+              </list>
+            </option>
+            <option name="pomFileName" value="pom.xml" />
+            <option name="profilesMap">
+              <map />
+            </option>
+            <option name="resolveToWorkspace" value="false" />
+            <option name="workingDirPath" value="$PROJECT_DIR$" />
+          </MavenRunnerParameters>
+        </option>
+      </MavenSettings>
+    </configuration>
     <configuration name="application-core-library [package]" type="MavenRunConfiguration" factoryName="Maven">
       <MavenSettings>
         <option name="myGeneralSettings" />
@@ -656,6 +676,7 @@
       <item itemvalue="JAR Application.MessageVortex-package-installer.jar" />
       <item itemvalue="JUnit.MainCoreSuite" />
       <item itemvalue="JUnit.RandomTest" />
+      <item itemvalue="Maven.application-core-library [package] (1)" />
     </list>
     <recent_temporary>
       <list>
@@ -742,14 +763,14 @@
       <window_info id="Image Layers" order="3" />
       <window_info anchor="right" id="Capture Analysis" order="4" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5017301" side_tool="true" weight="0.32819635" />
-      <window_info active="true" anchor="right" id="Maven Projects" order="6" sideWeight="0.49857143" visible="true" weight="0.26211074" />
+      <window_info anchor="right" id="Maven Projects" order="6" sideWeight="0.49857143" visible="true" weight="0.26211074" />
       <window_info anchor="bottom" id="Version Control" order="11" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4982699" visible="true" weight="0.46576878" />
       <window_info anchor="bottom" id="CheckStyle" order="8" weight="0.34118968" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Capture Tool" order="6" />
       <window_info id="Designer" order="2" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.21280277" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.21280277" />
       <window_info anchor="bottom" id="Analysis" order="14" />
       <window_info anchor="bottom" id="SonarQube" order="15" weight="0.32996634" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -819,21 +840,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/Desktop/test.xml" />
-    <entry file="file://$PROJECT_DIR$/src/main/izpack/resources/assembly.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" selection-start-line="8" selection-end-line="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/net/messagevortex/test/imap/ImapClientTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2295">
-          <caret line="200" selection-start-line="200" selection-end-line="200" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/net/messagevortex/test/imap/ImapSSLTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="821">
@@ -1203,10 +1209,19 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/target/maven-archiver/pom.properties">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/target/classes/META-INF/messageVortex.properties">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/target/lib/META-INF/messageVortex.properties">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="714">
-          <caret line="194" column="101" selection-start-line="194" selection-start-column="90" selection-end-line="194" selection-end-column="101" />
+        <state relative-caret-position="286">
+          <caret line="109" selection-start-line="109" selection-end-line="109" />
         </state>
       </provider>
     </entry>
