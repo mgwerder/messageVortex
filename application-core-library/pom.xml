@@ -222,20 +222,18 @@
                         <goals>
                             <goal>jar</goal>
                         </goals>
-                        <configuration>
-                            <archive>
-                                <addMavenDescriptor/>
-                                <manifest>
-                                    <mainClass>net.messagevortex.MessageVortex</mainClass>
-                                    <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                                    <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-                                    <addExtensions>true</addExtensions>
-                                </manifest>
-                            </archive>
-                            <classifier>core</classifier>
-                        </configuration>
                     </execution>
                 </executions>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>net.messagevortex.MessageVortex</mainClass>
+                            <!--<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>-->
+                        </manifest>
+                    </archive>
+                    <classifier>core</classifier>
+                </configuration>
             </plugin>
 
             <plugin>
