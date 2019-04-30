@@ -109,6 +109,7 @@ public class Config {
     BOOLEAN(new BooleanConverters()),
     NUMERIC(new IntegerConverters()),
     SECTION_LIST(new StringConverters()),
+    SECTION(new StringConverters()),
     STRING(new StringConverters());
 
     public static ConfigType getById(String id) {
@@ -307,6 +308,16 @@ public class Config {
       return ret;
     }
 
+    public final String getSectionValue(String section) {
+      return (String) (getType().getConverters().stringToObject(getValue(section)));
+    }
+
+    public final String setSectionValue(String section, String value, int lineNumber) {
+      String ret = getStringValue(section);
+      setValue(section, getType().getConverters().objectToString(value), lineNumber);
+      return ret;
+    }
+
     public final boolean getBooleanValue(String section) {
       return (Boolean) (getType().getConverters().stringToObject(getValue(section)));
     }
@@ -416,6 +427,14 @@ public class Config {
                 }
                 String desc = scanner.next().trim();
                 createSectionListConfigValue(name, desc, val);
+              } else if ("section".equals(token.toLowerCase())) {
+                String name = scanner.next().trim();
+                String val = scanner.next().trim();
+                if ("".equals(val)) {
+                  val = null;
+                }
+                String desc = scanner.next().trim();
+                createSectionConfigValue(name, desc, val);
               } else {
                 throw new IOException("encountered unknown field type: " + token
                         + " (line was \"" + line + "\")");
@@ -481,6 +500,8 @@ public class Config {
       setStringValue(section, id, value, lineNumber);
     } else if (c.getType() == ConfigType.SECTION_LIST) {
       setSectionListValue(section, id, value, lineNumber);
+    } else if (c.getType() == ConfigType.SECTION) {
+      setSectionValue(section, id, value, lineNumber);
     } else {
       throw new NotImplementedException();
     }
@@ -587,6 +608,28 @@ public class Config {
   }
 
   /***
+   * <p>Creates a new section config value in the store.</p>
+   *
+   * @param id           the name (id) of the new value
+   * @param description  the description for the value
+   * @param dval         the default value
+   */
+  public void createSectionConfigValue(String id, String description, String dval) {
+    synchronized (configData) {
+      if (configData.get(id.toLowerCase()) == null) {
+        ConfigElement ele = new ConfigElement(id, "section", description, dval);
+        configData.put(id.toLowerCase(), ele);
+        LOGGER.log(Level.FINE,
+                "Created section config variable " + id.toLowerCase() + "[section]=" + dval
+        );
+        this.fields.add(id);
+      } else {
+        throw new IllegalArgumentException("id \"" + id + "\" is already defined");
+      }
+    }
+  }
+
+  /***
    * <p>Sets a numeric value in the application config.</p>
    *
    * @param section section from which the value should be taken. null defaults to default section
@@ -649,7 +692,7 @@ public class Config {
   public boolean createSectionListConfigValue(String id, String description, String dval) {
     synchronized (configData) {
       if (configData.get(id.toLowerCase()) == null) {
-        ConfigElement ele = new ConfigElement(id, "SECTION_LIST", description);
+        ConfigElement ele = new ConfigElement(id, "section_list", description);
         configData.put(id.toLowerCase(), ele);
         ele.setDefaultValue(dval);
         LOGGER.log(Level.FINE, "Created section_list config variable " + id.toLowerCase());
@@ -685,7 +728,7 @@ public class Config {
     }
     ConfigType type = ele.getType();
     if (type != ConfigType.SECTION_LIST) {
-      throw new ClassCastException("Unable to cast type to correct class (expected: string; is: "
+      throw new ClassCastException("Unable to cast type to correct class (expected: section_list; is: "
               + type.name() + ")");
     }
     return ele.setSectionListValue(section, value, lineNumber);
@@ -711,10 +754,66 @@ public class Config {
     }
     ConfigType type = ele.getType();
     if (type != ConfigType.SECTION_LIST) {
-      throw new ClassCastException("Unable to cast type to correct class (expected: string; is: "
+      throw new ClassCastException("Unable to cast type to correct class (expected: section_list; is: "
               + type.name() + ")");
     }
     return ele.getSectionListValue(section).split("\\s*,\\s*");
+  }
+
+  /***
+   * <p>Set a section value to a config parameter.</p>
+   *
+   * @param section               section from which the value should be taken. null defaults to
+   *                              default section
+   * @param id key which should be set
+   * @param value Value to be set in key
+   * @param lineNumber the line number of the respective file (for error messages)
+   * @return the previously set value
+   *
+   * @throws NullPointerException when id is unknown or value is null
+   * @throws ClassCastException   when id is not a String setting
+   */
+  public String setSectionValue(String section, String id, String value, int lineNumber) {
+    ConfigElement ele = configData.get(id.toLowerCase());
+    if (ele == null) {
+      throw new NullPointerException("unable to get id " + id + " from config subsystem");
+    }
+    if (value == null) {
+      throw new NullPointerException("unable to set id " + id + " of config subsystem "
+              + "(value may not be null)");
+    }
+    ConfigType type = ele.getType();
+    if (type != ConfigType.SECTION) {
+      throw new ClassCastException("Unable to cast type to correct class (expected: section; is: "
+              + type.name() + ")");
+    }
+    return ele.setSectionListValue(section, value, lineNumber);
+  }
+
+  /***
+   * <p>Gets the value of a section type.</p>
+   *
+   * @param section               section from which the value should be taken.
+   *                              'Null' defaults to default section
+   * @param id                    the id of the value to be retrieved
+   * @return a section name
+   *
+   * @throws NullPointerException when id is unknown
+   * @throws ClassCastException   when id is not a String setting
+   */
+  public String getSectionValue(String section, String id) {
+    ConfigElement ele = configData.get(id.toLowerCase());
+    if (ele == null) {
+      throw new NullPointerException(
+              "unable to get id " + id + " from config subsystem (unknown element)"
+      );
+    }
+    ConfigType type = ele.getType();
+    if (type != ConfigType.SECTION) {
+      throw new ClassCastException("Unable to cast type to correct class (expected: section; is: "
+              + type.name() + ")");
+    }
+    return ele.getSectionValue(section);
   }
 
   /***

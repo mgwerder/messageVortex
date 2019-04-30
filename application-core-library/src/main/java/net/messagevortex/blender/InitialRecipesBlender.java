@@ -57,12 +57,12 @@ public class InitialRecipesBlender extends Blender {
    * @throws IOException if anything fails :-D
    */
   public InitialRecipesBlender(String section) throws IOException {
-    // This is a dummy constructor which breaks the implementation ->
-    // FIXME add sensible identity store
     this(
-            null,
-            MessageVortex.getRouter(Config.getDefault().getStringValue(section, "router")),
-            new IdentityStore()
+            Config.getDefault().getStringValue(section, "node_identity"),
+            MessageVortex.getRouter(Config.getDefault().getSectionValue(section, "router")),
+            MessageVortex.getIdentityStore(
+                    Config.getDefault().getSectionValue(section, "identity_store")
+            )
     );
   }
 
@@ -78,6 +78,7 @@ public class InitialRecipesBlender extends Blender {
                                IdentityStore identityStore)
           throws IOException {
     super(router, null);
+    this.identityStore = identityStore;
     this.identity = identity;
     if (identity != null) {
       this.transport = new DummyTransportTrx(identity, this);

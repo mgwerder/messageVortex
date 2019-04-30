@@ -25,6 +25,7 @@ package net.messagevortex.router.operation;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -50,11 +51,11 @@ public class InternalPayloadSpace {
 
   InternalPayloadSpaceStore payloadSpace;
   IdentityBlock identity;
-  final List<Operation> operations = new ArrayList<>();
-  final Map<Integer, PayloadChunk> internalPayload = new ConcurrentHashMap<>();
-  final Map<Integer, PayloadChunk> internalPayloadCache = new ConcurrentHashMap<>();
-  final Map<Integer, Operation> internalOperationOutput = new ConcurrentHashMap<>();
-  final Map<Integer, Set<Operation>> internalOperationInput = new ConcurrentHashMap<>();
+  final List<Operation>              operations = new ArrayList<>();
+  final Map<Integer, PayloadChunk>   internalPayload = new HashMap<>();
+  final Map<Integer, PayloadChunk>   internalPayloadCache = new ConcurrentHashMap<>();
+  final Map<Integer, Operation>      internalOperationOutput = new HashMap<>();
+  final Map<Integer, Set<Operation>> internalOperationInput = new HashMap<>();
 
   private long lastcompact = System.currentTimeMillis();
 
@@ -69,7 +70,9 @@ public class InternalPayloadSpace {
   }
 
   private PayloadChunk getPayloadCache(int id) {
-    return internalPayloadCache.get(id);
+    synchronized (internalPayload) {
+      return internalPayloadCache.get(id);
+    }
   }
 
   /***
@@ -365,15 +368,18 @@ public class InternalPayloadSpace {
       }
 
       // remove subsequent payloadcaches
-      for (int i : expiredPayloadIds) {
-        Set<Operation> ops = internalOperationInput.get(i);
-        if (ops != null && !ops.isEmpty()) {
-          for (Operation op : ops) {
-            for (int j : op.getOutputId()) {
-              setCalculatedPayload(j, null);
+      synchronized (internalOperationInput) {
+        for (int i : expiredPayloadIds) {
+          Set<Operation> ops = internalOperationInput.get(i);
+          if (ops != null && !ops.isEmpty()) {
+            for (Operation op : ops) {
+              for (int j : op.getOutputId()) {
+                setCalculatedPayload(j, null);
+              }
             }
           }
         }
+
       }
     }
   }

@@ -3,6 +3,7 @@ section_list; transport_setup; default; A comma separated list of transport endp
 section_list; blender_setup; default; A comma separated list of  blender sections
 section_list; router_setup; default; A comma separated list of  router sections
 section_list; credential_source_setup; default; The credential source setup section to be used
+section_list; identity_store_setup; default; The identity store sections to be set up
 
 // router section specifics
 String; router_implementation; net.messagevortex.router.SimpleRouterImplementation; router class to be used
@@ -10,8 +11,10 @@ String; accounting_implementation; net.messagevortex.accounting.AccountingImplem
 
 // belnder section specifics
 string; blender_implementation;; blender class to be used
-string; router; router; the section name of the respective router implementation
-string; forward_transport;; section of the forwarding transport client
+section; router; router; the section name of the respective router implementation
+section; forward_transport;; section of the forwarding transport client
+String; node_identity; local_node; the name of the node identity to be used
+section; identity_store; default_identity_store; the section name of the identitty store
 
 // generic transport classes
 String; transport_endpoint_receiver; net.messagevortex.transport.pop.Pop3Receiver; The class name of the transport receiver
@@ -19,6 +22,12 @@ String; transport_endpoint_Sender; net.messagevortex.transport.smtp.SmtpSender; 
 string; transport_implementation; ; The class name of the transport impementation
 string; blender; blender; The section name of the upstream blender
 string; transport_id;; ID of the endpoint
+
+// Identity store
+String; node_identity; "default"; the name of the node identity to be used
+
+// generic sections
+String; filename;;The filename of the file to be loaded
 
 // Incoming SMTP connection listener settings
 numeric; smtp_incoming_port                ; 587      ; The port number for incoming SMTP connects.

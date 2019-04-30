@@ -124,7 +124,7 @@ public class DummyBlender extends Blender {
     // FIXME add sensible identity store
     this(
             null,
-            MessageVortex.getRouter(Config.getDefault().getStringValue(section, "router")),
+            MessageVortex.getRouter(Config.getDefault().getSectionValue(section, "router")),
             new IdentityStore()
     );
   }

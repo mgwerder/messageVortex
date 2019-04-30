@@ -126,7 +126,8 @@ public class MessageVortex implements Callable<Integer> {
 
     try {
       // load IdentityStore
-      identityStore.put("default", new IdentityStore(
+      // FIXME process set of identity stores
+      identityStore.put("default_identity_store", new IdentityStore(
               new File(CommandLineHandlerIdentityStore.DEFAULT_FILENAME)));
 
       // setup according to config file
