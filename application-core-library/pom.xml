@@ -162,7 +162,7 @@
                                     <filtering>true</filtering>
                                 </resource>
                             </resources>
-                            <outputDirectory>${project.build.directory}/classes</outputDirectory>
+                            <outputDirectory>${project.build.directory}/classes/</outputDirectory>
                             <nonFilteredFileExtensions>
                                 <nonFilteredFileExtension>jks</nonFilteredFileExtension>
                                 <nonFilteredFileExtension>jar</nonFilteredFileExtension>
@@ -494,6 +494,7 @@
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
                 <groupId>sh.tak.appbundler</groupId>
                 <artifactId>appbundle-maven-plugin</artifactId>
@@ -501,18 +502,17 @@
                 <configuration>
                     <mainClass>net.messagevortex.MessageVortex</mainClass>
                     <generateDiskImageFile>true</generateDiskImageFile>
-                    <!-- Removed as it caused problems when building in jenkins (drove me mad)
-                    <iconFile>images/MessageVortexLogo_128.icns</iconFile>
-                    -->
+                    <!-- Removed as it caused problems when building in jenkins (drove me mad)-->
+                    <!--<iconFile>images/MessageVortexLogo_128.icns</iconFile>-->
                 </configuration>
-                <executions>
+                <!--<executions>
                     <execution>
                         <phase>package</phase>
                         <goals>
                             <goal>bundle</goal>
                         </goals>
                     </execution>
-                </executions>
+                </executions>-->
             </plugin>
 
             <plugin>
