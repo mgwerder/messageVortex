@@ -20,10 +20,12 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
+
 import net.messagevortex.Config;
 import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.Version;
+import net.messagevortex.accounting.Accountant;
 import net.messagevortex.asn1.BlendingSpec;
 import net.messagevortex.asn1.IdentityStore;
 import net.messagevortex.asn1.IdentityStoreBlock;
@@ -62,7 +64,8 @@ public class InitialRecipesBlender extends Blender {
             MessageVortex.getRouter(Config.getDefault().getSectionValue(section, "router")),
             MessageVortex.getIdentityStore(
                     Config.getDefault().getSectionValue(section, "identity_store")
-            )
+            ),
+            MessageVortex.getAccountant(Config.getDefault().getSectionValue(section, "accounting"))
     );
   }
 
@@ -75,9 +78,9 @@ public class InitialRecipesBlender extends Blender {
    * @throws IOException    if anything fails :-D
    */
   public InitialRecipesBlender(String identity, BlendingReceiver router,
-                               IdentityStore identityStore)
+                               IdentityStore identityStore, Accountant verifier)
           throws IOException {
-    super(router, null);
+    super(router, verifier);
     this.identityStore = identityStore;
     this.identity = identity;
     if (identity != null) {
@@ -103,11 +106,11 @@ public class InitialRecipesBlender extends Blender {
     try {
       //Session session = Session.getDefaultInstance(new Properties(), null);
       Session session = Session.getInstance(new Properties(),
-            new javax.mail.Authenticator() {
-              protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("username", "password");
+              new javax.mail.Authenticator() {
+                protected PasswordAuthentication getPasswordAuthentication() {
+                  return new PasswordAuthentication("username", "password");
+                }
               }
-            }
       );
       final MimeMessage mimeMsg = new MimeMessage(session);
       mimeMsg.setFrom(new InternetAddress("test@test.com"));
@@ -164,11 +167,11 @@ public class InitialRecipesBlender extends Blender {
   public boolean gotMessage(final InputStream is) {
     try {
       Session session = Session.getInstance(new Properties(),
-            new javax.mail.Authenticator() {
-              protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("username", "password");
+              new javax.mail.Authenticator() {
+                protected PasswordAuthentication getPasswordAuthentication() {
+                  return new PasswordAuthentication("username", "password");
+                }
               }
-            }
       );
       int i = 0;
 

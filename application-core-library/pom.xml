@@ -496,26 +496,6 @@
             </plugin>
 
             <plugin>
-                <groupId>sh.tak.appbundler</groupId>
-                <artifactId>appbundle-maven-plugin</artifactId>
-                <version>1.2.0</version>
-                <configuration>
-                    <mainClass>net.messagevortex.MessageVortex</mainClass>
-                    <generateDiskImageFile>true</generateDiskImageFile>
-                    <!-- Removed as it caused problems when building in jenkins (drove me mad)-->
-                    <!--<iconFile>images/MessageVortexLogo_128.icns</iconFile>-->
-                </configuration>
-                <!--<executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>bundle</goal>
-                        </goals>
-                    </execution>
-                </executions>-->
-            </plugin>
-
-            <plugin>
                 <groupId>com.jolira</groupId>
                 <artifactId>onejar-maven-plugin</artifactId>
                 <version>1.4.4</version>
@@ -530,6 +510,26 @@
 
             </plugin>
 
+
+            <!-- <plugin>
+                <groupId>sh.tak.appbundler</groupId>
+                <artifactId>appbundle-maven-plugin</artifactId>
+                <version>1.1.1</version>
+                <configuration>
+                    <mainClass>net.messagevortex.MessageVortex</mainClass>
+                    <generateDiskImageFile>true</generateDiskImageFile>-->
+                    <!-- Removed as it caused problems when building in jenkins (drove me mad)-->
+                    <!--<iconFile>images/MessageVortexLogo_128.icns</iconFile>-->
+                <!--</configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>bundle</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin> -->
 
         </plugins>
     </build>

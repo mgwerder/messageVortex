@@ -265,6 +265,9 @@ public class MessageVortex implements Callable<Integer> {
   }
 
   public static Accountant getAccountant(String id) {
+    if (id == null) {
+      return null;
+    }
     return accountant.get(id.toLowerCase());
   }
 

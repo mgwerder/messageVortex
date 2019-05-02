@@ -9,7 +9,7 @@ section_list; identity_store_setup; default; The identity store sections to be s
 String; router_implementation; net.messagevortex.router.SimpleRouterImplementation; router class to be used
 String; accounting_implementation; net.messagevortex.accounting.AccountingImplementation; accounting class to be used
 
-// belnder section specifics
+// blender section specifics
 string; blender_implementation;; blender class to be used
 section; router; router; the section name of the respective router implementation
 section; forward_transport;; section of the forwarding transport client
@@ -28,6 +28,7 @@ String; node_identity; "default"; the name of the node identity to be used
 
 // generic sections
 String; filename;;The filename of the file to be loaded
+Section; accounting;; The section name of the respective accounting layer
 
 // Incoming SMTP connection listener settings
 numeric; smtp_incoming_port                ; 587      ; The port number for incoming SMTP connects.

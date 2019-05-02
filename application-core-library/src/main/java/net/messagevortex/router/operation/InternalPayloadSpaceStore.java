@@ -22,13 +22,14 @@ package net.messagevortex.router.operation;
 // * SOFTWARE.
 // ************************************************************************************
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import net.messagevortex.asn1.IdentityBlock;
 
 public class InternalPayloadSpaceStore {
 
-  private Map<IdentityBlock, InternalPayloadSpace> internalPayloadMap = new ConcurrentHashMap<>();
+  private Map<IdentityBlock, InternalPayloadSpace> internalPayloadMap = new HashMap<>();
 
   /***
    * <p>Sets a payload space into the payload space store.</p>
