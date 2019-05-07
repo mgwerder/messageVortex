@@ -288,7 +288,7 @@
                 <version>3.0.1</version>
                 <configuration>
                     <failOnError>true</failOnError>
-                    <failOnWarnings>true</failOnWarnings>
+                    <failOnWarnings>false</failOnWarnings>
                     <tags>
                         <tag>
                             <name>FIXME</name>

@@ -728,8 +728,8 @@ public class Config {
     }
     ConfigType type = ele.getType();
     if (type != ConfigType.SECTION_LIST) {
-      throw new ClassCastException("Unable to cast type to correct class (expected: section_list; is: "
-              + type.name() + ")");
+      throw new ClassCastException("Unable to cast type to correct class ("
+              + type.name() + " is not section_list)");
     }
     return ele.setSectionListValue(section, value, lineNumber);
   }
@@ -754,8 +754,8 @@ public class Config {
     }
     ConfigType type = ele.getType();
     if (type != ConfigType.SECTION_LIST) {
-      throw new ClassCastException("Unable to cast type to correct class (expected: section_list; is: "
-              + type.name() + ")");
+      throw new ClassCastException("Unable to cast type to correct class ("
+              + type.name() + " is not typed section_list)");
     }
     String secList = ele.getSectionListValue(section);
     if (secList == null) {
@@ -810,7 +810,9 @@ public class Config {
     ConfigElement ele = configData.get(id.toLowerCase());
     if (ele == null) {
       throw new NullPointerException(
-              "unable to get value for \"" + id + "\" from config subsystem (unknown element in section \"" + section + "\")"
+              "unable to get value for \"" + id
+              + "\" from config subsystem (unknown element in section \""
+              + section + "\")"
       );
     }
     ConfigType type = ele.getType();

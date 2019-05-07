@@ -59,7 +59,8 @@ import picocli.CommandLine;
                 CommandLineHandlerIdentityStoreCreate.class
         }
  )
-public class IdentityStore extends AbstractBlock implements Serializable, Callable<Integer>, RunningDaemon {
+public class IdentityStore extends AbstractBlock
+        implements Serializable, Callable<Integer>, RunningDaemon {
 
   public static final long serialVersionUID = 100000000008L;
 

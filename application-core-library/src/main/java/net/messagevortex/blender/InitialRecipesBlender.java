@@ -10,6 +10,7 @@ import java.util.Properties;
 import java.util.logging.Level;
 import javax.activation.DataHandler;
 import javax.mail.Address;
+import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
@@ -20,7 +21,6 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
-
 import net.messagevortex.Config;
 import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexLogger;
@@ -108,13 +108,12 @@ public class InitialRecipesBlender extends Blender {
     // encode message in clear readable and send it
     try {
       //Session session = Session.getDefaultInstance(new Properties(), null);
-      Session session = Session.getInstance(new Properties(),
-              new javax.mail.Authenticator() {
-                protected PasswordAuthentication getPasswordAuthentication() {
-                  return new PasswordAuthentication("username", "password");
-                }
-              }
-      );
+      Authenticator a = new javax.mail.Authenticator() {
+        protected PasswordAuthentication getPasswordAuthentication() {
+          return new PasswordAuthentication("username", "password");
+        }
+      };
+      Session session = Session.getInstance(new Properties(), a);
       final MimeMessage mimeMsg = new MimeMessage(session);
       mimeMsg.setFrom(new InternetAddress("test@test.com"));
       mimeMsg.setRecipient(Message.RecipientType.TO,
@@ -169,13 +168,12 @@ public class InitialRecipesBlender extends Blender {
   @Override
   public boolean gotMessage(final InputStream is) {
     try {
-      Session session = Session.getInstance(new Properties(),
-              new javax.mail.Authenticator() {
-                protected PasswordAuthentication getPasswordAuthentication() {
-                  return new PasswordAuthentication("username", "password");
-                }
-              }
-      );
+      Authenticator a = new javax.mail.Authenticator() {
+        protected PasswordAuthentication getPasswordAuthentication() {
+          return new PasswordAuthentication("username", "password");
+        }
+      };
+      Session session = Session.getInstance(new Properties(), a);
       int i = 0;
 
       MimeMessage msg = new MimeMessage(session, is);

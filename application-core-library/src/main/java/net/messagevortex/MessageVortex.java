@@ -136,32 +136,34 @@ public class MessageVortex implements Callable<Integer> {
               new File(CommandLineHandlerIdentityStore.DEFAULT_FILENAME)));
 
       for (String idstoreSection : cfg.getSectionListValue(null, "identity_store_setup")) {
-        LOGGER.log(Level.INFO, "setting up accounting for routing layer \"" + idstoreSection + "\"");
+        LOGGER.log(Level.INFO, "setting up accounting for routing layer \"" + idstoreSection
+                + "\"");
         String fn = cfg.getStringValue(idstoreSection, "filename");
         if (fn == null) {
-          throw new IOException("unable to obtain identity store filename of section " + idstoreSection + "");
+          throw new IOException("unable to obtain identity store filename of section "
+                  + idstoreSection + "");
         }
         File f = new File(fn);
         if (f == null) {
           throw new IOException("identity store file \"" + fn + "\" not found");
         }
-        identityStore.put(idstoreSection.toLowerCase(), new IdentityStore(
-                        f
-                )
-        );
-
+        identityStore.put(idstoreSection.toLowerCase(), new IdentityStore(f));
       }
 
 
-      //Setup routers and accounting
-      for (String routerSection : cfg.getSectionListValue(null, "router_setup")) {
+      //Setup routers
+      for (String accountingSection : cfg.getSectionListValue(null, "accountant_setup")) {
 
         // setup Accounting
-        /*LOGGER.log(Level.INFO, "setting up accounting for routing layer \"" + routerSection + "\"");
-        accountant.put(routerSection.toLowerCase(), (Accountant) getDaemon(routerSection,
-                cfg.getStringValue(routerSection, "accounting_implementation"),
-                DaemonType.ACCOUNTING));*/
+        LOGGER.log(Level.INFO, "setting up accounting for routing layer \"" + accountingSection
+                + "\"");
+        accountant.put(accountingSection.toLowerCase(), (Accountant) getDaemon(accountingSection,
+                cfg.getStringValue(accountingSection, "accounting_implementation"),
+                DaemonType.ACCOUNTING));
 
+      }
+
+      for (String routerSection : cfg.getSectionListValue(null, "router_setup")) {
         // setup routers
         LOGGER.log(Level.INFO, "setting up routing layer \"" + routerSection + "\"");
         router.put(routerSection.toLowerCase(), (Router) getDaemon(routerSection,
@@ -171,7 +173,6 @@ public class MessageVortex implements Callable<Integer> {
 
       // setup blending
       for (String blendingSection : cfg.getSectionListValue(null, "blender_setup")) {
-
         // setup blending
         LOGGER.log(Level.INFO, "setting up blending layer \"" + blendingSection + "\"");
         blender.put(blendingSection.toLowerCase(), (Blender) getDaemon(blendingSection,
@@ -182,7 +183,6 @@ public class MessageVortex implements Callable<Integer> {
 
       // Setup transport
       for (String transportSection : cfg.getSectionListValue(null, "transport_setup")) {
-
         // setup transport
         LOGGER.log(Level.INFO, "setting up transport layer \"" + transportSection + "\"");
         transport.put(transportSection.toLowerCase(), (Transport) getDaemon(transportSection,
@@ -284,6 +284,11 @@ public class MessageVortex implements Callable<Integer> {
     }
   }
 
+  /***
+   * <p>Get the accountant specified in the named configuration section.</p>
+   * @param id the name of the config section
+   * @return the requested accountant or null
+   */
   public static Accountant getAccountant(String id) {
     if (id == null) {
       return null;
@@ -291,15 +296,39 @@ public class MessageVortex implements Callable<Integer> {
     return accountant.get(id.toLowerCase());
   }
 
+  /***
+   * <p>Get the blender specified in the named configuration section.</p>
+   * @param id the name of the config section
+   * @return the requested blender or null
+   */
   public static Blender getBlender(String id) {
+    if (id == null) {
+      return null;
+    }
     return blender.get(id.toLowerCase());
   }
 
+  /***
+   * <p>Get the router specified in the named configuration section.</p>
+   * @param id the name of the config section
+   * @return the requested router or null
+   */
   public static Router getRouter(String id) {
+    if (id == null) {
+      return null;
+    }
     return router.get(id.toLowerCase());
   }
 
+  /***
+   * <p>Get the identity store specified in the named configuration section.</p>
+   * @param id the name of the config section
+   * @return the requested identity store or null
+   */
   public static IdentityStore getIdentityStore(String id) {
+    if (id == null) {
+      return null;
+    }
     return identityStore.get(id.toLowerCase());
   }
 }
