@@ -63,7 +63,8 @@ public class MessageVortex implements Callable<Integer> {
     TRANSPORT,
     BLEDING,
     ROUTING,
-    ACCOUNTING;
+    ACCOUNTING,
+    IDENTITY_STORE;
   }
 
   @CommandLine.Option(names = {"-c", "--config"}, description = "filename of the config to be used")
@@ -125,22 +126,41 @@ public class MessageVortex implements Callable<Integer> {
     }
 
     try {
+      Config cfg = MessageVortexConfig.getDefault();
+
+      // setup according to config file
+      // all runners
+
       // load IdentityStore
-      // FIXME process set of identity stores
       identityStore.put("default_identity_store", new IdentityStore(
               new File(CommandLineHandlerIdentityStore.DEFAULT_FILENAME)));
 
-      // setup according to config file
-      Config cfg = MessageVortexConfig.getDefault();
+      for (String idstoreSection : cfg.getSectionListValue(null, "identity_store_setup")) {
+        LOGGER.log(Level.INFO, "setting up accounting for routing layer \"" + idstoreSection + "\"");
+        String fn = cfg.getStringValue(idstoreSection, "filename");
+        if (fn == null) {
+          throw new IOException("unable to obtain identity store filename of section " + idstoreSection + "");
+        }
+        File f = new File(fn);
+        if (f == null) {
+          throw new IOException("identity store file \"" + fn + "\" not found");
+        }
+        identityStore.put(idstoreSection.toLowerCase(), new IdentityStore(
+                        f
+                )
+        );
+
+      }
+
 
       //Setup routers and accounting
       for (String routerSection : cfg.getSectionListValue(null, "router_setup")) {
 
         // setup Accounting
-        LOGGER.log(Level.INFO, "setting up accounting for routing layer \"" + routerSection + "\"");
+        /*LOGGER.log(Level.INFO, "setting up accounting for routing layer \"" + routerSection + "\"");
         accountant.put(routerSection.toLowerCase(), (Accountant) getDaemon(routerSection,
                 cfg.getStringValue(routerSection, "accounting_implementation"),
-                DaemonType.ACCOUNTING));
+                DaemonType.ACCOUNTING));*/
 
         // setup routers
         LOGGER.log(Level.INFO, "setting up routing layer \"" + routerSection + "\"");

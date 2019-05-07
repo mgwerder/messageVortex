@@ -3,14 +3,16 @@
   <component name="ChangeListManager">
     <list default="true" id="d11f21f3-1155-4924-86d1-bc99f93f8cdb" name="Default Changelist" comment="Default Changelist">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/Config.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/IdentityStore.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/IdentityStore.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/InitialRecipesBlender.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/InitialRecipesBlender.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/router/operation/InternalPayloadSpaceStore.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/router/operation/InternalPayloadSpaceStore.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/messageVortex.cfg" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/messageVortex.cfg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/messageVortex.cfgRessources" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/messageVortex.cfgRessources" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -72,9 +74,9 @@
         <counts>
           <entry key="CLASS" value="4" />
           <entry key="Ini" value="3" />
-          <entry key="JAVA" value="139" />
+          <entry key="JAVA" value="137" />
           <entry key="Jenkins file" value="1" />
-          <entry key="PLAIN_TEXT" value="11" />
+          <entry key="PLAIN_TEXT" value="10" />
           <entry key="Properties" value="3" />
           <entry key="XML" value="6" />
         </counts>
@@ -95,61 +97,91 @@
         <counts>
           <entry key="CLASS" value="7" />
           <entry key="Ini" value="246" />
-          <entry key="JAVA" value="20542" />
+          <entry key="JAVA" value="20449" />
           <entry key="Jenkins file" value="393" />
-          <entry key="PLAIN_TEXT" value="2124" />
+          <entry key="PLAIN_TEXT" value="2040" />
           <entry key="Properties" value="15" />
-          <entry key="XML" value="603" />
+          <entry key="XML" value="597" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java">
+      <file leaf-file-name="Jenkinsfile" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../Jenkinsfile">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="397">
-              <caret line="267" column="18" selection-start-line="267" selection-start-column="18" selection-end-line="267" selection-end-column="18" />
+            <state relative-caret-position="1017">
+              <caret line="130" column="57" selection-start-line="130" selection-start-column="57" selection-end-line="130" selection-end-column="57" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="messageVortex.cfgRessources" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/resources/messageVortex.cfgRessources">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="442">
+              <caret line="26" column="7" selection-start-line="26" selection-start-column="7" selection-end-line="26" selection-end-column="7" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Config.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/Config.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="443">
+              <caret line="812" column="117" selection-start-line="812" selection-start-column="117" selection-end-line="812" selection-end-column="117" />
               <folding>
-                <element signature="imports" expanded="true" />
+                <element signature="e#31584#31585#0" expanded="true" />
+                <element signature="e#31611#31612#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pom.xml">
+      <file leaf-file-name="messageVortex.cfg" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/resources/messageVortex.cfg">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="380">
-              <caret line="541" column="46" selection-start-line="541" selection-start-column="46" selection-end-line="541" selection-end-column="46" />
+            <state relative-caret-position="255">
+              <caret line="15" column="10" selection-start-line="15" selection-start-column="10" selection-end-line="15" selection-end-column="10" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/resources/messageVortex.cfgRessources">
+      <file leaf-file-name="MessageVortexTest.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/MessageVortexTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="510">
-              <caret line="30" column="73" selection-start-line="30" selection-start-column="73" selection-end-line="30" selection-end-column="73" />
+            <state relative-caret-position="864">
+              <caret line="83" selection-start-line="83" selection-end-line="83" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/router/operation/InternalPayloadSpaceStore.java">
+      <file leaf-file-name="MessageVortex.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="229">
-              <caret line="31" column="69" selection-start-line="31" selection-start-column="51" selection-end-line="31" selection-end-column="69" />
+            <state relative-caret-position="460">
+              <caret line="162" column="42" selection-start-line="162" selection-start-column="42" selection-end-line="162" selection-end-column="42" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#11386#11387#0" expanded="true" />
+                <element signature="e#11435#11436#0" expanded="true" />
+                <element signature="e#11484#11485#0" expanded="true" />
+                <element signature="e#11530#11531#0" expanded="true" />
+                <element signature="e#11577#11578#0" expanded="true" />
+                <element signature="e#11622#11623#0" expanded="true" />
+                <element signature="e#11683#11684#0" expanded="true" />
+                <element signature="e#11735#11736#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/blender/InitialRecipesBlender.java">
+      <file leaf-file-name="IdentityStore.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/IdentityStore.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="67" column="99" selection-start-line="67" selection-start-column="99" selection-end-line="67" selection-end-column="99" />
+            <state relative-caret-position="4284">
+              <caret line="286" selection-start-line="286" selection-end-line="286" />
             </state>
           </provider>
         </entry>
@@ -165,6 +197,9 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
+      <find>izpa</find>
+      <find>ant</find>
+      <find>png</find>
       <find>timeou</find>
       <find>processC</find>
       <find>icn</find>
@@ -190,11 +225,8 @@
       <find>app</find>
       <find>jar</find>
       <find>Plex</find>
-      <find>g722</find>
       <find>Dea</find>
-      <find>internalPayloadMap</find>
-      <find>appbundl</find>
-      <find>accounta</find>
+      <find>g722</find>
     </findStrings>
     <replaceStrings>
       <replace>;</replace>
@@ -215,14 +247,11 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/DummyBlender.java" />
-        <option value="$PROJECT_DIR$/src/main/izpack/HTMLInfoPanel.info" />
         <option value="$PROJECT_DIR$/src/main/izpack/resources/hello.html" />
         <option value="$PROJECT_DIR$/src/main/izpack/resources/assembly.xml" />
         <option value="$PROJECT_DIR$/src/main/izpack/install.xml" />
         <option value="$PROJECT_DIR$/src/test/java/net/messagevortex/test/imap/ImapSSLTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/net/messagevortex/test/imap/ImapLineTest.java" />
-        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/Config.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/ExtendedSecureRandom.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/BlendingReceiver.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/accounting/HeaderVerifier.java" />
@@ -243,6 +272,7 @@
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/InnerMessageBlock.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/router/operation/InternalPayload.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/router/operation/InternalPayloadSpace.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/router/operation/InternalPayloadSpaceStore.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/MailServer.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/router/JGraph.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/ListeningSocketChannel.java" />
@@ -258,14 +288,16 @@
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/SecurityContext.java" />
         <option value="$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/RandomTest.java" />
         <option value="$PROJECT_DIR$/../Jenkinsfile" />
+        <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/VersionTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/MessageVortexTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/net/messagevortex/test/imap/ImapClientTest.java" />
-        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/router/operation/InternalPayloadSpaceStore.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/InitialRecipesBlender.java" />
-        <option value="$PROJECT_DIR$/pom.xml" />
-        <option value="$PROJECT_DIR$/src/main/resources/messageVortex.cfgRessources" />
+        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/IdentityStore.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/Config.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/messageVortex.cfg" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/messageVortex.cfgRessources" />
       </list>
     </option>
   </component>
@@ -307,6 +339,17 @@
         <path>
           <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
           <item name="application-core-library" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+          <item name="Plugins" type="7aea1407:MavenProjectsStructure$PluginsNode" />
+          <item name="clean" type="36feed69:MavenProjectsStructure$PluginNode" />
+        </path>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="application-core-library" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+          <item name="Run Configurations" type="21c1f71a:MavenProjectsStructure$RunConfigurationsNode" />
+        </path>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="application-core-library" type="9519ce18:MavenProjectsStructure$ProjectNode" />
           <item name="Dependencies" type="f4be9f2a:MavenProjectsStructure$DependenciesNode" />
         </path>
       </expand>
@@ -314,10 +357,10 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-183" />
+    <option name="x" value="1272" />
     <option name="y" value="-8" />
-    <option name="width" value="1278" />
-    <option name="height" value="707" />
+    <option name="width" value="1296" />
+    <option name="height" value="736" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -325,8 +368,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
+      <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -350,30 +392,6 @@
               <item name="application-core-library" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="izpack" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="application-core-library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="application-core-library" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="izpack" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="application-core-library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="application-core-library" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="izpack" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="launch4j" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="application-core-library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="application-core-library" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -391,7 +409,7 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="messagevortex" type="462c0819:PsiDirectoryNode" />
-              <item name="blender" type="462c0819:PsiDirectoryNode" />
+              <item name="accounting" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="application-core-library" type="b2602c69:ProjectViewProjectNode" />
@@ -404,105 +422,45 @@
               <item name="application-core-library" type="b2602c69:ProjectViewProjectNode" />
               <item name="application-core-library" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="images" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="application-core-library" type="b2602c69:ProjectViewProjectNode" />
               <item name="application-core-library" type="462c0819:PsiDirectoryNode" />
-              <item name="target" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="application-core-library" type="b2602c69:ProjectViewProjectNode" />
               <item name="application-core-library" type="462c0819:PsiDirectoryNode" />
-              <item name="target" type="462c0819:PsiDirectoryNode" />
-              <item name="classes" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="application-core-library" type="b2602c69:ProjectViewProjectNode" />
               <item name="application-core-library" type="462c0819:PsiDirectoryNode" />
-              <item name="target" type="462c0819:PsiDirectoryNode" />
-              <item name="MessageVortex" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="application-core-library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="application-core-library" type="462c0819:PsiDirectoryNode" />
-              <item name="target" type="462c0819:PsiDirectoryNode" />
-              <item name="MessageVortex" type="462c0819:PsiDirectoryNode" />
-              <item name="application-core-library.app" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="application-core-library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="application-core-library" type="462c0819:PsiDirectoryNode" />
-              <item name="target" type="462c0819:PsiDirectoryNode" />
-              <item name="MessageVortex" type="462c0819:PsiDirectoryNode" />
-              <item name="application-core-library.app" type="462c0819:PsiDirectoryNode" />
-              <item name="Contents" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="application-core-library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="application-core-library" type="462c0819:PsiDirectoryNode" />
-              <item name="target" type="462c0819:PsiDirectoryNode" />
-              <item name="MessageVortex" type="462c0819:PsiDirectoryNode" />
-              <item name="application-core-library.app" type="462c0819:PsiDirectoryNode" />
-              <item name="Contents" type="462c0819:PsiDirectoryNode" />
-              <item name="Java" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="application-core-library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="application-core-library" type="462c0819:PsiDirectoryNode" />
-              <item name="target" type="462c0819:PsiDirectoryNode" />
-              <item name="MessageVortex" type="462c0819:PsiDirectoryNode" />
-              <item name="application-core-library.app" type="462c0819:PsiDirectoryNode" />
-              <item name="Contents" type="462c0819:PsiDirectoryNode" />
-              <item name="Java" type="462c0819:PsiDirectoryNode" />
-              <item name="net" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="application-core-library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="application-core-library" type="462c0819:PsiDirectoryNode" />
-              <item name="target" type="462c0819:PsiDirectoryNode" />
-              <item name="MessageVortex" type="462c0819:PsiDirectoryNode" />
-              <item name="application-core-library.app" type="462c0819:PsiDirectoryNode" />
-              <item name="Contents" type="462c0819:PsiDirectoryNode" />
-              <item name="Java" type="462c0819:PsiDirectoryNode" />
-              <item name="net" type="462c0819:PsiDirectoryNode" />
-              <item name="messagevortex" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="application-core-library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="application-core-library" type="462c0819:PsiDirectoryNode" />
-              <item name="target" type="462c0819:PsiDirectoryNode" />
-              <item name="MessageVortex" type="462c0819:PsiDirectoryNode" />
-              <item name="application-core-library.app" type="462c0819:PsiDirectoryNode" />
-              <item name="Contents" type="462c0819:PsiDirectoryNode" />
-              <item name="Java" type="462c0819:PsiDirectoryNode" />
-              <item name="net" type="462c0819:PsiDirectoryNode" />
-              <item name="messagevortex" type="462c0819:PsiDirectoryNode" />
-              <item name="application-core-library" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="application-core-library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="application-core-library" type="462c0819:PsiDirectoryNode" />
-              <item name="target" type="462c0819:PsiDirectoryNode" />
-              <item name="MessageVortex" type="462c0819:PsiDirectoryNode" />
-              <item name="application-core-library.app" type="462c0819:PsiDirectoryNode" />
-              <item name="Contents" type="462c0819:PsiDirectoryNode" />
-              <item name="MacOS" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="transport" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="AndroidView" />
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="SearchEverywhereHistoryKey" value="final ret= new Boolean&#9;null&#9;null" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1556788265466" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1556284793172" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../sonar.properties" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -536,7 +494,7 @@
   <component name="RunManager" selected="JUnit.All Tests">
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <method v="2">
+      <method>
         <option name="Make" enabled="true" />
       </method>
     </configuration>
@@ -545,30 +503,21 @@
       <module name="application-core-library" />
       <option name="PROGRAM_PARAMETERS" value="--help" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
     </configuration>
     <configuration name="MessageVortex keycache" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="net.messagevortex.asn1.AsymmetricKeyPreCalculator" />
       <module name="application-core-library" />
       <option name="PROGRAM_PARAMETERS" value="keycache -f AsymmetricKey.cache list" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
     </configuration>
     <configuration name="MessageVortex" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="net.messagevortex.MessageVortex" />
       <module name="application-core-library" />
       <option name="PROGRAM_PARAMETERS" value="--threadDumpInteval 10 is dp" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <method v="2">
+      <method>
         <option name="Make" enabled="true" />
       </method>
     </configuration>
@@ -580,32 +529,48 @@
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
       <option name="PACKAGE_NAME" value="net.messagevortex.test.core" />
       <option name="MAIN_CLASS_NAME" value="net.messagevortex.test.core.RandomTest" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
       <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <patterns />
     </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit">
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
       <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <method v="2">
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <patterns />
+      <method>
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <configuration name="MessageVortex-package-installer.jar" type="JarApplication" factoryName="JAR Application" temporary="true">
       <option name="JAR_PATH" value="$PROJECT_DIR$/target/MessageVortex-package-installer.jar" />
-      <method v="2" />
     </configuration>
     <configuration name="MessageVortex.jar" type="JarApplication" factoryName="JAR Application" temporary="true">
       <option name="JAR_PATH" value="$PROJECT_DIR$/target/MessageVortex.jar" />
-      <method v="2" />
     </configuration>
     <configuration name="MessageVortex.one-jar.jar" type="JarApplication" factoryName="JAR Application" temporary="true">
       <option name="JAR_PATH" value="$PROJECT_DIR$/target/MessageVortex.one-jar.jar" />
-      <method v="2" />
     </configuration>
     <configuration name="application-core-library [appbundle:bundle]" type="MavenRunConfiguration" factoryName="Maven">
       <MavenSettings>
@@ -631,7 +596,6 @@
           </MavenRunnerParameters>
         </option>
       </MavenSettings>
-      <method v="2" />
     </configuration>
     <configuration name="application-core-library [package]" type="MavenRunConfiguration" factoryName="Maven">
       <MavenSettings>
@@ -658,14 +622,29 @@
           </MavenRunnerParameters>
         </option>
       </MavenSettings>
-      <method v="2" />
     </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="SUITE_NAME" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="GROUP_NAME" />
+      <option name="TEST_OBJECT" value="CLASS" />
       <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="OUTPUT_DIRECTORY" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <option name="USE_DEFAULT_REPORTERS" value="false" />
+      <option name="PROPERTIES_FILE" />
       <properties />
       <listeners />
-      <method v="2">
+      <method>
         <option name="Make" enabled="true" />
       </method>
     </configuration>
@@ -674,7 +653,7 @@
       <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
       <option name="PROGRAM_PARAMETERS" />
       <predefined_log_file id="idea.log" enabled="true" />
-      <method v="2">
+      <method>
         <option name="Make" enabled="true" />
       </method>
     </configuration>
@@ -719,39 +698,39 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="RandomTest - 2019.04.27 at 10h 24m 00s.xml">
-      <configuration name="RandomTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="All_Tests - 2019.04.27 at 17h 43m 31s.xml">
+    <history-entry file="All_Tests - 2019.05.07 at 14h 22m 17s.xml">
       <configuration name="All Tests" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="All_Tests - 2019.04.27 at 17h 43m 38s.xml">
+    <history-entry file="All_Tests - 2019.05.07 at 15h 29m 33s.xml">
       <configuration name="All Tests" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="All_Tests - 2019.04.29 at 16h 52m 23s.xml">
+    <history-entry file="All_Tests - 2019.05.07 at 15h 31m 13s.xml">
       <configuration name="All Tests" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="All_Tests - 2019.05.01 at 05h 25m 10s.xml">
+    <history-entry file="All_Tests - 2019.05.07 at 15h 34m 05s.xml">
       <configuration name="All Tests" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="All_Tests - 2019.05.01 at 05h 26m 25s.xml">
+    <history-entry file="All_Tests - 2019.05.07 at 15h 35m 44s.xml">
       <configuration name="All Tests" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="All_Tests - 2019.05.02 at 10h 34m 48s.xml">
+    <history-entry file="All_Tests - 2019.05.07 at 15h 37m 07s.xml">
       <configuration name="All Tests" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="All_Tests - 2019.05.02 at 11h 08m 46s.xml">
+    <history-entry file="All_Tests - 2019.05.07 at 15h 39m 48s.xml">
       <configuration name="All Tests" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="All_Tests - 2019.05.02 at 11h 09m 26s.xml">
+    <history-entry file="All_Tests - 2019.05.07 at 15h 40m 32s.xml">
       <configuration name="All Tests" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="All_Tests - 2019.05.02 at 11h 10m 21s.xml">
+    <history-entry file="All_Tests - 2019.05.07 at 15h 42m 44s.xml">
+      <configuration name="All Tests" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="All_Tests - 2019.05.07 at 15h 44m 29s.xml">
       <configuration name="All Tests" configurationId="JUnit" />
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="118545000" />
+    <option name="totallyTimeSpent" value="116920000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -763,81 +742,81 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1176" extended-state="6" />
+    <frame x="1192" y="-8" width="1216" height="1936" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.21268657" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info id="Designer" order="2" />
-      <window_info id="Image Layers" order="3" />
-      <window_info id="UI Designer" order="4" />
-      <window_info id="Favorites" order="5" side_tool="true" />
-      <window_info id="Capture Tool" order="6" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.24579124" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4982699" visible="true" weight="0.30268198" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.39955106" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32950193" />
-      <window_info anchor="bottom" id="Terminal" order="7" />
-      <window_info anchor="bottom" id="CheckStyle" order="8" weight="0.34118968" />
-      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5017301" side_tool="true" weight="0.32819635" />
-      <window_info anchor="bottom" id="Database Changes" order="10" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="11" />
-      <window_info anchor="bottom" id="Messages" order="12" weight="0.3271605" />
       <window_info anchor="bottom" id="FindBugs-IDEA" order="13" weight="0.32996634" />
+      <window_info anchor="bottom" id="Messages" order="12" weight="0.3271605" />
+      <window_info anchor="right" id="Palette&#9;" order="7" />
+      <window_info id="Image Layers" order="3" />
+      <window_info anchor="right" id="Capture Analysis" order="4" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5017301" side_tool="true" weight="0.32819635" />
+      <window_info anchor="right" id="Maven Projects" order="6" sideWeight="0.49857143" weight="0.27941176" />
+      <window_info anchor="bottom" id="Version Control" order="11" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4982699" visible="true" weight="0.25308642" />
+      <window_info anchor="bottom" id="CheckStyle" order="8" weight="0.34118968" />
+      <window_info anchor="bottom" id="Terminal" order="7" />
+      <window_info id="Capture Tool" order="6" />
+      <window_info id="Designer" order="2" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.23096886" />
       <window_info anchor="bottom" id="Analysis" order="14" />
       <window_info anchor="bottom" id="SonarQube" order="15" weight="0.32996634" />
-      <window_info anchor="bottom" id="Java Enterprise" order="16" />
-      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Palette" order="3" />
-      <window_info anchor="right" id="Capture Analysis" order="4" />
-      <window_info anchor="right" id="Database" order="5" sideWeight="0.49857143" weight="0.32995737" />
-      <window_info anchor="right" id="Maven Projects" order="6" sideWeight="0.49857143" visible="true" weight="0.26172706" />
-      <window_info anchor="right" id="Palette&#9;" order="7" />
+      <window_info id="UI Designer" order="4" />
       <window_info anchor="right" id="Theme Preview" order="8" />
+      <window_info id="Favorites" order="5" side_tool="true" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.39955106" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.24579124" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="right" id="Database" order="5" sideWeight="0.49857143" weight="0.32995737" />
       <window_info anchor="right" id="Coverage" order="9" sideWeight="0.50142854" side_tool="true" weight="0.32995737" />
+      <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="right" id="CDI" order="10" />
+      <window_info anchor="bottom" id="Database Changes" order="10" show_stripe_button="false" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="bottom" id="Java Enterprise" order="16" />
     </layout>
     <layout-to-restore>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.28944564" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info active="true" anchor="bottom" id="FindBugs-IDEA" order="13" visible="true" weight="0.32996634" />
       <window_info id="Designer" order="2" />
+      <window_info anchor="bottom" id="Analysis" order="14" />
+      <window_info anchor="right" id="Palette" order="3" />
       <window_info id="Image Layers" order="3" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4982699" weight="0.46586716" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info id="UI Designer" order="4" />
       <window_info id="Favorites" order="5" side_tool="true" />
-      <window_info id="Capture Tool" order="6" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.24630997" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4982699" weight="0.46586716" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" weight="0.32950193" />
       <window_info anchor="bottom" id="Terminal" order="7" />
+      <window_info id="Capture Tool" order="6" />
+      <window_info anchor="right" id="Capture Analysis" order="4" />
+      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info active="true" anchor="bottom" id="CheckStyle" order="8" visible="true" weight="0.3413284" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5017301" side_tool="true" weight="0.32819635" />
+      <window_info anchor="bottom" id="Messages" order="12" weight="0.32792208" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="bottom" id="Java Enterprise" order="16" />
       <window_info anchor="bottom" id="Database Changes" order="10" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="11" />
-      <window_info anchor="bottom" id="Messages" order="12" weight="0.32792208" />
-      <window_info active="true" anchor="bottom" id="FindBugs-IDEA" order="13" visible="true" weight="0.32996634" />
-      <window_info anchor="bottom" id="Analysis" order="14" />
-      <window_info anchor="bottom" id="SonarQube" order="15" weight="0.32996634" />
-      <window_info anchor="bottom" id="Java Enterprise" order="16" />
-      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Palette" order="3" />
-      <window_info anchor="right" id="Capture Analysis" order="4" />
-      <window_info anchor="right" id="Database" order="5" sideWeight="0.49857143" weight="0.32995737" />
       <window_info anchor="right" id="Maven Projects" order="6" sideWeight="0.49857143" visible="true" weight="0.18443497" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.28944564" />
+      <window_info anchor="right" id="Database" order="5" sideWeight="0.49857143" weight="0.32995737" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32950193" />
       <window_info anchor="right" id="Palette&#9;" order="7" />
       <window_info anchor="right" id="Theme Preview" order="8" />
-      <window_info anchor="right" id="Coverage" order="9" sideWeight="0.50142854" side_tool="true" weight="0.32995737" />
+      <window_info anchor="bottom" id="SonarQube" order="15" weight="0.32996634" />
       <window_info anchor="right" id="CDI" order="10" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="right" id="Coverage" order="9" sideWeight="0.50142854" side_tool="true" weight="0.32995737" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.24630997" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
     </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -851,27 +830,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/test/java/net/messagevortex/test/imap/ImapLineTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="20" column="47" selection-start-line="20" selection-start-column="47" selection-end-line="20" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/Config.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="14365">
-          <caret line="894" column="4" selection-start-line="894" selection-start-column="4" selection-end-line="894" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/ExtendedSecureRandom.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="353">
-          <caret line="115" column="31" selection-start-line="115" selection-start-column="31" selection-end-line="115" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/blender/BlendingReceiver.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="381">
@@ -932,10 +890,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="336">
           <caret line="164" column="6" selection-start-line="164" selection-start-column="6" selection-end-line="164" selection-end-column="6" />
-          <folding>
-            <element signature="e#1887#1888#0" expanded="true" />
-            <element signature="e#1913#1914#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -950,11 +904,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
           <caret line="140" column="6" selection-start-line="140" selection-start-column="6" selection-end-line="140" selection-end-column="6" />
-          <folding>
-            <element signature="e#5479#5516#1" expanded="true" />
-            <element signature="e#5532#5569#1" expanded="true" />
-            <element signature="e#7411#7448#1" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -983,6 +932,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
           <caret line="46" selection-start-line="46" selection-end-line="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/router/operation/InternalPayloadSpaceStore.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="421">
+          <caret line="40" column="49" selection-start-line="40" selection-start-column="49" selection-end-line="40" selection-end-column="49" />
         </state>
       </provider>
     </entry>
@@ -1025,17 +981,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="625">
           <caret line="125" column="30" lean-forward="true" selection-start-line="125" selection-start-column="30" selection-end-line="125" selection-end-column="30" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#3903#3904#0" expanded="true" />
-            <element signature="e#3954#3955#0" expanded="true" />
-            <element signature="e#3992#3993#0" expanded="true" />
-            <element signature="e#4022#4023#0" expanded="true" />
-            <element signature="e#4051#4052#0" expanded="true" />
-            <element signature="e#4084#4085#0" expanded="true" />
-            <element signature="e#4131#4132#0" expanded="true" />
-            <element signature="e#4174#4175#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1057,14 +1002,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="629">
           <caret line="121" lean-forward="true" selection-start-line="121" selection-end-line="121" />
-          <folding>
-            <element signature="e#2641#2642#0" expanded="true" />
-            <element signature="e#2666#2667#0" expanded="true" />
-            <element signature="e#2991#2992#0" expanded="true" />
-            <element signature="e#3014#3015#0" expanded="true" />
-            <element signature="e#3170#3171#0" expanded="true" />
-            <element signature="e#3194#3195#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1128,6 +1065,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="765">
           <caret line="139" column="23" selection-start-line="139" selection-end-line="140" />
+          <folding>
+            <element signature="e#5261#5262#0" expanded="true" />
+            <element signature="e#5289#5290#0" expanded="true" />
+            <element signature="e#5528#5529#0" expanded="true" />
+            <element signature="e#5576#5577#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1138,33 +1081,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../Jenkinsfile">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="860">
-          <caret line="130" column="57" selection-start-line="130" selection-start-column="57" selection-end-line="130" selection-end-column="57" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/target/lib/META-INF/messageVortex.properties">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/target/classes/META-INF/messageVortex.properties">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/target/maven-archiver/pom.properties">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/target/maven-archiver/pom.properties" />
     <entry file="jar://$MAVEN_REPOSITORY$/org/codehaus/plexus/plexus-utils/3.0.20/plexus-utils-3.0.20.jar!/org/codehaus/plexus/util/FileUtils.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="426">
           <caret line="449" selection-start-line="449" selection-end-line="449" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/AbstractConnection.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="620">
-          <caret line="721" column="18" selection-start-line="721" selection-start-column="8" selection-end-line="721" selection-end-column="22" />
         </state>
       </provider>
     </entry>
@@ -1175,55 +1102,99 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/MessageVortexTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="544">
-          <caret line="47" lean-forward="true" selection-start-line="47" selection-end-line="47" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/net/messagevortex/test/imap/ImapClientTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="459">
           <caret line="57" column="2" lean-forward="true" selection-start-line="57" selection-start-column="2" selection-end-line="57" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/router/operation/InternalPayloadSpaceStore.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="229">
-          <caret line="31" column="69" selection-start-line="31" selection-start-column="51" selection-end-line="31" selection-end-column="69" />
+          <folding>
+            <element signature="e#2953#2954#0" expanded="true" />
+            <element signature="e#2991#2992#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/blender/InitialRecipesBlender.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="67" column="99" selection-start-line="67" selection-start-column="99" selection-end-line="67" selection-end-column="99" />
+        <state relative-caret-position="561">
+          <caret line="67" column="76" selection-start-line="67" selection-start-column="76" selection-end-line="67" selection-end-column="76" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/IdentityStore.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4284">
+          <caret line="286" selection-start-line="286" selection-end-line="286" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/AbstractConnection.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="721" column="18" selection-start-line="721" selection-start-column="8" selection-end-line="721" selection-end-column="22" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="380">
-          <caret line="541" column="46" selection-start-line="541" selection-start-column="46" selection-end-line="541" selection-end-column="46" />
+        <state relative-caret-position="17">
+          <caret line="501" selection-start-line="501" selection-end-line="501" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/messageVortex.cfgRessources">
+    <entry file="file://$PROJECT_DIR$/../Jenkinsfile">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="30" column="73" selection-start-line="30" selection-start-column="73" selection-end-line="30" selection-end-column="73" />
+        <state relative-caret-position="1017">
+          <caret line="130" column="57" selection-start-line="130" selection-start-column="57" selection-end-line="130" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/MessageVortexTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="864">
+          <caret line="83" selection-start-line="83" selection-end-line="83" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/Config.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="443">
+          <caret line="812" column="117" selection-start-line="812" selection-start-column="117" selection-end-line="812" selection-end-column="117" />
+          <folding>
+            <element signature="e#31584#31585#0" expanded="true" />
+            <element signature="e#31611#31612#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/messageVortex.cfg">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="15" column="10" selection-start-line="15" selection-start-column="10" selection-end-line="15" selection-end-column="10" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="397">
-          <caret line="267" column="18" selection-start-line="267" selection-start-column="18" selection-end-line="267" selection-end-column="18" />
+        <state relative-caret-position="460">
+          <caret line="162" column="42" selection-start-line="162" selection-start-column="42" selection-end-line="162" selection-end-column="42" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#11386#11387#0" expanded="true" />
+            <element signature="e#11435#11436#0" expanded="true" />
+            <element signature="e#11484#11485#0" expanded="true" />
+            <element signature="e#11530#11531#0" expanded="true" />
+            <element signature="e#11577#11578#0" expanded="true" />
+            <element signature="e#11622#11623#0" expanded="true" />
+            <element signature="e#11683#11684#0" expanded="true" />
+            <element signature="e#11735#11736#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/messageVortex.cfgRessources">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="442">
+          <caret line="26" column="7" selection-start-line="26" selection-start-column="7" selection-end-line="26" selection-end-column="7" />
         </state>
       </provider>
     </entry>

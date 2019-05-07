@@ -37,6 +37,7 @@ import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.RunningDaemon;
 import net.messagevortex.asn1.encryption.DumpType;
 import net.messagevortex.commandline.CommandLineHandlerIdentityStoreCreate;
 import org.bouncycastle.asn1.ASN1Encodable;
@@ -58,7 +59,7 @@ import picocli.CommandLine;
                 CommandLineHandlerIdentityStoreCreate.class
         }
  )
-public class IdentityStore extends AbstractBlock implements Serializable, Callable<Integer> {
+public class IdentityStore extends AbstractBlock implements Serializable, Callable<Integer>, RunningDaemon {
 
   public static final long serialVersionUID = 100000000008L;
 
@@ -268,5 +269,20 @@ public class IdentityStore extends AbstractBlock implements Serializable, Callab
 
   public Integer call() {
     return null;
+  }
+
+  @Override
+  public void startDaemon() {
+    // FIXME implement file monitor
+  }
+
+  @Override
+  public void stopDaemon() {
+    // FIXME implement file monitor
+  }
+
+  @Override
+  public void shutdownDaemon() {
+    // FIXME implement file monitor
   }
 }

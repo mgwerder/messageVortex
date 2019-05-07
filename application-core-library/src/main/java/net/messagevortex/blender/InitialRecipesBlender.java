@@ -65,7 +65,10 @@ public class InitialRecipesBlender extends Blender {
             MessageVortex.getIdentityStore(
                     Config.getDefault().getSectionValue(section, "identity_store")
             ),
-            MessageVortex.getAccountant(Config.getDefault().getSectionValue(section, "accounting"))
+            MessageVortex.getAccountant(
+                    Config.getDefault().getSectionValue(section, "accountant")
+            )
+
     );
   }
 
@@ -78,9 +81,9 @@ public class InitialRecipesBlender extends Blender {
    * @throws IOException    if anything fails :-D
    */
   public InitialRecipesBlender(String identity, BlendingReceiver router,
-                               IdentityStore identityStore, Accountant verifier)
+                               IdentityStore identityStore, Accountant acc)
           throws IOException {
-    super(router, verifier);
+    super(router, acc);
     this.identityStore = identityStore;
     this.identity = identity;
     if (identity != null) {

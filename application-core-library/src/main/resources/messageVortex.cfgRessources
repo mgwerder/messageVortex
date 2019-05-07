@@ -2,12 +2,15 @@
 section_list; transport_setup; default; A comma separated list of transport endpoints sections (senders and receivers)
 section_list; blender_setup; default; A comma separated list of  blender sections
 section_list; router_setup; default; A comma separated list of  router sections
-section_list; credential_source_setup; default; The credential source setup section to be used
-section_list; identity_store_setup; default; The identity store sections to be set up
+section_list; accountant_setup; default; A comma separated list of accountant sections
+section_list; credential_source_setup;; The credential source setup section to be used
+section_list; identity_store_setup;; The identity store sections to be set up
+
+// accountant specific settings
+String; accounting_implementation; net.messagevortex.accounting.AccountingImplementation; accounting class to be used
 
 // router section specifics
 String; router_implementation; net.messagevortex.router.SimpleRouterImplementation; router class to be used
-String; accounting_implementation; net.messagevortex.accounting.AccountingImplementation; accounting class to be used
 
 // blender section specifics
 string; blender_implementation;; blender class to be used
@@ -21,6 +24,7 @@ String; transport_endpoint_receiver; net.messagevortex.transport.pop.Pop3Receive
 String; transport_endpoint_Sender; net.messagevortex.transport.smtp.SmtpSender; The class name of the transport sender
 string; transport_implementation; ; The class name of the transport impementation
 string; blender; blender; The section name of the upstream blender
+section; accountant;; The section name of the accountant to be used
 string; transport_id;; ID of the endpoint
 
 // Identity store

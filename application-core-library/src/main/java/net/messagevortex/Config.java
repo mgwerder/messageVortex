@@ -757,7 +757,12 @@ public class Config {
       throw new ClassCastException("Unable to cast type to correct class (expected: section_list; is: "
               + type.name() + ")");
     }
-    return ele.getSectionListValue(section).split("\\s*,\\s*");
+    String secList = ele.getSectionListValue(section);
+    if (secList == null) {
+      return new String[0];
+    } else {
+      return secList.split("\\s*,\\s*");
+    }
   }
 
   /***
@@ -805,7 +810,7 @@ public class Config {
     ConfigElement ele = configData.get(id.toLowerCase());
     if (ele == null) {
       throw new NullPointerException(
-              "unable to get id " + id + " from config subsystem (unknown element)"
+              "unable to get value for \"" + id + "\" from config subsystem (unknown element in section \"" + section + "\")"
       );
     }
     ConfigType type = ele.getType();
@@ -985,7 +990,7 @@ public class Config {
     // get list of sections
 
     try (BufferedWriter bw = new BufferedWriter(
-            new OutputStreamWriter(new FileOutputStream(filename),StandardCharsets.UTF_8))) {
+            new OutputStreamWriter(new FileOutputStream(filename), StandardCharsets.UTF_8))) {
       store(bw);
     }
   }
