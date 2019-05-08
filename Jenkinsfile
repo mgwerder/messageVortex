@@ -27,8 +27,7 @@ pipeline {
             timeout(time: 120, unit: 'MINUTES')
           }
           steps{
-                sh 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
-                sh 'mvn -pl application-core-library site'
+                sh 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report site'
           }
           post {
             success {
@@ -64,9 +63,7 @@ pipeline {
           }
           steps{
             script {
-              //if (env.BRANCH_NAME != 'master') {
-                sh script: 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
-              //}
+              sh script: 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
             }
           }
         }
@@ -82,9 +79,7 @@ pipeline {
           }
           steps {
             script {
-              //if (env.BRANCH_NAME != 'master') {
-                sh script: 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
-              //}
+              sh script: 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
             }
           }
         }
@@ -100,9 +95,7 @@ pipeline {
           }
           steps {
             script {
-              //if (env.BRANCH_NAME != 'master') {
-                sh script: 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
-              //}
+              sh script: 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
             }
           }
         }
