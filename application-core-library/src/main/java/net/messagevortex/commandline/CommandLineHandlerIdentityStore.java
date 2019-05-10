@@ -11,6 +11,9 @@ import picocli.CommandLine;
         mixinStandardHelpOptions = true,
         subcommands = {
                 CommandLineHandlerIdentityStoreCreate.class,
+                CommandLineHandlerIdentityStoreGenerate.class,
+                CommandLineHandlerIdentityStoreAdd.class,
+                CommandLineHandlerIdentityStoreDel.class,
                 CommandLineHandlerIdentityStoreDump.class
         }
 )

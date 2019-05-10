@@ -179,9 +179,9 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
     void shutdown() {
       pool.shutdown();
 
-      // wait maximum 60 seconds for shutdown then abbort key calculation
+      // wait maximum 3 seconds for shutdown then abort key calculation
       try {
-        pool.awaitTermination(180, TimeUnit.SECONDS);
+        pool.awaitTermination(3, TimeUnit.SECONDS);
         pool.shutdownNow();
       } catch (InterruptedException ie) {
         pool.shutdownNow();

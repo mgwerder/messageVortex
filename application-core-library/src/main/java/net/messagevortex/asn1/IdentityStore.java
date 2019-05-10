@@ -33,6 +33,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.Vector;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import net.messagevortex.ExtendedSecureRandom;
@@ -175,14 +176,20 @@ public class IdentityStore extends AbstractBlock
    * @throws IOException if requested anonymity set size is too big for this store
    */
   public List<IdentityStoreBlock> getAnonSet(int size) throws IOException {
-    LOGGER.log(Level.FINE, "Executing getAnonSet(" + size + ") from " + blocks.size());
+    LOGGER.log(Level.INFO, "Executing getAnonSet(" + size + ") from " + blocks.size());
+    if (size>blocks.size()+1) {
+      // unable to create a block with a bigger anonymity set than the sum of identity store blocks
+      return null;
+    }
     List<IdentityStoreBlock> ret = new ArrayList<>();
     String[] keys = blocks.keySet().toArray(new String[0]);
     int i = 0;
     while (ret.size() < size && i < 10000) {
       i++;
       IdentityStoreBlock isb = blocks.get(keys[ExtendedSecureRandom.nextInt(keys.length)]);
-      if (isb != null && isb.getType() == IdentityStoreBlock.IdentityType.RECIPIENT_IDENTITY
+      if (isb != null && (
+              isb.getType() == IdentityStoreBlock.IdentityType.RECIPIENT_IDENTITY
+                      || isb.getType() == IdentityStoreBlock.IdentityType.NODE_IDENTITY)
               && !ret.contains(isb)) {
         ret.add(isb);
         LOGGER.log(Level.FINER, "adding to anonSet "
@@ -225,6 +232,29 @@ public class IdentityStore extends AbstractBlock
       ident = toHex(isb.getIdentityKey().getPublicKey());
     }
     blocks.put(ident, isb);
+  }
+
+  public void removeAddress(String nodeAddress) throws IOException {
+    List<String> rem = new Vector<>();
+    if (nodeAddress!=null) {
+      nodeAddress = nodeAddress.toLowerCase();
+    }
+    synchronized (blocks) {
+      for (Map.Entry<String, IdentityStoreBlock> e : blocks.entrySet()) {
+        String v = e.getValue().getNodeAddress();
+        if ((v == null && nodeAddress == null)
+                || (v != null
+                && v.toLowerCase().equals(nodeAddress))) {
+          rem.add(e.getKey());
+        }
+      }
+      if (rem.size()==0) {
+        throw new IOException("unable to find nodeAddress \""+nodeAddress+"\"");
+      }
+      for (String s : rem) {
+        blocks.remove(s);
+      }
+    }
   }
 
   @Override

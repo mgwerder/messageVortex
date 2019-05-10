@@ -196,9 +196,17 @@ public class InitialRecipesBlender extends Blender {
 
       // get anonymity set
       List<IdentityStoreBlock> anonSet = istore.getAnonSet(anonSetSize);
+      if (anonSet==null) {
+        LOGGER.log(Level.WARNING, "unable to get anonymity set for message");
+        return false;
+      }
 
       // get receipes
       BlenderRecipe recipe = BlenderRecipe.getRecipe(recipes, anonSet);
+      if (recipe==null) {
+        LOGGER.log(Level.WARNING, "unable to get recipe for message");
+        return false;
+      }
 
       // apply receipes
       for (Address receiverAddress : to) {

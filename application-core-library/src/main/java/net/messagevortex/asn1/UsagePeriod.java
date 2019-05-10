@@ -69,12 +69,20 @@ public class UsagePeriod extends AbstractBlock implements Serializable {
   public UsagePeriod(long seconds) {
     notBefore = new Date();
     notAfter = new Date(notBefore.getTime() + seconds * 1000L);
-    type = UsagePeriodType.RELATIVE;
+    type = UsagePeriodType.ABSOLUTE;
+  }
+
+  /***
+   * <p>Creates a new object valid from this point in time for the maximum possible duration.</p>
+   */
+  public UsagePeriod() {
+    this(Long.MAX_VALUE);
   }
 
   public UsagePeriod(UsagePeriod p) {
     notAfter = p.notAfter;
     notBefore = p.notBefore;
+    type = p.type;
   }
 
   /***

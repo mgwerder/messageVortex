@@ -136,7 +136,7 @@ public class MessageVortex implements Callable<Integer> {
               new File(CommandLineHandlerIdentityStore.DEFAULT_FILENAME)));
 
       for (String idstoreSection : cfg.getSectionListValue(null, "identity_store_setup")) {
-        LOGGER.log(Level.INFO, "setting up accounting for routing layer \"" + idstoreSection
+        LOGGER.log(Level.INFO, "setting up identity store \"" + idstoreSection
                 + "\"");
         String fn = cfg.getStringValue(idstoreSection, "filename");
         if (fn == null) {

@@ -325,21 +325,22 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
   public String dumpValueNotation(String prefix,DumpType dumpType) {
     StringBuilder sb = new StringBuilder();
     sb.append('{').append(CRLF);
-    sb.append(dumpKeyTypeValueNotation(prefix,dumpType));
-    sb.append(',').append(CRLF);
+    sb.append(dumpKeyTypeValueNotation(prefix + "  ",dumpType)).append(',').append(CRLF);
     String s = toHex(publicKey);
     sb.append(prefix).append("  publicKey ").append(s);
-    switch (dumpType) {
-      case ALL:
-      case ALL_UNENCRYPTED:
-      case PRIVATE_COMMENTED:
-        dumpPrivateKey(sb,dumpType,prefix);
-        sb.append(CRLF);
-        break;
-      default:
-        sb.append(CRLF);
+    if (privateKey != null && privateKey.length != 0) {
+      switch (dumpType) {
+        case ALL:
+        case ALL_UNENCRYPTED:
+        case PRIVATE_COMMENTED:
+          dumpPrivateKey(sb, dumpType, prefix + "  ");
+          break;
+        default:
+          break;
+      }
+    } else {
+      sb.append(CRLF);
     }
-
     sb.append(prefix).append('}');
     return sb.toString();
   }
@@ -350,7 +351,7 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
     }
     sb.append(CRLF);
     String s = toHex(privateKey);
-    sb.append(prefix).append("  ");
+    sb.append(prefix);
     if (dumpType == DumpType.PRIVATE_COMMENTED) {
       sb.append("-- ");
     }

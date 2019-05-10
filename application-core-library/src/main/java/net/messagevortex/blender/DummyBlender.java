@@ -182,7 +182,7 @@ public class DummyBlender extends Blender {
 
       // body
       MimeBodyPart body = new MimeBodyPart();
-      body.setText("This is a VortexMessage");
+      body.setText("-- This is a VortexMessage --\r\n\r\n" + msg.dumpValueNotation(""));
       content.addBodyPart(body);
 
       //create attachment
