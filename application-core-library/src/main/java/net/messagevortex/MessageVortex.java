@@ -128,13 +128,11 @@ public class MessageVortex implements Callable<Integer> {
     try {
       Config cfg = MessageVortexConfig.getDefault();
 
-      // setup according to config file
-      // all runners
-
       // load IdentityStore
       identityStore.put("default_identity_store", new IdentityStore(
               new File(CommandLineHandlerIdentityStore.DEFAULT_FILENAME)));
 
+      // setup non-standard identity stores
       for (String idstoreSection : cfg.getSectionListValue(null, "identity_store_setup")) {
         LOGGER.log(Level.INFO, "setting up identity store \"" + idstoreSection
                 + "\"");
@@ -151,7 +149,7 @@ public class MessageVortex implements Callable<Integer> {
       }
 
 
-      //Setup routers
+      //Setup accounting
       for (String accountingSection : cfg.getSectionListValue(null, "accountant_setup")) {
 
         // setup Accounting
@@ -163,6 +161,7 @@ public class MessageVortex implements Callable<Integer> {
 
       }
 
+      // setup routers
       for (String routerSection : cfg.getSectionListValue(null, "router_setup")) {
         // setup routers
         LOGGER.log(Level.INFO, "setting up routing layer \"" + routerSection + "\"");
@@ -189,7 +188,6 @@ public class MessageVortex implements Callable<Integer> {
                 cfg.getStringValue(transportSection, "transport_implementation"),
                 DaemonType.TRANSPORT));
       }
-
     } catch (IOException ioe) {
       LOGGER.log(Level.SEVERE, "Exception while setting up infrastructure", ioe);
       return SETUP_FAIL;
@@ -197,6 +195,7 @@ public class MessageVortex implements Callable<Integer> {
       LOGGER.log(Level.SEVERE, "Bad class configured", cnf);
       return SETUP_FAIL;
     }
+
     // enable thread dumper
     if (threadDumpInterval > 0) {
       LOGGER.log(Level.INFO, "starting thread dumper with interval " + threadDumpInterval);
@@ -226,6 +225,7 @@ public class MessageVortex implements Callable<Integer> {
       LOGGER.log(Level.INFO, "shutting down " + es.getKey());
       es.getValue().shutdownDaemon();
     }
+
     LOGGER.log(Level.INFO, "******* shutdown complete *******");
     return 0;
   }

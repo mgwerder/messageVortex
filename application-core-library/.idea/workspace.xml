@@ -2,37 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d11f21f3-1155-4924-86d1-bc99f93f8cdb" name="Default Changelist" comment="Default Changelist">
-      <change afterPath="$PROJECT_DIR$/is_dummy2.cfg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/is_dummy3.cfg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/is_dummy4.cfg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/is_dummy5.cfg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/is_dummy6.cfg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/is_dummy7.cfg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/is_dummy8.cfg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/is_dummy9.cfg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/commandline/CommandLineHandlerIdentityStoreAdd.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/commandline/CommandLineHandlerIdentityStoreDel.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/commandline/CommandLineHandlerIdentityStoreGenerate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarIssues.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarIssues.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/identityStore.cfg" beforeDir="false" afterPath="$PROJECT_DIR$/is_dummy1.cfg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/asn/MessageVortex-Schema.asn" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/asn/MessageVortex-Schema.asn" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AbstractBlock.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AbstractBlock.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AsymmetricKey.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AsymmetricKey.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AsymmetricKeyPreCalculator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AsymmetricKeyPreCalculator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/IdentityStore.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/IdentityStore.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/IdentityStoreBlock.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/IdentityStoreBlock.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/UsagePeriod.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/UsagePeriod.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/DummyBlender.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/DummyBlender.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/InitialRecipesBlender.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/InitialRecipesBlender.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/commandline/CommandLineHandlerIdentityStore.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/commandline/CommandLineHandlerIdentityStore.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/commandline/CommandLineHandlerIdentityStoreCreate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/commandline/CommandLineHandlerIdentityStoreCreate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/commandline/CommandLineHandlerIdentityStoreDump.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/commandline/CommandLineHandlerIdentityStoreDump.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/messageVortex.cfg" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/messageVortex.cfg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/net/messagevortex/test/asn1/IdentityStoreTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/net/messagevortex/test/asn1/IdentityStoreTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../thesis/src/main/latex/messageVortex.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/../thesis/src/main/latex/messageVortex.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../thesis/src/main/latex/messageVortex.tex" beforeDir="false" afterPath="$PROJECT_DIR$/../thesis/src/main/latex/messageVortex.tex" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -150,11 +121,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="IdentityStore.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="IdentityStore.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/IdentityStore.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="584">
-              <caret line="188" column="39" selection-start-line="188" selection-start-column="39" selection-end-line="188" selection-end-column="39" />
+            <state relative-caret-position="360">
+              <caret line="193" column="74" selection-start-line="193" selection-start-column="74" selection-end-line="193" selection-end-column="74" />
             </state>
           </provider>
         </entry>
@@ -194,20 +165,11 @@
       <file leaf-file-name="MessageVortex.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="408">
-              <caret line="138" column="57" selection-start-line="138" selection-start-column="57" selection-end-line="138" selection-end-column="57" />
+            <state relative-caret-position="221">
+              <caret line="134" column="19" selection-start-line="134" selection-start-column="19" selection-end-line="134" selection-end-column="19" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CommandLineHandlerIdentityStoreAdd.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/commandline/CommandLineHandlerIdentityStoreAdd.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="646">
-              <caret line="48" column="62" selection-start-line="48" selection-start-column="62" selection-end-line="48" selection-end-column="62" />
             </state>
           </provider>
         </entry>
@@ -322,8 +284,8 @@
         <option value="$PROJECT_DIR$/src/main/resources/messageVortex.cfg" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/commandline/CommandLineHandlerIdentityStoreDel.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/IdentityStoreBlock.java" />
-        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/IdentityStore.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/IdentityStore.java" />
       </list>
     </option>
   </component>
@@ -491,7 +453,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.MessageVortex">
+  <component name="RunManager" selected="JUnit.All Tests">
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
       <method>
@@ -743,9 +705,6 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="All_Tests - 2019.05.07 at 17h 52m 51s.xml">
-      <configuration name="All Tests" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="All_Tests - 2019.05.09 at 23h 10m 54s.xml">
       <configuration name="All Tests" configurationId="JUnit" />
     </history-entry>
@@ -773,6 +732,9 @@
     <history-entry file="IdentityStoreTest_testingIdentityStoreDemo - 2019.05.10 at 08h 24m 58s.xml">
       <configuration name="IdentityStoreTest.testingIdentityStoreDemo" configurationId="JUnit" />
     </history-entry>
+    <history-entry file="All_Tests - 2019.05.10 at 13h 04m 40s.xml">
+      <configuration name="All Tests" configurationId="JUnit" />
+    </history-entry>
   </component>
   <component name="TimeTrackingManager">
     <option name="totallyTimeSpent" value="116920000" />
@@ -788,6 +750,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1192" y="-8" width="1216" height="1936" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="FindBugs-IDEA" order="13" weight="0.32996634" />
@@ -1229,10 +1192,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/commandline/CommandLineHandlerIdentityStoreAdd.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="646">
+          <caret line="48" column="62" selection-start-line="48" selection-start-column="62" selection-end-line="48" selection-end-column="62" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="138" column="57" selection-start-line="138" selection-start-column="57" selection-end-line="138" selection-end-column="57" />
+        <state relative-caret-position="221">
+          <caret line="134" column="19" selection-start-line="134" selection-start-column="19" selection-end-line="134" selection-end-column="19" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1241,15 +1211,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/IdentityStore.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="584">
-          <caret line="188" column="39" selection-start-line="188" selection-start-column="39" selection-end-line="188" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/commandline/CommandLineHandlerIdentityStoreAdd.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="646">
-          <caret line="48" column="62" selection-start-line="48" selection-start-column="62" selection-end-line="48" selection-end-column="62" />
+        <state relative-caret-position="360">
+          <caret line="193" column="74" selection-start-line="193" selection-start-column="74" selection-end-line="193" selection-end-column="74" />
         </state>
       </provider>
     </entry>

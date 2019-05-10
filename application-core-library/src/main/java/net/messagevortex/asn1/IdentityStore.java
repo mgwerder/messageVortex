@@ -29,7 +29,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -192,8 +191,7 @@ public class IdentityStore extends AbstractBlock
                       || isb.getType() == IdentityStoreBlock.IdentityType.NODE_IDENTITY)
               && !ret.contains(isb)) {
         ret.add(isb);
-        LOGGER.log(Level.FINER, "adding to anonSet "
-                + Arrays.hashCode(isb.getIdentityKey().getPublicKey()));
+        LOGGER.log(Level.FINER, "adding to anonSet "+ isb.getNodeAddress());
       }
     }
     if (ret.size() < size) {
