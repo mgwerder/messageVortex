@@ -93,9 +93,10 @@ public class IdentityStoreBlock extends AbstractBlock implements Serializable {
    */
   public IdentityStoreBlock(String url) throws IOException {
     if (url != null && url.toLowerCase().startsWith("vortexsmtp://")) {
+      LOGGER.log(Level.INFO, "Creating identity from URL " + url);
       String[] s = url.substring(13).split("\\.\\.");
       String[] s2 = s[2].split("@");
-      nodeKey = new AsymmetricKey(Base64.decode(s[1]));
+      identityKey = new AsymmetricKey(Base64.decode(s[1]));
       nodeAddress = "smtp:" + s[0] + "@" + s2[0];
       valid = new UsagePeriod();
     } else {
@@ -402,14 +403,14 @@ public class IdentityStoreBlock extends AbstractBlock implements Serializable {
    */
   public String getUrl() throws IOException {
     if (nodeAddress.startsWith("smtp:")) {
-      String[] addr = nodeAddress.substring(5,nodeAddress.length()).split("@");
-      if (identityKey==null) {
+      String[] addr = nodeAddress.substring(5, nodeAddress.length()).split("@");
+      if (identityKey == null) {
         LOGGER.log(Level.WARNING, "unable to encode identity key of " + nodeAddress + " (key is null)");
         return UNENCODABLE;
       }
       ASN1Object e = identityKey.toAsn1Object(DumpType.PUBLIC_ONLY);
-      if (e==null) {
-        LOGGER.log(Level.WARNING, "unable to encode identity key of " + nodeAddress );
+      if (e == null) {
+        LOGGER.log(Level.WARNING, "unable to encode identity key of " + nodeAddress);
         return UNENCODABLE;
       }
       String keySpec = toBase64(e.getEncoded());
@@ -431,7 +432,7 @@ public class IdentityStoreBlock extends AbstractBlock implements Serializable {
     if (idType != null) {
       return idType;
     }
-    if (nodeKey == null) {
+    if (nodeKey == null && identityKey.privateKey != null) {
       return IdentityType.OWNED_IDENTITY;
     }
     return identityKey == null ? IdentityType.NODE_IDENTITY : IdentityType.RECIPIENT_IDENTITY;
@@ -463,7 +464,8 @@ public class IdentityStoreBlock extends AbstractBlock implements Serializable {
             && isb.nodeAddress != null)) {
       return false;
     }
-    return nodeKey.equals(isb.nodeKey);
+    return (nodeKey == null && isb.nodeKey == null)
+            || (nodeKey != null && nodeKey.equals(isb.nodeKey));
   }
 
 }

@@ -36,6 +36,7 @@ import net.messagevortex.accounting.Accountant;
 import net.messagevortex.asn1.AsymmetricKeyPreCalculator;
 import net.messagevortex.asn1.IdentityStore;
 import net.messagevortex.blender.Blender;
+import net.messagevortex.blender.recipes.BlenderRecipe;
 import net.messagevortex.commandline.CommandLineHandlerIdentityStore;
 import net.messagevortex.router.Router;
 import net.messagevortex.transport.Transport;
@@ -148,6 +149,16 @@ public class MessageVortex implements Callable<Integer> {
         identityStore.put(idstoreSection.toLowerCase(), new IdentityStore(f));
       }
 
+      // setup recipes
+      // create default recipe store
+      String lst=Config.getDefault().getStringValue(null, "recipes");
+      for (String cl:lst.split(" *, *")) {
+        BlenderRecipe.addRecipe(null,
+                (BlenderRecipe) getConfiguredClass(null, cl,BlenderRecipe.class));
+      }
+      for (String accountingSection : cfg.getSectionListValue(null, "recipe_setup")) {
+
+      }
 
       //Setup accounting
       for (String accountingSection : cfg.getSectionListValue(null, "accountant_setup")) {

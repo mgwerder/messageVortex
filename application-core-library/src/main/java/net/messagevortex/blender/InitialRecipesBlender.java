@@ -34,6 +34,7 @@ import net.messagevortex.asn1.PrefixBlock;
 import net.messagevortex.asn1.RoutingBlock;
 import net.messagevortex.asn1.VortexMessage;
 import net.messagevortex.asn1.encryption.DumpType;
+import net.messagevortex.blender.recipes.BlenderRecipe;
 import net.messagevortex.transport.Transport;
 import net.messagevortex.transport.dummy.DummyTransportTrx;
 
@@ -209,9 +210,17 @@ public class InitialRecipesBlender extends Blender {
       }
 
       // apply receipes
+      LOGGER.log(Level.INFO, "blending messages");
       for (Address receiverAddress : to) {
-        RoutingBlock rb = recipe.applyRecipe(anonSet, istore.getIdentity(from[0].toString()),
-                istore.getIdentity(receiverAddress.toString()));
+        LOGGER.log(Level.INFO, "blending message for \"" + receiverAddress.toString() + "\"");
+        IdentityStoreBlock fromAddr = istore.getIdentity(from[0].toString());
+
+        IdentityStoreBlock toAddr = istore.getIdentity(receiverAddress.toString());
+        RoutingBlock rb = recipe.applyRecipe(anonSet, fromAddr, toAddr);
+
+        if (rb == null) {
+          LOGGER.log(Level.WARNING, "Unable to route message to " + receiverAddress.toString());
+        }
 
         PrefixBlock pb = new PrefixBlock();
         InnerMessageBlock im = new InnerMessageBlock();
@@ -224,6 +233,7 @@ public class InitialRecipesBlender extends Blender {
           i++;
         }
       }
+      LOGGER.log(Level.INFO, "done blending");
       return i == to.length;
     } catch (IOException | MessagingException ioe) {
       LOGGER.log(Level.WARNING, "Exception while getting and parsing message", ioe);

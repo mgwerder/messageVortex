@@ -5,6 +5,7 @@ section_list; router_setup; default; A comma separated list of  router sections
 section_list; accountant_setup; default; A comma separated list of accountant sections
 section_list; credential_source_setup;; The credential source setup section to be used
 section_list; identity_store_setup;; The identity store sections to be set up
+section_list; recipe_setup;; The recipe sections to be set up
 
 // accountant specific settings
 String; accounting_implementation; net.messagevortex.accounting.AccountingImplementation; accounting class to be used
@@ -29,6 +30,9 @@ string; transport_id;; ID of the endpoint
 
 // Identity store
 String; node_identity; "default"; the name of the node identity to be used
+
+// Recipe store
+String; recipes;; comma separated list of recipe class names
 
 // generic sections
 String; filename;;The filename of the file to be loaded
