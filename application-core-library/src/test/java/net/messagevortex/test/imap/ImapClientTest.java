@@ -183,23 +183,6 @@ public class ImapClientTest {
       assertTrue("Did not wait until end of timeout was reached (just " + el + ")", el >= 300);
       assertFalse("Did wait too long", el > 2100);
     }
-    try {
-      ic.setTimeout(500);
-      LOGGER.log(Level.INFO, "sending timeout and awaiting timeout");
-      String[] sa = ic.sendCommand("a1 IWantATimeout", 300);
-      LOGGER.log(Level.SEVERE, "got unexpected reply:");
-      if (sa != null) {
-        for (String s : sa) {
-          LOGGER.log(Level.SEVERE, "  reply:" + s);
-        }
-      }
-      fail("No timeoutException was raised");
-    } catch (TimeoutException te) {
-      long el = (System.currentTimeMillis() - start);
-      assertTrue("Did not wait until end of timeout was reached (just " + el + ")", el >= 300);
-      assertFalse("Did wait too long (" + el + " ms; expected: 300)", el > 1000);
-      // assertTrue("Connection was not terminated",ic.isTerminated());
-    }
     ImapCommand.deregisterCommand("IWantATimeout");
     ict.shutdown();
     try {

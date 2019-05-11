@@ -2,15 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d11f21f3-1155-4924-86d1-bc99f93f8cdb" name="Default Changelist" comment="Default Changelist">
-      <change beforePath="$PROJECT_DIR$/.idea/sonarIssues.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarIssues.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/identityStore.cfg" beforeDir="false" afterPath="$PROJECT_DIR$/identityStore.cfg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/IdentityStoreBlock.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/IdentityStoreBlock.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/BlenderRecipe.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/recipes/BlenderRecipe.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/InitialRecipesBlender.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/InitialRecipesBlender.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/messageVortex.cfg" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/messageVortex.cfg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/messageVortex.cfgRessources" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/messageVortex.cfgRessources" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/messagevortex/test/imap/ImapClientTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/net/messagevortex/test/imap/ImapClientTest.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -179,15 +172,24 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BlenderRecipe.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="BlenderRecipe.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/blender/recipes/BlenderRecipe.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1360">
-              <caret line="90" selection-start-line="90" selection-end-line="90" />
+            <state relative-caret-position="966">
+              <caret line="88" column="34" selection-start-line="88" selection-start-column="34" selection-end-line="88" selection-end-column="34" />
               <folding>
                 <element signature="e#2575#2576#0" expanded="true" />
                 <element signature="e#2634#2635#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ImapClientTest.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/test/java/net/messagevortex/test/imap/ImapClientTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="810">
+              <caret line="185" selection-start-line="185" selection-end-line="185" />
             </state>
           </provider>
         </entry>
@@ -215,7 +217,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>call(</find>
       <find>call</find>
       <find>copy</find>
       <find>master</find>
@@ -245,6 +246,7 @@
       <find>getAn</find>
       <find>getTy</find>
       <find>getType</find>
+      <find>IMAP Client Timeout Test</find>
     </findStrings>
     <replaceStrings>
       <replace>;</replace>
@@ -292,7 +294,6 @@
         <option value="$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/RandomTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/VersionTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/net/messagevortex/test/core/MessageVortexTest.java" />
-        <option value="$PROJECT_DIR$/src/test/java/net/messagevortex/test/imap/ImapClientTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/Config.java" />
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/../Jenkinsfile" />
@@ -316,6 +317,7 @@
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/InitialRecipesBlender.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/recipes/SimplePathRecipe.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/recipes/BlenderRecipe.java" />
+        <option value="$PROJECT_DIR$/src/test/java/net/messagevortex/test/imap/ImapClientTest.java" />
       </list>
     </option>
   </component>
@@ -466,6 +468,15 @@
               <item name="test" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="test" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="application-core-library" type="b2602c69:ProjectViewProjectNode" />
+              <item name="application-core-library" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="imap" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -786,9 +797,6 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="All_Tests - 2019.05.10 at 07h 31m 45s.xml">
-      <configuration name="All Tests" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="All_Tests - 2019.05.10 at 07h 34m 39s.xml">
       <configuration name="All Tests" configurationId="JUnit" />
     </history-entry>
@@ -816,6 +824,9 @@
     <history-entry file="MainCoreSuite - 2019.05.11 at 14h 21m 04s.xml">
       <configuration name="MainCoreSuite" configurationId="JUnit" />
     </history-entry>
+    <history-entry file="MainCoreSuite - 2019.05.11 at 14h 26m 03s.xml">
+      <configuration name="MainCoreSuite" configurationId="JUnit" />
+    </history-entry>
   </component>
   <component name="TimeTrackingManager">
     <option name="totallyTimeSpent" value="116920000" />
@@ -836,7 +847,7 @@
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="FindBugs-IDEA" order="13" weight="0.32996634" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5017301" side_tool="true" weight="0.32819635" />
-      <window_info anchor="right" id="Maven Projects" order="6" sideWeight="0.49857143" visible="true" weight="0.27941176" />
+      <window_info anchor="right" id="Maven Projects" order="6" sideWeight="0.49857143" weight="0.27941176" />
       <window_info id="Capture Tool" order="6" />
       <window_info id="Designer" order="2" />
       <window_info anchor="bottom" id="SonarQube" order="15" weight="0.32996634" />
@@ -850,7 +861,7 @@
       <window_info id="Image Layers" order="3" />
       <window_info anchor="right" id="Capture Analysis" order="4" />
       <window_info anchor="bottom" id="Version Control" order="11" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4982699" weight="0.335578" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4982699" visible="true" weight="0.335578" />
       <window_info anchor="bottom" id="CheckStyle" order="8" weight="0.34118968" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.34429064" />
@@ -1020,17 +1031,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="357">
           <caret line="27" column="110" selection-start-line="27" selection-start-column="110" selection-end-line="27" selection-end-column="110" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/net/messagevortex/test/imap/ImapClientTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="57" column="2" lean-forward="true" selection-start-line="57" selection-start-column="2" selection-end-line="57" selection-end-column="2" />
-          <folding>
-            <element signature="e#2953#2954#0" expanded="true" />
-            <element signature="e#2991#2992#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1278,12 +1278,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/blender/recipes/BlenderRecipe.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1360">
-          <caret line="90" selection-start-line="90" selection-end-line="90" />
+        <state relative-caret-position="966">
+          <caret line="88" column="34" selection-start-line="88" selection-start-column="34" selection-end-line="88" selection-end-column="34" />
           <folding>
             <element signature="e#2575#2576#0" expanded="true" />
             <element signature="e#2634#2635#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/net/messagevortex/test/imap/ImapClientTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="810">
+          <caret line="185" selection-start-line="185" selection-end-line="185" />
         </state>
       </provider>
     </entry>
