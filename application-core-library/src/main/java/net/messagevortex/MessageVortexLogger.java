@@ -59,7 +59,8 @@ public class MessageVortexLogger extends Logger {
   }
 
   public static void setGlobalLogLevel(Level l) {
-    getGlobalLogger().setLevel(l);
+    consoleHandler.setLevel(l);
+    getGlobalLogger().getParent().setLevel(l);
   }
 
   public static Logger getGlobalLogger() {
