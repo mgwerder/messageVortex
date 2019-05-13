@@ -47,7 +47,7 @@ public class LowAnonRecipe extends BlenderRecipe {
 
     // send packages along the line
 
-    // add dead ends
+    // add some dead ends
 
     return null;
   }

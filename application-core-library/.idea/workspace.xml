@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d11f21f3-1155-4924-86d1-bc99f93f8cdb" name="Default Changelist" comment="Default Changelist">
-      <change afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/recipes/LowAnonRecipe.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarIssues.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarIssues.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortexLogger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortexLogger.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/recipes/LowAnonRecipe.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/recipes/LowAnonRecipe.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -149,11 +148,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="LowAnonRecipe.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="LowAnonRecipe.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/blender/recipes/LowAnonRecipe.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="646">
-              <caret line="42" column="5" lean-forward="true" selection-start-line="42" selection-start-column="5" selection-end-line="42" selection-end-column="5" />
+            <state relative-caret-position="765">
+              <caret line="49" column="16" selection-start-line="49" selection-start-column="16" selection-end-line="49" selection-end-column="16" />
             </state>
           </provider>
         </entry>
@@ -179,11 +178,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MessageVortexLogger.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="MessageVortexLogger.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortexLogger.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="269">
-              <caret line="62" column="46" selection-start-line="62" selection-start-column="46" selection-end-line="62" selection-end-column="46" />
+            <state relative-caret-position="1000">
+              <caret line="102" column="21" selection-start-line="102" selection-start-column="21" selection-end-line="102" selection-end-column="21" />
             </state>
           </provider>
         </entry>
@@ -295,11 +294,11 @@
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/recipes/SimplePathRecipe.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/recipes/BlenderRecipe.java" />
         <option value="$PROJECT_DIR$/src/test/java/net/messagevortex/test/imap/ImapClientTest.java" />
-        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortexLogger.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/router/SimpleMessageFactory.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/router/MessageFactory.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/router/GraphSet.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/recipes/LowAnonRecipe.java" />
+        <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortexLogger.java" />
       </list>
     </option>
   </component>
@@ -1219,13 +1218,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortexLogger.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="269">
-          <caret line="62" column="46" selection-start-line="62" selection-start-column="46" selection-end-line="62" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/router/Edge.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="595">
@@ -1266,8 +1258,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/blender/recipes/LowAnonRecipe.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="646">
-          <caret line="42" column="5" lean-forward="true" selection-start-line="42" selection-start-column="5" selection-end-line="42" selection-end-column="5" />
+        <state relative-caret-position="765">
+          <caret line="49" column="16" selection-start-line="49" selection-start-column="16" selection-end-line="49" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortexLogger.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1000">
+          <caret line="102" column="21" selection-start-line="102" selection-start-column="21" selection-end-line="102" selection-end-column="21" />
         </state>
       </provider>
     </entry>

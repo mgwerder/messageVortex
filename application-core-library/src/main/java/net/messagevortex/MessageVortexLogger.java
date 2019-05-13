@@ -69,34 +69,38 @@ public class MessageVortexLogger extends Logger {
 
   static final class MyLogFormatter extends Formatter {
 
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Override
     public String format(LogRecord record) {
 
       StringBuilder sb = new StringBuilder();
+      try {
+        synchronized (sdf) {
+          String time = sdf.format(new Date());
 
-      sb.append(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()))
-              .append(' ')
-              .append(record.getLevel().getLocalizedName())
-              .append(": ")
-              .append('[')
-              .append(Thread.currentThread().getName())
-              .append("] ")
-              .append(formatMessage(record))
-              .append(LINE_SEPARATOR);
-
-      //noinspection ThrowableResultOfMethodCallIgnored
-      if (record.getThrown() != null) {
-        try {
-          StringWriter sw = new StringWriter();
-          PrintWriter pw = new PrintWriter(sw);
-          //noinspection ThrowableResultOfMethodCallIgnored
-          record.getThrown().printStackTrace(pw);
-          pw.close();
-          sb.append(sw);
-        } catch (Exception ex) {
-          assert true : "Never throw assertion" + ex;
+          sb.append(time).append(' ').append(record.getLevel().getLocalizedName()).append(": ")
+                  .append('[').append(Thread.currentThread().getName()).append("] ")
+                  .append(formatMessage(record)).append(LINE_SEPARATOR);
         }
+
+        //noinspection ThrowableResultOfMethodCallIgnored
+        if (record.getThrown() != null) {
+          try {
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            //noinspection ThrowableResultOfMethodCallIgnored
+            record.getThrown().printStackTrace(pw);
+            pw.close();
+            sb.append(sw);
+          } catch (Exception ex) {
+            assert true : "Never throw assertion" + ex;
+          }
+        }
+      } catch(Exception e) {
+        System.err.println( "DESASTER: exception while logging" );
+        e.printStackTrace();
+        System.exit(200);
       }
 
       return sb.toString();
