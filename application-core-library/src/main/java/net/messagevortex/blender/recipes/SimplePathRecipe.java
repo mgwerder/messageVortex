@@ -22,7 +22,12 @@ public class SimplePathRecipe extends BlenderRecipe {
   @Override
   public RoutingBlock applyRecipe(List<IdentityStoreBlock> anonSet, IdentityStoreBlock from,
                                   IdentityStoreBlock to) {
-    // FIXME
+    // creating a graph
+
+    // selecting routes
+
+    //selecting operations
+    //building and returning routing block
     return null;
   }
 
