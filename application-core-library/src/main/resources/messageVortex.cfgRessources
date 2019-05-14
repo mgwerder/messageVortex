@@ -36,7 +36,7 @@ String; recipes;; comma separated list of recipe class names
 
 // generic sections
 String; filename;;The filename of the file to be loaded
-Section; accounting;; The section name of the respective accounting layer
+Section; accounting; default_accountant; The section name of the respective accounting layer
 
 // Incoming SMTP connection listener settings
 numeric; smtp_incoming_port                ; 587      ; The port number for incoming SMTP connects.

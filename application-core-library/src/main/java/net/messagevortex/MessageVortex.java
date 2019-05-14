@@ -34,11 +34,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.messagevortex.accounting.Accountant;
 import net.messagevortex.asn1.AsymmetricKeyPreCalculator;
+import net.messagevortex.asn1.IdentityBlock;
 import net.messagevortex.asn1.IdentityStore;
+import net.messagevortex.asn1.IdentityStoreBlock;
 import net.messagevortex.blender.Blender;
 import net.messagevortex.blender.recipes.BlenderRecipe;
 import net.messagevortex.commandline.CommandLineHandlerIdentityStore;
 import net.messagevortex.router.Router;
+import net.messagevortex.router.operation.InternalPayloadSpace;
+import net.messagevortex.router.operation.InternalPayloadSpaceStore;
 import net.messagevortex.transport.Transport;
 import picocli.CommandLine;
 
@@ -88,6 +92,8 @@ public class MessageVortex implements Callable<Integer> {
   private static Map<String, Router> router = new ConcurrentHashMap<>();
   private static Map<String, Accountant> accountant = new ConcurrentHashMap<>();
   private static Map<String, IdentityStore> identityStore = new ConcurrentHashMap<>();
+  private static InternalPayloadSpaceStore ownStores = new InternalPayloadSpaceStore();
+  private static InternalPayloadSpaceStore simStores = new InternalPayloadSpaceStore();
 
   /***
    * <p>Main command line method.</p>
@@ -112,7 +118,6 @@ public class MessageVortex implements Callable<Integer> {
     Integer i = CommandLine.call(new MessageVortex(), args == null ? new String[0] : args);
     return i != null ? i : ARGUMENT_FAIL;
   }
-
 
   @Override
   public Integer call() {
@@ -341,5 +346,33 @@ public class MessageVortex implements Callable<Integer> {
       return null;
     }
     return identityStore.get(id.toLowerCase());
+  }
+
+  public static InternalPayloadSpace getSimulatedSpace(IdentityBlock ib) {
+    InternalPayloadSpace ret =null;
+    synchronized (simStores) {
+      // get exiting space
+      ret = simStores.getInternalPayload(ib);
+
+      if (ret == null) {
+        // create a new space if missing
+        ret = new InternalPayloadSpace(simStores, ib);
+      }
+    }
+    return ret;
+  }
+
+  public static InternalPayloadSpace getOwnSpace(IdentityBlock ib) {
+    InternalPayloadSpace ret =null;
+    synchronized (ownStores) {
+      // get exiting space
+      ret = ownStores.getInternalPayload(ib);
+
+      if (ret == null) {
+        // create a new space if missing
+        ret = new InternalPayloadSpace(ownStores, ib);
+      }
+    }
+    return ret;
   }
 }
