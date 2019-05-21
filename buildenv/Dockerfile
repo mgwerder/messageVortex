@@ -21,12 +21,12 @@ RUN mkdir /var/tmp/messagevortex && \
     pip install xml2rfc 'weasyprint<=0.42.3' && \
     sed 's/domain="coder" rights="none"/domain="coder" rights="read|write"/' </etc/ImageMagick-6/policy.xml >/tmp/policy.xml && mv /tmp/policy.xml /etc/ImageMagick-6/policy.xml 
 COPY mavenfiles.tar /tmp/mavenfiles.tar
+COPY AdobeICCProfilesWin_end-user.zip /tmp/AdobeICCProfilesWin_end-user.zip
 RUN cd /var/tmp/messagevortex && \
     tar -xvf /tmp/mavenfiles.tar && \
     cat /etc/maven/settings.xml|sed 's~.xsd">~.xsd"><localRepository>/var/lib/maven</localRepository>~' >/etc/maven/settings.xml.new && mv /etc/maven/settings.xml.new /etc/maven/settings.xml && \
     mkdir -p /var/lib/maven/.m2 && \
-    wget http://download.adobe.com/pub/adobe/iccprofiles/win/AdobeICCProfilesWin_end-user.zip && \
-    unzip -c AdobeICCProfilesWin_end-user.zip  "Adobe ICC Profiles (end-user)/RGB Profiles/AdobeRGB1998.icc" >$(dirname $(find /usr/share/ghostscript/*.*/lib/ -type f|head -n 1) )/AdobeRGB1998.icc && \
+    unzip -c /tmp/AdobeICCProfilesWin_end-user.zip  "Adobe ICC Profiles (end-user)/RGB Profiles/AdobeRGB1998.icc" >$(dirname $(find /usr/share/ghostscript/*.*/lib/ -type f|head -n 1) )/AdobeRGB1998.icc && \
     sed "s~/ICCProfile (srgb.icc)~/ICCProfile ($( dirname $(find /usr/share/ghostscript/*.*/lib/ -type f|head -n 1) )/AdobeRGB1998.icc)~" <$(dirname $(find /usr/share/ghostscript/*.*/lib/ -type f|head -n 1) )/PDFA_def.ps >/tmp/PDFA_def.ps.new && mv /tmp/PDFA_def.ps.new $( dirname $(find /usr/share/ghostscript/*.*/lib/ -type f|head -n 1) )/AdobeRGB1998.icc && \
     MAVEN_CONFIG=/var/lib/maven/ mvn dependency:go-offline dependency:resolve-plugins 
 CMD [ "/var/tmp/messagevortex/buildenv/runDockerTasks.sh" ]
