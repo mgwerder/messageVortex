@@ -89,7 +89,7 @@ public class RandomTest {
     for (int i = 0; i < classes.length; i++) {
       if (i != 0) sb.append(',');
       sb.append(classes[i]);
-      long t = (long) (Math.max(200, sample[i] * mul / 30000 * 0.2));
+      long t = (long) (Math.max(280, sample[i] * mul / 30000 * 0.2));
       assertTrue("failed at pos " + i + " (result:" + classes[i] + "; expect:" + sample[i] * mul / 30000 + ")", classes[i] >= (sample[i] * mul / 30000 - t) && classes[i] <= (sample[i] * mul / 30000 + t));
     }
     System.out.println(sb.toString() + "}");
