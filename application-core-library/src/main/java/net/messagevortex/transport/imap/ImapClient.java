@@ -94,7 +94,7 @@ public class ImapClient extends ClientConnection {
    * @param creds The credentials to be used for the authentication
    * @return true if successful
    */
-  public boolean authenticate(Credentials creds) {
+  public boolean authenticate(Credentials creds) throws TimeoutException {
     // FIXME this dummy always selects plain
     // get capabilities
     // get best auth type supported
@@ -108,7 +108,7 @@ public class ImapClient extends ClientConnection {
    * @param mech the SASL mechanism to be used
    * @return true if successful
    */
-  public boolean authenticate(Credentials creds, SaslMechanisms mech) {
+  public boolean authenticate(Credentials creds, SaslMechanisms mech) throws TimeoutException {
     CallbackHandler clientHandler = new SaslClientCallbackHandler(creds);
 
     Map<String, String> props = new HashMap<>();
@@ -232,11 +232,11 @@ public class ImapClient extends ClientConnection {
     }
   }
 
-  public void processLine(String line) throws IOException {
+  public void processLine(String line) throws IOException, TimeoutException {
     processLine(line, getTimeout());
   }
 
-  private void processLine(String line, long timeout) throws IOException {
+  private void processLine(String line, long timeout) throws IOException, TimeoutException {
     currentCommand = line;
     LOGGER.log(Level.INFO, "IMAP C->S: " + ImapLine.commandEncoder(currentCommand));
     final long start = System.currentTimeMillis();
@@ -280,7 +280,7 @@ public class ImapClient extends ClientConnection {
     LOGGER.log(Level.FINEST, "command has been completely processed");
   }
 
-  private void runStep() throws IOException {
+  private void runStep() throws IOException, TimeoutException {
     LOGGER.log(Level.INFO, "Waiting for command to process");
     startTls();
     waitForWakeupRunner();
