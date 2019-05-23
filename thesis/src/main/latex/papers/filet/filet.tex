@@ -429,7 +429,7 @@ E-mail: see http://www.messagevortex.net
 \begin{abstract}
 In this paper, we introduce an unobservable message anonymization protocol, named MessageVortex. It bases on the zero trust principle and a distributed peer-to-peer like architecture and avoids central aspects such as fixed infrastructures within a global network. 
 
-It scores over existing work by blending its traffic into suitable existing transport protocols, thus making it next to impossible to block it without significantly affecting regular users of the transport medium. No additional protocol-specific infrastructure is required in public networks and allows a sender to control all aspects of a message such as the degree of anonymity, timing, and redundancy of the message transport without disclosing any of these details to the routing or transporting nodes. Part of this work is an RFC document attached in Appendix \ref{app:rfcMessageVortexMain} describing the protocol. It contains all the necessary information to build protocol nodes. The RFC draft is available through the official RFC channels. Additionally, the RFC document, additional documents, and a reference are available under \url{https://messagevortex.net/}.
+It scores over existing work by blending its traffic into suitable existing transport protocols, thus making it next to impossible to block it without significantly affecting regular users of the transport medium. No additional protocol-specific infrastructure is required in public networks and allows a sender to control all aspects of a message such as the degree of anonymity, timing, and redundancy of the message transport without disclosing any of these details to the routing or transporting nodes. The most recent RFC-draft describes the protocol in detail. This draft contains all the necessary information to build protocol nodes. More information and a prototype implementation are available under \url{https://messagevortex.net/}.
 \end{abstract}
 
 % Note that keywords are not normally used for peerreview papers.
@@ -494,51 +494,75 @@ Computer Society, IEEE, IEEEtran, journal, \LaTeX, paper, template.
 % 
 % Here we have the typical use of a "T" for an initial drop letter
 % and "HIS" in caps to complete the first word.
-\IEEEPARstart{A}{lmon Brown Strowger} was the owner of a funeral parlor in St. Petersburg. He filed a patent on March \nth{10}, 1891 for an ``Automatic Telephone Exchange'' \cite{pulseDialingPatent}. This patent built the base for modern automated telephone systems. According to several sources, he was annoyed by the fact that the local telephone operator was married to another undertaker. She diverted potential customers of Mr. Strowger to her husband instead, which caused Almon B. Strowger to lose business. In 1922, this telephone dialing system which is nowadays called pulse dialing became the standard dialing technology for more than 70 years until tone dialing replaced it.
+\IEEEPARstart{A}{lmon Brown Strowger} was the owner of a funeral parlor in St. Petersburg. He filed a patent on March \nth{10}, 1891 for an ``Automatic Telephone Exchange'' \cite{pulseDialingPatent}. This patent built the base for modern automated telephone systems. According to several sources, he was annoyed by the fact that the local telephone operator was married to another undertaker. She diverted potential customers of Mr. Strowger to her husband instead, which caused Almon B. Strowger to lose business. In 1922, this telephone dialing system, which is nowadays called pulse dialing became the standard dialing technology for more than 70 years until tone dialing replaced it.
 
-This dialing technology enabled automatic messaging for voice and text messages (e.g. telex) up until today and is the foundation for current routed networks. These networks build the base for our communication-based Society these days and allow us to connect quickly with any person or company of our wish. We use these networks today as communication meaning for all purposes and most of the people spend minimal thoughts on the possible consequences arising if someone puts hands on this communication. 
+This dialing technology enabled automatic messaging for voice and text messages (e.g., telex) up until today and is the foundation for current routed networks. These networks build the base for our communication-based Society these days and allow us to connect quickly with any person or company of our wish. We use these networks today as communication meaning for all purposes, and most of the people spend minimal thoughts on the possible consequences arising if someone puts hands on this communication. 
 
-Collected data may be used to judge on our intentions and thus is not only confidential if we have something to hide. This problem has dramatically increased in the last years as big companies and countries started to collect all kinds of data and created the means to process them. It allows, supposedly, to judge peoples not only on what they are doing but as well, on what they did and what they might do. Numerous events in the present and past show that multiple actors, some of which are state-sponsored, collected data on a broad base within the internet. Whether this is a problem or not may be disputable. Undisputed is that such data requires careful handling and accusations should then base on solid facts. Unacceptable seems the use of ``guesses'' or ``extrapolations'' in most of the cases.
+Collected data may be used to judge upon our intentions and thus is not only confidential if we have something to hide. This problem has dramatically increased in the last years as big companies and countries started to collect all kinds of data and created the means to process them. It allows, supposedly, to judge peoples not only on what they are doing but as well, on what they did and what they might do. Numerous events in the present and past show that multiple actors, some of which are state-sponsored, collected data on a broad base within the Internet. Whether this is a problem or not may be disputable. Undisputed is that such data requires careful handling, and accusations should then base on solid facts. Unacceptable seems the use of ``guesses'' or ``extrapolations'' in most of the cases.
 
-To show that this may happen even under complete democratic control we might refer to events such as the ``secret files scandal'' (or  ``Fichenskandal'') in Switzerland. In the years from 1900 to 1990 Swiss government collected 900’000 files in a secret archive (covering roughly 10\% of the natural and juristic entities within Switzerland at that time). More about the Fichenskandal is well documented in the Swiss Federal Archives (https://www.bar.admin.ch).
+To show that this may happen even under complete democratic control we might refer to events such as the ``secret files scandal'' (or  ``Fichenskandal'') in Switzerland. In the years from 1900 to 1990 Swiss government collected 900’000 files in a secret archive (covering roughly 10\% of the natural and juristic entities within Switzerland at that time). The Swiss Federal Archives (https://www.bar.admin.ch) documents more about the Fichenskandal.
 
-Whistleblower Edward Snowden leaked a vast amount of documents suggesting that such attacks on privacy are commonly done a on a global scale. The documents were leaked in 2009 and a significant number of journalists from multiple countries screened these documents (\href{http://www.nrc.nl/nieuws/2013/11/23/nederland-sinds-1946-doelwit-van-nsa}{NRC}). According to these documents, NSA infiltrated more than 50k computers with malware to collect classified or personal information. They furthermore infiltrated Telecom-Operators (mainly executed by British GCHQ) such as Belgacom to collect data and targeted high member of governments even in associated states (such as the mobile phone number of Germany's president and high ranking members of economy and finance).
+Whistleblower Edward Snowden leaked a vast amount of documents. These documents suggested that such attacks on privacy are commonly made on a global scale. The documents leaked in 2009 and a significant number of journalists from multiple countries screened them (\href{http://www.nrc.nl/nieuws/2013/11/23/nederland-sinds-1946-doelwit-van-nsa}{NRC}). According to these documents, NSA infiltrated more than 50k computers with malware to collect classified or personal information. They furthermore infiltrated Telecom-Operators (mainly executed by British GCHQ) such as Belgacom to collect data and targeted high member of governments even in associated states (such as the mobile phone number of Germany's president and high ranking members of economy and finance).
 
-This list of events shows that big players are collecting and storing vast amounts of data for analysis or possibly future use. The list of events shows also that the use of this data has in the past been at least partially questionable. As a part of possible counter measures this work analyses the possibility of using state-of-the-art technology to minimize the information footprint of a person on the Internet. 
+This list of events shows that big players are collecting and storing vast amounts of data for analysis or possible future use. The list of events also shows that the use of this data has in the past been at least partially questionable. As a part of possible countermeasures, this work analyses the possibility of using state-of-the-art technology to minimize the information footprint of a person on the Internet. 
 
-We leave a vast information footprint in our daily communication. On a regular email we disclose everything in an ``postcard'' to any entity on its way. Even when encrypting a message perfectly with today's technology (S/MIME\cite{RFC2045} or PGP\cite{RFC2015}) it still leaves at least the originating and the receiving entity disclosed or we rely on the promises of a third party provider which offers a proprietary solution. Even in those cases we leak informations such as ``message subject'', ``frequency of exchanged messages'', ``size of messages'', or ``client beeing used''. A good anonymity protocol has therefore far more attributes to cover than the message itself. It includes beside the message itself, all metadata, and all the traffic flows. Furthermore, a protocol to anonymize messages should not rely on the trust of infrastructure other than the infrastructure under control of the sending or receiving entity. A trust in any third party might be misleading in terms of security.
+We leave a large information footprint in our daily communication. On a regular email, we disclose everything in an ``postcard'' to any entity on its way. Even when encrypting a message perfectly with today's technology (S/MIME\cite{RFC2045} or PGP\cite{RFC2015}) it still leaves at least the originating and the receiving entity disclosed, or we rely on the promises of a third party provider which offers a proprietary solution. Even in those cases, we leak pieces of information such as ``message subject'', ``frequency of exchanged messages'', ``size of messages'', or ``client being used''. A suitable anonymity protocol has therefore not only a message to hide but additional attributes as well. It includes besides the message itself, all metadata, and all the traffic flows. Furthermore, a protocol to anonymize messages should not rely on the trust of infrastructure other than the infrastructure under control of the sending or receiving entity. Trust in any third party might be misleading in terms of security.
 
 Central infrastructure is bound to be of particular interest to anyone gathering data. It may furthermore allow manipulating the system or the data or the data flow. So, avoiding a central infrastructure is a good thing.
 
-Leaving no information trail when sending information from one person to another is hard to achieve. Most messaging systems disclose at least the peer partners when sending messages. Metadata such as starting and endpoints, frequency, or message size are leaked in all common systems even when encrypting messages.
+Leaving no information trail when sending information from one person to another is hard to achieve. Most messaging systems disclose at least the peer partners when sending messages. Metadata such as starting and endpoints, frequency, or message size are leaked in all standard systems even when encrypting messages.
 
-Allowing an entity to collect data may affect senders and recipients of any information. Collection of vast amounts of data allows a potent adversary to build a  profile of a person. Unlike in the past, the availability of this kind of information has been risen to a never known extend with the internet.
+Allowing an entity to collect data may affect senders and recipients of any information. Collection of vast amounts of data allows a potent adversary to build a  profile of a person. Unlike in the past, the availability of this kind of information has been risen to a never known extend with the Internet.
 
-An entity in possession of such Profiles may use them for many purposes. These include service adoption, directed advertising or classification of citizens. The examples given above show that the effects of this data is not limited to the internet but reaches us effectively in the real world.
+An entity in possession of such Profiles may use them for many purposes. These include service adoption, directed advertising, or classification of citizens. The examples given above show that the effects of this data is not limited to the Internet but reaches us effectively in the real world.
 
-The main problem of this data is that it may be collected over a considerable amount of time and evaluated at any time. It even happened that standard practices of a time are differently judged upon in a later time. Persons may then be judged retrospectively upon these types of practice. This questionable type of judgment is visible in the tax avoidance discussion. 
+The main problem of this data is that it may be collected over a considerable amount of time and evaluated at any time. It even happened that standard practices of the time are judged differently upon later. Persons may then be judged retrospectively upon these types of practice. This questionable type of judgment is visible in the tax avoidance discussion. 
 
-People must be able to control their data footprint. Not providing these means does effectively allow any country or a bigger player to ban and control any number of persons within or outside the internet. 
+People must be able to control their data footprint. Not providing these means does effectively allow any country or a bigger player to ban and control any number of persons within or outside the Internet.  
 
-In this work, a new protocol is designed to allow message transfer through existing communication channels. These messages are next to unobservable to any third party. This unobservability does not only cover the message itself but all metadata and flows associated with it. We called this protocol ``MessageVortex'' or in short just ``Vortex''. The protocol is designed in such a way so that it is capable of using a wide variety of transport protocols. It is even possible to switch protocols while the messages are in transfer. This behavior allows media breaches (at least on a protocol level) and makes analysis even harder.
+In this work, a new protocol is designed to allow message transfer through existing communication channels. These messages are next to unobservable to any third party. This unobservability does not only cover the message itself but all metadata and flows associated with it. We called this protocol ``MessageVortex'' or in short just ``Vortex''. The protocol is designed in such a way so that it is capable of using a wide variety of transport protocols. It is even possible to switch protocols while the messages are transferred. This behavior allows media breaches (at least on a protocol level) and makes analysis even harder.
 
-The new protocol allows secure communication without the need for trusting the underlying transport media. Furthermore, the usage of the protocol itself is possible without altering the immediate behavior of the transport layer. That way it is possible to use the transport layers normal traffic to increase the noise in which information has to be searched. 
+The new protocol allows secure communication without the need for trusting the underlying transport media. Furthermore, the usage of the protocol itself is possible without altering the immediate behavior of the transport layer. That way it is possible to use the transport layers regular traffic to increase the noise in which information has to be searched. 
 
 \subsection{About Unlinkability, Unobservability, Undetectability and Censorship resistance}
-From an academic point of view achieving anonymity is relatively simple. All we need is a trusted party distributing the messages while making sure that no trace from the sender arrives at the recipient. Unlinkability as defined in \cite{anon_terminology} is much harder to achieve. It requires that a specified attacker is unable to link a sender and recipients of a message. Even if a system provides unlinkable message transfer, it is most probable prone to denial of service and thus partial or full censorship. By introducing a global observer or infiltrating parts of the system an attacker may gain insight int the messages transported by the system and thus leaking information.
+From an academic point of view, achieving anonymity is relatively simple. All we need is a trusted party distributing the messages while making sure that no trace from the sender arrives at the recipient. Unlinkability, as defined in \cite{anon_terminology} is much harder to achieve. It requires that a specified attacker is unable to link a sender and recipients of a message. Even if a system provides unlinkable message transfer, it is most probable prone to denial of service and thus partial or full censorship. By introducing a global observer or infiltrating parts of the system, an attacker may gain insight into the messages transported by the system and thus leaking information.
 
-So in order to be censorship resistant a protocol requires a number of very important and not so obvious properties. As outlined It should be undetectable from the outside. From within the system we need to provide 
+So to be censorship resistant, a protocol requires many critical, unobvious properties. As outlined It should be undetectable from the outside. From within the system, we need to provide a mean to make it very hard to follow message flows or identify participants.
 
-MessageVortex is a protocol providing under ideal circumstances censorship resistance. It does this using a rigid design from bottom up to provide the required properties. While being a protocol on its own, it uses many common protocols. Partly to provide user friendliness, but mostly to hide within the common network flows. As such a protocol requires to be undetectable on the network. A protocol all alone may not be undetectable as each protocol sends data over a network. This data is detectable. In order to be undetectable a censorship resistant protocol requires to be embedded undetectably in legit message flows. This is usually done either by side channel transmissions or by employing steganography. Our Protocol may use both but will use typically the later. 
+MessageVortex is a protocol providing censorship resistance under ideal circumstances. It does this using a rigid design from bottom up to provide the required properties. While being a protocol on its own, it uses many standard protocols. Partly to provide user-friendliness, but mostly to hide within the regular network flows. As such, a protocol requires to be undetectable on the network. A protocol all alone may not be undetectable as each protocol sends data over a network. This data is detectable. To be undetectable, a censorship-resistant protocol requires to be embedded undetectably in legit message flows. Such embedding is usually done either by side channel transmissions or by employing steganography. Our protocol may use both but will use typically the later. 
+
+\subsection{Adversary Model}
+For our adversary, we need to assume someone of the capabilities of a state-sponsored actor. State-sponsored actors may work these days with allies but will not achieve dominance over all jurisdictional domains.
+
+For our adversary model we assume the following properties:
+\begin{itemize}
+	\item An adversary will have elaborated technical know-how to attack any infrastructure.
+	\item An adversary may have the capability to monitor traffic at many points in most networks within a jurisdiction.
+	\item An adversary may have the capability to modify routing information within a jurisdiction freely.
+	\item An adversary may have the possibility to freely modify even cryptographically weak secured data where a single or a limited number of entities grant proof of authenticity or privacy.
+	\item An adversary may have the possibility to inject or modify any data on the network of a jurisdiction.
+	\item An adversary may create own nodes of a network. He may furthermore monitor their behavior and data flow to the maximum possible extent.
+	\item An adversary may force a limited number of other non-allied nodes to expose their data to him.
+	\item An adversary may have a similar access to resources as within its jurisdiction in a limited number of other jurisdictions.
+\end{itemize}
+
+We assume the following goals for an adversary:
+\begin{itemize}
+	\item An adversary may want to disrupt non-authorized communication.
+	\item An adversary may want to read any information passing throughout the internet.
+	\item An adversary may want to build and conserve data about individuals or groups of individuals of their life. This data includes all activities in any part of their life regardless of their apparent fitness for any specific purpose or their correctness.
+\end{itemize}
+
+
 
 \section{The MessageVortex Protocol}
-The theory in this document is heavily based on symmetric encryption, asymmetric encryption and hashing. In order to use a uniformed notation I use $E^{K_a}(M)$ (where $a$ is an index to distinguish multiple keys) resulting in $\mathbf{M^{K_a}}$ as the encrypted message. If we are reflecting a tuple of information we write it in boldface. to express the tuples content we use angular brackets $\mathbf{L\langle normalAddress,vortexAddress\rangle }$. If we want Messages encrypted with multiple keys do list the used keys as a comma separated list in superscript $E^{K_b}\left(E^{K_a}\left(M\right)\right)=M^{{K_{a}},{K_b}}$.
+The theory in this document is heavily based on symmetric encryption, asymmetric encryption, and hashing. To use a uniformed notation I use $E^{K_a}(M)$ (where $a$ is an index to distinguish multiple keys) resulting in $\mathbf{M^{K_a}}$ as the encrypted message. If we are reflecting a tuple of information, we write it in boldface. To express the content of the tuple, we use angular brackets $\mathbf{L\langle normalAddress,vortexAddress\rangle }$. If we want Messages encrypted with multiple keys do list the used keys as a comma-separated list in superscript $E^{K_b}\left(E^{K_a}\left(M\right)\right)=M^{{K_{a}},{K_b}}$.
 
 For a symmetric encryption of a message $\mathbf{M}$ with a key $K_a$ resulting in $\mathbf{M^{K_a}}$ where $a$ is an index to distinguish different keys. Decryption uses therefore $D^{K_a}(\mathbf{M^{K_a}})=\mathbf{M}$.
 
 As notation for asymetric encryption we use $E^{K^{1}_a}(\mathbf{M})$ where as $K^{-1}_a$ is the private key and $K^{1}_a$ is the public key of a key pair $K^p_a$. The asymmetric decryption is noted as $D^{K^{-1}_a}(\mathbf{M})$.
 
-For hashing we do use $H(\mathbf{M})$ if unsalted and $H^{S_a}$ if using a salted hash with salt $S_a$. The generated hash is shown as $H_M$ if unsalted and $H^{S_a}_M$ if salted.
+For hashing, we do use $H(\mathbf{M})$ if unsalted and $H^{S_a}$ if using a salted hash with salt $S_a$. The generated hash is shown as $H_M$ if unsalted and $H^{S_a}_M$ if salted.
 
 If we want to express what details contained in a tuple we use the the notation $\mathbf{M\langle t,MURB,serial\rangle }$ respectively if encrypted $\mathbf{M^{K_{a}}\langle t,MURB,serial\rangle}$.
 
@@ -571,9 +595,11 @@ In this section, we introduce a new consistent, transport independent model for 
 	\caption{A rough protocol outline of the MessageVortex protocol}\label{fig:protocolOutline}
 \end{figure}
 
+The protocol handles messages which are passed by a transport protocol from node to node. In each node a sender has a so called identity with an assigned workspace. In these workspaces messages may be assembled, transformed, or decomposed. Results are sent to other nodes. Due to the nature of the operations all messages passed on may be decoy traffic or ``real messsage parts''. A node will know that a message is destined for it when a message results in data in specific parts of the identities workspace.
+
 We divide our protocol into four different layers, whereas only three are specific to the MessageVortex protocol. The lowest layer is the transport layer. As expressed earlier, dedicated protocols are easy to censor. Therefore we build our protocol on top of other suitable transport protocols. 
 
-The other Three layers are vortex specific and do not require any infrastructure on the internet. We elaborate further on these layers in the next section.
+The other Three layers are Vortex-specific and do not require any infrastructure on the Internet. We elaborate further on these layers in section \ref{sec:transportAndBlending} and section \ref{sec:routingAndAccounting}.
 
 For our first tests, we used a custom transport layer allowing us to monitor all traffic quickly, and build structures in a very flexible way. This transport layer works locally with a minimum amount of work for setup and deployment. It furthermore works across multiple hosts in a broadcast domain. The API may be used to support almost any kind of transport layer. After that, we focused on the protocols identified suitable as transport protocols:
 \begin{itemize}
@@ -584,11 +610,11 @@ For the prototype, we have implemented an SMTP transport agent and the respectiv
 
 The blending layer is taking care of multiple problems:
 \begin{itemize}
-	\item It is translating the message block into a suitable format for transport\\
+	\item Translating the message block into the transport format\\
 	This translation includes jobs such as embedding a block as encoded text, as a binary attachment or hide it within a message using steganography.
-	\item Extract incoming blocks\\
+	\item Extract incoming messages from transport\\
 	Identify incoming messages containing a possible block and extract it from the message.
-	\item Do housekeeping on the storage layer of the transport protocol\\
+	\item Do housekeeping on the storage layer\\
 	Access protocols POP and IMAP require that messages are deleted from time to time in order to stay below the sizing quotas of an account.      
 \end{itemize}
 
@@ -597,13 +623,13 @@ We define the blending layer to work as follows when receiving messages:
 	\item Log arrival time (in UTC) on the transport layer.
 	\item Extract possible blocks.
 	\item Apply decryption on a suspected header block.
-	\item Identify header block as valid by querying the accounting.
+	\item Validate the header block using the accounting layer.
+	\item Process header requests (if any)
 	\item Extract and decrypt subsequent blocks.
 	\item Pass extracted blocks and information to the routing layer.
 \end{enumerate}
 
 We define the blending layer to work as follows for sending messages:
-
 \begin{enumerate}
 	\item Assemble message as passed on by the routing layer.
 	\item Using the blending method specified in the routing block build an empty message. 
@@ -611,12 +637,13 @@ We define the blending layer to work as follows for sending messages:
 	\item Send the message to the appropriate recipient using the transport layer protocol.
 \end{enumerate}
 
-The routing layer receives the message blocks in a decrypted and authorized form from the blending layer and processes them as follows:
+The routing layer receives the message blocks in a decrypted and authorized form from the blending layer. The routing layer then assembles all information of an identity and makes executes the accepted operations using the available data. 
 
+Tasks of the transport layer are:
 \begin{itemize}
 	\item Build structure representing the block building and the appropriate block IDs.
 	\item Schedule all Routing blocks for processing in an priority queue.
-	\item Authorise all routing blocks ready for processing with the calculated block sizes.
+	\item Authorize all routing blocks ready for processing with the calculated block sizes.
 	\item Process blocks.
 	\item Send prepared building blocks to the Blending layer.
 \end{itemize}
@@ -683,7 +710,7 @@ The second key is the header key located in the encrypted header. The RBB choose
 	This is valuable information when following traffic of a message.
 \end{itemize}
 
-\subsection{Transport and Blending Layer}
+\subsection{Transport and Blending Layer\label{sec:transportAndBlending}}
 The tuple of Transport and Blending layer builds the main core functionality when it comes to the undetectability property. In order to avoid transport protocol misuse and unintentional exit nodes of the protocol the original RBL has no control over the transported content except for the hidden VortexMessage and how it is embedded. This loads the burden of sensible clear text payload generation to blending layer. It is relatively easy to generate a credible clear text message to pass an automated testing engine. This can be easily proven by looking at the effectivity of junk mail filters. These filters have tremendous problems continuosly adapting to the new types of unsolicited bulk emails (UBE).
 
 Things do however drastically change if taking a human censor into account.
@@ -693,7 +720,7 @@ A human censor is able to take very complex information into account when it com
 
 For steganography we decided to go for F5\cite{f5}. It is a reasonably well-researched algorithm which attracted many researchers. The original F5 implementation had a detectable issue with artifacts\cite{F5broken} caused by the recompression of the image. This issue was caused only due to an issue in the reference implementation, and the researchers have provided a corrected reference implementation without the weakness. Like always the type of embedding may be specified and replaced upon request. 
 
-\subsection{Routing and Accounting}
+\subsection{Routing and Accounting\label{sec:routingAndAccounting}}
 Each routing layer does the anonymization operations. These operations should make sure that no message may be identified unless destined for the current node. 
 
 \subsection{The Core: Operations}
@@ -796,8 +823,13 @@ It may be subdivided into the following operations:
 \subsubsection{Endpoint Operation}
 \subsection{Dynamic Protocol Analysis}
 
+\subsection{The Missing Links}
+A lot still needs to be done. For this protocol to be of any use, a user-friendly implementation is required. This implementation must provide very good censorship resistance while providing easy to use recipes for message transfer. 
+
+For the traffic to be truly undetectable AIs must generate meaningful conversation between agents. This conversation does not necessarily boil down to a turing test. It is sufficient that two blending layer are capable to set up a communication which is undestinguishible from a normal human communication. As an adversary is typically not able to generate own traffic without exposing the probing activity and a blender is not required to such probes an attacker is very limited.
+
 \section{Conclusion}
-Creating a possibly censorship resistant protocol is already hard. Analysis showed that even when a protocol is crafted with great care braking unobservability is far easier than doing it right.
+Creating a possibly censorship resistant protocol is already hard. Analysis showed that even when a protocol is crafted with great care braking unobservability is far easier than doing it right. At the same time we were able to present a system which requires an unmatched amount of observation and calculation power to be broken.
 
 \hfill gwm
  
