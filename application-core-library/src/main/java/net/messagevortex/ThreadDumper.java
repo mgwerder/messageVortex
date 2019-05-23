@@ -61,13 +61,23 @@ public class ThreadDumper {
     }
   }
 
-
+  /***
+   * <p>Dump all running threads on a regular base.</p>
+   *
+   * @param interval interval in seconds
+   */
   public ThreadDumper(long interval) {
     LOGGER.log(Level.INFO, "added thread dumper scheduler");
     Runnable r = new ThreadDumperRunner();
     scheduler.scheduleAtFixedRate(r, interval, interval, TimeUnit.SECONDS);
   }
 
+  /***
+   * <p>Get a string dump all running threads.</p>
+   *
+   * @param dumpDaemon true if daemon processes should be dumped too
+   * @return the requested dump
+   */
   public static String getThreadDump(boolean dumpDaemon) {
     StringBuilder tdump = new StringBuilder();
     tdump.append("======================================================================" + CRLF);
@@ -96,7 +106,7 @@ public class ThreadDumper {
     return tdump.toString();
   }
 
-  static Thread getThread(long id) {
+  private static Thread getThread(long id) {
     final ThreadMXBean thbean = ManagementFactory.getThreadMXBean();
     ThreadGroup root = rootTG;
     if (root == null) {

@@ -32,6 +32,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 
 import net.messagevortex.MessageVortexLogger;
@@ -83,92 +84,96 @@ public class SmtpSender extends ClientConnection implements TransportSender {
   @Override
   public void sendMessage(String address, InputStream is) throws IOException {
 
-    // reading server greeting
-    LOGGER.log(Level.INFO, "waiting for server greeting");
-    String serverGreeting = readln();
-    if (!serverGreeting.startsWith("220 ")) {
-      throw new IOException("Unable to communicate with server  (Greeting was '" + serverGreeting
-              + "' )");
-    }
-
-    // send ehlo
-    LOGGER.log(Level.INFO, "got greeting ... sending ehlo");
-    write("EHLO " + InetAddress.getLocalHost().getHostName() + CRLF);
-    String[] ehloReply = getReply();
-    if (!ehloReply[ehloReply.length - 1].startsWith("250 ")) {
-      throw new IOException("Invalid EHLO reply  (Reply was '"
-              + Arrays.toString(ehloReply).replaceAll(",", "\n") + "' )");
-    }
-
-    // start tls (if required/possible)
-    if (credentials != null && (credentials.getSecurityRequirement() == STARTTLS
-            || credentials.getSecurityRequirement() == SecurityRequirement.UNTRUSTED_STARTTLS)) {
-      LOGGER.log(Level.INFO, "issuing STARTTLS command");
-      write("STARTTLS" + CRLF);
-      String reply = readln();
-      if (!reply.startsWith("220 ")) {
-        throw new IOException("Invalid STARTTLS reply  (Reply was '" + reply + "')");
+    try {
+      // reading server greeting
+      LOGGER.log(Level.INFO, "waiting for server greeting");
+      String serverGreeting = readln();
+      if (!serverGreeting.startsWith("220 ")) {
+        throw new IOException("Unable to communicate with server  (Greeting was '" + serverGreeting
+                + "' )");
       }
-      startTls();
+
+      // send ehlo
+      LOGGER.log(Level.INFO, "got greeting ... sending ehlo");
       write("EHLO " + InetAddress.getLocalHost().getHostName() + CRLF);
-      ehloReply = getReply();
+      String[] ehloReply = getReply();
       if (!ehloReply[ehloReply.length - 1].startsWith("250 ")) {
         throw new IOException("Invalid EHLO reply  (Reply was '"
                 + Arrays.toString(ehloReply).replaceAll(",", "\n") + "' )");
       }
-    }
 
-    // Log into system
-    if (credentials != null && credentials.getUsername() != null) {
-      LOGGER.log(Level.INFO, "sending credentials");
-      sendAuth();
-    }
+      // start tls (if required/possible)
+      if (credentials != null && (credentials.getSecurityRequirement() == STARTTLS
+              || credentials.getSecurityRequirement() == SecurityRequirement.UNTRUSTED_STARTTLS)) {
+        LOGGER.log(Level.INFO, "issuing STARTTLS command");
+        write("STARTTLS" + CRLF);
+        String reply = readln();
+        if (!reply.startsWith("220 ")) {
+          throw new IOException("Invalid STARTTLS reply  (Reply was '" + reply + "')");
+        }
+        startTls();
+        write("EHLO " + InetAddress.getLocalHost().getHostName() + CRLF);
+        ehloReply = getReply();
+        if (!ehloReply[ehloReply.length - 1].startsWith("250 ")) {
+          throw new IOException("Invalid EHLO reply  (Reply was '"
+                  + Arrays.toString(ehloReply).replaceAll(",", "\n") + "' )");
+        }
+      }
 
-    String reply;
+      // Log into system
+      if (credentials != null && credentials.getUsername() != null) {
+        LOGGER.log(Level.INFO, "sending credentials");
+        sendAuth();
+      }
 
-    // send envelope from
-    LOGGER.log(Level.INFO, "sending message");
-    write("MAIL FROM: " + senderAddress + CRLF);
-    reply = readln();
-    if (reply == null || !reply.startsWith("250 ")) {
-      throw new IOException("Invalid MAIL FROM reply  (Reply was '" + reply + "')");
-    }
+      String reply;
 
-    // send envelope to
-    write("RCPT TO: " + address + CRLF);
-    reply = readln();
-    if (reply == null || !reply.startsWith("250 ")) {
-      throw new IOException("Invalid RCPT reply  (Reply was '" + reply + "')");
-    }
+      // send envelope from
+      LOGGER.log(Level.INFO, "sending message");
+      write("MAIL FROM: " + senderAddress + CRLF);
+      reply = readln();
+      if (reply == null || !reply.startsWith("250 ")) {
+        throw new IOException("Invalid MAIL FROM reply  (Reply was '" + reply + "')");
+      }
 
-    // send data
-    write("DATA" + CRLF);
-    reply = readln();
-    if (reply == null || !reply.startsWith("354 ")) {
-      throw new IOException("Invalid DATA reply  (Reply was '" + reply + "')");
-    }
-    java.util.Scanner s = new Scanner(is, "UTF-8").useDelimiter("\\A");
-    String txt = s.hasNext() ? s.next() : "";
-    write(txt + CRLF + "." + CRLF);
+      // send envelope to
+      write("RCPT TO: " + address + CRLF);
+      reply = readln();
+      if (reply == null || !reply.startsWith("250 ")) {
+        throw new IOException("Invalid RCPT reply  (Reply was '" + reply + "')");
+      }
 
-    // get delivery confirmed or denied
-    reply = readln();
-    if (reply == null || !reply.startsWith("250 ")) {
-      throw new IOException("Invalid EOD reply (Reply was '" + reply + "')");
-    } else {
-      LOGGER.log(Level.INFO, "data sent: " + reply);
-    }
+      // send data
+      write("DATA" + CRLF);
+      reply = readln();
+      if (reply == null || !reply.startsWith("354 ")) {
+        throw new IOException("Invalid DATA reply  (Reply was '" + reply + "')");
+      }
+      java.util.Scanner s = new Scanner(is, "UTF-8").useDelimiter("\\A");
+      String txt = s.hasNext() ? s.next() : "";
+      write(txt + CRLF + "." + CRLF);
 
-    // close connection
-    write("QUIT" + CRLF);
-    reply = readln();
-    if (reply == null || !reply.startsWith("221 ")) {
-      throw new IOException("Invalid QUIT reply  (Reply was '" + reply + "')");
+      // get delivery confirmed or denied
+      reply = readln();
+      if (reply == null || !reply.startsWith("250 ")) {
+        throw new IOException("Invalid EOD reply (Reply was '" + reply + "')");
+      } else {
+        LOGGER.log(Level.INFO, "data sent: " + reply);
+      }
+
+      // close connection
+      write("QUIT" + CRLF);
+      reply = readln();
+      if (reply == null || !reply.startsWith("221 ")) {
+        throw new IOException("Invalid QUIT reply  (Reply was '" + reply + "')");
+      }
+      closeConnection();
+    } catch (TimeoutException te) {
+      LOGGER.log(Level.INFO, "got timeout exception while sending message");
     }
-    closeConnection();
   }
 
-  private void sendAuth() throws IOException {
+  private void sendAuth() throws IOException,TimeoutException {
     write("AUTH login" + CRLF);
     String reply = readln();
     if (!reply.startsWith("334 ")) {
@@ -192,7 +197,7 @@ public class SmtpSender extends ClientConnection implements TransportSender {
     }
   }
 
-  private void sendPlain() throws IOException {
+  private void sendPlain() throws IOException, TimeoutException {
     String txt = credentials.getUsername() + "\0" + credentials.getUsername() + "\0"
             + credentials.getPassword();
     txt = new String(Base64.encode(txt.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
@@ -206,7 +211,7 @@ public class SmtpSender extends ClientConnection implements TransportSender {
     }
   }
 
-  private String[] getReply() throws IOException {
+  private String[] getReply() throws IOException,TimeoutException {
     ArrayList<String> replies = new ArrayList<>();
     String line = null;
     while (line == null || (line.length() < 4 || line.charAt(3) != ' ')) {

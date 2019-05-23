@@ -315,6 +315,11 @@
 % correct bad hyphenation here
 \hyphenation{op-tical net-works semi-conduc-tor}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Custom Packages not from the template
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{nth}
+\usepackage{hyperref}
 
 \begin{document}
 %
@@ -324,7 +329,7 @@
 % not capitalized unless they are the first or last word of the title.
 % Linebreaks \\ can be used within to get better formatting as desired.
 % Do not put math or special symbols in the title.
-\title{Messaging anonymously with MessageVortex}
+\title{Unobservable Messaging with MessageVortex}
 %
 %
 % author names and IEEE memberships
@@ -350,14 +355,16 @@
 
 \author{Martin~Gwerder%,~\IEEEmembership{Member,~IEEE,}
         %John~Doe,~\IEEEmembership{Fellow,~OSA,}
-        }% <-this % stops a space
+
 \IEEEcompsocitemizethanks{\IEEEcompsocthanksitem M. Gwerder was with the Institute of Mobile and Distributed Systems
 of the University of Applied Sciences of Northwestern Switzerland.\protect\\
 % note need leading \protect in front of \\ to get a newline within \thanks as
 % \\ is fragile and will error, could use \hfil\break instead.
 E-mail: see http://www.messagevortex.net
-\IEEEcompsocthanksitem J. Doe and J. Doe are with Anonymous University.}% <-this % stops an unwanted space
-\thanks{Manuscript received April 19, 2005; revised August 26, 2015.}
+%\IEEEcompsocthanksitem J. Doe and J. Doe are with Anonymous University.
+}% <-this % stops an unwanted space
+\thanks{Manuscript received June 1, 2019; revised July 20, 2019.}
+        }% <-this % stops a space
 
 % note the % following the last \IEEEmembership and also \thanks - 
 % these prevent an unwanted space from occurring between the last author name
@@ -380,8 +387,8 @@ E-mail: see http://www.messagevortex.net
 
 
 % The paper headers
-\markboth{Journal of \LaTeX\ Class Files,~Vol.~14, No.~8, August~2015}%
-{Shell \MakeLowercase{\textit{et al.}}: Bare Demo of IEEEtran.cls for Computer Society Journals}
+\markboth{Journal Privacy \& Anonymity,~Vol.~XXXX, No.~XXXX, September~2019}%
+{Gwerder \MakeLowercase{\textit{et al.}}: Unobservable Messaging wit Messagevortex}
 % The only time the second header will appear is for the odd numbered pages
 % after the title page when using the twoside option.
 % 
@@ -420,7 +427,9 @@ E-mail: see http://www.messagevortex.net
 % in the abstract or keywords.
 \IEEEtitleabstractindextext{%
 \begin{abstract}
-The abstract goes here.
+In this paper, we introduce an unobservable message anonymization protocol, named MessageVortex. It bases on the zero trust principle and a distributed peer-to-peer like architecture and avoids central aspects such as fixed infrastructures within a global network. 
+
+It scores over existing work by blending its traffic into suitable existing transport protocols, thus making it next to impossible to block it without significantly affecting regular users of the transport medium. No additional protocol-specific infrastructure is required in public networks and allows a sender to control all aspects of a message such as the degree of anonymity, timing, and redundancy of the message transport without disclosing any of these details to the routing or transporting nodes. Part of this work is an RFC document attached in Appendix \ref{app:rfcMessageVortexMain} describing the protocol. It contains all the necessary information to build protocol nodes. The RFC draft is available through the official RFC channels. Additionally, the RFC document, additional documents, and a reference are available under \url{https://messagevortex.net/}.
 \end{abstract}
 
 % Note that keywords are not normally used for peerreview papers.
@@ -485,25 +494,323 @@ Computer Society, IEEE, IEEEtran, journal, \LaTeX, paper, template.
 % 
 % Here we have the typical use of a "T" for an initial drop letter
 % and "HIS" in caps to complete the first word.
-\IEEEPARstart{T}{his} demo file is intended to serve as a ``starter file''
-for IEEE Computer Society journal papers produced under \LaTeX\ using
-IEEEtran.cls version 1.8b and later.
-% You must have at least 2 lines in the paragraph with the drop letter
-% (should never be an issue)
-I wish you the best of success.
+\IEEEPARstart{A}{lmon Brown Strowger} was the owner of a funeral parlor in St. Petersburg. He filed a patent on March \nth{10}, 1891 for an ``Automatic Telephone Exchange'' \cite{pulseDialingPatent}. This patent built the base for modern automated telephone systems. According to several sources, he was annoyed by the fact that the local telephone operator was married to another undertaker. She diverted potential customers of Mr. Strowger to her husband instead, which caused Almon B. Strowger to lose business. In 1922, this telephone dialing system which is nowadays called pulse dialing became the standard dialing technology for more than 70 years until tone dialing replaced it.
 
-\hfill mds
+This dialing technology enabled automatic messaging for voice and text messages (e.g. telex) up until today and is the foundation for current routed networks. These networks build the base for our communication-based Society these days and allow us to connect quickly with any person or company of our wish. We use these networks today as communication meaning for all purposes and most of the people spend minimal thoughts on the possible consequences arising if someone puts hands on this communication. 
+
+Collected data may be used to judge on our intentions and thus is not only confidential if we have something to hide. This problem has dramatically increased in the last years as big companies and countries started to collect all kinds of data and created the means to process them. It allows, supposedly, to judge peoples not only on what they are doing but as well, on what they did and what they might do. Numerous events in the present and past show that multiple actors, some of which are state-sponsored, collected data on a broad base within the internet. Whether this is a problem or not may be disputable. Undisputed is that such data requires careful handling and accusations should then base on solid facts. Unacceptable seems the use of ``guesses'' or ``extrapolations'' in most of the cases.
+
+To show that this may happen even under complete democratic control we might refer to events such as the ``secret files scandal'' (or  ``Fichenskandal'') in Switzerland. In the years from 1900 to 1990 Swiss government collected 900’000 files in a secret archive (covering roughly 10\% of the natural and juristic entities within Switzerland at that time). More about the Fichenskandal is well documented in the Swiss Federal Archives (https://www.bar.admin.ch).
+
+Whistleblower Edward Snowden leaked a vast amount of documents suggesting that such attacks on privacy are commonly done a on a global scale. The documents were leaked in 2009 and a significant number of journalists from multiple countries screened these documents (\href{http://www.nrc.nl/nieuws/2013/11/23/nederland-sinds-1946-doelwit-van-nsa}{NRC}). According to these documents, NSA infiltrated more than 50k computers with malware to collect classified or personal information. They furthermore infiltrated Telecom-Operators (mainly executed by British GCHQ) such as Belgacom to collect data and targeted high member of governments even in associated states (such as the mobile phone number of Germany's president and high ranking members of economy and finance).
+
+This list of events shows that big players are collecting and storing vast amounts of data for analysis or possibly future use. The list of events shows also that the use of this data has in the past been at least partially questionable. As a part of possible counter measures this work analyses the possibility of using state-of-the-art technology to minimize the information footprint of a person on the Internet. 
+
+We leave a vast information footprint in our daily communication. On a regular email we disclose everything in an ``postcard'' to any entity on its way. Even when encrypting a message perfectly with today's technology (S/MIME\cite{RFC2045} or PGP\cite{RFC2015}) it still leaves at least the originating and the receiving entity disclosed or we rely on the promises of a third party provider which offers a proprietary solution. Even in those cases we leak informations such as ``message subject'', ``frequency of exchanged messages'', ``size of messages'', or ``client beeing used''. A good anonymity protocol has therefore far more attributes to cover than the message itself. It includes beside the message itself, all metadata, and all the traffic flows. Furthermore, a protocol to anonymize messages should not rely on the trust of infrastructure other than the infrastructure under control of the sending or receiving entity. A trust in any third party might be misleading in terms of security.
+
+Central infrastructure is bound to be of particular interest to anyone gathering data. It may furthermore allow manipulating the system or the data or the data flow. So, avoiding a central infrastructure is a good thing.
+
+Leaving no information trail when sending information from one person to another is hard to achieve. Most messaging systems disclose at least the peer partners when sending messages. Metadata such as starting and endpoints, frequency, or message size are leaked in all common systems even when encrypting messages.
+
+Allowing an entity to collect data may affect senders and recipients of any information. Collection of vast amounts of data allows a potent adversary to build a  profile of a person. Unlike in the past, the availability of this kind of information has been risen to a never known extend with the internet.
+
+An entity in possession of such Profiles may use them for many purposes. These include service adoption, directed advertising or classification of citizens. The examples given above show that the effects of this data is not limited to the internet but reaches us effectively in the real world.
+
+The main problem of this data is that it may be collected over a considerable amount of time and evaluated at any time. It even happened that standard practices of a time are differently judged upon in a later time. Persons may then be judged retrospectively upon these types of practice. This questionable type of judgment is visible in the tax avoidance discussion. 
+
+People must be able to control their data footprint. Not providing these means does effectively allow any country or a bigger player to ban and control any number of persons within or outside the internet. 
+
+In this work, a new protocol is designed to allow message transfer through existing communication channels. These messages are next to unobservable to any third party. This unobservability does not only cover the message itself but all metadata and flows associated with it. We called this protocol ``MessageVortex'' or in short just ``Vortex''. The protocol is designed in such a way so that it is capable of using a wide variety of transport protocols. It is even possible to switch protocols while the messages are in transfer. This behavior allows media breaches (at least on a protocol level) and makes analysis even harder.
+
+The new protocol allows secure communication without the need for trusting the underlying transport media. Furthermore, the usage of the protocol itself is possible without altering the immediate behavior of the transport layer. That way it is possible to use the transport layers normal traffic to increase the noise in which information has to be searched. 
+
+\subsection{About Unlinkability, Unobservability, Undetectability and Censorship resistance}
+From an academic point of view achieving anonymity is relatively simple. All we need is a trusted party distributing the messages while making sure that no trace from the sender arrives at the recipient. Unlinkability as defined in \cite{anon_terminology} is much harder to achieve. It requires that a specified attacker is unable to link a sender and recipients of a message. Even if a system provides unlinkable message transfer, it is most probable prone to denial of service and thus partial or full censorship. By introducing a global observer or infiltrating parts of the system an attacker may gain insight int the messages transported by the system and thus leaking information.
+
+So in order to be censorship resistant a protocol requires a number of very important and not so obvious properties. As outlined It should be undetectable from the outside. From within the system we need to provide 
+
+MessageVortex is a protocol providing under ideal circumstances censorship resistance. It does this using a rigid design from bottom up to provide the required properties. While being a protocol on its own, it uses many common protocols. Partly to provide user friendliness, but mostly to hide within the common network flows. As such a protocol requires to be undetectable on the network. A protocol all alone may not be undetectable as each protocol sends data over a network. This data is detectable. In order to be undetectable a censorship resistant protocol requires to be embedded undetectably in legit message flows. This is usually done either by side channel transmissions or by employing steganography. Our Protocol may use both but will use typically the later. 
+
+\section{The MessageVortex Protocol}
+The theory in this document is heavily based on symmetric encryption, asymmetric encryption and hashing. In order to use a uniformed notation I use $E^{K_a}(M)$ (where $a$ is an index to distinguish multiple keys) resulting in $\mathbf{M^{K_a}}$ as the encrypted message. If we are reflecting a tuple of information we write it in boldface. to express the tuples content we use angular brackets $\mathbf{L\langle normalAddress,vortexAddress\rangle }$. If we want Messages encrypted with multiple keys do list the used keys as a comma separated list in superscript $E^{K_b}\left(E^{K_a}\left(M\right)\right)=M^{{K_{a}},{K_b}}$.
+
+For a symmetric encryption of a message $\mathbf{M}$ with a key $K_a$ resulting in $\mathbf{M^{K_a}}$ where $a$ is an index to distinguish different keys. Decryption uses therefore $D^{K_a}(\mathbf{M^{K_a}})=\mathbf{M}$.
+
+As notation for asymetric encryption we use $E^{K^{1}_a}(\mathbf{M})$ where as $K^{-1}_a$ is the private key and $K^{1}_a$ is the public key of a key pair $K^p_a$. The asymmetric decryption is noted as $D^{K^{-1}_a}(\mathbf{M})$.
+
+For hashing we do use $H(\mathbf{M})$ if unsalted and $H^{S_a}$ if using a salted hash with salt $S_a$. The generated hash is shown as $H_M$ if unsalted and $H^{S_a}_M$ if salted.
+
+If we want to express what details contained in a tuple we use the the notation $\mathbf{M\langle t,MURB,serial\rangle }$ respectively if encrypted $\mathbf{M^{K_{a}}\langle t,MURB,serial\rangle}$.
+
+\begin{align*}
+\text{asymetric:}         & E^{K^{-1}_a}\left(\mathbf{M}\right)                        	&& =\mathbf{M}^{K^{-1}_a}\\
+& D^{K^{1}_a}\left(E^{K^{-1}_a}\left(\mathbf{M}\right)\right)	&& =\mathbf{M}\\
+& D^{K^{-1}_a}\left(E^{K^{1}_a}\left(\mathbf{M}\right)\right)	&& =\mathbf{M}\\
+\text{symetric:}          & E^{K_a}\left(\mathbf{M}\right)                             	&& =\mathbf{M}^{K_a}\\
+& D^{K_a}\left(E^{K_a}\left(\mathbf{M}\right)\right)          && =\mathbf{M}\\
+\text{hashing (unsalted):}& H\left(\mathbf{M}\right)                                   	&& =\mathbf{H}_M\\
+\text{hashing (salted):}  & H^{S_a}\left(\mathbf{M}\right)                             	&& =\mathbf{H}^{S_a}_M
+\end{align*}
+
+In general Subscripts denote selectors to differentiate values of the same type and superscript denote relevant parameters to operations expressed. The subscripted and superscripted information may be omitted where not needed.
+
+We refer to the components of a Vortex Message as follows:
+\begin{align*}
+\text{Prefix component:}         & \mathbf{PREFIX}             	&=D^{K^{1}_a}\left(\mathbf{P}^{K^{-1}_a}\right) &=D\left(\mathbf{P}\right)\\
+\text{Header component:}         & \mathbf{HEAD}             	&=D^{K^{1}_a}\left(\mathbf{H}^{K^{-1}_a}\right) &=D\left(\mathbf{H}\right)\\
+\text{Route component:}         & \mathbf{ROUTE}             	&=D^{K^{1}_a}\left(\mathbf{R}^{K^{-1}_a}\right) &=D\left(\mathbf{R}\right)\\
+\end{align*}
+
+In general a decrypted Block is written as capitalized multi character boldface. An encrypted Block is written as capitalized single character boldface.
+
+\subsection{General Design}
+In this section, we introduce a new consistent, transport independent model for representing the different protocols used by MessageVortex.
+
+\begin{figure}[ht!]
+	\centering\includegraphics[width=\columnwidth]{../../inc/roughProtocolDesign.pdf}
+	\caption{A rough protocol outline of the MessageVortex protocol}\label{fig:protocolOutline}
+\end{figure}
+
+We divide our protocol into four different layers, whereas only three are specific to the MessageVortex protocol. The lowest layer is the transport layer. As expressed earlier, dedicated protocols are easy to censor. Therefore we build our protocol on top of other suitable transport protocols. 
+
+The other Three layers are vortex specific and do not require any infrastructure on the internet. We elaborate further on these layers in the next section.
+
+For our first tests, we used a custom transport layer allowing us to monitor all traffic quickly, and build structures in a very flexible way. This transport layer works locally with a minimum amount of work for setup and deployment. It furthermore works across multiple hosts in a broadcast domain. The API may be used to support almost any kind of transport layer. After that, we focused on the protocols identified suitable as transport protocols:
+\begin{itemize}
+	\item SMTP
+	\item XMPP
+\end{itemize}
+For the prototype, we have implemented an SMTP transport agent and the respective blending layer.
+
+The blending layer is taking care of multiple problems:
+\begin{itemize}
+	\item It is translating the message block into a suitable format for transport\\
+	This translation includes jobs such as embedding a block as encoded text, as a binary attachment or hide it within a message using steganography.
+	\item Extract incoming blocks\\
+	Identify incoming messages containing a possible block and extract it from the message.
+	\item Do housekeeping on the storage layer of the transport protocol\\
+	Access protocols POP and IMAP require that messages are deleted from time to time in order to stay below the sizing quotas of an account.      
+\end{itemize}
+
+We define the blending layer to work as follows when receiving messages:
+\begin{enumerate}
+	\item Log arrival time (in UTC) on the transport layer.
+	\item Extract possible blocks.
+	\item Apply decryption on a suspected header block.
+	\item Identify header block as valid by querying the accounting.
+	\item Extract and decrypt subsequent blocks.
+	\item Pass extracted blocks and information to the routing layer.
+\end{enumerate}
+
+We define the blending layer to work as follows for sending messages:
+
+\begin{enumerate}
+	\item Assemble message as passed on by the routing layer.
+	\item Using the blending method specified in the routing block build an empty message. 
+	\item Create a message decoy content.
+	\item Send the message to the appropriate recipient using the transport layer protocol.
+\end{enumerate}
+
+The routing layer receives the message blocks in a decrypted and authorized form from the blending layer and processes them as follows:
+
+\begin{itemize}
+	\item Build structure representing the block building and the appropriate block IDs.
+	\item Schedule all Routing blocks for processing in an priority queue.
+	\item Authorise all routing blocks ready for processing with the calculated block sizes.
+	\item Process blocks.
+	\item Send prepared building blocks to the Blending layer.
+\end{itemize}
+
+\subsubsection{Identities and Keys}
+Several keys are being used during the life of a message. In the following section, we emphasize on the type, the usage, and their specialties.
+
+\subsubsection{Peer key}
+The peer key is a message specific symmetrical key known to two adjacent routing nodes. It is generated by the sending routing node and encrypted with the public key of the receiving nodes identity key.
+
+\subsubsection{Header Key}
+The header key is a symmetric key protecting the routing and ephemeral identity information of the message. It is prepended to the header section and protected by the identity key of the processing node.
+
+The Identity key is a static, asymmetric keypair existing on a per user base used to sign messages or encrypt symmetric keys. We refer here as a user any peer participating in the message stream. Every user participating in the Vortex network requires at least one key pair. Depending on the use-case (e.g., unlikable signatures or scalable security) a user may use multiple key pairs at the same time.
+
+An ephemeral identity key identifies the sender to a processing host. The ephemeral identity key must be handled in such a way that it is not linkable. It is mainly used to process accounting information.
+
+\subsection{Messages}
+The outline in figure \ref{fig:messageOutline} is a simplified view of the message block of MessageVortex.
+
+\begin{figure*}[ht]
+	\includegraphics[width=\textwidth]{../../inc/blockLayoutSimplified}
+	\caption{Simplified message outline}
+	\label{fig:messageOutline}
+\end{figure*}
+
+A Vortex message is a message passed from one router to another this message may or may not contain any valuable information. Binary data represents the message content in the transfer protocol. Every router may decide for himself on the support of algorithms and embedding mechanisms.
+
+The block structure of a Vortex message is as follows:
+\begin{itemize}
+	\item header
+	\begin{itemize}
+		\item Encrypted message key.\\
+		Contains symmetrical key for decryption of follow up header information and payload blocks. All symmetric keys are encrypted with a receiving host's public key.
+		\item Identity and ``proof of work'' information\\
+		This information contains requests, proof-of-work sections, and a header key.
+	\end{itemize}
+	\item Encrypted payload blocks (encrypted with header key)
+	\begin{itemize}
+		\item Routing blocks (encrypted with message key)
+		\begin{itemize}
+			\item Next hop timing instructions
+			\item Next hop routing blocks (encrypted)
+			\item Next hop header
+			\item Message build instructions.
+			\item Next hop header key and spec.
+			\item Next hop blending instructions.
+		\end{itemize}
+		\item Payload chunk blocks
+	\end{itemize}
+\end{itemize}
+
+It is important to note that there are two symmetrical keys involved in encrypting and decrypting message headers. Having two keys is not a flaw in the protocol but necessary. 
+
+The first key of a Vortex message is the message key. This key is only accessible with the private key of the node receiving the message. It allows decryption of the routing blocks and the header information. The sender of a message block is therefore not able to tell if a message contains one or more routing blocks. It is important to note that no other node should have access to this information. 
+
+The second key is the header key located in the encrypted header. The RBB chooses the key. This key protects the inner structure of the Message. It makes it impossible for any node except the sending or the receiving peer node to detect the inner structure of the message. Without this key, any independent observer with knowledge about the blending capabilities of a receiving node may:
+\begin{itemize}
+	\item easier identify the block structure.\\ 
+	This remains the case regardless of whether ASN.1 or length prefixed structures are used. If the structure of a vortex Message can be easily identified the messages may be logged or dropped.
+	\item Identify the routing block size.\\
+	The value of this information is only minimal as it only reflects the complexity of the remaining routing information indirectly.
+	\item Identify the number of payload blocks and their respective sizes. \\
+	This is valuable information when following traffic of a message.
+\end{itemize}
+
+\subsection{Transport and Blending Layer}
+The tuple of Transport and Blending layer builds the main core functionality when it comes to the undetectability property. In order to avoid transport protocol misuse and unintentional exit nodes of the protocol the original RBL has no control over the transported content except for the hidden VortexMessage and how it is embedded. This loads the burden of sensible clear text payload generation to blending layer. It is relatively easy to generate a credible clear text message to pass an automated testing engine. This can be easily proven by looking at the effectivity of junk mail filters. These filters have tremendous problems continuosly adapting to the new types of unsolicited bulk emails (UBE).
+
+Things do however drastically change if taking a human censor into account.
+
+\subsubsection{Applied Steganography and the Dead Parrot}
+A human censor is able to take very complex information into account when it comes to analyses of message content. He is able to not only analyze a message for its true content, but he may also see the message in the context of other messages. In \cite{oakland2013-parrot} is expressed that it is easy for a human to determine decoy traffic as the content is easily identifiable as generated content. While this is true, there is a possibility here to generate ``human-like'' data traffic to a certain extent. As an adversary may not assume that his messages are replied to, the problem does not boil down to a true Turing test. It remains on a ``passive observer Turing test'', enabling the potential nodes to choose their messages. 
+
+For steganography we decided to go for F5\cite{f5}. It is a reasonably well-researched algorithm which attracted many researchers. The original F5 implementation had a detectable issue with artifacts\cite{F5broken} caused by the recompression of the image. This issue was caused only due to an issue in the reference implementation, and the researchers have provided a corrected reference implementation without the weakness. Like always the type of embedding may be specified and replaced upon request. 
+
+\subsection{Routing and Accounting}
+Each routing layer does the anonymization operations. These operations should make sure that no message may be identified unless destined for the current node. 
+
+\subsection{The Core: Operations}
+We differentiate three types of operations:
+\begin{itemize}
+	\item Splitting and merging of chunks
+	\item Encryption and decryption of chunks
+	\item Redundancy calculations carried out on chunks
+\end{itemize}
+
+The first two Operations don not really provide a high level of unlinkability as they do allow analysis such as hotspot analysis and produce continuously inclining, steady or declining message sizes depending on the type of use. The third operation however adds a whole lot of new possibilities in conjunction with the other two.
+
+\subsubsection{Splitting and Merging}
+The splitPayload operation splits a payload block into two chunks of different or equal sizes. The parameters for this operation are:
+
+\begin{itemize}
+	\item source payload block $pb_1$
+	\item fraction $f$\\
+	A floating-point number which is describing the size of the first chunk. If the fraction is ``1.0'', then the whole payload is transferred to the second target chunk
+\end{itemize}
+
+If $len(pb_1)$ expresses the size of a payloadblock called $pb_1$ in bytes then the two resulting blocks of the SpitPayload Operation $pb_2$ and $pb_3$ have to follow the following rules:
+
+\begin{eqnarray}
+split(f, pb_1) & = &\langle pb_1, pb_2 \rangle\\
+pb_1.startsWith(pb_2)\\
+pb_1.endsWith(pb_3)\\
+len(pb_2) & = & floor(len(pb_1)\cdot f)\\
+len(pb_1) & = & len(pb_2) + len(pb_3)
+\end{eqnarray}
+
+The mergePayload operation combines two payload blocks into one. The parameters for this operation are:
+
+\begin{itemize}
+	\item first source payload block $pb_1$
+	\item second source payload block $pb_2$
+\end{itemize}
+
+If $len(pb)$ expresses the size of a payloadblock called $pb$ in bytes then resulting block of the MergePayload Operation $pb_3$ have to follow the following rules:
+
+\begin{eqnarray}
+merge(pb_1, pb_2) & = & pb_3 \\
+pb_3.startsWith(pb_1)\\
+pb_3.endsWith(pb_2)\\
+len(pb_3) & = & len(pb_1) + len(pb_2)
+\end{eqnarray}
+
+\subsubsection{Encryption and Decryption}
+The encryptPayload operation encrypts a payload block $pb_1$ symmetrically resulting in a block $pb_2$. The length of block $pb_2$ may vary according to mode and padding chosen. The parameters for this operation are:
+
+\begin{itemize}
+	\item Source payload block $pb_1$
+	\item Encryption specification $spec$
+	\item Symmetric key $k$
+\end{itemize}
+
+The operation follows the following rules (please note section \ref{sec:encNot} for notation):
+\begin{eqnarray}
+encrypt(pb_1, spec, k) & = & pb_2 \\
+pb_2 & = & E_{spec}^{K_a}\left( pb_1 \right)\\\
+len(pb_2) & \geq & len(pb_1)
+\end{eqnarray}
+
+
+The decryptPayload operation decrypts a payload block $pb_1$ symmetrically resulting in a block $pb_2$. The length of block $pb_2$ may vary according to mode and padding chosen. The parameters for this operation are:
+
+\begin{itemize}
+	\item Source payload block $pb_1$
+	\item Decryption specification $spec$
+	\item Symmetric key $k$
+\end{itemize}
+
+The operation follows the following rules (please note section \ref{sec:encNot} for notation):
+\begin{eqnarray}
+decrypt(pb_1, spec, k) & = & pb_2 \\
+pb_2 & = & D_{spec}^{K_a}\left( pb_1 \right)\\\
+len(pb_2) & \leq & len(pb_1)
+\end{eqnarray}
+
+\subsubsection{Redundancy Operations}
+These operations build the core of the mixing operations. The operation allows to add to a message redundancy information or to rebuild a block from a chosen set of information. 
+
+The Operation itself is shown in \ref{fig:addRedundancyOperation}. 
+\begin{figure}[ht]\centering
+	\includegraphics[width=0.8\columnwidth]{../../inc/addRedundancyOp}
+	\caption{Outline of the addRedundancy operation}
+	\label{fig:addRedundancyOperation}
+\end{figure}
+It may be subdivided into the following operations:
+\begin{itemize}
+	\item Pad the original message block in such a way, that all resulting blocks are a multiple of the block size of the encrypting cipher.
+	\item Apply a Reed Solomon operation in a given GF space with a vanderMonde matrix.
+	\item Encrypt all resulting blocks with unpadded, symmetrical encryption.
+\end{itemize}
+
+\subsection{Usage of the Protocol}
+
+\section{Discussion of the Results}
+\subsection{Static Protocol Analysis}
+\subsubsection{Endpoint Operation}
+\subsection{Dynamic Protocol Analysis}
+
+\section{Conclusion}
+Creating a possibly censorship resistant protocol is already hard. Analysis showed that even when a protocol is crafted with great care braking unobservability is far easier than doing it right.
+
+\hfill gwm
  
-\hfill August 26, 2015
+\hfill May 8, 2019
 
-\subsection{Subsection Heading Here}
-Subsection text here.
+%\subsection{Subsection Heading Here}
+%Subsection text here.
 
 % needed in second column of first page if using \IEEEpubid
 %\IEEEpubidadjcol
 
-\subsubsection{Subsubsection Heading Here}
-Subsubsection text here.
+%\subsubsection{Subsubsection Heading Here}
+%Subsubsection text here.
 
 
 % An example of a floating figure using the graphicx package.
@@ -604,8 +911,8 @@ Subsubsection text here.
 
 
 
-\section{Conclusion}
-The conclusion goes here.
+%\section{Conclusion}
+%The conclusion goes here.
 
 
 
@@ -627,26 +934,26 @@ The conclusion goes here.
 
 
 \appendices
-\section{Proof of the First Zonklar Equation}
-Appendix one text goes here.
+%\section{Proof of the First Zonklar Equation}
+%Appendix one text goes here.
 
 % you can choose not to have a title for an appendix
 % if you want by leaving the argument blank
-\section{}
-Appendix two text goes here.
+%\section{}
+%Appendix two text goes here.
 
 
 % use section* for acknowledgment
-\ifCLASSOPTIONcompsoc
-  % The Computer Society usually uses the plural form
-  \section*{Acknowledgments}
-\else
-  % regular IEEE prefers the singular form
-  \section*{Acknowledgment}
-\fi
-
-
-The authors would like to thank...
+%\ifCLASSOPTIONcompsoc
+%  % The Computer Society usually uses the plural form
+%  \section*{Acknowledgments}
+%\else
+%  % regular IEEE prefers the singular form
+%  \section*{Acknowledgment}
+%\fi
+%
+%
+%The authors would like to thank...
 
 
 % Can use something like this to put references on a page
@@ -672,20 +979,18 @@ The authors would like to thank...
 % http://mirror.ctan.org/biblio/bibtex/contrib/doc/
 % The IEEEtran BibTeX style support page is at:
 % http://www.michaelshell.org/tex/ieeetran/bibtex/
-%\bibliographystyle{IEEEtran}
+\bibliographystyle{IEEEtran}
 % argument is your BibTeX string definitions and bibliography database(s)
 %\bibliography{IEEEabrv,../bib/paper}
 %
 % <OR> manually copy in the resultant .bbl file
 % set second argument of \begin to the number of references
 % (used to reserve space for the reference number labels box)
-\begin{thebibliography}{1}
-
-\bibitem{IEEEhowto:kopka}
-H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
-  0.5em minus 0.4em\relax Harlow, England: Addison-Wesley, 1999.
-
-\end{thebibliography}
+%\begin{thebibliography}{1}
+%
+%
+%\end{thebibliography}
+\bibliography{../../messageVortex}
 
 % biography section
 % 
@@ -697,23 +1002,23 @@ H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
 % simpler here.)
 %\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{mshell}}]{Michael Shell}
 % or if you just want to reserve a space for a photo:
-
-\begin{IEEEbiography}{Michael Shell}
-Biography text here.
+\gdef\bioloc{../../inc/biography/}
+\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{\bioloc/passphoto}}]{Martin Gwerder}
+  \input \bioloc/biotext.inc.tex
 \end{IEEEbiography}
 
 % if you will not have a photo at all:
-\begin{IEEEbiographynophoto}{John Doe}
-Biography text here.
-\end{IEEEbiographynophoto}
+%\begin{IEEEbiographynophoto}{John Doe}
+%Biography text here.
+%\end{IEEEbiographynophoto}
 
 % insert where needed to balance the two columns on the last page with
 % biographies
 %\newpage
 
-\begin{IEEEbiographynophoto}{Jane Doe}
-Biography text here.
-\end{IEEEbiographynophoto}
+%\begin{IEEEbiographynophoto}{Jane Doe}
+%Biography text here.
+%\end{IEEEbiographynophoto}
 
 % You can push biographies down or up by placing
 % a \vfill before or after them. The appropriate

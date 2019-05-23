@@ -220,9 +220,9 @@ public class LineTRXTest {
                 t.isFailed();
 
             }
-        } catch(IOException ioe) {
+        } catch(Exception ioe) {
             ioe.printStackTrace();
-            fail( "got IOException while handling the client side" );
+            fail( "got exception while handling the client side" );
         }
         Assert.assertTrue("error searching for hangig threads", ImapSSLTest.verifyHangingThreads(threadSet).size() == 0);
     }
@@ -292,9 +292,9 @@ public class LineTRXTest {
 
             LOGGER.log(Level.INFO, "  client shutdown completed");
             t.isFailed();
-        } catch(IOException ioe) {
+        } catch(Exception ioe) {
             ioe.printStackTrace();
-            fail( "got IOException while handling the client side" );
+            fail( "got exception while handling the client side" );
         }
         Assert.assertTrue("error searching for hangig threads", ImapSSLTest.verifyHangingThreads(threadSet).size() == 0);
     }

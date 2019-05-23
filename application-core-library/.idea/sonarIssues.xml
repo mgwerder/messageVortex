@@ -158,7 +158,17 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AbstractBlock.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AbstractRedundancyOperation.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AsymmetricKey.java">
           <value>
             <set />
           </value>
@@ -218,6 +228,16 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/RoutingBlock.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/UsagePeriod.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/VortexMessage.java">
           <value>
             <set />
@@ -253,6 +273,21 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/recipes/BlenderRecipe.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/recipes/LowAnonRecipe.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/recipes/SimplePathRecipe.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/blending/Blender.java">
           <value>
             <set />
@@ -284,6 +319,31 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/commandline/CommandLineHandlerIdentityStore.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/commandline/CommandLineHandlerIdentityStoreAdd.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/commandline/CommandLineHandlerIdentityStoreCreate.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/commandline/CommandLineHandlerIdentityStoreDel.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/commandline/CommandLineHandlerIdentityStoreDump.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/commandline/CommandLineHandlerIdentityStoreGenerate.java">
           <value>
             <set />
           </value>
@@ -349,6 +409,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/MailServer.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/transport/SecurityContext.java">
           <value>
             <set />
           </value>
@@ -478,6 +543,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/test/java/net/messagevortex/test/asn1/IdentityStoreTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/test/java/net/messagevortex/test/asn1/MacAlgorithmTest.java">
           <value>
             <set />
@@ -564,6 +634,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/target/classes/LICENSE.md">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/target/classes/META-INF/messageVortex.properties">
           <value>
             <set />
           </value>

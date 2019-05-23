@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.security.Security;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.security.auth.callback.CallbackHandler;
@@ -142,9 +143,13 @@ public class ImapCommandAuthenticate extends ImapCommand {
           line.getConnection().writeln("+ ");
         }
         LOGGER.log(Level.INFO, "getting reply");
-        String reply = line.getConnection().readln(300000);
-        LOGGER.log(Level.INFO, "got reply (" + reply + ")");
-        saslReply = Base64.decode(reply);
+        try {
+          String reply = line.getConnection().readln(300000);
+          LOGGER.log(Level.INFO, "got reply (" + reply + ")");
+          saslReply = Base64.decode(reply);
+        } catch(TimeoutException te) {
+          throw new IOException("Tmeout while wating for sasl challenge reply", te);
+        }
       }
 
       // verify reply

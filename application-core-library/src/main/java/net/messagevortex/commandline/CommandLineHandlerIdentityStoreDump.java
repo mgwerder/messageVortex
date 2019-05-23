@@ -37,6 +37,6 @@ public class CommandLineHandlerIdentityStoreDump implements Callable<Integer> {
     }
     IdentityStore is = new IdentityStore(new File(filename));
     System.out.println(is.dumpValueNotation("",DumpType.ALL_UNENCRYPTED));
-    return null;
+    return 0;
   }
 }

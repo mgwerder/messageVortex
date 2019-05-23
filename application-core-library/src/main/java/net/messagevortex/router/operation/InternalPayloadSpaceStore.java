@@ -22,13 +22,14 @@ package net.messagevortex.router.operation;
 // * SOFTWARE.
 // ************************************************************************************
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import net.messagevortex.asn1.IdentityBlock;
 
 public class InternalPayloadSpaceStore {
 
-  private Map<IdentityBlock, InternalPayloadSpace> internalPayloadMap = new ConcurrentHashMap<>();
+  private Map<String, InternalPayloadSpace> internalPayloadMap = new HashMap<>();
 
   /***
    * <p>Sets a payload space into the payload space store.</p>
@@ -41,11 +42,12 @@ public class InternalPayloadSpaceStore {
                                                  InternalPayloadSpace payload) {
     InternalPayloadSpace ret = null;
     synchronized (internalPayloadMap) {
-      ret = internalPayloadMap.get(identity);
+      String key = new String(identity.getIdentityKey().getPublicKey());
+      ret = internalPayloadMap.get(key);
       if (payload != null) {
-        internalPayloadMap.put(identity, payload);
+        internalPayloadMap.put(key, payload);
       } else {
-        internalPayloadMap.remove(identity);
+        internalPayloadMap.remove(key);
       }
     }
     return ret;
@@ -60,7 +62,8 @@ public class InternalPayloadSpaceStore {
   public InternalPayloadSpace getInternalPayload(IdentityBlock identity) {
     InternalPayloadSpace ret;
     synchronized (internalPayloadMap) {
-      ret = internalPayloadMap.get(identity);
+      String key = new String(identity.getIdentityKey().getPublicKey());
+      ret = internalPayloadMap.get(key);
       if (ret == null) {
         ret = new InternalPayloadSpace(this, identity);
       }

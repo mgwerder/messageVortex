@@ -1,12 +1,12 @@
 package net.messagevortex.test.core;
 
-import net.messagevortex.Version;
+import static org.junit.Assert.assertTrue;
+
 import net.messagevortex.MessageVortex;
+import net.messagevortex.Version;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
-import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for {@link MessageVortex}.
@@ -25,7 +25,7 @@ public class VersionTest {
     @Test
     public void testBuild() {
         System.out.println("Build is "+ Version.getBuild());
-        assertTrue("Build String ("+Version.getBuild()+") does not match regexp.",Version.getBuild().matches("[0-9]+\\.[0-9]+\\.[0-9]+ \\([0-9a-f]+\\)"));
+        assertTrue("Build String ("+Version.getBuild()+") does not match regexp.",Version.getBuild()!=null && Version.getBuild().matches("[0-9]+\\.[0-9]+\\.[0-9]+ \\([0-9a-f]+\\)"));
     }
 
 }

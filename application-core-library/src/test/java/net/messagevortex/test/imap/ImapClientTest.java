@@ -60,6 +60,7 @@ public class ImapClientTest {
 
     public DeadSocket(int port, int counter) {
       this.counter = counter;
+      LOGGER.log(Level.INFO, "starting dead socket");
       try {
         ss = new ServerSocket(port, 20, InetAddress.getByName("localhost"));
       } catch (Exception e) {
@@ -67,6 +68,7 @@ public class ImapClientTest {
       runner.setName("DeadSocket (port " + ss.getLocalPort());
       runner.setDaemon(true);
       runner.start();
+      LOGGER.log(Level.INFO, "started dead socket on port " + ss.getLocalPort());
     }
 
     public void shutdown() {
@@ -80,10 +82,11 @@ public class ImapClientTest {
       }
 
       // Shutdown runner task
-      boolean endshutdown = false;
-      try {
-        runner.join();
-      } catch (InterruptedException ie) {
+      while (runner.isAlive()) {
+        try {
+          runner.join();
+        } catch (InterruptedException ie) {
+        }
       }
     }
 
@@ -99,7 +102,15 @@ public class ImapClientTest {
           assertTrue("Exception should not be rised", false);
         }
         counter--;
-        if (counter == 0) shutdown = true;
+        if (counter == 0) {
+          shutdown = true;
+        }
+      }
+      LOGGER.log(Level.INFO, "dead socket shutdown on port " + ss.getLocalPort());
+      try {
+        ss.close();
+      } catch (IOException ioe) {
+        LOGGER.log(Level.SEVERE, "Unable to close down dead socket properly", ioe);
       }
     }
   }
@@ -171,21 +182,6 @@ public class ImapClientTest {
       long el = (System.currentTimeMillis() - start);
       assertTrue("Did not wait until end of timeout was reached (just " + el + ")", el >= 300);
       assertFalse("Did wait too long", el > 2100);
-    }
-    try {
-      ic.setTimeout(500);
-      String[] sa = ic.sendCommand("a1 IWantATimeout", 300);
-      if (sa != null) {
-        for (String s : sa) {
-          System.out.println("Reply was: " + s);
-        }
-      }
-      fail("No timeoutException was raised");
-    } catch (TimeoutException te) {
-      long el = (System.currentTimeMillis() - start);
-      assertTrue("Did not wait until end of timeout was reached (just " + el + ")", el >= 300);
-      assertFalse("Did wait too long (" + el + " ms; expected: 300)", el > 1000);
-      // assertTrue("Connection was not terminated",ic.isTerminated());
     }
     ImapCommand.deregisterCommand("IWantATimeout");
     ict.shutdown();

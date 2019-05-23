@@ -29,6 +29,7 @@ import java.net.InetSocketAddress;
 import java.net.SocketTimeoutException;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 
 import net.messagevortex.Config;
@@ -95,87 +96,92 @@ public class SmtpConnection extends ClientConnection {
           LOGGER.log(Level.INFO, "Waiting for SMTP command to arrive");
 
           // wait for incomming command
-          command = readln();
-          LOGGER.log(Level.INFO, "got command '" + command + "'");
+          command = "";
+          try {
+            command = readln();
+            LOGGER.log(Level.INFO, "got command '" + command + "'");
+            // check for helo command
+            if (command.toLowerCase().startsWith("helo ")) {
+              write("250 Hi " + command.toLowerCase().substring(6) + " nice meeting you");
 
-          // check for helo command
-          if (command.toLowerCase().startsWith("helo ")) {
-            write("250 Hi " + command.toLowerCase().substring(6) + " nice meeting you");
+              // check for ehlo command
+            } else if (command.toLowerCase().startsWith("ehlo ")) {
+              write("250-Hi " + command.toLowerCase().substring(6) + " nice meeting you");
+              write("250-ENHANCEDSTATUSCODES" + CRLF);
+              write("250 AUTH login" + CRLF);
+              // check for login
+            } else if ("auth login".equals(command.toLowerCase())) {
+              writeln("334 " + new String(
+                      Base64.encode("Username:".getBytes(StandardCharsets.UTF_8)))
+              );
+              String username = new String(Base64.decode(readln()));
+              Config.getDefault().getStringValue(cfgSection, "smtp_incomming_user");
+              write("334 " + new String(
+                      Base64.encode("Password:".getBytes(StandardCharsets.UTF_8))) + CRLF
+              );
+              String password = new String(Base64.decode(readln()));
+              Config.getDefault().getStringValue(cfgSection, "smtp_incomming_password");
 
-          // check for ehlo command
-          } else if (command.toLowerCase().startsWith("ehlo ")) {
-            write("250-Hi " + command.toLowerCase().substring(6) + " nice meeting you");
-            write("250-ENHANCEDSTATUSCODES" + CRLF);
-            write("250 AUTH login" + CRLF);
-          // check for login
-          } else if ("auth login".equals(command.toLowerCase())) {
-            writeln("334 " + new String(
-                    Base64.encode("Username:".getBytes(StandardCharsets.UTF_8)))
-            );
-            String username = new String(Base64.decode(readln()));
-            Config.getDefault().getStringValue(cfgSection, "smtp_incomming_user");
-            write("334 " + new String(
-                    Base64.encode("Password:".getBytes(StandardCharsets.UTF_8))) + CRLF
-            );
-            String password = new String(Base64.decode(readln()));
-            Config.getDefault().getStringValue(cfgSection, "smtp_incomming_password");
-
-          // check for sender string
-          } else if (command.toLowerCase().startsWith("mail from")) {
-            envelopeFrom = command.substring(10).trim();
-            write("250 OK" + CRLF);
-            // FIXME reject if not apropriate
-          // check for receiver string
-          } else if (command.toLowerCase().startsWith("rcpt to")) {
-            envelopeTo = command.substring(8).trim();
-            write("250 OK" + CRLF);
-            // FIXME reject if not apropriate
-          // check for message body
-          } else if ("data".equals(command.toLowerCase())) {
-            if (envelopeFrom != null && envelopeTo != null) {
-              write("354 send the mail data, end with ." + CRLF);
-
-              // get body until terminated with a line with a single dot
-              String l = null;
-              StringBuilder sb = new StringBuilder();
-              while (l == null || !".".equals(l)) {
-                if (l != null) {
-                  sb.append(l + CRLF);
-                }
-                l = readln();
-              }
-
-              // send message to blending layer
-              if (getReceiver() != null) {
-                LOGGER.log(Level.INFO, "Message passed to blender layer");
-                getReceiver().gotMessage(new ByteArrayInputStream(sb.toString().getBytes()));
-              } else {
-                LOGGER.log(Level.WARNING, "blender layer unknown ... message discarded");
-              }
+              // check for sender string
+            } else if (command.toLowerCase().startsWith("mail from")) {
+              envelopeFrom = command.substring(10).trim();
               write("250 OK" + CRLF);
+              // FIXME reject if not apropriate
+              // check for receiver string
+            } else if (command.toLowerCase().startsWith("rcpt to")) {
+              envelopeTo = command.substring(8).trim();
+              write("250 OK" + CRLF);
+              // FIXME reject if not apropriate
+              // check for message body
+            } else if ("data".equals(command.toLowerCase())) {
+              if (envelopeFrom != null && envelopeTo != null) {
+                write("354 send the mail data, end with ." + CRLF);
+
+                // get body until terminated with a line with a single dot
+                String l = null;
+                StringBuilder sb = new StringBuilder();
+                while (l == null || !".".equals(l)) {
+                  if (l != null) {
+                    sb.append(l + CRLF);
+                  }
+                  l = readln();
+                }
+
+                // send message to blending layer
+                if (getReceiver() != null) {
+                  LOGGER.log(Level.INFO, "Message passed to blender layer");
+                  getReceiver().gotMessage(new ByteArrayInputStream(sb.toString().getBytes()));
+                } else {
+                  LOGGER.log(Level.WARNING, "blender layer unknown ... message discarded");
+                }
+                write("250 OK" + CRLF);
+              } else {
+                write("554 ERROR" + CRLF);
+              }
+
+              // check for state rset
+            } else if ("rset".equals(command.toLowerCase().trim())) {
+              envelopeFrom = null;
+              envelopeTo = null;
+              write("250 OK" + CRLF);
+
+              // ignore NOP command
+            } else if ("noop".equals(command.toLowerCase().trim())) {
+              write("250 OK" + CRLF);
+
+              // check for client terminating the connection
+            } else if ("quit".equals(command.toLowerCase().trim())) {
+              write("221 bye" + CRLF);
+              command = "quit";
             } else {
-              write("554 ERROR" + CRLF);
+
+              // on unknown command throw error message
+              write("500 Syntax Error" + CRLF);
             }
-
-          // check for state rset
-          } else if ("rset".equals(command.toLowerCase().trim())) {
-            envelopeFrom = null;
-            envelopeTo = null;
-            write("250 OK" + CRLF);
-
-          // ignore NOP command
-          } else if ("noop".equals(command.toLowerCase().trim())) {
-            write("250 OK" + CRLF);
-
-          // check for client terminating the connection
-          } else if ("quit".equals(command.toLowerCase().trim())) {
-            write("221 bye" + CRLF);
-            command = "quit";
-          } else {
-
-            // on unknown command throw error message
-            write("500 Syntax Error" + CRLF);
+          } catch (TimeoutException te) {
+            LOGGER.log(Level.INFO, "got Timeout while wating for command");
           }
+
         }
       } catch (SocketTimeoutException ste) {
         LOGGER.log(Level.WARNING, "Connection closed due to timeout", ste);

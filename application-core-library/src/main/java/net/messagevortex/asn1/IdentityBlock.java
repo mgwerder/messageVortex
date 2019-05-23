@@ -44,6 +44,25 @@ import org.bouncycastle.asn1.DERTaggedObject;
  */
 public class IdentityBlock extends AbstractBlock implements Serializable, Dumpable {
 
+  public enum IdentityStatus {
+    NEW(0),
+    PUZZLE_REQUESTED(1),
+    PUZZLE_RECEIVED(2),
+    PUZZLE_SENT(3),
+    ESTABLISHED(10),
+    EXPIRED(100);
+
+    private int statusNumber;
+
+    IdentityStatus(int num) {
+      this.statusNumber = num;
+    }
+
+    public int getStatusNumber() {
+      return statusNumber;
+    }
+  }
+
   public static final long serialVersionUID = 100000000008L;
 
   private static int nextID = 0;
@@ -68,6 +87,7 @@ public class IdentityBlock extends AbstractBlock implements Serializable, Dumpab
   private long identifier = -1;
   private byte[] padding = null;
   private byte[] encryptedIdentityBlock = null;
+  private IdentityStatus status = IdentityStatus.NEW;
 
   private int id;
 
@@ -87,7 +107,7 @@ public class IdentityBlock extends AbstractBlock implements Serializable, Dumpab
   }
 
   /***
-   * <p>Generates a new IdentityBlock for the given key.</p>$
+   * <p>Generates a new IdentityBlock for the given key.</p>
    *
    * <p>The new identity block is characterized by 1 replay (not replayable),
    * a random serial, a usage perod of 1 hour, and no requests.</p>
@@ -478,7 +498,7 @@ public class IdentityBlock extends AbstractBlock implements Serializable, Dumpab
     }
     IdentityBlock o = (IdentityBlock) t;
     try {
-      return dumpValueNotation("", DumpType.ALL).equals(o.dumpValueNotation("", DumpType.ALL));
+      return dumpValueNotation("", DumpType.ALL_UNENCRYPTED).equals(o.dumpValueNotation("", DumpType.ALL_UNENCRYPTED));
     } catch (IOException ioe) {
       return false;
     }

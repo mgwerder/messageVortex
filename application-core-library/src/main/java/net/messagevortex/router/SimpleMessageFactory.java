@@ -22,20 +22,37 @@ package net.messagevortex.router;
 // * SOFTWARE.
 // ************************************************************************************
 
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
 import net.messagevortex.ExtendedSecureRandom;
+import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.IdentityStore;
 import net.messagevortex.asn1.IdentityStoreBlock;
+import net.messagevortex.asn1.RoutingBlock;
 
 /**
  * Created by martin.gwerder on 06.06.2016.
  */
 public class SimpleMessageFactory extends MessageFactory {
 
+  private static final java.util.logging.Logger LOGGER;
+
+  static {
+    LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+  }
+
   /* Edge set to be honored */
   GraphSet graph = new GraphSet();
 
   /* number of ms for the graph to be completed */
+  long minMessageTransferTime = 300L * 1000L;
+
+  /* number of ms for the graph to be completed */
   long maxMessageTransferTime = 600L * 1000L;
+
+  /* number of ms between arrival the first sending time */
+  long minStepProcessSTime = 30L * 1000L;
 
   protected SimpleMessageFactory(String msg, int source, int target,
                                  IdentityStoreBlock[] anonGroupMembers, IdentityStore is) {
@@ -49,11 +66,13 @@ public class SimpleMessageFactory extends MessageFactory {
   /***
    * <p>build a simple message path.</p>
    */
-  public void build() {
+  public RoutingBlock build() {
 
     // building vector graphs
+    // minimum Graph size is 2.5 time edges
     int numberOfGraphs = (int) (graph.getAnonymitySetSize() * 2.5);
 
+    // create graph until minimum size is reached and target graph get message
     while (graph.size() < numberOfGraphs || !graph.allTargetsReached()) {
       IdentityStoreBlock from = null;
       IdentityStoreBlock to = null;
@@ -67,22 +86,51 @@ public class SimpleMessageFactory extends MessageFactory {
     }
 
     // set times
-    // FIXME: THIS SECTION IS BROKEN!!!!!!
-    long fullTime = maxMessageTransferTime * ExtendedSecureRandom.nextInt(1000) / 1000;
+    long fullMsgTime = minMessageTransferTime + (maxMessageTransferTime - minMessageTransferTime)
+            * ExtendedSecureRandom.nextInt(1000) / 1000;
+    LOGGER.log(Level.FINE, "Transfer time of message is " + (fullMsgTime / 1000) + "s");
+    long minArrival = 0;
+    long maxArrival = 0;
     for (int i = 0; i < graph.size(); i++) {
       Edge g = graph.get(i);
-      long start = (long) ExtendedSecureRandom.nextRandomTime(30000, 60000, 90000);
-      long avg = fullTime / (graph.size() - i);
-      long delay = (long) ExtendedSecureRandom.nextRandomTime(30000, 30000 + avg, 30000 + 2 * avg);
-      System.out.println("setting times to " + start + "/" + delay);
-      g.setStartTime(start);
-      g.setDelayTime(delay);
-      fullTime += start + delay;
+      long minDelay = (long) ExtendedSecureRandom.nextRandomTime(minStepProcessSTime,
+              2 * minStepProcessSTime, 3 * minStepProcessSTime);
+      long avg = (fullMsgTime - maxArrival) / (graph.size() - i);
+      long maxDelay = (long) ExtendedSecureRandom.nextRandomTime(0, 0 + avg - minStepProcessSTime,
+              0 + 2 * avg - minStepProcessSTime);
+      LOGGER.log(Level.FINER, "  setting times to arrival:" + (minArrival / 1000) + "-"
+              + (maxArrival / 1000) + "; startDelay:" + (minDelay / 1000) + "-"
+              + ((minDelay + maxDelay) / 1000) + " (est. delivery time is "
+              + ((minArrival + (maxArrival - minArrival) / 2 + minDelay) / 1000) + "s)");
+      g.setStartTime(minDelay);
+      g.setDelayTime(maxDelay);
+
+      minArrival += minDelay;
+      maxArrival += minDelay + maxDelay;
     }
 
-    // determine message route
-    // FIXME select operation
+    // select operations
+    return buildRoutingBlock();
+  }
 
+  private RoutingBlock buildRoutingBlock() {
+    // determine message route
+    GraphSet[] gs = graph.getRoutes();
+    GraphSet msgpath = gs[ExtendedSecureRandom.nextInt(gs.length)];
+
+    return graph.getRoutingBlock();
+  }
+
+  public long setMaxTransferTime(long newmax) {
+    long ret = maxMessageTransferTime;
+    maxMessageTransferTime = newmax;
+    return ret;
+  }
+
+  public long setMinStepProcessSTime(long newmin) {
+    long ret = minStepProcessSTime;
+    minStepProcessSTime = newmin;
+    return ret;
   }
 
   /***
@@ -91,6 +139,21 @@ public class SimpleMessageFactory extends MessageFactory {
    */
   public GraphSet getGraph() {
     return graph;
+  }
+
+  public static void main(String[] args) throws IOException {
+    MessageVortexLogger.setGlobalLogLevel(Level.FINEST);
+    LOGGER.log(Level.INFO, "Loading identity store");
+    IdentityStore identityStore = new IdentityStore(new File("identityStore.cfg"));
+    LOGGER.log(Level.INFO, "getting anon set");
+    IdentityStoreBlock[] anonSet = identityStore.getAnonSet(5).toArray(new IdentityStoreBlock[0]);
+    LOGGER.log(Level.INFO, "creating message factory");
+    SimpleMessageFactory smf = new SimpleMessageFactory("", 0, 1, anonSet, identityStore);
+    LOGGER.log(Level.INFO, "building routing block");
+    smf.setMaxTransferTime(60 * 1000);
+    smf.setMinStepProcessSTime(6 * 1000);
+    smf.build();
+    LOGGER.log(Level.INFO, "done building");
   }
 
 }

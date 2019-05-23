@@ -10,6 +10,7 @@ import java.util.Properties;
 import java.util.logging.Level;
 import javax.activation.DataHandler;
 import javax.mail.Address;
+import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
@@ -24,6 +25,7 @@ import net.messagevortex.Config;
 import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.Version;
+import net.messagevortex.accounting.Accountant;
 import net.messagevortex.asn1.BlendingSpec;
 import net.messagevortex.asn1.IdentityStore;
 import net.messagevortex.asn1.IdentityStoreBlock;
@@ -32,6 +34,7 @@ import net.messagevortex.asn1.PrefixBlock;
 import net.messagevortex.asn1.RoutingBlock;
 import net.messagevortex.asn1.VortexMessage;
 import net.messagevortex.asn1.encryption.DumpType;
+import net.messagevortex.blender.recipes.BlenderRecipe;
 import net.messagevortex.transport.Transport;
 import net.messagevortex.transport.dummy.DummyTransportTrx;
 
@@ -57,12 +60,16 @@ public class InitialRecipesBlender extends Blender {
    * @throws IOException if anything fails :-D
    */
   public InitialRecipesBlender(String section) throws IOException {
-    // This is a dummy constructor which breaks the implementation ->
-    // FIXME add sensible identity store
     this(
-            null,
-            MessageVortex.getRouter(Config.getDefault().getStringValue(section, "router")),
-            new IdentityStore()
+            Config.getDefault().getStringValue(section, "node_identity"),
+            MessageVortex.getRouter(Config.getDefault().getSectionValue(section, "router")),
+            MessageVortex.getIdentityStore(
+                    Config.getDefault().getSectionValue(section, "identity_store")
+            ),
+            MessageVortex.getAccountant(
+                    Config.getDefault().getSectionValue(section, "accountant")
+            )
+
     );
   }
 
@@ -75,9 +82,10 @@ public class InitialRecipesBlender extends Blender {
    * @throws IOException    if anything fails :-D
    */
   public InitialRecipesBlender(String identity, BlendingReceiver router,
-                               IdentityStore identityStore)
+                               IdentityStore identityStore, Accountant acc)
           throws IOException {
-    super(router, null);
+    super(router, acc);
+    this.identityStore = identityStore;
     this.identity = identity;
     if (identity != null) {
       this.transport = new DummyTransportTrx(identity, this);
@@ -101,13 +109,12 @@ public class InitialRecipesBlender extends Blender {
     // encode message in clear readable and send it
     try {
       //Session session = Session.getDefaultInstance(new Properties(), null);
-      Session session = Session.getInstance(new Properties(),
-            new javax.mail.Authenticator() {
-              protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("username", "password");
-              }
-            }
-      );
+      Authenticator a = new javax.mail.Authenticator() {
+        protected PasswordAuthentication getPasswordAuthentication() {
+          return new PasswordAuthentication("username", "password");
+        }
+      };
+      Session session = Session.getInstance(new Properties(), a);
       final MimeMessage mimeMsg = new MimeMessage(session);
       mimeMsg.setFrom(new InternetAddress("test@test.com"));
       mimeMsg.setRecipient(Message.RecipientType.TO,
@@ -162,13 +169,12 @@ public class InitialRecipesBlender extends Blender {
   @Override
   public boolean gotMessage(final InputStream is) {
     try {
-      Session session = Session.getInstance(new Properties(),
-            new javax.mail.Authenticator() {
-              protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("username", "password");
-              }
-            }
-      );
+      Authenticator a = new javax.mail.Authenticator() {
+        protected PasswordAuthentication getPasswordAuthentication() {
+          return new PasswordAuthentication("username", "password");
+        }
+      };
+      Session session = Session.getInstance(new Properties(), a);
       int i = 0;
 
       MimeMessage msg = new MimeMessage(session, is);
@@ -191,14 +197,30 @@ public class InitialRecipesBlender extends Blender {
 
       // get anonymity set
       List<IdentityStoreBlock> anonSet = istore.getAnonSet(anonSetSize);
+      if (anonSet==null) {
+        LOGGER.log(Level.WARNING, "unable to get anonymity set for message");
+        return false;
+      }
 
       // get receipes
       BlenderRecipe recipe = BlenderRecipe.getRecipe(recipes, anonSet);
+      if (recipe==null) {
+        LOGGER.log(Level.WARNING, "unable to get recipe for message");
+        return false;
+      }
 
       // apply receipes
+      LOGGER.log(Level.INFO, "blending messages");
       for (Address receiverAddress : to) {
-        RoutingBlock rb = recipe.applyRecipe(anonSet, istore.getIdentity(from[0].toString()),
-                istore.getIdentity(receiverAddress.toString()));
+        LOGGER.log(Level.INFO, "blending message for \"" + receiverAddress.toString() + "\"");
+        IdentityStoreBlock fromAddr = istore.getIdentity(from[0].toString());
+
+        IdentityStoreBlock toAddr = istore.getIdentity(receiverAddress.toString());
+        RoutingBlock rb = recipe.applyRecipe(anonSet, fromAddr, toAddr);
+
+        if (rb == null) {
+          LOGGER.log(Level.WARNING, "Unable to route message to " + receiverAddress.toString());
+        }
 
         PrefixBlock pb = new PrefixBlock();
         InnerMessageBlock im = new InnerMessageBlock();
@@ -211,6 +233,7 @@ public class InitialRecipesBlender extends Blender {
           i++;
         }
       }
+      LOGGER.log(Level.INFO, "done blending");
       return i == to.length;
     } catch (IOException | MessagingException ioe) {
       LOGGER.log(Level.WARNING, "Exception while getting and parsing message", ioe);
