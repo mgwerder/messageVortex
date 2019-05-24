@@ -553,10 +553,8 @@ We assume the following goals for an adversary:
 	\item An adversary may want to build and conserve data about individuals or groups of individuals of their life. This data includes all activities in any part of their life regardless of their apparent fitness for any specific purpose or their correctness.
 \end{itemize}
 
-
-
-\section{The MessageVortex Protocol}
-The theory in this document is heavily based on symmetric encryption, asymmetric encryption, and hashing. To use a uniformed notation I use $E^{K_a}(M)$ (where $a$ is an index to distinguish multiple keys) resulting in $\mathbf{M^{K_a}}$ as the encrypted message. If we are reflecting a tuple of information, we write it in boldface. To express the content of the tuple, we use angular brackets $\mathbf{L\langle normalAddress,vortexAddress\rangle }$. If we want Messages encrypted with multiple keys do list the used keys as a comma-separated list in superscript $E^{K_b}\left(E^{K_a}\left(M\right)\right)=M^{{K_{a}},{K_b}}$.
+\subsection{Notation \label{sec:encNot}}
+The theory in this document is heavily based on symmetric encryption, asymmetric encryption, and hashing. To use an uniformed notation we use $E^{K_a}(M)$ (where $a$ is an index to distinguish multiple keys) for an encrypting function with a key $K_a$. This results in $\mathbf{M^{K_a}}$ for the encrypted message. If we are reflecting a tuple of information, we write in boldface. To express a concatenated set of information, we use angular brackets $\mathbf{L\langle normalAddress,vortexAddress\rangle }$. If we want to differentiate messages encrypted with multiple keys, we list the used keys as a comma-separated list in superscript $E^{K_b}\left(E^{K_a}\left(M\right)\right)=M^{{K_{a}},{K_b}}$.
 
 For a symmetric encryption of a message $\mathbf{M}$ with a key $K_a$ resulting in $\mathbf{M^{K_a}}$ where $a$ is an index to distinguish different keys. Decryption uses therefore $D^{K_a}(\mathbf{M^{K_a}})=\mathbf{M}$.
 
@@ -586,6 +584,8 @@ We refer to the components of a Vortex Message as follows:
 \end{align*}
 
 In general a decrypted Block is written as capitalized multi character boldface. An encrypted Block is written as capitalized single character boldface.
+
+\section{The MessageVortex Protocol}
 
 \subsection{General Design}
 In this section, we introduce a new consistent, transport independent model for representing the different protocols used by MessageVortex.
@@ -822,6 +822,10 @@ It may be subdivided into the following operations:
 \subsection{Static Protocol Analysis}
 \subsubsection{Endpoint Operation}
 \subsection{Dynamic Protocol Analysis}
+
+\subsubsection{Bootstrapping of Addresses and Identities}
+
+\subsubsection{Discovery of Peer Nodes}
 
 \subsection{The Missing Links}
 A lot still needs to be done. For this protocol to be of any use, a user-friendly implementation is required. This implementation must provide very good censorship resistance while providing easy to use recipes for message transfer. 
