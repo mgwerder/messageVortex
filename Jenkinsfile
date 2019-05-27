@@ -104,7 +104,7 @@ pipeline {
     stage ('Package all') {
       steps {
         sh 'mkdir /var/www/messagevortex/devel/repo || /bin/true'
-        sh 'mvn -DskipTests compile package'
+        sh 'mvn -DskipTests package'
       }
     }
     stage ('Site build') {
