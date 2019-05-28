@@ -850,12 +850,21 @@ The padded value $\mathbf{X}$ for a function $RS_{\text{m of n}}$ and an encrypt
 	i          & = & len(\mathbf{M})\\
 	e          & = & k \cdot n\\
 	l          & = & \left\lceil\frac{i + 4 + C2 }{e}\right\rceil\cdot e\\
-	p          & = & i + C1 \cdot l \pmod{2^{32}}\\
-	\mathbf{X} & = & \langle p,\mathbf{M},R_{t}\left(s,l-i)\right)\rangle
+	p          & = & i + \left( C1 \cdot l \pmod{\left\lfloor\frac{2^{32}-i}{l}\right\rfloor\cdot l}\right)\\
+	\mathbf{X} & = & \langle p,\mathbf{M},R_{t}\left(s,l-i-4\right)\rangle
 \end{eqnarray}	
 The remainder of the input block, up to length $l$, is padded with random data. The random padding data may be specified by RBB though an PRNG spec $t$ and an initial seed value $s$. The message is padded up to size $L$. All encrypted blocks do not require any padding as the initial padding guarantees that all resulting blocks are dividable by the block size of the encrypting function. If not provided by an RBB, an additional parameters $C1$ is chosen as random positive integer and $C2=0$  by the node executing the operation.
 
-To reverse a successful message recovery information the of a padded block $\mathbf{X}$ we calculate the original message size by extracting $p$ and doing $len(\mathbf{M})=p - C2 \pmod{ len(\mathbf{X})}$
+To reverse a successful message recovery information the of a padded block $\mathbf{X}$ we calculate the original message size by extracting $p$ and doing $len(\mathbf{M})=p \pmod{ len(\mathbf{X})}$.
+
+This padding has many important advantages:
+\begin{enumerate}
+	\item The padding does not leak if the rebuild of the original message was successful. Any value in the padding may reflect a valid value.
+	\item Since we have a value $C2$ the statement that a message size is within $len(\mathbf{X})<size<(len(\mathbf{X})-k\cdot n)$ is no longer true and any value smaller $len(\mathbf{X})$ may be correct.
+	\item An RBB may predict the exact binary image of the padded message when specifying $C1$, $C2$, and $R_{t}(s,)$.
+\end{enumerate}
+
+The Reed-Solomon operation is done with a Vandermonde matrix. Unlike in error correcting systems we do not normalize the matrix so that the result of the first blocks is equivalent to the original message. Instead the error correcting information is equally distributed over all resulting blocks adding further obfuscation. Since the entropy of the resulting blocks is lowered and may thus leak an estimate of how a resulting block may have been treated, we added an additional encryption step equalizing entropy again. The previously introduced padding guarantees that there is no further padding on block level required. Such a padding could leak in case of decryption whether the block has been altered or not.
 
 \subsection{Usage of the Protocol}
 First a sending node collects either a set of nodes and keys it wants to use and creates identities on these nodes using header requests. Then the sender creates a routing block containing all the routing instructions (hops and operations). Alternatively a sender may use a premanufactured routing block for the specified target. This routing block is then concatenated to a message and passed to the locally running routing node. From there the message is routed as defined in the routing block. An example for such a route is shown in Fig.~\ref{fig:protocolOutline}.
