@@ -676,11 +676,10 @@ A Vortex message is a message passed from one router to another this message may
 
 The block structure of a Vortex message is as follows:
 \begin{itemize}
-	\item padding
-	\begin{itemize}
-		\item Encrypted message key $k_{peer}$.\\
-	          Contains symmetrical key for decryption of follow up header information and payload blocks. The key is encrypted with the receiving host's public key. The key is known to the RBB, the message sending node and the message receiving node. No other node has knowledge of the key.
-	\end{itemize}      
+	\item Encrypted peer key $k_{peer}$\\
+          Contains symmetrical key for decryption of follow up header information and payload blocks. The key is encrypted with the receiving host's public key. The key is known to the RBB, the message sending node and the message receiving node. No other node has knowledge of the key.
+	\item padding\\
+	      This padding makes sure that the message part encrypted with the peer key does look different for each payload even when reusing keys. This case is not recommended but unavoidable in the case of a reused routing block. 
 	\item header block
 	\begin{itemize}
 		\item Identity and ``proof of work'' information\\
@@ -692,7 +691,7 @@ The block structure of a Vortex message is as follows:
 		\item (optionally) Proof-of-work information\\
               This information allows a sending node to fulfill a proof of work requirement raised due to a previously sent request.      
 	\end{itemize}
-		\item Routing blocks (encrypted with message key)
+	\item Routing blocks (encrypted with sender key)
 	\begin{itemize}
 		\item Next hop timing instructions
 		\item Next hop routing blocks (encrypted)
@@ -709,7 +708,7 @@ The block structure of a Vortex message is as follows:
 
 It is important to note that there are two symmetrical keys involved in encrypting and decrypting message headers. Having two keys is not a flaw in the protocol but necessary. 
 
-The first key of a Vortex message is the message key. This key is only accessible with the private key of the node receiving the message. It allows decryption of the routing blocks and the header information. The sender of a message block is therefore not able to tell if a message contains one or more routing blocks. It is important to note that no other node should have access to this information. 
+The first key of a Vortex message is the sender key. This key is only accessible with the private key of the node receiving the message. It allows decryption of the routing blocks and the header information. The sender of a message block is therefore not able to tell if a message contains one or more routing blocks. It is important to note that no other node should have access to this information. 
 
 The second key is the header key located in the encrypted header. The RBB chooses the key. This key protects the inner structure of the Message. It makes it impossible for any node except the sending or the receiving peer node to detect the inner structure of the message. Without this key, any independent observer with knowledge about the blending capabilities of a receiving node may:
 \begin{itemize}
@@ -770,7 +769,7 @@ If $len(pb_1)$ expresses the size of a payloadblock called $pb_1$ in bytes then 
 split(f, pb_1) & = &\langle pb_1, pb_2 \rangle\\
 pb_1.startsWith(pb_2)\\
 pb_1.endsWith(pb_3)\\
-len(pb_2) & = & floor(len(pb_1)\cdot f)\\
+len(pb_2) & = & \lfloor len(pb_1)\cdot f\rfloor\\
 len(pb_1) & = & len(pb_2) + len(pb_3)
 \end{eqnarray}
 
@@ -825,7 +824,7 @@ len(pb_2) & \leq & len(pb_1)
 \subsubsection{Redundancy Operations}
 These operations build the core of the mixing operations. The operation allows to add to a message redundancy information or to rebuild a block from a chosen set of information. 
 
-The Operation itself is shown in \ref{fig:addRedundancyOperation}. 
+The operation itself is shown in Fig.~\ref{fig:addRedundancyOperation}. 
 \begin{figure}[ht]\centering
 	\includegraphics[width=0.8\columnwidth]{../../inc/addRedundancyOp}
 	\caption{Outline of the addRedundancy operation}
@@ -868,6 +867,20 @@ We especially highlight adversary in an environment where the participation as a
 
 \subsection{Static Protocol Analysis\label{sec:staticAnalysis}}
 \subsubsection{Endpoint Operation}
+Depending on the blending method, single messages might be identified as long as they are detectable. Detectability depends on various factors such as:
+
+\begin{itemize}
+	\item Broken internal file structure (due to plain blending)
+	\item Uncommon high entropy in a structureless file
+	\item Unrelated message flow (see \cite{oakland2013-parrot})
+	\item Non-human behaviour on the transport layer (e.g., message traffic 24x7)
+\end{itemize}
+
+If an endpoint is successfully identified, then all directly related endpoints of the same protocol may be identified as well by following the message flow. This does however not enable an adversary to inject messages as the host key is not leaked. 
+
+Assuming a global observer as an adversary and unencrypted traffic, he might discover the originating routing layer and thus identify it as Vortex node by following traces of the transport layer. In most protocols, however, this address is spoofable and not a reliable source for the originating account.
+
+
 \subsection{Dynamic Protocol Analysis}
 
 \subsubsection{Bootstrapping of Addresses and Identities}
@@ -877,16 +890,18 @@ We especially highlight adversary in an environment where the participation as a
 Besides attacking the message content, attacking the routing nodes is an option for an adversary in a jurisdiction where operation of such a node is a criminal act. The presence of routing nodes is a valuable information for a global observer narrowing down the information regarding data to be analyzed.
 
 \subsubsection{Findings based on adversary environment}
-In environments containing only global observers and no jurisdictional constraints regarding the technology, a VortexNode may disclose its presence. This means a 
+In environments containing only global observers and no jurisdictional constraints regarding the technology, a VortexNode may disclose its presence. This means a VortexNode is not forced to cloak its presence. In such an environment an RBB should choose the operations to be sensible but no extensive care is required. Even if there is a node with a known owner of the node and a suspected message is received, the owner may credibly claim that the message in question was a decoy. No information obtained by any node involved in the routing of the message may proof anything else. Since a message may be split in any number of parts and related messages are only identifiable with a high degreee of improbability even meta information such as the true size of the message, the sending time or the involved parties in the anonymity set are unknown. This is still true if we consider an active adversary.
+
+In environments where using a VortexNode is subject to criminal prosecution much more care has to be applied. As all routing nodes know their immediate peer, we were only able to find two weak solutions to this problem. The first solution is to only use trusted nodes. If we can trust all routing nodes no external observer may proof that the message flow is in fact MessageVortex traffic. An adversary node within such a system will be able to learn the addresses of other nodes within the set. The set of uncovered nodes may be reduced by the RBB by applying communicating groups of nodes (communication cells) with defined gateways nodes between them. In such a scenario only a cell and a possible adjacent cell may be discovered.
 
 
 \subsection{The Missing Links}
-A lot still needs to be done. For this protocol to be of any use, a user-friendly implementation is required. The current implementation works as a prototype for academic research but is far beyond from being user friendly. Too many chices are left to the user currently. The new implementation must provide very good censorship resistance while providing easy to use recipes for message transfer. 
+A lot still needs to be done. For this protocol to be of any use, a user-friendly implementation is required. The current implementation works as a prototype for academic research but is far beyond from being user friendly. Too many choices are currently left to the user. The new implementation must provide very good censorship resistance while providing easy to use recipes for message transfer. 
 
-For the traffic to be truly undetectable AIs must generate meaningful conversation between agents. This conversation does not necessarily boil down to a turing test. It is sufficient that two blending layer are capable to set up a communication which is undestinguishible from a normal human communication. As an adversary is typically not able to generate own traffic without exposing the probing activity and a blender is not required to such probes an attacker is very limited.
+For the traffic to be truly undetectable, chat bots must generate meaningful conversation between blending nodes. This conversation does not necessarily boil down to a turing test. It is sufficient that two blending layer are capable to set up a communication which is undestinguishible from a normal human communication. As an adversary is typically not able to generate own traffic without exposing the probing activity and a blender is not required to such probes an attacker is very limited.
 
 \section{Conclusion}
-Creating a possibly censorship resistant protocol is already hard. Analysis showed that even when a protocol is crafted with great care braking unobservability is far easier than doing it right. At the same time we were able to present a system which requires an unmatched amount of observation and calculation power to be broken.
+Creating a protocol which is possibly censorship resistant, is already hard. Analysis showed that even when a protocol is crafted with great care, braking unobservability is far easier than doing it right. At the same time we were able to present a system which requires an unmatched amount of observation, infrastructure and calculation power to be broken.
 
 \hfill gwm
  
