@@ -26,17 +26,20 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.crypto.Cipher;
 import net.messagevortex.accounting.Accountant;
 import net.messagevortex.asn1.AsymmetricKeyPreCalculator;
 import net.messagevortex.asn1.IdentityBlock;
 import net.messagevortex.asn1.IdentityStore;
-import net.messagevortex.asn1.IdentityStoreBlock;
 import net.messagevortex.blender.Blender;
 import net.messagevortex.blender.recipes.BlenderRecipe;
 import net.messagevortex.commandline.CommandLineHandlerIdentityStore;
@@ -94,6 +97,46 @@ public class MessageVortex implements Callable<Integer> {
   private static Map<String, IdentityStore> identityStore = new ConcurrentHashMap<>();
   private static InternalPayloadSpaceStore ownStores = new InternalPayloadSpaceStore();
   private static InternalPayloadSpaceStore simStores = new InternalPayloadSpaceStore();
+  private static Integer JRE_AES_KEY_SIZE = null;
+
+  private void verifyPrerequisites() {
+    LOGGER.log(Level.INFO, "Checking bouncycastle version..." + Version.getBuild());
+    String bcversion = org.bouncycastle.jce.provider.BouncyCastleProvider
+            .class
+            .getPackage()
+            .getImplementationVersion();
+    Matcher m = Pattern.compile("(\\d+)\\.(\\d+)\\.(\\d+)(beta(\\d*))?")
+            .matcher(bcversion);
+    LOGGER.log(Level.INFO, "Detected BC version is " + bcversion + ".");
+    if (!m.matches()) {
+      LOGGER.log(Level.SEVERE, "unable to parse BC version (" + bcversion + ")");
+    } else {
+      int major = Integer.parseInt(m.group(1));
+      int minor = Integer.parseInt(m.group(2));
+      if ((major == 1 && minor >= 60) || (major >= 2)) {
+        LOGGER.log(Level.INFO, "Detected BC version is " + bcversion + ". This should do the trick.");
+      } else {
+        LOGGER.log(Level.SEVERE, "Looks like your BC installation is heavily outdated. At least version 1.60 is recommended.");
+      }
+    }
+
+    LOGGER.log(Level.INFO, "Checking JRE");
+    try {
+      String jreversion = System.getProperty("java.version");
+      LOGGER.log(Level.INFO, "JRE  version is " + jreversion);
+      if (JRE_AES_KEY_SIZE == null) {
+        JRE_AES_KEY_SIZE = Cipher.getMaxAllowedKeyLength("AES");
+      }
+      int i = JRE_AES_KEY_SIZE;
+      if (i > 128) {
+        LOGGER.log(Level.INFO, "Looks like JRE having an unlimited JCE installed (AES max allowed key length is = " + i + "). This is good.");
+      } else {
+        LOGGER.log(Level.SEVERE, "Looks like JRE not having an unlimited JCE installed (AES max allowed key length is = " + i + "). This is bad.");
+      }
+    } catch (NoSuchAlgorithmException nsa) {
+      LOGGER.log(Level.SEVERE, "OOPS... Got an exception while testing for an unlimited JCE. This is bad.", nsa);
+    }
+  }
 
   /***
    * <p>Main command line method.</p>
@@ -132,6 +175,9 @@ public class MessageVortex implements Callable<Integer> {
     }
 
     try {
+      // check prerequisites
+      verifyPrerequisites();
+
       Config cfg = MessageVortexConfig.getDefault();
 
       // load IdentityStore
@@ -156,10 +202,10 @@ public class MessageVortex implements Callable<Integer> {
 
       // setup recipes
       // create default recipe store
-      String lst=Config.getDefault().getStringValue(null, "recipes");
-      for (String cl:lst.split(" *, *")) {
+      String lst = Config.getDefault().getStringValue(null, "recipes");
+      for (String cl : lst.split(" *, *")) {
         BlenderRecipe.addRecipe(null,
-                (BlenderRecipe) getConfiguredClass(null, cl,BlenderRecipe.class));
+                (BlenderRecipe) getConfiguredClass(null, cl, BlenderRecipe.class));
       }
       for (String accountingSection : cfg.getSectionListValue(null, "recipe_setup")) {
 
@@ -349,7 +395,7 @@ public class MessageVortex implements Callable<Integer> {
   }
 
   public static InternalPayloadSpace getSimulatedSpace(IdentityBlock ib) {
-    InternalPayloadSpace ret =null;
+    InternalPayloadSpace ret = null;
     synchronized (simStores) {
       // get exiting space
       ret = simStores.getInternalPayload(ib);
@@ -363,7 +409,7 @@ public class MessageVortex implements Callable<Integer> {
   }
 
   public static InternalPayloadSpace getOwnSpace(IdentityBlock ib) {
-    InternalPayloadSpace ret =null;
+    InternalPayloadSpace ret = null;
     synchronized (ownStores) {
       // get exiting space
       ret = ownStores.getInternalPayload(ib);
