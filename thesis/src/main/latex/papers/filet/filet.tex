@@ -77,7 +77,7 @@
 % *** GRAPHICS RELATED PACKAGES ***
 %
 \ifCLASSINFOpdf
-  \usepackage[pdftex]{graphicx}
+  \usepackage[pdftex,final]{graphicx}
   % declare the path(s) where your graphic files are
   \graphicspath{{../pdf/}{../jpeg/}}
   % and their extensions so you won't have to specify these with
@@ -321,6 +321,10 @@
 \usepackage{nth}
 \usepackage{hyperref}
 
+% Document annotations
+\usepackage[nomargin,draft]{fixme}
+\fxsetup{layout=pdfnote}
+
 \begin{document}
 %
 % paper title
@@ -496,13 +500,15 @@ Computer Society, IEEE, IEEEtran, journal, \LaTeX, paper, template.
 % and "HIS" in caps to complete the first word.
 \IEEEPARstart{A}{lmon Brown Strowger} was the owner of a funeral parlor in St. Petersburg. He filed a patent on March \nth{10}, 1891 for an ``Automatic Telephone Exchange'' \cite{pulseDialingPatent}. This patent built the base for modern automated telephone systems. According to several sources, he was annoyed by the fact that the local telephone operator was married to another undertaker. She diverted potential customers of Mr. Strowger to her husband instead, which caused Almon B. Strowger to lose business. In 1922, this telephone dialing system, which is nowadays called pulse dialing became the standard dialing technology for more than 70 years until tone dialing replaced it.
 
-This dialing technology enabled automatic messaging for voice and text messages (e.g., telex) up until today and is the foundation for current routed networks. These networks build the base for our communication-based Society these days and allow us to connect quickly with any person or company of our wish. We use these networks today as communication meaning for all purposes, and most of the people spend minimal thoughts on the possible consequences arising if someone puts hands on this communication. 
+This dialing technology enabled automatic messaging for voice and text messages (e.g., telex) up until today and is one of the foundations for our current routed networks. These networks build the base of our communication-based Society these days and allow us to connect quickly with any person or company of our wish. We use these networks today as communication meaning for all purposes, and most of the people spend minimal thoughts on the possible consequences arising if someone puts hands on this communication. 
 
-Collected data may be used to judge upon our intentions and thus is not only confidential if we have something to hide. This problem has dramatically increased in the last years as big companies and countries started to collect all kinds of data and created the means to process them. It allows, supposedly, to judge peoples not only on what they are doing but as well, on what they did and what they might do. Numerous events in the present and past show that multiple actors, some of which are state-sponsored, collected data on a broad base within the Internet. Whether this is a problem or not may be disputable. Undisputed is that such data requires careful handling, and accusations should then base on solid facts. Unacceptable seems the use of ``guesses'' or ``extrapolations'' in most of the cases.
+Collected data may be used to judge upon our intentions and thus is not only confidential if we have something to hide. This problem has dramatically increased in the last years as big companies and countries started to collect all kinds of data and created the means to process them. It allows, supposedly, to judge peoples. This is not limited to what they are doing but as well, on what they did and what they might do. Numerous events in the present and past show that multiple actors, some of which are state-sponsored, collected data on a broad base within the Internet. Whether this is a problem or not may be disputable. Undisputed is that such data requires careful handling, and accusations should then base on solid facts. Unacceptable seems the use of ``guesses'' or ``extrapolations'' in most of the cases.
 
-To show that this may happen even under complete democratic control we might refer to events such as the ``secret files scandal'' (or  ``Fichenskandal'') in Switzerland. In the years from 1900 to 1990 Swiss government collected 900’000 files in a secret archive (covering roughly 10\% of the natural and juristic entities within Switzerland at that time). The Swiss Federal Archives (https://www.bar.admin.ch) documents more about the Fichenskandal.
+To show that this may happen even under complete democratic control, we may refer to events such as the ``secret files scandal'' (or  ``Fichenskandal'') in Switzerland. In the years from 1900 to 1990 Swiss government collected 900’000 files in a secret archive (covering roughly 10\% of the natural and juristic entities within Switzerland at that time). The Swiss Federal Archives (https://www.bar.admin.ch) documents more about the Fichenskandal.
 
-Whistleblower Edward Snowden leaked a vast amount of documents. These documents suggested that such attacks on privacy are commonly made on a global scale. The documents leaked in 2009 and a significant number of journalists from multiple countries screened them (\href{http://www.nrc.nl/nieuws/2013/11/23/nederland-sinds-1946-doelwit-van-nsa}{NRC}). According to these documents, NSA infiltrated more than 50k computers with malware to collect classified or personal information. They furthermore infiltrated Telecom-Operators (mainly executed by British GCHQ) such as Belgacom to collect data and targeted high member of governments even in associated states (such as the mobile phone number of Germany's president and high ranking members of economy and finance).
+Whistleblower Edward Snowden leaked a vast amount of documents. These documents suggested that such attacks on privacy are commonly made on a global scale. The documents leaked in 2009 and a significant number of journalists from multiple countries screened them (\href{http://www.nrc.nl/nieuws/2013/11/23/nederland-sinds-1946-doelwit-van-nsa}{NRC}). According to these documents, NSA infiltrated more than 50k computers with malware to collect classified or personal information. They furthermore infiltrated Telecom-Operators (according to the same documents mainly executed by British GCHQ) such as Belgacom to collect data and targeted high member of governments even in associated states (such as the mobile phone number of Germany's president and high ranking members of economy and finance).
+
+The National Security Agency (NSA) collected network data with a program called XKeyscore. Several proofs and in depth information have been found within the documents leaked by Snowden (e.g., \cite{XKeyscore}). According to these papers XKeyscores spanned in 2008 $\approx150$ sites with $700$ Severs collecting emails, web traffic, and chat messages.
 
 This list of events shows that big players are collecting and storing vast amounts of data for analysis or possible future use. The list of events also shows that the use of this data has in the past been at least partially questionable. As a part of possible countermeasures, this work analyses the possibility of using state-of-the-art technology to minimize the information footprint of a person on the Internet. 
 
@@ -553,6 +559,8 @@ We assume the following goals for an adversary:
 	\item An adversary may want to build and conserve data about individuals or groups of individuals of their life. This data includes all activities in any part of their life regardless of their apparent fitness for any specific purpose or their correctness.
 \end{itemize}
 
+This adversary is much more powerful than the XKeyscore appliccation but it shows that 
+
 \subsection{Notation \label{sec:encNot}}
 The theory in this document is heavily based on symmetric encryption, asymmetric encryption, and hashing. To use an uniformed notation we use $E^{K_a}(M)$ (where $a$ is an index to distinguish multiple keys) for an encrypting function with a key $K_a$. This results in $\mathbf{M^{K_a}}$ for the encrypted message. If we are reflecting a tuple of information, we write in boldface. To express a concatenated set of information, we use angular brackets $\mathbf{L\langle normalAddress,vortexAddress\rangle }$. If we want to differentiate messages encrypted with multiple keys, we list the used keys as a comma-separated list in superscript $E^{K_b}\left(E^{K_a}\left(M\right)\right)=M^{{K_{a}},{K_b}}$.
 
@@ -588,16 +596,22 @@ In general a decrypted Block is written as capitalized multi character boldface.
 To specify a random byte sequence of $n$ octets generated by an PRNG of type $t$ and seeded with $s$ we use $R_t\left(s,n\right)$
 
 \section{The MessageVortex Protocol}
+In this section, we introduce a new consistent, transport independent model for representing the different protocols used by MessageVortex.\fxwarning{is this still true?}
+
 
 \subsection{General Design}
-In this section, we introduce a new consistent, transport independent model for representing the different protocols used by MessageVortex.
-
 \begin{figure}[ht!]
 	\centering\includegraphics[width=\columnwidth]{../../inc/roughProtocolDesign.pdf}
 	\caption{A rough protocol outline of the MessageVortex protocol}\label{fig:protocolOutline}
 \end{figure}
 
-The protocol handles messages which are passed by a transport protocol from node to node. The instructions how and when to pass a message is generated by the ``routing block builder'' (RBB). The RBB defines the path of the message, the type of blending on each nodes, and the operations applied to each part of the message in each node. To avoid collision of operations, an RBB has identities on each node with an assigned workspace. In these workspaces messages may be assembled, transformed, or decomposed with the aforementioned operations. Results are sent to other nodes. Due to the nature of the operations all messages passed on may be decoy traffic or ``real messsage parts'' (We proof that claim in section \ref{sec:staticAnalysis}). A node will know that a message is destined for it when a message results in data in specific parts of the identities workspace.
+The protocol handles messages which are passed by a transport protocol from node to node. The instructions how and when to pass a message is generated by a ``routing block builder'' (RBB). The RBB defines the path of the message, the type of hiding (blending) in the transport protocol, and the operations applied to each part of the message in each node. To avoid collision of operations, an RBB has identities on each node with an assigned workspace. In these workspaces messages may be assembled, transformed, or decomposed with the aforementioned operations. Results are sent to other nodes. Due to the nature of the operations all messages passed on may be decoy traffic or ``real messsage parts'' (We proof that claim in section \ref{sec:staticAnalysis}). A node will know that a message is destined for it when a message results in data in specific parts of the identities workspace.
+
+\fxwarning{introduce ephemeral identities}
+\fxwarning{explain pow}
+\fxwarning{Add here general use of RS function}\cite{reed1960polynomial}\cite{mceliece1981sharing}
+
+A routing block may be used once or multiple times if flagged accordingly. Repeating a routing block allows a sender to use a routing block as anonymous endpoint address. It is important to understand that reusing a routing block does have downsides in terms of privacy. Reusing a routing block does typically create the same pattern on the network assuming the same workspace layout. While the timing might vary the number of messages and the sequence of messages remains the same. For a full list of see \ref{sec:dynamicAnalysis}.
 
 We divide our protocol into four different layers, whereas only three are specific to the MessageVortex protocol. The lowest layer is the transport layer. As expressed earlier, dedicated protocols are easy to censor. Therefore we build our protocol on top of other suitable transport protocols. 
 
@@ -833,7 +847,7 @@ The operation itself is shown in Fig.~\ref{fig:addRedundancyOperation}.
 It may be subdivided into the following operations:
 \begin{itemize}
 	\item Pad the original message block in such a way, that all resulting blocks are a multiple of the block size of the encrypting cipher.
-	\item Apply a Reed Solomon operation in a given GF space with a vanderMonde matrix.
+	\item Apply a Reed Solomon operation in a given GF space with a Vandermonde matrix.
 	\item Encrypt all resulting blocks with unpadded, symmetrical encryption.
 \end{itemize}
 
@@ -875,6 +889,10 @@ We first focus on the protocol itself to show the strength an weaknesses of the 
 We especially highlight adversary in an environment where the participation as a MessageVortex route is a criminal act and highlight some additional constraints applying in such situations.
 
 \subsection{Static Protocol Analysis\label{sec:staticAnalysis}}
+A VortexMessageis not identifiable as the message is structureless on the outside. This means that the message itself follows immediately the encrypted key without any structure. Therefore, we require the hosts private key to tell whether there is VortexMessage within a transport message.
+
+The padding block $PAD$ makes sure that even if a routing block is reused, the messagge structure is not the same. however, the preceeding block with the key remains the same
+
 \subsubsection{Endpoint Operation}
 Depending on the blending method, single messages might be identified as long as they are detectable. Detectability depends on various factors such as:
 
@@ -889,8 +907,13 @@ If an endpoint is successfully identified, then all directly related endpoints o
 
 Assuming a global observer as an adversary and unencrypted traffic, he might discover the originating routing layer and thus identify it as Vortex node by following traces of the transport layer. In most protocols, however, this address is spoofable and not a reliable source for the originating account.
 
+\subsection{Conclusions based on ephemeral identities}
+\fxwarning{Write something about the linking of ephemeral identities}
 
-\subsection{Dynamic Protocol Analysis}
+\subsubsection{Conclusions from Operations}
+\fxwarning{Write here something for each operation type}
+
+\subsection{Dynamic Protocol Analysis\label{ref:dynamicAnalysis}}
 
 \subsubsection{Bootstrapping of Addresses and Identities}
 
@@ -902,6 +925,9 @@ Besides attacking the message content, attacking the routing nodes is an option 
 In environments containing only global observers and no jurisdictional constraints regarding the technology, a VortexNode may disclose its presence. This means a VortexNode is not forced to cloak its presence. In such an environment an RBB should choose the operations to be sensible but no extensive care is required. Even if there is a node with a known owner of the node and a suspected message is received, the owner may credibly claim that the message in question was a decoy. No information obtained by any node involved in the routing of the message may proof anything else. Since a message may be split in any number of parts and related messages are only identifiable with a high degreee of improbability even meta information such as the true size of the message, the sending time or the involved parties in the anonymity set are unknown. This is still true if we consider an active adversary.
 
 In environments where using a VortexNode is subject to criminal prosecution much more care has to be applied. As all routing nodes know their immediate peer, we were only able to find two weak solutions to this problem. The first solution is to only use trusted nodes. If we can trust all routing nodes no external observer may proof that the message flow is in fact MessageVortex traffic. An adversary node within such a system will be able to learn the addresses of other nodes within the set. The set of uncovered nodes may be reduced by the RBB by applying communicating groups of nodes (communication cells) with defined gateways nodes between them. In such a scenario only a cell and a possible adjacent cell may be discovered.
+
+\subsubsection{Issues When Reusing Routing Blocks}
+\fxfatal{add text here}
 
 
 \subsection{The Missing Links}

@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d11f21f3-1155-4924-86d1-bc99f93f8cdb" name="Default Changelist" comment="Default Changelist">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java" afterDir="false" />
-    </list>
+    <list default="true" id="d11f21f3-1155-4924-86d1-bc99f93f8cdb" name="Default Changelist" comment="Default Changelist" />
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -152,8 +149,8 @@
       <file leaf-file-name="MessageVortex.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="518">
-              <caret line="133" column="33" selection-start-line="133" selection-start-column="33" selection-end-line="133" selection-end-column="33" />
+            <state relative-caret-position="620">
+              <caret line="139" selection-start-line="139" selection-end-line="139" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -499,18 +496,18 @@
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\PHD\Documents\messageVortex\application-core-library" />
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\PHD\Documents\messageVortex\application-core-library\src\main\izpack\resources" />
+      <recent name="C:\PHD\Documents\messageVortex\application-core-library\src\main" />
+      <recent name="C:\PHD\Documents\messageVortex\application-core-library\src" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="net.messagevortex.blender.recipes" />
       <recent name="net.messagevortex.commandline" />
       <recent name="net.messagevortex.transport" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\PHD\Documents\messageVortex\application-core-library\src\main\izpack\resources" />
-      <recent name="C:\PHD\Documents\messageVortex\application-core-library\src\main" />
-      <recent name="C:\PHD\Documents\messageVortex\application-core-library\src" />
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\PHD\Documents\messageVortex\application-core-library" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -806,9 +803,6 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="PaddingTest - 2019.05.28 at 15h 12m 56s.xml">
-      <configuration name="PaddingTest" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="PaddingTest - 2019.05.28 at 15h 17m 17s.xml">
       <configuration name="PaddingTest" configurationId="JUnit" />
     </history-entry>
@@ -834,6 +828,9 @@
       <configuration name="All Tests" configurationId="JUnit" />
     </history-entry>
     <history-entry file="All_Tests - 2019.05.29 at 10h 51m 53s.xml">
+      <configuration name="All Tests" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="All_Tests - 2019.05.29 at 16h 43m 04s.xml">
       <configuration name="All Tests" configurationId="JUnit" />
     </history-entry>
   </component>
@@ -1261,8 +1258,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="518">
-          <caret line="133" column="33" selection-start-line="133" selection-start-column="33" selection-end-line="133" selection-end-column="33" />
+        <state relative-caret-position="620">
+          <caret line="139" selection-start-line="139" selection-end-line="139" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
