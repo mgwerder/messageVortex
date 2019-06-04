@@ -36,9 +36,11 @@ public class CommandLineHandlerIdentityStoreCreate implements Callable<Integer> 
       LOGGER.log(Level.SEVERE, "File \"" + filename + "\" already exists");
       return MessageVortex.ARGUMENT_FAIL;
     }
+    LOGGER.log(Level.INFO, "Writing \"" + filename + "\"");
     OutputStream os = new FileOutputStream(filename);
     os.write(is.toBytes(DumpType.ALL_UNENCRYPTED));
     os.close();
-    return null;
+    LOGGER.log(Level.INFO, "Finished");
+    return 0;
   }
 }

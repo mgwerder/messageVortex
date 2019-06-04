@@ -9,6 +9,7 @@ import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.net.ssl.SSLEngine;
@@ -737,7 +738,7 @@ public abstract class AbstractConnection {
    * @return FIXME
    * @throws IOException FIXME
    */
-  private int readSocket(long timeout) throws IOException  {
+  private int readSocket(long timeout) throws IOException,TimeoutException  {
 
     int bytesRead;
     int totBytesRead = 0;
@@ -745,7 +746,18 @@ public abstract class AbstractConnection {
     long start = System.currentTimeMillis();
     boolean timeoutReached;
     do {
-      bytesRead = readRawSocket(timeout - (System.currentTimeMillis() - start));
+      try {
+        bytesRead = readRawSocket(timeout - (System.currentTimeMillis() - start));
+      } catch(IOException ioe) {
+        bytesRead = 0;
+        if (timeout <= (System.currentTimeMillis() - start)) {
+          // timeout has been reached
+          LOGGER.log(Level.FINE, "timeout has been reached while waiting for input");
+          throw new TimeoutException("Timeout while reading");
+        } else {
+          throw ioe;
+        }
+      }
 
       if (bytesRead == 0) {
         LOGGER.log(Level.INFO, "sleeping due to missing data ("
@@ -860,7 +872,7 @@ public abstract class AbstractConnection {
     writeSocket(message, getTimeout());
   }
 
-  public String read() throws IOException {
+  public String read() throws IOException,TimeoutException {
     return read(getTimeout());
   }
 
@@ -871,7 +883,7 @@ public abstract class AbstractConnection {
    * @return the string read
    * @throws IOException if decryption fails or host is unexpectedly disconnected
    */
-  public String read(long timeout) throws IOException {
+  public String read(long timeout) throws IOException,TimeoutException {
     int numBytes = readSocket(timeout);
     if (numBytes > 0) {
       byte[] b = new byte[numBytes];
@@ -883,7 +895,7 @@ public abstract class AbstractConnection {
     }
   }
 
-  public String readln() throws IOException {
+  public String readln() throws IOException,TimeoutException {
     return readln(getTimeout());
   }
 
@@ -895,22 +907,31 @@ public abstract class AbstractConnection {
    * @return the string read
    * @throws IOException if decryption fails or host is unexpectedly disconnected
    */
-  public String readln(long timeout) throws IOException {
+  public String readln(long timeout) throws IOException,TimeoutException {
     StringBuilder ret = new StringBuilder();
     long start = System.currentTimeMillis();
-    while (!shutdownAbstractConnection && ! ret.toString().endsWith("\r\n")
-            && timeout - (System.currentTimeMillis() - start) > 0) {
-      if (! inboundAppData.hasRemaining()) {
-        readSocket(timeout - (System.currentTimeMillis() - start));
-      }
-      if (inboundAppData.hasRemaining()) {
-        ret.append((char) inboundAppData.get());
-      } else {
-        try {
-          Thread.sleep(40);
-        } catch (InterruptedException ie) {
-          // safe to ignore due to loop
+    try {
+      while (!shutdownAbstractConnection && !ret.toString().endsWith("\r\n")
+              && timeout - (System.currentTimeMillis() - start) > 0) {
+        if (!inboundAppData.hasRemaining()) {
+          readSocket(timeout - (System.currentTimeMillis() - start));
         }
+        if (inboundAppData.hasRemaining()) {
+          ret.append((char) inboundAppData.get());
+        } else {
+          try {
+            Thread.sleep(40);
+          } catch (InterruptedException ie) {
+            // safe to ignore due to loop
+          }
+        }
+      }
+    } catch(IOException ioe) {
+      if (timeout <= (System.currentTimeMillis() - start)) {
+        // timeout has been reached
+        LOGGER.log(Level.INFO, "timeout has been reached while waiting for input");
+      } else {
+        throw ioe;
       }
     }
 

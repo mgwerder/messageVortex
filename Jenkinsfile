@@ -27,8 +27,7 @@ pipeline {
             timeout(time: 120, unit: 'MINUTES')
           }
           steps{
-                sh 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
-                sh 'mvn -pl application-core-library site'
+                sh 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report site'
           }
           post {
             success {
@@ -64,9 +63,7 @@ pipeline {
           }
           steps{
             script {
-              //if (env.BRANCH_NAME != 'master') {
-                sh script: 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
-              //}
+              sh script: 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
             }
           }
         }
@@ -82,9 +79,7 @@ pipeline {
           }
           steps {
             script {
-              //if (env.BRANCH_NAME != 'master') {
-                sh script: 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
-              //}
+              sh script: 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
             }
           }
         }
@@ -100,9 +95,7 @@ pipeline {
           }
           steps {
             script {
-              //if (env.BRANCH_NAME != 'master') {
-                sh script: 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
-              //}
+              sh script: 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
             }
           }
         }
@@ -111,7 +104,7 @@ pipeline {
     stage ('Package all') {
       steps {
         sh 'mkdir /var/www/messagevortex/devel/repo || /bin/true'
-        sh 'mvn -DskipTests compile package'
+        sh 'mvn -DskipTests package'
       }
     }
     stage ('Site build') {
@@ -128,7 +121,7 @@ pipeline {
     }
     stage('Publish artifacts') {
       steps {
-        sh 'mvn -pl application-core-library -DskipTests dependency:copy-resources@publish-artifacts'
+        sh 'mvn -pl application-core-library -DskipTests git-commit-id:revision@get-the-git-infos resources:copy-resources@publish-artifacts'
       }
     }
   }

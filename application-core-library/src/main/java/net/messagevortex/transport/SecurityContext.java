@@ -131,6 +131,10 @@ public class SecurityContext {
     return keyStore;
   }
 
+  /***
+   * <p>Gets the currently set SSL context.</p>
+   * @return the currently set context
+   */
   public SSLContext getContext() {
     if (context == null) {
       // init is broken init();
@@ -138,6 +142,12 @@ public class SecurityContext {
     return context;
   }
 
+  /***
+   * <p>Sets the SSL context to be used.</p>
+   *
+   * @param context the SSL context to be set
+   * @return the previously set context
+   */
   public SSLContext setContext(SSLContext context) {
     SSLContext ret = this.context;
     this.context = context;
@@ -148,16 +158,28 @@ public class SecurityContext {
     return requirement;
   }
 
+  /***
+   * <p>Sets the necessities of the security context.</p>
+   *
+   * @param requirement the requrement to be achieved
+   * @return the previously set requirement
+   */
   public SecurityRequirement setRequirement(SecurityRequirement requirement) {
     SecurityRequirement ret = this.requirement;
     this.requirement = requirement;
     return ret;
   }
 
+
   public boolean isCipherSupported(String name) {
     return supportedCiphers.contains(name);
   }
 
+  /***
+   * <p>Gets all the supported ciphers.</p>
+   *
+   * @return the requested set of strings
+   */
   public Set<String> getSupportedCiphers() {
     Set<String> ret = new HashSet<>();
     ret.addAll(supportedCiphers);

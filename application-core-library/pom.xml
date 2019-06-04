@@ -87,6 +87,7 @@
             <groupId>org.codehaus.izpack</groupId>
             <artifactId>izpack-maven-plugin</artifactId>
             <version>${izpack.version}</version>
+            <scope>compile</scope>
             <type>pom</type>
         </dependency>
 
@@ -161,7 +162,7 @@
                                     <filtering>true</filtering>
                                 </resource>
                             </resources>
-                            <outputDirectory>${project.build.directory}/classes</outputDirectory>
+                            <outputDirectory>${project.build.directory}/classes/</outputDirectory>
                             <nonFilteredFileExtensions>
                                 <nonFilteredFileExtension>jks</nonFilteredFileExtension>
                                 <nonFilteredFileExtension>jar</nonFilteredFileExtension>
@@ -192,7 +193,7 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>/var/www/messagevortex/devel/artifacts/${git.branch}</outputDirectory>
+                            <outputDirectory>/var/www/messagevortex/devel/artifacts/${env.BRANCH_NAME}</outputDirectory>
                             <resources>
                                 <resource>
                                     <directory>${project.build.directory}</directory>
@@ -200,6 +201,10 @@
                                     <include>*.exe</include>
                                     <include>*.dmg</include>
                                     <include>*.zip</include>
+                                </resource>
+                                <resource>
+                                    <directory>${project.build.directory}/maven-archiver/</directory>
+                                    <include>*.properties</include>
                                 </resource>
                             </resources>
                         </configuration>
@@ -217,18 +222,18 @@
                         <goals>
                             <goal>jar</goal>
                         </goals>
-                        <configuration>
-                            <archive>
-                                <manifest>
-                                    <mainClass>net.messagevortex.MessageVortex</mainClass>
-                                    <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                                    <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-                                </manifest>
-                            </archive>
-                            <classifier>core</classifier>
-                        </configuration>
                     </execution>
                 </executions>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>net.messagevortex.MessageVortex</mainClass>
+                            <!--<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>-->
+                        </manifest>
+                    </archive>
+                    <classifier>core</classifier>
+                </configuration>
             </plugin>
 
             <plugin>
@@ -283,7 +288,7 @@
                 <version>3.0.1</version>
                 <configuration>
                     <failOnError>true</failOnError>
-                    <failOnWarnings>true</failOnWarnings>
+                    <failOnWarnings>false</failOnWarnings>
                     <tags>
                         <tag>
                             <name>FIXME</name>
@@ -489,26 +494,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>sh.tak.appbundler</groupId>
-                <artifactId>appbundle-maven-plugin</artifactId>
-                <version>1.2.0</version>
-                <configuration>
-                    <mainClass>net.messagevortex.MessageVortex</mainClass>
-                    <generateDiskImageFile>true</generateDiskImageFile>
-                    <!-- Removed as it caused problems when building in jenkins (drove me mad)
-                    <iconFile>images/MessageVortexLogo_128.icns</iconFile>
-                    -->
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>bundle</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
 
             <plugin>
                 <groupId>com.jolira</groupId>
@@ -525,6 +510,26 @@
 
             </plugin>
 
+
+            <!-- <plugin>
+                <groupId>sh.tak.appbundler</groupId>
+                <artifactId>appbundle-maven-plugin</artifactId>
+                <version>1.1.1</version>
+                <configuration>
+                    <mainClass>net.messagevortex.MessageVortex</mainClass>
+                    <generateDiskImageFile>true</generateDiskImageFile>-->
+                    <!-- Removed as it caused problems when building in jenkins (drove me mad)-->
+                    <!--<iconFile>images/MessageVortexLogo_128.icns</iconFile>-->
+                <!--</configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>bundle</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin> -->
 
         </plugins>
     </build>

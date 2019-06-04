@@ -11,7 +11,10 @@ import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.List;
 import java.util.Set;
+import java.util.Vector;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import javax.net.SocketFactory;
@@ -57,9 +60,11 @@ public class ImapClientTest {
 
     private ServerSocket ss;
     private int counter;
+    private List<Socket> deadSockets = new Vector<>();
 
     public DeadSocket(int port, int counter) {
       this.counter = counter;
+      LOGGER.log(Level.INFO, "starting dead socket");
       try {
         ss = new ServerSocket(port, 20, InetAddress.getByName("localhost"));
       } catch (Exception e) {
@@ -67,6 +72,7 @@ public class ImapClientTest {
       runner.setName("DeadSocket (port " + ss.getLocalPort());
       runner.setDaemon(true);
       runner.start();
+      LOGGER.log(Level.INFO, "started dead socket on port " + ss.getLocalPort());
     }
 
     public void shutdown() {
@@ -80,10 +86,11 @@ public class ImapClientTest {
       }
 
       // Shutdown runner task
-      boolean endshutdown = false;
-      try {
-        runner.join();
-      } catch (InterruptedException ie) {
+      while (runner.isAlive()) {
+        try {
+          runner.join();
+        } catch (InterruptedException ie) {
+        }
       }
     }
 
@@ -94,12 +101,30 @@ public class ImapClientTest {
     public void run() {
       while (!shutdown) {
         try {
-          ss.accept();
+          Socket s = ss.accept();
+          LOGGER.log(Level.INFO, "got connection on dead socket port");
+          deadSockets.add(s);
         } catch (Exception sorry) {
           assertTrue("Exception should not be rised", false);
         }
         counter--;
-        if (counter == 0) shutdown = true;
+        if (counter == 0) {
+          shutdown = true;
+        }
+      }
+      LOGGER.log(Level.INFO, "dead socket shutdown on port " + ss.getLocalPort());
+      try {
+        ss.close();
+      } catch (IOException ioe) {
+        LOGGER.log(Level.SEVERE, "Unable to close down dead socket properly", ioe);
+      }
+      LOGGER.log(Level.INFO, "closing all dead connections");
+      for (Socket s : deadSockets) {
+        try {
+          s.close();
+        } catch (IOException ioe) {
+          LOGGER.log(Level.SEVERE, "Unable to close down dead socket endpoint properly", ioe);
+        }
       }
     }
   }
@@ -171,21 +196,6 @@ public class ImapClientTest {
       long el = (System.currentTimeMillis() - start);
       assertTrue("Did not wait until end of timeout was reached (just " + el + ")", el >= 300);
       assertFalse("Did wait too long", el > 2100);
-    }
-    try {
-      ic.setTimeout(500);
-      String[] sa = ic.sendCommand("a1 IWantATimeout", 300);
-      if (sa != null) {
-        for (String s : sa) {
-          System.out.println("Reply was: " + s);
-        }
-      }
-      fail("No timeoutException was raised");
-    } catch (TimeoutException te) {
-      long el = (System.currentTimeMillis() - start);
-      assertTrue("Did not wait until end of timeout was reached (just " + el + ")", el >= 300);
-      assertFalse("Did wait too long (" + el + " ms; expected: 300)", el > 1000);
-      // assertTrue("Connection was not terminated",ic.isTerminated());
     }
     ImapCommand.deregisterCommand("IWantATimeout");
     ict.shutdown();

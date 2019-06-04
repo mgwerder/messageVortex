@@ -1,5 +1,13 @@
 package net.messagevortex.test.core;
 
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.crypto.Cipher;
 import net.messagevortex.Config;
 import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexConfig;
@@ -8,15 +16,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
-import javax.crypto.Cipher;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 /**
  * Tests for {@link MessageVortex}.
@@ -55,8 +54,8 @@ public class MessageVortexTest {
 
   @Test
   public void getVersion() {
-    int e = MessageVortex.mainReturn(new String[]{"--version"});
-    assertTrue("Errorcode for --version is not 103 but " + e, e == 103);
+    Integer e = MessageVortex.mainReturn(new String[]{"--version"});
+    assertTrue("Errorcode for --version is not 103 but " + e, e != null && e == 103);
   }
 
   @Test

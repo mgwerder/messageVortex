@@ -26,18 +26,26 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.crypto.Cipher;
 import net.messagevortex.accounting.Accountant;
 import net.messagevortex.asn1.AsymmetricKeyPreCalculator;
+import net.messagevortex.asn1.IdentityBlock;
 import net.messagevortex.asn1.IdentityStore;
 import net.messagevortex.blender.Blender;
+import net.messagevortex.blender.recipes.BlenderRecipe;
 import net.messagevortex.commandline.CommandLineHandlerIdentityStore;
 import net.messagevortex.router.Router;
+import net.messagevortex.router.operation.InternalPayloadSpace;
+import net.messagevortex.router.operation.InternalPayloadSpaceStore;
 import net.messagevortex.transport.Transport;
 import picocli.CommandLine;
 
@@ -63,7 +71,8 @@ public class MessageVortex implements Callable<Integer> {
     TRANSPORT,
     BLEDING,
     ROUTING,
-    ACCOUNTING;
+    ACCOUNTING,
+    IDENTITY_STORE;
   }
 
   @CommandLine.Option(names = {"-c", "--config"}, description = "filename of the config to be used")
@@ -86,7 +95,54 @@ public class MessageVortex implements Callable<Integer> {
   private static Map<String, Router> router = new ConcurrentHashMap<>();
   private static Map<String, Accountant> accountant = new ConcurrentHashMap<>();
   private static Map<String, IdentityStore> identityStore = new ConcurrentHashMap<>();
+  private static InternalPayloadSpaceStore ownStores = new InternalPayloadSpaceStore();
+  private static InternalPayloadSpaceStore simStores = new InternalPayloadSpaceStore();
+  private static Integer JRE_AES_KEY_SIZE = null;
 
+  private void verifyPrerequisites() {
+    LOGGER.log(Level.INFO, "Checking bouncycastle version..." + Version.getBuild());
+    String bcversion = org.bouncycastle.jce.provider.BouncyCastleProvider
+            .class
+            .getPackage()
+            .getImplementationVersion();
+    Matcher m = Pattern.compile("(\\d+)\\.(\\d+)\\.(\\d+)(beta(\\d*))?")
+            .matcher(bcversion);
+    LOGGER.log(Level.INFO, "Detected BC version is " + bcversion + ".");
+    if (!m.matches()) {
+      LOGGER.log(Level.SEVERE, "unable to parse BC version (" + bcversion + ")");
+    } else {
+      int major = Integer.parseInt(m.group(1));
+      int minor = Integer.parseInt(m.group(2));
+      if ((major == 1 && minor >= 60) || (major >= 2)) {
+        LOGGER.log(Level.INFO, "Detected BC version is " + bcversion + ". This should do the trick.");
+      } else {
+        LOGGER.log(Level.SEVERE, "Looks like your BC installation is heavily outdated. At least version 1.60 is recommended.");
+      }
+    }
+
+    LOGGER.log(Level.INFO, "Checking JRE");
+    try {
+      String jreversion = System.getProperty("java.version");
+      LOGGER.log(Level.INFO, "JRE  version is " + jreversion);
+      if (JRE_AES_KEY_SIZE == null) {
+        JRE_AES_KEY_SIZE = Cipher.getMaxAllowedKeyLength("AES");
+      }
+      int i = JRE_AES_KEY_SIZE;
+      if (i > 128) {
+        LOGGER.log(Level.INFO, "Looks like JRE having an unlimited JCE installed (AES max allowed key length is = " + i + "). This is good.");
+      } else {
+        LOGGER.log(Level.SEVERE, "Looks like JRE not having an unlimited JCE installed (AES max allowed key length is = " + i + "). This is bad.");
+      }
+    } catch (NoSuchAlgorithmException nsa) {
+      LOGGER.log(Level.SEVERE, "OOPS... Got an exception while testing for an unlimited JCE. This is bad.", nsa);
+    }
+  }
+
+  /***
+   * <p>Main command line method.</p>
+   *
+   * @param args command line parameters
+   */
   public static void main(String[] args) {
     int retval = mainReturn(args);
     if (retval > 0) {
@@ -94,12 +150,17 @@ public class MessageVortex implements Callable<Integer> {
     }
   }
 
+  /***
+   * <p>Wrapper function as entry point for tests.</p>
+   *
+   * @param args command line arguments
+   * @return the errorlevel to be returned
+   */
   public static int mainReturn(String[] args) {
     LOGGER.log(Level.INFO, "MessageVortex V" + Version.getBuild());
     Integer i = CommandLine.call(new MessageVortex(), args == null ? new String[0] : args);
     return i != null ? i : ARGUMENT_FAIL;
   }
-
 
   @Override
   public Integer call() {
@@ -114,22 +175,56 @@ public class MessageVortex implements Callable<Integer> {
     }
 
     try {
-      // load IdentityStore
-      identityStore.put("default", new IdentityStore(
-              new File(CommandLineHandlerIdentityStore.DEFAULT_FILENAME)));
+      // check prerequisites
+      verifyPrerequisites();
 
-      // setup according to config file
       Config cfg = MessageVortexConfig.getDefault();
 
-      //Setup routers and accounting
-      for (String routerSection : cfg.getSectionListValue(null, "router_setup")) {
+      // load IdentityStore
+      identityStore.put("default_identity_store", new IdentityStore(
+              new File(CommandLineHandlerIdentityStore.DEFAULT_FILENAME)));
+
+      // setup non-standard identity stores
+      for (String idstoreSection : cfg.getSectionListValue(null, "identity_store_setup")) {
+        LOGGER.log(Level.INFO, "setting up identity store \"" + idstoreSection
+                + "\"");
+        String fn = cfg.getStringValue(idstoreSection, "filename");
+        if (fn == null) {
+          throw new IOException("unable to obtain identity store filename of section "
+                  + idstoreSection + "");
+        }
+        File f = new File(fn);
+        if (f == null) {
+          throw new IOException("identity store file \"" + fn + "\" not found");
+        }
+        identityStore.put(idstoreSection.toLowerCase(), new IdentityStore(f));
+      }
+
+      // setup recipes
+      // create default recipe store
+      String lst = Config.getDefault().getStringValue(null, "recipes");
+      for (String cl : lst.split(" *, *")) {
+        BlenderRecipe.addRecipe(null,
+                (BlenderRecipe) getConfiguredClass(null, cl, BlenderRecipe.class));
+      }
+      for (String accountingSection : cfg.getSectionListValue(null, "recipe_setup")) {
+
+      }
+
+      //Setup accounting
+      for (String accountingSection : cfg.getSectionListValue(null, "accountant_setup")) {
 
         // setup Accounting
-        LOGGER.log(Level.INFO, "setting up accounting for routing layer \"" + routerSection + "\"");
-        accountant.put(routerSection.toLowerCase(), (Accountant) getDaemon(routerSection,
-                cfg.getStringValue(routerSection, "accounting_implementation"),
+        LOGGER.log(Level.INFO, "setting up accounting for routing layer \"" + accountingSection
+                + "\"");
+        accountant.put(accountingSection.toLowerCase(), (Accountant) getDaemon(accountingSection,
+                cfg.getStringValue(accountingSection, "accounting_implementation"),
                 DaemonType.ACCOUNTING));
 
+      }
+
+      // setup routers
+      for (String routerSection : cfg.getSectionListValue(null, "router_setup")) {
         // setup routers
         LOGGER.log(Level.INFO, "setting up routing layer \"" + routerSection + "\"");
         router.put(routerSection.toLowerCase(), (Router) getDaemon(routerSection,
@@ -139,7 +234,6 @@ public class MessageVortex implements Callable<Integer> {
 
       // setup blending
       for (String blendingSection : cfg.getSectionListValue(null, "blender_setup")) {
-
         // setup blending
         LOGGER.log(Level.INFO, "setting up blending layer \"" + blendingSection + "\"");
         blender.put(blendingSection.toLowerCase(), (Blender) getDaemon(blendingSection,
@@ -150,14 +244,12 @@ public class MessageVortex implements Callable<Integer> {
 
       // Setup transport
       for (String transportSection : cfg.getSectionListValue(null, "transport_setup")) {
-
         // setup transport
         LOGGER.log(Level.INFO, "setting up transport layer \"" + transportSection + "\"");
         transport.put(transportSection.toLowerCase(), (Transport) getDaemon(transportSection,
                 cfg.getStringValue(transportSection, "transport_implementation"),
                 DaemonType.TRANSPORT));
       }
-
     } catch (IOException ioe) {
       LOGGER.log(Level.SEVERE, "Exception while setting up infrastructure", ioe);
       return SETUP_FAIL;
@@ -165,6 +257,7 @@ public class MessageVortex implements Callable<Integer> {
       LOGGER.log(Level.SEVERE, "Bad class configured", cnf);
       return SETUP_FAIL;
     }
+
     // enable thread dumper
     if (threadDumpInterval > 0) {
       LOGGER.log(Level.INFO, "starting thread dumper with interval " + threadDumpInterval);
@@ -194,6 +287,7 @@ public class MessageVortex implements Callable<Integer> {
       LOGGER.log(Level.INFO, "shutting down " + es.getKey());
       es.getValue().shutdownDaemon();
     }
+
     LOGGER.log(Level.INFO, "******* shutdown complete *******");
     return 0;
   }
@@ -252,19 +346,79 @@ public class MessageVortex implements Callable<Integer> {
     }
   }
 
+  /***
+   * <p>Get the accountant specified in the named configuration section.</p>
+   * @param id the name of the config section
+   * @return the requested accountant or null
+   */
   public static Accountant getAccountant(String id) {
+    if (id == null) {
+      return null;
+    }
     return accountant.get(id.toLowerCase());
   }
 
+  /***
+   * <p>Get the blender specified in the named configuration section.</p>
+   * @param id the name of the config section
+   * @return the requested blender or null
+   */
   public static Blender getBlender(String id) {
+    if (id == null) {
+      return null;
+    }
     return blender.get(id.toLowerCase());
   }
 
+  /***
+   * <p>Get the router specified in the named configuration section.</p>
+   * @param id the name of the config section
+   * @return the requested router or null
+   */
   public static Router getRouter(String id) {
+    if (id == null) {
+      return null;
+    }
     return router.get(id.toLowerCase());
   }
 
+  /***
+   * <p>Get the identity store specified in the named configuration section.</p>
+   * @param id the name of the config section
+   * @return the requested identity store or null
+   */
   public static IdentityStore getIdentityStore(String id) {
+    if (id == null) {
+      return null;
+    }
     return identityStore.get(id.toLowerCase());
+  }
+
+  public static InternalPayloadSpace getSimulatedSpace(IdentityBlock ib) {
+    InternalPayloadSpace ret = null;
+    synchronized (simStores) {
+      // get exiting space
+      ret = simStores.getInternalPayload(ib);
+
+      if (ret == null) {
+        // create a new space if missing
+        ret = new InternalPayloadSpace(simStores, ib);
+      }
+    }
+    return ret;
+  }
+
+  public static InternalPayloadSpace getOwnSpace(IdentityBlock ib) {
+    InternalPayloadSpace ret = null;
+    synchronized (ownStores) {
+      // get exiting space
+      ret = ownStores.getInternalPayload(ib);
+
+      if (ret == null) {
+        // create a new space if missing
+        ret = new InternalPayloadSpace(ownStores, ib);
+      }
+    }
+    return ret;
   }
 }

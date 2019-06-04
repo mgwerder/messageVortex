@@ -33,6 +33,7 @@ import org.bouncycastle.asn1.ASN1BitString;
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1Object;
 import org.bouncycastle.asn1.ASN1Sequence;
+import org.bouncycastle.util.encoders.Base64;
 
 /**
  * Abstract class collecting all ASN1 Block parser classes.
@@ -58,6 +59,24 @@ public abstract class AbstractBlock implements Block {
               + Character.digit(s.charAt(i + 1), 16));
     }
     return data;
+  }
+
+  /***
+   * <p>Decode a base64 encoded string representation to a byte array.</p>
+   * @param b the string to be decoded
+   * @return the decoded equivalent
+   */
+  public static byte[] fromBase64(String b) {
+    return Base64.decode(b);
+  }
+
+  /***
+   * <p>Get a base64 encoded string representation of the byte array.</p>
+   * @param b the byte array to be encoded
+   * @return the encoded equivalent
+   */
+  public static String toBase64(byte[] b) {
+    return new String(Base64.encode(b));
   }
 
   /***

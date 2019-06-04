@@ -124,7 +124,7 @@ public class DummyBlender extends Blender {
     // FIXME add sensible identity store
     this(
             null,
-            MessageVortex.getRouter(Config.getDefault().getStringValue(section, "router")),
+            MessageVortex.getRouter(Config.getDefault().getSectionValue(section, "router")),
             new IdentityStore()
     );
   }
@@ -182,7 +182,7 @@ public class DummyBlender extends Blender {
 
       // body
       MimeBodyPart body = new MimeBodyPart();
-      body.setText("This is a VortexMessage");
+      body.setText("-- This is a VortexMessage --\r\n\r\n" + msg.dumpValueNotation(""));
       content.addBodyPart(body);
 
       //create attachment

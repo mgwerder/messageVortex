@@ -131,7 +131,6 @@ public class RoutingBlock extends AbstractBlock implements Serializable {
 
   @Override
   protected void parse(ASN1Encodable to) throws IOException {
-    Operation.init();
     if (isEncrypted()) {
       throw new IOException("Unable to encode to asn encrypted stream");
     }

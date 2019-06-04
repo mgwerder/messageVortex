@@ -14,6 +14,7 @@ import net.messagevortex.test.asn1.FuzzerTest;
 import net.messagevortex.test.asn1.IdentityBlockTest;
 import net.messagevortex.test.asn1.IdentityStoreTest;
 import net.messagevortex.test.asn1.MacAlgorithmTest;
+import net.messagevortex.test.asn1.PaddingTest;
 import net.messagevortex.test.asn1.SecurityLevelTest;
 import net.messagevortex.test.asn1.SymmetricKeyTest;
 import net.messagevortex.test.asn1.VortexMessageTest;
@@ -35,6 +36,7 @@ import org.junit.runners.Suite;
         AsymmetricKeyTest.class,
         AsymmetricKeyReencodingTest.class,
         IdentityStoreTest.class,
+        PaddingTest.class,
         IdentityBlockTest.class
 })
 
@@ -43,27 +45,28 @@ import org.junit.runners.Suite;
  */
 public class MainASN1Suite {
 
-    @Before
-    public void init() {
-        AsymmetricKey.setCacheFileName("AsymmetricKey.cache");
-    }
+  @Before
+  public void init() {
+    AsymmetricKey.setCacheFileName("AsymmetricKey.cache");
+  }
 
-    public static junit.framework.Test suite() {
-        final TestSuite s = new TestSuite();
-        s.addTest(new JUnit4TestAdapter(BuildSamplesTest.class));
-        s.addTest(new JUnit4TestAdapter(BlendingParameterTest.class));
-        s.addTest(new JUnit4TestAdapter(CipherSpecTest.class));
-        s.addTest(new JUnit4TestAdapter(FuzzerTest.class));
-        s.addTest(new JUnit4TestAdapter(VortexMessageTest.class));
-        s.addTest(new JUnit4TestAdapter(AbstractBlockTest.class));
-        s.addTest(new JUnit4TestAdapter(MacAlgorithmTest.class));
-        s.addTest(new JUnit4TestAdapter( SecurityLevelTest.class ) );
-        s.addTest(new JUnit4TestAdapter( SymmetricKeyTest.class ) );
-        s.addTest(new JUnit4TestAdapter(AsymmetricKeyTest.class));
-        s.addTest(new JUnit4TestAdapter(AsymmetricKeyReencodingTest.class));
-        s.addTest(new JUnit4TestAdapter(IdentityStoreTest.class));
-        s.addTest(new JUnit4TestAdapter(IdentityBlockTest.class));
-        return s;
-    }
+  public static junit.framework.Test suite() {
+    final TestSuite s = new TestSuite();
+    s.addTest(new JUnit4TestAdapter(BuildSamplesTest.class));
+    s.addTest(new JUnit4TestAdapter(BlendingParameterTest.class));
+    s.addTest(new JUnit4TestAdapter(CipherSpecTest.class));
+    s.addTest(new JUnit4TestAdapter(FuzzerTest.class));
+    s.addTest(new JUnit4TestAdapter(VortexMessageTest.class));
+    s.addTest(new JUnit4TestAdapter(AbstractBlockTest.class));
+    s.addTest(new JUnit4TestAdapter(MacAlgorithmTest.class));
+    s.addTest(new JUnit4TestAdapter(SecurityLevelTest.class));
+    s.addTest(new JUnit4TestAdapter(SymmetricKeyTest.class));
+    s.addTest(new JUnit4TestAdapter(AsymmetricKeyTest.class));
+    s.addTest(new JUnit4TestAdapter(AsymmetricKeyReencodingTest.class));
+    s.addTest(new JUnit4TestAdapter(IdentityStoreTest.class));
+    s.addTest(new JUnit4TestAdapter(PaddingTest.class));
+    s.addTest(new JUnit4TestAdapter(IdentityBlockTest.class));
+    return s;
+  }
 
 }

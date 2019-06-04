@@ -29,14 +29,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.Vector;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.RunningDaemon;
 import net.messagevortex.asn1.encryption.DumpType;
 import net.messagevortex.commandline.CommandLineHandlerIdentityStoreCreate;
 import org.bouncycastle.asn1.ASN1Encodable;
@@ -58,7 +59,8 @@ import picocli.CommandLine;
                 CommandLineHandlerIdentityStoreCreate.class
         }
  )
-public class IdentityStore extends AbstractBlock implements Serializable, Callable<Integer> {
+public class IdentityStore extends AbstractBlock
+        implements Serializable, Callable<Integer>, RunningDaemon {
 
   public static final long serialVersionUID = 100000000008L;
 
@@ -173,18 +175,23 @@ public class IdentityStore extends AbstractBlock implements Serializable, Callab
    * @throws IOException if requested anonymity set size is too big for this store
    */
   public List<IdentityStoreBlock> getAnonSet(int size) throws IOException {
-    LOGGER.log(Level.FINE, "Executing getAnonSet(" + size + ") from " + blocks.size());
+    LOGGER.log(Level.INFO, "Executing getAnonSet(" + size + ") from " + blocks.size());
+    if (size>blocks.size()+1) {
+      // unable to create a block with a bigger anonymity set than the sum of identity store blocks
+      return null;
+    }
     List<IdentityStoreBlock> ret = new ArrayList<>();
     String[] keys = blocks.keySet().toArray(new String[0]);
     int i = 0;
     while (ret.size() < size && i < 10000) {
       i++;
       IdentityStoreBlock isb = blocks.get(keys[ExtendedSecureRandom.nextInt(keys.length)]);
-      if (isb != null && isb.getType() == IdentityStoreBlock.IdentityType.RECIPIENT_IDENTITY
+      if (isb != null && (
+              isb.getType() == IdentityStoreBlock.IdentityType.RECIPIENT_IDENTITY
+                      || isb.getType() == IdentityStoreBlock.IdentityType.NODE_IDENTITY)
               && !ret.contains(isb)) {
         ret.add(isb);
-        LOGGER.log(Level.FINER, "adding to anonSet "
-                + Arrays.hashCode(isb.getIdentityKey().getPublicKey()));
+        LOGGER.log(Level.FINER, "adding to anonSet "+ isb.getNodeAddress());
       }
     }
     if (ret.size() < size) {
@@ -223,6 +230,29 @@ public class IdentityStore extends AbstractBlock implements Serializable, Callab
       ident = toHex(isb.getIdentityKey().getPublicKey());
     }
     blocks.put(ident, isb);
+  }
+
+  public void removeAddress(String nodeAddress) throws IOException {
+    List<String> rem = new Vector<>();
+    if (nodeAddress!=null) {
+      nodeAddress = nodeAddress.toLowerCase();
+    }
+    synchronized (blocks) {
+      for (Map.Entry<String, IdentityStoreBlock> e : blocks.entrySet()) {
+        String v = e.getValue().getNodeAddress();
+        if ((v == null && nodeAddress == null)
+                || (v != null
+                && v.toLowerCase().equals(nodeAddress))) {
+          rem.add(e.getKey());
+        }
+      }
+      if (rem.size()==0) {
+        throw new IOException("unable to find nodeAddress \""+nodeAddress+"\"");
+      }
+      for (String s : rem) {
+        blocks.remove(s);
+      }
+    }
   }
 
   @Override
@@ -268,5 +298,20 @@ public class IdentityStore extends AbstractBlock implements Serializable, Callab
 
   public Integer call() {
     return null;
+  }
+
+  @Override
+  public void startDaemon() {
+    // FIXME implement file monitor
+  }
+
+  @Override
+  public void stopDaemon() {
+    // FIXME implement file monitor
+  }
+
+  @Override
+  public void shutdownDaemon() {
+    // FIXME implement file monitor
   }
 }

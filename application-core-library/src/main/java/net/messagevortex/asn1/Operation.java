@@ -51,10 +51,18 @@ public abstract class Operation extends AbstractBlock implements Serializable {
     init();
   }
 
+  /***
+   * <p>Gets the respective Operation by tag number.</p>
+   *
+   * @param object the object to be parsed
+   * @return the operation object
+   *
+   * @throws IOException if no operations have been registered or an unknown tag number is detected
+   */
   public static Operation getInstance(ASN1Encodable object) throws IOException {
     synchronized (operations) {
       if (operations.isEmpty()) {
-        throw new IOException("init() not called");
+        init();
       }
       int tag = ASN1TaggedObject.getInstance(object).getTagNo();
       if (operations.get(tag) == null) {
@@ -64,7 +72,10 @@ public abstract class Operation extends AbstractBlock implements Serializable {
     }
   }
 
-  public static void init() {
+  /***
+   * <p>Registers all standard operations.</p>
+   */
+  private static void init() {
     synchronized (operations) {
       if (operations.isEmpty() && !initInProgress) {
         initInProgress = true;
@@ -79,18 +90,14 @@ public abstract class Operation extends AbstractBlock implements Serializable {
     }
   }
 
-  public static Operation parseInstance(ASN1TaggedObject object) throws IOException {
-    synchronized (operations) {
-      if (operations.isEmpty()) {
-        throw new IOException("init() not called");
-      }
-      if (operations.get(object.getTagNo()) == null) {
-        throw new IOException("got unknown tag number for operation (" + object.getTagNo());
-      }
-      return operations.get(object.getTagNo()).getInstance(object.getObject());
-    }
-  }
-
-  public abstract Operation getNewInstance(ASN1Encodable object) throws IOException;
+  /***
+   * <p>Gets an instance of the object.</p>
+   *
+   * @param asn1Encodable the object to be parsed
+   * @return the parsed operation object
+   *
+   * @throws IOException if parsing fails
+   */
+  public abstract Operation getNewInstance(ASN1Encodable asn1Encodable) throws IOException;
 
 }

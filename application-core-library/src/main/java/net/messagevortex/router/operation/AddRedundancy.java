@@ -24,12 +24,17 @@ package net.messagevortex.router.operation;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.math.BigInteger;
+import java.security.SecureRandom;
+import java.util.Random;
 import java.util.logging.Level;
+
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.AbstractRedundancyOperation;
 import net.messagevortex.asn1.AddRedundancyOperation;
 import net.messagevortex.asn1.PayloadChunk;
 import net.messagevortex.asn1.VortexMessage;
+import net.messagevortex.asn1.encryption.PRNG;
 
 /**
  * <p>This is the core of the redundancy add operation.</p>
@@ -37,6 +42,30 @@ import net.messagevortex.asn1.VortexMessage;
  * <p>It builds redundant data blocksfrom the existing data blocks.</p>
  */
 public class AddRedundancy extends AbstractOperation implements Serializable {
+
+  private static final long MAX_SIZE = (long) Math.pow(2, 32);
+
+  public static class SimplePrng implements PRNG {
+
+    private Random sr = new Random();
+    private long seed = sr.nextLong();
+
+    public SimplePrng() {
+      sr.setSeed(seed);
+    }
+
+    public synchronized byte nextByte() {
+      byte[] a = new byte[1];
+      sr.nextBytes(a);
+      return a[0];
+    }
+
+    public void reset() {
+      sr.setSeed(seed);
+    }
+  }
+
+  private static PRNG localPrng = new SimplePrng();
 
   public static final long serialVersionUID = 100000000018L;
 
@@ -91,13 +120,13 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
     int keySize = operation.getkeys()[1].getKeySize() / 8;
     if (size % (keySize * operation.getDataStripes()) > 0) {
       size = keySize * operation.getDataStripes() * (size
-             / (keySize * operation.getDataStripes()) + 1);
+              / (keySize * operation.getDataStripes()) + 1);
     }
     byte[] in2 = new byte[size];
     byte[] pad = VortexMessage.getLongAsBytes(in.length, paddingSize);
     LOGGER.log(Level.INFO, "  calculated padded size (original: " + in.length + "; blocks: "
-               + operation.getDataStripes() + "; block size: " + keySize + "; padded size: "
-               + size + ")");
+            + operation.getDataStripes() + "; block size: " + keySize + "; padded size: "
+            + size + ")");
 
     // copy length prefix
     System.arraycopy(pad, 0, in2, 0, paddingSize);
@@ -114,7 +143,7 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
     MathMode mm = GaloisFieldMathMode.getGaloisFieldMathMode(operation.getGfSize());
     LOGGER.log(Level.INFO, "  preparing data matrixContent");
     Matrix data = new Matrix(in2.length / operation.getDataStripes(), operation.getDataStripes(),
-                             mm, in2);
+            mm, in2);
     LOGGER.log(Level.INFO, "  data matrixContent is " + data.getX() + "x" + data.getY());
     LOGGER.log(Level.INFO, "  preparing redundancy matrixContent");
     RedundancyMatrix r = new RedundancyMatrix(operation.getDataStripes(),
@@ -142,9 +171,93 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
       return new int[0];
     }
     LOGGER.log(Level.INFO, "  done (chunk size: " + out.getRowAsByteArray(0).length + "; total:"
-               + tot + ")");
+            + tot + ")");
 
     return getOutputId();
+  }
+
+  public static byte[] pad(int blocksize, int numberOfOutBlocks, byte[] data, PRNG prng, int c1, int c2) {
+    LOGGER.log(Level.FINEST, "starting padding of " + data.length + " bytes");
+
+    // catch some bad values
+    if (c1 < 0) {
+      c1 = 0;
+    }
+    if (c2 < 0) {
+      c2 = 0;
+    }
+
+    // calculate sizes
+    int outRowSize = blocksize * numberOfOutBlocks;
+    long containerSize = (long) (Math.ceil(((double)data.length + 4 + c2) / outRowSize)) * outRowSize;
+    LOGGER.log(Level.FINEST, "container size of padded array is " + containerSize + " bytes (c1: "+c1+"; c2: "+c2+")");
+
+    // calculate padding value
+    long pval = (new BigInteger(""+data.length).add(new BigInteger(""+c1).multiply(new BigInteger(""+containerSize)).mod(
+            new BigInteger("" + (((MAX_SIZE-data.length)/containerSize)*containerSize))
+    ))).longValue();
+    LOGGER.log(Level.FINEST, "Padding value is " + pval + "");
+
+    // create new container
+    byte[] out = new byte[(int)containerSize];
+
+    // insert size descriptor
+    out[0] = (byte) ((pval          & 255) - 128);
+    out[1] = (byte) (((pval >>> 8)  & 255) - 128);
+    out[2] = (byte) (((pval >>> 16) & 255) - 128);
+    out[3] = (byte) (((pval >>> 24) & 255) - 128);
+
+    // insert data (inefficient yet working)
+    for (int a = 4; a < data.length + 4; a++) {
+      out[a] = data[a - 4];
+    }
+
+    // insert padding
+    if (prng == null) {
+      prng = localPrng;
+    }
+    for (int a = 4 + data.length; a < out.length; a++) {
+      out[a] = prng.nextByte();
+    }
+
+    return out;
+  }
+
+  /***
+   * <p>Removes padding from a byte array.</p>
+   * @param blocksize          encryption block size
+   * @param numberOfOutBlocks  number of out streams in the RS function
+   * @param in                 the padded array
+   * @param prng               the random number generator for the padding data
+   * @return the unpadded data stream
+   *
+   * @throws IOException       if unpadding fails for any reason
+   */
+  public static byte[] unpad(int blocksize, int numberOfOutBlocks, byte[] in, PRNG prng ) throws IOException {
+    LOGGER.log(Level.FINEST, "starting unpadding of " + in.length + " bytes");
+
+    // extract size descriptor
+    long size = ((long)(in[0]) + 128) + ((long)(in[1]) + 128) * 256 + ((long)(in[2]) + 128) * 256 * 256 + ((long)(in[3]) + 128) * 256 * 256 * 256;
+    LOGGER.log(Level.FINEST, "Padding value is " + size );
+    size = size % in.length;
+    LOGGER.log(Level.FINEST, "size is " + size + " bytes");
+
+    // creating output
+    byte[] out = new byte[(int) size];
+    for (int a = 4; a < out.length + 4; a++) {
+      out[a - 4] = in[a];
+    }
+
+    // check if padding is correct
+    if (prng != null) {
+      for (int a = out.length + 4; a < in.length; a++) {
+        if (in[a] != prng.nextByte()) {
+          throw new IOException("error verifying padding at position " + a + " in container");
+        }
+      }
+    }
+
+    return out;
   }
 
   public String toString() {

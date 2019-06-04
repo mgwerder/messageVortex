@@ -23,6 +23,7 @@ package net.messagevortex.transport.imap;
 // ************************************************************************************
 
 import java.io.IOException;
+import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.messagevortex.MessageVortexLogger;
@@ -58,32 +59,36 @@ public class ImapConnection extends ServerConnection
     public void run() {
       try {
         while (!shutdownImapRunner && imapConnectionRunner != null) {
-          String line = readln();
-          if (line == null) {
-            // timeout reached
-            shutdownImapRunner = true;
-            getSocketChannel().close();
-            imapConnectionRunner = null;
-          } else {
-            LOGGER.log(Level.INFO, "processing command \"" + ImapLine.commandEncoder(line) + "\"");
-
-            String[] reply = processCommand(line + CRLF);
-            if (reply != null) {
-              for (String r : reply) {
-                LOGGER.log(Level.INFO, "sending reply to client \"" + ImapLine.commandEncoder(r)
-                        + "\"");
-                if (r != null) {
-                  write(r);
-                }
-              }
-            }
-            if (reply == null || reply[reply.length - 1] == null) {
-              // process command requested connection close
+          try {
+            String line = readln();
+            if (line == null) {
+              // timeout reached
               shutdownImapRunner = true;
-              //super.shutdown();
               getSocketChannel().close();
               imapConnectionRunner = null;
+            } else {
+              LOGGER.log(Level.INFO, "processing command \"" + ImapLine.commandEncoder(line) + "\"");
+
+              String[] reply = processCommand(line + CRLF);
+              if (reply != null) {
+                for (String r : reply) {
+                  LOGGER.log(Level.INFO, "sending reply to client \"" + ImapLine.commandEncoder(r)
+                          + "\"");
+                  if (r != null) {
+                    write(r);
+                  }
+                }
+              }
+              if (reply == null || reply[reply.length - 1] == null) {
+                // process command requested connection close
+                shutdownImapRunner = true;
+                //super.shutdown();
+                getSocketChannel().close();
+                imapConnectionRunner = null;
+              }
             }
+          } catch (TimeoutException te) {
+            LOGGER.log(Level.WARNING,"got timeout exception when reading", te);
           }
         }
         LOGGER.log(Level.INFO, "left main loop (shutting down)");

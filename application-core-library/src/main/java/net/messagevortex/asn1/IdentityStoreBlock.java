@@ -40,6 +40,7 @@ import org.bouncycastle.asn1.ASN1TaggedObject;
 import org.bouncycastle.asn1.DERSequence;
 import org.bouncycastle.asn1.DERTaggedObject;
 import org.bouncycastle.asn1.DERUTF8String;
+import org.bouncycastle.util.encoders.Base64;
 
 /**
  * This class represents one block of an identity store for storage.
@@ -53,6 +54,8 @@ public class IdentityStoreBlock extends AbstractBlock implements Serializable {
     NODE_IDENTITY,
     RECIPIENT_IDENTITY
   }
+
+  public static final String UNENCODABLE = "<UNENCODABLE>";
 
   private static final java.util.logging.Logger LOGGER;
 
@@ -81,6 +84,24 @@ public class IdentityStoreBlock extends AbstractBlock implements Serializable {
    */
   public IdentityStoreBlock(ASN1Encodable ae) throws IOException {
     parse(ae);
+  }
+
+  /***
+   * <p>Create an identity store block from an url.</p>
+   *
+   * @param url th url to be parsed
+   */
+  public IdentityStoreBlock(String url) throws IOException {
+    if (url != null && url.toLowerCase().startsWith("vortexsmtp://")) {
+      LOGGER.log(Level.INFO, "Creating identity from URL " + url);
+      String[] s = url.substring(13).split("\\.\\.");
+      String[] s2 = s[2].split("@");
+      identityKey = new AsymmetricKey(Base64.decode(s[1]));
+      nodeAddress = "smtp:" + s[0] + "@" + s2[0];
+      valid = new UsagePeriod();
+    } else {
+      throw new IOException("unable to parse " + url);
+    }
   }
 
   @Override
@@ -348,14 +369,17 @@ public class IdentityStoreBlock extends AbstractBlock implements Serializable {
   public String dumpValueNotation(String prefix, DumpType dumpType) throws IOException {
     StringBuilder sb = new StringBuilder();
     sb.append('{').append(CRLF);
-    sb.append(prefix).append("  valid ").append(valid.dumpValueNotation(prefix + "    ", dumpType))
+    sb.append(prefix).append("  -- ").append(getUrl()).append(CRLF);
+    sb.append(prefix).append("  -- size: ").append(getUrl().length()).append(CRLF);
+    sb.append(prefix).append("  -- encoded size: ").append(toAsn1Object(DumpType.ALL_UNENCRYPTED).getEncoded().length).append(CRLF);
+    sb.append(prefix).append("  valid ").append(valid.dumpValueNotation(prefix + "  ", dumpType))
             .append(',').append(CRLF);
     sb.append(prefix).append("  messageQuota ").append(messageQuota).append(',').append(CRLF);
     sb.append(prefix).append("  transferQuota ").append(transferQuota);
     if (identityKey != null) {
       sb.append(',').append(CRLF);
       sb.append(prefix).append("  identity ")
-              .append(identityKey.dumpValueNotation(prefix + "    ", dumpType));
+              .append(identityKey.dumpValueNotation(prefix + "  ", dumpType));
     }
     if (nodeAddress != null) {
       sb.append(',').append(CRLF);
@@ -364,11 +388,36 @@ public class IdentityStoreBlock extends AbstractBlock implements Serializable {
     if (nodeKey != null) {
       sb.append(',').append(CRLF);
       sb.append(prefix).append("  nodeKey ")
-              .append(nodeKey.dumpValueNotation(prefix + "    ", dumpType));
+              .append(nodeKey.dumpValueNotation(prefix + "  ", dumpType));
     }
     sb.append(CRLF);
     sb.append(prefix).append('}');
     return sb.toString();
+  }
+
+  /***
+   * <p>Gets an URL representation of the identity.</p>
+   *
+   * @return the url or IdentityStoreBlock.UNENCODABLE on fail
+   * @throws IOException on failure
+   */
+  public String getUrl() throws IOException {
+    if (nodeAddress.startsWith("smtp:")) {
+      String[] addr = nodeAddress.substring(5, nodeAddress.length()).split("@");
+      if (identityKey == null) {
+        LOGGER.log(Level.WARNING, "unable to encode identity key of " + nodeAddress + " (key is null)");
+        return UNENCODABLE;
+      }
+      ASN1Object e = identityKey.toAsn1Object(DumpType.PUBLIC_ONLY);
+      if (e == null) {
+        LOGGER.log(Level.WARNING, "unable to encode identity key of " + nodeAddress);
+        return UNENCODABLE;
+      }
+      String keySpec = toBase64(e.getEncoded());
+      return "vortexsmtp://" + addr[0] + ".." + keySpec + ".." + addr[1] + "@localhost";
+    } else {
+      return UNENCODABLE;
+    }
   }
 
   /***
@@ -383,7 +432,7 @@ public class IdentityStoreBlock extends AbstractBlock implements Serializable {
     if (idType != null) {
       return idType;
     }
-    if (nodeKey == null) {
+    if (nodeKey == null && identityKey.privateKey != null) {
       return IdentityType.OWNED_IDENTITY;
     }
     return identityKey == null ? IdentityType.NODE_IDENTITY : IdentityType.RECIPIENT_IDENTITY;
@@ -415,7 +464,8 @@ public class IdentityStoreBlock extends AbstractBlock implements Serializable {
             && isb.nodeAddress != null)) {
       return false;
     }
-    return nodeKey.equals(isb.nodeKey);
+    return (nodeKey == null && isb.nodeKey == null)
+            || (nodeKey != null && nodeKey.equals(isb.nodeKey));
   }
 
 }
