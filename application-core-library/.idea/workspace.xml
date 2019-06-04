@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d11f21f3-1155-4924-86d1-bc99f93f8cdb" name="Default Changelist" comment="Default Changelist">
-      <change beforePath="$PROJECT_DIR$/../thesis/src/main/latex/papers/filet/filet.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/../thesis/src/main/latex/papers/filet/filet.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../thesis/src/main/latex/papers/filet/filet.tex" beforeDir="false" afterPath="$PROJECT_DIR$/../thesis/src/main/latex/papers/filet/filet.tex" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/net/messagevortex/test/imap/ImapClientTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/net/messagevortex/test/imap/ImapClientTest.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -149,7 +148,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MessageVortex.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="MessageVortex.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="620">
@@ -157,6 +156,15 @@
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ImapClientTest.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/test/java/net/messagevortex/test/imap/ImapClientTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="917">
+              <caret line="122" column="13" selection-start-line="122" selection-start-column="13" selection-end-line="122" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -275,7 +283,6 @@
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/IdentityStoreBlock.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/InitialRecipesBlender.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/blender/recipes/BlenderRecipe.java" />
-        <option value="$PROJECT_DIR$/src/test/java/net/messagevortex/test/imap/ImapClientTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/router/SimpleMessageFactory.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/router/MessageFactory.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/router/GraphSet.java" />
@@ -296,6 +303,7 @@
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/router/operation/AddRedundancy.java" />
         <option value="$PROJECT_DIR$/src/test/java/net/messagevortex/test/MainASN1Suite.java" />
         <option value="$PROJECT_DIR$/src/main/java/net/messagevortex/MessageVortex.java" />
+        <option value="$PROJECT_DIR$/src/test/java/net/messagevortex/test/imap/ImapClientTest.java" />
       </list>
     </option>
   </component>
@@ -354,7 +362,7 @@
       <select />
     </treeState>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="1272" />
     <option name="y" value="-8" />
     <option name="width" value="1296" />
@@ -429,15 +437,6 @@
               <item name="test" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="test" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="application-core-library" type="b2602c69:ProjectViewProjectNode" />
-              <item name="application-core-library" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="asn1" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="application-core-library" type="b2602c69:ProjectViewProjectNode" />
@@ -806,9 +805,6 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="PaddingTest - 2019.05.28 at 15h 17m 17s.xml">
-      <configuration name="PaddingTest" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="PaddingTest - 2019.05.28 at 15h 20m 12s.xml">
       <configuration name="PaddingTest" configurationId="JUnit" />
     </history-entry>
@@ -836,6 +832,9 @@
     <history-entry file="All_Tests - 2019.05.29 at 16h 43m 04s.xml">
       <configuration name="All Tests" configurationId="JUnit" />
     </history-entry>
+    <history-entry file="All_Tests - 2019.06.04 at 07h 47m 17s.xml">
+      <configuration name="All Tests" configurationId="JUnit" />
+    </history-entry>
   </component>
   <component name="TimeTrackingManager">
     <option name="totallyTimeSpent" value="134457000" />
@@ -851,7 +850,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1192" y="-8" width="1216" height="1936" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32940516" />
@@ -1123,13 +1121,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/net/messagevortex/test/imap/ImapClientTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3026">
-          <caret line="180" column="19" lean-forward="true" selection-start-line="180" selection-start-column="19" selection-end-line="180" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/net/messagevortex/transport/AbstractConnection.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="143">
@@ -1266,6 +1257,13 @@
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/net/messagevortex/test/imap/ImapClientTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="917">
+          <caret line="122" column="13" selection-start-line="122" selection-start-column="13" selection-end-line="122" selection-end-column="13" />
         </state>
       </provider>
     </entry>
