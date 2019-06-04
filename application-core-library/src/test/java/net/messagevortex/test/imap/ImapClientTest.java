@@ -11,7 +11,10 @@ import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.List;
 import java.util.Set;
+import java.util.Vector;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import javax.net.SocketFactory;
@@ -57,6 +60,7 @@ public class ImapClientTest {
 
     private ServerSocket ss;
     private int counter;
+    private List<Socket> deadSockets = new Vector<>();
 
     public DeadSocket(int port, int counter) {
       this.counter = counter;
@@ -97,7 +101,9 @@ public class ImapClientTest {
     public void run() {
       while (!shutdown) {
         try {
-          ss.accept();
+          Socket s = ss.accept();
+          LOGGER.log(Level.INFO, "got connection on dead socket port");
+          deadSockets.add(s);
         } catch (Exception sorry) {
           assertTrue("Exception should not be rised", false);
         }
@@ -111,6 +117,14 @@ public class ImapClientTest {
         ss.close();
       } catch (IOException ioe) {
         LOGGER.log(Level.SEVERE, "Unable to close down dead socket properly", ioe);
+      }
+      LOGGER.log(Level.INFO, "closing all dead connections");
+      for (Socket s : deadSockets) {
+        try {
+          s.close();
+        } catch (IOException ioe) {
+          LOGGER.log(Level.SEVERE, "Unable to close down dead socket endpoint properly", ioe);
+        }
       }
     }
   }
