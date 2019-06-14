@@ -932,16 +932,16 @@ The operation itself is shown in Fig.~\ref{fig:addRedundancyOperation}.
 It may be subdivided into the following operations:
 \begin{itemize}
 	\item Pad the original message block in such a way, that all resulting blocks are a multiple of the block size of the encrypting cipher.
-	\item Apply a Reed Solomon operation in a given GF space with a Vandermonde matrix.
+	\item Apply a Reed-Solomon operation in a given GF space with a Vandermonde matrix.
 	\item Encrypt all resulting blocks with unpadded, symmetrical encryption.
 \end{itemize}
 
 The padding is not a standard padding from encryption. The reason for this lies in the properties required in the padding. These properties were:
 \begin{itemize}
 	\item The padding must not leak whether the rebuild cycle was successful or not.
-	\item The padding should only reveal true message size if a message was successfully rebuilt. 
-	\item The anyone knowing the routing block content and the transmitted message must be able to predict any treated block including all padding bytes
-	\item The padding must work with any size padding space
+	\item The padding should not leak whether a removeRedundancy operation was successful or not. 
+	\item Anyone knowing the routing block content and the transmitted message must be able to predict any treated block including all padding bytes.
+	\item The padding must work with any size padding space.
 \end{itemize}
 
 The padded value $\mathbf{X}$ for a function $RS_{\text{m of n}}$ and an encryption block size of $k$ is calculated as follows:
@@ -992,7 +992,7 @@ Depending on the blending method, an adversary may identify single messages as l
 	\item Broken internal file structure (due to plain blending)
 	\item Uncommon high entropy in a structureless file
 	\item Unrelated message flow (see \cite{oakland2013-parrot})
-	\item Non-human behaviour on the transport layer (e.g., message traffic 24x7)
+	\item Non-human behavior on the transport layer (e.g., message traffic 24x7)
 \end{itemize}
 
 If an adversary identifies an endpoint successfully, then all peering endpoints of the same protocol may be identified as well by following the message flow. This does, however, not enable an adversary to inject messages as the host key is not known. 
@@ -1039,7 +1039,10 @@ A MURB creates a repeated pattern on the network in terms of messages. For a rou
 
 Furthermore, security is affected when using MURBs. A MURB may be replayed and allows thus to exhaust quotas of an ephemeral identity. To counter such exhaustion, the protocol introduces a maximum replay rate, but this is only weak protection.
 
-\subsection{The Missing Links}
+\section{Conclusion}
+Creating a protocol which is possibly censorship resistant, is already hard. The analysis showed that even when a protocol is crafted with great care, braking unobservability is far simpler than doing it right. MessageVortex does show the desired properties. The protocol allows to send a message from a sender to a recipient without exposing the linking between the two. Traditional analysis, such as hotspot analysis, fail since the operations successfully hide properties of the message flow. At the same time, we were able to present a system which requires an unmatched amount of observation, infrastructure, and calculation power to be broken.
+
+\subsection{The Missing Links and future research}
 A lot still needs to be done. For this protocol to be of any use, a user-friendly implementation is required. The currently released implementation works as a prototype for academic research. It is, however, far beyond from being user-friendly. Too many choices are currently left to the user. A new implementation must provide excellent censorship resistance while providing easy to use recipes for message transfer.  
 
 For the traffic to be truly undetectable, chatbots must generate meaningful conversation between blending nodes. This conversation does not necessarily boil down to a Turing test. It is sufficient that two blending layers are capable of setting up communication, which is indistinguishable from a regular human or machine communication. As an adversary is typically not able to generate own traffic without exposing the probing activity and a blender is not required to such probes, an attacker is very limited.
@@ -1049,9 +1052,6 @@ Furthermore, some issues have been identified relating to updating nodes. A node
 Next is the problem of the routing node. The hardware of such a node should be protected with a small platform featuring deniable encryption and anti-forensic measures. We are currently investigating the possibility of creating such a cheap platform based on a RaspberryPi Zero.
 
 Another exciting field of academic research is creating strategies for Routing block builders (RBB). We currently have a toolset of powerful operations, but academic researched strategies or guidelines for good routing blocks are missing. 
-
-\section{Conclusion}
-Creating a protocol which is possibly censorship resistant, is already hard. The analysis showed that even when a protocol is crafted with great care, braking unobservability is far simpler than doing it right. At the same time, we were able to present a system which requires an unmatched amount of observation, infrastructure, and calculation power to be broken.
 
 \hfill gwm
  
