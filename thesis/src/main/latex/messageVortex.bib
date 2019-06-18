@@ -334,14 +334,17 @@ We investigate how Tor's routing optimizations impact its ability to provide str
   Localfile                = {inc/bib/rfc5378.pdf}
 }
 
-@Article{F5broken,
-  Title                    = {Has F5 Really Been Broken},
-  Author                   = {Briffa, Johann A. and Schaathun, Hans Georg and Wahab, Ainuddin Wahid Abdul},
-  Url                      = {https://pdfs.semanticscholar.org/4d6c/d9d7e3a419ea74a4a363a36fcc674e89ecc7.pdf},
-
-  File                     = {:inc/bib/F5ReallyBroken.pdf:PDF},
-  Owner                    = {Martin},
-  Timestamp                = {2018.04.28}
+@Proceedings{F5broken,
+  title     = {Has F5 Really Been Broken},
+  year      = {2009},
+  publisher = {{IET}},
+  author    = {Briffa, Johann A. and Schaathun, Hans Georg and Wahab, Ainuddin Wahid Abdul},
+  booktitle = {3rd International Conference on Imaging for Crime Detection and Prevention ({ICDP} 2009)},
+  doi       = {10.1049/ic.2009.0245},
+  file      = {:inc/bib/F5ReallyBroken.pdf:PDF},
+  owner     = {Martin},
+  timestamp = {2018.04.28},
+  url       = {https://pdfs.semanticscholar.org/4d6c/d9d7e3a419ea74a4a363a36fcc674e89ecc7.pdf},
 }
 
 @Article{Byers:1998:DFA:285243.285258,
@@ -947,16 +950,13 @@ Several researchers have proposed valuable methods of detecting cheating players
 }
 
 @Misc{MessageVortexRFC,
-  Title                    = {MessageVortex Protocol},
-  Author                   = {Martin Gwerder},
-  Year                     = {2018},
-  HowPublished             = {IETF},
-  Month                    = july,
-  Url                      = {https://messagevortex.net/documentation.html},
-
-  Keywords                 = {RFC Draft},
-  Owner                    = {Martin},
-  Timestamp                = {2018.07.20}
+  author       = {Martin Gwerder},
+  title        = {MessageVortex Protocol},
+  howpublished = {IETF},
+  keywords     = {RFC Draft},
+  owner        = {Martin},
+  timestamp    = {2018.07.20},
+  url          = {https://messagevortex.net/documentation.html},
 }
 
 @Unpublished{messageVortex,
@@ -2367,11 +2367,6 @@ This paper is intended for the systems programmer. It presents a complete specif
   timestamp = {2019.02.02},
 }
 
-@Misc{,
-  owner     = {Martin},
-  timestamp = {2019.01.30},
-}
-
 @Article{LEMIRE2019139,
   author    = {Lemire, Daniel and O'Neill, Melissa E.},
   title     = {Xorshift1024*, xorshift1024+, xorshift128+ and xoroshiro128+ fail statistical tests for linearity},
@@ -2772,18 +2767,10 @@ We study this trade-o in two P2P anonymous systems, Salsa and AP3. In both cases
   url     = {https://xmpp.org/extensions/xep-0234.pdf},
 }
 
-@Misc{NRC2013,
-  author    = {NRC},
-  title     = {Document Snowden: Nederland al sinds 1946 doelwit van NSA},
-  month     = nov,
-  year      = {2013},
-  owner     = {Martin},
-  timestamp = {2019.05.27},
-}
-
 @Misc{XKeyscore,
   author       = {NSA},
-  howpublished = {Web and several newspapers},
+  title        = {XKeyscore presentation from 2008 – read in full},
+  howpublished = {Web and several newspapers (e.g., guardian)},
   month        = jul,
   year         = {2013},
   note         = {Three slides have been redacted as they contained suposedly specific NSA operations},
@@ -2820,7 +2807,7 @@ We study this trade-o in two P2P anonymous systems, Salsa and AP3. In both cases
   url       = {https://faculty.math.illinois.edu/~duursma/CT/RS-1960.pdf},
 }
 
-@Article{Ensafi_2015,
+@Misc{Ensafi_2015,
   author    = {Roya Ensafi and David Fifield and Philipp Winter and Nick Feamster and Nicholas Weaver and Vern Paxson},
   title     = {Examining how the Great Firewall discovers hidden circumvention servers},
   year      = {2015},
@@ -2857,15 +2844,16 @@ We study this trade-o in two P2P anonymous systems, Salsa and AP3. In both cases
   url     = {https://censorbib.nymity.ch/pdf/Lowe2007a.pdf},
 }
 
-@Article{Bauer_2008,
-  author    = {Kevin Bauer and Damon McCoy and Dirk Grunwald and Douglas Sicker},
+@Proceedings{Bauer_2008,
   title     = {BitBlender: Light-weight anonymity for BitTorrent},
   year      = {2008},
+  series    = {SecureComm'08, AlPACa Workshop},
+  publisher = {{ACM} Press},
+  author    = {Kevin Bauer and Damon McCoy and Dirk Grunwald and Douglas Sicker},
   booktitle = {Proceedings of the workshop on Applications of private and anonymous communications - {AIPACa} {\textquotesingle}08},
   doi       = {10.1145/1461464.1461465},
   file      = {:inc/bib/BitBlender_Light-weight_anonymity_for_BitTorrent.pdf:PDF},
   owner     = {Martin},
-  publisher = {{ACM} Press},
   timestamp = {2019.06.08},
 }
 
@@ -2880,6 +2868,66 @@ We study this trade-o in two P2P anonymous systems, Salsa and AP3. In both cases
   file      = {:inc/bib/PDCAT2009-1.pdf:PDF},
   owner     = {Martin},
   timestamp = {2019.06.08},
+}
+
+@Misc{NCR2013,
+  author       = {Boon, Floor and Derix, Steven and Modderkolk, Huib},
+  title        = {Document Snowden: Nederland al sinds 1946 doelwit van NSA},
+  howpublished = {Newspaper},
+  month        = nov,
+  year         = {2013},
+  keywords     = {NSA, Snowden},
+  owner        = {Martin},
+  timestamp    = {2019.06.18},
+  url          = {https://www.nrc.nl/nieuws/2013/11/23/nederland-sinds-1946-doelwit-van-nsa-a1429490},
+}
+
+@Misc{Ball2013,
+  author       = {Ball, James},
+  title        = {NSA's Prism surveillance program: how it works and what it can do},
+  howpublished = {Newspaper},
+  month        = jun,
+  year         = {2013},
+  owner        = {Martin},
+  timestamp    = {2019.06.18},
+  url          = {https://www.theguardian.com/world/2013/jun/08/nsa-prism-server-collection-facebook-google},
+}
+
+@Misc{Greenberg2013,
+  author    = {Greenberg, Andy},
+  title     = {Leaked NSA Doc Says It Can Collect And Keep Your Encrypted Data As Long As It Takes To Crack It},
+  month     = jun,
+  year      = {2013},
+  keywords  = {Snowden, NSA},
+  owner     = {Martin},
+  timestamp = {2019.06.18},
+  url       = {https://www.forbes.com/sites/andygreenberg/2013/06/20/leaked-nsa-doc-says-it-can-collect-and-keep-your-encrypted-data-as-long-as-it-takes-to-crack-it/#5edf34edb07d},
+}
+
+@Misc{Leuenberger1989,
+  author       = {Leuenberger, Moritz and Meier, Josi},
+  title        = {Vorkommnisse im EJPD Bericht der Parlamentarischen Untersuchungskommission(PUK)},
+  howpublished = {Bundesblatt 1989-55},
+  month        = nov,
+  year         = {1989},
+  file         = {:inc/bib/ed-berichte-puk-ejpd.pdf:PDF},
+  keywords     = {fichenskandal },
+  owner        = {Martin},
+  timestamp    = {2019.06.18},
+  url          = {https://www.parlament.ch/centers/documents/de/ed-berichte-puk-ejpd.pdf},
+}
+
+@Misc{Amat1999,
+  author       = {Amat, Oriol and Blake, John and Dowds, Jack},
+  title        = {THE ETHICS OF CREATIVE ACCOUNTING},
+  howpublished = {Journal of Economic Literature classification},
+  month        = dec,
+  year         = {1999},
+  doi          = {10.1.1.198.7724},
+  file         = {:inc/bib/10.1.1.198.7724.pdf:PDF},
+  owner        = {Martin},
+  timestamp    = {2019.06.18},
+  url          = {http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.198.7724&rep=rep1&type=pdf},
 }
 
 @Comment{jabref-meta: databaseType:bibtex;}
