@@ -225,7 +225,7 @@
 %\usepackage{stfloats}
 % stfloats.sty was written by Sigitas Tolusis. This package gives LaTeX2e
 % the ability to do double column floats at the bottom of the page as well
-% as the top. (e.g., "\begin{figure*}[!b]" is not normally possible in
+% as the top. (e.g., "\begin{figure}[!b]" is not normally possible in
 % LaTeX2e). It also provides a command:
 %\fnbelowfloat
 % to enable the placement of footnotes below bottom floats (the standard
@@ -319,7 +319,7 @@
 %% Custom Packages not from the template
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{nth}
-\usepackage{hyperref}
+\usepackage[hidelinks]{hyperref}
 
 % Document annotations
 \usepackage[nomargin,draft]{fixme}
@@ -651,6 +651,15 @@ For our work, We define the anonymity set as the set of all possible subjects wi
 The set of terms is further broadened with $k$-Anonymity as defined in \cite{k-anonymous:ccs2003}. $k$-Anonymity is relevant for all jurisdictions where it is insufficient to track an illegal anonymity to more than $k-1$ subjects.
 
 \subsection{Existing work regarding Anonymity Protocols and Censorship Resistance}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Manual float placement
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure*}[ht]
+	\centering\includegraphics[width=\textwidth]{../../inc/roughProtocolDesign.pdf}
+	\caption{A rough protocol outline of the MessageVortex protocol}
+	\label{fig:protocolLayers}
+\end{figure*}
+
 We were unable to identify a protocol withstanding the strong definition of our adversary. We have, however, found many protocols dealing with anonymity and very few dealing censorship circumvention. We tried to learn from these approaches and tried to integrate useful approaches. It has to be said, however, that very little of the mentioned protocols here had ever experienced broad adoption. Even more, most of them were never implemented or challenged. 
 
 In terms of censorship circumvention, we found that only little work has been done in academia. Several technical ways have been explored to circumvent censorship. All of them seem to boil down to the following main ideas:
@@ -665,38 +674,130 @@ In terms of censorship circumvention, we found that only little work has been do
 
 For Anonymization the ideas seem mainly to concentrate around onionizing (ToR\cite{tor-spec}, SOR\cite{Egners_2012}, DUO-Onions and Hydra-Onions\cite{iwanik2005duo}), DC networks (DC-Nets\cite{chaum-dc}, Tarzan\cite{tarzan:ccs02}, GAS\cite{AthanRAM07}), mixing (Babel\cite{babel}, MorphMix\cite{morphmix:wpes2002}, Mixminion\cite{minion-design}, Salsa\cite{Salsa}) and DHT tables (Bifrost\cite{Kondo2009}, BitBlender\cite{Bauer_2008}).
 
-As we use alien transport protocols instead of an own protocol, we decided to go for a mixing approach. This approach minimizes the number of messages. Unlike other protocols, we do not rely the logic of mixing on the routing node but entirely on the RBB. 
+As we use alien transport protocols instead of an own protocol, we decided to go for a mixing approach. This approach minimizes the number of messages between the nodes. Furthermore, mixing allows to use the nodes in a structurless  way as opposed to DC nets where we would have to build fixed or ad-hoc rings for exchanging messages. Unlike other protocols, we do not rely the logic of mixing on the routing node but entirely on the RBB. Routing nodes just follow an onionized set of instructions to build messages. 
 
 \section{The MessageVortex Protocol}
-In this section, we introduce a new consistent, transport independent model for representing the different protocols used by MessageVortex. The focus of the description lies in academic concepts. For more technical information specifying the protocol as implemented, refer to \cite{MessageVortexRFC}. 
-
-Generally, the MessageVortex System consists only of nodes, whereas a node may be any system always connected to the Internet. This applies to any device regardless of NAT or similar technologies which usually oppose problems.
+In this section, we introduce a new consistent, transport independent model for representing the different protocols used by MessageVortex. The focus of the description lies in academic concepts. For more technical information specifying the protocol as implemented, refer to \cite{MessageVortexRFC}. This document provides details such as specific ASN.1 structures outlining every single block.
 
 \subsection{General Design}
-\begin{figure*}[ht]
-	\centering\includegraphics[width=\textwidth]{../../inc/roughProtocolDesign.pdf}
-    \caption{A rough protocol outline of the MessageVortex protocol}\label{fig:protocolOutline}
-	\label{fig:protocolLayers}
-\end{figure*}
+
+Generally, the Vortex System consists only of nodes, whereas a node may be any system always connected to the Internet. This applies to any device regardless of NAT or similar technologies which usually oppose problems for services. Figure~\ref{fig:protocolLayers} shows a network of four nodes passing messages between them. The transport layer is a common message passing protocol in the Internet. This infrastructure is fixed, within the internet but not modified for the protocol. It serves as store-and-forward infrastructure. Although we used SMTP for our experiments it is not limited to this protocol. The RFC draft document also specifies XMPP. We refer to the red part of each node as VortexNode. These nodes may be any device with a permanent connection to the Internet (e.g., a RaspberryPi computer or a mobile phone).
+
+The Vortex system routes messages from a sender to one or more recipients. We refer to the message sent by the sender and received by the recipients as ``message''. We use the ternm ``VortexMessage'' for the messages exchanged between the nodes containing either message parts, full messages or decoy traffic.
+
+Each Vortex node constitutes out of three layers. A blending layer embedding and extracting messages from the transport layer, a routing layer processing the VortexMessages and providing ``workspaces'' for ``ephemeral identities'', and an accounting layer authorizing messages. We describe the inner workings of these layer in detail in the next sections.
 
 The protocol handles messages which are passed by a transport protocol from node to node. The instructions how and when to pass a message is generated by a ``routing block builder'' (RBB). The RBB defines the path of the message, the type of hiding (blending) in the transport protocol, and the operations applied to each part of the message in each node. To avoid collision of operations, an RBB has ``ephemeral identities'' on each node with an assigned workspace. Ephemeral identities are short term identities containing a workspace and message quotas for a limited time. Ephemeral identities of a node are unrelated to each other. In the workspaces attached to the ephemeral identities, messages may be assembled, transformed, or decomposed with the operations above. Results are sent to other nodes. Due to the nature of the operations, all messages passed on may be decoy traffic or ``real message parts'' (We proof that claim in section \ref{sec:staticAnalysis}). A node knows that a message is destined for it when a message results in data in specific parts of the identities workspace.
+
+The RBB may be the sender of a block or n other node. If the RBB is not identical to the sender, then the sender is using the routing block for sending a message without knowing its final destination.
+
+\subsubsection{Message Outline}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Manual float placement
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure*}[ht]
+	\includegraphics[width=\textwidth]{../../inc/blockLayoutSimplified}
+	\caption{Simplified message outline}
+	\label{fig:messageOutline}
+\end{figure*}
+
+We show in Figure~\ref{fig:messageOutline} a simplified view on a VortexMessage.
+
+A VortexMessage is passed from one router to another and is embedded as binary data in the transfer protocol. Every Vortex node may decide for himself on the support of algorithms and embedding mechanisms.
+
+The block structure of a Vortex message is as follows:
+\begin{itemize}
+	\item Encrypted peer key $k_{peer_n}$\\
+	Contains symmetrical key for decryption of follow up header information and payload blocks. The key is encrypted with the receiving host's public key. The key is known to the RBB, the message sending node, and the message receiving node. No other node knows the key.
+	\item padding\\
+	This padding makes sure that the message part encrypted with the peer key does look different for each payload even when reusing keys. This case is not recommended but unavoidable in the case of a reused routing block. Using a different IV in this case is not an option as the IV is specified in the routing block and thus replayed as well.
+	\item header block encrypted with $k_{sender_n}$ and signed with the identities private key (detached signature).
+	\begin{itemize}
+		\item Identity and ``proof of work'' information\\
+		This information contains the public key of the identity. It serves as an identifier for the workspace and is authenticates by the signature.
+		\item Replay protection information\\
+		This information allows a node to identify replayed Messages even if the payload of the content has been modified.
+		\item Forward secret information\\
+		This information allows a node to identify VortexMessages where tampering occurred by recombining blocks of multiple messages.      
+		\item (optionally) Proof-of-work information\\
+		This information allows a sending node to fulfill a proof of work requirement raised due to a previously sent request.      
+	\end{itemize}
+	\item Routing blocks (encrypted with sender key)
+	\begin{itemize}
+		\item Next hop timing instructions
+		This specifies by when building instructions should be carried out relative to the moment of reception of the VortexMessage. It is specified as a time range. There may be multiple timing instructions. Each of the instructions refers to precisely one routing block and one header block.
+		\item Next hop routing blocks\\
+		These routing blocks are placed into the VortexMessage created according to the build instructions and are already encrypted with $k_{sender_{n+1}}$ and thus not readable to the current node.
+		\item Next hop header (encrypted with $k_{sender_{n+1}}$)
+		These header blocks are placed into the VortexMessage created according to the build instructions and are already encrypted with $k_{sender_{n+1}}$ and thus not readable to the current node.
+		\item Message build instructions.\\
+		These instructions form the core for the workspace and contain all instructions and the information which payload blocks should be included in each of the messages.
+		\item Next hop peer key $k_{peer_{n+1}}$.\\
+		This part may contain one or more peer keys.
+		\item Next hop blending instructions.\\
+		These contain the information about what transport to use, what blending to use, and the address of the next router node.
+	\end{itemize}
+	\item Encrypted payload blocks (encrypted with peer key)
+	\begin{itemize}
+		\item Payload blocks
+	\end{itemize}
+\end{itemize}
+
+It is important to note that there are two symmetrical keys involved in encrypting and decrypting message headers. Having two keys is not a flaw in the protocol but necessary. 
+
+The first key of a VortexMessage is the peer key $k_{sender_n}$. This key is only accessible with the private key of the node receiving the message and is furthermore known by the RBB. It allows decryption of the routing blocks concerning the current node and the header information. The sender of a message block is therefore not able to tell if a VortexMessage contains one or more routing blocks for the next node. It is important to note that no other node should have access to this information as this builds the unlinkability between two non-adjacent nodes. 
+
+The second key is the peer key $k_{peer_n}$ located in the encrypted header. The RBB chooses the key. This key protects the inner structure of the message. It makes it impossible for any node except the sending or the receiving peer node to detect the inner structure of the message. Without this key, any independent observer with knowledge about the blending capabilities of a receiving node may:
+\begin{itemize}
+	\item easier identify the block structure.\\ 
+	This remains the case regardless of whether ASN.1 or length prefixed structures are used. If the structure of a vortex Message is identifiable, the messages may be logged or dropped by an adversary.
+	\item Identify the routing block size.\\
+	The value of this information is only minimal as it only reflects the complexity of the remaining routing information indirectly.
+	\item Identify the number of payload blocks and their respective sizes. \\
+	This is valuable information when following the traffic of a message.
+\end{itemize}
+
+Furthermore, by providing a preencrypted key we hide the asymmetric key required to the next node. So, a node is able to compile a message for another node without being aware of the required public key.
+
+\subsubsection{Accounting Layer}
+The Accounting layer maintains all local identities called ephemeral identities and controls the overall load to the system. Ephemeral identities are temporary accounting objects identified with the public part of an asymmetric key. 
+
+The accounting layer processes requests from other nodes. Each request is either a request for information about the node, the creation of a new ephemeral identity, or a request to process messages. The accounting layer creates replys to such requests and maintains the accounting information of such an entity. The accounting layer has the options to either accep a request, reject a request, silently drop a request (usually done to improve privacy), or to request the solving of a proof-of-work puzzle (puzzle). To send a reply to the unknown requester the header block contains a routing block prebuilt by the RBB.
+
+The only implemented puzzle so far is a hash based puzzle. The puzzle oposes that a header block $\mathbf{H}
+
+\subsubsection{Routing Layer}
+The routing layer processes the messages. Incomming messages are passed after extraction by the blending layer to the routing layer. There the message is disassembled in its components.
 
 As operations, we use some general capabilities such as splitting a message into two payload blocks and merging them again. Another type of operation is encryption and decryption of payload blocks. The third and most important type of operation is a redundancy operation. This operation uses a Reed-Solomon\cite{reed1960polynomial} function to add redundancy information to the data while obfuscating its content. This function has previously been proposed mainly for information sharing systems (e.g., \cite{mceliece1981sharing}).
 
 A routing block may be used once or multiple times if flagged accordingly. Repeating a routing block allows a sender to use a routing block as an anonymous endpoint address. It is essential to understand that reusing a routing block does have downsides in terms of privacy. Reusing a routing block does typically create the same pattern on the network assuming the same workspace layout. While the timing might vary the number of messages and the sequence of messages remains the same. For a full list of weaknesses when reusing routing blocks, see \ref{sec:dynamicAnalysis}.
 
-We divide our protocol into four different layers, whereas only three are specific to the MessageVortex protocol. The lowest layer is the transport layer. As expressed earlier, dedicated protocols are easy to censor. Therefore we build our protocol on top of other suitable transport protocols. 
-
-The other Three layers are Vortex-specific and do not require any infrastructure on the Internet. We elaborate further on these layers in section \ref{sec:transportAndBlending} and section \ref{sec:routingAndAccounting}.
-
-For our first tests, we used a custom transport layer, allowing us to monitor all traffic quickly, and build structures in a very flexible way. This transport layer works locally with a minimum amount of work for setup and deployment. It furthermore works across multiple hosts in a broadcast domain. The API may be used to support almost any kind of transport layer. After that, we focused on the protocols identified as suitable as transport protocols:
+Tasks of the routing layer are:
 \begin{itemize}
-	\item SMTP
-	\item XMPP
+	\item Build structure representing the block building and the appropriate block IDs.
+	\item Schedule all Routing blocks for processing in a priority queue.
+	\item Authorize all routing blocks ready for processing with the calculated block sizes.
+	\item Process blocks.
+	\item Send prepared building blocks to the Blending layer.
 \end{itemize}
-For the prototype, we have implemented an SMTP transport agent and the respective blending layer.
 
-The blending layer is taking care of multiple problems:
+The workspace of an ephemeral identity is Shown in Figure~\ref{fig:workspace}.
+
+\begin{figure}[ht]
+	\centering\includegraphics[width=\columnwidth]{../../inc/roughProtocolDesign_workspace.pdf}
+	\caption{Layout of a workspace}
+	\label{fig:workspace}
+\end{figure}
+
+Each workspace stores objects for a limited amount of time. 
+
+\subsubsection{Blending Layer}
+The blending layer provides the ``undetectability'' feature of the Vortex system. To avoid transport protocol misuse and unintentional exit nodes of the protocol, the RBB has no control over the transported content except for the hidden VortexMessage and how it is embedded. This rule loads the burden of sensible cleartext payload generation to the blending layer. 
+
+A blending layer may provide multiple strategies to embed a message. In our prototype we always sent a VortexMessage by embedding its content into an attachment. While F5\cite{f5} is currently preferred for embedding, current implementation supports as well so called plain embedding simply replacing the file content of the attachment with the VortexMessage. This may be done starting at character 0 or at any other by the blending layer supported position of the file (to leave header data intact).
+
+Furthermore, this layer is taking care of multiple problems:
 \begin{itemize}
 	\item Translating the message into the transport format\\
 	This translation includes jobs such as embedding a message as encoded text, as a binary attachment or hide it within a message using steganography.
@@ -725,100 +826,14 @@ We define the blending layer to work as follows for sending messages:
 	\item Send the message to the appropriate recipient using the transport layer protocol.
 \end{enumerate}
 
+For our first tests, we used a custom transport layer, allowing us to monitor all traffic quickly, and build structures in a very flexible way. This transport layer works locally with a minimum amount of work for setup and deployment. It furthermore works across multiple hosts in a broadcast domain. The API may be used to support almost any kind of transport layer. After that, we focused on the protocols identified as suitable as transport protocols:
+\begin{itemize}
+	\item SMTP
+	\item XMPP
+\end{itemize}
+For the prototype, we have implemented an SMTP transport agent and the respective blending layer.
+
 The routing layer receives the message blocks in a decrypted and authorized form from the blending layer. The routing layer then assembles all information of an identity and makes executes the accepted operations using the available data. 
-
-Tasks of the transport layer are:
-\begin{itemize}
-	\item Build structure representing the block building and the appropriate block IDs.
-	\item Schedule all Routing blocks for processing in a priority queue.
-	\item Authorize all routing blocks ready for processing with the calculated block sizes.
-	\item Process blocks.
-	\item Send prepared building blocks to the Blending layer.
-\end{itemize}
-
-The only exclusions to these capabilities are made to the sending and the receiving node of a message. We always that these two nodes are not compromised observed.
-
-\subsubsection{Identities and Keys}
-During the life of a message, it requires several keys. In the following section, we emphasize on the type, the usage, and their specialties.
-
-\subsubsection{Peer key}
-The peer key is a message specific symmetrical key known to two adjacent routing nodes. The sending node generates it and encrypts it with the public key of the receiving nodes identity key.
-
-\subsubsection{Sender Key}
-The sender key is a symmetric key protecting the routing block and ephemeral identity information of the message. It is prepended to the header section and protected by the identity key of the processing node.
-
-\subsubsection{Identity Key}
-The Identity key is a static, asymmetric keypair existing on a per user base used to sign messages or encrypt symmetric keys. We refer here as a user any peer participating in the message stream. Every user participating in the Vortex network requires at least one key pair. Depending on the use-case (e.g., unlikable signatures or scalable security), a user may use multiple key pairs at the same time.
-
-\subsubsection{Ephemeral Key}
-An ephemeral identity key identifies the sender to a processing host. It is asymmetric, short-lived (typically hours or days) and is created upon request of an RBB. It does not link to another identity (unlinkability). The purpose of an ephemeral key is to identify and protect the workspace on a node. This workspace is used for processing and storing VortexMessages and to process accounting information.  
-
-To create an ephemeral key, an RBB sends an empty VortexMessage to a node only containing a header request for creation of a new identity. The routing node may accept this request or reply with a request for proof of work. As a proof of work, the RBB has to send an identity block containing a specific pattern linked to the requested entity and the hash of the identity block has to start with a specified bit sequence. The length of the requested hash bit sequence reflects the complexity of the puzzle. The granting routing node may freely decide upon the validity and the complexity of the puzzle. 
-
-\subsection{Messages and VortexMessages}
-A message is passed in full or only partially from routing node to another routing node. We refer as ``message'' to the full message as entered by the sender and received by the receiver. A ``VortexMessage'' is used for the message which is passed from routing node to routing node and contains the message, parts of the message or just decoy content. We show in figure  \ref{fig:messageOutline} a simplified view on a VortexMessage.
-
-\begin{figure*}[ht]
-	\includegraphics[width=\textwidth]{../../inc/blockLayoutSimplified}
-	\caption{Simplified message outline}
-	\label{fig:messageOutline}
-\end{figure*}
-
-A VortexMessage is passed from one router to another and is embedded as binary data in the transfer protocol. Every router may decide for himself on the support of algorithms and embedding mechanisms.
-
-The block structure of a Vortex message is as follows:
-\begin{itemize}
-	\item Encrypted peer key $k_{peer_n}$\\
-          Contains symmetrical key for decryption of follow up header information and payload blocks. The key is encrypted with the receiving host's public key. The key is known to the RBB, the message sending node, and the message receiving node. No other node knows the key.
-	\item padding\\
-	      This padding makes sure that the message part encrypted with the peer key does look different for each payload even when reusing keys. This case is not recommended but unavoidable in the case of a reused routing block. 
-	\item header block encrypted with $k_{sender_n}$ and signed with the identities private key.
-	\begin{itemize}
-		\item Identity and ``proof of work'' information\\
-		      This information contains the public key of the identity. It serves as an identifier for the workspace and is authenticates by the signature.
-		\item Replay protection information\\
-		      This information allows a node to identify replayed Messages even if the payload of the content has been modified.
-		\item Forward secret information\\
-		      This information allows a node to identify VortexMessages where tampering occurred by recombining blocks of multiple messages.      
-		\item (optionally) Proof-of-work information\\
-              This information allows a sending node to fulfill a proof of work requirement raised due to a previously sent request.      
-	\end{itemize}
-	\item Routing blocks (encrypted with sender key)
-	\begin{itemize}
-		\item Next hop timing instructions
-		      This specifies by when building instructions should be carried out relative to the moment of reception of the VortexMessage. It is specified as a time range. There may be multiple timing instructions. Each of the instructions refers to precisely one routing block and one header block.
-		\item Next hop routing blocks\\
-		      These routing blocks are placed into the VortexMessage created according to the build instructions and are already encrypted with $k_{sender_{n+1}}$ and thus not readable to the current node.
-		\item Next hop header (encrypted with $k_{sender_{n+1}}$)
-		      These header blocks are placed into the VortexMessage created according to the build instructions and are already encrypted with $k_{sender_{n+1}}$ and thus not readable to the current node.
-		\item Message build instructions.\\
-		      These instructions form the core for the workspace and contain all instructions and the information which payload blocks should be included in each of the messages.
-		\item Next hop peer key $k_peer_{n+1}$.
-		\item Next hop blending instructions.\\
-		      These contain the information about what transport to use, what blending to use, and the address of the next router node.
-	\end{itemize}
-	\item Encrypted payload blocks (encrypted with peer key)
-	\begin{itemize}
-		\item Payload blocks
-	\end{itemize}
-\end{itemize}
-
-It is important to note that there are two symmetrical keys involved in encrypting and decrypting message headers. Having two keys is not a flaw in the protocol but necessary. 
-
-The first key of a VortexMessage is the peer key $k_{sender_n}$. This key is only accessible with the private key of the node receiving the message and is furthermore known by the RBB. It allows decryption of the routing blocks concerning the current node and the header information. The sender of a message block is therefore not able to tell if a message contains one or more routing blocks. It is important to note that no other node should have access to this information. 
-
-The second key is the peer key $k_{peer_n}$ located in the encrypted header. The RBB chooses the key. This key protects the inner structure of the message. It makes it impossible for any node except the sending or the receiving peer node to detect the inner structure of the message. Without this key, any independent observer with knowledge about the blending capabilities of a receiving node may:
-\begin{itemize}
-	\item easier identify the block structure.\\ 
-	This remains the case regardless of whether ASN.1 or length prefixed structures are used. If the structure of a vortex Message is identifiable, the messages may be logged or dropped by an adversary.
-	\item Identify the routing block size.\\
-	The value of this information is only minimal as it only reflects the complexity of the remaining routing information indirectly.
-	\item Identify the number of payload blocks and their respective sizes. \\
-	This is valuable information when following the traffic of a message.
-\end{itemize}
-
-\subsection{Transport and Blending Layer\label{sec:transportAndBlending}}
-The tuple of Transport and Blending layer builds the main core functionality when it comes to the undetectability property. To avoid transport protocol misuse and unintentional exit nodes of the protocol, the RBB has no control over the transported content except for the hidden VortexMessage and how it is embedded. This rule loads the burden of sensible cleartext payload generation to the blending layer. 
 
 It is relatively easy to generate a credible cleartext message to pass an automated testing engine. This statement may be verified by looking at the effectivity of today's junk mail filters. These filters have huge problems continuously adapting to the new types of unsolicited bulk emails (UBE).
 
@@ -834,16 +849,6 @@ The VortexMessage itself is binary, and as such, there are only limited possibil
 Plain embedding means that we insert a sequence of blocks into a standard message. This is typically done within files with a weaker structure and high entropy (such as an MP3 encoded file). While this is very hard to detect for a machine, it becomes immediately suspicious for a human censor. A human censor would detect the presence of a payload which does not make any sense.
 
 For steganographic embedding, we decided to go for F5\cite{f5}. It is a reasonably well-researched algorithm which attracted many researchers. The original F5 implementation had a detectable issue with artifacts\cite{F5broken} caused by the recompression of the image. This issue was caused only due to an issue in the reference implementation, and the researchers have provided a corrected reference implementation without the weakness. Like always, the type of embedding may be specified and replaced upon request. 
-
-\subsection{Routing and Accounting\label{sec:routingAndAccounting}}
-Each routing layer does the anonymization operations. These operations should make sure that no message may be identified unless destined for the current node. An incoming  VortexMessage is first extracted by the routing layer and authenticated through the accounting layer. For a message to be valid, the identity must be known (or include an identity creation request), the VortexMessage must not be replayed, and there must be an available quota for the message. If all criteria apply the VortexMessage content consisting of routing blocks, operations, and the payload is added to the workspace of the identity.
-
-Each routing block of a workspace has an active time range measured in seconds since the arrival of its message on the transport layer. If a routing block becomes active, operations for building its payload blocks are processed, and new VortexMessages are assembled and passed to the blending layer for embedding and sending.
-
-\subsection{Header Requests}
-There are several header requests available to the protocol mainly supporting the message transfer. There are header requests for creating ephemeral identities on a node, and for raising a message or size quota. Additionally, there are some helper requests for querying quotas of an ephemeral identity and for querying the capabilities of a node. Additionally, a node may offer knowledge about other routing nodes. This request should, however, only discover nodes in jurisdictions, where the operation of such nodes is legal.
-
-Some of the requests may be replied with the requirement of providing a ``proof of work'' to be fulfilled. A node is free to not reply to a request or reject it depending on its privacy needs and the current usage of resources.
 
 \subsection{The Core: Operations}
 We differentiate three types of operations:
@@ -947,7 +952,7 @@ The padding is not a standard padding from encryption. The reason for this lies 
 	\item The padding must work with any size padding space.
 \end{itemize}
 
-The padded value $\mathbf{X}$ for a function $RS_{\text{m of n}}$ and an encryption block size of $k$ is calculated as follows:
+The padded block $\mathbf{X}$ is created from a padding value $p$, the unpadded block $\mathbf{M}$ and a srie of padding bytes. We build $\mathbf{X}$ for a function $RS_{\text{m of n}}$ and an encryption block $\mathbf{M}$ sized $k$ as follows:
 \begin{eqnarray}
 	i          & = & len(\mathbf{M})\\
 	e          & = & k \cdot n\\
@@ -969,7 +974,11 @@ This padding has many important advantages:
 The Reed-Solomon operation is done with a Vandermonde matrix. Unlike in error correcting systems, we do not normalize the matrix so that the result of the first blocks is equivalent to the original message. Instead, the error correcting information is equally distributed over all resulting blocks adding further obfuscation. Since the entropy of the resulting blocks is lowered and may thus leak an estimate of how a resulting block may have been treated, we added the encryption step to equalize entropy again. The previously introduced padding guarantees that there is no further padding on block level required. Such padding could leak in case of decryption whether the block has been altered or not.
 
 \subsection{Usage of the Protocol}
-First, a sending node collects either a set of nodes and keys it wants to use and creates identities on these nodes using header requests. Then the sender creates a routing block containing all the routing instructions (hops and operations). Alternatively, a sender may use a premanufactured routing block for the specified target. This routing block is then concatenated to a message and passed to the locally running routing node. From there the message is routed as defined in the routing block. An example of such a route is shown in Fig.~\ref{fig:protocolOutline}.
+First, a sending node collects either a set of nodes and keys it wants to use and creates identities on these nodes using header requests. Then the sender creates a routing block containing all the routing instructions (hops and operations). Alternatively, a sender may use a premanufactured routing block for the specified target. This routing block is then concatenated to a message and passed to the locally running routing node. From there the message is routed as defined in the routing block. An example of such a route is shown in Figure~\ref{fig:protocolLayers}.
+
+An absolutely trivial routing block may only include the direct hop from the sender to the receiver. When adding subsequent decoy paths leaving the receiver, it is even for an adversary capable of mapping ephemeral identities to the respective RBB impossible to tell the final recipient. this due to the fact that a message may increase or decrease in its size even after the final delivery through the addRedundancy operation. even the recipient node is unable to tell if there are any other messages routed if crafted properly.
+
+If a node is using always a set of $k$ recipients of its address book, at least $k$ anoymity is achieved. If all other nodes involved in routing ar compromized by an adversary, he is still unable to tell anything
 
 \section{Discussion of the Results}
 We first focus on the protocol itself to show the strength an weaknesses of the protocol. After that, we focus on the dynamic part and see what type of data may be collected when considering not only the protocol but the whole message flow. We then present guidelines for different jurisdictional types.
@@ -979,9 +988,9 @@ We focus on an adversary in an environment, where the participation as a Message
 \subsection{Static Protocol Analysis\label{sec:staticAnalysis}}
 A VortexMessage is not identifiable as the message is structureless on the outside. The VortexMessage itself follows the encrypted key without any structure. Therefore, we require the hosts private key to tell whether there is VortexMessage within a transport message or not.
 
-The padding block $PAD$ makes sure that, even if a routing block is reused, the VortexMessage structure is not the same. However, the preceding block with the key remains the same. This block may serve as a fingerprint for an adversary to identify repeated MURBs.
+The padding block $PAD$ makes sure that, even if a routing block is reused, the VortexMessage structure is not the same. However, the preceding block with the key remains the same unless the RBB provided multiple key blocks. If  key block is reused, an adversary to identify repeated MURBs by this fingerprint.
 
-Next, and one of the biggest problems we found is that a VortexNode is aware of its immediate peers. This flaw is because we do require a routable address for the transport protocol. Vortex nodes may thus discover their peers. It is, on the other side, not possible to use discovered peers. To use a peer, a transport address and a host key are required. A VortexNode may query this key, but there is no obligation to reply for the node asked for the key.
+Next, and one of the biggest problems we found is that a VortexNode is aware of its immediate peers. This flaw is because we do require a routable address for the transport protocol. Vortex nodes may thus discover their peers. It is, on the other side, not possible to use discovered peers. To use a peer, a transport address and a host key are required. A VortexNode may query this key, but there is no obligation to reply for the node asked for the key. We were unable to find a protocol comonly used in the Internet allowing to cloak the receiving node of a message.
 
 An active adversary may not create its routing blocks or header blocks and inject them due to the forward secret. He may, however, replace the peer key of a message. As this key is known to him, he gains no additional knowledge. Replacing the sender key block breaks the message. Replacing the header or routing block of the message with another header or routing block from the same ephemeral identity breaks the message unless the RBB reused the sender key and the forward secret. Finally, exchanging, omitting, or adding payload blocks renders the message inoperable, but does not generate additional knowledge. Replying the same or a modified block does not generate any pattern on the network as the replay protection stops propagating messages at the next node. Thus, a replayed block does not generate new knowledge to an observer.
 
