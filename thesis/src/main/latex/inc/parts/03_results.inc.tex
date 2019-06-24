@@ -463,21 +463,21 @@ For an ephemeral identity, very little information has to be kept. This identity
 
 The following data has to be kept per identity:
 \begin{itemize}
-	\item $\mathbf{ID}\langle pubKey, expiry, messagesLeft, bytesLeft \rangle$
+	\item $\mathbf{EIdentity}\langle pubKey, expiry, messagesLeft, bytesLeft \rangle$
 	\item $\mathbf{Puzz[]}\langle expiry, request, puzzle \rangle$
-	\item $\mathbf{Build[]}\langle expiry, targetID, buildOperation \rangle$
+	\item $\mathbf{Build[]}\langle expiry, buildOperation \rangle$
 \end{itemize}
-The $\mathbf{ID}$ tuple is the longest living tuple. It reflects an ephemeral identity and exists as long as the current identity is valid. All other tuples are short living lists. As the server decides if he accepts new identities or not, the size of this data is controllable.
+
+The $\mathbf{EIdentity}$ tuple is the longest living tuple. It reflects an ephemeral identity and exists as long as the current identity is valid. All other tuples are short living lists. As the server decides if he accepts new identities or not, the size of this data is controllable.
 
 $\mathbf{Puzz[]}$ is a list of not yet solved puzzles of this user. Every puzzle has a relatively short lifespan (typically below 1d). As the server may decide how many outstanding puzzles he accepts, he controls the size of this.
 
 $\mathbf{Build[]}$ is a list of building instructions for a message. The server may decide at any time to reject a too big list or a too long living message. Thus he may control the size of this list as well. However, controlling the size of this list will most likely result in the non-delivery of a message.
 
-
 \subsubsection{Accounting Data of a ``header'' Block}
 All accounting data of a header block is connected to the respective identity. All header blocks do expire latest with their respective identity. The following data has to be kept on a mix:
 \begin{itemize}
-	\item $\mathbf{HL}\langle identity, serial, remainingReplays, expiry\rangle$\\
+	\item $\mathbf{HL}\langle identity, serial, remainingReplays, expiry, lastSeen \rangle$\\
 	This is the long term header list. It lists all headers of an ephemeral identity, and how many replays are left until the requests are rejected.
 	\item $\mathbf{HS}\langle identity, serial, arrivalTime, hash, duration \rangle$\\
 	This is the short term replay protection. It protects a block with the same hash from being replayed.
