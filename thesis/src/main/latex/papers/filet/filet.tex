@@ -294,7 +294,7 @@
 
 % *** PDF, URL AND HYPERLINK PACKAGES ***
 %
-\usepackage{url}
+\usepackage[hyphens]{url}
 % url.sty was written by Donald Arseneau. It provides better support for
 % handling and breaking URLs. url.sty is already installed on most LaTeX
 % systems. The latest version and documentation can be obtained at:
@@ -363,8 +363,8 @@
 \author{Martin~Gwerder%,~\IEEEmembership{Member,~IEEE,}
         %John~Doe,~\IEEEmembership{Fellow,~OSA,}
 
-\IEEEcompsocitemizethanks{\IEEEcompsocthanksitem M. Gwerder was with the Institute of Mobile and Distributed Systems
-of the University of Applied Sciences of Northwestern Switzerland.\protect\\
+\IEEEcompsocitemizethanks{\IEEEcompsocthanksitem M. Gwerder is with the Institute of Mobile and Distributed Systems
+of the University of Applied Sciences Northwestern Switzerland.\protect\\
 % note need leading \protect in front of \\ to get a newline within \thanks as
 % \\ is fragile and will error, could use \hfil\break instead.
 E-mail: see http://www.messagevortex.net
@@ -503,19 +503,19 @@ Anonymity, Unlinkability, Communication protocol, Steganography
 % and "HIS" in caps to complete the first word.
 \IEEEPARstart{A}{lmon Brown Strowger} was the owner of a funeral parlor in St. Petersburg. He filed a patent on March \nth{10}, 1891 for an ``Automatic Telephone Exchange'' \cite{pulseDialingPatent}. This patent built the base for modern automated telephone systems. According to several sources, he was annoyed by the fact that the local telephone operator was married to another undertaker. She diverted potential customers of Mr. Strowger to her husband instead, which caused Almon B. Strowger to lose business. In 1922, this telephone dialing system, which is nowadays called pulse dialing became the standard dialing technology for more than 70 years until tone dialing replaced it.
 
-This dialing technology enabled automatic routing for voice and text messages (e.g., telex) up until today and is one of the foundations for our current routed networks. These networks build the base of our communication-based Society these days and allow us to connect quickly with any person or company of our wish. We use these networks today as communication meaning for all purposes, and most of the people spend minimal thoughts on the possible consequences arising if someone puts hands on this communication. 
+This dialing technology enabled automatic routing for voice and text messages (e.g., telex) up until today and is one of the foundations for our current routed networks. These networks build the base of our communication-based society these days and allow us to connect quickly with any person or company of our wish. We use these networks today as communication meaning for all purposes, and most of the people spend minimal thoughts on the possible consequences arising if someone puts hands on this communication. 
 
 Collected data may be used to judge upon our intentions and thus is not only confidential if we have something to hide. This problem has dramatically increased in the last years as big companies and countries started to collect all kinds of data and created the means to process them. Such a judgment allows, supposedly, to classify people and their intentions. This is not limited to what they are doing but as well, on what they did and what they might do. Numerous events in the present and past show that multiple actors, some of which are state-sponsored, collected data on a broad base within the Internet. Whether this is a problem or not may be disputable. Undisputed is that such data requires careful handling, and accusations should then base on solid facts. Unacceptable seems the use of ``guesses'' or ``extrapolations'' in most of the cases.
 
 To show that this may happen even under complete democratic control, we may refer to events such as the ``secret files scandal'' (or  ``Fichenskandal'') in Switzerland. In the years from 1900 to 1990 Swiss government collected 900’000 files in a secret archive (covering roughly 10\% of the natural and juristic entities within Switzerland at that time)\cite{Leuenberger1989}.
 
-Whistleblower Edward Snowden leaked a vast amount of documents. These documents suggested that such attacks on privacy are commonly made on a global scale. The documents leaked in 2009 and a significant number of journalists from multiple countries screened them (e.g., \cite{NCR2013}, \cite{XKeyscore}, \cite{Ball2013} or \cite{Greenberg2013}). According to these documents, NSA infiltrated more than 50k computer networks with malware to collect classified or personal information. They furthermore infiltrated Telecom-Operators (according to the same documents mainly executed by British GCHQ) such as Belgacom to collect data and targeted high member of governments even in associated states (such as the mobile phone number of Germany's president and high ranking members of economy and finance).
+Whistleblower Edward Snowden leaked a vast amount of documents. These documents suggested that such attacks on privacy are commonly made on a global scale. The documents leaked in 2009 and a significant number of journalists from multiple countries screened them (e.g., \cite{NCR2013}, \cite{XKeyscore}, \cite{Ball2013} or \cite{Greenberg2013}). According to these documents, Natinal Security Agency (NSA) infiltrated more than 50k computer networks with malware to collect classified or personal information. They furthermore infiltrated Telecom-Operators (according to the same documents mainly executed by British GCHQ) such as Belgacom to collect data and targeted high member of governments even in associated states (such as the mobile phone number of Germany's president and high ranking members of economy and finance).
 
-The National Security Agency (NSA) collected network data with a program called XKeyscore. Several proofs and in-depth information have been found within the documents leaked by Snowden (e.g., \cite{XKeyscore}). According to these papers, XKeyscore spanned (in 2008) $\approx150$ sites with $700$ Severs collecting emails, web traffic, and chat messages.
+The NSA collected network data with a program called XKeyscore (e.g., \cite{XKeyscore}). According to the leaked papers, XKeyscore spanned (in 2008) $\approx150$ sites with $700$ Severs collecting emails, web traffic, and chat messages.
 
 This list of events shows that big players are collecting and storing vast amounts of data for immediate or possible future analysis. The list of events also shows that the use of this data has in the past been at least partially questionable. As a part of possible countermeasures, this work analyses the possibility of using state-of-the-art technology to minimize the information footprint of a person on the Internet. 
 
-We leave a large information footprint in our daily communication. On a regular email, we disclose everything in a ``postcard'' to any entity on its way. Even when encrypting a message perfectly with today's technology (S/MIME\cite{RFC2045} or PGP\cite{RFC2015}) it still leaves at least the originating and the receiving entity disclosed, or we rely on the promises of a third party provider which offers a proprietary solution. Even in those cases, we leak pieces of information such as ``message subject'', ``frequency of exchanged messages'', ``size of messages'', or ``client being used''. This meta information may leak properties such as the intensity of relationships or group memberships. A suitable anonymity protocol has, therefore, not only a message to hide but additional attributes as well. It includes leaving the message itself aside, all metadata, and all the traffic flows. Furthermore, a protocol to unlink and anonymize messages should not rely on the trust of infrastructure other than the infrastructure under control of the sending or receiving entity. Trust in any third party might be misleading in terms of security of the protocol.
+We leave a large information footprint in our daily communication. On a regular email, we disclose everything in a ``postcard'' to any entity on its way. Even when encrypting a message perfectly with today's technology (S/MIME\cite{RFC2045} or PGP\cite{RFC2015}) it still leaves at least the originating and the receiving entity disclosed, or we rely on the promises of a third party provider which offers a proprietary solution. Even in those cases, we leak pieces of information such as ``message subject'', ``frequency of exchanged messages'', ``size of messages'', or ``client being used''. This meta information may leak properties such as the intensity of relationships or group memberships. A suitable anonymity protocol has, therefore, not only to hide a message but additional attributes as well. It includes leaving the message itself aside, all metadata, and all the traffic flows. Furthermore, a protocol to unlink and anonymize messages should not rely on the trust of infrastructure other than the infrastructure under control of the sending or receiving entity. Trust in any third party might be misleading in terms of security of the protocol.
 
 Central infrastructure is bound to be of particular interest to anyone gathering data. It may furthermore allow manipulating the system or the data or the data flow. So, avoiding a central infrastructure was a primary goal for our protocol.
 
@@ -523,15 +523,27 @@ Leaving no information trail when sending information from one person to another
 
 Allowing an entity to collect data may affect senders and recipients of any information. Collection of vast amounts of data allows a potent adversary to build a  profile of a person. Unlike in the past, the availability of this kind of information has been risen to a never known extend with the Internet.
 
-An entity in possession of such Profiles may use them for many purposes. These include service adoption, directed advertising, or classification of citizens. The examples given above show that the effects of this data is not limited to the Internet but reaches us effectively in the real world. While directed advertising may be classified as legit use, a general classification of citizens was considered as unacceptable in the past (see previously quoted documents \cite{NCR2013}, \cite{XKeyscore}, \cite{Ball2013}, \cite{Greenberg2013},\cite{Leuenberger1989})
+An entity in possession of such Profiles may use them for many purposes. These include service adoption, directed advertising, or classification of citizens. The examples given above show that the effects of this data is not limited to the Internet but reaches us effectively in the real world. While directed advertising may be classified as legit use, a general classification of citizens was considered as unacceptable in the past (see previously quoted documents \cite{NCR2013}, \cite{XKeyscore}, \cite{Ball2013}, \cite{Greenberg2013},\cite{Leuenberger1989}).
 
 The main problem of this data is that it may be collected over a considerable amount of time and evaluated at any time. It even happened that standard practices of the time are judged differently upon later. Persons may then be judged retrospectively upon these types of practice. This questionable type of judgment is visible in the tax avoidance discussion\cite{Amat1999}. 
 
-People must be able to control their data footprint. Not providing these means does effectively allow any country or a bigger player to ban and control any number of persons within or outside the Internet.  
+People must be able to control their data footprint. Not providing thhis control does effectively allow any country or a bigger player to ban and control any number of persons within or outside the Internet.  
 
-In this work, a new protocol is designed to allow message transfer through existing communication channels. These messages are next to unobservable for any third party. This unobservability does not only cover the message itself but all metadata and flows associated with it. We called this protocol ``MessageVortex'' or in short just ``Vortex''. The protocol is designed in such a way so that it is capable of using a wide variety of transport protocols. It is even possible to switch protocols while the messages are transferred. This behavior allows media breaches (at least on a protocol level) and makes analysis even harder.
+\section{Formalization}
+In this work, a new protocol is designed to allow message transfer through existing communication channels. These messages are next to unobservable for any third party. This unobservability does not only cover the message itself but all metadata and flows associated with it. We called this protocol ``MessageVortex'' or in short just ``Vortex''. The protocol is designed in such a way so that it is capable of using a wide variety of transport protocols. It is even possible to switch transfer protocols for the same message in transfer. This behavior allows media breaches (at least on a protocol level) and makes analysis of the protocol by an adversary even harder.
 
-The new protocol allows secure communication without the need for trusting the underlying transport media. Furthermore, the usage of the protocol itself is possible without altering the immediate behavior of the transport layer. That way it is possible to use the transport layers regular traffic to increase the noise in which information has to be searched. 
+\subsection{What We Worked On}
+The new protocol allows secure communication without the need for trusting the underlying transport media. Furthermore, the usage of the protocol itself is possible without altering the immediate behavior of the transport layer. That way, it is possible to use the transport layers regular traffic to increase the noise in which potential information has to be searched by an adversary. 
+
+We send messages between nodes by hiding a message in a common transport protocol in the internet (e.g., SMTP) by so called routing nodes. The routing nodes take instructions on how to process the message from the message itself and send the processed information including an encrypted set of processing instructions to the next nodes. The instructions available are encryption/decryption, splitting and merging, and add/remove redundancy information by applying a Reed-Solomon operation. To avoid collisions when sending messages a sender first allocates a workspace on each node used to route the message. Each workspace holds message parts and instructions on how to process them for a very limited amount of time. The message parts are represented in the workspace as IDs whereas the first IDs have special meanings (e.g., a block unfolding to ID 0 is destined for the current node). 
+
+Either instructions provided in the message itself or received and triggered afterwards by the same routing block builder may be used to assemble messages for the current node or neighboring routing nodes.
+
+A message typically includes from the very start all information to process the message to the end. Every routing node is just processing ``its part'' without any knowledge of what it is processing. A routing node is unaware if generated additional message content by Reed-Solomon operations is used for redundancy or decoy traffic generation.
+
+Diagnosis or even reputation may be built by routing intermediate results of the message transfer back to the sender. If message delivery fails, a sender may create additional messages picking up such intermediate results for diagnosis.
+
+We did not only implement the instruction part of the protocol, but a holistic protocol approach trying to mitigate misuse of the system by design. While it is not yet production grade it features all parts of the protocol.
 
 \subsection{About Unlinkability, Unobservability, Undetectability and Censorship resistance}
 For definition of terms ``unlinkability'', ``anonymity'', and ``undetectability'', we use definitions as provided by \cite{anon_terminology}. From an academic point of view, achieving anonymity is relatively simple. All we need is a trusted party distributing the messages while making sure that no trace from the sender arrives at the recipient. Unlinkability is much harder to achieve. It requires that a specified attacker is unable to link a sender and recipients of a message. A soon as a system provides properties identifiable by third parties, it is prone to denial of service and thus partial or full censorship. By introducing a global observer or infiltrating parts of the system, an attacker may gain insight into the messages transported by the system and thus leaking information.
@@ -541,7 +553,7 @@ So to be censorship resistant, a protocol requires many critical, unobvious prop
 MessageVortex is a protocol providing censorship resistance under ideal circumstances. It does this using a rigid design from bottom up to provide the required properties. While being a protocol on its own, it uses many standard protocols. Partly to provide user-friendliness, but mostly to hide within the regular network flows. As such, a protocol requires to be undetectable on the network. A protocol all alone may not be undetectable as each protocol sends data over a network. This data is detectable. A protocol sending undetectable data, a censorship-resistant protocol requires to be embedded undetectably in legit message flows or hide in side channels. Such embedding is usually done either by side channel transmissions or by employing steganography. Our protocol may use both. The steganography is, however, the preferred way as it implies no control over the transport infrastructure.
 
 \subsection{Adversary Model}
-We refer to jurisdiction as a geographical area where a set of legal rules created by a single actor or a group of actors apply and contains executive means to enforce this set of legal rules.
+We refer to jurisdiction as a geographical area where a set of legal rules created by a single actor or a group of actors apply and this geographical area contains, furthermore, the executive means to enforce this set of legal rules.
 
 We assume that the most potent adversaries are state-sponsored actors. Such actors may have high funding and are assumed to have elaborated capabilities within the jurisdiction of the sponsor. State-sponsored actors may work with allies. Achieving dominance on a world scale is excluded from our model. We always assume one or more actors with disjoint interests covering half of the network or more. We, furthermore, assume that there are always neutral actors not having  disjoint interests
 
@@ -564,18 +576,18 @@ To achieve these goals, we assume the following properties of our adversary:
 	\item An adversary may have similar access to resources as within its jurisdiction in a limited number of other jurisdictions.
 \end{itemize}
 
-We may test this adversary by taking a known, strong adversary. This adversary is much more potent than the supposed XKeyscore application. It surpasses the XKeyscore in terms of observation capabilities and routing. The Snowden papers suggest that this type of adversary is generally realistic, but even the supposedly most powerful country in the world was unable to set up such an adversary.
+We may verify this adversary by taking a known, strong adversary. The adversary defined above is much more potent than the supposed XKeyscore application. He surpasses the XKeyscore in terms of observation capabilities and routing. The Snowden papers suggest that this type of adversary is generally realistic, but even the supposedly most powerful country in the world was unable to set up such an adversary.
 
 \subsection{Notation \label{sec:encNot}}
 The theory in this document is heavily based on symmetric encryption, asymmetric encryption, and cryptographic hashing. To use a uniformed notation, we use $E^{K_a}(M)$ (where $a$ is an index to distinguish multiple keys) for an encrypting function with a key $K_a$. This results in $\mathbf{M^{K_a}}$ for the encrypted message. If we are reflecting a tuple of information, we write in boldface. To express a concatenated set of information, we use angular brackets $\mathbf{\langle normalAddress,vortexAddress\rangle }$. 
 
 For a symmetric encryption of a message $\mathbf{M}$ with a key $K_a$ resulting in $\mathbf{M^{K_a}}$ where $a$ is an index to distinguish different keys. Decryption uses therefore $D^{K_a}(\mathbf{M^{K_a}})=\mathbf{M}$.
 
-As notation for asymmetric encryption we use $E^{K^{1}_a}(\mathbf{M})$ where as $K^{-1}_a$ is the private key and $K^{1}_a$ is the public key of a key pair $K^p_a$. The asymmetric decryption is noted as $D^{K^{-1}_a}(\mathbf{M})$.
+As notation for asymmetric encryption we use $E^{K^{1}_a}(\mathbf{M})$ where as $K^{-1}_a$ is the private key and $K^{1}_a$ is the public key of a key pair $K^{p_a}=\langle K^1_a, K^{-1}_a\rangle$. The asymmetric decryption is noted as $D^{K^{-1}_a}(\mathbf{M})$.
 
 For hashing, we do use $H(\mathbf{M})$ if unsalted and $H^{S_a}$ if using a salted hash with salt $S_a$. The generated hash is shown as $H_M$ if unsalted and $H^{S_a}_M$ if salted.
 
-If we want to express what details contained in a tuple we use the the notation $\mathbf{M\langle t,MURB,serial\rangle }$ respectively if encrypted $\mathbf{M^{K_{a}}\langle t,MURB,serial\rangle}$.
+If we want to express what details contained in a tuple we use the notation $\mathbf{M\langle t,MURB,serial\rangle }$ respectively if encrypted $\mathbf{M^{K_{a}}\langle t,MURB,serial\rangle}$.
 
 \begin{align*}
 \text{asymmetric:}         & E^{K^{-1}_a}\left(\mathbf{M}\right)                            && =\mathbf{M}^{K^{-1}_a}\\
@@ -587,16 +599,16 @@ If we want to express what details contained in a tuple we use the the notation 
 \text{hashing (salted):}  & H^{S_a}\left(\mathbf{M}\right)                                 && =\mathbf{H}^{S_a}_M
 \end{align*}
 
-In general, subscripts denote selectors to differentiate values of the same type, and superscript denotes relevant parameters to operations expressed. The subscripted and superscripted information may be omitted where not needed.
+In general, subscripts denote selectors to differentiate values of the same type or specifications, and superscript denotes relevant parameters to operations expressed. The subscripted and superscripted information may be omitted where not needed.
 
 We refer to the encrypted components of a Vortex Message as follows:
 \begin{align*}
-\text{Prefix component:}         & \mathbf{PREFIX}                 &=D^{K^{1}_a}\left(\mathbf{P}^{K^{-1}_a}\right) &=D\left(\mathbf{P}\right)\\
-\text{Header component:}         & \mathbf{HEAD}                 &=D^{K^{1}_a}\left(\mathbf{H}^{K^{-1}_a}\right) &=D\left(\mathbf{H}\right)\\
-\text{Route component:}         & \mathbf{ROUTE}                 &=D^{K^{1}_a}\left(\mathbf{R}^{K^{-1}_a}\right) &=D\left(\mathbf{R}\right)\\
+\text{Prefix:} &\mathbf{PREFIX}&=D^{K^{1}_a}\left(\mathbf{PREFIX}^{K^{-1}_a}\right) &=D\left(\mathbf{P}\right)\\
+\text{Header:} &\mathbf{HEAD}&=D^{K^{1}_a}\left(\mathbf{HEAD}^{K^{-1}_a}\right)   &=D\left(\mathbf{H}\right)\\
+\text{Route:}  &\mathbf{ROUTE}&=D^{K^{1}_a}\left(\mathbf{ROUTE}^{K^{-1}_a}\right)  &=D\left(\mathbf{R}\right)\\
 \end{align*}
 
-For a more precise description of the message see \ref{sec:messageOutline}.
+While this representation is perfectly true from the mathematical point of view, we used for the implementation a symmetrical key $K_b$ to encrypt the blocks which was protected by an asymmetric key pair, which then results in $\mathbf{M}=D^{D^{K^{-1}_a}(K_b)}\left(\mathbf{MESSAGE}^{K_b}\right)$. For a more precise description of the message see \ref{sec:messageOutline}.
 
 In general, a decrypted Block is written as capitalized multi-character boldface. An encrypted Block is written as capitalized single character boldface.
 
@@ -604,12 +616,12 @@ To specify a random byte sequence of $n$ octets generated by an PRNG of type $t$
 
 \subsection{Related work}
 \subsubsection{Definition of Censorship, Anonymity, Unlinkability and Censorship Resistance}
-As a definition for censorship, we take
+As a definition for censorship, we take a definition which is attributed to Chuck Stone Professor at the School of Journalism and Mass Communication, University of North Carolina. 
 \begin{quote}
-	Censorship: the cyclical suppression, banning, expurgation, or editing by an individual, institution, group or government that enforce or influence its decision against members of the public -- of any written or pictorial materials which that individual, institution, group or government deems obscene and ``utterly without redeeming social value,'' as determined by ``contemporary community standards.''
+	Censorship: The cyclical suppression, banning, expurgation, or editing by an individual, institution, group or government that enforce or influence its decision against members of the public -- of any written or pictorial materials which that individual, institution, group or government deems obscene and ``utterly without redeeming social value,'' as determined by ``contemporary community standards.''
 \end{quote}
 
-Which is attributed to Chuck Stone Professor at the School of Journalism and Mass Communication, University of North Carolina. Please note that ``Self Censorship'' (not expressing something in fear of consequences)  is a form of censorship according to this definition too.
+Please note that ``Self Censorship'' (not expressing something in fear of consequences)  is a form of censorship according to this definition too.
 
 In our more technical context, we reduce the definition to
 \begin{quote}
@@ -627,8 +639,8 @@ A censorship resistant system is a system which allows the entities of the syste
 \end{itemize}
 
 For all other anonymity relevant terms, we refer to \cite{anon_terminology}.
-\DeclareFixedFootnote{\omitted}{footnotes omitted in quote}. It defines anonymity as 
-
+\DeclareFixedFootnote{\omitted}{footnotes of quotes are ommited in citations for clarity}
+It defines anonymity as 
 \begin{quote}
 	Anonymity of a subject means that the subject is not identifiable within a set of subjects, the anonymity set.\omitted
 \end{quote}
@@ -637,13 +649,13 @@ and
 	Anonymity of a subject from an attacker's perspective means that the attacker cannot sufficiently identify the subject within a set of subjects, the anonymity set.\omitted
 \end{quote}
 
-It defines unlinkability as
+\noindent It defines unlinkability as
 
 \begin{quote}
 	Unlinkability of two or more items of interest (IOIs, e.g., subjects, messages, actions, \ldots) from an attacker’s perspective means that within the system (comprising these and possibly other items), the attacker cannot sufficiently distinguish whether these IOIs are related or not.\omitted
 \end{quote}
 
-And undetectability as
+\noindent and undetectability as
 \begin{quote}
 	Undetectability of an item of interest (IOI) from an attacker’s perspective means that the attacker cannot sufficiently distinguish whether it exists or not.
 \end{quote}
@@ -652,7 +664,7 @@ For our work, We define the anonymity set as the set of all possible subjects wi
 
 The set of terms is further broadened with $k$-Anonymity as defined in \cite{k-anonymous:ccs2003}. $k$-Anonymity is relevant for all jurisdictions where it is insufficient to track an illegal action to more than $k-1$ subjects.
 
-\subsection{Existing work regarding Anonymity Protocols and Censorship Resistance}
+\subsubsection{Existing work regarding Anonymity Protocols and Censorship Resistance}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Manual float placement
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -662,30 +674,30 @@ The set of terms is further broadened with $k$-Anonymity as defined in \cite{k-a
 	\label{fig:protocolLayers}
 \end{figure*}
 
-We were unable to identify a protocol withstanding the strong definition of our adversary. We have, however, found many protocols dealing with anonymity and very few dealing censorship circumventions. We tried to learn from these approaches and tried to integrate useful approaches. It has to be said, however, that very little of the mentioned protocols here had ever experienced broad adoption. Even more, most of them were never implemented or challenged. 
+We were unable to identify a protocol withstanding the definition of our strong adversary. We have, however, found many protocols dealing with anonymity and very few dealing with censorship circumvention. We learned from these approaches and integrated useful approaches wherever we were able to. It has to be said, however, that very little of the mentioned protocols here had ever experienced broad adoption. Even more, most of them were never implemented or challenged. 
 
 In terms of censorship circumvention, we found that only a little work has been done in academia. Several technical ways have been explored to circumvent censorship. All of them seem to boil down to the following main ideas:
 \begin{itemize}
-	\item Hide data\\
-	The most common approaches we have found were either mimicking protocols (as in \cite{mohajeri2013skypemorph}), use protocols as payload transports (\cite{AthanRAM07}) or employ steganography (as in \cite{f5}) or comparable technologies as side channels.
-	\item Copy or distribute data to a vast amount of places in order to improve the lifespan of data\\
+	\item \emph{Hide data}\\
+	The most common approaches we have found were either mimicking protocols (as in \cite{mohajeri2013skypemorph}), use protocols as payload transports (as in \cite{AthanRAM07}), employ steganography (as in \cite{f5}) or comparable technologies as side channels.
+	\item \emph{Copy or distribute data to a vast amount of places in order to improve the lifespan of data}\\
 	This has been done by systems like \cite{freenet}, or WikiLeaks.
-	\item Outcurve censorship measurements\\
-	Censorship measurements, especially regarding the Internet censorship of China, have been analyzed in depth under technological, sociological and economical aspects (\cite{Ensafi_2015}, \cite{Clayton_2006}, or \cite{lowe2007great} to name a few)
+	\item \emph{Outcurve censorship measurements}\\
+	Censorship measurements, especially regarding the Internet censorship of China, have been analyzed in depth under technological, sociological and economical aspects (see\cite{Ensafi_2015}, \cite{Clayton_2006}, or \cite{lowe2007great} to name a few)
 \end{itemize}
 
-For Anonymization the ideas seem mainly to concentrate around onionizing (ToR\cite{tor-spec}, SOR\cite{Egners_2012}, DUO-Onions and Hydra-Onions\cite{iwanik2005duo}), DC networks (DC-Nets\cite{chaum-dc}, Tarzan\cite{tarzan:ccs02}, GAS\cite{AthanRAM07}), mixing (Babel\cite{babel}, MorphMix\cite{morphmix:wpes2002}, Mixminion\cite{minion-design}, Salsa\cite{Salsa}) and DHT tables (Bifrost\cite{Kondo2009}, BitBlender\cite{Bauer_2008}).
+For Anonymization the ideas seem mainly to concentrate around onionizing (ToR\cite{tor-spec}, SOR\cite{Egners_2012}, DUO-Onions and Hydra-Onions\cite{iwanik2005duo}), Dining Cryptographer networks (DC-Nets; e.g., \cite{chaum-dc}, Tarzan\cite{tarzan:ccs02}, GAS\cite{AthanRAM07}), mixing (Babel\cite{babel}, MorphMix\cite{morphmix:wpes2002}, Mixminion\cite{minion-design}, Salsa\cite{Salsa}) and distributed hash tables (DHT; e.g., Bifrost\cite{Kondo2009} or BitBlender\cite{Bauer_2008}).
 
 As we use alien transport protocols instead of our protocol, we decided to go for a mixing approach. This approach minimizes the number of messages between the nodes. Furthermore, mixing allows using the nodes in a structureless way as opposed to DC-nets, where we would have to build fixed or ad-hoc rings for exchanging messages. Unlike other protocols, we do not rely on the logic of mixing on the routing node but entirely on the RBB. Routing nodes follow an onionized set of instructions to build messages. 
 
 \section{The MessageVortex Protocol}
-In this section, we introduce a new consistent, transport independent model for representing the different protocols used by MessageVortex. The focus of the description lies in academic concepts. For more technical information specifying the protocol as implemented, refer to \cite{MessageVortexRFC}. This document provides details such as specific ASN.1 structures outlining every single block.
+In this section, we introduce a new consistent, transport independent model for representing the different protocols used by MessageVortex. The focus of the description lies in academic concepts. For more technical information specifying the protocol as implemented, we refer to \cite{MessageVortexRFC}. 
 
 \subsection{General Design}
 
 Generally, the Vortex System consists only of nodes, whereas a node may be any system always connected to the Internet. This applies to any device regardless of NAT or similar technologies which usually oppose problems for services. Figure~\ref{fig:protocolLayers} shows a network of four nodes passing messages between them. The symbols within the routing layer show the content of a workspace of one ephemeral identity. We elaborate on those two concepts further in the next sections. 
 
-The transport layer is a common message passing protocol on the Internet. This infrastructure is fixed, within the Internet but not modified for the protocol. It serves as a store-and-forward infrastructure. Although we used SMTP for our experiments, it is not limited to this protocol. The RFC draft document also specifies XMPP. We refer to the red part of each node as VortexNode. These nodes may be any device with a permanent connection to the Internet (e.g., a RaspberryPi computer or a mobile phone). The message paths shown in the figure are not relevant. Any path layout such as cyclical or tree-like may be possible.
+The transport layer is a common message passing protocol on the Internet. This infrastructure lies within the public part of the Internet but is not modified for serve this protocol. It offers a store-and-forward infrastructure for the other protocol layers. Although we used SMTP for our experiments, it is not limited to this protocol. The RFC draft document also specifies XMPP. We refer to the upper part (accounting, routing, and blending layer) of each node as VortexNode. These nodes may be any device with a permanent connection to the Internet (e.g., a RaspberryPi computer or a mobile phone). The message paths shown in the figure are not relevant. Any path layout such as cyclical or tree-like may be possible.
 
 The Vortex system routes messages from a sender to one or more recipients. We refer to the message sent by the sender and received by the recipients as ``message''. We use the term ``VortexMessage'' for the messages exchanged between the nodes containing either message parts, full messages or decoy traffic.
 
@@ -707,41 +719,43 @@ The RBB may be the sender of a block or a different node. If the RBB is not iden
 
 A VortexMessage is passed from one router to another and is embedded as binary data in the transfer protocol. Every Vortex node may decide for itself on the support of algorithms and embedding mechanisms.
 
-A VortexMessage contains an encrypted symmetric key $E^{host_n}\left(K_{peer_n}\right)$ immediately followed by an inner message $E^{K_{peer_n}}$ which is encrypted with this key. The inner message contains a series of blocks encoded in ASN.1. We show in Figure~\ref{fig:messageOutline} a simplified view on a VortexMessage. 
+A VortexMessage contains an encrypted symmetric key $E^{K_{host_n}}\left(K_{peer_n}\right)$ immediately followed by an inner message $E^{K_{peer_n}}$ which is encrypted with this key. The inner message contains a series of blocks encoded in ASN.1. In Figure~\ref{fig:messageOutline} we show a simplified view on a VortexMessage. 
 
 The block structure of a Vortex message is as follows:
 \begin{itemize}
-	\item Encrypted peer key $K_{peer_n}$\\
+	\item \emph{Encrypted peer key $K_{peer_n}$}\\
 	Contains symmetrical key for decryption of follow up header information and payload blocks. The key is encrypted with the receiving host's public key. The key is known to the RBB, the message sending node, and the message receiving node. No other node knows the key.
-	\item padding\\
+	\item \emph{Padding}\\
 	This padding is a defined excerpt of the transferred payload blocks (see further down). It makes sure that the message part encrypted with the peer key does look different for each payload even when reusing keys. This case is not recommended but unavoidable in the case of a reused routing block. Using a different IV, in this case, is not an option as the IV is specified in the routing block and thus replayed as well.
-	\item header block encrypted with $K_{sender_n}$ and signed with the identities private key (detached signature).
+	\item \emph{Header block encrypted with $K_{sender_n}$}\\
+	This block contains all information about the sender and is signed with the identities private key (detached signature)
 	\begin{itemize}
-		\item Identity\\
-		This information contains the public key of the identity. It serves as an identifier for the workspace and is authenticates by the signature.
-		\item Replay protection information\\
-		This information allows a node to identify replayed Messages even if the payload of the content has been modified.
-		\item Forward secret information ($forwardSecret$)\\
+		\item \emph{Identity}\\
+		This information contains the public key of the identity. It serves as an identifier for the workspace and is authenticated by the signature.
+		\item \emph{Replay protection information}\\
+		This information allows a node to identify replayed messages even if the payload of the content has been modified.
+		\item \emph{Forward secret information ($forwardSecret$)}\\
 		This information allows a node to identify VortexMessages where tampering occurred by recombining blocks of multiple messages.      
-		\item (optionally) Proof-of-work information\\
+		\item \emph{(optionally) Proof-of-work information}\\
 		This information allows a sending node to fulfill a proof of work requirement raised due to a previously sent request. Proof-of-work (puzzle) is required to assign a ``cost'' to a creator of an ephemeral identity. A node fulfilling a puzzle is ``prepaying'' the costs for one or multiple potential message transfers. 
 	\end{itemize}
-	\item Routing blocks (encrypted with sender key)
+	\item \emph{Routing blocks (encrypted with sender key)}\\
+	This block contains all the information required for processing the payload blocks and reassemble new messages.
 	\begin{itemize}
-		\item Next hop timing instructions
+		\item \emph{Next hop timing instructions}\\
 		This specifies by when building instructions should be carried out relative to the moment of reception of the VortexMessage. It is specified as a time range. There may be multiple timing instructions. Each of the instructions refers to precisely one routing block and one header block.
-		\item Next-hop routing blocks\\
-		These routing blocks are placed into the VortexMessage created according to the build instructions and are already encrypted with $k_{sender_{n+1}}$ and thus not readable to the current node.
-		\item Next hop header (encrypted with $k_{sender_{n+1}}$)
-		These header blocks are placed into the VortexMessage created according to the build instructions and are already encrypted with $k_{sender_{n+1}}$ and thus not readable to the current node.
-		\item Message build instructions.\\
+		\item \emph{Next-hop routing blocks}\\
+		These routing blocks are placed into the VortexMessage created according to the build instructions and are already encrypted with $k_{sender_{a+1}}$ and thus not readable to the current node.
+		\item Next hop header (encrypted with $k_{sender_{a+1}}$)
+		These header blocks are placed into the VortexMessage created according to the build instructions and are already encrypted with $k_{sender_{a+1}}$ and thus not readable to the current node.
+		\item \emph{Message build instructions}\\
 		These instructions form the core for the workspace and contain all instructions and the information which payload blocks should be included in each of the messages.
-		\item Next hop peer key $k_{peer_{n+1}}$.\\
+		\item \emph{Next hop peer key $k_{peer_{a+1}}$}\\
 		This part may contain one or more peer keys.
-		\item Next hop blending instructions.\\
+		\item \emph{Next hop blending instructions}\\
 		These contain the information about what transport to use, what blending to use, and the address of the next router node.
 	\end{itemize}
-	\item Encrypted payload blocks (encrypted with peer key)
+	\item \emph{Encrypted payload blocks (encrypted with peer key)}\\
 	\begin{itemize}
 		\item Payload blocks
 	\end{itemize}
@@ -753,11 +767,11 @@ The first key of a VortexMessage is the peer key $k_{sender_n}$. This key is onl
 
 The second key is the peer key $k_{peer_n}$ located in the encrypted $headerBlock$. The RBB chooses the key. This key protects the inner structure of the message. It makes it impossible for any node except the sending or the receiving peer node to detect the inner structure of the message. Without this key, any independent observer with knowledge about the blending capabilities of a receiving node may:
 \begin{itemize}
-	\item easier identify the block structure.\\ 
+	\item \emph{Easier identify the block structure}\\ 
 	This remains the case regardless of whether ASN.1 or length prefixed structures are used. If the structure of a vortex Message is identifiable, the messages may be logged or dropped by an adversary.
-	\item Identify the routing block size.\\
+	\item \emph{Identify the routing block size}\\
 	The value of this information is only minimal as it only reflects the complexity of the remaining routing information indirectly.
-	\item Identify the number of payload blocks and their respective sizes. \\
+	\item \emph{Identify the number of payload blocks and their respective sizes}\\
 	This is valuable information when following the traffic of a message.
 \end{itemize}
 
@@ -808,7 +822,7 @@ The workspace of an ephemeral identity is shown in Figure~\ref{fig:workspace}.
 	\label{fig:workspace}
 \end{figure}
 
-Each workspace stores objects for a specific ephemeral identity for a limited amount of time. The workspace receives routing blocks, payload blocks, and operations of the respective ephemeral identity. The lifetime of these objects is either limited by the lifetime of the header block (this applies to payload blocks and operations), or by the routing block (applies to the routing block). As soon as a routing block is due he takes compiles a list of all payload blocks which have to be sent and executes the operations to generate them. The routing layer then assembles the inner message with padding (PAD), the header block with a prefix, the routing block, and the generated payload blocks and encrypts the whole stream with the peer key $K_{peer_{n+1}}$. The header and routing blocks are already pre-encrypted with $K_{sender_{n+1}}$.
+Each workspace stores objects for a specific ephemeral identity for a limited amount of time. The workspace receives routing blocks, payload blocks, and operations of the respective ephemeral identity. The lifetime of these objects is either limited by the lifetime of the header block (this applies to payload blocks and operations), or by the routing block (applies to the routing block). As soon as a routing block is due he takes compiles a list of all payload blocks which have to be sent and executes the operations to generate them. The routing layer then assembles the inner message with padding (PAD), the header block with a prefix, the routing block, and the generated payload blocks and encrypts the whole stream with the peer key $K_{peer_{a+1}}$. The header and routing blocks are already pre-encrypted with $K_{sender_{a+1}}$.
 
 \subsubsection{Blending Layer}
 The blending layer provides the ``undetectability'' feature of the Vortex system. To avoid transport protocol misuse and unintentional exit nodes of the protocol, the RBB has no control over the transported content except for the hidden VortexMessage and how it is embedded. This rule loads the burden of sensible cleartext payload generation to the blending layer. 
@@ -817,11 +831,11 @@ A blending layer may provide multiple strategies to embed a message. In our prot
 
 Furthermore, this layer is taking care of multiple problems:
 \begin{itemize}
-	\item Translating the message into the transport format\\
+	\item \emph{Translating the message into the transport format}\\
 	This translation includes jobs such as embedding a message as encoded text, as a binary attachment or hide it within a message using steganography.
-	\item Extract incoming messages from the transport protocol\\
+	\item \emph{Extract incoming messages from the transport protocol}\\
 	Identify incoming messages containing a possible block and extract it from the message.
-	\item Do housekeeping on the storage layer\\
+	\item \emph{Do housekeeping on the storage layer}\\
 	Access protocols such as POP and IMAP require message deletion after processing to stay below the sizing quotas of an account.         
 \end{itemize}
 
@@ -1300,6 +1314,7 @@ Another exciting field of academic research is creating strategies for Routing b
 %
 %
 %\end{thebibliography}
+\Urlmuskip=0mu plus 1mu % fixes URL breaks
 \bibliography{../../messageVortex}
 
 % biography section
