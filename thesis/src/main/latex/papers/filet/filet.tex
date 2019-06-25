@@ -1,5 +1,6 @@
 % !TeX spellcheck = en_US
-\documentclass[10pt,journal,compsoc]{IEEEtran}
+\documentclass[9pt,journal,compsoc,twocolumn,twoside]{IEEEtran}
+%\documentclass[10pt,journal,compsoc,draftcls,onecolumn,peerreview]{IEEEtran}
 %
 % If IEEEtran.cls has not been installed into the LaTeX system files,
 % manually specify the path to it like:
@@ -79,7 +80,7 @@
 \ifCLASSINFOpdf
   \usepackage[pdftex,final]{graphicx}
   % declare the path(s) where your graphic files are
-  \graphicspath{{../pdf/}{../jpeg/}}
+  \graphicspath{{./inc/}{../../inc/}{./jpeg/}}
   % and their extensions so you won't have to specify these with
   % every instance of \includegraphics
   \DeclareGraphicsExtensions{.pdf,.jpeg,.png}
@@ -360,6 +361,9 @@
 % journal papers have the author affiliations above the "Manuscript
 % received ..."  text while in non-compsoc journals this is reversed. Sigh.
 
+\ifCLASSOPTIONpeerreview
+\author{(blinded)}
+\else
 \author{Martin~Gwerder%,~\IEEEmembership{Member,~IEEE,}
         %John~Doe,~\IEEEmembership{Fellow,~OSA,}
 
@@ -372,7 +376,7 @@ E-mail: see http://www.messagevortex.net
 }% <-this % stops an unwanted space
 \thanks{Manuscript received June 1, 2019; revised July 20, 2019.}
         }% <-this % stops a space
-
+\fi
 % note the % following the last \IEEEmembership and also \thanks - 
 % these prevent an unwanted space from occurring between the last author name
 % and the end of the author line. i.e., if you had this:
@@ -394,8 +398,15 @@ E-mail: see http://www.messagevortex.net
 
 
 % The paper headers
+\ifCLASSOPTIONpeerreview
 \markboth{IEEE Transactions on Information Forensics and Security,~Vol.~XXXX, No.~XXXX, September~2019}%
-{Gwerder \MakeLowercase{\textit{et al.}}: Unobservable Messaging wit Messagevortex}
+{(Blinded)%\MakeLowercase{\textit{et al.}
+: Unobservable Messaging wit Messagevortex}
+\else
+\markboth{IEEE Transactions on Information Forensics and Security,~Vol.~XXXX, No.~XXXX, September~2019}%
+{Gwerder%\MakeLowercase{\textit{et al.}}
+	: Unobservable Messaging wit Messagevortex}
+\fi
 % The only time the second header will appear is for the odd numbered pages
 % after the title page when using the twoside option.
 % 
@@ -464,9 +475,9 @@ Anonymity, Unlinkability, Communication protocol, Steganography
 
 % For peer review papers, you can put extra information on the cover
 % page as needed:
-% \ifCLASSOPTIONpeerreview
-% \begin{center} \bfseries EDICS Category: 3-BBND \end{center}
-% \fi
+\ifCLASSOPTIONpeerreview
+  \begin{center} \bfseries EDICS Category: ADP-PPRO \end{center}
+\fi
 %
 % For peerreview papers, this IEEEtran command inserts a page break and
 % creates the second title. It will be ignored for other modes.
@@ -674,7 +685,7 @@ The set of terms is further broadened with $k$-Anonymity as defined in \cite{k-a
 %%% Manual float placement
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure*}[ht]
-	\centering\includegraphics[width=\textwidth]{../../inc/roughProtocolDesign.pdf}
+	\centering\includegraphics[width=\textwidth]{roughProtocolDesign}
 	\caption{A rough protocol outline of the MessageVortex protocol}
 	\label{fig:protocolLayers}
 \end{figure*}
@@ -696,7 +707,7 @@ For Anonymization the ideas seem mainly to concentrate around onionizing (ToR\ci
 As we use alien transport protocols instead of our protocol, we decided to go for a mixing approach. This approach minimizes the number of messages between the nodes. Furthermore, mixing allows using the nodes in a structureless way as opposed to DC-nets, where we would have to build fixed or ad-hoc rings for exchanging messages. Unlike other protocols, we do not rely on the logic of mixing on the routing node but entirely on the RBB. Routing nodes follow an onionized set of instructions to build messages. 
 
 \section{The MessageVortex Protocol\label{sec:protocol}}
-In this section, we introduce a new consistent, transport independent model for representing the different protocols used by MessageVortex. The focus of the description lies in academic concepts. For more technical information specifying the protocol as implemented, refer to \cite{MessageVortexRFC}. This document provides details such as specific ASN.1 structures outlining every single block.
+In this section, we introduce a new consistent, transport independent model for representing the different protocols used by MessageVortex. The focus of the description lies in academic concepts. For more technical information specifying the protocol as implemented, refer to \ifCLASSOPTIONpeerreview\cite{Blinded}\else \cite{MessageVortexRFC}\fi. This document provides details such as specific ASN.1 structures outlining every single block.
 
 \subsection{General Design}
 
@@ -717,7 +728,7 @@ The RBB may be the sender of a block or a different VortexNode. If the RBB is no
 %%% Manual float placement
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure*}[ht]
-	\includegraphics[width=\textwidth]{../../inc/blockLayoutSimplified}
+	\includegraphics[width=\textwidth]{blockLayoutSimplified}
 	\caption{A simplified message outline for a message destined for a host $o$}
 	\label{fig:messageOutline}
 \end{figure*}
@@ -820,7 +831,7 @@ Tasks of the routing layer are:
 The workspace of an ephemeral identity is shown in Figure~\ref{fig:workspace}.
 
 \begin{figure}[ht]
-	\centering\includegraphics[width=\columnwidth]{../../inc/roughProtocolDesign_workspace.pdf}
+	\centering\includegraphics[width=\columnwidth]{roughProtocolDesign_workspace}
 	\caption{Layout of a workspace}
 	\label{fig:workspace}
 \end{figure}
@@ -968,7 +979,7 @@ These operations build the core of the mixing operations. The operation allows t
 
 The operation itself is shown in Fig.~\ref{fig:addRedundancyOperation}. 
 \begin{figure}[ht]\centering
-	\includegraphics[width=0.8\columnwidth]{../../inc/addRedundancyOp}
+	\includegraphics[width=0.8\columnwidth]{addRedundancyOp}
 	\caption{Outline of the addRedundancy operation}
 	\label{fig:addRedundancyOperation}
 \end{figure}
@@ -1076,7 +1087,7 @@ As the communication pattern is defined by the RBB and not always the same, it i
 %%% Manual float placement
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}[ht]
-	\includegraphics[width=\columnwidth]{../../inc/messagePaths}
+	\includegraphics[width=\columnwidth]{messagePaths}
 	\caption{A possible path of a VortexMessage}
 	\label{fig:messagePaths}
 \end{figure}
@@ -1129,10 +1140,13 @@ Next is the problem of the routing node. The hardware of such a node should be p
 Another exciting field of academic research is creating strategies for Routing block builders (RBB). We currently have a toolset of powerful operations, but academic researched strategies or guidelines for good routing blocks are missing. 
 
 \subsection{Further Reading}
-This paper is a very rough overview of the MessageVortex protocol. For those interested in the technical implementation details the current version of the RFC\cite{MessageVortexRFC}. For a more elaborated analysis covering additional topics such as the blending types, additional literature research, or arguments for a decision, we recommend reading the thesis paper \cite{messageVortex}. In this document we cover additional details such as elaborated analysis on the protocol, the implications of the connection between transport endpoints and VortexNodes, or an analysis of the plain embedding technique.
-
+This paper is a very rough overview of the MessageVortex protocol. For those interested in the technical implementation details the current version of the RFC\ifCLASSOPTIONpeerreview\cite{Blinded}\else{}\cite{MessageVortexRFC}\fi. For a more elaborated analysis covering additional topics such as the blending types, additional literature research, or arguments for a decision, we recommend reading the thesis paper \ifCLASSOPTIONpeerreview\cite{Blinded}\else{}\cite{messageVortex}\fi. In this document we cover additional details such as elaborated analysis on the protocol, the implications of the connection between transport endpoints and VortexNodes, or an analysis of the plain embedding technique.
+\ifCLASSOPTIONpeerreview
+\hfill (Blinded)
+\else
 \hfill gwm
- 
+\fi
+
 \hfill May 8, 2019
 
 %\subsection{Subsection Heading Here}
@@ -1335,11 +1349,13 @@ This paper is a very rough overview of the MessageVortex protocol. For those int
 % simpler here.)
 %\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{mshell}}]{Michael Shell}
 % or if you just want to reserve a space for a photo:
+\ifCLASSOPTIONpeerreview
+\else
 \gdef\bioloc{../../inc/biography/}
 \begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{\bioloc/passphoto}}]{Martin Gwerder}
   \input \bioloc/biotext.inc.tex
 \end{IEEEbiography}
-
+\fi
 % if you will not have a photo at all:
 %\begin{IEEEbiographynophoto}{John Doe}
 %Biography text here.
