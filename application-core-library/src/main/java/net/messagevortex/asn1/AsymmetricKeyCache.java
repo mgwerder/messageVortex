@@ -68,16 +68,32 @@ public class AsymmetricKeyCache implements Serializable {
     private int numberOfCalcTimes = 0;
     private Queue<AsymmetricKey> cache = new ArrayDeque<>();
 
+    /***
+     * <p>Gets the maximum size of the cache element.</p>
+     *
+     * @return the currently set maximum size
+     */
     public int getMaxSize() {
       return maxSize;
     }
 
+    /***
+     * <p>Sets the maximum size of the cache to the specified value.</p>
+     *
+     * @param size the new maximum size to be set
+     * @return the previously set maximum size
+     */
     public int setMaxSize(int size) {
       int ret = maxSize;
       maxSize = size;
       return ret;
     }
 
+    /***
+     * <p>Gets the topmost cache element from the element queue.</p>
+     *
+     * @return the topmost element from the cache queue
+     */
     public AsymmetricKey pull() {
       synchronized (cache) {
         if (cache.size() > 0) {
@@ -89,6 +105,11 @@ public class AsymmetricKeyCache implements Serializable {
       }
     }
 
+    /***
+     * <p>Gets the topmost element from the cache queue without removing it.</p>
+     *
+     * @return the topmost element from the cache queue
+     */
     public AsymmetricKey peek() {
       synchronized (cache) {
         if (cache.size() > 0) {
@@ -99,12 +120,20 @@ public class AsymmetricKeyCache implements Serializable {
       }
     }
 
+    /***
+     * <p>Adds a new precaculated key to the cache queue.</p>
+     * @param key the key to be added.
+     */
     public void push(AsymmetricKey key) {
       synchronized (cache) {
         cache.add(key);
       }
     }
 
+    /***
+     * <p>Adds the time of calculation of the last key for stats purposes.</p>
+     * @param millis the required time in milliseconds
+     */
     public void setCalcTime(long millis) {
       synchronized (cache) {
         averageCalcTime = (averageCalcTime * numberOfCalcTimes + millis) / (numberOfCalcTimes + 1);
@@ -112,10 +141,20 @@ public class AsymmetricKeyCache implements Serializable {
       }
     }
 
+    /***
+     * <p>Gets the average time to calculate this type of key.</p>
+     *
+     * @return the average time to calculate a new cache element of this type
+     */
     public double getAverageCalcTime() {
       return averageCalcTime;
     }
 
+    /***
+     * <p>Cacluates the time required to fill this cache based on its current fill.</p>
+     *
+     * @return the calculated time required in milliseconds
+     */
     public double getCacheFillTime() {
       double avg = getAverageCalcTime();
       if (avg <= 0) {
@@ -124,18 +163,31 @@ public class AsymmetricKeyCache implements Serializable {
       return Math.max(0, maxSize - cache.size()) * avg;
     }
 
+    /***
+     * <p>Gets the number of elements in the cache.</p>
+     *
+     * @return the current number of elements in the cache queue
+     */
     public int size() {
       synchronized (cache) {
         return cache.size();
       }
     }
 
+    /***
+     * <p>Clears all elements from the cache queue.</p>
+     */
     public void clearCache() {
       synchronized (cache) {
         cache.clear();
       }
     }
 
+    /***
+     * <p>Merges two cache queues.</p>
+     *
+     * @param element the cache queue to be merged into the current one
+     */
     public void merge(CacheElement element) {
       synchronized (cache) {
         cache.addAll(element.cache);
@@ -149,6 +201,12 @@ public class AsymmetricKeyCache implements Serializable {
       }
     }
 
+    /***
+     * <p>Serializer for the cache queue including the cache elements and stats.</p>
+     *
+     * @param out the writer to be used
+     * @throws IOException if the writer does not accept the object (e.g., permission denied or disk full)
+     */
     private void writeObject(ObjectOutputStream out) throws IOException {
       synchronized (cache) {
         out.writeObject(maxSize);
@@ -161,6 +219,13 @@ public class AsymmetricKeyCache implements Serializable {
       }
     }
 
+    /***
+     * <p>Deserializer for the cache queue.</p>
+     *
+     * @param in the reader to be used
+     * @throws IOException if a disk error occures when reading (e.g., corrupted filesystem)
+     * @throws ClassNotFoundException if deserialization fails
+     */
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
       maxSize = (Integer) in.readObject();
       averageCalcTime = (long) (in.readObject());
@@ -172,6 +237,9 @@ public class AsymmetricKeyCache implements Serializable {
       }
     }
 
+    /***
+     * <p>Convenience function to request a cache increase in case of an empty cache.</p>
+     */
     public void requestCacheIncrease() {
       maxSize = Math.min(MAX_CACHE_SIZE, Math.max((int) (maxSize * 1.1), maxSize + 1));
     }
