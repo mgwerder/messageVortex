@@ -51,7 +51,6 @@ public class InitialRecipesBlender extends Blender {
   private BlendingReceiver router;
   private IdentityStore identityStore;
   private int anonSetSize = 5;
-  private String recipes = null;
 
   /**
    * <p>An initial blender implementation based on anonymity recipes.</p>
@@ -203,7 +202,7 @@ public class InitialRecipesBlender extends Blender {
       }
 
       // get receipes
-      BlenderRecipe recipe = BlenderRecipe.getRecipe(recipes, anonSet);
+      BlenderRecipe recipe = BlenderRecipe.getRecipe(null, anonSet);
       if (recipe==null) {
         LOGGER.log(Level.WARNING, "unable to get recipe for message");
         return false;

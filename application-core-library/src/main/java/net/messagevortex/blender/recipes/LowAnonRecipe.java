@@ -22,11 +22,7 @@ public class LowAnonRecipe extends BlenderRecipe {
 
   @Override
   public boolean isAppliable(List<IdentityStoreBlock> anonSet) {
-    if (anonSet != null && anonSet.size() >= 0 && anonSet.size() > 4) {
-      return true;
-    } else {
-      return false;
-    }
+    return (anonSet != null && anonSet.size() > 4);
   }
 
   @Override
@@ -51,8 +47,8 @@ public class LowAnonRecipe extends BlenderRecipe {
       }
       order[i] = ni;
       g.add(new Edge(fb, set.get(ni)
-              , minStart + ExtendedSecureRandom.nextInt((int)(maxStart - minStart))
-              , minDelay + ExtendedSecureRandom.nextInt((int)(maxDelay - minDelay))));
+              , minStart + ExtendedSecureRandom.nextInt((int) (maxStart - minStart))
+              , minDelay + ExtendedSecureRandom.nextInt((int) (maxDelay - minDelay))));
       fb = set.get(ni);
     }
 

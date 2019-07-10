@@ -107,7 +107,7 @@ public class IdentityStore extends AbstractBlock
    * @return returns a reference identity store
    * @throws IOException if building of the store fails
    */
-  public static IdentityStore getIdentityStoreDemo() throws IOException {
+  public synchronized static IdentityStore getIdentityStoreDemo() throws IOException {
     if (demo == null) {
       demo = getNewIdentityStoreDemo(true);
     }
