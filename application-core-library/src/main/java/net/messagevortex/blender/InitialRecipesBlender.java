@@ -79,6 +79,8 @@ public class InitialRecipesBlender extends Blender {
    * @param identity        the identity (receiver/sender address)
    * @param router          the router layer to be used
    * @param identityStore   the identity store to be used (for decryption of headers)
+   * @param acc             the accountant to be used
+   *
    * @throws IOException    if anything fails :-D
    */
   public InitialRecipesBlender(String identity, BlendingReceiver router,

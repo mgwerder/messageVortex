@@ -48,7 +48,7 @@ public class ExtendedSecureRandom {
    * @param up the maximum value to be used
    * @return a random integer value between low and up-1
    *
-   * @throws IllegalArgumentException if low  >= up
+   * @throws IllegalArgumentException if low &gt;= up
    */
   public static final int nextInt(int low, int up) {
     if (low >= up) {

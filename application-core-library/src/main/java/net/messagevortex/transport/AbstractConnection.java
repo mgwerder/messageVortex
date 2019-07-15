@@ -882,7 +882,9 @@ public abstract class AbstractConnection {
    *
    * @param timeout the timeout to be applied before unblocking
    * @return the string read
+   *
    * @throws IOException if decryption fails or host is unexpectedly disconnected
+   * @throws TimeoutException if reaching a timeout while reading
    */
   public String read(long timeout) throws IOException, TimeoutException {
     int numBytes = readSocket(timeout);
@@ -906,7 +908,9 @@ public abstract class AbstractConnection {
    *
    * @param timeout the timeout to be applied before unblocking
    * @return the string read
+   *
    * @throws IOException if decryption fails or host is unexpectedly disconnected
+   * @throws TimeoutException if reaching a timeout while reading
    */
   public String readln(long timeout) throws IOException, TimeoutException {
     StringBuilder ret = new StringBuilder();

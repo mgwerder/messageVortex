@@ -90,6 +90,8 @@ public class IdentityStoreBlock extends AbstractBlock implements Serializable {
    * <p>Create an identity store block from an url.</p>
    *
    * @param url th url to be parsed
+   *
+   * @throws IOException if parsing of the url fails
    */
   public IdentityStoreBlock(String url) throws IOException {
     if (url != null && url.toLowerCase().startsWith("vortexsmtp://")) {
