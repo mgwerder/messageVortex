@@ -203,12 +203,13 @@ public class MessageVortex implements Callable<Integer> {
       // setup recipes
       // create default recipe store
       String lst = Config.getDefault().getStringValue(null, "recipes");
+      BlenderRecipe.clearRecipes( null );
       for (String cl : lst.split(" *, *")) {
         BlenderRecipe.addRecipe(null,
                 (BlenderRecipe) getConfiguredClass(null, cl, BlenderRecipe.class));
       }
       for (String accountingSection : cfg.getSectionListValue(null, "recipe_setup")) {
-
+        // FIXME there is something missing here! Just found this unused code snipped... I really need some sleep.
       }
 
       //Setup accounting

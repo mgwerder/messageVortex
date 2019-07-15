@@ -30,7 +30,21 @@ public class EncryptPayloadOperation extends AbstractCryptPayloadOperation imple
 
   public static final long serialVersionUID = 100000000029L;
 
+  /***
+   * <p>This is an empty constructor for template instanciation.</p>
+   */
   EncryptPayloadOperation() {
+    // empty constructor for template instanciation
+  }
+
+  public EncryptPayloadOperation(int sourceBlock,int targetBlock, SymmetricKey key) throws IOException {
+    if (key == null) {
+      key = new SymmetricKey();
+    }
+    setTagNumber(ENCRYPT_PAYLOAD);
+    this.originalId = sourceBlock;
+    this.newId = targetBlock;
+    this.key = key;
   }
 
   /***

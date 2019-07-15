@@ -1,9 +1,11 @@
 package net.messagevortex.blender.recipes;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Vector;
 
 import net.messagevortex.ExtendedSecureRandom;
+import net.messagevortex.asn1.EncryptPayloadOperation;
 import net.messagevortex.asn1.IdentityStoreBlock;
 import net.messagevortex.asn1.RoutingBlock;
 import net.messagevortex.router.Edge;
@@ -16,18 +18,35 @@ public class LowAnonRecipe extends BlenderRecipe {
   long minDelay = 20 * 1000;
   long maxDelay = 10 * 1000;
 
+  /***
+   * <p>Constructor to create low anon recipe.</p>
+   *
+   * <p>This class is required for bootstrapping a new nenber not having sufficient ephemeral identities to use a
+   * high anonymity recipe.</p>
+   *
+   * @param section the name of the configuration section to be used
+   */
   public LowAnonRecipe(String section) {
     // no parameters required
   }
 
+  /***
+   * <p>Checks if the recipe is applicaable.</p>
+   *
+   * <p>Recipe is applicable if less than four identities are available. For larger anonymisation sets a
+   * more secure recipe is assumed to be available.</p>
+   *
+   * @param anonSet the anonymisation set available
+   * @return true if recipe may be applied
+   */
   @Override
   public boolean isAppliable(List<IdentityStoreBlock> anonSet) {
-    return (anonSet != null && anonSet.size() > 4);
+    return (anonSet != null && anonSet.size() <= 4);
   }
 
   @Override
   public RoutingBlock applyRecipe(List<IdentityStoreBlock> anonSet, IdentityStoreBlock from,
-                                  IdentityStoreBlock to) {
+                                  IdentityStoreBlock to) throws IOException {
     // select random order
     List<IdentityStoreBlock> set = new Vector<>();
     //set.add(from);
@@ -46,15 +65,17 @@ public class LowAnonRecipe extends BlenderRecipe {
         }
       }
       order[i] = ni;
+      // set timings between nodes
       g.add(new Edge(fb, set.get(ni)
               , minStart + ExtendedSecureRandom.nextInt((int) (maxStart - minStart))
               , minDelay + ExtendedSecureRandom.nextInt((int) (maxDelay - minDelay))));
       fb = set.get(ni);
     }
 
-
-    // split message at start
-
+    // encrypt and split message at start
+    RoutingBlock rb = new RoutingBlock();
+    int targetBlock = ExtendedSecureRandom.nextInt(1024,65737 );
+    rb.addOperation(new EncryptPayloadOperation(0,targetBlock,null));
 
     // send packages along the line
 

@@ -78,11 +78,27 @@ public abstract class BlenderRecipe implements Comparable<BlenderRecipe> {
     }
   }
 
+  /***
+   * <p>Tests if the given recipe may be applied to the anon set available.</p>
+   *
+   * @param anonSet the currently available anonymity set
+   * @return true if the recipe may be applied
+   */
   public abstract boolean isAppliable(List<IdentityStoreBlock> anonSet);
 
+  /***
+   * <p>Creates a routing block with the given parameters.</p>
+   *
+   * @param anonSet the anonymity set to be used
+   * @param from the sending node address
+   * @param to the receiving node address
+   * @return the built routing block
+   *
+   * @throws IOException if a problem arises when creating the block
+   */
   public abstract RoutingBlock applyRecipe(List<IdentityStoreBlock> anonSet,
                                            IdentityStoreBlock from,
-                                           IdentityStoreBlock to);
+                                           IdentityStoreBlock to) throws IOException;
 
   @Override
   public int compareTo(BlenderRecipe o) {

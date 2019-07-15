@@ -46,6 +46,8 @@ public abstract class Operation extends AbstractBlock implements Serializable {
   private static final Map<Integer, Operation> operations = new HashMap<>();
   private static boolean initInProgress = false;
 
+  private int tagNumber = -1;
+
   /* constructor */
   Operation() {
     init();
@@ -99,5 +101,18 @@ public abstract class Operation extends AbstractBlock implements Serializable {
    * @throws IOException if parsing fails
    */
   public abstract Operation getNewInstance(ASN1Encodable asn1Encodable) throws IOException;
+
+  /***
+   * <p>sets the ag number to be set when ancoding the operation.</p>
+   *
+   * @param newTagNumber the new tag number to be set
+   */
+  protected void setTagNumber(int newTagNumber) {
+    tagNumber = newTagNumber;
+  }
+
+  protected int getTagNumber() {
+    return tagNumber;
+  }
 
 }
