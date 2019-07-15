@@ -32,7 +32,7 @@ public class CommandLineHandlerIdentityStoreDel implements Callable<Integer> {
 
   @CommandLine.Option(names = {"--nodeAddress"}, required = true,
           description = "the identity address")
-  String nodeAddress[];
+  String[] nodeAddress;
 
   @Override
   public Integer call() throws Exception {

@@ -56,7 +56,9 @@ public class CommandLineHandlerIdentityStoreGenerate implements Callable<Integer
     isb.setValid(new UsagePeriod(3600 * 24 * 365)); // set validity to one year
     isb.setTransferQuota(ExtendedSecureRandom.nextInt(Integer.MAX_VALUE)); // maximum transfer quota
     isb.setMessageQuota(ExtendedSecureRandom.nextInt(Integer.MAX_VALUE)); // maximum Message quota
-    isb.setIdentityKey(new AsymmetricKey(Algorithm.getDefault(AlgorithmType.ASYMMETRIC).getParameters(SecurityLevel.QUANTUM)));
+    isb.setIdentityKey(new AsymmetricKey(
+            Algorithm.getDefault(AlgorithmType.ASYMMETRIC).getParameters(SecurityLevel.QUANTUM))
+    );
     isb.setNodeAddress("smtp:" + identityId);
     isb.setNodeKey(null);
     is.add(isb);

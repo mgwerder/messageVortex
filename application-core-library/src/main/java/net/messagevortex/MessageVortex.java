@@ -36,6 +36,7 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.crypto.Cipher;
+
 import net.messagevortex.accounting.Accountant;
 import net.messagevortex.asn1.AsymmetricKeyPreCalculator;
 import net.messagevortex.asn1.IdentityBlock;
@@ -114,9 +115,11 @@ public class MessageVortex implements Callable<Integer> {
       int major = Integer.parseInt(m.group(1));
       int minor = Integer.parseInt(m.group(2));
       if ((major == 1 && minor >= 60) || (major >= 2)) {
-        LOGGER.log(Level.INFO, "Detected BC version is " + bcversion + ". This should do the trick.");
+        LOGGER.log(Level.INFO, "Detected BC version is " + bcversion
+                + ". This should do the trick.");
       } else {
-        LOGGER.log(Level.SEVERE, "Looks like your BC installation is heavily outdated. At least version 1.60 is recommended.");
+        LOGGER.log(Level.SEVERE, "Looks like your BC installation is heavily outdated. "
+                + "At least version 1.60 is recommended.");
       }
     }
 
@@ -129,12 +132,15 @@ public class MessageVortex implements Callable<Integer> {
       }
       int i = JRE_AES_KEY_SIZE;
       if (i > 128) {
-        LOGGER.log(Level.INFO, "Looks like JRE having an unlimited JCE installed (AES max allowed key length is = " + i + "). This is good.");
+        LOGGER.log(Level.INFO, "Looks like JRE having an unlimited JCE installed (AES max allowed "
+                + "key length is = " + i + "). This is good.");
       } else {
-        LOGGER.log(Level.SEVERE, "Looks like JRE not having an unlimited JCE installed (AES max allowed key length is = " + i + "). This is bad.");
+        LOGGER.log(Level.SEVERE, "Looks like JRE not having an unlimited JCE installed (AES max "
+                + "allowed key length is = " + i + "). This is bad.");
       }
     } catch (NoSuchAlgorithmException nsa) {
-      LOGGER.log(Level.SEVERE, "OOPS... Got an exception while testing for an unlimited JCE. This is bad.", nsa);
+      LOGGER.log(Level.SEVERE, "OOPS... Got an exception while testing for an unlimited JCE. "
+              + "This is bad.", nsa);
     }
   }
 
@@ -203,13 +209,14 @@ public class MessageVortex implements Callable<Integer> {
       // setup recipes
       // create default recipe store
       String lst = Config.getDefault().getStringValue(null, "recipes");
-      BlenderRecipe.clearRecipes( null );
+      BlenderRecipe.clearRecipes(null);
       for (String cl : lst.split(" *, *")) {
         BlenderRecipe.addRecipe(null,
                 (BlenderRecipe) getConfiguredClass(null, cl, BlenderRecipe.class));
       }
       for (String accountingSection : cfg.getSectionListValue(null, "recipe_setup")) {
-        // FIXME there is something missing here! Just found this unused code snipped... I really need some sleep.
+        // FIXME there is something missing here! Just found this unused code snipped...
+        // I really need some sleep.
       }
 
       //Setup accounting
@@ -395,6 +402,12 @@ public class MessageVortex implements Callable<Integer> {
     return identityStore.get(id.toLowerCase());
   }
 
+  /***
+   * <p>gets a simulated payload space for a specific identity block.</p>
+   *
+   * @param ib the identity block
+   * @return the requested payload space
+   */
   public static InternalPayloadSpace getSimulatedSpace(IdentityBlock ib) {
     InternalPayloadSpace ret = null;
     synchronized (simStores) {
@@ -409,6 +422,12 @@ public class MessageVortex implements Callable<Integer> {
     return ret;
   }
 
+  /***
+   * <p>Gets own payload space for a specific identity.</p>
+   *
+   * @param ib the identityblock identifying the payload space
+   * @return the requested payload space
+   */
   public static InternalPayloadSpace getOwnSpace(IdentityBlock ib) {
     InternalPayloadSpace ret = null;
     synchronized (ownStores) {

@@ -45,6 +45,9 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
 
   private static final long MAX_SIZE = (long) Math.pow(2, 32);
 
+  /***
+   * <p>Wrapper for the java random number generator (not normative).</p>
+   */
   public static class SimplePrng implements PRNG {
 
     private Random sr = new Random();
@@ -54,12 +57,20 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
       sr.setSeed(seed);
     }
 
+    /***
+     * <p>Get the next random byte of the PRNG.</p>
+     *
+     * @return the next random byte
+     */
     public synchronized byte nextByte() {
       byte[] a = new byte[1];
       sr.nextBytes(a);
       return a[0];
     }
 
+    /***
+     * <p>Resets the PRNG to the initially seeded state.</p>
+     */
     public void reset() {
       sr.setSeed(seed);
     }
@@ -176,7 +187,18 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
     return getOutputId();
   }
 
-  public static byte[] pad(int blocksize, int numberOfOutBlocks, byte[] data, PRNG prng, int c1, int c2) {
+  /***
+   * <p>padds a given payload block.</p>
+   * @param blocksize the size of the blocks of the used encryption in the addRedundancy operation
+   * @param numberOfOutBlocks the number of resulting blocks in the addRedundancy operation
+   * @param data the data to be padded (payload block
+   * @param prng the PRNG to be used for padding
+   * @param c1 the padding parameter c1 as specified in the padding spec
+   * @param c2 the padding parameter c2 as specified in the padding spec
+   * @return
+   */
+  public static byte[] pad(int blocksize, int numberOfOutBlocks, byte[] data,
+                           PRNG prng, int c1, int c2) {
     LOGGER.log(Level.FINEST, "starting padding of " + data.length + " bytes");
 
     // catch some bad values
@@ -189,21 +211,24 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
 
     // calculate sizes
     int outRowSize = blocksize * numberOfOutBlocks;
-    long containerSize = (long) (Math.ceil(((double)data.length + 4 + c2) / outRowSize)) * outRowSize;
-    LOGGER.log(Level.FINEST, "container size of padded array is " + containerSize + " bytes (c1: "+c1+"; c2: "+c2+")");
+    long containerSize = (long) (Math.ceil(((double) data.length + 4 + c2) / outRowSize))
+            * outRowSize;
+    LOGGER.log(Level.FINEST, "container size of padded array is " + containerSize + " bytes (c1: "
+            + c1 + "; c2: " + c2 + ")");
 
     // calculate padding value
-    long pval = (new BigInteger(""+data.length).add(new BigInteger(""+c1).multiply(new BigInteger(""+containerSize)).mod(
-            new BigInteger("" + (((MAX_SIZE-data.length)/containerSize)*containerSize))
+    long pval = (new BigInteger("" + data.length).add(new BigInteger("" + c1).multiply(
+            new BigInteger("" + containerSize)).mod(new BigInteger(""
+            + (((MAX_SIZE - data.length) / containerSize) * containerSize))
     ))).longValue();
     LOGGER.log(Level.FINEST, "Padding value is " + pval + "");
 
     // create new container
-    byte[] out = new byte[(int)containerSize];
+    byte[] out = new byte[(int) containerSize];
 
     // insert size descriptor
-    out[0] = (byte) ((pval          & 255) - 128);
-    out[1] = (byte) (((pval >>> 8)  & 255) - 128);
+    out[0] = (byte) ((pval & 255) - 128);
+    out[1] = (byte) (((pval >>> 8) & 255) - 128);
     out[2] = (byte) (((pval >>> 16) & 255) - 128);
     out[3] = (byte) (((pval >>> 24) & 255) - 128);
 
@@ -233,12 +258,14 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
    *
    * @throws IOException       if unpadding fails for any reason
    */
-  public static byte[] unpad(int blocksize, int numberOfOutBlocks, byte[] in, PRNG prng ) throws IOException {
+  public static byte[] unpad(int blocksize, int numberOfOutBlocks, byte[] in, PRNG prng)
+          throws IOException {
     LOGGER.log(Level.FINEST, "starting unpadding of " + in.length + " bytes");
 
     // extract size descriptor
-    long size = ((long)(in[0]) + 128) + ((long)(in[1]) + 128) * 256 + ((long)(in[2]) + 128) * 256 * 256 + ((long)(in[3]) + 128) * 256 * 256 * 256;
-    LOGGER.log(Level.FINEST, "Padding value is " + size );
+    long size = ((long) (in[0]) + 128) + ((long) (in[1]) + 128) * 256 + ((long) (in[2]) + 128) * 256
+            * 256 + ((long) (in[3]) + 128) * 256 * 256 * 256;
+    LOGGER.log(Level.FINEST, "Padding value is " + size);
     size = size % in.length;
     LOGGER.log(Level.FINEST, "size is " + size + " bytes");
 

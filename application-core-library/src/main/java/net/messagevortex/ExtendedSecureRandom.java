@@ -54,7 +54,7 @@ public class ExtendedSecureRandom {
     if (low >= up) {
       throw new IllegalArgumentException("lower bound is not smaller than upper bound");
     }
-    return low+sr.nextInt(up-low);
+    return low + sr.nextInt(up - low);
   }
 
   /***

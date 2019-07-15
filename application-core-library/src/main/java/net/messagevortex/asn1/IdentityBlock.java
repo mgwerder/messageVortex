@@ -498,7 +498,8 @@ public class IdentityBlock extends AbstractBlock implements Serializable, Dumpab
     }
     IdentityBlock o = (IdentityBlock) t;
     try {
-      return dumpValueNotation("", DumpType.ALL_UNENCRYPTED).equals(o.dumpValueNotation("", DumpType.ALL_UNENCRYPTED));
+      return dumpValueNotation("", DumpType.ALL_UNENCRYPTED).equals(o.dumpValueNotation("",
+              DumpType.ALL_UNENCRYPTED));
     } catch (IOException ioe) {
       return false;
     }

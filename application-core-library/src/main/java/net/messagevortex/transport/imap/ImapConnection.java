@@ -67,7 +67,8 @@ public class ImapConnection extends ServerConnection
               getSocketChannel().close();
               imapConnectionRunner = null;
             } else {
-              LOGGER.log(Level.INFO, "processing command \"" + ImapLine.commandEncoder(line) + "\"");
+              LOGGER.log(Level.INFO, "processing command \"" + ImapLine.commandEncoder(line)
+                      + "\"");
 
               String[] reply = processCommand(line + CRLF);
               if (reply != null) {

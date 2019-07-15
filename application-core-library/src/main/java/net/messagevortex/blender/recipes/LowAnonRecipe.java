@@ -21,8 +21,8 @@ public class LowAnonRecipe extends BlenderRecipe {
   /***
    * <p>Constructor to create low anon recipe.</p>
    *
-   * <p>This class is required for bootstrapping a new nenber not having sufficient ephemeral identities to use a
-   * high anonymity recipe.</p>
+   * <p>This class is required for bootstrapping a new nenber not having sufficient ephemeral
+   * identities to use a high anonymity recipe.</p>
    *
    * @param section the name of the configuration section to be used
    */
@@ -33,8 +33,8 @@ public class LowAnonRecipe extends BlenderRecipe {
   /***
    * <p>Checks if the recipe is applicaable.</p>
    *
-   * <p>Recipe is applicable if less than four identities are available. For larger anonymisation sets a
-   * more secure recipe is assumed to be available.</p>
+   * <p>Recipe is applicable if less than four identities are available. For larger anonymisation
+   * sets a more secure recipe is assumed to be available.</p>
    *
    * @param anonSet the anonymisation set available
    * @return true if recipe may be applied
@@ -66,16 +66,16 @@ public class LowAnonRecipe extends BlenderRecipe {
       }
       order[i] = ni;
       // set timings between nodes
-      g.add(new Edge(fb, set.get(ni)
-              , minStart + ExtendedSecureRandom.nextInt((int) (maxStart - minStart))
-              , minDelay + ExtendedSecureRandom.nextInt((int) (maxDelay - minDelay))));
+      g.add(new Edge(fb, set.get(ni),
+              minStart + ExtendedSecureRandom.nextInt((int) (maxStart - minStart)),
+              minDelay + ExtendedSecureRandom.nextInt((int) (maxDelay - minDelay))));
       fb = set.get(ni);
     }
 
     // encrypt and split message at start
     RoutingBlock rb = new RoutingBlock();
-    int targetBlock = ExtendedSecureRandom.nextInt(1024,65737 );
-    rb.addOperation(new EncryptPayloadOperation(0,targetBlock,null));
+    int targetBlock = ExtendedSecureRandom.nextInt(1024, 65737);
+    rb.addOperation(new EncryptPayloadOperation(0, targetBlock, null));
 
     // send packages along the line
 

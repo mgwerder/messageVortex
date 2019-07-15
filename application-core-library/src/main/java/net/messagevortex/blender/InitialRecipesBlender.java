@@ -21,6 +21,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
+
 import net.messagevortex.Config;
 import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexLogger;
@@ -196,14 +197,14 @@ public class InitialRecipesBlender extends Blender {
 
       // get anonymity set
       List<IdentityStoreBlock> anonSet = istore.getAnonSet(anonSetSize);
-      if (anonSet==null) {
+      if (anonSet == null) {
         LOGGER.log(Level.WARNING, "unable to get anonymity set for message");
         return false;
       }
 
       // get receipes
       BlenderRecipe recipe = BlenderRecipe.getRecipe(null, anonSet);
-      if (recipe==null) {
+      if (recipe == null) {
         LOGGER.log(Level.WARNING, "unable to get recipe for message");
         return false;
       }

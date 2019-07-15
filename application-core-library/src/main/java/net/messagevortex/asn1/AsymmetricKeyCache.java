@@ -36,6 +36,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.TreeMap;
 import java.util.logging.Level;
+
 import net.messagevortex.MessageVortexLogger;
 
 /**
@@ -205,7 +206,8 @@ public class AsymmetricKeyCache implements Serializable {
      * <p>Serializer for the cache queue including the cache elements and stats.</p>
      *
      * @param out the writer to be used
-     * @throws IOException if the writer does not accept the object (e.g., permission denied or disk full)
+     * @throws IOException if the writer does not accept the object (e.g., permission denied or
+     *                     disk full)
      */
     private void writeObject(ObjectOutputStream out) throws IOException {
       synchronized (cache) {

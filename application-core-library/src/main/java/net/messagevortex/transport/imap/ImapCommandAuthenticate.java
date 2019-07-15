@@ -33,6 +33,7 @@ import javax.security.auth.callback.CallbackHandler;
 import javax.security.sasl.Sasl;
 import javax.security.sasl.SaslException;
 import javax.security.sasl.SaslServer;
+
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.transport.RandomString;
 import net.messagevortex.transport.SaslMechanisms;
@@ -147,7 +148,7 @@ public class ImapCommandAuthenticate extends ImapCommand {
           String reply = line.getConnection().readln(300000);
           LOGGER.log(Level.INFO, "got reply (" + reply + ")");
           saslReply = Base64.decode(reply);
-        } catch(TimeoutException te) {
+        } catch (TimeoutException te) {
           throw new IOException("Tmeout while wating for sasl challenge reply", te);
         }
       }

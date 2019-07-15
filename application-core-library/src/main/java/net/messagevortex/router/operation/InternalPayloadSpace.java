@@ -59,6 +59,11 @@ public class InternalPayloadSpace {
 
   private long lastcompact = System.currentTimeMillis();
 
+  /***
+   * <p></p>
+   * @param payloadSpace
+   * @param identity
+   */
   public InternalPayloadSpace(InternalPayloadSpaceStore payloadSpace, IdentityBlock identity) {
     this.identity = identity;
     this.payloadSpace = payloadSpace;

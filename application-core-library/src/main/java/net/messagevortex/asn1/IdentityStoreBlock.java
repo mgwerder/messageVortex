@@ -371,7 +371,9 @@ public class IdentityStoreBlock extends AbstractBlock implements Serializable {
     sb.append('{').append(CRLF);
     sb.append(prefix).append("  -- ").append(getUrl()).append(CRLF);
     sb.append(prefix).append("  -- size: ").append(getUrl().length()).append(CRLF);
-    sb.append(prefix).append("  -- encoded size: ").append(toAsn1Object(DumpType.ALL_UNENCRYPTED).getEncoded().length).append(CRLF);
+    sb.append(prefix).append("  -- encoded size: ").append(
+            toAsn1Object(DumpType.ALL_UNENCRYPTED).getEncoded().length
+    ).append(CRLF);
     sb.append(prefix).append("  valid ").append(valid.dumpValueNotation(prefix + "  ", dumpType))
             .append(',').append(CRLF);
     sb.append(prefix).append("  messageQuota ").append(messageQuota).append(',').append(CRLF);
@@ -405,7 +407,8 @@ public class IdentityStoreBlock extends AbstractBlock implements Serializable {
     if (nodeAddress.startsWith("smtp:")) {
       String[] addr = nodeAddress.substring(5, nodeAddress.length()).split("@");
       if (identityKey == null) {
-        LOGGER.log(Level.WARNING, "unable to encode identity key of " + nodeAddress + " (key is null)");
+        LOGGER.log(Level.WARNING, "unable to encode identity key of " + nodeAddress
+                + " (key is null)");
         return UNENCODABLE;
       }
       ASN1Object e = identityKey.toAsn1Object(DumpType.PUBLIC_ONLY);
