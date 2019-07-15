@@ -24,6 +24,7 @@ package net.messagevortex.transport.imap;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -147,7 +148,7 @@ public class ImapClient extends ClientConnection {
         c = Base64.decode(saslchallenge.substring(2));
       }
       byte[] saslReply = sc.evaluateChallenge(c);
-      String reply = new String(Base64.encode(saslReply));
+      String reply = new String(Base64.encode(saslReply), StandardCharsets.UTF_8);
       LOGGER.log(Level.INFO, "sending reply to server (" + saslReply.length + " bytes;" + reply
               + ")");
       writeln(reply);

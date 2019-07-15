@@ -25,7 +25,6 @@ package net.messagevortex.router.operation;
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.security.SecureRandom;
 import java.util.Random;
 import java.util.logging.Level;
 
@@ -34,7 +33,7 @@ import net.messagevortex.asn1.AbstractRedundancyOperation;
 import net.messagevortex.asn1.AddRedundancyOperation;
 import net.messagevortex.asn1.PayloadChunk;
 import net.messagevortex.asn1.VortexMessage;
-import net.messagevortex.asn1.encryption.PRNG;
+import net.messagevortex.asn1.encryption.Prng;
 
 /**
  * <p>This is the core of the redundancy add operation.</p>
@@ -48,7 +47,7 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
   /***
    * <p>Wrapper for the java random number generator (not normative).</p>
    */
-  public static class SimplePrng implements PRNG {
+  public static class SimplePrng implements Prng {
 
     private Random sr = new Random();
     private long seed = sr.nextLong();
@@ -58,7 +57,7 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
     }
 
     /***
-     * <p>Get the next random byte of the PRNG.</p>
+     * <p>Get the next random byte of the Prng.</p>
      *
      * @return the next random byte
      */
@@ -69,14 +68,14 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
     }
 
     /***
-     * <p>Resets the PRNG to the initially seeded state.</p>
+     * <p>Resets the Prng to the initially seeded state.</p>
      */
     public void reset() {
       sr.setSeed(seed);
     }
   }
 
-  private static PRNG localPrng = new SimplePrng();
+  private static Prng localPrng = new SimplePrng();
 
   public static final long serialVersionUID = 100000000018L;
 
@@ -192,13 +191,13 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
    * @param blocksize the size of the blocks of the used encryption in the addRedundancy operation
    * @param numberOfOutBlocks the number of resulting blocks in the addRedundancy operation
    * @param data the data to be padded (payload block
-   * @param prng the PRNG to be used for padding
+   * @param prng the Prng to be used for padding
    * @param c1 the padding parameter c1 as specified in the padding spec
    * @param c2 the padding parameter c2 as specified in the padding spec
    * @return
    */
   public static byte[] pad(int blocksize, int numberOfOutBlocks, byte[] data,
-                           PRNG prng, int c1, int c2) {
+                           Prng prng, int c1, int c2) {
     LOGGER.log(Level.FINEST, "starting padding of " + data.length + " bytes");
 
     // catch some bad values
@@ -258,7 +257,7 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
    *
    * @throws IOException       if unpadding fails for any reason
    */
-  public static byte[] unpad(int blocksize, int numberOfOutBlocks, byte[] in, PRNG prng)
+  public static byte[] unpad(int blocksize, int numberOfOutBlocks, byte[] in, Prng prng)
           throws IOException {
     LOGGER.log(Level.FINEST, "starting unpadding of " + in.length + " bytes");
 

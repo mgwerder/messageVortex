@@ -23,6 +23,7 @@ package net.messagevortex.transport.imap;
 // ************************************************************************************
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.security.Security;
 import java.util.HashMap;
 import java.util.Map;
@@ -137,7 +138,7 @@ public class ImapCommandAuthenticate extends ImapCommand {
         LOGGER.log(Level.INFO, "sending challenge");
         if (saslChallenge.length > 0) {
           LOGGER.log(Level.INFO, "sending challenge (" + saslChallenge.length + " bytes; "
-                  + new String(Base64.encode(saslChallenge)) + ")");
+                  + new String(Base64.encode(saslChallenge), StandardCharsets.UTF_8) + ")");
           line.getConnection().writeln("+ " + new String(Base64.encode(saslChallenge)));
         } else {
           LOGGER.log(Level.INFO, "sending empty challenge");

@@ -1,9 +1,9 @@
 package net.messagevortex.asn1.encryption;
 
-public interface PRNG {
+public interface Prng {
 
   /***
-   * <p>Returns the next random byte of the initialized PRNG.</p>
+   * <p>Returns the next random byte of the initialized Prng.</p>
    *
    * @return the requested byte
    */

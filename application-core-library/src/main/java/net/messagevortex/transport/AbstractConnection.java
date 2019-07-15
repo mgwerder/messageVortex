@@ -423,8 +423,8 @@ public abstract class AbstractConnection {
             res = getEngine().unwrap(inboundEncryptedData, inboundAppData);
           } catch (SSLException sslException) {
             LOGGER.log(Level.WARNING, "A problem was encountered while processing the data "
-                    + "that caused the SSLEngine to abort. Will try to properly close "
-                    + "connection...",
+                            + "that caused the SSLEngine to abort. Will try to properly close "
+                            + "connection...",
                     sslException);
             getEngine().closeOutbound();
             handshakeStatus = getEngine().getHandshakeStatus();
