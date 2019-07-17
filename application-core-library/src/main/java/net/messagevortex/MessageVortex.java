@@ -200,7 +200,7 @@ public class MessageVortex implements Callable<Integer> {
                   + idstoreSection + "");
         }
         File f = new File(fn);
-        if (f == null) {
+        if (!f.exists()) {
           throw new IOException("identity store file \"" + fn + "\" not found");
         }
         identityStore.put(idstoreSection.toLowerCase(), new IdentityStore(f));
@@ -409,17 +409,8 @@ public class MessageVortex implements Callable<Integer> {
    * @return the requested payload space
    */
   public static InternalPayloadSpace getSimulatedSpace(IdentityBlock ib) {
-    InternalPayloadSpace ret = null;
-    synchronized (simStores) {
-      // get exiting space
-      ret = simStores.getInternalPayload(ib);
-
-      if (ret == null) {
-        // create a new space if missing
-        ret = new InternalPayloadSpace(simStores, ib);
-      }
-    }
-    return ret;
+    // get exiting space
+    return simStores.getInternalPayload(ib);
   }
 
   /***
@@ -429,16 +420,6 @@ public class MessageVortex implements Callable<Integer> {
    * @return the requested payload space
    */
   public static InternalPayloadSpace getOwnSpace(IdentityBlock ib) {
-    InternalPayloadSpace ret = null;
-    synchronized (ownStores) {
-      // get exiting space
-      ret = ownStores.getInternalPayload(ib);
-
-      if (ret == null) {
-        // create a new space if missing
-        ret = new InternalPayloadSpace(ownStores, ib);
-      }
-    }
-    return ret;
+    return ownStores.getInternalPayload(ib);
   }
 }

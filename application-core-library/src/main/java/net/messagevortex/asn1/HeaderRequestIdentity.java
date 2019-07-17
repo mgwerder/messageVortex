@@ -71,6 +71,21 @@ public class HeaderRequestIdentity extends HeaderRequest implements Serializable
     return 0;
   }
 
+  public UsagePeriod getUsagePeriod() {
+    return period;
+  }
+
+  /***
+   * <p>Sets the usage period of the identity to the new value.</p>
+   * @param newPeriod the new usage period
+   * @return          the previously set usage period
+   */
+  public UsagePeriod setUsagePeriod(UsagePeriod newPeriod) {
+    UsagePeriod old = period;
+    this.period = newPeriod;
+    return old;
+  }
+
   @Override
   public String dumpValueNotation(String prefix, DumpType dumpType) {
     StringBuilder sb = new StringBuilder();

@@ -12,11 +12,7 @@ public class SimplePathRecipe extends BlenderRecipe {
 
   @Override
   public boolean isAppliable(List<IdentityStoreBlock> anonSet) {
-    if (anonSet != null && anonSet.size() > 3) {
-      return true;
-    } else {
-      return false;
-    }
+    return (anonSet != null && anonSet.size() > 3);
   }
 
   @Override

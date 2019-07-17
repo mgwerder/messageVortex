@@ -60,9 +60,10 @@ public class InternalPayloadSpace {
   private long lastcompact = System.currentTimeMillis();
 
   /***
-   * <p></p>
-   * @param payloadSpace
-   * @param identity
+   * <p>Creates an internal payload space and adds it to the central directory.</p>
+   *
+   * @param payloadSpace   the payload space to be added
+   * @param identity       the identity the payload space is assigned to
    */
   public InternalPayloadSpace(InternalPayloadSpaceStore payloadSpace, IdentityBlock identity) {
     this.identity = identity;

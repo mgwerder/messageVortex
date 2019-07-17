@@ -68,6 +68,7 @@ public class InternalPayloadSpaceStore {
       ret = internalPayloadMap.get(key);
       if (ret == null) {
         ret = new InternalPayloadSpace(this, identity);
+        internalPayloadMap.put(key, ret);
       }
     }
     return ret;

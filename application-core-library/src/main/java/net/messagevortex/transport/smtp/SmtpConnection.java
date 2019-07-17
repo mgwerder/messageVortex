@@ -151,7 +151,9 @@ public class SmtpConnection extends ClientConnection {
                 // send message to blending layer
                 if (getReceiver() != null) {
                   LOGGER.log(Level.INFO, "Message passed to blender layer");
-                  getReceiver().gotMessage(new ByteArrayInputStream(sb.toString().getBytes(StandardCharsets.UTF_8)));
+                  getReceiver().gotMessage(new ByteArrayInputStream(
+                          sb.toString().getBytes(StandardCharsets.UTF_8))
+                  );
                 } else {
                   LOGGER.log(Level.WARNING, "blender layer unknown ... message discarded");
                 }

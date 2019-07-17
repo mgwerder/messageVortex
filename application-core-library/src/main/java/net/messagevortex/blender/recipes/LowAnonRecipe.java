@@ -77,6 +77,7 @@ public class LowAnonRecipe extends BlenderRecipe {
     int targetBlock = ExtendedSecureRandom.nextInt(1024, 65737);
     rb.addOperation(new EncryptPayloadOperation(0, targetBlock, null));
 
+
     // send packages along the line
 
     // add some dead ends

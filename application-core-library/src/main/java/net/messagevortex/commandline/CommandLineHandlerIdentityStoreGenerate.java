@@ -3,6 +3,7 @@ package net.messagevortex.commandline;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.util.Date;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import net.messagevortex.ExtendedSecureRandom;
@@ -53,7 +54,7 @@ public class CommandLineHandlerIdentityStoreGenerate implements Callable<Integer
     // generate new identity
     LOGGER.log(Level.INFO, "Generating new identity for \"" + identityId + "\"");
     IdentityStoreBlock isb = new IdentityStoreBlock();
-    isb.setValid(new UsagePeriod(3600 * 24 * 365)); // set validity to one year
+    isb.setValid(new UsagePeriod(new Date(),new Date( new Date().getTime() * 3600 * 24 * 365))); // set validity to one year
     isb.setTransferQuota(ExtendedSecureRandom.nextInt(Integer.MAX_VALUE)); // maximum transfer quota
     isb.setMessageQuota(ExtendedSecureRandom.nextInt(Integer.MAX_VALUE)); // maximum Message quota
     isb.setIdentityKey(new AsymmetricKey(

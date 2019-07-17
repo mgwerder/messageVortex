@@ -168,6 +168,10 @@ public class IdentityStore extends AbstractBlock
     return ret;
   }
 
+  public String[] getIdentityList() {
+    return blocks.keySet().toArray(new String[0]);
+  }
+
   /***
    * <p>Gets a random set of known recipient identities.</p>
    *

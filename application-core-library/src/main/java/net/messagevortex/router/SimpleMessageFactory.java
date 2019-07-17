@@ -121,12 +121,25 @@ public class SimpleMessageFactory extends MessageFactory {
     return graph.getRoutingBlock();
   }
 
+  /***
+   * <p>Sets the maximum time allowed to transfer the message to the final destination.</p>
+   *
+   * @param newmax the new maximum transfer time in seconds
+   * @return       the previously set transfer time
+   */
   public long setMaxTransferTime(long newmax) {
     long ret = maxMessageTransferTime;
     maxMessageTransferTime = newmax;
     return ret;
   }
 
+  /***
+   * <p>Sets the minimum time required to process a message in a node.</p>
+   *
+   * <p>This time includes anti-malware related processing or anti-UBE related actions.</p>
+   * @param newmin the new time in seconds to be set
+   * @return       the previously set time
+   */
   public long setMinStepProcessSTime(long newmin) {
     long ret = minStepProcessSTime;
     minStepProcessSTime = newmin;
@@ -141,6 +154,12 @@ public class SimpleMessageFactory extends MessageFactory {
     return graph;
   }
 
+  /***
+   * <p>This is a test methode sheduled to be removed.</p>
+   *
+   * @param args          ordinary main args (ignored)
+   * @throws IOException  if the function was unable to load the identity store from filesystem
+   */
   public static void main(String[] args) throws IOException {
     MessageVortexLogger.setGlobalLogLevel(Level.FINEST);
     LOGGER.log(Level.INFO, "Loading identity store");
