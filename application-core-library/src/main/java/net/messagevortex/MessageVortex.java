@@ -274,16 +274,9 @@ public class MessageVortex implements Callable<Integer> {
 
     LOGGER.log(Level.INFO, "******* startup of MessageVortex complete *******");
 
-    if (timeoutInSeconds >= 0) {
-      try {
-        Thread.sleep(timeoutInSeconds * 1000);
-      } catch (InterruptedException ie) {
-        // may be safely ignored
-      }
-    } else {
-      MessageVortexController controller = new MessageVortexController();
-      controller.waitForShutdown();
-    }
+    MessageVortexController controller = new MessageVortexController();
+    controller.setTimeout(timeoutInSeconds * 1000);
+    controller.waitForShutdown();
 
     LOGGER.log(Level.INFO, "******* shutting down MessageVortex *******");
     Map<String, RunningDaemon> tmap = new HashMap<>();
