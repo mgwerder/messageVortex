@@ -237,7 +237,8 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
       // get list of files to merge
       String targetFile;  // fileThatYouWantToFilter
       List<File> listOfFiles = new ArrayList<>();
-      for (File tfile : (new File(System.getProperty("java.io.tmpdir"))).listFiles()) {
+      File[] fl = (new File(System.getProperty("java.io.tmpdir"))).listFiles();
+      for (File tfile : fl==null?new File[0]:fl) {
         if (tfile.isFile()) {
           targetFile = tfile.getName();
           if (targetFile.startsWith(TMP_PREFIX) && targetFile.endsWith(".key")) {
