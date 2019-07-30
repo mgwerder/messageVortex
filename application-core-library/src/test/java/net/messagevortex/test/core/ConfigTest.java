@@ -278,7 +278,7 @@ public class ConfigTest {
       Config cfg1 = MessageVortexConfig.getDefault();
       LOGGER.log(Level.INFO, "storing std config to string");
       String cfg1s = cfg1.store();
-      String filename = System.getProperty("java.io.tmpdir") + "tmpfile.cfg";
+      String filename = System.getProperty("java.io.tmpdir") + "/tmpfile.cfg";
       LOGGER.log(Level.INFO, "storing std config to file to " + filename);
       cfg1.store(filename);
       assertTrue("File not created", new File(filename).exists());
