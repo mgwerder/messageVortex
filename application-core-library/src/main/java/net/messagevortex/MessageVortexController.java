@@ -54,19 +54,19 @@ public class MessageVortexController implements SignalHandler {
 
           // read exactly one line and close socket
           String command = new BufferedReader(
-                  new InputStreamReader(s.getInputStream(),StandardCharsets.UTF_8)
+                  new InputStreamReader(s.getInputStream(), StandardCharsets.UTF_8)
           ).readLine();
           LOGGER.log(Level.INFO, "MessageVortex controller got command \"" + command + "\"");
 
-          if (command== null) {
+          if (command == null) {
             LOGGER.log(Level.INFO, "MessageVortex controller skips empty command line");
           } else if (command.toLowerCase().startsWith("shutdown")) {
             LOGGER.log(Level.INFO, "MessageVortex controller executes shutdown command");
             shutdown = true;
             s.getOutputStream().write("OK\r\n".getBytes(StandardCharsets.UTF_8));
           } else {
-            LOGGER.log(Level.WARNING, "MessageVortex controller got illegal command \"" +
-                    command + "\"");
+            LOGGER.log(Level.WARNING, "MessageVortex controller got illegal command \""
+                    + command + "\"");
           }
 
           s.close();
@@ -115,6 +115,9 @@ public class MessageVortexController implements SignalHandler {
 
   }
 
+  /***
+   * <p>Creates a new vortex controller listening on localhost only.</p>
+   */
   public MessageVortexController() {
     Thread t = new Thread(runner);
     t.setName("MessageVortexShutdownController");
@@ -132,12 +135,21 @@ public class MessageVortexController implements SignalHandler {
     }
   }
 
+  /***
+   * <p>Wait for shutdown of the runner.</p>
+   */
   public void waitForShutdown() {
     runner.waitForShutdown();
   }
 
+  /***
+   * <p>Sets the timeout when the controller should shutdown.</p>
+   *
+   * @param milliSeconds the time in milliseconds
+   */
   public synchronized void setTimeout(long milliSeconds) {
-    LOGGER.log(Level.INFO, "MessageVortex controller sets timeout to " + milliSeconds/1000 + " s");
+    LOGGER.log(Level.INFO, "MessageVortex controller sets timeout to " + milliSeconds / 1000
+            + " s");
     if (timer != null) {
       timer.cancel();
     }

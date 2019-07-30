@@ -139,7 +139,8 @@ public class ImapCommandAuthenticate extends ImapCommand {
         if (saslChallenge.length > 0) {
           LOGGER.log(Level.INFO, "sending challenge (" + saslChallenge.length + " bytes; "
                   + new String(Base64.encode(saslChallenge), StandardCharsets.UTF_8) + ")");
-          line.getConnection().writeln("+ " + new String(Base64.encode(saslChallenge)));
+          line.getConnection().writeln("+ "
+                  + new String(Base64.encode(saslChallenge), StandardCharsets.UTF_8));
         } else {
           LOGGER.log(Level.INFO, "sending empty challenge");
           line.getConnection().writeln("+ ");

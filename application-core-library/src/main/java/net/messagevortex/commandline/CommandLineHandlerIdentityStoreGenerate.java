@@ -43,6 +43,24 @@ public class CommandLineHandlerIdentityStoreGenerate implements Callable<Integer
 
   @Override
   public Integer call() throws Exception {
+    // generate new identity
+    LOGGER.log(Level.INFO, "Generating new identity for \"" + identityId + "\"");
+    IdentityStoreBlock isb = new IdentityStoreBlock();
+
+    // set validity to one year
+    isb.setValid(new UsagePeriod(new Date(), new Date(new Date().getTime() * 3600 * 24 * 365)));
+
+    // maximum transfer quota
+    isb.setTransferQuota(ExtendedSecureRandom.nextInt(Integer.MAX_VALUE));
+
+    // maximum Message quota
+    isb.setMessageQuota(ExtendedSecureRandom.nextInt(Integer.MAX_VALUE));
+    isb.setIdentityKey(new AsymmetricKey(
+            Algorithm.getDefault(AlgorithmType.ASYMMETRIC).getParameters(SecurityLevel.QUANTUM))
+    );
+    isb.setNodeAddress("smtp:" + identityId);
+    isb.setNodeKey(null);
+
     // load store
     if (!new File(filename).exists()) {
       LOGGER.log(Level.SEVERE, "File \"" + filename + "\" not found");
@@ -51,22 +69,12 @@ public class CommandLineHandlerIdentityStoreGenerate implements Callable<Integer
     LOGGER.log(Level.INFO, "Loading identity store \"" + filename + "\"");
     IdentityStore is = new IdentityStore(new File(filename));
 
-    // generate new identity
-    LOGGER.log(Level.INFO, "Generating new identity for \"" + identityId + "\"");
-    IdentityStoreBlock isb = new IdentityStoreBlock();
-    isb.setValid(new UsagePeriod(new Date(),new Date( new Date().getTime() * 3600 * 24 * 365))); // set validity to one year
-    isb.setTransferQuota(ExtendedSecureRandom.nextInt(Integer.MAX_VALUE)); // maximum transfer quota
-    isb.setMessageQuota(ExtendedSecureRandom.nextInt(Integer.MAX_VALUE)); // maximum Message quota
-    isb.setIdentityKey(new AsymmetricKey(
-            Algorithm.getDefault(AlgorithmType.ASYMMETRIC).getParameters(SecurityLevel.QUANTUM))
-    );
-    isb.setNodeAddress("smtp:" + identityId);
-    isb.setNodeKey(null);
+    // add identity stor block to identity store
     is.add(isb);
 
     // dump store
     LOGGER.log(Level.INFO, "Dumping identity store");
-    System.out.println(is.dumpValueNotation("",DumpType.ALL_UNENCRYPTED));
+    System.out.println(is.dumpValueNotation("", DumpType.ALL_UNENCRYPTED));
 
     // dump store to disk
     LOGGER.log(Level.INFO, "writing identity store to \"" + filename + "\"");

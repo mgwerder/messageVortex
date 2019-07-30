@@ -383,6 +383,12 @@ public class Config {
     // All OK
   }
 
+  /***
+   * <p>Creates an config object following the spec given in the resource file.</p>
+   *
+   * @param ressourceFile filename of the resource file
+   * @throws IOException if an error happens while reading the file
+   */
   public Config(String ressourceFile) throws IOException {
     this();
     if (ressourceFile != null) {
@@ -864,6 +870,12 @@ public class Config {
     }
   }
 
+  /***
+   * <p>Removes a config value declaration from the config container.</p>
+   *
+   * @param id the id of the value to be removed
+   * @return true if the id did exist
+   */
   public boolean removeConfigValue(String id) {
     synchronized (configData) {
       if (configData.get(id.toLowerCase()) == null) {
@@ -1070,7 +1082,8 @@ public class Config {
     for (String field : fields) {
       synchronized (this.configData) {
         if (this.configData.get(field.toLowerCase()) == null) {
-          throw new IOException("inconsistency deteceted in internal storage when querying field " + field);
+          throw new IOException("inconsistency deteceted in internal storage when querying field "
+                  + field);
         }
       }
       if (withComments) {

@@ -115,7 +115,7 @@ public class SmtpConnection extends ClientConnection {
                       Base64.encode("Username:".getBytes(StandardCharsets.UTF_8)),
                       StandardCharsets.UTF_8
               ));
-              String username = new String(Base64.decode(readln()));
+              String username = new String(Base64.decode(readln()),StandardCharsets.UTF_8);
               Config.getDefault().getStringValue(cfgSection, "smtp_incomming_user");
               write("334 " + new String(
                       Base64.encode("Password:".getBytes(StandardCharsets.UTF_8))) + CRLF
@@ -136,7 +136,7 @@ public class SmtpConnection extends ClientConnection {
               // check for message body
             } else if ("data".equals(command.toLowerCase())) {
               if (envelopeFrom != null && envelopeTo != null) {
-                write("354 send the mail data, end with ." + CRLF);
+                write("354 send the mail data, end with CRLF.CRLF" + CRLF);
 
                 // get body until terminated with a line with a single dot
                 String l = null;

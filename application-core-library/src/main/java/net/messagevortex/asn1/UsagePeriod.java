@@ -213,7 +213,7 @@ public class UsagePeriod extends AbstractBlock implements Serializable, Comparab
    * @return the previously set point in time
    */
   public Date setNotBefore(Date validityStart) {
-    Date d2 = new Date(notBefore / 1000L );
+    Date d2 = new Date(notBefore / 1000L);
     notBefore = validityStart.getTime();
     type = UsagePeriodType.ABSOLUTE;
     return d2;
@@ -225,7 +225,7 @@ public class UsagePeriod extends AbstractBlock implements Serializable, Comparab
    * @return the currently set date of expiry
    */
   public Date getNotAfter() {
-    return new Date(notAfter/1000L);
+    return new Date(notAfter / 1000L);
   }
 
   /***
@@ -247,7 +247,7 @@ public class UsagePeriod extends AbstractBlock implements Serializable, Comparab
    * @return the absolute epoch in seconds
    */
   public long getBeforeInt() {
-    return (reference == null ? notBefore / 1000L: (notBefore - reference.getTime()) / 1000L);
+    return (reference == null ? notBefore / 1000L : (notBefore - reference.getTime()) / 1000L);
   }
 
   /***
@@ -368,7 +368,7 @@ public class UsagePeriod extends AbstractBlock implements Serializable, Comparab
   @Override
   public boolean equals(Object o) {
     if (o instanceof UsagePeriod) {
-      return compareTo((UsagePeriod)o)==0;
+      return compareTo((UsagePeriod) o) == 0;
     } else {
       return false;
     }
