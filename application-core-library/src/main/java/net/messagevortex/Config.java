@@ -25,6 +25,7 @@ package net.messagevortex;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -947,9 +948,11 @@ public class Config {
 
     InputStream fstream = this.getClass().getClassLoader().getResourceAsStream(filename);
     if (fstream == null) {
-      fstream = new FileInputStream(filename);
-      if (fstream == null) {
-        throw new IOException(" unable to locate file \"" + filename + "\"");
+      try {
+        fstream = new FileInputStream(filename);
+      } catch (FileNotFoundException fnfe) {
+        LOGGER.log(Level.WARNING, "Unable to load config file \"" + filename + "\"", fnfe);
+        throw fnfe;
       }
     }
 

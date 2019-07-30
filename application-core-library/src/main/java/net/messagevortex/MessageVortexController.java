@@ -1,21 +1,15 @@
 package net.messagevortex;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketAddress;
 import java.nio.charset.StandardCharsets;
-import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
-
-import net.messagevortex.transport.ServerConnection;
 import sun.misc.Signal;
 import sun.misc.SignalHandler;
 
@@ -59,16 +53,20 @@ public class MessageVortexController implements SignalHandler {
           Socket s = serverConnection.accept();
 
           // read exactly one line and close socket
-          String command = new BufferedReader(new InputStreamReader(s.getInputStream())).readLine();
+          String command = new BufferedReader(
+                  new InputStreamReader(s.getInputStream(),StandardCharsets.UTF_8)
+          ).readLine();
           LOGGER.log(Level.INFO, "MessageVortex controller got command \"" + command + "\"");
 
-
-          if (command.toLowerCase().startsWith("shutdown")) {
+          if (command== null) {
+            LOGGER.log(Level.INFO, "MessageVortex controller skips empty command line");
+          } else if (command.toLowerCase().startsWith("shutdown")) {
             LOGGER.log(Level.INFO, "MessageVortex controller executes shutdown command");
             shutdown = true;
             s.getOutputStream().write("OK\r\n".getBytes(StandardCharsets.UTF_8));
           } else {
-            LOGGER.log(Level.WARNING, "MessageVortex controller got illegal command \"" + command + "\"");
+            LOGGER.log(Level.WARNING, "MessageVortex controller got illegal command \"" +
+                    command + "\"");
           }
 
           s.close();

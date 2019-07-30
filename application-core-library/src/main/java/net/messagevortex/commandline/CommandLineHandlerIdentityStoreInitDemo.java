@@ -1,22 +1,13 @@
 package net.messagevortex.commandline;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
-import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.asn1.AsymmetricKey;
 import net.messagevortex.asn1.IdentityStore;
-import net.messagevortex.asn1.IdentityStoreBlock;
-import net.messagevortex.asn1.UsagePeriod;
-import net.messagevortex.asn1.encryption.Algorithm;
-import net.messagevortex.asn1.encryption.AlgorithmType;
 import net.messagevortex.asn1.encryption.DumpType;
-import net.messagevortex.asn1.encryption.SecurityLevel;
 import picocli.CommandLine;
 
 @CommandLine.Command(
@@ -52,8 +43,9 @@ public class CommandLineHandlerIdentityStoreInitDemo implements Callable<Integer
 
       // delete old identity store
       File f = new File( "is_dummy"+i+".cfg" );
-      if (f.exists())
-        f.delete();
+      if (f.exists() && f.delete()) {
+        LOGGER.log(Level.INFO, "old identity store \"" + f.getName() + "\" deleted");
+      }
 
       // generate new store
       LOGGER.log(Level.INFO, "creating identity store \"" + f.getName() + "\"");

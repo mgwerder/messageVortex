@@ -28,9 +28,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
-
 import net.messagevortex.asn1.encryption.DumpType;
-import org.bouncycastle.asn1.ASN1Choice;
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1EncodableVector;
 import org.bouncycastle.asn1.ASN1GeneralizedTime;
@@ -95,7 +93,7 @@ public class UsagePeriod extends AbstractBlock implements Serializable, Comparab
   public UsagePeriod(long startSeconds, long durationSeconds, Date reference) {
     notBefore = reference.getTime() + startSeconds * 1000L;
     notAfter = notBefore + durationSeconds * 1000L;
-    this.reference = reference;
+    this.reference = new Date(reference.getTime());
     type = UsagePeriodType.RELATIVE;
   }
 
@@ -364,6 +362,15 @@ public class UsagePeriod extends AbstractBlock implements Serializable, Comparab
       }
     } else {
       return -1;
+    }
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o instanceof UsagePeriod) {
+      return compareTo((UsagePeriod)o)==0;
+    } else {
+      return false;
     }
   }
 
