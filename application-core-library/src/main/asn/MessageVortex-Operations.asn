@@ -21,7 +21,8 @@ BEGIN
     encryptPayload  [300] EncryptPayloadOperation,
     decryptPayload  [310] DecryptPayloadOperation,
     addRedundancy   [400] AddRedundancyOperation,
-    removeRedundancy[410] RemoveRedundancyOperation
+    removeRedundancy[410] RemoveRedundancyOperation,
+    map             [1001] MapBlockOperation
   }
 
   PercentSizeBlock ::= SEQUENCE {
@@ -85,6 +86,11 @@ BEGIN
   DecryptPayloadOperation ::= SEQUENCE {
     originalId            INTEGER (0..maxID),
     key                   SymmetricKey,
+    newId                 INTEGER (1..maxID)
+  }
+
+  MapBlockOperation ::= SEQUENCE {
+    originalId            INTEGER (0..maxID),
     newId                 INTEGER (1..maxID)
   }
 

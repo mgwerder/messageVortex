@@ -16,7 +16,7 @@ import net.messagevortex.asn1.IdentityStore;
 import net.messagevortex.asn1.InnerMessageBlock;
 import net.messagevortex.asn1.PayloadChunk;
 import net.messagevortex.asn1.PrefixBlock;
-import net.messagevortex.asn1.RoutingBlock;
+import net.messagevortex.asn1.RoutingCombo;
 import net.messagevortex.asn1.SymmetricKey;
 import net.messagevortex.asn1.UsagePeriod;
 import net.messagevortex.asn1.VortexMessage;
@@ -61,7 +61,7 @@ public class FuzzerTest {
                 PrefixBlock p=new PrefixBlock();
                 p.setKey( new SymmetricKey() );
                 IdentityBlock identity=new IdentityBlock();
-                RoutingBlock routing=new RoutingBlock();
+                RoutingCombo routing=new RoutingCombo();
                 VortexMessage s = new VortexMessage( p,new InnerMessageBlock( new PrefixBlock(),identity,routing ) );
                 assertTrue( "VortexMessage may not be null", s != null );
                 byte[] b1 = s.toBytes(DumpType.ALL_UNENCRYPTED);
@@ -220,13 +220,13 @@ public class FuzzerTest {
         try{
             for (int i = 0; i < ksDisc/8192; i++) {;
                 LOGGER.log(Level.INFO,"creating router block");
-                RoutingBlock routing=new RoutingBlock();
+                RoutingCombo routing=new RoutingCombo();
                 assertTrue( "Routing Block may not be null",routing!=null);
                 LOGGER.log(Level.INFO,"encoding binary");
                 byte[] b1=routing.toBytes(DumpType.ALL_UNENCRYPTED);
                 assertTrue( "Byte representation may not be null",b1!=null);
                 LOGGER.log(Level.INFO,"reencoding from binary");
-                RoutingBlock routing2=new RoutingBlock(ASN1Sequence.getInstance(b1));
+                RoutingCombo routing2=new RoutingCombo(ASN1Sequence.getInstance(b1));
                 byte[] b2=(routing2).toBytes(DumpType.ALL_UNENCRYPTED);
                 assertTrue( "Byte arrays should be equal when reencoding" ,Arrays.equals(b1,b2));
                 assertTrue( "ASN1 value dumps should be equal when reencoding (ALL_UNENCRYPTED)" ,routing.dumpValueNotation("",DumpType.ALL_UNENCRYPTED).equals(routing2.dumpValueNotation("",DumpType.ALL_UNENCRYPTED)));

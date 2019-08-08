@@ -58,6 +58,16 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/asn/MessageVortex-Operations.asn">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/asn/MessageVortex-Schema.asn">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/content/books/adminGuide.xml">
           <value>
             <set />
@@ -168,6 +178,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AssemblyBlock.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AsymmetricKey.java">
           <value>
             <set />
@@ -223,12 +238,22 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/MapBlockOperation.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/Operation.java">
           <value>
             <set />
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/RoutingBlock.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/RoutingCombo.java">
           <value>
             <set />
           </value>
@@ -524,6 +549,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/main/resources/LICENSE.md">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/resources/asn.examples/messageBlocks.asn">
           <value>
             <set />
           </value>

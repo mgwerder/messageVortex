@@ -35,12 +35,15 @@ import org.bouncycastle.asn1.DERSequence;
 /**
  * Contains all classes extending assembly blocks (Payload operations).
  */
-public class AssemblyBlock extends AbstractBlock implements Serializable, Dumpable {
+public class MapBlockOperation extends Operation implements Serializable {
 
   public static final long serialVersionUID = 100000000002L;
 
-  int routingBlockIndex = -1;
-  int[] payloadBlockIndex = new int[0];
+  int originalId = -1;
+  int newId = -1;
+
+  MapBlockOperation() {
+  }
 
   /***
    * <p>Create object from ASN.1 code.</p>
@@ -48,7 +51,7 @@ public class AssemblyBlock extends AbstractBlock implements Serializable, Dumpab
    * @param object the ASN.1 code
    * @throws IOException if parsing of ASN.1 code fails
    */
-  public AssemblyBlock(ASN1Encodable object) throws IOException {
+  public MapBlockOperation(ASN1Encodable object) throws IOException {
     parse(object);
   }
 
@@ -56,44 +59,30 @@ public class AssemblyBlock extends AbstractBlock implements Serializable, Dumpab
   protected void parse(ASN1Encodable to) throws IOException {
     ASN1Sequence s1 = ASN1Sequence.getInstance(to);
     int i = 0;
-    routingBlockIndex = ASN1Integer.getInstance(s1.getObjectAt(i++)).getValue().intValue();
-    ASN1Sequence s2 = ASN1Sequence.getInstance(s1.getObjectAt(i++));
-    int[] l = new int[s1.size()];
-    int j = 0;
-    for (ASN1Encodable e : s2) {
-      l[j++] = ASN1Integer.getInstance(e).getValue().intValue();
-    }
-    payloadBlockIndex = l;
+    originalId = ASN1Integer.getInstance(s1.getObjectAt(i++)).getValue().intValue();
+    newId = ASN1Integer.getInstance(s1.getObjectAt(i++)).getValue().intValue();
   }
 
   @Override
   public String dumpValueNotation(String prefix, DumpType dumptype) throws IOException {
     StringBuilder sb = new StringBuilder();
     sb.append('{').append(CRLF);
-    sb.append(prefix).append("  routingBlockIndex ").append(routingBlockIndex).append(CRLF);
-    sb.append(prefix).append("  payloadBlockIndex { ");
-    int j = 0;
-    for (int i : payloadBlockIndex) {
-      if (j > 0) {
-        sb.append(", ");
-      }
-      sb.append(i);
-      j++;
-    }
-    sb.append(" }");
+    sb.append(prefix).append("  originalId ").append(originalId).append(",").append(CRLF);
+    sb.append(prefix).append("  newId ").append(newId).append(CRLF);
+    sb.append(prefix).append("}").append(CRLF);
     return sb.toString();
   }
 
   @Override
   public ASN1Object toAsn1Object(DumpType dumpType) throws IOException {
     ASN1EncodableVector v = new ASN1EncodableVector();
-    v.add(new ASN1Integer(routingBlockIndex));
-    ASN1EncodableVector v2 = new ASN1EncodableVector();
-    for (int i : payloadBlockIndex) {
-      v2.add(new ASN1Integer(i));
-    }
-    v.add(new DERSequence(v2));
+    v.add(new ASN1Integer(originalId));
+    v.add(new ASN1Integer(newId));
     return new DERSequence(v);
   }
 
+  @Override
+  public Operation getNewInstance(ASN1Encodable object) throws IOException {
+    return new MapBlockOperation(object);
+  }
 }

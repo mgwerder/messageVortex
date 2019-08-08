@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentSkipListSet;
 
 import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.asn1.IdentityStoreBlock;
-import net.messagevortex.asn1.RoutingBlock;
+import net.messagevortex.asn1.RoutingCombo;
 
 public abstract class BlenderRecipe implements Comparable<BlenderRecipe> {
 
@@ -108,7 +108,7 @@ public abstract class BlenderRecipe implements Comparable<BlenderRecipe> {
    *
    * @throws IOException if a problem arises when creating the block
    */
-  public abstract RoutingBlock applyRecipe(List<IdentityStoreBlock> anonSet,
+  public abstract RoutingCombo applyRecipe(List<IdentityStoreBlock> anonSet,
                                            IdentityStoreBlock from,
                                            IdentityStoreBlock to) throws IOException;
 

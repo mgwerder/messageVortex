@@ -42,6 +42,7 @@ public abstract class Operation extends AbstractBlock implements Serializable {
   public static final int DECRYPT_PAYLOAD = 310;
   public static final int ADD_REDUNDANCY = 400;
   public static final int REMOVE_REDUNDANCY = 410;
+  public static final int MAP = 1001;
 
   private static final Map<Integer, Operation> operations = new HashMap<>();
   private static boolean initInProgress = false;
@@ -87,6 +88,7 @@ public abstract class Operation extends AbstractBlock implements Serializable {
         operations.put(DECRYPT_PAYLOAD, new DecryptPayloadOperation());
         operations.put(ADD_REDUNDANCY, new AddRedundancyOperation());
         operations.put(REMOVE_REDUNDANCY, new RemoveRedundancyOperation());
+        operations.put(MAP, new MapBlockOperation());
         initInProgress = false;
       }
     }

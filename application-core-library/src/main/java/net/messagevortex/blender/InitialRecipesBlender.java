@@ -32,7 +32,7 @@ import net.messagevortex.asn1.IdentityStore;
 import net.messagevortex.asn1.IdentityStoreBlock;
 import net.messagevortex.asn1.InnerMessageBlock;
 import net.messagevortex.asn1.PrefixBlock;
-import net.messagevortex.asn1.RoutingBlock;
+import net.messagevortex.asn1.RoutingCombo;
 import net.messagevortex.asn1.VortexMessage;
 import net.messagevortex.asn1.encryption.DumpType;
 import net.messagevortex.blender.recipes.BlenderRecipe;
@@ -218,7 +218,7 @@ public class InitialRecipesBlender extends Blender {
         IdentityStoreBlock fromAddr = istore.getIdentity(from[0].toString());
 
         IdentityStoreBlock toAddr = istore.getIdentity(receiverAddress.toString());
-        RoutingBlock rb = recipe.applyRecipe(anonSet, fromAddr, toAddr);
+        RoutingCombo rb = recipe.applyRecipe(anonSet, fromAddr, toAddr);
 
         if (rb == null) {
           LOGGER.log(Level.WARNING, "Unable to route message to " + receiverAddress.toString());

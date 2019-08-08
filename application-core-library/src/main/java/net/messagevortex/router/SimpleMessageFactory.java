@@ -29,7 +29,7 @@ import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.IdentityStore;
 import net.messagevortex.asn1.IdentityStoreBlock;
-import net.messagevortex.asn1.RoutingBlock;
+import net.messagevortex.asn1.RoutingCombo;
 
 /**
  * Created by martin.gwerder on 06.06.2016.
@@ -66,7 +66,7 @@ public class SimpleMessageFactory extends MessageFactory {
   /***
    * <p>build a simple message path.</p>
    */
-  public RoutingBlock build() {
+  public RoutingCombo build() {
 
     // building vector graphs
     // minimum Graph size is 2.5 time edges
@@ -113,7 +113,7 @@ public class SimpleMessageFactory extends MessageFactory {
     return buildRoutingBlock();
   }
 
-  private RoutingBlock buildRoutingBlock() {
+  private RoutingCombo buildRoutingBlock() {
     // determine message route
     GraphSet[] gs = graph.getRoutes();
     GraphSet msgpath = gs[ExtendedSecureRandom.nextInt(gs.length)];

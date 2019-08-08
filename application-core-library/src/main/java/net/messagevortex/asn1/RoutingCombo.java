@@ -45,7 +45,7 @@ import org.bouncycastle.asn1.DERTaggedObject;
 /**
  * Created by martin.gwerder on 14.04.2016.
  */
-public class RoutingBlock extends AbstractBlock implements Serializable {
+public class RoutingCombo extends AbstractBlock implements Serializable {
 
   public static final long serialVersionUID = 100000000014L;
 
@@ -79,21 +79,20 @@ public class RoutingBlock extends AbstractBlock implements Serializable {
   private long minProcessTime = 0;
   private long maxProcessTime = 0;
   private PrefixBlock[] prefix;
-  private RoutingBlock[] nextHop;
+  private RoutingCombo[] nextHop;
   private long forwardSecret = -1;
-  private RoutingBlock murbReplyBlock = null;
+  private RoutingCombo murbReplyBlock = null;
   private long murbMaxReplay = -1;
   private UsagePeriod murbValidity = null;
   private List<Operation> operation = new ArrayList<>();
-  private AssemblyBlock[] assembly = null;
 
   /***
    * <p>Creates an empty router block.</p>
    */
-  public RoutingBlock() {
+  public RoutingCombo() {
     recipient = new BlendingSpec("");
     prefix = new PrefixBlock[0];
-    nextHop = new RoutingBlock[0];
+    nextHop = new RoutingCombo[0];
   }
 
   /***
@@ -107,7 +106,7 @@ public class RoutingBlock extends AbstractBlock implements Serializable {
    *                      encryption
    * @throws IOException  if failing to parse the block
    */
-  public RoutingBlock(byte[] b, boolean encrypted) throws IOException {
+  public RoutingCombo(byte[] b, boolean encrypted) throws IOException {
     if (encrypted) {
       this.encrypted = Arrays.copyOf(b, b.length);
     } else {
@@ -115,7 +114,7 @@ public class RoutingBlock extends AbstractBlock implements Serializable {
     }
   }
 
-  public RoutingBlock(ASN1Encodable to) throws IOException {
+  public RoutingCombo(ASN1Encodable to) throws IOException {
     parse(to);
   }
 
@@ -172,14 +171,14 @@ public class RoutingBlock extends AbstractBlock implements Serializable {
       case ROUTING_ENCRYPTED:
         // if it is encrypted we have no decryption key for it anyway
         ASN1Sequence seq = ASN1Sequence.getInstance(ae.getObject());
-        List<RoutingBlock> p2 = new ArrayList<>(seq.size());
+        List<RoutingCombo> p2 = new ArrayList<>(seq.size());
         for (ASN1Encodable b : seq) {
-          p2.add(new RoutingBlock(b));
+          p2.add(new RoutingCombo(b));
         }
         if (p2.size() != prefix.length) {
           throw new IOException("missmatch in length of prefix and router block");
         } else {
-          nextHop = p2.toArray(new RoutingBlock[p2.size()]);
+          nextHop = p2.toArray(new RoutingCombo[p2.size()]);
         }
         break;
       default:
@@ -198,7 +197,7 @@ public class RoutingBlock extends AbstractBlock implements Serializable {
         throw new IOException("invalid sequence size for reply block (got: " + s2.size()
                               + "; expected: 3)");
       }
-      murbReplyBlock = new RoutingBlock(s2.getObjectAt(0));
+      murbReplyBlock = new RoutingCombo(s2.getObjectAt(0));
       murbMaxReplay = ASN1Integer.getInstance(s2.getObjectAt(1)).getPositiveValue().intValue();
       murbValidity = new UsagePeriod(s2.getObjectAt(2));
     } else if (ae.getTagNo() == OPERATIONS) {
@@ -226,13 +225,6 @@ public class RoutingBlock extends AbstractBlock implements Serializable {
                             + OPERATIONS + ")");
     }
 
-    // parse assembly
-    ASN1Sequence s2 = ASN1Sequence.getInstance(s1.getObjectAt(i++));
-    List<AssemblyBlock> o = new ArrayList<>(s2.size());
-    for (ASN1Encodable obj : s2) {
-      o.add(new AssemblyBlock(obj));
-    }
-    assembly = o.toArray(new AssemblyBlock[s2.size()]);
   }
 
   public boolean isEncrypted() {
@@ -314,7 +306,7 @@ public class RoutingBlock extends AbstractBlock implements Serializable {
       case ALL_UNENCRYPTED:
       case INTERNAL:
         ASN1EncodableVector v2 = new ASN1EncodableVector();
-        for (RoutingBlock p : nextHop) {
+        for (RoutingCombo p : nextHop) {
           v2.add(p.toAsn1Object(dumpType));
         }
         v.add(new DERTaggedObject(ROUTING_PLAIN, new DERSequence(v2)));
@@ -323,7 +315,7 @@ public class RoutingBlock extends AbstractBlock implements Serializable {
       case PUBLIC_ONLY:
       case ALL:
         ASN1EncodableVector v3 = new ASN1EncodableVector();
-        for (RoutingBlock p : nextHop) {
+        for (RoutingCombo p : nextHop) {
           v3.add(new DEROctetString(p.toEncBytes()));
         }
         v.add(new DERTaggedObject(ROUTING_ENCRYPTED, new DERSequence(v3)));
@@ -349,14 +341,6 @@ public class RoutingBlock extends AbstractBlock implements Serializable {
       }
     }
     v.add(new DERTaggedObject(OPERATIONS, new DERSequence(v2)));
-
-    v2 = new ASN1EncodableVector();
-    if (assembly != null && assembly.length > 0) {
-      for (AssemblyBlock a : assembly) {
-        v2.add(a.toAsn1Object(dumpType));
-      }
-    }
-    v.add(new DERSequence(v2));
 
     return new DERSequence(v);
   }
@@ -387,7 +371,7 @@ public class RoutingBlock extends AbstractBlock implements Serializable {
     if (o.getClass() != this.getClass()) {
       return false;
     }
-    RoutingBlock rb = (RoutingBlock) o;
+    RoutingCombo rb = (RoutingCombo) o;
     try {
       return Arrays.equals(rb.toBytes(DumpType.ALL_UNENCRYPTED), toBytes(DumpType.ALL_UNENCRYPTED));
     } catch (IOException ioe) {

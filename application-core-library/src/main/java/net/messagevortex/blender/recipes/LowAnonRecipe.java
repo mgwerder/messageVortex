@@ -7,7 +7,7 @@ import java.util.Vector;
 import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.asn1.EncryptPayloadOperation;
 import net.messagevortex.asn1.IdentityStoreBlock;
-import net.messagevortex.asn1.RoutingBlock;
+import net.messagevortex.asn1.RoutingCombo;
 import net.messagevortex.router.Edge;
 import net.messagevortex.router.GraphSet;
 
@@ -45,7 +45,7 @@ public class LowAnonRecipe extends BlenderRecipe {
   }
 
   @Override
-  public RoutingBlock applyRecipe(List<IdentityStoreBlock> anonSet, IdentityStoreBlock from,
+  public RoutingCombo applyRecipe(List<IdentityStoreBlock> anonSet, IdentityStoreBlock from,
                                   IdentityStoreBlock to) throws IOException {
     // select random order
     List<IdentityStoreBlock> set = new Vector<>();
@@ -73,7 +73,7 @@ public class LowAnonRecipe extends BlenderRecipe {
     }
 
     // encrypt and split message at start
-    RoutingBlock rb = new RoutingBlock();
+    RoutingCombo rb = new RoutingCombo();
     int targetBlock = ExtendedSecureRandom.nextInt(1024, 65737);
     rb.addOperation(new EncryptPayloadOperation(0, targetBlock, null));
 

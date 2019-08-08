@@ -104,14 +104,9 @@ BEGIN
   }
 
   RoutingBlock ::= SEQUENCE {
-    -- contains the prefix to be used
-    routing    CHOICE {
-      -- debug/internal use only
-      plain             [331] SEQUENCE (SIZE (0..maxRoutingBlocks))
+    -- contains the routingCombos
+    routing    [332] SEQUENCE (SIZE (0..maxRoutingBlocks))
                               OF RoutingCombo,
-      encrypted         [332] SEQUENCE (SIZE (0..maxRoutingBlocks))
-                              OF OCTET STRING
-    },
     -- contains the secret of the header block
     forwardSecret     ChainSecret,
     -- contains a routing block which may be used when sending
@@ -131,26 +126,26 @@ BEGIN
     minProcessTime INTEGER (0..maxDurationOfProcessing),
     maxProcessTime INTEGER (0..maxDurationOfProcessing),
     -- The message key to encrypt the message
-    messageKey    [401] SymmetricKey OPTIONAL,
+    peerKey        [401] SymmetricKey OPTIONAL,
     -- contains the next recipient
-    recipient     [402] BlendingSpec OPTIONAL,
+    recipient      [402] BlendingSpec OPTIONAL,
     -- PrefixBlock encrypted with message key
-    mPrefix       [403] OCTET STRING OPTIONAL,
+    mPrefix        [403] OCTET STRING OPTIONAL,
     -- PrefixBlock encrypted with sender key
-    cPrefix       [404] OCTET STRING OPTIONAL,
+    cPrefix        [404] OCTET STRING OPTIONAL,
     -- HeaderBlock encrypted with sender key
-    header        [405] OCTET STRING OPTIONAL,
+    header         [405] OCTET STRING OPTIONAL,
     -- RoutingBlock encrypted with sender key
-    routing       [406] OCTET STRING OPTIONAL,
+    routing        [406] OCTET STRING OPTIONAL,
     -- contains information for building messages (when used as MURB
     -- ID 0 denotes original message; ID 1-maxPayloadBlocks denotes
     -- target message; 32768-maxWorkspaceId shared workspace for all
     -- blocks of this identity)
-    assembly      [407] SEQUENCE (SIZE (0..maxAssemblyInstructions))
+    assembly       [407] SEQUENCE (SIZE (0..maxAssemblyInstructions))
                   OF PayloadOperation,
-    validity      [408] UsagePeriod,
+    validity       [408] UsagePeriod,
     -- optional - to identify the sender of a message when received
-    id            [409] INTEGER OPTIONAL
+    id             [409] INTEGER OPTIONAL
   }
 
   PuzzleIdentifier          ::= OCTET STRING ( SIZE(0..16) )
