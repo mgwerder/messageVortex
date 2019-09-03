@@ -25,13 +25,19 @@ package net.messagevortex.router.operation;
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigInteger;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Random;
+import java.util.Vector;
 import java.util.logging.Level;
 
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.AbstractRedundancyOperation;
 import net.messagevortex.asn1.AddRedundancyOperation;
 import net.messagevortex.asn1.PayloadChunk;
+import net.messagevortex.asn1.SymmetricKey;
 import net.messagevortex.asn1.VortexMessage;
 import net.messagevortex.asn1.encryption.Prng;
 
@@ -124,6 +130,58 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
     LOGGER.log(Level.INFO, "executing add redundancy operation (" + toString() + ")");
     byte[] in = payload.getPayload(operation.getInputId()).getPayload();
 
+    Matrix out = executeInt(in);
+
+    // set output
+    LOGGER.log(Level.INFO, "  setting output chunks");
+    int tot = 0;
+    assert out.getY() == (operation.getRedundancy() + operation.getDataStripes());
+    try {
+      for (int i = 0; i < out.getY(); i++) {
+        int plid = operation.getOutputId() + i;
+        byte[] b = operation.getkeys()[i].encrypt(out.getRowAsByteArray(i));
+        payload.setCalculatedPayload(plid, new PayloadChunk(plid, b, getUsagePeriod()));
+        tot += b.length;
+      }
+    } catch (IOException ioe) {
+      for (int i : getOutputId()) {
+        payload.setCalculatedPayload(i, null);
+      }
+      LOGGER.log(Level.INFO, "  failed");
+      return new int[0];
+    }
+    LOGGER.log(Level.INFO, "  done (chunk size: " + out.getRowAsByteArray(0).length + "; total:"
+            + tot + ")");
+
+    return getOutputId();
+  }
+
+  public static byte[] execute(byte[] in, int redundancy, int dataStripes, int gf) {
+    AddRedundancy ar = new AddRedundancy(new AddRedundancyOperation(-1, redundancy, dataStripes, new Vector<SymmetricKey>(), -1, gf));
+    if (!ar.canRun()) {
+      return new byte[0];
+    }
+    LOGGER.log(Level.INFO, "executing add redundancy operation (" + ar.toString() + ")");
+    Matrix out = ar.executeInt(in);
+
+    // set output
+    LOGGER.log(Level.INFO, "  setting output chunks");
+    int tot = 0;
+    byte[] totArray = new byte[0];
+    for (int i = 0; i < out.getY(); i++) {
+      byte[] b = out.getRowAsByteArray(i);
+      byte[] t = new byte[tot + b.length];
+      System.arraycopy(totArray, 0, t, 0, totArray.length);
+      System.arraycopy(b, 0, t, totArray.length, b.length);
+      totArray = t;
+      tot += b.length;
+    }
+    LOGGER.log(Level.INFO, "  done (chunk size: " + out.getRowAsByteArray(0).length + "; total:"
+            + tot + ")");
+    return totArray;
+  }
+
+  private Matrix executeInt(byte[] in) {
     // do the padding
     int paddingSize = 4;
     int size = in.length + paddingSize;
@@ -160,30 +218,7 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
             operation.getDataStripes() + operation.getRedundancy(), mm);
     LOGGER.log(Level.INFO, "  redundancy matrixContent is " + r.getX() + "x" + r.getY());
     LOGGER.log(Level.INFO, "  calculating");
-    Matrix out = r.mul(data);
-
-    // set output
-    LOGGER.log(Level.INFO, "  setting output chunks");
-    int tot = 0;
-    assert out.getY() == (operation.getRedundancy() + operation.getDataStripes());
-    try {
-      for (int i = 0; i < out.getY(); i++) {
-        int plid = operation.getOutputId() + i;
-        byte[] b = operation.getkeys()[i].encrypt(out.getRowAsByteArray(i));
-        payload.setCalculatedPayload(plid, new PayloadChunk(plid, b, getUsagePeriod()));
-        tot += b.length;
-      }
-    } catch (IOException ioe) {
-      for (int i : getOutputId()) {
-        payload.setCalculatedPayload(i, null);
-      }
-      LOGGER.log(Level.INFO, "  failed");
-      return new int[0];
-    }
-    LOGGER.log(Level.INFO, "  done (chunk size: " + out.getRowAsByteArray(0).length + "; total:"
-            + tot + ")");
-
-    return getOutputId();
+    return r.mul(data);
   }
 
   /***

@@ -561,7 +561,7 @@ So to be censorship resistant, a protocol requires many critical, unobvious prop
 
 MessageVortex is a protocol providing censorship resistance under ideal circumstances. It does this using a rigid design from bottom up to provide the required properties. While being a protocol on its own, it uses many standard protocols. Partly to provide user-friendliness, but mostly to hide within the regular network flows. As such, a protocol requires to be undetectable on the network. A protocol all alone may not be undetectable as each protocol sends data over a network. This data is detectable. A protocol sending undetectable data requires to be embedded undetectably in legit message flows or hide in side channels. Such embedding is usually done either by side channel transmissions or by employing steganography. Our protocol may use both. The steganography is, however, the preferred way as it implies no control over the transport infrastructure.
 
-\subsection{Adversary Model}
+\subsection{Threat Model}
 We refer to jurisdiction as a geographical area where a set of legal rules created by a single actor or a group of actors apply, and contains executive capabilities (e.g., police, army, or secret service) to enforce this set of legal rules.
 
 We assume that the most potent adversaries are state-sponsored actors. Such actors may have high funding and are assumed to have elaborated capabilities within the jurisdiction of the sponsor. State-sponsored actors may work with allies. Achieving dominance on a world scale is excluded from our model. We always assume one or more actors with disjoint interests covering half of the network or more. We, furthermore, assume that there are always neutral actors not having disjoint interests.
