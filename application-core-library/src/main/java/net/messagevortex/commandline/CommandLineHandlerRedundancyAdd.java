@@ -34,7 +34,7 @@ public class CommandLineHandlerRedundancyAdd implements Callable<Integer> {
           description = "filename of the file to add redundancy")
   String inFile;
 
-  @CommandLine.Option(names = {"--outfile", "-i"}, required = true,
+  @CommandLine.Option(names = {"--outfile", "-o"}, required = true,
           description = "output filename")
   String outFile;
 

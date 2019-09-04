@@ -8,7 +8,7 @@ import java.util.concurrent.Callable;
 @CommandLine.Command(
         description = "Helper for add redundancy operations",
         name = "redundancy",
-        aliases = { "red","is" },
+        aliases = { "red" },
         mixinStandardHelpOptions = true,
         subcommands = {
                 CommandLineHandlerRedundancyAdd.class

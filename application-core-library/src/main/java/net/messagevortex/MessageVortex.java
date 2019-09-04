@@ -44,6 +44,7 @@ import net.messagevortex.asn1.IdentityStore;
 import net.messagevortex.blender.Blender;
 import net.messagevortex.blender.recipes.BlenderRecipe;
 import net.messagevortex.commandline.CommandLineHandlerIdentityStore;
+import net.messagevortex.commandline.CommandLineHandlerRedundancy;
 import net.messagevortex.router.Router;
 import net.messagevortex.router.operation.InternalPayloadSpace;
 import net.messagevortex.router.operation.InternalPayloadSpaceStore;
@@ -57,7 +58,8 @@ import picocli.CommandLine;
         versionProvider = Version.class,
         subcommands = {
                 AsymmetricKeyPreCalculator.class,
-                CommandLineHandlerIdentityStore.class
+                CommandLineHandlerIdentityStore.class,
+                CommandLineHandlerRedundancy.class
         }
 )
 public class MessageVortex implements Callable<Integer> {
