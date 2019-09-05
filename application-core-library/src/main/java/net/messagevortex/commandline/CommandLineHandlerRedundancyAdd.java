@@ -70,8 +70,8 @@ public class CommandLineHandlerRedundancyAdd implements Callable<Integer> {
 
     // write output file
     LOGGER.log(Level.INFO, "writing output");
-    try (FileOutputStream fis = new FileOutputStream(f)) {
-      fis.write(out);
+    try (FileOutputStream fos = new FileOutputStream(new File(outFile))) {
+      fos.write(out);
     }
 
     LOGGER.log(Level.INFO, "finished");
