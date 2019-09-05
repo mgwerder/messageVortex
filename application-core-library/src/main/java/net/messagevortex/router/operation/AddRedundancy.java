@@ -158,9 +158,7 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
 
   public static byte[] execute(byte[] in, int redundancy, int dataStripes, int gf) {
     AddRedundancy ar = new AddRedundancy(new AddRedundancyOperation(-1, redundancy, dataStripes, new Vector<SymmetricKey>(), -1, gf));
-    if (!ar.canRun()) {
-      return new byte[0];
-    }
+
     LOGGER.log(Level.INFO, "executing add redundancy operation (" + ar.toString() + ")");
     Matrix out = ar.executeInt(in);
 
@@ -185,7 +183,7 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
     // do the padding
     int paddingSize = 4;
     int size = in.length + paddingSize;
-    int keySize = operation.getkeys()[1].getKeySize() / 8;
+    int keySize = operation.getkeys().length!=0?operation.getkeys()[1].getKeySize() / 8:32;
     if (size % (keySize * operation.getDataStripes()) > 0) {
       size = keySize * operation.getDataStripes() * (size
               / (keySize * operation.getDataStripes()) + 1);
