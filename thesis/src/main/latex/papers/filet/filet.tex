@@ -992,7 +992,14 @@ This padding has many important advantages:
 	\item An RBB may predict the exact binary image of the padded message when specifying $C1$, $C2$, and $R_{t}(s,)$.
 \end{enumerate}
 
-The Reed-Solomon operation is done with a Vandermonde matrix. Unlike in error correcting systems, we do not normalize the matrix so that the result of the first blocks is equivalent to the original message. Instead, the error correcting information is equally distributed over all resulting blocks adding further obfuscation. Since the entropy of the resulting blocks is lowered and may thus leak an estimate of how a resulting block may have been treated, we added the encryption step to equalize entropy again. The previously introduced padding guarantees that there is no further padding on block level required. Such padding could leak in case of decryption whether the block has been altered or not.
+\begin{figure}[ht]\centering
+	\includegraphics[width=1\columnwidth]{randomblock_10kb}
+	\caption{Resulting entropy of addRedundancy without encryption step}
+	\label{fig:entropy}
+\end{figure}
+
+
+The Reed-Solomon operation is done with a Vandermonde matrix. Unlike in error correcting systems, we do not normalize the matrix so that the result of the first blocks is equivalent to the original message. Instead, the error correcting information is equally distributed over all resulting blocks adding further obfuscation. Since the entropy of the resulting blocks is lowered as shown in Fig.~\ref{fig:entropy} and may thus leak an estimate of how a resulting block may have been treated, we added the encryption step to equalize entropy again. The previously introduced padding guarantees that there is no further padding on block level required. Such padding could leak in case of decryption whether the block has been altered or not.
 
 \subsection{Usage of the Protocol}
 First, a sending node collects either a set of nodes and keys it wants to use and creates identities on these nodes using header requests. Then the sender creates a routing block containing all the routing instructions (hops and operations). Alternatively, a sender may use a premanufactured routing block for the specified target. This routing block is then concatenated to a message and passed to the locally running routing node. From there the message is routed as defined in the routing block. An example of such a route is shown in Figure~\ref{fig:protocolLayers}.
