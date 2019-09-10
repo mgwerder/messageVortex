@@ -70,7 +70,7 @@
                 A message is split and reassembled during transmission. Chunks of the message may carry redundant information to avoid service interruptions during transit. Decoy and message traffic are not differentiable as the nature of the addRedundancy operation allows each generated portion to be either message or decoy. Therefore, any routing node is unable to distinguish between message and decoy traffic.
             </t>
             <t>
-                After processing, a potential receiver node knows if the message is destined for it (by creating a chunk with ID 1) or other nodes . Due to missing keys, no other node may perform this processing.
+                After processing, a potential receiver node knows if the message is destined for it (by creating a chunk with ID 0) or other nodes. Due to missing keys, no other node may perform this processing.
             </t>
             <t>
                 This RFC begins with general terminology (see <xref target="entities_overview"/>) followed by an overview of the process (see <xref target="layer_overview"/>). The subsequent sections describe the details of the protocol.
@@ -215,7 +215,7 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec]]></artwork>
             </section>
             <section anchor="keys" title="Key and MAC specifications and usage">
               <t>
-                MessageVortex uses a unique encoding for keys that is designed to be small and flexible while maintaining a specific base structure.
+                MessageVortex uses a unique encoding for keys. This encoding is designed to be small and flexible while maintaining a specific base structure.
               </t>
               <t>
                 The following key structures are available:
@@ -260,7 +260,7 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec]]></artwork>
             <section anchor="entities_identity" title="Identity">
                 <section anchor="entities_identity_peer" title="Peer Identity">
                     <t>
-                        The peer identity may contain the following information of a peer partner.
+                        The peer identity may contain the following information of a peer partner:
                     </t>
                     <t>
                         <list style="symbols">
@@ -306,7 +306,7 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec]]></artwork>
                             <list style="symbols">
                                 <t>MUST contain a numerical ID identifying the slot.</t>
                                 <t>MAY contain payload content.</t>
-                                <t>If a block contains payload, then it MUST contain a validity period.</t>
+                                <t>If a block contains a payload, then it MUST contain a validity period.</t>
                             </list>
                         </t>
                     </list>
@@ -365,12 +365,12 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec]]></artwork>
             </section>
             <section anchor="layer_overview_routing" title="Routing Layer">
                 <t>
-                    The routing layer expands information contained in MessageVortex packets, processes them, and passes generated packets to the respective blending layer.
+                    The routing layer expands the information contained in MessageVortex packets, processes them, and passes generated packets to the respective blending layer.
                 </t>
             </section>
             <section anchor="layer_overview_accounting" title="Accounting Layer">
                 <t>
-                    The accounting layer tracks all ephemeral identities authorized to use a MessageVortex node, and verifies the available quotas to an ephemeral identity.
+                    The accounting layer tracks all ephemeral identities authorized to use a MessageVortex node and verifies the available quotas to an ephemeral identity.
                 </t>
             </section>
         </section>
@@ -378,7 +378,7 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec]]></artwork>
         <section title="Vortex Message">
             <section title="Overview">
                 <t>
-                    <xref target="fig_message_overview"/> shows a Vortex message. The enclosed sections denote encrypted blocks, and the three or four letter abbreviations denote the key required for decryption. The abbreviation k_h stands for the asymmetric host key, and sk_p is the symmetric peer key. The receiving node obtains this key by decrypting MPREFIX with its host key k_h. Then, sk_s is the symmetric sender key. When decrypting the MPREFIX block, the node obtains this key. The sender key protects the header and routing blocks by guaranteeing the node assembling the message does not know about upcoming identities, operations, and requests. The peer key protects the message, including its structure, from third-party observers.
+                    <xref target="fig_message_overview"/> shows a Vortex message. The enclosed sections denote encrypted blocks, and the three or four-letter abbreviations denote the key required for decryption. The abbreviation k_h stands for the asymmetric host key, and sk_p is the symmetric peer key. The receiving node obtains this key by decrypting MPREFIX with its host key k_h. Then, sk_s is the symmetric sender key. When decrypting the MPREFIX block, the node obtains this key. The sender key protects the header and routing blocks by guaranteeing the node assembling the message does not know about upcoming identities, operations, and requests. The peer key protects the message, including its structure, from third-party observers.
                     <figure anchor="fig_message_overview" title="Vortex message overview">
                         <artwork align="center" type="ascii-art"
 ><![CDATA[+-+---+-+-+---+-+---+-+-+---+-+-+---+-+-------+-+
@@ -399,7 +399,7 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec]]></artwork>
             </section>
             <section title="Message Prefix Block (MPREFIX)">
                 <t>
-                    The PrefixBlock contains a symmetrical key as defined in <xref target="asnOne_schema"/> and is encrypted using the host key of the receiving peer host. The symmetric key utilized MUST be from the set advertised by a CapabilitiesReplyBlock (see <xref target="routing_header_req_cap"/>). A node MAY choose any parameters omitted in the CapabilitiesReplyBlock freely, unless stated otherwise in <xref target="routing_header_req_cap"/>. A node SHOULD avoid sending unencrypted PrefixBlocks, and a prefix block MUST contain the same forward-secret as the other prefix as well as the routing and header blocks. A host MAY reply to a message with an unencrypted message block, but any reply to a message SHOULD be encrypted.
+                    The PrefixBlock contains a symmetrical key as defined in <xref target="asnOne_schema"/> and is encrypted using the host key of the receiving peer host. The symmetric key utilized MUST be from the set advertised by a CapabilitiesReplyBlock (see <xref target="routing_header_req_cap"/>). A node MAY choose any parameters omitted in the CapabilitiesReplyBlock freely unless stated otherwise in <xref target="routing_header_req_cap"/>. A node SHOULD avoid sending unencrypted PrefixBlocks, and a prefix block MUST contain the same forward-secret as the other prefix as well as the routing and header blocks. A host MAY reply to a message with an unencrypted message block, but any reply to a message SHOULD be encrypted.
                 </t>
                 <t>
                     The sender MUST choose a key which may be encrypted with the host key in the respective PrefixBlock using the padding advertised by the CapabilitiesReplyBlock.
@@ -413,14 +413,14 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec]]></artwork>
                     An InnerMessageBlock always starts with a padding block, which guarantees that when using the same routing block multiple times, its binary structure is not repeated throughout the messages of the same routing block. The padding MUST be the first 16 bytes of the first four non-empty payload chunks (i.e., PayloadChunks). If a payload chunk is shorter than 16 bytes, then the content of the padding SHOULD be filled with zero-valued bytes (00h) from the end up to the required number of bytes. An inner message block (i.e., InnerMessageBlock) SHOULD contain at least four payload chunks with a size of 16 bytes or larger. If there are less than four payload chunks, then the padding MUST contain a random sequence of 16 bytes for those missing, and a node MUST NOT reuse random sequences.
                 </t>
                 <t>
-                    An InnerMessageBlock contains so-called forwardSecrets, a random number that MUST be the same in the HeaderBlock, RoutingBlock, and PrefixBlock. Nodes receiving messages containing non-matching forwardSecrets MUST discard these messages and SHOULD NOT send an error message. If a node receives too many messages with illegal forward secrets, then the node SHOULD delete this identity. A node receiving a message with a broken forwardSecret SHOULD treat the block as a replayed block and discard it regardless of a valid forwardSecret. Any replay within the replay protection time MUST be discarded regardless if the forward secret is correct.
+                    An InnerMessageBlock contains so-called forwardSecrets, a random number that MUST be the same in the HeaderBlock, RoutingBlock, and PrefixBlock. Nodes receiving messages containing non-matching forwardSecrets MUST discard these messages and SHOULD NOT send an error message. If a node receives too many messages with illegal forward secrets, then the node SHOULD delete this identity. A node receiving a message with a broken forwardSecret SHOULD treat the block as a replayed block and discard it regardless of a valid forwardSecret. Any replay within the replay protection time MUST be discarded regardless of a correct forward secret.
                 </t>
                 <section title="Control Prefix Block">
                     <t>
                         Control prefix (CPREFIX) and MPREFIX blocks share the same structure and logic as well as containing the sender key sk_s. If an MPREFIX block is unencrypted, a node MAY omit the CPREFIX block. An omitted CPREFIX block results in unencrypted control blocks (e.g., the HeaderBlock and RoutingBlock).
                     </t>
                     <t>
-                        A prefix block MUST contain the same forwardSecret as the other prefix, the routing block, and header block.
+                        A prefix block MUST contain the same forwardSecret as the other prefix, the routing block, and the header block.
                     </t>
                 </section>
                 <section title="Control Blocks">
@@ -596,7 +596,7 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec]]></artwork>
                         A blending layer embeds a VortexMessage in a carrier file with an offset for PLAIN blending. For replacing a file start, a node MUST use the offset 0. The routing node MUST choose the payload file for the message, and SHOULD use a credible payload type (e.g., MIME type) with high entropy. Furthermore, it SHOULD prefix a valid header structure to avoid easy detection of the Vortex message. Finally, a routing node SHOULD use a valid footer, if any, to a payload file to improve blending.
                     </t>
                     <t>
-                    	The blended Vortex message is embedded in one or more message chunks, each starting with two variable length unsigned integers. The integer starts with the LSB, and if bit 7 is set, then there is another byte following. There cannot be more than four bytes where the last, fourth byte is always 8 bit. The three preceding bytes have a payload of seven bits each, which results in a maximum number of 2^29 bits. The first of the extracted numbers reflects the number of bytes in the chunk after the length descriptors. The second contains the number of bytes to be skipped to reach the next chunk. There exists no "last chunk" indicator.
+                    	The blended Vortex message is embedded in one or more message chunks, each starting with two unsigned integers of variable length. The integer starts with the LSB, and if bit 7 is set, then there is another byte following. There cannot be more than four bytes where the last, fourth byte is always 8 bit. The three preceding bytes have a payload of seven bits each, which results in a maximum number of 2^29 bits. The first of the extracted numbers reflect the number of bytes in the chunk after the length descriptors. The second contains the number of bytes to be skipped to reach the next chunk. There exists no "last chunk" indicator.
                     </t>	
                     <t>
                       <figure>	
@@ -607,7 +607,7 @@ value:   01 02 03 04 05 06 07 08 09  ... 01 05 0A 0B 0C 0D 0E 0F f0 03 12 13
 
 Embedding: "(plain:1024)"
 
-Result:  0A 13 (+ 494 omited bytes; then skip 12 bytes to next chunk)
+Result:  0A 13 (+ 494 omitted bytes; then skip 12 bytes to next chunk)
 ]]></artwork>
                       </figure>
                     </t>	
@@ -688,7 +688,7 @@ Result:  0A 13 (+ 494 omited bytes; then skip 12 bytes to next chunk)
                     <t>
                         <list style="symbols">
                             <t>A node MUST ignore identity creation requests.</t>
-                            <t>A node MUST replace the current reply block with the reply block provided in the routing block, if any. The node MUST keep the reply block if none is provided.</t>
+                            <t>A node MUST replace the current reply block with the reply block provided in the routing block (if any). The node MUST keep the reply block if none is provided.</t>
                             <t>A node SHOULD process all header requests.</t>
                             <t>A node SHOULD add all routing blocks to the workspace.</t>
                             <t>A node SHOULD add all payload blocks to the workspace.</t>
@@ -698,7 +698,7 @@ Result:  0A 13 (+ 494 omited bytes; then skip 12 bytes to next chunk)
                         A routing node MUST decrement the message quota by one if a received message is authenticated, valid, and contains at least one payload block. If a message is identified as duplicate according to the reply protection, then a node MUST NOT decrement the message quota.
                     </t>
                     <t>
-                    	Reflected in pseudo code, the message processing works according to the following.
+                    	The message processing works according pseudo-code shown below.
                     	<figure>
                     		<artwork type="pseudocode"><![CDATA[function incomming_message(VortexMessage blendedMessage) {
   try{                    				
@@ -767,7 +767,7 @@ Result:  0A 13 (+ 494 omited bytes; then skip 12 bytes to next chunk)
                     </t>
                     <t>
                         <list style="symbols">
-                            <t>The identity it links to, which determines the lifetime of the workspace.</t>
+                            <t>The identity linked to, which determines the lifetime of the workspace.</t>
                             <t>The linked routing combos (RoutingCombo).</t>
                             <t>A payload chunk space with the following multiple subspaces available:
                                 <list style="symbols">
@@ -800,7 +800,7 @@ Result:  0A 13 (+ 494 omited bytes; then skip 12 bytes to next chunk)
                         The accounting layer triggers routing events occurring at least the minProcessTime after the last octet of the message arrived at the routing layer. A node SHOULD choose the latest possible moment at which the peer node receives the last octet of the assembled message before the maxProcessTime is reached. The calculation of this last point in time where a message may be set SHOULD always assume that the target node is working. A sending node SHOULD choose the time within these bounds randomly. An accounting layer MAY trigger multiple routing combos in bulk to further obfuscate the identity of a single transport message.
                     </t>
                     <t>
-                        First, the processing node escapes the payload chunk at ID 0 if needed (e.g., a non-special block starting with a backslash). Next, it executes all processing instructions of the routing combo in the specified sequence. If an instruction fails, then the block at the target ID of the operation remains unchanged. The routing layer proceeds with the subsequent processing instructions by ignoring the error. For a detailed description of the operations, see <xref target="routing_operations"/>. If a node succeeds in building at least one payload chunk, then a VortexMessage is composed and passed to the blending layer.
+                        First, the processing node escapes the payload chunk at ID 0 if needed (e.g., a non-special block is starting with a backslash). Next, it executes all processing instructions of the routing combo in the specified sequence. If an instruction fails, then the block at the target ID of the operation remains unchanged. The routing layer proceeds with the subsequent processing instructions by ignoring the error. For a detailed description of the operations, see <xref target="routing_operations"/>. If a node succeeds in building at least one payload chunk, then a VortexMessage is composed and passed to the blending layer.
                     </t>
                 </section>
                 <section anchor="routing_outgoing" title="Processing of Outgoing Vortex Messages">
@@ -818,10 +818,10 @@ Result:  0A 13 (+ 494 omited bytes; then skip 12 bytes to next chunk)
                         Requesting a new ephemeral identity is performed by sending a message containing a header block with the new identity and an identity creation request (HeaderRequestIdentity) to a node. The node MAY send an error block (see <xref target="routing_special_error"/>) if it rejects the request.
                     </t>
                     <t>
-                        If a node accepts an identity creation request, then it MUST send a reply. To accept a request without a requirement, an accepting node MUST send back a special block containing "no error." To accept a block with a requirement, an accepting node MUST send a special block containing a requirement block.
+                        If a node accepts an identity creation request, then it MUST send a reply. A node accepting a request without a requirement MUST send back a special block containing "no error". A node accepting a request under the precondition of a requirement to be fulfilled  MUST send a special block containing a requirement block.
                     </t>
                     <t>
-                    	A node SHOULD NOT reply to clear-text requests if the node does not want to officially disclose its identity as a Vortex node. A node MUST reply with an error block if a valid identity is used for the request.
+                        A node SHOULD NOT reply to any clear-text requests if the node does not want to disclose its identity as a Vortex node officially. A node MUST reply with an error block if a valid identity is used for the request.
                     </t>	
                 </section>
                 <section anchor="routing_header_req_msg_quota" title="Request Message Quota">
@@ -864,7 +864,7 @@ Result:  0A 13 (+ 494 omited bytes; then skip 12 bytes to next chunk)
                     Any node MAY request the capabilities of another node, which include all information necessary to create a parseable VortexMessage. Any node SHOULD reply to any encrypted HeaderRequestCapability.
                   </t>
                   <t>
-                     A node SHOULD NOT reply to clear-text requests if the node does not want to officially disclose its identity as a Vortex node. A node MUST reply if a valid identity is used for the request, and it MAY reply to unknown identities.
+                     A node SHOULD NOT reply to clear-text requests if the node does not want to disclose its identity as a Vortex node officially. A node MUST reply if a valid identity is used for the request, and it MAY reply to unknown identities.
                   </t>                
                 </section>
                 <section anchor="routing_header_req_nodes" title="Request Nodes">
@@ -877,7 +877,7 @@ Result:  0A 13 (+ 494 omited bytes; then skip 12 bytes to next chunk)
                 </section>
                 <section anchor="routing_header_req_identity_replace" title="Request Identity Replace">
                     <t>
-                        This request type allows a receiving node to replace an identity with the identity provided in the message, and is required if an adversary manages to deny the usage of a node (e.g., by deleting the corresponding transport account). Any sending node may recover from such an attack by sending a valid authenticated message to another identity to provide the new transport and key details.
+                        This request type allows a receiving node to replace an existing identity with the identity provided in the message, and is required if an adversary manages to deny the usage of a node (e.g., by deleting the corresponding transport account). Any sending node may recover from such an attack by sending a valid authenticated message to another identity to provide the new transport and key details.
                     </t>
                     <t>
                         A node SHOULD reply to such a request from a valid known identity, and the reply MUST include an error message or a "no error" status message.
@@ -890,7 +890,7 @@ Result:  0A 13 (+ 494 omited bytes; then skip 12 bytes to next chunk)
                 </t>
                 <section anchor="routing_special_error" title="Error Block">
                     <t>
-                        An error block may be sent as a reply where specified as a payload. The error block is embedded in a special block and sent with any provided reply block. Error messages SHOULD contain the serial number of the offending header block and MAY contain human-readable text providing additional messages about the error.
+                        An error block may be sent as a reply contained in the payload section. The error block is embedded in a special block and sent with any provided reply block. Error messages SHOULD contain the serial number of the offending header block and MAY contain human-readable text providing additional messages about the error.
                     </t>
                 </section>
                 <section anchor="routing_special_requirement" title="Requirement Block">
@@ -898,14 +898,15 @@ Result:  0A 13 (+ 494 omited bytes; then skip 12 bytes to next chunk)
                         If a node is receiving a requirement block, then it MUST assume that the request block is accepted, is not yet processed, and is to be processed if it meets the contained requirement. A node MUST process a request as soon as the requirement is fulfilled, and MUST resend the request as soon as it meets the requirement.
                     </t>
                     <t>
-                        A node MAY reject a request, accept a request without a requirement, accept a request upon payment (RequirementPaymentRequired) or accept a request upon solving a proof of work puzzle (RequirementPuzzleRequired).
+                        A node MAY reject a request, accept a request without a requirement, accept a request upon payment (RequirementPaymentRequired), or accept a request upon solving a proof of work puzzle (RequirementPuzzleRequired).
                     </t>
                     <section anchor="routing_special_requirement_puzzle" title="Puzzle Requirement">
                         <t>
                             If a node requests a puzzle, then it MUST send a RequirementPuzzleRequired block. The puzzle requirement is solved if the node receiving the puzzle is replying with a header block that contains the puzzle block, and the hash of the encoded block begins with the bit sequence mentioned in the puzzle within the period specified in the field 'valid.'
                         </t>
                         <t>
-                            To solve a puzzle posed by a node, a Vortex Message needs to be sent to the requesting node, which MUST contain a header block that includes the puzzle block and MUST have a MAC fingerprint starting with the bit sequence as specified in the challenge. A node calculates the MAC from the unencrypted DER encoded HeaderBlock with the algorithm specified by the node. To meet this requirement, a node adds a proofOfWork field to the HeaderBlock.
+
+                            A node solving a puzzle requires sending a VortexMessage to the requesting node, which MUST contain a header block that includes the puzzle block and MUST have a MAC fingerprint starting with the bit sequence as specified in the challenge. The receiving node calculates the MAC from the unencrypted DER encoded HeaderBlock with the algorithm specified by the node. The sending node may achieve the requirement by adding a proofOfWork field to the HeaderBlock containing any content fulfilling the criteria. The sending node SHOULD keep the proofOfWork field as short as possible.
                         </t>
                     </section>
                     <section anchor="routing_special_requirement_payment" title="Payment Requirement">
@@ -923,7 +924,7 @@ Result:  0A 13 (+ 494 omited bytes; then skip 12 bytes to next chunk)
                     All payload chunk blocks inherit the validity time from the message routing combos as arrival time + max(maxProcessTime).
                 </t>
                 <t>
-                    When applying an operation to a source block, the resulting target block inherits the expiration of the of the source block. When multiple expiration times exist, the one furthest in the future is applied to the target block. If the operation fails, then the target expiration remains unchanged.
+                    When applying an operation to a source block, the resulting target block inherits the expiration of the source block. When multiple expiration times exist, the one furthest in the future is applied to the target block. If the operation fails, then the target expiration remains unchanged.
                 </t>
                 <section anchor="routing_operations_mapping" title="Mapping Operation">
                     <t>
@@ -944,12 +945,12 @@ Result:  0A 13 (+ 494 omited bytes; then skip 12 bytes to next chunk)
                         </list>
                     </t>
                     <t>
-                        An operation MUST fail if relative values are equal to, or less than, zero. An operation MUST fail if a relative value is equal to, or greater than, 100. All floating point operations must be performed according to <xref target="IEEE754"/> and in 64-bit precision.
+                        An operation MUST fail if relative values are equal to, or less than, zero. An operation MUST fail if a relative value is equal to, or greater than, 100. All floating-point operations must be performed according to <xref target="IEEE754"/> and in 64-bit precision.
                     </t>
                 </section>
                 <section anchor="routing_operations_crypt" title="Encrypt and Decrypt Operations">
                     <t>
-                        Encryption and decryption are executed according to the standards mentioned above. An encryption operation encrypts a block symmetrically and places the result in the target block. The parameters MUST contain IV, padding or cipher modes. An encryption operation without a valid parameter set MUST fail.
+                        Encryption and decryption are executed according to the standards mentioned above. An encryption operation encrypts a block symmetrically and places the result in the target block. The parameters MUST contain IV, padding, and cipher modes. An encryption operation without a valid parameter set MUST fail.
                     </t>
                 </section>
                 <section anchor="routing_operations_redundancy" title="Add and Remove Redundancy Operations">
@@ -968,7 +969,7 @@ Result:  0A 13 (+ 494 omited bytes; then skip 12 bytes to next chunk)
                     </t>
                     <section anchor="routing_operations_redundancy_padding" title="Padding Operation">
                         <t>
-                            A processing node calculates the final length of all output blocks including redundancy. This is done by L=roof((&lt;input block size in bytes&gt;+4)/&lt;encryption block size in bytes&gt;)*&lt;encryption block size in bytes&gt;. The block is prepended with a 32-bit unit length indicator in bytes (little-endian). This length indicator, i, is calculated by i=&lt;input block size in bytes&gt;*randominteger\cdot L. The remainder of the input block, up to length L, is padded with random data. A routing block builder should specify the value of the $randomInteger$. If not specified the routing node may choosea random positive integer value. A routing block builder SHOULD specify a PRNG and a seed used for this padding. If GF(16) is applied, then all numbers are treated as little-endian representations. Only GF(8) and GF(16) are allowed fields.
+                            A processing node calculates the final length of all payload blocks, including redundancy. This is done by L=roof((&lt;input block size in bytes&gt;+4)/&lt;encryption block size in bytes&gt;)*&lt;encryption block size in bytes&gt;. The block is prepended with a 32-bit unit length indicator in bytes (little-endian). This length indicator, i, is calculated by i=&lt;input block size in bytes&gt;*randominteger\cdot L. The remainder of the input block, up to length L, is padded with random data. A routing block builder should specify the value of the $randomInteger$. If not specified the routing node may choose a random positive integer value. A routing block builder SHOULD specify a PRNG and a seed used for this padding. If GF(16) is applied, then all numbers are treated as little-endian representations. Only GF(8) and GF(16) are allowed fields.
                         </t>
                         <t>
                             For padding removal, the padding i at the start is first removed as a little-endian integer. Second, the length of the output block is calculated by applying &lt;output block size in bytes&gt;=i mod &lt;input block size in bytes&gt;
@@ -994,7 +995,7 @@ Result:  0A 13 (+ 494 omited bytes; then skip 12 bytes to next chunk)
             </section>
             <section anchor="routing_processing" title="Processing of Vortex Messages">
                 <t>
-                    The accounting layer triggers processing according to information contained in a routing block in the workspace. All operations MUST be executed in the sequence provided in the routing block, and any failing operation must leave the result block unmodified.
+                    The accounting layer triggers processing according to the information contained in a routing block in the workspace. All operations MUST be executed in the sequence provided in the routing block, and any failing operation must leave the result block unmodified.
                 </t>
                 <t>
                     All workspace blocks resulting in IDs of 1 to maxPayloadBlock are then added to the message and passed to the blending layer with appropriate instructions.
@@ -1042,7 +1043,7 @@ Result:  0A 13 (+ 494 omited bytes; then skip 12 bytes to next chunk)
                 </section>
                 <section anchor="accounting_create_identity" title="Ephemeral Identity Creation">
                     <t>
-                        Any packet may request the creation of an ephemeral identity. A node SHOULD NOT accept such a request without a costly requirement, since the request includes a lifetime of the ephemeral identity. The costs for creating the ephemeral identity SHOULD increase if a longer lifetime is requested.
+                        Any packet may request the creation of an ephemeral identity. A node SHOULD NOT accept such a request without a costly requirement since the request includes a lifetime of the ephemeral identity. The costs for creating the ephemeral identity SHOULD increase if a longer lifetime is requested.
                     </t>
                 </section>
             </section>
@@ -1098,7 +1099,7 @@ Result:  0A 13 (+ 494 omited bytes; then skip 12 bytes to next chunk)
                  The two layers of 'routing' and 'accounting' have the deepest insight into a Vortex message's inner working. Each knows the immediate peer sender and the peer recipients of all payload chunks. As decoy traffic is generated by combining chunks and applying redundancy calculations, a node can never know if a malfunction (e.g., during a recovery calculation) was intended. Therefore, a node is unable to distinguish a failed transaction from a terminated transaction as well as content from decoy traffic.
              </t>
              <t>
-                A routing block builder SHOULD follow the following rules to not compromise a Vortex message's anonymity.
+                A routing block builder SHOULD follow the following rules not to compromise a Vortex message's anonymity.
             </t>
             <t>
                 <list style="symbols">
@@ -1111,10 +1112,10 @@ Result:  0A 13 (+ 494 omited bytes; then skip 12 bytes to next chunk)
                 </list>
              </t>
              <t>
-                An active adversary cannot use blocks from other routing block builders. While the adversary may falsify the result by injecting an incorrect message chunk or not sending a message, such message disruptions may be detected by intentionally routing information to the routing block builder'node. If the Vortex message does not carry the information expected, then the node may safely assume that one of the involved nodes is misbehaving. A block building node MAY calculate reputation for involved nodes over time and MAY build redundancy paths into a routing block to withstand such malicious nodes.
+                An active adversary cannot use blocks from other routing block builders. While the adversary may falsify the result by injecting an incorrect message chunk or not sending a message, such message disruptions may be detected by intentionally routing information to the routing block builder (RBB) node. If the Vortex message does not carry the information expected, then the node may safely assume that one of the involved nodes is misbehaving. A block building node MAY calculate reputation for involved nodes over time and MAY build redundancy paths into a routing block to withstand such malicious nodes.
             </t>
             <t>
-                Receiver anonymity is at risk if the handling of the message header and content is not done with care. An attacker might send a bugged message (e.g., with a DKIM or DMARC header) to deanonymize a recipient. Careful attention is required when handling anything other than local references when processing, verifying or rendering a message.
+                Receiver anonymity is at risk if the handling of the message header and content is not done with care. An attacker might send a bugged message (e.g., with a DKIM or DMARC header) to deanonymize a recipient. Careful attention is required when handling anything other than local references when processing, verifying, or rendering a message.
             </t>
         </section>
     </middle>
