@@ -1,21 +1,33 @@
 package net.messagevortex.commandline;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import static net.messagevortex.commandline.CommandLineHandlerCipherList.CipherType.ASYM;
+import static net.messagevortex.commandline.CommandLineHandlerCipherList.CipherType.MODE;
+import static net.messagevortex.commandline.CommandLineHandlerCipherList.CipherType.PAD;
+import static net.messagevortex.commandline.CommandLineHandlerCipherList.CipherType.SYM;
+
+import java.io.IOException;
 import java.util.concurrent.Callable;
-import java.util.logging.Level;
-import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.router.operation.AddRedundancy;
+import net.messagevortex.asn1.encryption.Algorithm;
+import net.messagevortex.asn1.encryption.AlgorithmType;
+import net.messagevortex.asn1.encryption.Mode;
+import net.messagevortex.asn1.encryption.Padding;
 import picocli.CommandLine;
 
 @CommandLine.Command(
         description = "list available ciphers",
-        name = "List",
+        name = "list",
+        aliases = { "lst" },
         mixinStandardHelpOptions = true
 )
 public class CommandLineHandlerCipherList implements Callable<Integer> {
+
+  enum CipherType {
+    ASYM,
+    SYM,
+    MODE,
+    PAD;
+  }
 
   private static final java.util.logging.Logger LOGGER;
 
@@ -23,51 +35,83 @@ public class CommandLineHandlerCipherList implements Callable<Integer> {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
 
-  @CommandLine.Option(names = {"--infile", "-i"}, required = true,
-          description = "filename of the file to add redundancy")
-  String inFile;
-
-  @CommandLine.Option(names = {"--outfile", "-o"}, required = true,
-          description = "output filename")
-  String outFile;
-
-  @CommandLine.Option(names = {"--redundancyBlocks"}, required = true,
-          description = "the number of blocks which may be removed")
-  int redundancyBlocks;
-
-  @CommandLine.Option(names = {"--blocks"}, required = true,
-          description = "the number of blocks")
-  int numBlocks;
-
-  @CommandLine.Option(names = {"--gf"}, required = true,
-          description = "the size of the gauloise field in bits")
-  int gf;
+  @CommandLine.Option(names = {"--type", "-t"}, required = false,
+          description = "type of information (ASYM, SYM, MODE, PAD)")
+  CipherType[] types = {ASYM, SYM, MODE, PAD};
 
   @Override
   public Integer call() throws Exception {
-    // load store
-    if (!new File(inFile).exists()) {
-      LOGGER.log(Level.SEVERE, "File \"" + inFile + "\" not found");
-      return MessageVortex.ARGUMENT_FAIL;
+    for(CipherType c:types) {
+      switch (c) {
+        case ASYM:
+          System.out.println("Asymmetric cpiher types:");
+          for (Algorithm a : Algorithm.getAlgorithms(AlgorithmType.ASYMMETRIC)) {
+            System.out.print("  " + a.toString());
+            System.out.print(" (modes: ");
+            int i=0;
+            for (Mode m: Mode.getModes(a)) {
+              if( i>0) {
+                System.out.print(", ");
+              }
+              i++;
+              System.out.print(m.toString());
+            }
+            System.out.print("; paddings: ");
+            i=0;
+            for (Padding p: Padding.getAlgorithms(a.getAlgorithmType())) {
+              if( i>0) {
+                System.out.print(", ");
+              }
+              i++;
+              System.out.print(p.toString());
+            }
+            System.out.println(")");
+          }
+          break;
+        case SYM:
+          System.out.println("Symmetric cpiher types:");
+          for (Algorithm a : Algorithm.getAlgorithms(AlgorithmType.SYMMETRIC)) {
+            System.out.print("  " + a.toString());
+            System.out.print(" (modes: ");
+            int i=0;
+            for (Mode m: Mode.getModes(a)) {
+              if( i>0) {
+                System.out.print(", ");
+              }
+              i++;
+              System.out.print(m.toString());
+            }
+            System.out.print("; paddings: ");
+            i=0;
+            for (Padding p: Padding.getAlgorithms(a.getAlgorithmType())) {
+              if( i>0) {
+                System.out.print(", ");
+              }
+              i++;
+              System.out.print(p.toString());
+            }
+            System.out.println(")");
+          }
+          break;
+        case MODE:
+          System.out.println("Cipher mode:");
+          for (Mode a : Mode.values()) {
+            System.out.println("  " + a.name());
+          }
+          break;
+        case PAD:
+          System.out.println("Padding types:");
+          for (Padding a : Padding.values()) {
+            System.out.println("  " + a.name());
+          }
+          break;
+        default:
+          System.err.println("ERROR: Unknown type specified");
+          throw new IOException("Unknown type specified");
+      }
+      System.out.println("");
+      System.out.flush();
     }
-    LOGGER.log(Level.INFO, "Loading file \"" + inFile + "\"");
-    File f = new File(inFile);
-    byte[] buffer = new byte[(int) f.length()];
-    try (FileInputStream fis = new FileInputStream(f)) {
-      fis.read(buffer);
-    }
-
-    // apply redundancy operation
-    LOGGER.log(Level.INFO, "adding redundancy");
-    byte[] out = AddRedundancy.execute(buffer, redundancyBlocks, numBlocks, gf);
-
-    // write output file
-    LOGGER.log(Level.INFO, "writing output");
-    try (FileOutputStream fos = new FileOutputStream(new File(outFile))) {
-      fos.write(out);
-    }
-
-    LOGGER.log(Level.INFO, "finished");
     return 0;
   }
 }

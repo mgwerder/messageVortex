@@ -43,6 +43,7 @@ import net.messagevortex.asn1.IdentityBlock;
 import net.messagevortex.asn1.IdentityStore;
 import net.messagevortex.blender.Blender;
 import net.messagevortex.blender.recipes.BlenderRecipe;
+import net.messagevortex.commandline.CommandLineHandlerCipher;
 import net.messagevortex.commandline.CommandLineHandlerIdentityStore;
 import net.messagevortex.commandline.CommandLineHandlerRedundancy;
 import net.messagevortex.router.Router;
@@ -59,6 +60,7 @@ import picocli.CommandLine;
         subcommands = {
                 AsymmetricKeyPreCalculator.class,
                 CommandLineHandlerIdentityStore.class,
+                CommandLineHandlerCipher.class,
                 CommandLineHandlerRedundancy.class
         }
 )
