@@ -61,7 +61,7 @@
                 Instead of defining a transport layer, Vortex piggybacks on other transport protocols.  A blending layer embeds Vortex messages (VortexMessage) into ordinary messages of the respective transport protocol.  This layer picks up the messages, passes them to a routing layer, which applies local operations to the messages, and resends the new message chunks to the next recipients.
             </t>
             <t>
-                A processing node learns as little as possible from the message or the network utilized due to the nature of the operations processed. The 'onionized' structure of the protocol makes it impossible to follow the trace of a message without having control over the processing node.
+                A processing node learns as little as possible from the message or the network utilized. The operations have been designed to be sensible in any context. The 'onionized' structure of the protocol makes it impossible to follow the trace of a message without having control over the processing node.
             </t>
             <t>
                 MessageVortex is a protocol which allows sending and receiving messages by using a routing block instead of a destination address. With this approach, the sender has full control over all parameters of the message flow.
@@ -112,7 +112,7 @@
                   </t>
                   <section anchor="entities_node_spec_smtp" title="NodeSpec for SMTP nodes">
                     <t>
-                      An alternative address representation is defined that allows a standard email client to address a Vortex node. An alternative representation SHOULD be supported as defined below with smtpAlternateSpec (its specification is noted in ABNF as in <xref target="RFC5234"/>). For applications with QR code support, an implementation SHOULD use the smtpUrl representation.
+                        An alternative address representation is defined that allows a standard email client to address a Vortex node. A node SHOULD support the smtpAlternateSpec (its specification is noted in ABNF as in <xref target="RFC5234"/>). For applications with QR code support, an implementation SHOULD use the smtpUrl representation.
                       <figure>
                         <artwork type="abnf"
 ><![CDATA[localPart         = <local part of address>
@@ -129,7 +129,7 @@ smtpUrl           = "vortexsmtp://" smtpAlternateSpec]]></artwork>
                   </section>
                   <section anchor="entities_node_spec_spec" title="NodeSpec for XMPP nodes">
                     <t>
-                      Typically, a node specification follows the ASN.1 block NodeSpec. For support of XMPP clients, an implementation SHOULD support the jidAlternateSpec as noted below (its specification is noted in ABNF as in <xref target="RFC5234"/>).
+                      Typically, a node specification follows the ASN.1 block NodeSpec. For support of XMPP clients, an implementation SHOULD support the jidAlternateSpec (its specification is noted in ABNF as in <xref target="RFC5234"/>).
                       <figure>
                         <artwork type="abnf"
 ><![CDATA[localPart         = <local part of address>
@@ -147,7 +147,7 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec]]></artwork>
             </section>
             <section anchor="entities_peer" title="Peer Partners">
               <t>
-                Two or more message sending or receiving entities are referred to as  'peer partners.' One partner sends a message, and all others receive one or more messages. Peer partners are message specific, and each partner always connects directly to a node.
+                This document refers to two or more message sending or receiving entities as peer partners. One partner sends a message, and all others receive one or more messages. Peer partners are message specific, and each partner always connects directly to a node.
               </t>
             </section>
             <section anchor="entities_keys" title="Encryption keys">
