@@ -43,18 +43,18 @@ public class SimpleMessageFactory extends MessageFactory {
   }
 
   /* Edge set to be honored */
-  GraphSet graph = new GraphSet();
+  private GraphSet graph = new GraphSet();
 
   /* number of ms for the graph to be completed */
-  long minMessageTransferTime = 300L * 1000L;
+  private long minMessageTransferTime = 300L * 1000L;
 
   /* number of ms for the graph to be completed */
-  long maxMessageTransferTime = 600L * 1000L;
+  private long maxMessageTransferTime = 600L * 1000L;
 
   /* number of ms between arrival the first sending time */
-  long minStepProcessSTime = 30L * 1000L;
+  private long minStepProcessSTime = 30L * 1000L;
 
-  protected SimpleMessageFactory(String msg, int source, int target,
+  public SimpleMessageFactory(String msg, int source, int target,
                                  IdentityStoreBlock[] anonGroupMembers, IdentityStore is) {
     this.msg = msg;
 
