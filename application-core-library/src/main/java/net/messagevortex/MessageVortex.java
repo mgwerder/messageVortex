@@ -104,7 +104,7 @@ public class MessageVortex implements Callable<Integer> {
   private static InternalPayloadSpaceStore simStores = new InternalPayloadSpaceStore();
   private static Integer JRE_AES_KEY_SIZE = null;
 
-  private void verifyPrerequisites() {
+  private boolean verifyPrerequisites() {
     LOGGER.log(Level.INFO, "Checking bouncycastle version..." + Version.getBuild());
     String bcversion = org.bouncycastle.jce.provider.BouncyCastleProvider
             .class
@@ -115,6 +115,7 @@ public class MessageVortex implements Callable<Integer> {
     LOGGER.log(Level.INFO, "Detected BC version is " + bcversion + ".");
     if (!m.matches()) {
       LOGGER.log(Level.SEVERE, "unable to parse BC version (" + bcversion + ")");
+      return false;
     } else {
       int major = Integer.parseInt(m.group(1));
       int minor = Integer.parseInt(m.group(2));
@@ -124,6 +125,7 @@ public class MessageVortex implements Callable<Integer> {
       } else {
         LOGGER.log(Level.SEVERE, "Looks like your BC installation is heavily outdated. "
                 + "At least version 1.60 is recommended.");
+        return false;
       }
     }
 
@@ -141,11 +143,14 @@ public class MessageVortex implements Callable<Integer> {
       } else {
         LOGGER.log(Level.SEVERE, "Looks like JRE not having an unlimited JCE installed (AES max "
                 + "allowed key length is = " + i + "). This is bad.");
+        return false;
       }
     } catch (NoSuchAlgorithmException nsa) {
       LOGGER.log(Level.SEVERE, "OOPS... Got an exception while testing for an unlimited JCE. "
               + "This is bad.", nsa);
+      return false;
     }
+    return true;
   }
 
   /***
