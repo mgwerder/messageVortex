@@ -16,9 +16,12 @@ import javax.lang.model.element.TypeElement;
 })
 
 public class AsnOneBuilder extends AbstractProcessor {
+
+
   
   @Override
   public synchronized void init(ProcessingEnvironment env){
+    super.init(env);
     // FIXME
   }
   
