@@ -45,7 +45,7 @@ pipeline {
             }
           }
           options {
-            timeout(time: 30, unit: 'MINUTES')
+            timeout(time: 120, unit: 'MINUTES')
           }
           steps{
                 sh 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report'
@@ -59,7 +59,7 @@ pipeline {
             }
           }
           options {
-            timeout(time: 30, unit: 'MINUTES')
+            timeout(time: 120, unit: 'MINUTES')
           }
           steps{
             script {
@@ -75,7 +75,7 @@ pipeline {
             }
           }
           options {
-            timeout(time: 30, unit: 'MINUTES')
+            timeout(time: 120, unit: 'MINUTES')
           }
           steps {
             script {
@@ -91,7 +91,7 @@ pipeline {
             }
           }
           options {
-            timeout(time: 30, unit: 'MINUTES')
+            timeout(time: 120, unit: 'MINUTES')
           }
           steps {
             script {
