@@ -20,22 +20,18 @@ pipeline {
         sh 'mvn -DskipTests compile'
       }
     }
-    stage ('Test') {
-      parallel {
-        stage ('Test on JDK8') {
-          options {
-            timeout(time: 120, unit: 'MINUTES')
-          }
-          steps{
-                sh 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report site'
-          }
-          post {
-            success {
-              junit 'application-core-library/target/surefire-reports/TEST-*.xml'
-              jacoco changeBuildStatus: true, classPattern: 'application-core-library/target/classes', execPattern: 'application-core-library/target/**.exec', inclusionPattern: '**/*.class', minimumBranchCoverage: '50', minimumClassCoverage: '50', minimumComplexityCoverage: '50', minimumLineCoverage: '70', minimumMethodCoverage: '50', sourcePattern: 'application-core-library/src/main/java,application-core-library/src/test/java'
-              publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'application-core-library/target/site', reportFiles: 'index.html', reportName: 'MessageVortex Report', reportTitles: 'MessageVortex'])
-            }
-          }
+    stage ('Test on JDK8') {
+      options {
+        timeout(time: 120, unit: 'MINUTES')
+      }
+      steps{
+        sh 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report site'
+      }
+      post {
+        success {
+          junit 'application-core-library/target/surefire-reports/TEST-*.xml'
+          jacoco changeBuildStatus: true, classPattern: 'application-core-library/target/classes', execPattern: 'application-core-library/target/**.exec', inclusionPattern: '**/*.class', minimumBranchCoverage: '50', minimumClassCoverage: '50', minimumComplexityCoverage: '50', minimumLineCoverage: '70', minimumMethodCoverage: '50', sourcePattern: 'application-core-library/src/main/java,application-core-library/src/test/java'
+          publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'application-core-library/target/site', reportFiles: 'index.html', reportName: 'MessageVortex Report', reportTitles: 'MessageVortex'])
         }
       }
     }
@@ -62,7 +58,6 @@ pipeline {
         sh 'mvn -pl application-core-library -DskipTests git-commit-id:revision@get-the-git-infos resources:copy-resources@publish-artifacts'
       }
     }
-  }
     stage ('Test other JDKs') {
       parallel {
         stage ('Test on JDK10') {
@@ -129,6 +124,7 @@ pipeline {
         }
       }
     }
+  }
   post {
     success {
       archiveArtifacts artifacts: 'application-core-library/target/*.jar,application-core-library/target/*.exe,application-core-library/target/*.dmg,thesis/target/main/latex/**/*.pdf*', fingerprint: true
