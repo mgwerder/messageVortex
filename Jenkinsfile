@@ -37,6 +37,34 @@ pipeline {
             }
           }
         }
+      }
+    }
+    stage ('Package all') {
+      steps {
+        sh 'mkdir /var/www/messagevortex/devel/repo || /bin/true'
+        sh 'mvn -DskipTests package'
+      }
+    }
+    stage ('Site build') {
+      steps {
+        sh 'mvn -pl application-core-library -DskipTests site'
+      }
+    }
+    stage('SonarQube analysis') {
+      steps {
+        withSonarQubeEnv('SonarQube') {
+          sh "mvn sonar:sonar"
+        }
+      }
+    }
+    stage('Publish artifacts') {
+      steps {
+        sh 'mvn -pl application-core-library -DskipTests git-commit-id:revision@get-the-git-infos resources:copy-resources@publish-artifacts'
+      }
+    }
+  }
+    stage ('Test other JDKs') {
+      parallel {
         stage ('Test on JDK10') {
           agent {
             docker {
@@ -101,30 +129,6 @@ pipeline {
         }
       }
     }
-    stage ('Package all') {
-      steps {
-        sh 'mkdir /var/www/messagevortex/devel/repo || /bin/true'
-        sh 'mvn -DskipTests package'
-      }
-    }
-    stage ('Site build') {
-      steps {
-        sh 'mvn -pl application-core-library -DskipTests site'
-      }
-    }
-    stage('SonarQube analysis') {
-      steps {
-        withSonarQubeEnv('SonarQube') {
-          sh "mvn sonar:sonar"
-        }
-      }
-    }
-    stage('Publish artifacts') {
-      steps {
-        sh 'mvn -pl application-core-library -DskipTests git-commit-id:revision@get-the-git-infos resources:copy-resources@publish-artifacts'
-      }
-    }
-  }
   post {
     success {
       archiveArtifacts artifacts: 'application-core-library/target/*.jar,application-core-library/target/*.exe,application-core-library/target/*.dmg,thesis/target/main/latex/**/*.pdf*', fingerprint: true
