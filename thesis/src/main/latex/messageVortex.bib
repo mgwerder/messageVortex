@@ -1,5 +1,4 @@
-% This file was created with JabRef 2.10.
-% Encoding: Cp1252
+% Encoding: windows-1252
 
 
 @Misc{Blinded,
@@ -137,19 +136,18 @@ TODO: Mathe begreifen},
   Year                     = {2014}
 }
 
-@Inproceedings{AthanRAM07,
-  Title                    = {GAS: Overloading a File Sharing Network as an Anonymizing System},
-  Author                   = {Elias Athanasopoulos and Mema Roussopoulos and Kostas G. Anagnostakis and Evangelos P. Markatos},
-  Booktitle                = {Proceedings of Second International Workshop on Security, (IWSEC 2007)},
-  Year                     = {2007},
-  Location                 = {Nara, Japan},
-  Url                      = {http://dcs.ics.forth.gr/Activities/papers/gas%20iwsec07.pdf},
-
-  Abstract                 = {Anonymity is considered as a valuable property as far as everyday transactions in the Internet are concerned. Users care about their privacy and they seek for new ways to keep secret as much as of their personal information from third parties. Anonymizing systems exist nowadays that provide users with the technology, which is able to hide their origin when they use applications such as the World Wide Web or Instant Messaging. However, all these systems are vulnerable to a number of attacks and some of them may collapse under a low strength adversary. In this paper we explore anonymity from a different perspective. Instead of building a new anonymizing system, we try to overload an existing file sharing system, Gnutella, and use it for a different purpose. We develop a technique that transforms Gnutella as an Anonymizing System (GAS) for a single download from the World Wide Web.},
-  File                     = {:inc/bib/unclassified/Anonbib/AthanRAM07.pdf:PDF},
-  Keywords                 = {GAS},
-  Lastaccessed             = {2007-10-18 03:18:39},
-  Timestamp                = {2017.02.20}
+@InProceedings{AthanRAM07,
+  author       = {Elias Athanasopoulos and Mema Roussopoulos and Kostas G. Anagnostakis and Evangelos P. Markatos},
+  title        = {GAS: Overloading a File Sharing Network as an Anonymizing System},
+  booktitle    = {Proceedings of Second International Workshop on Security, (IWSEC 2007)},
+  year         = {2007},
+  abstract     = {Anonymity is considered as a valuable property as far as everyday transactions in the Internet are concerned. Users care about their privacy and they seek for new ways to keep secret as much as of their personal information from third parties. Anonymizing systems exist nowadays that provide users with the technology, which is able to hide their origin when they use applications such as the World Wide Web or Instant Messaging. However, all these systems are vulnerable to a number of attacks and some of them may collapse under a low strength adversary. In this paper we explore anonymity from a different perspective. Instead of building a new anonymizing system, we try to overload an existing file sharing system, Gnutella, and use it for a different purpose. We develop a technique that transforms Gnutella as an Anonymizing System (GAS) for a single download from the World Wide Web.},
+  file         = {:inc/bib/unclassified/Anonbib/AthanRAM07.pdf:PDF},
+  keywords     = {GAS LAP SCION},
+  lastaccessed = {2007-10-18 03:18:39},
+  location     = {Nara, Japan},
+  timestamp    = {2017.02.20},
+  url          = {http://dcs.ics.forth.gr/Activities/papers/gas%20iwsec07.pdf},
 }
 
 @Article{aumasson2008blake,
@@ -3031,5 +3029,75 @@ This paper is intended for the systems programmer. It presents a complete specif
   Localfile                = {inc/bib/bahrain.pdf}
 }
 
-@comment{jabref-meta: databaseType:bibtex;}
+@InProceedings{hsiao2012lap,
+  author       = {Hsiao, Hsu-Chun and Kim, Tiffany Hyun-Jin and Perrig, Adrian and Yamada, Akira and Nelson, Samuel C and Gruteser, Marco and Meng, Wei},
+  title        = {{LAP}: Lightweight anonymity and privacy},
+  booktitle    = {2012 IEEE Symposium on Security and Privacy},
+  year         = {2012},
+  pages        = {506--520},
+  organization = {IEEE},
+  abstract     = {Popular anonymous communication systems oftenrequire sending packets through a sequence of relays on dilatedpaths for strong anonymity protection. As a result, increasedend-to-end latency renders such systems inadequate for themajority of Internet users who seek an intermediate level ofanonymity protection while using latency-sensitive applications,such as Web applications. This paper serves to bridge the gapbetween communication systems that provide strong anonymityprotection but with intolerable latency and non-anonymouscommunication systems by considering a new design spacefor the setting. More specifically, we explore how to achievenear-optimal latency while achieving an intermediate level ofanonymity with a weaker yet practical adversary model (i.e.,protecting an end-host’s identity and location from servers)such that users can choose between the level of anonymityand usability. We proposeLightweight Anonymity and Privacy(LAP), an efficient network-based solution featuring lightweightpath establishment and stateless communication, by concealingan end-host’s topological location to enhance anonymity againstremote tracking. To show practicality, we demonstrate thatLAP can work on top of the current Internet and proposedfuture Internet architectures.},
+  comment      = { This paper from Security & Privacy 2012 proposes a new network-layer anonymity system called Lightweight Anonymity and Privacy (LAP). LAP is a new point in the design space for anonymity systems, which trades off a strong threat model for significantly better performance. In practice, its anonymity guarantees are weaker than Tor, but latency is much less of a problem. Being a network-layer anonymity system, LAP is not as easy to deploy as Tor. While it would work in the current-day Internet by leveraging IP options, it is meant to be part of next-generation Internet architecture such as SCION or MobilityFirst. The authors made an effort to use symmetric and stateless crypto, to account for computational shortcomings of routers, and also propose a way to make LAP incrementally deployable.
 
+Since LAP is a network-layer anonymity system, it is replacing IP, but it needs a destination IP address for path establishment. At the core of LAP’s design is the notion of “packet-carried forwarding state.” As the name suggests, the idea is that forwarding decisions are made by routers based on encrypted packet headers. Each router can only read forwarding decisions that are encrypted to its own key. A set of these forwarding decisions form an e-path which clients need to communicate with a destination. An e-path is incrementally compiled by on-path routers as a client sends a REQUEST packet—a packet destined for the destination’s IP address. As an on-path router forwards the packet, it appends encrypted forwarding information to the packet. The same happens for a REPLY packet which is sent by the destination after it received a REQUEST packet. Again, on-path routers add encrypted forwarding information to the packet. After the REPLY and REQUEST packets, both the client and destination are in possession of an e-path, now allowing them to communicate without IP addresses. Once the client and destination start to exchange data using their respective e-path, each router on the path decrypts its own forwarding information embedded in the e-path. In a way, LAP can be understood as a mechanism to upgrade IP-based communication to e-path-based communication. However, the system only requires the destination’s IP address at the very beginning; the client does not need an IP address as the destination has an e-path to reply.
+
+In LAP, the client’s ISP learns where she is connecting to, and must therefore be trusted. That’s different in Tor. For LAP, the primary adversary is the destination—the farther you are away from the client topologically, the higher the client’s anonymity set. As a result, the autonomous system right after the client knows the client’s ISP, but not its IP address. (It might know the client’s approximate physical location, though, if the ISP only operates in, say, a single city.) Like Tor, LAP cannot protect against an adversary that controls ingress and egress traffic. In fact, traffic can simply be correlated by looking at the payload. Since LAP does not use onion routing, the encrypted payload never changes as it travels from the client to the destination. E-paths, however, don’t need to be reused. The authors took special care to make e-path construction cheap, so clients are encouraged to rotate them frequently. Another benefit from the lightweight crypto is that computational DoS is less of a problem. LAP also allows clients to tune their desired level of privacy by allowing them to influence the number of hops on the path.
+
+While the bulk of the paper is about sender anonymity, the authors also considered how to implement receiver anonymity. Similar to Tor’s onion services, receiver anonymity is based on a rendez-vous point and a lookup service that allows clients to learn the e-path between the rendez-vous point and the destination.
+
+While LAP seems like a promising first step, it has no way to “evolve” if it were to be fully deployed. What if the crypto needs to be upgraded? What if we need to account for a design aspect that wasn’t considered when LAP was rolled out? If we really have a chance to redesign the ossified address and network layer, we better do it in a way that allows for architectural evolution. 
+
+From: https://nymity.ch/reviews/LAP_Lightweight_Anonymity_and_Privacy.html},
+  file         = {:inc/bib/LAP-oakland12.pdf:PDF},
+  url          = {https://www.cs.cmu.edu/~xia/resources/Documents/LAP-oakland12.pdf},
+}
+
+@Article{chen2017phi,
+  author    = {Chen, Chen and Perrig, Adrian},
+  title     = {Phi: Path-hidden lightweight anonymity protocol at network layer},
+  journal   = {Proceedings on Privacy Enhancing Technologies},
+  year      = {2017},
+  volume    = {2017},
+  number    = {1},
+  pages     = {100--117},
+  abstract  = {We identify two vulnerabilities for existing high-speed  network-layer  anonymity  protocols,  such  as  LAP  andDovetail. First, the header formats of LAP and Dovetail leakpath information, reducing the anonymity-set size when an ad-versary launches topological attacks. Second, ASes can launchsession hijacking attacks to deanonymize destinations. HOR-NET  addresses  these  problems  but  incurs  additional  band-width overhead and latency.In  this  paper,  we  propose  PHI,  a  Path-HIdden  lightweightanonymity  protocol  that  solves  both  challenges  while  main-taining the same level of efficiency as LAP and Dovetail. Wepresent an efficient packet header format that hides path in-formation and a new back-off setup method that is compati-ble with current and future network architectures. Our exper-iments demonstrate that PHI expands anonymity sets of LAPand Dovetail by over 30x and reaches 120 Gbps forwardingspeed on a commodity software router.},
+  doi       = {10.1515/popets-2017-0007},
+  file      = {:inc/bib/popets-phi17.pdf:PDF},
+  keywords  = {SCION},
+  publisher = {De Gruyter Open},
+  url       = {https://www.degruyter.com/downloadpdf/j/popets.2017.2017.issue-1/popets-2017-0007/popets-2017-0007.pdf},
+}
+
+@Book{perrig2017scion,
+  title     = {SCION: a secure Internet architecture},
+  publisher = {Springer},
+  year      = {2017},
+  author    = {Perrig, Adrian and Szalachowski, Pawel and Reischuk, Raphael M and Chuat, Laurent},
+  file      = {:inc/bib/SCION-book.pdf:PDF},
+  keywords  = {SCION},
+  url       = {https://www.scion-architecture.net/pdf/SCION-book.pdf},
+}
+
+@InProceedings{chen2015hornet,
+  author       = {Chen, Chen and Asoni, Daniele E and Barrera, David and Danezis, George and Perrig, Adrain},
+  title        = {HORNET: High-speed onion routing at the network layer},
+  booktitle    = {Proceedings of the 22nd ACM SIGSAC Conference on Computer and Communications Security},
+  year         = {2015},
+  pages        = {1441--1454},
+  organization = {ACM},
+  file         = {:inc/bib/hornet2016.pdf:PDF},
+  url          = {https://arxiv.org/pdf/1507.05724.pdf},
+}
+
+@InProceedings{sankey2014dovetail,
+  author       = {Sankey, Jody and Wright, Matthew},
+  title        = {Dovetail: Stronger anonymity in next-generation internet routing},
+  booktitle    = {International Symposium on Privacy Enhancing Technologies Symposium},
+  year         = {2014},
+  pages        = {283--303},
+  organization = {Springer},
+  file         = {:inc/bib/dovetail 2014.pdf:PDF},
+  url          = {https://arxiv.org/pdf/1405.0351.pdf},
+}
+
+@Comment{jabref-meta: databaseType:bibtex;}

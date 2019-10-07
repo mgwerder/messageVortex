@@ -2,8 +2,8 @@
 
 %\PassOptionsToClass{peerreview}{IEEEtran}
 
-\documentclass[acmsmall, screen, review]{acmart}
-
+%\documentclass[acmsmall, screen, review]{acmart}
+\documentclass[acmsmall, screen]{acmart}
 \usepackage{natbib}
 
 \acmJournal{TOPS}
@@ -82,9 +82,16 @@ This list of events shows that big players are collecting and storing vast amoun
 
 Our work tries to fill the gap and provides an unobservable and under ideal conditions censorship-resistant protocol called \emph{MessageVortex}. It combines well proven technologies such as F5 steganography and onionized routing structure. MessageVortex has been developed and published as RFC-draft. Furthermore, an implementation for academic research exists. 
 
-To be censorship-resistant \emph{MessageVortex} features some unique properties. First there is no protocol specific infrastructure in the internet required. The protocol pigibacks common messaging protocols such as SMTP or XMPP. This means that ordinary account of messaging providers (such as freenet, gmx, gmail, or yandex) may be used as infrastructure. The messages themselfes are kept as undistinguishable as possible from regular messaging traffic. Only an endpoints blending layer residing on a endpoint device is able to tell if am message contains traffic destined for the current node of the \emph{MessageVortex} network. All endpoint devices (e.g., smartphones or notebooks) work alike and there are no such things as entry or exit nodes as there are in other similar systems such as ToR\cite{tor-spec}. Central infrastructure such as keyservers, directory servers or similar does not exist. This lack makes the protocol less susceptible to attacks.
+To be censorship-resistant \emph{MessageVortex} features some unique properties. First there is no protocol specific infrastructure in the Internet required. The protocol pigibacks common messaging protocols such as SMTP or XMPP. This means that ordinary account of messaging providers (such as freenet, gmx, gmail, or yandex) may be used as infrastructure. The messages themselves are kept as indistinguishable as possible from regular messaging traffic. Only an endpoints blending layer residing on a endpoint device is able to tell if am message contains traffic destined for the current node of the \emph{MessageVortex} network. All endpoint devices (e.g., smartphones or notebooks) work alike and there are no such things as entry or exit nodes as there are in other similar systems such as ToR\cite{tor-spec}. Central infrastructure such as keyservers, directory servers or similar does not exist. This lack makes the protocol less susceptible to attacks.
 
 The messages themselfes are routed in an onionized form. Unlike in compareable systems, the message is not routed as a whole or in a chunked form. Instead the routing information contains instructions about how to handle all parts of the message. The instructions are crafted in such a way that an attacker is unable to distinguish decoy from payload traffic even if having a full insight into a routing node.
+
+\begin{figure*}[ht]
+	\centering\includegraphics[width=0.6\textwidth]{../../inc/internet_overview}
+	\caption{A sample flow of a message traveling through unmodified Internet infrastructure}
+	\label{fig:inet_overview}
+\end{figure*}
+
 
 MessageVortex does not rely on the trust of infrastructure other than the infrastructure under control of the sending or receiving entity. Trust in any third party might be misleading in terms of security of the protocol. Central infrastructure is bound to be of particular interest to anyone gathering data. It may furthermore allow manipulating the system or the data or the data flow. Therefore MessageVortex does not have such infrastructure. The only protocol specific devices are the endpoint devices of the users.
 
@@ -102,7 +109,7 @@ This simplified definition narrows down the location to computer networks.  Furt
 In the next section, We explain roughly the main characteristics and working of our protocol mitigating these problems. We then introduce some of the core terms and a general adversary model. We furthermore elaborate on the Notation used to describe our protocol. In section \ref{sec:protocol}, we dive into the technical details of the protocol and describe its operations in detail. In section \ref{sec:discussion}, we discuss some of the key findings related to the protocol.
 
 \subsection{Formalization}
-\subsubsection{What We Worked On}
+\subsubsection{Proposed solution}
 In this work, a new protocol is designed to allow message transfer through existing communication channels. These messages are next to unobservable for any third party. This unobservability does covers the message and all metadata and flows associated with it. We called this protocol ``MessageVortex''. The protocol is designed to be capable of using a wide variety of transport protocols. It is possible to switch protocols while the messages are transferred. This behavior allows media breaches on a protocol level and makes an analysis of the message flow for any adversary harder as analysis have to span multiple protocols. MessageVortex allows secure communication without the need for trusting the underlying transport media. Furthermore, the usage of the protocol itself is possible without altering the immediate behavior of the transport layer. The transport layers regular traffic increases the noise in which an adversary has to search for information. We use a common internet transport protocol such as SMTP or XMPP as a store and forward service for our messages. We then set up nodes fetching these messages from the transport layer, extract our own, embedded messages, and process them. This processing, we refer as routing and the processing node as VortexNode. A user sending a message through this system connects to his VortexNode and transfers the message to it. 
 
 To send a message, a VortexNode first selects a mesh of other VortexNodes destined to be used for routing this message. After this, the node creates temporary workspaces on each of the involved nodes (or it may use pre-allocated ones) and defines a set of instructions for every VortexNode involved to be executed. The instructions include splitting and reassembling of messages, encrypting and decrypting messages, and adding and removing redundancy information. While the first two sets of instructions are well known and common, the third is a core functionality unique to our protocol. We use a Reed-Solomon function with a Vandermonde matrix and encrypt all resulting blocks. After employing this operation, any sufficient number of blocks may be used to rebuild the original information. If we send these blocks to different nodes, the current node is unable to tell which of the next peers is involved in routing and which ones receive decoy traffic as none of the blocks can be identified as a decoy by its creator. All this information is compiled to a routing block with an onionized structure. Each node decrypting the routing block obtains a new set of routing blocks and instructions on how and when to compile subsequent messages. 
@@ -115,9 +122,9 @@ The workspace contains a series of slots identified with IDs to store the messag
 So, our protocol allows the passing of message fragments through a mesh of VortexNodes. Each node is aware of the previous sender of a message and the receiver of his processed result. However, none of the nodes is aware where the originally message came from, where it is destined to, or if the passed message contains payload or just decoy. % The load put on the network may increase between the node randomly and unrelated to any payload content. Furthermore, by routing back parts of the traffic to the sending node, we may monitor the progress of message delivery or even identify misbehaving VortexNodes. Due to the nature of the Reed-Solomon function, we are able to build redundancy in the message path. It allows us to rebuild the message at the receiving node if redundancy is still sufficient.
 
 \subsection{About Unlinkability, Unobservability, Undetectability and Censorship resistance}
-For definition of terms ``unlinkability'', ``anonymity'', and ``undetectability'', we use \cite{anon_terminology}. From an academic point of view, achieving anonymity is relatively simple. All we need is a trusted party distributing the messages while making sure that no trace from the sender arrives at the recipient. Unlinkability is much harder to achieve. It requires that a specified attacker is unable to link a sender and recipients of a message. A soon as a system provides properties identifiable by third parties, it is prone to denial of service and thus partial or full censorship. By introducing a global observer or infiltrating parts of the system, an attacker may gain insight into the messages transported by the system and thus leaking information.
+For definition of terms ``unlinkability'', ``anonymity'', and ``undetectability'', we use \cite{anon_terminology}. From an academic point of view, achieving anonymity is relatively simple. All we need is a trusted party distributing the messages while making sure that no trace from the sender arrives at the recipient. Unlinkability is much harder to achieve. It requires that a specified attacker is unable to link a sender and recipients of a message. 
 
-So to be censorship-resistant, a protocol requires many critical, unobvious properties. As outlined, it should be undetectable from the outside. From within the system, we need to provide the possibility to make it ideally impossible to follow message flows or identify participants.
+A soon as a system provides properties identifiable by third parties, it is prone to denial of service and thus partial or full censorship. By introducing a global observer or infiltrating parts of the system, an attacker may gain insight into the messages transported by the system and thus leaking information. To be censorship-resistant, a protocol requires many critical, unobvious properties. As outlined, it should be undetectable from the outside. From within the system, we need to provide the possibility to make it ideally impossible to follow message flows or identify participants.
 
 MessageVortex is a protocol providing censorship-resistance under ideal circumstances. It does this using a rigid design from bottom up to provide the required properties. While being a protocol on its own, it uses many standard protocols. Partly to provide user-friendliness, but mostly to hide within the regular network flows. As such, a protocol requires to be undetectable on the network. A protocol all alone may not be undetectable as each protocol sends data over a network. This data is detectable. A protocol sending undetectable data requires to be embedded undetectably in legit message flows or hide in side channels. Such embedding is usually done either by side-channel transmissions or by employing steganography. Steganography is the preferred way in MessageVortex as it implies no control over the transport infrastructure.
 
@@ -189,31 +196,31 @@ In general, subscripts denote selectors to differentiate values of the same type
 %\end{itemize}
 %
 For all other anonymity relevant terms, we refer to \cite{anon_terminology}.
-\DeclareFixedFootnote{\omitted}{footnotes of quotes are omitted for readability}
-It defines anonymity as 
+%\DeclareFixedFootnote{\omitted}{footnotes of quotes are omitted for readability}
+%It defines anonymity as 
+%
+%\begin{quote}
+%	Anonymity of a subject means that the subject is not identifiable within a set of subjects, the anonymity set.\omitted
+%\end{quote}
+%and
+%\begin{quote}
+%	Anonymity of a subject from an attacker's perspective means that the attacker cannot sufficiently identify the subject within a set of subjects, the anonymity set.\omitted
+%\end{quote}
+%
+%\noindent It defines unlinkability as
+%
+%\begin{quote}
+%	Unlinkability of two or more items of interest (IOIs, e.g., subjects, messages, actions, \ldots) from an attacker’s perspective means that within the system (comprising these and possibly other items), the attacker cannot sufficiently distinguish whether these IOIs are related or not.\omitted
+%\end{quote}
+%
+%\noindent and undetectability as
+%\begin{quote}
+%	Undetectability of an item of interest (IOI) from an attacker’s perspective means that the attacker cannot sufficiently distinguish whether it exists or not.
+%\end{quote}
+%
+%For our work, We define the anonymity set as the set of all possible subjects within a supposed message. %The anonymity of a subject towards an observing third party is a crucial factor as it relates directly to our adversary model.
 
-\begin{quote}
-	Anonymity of a subject means that the subject is not identifiable within a set of subjects, the anonymity set.\omitted
-\end{quote}
-and
-\begin{quote}
-	Anonymity of a subject from an attacker's perspective means that the attacker cannot sufficiently identify the subject within a set of subjects, the anonymity set.\omitted
-\end{quote}
-
-\noindent It defines unlinkability as
-
-\begin{quote}
-	Unlinkability of two or more items of interest (IOIs, e.g., subjects, messages, actions, \ldots) from an attacker’s perspective means that within the system (comprising these and possibly other items), the attacker cannot sufficiently distinguish whether these IOIs are related or not.\omitted
-\end{quote}
-
-\noindent and undetectability as
-\begin{quote}
-	Undetectability of an item of interest (IOI) from an attacker’s perspective means that the attacker cannot sufficiently distinguish whether it exists or not.
-\end{quote}
-
-For our work, We define the anonymity set as the set of all possible subjects within a supposed message. %The anonymity of a subject towards an observing third party is a crucial factor as it relates directly to our adversary model.
-
-The set of terms is further broadened with $k$-Anonymity as defined in \cite{k-anonymous:ccs2003}. $k$-Anonymity is relevant for all jurisdictions where it is insufficient to track an illegal action to more than $k-1$ subjects.
+The set of terms is further broadened with $k$-Anonymity as defined in \cite{k-anonymous:ccs2003}. $k$-Anonymity is relevant for all jurisdictions where it is insufficient to track an illegal action according to the jurisdiction down to less than $k-1$ subjects.
 
 \subsubsection{Existing work regarding Anonymity Protocols and Censorship Resistance}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -237,7 +244,7 @@ In terms of censorship circumvention, we found that only a little work has been 
 	Censorship measurements, especially regarding the Internet censorship of China, have been analyzed in depth under technological, sociological and economical aspects (e.g., \cite{Ensafi_2015}, \cite{Clayton_2006}, or \cite{lowe2007great}).
 \end{itemize}
 
-For Anonymization the ideas seem mainly to concentrate around onionizing (ToR\cite{tor-spec}, SOR\cite{Egners_2012}, DUO-Onions and Hydra-Onions\cite{iwanik2005duo}), DC networks (DC-Nets\cite{chaum-dc}, Tarzan\cite{tarzan:ccs02}, GAS\cite{AthanRAM07}), mixing (Babel\cite{babel}, MorphMix\cite{morphmix:wpes2002}, Mixminion\cite{minion-design}, Salsa\cite{Salsa}), and distributed hash tables (DHT; e.g., Bifrost\cite{Kondo2009}, BitBlender\cite{Bauer_2008}).
+For Anonymization the ideas seem mainly to concentrate around onionizing (ToR\cite{tor-spec}, SOR\cite{Egners_2012}, DUO-Onions and Hydra-Onions\cite{iwanik2005duo}), DC networks (DC-Nets\cite{chaum-dc}, Tarzan\cite{tarzan:ccs02}, GAS\cite{AthanRAM07}), mixing (Babel\cite{babel}, MorphMix\cite{morphmix:wpes2002}, Mixminion\cite{minion-design}, Salsa\cite{Salsa}), and distributed hash tables (DHT; e.g., Bifrost\cite{Kondo2009}, BitBlender\cite{Bauer_2008}). For network-layer high speed Protocols we identifyed LAP\cite{hsiao2012lap}, PHI (related to SCION\cite{perrig2017scion}), HORNET\cite{chen2015hornet}, and Dovetail\cite{chen2015hornet}. While these protocols delivered valuable inputs in terms of their weaknesses, we do not directly compare to them as achieving anonymity in a low latence environment is much far harder to achieve and some generic restrictions applied we wanted to overcome such as context based timing analysis.
 
 As we use alien transport protocols instead of our protocol, we decided to go for a mixing approach. This approach minimizes the number of messages between the nodes. Furthermore, mixing allows using the nodes in a structureless way as opposed to DC-nets, where we would have to build fixed or ad-hoc rings for exchanging messages. % Unlike other protocols, we do not rely on the logic of mixing on the routing node but entirely on the RBB. Routing nodes follow an onionized set of instructions to build messages. 
 
@@ -253,6 +260,8 @@ The transport layer is a common message-passing protocol on the Internet. The in
 The Vortex system routes messages from a sender to one or more recipients. We refer to the message sent by the sender and received by the recipients as ``message''. We use the term ``VortexMessage'' for the messages exchanged between the nodes containing either message parts, full messages or decoy traffic.
 
 Each VortexNode constitutes out of three layers. A blending layer embedding and extracting messages from the transport layer, a routing layer processing the VortexMessages and providing ``workspaces'' for ``ephemeral identities'', and an accounting layer authorizing messages. We describe the inner workings of these layer in detail in the next sections.
+
+Great care has been taken to build the protocol in a modular way. Building blocks such as used blending type, PRNG, asymmetric or symmetric encryption algorithms, modes, paddings, and hashing algorithms may be signaled and varied from node to node. As a sending node may willingly choose all parameters for all hops, it may omit any node not fulfilling the required level of security. On the other hand, new algorithms may be introduced at any time without the need to upgrade the whole network. 
 
 The protocol handles messages which are passed by a transport protocol from node to node. The instructions how and when to pass a message is generated by a node we refer to as ``routing block builder'' (RBB). The RBB defines the path of the message, the type of hiding (blending) in the transport protocol, and the operations applied to each part of the message in each node. To avoid collision of operations, an RBB has on each used node ``ephemeral identities'' with an assigned workspace within the node. Ephemeral identities are short term identities containing a workspace and message quotas for a limited time. Ephemeral identities of a node are unrelated to each other. In the workspaces attached to the ephemeral identities, messages may be assembled, transformed, or decomposed with the operations above. Results are sent to other nodes. Due to the nature of the operations, all messages passed on may be decoy traffic or ``real message parts'' (We prove this claim in section \ref{sec:staticAnalysis}). A node identifies a message destined for it when a message processes data to ID 0 of the identities workspace.
 
@@ -527,7 +536,7 @@ The padding is not standard padding from encryption. The reason for this lies in
 	\item The padding must work with any size padding space.
 \end{itemize}
 
-The padded block $\mathbf{X}$ is created from a padding value $p$, the unpadded block $\mathbf{M}$ and a srie of padding bytes. We build $\mathbf{X}$ for a function $RS_{\text{m of n}}$ and an encryption block $\mathbf{M}$ sized $K$ as follows:
+The padded block $\mathbf{X}$ is created from a padding value $p$, the unpadded block $\mathbf{M}$ and a series of padding bytes. We build $\mathbf{X}$ for a function $RS_{\text{m of n}}$ and an encryption block $\mathbf{M}$ sized $K$ as follows:
 \begin{eqnarray}
 i          & = & len(\mathbf{M})\\
 e          & = & k \cdot n\\
