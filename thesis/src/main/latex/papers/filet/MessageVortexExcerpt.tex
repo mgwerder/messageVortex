@@ -118,20 +118,18 @@ A soon as a system provides properties identifiable by third parties, it is pron
 
 In the next section, We explain roughly the main characteristics and working of our protocol mitigating these problems. We then introduce some of the core terms and a general adversary model. We furthermore elaborate on the Notation used to describe our protocol. In section \ref{sec:protocol}, we dive into the technical details of the protocol and describe its operations in detail. In section \ref{sec:discussion}, we discuss some of the key findings related to the protocol.
 
-%%%%%%%%%%%%%%%%%%%%%% Start checking from here %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \section{Proposed solution}
-In this work, a new protocol is designed to allow message transfer through existing communication channels. These messages are next to unobservable for any third party. This unobservability does covers the message and all metadata and flows associated with it.  The protocol is designed to be capable of using a wide variety of transport protocols. It is possible to switch protocols while the messages are transferred. This behavior allows media breaches on a protocol level and makes an analysis of the message flow for any adversary harder as analysis have to span multiple protocols. \emph{MessageVortex} allows secure communication without the need for trusting the underlying transport media. Furthermore, the usage of the protocol itself is possible without altering the immediate behavior of the transport layer. The transport layers regular traffic increases the noise in which an adversary has to search for information. We use a common internet transport protocol such as SMTP or XMPP as a store and forward service for our messages. We then set up nodes fetching these messages from the transport layer, extract our own, embedded messages, and process them. This processing, we refer as routing and the processing node as VortexNode. A user sending a message through this system connects to his VortexNode and transfers the message to it. 
+In this work, a new protocol is designed to allow message transfer through existing communication channels. These messages are next to unobservable for any third party. This unobservability does cover the message and all metadata and flows associated with it.  The protocol is designed to be capable of using a wide variety of transport protocols. Messages may switch protocols while in transmission. An adversary has to take all message flows into account and their timely relationship, which makes analysis harder as it has to span multiple protocol properties. \emph{MessageVortex} allows secure communication without the need for trusting the underlying transport media.
 
-To send a message, a VortexNode first selects a mesh of other VortexNodes destined to be used for routing this message. After this, the node creates temporary workspaces on each of the involved nodes (or it may use pre-allocated ones) and defines a set of instructions for every VortexNode involved to be executed. The instructions include splitting and reassembling of messages, encrypting and decrypting messages, and adding and removing redundancy information. While the first two sets of instructions are well known and common, the third is a core functionality unique to our protocol. We use a Reed-Solomon function with a Vandermonde matrix and encrypt all resulting blocks. After employing this operation, any sufficient number of blocks may be used to rebuild the original information. If we send these blocks to different nodes, the current node is unable to tell which of the next peers is involved in routing and which ones receive decoy traffic as none of the blocks can be identified as a decoy by its creator. All this information is compiled to a routing block with an onionized structure. Each node decrypting the routing block obtains a new set of routing blocks and instructions on how and when to compile subsequent messages. 
-%The resulting routing blocks may not be read as they are encrypted, but used to assemble messages for the next VortexNodes.
+As the usage of the protocol itself is possible without altering the immediate behavior of the transport layer, the transport layer's regular traffic increases the noise in which an adversary has to search for information. A sender may hide its messages within regular messages, UBE, or even messages destined for M2M communication. For our implementation, we use the standard internet transport protocols SMTP and XMPP as a store and forward service for our messages. We set up our nodes (\emph{VortexNodes}) fetching these messages from the transport layer. These nodes extract our messages from the transport layer and process them as part of our routing. 
 
-As a next step, the sender assembles a VortexMessage. The VortexMessage contains the full message, parts of the message, and possibly decoy payload. Furthermore, it contains the previously built routing block and some additional information in a header required for the protocol (such as the workspace). The Vortex message is then passed from VortexNode to VortexNode. Each VortexNode executes the set of instructions in the allocated workspace with the received message parts. 
+To send a message, a \emph{VortexNode} first selects a mesh of other \emph{VortexNodes} destined for routing of the message. Next, the \emph{vortexNode} creates temporary workspaces on each of the involved nodes (or it may use pre-allocated ones) and defines a set of instructions for every VortexNode involved required to rout the message. The instructions include splitting and reassembling messages, encrypting and decrypting messages, and adding and removing redundancy information. While the first two sets of instructions are well known and standard, the third is a core functionality unique to our protocol. We use a Reed-Solomon function with a Vandermonde matrix and encrypt all resulting blocks. After employing this operation, any sufficient number of blocks may be used together with their keys rebuilding the original information. If we send these blocks to different nodes, the current node is unable to tell which of the next peers is involved in routing and which ones receive decoy traffic. A sending node generates traffic overhead, which may be used to rebuild the original message. It is impossible to identify any of the blocks as decoy ndmessage without knowing the whole previous operations and all subsequent operations afterward applied to the message. A sending node compiles all information into one or more routing blocks with an onionized structure. Each node decrypting the routing block obtains its set of routing blocks and instructions on how and when to compile subsequent messages. 
 
-The workspace contains a series of slots identified with IDs to store the message parts. The first couple of IDs of any workspace do have a special meaning. The first slots starting from ID 1 serve as temporary storage for incoming messages while as the slot with ID 0 is a special slot. This slot is used to signal a VortexNode, that the result is destined for the current node.
+The sender assembles a \emph{VortexMessage}. Any \emph{VortexMessage} contains some parts of the message, and possibly decoy payload. Furthermore, it contains the previously built routing block and some additional information in a header required for the protocol (such as the assigned workspace). Each VortexNode executes the set of instructions in the allocated workspace with the received message parts. 
 
-So, our protocol allows the passing of message fragments through a mesh of VortexNodes. Each node is aware of the previous sender of a message and the receiver of his processed result. However, none of the nodes is aware where the originally message came from, where it is destined to, or if the passed message contains payload or just decoy. % The load put on the network may increase between the node randomly and unrelated to any payload content. Furthermore, by routing back parts of the traffic to the sending node, we may monitor the progress of message delivery or even identify misbehaving VortexNodes. Due to the nature of the Reed-Solomon function, we are able to build redundancy in the message path. It allows us to rebuild the message at the receiving node if redundancy is still sufficient.
+A workspace contains a series of slots identified with IDs to store the message parts. The first couple of IDs of any workspace do have a special meaning. The first slots starting from ID 1 serve as temporary storage for incoming messages. The slot with ID 0 is a special slot, signaling a \emph{VortexNode}, that the result is destined for the current node.
 
+So, our protocol allows the passing of message fragments through a mesh of VortexNodes. Each node is aware of the previous sender of a message and the receiver of his processed result. However, none of the nodes is aware where the original message came from, where the final target of the original messages is, or if the passed \emph{VortexMessage} contains payload or just decoy. 
 
 \subsection{Threat Model}
 We refer to jurisdiction as a geographical area where a set of legal rules created by a single actor or a group of actors apply, and contains executive capabilities (e.g., police, army, or secret service) to enforce this set of legal rules.
@@ -147,28 +145,26 @@ We assume the following goals for an adversary:
 
 To achieve these goals, we assume the following properties of our adversary:
 \begin{itemize}
-	\item An adversary has elaborated technical know-how to attack any infrastructure. This attack may cover any attack favoring his goals, starting with exploiting weaknesses of popular software (e.g., buffer overflows or zero-day exploits) down to simple or elaborated (D)DoS attacks.
+    \item An adversary has elaborated technical know-how to attack any infrastructure. This attack may cover any attack favoring his goals, starting with exploiting weaknesses of popular software (e.g., buffer overflows or zero-day exploits) down to simple or elaborated (D)DoS attacks.
 	\item An adversary may monitor traffic at any point in public networks within a jurisdiction.
 	\item An adversary may modify routing information within a jurisdiction freely.
 	\item An adversary may freely modify even cryptographically weak secured data where a single or a limited number of entities grant proof of authenticity or privacy.
 	\item An adversary may inject or modify any data on the network of a jurisdiction.
-	\item An adversary may create own nodes of a network. He may furthermore monitor their behavior and data flow without limitation.
+	\item An adversary may create their nodes in a network. He may furthermore monitor their behavior and data flow without limitation.
 	\item An adversary may force a limited number of other non-allied nodes to expose their data to him. Actors with disjoint interests are explicitly excluded from this assumption.
 	\item An adversary may have similar access to resources as within its jurisdiction in a limited number of other jurisdictions.
 \end{itemize}
 
-%We may verify this adversary for realism by taking a known, strong adversary. Our adversary is much more potent than the supposed XKeyscore application. It surpasses the XKeyscore in terms of observation capabilities and routing. The Snowden papers suggest that this type of adversary is generally realistic, but even the supposedly most powerful country in the world was unable to set up such an adversary.
-
 \subsection{Notation \label{sec:encNot}}
-The theory in this document is heavily based on symmetric encryption, asymmetric encryption, and cryptographic hashing. To use a uniformed notation, we use $E^{K_a}(M)$ (where $a$ is an index to distinguish multiple keys) for an encrypting function with a key $K_a$. This results in $\mathbf{M^{K_a}}$ for the encrypted message. If we are reflecting a tuple of information, we write in boldface. To express a concatenated set of information, we use angular brackets $\mathbf{\langle normalAddress,vortexAddress\rangle }$. 
+The theory in this document is heavily based on symmetric encryption, asymmetric encryption, and cryptographic hashing. To use a uniformed notation, we use $E^{K_a}(M)$ (where $a$ is an index to distinguish multiple keys) for an encrypting function with a key $K_a$. This results in $\mathbf{M^{K_a}}=E^{K_a}(\mathbf{M})$ for the encrypted message. If we are reflecting a tuple of information, we write in boldface. To express a concatenated set of information, we use angular brackets $\mathbf{\langle normalAddress,vortexAddress\rangle }$. 
 
 For a symmetric encryption of a message $\mathbf{M}$ with a key $K_a$ resulting in $\mathbf{M^{K_a}}$ where $a$ is an index to distinguish different keys. Decryption uses therefore $D^{K_a}(\mathbf{M^{K_a}})=\mathbf{M}$.
 
 As notation for asymmetric encryption we use $E^{K^{1}_a}(\mathbf{M})$ where as $K^{-1}_a$ is the private key and $K^{1}_a$ is the public key of a key pair $K^{p_a}$. The asymmetric decryption is noted as $D^{K^{-1}_a}(\mathbf{M})$. If a key $K_a$ is specific to a host, we refer to it with a subscripted $o$ (e.g., $K_{peer_o}$).
 
-For hashing, we do use $H(\mathbf{M})$ if unsalted and $H^{S_a}$ if using a salted hash with salt $S_a$. The generated hash is shown as $H_M$ if unsalted and $H^{S_a}_M$ if salted.
+For hashing, we do use $H(\mathbf{M})$ if unsalted and $H^{S_a}$ if using a salted hash with salt $S_a$. The generated hash is shown as $H_\mathbf{M}$ if unsalted and $H^{S_a}_\mathbf{M}$ if salted.
 
-If we want to express what details are contained in a tuple, we use the notation $\mathbf{M\langle t,MURB,serial\rangle }$ respectively if encrypted $\mathbf{M^{K_{a}}\langle t,MURB,serial\rangle}$.
+If we want to express what details are contained in a tuple, we use the notation $\mathbf{M\langle t,MURB,serial\rangle}$ respectively if encrypted $\mathbf{M^{K_{a}}\langle t,MURB,serial\rangle}$.
 
 \begin{align*}
 \text{asym:}         & E^{K^{-1}_a}\left(\mathbf{M}\right)                            && =\mathbf{M}^{K^{-1}_a}\\
@@ -181,57 +177,15 @@ If we want to express what details are contained in a tuple, we use the notation
 
 In general, subscripts denote selectors to differentiate values of the same type, and superscript denotes relevant parameters to operations expressed. The subscripted and superscripted information may be omitted where not needed.
 
-%We refer to the encrypted components of a Vortex Message as follows:
-%\begin{align*}
-%\text{Prefix:}        & \mathbf{PREFIX}           &=D^{K^{1}_a}\left(\mathbf{PREFIX}^{K^{-1}_a}\right) &=D\left(\mathbf{P}\right)\\
-%\text{Header:}        & \mathbf{HEAD}             &=D^{K^{1}_a}\left(\mathbf{HEAD}^{K^{-1}_a}\right) &=D\left(\mathbf{H}\right)\\
-%\text{Route:}         & \mathbf{ROUTE}            &=D^{K^{1}_a}\left(\mathbf{ROUTE}^{K^{-1}_a}\right) &=D\left(\mathbf{R}\right)\\
-%\end{align*}
-%
-%For a more precise description of the message, see \ref{sec:messageOutline}. In general, a decrypted Block is written as capitalized multi-character boldface. An encrypted Block is written as capitalized single character boldface. To specify a random byte sequence of $n$ octets generated by an PRNG of type $t$ and seeded with $s$ we use $R_t\left(s,n\right)$
+\section{Related work}
+\subsection{Definition of Anonymity, Unlinkability and Censorship Resistance}
 
-\subsection{Related work}
-\subsubsection{Definition of Anonymity, Unlinkability and Censorship Resistance}
-
-%\begin{itemize}
-%	\item \emph{The system must be either undetectable or out of reach for an entity censoring}\\*
-%	The possibility of identifying a protocol or data allows a censoring entity to suppress the use of the protocol itself. 
-%	\item \emph{The entities involved in a system must be untraceable}\\*
-%	Traceable entities would result in the possibility of suppressing real-world entities participating in the system.
-%\end{itemize}
-%
-For all other anonymity relevant terms, we refer to \cite{anon_terminology}.
-%\DeclareFixedFootnote{\omitted}{footnotes of quotes are omitted for readability}
-%It defines anonymity as 
-%
-%\begin{quote}
-%	Anonymity of a subject means that the subject is not identifiable within a set of subjects, the anonymity set.\omitted
-%\end{quote}
-%and
-%\begin{quote}
-%	Anonymity of a subject from an attacker's perspective means that the attacker cannot sufficiently identify the subject within a set of subjects, the anonymity set.\omitted
-%\end{quote}
-%
-%\noindent It defines unlinkability as
-%
-%\begin{quote}
-%	Unlinkability of two or more items of interest (IOIs, e.g., subjects, messages, actions, \ldots) from an attacker’s perspective means that within the system (comprising these and possibly other items), the attacker cannot sufficiently distinguish whether these IOIs are related or not.\omitted
-%\end{quote}
-%
-%\noindent and undetectability as
-%\begin{quote}
-%	Undetectability of an item of interest (IOI) from an attacker’s perspective means that the attacker cannot sufficiently distinguish whether it exists or not.
-%\end{quote}
-%
-%For our work, We define the anonymity set as the set of all possible subjects within a supposed message. %The anonymity of a subject towards an observing third party is a crucial factor as it relates directly to our adversary model.
+For all anonymity relevant terms, we refer to \cite{anon_terminology}.
 
 The set of terms is further broadened with $k$-Anonymity as defined in \cite{k-anonymous:ccs2003}. $k$-Anonymity is relevant for all jurisdictions where it is insufficient to track an illegal action according to the jurisdiction down to less than $k-1$ subjects.
 
-\subsubsection{Existing work regarding Anonymity Protocols and Censorship Resistance}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Manual float placement
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-We were unable to identify a protocol withstanding the strong definition of our adversary. We have, however, found many protocols dealing with anonymity and very few dealing with censorship circumventions. We considered these approaches and integrated appropriate techniques in our work. It has to be said, however, that very little of the mentioned protocols here had ever experienced broad adoption. Even more, most of them were never implemented or challenged. 
+\subsection{Existing work regarding Anonymity Protocols and Censorship Resistance}
+We were unable to identify a protocol withstanding the strong definition of our adversary. Even ToR is weak as censorship is relatively easy. There are possibilities to piggyback other protocols with ToR messages and to hide nodes on directories, but this technology is bulky and only used in exceptional cases. We have, however, found many protocols dealing with anonymity and very few dealing with censorship circumventions. We considered these approaches and integrated appropriate techniques in our work. It has to be said, however, that very little of the mentioned protocols here had ever experienced broad adoption. Even more, most of them were never implemented or challenged. 
 
 In terms of censorship circumvention, we found that only a little work has been done in academia. Several technical ways have been explored to circumvent censorship. All of them seem to boil down to the following main ideas:
 \begin{itemize}
@@ -245,30 +199,29 @@ In terms of censorship circumvention, we found that only a little work has been 
 
 For Anonymization the ideas seem mainly to concentrate around onionizing (ToR\cite{tor-spec}, SOR\cite{Egners_2012}, DUO-Onions and Hydra-Onions\cite{iwanik2005duo}), DC networks (DC-Nets\cite{chaum-dc}, Tarzan\cite{tarzan:ccs02}, GAS\cite{AthanRAM07}), mixing (Babel\cite{babel}, MorphMix\cite{morphmix:wpes2002}, Mixminion\cite{minion-design}, Salsa\cite{Salsa}), and distributed hash tables (DHT; e.g., Bifrost\cite{Kondo2009}, BitBlender\cite{Bauer_2008}). For network-layer high speed Protocols we identifyed LAP\cite{hsiao2012lap}, PHI (related to SCION\cite{perrig2017scion}), HORNET\cite{chen2015hornet}, and Dovetail\cite{chen2015hornet}. While these protocols delivered valuable inputs in terms of their weaknesses, we do not directly compare to them as achieving anonymity in a low latence environment is much far harder to achieve and some generic restrictions applied we wanted to overcome such as context based timing analysis.
 
-As we use alien transport protocols instead of our protocol, we decided to go for a mixing approach. This approach minimizes the number of messages between the nodes. Furthermore, mixing allows using the nodes in a structureless way as opposed to DC-nets, where we would have to build fixed or ad-hoc rings for exchanging messages. % Unlike other protocols, we do not rely on the logic of mixing on the routing node but entirely on the RBB. Routing nodes follow an onionized set of instructions to build messages. 
+As we use alien transport protocols instead of our protocol, we decided to go for a mixing approach. This approach minimizes the number of messages between the nodes. Furthermore, mixing allows using the nodes in a structureless way as opposed to DC-nets, where we would have to build fixed or ad-hoc rings for exchanging messages. Unlike other protocols, we do not rely on the logic of mixing on the routing node. Instead, the a node generating a routing block (also referred as RBB) decides on all mixing and decoy generation. Routing nodes follow an onionized set of instructions to build messages. 
+
+%%%%%%%%%%%%%%%%%%%%%% Start checking from here %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{The \emph{MessageVortex} Protocol\label{sec:protocol}}
-% In this section, we introduce a new consistent, transport-independent model for representing the different protocols used by MessageVortex. The focus of the description lies in academic concepts. For more technical information specifying the protocol as implemented, refer to \ifCLASSOPTIONpeerreview\cite{Blinded}\else \cite{MessageVortexRFC}\fi. This document provides details such as specific ASN.1 structures outlining every single block.
+ In this section, we introduce a new consistent, transport-independent model for representing the different protocols used by MessageVortex. The focus of the description lies in academic concepts. For more technical information specifying the protocol as implemented, refer to \cite{MessageVortexRFC}. This document provides details such as specific ASN.1 structures outlining every single block.
 
 \subsection{General Design}
-
 Generally, the Vortex System consists only of nodes, whereas a node may be any system always connected to the Internet. This applies to any device regardless of NAT or similar technologies which usually oppose problems for services. Figure~\ref{fig:protocolLayers} shows a network of four nodes passing messages between them. The symbols within the routing layer show the content of a workspace of one ephemeral identity. We elaborate on those two concepts further in the next sections. 
 
 \begin{figure*}[ht]
 	\centering\includegraphics[width=0.6\textwidth,height=90pt]{../../inc/roughProtocolDesign}
-	\caption{A rough protocol outline of the MessageVortex protocol}
+	\caption{A circular graph showing a typical message flow without the possibility to identify original sender or final recipient}
 	\label{fig:protocolLayers}
 \end{figure*}
 
 The transport layer is a common message-passing protocol on the Internet. The infrastructure for this message-passing protocol is used in unmodified form by VotexNodes, as it serves as a store-and-forward infrastructure. Although we used SMTP for our experiments, it is not limited to this protocol. The RFC draft document also specifies XMPP. We refer to the upper part of each node as VortexNode. These nodes may be any device with a permanent connection to the Internet (e.g., a RaspberryPi computer or a mobile phone). The message paths shown in the figure are not relevant. Any path layout such as cyclical or tree-like may be possible.
 
-The Vortex system routes messages from a sender to one or more recipients. We refer to the message sent by the sender and received by the recipients as ``message''. We use the term ``VortexMessage'' for the messages exchanged between the nodes containing either message parts, full messages or decoy traffic.
+Each VortexNode constitutes out of three layers. A blending layer embedding and extracting messages from the transport layer, a routing layer processing the VortexMessages and providing ``workspaces'' for ``ephemeral identities'', and an accounting layer authorizing messages. We describe the inner workings of these layers in detail in the next sections.
 
-Each VortexNode constitutes out of three layers. A blending layer embedding and extracting messages from the transport layer, a routing layer processing the VortexMessages and providing ``workspaces'' for ``ephemeral identities'', and an accounting layer authorizing messages. We describe the inner workings of these layer in detail in the next sections.
+Great care has been taken to build the protocol in a modular way. A node may query another node about properties such as used blending type, PRNG, asymmetric or symmetric encryption algorithms, modes, paddings, and hashing algorithms. Therefore all these properties may vary from node to node. As an RBB may willingly choose all parameters for all hops, it may omit any node not fulfilling a required level of security. On the other hand, new algorithms may be introduced at any time without the need to upgrade the whole network simultaneously. 
 
-Great care has been taken to build the protocol in a modular way. Building blocks such as used blending type, PRNG, asymmetric or symmetric encryption algorithms, modes, paddings, and hashing algorithms may be signaled and varied from node to node. As a sending node may willingly choose all parameters for all hops, it may omit any node not fulfilling the required level of security. On the other hand, new algorithms may be introduced at any time without the need to upgrade the whole network. 
-
-The protocol handles messages which are passed by a transport protocol from node to node. The instructions how and when to pass a message is generated by a node we refer to as ``routing block builder'' (RBB). The RBB defines the path of the message, the type of hiding (blending) in the transport protocol, and the operations applied to each part of the message in each node. To avoid collision of operations, an RBB has on each used node ``ephemeral identities'' with an assigned workspace within the node. Ephemeral identities are short term identities containing a workspace and message quotas for a limited time. Ephemeral identities of a node are unrelated to each other. In the workspaces attached to the ephemeral identities, messages may be assembled, transformed, or decomposed with the operations above. Results are sent to other nodes. Due to the nature of the operations, all messages passed on may be decoy traffic or ``real message parts'' (We prove this claim in section \ref{sec:staticAnalysis}). A node identifies a message destined for it when a message processes data to ID 0 of the identities workspace.
+The instructions on how and when to pass a message are generated by a node we refer to as ``routing block builder'' (RBB). The RBB defines the path of the message, the type of hiding (blending) in the transport protocol, and the operations applied to each part of the message in each node. To avoid collision between operations of different nodes, an RBB has on each used node ``ephemeral identities'' with an assigned workspace within the node. Ephemeral identities are random, short term identities containing a workspace and quotas for a limited time. Ephemeral identities of a node are unrelated to each other. In the workspaces attached to the ephemeral identities, messages may be assembled, transformed, or decomposed with the operations stated above. Results are sent to other nodes. Due to the nature of the operations, all messages passed on may contain decoy traffic or ``real message parts'' (We prove this claim in section \ref{sec:staticAnalysis}). A node identifies a message destined for it when a message processes data to ID 0 of the identities workspace.
 
 The RBB may be the sender of a block or a different VortexNode. If the RBB is not identical to the sender, then the sender is using the routing block for sending a message without knowing its final destination.
 
