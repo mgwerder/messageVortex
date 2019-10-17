@@ -75,7 +75,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
   private static long lastSaved = 0;
   private static boolean firstWarning = true;
   private static volatile InternalThread runner = null;
-  @CommandLine.Option(names = {"--cacheFileName", "-f"},
+  @CommandLine.Option(names = {"--cacheFileName" },
           description = "filename of the cache file", required = true)
   private static String filename = null;
   private static int incrementor = 128;
@@ -279,6 +279,17 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
     return ret;
   }
 
+  @CommandLine.Command(name = "run", description = "pre-populates the cache")
+  public static void fillCache() {
+    stopIfFull=true;
+    startOrStopThread();
+    try {
+      runner.join();
+    } catch(InterruptedException ie) {
+      LOGGER.log(Level.WARNING,"Got unexpected exception",ie);
+    }
+  }
+
   private static void startOrStopThread() {
     // check if we have to start or stop
     synchronized (cache) {
@@ -330,7 +341,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
         synchronized (cache) {
           cache.store(filename + ".tmp");
           lastSaved = System.currentTimeMillis();
-          if (tempdir != null && cache.getCacheFillGrade() > 0.9) {
+          if (tempdir != null && cache.getCacheFillGrade() >= 0.999) {
             // move file as temp file and clear cache
             String fn = File.createTempFile(TMP_PREFIX, ".key").getAbsolutePath();
             LOGGER.log(Level.INFO, "stored chunk to file \"" + fn + "\" to pick up");
@@ -560,6 +571,10 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
             } catch (InterruptedException ie) {
               Thread.currentThread().interrupt();
             }
+          } else if(cache.getCacheFillGrade()>=0.999) {
+            LOGGER.log(Level.INFO, "cache is full(" + String.format("%2.3f",
+                    cache.getCacheFillGrade() * 100) + "%) ... shutting down");
+            shutdown=true;
           }
         }
 

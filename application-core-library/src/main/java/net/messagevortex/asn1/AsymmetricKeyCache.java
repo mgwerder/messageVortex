@@ -36,7 +36,6 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.TreeMap;
 import java.util.logging.Level;
-
 import net.messagevortex.MessageVortexLogger;
 
 /**
@@ -491,7 +490,9 @@ public class AsymmetricKeyCache implements Serializable {
     if (maxSize == 0) {
       return 1.0;
     } else {
-      return (0.0 + currSize) / maxSize;
+      double fg = (0.0 + currSize) / maxSize;
+      LOGGER.log(Level.FINE, "Cache fill grade is " + fg);
+      return fg;
     }
   }
 
