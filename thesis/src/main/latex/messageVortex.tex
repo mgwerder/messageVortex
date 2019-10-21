@@ -1,6 +1,6 @@
 % !TeX spellcheck = en_US
 
-\documentclass[a4paper,appendixprefix,pdfusetitle,twocolumn,fontsize=8pt,final,status=final]{scrbook}
+\documentclass[a4paper,appendixprefix,pdfusetitle,twocolumn,fontsize=8pt,draft,status=final]{scrbook}
 %add attachdocs to attach all documents
 % add openany to avoid empty pages
 %\usepackage{gitinfo}
@@ -429,6 +429,12 @@
 \makeatletter\@ifclasswith{scrbook}{draft}{\gdef\indexes{\listoffixmes}}{\gdef\indexes{\listoftables\listoffigures\listofrequirements}}\makeatother
 
 \RequirePackage[explicit]{titlesec}
+
+% Watermark
+\usepackage[firstpage]{draftwatermark}
+\SetWatermarkText{Draft}
+\SetWatermarkColor[rgb]{1,0,0}
+\SetWatermarkScale{2}
 \begin{document}%
 %
 \frontmatter%
@@ -616,7 +622,7 @@ The \nth{3} Generation Partnership Project (3GPP) maintains the Multimedia Messa
 \end{entry}
 
 \begin{entry}
-	\mainentry{anonymity}{We refer to the term anonymity as defined in \cite{anon_terminology}. ``Anonymity of a subject means that the subject is not identifiable within a set of subjects, the anonymity set.''\omitted}
+	\mainentry{anonymity}{We refer to the term anonymity as defined in \cite{anonTerminology}. ``Anonymity of a subject means that the subject is not identifiable within a set of subjects, the anonymity set.''\omitted}
 	\subentry{Sender Anonymity}{The anonymity set is the set of all possible subjects. For actors, the anonymity set consists of the subjects who might cause an action. For actees, the anonymity set consists of the subjects who might be acted upon. Therefore, a sender may be anonymous (sender anonymity) only within a set of potential senders, his/her sender anonymity set, which itself may be a subset of all subjects worldwide who may send a message from time to time.}
 	\subentry{Receiver Anonymity}{The same for the recipient means that a recipient may be anonymous (recipient anonymity) only within a set of potential recipients, his/her recipient anonymity set. Both anonymity sets may be disjoint, be the same, or they may overlap. The anonymity sets may vary over time.}
 \end{entry}
@@ -634,7 +640,7 @@ The \nth{3} Generation Partnership Project (3GPP) maintains the Multimedia Messa
 \end{entry}
 
 \begin{entry}
-	\mainentry{Item of Interest (IoI)}{The Item of Intrest (IoI) are defined in \cite{anon_terminology} and refer to any subject action or entity which is of interest to a potential adversary.}
+	\mainentry{Item of Interest (IoI)}{The Item of Intrest (IoI) are defined in \cite{anonTerminology} and refer to any subject action or entity which is of interest to a potential adversary.}
 \end{entry}
 
 \begin{entry}
@@ -702,7 +708,7 @@ The \nth{3} Generation Partnership Project (3GPP) maintains the Multimedia Messa
 
 \begin{entry}
 	\mainentry{Pseudonymity}{
-		As Pseudonymity we take the definition as specified in \cite{anon_terminology}.
+		As Pseudonymity we take the definition as specified in \cite{anonTerminology}.
 		\begin{quote}
 			A pseudonym is an identifier of a subject other than one of the subject's real names. The subject which the pseudonym refers to is the holder of the pseudonym. A subject is pseudonymous if a pseudonym is used as an identifier instead of one of its real names.\omitted
 		\end{quote}
@@ -731,7 +737,7 @@ The \nth{3} Generation Partnership Project (3GPP) maintains the Multimedia Messa
 
 \begin{entry}
 	\mainentry{Undetectability}{
-		As undetectability we take the definition as specified in \cite{anon_terminology}.
+		As undetectability we take the definition as specified in \cite{anonTerminology}.
 		\begin{quote}
 			Undetectability of an item of interest (IOI\index{Item of Interest}) from an attacker's perspective means that the
 			attacker cannot sufficiently distinguish whether it exists or not.\omitted
@@ -740,13 +746,13 @@ The \nth{3} Generation Partnership Project (3GPP) maintains the Multimedia Messa
 \end{entry}
 
 \begin{entry}
-	\mainentry{Unlikability}{We refer to the term unlinkability as defined in \cite{anon_terminology}. ``Unlinkability of two or more items of interest (IOIs, e.g., subjects, messages, actions, ...) from an attacker’s perspective means that within the system (comprising these and possibly other items), the attacker cannot sufficiently distinguish whether these IOIs are 
+	\mainentry{Unlikability}{We refer to the term unlinkability as defined in \cite{anonTerminology}. ``Unlinkability of two or more items of interest (IOIs, e.g., subjects, messages, actions, ...) from an attacker’s perspective means that within the system (comprising these and possibly other items), the attacker cannot sufficiently distinguish whether these IOIs are 
 		related or not.}
 \end{entry}
 
 \begin{entry}
 	\mainentry{Unobservability}{
-		As unobservability we take the definition as specified in \cite{anon_terminology}.
+		As unobservability we take the definition as specified in \cite{anonTerminology}.
 		\begin{quote}
 			Unobservability of an item of interest (IOI) means
 			\begin{itemize}

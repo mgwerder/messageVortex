@@ -261,7 +261,7 @@ In this section, we collect protocols research related to anonymity. We did not 
 
 \subsection{Definition of Anonymity}
 \DeclareFixedFootnote{\omitted}{footnotes omitted in quote}
-As the definition for Anonymity we take the definition as specified in \cite{anon_terminology}.
+As the definition for Anonymity we take the definition as specified in \cite{anonTerminology}.
 
 \begin{quote}
 	Anonymity of a subject means that the subject is not identifiable within a set of subjects, the anonymity set.\omitted
@@ -499,14 +499,14 @@ We evaluated the most common cipher modes for suitability. For MessageVortex, we
 	\item XTS (XEX-based tweaked-codebook mode with ciphertext stealing)\\
 	This mode is standardized in IEE 1619-2007 (soon to be superseded). A rough overview of XTS may be found at \cite{Martin2010}. It was developed initially for Disks offering random access and authentication at the same time. 
 	\item CMC (CBC-mask-CBC) and EME (ECB-mask-ECB)\\ 
-	In \cite{Halevi_2003} \citeauthor{Halevi_2003} introduces a cipher mode which is extremely costly as it requires two encryptions. CMC is not parallelizable due to the underlying CBC mode, but EME is. 
+	In \cite{Halevi:2003} \citeauthor{Halevi:2003} introduces a cipher mode which is extremely costly as it requires two encryptions. CMC is not parallelizable due to the underlying CBC mode, but EME is. 
 	\item LRW\\
 	LRW is a tweakable narrow-block cipher mode described in \cite{tschorsch:translayeranon}. This mode shares the same properties as EBC but without the weakness of the same clear text block resulting in the same ciphertext. Similarly to XEX, it requires a tweak instead of an IV.
 \end{itemize}
 
 \subsubsection{Summary of Cipher Modes}
 
-\begin{table}[h]
+\begin{table}[ht]
 	\centering\tiny
 	\begin{tabular}{|l|l|l|l|l|}\hline
 		\diaghead{\theadfont Mode Criteria}{Mode}{Criteria}         & \thead{auth}  &\thead{Requires IV}               & \thead{parallelisable}     & \thead{random access}\\

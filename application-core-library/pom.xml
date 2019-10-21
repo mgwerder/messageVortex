@@ -46,7 +46,7 @@
         <sonar.issues.defaultAssigneeLogin>mgwerder</sonar.issues.defaultAssigneeLogin>
         <sonar.scm.disabled>true</sonar.scm.disabled>
         <sonar.verbose>true</sonar.verbose>
-	    <sonar.sonargraph.report.path>target/sonargraph</sonar.sonargraph.report.path>
+        <sonar.sonargraph.report.path>target/sonargraph</sonar.sonargraph.report.path>
 
         <izpack.version>5.1.3</izpack.version>
         <izpack.staging>${project.build.directory}/staging</izpack.staging>
@@ -471,22 +471,28 @@
                     <execution>
                         <id>l4j-create-exe</id>
                         <phase>package</phase>
-                        <goals><goal>launch4j</goal></goals>
+                        <goals>
+                            <goal>launch4j</goal>
+                        </goals>
                         <configuration>
                             <headerType>gui</headerType>
                             <dontWrapJar>false</dontWrapJar>
                             <outfile>${project.build.directory}/MessageVortex-package-installer.exe</outfile>
                             <jar>${project.build.directory}/MessageVortex-package-installer.jar</jar>
-                            <obj>${izpack.staging}/resources/w32api/crt2.o</obj>
-                            <obj>${izpack.staging}/resources/head/guihead.o</obj>
-                            <obj>${izpack.staging}/resources/head/head.o</obj>
-                            <lib>${izpack.staging}/resources/w32api/libmingw32.a</lib>
-                            <lib>${izpack.staging}/resources/w32api/libgcc.a</lib>
-                            <lib>${izpack.staging}/resources/w32api/libmsvcrt.a</lib>
-                            <lib>${izpack.staging}/resources/w32api/libkernel32.a</lib>
-                            <lib>${izpack.staging}/resources/w32api/libuser32.a</lib>
-                            <lib>${izpack.staging}/resources/w32api/libadvapi32.a</lib>
-                            <lib>${izpack.staging}/resources/w32api/libshell32.a</lib>
+                            <objs>
+                                <obj>${izpack.staging}/resources/w32api/crt2.o</obj>
+                                <obj>${izpack.staging}/resources/head/guihead.o</obj>
+                                <obj>${izpack.staging}/resources/head/head.o</obj>
+                            </objs>
+                            <libs>
+                                <lib>${izpack.staging}/resources/w32api/libmingw32.a</lib>
+                                <lib>${izpack.staging}/resources/w32api/libgcc.a</lib>
+                                <lib>${izpack.staging}/resources/w32api/libmsvcrt.a</lib>
+                                <lib>${izpack.staging}/resources/w32api/libkernel32.a</lib>
+                                <lib>${izpack.staging}/resources/w32api/libuser32.a</lib>
+                                <lib>${izpack.staging}/resources/w32api/libadvapi32.a</lib>
+                                <lib>${izpack.staging}/resources/w32api/libshell32.a</lib>
+                            </libs>
                             <icon>${izpack.staging}/resources/MessageVortexLogo_128.ico</icon>
                             <!--<classPath>
                                 <mainClass>net.messagevortex.MessageVortex</mainClass>
@@ -541,18 +547,18 @@
                 <configuration>
                     <mainClass>net.messagevortex.MessageVortex</mainClass>
                     <generateDiskImageFile>true</generateDiskImageFile>-->
-                    <!-- Removed as it caused problems when building in jenkins (drove me mad)-->
-                    <!--<iconFile>images/MessageVortexLogo_128.icns</iconFile>-->
-                <!--</configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>bundle</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin> -->
+            <!-- Removed as it caused problems when building in jenkins (drove me mad)-->
+            <!--<iconFile>images/MessageVortexLogo_128.icns</iconFile>-->
+            <!--</configuration>
+            <executions>
+                <execution>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>bundle</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin> -->
 
         </plugins>
     </build>
