@@ -1,9 +1,9 @@
 % !TeX spellcheck = en_US
 
-\documentclass[a4paper,appendixprefix,pdfusetitle,twocolumn,fontsize=8pt,draft,status=final]{scrbook}
+\documentclass[a4paper,appendixprefix,pdfusetitle,twocolumn,fontsize=8pt,final]{scrbook}
 %add attachdocs to attach all documents
 % add openany to avoid empty pages
-%\usepackage{gitinfo}
+\usepackage{gitinfo}
 
 % Make C&P work
 \usepackage{cmap}
@@ -43,7 +43,16 @@
 %\renewcommand{\cftchapaftersnum}{\hspace{5pt}}
 
 %enable hyperlinks
-\usepackage[pdfencoding=auto, psdextra,hidelinks,bookmarks,hyperindex,hyperfigures,pdfpagelabels,pdftex,pdfa,final]{hyperref}
+\usepackage[pdfencoding=auto,
+            psdextra,
+            hidelinks,
+            bookmarks,
+            hyperindex,
+            hyperfigures,
+            pdfpagelabels,
+            pdftex,
+            pdfa,
+            final]{hyperref}
 \makeatletter
 \hypersetup{	
 	pdftitle={\thetitle},
@@ -431,10 +440,10 @@
 \RequirePackage[explicit]{titlesec}
 
 % Watermark
-\usepackage[firstpage]{draftwatermark}
-\SetWatermarkText{Draft}
-\SetWatermarkColor[rgb]{1,0,0}
-\SetWatermarkScale{2}
+%\usepackage[firstpage]{draftwatermark}
+%\SetWatermarkText{Draft}
+%\SetWatermarkColor[rgb]{1,0,0}
+%\SetWatermarkScale{2}
 \begin{document}%
 %
 \frontmatter%
@@ -446,7 +455,7 @@
 
 \begin{comment}
 \section*{Acknowledgements}
-I would like to thank my wife Cornelia and my lovely three kids (Saphira, Florian and Aurelius) for their patience and their support. Without them I could never have done this work.\par
+I would like to thank my wife Cornelia and my lovely three kids (Saphira, Florian and Aurelius) for their patience and their support. Without them I could never have done this work.
 
 I would like to thank Prof. Dr. C. Tschudin and the University of Basel for the possibility to write this work and for the challenges they opposed to me, allowing me to grow. 
 
@@ -454,12 +463,12 @@ Dr. Andreas Hueni for his thoughts and challenging outside-the-normal-box.
 
 Prof. Dr. Carlos Nicolas of the University of Northwestern Switzerland for being such a valuable sparring partner allowing me to test my thoughts.
 
-I would like to acknowledge all the individuals who have coded for the \LaTeX project for free. It is due to their efforts that we can generate professionally typeset PDFs now.
+I would like to acknowledge all the individuals who have coded for the \LaTeX project for free. It is due to their efforts that we can generate professionally typeset PDFs (and far more) for .
 \end{comment}
 
 \cleardoublepage
 \makeatletter
-\renewcommand{\l@subsubsection}{\@dottedtocline{3}{7.4em}{4.5em}}
+\renewcommand{\l@subsubsection}{\@dottedtocline{3px}{7.4em}{4.5em}}
 \renewcommand{\@pnumwidth}{3em}
 \makeatother
 
@@ -511,7 +520,7 @@ I would like to acknowledge all the individuals who have coded for the \LaTeX pr
 
 
 
-\gdef\rfc{../../../../rfc/src/xml2rfc/draft-gwerder-messagevortexmain-02.pdf}
+\gdef\rfc{../../../../rfc/src/xml2rfc/draft-gwerder-messagevortexmain-03.pdf}
 %\includepdf[pages=-,frame=true,scale=0.5]{\rfc}
 \includepdf[pages=1,frame=true,scale=0.70,pagecommand={\chapter{The RFC draft document\label{app:rfcMessageVortexMain}}}, offset=0 -1cm]{\rfc}
 \includepdf[pages=2-,frame=true,scale=0.8,pagecommand={}, offset=0 -1cm]{\rfc}
