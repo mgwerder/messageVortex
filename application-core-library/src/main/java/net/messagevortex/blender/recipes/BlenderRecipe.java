@@ -8,9 +8,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
+
 import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.asn1.IdentityStoreBlock;
-import net.messagevortex.asn1.RoutingBlock;
+import net.messagevortex.asn1.RoutingCombo;
 
 public abstract class BlenderRecipe implements Comparable<BlenderRecipe> {
 
@@ -25,7 +26,7 @@ public abstract class BlenderRecipe implements Comparable<BlenderRecipe> {
    *
    * @param identifier the name of the recipe set
    * @param anonSet    the anonymity set to be used
-   * @return           a random recipe
+   * @return a random recipe
    *
    * @throws IOException if no candidates can be found
    */
@@ -53,6 +54,11 @@ public abstract class BlenderRecipe implements Comparable<BlenderRecipe> {
     return l.get(esr.nextInt(l.size()));
   }
 
+  /***
+   * <p>Remove all recipes from the specified list of recipes.</p>
+   *
+   * @param identifier the recipe list identifier (null for default list)
+   */
   public static void clearRecipes(String identifier) {
     if (identifier == null) {
       identifier = DEFAULT;
@@ -65,6 +71,12 @@ public abstract class BlenderRecipe implements Comparable<BlenderRecipe> {
     }
   }
 
+  /***
+   * <p>Adds a recipe to the specified recipe list.</p>
+   *
+   * @param identifier the name of the recipe list (null for default)
+   * @param add the recipe to be added
+   */
   public static void addRecipe(String identifier, BlenderRecipe add) {
     if (identifier == null) {
       identifier = DEFAULT;
@@ -78,14 +90,30 @@ public abstract class BlenderRecipe implements Comparable<BlenderRecipe> {
     }
   }
 
+  /***
+   * <p>Tests if the given recipe may be applied to the anon set available.</p>
+   *
+   * @param anonSet the currently available anonymity set
+   * @return true if the recipe may be applied
+   */
   public abstract boolean isAppliable(List<IdentityStoreBlock> anonSet);
 
-  public abstract RoutingBlock applyRecipe(List<IdentityStoreBlock> anonSet,
+  /***
+   * <p>Creates a routing block with the given parameters.</p>
+   *
+   * @param anonSet the anonymity set to be used
+   * @param from the sending node address
+   * @param to the receiving node address
+   * @return the built routing block
+   *
+   * @throws IOException if a problem arises when creating the block
+   */
+  public abstract RoutingCombo applyRecipe(List<IdentityStoreBlock> anonSet,
                                            IdentityStoreBlock from,
-                                           IdentityStoreBlock to);
+                                           IdentityStoreBlock to) throws IOException;
 
   @Override
   public int compareTo(BlenderRecipe o) {
-    return (""+hashCode()).compareTo(""+o.hashCode());
+    return ("" + hashCode()).compareTo("" + o.hashCode());
   }
 }

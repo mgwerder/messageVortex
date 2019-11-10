@@ -11,6 +11,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="application-core-library" target="1.8" />
+      <module name="messageVortex" target="1.5" />
       <module name="messagevortex-project" target="1.5" />
       <module name="rfc" target="1.5" />
       <module name="thesis" target="1.5" />

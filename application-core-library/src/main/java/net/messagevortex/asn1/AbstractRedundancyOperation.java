@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 import java.util.logging.Level;
 
 import net.messagevortex.MessageVortexLogger;
@@ -273,7 +274,11 @@ public abstract class AbstractRedundancyOperation
    * @throws ArithmeticException if the number of keys doees not match the number of stripes
    */
   public final SymmetricKey[] setKeys(List<SymmetricKey> keys) {
-    if (this.dataStripes + this.redundancyStripes != keys.size()) {
+    if (keys==null) {
+      keys=new Vector<SymmetricKey>();
+    }
+
+    if (this.dataStripes + this.redundancyStripes != keys.size() &&  keys.size()!=0 ) {
       throw new ArithmeticException("illegal number of keys");
     }
 

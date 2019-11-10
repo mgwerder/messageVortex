@@ -32,7 +32,9 @@ import org.bouncycastle.asn1.ASN1EncodableVector;
 import org.bouncycastle.asn1.ASN1Integer;
 import org.bouncycastle.asn1.ASN1Object;
 import org.bouncycastle.asn1.ASN1Sequence;
+import org.bouncycastle.asn1.ASN1TaggedObject;
 import org.bouncycastle.asn1.DERSequence;
+import org.bouncycastle.asn1.DERTaggedObject;
 
 public abstract class AbstractCryptPayloadOperation extends Operation
                 implements Serializable, Dumpable {
@@ -67,7 +69,7 @@ public abstract class AbstractCryptPayloadOperation extends Operation
   @Override
   public String dumpValueNotation(String prefix, DumpType dumptype) throws IOException {
     StringBuilder sb = new StringBuilder();
-    sb.append("{" + CRLF);
+    sb.append("[" + getTagNumber() + "] {" + CRLF);
     sb.append(prefix).append("  originalId ").append(originalId).append(',').append(CRLF);
     sb.append(prefix).append("  key ").append(key.dumpValueNotation(prefix + "  ", dumptype))
                      .append(',').append(CRLF);
@@ -82,7 +84,7 @@ public abstract class AbstractCryptPayloadOperation extends Operation
     v.add(new ASN1Integer(originalId));
     v.add(key.toAsn1Object(dumpType));
     v.add(new ASN1Integer(newId));
-    return new DERSequence(v);
+    return new DERTaggedObject(getTagNumber(), new DERSequence(v));
   }
 
   public abstract Operation getNewInstance(ASN1Encodable object) throws IOException;

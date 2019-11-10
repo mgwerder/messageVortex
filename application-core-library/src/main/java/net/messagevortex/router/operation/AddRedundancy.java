@@ -25,16 +25,21 @@ package net.messagevortex.router.operation;
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.security.SecureRandom;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Random;
+import java.util.Vector;
 import java.util.logging.Level;
 
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.AbstractRedundancyOperation;
 import net.messagevortex.asn1.AddRedundancyOperation;
 import net.messagevortex.asn1.PayloadChunk;
+import net.messagevortex.asn1.SymmetricKey;
 import net.messagevortex.asn1.VortexMessage;
-import net.messagevortex.asn1.encryption.PRNG;
+import net.messagevortex.asn1.encryption.Prng;
 
 /**
  * <p>This is the core of the redundancy add operation.</p>
@@ -45,7 +50,10 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
 
   private static final long MAX_SIZE = (long) Math.pow(2, 32);
 
-  public static class SimplePrng implements PRNG {
+  /***
+   * <p>Wrapper for the java random number generator (not normative).</p>
+   */
+  public static class SimplePrng implements Prng {
 
     private Random sr = new Random();
     private long seed = sr.nextLong();
@@ -54,18 +62,26 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
       sr.setSeed(seed);
     }
 
+    /***
+     * <p>Get the next random byte of the Prng.</p>
+     *
+     * @return the next random byte
+     */
     public synchronized byte nextByte() {
       byte[] a = new byte[1];
       sr.nextBytes(a);
       return a[0];
     }
 
+    /***
+     * <p>Resets the Prng to the initially seeded state.</p>
+     */
     public void reset() {
       sr.setSeed(seed);
     }
   }
 
-  private static PRNG localPrng = new SimplePrng();
+  private static Prng localPrng = new SimplePrng();
 
   public static final long serialVersionUID = 100000000018L;
 
@@ -114,10 +130,60 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
     LOGGER.log(Level.INFO, "executing add redundancy operation (" + toString() + ")");
     byte[] in = payload.getPayload(operation.getInputId()).getPayload();
 
+    Matrix out = executeInt(in);
+
+    // set output
+    LOGGER.log(Level.INFO, "  setting output chunks");
+    int tot = 0;
+    assert out.getY() == (operation.getRedundancy() + operation.getDataStripes());
+    try {
+      for (int i = 0; i < out.getY(); i++) {
+        int plid = operation.getOutputId() + i;
+        byte[] b = operation.getkeys()[i].encrypt(out.getRowAsByteArray(i));
+        payload.setCalculatedPayload(plid, new PayloadChunk(plid, b, getUsagePeriod()));
+        tot += b.length;
+      }
+    } catch (IOException ioe) {
+      for (int i : getOutputId()) {
+        payload.setCalculatedPayload(i, null);
+      }
+      LOGGER.log(Level.INFO, "  failed");
+      return new int[0];
+    }
+    LOGGER.log(Level.INFO, "  done (chunk size: " + out.getRowAsByteArray(0).length + "; total:"
+            + tot + ")");
+
+    return getOutputId();
+  }
+
+  public static byte[] execute(byte[] in, int redundancy, int dataStripes, int gf) {
+    AddRedundancy ar = new AddRedundancy(new AddRedundancyOperation(-1, redundancy, dataStripes, new Vector<SymmetricKey>(), -1, gf));
+
+    LOGGER.log(Level.INFO, "executing add redundancy operation (" + ar.toString() + ")");
+    Matrix out = ar.executeInt(in);
+
+    // set output
+    LOGGER.log(Level.INFO, "  setting output chunks");
+    int tot = 0;
+    byte[] totArray = new byte[0];
+    for (int i = 0; i < out.getY(); i++) {
+      byte[] b = out.getRowAsByteArray(i);
+      byte[] t = new byte[tot + b.length];
+      System.arraycopy(totArray, 0, t, 0, totArray.length);
+      System.arraycopy(b, 0, t, totArray.length, b.length);
+      totArray = t;
+      tot += b.length;
+    }
+    LOGGER.log(Level.INFO, "  done (chunk size: " + out.getRowAsByteArray(0).length + "; total:"
+            + tot + ")");
+    return totArray;
+  }
+
+  private Matrix executeInt(byte[] in) {
     // do the padding
     int paddingSize = 4;
     int size = in.length + paddingSize;
-    int keySize = operation.getkeys()[1].getKeySize() / 8;
+    int keySize = operation.getkeys().length!=0?operation.getkeys()[1].getKeySize() / 8:32;
     if (size % (keySize * operation.getDataStripes()) > 0) {
       size = keySize * operation.getDataStripes() * (size
               / (keySize * operation.getDataStripes()) + 1);
@@ -150,33 +216,21 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
             operation.getDataStripes() + operation.getRedundancy(), mm);
     LOGGER.log(Level.INFO, "  redundancy matrixContent is " + r.getX() + "x" + r.getY());
     LOGGER.log(Level.INFO, "  calculating");
-    Matrix out = r.mul(data);
-
-    // set output
-    LOGGER.log(Level.INFO, "  setting output chunks");
-    int tot = 0;
-    assert out.getY() == (operation.getRedundancy() + operation.getDataStripes());
-    try {
-      for (int i = 0; i < out.getY(); i++) {
-        int plid = operation.getOutputId() + i;
-        byte[] b = operation.getkeys()[i].encrypt(out.getRowAsByteArray(i));
-        payload.setCalculatedPayload(plid, new PayloadChunk(plid, b, getUsagePeriod()));
-        tot += b.length;
-      }
-    } catch (IOException ioe) {
-      for (int i : getOutputId()) {
-        payload.setCalculatedPayload(i, null);
-      }
-      LOGGER.log(Level.INFO, "  failed");
-      return new int[0];
-    }
-    LOGGER.log(Level.INFO, "  done (chunk size: " + out.getRowAsByteArray(0).length + "; total:"
-            + tot + ")");
-
-    return getOutputId();
+    return r.mul(data);
   }
 
-  public static byte[] pad(int blocksize, int numberOfOutBlocks, byte[] data, PRNG prng, int c1, int c2) {
+  /***
+   * <p>padds a given payload block.</p>
+   * @param blocksize the size of the blocks of the used encryption in the addRedundancy operation
+   * @param numberOfOutBlocks the number of resulting blocks in the addRedundancy operation
+   * @param data the data to be padded (payload block
+   * @param prng the Prng to be used for padding
+   * @param c1 the padding parameter c1 as specified in the padding spec
+   * @param c2 the padding parameter c2 as specified in the padding spec
+   * @return
+   */
+  public static byte[] pad(int blocksize, int numberOfOutBlocks, byte[] data,
+                           Prng prng, int c1, int c2) {
     LOGGER.log(Level.FINEST, "starting padding of " + data.length + " bytes");
 
     // catch some bad values
@@ -189,21 +243,24 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
 
     // calculate sizes
     int outRowSize = blocksize * numberOfOutBlocks;
-    long containerSize = (long) (Math.ceil(((double)data.length + 4 + c2) / outRowSize)) * outRowSize;
-    LOGGER.log(Level.FINEST, "container size of padded array is " + containerSize + " bytes (c1: "+c1+"; c2: "+c2+")");
+    long containerSize = (long) (Math.ceil(((double) data.length + 4 + c2) / outRowSize))
+            * outRowSize;
+    LOGGER.log(Level.FINEST, "container size of padded array is " + containerSize + " bytes (c1: "
+            + c1 + "; c2: " + c2 + ")");
 
     // calculate padding value
-    long pval = (new BigInteger(""+data.length).add(new BigInteger(""+c1).multiply(new BigInteger(""+containerSize)).mod(
-            new BigInteger("" + (((MAX_SIZE-data.length)/containerSize)*containerSize))
+    long pval = (new BigInteger("" + data.length).add(new BigInteger("" + c1).multiply(
+            new BigInteger("" + containerSize)).mod(new BigInteger(""
+            + (((MAX_SIZE - data.length) / containerSize) * containerSize))
     ))).longValue();
     LOGGER.log(Level.FINEST, "Padding value is " + pval + "");
 
     // create new container
-    byte[] out = new byte[(int)containerSize];
+    byte[] out = new byte[(int) containerSize];
 
     // insert size descriptor
-    out[0] = (byte) ((pval          & 255) - 128);
-    out[1] = (byte) (((pval >>> 8)  & 255) - 128);
+    out[0] = (byte) ((pval & 255) - 128);
+    out[1] = (byte) (((pval >>> 8) & 255) - 128);
     out[2] = (byte) (((pval >>> 16) & 255) - 128);
     out[3] = (byte) (((pval >>> 24) & 255) - 128);
 
@@ -233,12 +290,14 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
    *
    * @throws IOException       if unpadding fails for any reason
    */
-  public static byte[] unpad(int blocksize, int numberOfOutBlocks, byte[] in, PRNG prng ) throws IOException {
+  public static byte[] unpad(int blocksize, int numberOfOutBlocks, byte[] in, Prng prng)
+          throws IOException {
     LOGGER.log(Level.FINEST, "starting unpadding of " + in.length + " bytes");
 
     // extract size descriptor
-    long size = ((long)(in[0]) + 128) + ((long)(in[1]) + 128) * 256 + ((long)(in[2]) + 128) * 256 * 256 + ((long)(in[3]) + 128) * 256 * 256 * 256;
-    LOGGER.log(Level.FINEST, "Padding value is " + size );
+    long size = ((long) (in[0]) + 128) + ((long) (in[1]) + 128) * 256 + ((long) (in[2]) + 128) * 256
+            * 256 + ((long) (in[3]) + 128) * 256 * 256 * 256;
+    LOGGER.log(Level.FINEST, "Padding value is " + size);
     size = size % in.length;
     LOGGER.log(Level.FINEST, "size is " + size + " bytes");
 

@@ -35,6 +35,7 @@ import java.util.TreeMap;
 import java.util.Vector;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
+
 import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.RunningDaemon;
@@ -54,11 +55,11 @@ import picocli.CommandLine;
 @CommandLine.Command(
         description = "Manipulator for IdentityStore",
         name = "intentitystore",
-        aliases = { "store","is" },
+        aliases = {"store", "is"},
         subcommands = {
                 CommandLineHandlerIdentityStoreCreate.class
         }
- )
+)
 public class IdentityStore extends AbstractBlock
         implements Serializable, Callable<Integer>, RunningDaemon {
 
@@ -107,7 +108,7 @@ public class IdentityStore extends AbstractBlock
    * @return returns a reference identity store
    * @throws IOException if building of the store fails
    */
-  public static IdentityStore getIdentityStoreDemo() throws IOException {
+  public static synchronized IdentityStore getIdentityStoreDemo() throws IOException {
     if (demo == null) {
       demo = getNewIdentityStoreDemo(true);
     }
@@ -167,6 +168,10 @@ public class IdentityStore extends AbstractBlock
     return ret;
   }
 
+  public String[] getIdentityList() {
+    return blocks.keySet().toArray(new String[0]);
+  }
+
   /***
    * <p>Gets a random set of known recipient identities.</p>
    *
@@ -176,7 +181,7 @@ public class IdentityStore extends AbstractBlock
    */
   public List<IdentityStoreBlock> getAnonSet(int size) throws IOException {
     LOGGER.log(Level.INFO, "Executing getAnonSet(" + size + ") from " + blocks.size());
-    if (size>blocks.size()+1) {
+    if (size > blocks.size() + 1) {
       // unable to create a block with a bigger anonymity set than the sum of identity store blocks
       return null;
     }
@@ -191,7 +196,7 @@ public class IdentityStore extends AbstractBlock
                       || isb.getType() == IdentityStoreBlock.IdentityType.NODE_IDENTITY)
               && !ret.contains(isb)) {
         ret.add(isb);
-        LOGGER.log(Level.FINER, "adding to anonSet "+ isb.getNodeAddress());
+        LOGGER.log(Level.FINER, "adding to anonSet " + isb.getNodeAddress());
       }
     }
     if (ret.size() < size) {
@@ -232,9 +237,15 @@ public class IdentityStore extends AbstractBlock
     blocks.put(ident, isb);
   }
 
+  /***
+   * <p>removes a node address from the identity store.</p>
+   *
+   * @param nodeAddress the node addrress to be removed
+   * @throws IOException if node address is not contained in identity store
+   */
   public void removeAddress(String nodeAddress) throws IOException {
     List<String> rem = new Vector<>();
-    if (nodeAddress!=null) {
+    if (nodeAddress != null) {
       nodeAddress = nodeAddress.toLowerCase();
     }
     synchronized (blocks) {
@@ -246,8 +257,8 @@ public class IdentityStore extends AbstractBlock
           rem.add(e.getKey());
         }
       }
-      if (rem.size()==0) {
-        throw new IOException("unable to find nodeAddress \""+nodeAddress+"\"");
+      if (rem.size() == 0) {
+        throw new IOException("unable to find nodeAddress \"" + nodeAddress + "\"");
       }
       for (String s : rem) {
         blocks.remove(s);

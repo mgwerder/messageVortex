@@ -36,22 +36,22 @@ public abstract class AbstractConnection {
   }
 
   private static long defaultTimeout = 10 * 1000;
-  private        long timeout        = defaultTimeout;
+  private long timeout = defaultTimeout;
 
-  private ByteBuffer outboundEncryptedData   = (ByteBuffer)ByteBuffer.allocate(1024).clear();
-  private ByteBuffer inboundEncryptedData    = (ByteBuffer)ByteBuffer.allocate(1024).clear().flip();
-  private ByteBuffer outboundAppData         = (ByteBuffer)ByteBuffer.allocate(1024).clear();
-  private ByteBuffer inboundAppData          = (ByteBuffer)ByteBuffer.allocate(1024).clear().flip();
+  private ByteBuffer outboundEncryptedData = (ByteBuffer) ByteBuffer.allocate(1024).clear();
+  private ByteBuffer inboundEncryptedData = (ByteBuffer) ByteBuffer.allocate(1024).clear().flip();
+  private ByteBuffer outboundAppData = (ByteBuffer) ByteBuffer.allocate(1024).clear();
+  private ByteBuffer inboundAppData = (ByteBuffer) ByteBuffer.allocate(1024).clear().flip();
 
-  private String    protocol                = null;
-  private boolean   isClient;
+  private String protocol = null;
+  private boolean isClient;
 
-  private   ExecutorService   executor      = Executors.newSingleThreadExecutor();
-  private   SecurityContext   context       = null;
-  private   boolean isTls = false;
-  private   SocketChannel     socketChannel = null;
-  private   InetSocketAddress remoteAddress = null;
-  private   SSLEngine         engine        = null;
+  private ExecutorService executor = Executors.newSingleThreadExecutor();
+  private SecurityContext context = null;
+  private boolean isTls = false;
+  private SocketChannel socketChannel = null;
+  private InetSocketAddress remoteAddress = null;
+  private SSLEngine engine = null;
 
   private volatile boolean shutdownAbstractConnection = false;
 
@@ -108,7 +108,7 @@ public abstract class AbstractConnection {
    * @throws IOException  if channel initialisation fails
    */
   public AbstractConnection(SocketChannel sock, SecurityContext context) throws IOException {
-    this(sock,context,true);
+    this(sock, context, true);
   }
 
   /***
@@ -257,7 +257,7 @@ public abstract class AbstractConnection {
     if (getEngine() == null && getSecurityContext() != null
             && getSecurityContext().getContext() != null) {
       // init engine if not yet done
-      InetSocketAddress ia = (InetSocketAddress)socketChannel.getLocalAddress();
+      InetSocketAddress ia = (InetSocketAddress) socketChannel.getLocalAddress();
       LOGGER.log(Level.INFO, "created SSLEngine for " + ia
               + " (name=" + ia.getHostName() + "; client=" + isClient + ")");
       setEngine(getSecurityContext().getContext().createSSLEngine(ia.getHostName(), ia.getPort()));
@@ -278,8 +278,8 @@ public abstract class AbstractConnection {
   /***
    * <p>Sets the protocol to be used (mainly for logger messages).</p>
    *
-    * @param protocol the protocol name or abreviation
-   * @return  the previously set protocol name
+   * @param protocol the protocol name or abreviation
+   * @return the previously set protocol name
    */
   public String setProtocol(String protocol) {
     String ret = getProtocol();
@@ -290,7 +290,7 @@ public abstract class AbstractConnection {
   /***
    * <p>Gets the protocol name used.</p>
    *
-   * @return  the protocol name
+   * @return the protocol name
    */
   public String getProtocol() {
     return protocol;
@@ -422,8 +422,9 @@ public abstract class AbstractConnection {
           try {
             res = getEngine().unwrap(inboundEncryptedData, inboundAppData);
           } catch (SSLException sslException) {
-            LOGGER.log(Level.WARNING, "A problem was encountered while processing the data that "
-                    + "caused the SSLEngine to abort. Will try to properly close connection...",
+            LOGGER.log(Level.WARNING, "A problem was encountered while processing the data "
+                            + "that caused the SSLEngine to abort. Will try to properly close "
+                            + "connection...",
                     sslException);
             getEngine().closeOutbound();
             handshakeStatus = getEngine().getHandshakeStatus();
@@ -494,7 +495,7 @@ public abstract class AbstractConnection {
           outboundEncryptedData.compact();
 
           switch (result.getStatus()) {
-            case OK :
+            case OK:
               writeRawSocket(timeout - (System.currentTimeMillis() - start));
               outboundEncryptedData.flip();
               LOGGER.log(Level.INFO, "wrap done with status OK (remaining bytes:"
@@ -738,7 +739,7 @@ public abstract class AbstractConnection {
    * @return FIXME
    * @throws IOException FIXME
    */
-  private int readSocket(long timeout) throws IOException,TimeoutException  {
+  private int readSocket(long timeout) throws IOException, TimeoutException {
 
     int bytesRead;
     int totBytesRead = 0;
@@ -748,7 +749,7 @@ public abstract class AbstractConnection {
     do {
       try {
         bytesRead = readRawSocket(timeout - (System.currentTimeMillis() - start));
-      } catch(IOException ioe) {
+      } catch (IOException ioe) {
         bytesRead = 0;
         if (timeout <= (System.currentTimeMillis() - start)) {
           // timeout has been reached
@@ -774,7 +775,7 @@ public abstract class AbstractConnection {
           inboundAppData.compact();
           LOGGER.log(Level.INFO, "decrypting (occupied inbound buffer space: "
                   + inboundEncryptedData.remaining() + "; counter: " + bytesRead
-                  + ")", new Object[]{  inboundEncryptedData,inboundAppData});
+                  + ")", new Object[]{inboundEncryptedData, inboundAppData});
           final SSLEngineResult result = getEngine().unwrap(inboundEncryptedData, inboundAppData);
           inboundAppData.flip();
           bytesRead += inboundAppData.remaining();
@@ -865,14 +866,14 @@ public abstract class AbstractConnection {
    * @param timeout the timeout in milliseconds
    * @throws IOException if communication or encryption fails
    */
-  public void write(String message,long timeout) throws IOException {
+  public void write(String message, long timeout) throws IOException {
     LOGGER.log(Level.INFO, "writing message with write ("
             + ImapLine.commandEncoder(message) + "; size "
             + (message != null ? message.length() : -1) + ")");
     writeSocket(message, getTimeout());
   }
 
-  public String read() throws IOException,TimeoutException {
+  public String read() throws IOException, TimeoutException {
     return read(getTimeout());
   }
 
@@ -881,9 +882,11 @@ public abstract class AbstractConnection {
    *
    * @param timeout the timeout to be applied before unblocking
    * @return the string read
+   *
    * @throws IOException if decryption fails or host is unexpectedly disconnected
+   * @throws TimeoutException if reaching a timeout while reading
    */
-  public String read(long timeout) throws IOException,TimeoutException {
+  public String read(long timeout) throws IOException, TimeoutException {
     int numBytes = readSocket(timeout);
     if (numBytes > 0) {
       byte[] b = new byte[numBytes];
@@ -895,7 +898,7 @@ public abstract class AbstractConnection {
     }
   }
 
-  public String readln() throws IOException,TimeoutException {
+  public String readln() throws IOException, TimeoutException {
     return readln(getTimeout());
   }
 
@@ -905,9 +908,11 @@ public abstract class AbstractConnection {
    *
    * @param timeout the timeout to be applied before unblocking
    * @return the string read
+   *
    * @throws IOException if decryption fails or host is unexpectedly disconnected
+   * @throws TimeoutException if reaching a timeout while reading
    */
-  public String readln(long timeout) throws IOException,TimeoutException {
+  public String readln(long timeout) throws IOException, TimeoutException {
     StringBuilder ret = new StringBuilder();
     long start = System.currentTimeMillis();
     try {
@@ -926,7 +931,7 @@ public abstract class AbstractConnection {
           }
         }
       }
-    } catch(IOException ioe) {
+    } catch (IOException ioe) {
       if (timeout <= (System.currentTimeMillis() - start)) {
         // timeout has been reached
         LOGGER.log(Level.INFO, "timeout has been reached while waiting for input");
@@ -977,7 +982,7 @@ public abstract class AbstractConnection {
     }
   }
 
-  protected void closeConnection() throws IOException  {
+  protected void closeConnection() throws IOException {
     if (getEngine() != null && isTls()) {
       do_teardown(1000);
     }
@@ -986,7 +991,7 @@ public abstract class AbstractConnection {
     }
   }
 
-  protected void handleEndOfStream() throws IOException  {
+  protected void handleEndOfStream() throws IOException {
     if (getEngine() != null) {
       try {
         getEngine().closeInbound();

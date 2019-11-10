@@ -24,6 +24,7 @@ package net.messagevortex.transport.imap;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +35,7 @@ import java.util.logging.Logger;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.sasl.Sasl;
 import javax.security.sasl.SaslClient;
+
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.transport.ClientConnection;
 import net.messagevortex.transport.Credentials;
@@ -93,6 +95,8 @@ public class ImapClient extends ClientConnection {
    *
    * @param creds The credentials to be used for the authentication
    * @return true if successful
+   *
+   * @throws TimeoutException if reaching a timeout while reading
    */
   public boolean authenticate(Credentials creds) throws TimeoutException {
     // FIXME this dummy always selects plain
@@ -107,6 +111,8 @@ public class ImapClient extends ClientConnection {
    * @param creds the credentials to be used
    * @param mech the SASL mechanism to be used
    * @return true if successful
+   *
+   * @throws TimeoutException if reaching a timeout while reading
    */
   public boolean authenticate(Credentials creds, SaslMechanisms mech) throws TimeoutException {
     CallbackHandler clientHandler = new SaslClientCallbackHandler(creds);
@@ -142,7 +148,7 @@ public class ImapClient extends ClientConnection {
         c = Base64.decode(saslchallenge.substring(2));
       }
       byte[] saslReply = sc.evaluateChallenge(c);
-      String reply = new String(Base64.encode(saslReply));
+      String reply = new String(Base64.encode(saslReply), StandardCharsets.UTF_8);
       LOGGER.log(Level.INFO, "sending reply to server (" + saslReply.length + " bytes;" + reply
               + ")");
       writeln(reply);

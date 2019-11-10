@@ -24,8 +24,11 @@ package net.messagevortex;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
@@ -55,6 +58,8 @@ public class Config {
 
   private List<String> sections = new ArrayList<>();
   private List<String> fields = new ArrayList<>();
+
+  private String resourceFilename;
 
   interface Converters {
 
@@ -378,17 +383,32 @@ public class Config {
     // All OK
   }
 
-  protected Config(String ressourceFile) throws IOException {
+  /***
+   * <p>Creates an config object following the spec given in the resource file.</p>
+   *
+   * @param ressourceFile filename of the resource file
+   * @throws IOException if an error happens while reading the file
+   */
+  public Config(String ressourceFile) throws IOException {
     this();
     if (ressourceFile != null) {
       readRessources(ressourceFile);
     }
   }
 
-  private void readRessources(String ressourceFile) throws IOException {
+  private void setResouceFilename(String ressouceFilename) {
+    this.resourceFilename = ressouceFilename;
+  }
+
+  public String getResouceFilename() {
+    return this.resourceFilename;
+  }
+
+  private void readRessources(String resourceFile) throws IOException {
+    setResouceFilename(resourceFile);
     try (BufferedReader reader = new BufferedReader(
             new InputStreamReader(
-                    this.getClass().getClassLoader().getResourceAsStream(ressourceFile),
+                    this.getClass().getClassLoader().getResourceAsStream(resourceFile),
                     StandardCharsets.UTF_8))) {
       String line = reader.readLine();
       while (line != null) {
@@ -522,7 +542,7 @@ public class Config {
         configData.put(id.toLowerCase(), ele);
         ele.setDefaultValue(dval ? "true" : "false");
         LOGGER.log(Level.FINE, "Created boolean config variable " + id.toLowerCase());
-        this.fields.add(id);
+        this.fields.add(id.toLowerCase());
       } else {
         throw new IllegalArgumentException("id \"" + id + "\" is already defined");
       }
@@ -600,7 +620,7 @@ public class Config {
         LOGGER.log(Level.FINE,
                 "Created numeric config variable " + id.toLowerCase() + "[numeric]=" + dval
         );
-        this.fields.add(id);
+        this.fields.add(id.toLowerCase());
       } else {
         throw new IllegalArgumentException("id \"" + id + "\" is already defined");
       }
@@ -622,7 +642,7 @@ public class Config {
         LOGGER.log(Level.FINE,
                 "Created section config variable " + id.toLowerCase() + "[section]=" + dval
         );
-        this.fields.add(id);
+        this.fields.add(id.toLowerCase());
       } else {
         throw new IllegalArgumentException("id \"" + id + "\" is already defined");
       }
@@ -696,7 +716,7 @@ public class Config {
         configData.put(id.toLowerCase(), ele);
         ele.setDefaultValue(dval);
         LOGGER.log(Level.FINE, "Created section_list config variable " + id.toLowerCase());
-        this.fields.add(id);
+        this.fields.add(id.toLowerCase());
         return true;
       } else {
         return false;
@@ -811,8 +831,8 @@ public class Config {
     if (ele == null) {
       throw new NullPointerException(
               "unable to get value for \"" + id
-              + "\" from config subsystem (unknown element in section \""
-              + section + "\")"
+                      + "\" from config subsystem (unknown element in section \""
+                      + section + "\")"
       );
     }
     ConfigType type = ele.getType();
@@ -842,10 +862,28 @@ public class Config {
         configData.put(id.toLowerCase(), ele);
         ele.setDefaultValue(dval);
         LOGGER.log(Level.FINE, "Created String config variable " + id.toLowerCase());
-        this.fields.add(id);
+        this.fields.add(id.toLowerCase());
         return true;
       } else {
         return false;
+      }
+    }
+  }
+
+  /***
+   * <p>Removes a config value declaration from the config container.</p>
+   *
+   * @param id the id of the value to be removed
+   * @return true if the id did exist
+   */
+  public boolean removeConfigValue(String id) {
+    synchronized (configData) {
+      if (configData.get(id.toLowerCase()) == null) {
+        return false;
+      } else {
+        configData.remove(id.toLowerCase());
+        this.fields.remove(id.toLowerCase());
+        return true;
       }
     }
   }
@@ -920,14 +958,18 @@ public class Config {
     Pattern sectionPat = Pattern.compile("^\\s*\\[([a-zA-Z0-9_\\-]+)\\]\\s*$");
     Pattern keyValuePat = Pattern.compile("^\\s*([^=]+)\\s*=\\s*(.*)\\s*$");
 
-    if (this.getClass().getClassLoader().getResourceAsStream(filename) == null) {
-      throw new IOException(" unable to locate file \"" + filename + "\"");
+    InputStream fstream = this.getClass().getClassLoader().getResourceAsStream(filename);
+    if (fstream == null) {
+      try {
+        fstream = new FileInputStream(filename);
+      } catch (FileNotFoundException fnfe) {
+        LOGGER.log(Level.WARNING, "Unable to load config file \"" + filename + "\"", fnfe);
+        throw fnfe;
+      }
     }
 
     try (BufferedReader br = new BufferedReader(
-            new InputStreamReader(
-                    this.getClass().getClassLoader().getResourceAsStream(filename),
-                    StandardCharsets.UTF_8))) {
+            new InputStreamReader(fstream, StandardCharsets.UTF_8))) {
       String line;
       String section = null;
       int lineCounter = 1;
@@ -1017,20 +1059,12 @@ public class Config {
    */
   public String getDescription(String id) {
     ConfigElement c = configData.get(id.toLowerCase());
-    if (c == null) {
-      return null;
-    } else {
-      return c.getDescription();
-    }
+    return c == null ? null : c.getDescription();
   }
 
   private String getValue(String section, String id) {
     ConfigElement c = configData.get(id.toLowerCase());
-    if (c == null) {
-      return null;
-    } else {
-      return c.getValue(section);
-    }
+    return c == null ? null : c.getValue(section);
   }
 
   /**
@@ -1041,15 +1075,17 @@ public class Config {
    */
   public String getDefaultValue(String id) {
     ConfigElement c = configData.get(id.toLowerCase());
-    if (c == null) {
-      return null;
-    } else {
-      return c.getDefaultValue();
-    }
+    return c == null ? null : c.getDefaultValue();
   }
 
   private void dumpSection(String section, Writer w, boolean withComments) throws IOException {
     for (String field : fields) {
+      synchronized (this.configData) {
+        if (this.configData.get(field.toLowerCase()) == null) {
+          throw new IOException("inconsistency deteceted in internal storage when querying field "
+                  + field);
+        }
+      }
       if (withComments) {
         w.write("// ******************************************************************************"
                 + System.lineSeparator());

@@ -23,6 +23,7 @@ package net.messagevortex.transport.imap;
 // ************************************************************************************
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.security.Security;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +34,7 @@ import javax.security.auth.callback.CallbackHandler;
 import javax.security.sasl.Sasl;
 import javax.security.sasl.SaslException;
 import javax.security.sasl.SaslServer;
+
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.transport.RandomString;
 import net.messagevortex.transport.SaslMechanisms;
@@ -136,8 +138,9 @@ public class ImapCommandAuthenticate extends ImapCommand {
         LOGGER.log(Level.INFO, "sending challenge");
         if (saslChallenge.length > 0) {
           LOGGER.log(Level.INFO, "sending challenge (" + saslChallenge.length + " bytes; "
-                  + new String(Base64.encode(saslChallenge)) + ")");
-          line.getConnection().writeln("+ " + new String(Base64.encode(saslChallenge)));
+                  + new String(Base64.encode(saslChallenge), StandardCharsets.UTF_8) + ")");
+          line.getConnection().writeln("+ "
+                  + new String(Base64.encode(saslChallenge), StandardCharsets.UTF_8));
         } else {
           LOGGER.log(Level.INFO, "sending empty challenge");
           line.getConnection().writeln("+ ");
@@ -147,7 +150,7 @@ public class ImapCommandAuthenticate extends ImapCommand {
           String reply = line.getConnection().readln(300000);
           LOGGER.log(Level.INFO, "got reply (" + reply + ")");
           saslReply = Base64.decode(reply);
-        } catch(TimeoutException te) {
+        } catch (TimeoutException te) {
           throw new IOException("Tmeout while wating for sasl challenge reply", te);
         }
       }

@@ -65,45 +65,27 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
   private static final String TMP_PREFIX = "MessageVortexPrecalc";
 
   private static final java.util.logging.Logger LOGGER;
-
-  static {
-    LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-  }
-
-  @CommandLine.Option(names = {"--element"},
-          description = "the affected element")
-  private int elementIndex = -1;
-
-  @CommandLine.Option(names = {"--value"},
-          description = "number of elements for a key (requires --element)")
-  private int value = -1;
-
+  private static final boolean DISABLE_CACHE = false;
   @CommandLine.Option(names = {"--stopIfFull"},
           description = "stop the cache calculation if the cache is full")
   private static boolean stopIfFull = false;
-
   private static AsymmetricKeyCache cache = new AsymmetricKeyCache();
-
-
-  private static final boolean DISABLE_CACHE = false;
   private static double dequeueProbability = 1.0;
-
   private static File tempdir = null;
-
   private static long lastSaved = 0;
   private static boolean firstWarning = true;
   private static volatile InternalThread runner = null;
-
-  @CommandLine.Option(names = {"--cacheFileName", "-f"},
+  @CommandLine.Option(names = {"--cacheFileName" },
           description = "filename of the cache file", required = true)
   private static String filename = null;
-
   private static int incrementor = 128;
-
   /* number of threads to use */
   private static int numThreads = Math.max(2, Runtime.getRuntime().availableProcessors() - 1);
   private static ThreadPoolExecutor pool;
 
+  static {
+    LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+  }
 
   static {
     BlockingQueue<Runnable> queue = new LinkedTransferQueue<Runnable>() {
@@ -152,185 +134,12 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
     });
   }
 
-  private static class InternalThread extends Thread {
-
-    private static int counter = 0;
-
-    private volatile boolean shutdown = false;
-    private volatile boolean stopIfFull;
-
-    InternalThread(boolean stopIfFull) {
-      this.stopIfFull = stopIfFull;
-      // This thread may die safely
-      setDaemon(true);
-
-      // ... and should run at very low priority
-      setPriority(MIN_PRIORITY);
-
-      // we start the daemon as soon as we can
-      setName(TMP_PREFIX + " manager " + (counter++));
-      start();
-      LOGGER.log(Level.INFO, "cache manager \"" + getName() + "\" started");
-    }
-
-    /***
-     * <p>Tells the process to shutdown asap.</p>
-     */
-    void shutdown() {
-      pool.shutdown();
-
-      // wait maximum 3 seconds for shutdown then abort key calculation
-      try {
-        pool.awaitTermination(3, TimeUnit.SECONDS);
-        pool.shutdownNow();
-      } catch (InterruptedException ie) {
-        pool.shutdownNow();
-        Thread.currentThread().interrupt();
-      }
-      shutdown = true;
-    }
-
-    public void run() {
-      pool.allowCoreThreadTimeOut(true);
-      while (!shutdown) {
-        // get a parameter set to be calculated
-        AlgorithmParameter p = cache.getSpeculativeParameter();
-
-        // calculate parameter set (if any)
-        if (p != null) {
-          // calculate key
-          calculateKey(p);
-
-          // merge precalculated keys (if applicable)
-          if (tempdir == null && mergePrecalculatedKeys()) {
-            try {
-              save();
-            } catch (IOException e) {
-              LOGGER.log(Level.WARNING, "Error saving cache (1)", e);
-            }
-          } else if (tempdir != null) {
-            try {
-              save();
-            } catch (IOException e) {
-              LOGGER.log(Level.WARNING, "Error saving cache (2)", e);
-            }
-          }
-        } else {
-          if (!stopIfFull) {
-            try {
-              LOGGER.log(Level.INFO, "cache is idle (" + String.format("%2.3f",
-                      cache.getCacheFillGrade() * 100) + "%) ... sleeping for a short while "
-                      + "and waiting for requests");
-              Thread.sleep(10000);
-            } catch (InterruptedException ie) {
-              Thread.currentThread().interrupt();
-            }
-          }
-        }
-
-      }
-
-    }
-
-    private boolean mergePrecalculatedKeys() {
-      boolean ret = false;
-      // get list of files to merge
-      String targetFile;  // fileThatYouWantToFilter
-      List<File> listOfFiles = new ArrayList<>();
-      for (File tfile : (new File(System.getProperty("java.io.tmpdir"))).listFiles()) {
-        if (tfile.isFile()) {
-          targetFile = tfile.getName();
-          if (targetFile.startsWith(TMP_PREFIX) && targetFile.endsWith(".key")) {
-            listOfFiles.add(tfile);
-          }
-        }
-      }
-      // add keys to cache
-      for (File f : listOfFiles) {
-        try {
-          //  merge only if one key cache is below 40%
-          double lowest = cache.getLowestCacheSize();
-          if (lowest < 0.4) {
-            load(f.getAbsolutePath(), true);
-            ret = f.delete();
-          } else {
-            // abort as soon as lowest cache element is above 40%
-            return ret;
-          }
-        } catch (IOException e) {
-          LOGGER.log(Level.WARNING, "Error merging file " + f.getAbsolutePath(), e);
-        }
-        ret &= f.delete();
-      }
-      return ret;
-    }
-
-    private void calculateKey(AlgorithmParameter p) {
-      try {
-        // prepare thread
-        Thread t = runCalculatorThread(p);
-        t.setName(TMP_PREFIX + " precalculation");
-        t.setPriority(Thread.MIN_PRIORITY);
-        t.setDaemon(true);
-        pool.execute(t);
-        LOGGER.log(Level.FINE, "Added key precalculator for " + p + " (pool size:"
-                + pool.getQueue().size() + "; thread count (min/current/max):"
-                + pool.getCorePoolSize() + "/" + pool.getActiveCount() + "/"
-                + pool.getMaximumPoolSize() + ")");
-
-        // Wait a while for existing tasks to terminate
-        if (pool.getQueue().size() > Math.max(incrementor * 2, numThreads)) {
-          pool.awaitTermination(10, TimeUnit.SECONDS);
-          if (tempdir != null) {
-            cache.showStats();
-            LOGGER.log(Level.INFO, "|Running threads " + pool.getActiveCount() + " of "
-                    + pool.getQueue().size());
-          }
-
-          // calculate new incrementor
-          if (pool.getQueue().size() > incrementor
-                  && pool.getQueue().size() < incrementor * 2 && tempdir != null) {
-            incrementor = Math.max(1, incrementor / 2);
-            LOGGER.log(Level.INFO, "lowered incrementor to " + incrementor);
-          } else if (pool.getQueue().size() < numThreads && tempdir != null) {
-            incrementor = incrementor * 2;
-            LOGGER.log(Level.INFO, "raised incrementor to " + incrementor);
-          }
-
-          // store cache
-          save();
-        }
-
-      } catch (IOException ioe) {
-        LOGGER.log(Level.INFO, "exception while storing file", ioe);
-      } catch (InterruptedException ie) {
-        // (Re-)Cancel if current thread also interrupted
-        pool.shutdownNow();
-        // Preserve interrupt status
-        Thread.currentThread().interrupt();
-      }
-    }
-
-    private Thread runCalculatorThread(final AlgorithmParameter param) {
-      return new Thread() {
-        public void run() {
-          LOGGER.log(Level.FINE, "precalculating key " + param + "");
-          try {
-            long start = System.currentTimeMillis();
-            AsymmetricKey ak = new AsymmetricKey(new AlgorithmParameter(param), false);
-            cache.setCalcTime(new AlgorithmParameter(param), System.currentTimeMillis() - start);
-
-            // put in cache
-            assert ak != null;
-            cache.push(ak);
-          } catch (IOException ioe) {
-            LOGGER.log(Level.SEVERE, "got unexpected exception", ioe);
-          }
-        }
-
-      };
-    }
-  }
+  @CommandLine.Option(names = {"--element"},
+          description = "the affected element")
+  private int elementIndex = -1;
+  @CommandLine.Option(names = {"--value"},
+          description = "number of elements for a key (requires --element)")
+  private int value = -1;
 
   private AsymmetricKeyPreCalculator() {
     // just a dummy to hide the default constructor
@@ -398,7 +207,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
           // this cache does not yet exist schedule for creation
           // is done by peeking first time
           cache.requestCacheIncrease(ap);
-          LOGGER.log(Level.FINE, "added new key type to cache ");
+          LOGGER.log(Level.FINE, "added new key type to cache (" + ap.toString() + ")");
           return null;
         }
       }
@@ -470,6 +279,17 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
     return ret;
   }
 
+  @CommandLine.Command(name = "run", description = "pre-populates the cache")
+  public static void fillCache() {
+    stopIfFull=true;
+    startOrStopThread();
+    try {
+      runner.join();
+    } catch(InterruptedException ie) {
+      LOGGER.log(Level.WARNING,"Got unexpected exception",ie);
+    }
+  }
+
   private static void startOrStopThread() {
     // check if we have to start or stop
     synchronized (cache) {
@@ -521,7 +341,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
         synchronized (cache) {
           cache.store(filename + ".tmp");
           lastSaved = System.currentTimeMillis();
-          if (tempdir != null && cache.getCacheFillGrade() > 0.9) {
+          if (tempdir != null && cache.getCacheFillGrade() >= 0.999) {
             // move file as temp file and clear cache
             String fn = File.createTempFile(TMP_PREFIX, ".key").getAbsolutePath();
             LOGGER.log(Level.INFO, "stored chunk to file \"" + fn + "\" to pick up");
@@ -676,5 +496,190 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
     cache.showStats();
     setCacheFileName(null);
     System.exit(0);
+  }
+
+  private static class InternalThread extends Thread {
+
+    private static int counter = 0;
+
+    private volatile boolean shutdown = false;
+    private volatile boolean stopIfFull;
+
+    InternalThread(boolean stopIfFull) {
+      this.stopIfFull = stopIfFull;
+      // This thread may die safely
+      setDaemon(true);
+
+      // ... and should run at very low priority
+      setPriority(MIN_PRIORITY);
+
+      // we start the daemon as soon as we can
+      setName(TMP_PREFIX + " manager " + (counter++));
+      start();
+      LOGGER.log(Level.INFO, "cache manager \"" + getName() + "\" started");
+    }
+
+    /***
+     * <p>Tells the process to shutdown asap.</p>
+     */
+    void shutdown() {
+      pool.shutdown();
+
+      // wait maximum 3 seconds for shutdown then abort key calculation
+      try {
+        pool.awaitTermination(3, TimeUnit.SECONDS);
+        pool.shutdownNow();
+      } catch (InterruptedException ie) {
+        pool.shutdownNow();
+        Thread.currentThread().interrupt();
+      }
+      shutdown = true;
+    }
+
+    public void run() {
+      pool.allowCoreThreadTimeOut(true);
+      while (!shutdown) {
+        // get a parameter set to be calculated
+        AlgorithmParameter p = cache.getSpeculativeParameter();
+
+        // calculate parameter set (if any)
+        if (p != null) {
+          // calculate key
+          calculateKey(p);
+
+          // merge precalculated keys (if applicable)
+          if (tempdir == null && mergePrecalculatedKeys()) {
+            try {
+              save();
+            } catch (IOException e) {
+              LOGGER.log(Level.WARNING, "Error saving cache (1)", e);
+            }
+          } else if (tempdir != null) {
+            try {
+              save();
+            } catch (IOException e) {
+              LOGGER.log(Level.WARNING, "Error saving cache (2)", e);
+            }
+          }
+        } else {
+          if (!stopIfFull) {
+            try {
+              LOGGER.log(Level.INFO, "cache is idle (" + String.format("%2.3f",
+                      cache.getCacheFillGrade() * 100) + "%) ... sleeping for a short while "
+                      + "and waiting for requests");
+              Thread.sleep(10000);
+            } catch (InterruptedException ie) {
+              Thread.currentThread().interrupt();
+            }
+          } else if(cache.getCacheFillGrade()>=0.999) {
+            LOGGER.log(Level.INFO, "cache is full(" + String.format("%2.3f",
+                    cache.getCacheFillGrade() * 100) + "%) ... shutting down");
+            shutdown=true;
+          }
+        }
+
+      }
+
+    }
+
+    private boolean mergePrecalculatedKeys() {
+      boolean ret = false;
+      // get list of files to merge
+      String targetFile;  // fileThatYouWantToFilter
+      List<File> listOfFiles = new ArrayList<>();
+      File[] fl = (new File(System.getProperty("java.io.tmpdir"))).listFiles();
+      for (File tfile : fl == null ? new File[0] : fl) {
+        if (tfile.isFile()) {
+          targetFile = tfile.getName();
+          if (targetFile.startsWith(TMP_PREFIX) && targetFile.endsWith(".key")) {
+            listOfFiles.add(tfile);
+          }
+        }
+      }
+      // add keys to cache
+      for (File f : listOfFiles) {
+        try {
+          //  merge only if one key cache is below 40%
+          double lowest = cache.getLowestCacheSize();
+          if (lowest < 0.4) {
+            load(f.getAbsolutePath(), true);
+            ret = f.delete();
+          } else {
+            // abort as soon as lowest cache element is above 40%
+            return ret;
+          }
+        } catch (IOException e) {
+          LOGGER.log(Level.WARNING, "Error merging file " + f.getAbsolutePath(), e);
+        }
+        ret &= f.delete();
+      }
+      return ret;
+    }
+
+    private void calculateKey(AlgorithmParameter p) {
+      try {
+        // prepare thread
+        Thread t = runCalculatorThread(p);
+        t.setName(TMP_PREFIX + " precalculation");
+        t.setPriority(Thread.MIN_PRIORITY);
+        t.setDaemon(true);
+        pool.execute(t);
+        LOGGER.log(Level.FINE, "Added key precalculator for " + p + " (pool size:"
+                + pool.getQueue().size() + "; thread count (min/current/max):"
+                + pool.getCorePoolSize() + "/" + pool.getActiveCount() + "/"
+                + pool.getMaximumPoolSize() + ")");
+
+        // Wait a while for existing tasks to terminate
+        if (pool.getQueue().size() > Math.max(incrementor * 2, numThreads)) {
+          pool.awaitTermination(10, TimeUnit.SECONDS);
+          if (tempdir != null) {
+            cache.showStats();
+            LOGGER.log(Level.INFO, "|Running threads " + pool.getActiveCount() + " of "
+                    + pool.getQueue().size());
+          }
+
+          // calculate new incrementor
+          if (pool.getQueue().size() > incrementor
+                  && pool.getQueue().size() < incrementor * 2 && tempdir != null) {
+            incrementor = Math.max(1, incrementor / 2);
+            LOGGER.log(Level.INFO, "lowered incrementor to " + incrementor);
+          } else if (pool.getQueue().size() < numThreads && tempdir != null) {
+            incrementor = incrementor * 2;
+            LOGGER.log(Level.INFO, "raised incrementor to " + incrementor);
+          }
+
+          // store cache
+          save();
+        }
+
+      } catch (IOException ioe) {
+        LOGGER.log(Level.INFO, "exception while storing file", ioe);
+      } catch (InterruptedException ie) {
+        // (Re-)Cancel if current thread also interrupted
+        pool.shutdownNow();
+        // Preserve interrupt status
+        Thread.currentThread().interrupt();
+      }
+    }
+
+    private Thread runCalculatorThread(final AlgorithmParameter param) {
+      return new Thread() {
+        public void run() {
+          LOGGER.log(Level.FINE, "precalculating key " + param + "");
+          try {
+            long start = System.currentTimeMillis();
+            AsymmetricKey ak = new AsymmetricKey(new AlgorithmParameter(param), false);
+            cache.setCalcTime(new AlgorithmParameter(param), System.currentTimeMillis() - start);
+
+            // put in cache
+            assert ak != null;
+            cache.push(ak);
+          } catch (IOException ioe) {
+            LOGGER.log(Level.SEVERE, "got unexpected exception", ioe);
+          }
+        }
+
+      };
+    }
   }
 }
