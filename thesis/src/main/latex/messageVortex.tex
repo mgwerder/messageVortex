@@ -1,9 +1,9 @@
 % !TeX spellcheck = en_US
 
-\documentclass[a4paper,appendixprefix,pdfusetitle,twocolumn,fontsize=8pt,final]{scrbook}
+\documentclass[a4paper,appendixprefix,pdfusetitle,twocolumn,fontsize=8pt,draft,DIV=calc]{scrbook}
 %add attachdocs to attach all documents
 % add openany to avoid empty pages
-\usepackage{gitinfo}
+%\usepackage{gitinfo}
 
 % Make C&P work
 \usepackage{cmap}
@@ -67,7 +67,7 @@
 	pdfkeywords={Messaging, Anonymity, SMTP, Message Vortex},
 	pdfcontactemail={martin.gwerder@fhnw.ch},
 	pdflicenseurl={http://creativecommons.org/licenses/by-nc-nd/3.0/ch/},
-	pdfcopyright={"Creative Commons Attribution-NonCommercial-NoDerivatives 3.0 Switzerland" (CC BY-NC-ND 3.0 CH)}
+	pdfcopyright={Creative Commons Attribution-NonCommercial-NoDerivatives 3.0 Switzerland (CC BY-NC-ND 3.0 CH)}
 }
 \makeatother
 
@@ -92,8 +92,8 @@
 \pdfinclusioncopyfonts=1
 
 % enable graphics inclusion
-\usepackage[final]{graphicx}
-
+%\usepackage[final]{graphicx}
+\PassOptionsToPackage{final}{graphicx}
 \usepackage{xcolor}
 
 \usepackage{xstring}
@@ -444,6 +444,8 @@
 %\SetWatermarkText{Draft}
 %\SetWatermarkColor[rgb]{1,0,0}
 %\SetWatermarkScale{2}
+%\newwatermark[pagex={1},color=red!50,angle=45,scale=3,xpos=0,ypos=0,disablegeometry]{DRAFT}
+\usepackage{ifdraft}
 \begin{document}%
 %
 \frontmatter%
