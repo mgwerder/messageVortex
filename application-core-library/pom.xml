@@ -50,6 +50,7 @@
 
         <izpack.version>5.1.3</izpack.version>
         <izpack.staging>${project.build.directory}/staging</izpack.staging>
+        <izpack.src>${basedir}/src/main/izpack/</izpack.src>
 
         <git-commit-id-plugin.version>2.2.6</git-commit-id-plugin.version>
         <git.commit.id>none</git.commit.id>
@@ -478,20 +479,20 @@
                             <headerType>gui</headerType>
                             <dontWrapJar>false</dontWrapJar>
                             <outfile>${project.build.directory}/MessageVortex-package-installer.exe</outfile>
-                            <jar>${project.build.directory}/MessageVortex-package-installer.jar</jar>
+                            <jar>${basedir}/target/MessageVortex-package-installer.jar</jar>
                             <objs>
-                                <obj>${izpack.staging}/resources/w32api/crt2.o</obj>
-                                <obj>${izpack.staging}/resources/head/guihead.o</obj>
-                                <obj>${izpack.staging}/resources/head/head.o</obj>
+                                <obj>${izpack.staging}/resources/launch4j/w32api/crt2.o</obj>
+                                <obj>${izpack.staging}/resources/launch4j/head/guihead.o</obj>
+                                <obj>${izpack.staging}/resources/launch4j/head/head.o</obj>
                             </objs>
                             <libs>
-                                <lib>${izpack.staging}/resources/w32api/libmingw32.a</lib>
-                                <lib>${izpack.staging}/resources/w32api/libgcc.a</lib>
-                                <lib>${izpack.staging}/resources/w32api/libmsvcrt.a</lib>
-                                <lib>${izpack.staging}/resources/w32api/libkernel32.a</lib>
-                                <lib>${izpack.staging}/resources/w32api/libuser32.a</lib>
-                                <lib>${izpack.staging}/resources/w32api/libadvapi32.a</lib>
-                                <lib>${izpack.staging}/resources/w32api/libshell32.a</lib>
+                                <lib>${izpack.staging}/resources/launch4j/w32api/libmingw32.a</lib>
+                                <lib>${izpack.staging}/resources/launch4j/w32api/libgcc.a</lib>
+                                <lib>${izpack.staging}/resources/launch4j/w32api/libmsvcrt.a</lib>
+                                <lib>${izpack.staging}/resources/launch4j/w32api/libkernel32.a</lib>
+                                <lib>${izpack.staging}/resources/launch4j/w32api/libuser32.a</lib>
+                                <lib>${izpack.staging}/resources/launch4j/w32api/libadvapi32.a</lib>
+                                <lib>${izpack.staging}/resources/launch4j/w32api/libshell32.a</lib>
                             </libs>
                             <icon>${izpack.staging}/resources/MessageVortexLogo_128.ico</icon>
                             <!--<classPath>
@@ -500,11 +501,10 @@
                                 <preCp>anything</preCp>
                             </classPath>-->
                             <jre>
-                                <path></path>
+                                <path>${java.home}</path>
                                 <bundledJre64Bit>false</bundledJre64Bit>
                                 <bundledJreAsFallback>false</bundledJreAsFallback>
                                 <minVersion>1.8.0</minVersion>
-                                <maxVersion></maxVersion>
                                 <jdkPreference>preferJre</jdkPreference>
                                 <runtimeBits>64/32</runtimeBits>
                             </jre>
