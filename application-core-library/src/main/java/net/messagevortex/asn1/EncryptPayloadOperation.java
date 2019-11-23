@@ -30,7 +30,31 @@ public class EncryptPayloadOperation extends AbstractCryptPayloadOperation imple
 
   public static final long serialVersionUID = 100000000029L;
 
+  /***
+   * <p>This is an empty constructor for template instanciation.</p>
+   */
   EncryptPayloadOperation() {
+    // empty constructor for template instanciation
+  }
+
+  /***
+   * <p>Create a functional encryption operation.</p>
+   *
+   * @param sourceBlock the block in the workspace to be encrypted
+   * @param targetBlock the resulting block in the workspace
+   * @param key the key to be applied (null for generating a random key
+   *
+   * @throws IOException if key generation fails
+   */
+  public EncryptPayloadOperation(int sourceBlock,int targetBlock, SymmetricKey key)
+          throws IOException {
+    if (key == null) {
+      key = new SymmetricKey();
+    }
+    setTagNumber(ENCRYPT_PAYLOAD);
+    this.originalId = sourceBlock;
+    this.newId = targetBlock;
+    this.key = key;
   }
 
   /***

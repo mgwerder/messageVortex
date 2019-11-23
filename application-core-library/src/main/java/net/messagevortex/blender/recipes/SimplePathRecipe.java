@@ -2,7 +2,7 @@ package net.messagevortex.blender.recipes;
 
 import java.util.List;
 import net.messagevortex.asn1.IdentityStoreBlock;
-import net.messagevortex.asn1.RoutingBlock;
+import net.messagevortex.asn1.RoutingCombo;
 
 public class SimplePathRecipe extends BlenderRecipe {
 
@@ -12,21 +12,18 @@ public class SimplePathRecipe extends BlenderRecipe {
 
   @Override
   public boolean isAppliable(List<IdentityStoreBlock> anonSet) {
-    if (anonSet != null && anonSet.size() > 3) {
-      return true;
-    } else {
-      return false;
-    }
+    return (anonSet != null && anonSet.size() > 3);
   }
 
   @Override
-  public RoutingBlock applyRecipe(List<IdentityStoreBlock> anonSet, IdentityStoreBlock from,
+  public RoutingCombo applyRecipe(List<IdentityStoreBlock> anonSet, IdentityStoreBlock from,
                                   IdentityStoreBlock to) {
     // creating a graph
 
     // selecting routes
 
     //selecting operations
+
     //building and returning routing block
     return null;
   }

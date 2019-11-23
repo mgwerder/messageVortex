@@ -32,7 +32,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.Vector;
 import net.messagevortex.asn1.IdentityStoreBlock;
-import net.messagevortex.asn1.RoutingBlock;
+import net.messagevortex.asn1.RoutingCombo;
 
 /**
  * <p>Represents the graphs between the nodes.</p>
@@ -358,7 +358,7 @@ public class GraphSet implements Comparator<GraphSet>, Comparable<GraphSet>, Ite
     return sb.toString();
   }
 
-  public RoutingBlock getRoutingBlock() {
+  public RoutingCombo getRoutingBlock() {
     // FIXME implementation missing
     return null;
   }

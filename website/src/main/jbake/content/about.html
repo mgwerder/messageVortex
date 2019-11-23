@@ -1,45 +1,58 @@
-title=About
-date=2018-05-02
-type=page
+title=About 
+date=2018-05-02 
+type=page 
 status=published
-~~~~~~
-<h1>What is it?</h1>
-<p>
-  <img src="/images/MessageVortexLogo_big.png" style="float:right;max-width:200px;min-width:30%;background-color:#fff;border: 2px solid black;"/>
-  MessageVortex is a protocol which is aimed to maintain the anonymity of sender and 
-  recipient of a message towards third parties. Unlike other protocols, it does not 
-  provide an own transport protocol. Instead, it hides in common transport 
+~~~~~~ 
+<h1>What is it?</h1> 
+
+<p> 
+  <img src="/images/MessageVortexLogo_big.png" style="float:right;max-width:200px;min-width:30%;background-color:#fff;border: 2px solid black;"/> 
+  MessageVortex is a protocol which is aimed to maintain the
+  anonymity of sender and recipient of a message towards third parties. In
+  academia, this concept is called unlinkability. Unlike other protocols, it does
+  not provide its transport protocol. Instead, it hides in common transport
   facilities such as email (SMTP/IMAP) or chat (XMPP).
+
 </p>
-<p>
-  This is done by something you might call as onionized mixing. 
-  &quot;Mixing&quot; is not entirely true as the protocol does more.
-  It adds redundancy information to the protocol while sending the message in chunks.
-  This redundancy makes it next to impossible for someone to follow the message flow.
+
+<p> 
+  The protocol does provide the unlinkability by chucking the original message
+  into pieces. Then it is passed from node to node. On each node, we apply
+  operations very similar to the ones used in fault-tolerant disk systems. Any
+  VortexMessage no matter how big or small may carry parts or the full message. In
+  one routing node (the recipient) the message is assembled and thus readable for
+  the recipient. We refer the whole routing process onionized mixing. 
+  &quot;Mixing&quot; is  not entirely accurate as the protocol does more. It adds 
+  redundancy information to the protocol while sending the message in chunks. This 
+  redundancy makes it next to impossible for someone to follow the message flow. 
 </p>
+
 <h1 style="float:clear;">Why should we use just another protocol?</h1>
 <p>
-What is so special about the protocol you might ask. 
-First, it has some unique properties due to the fact that it hides within other protocols. 
-Therefore, all &quot;ordinary users&quot; of the protocol do improve hiding as they increase the mass to be analyzed. 
-Another unique property is that it relays not on any trust into a central infrastructure. 
-Infact, we assume malicious nodes.
-Third, any message transferring account may be used to send VortexMessages. 
-No need to buid specialized servers. 
-A smartphone or an ordinary PC can do it.
+  What is so special about the protocol you might ask. First, it has some unique 
+  properties because it hides within other protocols. Therefore, all "ordinary 
+  users" of the protocol do improve hiding as they increase the mass to be analyzed. 
+  Another unique property is that it relays not on any trust into a central 
+  infrastructure. In fact, we assume malicious nodes. Third, any message 
+  transferring account may be used to send VortexMessages. No need to build 
+  specialized servers. A smartphone or an ordinary PC can do it.
 </p>
+
 <h1>Where should I start?</h1>
 <p>
-Currently published is only the draft of the RFC document. 
-If you are interested in the projects source code, feel free to contact the website owner. 
-There is already a working (but not yet complete) implementation available.
+  Currently published is only the draft of the RFC document some academic work and 
+  an executable binary. If you are interested in the projects source code, feel free 
+  to contact the website owner. It should be released, but at this point, the code 
+  is still in desperate need of some massaging. There is already a working (but not 
+  yet complete) implementation for academic experiments available.
+</p>
+
+<p>
+  Just give it a try.
 </p>
 <p>
-A reference implementation in Java will be available in the download section soon. 
-Just give it a try.
-</p>
-<p>
-In the meantime feel free to read the RFC draft or the other docs. 
-They are becomming more and more stable. The protocol may be considered as final.
-<style="float:clear;"/>
+  Until the end user version is released, feel free to read the RFC draft or the 
+  other docs. They are becoming more and more stable. The protocol may be considered 
+  as final.
+  <style="float:clear;"/>
 </p>

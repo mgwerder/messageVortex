@@ -16,7 +16,7 @@ import net.messagevortex.asn1.IdentityBlock;
 import net.messagevortex.asn1.IdentityStore;
 import net.messagevortex.asn1.InnerMessageBlock;
 import net.messagevortex.asn1.PrefixBlock;
-import net.messagevortex.asn1.RoutingBlock;
+import net.messagevortex.asn1.RoutingCombo;
 import net.messagevortex.asn1.VortexMessage;
 import net.messagevortex.asn1.encryption.Algorithm;
 import net.messagevortex.asn1.encryption.SecurityLevel;
@@ -72,7 +72,7 @@ public class DummyBlendingTest implements BlendingReceiver {
       // this is expected behaviour
     }
     try {
-      VortexMessage v = new VortexMessage(new PrefixBlock(), new InnerMessageBlock(new PrefixBlock(), new IdentityBlock(), new RoutingBlock()));
+      VortexMessage v = new VortexMessage(new PrefixBlock(), new InnerMessageBlock(new PrefixBlock(), new IdentityBlock(), new RoutingCombo()));
       v.setDecryptionKey(new AsymmetricKey(Algorithm.RSA.getParameters(SecurityLevel.getDefault())));
       assertTrue("Failed sending message to different endpoint", dt[0].blendMessage(new BlendingSpec("martin@example.com1"), v));
       assertFalse("Failed sending message to unknown endpoint (unexpectedly succeeded)", dt[0].blendMessage(new BlendingSpec("martin@example.com-1"), v));

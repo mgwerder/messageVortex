@@ -112,9 +112,10 @@ public class SmtpConnection extends ClientConnection {
               // check for login
             } else if ("auth login".equals(command.toLowerCase())) {
               writeln("334 " + new String(
-                      Base64.encode("Username:".getBytes(StandardCharsets.UTF_8)))
-              );
-              String username = new String(Base64.decode(readln()));
+                      Base64.encode("Username:".getBytes(StandardCharsets.UTF_8)),
+                      StandardCharsets.UTF_8
+              ));
+              String username = new String(Base64.decode(readln()),StandardCharsets.UTF_8);
               Config.getDefault().getStringValue(cfgSection, "smtp_incomming_user");
               write("334 " + new String(
                       Base64.encode("Password:".getBytes(StandardCharsets.UTF_8))) + CRLF
@@ -135,7 +136,7 @@ public class SmtpConnection extends ClientConnection {
               // check for message body
             } else if ("data".equals(command.toLowerCase())) {
               if (envelopeFrom != null && envelopeTo != null) {
-                write("354 send the mail data, end with ." + CRLF);
+                write("354 send the mail data, end with CRLF.CRLF" + CRLF);
 
                 // get body until terminated with a line with a single dot
                 String l = null;
@@ -150,7 +151,9 @@ public class SmtpConnection extends ClientConnection {
                 // send message to blending layer
                 if (getReceiver() != null) {
                   LOGGER.log(Level.INFO, "Message passed to blender layer");
-                  getReceiver().gotMessage(new ByteArrayInputStream(sb.toString().getBytes()));
+                  getReceiver().gotMessage(new ByteArrayInputStream(
+                          sb.toString().getBytes(StandardCharsets.UTF_8))
+                  );
                 } else {
                   LOGGER.log(Level.WARNING, "blender layer unknown ... message discarded");
                 }

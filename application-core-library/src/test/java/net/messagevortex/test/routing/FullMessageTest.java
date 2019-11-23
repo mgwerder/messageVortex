@@ -14,7 +14,7 @@ import net.messagevortex.asn1.AsymmetricKey;
 import net.messagevortex.asn1.IdentityBlock;
 import net.messagevortex.asn1.InnerMessageBlock;
 import net.messagevortex.asn1.PrefixBlock;
-import net.messagevortex.asn1.RoutingBlock;
+import net.messagevortex.asn1.RoutingCombo;
 import net.messagevortex.asn1.SymmetricKey;
 import net.messagevortex.asn1.UsagePeriod;
 import net.messagevortex.asn1.VortexMessage;
@@ -47,7 +47,7 @@ public class FullMessageTest {
     blockIdentity.setSerial(42);
     blockIdentity.setReplay(84);
     blockIdentity.setUsagePeriod(new UsagePeriod(100));
-    RoutingBlock routing = message.getInnerMessage().getRouting();
+    RoutingCombo routing = message.getInnerMessage().getRouting();
     List<SymmetricKey> sk = new ArrayList<>();
     for (int i = 0; i < 20; i++) {
       sk.add(new SymmetricKey());

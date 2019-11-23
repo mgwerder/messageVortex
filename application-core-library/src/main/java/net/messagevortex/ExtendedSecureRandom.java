@@ -42,6 +42,22 @@ public class ExtendedSecureRandom {
   }
 
   /***
+   * <p>Returns an integer between low and up-1.</p>
+   *
+   * @param low the minimum value to be returned
+   * @param up the maximum value to be used
+   * @return a random integer value between low and up-1
+   *
+   * @throws IllegalArgumentException if low &gt;= up
+   */
+  public static final int nextInt(int low, int up) {
+    if (low >= up) {
+      throw new IllegalArgumentException("lower bound is not smaller than upper bound");
+    }
+    return low + sr.nextInt(up - low);
+  }
+
+  /***
    * <p>An array filled with random byte values.</p>
    *
    * @param array  the array to be filled

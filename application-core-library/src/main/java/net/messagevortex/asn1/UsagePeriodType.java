@@ -25,6 +25,17 @@ package net.messagevortex.asn1;
  * Created by martin.gwerder on 26.01.2018.
  */
 public enum UsagePeriodType {
-    ABSOLUTE,
-    RELATIVE
+  ABSOLUTE(2),
+  RELATIVE(3);
+
+  private int id;
+
+  UsagePeriodType(int id) {
+    this.id = id;
+  }
+
+  public int getId() {
+    return this.id;
+  }
+
 }

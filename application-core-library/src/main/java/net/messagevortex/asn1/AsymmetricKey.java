@@ -595,7 +595,11 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
       throw new NullPointerException("Public key may not be null");
     }
     byte[] old = publicKey;
-    publicKey = b;
+    if (b == null) {
+      publicKey = null;
+    } else {
+      publicKey = Arrays.copyOf(b, b.length);
+    }
     return old;
   }
 
@@ -616,7 +620,11 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
    */
   public byte[] setPrivateKey(byte[] b) {
     byte[] old = privateKey;
-    privateKey = b;
+    if (b == null) {
+      privateKey = null;
+    } else {
+      privateKey = Arrays.copyOf(b, b.length);
+    }
     return old;
   }
 

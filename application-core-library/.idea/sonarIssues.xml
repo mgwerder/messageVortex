@@ -58,6 +58,16 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/asn/MessageVortex-Operations.asn">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/asn/MessageVortex-Schema.asn">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/content/books/adminGuide.xml">
           <value>
             <set />
@@ -168,6 +178,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AssemblyBlock.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/AsymmetricKey.java">
           <value>
             <set />
@@ -223,6 +238,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/MapBlockOperation.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/Operation.java">
           <value>
             <set />
@@ -233,12 +253,22 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/RoutingCombo.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/UsagePeriod.java">
           <value>
             <set />
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/VortexMessage.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/asn1/encryption/Algorithm.java">
           <value>
             <set />
           </value>
@@ -303,6 +333,36 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/commandline/CommandLineHandlerCache.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/commandline/CommandLineHandlerCacheCalculate.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/commandline/CommandLineHandlerCipher.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/commandline/CommandLineHandlerCipherEncrypt.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/commandline/CommandLineHandlerCipherList.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/commandline/CommandLineHandlerEncryption.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/commandline/CommandLineHandlerIS.java">
           <value>
             <set />
@@ -348,7 +408,17 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/commandline/CommandLineHandlerIdentityStoreInitDemo.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/router/GraphSet.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/net/messagevortex/router/JGraph.java">
           <value>
             <set />
           </value>
@@ -523,6 +593,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/resources/asn.examples/messageBlocks.asn">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/resources/messageVortex.cfg">
           <value>
             <set />
@@ -539,6 +614,16 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/test/java/net/messagevortex/test/MainASN1Suite.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/test/java/net/messagevortex/test/MainCliSuite.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/test/java/net/messagevortex/test/MainRoutingSuite.java">
           <value>
             <set />
           </value>
@@ -564,6 +649,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/test/java/net/messagevortex/test/blender/DummyBlendingTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/test/java/net/messagevortex/test/cli/GeneralCommandline.java">
           <value>
             <set />
           </value>
@@ -614,6 +704,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/test/java/net/messagevortex/test/routing/EdgeTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/test/java/net/messagevortex/test/routing/JGraphTest.java">
           <value>
             <set />
           </value>

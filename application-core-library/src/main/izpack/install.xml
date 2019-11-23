@@ -42,7 +42,6 @@
     </resources>
 
     <panels>
-        <!-- FIXME why doesn't HTMLHelloPanel work any more?  it is nice not to have the "Please read the following information" text ... -->
         <!--<panel classname="HTMLInfoPanel" id="welcome"/>-->
 
         <!-- this is our custom panel, loaded from the izpack-panels.jar file -->

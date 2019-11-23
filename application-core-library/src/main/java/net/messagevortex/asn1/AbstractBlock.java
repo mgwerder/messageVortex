@@ -24,6 +24,7 @@ package net.messagevortex.asn1;
 
 import java.io.IOException;
 
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -76,7 +77,7 @@ public abstract class AbstractBlock implements Block {
    * @return the encoded equivalent
    */
   public static String toBase64(byte[] b) {
-    return new String(Base64.encode(b));
+    return new String(Base64.encode(b), StandardCharsets.UTF_8);
   }
 
   /***

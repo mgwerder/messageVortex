@@ -1,5 +1,9 @@
 \newgeometry{margin=0.1cm, footskip=1mm}
 \begin{titlepage}
+\ifdraft{
+\begin{tikzpicture}[remember picture,overlay] 
+\node[rotate=60,scale=10,text opacity=0.8] at (current page.center){\color{red}\textbf{\Huge DRAFT}};
+\end{tikzpicture}}{}
 \pagecolor{gray}\afterpage{\nopagecolor}
 \begin{center}~\\[1cm]
 \includegraphics[height=0.4\paperwidth]{../../../../website/src/main/jbake/assets/images/MessageVortexLogo_huge}~\\[1cm]
@@ -28,6 +32,7 @@ von Glarus GL\\
 \includegraphics[height=7mm]{./inc/cclic.png}~\\[0.5cm]
 This work is published under  "Creative Commons Attribution-NonCommercial-NoDerivatives 3.0 Switzerland" (CC BY-NC-ND 3.0 CH) licensed. The full license can be found at \url{http://creativecommons.org/licenses/by-nc-nd/3.0/ch/}.
 }
+
 \end{center}
 \end{titlepage}\restoregeometry\onecolumn\clearpage\pagestyle{plain}
 

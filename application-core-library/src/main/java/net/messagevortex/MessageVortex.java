@@ -36,13 +36,16 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.crypto.Cipher;
+
 import net.messagevortex.accounting.Accountant;
 import net.messagevortex.asn1.AsymmetricKeyPreCalculator;
 import net.messagevortex.asn1.IdentityBlock;
 import net.messagevortex.asn1.IdentityStore;
 import net.messagevortex.blender.Blender;
 import net.messagevortex.blender.recipes.BlenderRecipe;
+import net.messagevortex.commandline.CommandLineHandlerCipher;
 import net.messagevortex.commandline.CommandLineHandlerIdentityStore;
+import net.messagevortex.commandline.CommandLineHandlerRedundancy;
 import net.messagevortex.router.Router;
 import net.messagevortex.router.operation.InternalPayloadSpace;
 import net.messagevortex.router.operation.InternalPayloadSpaceStore;
@@ -56,7 +59,9 @@ import picocli.CommandLine;
         versionProvider = Version.class,
         subcommands = {
                 AsymmetricKeyPreCalculator.class,
-                CommandLineHandlerIdentityStore.class
+                CommandLineHandlerIdentityStore.class,
+                CommandLineHandlerCipher.class,
+                CommandLineHandlerRedundancy.class
         }
 )
 public class MessageVortex implements Callable<Integer> {
@@ -99,7 +104,7 @@ public class MessageVortex implements Callable<Integer> {
   private static InternalPayloadSpaceStore simStores = new InternalPayloadSpaceStore();
   private static Integer JRE_AES_KEY_SIZE = null;
 
-  private void verifyPrerequisites() {
+  private boolean verifyPrerequisites() {
     LOGGER.log(Level.INFO, "Checking bouncycastle version..." + Version.getBuild());
     String bcversion = org.bouncycastle.jce.provider.BouncyCastleProvider
             .class
@@ -110,13 +115,17 @@ public class MessageVortex implements Callable<Integer> {
     LOGGER.log(Level.INFO, "Detected BC version is " + bcversion + ".");
     if (!m.matches()) {
       LOGGER.log(Level.SEVERE, "unable to parse BC version (" + bcversion + ")");
+      return false;
     } else {
       int major = Integer.parseInt(m.group(1));
       int minor = Integer.parseInt(m.group(2));
       if ((major == 1 && minor >= 60) || (major >= 2)) {
-        LOGGER.log(Level.INFO, "Detected BC version is " + bcversion + ". This should do the trick.");
+        LOGGER.log(Level.INFO, "Detected BC version is " + bcversion
+                + ". This should do the trick.");
       } else {
-        LOGGER.log(Level.SEVERE, "Looks like your BC installation is heavily outdated. At least version 1.60 is recommended.");
+        LOGGER.log(Level.SEVERE, "Looks like your BC installation is heavily outdated. "
+                + "At least version 1.60 is recommended.");
+        return false;
       }
     }
 
@@ -129,13 +138,19 @@ public class MessageVortex implements Callable<Integer> {
       }
       int i = JRE_AES_KEY_SIZE;
       if (i > 128) {
-        LOGGER.log(Level.INFO, "Looks like JRE having an unlimited JCE installed (AES max allowed key length is = " + i + "). This is good.");
+        LOGGER.log(Level.INFO, "Looks like JRE having an unlimited JCE installed (AES max allowed "
+                + "key length is = " + i + "). This is good.");
       } else {
-        LOGGER.log(Level.SEVERE, "Looks like JRE not having an unlimited JCE installed (AES max allowed key length is = " + i + "). This is bad.");
+        LOGGER.log(Level.SEVERE, "Looks like JRE not having an unlimited JCE installed (AES max "
+                + "allowed key length is = " + i + "). This is bad.");
+        return false;
       }
     } catch (NoSuchAlgorithmException nsa) {
-      LOGGER.log(Level.SEVERE, "OOPS... Got an exception while testing for an unlimited JCE. This is bad.", nsa);
+      LOGGER.log(Level.SEVERE, "OOPS... Got an exception while testing for an unlimited JCE. "
+              + "This is bad.", nsa);
+      return false;
     }
+    return true;
   }
 
   /***
@@ -194,7 +209,7 @@ public class MessageVortex implements Callable<Integer> {
                   + idstoreSection + "");
         }
         File f = new File(fn);
-        if (f == null) {
+        if (!f.exists()) {
           throw new IOException("identity store file \"" + fn + "\" not found");
         }
         identityStore.put(idstoreSection.toLowerCase(), new IdentityStore(f));
@@ -203,12 +218,14 @@ public class MessageVortex implements Callable<Integer> {
       // setup recipes
       // create default recipe store
       String lst = Config.getDefault().getStringValue(null, "recipes");
+      BlenderRecipe.clearRecipes(null);
       for (String cl : lst.split(" *, *")) {
         BlenderRecipe.addRecipe(null,
                 (BlenderRecipe) getConfiguredClass(null, cl, BlenderRecipe.class));
       }
       for (String accountingSection : cfg.getSectionListValue(null, "recipe_setup")) {
-
+        // FIXME there is something missing here! Just found this unused code snipped...
+        // I really need some sleep.
       }
 
       //Setup accounting
@@ -266,16 +283,9 @@ public class MessageVortex implements Callable<Integer> {
 
     LOGGER.log(Level.INFO, "******* startup of MessageVortex complete *******");
 
-    if (timeoutInSeconds >= 0) {
-      try {
-        Thread.sleep(timeoutInSeconds * 1000);
-      } catch (InterruptedException ie) {
-        // may be safely ignored
-      }
-    } else {
-      MessageVortexController controller = new MessageVortexController();
-      controller.waitForShutdown();
-    }
+    MessageVortexController controller = new MessageVortexController();
+    controller.setTimeout(timeoutInSeconds * 1000);
+    controller.waitForShutdown();
 
     LOGGER.log(Level.INFO, "******* shutting down MessageVortex *******");
     Map<String, RunningDaemon> tmap = new HashMap<>();
@@ -394,31 +404,24 @@ public class MessageVortex implements Callable<Integer> {
     return identityStore.get(id.toLowerCase());
   }
 
+  /***
+   * <p>gets a simulated payload space for a specific identity block.</p>
+   *
+   * @param ib the identity block
+   * @return the requested payload space
+   */
   public static InternalPayloadSpace getSimulatedSpace(IdentityBlock ib) {
-    InternalPayloadSpace ret = null;
-    synchronized (simStores) {
-      // get exiting space
-      ret = simStores.getInternalPayload(ib);
-
-      if (ret == null) {
-        // create a new space if missing
-        ret = new InternalPayloadSpace(simStores, ib);
-      }
-    }
-    return ret;
+    // get exiting space
+    return simStores.getInternalPayload(ib);
   }
 
+  /***
+   * <p>Gets own payload space for a specific identity.</p>
+   *
+   * @param ib the identityblock identifying the payload space
+   * @return the requested payload space
+   */
   public static InternalPayloadSpace getOwnSpace(IdentityBlock ib) {
-    InternalPayloadSpace ret = null;
-    synchronized (ownStores) {
-      // get exiting space
-      ret = ownStores.getInternalPayload(ib);
-
-      if (ret == null) {
-        // create a new space if missing
-        ret = new InternalPayloadSpace(ownStores, ib);
-      }
-    }
-    return ret;
+    return ownStores.getInternalPayload(ib);
   }
 }

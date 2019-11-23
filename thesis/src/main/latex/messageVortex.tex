@@ -1,6 +1,6 @@
 % !TeX spellcheck = en_US
 
-\documentclass[a4paper,appendixprefix,pdfusetitle,twocolumn,fontsize=8pt,final,status=final]{scrbook}
+\documentclass[a4paper,appendixprefix,pdfusetitle,twocolumn,fontsize=8pt,draft,DIV=calc]{scrbook}
 %add attachdocs to attach all documents
 % add openany to avoid empty pages
 %\usepackage{gitinfo}
@@ -34,16 +34,25 @@
 \usepackage{hyperxmp}
 
 % extended width for toc page numbers
-%\usepackage[titles]{tocloft}
-%\cftsetpnumwidth{3em}
+\usepackage[titles]{tocloft}
+\cftsetpnumwidth{3em}
 % Format appendix
-%\setlength{\cftchapnumwidth}{65pt}%
-%\renewcommand{\cftpartpresnum}{\partname\hspace{10pt}}
-%\renewcommand{\cftchappresnum}{\chaptername\hspace{5pt}}
-%\renewcommand{\cftchapaftersnum}{\hspace{5pt}}
+\setlength{\cftchapnumwidth}{65pt}%
+%\renewcommand{\cftpartpresnum}{\partname\hspace{13pt}}
+\renewcommand{\cftchappresnum}{\chaptername\hspace{5pt}}
+\renewcommand{\cftchapaftersnum}{\hspace{5pt}}
 
 %enable hyperlinks
-\usepackage[pdfencoding=auto, psdextra,hidelinks,bookmarks,hyperindex,hyperfigures,pdfpagelabels,pdftex,pdfa,final]{hyperref}
+\usepackage[pdfencoding=auto,
+            psdextra,
+            hidelinks,
+            bookmarks,
+            hyperindex,
+            hyperfigures,
+            pdfpagelabels,
+            pdftex,
+            pdfa,
+            final]{hyperref}
 \makeatletter
 \hypersetup{	
 	pdftitle={\thetitle},
@@ -58,7 +67,7 @@
 	pdfkeywords={Messaging, Anonymity, SMTP, Message Vortex},
 	pdfcontactemail={martin.gwerder@fhnw.ch},
 	pdflicenseurl={http://creativecommons.org/licenses/by-nc-nd/3.0/ch/},
-	pdfcopyright={"Creative Commons Attribution-NonCommercial-NoDerivatives 3.0 Switzerland" (CC BY-NC-ND 3.0 CH)}
+	pdfcopyright={Creative Commons Attribution-NonCommercial-NoDerivatives 3.0 Switzerland (CC BY-NC-ND 3.0 CH)}
 }
 \makeatother
 
@@ -83,8 +92,8 @@
 \pdfinclusioncopyfonts=1
 
 % enable graphics inclusion
-\usepackage[final]{graphicx}
-
+%\usepackage[final]{graphicx}
+\PassOptionsToPackage{final}{graphicx}
 \usepackage{xcolor}
 
 \usepackage{xstring}
@@ -214,9 +223,9 @@
 %\usepackage{cite}
 
 % set numbering for subsubsections
-\usepackage{tocstyle}
-\setcounter{secnumdepth}{3}
-\setcounter{tocdepth}{4}
+%\usepackage{tocstyle}
+%\setcounter{secnumdepth}{3}
+%\setcounter{tocdepth}{4}
 
 % Sans serif font for the whole document
 \renewcommand{\familydefault}{\sfdefault}
@@ -429,6 +438,14 @@
 \makeatletter\@ifclasswith{scrbook}{draft}{\gdef\indexes{\listoffixmes}}{\gdef\indexes{\listoftables\listoffigures\listofrequirements}}\makeatother
 
 \RequirePackage[explicit]{titlesec}
+
+% Watermark
+%\usepackage[firstpage]{draftwatermark}
+%\SetWatermarkText{Draft}
+%\SetWatermarkColor[rgb]{1,0,0}
+%\SetWatermarkScale{2}
+%\newwatermark[pagex={1},color=red!50,angle=45,scale=3,xpos=0,ypos=0,disablegeometry]{DRAFT}
+\usepackage{ifdraft}
 \begin{document}%
 %
 \frontmatter%
@@ -440,7 +457,7 @@
 
 \begin{comment}
 \section*{Acknowledgements}
-I would like to thank my wife Cornelia and my lovely three kids (Saphira, Florian and Aurelius) for their patience and their support. Without them I could never have done this work.\par
+I would like to thank my wife Cornelia and my lovely three kids (Saphira, Florian and Aurelius) for their patience and their support. Without them I could never have done this work.
 
 I would like to thank Prof. Dr. C. Tschudin and the University of Basel for the possibility to write this work and for the challenges they opposed to me, allowing me to grow. 
 
@@ -448,12 +465,12 @@ Dr. Andreas Hueni for his thoughts and challenging outside-the-normal-box.
 
 Prof. Dr. Carlos Nicolas of the University of Northwestern Switzerland for being such a valuable sparring partner allowing me to test my thoughts.
 
-I would like to acknowledge all the individuals who have coded for the \LaTeX project for free. It is due to their efforts that we can generate professionally typeset PDFs now.
+I would like to acknowledge all the individuals who have coded for the \LaTeX project for free. It is due to their efforts that we can generate professionally typeset PDFs (and far more) for .
 \end{comment}
 
 \cleardoublepage
 \makeatletter
-\renewcommand{\l@subsubsection}{\@dottedtocline{3}{7.4em}{4.5em}}
+\renewcommand{\l@subsubsection}{\@dottedtocline{3px}{7.4em}{4.5em}}
 \renewcommand{\@pnumwidth}{3em}
 \makeatother
 
@@ -505,7 +522,7 @@ I would like to acknowledge all the individuals who have coded for the \LaTeX pr
 
 
 
-\gdef\rfc{../../../../rfc/src/xml2rfc/draft-gwerder-messagevortexmain-02.pdf}
+\gdef\rfc{../../../../rfc/src/xml2rfc/draft-gwerder-messagevortexmain-03.pdf}
 %\includepdf[pages=-,frame=true,scale=0.5]{\rfc}
 \includepdf[pages=1,frame=true,scale=0.70,pagecommand={\chapter{The RFC draft document\label{app:rfcMessageVortexMain}}}, offset=0 -1cm]{\rfc}
 \includepdf[pages=2-,frame=true,scale=0.8,pagecommand={}, offset=0 -1cm]{\rfc}
@@ -616,7 +633,7 @@ The \nth{3} Generation Partnership Project (3GPP) maintains the Multimedia Messa
 \end{entry}
 
 \begin{entry}
-	\mainentry{anonymity}{We refer to the term anonymity as defined in \cite{anon_terminology}. ``Anonymity of a subject means that the subject is not identifiable within a set of subjects, the anonymity set.''\omitted}
+	\mainentry{anonymity}{We refer to the term anonymity as defined in \cite{anonTerminology}. ``Anonymity of a subject means that the subject is not identifiable within a set of subjects, the anonymity set.''\omitted}
 	\subentry{Sender Anonymity}{The anonymity set is the set of all possible subjects. For actors, the anonymity set consists of the subjects who might cause an action. For actees, the anonymity set consists of the subjects who might be acted upon. Therefore, a sender may be anonymous (sender anonymity) only within a set of potential senders, his/her sender anonymity set, which itself may be a subset of all subjects worldwide who may send a message from time to time.}
 	\subentry{Receiver Anonymity}{The same for the recipient means that a recipient may be anonymous (recipient anonymity) only within a set of potential recipients, his/her recipient anonymity set. Both anonymity sets may be disjoint, be the same, or they may overlap. The anonymity sets may vary over time.}
 \end{entry}
@@ -634,7 +651,7 @@ The \nth{3} Generation Partnership Project (3GPP) maintains the Multimedia Messa
 \end{entry}
 
 \begin{entry}
-	\mainentry{Item of Interest (IoI)}{The Item of Intrest (IoI) are defined in \cite{anon_terminology} and refer to any subject action or entity which is of interest to a potential adversary.}
+	\mainentry{Item of Interest (IoI)}{The Item of Intrest (IoI) are defined in \cite{anonTerminology} and refer to any subject action or entity which is of interest to a potential adversary.}
 \end{entry}
 
 \begin{entry}
@@ -702,7 +719,7 @@ The \nth{3} Generation Partnership Project (3GPP) maintains the Multimedia Messa
 
 \begin{entry}
 	\mainentry{Pseudonymity}{
-		As Pseudonymity we take the definition as specified in \cite{anon_terminology}.
+		As Pseudonymity we take the definition as specified in \cite{anonTerminology}.
 		\begin{quote}
 			A pseudonym is an identifier of a subject other than one of the subject's real names. The subject which the pseudonym refers to is the holder of the pseudonym. A subject is pseudonymous if a pseudonym is used as an identifier instead of one of its real names.\omitted
 		\end{quote}
@@ -731,7 +748,7 @@ The \nth{3} Generation Partnership Project (3GPP) maintains the Multimedia Messa
 
 \begin{entry}
 	\mainentry{Undetectability}{
-		As undetectability we take the definition as specified in \cite{anon_terminology}.
+		As undetectability we take the definition as specified in \cite{anonTerminology}.
 		\begin{quote}
 			Undetectability of an item of interest (IOI\index{Item of Interest}) from an attacker's perspective means that the
 			attacker cannot sufficiently distinguish whether it exists or not.\omitted
@@ -740,13 +757,13 @@ The \nth{3} Generation Partnership Project (3GPP) maintains the Multimedia Messa
 \end{entry}
 
 \begin{entry}
-	\mainentry{Unlikability}{We refer to the term unlinkability as defined in \cite{anon_terminology}. ``Unlinkability of two or more items of interest (IOIs, e.g., subjects, messages, actions, ...) from an attacker’s perspective means that within the system (comprising these and possibly other items), the attacker cannot sufficiently distinguish whether these IOIs are 
+	\mainentry{Unlikability}{We refer to the term unlinkability as defined in \cite{anonTerminology}. ``Unlinkability of two or more items of interest (IOIs, e.g., subjects, messages, actions, ...) from an attacker’s perspective means that within the system (comprising these and possibly other items), the attacker cannot sufficiently distinguish whether these IOIs are 
 		related or not.}
 \end{entry}
 
 \begin{entry}
 	\mainentry{Unobservability}{
-		As unobservability we take the definition as specified in \cite{anon_terminology}.
+		As unobservability we take the definition as specified in \cite{anonTerminology}.
 		\begin{quote}
 			Unobservability of an item of interest (IOI) means
 			\begin{itemize}

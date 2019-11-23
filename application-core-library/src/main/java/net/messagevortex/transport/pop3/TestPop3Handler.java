@@ -62,7 +62,6 @@ public class TestPop3Handler implements Transport {
 
   @Override
   public void sendMessage(String address, InputStream os) throws IOException {
-    Config cfg = Config.getDefault();
     try {
       MimeMessage msg = new MimeMessage(null, os);
       outUser.deliver(msg);

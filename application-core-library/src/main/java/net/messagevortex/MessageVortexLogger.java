@@ -97,8 +97,8 @@ public class MessageVortexLogger extends Logger {
             assert true : "Never throw assertion" + ex;
           }
         }
-      } catch(Exception e) {
-        System.err.println( "DESASTER: exception while logging" );
+      } catch (Exception e) {
+        System.err.println("DESASTER: exception while logging");
         e.printStackTrace();
         System.exit(200);
       }
