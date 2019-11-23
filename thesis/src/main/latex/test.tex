@@ -1,0 +1,545 @@
+% !TeX spellcheck = en_US
+
+\documentclass[a4paper,appendixprefix,pdfusetitle,twocolumn,fontsize=8pt,final,status=final]{scrbook}
+%add attachdocs to attach all documents
+% add openany to avoid empty pages
+%\usepackage{gitinfo}
+
+% Make C&P work
+\usepackage{cmap}
+
+\makeatletter
+\def\title#1{\gdef\@title{#1}\gdef\thetitle{#1}}
+\makeatother
+
+%\usepackage{scrpage2}
+
+\title{MessageVortex}
+\gdef\thesubtitle{Transport Independent Messaging Anonymous to Third Parties}
+\subtitle{\thesubtitle}
+\author{Martin Gwerder (06-073-787)}
+%\date{\gitAuthorDate}
+\gdef\myabstract{
+	In this paper, we introduce an unobservable message anonymization protocol, named MessageVortex. It bases on the zero trust principle and a distributed peer-to-peer (P2P) architecture and avoids central aspects such as fixed infrastructures within a global network. 
+	
+	It scores over existing work by blending its traffic into suitable existing transport protocols, thus making it next to impossible to block it without significantly affecting regular users of the transport medium. No additional protocol-specific infrastructure is required in public networks and allows a sender to control all aspects of a message such as the degree of anonymity, timing, and redundancy of the message transport without disclosing any of these details to the routing or transporting nodes. Part of this work is an RFC document attached in Appendix \ref{app:rfcMessageVortexMain} describing the protocol. It contains all the necessary information to build protocol nodes. The RFC draft is available through the official RFC channels. Additionally, the RFC document, additional documents, and a reference are available under \url{https://messagevortex.net/}.}
+\makeatother
+
+% enable superscript  for 1st, 2nd, 3rd etc.
+\usepackage[super]{nth}
+
+% XMP support 
+\RequirePackage{xmpincl}
+\includexmp{messageVortex}
+\usepackage{hyperxmp}
+
+% extended width for toc page numbers
+\usepackage[titles]{tocloft}
+\cftsetpnumwidth{3em}
+% Format appendix
+\setlength{\cftchapnumwidth}{65pt}%
+\renewcommand{\cftpartpresnum}{\partname\hspace{10pt}}
+\renewcommand{\cftchappresnum}{\chaptername\hspace{5pt}}
+\renewcommand{\cftchapaftersnum}{\hspace{5pt}}
+
+%enable hyperlinks
+\usepackage[pdfencoding=auto, psdextra,hidelinks,bookmarks,hyperindex,hyperfigures,pdfpagelabels,pdftex,pdfa,final]{hyperref}
+\makeatletter
+\hypersetup{	
+	pdftitle={\thetitle},
+	pdfpagelayout=TwoPageRight,
+	linktoc=all,
+	breaklinks=true,
+	pdfstartview=Fit,
+	pdfauthor={\author},
+	pdftitle={\thetitle - \thesubtitle},
+	pdflang=en,
+	%pdfsubject={\myabstract},
+	pdfkeywords={Messaging, Anonymity, SMTP, Message Vortex},
+	pdfcontactemail={martin.gwerder@fhnw.ch},
+	pdflicenseurl={http://creativecommons.org/licenses/by-nc-nd/3.0/ch/},
+	pdfcopyright={"Creative Commons Attribution-NonCommercial-NoDerivatives 3.0 Switzerland" (CC BY-NC-ND 3.0 CH)}
+}
+\makeatother
+
+% PDF/a measures
+% embed color profile 
+\immediate\pdfobj stream attr{/N 3} file{ISOcoated_v2_300_bas.ICC}
+\pdfcatalog{%
+	/OutputIntents [ <<
+	/Type /OutputIntent
+	/S/GTS_PDFA1
+	/DestOutputProfile \the\pdflastobj\space 0 R
+	/OutputConditionIdentifier (ISOcoated v2 300 basic)
+	/Info(ISOcoated v2 300 basic)
+	>> ]
+}
+% map glyphs 
+\input{glyphtounicode.tex}
+\input{glyphtounicode-cmr.tex}
+\pdfgentounicode=1
+% deactivate LZW compression
+\pdfobjcompresslevel=0
+\pdfinclusioncopyfonts=1
+
+% enable graphics inclusion
+\usepackage[final]{graphicx}
+
+\usepackage{xcolor}
+
+\usepackage{xstring}
+
+\usepackage{pdfsync} 
+
+%\usepackage{MnSymbol} % required for the arrow
+
+%\usepackage{underscore}
+
+% No new page for chapters
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd{\chapter}{\if@openright\cleardoublepage\else\clearpage\fi}{}{}{}
+\makeatother
+
+% titlepage geometry change
+\usepackage[paper=a4paper,top=2cm,bottom=2cm,inner=2cm,outer=2cm]{geometry}% http://ctan.org/pkg/geometry
+
+% For formulae in twocolumn
+\usepackage{mathtools}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{cuted}
+
+\usepackage{scrhack}
+
+\usepackage[autocite=superscript,
+            backref=true,
+            backend=bibtex,
+            hyperref=true,
+            url=true,
+            isbn=true,
+            maxcitenames=3,
+            maxbibnames=100,
+            block=none,
+            sorting=anyt]{biblatex}
+
+%\bibstyle{alphadin}
+\addbibresource{messageVortex}
+%\addbibresource{inc/bib/unclassified/Anonbib/anonbib}
+\usepackage{csquotes}
+
+% For Multipage listing in appendix
+\usepackage[final]{listings}
+\usepackage{caption}
+\usepackage[framemethod=tikz]{mdframed}
+\usepackage[many]{tcolorbox}
+\tcbuselibrary{listings}
+
+% enable raggedright in tables
+\usepackage{array}
+% for diagonal divided cells in tables
+\usepackage{makecell}
+\renewcommand\theadfont{\bfseries}
+
+% footnotes for tables
+\usepackage{tablefootnote}
+%\makesavenoteenv{tabular}
+
+% enable placement of floating images
+\usepackage{float}
+
+%enable page spanning tables
+\usepackage{supertabular}
+
+% for PDF/A generation
+%\usepackage[a-3b]{pdfx}
+
+
+
+% Link above tables and figures
+%\usepackage[hypcap]{caption}
+
+% support repetitive footnotes
+\usepackage{fixfoot}
+
+% Document annotations
+\usepackage[nomargin]{fixme}
+\fxsetup{layout=pdfnote}
+
+%enable attached files
+\usepackage[color=black]{attachfile2}
+\usepackage{embedfile}
+\usepackage{hypgotoe}
+
+%enable word separation
+\usepackage[english]{babel}
+
+% enable nice references
+\usepackage{fancyref}
+
+% For abstracts
+\makeatletter
+\newenvironment{abstract}{%
+	\if@twocolumn
+	\section*{\abstractname}%
+	\else
+	\small
+	\begin{center}%
+		{\bfseries \abstractname\vspace{-.5em}\vspace{\z@}}%
+	\end{center}%
+	\quotation
+	\fi}
+{\if@twocolumn\else\endquotation\fi}
+\makeatother
+
+% Enable indexes
+\usepackage{makeidx}
+\makeindex 
+
+% format appendix
+\usepackage{bookmark}
+\usepackage[]{appendix} %enable appendix 
+
+\let\oldappendices\appendices
+\renewcommand{\appendices}{%
+	\oldappendices
+	\bookmarksetupnext{level=-1}
+	\addtocontents{toc}{\protect\renewcommand\protect\cftpartpresnum{}}
+	\addcontentsline{toc}{part}{Appendices}
+	\addtocontents{toc}{\protect\renewcommand\protect\cftchappresnum{}%
+		\protect\setlength\protect\cftchapnumwidth{15pt}}%
+}
+
+% citations
+%\usepackage{cite}
+
+% set numbering for subsubsections
+%\usepackage{tocstyle}
+%\setcounter{secnumdepth}{3}
+%\setcounter{tocdepth}{4}
+
+% Sans serif font for the whole document
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage[T1]{fontenc}
+\usepackage{times}
+
+\usepackage{amsmath}
+
+% No paragraph indentation
+\setlength\parindent{0pt} 
+\setlength\parskip{6pt} 
+
+% For coments and similar
+\usepackage{verbatim}
+
+% For Page background color
+\usepackage{afterpage}
+\usepackage{xcolor} 
+
+
+\usepackage{tabularx}
+\usepackage{multirow}
+
+% Required for definitions environment
+\usepackage{hanging}
+\usepackage{ragged2e}
+\newenvironment{entry}{\par\leavevmode\hangpara{1.5mm}{1}\ignorespaces}{\RaggedRight\par}
+\newcommand*{\mainentry}[2]{{\bfseries{#1\label{def:#1}}}~#2\par}
+\newcommand*{\subentry}[2]{\par~\begin{minipage}{\columnwidth-0.6cm}{\bfseries{\itshape{#1\label{def:#1}}}}~#2\end{minipage}}
+
+\newcommand*{\defref}[1]{\hyperref[def:#1]{#1}}
+\title{MessageVortex}
+\subtitle{Transport Independent and Unlinking Messaging}
+\author{Martin Gwerder (06-073-787)}
+\date{\gitAuthorDate}
+
+%\hypersetup{pdfinfo={
+%Subject={Privacy when using common internet transport protocols},
+%
+%}}
+
+\lstset{ %
+	backgroundcolor=\color{lightgray},   
+	language=java,
+	frame=single,
+	numbers=left,
+	numbersep=5pt,
+	numberstyle=\tiny,
+	basicstyle=\tiny,
+}
+
+\lstdefinelanguage{ASN1}
+{
+	morekeywords=[1]{DEFINITIONS,AUTOMATIC,TAGS,BEGIN,END,%
+		SEQUENCE,OF,CHOICE,ENUMERATED,NULL,SIZE,OPTIONAL,%
+		OCTET,BIT,STRING,INTEGER,REAL,BOOLEAN,WITH,COMPONENTS},%
+	commentstyle=\itshape,%
+	morecomment=[l]{--},%
+	basicstyle=\tiny\sffamily,
+	breaklines=true,
+	prebreak={\mbox{\quad$\hookleftarrow$}},
+}
+
+\lstdefinelanguage{bash}{
+	language={},
+	basicstyle=\tiny\sffamily,
+	numbers=none,
+	frame=tb,
+	breaklines=true,
+	prebreak={\mbox{\quad$\hookleftarrow$}},
+	columns=fullflexible,
+	backgroundcolor=\color{gray!20},
+    literate=~{$\sim$}2
+			{\$}{\$}1
+%	linewidth=0.9\linewidth,
+%	xleftmargin=0.1\linewidth
+}
+
+\makeatletter
+\newcommand{\getfilename}[1]{%
+	\begingroup
+	% \lstname seems to change hyphens into \textendash
+	\def\textendash{-}%
+	\filename@parse{#1}%
+	\texttt{\filename@base.\filename@ext}%
+	\endgroup
+}
+\makeatother
+
+\usepackage{wrapfig}
+
+%% This package will make dealing with the ``requirements'' environment a lot easier:
+\usepackage{environ}
+\newcounter{requirements}\setcounter{requirements}{0}
+\makeatletter
+%% This is a macro that gets called by the .aux file to load in data.
+\gdef\savedreq#1#2{\expandafter\gdef\csname req#1\endcsname{#2}}
+%% This macro will save the given requirement to the .aux file so we will have it during the next LaTeX pass to put in the list:
+\def\recordrequirement#1{\immediate\write\@mainaux{\string\savedreq{\the\value{requirements}}{#1}}}
+\AtEndDocument{
+	\refstepcounter{requirements}
+	\immediate\write\@mainaux{\string\xdef\string\totalreqsplusone{\the\value{requirements}}}
+}
+\NewEnviron{requirement}[2]{
+	\noindent
+	\begingroup
+	%% Increment the requirement counter
+	\refstepcounter{requirements}
+	%% Here is the ``Req.'' text:
+	%\textbf{RQ\arabic{requirements} (#2)}:
+	%% Make a label that we can use to refer to this counter:
+	\label{req:\arabic{requirements}}
+	\protected@write \@auxout {}{\string \newlabel {req:#1}{{RQ\arabic{requirements} (#2)}{\thepage}{RQ\arabic{requirements} (#2)}{req:#1}{}} }\recordrequirement{\BODY}
+	
+	%% Next, save this requirement to the .aux file so we will have it during the next LaTeX pass to put in the list:
+	%% We will make the remainder italic:
+	\textbf{RQ\arabic{requirements} (#2):} \itshape
+	\BODY\hypertarget{req:#1}{}
+	\endgroup
+}
+\newcommand{\listofrequirements}{
+	\chapter*{List of Requirements}
+	%% First, we need to make sure that this is not the first LaTeX pass (i.e., that all of the information has already been recorded to the .aux file):
+	\expandafter\ifx\csname totalreqsplusone\endcsname\relax
+	Please run \LaTeX\ again to populate this list!
+	\else
+	\begingroup
+	%% This \reqi counter is what we are going to use to iterate over the requirements:
+	\newcount\reqi
+	\reqi=0
+	\loop
+	\advance\reqi by 1
+	\ifnum\reqi<\totalreqsplusone
+	%% The requirement numbered \reqi exists!
+	\noindent\textbf{RQ\the\reqi} \csname req\the\reqi\endcsname\leaders\hbox to 2em{\dotfill}\hfill\pageref{req:\the\reqi}\\
+	\repeat
+	\endgroup
+	\fi
+}
+
+\newcommand{\slistofrequirements}{
+	%% First, we need to make sure that this is not the first LaTeX pass (i.e., that all of the information has already been recorded to the .aux file):
+	\expandafter\ifx\csname totalreqsplusone\endcsname\relax
+	Please run \LaTeX\ again to populate this list!
+	\else
+	\begingroup
+	%% This \reqi counter is what we are going to use to iterate over the requirements:
+	\par
+	\newcount\reqi
+	\reqi=0
+%	\leftskip=25pt
+	\loop
+	\advance\reqi by 1
+	\ifnum\reqi<\totalreqsplusone
+	%% The requirement numbered \reqi exists!
+	\hangindent=30pt \parbox{30pt}{\textbf{RQ\the\reqi} }\csname req\the\reqi\endcsname\par
+	\repeat
+	\endgroup
+	\fi
+}
+\makeatother
+
+\captionsetup[lstlisting]{position=bottom}
+\captionsetup[lstinputlisting]{position=bottom}
+
+
+\usepackage[final]{pdfpages}
+
+% How do I make an attached non-pdf file display like a link?
+% (http://tex.stackexchange.com/q/230581)
+\makeatletter
+\newcommand*{\embeddedfilelink}[2]{%
+	\begingroup
+	\leavevmode
+	\pdfstartlink
+	attr{%
+		\Hy@setpdfborder
+		\ifx\@pdfhighlight\@empty
+		\else
+		/H\@pdfhighlight
+		\fi
+		\ifx\@filebordercolor\relax
+		\else
+		/C[\@filebordercolor]%
+		\fi
+	}%
+	user{%
+		/Subtype/Link%
+		/A<<%
+		/Type/Action%
+		/S/JavaScript%
+		/JS(this.exportDataObject({cName: "#1", nLaunch: 2}))%
+		>>%
+	}%
+	\relax
+	\Hy@colorlink\@filebordercolor#2%
+	\close@pdflink
+	\endgroup
+}
+\makeatother
+
+% Adapt bibtex to include documents
+  \makeatletter
+\@ifclasswith{scrbook}{attachdocs}{\DeclareFieldFormat{file}{\StrGobbleLeft{#1}{1}[\wtcGwM]\StrGobbleRight{\wtcGwM}{4}[\filename] \IfFileExists{\filename}{\textattachfile{\filename}{}}{FIXME missing document link}}
+	\renewbibmacro{finentry}{\finentry\addspace \printfield{file}}
+}{}
+\makeatother
+\renewcommand*{\bibfont}{\small}
+
+\makeatletter\@ifclasswith{scrbook}{draft}{\gdef\indexes{\listoffixmes}}{\gdef\indexes{\listoftables\listoffigures\listofrequirements}}\makeatother
+
+\RequirePackage[explicit]{titlesec}
+\begin{document}%
+%
+\frontmatter%
+%
+% include title page
+\input{inc/parts/title.tex}
+%
+
+
+\begin{comment}
+\section*{Acknowledgements}
+I would like to thank my wife Cornelia and my lovely three kids (Saphira, Florian and Aurelius) for their patience and their support. Without them I could never have done this work.\par
+
+I would like to thank Prof. Dr. C. Tschudin and the University of Basel for the possibility to write this work and for the challenges they opposed to me, allowing me to grow. 
+
+Dr. Andreas Hueni for his thoughts and challenging outside-the-normal-box.
+
+Prof. Dr. Carlos Nicolas of the University of Northwestern Switzerland for being such a valuable sparring partner allowing me to test my thoughts.
+
+I would like to acknowledge all the individuals who have coded for the \LaTeX project for free. It is due to their efforts that we can generate professionally typeset PDFs now.
+\end{comment}
+
+\cleardoublepage
+\makeatletter
+\renewcommand{\l@subsubsection}{\@dottedtocline{3}{7.4em}{4.5em}}
+\renewcommand{\@pnumwidth}{3em}
+\makeatother
+
+\onecolumn
+%\setpnumwidth{2em}
+%\setlength\cftsectionnumwidth{3em}
+\setcounter{tocdepth}{2}
+\tableofcontents
+\indexes
+\twocolumn
+
+\makeatletter
+\newlength\mylena
+\newlength\mylenb
+\setlength\mylena{1.3cm}
+\setlength\mylenb{\dimexpr\columnwidth-\mylena\relax}
+
+\newcommand\PlaceNumber[1]{%
+	\makebox[\mylena][l]{#1}}
+
+\titleformat{\chapter}
+{\Large\sffamily\bfseries}
+{}
+{0em}
+{\PlaceNumber{\thechapter}\parbox[t]{\mylenb}{\raggedright#1}}
+
+\titlespacing*{\chapter}{0pc}{3ex \@plus4pt \@minus3pt}{5pt}
+
+\titleclass{\chapter}{straight}%% added
+\makeatother
+
+\mainmatter
+
+%\appendix
+%\part{Appendix}
+
+\onecolumn
+\appendix
+\pagenumbering{arabic}% resets `page` counter to 1
+\renewcommand*{\thepage}{A\arabic{page}}
+%\renewcommand{\setthechapter}{\Alph{section}}
+%\renewcommand\thechapter{\Alph{chapter}}
+%\setcounter{chapter}{0}
+
+
+
+\gdef\rfc{../../../../rfc/src/xml2rfc/draft-gwerder-messagevortexmain-02.pdf}
+%\includepdf[pages=-,frame=true,scale=0.5]{\rfc}
+\includepdf[pages=1,frame=true,scale=0.70,pagecommand={\chapter{The RFC draft document\label{app:rfcMessageVortexMain}}}, offset=0 -1cm]{\rfc}
+\includepdf[pages=2-,frame=true,scale=0.8,pagecommand={}, offset=0 -1cm]{\rfc}
+
+\twocolumn\clearpage
+\chapter{Short analysis on common internet protocols\label{app:transportProtocols}}
+The following sections list common internet protocols. We analyze those protocols for the fitness as transport layer of message vortex. The criteria applied are listed under section \ref{sec:existingTPP}.
+
+All sections are structured the same way. We first refer to the protocol or standard and describe it in the simplest possible form. We refer to subsequent standards where required to consider extensions where sensible. We then apply the previously referenced criteria and make a concise summary of the suiting of the protocol as a transport layer. The findings of this section is listed in table \ref{tab:protoSuitCrit}. The list here does not reflect the quality or maturity of the protocols. It is a simple analysis of suiting as a transport layer.
+
+
+All sections are structured the same way. We first refer to the protocol or standard and describe it in the simplest possible form. We refer to subsequent standards where required to consider extensions where sensible. We then apply the previously referenced criteria and make a concise summary of the suiting of the protocol as a transport layer. The findings of this section is listed in table \ref{tab:protoSuitCrit}. The list here does not reflect the quality or maturity of the protocols. It is a simple analysis of suiting as a transport layer.
+ does not reflect the quality or maturity of the protocols. It is a plain analysis for suiting as a transport layer.
+
+
+\backmatter
+\chapter{Bibliography}
+{
+  %\def\filespliter#1{\expandafter\intfilespliter#1\relax}
+  %\def\intfilespliter#1 #2 #3\relax{ First: (#1), Second: (#2), Third: (#3) }
+  \printbibliography[title={},heading=none]
+}
+
+% additional reference entries
+\index{Mail transport|see {Message Transport}}
+
+% add the index
+\printindex
+
+\begin{comment}
+% just a trick to make TexNicCenter Bibliography working
+\bibliography{messageVortex}
+\bibliography{inc/bib/unclassified/Anonbib/anonbib}
+\end{comment}
+
+\clearpage\chapter{Short Biography}
+\begin{wrapfigure}{R}{0.3\columnwidth}
+	\includegraphics[width=0.29\columnwidth]{inc/biography/passphoto}
+\end{wrapfigure}
+\input{inc/biography/biotext.inc.tex}
+
+\end{document}
