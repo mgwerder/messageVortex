@@ -61,35 +61,47 @@ We cannot be sure that data packets we are sending are passing only through coun
 \end{figure}
 
 
-\section{Adversary model\label{sec:adversary}}
-For an anonymization adversary, we need to assume someone of the capabilities of a state-sponsored actor. State-sponsored actors may work these days with allies but will not achieve dominance over all jurisdictional domains.
+\section{Threat model\label{sec:adversary}}
+We refer to jurisdiction as a geographical area where a set of legal rules created by a single actor or a group of actors apply, which contains executive capabilities (e.g., police, army, or secret service) to enforce this set of legal rules.
 
-For our adversary model, we assume the following properties:
-\begin{itemize}
-	\item An adversary has elaborated technical know-how to attack any infrastructure.
-	\item An adversary may have the capability to monitor traffic at any point in any network within a jurisdiction.
-	\item An adversary may have the capability to modify routing information within a jurisdiction freely.
-	\item An adversary may have the possibility to freely modify even cryptographically weak secured data where a single or a limited number of entities grant proof of authenticity or privacy.
-	\item An adversary may have the possibility to inject or modify any data on the network of a jurisdiction.
-	\item An adversary may create own nodes of a network. He may furthermore monitor their behavior and data flow to the maximum possible extent.
-	\item An adversary may force a limited number of other non-allied nodes to expose their data to him.
-	\item An adversary may have the same access to resources as within its jurisdiction in a limited number of other jurisdictions.
-\end{itemize}
+We assume for our protocol that adversaries are state-sponsored actors or players of large organizations. Such actors have high funding and are assumed to have elaborated capabilities within reach of the sponsor. Actors may join forces with other actors as allies. However, achieving more than 50\% on a world scale is excluded from our model. We always assume one or more actors with disjoint interests covering half of the network or more. 
 
 We assume the following goals for an adversary:
 \begin{itemize}
 	\item An adversary may want to disrupt non-authorized communication.
-	\item An adversary may want to read any information passing throughout the internet.
-	\item  An adversary may want to build and conserve data about individuals or groups of individuals of their life. This data includes all activities in any part of their life regardless of their apparent fitness for any specific purpose or their correctness.
+	\item An adversary may want to read any information passing through portions of the Internet.
+	\item An adversary may want to build and conserve information about individuals or groups of individuals of any aspect of their life. 
 \end{itemize}
 
-\section{Required Properties}
+To achieve these goals, we assume the following properties of our adversary:
+\begin{itemize}
+	\item An adversary has elaborated technical know-how to attack any infrastructure. This attack may cover any attack favoring his goals, starting with exploiting weaknesses of popular software (e.g., buffer overflows or zero-day exploits) down to simple or elaborated (D)DoS attacks.
+	\item An adversary may monitor traffic at any point in public networks within a jurisdiction.
+	\item An adversary may modify routing information within a jurisdiction freely.
+	\item An adversary may freely modify even cryptographically weak secured data where a single or a limited number of entities grant proof of authenticity or privacy.
+	\item An adversary may inject or modify any data on the network of a jurisdiction.
+	\item An adversary may create their nodes in a network. He may furthermore monitor their behavior and data flow without limitation.
+	\item An adversary may force a limited number of other non-allied nodes to expose their data to him. For this assumption, we explicitly excluded actors with disjoint interests.
+	\item An adversary may have similar access to resources as within its jurisdiction in a limited number of other jurisdictions.
+\end{itemize}
+
+we may furthermore subdivide the adversaries into the following sub-classes:
+\begin{itemize}
+	\item A censoring adversary\\
+	      The primary goal of this adversary is censoring messages and opinions not within his interests. He does this regardless whether the activities of censorship may be observed or not. Therefore, this adversary does not cloak its activities and typically bans censorship circumventing activities as illegal.
+	\item An observing adversary\\
+	      This adversary behaves as a traditional spy. He collects and classifies information while hiding its activities. Unlike within the reach of a censoring adversary, in this case typically no restrictions apply to the use of anonymization technology.
+\end{itemize}
+
+\section{Required Properties of an unobservable network}
 In this section, we summarize the required properties of an anonymizing network.
 
 \subsection{Anonymizing and Unlinking}
 If we are unable to limit the route of our packets through named jurisdictions, we must protect ourselves from unintentionally breaking the law of a foreign country. Therefore we need to be anonymous when sending or receiving messages. Unfortunately, most transport protocols (in fact almost all of them such as SMTP, SMS, XMPP, or IP) use a globally unique identifier for senders and receivers which are readable by any party which is capable of reading the packets. 
 
-As a result, anonymization of a sender or a receiver is not simple. A relay may allow at least the anonymization of the original sender given trust into the proxy. By combining it with encryption, we may even achieve a simple form of a sender and receiver pseudonymity. If cascading more relay like infrastructures and combining it with cryptography, we might even achieve sender and receiver anonymity. These are the standard approaches in remailers and mixes. Their approaches are questionable as shown in \ref{sec:remailer} and \ref{sec:mixnets}. Attacks onto such systems were carried out in the past. Some of them were successful.
+As a result, anonymization of a sender or a receiver is not simple. A relay may allow at least the anonymization of the original sender given trust into the proxy. By combining it with encryption, we may even achieve a simple form of a sender and receiver pseudonymity. If cascading more relay like infrastructures and combining it with cryptography, we might even achieve sender and receiver anonymity. When introducing anonymous remailing endpoints, we may even achieve both simultaneously.
+
+These are the standard approaches in remailers and mixes. Their approaches are questionable as shown in \ref{sec:remailer} and \ref{sec:mixnets}. Attacks onto such systems were carried out in the past. Some of them were successful.
 
 \subsection{Censorship Resistant}
 In our scenario in \ref{sec:genRequirements}, we defined the adversary as someone with superior access to the network and its infrastructure. Such an adversary might attack a message flow in several ways:
@@ -102,11 +114,10 @@ In our scenario in \ref{sec:genRequirements}, we defined the adversary as someon
 
 We furthermore have to assume that all actions taken by a potential adversary are not subject to legal prosecution. This assumption based on the fact that an adversary trying to establish censorship may be part of the government of jurisdiction. We may safely assume that there are legal exceptions in some jurisdiction for such entities.
 
-To be able to withstand an adversary outlined above, the message content needs to be unidentifiable by attributes or content. ``Attributes'' include any meta information including, but not limited to, frequency, timing, message size, sender, protocol, ports, or recipient.
+To be able to withstand an adversary outlined above, the messages  sent  requires to be unidentifiable by attributes or content. ``Attributes'' include any meta information including, but not limited to, frequency, timing, message size, sender, protocol, ports, or recipient.
 
 \subsection{Controllable trust}
 If we want to control trust, we have to conclude that:
-
 \begin{enumerate}
 	\item Trust in infrastructure is given because it is under full control of either the sender or the recipient.
 	\item Trust in infrastructure may not be necessary as it is ideally unable to misuse data passed through it.
@@ -115,14 +126,13 @@ If we want to control trust, we have to conclude that:
 In this thesis, we work with both cases. We will however never trust a third party apart from sender and recipient.
 
 \subsection{Reliable}
-Any message-sending protocol needs to be reliable in its functionality. If the means of message transport are unreliable, users tend to use differentAny message-sending protocol needs to be reliable in its functionality. If the means of message transport are unreliable, users tend to use different means for communication. 
+Any message-sending protocol needs to be reliable in its functionality. Any message-sending protocol needs to be reliable in its functionality. If the means of message transport are unreliable, users tend to use different means for communication. 
 
-\subsection{Diagnosable}
-Transparent behavior is a prerequisite for reliability if there is no other trustworthy instance. If something is generating a  behavior, but we are unable to determine the reason for it (i.e., if we are expecting a different behavior), we usually assume a malfunction. Therefore ``reliable'' means not only stable by its behavior. It also means diagnosable. A users perception will not be ``reliable'' if he is not able to determine causes for differences in observed and expected behavior.
+\subsection{Diagnoseable}
+Transparent behavior is a prerequisite for reliability if there is no other trustworthy instance. If something is generating a  behavior, but we are unable to determine the reason for it (i.e., if we are expecting a different behavior), we usually assume a malfunction. Therefore ``reliable'' means not only stable by its behavior. It also means diagnoseable. A users perception will not be ``reliable'' if he is not able to determine causes for differences in observed and expected behavior.
 
 \subsection{Available}
 Availability has two meanings in this context which do differ. Technology is available if\ldots
-
 \begin{enumerate}
 	\item a sender and a recipient have (or may have) the means of using it.
 	\item the infrastructure is providing the service (as opposed to: ``is running in a degraded or faulty state unable to provide a service'').
