@@ -1,0 +1,1 @@
+@jbake\bin\jbake.bat -s src\main\jbake target\jbake
