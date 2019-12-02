@@ -1,6 +1,6 @@
 	<!-- Fixed navbar -->
-	<div class="container">
-		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<div class="container">
 			<div class="animated fadeIn" style="animation-duration: 5s;">
 				<a class="navbar-brand" href="<#if (content.rootpath)??>${content.rootpath}<#else></#if>"><img src="<#if (content.rootpath)??>${content.rootpath}<#else></#if>images/MessageVortexLogo.png" alt="MessageVortex Logo" style="width: 30px; position:relative; top:-6px;"/><span style="font-size:36px;margin:3px;">MessageVortex</span></a>
 			</div>
@@ -16,6 +16,6 @@
 					<li class="nav-item"><a href="<#if (content.rootpath)??>${content.rootpath}<#else></#if>${config.feed_file}" class="nav-link">Subscribe</a></li>
 				</ul>
 			</div>
-		</nav>
-	</div>
+		</div>
+	</nav>
     <div class="container">
