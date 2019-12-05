@@ -60,7 +60,7 @@
 	}
 	\email{martin.gwerder@fhnw.ch}
 	
-	\acmSubmissionID{TOPS-2019-12-0186} % FIXME if we get a nuber from the submission system
+	\acmSubmissionID{TOPS-2019-12-0186} 
 	
 	
 	\begin{abstract}
@@ -213,7 +213,7 @@
 		Censorship measurements, especially regarding the Internet censorship of China, have been analyzed in depth under technological, sociological and economical aspects (e.g., \cite{Ensafi:2015}, \cite{Clayton:2006}, or \cite{lowe2007great}).
 	\end{itemize}
 	
-	For anonymization the ideas concentrate around onionizing (ToR\cite{tor-spec}, SOR\cite{Egners_2012}, DUO-Onions and Hydra-Onions\cite{iwanik2005duo}), DC networks (DC-Nets\cite{chaum-dc}, Tarzan\cite{tarzan:ccs02}, GAS\cite{AthanRAM07}), mixing (Babel\cite{babel}, MorphMix\cite{morphmix:wpes2002}, Mixminion\cite{minion-design}, Salsa\cite{Salsa}), and distributed hash tables (DHT; e.g., Bifrost\cite{Kondo2009}, BitBlender\cite{Bauer:2008}). For network-layer high speed Protocols we identifyed LAP\cite{hsiao2012lap}, PHI (related to SCION\cite{perrig2017scion}), HORNET\cite{chen2015hornet}, and Dovetail\cite{chen2015hornet}. While these protocols delivered valuable inputs in terms of their weaknesses, we do not directly compare to them as achieving anonymity in a low latence environment is much harder to achieve and some generic restrictions applied we wanted to overcome such as context based timing analysis.
+	For anonymization the ideas concentrate around onionizing (ToR\cite{tor-spec}, SOR\cite{Egners_2012}, DUO-Onions and Hydra-Onions\cite{iwanik2005duo}), DC networks (DC-Nets\cite{chaum-dc}, Tarzan\cite{tarzan:ccs02}, GAS\cite{AthanRAM07}), mixing messages (Ba\-bel\cite{babel}, Morph\-Mix\cite{morphmix:wpes2002}, Mixminion\cite{minion-design}, Salsa\cite{Salsa}), and distributed hash tables (e.g., Bi\-frost\cite{Kondo2009}, Bit\-Blen\-der\cite{Bauer:2008}). For network-layer high speed Protocols we identifyed LAP\cite{hsiao2012lap}, PHI (related to SCI\-ON\cite{perrig2017scion}), HOR\-NET\cite{chen2015hornet}, and Dovetail\cite{chen2015hornet}. While these protocols delivered valuable inputs in terms of their weaknesses, we do not directly compare to them as achieving anonymity in a low latence environment is much harder to achieve and some generic restrictions applied we wanted to overcome such as context based timing analysis.
 	
 	As we use alien transport protocols instead of our protocol, we decided to go for a mixing approach. This approach minimizes the number of messages exchanged between the nodes. Furthermore, mixing allows using the nodes in a structureless way as opposed to DC-nets, where we would have to build fixed or ad-hoc rings for exchanging messages. Unlike other protocols, we do not rely on the logic of mixing on the routing node. Instead, the node generating a routing block (also referred to as RBB) decides on all mixing and decoy generation. Routing nodes follow an onionized set of instructions to build messages. 
 	
@@ -226,6 +226,7 @@
 	\begin{figure*}[ht]
 		\centering\includegraphics[width=0.8\textwidth]{roughProtocolDesign}
 		\caption{A circular graph showing a typical message flow without the possibility to identify original sender or final recipient}
+		\Description[The graph describes a typical message flow from the sender to the recipient in a normalized flow]{A circular graph showing four workspaces and symbols for the associated operations. The graph is circular and does not allow to identify sender or recipient. Underneath the four vortex node, all nodes share a common transport protocol.}
 		\label{fig:protocolLayers}
 	\end{figure*}
 	
@@ -254,6 +255,7 @@
 		\centering\includegraphics[width=1.0\textwidth]{blockLayoutSimplified}
 		\caption{A simplified message outline for a message destined for a host $o$}
 		\label{fig:messageOutline}
+		\Description[The graph shows a visaul representation of the message blocks and their encryption.]{This graph displays the sequence and encryption of a typical MessageVortex message. first there is a peer key encrypted with the hosts public key. Next, a huge block follows encrypted by the symmetric peer key. Within this big block we have a sequence of the following blocks: PAD, sender key encrypted with the public key of the host, header encrypted with the sender key, a recursive routing block encrypted with the sender key, and a sequence of payloads.}
 	\end{figure*}
 	
 	%A VortexMessage is passed from one router to another and is embedded as binary data in the transfer protocol. 
@@ -261,7 +263,7 @@
 	Every \emph{VortexNode} may decide for itself on the support of algorithms and embedding mechanisms. A \emph{VortexMessage} contains an encrypted symmetric key $E^{host_o}\left(K_{peer_o}\right)$ immediately followed by an inner message $E^{K_{peer_o}}$ which is encrypted with this key. The inner message contains a series of blocks encoded in ASN.1. We show in Figure~\ref{fig:messageOutline} a simplified view on a \emph{VortexMessage}. The block structure of a \emph{VortexMessage} is as follows:
 	\begin{itemize}
 		\item \emph{Encrypted peer key $K_{peer_o}$}\\*
-		It contains the symmetrical key for decryption of follow up header information and payload blocks. The symmetric key is encrypted with the receiving host's public key (i.e. $E^{K_{host_o}}\left(K_{peer_o}\right)$ ). The key $K_{peer_o}$ is known to the RBB, the message sending node, and the message receiving node.
+		It contains the symmetrical key for decryption of follow up header information and payload blocks. The symmetric key is encrypted with the receiving host's public key ($E^{K_{host_o}}\left(K_{peer_o}\right)$ ). The key $K_{peer_o}$ is known to the RBB, the message sending node, and the message receiving node.
 		\item \emph{Padding $PAD$}\\*
 		This padding is a defined excerpt of the transferred payload blocks (see further down). It makes sure that the message part encrypted with the peer key does look different for each payload even when reusing keys. This case is not recommended but unavoidable in the case of a reused routing block. Using a different IV is not an option as the IV would be replayed as well.
 		\item header block encrypted with $K_{sender_o}$ and signed with the identities private key (detached signature).
@@ -348,6 +350,7 @@
 	\begin{figure}[ht]
 		\centering\includegraphics[width=0.6\columnwidth]{roughProtocolDesign_workspace}
 		\caption{A sample workspace containing eight payload blocks, two operations, and three routing blocks}
+		\Description{Contains a visual representation of a typical workspace.}
 		\label{fig:workspace}
 	\end{figure}
 	
@@ -489,6 +492,7 @@
 		\includegraphics[width=0.5\columnwidth]{addRedundancyOp}
 		\caption{Graphical representation of the addRedundancy operation}
 		\label{fig:addRedundancyOperation}
+		\Description{Contains a block diagram representing the addRedundancy operation. First an incomming block is padded and split into a number of blocks. Then, the RS operation is applied, and each resulting block is then encrypted with its own key.}
 	\end{figure}
 	
 	The operation itself is shown in Fig.~\ref{fig:addRedundancyOperation} and may be subdivided into the following operations:
@@ -529,6 +533,7 @@
 	\begin{figure}[ht]\centering
 		\includegraphics[width=1\columnwidth]{randomblock_10kb}
 		\caption{Resulting entropy of addRedundancy with and without encryption step}
+		\Description{This graph shows that without the last encryption step in the addRedundancy operation, the entropy and the monte carlo PI may be used on the output block to determine the set of of applied operations on the input block.}
 		\label{fig:entropy}
 	\end{figure}
 	
@@ -556,7 +561,7 @@
 	
 	All operations may apply to true message chunks as well as decoy traffic. As a node cannot tell if a traffic arriving is a decoy or true message content, it is unable to tell apart what outgoing traffic is a decoy. An encrypted block is of the same nature before and after encryption. As we do not know the blocks nature before, we are unable to tell the blocks nature after the encryption. The same argument applies to decryption, split, and merge operations. 
 	
-	Redundancy operations are alike. They, however, fulfill an additional purpose. An $addRedundancy$ operation adds size to a message without differentiating between redundancy information and original payload. If the original block was a decoy, then all resulting blocks are decoys. If an originating block was message content, then all resulting blocks hold the same amount of data from the original block. So, this operation allows decoy traffic generation without enabling a generating node to identify the decoy traffic.
+	Redundancy operations are alike. They, however, fulfill an additional purpose. An operation called $addRedundancy$ enables the protocol to add size to a message without enabling the sender to differentiate between redundancy information and original payload. If the original block was a decoy, then all resulting blocks are decoys. If an originating block was message content, then all resulting blocks hold the same amount of data from the original block. So, this operation allows decoy traffic generation without enabling a generating node to identify the decoy traffic.
 	
 	An active adversary may not create its routing blocks or header blocks and inject them due to the forward secret. He may, however, replace the peer key of a message. As this key is known to him, he gains no additional knowledge. Replacing the sender key block breaks the message. Replacing the header or routing block of the message with another header or routing block from the same ephemeral identity breaks the message unless the RBB reused the sender key and the forward secret. Finally, exchanging, omitting, or adding payload blocks renders the message inoperable, but does not generate additional knowledge. Replying the same or a modified block does not generate any pattern on the network as the replay protection stops propagating messages at the next node. Thus, a replayed block does not generate new knowledge to an observer.
 	
@@ -594,6 +599,7 @@
 	\begin{figure}[ht]
 		\centering\includegraphics[width=0.7\columnwidth]{messagePaths}
 		\caption{A possible path of a VortexMessage}
+		\Description{Graph shows the sender followed by four routing paths (sequentially) ending in a set of five  ``anonymity nodes''.}n
 		\label{fig:messagePaths}
 	\end{figure}
 	
