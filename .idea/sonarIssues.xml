@@ -8,6 +8,11 @@
             <set />
           </value>
         </entry>
+        <entry key="/a.dummy">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="/a.regexp">
           <value>
             <set />
@@ -754,6 +759,26 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/asn1/AlgorithmParameter.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/asn1/yaml/IdentityStoreRepresenter.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/asn1/yaml/IdentityStoreYamlHandler.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/asn1/yaml/MessageVortexRepresenter.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/commandline/CommandLineHandlerIdentityStoreDump.java">
           <value>
             <set />
           </value>

@@ -20,9 +20,7 @@
 \author{Martin Gwerder (06-073-787)}
 %\date{\gitAuthorDate}
 \gdef\myabstract{
-	In this paper, we introduce an unobservable message anonymization protocol, named MessageVortex. It bases on the zero trust principle and a distributed peer-to-peer (P2P) architecture and avoids central aspects such as fixed infrastructures within a global network. 
-	
-	It scores over existing work by blending its traffic into suitable existing transport protocols, thus making it next to impossible to block it without significantly affecting regular users of the transport medium. No additional protocol-specific infrastructure is required in public networks and allows a sender to control all aspects of a message such as the degree of anonymity, timing, and redundancy of the message transport without disclosing any of these details to the routing or transporting nodes. Part of this work is an RFC document attached in Appendix \ref{app:rfcMessageVortexMain} describing the protocol. It contains all the necessary information to build protocol nodes. The RFC draft is available through the official RFC channels. Additionally, the RFC document, additional documents, and a reference are available under \url{https://messagevortex.net/}.}
+	In this paper, we introduce an unobservable message anonymization protocol, named MessageVortex. It bases on the zero trust principle, a distributed peer-to-peer (P2P) architecture, and avoids central aspects such as fixed infrastructures within a global network. It scores over existing work by blending its traffic into suitable existing transport protocols, thus making it next to impossible to block it without significantly affecting regular users of the transport medium. No additional protocol-specific infrastructure is required in public networks and allows a sender to control all aspects of a message such as the degree of anonymity, timing, and redundancy of the message transport without disclosing any of these details to the routing or transporting nodes. Part of this work is an RFC document attached in Appendix \ref{app:rfcMessageVortexMain} describing the protocol. It contains all the necessary information to build protocol nodes. The RFC draft is available through the official RFC channels. Additionally, the RFC document, additional documents, and a reference are available under \url{https://messagevortex.net/}.}
 \makeatother
 
 % enable superscript  for 1st, 2nd, 3rd etc.
@@ -291,9 +289,10 @@
 
 \lstdefinelanguage{bash}{
 	language={},
-	basicstyle=\tiny\sffamily,
+	basicstyle=\tiny\ttfamily,
 	numbers=none,
 	frame=tb,
+	keepspaces=true,
 	breaklines=true,
 	prebreak={\mbox{\quad$\hookleftarrow$}},
 	columns=fullflexible,
@@ -303,6 +302,8 @@
 %	linewidth=0.9\linewidth,
 %	xleftmargin=0.1\linewidth
 }
+
+\hyphenation{an-on-ym-iz-ing an-on-ym-ity al-though weak-ness-es}
 
 \makeatletter
 \newcommand{\getfilename}[1]{%
@@ -522,22 +523,33 @@ I would like to acknowledge all the individuals who have coded for the \LaTeX pr
 
 
 
-\gdef\rfc{../../../../rfc/src/xml2rfc/draft-gwerder-messagevortexmain-03.pdf}
+\gdef\rfc{../../../../rfc/src/xml2rfc/draft-gwerder-messagevortexmain-04.pdf}
 %\includepdf[pages=-,frame=true,scale=0.5]{\rfc}
 \includepdf[pages=1,frame=true,scale=0.70,pagecommand={\chapter{The RFC draft document\label{app:rfcMessageVortexMain}}}, offset=0 -1cm]{\rfc}
 \includepdf[pages=2-,frame=true,scale=0.8,pagecommand={}, offset=0 -1cm]{\rfc}
 
 \twocolumn\clearpage
 \chapter{Short analysis on common internet protocols\label{app:transportProtocols}}
+
+\section{Introduction}
 The following sections list common internet protocols. We analyze those protocols for the fitness as transport layer of message vortex. The criteria applied are listed under section \ref{sec:existingTPP}.
 
+\section{Methodes}
 All sections are structured the same way. We first refer to the protocol or standard and describe it in the simplest possible form. We refer to subsequent standards where required to consider extensions where sensible. We then apply the previously referenced criteria and make a concise summary of the suiting of the protocol as a transport layer. The findings of this section is listed in table \ref{tab:protoSuitCrit}. The list here does not reflect the quality or maturity of the protocols. It is a simple analysis of suiting as a transport layer.
 
 
-All sections are structured the same way. We first refer to the protocol or standard and describe it in the simplest possible form. We refer to subsequent standards where required to consider extensions where sensible. We then apply the previously referenced criteria and make a concise summary of the suiting of the protocol as a transport layer. The findings of this section is listed in table \ref{tab:protoSuitCrit}. The list here does not reflect the quality or maturity of the protocols. It is a simple analysis of suiting as a transport layer.
- does not reflect the quality or maturity of the protocols. It is a plain analysis for suiting as a transport layer.
+All sections are structured the same way. 
+\begin{itemize}
+	\item Description\\
+	      We first refer to the protocol or standard and describe it in the simplest possible form. We refer to subsequent standards where required to consider extensions where sensible.
+	\item Apply criteria\\\\
+	      We then apply the previously referenced criteria and make a concise summary of the suiting of the protocol as a transport layer. The findings of this section is listed in table \ref{tab:protoSuitCrit}. The list here does not reflect the quality or maturity of the protocols. It is a simple analysis of suiting as a transport layer.
+\end{itemize} 
 
-\section{HTTP}
+For the criteria please refer to section \ref{sec:existingTPP} on page \pageref{sec:existingTPP} of this document.
+
+\section{Analysis}
+\subsection{HTTP}
 The HTTP protocol allows message transfer from and to a server and is specified in RFC2616 \cite{RFC2616}. It is not suitable as a communication protocol for messages due to the lack of notifications. There are some extensions which would allow such communications (such as WebDAV), but in general, even those are not suitable as they require a continuous connection to the server in order to get notifications. Having a ``rollup'' of notifications when connecting is not there by default but could be implemented on top of it. 
 
 HTTP servers listen on standard ports 80 or 443 for incoming connects. The port 443 is equivalent to the port 80 except for the fact that it has a wrapping encryption layer (usually TLS). The incoming connects (requests) must offer a header part and may contain a body part which would be suitable for transferring messages to the server. The reply onto this request is transferred over the same TCP connection containing the same two sections.
@@ -550,7 +562,7 @@ The protocol does satisfy the first two main criteria (Ct1: Widely Adopted and C
 
 The main disadvantage in terms as a message transport protocol is that this protocol is not symmetrically. This means that a server is always just ``serving requests'' and not sending information actively to peers. This Request-Reply violates criteria (Ct1: Symmetrically built) and makes the protocol not a primary choice for message transport. 
 
-\section{FTP}
+\subsection{FTP}
 FTP is defined in RFC959\cite{RFC959}. This Protocol is intended for authenticated file transfer only. There is an account available for general access (``anonymous''). This account does for security reasons normally not offer upload rights.
 
 It is possible to use FTP as message transfer endpoint. The configuration would work as follows: ``anonymous'' has upload rights only. It is unable to download or list a directory. A node may upload a message with a random name. In case of a collision, the node retries with another random name.
@@ -563,19 +575,19 @@ Furthermore, FTP may be problematic when used in active mode for firewalls. All 
 
 Like in HTTP, a disadvantage of FTP in terms as a message transport protocol is that this protocol is not symmetrically. This means that a server is always just ``serving requests'' and not sending information actively to peers. This Request-Reply violates criteria (Ct3: Symmetrically built) and makes the protocol not a primary choice for message transport. The Protocol, however, satisfies the first two criteria  (Ct1: Widely Adopted and Ct2: Reliable).
 
-\section{TFTP}
+\subsection{TFTP}
 TFTP has despite its naming similarities to FTP very little in common with it. TFTP is a UDP based file transfer protocol without any authentication scheme. This makes it not suitable as a transport layer as it would leave messages open to anyone. The protocol is due to the use of UDP in a meshed network with redundant routes. Since the internet has a lot of these redundant routes, this neglects the use of this protocol.
 
 TFTP is rarely ever used on the internet (it is quite commonly used in local area networks for booting over a network connection). This violates Criteria one (Ct1: Widely Adopted). TFTP is not symmetrically. This means that a server is always just ``serving requests'' and not sending information actively to peers. This Request-Reply violates criteria (Ct3: Symmetrically built) and makes the protocol not a primary choice for message transport. The Protocol furthermore violates Ct2 (Ct2: Reliable) as it is based on UDP without any additional error correction.
 
-\section{MQTT}
+\subsection{MQTT}
 MQTT is an ISO standard (ISO/IEC PRF 20922:2016) and was formerly called MQ Telemetry Transport. The current standard as the time of writing this document was 3.1.1 \cite{mqtt}. 
 
 The protocol runs by default on the two ports 1883 and 8883 and may be encrypted with TLS. MQTT is a publish/subscribe based message passing protocol which is mainly targeted to m2m communication. This Protocol requires the receiving party to be subscribed in a central infrastructure in order to be able to receive messages. This makes it very hard to be used in a system without centralistic infrastructure and having no static routes between senders and recipients.
 
 The protocol does satisfy the second criteria (Ct2: Reliable). It is in the area of end-user (i.e., Internet) not widely adopted thus violating Criteria 1 (Ct1: Widely Adopted). In terms of decentralization design, the protocol fails as well (Ct3: Symmetrically built).
 
-\section{Advanced Message Queuing Protocol}
+\subsection{Advanced Message Queuing Protocol}
 The Advanced Message Queuing Protocol (AMQP) was initially initiated by numerous exponents based mainly in finance-related industries. The AMQP-Protocol is either used for communication between two message brokers, or between a message broker and a client\cite{amqp}.
 
 It is designed to be interoperable, stable, reliable and safe. It supports either SASL or TLS secured communication. The use of such a tunnel is controlled by the immediate sender of a message. In its current version 1.0, it does however not support a dynamic routing between brokers\cite{amqp}.
@@ -584,26 +596,26 @@ Due to the lack of a generic routing capability, this protocol is therefore not 
 
 The protocol satisfies partially the first criterion (Ct1: Widely Adopted) and fully satisfies the second criterion (Ct2: Reliable). However, the third criterion is violated due to the lack of routing capabilities between message brokers (Ct3: Symmetrically built).
 
-\section{Constrained Application Protocol (CoAP)}
+\subsection{Constrained Application Protocol (CoAP)}
 The Constrained Application Protocol (CoAP) is a communication Protocol which is primarily destined to m2m communication. It is defined in RFC7252\cite{RFC7252}.  It is Defined as a lightweight replacement for HTTP in IoT devices and is based on UDP.
 
 The protocol does partially satisfy the first criteria (Ct1: Widely Adopted). The second criteria (Ct2: Reliable) is only partially fulfilled as it is based on UDP and does only add limited session control on its own.
 
 The main disadvantage in terms as a message transport protocol is that this protocol is not (like HTTP) symmetrically. This means that a server is always just ``serving requests'' and not sending information actively to peers. This Request-Reply violates criteria (Ct3: Symmetrically built) and makes the protocol not a primary choice for message transport. 
 
-\section{Web Application Messaging Protocol}
+\subsection{Web Application Messaging Protocol}
 WAMP is a web-sockets based protocol destined to enable M2M communication. Like MQTT it is publish respectively subscribe oriented. Unlike MQTT it allows remote procedure calls (RPC).
 
 The WAMP protocol is not widely adopted (Ct1: Widely Adopted), but it is reliable on a per node base (Ct2: Reliable). Due to its RPC based capability unlike MQTT a routing like capability could be implemented. Symmetrical protocol behavior is therefore not available but could be built in relatively easy.
 
-\section{XMPP (jabber)}
+\subsection{XMPP (jabber)}
 XMPP (originally named Jabber) is a synchronous message protocol used in the internet. It is specified in the documents RFC6120\cite{RFC6120}, RFC6121\cite{RFC6120}, RFC3922\cite{RFC3922}, and RFC3923\cite{RFC3923}. The protocol is a very advanced chat protocol featuring numeros levels of security including end-to-end signing and object encryption\cite{RFC3923}. There is also a stream initiation extension for transferring files between endpoints \cite{xep0096}.
 
 It has generic routing capabilities spanning between known and unknown servers. The protocol offers a message retrieval mechanism for offline messages similarily to POP \cite{xep0013}.
 
 The protocol itself seems to be a strong candidate as a transport layer as it is being used actively on the internet.
 
-\section{SMTP}
+\subsection{SMTP}
 The SMTP protocol is currently specified in \cite{RFC5321}. It specifies a method to deliver reliably asynchronous mail objects thru a specific transport medium (most of the time the internet). The document splits a mail object into a mail envelope and its content. The envelope contains the routing information which is the sender (one) and the recipient (one or more) in 7-Bit ASCII. The envelope may additionally contain optional protocol extension material. 
 
 The content should be in 7-Bit-ASCII (8-Bit ASCII may be requested, but this feature is not widely adopted). It is split into two parts. These parts are the header (which does contain meta-information about the message such as subject, reply address or a comprehensive list of all recipients), and the body which contains the message itself. All lines of the content must be terminated with a CRLF and must not be longer than 998 characters excluding CRLF.
@@ -618,13 +630,18 @@ SMTP is one of the most common messaging protocols on the internet (Ct1: Widely 
 
 SMTP is considered a strong candidate as a transport layer.  
 
-\section{SMS}
+\subsection{SMS}
 SMS capability was introduced in the SS7 protocol. This protocol allows the message transfer of messages not bigger than 144 characters. Due to this restriction in size, it is unlikely to be suitable for this type of communication as the keys being required are already sized similarly leaving no space for Messages or routing information.
 
 Secondly, the protocol is not widely adopted within the internet domain. There are gateways providing bridging functionalities to the SMS service. However -- the protocol itself is insignificant on the internet itself. 
 
-\section{MMS}
+\subsection{MMS}
 The \nth{3} Generation Partnership Project (3GPP) maintains the Multimedia Messaging Service (MMS). This protocol is mainly a mobile protocol based on telephone networks. This protocol is just like the SMS protocol accessible through the internet by using gateways but not directly usable within the internet.
+
+\section{Results}
+We can clearly state that according to the criteria only few protocols are suitable. Table \ref{tab:protoSuitCrit} on page \pageref{tab:protoSuitCrit} shows that only SMTP and XMPP are suitable protocols. Eventually similar protocols such as HTTP (with WebDAV) or FTP may be usable as well. 
+
+The findings of this short analysis suggested that we should use the two protocols SMTP and XMPP for our first standardization. We require at least two to prove that the protocol is agnostic to the transport.
 
 \clearpage\chapter{Glossary}
 

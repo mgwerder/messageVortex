@@ -22,11 +22,18 @@ The hardware currently requires a network interface and a fully functional JSE V
 
 \section{Addresses}
 
-\fxerror{change to one representation}
+A Vortex address is built as follows: 
 
-A Vortex address is built as follows: $vortexAddress=<transport>:<address>!<publicKey>$
+\begin{lstlisting}[language=bash]
+  localPart         = <local part of address>
+  domain            = <domain part of address>
+  email             = localPart "@" domain
+  keySpec           = <BASE64 encoded AsymmetricKey [DER encoded]>
+  smtpAlternateSpec = localPart ".." keySpec ".." domain "@localhost"
+  smtpUrl           = "vortexsmtp://" smtpAlternateSpec
+\end{lstlisting}
 
-To allow storage of Vortex addresses in standard messaging programs such as Outlook or Thunderbird. We define an alternate representation $encodedVortexAddress=base64(<transport>:<address>).<publicKey>@localhost$. 
+To allow storage of Vortex addresses in standard messaging programs such as Outlook or Thunderbird $smtpAlternateSpec$ may be used. 
 
 The suffix ``@localhost'' makes sure that any non-participating server does not route a message intended for Vortex.
 
@@ -48,10 +55,10 @@ Messages are always encoded as attachments in SMTP and XMMP.
 If not further specified by the receiving node an attachment should be the encoded message. 
 
 Valid properties may be:
-\begin{itemize}
-	\item $plainEncoding="("plain:"<numberOfBytesOfOffset>[,<numberOfBytesOfOffset>]*")$
-	\item $F5Encoding="(F5:"<passwordString>[,<PasswordString>]*")"$
-\end{itemize}
+\begin{lstlisting}[language=bash]
+	plainEncoding = "("plain:"<#BytesOfOffset>[,<#BytesOfOffset>]*")
+	F5Encoding    = "(F5:"<passwordString>[,<PasswordString>]*")"
+\end{lstlisting}
 
 \section{Client}
 We did not create a Vortex client for sending messages. Instead, we used a standard Thunderbird email client pointing to a local SMTP and IMAP Server provided by a Vortex proxy. On the SMTP side Vortex does encapsulate where possible mails into a Vortex message and builds an automated route to the recipient. The SMTP part of vortex may be used to encapsulate all messages automatically with a known Vortex identity into a vortex message. On the IMAP side, it merges a local Vortex message store with the standard Email repository building a combined view.
@@ -664,7 +671,7 @@ A node may reject an operation for any reason, including exceeding an unnatural 
 
 A reply containing a null length puzzle means that the requested operation is rejected.
 
-\chapter{MessageVortex - Transport Independent Messaging anonymous to \texorpdfstring{\nth{3}}{3rd} Parties\label{sec:spec}}
+\chapter{MessageVortex -- Transport Independent Messaging anonymous to \texorpdfstring{\nth{3}}{3rd} Parties\label{sec:spec}}
 This approach is different from all approaches discussed previously. Unlike them, we put complete distrust into the infrastructure being used. Furthermore, we do not rely on a custom server infrastructure on the internet. Instead, we take advantage of the availability of internet-connected devices such as mobile phones, tablets, or even commonly available SoC such as RaspberryPi or similar. It is still tough to maintain a server on the internet. Considering the vastly growing amount of automated attacks carried out against Internet-connected servers, it is not advisable or realistic to assume that a future user of this system owns either a server or connects to a service which is offering anonymizing services. These infrastructures would be susceptible to monitoring or even banning. Instead, we take a different approach.
 
 We use common messaging protocols as transport layers and connect to them using the respective client protocols. The actual mixes are operated by the users on their ``always connected'' devices. Such a system is far less reliable than a traditionally run server as this hardware is typically cheap and generally connected to the internet using a bandwidth shared media.

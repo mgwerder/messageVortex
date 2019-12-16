@@ -2,25 +2,11 @@
 %!TeX encoding=utf8
 %!TeX spellcheck = en_US
 %!TeX root = ../../messageVortex.tex
+%
 
-\part{Discussion \label{sec:discussion}}
 
-In the following chapters, we analyze the protocol thoroughly for fitness of purpose. 
-
-We first apply a statical analysis of the protocol to identify all pieces of information leaked at all levels.
-
-Then we apply a dynamic analysis of the protocol to identify all meta pieces of information leaked during transmission of the protocol such as timing or context between messages.
-
-We distinguish between passive and active adversaries. Passive adversaries follow the MessageVortex protocol, have unlimited observation capabilities on the network up to layer 4 of the ISO/OSI protocol, and do have unlimited observation capabilities on the transporting layer of MessageVortex. Active adversaries share the capabilities of passive adversaries, but do not follow the MessageVortex protocol. Both adversaries try to obtain valuable information (e.g., message content, metadata such as the communicating peers or message frequencies). For a more precise model, refer to \ref{sec:adversary}.
-
-We then sum up the achieved goals by looking at well-known attacks and analyze the effectiveness of them to analyze the protocol.
-
-At the very end of this chapter, we identify the gaps uncovered by this work.
-
-\chapter{Static analysis}
-In this section, we analyze the protocol statically. Looking at a full message, we get the protocol outline as shown in \eqref{eq:vortexMessage} on page~\pageref{eq:vortexMessage}.
-
-\begin{figure*}[!h]
+\part{Discussion \label{sec:discussion}}%
+\begin{figure*}[!ht]
 	\begin{align}
 	VortexMessage                = &\langle \mathbf{MP}^{K^{-1}_{hostN}}, \langle\mathbf{PAD}, \mathbf{CP}^{K^{-1}_{hostN}}, \mathbf{H}^{K_{senderN}}, E^{K^{-1}_{senderN}}\left(H\left(\mathbf{HEADER}\right)\right)  \nonumber \\
 	& \left[\mathbf{R}^{K_{senderN}}\right], \left[\mathbf{PL}\right]*\rangle^{K_{peerN}} \rangle\label{eq:vortexMessage}\\ 
@@ -34,20 +20,70 @@ In this section, we analyze the protocol statically. Looking at a full message, 
 	\mathbf{ROUTING}             = & \langle [ \mathbf{ROUTINGCOMBO} ] *, forwardSecret, replyBlock \rangle\\  
 	\mathbf{ROUTINGCOMBO}        = & \langle processIntervall, K_{peerN+1}, recipient, \mathbf{nextCP}, \mathbf{nextMP}, \nonumber \\
 	& \mathbf{nextHEADER}, \mathbf{nextROUTING}, assemblyInstructions, id \rangle\\
-	\mathbf{PL}                  = &\langle \text{payload octets} \rangle *\\ 
+	\mathbf{PL}                  = &\langle \text{payload octets} \rangle *
 	\end{align}
 	%\captionsetup{labelformat=empty}
 	\caption{Detailed representation of a VortexMessage}
 \end{figure*}
 
+In the following chapters, we analyze the protocol thoroughly for fitness of purpose. 
+
+We first apply a statical analysis of the protocol to identify all pieces of information leaked at all levels.
+
+Then we apply a dynamic analysis of the protocol to identify all meta pieces of information leaked during transmission of the protocol such as timing or context between messages.
+
+We distinguish between oserving and cansoring adversaries as defined prevouly (see \ref{sec:adversary}) and apply different restrictions where applicable.
+
+We then sum up the achieved goals by looking at well-known attacks and analyze the effectiveness of them to analyze the protocol.
+
+At the very end of this chapter, we identify the gaps uncovered by this work.
+
+\chapter{Static analysis}
+In this section, we analyze the protocol statically. Looking at a full message, we get the protocol outline as shown in \eqref{eq:vortexMessage} on page~\pageref{eq:vortexMessage}.
+
+\begin{table*}[ht]
+	\centering\tiny
+	\begin{tabular}{|l|l|l|l|}\hline
+		\diaghead{\theadfont Type Criteria}{Type}{Criteria} & \thead{Avg. Entropy}     & \thead{IQR} & \thead{Remarks}\\\hline
+		JPG       & 7.008  & 0.097 & -- \\              
+		PNG       & 7.116  & 0.086 & -- \\              
+		GIF       & 6.978  & 0.194 & -- \\              
+		BMP       & 2.997  & 4.964 & not suitable as entropy covers almost the whole spectrum.\\              
+		PDF       & 6.660  & 0.282 & hard to embed sensibly due to a very complex inner structure but well suited, as analysis is similarily hard.\\\hline              
+		MP3       & 7.076  & 0.091 & -- \\              
+		WAV       & 4.777  & 0.927 & -- \\              
+		OGG       & 7.104  & 0.093 & relatively easy to embedd. Hard not to break the file structure. \\\hline              
+		mpg4      & n/a    & n/a   & good to embedd but due to the possible codecs no conclusive analysis was caried out. Steganography could be applied here easily too.\\\hline              
+		zip       & 7.148  & 0.080 & easy to embedd when using ``password protected''  archives. Such archives use a similar encrypted structure resulting in the same entropy pattern. \\\hline\hline
+		MVaes     & 7.176  & 0.072 & Without length padding as reference encrypted with AES 256 CBC\\
+		MVcam     & 7.175  & 0.070 & Without length padding as reference encrypted with Camellia 256 CBC\\\hline
+	\end{tabular}    
+	\caption{comparison of protocols in terms of the suitability criteria as transport layer}
+	\label{tab:fileEntropy}
+\end{table*}
+
 \section{Transport and Blending Layer}
+The transport layer is unmodified and no trust has been put within it. We always assume that it may leak all non-hidden properties of a message. Therefore, the assumption must be that some properties are leaked when assuming that an adversary knows that a transported message contains a \emph{VortexMessage}. If this assumption is deemed to be incorrect, no properties are leaked. These properties may vary from protocol to protocol. We assumed SMTP and XMPP as transport protocol and a worst case.
+
+The leaked properties of a known VortexMessage are at least sending and receiving VortexNode. Even when spoofing the sender address of the transport protocol the sending node without the exact address is identifiable. Another property leaked is a maximum size of a \emph{VortexMessage}. It is equal to the biggest attachment in the transported message. When using plain embedding the size of the message may be narrowed down further by differences in entropy in the file or sudden visible breaches in the content of the attachment. No similar weaknesses are known in the F5 embedding methode so far.
+
+Not leaked properties are: 
+\begin{itemize}
+	\item The exact size of the message
+	\item Content of the message
+	\item The used keys
+\end{itemize} 
+
+As at least the key $K_{peer}$ would be required to gain further information, no additional information is leaked. Especially not leaked is the key $K_{host}$ which would allow an adversary to craft additional VortexMessages to gain further knowledge.  
+
+Therefore, an adversary may discover the peer partners when identifying a message on the transport layer as \emph{VortexMessage}, but due to the lack of the required keys he is not able to craft a message for the block. This would be a requirement for an observing adversary.
 
 \subsection{Analysis of Plain Embedding}
-It is undeniable why a file treated with plain embedding is easily identifiable as a broken or tampered file. While the file is still parseable, its content is no longer sensible to a human and thus at least suspect. 
+It is undeniable that a file treated with plain embedding is easily identifiable as a broken or tampered file. While the file may be still parseable, its content is no longer sensible to a human and thus at least suspect. 
 
 We wanted to know if there is an easy method to detect the modifications of such a file. While most of the analysis method requires the processing of large data sets, we tried to find apparent, non-calculation-intense test methods which were generic. We did not take any content-based characteristics such as ``outline of an image'' or ``resulting spectrum of a sound file'' into account. As our embedding is generic, we searched for a similar detection method.
 
-A property of encrypted ciphertext is the high entropy. We, therefore, used the calculation of the Shannon entropy in bytes as property and tried to show the shift of entropy within the files. This detection method depended very much on the type of file used for embedding. It showed an expected behavior, that file types having in the expected area a similar entropy were not detectable by this method. However, the following file types were identified to be unsuitable for plain blending due to their entropy structure.
+A common property of encrypted ciphertext is the high entropy. We, therefore, used the calculation of the Shannon entropy in bytes as property and tried to show the shift of entropy within the files. This detection method depended very much on the type of file used for embedding. It showed an expected behavior, that file types having in the expected area a similar entropy were not detectable by this method. However, the following file types were identified to be unsuitable for plain blending due to their entropy structure.
 
 We analyzed the files by calculating the entropy of blocks 256 bytes and did this with a sliding window over a randomly collected set of images (e.g., the first 100 entries of a file type after searching for ``mouse'', ``cat'', ``camel'', or ``dog''). We did intentionally not filter or eliminate images. Surprisingly, we were able to tell file types apart, were able to identify files with thumbnails or an interlaced structure. We even identified certain specific pattern regarding the producer type of an image (e.g., we could differentiate between images scanned and images taken by a camera). It was not so much surprising that we were able to identify these features, but the fact that we could see them in entropy data.
 
@@ -57,34 +93,15 @@ We analyzed the files by calculating the entropy of blocks 256 bytes and did thi
 	\label{fig:statGraph}
 \end{figure*}
 
+We then embedded a VortexMessage using different types of embedding (chunked or unchunked) into the carrierand tried to identify all those carriers from unmodified carriers by the applied methode. We found that it is characteristic that due to its inner stucture a VortexMessage has a very high and constant entropy ($\approx 7.2$). Any file suitable for embedding must therefore have a similar entropy. It does not have to be equal but requires section of equal entropy. Then putting the VortexMessage into these sections was sufficient. This methode was easy identifiable by a human as the resulting attachment was obviously damaged. Another suitable possibility was to invent new exif properties. As these properties were unknown to viewers they were not displayed and thus remained invisible. However, the presence of metadata with a high entropy in a file may be suspicious enough to classify a message as VortexMessage.
+
 \begin{figure*}[ht]
 	\includegraphics[width=\textwidth]{inc/statanalysis_mv}
-	\caption{Distribution Analysis of a MessageVortex Block}
+	\caption{Distribution Analysis of a single VortexMessage}
 	\label{fig:statMvGraph}
 \end{figure*}
 
-We then carried out an analysis identifying the typical entropy and the inner structures. The graphs in \ref{fig:statGraph} show a typical analysis. In that case, we looked at 100 images of each type. We graphed and analyzed their entropy and tested for suitability of a plain embedding. Table \ref{tab:fileEntropy} lists the average entropy of analyzed file types and makes remarks about the suitability for plain embedding. In practice, we found that most suitable file formats have an entropy of $\approx 7.2$ and an inter-quartile range (IQR) of 0.15 or less. Furthermore, files should have a big, uniform, the non-structured range containing these characteristics. Such a file has a suitable space for embedding. For reference, Figure \ref{fig:statMvGraph} shows the distribution of typical MessageVortex blocks. The uniform entropy must be matched in the case of embedding.
-
-\begin{table*}[!ht]
-	\centering\tiny
-	\begin{tabular}{|l|l|l|l|}\hline
-		\diaghead{\theadfont Type Criteria}{Type}{Criteria} & \thead{Avg. Entropy}     & \thead{IQR} & \thead{Remarks}\\\hline
-		JPG       & 7.008  & 0.097 & -- \\              
-		PNG       & 7.116  & 0.086 & -- \\              
-		GIF       & 6.978  & 0.194 & -- \\              
-		BMP       & 2.997  & 4.964 & not suitable \\              
-		PDF       & 6.660  & 0.282 & Hard to embed due to a very complex inner structure but well suited \\\hline              
-		MP3       & 7.076  & 0.091 & -- \\              
-		WAV       & 4.777  & 0.927 & -- \\              
-		OGG       & 7.104  & 0.093 & relatively easy to embedd. Hard not to break the file structure. \\\hline              
-		mpg4      & n/a    & n/a   & good to embedd. Steganography could be applied here easily too. \\\hline              
-		zip       & 7.148  & 0.080 & easy to embedd when using ``password protected''  archives \\\hline\hline
-		MVaes     & 7.176  & 0.072 & Without length padding as reference encrypted with AES 256 CBC\\
-		MVcam     & 7.175  & 0.070 & Without length padding as reference encrypted with Camellia 256 CBC\\\hline
-	\end{tabular}    
-	\caption{comparison of protocols in terms of the suitability criteria as transport layer}
-	\label{tab:fileEntropy}
-\end{table*}
+The graphs in \ref{fig:statGraph} show a typical analysis. In that case, we looked at 100 images of each type. We graphed and analyzed their entropy and tested for suitability of a plain embedding. Table \ref{tab:fileEntropy} lists the average entropy of analyzed file types and makes remarks about the suitability for plain embedding. In practice, we found that most suitable file formats have an entropy of $\approx 7.2$ and an inter-quartile range (IQR) of 0.15 or less. Furthermore, files should have a big, uniform, the non-structured range containing these characteristics. Such a file has a suitable space for embedding. For reference, Figure \ref{fig:statMvGraph} shows the distribution of typical MessageVortex blocks. The uniform entropy must be matched in the case of embedding.
 
 When blending into images, BMP showed a strongly varying entropy within a file. A sampling of ten blocks at random position resulted already in detection with a failure rate below 5\%. PNG and JPG files showed to be very robust within the sample. We did not succeed in identifying the MessageVortex blending content based on entropy values. GIF images showed to be unsuitable. Archive formats such as zip files were extremely robust. We were able to embed into a zip file and marking it (generically) as an encrypted password file. This embedding was genuinely undetectable. However, such embedding may potentially lead to censorship based on blacklisting.
 
@@ -94,6 +111,8 @@ We could show that with an approach based on Shannon entropy, we may identify pl
 
 All movie formats were performing similarly to jpg and PNG. However, due to the very complex structure with scattered blocks, they seem to be unsuitable for plain embedding. They are, however, strong candidates for steganography.
 
+We may therefore conclude that plain embedding is not suitable for an censoring adversary. But may be sufficient for an observing adversary.
+
 \subsection{Identifying a Vortex Message Endpoint}
 Depending on the blending method, single messages might be identified as long as they are detectable. Detectability depends on various factors, such as:
 
@@ -101,12 +120,14 @@ Depending on the blending method, single messages might be identified as long as
 	\item Broken internal file structure (due to plain blending)
 	\item Uncommon high entropy in a structureless file
 	\item Unrelated message flow (see \cite{oakland2013-parrot})
-	\item Non-human behaviour on the transport layer (e.g., message traffic 24x7)
+	\item Possibly non-human behaviour on the transport layer (e.g., message traffic 24x7)
 \end{itemize}
 
 If an endpoint is successfully identified, then all directly related endpoints of the same protocol may be identified as well by following the message flow. This does, however, not enable an adversary to inject messages as the host key is not leaked. 
 
 Assuming a global observer as an adversary and unencrypted traffic, he might discover the originating routing layer and thus identify it as Vortex node by following traces of the transport layer. In most protocols, however, this address is spoofable and not a reliable source for the originating account.
+
+Special care applies to the non-human behavior. While it is true that these properties may lead to detection they are not necessarily a problem. VortexMessage traffic may hide as well in H2M (human-to-machine), M2H (machine-to-human), and M2M (machine-to-machine) traffic. Especially the latter two cases are intrestiong as they erradicate any need for human behavvior and structured messages become the normal case. bBlending then becomes far easier as we may hide our message in a traffic graph of a routing monitor or in diagnostic graphs of a production machine. This is especially true when looking at messaging protocols created for M2M communication such as AMQP or MQTT as their communication increases with the growing IoT (internet of things). Hiwever, it has to be stated that current devices form stable pairs or groups within the network whereas our protocol does not. Unless this changes, traditional M2M protocols are not suitable for hidding VortexMessages.
 
 \section{Senders routing layer}
 A sender may have some knowledge about the Routing block size and may, therefore, guess the complexity of the routing path. He is, however, unable to gain any additional information such as time of travel or number of hops until the target.

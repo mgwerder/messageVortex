@@ -149,7 +149,7 @@ A messaging system offering unlinkability may offer sender anonymity. If so a se
 
 To fulfill the criteria given above, we define a very rough idea of the protocol and its layers. The rough overview is given in figure \ref{fig:roughProtocolDesign}. The protocol should work on the base of onion routing. Unlike Tor (see \ref{sec:tor}) it should not rely on central infrastructures. It furthermore should not be limited to onionized messages. It should be capable of splitting and reassemble messages at an intermediate router.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 	\includegraphics[width=\columnwidth]{inc/roughProtocolDesign.pdf}
 	\caption{A first rough overview for the protocol}
 	\label{fig:roughProtocolDesign}
@@ -369,7 +369,7 @@ After reviewing the options, we decided to go for F5\cite{f5}. It is a reasonabl
 
 % We use https://github.com/matthewgao/F5-steganography
 
-YASS, as described in \cite{solanki2007yass} was not considered a candidate. Although less researched, researchers found multiple weaknesses\cite{kodovsky2010modern,li2009steganalysis}. We rejected it, thus, later. 
+YASS, as described in \cite{solanki2007yass} was not considered a candidate. Although less researched, researchers found multiple weakness\-es\cite{kodovsky2010modern,li2009steganalysis}.
 
 \subsubsection{Timing Channels}
 
@@ -749,7 +749,7 @@ The transport layer problematic has been wholly ignored. As there is no precise 
 \subsection{Gnutella}
 Gnutella is not a protocol to the anonymity world in special. Instead, the Gnutella protocol implements a general file sharing on a Peer to peer base. This peer-to-peer approach is the most interesting aspect of Gnutella in this context. Furthermore, Gnutella has proven to be working with a large number of clients.
 
-The current protocol specification may be found under \url{http://rfc-gnutella.sourceforge.net/developer/stable/index.html}{http://rfc-gnutella.sourceforge.net/}. While the Gnutella network is defunct. The approaches to solve some of the peer-to-peer aspects were very interesting.
+The current protocol specification may be found under \href{http://rfc-gnutella.sourceforge.net/developer/stable/index.html}{http://rfc-gnutella.sourceforge.net/}. While the Gnutella network is defunct. The approaches to solve some of the peer-to-peer aspects were very interesting.
 
 \subsection{Gnutella2}
 Despite its name, Gnutella2 is not the next generation of Gnutella. It was a fork in 2002 from the original Gnutella and has been developed in a different direction. The specification may be found on \url{http://g2.doxu.org}. Just as its predecessor, Gnutella2 seems to be dead. Last relevant update to the main site or its protocol is dated four years back.

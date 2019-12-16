@@ -95,6 +95,12 @@
             <type>pom</type>
         </dependency>
 
+        <dependency>
+            <groupId>org.snakeyaml</groupId>
+            <artifactId>snakeyaml-engine</artifactId>
+            <version>2.0</version>
+        </dependency>
+
         <!-- Required for TestSmtpHandler -> FIXME get rid of it ASAP -->
         <dependency>
             <groupId>com.icegreen</groupId>
@@ -108,6 +114,11 @@
             <version>1.6.1</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.jruby</groupId>
+            <artifactId>jruby-complete</artifactId>
+            <version>1.7.16.1</version>
+        </dependency>
     </dependencies>
 
     <build>
