@@ -1113,9 +1113,7 @@ Identifying a node by probing and check their reaction is commonly done when fin
 
 One of the problems is clear-text requests. These requests may be used on any transport layer account without previous knowledge of any host key. Thus the recommendation in table \ref{tab:protoReplyCrit} is generally not to answer the requests. Routing nodes in jurisdictions not fearing legal repression or prosecution may reply to clear text requests, but it is generally discouraged as they allow harvesting of addresses.
 
-One strategy to avoid would be to put high costs onto clear-text requests in such a way that a clear-text request may have a long reply time (e.g., up to one day). A first retry of the same identity would lead to automatic blacklisting. This is an insufficient strategy as a big adversary may have lots of identities in stock. Requesting an unusually long key as a plain-text identity does not make sense either as these as well may be kept in stock. We may, however, force a plaintext request to have a hash following specific rules. We may for example put in a requirement that the first four bytes of the hash of a header block translate to the first four characters of the receiving address.
-
-\fxwarning{Good idea. It is not yet in the protocol. Why?}
+One strategy to avoid would be to put high costs onto clear-text requests in such a way that a clear-text request may have a long reply time (e.g., up to one day). A node is free to blacklist an identity in case of an early reply. This is an insufficient strategy as a big adversary may have lots of identities in stock. Requesting an unusually long key as a plain-text identity does not make sense either as these as well may be kept in stock. We may, however, force a plaintext request to have an identity block with a hash following specific rules. We may for example put in a requirement that the first four bytes of the hash of a header block translate to the first four characters of the routing block. At the moment, this has been rejected in the standard for practical reasons. First, as the request is unsolicited, a sender is the only one able to decide the algorithm of the hash. This would allow a requester to choose upon the complexity of the puzzle. Second, any negotiation of the requests cost would result in disclosure of the node as VortexNode which might be unsuitable.
 
 \subsubsection{Hotspot Attacks}
 Hotspot attacks aim to isolate high traffic sites within a network. By analyzing specific properties or the general throughput locations with outstanding traffic may be identified. These messages do quite often reveal senders or recipients. Sometimes an intermediate node in an anonymizing system. 
@@ -1510,11 +1508,11 @@ In the previous part, we identified a lot of attack schemes used to attack anony
 \begin{itemize}
 	\item Anonymity attacks
 	\begin{itemize}
-		\item Hotspot
-		\item Side channel
-		\item Sizing
-		\item Bugging
-		\item Tagging and tracing
+		\item Hotspot attacks
+		\item Side channel attacks
+		\item Sizing analysis
+		\item Bugging attacks
+		\item Tagging and tracing attacks
 		\begin{itemize}
 			\item Peer discovering attacks
 			\item Traffic flow attacks
@@ -1522,21 +1520,21 @@ In the previous part, we identified a lot of attack schemes used to attack anony
 	\end{itemize}
 	\item Availability and reliability attacks
 	\begin{itemize}
-		\item Denial of service (DoS)
-		\item Censorship
+		\item Denial of service (DoS) attacks
+		\item Censorship attacks
 	\end{itemize}
 	\item Non-technical Attacks
 	\begin{itemize}
-		\item Credibility
-		\item Censorship
+		\item Credibility attacks
+		\item Censorship attacks
 	\end{itemize}
 \end{itemize}
 
-We identified several possibilities to circumvent the attack classes listed above. Some of them, such as the bugging attack may be countered by design (e.g., by allowing only simple messages). Other can only be countered partially in reality (e.g., DoS attacks). We will further elaborate on the protocol and then analyze the impact of every single attack on the protocol.
+We identified several possibilities to circumvent the attack classes listed above. Some of them, such as the bugging attack may be countered by design (e.g., by allowing only simple messages). Other can only be countered partially in reality (e.g., DDoS attacks). We will further elaborate on the protocol and then analyze the impact of every single attack on the protocol.
 
 \subsection{SQ3: Attack Mitigation by design}
 This SQ is a part of the previous question to a certain extent. We identified that reliability and trust are key factors to a protocol. Therefore, allowing a single point of failures (SPOF) or extending trust over central infrastructures is deadly for an anonymizing protocol. 
 
-When elaborating the protocol in the next part, we will focus on introducing designs which will prohibit actions endangering anonymity.
+When elaborating the protocol in the next part, we will focus on introducing designs which will prohibit actions endangering anonymity. In the Result section we will focus on all attacks which should be mitigated by design. 
 
-\fxwarning{Extend replies to all scientific questions and their follow up.}
+\fxwarning{dataflow of a messages sending is missing}
