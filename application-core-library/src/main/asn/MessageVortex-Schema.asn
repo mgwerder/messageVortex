@@ -42,9 +42,9 @@ BEGIN
   -- Block Definitions
   --***************************************************************
   PrefixBlock ::= SEQUENCE {
-    forwardsecret   ChainSecret,
-    key             SymmetricKey,
-	version			INTEGER OPTIONAL
+	version			[0] INTEGER OPTIONAL
+    forwardsecret   [1] ChainSecret,
+    key             [2] SymmetricKey,
   }
 
   IdentityBlock ::= SEQUENCE {
@@ -126,11 +126,13 @@ BEGIN
     minProcessTime INTEGER (0..maxDurationOfProcessing),
     maxProcessTime INTEGER (0..maxDurationOfProcessing),
     -- The message key to encrypt the message
-    peerKey        [401] SymmetricKey OPTIONAL,
+    peerKey        [401] SEQUENCE (1..maxNumberOfReplays)
+	                     SymmetricKey OPTIONAL,
     -- contains the next recipient
     recipient      [402] BlendingSpec OPTIONAL,
     -- PrefixBlock encrypted with message key
-    mPrefix        [403] OCTET STRING OPTIONAL,
+    mPrefix        [403] SEQUENCE (1..maxNumberOfReplays) 
+	                     OF OCTET STRING OPTIONAL,
     -- PrefixBlock encrypted with sender key
     cPrefix        [404] OCTET STRING OPTIONAL,
     -- HeaderBlock encrypted with sender key

@@ -189,7 +189,6 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec]]></artwork>
               <t>
                 <list style="symbols">
                   <t>The peer key, which is encrypted with the host key of the node and stored in a prefixBlock, protects the inner Vortex message (innerMessageBlock).</t>
-                  <t>The small padding guarantees that a replayed routing block with different content does not look the same.</t>
                   <t>The sender key, also encrypted with the host key of the node, protects the identity and routing block.</t>
                   <t>The identity block, protected by the sender key, contains information about the ephemeral identity of the sender, replay protection information, header requests (optional), and a requirement reply (optional).</t>
                   <t>The routing block, protected by the sender key, contains information on how subsequent messages are processed, assembled, and blended.</t>
@@ -313,10 +312,17 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec]]></artwork>
                 </t>
             </section>
             <section anchor="entities_murb" title="Multi-use Reply Blocks">
-        <t>
-          'Multi-use reply blocks' (MURB) are a special type routing block sent to a receiver of a message or request. A sender may use such a block one or several times to reply to the sender linked to the ephemeral identity, and it is possible to achieve sender anonymity using MURBs.
-        </t>
-      </section>
+			  <t>
+			    'Multi-use reply blocks' (MURB) are a special type routing block sent to a receiver of a message or request. A sender may use such a block one or several times to reply to the sender linked to the ephemeral identity, and it is possible to achieve sender anonymity using MURBs.
+			  </t>
+			  <t>
+		        A vortex node MAY deny the use of MURBs by indicating a maxReplay equal to zero when sending a ReplyCapability block. An unobservable node SHOULD deny the use of MURBs.
+			  </t>
+			</section>
+			<section anchor="entities_version" title="Protocol Version">
+			  <t>
+			    This Document describes the version 1 of the protocol. The message PrefixBlock contains an optional version indicator. If absent protocol version 1 should be assumed.
+			  </t>	
         </section>
 
         <section anchor="layer_overview" title="Layer Overview">
@@ -382,18 +388,18 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec]]></artwork>
                     <figure anchor="fig_message_overview" title="Vortex message overview">
                         <artwork align="center" type="ascii-art"
 ><![CDATA[+-+---+-+-+---+-+---+-+-+---+-+-+---+-+-------+-+
-| |   | | |   | | C | | |   | | | R | |       | |
-| |   | | |   | | P | | | H | | | O | |       | |
-| | M | | | P | | R | | | E | | | U | |   P   | |
-| | P | | | A | | E | | | A | | | T | |   A   | |
-| | R | | | D | | F | | | D | | | I | |   Y   | |
-| | E | | | D | | I | | | E | | | N | |   L   | |
-| | F | | | I | | X | | | R | | | G | |   O   | |
-| | I | | | N | +---+ | |___| | |___| |   A   | |
-| | X | | | G |  k_h  | sk_s  | sk_s  |   D   | |
-| |___| | |___|_______|_______|_______|_______| |
-|  k_h  |                  sk_p                 |
-|_______|_______________________________________|]]></artwork>
+| |   | | | | C | | |   | | | R | |       | |
+| |   | | | | P | | | H | | | O | |       | |
+| | M | | | | R | | | E | | | U | |   P   | |
+| | P | | | | E | | | A | | | T | |   A   | |
+| | R | | | | F | | | D | | | I | |   Y   | |
+| | E | | | | I | | | E | | | N | |   L   | |
+| | F | | | | X | | | R | | | G | |   O   | |
+| | I | | | +---+ | |___| | |___| |   A   | |
+| | X | | |  k_h  | sk_s  | sk_s  |   D   | |
+| |___| | |_______|_______|_______|_______| |
+|  k_h  |                sk_p               |
+|_______|___________________________________|]]></artwork>
                     </figure>
                 </t>
             </section>
@@ -410,10 +416,7 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec]]></artwork>
                     A node MUST always encrypt an InnerMessageBlock with the symmetric key of the PrefixBlock to hide the inner structure of the message. The InnerMessageBlock SHOULD always accommodate four or more payload chunks.
                 </t>
                 <t>
-                    An InnerMessageBlock always starts with a padding block, which guarantees that when using the same routing block multiple times, its binary structure is not repeated throughout the messages of the same routing block. The padding MUST be the first 16 bytes of the first four non-empty payload chunks (i.e., PayloadChunks). If a payload chunk is shorter than 16 bytes, then the content of the padding SHOULD be filled with zero-valued bytes (00h) from the end up to the required number of bytes. An inner message block (i.e., InnerMessageBlock) SHOULD contain at least four payload chunks with a size of 16 bytes or larger. If there are less than four payload chunks, then the padding MUST contain a random sequence of 16 bytes for those missing, and a node MUST NOT reuse random sequences.
-                </t>
-                <t>
-                    An InnerMessageBlock contains so-called forwardSecrets, a random number that MUST be the same in the HeaderBlock, RoutingBlock, and PrefixBlock. Nodes receiving messages containing non-matching forwardSecrets MUST discard these messages and SHOULD NOT send an error message. If a node receives too many messages with illegal forward secrets, then the node SHOULD delete this identity. A node receiving a message with a broken forwardSecret SHOULD treat the block as a replayed block and discard it regardless of a valid forwardSecret. Any replay within the replay protection time MUST be discarded regardless of a correct forward secret.
+                    An InnerMessageBlock contains so-called forwardSecrets, a random number that MUST be the same in the PrefixBlock, HeaderBlock, RoutingBlock, and PrefixBlock. Nodes receiving messages containing non-matching forwardSecrets MUST discard these messages and SHOULD NOT send an error message. If a node receives too many messages with illegal forward secrets, then the node SHOULD delete this identity. A node receiving a message with a broken forwardSecret SHOULD treat the block as a replayed block and discard it regardless of a valid forwardSecret. Any replay within the replay protection time MUST be discarded regardless of a correct forward secret.
                 </t>
                 <section title="Control Prefix Block">
                     <t>
@@ -596,7 +599,7 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec]]></artwork>
                         A blending layer embeds a VortexMessage in a carrier file with an offset for PLAIN blending. For replacing a file start, a node MUST use the offset 0. The routing node MUST choose the payload file for the message, and SHOULD use a credible payload type (e.g., MIME type) with high entropy. Furthermore, it SHOULD prefix a valid header structure to avoid easy detection of the Vortex message. Finally, a routing node SHOULD use a valid footer, if any, to a payload file to improve blending.
                     </t>
                     <t>
-                    	The blended Vortex message is embedded in one or more message chunks, each starting with two unsigned integers of variable length. The integer starts with the LSB, and if bit 7 is set, then there is another byte following. There cannot be more than four bytes where the last, fourth byte is always 8 bit. The three preceding bytes have a payload of seven bits each, which results in a maximum number of 2^29 bits. The first of the extracted numbers reflect the number of bytes in the chunk after the length descriptors. The second contains the number of bytes to be skipped to reach the next chunk. There exists no "last chunk" indicator.
+                    	The blended Vortex message is embedded in one or more message chunks, each starting with two unsigned integers of variable length. The integer starts with the LSB, and if bit 7 is set, then there is another byte following. There cannot be more than four bytes where the last, fourth byte is always 8 bit. The three preceding bytes have a payload of seven bits each, which results in a maximum number of 2^29 bits. The first of the extracted numbers reflect the number of bytes in the chunk after the length descriptors. The second contains the number of bytes to be skipped to reach the next chunk. There exists no "last chunk" indicator. A chunk or the gap MAY surpass the end of the file.
                     </t>	
                     <t>
                       <figure>	
@@ -883,6 +886,11 @@ Result:  0A 13 (+ 494 omitted bytes; then skip 12 bytes to next chunk)
                         A node SHOULD reply to such a request from a valid known identity, and the reply MUST include an error message or a "no error" status message.
                     </t>
                 </section>
+                <section anchor="routing_header_req_upgrade" title="Request Upgrade">
+                    <t>
+                        This request type allows a node to request a new version of the software in an anonymous, unliked manor. The identifier MUST identify the software product uniquely. The version MUST reflect the version tag of the currently installed version or a similarly usable tag. 
+                    </t>
+                </section>
             </section>
             <section anchor="routing_special" title="Special Blocks">
                 <t>
@@ -912,6 +920,11 @@ Result:  0A 13 (+ 494 omitted bytes; then skip 12 bytes to next chunk)
                     <section anchor="routing_special_requirement_payment" title="Payment Requirement">
                         <t>
                             If a node requests a payment, then it MUST send a RequirementPaymentRequired block. As soon as the requested fee is paid and confirmed, the requesting node MUST send a "no error" status message. The usage period 'valid' describes the period during which the payment may be carried out. A node MUST accept the payment if occurring within the 'valid' period but confirmed later. A node SHOULD return all unsolicited payments to the sending address.
+                        </t>
+                    </section>
+                    <section anchor="routing_special_upgrade" title="Upgrade">
+                        <t>
+                            If a node requests an upgrade a ReplyUpgrade block MAY be sent. The block must contain the identifier and version of the most recent software version. The blob MAY contain the software if there is a newer one available.
                         </t>
                     </section>
                 </section>

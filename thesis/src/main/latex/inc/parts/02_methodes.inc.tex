@@ -1484,7 +1484,13 @@ A Block picked up in the blending layer is handled, as shown in image \ref{fig:m
 	\label{fig:msgRecvProcessing}
 \end{figure*}
 
-The processing of a sending block is triggered by a routing block in the workspace. The assembly instructions are processed to collect the payload blocks. Then the encryption is applied to the message and passed on to the blending layer for processing.
+The processing of a sending block is triggered by a routing block in the workspace as shown in figure~\ref{fig:msgSendProcessing}. The assembly instructions are processed to collect the payload blocks. Then the encryption is applied to the message and passed on to the blending layer for processing.
+
+\begin{figure*}[hbt]
+	\includegraphics[width=0.90\textwidth]{inc/flowchart_message_sending}
+	\caption{flow diagram showing processing of outgoing messages}
+	\label{fig:msgSendProcessing}
+\end{figure*}
 
 \section{Sub Research Questions Roundup}
 We sum up the findings of the last part regarding our three research questions and describe the next steps to be taken.
@@ -1536,5 +1542,3 @@ We identified several possibilities to circumvent the attack classes listed abov
 This SQ is a part of the previous question to a certain extent. We identified that reliability and trust are key factors to a protocol. Therefore, allowing a single point of failures (SPOF) or extending trust over central infrastructures is deadly for an anonymizing protocol. 
 
 When elaborating the protocol in the next part, we will focus on introducing designs which will prohibit actions endangering anonymity. In the Result section we will focus on all attacks which should be mitigated by design. 
-
-\fxwarning{dataflow of a messages sending is missing}
