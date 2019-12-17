@@ -13,7 +13,7 @@ Then we apply a dynamic attack analysis of the protocol to identify all meta pie
 
 We distinguish between passive and active adversaries. Passive adversaries follow the MessageVortex protocol, have unlimited observation capabilities on the network up to layer 4 of the ISO/OSI protocol, and do have unlimited observation capabilities on the transporting layer of MessageVortex. We assume that an observing adversary, as defined in \ref{sec:adversary}, is part of these adversaries. Active adversaries share the capabilities of passive adversaries, but do not follow the MessageVortex protocol. Both adversaries try to obtain valuable information (e.g., message content, metadata such as the communicating peers or message frequencies). 
 
-We then sum up the achieved goals by looking at well-known attacks and analyze the effectiveness of them to analyze the protocol.
+We then sum up the achieved goals by looking at well-known attacks and analyze the effectiveness of them on the protocol.
 
 At the very end of this chapter, we identify the gaps uncovered by this work.
 
@@ -42,13 +42,13 @@ In this section, we analyze the protocol statically. Looking at a full message, 
 \section{Transport and Blending Layer}
 
 \subsection{Analysis of Plain Embedding}
-It is undeniable why a file treated with plain embedding is easily identifiable as a broken or tampered file. While the file is still parseable, its content is no longer sensible to a human and thus at least suspect. 
+It is undeniable why a file treated with plain embedding is easily identifiable as a broken or tampered file. While the information remains parseable, its content is no longer sensible to a human and thus at least suspect. 
 
-We wanted to know if there is an easy method to detect the modifications of such a file. While most of the analysis method requires the processing of large data sets, we tried to find apparent, non-calculation-intense test methods that were generic. We did not take any content-based characteristics such as ``outline of an image'' or ``resulting spectrum of a sound file'' into account. As our embedding is generic, we searched for a similar detection method.
+We wanted to know if there is a simple method to detect the modifications of such a file. While most of the analysis method requires the processing of large data sets, we tried to find apparent, non-calculation-intense test methods that were generic. We did not take any content-based characteristics such as ``outline of an image'' or ``resulting spectrum of a sound file'' into account. As our embedding is generic, we searched for a similar detection method.
 
 A property of encrypted ciphertext is the high entropy. We, therefore, used the calculation of the Shannon entropy in bytes as property and tried to show the shift of entropy within the files. This detection method depended very much on the type of file used for embedding. It showed an expected behavior, that file types having in the expected area a similar entropy were not detectable by this method. However, we identified some file types to be unsuitable for plain blending due to their entropy structure.
 
-We analyzed the files by calculating the entropy of blocks 256 bytes with a sliding window over a randomly collected set of images (e.g., the first 100 entries of a file type after searching for ``mouse'', ``cat'', ``camel'', or ``dog''). We did intentionally not filter or eliminate images. Surprisingly, we were able to tell file types apart, were able to identify files with thumbnails or an interlaced structure. We even identified certain specific patterns regarding the producer type of an image (e.g., we could differentiate between images scanned and images taken by a camera). It was not so much surprising that we were able to identify these features, but the fact that we could see them in entropy data.
+We analyzed the files by calculating the entropy of blocks 256 bytes with a sliding window over a randomly collected set of images (e.g., the first 100 entries of a file type after searching for ``mouse'', ``cat'', ``camel'', or ``dog''). We did intentionally not filter or eliminate images. Surprisingly, we were able to tell file types apart, were able to identify files with thumbnails or an interlaced structure. We even identified certain specific patterns regarding the producer type of an image (e.g., we could differentiate between pictures scanned or taken by a camera). It was not so much surprising that we were able to identify these features, but the fact that we could see them in entropy data.
 
 \begin{figure*}[ht]
 	\includegraphics[width=\textwidth]{inc/statanalysis_graph}
@@ -103,7 +103,7 @@ Depending on the blending method, a single, identifiable message is sufficient t
 	\item Non-human behaviour on the transport layer (e.g., message traffic 24x7)
 \end{itemize}
 
-If an endpoint is successfully identified, then all directly related endpoints of the same protocol may be identified as well by following the message flow. This does, however, not enable an adversary to inject messages as the host key is not leaked. 
+If an endpoint is successfully identified, then all peering  endpoints of the same protocol may be dentified as well by following the message flow. This does, however, not enable an adversary to inject messages as the host key is not leaked. 
 
 Assuming a global observer as an adversary and unencrypted traffic, he might discover the originating routing layer and thus identify it as Vortex node by following traces of the transport layer. In most protocols, however, this address is spoofable and not a reliable source for the originating account.
 
@@ -113,20 +113,20 @@ A sender may have some knowledge about the Routing block size and may, therefore
 \section{Intermediate node routing layer}
 An intermediate node does know all the operations applied and the immediate next hop. It does learn the routing addresses of the immediately following endpoints but is unable to use these endpoints. This is because he has no means to get the host key required to communicate.
 
-If a routing block is repeated, a router may identify the routing block as repetition. Identifying the repetition of a bolock can be done by looking at the serial number of replay protection. We then may give a rough estimate of the message size by comparing the payload chunks. This estimate is, however, very rough as it is bounded by the block size of the symmetrically applied encryption.
+If a routing block is repeated, a router may identify the routing block as repetition. Identifying the repetition of a block can be done by looking at the serial number of replay protection. We then may give a rough estimate of the message size by comparing the payload chunks. This estimate is, however, very rough as it is bounded by the block size of the symmetrically applied encryption.
 
 \section{Security of Protocol Blocks}
-To analyze the security of the protocol, we first go through all protocol blocks and judge upon their security. After that, we will look at the possibilities of block recombinations and how to gain data or services based on such behavior. 
+To analyze the security of the protocol, we first go through all protocol blocks . After that, we will look at the possibilities of block recombinations and how to gain data or services based on such behavior. 
 
 Assuming plain embedding, the presence of a chain of blocks may leak an existing VortexMessage. At the moment, the protocol expects at the offset and the size of the bytes to be skipped to the next block. The encoding does not assume an end of the chain marker as such a marker would make the design identifiable. As an encoding scheme, a variable byte length has been chosen. This guarantees that any file will always result in a valid chain of blocks and thus not leak such a presence.
 
-The entropy of the only two blocks in this stream (MPREFIX and InnerMessageBlock) is comparable as both blocks are encrypted. Both blocks are encrypted and feature a comparable entropy. The blocks follow each other without any delimiter. This results in a continuous stream of data with constant properties. When using a MURB, the block may be identified by the repeated MPREFIX block, which remains constant. Furthermore, the IV is constant in such a case as well, which could result in additional weaknesses if this is applicable for the chosen mode. 
+The entropy of the only two blocks in this stream (MPREFIX and InnerMessageBlock) is comparable as both blocks are encrypted. Both blocks are encrypted and feature a similar entropy. The blocks follow each other without any delimiter. This results in a continuous stream of data with constant properties. 
 
 To avoid repeating patters at the beginning of streams due to reused identity blocks, a MURB must provide sufficient peer keys and prefix blocks. A VortexNode may, however, refuse to process MURBS (only accept maxReplays equal to 0).
 
 All blocks of InnerMessageBlock are protected by the peer key $E^{K_{peer}}$. The forward secrets in all blocks except the payload blocks make sure that the recombination of blocks does not work for an adversary. To be successful, an adversary requires to know the forward secret of the next hop.
 
-To keep the secrets of the next hop, hidden from the host assembling the message, the subsequent header and the routing block are protected by the sender key $E^{K_{sender}}$. Protected in such a way a message assembling node is not even capable of creating own messages to an unknown node as the hosts public key $E^{K^{1}_{host}}$ is not derivable from a message.
+To keep the secrets of the next hop, hidden from the host assembling the message, the subsequent header and the routing block are protected by the sender key $E^{K_{sender}}$.A message assembling node is, therefore, not even capable of creating own messages to an unknown node as the hosts public key $E^{K^{1}_{host}}$ is not derivable from a message.
 
 Therefore, a routing node is not able to assemble messages for a specific host on the base of a routed message only. A routing node does not gain any additional knowledge except for the locally executed operations, the number of messages of the ephemeral identity, the size of messages of any ephemeral identity, the sending IP of a received VortexMessage and the transport endpoint address of any receiving endpoint. The most critical information is endpoint data, as all other data is unrelated to the original message (sender recipient and size). This information becomes absolutely crucial if assuming a censoring adversary. Therefore, a sender in a jurisdiction where the use of MessageVortex is deemed illegal must use only trusted nodes within the jurisdiction and at least for the first hop outside the jurisdictional reach of an adversary.
 
