@@ -9,9 +9,9 @@ import net.messagevortex.asn1.encryption.Algorithm;
 import picocli.CommandLine;
 
 @CommandLine.Command(
-        description = "symmetrically encrypt a file",
-        name = "encrypt",
-        aliases = {"enc"},
+        description = "Add key to cache",
+        name = "cache",
+        aliases = {"cache"},
         mixinStandardHelpOptions = true
 )
 public class CommandLineHandlerCacheCalculate implements Callable<Integer> {
@@ -26,10 +26,6 @@ public class CommandLineHandlerCacheCalculate implements Callable<Integer> {
           description = "filename of the file to handle")
   String inFile="source.txt";
 
-  @CommandLine.Option(names = {"--outfilefile", "-i"},
-          description = "filename of the file to handle")
-  String outFile=inFile+".encrypted";
-
   @CommandLine.Option(names = {"-c", "--ciphertype"}, required = true,
           description = "filename of the file to handle")
   String cipherType;
@@ -42,10 +38,12 @@ public class CommandLineHandlerCacheCalculate implements Callable<Integer> {
       key = Files.readAllBytes(new File(inFile).toPath());
     }
 
-    Algorithm ct = Algorithm.getByString("");
+    Algorithm ct = Algorithm.getByString(cipherType);
     if (ct == null) {
       throw new IOException("Unknown cipher type");
     }
+
+    // FIXME: code incomplete
 
     return 0;
   }
