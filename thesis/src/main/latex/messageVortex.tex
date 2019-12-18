@@ -1,9 +1,14 @@
 % !TeX spellcheck = en_US
 
-\documentclass[a4paper,appendixprefix,pdfusetitle,twocolumn,fontsize=8pt,draft,DIV=calc]{scrbook}
+\documentclass[a4paper,appendixprefix,pdfusetitle,twocolumn,fontsize=8pt,draft,DIV=calc]{book} %scrbook
 %add attachdocs to attach all documents
 % add openany to avoid empty pages
 %\usepackage{gitinfo}
+
+% Workarround for book
+\makeatletter
+\def\subtitle#1{\gdef\@subtitle{#1}}
+\makeatother
 
 \usepackage[utf8]{inputenc}
 
