@@ -51,12 +51,12 @@ $(INTERDIR)/MessageVortexExcerpt.pdf: $(SRCDIR)/papers/filet/MessageVortexExcerp
 	@make dirs
 	@echo "building tmp pdf file $@"
 	(cd $(SRCDIR); tar -cf - $$(find . -name '*.bib') inc/bib/ ) | (cd $(INTERDIR); tar -xvf -)
-	(cd $(SRCDIR)/papers/filet; TEXINPUTS=../../../../../$(INTERDIR)/papers/filet:../../../../../$(INTERDIR):$${TEXINPUTS} pdflatex -output-directory=../../../../../$(INTERDIR) filet.tex )
+	(cd $(SRCDIR)/papers/filet; TEXINPUTS=../../../../../$(INTERDIR)/papers/filet:../../../../../$(INTERDIR):$${TEXINPUTS} pdflatex -output-directory=../../../../../$(INTERDIR) MessageVortexExcerpt.tex )	
 	(cd $(INTERDIR)/; bibtex messageVortex )
-	(cd $(SRCDIR)/papers/filet; TEXINPUTS=../../../../../$(INTERDIR)/papers/filet:../../../../../$(INTERDIR):$${TEXINPUTS} pdflatex -output-directory=../../../../../$(INTERDIR) filet.tex )
-	(cd $(SRCDIR)/papers/filet; TEXINPUTS=../../../../../$(INTERDIR)/papers/filet:../../../../../$(INTERDIR):$${TEXINPUTS} pdflatex -output-directory=../../../../../$(INTERDIR) filet.tex )
+	(cd $(SRCDIR)/papers/filet; TEXINPUTS=../../../../../$(INTERDIR)/papers/filet:../../../../../$(INTERDIR):$${TEXINPUTS} pdflatex -output-directory=../../../../../$(INTERDIR) MessageVortexExcerpt.tex )
+	(cd $(SRCDIR)/papers/filet; TEXINPUTS=../../../../../$(INTERDIR)/papers/filet:../../../../../$(INTERDIR):$${TEXINPUTS} pdflatex -output-directory=../../../../../$(INTERDIR) MessageVortexExcerpt.tex )
 	(cd $(INTERDIR)/; makeindex messageVortex )
-	(cd $(SRCDIR)/papers/filet; TEXINPUTS=../../../../../$(INTERDIR)/papers/filet:../../../../../$(INTERDIR):$${TEXINPUTS} pdflatex -output-directory=../../../../../$(INTERDIR) filet.tex )
+	(cd $(SRCDIR)/papers/filet; TEXINPUTS=../../../../../$(INTERDIR)/papers/filet:../../../../../$(INTERDIR):$${TEXINPUTS} pdflatex -output-directory=../../../../../$(INTERDIR) MessageVortexExcerpt.tex )
 
 $(OUTDIR)/%.pdf: $(INTERDIR)/%.pdf
 	cp $< $@
