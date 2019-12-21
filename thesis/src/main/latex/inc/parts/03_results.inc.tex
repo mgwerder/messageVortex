@@ -470,12 +470,12 @@ For an ephemeral identity, very little information has to be kept. This identity
 
 The following data has to be kept per identity:
 \begin{itemize}
-	\item $\mathbf{EIdentity}\langle pubKey, expiry, messagesLeft, bytesLeft \rangle$
+	\item $\mathbf{EId}\langle pubKey, expiry, messagesLeft, bytesLeft \rangle$
 	\item $\mathbf{Puzz[]}\langle expiry, request, puzzle \rangle$
 	\item $\mathbf{Build[]}\langle expiry, buildOperation \rangle$
 \end{itemize}
 
-The $\mathbf{EIdentity}$ tuple is the longest living tuple. It reflects an ephemeral identity and exists as long as the current identity is valid. All other tuples are short living lists. As the server decides if he accepts new identities or not, the size of this data is controllable.
+The $\mathbf{EId}$ tuple is the longest living tuple. It reflects an ephemeral identity and exists as long as the current identity is valid. All other tuples are short living lists. As the server decides if he accepts new identities or not, the size of this data is controllable.
 
 $\mathbf{Puzz[]}$ is a list of not yet solved puzzles of this user. Every puzzle has a relatively short lifespan (typically below 1d). As the server may decide how many outstanding puzzles he accepts, he controls the size of this.
 
@@ -715,7 +715,7 @@ It is essential to understand that this is a frail form of information hiding. A
 \subsubsection{File Type Candidates}
 
 We were unable to find any scientifical data regarding what type of traffic or attachment is common on the internet. We, therefore, tried to analyze mail logs (SMTP) of a mail provider. We were scanning $567594$ emails for attachment properties after the spam elimination queue. $16.5\%$ of all scanned messages had an attachment. The top 20 attachment types distributions are shown in table \ref{tab:emailAttachments}.
-\begin{table}[H]\small
+\begin{table}[H]
 	%    \centering\scriptsize
 	
 	\begin{tabular}{l|r}\hline

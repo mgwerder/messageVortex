@@ -20,7 +20,7 @@ At the very end of this chapter, we identify the gaps uncovered by this work.
 \chapter{Protocol Analysis}
 In this section, we analyze the protocol statically. Looking at a full message, we get the protocol outline, as shown in \eqref{eq:vortexMessage} on page~\pageref{eq:vortexMessage}.
 
-\begin{figure*}[!h]
+\begin{figure*}[!ht]
 	\begin{align}
 	VortexMessage                = &\langle \mathbf{MP}^{K^{-1}_{hostN}}, \mathbf{CP}^{K^{-1}_{hostN}}, \mathbf{H}^{K_{senderN}}, E^{K^{-1}_{senderN}}\left(H\left(\mathbf{HEADER}\right)\right)  \nonumber \\
 	& \left[\mathbf{R}^{K_{senderN}}\right], \left[\mathbf{PL}\right]*\rangle^{K_{peerN}} \rangle\label{eq:vortexMessage}\\ 

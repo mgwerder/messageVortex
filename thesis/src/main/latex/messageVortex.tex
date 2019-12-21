@@ -1,6 +1,6 @@
 % !TeX spellcheck = en_US
-
-\documentclass[a4paper,appendixprefix,pdfusetitle,twocolumn,fontsize=8pt,draft,DIV=calc]{book} %scrbook
+\gdef\doctype{extbook}
+\documentclass[a4paper,appendixprefix,pdfusetitle,twocolumn,fontsize=8pt,draft,DIV=calc,attachdocs,8pt]{\doctype} %scrbook
 %add attachdocs to attach all documents
 % add openany to avoid empty pages
 %\usepackage{gitinfo}
@@ -10,7 +10,7 @@
 \def\subtitle#1{\gdef\@subtitle{#1}}
 \makeatother
 
-%\usepackage[utf8]{inputenc}
+\usepackage[utf8]{inputenc}
 
 % Make C&P work
 \usepackage{cmap}
@@ -31,15 +31,31 @@
 \makeatother
 
 % for PDF/A generation
-\PassOptionsToPackage{
-	pdfencoding=unicode,
-	psdextra,
-	bookmarks,
-	hyperindex,
-	hyperfigures,
-	pdfpagelabels,
-	final}{hyperref}
-\usepackage[a-1b]{pdfx}
+\makeatletter
+\@ifclasswith{\doctype}{attachdocs}{
+	\usepackage[
+	  pdfencoding=unicode,
+	  psdextra,
+	  bookmarks,
+	  hyperindex,
+	  hyperfigures,
+	  pdfpagelabels,
+	  final]{hyperref}
+}{
+	\typeout{INFO: ======================}
+	\typeout{INFO: creating PDF/A}
+	\typeout{INFO: ======================}
+	\PassOptionsToPackage{
+  	  pdfencoding=unicode,
+	  psdextra,
+	  bookmarks,
+	  hyperindex,
+	  hyperfigures,
+	  pdfpagelabels,
+	  final}{hyperref}
+	\usepackage[a-3b]{pdfx}
+}
+\makeatother
 
 % enable superscript  for 1st, 2nd, 3rd etc.
 \usepackage[super]{nth}
@@ -62,17 +78,17 @@
 \makeatletter
 \RequirePackage{hyperref}
 \hypersetup{	
-	%pdftitle={\thetitle},
+	pdftitle={\thetitle},
 	pdfpagelayout=TwoPageRight,
 	linktoc=all,
 	breaklinks=true,
 	hidelinks,
 	pdfstartview=Fit,
-	%pdfauthor={\author},
-	%pdftitle={\thetitle - \thesubtitle},
+	pdfauthor={\author},
+	pdftitle={\thetitle - \thesubtitle},
 	pdflang=en,
-	%pdfsubject={\myabstract},
-	%pdfkeywords={Messaging, Anonymity, SMTP, Message Vortex},
+	pdfsubject={\myabstract},
+	pdfkeywords={Messaging, Anonymity, SMTP, Message Vortex},
 	pdfcontactemail={martin.gwerder@fhnw.ch},
 	pdflicenseurl={http://creativecommons.org/licenses/by-nc-nd/3.0/ch/},
 	pdfcopyright={Creative Commons Attribution-NonCommercial-NoDerivatives 3.0 Switzerland (CC BY-NC-ND 3.0 CH)}
@@ -81,16 +97,16 @@
 
 % PDF/a measures
 % embed color profile 
-\immediate\pdfobj stream attr{/N 3} file{sRGB_IEC61966-2-1_black_scaled.ICC}
-\pdfcatalog{%
-	/OutputIntents [ <<
-	/Type /OutputIntent
-	/S/GTS_PDFA1
-	/DestOutputProfile \the\pdflastobj\space 0 R
-	/OutputConditionIdentifier (sRGB IEC61966-2-1 black scaled)
-	/Info(sRGB IEC61966-2-1 black scaled)
-	>> ]
-}
+%\immediate\pdfobj stream attr{/N 3} file{sRGB_IEC61966-2-1_black_scaled.ICC}
+%\pdfcatalog{%
+%	/OutputIntents [ <<
+%	/Type /OutputIntent
+%	/S/GTS_PDFA1
+%	/DestOutputProfile \the\pdflastobj\space 0 R
+%	/OutputConditionIdentifier (sRGB IEC61966-2-1 black scaled)
+%	/Info(sRGB IEC61966-2-1 black scaled)
+%	>> ]
+%}
 % map glyphs 
 \input{glyphtounicode.tex}
 \input{glyphtounicode-cmr.tex}
@@ -282,7 +298,7 @@
 	basicstyle=\tiny\ttfamily,
 	numbers=none,
 	frame=tb,
-	keepspaces=true,
+	%keepspaces=true,
 	breaklines=true,
 	prebreak={\mbox{\quad$\hookleftarrow$}},
 	columns=fullflexible,
@@ -419,14 +435,18 @@
 \makeatother
 
 % Adapt bibtex to include documents
-  \makeatletter
-\@ifclasswith{scrbook}{attachdocs}{\DeclareFieldFormat{file}{\StrGobbleLeft{#1}{1}[\wtcGwM]\StrGobbleRight{\wtcGwM}{4}[\filename] \IfFileExists{\filename}{\textattachfile{\filename}{}}{FIXME missing document link}}
+\makeatletter
+\@ifclasswith{\doctype}{attachdocs}{
+	\typeout{INFO: ======================}
+	\typeout{INFO: attaching files to PDF}
+	\typeout{INFO: ======================}
+	\DeclareFieldFormat{file}{\StrGobbleLeft{#1}{1}[\wtcGwM]\StrGobbleRight{\wtcGwM}{4}[\filename] \IfFileExists{\filename}{\textattachfile{\filename}{}}{FIXME missing document link}}
 	\renewbibmacro{finentry}{\finentry\addspace \printfield{file}}
 }{}
 \makeatother
 \renewcommand*{\bibfont}{\small}
 
-\makeatletter\@ifclasswith{scrbook}{draft}{\gdef\indexes{\listoffixmes}}{\gdef\indexes{\listoftables\listoffigures\listofrequirements}}\makeatother
+\makeatletter\@ifclasswith{\doctype}{draft}{\gdef\indexes{\listoffixmes}}{\gdef\indexes{\listoftables\listoffigures\listofrequirements}}\makeatother
 
 \RequirePackage[explicit]{titlesec}
 
@@ -445,21 +465,22 @@
 \input{inc/parts/title.tex}
 %
 
+\vspace*{\fill}
 
-\begin{comment}
+%\begin{comment}
 \section*{Acknowledgements}
 I would like to thank my wife Cornelia and my lovely three kids (Saphira, Florian and Aurelius) for their patience and their support. Without them I could never have done this work.
 
 I would like to thank Prof. Dr. C. Tschudin and the University of Basel for the possibility to write this work and for the challenges they opposed to me, allowing me to grow. 
 
-Dr. Andreas Hueni for his thoughts and challenging outside-the-normal-box.
+Dr. Andreas Hueni for his thoughts and challenging outside-the-normal-box thinking.
 
 Prof. Dr. Carlos Nicolas of the University of Northwestern Switzerland for being such a valuable sparring partner allowing me to test my thoughts.
 
-I would like to acknowledge all the individuals who have coded for the \LaTeX project for free. It is due to their efforts that we can generate professionally typeset PDFs (and far more) for .
-\end{comment}
+I would like to acknowledge all the individuals who have coded for the \LaTeX project for free. It is due to their efforts that we can generate professionally typeset PDFs (and far more) for free.
+%\end{comment}
 
-\cleardoublepage
+\twocolumn\cleardoublepage
 \makeatletter
 \renewcommand{\l@subsubsection}{\@dottedtocline{3px}{7.4em}{4.5em}}
 \renewcommand{\@pnumwidth}{3em}
