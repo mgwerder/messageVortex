@@ -17,6 +17,7 @@ dirs:
 
 $(INTERDIR)/messageVortex.pdf: $(SRCDIR)/messageVortex.tex $(SRCDIR)/messageVortex.bib 
 	@make dirs
+	@tlmgr install colorprofiles pdfx
 	@echo "building tmp pdf file $@"
 	@cp ../rfc/target/xml2rfc/*.pdf $(INTERDIR)/rfc
 	(cd $(SRCDIR); tar -cf - $$(find . -name '*.bib') inc/bib/ ) | (cd $(INTERDIR); tar -xvf -)
@@ -50,6 +51,7 @@ $(INTERDIR)/filet.pdf: $(SRCDIR)/papers/filet/filet.tex $(SRCDIR)/messageVortex.
 $(INTERDIR)/MessageVortexExcerpt.pdf: $(SRCDIR)/papers/filet/MessageVortexExcerpt.tex $(SRCDIR)/messageVortex.bib 
 	@make dirs
 	@echo "building tmp pdf file $@"
+	@tlmgr install acmart
 	(cd $(SRCDIR); tar -cf - $$(find . -name '*.bib') inc/bib/ ) | (cd $(INTERDIR); tar -xvf -)
 	(cd $(SRCDIR)/papers/filet; TEXINPUTS=../../../../../$(INTERDIR)/papers/filet:../../../../../$(INTERDIR):$${TEXINPUTS} pdflatex -output-directory=../../../../../$(INTERDIR) MessageVortexExcerpt.tex )	
 	(cd $(INTERDIR)/; bibtex messageVortex )
