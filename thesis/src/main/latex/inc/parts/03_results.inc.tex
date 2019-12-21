@@ -4,19 +4,19 @@
 %!TeX root = ../../messageVortex.tex
 
 \part{Results}
-To verify the hypothesis made in this paper, and to analyze properties of the protocol in a real world scenario a library was implemented in Java which was capable of handling all message packets and the routing stack as a whole. The implementation is available under \url{https://messagevortex.net}. The following paragraphs describe the protocol developed in general as a generic approach. Appendix \ref{app:rfcMessageVortexMain} gives the full ASN.1 representation of the protocol. 
+To verify the hypothesis made in this paper and to analyze properties of the protocol in a real-world scenario, a library was implemented in Java, which is capable of handling all message packets and the routing stack as a whole. The implementation is available under \url{https://messagevortex.net}. The following paragraphs describe the protocol developed in general as a generic approach. Appendix \ref{app:rfcMessageVortexMain} gives the full ASN.1 representation of the protocol. 
 
-It is important to notice that ASN.1 has no mean to express encrypted structures. Due to this fact, we defined all encrypted fields as \verb|OCTET STRING|. 
+It is essential to notice that ASN.1 has no means to express encrypted structures. Due to this fact, we defined all encrypted fields as \verb|OCTET STRING|. 
 
 The protocol is defined in ASN.1 to support onionized information in an unencrypted form. These unencrypted structures are for debugging purposes only. At no point should this possibility be used in a production environment.
 
-The protocol described in the next chapter is independent of routing. We built a blending layer for SMTP. Layers for other protocols such as XMPP may be built similarly. The extending the protocol is done by adding blending layers and their addressing schemes.
+The protocol described in the next chapter is independent of routing. We built a blending layer for SMTP. Layers for other protocols such as XMPP may be defined similarly. The extending of the protocol is done by adding blending layers and their addressing schemes.
 
 The Protocol outlined here is the final product and has undergone many development cycles. A lot of advantageous features and capabilities such as a mechanism analogous to the SMTP received headers were dropped as they were beneficial but threatened security or anonymity.
 
 \chapter{Vortex Prerequisites}
 \section{Hardware}
-No special Hardware is required for running Vortex nodes. The capabilities of Vortex are designed in such a way that ordinary mobile phones may act as vortex nodes. It is, however, recommended to have a node always connected to the internet. A mobile phone may disconnect from time to time based on the availability of the network. For our experiments, we use a RaspberryPi Version 1. It is however recommended to use a faster, newer model due to the memory requirements of the proof of work algorithm.
+No special hardware is required for running Vortex nodes. The capabilities of Vortex are designed in such a way that ordinary mobile phones may act as vortex nodes. It is, however, recommended to have a node always connected to the internet. A mobile phone may disconnect from time to time based on the availability of the network. For our experiments, we use a RaspberryPi Version 1. It is, however, recommended to use a faster, newer model due to the memory requirements of the proof of work algorithm.
 
 The hardware currently requires a network interface and a fully functional JSE VM to run the reference implementation.
 
@@ -25,19 +25,19 @@ The hardware currently requires a network interface and a fully functional JSE V
 A Vortex address is built as follows: 
 
 \begin{lstlisting}[language=bash]
-  localPart         = <local part of address>
-  domain            = <domain part of address>
-  email             = localPart "@" domain
-  keySpec           = <BASE64 encoded AsymmetricKey [DER encoded]>
-  smtpAlternateSpec = localPart ".." keySpec ".." domain "@localhost"
-  smtpUrl           = "vortexsmtp://" smtpAlternateSpec
+localPart         = <local part of address>
+domain            = <domain part of address>
+email             = localPart "@" domain
+keySpec           = <BASE64 encoded AsymmetricKey [DER encoded]>
+smtpAlternateSpec = localPart ".." keySpec ".." domain "@localhost"
+smtpUrl           = "vortexsmtp://" smtpAlternateSpec
 \end{lstlisting}
 
 To allow storage of Vortex addresses in standard messaging programs such as Outlook or Thunderbird $smtpAlternateSpec$ may be used. 
 
 The suffix ``@localhost'' makes sure that any non-participating server does not route a message intended for Vortex.
 
-The main downside of vortex addresses is that they are no longer readable by a human. The main reason for this is the public key which is required. We may abstract this further by allowing clear-text requests on the primary email address for the public key. The vortex account must then answer such requests with the valid Vortex address.
+The main downside of vortex addresses is that they are no longer readable by a human. The main reason for this is the public key, which is required. We may abstract this further by allowing clear-text requests on the primary email address for the public key. The vortex account must then answer such requests with the valid Vortex address.
 
 \subsection{Public Key Encoding in Address Representation}
 The public key of an address is encoded as follows:
@@ -52,50 +52,50 @@ As transport layer protocols, we specified the protocols SMTP and XMMP as valid 
 \subsection{Embedding Spec}
 Messages are always encoded as attachments in SMTP and XMMP. 
 
-If not further specified by the receiving node an attachment should be the encoded message. 
+If not further specified by the receiving node, an attachment should be the encoded message. 
 
 Valid properties may be:
 \begin{lstlisting}[language=bash]
-	plainEncoding = "("plain:"<#BytesOfOffset>[,<#BytesOfOffset>]*")
-	F5Encoding    = "(F5:"<passwordString>[,<PasswordString>]*")"
+plainEncoding = "("plain:"<#BytesOfOffset>[,<#BytesOfOffset>]*")
+F5Encoding    = "(F5:"<passwordString>[,<PasswordString>]*")"
 \end{lstlisting}
 
 \section{Client}
-We did not create a Vortex client for sending messages. Instead, we used a standard Thunderbird email client pointing to a local SMTP and IMAP Server provided by a Vortex proxy. On the SMTP side Vortex does encapsulate where possible mails into a Vortex message and builds an automated route to the recipient. The SMTP part of vortex may be used to encapsulate all messages automatically with a known Vortex identity into a vortex message. On the IMAP side, it merges a local Vortex message store with the standard Email repository building a combined view.
+We did not create a Vortex client for sending messages. Instead, we used a standard Thunderbird email client pointing to a local SMTP and IMAP Server provided by a Vortex proxy. On the SMTP side, Vortex does encapsulate where possible mails into a Vortex message and builds an automated route to the recipient. The SMTP part of Vortex may be used to encapsulate all messages automatically with a known Vortex identity into a vortex message. On the IMAP side, it merges a local Vortex message store with the standard Email repository building a combined view.
 
 Using Vortex like this offers us the advantages of a known client with the anonymity Vortex offers.
 
-This has certain downsides. At the moment, the vortex client has only a local store. This makes it impossible to handle multiple simultaneously connected clients to use Vortex. This is, however, just a lack of the current implementation and not of the protocol itself as we may safely use an IMAP storage for storing vortex mails centrally.
+This has certain downsides. At the moment, the vortex client has only a local store. This makes it impossible to handle multiple simultaneously connected clients to use Vortex. This is, however, just a lack of the current implementation and not of the protocol itself as we may safely use an IMAP storage for storing vortex messages centrally.
 
 \subsection{Vortex Accounts}
-By definition, any transport layer address may represent a Vortex identity. This fact may make people believe that their current email or jabber address is suitable as Vortex address. This is technically perfectly true, but should not be done for the following reasons:
+By definition, any transport layer address may represent a Vortex identity. This fact may make people believe that their current email or jabber address is suitable as a Vortex address. This is technically perfectly true, but should not be done for the following reasons:
 
 \begin{itemize}
-	\item If an address is identified as a vortex address it may be blocked (directly or indirectly) by an adversary.
+	\item If an address is identified as a Vortex address, it may be blocked (directly or indirectly) by an adversary.
 	\item If a vortex node is malfunctioning non-vortex messages should remain unaffected. This is more likely to happen if non-Vortex messages are kept in a separate account.
-	\item If a user wants no longer to maintain its Vortex address (hopefully there will be better technology in future) he may give up his Vortex accounts. If he had been using his normal messaging account for Vortex, he would receive mixing messages which he has to filter in the future.
+	\item If a user wants no longer to maintain its Vortex address (hopefully there will be better technology in the future), he may give up his Vortex accounts. If he had been using his normal messaging account for Vortex, he would receive mixing messages which he has to filter in the future.
 \end{itemize}
 
 \subsection{Vortex Node Types}
 
 \subsubsection{Public Vortex Node}
-Public nodes are nodes, which advertise themselves as normal mixes. Just as all nodes, they may be an endpoint or a mix. Typically they accept all requests exactly as outlined in \ref{tab:protoReplyCrit}. As an immediate result of the publicly available information about such a node, the owner may be the target of our adversary. Pressure may be opposed to close down such a node. However, since we do not need a specific account, we may safely close down one transport account and open up a different one. This is even possible on the same infrastructure. To notify other users of the move and remain reachable, a user may send a newIdentity request using the old identity. That way, we can guarantee, that only the holder of the old address may request an address update.
+Public nodes are nodes, which advertise themselves as normal mixes. Just as all nodes, they may be an endpoint or a mix. Typically they accept all requests exactly as outlined in \ref{tab:protoReplyCrit}. As an immediate result of the publicly available information about such a node, the owner may be the target of our adversary. Pressure may be opposed to close down such a node. However, since we do not need a specific account, we may safely close down one transport account and open up a different one. This is even possible on the same infrastructure. To notify other users of the move and remain reachable, a user may send a newIdentity request using the old identity. That way, we can guarantee that only the holder of the old address may request an address update.
 
 \subsubsection{Stealth Vortex Node\label{sec:stealthNode}}
-This node does not answer any clear text requests. As an immediate result, the node is only usable by other nodes knowing the public key of this node. The node is therefore on a known secret base only reachable.
+This node does not answer any clear-text requests. As an immediate result, the node is only usable by other nodes knowing the public key of this node. The node is, therefore, on a known secret base only reachable.
 
 \subsubsection{Hidden Vortex Node\label{sec:hiddenNode}}
-A hidden node is a special form to a stealth node. It has a set of preset identities. Only these entities are processed. This behavior has certain drawbacks. An identity may not be changed. As an immediate result, traffic may become pseudonymity. To counter this effect at least partially, we may use the same local identity for multiple senders. The sender is only one of all senders knowing the private key of an identity.
+A hidden node is a special form to a stealth node. It has a set of preset identities. Only these entities are processed. This behavior has certain drawbacks. An identity may not be changed. As an immediate result, traffic may become pseudonymity. To counter this effect, at least partially, we may use the same local identity for multiple senders. The sender is only one of all senders knowing the private key of an identity.
 
 \chapter{Protocol Overview}
-The Protocol implementation is described in the RFC document in \ref{app:rfcMessageVortexMain}. It contains all the necessary information to build the protocol. The RFC is published on the website \url{https://messagevortex.net/} and through the official IETF channels. Beside the RFC document, additional documents and references may be found there.
+The Protocol implementation is described in the RFC document in \ref{app:rfcMessageVortexMain}. It contains all the necessary information to build the protocol. The RFC is published on the website \url{https://messagevortex.net/} and through the official IETF channels. Besides the RFC document, additional documents and references may be found there.
 
 The MessageVortex protocol described here is an onionizing protocol for asynchronous data transfer. The protocol itself is embedded into a carrier protocol as binary information to avoid easy detection and make it hard to block traffic without blocking other legitimate traffic.
 
-The data transferred is passed thru multiple routers. The builder of a routing block (normally the sender) decides upon the following attributes:
+The data transferred is passed through multiple routers. The builder of a routing block (normally the sender) decides upon the following attributes:
 \begin{itemize}
 	\item Hops for the message and all decoy traffic.
-	\item Timing behavior respectively speeds of the message.
+	\item Timing behavior, respectively, speeds of the message.
 	\item Decoy traffic generation.
 	\item Set of possible recipients.
 \end{itemize}
@@ -116,9 +116,9 @@ A mix may be just an intermediate station or the final target of a message. Only
 	\item IPs of the receiving mixes.
 \end{itemize}
 
-A mix always applies the operations requested in the building instructions to the received data. If this is not done the message properly may fail to transfer to its final destination. 
+A mix always applies the operations requested in the building instructions to the received data. If this is not done, the message properly may fail to transfer to its final destination. 
 
-The operations to be applied on a message are chosen in such a way that they may or may not generate decoy traffic. This guarantees that a valid message may not be identified on the operations applied to the message.
+The operations to be applied to a message are chosen in such a way that they may or may not generate decoy traffic. This guarantees that a valid message may not be identified on the operations applied to the message.
 
 Redundancy may be built in a routing block as well as progress indication.
 
@@ -154,14 +154,14 @@ The outline in figure \ref{fig:messageOutline} is a simplified view of the messa
 	\label{fig:messageOutline}
 \end{figure*}
 
-A Vortex message is a message passed from one router to another this message may or may not contain any valuable information. Binary data represents the message content in the transfer protocol. Every router may decide for himself on the support of algorithms and embedding mechanisms.
+A Vortex message is a message passed from one router to another. This message may or may not contain any valuable information. The VortexMessage is encoded as binary data in the transfer protocol. Every router may decide for himself on the support of algorithms and embedding mechanisms.
 
 The block structure of a Vortex message is as follows:
 \begin{itemize}
 	\item header
 	\begin{itemize}
 		\item Encrypted message key.\\
-		Contains symmetrical key for decryption of follow up header information and payload blocks. All symmetric keys are encrypted with a receiving host's public key.
+		It contains a symmetrical key for decryption of follow up header information and payload blocks. All symmetric keys are encrypted with a receiving host's public key.
 		\item Identity and ``proof of work'' information\\
 		This information contains requests, proof-of-work sections, and a header key.
 	\end{itemize}
@@ -182,7 +182,7 @@ The block structure of a Vortex message is as follows:
 
 It is important to note that there are two symmetrical keys involved in encrypting and decrypting message headers. Having two keys is not a flaw in the protocol but necessary. 
 
-The first key of a Vortex message is the message key. This key is only accessible with the private key of the node receiving the message. It allows decryption of the routing blocks and the header information. The sender of a message block is therefore not able to tell if a message contains one or more routing blocks. It is important to note that no other node should have access to this information. 
+The first key of a Vortex message is the message key. This key is only accessible with the private key of the node receiving the message. It allows the decryption of the routing blocks and the header information. The sender of a message block is, therefore, not able to tell if a message contains one or more routing blocks. It is important to note that no other node should have access to this information. 
 
 The second key is the header key located in the encrypted header. The RBB chooses the key. This key protects the inner structure of the Message. It makes it impossible for any node except the sending or the receiving peer node to detect the inner structure of the message. Without this key, any independent observer with knowledge about the blending capabilities of a receiving node may:
 \begin{itemize}
@@ -204,7 +204,7 @@ The peer key is a message specific symmetrical key known to two adjacent routing
 The header key is a symmetric key protecting the routing and ephemeral identity information of the message. It is prepended to the header section and protected by the identity key of the processing node.
 
 \subsubsection{Identity Key}
-The Identity key is a static, asymmetric keypair existing on a per user base used to sign messages or encrypt symmetric keys. We refer here as a user any peer participating in the message stream. Every user participating in the Vortex network requires at least one key pair. 
+The Identity key is a static, asymmetric keypair existing on a per-user base used to sign messages or encrypt symmetric keys. We refer here as a user any peer participating in the message stream. Every user participating in the Vortex network requires at least one key pair. 
 
 Depending on the use-case (e.g., unlikable signatures or scalable security), a user may use multiple key pairs at the same time.
 
@@ -242,18 +242,18 @@ The payload of a message is generated according to instructions in the routing b
 A vortex message may be composed not earlier than a ``validFrom'' expressed in the respective routing block.
 
 \subsubsection{Building and Sending Messages}
-Any time after a routing block reaches ``validFrom'' and before the ``validTo'' is reached processing of a routing block is triggered. An implementation should when triggering a routing block for processing trigger as many routing blocks as possible to make traffic analysis harder.
+Any time after a routing block reaches ``validFrom'' and before the ``validTo'' is reached, processing of a routing block is triggered. An implementation should, when triggering a routing block for processing, trigger as many routing blocks as possible to make traffic analysis harder.
 
 The message is then built as follows:
 \begin{enumerate}
 	\item Check if all building instructions can be fulfilled due to their prerequisites.
 	\item Build requested payload blocks.
-	\item Extract peer key from routing block.
+	\item Extract peer key from the routing block.
 	\item Extract headerBlock from routing block.
 	\item Extract (sender key encrypted) nextHop routing blocks from routing block.
 	\item Encrypt message using the peer key.
 	\item Update accounting figures.
-	\item Blend into transport layer according to spec and send a message.
+	\item Blend into the transport layer according to spec and send a message.
 \end{enumerate}
 
 \section{Protocol design}
@@ -275,7 +275,7 @@ The header block contains the identity and should contain all information requir
 The header block contains the following data:
 \begin{itemize}
 	\item A symmetric header key (header key)\\
-	This key is encrypted with the receiving identities public key. This key guarantees efficient handling of the header data. As the number of bytes in the header is limited a receiving node may assign all subsequent work to a known identity or discard it.
+	This key is encrypted with the receiving identities public key. This key guarantees efficient handling of the header data. As the number of bytes in the header is limited, a receiving node may assign all subsequent work to a known identity or discard it.
 	\item An identity block (identityBlock)\\
 	This block contains some data which reflects the identity of the sender and the use of this (and subsequent blocks).
 	\begin{itemize}
@@ -286,7 +286,7 @@ The header block contains the following data:
 		\item validity period for this block (in seconds)
 		\item Symmetric decryption key for subsequent blocks
 		\item Chain secret for the forwarding block\\
-		If specified the specified secret should be named in all subsequent blocks.
+		If specified, the specified secret should be named in all subsequent blocks.
 		\item Protocol requests to this node
 		\item Identifier and padding for proof of work
 	\end{itemize}
@@ -302,7 +302,7 @@ Requests are always embedded in a header block. All requests are answered with a
 
 There are several header requests defined:
 
-\paragraph{newIdentity request:} This request may be answered with either a reject or a puzzle which is required to solve. Solving the puzzle results in the creation of the identity on the node. Identities may be rejected by the node for various reasons:
+\paragraph{newIdentity request:} This request may be answered with either a reject or a puzzle that is required to solve. Solving the puzzle results in the creation of the identity on the node. Identities may be rejected by the node for various reasons:
 
 \begin{itemize}
 	\item The node is not accepting newIdentity requests
@@ -313,7 +313,7 @@ There are several header requests defined:
 
 An identity may be rejected if the wrong types of keys and key sizes are used. However, it must accept at least the key types and sizes it uses for its own identity.
 
-If an identity is rejected the request may not be replayed by the same identity again. A sending party must generate a new identity for a new request. 
+If an identity is rejected, the request may not be replayed by the same identity again. A sending party must generate a new identity for a new request. 
 
 This request should be by far the most expensive request. It must, at any time, be more expensive to request a new identity compared to raise the quota of an existing one.
 
@@ -337,18 +337,18 @@ These measures limit the effectivity of harvesting attacks while giving any node
 	\item messageQuota request:\\ 
 	This request raises the number of routing blocks which may be processed for an identity. A node may reject this request depending on the load of the node, personal preferences, or because this identity causes too much traffic.
 	
-	It is typically answered for all valid identities only. The node may answer it for recently expired identities. It is however not recommended to send a reply to an unknown identity as this behavior might be used for probing of a node.
+	It is typically answered for all valid identities only. The node may r recently expired identities. It is, however, not recommended to send a reply to an unknown identity as this behavior might be used for the probing of a node.
 	
 	\item transferQuota request:\\
-	This request raises the number of bytes which may be transferred for an identity. A node may reject this request depending on the load of the node, personal preferences, or because this identity causes too much traffic.
+	This request raises the number of bytes that may be transferred for an identity. A node may reject this request depending on the load of the node, personal preferences, or because this identity causes too much traffic.
 	
-	It is typically answered for all valid identities only. The node may answer it for recently expired identities. It is however not recommended to send a reply to an unknown identity as this behavior might be used for probing of a node.
+	It is typically answered for all valid identities only. The node may reply if the identity has recently expired. It is, however, not recommended to send a reply to an unknown identity as this behavior might be used for the probing of a node.
 	
 	\item queryQuota request:\\
 	This request instructs the node to send information about the given identity.
 \end{itemize}
 
-It is typically answered for all valid identities only. The node may answer it for recently expired identities. It is however not recommended to send a reply to an unknown identity as this behavior might be used for probing of a node.
+It is typically answered for all valid identities only. The node may have recently expired. It is, however, not recommended to send a reply to an unknown identity as this behavior might be used for the probing of a node.
 
 \subsubsection{Replys to Clear Text Requests}
 It is up to the decision of the node whether it wants to answer a clear-text request or not. Recommended for this behavior is to discard plain text requests. 
@@ -358,9 +358,9 @@ This should only be a problem when bootstrapping or when adding new identities t
 \subsection{Main block}
 The main two block types are routing blocks and payload blocks. 
 
-Routing blocks contain an onionised route chosen by the builder of the routing blocks and may contain instructions for building a message.
+Routing blocks contain an onionised route, chosen by the builder of the routing blocks, and may provide instructions for building subsequent messages.
 
-Payload blocks contain an encrypted message, parts of it or decoy traffic.
+Payload blocks contain an encrypted message, parts of it, or decoy traffic.
 
 \subsubsection{Routing Blocks}
 Routing blocks contain the following information:
@@ -382,24 +382,24 @@ Payload is being built right before sending a block (processing a routing block)
 srcIDs \xrightarrow{\text{build operation}} targetIDs
 \end{equation*}
 
-Every node maintains a list of received blocks including their IDs and building instructions for them. Any node must keep blocks and building instructions during the whole lifetime of a routing block. It may keep it longer. If a conflicting building instruction arrives, all conflicting older rules are removed. Building instructions are always kept on a per-identity base. It is not possible to reference building instructions of a foreign identity.
+Every node maintains a list of received blocks, including their IDs and building instructions for them. Any node must keep blocks and building instructions during the whole lifetime of a routing block. It may keep it longer. If a conflicting building instruction arrives, all conflicting older rules are removed. Building instructions are always followed on a per-identity base. It is not possible to reference building instructions of a different identity.
 
 \begin{itemize}
 	\item splitPayload and mergePayload: \\
-	Split a message block into two parts of variable size. The size of the first chunk is expressed either absolute or in percent of the original block size.
+	Split a message block into two parts of varying sizes. The size of the first chunk is expressed either absolute or in percent of the original block size.
 	\item encryptPayload and decryptPayload:\\ 
 	Encrypts and decrypts a payload chunk block with a given symmetric key and algorithm. Please note that this operation changes the size of a message due to the key size and the padding.
 	\item addRedundancy and removeRedundancy:\\
-	Splits a payload block into uniform chunks and adds redundancy information or removes it respectively.
+	Splits a payload block into uniform chunks and adds redundancy information or removes it.
 \end{itemize}
-All the operations specified above have in common that they may be applied on decoy traffic as well as on real message data. The size of incoming and outgoing blocks do not relate as messages are increasing the size as well as decreasing in size.
+All the operations specified above have in common that they may be applied to decoy traffic as well as on real message data. The size of incoming and outgoing blocks do not relate as messages are increasing the size as well as decreasing in size.
 
 \subsubsection{Reply Block\label{sec:replyBlock}}
-Reply blocks are blocks embedded into payload blocks. There are very few reply blocks necessary. Unlike normal data blocks, these messages are not accounted in quotas on the node generating the reply block. 
+Reply blocks are blocks embedded into payload blocks. There are very few reply blocks necessary. Unlike normal data blocks, these messages are not accounted to quotas on the node generating the reply block. 
 
 It is up to the node to decide whether it wants to answer a request or not.
 
-Replies are being built as ordinary message blocks. To identify a Vortex message, it must begin with the string ``\textbackslash special'' encoded in ASCII followed by a valid reply block structure. No additional bytes may be appended. Blocks with additional data should be discarded. To express a block starting with ``\textbackslash special'' the token is repeated prefixed with a backslash.
+Replies are being built as ordinary message blocks. To identify a Vortex message, it must begin with the string ``\textbackslash special'' encoded in ASCII followed by a valid reply block structure. No additional bytes may be appended. Blocks with other data should be discarded. To express a block starting with ``\textbackslash special'', the token is repeated prefixed with a backslash.
 
 \begin{itemize}
 	\item replyCapability block:\\
@@ -418,7 +418,7 @@ Replies are being built as ordinary message blocks. To identify a Vortex message
 	Requirement blocks denote a requirement a requester has to fulfill before a previously sent request is processed. Usually, proof of work puzzles needs to be solved to allow a request to be processed. Alternatively, a commercial supplier may request payment in a digital currency. Currently, supported digital currencies are Bitcoin, Ethereum, and ZCash.
 	
 	\item replyStatus block:\\
-	General answer block which is signaling a status. The block is limited in length to minimize misuse of bandwidth. The Block contains the following data:
+	General answer block, which is signaling a status. The block is limited in length to minimize the misuse of bandwidth. The Block contains the following data:
 	\begin{itemize}
 		\item Three digit status number
 		\item Sending node identity
@@ -438,7 +438,7 @@ Replies are being built as ordinary message blocks. To identify a Vortex message
 	
 	This message may arrive at any time. Any recipient might decide on its own whether it wants to accept the update or not.
 	
-	A node should not accept an identity update if the strength of the new identity has been lowered compared to the old identity. A client may make a difference on the fact whether the transport layer address or the key is exchanged. 
+	A node should not accept an identity update if the strength of the new identity has been lowered compared to the old identity. A client may make a difference in the fact of whether the transport layer address or the key is exchanged. 
 \end{itemize}
 
 \subsubsection{payload Block}
@@ -451,7 +451,7 @@ It contains:
 	\item A payload signature (optional; required for vortex blocks)
 \end{itemize}
 
-It is essential to understand that a block may be exchanged at any time by an evil node. This, however, does not affect the safety on the message. Any tagging introduced at this point does invalidate the stream. The output after the next hop is entirely unpredictable.
+It is essential to understand that a block may be exchanged at any time by an evil node. This, however, does not affect the safety of the message. Any tagging introduced at this point does invalidate the stream. The output after the next hop is entirely unpredictable.
 
 \subsection{Accounting\label{sec:accounting}}
 Accounting covers several purposes in this system:
@@ -461,7 +461,7 @@ Accounting covers several purposes in this system:
 	\item It offers an ephemeral identity with a limited lifespan.
 \end{itemize}
 
-As accounting data may be used to overfill a nodes accounting tables, special care has been taken to limit the number of information which has to be maintained per identity. We furthermore tried to minimize the risk that someone might occupy the accounting memory of a node without costs. Furthermore, any node may cancel an illicit behaving identity at any time.
+As accounting data may be used to overfill a nodes accounting tables, special care has been taken to limit the number of information which has to be maintained per identity. We furthermore tried to minimize the risk that someone might occupy the accounting memory of a node without costs. Moreover, any node may cancel an illicit behaving identity at any time.
 
 It is essential that the accounting described here is for mixes. A node assembling messages needs to keep a lot more information.
 
@@ -479,10 +479,10 @@ The $\mathbf{EId}$ tuple is the longest living tuple. It reflects an ephemeral i
 
 $\mathbf{Puzz[]}$ is a list of not yet solved puzzles of this user. Every puzzle has a relatively short lifespan (typically below 1d). As the server may decide how many outstanding puzzles he accepts, he controls the size of this.
 
-$\mathbf{Build[]}$ is a list of building instructions for a message. The server may decide at any time to reject a too big list or a too long living message. Thus he may control the size of this list as well. However, controlling the size of this list will most likely result in the non-delivery of a message.
+$\mathbf{Build[]}$ is a list of building instructions for a message. The server may decide at any time to reject a too big list or long-living message. Thus he may control the size of this list as well. However, controlling the size of this list will most likely result in the non-delivery of a message.
 
 \subsubsection{Accounting Data of a ``header'' Block}
-All accounting data of a header block is connected to the respective identity. All header blocks do expire latest with their respective identity. The following data has to be kept on a mix:
+All accounting data of a header block is connected to the respective identity. All header blocks do expire the latest with their respective identities. The following data has to be kept on a mix:
 \begin{itemize}
 	\item $\mathbf{HL}\langle identity, serial, remainingReplays, expiry, lastSeen \rangle$\\
 	This is the long term header list. It lists all headers of an ephemeral identity, and how many replays are left until the requests are rejected.
@@ -491,7 +491,7 @@ All accounting data of a header block is connected to the respective identity. A
 \end{itemize}
 
 \subsubsection{Accounting Data of a ``payload'' Block}
-All accounting data is connected to a header block and expires latest with its header block. The expiry time is, however, relative to the arrival time of the header block.
+All accounting data is connected to a header block and expires the latest with its header block. The expiry time is, however, relative to the arrival time of the header block.
 \begin{itemize}
 	\item $\mathbf{PL}\langle identity, serial, id, hash, expiry, content\rangle$\\
 \end{itemize}
@@ -588,7 +588,7 @@ len(pb_2) & \leq & len(pb_1)
 \end{eqnarray}
 
 \subsubsection{VortexMessage addRedundancy and removeRedundancy Operation}
-These operations build the core of the mixing operations. The operation allows to add to a message redundancy information or to rebuild a block from a chosen set of information. 
+These operations build the core of the mixing operations. The operation allows us to add to a message redundancy information or to rebuild a block from a chosen set of information. 
 
 The Operation itself is shown in \ref{fig:addRedundancyOperation}. 
 \begin{figure}[ht]\centering
@@ -605,7 +605,7 @@ It may be subdivided into the following operations:
 
 
 \section{VortexMessage Request Processing}
-Vortex message requests allow a Vortex node to gain knowledge about the Vortex network and, create new identities. A request may contain either a request for information such as current quota or capabilities of the router. It may contain a request for a new identity, or it may contain a request for raising the quotas. The following sections explain the different kinds of requests.
+Vortex message requests allow a Vortex node to gain knowledge about the Vortex network and create new identities. A request may contain either a request for information such as the current quota or capabilities of the router. It may contain a request for a new identity, or it may contain a request for raising the quotas. The following sections explain the different kinds of requests.
 
 \subsection{VortexMessage Requests}
 These requests are contained in the header portion of a Vortex message. These requests are purely for bootstrapping and maintaining the quota system and for requesting network capability.
@@ -614,7 +614,7 @@ The request information is defined in section \ref{sec:request}. For more inform
 
 Any node decides on its own what type of requests are being answered. 
 
-A node not replying to clear text request is called a ``stealth node'' (see \ref{sec:stealthNode}). Such a stealth node discloses itself only to participants who do already know at least the public key of the node. This usually means that they have ``earned'' this information by issuing a queryPeer request to another node and obtaining the information did already generate costs to the sender.
+A node not replying to clear text request is called a ``stealth node'' (see \ref{sec:stealthNode}). Such a stealth node discloses itself only to participants who do already know at least the public key of the node. This usually means that they have ``earned'' this information by issuing a queryPeer request to another node, and obtaining the information did already generate costs to the sender.
 
 A node only replying to a fixed set of identities (in that specific case they are not ephemeral) is called a ``hidden node'' (see section \ref{sec:hiddenNode}).
 
@@ -630,27 +630,27 @@ The only valid reply is a replyCapability message in encrypted form.
 \subsubsection{NewIdentity Request}
 If this request is accepted, it generates a new ephemeral identity. The identity itself is stored in the header fields. The standard behavior is to reply with a replyPuzzleRequired block. 
 
-This request generates a temporary, ephemeral identity for the limited time denoted in the validity field of the reply block. No quota is assigned during that phase. As soon as the identity offers a valid puzzle solution, the requested quota is assigned, and the identity may be used for subsequent requests.
+This request generates a temporary, ephemeral identity for the limited time denoted in the validity field of the reply block. No quota is assigned during that phase. As soon as the identity offers a valid puzzle solution, the requested quota is allocated, and the identity may be used for subsequent requests.
 
 If a puzzle is not solved within the given time, the temporary identity may be deleted. A node should not accept a solved puzzle after the given duration. 
 
-Request with a too high message or transfer quota should not be answered with a replyPuzzleRequired block containing a zero-length puzzle.
+Requests with a too high message or transfer quota should not be answered with a replyPuzzleRequired block containing a zero-length puzzle.
 
 \subsubsection{QueryPeer Request}
-As outlined in section \ref{sec:request} this request should be very costly, and harvesting of public addresses should be hard. Furthermore, this request should always disclose the nodes from a fixed subset of the nodes known to the queried mix. This maximizes the effort to harvest participating nodes.
+As outlined in section \ref{sec:request}, this request should be very costly, and the harvesting of public addresses should be hard. Furthermore, this request should always disclose the nodes from a fixed subset of the nodes known to the queried mix. This maximizes the effort to harvest participating nodes.
 
 It is at the same time worth mentioning that this limit may oppose a thread that traffic is concentrated on similar nodes within participating nodes using the same initial set of public addresses to bootstrap. This because if using the same node to bootstrap for multiple participants within a group results in peer knowledge, which is similar. They are thus resulting in a similar network. 
 
-Participants belonging to more than one group will evolve as their different peer partners will result in different anonymity sets over time even when applying precisely the same reproducible rules.
+Participants belonging to more than one group will evolve as their different peer partners will result in different anonymity sets over time, even when applying precisely the same reproducible rules.
 
 \subsubsection{TransferQuota, MessageQuota,  and QueryQuota Request}
 This request may be accepted by a node if and only if the sender is a valid identity. It may be accepted even for a temporary identity.
 
-The transfer quota offers the capability to raise the number of bytes an identity may transfer. This quota is increased upon request by the ephemeral identity at any time. It is up to the owner of an ephemeral identity and the node using the identity to decide whether an identity may be kept or not, respectively its quotas raised.
+The transfer quota offers the capability to raise the number of bytes an identity may transfer. This quota is increased upon request by the ephemeral identity at any time. It is up to the owner of an ephemeral identity and the node using the identity to decide whether an identity may be kept or not, respectively, its quotas raised.
 
 The Message Quota is a quota not limiting the number of bytes but the number of messages. As every message generates accounting overhead, this number has to be limited as well. There are constraints similar to transferQuota when raising this value.
 
-The queryQuota request enables the owner of an ephemeral identity to query the current amount of remaining messages, respectively bytes.
+The queryQuota request enables the owner of an ephemeral identity to query the current amount of remaining messages, respectively, bytes.
 
 \subsection{VortexMessage Reply Blocks}
 Reply blocks are as outlined in section \ref{sec:replyBlock} prefixed payload blocks. 
@@ -672,19 +672,19 @@ A node may reject an operation for any reason, including exceeding an unnatural 
 A reply containing a null length puzzle means that the requested operation is rejected.
 
 \chapter{MessageVortex -- Transport Independent Messaging anonymous to \texorpdfstring{\nth{3}}{3rd} Parties\label{sec:spec}}
-This approach is different from all approaches discussed previously. Unlike them, we put complete distrust into the infrastructure being used. Furthermore, we do not rely on a custom server infrastructure on the internet. Instead, we take advantage of the availability of internet-connected devices such as mobile phones, tablets, or even commonly available SoC such as RaspberryPi or similar. It is still tough to maintain a server on the internet. Considering the vastly growing amount of automated attacks carried out against Internet-connected servers, it is not advisable or realistic to assume that a future user of this system owns either a server or connects to a service which is offering anonymizing services. These infrastructures would be susceptible to monitoring or even banning. Instead, we take a different approach.
+This approach is different from all approaches discussed previously. Unlike them, we put complete distrust into the infrastructure being used. Furthermore, we do not rely on a custom server infrastructure on the internet. Instead, we take advantage of the availability of internet-connected devices such as mobile phones, tablets, or even commonly available SoC such as RaspberryPi or similar. It is still tough to maintain a server on the internet. Considering the vastly growing amount of automated attacks carried out against Internet-connected servers, it is not advisable or realistic to assume that a future user of this system owns either a server or connects to a service that is offering anonymizing services. These infrastructures would be susceptible to monitoring or even banning. Instead, we take a different approach.
 
 We use common messaging protocols as transport layers and connect to them using the respective client protocols. The actual mixes are operated by the users on their ``always connected'' devices. Such a system is far less reliable than a traditionally run server as this hardware is typically cheap and generally connected to the internet using a bandwidth shared media.
 
-The basic idea is that a client generates all traffic (including decoy and diagnosis) by itself. It defines the routes a message takes through the mixes and decides which targets are receiving dummy traffic at the same time. In such a system, even when possessing all the nodes routing the traffic (without the endpoints) an anonymity set of $k$ (whereas the sender defines the size of $k$) is guaranteed.
+The basic idea is that a client generates all traffic (including decoy and diagnosis) by itself. It defines the routes a message takes through the mixes and decides which targets are receiving dummy traffic at the same time. In such a system, even when possessing all the nodes routing the traffic (without the endpoints), an anonymity set of $k$ (whereas the sender defines the size of $k$) is guaranteed.
 
 As decoy traffic is generated with the same operations as the real content is split, it is impossible for an adversary running a node to determine whether he is generating noise or processing the real message.
-All nodes, regardless of endpoint or mix, implement the same logic, and fulfill the same functions, which make it impossible to determine the function. Exit nodes as in Tor or similar systems do not exist.
+All nodes, regardless of endpoint or mix, implement the same logic and fulfill the same functions, which make it impossible to determine the function. Exit nodes, as in Tor or similar systems, do not exist.
 
 \section{Accounting}
 The Accounting layer maintains all local identities and controls the overall load to the system. He processes requests from an ephemeral identity and generates replies to these requests. 
 
-In table \ref{tab:protoReplyCrit} we show under what circumstances a reply to a header request should be sent. The capitalized words MAY, MUST, SHOULD, and SHOULD NOT are used as defined in RFC2119\cite{RFC2119}.
+In table \ref{tab:protoReplyCrit}, we show under what circumstances a reply to a header request should be sent. The capitalized words MAY, MUST, SHOULD, and SHOULD NOT are used as defined in RFC2119\cite{RFC2119}.
 \begin{table*}[ht]
 	\centering\scriptsize
 	\begin{tabular}{|l|l|l|l|l|}\hline
@@ -700,12 +700,12 @@ In table \ref{tab:protoReplyCrit} we show under what circumstances a reply to a 
 \end{table*}
 
 \section{Routing}
-Routing of a message is simple. A workspace of an ephemeral identity contains routing blocks and payload blocks. A routing block has an active time window. Anytime during that time window, a routing layer processes the routing instructions contained in the assembly operations of the routing block. If successful, the message will be sent using the specified blending layer and target address.
+The routing of a message is simple. A workspace of an ephemeral identity contains routing blocks and payload blocks. A routing block has an active time window. Anytime during that time window, a routing layer processes the routing instructions contained in the assembly operations of the routing block. If successful, the message will be sent using the specified blending layer and target address.
 
 \section{Blending layer}
-Blending layer must be crafted carefully. A blending layer is responsible for the sensible content generation of the transport media plus embedding a VortexMessage into the transport layer according to specs provided by the original sender.
+The blending layer must be crafted carefully. A blending layer is responsible for the sensible content generation of the transport media plus embedding a VortexMessage into the transport layer according to specs provided by the original sender.
 
-The original sender has no control over the plain text messages to avoid possibilities of sending targeted messages over the transport layer using MessageVortex. This differentiates MessageVortex from other systems having ``exit nodes'' such as Tor.
+The original sender has no control over the plain text messages to avoid the possibility of sending targeted messages over the transport layer using MessageVortex. This differentiates MessageVortex from other systems having ``exit nodes'' such as Tor.
 
 \subsection{Plain Inclusion}
 The data stream has of the MessageVortex protocol has no structure visible from the outside. This property allows embedding as structureless information in files with a similar entropy. We did an analysis of common file formats on the internet to figure out which file format is suitable for this type of inclusion.
@@ -748,16 +748,16 @@ We were unable to find any scientifical data regarding what type of traffic or a
 As expected, the number of images within mail was very high ($\approx 50\%$). Unfortunately, we were unable to analyze the content of ms-tnef attachments retrospectively. It seems that based on these figures, information hiding within images in email traffic is a good choice.
 
 \section{Considerations for Building Messages}
-In a worst-case scenario, we assume that an adversary is controlling most of the network utilized for anonymization. While this is not necessarily a problem, it allows an adversary to track a message while agents are being used under his control. So for simplicity and as a worst case assumption, we always assume that an adversary has perfect knowledge of an associated message flow. This is, however, a worst-case scenario. One missing agent disconnects the whole chain and as messages are no longer traceable.
+In a worst-case scenario, we assume that an adversary is controlling most of the network utilized for anonymization. While this is not necessarily a problem, it allows an adversary to track a message while agents are being used under his control. So for simplicity and as a worst-case assumption, we always assume that an adversary has perfect knowledge of an associated message flow. This is, however, a worst-case scenario. One missing agent disconnects the whole chain, and as messages are no longer traceable.
 
 \subsection{Ephemeral identities}
 Any VortexMessage sender may maintain one or more ephemeral identities per node. These identities might be active in parallel, overlapping, or even with interruptions. A routing block building node is advised to select multiple trustworthy nodes (such as known endpoints) and add some publicly available nodes or nodes obtained by bootstrapping. Those nodes are not trustworthy and may be chosen from a list of different networks.
 
 \subsection{Timing of messages}
-Messages are flowing in a timed manner through the network. As a routing block builder has to take into account that potential routing mechanisms of the transport layer consume time, a message is delayed in each hop.  The routing block builder controls the timing and duration of delivery. Depending on the number of hops for the longest path of the message and the delay windows on every hop the total message has a delay which is controllable by the routing block builder.
+Messages are flowing in a timed manner through the network. As a routing block builder has to take into account that potential routing mechanisms of the transport layer consume time, a message is delayed in each hop.  The routing block builder controls the timing and duration of delivery. Depending on the number of hops for the longest path of the message and the delay windows on every hop, the total message has a delay, which is controllable by the routing block builder.
 
 \subsection{Diagnostics}
-To diagnose the flow of a message, any part of the message may be sent directly or indirectly back to the routing block builder. This allows him to judge upon the message progress and whether nodes are well behaving or not.
+To diagnose the flow of a message, any part of the message may be sent directly or indirectly back to the routing block builder. This allows him to judge upon the message progress and whether nodes are well-behaving or not.
 
 There is no fingerprinting operation available for making such a diagnosis. Such operations would make the traffic identifiable as diagnostic traffic.
 
@@ -775,22 +775,22 @@ In the previous sections, we identified a list of requirements.
 In the following subsections, we will iterate through all requirements and verify to what degree we achieved the goal.
 
 \paragraph*{\ref{req:zeroTrust}:} 
-We have not put any trust in an external infrastructure. While we do assume that all routing nodes act as defined. A misbehaving node may be identified and eliminated without putting any trust on other nodes. Analysis has shown no means for a misbehaving node which might be intentional or unintentional endangering anonymity at any time. We do not rely on any third party technology or infrastructure for our anonymity. 
+We have not put any trust in an external infrastructure. While we do assume that all routing nodes act as defined. A misbehaving node may be identified and eliminated without putting any trust in other nodes. Analysis has shown no means for a misbehaving node, which might be intentional or unintentional endangering anonymity at any time. We do not rely on any third-party technology or infrastructure for our anonymity. 
 
-This requirement is, therefore fulfilled.
+This requirement is, therefore, fulfilled.
 
 \paragraph*{\ref{req:P2P}:} 
 No node has additional privileges or offers additional services. All are equal and share the same privileges.
 
-This requirement is, therefore fulfilled.
+This requirement is, therefore, fulfilled.
 
 \paragraph*{\ref{req:untagable}:} 
 Messages may not be tagged. All content is either strictly onionised or defined and linked with unknown hooks. Tampering with a message will typically cause the message delivery to fail at the next node. Furthermore, may tampering be detected.
 
-This requirement is, therefore fulfilled.
+This requirement is, therefore, fulfilled.
 
 \paragraph*{\ref{req:unbugable}:} 
-There are always means to bug a message. As we put trust in sender and recipient and we know already that an intermediate mixing node is not able to modify the message, the protocol is hard to bug. There may be a possibility to bug a message with a routing log entry over DNS. If a recipient is not resolving names or trusts in the content of such a message he is safe.
+There are always means to bug a message. As we put trust in the sender and recipient, and we know already that an intermediate mixing node is not able to modify the message, the protocol is hard to bug. There may be a possibility to bug a message with a routing log entry over DNS. If a recipient is not resolving names or trusts in the content of such a message, he is safe.
 
 This requirement is, therefore, fulfilled. It may be only partially fulfilled if log entries are not handled with care.
 
@@ -808,7 +808,7 @@ This requirement is, therefore, fulfilled.
 The following statements are the findings of the previous chapters:
 \begin{itemize}
 	\item Routing nodes are identifiable by an in-depth inspection.\\
-	A routing node features unique features which can be identified. 
+	A routing node features unique features that can be identified. 
 	
 	Identifyable properties discovered are:
 	\begin{itemize}
@@ -819,18 +819,18 @@ The following statements are the findings of the previous chapters:
 	\item A routing node can link a message to an ephemeral identity\\
 	This is a minor issue and is countered by the fact that ephemeral identities have a very short lifespan and are unconnected.
 	\item A routing node learns about other nodes over time.\\
-	A routing node is unable to communicate with the peers without a host key. It may, however, learn the endpoint address of its peer. Assuming a censoring adversary, this may be a problem in a single case as the provider of the transport layer may be forced to block the account.
+	A routing node is unable to communicate with peers without a host key. It may, however, learn the endpoint address of its peer. Assuming a censoring adversary, this may be a problem in a single case as the provider of the transport layer may be forced to block the account.
 \end{itemize}
 
 On the other hand, no node can tell by observing traffic if another node is a final recipient or just another router.
 
-There are, however, some weaknesses in the protocol. As the implementation is currently connecting simultaneously to the transport layer endpoint (email or Jabber account in the current implementation) and the Vortex account that fact might identify the user. Using an anonymization proxy could solve the problem, but it would violate the Zero trust principle.
+There are, however, some weaknesses in the protocol. As the implementation is currently connecting simultaneously to the transport layer endpoint (email or Jabber account in the current implementation) and the Vortex account, that fact might identify the user. Using an anonymization proxy could solve the problem, but it would violate the Zero trust principle.
 
 A sender is capable of leaking the presence of a receiver to a global observer.
 
 This requirement is, therefore, only partially fulfilled. However, the weakness is very faint.
 
-\paragraph*{\ref{req:boot}:} The header request peer functionality allows to query for routing nodes. The key handling of the protocol allows using a node without disclosing its host key. Each node may decide on their wether it leaks its own identity.
+\paragraph*{\ref{req:boot}:} The header request peer functionality allows to query for routing nodes. The key handling of the protocol allows using a node without disclosing its host key. Each node may decide on whether it leaks its own identity.
 
 This requirement is, therefore, fulfilled.
 
@@ -838,14 +838,14 @@ This requirement is, therefore, fulfilled.
 
 This requirement is, therefore, fulfilled.
 
-\paragraph*{\ref{req:easy}:} The protocol allows to reuse clients already available to send messages. The whole encryption and anonymity problem is hidden in a local proxy. This allows users to stick to their favorite tools.
+\paragraph*{\ref{req:easy}:} The protocol allows the use of clients already available and know to the user to send messages. The whole encryption and anonymity problem is hidden in a local proxy. This allows users to stick to their favorite tools.
 
-This requirement is, therefore fulfilled.
+This requirement is,  therefore, fulfilled.
 
 \section{Considerations for Routing Messages}
 Messages should always be sent nearby other messages timewise. This means that the best moment for sending a message in a ready queue is at a time when sending other messages is due. However, no optimization should be done to send as many messages as possible at the same time. This would lead to a foreseeable behavior of the routing layer and thus to miss-usable behavior.
 
-The approach is furthermore heavily dependent on the transport protocol and builds on top of a new obfuscating/routing layer. For this system to become a real peer-to-peer approach, some additional quirks are required. A message-Vortex-Account always needs an active routing handler. This routing handler may be introduced by new server capabilities or by having a device handling the routing from the client side. For this reason, we built a RaspberryPi appliance capable of connecting to one (or more) accounts fetching incoming emails, analyzing them and reroute them if necessary. Although the system is designed to be run on a RaspberryPi, the software might be installed to any Java-capable client. The RaspberryPi is just one affordable lightweight device which offers all required capabilities.
+The approach is furthermore heavily dependent on the transport protocol and builds on top of a new obfuscating/routing layer. For this system to become a real peer-to-peer approach, some additional quirks are required. A message-Vortex-Account always needs an active routing handler. This routing handler may be introduced by new server capabilities or by having a device handling the routing from the client-side. For this reason, we built a RaspberryPi appliance capable of connecting to one (or more) accounts fetching incoming emails, analyzing them, and reroute them if necessary. Although the system is designed to be run on a RaspberryPi, the software might be installed to any Java-capable client. The RaspberryPi is just one affordable, lightweight device that offers all required capabilities.
 
 There was up until very late a routing log functionality in the protocol. This functionality did, however, have the disadvantage that it allowed bugging and could disclose intermediate mixes to a recipient who did not comply with the policy the mixes might have chosen. Therefore this feature was dropped and replaced with the fetch block behavior.
 
@@ -878,7 +878,7 @@ We assume that the adversary is targeting the following pieces of information:
 	\item Message frequency
 \end{itemize}
 
-Attacks on the users' identity are no longer possible as the identity used on the nodes is based on ephemeral identities instead of the users' true identity. As the ephemeral identities may exist in parallel, overlapping or in a serial manner and are strictly unlinked to the true identity, no statement can be made concerning the linking of ephemeral identities to the real identities. Frequency patterns or behavioral patterns may be split among multiple identities and distributed over multiple nodes. 
+Attacks on the users' identity are no longer possible as the identity used on the nodes is based on ephemeral identities instead of the users' true identity. As the ephemeral identities may exist in parallel, overlapping, or in a serial manner and are strictly unlinked to the true identity, no statement can be made concerning the linking of ephemeral identities to the real identities. Frequency patterns or behavioral patterns may be split among multiple identities and distributed over multiple nodes. 
 
 Frequency and bandwidth analysis are not possible as the frequency and bandwidth of a single message are not trackable, and the size of a message is generally not related to the message flow. An exception to this statement is when routing a different message through a vortex system using a reused routing block general statements such as ``the message is bigger than the previous one'' about the size of the message is possible if the routing block makes use of relative split operations. In experiments, we were able to mimic any desired communication pattern we wanted for an adversary to be found.
 
@@ -890,7 +890,7 @@ The message content remains cryptographically secured if the dual trust (sender 
 Traditional man-in-the-middle (MITM) attacks are not possible when using the message vortex protocol as the remote identity secures the recipient to a specific recipient. If, however, a recipient identity has been compromised either by stealing its private key or by injecting a wrong identity in the senders' repository man in the middle attacks become possible. We do not cover this problem within this work as a secure, verifiable way to exchange identities is not included in the protocol.
 
 \subsection{Identification of Participating Nodes}
-Participating nodes may be identified when injecting evil routing nodes. When suspecting such nodes first step should be moving outside the jurisdictional reach before reaching out to the final anonymity set. If the anonymity set is compromised, identification of the participating nodes is, however possible.
+Participating nodes may be identified when injecting evil routing nodes. When suspecting such nodes first step should be moving outside the jurisdictional reach before reaching out to the final anonymity set. If the anonymity set is compromised, identification of the participating nodes is, however, possible.
 
 \subsubsection{Identification by Content}
 Message extraction by content is not generally possible even if knowing the blending type and corresponding blending keys. As the VortexMessage does not show an outer structure such as ASN.1 or similar. The message itself remains undetectable.
@@ -902,7 +902,7 @@ A vortex node may be identified by the query if the node responds to unencrypted
 Vortex node shows a specific behavior in terms of supported protocols. Depending on the implementation, this behavior is detectable. At the moment, supported protocols are POP/SMTP and XMPP. Since both protocols are widespread among internet users, this footprint is shallow.
 
 \subsection{Storage of Messages and queues}
-The storage of messages sent though MessageVortex should be handled with great care. It seems on the first sight a good idea to merge all messages in globally available storage such as the IMAP account of the receiving entity. However -- In doing so, we would discover the message content to the providing party of a mail account. Since we handled the message with great care and tremendous costs up until this point, it would be careless doing so. 
+The storage of messages sent through MessageVortex should be handled with great care. It seems, at first sight, a good idea to merge all messages in globally available storage such as the IMAP account of the receiving entity. However -- In doing so, we would discover the message content to the providing party of a mail account. Since we handled the message with great care and tremendous costs up until this point, it would be careless doing so. 
 
-Storing them in a localized and receiving entity controlled storage is a good idea but leaves security considerations like a backup possibly to an end user. This might be better but in effect, a questionable decision. There is, however, a third option. By leaving the message unhandled on the last transport layer of the MessageVortex chain, we may safely backup the data without disclosing the message content. Merging the content then dynamically through a specialized proxy would allow the user to have a unified view on his without compromising the security.
+Storing them in a localized and receiving entity controlled storage is a good idea but leaves security considerations like a backup possibly to an end-user. This might be better but, in effect, a questionable decision. There is, however, a third option. By leaving the message unhandled on the last transport layer of the MessageVortex chain, we may safely back up the data without disclosing the message content. Merging the content then dynamically through a specialized proxy would allow the user to have a unified view on his without compromising the security.
 
