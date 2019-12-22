@@ -1,4 +1,4 @@
-FROM ubuntu:bionic
+FROM ubuntu:disco
 
 MAINTAINER Martin Gwerder
 
@@ -8,7 +8,7 @@ RUN mkdir /var/tmp/messagevortex && \
     DEBIAN_FRONTEND=noninteractive apt-get -y install \
                texlive-latex-base texlive-generic-recommended texlive-extra-utils texlive-latex-extra \
                texlive-bibtex-extra texlive-luatex \
-               texlive-lang-german texlive-lang-english \
+               texlive-lang-german texlive-lang-english xzdec \
                ghostscript gsfonts gsfonts-other gsfonts-x11 \
                pandoc calibre enscript \
                fig2dev \
@@ -29,5 +29,5 @@ RUN cd /var/tmp/messagevortex && \
     unzip -c /tmp/AdobeICCProfilesWin_end-user.zip  "Adobe ICC Profiles (end-user)/RGB Profiles/AdobeRGB1998.icc" >$(dirname $(find /usr/share/ghostscript/*.*/lib/ -type f|head -n 1) )/AdobeRGB1998.icc && \
     sed "s~/ICCProfile (srgb.icc)~/ICCProfile ($( dirname $(find /usr/share/ghostscript/*.*/lib/ -type f|head -n 1) )/AdobeRGB1998.icc)~" <$(dirname $(find /usr/share/ghostscript/*.*/lib/ -type f|head -n 1) )/PDFA_def.ps >/tmp/PDFA_def.ps.new && mv /tmp/PDFA_def.ps.new $( dirname $(find /usr/share/ghostscript/*.*/lib/ -type f|head -n 1) )/AdobeRGB1998.icc && \
     MAVEN_CONFIG=/var/lib/maven/ mvn dependency:go-offline dependency:resolve-plugins && \
-    tlmgr install pdfx colorprofiles acmart
+    tlmgr init-usertree && tlmgr --repository ftp://tug.org/historic/systems/texlive/2018/tlnet-final install pdfx colorprofiles acmart
 CMD [ "/var/tmp/messagevortex/buildenv/runDockerTasks.sh" ]
