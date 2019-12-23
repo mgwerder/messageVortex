@@ -549,11 +549,11 @@ For the criteria please refer to section \ref{sec:existingTPP} on page \pageref{
 
 \section{Analysis}
 \subsection{HTTP}
-The HTTP protocol allows message transfer from and to a server and is specified in RFC2616 \cite{RFC2616}. It is not suitable as a communication protocol for messages due to the lack of notifications. There are some extensions that would allow such communications (such as WebDAV). Still, in general, even those are not suitable as they require a continuous connection to the server to get notifications. Having a ``rollup'' of notifications when connecting is not there by default but could be implemented on top of it. 
+The HTTP protocol allows message transfer from and to a server and is specified in RFC2616 \cite{rfc2616}. It is not suitable as a communication protocol for messages due to the lack of notifications. There are some extensions that would allow such communications (such as WebDAV). Still, in general, even those are not suitable as they require a continuous connection to the server to get notifications. Having a ``rollup'' of notifications when connecting is not there by default but could be implemented on top of it. 
 
 HTTP servers listen on standard ports 80 or 443 for incoming connects. The port 443 is equivalent to the port 80 except for the fact that it has a wrapping encryption layer (usually TLS). The incoming connects (requests) must offer a header part and may contain a body part that would be suitable for transferring messages to the server. The reply to this request is transferred over the same TCP connection containing the same two sections.
 
-HTTP0.9-HTTP/1.1 are clear text protocols which are human-readable (except for the data part which might contain binary data). The HTTP/2 (as specified in \cite{RFC7540}) is using the same ports and default behavior. Unlike HTTP/0.9-HTTP/1.1, it is not a clear text but a binary protocol. Headers and bodies of messages are sent as binaries. 
+HTTP0.9-HTTP/1.1 are clear text protocols which are human-readable (except for the data part which might contain binary data). The HTTP/2 (as specified in \cite{rfc7540}) is using the same ports and default behavior. Unlike HTTP/0.9-HTTP/1.1, it is not a clear text but a binary protocol. Headers and bodies of messages are sent as binaries. 
 
 To be a valid candidate as storage, WebDAV support, as specified in \cite{rfc4918}, must be assumed.
 
@@ -838,12 +838,6 @@ The findings of this short analysis suggested that we should use the two protoco
 
 % add the index
 \printindex
-
-\begin{comment}
-% just a trick to make TexNicCenter Bibliography working
-\addbibresource{messageVortex}
-\addbibresource{inc/bib/unclassified/Anonbib/anonbib}
-\end{comment}
 
 \clearpage\chapter{Short Biography}
 \begin{wrapfigure}{R}{0.3\columnwidth}

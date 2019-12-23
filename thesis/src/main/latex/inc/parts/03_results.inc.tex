@@ -16,7 +16,7 @@ The Protocol outlined here is the final product and has undergone many developme
 
 \chapter{Vortex Prerequisites}
 \section{Hardware}
-No special hardware is required for running Vortex nodes. The capabilities of Vortex are designed in such a way that ordinary mobile phones may act as vortex nodes. It is, however, recommended to have a node always connected to the internet. A mobile phone may disconnect from time to time based on the availability of the network. For our experiments, we use a RaspberryPi Version 1. It is, however, recommended to use a faster, newer model due to the memory requirements of the proof of work algorithm.
+No special hardware is required for running Vortex nodes. The capabilities of Vortex are designed in such a way that ordinary mobile phones may act as vortex nodes. It is, however, recommended to have a node always connected to the Internet. A mobile phone may disconnect from time to time based on the availability of the network. For our experiments, we use a RaspberryPi Version 1. It is, however, recommended to use a faster, newer model due to the memory requirements of the proof of work algorithm.
 
 The hardware currently requires a network interface and a fully functional JSE VM to run the reference implementation.
 
@@ -672,9 +672,9 @@ A node may reject an operation for any reason, including exceeding an unnatural 
 A reply containing a null length puzzle means that the requested operation is rejected.
 
 \chapter{MessageVortex -- Transport Independent Messaging anonymous to \texorpdfstring{\nth{3}}{3rd} Parties\label{sec:spec}}
-This approach is different from all approaches discussed previously. Unlike them, we put complete distrust into the infrastructure being used. Furthermore, we do not rely on a custom server infrastructure on the internet. Instead, we take advantage of the availability of internet-connected devices such as mobile phones, tablets, or even commonly available SoC such as RaspberryPi or similar. It is still tough to maintain a server on the internet. Considering the vastly growing amount of automated attacks carried out against Internet-connected servers, it is not advisable or realistic to assume that a future user of this system owns either a server or connects to a service that is offering anonymizing services. These infrastructures would be susceptible to monitoring or even banning. Instead, we take a different approach.
+This approach is different from all approaches discussed previously. Unlike them, we put complete distrust into the infrastructure being used. Furthermore, we do not rely on a custom server infrastructure on the Internet. Instead, we take advantage of the availability of Internet-connected devices such as mobile phones, tablets, or even commonly available SoC such as RaspberryPi or similar. It is still tough to maintain a server on the Internet. Considering the vastly growing amount of automated attacks carried out against Internet-connected servers, it is not advisable or realistic to assume that a future user of this system owns either a server or connects to a service that is offering anonymizing services. These infrastructures would be susceptible to monitoring or even banning. Instead, we take a different approach.
 
-We use common messaging protocols as transport layers and connect to them using the respective client protocols. The actual mixes are operated by the users on their ``always connected'' devices. Such a system is far less reliable than a traditionally run server as this hardware is typically cheap and generally connected to the internet using a bandwidth shared media.
+We use common messaging protocols as transport layers and connect to them using the respective client protocols. The actual mixes are operated by the users on their ``always connected'' devices. Such a system is far less reliable than a traditionally run server as this hardware is typically cheap and generally connected to the Internet using a bandwidth shared media.
 
 The basic idea is that a client generates all traffic (including decoy and diagnosis) by itself. It defines the routes a message takes through the mixes and decides which targets are receiving dummy traffic at the same time. In such a system, even when possessing all the nodes routing the traffic (without the endpoints), an anonymity set of $k$ (whereas the sender defines the size of $k$) is guaranteed.
 
@@ -708,13 +708,13 @@ The blending layer must be crafted carefully. A blending layer is responsible fo
 The original sender has no control over the plain text messages to avoid the possibility of sending targeted messages over the transport layer using MessageVortex. This differentiates MessageVortex from other systems having ``exit nodes'' such as Tor.
 
 \subsection{Plain Inclusion}
-The data stream has of the MessageVortex protocol has no structure visible from the outside. This property allows embedding as structureless information in files with a similar entropy. We did an analysis of common file formats on the internet to figure out which file format is suitable for this type of inclusion.
+The data stream has of the MessageVortex protocol has no structure visible from the outside. This property allows embedding as structureless information in files with a similar entropy. We did an analysis of common file formats on the Internet to figure out which file format is suitable for this type of inclusion.
 
 It is essential to understand that this is a frail form of information hiding. A human observer may easily tell ``real'' data from ``broken'' data apart. A human is not able to tell whether a file is severely broken or contains a VortexMessage.
 
 \subsubsection{File Type Candidates}
 
-We were unable to find any scientifical data regarding what type of traffic or attachment is common on the internet. We, therefore, tried to analyze mail logs (SMTP) of a mail provider. We were scanning $567594$ emails for attachment properties after the spam elimination queue. $16.5\%$ of all scanned messages had an attachment. The top 20 attachment types distributions are shown in table \ref{tab:emailAttachments}.
+We were unable to find any scientifical data regarding what type of traffic or attachment is common on the Internet. We, therefore, tried to analyze mail logs (SMTP) of a mail provider. We were scanning $567594$ emails for attachment properties after the spam elimination queue. $16.5\%$ of all scanned messages had an attachment. The top 20 attachment types distributions are shown in table \ref{tab:emailAttachments}.
 \begin{table}[H]
 	%    \centering\scriptsize
 	
@@ -899,7 +899,7 @@ Message extraction by content is not generally possible even if knowing the blen
 A vortex node may be identified by the query if the node responds to unencrypted requests. An active node may be differentiated from an inactive node at any time if a valid blending specification is known. With such a specification, an evil routing node is capable of creating requests such as new identity requests. As soon as the evil node receives a reply, the node may conclude that the probed node is a VortexNode.
 
 \subsubsection{Identification by Traffic Type}
-Vortex node shows a specific behavior in terms of supported protocols. Depending on the implementation, this behavior is detectable. At the moment, supported protocols are POP/SMTP and XMPP. Since both protocols are widespread among internet users, this footprint is shallow.
+Vortex node shows a specific behavior in terms of supported protocols. Depending on the implementation, this behavior is detectable. At the moment, supported protocols are POP/SMTP and XMPP. Since both protocols are widespread among Internet users, this footprint is shallow.
 
 \subsection{Storage of Messages and queues}
 The storage of messages sent through MessageVortex should be handled with great care. It seems, at first sight, a good idea to merge all messages in globally available storage such as the IMAP account of the receiving entity. However -- In doing so, we would discover the message content to the providing party of a mail account. Since we handled the message with great care and tremendous costs up until this point, it would be careless doing so. 
