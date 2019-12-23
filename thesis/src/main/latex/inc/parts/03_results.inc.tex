@@ -3,7 +3,7 @@
 %!TeX spellcheck = en_US
 %!TeX root = ../../messageVortex.tex
 
-\part{Results}
+\part{Results\label{sec:results}}
 To verify the hypothesis made in this paper and to analyze properties of the protocol in a real-world scenario, a library was implemented in Java, which is capable of handling all message packets and the routing stack as a whole. The implementation is available under \url{https://messagevortex.net}. The following paragraphs describe the protocol developed in general as a generic approach. Appendix \ref{app:rfcMessageVortexMain} gives the full ASN.1 representation of the protocol. 
 
 It is essential to notice that ASN.1 has no means to express encrypted structures. Due to this fact, we defined all encrypted fields as \verb|OCTET STRING|. 
@@ -85,7 +85,7 @@ Public nodes are nodes, which advertise themselves as normal mixes. Just as all 
 This node does not answer any clear-text requests. As an immediate result, the node is only usable by other nodes knowing the public key of this node. The node is, therefore, on a known secret base only reachable.
 
 \subsubsection{Hidden Vortex Node\label{sec:hiddenNode}}
-A hidden node is a special form to a stealth node. It has a set of preset identities. Only these entities are processed. This behavior has certain drawbacks. An identity may not be changed. As an immediate result, traffic may become pseudonymity. To counter this effect, at least partially, we may use the same local identity for multiple senders. The sender is only one of all senders knowing the private key of an identity.
+A hidden node is a special form to a stealth node. It has a set of preset identities. Only these entities are processed. This behavior has certain drawbacks. An existing identity may not be changed, and new ephemeral identities may not be created. As an immediate result, traffic may become pseudonymity. To counter this effect, at least partially, we may use the same local identity for multiple senders. The sender is only one of all senders knowing the private key of an identity.
 
 \chapter{Protocol Overview}
 The Protocol implementation is described in the RFC document in \ref{app:rfcMessageVortexMain}. It contains all the necessary information to build the protocol. The RFC is published on the website \url{https://messagevortex.net/} and through the official IETF channels. Besides the RFC document, additional documents and references may be found there.
@@ -186,7 +186,7 @@ The first key of a Vortex message is the message key. This key is only accessibl
 
 The second key is the header key located in the encrypted header. The RBB chooses the key. This key protects the inner structure of the Message. It makes it impossible for any node except the sending or the receiving peer node to detect the inner structure of the message. Without this key, any independent observer with knowledge about the blending capabilities of a receiving node may:
 \begin{itemize}
-	\item easier to identify the block structure.\\ 
+	\item Easier to identify the block structure.\\ 
 	This remains the case regardless of whether ASN.1 or length prefixed structures are used. If the structure of a vortex Message can be easily identified, the messages may be logged or dropped.
 	\item Identify the routing block size.\\
 	The value of this information is only minimal as it only reflects the complexity of the remaining routing information indirectly.
@@ -231,7 +231,7 @@ All messages are processed as follows:
 	\item Decide if the message should be processed. If not abort here.
 	\item Decrypt the main block with the message key
 	\item Extract payload chunks.
-	\item decrypt routing blocks with header key.
+	\item Decrypt routing blocks with header key.
 	\item Check backref secrets.
 \end{enumerate}
 
@@ -896,7 +896,7 @@ Participating nodes may be identified when injecting evil routing nodes. When su
 Message extraction by content is not generally possible even if knowing the blending type and corresponding blending keys. As the VortexMessage does not show an outer structure such as ASN.1 or similar. The message itself remains undetectable.
 
 \subsubsection{Identification by Query}
-A vortex node may be identified by the query if the node responds to unencrypted requests. An active node may be differentiated from an inactive node at any time if a valid blending specification is known. With such a specification, an evil routing node is capable of creating requests such as new identity requests and taking a successful reply as an indication for an active routing node.
+A vortex node may be identified by the query if the node responds to unencrypted requests. An active node may be differentiated from an inactive node at any time if a valid blending specification is known. With such a specification, an evil routing node is capable of creating requests such as new identity requests. As soon as the evil node receives a reply, the node may conclude that the probed node is a VortexNode.
 
 \subsubsection{Identification by Traffic Type}
 Vortex node shows a specific behavior in terms of supported protocols. Depending on the implementation, this behavior is detectable. At the moment, supported protocols are POP/SMTP and XMPP. Since both protocols are widespread among internet users, this footprint is shallow.
@@ -904,5 +904,5 @@ Vortex node shows a specific behavior in terms of supported protocols. Depending
 \subsection{Storage of Messages and queues}
 The storage of messages sent through MessageVortex should be handled with great care. It seems, at first sight, a good idea to merge all messages in globally available storage such as the IMAP account of the receiving entity. However -- In doing so, we would discover the message content to the providing party of a mail account. Since we handled the message with great care and tremendous costs up until this point, it would be careless doing so. 
 
-Storing them in a localized and receiving entity controlled storage is a good idea but leaves security considerations like a backup possibly to an end-user. This might be better but, in effect, a questionable decision. There is, however, a third option. By leaving the message unhandled on the last transport layer of the MessageVortex chain, we may safely back up the data without disclosing the message content. Merging the content then dynamically through a specialized proxy would allow the user to have a unified view on his without compromising the security.
+Storing them in a localized and receiving entity controlled storage is a good idea but leaves security considerations like a backup possibly to an end-user. This might be better but, in effect, a questionable decision. There is, however, a third option: By leaving the message unhandled on the last transport layer of the MessageVortex chain, we may safely back up the data without disclosing the message content. Merging the content then dynamically through a specialized proxy would allow the user to have a unified view on his without compromising the security.
 

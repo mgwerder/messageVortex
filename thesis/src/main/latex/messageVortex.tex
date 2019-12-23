@@ -442,16 +442,6 @@
 
 \usepackage{ifdraft}
 
-% Adapt bibtex to include documents
-\makeatletter
-\@ifclasswith{\doctype}{attachdocs}{
-	\typeout{INFO: ======================}
-	\typeout{INFO: attaching files to PDF}
-	\typeout{INFO: ======================}
-	\DeclareFieldFormat{file}{\StrGobbleLeft{#1}{1}[\wtcGwM]\StrGobbleRight{\wtcGwM}{4}[\filename] \IfFileExists{\filename}{\textattachfile{\filename}{}}{FIXME missing document link}}
-	\renewbibmacro{finentry}{\finentry\addspace \printfield{file}}
-}{}
-
 \begin{document}%
 %
 \frontmatter%
@@ -815,6 +805,16 @@ The findings of this short analysis suggested that we should use the two protoco
 \backmatter
 \chapter{Bibliography}
 {
+% Adapt bibtex to include documents  
+  \makeatletter
+  %\@ifclasswith{\doctype}{attachdocs}{
+	\typeout{INFO: ======================}
+	\typeout{INFO: attaching files to PDF}
+	\typeout{INFO: ======================}
+	\DeclareFieldFormat{file}{\StrGobbleLeft{#1}{1}[\wtcGwM]\StrGobbleRight{\wtcGwM}{4}[\filename] \IfFileExists{\filename}{\textattachfile{\filename}{}}{FIXME missing document link}}
+	\renewbibmacro{finentry}{\finentry\addspace \printfield{file}}
+  %}{}
+  \makeatother
   %\def\filespliter#1{\expandafter\intfilespliter#1\relax}
   %\def\intfilespliter#1 #2 #3\relax{ First: (#1), Second: (#2), Third: (#3) }
   \printbibliography[title={},heading=none]

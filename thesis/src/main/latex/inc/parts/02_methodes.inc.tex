@@ -7,14 +7,14 @@
 % ********************************************************************************************************
 % *** Methodes
 % ********************************************************************************************************
-\part{Methodes}
+\part{Methodes\label{sec:methodes}}
 In this part of the thesis, we collect requirements, definitions, methods, and existing research relevant to the topic of this thesis. 
 
 We start by collecting requirements for the protocol.
 
-Having the requirements, we collect many existing technologies on research and implementation levels. Each of the technologies is quickly categorized and either further studied or rejected, naming the reasons for rejection.
+Having the requirements, we collect many existing technologies on research and implementation levels. Each of the techniques is quickly categorized and either further studied or rejected, naming the reasons for rejection.
 
-The list of technologies and research collected is big. All relevant technologies, either widely adopted or thoroughly researched, should be included in this chapter. All Technologies and research are categorized. We reference technologies through their respective standards. If applicable, multiple standards may be part of the analysis. A short introduction into the protocol is given and then analyzed for suitability for a specific problem addressed in this work. Whenever quoting research, we refer to the respective papers. If appropriate, multiple related pieces of research are collected together into a bigger picture and then analyzed. When analyzing, we focus on suitability concerning specific problems. If related to standard technology, we link to the respective standards. Transport layer protocols have been shortened to the outcomings in table \ref{tab:protoSuitCrit}. For an extensive analysis see Appendix \ref{app:transportProtocols}
+The list of technologies and research collected is big. All relevant technologies, either widely adopted or thoroughly researched, should be included in this chapter. All Technologies and research are categorized. We reference technologies through their standards. If applicable, multiple standards may be part of the analysis. A short introduction into the protocol is given and then analyzed for suitability for a specific problem addressed in this work. Whenever quoting research, we refer to the respective papers. If appropriate, multiple related pieces of research are collected together into a bigger picture and then analyzed. When analyzing, we focus on suitability concerning specific problems. If related to standard technology, we link to the respective standards. Transport layer protocols have been shortened to the outcomings in table \ref{tab:protoSuitCrit}. For an extensive analysis see Appendix \ref{app:transportProtocols}
 
 In chapter \ref{sec:genRequirements}, we collect the requirements for the protocol. Based on the findings in this section, we collect in chapter \ref{sec:existingTPP}. In chapter \ref{sec:existingRD}, we collect relevant research about the topic. In chapter \ref{sec:appliedMethods}, we summarize the chosen methods. We explain choices and give a rough outline of the protocol baselines.
 
@@ -30,13 +30,13 @@ and
 	Everyone shall have the right to freedom of expression; this right shall include freedom to seek, receive and impart information and ideas of all kinds, regardless of frontiers, either orally, in writing or print, in the form of art, or through any other media of his choice.
 \end{quote}
 
-We imply that not all participants on the internet share this value. As of September \th{1}, 2016 Countries such as China (signatory), Cuba (signatory), Qatar, Saudi Arabia, Singapore, United Arab Emirates, or Myanmar did not ratify the ICCPR. Other countries such as the United States or Russia did either put local laws in place superseding the ICCPR or made reservations rendering parts of it ineffective. We may, therefore, safely assume that freedom of speech is not given on the internet, as at least countries explicitly supersede them.
+We imply that not all participants on the Internet share this value. As of September \th{1}, 2016 Countries such as China (signatory), Cuba (signatory), Qatar, Saudi Arabia, Singapore, United Arab Emirates, or Myanmar did not ratify the ICCPR. Other countries such as the United States or Russia did either put local laws in place superseding the ICCPR or made reservations rendering parts of it ineffective. We may, therefore, safely assume that freedom of speech is not given on the Internet, as at least countries explicitly supersede them.
 
-Network packets may pass through any point of the world. A sender has no control over it. This lack of control is since every routing device decides on its own for the next hop. This decision may be based on static rules or influenced by third party nodes or circumstances (e.g., BGB, RIP, OSPF\ldots). It is furthermore not possible to detect what way has a packet taken. The standard network diagnostic tool \verb|tracert| respectively \verb|traceroute| list a possible list of hops. This list is only correct under certain circumstances (e.g., a stable route for multiple packets or same routing decisions regardless of other properties than the source and destination address). Any Output of these tools may, therefore, not taken as a log of routing decisions. There is no possibility in standard IP routed networks to foresee a route for a packet, nor can it be measured while or after sending. 
+Network packets may pass through any point of the world. A sender has no control over it. This lack of control is since every routing device decides on its own for the next hop. This decision may be based on static rules or influenced by third party nodes or circumstances (e.g., BGB, RIP, OSPF\ldots). It is furthermore not possible to detect what way has a packet taken. The standard network diagnostic tool \verb|tracert| respectively \verb|traceroute| returns a potential list of hops. This list is only correct under certain circumstances (e.g., a stable route for multiple packets or same routing decisions regardless of other properties than the source and destination address). Any Output of these tools may, therefore, not taken as a log of routing decisions. There is no possibility in standard IP routed networks to foresee a route for a packet, nor can it be measured while or after sending. 
 
 As an example of the problems analyzing a packet route, we may look at \verb|traceroute|. According to the manpage of traceroute, \verb|traceroute| uses UDP, TCP, or ICMP packets with a short TTL and analyses the IP of the peer sending a TIME\_EXCEEDED (message of the ICMP protocol). This information is then collected and shown as a route. This route may be completely wrong. The man page describes some of the possible causes.
 
-We cannot be sure that data packets we are sending are passing only through countries accepting the ICCPR to the full extent.
+We cannot state that data packets we are sending are passing only through countries accepting the ICCPR to the full extent, nor can we craft packages following such a rule.
 
 \begin{figure}[H]
 	\begin{lstlisting}[language=bash,breaklines=true,basicstyle=\tiny]
@@ -64,7 +64,7 @@ We cannot be sure that data packets we are sending are passing only through coun
 \section{Threat model\label{sec:adversary}}
 We refer to jurisdiction as a geographical area where a set of legal rules created by a single actor or a group of actors apply, which contains executive capabilities (e.g., police, army, or secret service) to enforce this set of legal rules.
 
-We assume for our protocol that adversaries are state-sponsored actors or players of large organizations. Such actors have high funding and are assumed to have elaborated capabilities within reach of the sponsor. Actors may join forces with other actors as allies. However, achieving more than 50\% on a world scale is excluded from our model. We always assume one or more actors with disjoint interests covering half of the network or more. 
+We assume for our protocol that adversaries are state-sponsored actors or players of large organizations. These actors have high funding and expected to have elaborated capabilities themselves or within reach of the sponsor. Actors may join forces with other actors as allies. However, achieving more than 50\% on a world scale is excluded from our model. We always assume one or more actors with disjoint interests covering half of the network or more. 
 
 We assume the following goals for an adversary:
 \begin{itemize}
@@ -94,14 +94,14 @@ we may furthermore subdivide the adversaries into the following sub-classes:
 \end{itemize}
 
 \section{Required Properties of an unobservable network}
-In this section, we summarize the required properties of an anonymizing network.
+In this section, we summarize the required properties of an anonymizing system.
 
 \subsection{Anonymizing and Unlinking}
 If we are unable to limit the route of our packets through named jurisdictions, we must protect ourselves from unintentionally breaking the law of a foreign country. Therefore we need to be anonymous when sending or receiving messages. Unfortunately, most transport protocols (in fact, almost all of them such as SMTP, SMS, XMPP, or IP) use a globally unique identifier for senders and receivers, which are readable by any party which is capable of reading the packets. 
 
-As a result, the anonymization of a sender or a receiver is not simple. A relay may allow at least the anonymization of the original sender given trust into the proxy. By combining it with encryption, we may even achieve a simple form of a sender and receiver pseudonymity. If cascading more relay like infrastructures and combining it with cryptography, we might even achieve sender and receiver anonymity. When introducing anonymous remailing endpoints, we may even achieve both simultaneously.
+As a result, the anonymization of a sender or a receiver is not simple. A relay may allow at least the anonymization of the original sender given trust into the proxy. By combining it with encryption, we may even achieve a simple form of a sender and receiver pseudonymity. If cascading more relay like infrastructures and combining it with cryptography, we may achieve sender and receiver anonymity. When introducing anonymous remailing endpoints, we may additionally achieve both simultaneously.
 
-These are the standard approaches in remailers and mixes. Their approaches are questionable as shown in \ref{sec:remailer} and \ref{sec:mixnets}. Attacks onto such systems were carried out in the past. Some of them were successful.
+These are the standard approaches in remailers and mixes. Their approaches are questionable as shown in \ref{sec:remailer} and \ref{sec:mixnets}. We have seen attacks on such systems in the past. Some of them were successful.
 
 \subsection{Censorship Resistant}
 In our scenario in \ref{sec:genRequirements}, we defined the adversary as someone with superior access to the network and its infrastructure. Such an adversary might attack a message flow in several ways:
@@ -145,7 +145,7 @@ The second meaning tells us that messages must always be capable of flowing from
 \subsection{Identifiable Sender}
 A messaging system offering unlinkability may offer sender anonymity. If so, a sender should be identifiable, so that the classification of senders is possible at any time.
 
-\section{Rough draft of Protocol}
+\section{Outline of Protocol}
 
 To fulfill the criteria given above, we define a very rough idea of the protocol and its layers. The rough overview is given in figure \ref{fig:roughProtocolDesign}. The protocol should work on the base of onion routing. Unlike Tor (see \ref{sec:tor}), it should not rely on central infrastructures. It furthermore should not be limited to onionized messages. It should be capable of splitting and reassemble messages at an intermediate router.
 
@@ -163,7 +163,7 @@ The ``accounting layer'' disassembles the received messages into its parts. It t
 
 The messages passed through such a protocol stack are onionised to offer anonymity from evil nodes. Furthermore, a node should be unable to tell whether a message was intended for a specific node or not. In consequence, we have to guarantee that all nodes, including sender and recipient, offer the same functions and are indistinguishable.
 
-To mitigate size based attacks (an onionised packet typically loses data on its way), we introduce operations that may be applied to a valid message as well as to decoy traffic. The operations should be able to increase and decrease in size without being able to tell if this message is destined to a target or not. Operations not carried out due to missing data might be either intentionally or a malfunction.
+To mitigate size based attacks (an onionised packet typically loses data on its way), we introduce operations that may be applied to a valid message as well as to decoy traffic. The operations must increase and decrease the message in size. The operations must not leak which part is decoy or not. Operations not carried out due to missing data might be either intentionally or a malfunction.
 
 The defined message operations are as follows:
 \begin{itemize}
@@ -185,9 +185,9 @@ To avoid making this system attractive to UBE, we introduce accounting to make m
 		\item Offer information about the current quota of an ephemeral identity.
 	\end{itemize}
 \end{itemize}
-To minimize accounting, all quotas are limited to a time interval. Such time-bound quotas guarantee that quota data of an accounting layer does not grow indefinitely. It is up to the node to decide what time duration is still acceptable.
+As we want to keep resource consumption for accounting as low as possible, all quotas are limited to a time interval. Such time-bound quotas guarantee that quota data of an accounting layer does not grow indefinitely. It is up to the node to decide what time duration is still acceptable.
 
-We minimize the possibility of an overload attack against a node, the following precautions are taken:
+We minimize the possibility of an overload attack against a node. We achieve this with the following precautions:
 \begin{itemize}
 	\item The message build process is far more complex than the routing carried out by the nodes.
 	\item Messages may be processed in parts to minimize the amount of work. After processing the start of a message, a node may already decide whether it will route the message or not.
@@ -223,7 +223,7 @@ For our protocol, we assume the following outline for a message:
 	\end{itemize}      
 \end{itemize}
 
-The message is picked up from the transport layer by the blending layer. This layer extracts the contained data and passes it to the routing layer. The routing layer extracts the message by extracting the ephemeral identity block. The accounting layer is called to authorize further processing for the identity. If authorized, the routing layer adds the routing blocks to the identity-specific workspace. As soon as the time specified in the routing block arrises, the routing block is processed by following the operations specified within. New messages are assembled and sent. The accounting layer keeps track of the quota regarding the new assembled messages. 
+The message is picked up from the transport layer by the blending layer. This layer extracts the contained data and passes it to the routing layer. The routing layer extracts the message by decrypting the ephemeral identity block. The accounting layer is called to authorize further processing for the identity. If approved, the routing layer adds the routing blocks to the identity-specific workspace. As soon as the time specified in the routing block arrises, the routing block is processed by following the operations specified within. New messages are assembled and sent. The accounting layer keeps track of the quota regarding the new constructed messages. 
 
 \chapter{Existing Transport Layer Protocols \label{sec:existingTPP}}
 In this chapter, we look at the various transport layer protocols. The primary goal is to identify strong candidates as a transport layer. The main focus lies on the following criteria:
@@ -259,7 +259,7 @@ In this chapter, we look at the various transport layer protocols. The primary g
 
 In table \ref{tab:protoSuitCrit} we sum up all previously analyzed protocols. We use ``$\checkmark$'' for a fulfilled criterion, ``\textasciitilde'' for a partially fulfilled criterion, and ``$\times$'' for a not fulfilled criterion. This overview shows in compact form protocols identified as strong candidates for use as a transport layer in terms of an anonymizing protocol. 
 
-This table shows that strong identified candidates are SMTP (being already a message sending protocol on asynchronous base) and XMPP (a real-time chat protocol able to attach files. This protocol features end-to-end encryption and signing furthermore). Both have the advantages that they are widely adopted on the internet and do additional support content (such as alternatives or attachments).
+This table shows that strong identified candidates are SMTP (being already a message sending protocol on asynchronous base) and XMPP (a real-time chat protocol able to attach files. This protocol features end-to-end encryption and signing furthermore). Both have the advantages that they are widely adopted on the Internet and do additional support content (such as alternatives or attachments).
 
 \footnotetext[1]{omitted due to message size being too small}
 
@@ -303,7 +303,7 @@ While $\ell$-diversity protects the identity of an entity, it does not prevent i
 \end{quote}
 
 \section{Single Use Reply Blocks and Multi-Use Reply Blocks}
-Chaum first introduced the use of reply blocks in \cite{CHAUM1}. A routing block, in general, is a structure allowing to send a message to someone without knowing the targets' true address. Reply blocks may be differentiated into two classes ``Single Use Reply Blocks'' (SURBs)  and ``Multi-Use Reply Blocks'' (MURBs). SURBs may be used once while MURBs may be used a limited number of times. 
+Chaum first introduced the use of reply blocks in \cite{CHAUM1}. A routing block, in general, is a structure allowing to send a message to someone without knowing the targets' real address. Reply blocks may be differentiated into two classes ``Single Use Reply Blocks'' (SURBs)  and ``Multi-Use Reply Blocks'' (MURBs). SURBs may be used once while MURBs may be used a limited number of times. 
 
 Within our research, we discovered that if a routing protocol is reproducible, the traffic of a MURB may be used to identify some of the properties of the message. Depending on the type of attack, the block has to be repeated very often. For this reason, we limited the number of replays to a low number. The concept is that we have, in our case a routing block, which might be used up to $n$ times ($0<n<127$). It is easily representable in a byte integer (signed or unsigned) on any system. It is big enough to support human communication sensibly and is big enough to add not too much overhead when rerequesting more MURBs. The number should not be too big because if a MURB is reused, the same pattern of traffic is generated, thus making the system susceptible to statistical attacks.
 
@@ -456,7 +456,7 @@ The question of key sizes is hard to answer as it depends on the current and fut
 
 \href{http://www.ecrypt.eu.org/}{Encrypt II (http://www.ecrypt.eu.org/)} recommends currently for a ``foreseeable future'' 256 Bits for symmetric encryption and for asymmetric encryption based on factoring modulus 15424 Bits. Elliptic Curve Cryptography and Hashing should be sufficient if used with at least 512 Bits. If the focus is reduced to the next $\approx$ 20 years, then the key size recommendations are reduced to 128 Bit for symmetric encryption, 3248 Bits for factoring modulus operations, and 256 Bits for elliptic curves and hashing.
 
-According to the equations proposed by \citeauthor{Lenstra04keylength.} in \cite{Lenstra04keylength.} an asymmetric key size of 2644 Bits respectively a symmetric key length of 95 Bits, or 190 Bits for elliptic curves and hashing should be sufficient for security up to the year 2048. 
+According to the equations proposed by \citeauthor{Lenstra04keylength.} in \cite{Lenstra04keylength.} an asymmetric key size of 2644 Bits respectively symmetric key length of 95 Bits, or 190 Bits for elliptic curves and hashing should be sufficient for security up to the year 2048. 
 
 According to \cite{CNSASuite} (superseding well known and often used \cite{nsa-fact-sheet-B}) data classified up to ``top secret'' should be signed with RSA 3072+ or ECDSA P-384.  For symmetric encryption, they recommend AES 256 Bits, for Hashing at least SHA-384 and for Elliptic curves a 384 Bit sized key.
 
@@ -780,6 +780,7 @@ No client implementation could be found on the internet. The project homepage \h
 \subsection{Email\label{sec:mailTransport}}
 As SMTP is one of our transport layers implemented in the prototype, we focus in-depth on this topic.
 
+
 \subsubsection{SMTP and Client Protocols}
 Today's mail transport is mostly done via SMTP\index{SMTP} protocol, as specified in \cite{RFC5321}. This protocol has proven to be stable and reliable. Most of the messages are passed from an MUA to an SMTP relay of a provider. From there, the message is directly sent to the SMTP server of the recipient and subsequently to the server-based storage of the recipient. The recipient may, at any time, connect to his server-based storage and may optionally relocate the message to a client-based (local) storage. The delivery from the server storage to the MUA of the recipient may happen by message polling or by message push (whereas the latter is usually implemented by a push-pull mechanism).
 
@@ -920,7 +921,7 @@ Numerous attacks are available through the bugging of a protocol. In this chapte
 	There are multiple possibilities to counter such an attack. The easiest one is to do no verification at all. Having no verification is, however, not desirable from the security point of view. Another possibility is only to verify trusted proof of identities. By doing so, the only attacker could be someone having access to a trusted source of proof of identities. A third possibility is to relay the request to another host either by using an anonymity structure such as Tor or by using its infrastructure. Using Tor would violate the ``Zero Trust'' goal. Such a measure would only conceal the source of the verification. It would not hide the fact that the message is processed. A fourth and most promising technology would be to force the sender of the certificate to include a ``proof of non-revocation''. Such a proof could be a timestamped and signed partial CRL. It would allow a node to verify the validity of a certificate without being forced to disclose itself by doing a verification. On the downside has to be mentioned that including proof of non-revocation involves the requirement to accept a certain amount of caching time to be accepted. This allowed caching time reduces the value of the proof as it may be expired in the meantime. It is recommended to keep the maximum cache time as low as 1d to avoid that revoked certificates may be used. 
 	
 	\item Bugging through DNS traffic:\\
-	A standard protocol on the internet is DNS. Almost all network-related programs use it without thinking. Typically the use of such andarda protocol is only a minor issue since the resolution of a lookup usually done by an ISP. In the case of a small internet service provider (ISP), this might, however, already become a problem.
+	A standard protocol on the internet is DNS. Almost all network-related programs use it without thinking. Typically the use of such protocol is only a minor issue since the resolution of a lookup usually done by an ISP. In the case of a small internet service provider (ISP), this might, however, already become a problem.
 	
 	The bugging in general attack works as follows: We include a unique DNS name to be resolved by a recipient. This can be done most easily by adding an external resource such as an image. A recipient will process this resource and might, therefore, deliver information about the frequency of reading, or the type of client. 
 	
@@ -946,7 +947,7 @@ An adversary may flood the system in two ways.
 \end{itemize}
 
 \subsubsection{Credibility Attack}
-Another type of DoS attack is the credibility attack. While not necessarily a technical attack, it is very effective. A system not having a sufficiently big user base is offering thus a lousy level of anonymity because the anonymity set is too small or the traffic concealing message flow is insufficient. 
+Another type of DoS attack is the credibility attack. While not a technical attack, it is very effective. A system not having a sufficiently big user base is offering thus a lousy level of anonymity because the anonymity set is too small or the traffic concealing message flow is insufficient. 
 
 Another way is to attack the reputation of a system in such a way that the system is no longer used. An adversary has many options to achieve such a reduction in credibility. Examples:
 \begin{itemize}
@@ -1054,7 +1055,7 @@ The system must allow the anonymizing of message source and message destination 
 \end{requirement}
 
 \subsection{Initial Bootstraping}
-The system must allow bootstrapping from a zero-knowledge or near-zero knowledge point. Starting from this point, the protocol must be able to extend the network on its own.
+The system must allow bootstrapping from a zero-knowledge or near-zero knowledge point. Therefore, the protocol must be able to extend the network of known nodes on its own.
 
 \begin{requirement}{boot}{bootstrapping}
 	The system must allow to bootstrap from a zero-knowledge or near-zero-knowledge point and extend the network on its own. 
@@ -1279,7 +1280,7 @@ The processing of a sending block is triggered by a routing block in the workspa
 We sum up the findings of the last part regarding our three research questions and describe the next steps to be taken.
 
 \subsection{SQ1: Technologies for sending messages maintaining unlinkability against an adversary}
-We were unable to identify a single technology that withstands our adversary model entirely. The technologies were either too simple to withstand an adversary (e.g., remailers), have substantial flaws affecting their reliability (e.g., most mixes and DC networks), an active adversary could easily sabotage them or do not scale.
+We were unable to identify a single technology that withstands our adversary model entirely. The technologies were either too simple to withstand an adversary (e.g., remailers), have substantial flaws affecting their reliability (e.g., most mixes and DC networks), an active adversary could sabotage them or do not scale.
 
 We were able to describe a rough protocol that performs far better in almost all aspects of anonymity than the solutions described in the previous sections. This comparison was always made for the adversary model given. If we assume that the constraints of trust (only trust in sender and recipient infrastructure, whereas we always have multiple recipients) are valid, we can make the following statements regarding anonymity and unlinkability:
 \begin{itemize}
