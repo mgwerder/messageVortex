@@ -147,13 +147,14 @@
 
 \usepackage[autocite=superscript,
             backref=true,
-            backend=bibtex,
+            backend=biber,
             hyperref=true,
             url=true,
             isbn=true,
             maxcitenames=3,
             maxbibnames=200,
-            block=none]{biblatex}
+            block=none,
+            sorting=anyt]{biblatex}
 
 \bibstyle{alphadin}
 \addbibresource{messageVortex}
@@ -640,7 +641,7 @@ The findings of this short analysis suggested that we should use the two protoco
 \clearpage\chapter{Glossary}
 
 \begin{entry}
-	\mainentry{adversary}{In this work, we are referring to an adverser to any entity opposing to the privacy of a message. For a more throughout definition refer to \ref{sec:adversary}}
+	\mainentry{adversary}{In this work, we are referring to an adverser to any entity opposing to the privacy of a message. For a more throughout definition refer to section~\ref{sec:adversary}}
 \end{entry}
 
 \begin{entry}
@@ -651,6 +652,10 @@ The findings of this short analysis suggested that we should use the two protoco
 
 \begin{entry}
 	\mainentry{Agent}{An agent is a single component of a service (\defref{Service}) provided to a user or other services.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{eID}{An ephemeral identity (eID) is a unique user of a vortex node characterized by its public key. This user is created with a VortexMessage and has only a limited lifetime. After expiry all informations related to this identity are deleted.}
 \end{entry}
 
 \begin{entry}
@@ -739,6 +744,10 @@ The findings of this short analysis suggested that we should use the two protoco
 
 \begin{entry}
 	\mainentry{POP}{POP (currently in version 3) is a typical protocol to be used between a \defref{Client MRA} and a \defref{Remote MDA}. Unlike \defref{IMAP}, it is not able to maintain a mail store. Its sole purpose is to fetch and delete emails in a server-based store. Modifying Mails or even handling a complex folder structure is not doable with POP}
+\end{entry}
+
+\begin{entry}
+	\mainentry{RBB}{A routing block builder (RBB) is a VortexNode assembling the operations and hops for a message. If the RBB is not equal to the sender of the message the receiver may be anonymous to the sender.}
 \end{entry}
 
 \begin{entry}

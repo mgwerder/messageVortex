@@ -8,15 +8,13 @@
 % *** Methodes
 % ********************************************************************************************************
 \part{Methodes\label{sec:methodes}}
-In this part of the thesis, we collect requirements, definitions, methods, and existing research relevant to the topic of this thesis. 
+In this part of the thesis, we collect requirements, definitions, methods, and existing research relevant to the topic of this thesis. We explain the choices made and what solutions have been discarded.
 
-We start by collecting requirements for the protocol.
+We start by collecting requirements for the protocol. Having the requirements, we collect existing technologies on research and implementation levels. Each of the techniques is quickly categorized and either further studied or rejected, naming the reasons for rejection.
 
-Having the requirements, we collect many existing technologies on research and implementation levels. Each of the techniques is quickly categorized and either further studied or rejected, naming the reasons for rejection.
+The list of technologies and research collected is big. All relevant technologies, either widely adopted or thoroughly researched, should be included in this chapter. All Technologies and research are categorized. We reference technologies through their standards. If applicable, multiple standards may be part of the analysis. A short introduction into the protocol is given and then analyzed for suitability for a specific problem addressed in this work. Whenever quoting research, we refer to the respective papers. If appropriate, multiple related pieces of research are collected together into a bigger picture and then analyzed. When analyzing, we focus on suitability concerning specific problems. If related to standard technology, we link to the respective standards. Transport layer protocols have been shortened to the outcomings in table \ref{tab:protoSuitCrit}. For an extensive analysis see appendix \ref{app:transportProtocols}
 
-The list of technologies and research collected is big. All relevant technologies, either widely adopted or thoroughly researched, should be included in this chapter. All Technologies and research are categorized. We reference technologies through their standards. If applicable, multiple standards may be part of the analysis. A short introduction into the protocol is given and then analyzed for suitability for a specific problem addressed in this work. Whenever quoting research, we refer to the respective papers. If appropriate, multiple related pieces of research are collected together into a bigger picture and then analyzed. When analyzing, we focus on suitability concerning specific problems. If related to standard technology, we link to the respective standards. Transport layer protocols have been shortened to the outcomings in table \ref{tab:protoSuitCrit}. For an extensive analysis see Appendix \ref{app:transportProtocols}
-
-In chapter \ref{sec:genRequirements}, we collect the requirements for the protocol. Based on the findings in this section, we collect in chapter \ref{sec:existingTPP}. In chapter \ref{sec:existingRD}, we collect relevant research about the topic. In chapter \ref{sec:appliedMethods}, we summarize the chosen methods. We explain choices and give a rough outline of the protocol baselines.
+In chapter \ref{sec:genRequirements}, we collect the requirements of the protocol. Based on the findings in this section, we collect in chapter \ref{sec:existingTPP}. In chapter \ref{sec:existingRD}, we collect relevant research about the topic. In chapter \ref{sec:appliedMethods}, we summarize the chosen methods. We explain choices and give a rough outline of the protocol working.
 
 \chapter{Requirements for an Anonymizing Protocol\label{sec:genRequirements}}
 In the following sections, we elaborate on the main characteristics of the anonymizing protocol. 
@@ -32,9 +30,9 @@ and
 
 We imply that not all participants on the Internet share this value. As of September \th{1}, 2016 Countries such as China (signatory), Cuba (signatory), Qatar, Saudi Arabia, Singapore, United Arab Emirates, or Myanmar did not ratify the ICCPR. Other countries such as the United States or Russia did either put local laws in place superseding the ICCPR or made reservations rendering parts of it ineffective. We may, therefore, safely assume that freedom of speech is not given on the Internet, as at least countries explicitly supersede them.
 
-Network packets may pass through any point of the world. A sender has no control over it. This lack of control is since every routing device decides on its own for the next hop. This decision may be based on static rules or influenced by third party nodes or circumstances (e.g., BGB, RIP, OSPF\ldots). It is furthermore not possible to detect what way has a packet taken. The standard network diagnostic tool \verb|tracert| respectively \verb|traceroute| returns a potential list of hops. This list is only correct under certain circumstances (e.g., a stable route for multiple packets or same routing decisions regardless of other properties than the source and destination address). Any Output of these tools may, therefore, not taken as a log of routing decisions. There is no possibility in standard IP routed networks to foresee a route for a packet, nor can it be measured while or after sending. 
+Network packets may pass through any point of the world. A sender has no control over it. This lack of control is since every routing device decides on its own for the next hop. This decision may be based on static rules or influenced by third party nodes or circumstances (e.g., BGB, RIP, OSPF\ldots). It is furthermore not possible to detect what way has a packet taken. The standard network diagnostic tool \verb|tracert| respectively \verb|traceroute| returns a potential list of hops. This list is only correct under certain circumstances (e.g., a stable route for multiple packets or same routing decisions regardless of other properties than the source and destination address). Any Output of these tools may, therefore, not taken as a log of routing decisions. There is no possibility in standard IP routed networks to foresee a route for a packet, nor can it be measured, recorded, or predicted before, while, or after sending. 
 
-As an example of the problems analyzing a packet route, we may look at \verb|traceroute|. According to the manpage of traceroute, \verb|traceroute| uses UDP, TCP, or ICMP packets with a short TTL and analyses the IP of the peer sending a TIME\_EXCEEDED (message of the ICMP protocol). This information is then collected and shown as a route. This route may be completely wrong. The man page describes some of the possible causes.
+As an example of the problems analyzing a packet route, we may look at \verb|traceroute|. According to the man page of traceroute, \verb|traceroute| uses UDP, TCP, or ICMP packets with a short TTL and analyses the IP of the peer sending a TIME\_EXCEEDED (message of the ICMP protocol). This information is then collected and shown as a route. This route may be completely wrong. The man page describes some of the possible causes.
 
 We cannot state that data packets we are sending are passing only through countries accepting the ICCPR to the full extent, nor can we craft packages following such a rule.
 
@@ -60,6 +58,7 @@ We cannot state that data packets we are sending are passing only through countr
 	\caption{A traceroute to the host www.ietf.org}
 \end{figure}
 
+To enable freedom of speech we need a mean of transport for messages which keep sender and recipient anonymous.
 
 \section{Threat model\label{sec:adversary}}
 We refer to jurisdiction as a geographical area where a set of legal rules created by a single actor or a group of actors apply, which contains executive capabilities (e.g., police, army, or secret service) to enforce this set of legal rules.
@@ -97,7 +96,7 @@ we may furthermore subdivide the adversaries into the following sub-classes:
 In this section, we summarize the required properties of an anonymizing system.
 
 \subsection{Anonymizing and Unlinking}
-If we are unable to limit the route of our packets through named jurisdictions, we must protect ourselves from unintentionally breaking the law of a foreign country. Therefore we need to be anonymous when sending or receiving messages. Unfortunately, most transport protocols (in fact, almost all of them such as SMTP, SMS, XMPP, or IP) use a globally unique identifier for senders and receivers, which are readable by any party which is capable of reading the packets. 
+If we are unable to limit the route of our packets through named jurisdictions, we must protect ourselves from unintentionally breaking the law of a foreign country. Therefore, we need to be anonymous when sending or receiving messages. Unfortunately, most transport protocols (in fact, almost all of them such as SMTP, SMS, XMPP, or IP) use a globally unique identifier for senders and receivers, which are readable by any party which is capable of reading the packets. 
 
 As a result, the anonymization of a sender or a receiver is not simple. A relay may allow at least the anonymization of the original sender given trust into the proxy. By combining it with encryption, we may even achieve a simple form of a sender and receiver pseudonymity. If cascading more relay like infrastructures and combining it with cryptography, we may achieve sender and receiver anonymity. When introducing anonymous remailing endpoints, we may additionally achieve both simultaneously.
 
@@ -138,7 +137,7 @@ Availability has two meanings in this context, which do differ. Technology is av
 	\item the infrastructure is providing the service (as opposed to: ``is running in a degraded or faulty state unable to provide a service'').
 \end{enumerate}
 
-The first meaning tells us that a protocol must run independently from an infrastructure the user has commonly ready.
+The first meaning tells us that a protocol must run on infrastructure the user has commonly available.
 
 The second meaning tells us that messages must always be capable of flowing from the sender to the recipient. As infrastructure may fail at any time, the protocol must offer the possibility to send messages through alternate routes. Alternative routes are simple to achieve, and many protocols implement such redundancies already. However, taking into account that the sender and recipient are not known to a routing node, this is a goal hard to achieve.
 
@@ -146,12 +145,11 @@ The second meaning tells us that messages must always be capable of flowing from
 A messaging system offering unlinkability may offer sender anonymity. If so, a sender should be identifiable, so that the classification of senders is possible at any time.
 
 \section{Outline of Protocol}
-
 To fulfill the criteria given above, we define a very rough idea of the protocol and its layers. The rough overview is given in figure \ref{fig:roughProtocolDesign}. The protocol should work on the base of onion routing. Unlike Tor (see \ref{sec:tor}), it should not rely on central infrastructures. It furthermore should not be limited to onionized messages. It should be capable of splitting and reassemble messages at an intermediate router.
 
 \begin{figure}[ht]
 	\includegraphics[width=\columnwidth]{inc/roughProtocolDesign.pdf}
-	\caption{A first rough overview for the protocol}
+	\caption{A generic overview for the protocol showing a circular path of a message}
 	\label{fig:roughProtocolDesign}
 \end{figure}    
 
@@ -159,7 +157,7 @@ The protocol itself should send messages through a well-known transport protocol
 
 The ``routing layer'' is the layer that receives and sends messages. It parses only the core protocol, and the data processed here is entirely independent of the underlying transport and blending layer.
 
-The ``accounting layer'' disassembles the received messages into its parts. It then recomposes and stores the messages for further routing. To avoid spam being sent over our media, some accounting is involved. 
+The ``accounting layer'' disassembles the received messages into its parts. It then recomposes and stores the messages for further routing. To avoid unsolicited bulk messages (\defref{UBM}) being sent over our media, some accounting is involved. 
 
 The messages passed through such a protocol stack are onionised to offer anonymity from evil nodes. Furthermore, a node should be unable to tell whether a message was intended for a specific node or not. In consequence, we have to guarantee that all nodes, including sender and recipient, offer the same functions and are indistinguishable.
 
@@ -173,16 +171,15 @@ The defined message operations are as follows:
 	\item Add redundancy information to a stream and send it through multiple channels or recover a partially received message according to the redundancy operation.
 \end{itemize}
 
-To avoid making this system attractive to UBE, we introduce accounting to make mass mailings more expensive. The system works as follows:
-
+To avoid making this system attractive to \defref{UBM}, we introduce accounting to make mass mailings more expensive. The system works as follows:
 \begin{itemize}
 	\item Routing nodes may offer their services at a cost. A participating node may pay a fee or solve a crypto-puzzle to pay for these costs.
 	\item The following operations may be cost-effective:
 	\begin{itemize}
-		\item Getting an ephemeral identity on a node (prerequisite for accounting; See section \ref{sec:ephemeralIdentity}).
-		\item Assign a maximum number of messages and bytes in a specified interval to an ephemeral identity on a node.
+		\item Getting an ephemeral identity (\defref{eID}) on a node (prerequisite for accounting; See section \ref{sec:ephemeralIdentity}).
+		\item Assign a maximum number of messages and bytes in a specified interval to an eID on a node.
 		\item Offer information about the known routing network by the node.
-		\item Offer information about the current quota of an ephemeral identity.
+		\item Offer information about the current quota of an eID.
 	\end{itemize}
 \end{itemize}
 As we want to keep resource consumption for accounting as low as possible, all quotas are limited to a time interval. Such time-bound quotas guarantee that quota data of an accounting layer does not grow indefinitely. It is up to the node to decide what time duration is still acceptable.
@@ -196,23 +193,23 @@ We minimize the possibility of an overload attack against a node. We achieve thi
 \end{itemize}
 
 \subsection{Ephemeral Identity\label{sec:ephemeralIdentity}}
-We use accounting on various levels. While we are dealing with anonymity, accounting has still to be linked to some identity. For this reason, we are introducing a term called ``ephemeral identity''.
+We use accounting on various levels. While we are dealing with anonymity, accounting has still to be linked to some identity. For this reason, we are introducing a term called ``ephemeral identity'' (\defref{eID}).
 
 \begin{quote}
-	An Ephemeral identity is a temporary identity, which is defined by the following attributes:
+	An eID is a temporary identity, which is defined by the following attributes:
 	\begin{itemize}
-		\item It is a fake identity represented by a public key.
-		\item A sender may only use it for a short, limited time-span.
+		\item It is a identity represented by a public key.
+		\item It is only valid for a short, limited time-span.
 		\item It is not linkable to another identity of any kind.
 	\end{itemize}
 \end{quote}
-The key to this definition is the last point. It is crucial and, at the same time, hard to achieve. In the protocol, any node may request from another node to accept a new ephemeral identity with a specified quota and a limited lifespan. The node accepting the identity may link its acceptance to the solving of a proof of work puzzle.
+The key to this definition is the last point. It is crucial and, at the same time, hard to achieve. In the protocol, any node may request from another node to accept a new eID with a specified quota and a limited lifespan. The node accepting the identity may link its acceptance to the solving of a proof of work puzzle.
 
 \section{Rough Draft of Messages}
 For our protocol, we assume the following outline for a message:
 \begin{itemize}
 	\item Header block\\ 
-	This block contains an ephemeral identity of the sender on the message processing host. It allows the host to decide whether he is willing to process the rest of the message or not. It is essential to know that the identity block contains a symmetric key for decryption of the main block and a secret repeated in the main block. This secret, shared among blocks, keeps a malicious node from exchanging the main block.
+	This block contains an eID of the sender on the message processing host. It allows the host to decide whether he is willing to process the rest of the message or not. It is essential to know that the identity block contains a symmetric key for decryption of the main block and a secret repeated in the main block. This secret, shared among blocks, keeps a malicious node from exchanging the main block.
 	\item Main block\\
 	This block contains all information regarding routing and processing data. It furthermore contains the payload data, which may or may not contain messages.
 	\begin{itemize}
@@ -652,11 +649,11 @@ Wherever possible, we try to refer to sources. If systems are no longer in use o
 If a system shows strong similarities in parts, then we emphasize on these parts and analyze the findings and attacks.
 
 \subsection{Pseudonymous Remailer\label{sec:remPseudo}}
-The basic idea of remailers was discussed in \cite{CHAUM1}. The most well-known remailer was probably anon.penet.fi, which operated from 1993 to 1996. This type of remailer is often referred to as type-0 remailer.
+The basic idea of remailers was discussed in \cite{CHAUM1}. The most well-known remailer was probably anon.penet.fi, which operated from 1993 to 1996. This type of remailer is often referred to as type-0-remailer.
 
 In principle, an anonymous remailer works as an ordinary forwarding SMTP server. The only difference is that it strips off all header fields except for ``from'', ``to'', and ``subject'' and then replaces the sender and recipient address with pseudonyms (if any). 
 
-As the example shows, this kind of remailer is easily attackable by an authority. Since the remailer knows tuples of pseudonyms and their respective real identities, it may be forced to reveal true identities. Furthermore, the message may be monitored at the server or on its way, and then due to the content matching or even tagging is possible.
+As the example shows, this kind of remailer is easily attackable by an authority. Since the remailer knows tuples of pseudonyms and their respective real identities, it may be forced to reveal true identities. Furthermore, the message may be monitored at the server or on its way, and then due to the unmodified content matching is easy.
 
 This remailer offers, therefore, no protection against an adversary defined in our problem.
 
@@ -822,7 +819,7 @@ Only two of these components do have external interfaces. These are \defref{MSA}
 	\item Port number is 587 (specified in \cite{RFC4409}).\\
 	Although port numbers 25 and 465 are valid and do usually have the same capabilities, they are for mail routing between servers only. Mail endpoints should no longer use them.
 	\item Connections are authenticated.\\
-	Unlike a normal server-to-server (relay or final delivery) SMTP connections on port 25, clients should always be authenticated of some sort. This may be based on data provided by the user (e.g., username/password or certificate) or data identifying the sending system (e.g., IP address)\cite{RFC4409}. Failure in doing authentication may result in this port being misused as a sender for UBE.
+	Unlike a normal server-to-server (relay or final delivery) SMTP connections on port 25, clients should always be authenticated of some sort. This may be based on data provided by the user (e.g., username/password or certificate) or data identifying the sending system (e.g., IP address)\cite{RFC4409}. Failure in doing authentication may result in this port being misused as a sender for \defref{UBM}.
 \end{itemize}
 
 Mail User Agents (MUA) are the terminal endpoint of email delivery. Mail user agents may be implemented as fat clients on a desktop or mobile system or as an interface over a different generic protocol such as HTTP (Web Clients). 
@@ -956,7 +953,7 @@ Another way is to attack the reputation of a system in such a way that the syste
 	\item Publicly dispute the effectiveness of a system.\\
 	Disputing the effectiveness is a very effective way to destroy a system. People are not willing to use a system which believed to be compromised if the primary goal of using the system is avoiding being observed.
 	\item Reduce the effectiveness of a system.\\
-	A system may be considerably loaded by an adversary to decrease the positive reception of the system. He may further use the system to send UBE to reduce the overall experience when using the system. Another way of reducing effectiveness is to misuse the system for evil purposes such as blackmailing and making them public.
+	A system may be considerably loaded by an adversary to decrease the positive reception of the system. He may further use the system to send \defref{UBM} to reduce the overall experience when using the system. Another way of reducing effectiveness is to misuse the system for evil purposes such as blackmailing and making them public.
 	\item Dispute the credibility of the system founders.\\
 	Another way of reducing the credibility of a system is to undermine its creators. If -- for example -- people believe that a founders' interest was to create a honey pot (e.g., because he is working for a potential state-sponsored adversary) for personal secrets, they will not be willing to use it.
 	\item Dispute the credibility of the infrastructure.\\
@@ -1041,7 +1038,7 @@ It should be able to increase and shrink in size, or all messages must have a un
 There should be no infrastructure dedicated to the operation of the solution. This avoids a single point of failure, as well as the possibility for an adversary to shut down this infrastructure to disrupt the functioning of the system as a whole. This requirement is already covered implicitly in \ref{req:zeroTrust}.
 
 \subsection{Accounting}
-The infrastructure must not be misused as UBE sending infrastructure. This implies that sending messages is connected to some ``cost''. ``Costs'' must be connected to some identity to allow accounting. Linking to a global identity would allow assigning traffic to a real-world user. Therefore the protocol must allow creating ephemeral local identities not linked to a real identity.
+The infrastructure must not be misused as \defref{UBM} sending infrastructure. This implies that sending messages is connected to some ``cost''. ``Costs'' must be connected to some identity to allow accounting. Linking to a global identity would allow assigning traffic to a real-world user. Therefore the protocol must allow creating ephemeral local identities not linked to a real identity.
 
 \begin{requirement}{accounting}{accounting}
 	The system must be able to do accounting without being linked to a real identity.

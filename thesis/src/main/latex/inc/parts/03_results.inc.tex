@@ -856,7 +856,7 @@ The message leaks its size when a routing block is reused.  This is due to the v
 \chapter{Security Analysis}
 In the following sections, we emphasize on attacks targeting either sender-recipient tuples or participating nodes. 
 
-Based on the protocol, we may safely assume the following key points:
+Based on the threat model, we may safely assume the following key points:
 \begin{itemize}
 	\item An adversary knows and controls a significant number of nodes.
 	\item An adversary may observe the traffic at any point without getting any information about the message content
@@ -866,7 +866,7 @@ Based on the protocol, we may safely assume the following key points:
 We always assume an adversary to have more knowledge than we think he may extract from the messages.
 \begin{itemize}
 	\item We assume that an adversary knows all messages of a transaction running over his nodes and matches them correctly to the same message.
-	\item FIXME
+	\item We assume that an adversary is aware of any message only containing decoy traffic.
 \end{itemize}
 
 We assume that the adversary is targeting the following pieces of information:
@@ -878,7 +878,7 @@ We assume that the adversary is targeting the following pieces of information:
 	\item Message frequency
 \end{itemize}
 
-Attacks on the users' identity are no longer possible as the identity used on the nodes is based on ephemeral identities instead of the users' true identity. As the ephemeral identities may exist in parallel, overlapping, or in a serial manner and are strictly unlinked to the true identity, no statement can be made concerning the linking of ephemeral identities to the real identities. Frequency patterns or behavioral patterns may be split among multiple identities and distributed over multiple nodes. 
+Attacks on the users' identity are no longer possible as the identity used on the nodes is based on \defref{eID}s instead of the users' true identity. As the \defref{eID}s may exist in parallel, overlapping, or in a serial manner and are strictly unlinked to the true identity, no statement can be made concerning the linking of ephemeral identities to the real identities. Frequency patterns or behavioral patterns may be split among multiple identities and distributed over multiple nodes. 
 
 Frequency and bandwidth analysis are not possible as the frequency and bandwidth of a single message are not trackable, and the size of a message is generally not related to the message flow. An exception to this statement is when routing a different message through a vortex system using a reused routing block general statements such as ``the message is bigger than the previous one'' about the size of the message is possible if the routing block makes use of relative split operations. In experiments, we were able to mimic any desired communication pattern we wanted for an adversary to be found.
 
