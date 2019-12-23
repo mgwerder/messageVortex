@@ -7,7 +7,7 @@
 
 % Workarround for book
 \makeatletter
-\def\subtitle#1{\gdef\@subtitle{#1}}
+\newcommand\subtitle[1]{\gdef\@subtitle{#1}}
 \makeatother
 
 \usepackage[utf8]{inputenc}
@@ -16,12 +16,16 @@
 \usepackage{cmap}
 
 \makeatletter
-\def\title#1{\gdef\@title{#1}\gdef\thetitle{#1}}
+\let\inserttitle\@title
 \makeatother
 
-%\usepackage{scrpage2}
+%\makeatletter
+%\def\title#1{\gdef\@title{#1}\gdef\thetitle{#1}}
+%\makeatother
 
-\title{MessageVortex}
+%\usepackage{scrpage2}
+\gdef\thetitle{MessageVortex}
+\title{\thetitle}
 \gdef\thesubtitle{Transport Independent Messaging Anonymous to Third Parties}
 \subtitle{\thesubtitle}
 \author{Martin Gwerder (06-073-787)}
@@ -156,8 +160,8 @@
             block=none,
             sorting=anyt]{biblatex}
 
-\bibstyle{alphadin}
-\addbibresource{messageVortex}
+%\bibstyle{alphadin}
+\addbibresource{messageVortex.bib}
 %\addbibresource{inc/bib/unclassified/Anonbib/anonbib}
 \usepackage{csquotes}
 
