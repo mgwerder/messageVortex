@@ -1,5 +1,6 @@
 SHELL := /bin/bash
 
+BIB_BINARY = biber
 OUTDIR  = target/main/latex
 INTERDIR= target/main/tmp
 SRCDIR  = src/main/latex
@@ -21,7 +22,7 @@ $(INTERDIR)/messageVortex.pdf: $(SRCDIR)/messageVortex.tex $(SRCDIR)/messageVort
 	@cp ../rfc/target/xml2rfc/*.pdf $(INTERDIR)/rfc
 	(cd $(SRCDIR); tar -cf - $$(find . -name '*.bib') inc/bib/ ) | (cd $(INTERDIR); tar -xvf -)
 	(cd $(SRCDIR); TEXINPUTS=../../../$(INTERDIR):$${TEXINPUTS} pdflatex -output-directory=../../../$(INTERDIR) messageVortex.tex )
-	(cd $(INTERDIR)/; bibtex messageVortex )
+	(cd $(INTERDIR)/; $(BIB_BINARY) messageVortex )
 	(cd $(SRCDIR); TEXINPUTS=../../../$(INTERDIR):$${TEXINPUTS} pdflatex -output-directory=../../../$(INTERDIR) messageVortex.tex )
 	(cd $(SRCDIR); TEXINPUTS=../../../$(INTERDIR):$${TEXINPUTS} pdflatex -output-directory=../../../$(INTERDIR) messageVortex.tex )
 	(cd $(INTERDIR)/; makeindex messageVortex )
@@ -30,7 +31,7 @@ $(INTERDIR)/messageVortex.pdf: $(SRCDIR)/messageVortex.tex $(SRCDIR)/messageVort
 $(INTERDIR)/messageVortex_attachdocs.pdf: $(SRCDIR)/messageVortex.tex $(SRCDIR)/messageVortex.bib $(INTERDIR)/messageVortex.pdf
 	cp $(INTERDIR)/messageVortex.bib $(INTERDIR)/messageVortex_attachdocs.bib
 	(cd $(SRCDIR); TEXINPUTS=.:../../../$(INTERDIR):$${TEXINPUTS} pdflatex -output-directory=../../../$(INTERDIR) -jobname=messageVortex_attachdocs "\PassOptionsToClass{attachdocs}{extbook}\input{messageVortex.tex}")
-	(cd $(INTERDIR)/; bibtex messageVortex_attachdocs )
+	(cd $(INTERDIR)/; $(BIB_BINARY) messageVortex_attachdocs )
 	(cd $(SRCDIR); TEXINPUTS=.:../../../$(INTERDIR):$${TEXINPUTS} pdflatex -output-directory=../../../$(INTERDIR) -jobname=messageVortex_attachdocs "\PassOptionsToClass{attachdocs}{extbook}\input{messageVortex.tex}")
 	(cd $(SRCDIR); TEXINPUTS=.:../../../$(INTERDIR):$${TEXINPUTS} pdflatex -output-directory=../../../$(INTERDIR) -jobname=messageVortex_attachdocs "\PassOptionsToClass{attachdocs}{extbook}\input{messageVortex.tex}")
 	(cd $(INTERDIR)/; makeindex messageVortex_attachdocs )
@@ -41,7 +42,7 @@ $(INTERDIR)/filet.pdf: $(SRCDIR)/papers/filet/filet.tex $(SRCDIR)/messageVortex.
 	@echo "building tmp pdf file $@"
 	(cd $(SRCDIR); tar -cf - $$(find . -name '*.bib') inc/bib/ ) | (cd $(INTERDIR); tar -xvf -)
 	(cd $(SRCDIR)/papers/filet; TEXINPUTS=../../../../../$(INTERDIR)/papers/filet:../../../../../$(INTERDIR):$${TEXINPUTS} pdflatex -output-directory=../../../../../$(INTERDIR) filet.tex )
-	(cd $(INTERDIR)/; bibtex messageVortex )
+	-(cd $(INTERDIR)/; bibtex filet )
 	(cd $(SRCDIR)/papers/filet; TEXINPUTS=../../../../../$(INTERDIR)/papers/filet:../../../../../$(INTERDIR):$${TEXINPUTS} pdflatex -output-directory=../../../../../$(INTERDIR) filet.tex )
 	(cd $(SRCDIR)/papers/filet; TEXINPUTS=../../../../../$(INTERDIR)/papers/filet:../../../../../$(INTERDIR):$${TEXINPUTS} pdflatex -output-directory=../../../../../$(INTERDIR) filet.tex )
 	(cd $(INTERDIR)/; makeindex messageVortex )
@@ -52,7 +53,7 @@ $(INTERDIR)/MessageVortexExcerpt.pdf: $(SRCDIR)/papers/filet/MessageVortexExcerp
 	@echo "building tmp pdf file $@"
 	(cd $(SRCDIR); tar -cf - $$(find . -name '*.bib') inc/bib/ ) | (cd $(INTERDIR); tar -xvf -)
 	(cd $(SRCDIR)/papers/filet; TEXINPUTS=../../../../../$(INTERDIR)/papers/filet:../../../../../$(INTERDIR):$${TEXINPUTS} pdflatex -output-directory=../../../../../$(INTERDIR) MessageVortexExcerpt.tex )	
-	(cd $(INTERDIR)/; bibtex messageVortex )
+	-(cd $(INTERDIR)/; bibtex MessageVortexExcerpt )
 	(cd $(SRCDIR)/papers/filet; TEXINPUTS=../../../../../$(INTERDIR)/papers/filet:../../../../../$(INTERDIR):$${TEXINPUTS} pdflatex -output-directory=../../../../../$(INTERDIR) MessageVortexExcerpt.tex )
 	(cd $(SRCDIR)/papers/filet; TEXINPUTS=../../../../../$(INTERDIR)/papers/filet:../../../../../$(INTERDIR):$${TEXINPUTS} pdflatex -output-directory=../../../../../$(INTERDIR) MessageVortexExcerpt.tex )
 	(cd $(INTERDIR)/; makeindex messageVortex )
@@ -62,8 +63,6 @@ $(OUTDIR)/%.pdf: $(INTERDIR)/%.pdf
 	cp $< $@
 
 
-%.pdfa: %.pdf
-	gs -dPDFA -dBATCH -dNOPAUSE -sProcessColorModel=DeviceRGB -sDEVICE=pdfwrite -sPDFACompatibilityPolicy=1 -sOutputFile=$@ $<
 
 
 
