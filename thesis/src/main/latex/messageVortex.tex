@@ -1,6 +1,6 @@
 % !TeX spellcheck = en_US
 \gdef\doctype{extbook}
-\documentclass[a4paper,appendixprefix,pdfusetitle,twocolumn,fontsize=8pt,draft,DIV=calc,attachdocs,8pt]{\doctype} %scrbook
+\documentclass[a4paper,appendixprefix,pdfusetitle,twocolumn,fontsize=8pt,draft,DIV=calc,8pt]{\doctype} %scrbook
 %add attachdocs to attach all documents
 % add openany to avoid empty pages
 %\usepackage{gitinfo}
@@ -199,7 +199,7 @@
 \fxsetup{layout=pdfnote}
 
 %enable attached files
-\usepackage[color=black]{attachfile2}
+\usepackage[color=black]{attachfile}
 \usepackage{embedfile}
 \usepackage{hypgotoe}
 
@@ -446,6 +446,17 @@
 \RequirePackage[explicit]{titlesec}
 
 \usepackage{ifdraft}
+
+% Adapt bibtex to include documents  
+\makeatletter
+\@ifclasswith{\doctype}{attachdocs}{
+	\typeout{INFO: ======================}
+	\typeout{INFO: attaching files to PDF}
+	\typeout{INFO: ======================}
+	\DeclareFieldFormat{file}{\StrGobbleLeft{#1}{1}[\wtcGwM]\StrGobbleRight{\wtcGwM}{4}[\filename] \IfFileExists{\filename}{\textattachfile{\filename}{}}{ FIXME missing document link}}
+	\renewcommand*{\finentrypunct}{\printfield{file}}%\addperiod
+}{}
+\makeatother
 
 \begin{document}%
 %
@@ -818,16 +829,6 @@ The findings of this short analysis suggested that we should use the two protoco
 \backmatter
 \chapter{Bibliography}
 {
-% Adapt bibtex to include documents  
-  \makeatletter
-  %\@ifclasswith{\doctype}{attachdocs}{
-	\typeout{INFO: ======================}
-	\typeout{INFO: attaching files to PDF}
-	\typeout{INFO: ======================}
-	\DeclareFieldFormat{file}{\StrGobbleLeft{#1}{1}[\wtcGwM]\StrGobbleRight{\wtcGwM}{4}[\filename] \IfFileExists{\filename}{\textattachfile{\filename}{}}{FIXME missing document link}}
-	\renewbibmacro{finentry}{\finentry\addspace \printfield{file}}
-  %}{}
-  \makeatother
   %\def\filespliter#1{\expandafter\intfilespliter#1\relax}
   %\def\intfilespliter#1 #2 #3\relax{ First: (#1), Second: (#2), Third: (#3) }
   \printbibliography[title={},heading=none]

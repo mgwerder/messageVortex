@@ -226,7 +226,7 @@ Due to the replay protection, no traffic may be generated or multiplied except f
 \subsection{Diagnosability of traffic}
 
 \subsubsection{Hijacking of Header and Routing Blocks}
-An attacker might try to recombine a header block of the third party with a routing block crafted to get the workspace content of a different node. To protect against this scenario, every routing block and its corresponding header block have a common value called forwardSecret. As the content of a hijacked header block is not known, he is unable to guess the forward secret within the block.
+An attacker might try to recombine a header block of the third party with a routing block crafted to get the workspace content of a different node. To protect against this scenario, every routing block and its corresponding header block has a shared value called forwardSecret. As the content of a hijacked header block is not known, he is unable to guess the forward secret within the block.
 
 It is not possible to brute-force the value due to the replay protection. More precisely, the probability of hijacking a single identity block is $\frac{1}{2^{32}}$. Hijacking such a block allows onetime access to the working space and is visible to the owner due to the manipulated quotas. Failing an attack will result in deleting the ephemeral identity, and a new, unlinked ephemeral identity will be created. 
 
