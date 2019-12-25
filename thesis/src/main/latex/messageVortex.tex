@@ -467,7 +467,7 @@
 	\typeout{INFO: attaching files to PDF}
 	\typeout{INFO: ======================}
 	\DeclareFieldFormat{file}{\StrGobbleLeft{#1}{1}[\wtcGwM]\StrGobbleRight{\wtcGwM}{4}[\filename]
-	\IfFileExists{\filename}{\textattachfile[subject=\printfield{ids}_\filenameExtract{\filename}]{\filename}{}}{ FIXME missing document link}}
+	\IfFileExists{\filename}{\textattachfile[description={\printfield{ids}_\filenameExtract{\filename}}]{\filename}{}}{ FIXME missing document link}}
 	\renewcommand*{\finentrypunct}{\printfield{file}}%\addperiod
 }{}
 \makeatother
