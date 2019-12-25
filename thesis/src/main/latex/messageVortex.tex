@@ -78,6 +78,19 @@
 \renewcommand{\cftchappresnum}{\chaptername\hspace{5pt}}
 \renewcommand{\cftchapaftersnum}{\hspace{5pt}}
 
+% Extract filename frompath
+\makeatletter
+\DeclareRobustCommand{\filenameExtract}[1]{%
+ \begingroup
+  % \lstname seems to change hyphens into \textendash
+  \def\textendash{-}%
+  \filename@parse{#1}%
+  \edef\filename@base{\detokenize\expandafter{\filename@base}}%
+  \texttt{\filename@base.\filename@ext}%
+ \endgroup
+}
+\makeatother
+
 %enable hyperlinks
 \makeatletter
 \RequirePackage{hyperref}
@@ -453,7 +466,8 @@
 	\typeout{INFO: ======================}
 	\typeout{INFO: attaching files to PDF}
 	\typeout{INFO: ======================}
-	\DeclareFieldFormat{file}{\StrGobbleLeft{#1}{1}[\wtcGwM]\StrGobbleRight{\wtcGwM}{4}[\filename] \IfFileExists{\filename}{\textattachfile{\filename}{}}{ FIXME missing document link}}
+	\DeclareFieldFormat{file}{\StrGobbleLeft{#1}{1}[\wtcGwM]\StrGobbleRight{\wtcGwM}{4}[\filename]
+	\IfFileExists{\filename}{\textattachfile[subject=\printfield{ids}_\filenameExtract{\filename}]{\filename}{}}{ FIXME missing document link}}
 	\renewcommand*{\finentrypunct}{\printfield{file}}%\addperiod
 }{}
 \makeatother
