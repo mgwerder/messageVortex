@@ -1,6 +1,6 @@
 % !TeX spellcheck = en_US
 \gdef\doctype{extbook}
-\documentclass[a4paper,appendixprefix,pdfusetitle,twocolumn,fontsize=8pt,draft,DIV=calc,8pt,attachdocs]{\doctype} %scrbook
+\documentclass[a4paper,appendixprefix,pdfusetitle,twocolumn,fontsize=8pt,draft,DIV=calc,8pt]{\doctype} %scrbook
 %add attachdocs to attach all documents
 % add openany to avoid empty pages
 %\usepackage{gitinfo}
@@ -468,7 +468,7 @@
 	\typeout{INFO: attaching files to PDF}
 	\typeout{INFO: ======================}
 	\DeclareFieldFormat{file}{\StrGobbleLeft{#1}{1}[\wtcGwM]\StrGobbleRight{\wtcGwM}{4}[\filename]
-	\IfFileExists{\filename}{\textattachfile[description={\printfield{ids}_\filenameExtract{\filename}}]{\filename}{}}{ FIXME missing document link}}
+	\IfFileExists{\filename}{\textattachfile[subject={\printfield{ids}_\filenameExtract{\StrGobbleLeft{#1}{1}[\wtcGwM]\StrGobbleRight{\wtcGwM}{4}[\filename]}}]{\filename}{}}{ FIXME missing document link}}
 	\renewcommand*{\finentrypunct}{\printfield{file}}%\addperiod
 }{}
 \makeatother
@@ -893,7 +893,7 @@ The findings of this short analysis suggested that we should use the two protoco
 \end{entry}
 
 \begin{entry}
-	\mainentry{XMPP}{The Extensible Messaging and Presence Protocol (XMPP)\cite{RFC6120,RFC6121} was formerly also known as Jabber protocol. It is an extensible intant messenger protocol widely adopted in chat clients.}
+	\mainentry{XMPP}{The Extensible Messaging and Presence Protocol (XMPP)\cite{RFC6120,RFC6121} was formerly also known as Jabber protocol. It is an extensible instant messenger protocol widely adopted in chat clients.}
 \end{entry}
 
 \begin{entry}
@@ -914,7 +914,7 @@ The findings of this short analysis suggested that we should use the two protoco
 \index{Mail transport|see {Message Transport}}
 
 % add the index
-\printindex
+%\printindex
 
 \clearpage\chapter{Short Biography}
 \begin{wrapfigure}{R}{0.3\columnwidth}
