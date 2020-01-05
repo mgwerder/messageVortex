@@ -1,6 +1,6 @@
 % !TeX spellcheck = en_US
 \gdef\doctype{extbook}
-\documentclass[a4paper,appendixprefix,pdfusetitle,twocolumn,fontsize=8pt,draft,DIV=calc,8pt]{\doctype} %scrbook
+\documentclass[a4paper,appendixprefix,pdfusetitle,twocolumn,fontsize=8pt,DIV=calc,8pt]{\doctype} %scrbook
 %add attachdocs to attach all documents
 % add openany to avoid empty pages
 %\usepackage{gitinfo}
@@ -297,6 +297,17 @@
 	numbersep=5pt,
 	numberstyle=\tiny,
 	basicstyle=\tiny,
+	frame=tb,
+	xleftmargin=.05\columnwidth, 
+	xrightmargin=.05\columnwidth,
+}
+
+\lstdefinelanguage{EBNF}%
+{
+	morestring=[b]',%
+	morestring=[b]",%
+	morecomment=[s]{?}{?},%
+	morecomment=[s]{(*}{*)},%
 }
 
 \lstdefinelanguage{ASN1}
@@ -327,7 +338,7 @@
 %	xleftmargin=0.1\linewidth
 }
 
-\hyphenation{an-on-ym-iz-ing an-on-ym-ity al-though weak-ness-es mes-sa-ges}
+\hyphenation{an-on-ym-iz-ing an-on-ym-ity al-though weak-ness-es mes-sa-ges know-led-ge}
 
 \makeatletter
 \newcommand{\getfilename}[1]{%
@@ -807,6 +818,10 @@ The findings of this short analysis suggested that we should use the two protoco
 \end{entry}
 
 \begin{entry}
+	\mainentry{MURB}{A multi use reply block. This tzpe of routing block is provided by a sender to give a node the possibilitz to route back answers without the knowledge of a location of the sender. In contrast to a SURB a MURB may be used mutiple times. The number of times is regulated by the $maxReplay$ field. Furthermore a MURB must provide multiple peer keys for all routing steps to avoid repeating patterns of key blocks. This structure makes a MURB much bigger than a SURB.}
+\end{entry}
+
+\begin{entry}
 	\mainentry{Privacy}{From the Oxford English Dictionary: ``
 		\begin{enumerate}
 			\item The state or condition of being withdrawn from the society of others, or from the public interest; seclusion. The state or condition of being alone, undisturbed, or free from public attention, as a matter of choice or right; freedom from interference or intrusion.
@@ -847,6 +862,10 @@ The findings of this short analysis suggested that we should use the two protoco
 
 \begin{entry}
 	\mainentry{Storage}{A store to keep data. It is assumed to be temporary or persistent.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{SURB}{A single use reply block. This type of routing block is provided by a sender to give a node the possibility to route back answers without the knowledge of a location of the sender. A SURB may only be used once subsequent uses of the block are not possible. The lifetime of a SURB is typically limited to minutes or hours.}
 \end{entry}
 
 \begin{entry}

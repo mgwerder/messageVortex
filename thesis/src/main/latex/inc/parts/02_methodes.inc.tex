@@ -58,7 +58,7 @@ We cannot state that data packets we are sending are passing only through countr
 	\caption{A traceroute to the host www.ietf.org}
 \end{figure}
 
-To enable freedom of speech we need a mean of transport for messages which keep sender and recipient anonymous.
+To enable freedom of speech, we need a mean of transport for messages which keep sender and recipient anonymous.
 
 \section{Threat model\label{sec:adversary}}
 We refer to jurisdiction as a geographical area where a set of legal rules created by a single actor or a group of actors apply, which contains executive capabilities (e.g., police, army, or secret service) to enforce this set of legal rules.
@@ -116,12 +116,12 @@ We furthermore have to assume that all actions taken by a potential adversary ar
 To be able to withstand an adversary outlined above, the messages sent requires to be unidentifiable by attributes or content. ``Attributes'' include any meta information including, but not limited to, frequency, timing, message size, sender, protocol, ports, or recipient.
 
 \subsection{Controllable trust}
-We multiple options building our system. We may rely on trust into infrastructure, we may work with distrust in infrastructure. In our model we will work with distrust into the infrastructure. As every infrastructure node learns from each transaction (e.g., the usage of the network or size of messages) we have to minimize or ideally erradicate such information gains. A main problem is that we are unable to hide peer senders or recipients when routing messages. In jurisdictions where such infrastructure usage is illegal we need to hide the presnce of our routing messages rom any party not trusted. This concludes that we need to be able to controll which nodes are involved when sending messages. We refer to this concept as controllable trust.
+We have multiple options for relying on trust when building our system. We may rely on trust in infrastructure, we may work with distrust in infrastructure. In our model, we will work with distrust into the infrastructure. As every infrastructure node learns from each transaction (e.g., the usage of the network or size of messages), we have to minimize or ideally eradicate such information gains. A main problem is that we are unable to hide peer senders or recipients when routing messages. In jurisdictions where such infrastructure usage is illegal, we need to hide the presence of our routing messages from any party not trusted. Such hiding concludes that we need to be able to control which nodes are involved when sending messages. We refer to this concept as controllable trust.
 
 In terms of trust, we have to conclude that:
 \begin{enumerate}
-	\item Trust in infrastructure is given because it is under full control of either the sender or the recipient.
-	\item Trust in all other infrastructure should not be necessary as an adversary is ideally unable to misuse data passed through it.
+	\item We trust in infrastructure because it is under full control of either the sender or the recipient.
+	\item We should not trust all other infrastructure as an adversary is potentially able to misuse data passed through it.
 \end{enumerate}
 
 In this work, we work with both cases. We will, however, avoid whenever possible to trust in any third party apart from the sender and recipient.
@@ -136,15 +136,15 @@ Transparent behavior is a prerequisite for reliability. If something is generati
 Availability has two meanings in this context, which do differ. Technology is available if\ldots
 \begin{enumerate}
 	\item a sender and a recipient have (or may have) the means of using it.
-	\item the infrastructure is providing the service (as opposed to: ``is running in a degraded or faulty state and, therefore, unable to provide the service'').
+	\item the infrastructure provides the service (as opposed to: ``is running in a degraded or faulty state and, therefore, unable to provide the service'').
 \end{enumerate}
 
-The first meaning tells us that a protocol must run on infrastructure the user has commonly access to it.
+The first meaning tells us that a protocol must run on infrastructure on which the user has access to it.
 
-The second meaning tells us that messages must always be capable of flowing from the sender to the recipient. As a part  infrastructure may fail at any time, the protocol must offer the possibility to send messages through alternate routes. Alternative routes are simple to achieve, and many protocols implement such redundancies already. However, taking into account that the sender and recipient are not known to a routing node, this is a goal hard to achieve. If we leave the choice of routing to any node apart from a trusted node, we would enable untrusted nodes to manipulate routing decisions and thus affect the security of a message.
+The second meaning tells us that messages must always be capable of flowing from the sender to the recipient. As a part of the infrastructure may fail at any time, the protocol must offer the possibility to send messages through alternate routes. Alternative routes are simple to achieve, and many protocols implement such redundancies already. However, taking into account that the sender and recipient are not known to a routing node, this is a goal hard to achieve. If we leave the choice of routing to any node apart from a trusted node, we will enable untrusted nodes to manipulate routing decisions and thus affect the security of a message.
 
 \subsection{Identifiable Sender}
-A messaging system offering unlinkability may offer sender anonymity. If so, a sender should be identifiable, so that the classification of senders is possible at any time and impersonation is not achievable. It is important to understand that an identifiable sender does not necessaryly mean that the sender is identified as a specific party. In our case any identification will do. We decicded to go for a short lived pseudonymity (see \defref{eID} in section \ref{sec:ephemeralIdentity}). This system guarantees that while only a pseudonym of the sender is known, hijacking of data by other participants of the system is not possible.
+A messaging system offering unlinkability may offer sender anonymity. If so, a sender should be identifiable in such a way, that a classification of senders is possible at any time, and impersonation is not achievable. It is important to understand that an identifiable sender does not necessarily mean that we can identify a sender as a specific party. In our case, any identification will do, which offers non-hijackable pseudonymity. We decided to go for a short-lived pseudonymity (see \defref{eID} in section \ref{sec:ephemeralIdentity}). This system guarantees that while only a pseudonym of the sender is known, the hijacking of data by other participants of the system is not possible.
 
 \section{Outline of Protocol}
 To fulfill the criteria given above, we outline our idea of the protocol and its layers. We give an overview in figure \ref{fig:roughProtocolDesign}. The protocol works on the base of onion routing. Unlike Tor (see \ref{sec:tor}), it does not rely on central, censorable infrastructures. To hide message sizes, we designed the system in such a way that it is not limited to onionized messages. Instead, it is capable of splitting and reassemble messages at any intermediate router.
@@ -159,21 +159,22 @@ The protocol itself sends messages through a well-known transport protocol (``Tr
 
 The ``routing layer'' is the layer that receives and sends messages. It parses only the core protocol, and the data processed here is entirely independent of the underlying transport and blending layer. Our routing layer processes payloads received from VortexMessages with a limited set of predefined operations. The sending node chooses the operations applied to the message.
 
-The ``accounting layer'' disassembles the received messages into its parts. It then recomposes and stores the messages for further routing. To avoid unsolicited bulk messages (\defref{UBM}) being sent over our media, some accounting is involved. This accounting prevents a sender from using up too many ressources of any intermediate node. It enables any node to keep control of its own resource usage and keeps other nodes from eating up more resources than planed.
+The ``accounting layer'' disassembles the received messages into its parts. It then recomposes and stores the messages for further routing. We introduce accounting to avoid that unsolicited bulk messages (\defref{UBM}) may be transmitted over our media. This accounting additionally prevents a sender from using up too many resources of any intermediate node. It enables any node to keep control of its resource usage and keeps other nodes from eating up more resources than planned.
 
-The messages passed through such a protocol stack are onionised to offer anonymity from evil nodes. Furthermore, a node is unable to tell whether a message was intended for a specific other node or not. In consequence, we have to guarantee that all nodes, including sender and recipient, offer the same functions and are indistinguishable.
+The messages passed through such a protocol stack are onionised to offer anonymity from evil nodes. Furthermore, any node or external observer is unable to tell whether a message was intended for a specific other node or not. In consequence, we have to guarantee that all nodes, including sender and recipient, offer the same functions and are indistinguishable.
 
-To mitigate size based attacks (an onionised packets typically loses data on its way), operations applied result always in valid message. The operations must increase and decrease the message in size to mitigate such attacks. The operations must not leak which part is decoy or real parts of the message. Operations not carried out due to missing data might be either intentionally or a malfunction.
+Operations applied always result in a valid message. As an onionised packet typically loses data on its way, the operations must increase and decrease the message in size to mitigate size tracking attacks. The operations must not leak, which part is a decoy or real parts of the message. Operations not carried out due to missing data might be either intentionally or a malfunction.
 
 The defined message operations are as follows:
 \begin{itemize}
 	\item Split a message block into two parts of variable size or join them.\\
-	This operation may be used to fan out decoy traffic, to cut off decoy data, or to send multiple parts of a message through different routing nodes.
+	We use this operation to fan out decoy traffic, to cut off decoy data, or to send multiple parts of a message through different routing nodes.
 	\item Encrypt or decrypt a block with a given key.      
-	\item Add redundancy information to a stream and send it through multiple channels or recover a partially received message according to the redundancy operation.
+	\item Add and remove redundancy information to a stream\\
+	We use this operation to send a message or decoy through multiple channels or recover a partially received message according to the redundancy operation.
 \end{itemize}
 
-To avoid making this system attractive to \defref{UBM} and to protect DoS attacks, we introduce accounting to make mass transfer of data more expensive than other means of message transport. The system works as follows:
+To avoid making this system attractive to \defref{UBM} and to protect DoS attacks, we introduce accounting to make a mass transfer of data more expensive than other means of message transport. The system works as follows:
 \begin{itemize}
 	\item Routing nodes may offer their services at a cost. A participating node may pay a fee or solve a crypto-puzzle to pay for these costs.
 	\item The following operations may be cost-effective:
@@ -200,33 +201,33 @@ We use accounting on various levels. While we are dealing with anonymity, accoun
 \begin{quote}
 	An eID is a temporary identity, which is defined by the following attributes:
 	\begin{itemize}
-		\item It is a identity represented by a public key.
+		\item It is an identity represented by a public key.
 		\item It is only valid for a short, limited time-span.
-		\item It is not linkable to another identity of any kind. It is not linkable especially to the senders known identity unless this sender is trustworthy and the infrastructure is trusted by the sender. Such a trust would always be an exception and is not a prerequisite for successful message transfer.
+		\item It is not linkable to another identity of any kind. It is not linkable, especially to the senders' known identity unless this sender is trustworthy, and the sender trusts the infrastructure. Such a trust would always be an exception and is not a prerequisite for successful message transfer.
 	\end{itemize}
 \end{quote}
-The key to this definition is the last point. It is crucial and, at the same time, hard to achieve. In the protocol, any node may request from another node to accept a new eID with a specified quota and a limited lifespan. The node accepting the identity may link its acceptance to the solving of a proof of work puzzle  or paying a micro fee in a digital currency.
+The key to this definition is the last point. It is crucial and, at the same time, hard to achieve. In the protocol, any node may request from another node to accept a new eID with a specified quota and a limited lifespan. The node accepting the identity may link its acceptance to the solving of a proof of work puzzle or paying a micro fee in digital currency.
 
-As the \defref{eID}s are limited in their lifespan, a single user has at least one probalbly multiple \defref{eID}s on any node used directly or indirectly for routing.
+As the \defref{eID}s are limited in their lifespan, a single user has at least one probably multiple \defref{eID}s on any node used directly or indirectly for routing.
 
 \section{Draft of VortexMessages}
 For our protocol, we assume the following outline for a message:
 \begin{itemize}
 	\item Header block\\ 
-	This block contains an eID of the sender on the message processing host. It allows the host to decide whether he is willing to process the rest of the message or not. It is essential to know that the identity block contains a symmetric key for decryption of the main block and a secret repeated in the main block. This secret, shared among blocks, keeps a malicious node from exchanging the any block.
+	This block contains an eID of the sender on the message processing host. It allows the host to decide whether he is willing to process the rest of the message or not. It is essential to know that the identity block contains a symmetric key for decryption of the main block and a secret repeated in the main block. This secret, shared among blocks, keeps a malicious node from exchanging any block.
 	\item Routing Blocks\\
 	This block contains routing information for all blocks. It furthermore may contain instruction for processing the data blocks and routing/reply blocks for subsequent processing. Routing blocks are not necessarily related to the payload in the same message. They may pick up payloads from other blocks.
 	\item payload Block\\
 	These Blocks form the payload data. They might contain a message, parts of a message, or decoy material in an unreadable and unidentifiable form.
 \end{itemize}
 
-The message is picked up from the transport layer by the blending layer. This layer extracts the contained data with the help of a host key and passes it to the routing layer. The routing layer extracts the message by decrypting the header block. The accounting layer is called to authorize further processing for the identity. If approved, the routing layer adds the routing blocks to the identity-specific workspace. As soon as the time specified in the routing block arrises, the routing block is processed by following the operations specified within. New messages are assembled and sent. The accounting layer keeps track of the \defref{eID}s quota in regard to the newly created messages. 
+The message is picked up from the transport layer by the blending layer. This layer extracts the contained data with the help of a host key and passes it to the routing layer. The routing layer extracts the message by decrypting the header block. The accounting layer is called to authorize further processing for the identity. If approved, the routing layer adds the routing blocks to the identity-specific workspace. As soon as the time specified in the routing block arrises, the routing block is processed by following the operations specified within. New messages are assembled and sent. The accounting layer keeps track of the \defref{eID}s quota concerning the newly created messages. 
 
 \chapter{Transport Layer Protocol analysis\label{sec:existingTPP}}
 In this chapter, we look at the various transport layer protocols. The primary goal is to identify strong candidates as a transport layer. For a full analysis see \ref{app:transportProtocols}.
 
 \section{Crtieria}
-When evaluating the transport protocols, we  first compiled a list of common messaging protocols. We then analyze these protocols for the following criteria:
+When evaluating the transport protocols, we first compiled a list of common messaging protocols. We then analyze these protocols for the following criteria:
 \begin{itemize}
 	\item Widely adopted (Ct1)\\
 	The more widely adopted and used a protocol is, the harder it is for an adversary to monitor (due to the sheer mass), filter, or block the protocol (censorship resistance).
@@ -359,7 +360,7 @@ The use of a legitimate channel such as \defref{SMTP} and hide information withi
 
 Steganography is an important part when it comes to unlinking information. In \cite{6828087} and \cite{subhedar2014current} we get a very rough overview. As some of the types and algorithms address specific topics of steganography (e.g., some hide from automatic detection and others address a human message stream auditor), we need to choose carefully. In our specific case, the main idea is to hide within the sheer mass of Internet traffic. As a human auditor screening all the messages is a minor thread, we focus on machine-based censorship. Most of the images sent in \defref{SMTP} are jpg images (see table \ref{tab:emailAttachments} on page \pageref{tab:emailAttachments}). We limited our search to algorithms capable of hiding binary data within these files. The number of academically researched options was surprisingly low.
 
-After reviewing the options, we decided to go for F5\cite{f5}. It is a reasonably well-researched algorithm which attracted many researchers. The original F5 implementation had a detectable issue with artifacts\cite{F5broken} caused by the recompression of the image. This issue was caused only due to an issue in the reference implementation, and the researchers have provided a corrected reference implementation without the weakness.
+After reviewing the options, we decided to go for F5\cite{f5}. It is a reasonably well-researched algorithm which attracted many researchers. The original F5 implementation had a detectable issue with artifacts\cite{F5broken} caused by the recompression of the image. This issue was caused only due to a problem in the reference implementation, and the researchers have provided a corrected reference implementation without the weakness.
 
 % We use https://github.com/matthewgao/F5-steganography
 
@@ -454,7 +455,7 @@ According to the equations proposed by \citeauthor{Lenstra04keylength.} in \cite
 
 According to \cite{CNSASuite} (superseding well known and often used \cite{nsa-fact-sheet-B}) data classified up to ``top secret'' should be signed with RSA 3072+ or ECDSA P-384.  For symmetric encryption, they recommend AES 256 Bits, for Hashing at least SHA-384 and for Elliptic curves a 384 Bit sized key.
 
-As it might seem not a wise idea to consider the recommendation of a potential state-sponsored adversary and the Formulas proposed by \citeauthor{Lenstra04keylength.} do not explicitly take quantum computers into account we follow the recommendations of ENCRYPT II.
+As it might seem not a wise idea to consider the recommendation of a potential state-sponsored adversary and the Formulas proposed by \citeauthor{Lenstra04keylength.} do not explicitly take quantum computers into account, we follow the advice of ENCRYPT II.
 
 Furthermore, taking all recommendations together, it seems that all involved parties assume the most trust in elliptic curves rather than asymmetric encryption based on factoring modulus.
 
@@ -550,7 +551,7 @@ This padding is the standard used in many places when applying symmetric encrypt
 \subsubsection{OAEP with SHA and MGF1 padding} 
 This padding is closely related to RSAES-OAEP padding. The hash size is, however, bigger, and thus, the required space for padding is much higher. OAEP with SHA and MGF1 Padding is used in asymmetric encryption only. Due to its size, it is important to note that the payload in the last block shrinks to $keySizeInBits/8-2-MacSize/4$.
 
-In our approach, we have chosen to allow these four paddings. The allowed sha sizes match the allowed hash sizes chosen above. It is important to note that padding costs space at the end of a stream. Since we are always using one block for signing, we have to take care that the chosen signing mac plus the bytes required for padding do not exceed the key size of the asymmetric encryption. While this usually is not a problem for RSA as there are keys 1024+ Bits required, it is an important problem for ECC algorithms as there are much shorter keys required to achieve an equivalent strength compared to RSA. 
+In our approach, we have chosen to allow these four paddings. The allowed sha sizes match the allowed mac sizes chosen above. It is important to note that padding costs space at the end of a stream. Since we are always using one block for signing, we have to take care that the chosen signing mac plus the bytes required for padding do not exceed the key size of the asymmetric encryption. While this usually is not a problem for RSA as there are keys 1024+ Bits required, it is an essential problem for ECC algorithms as there are much shorter keys needed to achieve an equivalent strength compared to RSA. 
 
 We have introduced an additional type of padding not related to these paddings. We required for the addRedundancy the following unique properties. Unfortunately, we were unable to find any padding which matched the following properties simultaneously:
 
@@ -565,7 +566,7 @@ Details of this padding are described in the section "Add and Remove Redundancy 
 
 \section{Routing}
 
-If we can follow data from a source to a destination, we may safely assume that the participants of this data exchange are no longer anonymous. So special care should be taken to this aspect. In the past, several approaches have been made to avoid the detection of data while routing. In the following sections, we will look at some basic concepts which have been proposed up until today. We describe their concept and have a look at their weaknesses discovered so far.
+If we can follow data from a source to a destination, we may safely assume that the participants of this data exchange are no longer anonymous. So special care should be taken to this aspect. In the past, several approaches have been made to avoid the detection of data while routing. In the following sections, we will look at some basic concepts which have been proposed up until today. We describe their idea and have a look at their weaknesses discovered so far.
 
 In \nameref{sec:sysImpl}, we analyze some related real-world systems regarding how they work and how they have been attacked in the past.
 
@@ -612,12 +613,12 @@ Crowds is a network that offers anonymity within a local group. It works as foll
 
 While crowds as specified in \cite{crowds:tissec} does anonymize the sender from the recipient rather well, the system offers no protection from someone capable of monitoring crowds traffic. The system may, however, be easily attacked from within by introducing collaborating johndos. It has been further developed to D-Crowds \cite{DBLP:conf/esorics/DanezisDKT09}, ADU/RADU \cite{Munoz-Gea2008}, Freenet\cite{freenet} and others. 
 
-Furthermore, the blender is aware of all JonDos and thus of special intrest for any observing or censoring adversary. Control of the blender enables an adversary to split the network into controllable parts, adding a high likelyhood of discovering an original sender.
+Furthermore, the blender is aware of all JonDos and thus of particular interest for any observing or censoring adversary. Control of the blender enables an adversary to split the network into controllable parts, adding a high likelihood of discovering an original sender.
 
 \subsection{Mimic routes}
 Mimics are a set of statical mixes which maintain a constant message flow between the static routes. If legitimate traffic arrives, the pseudo traffic is replaced by legitimate traffic. An outstanding observer is thus incapable of telling the difference between real traffic and dummy traffic.
 
-If centralized mixes are used, the system lacks the same vulnerabilities of sizing and observing the exit nodes as all previously mentioned systems. If we assume that the sender and receiver operate a mixer by themselves, the system would be no longer susceptible to timing or sizing analyses. The mimic routes put a constant load onto the network. This bandwidth is lost and may not be reclaimed. It does not scale well as every new participant increases the need for mimic routes and creates (in the case of user mixes) a new mimic load. Furthermore, the mixes are easily identifiable as their charcteristic data stream contrasts other network services.
+If centralized mixes are used, the system lacks the same vulnerabilities of sizing and observing the exit nodes as all previously mentioned systems. If we assume that the sender and receiver operate a mixer by themselves, the system would no longer be susceptible to timing or sizing analyses. The mimic routes put a constant load onto the network. This bandwidth is lost and may not be reclaimed. It does not scale well as every new participant increases the need for mimic routes and creates (in the case of user mixes) a new mimic load. Furthermore, the mixes are easily identifiable as their characteristic data stream contrasts compared to other network service streams.
 
 \subsubsection{DC Networks}
 DC networks are based on the work \citetitle{chaum-dc} by \citeauthor{chaum-dc}\cite{chaum-dc}. In this work, \citeauthor{chaum-dc} describes a system allowing a one-bit transfer (The specific paper talks about the payment of a meal). Although all participants of the DC net are known, the system makes it unable to determine who has been sending a message. The message in a DC-Net is readable for anyone. This network has the downside that a cheating player may disrupt communication without being traceable.
@@ -649,14 +650,14 @@ Wherever possible, we try to refer to sources. If systems are no longer in use o
 
 If a system shows strong similarities in parts, then we emphasize on these parts and analyze the findings and attacks.
 
-All systems have incommon that they are easily identifiable on the network layer except for ToR when working with ``plugable transports''
+All systems have in common that they are easily identifiable on the network layer except for ToR when working with ``pluggable transports'.'
 
 \subsection{Pseudonymous Remailer\label{sec:remPseudo}}
 The basic idea of remailers was discussed in \cite{CHAUM1}. The most well-known remailer was probably anon.penet.fi, which operated from 1993 to 1996. This type of remailer is often referred to as type-0-remailer.
 
 In principle, an anonymous remailer works as an ordinary forwarding \defref{SMTP} server. The only difference is that it strips off all header fields except for ``from'', ``to'', and ``subject'' and then replaces the sender and recipient address with pseudonyms respectively with the real address. 
 
-This kind of remailer is easily attackable by an authority. Since the remailer knows tuples of pseudonyms and their respective real identities, it  was forced in the past to reveal true identities\cite{penetClosure}. Furthermore, the message may be monitored at the server or on its way, and then due to the unmodified content matching is easy.
+This kind of remailer is easily attackable by an authority. Since the remailer knows tuples of pseudonyms and their respective real identities, it was forced in the past to reveal true identities\cite{penetClosure}. Furthermore, the message may be monitored at the server or on its way, and then due to the unmodified content matching is easy.
 
 This remailer offers, therefore, no protection against an adversary defined in our problem.
 
@@ -683,15 +684,15 @@ Tarzan is a P2P IP protocol using UDP to communicate. It is specified in \cite{t
 AN.ON, as suggested in \cite{federrath2003system}, is a mixing network. It generates messages in equally sized chunks and sends them in fixed time slots after random mixing. Its implementation is called JAP and may be found under https://anon.inf.tu-dresden.de/. JAP is many ways similar to the capabilities of ToR. The network was at the time of writing a lot smaller (10 JonDos compared to 6500 relays in the ToR network).
 
 \subsection{MorphMix}
-MorphMix is another mix network and specified in \cite{morphmix:wpes2002}. It was a circuit-based mix system for networking anonymity. The core of the network was a collision detection. This detection has been circumvented by \cite{morphmix:pet2006}. Since then, no new papers have been published, and the project seems to be dead.
+MorphMix is another mix network and specified in \cite{morphmix:wpes2002}. It was a circuit-based mix system for networking anonymity. The core of the network was collision detection. This detection has been circumvented by \cite{morphmix:pet2006}. Since then, no new papers have been published, and the project seems to be dead.
 
 \subsection{SOR (SSH-based onion routing)}
 SOR \cite{Egners_2012} is blaming the complex and monocultural landscape of anonymizing software and proclaims a simple approach based on onionized SSH tunnels. While the approach is both simple and effective, it is not suitable against a powerful adversary. First, he may be able to snoop the forwarding when on the system. Second, due to the timing behavior, tunnels belonging to each other may be identified, and third, the package size information does leak as well.
 
 \subsection{SCION}
-SCION\cite{perrig2017scion} is a clean slate Internet protocol. While SCION is not really an anonymizing protocol it contains many interesting features. Unlike with the traditional networks, we have the possibility of influencing the routing of data within SCION. Furthermore, with PHI\cite{chen2017phi} and Dovetail\cite{sankey2014dovetail} SCION may feature strong and fast anonymity features. 
+SCION\cite{perrig2017scion} is a clean slate Internet protocol. While SCION is not really an anonymizing protocol. It contains, however,  many interesting features. Unlike with the traditional networks, we have the possibility of influencing the routing of data within SCION. Furthermore, with PHI\cite{chen2017phi} and Dovetail\cite{sankey2014dovetail}, SCION may feature strong and fast anonymity features. 
 
-Unfortunately, as this is a clean slate Internet design, it is not available commonly currently and as it is easy identifiable, it enables easy censorship as the relevance is due to its current availability of no importance and a censoring adversary may just ban and censor SCION fully. 
+Unfortunately, as this is a clean slate Internet design, it is not available commonly currently, and as it is easily identifiable, it enables easy censorship as the relevance is due to its current availability of no importance, and a censoring adversary may just ban and censor SCION entirely. 
 
 \subsection{Tor\label{sec:tor}}
 Tor is one of the most common onion router networks these days and onionizes generic TCP streams. It is specified in \cite{tor-spec}. It might be considered one of the most advanced networks since it has a considerable size, and much research has been done here.
@@ -765,12 +766,12 @@ Hordes was a multicast-based protocol for anonymity specified in \cite{Levine:20
 This assumption is correct for a local observer. Unfortunately, it is not sufficient assuming an adversary as defined in this paper.
 
 \subsection{Salsa}
-Salsa was proposed in \cite{Salsa} and described a circuit based anonymization pattern based on distributed hash tables (DHT). An implementation for Salsa is available, but it is not public. \cite{ccs2008:mittal} claims that by combining active and passive attacks anonymity can be compromized.
+Salsa was proposed in \cite{Salsa} and described a circuit based anonymization pattern based on distributed hash tables (DHT). An implementation for Salsa is available, but it is not public. \cite{ccs2008:mittal} claims that by combining active and passive attacks, anonymity can be compromised.
 
 \subsection{AP3}
 AP3, as defined in \cite{mislove2004ap3}, is an anonymous communication system and very similar to crowds. It performs a random walk over a set of known nodes. Not all nodes are known to anyone, and all nodes are aware of the final recipient. 
 
-The system is susceptible to numerous attacks, as shown by \cite{ccs2008:mittal} and does not withstand our adversary as the final recipient is known to the routing nodes.
+The system is susceptible to numerous attacks, as shown by \cite{ccs2008:mittal}, and does not withstand our adversary as the final recipient is known to the routing nodes.
 
 \subsection{Cashmere}
 Cashmere is specified in \cite{zhuang2005cashmere}. It defines a protocol for the use of chaum mixes. Unlike most of the protocols, the chaum mixes in cashmere are virtual. So-called relay groups represent them. Each mix in the relay group may be used as an equivalent mix to all other mixes in the same group. 
@@ -839,7 +840,7 @@ Server located clients build an absolute minority. This kind of clients was comm
 Web clients are these days a common alternative to fat clients. Most big provider companies use their proprietary web client. According to \cite{clientDistribution2} the most common web clients are "`Gmail"', "`Outlook.com"', and "`Yahoo! Mail"'. All these Interfaces do not offer a kind of public plug-in interface. However,  they do offer IMAP-interfaces. This important for a future generalistic approach to the problem.
 
 \subsection{S/MIME}
-S/MIME is an extension to the MIME standard. The MIME standard allows in simple text-oriented mails an alternate representation of the same content (e.g., as text and as HTML), or it allows to split a message into multiple parts that may be encoded. It is important to note that MIME encoding is only effective in the body part of an mail.
+S/MIME is an extension to the MIME standard. The MIME standard allows in simple text-oriented mails an alternate representation of the same content (e.g., as text and as HTML), or it allows to split a message into multiple parts that may be encoded. It is important to note that MIME encoding is only effective in the body part of a mail.
 
 S/MIME, as described in \cite{RFC3851}, extends this standard with the possibility to encrypt mail content or to sign it. Practically this is achieved by either putting the encrypted part or the signature into an attachment. It is essential to know that this method leaks significant pieces of the data.
 
@@ -893,7 +894,7 @@ Identifying a node by probing and check their reaction is commonly done when fin
 
 One of the problems is clear-text requests. These requests may be used on any transport layer account without previous knowledge of any host key. Thus the recommendation in table \ref{tab:protoReplyCrit} is generally not to answer the requests. Routing nodes in jurisdictions not fearing legal repression or prosecution may reply to clear text requests, but it is usually discouraged as they allow harvesting of addresses.
 
-One strategy to avoid would be to put high costs onto clear-text requests in such a way that a clear-text request may have a long reply time (e.g., up to one day). A node is free to blacklist an identity in case of an early reply. This is an insufficient strategy as a big adversary may have lots of identities in stock. Requesting an unusually long key as a plain-text identity does not make sense either as these as well may be kept in stock. We may, however, force a plaintext request to have an identity block with a hash following specific rules. We may, for example, put in a requirement that the first four bytes of the hash of a header block translate to the first four characters of the routing block. At the moment, this has been rejected in the standard for practical reasons. First, as the request is unsolicited, a sender is the only one able to decide the algorithm of the hash. This would allow a requester to choose upon the complexity of the puzzle. Second, any negotiation of the cost of the request would result in the disclosure of the node as VortexNode, which might be unsuitable.
+One strategy to avoid would be to put high costs onto clear-text requests in such a way that a clear-text request may have a long reply time (e.g., up to one day). A node is free to blacklist an identity in case of an early reply. This is an insufficient strategy as a big adversary may have lots of identities in stock. Requesting an unusually long key as a plain-text identity does not make sense either as these as well may be kept in stock. We may, however, force a plaintext request to have an identity block with a hash following specific rules. We may, for example, put in a requirement that the first four bytes of the hash of a header block translates to the first four characters of the routing block. At the moment, this has been rejected in the standard for practical reasons. First, as the request is unsolicited, a sender is the only one able to decide the algorithm of the hash. This would allow a requester to choose upon the complexity of the puzzle. Second, any negotiation of the cost of the request would result in the disclosure of the node as VortexNode, which might be unsuitable.
 
 \subsubsection{Hotspot Attacks}
 Hotspot attacks aim to isolate high traffic sites within a network. By analyzing specific properties or the general throughput locations with outstanding traffic may be identified. These messages do quite often reveal senders or recipients. Sometimes an intermediate node in an anonymizing system. 
@@ -1261,13 +1262,7 @@ For a MURB to work, the RBB has to take care that all quotas required to the rou
 In the following sections, we outline the handling of messages we split the handling into incoming messages and outgoing messages. All handling assumes that we have a blending layer independently picking up messages as advertised in the capabilities messages.
 
 \subsection{Block Processing}
-A Block picked up in the blending layer is handled, as shown in image \ref{fig:msgRecvProcessing}. First, we try to authenticate the message. If we can authenticate the message, we process it and add the contained instructions to a processing workspace. Unauthenticated messages may be discarded at any point.
-
-\begin{figure*}[hbt]
-	\includegraphics[width=0.90\textwidth]{inc/flowchart_message_receiving}
-	\caption{flow diagram showing processing of incomming messages}
-	\label{fig:msgRecvProcessing}
-\end{figure*}
+A Block is picked up in the blending layer and then handled in the routing layer. First, we try to authenticate the message. If we can authenticate the message, we process it and add the contained instructions to a processing workspace. Unauthenticated messages may be discarded at any point.
 
 The processing of a sending block is triggered by a routing block in the workspace, as shown in figure~\ref{fig:msgSendProcessing}. The assembly instructions are processed to collect the payload blocks. Then the encryption is applied to the message and passed on to the blending layer for processing.
 
@@ -1290,7 +1285,7 @@ We were able to describe a rough protocol that performs far better in almost all
 	\item If an adversary is running a node, he may identify other nodes participating in the network by analyzing peer messages.
 \end{itemize}
 
-We may safely assume that a carefully crafted message within a standard message flow is therefore unlinked from the two message peers. An adversary running a node may identify over time, possibly participating nodes if not operating in a closed group, but he will be unable to query or use such a node without the corresponding keys. He may be able to observe such nodes, possibly view their activity, but he is unable to match messages generated.
+We may safely assume that a carefully crafted message within a standard message flow is therefore unlinked from the two message peers. An adversary running a node may identify over time, possibly participating nodes, if not operating in a closed group, but he will be unable to query or use such a node without the corresponding keys. He may be able to observe such nodes, possibly view their activity, but he is unable to match messages generated.
 
 In the next section, we will further elaborate on this protocol and analyze it. We will focus on the question of whether it is possible to create a protocol that withstands our threat model.
 

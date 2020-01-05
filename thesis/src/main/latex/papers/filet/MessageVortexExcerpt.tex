@@ -2,19 +2,21 @@
 
 %\PassOptionsToClass{peerreview}{IEEEtran}
 
-\documentclass[acmsmall, screen, final]{acmart}
+\documentclass[acmsmall, screen, final, natbib=false]{acmart}
 %\documentclass[acmsmall, screen]{acmart}
-\usepackage{natbib}
+%natbib \usepackage{natbib}
+\usepackage[style=ACM-Reference-Format,backend=biber]{biblatex}
+\addbibresource{../../messageVortex.bib}
 
 \acmJournal{TOPS}
 
 
 % *** GRAPHICS RELATED PACKAGES ***
 %
-%usepackage[pdftex,final]{graphicx}
+%\usepackage[pdftex,final]{graphicx}
 \graphicspath{{./inc/}{../../inc/}{./jpeg/}}
 %\DeclareGraphicsExtensions{.pdf,.jpeg,.png}
-
+%
 % *** MATH PACKAGES ***
 %
 \usepackage{amsmath}
@@ -599,7 +601,7 @@
 	\begin{figure}[ht]
 		\centering\includegraphics[width=0.7\columnwidth]{messagePaths}
 		\caption{A possible path of a VortexMessage}
-		\Description{Graph shows the sender followed by four routing paths (sequentially) ending in a set of five  ``anonymity nodes''.}n
+		\Description{Graph shows the sender followed by four routing paths (sequentially) ending in a set of five  ``anonymity nodes''.}
 		\label{fig:messagePaths}
 	\end{figure}
 	
@@ -635,10 +637,12 @@
 	\subsection{Further Reading}
 	This paper is a very rough overview of the \emph{MessageVortex} protocol. For those interested in the technical implementation details, the current version of the RFC\cite{MessageVortexRFC}. For a more elaborated analysis covering additional topics such as the blending types, additional literature research, or arguments for a decision, we recommend reading the thesis paper \cite{messageVortex}. In this document, we cover additional details such as elaborated analysis on the protocol, the implications of the connection between transport endpoints and \emph{VortexNodes}, or an analysis of the plain embedding technique.
 	
-	\bibliographystyle{ACM-Reference-Format}
+	% natbib \bibliographystyle{ACM-Reference-Format}
 	%\citestyle{acmauthoryear}
 	
 	\Urlmuskip=0mu plus 1mu % fixes URL breaks
-	\bibliography{messageVortex}
+	%natbib \bibliography{messageVortex}
+	
+	\printbibliography
 	
 \end{document}
