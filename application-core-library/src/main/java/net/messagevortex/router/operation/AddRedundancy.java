@@ -25,14 +25,9 @@ package net.messagevortex.router.operation;
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
 import java.util.Random;
 import java.util.Vector;
 import java.util.logging.Level;
-
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.AbstractRedundancyOperation;
 import net.messagevortex.asn1.AddRedundancyOperation;
@@ -221,6 +216,7 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
 
   /***
    * <p>padds a given payload block.</p>
+   *
    * @param blocksize the size of the blocks of the used encryption in the addRedundancy operation
    * @param numberOfOutBlocks the number of resulting blocks in the addRedundancy operation
    * @param data the data to be padded (payload block
