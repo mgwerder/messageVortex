@@ -48,7 +48,7 @@ public class MessageFactoryTest {
             f.writeObject( is.toAsn1Object(DumpType.ALL_UNENCRYPTED) );
             f.close();
         }
-        int maxTests=10;
+        int maxTests=10;.
         for (int i = 1; i <= maxTests; i++) {
             LOGGER.log( Level.INFO, "cycle "+i+" of "+maxTests );
             LOGGER.log( Level.INFO, "  building message ("+i+" of "+maxTests+")" );
