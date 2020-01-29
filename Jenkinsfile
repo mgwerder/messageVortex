@@ -127,7 +127,7 @@ pipeline {
   }
   post {
     success {
-      archiveArtifacts artifacts: 'application-core-library/target/*.jar,application-core-library/target/*.exe,application-core-library/target/*.dmg,thesis/target/main/latex/**/*.pdf*', fingerprint: true
+      archiveArtifacts artifacts: 'application-core-library/target/*.jar,application-core-library/target/*.exe,application-core-library/target/*.dmg,thesis/target/main/latex/**/*.pdf*,application-core-library/target/lib-runtimes/*.jar', fingerprint: true
     }
   }
 }
