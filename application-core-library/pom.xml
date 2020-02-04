@@ -79,6 +79,7 @@
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcprov-jdk15on</artifactId>
             <version>1.60</version>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
@@ -87,24 +88,26 @@
             <version>3.9.5</version>
         </dependency>
 
-        <dependency>
+        <!--<dependency>
             <groupId>org.codehaus.izpack</groupId>
             <artifactId>izpack-maven-plugin</artifactId>
             <version>${izpack.version}</version>
             <scope>compile</scope>
             <type>pom</type>
-        </dependency>
+        </dependency>-->
 
         <dependency>
             <groupId>org.snakeyaml</groupId>
             <artifactId>snakeyaml-engine</artifactId>
             <version>2.0</version>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast</artifactId>
             <version>3.7.2</version>
+            <scope>compile</scope>
         </dependency>
 
         <!-- Required for TestSmtpHandler -> FIXME get rid of it ASAP -->
@@ -112,18 +115,21 @@
             <groupId>com.icegreen</groupId>
             <artifactId>greenmail</artifactId>
             <version>1.5.9</version>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>1.6.1</version>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>org.jruby</groupId>
             <artifactId>jruby-complete</artifactId>
             <version>1.7.16.1</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
