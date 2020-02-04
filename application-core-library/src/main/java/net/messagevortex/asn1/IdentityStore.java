@@ -69,7 +69,7 @@ public class IdentityStore extends AbstractBlock
 
   static {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-    MessageVortexLogger.setGlobalLogLevel(Level.ALL);
+    //MessageVortexLogger.setGlobalLogLevel(Level.ALL);
   }
 
   private static IdentityStore demo = null;

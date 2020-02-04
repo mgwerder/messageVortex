@@ -366,7 +366,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
 
   @Override
   public Integer call() throws IOException {
-    MessageVortexLogger.setGlobalLogLevel(Level.ALL);
+    //MessageVortexLogger.setGlobalLogLevel(Level.ALL);
     new AsymmetricKeyPreCalculator(true);
     if (cache.isEmpty()) {
       try {

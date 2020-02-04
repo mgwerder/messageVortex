@@ -104,14 +104,18 @@ public class MessageVortex implements Callable<Integer> {
   private static Integer JRE_AES_KEY_SIZE = null;
 
   private boolean verifyPrerequisites() {
-    LOGGER.log(Level.INFO, "Checking bouncycastle version..." + Version.getBuild());
+    LOGGER.log(Level.INFO, "Checking bouncycastle version...");
     String bcversion = org.bouncycastle.jce.provider.BouncyCastleProvider
             .class
             .getPackage()
             .getImplementationVersion();
+    LOGGER.log(Level.INFO, "Detected BouncyCastle version is "+bcversion);
+    if(bcversion==null) {
+      LOGGER.log(Level.SEVERE, "unable to determine BC version (got NULL value)");
+      return false;
+    }
     Matcher m = Pattern.compile("(\\d+)\\.(\\d+)\\.(\\d+)(beta(\\d*))?")
             .matcher(bcversion);
-    LOGGER.log(Level.INFO, "Detected BC version is " + bcversion + ".");
     if (!m.matches()) {
       LOGGER.log(Level.SEVERE, "unable to parse BC version (" + bcversion + ")");
       return false;

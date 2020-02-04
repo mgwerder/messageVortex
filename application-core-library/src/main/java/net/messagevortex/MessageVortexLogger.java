@@ -40,36 +40,62 @@ public class MessageVortexLogger extends Logger {
 
   static final Handler consoleHandler = new ConsoleHandler();
 
+  private static int init = 0;
+  private static final Object lock =new Object();
+
   static {
-    // remove all existing console handler
-    Handler[] handlers = getGlobalLogger().getParent().getHandlers();
-    if (handlers != null) {
-      for (Handler h : handlers) {
-        getGlobalLogger().getParent().removeHandler(h);
+    init();
+  }
+
+  private static void init() {
+    synchronized(lock) {
+      if(init==0) {
+        init=1;
+
+        // remove all existing console handler
+        Handler[] handlers = getGlobalLogger().getParent().getHandlers();
+        if (handlers != null) {
+          for (Handler h : handlers) {
+            getGlobalLogger().getParent().removeHandler(h);
+          }
+        }
+
+        // set log formater
+        consoleHandler.setFormatter(new MyLogFormatter());
+        getGlobalLogger().getParent().addHandler(consoleHandler);
+        getGlobalLogger().log(Level.INFO, "log level is set to "+getGlobalLogLevel());
+
+        init=2;
+
+        getLogger("Logger").log(Level.INFO,"Logger initialized");
       }
     }
-
-    // set log formater
-    consoleHandler.setFormatter(new MyLogFormatter());
-    getGlobalLogger().getParent().addHandler(consoleHandler);
-    getGlobalLogger().log(Level.INFO, "log level is set to "+getGlobalLogLevel());
   }
 
   private MessageVortexLogger() {
     super(null, null);
+    init();
   }
 
   public static void setGlobalLogLevel(Level l) {
+    init();
     consoleHandler.setLevel(l);
     getGlobalLogger().getParent().setLevel(l);
   }
 
   public static Level getGlobalLogLevel() {
+    init();
     return getGlobalLogger().getParent().getLevel();
   }
 
   public static Logger getGlobalLogger() {
+    init();
     return LogManager.getLogManager().getLogger(Logger.GLOBAL_LOGGER_NAME);
+  }
+
+  public static Logger getLogger(String name) {
+    init();
+    return getGlobalLogger().getLogger(Logger.GLOBAL_LOGGER_NAME);
   }
 
   static final class MyLogFormatter extends Formatter {
@@ -113,6 +139,7 @@ public class MessageVortexLogger extends Logger {
   }
 
   public static void flush() {
+    init();
     consoleHandler.flush();
   }
 

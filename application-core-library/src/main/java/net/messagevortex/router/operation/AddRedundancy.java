@@ -84,7 +84,7 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
 
   static {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-    MessageVortexLogger.setGlobalLogLevel(Level.ALL);
+    //MessageVortexLogger.setGlobalLogLevel(Level.ALL);
   }
 
   AbstractRedundancyOperation operation;

@@ -161,7 +161,7 @@ public class SimpleMessageFactory extends MessageFactory {
    * @throws IOException  if the function was unable to load the identity store from filesystem
    */
   public static void main(String[] args) throws IOException {
-    MessageVortexLogger.setGlobalLogLevel(Level.FINEST);
+    //MessageVortexLogger.setGlobalLogLevel(Level.FINEST);
     LOGGER.log(Level.INFO, "Loading identity store");
     IdentityStore identityStore = new IdentityStore(new File("identityStore.cfg"));
     LOGGER.log(Level.INFO, "getting anon set");

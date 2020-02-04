@@ -148,6 +148,9 @@ public class MessageVortexController implements SignalHandler {
    * @param milliSeconds the time in milliseconds
    */
   public synchronized void setTimeout(long milliSeconds) {
+    if(milliSeconds<=0) {
+      return;
+    }
     LOGGER.log(Level.INFO, "MessageVortex controller sets timeout to " + milliSeconds / 1000
             + " s");
     if (timer != null) {
