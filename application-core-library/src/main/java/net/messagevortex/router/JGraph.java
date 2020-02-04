@@ -86,13 +86,13 @@ public class JGraph extends JPanel implements MouseListener {
   private void update() {
     GraphSet[] routes = graph.getRoutes();
     Dimension d = new Dimension(graph.getAnonymitySetSize() * (BOX_WIDTH + 1) + 2 * X_OFFSET,
-            2 * Y_OFFSET + 2 * ROUTE_BORDER + routes.length * 4);
+        2 * Y_OFFSET + 2 * ROUTE_BORDER + routes.length * 4);
     setMinimumSize(d);
   }
 
   private void drawTopLabels(Graphics g) {
     double horizontalSpace = (0.0 + getWidth() - 2 * X_OFFSET - BOX_WIDTH)
-            / (graph.getAnonymitySetSize() - 1);
+        / (graph.getAnonymitySetSize() - 1);
     for (int i = 0; i < graph.getAnonymitySetSize(); i++) {
       int x = (int) (X_OFFSET + i * horizontalSpace);
 
@@ -114,14 +114,14 @@ public class JGraph extends JPanel implements MouseListener {
       int adv = metrics.stringWidth("" + i);
       g.setColor(Color.BLACK);
       g.drawString("" + i, x + BOX_WIDTH / 2 - (adv) / 2, Y_OFFSET + BOX_HEIGHT / 2 + (hgt + 2)
-              / 2 - 2);
+          / 2 - 2);
 
       // draw vertical lines
       Graphics2D g3 = (Graphics2D) g.create();
       g3.setStroke(new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0,
-              new float[]{9}, 0));
+          new float[] {9}, 0));
       g3.drawLine(x + BOX_WIDTH / 2, Y_OFFSET + BOX_HEIGHT, x + BOX_WIDTH / 2, getHeight()
-              - Y_OFFSET - 2 * ROUTE_BORDER);
+          - Y_OFFSET - 2 * ROUTE_BORDER);
       g3.dispose();
     }
   }
@@ -130,27 +130,27 @@ public class JGraph extends JPanel implements MouseListener {
     GraphSet[] routes = graph.getRoutes();
 
     double horizontalSpace = (0.0 + getWidth() - 2 * X_OFFSET - BOX_WIDTH)
-            / (graph.getAnonymitySetSize() - 1);
+        / (graph.getAnonymitySetSize() - 1);
     double verticalSpace = (0.0 + getHeight() - 2 * Y_OFFSET - 2 * BOX_HEIGHT - ROUTE_BORDER)
-            / (graph.size());
+        / (graph.size());
     Graphics2D g2 = (Graphics2D) (g.create());
     Stroke s = g2.getStroke();
     Stroke s2 = new BasicStroke(3);
 
     int lastY = 0;
     System.out.println("## displaying route " + this.route + " (" + routes[this.route].size()
-            + ")");
+        + ")");
     for (int i = 0; i < graph.size(); i++) {
       Edge gr = graph.get(i);
       int x1 = (int) (X_OFFSET + (double) BOX_WIDTH / 2 + graph.getAnonymityIndex(gr.getFrom())
-              * horizontalSpace);
+          * horizontalSpace);
       int x2 = (int) (X_OFFSET + (double) BOX_WIDTH / 2 + graph.getAnonymityIndex(gr.getTo())
-              * horizontalSpace);
+          * horizontalSpace);
       int y = (int) (Y_OFFSET + 2 * BOX_HEIGHT + i * verticalSpace);
 
       if (routes[this.route].contains(gr)) {
         System.out.println("##   route " + this.route + " contains " + i + " ("
-                + routes[this.route].size() + "/" + gr.getStartTime() + ")");
+            + routes[this.route].size() + "/" + gr.getStartTime() + ")");
         g2.setColor(Color.GREEN);
         g2.setStroke(s2);
         if (lastY > 0) {
@@ -174,12 +174,12 @@ public class JGraph extends JPanel implements MouseListener {
     GraphSet[] routes = graph.getRoutes();
 
     double horizontalSpace = (0.0 + getWidth() - 2 * X_OFFSET - BOX_WIDTH)
-            / (graph.getAnonymitySetSize() - 1);
+        / (graph.getAnonymitySetSize() - 1);
 
     horizontalSpace = (double) (getWidth() - 2 * X_OFFSET) / (routes.length * 2 - 1);
     for (int i = 0; i < routes.length; i++) {
       int x1 = (int) ((getWidth() - (routes.length * 2 - 1) * horizontalSpace)
-              / 2 + i * horizontalSpace * 2);
+          / 2 + i * horizontalSpace * 2);
       int y = getHeight() - Y_OFFSET - ROUTE_BORDER;
       if (this.route == i) {
         g.setColor(Color.BLUE);
@@ -216,7 +216,7 @@ public class JGraph extends JPanel implements MouseListener {
       return t;
     }
     return "No location effective tooltip (x=" + event.getX() + "/y=" + event.getY() + ""
-            + super.getToolTipText(event);
+        + super.getToolTipText(event);
   }
 
   private String tooltipForCircle(Point p, Ellipse2D circle) {
@@ -296,19 +296,19 @@ public class JGraph extends JPanel implements MouseListener {
     IdentityStore is = null;
     try {
       is = new IdentityStore(new File(System.getProperty("java.io.tmpdir")
-              + "/IdentityStoreExample1.der"));
+          + "/IdentityStoreExample1.der"));
     } catch (IOException ioe) {
       is = IdentityStore.getNewIdentityStoreDemo(false);
       DEROutputStream f = new DEROutputStream(
-              new FileOutputStream(
-                      System.getProperty("java.io.tmpdir") + "/IdentityStoreExample1.der"
-              )
+          new FileOutputStream(
+              System.getProperty("java.io.tmpdir") + "/IdentityStoreExample1.der"
+          )
       );
       f.writeObject(is.toAsn1Object(DumpType.ALL_UNENCRYPTED));
       f.close();
     }
     SimpleMessageFactory smf = new SimpleMessageFactory("", 0, 1,
-            is.getAnonSet(7).toArray(new IdentityStoreBlock[0]), is);
+        is.getAnonSet(7).toArray(new IdentityStoreBlock[0]), is);
     smf.build();
     System.out.println("got " + smf.getGraph().getRoutes().length + " routes");
     final JGraph jg = new JGraph(smf.getGraph());
@@ -321,7 +321,7 @@ public class JGraph extends JPanel implements MouseListener {
 
   private void createAndShowUserInterface() {
     System.out.println("Created GUI on event dispatching thread? "
-            + SwingUtilities.isEventDispatchThread());
+        + SwingUtilities.isEventDispatchThread());
     JFrame f = new JFrame("Edge Demo");
     f.add(this);
     f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -329,19 +329,29 @@ public class JGraph extends JPanel implements MouseListener {
     f.setVisible(true);
   }
 
+  /***
+   * <p>gets an image of the current graph.</p>
+   * @return the image
+   */
   public BufferedImage getScreenShot() {
-    int width =1024;
+    int width = 1024;
     int height = 768;
     BufferedImage image = new BufferedImage(
-            width,
-            height,
-            BufferedImage.TYPE_INT_RGB
+        width,
+        height,
+        BufferedImage.TYPE_INT_RGB
     );
     setSize(width, height);
     paintComponent(image.getGraphics());
     return image;
   }
 
+  /***
+   * <p>Writes a screenshot of the current graph into a jpeg file.</p>
+   * @param filename name of the file to be written
+   * @return the image object
+   * @throws IOException when writing file
+   */
   public BufferedImage saveScreenShot(String filename) throws IOException {
     BufferedImage image = getScreenShot();
     File outputfile = new File(filename);

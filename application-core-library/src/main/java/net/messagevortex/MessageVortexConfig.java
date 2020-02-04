@@ -48,7 +48,7 @@ public class MessageVortexConfig extends Config {
    * @throws IOException if errors occurred during reading of messageVortex.cfgRessources
    */
   private static synchronized Config createConfig() throws IOException {
-    synchronized(lock) {
+    synchronized (lock) {
       if (defaultConfig == null) {
         Config cfg = new MessageVortexConfig();
         defaultConfig = cfg;

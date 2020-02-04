@@ -146,13 +146,24 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
       return new int[0];
     }
     LOGGER.log(Level.INFO, "  done (chunk size: " + out.getRowAsByteArray(0).length + "; total:"
-            + tot + ")");
+        + tot + ")");
 
     return getOutputId();
   }
 
+  /***
+   * <p>Execute the add redundancy operation on the provided data.</p>
+   * @param in           data to add redundancy
+   * @param redundancy   the number of redundancy blocks
+   * @param dataStripes  the number of data stripes
+   * @param gf           the size of the GF
+   * @return the data with added redundancy
+   */
   public static byte[] execute(byte[] in, int redundancy, int dataStripes, int gf) {
-    AddRedundancy ar = new AddRedundancy(new AddRedundancyOperation(-1, redundancy, dataStripes, new Vector<SymmetricKey>(), -1, gf));
+    AddRedundancy ar = new AddRedundancy(
+        new AddRedundancyOperation(-1, redundancy, dataStripes,
+            new Vector<SymmetricKey>(), -1, gf)
+    );
 
     LOGGER.log(Level.INFO, "executing add redundancy operation (" + ar.toString() + ")");
     Matrix out = ar.executeInt(in);
@@ -170,7 +181,7 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
       tot += b.length;
     }
     LOGGER.log(Level.INFO, "  done (chunk size: " + out.getRowAsByteArray(0).length + "; total:"
-            + tot + ")");
+        + tot + ")");
     return totArray;
   }
 
@@ -178,16 +189,16 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
     // do the padding
     int paddingSize = 4;
     int size = in.length + paddingSize;
-    int keySize = operation.getkeys().length!=0?operation.getkeys()[1].getKeySize() / 8:32;
+    int keySize = operation.getkeys().length != 0 ? operation.getkeys()[1].getKeySize() / 8 : 32;
     if (size % (keySize * operation.getDataStripes()) > 0) {
       size = keySize * operation.getDataStripes() * (size
-              / (keySize * operation.getDataStripes()) + 1);
+          / (keySize * operation.getDataStripes()) + 1);
     }
     byte[] in2 = new byte[size];
     byte[] pad = VortexMessage.getLongAsBytes(in.length, paddingSize);
     LOGGER.log(Level.INFO, "  calculated padded size (original: " + in.length + "; blocks: "
-            + operation.getDataStripes() + "; block size: " + keySize + "; padded size: "
-            + size + ")");
+        + operation.getDataStripes() + "; block size: " + keySize + "; padded size: "
+        + size + ")");
 
     // copy length prefix
     System.arraycopy(pad, 0, in2, 0, paddingSize);
@@ -204,11 +215,11 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
     MathMode mm = GaloisFieldMathMode.getGaloisFieldMathMode(operation.getGfSize());
     LOGGER.log(Level.INFO, "  preparing data matrixContent");
     Matrix data = new Matrix(in2.length / operation.getDataStripes(), operation.getDataStripes(),
-            mm, in2);
+        mm, in2);
     LOGGER.log(Level.INFO, "  data matrixContent is " + data.getX() + "x" + data.getY());
     LOGGER.log(Level.INFO, "  preparing redundancy matrixContent");
     RedundancyMatrix r = new RedundancyMatrix(operation.getDataStripes(),
-            operation.getDataStripes() + operation.getRedundancy(), mm);
+        operation.getDataStripes() + operation.getRedundancy(), mm);
     LOGGER.log(Level.INFO, "  redundancy matrixContent is " + r.getX() + "x" + r.getY());
     LOGGER.log(Level.INFO, "  calculating");
     return r.mul(data);
@@ -223,7 +234,7 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
    * @param prng the Prng to be used for padding
    * @param c1 the padding parameter c1 as specified in the padding spec
    * @param c2 the padding parameter c2 as specified in the padding spec
-   * @return
+   * @return the padded data array
    */
   public static byte[] pad(int blocksize, int numberOfOutBlocks, byte[] data,
                            Prng prng, int c1, int c2) {
@@ -240,14 +251,14 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
     // calculate sizes
     int outRowSize = blocksize * numberOfOutBlocks;
     long containerSize = (long) (Math.ceil(((double) data.length + 4 + c2) / outRowSize))
-            * outRowSize;
+        * outRowSize;
     LOGGER.log(Level.FINEST, "container size of padded array is " + containerSize + " bytes (c1: "
-            + c1 + "; c2: " + c2 + ")");
+        + c1 + "; c2: " + c2 + ")");
 
     // calculate padding value
     long pval = (new BigInteger("" + data.length).add(new BigInteger("" + c1).multiply(
-            new BigInteger("" + containerSize)).mod(new BigInteger(""
-            + (((MAX_SIZE - data.length) / containerSize) * containerSize))
+        new BigInteger("" + containerSize)).mod(new BigInteger(""
+        + (((MAX_SIZE - data.length) / containerSize) * containerSize))
     ))).longValue();
     LOGGER.log(Level.FINEST, "Padding value is " + pval + "");
 
@@ -287,12 +298,12 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
    * @throws IOException       if unpadding fails for any reason
    */
   public static byte[] unpad(int blocksize, int numberOfOutBlocks, byte[] in, Prng prng)
-          throws IOException {
+      throws IOException {
     LOGGER.log(Level.FINEST, "starting unpadding of " + in.length + " bytes");
 
     // extract size descriptor
     long size = ((long) (in[0]) + 128) + ((long) (in[1]) + 128) * 256 + ((long) (in[2]) + 128) * 256
-            * 256 + ((long) (in[3]) + 128) * 256 * 256 * 256;
+        * 256 + ((long) (in[3]) + 128) * 256 * 256 * 256;
     LOGGER.log(Level.FINEST, "Padding value is " + size);
     size = size % in.length;
     LOGGER.log(Level.FINEST, "size is " + size + " bytes");

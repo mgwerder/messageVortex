@@ -9,10 +9,10 @@ import net.messagevortex.asn1.encryption.Algorithm;
 import picocli.CommandLine;
 
 @CommandLine.Command(
-        description = "Add key to cache",
-        name = "cache",
-        aliases = {"cache"},
-        mixinStandardHelpOptions = true
+    description = "Add key to cache",
+    name = "cache",
+    aliases = {"cache"},
+    mixinStandardHelpOptions = true
 )
 public class CommandLineHandlerCacheCalculate implements Callable<Integer> {
 
@@ -23,11 +23,11 @@ public class CommandLineHandlerCacheCalculate implements Callable<Integer> {
   }
 
   @CommandLine.Option(names = {"--infile", "-i"},
-          description = "filename of the file to handle")
-  String inFile="source.txt";
+      description = "filename of the file to handle")
+  String inFile = "source.txt";
 
   @CommandLine.Option(names = {"-c", "--ciphertype"}, required = true,
-          description = "filename of the file to handle")
+      description = "filename of the file to handle")
   String cipherType;
 
   @Override

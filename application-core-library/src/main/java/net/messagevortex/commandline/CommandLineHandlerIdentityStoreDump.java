@@ -11,13 +11,13 @@ import org.yaml.snakeyaml.Yaml;
 import picocli.CommandLine;
 
 @CommandLine.Command(
-        description = "dump content of IdentityStore",
-        name = "dump",
-        aliases = {"dp"},
-        mixinStandardHelpOptions = true
+    description = "dump content of IdentityStore",
+    name = "dump",
+    aliases = {"dp"},
+    mixinStandardHelpOptions = true
 )
 public class CommandLineHandlerIdentityStoreDump implements Callable<Integer> {
-  
+
   enum Format {
     ASN1,
     YAML
@@ -30,14 +30,14 @@ public class CommandLineHandlerIdentityStoreDump implements Callable<Integer> {
   }
 
   @CommandLine.Option(names = {"--filename", "-f"},
-          description = "filename of the IdentityStorage file",
-          arity = "1"
+      description = "filename of the IdentityStorage file",
+      arity = "1"
   )
   String filename = CommandLineHandlerIdentityStore.DEFAULT_FILENAME;
-  
-  
+
+
   @CommandLine.Option(names = {"--outputFormat", "-o"},
-          description = "Format of output"
+      description = "Format of output"
   )
   Format outputFormat = Format.ASN1;
 
@@ -49,11 +49,11 @@ public class CommandLineHandlerIdentityStoreDump implements Callable<Integer> {
     }
     IdentityStore is = new IdentityStore(new File(filename));
     String out = "";
-    if(outputFormat==Format.ASN1) {
-      out=is.dumpValueNotation("", DumpType.ALL_UNENCRYPTED);
+    if (outputFormat == Format.ASN1) {
+      out = is.dumpValueNotation("", DumpType.ALL_UNENCRYPTED);
     } else {
       Yaml yaml = new Yaml();
-      out=yaml.dump( is );
+      out = yaml.dump(is);
     }
     System.out.println(out);
     return 0;

@@ -42,7 +42,11 @@ import net.messagevortex.asn1.IdentityBlock;
 import net.messagevortex.asn1.IdentityStore;
 import net.messagevortex.blender.Blender;
 import net.messagevortex.blender.recipes.BlenderRecipe;
-import net.messagevortex.commandline.*;
+import net.messagevortex.commandline.CommandLineHandlerCipher;
+import net.messagevortex.commandline.CommandLineHandlerIdentityStore;
+import net.messagevortex.commandline.CommandLineHandlerInit;
+import net.messagevortex.commandline.CommandLineHandlerRedundancy;
+import net.messagevortex.commandline.CommandLineHandlerVersion;
 import net.messagevortex.router.Router;
 import net.messagevortex.router.operation.InternalPayloadSpace;
 import net.messagevortex.router.operation.InternalPayloadSpaceStore;
@@ -50,18 +54,18 @@ import net.messagevortex.transport.Transport;
 import picocli.CommandLine;
 
 @CommandLine.Command(
-        description = "A MessageVortex implementation for the privacy aware person.",
-        name = "MessageVortex",
-        mixinStandardHelpOptions = true,
-        versionProvider = Version.class,
-        subcommands = {
-                AsymmetricKeyPreCalculator.class,
-                CommandLineHandlerIdentityStore.class,
-                CommandLineHandlerCipher.class,
-                CommandLineHandlerVersion.class,
-                CommandLineHandlerInit.class,
-                CommandLineHandlerRedundancy.class
-        }
+    description = "A MessageVortex implementation for the privacy aware person.",
+    name = "MessageVortex",
+    mixinStandardHelpOptions = true,
+    versionProvider = Version.class,
+    subcommands = {
+        AsymmetricKeyPreCalculator.class,
+        CommandLineHandlerIdentityStore.class,
+        CommandLineHandlerCipher.class,
+        CommandLineHandlerVersion.class,
+        CommandLineHandlerInit.class,
+        CommandLineHandlerRedundancy.class
+    }
 )
 public class MessageVortex implements Callable<Integer> {
 
@@ -83,11 +87,11 @@ public class MessageVortex implements Callable<Integer> {
   private String configFile = "messageVortex.cfg";
 
   @CommandLine.Option(names = {"--timeoutAndDie"}, hidden = true,
-          description = "timeout before aboorting execution (for test purposes only)")
+      description = "timeout before aboorting execution (for test purposes only)")
   private int timeoutInSeconds = -1;
 
   @CommandLine.Option(names = {"--threadDumpInteval"}, hidden = true,
-          description = "timeout before aboorting execution (for test purposes only)")
+      description = "timeout before aboorting execution (for test purposes only)")
   private int threadDumpInterval = 300;
 
   static {
@@ -106,16 +110,16 @@ public class MessageVortex implements Callable<Integer> {
   private boolean verifyPrerequisites() {
     LOGGER.log(Level.INFO, "Checking bouncycastle version...");
     String bcversion = org.bouncycastle.jce.provider.BouncyCastleProvider
-            .class
-            .getPackage()
-            .getImplementationVersion();
-    LOGGER.log(Level.INFO, "Detected BouncyCastle version is "+bcversion);
-    if(bcversion==null) {
+        .class
+        .getPackage()
+        .getImplementationVersion();
+    LOGGER.log(Level.INFO, "Detected BouncyCastle version is " + bcversion);
+    if (bcversion == null) {
       LOGGER.log(Level.SEVERE, "unable to determine BC version (got NULL value)");
       return false;
     }
     Matcher m = Pattern.compile("(\\d+)\\.(\\d+)\\.(\\d+)(beta(\\d*))?")
-            .matcher(bcversion);
+        .matcher(bcversion);
     if (!m.matches()) {
       LOGGER.log(Level.SEVERE, "unable to parse BC version (" + bcversion + ")");
       return false;
@@ -124,10 +128,10 @@ public class MessageVortex implements Callable<Integer> {
       int minor = Integer.parseInt(m.group(2));
       if ((major == 1 && minor >= 60) || (major >= 2)) {
         LOGGER.log(Level.INFO, "Detected BC version is " + bcversion
-                + ". This should do the trick.");
+            + ". This should do the trick.");
       } else {
         LOGGER.log(Level.SEVERE, "Looks like your BC installation is heavily outdated. "
-                + "At least version 1.60 is recommended.");
+            + "At least version 1.60 is recommended.");
         return false;
       }
     }
@@ -142,15 +146,15 @@ public class MessageVortex implements Callable<Integer> {
       int i = JRE_AES_KEY_SIZE;
       if (i > 128) {
         LOGGER.log(Level.INFO, "Looks like JRE having an unlimited JCE installed (AES max allowed "
-                + "key length is = " + i + "). This is good.");
+            + "key length is = " + i + "). This is good.");
       } else {
         LOGGER.log(Level.SEVERE, "Looks like JRE not having an unlimited JCE installed (AES max "
-                + "allowed key length is = " + i + "). This is bad.");
+            + "allowed key length is = " + i + "). This is bad.");
         return false;
       }
     } catch (NoSuchAlgorithmException nsa) {
       LOGGER.log(Level.SEVERE, "OOPS... Got an exception while testing for an unlimited JCE. "
-              + "This is bad.", nsa);
+          + "This is bad.", nsa);
       return false;
     }
     return true;
@@ -200,16 +204,16 @@ public class MessageVortex implements Callable<Integer> {
 
       // load IdentityStore
       identityStore.put("default_identity_store", new IdentityStore(
-              new File(CommandLineHandlerIdentityStore.DEFAULT_FILENAME)));
+          new File(CommandLineHandlerIdentityStore.DEFAULT_FILENAME)));
 
       // setup non-standard identity stores
       for (String idstoreSection : cfg.getSectionListValue(null, "identity_store_setup")) {
         LOGGER.log(Level.INFO, "setting up identity store \"" + idstoreSection
-                + "\"");
+            + "\"");
         String fn = cfg.getStringValue(idstoreSection, "filename");
         if (fn == null) {
           throw new IOException("unable to obtain identity store filename of section "
-                  + idstoreSection + "");
+              + idstoreSection + "");
         }
         File f = new File(fn);
         if (!f.exists()) {
@@ -224,7 +228,7 @@ public class MessageVortex implements Callable<Integer> {
       BlenderRecipe.clearRecipes(null);
       for (String cl : lst.split(" *, *")) {
         BlenderRecipe.addRecipe(null,
-                (BlenderRecipe) getConfiguredClass(null, cl, BlenderRecipe.class));
+            (BlenderRecipe) getConfiguredClass(null, cl, BlenderRecipe.class));
       }
       for (String accountingSection : cfg.getSectionListValue(null, "recipe_setup")) {
         // FIXME there is something missing here! Just found this unused code snipped...
@@ -236,10 +240,10 @@ public class MessageVortex implements Callable<Integer> {
 
         // setup Accounting
         LOGGER.log(Level.INFO, "setting up accounting for routing layer \"" + accountingSection
-                + "\"");
+            + "\"");
         accountant.put(accountingSection.toLowerCase(), (Accountant) getDaemon(accountingSection,
-                cfg.getStringValue(accountingSection, "accounting_implementation"),
-                DaemonType.ACCOUNTING));
+            cfg.getStringValue(accountingSection, "accounting_implementation"),
+            DaemonType.ACCOUNTING));
 
       }
 
@@ -248,8 +252,8 @@ public class MessageVortex implements Callable<Integer> {
         // setup routers
         LOGGER.log(Level.INFO, "setting up routing layer \"" + routerSection + "\"");
         router.put(routerSection.toLowerCase(), (Router) getDaemon(routerSection,
-                cfg.getStringValue(routerSection, "router_implementation"),
-                DaemonType.ROUTING));
+            cfg.getStringValue(routerSection, "router_implementation"),
+            DaemonType.ROUTING));
       }
 
       // setup blending
@@ -257,8 +261,8 @@ public class MessageVortex implements Callable<Integer> {
         // setup blending
         LOGGER.log(Level.INFO, "setting up blending layer \"" + blendingSection + "\"");
         blender.put(blendingSection.toLowerCase(), (Blender) getDaemon(blendingSection,
-                cfg.getStringValue(blendingSection, "blender_implementation"),
-                DaemonType.BLEDING));
+            cfg.getStringValue(blendingSection, "blender_implementation"),
+            DaemonType.BLEDING));
 
       }
 
@@ -267,8 +271,8 @@ public class MessageVortex implements Callable<Integer> {
         // setup transport
         LOGGER.log(Level.INFO, "setting up transport layer \"" + transportSection + "\"");
         transport.put(transportSection.toLowerCase(), (Transport) getDaemon(transportSection,
-                cfg.getStringValue(transportSection, "transport_implementation"),
-                DaemonType.TRANSPORT));
+            cfg.getStringValue(transportSection, "transport_implementation"),
+            DaemonType.TRANSPORT));
       }
     } catch (IOException ioe) {
       LOGGER.log(Level.SEVERE, "Exception while setting up infrastructure", ioe);
@@ -317,7 +321,7 @@ public class MessageVortex implements Callable<Integer> {
    * @throws ClassNotFoundException if classname not found
    **/
   public static RunningDaemon getDaemon(String section, String classname, DaemonType type)
-          throws ClassNotFoundException {
+      throws ClassNotFoundException {
     return (RunningDaemon) getConfiguredClass(section, classname, RunningDaemon.class);
   }
 
@@ -336,7 +340,7 @@ public class MessageVortex implements Callable<Integer> {
    * @throws ClassNotFoundException if the named class cannot be found
    **/
   public static Object getConfiguredClass(String section, String name, Class templateClass)
-          throws ClassNotFoundException {
+      throws ClassNotFoundException {
     if (name == null) {
       throw new ClassNotFoundException("unable to obtain class \"null\"");
     }
@@ -346,14 +350,14 @@ public class MessageVortex implements Callable<Integer> {
       myConstructor = myClass.getConstructor(String.class);
     } catch (NoSuchMethodException e) {
       throw new ClassNotFoundException("unable to get apropriate constructor from class \""
-              + name + "\"", e);
+          + name + "\"", e);
     }
     if (!templateClass.isAssignableFrom(myClass)) {
       throw new ClassNotFoundException("Class \"" + name
-              + "\" does not implement required interfaces");
+          + "\" does not implement required interfaces");
     }
     try {
-      return myConstructor.newInstance(new Object[]{section});
+      return myConstructor.newInstance(new Object[] {section});
     } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
       throw new ClassNotFoundException("Class \"" + name + "\" failed running the constructor", e);
     }

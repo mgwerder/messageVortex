@@ -15,10 +15,10 @@ import net.messagevortex.asn1.encryption.Padding;
 import picocli.CommandLine;
 
 @CommandLine.Command(
-        description = "list available ciphers",
-        name = "list",
-        aliases = { "lst" },
-        mixinStandardHelpOptions = true
+    description = "list available ciphers",
+    name = "list",
+    aliases = {"lst"},
+    mixinStandardHelpOptions = true
 )
 public class CommandLineHandlerCipherList implements Callable<Integer> {
 
@@ -36,30 +36,30 @@ public class CommandLineHandlerCipherList implements Callable<Integer> {
   }
 
   @CommandLine.Option(names = {"--type", "-t"}, required = false,
-          description = "type of information (ASYM, SYM, MODE, PAD)")
+      description = "type of information (ASYM, SYM, MODE, PAD)")
   CipherType[] types = {ASYM, SYM, MODE, PAD};
 
   @Override
   public Integer call() throws Exception {
-    for(CipherType c:types) {
+    for (CipherType c : types) {
       switch (c) {
         case ASYM:
           System.out.println("Asymmetric cpiher types:");
           for (Algorithm a : Algorithm.getAlgorithms(AlgorithmType.ASYMMETRIC)) {
             System.out.print("  " + a.toString());
             System.out.print(" (modes: ");
-            int i=0;
-            for (Mode m: Mode.getModes(a)) {
-              if( i>0) {
+            int i = 0;
+            for (Mode m : Mode.getModes(a)) {
+              if (i > 0) {
                 System.out.print(", ");
               }
               i++;
               System.out.print(m.toString());
             }
             System.out.print("; paddings: ");
-            i=0;
-            for (Padding p: Padding.getAlgorithms(a.getAlgorithmType())) {
-              if( i>0) {
+            i = 0;
+            for (Padding p : Padding.getAlgorithms(a.getAlgorithmType())) {
+              if (i > 0) {
                 System.out.print(", ");
               }
               i++;
@@ -73,18 +73,18 @@ public class CommandLineHandlerCipherList implements Callable<Integer> {
           for (Algorithm a : Algorithm.getAlgorithms(AlgorithmType.SYMMETRIC)) {
             System.out.print("  " + a.toString());
             System.out.print(" (modes: ");
-            int i=0;
-            for (Mode m: Mode.getModes(a)) {
-              if( i>0) {
+            int i = 0;
+            for (Mode m : Mode.getModes(a)) {
+              if (i > 0) {
                 System.out.print(", ");
               }
               i++;
               System.out.print(m.toString());
             }
             System.out.print("; paddings: ");
-            i=0;
-            for (Padding p: Padding.getAlgorithms(a.getAlgorithmType())) {
-              if( i>0) {
+            i = 0;
+            for (Padding p : Padding.getAlgorithms(a.getAlgorithmType())) {
+              if (i > 0) {
                 System.out.print(", ");
               }
               i++;

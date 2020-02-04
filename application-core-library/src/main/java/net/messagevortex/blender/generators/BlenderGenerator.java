@@ -6,6 +6,6 @@ import net.messagevortex.blender.BlenderContent;
 
 public interface BlenderGenerator {
 
-    BlenderContent getBlenderContent(BlendingParameter parameter, VortexMessage msg);
+  BlenderContent getBlenderContent(BlendingParameter parameter, VortexMessage msg);
 
 }

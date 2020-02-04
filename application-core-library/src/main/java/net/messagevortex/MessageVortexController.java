@@ -54,7 +54,7 @@ public class MessageVortexController implements SignalHandler {
 
           // read exactly one line and close socket
           String command = new BufferedReader(
-                  new InputStreamReader(s.getInputStream(), StandardCharsets.UTF_8)
+              new InputStreamReader(s.getInputStream(), StandardCharsets.UTF_8)
           ).readLine();
           LOGGER.log(Level.INFO, "MessageVortex controller got command \"" + command + "\"");
 
@@ -66,7 +66,7 @@ public class MessageVortexController implements SignalHandler {
             s.getOutputStream().write("OK\r\n".getBytes(StandardCharsets.UTF_8));
           } else {
             LOGGER.log(Level.WARNING, "MessageVortex controller got illegal command \""
-                    + command + "\"");
+                + command + "\"");
           }
 
           s.close();
@@ -148,11 +148,11 @@ public class MessageVortexController implements SignalHandler {
    * @param milliSeconds the time in milliseconds
    */
   public synchronized void setTimeout(long milliSeconds) {
-    if(milliSeconds<=0) {
+    if (milliSeconds <= 0) {
       return;
     }
     LOGGER.log(Level.INFO, "MessageVortex controller sets timeout to " + milliSeconds / 1000
-            + " s");
+        + " s");
     if (timer != null) {
       timer.cancel();
     }

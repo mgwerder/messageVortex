@@ -5,19 +5,24 @@ import net.messagevortex.Version;
 import picocli.CommandLine;
 
 @CommandLine.Command(
-        description = "Get detailed version information",
-        name = "version",
-        aliases={ "v", "ver" },
-        mixinStandardHelpOptions = true,
-        subcommands = {
-                CommandLineHandlerCacheCalculate.class,
-        }
+    description = "Get detailed version information",
+    name = "version",
+    aliases = {"v", "ver"},
+    mixinStandardHelpOptions = true,
+    subcommands = {
+        CommandLineHandlerCacheCalculate.class,
+    }
 )
 public class CommandLineHandlerVersion implements Callable<Integer> {
 
-  public Integer call() throws Exception {
-    System.out.println("VERSION="+Version.getStringVersion());
-    System.out.println("BUILD="+Version.getBuild());
+  /***
+   * <p>Commandline handler to display application version.</p>
+   * @return the errorlevel
+   */
+  @Override
+  public Integer call() {
+    System.out.println("VERSION=" + Version.getStringVersion());
+    System.out.println("BUILD=" + Version.getBuild());
     return 0;
   }
 
