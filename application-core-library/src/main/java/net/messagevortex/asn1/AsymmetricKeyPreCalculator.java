@@ -62,7 +62,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
 
   public static final long serialVersionUID = 100000000031L;
 
-  private static final String TMP_PREFIX = "MessageVortexPrecalc";
+  private static final String TMP_PREFIX = "Precalc";
 
   private static final java.util.logging.Logger LOGGER;
   private static final boolean DISABLE_CACHE = false;
@@ -151,7 +151,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
     if (detached) {
       try {
         // create temporary file
-        t = File.createTempFile(TMP_PREFIX, ".keydir");
+        t = File.createTempFile("MessageVortex"+TMP_PREFIX, ".keydir");
       } catch (IOException ioe) {
         LOGGER.log(Level.WARNING, "Unable to create temp file", ioe);
       } finally {
@@ -346,7 +346,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
           lastSaved = System.currentTimeMillis();
           if (tempdir != null && cache.getCacheFillGrade() >= 0.999) {
             // move file as temp file and clear cache
-            String fn = File.createTempFile(TMP_PREFIX, ".key").getAbsolutePath();
+            String fn = File.createTempFile("MessageVortex"+TMP_PREFIX, ".key").getAbsolutePath();
             LOGGER.log(Level.INFO, "stored chunk to file \"" + fn + "\" to pick up");
             Files.move(Paths.get(filename + ".tmp"), Paths.get(fn),
                 StandardCopyOption.REPLACE_EXISTING);
@@ -594,7 +594,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
       for (File tfile : fl == null ? new File[0] : fl) {
         if (tfile.isFile()) {
           targetFile = tfile.getName();
-          if (targetFile.startsWith(TMP_PREFIX) && targetFile.endsWith(".key")) {
+          if (targetFile.startsWith("MessageVortex"+TMP_PREFIX) && targetFile.endsWith(".key")) {
             listOfFiles.add(tfile);
           }
         }
