@@ -52,6 +52,7 @@ public class MessageVortexLogger extends Logger {
     // set log formater
     consoleHandler.setFormatter(new MyLogFormatter());
     getGlobalLogger().getParent().addHandler(consoleHandler);
+    getGlobalLogger().log(Level.INFO, "log level is set to "+getGlobalLogLevel());
   }
 
   private MessageVortexLogger() {
@@ -61,6 +62,10 @@ public class MessageVortexLogger extends Logger {
   public static void setGlobalLogLevel(Level l) {
     consoleHandler.setLevel(l);
     getGlobalLogger().getParent().setLevel(l);
+  }
+
+  public static Level getGlobalLogLevel() {
+    return getGlobalLogger().getParent().getLevel();
   }
 
   public static Logger getGlobalLogger() {
@@ -80,8 +85,8 @@ public class MessageVortexLogger extends Logger {
           String time = sdf.format(new Date());
 
           sb.append(time).append(' ').append(record.getLevel().getLocalizedName()).append(": ")
-                  .append('[').append(Thread.currentThread().getName()).append("] ")
-                  .append(formatMessage(record)).append(LINE_SEPARATOR);
+                  .append('[').append(Thread.currentThread().getName()).append("/").append(record.getLoggerName())
+                  .append("] ").append(formatMessage(record)).append(LINE_SEPARATOR);
         }
 
         //noinspection ThrowableResultOfMethodCallIgnored
