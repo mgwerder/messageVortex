@@ -286,7 +286,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>net.messagevortex.MessageVortexS</mainClass>
+                            <mainClass>net.messagevortex.MessageVortex</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
