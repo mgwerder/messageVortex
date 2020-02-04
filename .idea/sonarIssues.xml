@@ -738,6 +738,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/messageVortex.cfgWritten">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/application-core-library/pom.xml">
           <value>
             <set />
@@ -778,7 +783,17 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/blender/DummyBlender.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/commandline/CommandLineHandlerIdentityStoreDump.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/commandline/CommandLineHandlerRedundancyAdd.java">
           <value>
             <set />
           </value>
@@ -889,6 +904,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/routing/FullMessageTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/routing/JGraphTest.java">
           <value>
             <set />
           </value>

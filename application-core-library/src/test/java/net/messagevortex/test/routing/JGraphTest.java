@@ -1,7 +1,7 @@
 package net.messagevortex.test.routing;
 
 import static junit.framework.TestCase.assertTrue;
-import static org.jsoup.helper.Validate.fail;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.FileOutputStream;
