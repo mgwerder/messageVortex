@@ -24,6 +24,7 @@ package net.messagevortex.asn1;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Arrays;
 import net.messagevortex.asn1.encryption.Algorithm;
 import net.messagevortex.asn1.encryption.AlgorithmType;
 import net.messagevortex.asn1.encryption.DumpType;
@@ -66,6 +67,7 @@ public class IdentityBlock extends AbstractBlock implements Serializable, Dumpab
   public static final long serialVersionUID = 100000000008L;
 
   private static int nextID = 0;
+  private static Object nextIdSemaphore = new Object();
 
   private static final int ENCRYPTED_HEADER_KEY = 1000;
   private static final int ENCRYPTED_BLOCK = 1001;
@@ -121,7 +123,9 @@ public class IdentityBlock extends AbstractBlock implements Serializable, Dumpab
     this.maxReplays = 1;
     this.valid = new UsagePeriod(3600);
     this.requests = IdentityBlock.NULLREQUESTS;
-    id = nextID++;
+    synchronized (nextIdSemaphore) {
+      id = nextID++;
+    }
   }
 
   /***
@@ -134,7 +138,9 @@ public class IdentityBlock extends AbstractBlock implements Serializable, Dumpab
   public IdentityBlock(byte[] b, AsymmetricKey ownIdentity) throws IOException {
     this.ownIdentity = ownIdentity;
     ASN1Encodable s = ASN1Sequence.getInstance(b);
-    id = nextID++;
+    synchronized (nextIdSemaphore) {
+      id = nextID++;
+    }
     parse(s);
   }
 
@@ -147,7 +153,9 @@ public class IdentityBlock extends AbstractBlock implements Serializable, Dumpab
    */
   public IdentityBlock(byte[] b) throws IOException {
     ASN1Encodable s = ASN1Sequence.getInstance(b);
-    id = nextID++;
+    synchronized (nextIdSemaphore) {
+      id = nextID++;
+    }
     parse(s);
   }
 
@@ -172,11 +180,13 @@ public class IdentityBlock extends AbstractBlock implements Serializable, Dumpab
     super();
     this.ownIdentity = ownIdentity;
     parse(to);
-    id = nextID++;
+    synchronized (nextIdSemaphore) {
+      id = nextID++;
+    }
   }
 
   public void setRequests(HeaderRequest[] hr) {
-    this.requests = hr;
+    this.requests = Arrays.copyOf(hr,hr.length);
   }
 
   @Override
@@ -498,7 +508,8 @@ public class IdentityBlock extends AbstractBlock implements Serializable, Dumpab
     }
     IdentityBlock o = (IdentityBlock) t;
     try {
-      return dumpValueNotation("", DumpType.ALL_UNENCRYPTED).equals(o.dumpValueNotation("", DumpType.ALL_UNENCRYPTED));
+      return dumpValueNotation("", DumpType.ALL_UNENCRYPTED).equals(o.dumpValueNotation("",
+              DumpType.ALL_UNENCRYPTED));
     } catch (IOException ioe) {
       return false;
     }

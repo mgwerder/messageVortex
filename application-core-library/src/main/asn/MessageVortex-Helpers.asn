@@ -7,9 +7,19 @@ BEGIN
   -- the maximum number of parameters that might be embedded
   maxNumberOfParameter      INTEGER ::= 127
 
-  UsagePeriod ::= SEQUENCE {
+  UsagePeriod ::= CHOICE {
+    absolute [2] AbsoluteUsagePeriod,
+    relative [3] RelativeUsagePeriod
+  }
+
+  AbsoluteUsagePeriod ::= SEQUENCE {
     notBefore       [0]     GeneralizedTime OPTIONAL,
     notAfter        [1]     GeneralizedTime OPTIONAL
+  }
+
+  RelativeUsagePeriod ::= SEQUENCE {
+    notBefore       [0]     INTEGER OPTIONAL,
+    notAfter        [1]     INTEGER OPTIONAL
   }
 
   -- contains a node spec of a routing point

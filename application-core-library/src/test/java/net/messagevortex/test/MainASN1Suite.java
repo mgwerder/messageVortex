@@ -4,6 +4,7 @@ package net.messagevortex.test;
 import junit.framework.JUnit4TestAdapter;
 import junit.framework.TestSuite;
 import net.messagevortex.asn1.AsymmetricKey;
+import net.messagevortex.asn1.HeaderRequest;
 import net.messagevortex.test.asn1.AbstractBlockTest;
 import net.messagevortex.test.asn1.AsymmetricKeyReencodingTest;
 import net.messagevortex.test.asn1.AsymmetricKeyTest;
@@ -11,6 +12,7 @@ import net.messagevortex.test.asn1.BlendingParameterTest;
 import net.messagevortex.test.asn1.BuildSamplesTest;
 import net.messagevortex.test.asn1.CipherSpecTest;
 import net.messagevortex.test.asn1.FuzzerTest;
+import net.messagevortex.test.asn1.HeaderRequestTest;
 import net.messagevortex.test.asn1.IdentityBlockTest;
 import net.messagevortex.test.asn1.IdentityStoreTest;
 import net.messagevortex.test.asn1.MacAlgorithmTest;
@@ -36,6 +38,7 @@ import org.junit.runners.Suite;
         AsymmetricKeyTest.class,
         AsymmetricKeyReencodingTest.class,
         IdentityStoreTest.class,
+        HeaderRequestTest.class,
         PaddingTest.class,
         IdentityBlockTest.class
 })
@@ -64,6 +67,7 @@ public class MainASN1Suite {
     s.addTest(new JUnit4TestAdapter(AsymmetricKeyTest.class));
     s.addTest(new JUnit4TestAdapter(AsymmetricKeyReencodingTest.class));
     s.addTest(new JUnit4TestAdapter(IdentityStoreTest.class));
+    s.addTest(new JUnit4TestAdapter(HeaderRequestTest.class));
     s.addTest(new JUnit4TestAdapter(PaddingTest.class));
     s.addTest(new JUnit4TestAdapter(IdentityBlockTest.class));
     return s;

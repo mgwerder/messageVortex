@@ -21,6 +21,9 @@ package net.messagevortex.transport.imap;
 // * SOFTWARE.
 // ************************************************************************************
 
+/***
+ * <p>This exception expresses a failure in IMAP processing.</p>
+ */
 public class ImapException extends Exception {
 
   private static final long serialVersionUID = 42L;

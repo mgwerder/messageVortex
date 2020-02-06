@@ -1,7 +1,7 @@
 package net.messagevortex.test.asn1;
 
 import net.messagevortex.MessageVortexLogger;
-import net.messagevortex.asn1.encryption.PRNG;
+import net.messagevortex.asn1.encryption.Prng;
 import net.messagevortex.router.operation.AddRedundancy;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,9 +30,9 @@ public class PaddingTest {
     int numberOfOutBlocks;
     int c1;
     int c2;
-    PRNG prng;
+    Prng prng;
 
-    public TestCase( byte[] in, byte[] out, int blockSize, int numberOfOutBlocks, int c1, int c2, PRNG prng) {
+    public TestCase( byte[] in, byte[] out, int blockSize, int numberOfOutBlocks, int c1, int c2, Prng prng) {
       this.in = in;
       this.out = out;
       this.blockSize = blockSize;
@@ -57,7 +57,7 @@ public class PaddingTest {
   public void simplePrngTest() {
     byte[] b = new byte[100];
     for (int i = 0; i < 1000; i++) {
-      PRNG p = new AddRedundancy.SimplePrng();
+      Prng p = new AddRedundancy.SimplePrng();
       for ( int j = 0; j < b.length; j++) {
         b[j] = p.nextByte();
       }

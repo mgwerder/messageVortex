@@ -40,31 +40,74 @@ public class MessageVortexLogger extends Logger {
 
   static final Handler consoleHandler = new ConsoleHandler();
 
+  private static int init = 0;
+  private static final Object lock = new Object();
+
   static {
-    // remove all existing console handler
-    Handler[] handlers = getGlobalLogger().getParent().getHandlers();
-    if (handlers != null) {
-      for (Handler h : handlers) {
-        getGlobalLogger().getParent().removeHandler(h);
+    init();
+  }
+
+  private static void init() {
+    synchronized (lock) {
+      if (init == 0) {
+        init = 1;
+
+        // remove all existing console handler
+        Handler[] handlers = getGlobalLogger().getParent().getHandlers();
+        if (handlers != null) {
+          for (Handler h : handlers) {
+            getGlobalLogger().getParent().removeHandler(h);
+          }
+        }
+
+        // set log formater
+        consoleHandler.setFormatter(new MyLogFormatter());
+        getGlobalLogger().getParent().addHandler(consoleHandler);
+        getGlobalLogger().log(Level.INFO, "log level is set to " + getGlobalLogLevel());
+
+        init = 2;
+
+        getLogger("Logger").log(Level.INFO, "Logger initialized");
       }
     }
-
-    // set log formater
-    consoleHandler.setFormatter(new MyLogFormatter());
-    getGlobalLogger().getParent().addHandler(consoleHandler);
   }
 
   private MessageVortexLogger() {
     super(null, null);
+    init();
   }
 
+  /***
+   * <p>Sets the provided log level globally.</p>
+   * @param l the log level to be set
+   */
   public static void setGlobalLogLevel(Level l) {
+    init();
     consoleHandler.setLevel(l);
     getGlobalLogger().getParent().setLevel(l);
   }
 
+  /***
+   * <p>Gets the log level of the global logger.</p>
+   * @return the previously set log level
+   */
+  public static Level getGlobalLogLevel() {
+    init();
+    return getGlobalLogger().getParent().getLevel();
+  }
+
+  /***
+   * <p>gets the global logger.</p>
+   * @return the requested logger
+   */
   public static Logger getGlobalLogger() {
+    init();
     return LogManager.getLogManager().getLogger(Logger.GLOBAL_LOGGER_NAME);
+  }
+
+  public static Logger getLogger(String name) {
+    init();
+    return getGlobalLogger().getLogger(Logger.GLOBAL_LOGGER_NAME);
   }
 
   static final class MyLogFormatter extends Formatter {
@@ -80,8 +123,9 @@ public class MessageVortexLogger extends Logger {
           String time = sdf.format(new Date());
 
           sb.append(time).append(' ').append(record.getLevel().getLocalizedName()).append(": ")
-                  .append('[').append(Thread.currentThread().getName()).append("] ")
-                  .append(formatMessage(record)).append(LINE_SEPARATOR);
+              .append('[').append(Thread.currentThread().getName()).append("/")
+              .append(record.getLoggerName()).append("] ")
+              .append(formatMessage(record)).append(LINE_SEPARATOR);
         }
 
         //noinspection ThrowableResultOfMethodCallIgnored
@@ -97,8 +141,8 @@ public class MessageVortexLogger extends Logger {
             assert true : "Never throw assertion" + ex;
           }
         }
-      } catch(Exception e) {
-        System.err.println( "DESASTER: exception while logging" );
+      } catch (Exception e) {
+        System.err.println("DESASTER: exception while logging");
         e.printStackTrace();
         System.exit(200);
       }
@@ -108,6 +152,7 @@ public class MessageVortexLogger extends Logger {
   }
 
   public static void flush() {
+    init();
     consoleHandler.flush();
   }
 

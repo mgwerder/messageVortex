@@ -25,7 +25,7 @@ package net.messagevortex.router;
 import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.asn1.IdentityStore;
 import net.messagevortex.asn1.IdentityStoreBlock;
-import net.messagevortex.asn1.RoutingBlock;
+import net.messagevortex.asn1.RoutingCombo;
 import net.messagevortex.asn1.VortexMessage;
 
 /**
@@ -95,7 +95,7 @@ public abstract class MessageFactory {
     return this.fullmsg;
   }
 
-  public abstract RoutingBlock build();
+  public abstract RoutingCombo build();
 
   public abstract GraphSet getGraph();
 

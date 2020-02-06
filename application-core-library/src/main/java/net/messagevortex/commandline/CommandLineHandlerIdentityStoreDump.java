@@ -7,15 +7,21 @@ import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.IdentityStore;
 import net.messagevortex.asn1.encryption.DumpType;
+import org.yaml.snakeyaml.Yaml;
 import picocli.CommandLine;
 
 @CommandLine.Command(
-        description = "dump content of IdentityStore",
-        name = "dump",
-        aliases = {"dp"},
-        mixinStandardHelpOptions = true
+    description = "dump content of IdentityStore",
+    name = "dump",
+    aliases = {"dp"},
+    mixinStandardHelpOptions = true
 )
 public class CommandLineHandlerIdentityStoreDump implements Callable<Integer> {
+
+  enum Format {
+    ASN1,
+    YAML
+  }
 
   private static final java.util.logging.Logger LOGGER;
 
@@ -24,10 +30,16 @@ public class CommandLineHandlerIdentityStoreDump implements Callable<Integer> {
   }
 
   @CommandLine.Option(names = {"--filename", "-f"},
-          description = "filename of the IdentityStorage file",
-          arity = "1"
+      description = "filename of the IdentityStorage file",
+      arity = "1"
   )
   String filename = CommandLineHandlerIdentityStore.DEFAULT_FILENAME;
+
+
+  @CommandLine.Option(names = {"--outputFormat", "-o"},
+      description = "Format of output"
+  )
+  Format outputFormat = Format.ASN1;
 
   @Override
   public Integer call() throws Exception {
@@ -36,7 +48,14 @@ public class CommandLineHandlerIdentityStoreDump implements Callable<Integer> {
       return MessageVortex.ARGUMENT_FAIL;
     }
     IdentityStore is = new IdentityStore(new File(filename));
-    System.out.println(is.dumpValueNotation("",DumpType.ALL_UNENCRYPTED));
+    String out = "";
+    if (outputFormat == Format.ASN1) {
+      out = is.dumpValueNotation("", DumpType.ALL_UNENCRYPTED);
+    } else {
+      Yaml yaml = new Yaml();
+      out = yaml.dump(is);
+    }
+    System.out.println(out);
     return 0;
   }
 }

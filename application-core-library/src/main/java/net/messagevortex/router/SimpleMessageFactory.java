@@ -29,7 +29,7 @@ import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.IdentityStore;
 import net.messagevortex.asn1.IdentityStoreBlock;
-import net.messagevortex.asn1.RoutingBlock;
+import net.messagevortex.asn1.RoutingCombo;
 
 /**
  * Created by martin.gwerder on 06.06.2016.
@@ -43,19 +43,27 @@ public class SimpleMessageFactory extends MessageFactory {
   }
 
   /* Edge set to be honored */
-  GraphSet graph = new GraphSet();
+  private GraphSet graph = new GraphSet();
 
   /* number of ms for the graph to be completed */
-  long minMessageTransferTime = 300L * 1000L;
+  private long minMessageTransferTime = 300L * 1000L;
 
   /* number of ms for the graph to be completed */
-  long maxMessageTransferTime = 600L * 1000L;
+  private long maxMessageTransferTime = 600L * 1000L;
 
   /* number of ms between arrival the first sending time */
-  long minStepProcessSTime = 30L * 1000L;
+  private long minStepProcessSTime = 30L * 1000L;
 
-  protected SimpleMessageFactory(String msg, int source, int target,
-                                 IdentityStoreBlock[] anonGroupMembers, IdentityStore is) {
+  /***
+   * <p>A simple message factory creating a possibly redundant message path.</p>
+   * @param msg     the message to be used
+   * @param source  the source address for the path
+   * @param target  the target address for the path
+   * @param anonGroupMembers the anonymity set to be used
+   * @param is      the identity store providing the necessary keys and identities
+   */
+  public SimpleMessageFactory(String msg, int source, int target,
+                              IdentityStoreBlock[] anonGroupMembers, IdentityStore is) {
     this.msg = msg;
 
     graph.setAnonymitySet(anonGroupMembers);
@@ -66,7 +74,7 @@ public class SimpleMessageFactory extends MessageFactory {
   /***
    * <p>build a simple message path.</p>
    */
-  public RoutingBlock build() {
+  public RoutingCombo build() {
 
     // building vector graphs
     // minimum Graph size is 2.5 time edges
@@ -87,21 +95,21 @@ public class SimpleMessageFactory extends MessageFactory {
 
     // set times
     long fullMsgTime = minMessageTransferTime + (maxMessageTransferTime - minMessageTransferTime)
-            * ExtendedSecureRandom.nextInt(1000) / 1000;
+        * ExtendedSecureRandom.nextInt(1000) / 1000;
     LOGGER.log(Level.FINE, "Transfer time of message is " + (fullMsgTime / 1000) + "s");
     long minArrival = 0;
     long maxArrival = 0;
     for (int i = 0; i < graph.size(); i++) {
       Edge g = graph.get(i);
       long minDelay = (long) ExtendedSecureRandom.nextRandomTime(minStepProcessSTime,
-              2 * minStepProcessSTime, 3 * minStepProcessSTime);
+          2 * minStepProcessSTime, 3 * minStepProcessSTime);
       long avg = (fullMsgTime - maxArrival) / (graph.size() - i);
       long maxDelay = (long) ExtendedSecureRandom.nextRandomTime(0, 0 + avg - minStepProcessSTime,
-              0 + 2 * avg - minStepProcessSTime);
+          0 + 2 * avg - minStepProcessSTime);
       LOGGER.log(Level.FINER, "  setting times to arrival:" + (minArrival / 1000) + "-"
-              + (maxArrival / 1000) + "; startDelay:" + (minDelay / 1000) + "-"
-              + ((minDelay + maxDelay) / 1000) + " (est. delivery time is "
-              + ((minArrival + (maxArrival - minArrival) / 2 + minDelay) / 1000) + "s)");
+          + (maxArrival / 1000) + "; startDelay:" + (minDelay / 1000) + "-"
+          + ((minDelay + maxDelay) / 1000) + " (est. delivery time is "
+          + ((minArrival + (maxArrival - minArrival) / 2 + minDelay) / 1000) + "s)");
       g.setStartTime(minDelay);
       g.setDelayTime(maxDelay);
 
@@ -113,7 +121,7 @@ public class SimpleMessageFactory extends MessageFactory {
     return buildRoutingBlock();
   }
 
-  private RoutingBlock buildRoutingBlock() {
+  private RoutingCombo buildRoutingBlock() {
     // determine message route
     GraphSet[] gs = graph.getRoutes();
     GraphSet msgpath = gs[ExtendedSecureRandom.nextInt(gs.length)];
@@ -121,12 +129,25 @@ public class SimpleMessageFactory extends MessageFactory {
     return graph.getRoutingBlock();
   }
 
+  /***
+   * <p>Sets the maximum time allowed to transfer the message to the final destination.</p>
+   *
+   * @param newmax the new maximum transfer time in seconds
+   * @return the previously set transfer time
+   */
   public long setMaxTransferTime(long newmax) {
     long ret = maxMessageTransferTime;
     maxMessageTransferTime = newmax;
     return ret;
   }
 
+  /***
+   * <p>Sets the minimum time required to process a message in a node.</p>
+   *
+   * <p>This time includes anti-malware related processing or anti-UBE related actions.</p>
+   * @param newmin the new time in seconds to be set
+   * @return the previously set time
+   */
   public long setMinStepProcessSTime(long newmin) {
     long ret = minStepProcessSTime;
     minStepProcessSTime = newmin;
@@ -141,8 +162,14 @@ public class SimpleMessageFactory extends MessageFactory {
     return graph;
   }
 
+  /***
+   * <p>This is a test methode sheduled to be removed.</p>
+   *
+   * @param args          ordinary main args (ignored)
+   * @throws IOException  if the function was unable to load the identity store from filesystem
+   */
   public static void main(String[] args) throws IOException {
-    MessageVortexLogger.setGlobalLogLevel(Level.FINEST);
+    //MessageVortexLogger.setGlobalLogLevel(Level.FINEST);
     LOGGER.log(Level.INFO, "Loading identity store");
     IdentityStore identityStore = new IdentityStore(new File("identityStore.cfg"));
     LOGGER.log(Level.INFO, "getting anon set");
