@@ -25,7 +25,7 @@ function addrow() {
 mkdir -p ${WWWDIR}/devel/ 2>/dev/null
 (cd $dir/../application-core-library/target/apidocs; zip -9ur ${WWWDIR}/devel/messageVortex_apidoc.zip .)
 (cd $dir/../application-core-library/; zip -9ur ${WWWDIR}/devel/messageVortex_development_core.zip . -x target/**/* )
-cp -u $dir/../application-core-library/target/messagevortex.jar ${WWWDIR}/devel/messageVortex_development_core.jar
+cp -u $dir/../application-core-library/target/MessageVortex-core.jar ${WWWDIR}/devel/messageVortex_development_core.jar
 cp -u $dir/../rfc/src/xml2rfc/draft-gwerder-*.xml  ${WWWDIR}/devel/
 #cp $dir/target/messageVortex_apidoc.zip ${WWWDIR}/devel/
 (cd ${WWWDIR}/devel/; mkdir apidoc 2>/dev/null; cd apidoc; unzip -qox ..//messageVortex_apidoc.zip)

@@ -26,6 +26,10 @@ import java.io.IOException;
 
 public class MessageVortexConfig extends Config {
 
+  public static final String DEFAULT_FILENAME = "messageVortex.cfg";
+
+  private static Object lock = new Object();
+
   private MessageVortexConfig() throws IOException {
     // This constructor hides a default constructor
     super("messageVortex.cfgRessources");
@@ -44,9 +48,11 @@ public class MessageVortexConfig extends Config {
    * @throws IOException if errors occurred during reading of messageVortex.cfgRessources
    */
   private static synchronized Config createConfig() throws IOException {
-    if (defaultConfig == null) {
-      Config cfg = new MessageVortexConfig();
-      defaultConfig = cfg;
+    synchronized (lock) {
+      if (defaultConfig == null) {
+        Config cfg = new MessageVortexConfig();
+        defaultConfig = cfg;
+      }
     }
     return defaultConfig;
   }

@@ -1,0 +1,15 @@
+org.snakeyaml.engine.v2.api
+org.snakeyaml.engine.v2.api.lowlevel
+org.snakeyaml.engine.v2.common
+org.snakeyaml.engine.v2.composer
+org.snakeyaml.engine.v2.constructor
+org.snakeyaml.engine.v2.emitter
+org.snakeyaml.engine.v2.events
+org.snakeyaml.engine.v2.exceptions
+org.snakeyaml.engine.v2.nodes
+org.snakeyaml.engine.v2.parser
+org.snakeyaml.engine.v2.representer
+org.snakeyaml.engine.v2.resolver
+org.snakeyaml.engine.v2.scanner
+org.snakeyaml.engine.v2.serializer
+org.snakeyaml.engine.v2.tokens

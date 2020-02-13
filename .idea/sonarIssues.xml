@@ -8,6 +8,11 @@
             <set />
           </value>
         </entry>
+        <entry key="/a.dummy">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="/a.regexp">
           <value>
             <set />
@@ -733,6 +738,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/messageVortex.cfgWritten">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/application-core-library/pom.xml">
           <value>
             <set />
@@ -753,12 +763,67 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/MessageVortexController.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/asn1/AlgorithmParameter.java">
           <value>
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/asn1/AsymmetricKeyPreCalculator.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/asn1/yaml/IdentityStoreRepresenter.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/asn1/yaml/IdentityStoreYamlHandler.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/asn1/yaml/MessageVortexRepresenter.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/blender/DummyBlender.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/commandline/CommandLineHandlerIdentityStoreDump.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/commandline/CommandLineHandlerRedundancyAdd.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/commandline/CommandLineHandlerVersion.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/router/operation/AddRedundancy.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/transport/CustomKeyManager.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/transport/dummy/DummyTransportTrx.java">
           <value>
             <set />
           </value>
@@ -849,6 +914,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/routing/FullMessageTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/routing/JGraphTest.java">
           <value>
             <set />
           </value>

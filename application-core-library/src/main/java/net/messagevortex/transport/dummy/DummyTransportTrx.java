@@ -80,8 +80,6 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
    *
    * @param blender reference to the respective blender layer
    * @throws IOException if therad problems occure
-   *
-   * @FIXME constructor not thread safe
    */
   public DummyTransportTrx(TransportReceiver blender) throws IOException {
     synchronized (endpoints) {
@@ -107,6 +105,7 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
    *
    * @param address the string representation of the target address on the transport layer
    * @param is      the input stream to be sent
+   *
    * @throws IOException if requested endpoint id is unknown
    */
   public void sendMessage(final String address, InputStream is) throws IOException {

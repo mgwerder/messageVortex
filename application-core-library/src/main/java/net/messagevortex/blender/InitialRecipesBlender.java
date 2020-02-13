@@ -21,6 +21,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
+
 import net.messagevortex.Config;
 import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexLogger;
@@ -31,7 +32,7 @@ import net.messagevortex.asn1.IdentityStore;
 import net.messagevortex.asn1.IdentityStoreBlock;
 import net.messagevortex.asn1.InnerMessageBlock;
 import net.messagevortex.asn1.PrefixBlock;
-import net.messagevortex.asn1.RoutingBlock;
+import net.messagevortex.asn1.RoutingCombo;
 import net.messagevortex.asn1.VortexMessage;
 import net.messagevortex.asn1.encryption.DumpType;
 import net.messagevortex.blender.recipes.BlenderRecipe;
@@ -43,7 +44,7 @@ public class InitialRecipesBlender extends Blender {
 
   static {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-    MessageVortexLogger.setGlobalLogLevel(Level.ALL);
+    //MessageVortexLogger.setGlobalLogLevel(Level.ALL);
   }
 
   private String identity;
@@ -51,7 +52,6 @@ public class InitialRecipesBlender extends Blender {
   private BlendingReceiver router;
   private IdentityStore identityStore;
   private int anonSetSize = 5;
-  private String recipes = null;
 
   /**
    * <p>An initial blender implementation based on anonymity recipes.</p>
@@ -79,6 +79,8 @@ public class InitialRecipesBlender extends Blender {
    * @param identity        the identity (receiver/sender address)
    * @param router          the router layer to be used
    * @param identityStore   the identity store to be used (for decryption of headers)
+   * @param acc             the accountant to be used
+   *
    * @throws IOException    if anything fails :-D
    */
   public InitialRecipesBlender(String identity, BlendingReceiver router,
@@ -197,14 +199,14 @@ public class InitialRecipesBlender extends Blender {
 
       // get anonymity set
       List<IdentityStoreBlock> anonSet = istore.getAnonSet(anonSetSize);
-      if (anonSet==null) {
+      if (anonSet == null) {
         LOGGER.log(Level.WARNING, "unable to get anonymity set for message");
         return false;
       }
 
       // get receipes
-      BlenderRecipe recipe = BlenderRecipe.getRecipe(recipes, anonSet);
-      if (recipe==null) {
+      BlenderRecipe recipe = BlenderRecipe.getRecipe(null, anonSet);
+      if (recipe == null) {
         LOGGER.log(Level.WARNING, "unable to get recipe for message");
         return false;
       }
@@ -216,7 +218,7 @@ public class InitialRecipesBlender extends Blender {
         IdentityStoreBlock fromAddr = istore.getIdentity(from[0].toString());
 
         IdentityStoreBlock toAddr = istore.getIdentity(receiverAddress.toString());
-        RoutingBlock rb = recipe.applyRecipe(anonSet, fromAddr, toAddr);
+        RoutingCombo rb = recipe.applyRecipe(anonSet, fromAddr, toAddr);
 
         if (rb == null) {
           LOGGER.log(Level.WARNING, "Unable to route message to " + receiverAddress.toString());

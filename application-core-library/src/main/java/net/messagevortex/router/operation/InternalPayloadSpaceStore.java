@@ -22,9 +22,11 @@ package net.messagevortex.router.operation;
 // * SOFTWARE.
 // ************************************************************************************
 
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
 import net.messagevortex.asn1.IdentityBlock;
 
 public class InternalPayloadSpaceStore {
@@ -42,7 +44,7 @@ public class InternalPayloadSpaceStore {
                                                  InternalPayloadSpace payload) {
     InternalPayloadSpace ret = null;
     synchronized (internalPayloadMap) {
-      String key = new String(identity.getIdentityKey().getPublicKey());
+      String key = new String(identity.getIdentityKey().getPublicKey(), StandardCharsets.UTF_8);
       ret = internalPayloadMap.get(key);
       if (payload != null) {
         internalPayloadMap.put(key, payload);
@@ -62,10 +64,11 @@ public class InternalPayloadSpaceStore {
   public InternalPayloadSpace getInternalPayload(IdentityBlock identity) {
     InternalPayloadSpace ret;
     synchronized (internalPayloadMap) {
-      String key = new String(identity.getIdentityKey().getPublicKey());
+      String key = new String(identity.getIdentityKey().getPublicKey(), StandardCharsets.UTF_8);
       ret = internalPayloadMap.get(key);
       if (ret == null) {
         ret = new InternalPayloadSpace(this, identity);
+        internalPayloadMap.put(key, ret);
       }
     }
     return ret;

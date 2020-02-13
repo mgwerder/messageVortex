@@ -1,45 +1,212 @@
-title=About
-date=2018-05-02
-type=page
+title=About 
+date=2018-05-02 
+type=page 
 status=published
 ~~~~~~
-<h1>What is it?</h1>
-<p>
-  <img src="/images/MessageVortexLogo_big.png" style="float:right;max-width:200px;min-width:30%;background-color:#fff;border: 2px solid black;"/>
-  MessageVortex is a protocol which is aimed to maintain the anonymity of sender and 
-  recipient of a message towards third parties. Unlike other protocols, it does not 
-  provide an own transport protocol. Instead, it hides in common transport 
+<h1>What is it?</h1> 
+
+<p> 
+  <img src="/images/MessageVortexLogo_big.png" alt="Logo" style="float:right;max-width:200px;min-width:30%;background-color:#fff;border: 2px solid black; border-radius: 5%; padding: 5px; margin:5px;" class="shadow-sm"/> 
+  MessageVortex is a protocol which is aimed to maintain the
+  anonymity of sender and recipient of a message towards third parties. In
+  academia, this concept is called unlinkability. Unlike other protocols, it does
+  not provide its transport protocol. Instead, it hides in common transport
   facilities such as email (SMTP/IMAP) or chat (XMPP).
+
 </p>
+
+<p> 
+  The protocol does provide the unlinkability by chucking the original message
+  into pieces. Then it is passed from node to node. On each node, we apply
+  operations very similar to the ones used in fault-tolerant disk systems. Any
+  VortexMessage no matter how big or small may carry parts or the full message. In
+  one routing node (the recipient) the message is assembled and thus readable for
+  the recipient. We refer the whole routing process onionized mixing. 
+  &quot;Mixing&quot; is  not entirely accurate as the protocol does more. It adds 
+  redundancy information to the protocol while sending the message in chunks. This 
+  redundancy makes it next to impossible for someone to follow the message flow. 
+</p>
+
+<h1 style="clear: both; margin-bottom:10px;">Features</h1>
+<div class="container-fluid">
+	<div id="myCarousel" class="carousel slide" data-ride="carousel"><!-- -->
+		<!-- Carousel indicators (Do not work porperly as JS reorders elements)-->
+		<ol class="carousel-indicators">
+			<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+			<li data-target="#myCarousel" data-slide-to="1"></li>
+			<li data-target="#myCarousel" data-slide-to="2"></li>
+			<li data-target="#myCarousel" data-slide-to="3"></li>
+			<li data-target="#myCarousel" data-slide-to="4"></li>
+			<li data-target="#myCarousel" data-slide-to="5"></li>
+		</ol>
+		<!-- Wrapper for carousel items -->
+		<div class="carousel-inner row w-100 mx-auto" role="listbox">
+			<div class="carousel-item col-md-4 active animated fadeIn">
+				<div class="card shadow">
+					<div class="card-img-top card-img-top-250">
+						<span class="fa-stack fa-54x">
+							<i class="fas fa-binoculars fa-stack-1x"></i>
+							<i class="fas fa-ban fa-stack-2x animated fadeIn infinite" style="color:Tomato"></i>
+						</span>
+					</div>
+					<div class="card-block p-t-2">
+						<h6 class="small text-wide p-b-2">Unobservable</h6>
+						<p>
+							It is not possible to observe a sender by design with the MessageVortex protocol.
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="carousel-item col-md-4 animated fadeIn">
+				<div class="card shadow">
+					<div class="card-img-top card-img-top-250">
+						<span class="fa-stack fa-54x">
+							<i class="fas fa-server fa-stack-1x"></i>
+							<i class="fas fa-ban fa-stack-2x animated swing infinite" style="color:Tomato"></i>
+						</span>
+					</div>
+					<div class="card-block p-t-2">
+						<h6 class="small text-wide p-b-2">No central infrastructure</h6>
+						<p>
+							As there is no internet infrastructure required! Anyone may start using th protocol immediately. 
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="carousel-item col-md-4 animated fadeIn">
+				<div class="card shadow">
+					<div class="card-img-top card-img-top-250">
+						<span class="fa-stack fa-54x animated infinite tada">
+							<i class="fas  fa-ghost fa-stack-1x"></i>
+						</span>
+					</div>
+					<div class="card-block p-t-2">
+						<h6 class="small text-wide p-b-2">No possibility to follow messages</h6>
+						<p>
+							No server knows where messages pass through. Everything is under senders control.
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="carousel-item col-md-4 animated fadeIn">
+				<div class="card shadow">
+					<div class="card-img-top card-img-top-250">
+						<span class="fa-stack fa-54x">
+							<i class="fas fa-network-wired fa-stack-1x animated rubberBand infinite"></i>
+						</span>
+					</div>
+					<div class="card-block p-t-2">
+						<h6 class="small text-wide p-b-2">Full control for RBB</h6>
+						<p>
+							A Routing Block Builder (RBB; typically the sender of a message) has full control over 
+							the security of a message.
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="carousel-item col-md-4 animated fadeIn">
+				<div class="card shadow">
+					<div class="card-img-top card-img-top-250">
+						<span class="fa-stack fa-54x">
+							<i class="fas fa-expand-arrows-alt fa-stack-1x animated rotate infinite"></i>
+						</span>
+					</div>
+					<div class="card-block p-t-2">
+						<h6 class="small text-wide p-b-2">No necessity for simultaneous upgrades</h6>
+						<p>
+							Every node or endpoint has its own unique properties. Not upgrading may endanger the nodes 
+							security but does not affect the MessageVortex network.
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="carousel-item col-md-4 animated fadeIn">
+				<div class="card shadow">
+					<div class="card-img-top card-img-top-250">
+						<span class="fa-stack fa-54x">
+							<i class="fab fa-raspberry-pi fa-stack-1x animated heartBeat infinite"></i>
+						</span>
+					</div>
+					<div class="card-block p-t-2">
+						<h6 class="small text-wide p-b-2">Runs on small devices</h6>
+						<p>
+							Even a device as small as a RaspberryPi Zero W may run a VortexNode.
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>	
+		<!-- Carousel controls -->
+		<!--<a class="carousel-control-prev" href="#myCarousel" data-slide="prev">
+			<span class="carousel-control-prev-icon"></span>
+		</a>
+		<a class="carousel-control-next" href="#myCarousel" data-slide="next">
+			<span class="carousel-control-next-icon"></span>
+		</a>-->
+		<a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
+			<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+			<span class="sr-only">Previous</span>
+		</a>
+		<a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
+			<span class="carousel-control-next-icon" aria-hidden="true"></span>
+			<span class="sr-only">Next</span>
+		</a>
+
+	</div> 
+	<!--<script>
+	$(document).ready(function() {
+	  $("#myCarousel").on("slide.bs.carousel", function(e) {
+		var $e = $(e.relatedTarget);
+		var idx = $e.index();
+		var itemsPerSlide = 3;
+		var totalItems = $(".carousel-item").length;
+
+		if (idx >= totalItems - (itemsPerSlide - 1)) {
+		  var it = itemsPerSlide - (totalItems - idx);
+		  for (var i = 0; i < it; i++) {
+			// append slides to end
+			if (e.direction == "left") {
+			  $(".carousel-item")
+				.eq(i)
+				.appendTo(".carousel-inner");
+			} else {
+			  $(".carousel-item")
+				.eq(0)
+				.appendTo($(this).find(".carousel-inner"));
+			}
+		  }
+		}
+	  });
+	});
+	</script>-->
+</div>
+
+<h1 style="clear: both;">Why should we use just another protocol?</h1>
 <p>
-  This is done by something you might call as onionized mixing. 
-  &quot;Mixing&quot; is not entirely true as the protocol does more.
-  It adds redundancy information to the protocol while sending the message in chunks.
-  This redundancy makes it next to impossible for someone to follow the message flow.
+  What is so special about the protocol you might ask. First, it has some unique 
+  properties because it hides within other protocols. Therefore, all "ordinary 
+  users" of the protocol do improve hiding as they increase the mass to be analyzed. 
+  Another unique property is that it relays not on any trust into a central 
+  infrastructure. In fact, we assume malicious nodes. Third, any message 
+  transferring account may be used to send VortexMessages. No need to build 
+  specialized servers. A smartphone or an ordinary PC can do it.
 </p>
-<h1 style="float:clear;">Why should we use just another protocol?</h1>
-<p>
-What is so special about the protocol you might ask. 
-First, it has some unique properties due to the fact that it hides within other protocols. 
-Therefore, all &quot;ordinary users&quot; of the protocol do improve hiding as they increase the mass to be analyzed. 
-Another unique property is that it relays not on any trust into a central infrastructure. 
-Infact, we assume malicious nodes.
-Third, any message transferring account may be used to send VortexMessages. 
-No need to buid specialized servers. 
-A smartphone or an ordinary PC can do it.
-</p>
+
 <h1>Where should I start?</h1>
 <p>
-Currently published is only the draft of the RFC document. 
-If you are interested in the projects source code, feel free to contact the website owner. 
-There is already a working (but not yet complete) implementation available.
+  Currently published is only the draft of the RFC document some academic work and 
+  an executable binary. If you are interested in the projects source code, feel free 
+  to contact the website owner. It should be released, but at this point, the code 
+  is still in desperate need of some massaging. There is already a working (but not 
+  yet complete) implementation for academic experiments available.
+</p>
+
+<p>
+  Just give it a try.
 </p>
 <p>
-A reference implementation in Java will be available in the download section soon. 
-Just give it a try.
-</p>
-<p>
-In the meantime feel free to read the RFC draft or the other docs. 
-They are becomming more and more stable. The protocol may be considered as final.
-<style="float:clear;"/>
+  Until the end user version is released, feel free to read the RFC draft or the 
+  other docs. They are becoming more and more stable. The protocol may be considered 
+  as final.
+  <span style="clear:both;"></span>
 </p>

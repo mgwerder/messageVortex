@@ -44,5 +44,10 @@ BEGIN
     period UsagePeriod
   }
 
+  HeaderRequestUpgrade ::= SEQUENCE {
+    version		OCTET STRING,
+	identifier  OCTET STRING
+  }
+
 
 END

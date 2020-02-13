@@ -14,7 +14,8 @@ import picocli.CommandLine;
                 CommandLineHandlerIdentityStoreGenerate.class,
                 CommandLineHandlerIdentityStoreAdd.class,
                 CommandLineHandlerIdentityStoreDel.class,
-                CommandLineHandlerIdentityStoreDump.class
+                CommandLineHandlerIdentityStoreDump.class,
+                CommandLineHandlerIdentityStoreInitDemo.class
         }
 )
 public class CommandLineHandlerIdentityStore implements Callable<Integer> {

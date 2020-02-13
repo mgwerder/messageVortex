@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 import java.util.logging.Level;
 
 import net.messagevortex.MessageVortexLogger;
@@ -45,8 +46,8 @@ import org.bouncycastle.asn1.DERTaggedObject;
  * Represents a the Blending specification of the router block.
  */
 public abstract class AbstractRedundancyOperation
-        extends Operation
-        implements ASN1Choice, Serializable, Dumpable {
+    extends Operation
+    implements ASN1Choice, Serializable, Dumpable {
 
   public static final long serialVersionUID = 100000000032L;
 
@@ -61,7 +62,7 @@ public abstract class AbstractRedundancyOperation
 
   static {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-    MessageVortexLogger.setGlobalLogLevel(Level.ALL);
+    //MessageVortexLogger.setGlobalLogLevel(Level.ALL);
   }
 
   int inputId;
@@ -113,9 +114,9 @@ public abstract class AbstractRedundancyOperation
 
     inputId = parseIntval(ASN1TaggedObject.getInstance(s1.getObjectAt(i++)), INPUT_ID, "inputId");
     dataStripes = parseIntval(ASN1TaggedObject.getInstance(s1.getObjectAt(i++)), DATA_STRIPES,
-            "dataStripes");
+        "dataStripes");
     redundancyStripes = parseIntval(ASN1TaggedObject.getInstance(s1.getObjectAt(i++)), REDUNDANCY,
-            "redundancy");
+        "redundancy");
 
     // reading keys
     ASN1TaggedObject to = ASN1TaggedObject.getInstance(s1.getObjectAt(i++));
@@ -131,7 +132,7 @@ public abstract class AbstractRedundancyOperation
     }
 
     outputId = parseIntval(ASN1TaggedObject.getInstance(s1.getObjectAt(i++)), OUTPUT_ID,
-            "outputId");
+        "outputId");
     gfSize = parseIntval(ASN1TaggedObject.getInstance(s1.getObjectAt(i++)), GF_SIZE, "gfSize");
 
     LOGGER.log(Level.FINER, "Finished parse()");
@@ -273,7 +274,11 @@ public abstract class AbstractRedundancyOperation
    * @throws ArithmeticException if the number of keys doees not match the number of stripes
    */
   public final SymmetricKey[] setKeys(List<SymmetricKey> keys) {
-    if (this.dataStripes + this.redundancyStripes != keys.size()) {
+    if (keys == null) {
+      keys = new Vector<SymmetricKey>();
+    }
+
+    if (this.dataStripes + this.redundancyStripes != keys.size() && keys.size() != 0) {
       throw new ArithmeticException("illegal number of keys");
     }
 
@@ -304,7 +309,7 @@ public abstract class AbstractRedundancyOperation
    */
   public final int setGfSize(int omega) {
     if (omega < 2 || omega > 16
-            || this.redundancyStripes + this.dataStripes > BitShifter.lshift(2, omega, (byte) 33)) {
+        || this.redundancyStripes + this.dataStripes > BitShifter.lshift(2, omega, (byte) 33)) {
       throw new ArithmeticException("galois field too small for the stripes to be acomodated");
     }
     int old = this.gfSize;

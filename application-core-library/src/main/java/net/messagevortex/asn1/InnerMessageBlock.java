@@ -65,7 +65,7 @@ public class InnerMessageBlock extends AbstractBlock implements Serializable {
   private PrefixBlock prefix;
   private IdentityBlock identity;
   private byte[] identitySignature = null;
-  private RoutingBlock routing;
+  private RoutingCombo routing;
   private Object payloadLock = new Object();
   private PayloadChunk[] payload = new PayloadChunk[0];
 
@@ -76,11 +76,11 @@ public class InnerMessageBlock extends AbstractBlock implements Serializable {
   }
 
   public InnerMessageBlock() throws IOException {
-    this(new PrefixBlock(), new IdentityBlock(), new RoutingBlock());
+    this(new PrefixBlock(), new IdentityBlock(), new RoutingCombo());
   }
 
   public InnerMessageBlock(Algorithm sym, AsymmetricKey asym) throws IOException {
-    this(new PrefixBlock(new SymmetricKey(sym)), new IdentityBlock(asym), new RoutingBlock());
+    this(new PrefixBlock(new SymmetricKey(sym)), new IdentityBlock(asym), new RoutingCombo());
   }
 
   /***
@@ -90,7 +90,7 @@ public class InnerMessageBlock extends AbstractBlock implements Serializable {
    * @param i       the header/identity block to be used
    * @param routing the router block to be used
    */
-  public InnerMessageBlock(PrefixBlock prefix, IdentityBlock i, RoutingBlock routing) {
+  public InnerMessageBlock(PrefixBlock prefix, IdentityBlock i, RoutingCombo routing) {
     this.prefix = prefix;
     identity = i;
     this.routing = routing;
@@ -164,11 +164,11 @@ public class InnerMessageBlock extends AbstractBlock implements Serializable {
     ASN1TaggedObject ae = ASN1TaggedObject.getInstance(s1.getObjectAt(i++));
     switch (ae.getTagNo()) {
       case ROUTING_PLAIN:
-        routing = new RoutingBlock(ae.getObject());
+        routing = new RoutingCombo(ae.getObject());
         break;
       case ROUTING_ENCRYPTED:
         try {
-          routing = new RoutingBlock(ASN1Sequence.getInstance(prefix.getKey()
+          routing = new RoutingCombo(ASN1Sequence.getInstance(prefix.getKey()
                   .decrypt(ASN1OctetString.getInstance(ae.getObject()).getOctets())));
         } catch (IOException ioe) {
           throw new IOException("error while decrypting router block", ioe);
@@ -293,7 +293,7 @@ public class InnerMessageBlock extends AbstractBlock implements Serializable {
     return identity;
   }
 
-  public RoutingBlock getRouting() {
+  public RoutingCombo getRouting() {
     return routing;
   }
 
@@ -359,8 +359,8 @@ public class InnerMessageBlock extends AbstractBlock implements Serializable {
    * @param newRouting the routing block to be set
    * @return the previously set routing block
    */
-  public RoutingBlock setRouting(RoutingBlock newRouting) {
-    RoutingBlock ret = routing;
+  public RoutingCombo setRouting(RoutingCombo newRouting) {
+    RoutingCombo ret = routing;
     routing = newRouting;
     return ret;
   }

@@ -72,6 +72,18 @@ public class HeaderRequestIncreaseMessageQuota extends HeaderRequest implements 
     return quota;
   }
 
+  /***
+   * <p>Sets the quota of the request.</p>
+   *
+   * @param newQuota the new quota to be set
+   * @return         the previously set quota
+   */
+  public long setQuota(long newQuota) {
+    long old = quota;
+    quota = newQuota;
+    return old;
+  }
+
   public int getId() {
     return 0;
   }

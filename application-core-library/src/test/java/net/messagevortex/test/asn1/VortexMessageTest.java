@@ -30,7 +30,7 @@ import net.messagevortex.asn1.AbstractBlock;
 import net.messagevortex.asn1.IdentityBlock;
 import net.messagevortex.asn1.InnerMessageBlock;
 import net.messagevortex.asn1.PrefixBlock;
-import net.messagevortex.asn1.RoutingBlock;
+import net.messagevortex.asn1.RoutingCombo;
 import net.messagevortex.asn1.SymmetricKey;
 import net.messagevortex.asn1.VortexMessage;
 import net.messagevortex.asn1.encryption.DumpType;
@@ -65,9 +65,9 @@ public class VortexMessageTest {
                 PrefixBlock randomOuterPrefixBlock=new PrefixBlock();
                 randomOuterPrefixBlock.setKey(new SymmetricKey() );
                 IdentityBlock randomIdentityBlock=new IdentityBlock();
-                RoutingBlock randomRoutingBlock=new RoutingBlock();
+                RoutingCombo randomRoutingCombo =new RoutingCombo();
                 PrefixBlock randomPrefixBlock=new PrefixBlock();
-                VortexMessage s = new VortexMessage(randomOuterPrefixBlock,new InnerMessageBlock( randomPrefixBlock,randomIdentityBlock,randomRoutingBlock));
+                VortexMessage s = new VortexMessage(randomOuterPrefixBlock,new InnerMessageBlock( randomPrefixBlock,randomIdentityBlock, randomRoutingCombo));
                 String s1=s.dumpValueNotation( "" );
                 byte[] b1 = s.toBytes(DumpType.ALL_UNENCRYPTED);
                 Assert.assertTrue( "Byte representation may not be null", b1 != null );
@@ -117,9 +117,9 @@ public class VortexMessageTest {
             PrefixBlock randomOuterPrefixBlock=new PrefixBlock();
             randomOuterPrefixBlock.setKey(new SymmetricKey() );
             IdentityBlock randomIdentityBlock=new IdentityBlock();
-            RoutingBlock randomRoutingBlock=new RoutingBlock();
+            RoutingCombo randomRoutingCombo =new RoutingCombo();
             PrefixBlock randomPrefixBlock=new PrefixBlock();
-            VortexMessage s = new VortexMessage(randomOuterPrefixBlock,new InnerMessageBlock( randomPrefixBlock,randomIdentityBlock,randomRoutingBlock));
+            VortexMessage s = new VortexMessage(randomOuterPrefixBlock,new InnerMessageBlock( randomPrefixBlock,randomIdentityBlock, randomRoutingCombo));
             File f = new File("testfile_VortexMessage_encrypted.der");
             try ( FileOutputStream o = new FileOutputStream(f); ) {
                 o.write(s.toBytes(DumpType.ALL_UNENCRYPTED));

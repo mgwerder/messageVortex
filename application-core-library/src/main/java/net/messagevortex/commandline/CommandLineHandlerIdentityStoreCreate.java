@@ -12,10 +12,10 @@ import net.messagevortex.asn1.encryption.DumpType;
 import picocli.CommandLine;
 
 @CommandLine.Command(
-        description = "Create an empty IdentityStore",
-        name = "create",
-        aliases = {"cr"},
-        mixinStandardHelpOptions = true
+    description = "Create an empty IdentityStore",
+    name = "create",
+    aliases = {"cr"},
+    mixinStandardHelpOptions = true
 )
 public class CommandLineHandlerIdentityStoreCreate implements Callable<Integer> {
 
@@ -26,7 +26,7 @@ public class CommandLineHandlerIdentityStoreCreate implements Callable<Integer> 
   }
 
   @CommandLine.Option(names = {"--filename", "-f"},
-          description = "filename of the IdentityStorage file")
+      description = "filename of the IdentityStorage file")
   String filename = CommandLineHandlerIdentityStore.DEFAULT_FILENAME;
 
   @Override

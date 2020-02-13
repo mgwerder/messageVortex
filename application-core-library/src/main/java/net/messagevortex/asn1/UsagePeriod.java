@@ -28,12 +28,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
-
 import net.messagevortex.asn1.encryption.DumpType;
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1EncodableVector;
 import org.bouncycastle.asn1.ASN1GeneralizedTime;
 import org.bouncycastle.asn1.ASN1InputStream;
+import org.bouncycastle.asn1.ASN1Integer;
 import org.bouncycastle.asn1.ASN1Object;
 import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.ASN1TaggedObject;
@@ -44,15 +44,15 @@ import org.bouncycastle.asn1.DERTaggedObject;
 /**
  * Represents a usage period.
  */
-public class UsagePeriod extends AbstractBlock implements Serializable {
+public class UsagePeriod extends AbstractBlock implements Serializable, Comparable<UsagePeriod> {
 
   public static final long serialVersionUID = 100000000017L;
 
   public static final int TAG_NOT_BEFORE = 0;
   public static final int TAG_NOT_AFTER = 1;
 
-  protected Date notBefore;
-  protected Date notAfter;
+  protected long notBefore = -1;
+  protected long notAfter = -1;
 
   protected Date reference = new Date();
 
@@ -67,9 +67,34 @@ public class UsagePeriod extends AbstractBlock implements Serializable {
    * @param seconds The number of seconds to be valid
    */
   public UsagePeriod(long seconds) {
-    notBefore = new Date();
-    notAfter = new Date(notBefore.getTime() + seconds * 1000L);
-    type = UsagePeriodType.ABSOLUTE;
+    this(0, seconds);
+  }
+
+  /***
+   * <p>Creates a new object valid from this point plus startSeconds in time for a duration
+   * of the specified amount of seconds.</p>
+   *
+   * <p>The validity time is created as relative time to the objects creation.</p>
+   *
+   * @param startSeconds the number of seconds after the current time the duration starts
+   * @param durationSeconds the number of seconds of the duration
+   */
+  public UsagePeriod(long startSeconds, long durationSeconds) {
+    this(startSeconds, durationSeconds, new Date());
+  }
+
+  /***
+   * <p>Constructor to create a relative usage period.</p>
+   *
+   * @param startSeconds     the number of seconds after the reference to start the period
+   * @param durationSeconds  the number of seconds the duration lasts
+   * @param reference        the date reference
+   */
+  public UsagePeriod(long startSeconds, long durationSeconds, Date reference) {
+    notBefore = reference.getTime() + startSeconds * 1000L;
+    notAfter = notBefore + durationSeconds * 1000L;
+    this.reference = new Date(reference.getTime());
+    type = UsagePeriodType.RELATIVE;
   }
 
   /***
@@ -79,9 +104,15 @@ public class UsagePeriod extends AbstractBlock implements Serializable {
     this(Long.MAX_VALUE);
   }
 
+  /***
+   * <p>Copy constructor to copy a usage period.</p>
+   *
+   * @param p the usage period to be copied
+   */
   public UsagePeriod(UsagePeriod p) {
     notAfter = p.notAfter;
     notBefore = p.notBefore;
+    reference = p.reference;
     type = p.type;
   }
 
@@ -95,8 +126,8 @@ public class UsagePeriod extends AbstractBlock implements Serializable {
    * @param to    the moment the object validity ends
    */
   public UsagePeriod(Date from, Date to) {
-    notBefore = from;
-    notAfter = to;
+    notBefore = from.getTime();
+    notAfter = to.getTime();
     type = UsagePeriodType.ABSOLUTE;
   }
 
@@ -123,24 +154,45 @@ public class UsagePeriod extends AbstractBlock implements Serializable {
   }
 
   protected void parse(ASN1Encodable to) throws IOException {
-    ASN1Sequence s1 = ASN1Sequence.getInstance(to);
-    for (ASN1Encodable e : s1.toArray()) {
-      ASN1TaggedObject tag = ASN1TaggedObject.getInstance(e);
-      if (tag.getTagNo() == TAG_NOT_BEFORE && notBefore == null) {
-        try {
-          notBefore = ASN1GeneralizedTime.getInstance(tag.getObject()).getDate();
-        } catch (ParseException pe) {
-          throw new IOException("unable to parse notAfter", pe);
+    ASN1TaggedObject s1 = ASN1TaggedObject.getInstance(to);
+    ASN1Sequence s2 = ASN1Sequence.getInstance(s1.getObject());
+    if (s1.getTagNo() == UsagePeriodType.ABSOLUTE.getId()) {
+      // get absolute
+      type = UsagePeriodType.ABSOLUTE;
+      for (ASN1Encodable e : s2.toArray()) {
+        ASN1TaggedObject tag = ASN1TaggedObject.getInstance(e);
+        if (tag.getTagNo() == TAG_NOT_BEFORE && notBefore == -1) {
+          try {
+            notBefore = ASN1GeneralizedTime.getInstance(tag.getObject()).getDate().getTime();
+          } catch (ParseException pe) {
+            throw new IOException("unable to parse notAfter", pe);
+          }
+        } else if (tag.getTagNo() == TAG_NOT_AFTER && notAfter == -1) {
+          try {
+            notAfter = ASN1GeneralizedTime.getInstance(tag.getObject()).getDate().getTime();
+          } catch (ParseException pe) {
+            throw new IOException("unable to parse notAfter", pe);
+          }
+        } else {
+          throw new IOException("Encountered unknown or repeated Tag number in Usage Period ("
+                  + tag.getTagNo() + ")");
         }
-      } else if (tag.getTagNo() == TAG_NOT_AFTER && notAfter == null) {
-        try {
-          notAfter = ASN1GeneralizedTime.getInstance(tag.getObject()).getDate();
-        } catch (ParseException pe) {
-          throw new IOException("unable to parse notAfter", pe);
+      }
+    } else if (s1.getTagNo() == UsagePeriodType.RELATIVE.getId()) {
+      type = UsagePeriodType.RELATIVE;
+      reference = new Date();
+      for (ASN1Encodable e : s2.toArray()) {
+        ASN1TaggedObject tag = ASN1TaggedObject.getInstance(e);
+        if (tag.getTagNo() == TAG_NOT_BEFORE && notBefore == -1) {
+          notBefore = ASN1Integer.getInstance(tag.getObject()).getValue().longValue() * 1000L
+                  + reference.getTime();
+        } else if (tag.getTagNo() == TAG_NOT_AFTER && notAfter == -1) {
+          notAfter = ASN1Integer.getInstance(tag.getObject()).getValue().longValue() * 1000L
+                  + reference.getTime();
+        } else {
+          throw new IOException("Encountered unknown or repeated Tag number in Usage Period ("
+                  + tag.getTagNo() + ")");
         }
-      } else {
-        throw new IOException("Encountered unknown or repeated Tag number in Usage Period ("
-                              + tag.getTagNo() + ")");
       }
     }
   }
@@ -151,7 +203,7 @@ public class UsagePeriod extends AbstractBlock implements Serializable {
    * @return the currently set start of the validity
    */
   public Date getNotBefore() {
-    return (Date) notBefore.clone();
+    return new Date(notBefore / 1000L);
   }
 
   /***
@@ -161,8 +213,8 @@ public class UsagePeriod extends AbstractBlock implements Serializable {
    * @return the previously set point in time
    */
   public Date setNotBefore(Date validityStart) {
-    Date d2 = notBefore;
-    notBefore = (Date) validityStart.clone();
+    Date d2 = new Date(notBefore / 1000L);
+    notBefore = validityStart.getTime();
     type = UsagePeriodType.ABSOLUTE;
     return d2;
   }
@@ -173,7 +225,7 @@ public class UsagePeriod extends AbstractBlock implements Serializable {
    * @return the currently set date of expiry
    */
   public Date getNotAfter() {
-    return (Date) notAfter.clone();
+    return new Date(notAfter / 1000L);
   }
 
   /***
@@ -183,22 +235,53 @@ public class UsagePeriod extends AbstractBlock implements Serializable {
    * @return the previously set date
    */
   public Date setNotAfter(Date pointInTime) {
-    Date d2 = notAfter;
-    notAfter = (Date) pointInTime.clone();
+    Date d2 = new Date(notAfter / 1000L);
+    notAfter = pointInTime.getTime();
     type = UsagePeriodType.ABSOLUTE;
     return d2;
+  }
+
+  /***
+   * <p>Gets the the absolute epoch of the start time.</p>
+   *
+   * @return the absolute epoch in seconds
+   */
+  public long getBeforeInt() {
+    return (reference == null ? notBefore / 1000L : (notBefore - reference.getTime()) / 1000L);
+  }
+
+  /***
+   * <p>Gets the the absolute epoch of the end time.</p>
+   *
+   * @return the absolute epoch in seconds
+   */
+  public long getAfterInt() {
+    return (reference == null ? notAfter / 1000L : (notAfter - reference.getTime()) / 1000L);
   }
 
   @Override
   public ASN1Object toAsn1Object(DumpType dumpType) {
     ASN1EncodableVector v = new ASN1EncodableVector();
-    if (notBefore != null) {
-      v.add(new DERTaggedObject(true, TAG_NOT_BEFORE, new DERGeneralizedTime(notBefore)));
+    if (type == UsagePeriodType.ABSOLUTE) {
+      if (notBefore != -1) {
+        v.add(new DERTaggedObject(true, TAG_NOT_BEFORE,
+                new DERGeneralizedTime(new Date(notBefore))));
+      }
+      if (notAfter != -1) {
+        v.add(new DERTaggedObject(true, TAG_NOT_AFTER,
+                new DERGeneralizedTime(new Date(notAfter))));
+      }
+    } else {
+      if (notBefore != -1) {
+        v.add(new DERTaggedObject(true, TAG_NOT_BEFORE,
+                new ASN1Integer((notBefore - reference.getTime()) / 1000L)));
+      }
+      if (notAfter != -1) {
+        v.add(new DERTaggedObject(true, TAG_NOT_AFTER,
+                new ASN1Integer((notAfter - reference.getTime()) / 1000L)));
+      }
     }
-    if (notAfter != null) {
-      v.add(new DERTaggedObject(true, TAG_NOT_AFTER, new DERGeneralizedTime(notAfter)));
-    }
-    return new DERSequence(v);
+    return new DERTaggedObject(type.getId(), new DERSequence(v));
   }
 
   /***
@@ -211,16 +294,35 @@ public class UsagePeriod extends AbstractBlock implements Serializable {
   public String dumpValueNotation(String prefix, DumpType dumpType) {
     StringBuilder sb = new StringBuilder();
     sb.append("{" + CRLF);
+    if (type == UsagePeriodType.ABSOLUTE) {
+      sb.append(prefix).append("  absolute [");
+    } else if (type == UsagePeriodType.RELATIVE) {
+      sb.append(prefix).append("  relative [");
+    } else {
+      sb.append(prefix).append("  /* UNKNOWN: " + type + " */").append(CRLF);
+    }
+    sb.append(type.getId()).append("] {").append(CRLF);
     final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddkkmmss");
     sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-    if (notBefore != null) {
-      sb.append(prefix).append("  notBefore \"").append(sdf.format(notBefore)).append("Z\"")
-                       .append((notAfter != null ? ',' : "")).append(CRLF);
+    if (notBefore != -1) {
+      sb.append(prefix).append("    notBefore ");
+      if (type == UsagePeriodType.ABSOLUTE) {
+        sb.append("\"").append(sdf.format(notBefore)).append("Z\"");
+      } else {
+        sb.append((notBefore - reference.getTime()) / 1000L);
+      }
+      sb.append((notAfter != -1 ? ',' : "")).append(CRLF);
     }
-    if (notAfter != null) {
-      sb.append(prefix).append("  notAfter  \"").append(sdf.format(notAfter)).append("Z\"")
-                       .append(CRLF);
+    if (notAfter != -1) {
+      sb.append(prefix).append("    notAfter  ");
+      if (type == UsagePeriodType.ABSOLUTE) {
+        sb.append("\"").append(sdf.format(notAfter)).append("Z\"");
+      } else {
+        sb.append((notAfter - reference.getTime()) / 1000L);
+      }
+      sb.append(CRLF);
     }
+    sb.append(prefix).append("  ").append("}").append(CRLF);
     sb.append(prefix).append('}');
     return sb.toString();
   }
@@ -237,11 +339,38 @@ public class UsagePeriod extends AbstractBlock implements Serializable {
    */
   public boolean inUsagePeriod(Date reference) {
     long now = new Date().getTime();
-    if (type == UsagePeriodType.ABSOLUTE) {
-      return now >= notBefore.getTime() && now <= notAfter.getTime();
+    return now >= notBefore && now <= notAfter;
+  }
+
+  @Override
+  public int compareTo(UsagePeriod other) {
+    if (getBeforeInt() > other.getBeforeInt()) {
+      return 1;
+    } else if (getBeforeInt() == other.getBeforeInt()) {
+      if (getAfterInt() == other.getAfterInt()) {
+        if (type == UsagePeriodType.ABSOLUTE && other.type != UsagePeriodType.ABSOLUTE) {
+          return 1;
+        } else if (type == UsagePeriodType.RELATIVE && other.type != UsagePeriodType.RELATIVE) {
+          return -1;
+        } else {
+          return 0;
+        }
+      } else if (getAfterInt() > other.getAfterInt()) {
+        return 1;
+      } else {
+        return -1;
+      }
     } else {
-      return now >= reference.getTime() && now <= reference.getTime() + (notAfter.getTime()
-             - notBefore.getTime());
+      return -1;
+    }
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o instanceof UsagePeriod) {
+      return compareTo((UsagePeriod) o) == 0;
+    } else {
+      return false;
     }
   }
 

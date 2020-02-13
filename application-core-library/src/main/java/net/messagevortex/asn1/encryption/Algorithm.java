@@ -119,7 +119,6 @@ public enum Algorithm implements Serializable {
 
   ),
 
-  SHA384(3000, AlgorithmType.HASHING, "sha384", "BC", SecurityLevel.HIGH)
   /* NTRU */
   /*NTRU      ( 2500, AlgorithmType.ASYMMETRIC, "NTRU", "BC", getSecLevelList(
           SecurityLevel.QUANTUM, getParameterList(
@@ -131,15 +130,16 @@ public enum Algorithm implements Serializable {
                             Parameter.PADDING+"="+Padding.getDefault( AlgorithmType.ASYMMETRIC )
                     }))
   ),*/
-  /* Hash algorithm enumerations */,
-  SHA512(3001, AlgorithmType.HASHING, "sha512", "BC", SecurityLevel.QUANTUM),
+
+  /* Hash algorithm enumerations */
+  SHA256(3000, AlgorithmType.HASHING, "sha256", "BC", SecurityLevel.MEDIUM),
+  SHA384(3001, AlgorithmType.HASHING, "sha384", "BC", SecurityLevel.HIGH),
+  SHA512(3002, AlgorithmType.HASHING, "sha512", "BC", SecurityLevel.QUANTUM),
+
   /* TWOFISH fixed (block sized) enumerations */
   TWOFISH128(1200, AlgorithmType.SYMMETRIC, "TWOFISH128", "BC", SecurityLevel.LOW),
   TWOFISH192(1201, AlgorithmType.SYMMETRIC, "TWOFISH192", "BC", SecurityLevel.MEDIUM),
-  TWOFISH256(1202, AlgorithmType.SYMMETRIC, "TWOFISH256", "BC", SecurityLevel.QUANTUM),
-  //RIPEMD256  ( 3101, AlgorithmType.HASHING, "ripemd256", "BC", SecurityLevel.MEDIUM ),
-  //RIPEMD320  ( 3102, AlgorithmType.HASHING, "ripemd320", "BC", SecurityLevel.HIGH ),
-  ;
+  TWOFISH256(1202, AlgorithmType.SYMMETRIC, "TWOFISH256", "BC", SecurityLevel.QUANTUM);
 
   public static final long serialVersionUID = 100000000039L;
 
@@ -300,14 +300,16 @@ public enum Algorithm implements Serializable {
   }
 
   /***
-   * <p>Look up an algorithm by its identification string.</p>
+   * <p>Look up an algorithm by its i+dentification string.</p>
+   *
+   * <p>The string search is case insensitive.</p>
    *
    * @param s  the identification string to be looked up
    * @return the algorithm or null if not found
    */
   public static Algorithm getByString(String s) {
     for (Algorithm e : values()) {
-      if (e.toString().equals(s)) {
+      if (e.toString().toLowerCase().equals(s.toLowerCase())) {
         return e;
       }
     }

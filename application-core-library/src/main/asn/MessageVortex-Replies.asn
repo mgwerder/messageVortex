@@ -6,7 +6,9 @@ BEGIN
           RequirementBlock
                 FROM MessageVortex-Requirements
           CipherSpec, PRNGType, MacAlgorithm
-                FROM MessageVortex-Ciphers;
+                FROM MessageVortex-Ciphers
+		  maxNumberOfReplays
+				FROM MessageVortex-Schema;
 
   SpecialBlock ::= CHOICE {
     capabilities  [1]  ReplyCapability,
@@ -50,8 +52,8 @@ BEGIN
   }
 
   ReplyNodes ::= SEQUENCE {
-      node   SEQUENCE (SIZE (1..5))
-             OF NodeSpec
+    node   SEQUENCE (SIZE (1..5))
+           OF NodeSpec
   }
 
   ReplyCapability ::= SEQUENCE {
@@ -71,6 +73,8 @@ BEGIN
     maxBuildOps       INTEGER (0..4294967295),
     -- maximum header lifespan in seconds
     maxHeaderLive     INTEGER (0..4294967295), 
+    -- maximum number of replays accepted,
+    maxReplay         INTEGER (0..maxNumberOfReplays), 
     
     supportedBlendingIn SEQUENCE OF BlendingSpec
   }
@@ -78,6 +82,15 @@ BEGIN
   ReplyCurrentQuota ::= SEQUENCE {
     messages INTEGER (0..4294967295),
     size     INTEGER (0..4294967295)
+  }
+
+  ReplyUpgrade ::= SEQUENCE {
+    -- The offered version
+    version    [0] OCTET STRING,
+	-- The offered identitfier
+	identifier [1] OCTET STRING,
+	-- The archive or blob containing the software
+    blob       [2] OPTIONAL OCTET STRING  
   }
 
 END

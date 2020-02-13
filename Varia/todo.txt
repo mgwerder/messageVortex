@@ -1,0 +1,2 @@
+FIXME add minimumWaitBeforeReplay to avoid race condition if reusing the same block more than once in a short time
+FIXME check replay protection

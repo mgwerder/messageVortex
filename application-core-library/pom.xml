@@ -46,10 +46,11 @@
         <sonar.issues.defaultAssigneeLogin>mgwerder</sonar.issues.defaultAssigneeLogin>
         <sonar.scm.disabled>true</sonar.scm.disabled>
         <sonar.verbose>true</sonar.verbose>
-	    <sonar.sonargraph.report.path>target/sonargraph</sonar.sonargraph.report.path>
+        <sonar.sonargraph.report.path>target/sonargraph</sonar.sonargraph.report.path>
 
         <izpack.version>5.1.3</izpack.version>
         <izpack.staging>${project.build.directory}/staging</izpack.staging>
+        <izpack.src>${basedir}/src/main/izpack/</izpack.src>
 
         <git-commit-id-plugin.version>2.2.6</git-commit-id-plugin.version>
         <git.commit.id>none</git.commit.id>
@@ -73,22 +74,40 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcprov-jdk15on</artifactId>
             <version>1.60</version>
+            <scope>compile</scope>
         </dependency>
+
         <dependency>
             <groupId>info.picocli</groupId>
             <artifactId>picocli</artifactId>
             <version>3.9.5</version>
         </dependency>
-        <dependency>
+
+        <!--<dependency>
             <groupId>org.codehaus.izpack</groupId>
             <artifactId>izpack-maven-plugin</artifactId>
             <version>${izpack.version}</version>
             <scope>compile</scope>
             <type>pom</type>
+        </dependency>-->
+
+        <dependency>
+            <groupId>org.snakeyaml</groupId>
+            <artifactId>snakeyaml-engine</artifactId>
+            <version>2.0</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast</artifactId>
+            <version>3.7.2</version>
+            <scope>compile</scope>
         </dependency>
 
         <!-- Required for TestSmtpHandler -> FIXME get rid of it ASAP -->
@@ -96,11 +115,21 @@
             <groupId>com.icegreen</groupId>
             <artifactId>greenmail</artifactId>
             <version>1.5.9</version>
+            <scope>compile</scope>
         </dependency>
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>1.6.1</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jruby</groupId>
+            <artifactId>jruby-complete</artifactId>
+            <version>1.7.16.1</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
@@ -133,6 +162,25 @@
                     <source>${jdk.version}</source>
                     <target>${jdk.version}</target>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>default-compile</id>
+                        <configuration>
+                            <compilerArgument>-proc:none</compilerArgument>
+                            <includes>
+                                <include>net/messagevortex/asn1/annotator/*.java</include>
+                                <!--include all dependencies required  -->
+                            </includes>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>compile-project</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -150,7 +198,6 @@
                 <executions>
                     <execution>
                         <id>copy-resources</id>
-                        <!-- here the phase you need -->
                         <phase>validate</phase>
                         <goals>
                             <goal>copy-resources</goal>
@@ -172,7 +219,6 @@
                     </execution>
                     <execution>
                         <id>copy-staging-resources</id>
-                        <!-- here the phase you need -->
                         <phase>validate</phase>
                         <goals>
                             <goal>copy-resources</goal>
@@ -237,6 +283,30 @@
             </plugin>
 
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.0.0</version>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <archive>
+                        <manifest>
+                            <mainClass>net.messagevortex.MessageVortex</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>${jacoco.version}</version>
@@ -292,7 +362,6 @@
                     <tags>
                         <tag>
                             <name>FIXME</name>
-                            <!-- todo tag for all places -->
                             <placement>a</placement>
                             <head>FIXME:</head>
                         </tag>
@@ -383,13 +452,27 @@
                 <version>3.1.1</version>
                 <executions>
                     <execution>
-                        <id>copy-dependencies</id>
+                        <id>copy-dependencies-izpack</id>
                         <phase>prepare-package</phase>
                         <goals>
                             <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
                             <outputDirectory>${izpack.staging}/lib</outputDirectory>
+                            <includeScope>runtime</includeScope>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/lib-runtimes</outputDirectory>
                             <includeScope>runtime</includeScope>
                             <overWriteReleases>false</overWriteReleases>
                             <overWriteSnapshots>false</overWriteSnapshots>
@@ -448,22 +531,28 @@
                     <execution>
                         <id>l4j-create-exe</id>
                         <phase>package</phase>
-                        <goals><goal>launch4j</goal></goals>
+                        <goals>
+                            <goal>launch4j</goal>
+                        </goals>
                         <configuration>
                             <headerType>gui</headerType>
                             <dontWrapJar>false</dontWrapJar>
                             <outfile>${project.build.directory}/MessageVortex-package-installer.exe</outfile>
-                            <jar>${project.build.directory}/MessageVortex-package-installer.jar</jar>
-                            <obj>${izpack.staging}/resources/w32api/crt2.o</obj>
-                            <obj>${izpack.staging}/resources/head/guihead.o</obj>
-                            <obj>${izpack.staging}/resources/head/head.o</obj>
-                            <lib>${izpack.staging}/resources/w32api/libmingw32.a</lib>
-                            <lib>${izpack.staging}/resources/w32api/libgcc.a</lib>
-                            <lib>${izpack.staging}/resources/w32api/libmsvcrt.a</lib>
-                            <lib>${izpack.staging}/resources/w32api/libkernel32.a</lib>
-                            <lib>${izpack.staging}/resources/w32api/libuser32.a</lib>
-                            <lib>${izpack.staging}/resources/w32api/libadvapi32.a</lib>
-                            <lib>${izpack.staging}/resources/w32api/libshell32.a</lib>
+                            <jar>${basedir}/target/MessageVortex-package-installer.jar</jar>
+                            <objs>
+                                <obj>${izpack.staging}/resources/launch4j/w32api/crt2.o</obj>
+                                <obj>${izpack.staging}/resources/launch4j/head/guihead.o</obj>
+                                <obj>${izpack.staging}/resources/launch4j/head/head.o</obj>
+                            </objs>
+                            <libs>
+                                <lib>${izpack.staging}/resources/launch4j/w32api/libmingw32.a</lib>
+                                <lib>${izpack.staging}/resources/launch4j/w32api/libgcc.a</lib>
+                                <lib>${izpack.staging}/resources/launch4j/w32api/libmsvcrt.a</lib>
+                                <lib>${izpack.staging}/resources/launch4j/w32api/libkernel32.a</lib>
+                                <lib>${izpack.staging}/resources/launch4j/w32api/libuser32.a</lib>
+                                <lib>${izpack.staging}/resources/launch4j/w32api/libadvapi32.a</lib>
+                                <lib>${izpack.staging}/resources/launch4j/w32api/libshell32.a</lib>
+                            </libs>
                             <icon>${izpack.staging}/resources/MessageVortexLogo_128.ico</icon>
                             <!--<classPath>
                                 <mainClass>net.messagevortex.MessageVortex</mainClass>
@@ -471,11 +560,10 @@
                                 <preCp>anything</preCp>
                             </classPath>-->
                             <jre>
-                                <path></path>
+                                <path>${java.home}</path>
                                 <bundledJre64Bit>false</bundledJre64Bit>
                                 <bundledJreAsFallback>false</bundledJreAsFallback>
                                 <minVersion>1.8.0</minVersion>
-                                <maxVersion></maxVersion>
                                 <jdkPreference>preferJre</jdkPreference>
                                 <runtimeBits>64/32</runtimeBits>
                             </jre>
@@ -518,18 +606,18 @@
                 <configuration>
                     <mainClass>net.messagevortex.MessageVortex</mainClass>
                     <generateDiskImageFile>true</generateDiskImageFile>-->
-                    <!-- Removed as it caused problems when building in jenkins (drove me mad)-->
-                    <!--<iconFile>images/MessageVortexLogo_128.icns</iconFile>-->
-                <!--</configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>bundle</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin> -->
+            <!-- Removed as it caused problems when building in jenkins (drove me mad)-->
+            <!--<iconFile>images/MessageVortexLogo_128.icns</iconFile>-->
+            <!--</configuration>
+            <executions>
+                <execution>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>bundle</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin> -->
 
         </plugins>
     </build>

@@ -32,7 +32,7 @@ public class CommandLineHandlerIdentityStoreAdd implements Callable<Integer> {
 
   @CommandLine.Option(names = {"--identity"}, required = true,
           description = "the identity URL")
-  String identity[];
+  String[] identity;
 
   @Override
   public Integer call() throws Exception {

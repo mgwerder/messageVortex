@@ -35,6 +35,26 @@ public class DecryptPayloadOperation extends AbstractCryptPayloadOperation imple
   }
 
   /***
+   * <p>Constructor to create an decrypt operation.</p>
+   *
+   * @param sourceBlock the ID of the source block in the workspace
+   * @param targetBlock the ID of the target block in the workspace
+   * @param key the key to be used for decryption
+   *
+   * @throws IOException if key generation fails when creating a new key
+   */
+  public DecryptPayloadOperation(int sourceBlock,int targetBlock, SymmetricKey key)
+          throws IOException {
+    if (key == null) {
+      key = new SymmetricKey();
+    }
+    setTagNumber(DECRYPT_PAYLOAD);
+    this.originalId = sourceBlock;
+    this.newId = targetBlock;
+    this.key = key;
+  }
+
+  /***
    * <p>Create object from ASN.1 code.</p>
    *
    * @param object the ASN.1 code

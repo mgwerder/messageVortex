@@ -108,6 +108,8 @@ public class Version implements CommandLine.IVersionProvider {
         } else {
           LOGGER.log(Level.SEVERE, "Version " + intVersion
                   + " does not match the required regular expression");
+          LOGGER.log(Level.SEVERE, "If this happens while testing in IDE try to"
+                  + " run 'mvn package'.");
         }
       } else {
         LOGGER.log(Level.SEVERE, "unable to get version number of application");
