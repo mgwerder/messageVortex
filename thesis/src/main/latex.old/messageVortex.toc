@@ -1,0 +1,561 @@
+\babel@toc {english}{}
+\boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
+\babel@toc {english}{}
+\defcounter {refsection}{0}\relax 
+\contentsline {part}{I\hspace {1em}Introduction}{1}{part.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {1}Foreword}{3}{chapter.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {1.1}Contributions}{3}{section.1.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {2}Notation}{4}{chapter.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {2.1}Cryptography }{4}{section.2.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {2.2}Code and commands}{4}{section.2.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {2.3}Hyperlinking}{4}{section.2.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {3}Main Research Question}{4}{chapter.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.1}SQ1: Technologies for Sending Messages Maintaining Unlinkability}{4}{section.3.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.2}SQ2: Attacking unlinkability and circumvention}{5}{section.3.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.3}SQ3: Attack Mitigation by design}{5}{section.3.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {part}{II\hspace {1em}Methodes}{7}{part.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {4}Requirements for an Anonymizing Protocol}{9}{chapter.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {4.1}Threat model}{9}{section.4.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {4.2}Required Properties of an unobservable network}{10}{section.4.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.2.1}Anonymizing and Unlinking}{10}{subsection.4.2.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.2.2}Censorship Resistant}{10}{subsection.4.2.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.2.3}Controllable trust}{10}{subsection.4.2.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.2.4}Reliable}{10}{subsection.4.2.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.2.5}Diagnoseable}{10}{subsection.4.2.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.2.6}Available}{10}{subsection.4.2.6}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.2.7}Identifiable Sender}{11}{subsection.4.2.7}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {4.3}Outline of Protocol}{11}{section.4.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {4.3.1}Ephemeral Identity}{12}{subsection.4.3.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {4.4}Draft of VortexMessages}{12}{section.4.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {5}Transport Layer Protocol analysis}{12}{chapter.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {5.1}Crtieria}{12}{section.5.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {5.2}Evaluation Result for Transport Protocols}{12}{section.5.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {6}Existing Research and Implementations on the Topic }{12}{chapter.6}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {6.1}Anonymity Research}{12}{section.6.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.1.1}Definition of Anonymity}{13}{subsection.6.1.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.1.2}$k$-Anonymity}{14}{subsection.6.1.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.1.3}$\ell $-Diversity}{14}{subsection.6.1.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.1.4}$t$-Closeness}{14}{subsection.6.1.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {6.2}Single Use Reply Blocks and Multi-Use Reply Blocks}{14}{section.6.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {6.3}Censorship}{14}{section.6.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.3.1}Censorship Resistant}{14}{subsection.6.3.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.3.2}Parrot Circumvention}{14}{subsection.6.3.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.3.3}Censorship Circumvention}{15}{subsection.6.3.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {6.3.3.1}Covert Channel and Channel Exploitations}{15}{subsubsection.6.3.3.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {6.3.3.2}Steganography}{15}{subsubsection.6.3.3.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {6.3.3.3}Timing Channels}{15}{subsubsection.6.3.3.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {6.4}Cryptography}{15}{section.6.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.4.1}Homomorphic encryption}{16}{subsection.6.4.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.4.2}Deniable Encryption and Deniable Steganography}{16}{subsection.6.4.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.4.3}Key Sizes}{16}{subsection.6.4.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.4.4}Cipher Mode}{16}{subsection.6.4.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {6.4.4.1}Summary of Cipher Modes}{17}{subsubsection.6.4.4.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.4.5}Padding}{17}{subsection.6.4.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {6.4.5.1}RSAES-PKCS1-v1\_5 and RSAES-OAEP}{17}{subsubsection.6.4.5.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {6.4.5.2}PKCS7}{17}{subsubsection.6.4.5.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {6.4.5.3}OAEP with SHA and MGF1 padding}{18}{subsubsection.6.4.5.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {6.5}Routing}{18}{section.6.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.5.1}Mixing}{18}{subsection.6.5.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.5.2}Onion Routing}{18}{subsection.6.5.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.5.3}Crowds}{18}{subsection.6.5.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.5.4}Mimic routes}{19}{subsection.6.5.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {6.5.4.1}DC Networks}{19}{subsubsection.6.5.4.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {6.5.4.2}Annonymous Remailer}{19}{subsubsection.6.5.4.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {6.6}System Implementations}{19}{section.6.6}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.6.1}Pseudonymous Remailer}{19}{subsection.6.6.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.6.2}Babel}{19}{subsection.6.6.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.6.3}Cypherpunk-Remailer}{19}{subsection.6.6.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.6.4}Mixmaster-Remailer}{20}{subsection.6.6.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.6.5}Mixminion-Remailer}{20}{subsection.6.6.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.6.6}Tarzan}{20}{subsection.6.6.6}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.6.7}AN.ON}{20}{subsection.6.6.7}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.6.8}MorphMix}{20}{subsection.6.6.8}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.6.9}SOR (SSH-based onion routing)}{20}{subsection.6.6.9}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.6.10}SCION}{20}{subsection.6.6.10}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.6.11}Tor}{20}{subsection.6.6.11}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.6.12}$I^2P$}{21}{subsection.6.6.12}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.6.13}Freenet}{21}{subsection.6.6.13}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.6.14}Herbivore}{21}{subsection.6.6.14}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.6.15}Dissent}{21}{subsection.6.6.15}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.6.16}$\mathcal {P}^5$}{21}{subsection.6.6.16}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.6.17}Gnutella}{21}{subsection.6.6.17}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.6.18}Gnutella2}{21}{subsection.6.6.18}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.6.19}Hordes}{21}{subsection.6.6.19}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.6.20}Salsa}{21}{subsection.6.6.20}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.6.21}AP3}{21}{subsection.6.6.21}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.6.22}Cashmere}{22}{subsection.6.6.22}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.6.23}Riffle}{22}{subsection.6.6.23}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.6.24}Atom}{22}{subsection.6.6.24}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.6.25}Riposte}{22}{subsection.6.6.25}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.6.26}Pung}{22}{subsection.6.6.26}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.6.27}PIR}{22}{subsection.6.6.27}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.6.28}Karaoke}{22}{subsection.6.6.28}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.6.29}Loopix}{22}{subsection.6.6.29}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.6.30}Stadium}{22}{subsection.6.6.30}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.6.31}Vuvuzela}{22}{subsection.6.6.31}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.6.32}SMTP and Related Client Protocols}{22}{subsection.6.6.32}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {6.6.32.1}Fat clients}{23}{subsubsection.6.6.32.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {6.6.32.2}Server located clients}{23}{subsubsection.6.6.32.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {6.6.32.3}Web clients}{23}{subsubsection.6.6.32.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.6.33}S/MIME}{23}{subsection.6.6.33}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.6.34}PGP/MIME}{24}{subsection.6.6.34}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.6.35}Characteristics of known anonymity Systems}{24}{subsection.6.6.35}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {6.7}Pseudo Random Number Generators }{24}{section.6.7}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {6.8}Known Attacks}{24}{section.6.8}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.8.1}Broken Encryption Algorithms}{24}{subsection.6.8.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.8.2}Attacks Targeting Anonymity}{24}{subsection.6.8.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {6.8.2.1}Probing Attacks}{24}{subsubsection.6.8.2.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {6.8.2.2}Hotspot Attacks}{25}{subsubsection.6.8.2.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {6.8.2.3}Message Tagging and Tracing}{25}{subsubsection.6.8.2.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {6.8.2.4}Side Channel Attacks}{25}{subsubsection.6.8.2.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {6.8.2.5}Sizing Attacks}{25}{subsubsection.6.8.2.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {6.8.2.6}Bugging Attacks}{25}{subsubsection.6.8.2.6}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {6.8.3}Denial of Service Attacks}{25}{subsection.6.8.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {6.8.3.1}Censorship}{25}{subsubsection.6.8.3.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {6.8.3.2}Denial of service}{25}{subsubsection.6.8.3.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {6.8.3.3}Credibility Attack}{26}{subsubsection.6.8.3.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {7}Applied Methodes}{26}{chapter.7}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {7.1}Problem Hotspots}{26}{section.7.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {7.1.1}Zero Trust Philosophy}{26}{subsection.7.1.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {7.1.2}Information leakage and P2P Design}{26}{subsection.7.1.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {7.1.2.1}Decoy traffic generation}{27}{subsubsection.7.1.2.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {7.1.2.2}Message tagging or bugging protection}{27}{subsubsection.7.1.2.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {7.1.2.3}Message replay protection}{27}{subsubsection.7.1.2.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {7.1.2.4}No Dedicated Infrastructure Philosophy}{27}{subsubsection.7.1.2.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {7.1.3}Accounting}{27}{subsection.7.1.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {7.1.4}Anonymisation}{27}{subsection.7.1.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {7.1.5}Initial Bootstraping}{27}{subsection.7.1.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {7.1.6}Cypher selection}{27}{subsection.7.1.6}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {7.1.7}Reed-Solomon function}{28}{subsection.7.1.7}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {7.1.8}Usability}{28}{subsection.7.1.8}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {7.2}Protocol outline}{28}{section.7.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {7.2.1}Protocol Terminology}{28}{subsection.7.2.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {7.2.2}Vortex Communication model}{29}{subsection.7.2.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {7.2.3}Transport Layer}{29}{subsection.7.2.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {7.2.4}Blending Layer}{29}{subsection.7.2.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {7.2.5}Routing Layer}{29}{subsection.7.2.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {7.2.5.1}Block Structure}{30}{subsubsection.7.2.5.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {7.2.5.2}MURBs}{30}{subsubsection.7.2.5.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {7.3}Protocol handling}{30}{section.7.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {7.3.1}Block Processing}{30}{subsection.7.3.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {7.4}Sub Research Questions Roundup}{30}{section.7.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {7.4.1}SQ1: Technologies for sending messages maintaining unlinkability against an adversary}{30}{subsection.7.4.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {7.4.2}SQ2: Attacking unlinkability and circumvention}{30}{subsection.7.4.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {7.4.3}SQ3: Attack Mitigation by design}{31}{subsection.7.4.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {part}{III\hspace {1em}Results}{33}{part.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {8}Vortex Prerequisites}{35}{chapter.8}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {8.1}Hardware}{35}{section.8.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {8.2}Addresses}{35}{section.8.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {8.3}Transport Layers}{35}{section.8.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {8.3.1}Embedding Spec}{35}{subsection.8.3.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {8.4}Client}{35}{section.8.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {8.4.1}Vortex Accounts}{35}{subsection.8.4.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {8.4.2}Vortex Node Types}{36}{subsection.8.4.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {8.4.2.1}Public Vortex Node}{36}{subsubsection.8.4.2.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {8.4.2.2}Stealth Vortex Node}{36}{subsubsection.8.4.2.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {8.4.2.3}Hidden Vortex Node}{36}{subsubsection.8.4.2.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {9}Vortex Protocol Overview}{36}{chapter.9}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {9.1}Vortex Message}{37}{section.9.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {9.1.1}Key Usage}{37}{subsection.9.1.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {9.1.1.1}Peer key}{37}{subsubsection.9.1.1.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {9.1.1.2}Header Key}{37}{subsubsection.9.1.1.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {9.1.1.3}Host Key}{38}{subsubsection.9.1.1.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {9.1.1.4}Ephemeral Identity Key}{38}{subsubsection.9.1.1.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {9.1.2}\emph {VortexMessage} Processing}{38}{subsection.9.1.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {9.1.2.1}Receiving Messages}{38}{subsubsection.9.1.2.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {9.1.2.2}Building and Sending Messages}{38}{subsubsection.9.1.2.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {9.2}Protocol design}{38}{section.9.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {9.2.1}Header block}{38}{subsection.9.2.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {9.2.1.1}Requests}{40}{subsubsection.9.2.1.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {9.2.1.2}Replys to Clear Text Requests}{40}{subsubsection.9.2.1.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {9.2.2}Routing Blocks}{40}{subsection.9.2.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {9.2.2.1}Payload Building Instructions}{40}{subsubsection.9.2.2.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {9.2.2.2}payload Block}{41}{subsubsection.9.2.2.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {9.2.2.3}Reply Block}{41}{subsubsection.9.2.2.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {9.2.3}Accounting}{41}{subsection.9.2.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {9.2.3.1}Accounting Data of an Ephemeral Identity}{41}{subsubsection.9.2.3.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {9.2.4}\emph {VortexMessage} Operations}{42}{subsection.9.2.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {9.2.4.1}SplitPayload Operation}{42}{subsubsection.9.2.4.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {9.2.4.2}MergePayload Operation}{42}{subsubsection.9.2.4.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {9.2.4.3}EncryptPayload Operation}{42}{subsubsection.9.2.4.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {9.2.4.4}DecryptPayload Operation}{42}{subsubsection.9.2.4.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {9.2.4.5}addRedundancy and removeRedundancy Operation}{42}{subsubsection.9.2.4.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {9.3}Request Processing}{44}{section.9.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {9.3.1}Requests}{44}{subsection.9.3.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {9.3.1.1}QueryCapability Request}{44}{subsubsection.9.3.1.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {9.3.1.2}NewIdentity Request}{44}{subsubsection.9.3.1.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {9.3.1.3}QueryPeer Request}{44}{subsubsection.9.3.1.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {9.3.1.4}TransferQuota, MessageQuota, and QueryQuota Request}{44}{subsubsection.9.3.1.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {9.3.2}Reply Blocks}{44}{subsection.9.3.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {9.3.2.1}ReplyCapability block}{45}{subsubsection.9.3.2.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {9.3.2.2}replyPuzzleRequired block}{45}{subsubsection.9.3.2.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {9.4}Protocol Usage}{45}{section.9.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {9.5}Accounting}{45}{section.9.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {9.6}Routing}{45}{section.9.6}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {9.7}Blending layer}{45}{section.9.7}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {9.7.1}Plain Inclusion}{45}{subsection.9.7.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {9.7.1.1}File Type Candidates}{45}{subsubsection.9.7.1.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {9.8}Considerations for Building Messages}{46}{section.9.8}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {9.8.1}Ephemeral identities}{46}{subsection.9.8.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {9.8.2}Timing of messages}{46}{subsection.9.8.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {9.8.3}Diagnostics}{46}{subsection.9.8.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {9.8.3.1}Implicit Diagnostic}{46}{subsubsection.9.8.3.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {9.8.3.2}On-Demand Diagnostic}{46}{subsubsection.9.8.3.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {9.9}Considerations for Routing Messages}{46}{section.9.9}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {10}Verification of requirements}{46}{chapter.10}%
+\defcounter {refsection}{0}\relax 
+\contentsline {paragraph}{\ref {req:undetectable}:}{47}{chapter.10}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {11}Security Analysis}{47}{chapter.11}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {11.1}Additional Considerations}{48}{section.11.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {11.1.1}Man in the Middle Attacks to Conversations}{48}{subsection.11.1.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {11.1.2}Identification of Participating Nodes}{48}{subsection.11.1.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {11.1.2.1}Identification by Content}{48}{subsubsection.11.1.2.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {11.1.2.2}Identification by Query}{48}{subsubsection.11.1.2.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {11.1.2.3}Identification by Traffic Type}{48}{subsubsection.11.1.2.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {11.1.3}Storage of Messages and queues}{48}{subsection.11.1.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {part}{IV\hspace {1em}Discussion }{49}{part.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {12}Protocol Analysis}{51}{chapter.12}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {12.1}Transport and Blending Layer}{51}{section.12.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {12.1.1}Analysis of Plain Embedding}{51}{subsection.12.1.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {12.1.2}Identifying a Vortex Message Endpoint}{51}{subsection.12.1.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {12.2}Senders routing layer}{51}{section.12.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {12.3}Intermediate node routing layer}{52}{section.12.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {12.4}Security of Protocol Blocks}{52}{section.12.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {13}Dynamic Attack Analysis}{52}{chapter.13}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {13.1}Attacks against the vortex system itself}{53}{section.13.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {13.1.1}DoS Attacks against the System}{53}{subsection.13.1.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {13.1.1.1}DoS by Traffic Replay}{53}{subsubsection.13.1.1.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {13.1.1.2}DoS by Traffic generation}{53}{subsubsection.13.1.1.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {13.1.2}Attacking a single ephemeral Identity of a MessageVortex Node}{54}{subsection.13.1.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {13.1.2.1}Denial of Service by Exhausting Quotas or Limits}{54}{subsubsection.13.1.2.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {13.1.3}Attacking Sending and Receiving Identities of the MessageVortex System}{54}{subsection.13.1.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {13.1.3.1}Traffic Highlighting}{54}{subsubsection.13.1.3.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {13.1.4}Recovery of Previously Carried Out Operations}{54}{subsection.13.1.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {13.2}Achieved Anonymity and Flaws}{54}{section.13.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {13.2.1}Measuring Anonymity}{54}{subsection.13.2.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {13.2.2}Attacking Routing Participants}{54}{subsection.13.2.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {13.2.3}Attacking Anonymity through Traffic Analysis}{55}{subsection.13.2.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {13.2.4}Attacking Anonymity through Timing Analysis}{56}{subsection.13.2.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {13.2.5}Attacking Anonymity through Throughput Analysis}{56}{subsection.13.2.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {13.2.6}Attacking Anonymity through Routing Block Analysis}{56}{subsection.13.2.6}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {13.2.7}Attacking Anonymity through Header Analysis}{56}{subsection.13.2.7}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {13.2.8}Attacking Anonymity through Payload Analysis}{56}{subsection.13.2.8}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {13.2.9}Attacking Anonymity through Bugging}{56}{subsection.13.2.9}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {13.2.10}Attacking Anonymity through Replay Analysis}{56}{subsection.13.2.10}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {13.2.11}Diagnosability of traffic}{56}{subsection.13.2.11}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {13.2.11.1}Hijacking of Header and Routing Blocks}{56}{subsubsection.13.2.11.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {13.2.11.2}Partial Implicit Routing Diagnosis}{56}{subsubsection.13.2.11.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {13.2.11.3}Partial Explicit Routing Diagnosis}{56}{subsubsection.13.2.11.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {14}Recommendations on Using the Vortex Protocol}{56}{chapter.14}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {14.1}Reuse of Routing blocks}{57}{section.14.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {14.2}Use of Ephemeral Identities}{57}{section.14.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {14.3}Recommendations on Operations applied on Nodes}{57}{section.14.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {14.4}Reuse of Keys, IVs or Routing patterns}{57}{section.14.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {14.5}Recommendations on Choosing involved Nodes}{57}{section.14.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {14.6}Message content}{57}{section.14.6}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {14.6.1}Splitting of message content}{57}{subsection.14.6.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {14.7}Routing}{57}{section.14.7}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {14.7.1}Redundancy}{57}{subsection.14.7.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {14.7.2}Operation Considerations}{57}{subsection.14.7.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {14.7.3}Anonymity}{57}{subsection.14.7.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\numberline {14.7.3.1}Size of the Anonymity Set}{57}{subsubsection.14.7.3.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {15}Missing gaps to be covered in future analysis}{58}{chapter.15}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {A}The RFC draft document}{A1}{appendix.A}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {B}Analysis on Common Internet Protocols Suitable as Transport Layers for MessageVortex}{A60}{appendix.B}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {B.1}Introduction}{A60}{section.B.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {B.2}Methods}{A60}{section.B.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {B.2.1}Applied Criteria}{A60}{subsection.B.2.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {B.2.2}Analyzed Protocols}{A60}{subsection.B.2.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {B.3}Analysis}{A60}{section.B.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {B.3.1}HTTP}{A60}{subsection.B.3.1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {B.3.2}FTP}{A61}{subsection.B.3.2}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {B.3.3}TFTP}{A61}{subsection.B.3.3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {B.3.4}MQTT}{A61}{subsection.B.3.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {B.3.5}Advanced Message Queuing Protocol (AMQP)}{A61}{subsection.B.3.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {B.3.6}Constrained Application Protocol (CoAP)}{A61}{subsection.B.3.6}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {B.3.7}Web Application Messaging Protocol (WAMP)}{A61}{subsection.B.3.7}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {B.3.8}XMPP (jabber)}{A61}{subsection.B.3.8}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {B.3.9}SMTP}{A62}{subsection.B.3.9}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {B.3.10}SMS and MMS}{A62}{subsection.B.3.10}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {B.3.11}MMS}{A62}{subsection.B.3.11}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {B.4}Results}{A62}{section.B.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {C}Glossary}{A63}{appendix.C}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{Bibliography}{A65}{Item.58}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{Short Biography}{A69}{Item.58}%

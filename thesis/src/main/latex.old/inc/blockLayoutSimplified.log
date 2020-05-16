@@ -1,0 +1,253 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6600) (preloaded format=pdflatex 2018.5.4)  17 DEC 2019 11:48
+entering extended mode
+**./blockLayoutSimplified.tex
+(blockLayoutSimplified.tex
+LaTeX2e <2017-04-15>
+Babel <3.18> and hyphenation patterns for 1 language(s) loaded.
+
+(F:\apps\portableApps\MikTeXPortable\App\MikTeX\tex\latex\standalone\standalone
+.cls
+Document Class: standalone 2018/03/26 v1.3a Class to compile TeX sub-files stan
+dalone
+(F:\apps\portableApps\MikTeXPortable\App\MikTeX\tex\latex\tools\shellesc.sty
+Package: shellesc 2016/06/07 v0.02a unified shell escape interface for LaTeX
+Package shellesc Info: Restricted shell escape enabled on input line 69.
+)
+(F:\apps\portableApps\MikTeXPortable\App\MikTeX\tex\generic\oberdiek\ifluatex.s
+ty
+Package: ifluatex 2016/05/16 v1.4 Provides the ifluatex switch (HO)
+Package ifluatex Info: LuaTeX not detected.
+)
+(F:\apps\portableApps\MikTeXPortable\App\MikTeX\tex\generic\oberdiek\ifpdf.sty
+Package: ifpdf 2017/03/15 v3.2 Provides the ifpdf switch
+)
+(F:\apps\portableApps\MikTeXPortable\App\MikTeX\tex\generic\ifxetex\ifxetex.sty
+Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
+) (F:\apps\portableApps\MikTeXPortable\App\MikTeX\tex\latex\xkeyval\xkeyval.sty
+Package: xkeyval 2014/12/03 v2.7a package option processing (HA)
+
+(F:\apps\portableApps\MikTeXPortable\App\MikTeX\tex\generic\xkeyval\xkeyval.tex
+
+(F:\apps\portableApps\MikTeXPortable\App\MikTeX\tex\generic\xkeyval\xkvutils.te
+x
+\XKV@toks=\toks14
+\XKV@tempa@toks=\toks15
+
+(F:\apps\portableApps\MikTeXPortable\App\MikTeX\tex\generic\xkeyval\keyval.tex)
+)
+\XKV@depth=\count79
+File: xkeyval.tex 2014/12/03 v2.7a key=value parser (HA)
+))
+\sa@internal=\count80
+\c@sapage=\count81
+
+(F:\apps\portableApps\MikTeXPortable\App\MikTeX\tex\latex\standalone\standalone
+.cfg
+File: standalone.cfg 2018/03/26 v1.3a Default configuration file for 'standalon
+e' class
+)
+(F:\apps\portableApps\MikTeXPortable\App\MikTeX\tex\latex\base\article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(F:\apps\portableApps\MikTeXPortable\App\MikTeX\tex\latex\base\size10.clo
+File: size10.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
+)
+\c@part=\count82
+\c@section=\count83
+\c@subsection=\count84
+\c@subsubsection=\count85
+\c@paragraph=\count86
+\c@subparagraph=\count87
+\c@figure=\count88
+\c@table=\count89
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+\sa@box=\box26
+)
+(F:\apps\portableApps\MikTeXPortable\App\MikTeX\tex\latex\graphics\color.sty
+Package: color 2016/07/10 v1.1e Standard LaTeX Color (DPC)
+
+(F:\apps\portableApps\MikTeXPortable\App\MikTeX\tex\latex\graphics-cfg\color.cf
+g
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package color Info: Driver file: pdftex.def on input line 147.
+
+(F:\apps\portableApps\MikTeXPortable\App\MikTeX\tex\latex\graphics-def\pdftex.d
+ef
+File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
+))
+(F:\apps\portableApps\MikTeXPortable\App\MikTeX\tex\latex\base\inputenc.sty
+Package: inputenc 2015/03/17 v1.2c Input encoding file
+\inpenc@prehook=\toks16
+\inpenc@posthook=\toks17
+
+(F:\apps\portableApps\MikTeXPortable\App\MikTeX\tex\latex\base\latin1.def
+File: latin1.def 2015/03/17 v1.2c Input encoding file
+))
+(F:\apps\portableApps\MikTeXPortable\App\MikTeX\tex\latex\graphics\graphicx.sty
+Package: graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)
+
+(F:\apps\portableApps\MikTeXPortable\App\MikTeX\tex\latex\graphics\graphics.sty
+Package: graphics 2017/06/25 v1.2c Standard LaTeX Graphics (DPC,SPQR)
+(F:\apps\portableApps\MikTeXPortable\App\MikTeX\tex\latex\graphics\trig.sty
+Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
+)
+(F:\apps\portableApps\MikTeXPortable\App\MikTeX\tex\latex\graphics-cfg\graphics
+.cfg
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 99.
+)
+\Gin@req@height=\dimen103
+\Gin@req@width=\dimen104
+)
+(F:\apps\portableApps\MikTeXPortable\App\MikTeX\tex\latex\jknappen\mathrsfs.sty
+Package: mathrsfs 1996/01/01 Math RSFS package v1.0 (jk)
+\symrsfs=\mathgroup4
+)
+
+LaTeX Warning: Unused global option(s):
+    [tightpage].
+
+(blockLayoutSimplified.aux)
+\openout1 = `blockLayoutSimplified.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+
+(F:\apps\portableApps\MikTeXPortable\App\MikTeX\tex\context\base\supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count90
+\scratchdimen=\dimen105
+\scratchbox=\box27
+\nofMPsegments=\count91
+\nofMParguments=\count92
+\everyMPshowfont=\toks18
+\MPscratchCnt=\count93
+\MPscratchDim=\dimen106
+\MPnumerator=\count94
+\makeMPintoPDFobject=\count95
+\everyMPtoPDFconversion=\toks19
+)
+(F:\apps\portableApps\MikTeXPortable\App\MikTeX\tex\latex\oberdiek\epstopdf-bas
+e.sty
+Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
+
+(F:\apps\portableApps\MikTeXPortable\App\MikTeX\tex\generic\oberdiek\infwarerr.
+sty
+Package: infwarerr 2016/05/16 v1.4 Providing info/warning/error messages (HO)
+)
+(F:\apps\portableApps\MikTeXPortable\App\MikTeX\tex\latex\oberdiek\grfext.sty
+Package: grfext 2016/05/16 v1.2 Manage graphics extensions (HO)
+
+(F:\apps\portableApps\MikTeXPortable\App\MikTeX\tex\generic\oberdiek\kvdefineke
+ys.sty
+Package: kvdefinekeys 2016/05/16 v1.4 Define keys (HO)
+
+(F:\apps\portableApps\MikTeXPortable\App\MikTeX\tex\generic\oberdiek\ltxcmds.st
+y
+Package: ltxcmds 2016/05/16 v1.23 LaTeX kernel commands for general use (HO)
+)))
+(F:\apps\portableApps\MikTeXPortable\App\MikTeX\tex\latex\oberdiek\kvoptions.st
+y
+Package: kvoptions 2016/05/16 v3.12 Key value format for package options (HO)
+
+(F:\apps\portableApps\MikTeXPortable\App\MikTeX\tex\generic\oberdiek\kvsetkeys.
+sty
+Package: kvsetkeys 2016/05/16 v1.17 Key value parser (HO)
+
+(F:\apps\portableApps\MikTeXPortable\App\MikTeX\tex\generic\oberdiek\etexcmds.s
+ty
+Package: etexcmds 2016/05/16 v1.6 Avoid name clashes with e-TeX commands (HO)
+Package etexcmds Info: Could not find \expanded.
+(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
+(etexcmds)             that some package has redefined \expanded.
+(etexcmds)             In the latter case, load this package earlier.
+)))
+(F:\apps\portableApps\MikTeXPortable\App\MikTeX\tex\generic\oberdiek\pdftexcmds
+.sty
+Package: pdftexcmds 2018/01/21 v0.26 Utility functions of pdfTeX for LuaTeX (HO
+)
+Package pdftexcmds Info: LuaTeX not detected.
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+)
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+38.
+Package grfext Info: Graphics extension search list:
+(grfext)             [.pdf,.png,.jpg,.mps,.jpeg,.jbig2,.jb2,.PDF,.PNG,.JPG,.JPE
+G,.JBIG2,.JB2,.eps]
+(grfext)             \AppendGraphicsExtensions on input line 456.
+)
+(F:/Git/messageVortex/thesis/src/main/latex/inc/blockLayoutSimplified_temp.pdft
+ex_t
+
+pdfTeX warning: pdflatex.exe (file F:/Git/messageVortex/thesis/src/main/latex/i
+nc/blockLayoutSimplified_temp.pdf): PDF inclusion: found PDF version <1.7>, but
+ at most version <1.5> allowed
+<F:/Git/messageVortex/thesis/src/main/latex/inc/blockLayoutSimplified_temp.pdf,
+ id=1, 545.03625pt x 139.52126pt>
+File: F:/Git/messageVortex/thesis/src/main/latex/inc/blockLayoutSimplified_temp
+.pdf Graphic file (type pdf)
+<use F:/Git/messageVortex/thesis/src/main/latex/inc/blockLayoutSimplified_temp.
+pdf>
+Package pdftex.def Info: F:/Git/messageVortex/thesis/src/main/latex/inc/blockLa
+youtSimplified_temp.pdf  used on input line 2.
+(pdftex.def)             Requested size: 545.03493pt x 139.5209pt.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 19.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 19.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 19.
+LaTeX Font Info:    Try loading font information for U+rsfs on input line 19.
+(F:\apps\portableApps\MikTeXPortable\App\MikTeX\tex\latex\jknappen\ursfs.fd
+File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
+)
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 22.
+)
+[1
+
+{F:/apps/portableApps/MikTeXPortable/App/MikTeX/pdftex/config/pdftex.map} <F:/G
+it/messageVortex/thesis/src/main/latex/inc/blockLayoutSimplified_temp.pdf>]
+(blockLayoutSimplified.aux) ) 
+Here is how much of TeX's memory you used:
+ 1999 strings out of 495204
+ 32583 string characters out of 3180596
+ 84147 words of memory out of 3000000
+ 5273 multiletter control sequences out of 15000+200000
+ 6287 words of font info for 25 fonts, out of 3000000 for 9000
+ 14 hyphenation exceptions out of 8191
+ 39i,9n,56p,312b,206s stack positions out of 5000i,500n,10000p,200000b,50000s
+<F:/apps/portableApps/MikTeXPortable/App/MikTeX/fo
+nts/type1/public/amsfonts/cm/cmmi10.pfb><F:/apps/portableApps/MikTeXPortable/Ap
+p/MikTeX/fonts/type1/public/amsfonts/cm/cmmi5.pfb><F:/apps/portableApps/MikTeXP
+ortable/App/MikTeX/fonts/type1/public/amsfonts/cm/cmmi6.pfb><F:/apps/portableAp
+ps/MikTeXPortable/App/MikTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><F:/apps/
+portableApps/MikTeXPortable/App/MikTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb
+><F:/apps/portableApps/MikTeXPortable/App/MikTeX/fonts/type1/public/amsfonts/cm
+/cmr10.pfb><F:/apps/portableApps/MikTeXPortable/App/MikTeX/fonts/type1/public/a
+msfonts/cm/cmr5.pfb><F:/apps/portableApps/MikTeXPortable/App/MikTeX/fonts/type1
+/public/amsfonts/cm/cmr7.pfb><F:/apps/portableApps/MikTeXPortable/App/MikTeX/fo
+nts/type1/public/amsfonts/cm/cmr8.pfb><F:/apps/portableApps/MikTeXPortable/App/
+MikTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb>
+Output written on blockLayoutSimplified.pdf (1 page, 86357 bytes).
+PDF statistics:
+ 49 PDF objects out of 1000 (max. 8388607)
+ 0 named destinations out of 1000 (max. 500000)
+ 6 words of extra memory for PDF output out of 10000 (max. 10000000)
+

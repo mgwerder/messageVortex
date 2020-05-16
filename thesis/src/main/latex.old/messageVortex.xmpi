@@ -1,0 +1,27 @@
+<?xpacket begin='' id='W5M0MpCehiHzreSzNTczkc9d'?> 
+<x:xmpmeta xmlns:x='adobe:ns:meta/'> 
+<rdf:RDF xmlns="http://web.resource.org/cc/" 
+xmlns:dc="http://purl.org/dc/elements/1.1/" 
+xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"> 
+<Work rdf:about=""> 
+<dc:title>MessageVortex --- Transport Independent Messaging Anonymous to 3rd Parties</dc:title> 
+<dc:date>2018</dc:date> 
+<dc:description> 
+In this paper we introduce an unobservable message annonymisation protocol, named MessageVortex. It is based on the zero trust principle and a distributed peer-to-peer (P2P) architecture and avoids central aspects such as fixed infrastructures within a global network. It scores over existing work by blending its traffic into suitable existing transport protocols, thus making it next to impossible to block it without significantly affecting regular users of the transport medium. It furthermore requires no protocol specific infrastructure in public networks and allows a sender to control all aspects of a message such as degree of anonymity, timing, and redundancy of the message transport without disclosing any of these details to the routing or transporting nodes. 
+</dc:description> 
+<dc:creator> 
+<Agent><dc:title>Martin Gwerder</dc:title></Agent> 
+</dc:creator> 
+<dc:rights> 
+<Agent><dc:title>Martin Gwerder</dc:title></Agent> 
+</dc:rights> 
+<dc:source rdf:resource="https://www.gwerder.net/~mgwerder/papers/phd/"/> 
+<license rdf:resource="http://creativecommons.org/licenses/GPL/2.0/" /> 
+</Work> 
+<License rdf:about="http://creativecommons.org/licenses/GPL/2.0/"> 
+<permits rdf:resource="http://web.resource.org/cc/Reproduction" /> 
+<permits rdf:resource="http://web.resource.org/cc/Distribution" /> 
+<requires rdf:resource="http://web.resource.org/cc/Notice" /> 
+</License> 
+</rdf:RDF> 
+<?xpacket end='r'?> 

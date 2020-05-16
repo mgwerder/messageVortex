@@ -1,0 +1,37 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [2][-]{subsection.1.1}{Formalization}{section.1}% 2
+\BOOKMARK [3][-]{subsubsection.1.1.1}{What We Worked On}{subsection.1.1}% 3
+\BOOKMARK [2][-]{subsection.1.2}{About Unlinkability, Unobservability, Undetectability and Censorship resistance}{section.1}% 4
+\BOOKMARK [2][-]{subsection.1.3}{Threat Model}{section.1}% 5
+\BOOKMARK [2][-]{subsection.1.4}{Notation }{section.1}% 6
+\BOOKMARK [2][-]{subsection.1.5}{Related work}{section.1}% 7
+\BOOKMARK [3][-]{subsubsection.1.5.1}{Definition of Anonymity, Unlinkability and Censorship Resistance}{subsection.1.5}% 8
+\BOOKMARK [3][-]{subsubsection.1.5.2}{Existing work regarding Anonymity Protocols and Censorship Resistance}{subsection.1.5}% 9
+\BOOKMARK [1][-]{section.2}{The MessageVortex Protocol}{}% 10
+\BOOKMARK [2][-]{subsection.2.1}{General Design}{section.2}% 11
+\BOOKMARK [3][-]{subsubsection.2.1.1}{Message Outline}{subsection.2.1}% 12
+\BOOKMARK [3][-]{subsubsection.2.1.2}{Accounting Layer}{subsection.2.1}% 13
+\BOOKMARK [3][-]{subsubsection.2.1.3}{Routing Layer}{subsection.2.1}% 14
+\BOOKMARK [3][-]{subsubsection.2.1.4}{Blending Layer}{subsection.2.1}% 15
+\BOOKMARK [3][-]{subsubsection.2.1.5}{Applied Steganography and the Dead Parrot}{subsection.2.1}% 16
+\BOOKMARK [2][-]{subsection.2.2}{The Core: Operations Executed in a Workspace}{section.2}% 17
+\BOOKMARK [3][-]{subsubsection.2.2.1}{Splitting and Merging}{subsection.2.2}% 18
+\BOOKMARK [3][-]{subsubsection.2.2.2}{Encryption and Decryption}{subsection.2.2}% 19
+\BOOKMARK [3][-]{subsubsection.2.2.3}{Redundancy Operations}{subsection.2.2}% 20
+\BOOKMARK [2][-]{subsection.2.3}{Usage of the Protocol}{section.2}% 21
+\BOOKMARK [1][-]{section.3}{Analysis of the MessageVortex Design}{}% 22
+\BOOKMARK [2][-]{subsection.3.1}{Static Protocol Analysis}{section.3}% 23
+\BOOKMARK [3][-]{subsubsection.3.1.1}{Endpoint Operation}{subsection.3.1}% 24
+\BOOKMARK [3][-]{subsubsection.3.1.2}{Conclusions Based on Ephemeral Identities}{subsection.3.1}% 25
+\BOOKMARK [3][-]{subsubsection.3.1.3}{Conclusions from Operations}{subsection.3.1}% 26
+\BOOKMARK [3][-]{subsubsection.3.1.4}{Ill-behaving Nodes and Unlinkability}{subsection.3.1}% 27
+\BOOKMARK [2][-]{subsection.3.2}{Dynamic Protocol Analysis}{section.3}% 28
+\BOOKMARK [3][-]{subsubsection.3.2.1}{Bootstrapping of Addresses and Identities}{subsection.3.2}% 29
+\BOOKMARK [3][-]{subsubsection.3.2.2}{Discovery of Peer Nodes}{subsection.3.2}% 30
+\BOOKMARK [3][-]{subsubsection.3.2.3}{Findings based on Adversary Environment}{subsection.3.2}% 31
+\BOOKMARK [3][-]{subsubsection.3.2.4}{Issues When Reusing Routing Blocks}{subsection.3.2}% 32
+\BOOKMARK [1][-]{section.4}{Conclusion}{}% 33
+\BOOKMARK [2][-]{subsection.4.1}{The Missing Links and Future Research}{section.4}% 34
+\BOOKMARK [2][-]{subsection.4.2}{Further Reading}{section.4}% 35
+\BOOKMARK [1][-]{IEEEbiography.0}{Biographies}{}% 36
+\BOOKMARK [2][-]{IEEEbiography.1}{Martin Gwerder}{IEEEbiography.0}% 37

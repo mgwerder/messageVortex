@@ -1,0 +1,17 @@
+[0] Config.pm:304> INFO - This is Biber 2.14
+[0] Config.pm:307> INFO - Logfile is 'messageVortex.blg'
+[116] biber-MSWIN32:322> INFO - === 
+[148] Biber.pm:415> INFO - Reading 'messageVortex.bcf'
+[348] Biber.pm:943> INFO - Found 135 citekeys in bib section 0
+[371] Biber.pm:4256> INFO - Processing section 0
+[372] Utils.pm:75> INFO - Globbing data source 'messageVortex.bib'
+[404] Utils.pm:91> INFO - Globbed data source 'messageVortex.bib' to messageVortex.bib
+[422] Biber.pm:4455> INFO - Looking for bibtex format file 'messageVortex.bib' for section 0
+[455] bibtex.pm:1653> INFO - LaTeX decoding ...
+[1220] bibtex.pm:1471> INFO - Found BibTeX data source 'messageVortex.bib'
+[2543] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[2543] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[2543] Biber.pm:4084> INFO - Sorting list 'anyt/global//global/global' of type 'entry' with template 'anyt' and locale 'en-US'
+[2543] Biber.pm:4090> INFO - No sort tailoring available for locale 'en-US'
+[3126] bbl.pm:652> INFO - Writing 'messageVortex.bbl' with encoding 'UTF-8'
+[3368] bbl.pm:755> INFO - Output to messageVortex.bbl

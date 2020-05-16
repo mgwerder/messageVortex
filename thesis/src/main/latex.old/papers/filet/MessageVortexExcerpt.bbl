@@ -1,0 +1,600 @@
+%%% -*-BibTeX-*-
+%%% Do NOT edit. File created by BibTeX with style
+%%% ACM-Reference-Format-Journals [18-Jan-2012].
+
+\begin{thebibliography}{37}
+
+%%% ====================================================================
+%%% NOTE TO THE USER: you can override these defaults by providing
+%%% customized versions of any of these macros before the \bibliography
+%%% command.  Each of them MUST provide its own final punctuation,
+%%% except for \shownote{}, \showDOI{}, and \showURL{}.  The latter two
+%%% do not use final punctuation, in order to avoid confusing it with
+%%% the Web address.
+%%%
+%%% To suppress output of a particular field, define its macro to expand
+%%% to an empty string, or better, \unskip, like this:
+%%%
+%%% \newcommand{\showDOI}[1]{\unskip}   % LaTeX syntax
+%%%
+%%% \def \showDOI #1{\unskip}           % plain TeX syntax
+%%%
+%%% ====================================================================
+
+\ifx \showCODEN    \undefined \def \showCODEN     #1{\unskip}     \fi
+\ifx \showDOI      \undefined \def \showDOI       #1{#1}\fi
+\ifx \showISBNx    \undefined \def \showISBNx     #1{\unskip}     \fi
+\ifx \showISBNxiii \undefined \def \showISBNxiii  #1{\unskip}     \fi
+\ifx \showISSN     \undefined \def \showISSN      #1{\unskip}     \fi
+\ifx \showLCCN     \undefined \def \showLCCN      #1{\unskip}     \fi
+\ifx \shownote     \undefined \def \shownote      #1{#1}          \fi
+\ifx \showarticletitle \undefined \def \showarticletitle #1{#1}   \fi
+\ifx \showURL      \undefined \def \showURL       {\relax}        \fi
+% The following commands are used for tagged output and should be
+% invisible to TeX
+\providecommand\bibfield[2]{#2}
+\providecommand\bibinfo[2]{#2}
+\providecommand\natexlab[1]{#1}
+\providecommand\showeprint[2][]{arXiv:#2}
+
+\bibitem[\protect\citeauthoryear{Ackerman}{Ackerman}{2013}]%
+        {Ackerman2013}
+\bibfield{author}{\bibinfo{person}{Spencer Ackerman}.}
+  \bibinfo{year}{2013}\natexlab{}.
+\newblock \bibinfo{title}{NSA warned to rein in surveillance as agency reveals
+  even greater scope}.
+\newblock \bibinfo{howpublished}{Newspaper}.
+\newblock
+\urldef\tempurl%
+\url{https://www.theguardian.com/world/2013/jul/17/nsa-surveillance-house-hearing}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Amat, Blake, and Dowds}{Amat
+  et~al\mbox{.}}{1999}]%
+        {Amat1999}
+\bibfield{author}{\bibinfo{person}{Oriol Amat}, \bibinfo{person}{John Blake},
+  {and} \bibinfo{person}{Jack Dowds}.} \bibinfo{year}{1999}\natexlab{}.
+\newblock \bibinfo{title}{THE ETHICS OF CREATIVE ACCOUNTING}.
+\newblock \bibinfo{howpublished}{Journal of Economic Literature
+  classification}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1.1.198.7724}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Athanasopoulos, Roussopoulos, Anagnostakis,
+  and Markatos}{Athanasopoulos et~al\mbox{.}}{2007}]%
+        {AthanRAM07}
+\bibfield{author}{\bibinfo{person}{Elias Athanasopoulos}, \bibinfo{person}{Mema
+  Roussopoulos}, \bibinfo{person}{Kostas~G. Anagnostakis}, {and}
+  \bibinfo{person}{Evangelos~P. Markatos}.} \bibinfo{year}{2007}\natexlab{}.
+\newblock \showarticletitle{GAS: Overloading a File Sharing Network as an
+  Anonymizing System}. In \bibinfo{booktitle}{\emph{Proceedings of Second
+  International Workshop on Security, (IWSEC 2007)}}. \bibinfo{pages}{1}.
+\newblock
+\urldef\tempurl%
+\url{http://dcs.ics.forth.gr/Activities/papers/gas%20iwsec07.pdf}
+\showURL{%
+Retrieved 2007-10-18 03:18:39 from \tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Ball}{Ball}{2013}]%
+        {Ball2013}
+\bibfield{author}{\bibinfo{person}{James Ball}.}
+  \bibinfo{year}{2013}\natexlab{}.
+\newblock \bibinfo{title}{NSA's Prism surveillance program: how it works and
+  what it can do}.
+\newblock \bibinfo{howpublished}{Newspaper}.
+\newblock
+\urldef\tempurl%
+\url{https://www.theguardian.com/world/2013/jun/08/nsa-prism-server-collection-facebook-google}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Boon, Derix, and Modderkolk}{Boon
+  et~al\mbox{.}}{2013}]%
+        {NCR2013}
+\bibfield{author}{\bibinfo{person}{Floor Boon}, \bibinfo{person}{Steven Derix},
+  {and} \bibinfo{person}{Huib Modderkolk}.} \bibinfo{year}{2013}\natexlab{}.
+\newblock \bibinfo{title}{Document Snowden: Nederland al sinds 1946 doelwit van
+  NSA}.
+\newblock \bibinfo{howpublished}{Newspaper}.
+\newblock
+\urldef\tempurl%
+\url{https://www.nrc.nl/nieuws/2013/11/23/nederland-sinds-1946-doelwit-van-nsa-a1429490}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Chaum}{Chaum}{1988}]%
+        {chaum-dc}
+\bibfield{author}{\bibinfo{person}{David Chaum}.}
+  \bibinfo{year}{1988}\natexlab{}.
+\newblock \showarticletitle{The Dining Cryptographers Problem: Unconditional
+  Sender and Recipient Untraceability}.
+\newblock \bibinfo{journal}{\emph{Journal of Cryptology}}  \bibinfo{volume}{1}
+  (\bibinfo{year}{1988}), \bibinfo{pages}{65--75}.
+\newblock
+\urldef\tempurl%
+\url{http://www.cs.ucsb.edu/~ravenben/classes/595n-s07/papers/dcnet-jcrypt88.pdf}
+\showURL{%
+Retrieved 2008-11-24 15:17:25 from \tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Chen, Asoni, Barrera, Danezis, and
+  Perrig}{Chen et~al\mbox{.}}{2015}]%
+        {chen2015hornet}
+\bibfield{author}{\bibinfo{person}{Chen Chen}, \bibinfo{person}{Daniele~E
+  Asoni}, \bibinfo{person}{David Barrera}, \bibinfo{person}{George Danezis},
+  {and} \bibinfo{person}{Adrain Perrig}.} \bibinfo{year}{2015}\natexlab{}.
+\newblock \showarticletitle{HORNET: High-speed onion routing at the network
+  layer}. In \bibinfo{booktitle}{\emph{Proceedings of the 22nd ACM SIGSAC
+  Conference on Computer and Communications Security}}. ACM,
+  \bibinfo{pages}{1441--1454}.
+\newblock
+\urldef\tempurl%
+\url{https://arxiv.org/pdf/1507.05724.pdf}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Clarke, Sandberg, Wiley, and Hong}{Clarke
+  et~al\mbox{.}}{2000}]%
+        {freenet}
+\bibfield{author}{\bibinfo{person}{Ian Clarke}, \bibinfo{person}{Oskar
+  Sandberg}, \bibinfo{person}{Brandon Wiley}, {and}
+  \bibinfo{person}{Theodore~W. Hong}.} \bibinfo{year}{2000}\natexlab{}.
+\newblock \showarticletitle{Freenet: {A} Distributed Anonymous Information
+  Storage and Retrieval System}. In \bibinfo{booktitle}{\emph{Proceedings of
+  Designing Privacy Enhancing Technologies: Workshop on Design Issues in
+  Anonymity and Unobservability}}. \bibinfo{pages}{46--66}.
+\newblock
+\urldef\tempurl%
+\url{https://freenetproject.org/}
+\showURL{%
+Retrieved 2003-09-09 00:53:33 from \tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Clayton, Murdoch, and Watson}{Clayton
+  et~al\mbox{.}}{2006}]%
+        {Clayton:2006}
+\bibfield{author}{\bibinfo{person}{Richard Clayton}, \bibinfo{person}{Steven~J.
+  Murdoch}, {and} \bibinfo{person}{Robert N.~M. Watson}.}
+  \bibinfo{year}{2006}\natexlab{}.
+\newblock \showarticletitle{Ignoring the Great Firewall of China}. In
+  \bibinfo{booktitle}{\emph{Privacy Enhancing Technologies}}.
+  \bibinfo{publisher}{Springer Berlin Heidelberg}, \bibinfo{pages}{20--35}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1007/11957454_2}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Danezis, Dingledine, and Mathewson}{Danezis
+  et~al\mbox{.}}{2003}]%
+        {minion-design}
+\bibfield{author}{\bibinfo{person}{George Danezis}, \bibinfo{person}{Roger
+  Dingledine}, {and} \bibinfo{person}{Nick Mathewson}.}
+  \bibinfo{year}{2003}\natexlab{}.
+\newblock \showarticletitle{Mixminion: Design of a Type III Anonymous Remailer
+  Protocol}. In \bibinfo{booktitle}{\emph{Proceedings of the 2003 IEEE
+  Symposium on Security and Privacy}}. \bibinfo{pages}{2--15}.
+\newblock
+\urldef\tempurl%
+\url{http://mixminion.net/minion-design.pdf}
+\showURL{%
+Retrieved 2006-04-09 17:24:35 from \tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Bauer, McCoy, Grunwald, and Sicker}{Department
+  of Computer Science, University of Colorado, Boulder, CO 80309-0430
+  USA}{2008}]%
+        {Bauer:2008}
+Department of Computer Science, University of Colorado, Boulder, CO 80309-0430
+  USA \bibinfo{year}{2008}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{BitBlender: Light-weight anonymity for
+  BitTorrent}}. Department of Computer Science, University of Colorado,
+  Boulder, CO 80309-0430 USA, \bibinfo{publisher}{{ACM} Press}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1145/1461464.1461465}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Briffa, Schaathun, and Wahab}{{Department of
+  Computing, University of Surrey, Guildford GU2 7XH, England}}{2009}]%
+        {F5broken}
+{Department of Computing, University of Surrey, Guildford GU2 7XH, England}
+  \bibinfo{year}{2009}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{Has F5 Really Been Broken}}. {Department of
+  Computing, University of Surrey, Guildford GU2 7XH, England},
+  \bibinfo{publisher}{{IET}}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1049/ic.2009.0245}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Dingledine and Mathewson}{Dingledine and
+  Mathewson}{[n.d.]}]%
+        {tor-spec}
+\bibfield{author}{\bibinfo{person}{Roger Dingledine} {and}
+  \bibinfo{person}{Nick Mathewson}.} \bibinfo{year}{[n.d.]}\natexlab{}.
+\newblock \bibinfo{title}{Tor Protocol Specification}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://gitweb.torproject.org/torspec.git/tree/tor-spec.txt}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Egners, Gatzen, Panchenko, and Meyer}{Egners
+  et~al\mbox{.}}{2012}]%
+        {Egners_2012}
+\bibfield{author}{\bibinfo{person}{Andr{\'e} Egners}, \bibinfo{person}{Dominic
+  Gatzen}, \bibinfo{person}{Andriy Panchenko}, {and} \bibinfo{person}{Ulrike
+  Meyer}.} \bibinfo{year}{2012}\natexlab{}.
+\newblock \showarticletitle{Introducing SOR: SSH-based onion routing}. In
+  \bibinfo{booktitle}{\emph{Advanced Information Networking and Applications
+  Workshops (WAINA), 2012 26th International Conference on}}. IEEE,
+  \bibinfo{publisher}{{IEEE}}, \bibinfo{pages}{280--286}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1109/waina.2012.89}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Ensafi, Fifield, Winter, Feamster, Weaver, and
+  Paxson}{Ensafi et~al\mbox{.}}{2015}]%
+        {Ensafi:2015}
+\bibfield{author}{\bibinfo{person}{Roya Ensafi}, \bibinfo{person}{David
+  Fifield}, \bibinfo{person}{Philipp Winter}, \bibinfo{person}{Nick Feamster},
+  \bibinfo{person}{Nicholas Weaver}, {and} \bibinfo{person}{Vern Paxson}.}
+  \bibinfo{year}{2015}\natexlab{}.
+\newblock \bibinfo{title}{Examining how the Great Firewall discovers hidden
+  circumvention servers}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1145/2815675.2815690}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Freedman and Morris}{Freedman and
+  Morris}{2002}]%
+        {tarzan:ccs02}
+\bibfield{author}{\bibinfo{person}{Michael~J. Freedman} {and}
+  \bibinfo{person}{Robert Morris}.} \bibinfo{year}{2002}\natexlab{}.
+\newblock \showarticletitle{Tarzan: A Peer-to-Peer Anonymizing Network Layer}.
+  In \bibinfo{booktitle}{\emph{Proceedings of the 9th ACM Conference on
+  Computer and Communications Security (CCS 2002)}}.
+\newblock
+\urldef\tempurl%
+\url{http://pdos.lcs.mit.edu/tarzan/docs/tarzan-ccs02.pdf}
+\showURL{%
+Retrieved 2003-09-09 00:53:38 from \tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Greenberg}{Greenberg}{2013}]%
+        {Greenberg2013}
+\bibfield{author}{\bibinfo{person}{Andy Greenberg}.}
+  \bibinfo{year}{2013}\natexlab{}.
+\newblock \bibinfo{title}{Leaked NSA Doc Says It Can Collect And Keep Your
+  Encrypted Data As Long As It Takes To Crack It}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://www.forbes.com/sites/andygreenberg/2013/06/20/leaked-nsa-doc-says-it-can-collect-and-keep-your-encrypted-data-as-long-as-it-takes-to-crack-it/#5edf34edb07d}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{G\"ulc\"u and Tsudik}{G\"ulc\"u and
+  Tsudik}{1996}]%
+        {babel}
+\bibfield{author}{\bibinfo{person}{Ceki G\"ulc\"u} {and} \bibinfo{person}{Gene
+  Tsudik}.} \bibinfo{year}{1996}\natexlab{}.
+\newblock \showarticletitle{Mixing {E}-mail With {B}abel}. In
+  \bibinfo{booktitle}{\emph{Proceedings of the Network and Distributed Security
+  Symposium - {NDSS} '96}}. \bibinfo{publisher}{IEEE}, \bibinfo{pages}{2--16}.
+\newblock
+\urldef\tempurl%
+\url{http://citeseer.nj.nec.com/2254.html}
+\showURL{%
+Retrieved 2003-09-09 00:53:01 from \tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Gwerder}{Gwerder}{[n.d.]}]%
+        {MessageVortexRFC}
+\bibfield{author}{\bibinfo{person}{Martin Gwerder}.}
+  \bibinfo{year}{[n.d.]}\natexlab{}.
+\newblock \bibinfo{title}{MessageVortex Protocol}.
+\newblock \bibinfo{howpublished}{IETF}.
+\newblock
+\urldef\tempurl%
+\url{https://datatracker.ietf.org/doc/draft-gwerder-messagevortexmain/}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Gwerder}{Gwerder}{2017}]%
+        {messageVortex}
+\bibfield{author}{\bibinfo{person}{Martin Gwerder}.}
+  \bibinfo{year}{2017}\natexlab{}.
+\newblock \bibinfo{title}{MessageVortex -- Transport Independent Messaging
+  Anonymous to Third Parties}.  (\bibinfo{date}{Dec.} \bibinfo{year}{2017}).
+\newblock
+\newblock
+\shownote{{PhD} thesis writing in progress.}
+
+
+\bibitem[\protect\citeauthoryear{Houmansadr, Brubaker, and
+  Shmatikov}{Houmansadr et~al\mbox{.}}{2013}]%
+        {oakland2013-parrot}
+\bibfield{author}{\bibinfo{person}{Amir Houmansadr}, \bibinfo{person}{Chad
+  Brubaker}, {and} \bibinfo{person}{Vitaly Shmatikov}.}
+  \bibinfo{year}{2013}\natexlab{}.
+\newblock \showarticletitle{The Parrot is Dead: Observing Unobservable Network
+  Communications}. In \bibinfo{booktitle}{\emph{Proceedings of the 2013 IEEE
+  Symposium on Security and Privacy}}.
+\newblock
+\urldef\tempurl%
+\url{http://www.cs.utexas.edu/~amir/papers/parrot.pdf}
+\showURL{%
+Retrieved 2013-06-15 02:30:17 from \tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Hsiao, Kim, Perrig, Yamada, Nelson, Gruteser,
+  and Meng}{Hsiao et~al\mbox{.}}{2012}]%
+        {hsiao2012lap}
+\bibfield{author}{\bibinfo{person}{Hsu-Chun Hsiao}, \bibinfo{person}{Tiffany
+  Hyun-Jin Kim}, \bibinfo{person}{Adrian Perrig}, \bibinfo{person}{Akira
+  Yamada}, \bibinfo{person}{Samuel~C Nelson}, \bibinfo{person}{Marco Gruteser},
+  {and} \bibinfo{person}{Wei Meng}.} \bibinfo{year}{2012}\natexlab{}.
+\newblock \showarticletitle{{LAP}: Lightweight anonymity and privacy}. In
+  \bibinfo{booktitle}{\emph{2012 IEEE Symposium on Security and Privacy}}.
+  IEEE, \bibinfo{pages}{506--520}.
+\newblock
+\urldef\tempurl%
+\url{https://www.cs.cmu.edu/~xia/resources/Documents/LAP-oakland12.pdf}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Iwanik, Klonowski, and Kuty{\l}owski}{Iwanik
+  et~al\mbox{.}}{2005}]%
+        {iwanik2005duo}
+\bibfield{author}{\bibinfo{person}{Jan Iwanik}, \bibinfo{person}{Marek
+  Klonowski}, {and} \bibinfo{person}{Miroslaw Kuty{\l}owski}.}
+  \bibinfo{year}{2005}\natexlab{}.
+\newblock \showarticletitle{DUO-Onions and Hydra-Onions-failure and adversary
+  resistant onion protocols}. In \bibinfo{booktitle}{\emph{Communications and
+  Multimedia Security}}. Springer, \bibinfo{pages}{1--15}.
+\newblock
+\urldef\tempurl%
+\url{http://dl.ifip.org/db/conf/cms/cms2004/IwanikKK04.pdf}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Kondo, Saito, Ishiguro, Tanaka, and
+  Matsuo}{Kondo et~al\mbox{.}}{2009}]%
+        {Kondo2009}
+\bibfield{author}{\bibinfo{person}{Masaki Kondo}, \bibinfo{person}{Shoichi
+  Saito}, \bibinfo{person}{Kiyohisa Ishiguro}, \bibinfo{person}{Hiroyuki
+  Tanaka}, {and} \bibinfo{person}{Hiroshi Matsuo}.}
+  \bibinfo{year}{2009}\natexlab{}.
+\newblock \showarticletitle{Bifrost : A Novel Anonymous Communication System
+  with {DHT}}. In \bibinfo{booktitle}{\emph{2009 International Conference on
+  Parallel and Distributed Computing, Applications and Technologies}}.
+  \bibinfo{publisher}{{IEEE}}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1109/pdcat.2009.35}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Leuenberger and Meier}{Leuenberger and
+  Meier}{1989}]%
+        {Leuenberger1989}
+\bibfield{author}{\bibinfo{person}{Moritz Leuenberger} {and}
+  \bibinfo{person}{Josi Meier}.} \bibinfo{year}{1989}\natexlab{}.
+\newblock \bibinfo{title}{Vorkommnisse im EJPD Bericht der Parlamentarischen
+  Untersuchungskommission(PUK)}.
+\newblock \bibinfo{howpublished}{Bundesblatt 1989-55}.
+\newblock
+\urldef\tempurl%
+\url{https://www.parlament.ch/centers/documents/de/ed-berichte-puk-ejpd.pdf}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Lowe, Winters, and Marcus}{Lowe
+  et~al\mbox{.}}{2007}]%
+        {lowe2007great}
+\bibfield{author}{\bibinfo{person}{Graham Lowe}, \bibinfo{person}{Patrick
+  Winters}, {and} \bibinfo{person}{Michael~L Marcus}.}
+  \bibinfo{year}{2007}\natexlab{}.
+\newblock \showarticletitle{The great DNS wall of China}.
+\newblock \bibinfo{journal}{\emph{MS, New York University}}
+  \bibinfo{volume}{21} (\bibinfo{year}{2007}), \bibinfo{pages}{1}.
+\newblock
+\urldef\tempurl%
+\url{https://censorbib.nymity.ch/pdf/Lowe2007a.pdf}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{McEliece and Sarwate}{McEliece and
+  Sarwate}{1981}]%
+        {mceliece1981sharing}
+\bibfield{author}{\bibinfo{person}{Robert~J. McEliece} {and}
+  \bibinfo{person}{Dilip~V. Sarwate}.} \bibinfo{year}{1981}\natexlab{}.
+\newblock \showarticletitle{On sharing secrets and Reed-Solomon codes}.
+\newblock \bibinfo{journal}{\emph{Commun. ACM}} \bibinfo{volume}{24},
+  \bibinfo{number}{9} (\bibinfo{year}{1981}), \bibinfo{pages}{583--584}.
+\newblock
+\urldef\tempurl%
+\url{http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.80.2829&rep=rep1&type=pdf}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Mohajeri~Moghaddam}{Mohajeri~Moghaddam}{2013}]%
+        {mohajeri2013skypemorph}
+\bibfield{author}{\bibinfo{person}{Hooman Mohajeri~Moghaddam}.}
+  \bibinfo{year}{2013}\natexlab{}.
+\newblock \emph{\bibinfo{title}{SkypeMorph: Protocol Obfuscation for Censorship
+  Resistance}}.
+\newblock \bibinfo{thesistype}{Master's\ thesis}. \bibinfo{school}{University
+  of Waterloo}.
+\newblock
+\urldef\tempurl%
+\url{https://uwspace.uwaterloo.ca/bitstream/handle/10012/7262/Mohajeri_Hooman.pdf?sequence=1}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Nambiar and Wright}{Nambiar and
+  Wright}{2006}]%
+        {Salsa}
+\bibfield{author}{\bibinfo{person}{Arjun Nambiar} {and}
+  \bibinfo{person}{Matthew Wright}.} \bibinfo{year}{2006}\natexlab{}.
+\newblock \showarticletitle{Salsa: A Structured Approach to Large-Scale
+  Anonymity}. In \bibinfo{booktitle}{\emph{Proceedings of CCS 2006}}.
+\newblock
+\urldef\tempurl%
+\url{http://ranger.uta.edu/~mwright/papers/salsa-ccs06.pdf}
+\showURL{%
+Retrieved 2008-06-26 10:04:52 from \tempurl}
+
+
+\bibitem[\protect\citeauthoryear{NSA}{NSA}{2013}]%
+        {XKeyscore}
+\bibfield{author}{\bibinfo{person}{NSA}.} \bibinfo{year}{2013}\natexlab{}.
+\newblock \bibinfo{title}{XKeyscore presentation from 2008 – read in full}.
+\newblock \bibinfo{howpublished}{Web and several newspapers (e.g., guardian)}.
+\newblock
+\urldef\tempurl%
+\url{https://www.theguardian.com/world/interactive/2013/jul/31/nsa-xkeyscore-program-full-presentation}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{Three slides have been redacted as they contained suposedly specific
+  NSA operations.}
+
+
+\bibitem[\protect\citeauthoryear{Perrig, Szalachowski, Reischuk, and
+  Chuat}{Perrig et~al\mbox{.}}{2017}]%
+        {perrig2017scion}
+\bibfield{author}{\bibinfo{person}{Adrian Perrig}, \bibinfo{person}{Pawel
+  Szalachowski}, \bibinfo{person}{Raphael~M Reischuk}, {and}
+  \bibinfo{person}{Laurent Chuat}.} \bibinfo{year}{2017}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{SCION: a secure Internet architecture}}.
+\newblock \bibinfo{publisher}{Springer}.
+\newblock
+\urldef\tempurl%
+\url{https://www.scion-architecture.net/pdf/SCION-book.pdf}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Pfitzmann and Hansen}{Pfitzmann and
+  Hansen}{2010}]%
+        {anonTerminology}
+\bibfield{author}{\bibinfo{person}{Andreas Pfitzmann} {and}
+  \bibinfo{person}{Marit Hansen}.} \bibinfo{year}{2010}\natexlab{}.
+\newblock \bibinfo{title}{A terminology for talking about privacy by data
+  minimization: Anonymity, Unlinkability, Undetectability, Unobservability,
+  Pseudonymity, and Identity Management}.
+\newblock
+  \bibinfo{howpublished}{http://dud.inf.tu-dresden.de/literatur/Anon\_Terminology\_v0.34.pdf}.
+\newblock
+\urldef\tempurl%
+\url{http://dud.inf.tu-dresden.de/literatur/Anon\_Terminology\_v0.34.pdf}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{v0.34.}
+
+
+\bibitem[\protect\citeauthoryear{Reed and Solomon}{Reed and Solomon}{1960}]%
+        {reed1960polynomial}
+\bibfield{author}{\bibinfo{person}{Irving~S Reed} {and}
+  \bibinfo{person}{Gustave Solomon}.} \bibinfo{year}{1960}\natexlab{}.
+\newblock \showarticletitle{Polynomial codes over certain finite fields}.
+\newblock \bibinfo{journal}{\emph{Journal of the society for industrial and
+  applied mathematics}} \bibinfo{volume}{8}, \bibinfo{number}{2}
+  (\bibinfo{date}{June} \bibinfo{year}{1960}), \bibinfo{pages}{300--304}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1137/0108018}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Rennhard and Plattner}{Rennhard and
+  Plattner}{2002}]%
+        {morphmix:wpes2002}
+\bibfield{author}{\bibinfo{person}{Marc Rennhard} {and}
+  \bibinfo{person}{Bernhard Plattner}.} \bibinfo{year}{2002}\natexlab{}.
+\newblock \showarticletitle{Introducing MorphMix: Peer-to-Peer based Anonymous
+  Internet Usage with Collusion Detection}. In
+  \bibinfo{booktitle}{\emph{Proceedings of the Workshop on Privacy in the
+  Electronic Society (WPES 2002)}}.
+\newblock
+\urldef\tempurl%
+\url{http://cecid.sourceforge.net/morphmix.pdf}
+\showURL{%
+Retrieved 2003-09-09 00:55:01 from \tempurl}
+
+
+\bibitem[\protect\citeauthoryear{von Ahn, Bortz, and Hopper}{von Ahn
+  et~al\mbox{.}}{2003}]%
+        {k-anonymous:ccs2003}
+\bibfield{author}{\bibinfo{person}{Luis von Ahn}, \bibinfo{person}{Andrew
+  Bortz}, {and} \bibinfo{person}{Nicholas~J. Hopper}.}
+  \bibinfo{year}{2003}\natexlab{}.
+\newblock \showarticletitle{k-Anonymous Message Transmission}. In
+  \bibinfo{booktitle}{\emph{Proceedings of the 10th ACM Conference on Computer
+  and Communications Security (CCS 2003)}},
+  \bibfield{editor}{\bibinfo{person}{Vijay Atluri} {and} \bibinfo{person}{Peng
+  Liu}} (Eds.). \bibinfo{publisher}{ACM Press}, \bibinfo{pages}{122--130}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.1145/948109.948128}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Westfeld}{Westfeld}{2002}]%
+        {f5}
+\bibfield{author}{\bibinfo{person}{Andreas Westfeld}.}
+  \bibinfo{year}{2002}\natexlab{}.
+\newblock \showarticletitle{F5 - A Steganographic Algorithm}.
+\newblock \bibinfo{journal}{\emph{none}}  \bibinfo{volume}{none}
+  (\bibinfo{year}{2002}).
+\newblock
+\urldef\tempurl%
+\url{http://www.ws.binghamton.edu/fridrich/research/f5.pdf}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Xinhua}{Xinhua}{2019}]%
+        {socialCreditSystem}
+\bibfield{author}{\bibinfo{person}{Xinhua}.} \bibinfo{year}{2019}\natexlab{}.
+\newblock \bibinfo{title}{China to boost social credit system with new market
+  regulatory measures}.
+\newblock \bibinfo{howpublished}{Internet}.
+\newblock
+\urldef\tempurl%
+\url{http://www.xinhuanet.com/english/2019-06/13/c_138138026.htm}
+\showURL{%
+\tempurl}
+
+
+\end{thebibliography}
