@@ -10,7 +10,7 @@ RUN mkdir /var/tmp/messagevortex && \
     DEBIAN_FRONTEND=noninteractive apt-get -y install \
                texlive-latex-base texlive-extra-utils texlive-latex-extra texlive-fonts-extra \
                texlive-bibtex-extra texlive-luatex \
-               texlive-lang-german texlive-lang-english xzdec biber \
+               texlive-lang-german texlive-lang-english xzdec biber texlive-publishers \
                ghostscript gsfonts gsfonts-other gsfonts-x11 \
                pandoc calibre enscript \
                fig2dev \
