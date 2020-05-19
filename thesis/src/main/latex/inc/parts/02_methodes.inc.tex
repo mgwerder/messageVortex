@@ -66,20 +66,8 @@ This question is answered in part \ref{sec:discussion}.
 \chapter{Anonymity Research}
 In this section, we collect protocols research related to anonymity. We did not stick to anonymous message transfer. Instead, we took a broad focus in terms of technology and outlined in each protocol strengths and weaknesses identified, which may be relevant to this research.
 
-\subsection{Definition of Anonymity}
-As the definition for Anonymity we take the definition as specified in \cite{anonTerminology}.\DeclareFixedFootnote{\omitted}{footnotes omitted in quote}
-\begin{quote}
-	Anonymity of a subject means that the subject is not identifiable within a set of subjects, the anonymity set.\omitted
-\end{quote}
-and
-\begin{quote}
-	Anonymity of a subject from an attacker's perspective means that the attacker cannot sufficiently identify the subject within a set of subjects, the anonymity set.\omitted
-\end{quote}
-
-We define the anonymity set as the set of all possible subjects within a supposed message. The anonymity of a subject towards an observing third party is a crucial factor as it relates directly to our adversary model.
-
 \section{Definition of Anonymity}
-As the definition for Anonymity we take the definition as specified in \cite{anonTerminology}.
+As the definition for Anonymity we take the definition as specified in \cite{anonTerminology}.\DeclareFixedFootnote{\omitted}{footnotes omitted in quote}
 \begin{quote}
 	Anonymity of a subject means that the subject is not identifiable within a set of subjects, the anonymity set.\omitted
 \end{quote}
@@ -125,8 +113,6 @@ We define the anonymity set as the set of all possible subjects within a suppose
 \section{Mixing}
 \fxwarning{complete section}
 \section{Onionizing}
-\fxwarning{complete section}
-\section{Crowds}
 \fxwarning{complete section}
 \section{Mimic Routes}
 \fxwarning{complete section}
@@ -240,7 +226,8 @@ Table \ref{tab:anonClass} shows the previously analyzed protocols.
 	\caption{Classification table for anonymization protocols according to \cite{Shirazi2018}}
 \end{table*}
 
-\section{Pseudonymous Remailers (1981)\label{sec:remPseudo}}
+\section{Remailers, Resenders, Onion Routers, and Mixnets}
+\subsection{Pseudonymous Remailers (1981)\label{sec:remPseudo}}
 The basic idea of remailers was discussed in \cite{CHAUM1}. The most well-known remailer was probably anon.penet.fi, which operated from 1993 to 1996. This type of remailer is often referred to as type-0-remailer.
 
 In principle, an anonymous remailer works as an ordinary forwarding service for messages (e.g., \defref{SMTP}). The only difference is that it strips off all meta information and then replaces the sender and recipient address with pseudonyms respectively with the real address. 
@@ -249,53 +236,27 @@ This kind of remailer is easily attackable by an authority. The remailer has a d
 
 This remailer offers, therefore, no protection against an adversary defined in our problem.
 
-\section{Babel (1996)}
-Babel was an academic system defined in a paper by \citeauthor{babel} in \citeyear{babel}\cite{babel}. It has been developed at IBM Zurich Research Laboratory. It was a mixing system using onionized addresses. The sender remains anonymous while he may provide a reply routing block called RPI. If both parties would like to remain anonymous, the RPI of the initiator is deployed in a forum thread. Anyone using this block adds an RPI for its address to the message.
-
-This system has all the disadvantages of a system using MURBs. Traffic highlighting and similar attacks are possible.
-
-\section{Cypherpunk Remailers (approx. 1993)\label{sec:remCypherpunk}}
+\subsection{Cypherpunk Remailers (approx. 1993)\label{sec:remCypherpunk}}
 With the failing of anon.penet.fi, it became clear that the weakest spot of a single server infrastructure the information stored on the server and the vulnerability of their owner. The new type-1-remailers score over the existing type-0-remailers by using encryption for the message. Most of the time PGP was used and custom programmed mail processors on systems to achieve the functionallity. It is unclear when first type-1-remailers were invented. Setting up a type-1-remailer was typically achieved by using procmail together with a small script calling PGP binaries and then sending the resulting message to the next recipient. By combining multiple type-1-remailers, an onion-like structure of the message was achievable. 
 
 This approach was promising, but it was still observable. An observation was possible by correlating the message sizes (e.g., strictly decreasing) and timing information. Furthermore, remailers were however still known and authorities were able to ban infrastructure and capable of monitoring their routing activities. Additionally, those remailers allowed to prosecute administrators of such systems.
 
-\section{Mixmaster-Remailers (1996)\label{sec:remMixmaster}}
+\subsection{Babel (1996)}
+Babel was an academic system defined in a paper by \citeauthor{babel} in \citeyear{babel}\cite{babel}. It has been developed at IBM Zurich Research Laboratory. It was a mixing system using onionized addresses. The sender remains anonymous while he may provide a reply routing block called RPI. If both parties would like to remain anonymous, the RPI of the initiator is deployed in a forum thread. Anyone using this block adds an RPI for its address to the message.
+
+This system has all the disadvantages of a system using MURBs. Traffic highlighting and similar attacks are possible.
+
+\subsection{Mixmaster-Remailers (1996)\label{sec:remMixmaster}}
 Like Cypherpunk remailers, the Mixmaster remailers were working with onion-like encrypted messages. The protocol was based on Mix-Nets described by Chaum in \cite{CHAUM1} and further developed by L. Cotrell in 1996. 
 
 In contrast to type-1-remailers, the use of cascading systems to remail became systematic. The enduser used specialized software to build and send Mixmaster messages.
 
 Mixmaster messages were still traceable by message size. Reply blocks were not supported by the system. A user had to know all Mixmaster nodes in order to use the system. The last node was typically an exit node sending the message in clear to the final recipient. This behavior still allowed the use of Usenet.
 
+\subsection{Crowds (1997)}
+\fxwarning{insert jondosystem}
 
-\section{Mixminion-Remailers (2002)\label{sec:remMixminion}}
-Mixminion was the standard implementation of a type-3-remailer. It tried to address many issues previously not solved. A Mixminion router splits messages in equally sized chunks and supports SURBs. Furthermore,  replay protection and key rotation were available. Unlike the previous remailer types, Mixminion was no longer using \defref{SMTP} as the transport protocol. Instead, Mixminion introduced a new transport protocol. The sources of this remailer are available on GitHub under https://github.com/mixminion/mixminion.
-
-As a received message had to be decoded by the final recipient. Therefore, the final recipient had to be aware of Mixminion system.
-
-According to \url{https://mixminion.net} the first release of the software was in December 2002. And has been discontinued in 2008. Since 2011 the sources are available on GitHub. Therehave been some forks in 2011 but at the moment all forks seem to be inactive since at least 2016 as there are no new commits.
-
-\section{Tarzan (2002)}
-Tarzan is a P2P IP protocol using UDP to communicate. It is specified in \cite{tarzan:ccs02}. Tarzan nodes may be used to anonymize Internet traffic in general. An initiator on the original sender machines encapsulates traffic into a layered UDP package and sends the package through a mix like relayd's. The last relayd acts as an exit node. A replier may send answers the opposite way. Each relayd knows its next and previous relayd. To minimize the impact of observation, Tarzan forwards packets only every 20ms and features replay protection.
-
-\section{AN.ON (2003)}
-AN.ON, as suggested in \cite{federrath2003system}, is a mixing network. It generates messages in equally sized chunks and sends them in fixed time slots after random mixing. Its implementation is called JAP and may be found under https://anon.inf.tu-dresden.de/. JAP is many ways similar to the capabilities of Tor. The network was at the time of writing a lot smaller (10 JonDos compared to 6500 relays in the Tor network).
-
-\section{MorphMix (2002)}
-MorphMix is another mix network and specified in \cite{morphmix:wpes2002}. It was a circuit-based mix system for networking anonymity. The core of the network was collision detection. This detection has been circumvented by \cite{morphmix:pet2006}. Since then, no new papers have been published, and the project seems to be dead.
-
-\section{SOR (2012)}
-SSH-based onion routing (SOR)\cite{Egners_2012} is blaming the complex and monocultural landscape of anonymizing software and proclaims a simple approach based on onionized SSH tunnels. 
-
-While the approach is both simple and effective, it is not suitable against a powerful adversary. First, an adversary may be able{\tiny } to snoop the forwarding when on the system. Second, due to the timing behavior, tunnels belonging to each other may be identified, and third, the package size information does leak as well.
-
-
-\section{SCION (2017)}
-SCION\cite{perrig2017scion} is a clean slate Internet protocol. While SCION is not really an anonymizing protocol. It contains, however,  many interesting features. Unlike with the traditional networks, we have the possibility of influencing the routing of data within SCION. Furthermore, with PHI\cite{chen2017phi} and Dovetail\cite{sankey2014dovetail}, SCION may feature strong and fast anonymity features. 
-
-Unfortunately, as this is a clean slate Internet design, it is not available commonly currently, and as it is easily identifiable, it enables easy censorship as the relevance is due to its current availability of no importance, and a censoring adversary may just ban and censor SCION entirely. 
-
-
-\section{Tor (2000)\label{sec:tor}}
+\subsection{Tor (2000)\label{sec:tor}}
 Tor is one of the most common onion router networks these days and onionizes generic TCP streams. It is specified in \cite{tor-spec}. It might be considered one of the most advanced networks since it has a considerable size, and much research has been done here.
 
 According to \cite{onion-routing:pet2000} Tor is a network consisting of multiple onion routers. Each client first picks an entry node. Then it establishes an identity, gets a listing of relay servers, and chooses a path through multiple onion routers. The temporary identity links to such a path and should be changed on a regular base along with its identity. Transferring data works by splitting the data into equally sized cells of 512 bytes.
@@ -312,11 +273,12 @@ Attacking anonymization has been done in several ways. First of all, the most co
 
 Generally, the effectiveness of the monitoring of single nodes or whole networks is disputed. According to a study by \citeauthor{ccs2013-usersrouted} in \citeyear{ccs2013-usersrouted}\cite{ccs2013-usersrouted}, a system in the scale of PRISM should be able to correlate traffic of 95\% of the users within a ``few days''. Other sources based on the Snowden Papers claim that NSA was unable so far to de-anonymize users of  Tor. However, since these papers referenced to ``manual analysis'', the statement may be disputed when looking at automated attacks as well.
 
+\subsubsection{Censorship Resistance}
 It is, according to \url{https://www.torproject.org/docs/pluggable-transports}, impossible to use transborder Tor traffic in at least China, Uzbekistan, Iran, and Kazakstan. In censored countries, Tor offers so-called bridged Transports. Currently deployed transports in the standard Tor browser bundle package are obfs4, meek, FTE, and ScrambleSuit. Only meek is listed as working in China. Meek achieves this by hiding its traffic in a standard protocol (https).
 
 \cite{saleh2018shedding} is an excellent survey listing recent developments and attacks within the Tor project.
 
-\section{\texorpdfstring{$I^2P$}{I2P} (2001)}
+\subsection{\texorpdfstring{$I^2P$}{I2P} (2001)}
 The name $I^2P$ is a derived from  ``Invisible Internet Project'' according to \href{https://geti2p.net/}{geti2p.net}. The first binary relase on sourceforge dates from 2001. The system itself is comparable to Tor for its capabilities. Mayor differences are:
 \begin{itemize}
 	\item P2P based
@@ -331,7 +293,69 @@ $I^2P$ has not attracted as much attention as Tor so far. So it is hard to judge
 In \citeyear{pets2011-i2p} \citeauthor{pets2011-i2p} presented in \cite{pets2011-i2p} an attack. As $I^2P$s security model is chosen based on IP addresses, the authors propose to use several cloud providers in different B-Class networks. By selectively flooding peers, an adversary may extract statistical information. The paper proposes an attack based on the heuristic performance-based peer selection. The main critics of the paper were that the peer selection might be influenced by an adversary enabling him to recover $I^2P$ has not attracted as much attention as Tor so far. So it is hard to judge upon its real qualities.
 
 In \citeyear{pets2011-i2p} \citeauthor{pets2011-i2p} presented in \cite{pets2011-i2p} an attack. As $I^2P$s security model is chosen based on IP addresses, the authors propose to use several cloud providers in different B-Class networks. By selectively flooding peers, an adversary may extract statistical information. The paper proposes an attack based on the heuristic performance-based peer selection. The main critics of the paper were that the peer selection might be influenced by an adversary enabling him to recover data on a statistical base.
-\section{Feenet (2000)}
+
+\subsection{Mixminion-Remailers (2002)\label{sec:remMixminion}}
+Mixminion was the standard implementation of a type-3-remailer. It tried to address many issues previously not solved. A Mixminion router splits messages in equally sized chunks and supports SURBs. Furthermore,  replay protection and key rotation were available. Unlike the previous remailer types, Mixminion was no longer using \defref{SMTP} as the transport protocol. Instead, Mixminion introduced a new transport protocol. The sources of this remailer are available on GitHub under https://github.com/mixminion/mixminion.
+
+As a received message had to be decoded by the final recipient. Therefore, the final recipient had to be aware of Mixminion system.
+
+According to \url{https://mixminion.net} the first release of the software was in December 2002. And has been discontinued in 2008. Since 2011 the sources are available on GitHub. Therehave been some forks in 2011 but at the moment all forks seem to be inactive since at least 2016 as there are no new commits.
+
+\subsection{\texorpdfstring{$\mathcal{P}^5$}{P5} (2002)}
+The Peer-to-Peer Personal Privacy Protocol is defined in \cite{sherwood-protocol}. It provides sender-, receiver- and sender-receiver anonymity. According to the project page of $\mathcal{P}^5$, there is only a simulator available for the protocol.
+
+The transport layer problematic has been wholly ignored. As there is no precise protocol specification but only a rough outline about the messaging and the crypto operations, $\mathcal{P}^5$ offers minimal possibilities for analysis.
+
+\subsubsection{AN.ON (2003)}
+AN.ON, as suggested in \cite{federrath2003system}, is a mixing network. It generates messages in equally sized chunks and sends them in fixed time slots after random mixing. Its implementation is called JAP and may be found under https://anon.inf.tu-dresden.de/. JAP is many ways similar to the capabilities of Tor. The network was at the time of writing a lot smaller (10 JonDos compared to 6500 relays in the Tor network).
+
+\subsection{AP3 (2004)}
+AP3, as defined in \cite{mislove2004ap3}, is an anonymous communication system and very similar to crowds. It performs a random walk over a set of known nodes. Not all nodes are known to anyone, and all nodes are aware of the final recipient. 
+
+The system is susceptible to numerous attacks, as shown by \cite{ccs2008:mittal}, and does not withstand our adversary as the final recipient is known to the routing nodes.
+
+\subsection{Cashmere (2005)}
+Cashmere is specified in \cite{zhuang2005cashmere}. It defines a protocol for the use of chaum mixes. Unlike most of the protocols, the chaum mixes in cashmere are virtual. So-called relay groups represent them. Each mix in the relay group may be used as an equivalent mix to all other mixes in the same group. 
+
+This design means that the failure of one mix does not result in the non-delivery of a message.
+
+No client implementation could be found on the \textit{}nternet. The project homepage \href{http://current.cs.ucsb.edu/projects/cashmere/}{http://current.cs.ucsb.edu/projects/cashmere/} has not been updated since 2005. This suggests that this project is dead or sleeping.
+
+\subsection{SCION (2017)}
+SCION\cite{perrig2017scion} is a clean slate Internet protocol. While SCION is not really an anonymizing protocol. It contains, however,  many interesting features. Unlike with the traditional networks, we have the possibility of influencing the routing of data within SCION. Furthermore, with PHI\cite{chen2017phi} and Dovetail\cite{sankey2014dovetail}, SCION may feature strong and fast anonymity features. 
+
+Unfortunately, as this is a clean slate Internet design, it is not available commonly currently, and as it is easily identifiable, it enables easy censorship as the relevance is due to its current availability of no importance, and a censoring adversary may just ban and censor SCION entirely. 
+
+\section{Distributed Hash Tables}
+\subsection{Tarzan (2002)}
+Tarzan is a P2P IP protocol using UDP to communicate. It is specified in \cite{tarzan:ccs02}. Tarzan nodes may be used to anonymize Internet traffic in general. An initiator on the original sender machines encapsulates traffic into a layered UDP package and sends the package through a mix like relayd's. The last relayd acts as an exit node. A replier may send answers the opposite way. Each relayd knows its next and previous relayd. To minimize the impact of observation, Tarzan forwards packets only every 20ms and features replay protection.
+
+\subsection{MorphMix (2002)}
+MorphMix is another mix network and specified in \cite{morphmix:wpes2002}. It was a circuit-based mix system for networking anonymity. The core of the network was collision detection. This detection has been circumvented by \cite{morphmix:pet2006}. Since then, no new papers have been published, and the project seems to be dead.
+
+\subsection{Salsa (2008)}
+Salsa was proposed in \cite{Salsa} and described a circuit based anonymization pattern based on distributed hash tables (DHT). An implementation for Salsa is available, but it is not public. \cite{ccs2008:mittal} claims that by combining active and passive attacks, anonymity can be compromised.
+
+\subsection{SOR (2012)}
+SSH-based onion routing (SOR)\cite{Egners_2012} is blaming the complex and monocultural landscape of anonymizing software and proclaims a simple approach based on onionized SSH tunnels. 
+
+While the approach is both simple and effective, it is not suitable against a powerful adversary. First, an adversary may be able{\tiny } to snoop the forwarding when on the system. Second, due to the timing behavior, tunnels belonging to each other may be identified, and third, the package size information does leak as well.
+
+\section{Dining Cryptographer Based Networks}
+\subsection{Herbivore (2003)}
+Herbivore is a network protocol designed by \citeauthor{herbivore:tr} in \cite{herbivore:tr}. It is based on the dining cryptographers paper\cite{chaum-dc}. At the time of writing, no herbivore client or an actual protocol implementation could be found on the Internet. Wikipedia lists Herbivore as ``dormant or defunct''.
+
+\subsection{Dissent (2010)}
+Dissent is defined in \cite{Corrigan-Gibbs:2010:DAA:1866307.1866346}. It is an anonymity network based on DC-nets. A set of servers forms these DC-nets. At least one of the servers in the used net must be trustworthy, and none may be misbehaving. A server failure results in the stall of all message delivery using this server.
+
+\section{Multicast and Broadcast Based Networks}
+\subsection{Hordes (2002)}
+Hordes was a multicast-based protocol for anonymity specified in \cite{Levine:2002}. Hordes used the abilities to handle multicast addresses of routers to generate a dynamic set of receivers and then sends messages to them. It assumes that a single observer or router does not know all participating peers. 
+
+This assumption is correct for a local observer. Unfortunately, it is not sufficient assuming an adversary as defined in this paper.
+
+\section{Distributed Storage Based Networks}
+\subsection{Feenet (2000)}
 Freenet was initially designed to be a fully distributed data store\cite{freenet}. Documents are stored in an encrypted form. Downloaders must know a document descriptor called CHK containing the file hash, the key, and some background about the crypto being used. A file is stored more or less redundantly based on the number of accesses to a stored file. The primary goal of Freenet is to decouple authorship from a particular document. It furthermore provides fault-tolerant storage, which improves caching of a document if requested more often.
 
 Precisely as $I^2P$, Freenet is not analyzed thoroughly by the scientific world. 
@@ -340,88 +364,56 @@ The Freenet features two protocols FCPv2 acts as the client protocol for partici
 
 The Freenet project seems to be under active development as pages about protocols were updated in the near past (Last update on the FCPv2 Page was July \nth{5} 2016 at the time of writing).
 
-\section{Herbivore (2003)}
-Herbivore is a network protocol designed by \citeauthor{herbivore:tr} in \cite{herbivore:tr}. It is based on the dining cryptographers paper\cite{chaum-dc}. At the time of writing, no herbivore client or an actual protocol implementation could be found on the Internet. Wikipedia lists Herbivore as ``dormant or defunct''.
-
-\section{Dissent (2010)}
-Dissent is defined in \cite{Corrigan-Gibbs:2010:DAA:1866307.1866346}. It is an anonymity network based on DC-nets. A set of servers forms these DC-nets. At least one of the servers in the used net must be trustworthy, and none may be misbehaving. A server failure results in the stall of all message delivery using this server.
-
-\section{\texorpdfstring{$\mathcal{P}^5$}{P5} (2002)}
-The Peer-to-Peer Personal Privacy Protocol is defined in \cite{sherwood-protocol}. It provides sender-, receiver- and sender-receiver anonymity. According to the project page of $\mathcal{P}^5$, there is only a simulator available for the protocol.
-
-The transport layer problematic has been wholly ignored. As there is no precise protocol specification but only a rough outline about the messaging and the crypto operations, $\mathcal{P}^5$ offers minimal possibilities for analysis.
-
-\section{Gnutella (2000)}
+\subsubsection{Gnutella (2000)}
 Gnutella is not a protocol for the anonymity world in special. Instead, the Gnutella protocol implements a general file sharing on a Peer to peer base. This peer-to-peer approach is the most interesting aspect of Gnutella in this context. Furthermore, Gnutella has proven to be working with a large number of clients.
 
 The current protocol specification may be found under \href{http://rfc-gnutella.sourceforge.net/developer/stable/index.html}{http://rfc-gnutella.sourceforge.net/}. While the Gnutella network is defunct. The approaches solving some of the peer-to-peer aspects were very interesting.
 
-\section{Gnutella2 (2002)}
+\subsection{Gnutella2 (2002)}
 Despite its name, Gnutella2 is not the next generation of Gnutella. It was a fork in 2002 from the original Gnutella and has been developed in a different direction. The specification may be found on \url{http://g2.doxu.org}. Just as its predecessor, Gnutella2 seems to be dead. The last relevant update to the main site or its protocol is dated four years back.
 
-
-\section{Hordes (2002)}
-Hordes was a multicast-based protocol for anonymity specified in \cite{Levine:2002}. Hordes used the abilities to handle multicast addresses of routers to generate a dynamic set of receivers and then sends messages to them. It assumes that a single observer or router does not know all participating peers. 
-
-
-This assumption is correct for a local observer. Unfortunately, it is not sufficient assuming an adversary as defined in this paper.
-
-\section{Salsa (2008)}
-Salsa was proposed in \cite{Salsa} and described a circuit based anonymization pattern based on distributed hash tables (DHT). An implementation for Salsa is available, but it is not public. \cite{ccs2008:mittal} claims that by combining active and passive attacks, anonymity can be compromised.
-
-\section{AP3 (2004)}
-AP3, as defined in \cite{mislove2004ap3}, is an anonymous communication system and very similar to crowds. It performs a random walk over a set of known nodes. Not all nodes are known to anyone, and all nodes are aware of the final recipient. 
-
-The system is susceptible to numerous attacks, as shown by \cite{ccs2008:mittal}, and does not withstand our adversary as the final recipient is known to the routing nodes.
-
-\section{Cashmere (2005)}
-Cashmere is specified in \cite{zhuang2005cashmere}. It defines a protocol for the use of chaum mixes. Unlike most of the protocols, the chaum mixes in cashmere are virtual. So-called relay groups represent them. Each mix in the relay group may be used as an equivalent mix to all other mixes in the same group. 
-
-This design means that the failure of one mix does not result in the non-delivery of a message.
-
-No client implementation could be found on the \textit{}nternet. The project homepage \href{http://current.cs.ucsb.edu/projects/cashmere/}{http://current.cs.ucsb.edu/projects/cashmere/} has not been updated since 2005. This suggests that this project is dead or sleeping.
-
-\section{Riffle (2016)}
+\section{Unknown (TBD)}
+\subsection{Riffle (2016)}
 \cite{kwon2016riffle}
 
 \fxwarning{Add Riffle}%
 
-\section{Atom (2017)}
+\subsection{Atom (2017)}
 \cite{kwon2017atom}
 
 \fxwarning{Add Atom}%
 
-\section{Riposte (2015)}
+\subsection{Riposte (2015)}
 \cite{corrigan2015riposte}
 
 \fxwarning{Add Riposte}%
 
-\section{Pung (2016)}
+\subsection{Pung (2016)}
 \cite{angel2016unobservable}
 
 \fxwarning{Add Pung}%
 
-\section{PIR (2018)}
+\subsection{PIR (2018)}
 \cite{angel2018pir}
 
 \fxwarning{Check PIR}%
 
-\section{Karaoke (2018)}
+\subsection{Karaoke (2018)}
 \cite{lazar2018karaoke}
 
 \fxwarning{Add Karaoke}%
 
-\section{Loopix (2017)}
+\subsection{Loopix (2017)}
 \cite{piotrowska2017loopix}
 
 \fxwarning{Add Loopix}%
 
-\section{Stadium (2017)}
+\subsection{Stadium (2017)}
 \cite{tyagi2017stadium}
 
 \fxwarning{Add Stadium}%
 
-\section{Vuvuzela (2015)}
+\subsection{Vuvuzela (2015)}
 \cite{van2015vuvuzela}
 
 \fxwarning{Add Vuvuzela}%
@@ -546,28 +538,278 @@ we may furthermore subdivide the adversaries into the following sub-classes:
 	This adversary behaves like a traditional spy. He collects and classifies information while hiding its activities. Unlike within reach of a censoring adversary, in this case, typically, no restrictions apply to the use of anonymization technology.
 \end{itemize}
 
-\chapter{Protocol Outline}
+
+\chapter{Required Properties of our Unobservable Network}
 \fxwarning{complete section}
-\chapter{Key Concepts}
+\section{Anonymizing and Unlinking}
 \fxwarning{complete section}
-\section{Nodes}
+\section{Censorship Resistant}
 \fxwarning{complete section}
-\section{Protocol Layers}
+\section{Controllable Trust}
 \fxwarning{complete section}
-\section{Vortex Messages}
+\section{Reliable}
 \fxwarning{complete section}
-\section{Workspaces}
+\section{Diagnoseable}
 \fxwarning{complete section}
-\section{Ephemeral Identities}
+\section{Available}
 \fxwarning{complete section}
-\section{Routing Operations}
+\section{Identifiable Sender}
 \fxwarning{complete section}
+
+\chapter{Identified Problem Hotspots}
+\fxwarning{complete section}
+\section{Zero Trust Philosophy}
+\fxwarning{complete section}
+\section{Information leakage and P2P Design}
+\fxwarning{complete section}
+\section{Accounting}
+\fxwarning{complete section}
+\section{Anonymisation}
+\fxwarning{complete section}
+\section{Censorship Resistance}
+\fxwarning{complete section}
+\section{Initial Bootstraping}
+\fxwarning{complete section}
+\section{Cypher selection}
+\fxwarning{complete section}
+\section{Reed-Solomon function}
+\fxwarning{complete section}
+\section{Usability}
+\fxwarning{complete section}
+	
+\chapter{Protocol}
+\fxwarning{complete section}
+\section{Key Concepts}
+\fxwarning{complete section}
+\subsection{Nodes and their Identity Keys}
+\fxwarning{complete section}
+\subsubsection{Public Vortex Node}
+\fxwarning{complete section}
+\subsubsection{Hidden Vortex Node}
+\fxwarning{complete section}
+\subsubsection{Stealth Vortex Node}
+\fxwarning{complete section}
+\subsection{Protocol Layers}
+\fxwarning{complete section}
+\subsection{Routing Operations}
+\fxwarning{complete section}
+\subsection{Vortex Messages}
+\fxwarning{complete section}
+\subsection{Ephemeral Identities, Workspaces and Accounting}
+\fxwarning{complete section}
+\subsection{Request and Reply Blocks}
+\fxwarning{complete section}
+\section{Outline of a Complete MessageVortex Message}
+\fxwarning{complete section}
+\section{Node Addressing Scheme}
+\fxwarning{complete section}
+
+
+\section{Message Blending}
+\fxwarning{complete section}
+\subsection{Plain Blending}
+\fxwarning{complete section}
+\subsection{F5 Blending}
+\fxwarning{complete section}
+
 \section{Routing}
 \fxwarning{complete section}
+\subsection{Algorithms Suitable for Achieving Anonymity}
+\fxwarning{complete section}
+\subsection{Routing Diagnosis and Reputation Building}
+\fxwarning{complete section}
+\subsection{Message Path Redundancy}
+\fxwarning{complete section}
 
+\section{Protocol Bootstrapping}
+\fxwarning{complete section}
+\subsection{Key Distribution for Endpoints}
+\fxwarning{complete section}
+\subsection{Key Aquisition for Routing Nodes}
+\fxwarning{complete section}
 
+\chapter{Routing Strategies}
+\fxwarning{complete section}
+\section{Strictly Onionized Message Routing}
+\fxwarning{complete section}
+\section{Mixing Routing}
+\fxwarning{complete section}
+\section{Redundant Message Passing}
+\fxwarning{complete section}
 
-\chapter{Identification of Possible Attack Schemes and Mitigation}
+\part{Analysis of MessageVortex}
+\fxwarning{complete section}
+\chapter{Suitability of transport layer protocols}
+The following sections list common Internet protocols. We analyze those protocols for the fitness as transport layer of message vortex. 
+
+\section{Methods}
+All sections are structured the same way. We first refer to the protocol or standard and describe it in the simplest possible form. We refer to subsequent standards if required to consider extensions where sensible. We then apply the previously referenced criteria and make a concise summary of the suiting of the protocol as a transport layer. The findings of this section is listed in table \ref{tab:protoSuitCrit}. The list here does not reflect the quality or maturity of the protocols. It is a simple analysis of suiting as a transport layer.
+
+All sections are structured the same way. 
+\begin{itemize}
+	\item Description\\
+	We first refer to the protocol or standard and describe it in the simplest possible form. We refer to subsequent standards if required to consider extensions where sensible.
+	\item Apply criteria\\\\
+	We then apply the previously referenced criteria and make a concise summary of the suiting of the protocol as a transport layer. The findings of this section is listed in table \ref{tab:protoSuitCrit}. The list here does not reflect the quality or maturity of the protocols. It is a simple analysis of suiting as a transport layer.
+\end{itemize} 
+
+\subsection{Applied Criteria}
+\begin{itemize}
+	\item Widely adopted (Ct1)\\
+	The more widely adopted and used a protocol is, the harder it is due to the sheer mass for an adversary to monitor , filter, or block the protocol. This is important for censorship resistance of the protocol. 
+	\item Reliable (Ct2)\\
+	Message transport between peers should be reliable. As messages may arrive anytime from everywhere, we do not have means to synchronize the peer partners on a higher level without investing a considerable effort. Furthermore, the availability of information when what type of information should be available at a specific point in the system would drastically simplify the identification of peers. To avoid synchronization, we do look for inherently reliable protocols.
+	\item Symmetrical built (Ct3)\\
+	The transport layer should rely on a peer to peer base. All servers implement a generic routing that requires no prior knowledge of all possible targets. This criterion neglects centralized infrastructures. This criterion may be dropped, assuming that the blending layer or a specialized transport overlay is responsible for routing.
+\end{itemize}
+
+\subsection{Analyzed Protocols}
+We were unable to find a comprehensive list of protocols being used within the Internet and their bandwidth consumption. A weak reference is \cite{zhou2011examining}. This wekaness is founded in the fact that traffic in this report is callified among two critera: Know server or known port. As streaming services consume a considerable part of the Internet bandwidth (acording to the report more than 60\% download). The focus on the report lies on the bandwidth intense figures. However, leavin aside all sources which are strictly one way or dominated by a small number of companies worldwide, the ``top 10'' list of the report shrinks to the two categories ``File sharing'' (Rank 5; 4.2\% download and 30.2\% upload) and ``Messaging'' (Rank 8; 1.6\% download and 8.3\% upload bandwidth). 
+
+In lack of such material we first collected a list of all common Internet messaging protocols (synchronous and asynchronous). We added furthermore some of the most common transfer protocols such as HTTP and FTP and analyzed this list.
+
+\begin{itemize}
+	\item Messaging Protocols
+	\begin{itemize}
+		\item SMTP
+		\item CoAP
+		\item MQTT
+		\item AMQP
+		\item XMPP
+		\item WAMP
+		\item SMS
+		\item MMS
+	\end{itemize}
+	\item Other Protocols
+	\begin{itemize}
+		\item FTP, SFTP, and FTPS
+		\item TFTP
+		\item HTTP
+	\end{itemize}
+\end{itemize}
+
+The following protocols have been discarded as we have considered them as outdated:
+\begin{itemize}
+	\item MTP\cite{RFC780} (obsoleted by SMTP)
+	\item NNTP\cite{RFC3977} (outdated and has only a small usage acording to \cite{kim2010today})
+\end{itemize}
+
+We furthermore discarded all RPC-related protocols as they would by definition violate Ct3.
+
+\section{Analysis}
+\subsection{HTTP}
+The HTTP protocol allows message transfer from and to a server and is specified in RFC2616 \cite{rfc2616}. It is not suitable as a communication protocol for messages due to the lack of notifications. There are some extensions that would allow such communications (such as WebDAV). Still, in general, even those are not suitable as they require a continuous connection to the server to get notifications. Having a ``rollup'' of notifications when connecting is not there by default but could be implemented on top of it. HTTP servers listen on standard ports 80 or 443 for incoming connects. The port 443 is equivalent to the port 80 except for the fact that it has a wrapping encryption layer (usually TLS). The incoming connects (requests) must offer a header part and may contain a body part that would be suitable for transferring messages to the server. The reply to this request is transferred over the same TCP connection containing the same two sections.
+
+HTTP0.9-HTTP/1.1 are clear text protocols which are human-readable (except for the data part which might contain binary data). The HTTP/2\cite{rfc7540} protocol is using the same ports and default behavior. Unlike HTTP/0.9-HTTP/1.1, it is not a clear text but encodes headers and bodies in binary form. 
+
+To be a valid candidate as storage, unauthenticated WebDAV support, as specified in \cite{rfc4918}, must be assumed.
+
+The protocol does satisfy the first two main criteria (Ct1: Widely Adopted and Ct2: Reliable). The main disadvantage in terms of a message transport protocol is that this protocol is not symmetrically. A server is always just ``serving requests'' and not sending information actively to peers. This Request-Reply violates criteria (Ct3: Symmetrically built) and makes the protocol not a primary choice for message transport. 
+
+It is possible to add such behavior to the blending layer using HTTP servers as pure storage. Such a behavior would however be most likely detectable and thus no longer be censorship resistant.
+
+\subsection{FTP}
+FTP is defined in RFC959\cite{RFC959}. This Protocol is intended for authenticated file transfer only. There is an account available for general access (``anonymous''). This account does normally not offer upload rights for security reasons. It is possible to use FTP as a message transfer endpoint. The configuration would work as follows: the user ``anonymous'' has upload rights only. It is unable to download or list a directory. A node may upload a message with a random name. In case a collision arises, the node retries with another random name. The blending layer picks messages up using an authenticated user. This workaround has multiple downsides. At first, handling FTP that way is very uncommon and usually requires an own dedicated infrastructure. Such beavior would make the protocol again possibly detectable. Secondly, passwords are always sent in the clear within FTP. Encryption as a wrapping layer (FTPS) is not common, and SFTP (actually a subsystem of SSH) has nothing in common with FTP except for the fact that it may transfer files as well.
+
+Furthermore, FTP may be problematic when used in active mode for firewalls. All these problems make FTP not very suitable as a transport layer protocol. FTPS and SFTP feature similar weaknesses as the FTP version in terms of detectability of non-standard behavior.
+
+Like in HTTP, a disadvantage of FTP in terms of a message transport protocol is that this protocol is not symmetrically. A server is always just ``serving requests'' and not sending information actively to peers. This Request-Reply violates criteria (Ct3: Symmetrically built) and makes the protocol not a primary choice for message transport. The Protocol, however, satisfies the first two criteria  (Ct1: Widely Adopted and Ct2: Reliable).
+
+\subsection{TFTP}
+TFTP has, despite its naming similarities to FTP, very little in common with it. TFTP is a UDP based file transfer protocol without any authentication scheme. The possibility of unauthenticated message access makes it not suitable as a transport layer. The protocol is due to the use of UDP in a meshed network with redundant routes. Since the Internet has a lot of these redundant routes, this neglects the use of this protocol.
+
+TFTP is rarely ever used on the Internet, as its UDP based nature is not suitable for a network with redundant routes. Not being common on the Internet violates criterion one (Ct1: Widely Adopted). TFTP is not symmetrically. This means that a server is always just ``serving requests'' and not sending information actively to peers. This Request-Reply violates criteria (Ct3: Symmetrically built) and makes the protocol not a primary choice for message transport. The Protocol furthermore violates Ct2 (Ct2: Reliable) as it is based on UDP without any additional error correction.
+
+\subsection{MQTT}
+MQTT is an ISO standard (ISO/IEC PRF 20922:2016) and was formerly called MQ Telemetry Transport. The current standard as the time of writing this document was 3.1.1 \cite{mqtt}. 
+
+The protocol runs by default on the two ports 1883 and 8883 and can be encrypted with TLS. MQTT is a publish/subscribe based message-passing protocol that is mainly targeted to m2m communication. This Protocol requires the receiving party to be subscribed to a central infrastructure in order to be able to receive messages. This makes it very hard to be used in a system without centralistic infrastructure and having no static routes between senders and recipients. 
+
+The protocol does satisfy the second criterion (Ct2: Reliable). It is in the area of end-user (i.e., Internet) not widely adopted, thus violating Criteria 1 (Ct1: Widely Adopted). In terms of decentralization design, the protocol fails as well (Ct3: Symmetrically built).
+
+\subsection{Advanced Message Queuing Protocol (AMQP)}
+The Advanced Message Queuing Protocol (AMQP) was initially initiated by numerous exponents based mainly on finance-related industries. The AMQP-Protocol is either used for communication between two message brokers, or between a message broker and a client\cite{amqp}.
+
+It is designed to be interoperable, stable, reliable, and safe. It supports either SASL or TLS secured communication. The use of such a tunnel is controlled by the immediate sender of a message. In its current version 1.0, it does, however, not support a dynamic routing between brokers\cite{amqp}.
+
+Due to the lack of a generic routing capability, this protocol is therefore not suitable for message transport in a generic, global environment.
+
+The protocol satisfies partially the first criterion (Ct1: Widely Adopted) and fully meets the second criterion (Ct2: Reliable). However, the third criterion is violated due to the lack of routing capabilities between message brokers (Ct3: Symmetrically built).
+
+\subsection{Constrained Application Protocol (CoAP)}
+The Constrained Application Protocol (CoAP) is a communication Protocol which is primarily destined to m2m communication. It is defined in RFC7252\cite{RFC7252}.  It is defined as a lightweight replacement for HTTP in IoT devices and is based on UDP.
+
+The protocol does partially satisfy the first criteria (Ct1: Widely Adopted). The second criterion (Ct2: Reliable) is only partially fulfilled as it is based on UDP and does only add limited session control on its own.
+
+The main disadvantage in terms of a message transport protocol is that this protocol is not (like HTTP) symmetrically. This means that a server is always just ``serving requests'' and not sending information actively to peers. This Request-Reply violates criteria (Ct3: Symmetrically built) and makes the protocol not a primary choice for message transport. 
+
+\subsection{Web Application Messaging Protocol (WAMP)}
+WAMP is a web-sockets based protocol destined to enable M2M communication. Like MQTT, it is publish respectively subscribe oriented. Unlike MQTT, it allows remote procedure calls (RPC).
+
+The WAMP protocol is not widely adopted (Ct1: Widely Adopted), but it is reliable on a per-node base (Ct2: Reliable). Due to its RPC based capability, unlike MQTT, a routing like capability could be implemented. Symmetrical protocol behavior is therefore not available but could be built in relatively easy.
+
+\subsection{XMPP (jabber)}
+XMPP (originally named Jabber) is a synchronous message protocol used in the Internet. It is specified in the documents RFC6120\cite{RFC6120}, RFC6121\cite{RFC6120}, RFC3922\cite{RFC3922}, and RFC3923\cite{RFC3923}. The protocol is a very advanced chat protocol featuring numeros levels of security including end-to-end signing and object encryption\cite{RFC3923}. There is also a stream initiation extension for transferring files between endpoints \cite{xep0096}.
+
+It has generic routing capabilities spanning between known and unknown servers. The protocol offers a message retrieval mechanism for offline messages similarily to POP \cite{xep0013}.
+
+The protocol itself seems to be a strong candidate as a transport layer as it is being used actively on the Internet.
+
+\subsection{SMTP}
+The SMTP protocol is currently specified in \cite{RFC5321}. It specifies a method to deliver reliably asynchronous mail objects through a specific transport medium (most of the time, the Internet). The document splits a mail object into a mail envelope and its content. The envelope contains the routing information, which is the sender (one) and the recipient (one or more) in 7-Bit ASCII. The envelope may additionally contain optional protocol extension material. 
+
+The content should be in 7-Bit-ASCII (8-Bit ASCII may be requested, but this feature is not widely adopted). It is split into two parts. These parts are the header (which does contain meta-information about the message such as subject, reply address, or a comprehensive list of all recipients), and the body which includes the message itself. All lines of the content must be terminated with a CRLF and must not be longer than 998 characters, excluding CRLF.
+
+The header consists of a collection of header fields. Each of them is built by a header name, a colon, and the data. The exact outline of the header is specified in \cite{RFC5322} and is separated with a blank line from the body. 
+
+\cite{RFC5321} furthermore introduces a simplistic model for SMTP message-based communication. A more comprehensive model is presented in section \nameref{sec:mailTransport} as the proposed model is not sufficient for a detailed end-to-end analysis.
+
+Traditionally the message itself is mime encoded. The MIME messages are mainly specified in \cite{RFC2045} and \cite{RFC2046}. MIME allows to send messages in multiple representations (alternates), and attach additional information (such as possibly inlined images or attached documents). 
+
+SMTP is one of the most common messaging protocols on the Internet (Ct1: Widely Adopted), and it would be devastating for the business of a country if, for censoring reasons, this protocol would be cut off. The protocol is furthermore very reliable as it has built-in support for redundancy and a thorough message design making it relatively easy to diagnose problems (Ct2: Reliable). All SMTP servers usually are capable of routing and receiving messages. Messages going over several servers are common (Ct3: Symmetrically built), so the third criterion may be considered as fulfilled as well.
+
+SMTP is considered a strong candidate as a transport layer.  
+
+\subsection{SMS and MMS}
+SMS capability was introduced in the SS7 protocol. This protocol allows the message transfer of messages not bigger than 144 characters. Due to this restriction in size, it is unlikely to be suitable for this type of communication as the keys being required are already sized similarly, leaving no space for Messages or routing information.
+
+The \nth{3} Generation Partnership Project (3GPP) maintains the Multimedia Messaging Service (MMS). This protocol is mainly a mobile protocol based on telephone networks.
+
+Both protocols are not widely adopted within the Internet domain. There are gateways providing bridging functionalities to the SMS/MMS services. However, the protocol itself is insignificant on the Internet itself. 
+
+\subsection{MMS}
+ This protocol is just like the SMS protocol accessible through the Internet by using gateways but not directly usable within the Internet.
+
+\section{Results}
+We have shown that all common M2M protocols failed mainly at Ct3 as there is no need for message routing. In M2M communication contacting foreign machines is not common. Therefore M2M protocolls are typically using static M2M communication over prepared channels. Such behavior is, however unsuitable for a generic messaging protocol.
+
+Pure storage protocols fail at the same criteria as they typically have a defined set of data sources and data sinks, whereas usually at least the data sources are limited in number. This makes those protocols unsuitable again.
+
+We can clearly state that according to the criteria, only a few protocols are suitable. Table \ref{tab:protoSuitCrit2} on page \pageref{tab:protoSuitCrit} shows that only SMTP and XMPP are suitable protocols. Eventually, similar protocols such as HTTP (with WebDAV) or FTP may be usable as well. 
+
+\begin{table}[h]
+	\centering\tiny
+	\begin{tabular}{|l|l|l|l|}\hline
+		\diaghead{\theadfont protocol Criteria}{Protocol}{Criteria} & \thead{Ct1: Widely adopted}     & \thead{Ct2: Reliable} & \thead{Ct3: Symmetrically built}\\\hline
+		HTTP     & $\checkmark$            & $\checkmark$        & $\times$\\              
+		FTP      & $\checkmark$            & $\checkmark$        & $\times$\\
+		TFTP     & $\times$                & $\times$            & $\times$\\
+		MQTT     & \textasciitilde         & $\checkmark$        & $\times$\\              
+		AMQP     & \textasciitilde         & $\checkmark$        & $\times$\\
+		CoAP     & \textasciitilde         & \textasciitilde     & $\times$\\
+		WAMP     & $\times$                & $\checkmark$        & \textasciitilde\\
+		XMPP     & $\checkmark$            & $\checkmark$        & $\checkmark$\\
+		SMTP     & $\checkmark$            & $\checkmark$        & $\checkmark$\\\hline
+	\end{tabular}    
+	\caption{comparison of protocols in terms of the suitability as transport layer}
+	\label{tab:protoSuitCrit2}
+\end{table}
+
+The findings of this short analysis suggested that we should use the two protocols, SMTP and XMPP, for our first standardization. We require at least two to prove that the protocol is agnostic to the transport.
+
+\chapter{Routing Strategy Considerations Related to Security and Anonymity}
+
+\chapter{Identification of Possible Attack Schemes}
 \fxwarning{complete section}
 \section{Static Attacks}
 \fxwarning{complete section}
@@ -575,71 +817,100 @@ we may furthermore subdivide the adversaries into the following sub-classes:
 \fxwarning{complete section}
 \subsection{Information Leaking related to Information Available to Routing Nodes}
 \fxwarning{complete section}
-\subsection{Identification of involved Nodes}
+\subsection{Identification of Involved Nodes}
 \fxwarning{complete section}
 \subsection{Identification of MessageVortex Traffic}
 \fxwarning{complete section}
+\subsection{Identification of Message Traffic}
+\fxwarning{complete section}
+\subsection{Identification of Software Updates Traffic}
+\fxwarning{complete section}
 \section{Dynamic Attacks}
 \fxwarning{complete section}
-\subsection{Attacks against the vortex system itself}
-%\subsubsection{DoS Attacks against the Transport System}
-%\subsubsection{DoS by Traffic Replay}
-%\subsubsection{DoS by Traffic generation}
-\subsection{Attacking a single ephemeral Identity of a MessageVortex Node}
+\subsubsection{DoS Attacks Against the Transport System}
 \fxwarning{complete section}
-%\subsubsection{Denial of Service by Exhausting Quotas or Limits}
+\subsection{Attacks Against the Vortex System Itself}
+\fxwarning{complete section}
+\subsubsection{DoS by Traffic Replay}
+\fxwarning{complete section}
+\subsubsection{DoS by Traffic Generation}
+\fxwarning{complete section}
+\subsection{Attacking a Single Ephemeral Identity of a MessageVortex Node}
+\fxwarning{complete section}
+\subsubsection{Denial of Service by Exhausting Quotas or Limits}
+\fxwarning{complete section}
 \subsection{Attacking Sending and Receiving Identities of the MessageVortex System}
 \fxwarning{complete section}
-%\subsubsection{Traffic Highlighting or Traffic Analysis}
+\subsubsection{Traffic Highlighting or Traffic Analysis}
 \subsection{Recovery of Previously Carried Out Operations}
 \fxwarning{complete section}
 
-\chapter{Censorship Circumvention}
+\chapter{Static Security Analysis of the Protocol}
 \fxwarning{complete section}
-\section{Technical Forms of Censorship}
+\section{Detection of Transport Layer Messages and Blending}
 \fxwarning{complete section}
-\section{Zero Trust}
+\subsection{Identification of a Message}
+\fxwarning{complete section}
+\subsubsection{Plain Embedding}
+\fxwarning{complete section}
+\subsubsection{F5}
+\fxwarning{complete section}
+\subsection{Message Structure Related to Censorship Circumvention}
+\fxwarning{complete section}
+\subsection{Message Structure Related to Information Leaking}
+\fxwarning{complete section}
+	
+\chapter{Dynamic Security Analysis of the Protocol}
+\fxwarning{complete section}
+\fxwarning{Add timing considerations here}
+\section{Attacks Against the Vortex System Itself}
+\fxwarning{complete section}
+\subsection{DoS Attacks against the System}
+\fxwarning{complete section}
+\subsection{Attacking a Single Ephemeral Identity of a MessageVortex Node}
+\fxwarning{complete section}
+\subsection{Attacking Sending and Receiving Identities of the MessageVortex System}
+\fxwarning{complete section}
+\subsection{Recovery of Previously Carried Out Operations}
+\fxwarning{complete section}
+\subsection{Attacking Routing Participants}
+\fxwarning{complete section}
+\subsection{Attacking Anonymity Through Traffic Analysis}
+\fxwarning{complete section}
+\subsection{Attacking Anonymity Through Timing Analysis}
+\fxwarning{complete section}
+\subsection{Attacking Anonymity through Throughput Analysis}
+\fxwarning{complete section}
+\subsection{Attacking Anonymity Through Routing Block Analysis}
+\fxwarning{complete section}
+\subsection{Attacking Anonymity Through Header Analysis}
+\fxwarning{complete section}
+\subsection{Attacking Anonymity Through Payload Analysis}
+\fxwarning{complete section}
+\subsection{Attacking Anonymity Through Bugging}
+\fxwarning{complete section}
+\subsection{Attacking Anonymity Through Replay Analysis}
 \fxwarning{complete section}
 
-\chapter{Message Blending}
+\chapter{Analysis of the Degree of Anonymization in Comparison to Other Systems}
 \fxwarning{complete section}
-\section{Plain Blending}
+\section{Mixnet Based or Onionizing Systems}
 \fxwarning{complete section}
-\section{F5 Blending}
+\section{DHT-Based Systems}
 \fxwarning{complete section}
-
-\chapter{Message Structure}
-\fxwarning{complete section}
-\section{Identification of a Message}
-\fxwarning{complete section}
-\section{Message Structure Related to Censorship Circumvention}
-\fxwarning{complete section}
-\section{Message Structure Related to Information Leaking}
+\section{DC-Based Systems}
 \fxwarning{complete section}
 
-\chapter{Routing}
-\fxwarning{complete section}
-\section{Algorithms Suitable for Achieving Anonymity}
-\fxwarning{complete section}
-\section{Possibilities of Routing Diagnosis and Reputation Building}
-\fxwarning{complete section}
-\section{Possibilities of Redundancies}
-\fxwarning{complete section}
-
-\chapter{Protocol Bootstrapping}
-\fxwarning{complete section}
-\section{Key Distribution for Endpoints}
-\fxwarning{complete section}
-\section{Key Aquisition for Routing Nodes}
-\fxwarning{complete section}
-
-
-\part{Analysis of MessageVortex}
-\fxwarning{complete section}
-\chapter{Analysis of the effectiveness of Attack Schemes}
-\fxwarning{complete section}
-\chapter{Analysis of the Degree of Anonymization in Comparison to other Systems}
-\fxwarning{complete section}
 
 \part{Discussion on Results}
 \fxwarning{complete section}
+
+\chapter{Summary on Weaknesses Found}
+\fxwarning{complete section}
+
+\chapter{Summary on the Research Questions}
+\fxwarning{complete section}
+
+\chapter{Further Research}
+\fxwarning{complete section}
+
