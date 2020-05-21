@@ -1,0 +1,99 @@
+%!TeX program=pdflatex
+%!TeX encoding=utf8
+%!TeX spellcheck = en_US
+%!TeX root = ../../messageVortex.tex
+
+% ********************************************************************************************************
+% *** Intro to MessageVortex
+% ********************************************************************************************************
+% ********************************************************************************************************
+% *** Research Preexisting work
+% ********************************************************************************************************
+\part{Concepts and Techniques}
+\fxwarning{complete section}
+
+\chapter{Anonymity Research}
+In this section, we collect protocols research related to anonymity. We did not stick to anonymous message transfer. Instead, we took a broad focus in terms of technology and outlined in each protocol strengths and weaknesses identified, which may be relevant to this research.
+
+\section{Definition of Anonymity}
+As the definition for Anonymity we take the definition as specified in \cite{anonTerminology}.\DeclareFixedFootnote{\omitted}{footnotes omitted in quote}
+\begin{quote}
+	Anonymity of a subject means that the subject is not identifiable within a set of subjects, the anonymity set.\omitted
+\end{quote}
+and
+\begin{quote}
+	Anonymity of a subject from an attacker's perspective means that the attacker cannot sufficiently identify the subject within a set of subjects, the anonymity set.\omitted
+\end{quote}
+
+We define the anonymity set as the set of all possible subjects within a supposed message. The anonymity of a subject towards an observing third party is a crucial factor as it relates directly to our adversary model.
+
+\section{$k$-Anonymity}
+\fxwarning{complete section}
+\section{$\ell$-Anonymity}
+\fxwarning{complete section}
+\section{$t$-closeness}
+\fxwarning{complete section}
+\section{Single and Multi Use Reply Blocks}
+\fxwarning{complete section}
+\chapter{Censorship}
+\fxwarning{complete section}
+\section{Censorship Resistance}
+\fxwarning{complete section}
+\section{Censorship Circumvention}
+\fxwarning{complete section}
+\section{Parrot Circumvention}
+\fxwarning{complete section}
+
+\chapter{Cryptography and Steganography}
+\fxwarning{complete section}
+\section{Homomorphic Encryption}
+\fxwarning{complete section}
+\section{Deniable Encryption}
+\fxwarning{complete section}
+\section{Deniable Steganography}
+\fxwarning{complete section}
+\section{Cryptographic modes for Block Cyphers}
+\fxwarning{complete section}
+\section{Padding for Block Cyphres}
+\fxwarning{complete section}
+
+\chapter{Censorship Circumvention}
+\fxwarning{complete section}
+\section{Technical Forms of Censorship}
+\fxwarning{complete section}
+\section{Zero Trust}
+\fxwarning{complete section}
+
+\chapter{Threat Model}
+We refer to jurisdiction as a geographical area where a set of legal rules created by a single actor or a group of actors apply, which contains executive capabilities (e.g., police, army, or secret service) to enforce this set of legal rules.
+
+We assume for our protocol that adversaries are state-sponsored actors or players of large organizations. These actors have high funding and expected to have elaborated capabilities themselves or within reach of the sponsor. Actors may join forces with other actors as allies. However, achieving more than 50\% on a world scale is excluded from our model. We always assume one or more actors with disjoint interests covering half of the network or more. 
+
+We assume the following goals for an adversary:
+\begin{itemize}
+	\item An adversary may want to disrupt non-authorized communication.
+	\item An adversary may want to read any information passing through portions of the Internet.
+	\item An adversary may want to build and conserve information about individuals or groups of individuals of any aspect of their life. 
+\end{itemize}
+
+To achieve these goals, we assume the following properties of our adversary:
+\begin{itemize}
+	\item An adversary has elaborated technical know-how to attack any infrastructure. This attack may cover any attack favoring his goals, starting with exploiting weaknesses of popular software (e.g., buffer overflows or zero-day exploits) down to simple or elaborated (D)DoS attacks.
+	\item An adversary may monitor traffic at any point in public networks within a jurisdiction.
+	\item An adversary may modify routing information within a jurisdiction freely.
+	\item An adversary may freely modify even cryptographically weak secured data where a single or a limited number of entities grant proof of authenticity or privacy.
+	\item An adversary may inject or modify any data on the network of a jurisdiction.
+	\item An adversary may create their nodes in a network. He may furthermore monitor their behavior and data flow without limitation.
+	\item An adversary may force a limited number of other non-allied nodes to expose their data to him. For this assumption, we explicitly excluded actors with disjoint interests.
+	\item An adversary may have similar access to resources as within its jurisdiction in a limited number of other jurisdictions.
+\end{itemize}
+
+we may furthermore subdivide the adversaries into the following sub-classes:
+\begin{itemize}
+	\item A censoring adversary\\
+	The primary goal of this adversary is censoring messages and opinions, not within his interests. He does this, regardless of whether the activities of censorship may be observed or not. Therefore, this adversary does not cloak its activities and typically bans censorship circumventing activities as illegal.
+	\item An observing adversary\\
+	This adversary behaves like a traditional spy. He collects and classifies information while hiding its activities. Unlike within reach of a censoring adversary, in this case, typically, no restrictions apply to the use of anonymization technology.
+\end{itemize}
+
+

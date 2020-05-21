@@ -1,0 +1,59 @@
+\cleardoublepage
+\makeatletter
+\renewcommand{\@pnumwidth}{4em}
+\renewcommand*\l@section{\@dottedtocline{1}{1.5em}{3em}}
+\renewcommand*\l@subsection{\@dottedtocline{2}{3.8em}{3.8em}}
+\renewcommand*\l@subsubsection{\@dottedtocline{3}{7.4em}{5em}}
+% Special Part
+\renewcommand*\l@part[2]{%
+	\ifnum \c@tocdepth >-2\relax
+	\addpenalty{-\@highpenalty}%
+	\addvspace{2.25em \@plus\p@}%
+	\setlength\@tempdima{3em}%
+	\begingroup
+	\parindent \z@ \rightskip \@pnumwidth
+	\parfillskip -\@pnumwidth
+	\begin{tcolorbox}[colback=red!10, right=0ex, left=0cm, sharpish corners, boxrule=0mm, width=1.0\textwidth]
+		{\leavevmode
+			\large \bfseries \vbox{\sffamily\bfseries#1}%
+			\hb@xt@0ex{\hss #2}
+		}
+	\end{tcolorbox}
+	\vspace*{1ex}
+	\nobreak
+	\global\@nobreaktrue
+	\everypar{\global\@nobreakfalse\everypar{}}%
+	\endgroup
+	\fi}
+\makeatother
+
+\onecolumn
+%\setpnumwidth{2em}
+%\setlength\cftsectionnumwidth{3em}
+\setcounter{tocdepth}{2}
+\tableofcontents
+
+\newpage
+\indexes
+%\twocolumn
+
+\makeatletter
+\newlength\mylena
+\newlength\mylenb
+\setlength\mylena{1.3cm}
+\setlength\mylenb{\dimexpr\columnwidth-\mylena\relax}
+
+\newcommand\PlaceNumber[1]{%
+	\makebox[\mylena][l]{#1}}
+
+\titleformat{\chapter}
+{\Large\sffamily\bfseries}
+{}
+{0em}
+{\PlaceNumber{\thechapter}\parbox[t]{\mylenb}{\raggedright#1}}
+
+\titlespacing*{\chapter}{0pc}{3ex \@plus4pt \@minus3pt}{5pt}
+
+\titleclass{\chapter}{straight}%% added
+\makeatother
+

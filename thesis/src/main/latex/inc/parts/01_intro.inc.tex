@@ -3,8 +3,12 @@
 %!TeX spellcheck = en_US
 %!TeX root = ../../messageVortex.tex
 
-\part{Introduction}
-\chapter{Foreword}
+
+% ********************************************************************************************************
+% *** Intro
+% ********************************************************************************************************
+
+\part{introduction}
 Almon Brown Strowger was the owner of a funeral parlor in St. Petersburg. He filed a patent on March \nth{10}, 1891 for an ``Automatic Telephone Exchange'' \cite{pulseDialingPatent}. This patent built the base for modern automated telephone systems. According to several sources, he was annoyed by the fact that the local telephone operator was married to another undertaker. She diverted potential customers of Mr. Strowger to her husband instead, which caused Almon B. Strowger to lose business. In 1922, this telephone dialing system, which is nowadays called pulse dialing, became the standard dialing technology for more than 70 years until tone dialing replaced it.
 
 This dialing technology is the base for automatic messaging for voice and text messages (e.g., telex) up until today and is the foundation for current routed networks. These networks build the base for our communication-based Society these days and allow us to connect quickly with any person or company of our wish. We use these networks today as communication meaning for all purposes, and most of the people spend minimal thoughts on the possible consequences arising if someone puts hands on this communication. 
@@ -35,23 +39,55 @@ We design in this work a new protocol. This protocol allows message transfer thr
 
 The new protocol allows secure communication without the need to trust the underlying transport media. Furthermore, the usage of the protocol itself is possible without altering the immediate behavior of the transport layer. The transport layers' regular traffic does, therefore, increase the noise in which hidden information has to be searched. 
 
-This work splits into multiple parts. In the first part, we collect available researches and technologies. We emphasize techniques on the strength and weaknesses relevant to this work. 
+\chapter{Our Contribution}
+This thesis contributes to anonymisation with an asynchronous messaging protocol called MessageVortex.
 
-In the second part, we reassemble the pieces to a new protocol. 
+The protocol employs a new type of programmable forwarders called ``routing nodes'' (nodes) with a novel way of message mixing, moving away from a strictly chunked and onionized system, to a system where routing operations allow to increase or decrease in size without differentiating between decoy traffic and message routing. We refer to the instructions required to process a node as ``routing blocks''. These routing blocks have an onionized structure, only exposing the required information for the current node. Routing blocks may travel with a message or join at any common routing node with the message.
 
-In the third part, we analyze the protocol for the fitness of the purpose. We try to find weaknesses and work out recommendations for protocol usage. 
+To non-traceable routing this, we introduce a novel type of routing operation called ``addRedundancy''. This operation is a Reed-Solomon-calculation with encryption and a new type of padding. This operation transposes the received information in a form bigger or smaller than the original message by adding or removing redundancy operations. The applied padding structures the message in such a way that any possible result of a decryption operation results in a plausible padding structure. With standard paddings, decoy operations on traffic would possibly be identifiable as the resulting padding structure may be invalid leaking information. After applying these operations, the routing node then sends this transposed information to subsequent peers without any knowledge of what parts of the sent messages are relevant for the successful message delivery. Therefore, applying such operations makes it impossible for any node to differentiate between decoy traffic and real message traffic. Furthermore, tagging beyond peering nodes is not possible, as building relations between messages of non-neighboring nodes is not possible.
 
-In the last part, we discuss the results and try to summarize the findings. We furthermore elaborate to what extent the protocol fulfills the requirements mentioned in the previous sections.
+An outside observer is unable to identify messages, as they do not use proprietary communication protocol but hide within other standard internet protocols. We blend these transport protocols without modifying the servers used for message transport. This property makes the protocol very robust as the prosecution of server administrators is not sensible if traffic is running over their infrastructures. 
 
-\section{Contributions}
-This thesis contributes to the topic in the following senses:
+As the structure of routing blocks does not expose the encryption keys required to build routing blocks for a peering node, a malicious node may only discover other possible peer partners when routing traffic without gaining the capability of talking to them. Other properties, such as type of routed traffic, message size, message content, communication partners, or intensity of communication, remain hidden. External global observers are unable to differentiate between regular protocol traffic and Vortex traffic. Assuming an observer capable of identifying the steganographically hidden information, he may apply censorship but remains unable to trace messages according to externally attributes, even assuming that he has additional information from collaborating nodes within the message path.
+
+Our protocol differentiates from other protocols by the fact that our way of mixing and routing messages does not rely on knowingly injected decoy traffic and that we are capable of piggybacking multiple other carrier protocols without modifying the required, already available infrastructure on the internet or requiring dedicated infrastructure. The carrier protocols may even be switched during routing, making it even harder to observe message traffic.
+
+
+\chapter{Scope and Aproach}
+\fxwarning{Get summary from old document}
+
+\section{Approaches}
+The main topic of this thesis was defined as follows:
+\fxwarning{Rewrite core question}
 \begin{itemize}
-	\item It introduces a consistent model for message delivery, which includes all endpoints and involved parties.
-	\item It shows an approach based on existing protocols for anonymous communication, which gives full control of the anonymity to the sender while controlling the costs.
-	\item It offers a client application implementing the proposed Protocol as IMAPv4 cache daemon and as SMTP relay.
+	\item Is it possible to have a messaging protocol used on the Internet, based on ``state of the science'' technologies offering a high level of unlikability (sender and receiver anonymity) towards an adversary with a high budget and privileged access to Internet infrastructure?
 \end{itemize}
 
+Based on this central question, there are several sub-questions grouped around various topics:
+
+\begin{enumerate}
+	\item What technologies and methods may be used to provide sender and receiver anonymity and unlinkability when sending messages against a potential adversary? 
+	\item How can entities utilizing \emph{MessageVortex} be attacked, and what measures are available to circumvent such attacks? 
+	\item How can design mitigate attacks target anonymity of a sending or receiving entity within \emph{MessageVortex}? 
+\end{enumerate}
+
+\paragraph{Approach 1: Technologies for Sending Messages Maintaining Unlinkability}
+This question covers the principal part of the work. We first elaborate on a list of criteria for the \emph{MessageVortex} protocol. We then create a list of suitable technologies and methods. Based on these findings, we define a protocol combining these technologies and researches into a solution. This solution is implemented and analyzed for suitability based on the criteria specified previously.
+
+Main results of this question are found in part~\ref{sec:methodes} and part~\ref{sec:results}. \fxwarning{rewrite reference}
+
+\paragraph{Approach 2: Attacking unlinkability and circumvention}
+Within this question, we look at various attacks and test resistance of the protocol based on the definition of the protocol. We do this by first collecting well-known attacks (either generic or specific to a technology used in the protocol). We then elaborate if those attacks might be successful (and if so under what circumstances).
+
+We discuss this question in part~\ref{sec:discussion}.\fxwarning{rewrite reference}
+
+\paragraph{Approach 3: Attack Mitigation by design}
+Within this question, we define baselines to mitigate attacks by identifying guidelines for using the protocol. We analyze the effectiveness of the guidelines and elaborate on the general achievement level of the protocol by looking again at the criteria defined in SQ1. 
+
+This question is answered in part \ref{sec:discussion}.\fxwarning{rewrite reference}
+
 \chapter{Notation}
+
 \section{Cryptography \label{sec:encNot}}
 The theory in this document is heavily based on symmetric encryption, asymmetric encryption, and hashing. To use a uniformed notation I use $E^{K_a}(M)$ (where $a$ is an index to distinguish multiple keys) resulting in $\mathbf{M^{K_a}}$ as the encrypted message. If we are reflecting a tuple of information, we write it in boldface. To express the content of the tuple, we use angular brackets $\mathbf{L\langle normalAddress,vortexAddress\rangle }$. If we want Messages encrypted with multiple keys do list the used keys as a comma-separated list in superscript $E^{K_b}\left(E^{K_a}\left(M\right)\right)=M^{{K_{a}},{K_b}}$.
 
@@ -109,4 +145,5 @@ Hello. This is a very long command-line that had to be broken to fit into the co
 
 \section{Hyperlinking}
 The electronic version of this document is hyperlinked. References to the glossary or the literature may be clicked to find the respective entry. Chapter or table references are clickable too. 
+
 
