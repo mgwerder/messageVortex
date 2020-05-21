@@ -8,13 +8,17 @@
 % *** Decisions and Research
 % ********************************************************************************************************
 \part{The  MessageVortex System}
-In the following section we describe the core functionalities 
-\fxwarning{complete section}
 
-MessageVortex is a protocol piggybacking common transport protocols somehow similar as S/MIME\cite{RFC2015} or PGP\cite{PGP} which are common transport protocols such as SMTP. 
-\fxwarning{complete intro to the MessageVortex model}
+In the following section we describe the core functionalities of the MessageVortex system. We start off with the general thread model. We then collect requirements for an anonymisation system. Next would be a rationale for single system features.
 
-\chapter{Intro}
+In the core chapter of this part we describe the MessageVortex protool and its key techniques.
+
+\chapter{Introduction}
+MessageVortex is a protocol piggybacking common transport protocols somehow similar as S/MIME\cite{RFC2015} or PGP\cite{PGP} piggybacks common transport protocols such as SMTP. 
+
+Unlike these protocols we need the capability to keep our messages secret. MessageVortex itself is agnostic to the transport, but we do require apprpriate blending to hide into the transport layer. The message itself should be only visible to a single processing node. Information destined for other nodes should not be visible and the information processed on a node should not leak any information about a message. This applies to the message itself as well as to the metainformation beloning to a message.
+
+We therefore crafted all operations very carefully to keep as much information secet as we could.
 
 \chapter{Requirements for an Anonymizing Protocol\label{sec:genRequirements}}
 In the following sections, we elaborate on the main characteristics of the anonymizing protocol. 
@@ -58,7 +62,9 @@ We cannot state that data packets we are sending are passing only through countr
 	\caption{A traceroute to the host www.ietf.org}
 \end{figure}
 
-To enable freedom of speech, we need a mean of transport for messages which keep sender and recipient anonymous.
+To enable freedom of speech, we need a mean of transport for messages which keep sender and recipient anonymous to an adversary.
+
+We start first by defining a thread model and then collect some basic requirements. These requirements are deduced from the threat and from lessons learned from common attacks to anonymity systems as outlined in \ref{sec:attacks}.
 
 \section{Threat model\label{sec:adversary}}
 We refer to jurisdiction as a geographical area where a set of legal rules created by a single actor or a group of actors apply, which contains executive capabilities (e.g., police, army, or secret service) to enforce this set of legal rules.
@@ -87,12 +93,12 @@ To achieve these goals, we assume the following properties of our adversary:
 we may furthermore subdivide the adversaries into the following sub-classes:
 \begin{itemize}
 	\item A censoring adversary\\
-	The primary goal of this adversary is censoring messages and opinions, not within his interests. He does this, regardless of whether the activities of censorship may be observed or not. Therefore, this adversary does not cloak its activities and typically bans censorship circumventing activities as illegal.
+	The primary goal of this adversary is censoring messages and opinions, not within his interests. He does this, regardless of whether the activities of censorship may be observed or not. Therefore, this adversary does not necessarily cloak its activities and typically bans censorship circumventing activities as illegal.
 	\item An observing adversary\\
-	This adversary behaves like a traditional spy. He collects and classifies information while hiding its activities. Unlike within reach of a censoring adversary, in this case, typically, no restrictions apply to the use of anonymization technology.
+	This adversary behaves like a traditional spy. He collects and classifies information while typically hiding its activities. Unlike within reach of a censoring adversary, in this case, typically, no restrictions apply to the use of anonymization technology.
 \end{itemize}
 
-\section{Required Properties of an unobservable network}
+\section{Required Properties of an Unobservable network}
 In this section, we summarize the required properties of an anonymizing system.
 
 \subsection{Anonymizing and Unlinking}
@@ -105,10 +111,11 @@ These are the standard approaches in remailers and mixes. Their approaches are q
 \subsection{Censorship Resistant}
 In our scenario in \ref{sec:genRequirements}, we defined the adversary as someone with superior access to the network and its infrastructure. Such an adversary might attack a message flow in several ways:
 \begin{itemize}
-	\item Identify sender
-	\item Identify recipient
-	\item Read messages passed or extract meta information
-	\item Disrupt communication fully or partially
+	\item Identify sender.
+	\item Identify recipient.
+	\item Identify other involved parties.
+	\item Read messages passed or extract meta information.
+	\item Disrupt communication fully or partially. This may or may not include the possible identification of the traffic.
 \end{itemize}
 
 We furthermore have to assume that all actions taken by a potential adversary are not subject to legal prosecution. This assumption based on the fact that an adversary trying to establish censorship may be part of the government of jurisdiction. We may safely assume that there are legal exceptions in some jurisdictions for such entities.
@@ -120,11 +127,9 @@ We have multiple options for relying on trust when building our system. We may r
 
 In terms of trust, we have to conclude that:
 \begin{enumerate}
-	\item We trust in infrastructure because it is under full control of either the sender or the recipient.
+	\item We trust in infrastructure because it is under full control of either the sender or the recipient. If we are unable to trust these infrastructures information may be leaked without any problems. So trusting these infrastructures is inevitable.
 	\item We should not trust all other infrastructure as an adversary is potentially able to misuse data passed through it.
 \end{enumerate}
-
-In this work, we work with both cases. We will, however, avoid whenever possible to trust in any third party apart from the sender and recipient.
 
 \subsection{Reliable}
 Any message-sending protocol needs to be reliable in its functionality. If the means of message transport are unreliable, users tend to use different means for communication\cite{zhou2011examining}. 
@@ -146,44 +151,101 @@ The second meaning tells us that messages must always be capable of flowing from
 \subsection{Identifiable Sender}
 A messaging system offering unlinkability may offer sender anonymity. If so, a sender should be identifiable in such a way, that a classification of senders is possible at any time, and impersonation is not achievable. It is important to understand that an identifiable sender does not necessarily mean that we can identify a sender as a specific party. In our case, any identification will do, which offers non-hijackable pseudonymity. We decided to go for a short-lived pseudonymity (see \defref{eID} in section \ref{sec:ephemeralIdentity}). This system guarantees that while only a pseudonym of the sender is known, the hijacking of data by other participants of the system is not possible.
 
+\section{Summary}
+The following key requirements were identified in the previous section:
+\begin{itemize}
+	\item The System should be allow an adversary as defined in out threat model to identify a participating node 
+	\item The System should unlinking senders and recipients towards an adversary.
+	\item The system should be censorship resistant
+	\item Decisions regarding the security of a message must be under the full control of a sending or receiving party.
+	\item The system should be reliable
+	\item The system should be diagnoseable 
+	\item Anonymization service is available any time and to anyone
+	\item Anonymization may be used any time
+	\item The sender and its message may be authenticated by the recipient
+\end{itemize}
+
+Implicitly, the system should not expose any members to additional threats. This is a logic consequence already covered in the censorship resitance requirement. Same applies to the fact that the system should be easy to use. A complex system would exclude members with missing knowledge or education. 
 
 \chapter{Rationale}
+In this chapter we set course for our protocol. We explain why the protocol has already some technologies and approaches preset before even starting the description of the protocol.
+
+\section{Detectable properties of an Anonymization System}
+\subsection{Transmission Type}
+If we want to be censorship resistant then we need to be undetectable, as any possible detection or identification enables an adversary to filter or disrupt these messages from a network. We also have to start off with our protocol at a very low level. It is not sensible to create a new transport protocol. Such a specific transport protocol would enable an adversary censorship. Either by identifying the protocol or its properties. We could use side channel transmission (such as timing of messages) instead of an own protocol. This, however, would imply a proprietary infrastructure on the internet which would either record or extract such side channels or even sends them. As proprietary infrastructure allows an adversary to put pressure such as legal threats on an owner of such infrastructure. We therefore chose an approach which is not relying on proprietary infrastructure within the internet.
+
+\subsection{Required Infrastructure}
+As previously mentioned the protocol should not rely on proprietary infrastructure. This leaves us either to a P2P approach or we may use already existing infrastructure for our purpose. P2P protocols are in the current internet a niche approach compared to infrastructure bound services. To be better able to hide in a mass, we have chosen to go with the infrastructure approach.
+
+This automatically results in a piggybacking protocol on a common internet protocol. The protocol should be common and blocking it should have significant unwanted impact to an adversary. The common usage of the transport protocol should enable to hide within the sheer mass of the common messages and should keep an adversary from blocking the protocol due to the reated economic impacts such a blocking would have.
+
+Looking at the infrastructure required by the enduser, we have to state that the system should run with common hardware such as personal computers, tablets and notebooks. For obious reasons a network conectivity to the internet is a must.
+
+\subsection{Message Size of An Anonymizing System}
+When sending messages across a network they may be tracked either by the message themselfes or their attributes. This has been  a considerable weaknes  for many protocols. Attributes, such as strictly decreasing or increasing sizes allow assumption of message flows. As the most robust solution so far have either eratically behaving systems proven or system with a constant message size. The constant message size has, however, an additional downside as it may allow to identify messages by assuming that their size is always related to the fixed message size. We therefore will go with an eratically behaving system without restricting the size of any component if possible.
+
+\subsection{Message Timing of an Annonymisation System}
+Timing of messages may leak several properties. First of all, bound to a specified timeframe may be related to each other. Therefore only a protocol without restrictions regarding the timing of a message. This however has some drawbacks. Not aplying a timing restriction realistically defies the possibility of synchnous or near synchronous message transmission. This leaves only asynchronous message transmission as the only option.
+
+Such asynchronous behavior requires therefore that messages are stored on nodes for a specified time. Such storing has several drawbacks. Storage should be managed and kept within very small bounds to allow a large user base. Secondly such a storage requires some kind of protection to refrain users from hijacking messages destined to other users.
+
+\section{Relying on Possibly Unsafe System and Research Results}
+As all systems and algorithms applied to the system may be weakenened or fail a system needs to have the possibility to choose from multiple algorithms, protocols and infrastructures. This choice should be made by trustworthy system which restricts us to either the sender or the receiving system.
+
+\section{Leaking of Information to Involved Parties}
+As we put distrust all parties except sender and recipient routing a message should leak no information related to the message. This property is very hard to achieve and limits to very few choices and some may even be unachivable. First we have to apply routing in such a way that a processing node does not learn any information valuable to it. As we are already bound to piggybacking common transport protocols we therefore always leak the transport addresses of our transport protocols. This is a serious flaw already in the system which we are unable to mitigate with the chosen approach. A possibility would be a common internet protocol based on broadcast routing. Unfortunately except very rare protocols such as the Automated Packet Reporting System (APRS) this is not a common behavior as brodcast based systems are typically inefficient and, thus, not suitable for a huge user set.
+
+Special care should be applied to things such as mimic routes. Mimic routes are typically generated by a node. Unlike an outside observer a routing node is typically aware over which channels mimic or decoy traffic is sent and over which channels message flow is applied. To refrain a routing nod from using such knowledge we need to apply routing operations which do not allow a rrouting node to differentiate decoy traffic from message traffic. This applies even to the case where decoy traffic is generated on the node itself. The result of a routing operations should always have the properties which do not leak additional information to any untrusted node. 
+
+We have taken great care to achieve this goal. All of our operations result in an encrypted block which may have any size. While applying a block ciphre to a message always results in a padded message of a block size. The shanon entropy is $\approx 7.2$ as with all encrypted blocks. If applied a split or merge operation any size of the message is achievable. Any operation has an inverse operation which means that any operation may be undone at a later stage. Furthermore, any inverse operation should result in a block with the same properties, not leaking the sucess of an applied operation. To generate decoy traffic we have applied a novel type of operation. Instead of generating decoy traffic explicitely, we allow a routing node to add and remove redundancy information to a given message. By doing so it is not clear, what part of the generated data is related to the message and what part is related to decoy messages. Furthermore, we may implement true redundancy in the message paths without duplicating message content.
+
+\section{Chosen Approaches for MessageVortex}
+In this chapter we have taken the following decisions:
+\begin{itemize}
+	\item Have no strict message size and avoid strictly increasing or decreasing sizes in any type of message or message part.
+	\item Piggybacks common protocols.
+	\item Does not require specialized hardware within the internet.
+	\item No proprietary systems on the internet.
+	\item Runs on comodity hardware.
+	\item Sends messages in an asynchronous mode.
+	\item Does not enforce specific attributes such as transport protocol, message size, message timing, or providers.
+	\item Run special routing operations instead of traditional mixing and recombination methodes.
+	\item Offer a choice of algorithms to use when routing.
+\end{itemize}
 
 
-\chapter{Protocol Outline}
+\chapter{Protocol}
 \fxwarning{complete section}
-\chapter{Key Components}
+\section{Key Components}
 \fxwarning{complete section}
-\section{Nodes}
+\subsection{Nodes and their identities}
 \fxwarning{complete section}
-\section{Protocol Layers}
+\subsection{Protocol Layers}
 \fxwarning{complete section}
-\section{Vortex Messages}
+\subsection{Vortex Messages}
 \fxwarning{complete section}
-\section{Workspaces}
+\subsection{Workspaces and Ephemeral Identities}
 \fxwarning{complete section}
-\section{Ephemeral Identities}
-\fxwarning{complete section}
-\section{Routing Operations}
+\subsection{Routing Operations}
 \fxwarning{complete section}
 \section{Routing}
 \fxwarning{complete section}
 
 
 
-\chapter{Transport Layer and Message Blending}
+\section{Transport Layer and Message Blending}
 \fxwarning{complete section}
-\section{Plain Blending}
+\subsection{Plain Blending}
 \fxwarning{complete section}
-\section{F5 Blending}
+\subsection{F5 Blending}
 \fxwarning{complete section}
 
-\chapter{Message Structure}
+\section{Message Structure}
 \fxwarning{complete section}
-\section{Identification of a Message}
+\subsection{Identification of a Message}
 \fxwarning{complete section}
-\section{Message Structure Related to Censorship Circumvention}
+\subsection{Message Structure Related to Censorship Circumvention}
 \fxwarning{complete section}
-\section{Message Structure Related to Information Leaking}
+\subsection{Message Structure Related to Information Leaking}
 \fxwarning{complete section}
 
