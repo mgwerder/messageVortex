@@ -11,8 +11,7 @@
 \renewcommand*{\thepage}{A\arabic{page}}
 %\renewcommand{\setthechapter}{\Alph{section}}
 %\renewcommand\thechapter{\Alph{chapter}}
-%\setcounter{chapter}{0}
-
+\setcounter{chapter}{0}
 
 
 \gdef\rfc{../../../../rfc/src/xml2rfc/draft-gwerder-messagevortexmain-04.pdf}
@@ -20,190 +19,227 @@
 \includepdf[pages=1,frame=true,scale=0.70,pagecommand={\chapter{The RFC draft document\label{app:rfcMessageVortexMain}}}, offset=0 -1cm]{\rfc}
 \includepdf[pages=2-,frame=true,scale=0.8,pagecommand={}, offset=0 -1cm]{\rfc}
 
-%\clearpage\chapter{Glossary}
-%
-%\begin{entry}
-%	\mainentry{adversary}{In this work, we are referring to an adverser to any entity opposing to the privacy of a message. For a more throughout definition refer to section~\ref{sec:adversary}}
-%\end{entry}
-%
-%\begin{entry}
-%	\mainentry{anonymity}{We refer to the term anonymity as defined in \cite{anonTerminology}. ``Anonymity of a subject means that the subject is not identifiable within a set of subjects, the anonymity set.''\omitted}
-%	\subentry{Sender Anonymity}{The anonymity set is the set of all possible subjects. For actors, the anonymity set consists of the subjects who might cause an action. For actees, the anonymity set consists of the subjects which might be acted upon. Therefore, a sender may be anonymous (sender anonymity) only within a set of potential senders, his/her sender anonymity set, which itself may be a subset of all subjects worldwide who may send a message from time to time.}
-%	\subentry{Receiver Anonymity}{The same for the recipient means that a recipient may be anonymous (recipient anonymity) only within a set of potential recipients, his/her recipient anonymity set. Both anonymity sets may be disjoint, be the same, or they may overlap. The anonymity sets may vary over time.}
-%\end{entry}
-%
-%\begin{entry}
-%	\mainentry{Agent}{An agent is a single component of a service (\defref{Service}) provided to a user or other services.}
-%\end{entry}
-%
-%\begin{entry}
-%	\mainentry{eID}{An ephemeral identity (eID) is a unique user of a vortex node characterized by its public key. This user is created with a VortexMessage and has only a limited lifetime. After expiry all informations related to this identity are deleted.}
-%\end{entry}
-%
-%\begin{entry}
-%	\mainentry{EWS}{Exchange Web Services (EWS) are a Microsoft proprietary protocol to access exchange services from a client. It may be regarded as an alternative to IMAPv4. This is however incomplete as EWS offers additional features such as User Configuration, Delegate Management or Unified Messaging.}
-%\end{entry}
-%
-%\begin{entry}
-%	\mainentry{IMAP}{IMAP (currently IMAPv4) is a typical protocol to be used between a \defref{Client MRA} and a \defref{Remote MDA}. It has been specified in its current version in \cite{RFC3501}. The protocol is capable of fully maintaining a server-based message store. This includes the capability of adding, modifying, and deleting messages and folders of a mailstore. It does not include however sending mails to other destinations outside the server-based store.}
-%\end{entry}
-%
-%\begin{entry}
-%	\mainentry{Item of Interest (IoI)}{The Item of Intrest (IoI) are defined in \cite{anonTerminology} and refer to any subject action or entity which is of interest to a potential adversary.}
-%\end{entry}
-%
-%\begin{entry}
-%	\mainentry{LMTP}{The Local Mail Transfer Protocol is defined in \cite{RFC2033}. This RFC defines a protocol similar to SMTP for local mail senders. This protocol allows a sender to have no mail queue at all and thus simplifies the client implementation.}
-%\end{entry}
-%
-%\begin{entry}
-%	\mainentry{Local Mail Store}{A Local Mail Store offers a persistent store on a local non-volatile memory in which messages are being stored. A store may be flat or structured (e.g., supports folders). A local mail store may be an authoritative store for mails or a ``cache only'' copy. It is typically not a queue.}
-%\end{entry}
-%
-%\begin{entry}
-%	\mainentry{Server Admin}{We do regard a server admin as a person with high privileges and profound technical knowledge of a server and its associated technology. A Server Admin may have access to one or multiple servers of the same kind.}
-%\end{entry}
-%
-%\begin{entry}
-%	\mainentry{MDA}{An MDA provides uniform access to a local message store.}
-%	\subentry{Remote MDA}{A Remote MDA is typically supporting a specific access protocol to access the data stored within a local message store.}
-%	\subentry{Local MDA}{A Local MDA is typically giving local applications access to a server store. This may be done thru an API, a named socket or similar mechanisms.}
-%\end{entry}
-%
-%\begin{entry}
-%	\mainentry{MRA}{A Mail Receiving Agent is an agent, which receives emails from another agent. Depending on the used protocol two subtypes of MRAs are available.}
-%	\subentry{Client MRA}{A client MRA picks up emails in the server mail storage from a remote MDA. Client MRAs usually connect through a standard protocol that was designed for client access. Examples for such protocols are POP or IMAP.}
-%	\subentry{Server MRA}{Unlike a Client MRA, a server MRA listens passively for incoming connections and forwards received messages to an MTA for delivery and routing. A typical protocol supported by a server MRA is SMTP}
-%\end{entry}
-%
-%\begin{entry}
-%	\mainentry{MS-OXCMAPIHTTP}{Microsofts Messaging Application Programming Interface (MAPI) 
-%		Extensions for HTTP specifies the Messaging Application Programming Interface (MAPI) Extensions for HTTP in \cite{ms-oxcmapihttp}, which enable a client to access personal messaging and directory data on a server by sending HTTP requests and receiving responses returned on the same HTTP connection. This protocol extends HTTP and HTTPS.}
-%\end{entry}
-%
-%\begin{entry}
-%	\mainentry{MSA}{A Mail Sending Agent. This agent sends emails to a \defref{Server MRA}. }
-%\end{entry}
-%
-%\begin{entry}
-%	\mainentry{MTA}{A Mail Transfer Agent. This transfer agent routes emails between other components. Typically an MTA receives emails from an MRA and forwards them to an MDA or MSA. The main task of an MTA is to provide reliable queues and solid track of all emails as long as they are not forwarded to another MTA or local storage.}
-%\end{entry}
-%
-%\begin{entry}
-%	\mainentry{MTS}{A Mail Transfer Service. This is a set of agents which provide the functionality to send and receive messages and forward them to a local or remote store.}
-%\end{entry}
-%
-%\begin{entry}
-%	\mainentry{MSS}{A Mail Storage Service. This is a set of agents providing a reliable store for local mail accounts. It also provides Interfacing which enables clients to access the users' mail.}
-%\end{entry}
-%
-%\begin{entry}
-%	\mainentry{MUA}{A Mail User Agent. This user-agent reads emails from local storage and allows a user to read existing emails, create and modify emails.}
-%\end{entry}
-%
-%\begin{entry}
-%	\mainentry{MURB}{A multi use reply block. This tzpe of routing block is provided by a sender to give a node the possibilitz to route back answers without the knowledge of a location of the sender. In contrast to a SURB a MURB may be used mutiple times. The number of times is regulated by the $maxReplay$ field. Furthermore a MURB must provide multiple peer keys for all routing steps to avoid repeating patterns of key blocks. This structure makes a MURB much bigger than a SURB.}
-%\end{entry}
-%
-%\begin{entry}
-%	\mainentry{Privacy}{From the Oxford English Dictionary: ``
-%		\begin{enumerate}
-%			\item The state or condition of being withdrawn from the society of others, or from the public interest; seclusion. The state or condition of being alone, undisturbed, or free from public attention, as a matter of choice or right; freedom from interference or intrusion.
-%			\item Private or retired place; private apartments; places of retreat.
-%			\item Absence or avoidance of publicity or display; a condition approaching to secrecy or concealment. Keeping of a secret.
-%			\item A private matter, a secret; private or personal matters or relations; The private parts.
-%			\item Intimacy, confidential relations.
-%			\item The state of being privy to some act.
-%		\end{enumerate}''\cite{OXFORD}\\
-%		In this work, privacy is related to definition two. Mails should be able to be handled as a virtual private place where no one knows who is talking to whom and about what or how frequent (except for directly involved people).
-%	}
-%\end{entry}
-%
-%\begin{entry}
-%	\mainentry{Pseudonymity}{
-%		As Pseudonymity we take the definition as specified in \cite{anonTerminology}.
-%		\begin{quote}
-%			A pseudonym is an identifier of a subject other than one of the subject's real names. The subject which the pseudonym refers to is the holder of the pseudonym. A subject is pseudonymous if a pseudonym is used as an identifier instead of one of its real names.\omitted
-%		\end{quote}
-%	}
-%\end{entry}
-%
-%\begin{entry}
-%	\mainentry{POP}{POP (currently in version 3) is a typical protocol to be used between a \defref{Client MRA} and a \defref{Remote MDA}. Unlike \defref{IMAP}, it is not able to maintain a mail store. Its sole purpose is to fetch and delete emails in a server-based store. Modifying Mails or even handling a complex folder structure is not doable with POP}
-%\end{entry}
-%
-%\begin{entry}
-%	\mainentry{RBB}{A routing block builder (RBB) is a VortexNode assembling the operations and hops for a message. If the RBB is not equal to the sender of the message the receiver may be anonymous to the sender.}
-%\end{entry}
-%
-%\begin{entry}
-%	\mainentry{Service}{A service is an endpoint on a server providing the functionality to a client. This service may consist of several Agents (\defref{Agent}).}
-%\end{entry}
-%
-%\begin{entry}
-%	\mainentry{SMTP}{SMTP is the most commonly used protocol for sending emails across the Internet. In its current version it has been specified in \cite{RFC5321}.}
-%\end{entry}
-%
-%\begin{entry}
-%	\mainentry{Storage}{A store to keep data. It is assumed to be temporary or persistent.}
-%\end{entry}
-%
-%\begin{entry}
-%	\mainentry{SURB}{A single use reply block. This type of routing block is provided by a sender to give a node the possibility to route back answers without the knowledge of a location of the sender. A SURB may only be used once subsequent uses of the block are not possible. The lifetime of a SURB is typically limited to minutes or hours.}
-%\end{entry}
-%
-%\begin{entry}
-%	\mainentry{UBM}{We use the term Unsolicited Bulk Message as a term for any mass message being received by a user without prior explicit consent. A less formal term for such a message in email terminology is spam or junk mail.}
-%\end{entry}
-%
-%\begin{entry}
-%	\mainentry{Undetectability}{
-%		As undetectability we take the definition as specified in \cite{anonTerminology}.
-%		\begin{quote}
-%			Undetectability of an item of interest (IOI\index{Item of Interest}) from an attacker's perspective means that the
-%			attacker cannot sufficiently distinguish whether it exists or not.\omitted
-%		\end{quote}
-%	}
-%\end{entry}
-%
-%\begin{entry}
-%	\mainentry{Unlikability}{We refer to the term unlinkability as defined in \cite{anonTerminology}. ``Unlinkability of two or more items of interest (IOIs, e.g., subjects, messages, actions, ...) from an attacker’s perspective means that within the system (comprising these and possibly other items), the attacker cannot sufficiently distinguish whether these IOIs are 
-%		related or not.}
-%\end{entry}
-%
-%\begin{entry}
-%	\mainentry{Unobservability}{
-%		As unobservability we take the definition as specified in \cite{anonTerminology}.
-%		\begin{quote}
-%			Unobservability of an item of interest (IOI) means
-%			\begin{itemize}
-%				\item undetectability of the IOI against all subjects uninvolved in it and
-%				\item anonymity of the subject(s) involved in the IOI even against the other subject(s) involved in that IOI.
-%			\end{itemize}
-%		\end{quote}        
-%		As mentioned in this paper, unobservability raises the bar of required attributes again ($\Rightarrow$ reads ``implies''):
-%		\begin{eqnarray*}
-%			censorship\ resistance & \Rightarrow & unobservability\\
-%			unobserability         & \Rightarrow & undetectability\\
-%			unobserability         & \Rightarrow & anonymity
-%		\end{eqnarray*}
-%	}
-%\end{entry}
-%
-%
-%\begin{entry}
-%	\mainentry{user}{Any human or technical entity using a system not following strict message processing rules. A user does always interface a non-interface related entity and is triggered by this or triggers it related, but not limited, to the message.}
-%\end{entry}
-%
-%\begin{entry}
-%	\mainentry{XMPP}{The Extensible Messaging and Presence Protocol (XMPP)\cite{RFC6120,RFC6121} was formerly also known as Jabber protocol. It is an extensible instant messenger protocol widely adopted in chat clients.}
-%\end{entry}
-%
-%\begin{entry}
-%	\mainentry{Zero Trust}{
-%		Zero trust is not a truly researched model in systems engineering. It is, however, widely adopted. We refer in this work to the zero trust model when denying the trust in any infrastructure not directly controlled by the sending or receiving entity. This distrust extends especially but not exclusively to the network transporting the message, the nodes storing and forwarding messages, the backup taken from any system except the client machines of the sending and receiving parties, and software, hardware, and operators of all systems not explicitly trusted. As explicitly trusted in our model, we do regard the user sending a message (and his immediate hardware used for sending the message), and the users receiving the messages. Trust in between the receiving parties (if more than one) of a message is not necessarily given.
-%	}
-%\end{entry}        
+\clearpage\chapter{Glossary}
+
+\begin{entry}
+	\mainentry{adversary}{In this work, we are referring to an adverser to any entity opposing to the privacy of a message. For a more throughout definition refer to section~\ref{sec:adversary}}
+\end{entry}
+
+\begin{entry}
+	\mainentry{anonymity}{We refer to the term anonymity as defined in \cite{anonTerminology}. ``Anonymity of a subject means that the subject is not identifiable within a set of subjects, the anonymity set.''\omitted}
+	\subentry{Sender Anonymity}{The anonymity set is the set of all possible subjects. For actors, the anonymity set consists of the subjects who might cause an action. For actees, the anonymity set consists of the subjects which might be acted upon. Therefore, a sender may be anonymous (sender anonymity) only within a set of potential senders, his/her sender anonymity set, which itself may be a subset of all subjects worldwide who may send a message from time to time.}
+	\subentry{Receiver Anonymity}{The same for the recipient means that a recipient may be anonymous (recipient anonymity) only within a set of potential recipients, his/her recipient anonymity set. Both anonymity sets may be disjoint, be the same, or they may overlap. The anonymity sets may vary over time.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{Agent}{An agent is a single component of a service (\defref{Service}) provided to a user or other services.}
+\end{entry}
+
+
+\begin{entry}
+	\mainentry{Decoy traffic}{Any data transported between routers that have no relevance to the message at the final destination and are not needed for the flow of the message.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{eID}{An ephemeral identity (eID) is a unique user of a vortex node characterized by its public key. This user is created with a VortexMessage and has only a limited lifetime. After expiry all informations related to this identity are deleted.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{Ephemeral Identity}{An identity created on any node with a limited lifetime anyone possessing the private key (proven by encrypting with it) is accepted as representative of that identity.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{EWS}{Exchange Web Services (EWS) are a Microsoft proprietary protocol to access exchange services from a client. It may be regarded as an alternative to IMAPv4. This is however incomplete as EWS offers additional features such as User Configuration, Delegate Management or Unified Messaging.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{Identity}{A tuple of a routable address and a public key. This tuple is a long-living tuple but may be exchanged from time to time. An Identity is always assigned to a nod, but one node may have multiple identities.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{IMAP}{IMAP (currently IMAPv4) is a typical protocol to be used between a \defref{Client MRA} and a \defref{Remote MDA}. It has been specified in its current version in \cite{RFC3501}. The protocol is capable of fully maintaining a server-based message store. This includes the capability of adding, modifying, and deleting messages and folders of a mailstore. It does not include however sending mails to other destinations outside the server-based store.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{Item of Interest (IoI)}{The Item of Intrest (IoI) are defined in \cite{anonTerminology} and refer to any subject action or entity which is of interest to a potential adversary.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{LMTP}{The Local Mail Transfer Protocol is defined in \cite{RFC2033}. This RFC defines a protocol similar to SMTP for local mail senders. This protocol allows a sender to have no mail queue at all and thus simplifies the client implementation.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{Local Mail Store}{A Local Mail Store offers a persistent store on a local non-volatile memory in which messages are being stored. A store may be flat or structured (e.g., supports folders). A local mail store may be an authoritative store for mails or a ``cache only'' copy. It is typically not a queue.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{Server Admin}{We do regard a server admin as a person with high privileges and profound technical knowledge of a server and its associated technology. A Server Admin may have access to one or multiple servers of the same kind.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{MDA}{An MDA provides uniform access to a local message store.}
+	\subentry{Remote MDA}{A Remote MDA is typically supporting a specific access protocol to access the data stored within a local message store.}
+	\subentry{Local MDA}{A Local MDA is typically giving local applications access to a server store. This may be done thru an API, a named socket or similar mechanisms.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{Message}{The ``real content'' to be transferred from the sender to the recipient. Please note the difference compared to a vortex message. We refer to the encoded form of a VortexMessage, which may or may not contain parts of the original message as VortexMessage.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{MRA}{A Mail Receiving Agent is an agent, which receives emails from another agent. Depending on the used protocol two subtypes of MRAs are available.}
+	\subentry{Client MRA}{A client MRA picks up emails in the server mail storage from a remote MDA. Client MRAs usually connect through a standard protocol that was designed for client access. Examples for such protocols are POP or IMAP.}
+	\subentry{Server MRA}{Unlike a Client MRA, a server MRA listens passively for incoming connections and forwards received messages to an MTA for delivery and routing. A typical protocol supported by a server MRA is SMTP}
+\end{entry}
+
+\begin{entry}
+	\mainentry{MS-OXCMAPIHTTP}{Microsofts Messaging Application Programming Interface (MAPI) 
+		Extensions for HTTP specifies the Messaging Application Programming Interface (MAPI) Extensions for HTTP in \cite{ms-oxcmapihttp}, which enable a client to access personal messaging and directory data on a server by sending HTTP requests and receiving responses returned on the same HTTP connection. This protocol extends HTTP and HTTPS.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{MSA}{A Mail Sending Agent. This agent sends emails to a \defref{Server MRA}. }
+\end{entry}
+
+\begin{entry}
+	\mainentry{MTA}{A Mail Transfer Agent. This transfer agent routes emails between other components. Typically an MTA receives emails from an MRA and forwards them to an MDA or MSA. The main task of an MTA is to provide reliable queues and solid track of all emails as long as they are not forwarded to another MTA or local storage.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{MTS}{A Mail Transfer Service. This is a set of agents which provide the functionality to send and receive messages and forward them to a local or remote store.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{MSS}{A Mail Storage Service. This is a set of agents providing a reliable store for local mail accounts. It also provides Interfacing which enables clients to access the users' mail.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{MUA}{A Mail User Agent. This user-agent reads emails from local storage and allows a user to read existing emails, create and modify emails.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{MURB}{A multi use reply block. This tzpe of routing block is provided by a sender to give a node the possibilitz to route back answers without the knowledge of a location of the sender. In contrast to a SURB a MURB may be used mutiple times. The number of times is regulated by the $maxReplay$ field. Furthermore a MURB must provide multiple peer keys for all routing steps to avoid repeating patterns of key blocks. This structure makes a MURB much bigger than a SURB.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{Payload}{Any data transported between routers regardless of the meaningfulness or relevance to the VortexMessage.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{Privacy}{From the Oxford English Dictionary: ``
+		\begin{enumerate}
+			\item The state or condition of being withdrawn from the society of others, or from the public interest; seclusion. The state or condition of being alone, undisturbed, or free from public attention, as a matter of choice or right; freedom from interference or intrusion.
+			\item Private or retired place; private apartments; places of retreat.
+			\item Absence or avoidance of publicity or display; a condition approaching to secrecy or concealment. Keeping of a secret.
+			\item A private matter, a secret; private or personal matters or relations; The private parts.
+			\item Intimacy, confidential relations.
+			\item The state of being privy to some act.
+		\end{enumerate}''\cite{OXFORD}\\
+		In this work, privacy is related to definition two. Mails should be able to be handled as a virtual private place where no one knows who is talking to whom and about what or how frequent (except for directly involved people).
+	}
+\end{entry}
+
+\begin{entry}
+	\mainentry{Pseudonymity}{
+		As Pseudonymity we take the definition as specified in \cite{anonTerminology}.
+		\begin{quote}
+			A pseudonym is an identifier of a subject other than one of the subject's real names. The subject which the pseudonym refers to is the holder of the pseudonym. A subject is pseudonymous if a pseudonym is used as an identifier instead of one of its real names.\omitted
+		\end{quote}
+	}
+\end{entry}
+
+\begin{entry}
+	\mainentry{POP}{POP (currently in version 3) is a typical protocol to be used between a \defref{Client MRA} and a \defref{Remote MDA}. Unlike \defref{IMAP}, it is not able to maintain a mail store. Its sole purpose is to fetch and delete emails in a server-based store. Modifying Mails or even handling a complex folder structure is not doable with POP}
+\end{entry}
+
+\begin{entry}
+	\mainentry{Recipient}{The user or process destined to receive the message in the end.}
+\end{entry}
+	
+\begin{entry}
+	\mainentry{Router}{Any VortexNode which is processing messages. Please note that all VortexNodes are routers.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{RBB}{A routing block builder (RBB) is a VortexNode assembling the operations and hops for a message. If the RBB is not equal to the sender of the message the receiver may be anonymous to the sender.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{Sender}{The user or process originally composing the message. we refer as the sender both the human creator or initiator of a message, as well as the process assembling and preparing the message.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{Service}{A service is an endpoint on a server providing the functionality to a client. This service may consist of several Agents (\defref{Agent}).}
+\end{entry}
+
+\begin{entry}
+	\mainentry{SMTP}{SMTP is the most commonly used protocol for sending emails across the Internet. In its current version it has been specified in \cite{RFC5321}.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{Storage}{A store to keep data. It is assumed to be temporary or persistent.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{SURB}{A single use reply block. This type of routing block is provided by a sender to give a node the possibility to route back answers without the knowledge of a location of the sender. A SURB may only be used once subsequent uses of the block are not possible. The lifetime of a SURB is typically limited to minutes or hours.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{UBM}{We use the term Unsolicited Bulk Message as a term for any mass message being received by a user without prior explicit consent. A less formal term for such a message in email terminology is spam or junk mail.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{Undetectability}{
+		As undetectability we take the definition as specified in \cite{anonTerminology}.
+		\begin{quote}
+			Undetectability of an item of interest (IOI\index{Item of Interest}) from an attacker's perspective means that the
+			attacker cannot sufficiently distinguish whether it exists or not.\omitted
+		\end{quote}
+	}
+\end{entry}
+
+\begin{entry}
+	\mainentry{Unlikability}{We refer to the term unlinkability as defined in \cite{anonTerminology}. ``Unlinkability of two or more items of interest (IOIs, e.g., subjects, messages, actions, ...) from an attacker’s perspective means that within the system (comprising these and possibly other items), the attacker cannot sufficiently distinguish whether these IOIs are 
+		related or not.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{Unobservability}{
+		As unobservability we take the definition as specified in \cite{anonTerminology}.
+		\begin{quote}
+			Unobservability of an item of interest (IOI) means
+			\begin{itemize}
+				\item undetectability of the IOI against all subjects uninvolved in it and
+				\item anonymity of the subject(s) involved in the IOI even against the other subject(s) involved in that IOI.
+			\end{itemize}
+		\end{quote}        
+		As mentioned in this paper, unobservability raises the bar of required attributes again ($\Rightarrow$ reads ``implies''):
+		\begin{eqnarray*}
+			censorship\ resistance & \Rightarrow & unobservability\\
+			unobserability         & \Rightarrow & undetectability\\
+			unobserability         & \Rightarrow & anonymity
+		\end{eqnarray*}
+	}
+\end{entry}
+
+
+\begin{entry}
+	\mainentry{User}{Any human or technical entity using a system not following strict message processing rules. A user does always interface a non-interface related entity and is triggered by this or triggers it related, but not limited, to the message.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{VortexMessage}{The encoded message passed from one VortexNode to another one. The VortexMessage is typically considered before any embedding takes place.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{XMPP}{The Extensible Messaging and Presence Protocol (XMPP)\cite{RFC6120,RFC6121} was formerly also known as Jabber protocol. It is an extensible instant messenger protocol widely adopted in chat clients.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{Zero Trust}{
+		Zero trust is not a truly researched model in systems engineering. It is, however, widely adopted. We refer in this work to the zero trust model when denying the trust in any infrastructure not directly controlled by the sending or receiving entity. This distrust extends especially but not exclusively to the network transporting the message, the nodes storing and forwarding messages, the backup taken from any system except the client machines of the sending and receiving parties, and software, hardware, and operators of all systems not explicitly trusted. As explicitly trusted in our model, we do regard the user sending a message (and his immediate hardware used for sending the message), and the users receiving the messages. Trust in between the receiving parties (if more than one) of a message is not necessarily given.
+	}
+\end{entry}        
 
 \backmatter
 \chapter{Bibliography}
@@ -217,7 +253,7 @@
 \index{Mail transport|see {Message Transport}}
 
 % add the index
-%\printindex
+\printindex
 
 \clearpage\chapter{Short Biography}
 \begin{wrapfigure}{R}{0.3\columnwidth}

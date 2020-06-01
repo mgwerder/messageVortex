@@ -7,8 +7,9 @@
 % ********************************************************************************************************
 % *** Intro
 % ********************************************************************************************************
-
-\part{introduction}
+\partepigraph{The most effective way to do it is TO DO IT}{Amelia Earhart}
+\part{Introduction}
+\chapter{Preface}
 Almon Brown Strowger was the owner of a funeral parlor in St. Petersburg. He filed a patent on March \nth{10}, 1891 for an ``Automatic Telephone Exchange'' \cite{pulseDialingPatent}. This patent built the base for modern automated telephone systems. According to several sources, he was annoyed by the fact that the local telephone operator was married to another undertaker. She diverted potential customers of Mr. Strowger to her husband instead, which caused Almon B. Strowger to lose business. In 1922, this telephone dialing system, which is nowadays called pulse dialing, became the standard dialing technology for more than 70 years until tone dialing replaced it.
 
 This dialing technology is the base for automatic messaging for voice and text messages (e.g., telex) up until today and is the foundation for current routed networks. These networks build the base for our communication-based Society these days and allow us to connect quickly with any person or company of our wish. We use these networks today as communication meaning for all purposes, and most of the people spend minimal thoughts on the possible consequences arising if someone puts hands on this communication. 
@@ -35,12 +36,12 @@ The main problem of this data is that it may be collected over a considerable am
 
 People must be able to control their data footprint. Not providing these means does effectively allow any country or a more prominent player to ban and control any number of persons within or outside the Internet. 
 
-We design in this work a new protocol. This protocol allows message transfer through existing communication channels. These messages are next to unobservable to any third party. This unobservability does not only cover the message itself but all metadata and flows associated with it. We called this protocol ``\emph{MessageVortex}'' or just ``\emph{Vortex}''. The protocol is capable of using a wide variety of transport protocols. It is even possible to switch protocols while the messages are in the transfer. This behavior allows media breaches (at least on a protocol level) and makes the analysis even harder.
+We design in this work a new protocol. This protocol allows message transfer through existing communication channels. These messages are next to unobservable to any third party. This unobservability does not only cover the message itself but all metadata and flows associated with it. We called this protocol ``\MessageVortex'' or just ``\emph{Vortex}''. The protocol is capable of using a wide variety of transport protocols. It is even possible to switch protocols while the messages are in the transfer. This behavior allows media breaches (at least on a protocol level) and makes the analysis even harder.
 
 The new protocol allows secure communication without the need to trust the underlying transport media. Furthermore, the usage of the protocol itself is possible without altering the immediate behavior of the transport layer. The transport layers' regular traffic does, therefore, increase the noise in which hidden information has to be searched. 
 
 \chapter{Our Contribution}
-This thesis contributes to anonymisation with an asynchronous messaging protocol called MessageVortex.
+This thesis contributes to anonymisation with an asynchronous messaging protocol called \MessageVortex.
 
 The protocol employs a new type of programmable forwarders called ``routing nodes'' (nodes) with a novel way of message mixing, moving away from a strictly chunked and onionized system, to a system where routing operations allow to increase or decrease in size without differentiating between decoy traffic and message routing. We refer to the instructions required to process a node as ``routing blocks''. These routing blocks have an onionized structure, only exposing the required information for the current node. Routing blocks may travel with a message or join at any common routing node with the message.
 
@@ -63,32 +64,30 @@ The main topic of this thesis was defined as follows:
 Based on this central question, there are several sub-questions grouped around various topics:
 
 \begin{enumerate}
-	\item What technologies and methods may be used to provide sender and receiver anonymity and unlinkability when sending messages against a potential adversary? 
-	\item How can entities utilizing \emph{MessageVortex} be attacked, and what measures are available to circumvent such attacks? 
-	\item How can design mitigate attacks target anonymity of a sending or receiving entity within \emph{MessageVortex}? 
+	\item What technologies and methods may be used to provide sender and receiver anonymity and unlinkability when sending messages against a potential adversary? \\
+	      This question covers the principal part of the work. We first elaborate on a list of criteria for the \MessageVortex protocol. We then create a list of suitable technologies and methods. Based on these findings, we define a protocol combining these technologies and researches into a solution. This solution is implemented and analyzed for suitability based on the criteria specified previously.
+	
+	      \fxwarning{ reference respectve sections}
+	\item How can entities utilizing \MessageVortex be attacked, and what measures are available to circumvent such attacks? \\
+	      Within this question, we look at various attacks and test resistance of the protocol based on the definition of the protocol. We do this by first collecting well-known attacks (either generic or specific to a technology used in the protocol). We then elaborate if those attacks might be successful (and if so under what circumstances).
+	      
+	      \fxwarning{ reference respectve sections}
+	      
+	\item How can design mitigate attacks target anonymity of a sending or receiving entity within \MessageVortex? \\
+          Within this question, we define baselines to mitigate attacks by identifying guidelines for using the protocol. We analyze the effectiveness of the guidelines and elaborate on the general achievement level of the protocol by looking again at the criteria defined in SQ1. 
+
+	      \fxwarning{ reference respectve sections}
 \end{enumerate}
 
-\paragraph{Approach 1: Technologies for Sending Messages Maintaining Unlinkability}
-This question covers the principal part of the work. We first elaborate on a list of criteria for the \emph{MessageVortex} protocol. We then create a list of suitable technologies and methods. Based on these findings, we define a protocol combining these technologies and researches into a solution. This solution is implemented and analyzed for suitability based on the criteria specified previously.
-
-Main results of this question are found in part~\ref{sec:methodes} and part~\ref{sec:results}. \fxwarning{rewrite reference}
-
-\paragraph{Approach 2: Attacking unlinkability and circumvention}
-Within this question, we look at various attacks and test resistance of the protocol based on the definition of the protocol. We do this by first collecting well-known attacks (either generic or specific to a technology used in the protocol). We then elaborate if those attacks might be successful (and if so under what circumstances).
-
-We discuss this question in part~\ref{sec:discussion}.\fxwarning{rewrite reference}
-
-\paragraph{Approach 3: Attack Mitigation by design}
-Within this question, we define baselines to mitigate attacks by identifying guidelines for using the protocol. We analyze the effectiveness of the guidelines and elaborate on the general achievement level of the protocol by looking again at the criteria defined in SQ1. 
-
-This question is answered in part \ref{sec:discussion}.\fxwarning{rewrite reference}
 
 \chapter{Related Research and Systems}
+
+To be written. 
 
 \chapter{Notation}
 
 \section{Cryptography \label{sec:encNot}}
-The theory in this document is heavily based on symmetric encryption, asymmetric encryption, and hashing. To use a uniformed notation I use $E^{K_a}(M)$ (where $a$ is an index to distinguish multiple keys) resulting in $\mathbf{M^{K_a}}$ as the encrypted message. If we are reflecting a tuple of information, we write it in boldface. To express the content of the tuple, we use angular brackets $\mathbf{L\langle normalAddress,vortexAddress\rangle }$. If we want Messages encrypted with multiple keys do list the used keys as a comma-separated list in superscript $E^{K_b}\left(E^{K_a}\left(M\right)\right)=M^{{K_{a}},{K_b}}$.
+The theory in this document is heavily based on symmetric encryption, asymmetric encryption, and hashing. To use a uniformed notation I use $E^{K_a}(M)$ (where $a$ is an index to distinguish multiple keys) resulting in $\mathbf{M^{K_a}}$ as the encrypted message. If we are reflecting a tuple of information, we write it in boldface. To express the content of the tuple, we use angular brackets $\splitatcommas{\mathbf{L\langle normalAddress,vortexAddress\rangle }}$. If we want Messages encrypted with multiple keys do list the used keys as a comma-separated list in superscript $E^{K_b}\left(E^{K_a}\left(M\right)\right)=M^{{K_{a}},{K_b}}$.
 
 For a symmetric encryption of a message $\mathbf{M}$ with a key $K_a$ resulting in $\mathbf{M^{K_a}}$ where $a$ is an index to distinguish different keys. Decryption uses therefore $D^{K_a}(\mathbf{M^{K_a}})=\mathbf{M}$.
 
@@ -110,7 +109,7 @@ If we want to express what details contained in a tuple we use the the notation 
 
 In general, subscripts denote selectors to differentiate the values of the same type, and superscript denotes relevant parameters to operations expressed. The subscripted and superscripted pieces of information are omitted if not needed.
 
-We refer to the components of a \emph{VortexMessage} as follows:
+We refer to the components of a \VortexMessage as follows:
 \begin{align*}
 \text{Prefix component:}         & \mathbf{PREFIX}                 &=D^{K^{1}_a}\left(\mathbf{P}^{K^{-1}_a}\right) &=D\left(\mathbf{P}\right)\\
 \text{Header component:}         & \mathbf{HEAD}                 &=D^{K^{1}_a}\left(\mathbf{H}^{K^{-1}_a}\right) &=D\left(\mathbf{H}\right)\\

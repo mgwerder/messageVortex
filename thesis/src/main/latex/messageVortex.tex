@@ -1,6 +1,6 @@
 % !TeX spellcheck = en_US
 \gdef\doctype{extbook}
-\documentclass[a4paper,appendixprefix,pdfusetitle,twocolumn,fontsize=8pt,DIV=calc,8pt,draft]{\doctype} %scrbook
+\documentclass[a4paper,appendixprefix,pdfusetitle,twocolumn,fontsize=11pt,DIV=calc,11pt,draft]{\doctype} %scrbook
 %add attachdocs to attach all documents
 % add openany to avoid empty pages
 %\usepackage{gitinfo}
@@ -167,6 +167,7 @@
 \usepackage{amssymb}
 \usepackage{cuted}
 
+% line breaking in math mode
 %\usepackage{scrhack}
 
 \usepackage[autocite=superscript,
@@ -252,7 +253,7 @@
 %\usepackage{cite}
 
 %fonts for comparison table 
-\usepackage{pifont,wasysym,fontawesome,txfonts,marvosym}
+\usepackage{pifont,wasysym,fontawesome,txfonts,marvosym,fontawesome}
 
 % colored tables 
 \usepackage{colortbl}
@@ -499,12 +500,86 @@
 }{}
 \makeatother
 
+%%% Specialized Part
+\usepackage{titlesec,titletoc}
+\usepackage{tikz}
+\usepackage{epigraph}
+\usepackage{xpatch}
+
+\titleclass{\part}{top}
+
+\let\Oldpart\part
+\newcommand{\parttitle}{}
+\newcommand\partepigraph[2]{\gdef\partepigraphtext{#1}\gdef\partepigraphauthor{#2}}
+\gdef\oldtoc{none}
+\renewcommand{\part}[1]{
+	\stopcontents
+	\Oldpart{#1}
+	\renewcommand{\parttitle}{#1}
+	\startcontents
+	%\vbox{\Large Part Table of Contents}\vskip1ex
+	%\rule{\textwidth}{0.4pt}
+	%\printcontents{1}{1}{\setcounter{tocdepth}{5}}
+    %font\rule{\textwidth}{0.4pt}
+	\vskip1ex
+	\cleardoublepage
+}
+
+\newlength\PartWd
+\settowidth\PartWd{\huge\parttitle}
+
+\definecolor{myblue}{RGB}{0,0,122}
+
+\titleformat{\part}[display]
+{\normalfont\filcenter\sffamily}
+{\tikz[remember picture,overlay]
+	{
+		\node[fill=myblue,font=\fontsize{60}{72}\selectfont\color{white},anchor=north east,minimum size=\PartWd] 
+		at ([xshift=-25pt,yshift=-25pt]current page.north east) 
+		(numb) {\thepart~};
+		\node[rotate=90,anchor=south,inner sep=0pt,font=\huge] at (numb.west) {Part};
+	}
+}{0pt}{\fontsize{33}{40}\selectfont\color{myblue}#1}[\vskip10pt\Large***\vskip10pt\epigraph{\partepigraphtext}{\partepigraphauthor}\vskip10pt ]
+\titlespacing*{\part}
+{0pt}{50pt}{10pt}
+
+
+\makeatletter
+\xpatchcmd{\ttl@printlist}{\endgroup}{{\noindent\color{myblue}\rule{\textwidth}{1.5pt}}\vskip30pt\endgroup}{}{}
+\makeatother
+
+\setlength\epigraphrule{0pt}
+\renewcommand\textflush{flushright}
+\renewcommand\epigraphsize{\normalsize\itshape}
+
+% Split at comas for long formulas
+\newcommand{\splitatcommas}[1]{%
+	\begingroup
+	\ifnum\mathcode`,="8000
+	\else
+	\begingroup\lccode`~=`, \lowercase{\endgroup
+		\edef~{\mathchar\the\mathcode`, \penalty0 \noexpand\hspace{0pt plus 1em}}%
+	}\mathcode`,="8000
+	\fi
+	#1%
+	\endgroup
+}
+
+% some macros to make it more readable
+\gdef\MessageVortex{\emph{\defref{MessageVortex}}}
+\gdef\VortexMessage{\emph{\defref{VortexMessage}}}
+\gdef\VortexMessages{\emph{\defref{VortexMessage}s}}
+\gdef\VortexNode{\emph{\defref{VortexNode}}}
+\gdef\VortexNodes{\emph{\defref{VortexNode}s}}
+
+
 \begin{document}%
 %
 \frontmatter%
 \input{inc/parts/00_a_title.inc.tex}
 \input{inc/parts/00_b_toc.inc.tex}
 \mainmatter
+\startcontents
 \input{inc/parts/01_intro.inc.tex}
 \input{inc/parts/02_concepts.inc.tex}
 \input{inc/parts/03_systems.inc.tex}
@@ -514,6 +589,7 @@
 \input{inc/parts/07_analysis.inc.tex}
 \input{inc/parts/08_discussion.inc.tex}
 \appendix
+
 \input{inc/parts/AA_appendix.inc.tex}
 
 \end{document}

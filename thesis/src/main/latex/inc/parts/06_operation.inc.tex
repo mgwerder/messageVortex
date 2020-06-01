@@ -2,12 +2,105 @@
 %!TeX encoding=utf8
 %!TeX spellcheck = en_US
 %!TeX root = ../../messageVortex.tex
-
+\partepigraph{Occurrences in this domain are beyond the reach of exact prediction because of the variety of factors in operation, not because of any lack of order in nature.}{Albert Einstein}
 \part{Operational concerns}
 \fxwarning{insert operational }
+\chapter{Unclassified}
+\section{Hardware}
+We require no specialized hardware for running Vortex nodes. Instead, we designed Vortex in such a way that ordinary mobile phones may act as Vortex nodes. It is, however, recommended to have a node always connected to the Internet. A mobile phone may disconnect from time to time based on the availability of the network. For our experiments, we used a RaspberryPi Zero W. It is, however, recommended to use a faster, newer model due to the memory requirements of the proof of work algorithm. 
 
-\chapter{Routing}
-\fxwarning{complete section}
+The hardware currently requires a network interface and a fully functional JSE VM to run the reference implementation.
+
+\section{Addressing of Vortex Nodes}
+A Vortex address is built as follows: 
+
+\begin{lstlisting}[language=EBNF]
+localPart         = <local part of address>
+domain            = <domain part of address>
+email             = localPart "@" domain
+keySpec           = <BASE64 encoded AsymmetricKey [DER encoded]>
+smtpAlternateSpec = localPart ".." keySpec ".." domain "@localhost"
+smtpUrl           = "vortexsmtp://" smtpAlternateSpec
+\end{lstlisting}
+
+To allow storage of Vortex addresses in standard messaging programs such as Outlook or Thunderbird, we introduced $smtpAlternateSpec$. 
+
+The suffix ``@localhost'' makes sure that any non-participating server does not route a message intended for Vortex. The doubly dotted notation is not RFC compliant but was accepted by all tested client address books. The address is, however, not a valid SMTP address due to its double-dotted notation. We selected this representatiopn to differentiate Vortex addresses from valid email addresses.
+
+The main downside of vortex addresses is that they are no longer readable by a human. The main reason for this is the public key, which is required. We may abstract this further by allowing clear-text requests on the primary email address for the public key. The vortex account must then answer such requests with the valid Vortex address.
+
+The $smtpUrl$ is representing the address in a standard way, which makes it suitable for QR codes and intent filters on Android.
+
+The public key of an address is encoded as follows:
+\begin{enumerate}
+	\item The asymmetric key is encoded as specified in the AsymmetricKey in ASN.1
+	\item The ASN.1 DER representation is then encoded using BASE64
+\end{enumerate}    
+
+\section{Transport Layers}                                          
+As transport layer protocols, we specified the protocols SMTP and XMMP as valid transport layers. In the following sections, we specify the blending properties for these protocols.
+
+\subsection{Embedding Spec}
+We always embed VortexMessages as attachments in SMTP and XMPP messages. 
+
+The embedding supports some properties. A receiving host chooses the supported properties. We describe valid properties by the blending specification::
+\begin{lstlisting}[language=EBNF]
+plainEncoding = "("plain:"<#BytesOfOffset>[,<#BytesOfOffset>]*")
+F5Encoding    = "(F5:"<passwordString>[,<PasswordString>]*")"
+\end{lstlisting}
+
+We use mainly plain embedding for our experiments. For better readability, we used a specialized blending layer using unchunked, plain embedding with an offset of $0$. The message itself was the ASN.1 block representation of the encoded block. The chosen encoding simplified to see the inner workings of the protocol. For production use, we apply F5 embedding with a generated payload. The current implementation of the blending layer is thus not suitable for production use as the messages remain identifiable or at least suspicious.
+
+\section{Client}
+We did not create a Vortex client for sending messages. Instead, we used a standard Thunderbird email client pointing to a local SMTP and IMAP Server provided by a Vortex proxy. On the SMTP side, Vortex does encapsulate where possible mails into a Vortex message and builds an automated route to the recipient. The SMTP part of Vortex may be used to encapsulate all messages automatically with a known Vortex identity into a \emph{VortexMessage}. On the IMAP side, it merges a local Vortex message store with the standard Email repository building a combined view.
+
+Using Vortex like this offers us the advantages of a known client with the anonymity Vortex offers.
+
+Using a proxy has certain downsides. At the moment, the vortex client has only a local store. Such a local store makes it impossible to handle multiple simultaneously connected clients to use Vortex. This limitation is, however, just a lack of the current implementation and not of the protocol itself. We may safely use IMAP storage for storing \emph{VortexMessages} centrally. This statement is true as long as:
+\begin{itemize}
+	\item The storage is not identifiable as such.\\
+	This requires:
+	\begin{itemize}
+		\item A non-identifiable folder/message structure
+		\item A storage not identifiable by access patterns
+		\item The stored messages do have the same strength as the transmitted messages in terms of detectability
+	\end{itemize}
+	\item A secured key\\
+	Either the host key is secured sufficiently with KDF, and a passphrase (or similar), or the host key remains off-storage.
+\end{itemize}
+
+\subsection{Vortex Accounts}
+By definition, any transport layer address may represent a Vortex identity. This fact may make people believe that their current email or jabber address is suitable as a Vortex address. This statement is technically perfectly true, but should not be done for the following reasons:
+\begin{itemize}
+	\item If an address is identified as a Vortex address, it may be blocked (directly or indirectly) by an adversary. Such blocking would lead to blocking of regular email traffic as well.
+	\item If a vortex node is malfunctioning non-\emph{VortexMessages} should remain unaffected. Isolation is far better if we keep non-Vortex messages in a separate account.
+	\item If a user wants no longer to maintain its Vortex address, he may give up his Vortex transport accounts. If he had been using his normal messaging account for Vortex, he would receive mixing messages which are hard to filter even with a known host key.
+\end{itemize}
+
+\subsection{Vortex Node Types}\label{sec:vortexNodeTypes}
+
+\subsubsection{Public Vortex Node}
+Public nodes are nodes, which advertise themselves as normal mixes. Just as all nodes, they may be an endpoint or a mix. Typically they accept all requests exactly as outlined in \ref{tab:protoReplyCrit}. As an immediate result of the publicly available information about such a node, the owner may be the target of our censoring adversary. Pressure may be opposed to close down such a node. However, since we do not need a specific account, we may safely close down one transport account and open up a different one. Such account reopenings are even possible on the same infrastructure. We are even able to notify other users of the move and remain reachable, as a user may send a newIdentity request using the old identity. 
+
+\subsubsection{Stealth Vortex Node}\label{sec:stealthNode}
+This node does not answer any clear-text requests. As an immediate result, the node is only usable by other nodes knowing the public key of this node. The node is, therefore, on a known secret base only reachable. This node type may be used in environments with a censoring adversary. People may form closed routing groups routing and anonymizing themselves. We have to state clearly at this point that putting trust into the routing nodes violates the \defref{Zero Trust} principle. It is, however, currently the only way to outcurve a censoring adversary. Means such as using distribution lists as endpoints seemed to be of some value at first but turned out just to shift the problem of detection from the routing to the less protected transport layer.
+
+\subsubsection{Hidden Vortex Node\label{sec:hiddenNode}}
+A hidden node is a special form to a stealth node. It has a predefined set of identities. Only these already known identities are processed. This behavior has certain drawbacks. An existing identity may not be changed, and new ephemeral identities may not be created. As an immediate result, traffic may become pseudonymity. To counter this effect, at least partially, we may use the same local identity for multiple senders. To remove clashes in the workspace, we may use preassigned IDs in the workspace. The sender is only one of all senders knowing the private key of an identity. The advantage of such a node is that identities have unlimited quotas on such nodes, no longer bothering about accounting and refreshing identities. Such behavior seems to be a valuable option when using bulletproof providers.
+
+
+\chapter{Routing}\label{sec:routingStrategies}
+\section{Strategies for Composing Routing Blocks}
+
+\subsection{MURBs\label{sec:murb}}
+The protocol includes the capability of MURBs. Such MURBs enable a user to send a limited amount of times messages to an anonymous receiver. Such sending may be done without having any knowledge about its identity, the location, or infrastructure he is using.
+
+A MURB in our term is an entirely prepared routing instruction built by the recipient of a message. The sender has only the routing blocks and the instructions to assemble the initial message. It does not know the message path except for the first message hops.
+
+As a MURB is a routing block, it generates the same pattern on the network each time a sender uses it. To avoid statistical visibility, we need to limit the number of uses per MURB. As a maximum number of usages, the protocol is limited to 127 usages. This number should be sufficiently sized for automated messages. A minute pattern would disappear after 2 hours latest and an hourly pattern after five days.
+
+For a MURB to work, the RBB has to take care that all quotas required to the route are sufficiently sized. Such sizing is hard to foresee in some cases. An RBB may query these identities from time to time to make sure that they do not deplete. Wherever possible, MURBs should be dropped in favor of multiple SURBs to avoid the dangers of MURBs.
+
 \section{Algorithms Suitable for Achieving Anonymity}
 \fxwarning{complete section}
 \section{Possibilities of Routing Diagnosis and Reputation Building}
@@ -15,7 +108,7 @@
 \section{Possibilities of Redundancies}
 \fxwarning{complete section}
 
-\chapter{Protocol Bootstrapping}
+\chapter{Protocol Bootstrapping}\label{sec:keyDistribution}
 \fxwarning{complete section}
 \section{Key Distribution for Endpoints}
 \fxwarning{complete section}
