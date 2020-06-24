@@ -4,6 +4,14 @@
 %!TeX root = ../../messageVortex.tex
 \partepigraph{Atoms are very special: they like certain particular partners, certain particular directions, and so on. It is the job of physics to analyze why each one wants what it wants.}{Richard P. Feynman}
 \part{Analysis of MessageVortex}
+In section~\ref{sec:adversary}, we described two different kinds of adversaries. Which do require different properties for our system to be fulfilled.
+
+An observing adversary is the less dangerous one. While observing all traffic he may not disrupt communication. Instead he is using all available information to collect data about all items of intrest (\defref{IOI}). He may do this for example by colecting inside or outside information about all message flows he may encounter. He may use this information and assign it to certain individuals or groups of individuals.
+
+A censoring attacker is far more dangerous as he does not only observe the system, but he may systematically supress freedom of speech and all technology related to it. As he has the means and the technical know-how, he may try, apart from observing, to discover systems communicating illegally either by observation or by infiltration of systemms. He may furthermore track down individuals within its reach and prosecute them. All other participants of an illegal system may be either identified and blacklisted or even attacked either by infiltrating their systems or by effectively launching DoS attacks against those systems.
+
+In the following sections, we will analyze aspects of security and highlight differences in terms of the different adversaries.
+
 \chapter{Analysis on Common Internet Protocols Suitable as Transport Layers for MessageVortex\label{sec:transportProtocols}}
 
 \section{Introduction}
@@ -21,7 +29,7 @@ All sections are structured the same way.
 	We then apply the previously referenced criteria and make a concise summary of the suiting of the protocol as a transport layer. The findings of this section is listed in table \ref{tab:protoSuitCrit}. The list here does not reflect the quality or maturity of the protocols. It is a simple analysis of suiting as a transport layer.
 \end{itemize} 
 
-\subsection{Applied Criteria}
+\subsection{Applied Criteria\label{sec:transportCriteria}}
 \begin{itemize}
 	\item Widely adopted (Ct1)\\
 	The more widely adopted and used a protocol is, the harder it is due to the sheer mass for an adversary to monitor , filter, or block the protocol. This is important for censorship resistance of the protocol. 
@@ -175,6 +183,7 @@ We can clearly state that according to the criteria, only a few protocols are su
 
 The findings of this short analysis suggested that we should use the two protocols, SMTP and XMPP, for our first standardization. We require at least two to prove that the protocol is agnostic to the transport.
 
+\chapter{Analysis of the Blending Layer}
 \chapter{Analysis of the Core Operations}
 \section{Splitting and Merging}
 \section{Encryption and Decryption Operations}
@@ -325,4 +334,9 @@ Another way is to attack the reputation of a system in such a way that the syste
 \fxwarning{complete section}
 \chapter{Analysis of the Degree of Anonymization in Comparison to other Systems}
 \fxwarning{complete section}
+
+\chapter{To be placed (TBP)}
+\section{Side Channel Leaking}
+\subsection{Software Updates and Related Data Streams}
+\subsection{Bugging in transported messages}
 

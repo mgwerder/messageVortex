@@ -76,7 +76,7 @@
 \usepackage[titles]{tocloft}
 \cftsetpnumwidth{3em}
 % Format appendix
-\setlength{\cftchapnumwidth}{65pt}%
+\setlength{\cftchapnumwidth}{16pt}%
 %\renewcommand{\cftpartpresnum}{\partname\hspace{13pt}}
 \renewcommand{\cftchappresnum}{\chaptername\hspace{5pt}}
 \renewcommand{\cftchapaftersnum}{\hspace{5pt}}
@@ -572,6 +572,8 @@
 \gdef\VortexNode{\emph{\defref{VortexNode}}}
 \gdef\VortexNodes{\emph{\defref{VortexNode}s}}
 
+% Allow byte field graphs
+\usepackage{bytefield}
 
 \begin{document}%
 %

@@ -11,7 +11,7 @@
 % ********************************************************************************************************
 
 \partepigraph{Where does a snake's tail start?}{My Son}
-\part{Concepts and Techniques}
+\part{Relevant Concepts}
 \fxwarning{complete section}
 
 \chapter{Anonymity Research}
@@ -316,11 +316,12 @@ We have introduced an additional type of padding not related to these paddings. 
 Details of this padding are described in the section "Add and Remove Redundancy Operations'' in \ref{app:rfcMessageVortexMain}. 
 
 \section{Pseudo Random Number Generators \label{sec:prng}}
-The following sections list two PRNG specifications to follow the recommendations of \cite{rfc1750}. These PRNGs are used to complete the padding specified in the addRedundancy operation.
+The following sections list two PRNG specifications to follow the recommendations of \cite{rfc1750}. These PRNGs are used to complete the padding in some of the later specified operations.
 
 We have chosen to support two kinds of PRNG. These algorithms are not relevant for the security of the system, but they guarantee non-detectable padding when doing the addRedundancy operation. The two PRNGs selected were xorshift128+ and Blum Micail PRNG. Both PRNGs were quoted to pass BigCrush. However, recent development shows that this might not be true for xorshift128+, as demonstrated in \cite{LEMIRE2019139}.
 
 \fxwarning{Extend PRNG section. Where is the rest?} 
+
 
 \chapter{Censorship Circumvention}
 Several technical ways have been explored to circumvent censorship. All seem to boil down to the following main ideas:

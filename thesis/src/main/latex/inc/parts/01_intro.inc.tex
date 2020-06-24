@@ -40,6 +40,47 @@ We design in this work a new protocol. This protocol allows message transfer thr
 
 The new protocol allows secure communication without the need to trust the underlying transport media. Furthermore, the usage of the protocol itself is possible without altering the immediate behavior of the transport layer. The transport layers' regular traffic does, therefore, increase the noise in which hidden information has to be searched. 
 
+The primary goal of the protocol is to enable freedom of speech, as defined in Article 19 of the International Covenant on Civil and Political Rights (ICCPR)\cite{iccpr}.
+\begin{quote}
+	everyone shall have the right to hold opinions without interference 
+\end{quote}
+and
+\begin{quote}
+	Everyone shall have the right to freedom of expression; this right shall include freedom to seek, receive and impart information and ideas of all kinds, regardless of frontiers, either orally, in writing or print, in the form of art, or through any other media of his choice.
+\end{quote}
+
+We imply that not all participants on the Internet share this value. As of September \nth{1}, 2016 Countries such as China (signatory), Cuba (signatory), Qatar, Saudi Arabia, Singapore, United Arab Emirates, or Myanmar did not ratify the ICCPR. Other countries such as the United States or Russia did either put local laws in place superseding the ICCPR or made reservations rendering parts of it ineffective. We may, therefore, safely assume that freedom of speech is not given on the Internet, as at least countries explicitly supersede them.
+
+Network packets may pass through any point of the world. A sender has no control over it. This lack of control is since every routing device decides on its own for the next hop. This decision may be based on static rules or influenced by third party nodes or circumstances (e.g., BGB, RIP, OSPF\ldots). It is furthermore not possible to detect what way has a packet taken. The standard network diagnostic tool \verb|tracert| respectively \verb|traceroute| returns a potential list of hops. This list is only correct under certain circumstances (e.g., a stable route for multiple packets or same routing decisions regardless of other properties than the source and destination address). Any Output of these tools may, therefore, not taken as a log of routing decisions. There is no possibility in standard IP routed networks to foresee a route for a packet, nor can it be measured, recorded, or predicted before, while, or after sending. 
+
+As an example of the problems analyzing a packet route, we may look at \verb|traceroute|. According to the man page of traceroute, \verb|traceroute| uses UDP, TCP, or ICMP packets with a short TTL and analyzes the IP of the peer sending a TIME\_EXCEEDED (message of the ICMP protocol). This information is then collected and shown as a route. This route may be completely wrong. The man page describes some of the possible causes.
+
+We cannot state that data packets we are sending are passing only through countries accepting the ICCPR to the full extent, nor can we craft packages following such a rule.
+
+\begin{figure}[H]
+	\begin{lstlisting}[language=bash,breaklines=true,basicstyle=\tiny]
+	$ traceroute www.ietf.org
+	traceroute to www.ietf.org.cdn.cloudflare-dnssec.net (104.20.0.85), 64 hops max
+	1   147.86.8.253  0.418ms  0.593ms  0.421ms
+	2   10.19.0.253  1.177ms  0.829ms  0.782ms
+	3   10.19.0.253  0.620ms  0.427ms  0.402ms
+	4   193.73.125.35  1.121ms  0.828ms  0.905ms
+	5   193.73.125.81  2.991ms  2.450ms  2.414ms
+	6   193.73.125.81  2.264ms  1.961ms  1.959ms
+	7   192.43.192.196  6.472ms  199.543ms  201.152ms
+	8   130.59.37.105  3.465ms  3.138ms  3.121ms
+	9   130.59.36.34  3.904ms  3.897ms  4.989ms
+	10   130.59.38.110  3.625ms  3.333ms  3.379ms
+	11   130.59.36.93  7.518ms  7.232ms  7.246ms
+	12   130.59.38.82  7.155ms  17.166ms  7.034ms
+	13   80.249.211.140  22.749ms  22.415ms  22.467ms
+	14   104.20.0.85  22.398ms  22.222ms  22.146ms
+	\end{lstlisting}
+	\caption{A traceroute to the host www.ietf.org}
+\end{figure}
+
+To enable freedom of speech, we need a mean of transport for messages which keep sender and recipient anonymous to an adversary.
+
 \chapter{Our Contribution}
 This thesis contributes to anonymisation with an asynchronous messaging protocol called \MessageVortex.
 
@@ -80,9 +121,8 @@ Based on this central question, there are several sub-questions grouped around v
 \end{enumerate}
 
 
-\chapter{Related Research and Systems}
-
-To be written. 
+\chapter{Scope}
+\fxwarning{Insert overview over preexisting work} 
 
 \chapter{Notation}
 

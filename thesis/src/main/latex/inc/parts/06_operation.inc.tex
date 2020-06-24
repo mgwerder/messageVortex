@@ -3,9 +3,11 @@
 %!TeX spellcheck = en_US
 %!TeX root = ../../messageVortex.tex
 \partepigraph{Occurrences in this domain are beyond the reach of exact prediction because of the variety of factors in operation, not because of any lack of order in nature.}{Albert Einstein}
-\part{Operational concerns}
-\fxwarning{insert operational }
-\chapter{Unclassified}
+\part{Operational concerns}\label{sec:operation}
+
+\fxwarning{part is highly incomplete}
+
+\chapter{General Concerns Regarding Operation}
 \section{Hardware}
 We require no specialized hardware for running Vortex nodes. Instead, we designed Vortex in such a way that ordinary mobile phones may act as Vortex nodes. It is, however, recommended to have a node always connected to the Internet. A mobile phone may disconnect from time to time based on the availability of the network. For our experiments, we used a RaspberryPi Zero W. It is, however, recommended to use a faster, newer model due to the memory requirements of the proof of work algorithm. 
 
@@ -36,20 +38,6 @@ The public key of an address is encoded as follows:
 	\item The asymmetric key is encoded as specified in the AsymmetricKey in ASN.1
 	\item The ASN.1 DER representation is then encoded using BASE64
 \end{enumerate}    
-
-\section{Transport Layers}                                          
-As transport layer protocols, we specified the protocols SMTP and XMMP as valid transport layers. In the following sections, we specify the blending properties for these protocols.
-
-\subsection{Embedding Spec}
-We always embed VortexMessages as attachments in SMTP and XMPP messages. 
-
-The embedding supports some properties. A receiving host chooses the supported properties. We describe valid properties by the blending specification::
-\begin{lstlisting}[language=EBNF]
-plainEncoding = "("plain:"<#BytesOfOffset>[,<#BytesOfOffset>]*")
-F5Encoding    = "(F5:"<passwordString>[,<PasswordString>]*")"
-\end{lstlisting}
-
-We use mainly plain embedding for our experiments. For better readability, we used a specialized blending layer using unchunked, plain embedding with an offset of $0$. The message itself was the ASN.1 block representation of the encoded block. The chosen encoding simplified to see the inner workings of the protocol. For production use, we apply F5 embedding with a generated payload. The current implementation of the blending layer is thus not suitable for production use as the messages remain identifiable or at least suspicious.
 
 \section{Client}
 We did not create a Vortex client for sending messages. Instead, we used a standard Thunderbird email client pointing to a local SMTP and IMAP Server provided by a Vortex proxy. On the SMTP side, Vortex does encapsulate where possible mails into a Vortex message and builds an automated route to the recipient. The SMTP part of Vortex may be used to encapsulate all messages automatically with a known Vortex identity into a \emph{VortexMessage}. On the IMAP side, it merges a local Vortex message store with the standard Email repository building a combined view.
@@ -88,8 +76,6 @@ This node does not answer any clear-text requests. As an immediate result, the n
 \subsubsection{Hidden Vortex Node\label{sec:hiddenNode}}
 A hidden node is a special form to a stealth node. It has a predefined set of identities. Only these already known identities are processed. This behavior has certain drawbacks. An existing identity may not be changed, and new ephemeral identities may not be created. As an immediate result, traffic may become pseudonymity. To counter this effect, at least partially, we may use the same local identity for multiple senders. To remove clashes in the workspace, we may use preassigned IDs in the workspace. The sender is only one of all senders knowing the private key of an identity. The advantage of such a node is that identities have unlimited quotas on such nodes, no longer bothering about accounting and refreshing identities. Such behavior seems to be a valuable option when using bulletproof providers.
 
-
-\chapter{Routing}\label{sec:routingStrategies}
 \section{Strategies for Composing Routing Blocks}
 
 \subsection{MURBs\label{sec:murb}}
@@ -114,5 +100,11 @@ For a MURB to work, the RBB has to take care that all quotas required to the rou
 \fxwarning{complete section}
 \section{Key Aquisition for Routing Nodes}
 \fxwarning{complete section}
+
+
+\chapter{Operational Concerns Regarding Environments with an Observing Adversary}
+
+\chapter{Operational Concerns Regarding Environments with an Censoring Adversary}
+\fxwarning{insert operational }
 
 
