@@ -5,6 +5,7 @@ out
 /app/testfile_*
 /app/src/messageVortex.iml
 /app/*.cache
+/thesis/src/main/latex/biberentries/*.bib
 build
 api
 cobertura
