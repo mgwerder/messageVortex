@@ -150,7 +150,7 @@ Crowds is a network that offers anonymity within a local group. It works as foll
 	\item Every JonDo takes any received message (might be from him as well) and sends it with a 50\% chance either to the correct recipient or to a randomly chosen destination
 \end{itemize}
 
-While crowds as specified in \cite{crowds:tissec} does anonymize the sender from the recipient rather well, the system offers no protection from someone capable of monitoring crowds traffic. The system may, however, be easily attacked from within by introducing collaborating johndos. It has been further developed to D-Crowds \cite{DBLP:conf/esorics/DanezisDKT09}, ADU/RADU \cite{Munoz-Gea2008}, Freenet\cite{freenet} and others. 
+While crowds as specified in \cite{crowds:tissec} does anonymize the sender from the recipient rather well, the system offers no protection from someone capable of monitoring crowds traffic. The system may, however, be easily attacked from within by introducing collaborating johndos. It has been further developed to D-Crowds \cite{crowdsAttack}, ADU/RADU \cite{Munoz-Gea2008}, Freenet\cite{freenet} and others. 
 
 Furthermore, the blender is aware of all JonDos and thus of particular interest for any observing or censoring adversary. Control of the blender enables an adversary to split the network into controllable parts, adding a high likelihood of discovering an original sender.
 
@@ -173,7 +173,7 @@ Several attempts have been made to strengthen the proposal of Chaum\cite{golle:e
 Table \ref{tab:anonClass} shows the previously analyzed protocols.
 
 \DeclareFixedFootnote{\takenFrom}{Definition taken from \ref{Shirazi2018}}
-\begin{table*}[t]\centering\tiny
+\begin{table*}[ht]\centering\tiny
 
 	\label{tab:anonClass}
 	\setlength{\aboverulesep}{0pt}
@@ -254,7 +254,7 @@ Table \ref{tab:anonClass} shows the previously analyzed protocols.
 	\newcommand\nscontfiles\faStickyNote
 	\newcommand\nscontwifi\faWifi
 	\newcommand\nscontBC{\faBullhorn}
-	\gdef\cwidth{0.37cm}
+	\gdef\cwidth{0.36cm}
 	\rowcolors{8}{black!30}{black!10}
 	\begin{tabular}{x{2pt}lx{2pt}*{5}{p{\cwidth}|}p{\cwidth}x{2pt}p{\cwidth}|p{\cwidth}x{2pt}*{4}{p{\cwidth}|}p{\cwidth}x{2pt}*{4}{p{\cwidth}|}p{\cwidth}x{2pt}}
 		\toprule
@@ -316,7 +316,9 @@ Table \ref{tab:anonClass} shows the previously analyzed protocols.
 \end{table*}
 \section{Resenders, Onion Routers, and MixNets\label{sec:remailersAndMixnets}}
 \subsection{Pseudonymous Remailers (1981)\label{sec:remPseudo}}
-\fxwarning{Section missing}
+A pseudonymous remailer allows to reach people via a pseudonymous email address. On the remailing server all traces of the original sender are removed and a pseudonymous email is inserted instead. The foundation of these reamilers can be found in an early article of David Chaum\cite{CHAUM1}.
+
+One of the most famous remailers was the Penet remailer (anon.penet.fi). This remailer only lasted from 1993 to 1996 and was shut down after at least two compromises involving the Chruch of Scientology. Details of the closure can be found in \cite{penetClosure}.
 
 \subsection{Cypherpunk Remailers (approx. 1993)\label{sec:remCypherpunk}}
 With the failing of anon.penet.fi, it became clear that the weakest spot of a single server infrastructure the information stored on the server and the vulnerability of their owner. The new type-1-remailers score over the existing type-0-remailers by using encryption for the message. Most of the time PGP was used and custom programmed mail processors on systems to achieve the functionallity. It is unclear when first type-1-remailers were invented. Setting up a type-1-remailer was typically achieved by using procmail together with a small script calling PGP binaries and then sending the resulting message to the next recipient. By combining multiple type-1-remailers, an onion-like structure of the message was achievable. 

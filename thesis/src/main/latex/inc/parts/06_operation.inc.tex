@@ -14,6 +14,8 @@ We require no specialized hardware for running Vortex nodes. Instead, we designe
 The hardware currently requires a network interface and a fully functional JSE VM to run the reference implementation.
 
 \section{Addressing of Vortex Nodes}
+from the start we were looking for an addressing scheme suitable for transparent addressing 
+
 A Vortex address is built as follows: 
 
 \begin{lstlisting}[language=EBNF]
@@ -107,4 +109,6 @@ For a MURB to work, the RBB has to take care that all quotas required to the rou
 \chapter{Operational Concerns Regarding Environments with an Censoring Adversary}
 \fxwarning{insert operational }
 
-
+\chapter{Real World Problems when using \MessageVortex}
+\section{Size Restrictions of the Transport Layer}
+A transport layer  may limit the size of messages transferred. We managed to create \VortexMessages{} as small as 2KB in size. Considering the blending overhead of F5 our message is sized at least 24KB which is not a problem for any of the selected transport protocol. So, while a \VortexMessage{} may be small an upper size limit i

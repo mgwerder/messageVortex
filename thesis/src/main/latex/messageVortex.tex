@@ -192,6 +192,15 @@
 \usepackage[framemethod=tikz]{mdframed}
 \usepackage[many]{tcolorbox}
 \tcbuselibrary{listings}
+\usepackage{multicol}% for multiple column listings
+\lstset{commentstyle=\color{darkgray}}
+\lstdefinelanguage[]{asn.1}{
+	keywords={DEFINITIONS,SEQUENCE,OCTET,INTEGER,BEGIN,END,OPTIONAL,STRING},
+	sensitive=true,
+	comment=[l]{--}, % l is for line comment
+	string=[b]", % defines that strings are enclosed in double quotes
+} 
+
 
 % enable raggedright in tables
 \usepackage{array}

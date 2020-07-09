@@ -22,9 +22,12 @@ package net.messagevortex.transport.dummy;
 // * SOFTWARE.
 // ************************************************************************************
 
+import com.hazelcast.core.Hazelcast;
+import com.hazelcast.core.HazelcastInstance;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -44,8 +47,11 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
 
   static {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+    HazelcastInstance hz = Hazelcast.newHazelcastInstance();
+    idReservation = hz.getMap("dummyTransportTrxEndpoints");
   }
 
+  static final Map<String, String> idReservation;
   static final Map<String, TransportReceiver> endpoints = new HashMap<>();
 
   /**
@@ -84,7 +90,7 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
   public DummyTransportTrx(TransportReceiver blender) throws IOException {
     synchronized (endpoints) {
       String id = null;
-      while (id == null || endpoints.containsKey(id)) {
+      while (id == null || idReservation.containsKey(id)) {
         id = RandomString.nextString(5, "0123456789abcdef@example.com");
       }
       init(id, blender);
@@ -93,15 +99,18 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
 
   private void init(String id, TransportReceiver blender) throws IOException {
     synchronized (endpoints) {
-      if (endpoints.containsKey(id)) {
+      if (idReservation.containsKey(id)) {
         throw new IOException("Duplicate transport endpoint identifier (id:" + id + ")");
       }
+      idReservation.put(id, InetAddress.getLocalHost().getHostName());
       endpoints.put(id, blender);
     }
   }
 
   /**
-   * send a message to another dummy endpoint.
+   * <p>send a message to another dummy endpoint.</p>
+   *
+   * <p>FIXME: This only works for local messages</p>
    *
    * @param address the string representation of the target address on the transport layer
    * @param is      the input stream to be sent
@@ -127,8 +136,8 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
     LOGGER.log(Level.INFO, "Dummy transport received " + arr.length + " sized message");
     final InputStream iso = new ByteArrayInputStream(arr);
     synchronized (endpoints) {
+      // create new thread for message processing
       new Thread() {
-
         @Override
         public void run() {
           ep.gotMessage(iso);

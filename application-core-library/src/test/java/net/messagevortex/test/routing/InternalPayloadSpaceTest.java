@@ -100,8 +100,8 @@ public class InternalPayloadSpaceTest {
         // just a quick small test
         payloadSpaceProcessingTest(RandomString.nextString(1));
 
-        //test with a 100MB blob
-        payloadSpaceProcessingTest(RandomString.nextString(1024*1024*100)); // creating a random sting up to 100 MB
+        //test with a 10MB blob
+        payloadSpaceProcessingTest(RandomString.nextString(1024*1024*10)); // creating a random sting up to 10 MB
 
         // fuzz it with some random strings
         for(int i=0;i<100;i++) {

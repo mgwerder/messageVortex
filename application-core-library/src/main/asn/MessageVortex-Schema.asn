@@ -15,7 +15,6 @@ BEGIN
   --***************************************************************
   -- Constant definitions
   --***************************************************************
-
   -- maximum serial number
   maxSerial                 INTEGER ::= 4294967295
   -- maximum number of administrative requests
@@ -38,6 +37,13 @@ BEGIN
   -- The maximum number of assembly instructions per combo
   maxAssemblyInstructions   INTEGER ::= 255
 
+
+  --***************************************************************
+  -- Types
+  --***************************************************************
+  PuzzleIdentifier ::= OCTET STRING ( SIZE(0..32) )
+  ChainSecret      ::= OCTET STRING  (SIZE (16..64))
+  
   --***************************************************************
   -- Block Definitions
   --***************************************************************
@@ -149,10 +155,6 @@ BEGIN
     -- optional - to identify the sender of a message when received
     id             [409] INTEGER OPTIONAL
   }
-
-  PuzzleIdentifier          ::= OCTET STRING ( SIZE(0..16) )
-
-  ChainSecret ::= INTEGER (0..4294967295)
 
 END
 

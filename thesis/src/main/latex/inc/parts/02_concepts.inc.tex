@@ -11,7 +11,7 @@
 % ********************************************************************************************************
 
 \partepigraph{Where does a snake's tail start?}{My Son}
-\part{Relevant Concepts}
+\part{Relevant Concepts and Technologies}
 \fxwarning{complete section}
 
 \chapter{Anonymity Research}
@@ -121,7 +121,7 @@ YASS, as described in \cite{solanki2007yass}, was not considered a candidate. Al
 
 Timing channels are a specialized form of covert channels. In timing channels, the information itself hides not within the data of the channel, but the usage of the channel is in such a way that it is capable of reflecting the data. As we do not have control over the timing of the transport channel, this is not an option for us.
 
-\chapter{Cryptography}
+\chapter{Related Cryptographic Theory and Algorithms}
 
 Whenever dealing with obfuscating data and maintaining the integrity of data, cryptography is the first tool in the hand of an implementer. A vast amount of research in this area does already exist. For this work, we focussed on algorithms either very well researched and implemented or research, which seem very valuable when putting this work into place. 
 
@@ -187,7 +187,6 @@ The number of crypto algorithms was higher than the steganography options. When 
 \end{itemize}
 
 
-\section{Homomorphic encryption}
 Homomorphic encryption, as introduced in \cite{feldman1987practical}, was from the beginning a strong candidate to be used within our work. Unfortunately, we did not find a way to apply the core addRedundancy operation in homomorphic encryption. Transforming the original data to the GF space in an efficient way to apply matrices was not doable and thus rejected.
 
 %\cite{Gentry:2009:FHE:1536414.1536440} %FIXME dangling reference
