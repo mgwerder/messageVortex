@@ -48,57 +48,31 @@ BEGIN
   -- Block Definitions
   --***************************************************************
   PrefixBlock ::= SEQUENCE {
-	version			[0] INTEGER OPTIONAL
+    version            [0] INTEGER OPTIONAL
     forwardsecret   [1] ChainSecret,
     key             [2] SymmetricKey,
-  }
-
-  IdentityBlock ::= SEQUENCE {
-    -- Public key of the identity representing this transmission
-    identityKey         AsymmetricKey,
-    -- serial identifying this block
-    serial              INTEGER (0..maxSerial),
-    -- number of times this block may be replayed (Tuple is
-    -- identityKey, serial while UsagePeriod of block)
-    maxReplays          INTEGER (0..maxNumberOfReplays),
-    -- subsequent Blocks are not processed before valid time.
-    -- Host may reject too long retention. Recomended validity
-    -- support >=1Mt.
-    valid               UsagePeriod,
-    -- represents the chained secret which has to be found in
-    -- subsequent blocks
-    -- prevents reassembly attack
-    forwardSecret       ChainSecret,
-    --  contains the MAC-Algorithm used for signing
-    signAlgorithm       MacAlgorithmSpec,
-    -- contains administrative requests such as quota requests
-    requests            SEQUENCE (SIZE (0..maxNumberOfRequests))
-                        OF HeaderRequest ,
-    -- Reply Block for the requests
-    requestReplyBlock   RoutingCombo,
-    -- padding and identitifier required to solve the cryptopuzzle
-    identifier  [12201] PuzzleIdentifier OPTIONAL,
-    -- This is for solving crypto puzzles
-    proofOfWork [12202] OCTET STRING OPTIONAL
   }
 
   InnerMessageBlock ::= SEQUENCE {
     padding   OCTET STRING,
     prefix    CHOICE {
         plain           [11011] PrefixBlock,
-        -- contains prefix encrypted with receivers public key
+        -- contains prefix encrypted with receivers 
+		-- public key
         encrypted       [11012] OCTET STRING
     },
-    identity  CHOICE  {
+    header  CHOICE  {
       -- debug/internal use only
-      plain     [11021] IdentityBlock,
+      plain     [11021] HeaderBlock,
       -- contains encrypted identity block
       encyrpted [11022] OCTET STRING
     },
     -- contains signature of Identity [as stored in
-    -- HeaderBlock; signed unencrypted HeaderBlock without Tag]
+    -- HeaderBlock; signed unencrypted HeaderBlock without 
+	-- Tag]
     identitySignature OCTET STRING,
-    -- contains routing information (next hop) for the payloads
+    -- contains routing information (next hop) for the 
+	-- payloads
     routing     CHOICE {
       plain     [11031] RoutingBlock,
       -- contains encrypted routing block
@@ -109,16 +83,51 @@ BEGIN
                 OF OCTET STRING
   }
 
+  HeaderBlock ::= SEQUENCE {
+    -- Public key of the identity representing this 
+	-- transmission
+    identityKey         AsymmetricKey,
+    -- serial identifying this block
+    serial              INTEGER (0..maxSerial),
+    -- number of times this block may be replayed 
+	-- (Tuple is identityKey, serial while UsagePeriod 
+	-- of block)
+    maxReplays          INTEGER (0..maxNumberOfReplays),
+    -- subsequent Blocks are not processed before 
+	-- valid time.
+    -- Host may reject too long retention. Recomended 
+	--validity support >=1Mt.
+    valid               UsagePeriod,
+    -- represents the chained secret which has to be 
+	-- found in subsequent blocks prevents reassembly 
+	-- attack
+    forwardSecret       ChainSecret,
+    --  contains the MAC-Algorithm used for signing
+    signAlgorithm       MacAlgorithmSpec,
+    -- contains administrative requests such as quota 
+	-- requests
+    requests            SEQUENCE 
+	                    (SIZE (0..maxNumberOfRequests))
+                        OF HeaderRequest ,
+    -- Reply Block for the requests
+    requestReplyBlock   RoutingCombo,
+    -- padding and identitifier required to solve the 
+	-- cryptopuzzle
+    identifier  [12201] PuzzleIdentifier OPTIONAL,
+    -- This is for solving crypto puzzles
+    proofOfWork [12202] OCTET STRING OPTIONAL
+  }
+
   RoutingBlock ::= SEQUENCE {
     -- contains the routingCombos
-    routing    [332] SEQUENCE (SIZE (0..maxRoutingBlocks))
+    routing    [331] SEQUENCE (SIZE (0..maxRoutingBlocks))
                               OF RoutingCombo,
     -- contains the secret of the header block
     forwardSecret     ChainSecret,
     -- contains a routing block which may be used when sending
     -- error messages back to the quota owner
     -- this routing block may be cached for future use
-    replyBlock [131]   SEQUENCE {
+    replyBlock [332]   SEQUENCE {
          murb           RoutingCombo,
          maxReplay      INTEGER,
          validity       UsagePeriod
@@ -133,12 +142,12 @@ BEGIN
     maxProcessTime INTEGER (0..maxDurationOfProcessing),
     -- The message key to encrypt the message
     peerKey        [401] SEQUENCE (1..maxNumberOfReplays)
-	                     SymmetricKey OPTIONAL,
+                         SymmetricKey OPTIONAL,
     -- contains the next recipient
     recipient      [402] BlendingSpec OPTIONAL,
     -- PrefixBlock encrypted with message key
     mPrefix        [403] SEQUENCE (1..maxNumberOfReplays) 
-	                     OF OCTET STRING OPTIONAL,
+                         OF OCTET STRING OPTIONAL,
     -- PrefixBlock encrypted with sender key
     cPrefix        [404] OCTET STRING OPTIONAL,
     -- HeaderBlock encrypted with sender key

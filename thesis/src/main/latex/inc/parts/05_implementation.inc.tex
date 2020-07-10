@@ -404,7 +404,7 @@ The findings of this short analysis suggested that we should use the two protoco
 
 \chapter{Transport Layer Implementation}
 \section{Implementation of a Dummy Transport Layer}
-For better diagnosability and fast setup, we implemented a custom transport layer working on a config-less manner in a localhost or broadcast-domain environment. The transport layer is based on the Hazelcast distributed hashmap. Implementation may be found under \lstinline[columns=fixed]{net.messagevortex.transport.dummy.DummyTransportTrx}. 
+For better diagnosability and fast setup, we implemented a custom transport layer working on a config-less manner in a localhost or broadcast-domain environment. The transport layer is based on the Hazelcast distributed hashmap. Implementation may be found under \lstinline[columns=fixed,basicstyle=\normalsize]{net.messagevortex.transport.dummy.DummyTransportTrx}. 
 
 \section{Implementation of an Email Transport Layer}
 Email supports a conglomerate of protocols. Looking at the client side, we will find that email is sent with an authenticated SMTP connection. The SMTP connection is somewhat different than than the connections used to send emails to the destination. First of all the client port was shifted in the past to a specific submission port (SMTPS: Port 465; Submission: Port 587). These submmission ports are authenticated (either by username and password, by IP or by certificates) and usually privileged (no \defref{UBE} checks). On the retrieval side, SMTP is not capable of handling these tasks sensibly. Instead, POP3 and IMAPv4 are used. POP3 is a deposit box for email where a device fetches the mail and stores it locally. This is commonly in use for automated processing of mails but these days, where the same user owns multiple devices no longer adequate. IMAPv4 offers to organize mails on the server. This allows a user to have the same folder structure of mails in a synchronized manner on all devices.
@@ -420,32 +420,52 @@ To transfer a \VortexMessage{}, we could embedd a MIME message just as with  SMT
 
 XMPP has an improvment process based on XEPs. For including binary contents such as attachments in messages multiple XEPs exists. Table~\ref{tab:xep} shows all idenified candidates.
 \begin{table*}[ht]\centering\tiny
-	\label{tab:xep}
 	%\setlength{\aboverulesep}{0pt}
 	%\setlength{\belowrulesep}{0pt}
 	\newcolumntype{x}[1]{!{\centering\arraybackslash\vrule width #1}}
 	\rowcolors{2}{black!30}{black!10}
 	\bgroup
 	\def\arraystretch{1.5}%  1 is the default, change whatever you need
-\begin{tabular}{|l|l|p{8cm}|}\hline
-	Name                                 & Status (as of 06-2020)             & Purpose \\\hline
-	\citetitle{xep0047}\cite{xep0047}    & Final Standard                     & Allows sending chunked, base64 encoded data within the jabber connections.\\
-	\citetitle{xep0066}\cite{xep0066}    & Draft Standard                     & Allows sending URIs of remotely hosted binary data.\\
-	\citetitle{xep0096}\cite{xep0096}    & Depreciated (referred to XEP-0234) & Improvement of \cite{xep0066} allowing to send metadata and alternative URIs\\
-	\citetitle{xep0135}\cite{xep0135}    & Deferred (inactive)                & Inband or Out-of-band file discovery and referral service. May be used in conjunction with FTP, HTTP, SCP, or \cite{xep0096}.\\
-	\citetitle{xep0231}\cite{xep0231}    & Draft Standard                     & Allows sending inband small unchunked files and referring within the message similarly to \cite{rfc2397}.\\
-	\citetitle{xep0234}\cite{xep0234}    & Deferred (inactive)                & Based on \cite{xep0166} allowing out-of-band content negotiation of complex data streams\\\hline 
-\end{tabular}
-\caption{Overview of XEPs related to transporting binary data.}
-\egroup
+	\begin{tabular}{|l|l|p{8cm}|}\hline
+		Name                                 & Status (as of 06-2020)             & Purpose \\\hline
+		\citetitle{xep0047}\cite{xep0047}    & Final Standard                     & Allows sending chunked, base64 encoded data within the jabber connections.\\
+		\citetitle{xep0066}\cite{xep0066}    & Draft Standard                     & Allows sending URIs of remotely hosted binary data.\\
+		\citetitle{xep0096}\cite{xep0096}    & Depreciated (ref. XEP-0234) & Improvement of \cite{xep0066} allowing to send metadata and alternative URIs\\
+		\citetitle{xep0135}\cite{xep0135}    & Deferred (inactive)                & Inband or Out-of-band file discovery and referral service. May be used in conjunction with FTP, HTTP, SCP, or \cite{xep0096}.\\
+		\citetitle{xep0231}\cite{xep0231}    & Draft Standard                     & Allows sending inband small unchunked files and referring within the message similarly to \cite{rfc2397}.\\
+		\citetitle{xep0234}\cite{xep0234}    & Deferred (inactive)                & Based on \cite{xep0166} allowing out-of-band content negotiation of complex data streams\\\hline 
+	\end{tabular}
+	\caption{Overview of XEPs related to transporting binary data.}
+	\label{tab:xep}
+	\egroup
 \end{table*}
 
-Many documents have either reached standard or have been deferred due to inactivity.  We used ``\citetitle{xep0231}''\cite{xep0231} for our protocol. It is simple to implement as a transport layer, used in many clients (e.g., Prosody, Pigdin, or CoyIM). A node may use any XMPP server regardless of any additional support for transfer.
+Relevant documents have either reached standard, draft standard, or have been deferred due to inactivity.  We used ``\citetitle{xep0231}''\cite{xep0231} for our protocol. It is simple to implement as a transport layer, used in many clients (e.g., Prosody, Pigdin, or CoyIM), and already aa draft standard which minimizes the risk of using later deprecated technology. As it is a client-only XEP, a node may use any XMPP server regardless of any additional support for XEP-0135. 
 
-The blending layer may generate decoy message analogue to the messages generated in the case of email.
+Embedding works exactly the same as with email with the same supported blending options. Instead of searching all attachments, we just search through all data objects for relevant \VortexMessages.
+
+The blending layer may generate decoy message analogue to the messages generated in the case of email. Some adoptions in terms of texts might be advisable.
 
 \section{Distributed Configuration and Runtime Store of processing content}
-If we care to run our \MessageVortex nodes in a sensible and 
+A distributed storage is advisable if working as a reliable service. This is why we defined ASN.1 structures for all elements kept in memory as shown in figure~\ref{fig:defConfig}. Wisely applied, they may be used to store in a transport storage for access of a redundant set of devices all maintaining the same set of data. 
+
+\begin{figure}[ht]
+	\lstinputlisting[language=asn.1,multicols=2]{../../../../application-core-library/src/main/asn/MessageVortex-NonProtocolBlocks.asn}
+	\caption{Definition of the structures related to a distributed storage}
+	\label{fig:defConfig}
+\end{figure}
+
+\fxwarning{check for completeness of helpers}
+
+The configuration should be stored sensibly in the transport storage to match regular usage patterns. A good storage may be organized as follows:
+\begin{itemize}
+	\item All configuration items are blended with F5 and protected by a key phrase to be encrypted with an appropriate KDF.
+	\item Draft folder contains one draft message with the current, short living configuration. 
+	\item Long living configuration is written to draft and then moved to the Sent Items folder.
+	\item A configuration is first fetched from the drafts folder and then the first config object of the ``sent items'' folder is fetched.
+	\item All items in the sent folder are deleted after a defined timespan (say 30 days). Items not yet expired are rewritten into a new config object into the sent folder prior delete. 
+\end{itemize}
+
 
 \chapter{Blending Layer Implementation}
 \section{Embedding Spec}
@@ -457,28 +477,39 @@ plainEmbedding = "("plain:"<#BytesOffset>[,<#BytesOffset>]*")
 F5Embedding    = "(F5:"<passwordString>[,<PasswordString>]*")"
 \end{lstlisting}
 
-\fxwarning{ Story: Both embeddings allow unbroken logical structure (plain->generic and F5 for JPEG/GIF/BMP). When advertizing multiple offsets or PWs then all of them are checked by blending layer. Presence of a valid header block is sufficient proof.}
+Both specifications allow embedding of a \VortexMessage{} and are described in the following section. In both cases a byte stream is extracted consisting of a prefix block containing the peer key $K_{peer_o}$ immediately followed by the symmetrically encrypted InnerMessageBlock as described in figure~\ref{fig:defOuterBlocks}. The string is not necessarily terminated correctly. The presence of a valid PrefixBlock signals an existing \VortexMessage{} to the blending layer. That way we make sure that the size of a potential message leakes its presence. To detect the presence of a \VortexMessage{}, the hosts private key $K^{-1}_{host_o}$ for decoding the is required. 
 
+\begin{figure}[ht]
+	\lstinputlisting[linerange={50-114},language=asn.1,multicols=2]{../../../../application-core-library/src/main/asn/MessageVortex-Schema.asn}
+	\caption{Definition of the outer message blocks.}
+	\label{fig:defOuterBlocks}
+\end{figure}
 
+\subsection{Extraction of the Blended Message}
+In this section we describe the extraction of a VortexMessage by the blending layer. We describe the Plain Embedding alolowing a detectable yet unreadable message including the chunking applied to minimize detection. Furthermore we describe the more elaborated methode of using F5  blending, which results in undetectable messages at the cost of roughly eight times higher protocol overhead.
 
 \subsection{Plain Embedding}
-The $plainEmbedding$ is a simple embedding replacing parts of the original file with the content of the \VortexMessage. To maintain the header information of a file we introduced an offset as a set of fixed values. A plain embedding may be identified by a host when decoding a single block with $K^{-1}_{host_o}$ if the resulting structure is an ASN.1 stucture is equivalent to XXX.
+The $plainEmbedding$ is a simple embedding replacing parts of the original file with the content of the \VortexMessage. To maintain the header information of a file we introduced an offset as a set of fixed values. A plain embedding may be identified by a host when decoding a single block with $K^{-1}_{host_o}$ if the resulting structure is an ASN.1 stucture is equivalent to \lstinline[columns=fixed,basicstyle=\normalsize]{PrefixBlock}.
 
 
 We use mainly plain embedding for our experiments. For better readability, we used a specialized blending layer using unchunked, plain embedding with an offset of $0$. The message itself was the ASN.1 block representation of the encoded block. The chosen encoding simplified to see the inner workings of the protocol. For production use, we apply F5 embedding with a generated payload. The current implementation of the blending layer employing plain embedding is thus not suitable for production use as the messages remain identifiable or at least suspicious.
 
-\subsubsection{Chunking of Plain Embedded Messages}\label{sec:chunkingPlain}
+\paragraph{Chunking of Plain Embedded Messages}\label{sec:chunkingPlain}~\\
 In this section we describe the chunked embedding into plain messages. The chunking is done by embedding one to four byte integer values which reflect (modulo the the remaining file size) the next chunk and the following gap. The byte layout is chosen in such a way that any byte sequence from two to eight bytes form a valid chunk header.
 
 When plain embedding messages we have the problem that most of the files have recurring logical structures. Such structures should not be broken when embedding in plain as such embedding as it would leak in an easy detectable manner the presence of a broken file.
 
-
-
-\subsection{Implementation of F5 Blending}
+\subsubsection{Implementation of F5 Blending}
 \fxwarning{complete section with story "Implementation of F5 Blending"}
-\fxwarning{Story: F5 \cite{f5} is very old and has not been broken. The first implementation had a detectable issue with an unintended double compression \cite{steganalysisf5} but the authors of f5 fixed this issue \cite{F5broken}. newer derivates and alternatives are available (e.g., nsF5 or   MSET)}
+\fxwarning{Story: F5 \cite{f5} is very old and has not been broken. The first implementation had a detectable issue with an unintended double compression \cite{steganalysisf5} but the authors of f5 fixed this issue \cite{F5broken}. newer derivates and alternatives are available (e.g., nsF5 or MSET)}
 
-\section{Blending Content Generation}
+\subsection{Message Processing by the Blending Layer}
+If a \VortexMessage is detected, the $prefix$ with the sender key $K_{sender_o}$ is decrypted to decrypt the header block $header$. Verfying the identity signature (which may be done even before decrypting the header block) guarantees that the original sender is the owner of the \defref{eID}. WIth the help of the accounting layer the \VortexMessage{} is authorized for processing. 
+
+Depending on the current quota (messages) and the status of the identity (temporary or established) further procesing by the routing layer is acknowledged.
+
+
+\section{Blending Decoy Content Generation}
 \fxwarning{complete section}
 
 \chapter{Routing Layer Implementation}
