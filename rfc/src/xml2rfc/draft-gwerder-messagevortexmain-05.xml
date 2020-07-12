@@ -10,6 +10,12 @@
 <?rfc compact="yes" ?>
 <?rfc subcompact="no" ?>
 
+<!-- FIXME: Correct handling of reply blocks as specified in tab:workspaceI and synchronize ID handling -->
+<!-- FIXME: Add limitatons to the GF sizes -->
+<!-- FIXME: Comment on extended Reply Capability block -->
+<!-- FIXME: Comment on special reply blocks in routing -->
+<!-- FIXME: Mention that only unsolicited replies should be accepted in workspace ID 0 -->
+
 <!-- verify request section to match ASN.1 -->
 <rfc category="exp" docName="draft-gwerder-messagevortexmain-05" ipr="trust200902" xml:lang="en">
 	<front>

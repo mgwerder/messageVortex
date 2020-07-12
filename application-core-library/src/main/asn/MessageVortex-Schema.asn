@@ -1,12 +1,12 @@
 MessageVortex-Schema DEFINITIONS EXPLICIT TAGS ::=
 BEGIN
   EXPORTS PrefixBlock, InnerMessageBlock, RoutingBlock,
-          maxID;
+          maxWorkspaceID;
   IMPORTS SymmetricKey, AsymmetricKey, MacAlgorithmSpec, CipherSpec
                 FROM MessageVortex-Ciphers
           HeaderRequest
                 FROM MessageVortex-Requests
-          PayloadOperation
+          PayloadOperation, MapBlockOperation
                 FROM MessageVortex-Operations
 
           UsagePeriod, BlendingSpec
@@ -23,7 +23,7 @@ BEGIN
   -- in the local queue (starting from startOffset)
   maxDurationOfProcessing   INTEGER ::= 86400
   -- maximum id of an operation
-  maxID                     INTEGER ::= 32767
+  minWorkspaceID            INTEGER ::= 32768
   -- maximum number of routing blocks in a message
   maxRoutingBlocks          INTEGER ::= 127
   -- maximum number a block may be replayed
@@ -58,7 +58,7 @@ BEGIN
     prefix    CHOICE {
         plain           [11011] PrefixBlock,
         -- contains prefix encrypted with receivers 
-		-- public key
+        -- public key
         encrypted       [11012] OCTET STRING
     },
     header  CHOICE  {
@@ -68,51 +68,51 @@ BEGIN
       encyrpted [11022] OCTET STRING
     },
     -- contains signature of Identity [as stored in
-    -- HeaderBlock; signed unencrypted HeaderBlock without 
-	-- Tag]
+    -- HeaderBlock; signed unencrypted HeaderBlock without    
+    -- Tag]
     identitySignature OCTET STRING,
     -- contains routing information (next hop) for the 
-	-- payloads
-    routing     CHOICE {
+    -- payloads
+    routing     [11001] CHOICE {
       plain     [11031] RoutingBlock,
       -- contains encrypted routing block
       encyrpted [11032] OCTET STRING
     },
     -- contains the actual payload
     payload     SEQUENCE (SIZE (0..maxPayloadBlocks))
-                OF OCTET STRING
+                OF OCTET STRING 
   }
 
   HeaderBlock ::= SEQUENCE {
     -- Public key of the identity representing this 
-	-- transmission
+    -- transmission
     identityKey         AsymmetricKey,
     -- serial identifying this block
     serial              INTEGER (0..maxSerial),
     -- number of times this block may be replayed 
-	-- (Tuple is identityKey, serial while UsagePeriod 
-	-- of block)
+    -- (Tuple is identityKey, serial while UsagePeriod 
+    -- of block)
     maxReplays          INTEGER (0..maxNumberOfReplays),
     -- subsequent Blocks are not processed before 
-	-- valid time.
+    -- valid time.
     -- Host may reject too long retention. Recomended 
-	--validity support >=1Mt.
+    -- validity support >=1Mt.
     valid               UsagePeriod,
     -- represents the chained secret which has to be 
-	-- found in subsequent blocks prevents reassembly 
-	-- attack
+    -- found in subsequent blocks prevents reassembly 
+    -- attack
     forwardSecret       ChainSecret,
     --  contains the MAC-Algorithm used for signing
     signAlgorithm       MacAlgorithmSpec,
     -- contains administrative requests such as quota 
-	-- requests
+    -- requests
     requests            SEQUENCE 
-	                    (SIZE (0..maxNumberOfRequests))
+                        (SIZE (0..maxNumberOfRequests))
                         OF HeaderRequest ,
     -- Reply Block for the requests
     requestReplyBlock   RoutingCombo,
     -- padding and identitifier required to solve the 
-	-- cryptopuzzle
+    -- cryptopuzzle
     identifier  [12201] PuzzleIdentifier OPTIONAL,
     -- This is for solving crypto puzzles
     proofOfWork [12202] OCTET STRING OPTIONAL
@@ -124,8 +124,13 @@ BEGIN
                               OF RoutingCombo,
     -- contains the secret of the header block
     forwardSecret     ChainSecret,
-    -- contains a routing block which may be used when sending
-    -- error messages back to the quota owner
+    -- contains the mapping operations to map payloads 
+    -- to the workspace
+    mappings   [332] SEQUENCE 
+                     (SIZE (0..maxPayloadBlocks))
+                     OF MapBlockOperation,
+    -- contains a routing block which may be used when 
+    -- sending error messages back to the quota owner
     -- this routing block may be cached for future use
     replyBlock [332]   SEQUENCE {
          murb           RoutingCombo,
@@ -135,8 +140,9 @@ BEGIN
   }
 
   RoutingCombo ::= SEQUENCE {
-    -- contains the period when the payload should be processed
-    -- Router might refuse to long queue retention
+    -- contains the period when the payload should be 
+    -- processed.
+    -- Router might refuse too long queue retention
     -- Recommended support for retention >=1h
     minProcessTime INTEGER (0..maxDurationOfProcessing),
     maxProcessTime INTEGER (0..maxDurationOfProcessing),
@@ -144,7 +150,7 @@ BEGIN
     peerKey        [401] SEQUENCE (1..maxNumberOfReplays)
                          SymmetricKey OPTIONAL,
     -- contains the next recipient
-    recipient      [402] BlendingSpec OPTIONAL,
+    recipient      [402] BlendingSpec,
     -- PrefixBlock encrypted with message key
     mPrefix        [403] SEQUENCE (1..maxNumberOfReplays) 
                          OF OCTET STRING OPTIONAL,
@@ -154,15 +160,17 @@ BEGIN
     header         [405] OCTET STRING OPTIONAL,
     -- RoutingBlock encrypted with sender key
     routing        [406] OCTET STRING OPTIONAL,
-    -- contains information for building messages (when used as MURB
-    -- ID 0 denotes original message; ID 1-maxPayloadBlocks denotes
-    -- target message; 32768-maxWorkspaceId shared workspace for all
+    -- contains information for building messages (when 
+    -- used as MURB)
+    -- ID 0 denotes original/local message
+    -- ID 1-maxPayloadBlocks denotes target message
+    -- 32768-maxWorkspaceId shared workspace for all
     -- blocks of this identity)
-    assembly       [407] SEQUENCE (SIZE (0..maxAssemblyInstructions))
-                  OF PayloadOperation,
-    validity       [408] UsagePeriod,
-    -- optional - to identify the sender of a message when received
-    id             [409] INTEGER OPTIONAL
+    assembly       [407] SEQUENCE 
+                   (SIZE (0..maxAssemblyInstructions))
+                   OF PayloadOperation,
+    -- optional for storage of the arrival time
+    validity       [408] UsagePeriod OPTIONAL,
   }
 
 END

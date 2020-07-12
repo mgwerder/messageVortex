@@ -193,6 +193,10 @@
 \usepackage[many]{tcolorbox}
 \tcbuselibrary{listings}
 \usepackage{multicol}% for multiple column listings
+\usepackage{float} % for defining floats
+\newfloat{lstfloat}{htbp}{lop}
+\floatname{lstfloat}{Listing}
+\def\lstfloatautorefname{Listing} % needed for hyperref/auroref
 \lstset{commentstyle=\color{darkgray}}
 \lstdefinelanguage[]{asn.1}{
 	keywords={DEFINITIONS,SEQUENCE,OCTET,INTEGER,BEGIN,END,OPTIONAL,STRING},

@@ -13,7 +13,7 @@ MessageVortex-NonProtocolBlocks DEFINITIONS
                                 EXPLICIT TAGS ::=
 BEGIN
   IMPORTS PrefixBlock, InnerMessageBlock, RoutingBlock, 
-          maxID
+          maxWorkspaceID
                 FROM MessageVortex-Schema
           UsagePeriod, NodeSpec, BlendingSpec
                 FROM MessageVortex-Helpers
@@ -33,19 +33,19 @@ BEGIN
     prefix        CHOICE {
         plain           [10011] PrefixBlock,
         -- contains prefix encrypted with receivers public 
-		-- key
+        -- key
         encrypted       [10012] OCTET STRING
     },
     innerMessage  CHOICE {
         plain     [10021] InnerMessageBlock,
         -- contains inner message encrypted with Symmetric 
-		-- key from prefix
+        -- key from prefix
         encrypted [10022] OCTET STRING
     }
   }
 
   MemoryPayloadChunk ::= SEQUENCE {
-    id                        INTEGER (0..maxID),
+    id                        INTEGER (0..maxWorkspaceID),
     payload                   [100] OCTET STRING,
     validity                  UsagePeriod
   }
@@ -66,9 +66,9 @@ BEGIN
     -- Contains the identity of the owning node;
     -- May be ommited if local node
     nodeKey             [1003] SEQUENCE OF AsymmetricKey 
-	                           OPTIONAL,
+                               OPTIONAL,
     routingBlocks       [1004] SEQUENCE OF RoutingBlock 
-	                           OPTIONAL,
+                               OPTIONAL,
     replayStore         [1005] IdentityReplayStore,
     requirement         [1006] RequirementBlock OPTIONAL
   }
