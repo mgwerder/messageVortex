@@ -21,8 +21,11 @@ BEGIN
   }
 
   HeaderRequestReplaceIdentity ::= SEQUENCE {
-    old            NodeSpec,
-    new            NodeSpec
+    replace           SEQUENCE {
+        old            NodeSpec,
+        new            NodeSpec OPTIONAL
+    },
+    identitySignature OCTET STRING
   }
 
   HeaderRequestQuota ::= SEQUENCE {

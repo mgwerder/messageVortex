@@ -651,7 +651,8 @@ If the identity is not temporary header requests are executed upon authorization
 As soon as the header requests are executed, the content is processed. Prior to adding the $RoutingCombo$ entries, we have to verify  that the forward secret of the routing block matches the $forwardSecret$ of the $HeaderBlock$. If the $forwardSecret$ matches, The $RoutingBlock$ is processed by adding the RoutingCombos to the workspace, mapping the payload to the workspace (according to $mappings$), and adding the reply block to the workspace.
 
 \begin{figure*}[ht]
-	\includegraphics[width=0.90\textwidth]{inc/flowchart_message_receiving}
+	\centering
+	\includegraphics[height=0.75\textheight]{inc/flowchart_message_receiving}
 	\caption{flow diagram showing processing of outgoing messages}
 	\label{fig:msgReceiveProcessing}
 \end{figure*}
@@ -664,6 +665,7 @@ In theis section we focus on the creation of new messages sent to a next hop rou
 The processing of a sending block is triggered by a routing block in the workspace, as shown in figure~\ref{fig:msgSendProcessing}. The assembly instructions are processed to collect the payload blocks. Then the encryption is applied to the message and passed on to the blending layer for processing.
 
 \begin{figure*}[ht]
+	\centering
 	\includegraphics[width=0.90\textwidth]{inc/flowchart_message_sending}
 	\caption{flow diagram showing processing of outgoing messages}
 	\label{fig:msgSendProcessing}
@@ -693,20 +695,44 @@ In this section we focus on the handling of requests and the replies to requests
 
 In general any host may send a request to any other host. These requests normally involve the requirement for sender anonymity. The request itself is included in the \lstinline[columns=fixed,basicstyle=\normalsize]{HeaderBlock}. The reply block provided in $requestReplyBlock$.
 
-The routing blocks for replies must be different for normal routing blocks as they may otherwise be misused as ordinary sending blocks. A reply block for request should always map to payload ID 128. Whereas a reply block for a normal user (to keep sender anonymity) always should map in workspace ID 0. That way it is impossible to misuse reply blocks for normal messages.
-
-Some replies may arise unsolicited (e.g., when moving a transport endpoint of a recipient; see section{sec:replaceID}). These requests may still be sent to ID 0 in case of recipient anonymity. This is, however, a special case.
-
-\subsection{Requesting a new Ephemeral Identity\label{sec:newEID}}
-One of the main requests for the protocol is the request for generating a new ephemeral identity. The goal of this operation is to create a non-hijackable workspace on a node while remaining anonymous. If having multiple \defref{eID}s on the same host they must be unlinkable. Furthermore it should be hard for an adversary to flood a \VortexNode{} with workspace requests to make a DoS attack.
+Requests are identified shown in figure~\ref{fig:defRequest}. The tagging of the requests is necessary to identify the request provided.
 
 \begin{lstfloat}[ht]
 	\lstinputlisting[linerange={9-18},language=asn.1]{../../../../application-core-library/src/main/asn/MessageVortex-Requests.asn}
+	\caption{Definition of a request}
+	\label{fig:defRequest}
+\end{lstfloat}
+
+The routing blocks for replies must be different for normal routing blocks as they may otherwise be misused as ordinary sending blocks. A reply block for request should always map to payload ID 128. Whereas a reply block for a normal user (to keep sender anonymity) always should map in workspace ID 0. That way it is impossible to misuse reply blocks for normal messages.
+
+A reply is sent as a special message block and must be mapped to workspace ID 128. A \VortexNode{} may accept a special block delivered to ID 0, but such behavior should never be assumed. Figure~\ref{fig:defReply} shows the definition of a reply. A reply is expressed in a special block. This special block contains a status of the request is either OK or a failure and may provide aditional information such as the outcome of a request.
+
+\begin{lstfloat}[ht]
+	\lstinputlisting[linerange={15-55},language=asn.1,multicols=2]{../../../../application-core-library/src/main/asn/MessageVortex-Replies.asn}
+	\caption{Definition of a request}
+	\label{fig:defRequest}
+\end{lstfloat}
+
+
+\subsection{Requesting a new Ephemeral Identity\label{sec:newEID}}
+One of the main requests for the protocol is the request for generating a new ephemeral identity. The goal of this operation is to create a non-hijackable workspace on a node while remaining anonymous. If having multiple \defref{eID}s on the same host they must be unlinkable. Furthermore it should be hard for an adversary to flood a \VortexNode{} with workspace requests to make a denial-of--service (DoS) attack.
+
+\begin{lstfloat}[ht]
+	\lstinputlisting[linerange={19-22},language=asn.1]{../../../../application-core-library/src/main/asn/MessageVortex-Requests.asn}
 	\caption{Definition of an identity request}
 	\label{fig:defCreateEID}
 \end{lstfloat}
 
-\fxwarning{complete section}
+Requesting a new identity is easy. The only information required is the lifetime requested (see listing~\ref{fig:defCreateEID}). A \VortexNode may do any of the following operations:
+\begin{itemize}
+	\item Deny the request (may be without an error message)
+	\item Accept the request without a ``puzzle''
+	\item Accept the request under the condition a ``puzzle'' is solved
+\end{itemize}
+
+Denial of a request does not necessarily lead to an error message. A \VortexNode{} sends only an error message if the node is a public node. All other nodes (stealth and hidden; see section{sec:vortexNodeTypes}) do not send an error message in order not to leak their existence.
+
+If a request is accepted, the \VortexNode replies either with an ``ok'' or with a ``puzzle required'' status.
 
 \begin{lstfloat}[ht]
 	\lstinputlisting[linerange={9-34},language=asn.1,multicols=2]{../../../../application-core-library/src/main/asn/MessageVortex-Requirements.asn}
@@ -714,28 +740,110 @@ One of the main requests for the protocol is the request for generating a new ep
 	\label{fig:defCreateEID}
 \end{lstfloat}
 
+As currently supported puzzles two possible answers are forseen by the protocol:
+\begin{itemize}
+	\item Solving a CPU bound hash puzzle 
+	\item Paying a fee in a digital currency
+\end{itemize}
 
-\subsection{Replacing an Existing Node Identity\label{sec:replaceID}}
-\fxwarning{complete section}
+The CPU bound puzzle is a hash based puzzle. The \VortexNode{} provides a bit string for the identity. The header has to be resent in such a way that the requested hash of the DER encoded header starts with the bit sequence provided. there are two ways of keeping track of these puzzles:
 
-\subsection{Replacing an Existing Reply Block}\label{sec:replaceMURB}
-\fxwarning{complete section}
+\begin{itemize}
+	\item Generate puzzles in a reproducible way\\
+	      This is the more elegant way of puzzles. Instead of keeping track of the puzzles, we generate the hash by applying the following function $left(MAC(K^1_{identity} | <\text{host secret} | \text{ date and hour }),\text{hourly complexity in bits})$. This method has some ups and downs. On the positive side we do not need to keep track of all puzzles provided to identities. Instead we just check, if a puzzle provided matches an appropriate challenge of the last hours. This host cannot be flooded with identity creation requests as it does not need to keep track of the requests.
+	\item Store random puzzles during their validity time\\
+	      This method is straight forward. It requires an entry in a table per puzzle and only for the lifetime considered. 
+\end{itemize}
 
+The second approach has a huge downside: A DoS attack is feasible. Given the fact that we need to store the key (1KB max) , the date and time of expiry 4 bytes (epoch), and the bit sequence (up to 8 bytes). Means that we require millions of requests to flood a host. Since the keys do not need to be strong (an adversary does not intend to use them; It is just a DoS attack), this attack is doable with considerable efforts. This is why we favor the first approach.
+
+\subsection{Replacing an Existing Node Specification or Proving a Sender Identity\label{sec:replaceID}}
+As users tend to change transport layer addresses, keys might become insecure, or transport services are no longer available, we need means of upgrading keys or replacing them with newer transport addresses. This may be done with a $HeaderRequestReplaceIdentity$ request as shown in figure~\ref{fig:reqReplaceIdentity}. This request allows in a cryptographically secured way to exchange keys and transport endpoints by the respective owners.
+
+\begin{lstfloat}[ht]
+	\lstinputlisting[linerange={23-30},language=asn.1]{../../../../application-core-library/src/main/asn/MessageVortex-Requests.asn}
+	\caption{Definition of an identity replace request}
+	\label{fig:reqReplaceIdentity}
+\end{lstfloat}
+
+By signing the request the sender proves that he is in possession of the old key. By omitting the new node specification, a user may bind an existing \defref{eID} to a real world identity. This is useful for securing endpoint identities if required. Such a secured identity should, however, only be used for endpoint messages and not for routing as this would shorten the secured path of the message.
+
+A \VortexNode{} may reply with a ``quotaStatus'' message, if the node owner decides to assign different (possibly unlimited) quota to the identity. 
+
+\subsection{Replacing an Existing Reply Block\label{sec:replaceMURB}}
+For sender anonymity, a sender may provide a reply block for single or multiple uses (SURBS and MURBS). These routing blocks use \defref{eID}s, which have by definition a limited lifespan. In this section we focus on the implementation details for requests replacing such reply blocks.
+
+A routing block has a limited lifespan which is directly limited by the \defref{eID}s involved. The first expiring \defref{eID} invalidates the block unless redundant paths are included. In this case only redundancy would be reduced. To keep a message intact even if a reply block of an anonymous sender expires, the sender may replace any existing reply block with a new routing block.
+
+To replace an existing routing lock with a new one it is sufficient to send an empty message to the respective \defref{eID}. Within the routing block we provide one or more new $replyBlock$ replacing all old existing ones. As the header is signed by the private key of the \defref{eID}s owner this operation is safe.
 
 \chapter{Accounting Layer Implementation}
-\fxwarning{complete section}
+The accounting layer is keeping track of all operations allowed to a message. In this section we list the tasks fulfilled by the accounting layer and make a precise outline of them.
+
+The accounting layer Keeps a list of the following information:
+% List duplicated in Accounting layer in implementation and protocol
+\begin{itemize}
+	\item $\mathbf{eID[]}\langle expiry, pubKey, mesgsLeft, bytesLeft \rangle$\\
+	\item $\mathbf{Puzz[]}\langle expiry, requestHeader, puzzle \rangle$\\
+	      or\\
+	      $\mathbf{Puzz[]}\langle dateAndHour, puzzleSizeNewIdentity, basePuzzleSizeQuta \rangle$\\
+	\item $\mathbf{Replay[]}\langle expiry, serial, numberOfRemainingUsages \rangle$\\
+\end{itemize}
+
+The list of all \defref{eID}s is kept in the accounting layer together with their quotas and expiry. The accounting layer triggers the deletion of the workspace assigned to it upon its expiry. Each \defref{eID} has assigned two quotas. The $messageQuota$ limits the ammount of messages containing payload blocks to be routed. This quota is measured upon arrival of a message (inbound only). The $bytesLeft$ quota is a sizing quota and is measured outbound. This quota is applied on all outbound messages regardless of their content.
+
+The $puzz[]$ list with $requestHeaders$ is only required if relying on random user puzzles. This would lead to an implementation which is simple but may be flooded with \defref{eID} requests. The second list requires only an entry per hour. The number of entries is limited by the number of hours a puzzle is accepted. The puzzle is built by calculating  $left(MAC(K^1_{eID} | globaöSecret | dateAndHour ), puzzleSizeNewIdentity)$. That way a DoS attack by flooding the puzzle table is no longer feasible.
+
+The last list to be kept is the list for replay protection $Replay[]$. This list is a list of serials and their remaining usages is an effective replay protection. A serial is only allowed to be processed if the serial has not reached the maximum number of replays. As a header block has typically only a limited lifespan this is a very short list. Flooding is not very effective as a host may limit the number of entries in this list. The only identity suffering from that measure would be the identity assigned to the serial as serials from this \defref{eID} would suffer incomplete replay protection and thus endanger its quotas and .
 
 \chapter{Usability Related Implementation Details}
-\fxwarning{complete section}
+Usability is one of the foremost criteria for user acceptance. As we have no chance to create a nice User interface competing with existing ones, we  went for a different approach. We use our \VortexNode as an IMAP/SMTP proxy. That way we can send with any email client \VortexMessages. To do so, we had to introduce an addressing scheme compatible with with email and the support of their clients but not creating any collisions with the existing email address schemes.
 
-\section{Adressing and address representations}
-\fxwarning{complete section}
+These scheme is discussed in the next section. After that, we address the problem of linkking to user agents and transparency issues.
+
+\section{Addressing and address representations}
+An endpoint requires always a public key and a transport endpoint. As we have no central infrastructure, we need a defined way to exchange addresses. These adresses need to be uniquely identifiable and have to work with clients. In this section we focus therefore on the implementation details of such an address.
+
+If we want to use common email or XMPP clients we must support an address format which is compatible to the client but produces no collisions with ordinary addresses. Luckily experiments showed that clients are not very restrictive in the acceptance of addresses. Most of the clients required either an at sign between two letters or additionally at least a dot in the domain part of the address. \cite{RFC5321} and \cite{RFC5322} specify the format for email addresses and \cite{RFC6120} does the same for XMPP. For both formats a double dot (``..'') in the local part is illegal. Clients do not seem to catch this exception. We therefore defined our addresses as follows.
+
+
+For email:
+\begin{lstlisting}[language=EBNF]
+localPart         = <local part of address>
+domain            = <domain part of address>
+email             = localPart "@" domain
+keySpec           = <BASE64 encoded AsymmetricKey [DER encoded]>
+smtpAlternateSpec = localPart ".." keySpec ".." domain "@localhost"
+smtpUrl           = "vortexsmtp://" smtpAlternateSpec]
+\end{lstlisting}
+
+For XMPP:
+\begin{lstlisting}[language=EBNF]
+localPart         = <local part of address>
+domain            = <domain part of address>
+resourcePart      = <resource part of the address>
+jid               = localPart "@" domain [ "/" resourcePart ]
+keySpec           = <BASE64 encoded AsymmetricKey [DER encoded]>;
+jidAlternateSpec  = localPart ".." keySpec ".." 
+domain "@localhost" [ "/" resourcePart ]
+jidUrl            = "vortexxmpp://" jidAlternateSpec]
+\end{lstlisting}
+
+This allows using of a regular client to host an \VortexMessage{} endpoint address. To avoid unintentional routing of an address to through a non-\VortexNode{} we defined ``localhost'' as the general domain part. The local part in email is restricted to 64 bytes whereas XMPP specifies 1024 bytes as size limit for the local part. Our experiments showed, however, that none of the clients enforce these limit.
+
+The respective URLs are defined in the standard to provide a unified mean for URLs to be properly identified by a system. This allows a unified usage of mechanisms such as QR codes across all platforms.
 
 \section{Linking to Common User Agents}
-\fxwarning{complete section}
+From an academic perspective the protocol linking as a proxy is easy. Real world implementation showed however many caveats. We will focus on these problems this section and note workarounds where possible.
+
+\fxwarning{FIXME story: 
+	SMTP: straight forward. Problems may arise in the case of a transparent proxy (credentials; starttls support)
+	POP3: doable as there is only a fetching point. problems similar to SMTP
+	IMAPv4: complex... problems in the field of login credentials, starttls support, message management, message storage,and  distributed access
+}
 
 \chapter{Efficiency Related Implementation Details}
-\fxwarning{complete section}
+In the following subsection we focus on the storage management of \VortexNodes{}. As they do run on mobile and similar devices, an adequate ressource consumption is essential for our system. We mainly focus on memory and CPU consumptions. network bandwith overhead and related problems are discussed in part~\ref{sec:analysis}.
 
 \section{Node Storage Management}
 \fxwarning{complete section}

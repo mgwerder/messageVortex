@@ -383,6 +383,8 @@ Each \defref{eID} has a lifetime, a maximum number of messages to be processed, 
 
 This system guarantees that a sender must invest considerable work (in terms of CPU time required) prior to using resources of a \VortexNode. A \VortexNode{} may raise the complexity of its puzzles when having a  high load. This allows for a single user to still obtain an \defref{eID} while increasing costs for an attacker considerably. Even if someone floods a node with new \defref{eID}s, already created \defref{eID}s are not affected as their workspace has already been allocated.
 
+The workspace itself contains chunks of the messages (payload blocks) mapped to IDs and operations. The Operations transform one or more source IDs onto one or more target IDs. Any of these payload blocks may be assigned to a subsequent message as payload block by a routing block. An operation or a payload block share the lifetime of the respective message header. If operations overlap in output blocks the newest operation (arrived latest) wins.
+
 This concept has certain downsides related to the expiry of \defref{eID}s. We will address them in section\ref{sec:newEID} and section~\ref{sec:replaceMURB}.
 
 \subsection{Protocol Layers}
@@ -495,7 +497,7 @@ Within the routing block, we find a set of instructions, next \VortexNodes infor
 	\mathbf{nextMP}              = & E^{K^1_{host_{o+1}}} \left( K_{peer_{o+1}} \right)\\
 	\mathbf{nextHP}              = & E^{K^1_{host_{o+1}}} \left( K_{sender_{o+1}} \right)\\
 	\mathbf{nextHEADER}          = & E^{K_{sender_o}} \left( \mathbf{HEADER_{o+1}} \right)\\
-	\mathbf{nextROUTING}           = & E^{K_{sender_o}} \left( \mathbf{ROUTING_{o+1}} \right)\\    
+	\mathbf{nextROUTING}         = & E^{K_{sender_o}} \left( \mathbf{ROUTING_{o+1}} \right)\\    
 	\mathbf{operations}          = & \langle \text{list of operations} \rangle \\
 	\mathbf{assembyInstructions} = & \langle  blendingInformation, nextHop, \langle \text{mapping operation} +\rangle \rangle
 	\end{align}
@@ -520,13 +522,15 @@ The routing layer stores the main information assigned to the operation of routi
 
 \subsubsection{Accounting Layer\label{sec:accountingLayer}}
 The accounting layer keeps tracks of all information required assigned to ephemeral identities (\defref{eID}). It is queried by the blending Layer and routing Layer for authorization of the operations. The accounting layer manages the following tuples of information:
+
+% List duplicated in Accounting layer in implementation and protocol
 \begin{itemize}
-	\item $\mathbf{eID}\langle expiry, pubKey, mesgsLeft, bytesLeft, temporary \rangle$\\
-	The $\mathbf{eID}$ tuple is the longest living tuple. It reflects an ephemeral identity and exists as long as the current identity is valid. All other tuples are short living lists. As the server decides if he accepts new identities or not, the size of this data is controllable. The temporary flag describes an identity which has an unsolved puzzle. 
+	\item $\mathbf{eID[]}\langle expiry, pubKey, mesgsLeft, bytesLeft \rangle$\\
+	The $\mathbf{eID}$ tuple is the longest living tuple. It reflects an ephemeral identity and exists as long as the current identity is valid. All other tuples are short living lists. As the server decides if he accepts new identities or not, the size of this data is controllable. 
 	\item $\mathbf{Puzz[]}\langle expiry, request, puzzle \rangle$\\
 	The array $\mathbf{Puzz[]}$ is a list of not yet solved puzzles of this \defref{eID}. Every puzzle has a relatively short lifespan (typically below 1d). A routing node controls the size of this list by only accepting requests to a certain extent. Typically this list should not surpass two entries as we should have either a maximum of two quota requests or one identity creation request open.
-	\item $\mathbf{Replay[]}\langle expiry, serial, numberOfUsages \rangle$\\
-	The array $\mathbf{Replay[]}$ is a list of replayable \defref{MURB}s. List entries are created upon their first usage and remain active until the block is expired. 
+	\item $\mathbf{Replay[]}\langle expiry, serial, numberOfRemainingUsages \rangle$\\
+	The array $\mathbf{Replay[]}$ is a list of serials. List entries are created upon their first usage and remain active until the block is expired. 
 \end{itemize}
 
 
@@ -627,6 +631,10 @@ It is unable to extract the following information:
 The routing operations build the core as they define the capabilities of the mixing. We decided to introduce three different classes of operations. Wherever we employ crypto, operations, we may choose the operation required for the operation. No choices exist for the core Reed-Solomon-Function, the padding and spitting operation related to it, and the split and merge operations.
 
 \subsubsection{$addRedundancy$ and $removeRedundancy$ Operations}
+I this section we focus on the core operation of our system. The $addRedundancy$ and $removeRedundancy$ allow growing message sizes in our system without allowing to identify the decoy traffic. 
+
+The Lagrange functions have been proposed in \cite{shamir1979share} and further more generalized in \cite{mceliece1981sharing} for sharing secrets. The general idea about all proposed schemes is to distribute informations and restrct access to it so that only if a specified number of shares are captured a secret may be rebulit. Unlike proposed in these papers we do not apply privacy to our protocol by sharing the data among many points. Instead we use lagrange functions to create decoy traffic. By doing so even a creator of traffic is unable to tell message traffic from decoy traffic apart. 
+
 These operations build the core of the routing capabilities of a node. The operation allows an \defref{RBB} to add to a message redundancy information or to rebuild a block from a chosen set of information. 
 
 The operation itself is shown in figure~\ref{fig:addRedundancyOperation}. 

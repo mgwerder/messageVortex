@@ -83,7 +83,11 @@ A good thing to learn from PGP is that peer-based approaches are offering limite
 
 
 \chapter{Information Routing and Distribution for Anonymizing Protocols}
-\fxwarning{complete section}
+Information routing and distribution is not a novelty in privacy research. Researchers arround the globe have searched for means of privacy.  One good example was the patent in the intro of Almon B. Strowger\cite{pulseDialingPatent}. More recent activities are the  infamous "How to share a secret"\cite{shamir1979share}, which used Lagrange polynomials to distribute shares of information accross multiple hosts for privacy. A single polynomial would be attackable. Therefore Shamir applied a $\mod p$ operation to hide characteristics of a curve (as long as $p$ is large and prime). The system had many problems which were addressed by subsequent work such as \cite{tompa1989share}.
+
+Lagrange polynomes form an important part when it comes to networking and privacy. They are commonly used in the form of Reed-Solomon codes for securing unreliable connections (e.g., \cite{aiache2008reed}), distributing data \cite{shamir1979share}.
+
+Our approach will be to use Lagrange not primarily for distributing data but to generate unidentifiable decoy traffic. When applying a Lagrange polynomial to a message all factors contain parts of the original message. Given enough factors of the polynomial, anyone may reconstruct the original message. As a result an adversary is not able which parts of the traffic is decoy and which part is message as all parts have the potential to recover the original message.
 
 \section{Mixing\label{sec:mixNets}}
 Mixes have been first introduced by \citetitle{CHAUM1}\cite{CHAUM1} in \citeyear{CHAUM1}. The basic concept in a mix goes as follows. We do not send a message directly from the source to the target. Instead, we use a kind of proxy server or router in between which picks up the packet, anonymizes it, and forwards it either to the recipient or another mix. If we assume that we have at least three mixes cascaded, we then can conclude that:
