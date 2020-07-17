@@ -154,7 +154,7 @@ Very important was, that we quite often reencrypt already encrypted content. As 
 	\item CTR\\
 	      CTR is specified in \cite{lipmaa2000ctr} and is a mixture between OFB and CBC. A nonce concatenated with a counter incrementing on every block is encrypted and then xor'ed with the plain text. This mode allows parallel decryption and encryption, as well as random access. Reusing IV/Key-pairs using CTR is a problem as we might derive the xor'ed product of two messages. This problem only applies where messages are not uniformly random such as in an already encrypted block.
 	\item CCM\\
-	      Counter with CBC-MAC (CCM) is specified in \cite{RFC3610}. It allows to pad and authenticate encrypted and unencrypted data. It furthermore requires a nonce for its operation. The size of the nonce is dependent on the number of octets in the length field. In the first 16 bytes of the message, the nonce and the message size is stored. For the encryption itself, CTR is used. It shares the same properties as CTR. 
+	      Counter with CBC-MAC (CCM) is specified in \cite{rfc3610}. It allows to pad and authenticate encrypted and unencrypted data. It furthermore requires a nonce for its operation. The size of the nonce is dependent on the number of octets in the length field. In the first 16 bytes of the message, the nonce and the message size is stored. For the encryption itself, CTR is used. It shares the same properties as CTR. 
 	
 	      It allows parallel decryption and encryption as well as random access.
 	\item GCM (Galois Counter Mode)\\
@@ -285,8 +285,8 @@ In lack of such material we first collected a list of all common Internet messag
 
 The following protocols have been discarded as we have considered them as outdated:
 \begin{itemize}
-	\item MTP\cite{RFC780} (obsoleted by SMTP)
-	\item NNTP\cite{RFC3977} (outdated and has only a small usage acording to \cite{kim2010today})
+	\item MTP\cite{rfc780} (obsoleted by SMTP)
+	\item NNTP\cite{rfc3977} (outdated and has only a small usage acording to \cite{kim2010today})
 \end{itemize}
 
 We furthermore discarded all RPC-related protocols as they would by definition violate Ct3.
@@ -304,7 +304,7 @@ The protocol does satisfy the first two main criteria (Ct1: Widely Adopted and C
 It is possible to add such behavior to the blending layer using HTTP servers as pure storage. Such a behavior would however be most likely detectable and thus no longer be censorship resistant.
 
 \subsubsection{FTP}
-FTP is defined in RFC959\cite{RFC959}. This Protocol is intended for authenticated file transfer only. There is an account available for general access (``anonymous''). This account does normally not offer upload rights for security reasons. It is possible to use FTP as a message transfer endpoint. The configuration would work as follows: the user ``anonymous'' has upload rights only. It is unable to download or list a directory. A node may upload a message with a random name. In case a collision arises, the node retries with another random name. The blending layer picks messages up using an authenticated user. This workaround has multiple downsides. At first, handling FTP that way is very uncommon and usually requires an own dedicated infrastructure. Such beavior would make the protocol again possibly detectable. Secondly, passwords are always sent in the clear within FTP. Encryption as a wrapping layer (FTPS) is not common, and SFTP (actually a subsystem of SSH) has nothing in common with FTP except for the fact that it may transfer files as well.
+FTP is defined in RFC959\cite{rfc959}. This Protocol is intended for authenticated file transfer only. There is an account available for general access (``anonymous''). This account does normally not offer upload rights for security reasons. It is possible to use FTP as a message transfer endpoint. The configuration would work as follows: the user ``anonymous'' has upload rights only. It is unable to download or list a directory. A node may upload a message with a random name. In case a collision arises, the node retries with another random name. The blending layer picks messages up using an authenticated user. This workaround has multiple downsides. At first, handling FTP that way is very uncommon and usually requires an own dedicated infrastructure. Such beavior would make the protocol again possibly detectable. Secondly, passwords are always sent in the clear within FTP. Encryption as a wrapping layer (FTPS) is not common, and SFTP (actually a subsystem of SSH) has nothing in common with FTP except for the fact that it may transfer files as well.
 
 Furthermore, FTP may be problematic when used in active mode for firewalls. All these problems make FTP not very suitable as a transport layer protocol. FTPS and SFTP feature similar weaknesses as the FTP version in terms of detectability of non-standard behavior.
 
@@ -332,7 +332,7 @@ Due to the lack of a generic routing capability, this protocol is therefore not 
 The protocol satisfies partially the first criterion (Ct1: Widely Adopted) and fully meets the second criterion (Ct2: Reliable). However, the third criterion is violated due to the lack of routing capabilities between message brokers (Ct3: Symmetrically built).
 
 \subsubsection{Constrained Application Protocol (CoAP)}
-The Constrained Application Protocol (CoAP) is a communication Protocol which is primarily destined to m2m communication. It is defined in RFC7252\cite{RFC7252}.  It is defined as a lightweight replacement for HTTP in IoT devices and is based on UDP.
+The Constrained Application Protocol (CoAP) is a communication Protocol which is primarily destined to m2m communication. It is defined in RFC7252\cite{rfc7252}.  It is defined as a lightweight replacement for HTTP in IoT devices and is based on UDP.
 
 The protocol does partially satisfy the first criteria (Ct1: Widely Adopted). The second criterion (Ct2: Reliable) is only partially fulfilled as it is based on UDP and does only add limited session control on its own.
 
@@ -344,22 +344,22 @@ WAMP is a web-sockets based protocol destined to enable M2M communication. Like 
 The WAMP protocol is not widely adopted (Ct1: Widely Adopted), but it is reliable on a per-node base (Ct2: Reliable). Due to its RPC based capability, unlike MQTT, a routing like capability could be implemented. Symmetrical protocol behavior is therefore not available but could be built in relatively easy.
 
 \subsubsection{XMPP (jabber)}
-XMPP (originally named Jabber) is a synchronous message protocol used in the Internet. It is specified in the documents RFC6120\cite{RFC6120}, RFC6121\cite{RFC6120}, RFC3922\cite{RFC3922}, and RFC3923\cite{RFC3923}. The protocol is a very advanced chat protocol featuring numeros levels of security including end-to-end signing and object encryption\cite{RFC3923}. There is also a stream initiation extension for transferring files between endpoints \cite{xep0096}.
+XMPP (originally named Jabber) is a synchronous message protocol used in the Internet. It is specified in the documents RFC6120\cite{rfc6120}, RFC6121\cite{rfc6121}, RFC3922\cite{rfc3922}, and RFC3923\cite{rfc3923}. The protocol is a very advanced chat protocol featuring numeros levels of security including end-to-end signing and object encryption\cite{rfc3923}. There is also a stream initiation extension for transferring files between endpoints \cite{xep0096}.
 
 It has generic routing capabilities spanning between known and unknown servers. The protocol offers a message retrieval mechanism for offline messages similarily to POP \cite{xep0013}.
 
 The protocol itself seems to be a strong candidate as a transport layer as it is being used actively on the Internet.
 
 \subsubsection{SMTP}
-The SMTP protocol is currently specified in \cite{RFC5321}. It specifies a method to deliver reliably asynchronous mail objects through a specific transport medium (most of the time, the Internet). The document splits a mail object into a mail envelope and its content. The envelope contains the routing information, which is the sender (one) and the recipient (one or more) in 7-Bit ASCII. The envelope may additionally contain optional protocol extension material. 
+The SMTP protocol is currently specified in \cite{rfc5321}. It specifies a method to deliver reliably asynchronous mail objects through a specific transport medium (most of the time, the Internet). The document splits a mail object into a mail envelope and its content. The envelope contains the routing information, which is the sender (one) and the recipient (one or more) in 7-Bit ASCII. The envelope may additionally contain optional protocol extension material. 
 
 The content should be in 7-Bit-ASCII (8-Bit ASCII may be requested, but this feature is not widely adopted). It is split into two parts. These parts are the header (which does contain meta-information about the message such as subject, reply address, or a comprehensive list of all recipients), and the body which includes the message itself. All lines of the content must be terminated with a CRLF and must not be longer than 998 characters, excluding CRLF.
 
-The header consists of a collection of header fields. Each of them is built by a header name, a colon, and the data. The exact outline of the header is specified in \cite{RFC5322} and is separated with a blank line from the body. 
+The header consists of a collection of header fields. Each of them is built by a header name, a colon, and the data. The exact outline of the header is specified in \cite{rfc5322} and is separated with a blank line from the body. 
 
-\cite{RFC5321} furthermore introduces a simplistic model for SMTP message-based communication. A more comprehensive model is presented in section \nameref{sec:mailTransport} as the proposed model is not sufficient for a detailed end-to-end analysis.
+\cite{rfc5321} furthermore introduces a simplistic model for SMTP message-based communication. A more comprehensive model is presented in section \nameref{sec:mailTransport} as the proposed model is not sufficient for a detailed end-to-end analysis.
 
-Traditionally the message itself is mime encoded. The MIME messages are mainly specified in \cite{RFC2045} and \cite{RFC2046}. MIME allows to send messages in multiple representations (alternates), and attach additional information (such as possibly inlined images or attached documents). 
+Traditionally the message itself is mime encoded. The MIME messages are mainly specified in \cite{rfc2045} and \cite{rfc2046}. MIME allows to send messages in multiple representations (alternates), and attach additional information (such as possibly inlined images or attached documents). 
 
 SMTP is one of the most common messaging protocols on the Internet (Ct1: Widely Adopted), and it would be devastating for the business of a country if, for censoring reasons, this protocol would be cut off. The protocol is furthermore very reliable as it has built-in support for redundancy and a thorough message design making it relatively easy to diagnose problems (Ct2: Reliable). All SMTP servers usually are capable of routing and receiving messages. Messages going over several servers are common (Ct3: Symmetrically built), so the third criterion may be considered as fulfilled as well.
 
@@ -414,7 +414,7 @@ For an ideal implementation we would do the following: Organize our \MessageVort
 In our current implementation the house keeping part has been skipped. Instead, we are just fetching the newly arrived messages and put in a local storage. The email presented to the client is provided by a local IMAP server. Persistence of these messages is not yet implemented. 
 
 \section{Implementation of an XMPP Transport Layer}
-The XMPP protocol (formerly called  Jabber, as specified in \cite{RFC6120}, is natively not capable of transferring anything else but text messages. Unlike email, XMPP is capable of true end-to-end signing and object encryption without solving the problem of the initial trust. While we may use the end-to-end encryption for additional security, relying on this feature is not sensible as we would put trust into the security features of an intermediate node. This would effectively violate \ref{req:zeroTrust} requirement. We decided to use the extension defined in \cite{xep0231} to transfer our messages, as it is simple and reliable.
+The XMPP protocol (formerly called  Jabber, as specified in \cite{rfc6120}, is natively not capable of transferring anything else but text messages. Unlike email, XMPP is capable of true end-to-end signing and object encryption without solving the problem of the initial trust. While we may use the end-to-end encryption for additional security, relying on this feature is not sensible as we would put trust into the security features of an intermediate node. This would effectively violate \ref{req:zeroTrust} requirement. We decided to use the extension defined in \cite{xep0231} to transfer our messages, as it is simple and reliable.
 
 To transfer a \VortexMessage{}, we could embedd a MIME message just as with  SMTP. While this would be technically feasible, the usage of MIME is not common and even discouraged. Instead, the inner structure if an XMPP message relies on XML. 
 
@@ -804,7 +804,7 @@ These scheme is discussed in the next section. After that, we address the proble
 \section{Addressing and address representations}
 An endpoint requires always a public key and a transport endpoint. As we have no central infrastructure, we need a defined way to exchange addresses. These adresses need to be uniquely identifiable and have to work with clients. In this section we focus therefore on the implementation details of such an address.
 
-If we want to use common email or XMPP clients we must support an address format which is compatible to the client but produces no collisions with ordinary addresses. Luckily experiments showed that clients are not very restrictive in the acceptance of addresses. Most of the clients required either an at sign between two letters or additionally at least a dot in the domain part of the address. \cite{RFC5321} and \cite{RFC5322} specify the format for email addresses and \cite{RFC6120} does the same for XMPP. For both formats a double dot (``..'') in the local part is illegal. Clients do not seem to catch this exception. We therefore defined our addresses as follows.
+If we want to use common email or XMPP clients we must support an address format which is compatible to the client but produces no collisions with ordinary addresses. Luckily experiments showed that clients are not very restrictive in the acceptance of addresses. Most of the clients required either an at sign between two letters or additionally at least a dot in the domain part of the address. \cite{rfc5321} and \cite{rfc5322} specify the format for email addresses and \cite{rfc6120} does the same for XMPP. For both formats a double dot (``..'') in the local part is illegal. Clients do not seem to catch this exception. We therefore defined our addresses as follows.
 
 
 For email:
@@ -836,11 +836,15 @@ The respective URLs are defined in the standard to provide a unified mean for UR
 \section{Linking to Common User Agents}
 From an academic perspective the protocol linking as a proxy is easy. Real world implementation showed however many caveats. We will focus on these problems this section and note workarounds where possible.
 
-\fxwarning{FIXME story: 
-	SMTP: straight forward. Problems may arise in the case of a transparent proxy (credentials; starttls support)
-	POP3: doable as there is only a fetching point. problems similar to SMTP
-	IMAPv4: complex... problems in the field of login credentials, starttls support, message management, message storage,and  distributed access
-}
+When combining data on asynchronous message protocols, we have always two possibilities. Either work as transparent proxy for a single view or combine multiple sources. Another option is always creating a local repository with the downside that such a repository may not be shared with other devices.
+
+For all protocols we have to mention that using the \VortexNode as a transparent proxy is not always doable for two reasons. First we must do a man in the middle (MITM) attack when proxying outbound or inbound connection. If such connections are encrypted this is a problem, due to the breach of the trust chain involved. Solving tis in an enterprise environment is easy as we have the possibility to control the trust store. Working with mobile operating systems such as android or iOS access to trust stores are complex and under some circumstances even prohibited. Another problem is that such MITM attacks are easily detected when employing DANE (\cite{rfc6698,rfc7672}) or similar technologies. Within all protocols analyzed certificate based authentication is very uncommon. But such authentication would break if we do a MITM.
+
+When sending mail we can use authenticated SMTP on the client submission ports. This may be realized either as transparent proxy or as store and forward solution with very little downsides. When working as store and forward we have the downside that in case of networking failure the node may delay or lose (in a worst case scenario) the message without the user knowing it as the client successfully sent the message. For this scenario we developed an easy workarround: Our SMTP implementation binds on 127.0.0.1 only and accepts a dummy password As soon as the data sequences simultanously we build a second connection to the providers SMTP channel and authenticate. As soon as the envelope is complete we decide whether the recipient is a\VortexNode (easily identifiable by the address).  If not we send the envelope to the providers SMTP connection and strictly forward from there on all traffic between the two. If the recipient is a \VortexNode{}, we use a pseudo blending layer which packs an apropriate routing block and the plan text message as a single payload into a pseudo \VortexMessage and deliver this message to the routing layer. The routing layer then, unaware of the pseudo nature of the message, handles the message does the first encryption operation required and applies then the operations to send the message to all next hops.
+
+When receiving messages by mail things get quickly more complex. For our experiments we used POP3 as a protocol. This protocol is somewhat similar to SMTP and allows normal store and forward operation. This means that we may fetch mail from a central infrastructure. This fetching is triggered by the fetching of the client, which is thus almost delay-less. As with POP3 mails are stored locally, we have no problems as the client fetches and stores the mail. Considering IMAPv4 we have a couple of very relevant differences. Unlike POP3 IMAPv4 stores and organizes messages on the server. The mainn advantage is that due to the central storage, multiple devices may access the messages simultaneously. Since all clients use the same storage a unified view is possible. Unfortunately all atempts generating a globally unique id for messages failed so far and client support for such a feature is sparse. In an ideal world we would have a unified view out of one or more \MessageVortex{} transport layer accounts and our regular mail, whereas the \VortexMessages{} are stored in the respective transport layer account and dynamically merged into the regular email store. 
+
+Such a store would have huge benefits compared to the current solution. It would allow a unified storage and offering simultaneous access for multiple devices. The problems to be solved are numerous. We need a unified storage for configurations including \defref{eID}s and workspaces. Furthermore, we need a lock to avoid concurrency issues with simulatneously running \VortexNodes{}. The unified view requires intelligence so that it is able to keep all \VortexMessages{} on the transport layer account  whereas ordinary emails are kept on the respective account. The housekeeping of the transport layer account needs to be done in a credible way. 
 
 \chapter{Efficiency Related Implementation Details}
 In the following subsection we focus on the storage management of \VortexNodes{}. As they do run on mobile and similar devices, an adequate ressource consumption is essential for our system. We mainly focus on memory and CPU consumptions. network bandwith overhead and related problems are discussed in part~\ref{sec:analysis}.

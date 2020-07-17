@@ -7,7 +7,7 @@
 \part{Anonymous Communication Systems\label{sec:systems}}
 \chapter{Well Known Standard Protocols}
 \section*{SMTP and Related Post Office Protocols (1982)}
-Today's mail transport is mostly done via \defref{SMTP}\index{SMTP} protocol, as specified in \cite{RFC5321}. This protocol has proven to be stable and reliable. Most of the messages are passed from an MUA to an SMTP relay of a provider. From there, the message is directly sent to the SMTP server of the recipient and subsequently to the server-based storage of the recipient. The recipient may, at any time, connect to his server-based storage and may optionally relocate the message to a client-based (local) storage. The delivery from the server storage to the MUA of the recipient may happen by message polling or by message push (whereas the latter is usually implemented by a push-pull mechanism).
+Today's mail transport is mostly done via \defref{SMTP}\index{SMTP} protocol, as specified in \cite{rfc5321}. This protocol has proven to be stable and reliable. Most of the messages are passed from an MUA to an SMTP relay of a provider. From there, the message is directly sent to the SMTP server of the recipient and subsequently to the server-based storage of the recipient. The recipient may, at any time, connect to his server-based storage and may optionally relocate the message to a client-based (local) storage. The delivery from the server storage to the MUA of the recipient may happen by message polling or by message push (whereas the latter is usually implemented by a push-pull mechanism).
 
 To understand the routing of a mail, it is essential to understand the whole chain starting from a user(-agent) until arriving at the target user (and being read!). To simplify this, we used a consistent model that includes all components (server and clients). The figure \ref{fig:MailAgents} shows all involved parties of a typical mail routing. It is essential to understand that mail routing remains the same regardless of the client. However, the availability of a mail at its destination changes drastically depending on the type of client used. Furthermore, control of the mail flow and control is different depending on the client.
 
@@ -42,10 +42,10 @@ Mail endpoints consist typically of the following components:
 
 Only two of these components do have external interfaces. These are \defref{MSA} and \defref{MRA}. \defref{MSA} usually uses \defref{SMTP} as transport protocol. When doing so, there are a couple of specialties. 
 \begin{itemize}
-	\item Port number is 587 (specified in \cite{RFC4409}).\\
+	\item Port number is 587 (specified in \cite{rfc4409}).\\
 	Although port numbers 25 and 465 are valid and do usually have the same capabilities, they are for mail routing between servers only. Mail endpoints should no longer use them.
 	\item Connections are authenticated.\\
-	Unlike a normal server-to-server (relay or final delivery) SMTP connections on port 25, clients should always be authenticated of some sort. This may be based on data provided by the user (e.g., username/password or certificate) or data identifying the sending system (e.g., IP address)\cite{RFC4409}. Failure in doing authentication may result in this port being misused as a sender for \defref{UBM}.
+	Unlike a normal server-to-server (relay or final delivery) SMTP connections on port 25, clients should always be authenticated of some sort. This may be based on data provided by the user (e.g., username/password or certificate) or data identifying the sending system (e.g., IP address)\cite{rfc4409}. Failure in doing authentication may result in this port being misused as a sender for \defref{UBM}.
 \end{itemize}
 
 Mail User Agents (MUA) are the terminal endpoint of email delivery. Mail user agents may be implemented as fat clients on a desktop or mobile system or as an interface over a different generic protocol such as HTTP (Web Clients). 
@@ -68,7 +68,7 @@ Web clients are these days a common alternative to fat clients. Most big provide
 \section*{S/MIME (1996)}
 S/MIME is an extension to the MIME standard. The MIME standard allows in simple text-oriented mails an alternate representation of the same content (e.g., as text and as HTML), or it allows to split a message into multiple parts that may be encoded. It is important to note that MIME encoding is only effective in the body part of a mail.
 
-S/MIME, as described in \cite{RFC3851}, extends this standard with the possibility to encrypt mail content or to sign it. Practically this is achieved by either putting the encrypted part or the signature into an attachment. It is essential to know that this method leaks significant pieces of the data.
+S/MIME, as described in \cite{rfc3851}, extends this standard with the possibility to encrypt mail content or to sign it. Practically this is achieved by either putting the encrypted part or the signature into an attachment. It is essential to know that this method leaks significant pieces of the data.
 
 As the mail travels directly from sender to recipient, both involved parties are revealed. Neither message subject nor message size or frequency is hidden. This method does offer limited protection when assuming an adversary with interest in the message content only. It does not protect from the kind of adversary in our case. 
 
@@ -304,7 +304,7 @@ Table \ref{tab:anonClass} shows the previously analyzed protocols.
 
 		$\mathcal{P}^5$\takenFrom & \networkPartly & \directionUnidi  & \syncAsync & \rolePtp & \hierarchyHierarchical & \decentralizationPart & \netviewPartly & \updatingEvent & \routingRoutebc & \shedprio & \nsdetdet & \nsnodesusr & \nsprobstat & \perflath & \perfmodemsg & \nsimplyes & \nscodeno & \nscontmsg\\
 		
-		Riffle & & & & & & & & & & & & & & & & & & \\
+		Riffle & \networkFully & \directionBidi & \syncSynchronous & \roleHybrid & \hierarchyHierarchical & \decentralizationNo & \netviewFully & \updatingNoupd & \routingRoutehop & \shedfair & \nsdetdet & F & & & & & & \\
 
 		Atom & & & & & & & & & & & & & & & & & & \\
 		Riposte & & & & & & & & & & & & & & & & & & \\
@@ -414,7 +414,16 @@ This design means that the failure of one mix does not result in the non-deliver
 No client implementation could be found on the \textit{}nternet. The project homepage \href{http://current.cs.ucsb.edu/projects/cashmere/}{http://current.cs.ucsb.edu/projects/cashmere/} has not been updated since 2005. This suggests that this project is dead or sleeping.
 
 \subsection{SOR (2012)}
-SSH-based onion routing (SOR)\cite{Egners_2012} is blaming the complex and monocultural landscape of anonymizing software and proclaims a simple approach based on onionized SSH tunnels. 
+SSH-based onion routing (SOR)\cite{Egners_2012} is blaming the complex and monocultural landscape of anonymizing software and proclaims a very simple approach based on onionized SSH tunnels. 
+
+\subsection{Riffle (2016)}
+Riffle\cite{kwon2016riffle} is developed by MIT in Python and Go as an alternative to Tor addressing some of its flaws. Riffle servers are mixes collecting user information, shuffling it and sends it to the next mixes or targets. The shuffling is secured by a zero-knowledge-proof while the permutation itself is hidden.
+
+The messages are sent in clusters whereas every client sends or receives data in every round (mimicking traffic). The sent blocks are padded to a fixed value to prevent size analysis. 
+
+So far the Riffle system has not attracted much interest in the academic world. While being extended, no valid attack was discovered so far.
+
+\fxwarning{Fill gaps in classification of Riffle}
 
 \subsection{SCION (2017)}
 SCION\cite{perrig2017scion} is a clean slate Internet protocol. While SCION is not really an anonymizing protocol. It contains, however,  many interesting features. Unlike with the traditional networks, we have the possibility of influencing the routing of data within SCION. Furthermore, with PHI\cite{chen2017phi} and Dovetail\cite{sankey2014dovetail}, SCION may feature strong and fast anonymity features. 
@@ -466,20 +475,15 @@ The current protocol specification may be found under \href{http://rfc-gnutella.
 Despite its name, Gnutella2 is not the next generation of Gnutella. It was a fork in 2002 from the original Gnutella and has been developed in a different direction. The specification may be found on \url{http://g2.doxu.org}. Just as its predecessor, Gnutella2 seems to be dead. The last relevant update to the main site or its protocol is dated four years back.
 
 \section{Unknown (TBD)}
-\subsection{Riffle (2016)}
-\cite{kwon2016riffle}
-
-\fxwarning{Add Riffle}%
-
 \subsection{Atom (2016)}
-\cite{kwon2016atom}
+Atom\cite{kwon2016atom} is an asynchronous anonymity service for small messages claiming to be scaleable and transferring up to a million tweet sized messages in 28 minutes.
 
-\fxwarning{Add Atom}%
+\fxwarning{Add and classify Atom}%
 
 \subsection{Riposte (2015)}
 \cite{corrigan2015riposte}
 
-\fxwarning{Add Riposte}%
+\fxwarning{Add and classify Riposte}%
 
 \subsection{Pung (2016)}
 \cite{angel2016unobservable}
