@@ -126,7 +126,7 @@ This requirement protects all involved parties from possible legal prosecution. 
 
 We have to assume that all actions taken by a potential adversary are not subject to legal prosecution. This assumption based on the fact that an adversary trying to establish censorship may be part of the government of jurisdiction. We may safely assume that there are legal exceptions in some jurisdictions for such entities. This means he may legally introduce nodes into our system.
 
-To withstand an adversary outlined in section\ref{sec:adversary}, the messages sent even within the system requires to be unidentifiable by attributes or content. "Attributes" may include any meta information including, but not limited to, frequency, timing, message size, sender, protocol, ports, or recipient. If we want to guarantee that a node is not identifiable as an endpoint of a message, all involved nodes must carry out equivalent operations. As soon as we have differences between routing nodes and endpoints, we can identify participating persons at entry or exit nodes.
+To withstand an adversary outlined in section\ref{sec:adversary}, the messages sent even within the system requires to be unidentifiable by attributes or content. "Attributes" may include any meta information including, but not limited to, frequency, timing, message size, sender, protocol, ports, or recipient. If we want to guarantee that a node is not identifiable as an endpoint of a message, all involved nodes must carry out equivalent \defref{operation}s. As soon as we have differences between routing nodes and endpoints, we can identify participating persons at entry or exit nodes.
 
 Furthermore, it must be impossible from an observing adversary to identify message endpoints. All nodes must look equal from the outside in terms of traffic, as well as in terms of their offered functions and behavior. 
 
@@ -271,15 +271,15 @@ One of the biggest weaknesses of all protocols is the information leakage they h
 	For us, this means that by design, a message is received and dismantled. Any content visible or manipulable by the previous node must be removed. Only new content or content inaccessible to the previous node may be used to build new messages. Following this criterion, we automatically fulfill the requirement \ref{req:untagable}.
 	\item A routing node may efficiently identify a message sender.\\      
 	The sender must be efficiently identifiable. At first sight, this requirement is non-fitting as it opposes heavily to \ref{req:anon} and \ref{req:unlink}. On the other hand, not providing these means makes it next to impossible to create a system that may not be misused and flooded. As the identification is pseudonymous, it must be short-lived, and multiple identities of the same sender must not be linked to each other. We will refer to this identity as an ephemeral ID (\defref{eID}). This \defref{eID} is handled in such a way that not complete decoding of the message is required to authorize the user. Instead, we build a message in such a way that tamper-proof, small-sized parts of the message are decoded first, and possibly bloated message content may be decoded after it is clear that the content is acceptable. If we assign "costs" to the creation of \defref{eID}s, it effectively protects the system from flooding.
-	\item The routing operations must not leak more information than the next hop.\\
+	\item The routing \defref{operation}s must not leak more information than the next hop.\\
 	We will apply a transformation on each routing hop to the message. This prevents following the message throughout the system. In most of the systems, messages are mainly disassembled and reassembled or onionized. The traffic is then cloaked in mimic traffic, making it impossible for an outside observer to identify message flows. The node generating the traffic is, however, well aware of the true message flow. In our system, we will add, instead of mimicking traffic, redundancy information (or remove it). By doing so, a routing node has no longer the insight which part of the traffic is relevant to the message and which not. We may, furthermore, introduce the possibility of distributing the message content throughout multiple paths in such a way that each path has not sufficient content to rebuild the message. In fact, depending on the complementing missing message, any content may be valid. 
 	\item Messages are protected from being replayed.\\
 	In former systems, message paths were highlighted by injecting additional information. Our system is already protected from such injections by the \defref{eID} concept, which identifies the sender. There are, however, other means to highlight traffic. An adversary may either inject message payload (corrupting the message flow) or replay the message. While we cannot keep anyone from sticking to rules, we may at least implement replay protection. Furthermore, we may later observe that we are able to control willingly induced, size mismatching content.
 	\item Messages in the routing system are "store and forward" .\\
 	All synchronous routing systems have in common that message observation is relatively easy for an outside or inside observer unless mimick routes are used. This is why we allow the message to be stored and picked up or sent at a later stage. 
-	\item Use the Reed-Solomon-Function as the main routing operation.\\
-	Originally \cite{reed1960polynomial} introduced a system allowing the use of polynomes to create error-correcting codes. In \cite{chaum1988multiparty} \citeauthor{chaum1988multiparty}, they have shown that the codes are suitable for distributing data assuming enough parties are honest and not malfunctioning. Unlike \citeauthor{chaum1988multiparty} proposition, we are not using the Reed Solomon function to achieve anonymity or privacy. Instead, we use it for decoy traffic generation. We are splitting a message into multiple parts at several points when routing and assemble it again on different nodes. By doing so, we achieve two vital things. First, we introduce the possibility of recovering errors due to misbehaving nodes, and secondly, the real traffic can no longer be differentiated from decoy traffic. The operation has proven to be insecure as it leaks properties of the operation applied in the result. We will show this in section \ref{sec:analysisReedSolomon}. Thus, We hardened the operation to remove the negative effects.
-	\item \MessageVortex{} must provide a variety of algorithms and operations to build a message.\\        
+	\item Use the Reed-Solomon-Function as the main routing \defref{operation}.\\
+	Originally \cite{reed1960polynomial} introduced a system allowing the use of polynomes to create error-correcting codes. In \cite{chaum1988multiparty} \citeauthor{chaum1988multiparty}, they have shown that the codes are suitable for distributing data assuming enough parties are honest and not malfunctioning. Unlike \citeauthor{chaum1988multiparty} proposition, we are not using the Reed Solomon function to achieve anonymity or privacy. Instead, we use it for decoy traffic generation. We are splitting a message into multiple parts at several points when routing and assemble it again on different nodes. By doing so, we achieve two vital things. First, we introduce the possibility of recovering errors due to misbehaving nodes, and secondly, the real traffic can no longer be differentiated from decoy traffic. The \defref{operation} has proven to be insecure as it leaks properties of the operation applied in the result. We will show this in section \ref{sec:analysisReedSolomon}. Thus, We hardened the operation to remove the negative effects.
+	\item \MessageVortex{} must provide a variety of algorithms and \defref{operation}s to build a message.\\        
 	As all systems and algorithms applied to the system may be weakened or fail, a system needs to have the possibility to choose from multiple algorithms, protocols, and infrastructures. This choice should be made by a trustworthy system that restricts us to either the sender or the receiving system. The German Federal Office for Information Security (BSI) makes in \cite{bsiPostQuantum} recommendations for systems and protocols, which we will follow.
 	
 	The main text can be boiled down to the following recommendations:
@@ -304,7 +304,7 @@ In this section, we have taken the following decisions for \MessageVortex:
 	\item Creates unidentifiable decoy traffic by using a Reed-Solomon-Function.
 	\item Have no strict message size and avoid strictly increasing or decreasing sizes in any type of message or message part.
 	\item Does not enforce specific attributes such as transport protocol, message size, message timing, or providers.
-	\item Run special routing operations instead of traditional mixing and recombination methods.
+	\item Run special routing \defref{operation}s instead of traditional mixing and recombination methods.
 	\item Offer a choice of algorithms to use when routing.
 \end{itemize}
 
@@ -325,7 +325,7 @@ This design is definitely implementable on a consumer device. On the other hand,
 \chapter{Protocol}\label{sec:protocol}
 \MessageVortex{} is a protocol piggybacking standard transport protocols somehow similar to S/MIME\cite{rfc2015} or PGP\cite{PGP}. Unlike these protocols, we need the capability to keep the presence of our messages secret.  The message itself should only be visible to an intended node.\MessageVortex{} itself is agnostic to the transport, but we do require appropriate blending to hide within the transport protocol. The information processed on a node and its associated meta-information should not leak any information about the processed message. 
 
-Our system sends so-called \VortexMessages. These messages are hidden within a transport protocol (e.g., SMTP or XMPP) with a blending mechanism (e.g., the steganographic algorithm F5) and extracted by a blending layer. The extracted \VortexMessage{} is handed over to a routing layer. The \VortexMessage{} itself contains a header block, a routing block, and possibly some payload blocks. The header block contains all the information required to protect the system. The routing block contains instructions (so-called "operations") how the payload blocks have to be processed and where to send the resulting blocks. Those operations are one of the keys as information leaking happens in this step in most of the systems. We, therefore, crafted all operations very carefully to keep as much information secret as we could. These operations are the key to the system as they allow us to increase and decrease the size of a message without leaking what part of the data is a decoy and what not.
+Our system sends so-called \VortexMessages. These messages are hidden within a transport protocol (e.g., SMTP or XMPP) with a blending mechanism (e.g., the steganographic algorithm F5) and extracted by a blending layer. The extracted \VortexMessage{} is handed over to a routing layer. The \VortexMessage{} itself contains a header block, a routing block, and possibly some payload blocks. The header block contains all the information required to protect the system. The routing block contains instructions (so-called ``\defref{operation}s'') how the payload blocks have to be processed and where to send the resulting blocks. Those \defref{operation}s are one of the keys as information leaking happens in this step in most of the systems. We, therefore, crafted all \defref{operation}s very carefully to keep as much information secret as we could. These \defref{operation}s are the key to the system as they allow us to increase and decrease the size of a message without leaking what part of the data is a decoy and what not.
 
 A payload may either be kept by the system for later processing with other messages, processed (possibly with different) payload blocks, or displayed to the "local user" as a message.
 
@@ -349,7 +349,7 @@ For our protocol, we use the following terms:
 	\item \textbf{\defref{VortexMessage}:} The encoded message passed from one node to another one. The \VortexMessage{} is considered before any embedding takes place. If embedded, we refer to such a message as "embedded \VortexMessage".
 	\item \textbf{\defref{Payload}:} Any data transported in a \VortexMessage{} between routers with exception to the routing and header block, regardless of the meaningfulness or relevance to the \VortexMessage.
 	\item \textbf{\defref{Decoy traffic}:} Any payload transported between routers that have no relevance to the message at the final destination.
-	\item \textbf{\defref{Identity}:} A tuple of a routable address and a public key. This tuple is a long-living tuple but may be exchanged from time to time. An Identity is always assigned to a nod, but one node may have multiple identities. 
+	\item \textbf{\defref{Identity}:} A tuple of a routable address and a public key. This tuple is a long-living tuple but may be exchanged from time to time. An Identity is always assigned to a node, but one node may have multiple identities. 
 	\item \textbf{\defref{eID}:} An identity created on any node with a limited lifetime anyone possessing the private key (proven by encrypting with it) is accepted as representative of that identity.
 	\item \textbf{Routing Block Builder (\defref{RBB}):} An entity, which is building a routing block. Typically identical to either sender or recipient.
 \end{itemize}
@@ -359,7 +359,7 @@ The following sections list some of the key components of the system. Their unde
 
 We first describe a single node and its identity. This node is always equivalent to a potential recipient. 
 
-We then introduce the concept of workspaces and ephemeral identities. These concepts are essential for the routing and accounting layers. They dictate memory and storage requirements and lay a foundation for the routing layer.
+We then introduce the concept of \defref{workspace}s and ephemeral identities. These concepts are essential for the routing and accounting layers. They dictate memory and storage requirements and lay a foundation for the routing layer.
 
 A node always consists of three layers and one or more transports connected to it. The understanding of their inner workings is essential to the understanding of the project as a whole. We emphasize on their main function and their inner workings without going into implementation details. These details are further discussed in part~\ref{sec:implementation}. We mainly focus on the data and the high-level processing done within these layers.
 
@@ -373,7 +373,7 @@ A node requires the key $K^1_{host_o}$ to encrypt a message for node $o$. This k
 The protocol itself has the possibility to answer clear-text requests. So-called ``public nodes'' (see \ref{sec:vortexNodeTypes}) make use of such messages. They are, however, an exception. In general, all \VortexMessages{} are encrypted.
 
 \subsection{Workspaces and Ephemeral Identities}
-We dumped the approach for a system global unified storage for all message processing as such a design would allow an adversary to flood our storage. Instead, we introduced temporary storages suitable for a set of transaction belonging to a single identity or limited set of entities which collaborate. In our system, every transaction on a nose is assigned to an ephemeral identity (\defref{eID}). An \defref{eID} has a limited lifetime and is represented by an asymmetric key pair and has to be created on each \VortexNode{} taking part in a message processing. Each \defref{eID} has a storage assigned to which we refer as ``workspace''.
+We dumped the approach for a system global unified storage for all message processing as such a design would allow an adversary to flood our storage. Instead, we introduced temporary storages suitable for a set of transaction belonging to a single identity or limited set of entities which collaborate. In our system, every transaction on a nose is assigned to an ephemeral identity (\defref{eID}). An \defref{eID} has a limited lifetime and is represented by an asymmetric key pair and has to be created on each \VortexNode{} taking part in a message processing. Each \defref{eID} has a storage assigned to which we refer as ``\defref{workspace}''.
 
 An \defref{eID} is unique on every host and created on each \VortexNode{} by the routing block builder (\defref{RBB}). To create an \defref{eID}, an \defref{RBB} first sends a message with only a header block to the respective \VortexNode. The request contains the new identity, a reply block, and a request to create a new identity. The receiving \VortexNode will then typically sends a challenge back. A challenge may be the start of a hash bit sequence (also referred to as "puzzle"). The requester has then to resend the request with a header block. The requester must insert additional data in such a way that the start hash in its binary form matches the bit sequence provided. Another possibility is to request a payment in cryptocurrency. This allows us to commercialize routers in some countries where the usage of such routers is generally allowed.
 
@@ -381,9 +381,9 @@ The length of the requested bit sequence is chosen by the accounting layer at it
 
 Each \defref{eID} has a lifetime, a maximum number of messages to be processed, and a maximum number of bytes to be sent assigned to it. The lifetime of an \defref{eID} is typically days and maybe up to a low number of months. Lifetimes may not be extended and are defined by the sender of the request. A node may accept or decline the request if the lifetime of the request or the state of the node does not meet its expectation. The puzzle sent in return may be a fixed value or related to the nodes' current state and load.
 
-This system guarantees that a sender must invest considerable work (in terms of CPU time required) prior to using resources of a \VortexNode. A \VortexNode{} may raise the complexity of its puzzles when having a  high load. This allows for a single user to still obtain an \defref{eID} while increasing costs for an attacker considerably. Even if someone floods a node with new \defref{eID}s, already created \defref{eID}s are not affected as their workspace has already been allocated.
+This system guarantees that a sender must invest considerable work (in terms of CPU time required) prior to using resources of a \VortexNode. A \VortexNode{} may raise the complexity of its puzzles when having a  high load. This allows for a single user to still obtain an \defref{eID} while increasing costs for an attacker considerably. Even if someone floods a node with new \defref{eID}s, already created \defref{eID}s are not affected as their \defref{workspace} has already been allocated.
 
-The workspace itself contains chunks of the messages (payload blocks) mapped to IDs and operations. The Operations transform one or more source IDs onto one or more target IDs. Any of these payload blocks may be assigned to a subsequent message as payload block by a routing block. An operation or a payload block share the lifetime of the respective message header. If operations overlap in output blocks the newest operation (arrived latest) wins.
+The \defref{workspace} itself contains chunks of the messages (payload blocks) mapped to \defref{ID}s and \defref{operation}s. The \defref{operation}s transform one or more source \defref{ID}s onto one or more target \defref{ID}s. Any of these payload blocks may be assigned to a subsequent message as payload block by a routing block. An \defref{operation} or a payload block share the lifetime of the respective message header. If \defref{operation}s overlap in output blocks the newest \defref{operation} (arrived latest) wins. Arriving \VortexMessages{} map their payloads onto \defref{ID}s of the respective \defref{workspace} of the \defref{eID}. to allow such mapping the first IDs are special \defref{ID}s either mapping to the \defref{ID} 0 (message for local delivery) or \defref{ID}s 1-127 (always reflect the current message [ingoing or outgoing]).
 
 This concept has certain downsides related to the expiry of \defref{eID}s. We will address them in section\ref{sec:newEID} and section~\ref{sec:replaceMURB}.
 
@@ -397,7 +397,7 @@ As already introduced in \ref{sec:reqSummary}, the protocol is built on multiple
 	
 	We may further split the Vortex infrastructure layers into
 	\begin{enumerate}
-		\item Blending layer\\
+		\item dBlending layer\\
 		This layer receives messages from the Vortex system and creates transport layer conformant messages and vice-versa. In an ideal case, the messages generated by this layer are indistinguishable from any regular message traffic of the transport layer, and the embedded message is only detectable by the receiving node.
 		\item Routing layer\\
 		The routing layer disassembles and reassembles messages. 
@@ -484,13 +484,13 @@ We decided to keep our plain embedding algorithm in the implementation. It alrea
 When using F5, jpeg images are required. Imagery requires to be at least eight times the size of the message embedded. Unlike other approaches harvesting random pics or obtaining them from a local repository, we recommend using machine-generated images such as rendered content. We recognize that custom Gravatars, router and usage graphs of services, or render services are suitable imagery material for our purpose. The message content would obviously be machine-generated content and not being suspect. This would effectively render the dead parrot problem as described in \cite{oakland2013-parrot} ineffective. 
 
 \subsubsection{Routing Layer\label{sec:routingLayer}}
-A routing layer needs to receive all payload and routing blocks, and process them (For an exact outline of the routing block, see section~\ref{sec:vortexMessage}). These blocks are stored in a suitable list within the workspace of the eID identified by the header block.
+A routing layer needs to receive all payload and routing blocks, and process them (For an exact outline of the routing block, see section~\ref{sec:vortexMessage}). These blocks are stored in a suitable list within the \defref{workspace} of the \defref{eID} identified by the header block.
 
 Within the routing block, we find a set of instructions, next \VortexNodes information, and the encrypted routing blocks for the messages to be assembled. A simplified representation of a routing block is shown in figure~\ref{fig:mathRoutingSimplified}.
 
 \begin{figure}[!ht]
 	\begin{align}
-	\mathbf{ROUTING_o}           = & \langle [ \mathbf{ROUTINGCOMBO} ] *, \mathbf{replyBlock},operation* \rangle\\  
+	\mathbf{ROUTING_o}           = & \langle [ \mathbf{ROUTINGCOMBO} ] *, \mathbf{replyBlock},mapping* \rangle\\  
 	\mathbf{ROUTINGCOMBO}        = & \langle processIntervall, K_{peerN+1}, recipient, \mathbf{nextMP}, \mathbf{nextHP}, \nonumber \\
 	& \mathbf{nextHEADER}, \mathbf{nextROUTING}, \mathbf{assemblyInstructions} \rangle\\
 	\mathbf{PL}                  = & \langle \text{payload octets} \rangle *\\ 
@@ -505,9 +505,9 @@ Within the routing block, we find a set of instructions, next \VortexNodes infor
 	\label{fig:mathRoutingSimplified}
 \end{figure}
 
-The routing of a message is simple. A workspace of an \defref{eID} contains routing blocks and payload blocks. A routing block has an active time window defined in the header block. Anytime during that time window, a routing layer processes the routing instructions contained in the assembly operations of the routing block. If successful, the message will be sent using the specified blending layer and target address.
+The routing of a message is simple. A \defref{workspace} of an \defref{eID} contains routing blocks and payload blocks. A routing block has an active time window defined in the header block. Anytime during that time window, a routing layer processes the routing instructions contained in the assembly operations of the routing block. If successful, the message will be sent using the specified blending layer and target address.
 
-The routing layer stores the main information assigned to the operation of routing messages. The following data has to be kept for routing within the \defref{eID}s workspace:
+The routing layer stores the main information assigned to the operation of routing messages. The following data has to be kept for routing within the \defref{eID}s \defref{workspace}:
 \begin{itemize}
 	\item $\mathbf{Build[]}\langle expiry, buildOperation \rangle$\\
 	The array $\mathbf{Build[]}$ is a list of building instructions for a message. The server may decide at any time to reject a too big list or long-living message. Thus, he may control the size of this list as well. However, controlling the size of this list will most likely result in the non-delivery of a message. 
@@ -557,7 +557,7 @@ The blocks $HEADER_o$ and $ROUTING_o$ are protected with an additional key $K_{s
 	\item \ldots keep the content of $\mathbf{HEADER_o}$, and $\mathbf{ROUTING_o}$ secret from $host_{o-1}$.
 \end{itemize}
 
-After authorization by the accounting layer, the header block is processed as outlined in section~\ref{sec:processingIncommingMessages}. Basically, we just add the routing blocks and payload to the respective workspace and wait for the routing layer to process the information.
+After authorization by the accounting layer, the header block is processed as outlined in section~\ref{sec:processingIncommingMessages}. Basically, we just add the routing blocks and payload to the respective \defref{workspace} and wait for the routing layer to process the information.
 
 Looking at a full \VortexMessage, we get the protocol outline, as shown in \eqref{eq:vortexMessage} on page~\pageref{eq:vortexMessage}.
 
@@ -589,7 +589,7 @@ Looking at a full \VortexMessage, we get the protocol outline, as shown in \eqre
 
 The routing log block is an onionized block. It contains at least a $forwardSecret$, which must match up with the header blocks $forwardSecret$. This mechanism is required to guarantee that routing blocks are not exchanged. The $replyBlock$ provides a possibility, if provided, to contact the original sender of the message without knowing him. It is just a routing block with instructions on how to prepare the message to be sent. The routing combos contain all the necessary information and prebuilt blocks to create the subsequent messages.
 
-At the very end, we got the payload. These blocks are simply added to the \defref{eID}s workspace.
+At the very end, we got the payload. These blocks are simply added to the \defref{eID}s \defref{workspace}.
 
 The double encryption of the routing and header block, are doubly encrypted. We could argue that the inner message block should not be encrypted with a peer key. This looks like a flaw at first sight but is, in fact, a feature that is very important. Without this key, any independent observer with knowledge about the blending capabilities of a receiving node may\ldots
 \begin{itemize}
@@ -753,14 +753,11 @@ It has to be mentioned that this operation tuple has some issues when it comes t
 
 
 \section{Summary}
-The \MessageVortex{}-Protocol is split into the four layers "Transport" (a common internet standard protocol), "blending" (extracting and embedding \VortexMessages), "Routing" (A layer reassembling messages according to received instruction), and "Accounting" (Keeps track of all stored data and discards expired information).
+The \MessageVortex{}-Protocol is split into the four layers ``Transport'' (a common internet standard protocol), ``blending'' (extracting and embedding \VortexMessages), ``Routing'' (A layer reassembling messages according to received instruction), and ``Accounting'' (Keeps track of all stored data and discards expired information).
 
 All nodes are realized in decentral devices such as computers or mobile phones. Messages are hidden with either plain embedding or (referred) F5 in the transport layer message. The routing layer processes messages by applying operations to messages. Valid operations are encrypt or decrypt a message chunk, split a message chunk into two parts, merge two parts into one, or add or remove redundancy information. The last operation is the most valuable. This operation allows by employing an extended Reed-Solomon-Operation to add decoy traffic to the message flow without enabling a node to identify such traffic. Furthermore, it allows a sender to send parts of a message through multiple chains of routing nodes to a recipient. Each message itself does not leak the message content since depending on the completing block, any message with appropriate length may be valid.
 
-The routing itself is done in a temporarily allocated storage called "workspace", which is tied to an ephemeral identity (\defref{eID}) represented by an asymmetric key pair. To get an \defref{eID}, a sender typically solves a crypto puzzle.
+The routing itself is done in a temporarily allocated storage called ``\defref{workspace}'', which is tied to an ephemeral identity (\defref{eID}) represented by an asymmetric key pair. To get an \defref{eID}, a sender typically solves a crypto puzzle. 
 
-
-
-
-
+Payloads of \VortexMessages{} are mapped into the \defref{workspace}{} and are assigned a unique \defref{ID}{} within that workspace. The subsequent \defref{routing block}s and their \defref{operation}s are added as well and processed in a time interval defined by the \defref{RBB}.
 
