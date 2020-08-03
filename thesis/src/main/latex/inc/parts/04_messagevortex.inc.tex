@@ -663,19 +663,20 @@ The padding applied in the first step is non-standard padding. The reason for th
 The padded block $\mathbf{X}$ is created from a padding value $p$, the unpadded block $\mathbf{M}$ and a series of padding bytes. We build $\mathbf{X}$ for a function $RS_{\text{m of n}}$ (allows adding $m$ redundancy blocks) and an encryption block $\mathbf{M}$ sized $K$ as follows:
 \begin{eqnarray}
 i          & = & len(\mathbf{M})\\
-e          & = & k \cdot n\\
-l          & = & \left\lceil\frac{i + 4 + C2 }{e}\right\rceil\cdot e\\
-p          & = & i + \left( C1 \cdot l \pmod{\left\lfloor\frac{2^{32}-i}{l}\right\rfloor\cdot l}\right)\\
-\mathbf{X} & = & \langle p,\mathbf{M},R_{t}\left(s,l-i-4\right)\rangle
+e          & = & blocksize\left(E^{K}\right) \cdot n\\
+l          & = & \left\lceil\frac{i + C2 }{e}\right\rceil\cdot e\\
+p          & = & i + \left( C1 \cdot l \pmod{\left\lfloor\frac{2^{32}-1-i}{l}\right\rfloor\cdot l}\right)\\
+\mathbf{X} & = & \langle p,\mathbf{M},R_{t}\left(s,l-i\right)\rangle\\\nonumber
+           & = & \langle p,\mathbf{M},R_{t}\left(s,p \pmod{len\left(\mathbf{X}\right)-len(p)}\right)\rangle
 \end{eqnarray}    
 The remainder of the input block, up to length $l$, is padded with random data. The random padding data may be specified by RBB though a PRNG spec $t$ and an initial seed value $s$. The message is padded up to size $L$. All resulting, encrypted blocks do not require any padding. This because the initial padding guarantees that all resulting blocks are dividable by the block size of the encrypting function. If not provided by an RBB, an additional parameter $C1$ is chosen as random positive integer and $C2=0$  by the node executing the operation.
 
-To reverse a successful message recovery information of a padded block $\mathbf{X}$, we calculate the original message size by extracting $p$ and doing $len(\mathbf{M})=p \pmod{ len(\mathbf{X})}$.
+To reverse a successful message recovery information of a padded block $\mathbf{X}$, we calculate the original message size by extracting $p$ and doing $i=len(\mathbf{M})=p \pmod{ len(\mathbf{X}-len(p))}$.
 
 This padding has many important advantages:
 \begin{enumerate}
 	\item The padding does not leak if the rebuilding of the original message was successful. Any value in the padding may reflect a valid value.
-	\item Since we have a value $C2$, the statement that a message size is within $len(\mathbf{X})<size<(len(\mathbf{X})-k\cdot n)$ is no longer true and any value smaller $len(\mathbf{X})-k\cdot n$ may be correct as well.
+	\item Since we have a value $C2$, the statement that a message size is within $len(\mathbf{X})>size>(len(\mathbf{X})-k\cdot n)$ is no longer true and any value smaller $len(\mathbf{X})-k\cdot n$ may be correct as well.
 	\item An RBB may predict the exact binary image of the padded message when specifying $C1$, $C2$, and $R_{t}(s,)$.
 	\item A node knowing the original parameters $C1$, $C2$, and the initial PRNG seed $s$ can detect successful decryption.
 \end{enumerate}

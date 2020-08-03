@@ -384,11 +384,18 @@ In \citeyear{pets2011-i2p} \citeauthor{pets2011-i2p} presented in \cite{pets2011
 In \citeyear{pets2011-i2p} \citeauthor{pets2011-i2p} presented in \cite{pets2011-i2p} an attack. As $I^2P$s security model is chosen based on IP addresses, the authors propose to use several cloud providers in different B-Class networks. By selectively flooding peers, an adversary may extract statistical information. The paper proposes an attack based on the heuristic performance-based peer selection. The main critics of the paper were that the peer selection might be influenced by an adversary enabling him to recover data on a statistical base.
 
 \subsection{Mixminion-Remailers (2002)\label{sec:remMixminion}}
-Mixminion was the standard implementation of a type-3-remailer. It tried to address many issues previously not solved. A Mixminion router splits messages in equally sized chunks and supports SURBs. Furthermore,  replay protection and key rotation were available. Unlike the previous remailer types, Mixminion was no longer using \defref{SMTP} as the transport protocol. Instead, Mixminion introduced a new transport protocol. The sources of this remailer are available on GitHub under https://github.com/mixminion/mixminion.
+Mixminion was the standard implementation of a type-3-remailer. It tried to address many issues previously not solved. A Mixminion router splits messages in equally sized chunks and supports SURBs. Furthermore,  replay protection and key rotation were available. Unlike the previous remailer types, Mixminion was no longer using \defref{SMTP} as the transport protocol. Instead, Mixminion introduced a new transport protocol. The sources of this remailer are available on GitHub under \url{https://github.com/mixminion/mixminion}.
 
 As a received message had to be decoded by the final recipient. Therefore, the final recipient had to be aware of Mixminion system.
 
-According to \url{https://mixminion.net} the first release of the software was in December 2002. And has been discontinued in 2008. Since 2011 the sources are available on GitHub. Therehave been some forks in 2011 but at the moment all forks seem to be inactive since at least 2016 as there are no new commits.
+Mixminion-Networks have been privacy-wise criticised for the following things: 
+\begin{itemize}
+	\item Pseudonymous single use reply blocks are broken (Chapter 4.2 in \cite{sassamanpynchon}).
+	\item Central directory of mixes.
+	\item Too few users
+\end{itemize}
+
+According to \url{https://mixminion.net} the first release of the software was in December 2002. And has been discontinued in 2008. Since 2011 the sources are available on GitHub. There have been some forks in 2011 but at the moment all forks seem to be inactive since at least 2016 as there are no new commits.
 
 \subsection{\texorpdfstring{$\mathcal{P}^5$}{P5} (2002)}
 The Peer-to-Peer Personal Privacy Protocol is defined in \cite{sherwood-protocol}. It provides sender-, receiver- and sender-receiver anonymity. According to the project page of $\mathcal{P}^5$, there is only a simulator available for the protocol.
