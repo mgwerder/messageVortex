@@ -6,7 +6,7 @@
 \part{Analysis of MessageVortex\label{sec:analysis}}
 In section~\ref{sec:adversary}, we described two different kinds of adversaries. Which do require different properties for our system to be fulfilled.
 
-An observing adversary is the less dangerous one. While observing all traffic he may not disrupt communication. Instead he is using all available information to collect data about all items of intrest (\defref{IOI}). He may do this for example by colecting inside or outside information about all message flows he may encounter. He may use this information and assign it to certain individuals or groups of individuals.
+An observing adversary is the less dangerous one. While observing all traffic he may not disrupt communication. Instead he is using all available information to collect data about all items of intrest (\defref{IoI}). He may do this for example by colecting inside or outside information about all message flows he may encounter. He may use this information and assign it to certain individuals or groups of individuals.
 
 A censoring attacker is far more dangerous as he does not only observe the system, but he may systematically supress freedom of speech and all technology related to it. As he has the means and the technical know-how, he may try, apart from observing, to discover systems communicating illegally either by observation or by infiltration of systemms. He may furthermore track down individuals within its reach and prosecute them. All other participants of an illegal system may be either identified and blacklisted or even attacked either by infiltrating their systems or by effectively launching DoS attacks against those systems.
 
@@ -62,7 +62,7 @@ Attacks targeting users anonymity are the main focus of this work. Many pieces o
 	An attack does always impose a load onto a system's resources regardless of its success. It is vital that a system recovers almost immediately from an attack and is not covered in a non-functional or only partial-functional state either temporarily or permanently.
 \end{itemize}
 
-In the following subsections, we list a couple of attack classes that have been used against systems listed in \ref{sec:sysImpl} or the respective academic works. We list the countermeasures which have been taken to deflect these attacks.
+In the following subsections, we list a couple of attack classes that have been used against systems listed in \ref{sec:implSystems} or the respective academic works. We list the countermeasures which have been taken to deflect these attacks.
 
 \subsubsection{Probing Attacks}
 Identifying a node by probing and check their reaction is commonly done when fingerprinting a service. As a node is participating in a network and relaying messages probing may not be evaded. However, it may be made costly for an adversary to do systematic probing. This should be taken into account. Both currently specified transport protocol features an indefinite number of possible accounts. Since not the server but the endpoint address is behaving, node probing is more complicated than in other cases where probing of service is sufficient. 

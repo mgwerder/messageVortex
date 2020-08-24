@@ -1,7 +1,7 @@
 % !TeX spellcheck = en_US
 \gdef\doctype{extbook}
 \documentclass[a4paper,appendixprefix,pdfusetitle,twocolumn,fontsize=12pt,DIV=calc,12pt,draft]{\doctype} %scrbook
-%add attachdocs to attach all documents
+% add attachdocs to attach all documents
 % add openany to avoid empty pages
 %\usepackage{gitinfo}
 
@@ -64,13 +64,34 @@
 }
 \makeatother
 
-% enable superscript  for 1st, 2nd, 3rd etc.
-\usepackage[super]{nth}
-
 % XMP support 
 \RequirePackage{xmpincl}
 %\includexmp{messageVortex}
 \usepackage{hyperxmp}
+
+%enable hyperlinks
+\makeatletter
+\hypersetup{	
+	pdftitle={\thetitle},
+	pdfpagelayout=TwoPageRight,
+	linktoc=all,
+	breaklinks=true,
+	hidelinks,
+	pdfstartview=Fit,
+	pdfauthor={\author},
+	pdftitle={\thetitle - \thesubtitle},
+	pdflang=en,
+	pdfsubject={\myabstract},
+	pdfkeywords={Messaging, Anonymity, SMTP, Message Vortex},
+	pdfcontactemail={martin.gwerder@fhnw.ch},
+	pdflicenseurl={http://creativecommons.org/licenses/by-nc-nd/3.0/ch/},
+	pdfcopyright={Creative Commons Attribution-NonCommercial-NoDerivatives 3.0 Switzerland (CC BY-NC-ND 3.0 CH)}
+}
+\makeatother
+
+
+% enable superscript  for 1st, 2nd, 3rd etc.
+\usepackage[super]{nth}
 
 % extended width for toc page numbers
 \usepackage[titles]{tocloft}
@@ -91,27 +112,6 @@
   \edef\filename@base{\detokenize\expandafter{\filename@base}}%
   \texttt{\filename@base.\filename@ext}%
  \endgroup
-}
-\makeatother
-
-%enable hyperlinks
-\makeatletter
-\RequirePackage{hyperref}
-\hypersetup{	
-	pdftitle={\thetitle},
-	pdfpagelayout=TwoPageRight,
-	linktoc=all,
-	breaklinks=true,
-	hidelinks,
-	pdfstartview=Fit,
-	pdfauthor={\author},
-	pdftitle={\thetitle - \thesubtitle},
-	pdflang=en,
-	pdfsubject={\myabstract},
-	pdfkeywords={Messaging, Anonymity, SMTP, Message Vortex},
-	pdfcontactemail={martin.gwerder@fhnw.ch},
-	pdflicenseurl={http://creativecommons.org/licenses/by-nc-nd/3.0/ch/},
-	pdfcopyright={Creative Commons Attribution-NonCommercial-NoDerivatives 3.0 Switzerland (CC BY-NC-ND 3.0 CH)}
 }
 \makeatother
 
@@ -229,6 +229,83 @@
 % support repetitive footnotes
 \usepackage{fixfoot}
 
+% Support for algorithms
+\usepackage{amsmath}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{caption}
+\newcounter{nalg}[chapter] % defines algorithm counter for chapter-level
+\renewcommand{\thenalg}{\thechapter .\arabic{nalg}} %defines appearance of the algorithm counter
+\DeclareCaptionLabelFormat{algocaption}{Algorithm \thenalg} % defines a new caption label as Algorithm x.y
+%set font size of algorithms
+\makeatletter
+\renewcommand{\ALG@beginalgorithmic}{\small}
+\makeatother
+% boolean operators
+\algnewcommand\And{~\textbf{and}~}
+\algnewcommand\Or{~\textbf{or}~}
+\algnewcommand\Not{~\neg~}
+\algnewcommand\Throw{\State \textbf{throw}~}
+\algnewcommand{\LineComment}[1]{\State \(\triangleright\) #1}
+%linebreak in algorithms 
+\algrenewcommand{\algorithmicreturn}{\State \textbf{return}}
+\newcommand\CONDITION[2]%
+{\begin{tabular}[t]{@{}l@{}l@{}}
+		#1&#2
+	\end{tabular}%
+}
+\algdef{SE}[WHILE]{While}{EndWhile}[1]%
+{\algorithmicwhile\ \CONDITION{#1}{\ \algorithmicdo}}%
+{\algorithmicend\ \algorithmicwhile}
+\algdef{SE}[FOR]{For}{EndFor}[1]%
+{\algorithmicfor\ \CONDITION{#1}{\ \algorithmicdo}}%
+{\algorithmicend\ \algorithmicfor}
+\algdef{S}[FOR]{ForAll}[1]%
+{\algorithmicforall\ \CONDITION{#1}{\ \algorithmicdo}}
+\algdef{SE}[REPEAT]{Repeat}{Until}{\algorithmicrepeat}[1]%
+{\algorithmicuntil\ \CONDITION{#1}{}}
+\algdef{SE}[IF]{If}{EndIf}[1]%
+{\algorithmicif\ \CONDITION{#1}{\ \algorithmicthen}}%
+{\algorithmicend\ \algorithmicif}%
+\algdef{C}[IF]{IF}{ElsIf}[1]%
+{\algorithmicelse\ \algorithmicif\ \CONDITION{#1}{\ \algorithmicthen}}
+%references to functions
+\makeatletter
+\renewcommand{\Function}[2]{%
+	\csname ALG@cmd@\ALG@L @Function\endcsname{#1}{#2}%
+	\def\jayden@currentfunction{#1}%
+}
+\newcommand{\funclabel}[1]{%
+	\@bsphack
+	\protected@write\@auxout{}{%
+		\string\newlabel{#1}{{\jayden@currentfunction}{\thepage}{}{}{}}%
+	}%
+	\@esphack
+}
+\newcommand{\funcref}[1]{\@bsphack\textproc{\ref{#1}}\@esphack}
+\makeatother
+% Euler number
+\newcommand{\euler}{\mathrm{e}}
+
+
+%\lstnewenvironment{algorithm}[1][] %defines the algorithm listing environment
+%{   
+%	\refstepcounter{nalg} %increments algorithm number
+%	\captionsetup{labelformat=algocaption,labelsep=colon} %defines the caption setup for: it ises label format as the declared caption label above and makes label and caption text to be separated by a ':'
+%	\lstset{ %this is the stype
+%		mathescape=true,
+%		frame=tB,
+%		numbers=left, 
+%		numberstyle=\tiny,
+%		basicstyle=\scriptsize, 
+%		keywordstyle=\color{black}\bfseries\em,
+%		keywords={,input, output, return, datatype, function, in, if, else, foreach, while, begin, end, } %add the keywords you want, or load a language as Rubens explains in his comment above.
+%		numbers=left,
+%		xleftmargin=.04\textwidth,
+%		#1 % this is to add specific settings to an usage of this environment (for instnce, the caption and referable label)
+%	}
+%}
+%{}
 % Document annotations
 \usepackage[nomargin]{fixme}
 \fxsetup{layout=pdfnote}
@@ -237,6 +314,9 @@
 \usepackage[color=black]{attachfile}
 \usepackage{embedfile}
 \usepackage{hypgotoe}
+
+% graphs
+\usepackage{pgfplots}
 
 %enable word separation
 \usepackage[english]{babel}

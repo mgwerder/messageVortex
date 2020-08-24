@@ -11,11 +11,12 @@ Today's mail transport is mostly done via \defref{SMTP}\index{SMTP} protocol, as
 
 To understand the routing of a mail, it is essential to understand the whole chain starting from a user(-agent) until arriving at the target user (and being read!). To simplify this, we used a consistent model that includes all components (server and clients). The figure \ref{fig:MailAgents} shows all involved parties of a typical mail routing. It is essential to understand that mail routing remains the same regardless of the client. However, the availability of a mail at its destination changes drastically depending on the type of client used. Furthermore, control of the mail flow and control is different depending on the client.
 
-The model has three main players storage (\defref{Storage}), agent (\defref{Agent}) and service (\defref{Service}). Storages are endpoint facilities storing emails received. Not explicitly shown are temporary storages such as spooler queues or state storages. Agents are simple programs taking care of a specific job. Agents may be exchangeable by other similar agents. A service is a bundle of agents that is responsible for a specific task or task sets.
+The model has three main players \defref{storage}, \defref{agent}, and \defref{service}. Storages are endpoint facilities storing emails received. Not explicitly shown are temporary storages such as spooler queues or state storages. Agents are simple programs taking care of a specific job. Agents may be exchangeable by other similar agents. A service is a bundle of agents that is responsible for a specific task or task sets.
 
 \begin{figure}[ht!]
 	\centering\includegraphics[width=\columnwidth]{inc/MailAgents1.pdf}
-	\caption{Mail Agents}\label{fig:MailAgents}
+	\caption{Mail Agents}
+	\label{fig:MailAgents}
 \end{figure}
 
 In the following paragraphs (for definitions), the term ``email'' is used synonymously to the term ``Message''.  ``Email'' has been chosen over ``messages'' because of its frequent use in standard documents.
@@ -173,13 +174,13 @@ Several attempts have been made to strengthen the proposal of Chaum\cite{golle:e
 
 \chapter{Proposed Academic Protocols and System Implementations\label{sec:implSystems}}
 \fxwarning{complete section}
+
+
 \section{Characteristics of Known Anonymity Implementations}
-Table \ref{tab:anonClass} shows the previously analyzed protocols.
+Table \ref{tab:anonClass} shows the previously analyzed protocols according to the classification scheme introduced in \cite{Shirazi2018}.
 
 \DeclareFixedFootnote{\takenFrom}{Definition taken from \ref{Shirazi2018}}
 \begin{table*}[ht]\centering\tiny
-
-	\label{tab:anonClass}
 	\setlength{\aboverulesep}{0pt}
 	\setlength{\belowrulesep}{0pt}
 	\newcolumntype{x}[1]{!{\centering\arraybackslash\vrule width #1}}
@@ -314,9 +315,11 @@ Table \ref{tab:anonClass} shows the previously analyzed protocols.
 		Loopix & & & & & & & & & & & & & & & & & & \\
 		Stadium & & & & & & & & & & & & & & & & & & \\
 		Vuvuzela & & & & & & & & & & & & & & & & & & \\
+		Alpenhorn & & & & & & & & & & & & & & & & & & \\
 		\bottomrule
 	\end{tabular}
-	\caption{Classification table for anonymization protocols according to \cite{Shirazi2018}}
+	\caption{Classification table for anonymization protocols}
+	\label{tab:anonClass}
 \end{table*}
 \section{Resenders, Onion Routers, and MixNets\label{sec:remailersAndMixnets}}
 \subsection{Pseudonymous Remailers (1981)\label{sec:remPseudo}}
@@ -359,7 +362,7 @@ Being an exit node may be a problem in some jurisdictions. In general, it seems 
 
 Furthermore, several DoS-Attacks have been carried out to overload parts of the Tor network. Most of them do a bandwidth drain on the network layer.
 
-Attacking anonymization has been done in several ways. First of all, the most common attack is a time-wise correlation of packets if in control of an entry and an exit node. A massive attack of this kind was published in 2014 and has been published on the tor website (\href{https://blog.torproject.org/blog/tor-security-advisory-relay-early-traffic-confirmation-attack}{relay early traffic confirmation attack}). This attack was possible because tor is a low latency network. Another attack is to identify routes through tor by statistically analyze the traffic density in the network between nodes. More theoretical attacks focus on the possibility of controlling the directory servers to guarantee that an entity may be deanonymized because it is using compromised routers.
+Attacking anonymization has been done in several ways. First of all, the most common attack is a time-wise correlation of packets if in control of an entry and an exit node. A massive attack of this kind was published in 2014 and has been published on the Tor website (\href{https://blog.torproject.org/blog/tor-security-advisory-relay-early-traffic-confirmation-attack}{relay early traffic confirmation attack}). This attack was possible because tor is a low latency network. Another attack is to identify routes through tor by statistically analyze the traffic density in the network between nodes. More theoretical attacks focus on the possibility of controlling the directory servers to guarantee that an entity may be deanonymized because it is using compromised routers.
 
 Generally, the effectiveness of the monitoring of single nodes or whole networks is disputed. According to a study by \citeauthor{ccs2013-usersrouted} in \citeyear{ccs2013-usersrouted}\cite{ccs2013-usersrouted}, a system in the scale of PRISM should be able to correlate traffic of 95\% of the users within a ``few days''. Other sources based on the Snowden Papers claim that NSA was unable so far to de-anonymize users of  Tor. However, since these papers referenced to ``manual analysis'', the statement may be disputed when looking at automated attacks as well.
 
@@ -371,7 +374,7 @@ It is, according to \url{https://www.torproject.org/docs/pluggable-transports}, 
 The name $I^2P$ is a derived from  ``Invisible Internet Project'' according to \href{https://geti2p.net/}{geti2p.net}. The first binary relase on sourceforge dates from 2001. The system itself is comparable to Tor for its capabilities. Mayor differences are:
 \begin{itemize}
 	\item P2P based
-	\item Packet-switched routing (tor is ``circuit-switched'')
+	\item Packet-switched routing (Tor is ``circuit-switched'')
 	\item Different forward and backward routes (called tunnels)
 	\item Works pseudonymously
 	\item Supports TCP and UDP
@@ -428,9 +431,18 @@ Riffle\cite{kwon2016riffle} is developed by MIT in Python and Go as an alternati
 
 The messages are sent in clusters whereas every client sends or receives data in every round (mimicking traffic). The sent blocks are padded to a fixed value to prevent size analysis. 
 
-So far the Riffle system has not attracted much interest in the academic world. While being extended, no valid attack was discovered so far.
+So far the Riffle system has not attracted much interest in the academic world. While being extended, we were unable to find an attack for Riffle.
 
 \fxwarning{Fill gaps in classification of Riffle}
+
+\subsection{Atom (2016)}
+Atom\cite{kwon2016atom} is an asynchronous anonymity service for small messages claiming to be scaleable and transferring up to a million tweet sized messages in 28 minutes. Its PoC implementation is written in Go and was tested by creating a serie of AWS based EC2 instances. It provides a broadcast primitive with limited reach by groupig its servers into small groups. All messages have equal length and groups organize all received messages in batches and distribute them to other server groups. This results in a mix cascade somehow similar to the Mixminion system. However, the system extends the mix cascades with a zero knowledge proof so that tampering may be discovered to a certain extent.
+
+According to the paper many aspects of Atom remain unsolved. Key distribution is proposed to be done by trustworthy third party ``directory authorities''. To remain anonymous at least one honest node per group is required. Identifying malicious users in Atom require a collaborative effort involving the publications of the private keys of the entry groups. Mallicious users a proposed to be blacklisted by the directory authorities. 
+
+As most of the other protocols Atom implements its own protocol making it susceptible to censorship.
+
+\fxwarning{Classify Atom}
 
 \subsection{SCION (2017)}
 SCION\cite{perrig2017scion} is a clean slate Internet protocol. While SCION is not really an anonymizing protocol. It contains, however,  many interesting features. Unlike with the traditional networks, we have the possibility of influencing the routing of data within SCION. Furthermore, with PHI\cite{chen2017phi} and Dovetail\cite{sankey2014dovetail}, SCION may feature strong and fast anonymity features. 
@@ -482,11 +494,6 @@ The current protocol specification may be found under \href{http://rfc-gnutella.
 Despite its name, Gnutella2 is not the next generation of Gnutella. It was a fork in 2002 from the original Gnutella and has been developed in a different direction. The specification may be found on \url{http://g2.doxu.org}. Just as its predecessor, Gnutella2 seems to be dead. The last relevant update to the main site or its protocol is dated four years back.
 
 \section{Unknown (TBD)}
-\subsection{Atom (2016)}
-Atom\cite{kwon2016atom} is an asynchronous anonymity service for small messages claiming to be scaleable and transferring up to a million tweet sized messages in 28 minutes.
-
-\fxwarning{Add and classify Atom}%
-
 \subsection{Riposte (2015)}
 \cite{corrigan2015riposte}
 
@@ -495,7 +502,7 @@ Atom\cite{kwon2016atom} is an asynchronous anonymity service for small messages 
 \subsection{Pung (2016)}
 \cite{angel2016unobservable}
 
-\fxwarning{Add Pung}%
+\fxwarning{Add Pung and classify}%
 
 \subsection{PIR (2018)}
 \cite{angel2018pir}
@@ -510,14 +517,16 @@ Karaoke\cite{lazar2018karaoke} is a low latency messaging system offering an alt
 \subsection{Loopix (2017)}
 \cite{piotrowska2017loopix}
 
-\fxwarning{Add Loopix}%
+\fxwarning{Add Loopix and classify}%
 
 \subsection{Stadium (2017)}
 \cite{tyagi2017stadium}
 
-\fxwarning{Add Stadium}%
+\fxwarning{Add Stadium and classify}%
 
 \subsection{Vuvuzela (2015)}
-Vuvuzela was presented by \citeauthor{van2015vuvuzela} in \cite{van2015vuvuzela}. It is a scalable anonymity system offering a high throughput between millions of users. The System has a PoC implementation written in Go. An adversary knows immediatly what clients do use vuvuzela. He is however unable to match up communication peers over time. The Vuvuzela client software is available under \href{https://vuvuzela.io/} and connects to a vuvuzela network forming a centralized infrastructure. A Vuvuzela infrastructure may handle according to its authors up to 10 million users with a average bandwith cost of 3.7KB/s per user.
+Vuvuzela was presented by \citeauthor{van2015vuvuzela} in \cite{van2015vuvuzela}. It is a scaleable anonymity system offering a high throughput between millions of users. The system is available as a PoC implementation written in Go. An adversary knows immediatly what clients do use vuvuzela. He is however unable to match up communication peers over time. The Vuvuzela client software is available under \href{https://vuvuzela.io/} and connects to a vuvuzela network forming a centralized infrastructure. A Vuvuzela infrastructure may handle according to its authors up to 10 million users with an average bandwith cost of 3.7KB/s per user.
 
-
+\subsection{Alpenhorn (2016)}
+\cite{lazar2016alpenhorn}
+\fxwarning{Add Alpenhorn; Refer to atom for similarity in terms of provided service}

@@ -65,7 +65,7 @@
 \end{entry}
 
 \begin{entry}
-	\mainentry{item of interest (IoI)}{The Item of Intrest (IoI) are defined in \cite{anonTerminology} and refer to any subject action or entity which is of interest to a potential adversary.}
+	\mainentry{IoI}{The Item of Intrest (IoI) are defined in \cite{anonTerminology} and refer to any subject action or entity which is of interest to a potential adversary.}
 \end{entry}
 
 \begin{entry}
@@ -84,6 +84,10 @@
 
 \begin{entry}
 	\mainentry{message}{The ``real content'' to be transferred from the sender to the recipient. Please note the difference compared to a \VortexMessage. We refer to the encoded form of a \VortexMessage, which may or may not contain parts of the original message always as \VortexMessage.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{MessageVortex}{The protocol described in this document.}
 \end{entry}
 
 \begin{entry}
@@ -122,6 +126,10 @@
 \end{entry}
 
 \begin{entry}
+	\mainentry{operation}{A function transforming the content of a \defref{payload block}. \defref{MessageVortex} supports four categories of operations. Relevant for the service are $addRedundancy$/$removeRedundancy$, $encrypt$/$decrypt$, and $split$/$merge$. Additionally for operation there is a $mapping$ operation allowing to map the payloads of a message into the payload space or vice-versa.}
+\end{entry}
+
+\begin{entry}
 	\mainentry{payload}{Any data transported between routers regardless of the meaningfulness or relevance to the VortexMessage.}
 \end{entry}
 
@@ -157,7 +165,11 @@
 \end{entry}
 	
 \begin{entry}
-	\mainentry{router}{Any \VortexNode which is processing messages. Please note that all VortexNodes are routers.}
+	\mainentry{router}{Any \VortexNode which is processing messages. Please note that all \defref{VortexNode}s are routers.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{routing block}{A block in the \defref{VortexMessage} containing all the instructions for processing the current message. It may contain, furthermore, addotional routing blocks to compose subsequent messages. The routing block is protected by the sender key $K_{sender}$.}
 \end{entry}
 
 \begin{entry}
@@ -233,6 +245,10 @@
 
 \begin{entry}
 	\mainentry{VortexMessage}{The encoded message passed from one VortexNode to another one. The VortexMessage is typically considered before any embedding takes place.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{VortexNode}{A hardware node running the MessageVortex specific software. These nodes typically run on always-connected, user-run devices such as mobile phones or tablets.}
 \end{entry}
 
 \begin{entry}

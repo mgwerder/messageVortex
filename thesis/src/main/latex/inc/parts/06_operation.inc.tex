@@ -73,12 +73,13 @@ By definition, any transport layer address may represent a Vortex identity. This
 Public nodes are nodes, which advertise themselves as normal mixes. Just as all nodes, they may be an endpoint or a mix. Typically they accept all requests exactly as outlined in \ref{tab:protoReplyCrit}. As an immediate result of the publicly available information about such a node, the owner may be the target of our censoring adversary. Pressure may be opposed to close down such a node. However, since we do not need a specific account, we may safely close down one transport account and open up a different one. Such account reopenings are even possible on the same infrastructure. We are even able to notify other users of the move and remain reachable, as a user may send a newIdentity request using the old identity. 
 
 \subsubsection{Stealth Vortex Node}\label{sec:stealthNode}
-This node does not answer any clear-text requests. As an immediate result, the node is only usable by other nodes knowing the public key of this node. The node is, therefore, on a known secret base only reachable. This node type may be used in environments with a censoring adversary. People may form closed routing groups routing and anonymizing themselves. We have to state clearly at this point that putting trust into the routing nodes violates the \defref{Zero Trust} principle. It is, however, currently the only way to outcurve a censoring adversary. Means such as using distribution lists as endpoints seemed to be of some value at first but turned out just to shift the problem of detection from the routing to the less protected transport layer.
+This node does not answer any clear-text requests. As an immediate result, the node is only usable by other nodes knowing the public key of this node. The node is, therefore, on a known secret base only reachable. This node type may be used in environments with a censoring adversary. People may form closed routing groups routing and anonymizing themselves. We have to state clearly at this point that putting trust into the routing nodes violates the \defref{zero trust} principle. It is, however, currently the only way to outcurve a censoring adversary. Means such as using distribution lists as endpoints seemed to be of some value at first but turned out just to shift the problem of detection from the routing to the less protected transport layer.
 
 \subsubsection{Hidden Vortex Node\label{sec:hiddenNode}}
 A hidden node is a special form to a stealth node. It has a predefined set of identities. Only these already known identities are processed. This behavior has certain drawbacks. An existing identity may not be changed, and new ephemeral identities may not be created. As an immediate result, traffic may become pseudonymity. To counter this effect, at least partially, we may use the same local identity for multiple senders. To remove clashes in the workspace, we may use preassigned IDs in the workspace. The sender is only one of all senders knowing the private key of an identity. The advantage of such a node is that identities have unlimited quotas on such nodes, no longer bothering about accounting and refreshing identities. Such behavior seems to be a valuable option when using bulletproof providers.
 
 \section{Strategies for Composing Routing Blocks}
+\fxwarning{complete section}
 
 \subsection{MURBs\label{sec:murb}}
 The protocol includes the capability of MURBs. Such MURBs enable a user to send a limited amount of times messages to an anonymous receiver. Such sending may be done without having any knowledge about its identity, the location, or infrastructure he is using.
@@ -89,24 +90,207 @@ As a MURB is a routing block, it generates the same pattern on the network each 
 
 For a MURB to work, the RBB has to take care that all quotas required to the route are sufficiently sized. Such sizing is hard to foresee in some cases. An RBB may query these identities from time to time to make sure that they do not deplete. Wherever possible, MURBs should be dropped in favor of multiple SURBs to avoid the dangers of MURBs.
 
-\section{Algorithms Suitable for Achieving Anonymity}
-\fxwarning{complete section}
-\section{Possibilities of Routing Diagnosis and Reputation Building\label{sec:diagnosisOfMessagePath}}
-\fxwarning{complete section}
-\section{Possibilities of Redundancies}
+\section{Routing Algorithms Suitable for Achieving Anonymity\label{sec:routingStrategies}}
+We discovered some 
+
+\subsection{General Rules for Routing Strategies}
 \fxwarning{complete section}
 
-\chapter{Protocol Bootstrapping}\label{sec:keyDistribution}
+In the following section we show a simple algoritthm for creating a routing graph in a non-censored environment or in an isolated node set in a censored environment. \fxwarning{incomplete text}
+
+To create a routing block we first need a graph representing the message flow. the nodes of the graph represent the \VortexNodes whereas the edges represent the messages sent between the \VortexNodes. Algorithm~\ref{alg:simpleGraph} shows a pseudo-code to get such a valid graph. After creating a graph, we need to assign timing and routing information. Algorithm~\ref{alg:simpleTiming} shows a possible algorithm for this timing assignage, whereas Algorithm~\ref{alg:simpleRouting} shows a simple generator for the routing operation. The algorithm ommits for simplicity allocation of workspace IDs as this is a ``book keeping''-only problem.
+
+\begin{algorithm}
+	\captionof{figure}[Simple Graph for Routing Block (PseudoCode)]{Simple Graph for Routing Block}\label{alg:simpleGraph}
+	\begin{algorithmic}[1]
+		\Function{getGraph}{startNode,endNode, numNodes, minEdges, listOfAllNodes}
+			\State $\text{nodes} \gets \Call{getNodes}{numNodes, ListOfAllNodes, startNode, Endnode}$
+			\State $\text{edges} \gets \Call{getEdges}{minEdges,nodes}$
+			\Return $[\text{nodes}, \text{edges}]$	
+		\EndFunction
+		\item[]		
+		\Function{getNodes}{numberOfNodes, ListOfKnownNodes, startNode, Endnode}
+		  \State $\text{nodeList} \gets \lbrack\text{startNode}, \text{endNode}\rbrack$
+		  \While {$\text{len(nodeList)} < \text{numberOfNodes}$}
+		  	\State $\text{randomNode} \gets \Call{pickRandomNodeFromSet}{listOfKnownNodes}$
+		  	\If {$\neg \text{nodeList.contains(randomNode)}$}
+		  		\State $\text{nodeList.append(randomNode)}$ 
+		  	\EndIf	
+		  \EndWhile{}	
+		  \Return nodeList
+		\EndFunction  
+		\item[]
+		\Function{nodesReached}{edgeList,startNode}
+			\State $\text{reachedNodeList} \gets [\text{startNode}]$
+			\ForAll{$\text{e} \in \text{edgeList}$}
+				\If{$\neg \text{reachedNodeList.contains(e[0])}$}
+					\State $\text{reachedNodeList.append(e[0])}$
+				\EndIf
+			\EndFor
+		\EndFunction
+		\item[]
+		\Function{getEdges}{minEdges, listOfAllNodes}
+			\While{$\text{len(edgeList)<minEdges} \Or $  \\ $\text{nodesReached(edgeList,listOfAllNodes[0])<len(listOfAllNodes)}$}
+				\State $\text{listOfReachedNodes} \gets \Call{getReachedNodes}{listOfAllNodes,edgeList}$
+				\State $\text{startNode} \gets \Call{randomNode}{listOfReachedNodes}$
+				\State $\text{endNode} \gets \Call{randomNode}{listOfAllNodes}$
+				\State $\text{edgeList.append([startNode, endNode])}$
+			\EndWhile{}
+			\Return $\text{edgeList}$
+		\EndFunction
+	\end{algorithmic}
+\end{algorithm}
+
+In the algorithm~\ref{alg:simpleTiming}, we use a custom random distribution called \funcref{alg:timingDistribution}. This distribution is a derived form of a gaussian distribution and has its minimum value, maximum value, and peak value at the desired spots. The timing information distributes in a serialized way along the timeline. Figure~\ref{fig:timeDistribution} shows the distribution of the implementation.
+
+\begin{algorithm}
+	\captionof{figure}[Assign Timing Information to a Graph (PseudoCode)]{Assign Timing Information to a Graph}\label{alg:simpleTiming}
+	\begin{algorithmic}[1]
+		\Function{getTiming}{edges, maxTime,minHopTime}
+			\If{$\text{len(edges)} \times \text{(minHopTime - 1)} > \text{maxTime}$}
+				\Throw "maxTime too small for constraints"
+			\EndIf
+			\State $\text{earliestTime} \gets 0$
+			\State $\text{maxRemainingTime} \gets \text{maxTime}-\text{earliestTime}$
+			\State $\text{remainingHops} \gets \text{len(edges)} - 1$
+			\State $\text{times} \gets []$
+			\ForAll{$\text{e} \in \text{edges}$}
+				\State $\text{maxShare} \gets \text{remainingTime} - \text{remainingHops}\times\text{minHopTime}$
+				\State $\text{share} \gets \frac{maxShare}{remainingHops}$
+				\State $\text{minTime} \gets \Call{getRandomTime}{earliestTime, earliestTime+share, earliestTime+maxShare}$
+				\State $\text{maxTime} \gets \Call{getRandomTime}{minTime, minTime+share, earliestTime+maxShare}$
+				\State $\text{earliestTime} \gets \text{maxTime}+\text{minHopTime}$
+				\State $\text{remainingHops} \gets \text{remainingHops} - 1$
+				\State $\text{maxRemainingTime} \gets \text{maxTime}-\text{earliestTime}$
+				\State $\text{times.append(minTime, maxTime)}$
+			\EndFor
+			\Return $\text{times}$
+		\EndFunction
+		\item[]		
+		\Function{getRandomTime}{min, peak, max}\funclabel{alg:timingDistribution}\label{alg:timingDistribution-line}
+			\State $\text{value} \gets -1$
+			\While{$\text{value} < \text{min} \Or \text{value} > \text{max}$} 
+				\State $\text{value} \gets \Call{nextRadnomGaussian}{~}$
+				\State $\text{d} \gets \Call{nextDouble}{~}$
+				\If{$d < (peak-min)/(max-min)$} 
+					\State $\text{value} \gets \text{peak} - \frac{\text{abs(value)} \times (\text{peak} - \text{min})}{5}$
+				\Else
+					\State $\text{value} \gets \text{peak} + \frac{\text{abs(value)} \times (\text{max} - \text{peak})}{5}$
+				\EndIf
+			\EndWhile
+			\Return $\text{value}$
+		\EndFunction
+	\end{algorithmic}
+\end{algorithm}
+
+\begin{figure*}[ht]
+	\centering
+\begin{tikzpicture}
+\begin{axis}[ytick={0,1088527},yticklabels={min,max},xtick={70,90,120,200},xticklabels={$70$,$90$,$120$,$200$}]
+\addplot[smooth] coordinates {
+(70,0)(71,0)(72,0)(73,0)(74,0)(75,0)(76,0)(77,0)(78,0)(79,0)
+(80,0)(81,0)(82,0)(83,0)(84,0)(85,0)(86,0)(87,0)(88,0)(89,0)(90,5)(91,17)(92,31)(93,63)(94,127)(95,284)(96,521)(97,1007)(98,1861)(99,3179)
+(100,5499)(101,9454)(102,15517)(103,25184)(104,38892)(105,59401)(106,86779)(107,124609)(108,173778)(109,236005)(110,310038)(111,398844)(112,499226)(113,606437)(114,713662)(115,820144)(116,918162)(117,995665)(118,1054089)(119,1081792)
+(120,1088527)(121,1082042)(122,1076051)(123,1063208)(124,1044725)(125,1025394)(126,1001131)(127,974837)(128,944276)(129,912184)(130,877056)(131,841599)(132,801819)(133,761560)(134,722383)(135,680702)(136,638947)(137,598466)(138,556899)(139,518323)
+(140,479028)(141,441472)(142,404478)(143,369047)(144,336823)(145,305905)(146,276225)(147,248062)(148,223072)(149,198637)(150,176465)(151,157067)(152,138213)(153,121287)(154,106923)(155,93143)(156,80291)(157,70019)(158,60285)(159,52003)
+(160,44159)(161,37625)(162,32157)(163,26929)(164,22780)(165,19184)(166,16166)(167,13179)(168,11125)(169,9137)(170,7434)(171,6295)(172,4924)(173,4037)(174,3300)(175,2651)(176,2092)(177,1693)(178,1367)(179,1102)
+(180,853)(181,687)(182,527)(183,387)(184,319)(185,241)(186,204)(187,141)(188,120)(189,99)(190,76)(191,47)(192,41)(193,19)(194,13)(195,16)(196,15)(197,6)(198,5)(199,2)
+};
+\end{axis}
+\end{tikzpicture}
+\caption{Distribution diagram of random Time algorithm as described in figure \ref{alg:simpleTiming}}
+\label{fig:timeDistribution}
+\end{figure*}
+
+\begin{algorithm}
+	\captionof{figure}[Assign Routing Information to a Graph (PseudoCode)]{Assign Routing Information to a Graph}\label{alg:simpleRouting}
+	\begin{algorithmic}[1]
+		\Function{getRouting}{edges, redundantRoutes, messaageId}
+			\If{$redundantRoutes<1$}
+				\Throw "At least one route is required"
+			\EndIf
+			\State $\text{routes} \gets \text{getRoutes(edges)}$
+			\If{$\text{len(routes)}<\text{redundantRoutes}$}
+				\Throw "Graph has not enough redundant routes"
+			\EndIf
+			\State $\text{numRoute} \gets 0$
+			\While{$\text{redundantRoutes}<\text{numRoute}$}
+				\State $\text{currentRoute} \gets \text{routes[numRoute]}$
+				\State $\Call{assignRoute}{\text{currentRoute}, \text{payloadId}, \text{currentRoute[LAST]},0}$
+				\State $\text{numRoute} \gets \text{numRoute} + 1$
+			\EndWhile
+			\LineComment{Add sensible operations to decoy routes}
+			\ForAll{$r \in getUnsuedRoutes(edges)$}
+				\State $\Call{assignRoute}{\text{r}, \text{r.getRandopOperation().getUnusedIds(1)}, \text{r[LAST]},r[LAST].getFreeId(1)}$
+			\EndFor
+			\State $\Call{addMessageMapping}{\text{edges}}$
+		\EndFunction
+		\item[]		
+		\Function{assignRoute}{route, payloadIds, lastNode, targetIds}
+			\State $source \gets route.getSourceNode()$
+			\If{$payloadIds.isEmpty()$}
+				\State $\text{PayloadIds} \gets source.getRandopOperation().getUnusedIds(1)$
+				\State $\text{payloadSet} \gets \Call{assignRoute}{\text{route[2-]}, \text{targetIds.forward()}, \text{lastNode}, \text{targetIds.reverse()}}$
+			\Else
+				\State $\text{targetIds}  \gets \Call{assignOperation}{\text{route.getSourceNode()}, \text{payloadIds}, \text{lastNode}, \text{targetIds}}$
+				\State $\text{payloadSet} \gets \Call{assignRoute}{\text{route[2-]}, \text{targetIds.forward()}, \text{lastNode}, \text{targetIds.reverse()}}$
+			\EndIf	
+		\EndFunction
+		\item[]		
+		\Procedure{assignOperation}{node, transportIds, reverseNode, targetIds}
+		    \State $\text{out} \gets \text{node.outEdges()}$
+		    \State $\text{in} \gets \text{node.inEdges()}$
+			\If{$\text{out}>1 \Or \text{extRandomInt(3)}=1$}
+				\LineComment{assign addRedundancy}
+				\State $\text{numBlocks} \gets \text{max(out+1, nextRandomInt(out+4))}$
+				\State $\text{seed} \gets \text{nextRandomInt}(2^{256}-1)$
+				\State $\text{op} \gets \text{node.addRedundancy(transportIds, numBlocks - 1, numBlocks, seed)}$
+				\State $\text{reverseOp} \gets \text{reverseNode.removeRedundancy(targetIds, op)}$
+				\State $\text{newId} \gets \text{op.getUnusedIds(1)}$
+				\State $\text{newId.addReverseIds(reverseOp)}$
+			\Else
+				\LineComment{assign encrypt}
+				\State $\text{keySize}   \gets (\text{nextRandomInt}(3)+2)*64$
+				\State $\text{key}       \gets \text{nextRandomInt}(2^{\text{keySize}})$
+				\State $\text{op}        \gets \text{node.encrypt(transportIds, "AES", keySize, key)}$
+				\State $\text{reverseOp} \gets \text{reverseNode.decrypt(targetIds, op)}$
+				\State $\text{newId}     \gets \text{op.getUnusedIds(1)}$
+				\State $\text{newId.addReverseIds(reverseOp)}$
+			\EndIf
+			\Return{$newIds$}
+		\EndProcedure
+	\end{algorithmic}
+\end{algorithm}
+
+\subsection{Mix Cascade Routing Strategy}
 \fxwarning{complete section}
+
+\subsection{Mix Cascade Routing Strategy}
+\fxwarning{complete section}
+
+\section{Routing Diagnosis and Reputation Building\label{sec:diagnosisOfMessagePath}}
+\fxwarning{complete section}
+
+\section{Redundancy and Distribution Strategy}
+\fxwarning{complete section}
+
+\chapter{Protocol Bootstrapping\label{sec:keyDistribution}}
+\fxwarning{complete section}
+
 \section{Key Distribution for Endpoints}
 \fxwarning{complete section}
+
 \section{Key Aquisition for Routing Nodes}
 \fxwarning{complete section}
 
 
-\chapter{Operational Concerns Regarding Environments with an Observing Adversary}
+\chapter{Operational Concerns} 
+\fxwarning{insert operational }
 
-\chapter{Operational Concerns Regarding Environments with an Censoring Adversary}
+\section{Environments with an Observing Adversary}
+\fxwarning{insert operational }
+
+\section{Environments with an Censoring Adversary}
 \fxwarning{insert operational }
 
 \chapter{Real World Problems when using \MessageVortex}

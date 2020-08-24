@@ -82,48 +82,6 @@ In \cite{oakland2013-parrot} \citeauthor{oakland2013-parrot} express that it is 
 
 In our design, this is the job covered by the blending layer. The blending layer generates these messages. These messages are context-less or remain in the context of previous conversations.
 
-\subsection{Censorship Circumvention}
-Several technical ways have been explored to circumvent censorship. All seem to boil down to the following main ideas:
-\begin{itemize}
-	\item Hide data by\ldots
-	\begin{itemize}
-		\item obfuscation or encryption
-		\item applying steganographic methodes
-	\end{itemize}
-	\item Copy or distribute data to a vast amount of places to improve the lifespan of data
-	\item Outcurve censorship measurements
-\end{itemize}
-
-In the following section, we look at technologies and ideas dealing with these circumvention technologies.
-
-\subsubsection{Covert Channel and Channel Exploitations}
-The original term of covert channels was defined by \citeauthor{Lampson73anote}\cite{Lampson73anote} as 
-
-\begin{quote}
-	not intended for information transfer at all, such as the service program's effect on system load.
-\end{quote}
-
-This was defined  in such a way to distinguish the message flow from 
-
-\begin{quote}
-	legitimate channels used by the confined service, such as the bill.
-\end{quote}
-
-The use of a legitimate channel such as \defref{SMTP} and hide information within this specific channel is not a usage of a covert channel. We refer to this as channel exploitation.
-
-\subsubsection{Steganography}
-
-Steganography is an important part when it comes to unlinking information. In \cite{6828087} and \cite{subhedar2014current} we get a very rough overview. As some of the types and algorithms address specific topics of steganography (e.g., some hide from automatic detection and others address a human message stream auditor), we need to choose carefully. In our specific case, the main idea is to hide within the sheer mass of Internet traffic. As a human auditor screening all the messages is a minor thread, we focus on machine-based censorship. Most of the images sent in \defref{SMTP} are jpg images (see table \ref{tab:emailAttachments} on page \pageref{tab:emailAttachments}). We limited our search to algorithms capable of hiding binary data within these files. The number of academically researched options was surprisingly low.
-
-After reviewing the options, we decided to go for F5\cite{f5}. It is a reasonably well-researched algorithm which attracted many researchers. The original F5 implementation had a detectable issue with artifacts\cite{F5broken} caused by the recompression of the image. This issue was caused only due to a problem in the reference implementation, and the researchers have provided a corrected reference implementation without the weakness.
-
-% We use https://github.com/matthewgao/F5-steganography
-
-YASS, as described in \cite{solanki2007yass}, was not considered a candidate. Although less researched, researchers found multiple weakness\-es\cite{kodovsky2010modern,li2009steganalysis}.
-
-\subsubsection{Timing Channels}
-
-Timing channels are a specialized form of covert channels. In timing channels, the information itself hides not within the data of the channel, but the usage of the channel is in such a way that it is capable of reflecting the data. As we do not have control over the timing of the transport channel, this is not an option for us.
 
 \chapter{Related Cryptographic Theory and Algorithms}
 
@@ -317,14 +275,6 @@ We have introduced an additional type of padding not related to these paddings. 
 \end{itemize}
 
 Details of this padding are described in the section "Add and Remove Redundancy Operations'' in \ref{app:rfcMessageVortexMain}. 
-
-\section{Pseudo Random Number Generators \label{sec:prng}}
-The following sections list two PRNG specifications to follow the recommendations of \cite{rfc1750}. These PRNGs are used to complete the padding in some of the later specified operations.
-
-We have chosen to support two kinds of PRNG. These algorithms are not relevant for the security of the system, but they guarantee non-detectable padding when doing the addRedundancy operation. The two PRNGs selected were xorshift128+ and Blum Micail PRNG. Both PRNGs were quoted to pass BigCrush. However, recent development shows that this might not be true for xorshift128+, as demonstrated in \cite{LEMIRE2019139}.
-
-\fxwarning{Extend PRNG section. Where is the rest?} 
-
 
 \chapter{Censorship Circumvention}
 Several technical ways have been explored to circumvent censorship. All seem to boil down to the following main ideas:

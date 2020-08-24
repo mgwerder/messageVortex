@@ -194,7 +194,7 @@ This padding is closely related to RSAES-OAEP padding. The hash size is, however
 
 In our approach, we have chosen to allow these four paddings. The allowed sha sizes match the allowed mac sizes chosen above. It is important to note that padding costs space at the end of a stream. Since we are always using one block for signing, we have to take care that the chosen signing mac plus the bytes required for padding do not exceed the key size of the asymmetric encryption. While this usually is not a problem for RSA as there are keys 1024+ Bits required, it is an essential problem for ECC algorithms as there are much shorter keys needed to achieve an equivalent strength compared to RSA. 
 
-\subsection{Honorable Mention: AP Padding for $redundancy$ Operations}
+\subsection{Honorable Mention: A Padding for \texorpdfstring{$redundancy$}{redundancy} Operations}
 We have introduced an additional type of padding not related to these paddings. We required for the $addRedundancy$ the following unique properties. Unfortunately, we were unable to find any padding which matched the following properties simultaneously:
 
 \begin{itemize}
@@ -233,7 +233,7 @@ x_{i+1}=g^{x_i}\mod p
 %\fxwarning{Add content here... maybe old text about PoW-Algorithms}
 % Erradicated old text too inocomplete and massive work required
 
-\section{Transport Layer Protocol Selection}
+\section{Transport Layer Protocol Selection\label{sec:transportProtocols}}
 The following sections list common Internet protocols. We analyze those protocols for the fitness as transport layer of message vortex. 
 
 We will identify SMTP and XMPP as good transport layer protocols for the \MessageVortex approach, as they have all required properties.
@@ -397,7 +397,7 @@ We can clearly state that according to the criteria, only a few protocols are su
 		SMTP     & $\checkmark$            & $\checkmark$        & $\checkmark$\\\hline
 	\end{tabular}    
 	\caption{comparison of protocols in terms of the suitability as transport layer}
-	\label{tab:protoSuitCrit2}
+	\label{tab:protoSuitCrit}
 \end{table}
 
 The findings of this short analysis suggested that we should use the two protocols, SMTP and XMPP, for our first standardization. We require at least two to prove that the protocol is agnostic to the transport.
@@ -407,9 +407,44 @@ The findings of this short analysis suggested that we should use the two protoco
 For better diagnosability and fast setup, we implemented a custom transport layer working on a config-less manner in a localhost or broadcast-domain environment. The transport layer is based on the Hazelcast distributed hashmap. Implementation may be found under \lstinline[columns=fixed,basicstyle=\normalsize]{net.messagevortex.transport.dummy.DummyTransportTrx}. 
 
 \section{Implementation of an Email Transport Layer}
-Email supports a conglomerate of protocols. Looking at the client side, we will find that email is sent with an authenticated SMTP connection. The SMTP connection is somewhat different than than the connections used to send emails to the destination. First of all the client port was shifted in the past to a specific submission port (SMTPS: Port 465; Submission: Port 587). These submmission ports are authenticated (either by username and password, by IP or by certificates) and usually privileged (no \defref{UBE} checks). On the retrieval side, SMTP is not capable of handling these tasks sensibly. Instead, POP3 and IMAPv4 are used. POP3 is a deposit box for email where a device fetches the mail and stores it locally. This is commonly in use for automated processing of mails but these days, where the same user owns multiple devices no longer adequate. IMAPv4 offers to organize mails on the server. This allows a user to have the same folder structure of mails in a synchronized manner on all devices.
+Email supports a conglomerate of protocols. Looking at the client side, we will find that email is sent with an authenticated SMTP connection. The SMTP connection is somewhat different than than the connections used to send emails to the destination. First of all the client port was shifted in the past to a specific submission port (SMTPS: Port 465; Submission: Port 587). These submmission ports are authenticated (either by username and password, by IP or by certificates) and usually privileged (no \defref{UBM} checks). On the retrieval side, SMTP is not capable of handling these tasks sensibly. Instead, POP3 and IMAPv4 are used. POP3 is a deposit box for email where a device fetches the mail and stores it locally. This is commonly in use for automated processing of mails but these days, where the same user owns multiple devices no longer adequate. IMAPv4 offers to organize mails on the server. This allows a user to have the same folder structure of mails in a synchronized manner on all devices.
 
 For an ideal implementation we would do the following: Organize our \MessageVortex{} mails in a separate account. The account is accessed through a local proxy relaying our ``ordinary outgoing mails'' through the SMTP server of our regular provider and all \MessageVortex{} related traffic through the provider of our \MessageVortex{} mailbox. Keeping the two mailboxes separate is sensible and important as we will see in part~\ref{sec:operation}. The housekeeping on the account used for \MessageVortex{} is done automatically and in a sensible way, comparable to a human (e.g., handle draft, sent and trash bin folders sensibly and keep all mails in a flat structure deleting old mails from time to time). The mails from the regular and the \MessageVortex{} account are merged by the proxy in a transparent way. Keeping the messages apart but offering a unified look.
+
+We were unable to find any scientifical data regarding what type of traffic or attachment is common on the Internet. We, therefore, tried to analyze mail logs (SMTP) of a mail provider. We were scanning $567594$ emails for attachment properties after the spam elimination queue. $16.5\%$ of all scanned messages had an attachment. The top 20 attachment types distributions are shown in table \ref{tab:emailAttachments}.
+\begin{table}[ht]
+	%    \centering\scriptsize
+	
+	\begin{tabular}{l|r}\hline
+		Type                                                                        & \%\\\hline
+		image/jpeg                                                                  &    27.4\\
+		application/ms-tnef                                                         &    13.7\\
+		image/png                                                                   &    13.3\\
+		application/pdf                                                             &    10.7\\
+		image/gif                                                                   &    7.4\\
+		application/x-pkcs7-signature                                               &    5.4\\
+		message/rfc822                                                              &    7.0\\
+		application/msword                                                          &    3.1\\
+		application/octet-stream                                                    &    3.0\\
+		application/pkcs7-signature                                                 &    2.3\\
+		application/vnd.\ldots.wordprocessingml.document                            &     1.4\\
+		message/disposition-notification                                            &    1.1\\
+		application/vnd.ms-excel                                                    &    0.8\\
+		application/vnd.\ldots.spreadsheetml.sheet                                  &    0.6\\
+		application/zip                                                             &    0.5\\
+		application/x-zip-compressed                                                &    0.5\\
+		image/pjpeg                                                                 &    0.4\\
+		application/pkcs7-mime                                                      &    0.4\\
+		video/mp4                                                                   &    0.4\\
+		text/calendar                                                               &    0.4\\\hline
+	\end{tabular}
+	\caption{Distribution of top 20 attachment types}
+	\label{tab:emailAttachments}
+\end{table}
+
+As expected, the number of images within mail was very high ($\approx 50\%$). Unfortunately, we were unable to analyze the content of ms-tnef attachments retrospectively. It seems that based on these figures, information hiding within images in email traffic is a good choice.
+
+For our implementation, we worked with F5 blending into jpeg images, as this choice seemed to undermine credible content based on table~\ref{tab:emailAttachments}.
 
 In our current implementation the house keeping part has been skipped. Instead, we are just fetching the newly arrived messages and put in a local storage. The email presented to the client is provided by a local IMAP server. Persistence of these messages is not yet implemented. 
 
@@ -710,7 +745,7 @@ A reply is sent as a special message block and must be mapped to workspace ID 12
 \begin{lstfloat}[ht]
 	\lstinputlisting[linerange={15-55},language=asn.1,multicols=2]{../../../../application-core-library/src/main/asn/MessageVortex-Replies.asn}
 	\caption{Definition of a request}
-	\label{fig:defRequest}
+	\label{fig:defReply}
 \end{lstfloat}
 
 
@@ -737,7 +772,7 @@ If a request is accepted, the \VortexNode replies either with an ``ok'' or with 
 \begin{lstfloat}[ht]
 	\lstinputlisting[linerange={9-34},language=asn.1,multicols=2]{../../../../application-core-library/src/main/asn/MessageVortex-Requirements.asn}
 	\caption{Definition of a requirement}
-	\label{fig:defCreateEID}
+	\label{fig:defRequirements}
 \end{lstfloat}
 
 As currently supported puzzles two possible answers are forseen by the protocol:
@@ -792,7 +827,7 @@ The accounting layer Keeps a list of the following information:
 
 The list of all \defref{eID}s is kept in the accounting layer together with their quotas and expiry. The accounting layer triggers the deletion of the workspace assigned to it upon its expiry. Each \defref{eID} has assigned two quotas. The $messageQuota$ limits the ammount of messages containing payload blocks to be routed. This quota is measured upon arrival of a message (inbound only). The $bytesLeft$ quota is a sizing quota and is measured outbound. This quota is applied on all outbound messages regardless of their content.
 
-The $puzz[]$ list with $requestHeaders$ is only required if relying on random user puzzles. This would lead to an implementation which is simple but may be flooded with \defref{eID} requests. The second list requires only an entry per hour. The number of entries is limited by the number of hours a puzzle is accepted. The puzzle is built by calculating  $left(MAC(K^1_{eID} | globaöSecret | dateAndHour ), puzzleSizeNewIdentity)$. That way a DoS attack by flooding the puzzle table is no longer feasible.
+The $puzz[]$ list with $requestHeaders$ is only required if relying on random user puzzles. This would lead to an implementation which is simple but may be flooded with \defref{eID} requests. The second list requires only an entry per hour. The number of entries is limited by the number of hours a puzzle is accepted. The puzzle is built by calculating  $left(MAC(K^1_{eID} | globalSecret | dateAndHour ), puzzleSizeNewIdentity)$. That way a DoS attack by flooding the puzzle table is no longer feasible.
 
 The last list to be kept is the list for replay protection $Replay[]$. This list is a list of serials and their remaining usages is an effective replay protection. A serial is only allowed to be processed if the serial has not reached the maximum number of replays. As a header block has typically only a limited lifespan this is a very short list. Flooding is not very effective as a host may limit the number of entries in this list. The only identity suffering from that measure would be the identity assigned to the serial as serials from this \defref{eID} would suffer incomplete replay protection and thus endanger its quotas and .
 

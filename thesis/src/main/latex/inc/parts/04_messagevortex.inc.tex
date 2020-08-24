@@ -17,7 +17,6 @@ The details of the implementation, as well as their realization in infrastructur
 In the following sections, we first define a threat model. We then elaborate on the main characteristics of the anonymizing protocol based on the threat model. 
 
 \begin{table*}[ht]\centering\tiny
-	\label{tab:anonClass}
 	%\setlength{\aboverulesep}{0pt}
 	%\setlength{\belowrulesep}{0pt}
 	\newcolumntype{x}[1]{!{\centering\arraybackslash\vrule width #1}}
@@ -156,7 +155,7 @@ We need a requirement guaranteeing the unlinkability between the sender and reci
 	A system must be able to anonymize sender and recipient at any point of the transport layer and any point within the system unless on the senders' or the recipients' node.
 \end{requirement}
 
-Unobservability requires, according to \cite{anonTerminology}, that an item of interest (\defref{IOI}) is undetectable from an uninvolved entity and anonymous for the involved entities. We therefore require: 
+Unobservability requires, according to \cite{anonTerminology}, that an item of interest (\defref{IoI}) is undetectable from an uninvolved entity and anonymous for the involved entities. We therefore require: 
 
 As a result of the architecture of today's common networks, the anonymization of a sender or a receiver is not simple. A relay may allow at least the anonymization of the original sender given trust into the proxy. By combining it with encryption, we may even achieve a simple form of a sender and receiver pseudonymity, even for a weak outside observer. This has been done in cypherpunk remailers (see section~\ref{sec:remailersAndMixnets}). If cascading more relay like infrastructures and combining it with cryptography, we may achieve sender and receiver anonymity. When introducing anonymous remailing endpoints, we may additionally achieve both simultaneously. These are the standard approaches in remailers and mixes. We have seen real-world attacks on such systems in the past, and some were successful (e.g., \cite{penetClosure}). 
 
@@ -341,15 +340,15 @@ In the following sections, we describe this protocol in detail. First, we build 
 \section{Protocol Terminology}
 For our protocol, we use the following terms:
 \begin{itemize}
-	\item \textbf{\defref{Sender}:} The user or process originally composing the message.
-	\item \textbf{\defref{Recipient}:} The user or process destined to receive the message in the end.
-	\item \textbf{\defref{User}:} Any entity, running a \MessageVortex{} node.
-	\item \textbf{\defref{Router}:} Any node which is processing the message. Please note that all \VortexNode{}s are routers. This includes the senders' and recipients' node.
-	\item \textbf{\defref{Message}:} The "real content" to be transferred from the sender to the recipient.    
+	\item \textbf{\defref{sender}:} The user or process originally composing the message.
+	\item \textbf{\defref{recipient}:} The user or process destined to receive the message in the end.
+	\item \textbf{\defref{user}:} Any entity, running a \MessageVortex{} node.
+	\item \textbf{\defref{router}:} Any node which is processing the message. Please note that all \VortexNode{}s are routers. This includes the senders' and recipients' node.
+	\item \textbf{\defref{message}:} The "real content" to be transferred from the sender to the recipient.    
 	\item \textbf{\defref{VortexMessage}:} The encoded message passed from one node to another one. The \VortexMessage{} is considered before any embedding takes place. If embedded, we refer to such a message as "embedded \VortexMessage".
-	\item \textbf{\defref{Payload}:} Any data transported in a \VortexMessage{} between routers with exception to the routing and header block, regardless of the meaningfulness or relevance to the \VortexMessage.
-	\item \textbf{\defref{Decoy traffic}:} Any payload transported between routers that have no relevance to the message at the final destination.
-	\item \textbf{\defref{Identity}:} A tuple of a routable address and a public key. This tuple is a long-living tuple but may be exchanged from time to time. An Identity is always assigned to a node, but one node may have multiple identities. 
+	\item \textbf{\defref{payload}:} Any data transported in a \VortexMessage{} between routers with exception to the routing and header block, regardless of the meaningfulness or relevance to the \VortexMessage.
+	\item \textbf{\defref{decoy traffic}:} Any payload transported between routers that have no relevance to the message at the final destination.
+	\item \textbf{\defref{identity}:} A tuple of a routable address and a public key. This tuple is a long-living tuple but may be exchanged from time to time. An Identity is always assigned to a node, but one node may have multiple identities. 
 	\item \textbf{\defref{eID}:} An identity created on any node with a limited lifetime anyone possessing the private key (proven by encrypting with it) is accepted as representative of that identity.
 	\item \textbf{Routing Block Builder (\defref{RBB}):} An entity, which is building a routing block. Typically identical to either sender or recipient.
 \end{itemize}
@@ -467,7 +466,7 @@ We define the blending layer to work as follows for sending messages:
 \end{enumerate}
 
 \paragraph{Credible Content Creation for the Transport Layer}~\\
-One of the most demanding tasks of the blending layer is to create transport protocol messages. In \cite{oakland2013-parrot}, \citeauthor{oakland2013-parrot} expresses that it is easy for a human to determine decoy traffic as the content is easily identifiable as generated content. While this is up to all that we know true, there is a possibility here to generate "human-like" data traffic to a certain extent. For the blending layer, it is not necessarily required to mimic human messages. Instead, the blending layer may generate messages such as password recovery messages, monitoring messages, and even \defref{UBE}-like content. All these messages have required properties in common. First, all of them are machine-generated messages which are modified quite often. All of these messages are known to be sent and possibly adapted individually. 
+One of the most demanding tasks of the blending layer is to create transport protocol messages. In \cite{oakland2013-parrot}, \citeauthor{oakland2013-parrot} expresses that it is easy for a human to determine decoy traffic as the content is easily identifiable as generated content. While this is up to all that we know true, there is a possibility here to generate "human-like" data traffic to a certain extent. For the blending layer, it is not necessarily required to mimic human messages. Instead, the blending layer may generate messages such as password recovery messages, monitoring messages, and even \defref{UBM}-like content. All these messages have required properties in common. First, all of them are machine-generated messages which are modified quite often. All of these messages are known to be sent and possibly adapted individually. 
 
 For the blending itself, we required a steganographic algorithm. After reviewing the options, we decided to go for F5\cite{f5} as a steganographic algorithm. It is a reasonably well-researched algorithm, which attracted many researchers. The original F5 implementation had a detectable issue with artifacts\cite{F5broken} caused by the recompression of the image. This issue was caused only due to a problem in the reference implementation, and the researchers have provided a corrected reference implementation without the weakness.
 
@@ -646,7 +645,7 @@ The operation itself is shown in figure~\ref{fig:addRedundancyOperation}.
 
 It may be subdivided into the following operations:
 \begin{itemize}
-	\item Pad the original message block in such a way, that all resulting blocks are a multiple of the block size of the encrypting cipher.
+	\item Pad the original message block in such a way, that all resulting blocks are a multiple of the block size ($C_1,\ldots, C_n$) of the encrypting cipher.
 	\item Apply a Reed Solomon operation in a given GF space with a vanderMonde matrix.
 	\item Encrypt all resulting blocks with unpadded, symmetrical encryption.
 \end{itemize}
@@ -667,7 +666,7 @@ e          & = & blocksize\left(E^{K}\right) \cdot n\\
 l          & = & \left\lceil\frac{i + C2 }{e}\right\rceil\cdot e\\
 p          & = & i + \left( C1 \cdot l \pmod{\left\lfloor\frac{2^{32}-1-i}{l}\right\rfloor\cdot l}\right)\\
 \mathbf{X} & = & \langle p,\mathbf{M},R_{t}\left(s,l-i\right)\rangle\\\nonumber
-           & = & \langle p,\mathbf{M},R_{t}\left(s,p \pmod{len\left(\mathbf{X}\right)-len(p)}\right)\rangle
+           & = & \langle p,\mathbf{M},R_{t}\left(s,l-\left(p \pmod{\left(\mathbf{X}\right)-4}\right)\right)\rangle
 \end{eqnarray}    
 The remainder of the input block, up to length $l$, is padded with random data. The random padding data may be specified by RBB though a PRNG spec $t$ and an initial seed value $s$. The message is padded up to size $L$. All resulting, encrypted blocks do not require any padding. This because the initial padding guarantees that all resulting blocks are dividable by the block size of the encrypting function. If not provided by an RBB, an additional parameter $C1$ is chosen as random positive integer and $C2=0$  by the node executing the operation.
 
