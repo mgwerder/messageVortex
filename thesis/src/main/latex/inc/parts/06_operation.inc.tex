@@ -95,6 +95,9 @@ We discovered some
 
 \subsection{General Rules for Routing Strategies}
 \fxwarning{complete section}
+\fxwarning{Add Text: Routing block builders must not repeat pattern in communication as they are identifiable.}
+\fxwarning{Add Text: routing block builders must be aware of the sizing limits of an underlying transport protocol.}
+
 
 In the following section we show a simple algoritthm for creating a routing graph in a non-censored environment or in an isolated node set in a censored environment. \fxwarning{incomplete text}
 
@@ -214,7 +217,7 @@ In the algorithm~\ref{alg:simpleTiming}, we use a custom random distribution cal
 				\Throw "Graph has not enough redundant routes"
 			\EndIf
 			\State $\text{numRoute} \gets 0$
-			\While{$\text{redundantRoutes}<\text{numRoute}$}
+			\While{$\text{redundantRoutes}>\text{numRoute}$}
 				\State $\text{currentRoute} \gets \text{routes[numRoute]}$
 				\State $\Call{assignRoute}{\text{currentRoute}, \text{payloadId}, \text{currentRoute[LAST]},0}$
 				\State $\text{numRoute} \gets \text{numRoute} + 1$
@@ -261,9 +264,6 @@ In the algorithm~\ref{alg:simpleTiming}, we use a custom random distribution cal
 		\EndProcedure
 	\end{algorithmic}
 \end{algorithm}
-
-\subsection{Mix Cascade Routing Strategy}
-\fxwarning{complete section}
 
 \subsection{Mix Cascade Routing Strategy}
 \fxwarning{complete section}

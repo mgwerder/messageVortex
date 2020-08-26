@@ -69,6 +69,8 @@ public class JGraph extends JPanel implements MouseListener {
 
   private GraphSet graph;
 
+  private TooltipContainer ttContainer = new TooltipContainer();
+
   /***
    * <p>Creates a graph with the specified set.</p>
    *
@@ -138,7 +140,7 @@ public class JGraph extends JPanel implements MouseListener {
     Stroke s2 = new BasicStroke(3);
 
     int lastY = 0;
-    System.out.println("## displaying route " + this.route + " (" + routes[this.route].size()
+    System.out.println("## displaying route " + this.route + " (" + (this.route<0?"none":routes[this.route].size())
         + ")");
     for (int i = 0; i < graph.size(); i++) {
       Edge gr = graph.get(i);
@@ -148,9 +150,9 @@ public class JGraph extends JPanel implements MouseListener {
           * horizontalSpace);
       int y = (int) (Y_OFFSET + 2 * BOX_HEIGHT + i * verticalSpace);
 
-      if (routes[this.route].contains(gr)) {
+      if (this.route>=0 && routes[this.route].contains(gr)) {
         System.out.println("##   route " + this.route + " contains " + i + " ("
-            + routes[this.route].size() + "/" + gr.getStartTime() + ")");
+            + (this.route<0?"none":routes[this.route].size()) + "/" + gr.getStartTime() + ")");
         g2.setColor(Color.GREEN);
         g2.setStroke(s2);
         if (lastY > 0) {
@@ -210,36 +212,26 @@ public class JGraph extends JPanel implements MouseListener {
    */
   @Override
   public String getToolTipText(MouseEvent event) {
-    Point p = new Point(event.getX(), event.getY());
-    String t = tooltipForCircle(p, new Ellipse2D.Double(0, 0, 20, 20));
-    if (t != null) {
-      return t;
+    String t = ttContainer.getTooltipText(new Point(event.getX(), event.getY()));
+    if (t == null) {
+      t=super.getToolTipText(event);
     }
-    return "No location effective tooltip (x=" + event.getX() + "/y=" + event.getY() + ""
-        + super.getToolTipText(event);
-  }
-
-  private String tooltipForCircle(Point p, Ellipse2D circle) {
-    // Test to check if the point  is inside circle
-    if (circle.contains(p)) {
-      // p is inside the circle, we return some information
-      // relative to that circle.
-      return "Circle: (" + circle.getX() + " " + circle.getY() + ")";
-    }
-    return null;
+    return t;
   }
 
   /***
    * <p>Sets the highlighted route.</p>
+   *
+   * <p>The selected route is highlighted in the graph.</p>
    *
    * @param r the route to be highlighted
    * @return the prviously set route
    */
   public int setRoute(int r) {
     int s = graph.getRoutes().length;
-    if (r < 0 || s <= r) {
-      throw new NullPointerException("unable to find adressed route r (0<=" + r + "<" + s + ")");
-    }
+    //if (r < 0 || s <= r) {
+    //  throw new NullPointerException("unable to find adressed route r (0<=" + r + "<" + s + ")");
+    //}
     int old = this.route;
     this.route = r;
     if (old != r) {
@@ -279,7 +271,10 @@ public class JGraph extends JPanel implements MouseListener {
       int y = getHeight() - Y_OFFSET - ROUTE_BORDER;
       tmp = tmp - (int) ((0.0 + pos) * 2 * horizontalSpace);
       if (e.getY() <= y + ROUTE_BORDER && e.getY() >= y && tmp < horizontalSpace) {
-        setRoute(Math.min(routes.length, pos));
+        int i=setRoute(Math.min(routes.length, pos));
+        if(pos==i) {
+          setRoute(-1);
+        }
       }
     }
   }
@@ -319,23 +314,25 @@ public class JGraph extends JPanel implements MouseListener {
     });
   }
 
-  private void createAndShowUserInterface() {
+  public void createAndShowUserInterface(int x, int y) {
     System.out.println("Created GUI on event dispatching thread? "
         + SwingUtilities.isEventDispatchThread());
     JFrame f = new JFrame("Edge Demo");
     f.add(this);
     f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    f.setSize(250, 250);
+    f.setSize(x, y);
     f.setVisible(true);
+  }
+
+  public void createAndShowUserInterface() {
+    createAndShowUserInterface(250,100);
   }
 
   /***
    * <p>gets an image of the current graph.</p>
    * @return the image
    */
-  public BufferedImage getScreenShot() {
-    int width = 1024;
-    int height = 768;
+  public BufferedImage getScreenShot(int width, int height) {
     BufferedImage image = new BufferedImage(
         width,
         height,
@@ -352,8 +349,8 @@ public class JGraph extends JPanel implements MouseListener {
    * @return the image object
    * @throws IOException when writing file
    */
-  public BufferedImage saveScreenShot(String filename) throws IOException {
-    BufferedImage image = getScreenShot();
+  public BufferedImage saveScreenshot(String filename, int width, int height) throws IOException {
+    BufferedImage image = getScreenShot(width,height);
     File outputfile = new File(filename);
     ImageIO.write(image, "jpg", outputfile);
     return image;

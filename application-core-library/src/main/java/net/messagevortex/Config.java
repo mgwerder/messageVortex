@@ -270,7 +270,7 @@ public class Config {
       return ret;
     }
 
-    private ConfigSource getValueSource(String section) {
+    public ConfigSource getValueSource(String section) {
       // make sure that we always have a section
       if (section == null) {
         section = DEFAULT;
@@ -929,15 +929,25 @@ public class Config {
     ConfigElement ele = configData.get(id.toLowerCase());
     if (ele == null) {
       throw new NullPointerException(
-              "unable to get id " + id + " from config subsystem (unknown element)"
+          "unable to get id " + id + " from config subsystem (unknown element)"
       );
     }
     ConfigType type = ele.getType();
     if (type != ConfigType.STRING) {
       throw new ClassCastException("Unable to cast type to correct class (expected: string; is: "
-              + type.name() + ")");
+          + type.name() + ")");
     }
     return ele.getStringValue(section);
+  }
+
+  public boolean isDefaultValue(String section, String id) {
+    ConfigElement ele = configData.get(id.toLowerCase());
+    if (ele == null) {
+      throw new NullPointerException(
+          "unable to get id " + id + " from config subsystem (unknown element)"
+      );
+    }
+    return ele.getValueSource(section)==ConfigSource.DEFAULT_VALUE;
   }
 
   public Map<String, ConfigElement> getMap() {

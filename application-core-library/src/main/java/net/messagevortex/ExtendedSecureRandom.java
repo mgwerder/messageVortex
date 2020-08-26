@@ -23,11 +23,19 @@ package net.messagevortex;
 // ************************************************************************************
 
 import java.security.SecureRandom;
+import java.util.logging.Level;
 
 /**
  * <p>A Specialized random number generator for MessageVortex.</p>
  */
 public class ExtendedSecureRandom {
+
+  private static final java.util.logging.Logger LOGGER;
+
+  static {
+    LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
+    //MessageVortexLogger.setGlobalLogLevel(Level.ALL);
+  }
 
   private static final SecureRandom sr = new SecureRandom();
 
@@ -136,16 +144,23 @@ public class ExtendedSecureRandom {
    * @return a gaussian random value
    */
   public static final double nextRandomTime(long start, long peak, long end) {
+    if(start>=end || peak<=start || end<=peak) {
+      throw new NullPointerException("random time must offer a valid window [start("+start+")<peak("+peak+")<end("+end+")]");
+    }
     double ret = -1;
-    while (ret < start) {
+    LOGGER.log(Level.INFO, "Getting random Time "+start+"/"+peak+"/"+end);
+    while (ret < start || ret>end) {
       ret = sr.nextGaussian();
-      if (ret < 0) {
-        ret = ret * (peak - start) / Math.E + peak;
+      double d=sr.nextDouble();
+      if (d < (double)(peak-start)/(end-start)) {
+        ret = peak - (Math.abs(ret) * (peak - start) / 5.0 );
       } else {
-        ret = ret * (end - peak) / Math.E + peak;
+        ret = peak + (Math.abs(ret) * (end  - peak) / 5.0 );
       }
     }
+    LOGGER.log(Level.INFO, "Done getting random Time");
     return ret;
   }
+
 
 }

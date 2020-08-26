@@ -61,13 +61,16 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
    * @throws IOException if endpoint id is already defined
    */
   public DummyTransportTrx(String section) throws IOException {
-    LOGGER.log(Level.INFO, "setup of dummy endpoint for section \"" + section + "\" done");
+    LOGGER.log(Level.INFO, "setup of dummy endpoint for section \"" + section + "\"");
     String id = Config.getDefault().getStringValue(section, "transport_id");
     LOGGER.log(Level.INFO, "  id is \"" + id + "\"");
-    TransportReceiver blender = MessageVortex.getBlender(
-            Config.getDefault().getStringValue(section, "blender")
-    );
+    String blenderName=Config.getDefault().getStringValue(section, "blender");
+    LOGGER.log(Level.INFO, "  blender is \"" + blenderName + "\"");
+    TransportReceiver blender = MessageVortex.getBlender(blenderName);
+    LOGGER.log(Level.INFO, "  blender "+(blender!=null?"found":"not found"));
+    LOGGER.log(Level.INFO, "  initializing transport");
     init(id, blender);
+    LOGGER.log(Level.INFO, "setup of dummy endpoint for section \"" + section + "\" done");
   }
 
   /**

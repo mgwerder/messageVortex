@@ -192,11 +192,13 @@ public class IdentityStore extends AbstractBlock
       i++;
       IdentityStoreBlock isb = blocks.get(keys[ExtendedSecureRandom.nextInt(keys.length)]);
       if (isb != null && (
-              isb.getType() == IdentityStoreBlock.IdentityType.RECIPIENT_IDENTITY
-                      || isb.getType() == IdentityStoreBlock.IdentityType.NODE_IDENTITY)
-              && !ret.contains(isb)) {
+          isb.getType() == IdentityStoreBlock.IdentityType.RECIPIENT_IDENTITY
+              || isb.getType() == IdentityStoreBlock.IdentityType.NODE_IDENTITY)
+          && !ret.contains(isb)) {
         ret.add(isb);
         LOGGER.log(Level.FINER, "adding to anonSet " + isb.getNodeAddress());
+      } else {
+        LOGGER.log(Level.INFO, "Skipping " + isb.getNodeAddress()+" ("+isb.getType()+")");
       }
     }
     if (ret.size() < size) {

@@ -14,7 +14,8 @@ import picocli.CommandLine;
     aliases = {"ex"},
     mixinStandardHelpOptions = true,
     subcommands = {
-        CommandLineHandlerExamplesAddress.class
+        CommandLineHandlerExamplesAddress.class,
+        CommandLineHandlerExamplesGraph.class
     }
 )
 public class CommandLineHandlerExamples implements Callable<Integer> {

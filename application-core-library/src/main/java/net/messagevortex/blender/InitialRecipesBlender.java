@@ -61,14 +61,15 @@ public class InitialRecipesBlender extends Blender {
    */
   public InitialRecipesBlender(String section) throws IOException {
     this(
+        Config.getDefault().isDefaultValue(section, "node_identity") ? null :
             Config.getDefault().getStringValue(section, "node_identity"),
-            MessageVortex.getRouter(Config.getDefault().getSectionValue(section, "router")),
-            MessageVortex.getIdentityStore(
-                    Config.getDefault().getSectionValue(section, "identity_store")
-            ),
-            MessageVortex.getAccountant(
-                    Config.getDefault().getSectionValue(section, "accountant")
-            )
+        MessageVortex.getRouter(Config.getDefault().getSectionValue(section, "router")),
+        MessageVortex.getIdentityStore(
+            Config.getDefault().getSectionValue(section, "identity_store")
+        ),
+        MessageVortex.getAccountant(
+            Config.getDefault().getSectionValue(section, "accountant")
+        )
 
     );
   }
@@ -85,7 +86,7 @@ public class InitialRecipesBlender extends Blender {
    */
   public InitialRecipesBlender(String identity, BlendingReceiver router,
                                IdentityStore identityStore, Accountant acc)
-          throws IOException {
+      throws IOException {
     super(router, acc);
     this.identityStore = identityStore;
     this.identity = identity;
@@ -120,10 +121,10 @@ public class InitialRecipesBlender extends Blender {
       final MimeMessage mimeMsg = new MimeMessage(session);
       mimeMsg.setFrom(new InternetAddress("test@test.com"));
       mimeMsg.setRecipient(Message.RecipientType.TO,
-              new InternetAddress(target.getRecipientAddress()));
+          new InternetAddress(target.getRecipientAddress()));
       mimeMsg.setSubject("VortexMessage");
       mimeMsg.setHeader("User-Agent:",
-              "MessageVortex/" + Version.getStringVersion());
+          "MessageVortex/" + Version.getStringVersion());
       MimeMultipart content = new MimeMultipart("mixed");
 
       // body
@@ -134,7 +135,7 @@ public class InitialRecipesBlender extends Blender {
       //create attachment
       MimeBodyPart attachment = new MimeBodyPart();
       ByteArrayDataSource source = new ByteArrayDataSource(msg.toBytes(DumpType.PUBLIC_ONLY),
-              "application/octet-stream");
+          "application/octet-stream");
       attachment.setDataHandler(new DataHandler(source));
       attachment.setFileName("messageVortex.raw");
       content.addBodyPart(attachment);
@@ -163,7 +164,7 @@ public class InitialRecipesBlender extends Blender {
       LOGGER.log(Level.SEVERE, "Error when composing message", me);
     } catch (IOException ioe) {
       LOGGER.log(Level.SEVERE, "Unable to send to transport endpoint "
-              + target.getRecipientAddress(), ioe);
+          + target.getRecipientAddress(), ioe);
     }
     return false;
   }

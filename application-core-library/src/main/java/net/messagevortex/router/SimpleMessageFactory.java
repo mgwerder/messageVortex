@@ -24,6 +24,7 @@ package net.messagevortex.router;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.util.logging.Level;
 import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortexLogger;
@@ -45,14 +46,14 @@ public class SimpleMessageFactory extends MessageFactory {
   /* Edge set to be honored */
   private GraphSet graph = new GraphSet();
 
-  /* number of ms for the graph to be completed */
-  private long minMessageTransferTime = 300L * 1000L;
+  /* number of s for the graph to be completed */
+  private long minMessageTransferStart = 180L;
 
-  /* number of ms for the graph to be completed */
-  private long maxMessageTransferTime = 600L * 1000L;
+  /* number of s for the graph to be completed */
+  private long maxMessageTransferTime = 1800L;
 
-  /* number of ms between arrival the first sending time */
-  private long minStepProcessSTime = 30L * 1000L;
+  /* number of s between arrival the first sending time */
+  private long minStepProcessSTime = 30L;
 
   /***
    * <p>A simple message factory creating a possibly redundant message path.</p>
@@ -75,12 +76,12 @@ public class SimpleMessageFactory extends MessageFactory {
    * <p>build a simple message path.</p>
    */
   public RoutingCombo build() {
-
     // building vector graphs
     // minimum Graph size is 2.5 time edges
     int numberOfGraphs = (int) (graph.getAnonymitySetSize() * 2.5);
 
     // create graph until minimum size is reached and target graph get message
+    LOGGER.log(Level.FINE, "Create graph");
     while (graph.size() < numberOfGraphs || !graph.allTargetsReached()) {
       IdentityStoreBlock from = null;
       IdentityStoreBlock to = null;
@@ -93,28 +94,32 @@ public class SimpleMessageFactory extends MessageFactory {
       graph.add(new Edge(from, to, graph.size(), 0));
     }
 
-    // set times
-    long fullMsgTime = minMessageTransferTime + (maxMessageTransferTime - minMessageTransferTime)
-        * ExtendedSecureRandom.nextInt(1000) / 1000;
-    LOGGER.log(Level.FINE, "Transfer time of message is " + (fullMsgTime / 1000) + "s");
+    // set times (all times in seconds)
+    LOGGER.log(Level.FINE, "Assigning time to graph");
     long minArrival = 0;
     long maxArrival = 0;
     for (int i = 0; i < graph.size(); i++) {
       Edge g = graph.get(i);
-      long minDelay = (long) ExtendedSecureRandom.nextRandomTime(minStepProcessSTime,
-          2 * minStepProcessSTime, 3 * minStepProcessSTime);
-      long avg = (fullMsgTime - maxArrival) / (graph.size() - i);
-      long maxDelay = (long) ExtendedSecureRandom.nextRandomTime(0, 0 + avg - minStepProcessSTime,
-          0 + 2 * avg - minStepProcessSTime);
-      LOGGER.log(Level.FINER, "  setting times to arrival:" + (minArrival / 1000) + "-"
-          + (maxArrival / 1000) + "; startDelay:" + (minDelay / 1000) + "-"
-          + ((minDelay + maxDelay) / 1000) + " (est. delivery time is "
-          + ((minArrival + (maxArrival - minArrival) / 2 + minDelay) / 1000) + "s)");
-      g.setStartTime(minDelay);
-      g.setDelayTime(maxDelay);
-
-      minArrival += minDelay;
-      maxArrival += minDelay + maxDelay;
+      // the maximum remaining time to fulfill maximum time graph length
+      long maxRemainingTime = maxMessageTransferTime - maxArrival; // OK
+      int remainingHops = graph.size() - i; //OK
+      LOGGER.log(Level.FINEST, "calculating timing for minArival=" + minArrival + "/maxArrival=" + maxArrival + "/remainingTime=" + maxRemainingTime + "/remainingHps=" + remainingHops);
+      long maxShare = maxRemainingTime - remainingHops * minStepProcessSTime - 2;
+      long share = Math.max(1,maxShare / remainingHops);
+      maxShare = Math.max(2,maxShare);
+      LOGGER.log(Level.FINEST, "calculated shares are maxShare=" + maxShare + "/share=" + share);
+      assert maxShare <= 0 : "maxShare is negative (" + maxShare + ")";
+      assert share <= 0 : "share is negative (" + share + ")";
+      long minTime = (long) (ExtendedSecureRandom.nextRandomTime(minArrival, minArrival + share + 1, minArrival + maxShare + 2));
+      maxRemainingTime = maxMessageTransferTime - minTime; // OK
+      maxShare = maxRemainingTime - remainingHops * minStepProcessSTime - 2;
+      share = Math.max(1,maxShare / remainingHops);
+      maxShare = Math.max(2,maxShare);
+      long maxTime = (long) (ExtendedSecureRandom.nextRandomTime(minTime, minTime + share + 1, minTime + maxShare + 2));
+      g.setStartTime(minArrival - minTime);
+      g.setDelayTime(maxTime - minTime);
+      maxArrival = maxTime + minStepProcessSTime;
+      minArrival = minTime + minStepProcessSTime;
     }
 
     // select operations
@@ -177,8 +182,8 @@ public class SimpleMessageFactory extends MessageFactory {
     LOGGER.log(Level.INFO, "creating message factory");
     SimpleMessageFactory smf = new SimpleMessageFactory("", 0, 1, anonSet, identityStore);
     LOGGER.log(Level.INFO, "building routing block");
-    smf.setMaxTransferTime(60 * 1000);
-    smf.setMinStepProcessSTime(6 * 1000);
+    smf.setMaxTransferTime(1800);
+    smf.setMinStepProcessSTime(30);
     smf.build();
     LOGGER.log(Level.INFO, "done building");
   }

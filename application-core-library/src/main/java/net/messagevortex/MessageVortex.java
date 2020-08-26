@@ -43,6 +43,7 @@ import net.messagevortex.asn1.IdentityStore;
 import net.messagevortex.blender.Blender;
 import net.messagevortex.blender.recipes.BlenderRecipe;
 import net.messagevortex.commandline.CommandLineHandlerCipher;
+import net.messagevortex.commandline.CommandLineHandlerExamples;
 import net.messagevortex.commandline.CommandLineHandlerIdentityStore;
 import net.messagevortex.commandline.CommandLineHandlerInit;
 import net.messagevortex.commandline.CommandLineHandlerRedundancy;
@@ -64,7 +65,9 @@ import picocli.CommandLine;
         CommandLineHandlerCipher.class,
         CommandLineHandlerVersion.class,
         CommandLineHandlerInit.class,
-        CommandLineHandlerRedundancy.class
+        CommandLineHandlerRedundancy.class,
+        CommandLineHandlerExamples.class
+,
     }
 )
 public class MessageVortex implements Callable<Integer> {
@@ -273,6 +276,7 @@ public class MessageVortex implements Callable<Integer> {
         transport.put(transportSection.toLowerCase(), (Transport) getDaemon(transportSection,
             cfg.getStringValue(transportSection, "transport_implementation"),
             DaemonType.TRANSPORT));
+        LOGGER.log(Level.INFO, "  setting up of \"" + transportSection + "\" is done");
       }
     } catch (IOException ioe) {
       LOGGER.log(Level.SEVERE, "Exception while setting up infrastructure", ioe);

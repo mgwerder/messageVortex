@@ -15,6 +15,10 @@
 <!-- FIXME: Comment on extended Reply Capability block -->
 <!-- FIXME: Comment on special reply blocks in routing -->
 <!-- FIXME: Mention that only unsolicited replies should be accepted in workspace ID 0 -->
+<!-- FIXME: correct padding formulas and mentioning of the calculation of the message size -->
+<!-- FIXME: add an exception where len(X)==0 in the padding any random value is deemed valid -->	
+<!-- FIXME: add note about routing block builders need to be aware if sizing restriction of their transport media -->	
+<!-- FIXME:remove forwardSecret as it is no longer required due to the protection by the sender key -->	
 
 <!-- verify request section to match ASN.1 -->
 <rfc category="exp" docName="draft-gwerder-messagevortexmain-05" ipr="trust200902" xml:lang="en">
