@@ -661,7 +661,7 @@ The padding applied in the first step is non-standard padding. The reason for th
 
 The padded block $\mathbf{X}$ is created from a padding value $p$, the unpadded block $\mathbf{M}$ and a series of padding bytes. We build $\mathbf{X}$ for a function $RS_{\text{m of n}}$ (allows adding $m$ redundancy blocks) and an encryption block $\mathbf{M}$ sized $K$ as follows:
 \begin{eqnarray}
-i          & = & len(\mathbf{M}) \label{eqn:[BsizeOrigMsg}\\
+i          & = & len(\mathbf{M}) \label{eqn:sizeOrigMsg}\\
 e          & = & lcm\left(blocksize\left(E^{K}\right), n\right) \label{eqn:sizeOfOpBlock}\\
 l          & = & \left\lceil\frac{i + C2 }{e}\right\rceil\cdot e \label{eqn:sizeOfPaddedBlock}\\
 p          & = & i + \left( C1 \cdot l \pmod{\left\lfloor\frac{2^{32}-1-i}{l}\right\rfloor\cdot l}\right)\\
@@ -672,7 +672,7 @@ The remainder of the input block, up to length $l$, is padded with random data. 
 
 To reverse a successful message recovery information of a padded block $\mathbf{X}$, we calculate the original message size by extracting $p$ and doing $i=len(\mathbf{M})=p \pmod{ len\left(\mathbf{X}\right)-len\left(p\right) }$.
 
-This padding has many important advantages:
+This padding has many advantages:
 \begin{enumerate}
 	\item The padding does not leak if the rebuilding of the original message was successful. Any value in the padding may reflect a valid value.
 	\item Since we have a value $C2$, the statement that a message size is within $len(\mathbf{X})>size>(len(\mathbf{X})-k\cdot n)$ is no longer true and any value smaller $len(\mathbf{X})-k\cdot n$ may be correct as well.
