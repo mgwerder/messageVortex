@@ -108,6 +108,16 @@ public class InitialRecipesBlender extends Blender {
   }
 
   @Override
+  public byte[] blendMessageToBytes(BlendingSpec target, VortexMessage msg) {
+    return new byte[0];
+  }
+
+  @Override
+  public VortexMessage unblendMessage(byte[] blendedMessage) {
+    return null;
+  }
+
+  @Override
   public boolean blendMessage(BlendingSpec target, VortexMessage msg) {
     // encode message in clear readable and send it
     try {

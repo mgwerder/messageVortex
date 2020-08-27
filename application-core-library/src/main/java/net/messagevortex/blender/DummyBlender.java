@@ -22,6 +22,8 @@ package net.messagevortex.blender;
 // * SOFTWARE.
 // ************************************************************************************
 
+import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -31,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.activation.DataHandler;
 import javax.mail.BodyPart;
 import javax.mail.Message;
@@ -83,6 +86,15 @@ public class DummyBlender extends Blender {
     public SenderThread(MimeMessage msg, OutputStream os) {
       this.output = os;
       this.msg = msg;
+    }
+
+    public SenderThread(byte[] msg, OutputStream os) throws MessagingException {
+      this.output = os;
+      Properties props = new Properties();
+      ByteInputStream bis = new ByteInputStream();
+      bis.setBuf(msg);
+      MimeMessage mmsg = new MimeMessage(null,bis);
+      this.msg = mmsg;
     }
 
     @Override
@@ -159,25 +171,25 @@ public class DummyBlender extends Blender {
   }
 
   @Override
-  public boolean blendMessage(BlendingSpec target, VortexMessage msg) {
+  public byte[] blendMessageToBytes(BlendingSpec target, VortexMessage msg) {
     // encode message in clear readable and send it
     try {
       //Session session = Session.getDefaultInstance(new Properties(), null);
       Session session = Session.getInstance(new Properties(),
-            new javax.mail.Authenticator() {
-              protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("username", "password");
-              }
+          new javax.mail.Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+              return new PasswordAuthentication("username", "password");
             }
+          }
       );
       session.setDebug(true);
       final MimeMessage mimeMsg = new MimeMessage(session);
       mimeMsg.setFrom(new InternetAddress("test@test.com"));
       mimeMsg.setRecipient(Message.RecipientType.TO,
-              new InternetAddress(target.getRecipientAddress()));
+          new InternetAddress(target.getRecipientAddress()));
       mimeMsg.setSubject("VortexMessage");
       mimeMsg.setHeader("User-Agent:",
-              "MessageVortex/" + Version.getStringVersion());
+          "MessageVortex/" + Version.getStringVersion());
       MimeMultipart content = new MimeMultipart("mixed");
 
       // body
@@ -188,16 +200,34 @@ public class DummyBlender extends Blender {
       //create attachment
       MimeBodyPart attachment = new MimeBodyPart();
       ByteArrayDataSource source = new ByteArrayDataSource(msg.toBytes(DumpType.PUBLIC_ONLY),
-              "application/octet-stream");
+          "application/octet-stream");
       attachment.setDataHandler(new DataHandler(source));
       attachment.setFileName("messageVortex.raw");
       content.addBodyPart(attachment);
 
       mimeMsg.setContent(content);
+      ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      mimeMsg.writeTo(baos);
+      baos.close();
+      return baos.toByteArray();
+    } catch(IOException | MessagingException ioe ) {
+      LOGGER.log(Level.SEVERE, "OOPS... got an unexpected exception",ioe);
+      return null;
+    }
+  }
+
+  @Override
+  public VortexMessage unblendMessage(byte[] blendedMessage) {
+    return null;
+  }
+
+  @Override
+  public boolean blendMessage(BlendingSpec target, VortexMessage msg) throws IOException {
+    try {
       if (transport != null) {
         PipedOutputStream os = new PipedOutputStream();
         PipedInputStream is = new PipedInputStream(os);
-        SenderThread t = new SenderThread(mimeMsg, os);
+        SenderThread t = new SenderThread(blendMessageToBytes(target,msg), os);
         t.start();
         try {
           transport.sendMessage(target.getRecipientAddress(), is);
@@ -220,7 +250,7 @@ public class DummyBlender extends Blender {
       LOGGER.log(Level.SEVERE, "Error when composing message", me);
     } catch (IOException ioe) {
       LOGGER.log(Level.SEVERE, "Unable to send to transport endpoint "
-              + target.getRecipientAddress(), ioe);
+        + target.getRecipientAddress(), ioe);
     }
     return false;
   }

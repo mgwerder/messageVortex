@@ -47,11 +47,22 @@ public class SmtpBlender extends Blender {
 
   @Override
   public boolean blendMessage(BlendingSpec target, VortexMessage message) {
-    throw new NotImplementedException(); // FIXME
+    byte[] msg = blendMessageToBytes(target, message);
+    return true;
   }
 
   @Override
   public String getBlendingAddress() {
+    return null;
+  }
+
+  @Override
+  public byte[] blendMessageToBytes(BlendingSpec target, VortexMessage msg) {
+    return new byte[0];
+  }
+
+  @Override
+  public VortexMessage unblendMessage(byte[] blendedMessage) {
     return null;
   }
 

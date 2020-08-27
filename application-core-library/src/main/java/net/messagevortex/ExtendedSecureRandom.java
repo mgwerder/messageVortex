@@ -148,7 +148,7 @@ public class ExtendedSecureRandom {
       throw new NullPointerException("random time must offer a valid window [start("+start+")<peak("+peak+")<end("+end+")]");
     }
     double ret = -1;
-    LOGGER.log(Level.INFO, "Getting random Time "+start+"/"+peak+"/"+end);
+    LOGGER.log(Level.FINEST, "Getting random Time "+start+"/"+peak+"/"+end);
     while (ret < start || ret>end) {
       ret = sr.nextGaussian();
       double d=sr.nextDouble();
@@ -158,7 +158,7 @@ public class ExtendedSecureRandom {
         ret = peak + (Math.abs(ret) * (end  - peak) / 5.0 );
       }
     }
-    LOGGER.log(Level.INFO, "Done getting random Time");
+    LOGGER.log(Level.FINEST, "Done getting random Time ("+(ret)+")");
     return ret;
   }
 

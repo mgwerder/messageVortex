@@ -1,5 +1,6 @@
 package net.messagevortex.blender;
 
+import java.io.IOException;
 import net.messagevortex.RunningDaemon;
 import net.messagevortex.asn1.BlendingSpec;
 import net.messagevortex.asn1.VortexMessage;
@@ -9,6 +10,7 @@ import net.messagevortex.asn1.VortexMessage;
  */
 public interface BlendingSender extends RunningDaemon {
 
-  public boolean blendMessage(BlendingSpec target, VortexMessage msg);
+  boolean blendMessage(BlendingSpec target, VortexMessage msg) throws IOException;
+
 
 }
