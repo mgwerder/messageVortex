@@ -22,7 +22,9 @@ package net.messagevortex.blender;
 // * SOFTWARE.
 // ************************************************************************************
 
+
 import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,7 +35,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.activation.DataHandler;
 import javax.mail.BodyPart;
 import javax.mail.Message;
@@ -91,8 +92,7 @@ public class DummyBlender extends Blender {
     public SenderThread(byte[] msg, OutputStream os) throws MessagingException {
       this.output = os;
       Properties props = new Properties();
-      ByteInputStream bis = new ByteInputStream();
-      bis.setBuf(msg);
+      ByteArrayInputStream bis = new ByteArrayInputStream(msg);
       MimeMessage mmsg = new MimeMessage(null,bis);
       this.msg = mmsg;
     }
