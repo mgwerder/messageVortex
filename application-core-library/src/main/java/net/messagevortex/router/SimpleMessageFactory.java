@@ -108,8 +108,8 @@ public class SimpleMessageFactory extends MessageFactory {
       long share = Math.max(1,maxShare / remainingHops);
       maxShare = Math.max(2,maxShare);
       LOGGER.log(Level.FINEST, "calculated shares are maxShare=" + maxShare + "/share=" + share);
-      assert maxShare <= 0 : "maxShare is negative (" + maxShare + ")";
-      assert share <= 0 : "share is negative (" + share + ")";
+      assert maxShare > 0 : "maxShare is negative (" + maxShare + ")";
+      assert share > 0 : "share is negative (" + share + ")";
       long minTime = (long) (ExtendedSecureRandom.nextRandomTime(minArrival, minArrival + share + 1, minArrival + maxShare + 2));
       maxRemainingTime = maxMessageTransferTime - minTime; // OK
       maxShare = maxRemainingTime - remainingHops * minStepProcessSTime - 2;

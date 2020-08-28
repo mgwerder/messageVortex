@@ -76,7 +76,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
   private static boolean firstWarning = true;
   private static volatile InternalThread runner = null;
   @CommandLine.Option(names = {"--cacheFileName"},
-      description = "filename of the cache file", required = true)
+      description = "filename of the cache file", required = false)
   private static String filename = null;
   private static int incrementor = 128;
   /* number of threads to use */
@@ -373,6 +373,9 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
     new AsymmetricKeyPreCalculator(true);
     if (cache.isEmpty()) {
       try {
+        if(filename==null) {
+          filename="AsymmetricKey.cache";
+        }
         load(filename, true);
       } catch (IOException ioe) {
         throw new IOException("unable to load existing asymmetric key cache file"

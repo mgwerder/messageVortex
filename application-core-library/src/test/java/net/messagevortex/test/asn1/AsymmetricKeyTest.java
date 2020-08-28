@@ -20,6 +20,7 @@ import net.messagevortex.asn1.AsymmetricKey;
 import net.messagevortex.asn1.encryption.Algorithm;
 import net.messagevortex.asn1.encryption.AlgorithmType;
 import net.messagevortex.asn1.encryption.DumpType;
+import net.messagevortex.asn1.encryption.EllipticCurveType;
 import net.messagevortex.asn1.encryption.Mode;
 import net.messagevortex.asn1.encryption.Padding;
 import net.messagevortex.asn1.encryption.Parameter;
@@ -53,8 +54,12 @@ public class AsymmetricKeyTest {
     try {
       AlgorithmParameter p = alg.getParameters(SecurityLevel.LOW);
       p.put(Parameter.KEYSIZE.getId(), "" + keySize);
+      p.put(Parameter.BLOCKSIZE.getId(), "" + keySize);
       p.put(Parameter.PADDING.getId(), pad.toString());
       p.put(Parameter.MODE.getId(), m.toString());
+      if(p.get(Parameter.CURVETYPE)!=null) {
+        p.put(Parameter.CURVETYPE.getId(), EllipticCurveType.getByKeySize(keySize)[0].toString());
+      }
       as = new AsymmetricKey(p);
     } catch (IOException ioe) {
       LOGGER.log(Level.WARNING, "unexpected exception", ioe);
@@ -93,6 +98,9 @@ public class AsymmetricKeyTest {
         AlgorithmParameter p = alg.getParameters(SecurityLevel.LOW);
         p.put(Parameter.KEYSIZE.getId(), "" + size);
         p.put(Parameter.BLOCKSIZE.getId(), "" + size);
+        if(p.get(Parameter.CURVETYPE)!=null) {
+          p.put(Parameter.CURVETYPE,EllipticCurveType.getByKeySize(size)[0].toString());
+        }
         s = new AsymmetricKey(p);
       } catch (IOException ioe) {
         LOGGER.log(Level.WARNING, "unexpected exception", ioe);

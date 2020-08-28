@@ -199,6 +199,8 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
     if (publicKey == null) {
       throw new IOException("selftest failed: Public key may not be null");
     }
+    assert getAlgorithm()!=Algorithm.EC || parameters.get(Parameter.CURVETYPE).indexOf(""+parameters.get(Parameter.BLOCKSIZE))>0: "found mismatch in curve type vs blocksize ("+parameters.get(Parameter.BLOCKSIZE)+"/"+parameters.get(Parameter.CURVETYPE)+")";
+    assert getAlgorithm()!=Algorithm.RSA || parameters.get(Parameter.KEYSIZE).equals(parameters.get(Parameter.BLOCKSIZE)): "found mismatch in RSA keysize vs blocksize (ks:"+parameters.get(Parameter.KEYSIZE)+"/bs:"+parameters.get(Parameter.BLOCKSIZE)+")";
   }
 
   private void createKey(boolean allowPrecomputed) throws IOException {
