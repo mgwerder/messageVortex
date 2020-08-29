@@ -69,7 +69,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
   @CommandLine.Option(names = {"--stopIfFull"},
       description = "stop the cache calculation if the cache is full")
   private static boolean stopIfFull = false;
-  private static AsymmetricKeyCache cache = new AsymmetricKeyCache();
+  private static final AsymmetricKeyCache cache = new AsymmetricKeyCache();
   private static double dequeueProbability = 1.0;
   private static File tempdir = null;
   private static long lastSaved = 0;
@@ -81,7 +81,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
   private static int incrementor = 128;
   /* number of threads to use */
   private static int numThreads = Math.max(2, Runtime.getRuntime().availableProcessors() - 1);
-  private static ThreadPoolExecutor pool;
+  private static final ThreadPoolExecutor pool;
 
   static {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
@@ -233,6 +233,28 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
     return ret;
   }
 
+  /**
+   * <p>Set the maximum number of working threads for the cache pre-calculator.</p>
+   *
+   * @param newNumThreads the number of threads used for pre-calculation
+   * @return the previously set number of threads
+   */
+  public static int setNumThreads(int newNumThreads) {
+    int old = getNumThreads();
+    numThreads = newNumThreads;
+    pool.setMaximumPoolSize(numThreads);
+    return old;
+  }
+
+  /**
+   * <p>Get the number of maximum threads used for cache pre-calculation.</p>
+   *
+   * @return the currently set number of threads
+   */
+  public static int getNumThreads() {
+    return numThreads;
+  }
+
   private static AlgorithmParameter prepareParameters(AlgorithmParameter ap) {
     AlgorithmParameter ret = new AlgorithmParameter(ap);
 
@@ -369,7 +391,6 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
 
   @Override
   public Integer call() throws IOException {
-    //MessageVortexLogger.setGlobalLogLevel(Level.ALL);
     new AsymmetricKeyPreCalculator(true);
     if (cache.isEmpty()) {
       try {
@@ -676,9 +697,6 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
             long start = System.currentTimeMillis();
             AsymmetricKey ak = new AsymmetricKey(new AlgorithmParameter(param), false);
             cache.setCalcTime(new AlgorithmParameter(param), System.currentTimeMillis() - start);
-
-            // put in cache
-            assert ak != null;
             cache.push(ak);
           } catch (IOException ioe) {
             LOGGER.log(Level.SEVERE, "got unexpected exception", ioe);
