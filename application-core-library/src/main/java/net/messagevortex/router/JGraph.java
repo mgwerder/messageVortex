@@ -22,18 +22,9 @@ package net.messagevortex.router;
 // * SOFTWARE.
 // ************************************************************************************
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Shape;
-import java.awt.Stroke;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -41,10 +32,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.imageio.ImageIO;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-import javax.swing.ToolTipManager;
+import javax.swing.*;
 import net.messagevortex.asn1.IdentityStore;
 import net.messagevortex.asn1.IdentityStoreBlock;
 import net.messagevortex.asn1.encryption.DumpType;
@@ -140,8 +128,12 @@ public class JGraph extends JPanel implements MouseListener {
     Stroke s2 = new BasicStroke(3);
 
     int lastY = 0;
-    System.out.println("## displaying route " + this.route + " (" + (this.route<0?"none":routes[this.route].size())
+    if(this.route>=0) {
+      System.out.println("## displaying route " + this.route + " (" + routes[this.route].size()
         + ")");
+    } else {
+      System.out.println("## no route set");
+    }
     for (int i = 0; i < graph.size(); i++) {
       Edge gr = graph.get(i);
       int x1 = (int) (X_OFFSET + (double) BOX_WIDTH / 2 + graph.getAnonymityIndex(gr.getFrom())
@@ -229,9 +221,9 @@ public class JGraph extends JPanel implements MouseListener {
    */
   public int setRoute(int r) {
     int s = graph.getRoutes().length;
-    //if (r < 0 || s <= r) {
-    //  throw new NullPointerException("unable to find adressed route r (0<=" + r + "<" + s + ")");
-    //}
+    if (r < 0 || s <= r) {
+      r=-1;
+    }
     int old = this.route;
     this.route = r;
     if (old != r) {
@@ -271,8 +263,8 @@ public class JGraph extends JPanel implements MouseListener {
       int y = getHeight() - Y_OFFSET - ROUTE_BORDER;
       tmp = tmp - (int) ((0.0 + pos) * 2 * horizontalSpace);
       if (e.getY() <= y + ROUTE_BORDER && e.getY() >= y && tmp < horizontalSpace) {
-        int i=setRoute(Math.min(routes.length, pos));
-        if(pos==i) {
+        int oldpos=setRoute(Math.min(routes.length, pos));
+        if(oldpos==pos) {
           setRoute(-1);
         }
       }
