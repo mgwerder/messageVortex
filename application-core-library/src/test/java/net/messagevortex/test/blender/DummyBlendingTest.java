@@ -57,19 +57,27 @@ public class DummyBlendingTest implements BlendingReceiver {
         fail("failed to add martin@example.com" + i);
       }
     }
+    for (int i = 0; i < dt.length; i++) {
+      dt[i].shutdownDaemon();
+    }
 
     // Test duplicate id generation for transport media
+    DummyBlender b = null;
     try {
       new DummyBlender("martin@example.com0", this, store);
       fail("duplicate addition of ID to DummyBlender unexpectedly succeeded");
     } catch (IOException ioe) {
       // this is expected behaviour
+    } finally {
+      b.shutdownDaemon();
     }
     try {
-      new DummyBlender("martin@example.com0", this, store);
+      b = new DummyBlender("martin@example.com0", this, store);
       fail("duplicate addition of ID to DummyTransportSender unexpectedly succeeded");
     } catch (IOException ioe) {
       // this is expected behaviour
+    } finally {
+      b.shutdownDaemon();
     }
     try {
       VortexMessage v = new VortexMessage(new PrefixBlock(), new InnerMessageBlock(new PrefixBlock(), new IdentityBlock(), new RoutingCombo()));
