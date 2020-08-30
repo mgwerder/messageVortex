@@ -82,11 +82,11 @@ BEGIN
     -- maximum number of replays accepted,
     maxReplay         INTEGER (0..maxNumberOfReplays), 
     -- Supported inbound blending
-    supportedBlendingIn SEQUENCE OF BlendingSpec
+    supportedBlendingIn SEQUENCE OF BlendingSpec,
     -- Supported outbound blending
-    supportedBlendingOut SEQUENCE OF BlendingSpec
-	-- supported gauloises fields
-	supportedGFSize   SEQUENCE OF (1..maxGF
+    supportedBlendingOut SEQUENCE OF BlendingSpec,
+    -- supported galoise fields
+    supportedGFSize   SEQUENCE OF (1..maxGF) OF INTEGER (1..maxGF)
   }
 
   ReplyCurrentQuota ::= SEQUENCE {

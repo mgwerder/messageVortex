@@ -65,7 +65,9 @@ public class DummyBlendingTest implements BlendingReceiver {
     } catch (IOException ioe) {
       // this is expected behaviour
     } finally {
-      b.shutdownDaemon();
+      if (b != null) {
+        b.shutdownDaemon();
+      }
     }
     try {
       b = new DummyBlender("martin@example.com0", this, store);
@@ -73,7 +75,9 @@ public class DummyBlendingTest implements BlendingReceiver {
     } catch (IOException ioe) {
       // this is expected behaviour
     } finally {
-      b.shutdownDaemon();
+      if (b != null) {
+        b.shutdownDaemon();
+      }
     }
     try {
       VortexMessage v = new VortexMessage(new PrefixBlock(), new InnerMessageBlock(new PrefixBlock(), new IdentityBlock(), new RoutingCombo()));

@@ -8,8 +8,8 @@ BEGIN
   maxNumberOfParameter      INTEGER ::= 127
 
   UsagePeriod ::= CHOICE {
-    absolute [2] AbsoluteUsagePeriod,
-    relative [3] RelativeUsagePeriod
+    absolute [2] AbsoluteUsagePeriod OPTIONAL,
+    relative [3] RelativeUsagePeriod OPTIONAL
   }
 
   AbsoluteUsagePeriod ::= SEQUENCE {

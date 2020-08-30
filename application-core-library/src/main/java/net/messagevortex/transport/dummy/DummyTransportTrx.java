@@ -43,20 +43,19 @@ import net.messagevortex.transport.Transport;
 import net.messagevortex.transport.TransportReceiver;
 
 public class DummyTransportTrx extends AbstractDaemon implements Transport {
-
+  
   private static final Logger LOGGER;
-
+  
   static {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
-    HazelcastInstance hz = Hazelcast.newHazelcastInstance();
-    idReservation = hz.getMap("dummyTransportTrxEndpoints");
   }
-
-  static final Map<String, String> idReservation;
-  static final Map<String, TransportReceiver> endpoints = new HashMap<>();
-
+  
+  static Map<String, String> idReservation;
+  static final Object mon = new Object();
+  static Map<String, TransportReceiver> endpoints = new HashMap<>();
+  private static String name = null;
   private String registeredEndpoint = null;
-
+  
   /**
    * <p>Constructor to set up a dummy endpoint with named id and blender.</p>
    *
@@ -64,6 +63,7 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
    * @throws IOException if endpoint id is already defined
    */
   public DummyTransportTrx(String section) throws IOException {
+    initCluster();
     LOGGER.log(Level.INFO, "setup of dummy endpoint for section \"" + section + "\"");
     String id = Config.getDefault().getStringValue(section, "transport_id");
     LOGGER.log(Level.INFO, "  id is \"" + id + "\"");
@@ -75,7 +75,21 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
     init(id, blender);
     LOGGER.log(Level.INFO, "setup of dummy endpoint for section \"" + section + "\" done");
   }
-
+  
+  /**
+   * <p>Sets the name of the cluster instance</p>
+   * @param newName the new Name of the instance to connect to.
+   */
+  public static void setClusterName(String newName) throws IOException {
+    synchronized (mon) {
+      if (idReservation == null) {
+        name = newName;
+      } else {
+        throw new IOException("Cluster is already initialized");
+      }
+    }
+  }
+  
   /**
    * <p>Constructor to set up a dummy endpoint with named id and blender.</p>
    *
@@ -86,7 +100,7 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
   public DummyTransportTrx(String id, TransportReceiver blender) throws IOException {
     init(id, blender);
   }
-
+  
   /**
    * Constructor to create an endpoint with a random id.
    *
@@ -94,6 +108,7 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
    * @throws IOException if therad problems occure
    */
   public DummyTransportTrx(TransportReceiver blender) throws IOException {
+    initCluster();
     synchronized (endpoints) {
       String id = null;
       while (id == null || idReservation.containsKey(id)) {
@@ -102,8 +117,21 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
       init(id, blender);
     }
   }
-
+  
+  private void initCluster() throws IOException {
+    synchronized (mon) {
+      if (name == null) {
+        // set an instance name
+        name = InetAddress.getLocalHost().getHostName();
+      }
+      
+      HazelcastInstance hz = Hazelcast.getOrCreateHazelcastInstance(new com.hazelcast.config.Config(name));
+      idReservation = hz.getMap("dummyTransportTrxEndpoints");
+    }
+  }
+  
   private void init(String id, TransportReceiver blender) throws IOException {
+    initCluster();
     synchronized (endpoints) {
       if (idReservation.containsKey(id)) {
         throw new IOException("Duplicate transport endpoint identifier (id:" + id + ")");
@@ -115,7 +143,7 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
       endpoints.put(id, blender);
     }
   }
-
+  
   @Override
   public void shutdownDaemon() {
     // deregister endpoint
@@ -131,10 +159,10 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
         LOGGER.log(Level.SEVERE, "OUCH... got exception while fetching own host name.", uhe);
       }
     }
-
+    
     super.shutdownDaemon();
   }
-
+  
   /**
    * <p>send a message to another dummy endpoint.</p>
    *
@@ -157,7 +185,7 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
       bab.append(buffer, n);
     }
     is.close();
-
+    
     // send byte array as input stream to target
     byte[] arr = bab.toBytes();
     LOGGER.log(Level.INFO, "Dummy transport received " + arr.length + " sized message");
@@ -172,7 +200,7 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
       }.start();
     }
   }
-
+  
   /**
    * <p>Remove all Dummy endpoints from the main listing.</p>
    */
