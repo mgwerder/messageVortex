@@ -24,6 +24,7 @@ import net.messagevortex.asn1.encryption.SecurityLevel;
 import net.messagevortex.blender.BlendingReceiver;
 import net.messagevortex.blender.DummyBlender;
 import net.messagevortex.test.imap.ImapSSLTest;
+import net.messagevortex.transport.dummy.DummyTransportTrx;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -61,7 +62,7 @@ public class DummyBlendingTest implements BlendingReceiver {
     // Test duplicate id generation for transport media
     DummyBlender b = null;
     try {
-      b = new DummyBlender("martin@example.com0"+ InetAddress.getLocalHost().getHostName(), this, store);
+      b = new DummyBlender("martin@example.com0" + InetAddress.getLocalHost().getHostName(), this, store);
       fail("duplicate addition of ID to DummyBlender unexpectedly succeeded");
     } catch (IOException ioe) {
       // this is expected behaviour
@@ -71,7 +72,7 @@ public class DummyBlendingTest implements BlendingReceiver {
       }
     }
     try {
-      b = new DummyBlender("martin@example.com0", this, store);
+      b = new DummyBlender("martin@example.com0" + InetAddress.getLocalHost().getHostName(), this, store);
       fail("duplicate addition of ID to DummyTransportSender unexpectedly succeeded");
     } catch (IOException ioe) {
       // this is expected behaviour
@@ -83,8 +84,8 @@ public class DummyBlendingTest implements BlendingReceiver {
     try {
       VortexMessage v = new VortexMessage(new PrefixBlock(), new InnerMessageBlock(new PrefixBlock(), new IdentityBlock(), new RoutingCombo()));
       v.setDecryptionKey(new AsymmetricKey(Algorithm.RSA.getParameters(SecurityLevel.getDefault())));
-      assertTrue("Failed sending message to different endpoint", dt[0].blendMessage(new BlendingSpec("martin@example.com1"), v));
-      assertFalse("Failed sending message to unknown endpoint (unexpectedly succeeded)", dt[0].blendMessage(new BlendingSpec("martin@example.com-1"), v));
+      assertTrue("Failed sending message to different endpoint", dt[0].blendMessage(new BlendingSpec("martin@example.com1"+ InetAddress.getLocalHost().getHostName()), v));
+      assertFalse("Failed sending message to unknown endpoint (unexpectedly succeeded)", dt[0].blendMessage(new BlendingSpec("martin@example.com-1"+ InetAddress.getLocalHost().getHostName()), v));
     } catch (Exception ioe) {
       LOGGER.log(Level.SEVERE, "Caught exception while creating message", ioe);
       fail("Endpointests failed as there was an error opening sample messages");
@@ -93,6 +94,7 @@ public class DummyBlendingTest implements BlendingReceiver {
       dt[i].shutdownDaemon();
     }
     Assert.assertTrue("error searching for hangig threads", ImapSSLTest.verifyHangingThreads(threadSet).size() == 0);
+    DummyTransportTrx.clearDummyEndpoints();
   }
   
   
