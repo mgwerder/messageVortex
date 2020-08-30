@@ -33,16 +33,16 @@ import org.junit.runners.JUnit4;
  */
 @RunWith(JUnit4.class)
 public class DummyBlendingTest implements BlendingReceiver {
-
+  
   private static final java.util.logging.Logger LOGGER;
-
+  
   static {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
     MessageVortexLogger.setGlobalLogLevel(Level.ALL);
   }
-
+  
   private List<VortexMessage> msgs = new Vector<>();
-
+  
   @Test
   public void dummyBlenderEndpointTest() {
     Set<Thread> threadSet = ImapSSLTest.getThreadList();
@@ -57,14 +57,10 @@ public class DummyBlendingTest implements BlendingReceiver {
         fail("failed to add martin@example.com" + i);
       }
     }
-    for (int i = 0; i < dt.length; i++) {
-      dt[i].shutdownDaemon();
-    }
-
     // Test duplicate id generation for transport media
     DummyBlender b = null;
     try {
-      new DummyBlender("martin@example.com0", this, store);
+      b = new DummyBlender("martin@example.com0", this, store);
       fail("duplicate addition of ID to DummyBlender unexpectedly succeeded");
     } catch (IOException ioe) {
       // this is expected behaviour
@@ -93,8 +89,8 @@ public class DummyBlendingTest implements BlendingReceiver {
     }
     Assert.assertTrue("error searching for hangig threads", ImapSSLTest.verifyHangingThreads(threadSet).size() == 0);
   }
-
-
+  
+  
   @Override
   public boolean gotMessage(VortexMessage message) {
     synchronized (msgs) {
@@ -102,5 +98,5 @@ public class DummyBlendingTest implements BlendingReceiver {
     }
     return true;
   }
-
+  
 }
