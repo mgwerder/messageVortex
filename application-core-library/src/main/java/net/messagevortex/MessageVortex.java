@@ -52,6 +52,7 @@ import net.messagevortex.router.Router;
 import net.messagevortex.router.operation.InternalPayloadSpace;
 import net.messagevortex.router.operation.InternalPayloadSpaceStore;
 import net.messagevortex.transport.Transport;
+import net.messagevortex.transport.dummy.DummyTransportTrx;
 import picocli.CommandLine;
 
 @CommandLine.Command(
@@ -308,7 +309,8 @@ public class MessageVortex implements Callable<Integer> {
       LOGGER.log(Level.INFO, "shutting down " + es.getKey());
       es.getValue().shutdownDaemon();
     }
-
+  
+    DummyTransportTrx.clearDummyEndpoints();
     LOGGER.log(Level.INFO, "******* shutdown complete *******");
     return 0;
   }

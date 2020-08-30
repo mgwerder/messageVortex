@@ -30,7 +30,9 @@ import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.messagevortex.AbstractDaemon;
@@ -150,12 +152,22 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
     // deregister endpoint
     synchronized (idReservation) {
       try {
-        String hostname = idReservation.remove(registeredEndpoint);
-        if (hostname.equals(InetAddress.getLocalHost().getHostName())) {
-          LOGGER.log(Level.FINE, "successfully deregistered id " + registeredEndpoint + " from dummy transport");
-        } else {
-          LOGGER.log(Level.SEVERE, "OUCH... for some reasons this endpoint was registered to a different host (" + hostname + "). It is unclear if your system is still working properly.");
+        // Remove all identities
+        List<String> l = new Vector<>();
+        for(Map.Entry<String,String> e : idReservation.entrySet()) {
+          if(e.getValue().equals(InetAddress.getLocalHost().getHostName())) {
+            l.add(e.getKey());
+          }
         }
+        for(String key: l) {
+          String hostname = idReservation.remove(key);
+          if (hostname!=null && hostname.equals(InetAddress.getLocalHost().getHostName())) {
+            LOGGER.log(Level.FINE, "successfully deregistered id " + registeredEndpoint + " from dummy transport");
+          } else {
+            LOGGER.log(Level.SEVERE, "OUCH... for some reasons this endpoint was registered to a different host (" + hostname + "). It is unclear if your system is still working properly.");
+          }
+        }
+        
       } catch (UnknownHostException uhe) {
         LOGGER.log(Level.SEVERE, "OUCH... got exception while fetching own host name.", uhe);
       }

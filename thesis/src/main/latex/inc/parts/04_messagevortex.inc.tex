@@ -666,8 +666,10 @@ e          & = & lcm\left(blocksize\left(E^{K}\right), n\right) \label{eqn:sizeO
 l          & = & \left\lceil\frac{i + C2 }{e}\right\rceil\cdot e \label{eqn:sizeOfPaddedBlock}\\
 p          & = & i + \left( C1 \cdot l \pmod{\left\lfloor\frac{2^{32}-1-i}{l}\right\rfloor\cdot l}\right)\\
 \mathbf{X} & = & \langle p,\mathbf{M},R_{t}\left(s,l-i\right)\rangle\\\nonumber
-           & = & \langle p,\mathbf{M},R_{t}\left(s,l-\left(p \pmod{\left(\mathbf{X}\right)-4}\right)\right)\rangle
+           & = & \langle p,\mathbf{M},R_{t}\left(s,l-\left(p \pmod{len\left(\mathbf{X}\right)-4}\right)\right)\rangle
 \end{eqnarray}    
+Variable $i$ denotes the length. By calculating $e$ as the least common multiplyer of the encryption block size and the number of output blocks, we determine the block size required for our operation so that no subsequent padding is required.
+
 The remainder of the input block, up to length $l$, is padded with random data. The random padding data may be specified by RBB though a PRNG spec $t$ and an initial seed value $s$. The message is padded up to size $L$. All resulting, encrypted blocks do not require any padding. This because the initial padding guarantees that all resulting blocks are dividable by the block size of the encrypting function. If not provided by an RBB, an additional parameter $C1$ is chosen as random positive integer and $C2=0$  by the node executing the operation.
 
 To reverse a successful message recovery information of a padded block $\mathbf{X}$, we calculate the original message size by extracting $p$ and doing $i=len(\mathbf{M})=p \pmod{ len\left(\mathbf{X}\right)-len\left(p\right) }$.
@@ -675,7 +677,7 @@ To reverse a successful message recovery information of a padded block $\mathbf{
 This padding has many advantages:
 \begin{enumerate}
 	\item The padding does not leak if the rebuilding of the original message was successful. Any value in the padding may reflect a valid value.
-	\item Since we have a value $C2$, the statement that a message size is within $len(\mathbf{X})>size>(len(\mathbf{X})-k\cdot n)$ is no longer true and any value smaller $len(\mathbf{X})-k\cdot n$ may be correct as well.
+	\item Since we have a value $C2$, the statement that a message size is within $len(\mathbf{X})>=size>(len(\mathbf{X})-e)$ is no longer true and any value smaller $len(\mathbf{X})-e$ may be correct as well.
 	\item An RBB may predict the exact binary image of the padded message when specifying $C1$, $C2$, and $R_{t}(s,)$.
 	\item A node knowing the original parameters $C1$, $C2$, and the initial PRNG seed $s$ can detect successful decryption.
 \end{enumerate}
