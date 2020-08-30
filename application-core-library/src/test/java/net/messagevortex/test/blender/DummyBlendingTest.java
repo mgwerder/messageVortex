@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
@@ -52,7 +53,7 @@ public class DummyBlendingTest implements BlendingReceiver {
     for (int i = 0; i < dt.length; i++) {
       LOGGER.log(Level.INFO, "  Setting up endpoint " + i);
       try {
-        dt[i] = new DummyBlender("martin@example.com" + i, this, store);
+        dt[i] = new DummyBlender("martin@example.com" + i + InetAddress.getLocalHost().getHostName(), this, store);
       } catch (IOException ioe) {
         fail("failed to add martin@example.com" + i);
       }
@@ -60,7 +61,7 @@ public class DummyBlendingTest implements BlendingReceiver {
     // Test duplicate id generation for transport media
     DummyBlender b = null;
     try {
-      b = new DummyBlender("martin@example.com0", this, store);
+      b = new DummyBlender("martin@example.com0"+ InetAddress.getLocalHost().getHostName(), this, store);
       fail("duplicate addition of ID to DummyBlender unexpectedly succeeded");
     } catch (IOException ioe) {
       // this is expected behaviour
