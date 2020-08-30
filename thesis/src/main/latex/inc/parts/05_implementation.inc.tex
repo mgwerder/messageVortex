@@ -882,12 +882,32 @@ When receiving messages by mail things get quickly more complex. For our experim
 Such a store would have huge benefits compared to the current solution. It would allow a unified storage and offering simultaneous access for multiple devices. The problems to be solved are numerous. We need a unified storage for configurations including \defref{eID}s and workspaces. Furthermore, we need a lock to avoid concurrency issues with simulatneously running \VortexNodes{}. The unified view requires intelligence so that it is able to keep all \VortexMessages{} on the transport layer account  whereas ordinary emails are kept on the respective account. The housekeeping of the transport layer account needs to be done in a credible way. 
 
 \chapter{Efficiency Related Implementation Details}
-In the following subsection we focus on the storage management of \VortexNodes{}. As they do run on mobile and similar devices, an adequate ressource consumption is essential for our system. We mainly focus on memory and CPU consumptions. network bandwith overhead and related problems are discussed in part~\ref{sec:analysis}.
+In the following subsection we focus on the storage management of \VortexNodes{}. As they do run on mobile and similar devices, an adequate ressource consumption is essential for our system. We mainly focus on memory and CPU consumptions. Network bandwith overhead and their related problems are discussed in part~\ref{sec:analysis}.
 
 \section{Node Storage Management}
-\fxwarning{complete section}
+In most mobile devices storage is very limited. This applies to the disk storage, but is exceptionally true for the RAM of such devices. Our protocol supports minimization of storage footpints in two ways.
+\begin{enumerate}
+	\item Every node may minimize the storage footprint by signaling that only a small footprint is possible through the capability block.
+	\item Every node may minimize the number of \defref{eID}s accepted.
+\end{enumerate}
 
-\subsection{Life-cycle of Ephemeral Identities and Workspace Elements}
+The runtime portion of RAM required may be minimized as the concurently needed RAM is limited to the event triggered Routing blocks respectively their trigger blocks. Listing~\ref{lst:defUsage} defines two type of windows. The absolute time (\texttt{AbsoluteUsagePeriod}) denominates the time interval the item is valid in an absolute UTC-based manner. The relative timing (\texttt{RelativeUsagePeriod}) furthermore limits the validity window measured relatively to the time of arrival. The real validity time is formed as the intersection out of the two timings whereas both may be ommited by definitions.
+
+\begin{lstfloat}[ht]
+	\lstinputlisting[linerange={10-23},language=asn.1]{../../../../application-core-library/src/main/asn/MessageVortex-helpers.asn}
+	\caption{Definition of a timing trigger}
+	\label{lst:defUsage}
+\end{lstfloat}
+
+The \texttt{ReplyCapability} as shown in listing~\ref{lst:defCapabilityReply} allows a \VortexNode{} to effectively limit the memory usage. 
+\begin{lstfloat}[ht]
+	\lstinputlisting[linerange={61-91},language=asn.1]{../../../../application-core-library/src/main/asn/MessageVortex-replies.asn}
+	\caption{Definition of a timing trigger}
+	\label{lst:defCapabilityReply}
+\end{lstfloat}
+
+
+\subsection{Life-cycle of Ephemeral Identities and Payload Blocks}
 \fxwarning{complete section}
 
 \subsection{Life-cycle of Requests}

@@ -58,7 +58,11 @@ public class DummyBlendingTest implements BlendingReceiver {
         hostname = InetAddress.getLocalHost().getHostName();
         dt[i] = new DummyBlender("martin@example.com" + i + hostname, this, store);
       } catch (IOException ioe) {
-        fail("failed to add martin@example.com" + i + hostname);
+        try {
+          fail("failed to add martin@example.com" + i + InetAddress.getLocalHost().getHostName());
+        } catch(IOException ioe2) {
+          fail("IOException when fetching hostnames");
+        }
       }
     }
     // Test duplicate id generation for transport media

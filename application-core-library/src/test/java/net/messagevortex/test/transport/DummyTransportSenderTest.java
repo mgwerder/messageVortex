@@ -51,7 +51,7 @@ public class DummyTransportSenderTest extends AbstractDaemon implements Transpor
           dt[i] = new DummyTransportTrx(this);
         } catch(IOException ioe) {
           ioe.printStackTrace();
-          fail( "unexpected IOException ocurred when setting up entpoints");
+          fail( "unexpected IOException occurred when setting up endpoints");
         }
       }
     }
