@@ -53,10 +53,12 @@ public class DummyBlendingTest implements BlendingReceiver {
     IdentityStore store = new IdentityStore();
     for (int i = 0; i < dt.length; i++) {
       LOGGER.log(Level.INFO, "  Setting up endpoint " + i);
+      String hostname = null;
       try {
-        dt[i] = new DummyBlender("martin@example.com" + i + InetAddress.getLocalHost().getHostName(), this, store);
+        hostname = InetAddress.getLocalHost().getHostName();
+        dt[i] = new DummyBlender("martin@example.com" + i + hostname, this, store);
       } catch (IOException ioe) {
-        fail("failed to add martin@example.com" + i);
+        fail("failed to add martin@example.com" + i + hostname);
       }
     }
     // Test duplicate id generation for transport media

@@ -79,6 +79,7 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
   /**
    * <p>Sets the name of the cluster instance</p>
    * @param newName the new Name of the instance to connect to.
+   * @throws IOException if the cluster is already initialized
    */
   public static void setClusterName(String newName) throws IOException {
     synchronized (mon) {
@@ -207,6 +208,8 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
   public static void clearDummyEndpoints() {
     synchronized (endpoints) {
       endpoints.clear();
+      idReservation=null;
+      name=null;
     }
   }
 }

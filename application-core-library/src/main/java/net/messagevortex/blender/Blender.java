@@ -132,6 +132,7 @@ public abstract class Blender extends AbstractDaemon implements TransportReceive
 
   /**
    * <p>Blends a VortexMessage into the apropriate text.</p>
+   * @param target  the blending spec for the recipient
    * @param msg  the message to be blended
    * @return the blended message
    */

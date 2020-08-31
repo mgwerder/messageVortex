@@ -392,6 +392,8 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
         LOGGER.log(Level.WARNING, "Exception while storing file", e);
         throw e;
       }
+    } else {
+      LOGGER.log(Level.WARNING, "Cache not dsaved to disk (no filename for caching set)");
     }
   }
   

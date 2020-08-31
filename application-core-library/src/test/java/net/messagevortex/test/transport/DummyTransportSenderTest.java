@@ -67,6 +67,7 @@ public class DummyTransportSenderTest extends AbstractDaemon implements Transpor
       dt[i].shutdownDaemon();
     }
     assertTrue("error searching for hangig threads", ImapSSLTest.verifyHangingThreads(threadSet).size() == 0);
+    DummyTransportTrx.clearDummyEndpoints();
   }
 
 

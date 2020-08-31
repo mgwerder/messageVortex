@@ -322,6 +322,8 @@ public class JGraph extends JPanel implements MouseListener {
 
   /***
    * <p>gets an image of the current graph.</p>
+   * @param width the width of the screenshot in pixels
+   * @param height the height of the screenshot in pixels
    * @return the image
    */
   public BufferedImage getScreenShot(int width, int height) {
@@ -338,6 +340,8 @@ public class JGraph extends JPanel implements MouseListener {
   /***
    * <p>Writes a screenshot of the current graph into a jpeg file.</p>
    * @param filename name of the file to be written
+   * @param width the width of the screenshot in pixels
+   * @param height the height of the screenshot in pixels
    * @return the image object
    * @throws IOException when writing file
    */
