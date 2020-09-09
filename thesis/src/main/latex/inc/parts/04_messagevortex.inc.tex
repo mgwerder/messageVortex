@@ -632,7 +632,7 @@ The routing operations build the core as they define the capabilities of the mix
 \subsubsection{$addRedundancy$ and $removeRedundancy$ Operations}
 I this section we focus on the core operation of our system. The $addRedundancy$ and $removeRedundancy$ allow growing message sizes in our system without allowing to identify the decoy traffic. 
 
-The Lagrange functions have been proposed in \cite{shamir1979share} and further more generalized in \cite{mceliece1981sharing} for sharing secrets. The general idea about all proposed schemes is to distribute informations and restrct access to it so that only if a specified number of shares are captured a secret may be rebulit. Unlike proposed in these papers we do not apply privacy to our protocol by sharing the data among many points. Instead we use lagrange functions to create decoy traffic. By doing so even a creator of traffic is unable to tell message traffic from decoy traffic apart. 
+The Lagrange functions have been proposed in \cite{shamir1979share} and further more generalized in \cite{mceliece1981sharing} for sharing secrets. The general idea about all proposed schemes is to distribute informations and restrict access to it so that only if a specified number of shares are captured a secret may be rebuilt. Unlike proposed in these papers we do not apply privacy to our protocol by sharing the data among many points. Instead we use Lagrange functions to create decoy traffic. By doing so even a creator of traffic is unable to tell message traffic from decoy traffic apart. 
 
 These operations build the core of the routing capabilities of a node. The operation allows an \defref{RBB} to add to a message redundancy information or to rebuild a block from a chosen set of information. 
 
