@@ -23,7 +23,7 @@ In the following sections, we first define a threat model. We then elaborate on 
 	\rowcolors{2}{black!30}{black!10}
 	\bgroup
 	\def\arraystretch{1.5}%  1 is the default, change whatever you need
-	\begin{tabular}{|l|l|l|p{11.8cm}|}\hline
+	\begin{tabular}{|l|l|l|p{9.8cm}|}\hline
 		ID   & Category    & Short               & Description \\\hline
 		RQ1  & System      & Undetectable        & Protocol nodes and their traffic should be undistinguishable from accepted nodes and traffic. \\
 		RQ2  & System      & Equal Nodes         & All nodes of the system should have similar functions, capabilities, and behavior. \\
@@ -663,7 +663,7 @@ The padded block $\mathbf{X}$ is created from a padding value $p$, the unpadded 
 \begin{eqnarray}
 i          & = & len(\mathbf{M}) \label{eqn:sizeOrigMsg}\\
 e          & = & lcm\left(blocksize\left(E^{K}\right), n\right) \label{eqn:sizeOfOpBlock}\\
-l          & = & \left\lceil\frac{i + C2 }{e}\right\rceil\cdot e \label{eqn:sizeOfPaddedBlock}\\
+l          & = & \left\lceil\frac{i + 4 + C2 }{e}\right\rceil\cdot e \label{eqn:sizeOfPaddedBlock}\\
 p          & = & i + \left( C1 \cdot l \pmod{\left\lfloor\frac{2^{32}-1-i}{l}\right\rfloor\cdot l}\right)\\
 \mathbf{X} & = & \langle p,\mathbf{M},R_{t}\left(s,l-i\right)\rangle\\\nonumber
            & = & \langle p,\mathbf{M},R_{t}\left(s,l-\left(p \pmod{len\left(\mathbf{X}\right)-4}\right)\right)\rangle

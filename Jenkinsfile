@@ -58,8 +58,8 @@ pipeline {
         sh 'mvn -pl application-core-library -DskipTests git-commit-id:revision@get-the-git-infos resources:copy-resources@publish-artifacts'
       }
     }
-    stage ('Test other JDKs') {
-      parallel {
+    /* stage ('Test other JDKs') {
+       parallel { */
         stage ('Test on JDK10') {
           agent {
             docker {
@@ -122,8 +122,8 @@ pipeline {
             }
           }
         }
-      }
-    }
+      /*}
+    }*/
   }
   post {
     success {
