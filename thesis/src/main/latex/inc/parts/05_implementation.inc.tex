@@ -652,8 +652,8 @@ The workspace itself contains payload blocks assigned to workspace IDs. The ID s
 		\multicolumn{3}{|l|}{ID} & Purpose \\\hline
 		&0&                      & Message for local delivery \\
 		1 & - & 127              & Payload block of current routing block \\
-		&128&                    & Reply block\\
-		129 & - & 32767          & Reserved\\
+		128 & - & 32766          & Reserved\\
+		&32767&                  & Reply block\\
 		32768 & - & 65535        & Payload block in workspace \\\hline
 	\end{tabular}
 	\caption{Workspace layout of IDs}
@@ -738,7 +738,7 @@ Requests are identified shown in figure~\ref{fig:defRequest}. The tagging of the
 	\label{fig:defRequest}
 \end{lstfloat}
 
-The routing blocks for replies must be different for normal routing blocks as they may otherwise be misused as ordinary sending blocks. A reply block for request should always map to payload ID 128. Whereas a reply block for a normal user (to keep sender anonymity) always should map in workspace ID 0. That way it is impossible to misuse reply blocks for normal messages.
+The routing blocks for replies must be different for normal routing blocks as they may otherwise be misused as ordinary sending blocks. A reply block for request should always map to payload ID 32767. Whereas a reply block for a normal user (to keep sender anonymity) always should map in workspace ID 0. That way it is impossible to misuse reply blocks for normal messages.
 
 A reply is sent as a special message block and must be mapped to workspace ID 128. A \VortexNode{} may accept a special block delivered to ID 0, but such behavior should never be assumed. Figure~\ref{fig:defReply} shows the definition of a reply. A reply is expressed in a special block. This special block contains a status of the request is either OK or a failure and may provide aditional information such as the outcome of a request.
 

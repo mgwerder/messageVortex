@@ -82,28 +82,49 @@ A hidden node is a special form to a stealth node. It has a predefined set of id
 \fxwarning{complete section}
 
 \subsection{MURBs\label{sec:murb}}
-The protocol includes the capability of MURBs. Such MURBs enable a user to send a limited amount of times messages to an anonymous receiver. Such sending may be done without having any knowledge about its identity, the location, or infrastructure he is using.
+The protocol includes the capability of MURBs. Such MURBs enable a user to send a limited amount of times messages to an anonymous receiver. Such sending may be done without having any knowledge about its identity, the location, or infrastructure he is using. A MURB is equivalent to a normal routing block except for the following properties:
 
 A MURB in our term is an entirely prepared routing instruction built by the recipient of a message. The sender has only the routing blocks and the instructions to assemble the initial message. It does not know the message path except for the first message hops.
+
+\begin{itemize}
+	\item The sender is not known but the receiver of the message.
+	\item It has a replay value of 1 or higher.
+	\item Due to transport layer size restrictions and ephemeral quotas the maximum message size is limited.
+\end{itemize}
 
 As a MURB is a routing block, it generates the same pattern on the network each time a sender uses it. To avoid statistical visibility, we need to limit the number of uses per MURB. As a maximum number of usages, the protocol is limited to 127 usages. This number should be sufficiently sized for automated messages. A minute pattern would disappear after 2 hours latest and an hourly pattern after five days.
 
 For a MURB to work, the RBB has to take care that all quotas required to the route are sufficiently sized. Such sizing is hard to foresee in some cases. An RBB may query these identities from time to time to make sure that they do not deplete. Wherever possible, MURBs should be dropped in favor of multiple SURBs to avoid the dangers of MURBs.
 
 \section{Routing Algorithms Suitable for Achieving Anonymity\label{sec:routingStrategies}}
-We discovered some 
+From the previous sections we know the routing of a \VortexMessage{} should have the following properties:
 
-\subsection{General Rules for Routing Strategies}
+\begin{itemize}
+	\item No forseeable or repeating patterns regarding\ldots
+	\begin{itemize}
+		\item Timing of the messages.
+		\item Operations applied to the blocks.
+		\item Nodes or node sequences involved.
+		\item Byte sequences within blocks.
+	\end{itemize}
+	\item No bad handling of blocks (i.e., encrypt a block in one node with a key $K_1$ and decrypt it with a different key $K_2$ on another node).
+\end{itemize}
+
+This is necessary as every forseeable pattern may be used to identify \VortexMessages{} or in transport involved nodes. 
+
+Odinary fixed pattern protocols, such as broadcast or DC-net based protocols, are identifiable as their communication pattern is stable (fixed set of messages between involved nodes and forseeable message size). Whereas the message size might be varried by adding
+
+\subsection{A Simple Routing strategy}
 \fxwarning{complete section}
 \fxwarning{Add Text: Routing block builders must not repeat pattern in communication as they are identifiable.}
 \fxwarning{Add Text: routing block builders must be aware of the sizing limits of an underlying transport protocol.}
 
 
-In the following section we show a simple algoritthm for creating a routing graph in a non-censored environment or in an isolated node set in a censored environment. \fxwarning{incomplete text}
+In the following section we show a simple algorithm for creating a routing graph in a non-censored environment or in an isolated node set in a censored environment. \fxwarning{incomplete text}
 
 To create a routing block we first need a graph representing the message flow. the nodes of the graph represent the \VortexNodes whereas the edges represent the messages sent between the \VortexNodes. Algorithm~\ref{alg:simpleGraph} shows a pseudo-code to get such a valid graph. After creating a graph, we need to assign timing and routing information. Algorithm~\ref{alg:simpleTiming} shows a possible algorithm for this timing assignage, whereas Algorithm~\ref{alg:simpleRouting} shows a simple generator for the routing operation. The algorithm ommits for simplicity allocation of workspace IDs as this is a ``book keeping''-only problem.
 
-\begin{algorithm}
+\begin{breakablealgorithm}
 	\captionof{figure}[Simple Graph for Routing Block (PseudoCode)]{Simple Graph for Routing Block}\label{alg:simpleGraph}
 	\begin{algorithmic}[1]
 		\Function{getGraph}{startNode,endNode, numNodes, minEdges, listOfAllNodes}
@@ -142,11 +163,11 @@ To create a routing block we first need a graph representing the message flow. t
 			\Return $\text{edgeList}$
 		\EndFunction
 	\end{algorithmic}
-\end{algorithm}
+\end{breakablealgorithm}
 
 In the algorithm~\ref{alg:simpleTiming}, we use a custom random distribution called \funcref{alg:timingDistribution}. This distribution is a derived form of a gaussian distribution and has its minimum value, maximum value, and peak value at the desired spots. The timing information distributes in a serialized way along the timeline. Figure~\ref{fig:timeDistribution} shows the distribution of the implementation.
 
-\begin{algorithm}
+\begin{breakablealgorithm}
 	\captionof{figure}[Assign Timing Information to a Graph (PseudoCode)]{Assign Timing Information to a Graph}\label{alg:simpleTiming}
 	\begin{algorithmic}[1]
 		\Function{getTiming}{edges, maxTime,minHopTime}
@@ -184,7 +205,7 @@ In the algorithm~\ref{alg:simpleTiming}, we use a custom random distribution cal
 			\Return $\text{value}$
 		\EndFunction
 	\end{algorithmic}
-\end{algorithm}
+\end{breakablealgorithm}
 
 \begin{figure*}[ht]
 	\centering
@@ -205,7 +226,7 @@ In the algorithm~\ref{alg:simpleTiming}, we use a custom random distribution cal
 \label{fig:timeDistribution}
 \end{figure*}
 
-\begin{algorithm}
+\begin{breakablealgorithm}
 	\captionof{figure}[Assign Routing Information to a Graph (PseudoCode)]{Assign Routing Information to a Graph}\label{alg:simpleRouting}
 	\begin{algorithmic}[1]
 		\Function{getRouting}{edges, redundantRoutes, messaageId}
@@ -216,6 +237,7 @@ In the algorithm~\ref{alg:simpleTiming}, we use a custom random distribution cal
 			\If{$\text{len(routes)}<\text{redundantRoutes}$}
 				\Throw "Graph has not enough redundant routes"
 			\EndIf
+			\LineComment{Add operations to true routes}
 			\State $\text{numRoute} \gets 0$
 			\While{$\text{redundantRoutes}>\text{numRoute}$}
 				\State $\text{currentRoute} \gets \text{routes[numRoute]}$
@@ -224,7 +246,7 @@ In the algorithm~\ref{alg:simpleTiming}, we use a custom random distribution cal
 			\EndWhile
 			\LineComment{Add sensible operations to decoy routes}
 			\ForAll{$r \in getUnsuedRoutes(edges)$}
-				\State $\Call{assignRoute}{\text{r}, \text{r.getRandopOperation().getUnusedIds(1)}, \text{r[LAST]},r[LAST].getFreeId(1)}$
+				\State $\Call{assignRoute}{\text{r}, \text{r.getRandopOperation().getUnusedIds(1)}, \text{NULL},32769}$
 			\EndFor
 			\State $\Call{addMessageMapping}{\text{edges}}$
 		\EndFunction
@@ -248,22 +270,26 @@ In the algorithm~\ref{alg:simpleTiming}, we use a custom random distribution cal
 				\State $\text{numBlocks} \gets \text{max(out+1, nextRandomInt(out+4))}$
 				\State $\text{seed} \gets \text{nextRandomInt}(2^{256}-1)$
 				\State $\text{op} \gets \text{node.addRedundancy(transportIds, numBlocks - 1, numBlocks, seed)}$
-				\State $\text{reverseOp} \gets \text{reverseNode.removeRedundancy(targetIds, op)}$
-				\State $\text{newId} \gets \text{op.getUnusedIds(1)}$
-				\State $\text{newId.addReverseIds(reverseOp)}$
+				\If{$reverseNode!=NULL$}
+					\State $\text{reverseOp} \gets \text{reverseNode.removeRedundancy(targetIds, op)}$
+					\State $\text{newId} \gets \text{op.getUnusedIds(1)}$
+					\State $\text{newId.addReverseIds(reverseOp)}$
+				\EndIf	
 			\Else
 				\LineComment{assign encrypt}
 				\State $\text{keySize}   \gets (\text{nextRandomInt}(3)+2)*64$
 				\State $\text{key}       \gets \text{nextRandomInt}(2^{\text{keySize}})$
 				\State $\text{op}        \gets \text{node.encrypt(transportIds, "AES", keySize, key)}$
-				\State $\text{reverseOp} \gets \text{reverseNode.decrypt(targetIds, op)}$
-				\State $\text{newId}     \gets \text{op.getUnusedIds(1)}$
-				\State $\text{newId.addReverseIds(reverseOp)}$
+				\If{$reverseNode!=NULL$}
+					\State $\text{reverseOp} \gets \text{reverseNode.decrypt(targetIds, op)}$
+					\State $\text{newId}     \gets \text{op.getUnusedIds(1)}$
+					\State $\text{newId.addReverseIds(reverseOp)}$
+				\EndIf	
 			\EndIf
 			\Return{$newIds$}
 		\EndProcedure
 	\end{algorithmic}
-\end{algorithm}
+\end{breakablealgorithm}
 
 \subsection{Mix Cascade Routing Strategy}
 \fxwarning{complete section}
