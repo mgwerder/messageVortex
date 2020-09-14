@@ -106,21 +106,21 @@ From the previous sections we know the routing of a \VortexMessage{} should have
 		\item Operations applied to the blocks.
 		\item Nodes or node sequences involved.
 		\item Byte sequences within blocks.
+		\item Involved keys or parameters.
 	\end{itemize}
 	\item No bad handling of blocks (i.e., encrypt a block in one node with a key $K_1$ and decrypt it with a different key $K_2$ on another node).
 \end{itemize}
 
-This is necessary as every forseeable pattern may be used to identify \VortexMessages{} or in transport involved nodes. 
+Every forseeable pattern may be used to identify \VortexMessages{} or in transport involved nodes. This is why we cannot use a fixed pattern in routing. Instead we use randomized routing paterns. 
 
 Odinary fixed pattern protocols, such as broadcast or DC-net based protocols, are identifiable as their communication pattern is stable (fixed set of messages between involved nodes and forseeable message size). Whereas the message size might be varried by adding
 
-\subsection{A Simple Routing strategy}
-\fxwarning{complete section}
-\fxwarning{Add Text: Routing block builders must not repeat pattern in communication as they are identifiable.}
 \fxwarning{Add Text: routing block builders must be aware of the sizing limits of an underlying transport protocol.}
 
+\subsection{A Simple Routing strategy}
+\fxwarning{complete section}
 
-In the following section we show a simple algorithm for creating a routing graph in a non-censored environment or in an isolated node set in a censored environment. \fxwarning{incomplete text}
+In the following section we show a simple algorithm for creating a routing graph in a non-censored environment or in an isolated node set in a censored environment. While the algoprithm is complete we had to short it for \fxwarning{incomplete text}
 
 To create a routing block we first need a graph representing the message flow. the nodes of the graph represent the \VortexNodes whereas the edges represent the messages sent between the \VortexNodes. Algorithm~\ref{alg:simpleGraph} shows a pseudo-code to get such a valid graph. After creating a graph, we need to assign timing and routing information. Algorithm~\ref{alg:simpleTiming} shows a possible algorithm for this timing assignage, whereas Algorithm~\ref{alg:simpleRouting} shows a simple generator for the routing operation. The algorithm ommits for simplicity allocation of workspace IDs as this is a ``book keeping''-only problem.
 
