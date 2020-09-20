@@ -15,10 +15,20 @@ In the following sections, we will analyze aspects of security and highlight dif
 
 
 \chapter{Analysis of the Blending Layer}
+\fxwarning{complete section Analysis blending layer}
+
 \chapter{Analysis of the Core Operations}
+\fxwarning{complete section analysis of operations}
+
 \section{Splitting and Merging}
+\fxwarning{complete section Analysis of Splitting OP}
+
 \section{Encryption and Decryption Operations}
+\fxwarning{complete section Analysis of Encryption OP}
+
 \section{Add and Remove Redundancy Operations}\label{sec:analysisReedSolomon}
+\fxwarning{complete section Analysis of Redundancy Op}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Preplaced float
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -30,11 +40,12 @@ In the following sections, we will analyze aspects of security and highlight dif
 
 
 \fxwarning{Fill in results of the RS analysis regarding the findings of the protocol}
-\fxwarning{FIXME sotry:
-	Argue that using reed solomon operations instead of plain lagrange allows detection of cheaters with well known algorithms
+
+\fxwarning{FIXME story:
+	Argue that using reed solomon operations instead of plain Lagrange allows detection of cheaters with well known algorithms
 }
 
-\chapter{Well Known Attacks}
+\chapter{Well Known Attacks}\label{sec:wellKnownAttacks}
 In the following sections, we emphasize on possible attacks to an anonymity preserving protocols. These attacks may be used to attack the anonymity of any entity involved in the message channel. In a later stage, we test the protocol for immunity against these classes of attacks.
 
 \section{Broken Encryption Algorithms}
@@ -104,7 +115,7 @@ Numerous attacks are available through the bugging of a protocol. In this chapte
 \end{itemize}
 
 \subsubsection{Analysis by Building Interaction Graphs\label{sec:analysisInteractionGraphs}}
-\fxwarning{Write section}
+\fxwarning{Write section Analysis on Graphs}
 
 \subsection{Denial of Service Attacks}
 \subsubsection{Censorship}
@@ -140,40 +151,65 @@ Another way is to attack the reputation of a system in such a way that the syste
 
 
 \chapter{Identification of Possible Attack Schemes and Mitigation\label{sec:attacks}}
-\fxwarning{complete section}
+In this chapter we take the attacks identified in the section~\ref{sec:wellKnownAttacks} and analyze our protocol on whether it is susceptible on such attacks or not.
+
 \section{Static Attacks}
 \fxwarning{complete section}
+
 \subsection{Bugging and Tagging Attacks}
 \fxwarning{complete section}
-\subsection{Information Leaking related to Information Available to Routing Nodes}
+
+\subsection{Information Leaking Related to Information Available to Routing Nodes}
 \fxwarning{complete section}
-\subsection{Identification of involved Nodes}
+
+\subsection{Identification of involved \VortexNodes{}}
 \fxwarning{complete section}
-\subsection{Identification of MessageVortex Traffic}
+
+\subsection{Identification of \MessageVortex{} Traffic}
 \fxwarning{complete section}
+
 \section{Dynamic Attacks}
 \fxwarning{complete section}
-\subsection{Attacks against the vortex system itself}
+
+\subsection{Attacks against the \MessageVortex{} system itself}
+\fxwarning{complete sction}
+
 \subsubsection{DoS Attacks against the Transport System}
+\fxwarning{complete sction}
+
 \subsubsection{DoS by Traffic Replay}
+\fxwarning{complete sction}
+
 \subsubsection{DoS by Traffic generation}
+\fxwarning{complete sction}
+
 \subsection{Attacking a single ephemeral Identity of a MessageVortex Node}
 \fxwarning{complete section}
+
 \subsubsection{Denial of Service by Exhausting Quotas or Limits}
+\fxwarning{complete sction}
+
 \subsection{Attacking Sending and Receiving Identities of the MessageVortex System}
 \fxwarning{complete section}
+
 \subsubsection{Traffic Highlighting or Traffic Analysis}
+\fxwarning{complete sction}
+
 \subsection{Recovery of Previously Carried Out Operations}
 \fxwarning{complete section}
 
-\fxwarning{complete section}
 \chapter{Analysis of the effectiveness of Attack Schemes}
 \fxwarning{complete section}
+
 \chapter{Analysis of the Degree of Anonymization in Comparison to other Systems}
 \fxwarning{complete section}
 
 \chapter{To be placed (TBP)}
 \section{Side Channel Leaking}
-\subsection{Software Updates and Related Data Streams}
-\subsection{Bugging in transported messages}
+\fxwarning{complete sction}
 
+\subsection{Software Updates and Related Data Streams}
+\fxwarning{complete sction}
+
+\subsection{Bugging in transported messages}
+\fxwarning{complete sction}

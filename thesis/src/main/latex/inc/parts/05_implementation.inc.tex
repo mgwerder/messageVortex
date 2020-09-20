@@ -670,7 +670,7 @@ A message extracted by the blending layer is passed to the routing layer for fur
 First step of the processing is the extraction of the identity. The identity can be found in the header block (see figure~\ref{fig:defInnerBlocks} $identityKey$) and then verified with the signature $identitySignature$ (figure~\ref{fig:defOuterBlocks})
 
 \begin{lstfloat}[ht]
-	\lstinputlisting[linerange={86-177},language=asn.1,multicols=2]{../../../../application-core-library/src/main/asn/MessageVortex-Schema.asn}
+	\lstinputlisting[linerange={85-173},language=asn.1,multicols=2]{../../../../application-core-library/src/main/asn/MessageVortex-Schema.asn}
 	\caption{Definition of the inner message blocks.}
 	\label{fig:defInnerBlocks}
 \end{lstfloat}
@@ -683,8 +683,6 @@ If verification is successful the message is authenticated but not necessarily r
 
 If the identity is not temporary header requests are executed upon authorization. The only header request executed on a temporary \defref{eID} is a $createIdentity$ request. 
 
-As soon as the header requests are executed, the content is processed. Prior to adding the $RoutingCombo$ entries, we have to verify  that the forward secret of the routing block matches the $forwardSecret$ of the $HeaderBlock$. If the $forwardSecret$ matches, The $RoutingBlock$ is processed by adding the RoutingCombos to the workspace, mapping the payload to the workspace (according to $mappings$), and adding the reply block to the workspace.
-
 \begin{figure*}[ht]
 	\centering
 	\includegraphics[height=0.75\textheight]{inc/flowchart_message_receiving}
@@ -692,7 +690,7 @@ As soon as the header requests are executed, the content is processed. Prior to 
 	\label{fig:msgReceiveProcessing}
 \end{figure*}
 
-The operations in the routing block are added to the workspace and the mapping operations remain in the routing combo. 
+As soon as the header requests are executed, the content is processed. The operations in the routing block are added to the workspace and the mapping operations remain in the routing combo. 
 
 \subsection{Processing of Outgoing Messages\label{sec:processingOutgoingMessages}}
 In theis section we focus on the creation of new messages sent to a next hop router. The message creation is triggered on a timed manner based on the content of the $RoutingCombo$ and then passed to the blending layer for blending.
@@ -713,13 +711,13 @@ The message is assembled by building the $InnerMessageBlock$ with $cPrefix$, $he
 The resulting message is a valid \VortexMessage but the generating node has no relevant knowledge about the message or its content except for the recipient address.
 
 \subsection{Implementation of Operations\label{sec:implOperations}}
-In this section we focus on the implemented operations. The operations outlined in section~\ref{sec:operations} were implmented in exact the described manner. Additionally we implemented a mapping operation, copying the content of one payload ID to anotherone. The implementation and its test showed some weaknesses related to platform and implementation specifics, which are outlined further down.
+In this section we focus on the implemented operations. The operations outlined in section~\ref{sec:operations} were implemented in exact the described manner. Additionally we implemented a mapping operation, copying the content of one payload ID to another one. The implementation and its test showed some weaknesses related to platform and implementation specifics, which are outlined further down.
 
 For our implementation we used a HashMap to keep a list of all operations. Key of the HashMap is the output id of the resulting operations. Instead of proactively executing all operations to get all possible payload IDs, we build a dependency tree of all required prerequisites. A caching structure allows us to efficiently work with the results of all operations. If an operation expires, all cached output of the respecthive operations is invalidated. If a payload block expires or is overridden, all outputs taking input from this payload directly or indirectly are invalidated. This allows us to keep a very efficient and compact representation of the payload space not wasting any memory without necessity.
 
 The mapping operation became a necessity when defining the system of specialized IDs as outlined in table~\ref{tab:workspaceId}. This usage of specialized workspace IDs make the mapping of values from one  ID to another one a necessity. While theoretically doable in a two-step operation by applying an operation and its reverse, the mapping operation is far more efficient.
 
-Some operations showed weaknesses. The splitPayload Operation was mathematically well designed. Due to differences in floating point calculations (FP ops)when carried out on ARM and AMD based platforms, the result may differ when working with this operation. As an immediate result we defined that all FP ops must be carried out as specified in \cite{IEEE754}. This allows us to have exact the same output of the splitting operation on all platforms and thus a constant result. Luckily in java such behavior may be achieved by applying the \lstinline[columns=fixed,basicstyle=\normalsize]{strictfp} keyword, which saved a lot of troubles and work.
+Some operations showed weaknesses. The splitPayload Operation was mathematically well designed. Due to differences in floating point calculations (FP ops)when carried out on ARM and AMD based platforms, the result may differ when working with this operation. As an immediate result we defined that all FP ops must be carried out as specified in \cite{IEEE754}. This allows us to have exact the same output of the splitting operation on all platforms and thus a constant result. Luckily in java such behavior may be achieved by applying the \lstinline[columns=fixed,basicstyle={\normalsize}]{strictfp} keyword, which saved a lot of troubles and work.
 
 Another problem which arose in practice was that applying a Gauloise field (GF) in the $addRedundancy$ and $removeRedundancy$ operations different to 8 or 16 make practical problems due to their resulting sizes. To apply the math matching a computer working with primarily 8 bits per byte only, only the the values 8 and 16 are easy to realize. While we did not want to remove this capability, we added a possibility for the node to signal which sizes of GFs are supported.
 
@@ -747,7 +745,6 @@ A reply is sent as a special message block and must be mapped to workspace ID 12
 	\caption{Definition of a request}
 	\label{fig:defReply}
 \end{lstfloat}
-
 
 \subsection{Requesting a new Ephemeral Identity\label{sec:newEID}}
 One of the main requests for the protocol is the request for generating a new ephemeral identity. The goal of this operation is to create a non-hijackable workspace on a node while remaining anonymous. If having multiple \defref{eID}s on the same host they must be unlinkable. Furthermore it should be hard for an adversary to flood a \VortexNode{} with workspace requests to make a denial-of--service (DoS) attack.
@@ -785,7 +782,7 @@ The CPU bound puzzle is a hash based puzzle. The \VortexNode{} provides a bit st
 
 \begin{itemize}
 	\item Generate puzzles in a reproducible way\\
-	      This is the more elegant way of puzzles. Instead of keeping track of the puzzles, we generate the hash by applying the following function $left(MAC(K^1_{identity} | <\text{host secret} | \text{ date and hour }),\text{hourly complexity in bits})$. This method has some ups and downs. On the positive side we do not need to keep track of all puzzles provided to identities. Instead we just check, if a puzzle provided matches an appropriate challenge of the last hours. This host cannot be flooded with identity creation requests as it does not need to keep track of the requests.
+	      This is the more elegant way of puzzles. Instead of keeping track of the puzzles, we generate the hash by applying the following function $left(MAC(K^1_{identity} | <\text{host secret}> | <\text{ date and hour }>),\text{hourly complexity in bits})$. This method has some ups and downs. On the positive side we do not need to keep track of all puzzles provided to identities. Instead we just check, if a puzzle provided matches an appropriate challenge of the last hours. This host cannot be flooded with identity creation requests as it does not need to keep track of the requests. Instead it must keep a list of successful serials that requested a quota increase as there it would be possible to replay the request in order to increase the quotas. This is not comparable to the costs for an attacker as we have only to keep a list of integers where the PoW has been solved.
 	\item Store random puzzles during their validity time\\
 	      This method is straight forward. It requires an entry in a table per puzzle and only for the lifetime considered. 
 \end{itemize}
@@ -830,6 +827,21 @@ The list of all \defref{eID}s is kept in the accounting layer together with thei
 The $puzz[]$ list with $requestHeaders$ is only required if relying on random user puzzles. This would lead to an implementation which is simple but may be flooded with \defref{eID} requests. The second list requires only an entry per hour. The number of entries is limited by the number of hours a puzzle is accepted. The puzzle is built by calculating  $left(MAC(K^1_{eID} | globalSecret | dateAndHour ), puzzleSizeNewIdentity)$. That way a DoS attack by flooding the puzzle table is no longer feasible.
 
 The last list to be kept is the list for replay protection $Replay[]$. This list is a list of serials and their remaining usages is an effective replay protection. A serial is only allowed to be processed if the serial has not reached the maximum number of replays. As a header block has typically only a limited lifespan this is a very short list. Flooding is not very effective as a host may limit the number of entries in this list. The only identity suffering from that measure would be the identity assigned to the serial as serials from this \defref{eID} would suffer incomplete replay protection and thus endanger its quotas and .
+
+In table \ref{tab:protoReplyCrit}, we show under what circumstances a reply to a header request should be sent. The capitalized words MAY, MUST, SHOULD, and SHOULD NOT are used as defined in RFC2119\cite{rfc2119}. 
+\begin{table*}[ht]
+	\centering\scriptsize
+	\begin{tabular}{|l|l|l|l|l|}\hline
+		\diaghead{\theadfont Request Criteria}{Request}{Criteria} & \thead{\begin{minipage}{2.5cm}unknown identity\\cleartext\end{minipage}} & \thead{\begin{minipage}{2.5cm}unknown identity\\ encrypted\end{minipage}} & \thead{\begin{minipage}{2.5cm}expired identity\\encrypted\end{minipage}} & \thead{\begin{minipage}{2.5cm}known identity\\encrypted\end{minipage}}\\\hline
+		newIdentity         & SHOULD NOT    & MAY         & Invalid (Error)     & Invalid (Error)\\              
+		queryPeer           & MUST NOT      & MUST NOT    & MAY                 & MAY\\        
+		queryCapability     & SHOULD NOT    & MAY         & MAY                 & MUST \\
+		messageQuota        & MUST NOT      & MUST NOT    & MAY                 & MUST \\              
+		transferQuota       & MUST NOT      & MUST NOT    & MAY                 & MUST \\\hline             
+	\end{tabular}    
+	\caption{Requests and the applicable criteria for replies}
+	\label{tab:protoReplyCrit}
+\end{table*}
 
 \chapter{Usability Related Implementation Details}
 Usability is one of the foremost criteria for user acceptance. As we have no chance to create a nice User interface competing with existing ones, we  went for a different approach. We use our \VortexNode as an IMAP/SMTP proxy. That way we can send with any email client \VortexMessages. To do so, we had to introduce an addressing scheme compatible with with email and the support of their clients but not creating any collisions with the existing email address schemes.
@@ -894,29 +906,43 @@ In most mobile devices storage is very limited. This applies to the disk storage
 The runtime portion of RAM required may be minimized as the concurently needed RAM is limited to the event triggered Routing blocks respectively their trigger blocks. Listing~\ref{lst:defUsage} defines two type of windows. The absolute time (\texttt{AbsoluteUsagePeriod}) denominates the time interval the item is valid in an absolute UTC-based manner. The relative timing (\texttt{RelativeUsagePeriod}) furthermore limits the validity window measured relatively to the time of arrival. The real validity time is formed as the intersection out of the two timings whereas both may be ommited by definitions.
 
 \begin{lstfloat}[ht]
-	\lstinputlisting[linerange={10-23},language=asn.1]{../../../../application-core-library/src/main/asn/MessageVortex-helpers.asn}
+	\lstinputlisting[linerange={10-23},language=asn.1]{../../../../application-core-library/src/main/asn/MessageVortex-Helpers.asn}
 	\caption{Definition of a timing trigger}
 	\label{lst:defUsage}
 \end{lstfloat}
 
 The \texttt{ReplyCapability} as shown in listing~\ref{lst:defCapabilityReply} allows a \VortexNode{} to effectively limit the memory usage. 
 \begin{lstfloat}[ht]
-	\lstinputlisting[linerange={61-91},language=asn.1]{../../../../application-core-library/src/main/asn/MessageVortex-replies.asn}
-	\caption{Definition of a timing trigger}
+	\lstinputlisting[linerange={61-91},language=asn.1]{../../../../application-core-library/src/main/asn/MessageVortex-Replies.asn}
+	\caption{Definition of a capability reply block}
 	\label{lst:defCapabilityReply}
 \end{lstfloat}
 
 
-\subsection{Life-cycle of Ephemeral Identities and Payload Blocks}
-\fxwarning{complete section}
+\subsection{Storage Management of Ephemeral Identities,  Operations, and Payload Blocks}
+The ephemeral identity (\defref{eID}) is the overarching unit of a users data. In a normal message server it may be comparable with the storage required for the queues. Unlike a message queue, \VortexMessages{} are not only kept until sent. \VortexMessages{} have different properties as we have a timed store-and-forward behavior. As a general rule, no data lives longer than its \defref{eID}.
+
+When an \defref{eID} is requested an absolute \texttt{UsagePeriod} (a timezone bound time) is specifies with an \texttt{AbsoluteUsagePeriod} is specified (see Figure~\ref{lst:defUsage}). Unless used for reply blocks (MURBs), \defref{eID} have a very limited lifespan of a couple hours. This minimizes any storage footprint associated with an \defref{eID}. 
+
+\begin{lstfloat}[ht]
+	\lstinputlisting[linerange={85-114},language=asn.1,multicols=2,basicstyle=\tiny]{../../../../application-core-library/src/main/asn/MessageVortex-Schema.asn}
+	\caption{Definition of a header block}
+	\label{lst:defHeaderBlock}
+\end{lstfloat}
+
+Every header block contains a relative and possibly an absolute \texttt{UsagePeriod}. A receiving node calculates a headers' lifespan by intersecting an absolute lifespan and a relative lifespan. All elements of a \VortexMessage{} inherit this lifespan. Therefore, payload blocks and operations as well as the routing blocks expire simultaneously within a workspace.
+
+Furthermore, A node signals additional boundaries in the CapabilityReplyBlock (see Figure~\ref{lst:defCapabilityReply}). with this block, a \VortexNode{} may limit the storage required even further. By specifying low boundaries for the maximum simultaneously usable payload blocks in a workspace and their maximum size, we can effectively limit the size of the payload data of a single workspace. The number of simultaneously active operations is similarly limited by specifying \texttt{maxBuildOps}.
 
 \subsection{Life-cycle of Requests}
-\fxwarning{complete section}
+Requests have a separate livecycle. As a Request may exist prior to a corresponding workspace, which is typically assigned to a proof of work, such requests may be subject of DoS attacks by flooding the memory of a node. All requests immediately executed have no direct memory requirements. However, requests containing a PoW cycle require to maintain the state. 
 
-\subsection{Life-cycle of Operations}
-\fxwarning{complete section}
+While this is considered a minor issue as it is very likely that nodes will first collapse due to their network load, we can still address this issue by using a secret generator instead of a list based as outlined in section~\ref{sec:newEID}. By using such a generator, we minimize the impact of a very sudden increase in requests while keeping the local memory requirements to an absolute minimum. 
 
-\section{Overhead Minimization in Message}
-\fxwarning{complete section}
+%\section{Overhead Minimization in Message}
+%\fxwarning{complete section}
+%
+%\section{Minimizing the Memory Footprint of Transactions}
+%\fxwarning{complete section}
 
 

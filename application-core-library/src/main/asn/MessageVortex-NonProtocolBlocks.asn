@@ -1,18 +1,20 @@
 -- States reflected: 
---   Tuple()=Val() [vallidity; allowed operations] {Store}
+--   Tuple()=Val()
+             [vallidity; allowed operations]{Store}
 --
 -- - Tuple(identity)=Val(messageQuota,transferQuota,
 --   sequence of Routingblocks for Error Message 
---   Routing) [validity; Requested at creation; may be 
---   extended upon request] {identityStore}
+--   Routing) [validity; Requested at creation; may  
+--   be extended upon request] {identityStore}
 -- - Tuple(Identity,Serial)=maxReplays ['valid' from 
---   Identity Block; from First Identity Block; may only 
---   be reduced] {IdentityReplayStore}
+--   Identity Block; from First Identity Block; may 
+--   only be reduced] {IdentityReplayStore}
 
 MessageVortex-NonProtocolBlocks DEFINITIONS 
                                 EXPLICIT TAGS ::=
 BEGIN
-  IMPORTS PrefixBlock, InnerMessageBlock, RoutingBlock, 
+  IMPORTS PrefixBlock, InnerMessageBlock, 
+          RoutingBlock, 
           maxWorkspaceID
                 FROM MessageVortex-Schema
           UsagePeriod, NodeSpec, BlendingSpec
@@ -22,9 +24,11 @@ BEGIN
           RequirementBlock
                 FROM MessageVortex-Requirements;
 
-  -- maximum size of transfer quota in bytes of an identity
+  -- maximum size of transfer quota in bytes of an 
+  -- identity
   maxTransferQuota          INTEGER ::= 4294967295
-  -- maximum # of messages quota in messages of an identity
+  -- maximum # of messages quota in messages of an 
+  -- identity
   maxMessageQuota           INTEGER ::= 4294967295
 
   -- do not use these blocks for protocol encoding 
@@ -32,22 +36,22 @@ BEGIN
   VortexMessage ::= SEQUENCE {
     prefix        CHOICE {
         plain           [10011] PrefixBlock,
-        -- contains prefix encrypted with receivers public 
-        -- key
+        -- contains prefix encrypted with receivers 
+		-- public key
         encrypted       [10012] OCTET STRING
     },
     innerMessage  CHOICE {
         plain     [10021] InnerMessageBlock,
-        -- contains inner message encrypted with Symmetric 
-        -- key from prefix
+        -- contains inner message encrypted with 
+        -- Symmetric key from prefix
         encrypted [10022] OCTET STRING
     }
   }
 
   MemoryPayloadChunk ::= SEQUENCE {
-    id                        INTEGER (0..maxWorkspaceID),
-    payload                   [100] OCTET STRING,
-    validity                  UsagePeriod
+    id            INTEGER (0..maxWorkspaceID),
+    payload       [100] OCTET STRING,
+    validity      UsagePeriod
   }
 
   IdentityStore ::= SEQUENCE {
@@ -56,21 +60,21 @@ BEGIN
   }
 
   IdentityStoreBlock ::= SEQUENCE {
-    valid               UsagePeriod,
-    messageQuota        INTEGER (0..maxMessageQuota),
-    transferQuota       INTEGER (0..maxTransferQuota),
+    valid          UsagePeriod,
+    messageQuota   INTEGER (0..maxMessageQuota),
+    transferQuota  INTEGER (0..maxTransferQuota),
     -- if omitted this is a node identity
-    identity            [1001] AsymmetricKey OPTIONAL,
+    identity       [1001] AsymmetricKey OPTIONAL,
     -- if ommited own identity key
-    nodeAddress         [1002] NodeSpec      OPTIONAL,
+    nodeAddress    [1002] NodeSpec      OPTIONAL,
     -- Contains the identity of the owning node;
     -- May be ommited if local node
-    nodeKey             [1003] SEQUENCE OF AsymmetricKey 
+    nodeKey        [1003] SEQUENCE OF AsymmetricKey 
+                            OPTIONAL,
+    routingBlocks  [1004] SEQUENCE OF RoutingBlock 
                                OPTIONAL,
-    routingBlocks       [1004] SEQUENCE OF RoutingBlock 
-                               OPTIONAL,
-    replayStore         [1005] IdentityReplayStore,
-    requirement         [1006] RequirementBlock OPTIONAL
+    replayStore    [1005] IdentityReplayStore,
+    requirement    [1006] RequirementBlock OPTIONAL
   }
 
   IdentityReplayStore ::= SEQUENCE {
@@ -79,9 +83,9 @@ BEGIN
   }
 
   IdentityReplayBlock ::= SEQUENCE {
-    identity            AsymmetricKey,
-    valid               UsagePeriod,
-    replaysRemaining  INTEGER (0..4294967295)
+    identity         AsymmetricKey,
+    valid            UsagePeriod,
+    replaysRemaining INTEGER (0..4294967295)
   }
 
 END

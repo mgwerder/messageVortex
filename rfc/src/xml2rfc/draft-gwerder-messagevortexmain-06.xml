@@ -550,9 +550,7 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
         target="routing_header_req_cap"/>). A node MAY choose any parameters
         omitted in the CapabilitiesReplyBlock freely unless stated otherwise
         in <xref target="routing_header_req_cap"/>. A node SHOULD avoid
-        sending unencrypted PrefixBlocks, and a prefix block MUST contain the
-        same forward-secret as the other prefix as well as the routing and
-        header blocks. A host MAY reply to a message with an unencrypted
+        sending unencrypted PrefixBlocks. A host MAY reply to a message with an unencrypted
         message block, but any reply to a message SHOULD be encrypted.</t>
 
         <t>The sender MUST choose a key which may be encrypted with the host
