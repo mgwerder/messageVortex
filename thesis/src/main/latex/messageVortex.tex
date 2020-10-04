@@ -26,7 +26,14 @@
 %\def\title#1{\gdef\@title{#1}\gdef\thetitle{#1}}
 %\makeatother
 
-%\usepackage{scrpage2}
+\PassOptionsToPackage{final}{graphicx}
+
+\usepackage{tikz}
+\usetikzlibrary{calc,positioning,arrows,backgrounds}
+\tikzset{background rectangle/.style={fill=black!10}, show background rectangle}
+
+\usepackage[draft=false]{scrlayer-scrpage}
+
 \gdef\thetitle{MessageVortex}
 \title{\thetitle}
 \gdef\thesubtitle{Transport Independent Messaging Anonymous to Third Parties}
@@ -135,11 +142,6 @@
 \pdfobjcompresslevel=0
 \pdfinclusioncopyfonts=1
 
-% enable graphics inclusion
-%\usepackage[final]{graphicx}
-\PassOptionsToPackage{final}{graphicx}
-
-
 % Table environments
 \usepackage{booktabs}
 \newcommand*\rot{\rotatebox{90}}
@@ -233,11 +235,14 @@
 \usepackage{amsmath}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
-
-\usepackage{caption}
-\newcounter{nalg}[chapter] % defines algorithm counter for chapter-level
-\renewcommand{\thenalg}{\thechapter .\arabic{nalg}} %defines appearance of the algorithm counter
-\DeclareCaptionLabelFormat{algocaption}{Algorithm \thenalg} % defines a new caption label as Algorithm x.y
+\algnewcommand{\AbstractFunction}[2]{\State \textbf{abstract function} \textproc{#1}(#2) \{\ldots\};}%
+\algdef{SE}% flags used internally to indicate we're defining a new block statement
+[OBJECT]% new block type, not to be confused with loops or if-statements
+{Object}% "\Struct{name}" will indicate the start of the struct declaration
+{EndObject}% "\EndStruct" ends the block indent
+[1]% There is one argument, which is the name of the data structure
+{\textbf{object} \textsc{#1}}% typesetting of the start of a struct
+{\textbf{end object}}% typesetting the end of the struct
 %set font size of algorithms
 \makeatletter
 \renewcommand{\ALG@beginalgorithmic}{\scriptsize}
@@ -249,6 +254,11 @@
 \algnewcommand\Throw{\State \textbf{throw}~}
 \algnewcommand{\LineComment}[1]{\State {\ttfamily\textcolor{blue}{\(\triangleright\) #1}}}
 
+
+\usepackage{caption}
+\newcounter{nalg}[chapter] % defines algorithm counter for chapter-level
+\renewcommand{\thenalg}{\thechapter .\arabic{nalg}} %defines appearance of the algorithm counter
+\DeclareCaptionLabelFormat{algocaption}{Algorithm \thenalg} % defines a new caption label as Algorithm x.y
 % Allow pagebreak in algorithms
 \makeatletter
 \newenvironment{breakablealgorithm}
