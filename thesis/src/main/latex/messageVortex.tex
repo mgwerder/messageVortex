@@ -1,16 +1,19 @@
 % !TeX spellcheck = en_US
 \gdef\doctype{extbook}
-\documentclass[a4paper,appendixprefix,pdfusetitle,twocolumn,fontsize=12pt,DIV=calc,12pt,draft]{\doctype} %scrbook
+\documentclass[a4paper,appendixprefix,pdfusetitle,twocolumn,fontsize=12pt,DIV=calc,12pt,draft,utf8]{\doctype} %scrbook
 % add attachdocs to attach all documents
 % add openany to avoid empty pages
-%\usepackage{gitinfo}
+
+% add encoding spec
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
 
 % Workarround for book
 \makeatletter
 \newcommand\subtitle[1]{\gdef\@subtitle{#1}}
 \makeatother
 
-%\usepackage[utf8]{inputenc}
 \PassOptionsToPackage{table}{xcolor}
 
 \usepackage{colortbl}
@@ -179,7 +182,9 @@
             url=true,
             isbn=true,
             maxcitenames=3,
+            minbibnames=1,
             maxbibnames=200,
+            bibencoding=utf8,
             block=none,
             sorting=anyt]{biblatex}
 

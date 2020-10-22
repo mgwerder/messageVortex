@@ -641,7 +641,7 @@ To create a \defref{routing block}, we need some basic objects as defined in alg
 		\EndObject
 	\end{algorithmic}
 \end{breakablealgorithm}
-
+\fxwarning{rewrite algorithm for oo type of algorithm}
 To create a routing block, we first need a graph representing the message flow. Algorithm~\ref{alg:simpleGraph} shows a pseudo-code to get such a valid graph. After creating a graph, we need to assign timing and routing information. Algorithm~\ref{alg:simpleTiming} shows a possible algorithm for assigning this timing information, whereas Algorithm~\ref{alg:simpleRouting} shows a simple generator for the routing operation. The algorithm omits for simplicity allocation of workspace IDs as this is a ``bookkeeping''-only problem.
 
 To create a graph we use the function~\funcref{alg:getRoutingGraph}{} on line~\ref{alg:getRoutingGraph-line} as shown in algorithm~\ref{alg:simpleGraph}. It creates an ordered set of nodes (\texttt{nodes}), whereas the first node in the set is the sender and the second node of the set is the final recipient. It then adds randomly known nodes until the anonymity set is as large as requested. Next, we assign the edges by calling function~\funcref{alg:getEdges}{} (Line~\ref{alg:getEdges-line}). The function loops until the requested minimum number of edges are reached, and all nodes of the graph receive at least one message. On each loop, an edge is added to the graph, that is pointing from any already reached node to a random, different node.
@@ -827,6 +827,8 @@ Operations are chosen in two ways either we create an $addRedundancy$ operation 
 		\EndFunction\label{alg:endAssignOperation-line}
 	\end{algorithmic}
 \end{breakablealgorithm}
+
+\fxwarning{rewrite to object oriented approach}
 
 The algorithm outlined in this section has a couple of downsides due to its brevity. As splitting of routes is hard to create in such a compact recursive manner, we omitted it. And for the same reason, we always used $addRedundancy$ operations, which rebuilds the message out of a single block. These simplifications have some drawbacks. This algorithm never loses size (it may gain size due to padding and stuffing). Therefore, we may match similarly sized payload blocks as potentially belonging to the same message. Apart from that, the algorithm fulfills all criteria mentioned above. We apply the same operations on the decoy and true message traffic, and we have no timing, operations, or message patterns. As soon as this algorithm is using either a split with the $split$ or $addRedundancy$ operation, this weakness disappears too.
 

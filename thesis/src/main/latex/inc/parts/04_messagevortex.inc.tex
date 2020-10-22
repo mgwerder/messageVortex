@@ -714,7 +714,7 @@ The encrypt and decrypt operations are essential for the requirement that taggin
 The reason for not building this step into the split and merge function was simple. We needed a separate encryption step to be able to work as an onionizing system, and there were use cases where integrated encryption did not make sense. For further details on this topic, see section~\ref{sec:routingStrategies}.
 
 
-\subsubsection{$mergePayload$ and $splitPayload$ operation}
+\subsubsection{$mergePayload$ and $splitPayload$ operation}\label{sec:mergeAndSplit}
 The $splitPayload$ operation splits a payload block into two chunks of different or equal sizes. The parameters for this operation are:
 
 \begin{itemize}

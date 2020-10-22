@@ -10,7 +10,8 @@
 % *** Research Preexisting work
 % ********************************************************************************************************
 
-\partepigraph{Where does a snake's tail start?}{My Son Florian}
+\partepigraph{Where does a snake's tail start?}{My son Florian}
+\DeclareFixedFootnote{\omitted}{footnotes omitted in quote}
 \part{Relevant Concepts and Technologies}
 \fxwarning{complete section}
 
@@ -18,7 +19,7 @@
 In this section, we collect protocols research related to anonymity. We did not stick to anonymous message transfer. Instead, we took a broad focus in terms of technology and outlined in each protocol strengths and weaknesses identified, which may be relevant to this research.
 
 \section{Definition of Anonymity}
-As the definition for Anonymity we take the definition as specified in \cite{anonTerminology}.\DeclareFixedFootnote{\omitted}{footnotes omitted in quote}
+As the definition for Anonymity we take the definition as specified in \cite{anonTerminology}.
 \begin{quote}
 	Anonymity of a subject means that the subject is not identifiable within a set of subjects, the anonymity set.\omitted
 \end{quote}
@@ -139,8 +140,8 @@ The number of crypto algorithms was higher than the steganography options. When 
 	
 	RSA is up until the day of writing this paper not publicly know to be broken (unless a too small key size is used). However -- \citeauthor{Shor97polynomial-timealgorithms} described in \citeyear{Shor97polynomial-timealgorithms} an algorithm which should enable quantum computers to break RSA far faster than done with traditional computers. In the section \ref{sec:keySize} we do elaborate these effects further.
 	\item ECC\\
-	The elliptic curves were independently suggested by \cite{Miller1986} and \cite{Koblitz04guideto} in 1986. Elliptic curve Cryptography started to be widely deployed in the public space in 2006. Since then, it seems to compete very well with the well established RSA algorithm. While being similarly well researched ECC, has the advantage of far shorter key sizes for the same grade of security.
-	\item McElliece\\
+	The elliptic curves were independently suggested by \cite{Miller1986} and \cite{Koblitz04guideto} in 1986. Elliptic curve cryptography started to be widely deployed in the public space in 2006. Since then, it seems to compete very well with the well established RSA algorithm. While being similarly well researched ECC, has the advantage of far shorter key sizes for the same grade of security.
+	\item McEliece\\
 	McEliece was first implemented and then removed again. The key size to gain equivalent security to RSA1024 was $\approx 1MB$. This was impractical and thus discarded again. This was done, although there is up until now no known quantum capable algorithm reducing the key size of McEliece.
 	\item NTRU\\
 	In \cite{Hoffstein1998} \citeauthor{Hoffstein1998} described the NTRU algorithm. The inclusion of this algorithm was disputed as it is patented in the united states as US7031468. It was included because the company Security Innovation holding the patent, released the NTRU algorithm on March \thanks{28} 2018 into the public domain according to a blog entry on the company website. While NTRU is not as well researched as RSA, it has been around for more than 20 years without being significantly affected by known attacks.
@@ -149,13 +150,13 @@ The number of crypto algorithms was higher than the steganography options. When 
 \end{itemize}
 
 
-Homomorphic encryption, as introduced in \cite{feldman1987practical}, was from the beginning a strong candidate to be used within our work. Unfortunately, we did not find a way to apply the core addRedundancy operation in homomorphic encryption. Transforming the original data to the GF space in an efficient way to apply matrices was not doable and thus rejected.
+Homomorphic encryption, as introduced in \cite{feldman1987practical}, was from the beginning a strong candidate to be used within our work. Unfortunately, we did not find a way to apply the core $addRedundancy$ operation in homomorphic encryption. Transforming the original data to the GF space in an efficient way to apply matrices was not doable and thus rejected.
 
 %\cite{Gentry:2009:FHE:1536414.1536440} %FIXME dangling reference
 
-\section{Deniable Encryption and Deniable Steganography}
+\section{Deniable Encryption and Steganography}
 
-Deniable encryption and deniable steganography have been considered out-of-bounds for this work. The main reason is that the presence of encryption (which is not deniable in both cases) may be sufficient for a censor to block a message. Adding a layer to make sure that encryption or steganography is deniable, does not add valuable properties to our system as the sheer presence of encryption might be sufficient for censorship. 
+Deniable encryption and steganography have been considered out-of-bounds for this work. The main reason is that the presence of encryption (which is not deniable in both cases) may be sufficient for a censor to block a message. Adding a layer to make sure that encryption or steganography is deniable, does not add valuable properties to our system as the sheer presence of encryption might be sufficient for censorship. 
 
 \section{Key Sizes\label{sec:keySize}}
 
@@ -311,6 +312,9 @@ After reviewing the options, we decided to go for F5\cite{f5}. It is a reasonabl
 
 YASS, as described in \cite{solanki2007yass}, was not considered a candidate. Although less researched, researchers found multiple weakness\-es\cite{kodovsky2010modern,li2009steganalysis}.
 
+%other options : MM3 only good below 5% (unclear ; no implementation found);  PQe or PQt only good below 10% (only matlab)
+% other algorithms nsF5 (only matlab)
+
 \section{Timing Channels}
 
 Timing channels are a specialized form of covert channels. In timing channels, the information itself hides not within the data of the channel, but the usage of the channel is in such a way that it is capable of reflecting the data. As we do not have control over the timing of the transport channel, this is not an option for us.
@@ -347,25 +351,37 @@ And lastly, The target may not be split (e.g., partial censoring). Censoring pla
 \fxwarning{Explain more and maybe add china as an example}
 
 \subsection{Making Systems Unavailable by Interfering with System Traffic}
-\fxwarning{Empty section}
+\fxwarning{May be done by traffic shaping, content moderation}
 
 \section{Spread Spectrum in Networking Protocols}
 \fxwarning{Empty section}
 
 \chapter{Other Related Concepts}
 \section{Zero Trust\label{sec:zeroTrust}}
-Zero trust is not an acdemically defined concept. In fact it is widely misused by many marketing departments of well known devices and applications related to security.
+Zero trust is not an acdemically defined concept. In fact it is widely misused by many marketing departments of well known devices and applications related to security. The first citation of the concept was in \cite{kindervag2010no} where \citeauthor{kindervag2010no} introduced this concept.
 
-We however define zero trust as follows:
+\citeauthor{kindervag2010no} compares the traditional approach as an M\&M (crunchy shell and soft inner part). And introduces the zero trust principle in three concepts:
 \begin{quote}
-	We assume that any participant in a network not explicitely trusted may:
-	\begin{itemize}
-		\item Make some or all information available to him available to others.
-		\item Analyze all information within his reach.
-		\item Willingly break protocol rules in order to gain information or other advantages.
-	\end{itemize}
+	\begin{enumerate}
+		\item Ensure That All Resources Are Accessed Securely Regardless Of Location
+		\item Adopt A Least Privilege Strategy And Strictly Enforce Access Control
+		\item Inspect And Log All Traffic
+	\end{enumerate}
 \end{quote}
 
-As design principle this means that information is kept hidden as much as possible within the system. 
+This concept applies to security and no to anonymity. We therefore had to adopt this concept not violating anonymity.
+	\begin{enumerate}
+	\item Ensure that all resources are accessed securely regardless of location\\
+		  We make sure that control over the security relevant parameters remain at all time within the originator of a message. Violation of transport security should not be possible by malfunctioning or poorly configured nodes.
+	\item Adopt a least privilege strategy and strictly enforce access control\\
+	      As design principle this means that information is kept hidden as much as possible within the system. We always assume that an adversary
+		  \begin{itemize}
+			\item makes some or all information within his reach available to others.
+			\item Analyze all information within his reach.
+			\item Willingly break protocol rules in order to gain information, disrupt information flows, or other advantages.
+		  \end{itemize}		
+	\item Inspect and log all traffic
+	      
+\end{enumerate}
 
-\fxwarning{incomplete section}
+
