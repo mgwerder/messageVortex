@@ -22,6 +22,7 @@ package net.messagevortex.blender;
 // * SOFTWARE.
 // ************************************************************************************
 
+import java.io.IOException;
 import net.messagevortex.AbstractDaemon;
 import net.messagevortex.accounting.HeaderVerifier;
 import net.messagevortex.asn1.BlendingSpec;
@@ -69,7 +70,7 @@ public abstract class Blender extends AbstractDaemon implements TransportReceive
    * @return the previously set verifier
    */
   public final HeaderVerifier setVerifier(HeaderVerifier verifier) {
-    HeaderVerifier ret = this.verifyer;
+    HeaderVerifier ret = getVerifier();
     this.verifyer = verifier;
     return ret;
   }
@@ -118,7 +119,7 @@ public abstract class Blender extends AbstractDaemon implements TransportReceive
    * @param message the message to be blended
    * @return true if blended successfully and sent by the transport layer
    */
-  public abstract boolean blendMessage(BlendingSpec target, VortexMessage message);
+  public abstract boolean blendMessage(BlendingSpec target, VortexMessage message) throws IOException;
 
   /***
    * <p>Returns the address supported for blender.</p>
@@ -128,5 +129,20 @@ public abstract class Blender extends AbstractDaemon implements TransportReceive
    * @return The vortex adress.
    */
   public abstract String getBlendingAddress();
+
+  /**
+   * <p>Blends a VortexMessage into the apropriate text.</p>
+   * @param target  the blending spec for the recipient
+   * @param msg  the message to be blended
+   * @return the blended message
+   */
+  public abstract byte[] blendMessageToBytes(BlendingSpec target, VortexMessage msg);
+
+  /**
+   * <p>Extracts a vortexMessage from a blended message.</p>
+   * @param blendedMessage the blended message
+   * @return the VortexMessage
+   */
+  public abstract VortexMessage unblendMessage(byte[] blendedMessage);
 
 }

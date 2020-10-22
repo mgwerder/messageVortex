@@ -7,8 +7,10 @@ BEGIN
                 FROM MessageVortex-Requirements
           CipherSpec, PRNGType, MacAlgorithm
                 FROM MessageVortex-Ciphers
-		  maxNumberOfReplays
-				FROM MessageVortex-Schema;
+          maxGFSize 
+                FROM MessageVortex-Operations		  
+          maxNumberOfReplays
+                FROM MessageVortex-Schema;
 
   SpecialBlock ::= CHOICE {
     capabilities  [1]  ReplyCapability,
@@ -71,12 +73,20 @@ BEGIN
     maxHeaderSerials  INTEGER (0..4294967295),
     -- maximum simultaneously valid build operations in workspace
     maxBuildOps       INTEGER (0..4294967295),
+    -- maximum payload size
+    maxPayloadSize    INTEGER (0..4294967295),
+    -- maximum active payloads (without intermediate products)
+    maxActivePayloads INTEGER (0..4294967295),
     -- maximum header lifespan in seconds
     maxHeaderLive     INTEGER (0..4294967295), 
     -- maximum number of replays accepted,
     maxReplay         INTEGER (0..maxNumberOfReplays), 
-    
-    supportedBlendingIn SEQUENCE OF BlendingSpec
+    -- Supported inbound blending
+    supportedBlendingIn SEQUENCE OF BlendingSpec,
+    -- Supported outbound blending
+    supportedBlendingOut SEQUENCE OF BlendingSpec,
+    -- supported galoise fields
+    supportedGFSize   SEQUENCE OF (1..maxGF) OF INTEGER (1..maxGF)
   }
 
   ReplyCurrentQuota ::= SEQUENCE {
@@ -87,9 +97,9 @@ BEGIN
   ReplyUpgrade ::= SEQUENCE {
     -- The offered version
     version    [0] OCTET STRING,
-	-- The offered identitfier
-	identifier [1] OCTET STRING,
-	-- The archive or blob containing the software
+    -- The offered identitfier
+    identifier [1] OCTET STRING,
+    -- The archive or blob containing the software
     blob       [2] OPTIONAL OCTET STRING  
   }
 

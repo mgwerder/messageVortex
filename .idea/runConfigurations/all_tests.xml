@@ -7,7 +7,7 @@
     <option name="PACKAGE_NAME" value="net.gwerder.java.messagevortex.test" />
     <option name="MAIN_CLASS_NAME" value="" />
     <option name="METHOD_NAME" value="" />
-    <option name="TEST_OBJECT" value="pattern" />
+    <option name="TEST_OBJECT" value="directory" />
     <option name="VM_PARAMETERS" value="-ea" />
     <option name="PARAMETERS" value="" />
     <option name="WORKING_DIRECTORY" value="file://$MODULE_DIR$/target/classes" />
@@ -15,17 +15,10 @@
     <option name="TEST_SEARCH_SCOPE">
       <value defaultName="singleModule" />
     </option>
-    <dir value="$PROJECT_DIR$/application-core-library/target/test-classes/net/gwerder/java/messagevortex/test" />
+    <dir value="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test" />
     <patterns>
-      <pattern testClass="net.messagevortex.test.MainAccountingSuite" />
-      <pattern testClass="net.messagevortex.test.MainBlenderSuite" />
-      <pattern testClass="net.messagevortex.test.MainCoreSuite" />
-      <pattern testClass="net.messagevortex.test.MainIMAPSuite" />
-      <pattern testClass="net.messagevortex.test.MainRoutingSuite" />
-      <pattern testClass="net.messagevortex.test.MainTransportSuite" />
-      <pattern testClass="net.messagevortex.test.MainASN1Suite" />
+      <pattern testClass="net.messagevortex.test.*Suite" />
     </patterns>
-    <fork_mode value="class" />
     <method>
       <option name="Make" enabled="false" />
       <option name="Maven.BeforeRunTask" enabled="true" file="C:\PHD\Documents\messageVortex\application-core-library/pom.xml" goal="compile test-compile" />

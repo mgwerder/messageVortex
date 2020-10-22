@@ -1,0 +1,371 @@
+%!TeX program=pdflatex
+%!TeX encoding=utf8
+%!TeX spellcheck = en_US
+%!TeX root = ../../messageVortex.tex
+
+% ********************************************************************************************************
+% *** Intro to MessageVortex
+% ********************************************************************************************************
+% ********************************************************************************************************
+% *** Research Preexisting work
+% ********************************************************************************************************
+
+\partepigraph{Where does a snake's tail start?}{My Son Florian}
+\part{Relevant Concepts and Technologies}
+\fxwarning{complete section}
+
+\chapter{Anonymity Research}
+In this section, we collect protocols research related to anonymity. We did not stick to anonymous message transfer. Instead, we took a broad focus in terms of technology and outlined in each protocol strengths and weaknesses identified, which may be relevant to this research.
+
+\section{Definition of Anonymity}
+As the definition for Anonymity we take the definition as specified in \cite{anonTerminology}.\DeclareFixedFootnote{\omitted}{footnotes omitted in quote}
+\begin{quote}
+	Anonymity of a subject means that the subject is not identifiable within a set of subjects, the anonymity set.\omitted
+\end{quote}
+and
+\begin{quote}
+	Anonymity of a subject from an attacker's perspective means that the attacker cannot sufficiently identify the subject within a set of subjects, the anonymity set.\omitted
+\end{quote}
+
+We define the anonymity set as the set of all possible subjects within a supposed message. The anonymity of a subject towards an observing third party is a crucial factor as it relates directly to our adversary model.
+
+\section{\texorpdfstring{$k$}{k}-Anonymity}
+$k$-anonymity is a term introduced in \cite{k-anonymous:ccs2003}. This work claims that entities are not responsible for an action if an observer is unable to match a specific action to less than $k$ entities.
+
+The Document distinguishes between \textit{Sender $k$-anonymity}, where the sending entity can only be narrowed down to a set of $k$ entities and \textit{Receiver $k$-anonymity}. 
+
+The size of $k$ is a crucial factor. One of the criteria is the legal requirements of the jurisdiction. Depending on the jurisdiction, it usually is not possible to prosecute someone if an action is not directly coupled to one person. Another criterion might be the decreasing of $k$ over time. If a Vortex account is used, we have to assume that some vortex identities go out of commission over time. If $k$ is chosen according to a legal requirement, it should be taken into account that $k$ might be decreasing over time.
+
+\section{\texorpdfstring{$\ell$}{l}-Diversity}
+In \cite{machanavajjhala2007diversity} an extended model of $k$-anonymity is introduced. In this paper, the authors emphasize that it is possible to break a $k$-anonymity set if there is additional information available which may be merged into a data set so that a distinct entity can be filtered from the $k$-anonymity set. In other words, if an anonymity set is to tightly specified, additional background information might be sufficient to identify a specific entity in an anonymity set.
+
+It might be arguable that a $k$-anonymity in which a member is not implicitly $k$-anonymous still is sufficient for $k$-anonymity in its sense. However, the point made in this work is right and is taken into account. Their approach is to introduce an amount of invisible diversity into $k$-anonymous sets, so that common background knowledge is no longer sufficient to isolate a single member.
+
+\section{\texorpdfstring{$t$}{t}-Closeness}
+While $\ell$-diversity protects the identity of an entity, it does not prevent information gain. A subject which is in a class has the same attributes. This is where $t$-closeness\cite{li2007t} comes into play. $t$-closeness is defined as follows:
+
+\begin{quote}
+	An equivalence class is said to have $t$-closeness if the distance between the distribution of a sensitive attribute in this class and the distribution of the attribute in the whole table is no more than a threshold. A table is said to have $t$-closeness if all equivalence classes have $t$-closeness.
+\end{quote}
+
+\section{Single Use Reply Blocks and Multi-Use Reply Blocks}
+Chaum first introduced the use of reply blocks in \cite{CHAUM1}. A routing block, in general, is a structure allowing to send a message to someone without knowing the targets' real address. Reply blocks may be differentiated into two classes ``Single Use Reply Blocks'' (SURBs)  and ``Multi-Use Reply Blocks'' (MURBs). SURBs may be used once while MURBs may be used a limited number of times. 
+
+Within our research, we discovered that if a routing protocol is reproducible, the traffic of a MURB may be used to identify some of the properties of the message. Depending on the type of attack, the block has to be repeated very often. For this reason, we limited the number of replays to a low number. The concept is that we have, in our case a routing block, which might be used up to $n$ times ($0<n<127$). It is easily representable in a byte integer (signed or unsigned) on any system. It is big enough to support human communication sensibly and is big enough to add not too much overhead when rerequesting more MURBs. The number should not be too big because if a MURB is reused, the same pattern of traffic is generated, thus making the system susceptible to statistical attacks.
+
+\section{Censorship}
+As a definition for censorship we take
+\begin{quote}
+	Censorship: the cyclical suppression, banning, expurgation, or editing by an individual, institution, group or government that enforce or influence its decision against members of the public -- of any written or pictorial materials which that individual, institution, group or government deems obscene and ``utterly without redeeming social value,'' as determined by ``contemporary community standards.''
+\end{quote}
+
+The definition is attributed to Chuck Stone Professor at the School of Journalism and Mass Communication, University of North Carolina. Please note that ``Self Censorship'' (not expressing something in fear of consequences) is a form of censorship too.
+
+In our more technical we reduce the definition to
+\begin{quote}
+	Censorship: A systematic suppression, modification, or banning of data in a network by either removal, or modification of the data, or systematic influencing of entities involved in the processing (e.g., by creating, routing, storing, or reading) of this data.
+\end{quote}
+This simplified definition narrows down the location to the Internet as it is the only relevant location for us.  Furthermore, it limits the definition to the maximum reach within that system.
+
+\subsection{Censorship Resistant}
+A censorship-resistant system is a system that allows the entities of the system and the data itself to be unaffected from censorship. Please note that this does not deny the presence of censorship per se. It still exists outside the system. However, it has some consequences for the system itself.
+
+\begin{itemize}
+	\item The system must be either undetectable or out of reach for an entity censoring.\\
+	The possibility of identifying a protocol or data allows a censoring entity to suppress the use of the protocol itself. 
+	\item The entities involved in a system must be untraceable.\\
+	Traceable entities would result in a mean of suppressing real-world entities participating in the system.
+\end{itemize}
+
+\subsection{Parrot Circumvention}
+In \cite{oakland2013-parrot} \citeauthor{oakland2013-parrot} express that it is easy for a human to determine decoy traffic as the content is easily identifiable as generated content. While this is true, there is a possibility here to generate ``human-like'' data traffic to a certain extent. As an adversary may not assume that his messages are replied to, the problem does not boil down to a true Turing test. It remains on a ``passive observer Turing test'', enabling the potential nodes to choose their messages. 
+
+In our design, this is the job covered by the blending layer. The blending layer generates these messages. These messages are context-less or remain in the context of previous conversations.
+
+
+\chapter{Related Cryptographic Theory and Algorithms}
+
+Whenever dealing with obfuscating data and maintaining the integrity of data, cryptography is the first tool in the hand of an implementer. A vast amount of research in this area does already exist. For this work, we focussed on algorithms either very well researched and implemented or research, which seem very valuable when putting this work into place. 
+
+In symmetric encryption in this paper always assumes that
+\begin{eqnarray}
+D^{K_a}\left(E^{K_a}\left(\mathbf{M}\right)\right) & = & \mathbf{M}
+\end{eqnarray} 
+
+For a key $K_b\neq K_a$ this means
+
+\begin{eqnarray}
+D^{K_a}\left(E^{K_b}\left(\mathbf{M}\right)\right) & \neq & \mathbf{M}\\
+D^{K_b}\left(E^{K_a}\left(\mathbf{M}\right)\right) & \neq & \mathbf{M}
+\end{eqnarray} 
+
+The following candidates have been analyzed:
+\begin{itemize}
+	\item AES\\
+	NIST announced AES in \citeyear{standard2001announcing} as a result of a contest. The algorithm works with four operations (subBytes, ShiftRows, mixColumns, and addRoundKey). These operations are repeated depending on the key length 10 to 14 times. 
+	
+	AES is up until now (2018) unbroken. It has been weakened in the analysis described in \cite{tao2015improving}, which reduces the complexity by roughly one to two bits. 
+	
+	\item Camellia\\
+	The camellia algorithm is described in \cite{rfc3713}. The key sizes are 128, 192, and 256. Camellia is a Feinstel cipher with 18 to 24 rounds depending on the key size. Up until today, no publication claims break this cipher. 
+\end{itemize}
+
+For all asymmetric encryption algorithm in this paper, we may assume that\ldots
+
+\begin{eqnarray}
+D^{K^{-1}_a}\left(E^{K^{1}_a}\left(\mathbf{M}\right)\right) & = & \mathbf{M}\\
+D^{K^{1}_a}\left(E^{K^{-1}_a}\left(\mathbf{M}\right)\right) & = & \mathbf{M}
+\end{eqnarray} 
+
+It is important that 
+\begin{eqnarray}
+D^{K^{-1}_a}\left(E^{K^{-1}_a}\left(\mathbf{M}\right)\right) & \neq & \mathbf{M}\\
+D^{K^{1}_a}\left(E^{K^{1}_a}\left(\mathbf{M}\right)\right)   & \neq & \mathbf{M}
+\end{eqnarray} 
+
+And for any other Keypair $K^{p}_a \neq K^{p}_b$
+\begin{eqnarray}
+D^{K^{-1}_b}\left(E^{K^{1}_a}\left(\mathbf{M}\right)\right)  & \neq & \mathbf{M}\\
+D^{K^{1}_b}\left(E^{K^{1}_a}\left(\mathbf{M}\right)\right)   & \neq & \mathbf{M}\\
+D^{K^{-1}_b}\left(E^{K^{-1}_a}\left(\mathbf{M}\right)\right) & \neq & \mathbf{M}\\
+D^{K^{1}_b}\left(E^{K^{-1}_a}\left(\mathbf{M}\right)\right)  & \neq & \mathbf{M}
+\end{eqnarray} 
+
+The number of crypto algorithms was higher than the steganography options. When looking for well-researched algorithms basing on different mathematical problems and having well-defined outlines, numbers dropped dramatically again.
+
+\begin{itemize}
+	\item RSA\\
+	In \citeyear{Rivest:1978:MOD:359340.359342} the authors \citeauthor{Rivest:1978:MOD:359340.359342} published with \cite{Rivest:1978:MOD:359340.359342} a paper which did revolutionize cryptography for years. In their paper, the authors described an encryption method later to be called RSA, which required a key pair ($K_a$) referenced as public ($K^{1}_a$) and private keys ($K^{-1}_a$). The novelty of this system was that anything encrypted with the public key was only decryptable with the private key and vice versa.
+	
+	RSA is up until the day of writing this paper not publicly know to be broken (unless a too small key size is used). However -- \citeauthor{Shor97polynomial-timealgorithms} described in \citeyear{Shor97polynomial-timealgorithms} an algorithm which should enable quantum computers to break RSA far faster than done with traditional computers. In the section \ref{sec:keySize} we do elaborate these effects further.
+	\item ECC\\
+	The elliptic curves were independently suggested by \cite{Miller1986} and \cite{Koblitz04guideto} in 1986. Elliptic curve Cryptography started to be widely deployed in the public space in 2006. Since then, it seems to compete very well with the well established RSA algorithm. While being similarly well researched ECC, has the advantage of far shorter key sizes for the same grade of security.
+	\item McElliece\\
+	McEliece was first implemented and then removed again. The key size to gain equivalent security to RSA1024 was $\approx 1MB$. This was impractical and thus discarded again. This was done, although there is up until now no known quantum capable algorithm reducing the key size of McEliece.
+	\item NTRU\\
+	In \cite{Hoffstein1998} \citeauthor{Hoffstein1998} described the NTRU algorithm. The inclusion of this algorithm was disputed as it is patented in the united states as US7031468. It was included because the company Security Innovation holding the patent, released the NTRU algorithm on March \thanks{28} 2018 into the public domain according to a blog entry on the company website. While NTRU is not as well researched as RSA, it has been around for more than 20 years without being significantly affected by known attacks.
+	\item ElGammal\\
+	We rejected ElGamal as a cryptosystem to include. It bases on the same mathematical problems for cryptoanalysis as RSA (discreet logarithms) but is not as common as RSA.
+\end{itemize}
+
+
+Homomorphic encryption, as introduced in \cite{feldman1987practical}, was from the beginning a strong candidate to be used within our work. Unfortunately, we did not find a way to apply the core addRedundancy operation in homomorphic encryption. Transforming the original data to the GF space in an efficient way to apply matrices was not doable and thus rejected.
+
+%\cite{Gentry:2009:FHE:1536414.1536440} %FIXME dangling reference
+
+\section{Deniable Encryption and Deniable Steganography}
+
+Deniable encryption and deniable steganography have been considered out-of-bounds for this work. The main reason is that the presence of encryption (which is not deniable in both cases) may be sufficient for a censor to block a message. Adding a layer to make sure that encryption or steganography is deniable, does not add valuable properties to our system as the sheer presence of encryption might be sufficient for censorship. 
+
+\section{Key Sizes\label{sec:keySize}}
+
+The question of key sizes is hard to answer as it depends on the current and future possibilities of an adversary, which is again depending on not foreseeable research. We tried to collect a couple of recommendations.
+
+\href{http://www.ecrypt.eu.org/}{Encrypt II (http://www.ecrypt.eu.org/)} recommends currently for a ``foreseeable future'' 256 Bits for symmetric encryption and for asymmetric encryption based on factoring modulus 15424 Bits. Elliptic Curve Cryptography and Hashing should be sufficient if used with at least 512 Bits. If the focus is reduced to the next $\approx$ 20 years, then the key size recommendations are reduced to 128 Bit for symmetric encryption, 3248 Bits for factoring modulus operations, and 256 Bits for elliptic curves and hashing.
+
+According to the equations proposed by \citeauthor{Lenstra04keylength.} in \cite{Lenstra04keylength.} an asymmetric key size of 2644 Bits respectively symmetric key length of 95 Bits, or 190 Bits for elliptic curves and hashing should be sufficient for security up to the year 2048. 
+
+According to \cite{CNSASuite} (superseding well known and often used \cite{nsa-fact-sheet-B}) data classified up to ``top secret'' should be signed with RSA 3072+ or ECDSA P-384.  For symmetric encryption, they recommend AES 256 Bits, for Hashing at least SHA-384 and for Elliptic curves a 384 Bit sized key.
+
+As it might seem not a wise idea to consider the recommendation of a potential state-sponsored adversary and the Formulas proposed by \citeauthor{Lenstra04keylength.} do not explicitly take quantum computers into account, we follow the advice of ENCRYPT II.
+
+Furthermore, taking all recommendations together, it seems that all involved parties assume the most trust in elliptic curves rather than asymmetric encryption based on factoring modulus.
+
+\section{Cipher Mode}
+The cipher mode defines how multiple blocks encrypted with the same key are handled. Main characteristics of cipher modes to us are:
+\begin{itemize}
+	\item Parallelisable\\ 
+	Can multiple parts of a plaintext be encrypted simultaneously? This feature is important for multi CPU and multi-core systems as they can handle parallelizable more efficiently by distributing them on multiple CPUs.
+	\item Random access in decryption\\
+	Random access on decryption allows efficient partial encryption of a ciphertext.
+	\item Initialisation vector\\
+	An initialization vector has downsides and advantages. On the downsides is the fact that an initialization vector must be shared with the message or before distributing it. It is essential to understand that the initialization vector itself usually is not treated as a secret. It is not part of the key.
+	\item Authentication\\
+	Authentication guarantees that the deciphered plaintext has been unmodified since encryption. It does not make a statement over the identity of the party encrypting the text. Such an identifying authentication is referred to as signcryption.
+\end{itemize}
+
+We evaluated the most common cipher modes for suitability. For \MessageVortex, we focussed on modes that have the properties parallelizable, random access, and do not do authentication. The main focus, besides the characteristics mentioned above, was on the question of whether there is an open implementation available in java, which is reasonably tested.
+
+\begin{itemize}
+	\item ECB (Electronic Code Book)\\
+	ECB is the most basic mode. Each block of the cleartext is encrypted on its own. This results in a big flaw: blocks containing the same data will always transform to the same ciphertext. This property makes it possible to see some structures of the plain text when looking at the ciphertext. This solution allows the parallelization of encryption, decryption, and random access while decrypting. Due to these flaws, we rejected this mode.
+	\item CBC (Cypher Block Chaining)\\  
+	CBC extends the encryption by xor'ing an initialization vector into the first block before encrypting. For all subsequent blocks, the ciphertext result of the preceding block is taken as xor input. This solution does not allow parallelization of encryption, but decryption may be paralleled, and random access is possible. As another downside, CBC requires a shared initialization vector. As with most IV bound modes, an IV/key pair should not be used twice, which has implications for our protocol.
+	\item PCBC (Propagation Cypher Block Chaining)\\
+	CBC extends the encryption by xor'ing, not the ciphertext but a xor result of ciphertext and plaintext. This modification denies parallel decryption and random access compared to CBC.
+	\item EAX\\      
+	EAX has been broken in 2012\cite{minematsu2013attacks} and is therefore rejected for our use.
+	\item CFB (Cypher Feedback)
+	CFB is specified in \cite{dworkin2001recommendation} and works precisely as CBC with the difference that the plain text is xor'ed and the initialization vector, or the preceding cipher result is encrypted. CFB does not support parallel encryption as the ciphertext input from the preceding operation is required for an encryption round. CFB does, however, allow parallel decryption and random access.
+	\item OFB\\
+	\cite{dworkin2001recommendation} specifies OFB and works exactly as CFB except for the fact that not the ciphertext result is taken as feedback but the result of the encryption before xor'ing the plain text. This denies parallel encryption and decryption, as well as random access.
+	\item OCB (Offset Codebook Mode)\\
+	This mode was first proposed in \cite{rogaway2003ocb} and later specified in \cite{krovetz-ocb-04}. OCB is specifically designed for AES128, AES192, and AES256. It supports authentication tag lengths of 128, 96, or 64 bits for each specified encryption algorithm. OCB hashes the plaintext of a message with a specialized function $H_{OCB}(\mathbf{M})$. OCB is fully parallelizable due to its internal structure. All blocks except the first and the last can be encrypted or decrypted in parallel.
+	\item CTR\\
+	CTR is specified in \cite{lipmaa2000ctr} and is a mixture between OFB and CBC. A nonce concatenated with a counter incrementing on every block is encrypted and then xor'ed with the plain text. This mode allows parallel decryption and encryption, as well as random access. Reusing IV/Key-pairs using CTR is a problem as we might derive the xor'ed product of two messages. This problem only applies where messages are not uniformly random such as in an already encrypted block.
+	\item CCM\\
+	Counter with CBC-MAC (CCM) is specified in \cite{rfc3610}. It allows to pad and authenticate encrypted and unencrypted data. It furthermore requires a nonce for its operation. The size of the nonce is dependent on the number of octets in the length field. In the first 16 bytes of the message, the nonce and the message size is stored. For the encryption itself, CTR is used. It shares the same properties as CTR. 
+	
+	It allows parallel decryption and encryption as well as random access.
+	\item GCM (Galois Counter Mode)\\
+	GCM has been defined in \cite{mcgrew2004galois}, and is related to CTR but has some major differences. The nonce is not used (just the counter starting with value 1). To authenticate the encryption, an authentication token $auth$ is hashed with $H_{GFmult}$ and then xor'ed with the first cipher block. All subsequent cipher blocks are xor'ed with the previous result and then hashed again with $H_{GFmult}$. After the last block the output $o$ is processed  as follows: $H_{GFmult}(o\bigoplus (len(A)||len(B))) \bigoplus E^{K^0}(counter_0)$. As a result, GCM is not parallelizable and does not support random access.
+	
+	The mode has been analyzed security-wise in \citeyear{mcgrew2004security} and showed no weaknesses in the analyzed fields \cite{mcgrew2004security}. 
+	
+	GCM supports parallel Encryption and decryption. Random access is possible. However, authentication of encryption is not parallelizable. The authentication makes it unsuitable for our purposes. Alternatively, we could use a fixed authentication string.
+	\item XTS (XEX-based tweaked-codebook mode with ciphertext stealing)\\
+	This mode is standardized in IEEE 1619-2007 (soon to be superseded). A rough overview of XTS may be found at \cite{Martin2010}. It was developed initially for Disks offering random access and authentication at the same time. 
+	\item CMC (CBC-mask-CBC) and EME (ECB-mask-ECB)\\ 
+	In \cite{Halevi:2003} \citeauthor{Halevi:2003} introduces a cipher mode which is extremely costly as it requires two encryptions. CMC is not parallelizable due to the underlying CBC mode, but EME is. 
+	\item LRW\\
+	LRW is a tweakable narrow-block cipher mode described in \cite{tschorsch:translayeranon}. This mode shares the same properties as EBC but without the weakness of the same clear text block resulting in the same ciphertext. Similarly to XEX, it requires a tweak instead of an IV.
+\end{itemize}
+
+\section{Summary of Cipher Modes}
+
+\begin{table}[ht]
+	\centering\tiny
+	\begin{tabular}{|l|l|l|l|l|}\hline
+		\diaghead{\theadfont Mode Criteria}{Mode}{Criteria}         & \thead{auth}  &\thead{Requires IV}               & \thead{parallelisable}     & \thead{random access}\\
+		\hline
+		CBC                                                            & $\times$        & $\checkmark$                      & $\times$                & $\times$\\                      
+		CCM                                                            & $\times$        & $\checkmark$                      & $\times$                   & $\times$\\
+		CFB                                                            & $\times$        & $\checkmark$                      & $\checkmark$            & $\checkmark$\\              
+		CTR                                                            & $\times$        & $\checkmark$                      & $\checkmark$               & $\checkmark$\\              
+		ECB                                                            & $\times$        & $\times$                          & $\checkmark$            & $\checkmark$\\   
+		GCM                                                            & $\checkmark$    & $\checkmark$                      & $\times$                   & $\times$\\              
+		OCB          & $\checkmark$& $\times$\footnotemark[1]    &$\times$                    &$\times$\\
+		OFB          & $\times$    & $\checkmark$                &$\times$                    &$\times$\\
+		PCBC         & $\times$    & $\checkmark$                &$\times$                    &$\times$\\
+		XTS          & $\times$    & $\checkmark$\footnotemark[2]&$\checkmark$                &$\times$\\
+		LRW          & $\times$    & $\checkmark$\footnotemark[2]&$\checkmark$                & $\checkmark$\\
+		CMC          & $\times$    & $\checkmark$\footnotemark[2]& $\times$                   & $\times$\\
+		EME          & $\times$    & $\checkmark$\footnotemark[2]& $\checkmark$                    & $\checkmark$\\              
+		\hline          
+	\end{tabular}    
+	\caption{comparison of encryption modes in terms of the suitability}
+	\label{tab:ModeSuitCrit}
+\end{table}
+\footnotetext[1]{included in auth}
+\footnotetext[2]{Requires tweak instead of IV}
+
+\section{Padding}
+A plain text stream may have any length. Since we always encrypt in blocks of a fixed size, we need a mechanism to indicate how many bytes of the last encrypted block may be safely discarded. 
+
+Different paddings are used at the end of a cipher stream to indicate how many bytes belong to the decrypted stream.
+
+\subsubsection{RSAES-PKCS1-v1\_5 and RSAES-OAEP}
+This padding is the older of the paddings standardized for PKCS1. It is basically a prefix of two bytes followed by a padding set of non zero bytes and then terminated by a zero byte and then followed by the message. This patting may give a clue if decryption was successful or not. RSAES-OAEP ist the newer of the two padding standards 
+
+\subsubsection{PKCS7} 
+This padding is the standard used in many places when applying symmetric encryption up to 256 bits key length. The free bytes in the last cipher block indicate the number of bytes being used. This makes this padding very compact. It requires only 1 Byte of functional data at the end of the block. All other bytes are defined but not needed.
+
+\subsubsection{OAEP with SHA and MGF1 padding} 
+This padding is closely related to RSAES-OAEP padding. The hash size is, however, bigger, and thus, the required space for padding is much higher. OAEP with SHA and MGF1 Padding is used in asymmetric encryption only. Due to its size, it is important to note that the payload in the last block shrinks to $keySizeInBits/8-2-MacSize/4$.
+
+In our approach, we have chosen to allow these four paddings. The allowed sha sizes match the allowed mac sizes chosen above. It is important to note that padding costs space at the end of a stream. Since we are always using one block for signing, we have to take care that the chosen signing mac plus the bytes required for padding do not exceed the key size of the asymmetric encryption. While this usually is not a problem for RSA as there are keys 1024+ Bits required, it is an essential problem for ECC algorithms as there are much shorter keys needed to achieve an equivalent strength compared to RSA. 
+
+We have introduced an additional type of padding not related to these paddings. We required for the addRedundancy the following unique properties. Unfortunately, we were unable to find any padding which matched the following properties simultaneously:
+
+\begin{itemize}
+	\item Padding must not leak successful decryption\\
+	For our addRedundancy operation, we required padding that had no detectable structure as a node should not be able to tell whether a removeRedundancy operation did generate content or decoy. 
+	\item Padding of more than one block\\
+	Due to the nature of the operation, it is required to be able to pad more than just one block.
+\end{itemize}
+
+Details of this padding are described in the section "Add and Remove Redundancy Operations'' in \ref{app:rfcMessageVortexMain}. 
+
+\chapter{Censorship Circumvention}
+Several technical ways have been explored to circumvent censorship. All seem to boil down to the following main ideas:
+\begin{itemize}
+	\item Hide data
+	\item Copy or distribute data to a vast amount of places to improve the lifespan of data
+	\item Outcurve censorship measurements
+\end{itemize}
+
+In the following section, we look at technologies and ideas dealing with these circumvention technologies.
+
+\section{Covert Channel and Channel Exploitations}
+The original term of covert channels was defined by \citeauthor{Lampson73anote}\cite{Lampson73anote} as 
+
+\begin{quote}
+	not intended for information transfer at all, such as the service program's effect on system load.
+\end{quote}
+
+This was defined  in such a way to distinguish the message flow from 
+
+\begin{quote}
+	legitimate channels used by the confined service, such as the bill.
+\end{quote}
+
+The use of a legitimate channel such as \defref{SMTP} and hide information within this specific channel is not a usage of a covert channel. We refer to this as channel exploitation.
+
+\section{Steganography}
+
+Steganography is an important part when it comes to unlinking information. In \cite{6828087} and \cite{subhedar2014current} we get a very rough overview. As some of the types and algorithms address specific topics of steganography (e.g., some hide from automatic detection and others address a human message stream auditor), we need to choose carefully. In our specific case, the main idea is to hide within the sheer mass of Internet traffic. As a human auditor screening all the messages is a minor thread, we focus on machine-based censorship. Most of the images sent in \defref{SMTP} are jpg images (see table \ref{tab:emailAttachments} on page \pageref{tab:emailAttachments}). We limited our search to algorithms capable of hiding binary data within these files. The number of academically researched options was surprisingly low.
+
+After reviewing the options, we decided to go for F5\cite{f5}. It is a reasonably well-researched algorithm which attracted many researchers. The original F5 implementation had a detectable issue with artifacts\cite{F5broken} caused by the recompression of the image. This issue was caused only due to a problem in the reference implementation, and the researchers have provided a corrected reference implementation without the weakness.
+
+% We use https://github.com/matthewgao/F5-steganography
+
+YASS, as described in \cite{solanki2007yass}, was not considered a candidate. Although less researched, researchers found multiple weakness\-es\cite{kodovsky2010modern,li2009steganalysis}.
+
+\section{Timing Channels}
+
+Timing channels are a specialized form of covert channels. In timing channels, the information itself hides not within the data of the channel, but the usage of the channel is in such a way that it is capable of reflecting the data. As we do not have control over the timing of the transport channel, this is not an option for us.
+
+\section{Technical Forms of Censorship}
+There are many types of censorship available within technical systems. An in-depth understanding of the possibilities is required in order to understand the means of a censoring adversary.
+
+\subsection{Making Systems Unavailable by Censoring Lookups}
+This is one of the cheapest method to create censorship. Lookup systems such as DNS servers are modified in such a way that traffic is no longer deliverable or redirected to a system controlled by the censorer.
+
+Many jurisdictions have implemented such measures a very cheap measure of censorship. It is, however, very easy to outcurve. As soon as a user no longer uses adversary controlled lookup services, this form of censorship is ineffective. In the case of DNS this means either: 
+
+\begin{itemize}
+	\item Use a public DNS server worldwide available
+	\item Use another protocol to hide the traffic 
+	\begin{itemize}
+		\item A legit protocol with tunnelling capabilities like SSH to a system outside of the reach of the censoring adversary.
+		\item Use a fully blown tunnel such as a VPN.
+		\item Piggyback a legit protocol such as DNS-over-HTTPS (DoH)\cite{rfc8484} or DNS-over-XMPP\cite{xep0418}
+	\end{itemize}
+\end{itemize}
+
+\subsection{Making Systems Unavailable by Disrupting System Traffic}
+Disruption of traffic is commonly done with packet filtering devices commonly referred as firewalls. These firewalls may filter any traffic to a given system. There are some considerable downsides to this system from the adversary's point of view.
+
+First, it requires high bandwidth. All traffic of a jurisdiction or target must pass through this filtering device. This is usually doable for a country. 
+
+Secondly, the target must be identifiable on a technical level (e.g., IP address) as content based filtering is only feasible with unencrypted or weakly protected systems. This technical identification is hard as systems may change their addresses dynamically either due to cloud related elasticity or simply due to an incomplete view to a distributed system.
+
+\fxwarning{Explain further the problem for people not so much in cloud and networks}
+
+And lastly, The target may not be split (e.g., partial censoring). Censoring platforms such as Youtube or Gmail which are commonly shared among legit and illegit uses from the censorers point-of-view can not be reasonably split. This due to the fact that only the provider of the service can do selective censoring on the system.
+
+\fxwarning{Explain more and maybe add china as an example}
+
+\subsection{Making Systems Unavailable by Interfering with System Traffic}
+\fxwarning{Empty section}
+
+\section{Spread Spectrum in Networking Protocols}
+\fxwarning{Empty section}
+
+\chapter{Other Related Concepts}
+\section{Zero Trust\label{sec:zeroTrust}}
+Zero trust is not an acdemically defined concept. In fact it is widely misused by many marketing departments of well known devices and applications related to security.
+
+We however define zero trust as follows:
+\begin{quote}
+	We assume that any participant in a network not explicitely trusted may:
+	\begin{itemize}
+		\item Make some or all information available to him available to others.
+		\item Analyze all information within his reach.
+		\item Willingly break protocol rules in order to gain information or other advantages.
+	\end{itemize}
+\end{quote}
+
+As design principle this means that information is kept hidden as much as possible within the system. 
+
+\fxwarning{incomplete section}

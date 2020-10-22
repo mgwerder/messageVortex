@@ -1,0 +1,880 @@
+%!TeX program=pdflatex
+%!TeX encoding=utf8
+%!TeX spellcheck = en_US
+%!TeX root = ../../messageVortex.tex
+\partepigraph{Occurrences in this domain are beyond the reach of exact prediction because of the variety of factors in operation, not because of any lack of order in nature.}{Albert Einstein}
+\part{Operational concerns}\label{sec:operation}
+
+\chapter{General Concerns Regarding Operation}
+\section{Hardware}
+We require no specialized hardware for running Vortex nodes. Instead, we designed Vortex in such a way that ordinary mobile phones may act as Vortex nodes. It is, however, recommended to have a node always connected to the Internet. A mobile phone may disconnect from time to time based on the availability of the network. For our experiments, we used a RaspberryPi Zero W. It is, however, recommended to use a faster, newer model due to the memory requirements of the proof of work algorithm. 
+
+The hardware currently requires a network interface and a fully functional JSE VM to run the reference implementation.
+
+\section{Addressing of Vortex Nodes}
+From the start, we were looking for an addressing scheme suitable for transparent addressing.
+
+A Vortex address is built as follows: 
+
+\begin{lstlisting}[language=EBNF]
+localPart         = <local part of address>
+domain            = <domain part of address>
+email             = localPart "@" domain
+keySpec           = <BASE64 encoded AsymmetricKey [DER encoded]>
+smtpAlternateSpec = localPart ".." [ keySpec ] ".." domain "@localhost"
+smtpUrl           = "vortexsmtp://" smtpAlternateSpec
+\end{lstlisting}
+
+To allow storage of Vortex addresses in standard messaging programs such as Outlook or Thunderbird, we introduced $smtpAlternateSpec$. 
+
+The suffix ``@localhost'' makes sure that any non-participating server does not route a \VortexMessage{} unintentionally. The doubly dotted notation is not RFC compliant but was accepted by all tested client address books. The address is, however, not a valid SMTP address due to its double-dotted notation. We selected this representation to differentiate Vortex addresses from valid email addresses.
+
+The main downside of vortex addresses is that they are no longer readable by a human. The main reason for this is the public key, which is required. We may abstract this further by allowing clear-text requests on the primary email address for the public key. The vortex account must then answer such requests with the valid Vortex address.
+
+The $smtpUrl$ is representing the address in a standard way, which makes it suitable for QR codes and intent filters on Android.
+
+The public key of an address is encoded as follows:
+\begin{enumerate}
+	\item The asymmetric key is encoded as specified in the \texttt{AsymmetricKey} in ASN.1
+	\item The ASN.1 DER representation is then encoded using BASE64
+\end{enumerate}    
+
+The \texttt{keySpec} may be omitted and inserted later from an address list. The quad-dotted resulting address is illegal in a standard mail system and offers a possibility for identification. Such a key-less address may furthermore be used as a synonym for the receivers' real address as any potential receiver may send an unsolicited \texttt{HeaderRequestReplaceIdentity}.
+
+\section{Client}
+We did not create a Vortex client for sending messages. Instead, we used a standard Thunderbird email client pointing to a local SMTP and IMAP Server provided by a Vortex proxy. On the SMTP side, Vortex does encapsulate where possible mails into a Vortex message and builds an automated route to the recipient. The SMTP part of Vortex may be used to encapsulate all messages automatically with a known Vortex identity into a \emph{VortexMessage}. On the IMAP side, it merges a local Vortex message store with the standard Email repository building a combined view.
+
+Using Vortex like this offers us the advantages of a known client with the anonymity Vortex offers.
+
+Using a proxy has certain downsides. At the moment, the vortex client has only a local store. Such a local store makes it impossible to handle multiple simultaneously connected clients to use Vortex. This limitation is, however, just a lack of the current implementation and not of the protocol itself. We may safely use IMAP storage for storing \emph{VortexMessages} centrally. This statement is true as long as:
+\begin{itemize}
+	\item The storage is not identifiable as such.\\
+	This requires:
+	\begin{itemize}
+		\item A non-identifiable folder/message structure
+		\item A storage not identifiable by access patterns
+		\item The stored messages do have the same strength as the transmitted messages in terms of detectability
+	\end{itemize}
+	\item A secured key\\
+	Either the host key is secured sufficiently with KDF, and a passphrase (or similar), or the host key remains off-storage.
+\end{itemize}
+
+\subsection{Vortex Accounts}
+By definition, any transport layer address may represent a Vortex identity. This fact may make people believe that their current email or jabber address is suitable as a Vortex address. This statement is technically perfectly true, but should not be done for the following reasons:
+\begin{itemize}
+	\item If an address is identified as a Vortex address, it may be blocked (directly or indirectly) by an adversary. Such blocking would lead to blocking of regular email traffic as well.
+	\item If a vortex node is malfunctioning, non-\emph{VortexMessages} should remain unaffected. Isolation is far better if we keep non-Vortex messages in a separate account.
+	\item If a user wants no longer to maintain its Vortex address, he may give up his Vortex transport accounts. If he had been using his normal messaging account for Vortex, he would receive mixing messages which are hard to filter even with a known host key.
+\end{itemize}
+
+\subsection{Vortex Node Types}\label{sec:vortexNodeTypes}
+Depending on the type of adversary within a jurisdiction, a \VortexNode{} may require different properties. In section~\ref{sec:adversary}, we defined observing and censoring adversaries. In environments with an observing adversary, the presence of a vortex node is not something that we have to keep hidden. In jurisdictions with a censoring adversary, we have to hide our nodes from the censor as their existence may be considered illegal.
+
+\subsubsection{Public Vortex Node}
+Public nodes are nodes, which advertise themselves as normal mixes. Just as all nodes, they may be an endpoint or a mix. Typically they accept all requests exactly as outlined in \ref{tab:protoReplyCrit}. As an immediate result of the publicly available information about such a node, the owner may be the target of our censoring adversary. Pressure may be opposed to close down such a node. However, since we do not need a specific account, we may safely close down one transport account and open up a different one. Such account reopenings are even possible on the same infrastructure. We are even able to notify other users of the move and remain reachable, as a user may send a \texttt{HeaderRequestIdentity} request using the old identity. 
+
+\subsubsection{Stealth Vortex Node}\label{sec:stealthNode}
+This node does not answer any clear-text requests. As an immediate result, the node is only usable by other nodes knowing the public key of this node. The node is, therefore, on a known secret base only reachable. This node type may be used in environments with a censoring adversary. People may form closed routing groups routing and anonymizing themselves. We have to state clearly at this point that putting trust into the routing nodes violates the \defref{zero trust} principle. It is, however, currently the only way to outcurve a censoring adversary. Means such as using distribution lists as endpoints seemed to be of some value at first but turned out just to shift the problem of detection from the routing to the less protected transport layer.
+
+\subsubsection{Hidden Vortex Node\label{sec:hiddenNode}}
+A hidden node is a special form to a stealth node. It has a predefined set of identities. Only these already known identities are processed. This behavior has certain drawbacks. An existing identity may not be changed, and new ephemeral identities may not be created. As an immediate result, traffic may become pseudonymity. To counter this effect, at least partially, we may use the same local identity for multiple senders. To remove clashes in the workspace, we may use preassigned IDs in the workspace. The sender is only one of all senders knowing the private key of an identity. The advantage of such a node is that identities have unlimited quotas on such nodes, no longer bothering about accounting and refreshing identities. Such behavior seems to be a valuable option when using bulletproof providers.
+
+\chapter{Routing}
+Routing contributes heavily to the security of \MessageVortex. In our system, we typically have one node identity (node key). While this identity is relatively constant (but may be exchanged and notified by a \texttt{HeaderRequestReplaceIdentity} request), the involved transport nodes may be more mobile. In general, an incoming transport address does change rather infrequently (unless advertised to friends with the header request mentioned above). The sending endpoint is irrelevant in the routing, and any routing node may, apart from the protocol type, freely choose this endpoint. 
+
+While having routing capabilities is absolutely mandatory, as every repeated pattern in routing leads to the possibility of identifying a node of an anonymity system, it adds significantly to the systems' complexity.
+
+The following sections emphasize the operational aspects of the routing. We introduce a detailed pseudo-code for creating a routing block and elaborate on the pros and cons of this implementation regarding complexity and anonymity.
+
+\section{Strategies for Composing Routing Blocks}\label{sec:routingStrategies}
+We have to follow certain rules when building routing blocks. The rules are:
+\begin{itemize}
+	\item Assuming an adversary has partial or full insight into a \defref{routing graph} (except for the sender and the final recipient), all operations must be valid. This means that no operation may be applied and an inverse operation with different parameters  (i.e., $D^{K_a}\left(E^{K_a}\left(\textbf{X}\right)\right)$).
+	\item No pattern is repeated within the protocol. This applies to:
+	\begin{itemize}
+		\item Timing patterns in messages.\\
+		      If we define fixed patterns of how a message has to be delivered (e.g., a message has to be delivered within a certain time or a payload block does expire in a workspace within a certain amount of time) and publish these as general rules, we allow an attacker to identify such timing patterns of the net and draw precise lines which messages may possibly be involved in a message transfer. By omitting such definitions and allowing each \defref{RBB} to define these values to themselves without communicating them, we make it harder to analyze the system by timing patterns.
+		\item Operation patterns.\\
+		      Defining operations use in a fixed pattern (e.g., first distribute a message over five independent message paths sized $n$), we would give clues to an adversary where in this pattern he is located and how close he is in regards to the beginning or in regards to the end. A difference in the patterns for message traffic and decoy traffic may result in the identification of decoy traffic.
+		\item Message patterns.\\
+		      Always communicating in the same pattern of messages (regardless of the timing), for example, always creating a full communication mesh with all parties of the anonymity set, is an identifiable property that an adversary may use to identify involved \VortexNodes from the outside.
+		\item Patterns in size or content of the payloads.\\
+		      Sending always similar patterns in size or content allows an inside observer to match similar sized payloads suspecting that they might have a connection and thus breaking the anonymity generated by an intermediate, honest node. Having the same pattern in the content on two different nodes (even as ``intermediate result'') is breaking all anonymization steps taken between the two workspaces as two collaborating nodes may identify this content as the same and thus conclude with certainty that they belong to the same message.
+		\item Applies the same patterns on decoy routes as on message routes.\\
+		      When applying different patterns on message and decoy routes, an adversary might notice such different behavior and thus exclude all in decoy traffic involved nodes from the anonymity set. 
+	\end{itemize}
+\end{itemize}
+
+We may use several strategies depending on our anonymity needs. 
+
+Strategies may include:
+\begin{itemize}
+	\item Focusing on redundancy of paths.\\
+	      In this scenario, we build \defref{routing graphs} that have a minimum sized set of $u$ independent paths expressed by the involved nodes. Such a \defref{routing graph} can guarantee that a message will arrive when less than $u$ nodes fail.
+	\item Focusing on involved jurisdictions.\\
+	      By focusing on the jurisdiction, an RBB may decrease the likeliness of analysis. As with each jurisdiction involved in the routing o a \VortexMessage{}, the likeliness increases that a non-collaborating jurisdiction is involved. By making educated guesses (e.g., that two opposing countries or organizations are unlikely to collaborate), the risk that a path may fully be analyzed from the sending node to the receiving node is less likely.
+	\item Focusing on the speed of delivery.\\
+	      The smaller we define the time windows for routing a message from the sender to the final recipient, the simpler is analysis for an adversary as there are fewer messages involved in a possible routing (assuming that an adversary has the means to identify by some magic all \VortexMessages). Inversely, if the speed of a message may be generally long, an adversary has to take far more messages into account.
+	\item Focusing on the size of the anonymity set.\\
+	      The more involved nodes and transport protocols in a routing block, the more complex observation of the protocol is. By increasing the anonymity set, the likelihood of overlapping \defref{routing graph}s increases significantly. Furthermore, the normal Message traffic of the transport protocol may further increase the complexity of an outside observer.
+	\item Focusing on anonymity of the \defref{eID}s.\\
+	      By using only short term \defref{eID}s where ever possible, we increase the complexity for an adversary as we reduce the number of overlapping routing points for the same identity. While the original sending identity may remain the same, the changing \defref{eID}s make it impossible to identify anonymity groups over time.
+	\item Focusing on the distribution of the message parts.\\
+	      A sender applying an $addRedundancy(m,n)$ operation on a message before sending is safe unless $n-m$ node in independent message paths collaborate and have full knowledge of all keys and operations (including the ones applied on the senders' node) as the resulting equation system would have any possible solution (in length and appearance) up to the size of all $n-m$ blocks.
+	\item Focusing on diagnose-ability.\\
+	      By deploying diagnosis payload blocks on subsequent nodes instead of just leaving them in the workspace of a node, the possibility of falsifying the result of a diagnosis based on the assumption that first the message is delivered and diagnosis is made retrospectively when detecting a problem is eradicated.
+\end{itemize}
+
+The algorithm itself does not really matter as long as it guarantees the properties at the beginning of this section.
+
+\section{Strategies for Minimizing Impact and Maximizing Effect when Routing Foreign Messages}
+Keeping a single node alive can be important. If we are assuming that reception of a message and sending is done through the same transport account, it is relatively easy for an adversary to observe this. By sending to a recipient transport address, he learns that a\VortexNode is connected to that address. Conversely, any mail coming from such an address is potentially a \VortexMessage{}.
+
+Any node may reduce the traceability by following a couple of additional rules. First of all, transport addresses for sending should be kept separate from receiving transport addresses. By doing so, an adversary needs to carry out man-in-the-middle (MitM) attacks in the respective access protocols or get direct access to the transport infrastructure to learn what transport addresses are used by the \VortexNode{}. If NAT is involved in the client access, as it is the normal case when using the targeted infrastructure for a \VortexNode, it just adds to the complexity an adversary has to solve. While this is no true gain in anonymity, it contributes heavily to the complexity an adversary has to handle. In a more advanced scenario, we would use some anonymization technology such as ToR to further hide the accessing source (\VortexNode) from the transport infrastructure. However, the use of such technology will make access to suspicious and possibly lead to the identification of the transport account.
+
+A supposedly compromised transport layer recipient endpoint address may be migrated using a \texttt{HeaderRequestReplaceIdentity} request as outlined in section~\ref{sec:replaceID}. Such a request leaves no trace to the transport endpoint owner but allows any subset of known \VortexNode{} to advertise the migration in a cryptographically secured way. Additionally, this request allows by omitting the new address to bind an ephemeral identity to a true transport address identifying the sender of a message. Such an ephemeral identity may be assigned with an infinite quota by the owner to spare the costs of recreating and re-authenticating the sender. If such binding of identity is done, it is absolutely vital that this identity is not used for routing but only as an endpoint. Otherwise, a malicious ``friend'' could draw conclusions on routing anonymity set and frequency out of such an identity.
+
+\subsection{Operational Aspects of MURBs\label{sec:murb}}
+As we have interactions of any possible node with an unknown sender of a request (e.g., in the case of a new identity request), reply blocks are a necessity for the \MessageVortex{} protocol.
+
+Originally, we included the possibility of replaying replayable blocks (MURBs) for sending error messages. Soon we figure out that such messages imply privacy issues. While the error messages have been dumped in favor of an RBB based diagnosability, we kept the possibility of MURBs to enable users to have sender/recipient anonymity. 
+
+Our MURBs are routing blocks that an owner of the block may use for a limited amount of times. Such sending may be done without having any knowledge about the recipient's identity, location, or infrastructure. A MURB is equivalent to a normal routing block except for the following properties:
+
+\begin{itemize}
+	\item The sender is not known but the receiver of the message.
+	\item It has a replay value of 1 or higher.
+	\item Due to transport layer size restrictions and ephemeral quotas, the total size of the transported messages is limited.
+\end{itemize}
+
+A MURB in our term is an entirely prepared routing instruction built by the recipient of a message. The sender has only the routing blocks and the instructions to assemble the initial message. It does not know the message path except for the first message hop.
+
+As a MURB is a routing block, it generates the same pattern on the network each time a sender uses it. To avoid statistical visibility, we need to limit the number of uses per MURB. As a maximum number of usages, the protocol is limited to 127 usages. This number should be sufficiently sized for automated messages. A minute pattern would disappear after 2 hours the latest and an hourly pattern after five days.
+
+For a MURB to work, the RBB has to take care that all quotas required to the route are sufficiently sized. Such sizing is hard to foresee in some cases. An RBB may query these identities from time to time to make sure that they do not deplete. Wherever possible, MURBs should be dropped in favor of multiple SURBs to avoid the dangers of MURBs.
+
+\section{Routing Algorithms Suitable for Achieving Anonymity\label{sec:routingStrategies}}
+In section~\ref{sec:routingStrategies}, we elaborated on the properties of a routing block required to build an anonymizing message path.
+
+In short, every foreseeable or logically invalid pattern may be used to identify \VortexMessages{} or in transport involved nodes. This is why we cannot use a fixed pattern in routing. Instead, we use randomized routing patterns. Ordinary fixed pattern protocols, such as broadcast or DC-net based protocols, are identifiable as their communication pattern is stable (fixed set of messages between involved nodes and foreseeable message size). Whereas the message size might be varied in such systems by adding decoy content or stuffing, such behavior depends on the secrecy of the nodes executing such operations.
+
+\subsection{The Routing Graph}\label{sec:routingGraph}
+In general, an RBB builds a routing block in three stages:
+\begin{enumerate}
+	\item Create a directed multigraph (\defref{routing graph}) where the nodes represent \VortexNodes, and the edges represent the messages sent between the \VortexNodes. The graph may contain loops. We may visualize such a \defref{routing graph} traditionally. Alternatively, we found that displaying the graph as a sequence of messages (see figure~\ref{fig:transformGraph}) offers a better overview over the inner workings of a \defref{routing graph}.
+	\item We then assign timing information to each edge, leaving sufficient time in between to process the incoming message on the transport layer.
+	\item As next step, we assign operations to all involved workspaces.
+\end{enumerate}
+
+Within such a \defref{routing graph}, we refer to a path between the two nodes $i$ and $j$ as an ordered set of edges, where an edge always starts where the previously edge ended, the first edge starts at node $i$, and the last edge ends at node $j$. A path may contain multiple times the same node, and a \defref{routing graph} may contain multiple paths between two given nodes.  Figure~\ref{fig:graphPaths} shows all paths between nodes $0$ and $1$ of the graph outlined in figure~\ref{fig:transformGraph}. All these paths may be used to transport a message from node $0$ to $1$. Depending on the strategy multiple paths may be used to transport a part of a message or used as a redundancy path.
+
+\begin{figure*}[ht]\centering
+  \begin{tikzpicture}[node distance=0.5cm,auto,>=stealth]
+	\begin{scope}[baseline=(current bounding box.center)]
+		\tikzstyle{knode}=[circle,draw=black,thick,inner sep=8pt,baseline=(current bounding box.center)]
+		\node[knode] (r0) at (0:2.5cm) {0};
+		\node[knode] (r1) at (51:2.5cm) {1};
+		\node[knode] (r2) at (103:2.5cm) {2};
+		\node[knode] (r3) at (154:2.5cm) {3};
+		\node[knode] (r4) at (206:2.5cm) {4};
+		\node[knode] (r5) at (257:2.5cm) {5};
+		\node[knode] (r6) at (309:2.5cm) {6};
+		%arrows
+		\draw[->] (r0)--(r1);
+		\draw[->] (r0)--(r3);
+		\draw[->] (r1)--(r2);
+		\draw[->,bend right,looseness=0.4] (r0) edge (r1);
+		\draw[->] (r3)--(r4);
+		\draw[->,bend right,looseness=0.4,in=190] (r0) edge (r3);
+		\draw[->] (r3)--(r5);
+		\draw[->] (r0)--(r6);
+		\draw[->] (r3)--(r1);
+		\draw[->] (r5)--(r1);
+		\draw[->,bend right,looseness=0.4] (r3)edge(r0);
+		\draw[->] (r5)--(r0);
+		\draw[->] (r6)--(r4);
+		\draw[->,bend right,looseness=0.4,out=-15,in=190] (r5) edge (r0);
+		\draw[->] (r2)--(r6);
+		\draw[->] (r3)--(r2);
+		\draw[->] (r2)--(r5);
+	\end{scope}
+	\begin{scope}[baseline=(current bounding box.center),xshift=5cm,yshift=2cm]
+		\node[] (n0) {0};
+		\node[right = of n0] (n1) {1};
+		\node[right = of n1] (n2) {2};
+		\node[right = of n2] (n3) {3};
+		\node[right = of n3] (n4) {4};
+		\node[right = of n4] (n5) {5};
+		\node[right = of n5] (n6) {6};
+		\node[left = -2 mm of n0] (nm0) {};
+		\node[below of=n0, node distance=5cm] (n0Ground) {};
+		\node[below of=n1, node distance=5cm] (n1Ground) {};
+		\node[below of=n2, node distance=5cm] (n2Ground) {};
+		\node[below of=n3, node distance=5cm] (n3Ground) {};
+		\node[below of=n4, node distance=5cm] (n4Ground) {};
+		\node[below of=n5, node distance=5cm] (n5Ground) {};
+		\node[below of=n6, node distance=5cm] (n6Ground) {};
+		\node[below of=nm0,node distance=5cm] (nm0Ground) {};
+		% lines down
+		\draw (n0) -- (n0Ground);
+		\draw (n1) -- (n1Ground);
+		\draw (n2) -- (n2Ground);
+		\draw (n3) -- (n3Ground);
+		\draw (n4) -- (n4Ground);
+		\draw (n5) -- (n5Ground);
+		\draw (n6) -- (n6Ground);
+		%arrows
+		\draw[->] ($(n0)!0.10!(n0Ground)$)--($(n1)!0.10!(n1Ground)$);
+		\draw[->] ($(n0)!0.15!(n0Ground)$)--($(n3)!0.15!(n3Ground)$);
+		\draw[->] ($(n1)!0.20!(n1Ground)$)--($(n2)!0.20!(n2Ground)$);
+		\draw[->] ($(n0)!0.25!(n0Ground)$)--($(n1)!0.25!(n1Ground)$);
+		\draw[->] ($(n3)!0.30!(n3Ground)$)--($(n4)!0.30!(n4Ground)$);
+		\draw[->] ($(n0)!0.35!(n0Ground)$)--($(n3)!0.35!(n3Ground)$);
+		\draw[->] ($(n3)!0.40!(n3Ground)$)--($(n5)!0.40!(n5Ground)$);
+		\draw[->] ($(n0)!0.45!(n0Ground)$)--($(n6)!0.45!(n6Ground)$);
+		\draw[->] ($(n3)!0.50!(n3Ground)$)--($(n1)!0.50!(n1Ground)$);
+		\draw[->] ($(n5)!0.55!(n5Ground)$)--($(n1)!0.55!(n1Ground)$);
+		\draw[->] ($(n3)!0.60!(n3Ground)$)--($(n0)!0.60!(n0Ground)$);
+		\draw[->] ($(n5)!0.65!(n5Ground)$)--($(n0)!0.65!(n0Ground)$);
+		\draw[->] ($(n6)!0.70!(n6Ground)$)--($(n4)!0.70!(n4Ground)$);
+		\draw[->] ($(n5)!0.75!(n5Ground)$)--($(n0)!0.75!(n0Ground)$);
+		\draw[->] ($(n2)!0.80!(n2Ground)$)--($(n6)!0.80!(n6Ground)$);
+		\draw[->] ($(n3)!0.85!(n3Ground)$)--($(n2)!0.85!(n2Ground)$);
+		\draw[->] ($(n2)!0.90!(n2Ground)$)--($(n5)!0.90!(n5Ground)$);
+		% Legend
+		\draw[->,shorten <=25pt,shorten >=20pt] (nm0) -- (nm0Ground)  node[midway,sloped,left,rotate=90] {$\text{time}$};
+		
+	\end{scope}
+	\draw[->,shorten <=25pt,shorten >=20pt,draw=red] ($(r0)!0.0!(r0)$)--($(n0)!0.4!(n0Ground)$);
+\end{tikzpicture}
+\caption{transformation of a graph into a sequence of messages}
+\label{fig:transformGraph}
+\end{figure*}
+
+\begin{figure*}[ht]
+	\resizebox{.9\linewidth}{!}{
+	\begin{tikzpicture}[>=stealth',shorten <=0.5pt,
+		main/.style={draw,minimum width=0.5cm},child/.style={draw,minimum width=0.5cm}]		
+		\tikzstyle{level 1}=[sibling angle=25.71]
+		
+		\node[main] (a) {
+			\begin{tikzpicture}
+				\node[] (n0) {0};
+				\node[right = of n0] (n1) {1};
+				\node[right = of n1] (n2) {2};
+				\node[right = of n2] (n3) {3};
+				\node[right = of n3] (n4) {4};
+				\node[right = of n4] (n5) {5};
+				\node[right = of n5] (n6) {6};
+				\node[below of=n0, node distance=5cm] (n0Ground) {};
+				\node[below of=n1, node distance=5cm] (n1Ground) {};
+				\node[below of=n2, node distance=5cm] (n2Ground) {};
+				\node[below of=n3, node distance=5cm] (n3Ground) {};
+				\node[below of=n4, node distance=5cm] (n4Ground) {};
+				\node[below of=n5, node distance=5cm] (n5Ground) {};
+				\node[below of=n6, node distance=5cm] (n6Ground) {};
+				% lines down
+				\draw (n0) -- (n0Ground);
+				\draw (n1) -- (n1Ground);
+				\draw (n2) -- (n2Ground);
+				\draw (n3) -- (n3Ground);
+				\draw (n4) -- (n4Ground);
+				\draw (n5) -- (n5Ground);
+				\draw (n6) -- (n6Ground);
+				%arrows
+				\draw[->] ($(n0)!0.10!(n0Ground)$)--($(n1)!0.10!(n1Ground)$);
+				\draw[->] ($(n0)!0.15!(n0Ground)$)--($(n3)!0.15!(n3Ground)$);
+				\draw[->] ($(n1)!0.20!(n1Ground)$)--($(n2)!0.20!(n2Ground)$);
+				\draw[->] ($(n0)!0.25!(n0Ground)$)--($(n1)!0.25!(n1Ground)$);
+				\draw[->] ($(n3)!0.30!(n3Ground)$)--($(n4)!0.30!(n4Ground)$);
+				\draw[->] ($(n0)!0.35!(n0Ground)$)--($(n3)!0.35!(n3Ground)$);
+				\draw[->] ($(n3)!0.40!(n3Ground)$)--($(n5)!0.40!(n5Ground)$);
+				\draw[->] ($(n0)!0.45!(n0Ground)$)--($(n6)!0.45!(n6Ground)$);
+				\draw[->] ($(n3)!0.50!(n3Ground)$)--($(n1)!0.50!(n1Ground)$);
+				\draw[->] ($(n5)!0.55!(n5Ground)$)--($(n1)!0.55!(n1Ground)$);
+				\draw[->] ($(n3)!0.60!(n3Ground)$)--($(n0)!0.60!(n0Ground)$);
+				\draw[->] ($(n5)!0.65!(n5Ground)$)--($(n0)!0.65!(n0Ground)$);
+				\draw[->] ($(n6)!0.70!(n6Ground)$)--($(n4)!0.70!(n4Ground)$);
+				\draw[->] ($(n5)!0.75!(n5Ground)$)--($(n0)!0.75!(n0Ground)$);
+				\draw[->] ($(n2)!0.80!(n2Ground)$)--($(n6)!0.80!(n6Ground)$);
+				\draw[->] ($(n3)!0.85!(n3Ground)$)--($(n2)!0.85!(n2Ground)$);
+				\draw[->] ($(n2)!0.90!(n2Ground)$)--($(n5)!0.90!(n5Ground)$);
+			\end{tikzpicture}
+		} ;
+		\node (1) at ($(a)+(0*180/5:17cm) $) [child] {
+			\begin{tikzpicture}
+				\node[] (n0) {0};
+				\node[right = of n0] (n1) {1};
+				\node[right = of n1] (n2) {2};
+				\node[right = of n2] (n3) {3};
+				\node[right = of n3] (n4) {4};
+				\node[right = of n4] (n5) {5};
+				\node[right = of n5] (n6) {6};
+				\node[below of=n0, node distance=5cm] (n0Ground) {};
+				\node[below of=n1, node distance=5cm] (n1Ground) {};
+				\node[below of=n2, node distance=5cm] (n2Ground) {};
+				\node[below of=n3, node distance=5cm] (n3Ground) {};
+				\node[below of=n4, node distance=5cm] (n4Ground) {};
+				\node[below of=n5, node distance=5cm] (n5Ground) {};
+				\node[below of=n6, node distance=5cm] (n6Ground) {};
+				% lines down
+				\draw (n0) -- (n0Ground);
+				\draw (n1) -- (n1Ground);
+				\draw (n2) -- (n2Ground);
+				\draw (n3) -- (n3Ground);
+				\draw (n4) -- (n4Ground);
+				\draw (n5) -- (n5Ground);
+				\draw (n6) -- (n6Ground);
+				%arrows
+				\draw[->,thick,color=green] ($(n0)!0.10!(n0Ground)$)--($(n1)!0.10!(n1Ground)$);
+				\draw[->] ($(n0)!0.15!(n0Ground)$)--($(n3)!0.15!(n3Ground)$);
+				\draw[->] ($(n1)!0.20!(n1Ground)$)--($(n2)!0.20!(n2Ground)$);
+				\draw[->] ($(n0)!0.25!(n0Ground)$)--($(n1)!0.25!(n1Ground)$);
+				\draw[->] ($(n3)!0.30!(n3Ground)$)--($(n4)!0.30!(n4Ground)$);
+				\draw[->] ($(n0)!0.35!(n0Ground)$)--($(n3)!0.35!(n3Ground)$);
+				\draw[->] ($(n3)!0.40!(n3Ground)$)--($(n5)!0.40!(n5Ground)$);
+				\draw[->] ($(n0)!0.45!(n0Ground)$)--($(n6)!0.45!(n6Ground)$);
+				\draw[->] ($(n3)!0.50!(n3Ground)$)--($(n1)!0.50!(n1Ground)$);
+				\draw[->] ($(n5)!0.55!(n5Ground)$)--($(n1)!0.55!(n1Ground)$);
+				\draw[->] ($(n3)!0.60!(n3Ground)$)--($(n0)!0.60!(n0Ground)$);
+				\draw[->] ($(n5)!0.65!(n5Ground)$)--($(n0)!0.65!(n0Ground)$);
+				\draw[->] ($(n6)!0.70!(n6Ground)$)--($(n4)!0.70!(n4Ground)$);
+				\draw[->] ($(n5)!0.75!(n5Ground)$)--($(n0)!0.75!(n0Ground)$);
+				\draw[->] ($(n2)!0.80!(n2Ground)$)--($(n6)!0.80!(n6Ground)$);
+				\draw[->] ($(n3)!0.85!(n3Ground)$)--($(n2)!0.85!(n2Ground)$);
+				\draw[->] ($(n2)!0.90!(n2Ground)$)--($(n5)!0.90!(n5Ground)$);
+			\end{tikzpicture}
+		};
+		\node (2) at ($(a)+(1*180/5:17cm) $) [child] {
+			\begin{tikzpicture}
+				5			\node[] (n0) {0};
+				\node[right = of n0] (n1) {1};
+				\node[right = of n1] (n2) {2};
+				\node[right = of n2] (n3) {3};
+				\node[right = of n3] (n4) {4};
+				\node[right = of n4] (n5) {5};
+				\node[right = of n5] (n6) {6};
+				\node[below of=n0, node distance=5cm] (n0Ground) {};
+				\node[below of=n1, node distance=5cm] (n1Ground) {};
+				\node[below of=n2, node distance=5cm] (n2Ground) {};
+				\node[below of=n3, node distance=5cm] (n3Ground) {};
+				\node[below of=n4, node distance=5cm] (n4Ground) {};
+				\node[below of=n5, node distance=5cm] (n5Ground) {};
+				\node[below of=n6, node distance=5cm] (n6Ground) {};
+				% lines down
+				\draw (n0) -- (n0Ground);
+				\draw (n1) -- (n1Ground);
+				\draw (n2) -- (n2Ground);
+				\draw (n3) -- (n3Ground);
+				\draw (n4) -- (n4Ground);
+				\draw (n5) -- (n5Ground);
+				\draw (n6) -- (n6Ground);
+				%arrows
+				\draw[->] ($(n0)!0.10!(n0Ground)$)--($(n1)!0.10!(n1Ground)$);
+				\draw[->,thick,color=green] ($(n0)!0.15!(n0Ground)$)--($(n3)!0.15!(n3Ground)$);
+				\draw[->] ($(n1)!0.20!(n1Ground)$)--($(n2)!0.20!(n2Ground)$);
+				\draw[->] ($(n0)!0.25!(n0Ground)$)--($(n1)!0.25!(n1Ground)$);
+				\draw[->] ($(n3)!0.30!(n3Ground)$)--($(n4)!0.30!(n4Ground)$);
+				\draw[->] ($(n0)!0.35!(n0Ground)$)--($(n3)!0.35!(n3Ground)$);
+				\draw[->] ($(n3)!0.40!(n3Ground)$)--($(n5)!0.40!(n5Ground)$);
+				\draw[->] ($(n0)!0.45!(n0Ground)$)--($(n6)!0.45!(n6Ground)$);
+				\draw[->,thick,color=green] ($(n3)!0.50!(n3Ground)$)--($(n1)!0.50!(n1Ground)$);
+				\draw[->] ($(n5)!0.55!(n5Ground)$)--($(n1)!0.55!(n1Ground)$);
+				\draw[->] ($(n3)!0.60!(n3Ground)$)--($(n0)!0.60!(n0Ground)$);
+				\draw[->] ($(n5)!0.65!(n5Ground)$)--($(n0)!0.65!(n0Ground)$);
+				\draw[->] ($(n6)!0.70!(n6Ground)$)--($(n4)!0.70!(n4Ground)$);
+				\draw[->] ($(n5)!0.75!(n5Ground)$)--($(n0)!0.75!(n0Ground)$);
+				\draw[->] ($(n2)!0.80!(n2Ground)$)--($(n6)!0.80!(n6Ground)$);
+				\draw[->] ($(n3)!0.85!(n3Ground)$)--($(n2)!0.85!(n2Ground)$);
+				\draw[->] ($(n2)!0.90!(n2Ground)$)--($(n5)!0.90!(n5Ground)$);
+				% addon arrows
+				\draw[->,thick,color=green] ($(n3)!0.15!(n3Ground)$)--($(n3)!0.50!(n3Ground)$);
+			\end{tikzpicture}
+		};
+		\node (3) at ($(a)+(2*180/5:17cm) $) [child] {
+			\begin{tikzpicture}
+				\node[] (n0) {0};
+				\node[right = of n0] (n1) {1};
+				\node[right = of n1] (n2) {2};
+				\node[right = of n2] (n3) {3};
+				\node[right = of n3] (n4) {4};
+				\node[right = of n4] (n5) {5};
+				\node[right = of n5] (n6) {6};
+				\node[below of=n0, node distance=5cm] (n0Ground) {};
+				\node[below of=n1, node distance=5cm] (n1Ground) {};
+				\node[below of=n2, node distance=5cm] (n2Ground) {};
+				\node[below of=n3, node distance=5cm] (n3Ground) {};
+				\node[below of=n4, node distance=5cm] (n4Ground) {};
+				\node[below of=n5, node distance=5cm] (n5Ground) {};
+				\node[below of=n6, node distance=5cm] (n6Ground) {};
+				% lines down
+				\draw (n0) -- (n0Ground);
+				\draw (n1) -- (n1Ground);
+				\draw (n2) -- (n2Ground);
+				\draw (n3) -- (n3Ground);
+				\draw (n4) -- (n4Ground);
+				\draw (n5) -- (n5Ground);
+				\draw (n6) -- (n6Ground);
+				%arrows
+				\draw[->] ($(n0)!0.10!(n0Ground)$)--($(n1)!0.10!(n1Ground)$);
+				\draw[->] ($(n0)!0.15!(n0Ground)$)--($(n3)!0.15!(n3Ground)$);
+				\draw[->] ($(n1)!0.20!(n1Ground)$)--($(n2)!0.20!(n2Ground)$);
+				\draw[->,thick,color=green] ($(n0)!0.25!(n0Ground)$)--($(n1)!0.25!(n1Ground)$);
+				\draw[->] ($(n3)!0.30!(n3Ground)$)--($(n4)!0.30!(n4Ground)$);
+				\draw[->] ($(n0)!0.35!(n0Ground)$)--($(n3)!0.35!(n3Ground)$);
+				\draw[->] ($(n3)!0.40!(n3Ground)$)--($(n5)!0.40!(n5Ground)$);
+				\draw[->] ($(n0)!0.45!(n0Ground)$)--($(n6)!0.45!(n6Ground)$);
+				\draw[->] ($(n3)!0.50!(n3Ground)$)--($(n1)!0.50!(n1Ground)$);
+				\draw[->] ($(n5)!0.55!(n5Ground)$)--($(n1)!0.55!(n1Ground)$);
+				\draw[->] ($(n3)!0.60!(n3Ground)$)--($(n0)!0.60!(n0Ground)$);
+				\draw[->] ($(n5)!0.65!(n5Ground)$)--($(n0)!0.65!(n0Ground)$);
+				\draw[->] ($(n6)!0.70!(n6Ground)$)--($(n4)!0.70!(n4Ground)$);
+				\draw[->] ($(n5)!0.75!(n5Ground)$)--($(n0)!0.75!(n0Ground)$);
+				\draw[->] ($(n2)!0.80!(n2Ground)$)--($(n6)!0.80!(n6Ground)$);
+				\draw[->] ($(n3)!0.85!(n3Ground)$)--($(n2)!0.85!(n2Ground)$);
+				\draw[->] ($(n2)!0.90!(n2Ground)$)--($(n5)!0.90!(n5Ground)$);
+				% addon arrows
+				%\draw[->,thick,color=green] ($(n3)!0.15!(n3Ground)$)--($(n3)!0.50!(n3Ground)$);
+			\end{tikzpicture}
+		};
+		\node (4) at ($(a)+(3*180/5:17cm) $) [child] {
+			\begin{tikzpicture}
+				\node[] (n0) {0};
+				\node[right = of n0] (n1) {1};
+				\node[right = of n1] (n2) {2};
+				\node[right = of n2] (n3) {3};
+				\node[right = of n3] (n4) {4};
+				\node[right = of n4] (n5) {5};
+				\node[right = of n5] (n6) {6};
+				\node[below of=n0, node distance=5cm] (n0Ground) {};
+				\node[below of=n1, node distance=5cm] (n1Ground) {};
+				\node[below of=n2, node distance=5cm] (n2Ground) {};
+				\node[below of=n3, node distance=5cm] (n3Ground) {};
+				\node[below of=n4, node distance=5cm] (n4Ground) {};
+				\node[below of=n5, node distance=5cm] (n5Ground) {};
+				\node[below of=n6, node distance=5cm] (n6Ground) {};
+				% lines down
+				\draw (n0) -- (n0Ground);
+				\draw (n1) -- (n1Ground);
+				\draw (n2) -- (n2Ground);
+				\draw (n3) -- (n3Ground);
+				\draw (n4) -- (n4Ground);
+				\draw (n5) -- (n5Ground);
+				\draw (n6) -- (n6Ground);
+				%arrows
+				\draw[->] ($(n0)!0.10!(n0Ground)$)--($(n1)!0.10!(n1Ground)$);
+				\draw[->,thick,color=green] ($(n0)!0.15!(n0Ground)$)--($(n3)!0.15!(n3Ground)$);
+				\draw[->] ($(n1)!0.20!(n1Ground)$)--($(n2)!0.20!(n2Ground)$);
+				\draw[->] ($(n0)!0.25!(n0Ground)$)--($(n1)!0.25!(n1Ground)$);
+				\draw[->] ($(n3)!0.30!(n3Ground)$)--($(n4)!0.30!(n4Ground)$);
+				\draw[->] ($(n0)!0.35!(n0Ground)$)--($(n3)!0.35!(n3Ground)$);
+				\draw[->,thick,color=green] ($(n3)!0.40!(n3Ground)$)--($(n5)!0.40!(n5Ground)$);
+				\draw[->] ($(n0)!0.45!(n0Ground)$)--($(n6)!0.45!(n6Ground)$);
+				\draw[->] ($(n3)!0.50!(n3Ground)$)--($(n1)!0.50!(n1Ground)$);
+				\draw[->,thick,color=green] ($(n5)!0.55!(n5Ground)$)--($(n1)!0.55!(n1Ground)$);
+				\draw[->] ($(n3)!0.60!(n3Ground)$)--($(n0)!0.60!(n0Ground)$);
+				\draw[->] ($(n5)!0.65!(n5Ground)$)--($(n0)!0.65!(n0Ground)$);
+				\draw[->] ($(n6)!0.70!(n6Ground)$)--($(n4)!0.70!(n4Ground)$);
+				\draw[->] ($(n5)!0.75!(n5Ground)$)--($(n0)!0.75!(n0Ground)$);
+				\draw[->] ($(n2)!0.80!(n2Ground)$)--($(n6)!0.80!(n6Ground)$);
+				\draw[->] ($(n3)!0.85!(n3Ground)$)--($(n2)!0.85!(n2Ground)$);
+				\draw[->] ($(n2)!0.90!(n2Ground)$)--($(n5)!0.90!(n5Ground)$);
+				% addon arrows
+				\draw[->,thick,color=green] ($(n3)!0.15!(n3Ground)$)--($(n3)!0.40!(n3Ground)$);
+				\draw[->,thick,color=green] ($(n5)!0.40!(n5Ground)$)--($(n5)!0.55!(n5Ground)$);
+			\end{tikzpicture}
+		};
+		\node (5) at ($(a)+(4*180/5:17cm) $) [child] {
+			\begin{tikzpicture}
+				\node[] (n0) {0};
+				\node[right = of n0] (n1) {1};
+				\node[right = of n1] (n2) {2};
+				\node[right = of n2] (n3) {3};
+				\node[right = of n3] (n4) {4};
+				\node[right = of n4] (n5) {5};
+				\node[right = of n5] (n6) {6};
+				\node[below of=n0, node distance=5cm] (n0Ground) {};
+				\node[below of=n1, node distance=5cm] (n1Ground) {};
+				\node[below of=n2, node distance=5cm] (n2Ground) {};
+				\node[below of=n3, node distance=5cm] (n3Ground) {};
+				\node[below of=n4, node distance=5cm] (n4Ground) {};
+				\node[below of=n5, node distance=5cm] (n5Ground) {};
+				\node[below of=n6, node distance=5cm] (n6Ground) {};
+				% lines down
+				\draw (n0) -- (n0Ground);
+				\draw (n1) -- (n1Ground);
+				\draw (n2) -- (n2Ground);
+				\draw (n3) -- (n3Ground);
+				\draw (n4) -- (n4Ground);
+				\draw (n5) -- (n5Ground);
+				\draw (n6) -- (n6Ground);
+				%arrows
+				\draw[->] ($(n0)!0.10!(n0Ground)$)--($(n1)!0.10!(n1Ground)$);
+				\draw[->] ($(n0)!0.15!(n0Ground)$)--($(n3)!0.15!(n3Ground)$);
+				\draw[->] ($(n1)!0.20!(n1Ground)$)--($(n2)!0.20!(n2Ground)$);
+				\draw[->] ($(n0)!0.25!(n0Ground)$)--($(n1)!0.25!(n1Ground)$);
+				\draw[->] ($(n3)!0.30!(n3Ground)$)--($(n4)!0.30!(n4Ground)$);
+				\draw[->,thick,color=green] ($(n0)!0.35!(n0Ground)$)--($(n3)!0.35!(n3Ground)$);
+				\draw[->,thick,color=green] ($(n3)!0.40!(n3Ground)$)--($(n5)!0.40!(n5Ground)$);
+				\draw[->] ($(n0)!0.45!(n0Ground)$)--($(n6)!0.45!(n6Ground)$);
+				\draw[->] ($(n3)!0.50!(n3Ground)$)--($(n1)!0.50!(n1Ground)$);
+				\draw[->,thick,color=green] ($(n5)!0.55!(n5Ground)$)--($(n1)!0.55!(n1Ground)$);
+				\draw[->] ($(n3)!0.60!(n3Ground)$)--($(n0)!0.60!(n0Ground)$);
+				\draw[->] ($(n5)!0.65!(n5Ground)$)--($(n0)!0.65!(n0Ground)$);
+				\draw[->] ($(n6)!0.70!(n6Ground)$)--($(n4)!0.70!(n4Ground)$);
+				\draw[->] ($(n5)!0.75!(n5Ground)$)--($(n0)!0.75!(n0Ground)$);
+				\draw[->] ($(n2)!0.80!(n2Ground)$)--($(n6)!0.80!(n6Ground)$);
+				\draw[->] ($(n3)!0.85!(n3Ground)$)--($(n2)!0.85!(n2Ground)$);
+				\draw[->] ($(n2)!0.90!(n2Ground)$)--($(n5)!0.90!(n5Ground)$);
+				% addon arrows
+				\draw[->,thick,color=green] ($(n3)!0.35!(n3Ground)$)--($(n3)!0.40!(n3Ground)$);
+				\draw[->,thick,color=green] ($(n5)!0.40!(n5Ground)$)--($(n5)!0.55!(n5Ground)$);
+			\end{tikzpicture}
+		};
+		\node (6) at ($(a)+(5*180/5:17cm) $) [child] {
+			\begin{tikzpicture}
+				\node[] (n0) {0};
+				\node[right = of n0] (n1) {1};
+				\node[right = of n1] (n2) {2};
+				\node[right = of n2] (n3) {3};
+				\node[right = of n3] (n4) {4};
+				\node[right = of n4] (n5) {5};
+				\node[right = of n5] (n6) {6};
+				\node[below of=n0, node distance=5cm] (n0Ground) {};
+				\node[below of=n1, node distance=5cm] (n1Ground) {};
+				\node[below of=n2, node distance=5cm] (n2Ground) {};
+				\node[below of=n3, node distance=5cm] (n3Ground) {};
+				\node[below of=n4, node distance=5cm] (n4Ground) {};
+				\node[below of=n5, node distance=5cm] (n5Ground) {};
+				\node[below of=n6, node distance=5cm] (n6Ground) {};
+				% lines down
+				\draw (n0) -- (n0Ground);
+				\draw (n1) -- (n1Ground);
+				\draw (n2) -- (n2Ground);
+				\draw (n3) -- (n3Ground);
+				\draw (n4) -- (n4Ground);
+				\draw (n5) -- (n5Ground);
+				\draw (n6) -- (n6Ground);
+				%arrows
+				\draw[->] ($(n0)!0.10!(n0Ground)$)--($(n1)!0.10!(n1Ground)$);
+				\draw[->] ($(n0)!0.15!(n0Ground)$)--($(n3)!0.15!(n3Ground)$);
+				\draw[->] ($(n1)!0.20!(n1Ground)$)--($(n2)!0.20!(n2Ground)$);
+				\draw[->] ($(n0)!0.25!(n0Ground)$)--($(n1)!0.25!(n1Ground)$);
+				\draw[->] ($(n3)!0.30!(n3Ground)$)--($(n4)!0.30!(n4Ground)$);
+				\draw[->,thick,color=green] ($(n0)!0.35!(n0Ground)$)--($(n3)!0.35!(n3Ground)$);
+				\draw[->] ($(n3)!0.40!(n3Ground)$)--($(n5)!0.40!(n5Ground)$);
+				\draw[->] ($(n0)!0.45!(n0Ground)$)--($(n6)!0.45!(n6Ground)$);
+				\draw[->,thick,color=green] ($(n3)!0.50!(n3Ground)$)--($(n1)!0.50!(n1Ground)$);
+				\draw[->] ($(n5)!0.55!(n5Ground)$)--($(n1)!0.55!(n1Ground)$);
+				\draw[->] ($(n3)!0.60!(n3Ground)$)--($(n0)!0.60!(n0Ground)$);
+				\draw[->] ($(n5)!0.65!(n5Ground)$)--($(n0)!0.65!(n0Ground)$);
+				\draw[->] ($(n6)!0.70!(n6Ground)$)--($(n4)!0.70!(n4Ground)$);
+				\draw[->] ($(n5)!0.75!(n5Ground)$)--($(n0)!0.75!(n0Ground)$);
+				\draw[->] ($(n2)!0.80!(n2Ground)$)--($(n6)!0.80!(n6Ground)$);
+				\draw[->] ($(n3)!0.85!(n3Ground)$)--($(n2)!0.85!(n2Ground)$);
+				\draw[->] ($(n2)!0.90!(n2Ground)$)--($(n5)!0.90!(n5Ground)$);
+				% addon arrows
+				\draw[->,thick,color=green] ($(n3)!0.35!(n3Ground)$)--($(n3)!0.50!(n3Ground)$);
+			\end{tikzpicture}
+		};
+		
+		\draw[->,shorten <=25pt,shorten >=10pt,draw=red,thick] (a)--(1) node[midway,sloped,above] {path 1};
+		\draw[->,shorten <=25pt,shorten >=10pt,draw=red,thick] (a)--(2) node[midway,sloped,above] {path 2};
+		\draw[->,shorten <=25pt,shorten >=10pt,draw=red,thick] (a)--(3) node[midway,sloped,above] {path 3};
+		\draw[->,shorten <=25pt,shorten >=10pt,draw=red,thick] (a)--(4) node[midway,sloped,above] {path 4};
+		\draw[->,shorten <=25pt,shorten >=10pt,draw=red,thick] (a)--(5) node[midway,sloped,above] {path 5};
+		\draw[->,shorten <=25pt,shorten >=10pt,draw=red,thick] (a)--(6) node[midway,sloped,above] {path 6};
+		
+	\end{tikzpicture}
+	}
+	\caption{A graph containing six paths between node $0$ and node $1$}\label{fig:graphPaths}
+\end{figure*}
+
+A possible routing mechanism creating such a graph and aplying routing information is described in detail in section~\ref{sec:simpleRoutingStrategy}.
+
+\subsection{A Simple Routing Strategy}\label{sec:simpleRoutingStrategy}
+In this section, we show a simple algorithm for creating a \defref{routing graph} in a non-censored environment or in an isolated node-set in a censored environment. While the algorithm is complete, we had to shorten it for this work in order to remain readable. The algorithm is not perfect as it leaks certain properties, such as the maximum possible message size.
+
+To create a \defref{routing block}, we need some basic objects as defined in algorithm~\ref{alg:simpleGraphObjects}.
+\begin{breakablealgorithm}
+	\captionof{figure}{Objects for building a routing block}\label{alg:simpleGraphObjects}
+	\begin{algorithmic}[1]
+		\LineComment{A routing graph}
+		\Object{RoutingGraph}
+			\State $\text{nodes}:\textsc{List<Node>}$
+			\State $\text{messages}:\textsc{List<Message>}$
+		\EndObject
+		\item[]
+		\Object{Message}
+			\State $\text{sourceNode}: Node$
+			\State $\text{sourceId}: int$
+			\State $\text{earliestTime}: datetime$
+			\State $\text{latestTime}:datetime$
+			\State $\text{targetNode}: Node$
+			\State $\text{targetId}$
+			\State $\text{operations}: \textsc{List<Operations>}$
+		\EndObject
+		\item[]
+		\LineComment{The projected workspace of any eID under our control}
+		\Object{WorkSpace}
+			\State $\text{payloads}:\textsc{Map<Id,Payload>}$
+			\State $\text{routingBlocks}:\textsc{List<RoutingBlock>}$
+			\State $\text{operations}:\textsc{List<Operation>}$
+			\item[]
+			\LineComment{Returns an unused id with at least <numberOfSubsequentIds> unused IDs following}
+			\AbstractFunction{getUnusedId}{numberOfSubsequentIds}
+			\LineComment{Returns a random output id of an operation unused so far and marks it as used}			\AbstractFunction{getRandomPayloadId}{}
+		\EndObject
+		\item[]
+		\LineComment{An object reflecting our knowledge about \MessageVortex}
+		\Object{Universe}
+			\State $\text{knownNodes}:\textsc{Map<Node,WorkSpace>}$
+			\item[]
+			\LineComment{Returns all the nodes of knownNodes}
+			\AbstractFunction{getAllNodes}{}
+			\LineComment{Returns a random node of knownNodes}
+			\AbstractFunction{getRandomNode}{list}
+			\LineComment{Returns the representation of the workspace of the named node}
+			\AbstractFunction{getWorkspace}{node}
+			\LineComment{Adds a message to a workspace with all its content (payloads, operations)}
+			\AbstractFunction{addMessageToWorkspaces}{message}
+		\EndObject
+	\end{algorithmic}
+\end{breakablealgorithm}
+
+To create a routing block, we first need a graph representing the message flow. Algorithm~\ref{alg:simpleGraph} shows a pseudo-code to get such a valid graph. After creating a graph, we need to assign timing and routing information. Algorithm~\ref{alg:simpleTiming} shows a possible algorithm for assigning this timing information, whereas Algorithm~\ref{alg:simpleRouting} shows a simple generator for the routing operation. The algorithm omits for simplicity allocation of workspace IDs as this is a ``bookkeeping''-only problem.
+
+To create a graph we use the function~\funcref{alg:getRoutingGraph}{} on line~\ref{alg:getRoutingGraph-line} as shown in algorithm~\ref{alg:simpleGraph}. It creates an ordered set of nodes (\texttt{nodes}), whereas the first node in the set is the sender and the second node of the set is the final recipient. It then adds randomly known nodes until the anonymity set is as large as requested. Next, we assign the edges by calling function~\funcref{alg:getEdges}{} (Line~\ref{alg:getEdges-line}). The function loops until the requested minimum number of edges are reached, and all nodes of the graph receive at least one message. On each loop, an edge is added to the graph, that is pointing from any already reached node to a random, different node.
+
+\begin{breakablealgorithm}
+	\captionof{figure}[Simple Graph for Routing Block (PseudoCode)]{Simple Graph for Routing Block}\label{alg:simpleGraph}
+	\begin{algorithmic}[1]
+		\Function{getRoutingGraph}{startNode,endNode, numNodes, minEdges, universe}\funclabel{alg:getRoutingGraph}\label{alg:getRoutingGraph-line}
+			\State $\text{ret} \gets \text{new RoutingGraph}()$
+			\State $\text{ret.nodes} \gets \Call{getNodes}{startNode, endnode, numNodes, universe}$
+			\State $\text{ret.messages} \gets \Call{getEdges}{minEdges, ret.nodes, universe}$
+			\Return $\text{ret}$	
+		\EndFunction
+		\item[]		
+		\Function{getNodes}{startNode, endnode, numberOfNodes, universe}\funclabel{alg:getNodes}\label{alg:getNodes-line}
+		  \State $\text{nodeList} \gets \lbrack\text{startNode}, \text{endNode}\rbrack$
+		  \While {$\text{len(nodeList)} < \text{numberOfNodes}$}
+		  	\State $\text{randomNode} \gets universe.\Call{getRandomNode()}$
+		  	\If {$\neg \text{nodeList.contains(randomNode)}$}
+		  		\State $\text{nodeList.append(randomNode)}$ 
+		  	\EndIf	
+		  \EndWhile{}	
+		  \Return nodeList
+		\EndFunction  
+		\item[]
+		\Function{getEdges}{minEdges, nodes, universe}\funclabel{alg:getEdges}\label{alg:getEdges-line}
+		    \State $\text{edgeList} \gets []$
+			\While{$\text{len(edgeList)<minEdges} \Or $  \\ $\text{getReachedNodes(edgeList, listOfAllNodes[0])<len(nodes)}$}
+				\State $\text{listOfReachedNodes} \gets \Call{getReachedNodes}{nodes, edgeList}$
+				\State $\text{startNode} \gets \Call{universe.getRandomNode}{listOfReachedNodes}$
+				\State $\text{endNode} \gets \Call{universe.getRandomNode}{listOfAllNodes-[startNode]}$
+				\State $\text{edgeList.append(new Message(startNode, endNode))}$
+			\EndWhile{}
+			\Return $\text{edgeList}$
+		\EndFunction
+		\item[]
+		\Function{getReachedNodes}{edgeList,startNode}\funclabel{alg:getReachedNodes}\label{alg:getReachedNodes-line}
+			\State $\text{reachedNodeList} \gets [\text{startNode}]$
+			\ForAll{$\text{e} \in \text{edgeList}$}
+				\If{$\neg \text{reachedNodeList.contains(e.targetNode)}$}
+					\State $\text{reachedNodeList.append(e.targetNode)}$
+				\EndIf
+			\EndFor
+			\Return $\text{reachedNodeList}$
+		\EndFunction
+	\end{algorithmic}
+\end{breakablealgorithm}
+
+In algorithm~\ref{alg:simpleTiming}, we assign the timing information. 
+
+We use a custom random distribution called \funcref{alg:getRandomTime} (line~\ref{alg:getRandomTime-line}). This distribution is a derived form of a Gaussian distribution and has its minimum value, maximum value, and peak value at desired spots. The squishing of the function violates some properties of the Gaussian bell curve. Due to the squishing, the left and right sides of the bell no longer have the same area. The timing information distributes in a serialized way along the timeline. Figure~\ref{fig:timeDistribution} shows the distribution of the implementation.
+
+\begin{figure*}[ht]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[ytick={0,1088527},yticklabels={0,max},xtick={70,90,120,200},xticklabels={$70$,$90$,$120$,$200$}]
+			\addplot[smooth] coordinates {
+				(70,0)(71,0)(72,0)(73,0)(74,0)(75,0)(76,0)(77,0)(78,0)(79,0)
+				(80,0)(81,0)(82,0)(83,0)(84,0)(85,0)(86,0)(87,0)(88,0)(89,0)(90,5)(91,17)(92,31)(93,63)(94,127)(95,284)(96,521)(97,1007)(98,1861)(99,3179)
+				(100,5499)(101,9454)(102,15517)(103,25184)(104,38892)(105,59401)(106,86779)(107,124609)(108,173778)(109,236005)(110,310038)(111,398844)(112,499226)(113,606437)(114,713662)(115,820144)(116,918162)(117,995665)(118,1054089)(119,1081792)
+				(120,1088527)(121,1082042)(122,1076051)(123,1063208)(124,1044725)(125,1025394)(126,1001131)(127,974837)(128,944276)(129,912184)(130,877056)(131,841599)(132,801819)(133,761560)(134,722383)(135,680702)(136,638947)(137,598466)(138,556899)(139,518323)
+				(140,479028)(141,441472)(142,404478)(143,369047)(144,336823)(145,305905)(146,276225)(147,248062)(148,223072)(149,198637)(150,176465)(151,157067)(152,138213)(153,121287)(154,106923)(155,93143)(156,80291)(157,70019)(158,60285)(159,52003)
+				(160,44159)(161,37625)(162,32157)(163,26929)(164,22780)(165,19184)(166,16166)(167,13179)(168,11125)(169,9137)(170,7434)(171,6295)(172,4924)(173,4037)(174,3300)(175,2651)(176,2092)(177,1693)(178,1367)(179,1102)
+				(180,853)(181,687)(182,527)(183,387)(184,319)(185,241)(186,204)(187,141)(188,120)(189,99)(190,76)(191,47)(192,41)(193,19)(194,13)(195,16)(196,15)(197,6)(198,5)(199,2)
+			};
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Distribution of \funcref{alg:getRandomTime}{}(90, 120, 200) in algorithm~\ref{alg:simpleTiming}}
+	\label{fig:timeDistribution}
+\end{figure*}
+
+We assign the timing information by looping through our ordered set of edges. We first, calculate the earliest ($\text{earliestTime}$) and the maximum available time starting then ($\text{maxShare}$) until the message has to be sent. We calculate when the message has to be sent in relation to $\text{earliestTime}$ ($\text{share}$). Finally, we generate a time when an edge may be executed earliest ($\text{minTime}$; line~\ref{alg:minTime-line}) and latest ($\text{maxTime}$; line~\ref{alg:maxTime-line}).
+
+\fxwarning{Verify simplification of timing algorithm and adapt to object oriented approach}
+
+\begin{breakablealgorithm}
+	\captionof{figure}[Assign Timing Information to a Graph (PseudoCode)]{Assign Timing Information to a Graph}\label{alg:simpleTiming}
+	\begin{algorithmic}[1]
+		\Function{getTiming}{edges, maxTime,minHopTime}\funclabel{alg:getTiming}\label{alg:getTiming-line}
+			\If{$\text{len(edges)} \times \text{(minHopTime - 1)} > \text{maxTime}$}
+				\Throw "maxTime too small for constraints"
+			\EndIf
+			\State $\text{earliestTime} \gets 0$
+			\State $\text{maxRemainingTime} \gets \text{maxTime}-\text{earliestTime}$
+			\State $\text{remainingHops} \gets \text{len(edges)} - 1$
+			\State $\text{times} \gets []$
+			\ForAll{$\text{e} \in \text{edges}$}
+				\State $\text{maxShare} \gets \text{remainingTime} - \text{remainingHops}\times\text{minHopTime}$
+				\State $\text{share} \gets \frac{maxShare}{remainingHops}$
+				\State $\text{minTime} \gets \Call{getRandomTime}{earliestTime, earliestTime+share, earliestTime+maxShare}$\label{alg:minTime-line}
+				\State $\text{maxTime} \gets \Call{getRandomTime}{minTime, minTime+share, earliestTime+maxShare}$\label{alg:maxTime-line}
+				\State $\text{earliestTime} \gets \text{maxTime}+\text{minHopTime}$
+				\State $\text{remainingHops} \gets \text{remainingHops} - 1$
+				\State $\text{maxRemainingTime} \gets \text{maxTime}-\text{earliestTime}$
+				\State $\text{times.append(minTime, maxTime)}$
+			\EndFor
+			\Return $\text{times}$
+		\EndFunction
+		\item[]		
+		\Function{getRandomTime}{min, peak, max}\funclabel{alg:getRandomTime}\label{alg:getRandomTime-line}
+			\State $\text{value} \gets -1$
+			\While{$\text{value} < \text{min} \Or \text{value} > \text{max}$} 
+				\State $\text{value} \gets \Call{nextRadnomGaussian}{~}$
+				\State $\text{d} \gets \Call{nextDouble}{~}$
+				\If{$d < (peak-min)/(max-min)$} 
+					\State $\text{value} \gets \text{peak} - \frac{\text{abs(value)} \times (\text{peak} - \text{min})}{5}$
+				\Else
+					\State $\text{value} \gets \text{peak} + \frac{\text{abs(value)} \times (\text{max} - \text{peak})}{5}$
+				\EndIf
+			\EndWhile
+			\Return $\text{value}$
+		\EndFunction
+	\end{algorithmic}
+\end{breakablealgorithm}
+
+Key of the graph itself are not the edges or nodes nor the timing but the operations applied to the graph. This part is covered by function~\funcref{alg:getRouting}{} in algorithm~\ref{alg:simpleRouting}. We assign the operations in three steps. We first assign to $\text{redundantRoutes}$ routes a valid message path (lines~\ref{alg:startAssignValidRoutes-line}\=/\ref{alg:endAssignValidRoutes-line}). After that we identify ``unused (sub\=/)routes'' and assign the same operations to these routes (lines~\ref{alg:startAssignUnusedRoutes-line}\=/\ref{alg:endAssignUnusedRoutes-line}). 
+
+Operations are assigned in a recursive manner. First, we identify the routes we want to assign operations. This recursive part is done by the \funcref{alg:assignRoute} (line~\ref{alg:startAssignRoute-line}\-/\ref{alg:endAssignRoute-line}). We first identify a payload to be transported and the chain of nodes. We call \funcref{alg:assignRoute}, which will then apply a random operation on the first node and transport the relevant payload block to the second node in the chain, mapping it there to an unused ID within the workspace. We then take the remaining path with the newly created ID in the remaining path and repeat the step, thus looping recursively through the path until we have covered the whole path.
+
+Operations are chosen in two ways either we create an $addRedundancy$ operation of type $n-1$ of $n$, or we use a simple encryption step. In each case, we apply on the current node the operation, and we apply on the final node the reverse operation, thus rebuilding the message on the last node simultaneously.
+
+\begin{breakablealgorithm}
+	\captionof{figure}[Assign Routing Information to a Graph (PseudoCode)]{Assign Routing Information to a Graph}\label{alg:simpleRouting}
+	\begin{algorithmic}[1]
+		\Function{getRouting}{edges, redundantRoutes, messageId}\funclabel{alg:getRouting}\label{alg:getRouting-line}
+			\If{$redundantRoutes<1$}
+				\Throw "At least one route is required"
+			\EndIf
+			\State $\text{routes} \gets \text{getRoutes(edges)}$\label{alg:startAssignValidRoutes-line}
+			\If{$\text{len(routes)}<\text{redundantRoutes}$}
+				\Throw "Graph has not enough redundant routes"
+			\EndIf
+			\LineComment{Add operations to true routes}
+			\State $\text{numRoute} \gets 0$
+			\While{$\text{redundantRoutes}>\text{numRoute}$}
+				\State $\text{currentRoute} \gets \text{routes[numRoute]}$
+				\State $\Call{assignRoute}{\text{currentRoute}, \text{payloadId}, \text{currentRoute[LAST]},0}$
+				\State $\text{numRoute} \gets \text{numRoute} + 1$
+			\EndWhile\label{alg:endAssignValidRoutes-line}
+			\LineComment{Add sensible operations to decoy routes}
+			\ForAll{$r \in getUnsuedRoutes(edges)$}\label{alg:startAssignUnusedRoutes-line}
+				\State $\Call{assignRoute}{\text{r}, \text{r.getRandopOperation().getUnusedIds(1)}, \text{NULL},32769}$
+			\EndFor\label{alg:endAssignUnusedRoutes-line}
+			\State $\Call{addMessageMapping}{\text{edges}}$
+		\EndFunction
+		\item[]		
+		\Function{assignRoute}{route, payloadIds, lastNode, targetIds}\funclabel{alg:assignRoute}\label{alg:startAssignRoute-line}
+			\State $source \gets route.getSourceNode()$
+			\If{$payloadIds.isEmpty()$}
+				\State $\text{PayloadIds} \gets source.getRandopOperation().getUnusedIds(1)$
+				\State $\text{payloadSet} \gets \Call{assignRoute}{\text{route[2-]}, \text{targetIds.forward()}, \text{lastNode}, \text{targetIds.reverse()}}$
+			\Else
+				\State $\text{targetIds}  \gets \Call{assignOperation}{\text{route.getSourceNode()}, \text{payloadIds}, \text{lastNode}, \text{targetIds}}$
+				\State $\text{payloadSet} \gets \Call{assignRoute}{\text{route[2-]}, \text{targetIds.forward()}, \text{lastNode}, \text{targetIds.reverse()}}$
+			\EndIf	
+		\EndFunction\label{alg:endAssignRoute-line}
+		\item[]		
+		\Function{assignOperation}{node, transportIds, reverseNode, targetIds}\funclabel{alg:assignOperation}\label{alg:startAssignOperation-line}
+		    \State $\text{out} \gets \text{node.outEdges()}$
+		    \State $\text{in} \gets \text{node.inEdges()}$
+			\If{$\text{out}>1 \Or \text{extRandomInt(3)}=1$}
+				\LineComment{assign addRedundancy}
+				\State $\text{numBlocks} \gets \text{max(out+1, nextRandomInt(out+4))}$
+				\State $\text{seed} \gets \text{nextRandomInt}(2^{256}-1)$
+				\State $\text{op} \gets \text{node.addRedundancy(transportIds, numBlocks - 1, numBlocks, seed)}$
+				\If{$reverseNode!=NULL$}
+					\State $\text{reverseOp} \gets \text{reverseNode.removeRedundancy(targetIds, op)}$
+					\State $\text{newId} \gets \text{op.getUnusedIds(1)}$
+					\State $\text{newId.addReverseIds(reverseOp)}$
+				\EndIf	
+			\Else
+				\LineComment{assign encrypt}
+				\State $\text{keySize}   \gets (\text{nextRandomInt}(3)+2)*64$
+				\State $\text{key}       \gets \text{nextRandomInt}(2^{\text{keySize}})$
+				\State $\text{op}        \gets \text{node.encrypt(transportIds, "AES", keySize, key)}$
+				\If{$reverseNode!=NULL$}
+					\State $\text{reverseOp} \gets \text{reverseNode.decrypt(targetIds, op)}$
+					\State $\text{newId}     \gets \text{op.getUnusedIds(1)}$
+					\State $\text{newId.addReverseIds(reverseOp)}$
+				\EndIf	
+			\EndIf
+			\Return{$newIds$}
+		\EndFunction\label{alg:endAssignOperation-line}
+	\end{algorithmic}
+\end{breakablealgorithm}
+
+The algorithm outlined in this section has a couple of downsides due to its brevity. As splitting of routes is hard to create in such a compact recursive manner, we omitted it. And for the same reason, we always used $addRedundancy$ operations, which rebuilds the message out of a single block. These simplifications have some drawbacks. This algorithm never loses size (it may gain size due to padding and stuffing). Therefore, we may match similarly sized payload blocks as potentially belonging to the same message. Apart from that, the algorithm fulfills all criteria mentioned above. We apply the same operations on the decoy and true message traffic, and we have no timing, operations, or message patterns. As soon as this algorithm is using either a split with the $split$ or $addRedundancy$ operation, this weakness disappears too.
+
+\section{Routing Diagnosis and Reputation Building\label{sec:diagnosisOfMessagePath}}
+When all nodes are working as expected, no diagnostic is required. As we are relying on always-connected devices such as mobile phones as routers, it is likely that not all nodes are available within the required time frames. As a result, we need at least the possibility to identify malfunctioning nodes and exclude them from routing. Furthermore, active adversaries may intentionally induce bad packets to destroy message content.
+
+\MessageVortex{} allows a diagnosis to identify such malicious nodes. We differentiate between implicit and explicit diagnosis. When making an implicit diagnosis, we are analyzing packets that are routed from the start node over one or more other nodes back to the start nodes again. As a routing block builder knows the message content and all involved routing operations, he may calculate the payload spaces at all points throughout the message transfer and, therefore, predict the content and size of the payload blocks received. This is possible due to the fact that we defined all operations byte precise and left no room for interpretation. This applies to all parts of the operation, including padding and stuffing. If the received payload blocks differ from the expectation, at least one of the nodes involved in the transfer of the payload malfunctioned. Reputation building over time can be done by assigning to all nodes additively a small reputation value if involved working route and subtract a value if participating in a loop that malfunctioned. As malfunctioning nodes will always be in a malfunctioning loop, their reputation value will drop while working nodes will build up a score each time when participating with other working nodes.
+
+We describe the Reputation of a node $a$ as $R_a$. Node $a$ takes part of a set closed loops $I$ with elements $I_i$. The weighting $w_i$ of a loop $I_i$ is $1$ for a successful loop and $-1$ for an unsuccessful loop. We then may calculate the reputation $R_a$ as described in equation~\ref{eqn:reputation}
+\begin{eqnarray}
+	R_a & = & \sum_{i}{\frac{w_i}{len\left(I_i\right)}}\label{eqn:reputation}
+\end{eqnarray} 
+
+We can make an explicit diagnosis in the case where the payload received does not match its expected value or is completely missing. We may do this by creating additional routing blocks picking up packets of the previous message in the workspaces of the suspected malfunctioning nodes. Explicit diagnosis yields a big danger. An adversary expecting diagnosis because he knows that he has cheated may fall back to an irregular behavior where the first operations are falsified, and if a second routing block arrives, the expected answers are given. This would falsify the reputation score in favor of an adversary and lower the reputation score of any subsequent nodes. This is why we recommend not to use explicit diagnosis to identify active adversaries or calculate a reputation but only to identify nodes that are offline.
+
+\section{Redundancy and Distribution Strategy}
+The capability to distribute data and redundancy information over several nodes is one of the key features of the protocol. The $addRedundancy$ operation has two purposes here. First, it allows a splitting operation where the content is not only split but distributed over all parts. While a normal $splitPayload$ operation leaves the message itself intact but splits it into two parts, which may contain each meaningful, readable parts of the underlying message, $addRedundancy$ distributes the message over the output blocks. The difference is not as big as it seems as the input is (with a possible exception to the sending node) not applied to the original message but to an encrypted part of the message.
+
+Assuming that an attacker does not control the whole network of relevant messages but is in possession of the whole routing block and possesses all operations and keys to recover the original message, It is safe to say that distributing the message over multiple redundant paths is improving security. Both operations allow such behavior, but in a very different way. The operations $splitPayload$ and $mergePayload$ allow to create payload blocks with any size. However, when transmitting both sizes of a split, they add up to a full block size of the previously done encryption operation. So if we control both receiving nodes of the parts of the $splitPayload$ operation, we may conclude that the two \defref{eID}s belong to the same real identity. This is why we always used a subsequent encryption operation after applying a $splitPayload$. This rounds both chunks again to block sizes of the encryption operation.
+
+\chapter{Protocol Bootstrapping\label{sec:keyDistribution}}
+Protocol bootstrapping is especially hard in an environment with a censoring adversary. While in an environment of an observing adversary, the nodes may be public and thus queried. In an environment of a censoring adversary, any directory or possibility to query nodes inevitably leads to a possibility of harvesting \VortexNodes{}. 
+
+We consider the bootstrapping problem as one of the major, unsolved problems of \MessageVortex.
+
+\section{Key Distribution for Endpoints}
+For endpoints, we may have at least a partial solution. Sending a \VortexMessage{} as an unencrypted message to the true email of a user, containing a request capability block and a \texttt{HeaderRequestReplaceIdentity} without a new $NodeSpec$ may be used to initiate a handshake between two nodes. While such behavior is cryptographically secured, the observing adversary gains as additional information that the receiving party of the message is using \MessageVortex{} and learns the full address, including its key from the sending party. None of this information is confidential in an environment with an observing adversary but shows the weakness of bootstrapping the system.
+
+\section{Key Acquisition for Routing Nodes}
+Key acquisition of routing nodes in an environment of an observing adversary may be made through the $HeaderRequestNodes$ request. All these nodes distributed by such mechanisms are so-called public nodes and must be considered as untrustworthy nodes at any time. 
+
+It is interesting to have an inbound address listed as a public node due to the traffic they receive. At the same time, they are not suitable as nodes for doing communications with environments connected to a censoring adversary. Therefore, such nodes do typically not considered to increase the anonymity set. This due to the fact that such an adversary would most likely try to harvest all public nodes and blacklist them to block cross border traffic and possibly gain clues on the identity of transport endpoints of \VortexNodes{} within his reach.
+
+So, while a node in an environment with an observing adversary may use such public nodes, a \VortexNode{} within reach of a censoring adversary has two choices:
+\begin{itemize}
+	\item Build a trusted ``own'' network of trustworthy partners and exchanging keys initially by hand.
+	\item Exit the jurisdiction on the first hop or even by using a transport layer account supposedly outside the reach of the own censoring adversary
+\end{itemize}
+
+Both options are equally bad, but the second option is easier to fulfill as currently alliances in terms of cooperations seem to be relatively stable, and only a limited amount of adversaries (e.g., ``Five Eyes'' or China) have the resources to record encrypted traffic for suspected later decryption.
+
+\chapter{Real World Problems when using \MessageVortex}
+Some problems are not directly related to the \MessageVortex{} protocol but must still be considered when implementing or using \MessageVortex. The problems discovered during our experiments and possible solutions are listed in the following sections.
+
+\section{Size Restrictions of the Transport Layer}
+A transport layer may limit the size of messages transferred. We managed to create \VortexMessages{} as small as $2KB$ in size. Considering the blending overhead of F5, our message is sized at least $16KB$, which is not a problem for any of the selected transport protocol. So, while a \VortexMessage{} may be small, an upper size limit is possibly imposed by the transport layer. Most SMTP providers define an upper limit of $10MB$ per message. Taking into account that we use a binary transfer, which is typically BASE64 encoded, the usable transfer size is roughly $7.5MB$, as BASE64 adds roughly $25\%$ overhead. Considering that we should not use any content bigger than $12\%$ of the carrier message, the true transport capability of a $10MB$ message drops to $\approx 900KB$, which is disastrously small. While a single \VortexMessage may not be bigger than the $900KB$ limit on SMTP due to this limitation, assembly in a workspace does, however, allow to transport bigger messages than the limit on the transport layer.
+
+The size of this calculation shows the waste of the transport capacity of our system in a drastic way. If assuming that we use a high anonymity set of $k=30 \text{nodes}$ and assuming that on average, each message contains half of the original message and we are exchanging 60 messages within the anonymity set, a $900KB$ message would result in $60\times 5MB=300MB$ cumulated transfer volume between all nodes which results in a total transfer efficiency of $\approx 0.3\%$. While such waste is not uncommon within anonymity systems (unless tuned for efficiency), it dramatically shows the level of waste.
+
+\section{Redundancy of the \VortexNode}
+At the beginning of our work, we tried to make \VortexNodes redundant by sharing configuration and state data over the transport media. While the idea was absolutely tempting, we discovered that any kind of such usage leads to an uncommon usage pattern of the transport account. This uncommon usage pattern allows an adversary to identify transport accounts of \VortexNodes. We, therefore, dropped this idea. 

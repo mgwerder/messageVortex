@@ -60,22 +60,26 @@ public class MessageVortexController implements SignalHandler {
 
           if (command == null) {
             LOGGER.log(Level.INFO, "MessageVortex controller skips empty command line");
+            s.getOutputStream().write("ERROR got empty command\r\n".getBytes(StandardCharsets.UTF_8));
           } else if (command.toLowerCase().startsWith("shutdown")) {
             LOGGER.log(Level.INFO, "MessageVortex controller executes shutdown command");
             shutdown = true;
             s.getOutputStream().write("OK\r\n".getBytes(StandardCharsets.UTF_8));
+          } else if (command.toLowerCase().startsWith("status")) {
+            LOGGER.log(Level.INFO, "MessageVortex controller executes status command");
+            s.getOutputStream().write("OK\r\n## Status for all components are green\r\n".getBytes(StandardCharsets.UTF_8));
           } else {
             LOGGER.log(Level.WARNING, "MessageVortex controller got illegal command \""
                 + command + "\"");
+            s.getOutputStream().write("ERROR unknown command\r\n".getBytes(StandardCharsets.UTF_8));
           }
-
           s.close();
 
         } catch (IOException ioe) {
           LOGGER.log(Level.FINE, "Exception while listening/processing controller connection", ioe);
         }
         synchronized (runningLock) {
-          shutdown = this.shutdown;
+          shutdown = this.shutdown || shutdown;
         }
       }
     }
@@ -120,7 +124,7 @@ public class MessageVortexController implements SignalHandler {
    */
   public MessageVortexController() {
     Thread t = new Thread(runner);
-    t.setName("MessageVortexShutdownController");
+    t.setName("MessageVortexShutdownController:"+port);
     runner.setThread(t);
     t.start();
   }

@@ -1,0 +1,2052 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd">
+<?rfc strict="yes" ?>
+<?rfc toc="yes"?>
+<?rfc tocdepth="4"?>
+<?rfc symrefs="yes"?>
+<?rfc sortrefs="yes" ?>
+<?rfc compact="yes" ?>
+<?rfc subcompact="no" ?>
+<!-- FIXME: verify request section to match ASN.1 -->
+<rfc category="exp" docName="draft-gwerder-messagevortexmain-05"
+     ipr="trust200902" xml:lang="en">
+  <front>
+    <title>MessageVortex Protocol</title>
+
+    <author fullname="Martin Gwerder" initials="M." surname="Gwerder">
+      <organization abbrev="FHNW">University of Applied Sciences and Arts
+      Northwestern Switzerland</organization>
+
+      <address>
+        <postal>
+          <street>Bahnhofstrasse 5</street>
+
+          <code>5210</code>
+
+          <city>Windisch</city>
+
+          <region>AG</region>
+
+          <country>Switzerland</country>
+        </postal>
+
+        <phone>+41 56 202 76 81</phone>
+
+        <email>rfc@messagevortex.net</email>
+      </address>
+    </author>
+
+    <date day="12" month="September" year="2020"/>
+
+    <area>General</area>
+
+    <workgroup>Internet Engineering Task Force</workgroup>
+
+    <keyword>SMTP</keyword>
+
+    <keyword>XMPP</keyword>
+
+    <keyword>IMAPrev4</keyword>
+
+    <keyword>MessageVortex</keyword>
+
+    <keyword>Anonymity</keyword>
+
+    <abstract>
+      <t>The MessageVortex (referred to as Vortex) protocol achieves different
+      degrees of anonymity, including sender, receiver, and third-party
+      anonymity, by specifying messages embedded within existing transfer
+      protocols, such as SMTP or XMPP, sent via peer nodes to one or more
+      recipients.</t>
+
+      <t>The protocol outperforms others by decoupling the transport from the
+      final transmitter and receiver. No trust is placed into any
+      infrastructure except for that of the sending and receiving parties of
+      the message. The creator of the routing block (Routing block builder;RBB) has full control over the
+      message flow. Routing nodes gain no non-obvious knowledge about the
+      messages even when collaborating. While third-party anonymity is always
+      achieved, the protocol also allows for either sender or receiver
+      anonymity.</t>
+    </abstract>
+  </front>
+
+  <middle>
+    <section title="Introduction">
+      <t>Anonymisation is hard to achieve. Most previous attempts relied on
+      either trust in a dedicated infrastructure or a specialized networking
+      protocol.</t>
+
+      <t>Instead of defining a transport layer, Vortex piggybacks on other
+      transport protocols. A blending layer embeds MessageVortex messages
+      (VortexMessage) into ordinary messages of the respective transport
+      protocol. This layer picks up the messages, passes them to a routing
+      layer, which applies local operations to the messages, and resends the
+      new message chunks to the next recipients.</t>
+
+      <t>A processing node learns as little as possible from the message or
+      the network utilized. The operations have been designed to be sensible
+      in any context. The 'onionized' structure of the protocol makes it
+      impossible to follow the trace of a message without having control over
+      the processing node.</t>
+
+      <t>MessageVortex is a protocol which allows sending and receiving
+      messages by using a routing block instead of a destination address. With
+      this approach, the sender has full control over all parameters of the
+      message flow.</t>
+
+      <t>A message is split and reassembled during transmission. Chunks of the
+      message may carry redundant information to avoid service interruptions
+      during transit. Decoy and message traffic are not differentiable as the
+      nature of the addRedundancy operation allows each generated portion to
+      be either message or decoy. Therefore, any routing node is unable to
+      distinguish between message and decoy traffic.</t>
+
+      <t>After processing, a potential receiver node knows if the message is
+      destined for it (by creating a chunk with ID 0) or other nodes. Due to
+      missing keys, no other node may perform this processing.</t>
+
+      <t>This RFC begins with general terminology (see <xref
+      target="entities_overview"/>) followed by an overview of the process
+      (see <xref target="layer_overview"/>). The subsequent sections describe
+      the details of the protocol.</t>
+
+      <section title="Requirements Language">
+        <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+        "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+        document are to be interpreted as described in <xref
+        target="RFC2119"/>.</t>
+      </section>
+
+      <section title="Protocol Specification">
+        <t><xref target="asn_one"/> specifies all relevant parts of the
+        protocol in ASN.1 (see <xref target="CCITT.X680.2002"/> and <xref
+        target="CCITT.X208.1988"/>). The blocks are DER encoded, if not
+        otherwise specified.</t>
+      </section>
+
+      <section title="Number Specification">
+        <t>All numbers within this document are, if not suffixed, decimal
+        numbers. Numbers suffixed with a small letter 'h' followed by two
+        hexadecimal digits are octets written in hexadecimal. For example, a
+        blank ASCII character (' ') is written as 20h and a capital 'K' in
+        ASCII as 4Bh.</t>
+      </section>
+    </section>
+
+    <section anchor="entities_overview" title="Entities Overview">
+      <t>The following entities used in this document are defined below.</t>
+
+      <section anchor="entities_node" title="Node">
+        <t>The term 'node' describes any computer system connected to other
+        nodes, which support the MessageVortex Protocol. A 'node address' is
+        typically an email address, an XMPP address or other transport
+        protocol identity supporting the MessageVortex protocol. Any address
+        SHOULD include a public part of an 'identity key' to allow messages to
+        transmit safely. One or more addresses MAY belong to the same
+        node.</t>
+
+        <section anchor="entities_blocks" title="Blocks">
+          <t>A 'block' represents an ASN.1 sequence in a transmitted message.
+          We embed messages in the transport protocol, and these messages may
+          be of any size.</t>
+        </section>
+
+        <section anchor="entities_node_spec" title="NodeSpec">
+          <t>A nodeSpec block, as specified in <xref
+          target="asnOne_helpers"/>, expresses an addressable node in a
+          unified format. The nodeSpec contains a reference to the routing
+          protocol, the routing address within this protocol, and the keys
+          required for addressing the node. This RFC specifies transport
+          layers for XMPP and SMTP. Additional transport layers will require
+          an extension to this RFC.</t>
+
+          <section anchor="entities_node_spec_smtp"
+                   title="NodeSpec for SMTP nodes">
+            <t>An alternative address representation is defined that allows a
+            standard email client to address a Vortex node. A node SHOULD
+            support the smtpAlternateSpec (its specification is noted in ABNF
+            as in <xref target="RFC5234"/>). For applications with QR code
+            support, an implementation SHOULD use the smtpUrl representation.
+            <figure>
+                <artwork type="abnf"><![CDATA[
+									localPart         = <local part of address>
+domain            = <domain part of address>
+email             = localPart "@" domain
+keySpec           = <BASE64 encoded AsymmetricKey [DER encoded]>
+smtpAlternateSpec = localPart ".." keySpec ".." domain "@localhost"
+smtpUrl           = "vortexsmtp://" smtpAlternateSpec
+								]]></artwork>
+              </figure></t>
+
+            <t>This representation does not support quoted local part SMTP
+            addresses.</t>
+          </section>
+
+          <section anchor="entities_node_spec_spec"
+                   title="NodeSpec for XMPP nodes">
+            <t>Typically, a node specification follows the ASN.1 block
+            NodeSpec. For support of XMPP clients, an implementation SHOULD
+            support the jidAlternateSpec (its specification is noted in ABNF
+            as in <xref target="RFC5234"/>). <figure>
+                <artwork type="abnf"><![CDATA[
+									localPart         = <local part of address>
+domain            = <domain part of address>
+resourcePart      = <resource part of the address>
+jid               = localPart "@" domain [ "/" resourcePart ]
+keySpec           = <BASE64 encoded AsymmetricKey [DER encoded]>;
+jidAlternateSpec  = localPart ".." keySpec ".." 
+                    domain "@localhost" [ "/" resourcePart ]
+jidUrl            = "vortexxmpp://" jidAlternateSpec
+								]]></artwork>
+              </figure></t>
+          </section>
+        </section>
+      </section>
+
+      <section anchor="entities_peer" title="Peer Partners">
+        <t>This document refers to two or more message sending or receiving
+        entities as peer partners. One partner sends a message, and all others
+        receive one or more messages. Peer partners are message specific, and
+        each partner always connects directly to a node.</t>
+      </section>
+
+      <section anchor="entities_keys" title="Encryption keys">
+        <t>Several keys are required for a Vortex message. For identities and
+        ephemeral identities (see below), we use asymmetric keys, while
+        symmetric keys are used for message encryption.</t>
+
+        <section anchor="entities_node_identity" title="Identity Keys">
+          <t>Every participant of the network includes an asymmetric key,
+          which SHOULD be either an EC key with a minimum length of 384 bits
+          or an RSA key with a minimum length of 2048 bits.</t>
+
+          <t>The public key must be known by all parties writing to or through
+          the node.</t>
+        </section>
+
+        <section anchor="entities_keys_peer" title="Peer Key">
+          <t>Peer keys are symmetrical keys transmitted with a Vortex message
+          and are always known to the node sending the message, the node
+          receiving the message, and the creator of the routing block.</t>
+
+          <t>A peer key is included in the Vortex message as well as the
+          building instructions for subsequent Vortex messages (see
+          RoutingCombo in <xref target="asn_one"/>).</t>
+        </section>
+
+        <section anchor="entities_keys_sender" title="Sender Key">
+          <t>The sender key is a symmetrical key protecting the identity and
+          routing block of a Vortex message. It is encrypted with the
+          receiving peer key and prefixed to the identity block. This key
+          further decouples the identity and processing information from the
+          previous key.</t>
+
+          <t>A sender key is known to only one peer of a Vortex message and
+          the creator of the routing block.</t>
+        </section>
+      </section>
+
+      <section anchor="entities_vortex_message" title="Vortex Message">
+        <t>The term 'Vortex message' represents a single transmission between
+        two routing layers. A message adapted to the transport layer by the
+        blending layer is called a 'blended Vortex message' (see <xref
+        target="layer_overview"/>).</t>
+
+        <t>A complete Vortex message contains the following items:</t>
+
+        <t><list style="symbols">
+            <t>The peer key, which is encrypted with the host key of the node
+            and stored in a prefixBlock, protects the inner Vortex message
+            (innerMessageBlock).</t>
+
+            <t>The sender key, also encrypted with the host key of the node,
+            protects the identity and routing block.</t>
+
+            <t>The identity block, protected by the sender key, contains
+            information about the ephemeral identity of the sender, replay
+            protection information, header requests (optional), and a
+            requirement reply (optional).</t>
+
+            <t>The routing block, protected by the sender key, contains
+            information on how subsequent messages are processed, assembled,
+            and blended.</t>
+
+            <t>The payload block, protected by the peer key, contains payload
+            chunks for processing.</t>
+          </list></t>
+      </section>
+
+      <section anchor="entities_message" title="Message">
+        <t>A message is content to be transmitted from a single sender to a
+        recipient. The sender uses a routing block either built itself or
+        provided by the receiver to perform the transmission. While a message
+        may be anonymous, there are different degrees of anonymity as
+        described by the following.</t>
+
+        <t><list style="symbols">
+            <t>If the sender of a message is not known to anyone else except
+            the sender, then this degree is referred to as 'sender
+            anonymity.'</t>
+
+            <t>If the receiver of a message is not known to anyone else except
+            the receiver, then the degree is 'receiver anonymity.'</t>
+
+            <t>If an attacker is unable to determine the content, original
+            sender, and final receiver, then the degree is considered
+            'third-party anonymity.'</t>
+
+            <t>If a sender or a receiver may be determined as one of a set of
+            &lt;k&gt; entities, then it is referred to as k-anonymity<xref
+            target="KAnon"/>.</t>
+          </list></t>
+
+        <t>A message is always MIME encoded as specified in <xref
+        target="RFC2045"/>.</t>
+      </section>
+
+      <section anchor="keys" title="Key and MAC specifications and usage">
+        <t>MessageVortex uses a unique encoding for keys. This encoding is
+        designed to be small and flexible while maintaining a specific base
+        structure.</t>
+
+        <t>The following key structures are available:</t>
+
+        <t><list style="symbols">
+            <t>SymmetricKey</t>
+
+            <t>AsymmetricKey</t>
+          </list></t>
+
+        <t>MAC does not require a complete structure containing specs and
+        values, and only a MacAlgorithmSpec is available. The following
+        sections outline the constraints for specifying parameters of these
+        structures where a node MUST NOT specify any parameter more than
+        once.</t>
+
+        <t>If a crypto mode is specified requiring an IV, then a node MUST
+        provide the IV when specifying the key.</t>
+
+        <section anchor="asymmetricKey" title="Asymmetric Keys">
+          <t>Nodes use asymmetric keys for identifying peer nodes (i.e.,
+          identities) and encrypting symmetric keys (for subsequent
+          de-/encryption of the payload or blocks). All asymmetric keys MUST
+          contain a key type specifying a strictly-normed key. Also, they MUST
+          contain a public part of the key encoded as an X.509 container and a
+          private key specified in PKCS#8 wherever possible.</t>
+
+          <t>RSA and EC keys MUST contain a keySize parameter. All asymmetric
+          keys SHOULD contain a padding parameter, and a node SHOULD assume
+          PKCS#1 if no padding is specified.</t>
+
+          <t>NTRU specification MUST provide the parameters "n", "p", and
+          "q".</t>
+        </section>
+
+        <section anchor="symmetricKey" title="Symmetric Keys">
+          <t>Nodes use symmetric keys for encrypting payloads and control
+          blocks. These symmetric keys MUST contain a key type specifying a
+          key, which MUST be in an encoded form.</t>
+
+          <t>A node MUST provide a keySize parameter if the key (or,
+          equivalently, the block) size is not standardized or encoded in the
+          name. All symmetric key specifications MUST contain a mode and
+          padding parameter. A node MAY list multiple padding or mode
+          parameters in a ReplyCapability block to offer the recipient a free
+          choice.</t>
+        </section>
+      </section>
+
+      <section anchor="entities_transport_address" title="Transport Address">
+        <t>The term 'transport address' represents the token required to
+        address the next immediate node on the transport layer. An email
+        transport layer would have SMTP addresses, such as
+        'vortex@example.com,' as the transport address.</t>
+      </section>
+
+      <section anchor="entities_identity" title="Identity">
+        <section anchor="entities_identity_peer" title="Peer Identity">
+          <t>The peer identity may contain the following information of a peer
+          partner:</t>
+
+          <t><list style="symbols">
+              <t>A transport address (always) and the public key of this
+              identity, given there is no recipient anonymity.</t>
+
+              <t>A routing block, which may be used to contact the sender. If
+              striving for recipient anonymity, then this block is
+              required.</t>
+
+              <t>The private key, which is only known by the owner of the
+              identity.</t>
+            </list></t>
+        </section>
+
+        <section anchor="entities_identity_ephemeral"
+                 title="Ephemeral Identity">
+          <t>Ephemeral identities are temporary identities created on a single
+          node. These identities MUST NOT relate to another identity on any
+          other node so that they allow bookkeeping for a node. Each ephemeral
+          identity has a workspace assigned, and may also have the following
+          items assigned.</t>
+
+          <t><list style="symbols">
+              <t>An asymmetric key pair to represent the identity.</t>
+
+              <t>A validity time of the identity.</t>
+            </list></t>
+        </section>
+
+        <section anchor="entities_identity_official" title="Official Identity">
+          <t>An official identity may have the following items assigned.</t>
+
+          <t><list style="symbols">
+              <t>Routing blocks used to reply to the node.</t>
+
+              <t>A list of assigned ephemeral identities on all other nodes
+              and their projected quotas.</t>
+
+              <t>A list of known nodes with the respective node identity.</t>
+            </list></t>
+        </section>
+      </section>
+
+      <section anchor="entities_workspace" title="Workspace">
+        <t>Every official or ephemeral identity has a workspace, which
+        consists of the following elements.</t>
+
+        <t><list style="symbols">
+            <t>Zero or more routing blocks to be processed.</t>
+
+            <t>Slots for a payload block sequentially numbered. Every slot:
+            <list style="symbols">
+                <t>MUST contain a numerical ID identifying the slot.</t>
+
+                <t>MAY contain payload content.</t>
+
+                <t>If a block contains a payload, then it MUST contain a
+                validity period.</t>
+              </list></t>
+          </list></t>
+      </section>
+
+      <section anchor="entities_murb" title="Multi-use Reply Blocks">
+        <t>'Multi-use reply blocks' (MURB) are a special type routing block
+        sent to a receiver of a message or request. A sender may use such a
+        block one or several times to reply to the sender linked to the
+        ephemeral identity, and it is possible to achieve sender anonymity
+        using MURBs.</t>
+
+        <t>A vortex node MAY deny the use of MURBs by indicating a maxReplay
+        equal to zero when sending a ReplyCapability block. An unobservable
+        node SHOULD deny the use of MURBs.</t>
+      </section>
+
+      <section anchor="entities_version" title="Protocol Version">
+        <t>This Document describes the version 1 of the protocol. The message
+        PrefixBlock contains an optional version indicator. If absent protocol
+        version 1 should be assumed.</t>
+      </section>
+    </section>
+
+    <section anchor="layer_overview" title="Layer Overview">
+      <t>The protocol is designed in four layers as shown in <xref
+      target="fig_layer_overview"/>.</t>
+
+      <figure anchor="fig_layer_overview" title="Layer overview">
+        <artwork align="center" type="ascii-art"><![CDATA[
+					+------------------------------------------------------------------+
+| Vortex Node                                                      |
+| +--------------------------------------------------------------+ |
+| |                       Accounting                             | |
+| |______________________________________________________________| |
+|                                                                  |
+| +--------------------------------------------------------------+ |
+| |                         Routing                              | |
+| |______________________________________________________________| |
+|                                                                  |
+| +---------------------------+ +--------------------------------+ |
+| |           Blending        | |             Blending           | |
+| |___________________________| |________________________________| |
+|__________________________________________________________________|
+  +---------------------------+ +--------------+ +---------------+
+  |          Transport        | | Transport in | | Transport out |
+  |___________________________| |______________| |_______________|
+				]]></artwork>
+      </figure>
+
+      <t>Every participating node MUST implement the layer's blending,
+      routing, and accounting. There MUST be at least one incoming and one
+      outgoing transport layer available to a node. All blending layers SHOULD
+      connect to the respective transport layers for sending and receiving
+      packets.</t>
+
+      <section anchor="layer_overview_transport" title="Transport Layer">
+        <t>The transport layer transfers the blended Vortex messages to the
+        next vortex node and stores it until the next blending layer picks up
+        the message.</t>
+
+        <t>The transport layer infrastructure SHOULD NOT be specific to
+        anonymous communication and should contain significant portions of
+        non-Vortex traffic.</t>
+      </section>
+
+      <section anchor="layer_overview_blending" title="Blending Layer">
+        <t>The blending layer embeds blended Vortex Message into the transport
+        layer data stream and extracts the packets from the transport
+        layer.</t>
+      </section>
+
+      <section anchor="layer_overview_routing" title="Routing Layer">
+        <t>The routing layer expands the information contained in
+        MessageVortex packets, processes them, and passes generated packets to
+        the respective blending layer.</t>
+      </section>
+
+      <section anchor="layer_overview_accounting" title="Accounting Layer">
+        <t>The accounting layer tracks all ephemeral identities authorized to
+        use a MessageVortex node and verifies the available quotas to an
+        ephemeral identity.</t>
+      </section>
+    </section>
+
+    <section title="Vortex Message">
+      <section title="Overview">
+        <t><xref target="fig_message_overview"/> shows a Vortex message. The
+        enclosed sections denote encrypted blocks, and the three or
+        four-letter abbreviations denote the key required for decryption. The
+        abbreviation k_h stands for the asymmetric host key, and sk_p is the
+        symmetric peer key. The receiving node obtains this key by decrypting
+        MPREFIX with its host key k_h. Then, sk_s is the symmetric sender key.
+        When decrypting the MPREFIX block, the node obtains this key. The
+        sender key protects the header and routing blocks by guaranteeing the
+        node assembling the message does not know about upcoming identities,
+        operations, and requests. The peer key protects the message, including
+        its structure, from third-party observers. <figure
+            anchor="fig_message_overview" title="Vortex message overview">
+            <artwork align="center" type="ascii-art"><![CDATA[
+							+-+---+-+-+---+-+---+-+-+---+-+-+---+-+-------+-+
+| |   | | | | C | | |   | | | R | |       | |
+| |   | | | | P | | | H | | | O | |       | |
+| | M | | | | R | | | E | | | U | |   P   | |
+| | P | | | | E | | | A | | | T | |   A   | |
+| | R | | | | F | | | D | | | I | |   Y   | |
+| | E | | | | I | | | E | | | N | |   L   | |
+| | F | | | | X | | | R | | | G | |   O   | |
+| | I | | | +---+ | |___| | |___| |   A   | |
+| | X | | |  k_h  | sk_s  | sk_s  |   D   | |
+| |___| | |_______|_______|_______|_______| |
+|  k_h  |                sk_p               |
+|_______|___________________________________|
+						]]></artwork>
+          </figure></t>
+      </section>
+
+      <section title="Message Prefix Block (MPREFIX)">
+        <t>The PrefixBlock contains a symmetrical key as defined in <xref
+        target="asnOne_schema"/> and is encrypted using the host key of the
+        receiving peer host. The symmetric key utilized MUST be from the set
+        advertised by a CapabilitiesReplyBlock (see <xref
+        target="routing_header_req_cap"/>). A node MAY choose any parameters
+        omitted in the CapabilitiesReplyBlock freely unless stated otherwise
+        in <xref target="routing_header_req_cap"/>. A node SHOULD avoid
+        sending unencrypted PrefixBlocks, and a prefix block MUST contain the
+        same forward-secret as the other prefix as well as the routing and
+        header blocks. A host MAY reply to a message with an unencrypted
+        message block, but any reply to a message SHOULD be encrypted.</t>
+
+        <t>The sender MUST choose a key which may be encrypted with the host
+        key in the respective PrefixBlock using the padding advertised by the
+        CapabilitiesReplyBlock.</t>
+      </section>
+
+      <section title="Inner Message Block">
+        <t>A node MUST always encrypt an InnerMessageBlock with the symmetric
+        key of the PrefixBlock to hide the inner structure of the message. The
+        InnerMessageBlock SHOULD always accommodate four or more payload
+        chunks.</t>
+
+        <section title="Control Prefix Block">
+          <t>Control prefix (CPREFIX) and MPREFIX blocks share the same
+          structure and logic as well as containing the sender key sk_s. If an
+          MPREFIX block is unencrypted, a node MAY omit the CPREFIX block. An
+          omitted CPREFIX block results in unencrypted control blocks (e.g.,
+          the HeaderBlock and RoutingBlock).</t>
+
+        </section>
+
+        <section title="Control Blocks">
+          <t>The control blocks of the HeaderBlock and a RoutingBlock contain
+          the core information to process the payload.</t>
+
+          <section title="Header Block">
+            <t>The header block (see HeaderBlock in <xref target="asn_one"/>)
+            contains the following information.</t>
+
+            <t><list style="symbols">
+                <t>It MUST contain the local ephemeral identity of the routing
+                block builder.</t>
+
+                <t>It MAY contain header requests.</t>
+
+                <t>It MAY contain the solution to a PuzzleRequired block
+                previously opposed in a header request.</t>
+              </list></t>
+
+            <t>The list of header requests MAY be one of the following.</t>
+
+            <t><list style="symbols">
+                <t>Empty.</t>
+
+                <t>Contain a single identity create request
+                (HeaderRequestIdentity).</t>
+
+                <t>Contain a single increase quota request.</t>
+              </list></t>
+
+            <t>If a header block violates these rules, then a node MUST NOT
+            reply to any header request. The payload and routing blocks SHOULD
+            still be added to the workspace and processed if the message quota
+            is not exceeded.</t>
+          </section>
+
+          <section title="Routing Block">
+            <t>The routing block (see RoutingBlock in <xref
+            target="asn_one"/>) contains the following information.</t>
+
+            <t><list style="symbols">
+                <t>It MUST contain a serial number uniquely identifying the
+                routing block of this user. The serial number MUST be unique
+                during the lifetime of the routing block.</t>
+
+                <t>It MUST contain the same forward secret as the two prefix
+                blocks and the header block.</t>
+
+                <t>It MAY contain assembly and processing instructions for
+                subsequent messages.</t>
+
+                <t>It MAY contain a reply block for messages assigned to the
+                owner of the identity.</t>
+              </list></t>
+          </section>
+        </section>
+
+        <section title="Payload Block">
+          <t>Each InnerMessageBlock with routing information SHOULD contain at
+          least four PayloadChunks.</t>
+        </section>
+      </section>
+    </section>
+
+    <section title="General notes">
+      <t>The MessageVortex protocol is a modular protocol that allows the use
+      of different encryption algorithms. For its operation, a Vortex node
+      SHOULD always support at least two distinct types of algorithms,
+      paddings or modes such that they rely on two mathematical problems.</t>
+
+      <section title="Supported Symmetric Ciphers">
+        <t>A node MUST support the following symmetric ciphers.</t>
+
+        <t><list style="symbols">
+            <t>AES128 (see <xref target="FIPS-AES"/> for AES implementation
+            details).</t>
+
+            <t>AES256.</t>
+
+            <t>CAMELLIA128 (see <xref target="RFC3657"/> Chapter 3 for
+            Camellia implementation details).</t>
+
+            <t>CAMELLIA256.</t>
+          </list></t>
+
+        <t>A node SHOULD support any standardized key larger than the smallest
+        key size.</t>
+
+        <t>A node MAY support Twofish ciphers (see <xref
+        target="TWOFISH"/>).</t>
+      </section>
+
+      <section title="Supported Asymmetric Ciphers">
+        <t>A node MUST support the following asymmetric ciphers.</t>
+
+        <t><list style="symbols">
+            <t>RSA with key sizes greater or equal to 2048 (<xref
+            target="RFC8017"/>).</t>
+
+            <t>ECC with named curves secp384r1, sect409k1 or secp521r1 (see
+            <xref target="SEC1"/>).</t>
+          </list></t>
+      </section>
+
+      <section title="Supported MACs">
+        <t>A node MUST support the following Message Authentication Codes
+        (MAC).</t>
+
+        <t><list style="symbols">
+            <t>SHA3-256 (see <xref target="ISO-10118-3"/> for SHA
+            implementation details).</t>
+
+            <t>RipeMD160 (see <xref target="ISO-10118-3"/> for RIPEMD
+            implementation details).</t>
+          </list></t>
+
+        <t>A node SHOULD support the following MACs.</t>
+
+        <t><list style="symbols">
+            <t>SHA3-512.</t>
+
+            <t>RipeMD256.</t>
+
+            <t>RipeMD512.</t>
+          </list></t>
+      </section>
+
+      <section title="Supported Paddings">
+        <t>A node MUST support the following paddings specified in <xref
+        target="RFC8017"/>.</t>
+
+        <t><list style="symbols">
+            <t>PKCS1 (see <xref target="RFC8017"/>).</t>
+
+            <t>PKCS7 (see <xref target="RFC5958"/>).</t>
+          </list></t>
+      </section>
+
+      <section title="Supported Modes">
+        <t>A node MUST support the following modes.</t>
+
+        <t><list style="symbols">
+            <t>CBC (see <xref target="RFC1423"/>) such that the utilized IV
+            must be of equal length as the key.</t>
+
+            <t>EAX (see <xref target="EAX"/>).</t>
+
+            <t>GCM (see <xref target="RFC5288"/>).</t>
+
+            <t>NONE (only used in special cases, see <xref
+            target="security"/>).</t>
+          </list></t>
+
+        <t>A node SHOULD NOT use the following modes.</t>
+
+        <t><list style="symbols">
+            <t>NONE (except as stated when using the addRedundancy
+            function).</t>
+
+            <t>ECB.</t>
+          </list></t>
+
+        <t>A node SHOULD support the following modes.</t>
+
+        <t><list style="symbols">
+            <t>CTR (<xref target="RFC3686"/>).</t>
+
+            <t>CCM (<xref target="RFC3610"/>).</t>
+
+            <t>OCB (<xref target="RFC7253"/>).</t>
+
+            <t>OFB (<xref target="MODES"/>).</t>
+          </list></t>
+      </section>
+    </section>
+
+    <section anchor="blending" title="Blending">
+      <t>Each node supports a fixed set of blending capabilities, which may be
+      different for incoming and outgoing messages.</t>
+
+      <t>The following sections describe the blending mechanism. There are
+      currently two blending layers specified with one for the Simple Mail
+      Transfer Protocol (SMTP, see <xref target="RFC5321"/>) and the second
+      for the Extensible Messaging and Presence Protocol (XMPP, see <xref
+      target="RFC6120"/>). All nodes MUST at least support
+      "encoding=plain:0,256".</t>
+
+      <section anchor="blending_general" title="Blending in Attachments">
+        <t>There are two types of blending supported when using
+        attachments.</t>
+
+        <t><list style="symbols">
+            <t>Plain binary encoding with offset (PLAIN).</t>
+
+            <t>Embedding with F5 in an image (F5).</t>
+          </list></t>
+
+        <t>A node MUST support PLAIN blending for reasons of interoperability
+        whereas a node MAY support blending using F5.</t>
+		
+		<t>A routing block builder (RBB) MUST take care about sizing restrictions 
+		of the transport layer when composing routing blocks</t>
+
+        <section anchor="blending_general_plain"
+                 title="PLAIN embedding into attachments">
+          <t>A blending layer embeds a VortexMessage in a carrier file with an
+          offset for PLAIN blending. For replacing a file start, a node MUST
+          use the offset 0. The routing node MUST choose the payload file for
+          the message, and SHOULD use a credible payload type (e.g., MIME
+          type) with high entropy. Furthermore, it SHOULD prefix a valid
+          header structure to avoid easy detection of the Vortex message.
+          Finally, a routing node SHOULD use a valid footer, if any, to a
+          payload file to improve blending.</t>
+
+          <t>The blended Vortex message is embedded in one or more message
+          chunks, each starting with a chnk header. The chunk header consists
+          two unsigned integers of variable length. The integer starts with
+          the LSB, and if bit 7 is set, then there is another byte following.
+          There cannot be more than four bytes where the last, fourth byte is
+          always 8 bit. The three preceding bytes have a payload of seven bits
+          each, which results in a maximum number of 2^29 bits. The first of
+          the extracted numbers (modulo remaining document bytes starting from
+          the first and including byte of the chunk header) reflect the number
+          of bytes in the chunk after the chunk header. The second contains
+          the number of bytes (again modulo remaing document bytes) to be
+          skipped after the current chunk to reach the next chunk. There
+          exists no "last chunk" indicator. And a gap or chunk may surpass the
+          end of the file.</t>
+
+          <t><figure>
+              <artwork type="ascii-art"><![CDATA[
+								
+position:00h   02h   04h   06h   08h ... 400h  402h  404h  406h  408h  40Ah
+value:   01 02 03 04 05 06 07 08 09  ... 01 05 0A 0B 0C 0D 0E 0F f0 03 12 13 
+
+Embedding: "(plain:1024)"
+
+Result:  0A 13 (+ 494 omitted bytes; then skip 12 bytes to next chunk)
+
+							]]></artwork>
+            </figure></t>
+
+          <t>A node SHOULD offer at least one PLAIN blending method and MAY
+          offer multiple offsets for incoming Vortex messages.</t>
+
+          <t>A plain blending is specified as the following.</t>
+
+          <t><figure>
+              <artwork type="abnf"><![CDATA[
+								plainEncoding = "("plain:" <numberOfBytesOfOffset> 
+                [ "," <numberOfBytesOfOffset> ]* ")"
+							]]></artwork>
+            </figure></t>
+        </section>
+
+        <section anchor="blending_general_F5"
+                 title="F5 embedding into attachments">
+          <t>For F5, a blending layer embeds a Vortex message into a jpeg file
+          according to <xref target="F5"/>. The password for blending may be
+          public, and a routing node MAY advertise multiple passwords. The use
+          of F5 adds approximately tenfold transfer volume to the message. A
+          routing block building node SHOULD only use F5 blending where
+          appropriate.</t>
+
+          <t>A blending in F5 is specified as the following.</t>
+
+          <t><figure>
+              <artwork type="abnf"><![CDATA[
+								f5Encoding = "(F5:" <passwordString> [ "," <PasswordString> ]* ")"
+							]]></artwork>
+            </figure></t>
+
+          <t>Commas and backslashes in passwords MUST be escaped with a
+          backslash whereas closing brackets are treated as normal password
+          characters unless they are the final character of the encoding
+          specification string.</t>
+        </section>
+      </section>
+
+      <section anchor="blending_smtp" title="Blending into an SMTP layer">
+        <t>Email messages with content MUST be encoded with Multipurpose
+        Internet Mail Extensions (MIME) as specified in <xref
+        target="RFC2045"/>. All nodes MUST support BASE64 encoding and MUST
+        test all sections of a MIME message for the presence of a
+        VortexMessage.</t>
+
+        <t>A vortex message is present if a block containing the peer key at
+        the known offset of any MIME part decodes correctly.</t>
+
+        <t>A node SHOULD support SMTP blending for sending and receiving. For
+        sending SMTP, the specification in <xref target="RFC5321"/> must be
+        used. TLS layers MUST always be applied when obtaining messages using
+        POP3 (as specified in <xref target="RFC1939"/> and <xref
+        target="RFC2595"/>) or IMAP (as specified in <xref
+        target="RFC3501"/>). Any SMTP connection MUST employ a TLS encryption
+        when passing credentials.</t>
+      </section>
+
+      <section anchor="blending_xmpp" title="Blending into an XMPP layer">
+        <t>For interoperability, an implementation SHOULD provide XMPP
+        blending.</t>
+
+        <t>Blending into XMPP traffic is performed using the <xref
+        target="XEP-0231"/> extension of the XMPP protocol.</t>
+
+        <t>PLAIN and F5 blending are acceptable for this transport layer.</t>
+      </section>
+    </section>
+
+    <section anchor="routing" title="Routing">
+      <section anchor="routing_message" title="Vortex Message Processing">
+        <section anchor="routing_incoming"
+                 title="Processing of incoming Vortex Messages">
+          <t>An incoming message is considered initially unauthenticated. A
+          node should consider a VortexMessage as authenticated as soon as the
+          ephemeral identity is known and is not temporary.</t>
+
+          <t>For an unauthenticated message, the following rules apply.</t>
+
+          <t><list style="symbols">
+              <t>A node MUST ignore all Routing blocks.</t>
+
+              <t>A node MUST ignore all Payload blocks.</t>
+
+              <t>A node SHOULD accept identity creation requests in
+              unauthenticated messages.</t>
+
+              <t>A node MUST ignore all other header requests except identity
+              creation requests.</t>
+
+              <t>A node MUST ignore all identity creation requests belonging
+              to an existing identity.</t>
+            </list></t>
+
+          <t>A message is considered authenticated as soon as the identity
+          used in the header block is known and not temporary. A node MUST NOT
+          treat a message as authenticated if the specified maximum number of
+          replays is reached. For authenticated messages, the following rules
+          apply.</t>
+
+          <t><list style="symbols">
+              <t>A node MUST ignore identity creation requests.</t>
+
+              <t>A node MUST replace the current reply block with the reply
+              block provided in the routing block (if any). The node MUST keep
+              the reply block if none is provided.</t>
+
+              <t>A node SHOULD process all header requests.</t>
+
+              <t>A node SHOULD add all routing blocks to the workspace.</t>
+
+              <t>A node SHOULD add all payload blocks to the workspace.</t>
+            </list></t>
+
+          <t>A routing node MUST decrement the message quota by one if a
+          received message is authenticated, valid, and contains at least one
+          payload block. If a message is identified as duplicate according to
+          the reply protection, then a node MUST NOT decrement the message
+          quota.</t>
+
+          <t>The message processing works according pseudo-code shown below.
+          <figure>
+              <artwork type="pseudocode"><![CDATA[
+								function incomming_message(VortexMessage blendedMessage) {
+  try{                    				
+    msg = unblend( blendedMessage );
+    if( not msg ) {
+      // Abort processing
+      throw exception( "no embedded message found" )
+    } else {
+      hdr = get_header( msg )
+      if( not known_identity( hdr.identity ) {
+        if( get_requests( hdr ) contains HeaderRequestIdentity ) {
+          create_new_identity( hdr ).set_temporary( true )
+          send_message( create_requirement( hdr )  )
+        } else {
+          // Abort processing
+          throw exception( "identity unknown" )
+        }
+      } else {
+        if( is_duplicate_or_replayed( msg ) ) {
+          // Abort processing
+          throw exception "duplicate or replayed message" )
+        } else {
+          if( get_accounting( hdr.identity ).is_temporary() ) {
+            if( not verify_requirement( hdr.identity, msg ) ) {
+              get_accounting( hdr.identity ).set_temporary( false )
+            } 
+          }
+          if( get_accounting( hdr ).is_temporary() ) {
+            throw exception( "no processing on temporary identity" )
+          }
+          
+          // Message authenticated
+          get_accounting( hdr.identity ).register_for_replay_protection( msg )
+          if( not verify_mtching_forward_secrets( msg ) ) {
+            throw exception( "forward secret missmatch" )
+          }
+          if( contains_payload( msg ) ) {
+            if( get_accounting( hdr.identity ).decrement_message_quota() ) {
+              while index,nextPayloadBlock = get_next_payload_block( msg ) {
+                add_workspace( header.identity, index, nextPayloadBlock )
+              }
+              while nextRoutingBlock = get_next_routing_block( msg ) {
+                add_workspace( hdr.identity, add_routing( nextRoutingBlock ) )
+              }
+              process_reserved_mapping_space( msg )
+              while nextRequirement = get_next_requirement( hdr ) {
+                add_workspace( hdr.identity, nextRequirement )
+              }
+            } else {
+              throw exception( "Message quota exceeded" )
+            }  
+          }
+        }
+      }
+  } catch( exception e ) {
+    // Message processing failed
+    throw e;
+  }
+}
+							]]></artwork>
+            </figure></t>
+        </section>
+
+        <section anchor="routing_workspace"
+                 title="Processing of Routing Blocks in the Workspace">
+          <t>A routing workspace consists of the following items.</t>
+
+          <t><list style="symbols">
+              <t>The identity linked to, which determines the lifetime of the
+              workspace.</t>
+
+              <t>The linked routing combos (RoutingCombo).</t>
+
+              <t>A payload chunk space with the following multiple subspaces
+              available: <list style="symbols">
+                  <t>ID 0 represents a message to be embedded (when reading)
+                  or a message to be extracted to the user (when written).</t>
+
+                  <t>ID 1 to ID maxPayloadBlocks represent the payload chunk
+                  slots in the target message.</t>
+
+                  <t>All blocks between ID maxPayloadBlocks + 1 to ID 32766
+                  belong to a temporary routing block-specific space.</t>
+				  
+				  <t>ID 32767 MUST be used to signal a solicited reply block.</t>
+
+                  <t>All blocks between ID 32768 to ID 65535 belong to a
+                  shared space available to all operations of the
+                  identity.</t>
+                </list></t>
+            </list></t>
+
+          <t>The accounting layer typically triggers processing and represents
+          either a cleanup action or a routing event. A cleanup event deletes
+          the following information from all workspaces.</t>
+
+          <t><list style="symbols">
+              <t>All processed routing combos.</t>
+
+              <t>All routing combos with expired usagePeriod.</t>
+
+              <t>All payload chunks exceeding the maxProcess time.</t>
+
+              <t>All expired objects.</t>
+
+              <t>All expired puzzles.</t>
+
+              <t>All expired identities.</t>
+
+              <t>All expired replay protections.</t>
+            </list></t>
+
+          <t>Note that maxProcessTime reflects the number of seconds since the
+          arrival of the last octet of the message at the transport layer
+          facility. A node SHOULD NOT take additional processing time (e.g.,
+          for anti-UBE or anti-virus) into account.</t>
+
+          <t>The accounting layer triggers routing events occurring at least
+          the minProcessTime after the last octet of the message arrived at
+          the routing layer. A node SHOULD choose the latest possible moment
+          at which the peer node receives the last octet of the assembled
+          message before the maxProcessTime is reached. The calculation of
+          this last point in time where a message may be set SHOULD always
+          assume that the target node is working. A sending node SHOULD choose
+          the time within these bounds randomly. An accounting layer MAY
+          trigger multiple routing combos in bulk to further obfuscate the
+          identity of a single transport message.</t>
+
+          <t>First, the processing node escapes the payload chunk at ID 0 if
+          needed (e.g., a non-special block is starting with a backslash).
+          Next, it executes all processing instructions of the routing combo
+          in the specified sequence. If an instruction fails, then the block
+          at the target ID of the operation remains unchanged. The routing
+          layer proceeds with the subsequent processing instructions by
+          ignoring the error. For a detailed description of the operations,
+          see <xref target="routing_operations"/>. If a node succeeds in
+          building at least one payload chunk, then a VortexMessage is
+          composed and passed to the blending layer.</t>
+        </section>
+
+        <section anchor="routing_outgoing"
+                 title="Processing of Outgoing Vortex Messages">
+          <t>The blending layer MUST compose a transport layer message
+          according to the specification provided in the routing combo. It
+          SHOULD choose any decoy message or steganographic carrier in such a
+          way that the dead parrot syndrome, as specified in <xref
+          target="DeadParrot"/>, is avoided.</t>
+        </section>
+      </section>
+
+      <section anchor="routing_header" title="Header Requests">
+        <t>Header requests are control requests for the anonymization system.
+        Messages with requests or replies only MUST NOT affect any quota.</t>
+
+        <section anchor="routing_header_eid"
+                 title="Request New Ephemeral Identity">
+          <t>Requesting a new ephemeral identity is performed by sending a
+          message containing a header block with the new identity and an
+          identity creation request (HeaderRequestIdentity) to a node. The
+          node MAY send an error block (see <xref
+          target="routing_special_error"/>) if it rejects the request.</t>
+
+          <t>If a node accepts an identity creation request, then it MUST send
+          a reply. A node accepting a request without a requirement MUST send
+          back a special block containing "no error". A node accepting a
+          request under the precondition of a requirement to be fulfilled MUST
+          send a special block containing a requirement block.</t>
+
+          <t>A node SHOULD NOT reply to any clear-text requests if the node
+          does not want to disclose its identity as a Vortex node officially.
+          A node MUST reply with an error block if a valid identity is used
+          for the request.</t>
+        </section>
+
+        <section anchor="routing_header_req_msg_quota"
+                 title="Request Message Quota">
+          <t>Any valid ephemeral identity may request an increase of the
+          current message quota to a specific value at any time. The request
+          MUST include a reply block in the header and may contain other
+          parts. If a requested value is lower than the current quota, then
+          the node SHOULD NOT refuse the quota request and SHOULD send a "no
+          error" status.</t>
+
+          <t>A node SHOULD reply to a HeaderRequestIncreaseMessageQuota
+          request (see <xref target="asn_one"/>) of a valid ephemeral
+          identity. The reply MUST include a requirement, an error message or
+          a "no error" status message.</t>
+        </section>
+
+        <section anchor="routing_header_inc_msg_quota"
+                 title="Request Increase of Message Quota">
+          <t>A node may request to increase the current message quota by
+          sending a HeaderRequestIncreaseMessageQuota request to the routing
+          node. The value specified within the node is the new quota.
+          HeaderRequestIncreaseMessageQuota requests MUST include a reply
+          block, and a node SHOULD NOT use a previously sent MURB to
+          reply.</t>
+
+          <t>If the requested quota is higher than the current quota, then the
+          node SHOULD send a "no error" reply. If the requested quota is not
+          accepted, then the node SHOULD send a requestedQuotaOutOfBand
+          reply.</t>
+
+          <t>A node accepting the request MUST send a RequirementBlock or a
+          "no error block."</t>
+        </section>
+
+        <section anchor="routing_header_req_trans_quota"
+                 title="Request Transfer Quota">
+          <t>Any valid ephemeral identity may request to increase the current
+          transfer quota to a specific value at any time. The request MUST
+          include a reply block in the header and may contain other parts. If
+          a requested value is lower than the current quota, then the node
+          SHOULD NOT refuse the quota request and SHOULD send a "no error"
+          status.</t>
+
+          <t>A node SHOULD reply to a HeaderRequestIncreaseTransferQuota
+          request (see <xref target="asn_one"/>) of a valid ephemeral
+          identity. The reply MUST include a requirement, an error message or
+          a "no error" status message.</t>
+        </section>
+
+        <section anchor="routing_header_qry_quota" title="Query Quota">
+          <t>Any valid ephemeral identity may request the current message and
+          transfer quota. The request MUST include a reply block in the header
+          and may contain other parts.</t>
+
+          <t>A node MUST reply to a HeaderRequestQueryQuota request (see <xref
+          target="asn_one"/>), which MUST include the current message quota
+          and the current message transfer quota. The reply to this request
+          MUST NOT include a requirement.</t>
+        </section>
+
+        <section anchor="routing_header_req_cap" title="Request Capabilities">
+          <t>Any node MAY request the capabilities of another node, which
+          include all information necessary to create a parseable
+          VortexMessage. Any node SHOULD reply to any encrypted
+          HeaderRequestCapability.</t>
+
+          <t>A node SHOULD NOT reply to clear-text requests if the node does
+          not want to disclose its identity as a Vortex node officially. A
+          node MUST reply if a valid identity is used for the request, and it
+          MAY reply to unknown identities.</t>
+        </section>
+
+        <section anchor="routing_header_req_nodes" title="Request Nodes">
+          <t>A node may ask another node for a list of routing node addresses
+          and keys, which may be used to bootstrap a new node and add routing
+          nodes to increase the anonymization of a node. The receiving node of
+          such a request SHOULD reply with a requirement (e.g.,
+          RequirementPuzzleRequired).</t>
+
+          <t>A node MAY reply to a HeaderRequest request (see <xref
+          target="asn_one"/>) of a valid ephemeral identity, and the reply
+          MUST include a requirement, an error message or a "no error" status
+          message. A node MUST NOT reply to an unknown identity, and SHOULD
+          always reply with the same result set to the same identity.</t>
+        </section>
+
+        <section anchor="routing_header_req_identity_replace"
+                 title="Request Identity Replace">
+          <t>This request type allows a receiving node to replace an existing
+          identity with the identity provided in the message, and is required
+          if an adversary manages to deny the usage of a node (e.g., by
+          deleting the corresponding transport account). Any sending node may
+          recover from such an attack by sending a valid authenticated message
+          to another identity to provide the new transport and key
+          details.</t>
+
+          <t>A node SHOULD reply to such a request from a valid known
+          identity, and the reply MUST include an error message or a "no
+          error" status message.</t>
+        </section>
+
+        <section anchor="routing_header_req_upgrade" title="Request Upgrade">
+          <t>This request type allows a node to request a new version of the
+          software in an anonymous, unliked manor. The identifier MUST
+          identify the software product uniquely. The version MUST reflect the
+          version tag of the currently installed version or a similarly usable
+          tag.</t>
+        </section>
+      </section>
+
+      <section anchor="routing_special" title="Special Blocks">
+        <t>Special blocks are payload messages that reflect messages from one
+        node to another and are not visible to the user. A special block
+        starts with the character sequence '\special' (or 5Ch 73h 70h 65h 63h
+        69h 61h 6Ch) followed by a DER encoded special block (SpecialBlock).
+        Any non-special message decoding to ID 0 in a workspace starting with
+        this character sequence MUST escape all backslashes within the payload
+        chunk with an additional backslash.</t>
+
+        <section anchor="routing_special_error" title="Error Block">
+          <t>An error block may be sent as a reply contained in the payload
+          section. The error block is embedded in a special block and sent
+          with any provided reply block. Error messages SHOULD contain the
+          serial number of the offending header block and MAY contain
+          human-readable text providing additional messages about the
+          error.</t>
+        </section>
+
+        <section anchor="routing_special_requirement"
+                 title="Requirement Block">
+          <t>If a node is receiving a requirement block, then it MUST assume
+          that the request block is accepted, is not yet processed, and is to
+          be processed if it meets the contained requirement. A node MUST
+          process a request as soon as the requirement is fulfilled, and MUST
+          resend the request as soon as it meets the requirement.</t>
+
+          <t>A node MAY reject a request, accept a request without a
+          requirement, accept a request upon payment
+          (RequirementPaymentRequired), or accept a request upon solving a
+          proof of work puzzle (RequirementPuzzleRequired).</t>
+
+          <section anchor="routing_special_requirement_puzzle"
+                   title="Puzzle Requirement">
+            <t>If a node requests a puzzle, then it MUST send a
+            RequirementPuzzleRequired block. The puzzle requirement is solved
+            if the node receiving the puzzle is replying with a header block
+            that contains the puzzle block, and the hash of the encoded block
+            begins with the bit sequence mentioned in the puzzle within the
+            period specified in the field 'valid.'</t>
+
+            <t>A node solving a puzzle requires sending a VortexMessage to the
+            requesting node, which MUST contain a header block that includes
+            the puzzle block and MUST have a MAC fingerprint starting with the
+            bit sequence as specified in the challenge. The receiving node
+            calculates the MAC from the unencrypted DER encoded HeaderBlock
+            with the algorithm specified by the node. The sending node may
+            achieve the requirement by adding a proofOfWork field to the
+            HeaderBlock containing any content fulfilling the criteria. The
+            sending node SHOULD keep the proofOfWork field as short as
+            possible.</t>
+          </section>
+
+          <section anchor="routing_special_requirement_payment"
+                   title="Payment Requirement">
+            <t>If a node requests a payment, then it MUST send a
+            RequirementPaymentRequired block. As soon as the requested fee is
+            paid and confirmed, the requesting node MUST send a "no error"
+            status message. The usage period 'valid' describes the period
+            during which the payment may be carried out. A node MUST accept
+            the payment if occurring within the 'valid' period but confirmed
+            later. A node SHOULD return all unsolicited payments to the
+            sending address.</t>
+          </section>
+
+          <section anchor="routing_special_upgrade" title="Upgrade">
+            <t>If a node requests an upgrade a ReplyUpgrade block MAY be sent.
+            The block must contain the identifier and version of the most
+            recent software version. The blob MAY contain the software if
+            there is a newer one available.</t>
+          </section>
+        </section>
+      </section>
+
+      <section anchor="routing_operations" title="Routing Operations">
+        <t>Routing operations are contained in a routing block and processed
+        upon arrival of a message or when compiling a new message. All
+        operations are reversible, and no operation is available for
+        generating decoy traffic, which may be used through encryption of an
+        unpadded block or the addRedundancy operation.</t>
+
+        <t>All payload chunk blocks inherit the validity time from the message
+        routing combos as arrival time + max(maxProcessTime).</t>
+
+        <t>When applying an operation to a source block, the resulting target
+        block inherits the expiration of the source block. When multiple
+        expiration times exist, the one furthest in the future is applied to
+        the target block. If the operation fails, then the target expiration
+        remains unchanged.</t>
+
+        <section anchor="routing_operations_mapping" title="Mapping Operation">
+          <t>The straightforward mapping operation is used in inOperations of
+          a routing block to map the routing block's specific blocks to a
+          permanent workspace.</t>
+        </section>
+
+        <section anchor="routing_operations_mergesplit"
+                 title="Split and Merge Operations">
+          <t>The split and merge operations allow splitting and recombining
+          message chunks. A node MUST adhere to the following constraints.</t>
+
+          <t><list style="symbols">
+              <t>The operation must be applied at an absolute (measuring in
+              bytes) or relative (measured as a float value in the range
+              0&gt;value&gt;100) position.</t>
+
+              <t>All calculations must be performed according to <xref
+              target="IEEE754">IEEE 754</xref> and in 64-bit precision.</t>
+
+              <t>If a relative value is a non-integer result, then a floor
+              operation (i.e., cutting off all non-integer parts) determines
+              the number of bytes.</t>
+
+              <t>If an absolute value is negative, then the size represents
+              the number of bytes counted from the end of the message
+              chunk.</t>
+
+              <t>If an absolute value is greater than the number of bytes in a
+              block, then all bytes are mapped to the respective target block,
+              and the other target block becomes a zero byte-sized block.</t>
+            </list></t>
+
+          <t>An operation MUST fail if relative values are equal to, or less
+          than, zero. An operation MUST fail if a relative value is equal to,
+          or greater than, 100. All floating-point operations must be
+          performed according to <xref target="IEEE754"/> and in 64-bit
+          precision.</t>
+        </section>
+
+        <section anchor="routing_operations_crypt"
+                 title="Encrypt and Decrypt Operations">
+          <t>Encryption and decryption are executed according to the standards
+          mentioned above. An encryption operation encrypts a block
+          symmetrically and places the result in the target block. The
+          parameters MUST contain IV, padding, and cipher modes. An encryption
+          operation without a valid parameter set MUST fail.</t>
+        </section>
+
+        <section anchor="routing_operations_redundancy"
+                 title="Add and Remove Redundancy Operations">
+          <t>The addRedundancy and removeRedundancy operations are core to the
+          protocol. They may be used to split messages and distribute message
+          content across multiple routing nodes. The operation is separated
+          into three steps.</t>
+
+          <t><list style="numbers">
+              <t>Pad the input block to a multiple of the key block size in
+              the resulting output blocks.</t>
+
+              <t>Apply a Vandermonde matrix with the given sizes.</t>
+
+              <t>Encrypt each resulting block with a separate key.</t>
+            </list></t>
+
+          <t>The following sections describe the order of the operations
+          within an addRedundancy operation. For a removeRedundancy operation,
+          invert the functions and order. If the removeRedundancy has more
+          than the required blocks to recover the information, then it should
+          take only the required number beginning from the smallest. If a seed
+          and PRNG are provided, then the removeRedundancy operation MAY test
+          any combination until recovery is successful.</t>
+
+          <section anchor="routing_operations_redundancy_padding"
+                   title="Padding Operation">
+            <t>Padding is done in multiple steps. First, we calculate the
+            padding value p. We then concatenate the padding value p as 32 bit
+            little-endian unint with the message and fill the remaining bytes
+            required with the seeded PRNG.</t>
+
+            <t>A processing node calculates the final length of all payload
+            blocks, including redundancy. This is done by in three steps
+            followed by the calculation of the padding value p. <list
+                style="numbers">
+                <t>i=len(&lt;input block&gt;) [calculate the size of the input
+                block]</t>
+
+                <t>e=lcm(&lt;Blocksize of output encyrption in #
+                bytes&gt;,&lt;# of output blocks&gt;) [Calculate Minimum size
+                of the output block]</t>
+
+                <t>l=roof((i+4+C2)/e)*e [Calculate the final length of the
+                padded stream suitable for the subsequent operations. C2 is a
+                constant which is either provided by the RBB or 0 if not
+                specified.]</t>
+
+                <t>p=i+(C1*l(mod (roof((2^32-1-i)/l)*))) [Calculate padding
+                value p. C1 is a positive integer constant and MUST be
+                provided by the RBB to maintain diagnosability.]</t>
+              </list> The remainder of the input block, up to length L, is
+            padded with random data. A routing block builder should specify
+            the value of the $randomInteger$. If not specified the routing
+            node may choose a random positive integer value. A routing block
+            builder SHOULD specify a PRNG and a seed used for this padding. If
+            GF(16) is applied, then all numbers are treated as little-endian
+            representations. Only GF(8) and GF(16) are allowed fields.</t>
+			
+			<t>The length of 0 is a valid length</t>
+
+            <t>This padding guarantees that each resulting block matches the
+            block size of the subsequent encryption operation and does not
+            require further padding.</t>
+
+            <t>For padding removal, the padding p at the start is first
+            removed as a little-endian integer. Second, the length of the
+            output block is calculated by applying &lt;output block size in
+            bytes&gt;=p (mod &lt;input block size in bytes&gt;-4)</t>
+
+          </section>
+
+          <section anchor="routing_operations_redundancy_matrix"
+                   title="Apply Matrix">
+            <t>Next, the input block is organized in a data matrix D of
+            dimensions (inrows, incols) where incols=(&lt;number of data
+            blocks&gt;-&lt;number of redundancy blocks&gt;) and
+            inrows=L/(&lt;number of data blocks&gt;-&lt;number of redundancy
+            blocks&gt;). The input block data is first distributed in this
+            matrix across, and then down.</t>
+
+            <t>Next, the data matrix D is multiplied by a Vandermonde matrix V
+            with its number of rows equal to the incols calculated and columns
+            equal to the &lt;number of data blocks&gt;. The content of the
+            matrix is formed by v(i,j)=pow(i,j), where i reflects the row
+            number starting at 0, and j reflects the column number starting at
+            0. The calculations described must be carried out in the GF noted
+            in the respective operation to be successful. The completed
+            operation results in matrix A.</t>
+          </section>
+
+          <section anchor="routing_operations_redundancy_encrypt"
+                   title="Encrypt Target Block">
+            <t>Each row vector of A is a new data block encrypted with the
+            corresponding encryption key noted in the keys of the
+            addRedundancyOperation. If there are not enough keys available,
+            then the keys used for encryption are reused from the beginning
+            after the final key is used. A routing block builder SHOULD
+            provide enough keys so that all target blocks may be encrypted
+            with a unique key. All encryptions SHOULD NOT use padding.</t>
+          </section>
+        </section>
+      </section>
+
+      <section anchor="routing_processing"
+               title="Processing of Vortex Messages">
+        <t>The accounting layer triggers processing according to the
+        information contained in a routing block in the workspace. All
+        operations MUST be executed in the sequence provided in the routing
+        block, and any failing operation must leave the result block
+        unmodified.</t>
+
+        <t>All workspace blocks resulting in IDs of 1 to maxPayloadBlock are
+        then added to the message and passed to the blending layer with
+        appropriate instructions.</t>
+      </section>
+    </section>
+
+    <section anchor="accounting" title="Accounting">
+      <section anchor="accounting_operations" title="Accounting Operations">
+        <t>The accounting layer has two types of operations.</t>
+
+        <t><list style="symbols">
+            <t>Time-based (e.g., cleanup jobs and initiation of routing).</t>
+
+            <t>Routing triggered (e.g., updating quotas, authorizing
+            operations, and pickup of incoming messages).</t>
+          </list></t>
+
+        <t>Implementations MUST provide sufficient locking mechanisms to
+        guarantee the integrity of accounting information and the workspace at
+        any time.</t>
+
+        <section anchor="accounting_timed_gc"
+                 title="Time-Based Garbage Collection">
+          <t>The accounting layer SHOULD keep a list of expiration times. As
+          soon as an entry (e.g., payload block or identity) expires, the
+          respective structure should be removed from the workspace. An
+          implementation MAY choose to remove expired items periodically or
+          when encountering them during normal operation.</t>
+        </section>
+
+        <section anchor="accounting_timed_routing"
+                 title="Time-Based Routing Initiation">
+          <t>The accounting layer MAY keep a list of when a routing block is
+          activated. For improved privacy, the accounting layer should use a
+          slotted model where, whenever possible, multiple routing blocks are
+          handled in the same period, and the requests to the blending layers
+          are mixed between the transactions.</t>
+        </section>
+
+        <section anchor="accounting_timed_quota"
+                 title="Routing Based Quota Updates">
+          <t>A node MUST update quotas on the respective operations. For
+          example, a node MUST decrease the message quota before processing
+          routing blocks in the workspace and after the processing of header
+          requests.</t>
+        </section>
+
+        <section anchor="accounting_routhing_auth"
+                 title="Routing Based Authorization">
+          <t>The transfer quota MUST be checked and decreased by the number of
+          data bytes in the payload chunks after an outgoing message is
+          processed and fully assembled. The message quota MUST be decreased
+          by one on each routing block triggering the assembly of an outgoing
+          message.</t>
+        </section>
+
+        <section anchor="accounting_create_identity"
+                 title="Ephemeral Identity Creation">
+          <t>Any packet may request the creation of an ephemeral identity. A
+          node SHOULD NOT accept such a request without a costly requirement
+          since the request includes a lifetime of the ephemeral identity. The
+          costs for creating the ephemeral identity SHOULD increase if a
+          longer lifetime is requested.</t>
+        </section>
+      </section>
+    </section>
+
+    <section anchor="Acknowledgments" title="Acknowledgments">
+      <t>Thanks go to my family who supported me with patience and countless
+      hours as well as to Mark Zeman for his feedback challenging my thoughts
+      and peace.</t>
+    </section>
+
+    <section anchor="IANA" title="IANA Considerations">
+      <t>This memo includes no request to IANA.</t>
+
+      <t>Additional encryption algorithms, paddings, modes, blending layers or
+      puzzles MUST be added by writing an extension to this or a subsequent
+      RFC. For testing purposes, IDs above 1,000,000 should be used.</t>
+    </section>
+
+    <section anchor="security" title="Security Considerations">
+      <t>The MessageVortex protocol should be understood as a toolset instead
+      of a fixed product. Depending on the usage of the toolset, anonymity and
+      security are affected. For a detailed analysis, see <xref
+      target="MVAnalysis"/>.</t>
+
+      <t>The primary goals for security within this protocol rely on the
+      following focus areas.</t>
+
+      <t><list style="symbols">
+          <t>Confidentiality</t>
+
+          <t>Integrity</t>
+
+          <t>Availability</t>
+
+          <t>Anonymity <list style="symbols">
+              <t>Third-party anonymity</t>
+
+              <t>Sender anonymity</t>
+
+              <t>Receiver anonymity</t>
+            </list></t>
+        </list></t>
+
+      <t>These aspects are affected by the usage of the protocol, and the
+      following sections provide additional information on how they impact the
+      primary goals.</t>
+
+      <t>The Vortex protocol does not rely on any encryption of the transport
+      layer since Vortex messages are already encrypted. Also, confidentiality
+      is not affected by the protection mechanisms of the transport layer.</t>
+
+      <t>If a transport layer supports encryption, then a Vortex node SHOULD
+      use it to improve the privacy of the message.</t>
+
+      <t>Anonymity is affected by the inner workings of the blending layer in
+      many ways. A Vortex message cannot be read by anyone except the peer
+      nodes and routing block builder. The presence of a Vortex node message
+      may be detected through the typical high entropy of an encrypted file,
+      broken structures of a carrier file, a meaningless content of a carrier
+      file or the contextless communication of the transport layer with its
+      peer partner. A blending layer SHOULD minimize the possibility of simply
+      detection by minimizing these effects.</t>
+
+      <t>A blending layer SHOULD use carrier files with high compression or
+      encryption. Carrier files SHOULD NOT have inner structures such that the
+      payload is comparable to valid content. To achieve undetectability by a
+      human reviewer, a routing block builder should use F5 instead of PLAIN
+      blending. This approach, however, increases the protocol overhead by
+      approximately tenfold.</t>
+
+      <t>The two layers of 'routing' and 'accounting' have the deepest insight
+      into a Vortex message's inner working. Each knows the immediate peer
+      sender and the peer recipients of all payload chunks. As decoy traffic
+      is generated by combining chunks and applying redundancy calculations, a
+      node can never know if a malfunction (e.g., during a recovery
+      calculation) was intended. Therefore, a node is unable to distinguish a
+      failed transaction from a terminated transaction as well as content from
+      decoy traffic.</t>
+
+      <t>A routing block builder SHOULD follow the following rules not to
+      compromise a Vortex message's anonymity.</t>
+
+      <t><list style="symbols">
+          <t>All operations applied SHOULD be credibly involved in a message
+          transfer.</t>
+
+          <t>A sufficient subset of the result of an addRedundancy operation
+          should always be sent to peers to allow recovery of the data
+          built.</t>
+
+          <t>The anonymity set of a message should be sufficiently large to
+          avoid legal prosecution of all jurisdictional entities involved,
+          even if a certain amount of the anonymity set cooperates with an
+          adversary.</t>
+
+          <t>Encryption and decryption SHOULD follow normal usage whenever
+          possible by avoiding the encryption of a block on a node with one
+          key and decrypting it with a different key on the same or adjacent
+          node.</t>
+
+          <t>Traffic peaks SHOULD be uniformly distributed within the entire
+          anonymity set.</t>
+
+          <t>A routing block SHOULD be used for a limited number of messages.
+          If used as a message block for the node, then it should be used only
+          once. A block builder SHOULD use the HeaderRequestReplaceIdentity
+          block to update the reply to routing blocks regularly. Implementers
+          should always remember that the same routing block is identifiable
+          by its structure.</t>
+        </list></t>
+
+      <t>An active adversary cannot use blocks from other routing block
+      builders. While the adversary may falsify the result by injecting an
+      incorrect message chunk or not sending a message, such message
+      disruptions may be detected by intentionally routing information to the
+      routing block builder (RBB) node. If the Vortex message does not carry
+      the information expected, then the node may safely assume that one of
+      the involved nodes is misbehaving. A block building node MAY calculate
+      reputation for involved nodes over time and MAY build redundancy paths
+      into a routing block to withstand such malicious nodes.</t>
+
+      <t>Receiver anonymity is at risk if the handling of the message header
+      and content is not done with care. An attacker might send a bugged
+      message (e.g., with a DKIM or DMARC header) to deanonymize a recipient.
+      Careful attention is required when handling anything other than local
+      references when processing, verifying, or rendering a message.</t>
+    </section>
+  </middle>
+
+  <!--  *****BACK MATTER ***** -->
+
+  <back>
+    <references title="Normative References">
+      <!-- Use of words -->
+
+      <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"?>
+
+      <!-- Camelia -->
+
+      <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3657.xml"?>
+
+      <!-- SHA (no longer needed -->
+
+      <!--<?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.6234.xml"?>-->
+
+      <!-- PKCS#1 -->
+
+      <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.8017.xml"?>
+
+      <!-- PKCS#8 -->
+
+      <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.5958.xml"?>
+
+      <!-- GCM -->
+
+      <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.5288.xml"?>
+
+      <!-- CTR -->
+
+      <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.3686.xml"?>
+
+      <!-- CCM -->
+
+      <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.3610.xml"?>
+
+      <!-- OCB -->
+
+      <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.7253.xml"?>
+
+      <!-- CBC -->
+
+      <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.1423.xml"?>
+
+      <!-- ABNF -->
+
+      <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.5234.xml"?>
+
+      <reference anchor="ISO-10118-3">
+        <front>
+          <title>ISO/IEC 10118-3:2004 -- Information technology -- Security
+          techniques -- Hash-functions -- Part 3: Dedicated
+          hash-functions</title>
+
+          <author>
+            <organization>International Organization for
+            Standardization</organization>
+          </author>
+
+          <date month="3" year="2004"/>
+        </front>
+      </reference>
+
+      <reference anchor="CCITT.X208.1988">
+        <front>
+          <title>Specification of Abstract Syntax Notation One (ASN.1)</title>
+
+          <author>
+            <organization>International Telephone and Telegraph Consultative
+            Committee</organization>
+          </author>
+
+          <date month="11" year="1998"/>
+        </front>
+
+        <seriesInfo name="CCITT Recommendation" value="X.208"/>
+      </reference>
+
+      <reference anchor="CCITT.X680.2002">
+        <front>
+          <title>Abstract Syntax Notation One (ASN.1): Specification of basic
+          notation</title>
+
+          <author>
+            <organization>International Telephone and Telegraph Consultative
+            Committee</organization>
+          </author>
+
+          <date month="11" year="2002"/>
+        </front>
+
+        <!--<seriesInfo name="CCITT Recommendation" value="X.680"/>-->
+      </reference>
+
+      <reference anchor="XEP-0231"
+                 target="https://xmpp.org/extensions/xep-0231.html">
+        <front>
+          <title>XEP-0231: Bits of Binary</title>
+
+          <author initials="S.A." surname="Peter"/>
+
+          <author initials="P." surname="Simerda"/>
+
+          <date day="03" month="09" year="2008"/>
+        </front>
+      </reference>
+
+      <reference anchor="F5">
+        <front>
+          <title>F5 - A Steganographic Algorithm - High Capacity Despite
+          Better Steganalysis</title>
+
+          <author initials="A." surname="Westfeld">
+            <organization>TU Dresden</organization>
+          </author>
+
+          <date day="24" month="10" year="2001"/>
+        </front>
+      </reference>
+
+      <reference anchor="TWOFISH">
+        <front>
+          <title>The Twofish Encryptions Algorithm: A 128-Bit Block Cipher,
+          1st Edition</title>
+
+          <author initials="B." surname="Schneier"/>
+
+          <date month="03" year="1999"/>
+        </front>
+      </reference>
+
+      <reference anchor="SEC1">
+        <front>
+          <title>SEC 1: Elliptic Curve Cryptography</title>
+
+          <author>
+            <organization>Certicom Research</organization>
+          </author>
+
+          <date day="21" month="05" year="2009"/>
+        </front>
+      </reference>
+
+      <reference anchor="FIPS-AES">
+        <front>
+          <title>Specification for the ADVANCED ENCRYPTION STANDARD
+          (AES)</title>
+
+          <author>
+            <organization>Federal Information Processing Standard
+            (FIPS)</organization>
+          </author>
+
+          <!--<seriesInfo name="Publication" value="197"/>-->
+
+          <date month="11" year="2011"/>
+        </front>
+      </reference>
+
+      <reference anchor="EAX">
+        <front>
+          <title>The EAX mode of operation</title>
+
+          <author initials="M." surname="Bellare"/>
+
+          <author initials="P." surname="Rogaway"/>
+
+          <author initials="D." surname="Wagner"/>
+
+          <!--<seriesInfo name="LNCS" value="3017"/>-->
+
+          <date year="2011"/>
+        </front>
+      </reference>
+
+      <reference anchor="MODES">
+        <front>
+          <title>Recommendation for Block Cipher Modes of Operation: Methods
+          and Techniques</title>
+
+          <author>
+            <organization>National Institute for Standards and Technology
+            (NIST)</organization>
+          </author>
+
+          <!--<seriesInfo name="NIST Special Publication" value="800-38A"/>-->
+
+          <date month="12" year="2001"/>
+        </front>
+      </reference>
+
+      <reference anchor="IEEE754">
+        <front>
+          <title>754-2008 - IEEE Standard for Floating-Point
+          Arithmetic</title>
+
+          <author>
+            <organization>IEEE</organization>
+          </author>
+
+          <date day="29" month="08" year="2008"/>
+        </front>
+      </reference>
+    </references>
+
+    <references title="Informative References">
+      <!-- MIME -->
+
+      <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2045.xml"?>
+
+      <!-- XMPP -->
+
+      <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6120.xml"?>
+
+      <!-- SMTP -->
+
+      <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5321.xml"?>
+
+      <!-- IMAP -->
+
+      <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3501.xml"?>
+
+      <!-- POP3 -->
+
+      <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.1939.xml"?>
+
+      <!-- POP3 STARTTLS -->
+
+      <?rfc include="http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2595.xml"?>
+
+      <!-- XMPP Adress -->
+
+      <!--<?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.7622.xml"?>-->
+
+      <reference anchor="MVAnalysis"
+                 target="https://messagevortex.net/devel/messageVortex.pdf">
+        <front>
+          <title>MessageVortex</title>
+
+          <author initials="M." surname="Gwerder"/>
+
+          <date year="2018"/>
+        </front>
+      </reference>
+
+      <reference anchor="DeadParrot"
+                 target="https://people.cs.umass.edu/~amir/papers/parrot.pdf">
+        <front>
+          <title>The Parrot is Dead: Observing Unobservable Network
+          Communications</title>
+
+          <author initials="A." surname="Houmansadr"/>
+
+          <author initials="C." surname="Burbaker"/>
+
+          <author initials="V." surname="Shmatikov"/>
+
+          <date year="2013"/>
+        </front>
+      </reference>
+
+      <reference anchor="KAnon">
+        <front>
+          <title>k-Anonymous Message Transmission</title>
+
+          <author initials="L." surname="Ahn">
+            <organization>Carnegie Mellon University</organization>
+          </author>
+
+          <author initials="A." surname="Bortz">
+            <organization>Carnegie Mellon University</organization>
+          </author>
+
+          <author initials="N.J." surname="Hopper">
+            <organization>Carnegie Mellon University</organization>
+          </author>
+
+          <date year="2003"/>
+        </front>
+      </reference>
+    </references>
+
+    <section anchor="asn_one" title="The ASN.1 schema for Vortex messages">
+      <t>The following sections contain the ASN.1 modules specifying the
+      MessageVortex Protocol.</t>
+
+      <section anchor="asnOne_schema" title="The Main MessageVortex Blocks">
+        <t><figure>
+            <artwork src="asn/MessageVortex-Schema.asn" alt="The main MessageVortex blocks"/>
+          </figure></t>
+      </section>
+
+      <section anchor="asnOne_Ciphers"
+               title="The MessageVortex Ciphers Structures">
+        <t><figure>
+            <artwork src="asn/MessageVortex-Ciphers.asn" alt=""/>
+          </figure></t>
+      </section>
+
+      <section anchor="asnOne_requests"
+               title="The MessageVortex Request Structures">
+        <t><figure>
+            <artwork src="asn/MessageVortex-Requests.asn"/>
+          </figure></t>
+      </section>
+
+      <section anchor="asnOne_replies"
+               title="The MessageVortex Replies Structures">
+        <t><figure>
+            <artwork src="asn/MessageVortex-Replies.asn"/>
+          </figure></t>
+      </section>
+
+      <section anchor="asnOne_requirements"
+               title="The MessageVortex Requirements Structures">
+        <t><figure>
+            <artwork src="asn/MessageVortex-Requirements.asn"/>
+          </figure></t>
+      </section>
+
+      <section anchor="asnOne_helpers"
+               title="The MessageVortex Helpers Structures">
+        <t><figure>
+            <artwork src="asn/MessageVortex-Helpers.asn"/>
+          </figure></t>
+      </section>
+
+      <section anchor="asnOne_additional"
+               title="The MessageVortex Additional Structures">
+        <t><figure>
+            <artwork src="asn/MessageVortex-NonProtocolBlocks.asn"/>
+          </figure></t>
+      </section>
+    </section>
+
+    <section anchor="changelog" title="Changelog">
+      <texttable anchor="table_ex" title="changes in versions">
+        <ttcol align="left">Version #</ttcol>
+
+        <ttcol align="left">Date</ttcol>
+
+        <ttcol align="left">Changes</ttcol>
+
+        <c>0</c>
+
+        <c>11-2018</c>
+
+        <c>Initial version</c>
+
+        <c>1</c>
+
+        <c>02-2019</c>
+
+        <c>Removed term block. Added more precise spec about blending. Change
+        in spec for XMPP blending (from XEP-234 to XEP-231). Restructured
+        ASN.1.</c>
+
+        <c>2</c>
+
+        <c>03-2019</c>
+
+        <c>Language and consistency improvments. Added example for chunnked
+        plain embedding. Added pseudocode for incomming message processing.
+        Improved wording of hashes in ASN.1.</c>
+
+        <c>3</c>
+
+        <c>09-2019</c>
+
+        <c>Removed LaTeX notation in padding.</c>
+
+        <c>4</c>
+
+        <c>03-2020</c>
+
+        <c>Added spec for Software update using MV. Minor language
+        improvments.</c>
+
+        <c>5</c>
+
+        <c>09-2020</c>
+
+        <c>Reinserted lost ASN.1 specs (unintentinally lost in last two
+        versions). Added changelog. Modified padding to improve credibility of
+        bad values.</c>
+      </texttable>
+
+      <t/>
+    </section>
+  </back>
+</rfc>

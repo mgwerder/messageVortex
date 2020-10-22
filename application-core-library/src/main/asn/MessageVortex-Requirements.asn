@@ -12,8 +12,8 @@ BEGIN
   }
 
   RequirementPuzzleRequired ::= SEQUENCE {
-    -- bit sequence at beginning of hash from encrypted identity
-    -- block
+    -- bit sequence at beginning of hash from 
+	-- the encrypted identity block
     challenge     BIT STRING,
     mac           MacAlgorithmSpec,
     valid         UsagePeriod,

@@ -172,7 +172,7 @@ public class FuzzerTest {
         for(Algorithm alg: Algorithm.getAlgorithms( AlgorithmType.SYMMETRIC )) {
             try {
                 int size=alg.getKeySize()/8;
-                System.out.println("Testing "+alg+" ("+ksDisc/size+")");
+                LOGGER.log(Level.INFO,"testing "+alg+" ("+ksDisc/size+")");
                 for (int i = 0; i < ksDisc/size; i++) {
                     SymmetricKey s = new SymmetricKey( alg );
                     assertTrue( "Symmetric may not be null",s!=null);

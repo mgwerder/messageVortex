@@ -2,17 +2,18 @@
 
 @InProceedings{hs-attack06,
   author       = {{\O}verlier, Lasse and Syverson, Paul},
-  title        = {{L}ocating {H}idden {S}ervers},
   booktitle    = {Proceedings of the 2006 {IEEE} Symposium on Security and Privacy},
+  title        = {{L}ocating {H}idden {S}ervers},
   year         = {2006},
   month        = may,
   publisher    = {IEEE CS},
   abstract     = {Hidden services were deployed on the Tor anonymous communication network in 2004. Announced properties include server resistance to distributed DoS. Both the E and Reporters Without Borders have issued guides that describe using hidden services via Tor to protect the safety of dissidents as well as to resist censorship. We present fast and cheap attacks that reveal the location of a hidden server. Using a single hostile Tor node we have located deployed hidden servers in a matter of minutes. Although we examine hidden services over Tor, our results apply to any client using a variety of anonymity networks. In fact, these are the first actual intersection attacks on any deployed public network: thus confirming general expectations from prior theory and simulation. We recommend changes to route selection design and implementation for Tor. These changes require no operational increase in network overhead and are simple to make; but they prevent the attacks we have demonstrated. They have been implemented.},
   file         = {:inc/bib/unclassified/Anonbib/hs-attack06.pdf:PDF},
+  keywords     = {Tor},
   lastaccessed = {2006-05-03 17:19:27},
   owner        = {Martin},
   ranking      = {rank4},
-  timestamp    = {2019.03.01},
+  timestamp    = {2020-05-22},
   url          = {http://tor-svn.freehaven.net/anonbib/cache/hs-attack06.pdf},
 }
 
@@ -182,36 +183,36 @@
   Timestamp                = {2019.06.18}
 }
 
-@Inproceedings{esorics13-cellflood,
-  Title                    = {{CellFlood}: Attacking {T}or Onion Routers on the Cheap},
-  Author                   = {Marco Valerio Barbera and Vasileios P. Kemerlis and Vasilis Pappas and Angelos Keromytis},
-  Booktitle                = {Proceedings of ESORICS 2013},
-  Year                     = {2013},
-  Month                    = sep,
-  Url                      = {http://www.cs.columbia.edu/~vpk/papers/cellflood.esorics13.pdf},
-
-  File                     = {:inc/bib/unclassified/Anonbib/esorics13-cellflood.pdf:PDF},
-  Lastaccessed             = {2013-09-19 22:28:50},
-  Timestamp                = {2017.02.24}
+@InProceedings{esorics13-cellflood,
+  author       = {Marco Valerio Barbera and Vasileios P. Kemerlis and Vasilis Pappas and Angelos Keromytis},
+  booktitle    = {Proceedings of ESORICS 2013},
+  title        = {{CellFlood}: Attacking {T}or Onion Routers on the Cheap},
+  year         = {2013},
+  month        = sep,
+  file         = {:inc/bib/unclassified/Anonbib/esorics13-cellflood.pdf:PDF},
+  keywords     = {Tor},
+  lastaccessed = {2013-09-19 22:28:50},
+  timestamp    = {2020-05-22},
+  url          = {http://www.cs.columbia.edu/~vpk/papers/cellflood.esorics13.pdf},
 }
 
-@Inproceedings{bauer:wpes2007,
-  Title                    = {Low-Resource Routing Attacks Against {Tor}},
-  Author                   = {Kevin Bauer and Damon McCoy and Dirk Grunwald and Tadayoshi Kohno and Douglas Sicker},
-  Booktitle                = {Proceedings of the Workshop on Privacy in the Electronic Society (WPES 2007)},
-  Year                     = {2007},
-  Doi                      = {10.1145/1314333.1314336},
-  Location                 = {Washington, DC, USA},
-  Month                    = oct,
-  Url                      = {http://systems.cs.colorado.edu/~bauerk/papers/wpes25-bauer.pdf},
-
-  Abstract                 = {Tor has become one of the most popular overlay networks for anonymizing TCP traffic. Its popularity is due in part to its perceived strong anonymity properties and its relatively low latency service. Low latency is achieved through Tor's ability to balance the traffic load by optimizing Tor router selection to probabilistically favor routers with highbandwidth capabilities.
+@InProceedings{bauer:wpes2007,
+  author       = {Kevin Bauer and Damon McCoy and Dirk Grunwald and Tadayoshi Kohno and Douglas Sicker},
+  booktitle    = {Proceedings of the Workshop on Privacy in the Electronic Society (WPES 2007)},
+  title        = {Low-Resource Routing Attacks Against {Tor}},
+  year         = {2007},
+  month        = oct,
+  abstract     = {Tor has become one of the most popular overlay networks for anonymizing TCP traffic. Its popularity is due in part to its perceived strong anonymity properties and its relatively low latency service. Low latency is achieved through Tor's ability to balance the traffic load by optimizing Tor router selection to probabilistically favor routers with highbandwidth capabilities.
 
 We investigate how Tor's routing optimizations impact its ability to provide strong anonymity. Through experiments conducted on PlanetLab, we show the extent to which routing performance optimizations have left the system vulnerable to end-to-end traffic analysis attacks from non-global adversaries with minimal resources. Further, we demonstrate that entry guards, added to mitigate path disruption attacks, are themselves vulnerable to attack. Finally, we explore solutions to improve Tor's current routing algorithms and propose alternative routing strategies that prevent some of the routing attacks used in our experiments.},
-  File                     = {:inc/bib/unclassified/Anonbib/bauer_wpes2007.pdf:PDF},
-  Lastaccessed             = {2007-10-18 03:18:41},
-  Ranking                  = {rank3},
-  Timestamp                = {2017.02.24}
+  doi          = {10.1145/1314333.1314336},
+  file         = {:inc/bib/unclassified/Anonbib/bauer_wpes2007.pdf:PDF},
+  keywords     = {Tor},
+  lastaccessed = {2007-10-18 03:18:41},
+  location     = {Washington, DC, USA},
+  ranking      = {rank3},
+  timestamp    = {2020-05-22},
+  url          = {http://systems.cs.colorado.edu/~bauerk/papers/wpes25-bauer.pdf},
 }
 
 @Proceedings{Bauer:2008,
@@ -279,42 +280,43 @@ We investigate how Tor's routing optimizations impact its ability to provide str
   File                     = {:inc/bib/equihash-asymmetric-proof-of-work-based-generalized-birthday-problem.pdf:PDF}
 }
 
-@Inproceedings{biryukov2015proof,
-  Title                    = {Proof-of-work as anonymous micropayment: Rewarding a Tor relay},
-  Author                   = {Biryukov, Alex and Pustogarov, Ivan},
-  Booktitle                = {International Conference on Financial Cryptography and Data Security},
-  Year                     = {2015},
-  Organization             = {Springer},
-  Pages                    = {445--455},
-
-  File                     = {:inc/bib/alex-ivan-tor-micropayments.pdf:PDF}
+@InProceedings{biryukov2015proof,
+  author       = {Biryukov, Alex and Pustogarov, Ivan},
+  booktitle    = {International Conference on Financial Cryptography and Data Security},
+  title        = {Proof-of-work as anonymous micropayment: Rewarding a Tor relay},
+  year         = {2015},
+  organization = {Springer},
+  pages        = {445--455},
+  file         = {:inc/bib/alex-ivan-tor-micropayments.pdf:PDF},
+  keywords     = {Tor},
+  timestamp    = {2020-05-22},
 }
 
-@Inproceedings{esorics12-torscan,
-  Title                    = {{TorScan}: Tracing Long-lived Connections and Differential Scanning Attacks},
-  Author                   = {Alex Biryukov and Ivan Pustogarov and Ralf Philipp Weinmann},
-  Booktitle                = {Proceedings of the European Symposium Research Computer Security - {ESORICS}'12},
-  Year                     = {2012},
-  Month                    = sep,
-  Publisher                = {Springer},
-  Url                      = {http://freehaven.net/anonbib/papers/torscan-esorics2012.pdf},
-
-  File                     = {:inc/bib/torscan-esorics2012.pdf:PDF},
-  Lastaccessed             = {2013-02-25 07:49:32},
-  Timestamp                = {2017.02.24}
+@InProceedings{esorics12-torscan,
+  author       = {Alex Biryukov and Ivan Pustogarov and Ralf Philipp Weinmann},
+  booktitle    = {Proceedings of the European Symposium Research Computer Security - {ESORICS}'12},
+  title        = {{TorScan}: Tracing Long-lived Connections and Differential Scanning Attacks},
+  year         = {2012},
+  month        = sep,
+  publisher    = {Springer},
+  file         = {:inc/bib/torscan-esorics2012.pdf:PDF},
+  keywords     = {Tor},
+  lastaccessed = {2013-02-25 07:49:32},
+  timestamp    = {2020-05-22},
+  url          = {http://freehaven.net/anonbib/papers/torscan-esorics2012.pdf},
 }
 
-@Inproceedings{oakland2013-trawling,
-  Title                    = {Trawling for Tor Hidden Services: Detection, Measurement, Deanonymization},
-  Author                   = {Alex Biryukov and Ivan Pustogarov and Ralf-Philipp Weinmann},
-  Booktitle                = {Proceedings of the 2013 IEEE Symposium on Security and Privacy},
-  Year                     = {2013},
-  Month                    = may,
-  Url                      = {http://www.ieee-security.org/TC/SP2013/papers/4977a080.pdf},
-
-  File                     = {:inc/bib/unclassified/Anonbib/oakland2013-trawling.pdf:PDF},
-  Lastaccessed             = {2013-06-15 02:30:17},
-  Timestamp                = {2017.02.24}
+@InProceedings{oakland2013-trawling,
+  author       = {Alex Biryukov and Ivan Pustogarov and Ralf-Philipp Weinmann},
+  booktitle    = {Proceedings of the 2013 IEEE Symposium on Security and Privacy},
+  title        = {Trawling for Tor Hidden Services: Detection, Measurement, Deanonymization},
+  year         = {2013},
+  month        = may,
+  file         = {:inc/bib/unclassified/Anonbib/oakland2013-trawling.pdf:PDF},
+  keywords     = {Tor},
+  lastaccessed = {2013-06-15 02:30:17},
+  timestamp    = {2020-05-22},
+  url          = {http://www.ieee-security.org/TC/SP2013/papers/4977a080.pdf},
 }
 
 @Article{blum1984generate,
@@ -332,17 +334,17 @@ We investigate how Tor's routing optimizations impact its ability to provide str
   Publisher                = {SIAM}
 }
 
-@Book{RFC1087,
-  Title                    = {RFC1087 Ethics and the Internet},
-  Author                   = {Internet Activities Board},
-  Year                     = {1989},
-  Editor                   = {IETF},
-  Publisher                = {IETF},
-  Url                      = {http://tools.ietf.org/pdf/rfc1087.pdf},
-
-  File                     = {:inc/bib/rfc1087.pdf:PDF},
-  Localfile                = {inc/bib/rfc1087.pdf},
-  Organization             = {Internet Activities Board}
+@Book{rfc1087,
+  author       = {Internet Activities Board},
+  editor       = {IETF},
+  publisher    = {IETF},
+  title        = {RFC1087 Ethics and the Internet},
+  year         = {1989},
+  file         = {:inc/bib/rfc1087.pdf:PDF},
+  localfile    = {inc/bib/rfc1087.pdf},
+  organization = {Internet Activities Board},
+  timestamp    = {2020-07-15},
+  url          = {http://tools.ietf.org/pdf/rfc1087.pdf},
 }
 
 @Misc{NCR2013,
@@ -358,11 +360,11 @@ We investigate how Tor's routing optimizations impact its ability to provide str
   Timestamp                = {2019.06.18}
 }
 
-@Misc{RFC7252,
+@Misc{rfc7252,
   author       = {Carsten Bormann and Klaus Hartke and Zach Shelby},
-  title        = {RFC7252: The Constrained Application Protocol (CoAP)},
   howpublished = {RFC 7252},
   month        = jun,
+  title        = {RFC7252: The Constrained Application Protocol (CoAP)},
   year         = {2014},
   abstract     = {The Constrained Application Protocol (CoAP) is a specialized web transfer protocol for use with constrained nodes and constrained (e.g., low-power, lossy) networks. The nodes often have 8-bit microcontrollers with small amounts of ROM and RAM, while constrained networks such as IPv6 over Low-Power Wireless Personal Area Networks (6LoWPANs) often have high packet error rates and a typical throughput of 10s of kbit/s. The protocol is designed for machine- to-machine (M2M) applications such as smart energy and building automation.},
   doi          = {10.17487/rfc7252},
@@ -370,41 +372,41 @@ We investigate how Tor's routing optimizations impact its ability to provide str
   number       = {7252},
   publisher    = {RFC Editor},
   series       = {Request for Comments},
-  timestamp    = {2017.02.24},
+  timestamp    = {2020-07-15},
   url          = {https://rfc-editor.org/rfc/rfc7252.txt},
 }
 
-@Book{RFC3979,
-  Title                    = {RFC3979 Intellectual Property Rights in IETF Technologys},
-  Author                   = {S. Bradner},
-  Year                     = {2005},
-  Publisher                = {IETF},
-  Url                      = {http://tools.ietf.org/pdf/rfc3979.pdf},
-
-  File                     = {:inc/bib/rfc3979.pdf:PDF},
-  Localfile                = {inc/bib/rfc3979.pdf}
+@Book{rfc3979,
+  author    = {S. Bradner},
+  publisher = {IETF},
+  title     = {RFC3979 Intellectual Property Rights in IETF Technologys},
+  year      = {2005},
+  file      = {:inc/bib/rfc3979.pdf:PDF},
+  localfile = {inc/bib/rfc3979.pdf},
+  timestamp = {2020-07-15},
+  url       = {http://tools.ietf.org/pdf/rfc3979.pdf},
 }
 
-@Book{RFC2119,
-  Title                    = {RFC2119 Key words for use in RFCs to Indicate Requirement Levels},
-  Author                   = {S. Bradner},
-  Year                     = {1997},
-  Publisher                = {IETF},
-  Url                      = {http://tools.ietf.org/pdf/rfc2119.pdf},
-
-  File                     = {:inc/bib/rfc2119.pdf:PDF},
-  Localfile                = {inc/bib/rfc2119.pdf}
+@Book{rfc2119,
+  author    = {S. Bradner},
+  publisher = {IETF},
+  title     = {RFC2119 Key words for use in RFCs to Indicate Requirement Levels},
+  year      = {1997},
+  file      = {:inc/bib/rfc2119.pdf:PDF},
+  localfile = {inc/bib/rfc2119.pdf},
+  timestamp = {2020-07-15},
+  url       = {http://tools.ietf.org/pdf/rfc2119.pdf},
 }
 
-@Book{RFC5378,
-  Title                    = {RFC5378 Rights Contributors Provide to the IETF Trust},
-  Author                   = {S. Bradner and J. Contreras},
-  Year                     = {2008},
-  Publisher                = {IETF},
-  Url                      = {http://tools.ietf.org/pdf/rfc5378.pdf},
-
-  File                     = {:inc/bib/rfc5378.pdf:PDF},
-  Localfile                = {inc/bib/rfc5378.pdf}
+@Book{rfc5378,
+  author    = {S. Bradner and J. Contreras},
+  publisher = {IETF},
+  title     = {RFC5378 Rights Contributors Provide to the IETF Trust},
+  year      = {2008},
+  file      = {:inc/bib/rfc5378.pdf:PDF},
+  localfile = {inc/bib/rfc5378.pdf},
+  timestamp = {2020-07-15},
+  url       = {http://tools.ietf.org/pdf/rfc5378.pdf},
 }
 
 @Proceedings{F5broken,
@@ -423,38 +425,36 @@ We investigate how Tor's routing optimizations impact its ability to provide str
 }
 
 @Article{Byers:1998:DFA:285243.285258,
-  Title                    = {A Digital Fountain Approach to Reliable Distribution of Bulk Data},
-  Author                   = {Byers, John W. and Luby, Michael and Mitzenmacher, Michael and Rege, Ashutosh},
-  Year                     = {1998},
-  Doi                      = {10.1145/285243.285258},
-  ISSN                     = {0146-4833},
-  Month                    = oct,
-  Number                   = {4},
-  Pages                    = {56--67},
-  Url                      = {http://doi.acm.org/10.1145/285243.285258},
-  Volume                   = {28},
-
-  Acmid                    = {285258},
-  Address                  = {New York, NY, USA},
-  File                     = {:inc/bib/p56-byers.pdf:PDF},
-  Issue_date               = {Oct. 1998},
-  Journal                  = {SIGCOMM Comput. Commun. Rev.},
-  Numpages                 = {12},
-  Publisher                = {ACM}
+  author     = {Byers, John W. and Luby, Michael and Mitzenmacher, Michael and Rege, Ashutosh},
+  journal    = {SIGCOMM Comput. Commun. Rev.},
+  title      = {A Digital Fountain Approach to Reliable Distribution of Bulk Data},
+  year       = {1998},
+  issn       = {0146-4833},
+  month      = oct,
+  number     = {4},
+  pages      = {56--67},
+  volume     = {28},
+  acmid      = {285258},
+  address    = {New York, NY, USA},
+  doi        = {10.1145/285243.285258},
+  file       = {:inc/bib/p56-byers.pdf:PDF},
+  issue_date = {Oct. 1998},
+  numpages   = {12},
+  publisher  = {ACM},
+  timestamp  = {2020-07-08},
 }
 
-@Inproceedings{esorics10-bandwidth,
-  Title                    = {Traffic Analysis Against Low-Latency Anonymity Networks Using Available Bandwidth Estimation},
-  Author                   = {Sambuddho Chakravarty and Angelos Stavrou and Angelos D. Keromytis},
-  Booktitle                = {Proceedings of the European Symposium Research Computer Security - {ESORICS}'10},
-  Year                     = {2010},
-  Month                    = {September},
-  Publisher                = {Springer},
-  Url                      = {http://www.cs.columbia.edu/~sc2516/papers/chakravartyTA.pdf},
-
-  File                     = {:inc/bib/unclassified/Anonbib/esorics10-bandwidth.pdf:PDF},
-  Lastaccessed             = {2012-08-31 05:05:20},
-  Timestamp                = {2017.03.23}
+@InProceedings{esorics10-bandwidth,
+  author       = {Sambuddho Chakravarty and Angelos Stavrou and Angelos D. Keromytis},
+  booktitle    = {Proceedings of the European Symposium Research Computer Security - {ESORICS}'10},
+  title        = {Traffic Analysis Against Low-Latency Anonymity Networks Using Available Bandwidth Estimation},
+  year         = {2010},
+  month        = sep,
+  publisher    = {Springer},
+  file         = {:inc/bib/unclassified/Anonbib/esorics10-bandwidth.pdf:PDF},
+  lastaccessed = {2012-08-31 05:05:20},
+  timestamp    = {2020-07-09},
+  url          = {http://www.cs.columbia.edu/~sc2516/papers/chakravartyTA.pdf},
 }
 
 @Article{chaum-dc,
@@ -529,18 +529,18 @@ The technique can also be used to form rosters of untraceable digital pseudonyms
   Publisher                = {De Gruyter Open}
 }
 
-@Inproceedings{freenet,
-  Title                    = {Freenet: {A} Distributed Anonymous Information Storage and Retrieval System},
-  Author                   = {Ian Clarke and Oskar Sandberg and Brandon Wiley and Theodore W. Hong},
-  Booktitle                = {Proceedings of Designing Privacy Enhancing Technologies: Workshop on Design Issues in Anonymity and Unobservability},
-  Year                     = {2000},
-  Month                    = jul,
-  Pages                    = {46--66},
-  Url                      = {https://freenetproject.org/},
-
-  File                     = {:inc/bib/freenet1-big.pdf:PDF},
-  Lastaccessed             = {2003-09-09 00:53:33},
-  Timestamp                = {2017.02.24}
+@InProceedings{freenet,
+  author       = {Ian Clarke and Oskar Sandberg and Brandon Wiley and Theodore W. Hong},
+  booktitle    = {Proceedings of Designing Privacy Enhancing Technologies: Workshop on Design Issues in Anonymity and Unobservability},
+  title        = {Freenet: {A} Distributed Anonymous Information Storage and Retrieval System},
+  year         = {2000},
+  month        = jul,
+  pages        = {46--66},
+  abstract     = {We describe Freenet a peertopeer network application that permits the publication replication and retrieval of data while protecting the anonymity of both authors and readers Freenet operates as a network of identical nodes that collectively pool their storage space to store data les and cooperate to route requests to the most likely physical location of data No broadcast search or centralized location index is employed Files are referred to in a locationindependent manner and are dynamically replicated in locations near requestors and deleted from locations where there is no interest It is infeasible to discover the true origin or destination of a le passing through the network and dicult for a node operator to determine or be held responsible for the actual physical contents of her own node.},
+  file         = {:inc/bib/freenet1-big.pdf:PDF},
+  lastaccessed = {2003-09-09 00:53:33},
+  timestamp    = {2020-05-22},
+  url          = {https://freenetproject.org/},
 }
 
 @Inproceedings{Clayton:2006,
@@ -600,15 +600,15 @@ The technique can also be used to form rosters of untraceable digital pseudonyms
   Timestamp                = {2019.03.01}
 }
 
-@Book{RFC3501,
-  Title                    = {RFC3501 INTERNET MESSAGE ACCESS PROTOCOL - VERSION 4rev1},
-  Author                   = {M. Crispin},
-  Year                     = {2003},
-  Publisher                = {IETF},
-  Url                      = {http://tools.ietf.org/pdf/rfc3501.pdf},
-
-  File                     = {:inc/bib/rfc3851.pdf:PDF},
-  Localfile                = {inc/bib/rfc3501.pdf}
+@Book{rfc3501,
+  author    = {M. Crispin},
+  publisher = {IETF},
+  title     = {RFC3501 INTERNET MESSAGE ACCESS PROTOCOL - VERSION 4rev1},
+  year      = {2003},
+  file      = {:inc/bib/rfc3851.pdf:PDF},
+  localfile = {inc/bib/rfc3501.pdf},
+  timestamp = {2020-07-15},
+  url       = {http://tools.ietf.org/pdf/rfc3501.pdf},
 }
 
 @Misc{rfc1750,
@@ -636,24 +636,23 @@ The technique can also be used to form rosters of untraceable digital pseudonyms
   File                     = {truecryptDFS.pdf:inc/bib/truecryptDFS.pdf:PDF}
 }
 
-@Inproceedings{DBLP:conf/esorics/DanezisDKT09,
-  Title                    = {The Wisdom of Crowds: Attacks and Optimal Constructions},
-  Author                   = {George Danezis and Claudia Diaz and Emilia K{\"a}sper and Carmela Troncoso},
-  Booktitle                = {Proceedings of the 14th European Symposium on Research in Computer Security (ESORICS 2009), Saint-Malo, France},
-  Editor                   = {Michael Backes and Peng Ning},
-  Year                     = {2009},
-  ISBN                     = {978-3-642-04443-4},
-  Month                    = sep,
-  Pages                    = {406--423},
-  Publisher                = {Springer},
-  Series                   = {Lecture Notes in Computer Science},
-  Url                      = {http://homes.esat.kuleuven.be/~ekasper/papers/crowds.pdf},
-  Volume                   = {5789},
-
-  File                     = {:inc/bib/unclassified/Anonbib/DanezisDKT09.pdf:PDF},
-  Lastaccessed             = {2010-02-15 13:51:28},
-  Owner                    = {Martin},
-  Timestamp                = {2019.03.01}
+@InProceedings{crowdsAttack,
+  author       = {George Danezis and Claudia Diaz and Emilia K{\"a}sper and Carmela Troncoso},
+  booktitle    = {Proceedings of the 14th European Symposium on Research in Computer Security (ESORICS 2009), Saint-Malo, France},
+  title        = {The Wisdom of Crowds: Attacks and Optimal Constructions},
+  year         = {2009},
+  editor       = {Michael Backes and Peng Ning},
+  month        = sep,
+  pages        = {406--423},
+  publisher    = {Springer},
+  series       = {Lecture Notes in Computer Science},
+  volume       = {5789},
+  file         = {:inc/bib/unclassified/Anonbib/DanezisDKT09.pdf:PDF},
+  isbn         = {978-3-642-04443-4},
+  lastaccessed = {2010-02-15 13:51:28},
+  owner        = {Martin},
+  timestamp    = {2020-07-09},
+  url          = {http://homes.esat.kuleuven.be/~ekasper/papers/crowds.pdf},
 }
 
 @Inproceedings{minion-design,
@@ -688,15 +687,15 @@ The technique can also be used to form rosters of untraceable digital pseudonyms
   Timestamp                = {2017.02.24}
 }
 
-@Book{RFC2460,
-  Title                    = {RFC2460 Internet Protocol, Version 6 (IPv6) Specification},
-  Author                   = {S. Deering and R. Hinden},
-  Year                     = {1983},
-  Publisher                = {IETF},
-  Url                      = {http://tools.ietf.org/pdf/rfc2460.pdf},
-
-  File                     = {:inc/bib/rfc2460.pdf:PDF},
-  Localfile                = {inc/bib/rfc2460.pdf}
+@Book{rfc2460,
+  author    = {S. Deering and R. Hinden},
+  publisher = {IETF},
+  title     = {RFC2460 Internet Protocol, Version 6 (IPv6) Specification},
+  year      = {1983},
+  file      = {:inc/bib/rfc2460.pdf:PDF},
+  localfile = {inc/bib/rfc2460.pdf},
+  timestamp = {2020-07-15},
+  url       = {http://tools.ietf.org/pdf/rfc2460.pdf},
 }
 
 @Inproceedings{freehaven-berk,
@@ -716,12 +715,12 @@ The technique can also be used to form rosters of untraceable digital pseudonyms
 }
 
 @Misc{tor-spec,
-  Title                    = {Tor Protocol Specification},
-  Author                   = {Roger Dingledine and Nick Mathewson},
-  Url                      = {https://gitweb.torproject.org/torspec.git/tree/tor-spec.txt},
-
-  File                     = {:inc/bib/tor-spec.pdf:PDF},
-  Timestamp                = {2016.11.13}
+  author    = {Roger Dingledine and Nick Mathewson},
+  title     = {Tor Protocol Specification},
+  file      = {:inc/bib/tor-spec.pdf:PDF},
+  keywords  = {Tor},
+  timestamp = {2020-05-22},
+  url       = {https://gitweb.torproject.org/torspec.git/tree/tor-spec.txt},
 }
 
 @Inproceedings{doshi2006efficient,
@@ -736,15 +735,15 @@ The technique can also be used to form rosters of untraceable digital pseudonyms
   File                     = {:inc/bib/doshi2006.pdf:PDF}
 }
 
-@Book{RFC2311,
-  Title                    = {RFC2311 S/MIME Version 2 Message Specification},
-  Author                   = {S. Dusse and P. Hoffman and B. Ramsdell and L. Lundblade and L. Repka},
-  Year                     = {1998},
-  Publisher                = {IETF},
-  Url                      = {http://tools.ietf.org/pdf/rfc2311.pdf},
-
-  File                     = {:inc/bib/rfc2311.pdf:PDF},
-  Localfile                = {inc/bib/rfc2311.pdf}
+@Book{rfc2311,
+  author    = {S. Dusse and P. Hoffman and B. Ramsdell and L. Lundblade and L. Repka},
+  publisher = {IETF},
+  title     = {RFC2311 S/MIME Version 2 Message Specification},
+  year      = {1998},
+  file      = {:inc/bib/rfc2311.pdf:PDF},
+  localfile = {inc/bib/rfc2311.pdf},
+  timestamp = {2020-07-15},
+  url       = {http://tools.ietf.org/pdf/rfc2311.pdf},
 }
 
 @Misc{rfc4918,
@@ -783,25 +782,25 @@ The technique can also be used to form rosters of untraceable digital pseudonyms
   File                     = {:inc/bib/nistCipherModes.pdf:PDF}
 }
 
-@Book{RFC2929,
-  Title                    = {BCP42 Domain Name System (DNS) IANA Considerations},
-  Author                   = {D. Eastlake and E. Brunner-Williams and B. Manning},
-  Year                     = {2000},
-  Publisher                = {IETF},
-  Url                      = {http://tools.ietf.org/pdf/rfc2929.pdf},
-
-  File                     = {:inc/bib/rfc6895.pdf:PDF},
-  Localfile                = {inc/bib/rfc2929.pdf}
+@Book{rfc2929,
+  author    = {D. Eastlake and E. Brunner-Williams and B. Manning},
+  publisher = {IETF},
+  title     = {BCP42 Domain Name System (DNS) IANA Considerations},
+  year      = {2000},
+  file      = {:inc/bib/rfc6895.pdf:PDF},
+  localfile = {inc/bib/rfc2929.pdf},
+  timestamp = {2020-07-15},
+  url       = {http://tools.ietf.org/pdf/rfc2929.pdf},
 }
 
 @Misc{ECHELON,
-  Title                    = {REPORT on the existence of a global system for the interception of private and commercial communications (ECHELON interception system) },
-  Author                   = {Temporary Committee on the ECHELON Interception System},
-  File                     = {:inc/bib/echelon.pdf:PDF},
-  Lastaccessed             = {15.12.2013},
-  Localfile                = {inc/bib/echelon.pdf},
-  Url                      = {http://www.europarl.europa.eu/sides/getDoc.do?pubRef=-//EP//NONSGML+REPORT+A5-2001-0264+0+DOC+PDF+V0//EN&language=EN},
-  Year                     = {2001}
+  author       = {Temporary Committee on the ECHELON Interception System},
+  title        = {REPORT on the existence of a global system for the interception of private and commercial communications (ECHELON interception system)},
+  year         = {2001},
+  file         = {:inc/bib/echelon.pdf:PDF},
+  lastaccessed = {15.12.2013},
+  localfile    = {inc/bib/echelon.pdf},
+  url          = {http://www.europarl.europa.eu/sides/getDoc.do?pubRef=-//EP//NONSGML+REPORT+A5-2001-0264+0+DOC+PDF+V0//EN&language=EN},
 }
 
 @InProceedings{Egners_2012,
@@ -818,15 +817,15 @@ The technique can also be used to form rosters of untraceable digital pseudonyms
   url          = {https://www.researchgate.net/profile/Andre_Egners/publication/237007773_Introducing_SOR_SSH-based_onion_routing/links/548805e90cf2ef34478ed724/Introducing-SOR-SSH-based-onion-routing.pdf},
 }
 
-@Book{RFC2015,
-  Title                    = {RFC2015 MIME Security with Pretty Good Privacy (PGP)},
-  Author                   = {M. Elkins},
-  Year                     = {1996},
-  Publisher                = {IETF},
-  Url                      = {http://tools.ietf.org/pdf/rfc2015.pdf},
-
-  File                     = {:inc/bib/rfc2015.pdf:PDF},
-  Localfile                = {inc/bib/rfc2015.pdf}
+@Book{rfc2015,
+  author    = {M. Elkins},
+  publisher = {IETF},
+  title     = {RFC2015 MIME Security with Pretty Good Privacy (PGP)},
+  year      = {1996},
+  file      = {:inc/bib/rfc2015.pdf:PDF},
+  localfile = {inc/bib/rfc2015.pdf},
+  timestamp = {2020-07-15},
+  url       = {http://tools.ietf.org/pdf/rfc2015.pdf},
 }
 
 @Misc{Ensafi:2015,
@@ -953,59 +952,59 @@ The technique can also be used to form rosters of untraceable digital pseudonyms
   File                     = {:inc/bib/Forler2014scryptSideChannel.pdf:PDF}
 }
 
-@Book{RFC2045,
-  Title                    = {RFC2045 Multipurpose Internet Mail Extensions; (MIME) Part One: Format of Internet Message Bodies},
-  Author                   = {N. Freed and N. Borenstein},
-  Year                     = {1996},
-  Publisher                = {IETF},
-  Url                      = {http://tools.ietf.org/pdf/rfc2045.pdf},
-
-  File                     = {:inc/bib/rfc2045.pdf:PDF},
-  Localfile                = {inc/bib/rfc2045.pdf}
+@Book{rfc2045,
+  author    = {N. Freed and N. Borenstein},
+  publisher = {IETF},
+  title     = {RFC2045 Multipurpose Internet Mail Extensions; (MIME) Part One: Format of Internet Message Bodies},
+  year      = {1996},
+  file      = {:inc/bib/rfc2045.pdf:PDF},
+  localfile = {inc/bib/rfc2045.pdf},
+  timestamp = {2020-07-15},
+  url       = {http://tools.ietf.org/pdf/rfc2045.pdf},
 }
 
-@Book{RFC2046,
-  Title                    = {RFC2046 Multipurpose Internet Mail Extensions; (MIME) Part Two: Media Types},
-  Author                   = {N. Freed and N. Borenstein},
-  Year                     = {1996},
-  Publisher                = {IETF},
-  Url                      = {http://tools.ietf.org/pdf/rfc2046.pdf},
-
-  File                     = {:inc/bib/rfc2046.pdf:PDF},
-  Localfile                = {inc/bib/rfc2046.pdf}
+@Book{rfc2046,
+  author    = {N. Freed and N. Borenstein},
+  publisher = {IETF},
+  title     = {RFC2046 Multipurpose Internet Mail Extensions; (MIME) Part Two: Media Types},
+  year      = {1996},
+  file      = {:inc/bib/rfc2046.pdf:PDF},
+  localfile = {inc/bib/rfc2046.pdf},
+  timestamp = {2020-07-15},
+  url       = {http://tools.ietf.org/pdf/rfc2046.pdf},
 }
 
-@Book{RFC2047,
-  Title                    = {RFC2047 Multipurpose Internet Mail Extensions; (MIME) Part Three: Message Header Extensions for Non-ASCII Text},
-  Author                   = {N. Freed and N. Borenstein},
-  Year                     = {1996},
-  Publisher                = {IETF},
-  Url                      = {http://tools.ietf.org/pdf/rfc2046.pdf},
-
-  File                     = {:inc/bib/rfc2047.pdf:PDF},
-  Localfile                = {inc/bib/rfc2047.pdf}
+@Book{rfc2047,
+  author    = {N. Freed and N. Borenstein},
+  publisher = {IETF},
+  title     = {RFC2047 Multipurpose Internet Mail Extensions; (MIME) Part Three: Message Header Extensions for Non-ASCII Text},
+  year      = {1996},
+  file      = {:inc/bib/rfc2047.pdf:PDF},
+  localfile = {inc/bib/rfc2047.pdf},
+  timestamp = {2020-07-15},
+  url       = {http://tools.ietf.org/pdf/rfc2046.pdf},
 }
 
-@Book{RFC2048,
-  Title                    = {RFC2048 Multipurpose Internet Mail Extensions; (MIME) Part Four: Registration Procedures},
-  Author                   = {N. Freed and J. Klensin and J. Postel},
-  Year                     = {1996},
-  Publisher                = {IETF},
-  Url                      = {http://tools.ietf.org/pdf/rfc2048.pdf},
-
-  File                     = {:inc/bib/rfc2048.pdf:PDF},
-  Localfile                = {inc/bib/rfc2048.pdf}
+@Book{rfc2048,
+  author    = {N. Freed and J. Klensin and J. Postel},
+  publisher = {IETF},
+  title     = {RFC2048 Multipurpose Internet Mail Extensions; (MIME) Part Four: Registration Procedures},
+  year      = {1996},
+  file      = {:inc/bib/rfc2048.pdf:PDF},
+  localfile = {inc/bib/rfc2048.pdf},
+  timestamp = {2020-07-15},
+  url       = {http://tools.ietf.org/pdf/rfc2048.pdf},
 }
 
-@Book{RFC2049,
-  Title                    = {RFC2049 Multipurpose Internet Mail Extensions; (MIME) Part Five: Conformance Criteria and Examples},
-  Author                   = {N. Freed and J. Klensin and J. Postel},
-  Year                     = {1996},
-  Publisher                = {IETF},
-  Url                      = {http://tools.ietf.org/pdf/rfc2049.pdf},
-
-  File                     = {:inc/bib/rfc2049.pdf:PDF},
-  Localfile                = {inc/bib/rfc2049.pdf}
+@Book{rfc2049,
+  author    = {N. Freed and J. Klensin and J. Postel},
+  publisher = {IETF},
+  title     = {RFC2049 Multipurpose Internet Mail Extensions; (MIME) Part Five: Conformance Criteria and Examples},
+  year      = {1996},
+  file      = {:inc/bib/rfc2049.pdf:PDF},
+  localfile = {inc/bib/rfc2049.pdf},
+  timestamp = {2020-07-15},
+  url       = {http://tools.ietf.org/pdf/rfc2049.pdf},
 }
 
 @Inproceedings{tarzan:ccs02,
@@ -1056,15 +1055,15 @@ This paper discusses the goals and desired properties of anonymous email in gene
   Timestamp                = {2017.04.03}
 }
 
-@Book{RFC1847,
-  Title                    = {RFC1847 Security Multiparts for MIME: Multipart/Signed and Multipart/Encrypted},
-  Author                   = {J. Galvin and S. Murphy and S. Crocker and N. Freed},
-  Year                     = {1995},
-  Publisher                = {IETF},
-  Url                      = {http://tools.ietf.org/pdf/rfc1847.pdf},
-
-  File                     = {:inc/bib/rfc1847.pdf:PDF},
-  Localfile                = {inc/bib/rfc1847.pdf}
+@Book{rfc1847,
+  author    = {J. Galvin and S. Murphy and S. Crocker and N. Freed},
+  publisher = {IETF},
+  title     = {RFC1847 Security Multiparts for MIME: Multipart/Signed and Multipart/Encrypted},
+  year      = {1995},
+  file      = {:inc/bib/rfc1847.pdf:PDF},
+  localfile = {inc/bib/rfc1847.pdf},
+  timestamp = {2020-07-15},
+  url       = {http://tools.ietf.org/pdf/rfc1847.pdf},
 }
 
 @Book{PGP,
@@ -1088,25 +1087,24 @@ This paper discusses the goals and desired properties of anonymous email in gene
   File                     = {:inc/bib/Groestl.pdf:PDF}
 }
 
-@Book{RFC6409,
-  Title                    = {STD72 Message Submission for Mail},
-  Author                   = {R. Gellens and J. Klensin},
-  Year                     = {2011},
-  Publisher                = {IETF},
-  Url                      = {http://tools.ietf.org/pdf/rfc6409.pdf},
-
-  File                     = {inc/bib/rfc6409.pdf:inc/bib/rfc6409.pdf:PDF}
+@Book{rfc6409,
+  author    = {R. Gellens and J. Klensin},
+  publisher = {IETF},
+  title     = {STD72 Message Submission for Mail},
+  year      = {2011},
+  file      = {inc/bib/rfc6409.pdf:inc/bib/rfc6409.pdf:PDF},
+  timestamp = {2020-07-15},
+  url       = {http://tools.ietf.org/pdf/rfc6409.pdf},
 }
 
-@Book{RFC4409,
-  Title                    = {RFC4409 Message Submission for Mail},
-  Author                   = {R. Gellens and J. Klensin},
-  Year                     = {2006},
-  Publisher                = {IETF},
-  Url                      = {http://tools.ietf.org/pdf/rfc4409.pdf},
-
-  File                     = {:inc/bib/rfc4409.pdf:PDF},
-  Timestamp                = {2015.01.29}
+@Book{rfc4409,
+  author    = {R. Gellens and J. Klensin},
+  publisher = {IETF},
+  title     = {RFC4409 Message Submission for Mail},
+  year      = {2006},
+  file      = {:inc/bib/rfc4409.pdf:PDF},
+  timestamp = {2020-07-15},
+  url       = {http://tools.ietf.org/pdf/rfc4409.pdf},
 }
 
 @Inproceedings{Gentry:2009:FHE:1536414.1536440,
@@ -1258,15 +1256,15 @@ Several researchers have proposed valuable methods of detecting cheating players
   Timestamp                = {2017.04.03}
 }
 
-@Book{RFC3207,
-  Title                    = {RFC3207 SMTP Service Extension for Secure SMTP over Transport Layer Security},
-  Author                   = {P. Hoffman},
-  Year                     = {2002},
-  Publisher                = {IETF},
-  Url                      = {http://tools.ietf.org/pdf/rfc3207.pdf},
-
-  File                     = {:inc/bib/rfc3207.pdf:PDF},
-  Localfile                = {inc/bib/rfc3207.pdf}
+@Book{rfc3207,
+  author    = {P. Hoffman},
+  publisher = {IETF},
+  title     = {RFC3207 SMTP Service Extension for Secure SMTP over Transport Layer Security},
+  year      = {2002},
+  file      = {:inc/bib/rfc3207.pdf:PDF},
+  localfile = {inc/bib/rfc3207.pdf},
+  timestamp = {2020-07-15},
+  url       = {http://tools.ietf.org/pdf/rfc3207.pdf},
 }
 
 @Inproceedings{Hoffstein1998,
@@ -1311,15 +1309,15 @@ We enumerate the requirements that a censorship-resistant system must satisfy to
   url          = {https://www.cs.cmu.edu/~xia/resources/Documents/LAP-oakland12.pdf},
 }
 
-@Book{RFC5068,
-  Title                    = {BCP143 Email Submission Operations: Access and Accountability Requirements},
-  Author                   = {C. Hutzler and D. Crocker and P. Resnick and E. Allman and T. Finch},
-  Year                     = {2007},
-  Publisher                = {IETF},
-  Url                      = {http://tools.ietf.org/pdf/rfc5068.pdf},
-
-  File                     = {:inc/bib/rfc5068.pdf:PDF},
-  Localfile                = {inc/bib/rfc5068.pdf}
+@Book{rfc5068,
+  author    = {C. Hutzler and D. Crocker and P. Resnick and E. Allman and T. Finch},
+  publisher = {IETF},
+  title     = {BCP143 Email Submission Operations: Access and Accountability Requirements},
+  year      = {2007},
+  file      = {:inc/bib/rfc5068.pdf:PDF},
+  localfile = {inc/bib/rfc5068.pdf},
+  timestamp = {2020-07-15},
+  url       = {http://tools.ietf.org/pdf/rfc5068.pdf},
 }
 
 @Inproceedings{iwanik2005duo,
@@ -1367,13 +1365,13 @@ We enumerate the requirements that a censorship-resistant system must satisfy to
   Journal                  = {Network Working Group}
 }
 
-@Article{RFC7914,
-  Title                    = {RFC7914: The scrypt Password-Based Key Derivation Function},
-  Author                   = {Josefsson, Simon and Percival, Colin},
-  Year                     = {2016},
-  Url                      = {https://tools.ietf.org/pdf/rfc7914.pdf},
-
-  File                     = {:inc/bib/rfc7914.pdf:PDF}
+@Article{rfc7914,
+  author    = {Josefsson, Simon and Percival, Colin},
+  title     = {RFC7914: The scrypt Password-Based Key Derivation Function},
+  year      = {2016},
+  file      = {:inc/bib/rfc7914.pdf:PDF},
+  timestamp = {2020-07-15},
+  url       = {https://tools.ietf.org/pdf/rfc7914.pdf},
 }
 
 @Inproceedings{juels1999client,
@@ -1419,37 +1417,37 @@ We enumerate the requirements that a censorship-resistant system must satisfy to
   Owner                    = {martin.gwerder}
 }
 
-@Book{RFC6652,
-  Title                    = {RFC6652 Sender Policy Framework (SPF) Authentication Failure Reporting Using the Abuse Reporting Format},
-  Author                   = {S. Kitterman},
-  Year                     = {2012},
-  Publisher                = {IETF},
-  Url                      = {http://tools.ietf.org/pdf/rfc6652.pdf},
-
-  File                     = {:inc/bib/rfc6652.pdf:PDF},
-  Localfile                = {inc/bib/rfc6652.pdf}
+@Book{rfc6652,
+  author    = {S. Kitterman},
+  publisher = {IETF},
+  title     = {RFC6652 Sender Policy Framework (SPF) Authentication Failure Reporting Using the Abuse Reporting Format},
+  year      = {2012},
+  file      = {:inc/bib/rfc6652.pdf:PDF},
+  localfile = {inc/bib/rfc6652.pdf},
+  timestamp = {2020-07-15},
+  url       = {http://tools.ietf.org/pdf/rfc6652.pdf},
 }
 
-@Book{RFC5321,
-  Title                    = {RFC5321 Simple Mail Transfer Protocol},
-  Author                   = {J. Klensin},
-  Year                     = {2008},
-  Publisher                = {IETF},
-  Url                      = {http://tools.ietf.org/pdf/rfc5321.pdf},
-
-  File                     = {:inc/bib/rfc5321.pdf:PDF},
-  Localfile                = {inc/bib/rfc5321.pdf}
+@Book{rfc5321,
+  author    = {J. Klensin},
+  publisher = {IETF},
+  title     = {RFC5321 Simple Mail Transfer Protocol},
+  year      = {2008},
+  file      = {:inc/bib/rfc5321.pdf:PDF},
+  localfile = {inc/bib/rfc5321.pdf},
+  timestamp = {2020-07-15},
+  url       = {http://tools.ietf.org/pdf/rfc5321.pdf},
 }
 
-@Book{RFC1870,
-  Title                    = {RFC1870 SMTP Service Extension for Message Size Declaration},
-  Author                   = {J. Klensin and N. Freed and K. Moore},
-  Year                     = {1995},
-  Publisher                = {IETF},
-  Url                      = {http://tools.ietf.org/pdf/rfc1870.pdf},
-
-  File                     = {:inc/bib/rfc1870.pdf:PDF},
-  Localfile                = {inc/bib/rfc1870.pdf}
+@Book{rfc1870,
+  author    = {J. Klensin and N. Freed and K. Moore},
+  publisher = {IETF},
+  title     = {RFC1870 SMTP Service Extension for Message Size Declaration},
+  year      = {1995},
+  file      = {:inc/bib/rfc1870.pdf:PDF},
+  localfile = {inc/bib/rfc1870.pdf},
+  timestamp = {2020-07-15},
+  url       = {http://tools.ietf.org/pdf/rfc1870.pdf},
 }
 
 @Misc{Koblitz04guideto,
@@ -1497,15 +1495,15 @@ We enumerate the requirements that a censorship-resistant system must satisfy to
   File                     = {:inc/bib/p613-lampson.pdf:PDF}
 }
 
-@Book{RFC5155,
-  Title                    = {RFC5155 DNS Security (DNSSEC) Hashed Authenticated Denial of Existence},
-  Author                   = {B. Laurie and G. Sisson and R. Arends and D. Blacka},
-  Year                     = {2008},
-  Publisher                = {IETF},
-  Url                      = {http://tools.ietf.org/pdf/rfc5155.pdf},
-
-  File                     = {:inc/bib/rfc5155.pdf:PDF},
-  Localfile                = {inc/bib/rfc5155.pdf}
+@Book{rfc5155,
+  author    = {B. Laurie and G. Sisson and R. Arends and D. Blacka},
+  publisher = {IETF},
+  title     = {RFC5155 DNS Security (DNSSEC) Hashed Authenticated Denial of Existence},
+  year      = {2008},
+  file      = {:inc/bib/rfc5155.pdf:PDF},
+  localfile = {inc/bib/rfc5155.pdf},
+  timestamp = {2020-07-15},
+  url       = {http://tools.ietf.org/pdf/rfc5155.pdf},
 }
 
 @Article{LEMIRE2019139,
@@ -1534,17 +1532,16 @@ We enumerate the requirements that a censorship-resistant system must satisfy to
 }
 
 @Misc{Leuenberger1989,
-  Title                    = {Vorkommnisse im EJPD Bericht der Parlamentarischen Untersuchungskommission(PUK)},
-  Author                   = {Leuenberger, Moritz and Meier, Josi},
-  Year                     = {1989},
-  HowPublished             = {Bundesblatt 1989-55},
-  Month                    = nov,
-  Url                      = {https://www.parlament.ch/centers/documents/de/ed-berichte-puk-ejpd.pdf},
-
-  File                     = {:inc/bib/ed-berichte-puk-ejpd.pdf:PDF},
-  Keywords                 = {fichenskandal },
-  Owner                    = {Martin},
-  Timestamp                = {2019.06.18}
+  author       = {Leuenberger, Moritz and Meier, Josi},
+  howpublished = {Bundesblatt 1989-55},
+  month        = nov,
+  title        = {Vorkommnisse im EJPD Bericht der Parlamentarischen Untersuchungskommission(PUK)},
+  year         = {1989},
+  file         = {:inc/bib/ed-berichte-puk-ejpd.pdf:PDF},
+  keywords     = {fichenskandal},
+  owner        = {Martin},
+  timestamp    = {2019.06.18},
+  url          = {https://www.parlament.ch/centers/documents/de/ed-berichte-puk-ejpd.pdf},
 }
 
 @Article{Levine:2002,
@@ -1590,21 +1587,21 @@ Seite 2: Serveral harmful abuses of anonymous communication have also been ident
   File                     = {:inc/bib/ctr-spec.pdf:PDF}
 }
 
-@Inproceedings{liskov2002tweakable,
-  Title                    = {Tweakable Block Ciphers},
-  Author                   = {Liskov, Moses and Rivest, Ronald L and Wagner, David},
-  Booktitle                = {Annual International Cryptology Conference},
-  Year                     = {2010},
-  Doi                      = {10.1007/s00145-010-9073-y},
-  Month                    = {sep},
-  Number                   = {3},
-  Organization             = {Springer},
-  Pages                    = {31--46},
-  Publisher                = {Springer Nature},
-  Volume                   = {24},
-
-  File                     = {:inc/bib/LiskovRivestWagner-TweakableBlockCiphers.pdf:PDF},
-  Journal                  = {Journal of Cryptology}
+@InProceedings{liskov2002tweakable,
+  author       = {Liskov, Moses and Rivest, Ronald L and Wagner, David},
+  booktitle    = {Annual International Cryptology Conference},
+  title        = {Tweakable Block Ciphers},
+  year         = {2010},
+  month        = sep,
+  number       = {3},
+  organization = {Springer},
+  pages        = {31--46},
+  publisher    = {Springer Nature},
+  volume       = {24},
+  doi          = {10.1007/s00145-010-9073-y},
+  file         = {:inc/bib/LiskovRivestWagner-TweakableBlockCiphers.pdf:PDF},
+  journal      = {Journal of Cryptology},
+  timestamp    = {2020-07-09},
 }
 
 @Article{lowe2007great,
@@ -1664,12 +1661,12 @@ Seite 2: Serveral harmful abuses of anonymous communication have also been ident
   Timestamp                = {2019.01.21}
 }
 
-@Article{RFC3713,
-  Title                    = {RFC3713: A Description of the Camellia Encryption Algorithm},
-  Author                   = {Matsui, Mitsuru and Moriai, S and Nakajima, J},
-  Year                     = {2004},
-
-  File                     = {:inc/bib/rfc3713.pdf:PDF}
+@Article{rfc3713,
+  author    = {Matsui, Mitsuru and Moriai, S and Nakajima, J},
+  title     = {RFC3713: A Description of the Camellia Encryption Algorithm},
+  year      = {2004},
+  file      = {:inc/bib/rfc3713.pdf:PDF},
+  timestamp = {2020-07-15},
 }
 
 @Article{mceliece1981sharing,
@@ -1767,33 +1764,33 @@ We study this trade-o in two P2P anonymous systems, Salsa and AP3. In both cases
   Timestamp                = {2019.03.01}
 }
 
-@Book{RFC919,
-  Title                    = {RFC919 BROADCASTING INTERNET DATAGRAMS},
-  Author                   = {Jeffrey Mogul},
-  Year                     = {1984},
-  Publisher                = {IETF},
-  Url                      = {http://tools.ietf.org/pdf/rfc919.pdf},
-
-  File                     = {:inc/bib/rfc919.pdf:PDF},
-  Localfile                = {inc/bib/rfc919.pdf}
+@Book{rfc919,
+  author    = {Jeffrey Mogul},
+  publisher = {IETF},
+  title     = {RFC919 BROADCASTING INTERNET DATAGRAMS},
+  year      = {1984},
+  file      = {:inc/bib/rfc919.pdf:PDF},
+  localfile = {inc/bib/rfc919.pdf},
+  timestamp = {2020-07-15},
+  url       = {http://tools.ietf.org/pdf/rfc919.pdf},
 }
 
-@Book{RFC922,
-  Title                    = {RFC922 BROADCASTING INTERNET DATAGRAMS IN THE PRESENCE OF SUBNETS},
-  Author                   = {J. Mogul},
-  Year                     = {1984},
-  Publisher                = {IETF},
-  Url                      = {http://tools.ietf.org/pdf/rfc922.pdf},
-
-  File                     = {:inc/bib/rfc922.pdf:PDF},
-  Localfile                = {inc/bib/rfc922.pdf}
+@Book{rfc922,
+  author    = {J. Mogul},
+  publisher = {IETF},
+  title     = {RFC922 BROADCASTING INTERNET DATAGRAMS IN THE PRESENCE OF SUBNETS},
+  year      = {1984},
+  file      = {:inc/bib/rfc922.pdf:PDF},
+  localfile = {inc/bib/rfc922.pdf},
+  timestamp = {2020-07-15},
+  url       = {http://tools.ietf.org/pdf/rfc922.pdf},
 }
 
 @Misc{rfc2616,
   author       = {Jerey Mogul and Larry M Masinter and Roy T. Fielding and Jim Gettys and Paul J. Leach and Tim Berners-Lee},
-  title        = {Hypertext Transfer Protocol -- HTTP/1.1},
   howpublished = {RFC 2616},
   month        = jun,
+  title        = {RFC2616: Hypertext Transfer Protocol -- HTTP/1.1},
   year         = {1999},
   abstract     = {HTTP has been in use by the World-Wide Web global information initiative since 1990. This specification defines the protocol referred to as "HTTP/1.1" and is an update to RFC 2068. [STANDARDS-TRACK]},
   doi          = {10.17487/rfc2616},
@@ -1802,19 +1799,19 @@ We study this trade-o in two P2P anonymous systems, Salsa and AP3. In both cases
   owner        = {Martin},
   publisher    = {RFC Editor},
   series       = {Request for Comments},
-  timestamp    = {2019.03.01},
+  timestamp    = {2020-07-15},
   url          = {https://rfc-editor.org/rfc/rfc2616.txt},
 }
 
-@Book{RFC950,
-  Title                    = {RFC950 Internet Standard Subnetting Procedure},
-  Author                   = {J. Mogul and J. Postel},
-  Year                     = {1985},
-  Publisher                = {IETF},
-  Url                      = {http://tools.ietf.org/pdf/rfc950.pdf},
-
-  File                     = {:inc/bib/rfc950.pdf:PDF},
-  Localfile                = {inc/bib/rfc950.pdf}
+@Book{rfc950,
+  author    = {J. Mogul and J. Postel},
+  publisher = {IETF},
+  title     = {RFC950 Internet Standard Subnetting Procedure},
+  year      = {1985},
+  file      = {:inc/bib/rfc950.pdf:PDF},
+  localfile = {inc/bib/rfc950.pdf},
+  timestamp = {2020-07-15},
+  url       = {http://tools.ietf.org/pdf/rfc950.pdf},
 }
 
 @Mastersthesis{mohajeri2013skypemorph,
@@ -1857,22 +1854,22 @@ We study this trade-o in two P2P anonymous systems, Salsa and AP3. In both cases
   Timestamp                = {2019.01.22}
 }
 
-@Book{RFC1939,
-  Title                    = {RFC1939 Post Office Protocol - Version 3},
-  Author                   = {J. Myers and M. Rose},
-  Year                     = {1996},
-  Publisher                = {IETF},
-  Url                      = {http://tools.ietf.org/pdf/rfc1939.pdf},
-
-  File                     = {:inc/bib/rfc1939.pdf:PDF},
-  Localfile                = {inc/bib/rfc1939.pdf}
+@Book{rfc1939,
+  author    = {J. Myers and M. Rose},
+  publisher = {IETF},
+  title     = {RFC1939 Post Office Protocol - Version 3},
+  year      = {1996},
+  file      = {:inc/bib/rfc1939.pdf:PDF},
+  localfile = {inc/bib/rfc1939.pdf},
+  timestamp = {2020-07-15},
+  url       = {http://tools.ietf.org/pdf/rfc1939.pdf},
 }
 
-@Misc{RFC2033,
+@Misc{rfc2033,
   author       = {John G. Myers},
-  title        = {{Local Mail Transfer Protocol}},
   howpublished = {RFC 2033},
   month        = oct,
+  title        = {{Local Mail Transfer Protocol}},
   year         = {1996},
   abstract     = {SMTP {[}SMTP{]} {[}HOST-REQ{]} and its service extensions {[}ESMTP{]} provide a mechanism for transferring mail reliably and efficiently. The design of the SMTP protocol effectively requires the server to manage a mail delivery queue. This memo provides information for the Internet community. This memo does not specify an Internet standard of any kind.},
   doi          = {10.17487/RFC2033},
@@ -1880,6 +1877,7 @@ We study this trade-o in two P2P anonymous systems, Salsa and AP3. In both cases
   number       = {2033},
   publisher    = {RFC Editor},
   series       = {Request for Comments},
+  timestamp    = {2020-07-15},
   url          = {https://rfc-editor.org/rfc/rfc2033.txt},
 }
 
@@ -1952,15 +1950,15 @@ In this paper we show that l-diversity has a number of limitations. In particula
   Timestamp                = {2016.11.29}
 }
 
-@Book{xep0013,
-  Title                    = {XEP-0013: Flexible Offline Message Retrieval},
-  Author                   = {Saint-Andre Peter and Kaes Craig},
-  Year                     = {2005},
-  Publisher                = {XMPP Standards Foundation},
-  Url                      = {http://xmpp.org/extensions/xep-0013.html},
-
-  File                     = {:inc/bib/xep-0013.pdf:PDF},
-  Localfile                = {inc/bib/xep0013.pdf}
+@Misc{xep0013,
+  author    = {Saint-Andre Peter and Kaes Craig},
+  title     = {XEP-0013: Flexible Offline Message Retrieval},
+  year      = {2005},
+  file      = {:inc/bib/xep-0013.pdf:PDF},
+  localfile = {inc/bib/xep0013.pdf},
+  publisher = {XMPP Standards Foundation},
+  timestamp = {2020-07-09},
+  url       = {http://xmpp.org/extensions/xep-0013.html},
 }
 
 @Misc{anonTerminology,
@@ -1985,109 +1983,108 @@ provide for the properties defined.},
   url       = {http://dud.inf.tu-dresden.de/literatur/Anon\_Terminology\_v0.34.pdf},
 }
 
-@Techreport{pd:96:rs,
-  Title                    = {A Tutorial on Reed-Solomon Coding for Fault-Tolerance in RAID-like Systems},
-  Author                   = {J. S. Plank},
-  Institution              = {University of Tennessee},
-  Year                     = {1996},
-  Month                    = {July},
-  Number                   = {CS-96-332},
-  Url                      = {http://web.eecs.utk.edu/~plank/plank/papers/CS-96-332.html},
-
-  Abstract                 = {It is well-known that Reed-Solomon codes may be used to provide error correction for multiple failures in RAID-like systems. The coding technique itself, however, is not as well-known. To the coding theorist, this technique is a straightforward extension to a basic coding paradigm and needs no special mention. However, to the systems programmer with no training in coding theory, the technique may be a mystery. Currently, there are no references that describe how to perform this coding that do not assume that the reader is already well-versed in algebra and coding theory. 
+@TechReport{pd:96:rs,
+  author      = {J. S. Plank},
+  institution = {University of Tennessee},
+  title       = {A Tutorial on Reed-Solomon Coding for Fault-Tolerance in RAID-like Systems},
+  year        = {1996},
+  month       = jul,
+  number      = {CS-96-332},
+  abstract    = {It is well-known that Reed-Solomon codes may be used to provide error correction for multiple failures in RAID-like systems. The coding technique itself, however, is not as well-known. To the coding theorist, this technique is a straightforward extension to a basic coding paradigm and needs no special mention. However, to the systems programmer with no training in coding theory, the technique may be a mystery. Currently, there are no references that describe how to perform this coding that do not assume that the reader is already well-versed in algebra and coding theory. 
 This paper is intended for the systems programmer. It presents a complete specification of the coding algorithm plus details on how it may be implemented. This specification assumes no prior knowledge of algebra or coding theory. The goal of this paper is for a systems programmer to be able to implement Reed-Solomon coding for reliability in RAID-like systems without needing to consult any external references.},
-  File                     = {:inc/bib/CS-96-332.pdf:PDF},
-  Where                    = {http://web.eecs.utk.edu/~plank/plank/papers/CS-96-332.html}
+  file        = {:inc/bib/CS-96-332.pdf:PDF},
+  timestamp   = {2020-07-09},
+  url         = {http://web.eecs.utk.edu/~plank/plank/papers/CS-96-332.html},
+  where       = {http://web.eecs.utk.edu/~jplank/plank/papers/CS-96-332.html},
 }
 
-@Techreport{pd:03:rs,
-  Title                    = {Note: Correction to the 1997 Tutorial on Reed-Solomon Coding},
-  Author                   = {J. S. Plank and Y. Ding},
-  Institution              = {University of Tennessee},
-  Year                     = {2003},
-  Month                    = {April},
-  Number                   = {CS-03-504},
-  Url                      = {http://web.eecs.utk.edu/~plank/plank/papers/CS-03-504.html},
-
-  Abstract                 = {In 1997, SPE published a tutorial by Plank on implementing Reed-Solomon codes for erasure correction in redundant data storage systems. The motivation of this tutorial was to present these codes, which are typically described mathematically by coding theorists, in a way accessible to the programmers who need to implement them. The tutorial as published presented an information dispersal matrix A, which does not have the properties claimed -- that the deletion of any m rows results in an invertable n*n matrix. The purpose of this note is to present a correct information dispersal matrix that has the desired properties, and to put the work in current context.},
-  File                     = {:inc/bib/CS-03-504.pdf:PDF},
-  Where                    = {http://web.eecs.utk.edu/~plank/plank/papers/CS-03-504.html}
+@TechReport{pd:03:rs,
+  author      = {J. S. Plank and Y. Ding},
+  institution = {University of Tennessee},
+  title       = {Note: Correction to the 1997 Tutorial on Reed-Solomon Coding},
+  year        = {2003},
+  month       = apr,
+  number      = {CS-03-504},
+  abstract    = {In 1997, SPE published a tutorial by Plank on implementing Reed-Solomon codes for erasure correction in redundant data storage systems. The motivation of this tutorial was to present these codes, which are typically described mathematically by coding theorists, in a way accessible to the programmers who need to implement them. The tutorial as published presented an information dispersal matrix A, which does not have the properties claimed -- that the deletion of any m rows results in an invertable n*n matrix. The purpose of this note is to present a correct information dispersal matrix that has the desired properties, and to put the work in current context.},
+  file        = {:inc/bib/CS-03-504.pdf:PDF},
+  timestamp   = {2020-07-09},
+  url         = {http://web.eecs.utk.edu/~plank/plank/papers/CS-03-504.html},
+  where       = {http://web.eecs.utk.edu/~plank/plank/papers/CS-03-504.html},
 }
 
-@Book{RFC791,
-  Title                    = {RFC791 INTERNET PROTOCOL DARPA INTERNET PROGRAM PROTOCOL SPECIFICATION},
-  Author                   = {J. Postel},
-  Year                     = {1981},
-  Publisher                = {IETF},
-  Url                      = {http://tools.ietf.org/pdf/rfc791.pdf},
-
-  File                     = {:inc/bib/rfc791.pdf:PDF},
-  Localfile                = {inc/bib/rfc791.pdf}
+@Book{rfc791,
+  author    = {J. Postel},
+  publisher = {IETF},
+  title     = {RFC791 INTERNET PROTOCOL DARPA INTERNET PROGRAM PROTOCOL SPECIFICATION},
+  year      = {1981},
+  file      = {:inc/bib/rfc791.pdf:PDF},
+  localfile = {inc/bib/rfc791.pdf},
+  timestamp = {2020-07-15},
+  url       = {http://tools.ietf.org/pdf/rfc791.pdf},
 }
 
-@Book{RFC792,
-  Title                    = {RFC792 INTERNET CONTROL MESSAGE PROTOCOL DARPA INTERNET PROGRAM PROTOCOL SPECIFICATION},
-  Author                   = {J. Postel},
-  Year                     = {1981},
-  Publisher                = {IETF},
-  Url                      = {http://tools.ietf.org/pdf/rfc792.pdf},
-
-  File                     = {:inc/bib/rfc792.pdf:PDF},
-  Localfile                = {inc/bib/rfc792.pdf}
+@Book{rfc792,
+  author    = {J. Postel},
+  publisher = {IETF},
+  title     = {RFC792 INTERNET CONTROL MESSAGE PROTOCOL DARPA INTERNET PROGRAM PROTOCOL SPECIFICATION},
+  year      = {1981},
+  file      = {:inc/bib/rfc792.pdf:PDF},
+  localfile = {inc/bib/rfc792.pdf},
+  timestamp = {2020-07-15},
+  url       = {http://tools.ietf.org/pdf/rfc792.pdf},
 }
 
-@Book{RFC793,
-  Title                    = {RFC793 TRANSMISSION CONTROL PROTOCOL DARPA INTERNET PROGRAM PROTOCOL SPECIFICATION},
-  Author                   = {J. Postel},
-  Year                     = {1981},
-  Publisher                = {IETF},
-  Url                      = {http://tools.ietf.org/pdf/rfc793.pdf},
-
-  File                     = {:inc/bib/rfc793.pdf:PDF},
-  Localfile                = {inc/bib/rfc793.pdf}
+@Book{rfc793,
+  author    = {J. Postel},
+  publisher = {IETF},
+  title     = {RFC793 TRANSMISSION CONTROL PROTOCOL DARPA INTERNET PROGRAM PROTOCOL SPECIFICATION},
+  year      = {1981},
+  file      = {:inc/bib/rfc793.pdf:PDF},
+  localfile = {inc/bib/rfc793.pdf},
+  timestamp = {2020-07-15},
+  url       = {http://tools.ietf.org/pdf/rfc793.pdf},
 }
 
-@Book{RFC760,
-  Title                    = {RFC760 DOD STANDARD INTERNET PROTOCOL},
-  Author                   = {Jon Postel},
-  Year                     = {1980},
-  Publisher                = {IETF},
-  Url                      = {http://tools.ietf.org/pdf/rfc760.pdf},
-
-  File                     = {:inc/bib/rfc760.pdf:PDF},
-  Localfile                = {inc/bib/rfc760.pdf}
+@Book{rfc760,
+  author    = {Jon Postel},
+  publisher = {IETF},
+  title     = {RFC760 DOD STANDARD INTERNET PROTOCOL},
+  year      = {1980},
+  file      = {:inc/bib/rfc760.pdf:PDF},
+  localfile = {inc/bib/rfc760.pdf},
+  timestamp = {2020-07-15},
+  url       = {http://tools.ietf.org/pdf/rfc760.pdf},
 }
 
-@Book{RFC2223,
-  Title                    = {RFC2223 Instructions to RFC Authors},
-  Author                   = {J. Postel and J. Reynolds},
-  Year                     = {1997},
-  Publisher                = {IETF},
-  Url                      = {http://tools.ietf.org/pdf/rfc2223.pdf},
-
-  File                     = {:inc/bib/rfc2223.pdf:PDF},
-  Localfile                = {inc/bib/rfc2223.pdf}
+@Book{rfc2223,
+  author    = {J. Postel and J. Reynolds},
+  publisher = {IETF},
+  title     = {RFC2223 Instructions to RFC Authors},
+  year      = {1997},
+  file      = {:inc/bib/rfc2223.pdf:PDF},
+  localfile = {inc/bib/rfc2223.pdf},
+  timestamp = {2020-07-15},
+  url       = {http://tools.ietf.org/pdf/rfc2223.pdf},
 }
 
-@Misc{RFC959,
-  Title                    = {RFC 959: File transfer protocol},
-  Author                   = {Postel, Jon and Reynolds, Joyce},
-  Year                     = {1985},
-  Url                      = {https://tools.ietf.org/pdf/rfc959.pdf},
-
-  Publisher                = {October},
-  Timestamp                = {2016.11.22}
+@Misc{rfc959,
+  author    = {Postel, Jon and Reynolds, Joyce},
+  title     = {RFC 959: File transfer protocol},
+  year      = {1985},
+  publisher = {October},
+  timestamp = {2020-07-15},
+  url       = {https://tools.ietf.org/pdf/rfc959.pdf},
 }
 
-@Book{RFC821,
-  Title                    = {RFC821 Simple Mail Transfer Protocol},
-  Author                   = {Jonathan B. Postel},
-  Year                     = {1982},
-  Publisher                = {IETF},
-  Url                      = {http://tools.ietf.org/pdf/rfc821.pdf},
-
-  File                     = {:inc/bib/rfc821.pdf:PDF},
-  Localfile                = {inc/bib/rfc821.pdf}
+@Book{rfc821,
+  author    = {Jonathan B. Postel},
+  publisher = {IETF},
+  title     = {RFC821 Simple Mail Transfer Protocol},
+  year      = {1982},
+  file      = {:inc/bib/rfc821.pdf:PDF},
+  localfile = {inc/bib/rfc821.pdf},
+  timestamp = {2020-07-15},
+  url       = {http://tools.ietf.org/pdf/rfc821.pdf},
 }
 
 @Article{postmes2001social,
@@ -2123,11 +2120,11 @@ This paper is intended for the systems programmer. It presents a complete specif
 }
 
 @Article{provos2002outguess,
-  Title                    = {Outguess},
-  Author                   = {Provos, Niels},
-  Year                     = {2002},
-
-  Journal                  = {Software available at www. outguess. org}
+  author    = {Provos, Niels},
+  title     = {Outguess},
+  year      = {2002},
+  comment   = {Software available at www. outguess. org},
+  timestamp = {2020-05-31},
 }
 
 @Book{hideAndSeek,
@@ -2163,26 +2160,26 @@ This paper is intended for the systems programmer. It presents a complete specif
   Publisher                = {ACM}
 }
 
-@Book{RFC2440,
-  Title                    = {RFC2440 Secure/Multipurpose Internet Mail Extensions (S/MIME) Version 3.1 Message Specification},
-  Author                   = {B. Ramsdell},
-  Year                     = {2004},
-  Publisher                = {IETF},
-  Url                      = {http://tools.ietf.org/pdf/rfc2440.pdf},
-
-  File                     = {:inc/bib/rfc2440.pdf:PDF},
-  Localfile                = {inc/bib/rfc2440.pdf}
+@Book{rfc2440,
+  author    = {B. Ramsdell},
+  publisher = {IETF},
+  title     = {RFC2440 Secure/Multipurpose Internet Mail Extensions (S/MIME) Version 3.1 Message Specification},
+  year      = {2004},
+  file      = {:inc/bib/rfc2440.pdf:PDF},
+  localfile = {inc/bib/rfc2440.pdf},
+  timestamp = {2020-07-15},
+  url       = {http://tools.ietf.org/pdf/rfc2440.pdf},
 }
 
-@Book{RFC3851,
-  Title                    = {RFC3851 Secure/Multipurpose Internet Mail Extensions (S/MIME) Version 3.1 Message Specification},
-  Author                   = {B. Ramsdell},
-  Year                     = {2004},
-  Publisher                = {IETF},
-  Url                      = {http://tools.ietf.org/pdf/rfc3851.pdf},
-
-  File                     = {:inc/bib/rfc3851.pdf:PDF},
-  Localfile                = {inc/bib/rfc3851.pdf}
+@Book{rfc3851,
+  author    = {B. Ramsdell},
+  publisher = {IETF},
+  title     = {RFC3851 Secure/Multipurpose Internet Mail Extensions (S/MIME) Version 3.1 Message Specification},
+  year      = {2004},
+  file      = {:inc/bib/rfc3851.pdf:PDF},
+  localfile = {inc/bib/rfc3851.pdf},
+  timestamp = {2020-07-15},
+  url       = {http://tools.ietf.org/pdf/rfc3851.pdf},
 }
 
 @Article{reed1960polynomial,
@@ -2251,15 +2248,15 @@ This paper is intended for the systems programmer. It presents a complete specif
   Timestamp                = {2019.02.27}
 }
 
-@Book{RFC5322,
-  Title                    = {RFC5322 Internet Message Format},
-  Author                   = {P. Resnick},
-  Year                     = {2008},
-  Publisher                = {IETF},
-  Url                      = {http://tools.ietf.org/pdf/rfc5322.pdf},
-
-  File                     = {:inc/bib/rfc5322.pdf:PDF},
-  Localfile                = {inc/bib/rfc5322.pdf}
+@Book{rfc5322,
+  author    = {P. Resnick},
+  publisher = {IETF},
+  title     = {RFC5322 Internet Message Format},
+  year      = {2008},
+  file      = {:inc/bib/rfc5322.pdf:PDF},
+  localfile = {inc/bib/rfc5322.pdf},
+  timestamp = {2020-07-15},
+  url       = {http://tools.ietf.org/pdf/rfc5322.pdf},
 }
 
 @Article{Rivest:1978:MOD:359340.359342,
@@ -2325,59 +2322,59 @@ This paper is intended for the systems programmer. It presents a complete specif
   url         = {https://tools.ietf.org/html/draft-krovetz-ocb-04},
 }
 
-@Book{RFC3923,
-  Title                    = {RFC3923: End-to-End Signing and Object Encryption for the Extensible Messaging and Presence Protocol (XMPP)},
-  Author                   = {J. P. Sain-Andre},
-  Year                     = {2004},
-  Publisher                = {IETF},
-  Url                      = {http://tools.ietf.org/pdf/rfc3923.pdf},
-
-  File                     = {:inc/bib/rfc3923.pdf:PDF},
-  Localfile                = {inc/bib/rfc3923.pdf}
+@Book{rfc3923,
+  author    = {J. P. Sain-Andre},
+  publisher = {IETF},
+  title     = {RFC3923: End-to-End Signing and Object Encryption for the Extensible Messaging and Presence Protocol (XMPP)},
+  year      = {2004},
+  file      = {:inc/bib/rfc3923.pdf:PDF},
+  localfile = {inc/bib/rfc3923.pdf},
+  timestamp = {2020-07-15},
+  url       = {http://tools.ietf.org/pdf/rfc3923.pdf},
 }
 
-@Book{RFC6120,
-  Title                    = {RFC6120: Extensible Messaging and Presence Protocol (XMPP): Core},
-  Author                   = {P. Saint-Andre},
-  Year                     = {2011},
-  Publisher                = {IETF},
-  Url                      = {http://tools.ietf.org/pdf/rfc6120.pdf},
-
-  File                     = {:inc/bib/rfc6120.pdf:PDF},
-  Localfile                = {inc/bib/rfc6120.pdf}
+@Book{rfc6120,
+  author    = {P. Saint-Andre},
+  publisher = {IETF},
+  title     = {RFC6120: Extensible Messaging and Presence Protocol (XMPP): Core},
+  year      = {2011},
+  file      = {:inc/bib/rfc6120.pdf:PDF},
+  localfile = {inc/bib/rfc6120.pdf},
+  timestamp = {2020-07-15},
+  url       = {http://tools.ietf.org/pdf/rfc6120.pdf},
 }
 
-@Book{RFC6121,
-  Title                    = {RFC6121: Extensible Messaging and Presence Protocol (XMPP): Instant Messaging and Presence},
-  Author                   = {P. Saint-Andre},
-  Year                     = {2011},
-  Publisher                = {IETF},
-  Url                      = {http://tools.ietf.org/pdf/rfc6121.pdf},
-
-  File                     = {:inc/bib/rfc6121.pdf:PDF},
-  Localfile                = {inc/bib/rfc6121.pdf}
+@Book{rfc6121,
+  author    = {P. Saint-Andre},
+  publisher = {IETF},
+  title     = {RFC6121: Extensible Messaging and Presence Protocol (XMPP): Instant Messaging and Presence},
+  year      = {2011},
+  file      = {:inc/bib/rfc6121.pdf:PDF},
+  localfile = {inc/bib/rfc6121.pdf},
+  timestamp = {2020-07-15},
+  url       = {http://tools.ietf.org/pdf/rfc6121.pdf},
 }
 
-@Book{RFC3922,
-  Title                    = {RFC3922: Mapping the Extensible Messaging and Presence Protocol (XMPP) to Common Presence and Instant Messaging (CPIM)},
-  Author                   = {P. Saint-Andre},
-  Year                     = {2004},
-  Publisher                = {IETF},
-  Url                      = {http://tools.ietf.org/pdf/rfc3922.pdf},
-
-  File                     = {:inc/bib/rfc3922.pdf:PDF},
-  Localfile                = {inc/bib/rfc3922.pdf}
+@Book{rfc3922,
+  author    = {P. Saint-Andre},
+  publisher = {IETF},
+  title     = {RFC3922: Mapping the Extensible Messaging and Presence Protocol (XMPP) to Common Presence and Instant Messaging (CPIM)},
+  year      = {2004},
+  file      = {:inc/bib/rfc3922.pdf:PDF},
+  localfile = {inc/bib/rfc3922.pdf},
+  timestamp = {2020-07-15},
+  url       = {http://tools.ietf.org/pdf/rfc3922.pdf},
 }
 
-@Article{xep0234,
-  Title                    = {XEP-0234: Jingle File Transfer},
-  Author                   = {Saint-Andre, Peter and Stout, Lance},
-  Year                     = {2011},
-  Url                      = {https://xmpp.org/extensions/xep-0234.pdf},
-  Volume                   = {29},
-
-  File                     = {:inc/bib/xep-0234.pdf:PDF},
-  Journal                  = {Saatavilla osoitteesta< URL: http://xmpp. org/extensions/xep-0234. html}
+@Misc{xep0234,
+  author    = {Saint-Andre, Peter and Stout, Lance},
+  title     = {XEP-0234: Jingle File Transfer},
+  year      = {2011},
+  file      = {:inc/bib/xep-0234.pdf:PDF},
+  journal   = {Saatavilla osoitteesta< URL: http://xmpp. org/extensions/xep-0234. html},
+  timestamp = {2020-07-09},
+  url       = {https://xmpp.org/extensions/xep-0234.pdf},
+  volume    = {29},
 }
 
 @Article{saleh2018shedding,
@@ -2478,15 +2475,15 @@ This paper is intended for the systems programmer. It presents a complete specif
   Biburl                   = {http://books.google.ch/books?id=OXPRAAAACAAJ}
 }
 
-@Book{RFC1180,
-  Title                    = {RFC1180 A TCP/IP Tutorial},
-  Author                   = {T. Socolofsky and C. Kale},
-  Year                     = {1991},
-  Publisher                = {IETF},
-  Url                      = {http://tools.ietf.org/pdf/rfc1180.pdf},
-
-  File                     = {:inc/bib/rfc1180.pdf:PDF},
-  Localfile                = {inc/bib/rfc1180.pdf}
+@Book{rfc1180,
+  author    = {T. Socolofsky and C. Kale},
+  publisher = {IETF},
+  title     = {RFC1180 A TCP/IP Tutorial},
+  year      = {1991},
+  file      = {:inc/bib/rfc1180.pdf:PDF},
+  localfile = {inc/bib/rfc1180.pdf},
+  timestamp = {2020-07-15},
+  url       = {http://tools.ietf.org/pdf/rfc1180.pdf},
 }
 
 @Inproceedings{solanki2007yass,
@@ -2622,14 +2619,14 @@ This paper is intended for the systems programmer. It presents a complete specif
   File                     = {:inc/bib/Biaoshuai2015bclique.pdf:PDF}
 }
 
-@Book{xep0096,
-  Title                    = {XEP-0096: SI File Transfer},
-  Author                   = {Muldowney Thomas and Miller Mathew and Eatmon Ryan and Saint-Andre Peter},
-  Year                     = {2004},
-  Publisher                = {XMPP Standards Foundation},
-  Url                      = {http://xmpp.org/extensions/xep-0096.html},
-
-  File                     = {:inc/bib/XMPP_XEP0096_file_Transfer.pdf:PDF}
+@Misc{xep0096,
+  author    = {Muldowney Thomas and Miller Mathew and Eatmon Ryan and Saint-Andre Peter},
+  title     = {XEP-0096: SI File Transfer},
+  year      = {2004},
+  file      = {:inc/bib/XMPP_XEP0096_file_Transfer.pdf:PDF},
+  publisher = {XMPP Standards Foundation},
+  timestamp = {2020-07-09},
+  url       = {http://xmpp.org/extensions/xep-0096.html},
 }
 
 @Inproceedings{tritilanunt2007toward,
@@ -2746,12 +2743,12 @@ This paper is intended for the systems programmer. It presents a complete specif
   Volume                   = {1}
 }
 
-@Article{RFC3610,
-  Title                    = {RFC3610: Counter with cbc-mac (ccm)},
-  Author                   = {Whiting, Doug and Ferguson, Niels and Housley, Russell},
-  Year                     = {2003},
-
-  File                     = {:inc/bib/rfc3610.pd.pdf:PDF}
+@Article{rfc3610,
+  author    = {Whiting, Doug and Ferguson, Niels and Housley, Russell},
+  title     = {RFC3610: Counter with cbc-mac (ccm)},
+  year      = {2003},
+  file      = {:inc/bib/rfc3610.pd.pdf:PDF},
+  timestamp = {2020-07-15},
 }
 
 @Misc{wiki:deniableEncryption,
@@ -2864,26 +2861,26 @@ This paper is intended for the systems programmer. It presents a complete specif
   Publisher                = {Wikipedia}
 }
 
-@Book{RFC4401,
-  Title                    = {RFC4401 Sender ID: Authenticating E-Mail},
-  Author                   = {N. Williams},
-  Year                     = {2006},
-  Publisher                = {IETF},
-  Url                      = {http://tools.ietf.org/pdf/rfc4401.pdf},
-
-  File                     = {:inc/bib/rfc4401.pdf:PDF},
-  Localfile                = {inc/bib/rfc4401.pdf}
+@Book{rfc4401,
+  author    = {N. Williams},
+  publisher = {IETF},
+  title     = {RFC4401 Sender ID: Authenticating E-Mail},
+  year      = {2006},
+  file      = {:inc/bib/rfc4401.pdf:PDF},
+  localfile = {inc/bib/rfc4401.pdf},
+  timestamp = {2020-07-15},
+  url       = {http://tools.ietf.org/pdf/rfc4401.pdf},
 }
 
-@Book{RFC4408,
-  Title                    = {RFC4408 Sender Policy Framework (SPF) for Authorizing Use of Domains in E-Mail, Version 1},
-  Author                   = {N. Williams},
-  Year                     = {2006},
-  Publisher                = {IETF},
-  Url                      = {http://tools.ietf.org/pdf/rfc4408.pdf},
-
-  File                     = {:inc/bib/rfc4408.pdf:PDF},
-  Localfile                = {inc/bib/rfc4408.pdf}
+@Book{rfc4408,
+  author    = {N. Williams},
+  publisher = {IETF},
+  title     = {RFC4408 Sender Policy Framework (SPF) for Authorizing Use of Domains in E-Mail, Version 1},
+  year      = {2006},
+  file      = {:inc/bib/rfc4408.pdf:PDF},
+  localfile = {inc/bib/rfc4408.pdf},
+  timestamp = {2020-07-15},
+  url       = {http://tools.ietf.org/pdf/rfc4408.pdf},
 }
 
 @Inproceedings{wolinsky2012dissent,
@@ -3070,24 +3067,25 @@ This paper is intended for the systems programmer. It presents a complete specif
 
 @Article{zhou2011examining,
   author    = {Zhou, Tao and Lu, Yaobin},
-  title     = {Examining mobile instant messaging user loyalty from the perspectives of network externalities and flow experience},
   journal   = {Computers in Human Behavior},
+  title     = {Examining mobile instant messaging user loyalty from the perspectives of network externalities and flow experience},
   year      = {2011},
-  volume    = {27},
   number    = {2},
   pages     = {883--889},
-  abstract  = {Due to the intense competition and low switching cost, building user loyalty is critical for mobile instant messaging (IM) service providers. Integrating both perspectives of network externalities and flow experience, this research identified the factors affecting mobile IM user loyalty. Network externalities include referent network size and perceived complementarity. Flow experience includes perceived enjoyment and attention focus. We conducted data analysis with structural equation modeling (SEM). The results show that both network externalities and flow experience significantly affect perceived usefulness and satisfaction, further determining user loyalty. Thus mobile service providers need to improve their IM platforms, and deliver positive network externalities and good usage experience to users. Then they can facilitate users’ loyalty.},
+  volume    = {27},
+  abstract  = {Due to the intense competition and low switching cost, building user loyalty is critical for mobile instant messaging (IM) service providers. Integrating both perspectives of network externalities and flow experience, this research identified the factors affecting mobile IM user loyalty. Network externalities include referent network size and perceived complementarity. Flow experience includes perceived enjoyment and attention focus. We conducted data analysis with structural equation modeling (SEM). The results show that both network externalities and flow experience significantly affect perceived usefulness and satisfaction, further determining user loyalty. Thus mobile service providers need to improve their IM platforms, and deliver positive network externalities and good usage experience to users. Then they can facilitate users loyalty.},
   doi       = {10.1016/j.chb.2010.11.013},
   file      = {:inc/bib/1-s2.0-S0747563210003584-main.pdf:PDF},
   publisher = {Elsevier},
+  timestamp = {2020-07-09},
 }
 
 @Misc{sandvine2019GIPR,
-  title        = {Internet Phenomena Report 2019},
   howpublished = {Internet},
   month        = sep,
+  title        = {Internet Phenomena Report 2019},
   year         = {2019},
-  comment      = {The data in this edition of the Global Internet Phenomena Report is drawn from Sandvine’s installed base of over 160 Tier 1 and Tier 2 fixed, mobile, and WiFi operators worldwide. The report does not include significant data from either China or India, but the data represents a portion of Sandvine’s 2.5B subscribers installed base, a statistically significant segment of the internet population. 
+  comment      = {The data in this edition of the Global Internet Phenomena Report is drawn from Sandvine’s installed base of over 160 Tier 1 and Tier 2 fixed, mobile, and WiFi operators worldwide. The report does not include significant data from either China or India, but the data represents a portion of Sandvine\’s 2.5B subscribers installed base, a statistically significant segment of the internet population. 
 
 This edition combines fixed and mobile data into a single comprehensive view of internet traffic across all network types. The volume of traffic on the internet is dominated by fixed line networks, so even though this report includes mobile and WiFi data, the trends on fixed networks dominate traffic share. Within each section, Sandvine measured the global traffic share for applications from several different perspectives:
 
@@ -3095,23 +3093,23 @@ Downstream: this is the traffic volume downloaded from the internet. Examples wo
 
 Upstream: this is the traffic volume uploaded to the Internet. It could be requests for content, an interactive messaging session, or a Twitch stream of a gaming session from a console.
 
-Connections: this represents the number of conversations occurring for an application. Some applications use a single connection for all traffic, others use many connections to transfer data or video to the end user. },
+Connections: this represents the number of conversations occurring for an application. Some applications use a single connection for all traffic, others use many connections to transfer data or video to the end user.},
   file         = {:inc/bib/Internet_Phenomena_Report_Q32019_20190910.pdf:PDF},
   owner        = {Martin},
-  timestamp    = {2019.12.29},
+  timestamp    = {2020-07-09},
 }
 
-@Misc{RFC780,
+@Misc{rfc780,
   author       = {Sluizer, Szusanne and Postel, jonathan B.},
-  title        = {Mail Transfer Protocol},
   howpublished = {IETF},
   month        = may,
+  title        = {Mail Transfer Protocol},
   year         = {1981},
   doi          = {10.17487/RFC0780},
   file         = {:inc/bib/rfc780.txt.pdf:PDF},
   keywords     = {MTP},
   owner        = {Martin},
-  timestamp    = {2019.12.29},
+  timestamp    = {2020-07-15},
   url          = {https://www.rfc-editor.org/rfc/pdfrfc/rfc780.txt.pdf},
 }
 
@@ -3129,15 +3127,15 @@ Connections: this represents the number of conversations occurring for an applic
   url          = {https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=5466665},
 }
 
-@Misc{RFC3977,
+@Misc{rfc3977,
   author       = {Feather, C},
-  title        = {Network News Transfer Protocol (NNTP)},
   howpublished = {IETF},
   month        = oct,
+  title        = {Network News Transfer Protocol (NNTP)},
   year         = {2006},
   file         = {:inc/bib/rfc3977.pdf:PDF},
   owner        = {Martin},
-  timestamp    = {2019.12.29},
+  timestamp    = {2020-07-15},
   url          = {https://www.rfc-editor.org/rfc/pdfrfc/rfc3977.txt.pdf},
 }
 
@@ -3151,6 +3149,362 @@ Connections: this represents the number of conversations occurring for an applic
   owner        = {Martin},
   timestamp    = {2019.12.29},
   url          = {https://www.nytimes.com/1996/09/06/business/behind-an-internet-message-service-s-close.html},
+}
+
+@InProceedings{piotrowska2017loopix,
+  author    = {Piotrowska, Ania M. and Hayes, Jamie and Elahi, Tariq and Meiser, Sebastian and Danezis, George},
+  booktitle = {26th $\{$USENIX$\}$ Security Symposium ($\{$USENIX$\}$ Security 17)},
+  title     = {The loopix anonymity system},
+  year      = {2017},
+  pages     = {1199--1216},
+  file      = {:inc/bib/loopix-sec17-piotrowska.pdf:PDF},
+  timestamp = {2020-05-21},
+  url       = {https://www.usenix.org/system/files/conference/usenixsecurity17/sec17-piotrowska.pdf},
+}
+
+@Article{kwon2016atom,
+  author    = {Kwon, Albert and Corrigan-Gibbs, Henry and Devadas, Srinivas and Ford, Bryan},
+  journal   = {CoRR abs/1612.07841},
+  title     = {Atom: Scalable anonymity resistant to traffic analysis},
+  year      = {2016},
+  file      = {:inc/bib/atom.pdf:PDF},
+  timestamp = {2020-05-21},
+  url       = {https://www.researchgate.net/profile/Bryan_Ford/publication/311900860_Atom_Scalable_Anonymity_Resistant_to_Traffic_Analysis/links/58c918ddaca2723ab18138c5/Atom-Scalable-Anonymity-Resistant-to-Traffic-Analysis.pdf},
+}
+
+@Article{kwon2016riffle,
+  author    = {Kwon, Albert and Lazar, David and Devadas, Srinivas and Ford, Bryan},
+  journal   = {Proceedings on Privacy Enhancing Technologies},
+  title     = {Riffle: An efficient communication system with strong anonymity},
+  year      = {2016},
+  number    = {2},
+  pages     = {115--134},
+  volume    = {2016},
+  file      = {:inc/bib/riffle.pdf:PDF},
+  publisher = {Sciendo},
+  timestamp = {2020-05-21},
+  url       = {https://content.sciendo.com/downloadpdf/journals/popets/2016/2/article-p115.pdf},
+}
+
+@InProceedings{corrigan2015riposte,
+  author       = {Corrigan-Gibbs, Henry and Boneh, Dan and Mazi{\`e}res, David},
+  booktitle    = {2015 IEEE Symposium on Security and Privacy},
+  title        = {Riposte: An anonymous messaging system handling millions of users},
+  year         = {2015},
+  organization = {IEEE},
+  pages        = {321--338},
+  file         = {:inc/bib/riposte.pdf:PDF},
+  timestamp    = {2020-05-21},
+  url          = {https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=7163034},
+}
+
+@TechReport{angel2016unobservableEV,
+  author      = {Angel, Sebastian and Setty, Srinath},
+  institution = {Technical Report TR-16-16, The University of Texas at Austin},
+  title       = {Unobservable communication over fully untrusted infrastructure (extended version)},
+  year        = {2016},
+  file        = {:inc/bib/pung-osdi16-tr.pdf:PDF},
+  timestamp   = {2020-05-21},
+  url         = {https://www.cis.upenn.edu/~sga001/papers/pung-osdi16-tr.pdf},
+}
+
+@InProceedings{angel2016unobservable,
+  author    = {Angel, Sebastian and Setty, Srinath},
+  booktitle = {12th $\{$USENIX$\}$ Symposium on Operating Systems Design and Implementation ($\{$OSDI$\}$ 16)},
+  title     = {Unobservable communication over fully untrusted infrastructure},
+  year      = {2016},
+  pages     = {551--569},
+  comment   = {PUNG},
+  file      = {:inc/bib/pung-osdi16.pdf:PDF},
+  timestamp = {2020-05-21},
+  url       = {https://www.usenix.org/system/files/conference/osdi16/osdi16-angel.pdf},
+}
+
+@InProceedings{angel2018pir,
+  author       = {Angel, Sebastian and Chen, Hao and Laine, Kim and Setty, Srinath},
+  booktitle    = {2018 IEEE Symposium on Security and Privacy (SP)},
+  title        = {PIR with compressed queries and amortized query processing},
+  year         = {2018},
+  organization = {IEEE},
+  pages        = {962--979},
+  timestamp    = {2020-05-21},
+  url          = {https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=8418648},
+}
+
+@InProceedings{lazar2018karaoke,
+  author    = {Lazar, David and Gilad, Yossi and Zeldovich, Nickolai},
+  booktitle = {13th $\{$USENIX$\}$ Symposium on Operating Systems Design and Implementation ($\{$OSDI$\}$ 18)},
+  title     = {Karaoke: Distributed private messaging immune to passive traffic analysis},
+  year      = {2018},
+  pages     = {711--725},
+  file      = {:inc/bib/karaoke.pdf:PDF},
+  timestamp = {2020-05-21},
+  url       = {https://www.usenix.org/system/files/osdi18-lazar.pdf},
+}
+
+@InProceedings{tyagi2017stadium,
+  author    = {Tyagi, Nirvan and Gilad, Yossi and Leung, Derek and Zaharia, Matei and Zeldovich, Nickolai},
+  booktitle = {Proceedings of the 26th Symposium on Operating Systems Principles},
+  title     = {Stadium: A distributed metadata-private messaging system},
+  year      = {2017},
+  pages     = {423--440},
+  file      = {:inc/bib/stadium.pdf:PDF},
+  timestamp = {2020-05-21},
+  url       = {https://dl.acm.org/doi/pdf/10.1145/3132747.3132783},
+}
+
+@InProceedings{van2015vuvuzela,
+  author    = {Van Den Hooff, Jelle and Lazar, David and Zaharia, Matei and Zeldovich, Nickolai},
+  booktitle = {Proceedings of the 25th Symposium on Operating Systems Principles},
+  title     = {Vuvuzela: Scalable private messaging resistant to traffic analysis},
+  year      = {2015},
+  pages     = {137--152},
+  abstract  = {Private messaging over the Internet has proven challenging toimplement, because even if message data is encrypted, it isdifficult to hide metadata aboutwhois communicating in theface of traffic analysis. Systems that offer strong privacy guar-antees, such as Dissent [36], scale to only several thousandclients, because they use techniques with superlinear cost inthe number of clients (e.g., each client broadcasts their mes-sage to all other clients). On the other hand, scalable systems,such as Tor, do not protect against traffic analysis, makingthem ineffective in an era of pervasive network monitoring.Vuvuzela is a new scalable messaging system that offersstrong privacy guarantees, hiding both message data and meta-data. Vuvuzela is secure against adversaries that observe andtamper with all network traffic, and that control all nodes ex-cept for one server.  Vuvuzela’s key insight is to minimizethe number of variables observable by an attacker, and to usedifferential privacy techniques to add noise to all observablevariables in a way that provably hides information about whichusers are communicating.  Vuvuzela has a linear cost in thenumber of clients, and experiments show that it can achieve athroughput of 68,000 messages per second for 1 million userswith a 37-second end-to-end latency on commodity servers.},
+  file      = {:inc/bib/vuvuzela.pdf:PDF},
+  owner     = {Martin Gwerder},
+  relevance = {High},
+  timestamp = {2020-05-22},
+  url       = {https://dl.acm.org/doi/pdf/10.1145/2815400.2815417},
+}
+
+@Misc{xep0418,
+  author    = {Burtrum, Travis},
+  month     = mar,
+  title     = {XEP-0418: DNS Queries over XMPP (DoX)},
+  year      = {2019},
+  file      = {:inc/bib/xep-0418.pdf:PDF},
+  keywords  = {XMPP},
+  owner     = {Martin Gwerder},
+  timestamp = {2020-07-09},
+  url       = {https://xmpp.org/extensions/xep-0418.pdf},
+}
+
+@Misc{rfc8484,
+  author       = {Hoffman, P. and McManus, P.},
+  howpublished = {IETF},
+  month        = oct,
+  title        = {DNS Queries over HTTPS (DoH)},
+  year         = {2018},
+  timestamp    = {2020-05-30},
+  url          = {https://tools.ietf.org/html/rfc8484},
+}
+
+@Misc{bsiPostQuantum,
+  author       = {BSI},
+  howpublished = {Bundesamt f\"ur Sicherheit in der Informationstechnik},
+  month        = mar,
+  title        = {Migration zu Post-Quanten-Kryptografie},
+  year         = {2020},
+  file         = {:inc/bib/Post-Quanten-Kryptografie.pdf:PDF},
+  keywords     = {BSI Handluungsempfehlungen Post Quantum Crypto},
+  owner        = {Martin Gwerder},
+  timestamp    = {2020-07-09},
+  url          = {https://www.bsi.bund.de/SharedDocs/Downloads/DE/BSI/Krypto/Post-Quanten-Kryptografie.pdf?__blob=publicationFile&v=2},
+}
+
+@Article{iso15408,
+  author    = {ISO, ISO and Std, IEC},
+  journal   = {Information technology-Security techniques-Evaluation criteria for IT security-Part},
+  title     = {ISO 15408-1: 2009},
+  year      = {2009},
+  volume    = {1},
+  file      = {:inc/bib/isoiec15408-1en.pdf:PDF},
+  timestamp = {2020-06-11},
+}
+
+@Article{dis19878824,
+  author    = {DIS, ISO},
+  journal   = {Basic Encoding Rules},
+  title     = {8824: Specification of Abstract Syntax Notation One (ASN. I)},
+  year      = {2015},
+  timestamp = {2020-06-28},
+}
+
+@InProceedings{hosseini2015modification,
+  author       = {Hosseini, Morteza Darvish Morshedi and Mahdavi, Mojtaba},
+  booktitle    = {2015 12th International Iranian Society of Cryptology Conference on Information Security and Cryptology (ISCISC)},
+  title        = {Modification in spatial, extraction from transform: A new approach for JPEG steganography},
+  year         = {2015},
+  organization = {IEEE},
+  pages        = {134--140},
+  file         = {:inc/bib/MSET_07387911.pdf:PDF},
+  timestamp    = {2020-06-30},
+}
+
+@InProceedings{fridrich2007statistically,
+  author    = {Fridrich, Jessica and Pevny, Tomav and Kodovsky, Jan},
+  booktitle = {Proceedings of the 9th workshop on Multimedia \& security},
+  title     = {Statistically undetectable jpeg steganography: dead ends challenges, and opportunities},
+  year      = {2007},
+  pages     = {3--14},
+  keywords  = {nsF5},
+  owner     = {Martin Gwerder},
+  timestamp = {2020-07-11},
+}
+
+@Misc{xep0047,
+  author    = {Karneges, Justin and Saint-Andre, Peter},
+  title     = {XEP-0047: In-band bytestreams},
+  year      = {2003},
+  file      = {:inc/bib/xep-0047.pdf:PDF},
+  journal   = {Jabber Software Foundation},
+  timestamp = {2020-07-09},
+  url       = {https://xmpp.org/extensions/xep-0047.html},
+}
+
+@Misc{xep0231,
+  author    = {Saint-Andre, Peter and Simerda, P},
+  title     = {XEP-0231: Bits of binary},
+  year      = {2008},
+  file      = {:inc/bib/xep-0231.pdf:PDF},
+  journal   = {XMPP Standards Foundation, Standards Track},
+  owner     = {Martin Gwerder},
+  timestamp = {2020-07-09},
+  url       = {https://xmpp.org/extensions/xep-0231.html},
+}
+
+@Misc{xep0135,
+  author    = {Saint-Andre, Peter},
+  title     = {XEP-0135: File Sharing},
+  year      = {2004},
+  file      = {:inc/bib/xep-0135.pdf:PDF},
+  publisher = {XMPP Standards Foundation},
+  timestamp = {2020-07-09},
+  url       = {https://xmpp.org/extensions/xep-0135.html},
+}
+
+@Misc{xep0066,
+  author    = {Saint-Andre, Peter},
+  title     = {XEP-0066: Out of Band Data},
+  year      = {2006},
+  file      = {:inc/bib/xep-0066.pdf:PDF},
+  publisher = {XMPP Standards Foundation},
+  timestamp = {2020-07-09},
+  url       = {https://xmpp.org/extensions/xep-0066.html},
+}
+
+@Misc{xep0166,
+  author    = {Ludwig, Scott and Beda, Joe and Saint-Andre, Peter and McQueen, Robert and Egan, Sean and Hildebrand, Joe},
+  title     = {XEP-0166: Jingle},
+  year      = {2009},
+  file      = {:inc/bib/xep-0166.pdf:PDF},
+  journal   = {XMPP Standards Foundation},
+  timestamp = {2020-07-09},
+  url       = {https://xmpp.org/extensions/xep-0166.html},
+}
+
+@Misc{rfc2397,
+  author    = {Masinter, Larry},
+  title     = {RFC2397 The" data" URL scheme},
+  year      = {1998},
+  file      = {:inc/bib/rfc2397.pdf:PDF},
+  publisher = {RFC Editor},
+  timestamp = {2020-07-09},
+  url       = {https://www.rfc-editor.org/info/rfc2397},
+}
+
+@InProceedings{westfeld1999attacks,
+  author       = {Westfeld, Andreas and Pfitzmann, Andreas},
+  booktitle    = {International workshop on information hiding},
+  title        = {Attacks on steganographic systems},
+  year         = {1999},
+  organization = {Springer},
+  pages        = {61--76},
+  file         = {:inc/bib/westfeld-pfitzmann-ihw99.pdf:PDF},
+  timestamp    = {2020-07-11},
+  url          = {https://link.springer.com/chapter/10.1007/10719724_5},
+}
+
+@Article{shamir1979share,
+  author    = {Shamir, Adi},
+  journal   = {Communications of the ACM},
+  title     = {How to share a secret},
+  year      = {1979},
+  number    = {11},
+  pages     = {612--613},
+  volume    = {22},
+  file      = {:inc/bib/shamirturing.pdf:PDF},
+  publisher = {ACm New York, NY, USA},
+  timestamp = {2020-07-15},
+  url       = {https://cs.jhu.edu/~sdoshi/crypto/papers/shamirturing.pdf},
+}
+
+@InProceedings{aiache2008reed,
+  author       = {Aiache, Herve and Tavernier, Cedric and Sieux, Corinne},
+  booktitle    = {2008 3rd International Symposium on Wireless Pervasive Computing},
+  title        = {Reed-Solomon codes and multi-path strategies to improve privacy performance over ad hoc networks},
+  year         = {2008},
+  organization = {IEEE},
+  pages        = {430--435},
+  file         = {:inc/bib/04556244.pdf:PDF},
+  timestamp    = {2020-07-15},
+  url          = {https://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=4556244},
+}
+
+@Article{tompa1989share,
+  author    = {Tompa, Martin and Woll, Heather},
+  journal   = {journal of Cryptology},
+  title     = {How to share a secret with cheaters},
+  year      = {1989},
+  number    = {3},
+  pages     = {133--138},
+  volume    = {1},
+  file      = {:inc/bib/Tompa-Woll1989_Article_HowToShareASecretWithCheaters.pdf:PDF},
+  publisher = {Springer},
+  timestamp = {2020-07-15},
+}
+
+@Misc{rfc6698,
+  author       = {Paul E. Hoffman and Jakob Schlyter},
+  howpublished = {RFC 6698},
+  month        = aug,
+  title        = {{RFC6698: The DNS-Based Authentication of Named Entities (DANE) Transport Layer Security (TLS) Protocol: TLSA}},
+  year         = {2012},
+  abstract     = {Encrypted communication on the Internet often uses Transport Layer Security (TLS), which depends on third parties to certify the keys used. This document improves on that situation by enabling the administrators of domain names to specify the keys used in that domain's TLS servers. This requires matching improvements in TLS client software, but no change in TLS server software. {[}STANDARDS-TRACK{]}},
+  doi          = {10.17487/RFC6698},
+  number       = {6698},
+  pagetotal    = {37},
+  publisher    = {RFC Editor},
+  series       = {Request for Comments},
+  timestamp    = {2020-07-15},
+  url          = {https://rfc-editor.org/rfc/rfc6698.txt},
+}
+
+@Misc{rfc7672,
+  author       = {Viktor Dukhovni and Wes Hardaker},
+  howpublished = {RFC 7672},
+  month        = oct,
+  title        = {{RFC7672: SMTP Security via Opportunistic DNS-Based Authentication of Named Entities (DANE) Transport Layer Security (TLS)}},
+  year         = {2015},
+  abstract     = {This memo describes a downgrade-resistant protocol for SMTP transport security between Message Transfer Agents (MTAs), based on the DNS-Based Authentication of Named Entities (DANE) TLSA DNS record. Adoption of this protocol enables an incremental transition of the Internet email backbone to one using encrypted and authenticated Transport Layer Security (TLS).},
+  doi          = {10.17487/RFC7672},
+  number       = {7672},
+  pagetotal    = {34},
+  publisher    = {RFC Editor},
+  series       = {Request for Comments},
+  timestamp    = {2020-07-15},
+  url          = {https://rfc-editor.org/rfc/rfc7672.txt},
+}
+
+@Article{sassamanpynchon,
+  author    = {Sassaman, Len and Cohen, Bram and Mathewson, Nick},
+  title     = {The Pynchon Gate},
+  file      = {:inc/bib/article-620.pdf:PDF},
+  keywords  = {https://www.esat.kuleuven.be/cosic/publications/article-620.pdf},
+  publisher = {Citeseer},
+  timestamp = {2020-08-03},
+  url       = {https://www.esat.kuleuven.be/cosic/publications/article-620.pdf},
+}
+
+@InProceedings{lazar2016alpenhorn,
+  author    = {Lazar, David and Zeldovich, Nickolai},
+  booktitle = {12th $\{$USENIX$\}$ Symposium on Operating Systems Design and Implementation ($\{$OSDI$\}$ 16)},
+  title     = {Alpenhorn: Bootstrapping secure communication without leaking metadata},
+  year      = {2016},
+  pages     = {571--586},
+  file      = {:inc/bib/osdi16-lazar.pdf:PDF},
+  timestamp = {2020-08-11},
+  url       = {https://www.usenix.org/system/files/conference/osdi16/osdi16-lazar.pdf},
 }
 
 @Comment{jabref-meta: databaseType:bibtex;}

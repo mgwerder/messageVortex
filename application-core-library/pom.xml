@@ -12,7 +12,7 @@
     <packaging>jar</packaging>
     <properties>
         <jdk.version>1.8</jdk.version>
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13</junit.version>
         <jacoco.version>0.8.3</jacoco.version>
         <surefire.version>2.22.0</surefire.version>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -78,14 +78,16 @@
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcprov-jdk15on</artifactId>
-            <version>1.60</version>
+            <!--<version>1.60</version>-->
+            <version>1.66</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>info.picocli</groupId>
             <artifactId>picocli</artifactId>
-            <version>3.9.5</version>
+            <!--<version>3.9.5</version>-->
+            <version>4.5.1</version>
         </dependency>
 
         <!--<dependency>
@@ -97,16 +99,17 @@
         </dependency>-->
 
         <dependency>
-            <groupId>org.snakeyaml</groupId>
-            <artifactId>snakeyaml-engine</artifactId>
-            <version>2.0</version>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>1.26</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast</artifactId>
-            <version>3.7.2</version>
+            <!--<version>3.7.2</version>-->
+            <version>4.0.2</version>
             <scope>compile</scope>
         </dependency>
 
@@ -114,21 +117,23 @@
         <dependency>
             <groupId>com.icegreen</groupId>
             <artifactId>greenmail</artifactId>
-            <version>1.5.9</version>
+            <!--<version>1.5.9</version>-->
+            <version>1.6.0</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
-            <version>1.6.1</version>
+            <version>1.7.25</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>org.jruby</groupId>
             <artifactId>jruby-complete</artifactId>
-            <version>1.7.16.1</version>
+            <!--<version>1.7.16.1</version>-->
+            <version>9.2.13.0</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
@@ -628,7 +633,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.1.0</version>
             </plugin>
 
             <plugin>
@@ -640,7 +645,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.1.1</version>
                 <configuration>
                     <configLocation>google_checks.xml</configLocation>
                 </configuration>

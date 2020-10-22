@@ -53,40 +53,40 @@ import picocli.CommandLine;
  * To disable set the name to null.</p>
  */
 @CommandLine.Command(
-    name = "keycache",
-    aliases = {"kc", "cache"},
-    description = "Handle the asymmetric key cache",
-    mixinStandardHelpOptions = true
+        name = "keycache",
+        aliases = {"kc", "cache"},
+        description = "Handle the asymmetric key cache",
+        mixinStandardHelpOptions = true
 )
 public class AsymmetricKeyPreCalculator implements Serializable, Callable<Integer> {
-
+  
   public static final long serialVersionUID = 100000000031L;
-
+  
   private static final String TMP_PREFIX = "Precalc";
-
+  
   private static final java.util.logging.Logger LOGGER;
   private static final boolean DISABLE_CACHE = false;
   @CommandLine.Option(names = {"--stopIfFull"},
-      description = "stop the cache calculation if the cache is full")
+          description = "stop the cache calculation if the cache is full")
   private static boolean stopIfFull = false;
-  private static AsymmetricKeyCache cache = new AsymmetricKeyCache();
+  private static final AsymmetricKeyCache cache = new AsymmetricKeyCache();
   private static double dequeueProbability = 1.0;
   private static File tempdir = null;
   private static long lastSaved = 0;
   private static boolean firstWarning = true;
   private static volatile InternalThread runner = null;
   @CommandLine.Option(names = {"--cacheFileName"},
-      description = "filename of the cache file", required = true)
+          description = "filename of the cache file", required = false)
   private static String filename = null;
   private static int incrementor = 128;
   /* number of threads to use */
   private static int numThreads = Math.max(2, Runtime.getRuntime().availableProcessors() - 1);
-  private static ThreadPoolExecutor pool;
-
+  private static final ThreadPoolExecutor pool;
+  
   static {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
-
+  
   static {
     BlockingQueue<Runnable> queue = new LinkedTransferQueue<Runnable>() {
       @Override
@@ -102,7 +102,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
         return t;
       }
     };
-
+    
     pool = new ThreadPoolExecutor(1, numThreads, 1, TimeUnit.SECONDS, queue, factory);
     pool.setRejectedExecutionHandler(new RejectedExecutionHandler() {
       @Override
@@ -115,7 +115,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
       }
     });
   }
-
+  
   static {
     Runtime.getRuntime().addShutdownHook(new Thread() {
       public void run() {
@@ -133,25 +133,25 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
       }
     });
   }
-
+  
   @CommandLine.Option(names = {"--element"},
-      description = "the affected element")
+          description = "the affected element")
   private int elementIndex = -1;
   @CommandLine.Option(names = {"--value"},
-      description = "number of elements for a key (requires --element)")
+          description = "number of elements for a key (requires --element)")
   private int value = -1;
-
+  
   private AsymmetricKeyPreCalculator() {
     // just a dummy to hide the default constructor
     this(false);
   }
-
+  
   private AsymmetricKeyPreCalculator(boolean detached) {
     File t = null;
     if (detached) {
       try {
         // create temporary file
-        t = File.createTempFile("MessageVortex"+TMP_PREFIX, ".keydir");
+        t = File.createTempFile("MessageVortex" + TMP_PREFIX, ".keydir");
       } catch (IOException ioe) {
         LOGGER.log(Level.WARNING, "Unable to create temp file", ioe);
       } finally {
@@ -178,16 +178,16 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
       tempdir = t;
     }
   }
-
+  
   /***
    * <p>retrieves a precomputed key from the cache.</p>
    * @param parameters the parameters reflecting the requested key
    * @return the requested key
    */
   public static AsymmetricKey getPrecomputedAsymmetricKey(AlgorithmParameter parameters) {
-
+    
     AlgorithmParameter ap = prepareParameters(parameters);
-
+    
     synchronized (cache) {
       if (filename == null && runner != null && !runner.isAlive()) {
         runner = null;
@@ -219,11 +219,11 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
       }
     }
   }
-
+  
   static double getDequeueProbability() {
     return dequeueProbability;
   }
-
+  
   static double setDequeueProbability(double newProbability) {
     if (newProbability > 1 || newProbability < 0) {
       throw new IllegalArgumentException("probablitiy must be in interval [0,1]");
@@ -232,20 +232,42 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
     dequeueProbability = newProbability;
     return ret;
   }
-
+  
+  /**
+   * <p>Set the maximum number of working threads for the cache pre-calculator.</p>
+   *
+   * @param newNumThreads the number of threads used for pre-calculation
+   * @return the previously set number of threads
+   */
+  public static int setNumThreads(int newNumThreads) {
+    int old = getNumThreads();
+    numThreads = newNumThreads;
+    pool.setMaximumPoolSize(numThreads);
+    return old;
+  }
+  
+  /**
+   * <p>Get the number of maximum threads used for cache pre-calculation.</p>
+   *
+   * @return the currently set number of threads
+   */
+  public static int getNumThreads() {
+    return numThreads;
+  }
+  
   private static AlgorithmParameter prepareParameters(AlgorithmParameter ap) {
     AlgorithmParameter ret = new AlgorithmParameter(ap);
-
+    
     // clear IV parameters as they are not relevant
     ret.put(Parameter.IV, null);
-
+    
     // make sure that padding and mode are on default
     ret.put(Parameter.PADDING, Padding.getDefault(AlgorithmType.ASYMMETRIC).toString());
     ret.put(Parameter.MODE, Mode.getDefault(AlgorithmType.ASYMMETRIC).toString());
-
+    
     return ret;
   }
-
+  
   /***
    * <p>Set name of cache file.</p>
    *
@@ -261,49 +283,55 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
     if (filename != null && filename.equals(name)) {
       return filename;
     }
-
+    
     // check if there is a dead runner
     if (filename == null && runner != null && !runner.isAlive()) {
       runner = null;
     }
-
+    
     // abort if there is a dying runner
     if (filename == null && name != null && runner != null) {
       throw new IllegalThreadStateException("Thread is still shutting down... try again later");
     }
-
+    
     // set runner name
     String ret = filename;
     filename = name;
     startOrStopThread();
     return ret;
   }
-
+  
   /***
    * <p>Commandline handler to pre-populate the key cache.</p>
    */
   @CommandLine.Command(name = "run", description = "pre-populates the cache")
   public static void fillCache() {
-    stopIfFull = true;
-    startOrStopThread();
     try {
+      if (filename == null) {
+        filename = "AsymmetricKey.cache";
+      }
+      load(filename, true);
+      stopIfFull = true;
+      startOrStopThread();
       runner.join();
+    } catch (IOException ioe) {
+      LOGGER.log(Level.SEVERE, "Got unexpected exception", ioe);
     } catch (InterruptedException ie) {
       LOGGER.log(Level.WARNING, "Got unexpected exception", ie);
     }
   }
-
+  
   private static void startOrStopThread() {
     // check if we have to start or stop
     synchronized (cache) {
       if (filename == null && runner != null) {
         runner.shutdown();
       }
-
+      
       if (runner != null && !runner.isAlive()) {
         runner = null;
       }
-
+      
       if (filename != null && runner == null) {
         // load cache
         try {
@@ -317,9 +345,9 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
         runner = new InternalThread(stopIfFull);
       }
     }
-
+    
   }
-
+  
   private static void load(String inFile, boolean merge) throws IOException {
     if (!merge) {
       cache.load(inFile);
@@ -327,7 +355,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
       cache.merge(inFile);
     }
   }
-
+  
   private static void save() throws IOException {
     // do not allow saving more often than every minute
     if (runner != null) {
@@ -337,7 +365,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
         }
       }
     }
-
+    
     // store data
     if (filename != null) {
       try {
@@ -346,10 +374,10 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
           lastSaved = System.currentTimeMillis();
           if (tempdir != null && cache.getCacheFillGrade() >= 0.999) {
             // move file as temp file and clear cache
-            String fn = File.createTempFile("MessageVortex"+TMP_PREFIX, ".key").getAbsolutePath();
+            String fn = File.createTempFile("MessageVortex" + TMP_PREFIX, ".key").getAbsolutePath();
             LOGGER.log(Level.INFO, "stored chunk to file \"" + fn + "\" to pick up");
             Files.move(Paths.get(filename + ".tmp"), Paths.get(fn),
-                StandardCopyOption.REPLACE_EXISTING);
+                    StandardCopyOption.REPLACE_EXISTING);
             cache.clear();
             if (stopIfFull) {
               setCacheFileName(null);
@@ -357,26 +385,30 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
           } else {
             LOGGER.log(Level.INFO, "stored cache");
             Files.move(Paths.get(filename + ".tmp"), Paths.get(filename),
-                StandardCopyOption.REPLACE_EXISTING);
+                    StandardCopyOption.REPLACE_EXISTING);
           }
         }
       } catch (Exception e) {
         LOGGER.log(Level.WARNING, "Exception while storing file", e);
         throw e;
       }
+    } else {
+      LOGGER.log(Level.WARNING, "Cache not dsaved to disk (no filename for caching set)");
     }
   }
-
+  
   @Override
   public Integer call() throws IOException {
-    //MessageVortexLogger.setGlobalLogLevel(Level.ALL);
     new AsymmetricKeyPreCalculator(true);
     if (cache.isEmpty()) {
       try {
+        if (filename == null) {
+          filename = "AsymmetricKey.cache";
+        }
         load(filename, true);
       } catch (IOException ioe) {
         throw new IOException("unable to load existing asymmetric key cache file"
-            + "... aborting execution", ioe);
+                + "... aborting execution", ioe);
       }
       cache.clear();
       cache.showStats();
@@ -394,7 +426,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
     }
     return 0;
   }
-
+  
   /***
    * <p>Command line helper to set the maximum cache size of a cached item.</p>
    *
@@ -405,7 +437,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
     LOGGER.log(Level.INFO, "SET called for element " + elementIndex);
     if (elementIndex <= 0 || value <= 0) {
       LOGGER.log(Level.SEVERE, "SET requires a valid element (" + elementIndex
-          + ") and an valid value to be set (" + value + ")");
+              + ") and an valid value to be set (" + value + ")");
       System.exit(MessageVortex.ARGUMENT_FAIL);
     } else {
       setCacheSize(elementIndex, value);
@@ -413,7 +445,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
     setCacheFileName(null);
     System.exit(0);
   }
-
+  
   /***
    * <p>Set the maximum cache size of a cached item.</p>
    *
@@ -429,7 +461,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
         load(filename, true);
       } catch (IOException ioe) {
         throw new IOException("unable to load existing asymmetric key cache file"
-            + "... aborting execution", ioe);
+                + "... aborting execution", ioe);
       }
     }
     LOGGER.log(Level.INFO, "chaning cache size");
@@ -438,7 +470,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
     LOGGER.log(Level.INFO, "storing cache " + filename);
     cache.store(filename);
   }
-
+  
   /***
    * <p>Command line helper to remove a cached item type from the cache.</p>
    *
@@ -456,7 +488,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
     setCacheFileName(null);
     System.exit(0);
   }
-
+  
   /***
    * <p>Remove a the specified item type from the cache.</p>
    *
@@ -470,7 +502,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
         load(filename, true);
       } catch (IOException ioe) {
         throw new IOException("unable to load existing asymmetric key cache file"
-            + "... aborting execution", ioe);
+                + "... aborting execution", ioe);
       }
     }
     LOGGER.log(Level.INFO, "removing element");
@@ -479,7 +511,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
     LOGGER.log(Level.INFO, "storing cache " + filename);
     cache.store(filename);
   }
-
+  
   /***
    * <p>Command line helper to list cached items.</p>
    *
@@ -493,41 +525,41 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
         load(filename, true);
       } catch (IOException ioe) {
         throw new IOException("unable to load existing asymmetric key cache file"
-            + "... aborting execution", ioe);
+                + "... aborting execution", ioe);
       }
     }
     cache.showStats();
     setCacheFileName(null);
     System.exit(0);
   }
-
+  
   private static class InternalThread extends Thread {
-
+    
     private static int counter = 0;
-
+    
     private volatile boolean shutdown = false;
     private volatile boolean stopIfFull;
-
+    
     InternalThread(boolean stopIfFull) {
       this.stopIfFull = stopIfFull;
       // This thread may die safely
       setDaemon(true);
-
+      
       // ... and should run at very low priority
       setPriority(MIN_PRIORITY);
-
+      
       // we start the daemon as soon as we can
       setName(TMP_PREFIX + " manager " + (counter++));
       start();
       LOGGER.log(Level.INFO, "cache manager \"" + getName() + "\" started");
     }
-
+    
     /***
      * <p>Tells the process to shutdown asap.</p>
      */
     void shutdown() {
       pool.shutdown();
-
+      
       // wait maximum 3 seconds for shutdown then abort key calculation
       try {
         pool.awaitTermination(3, TimeUnit.SECONDS);
@@ -538,18 +570,18 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
       }
       shutdown = true;
     }
-
+    
     public void run() {
       pool.allowCoreThreadTimeOut(true);
       while (!shutdown) {
         // get a parameter set to be calculated
         AlgorithmParameter p = cache.getSpeculativeParameter();
-
+        
         // calculate parameter set (if any)
         if (p != null) {
           // calculate key
           calculateKey(p);
-
+          
           // merge precalculated keys (if applicable)
           if (tempdir == null && mergePrecalculatedKeys()) {
             try {
@@ -568,23 +600,23 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
           if (!stopIfFull) {
             try {
               LOGGER.log(Level.INFO, "cache is idle (" + String.format("%2.3f",
-                  cache.getCacheFillGrade() * 100) + "%) ... sleeping for a short while "
-                  + "and waiting for requests");
+                      cache.getCacheFillGrade() * 100) + "%) ... sleeping for a short while "
+                      + "and waiting for requests");
               Thread.sleep(10000);
             } catch (InterruptedException ie) {
               Thread.currentThread().interrupt();
             }
           } else if (cache.getCacheFillGrade() >= 0.999) {
             LOGGER.log(Level.INFO, "cache is full(" + String.format("%2.3f",
-                cache.getCacheFillGrade() * 100) + "%) ... shutting down");
+                    cache.getCacheFillGrade() * 100) + "%) ... shutting down");
             shutdown = true;
           }
         }
-
+        
       }
-
+      
     }
-
+    
     private boolean mergePrecalculatedKeys() {
       boolean ret = false;
       // get list of files to merge
@@ -594,7 +626,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
       for (File tfile : fl == null ? new File[0] : fl) {
         if (tfile.isFile()) {
           targetFile = tfile.getName();
-          if (targetFile.startsWith("MessageVortex"+TMP_PREFIX) && targetFile.endsWith(".key")) {
+          if (targetFile.startsWith("MessageVortex" + TMP_PREFIX) && targetFile.endsWith(".key")) {
             listOfFiles.add(tfile);
           }
         }
@@ -618,7 +650,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
       }
       return ret;
     }
-
+    
     private void calculateKey(AlgorithmParameter p) {
       try {
         // prepare thread
@@ -628,33 +660,33 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
         t.setDaemon(true);
         pool.execute(t);
         LOGGER.log(Level.FINE, "Added key precalculator for " + p + " (pool size:"
-            + pool.getQueue().size() + "; thread count (min/current/max):"
-            + pool.getCorePoolSize() + "/" + pool.getActiveCount() + "/"
-            + pool.getMaximumPoolSize() + ")");
-
+                + pool.getQueue().size() + "; thread count (min/current/max):"
+                + pool.getCorePoolSize() + "/" + pool.getActiveCount() + "/"
+                + pool.getMaximumPoolSize() + ")");
+        
         // Wait a while for existing tasks to terminate
         if (pool.getQueue().size() > Math.max(incrementor * 2, numThreads)) {
           pool.awaitTermination(10, TimeUnit.SECONDS);
           if (tempdir != null) {
             cache.showStats();
             LOGGER.log(Level.INFO, "|Running threads " + pool.getActiveCount() + " of "
-                + pool.getQueue().size());
+                    + pool.getQueue().size());
           }
-
+          
           // calculate new incrementor
           if (pool.getQueue().size() > incrementor
-              && pool.getQueue().size() < incrementor * 2 && tempdir != null) {
+                  && pool.getQueue().size() < incrementor * 2 && tempdir != null) {
             incrementor = Math.max(1, incrementor / 2);
             LOGGER.log(Level.INFO, "lowered incrementor to " + incrementor);
           } else if (pool.getQueue().size() < numThreads && tempdir != null) {
             incrementor = incrementor * 2;
             LOGGER.log(Level.INFO, "raised incrementor to " + incrementor);
           }
-
+          
           // store cache
           save();
         }
-
+        
       } catch (IOException ioe) {
         LOGGER.log(Level.INFO, "exception while storing file", ioe);
       } catch (InterruptedException ie) {
@@ -664,7 +696,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
         Thread.currentThread().interrupt();
       }
     }
-
+    
     private Thread runCalculatorThread(final AlgorithmParameter param) {
       return new Thread() {
         public void run() {
@@ -673,15 +705,12 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
             long start = System.currentTimeMillis();
             AsymmetricKey ak = new AsymmetricKey(new AlgorithmParameter(param), false);
             cache.setCalcTime(new AlgorithmParameter(param), System.currentTimeMillis() - start);
-
-            // put in cache
-            assert ak != null;
             cache.push(ak);
           } catch (IOException ioe) {
             LOGGER.log(Level.SEVERE, "got unexpected exception", ioe);
           }
         }
-
+        
       };
     }
   }

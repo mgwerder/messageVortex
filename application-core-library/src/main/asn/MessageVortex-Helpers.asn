@@ -4,12 +4,12 @@ BEGIN
   IMPORTS AsymmetricKey, SymmetricKey
                 FROM MessageVortex-Ciphers;
 
-  -- the maximum number of parameters that might be embedded
+  -- the maximum number of embeddable parameters
   maxNumberOfParameter      INTEGER ::= 127
 
   UsagePeriod ::= CHOICE {
-    absolute [2] AbsoluteUsagePeriod,
-    relative [3] RelativeUsagePeriod
+    absolute [2] AbsoluteUsagePeriod OPTIONAL,
+    relative [3] RelativeUsagePeriod OPTIONAL
   }
 
   AbsoluteUsagePeriod ::= SEQUENCE {
@@ -27,7 +27,8 @@ BEGIN
   BlendingSpec ::= SEQUENCE {
     target            [1] NodeSpec,
     blendingType      [2] IA5String,
-    parameter         [3] SEQUENCE ( SIZE (0..maxNumberOfParameter) )
+    parameter         [3] SEQUENCE 
+                          ( SIZE (0..maxNumberOfParameter) )
                           OF BlendingParameter
   }
 

@@ -300,7 +300,7 @@ public enum Algorithm implements Serializable {
   }
 
   /***
-   * <p>Look up an algorithm by its i+dentification string.</p>
+   * <p>Look up an algorithm by its identification string.</p>
    *
    * <p>The string search is case insensitive.</p>
    *
