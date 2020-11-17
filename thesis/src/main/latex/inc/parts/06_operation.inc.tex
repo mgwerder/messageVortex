@@ -80,7 +80,7 @@ This node does not answer any clear-text requests. As an immediate result, the n
 A hidden node is a special form to a stealth node. It has a predefined set of identities. Only these already known identities are processed. This behavior has certain drawbacks. An existing identity may not be changed, and new ephemeral identities may not be created. As an immediate result, traffic may become pseudonymity. To counter this effect, at least partially, we may use the same local identity for multiple senders. To remove clashes in the workspace, we may use preassigned IDs in the workspace. The sender is only one of all senders knowing the private key of an identity. The advantage of such a node is that identities have unlimited quotas on such nodes, no longer bothering about accounting and refreshing identities. Such behavior seems to be a valuable option when using bulletproof providers.
 
 \chapter{Routing}
-Routing contributes heavily to the security of \MessageVortex. In our system, we typically have one node identity (node key). While this identity is relatively constant (but may be exchanged and notified by a \texttt{HeaderRequestReplaceIdentity} request), the involved transport nodes may be more mobile. In general, an incoming transport address does change rather infrequently (unless advertised to friends with the header request mentioned above). The sending endpoint is irrelevant in the routing, and any routing node may, apart from the protocol type, freely choose this endpoint. 
+Routing (as described in section~\ref{sec:routingLayer}) contributes heavily to the security of \MessageVortex. In our system, we typically have one node identity (node key). While this identity is relatively constant (but may be exchanged and notified by a \texttt{HeaderRequestReplaceIdentity} request), the involved transport nodes may be more mobile. In general, an incoming transport address does change rather infrequently (unless advertised to friends with the header request mentioned above). The sending endpoint is irrelevant in the routing, and any routing node may, apart from the protocol type, freely choose this endpoint. 
 
 While having routing capabilities is absolutely mandatory, as every repeated pattern in routing leads to the possibility of identifying a node of an anonymity system, it adds significantly to the systems' complexity.
 
@@ -89,7 +89,8 @@ The following sections emphasize the operational aspects of the routing. We intr
 \section{Strategies for Composing Routing Blocks}\label{sec:routingStrategies}
 We have to follow certain rules when building routing blocks. The rules are:
 \begin{itemize}
-	\item Assuming an adversary has partial or full insight into a \defref{routing graph} (except for the sender and the final recipient), all operations must be valid. This means that no operation may be applied and an inverse operation with different parameters  (i.e., $D^{K_a}\left(E^{K_a}\left(\textbf{X}\right)\right)$).
+	\item Valid chain of operations\\
+	      Assuming an adversary has partial or full insight into a \defref{routing graph} (except for the sender and the final recipient), all operations must be valid. This means that no operation may be applied and an inverse operation with different parameters  (i.e., $D^{K_b}\left(E^{K_a}\left(\textbf{X}\right)\right)$).
 	\item No pattern is repeated within the protocol. This applies to:
 	\begin{itemize}
 		\item Timing patterns in messages.\\
@@ -103,6 +104,8 @@ We have to follow certain rules when building routing blocks. The rules are:
 		\item Applies the same patterns on decoy routes as on message routes.\\
 		      When applying different patterns on message and decoy routes, an adversary might notice such different behavior and thus exclude all in decoy traffic involved nodes from the anonymity set. 
 	\end{itemize}
+	\item Sufficient anonymity set\\
+	      We assumed that we do not trust into others traffic. This means that an RBB has to pick a sufficiently large set for its anonymity needs by himself. Overlapping traffic will add to the anonymity but an RBB should not rely on that assumption.
 \end{itemize}
 
 We may use several strategies depending on our anonymity needs. 
@@ -153,7 +156,7 @@ As a MURB is a routing block, it generates the same pattern on the network each 
 
 For a MURB to work, the RBB has to take care that all quotas required to the route are sufficiently sized. Such sizing is hard to foresee in some cases. An RBB may query these identities from time to time to make sure that they do not deplete. Wherever possible, MURBs should be dropped in favor of multiple SURBs to avoid the dangers of MURBs.
 
-\section{Routing Algorithms Suitable for Achieving Anonymity\label{sec:routingStrategies}}
+\section{Routing Algorithms Suitable for Achieving Anonymity\label{sec:routingAlgorithm}}
 In section~\ref{sec:routingStrategies}, we elaborated on the properties of a routing block required to build an anonymizing message path.
 
 In short, every foreseeable or logically invalid pattern may be used to identify \VortexMessages{} or in transport involved nodes. This is why we cannot use a fixed pattern in routing. Instead, we use randomized routing patterns. Ordinary fixed pattern protocols, such as broadcast or DC-net based protocols, are identifiable as their communication pattern is stable (fixed set of messages between involved nodes and foreseeable message size). Whereas the message size might be varied in such systems by adding decoy content or stuffing, such behavior depends on the secrecy of the nodes executing such operations.
@@ -168,9 +171,9 @@ In general, an RBB builds a routing block in three stages:
 
 Within such a \defref{routing graph}, we refer to a path between the two nodes $i$ and $j$ as an ordered set of edges, where an edge always starts where the previously edge ended, the first edge starts at node $i$, and the last edge ends at node $j$. A path may contain multiple times the same node, and a \defref{routing graph} may contain multiple paths between two given nodes.  Figure~\ref{fig:graphPaths} shows all paths between nodes $0$ and $1$ of the graph outlined in figure~\ref{fig:transformGraph}. All these paths may be used to transport a message from node $0$ to $1$. Depending on the strategy multiple paths may be used to transport a part of a message or used as a redundancy path.
 
-\begin{figure*}[ht]\centering
+\begin{figure*}[ht]\centering\resizebox{.95\linewidth}{!}{
   \begin{tikzpicture}[node distance=0.5cm,auto,>=stealth]
-	\begin{scope}[baseline=(current bounding box.center)]
+	\begin{scope}[baseline=(current bounding box.center),xshift=-3cm]
 		\tikzstyle{knode}=[circle,draw=black,thick,inner sep=8pt,baseline=(current bounding box.center)]
 		\node[knode] (r0) at (0:2.5cm) {0};
 		\node[knode] (r1) at (51:2.5cm) {1};
@@ -180,33 +183,34 @@ Within such a \defref{routing graph}, we refer to a path between the two nodes $
 		\node[knode] (r5) at (257:2.5cm) {5};
 		\node[knode] (r6) at (309:2.5cm) {6};
 		%arrows
-		\draw[->] (r0)--(r1);
-		\draw[->] (r0)--(r3);
-		\draw[->] (r1)--(r2);
-		\draw[->,bend right,looseness=0.4] (r0) edge (r1);
-		\draw[->] (r3)--(r4);
-		\draw[->,bend right,looseness=0.4,in=190] (r0) edge (r3);
-		\draw[->] (r3)--(r5);
-		\draw[->] (r0)--(r6);
-		\draw[->] (r3)--(r1);
-		\draw[->] (r5)--(r1);
-		\draw[->,bend right,looseness=0.4] (r3)edge(r0);
-		\draw[->] (r5)--(r0);
-		\draw[->] (r6)--(r4);
-		\draw[->,bend right,looseness=0.4,out=-15,in=190] (r5) edge (r0);
-		\draw[->] (r2)--(r6);
-		\draw[->] (r3)--(r2);
-		\draw[->] (r2)--(r5);
+		\draw[->] (r0)--node[sloped, anchor=center, above=-1mm]{\tiny 1}(r1);
+		\draw[->] (r0)--node[sloped, anchor=center, above=-1mm]{\tiny 2}(r3);
+		\draw[->] (r1)--node[sloped, anchor=center, above=-1mm]{\tiny 3}(r2);
+		\draw[->,bend right,looseness=0.4] (r0) edge node[sloped, anchor=center, above=-1mm]{\tiny 4} (r1);
+		\draw[->] (r3)-- node[sloped, anchor=center, above=-1mm]{\tiny 5}(r4);
+		\draw[->,bend right,looseness=0.4,in=190] (r0) edge  node[sloped, anchor=center, above=-1mm]{\tiny 6}(r3);
+		\draw[->] (r3)-- node[sloped, anchor=center, above=-1mm]{\tiny 7}(r5);
+		\draw[->] (r0)-- node[sloped, anchor=center, above=-1mm]{\tiny 8}(r6);
+		\draw[->] (r3)-- node[sloped, anchor=center, above=-1mm]{\tiny 9}(r1);
+		\draw[->] (r5)-- node[sloped, anchor=center, above=-1mm]{\tiny 10}(r1);
+		\draw[->,bend right,looseness=0.4] (r3)edge node[sloped, anchor=center, above=-1mm]{\tiny 11}(r0);
+		\draw[->] (r5)-- node[sloped, anchor=center, above=-1mm]{\tiny 12}(r0);
+		\draw[->] (r6)-- node[sloped, anchor=center, above=-1mm]{\tiny 13}(r4);
+		\draw[->,bend right,looseness=0.4,out=-15,in=190] (r5) edge  node[sloped, anchor=center, above=-1mm]{\tiny 14}(r0);
+		\draw[->] (r2)-- node[sloped, anchor=center, above=-1mm]{\tiny 15}(r6);
+		\draw[->] (r3)-- node[sloped, anchor=center, above=-1mm]{\tiny 16}(r2);
+		\draw[->] (r2)-- node[sloped, anchor=center, above=-1mm]{\tiny 17}(r5);
 	\end{scope}
 	\begin{scope}[baseline=(current bounding box.center),xshift=5cm,yshift=2cm]
-		\node[] (n0) {0};
-		\node[right = of n0] (n1) {1};
-		\node[right = of n1] (n2) {2};
-		\node[right = of n2] (n3) {3};
-		\node[right = of n3] (n4) {4};
-		\node[right = of n4] (n5) {5};
-		\node[right = of n5] (n6) {6};
-		\node[left = -2 mm of n0] (nm0) {};
+		\tikzstyle{knode}=[circle,draw=black,thick,inner sep=1pt,baseline=(current bounding box.center)]
+		\node[knode] (n0) {0};
+		\node[knode,right = of n0] (n1) {1};
+		\node[knode,right = of n1] (n2) {2};
+		\node[knode,right = of n2] (n3) {3};
+		\node[knode,right = of n3] (n4) {4};
+		\node[knode,right = of n4] (n5) {5};
+		\node[knode,right = of n5] (n6) {6};
+		\node[left = 0mm of n0] (nm0) {};
 		\node[below of=n0, node distance=5cm] (n0Ground) {};
 		\node[below of=n1, node distance=5cm] (n1Ground) {};
 		\node[below of=n2, node distance=5cm] (n2Ground) {};
@@ -224,31 +228,125 @@ Within such a \defref{routing graph}, we refer to a path between the two nodes $
 		\draw (n5) -- (n5Ground);
 		\draw (n6) -- (n6Ground);
 		%arrows
-		\draw[->] ($(n0)!0.10!(n0Ground)$)--($(n1)!0.10!(n1Ground)$);
-		\draw[->] ($(n0)!0.15!(n0Ground)$)--($(n3)!0.15!(n3Ground)$);
-		\draw[->] ($(n1)!0.20!(n1Ground)$)--($(n2)!0.20!(n2Ground)$);
-		\draw[->] ($(n0)!0.25!(n0Ground)$)--($(n1)!0.25!(n1Ground)$);
-		\draw[->] ($(n3)!0.30!(n3Ground)$)--($(n4)!0.30!(n4Ground)$);
-		\draw[->] ($(n0)!0.35!(n0Ground)$)--($(n3)!0.35!(n3Ground)$);
-		\draw[->] ($(n3)!0.40!(n3Ground)$)--($(n5)!0.40!(n5Ground)$);
-		\draw[->] ($(n0)!0.45!(n0Ground)$)--($(n6)!0.45!(n6Ground)$);
-		\draw[->] ($(n3)!0.50!(n3Ground)$)--($(n1)!0.50!(n1Ground)$);
-		\draw[->] ($(n5)!0.55!(n5Ground)$)--($(n1)!0.55!(n1Ground)$);
-		\draw[->] ($(n3)!0.60!(n3Ground)$)--($(n0)!0.60!(n0Ground)$);
-		\draw[->] ($(n5)!0.65!(n5Ground)$)--($(n0)!0.65!(n0Ground)$);
-		\draw[->] ($(n6)!0.70!(n6Ground)$)--($(n4)!0.70!(n4Ground)$);
-		\draw[->] ($(n5)!0.75!(n5Ground)$)--($(n0)!0.75!(n0Ground)$);
-		\draw[->] ($(n2)!0.80!(n2Ground)$)--($(n6)!0.80!(n6Ground)$);
-		\draw[->] ($(n3)!0.85!(n3Ground)$)--($(n2)!0.85!(n2Ground)$);
-		\draw[->] ($(n2)!0.90!(n2Ground)$)--($(n5)!0.90!(n5Ground)$);
+		\draw[->] ($(n0)!0.10!(n0Ground)$)--($(n1)!0.10!(n1Ground)$);\node[anchor=east] at ($(n0)!0.10!(n0Ground)$) {\tiny 1};
+		\draw[->] ($(n0)!0.15!(n0Ground)$)--($(n3)!0.15!(n3Ground)$);\node[anchor=east] at ($(n0)!0.15!(n0Ground)$) {\tiny 2};
+		\draw[->] ($(n1)!0.20!(n1Ground)$)--($(n2)!0.20!(n2Ground)$);\node[anchor=east] at ($(n0)!0.20!(n0Ground)$) {\tiny 3};
+		\draw[->] ($(n0)!0.25!(n0Ground)$)--($(n1)!0.25!(n1Ground)$);\node[anchor=east] at ($(n0)!0.25!(n0Ground)$) {\tiny 4};
+		\draw[->] ($(n3)!0.30!(n3Ground)$)--($(n4)!0.30!(n4Ground)$);\node[anchor=east] at ($(n0)!0.30!(n0Ground)$) {\tiny 5};
+		\draw[->] ($(n0)!0.35!(n0Ground)$)--($(n3)!0.35!(n3Ground)$);\node[anchor=east] at ($(n0)!0.35!(n0Ground)$) {\tiny 6};
+		\draw[->] ($(n3)!0.40!(n3Ground)$)--($(n5)!0.40!(n5Ground)$);\node[anchor=east] at ($(n0)!0.40!(n0Ground)$) {\tiny 7};
+		\draw[->] ($(n0)!0.45!(n0Ground)$)--($(n6)!0.45!(n6Ground)$);\node[anchor=east] at ($(n0)!0.45!(n0Ground)$) {\tiny 8};
+		\draw[->] ($(n3)!0.50!(n3Ground)$)--($(n1)!0.50!(n1Ground)$);\node[anchor=east] at ($(n0)!0.50!(n0Ground)$) {\tiny 9};
+		\draw[->] ($(n5)!0.55!(n5Ground)$)--($(n1)!0.55!(n1Ground)$);\node[anchor=east] at ($(n0)!0.55!(n0Ground)$) {\tiny 10};
+		\draw[->] ($(n3)!0.60!(n3Ground)$)--($(n0)!0.60!(n0Ground)$);\node[anchor=east] at ($(n0)!0.60!(n0Ground)$) {\tiny 11};
+		\draw[->] ($(n5)!0.65!(n5Ground)$)--($(n0)!0.65!(n0Ground)$);\node[anchor=east] at ($(n0)!0.65!(n0Ground)$) {\tiny 12};
+		\draw[->] ($(n6)!0.70!(n6Ground)$)--($(n4)!0.70!(n4Ground)$);\node[anchor=east] at ($(n0)!0.70!(n0Ground)$) {\tiny 13};
+		\draw[->] ($(n5)!0.75!(n5Ground)$)--($(n0)!0.75!(n0Ground)$);\node[anchor=east] at ($(n0)!0.75!(n0Ground)$) {\tiny 14};
+		\draw[->] ($(n2)!0.80!(n2Ground)$)--($(n6)!0.80!(n6Ground)$);\node[anchor=east] at ($(n0)!0.80!(n0Ground)$) {\tiny 15};
+		\draw[->] ($(n3)!0.85!(n3Ground)$)--($(n2)!0.85!(n2Ground)$);\node[anchor=east] at ($(n0)!0.85!(n0Ground)$) {\tiny 16};
+		\draw[->] ($(n2)!0.90!(n2Ground)$)--($(n5)!0.90!(n5Ground)$);\node[anchor=east] at ($(n0)!0.90!(n0Ground)$) {\tiny 17};
 		% Legend
-		\draw[->,shorten <=25pt,shorten >=20pt] (nm0) -- (nm0Ground)  node[midway,sloped,left,rotate=90] {$\text{time}$};
+		\draw[->,shorten <=25pt,shorten >=20pt] (nm0) --node[above=-1mm,sloped,anchor=center,rotate=180] {$\text{\tiny time (epoch)}$} (nm0Ground)  ;
 		
 	\end{scope}
-	\draw[->,shorten <=25pt,shorten >=20pt,draw=red] ($(r0)!0.0!(r0)$)--($(n0)!0.4!(n0Ground)$);
-\end{tikzpicture}
-\caption{transformation of a graph into a sequence of messages}
-\label{fig:transformGraph}
+	\draw[->,shorten <=25pt,shorten >=20pt,draw=red] ($(r0)!0.0!(r0)$)--node[above,sloped]{\tiny \textcolor{red}{redraw}}($(n0)!0.4!(n0Ground)$);
+	\begin{scope}[baseline=(current bounding box.center),xshift=5cm,yshift=-5cm]
+		\tikzstyle{knode}=[circle,draw=black,thick,inner sep=1pt,baseline=(current bounding box.center)]
+		\node[knode] (n10) {0};
+		\node[knode,right = of n10] (n11) {1};
+		\node[knode,right = of n11] (n12) {2};
+		\node[knode,right = of n12] (n13) {3};
+		\node[knode,right = of n13] (n14) {4};
+		\node[knode,right = of n14] (n15) {5};
+		\node[knode,right = of n15] (n16) {6};
+		\node[left = 0mm of n10] (nm10) {};
+		\node[below of=n10, node distance=5cm] (n10Ground) {};
+		\node[below of=n11, node distance=5cm] (n11Ground) {};
+		\node[below of=n12, node distance=5cm] (n12Ground) {};
+		\node[below of=n13, node distance=5cm] (n13Ground) {};
+		\node[below of=n14, node distance=5cm] (n14Ground) {};
+		\node[below of=n15, node distance=5cm] (n15Ground) {};
+		\node[below of=n16, node distance=5cm] (n16Ground) {};
+		\node[below of=nm10,node distance=5cm] (nm10Ground) {};
+		% lines down
+		\draw (n10) -- (n10Ground);
+		\draw (n11) -- (n11Ground);
+		\draw (n12) -- (n12Ground);
+		\draw (n13) -- (n13Ground);
+		\draw (n14) -- (n14Ground);
+		\draw (n15) -- (n15Ground);
+		\draw (n16) -- (n16Ground);
+		%arrows
+		\draw[->] ($(n10)!0.10!(n10Ground)$)--($(n11)!0.10!(n11Ground)$);\node[anchor=east] at ($(n10)!0.10!(n10Ground)$) {\tiny 1: 00:10};
+		\draw[->] ($(n10)!0.15!(n10Ground)$)--($(n13)!0.15!(n13Ground)$);\node[anchor=east] at ($(n10)!0.15!(n10Ground)$) {\tiny 2: 00:23-00:36};
+		\draw[->] ($(n11)!0.20!(n11Ground)$)--($(n12)!0.20!(n12Ground)$);\node[anchor=east] at ($(n10)!0.20!(n10Ground)$) {\tiny 3: 00:41-00:44};
+		\draw[->] ($(n10)!0.25!(n10Ground)$)--($(n11)!0.25!(n11Ground)$);\node[anchor=east] at ($(n10)!0.25!(n10Ground)$) {\tiny 4: 00:58-01:10};
+		\draw[->] ($(n13)!0.30!(n13Ground)$)--($(n14)!0.30!(n14Ground)$);\node[anchor=east] at ($(n10)!0.30!(n10Ground)$) {\tiny 5: 01:25-01:28};
+		\draw[->] ($(n10)!0.35!(n10Ground)$)--($(n13)!0.35!(n13Ground)$);\node[anchor=east] at ($(n10)!0.35!(n10Ground)$) {\tiny 6: 02:09-02:21};
+		\draw[->] ($(n13)!0.40!(n13Ground)$)--($(n15)!0.40!(n15Ground)$);\node[anchor=east] at ($(n10)!0.40!(n10Ground)$) {\tiny 7: 02:45-02:48};
+		\draw[->] ($(n10)!0.45!(n10Ground)$)--($(n16)!0.45!(n16Ground)$);\node[anchor=east] at ($(n10)!0.45!(n10Ground)$) {\tiny 8: 02:59-03:20};
+		\draw[->] ($(n13)!0.50!(n13Ground)$)--($(n11)!0.50!(n11Ground)$);\node[anchor=east] at ($(n10)!0.50!(n10Ground)$) {\tiny 9: 03:34-03:36};
+		\draw[->] ($(n15)!0.55!(n15Ground)$)--($(n11)!0.55!(n11Ground)$);\node[anchor=east] at ($(n10)!0.55!(n10Ground)$) {\tiny 10: 03:40-04:01};
+		\draw[->] ($(n13)!0.60!(n13Ground)$)--($(n10)!0.60!(n10Ground)$);\node[anchor=east] at ($(n10)!0.60!(n10Ground)$) {\tiny 11: 04:21-04:22};
+		\draw[->] ($(n15)!0.65!(n15Ground)$)--($(n10)!0.65!(n10Ground)$);\node[anchor=east] at ($(n10)!0.65!(n10Ground)$) {\tiny 12: 04:42-04:56};
+		\draw[->] ($(n16)!0.70!(n16Ground)$)--($(n14)!0.70!(n14Ground)$);\node[anchor=east] at ($(n10)!0.70!(n10Ground)$) {\tiny 13: 05:10-05:19};
+		\draw[->] ($(n15)!0.75!(n15Ground)$)--($(n10)!0.75!(n10Ground)$);\node[anchor=east] at ($(n10)!0.75!(n10Ground)$) {\tiny 14: 05:26-05:27};
+		\draw[->] ($(n12)!0.80!(n12Ground)$)--($(n16)!0.80!(n16Ground)$);\node[anchor=east] at ($(n10)!0.80!(n10Ground)$) {\tiny 15: 05:36-05:56};
+		\draw[->] ($(n13)!0.85!(n13Ground)$)--($(n12)!0.85!(n12Ground)$);\node[anchor=east] at ($(n10)!0.85!(n10Ground)$) {\tiny 16: 06:20-07:15};
+		\draw[->] ($(n12)!0.90!(n12Ground)$)--($(n15)!0.90!(n15Ground)$);\node[anchor=east] at ($(n10)!0.90!(n10Ground)$) {\tiny 17: 08:11-08:12};
+	\end{scope}
+	\draw[->,shorten <=1pt,shorten >=2pt,draw=red] (n3Ground)--node[rotate=180,above,sloped]{\tiny \textcolor{red}{assign time slots}}(n13);
+	\begin{scope}[baseline=(current bounding box.center),xshift=-6cm,yshift=-5cm]
+		\tikzstyle{knode}=[circle,draw=black,thick,inner sep=1pt,baseline=(current bounding box.center)]
+		\node[knode] (n20) {0};
+		\node[knode,right = of n20] (n21) {1};
+		\node[knode,right = of n21] (n22) {2};
+		\node[knode,right = of n22] (n23) {3};
+		\node[knode,right = of n23] (n24) {4};
+		\node[knode,right = of n24] (n25) {5};
+		\node[knode,right = of n25] (n26) {6};
+		\node[left = 0mm of n20] (nm20) {};
+		\node[below of=n20, node distance=5cm] (n20Ground) {};
+		\node[below of=n21, node distance=5cm] (n21Ground) {};
+		\node[below of=n22, node distance=5cm] (n22Ground) {};
+		\node[below of=n23, node distance=5cm] (n23Ground) {};
+		\node[below of=n24, node distance=5cm] (n24Ground) {};
+		\node[below of=n25, node distance=5cm] (n25Ground) {};
+		\node[below of=n26, node distance=5cm] (n26Ground) {};
+		\node[below of=nm20,node distance=5cm] (nm20Ground) {};
+		% lines down
+		\draw (n20) -- (n20Ground);
+		\draw (n21) -- (n21Ground);
+		\draw (n22) -- (n22Ground);
+		\draw (n23) -- (n23Ground);
+		\draw (n24) -- (n24Ground);
+		\draw (n25) -- (n25Ground);
+		\draw (n26) -- (n26Ground);
+		%arrows
+		\draw[->] ($(n20)!0.10!(n20Ground)$)--($(n21)!0.10!(n21Ground)$);\node[anchor=east] at ($(n20)!0.10!(n20Ground)$) {\tiny 1: 00:10}; \node[regular polygon,regular polygon sides=6,draw,fill=red,inner sep=0mm,minimum size=2mm]  at ($(n20)!0.10!(n20Ground)$) {};
+		\draw[->] ($(n20)!0.15!(n20Ground)$)--($(n23)!0.15!(n23Ground)$);\node[anchor=east] at ($(n20)!0.15!(n20Ground)$) {\tiny 2: 00:23-00:36};\node[regular polygon,regular polygon sides=6,draw,fill=red,inner sep=0mm,minimum size=2mm]  at ($(n20)!0.15!(n20Ground)$) {};
+		\draw[->] ($(n21)!0.20!(n21Ground)$)--($(n22)!0.20!(n22Ground)$);\node[anchor=east] at ($(n20)!0.20!(n20Ground)$) {\tiny 3: 00:41-00:44};\node[regular polygon,regular polygon sides=6,draw,fill=red,inner sep=0mm,minimum size=2mm]  at ($(n21)!0.20!(n21Ground)$) {};
+		\draw[->] ($(n20)!0.25!(n20Ground)$)--($(n21)!0.25!(n21Ground)$);\node[anchor=east] at ($(n20)!0.25!(n20Ground)$) {\tiny 4: 00:58-01:10};\node[regular polygon,regular polygon sides=6,draw,fill=red,inner sep=0mm,minimum size=2mm]  at ($(n20)!0.25!(n20Ground)$) {};
+		\draw[->] ($(n23)!0.30!(n23Ground)$)--($(n24)!0.30!(n24Ground)$);\node[anchor=east] at ($(n20)!0.30!(n20Ground)$) {\tiny 5: 01:25-01:28};\node[regular polygon,regular polygon sides=6,draw,fill=red,inner sep=0mm,minimum size=2mm]  at ($(n23)!0.30!(n23Ground)$) {};
+		\draw[->] ($(n20)!0.35!(n20Ground)$)--($(n23)!0.35!(n23Ground)$);\node[anchor=east] at ($(n20)!0.35!(n20Ground)$) {\tiny 6: 02:09-02:21};\node[regular polygon,regular polygon sides=6,draw,fill=red,inner sep=0mm,minimum size=2mm]  at ($(n20)!0.35!(n20Ground)$) {};
+		\draw[->] ($(n23)!0.40!(n23Ground)$)--($(n25)!0.40!(n25Ground)$);\node[anchor=east] at ($(n20)!0.40!(n20Ground)$) {\tiny 7: 02:45-02:48};\node[regular polygon,regular polygon sides=6,draw,fill=red,inner sep=0mm,minimum size=2mm]  at ($(n23)!0.40!(n23Ground)$) {};
+		\draw[->] ($(n20)!0.45!(n20Ground)$)--($(n26)!0.45!(n26Ground)$);\node[anchor=east] at ($(n20)!0.45!(n20Ground)$) {\tiny 8: 02:59-03:20};\node[regular polygon,regular polygon sides=6,draw,fill=red,inner sep=0mm,minimum size=2mm]  at ($(n20)!0.45!(n20Ground)$) {};
+		\draw[->] ($(n23)!0.50!(n23Ground)$)--($(n21)!0.50!(n21Ground)$);\node[anchor=east] at ($(n20)!0.50!(n20Ground)$) {\tiny 9: 03:34-03:36};\node[regular polygon,regular polygon sides=6,draw,fill=red,inner sep=0mm,minimum size=2mm]  at ($(n23)!0.50!(n23Ground)$) {};
+		\draw[->] ($(n25)!0.55!(n25Ground)$)--($(n21)!0.55!(n21Ground)$);\node[anchor=east] at ($(n20)!0.55!(n20Ground)$) {\tiny 10: 03:40-04:01};\node[regular polygon,regular polygon sides=6,draw,fill=red,inner sep=0mm,minimum size=2mm]  at ($(n25)!0.55!(n25Ground)$) {};
+		\node[regular polygon,regular polygon sides=6,draw,fill=green,inner sep=0mm,minimum size=2mm]  at ($(n21)!0.575!(n21Ground)$) {}; %% reassembly node
+		\draw[->] ($(n23)!0.60!(n23Ground)$)--($(n20)!0.60!(n20Ground)$);\node[anchor=east] at ($(n20)!0.60!(n20Ground)$) {\tiny 11: 04:21-04:22};\node[regular polygon,regular polygon sides=6,draw,fill=red,inner sep=0mm,minimum size=2mm]  at ($(n23)!0.60!(n23Ground)$) {};
+		\draw[->] ($(n25)!0.65!(n25Ground)$)--($(n20)!0.65!(n20Ground)$);\node[anchor=east] at ($(n20)!0.65!(n20Ground)$) {\tiny 12: 04:42-04:56};\node[regular polygon,regular polygon sides=6,draw,fill=red,inner sep=0mm,minimum size=2mm]  at ($(n25)!0.65!(n25Ground)$) {};
+		\draw[->] ($(n26)!0.70!(n26Ground)$)--($(n24)!0.70!(n24Ground)$);\node[anchor=east] at ($(n20)!0.70!(n20Ground)$) {\tiny 13: 05:10-05:19};\node[regular polygon,regular polygon sides=6,draw,fill=red,inner sep=0mm,minimum size=2mm]  at ($(n26)!0.70!(n26Ground)$) {};
+		\draw[->] ($(n25)!0.75!(n25Ground)$)--($(n20)!0.75!(n20Ground)$);\node[anchor=east] at ($(n20)!0.75!(n20Ground)$) {\tiny 14: 05:26-05:27};\node[regular polygon,regular polygon sides=6,draw,fill=red,inner sep=0mm,minimum size=2mm]  at ($(n25)!0.75!(n25Ground)$) {};
+		\draw[->] ($(n22)!0.80!(n22Ground)$)--($(n26)!0.80!(n26Ground)$);\node[anchor=east] at ($(n20)!0.80!(n20Ground)$) {\tiny 15: 05:36-05:56};\node[regular polygon,regular polygon sides=6,draw,fill=red,inner sep=0mm,minimum size=2mm]  at ($(n22)!0.80!(n22Ground)$) {};
+		\draw[->] ($(n23)!0.85!(n23Ground)$)--($(n22)!0.85!(n22Ground)$);\node[anchor=east] at ($(n20)!0.85!(n20Ground)$) {\tiny 16: 06:20-07:15};\node[regular polygon,regular polygon sides=6,draw,fill=red,inner sep=0mm,minimum size=2mm]  at ($(n23)!0.85!(n23Ground)$) {};
+		\draw[->] ($(n22)!0.90!(n22Ground)$)--($(n25)!0.90!(n25Ground)$);\node[anchor=east] at ($(n20)!0.90!(n20Ground)$) {\tiny 17: 08:11-08:12};\node[regular polygon,regular polygon sides=6,draw,fill=red,inner sep=0mm,minimum size=2mm]  at ($(n22)!0.90!(n22Ground)$) {};
+	\end{scope}
+	\draw[->,shorten <=55pt,shorten >=20pt,draw=red] ($(n10)!0.4!(n10Ground)$)--node[above,xshift=-17pt]{\tiny \textcolor{red}{assign operations}}($(n26)!0.4!(n26Ground)$);
+	\end{tikzpicture}
+	}
+	\caption{Transformation of a graph into a sequence of messages}
+	\label{fig:transformGraph}
 \end{figure*}
 
 \begin{figure*}[ht]
@@ -601,8 +699,10 @@ To create a \defref{routing block}, we need some basic objects as defined in alg
 	\begin{algorithmic}[1]
 		\LineComment{A routing graph}
 		\Object{RoutingGraph}
-			\State $\text{nodes}:\textsc{List<Node>}$
-			\State $\text{messages}:\textsc{List<Message>}$
+			\LineComment{Contains the Vortex routing nodes (node[0]$\rightarrow$sender; node[1]$\Rightarrow$receiver)}
+			\State $\text{nodes}:\textsc{Sequence<Node>}$
+			\LineComment{Contains messages between the nodes}
+			\State $\text{edges}:\textsc{Sequence<Message>}$
 		\EndObject
 		\item[]
 		\Object{Message}
@@ -613,6 +713,11 @@ To create a \defref{routing block}, we need some basic objects as defined in alg
 			\State $\text{targetNode}: Node$
 			\State $\text{targetId}$
 			\State $\text{operations}: \textsc{List<Operations>}$
+			\item[]
+			\Procedure{setTiming}{min,max}
+				\State $\text{earliestTime} \gets \text{min}$
+				\State $\text{latestTime} \gets \text{max}$
+			\EndProcedure
 		\EndObject
 		\item[]
 		\LineComment{The projected workspace of any eID under our control}
@@ -632,16 +737,22 @@ To create a \defref{routing block}, we need some basic objects as defined in alg
 			\item[]
 			\LineComment{Returns all the nodes of knownNodes}
 			\AbstractFunction{getAllNodes}{}
-			\LineComment{Returns a random node of knownNodes}
+			\LineComment{Returns a random node of list}
 			\AbstractFunction{getRandomNode}{list}
 			\LineComment{Returns the representation of the workspace of the named node}
 			\AbstractFunction{getWorkspace}{node}
 			\LineComment{Adds a message to a workspace with all its content (payloads, operations)}
 			\AbstractFunction{addMessageToWorkspaces}{message}
+			\LineComment{returns an integer r within 0<=r<maxValue}
+			\AbstractFunction{nextRandomInt}{maxValue}
+			\LineComment{returns an double r within 0<=r<1}
+			\AbstractFunction{nextRandomDouble}{~}
+			\LineComment{returns an double r with a Gaussian distribution}
+			\AbstractFunction{nextRandomGaussian}{~}
 		\EndObject
 	\end{algorithmic}
 \end{breakablealgorithm}
-\fxwarning{rewrite algorithm for oo type of algorithm}
+
 To create a routing block, we first need a graph representing the message flow. Algorithm~\ref{alg:simpleGraph} shows a pseudo-code to get such a valid graph. After creating a graph, we need to assign timing and routing information. Algorithm~\ref{alg:simpleTiming} shows a possible algorithm for assigning this timing information, whereas Algorithm~\ref{alg:simpleRouting} shows a simple generator for the routing operation. The algorithm omits for simplicity allocation of workspace IDs as this is a ``bookkeeping''-only problem.
 
 To create a graph we use the function~\funcref{alg:getRoutingGraph}{} on line~\ref{alg:getRoutingGraph-line} as shown in algorithm~\ref{alg:simpleGraph}. It creates an ordered set of nodes (\texttt{nodes}), whereas the first node in the set is the sender and the second node of the set is the final recipient. It then adds randomly known nodes until the anonymity set is as large as requested. Next, we assign the edges by calling function~\funcref{alg:getEdges}{} (Line~\ref{alg:getEdges-line}). The function loops until the requested minimum number of edges are reached, and all nodes of the graph receive at least one message. On each loop, an edge is added to the graph, that is pointing from any already reached node to a random, different node.
@@ -650,9 +761,18 @@ To create a graph we use the function~\funcref{alg:getRoutingGraph}{} on line~\r
 	\captionof{figure}[Simple Graph for Routing Block (PseudoCode)]{Simple Graph for Routing Block}\label{alg:simpleGraph}
 	\begin{algorithmic}[1]
 		\Function{getRoutingGraph}{startNode,endNode, numNodes, minEdges, universe}\funclabel{alg:getRoutingGraph}\label{alg:getRoutingGraph-line}
+			\LineComment{The maximum number of seconds until the message needs to be delivered}
+			\State $\text{maxTime} \gets 3000$
+			\LineComment{The minimum number of seconds a message has time to be on one routing node}
+			\State $\text{minHopTime} \gets 10$
+			\LineComment{The minimum number of seconds a message has time to be on one routing node}
+			\State $\text{redundantRoutes} \gets 3$
+			\item[]
 			\State $\text{ret} \gets \text{new RoutingGraph}()$
 			\State $\text{ret.nodes} \gets \Call{getNodes}{startNode, endnode, numNodes, universe}$
-			\State $\text{ret.messages} \gets \Call{getEdges}{minEdges, ret.nodes, universe}$
+			\State $\text{ret.edges} \gets \Call{getEdges}{minEdges, ret.nodes, universe}$
+			\State $\Call{assignTiming}{ret.edges, maxTime,minHopTime}$
+			\State $\Call{assignRouting}{ret.edges, redundantRoutes, 0}$
 			\Return $\text{ret}$	
 		\EndFunction
 		\item[]		
@@ -664,7 +784,7 @@ To create a graph we use the function~\funcref{alg:getRoutingGraph}{} on line~\r
 		  		\State $\text{nodeList.append(randomNode)}$ 
 		  	\EndIf	
 		  \EndWhile{}	
-		  \Return nodeList
+		  \Return $\text{nodeList}$
 		\EndFunction  
 		\item[]
 		\Function{getEdges}{minEdges, nodes, universe}\funclabel{alg:getEdges}\label{alg:getEdges-line}
@@ -692,7 +812,7 @@ To create a graph we use the function~\funcref{alg:getRoutingGraph}{} on line~\r
 
 In algorithm~\ref{alg:simpleTiming}, we assign the timing information. 
 
-We use a custom random distribution called \funcref{alg:getRandomTime} (line~\ref{alg:getRandomTime-line}). This distribution is a derived form of a Gaussian distribution and has its minimum value, maximum value, and peak value at desired spots. The squishing of the function violates some properties of the Gaussian bell curve. Due to the squishing, the left and right sides of the bell no longer have the same area. The timing information distributes in a serialized way along the timeline. Figure~\ref{fig:timeDistribution} shows the distribution of the implementation.
+We use a custom random distribution called \funcref{alg:setRandomTime} (line~\ref{alg:setRandomTime-line}). This distribution is a derived form of a Gaussian distribution and has its minimum value, maximum value, and peak value at desired spots. The squishing of the function violates some properties of the Gaussian bell curve. Due to the squishing, the left and right sides of the bell no longer have the same area. The timing information distributes in a serialized way along the timeline. Figure~\ref{fig:timeDistribution} shows the distribution of the implementation.
 
 \begin{figure*}[ht]
 	\centering
@@ -709,7 +829,7 @@ We use a custom random distribution called \funcref{alg:getRandomTime} (line~\re
 			};
 		\end{axis}
 	\end{tikzpicture}
-	\caption{Distribution of \funcref{alg:getRandomTime}{}(90, 120, 200) in algorithm~\ref{alg:simpleTiming}}
+	\caption{Distribution of \funcref{alg:setRandomTime}{}(90, 120, 200) in algorithm~\ref{alg:simpleTiming}}
 	\label{fig:timeDistribution}
 \end{figure*}
 
@@ -720,7 +840,7 @@ We assign the timing information by looping through our ordered set of edges. We
 \begin{breakablealgorithm}
 	\captionof{figure}[Assign Timing Information to a Graph (PseudoCode)]{Assign Timing Information to a Graph}\label{alg:simpleTiming}
 	\begin{algorithmic}[1]
-		\Function{getTiming}{edges, maxTime,minHopTime}\funclabel{alg:getTiming}\label{alg:getTiming-line}
+		\Procedure{assignTiming}{edges, maxTime,minHopTime}\proclabel{alg:assignTiming}\label{alg:assignTiming-line}
 			\If{$\text{len(edges)} \times \text{(minHopTime - 1)} > \text{maxTime}$}
 				\Throw "maxTime too small for constraints"
 			\EndIf
@@ -736,16 +856,15 @@ We assign the timing information by looping through our ordered set of edges. We
 				\State $\text{earliestTime} \gets \text{maxTime}+\text{minHopTime}$
 				\State $\text{remainingHops} \gets \text{remainingHops} - 1$
 				\State $\text{maxRemainingTime} \gets \text{maxTime}-\text{earliestTime}$
-				\State $\text{times.append(minTime, maxTime)}$
+				\State $\text{e}.\Call{setTiming}{minTime, maxTime}$
 			\EndFor
-			\Return $\text{times}$
-		\EndFunction
+		\EndProcedure
 		\item[]		
 		\Function{getRandomTime}{min, peak, max}\funclabel{alg:getRandomTime}\label{alg:getRandomTime-line}
-			\State $\text{value} \gets -1$
+			\State $\text{value} \gets \text{min}-1$
 			\While{$\text{value} < \text{min} \Or \text{value} > \text{max}$} 
-				\State $\text{value} \gets \Call{nextRadnomGaussian}{~}$
-				\State $\text{d} \gets \Call{nextDouble}{~}$
+				\State $\text{value} \gets \text{universe}.\Call{nextRandomGaussian}{~}$
+				\State $\text{d} \gets \text{universe}.\Call{nextRandomDouble}{~}$
 				\If{$d < (peak-min)/(max-min)$} 
 					\State $\text{value} \gets \text{peak} - \frac{\text{abs(value)} \times (\text{peak} - \text{min})}{5}$
 				\Else
@@ -757,16 +876,16 @@ We assign the timing information by looping through our ordered set of edges. We
 	\end{algorithmic}
 \end{breakablealgorithm}
 
-Key of the graph itself are not the edges or nodes nor the timing but the operations applied to the graph. This part is covered by function~\funcref{alg:getRouting}{} in algorithm~\ref{alg:simpleRouting}. We assign the operations in three steps. We first assign to $\text{redundantRoutes}$ routes a valid message path (lines~\ref{alg:startAssignValidRoutes-line}\=/\ref{alg:endAssignValidRoutes-line}). After that we identify ``unused (sub\=/)routes'' and assign the same operations to these routes (lines~\ref{alg:startAssignUnusedRoutes-line}\=/\ref{alg:endAssignUnusedRoutes-line}). 
+Key of the graph itself are not the edges or nodes nor the timing but the operations applied to the graph. This part is covered by function~\funcref{alg:assignRouting}{} in algorithm~\ref{alg:simpleRouting}. We assign the operations in three steps. We first assign to $\text{redundantRoutes}$ routes a valid message path (lines~\ref{alg:startAssignValidRoutes-line}\=/\ref{alg:endAssignValidRoutes-line}). After that we identify ``unused (sub\=/)routes'' and assign the same operations to these routes (lines~\ref{alg:startAssignUnusedRoutes-line}\=/\ref{alg:endAssignUnusedRoutes-line}). 
 
-Operations are assigned in a recursive manner. First, we identify the routes we want to assign operations. This recursive part is done by the \funcref{alg:assignRoute} (line~\ref{alg:startAssignRoute-line}\-/\ref{alg:endAssignRoute-line}). We first identify a payload to be transported and the chain of nodes. We call \funcref{alg:assignRoute}, which will then apply a random operation on the first node and transport the relevant payload block to the second node in the chain, mapping it there to an unused ID within the workspace. We then take the remaining path with the newly created ID in the remaining path and repeat the step, thus looping recursively through the path until we have covered the whole path.
+Operations are assigned in a recursive manner. First, we identify the routes we want to assign operations. This recursive part is done by the \funcref{alg:assignSingleRoute} (line~\ref{alg:startAssignRoute-line}\-/\ref{alg:endAssignRoute-line}). We first identify a payload to be transported and the chain of nodes. We call \funcref{alg:assignSingleRoute}, which will then apply a random operation on the first node and transport the relevant payload block to the second node in the chain, mapping it there to an unused ID within the workspace. We then take the remaining path with the newly created ID in the remaining path and repeat the step, thus looping recursively through the path until we have covered the whole path.
 
 Operations are chosen in two ways either we create an $addRedundancy$ operation of type $n-1$ of $n$, or we use a simple encryption step. In each case, we apply on the current node the operation, and we apply on the final node the reverse operation, thus rebuilding the message on the last node simultaneously.
 
 \begin{breakablealgorithm}
 	\captionof{figure}[Assign Routing Information to a Graph (PseudoCode)]{Assign Routing Information to a Graph}\label{alg:simpleRouting}
 	\begin{algorithmic}[1]
-		\Function{getRouting}{edges, redundantRoutes, messageId}\funclabel{alg:getRouting}\label{alg:getRouting-line}
+		\Procedure{assignRouting}{edges, redundantRoutes, messageId}\proclabel{alg:assignRouting}\label{alg:assignRouting-line}
 			\If{$redundantRoutes<1$}
 				\Throw "At least one route is required"
 			\EndIf
@@ -782,13 +901,13 @@ Operations are chosen in two ways either we create an $addRedundancy$ operation 
 				\State $\text{numRoute} \gets \text{numRoute} + 1$
 			\EndWhile\label{alg:endAssignValidRoutes-line}
 			\LineComment{Add sensible operations to decoy routes}
-			\ForAll{$r \in getUnsuedRoutes(edges)$}\label{alg:startAssignUnusedRoutes-line}
+			\ForAll{$r \in getUnusedRoutes(edges)$}\label{alg:startAssignUnusedRoutes-line}
 				\State $\Call{assignRoute}{\text{r}, \text{r.getRandopOperation().getUnusedIds(1)}, \text{NULL},32769}$
 			\EndFor\label{alg:endAssignUnusedRoutes-line}
 			\State $\Call{addMessageMapping}{\text{edges}}$
-		\EndFunction
+		\EndProcedure
 		\item[]		
-		\Function{assignRoute}{route, payloadIds, lastNode, targetIds}\funclabel{alg:assignRoute}\label{alg:startAssignRoute-line}
+		\Function{assignSingleRoute}{route, payloadIds, lastNode, targetIds}\funclabel{alg:assignRoute}\label{alg:startAssignRoute-line}
 			\State $source \gets route.getSourceNode()$
 			\If{$payloadIds.isEmpty()$}
 				\State $\text{PayloadIds} \gets source.getRandopOperation().getUnusedIds(1)$

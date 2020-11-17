@@ -16,6 +16,9 @@
 
 \PassOptionsToPackage{table}{xcolor}
 
+% enable breakable URLS
+\PassOptionsToPackage{hyphens}{url}
+
 \usepackage{colortbl}
 
 % Make C&P work
@@ -32,7 +35,7 @@
 \PassOptionsToPackage{final}{graphicx}
 
 \usepackage{tikz}
-\usetikzlibrary{calc,positioning,arrows,backgrounds}
+\usetikzlibrary{calc,positioning,arrows,backgrounds,shapes.geometric}
 \tikzset{background rectangle/.style={fill=black!10}, show background rectangle}
 
 \usepackage[draft=false]{scrlayer-scrpage}
@@ -98,7 +101,6 @@
 	pdfcopyright={Creative Commons Attribution-NonCommercial-NoDerivatives 3.0 Switzerland (CC BY-NC-ND 3.0 CH)}
 }
 \makeatother
-
 
 % enable superscript  for 1st, 2nd, 3rd etc.
 \usepackage[super]{nth}
@@ -317,6 +319,17 @@
 	\@bsphack
 	\protected@write\@auxout{}{%
 		\string\newlabel{#1}{{\jayden@currentfunction}{\thepage}{}{}{}}%
+	}%
+	\@esphack
+}
+\renewcommand{\Procedure}[2]{%
+	\csname ALG@cmd@\ALG@L @Procedure\endcsname{#1}{#2}%
+	\def\jayden@currentprocedure{#1}%
+}
+\newcommand{\proclabel}[1]{%
+	\@bsphack
+	\protected@write\@auxout{}{%
+		\string\newlabel{#1}{{\jayden@currentprocedure}{\thepage}{}{}{}}%
 	}%
 	\@esphack
 }

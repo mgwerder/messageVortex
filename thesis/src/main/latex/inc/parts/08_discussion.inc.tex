@@ -4,34 +4,88 @@
 %!TeX root = ../../messageVortex.tex
 \partepigraph{Limit your inputs to only those that support a certain kind of self-destructive behavior, and you can be cheered with enthusiasm as you drive yourself off a cliff.}{Adam-Troy Castro}
 \part{Discussion on Results}
-\fxwarning{complete section}
+In this chapter we outline the main results of our work. We emphasize on the weaknesses and concentrate on the technologies probably able to complement our new protocol.
 
 \chapter{Measuring up to the Requirenets\label{sec:reqDiscussion}}
-In this section we analyze the level of achievment in respect to the requirements defined in section\ref{sec:requirements}. We will go through each requirement and discuss the level of achievement. In the case of a failure, we highlight the reason for the failure and elaborate on the consequences of the current flaws.
+In this section we analyze the level of achievement in respect to the requirements defined in section\ref{sec:requirements}. We will go through each requirement and discuss the level of achievement. In the case of a failure, we highlight the reason for the failure and elaborate on the consequences of the current flaws. An overview of all requirements can be found on table~\ref{tab:requiremnts} on page~\pageref{tab:requiremnts}.
 
-\fxwarning{complete section}
+In our opinion the requirement \ref{req:undetectable} is met as long as the blending layer obeys the criterion opposed to it. If we assume that the dummy content of a message is not distinguishable from other traffic by a censoring adversary and F5 is not broken, then a \VortexNode{} should be truly undetectable from the outside.
 
+The requirement \ref{req:P2P} is met as there is no difference in the nodes. All nodes serve as possible endpoints and all nodes do routing. There is no technical difference between the nodes which may be used to differentiate between endpoints and anonymity routers.
 
-\chapter{Achieved level of anonymity}
-\fxwarning{complete section}
+The requirement \ref{req:zeroTrust} is met in a wider sense. We do not require any trust into any routing nodes. However, we do need either message traffic to trusted nodes from a non-cooperating adversary or we do need honest \VortexNodes{} with additional traffic within our anonymity set. 
 
-\chapter{Weaknesses of the protocol}
-\fxwarning{complete section}
+The requiremment \ref{req:unlink} is under full control of an RBB. The RBB controls number of hops and the nodes involved. He may therefore achieve unlinkability by combining the operations accordingly.
+
+The requirement \ref{req:anon} can be met in various grades ($k$-Anonymity) by the RBB. If all independent message paths of a \VortexMessage{} contain at least one honest \VortexNode{} with additional traffic, an adversary is no longer able to conclude on any potential anonymity set. The function of the honest node may even be taken by the sender and recipient.
+
+The requirement \ref{req:accounting} is fullfiled as all elements required for accounting do have an expiration date. Requests going beyond that date are discarded. The information to be kept is limmited to an absolute minimum and may acomodate multiple 100k identities per \VortexNode.
+
+The requirement \ref{req:untagable} is fulfilled as there is no pattern which may be followed through the network. All informations visible to an outside or inside observer are discarded at the following node.
+
+The requirement \ref{req:unbugable} is only partially met. As we did not specify what payload may be transported but suggested MIME-encoded messages bugging is possible. However, message bugging in MMe encoded messages is well known and most of the clients offfer apropriate counter measures such as supression of external imagery loading and similar. When sticking to the recommendation to send text-only messages buggiing is not possible.
+
+The requirement \ref{req:unreplayable} is only partially fulfilled. As we allowed the use of MURBS, replaying a message is possible. As it is an optional feature and normal messages do have replay protection the impact of this flaw is minimal and intended.
+
+The requirement \ref{req:boot} remains one of the major flaws of our protocol. This has systemic reasons. The possibility of discovering \VortexNodes{} in an environment of a censoring adversary no matter how built is enabling the adversary to harvest a network of nodes. This means that in such a environment any possibility to narrow down potential nodes may be hazardous. It is our belief that, unless we have broadly accepted protocols using broadcast into huge domains, this problem ay not be solved. We, furthermore, belief that such a protocol support is unlikely to arise due to bandwidth reasons. 
+
+The requirement \ref{req:algVar} is met as we have built in the possibility to vary any algorithm. Wherever possible we named and included independent alternatives based on a different mathematical problems into the standard. It is furthermore possible to signal non-standard algorithms. As long as two nodes support the same standard they are capable of communicating.
+
+In our eyes the requirement \ref{req:easy} turned out to be the least successful of all. While we may automate the \MessageVortex{} protocol and all its needs in a environment of an observing adversary, the use in an environment of a censoring adversary is not possible for a non-savy individual or a small organization. This is due to the fact that the dummy traffic generated to carry \VortexMessages{} has to be individual and credible. To meet this requirement, coding skills are required, which opposes to \ref{req:easy}. While not unsolvable we consider this problem as a problem hard to solve.
+
+The requirement \ref{req:reliable} can be met in various degrees. The degree of reliability depends on the number of stable working nodes in an anonymity set and the strategy chosen by an RBB to build the routing block. We consider this requirement as met. 
+
+The requirement \ref{req:transparent} is met in our opinion as we offer the possibility to diagnose the entire message traffic explicitly or implicitly at any time. 
+
+The requirement \ref{req:available} is met as our system remains functional via alternate message paths if a \VortexNode{} is no longer functional. However, as we do not have the possibility to adapt the route of a message the availability of the system is controlled by the RBB.
+
+We consider the requirement \ref{req:senderId} as met as the protocol offers the possibility to match two messages to the same sender (even if not knowing its identity) by matching the \defref{eID}. To eep this possibility for a recipient both sender and receiver have to collaborate as the sender needs to use the same \defref{eID} for all messages and the recipient must allow usage of such \defref{eID} for the entire period of time.
+
+Overall we consider this work in its current state as a partial fail due to the miss of the requirement \ref{req:easy}. This miss causes the protocol only of limited use to a single individuum operating in an environment of a censoring adversary.
+
+\chapter{Achieved level of anonymity and detectability}
+We have to emphasize when discussing anonymity that our system is unlike most of other systems. As we have an adversary defined that other systems do not withstand, we have to compare anonymity on multiple layers. Within these layers anonymity and detectability complement each other as breaking detectability might lead to deanonymization of a node or a respective user. 
+
+These layers relevant to anonymity or detectability are:
+\begin{itemize}
+	\item The detectability of the system by\ldots
+	\begin{itemize}
+		\item detecting or identifying transport layer accounts.
+		\item detecting or identifying \VortexNodes{}.
+	\end{itemize}
+	\item The detectability and tracing of single \VortexMessages.
+	\item The traceability of a message over a number of \VortexNodes{}.
+	\item The identification of \MessageVortex{} users by$\ldots$
+	\begin{itemize}
+		\item the sending \MessageVortex{} user
+		\item the receiving \MessageVortex{} user
+		\item an adversary within the anonymity set
+		\item an outside adversary
+	\end{itemize}
+\end{itemize} 
+
+Detectability of a system depends on multiple facts. If the belnding is detectable a \VortexNode{} is identifiable and may lead to uncovering of the respective user. In environments with a censoring adversary such identification may deemed as dangerous. In such environments our system heavily depends on the respective implementation of the blending. In its current state coding, skills are likely needed to remain undetectable as not following a pattern is there key and our standard implementation may be deemed as a pattern. The traffic generated for accessing a transport layer account is not especially susceptible to detectability as the always-connected pattern is very common among devices and services these days. Special care has to be taken if protocols offer housekeeping features for the transported messages. In these cases access patterns should match the pattern of the chosen service (e.g., delete INBOX mails after 30 days) otherwise a node may be identified by the transport layer owner as atypical behavior.
+
+Single \VortexMessages{} may be detectable from the outside as covered in the previous paragraph. Apart from that sending and receiving \VortexNodes{} do always know the identity of the transport layer address. This means that anonymity is no longer possible if a censoring adversary is part of an anonymity set. In such a case the adversary would be capable of uncovering involved \VortexNodes{} by harvesting node transport addresses over time. A solution for this problem does not exist as long as we are not assuming the presence of a common protocol employing broadcasting (or at least multicasting) with huge domains.
+
+Messages are not traceable as long as we have at least one honest or  non-collaborating (to the current adversary) \VortexNode{} in a message path due to the message properties. As soon as two adjacent \VortexNodes collaborate they may collapse all operations of the two int one workspace.
+
+Identification of \MessageVortex{} users may be done in multiple ways. If an RBB composes unsuitable routing blocks anonymity is broken. We outlined before that \MessageVortex{} may build the same messaging patterns as Mix-, Onion-, BC- or DC-networks but with additional security related features such as redundancy or the split of messages. This makes in general our protocol at least equivalent or even superior to aforementioned technologies. Unlike those systems, our system is not limited to specific message patterns which makes our system more suitable in an environment of a censoring adversary. The sending user may be identified by a unique fingerprint of composing messages. He furthermore may be identified by bugging a message sent with a reply block. For an outside observer a sending user may be suspected if there is no additional traffic running over its routing node. Therefore, receiving traffic (to be routed or not is irrelevant) adds to the anonymity of a message sent. The receiving user may be identified by a bugged message. From the outside a receiving user may or may not further deliver messages. The same applies to any routing node. This does not give any indication on a received message.
+
+\chapter{Weaknesses of the Protocol and Related Missing Research}
+The protocol has several weaknesses which we were unable to compensate accordingly. The complexity of the algorithms for an RBB is definitely high compared to other protocols. Nevertheless, it is possible for a single RBB to create and maintain a network of ready \defref{eID}s for routing. Given a sufficient set of nodes this routing works comparable to other protocols. It scales very well under high loads and once properly bootstraped it is easy to use as  a user may use it with common clients such as email clients.
+
+The true weaknesses of the protocol are in the lack of implementations available for anonymity. Available implementations of steganographic algorithms in C/C++ or Java are rare. And we were unable to find any partial essay of an implementation for creating dummy traffic. One true weakness may, therefore, be found in the lack of adaptation of protocols and algorithms from the scientific world. Especially an alternative available to the implementation of F5 would be sensible and helpful. While such an implementation may at any time retrofitted in the system, the lack in the current state is regarded as a weakness. The same may apply to algorithms such as NTRUencrypt. While this algorithm has been implemented and specified in terms of encryption and decryption, a binary layout for the key was never specified. Such layouts are however crucial for a world of inter-operation. The lack of such specifications and implementations make our implementation of \MessageVortex{} weaker. We are of course capable of creating our own implementation and specify our own binary layouts, but such implementations lack a proper peer review as well as they violate the basics of interoperability which are a major concern in all protocols. 
+
+The lack of other, comparable protocols make the \MessageVortex{} protocol weaker. Having no true competitor in a class makes it very hard to measure and compare a solution. Assuming a censoring adversary is a hard to fullfill teritory and most of the people rather seem to focus on a single problem without true implementation than on a solution of a real world problem. Claiming that anonymity is solveable is alright in the eyes of the authors, as long as we can describe realistic real-world or clean slate approaches, these approaches must be implementable. The authors encountered multiple solutions which were definitely a good idea but lack a realistic view. Achieving in an environment where there is no inside observer or just regional observers is easy but not realistic. It is not realistic to conclude that science solves a small part of the problem in perfection and the real world engineers should solve the ones science was unable to solve.
+
+Another problem we encountered is the lack of available statistical data regarding true internet environments. There is a lot of data available which may be easily extracted. When it comes to true insights of the internet we have, however, only very limited data. In our specific case there is some data available about censorship made in China and some in Turkey. It would have been tremendously welcomed if we would have comparisons in the communication patters of persons. Questions about ``What protocols are used in what extend to transfer messages either in human-to-human or machine-to-human communication'', ``Which types of attachments are common among specific protocols'', or ``What are common threats today'' seem not be researched. There are some pseudo-scientific papers available shedding light on some of the questions but these papers do not follow scientific standards and are quite often misunderstood as a mean to boost certain products. A good example for this trend are papers describing the dangers solely from the perspective of anti-malware or firewalls, which typically fail completely to list threats related to social engineering. Available data is often collected cheaply by querying SNMP MIBs or by filtering traffic by static sources list to identify streaming traffic.
 
 \chapter{Further and Missing Research}
-The current blending layer is simple in its inner working. It creates context-less messages based on an easily recognizable scheme. An unsuspecting observer may have the impression that this is just a way of communicating, but censor may, by observing the message flow easily and conclude that these messages are not written by a human. Such detection could lead to censorship of the respective routing node and thus disrupt the message flow. It is easy to recover from such censorship by advertising a new identity to known peer partners. To minimize the effects of censorship, an improvement in this area would help.
-
-To be undetectable, all work done by the blending layer has to be indistinguishable from regular human communication. This applies not only to the message steganographic embedding of the message but to the message content as well. This is very much similar to the problems of chatterbots these days. Assuming that a blending layer is only communicating with other nodes correctly embedding messages, we have a chatterbot problem. It is reduced as the chatterbot must only reply credibly and undetectable to generated messages of other chatterbots. If assuming that a blending layer replies to any non-Vortex nodes, the problem boils down to a Turing test, as stated in \cite{turing1950computing}. As we defined that an adversary has enormous but limited resources, this blending is, however, sufficient if it is done ``good enough''. What criteria would apply here is a topic for further research. Applying any research to this topic would require to add a more precise adversary model.
+The current blending layer is by far too simple in its inner working. It creates context-less messages based on an easily recognizable scheme. It is not suitable to mimic human communicaion. A good blending layer would be capable of mimicking not only machine like traffic but even human like traffic. Atypical communication pattern such as 24x7 communication may be broken into typical pattern by mimicking three sending accounts with different overlapping communication patterns. The system does not necessarily have to pass a full turing test. It would be sufficient to create credible human communication between machines sounding human like. Research in AI already succeded in generating credible communications between two robots. It is unknown whether or not such ``smalltalking'' implementations would create credible content. As we defined that an adversary has enormous but limited resources, this blending is, however, sufficient if it is done ``good enough'' so that an adversary is not able o identify the traffic as generated content. What criteria would apply here is a topic for further research. Applying any research to this topic would require to add a more precise adversary model.
 
 The currently applied choice of transport layer protocol is a snapshot of current Internet traffic. While done with great care, it must be adapted to the changing communication habits of humanity. Identifying new or depreciated communication protocols and blending schemes would be another field of research.
 
-A comprehensive survey of the newest trends and techniques in steganography is another topic to be covered. It would allow identifying new candidates for blending techniques. Especially interesting are steganography algorithms covering movie file formats.
-
-This is especially hard since true evidence of in-depth protocol usage seems to be completely missing. While we were able to gather much data which is collected by simple routers (such as bandwidth), credible figures about client and content usage seemed to be completely missing or of very poor quality.
+A comprehensive survey of the newest trends and techniques in steganography is another topic to be covered. It would allow identifying new candidates for blending techniques. Especially interesting are steganography algorithms covering movie and audio file formats. This may be especially interesting when it comes to mimic other communication patters such as social network apps using voice messaging.
 
 Anonymity has effects on the behavior of humans. We have found that although there is some research in this field (such as \cite{postmes2001social}), the evidence is very weak. Although the possibility of anonymity is undisputed among so-called free countries, the downsides (e.g., misuse for criminal acts) of anonymity are apparent. More research in this field is required. On the other hand, a lack of awareness for anonymity, especially in ``non-free'' jurisdiction, has been observed, which would be another relevant field of research. 
-
-\fxwarning{Mention that writing simulators is not the same as writing an implementation. Mention that steganography.}
-\fxwarning{complete section}
-
-

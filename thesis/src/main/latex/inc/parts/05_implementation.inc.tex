@@ -127,7 +127,7 @@ This allows categorizing the used algorithms to a strength. This list, however, 
 We evaluated the most common cipher modes for suitability. For MessageVortex, we focussed on modes that have the properties parallelizable, random access, and do not do authentication. The main focus, besides the characteristics mentioned before, was on the question of whether there is an open implementation available in java, which is reasonably tested.
 
 \begin{figure}[ht]
-	\lstinputlisting[linerange={99-112},language=asn.1]{../../../../application-core-library/src/main/asn/MessageVortex-Ciphers.asn}
+	\lstinputlisting[linerange={101-113},language=asn.1]{../../../../application-core-library/src/main/asn/MessageVortex-Ciphers.asn}
 	\caption{Enumeration definition of modes in ASN.1 with support requirements.}
 	\label{fig:defModes}
 \end{figure}
@@ -178,7 +178,7 @@ A plain text stream may have any length. Since we always encrypt in blocks of a 
 
 We have chosen for the paddings outlined in figure~\ref{fig:defPaddings} to be supported.
 \begin{figure}[ht]
-	\lstinputlisting[linerange={114-121},language=asn.1]{../../../../application-core-library/src/main/asn/MessageVortex-Ciphers.asn}
+	\lstinputlisting[linerange={116-123},language=asn.1]{../../../../application-core-library/src/main/asn/MessageVortex-Ciphers.asn}
 	\caption{Enumeration definition of paddings in ASN.1 with support requirements.}
 	\label{fig:defPaddings}
 \end{figure}
@@ -204,7 +204,7 @@ We have introduced an additional type of padding not related to these paddings. 
 	Due to the nature of the operation, it is required to be able to pad more than just one block.
 \end{itemize}
 
-This padding is the only padding for the $addRedundancy$ and $removeRedundancy$ operations.
+This padding is the only padding for the $addRedundancy$ and $removeRedundancy$ operations. A specification may be found in section~\ref{sec:redundancyOperation}.
 
 \subsection{Pseudo Random Number Generator Selection\label{sec:prng}}
 For our $addRedundancy$ and $removeRedundancy$ operations we needed a pseudo random number generator (PRNG). For our implementation we did not research deeply this part as it seemed irrelevant. The only criteriion was, that it had to create content indistinguishable from an encrypted message. This criterion arose as we use it for padding invisibly an already encrypted message.
@@ -461,7 +461,7 @@ XMPP has an improvment process based on XEPs. For including binary contents such
 	\rowcolors{2}{black!30}{black!10}
 	\bgroup
 	\def\arraystretch{1.5}%  1 is the default, change whatever you need
-	\begin{tabular}{|l|l|p{8cm}|}\hline
+	\begin{tabular}{|l|l|p{7.5cm}|}\hline
 		Name                                 & Status (as of 06-2020)             & Purpose \\\hline
 		\citetitle{xep0047}\cite{xep0047}    & Final Standard                     & Allows sending chunked, base64 encoded data within the jabber connections.\\
 		\citetitle{xep0066}\cite{xep0066}    & Draft Standard                     & Allows sending URIs of remotely hosted binary data.\\

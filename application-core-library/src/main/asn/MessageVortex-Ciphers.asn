@@ -4,8 +4,8 @@ BEGIN
           MacAlgorithm, CipherSpec, PRNGType;
 
   CipherSpec ::= SEQUENCE {
-      asymmetric  [16001] AsymmetricAlgorithmSpec OPTIONAL,
-      symmetric   [16002] SymmetricAlgorithmSpec OPTIONAL,
+      asymmetric  [16001] AsymAlgSpec OPTIONAL,
+      symmetric   [16002] SymAlgSpec OPTIONAL,
       mac         [16003] MacAlgorithmSpec OPTIONAL,
       cipherUsage [16004] CipherUsage
   }
@@ -15,25 +15,25 @@ BEGIN
     encrypt       (210)
   }
 
-  SymmetricAlgorithmSpec  ::=  SEQUENCE  {
+  SymAlgSpec  ::=  SEQUENCE  {
     algorithm     [16101]SymmetricAlgorithm,
     -- if ommited: pkcs7
     padding       [16102]CipherPadding OPTIONAL,
     -- if ommited: cbc
     mode          [16103]CipherMode OPTIONAL,
-    parameter     [16104]AlgorithmParameters OPTIONAL
+    parameter     [16104]AlgParameters OPTIONAL
   }
 
-  AsymmetricAlgorithmSpec  ::=  SEQUENCE  {
+  AsymAlgSpec  ::=  SEQUENCE  {
     algorithm     AsymmetricAlgorithm,
     -- if ommited: pkcs1
     padding       [16102]CipherPadding OPTIONAL,
-    parameter     AlgorithmParameters OPTIONAL
+    parameter     AlgParameters OPTIONAL
   }
 
   SymmetricKey ::= SEQUENCE {
     keyType       SymmetricAlgorithm,
-    parameter     AlgorithmParameters,
+    parameter     AlgParameters,
     key           OCTET STRING (SIZE(16..512))
   }
 
@@ -41,13 +41,14 @@ BEGIN
     keyType       AsymmetricAlgorithm,
     -- private key encoded as PKCS#8/PrivateKeyInfo
     publicKey     [2] OCTET STRING,
-    -- private key encoded as X.509/SubjectPublicKeyInfo
+    -- private key encoded as 
+	-- X.509/SubjectPublicKeyInfo
     privateKey    [3] OCTET STRING OPTIONAL
   }
 
   SymmetricKey ::= SEQUENCE {
     keyType       SymmetricAlgorithm,
-    parameter     AlgorithmParameters,
+    parameter     AlgParameters,
     key           OCTET STRING (SIZE(16..512))
   }
 
@@ -55,7 +56,8 @@ BEGIN
     keyType       AsymmetricAlgorithm,
     -- private key encoded as PKCS#8/PrivateKeyInfo
     publicKey     [2] OCTET STRING,
-    -- private key encoded as X.509/SubjectPublicKeyInfo
+    -- private key encoded as 
+	-- X.509/SubjectPublicKeyInfo
     privateKey    [3] OCTET STRING OPTIONAL
   }
 
@@ -82,24 +84,24 @@ BEGIN
     sect409k1     (2501),
     secp521r1     (2502)
   }
-  AlgorithmParameters ::= SEQUENCE {
-    keySize       [9000] INTEGER (0..65535) OPTIONAL,
-    curveType     [9001] ECCurveType   OPTIONAL,
-    iv            [9002] OCTET STRING  OPTIONAL,
-    nonce         [9003] OCTET STRING  OPTIONAL,
-    mode          [9004] CipherMode    OPTIONAL,
-    padding       [9005] CipherPadding OPTIONAL,
-    n             [9010] INTEGER       OPTIONAL,
-    p             [9011] INTEGER       OPTIONAL,
-    q             [9012] INTEGER       OPTIONAL,
-    k             [9013] INTEGER       OPTIONAL,
-    t             [9014] INTEGER       OPTIONAL
+  AlgParameters ::= SEQUENCE {
+    keySize      [9000] INTEGER (0..65535) OPTIONAL,
+    curveType    [9001] ECCurveType   OPTIONAL,
+    iv           [9002] OCTET STRING  OPTIONAL,
+    nonce        [9003] OCTET STRING  OPTIONAL,
+    mode         [9004] CipherMode    OPTIONAL,
+    padding      [9005] CipherPadding OPTIONAL,
+    n            [9010] INTEGER       OPTIONAL,
+    p            [9011] INTEGER       OPTIONAL,
+    q            [9012] INTEGER       OPTIONAL,
+    k            [9013] INTEGER       OPTIONAL,
+    t            [9014] INTEGER       OPTIONAL
   }
 
   CipherMode ::= ENUMERATED {
-    -- ECB is a really bad choice. Do not use unless really
-    -- necessary and you are sure that the content is already 
-    -- encrypted
+    -- ECB is a really bad choice. Do not use unless 
+	-- really necessary and you are sure that the 
+	-- content is already encrypted
     ecb           (10000), -- optional support
     cbc           (10001), -- required
     eax           (10002), -- optional support
@@ -131,7 +133,7 @@ BEGIN
   
   MacAlgorithmSpec  ::=  SEQUENCE  {
     algorithm     MacAlgorithm,
-    parameter     AlgorithmParameters
+    parameter     AlgParameters
   }
 
   PRNGAlgorithmSpec ::= SEQUENCE {

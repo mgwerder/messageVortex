@@ -164,8 +164,8 @@ Mimics are a set of statical mixes which maintain a constant message flow betwee
 
 If centralized mixes are used, the system lacks the same vulnerabilities of sizing and observing the exit nodes as all previously mentioned systems. If we assume that the sender and receiver operate a mixer by themselves, the system would no longer be susceptible to timing or sizing analyses. The mimic routes put a constant load onto the network. This bandwidth is lost and may not be reclaimed. It does not scale well as every new participant increases the need for mimic routes and creates (in the case of user mixes) a new mimic load. Furthermore, the mixes are easily identifiable as their characteristic data stream contrasts compared to other network service streams.
 
-\section{Distributed Hash Tables}
-\fxwarning{complete section}
+%\section{Distributed Hash Tables}
+%\fxwarning{complete section}
 
 \section{Dining Cryptographer Networks}
 DC networks are based on the work \citetitle{chaum-dc} by \citeauthor{chaum-dc}\cite{chaum-dc}. In this work, \citeauthor{chaum-dc} describes a system allowing a one-bit transfer (The specific paper talks about the payment of a meal). Although all participants of the DC net are known, the system makes it unable to determine who has been sending a message. The message in a DC-Net is readable for anyone. This network has the downside that a cheating player may disrupt communication without being traceable.
@@ -173,13 +173,13 @@ DC networks are based on the work \citetitle{chaum-dc} by \citeauthor{chaum-dc}\
 Several attempts have been made to strengthen the proposal of Chaum\cite{golle:eurocrypt2004,disco,herbivore:tr,Corrigan-Gibbs:2010:DAA:1866307.1866346}. However, no one succeeded without introducing significant downsides on the privacy side.
 
 \chapter{Proposed Academic Protocols and System Implementations\label{sec:implSystems}}
-\fxwarning{complete section}
+In this section we list various proposed anonymity systems regardless of their age or state. We analyze their inner working and try to compare them in a unified way. This comparison was a base for selecting our approach.
 
 
 \section{Characteristics of Known Anonymity Implementations}
 Table \ref{tab:anonClass} shows the previously analyzed protocols according to the classification scheme introduced in \cite{Shirazi2018}.
 
-\DeclareFixedFootnote{\takenFrom}{Definition taken from \ref{Shirazi2018}}
+\DeclareFixedFootnote{\takenFrom}{Definition taken from \cite{Shirazi2018}}
 \begin{table*}[ht]\centering\tiny
 	\setlength{\aboverulesep}{0pt}
 	\setlength{\belowrulesep}{0pt}
@@ -301,6 +301,8 @@ Table \ref{tab:anonClass} shows the previously analyzed protocols according to t
 
 		Dissent in numbers\takenFrom & \networkPartly & \directionUnidi  & \syncAsync & \roleCs & \hierarchyHierarchical & \decentralizationPart & \netviewPartly & \updatingEvent & \routingRoutebc & \shedfair & \nsdetdet & \nsnodesnet & \nsprobstat & \perflath & \perfmodemsg & \nsimplyes & \nscodeyes & \nscontmsg \\
 
+		Verdict & & & & & & & & & & & & & & & & & & \\
+
 		$I^2P$\takenFrom & \networkMostly & \directionUnidi  & \syncAsync & \rolePtp & \hierarchyFlat & \decentralizationDecentr & \netviewFully & \updatingTimed & \routingRoutesrc & \shedprio & \nsdetprob & \nsnodesnet \nsnodessec & \nsprobdyn & \perflatl & \perfmodecon & \nsimplyes & \nscodeyes & \begin{tabular}{@{}c@{}} \nscontwww \nscontmail \\ \nscontfiles\end{tabular} \\
 
 		$\mathcal{P}^5$\takenFrom & \networkPartly & \directionUnidi  & \syncAsync & \rolePtp & \hierarchyHierarchical & \decentralizationPart & \netviewPartly & \updatingEvent & \routingRoutebc & \shedprio & \nsdetdet & \nsnodesusr & \nsprobstat & \perflath & \perfmodemsg & \nsimplyes & \nscodeno & \nscontmsg\\
@@ -362,7 +364,7 @@ Being an exit node may be a problem in some jurisdictions. In general, it seems 
 
 Furthermore, several DoS-Attacks have been carried out to overload parts of the Tor network. Most of them do a bandwidth drain on the network layer.
 
-Attacking anonymization has been done in several ways. First of all, the most common attack is a time-wise correlation of packets if in control of an entry and an exit node. A massive attack of this kind was published in 2014 and has been published on the Tor website (\href{https://blog.torproject.org/blog/tor-security-advisory-relay-early-traffic-confirmation-attack}{relay early traffic confirmation attack}). This attack was possible because tor is a low latency network. Another attack is to identify routes through tor by statistically analyze the traffic density in the network between nodes. More theoretical attacks focus on the possibility of controlling the directory servers to guarantee that an entity may be deanonymized because it is using compromised routers.
+Attacking anonymization has been done in several ways. First of all, the most common attack is a time-wise correlation of packets if in control of an entry and an exit node. A massive attack of this kind was published in 2014 and has been published on the Tor website (\href{https://blog.torproject.org/blog/tor-security-advisory-relay-early-traffic-confirmation-attack}{relay early traffic confirmation attack}). This attack was possible because tor is a low latency network. Another attack is to identify routes through tor by statistically analyze the traffic density in the network between nodes. More theoretical attacks focus on the possibility of controlling the directory servers to guarantee that an entity may be deanonymized because it is using compromised routers. A generc analysis of low latency systems also relevant for tor can be found in \cite{johnson2009design}.
 
 Generally, the effectiveness of the monitoring of single nodes or whole networks is disputed. According to a study by \citeauthor{ccs2013-usersrouted} in \citeyear{ccs2013-usersrouted}\cite{ccs2013-usersrouted}, a system in the scale of PRISM should be able to correlate traffic of 95\% of the users within a ``few days''. Other sources based on the Snowden Papers claim that NSA was unable so far to de-anonymize users of  Tor. However, since these papers referenced to ``manual analysis'', the statement may be disputed when looking at automated attacks as well.
 
@@ -436,9 +438,9 @@ So far the Riffle system has not attracted much interest in the academic world. 
 \fxwarning{Fill gaps in classification of Riffle}
 
 \subsection{Atom (2016)}
-Atom\cite{kwon2016atom} is an asynchronous anonymity service for small messages claiming to be scaleable and transferring up to a million tweet sized messages in 28 minutes. Its PoC implementation is written in Go and was tested by creating a serie of AWS based EC2 instances. It provides a broadcast primitive with limited reach by groupig its servers into small groups. All messages have equal length and groups organize all received messages in batches and distribute them to other server groups. This results in a mix cascade somehow similar to the Mixminion system. However, the system extends the mix cascades with a zero knowledge proof so that tampering may be discovered to a certain extent.
+Atom\cite{kwon2016atom} is an asynchronous anonymity service for small messages claiming to be scaleable and transferring up to a million tweet sized messages in 28 minutes. Its PoC implementation is written in Go and was tested by creating series of AWS based EC2 instances. It provides a broadcast primitive with limited reach by groupig its servers into small groups. All messages have equal length and groups organize all received messages in batches and distribute them to other server groups. This results in a mix cascade somehow similar to the Mixminion system. However, the system extends the mix cascades with a zero knowledge proof so that tampering may be discovered to a certain extent.
 
-According to the paper many aspects of Atom remain unsolved. Key distribution is proposed to be done by trustworthy third party ``directory authorities''. To remain anonymous at least one honest node per group is required. Identifying malicious users in Atom require a collaborative effort involving the publications of the private keys of the entry groups. Mallicious users a proposed to be blacklisted by the directory authorities. 
+According to the paper many aspects of Atom remain unsolved. Key distribution is proposed to be done by trustworthy third party ``directory authorities''. To remain anonymous at least one honest node per group is required. Identifying malicious users in Atom require a collaborative effort involving the publications of the private keys of the entry groups. Malicious users a proposed to be blacklisted by the directory authorities. 
 
 As most of the other protocols Atom implements its own protocol making it susceptible to censorship.
 
@@ -468,6 +470,13 @@ Dissent is defined in \cite{Corrigan-Gibbs:2010:DAA:1866307.1866346}. It is an a
 
 In an attempt to improve Dissent \citeauthor{wolinsky2012dissent} introduced in \cite{wolinsky2012dissent} a modified version. This improved version mainly addresses scalability issues of the original design. Furthermore, some information leakage and scalability flaws in the original approach were addressed.
 
+\subsection{Verdict (2013)}
+Verdict\cite{180367} is an improved version of Dissent using proactively verifiable DC-Nets. It uses zero-knowledge proofs (ZKPs) to detect misbehaving nodes. The authors claim that it is able to process 1000 Senders within 10 seconds.
+
+Unlike many other systems Verdict withstands an observing adversary as defined within this work. However, due to the message patterns generated when communicating eve when steganographically hiding the traffic, a censoring adversary would be able to detect the traffic generated.
+
+\fxwarning{Classify verdict}
+
 \section{Broadcast and Multicast Networks}
 \subsection{Hordes (2002)}
 Hordes was a multicast-based protocol for anonymity specified in \cite{Levine:2002}. Hordes used the abilities to handle multicast addresses of routers to generate a dynamic set of receivers and then sends messages to them. It assumes that a single observer or router does not know all participating peers. 
@@ -495,9 +504,9 @@ Despite its name, Gnutella2 is not the next generation of Gnutella. It was a for
 
 \section{Unknown (TBD)}
 \subsection{Riposte (2015)}
-\cite{corrigan2015riposte}
+Riposte\cite{corrigan2015riposte} is an anonymity messaging system inspired by DC networks which scales well for tweet sized messages. The messages are sent o a regular base (time epochs). The system achieves sender anonymity by distributing parts of a message over multiple hosts. The sytem builds on a 
 
-\fxwarning{Add and classify Riposte}%
+\fxwarning{Classify Riposte}%
 
 \subsection{Pung (2016)}
 \cite{angel2016unobservable}

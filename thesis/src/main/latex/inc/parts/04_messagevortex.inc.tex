@@ -34,7 +34,7 @@ In the following sections, we first define a threat model. We then elaborate on 
 		RQ7  & Message     & Untagable           & The message should be un-tagable (neither by a sender nor an involved intermediate node). \\
 		RQ8  & Message     & Unbugable           & The message should be unbugable (neither by the sender nor by an involved intermediate node). \\
 		RQ9  & Message     & Unreplayable        & A message or its behavior must not be replayable. \\
-		RQ10 & Operational & Bootstrapping        & The system must allow to bootstrap from a zero-knowledge or near-zero-knowledge point and extend the network on its own. \\
+		RQ10 & Operational & Bootstrapping       & The system must allow to bootstrap from a zero-knowledge or near-zero-knowledge point and extend the network on its own. \\
 		RQ11 & Operational & Algorithmic variety & The system must be able to use multiple symmetric, asymmetric, and hashing algorithms to immediately fall back to a secure algorithm for all new messages if required. \\
 		RQ12 & Operational & Easy handleable     & The system must be usable without cryptographic know-how and with popular or common tools. \\
 		RQ13 & Operational & Reliable            & From a user's perspective, the system must act predictably. Messages handed over to the system should reach their destination in any case. \\
@@ -247,6 +247,8 @@ Availability, in this specific context, may have two meanings, which do differ. 
 
 A messaging system offering unlinkability may offer sender anonymity from a recipient's perspective. If so, a sender should be identifiable in such a way, that a classification of senders is possible for a legit recipient, and impersonation is not achievable. It is important to understand that an identifiable sender does not necessarily mean that users can identify a sender as a specific party. It only means that two senders may be identified as the same sender.
 
+We did not consider efficiency as a requirement. Our goal is to achieve anonymity under harsh conditions such as . 
+
 \chapter{Rationale\label{sec:rationale}}
 In this chapter, we set the course for our system. We explain why we built the protocol the way it is. We try to elaborate on our decisions and explain why the system is not built differently.
 
@@ -292,7 +294,7 @@ One of the biggest weaknesses of all protocols is the information leakage they h
 	\end{itemize} 
 \end{itemize}
 
-\section{Summarizing Chosen Approaches for \MessageVortex\label{sec:reqSummary}}
+\section{Summarizing Chosen Approaches for \MessageVortex}\label{sec:reqSummary}
 In this section, we have taken the following decisions for \MessageVortex:
 \begin{itemize}
 	\item Piggybacks common protocols.
@@ -629,7 +631,7 @@ It is unable to extract the following information:
 \subsection{Routing Operations\label{sec:operations}}
 The routing operations build the core as they define the capabilities of the mixing. We decided to introduce three different classes of operations. Wherever we employ crypto, operations, we may choose the operation required for the operation. No choices exist for the core Reed-Solomon-Function, the padding and spitting operation related to it, and the split and merge operations.
 
-\subsubsection{$addRedundancy$ and $removeRedundancy$ Operations}
+\subsubsection{\texorpdfstring{$addRedundancy$}{addRedundancy} and \texorpdfstring{$removeRedundancy$}{removeRedundancy} Operations}\label{sec:redundancyOperation}
 I this section we focus on the core operation of our system. The $addRedundancy$ and $removeRedundancy$ allow growing message sizes in our system without allowing to identify the decoy traffic. 
 
 The Lagrange functions have been proposed in \cite{shamir1979share} and further more generalized in \cite{mceliece1981sharing} for sharing secrets. The general idea about all proposed schemes is to distribute informations and restrict access to it so that only if a specified number of shares are captured a secret may be rebuilt. Unlike proposed in these papers we do not apply privacy to our protocol by sharing the data among many points. Instead we use Lagrange functions to create decoy traffic. By doing so even a creator of traffic is unable to tell message traffic from decoy traffic apart. 
@@ -708,13 +710,13 @@ R_i & = & E^{K_i}\left(Q_i\right)
 
 We apply the Reed-Solomon function by employing a Vandermonde matrix ($\mathbf{V}$). We build the data matrix ($\mathbf{A}$) by distributing the data into $\frac{len\left(\mathbf{X}\right)}{m}$ columns. This results in a matrix with $m$ rows. Unlike in error-correcting systems, we do not normalize the matrix so that the result of the first blocks is equivalent to the original message. Instead, the error-correcting information is distributed over all resulting blocks ($\mathbf{Q_i}$). Since the entropy of the resulting blocks is lowered as shown in figure~\ref{fig:entropy} and may thus leak an estimate of how a resulting block may have been treated, we added the encryption step to equalize entropy again. The previously introduced padding guarantees that there is no further padding on block-level required. The key used to encrypt the single blocks must not be equivalent. Equivalent keys have the side effect encrypting equal blocks into the same cyphertext. We observed faint but statistically relevant reminders of the unencrypted graphs when treating the same block with the same key and different redundancy parameters.
 
-\subsubsection{$encrypt$ and $decrypt$ Operations}
+\subsubsection{\texorpdfstring{$encrypt$ and $decrypt$}{encrypt and decrypt} Operations}
 The encrypt and decrypt operations are essential for the requirement that tagging should not be possible. Unlike the $addRedundancy$ and $removeRedundancy$, the splitting operations do not feature any encryption step after splitting or merging. Reusing a payload block that has only been split or merged would repeat the payload pattern on multiple nodes during transfer. That is why we require to have encryption.
 
 The reason for not building this step into the split and merge function was simple. We needed a separate encryption step to be able to work as an onionizing system, and there were use cases where integrated encryption did not make sense. For further details on this topic, see section~\ref{sec:routingStrategies}.
 
 
-\subsubsection{$mergePayload$ and $splitPayload$ operation}\label{sec:mergeAndSplit}
+\subsubsection{\texorpdfstring{$mergePayload$ and $splitPayload$}{mergePayload and splitPayload} operation}\label{sec:mergeAndSplit}
 The $splitPayload$ operation splits a payload block into two chunks of different or equal sizes. The parameters for this operation are:
 
 \begin{itemize}
