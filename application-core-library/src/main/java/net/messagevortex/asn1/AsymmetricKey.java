@@ -61,6 +61,7 @@ import org.bouncycastle.asn1.ASN1EncodableVector;
 import org.bouncycastle.asn1.ASN1Object;
 import org.bouncycastle.asn1.ASN1OctetString;
 import org.bouncycastle.asn1.ASN1Sequence;
+import org.bouncycastle.asn1.ASN1TaggedObject;
 import org.bouncycastle.asn1.DEROctetString;
 import org.bouncycastle.asn1.DERSequence;
 import org.bouncycastle.asn1.DERTaggedObject;
@@ -199,6 +200,8 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
     if (publicKey == null) {
       throw new IOException("selftest failed: Public key may not be null");
     }
+    assert getAlgorithm()!=Algorithm.EC || parameters.get(Parameter.CURVETYPE).indexOf(""+parameters.get(Parameter.BLOCKSIZE))>0: "found mismatch in curve type vs blocksize ("+parameters.get(Parameter.BLOCKSIZE)+"/"+parameters.get(Parameter.CURVETYPE)+")";
+    assert getAlgorithm()!=Algorithm.RSA || parameters.get(Parameter.KEYSIZE).equals(parameters.get(Parameter.BLOCKSIZE)): "found mismatch in RSA keysize vs blocksize (ks:"+parameters.get(Parameter.KEYSIZE)+"/bs:"+parameters.get(Parameter.BLOCKSIZE)+")";
   }
 
   private void createKey(boolean allowPrecomputed) throws IOException {
@@ -277,7 +280,7 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
     parseKeyParameter(ASN1Sequence.getInstance(s1.getObjectAt(i++)));
 
     //parse public key
-    DERTaggedObject tagged = (DERTaggedObject)(s1.getObjectAt(i++));
+    ASN1TaggedObject tagged = (ASN1TaggedObject)(s1.getObjectAt(i++));
     if (tagged.getTagNo() !=  PUBLIC_KEY_TAG) {
       throw new IOException("encountered wrong tag number when parsing public key (expected: "
               + PUBLIC_KEY_TAG + "; got:" + tagged.getTagNo() + ")");
@@ -286,7 +289,7 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
 
     // parse private key
     if (s1.size() > i) {
-      tagged = (DERTaggedObject)(s1.getObjectAt(i++));
+      tagged = (ASN1TaggedObject)(s1.getObjectAt(i++));
       if (tagged.getTagNo() != PRIVATE_KEY_TAG) {
         throw new IOException("encountered wrong tag number when parsing private key (expected: "
                 + PRIVATE_KEY_TAG + "; got:" + tagged.getTagNo() + ")");

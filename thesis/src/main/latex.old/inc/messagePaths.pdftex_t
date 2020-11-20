@@ -1,0 +1,47 @@
+\begin{picture}(0,0)%
+\includegraphics{messagePaths.pdf}%
+\end{picture}%
+%
+%  Created by WinFIG version 7.5 
+%  METADATA <version>1.0</version> 
+%
+\setlength{\unitlength}{3947sp}%
+%
+\begingroup\makeatletter\ifx\SetFigFont\undefined%
+\gdef\SetFigFont#1#2#3#4#5{%
+  \reset@font\fontsize{#1}{#2pt}%
+  \fontfamily{#3}\fontseries{#4}\fontshape{#5}%
+  \selectfont}%
+\fi\endgroup%
+\begin{picture}(8754,6476)(619,-6323)
+%  METADATA <id>164</id> 
+\put(8026,-181){\makebox(0,0)[b]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}related VortexMessage}%
+}}}}
+%  METADATA <id>165</id> 
+\put(8131,-594){\makebox(0,0)[b]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}unrelated VortexMessage}%
+}}}}
+%  METADATA <id>111</id> 
+\put(5434,-106){\makebox(0,0)[b]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}sender $s$}%
+}}}}
+%  METADATA <id>112</id> 
+\put(1322,-1759){\makebox(0,0)[b]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}routing node $n_{1,1}$}%
+}}}}
+%  METADATA <id>113</id> 
+\put(1300,-4240){\makebox(0,0)[b]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}routing node $n_{i,1}$}%
+}}}}
+%  METADATA <id>152</id> 
+\put(6916,-1741){\makebox(0,0)[lb]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}routing node $n_{1,j}$}%
+}}}}
+%  METADATA <id>154</id> 
+\put(6927,-4236){\makebox(0,0)[lb]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}routing node $n_{i,j}$}%
+}}}}
+%  METADATA <id>155</id> 
+\put(2124,-6249){\makebox(0,0)[b]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}anon $a_1$}%
+}}}}
+%  METADATA <id>156</id> 
+\put(5671,-6226){\makebox(0,0)[b]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}anon $a_k$}%
+}}}}
+%  METADATA <id>157</id> 
+\put(6849,-6226){\makebox(0,0)[b]{\smash{{\SetFigFont{12}{14.4}{\rmdefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}receiver $r$}%
+}}}}
+\end{picture}%

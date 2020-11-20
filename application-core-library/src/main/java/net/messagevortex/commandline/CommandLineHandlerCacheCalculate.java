@@ -5,8 +5,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.concurrent.Callable;
 import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.asn1.AsymmetricKey;
+import net.messagevortex.asn1.AsymmetricKeyCache;
 import net.messagevortex.asn1.encryption.Algorithm;
 import picocli.CommandLine;
+import sun.misc.Signal;
 
 @CommandLine.Command(
     description = "Add key to cache",
@@ -22,28 +25,28 @@ public class CommandLineHandlerCacheCalculate implements Callable<Integer> {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
 
-  @CommandLine.Option(names = {"--infile", "-i"},
-      description = "filename of the file to handle")
-  String inFile = "source.txt";
+  @CommandLine.Option(names = {"--seconds"},
+      description = "number of seconds to run the calculator (-1) for infinite")
+  private int seconds = -1;
 
-  @CommandLine.Option(names = {"-c", "--ciphertype"}, required = true,
-      description = "filename of the file to handle")
-  String cipherType;
-
-  @Override
   public Integer call() throws Exception {
-    byte[] inBuffer = Files.readAllBytes(new File(inFile).toPath());
-    byte[] key = null;
-    if (inBuffer != null) {
-      key = Files.readAllBytes(new File(inFile).toPath());
-    }
 
-    Algorithm ct = Algorithm.getByString(cipherType);
-    if (ct == null) {
-      throw new IOException("Unknown cipher type");
-    }
+    // just create an instance and wait for the Cache to fill
+    final AsymmetricKey a = new AsymmetricKey();
 
-    // FIXME: code incomplete
+    Signal.handle(new Signal("HUP"), signal -> {
+      AsymmetricKey.setCacheFileName(null);
+    });
+
+    int i=0;
+    while(i<seconds || i==-1) {
+      try {
+        Thread.sleep(1000);
+        i++;
+      }catch (InterruptedException ie) {
+        ie.printStackTrace();
+      }
+    }
 
     return 0;
   }

@@ -14,6 +14,7 @@ clean:
 	@rm -r target 2>/dev/null; /bin/true
 
 dirs:
+	@-for i in aux bbl bcf; do find . -name "*.$i" -exec rm \{} \; ;done
 	@-mkdir -p $(OUTDIR) $(INTERDIR)/rfc 2>/dev/null 
 	
 prepInterdir:
@@ -27,7 +28,6 @@ $(INTERDIR)/messageVortex.pdf: $(SRCDIR)/messageVortex.tex $(SRCDIR)/messageVort
 	@make dirs
 	@echo "building tmp pdf file $@"
 	@make prepInterdir
-	-rm $(INTERDIR)/messageVortex.aux $(INTERDIR)/messageVortex.bbl
 	(cd $(INTERDIR); pdflatex messageVortex.tex )
 	(cd $(INTERDIR)/; $(BIB_BINARY) messageVortex )
 	(cd $(INTERDIR); TEXINPUTS=$(INTERDIR):../../../$(SRCDIR):$${TEXINPUTS} pdflatex -output-directory=../../../$(INTERDIR) messageVortex.tex )

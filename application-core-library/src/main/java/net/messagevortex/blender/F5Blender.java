@@ -49,6 +49,7 @@ import javax.mail.util.ByteArrayDataSource;
 import net.messagevortex.Config;
 import net.messagevortex.MessageVortex;
 import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.NotImplementedException;
 import net.messagevortex.Version;
 import net.messagevortex.asn1.BlendingSpec;
 import net.messagevortex.asn1.IdentityStore;
@@ -157,6 +158,17 @@ public class F5Blender extends Blender {
   @Override
   public String getBlendingAddress() {
     return this.identity;
+  }
+
+  @Override
+  public byte[] blendMessageToBytes(BlendingSpec nextHop, VortexMessage msg) {
+    throw new NotImplementedException();
+    // return new byte[0];
+  }
+
+  @Override
+  public VortexMessage unblendMessage(byte[] blendedMessage) {
+    return null;
   }
 
   @Override

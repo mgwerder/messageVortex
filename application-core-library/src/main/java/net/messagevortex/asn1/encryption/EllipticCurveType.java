@@ -22,14 +22,17 @@ package net.messagevortex.asn1.encryption;
 // * SOFTWARE.
 // ************************************************************************************
 
+import java.util.List;
+import java.util.Vector;
+
 /**
  * <p>Represents all supported EC named curves.</p>
  */
 public enum EllipticCurveType {
 
-  SECP384R1(2500, "secp384r1", Algorithm.EC, SecurityLevel.MEDIUM),
-  SECT409K1(2501, "sect409k1", Algorithm.EC, SecurityLevel.HIGH),
-  SECP521R1(2502, "secp521r1", Algorithm.EC, SecurityLevel.QUANTUM);
+  SECP384R1(2500, "secp384r1", 384,Algorithm.EC, SecurityLevel.MEDIUM),
+  SECT409K1(2501, "sect409k1", 409,Algorithm.EC, SecurityLevel.HIGH),
+  SECP521R1(2502, "secp521r1", 521,Algorithm.EC, SecurityLevel.QUANTUM);
 
   static EllipticCurveType def = SECP521R1;
 
@@ -38,12 +41,14 @@ public enum EllipticCurveType {
   private String txt;
   private Algorithm alg;
   private SecurityLevel secLevel;
+  private int keySize;
 
-  EllipticCurveType(int id, String txt, Algorithm alg, SecurityLevel level) {
+  EllipticCurveType(int id, String txt, int keySize, Algorithm alg, SecurityLevel level) {
     this.id = id;
     this.txt = txt;
     this.alg = alg;
     this.secLevel = level;
+    this.keySize = keySize;
   }
 
   /***
@@ -59,6 +64,22 @@ public enum EllipticCurveType {
       }
     }
     return null;
+  }
+
+  /***
+   * <p>Gets en elliptic curve by keySize.</p>
+   *
+   * @param ks  the keysize to look up
+   * @return an array of suitable enums
+   */
+  public static EllipticCurveType[] getByKeySize(int ks) {
+    List<EllipticCurveType> l= new Vector<>();
+    for (EllipticCurveType e : values()) {
+      if (e.getKeySize() == ks) {
+        l.add(e);
+      }
+    }
+    return l.toArray(new EllipticCurveType[l.size()]);
   }
 
   /***
@@ -93,7 +114,7 @@ public enum EllipticCurveType {
   }
 
   public int getKeySize() {
-    return Integer.parseInt(txt.substring(4, 7));
+    return keySize;
   }
 
   public static EllipticCurveType getDefault() {

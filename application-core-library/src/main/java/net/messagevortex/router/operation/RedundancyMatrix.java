@@ -55,15 +55,16 @@ public class RedundancyMatrix extends VandermondeMatrix {
   }
 
   /***
-   * <p>Creates a redundancy matrixContent based on vnadermonde matrices.</p>
+   * <p>Creates a redundancy matrixContent based on vandermonde matrices.</p>
    *
-   * @param dataRows the number of data rows
-   * @param total    the number of total rows (redundancy + data rows)
-   * @param mode     the math mode to be used
-   * @param noInit  if set precached values are ignored
+   * @param dataRows    the number of data rows
+   * @param total       the number of total rows (redundancy + data rows)
+   * @param mode        the math mode to be used
+   * @param noCache     if set the result is not cached
+   * @param noNormalize if set the matrix is not normalized upon creation
    */
-  private RedundancyMatrix(int dataRows, int total, MathMode mode, boolean noCache,
-                           boolean noInit) {
+  public RedundancyMatrix(int dataRows, int total, MathMode mode, boolean noCache,
+                           boolean noNormalize ) {
     super(dataRows, total, mode);
 
     // get value from cache
@@ -76,7 +77,7 @@ public class RedundancyMatrix extends VandermondeMatrix {
       }
     }
 
-    if (!noInit) {
+    if (!noNormalize) {
       for (int col = 1; col < getX(); col++) {
         // make x=y a unit field
         if (getField(col, col) != 1) {

@@ -27,7 +27,9 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Random;
 import java.util.Vector;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
+import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.AbstractRedundancyOperation;
 import net.messagevortex.asn1.AddRedundancyOperation;
@@ -225,6 +227,26 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
     return r.mul(data);
   }
 
+  private static long gcd(long n1, long n2) {
+    long gcd = 1;
+
+    for (int i = 1; i <= n1 && i <= n2; ++i) {
+      // Checks if i is factor of both integers
+      if (n1 % i == 0 && n2 % i == 0) {
+        gcd = i;
+      }
+    }
+
+    return gcd;
+  }
+
+  private static long lcm(long n1, long n2) {
+    long gcd = gcd(n1, n2);
+
+    long lcm = (n1 * n2) / gcd;
+    return lcm;
+  }
+
   /***
    * <p>padds a given payload block.</p>
    *
@@ -238,7 +260,7 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
    */
   public static byte[] pad(int blocksize, int numberOfOutBlocks, byte[] data,
                            Prng prng, int c1, int c2) {
-    LOGGER.log(Level.FINEST, "starting padding of " + data.length + " bytes");
+    LOGGER.log(Level.FINEST, "starting padding of " + data.length + " bytes with blocksize " + blocksize + " and output block count with " + numberOfOutBlocks);
 
     // catch some bad values
     if (c1 < 0) {
@@ -249,27 +271,29 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
     }
 
     // calculate sizes
-    int outRowSize = blocksize * numberOfOutBlocks;
-    long containerSize = (long) (Math.ceil(((double) data.length + 4 + c2) / outRowSize))
-        * outRowSize;
-    LOGGER.log(Level.FINEST, "container size of padded array is " + containerSize + " bytes (c1: "
+    long outRowSize = lcm(blocksize, numberOfOutBlocks);
+    long containerSize = ((long) (Math.ceil(((double) data.length + c2) / outRowSize))
+        * outRowSize);
+    LOGGER.log(Level.FINEST, "container size of padded array is " + (containerSize + 4) + " bytes (c1: "
         + c1 + "; c2: " + c2 + ")");
 
     // calculate padding value
-    long pval = (new BigInteger("" + data.length).add(new BigInteger("" + c1).multiply(
-        new BigInteger("" + containerSize)).mod(new BigInteger(""
-        + (((MAX_SIZE - data.length) / containerSize) * containerSize))
-    ))).longValue();
+    long modOp = (long) (Math.floor((0.0 + MAX_SIZE - 1 - data.length) / containerSize)) * containerSize;
+    long pval = (containerSize == 0 ? ThreadLocalRandom.current().nextLong(MAX_SIZE) : new BigInteger("" + data.length).add(new BigInteger("" + c1).multiply(
+        new BigInteger("" + containerSize))).mod(new BigInteger("" + modOp)).longValue());
     LOGGER.log(Level.FINEST, "Padding value is " + pval + "");
+    assert modOp < MAX_SIZE : "modulo value too big (" + modOp + ">" + MAX_SIZE + ")";
+    assert pval < MAX_SIZE : "Padding value too big (" + pval + ">" + MAX_SIZE + ")";
 
     // create new container
-    byte[] out = new byte[(int) containerSize];
+    byte[] out = new byte[(int) containerSize + 4];
 
     // insert size descriptor
     out[0] = (byte) ((pval & 255) - 128);
     out[1] = (byte) (((pval >>> 8) & 255) - 128);
     out[2] = (byte) (((pval >>> 16) & 255) - 128);
     out[3] = (byte) (((pval >>> 24) & 255) - 128);
+    LOGGER.log(Level.FINEST, "Encoded padding value is " + out[0] + ";" + out[1] + ";" + out[2] + ";" + out[3] + "");
 
     // insert data (inefficient yet working)
     for (int a = 4; a < data.length + 4; a++) {
@@ -281,8 +305,14 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
       prng = localPrng;
     }
     for (int a = 4 + data.length; a < out.length; a++) {
-      out[a] = prng.nextByte();
+      byte val = prng.nextByte();
+      out[a] = val;
+      if (a < 8 + data.length) {
+        LOGGER.log(Level.FINEST, "  Padding start value is " + val + " at " + a);
+      }
     }
+
+    LOGGER.log(Level.FINEST, "Padding is done up to size " + out.length);
 
     return out;
   }
@@ -302,10 +332,15 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
     LOGGER.log(Level.FINEST, "starting unpadding of " + in.length + " bytes");
 
     // extract size descriptor
+    LOGGER.log(Level.FINEST, "Encoded padding value is " + in[0] + ";" + in[1] + ";" + in[2] + ";" + in[3] + "");
     long size = ((long) (in[0]) + 128) + ((long) (in[1]) + 128) * 256 + ((long) (in[2]) + 128) * 256
         * 256 + ((long) (in[3]) + 128) * 256 * 256 * 256;
     LOGGER.log(Level.FINEST, "Padding value is " + size);
-    size = size % in.length;
+    if (in.length > 4) {
+      size = size % (in.length - 4);
+    } else {
+      size = 0;
+    }
     LOGGER.log(Level.FINEST, "size is " + size + " bytes");
 
     // creating output
@@ -317,7 +352,11 @@ public class AddRedundancy extends AbstractOperation implements Serializable {
     // check if padding is correct
     if (prng != null) {
       for (int a = out.length + 4; a < in.length; a++) {
-        if (in[a] != prng.nextByte()) {
+        byte val = prng.nextByte();
+        if (a < 8 + out.length) {
+          LOGGER.log(Level.FINEST, "  Padding start value is " + val + " at " + a);
+        }
+        if (in[a] != val) {
           throw new IOException("error verifying padding at position " + a + " in container");
         }
       }

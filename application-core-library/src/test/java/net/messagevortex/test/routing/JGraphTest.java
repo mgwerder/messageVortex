@@ -62,7 +62,7 @@ public class JGraphTest {
         public void run() {
           try {
             LOGGER.log(Level.INFO,"saving image");
-            jg.saveScreenShot("graphTest.jpg");
+            jg.saveScreenshot("graphTest.jpg",1024,768);
           } catch(IOException ioe) {
             ioe.printStackTrace();
             fail("got unexpected exception");

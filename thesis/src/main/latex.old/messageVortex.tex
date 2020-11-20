@@ -1,0 +1,958 @@
+% !TeX spellcheck = en_US
+\gdef\doctype{extbook}
+\documentclass[a4paper,appendixprefix,pdfusetitle,twocolumn,fontsize=8pt,DIV=calc,8pt,draft]{\doctype} %scrbook
+%add attachdocs to attach all documents
+% add openany to avoid empty pages
+%\usepackage{gitinfo}
+
+% Workarround for book
+\makeatletter
+\newcommand\subtitle[1]{\gdef\@subtitle{#1}}
+\makeatother
+
+%\usepackage[utf8]{inputenc}
+\PassOptionsToPackage{table}{xcolor}
+
+\usepackage{colortbl}
+
+% Make C&P work
+\usepackage{cmap}
+
+\makeatletter
+\let\inserttitle\@title
+\makeatother
+
+%\makeatletter
+%\def\title#1{\gdef\@title{#1}\gdef\thetitle{#1}}
+%\makeatother
+
+%\usepackage{scrpage2}
+\gdef\thetitle{MessageVortex}
+\title{\thetitle}
+\gdef\thesubtitle{Transport Independent Messaging Anonymous to Third Parties}
+\subtitle{\thesubtitle}
+\author{Martin Gwerder (06-073-787)}
+%\date{\gitAuthorDate}
+\gdef\myabstract{
+	In this paper, we introduce an unobservable message anonymization protocol, named MessageVortex. It bases on the zero-trust principle, a distributed peer-to-peer (P2P) architecture, and avoids central aspects such as fixed infrastructures within a global network. It scores over existing work by blending its traffic into suitable existing transport protocols, thus making it next to impossible to block it without significantly affecting regular users of the transport medium. No additional protocol-specific infrastructure is required in public networks and allows a sender to control all aspects of a message such as the degree of anonymity, timing, and redundancy of the message transport without disclosing any of these details to the routing or transporting nodes. Part of this work is an RFC document attached in Appendix A describing the protocol. It contains all the necessary information to build protocol nodes. The RFC draft is available through the official RFC channels. Additionally, the RFC document, additional documents, and a reference are available under https://messagevortex.net/.}
+\makeatother
+
+% for PDF/A generation
+\makeatletter
+\@ifclasswith{\doctype}{attachdocs}{
+	\usepackage[
+	  pdfencoding=unicode,
+	  psdextra,
+	  bookmarks,
+	  hyperindex,
+	  hyperfigures,
+	  pdfpagelabels,
+	  final]{hyperref}
+}{
+	\typeout{INFO: ======================}
+	\typeout{INFO: creating PDF/A}
+	\typeout{INFO: ======================}
+	\PassOptionsToPackage{
+  	  pdfencoding=unicode,
+	  psdextra,
+	  bookmarks,
+	  hyperindex,
+	  hyperfigures,
+	  pdfpagelabels,
+	  final}{hyperref}
+	\usepackage[a-3b]{pdfx}
+}
+\makeatother
+
+% enable superscript  for 1st, 2nd, 3rd etc.
+\usepackage[super]{nth}
+
+% XMP support 
+\RequirePackage{xmpincl}
+%\includexmp{messageVortex}
+\usepackage{hyperxmp}
+
+% extended width for toc page numbers
+\usepackage[titles]{tocloft}
+\cftsetpnumwidth{3em}
+% Format appendix
+\setlength{\cftchapnumwidth}{65pt}%
+%\renewcommand{\cftpartpresnum}{\partname\hspace{13pt}}
+\renewcommand{\cftchappresnum}{\chaptername\hspace{5pt}}
+\renewcommand{\cftchapaftersnum}{\hspace{5pt}}
+
+% Extract filename frompath
+\makeatletter
+\DeclareRobustCommand{\filenameExtract}[1]{%
+ \begingroup
+  % \lstname seems to change hyphens into \textendash
+  \def\textendash{-}%
+  \filename@parse{#1}%
+  \edef\filename@base{\detokenize\expandafter{\filename@base}}%
+  \texttt{\filename@base.\filename@ext}%
+ \endgroup
+}
+\makeatother
+
+%enable hyperlinks
+\makeatletter
+\RequirePackage{hyperref}
+\hypersetup{	
+	pdftitle={\thetitle},
+	pdfpagelayout=TwoPageRight,
+	linktoc=all,
+	breaklinks=true,
+	hidelinks,
+	pdfstartview=Fit,
+	pdfauthor={\author},
+	pdftitle={\thetitle - \thesubtitle},
+	pdflang=en,
+	pdfsubject={\myabstract},
+	pdfkeywords={Messaging, Anonymity, SMTP, Message Vortex},
+	pdfcontactemail={martin.gwerder@fhnw.ch},
+	pdflicenseurl={http://creativecommons.org/licenses/by-nc-nd/3.0/ch/},
+	pdfcopyright={Creative Commons Attribution-NonCommercial-NoDerivatives 3.0 Switzerland (CC BY-NC-ND 3.0 CH)}
+}
+\makeatother
+
+% PDF/a measures
+% embed color profile 
+%\immediate\pdfobj stream attr{/N 3} file{sRGB_IEC61966-2-1_black_scaled.ICC}
+%\pdfcatalog{%
+%	/OutputIntents [ <<
+%	/Type /OutputIntent
+%	/S/GTS_PDFA1
+%	/DestOutputProfile \the\pdflastobj\space 0 R
+%	/OutputConditionIdentifier (sRGB IEC61966-2-1 black scaled)
+%	/Info(sRGB IEC61966-2-1 black scaled)
+%	>> ]
+%}
+% map glyphs 
+\input{glyphtounicode.tex}
+\input{glyphtounicode-cmr.tex}
+\pdfgentounicode=1
+% deactivate LZW compression
+\pdfobjcompresslevel=0
+\pdfinclusioncopyfonts=1
+
+% enable graphics inclusion
+%\usepackage[final]{graphicx}
+\PassOptionsToPackage{final}{graphicx}
+
+
+% Table environments
+\usepackage{booktabs}
+\newcommand*\rot{\rotatebox{90}}
+
+\usepackage{xstring}
+
+\usepackage{pdfsync} 
+
+%\usepackage{MnSymbol} % required for the arrow
+
+%\usepackage{underscore}
+
+% No new page for chapters
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd{\chapter}{\if@openright\cleardoublepage\else\clearpage\fi}{}{}{}
+\makeatother
+
+% titlepage geometry change
+\usepackage[paper=a4paper,top=2cm,bottom=2cm,inner=2cm,outer=2cm]{geometry}% http://ctan.org/pkg/geometry
+
+% For formulae in twocolumn
+\usepackage{mathtools}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{cuted}
+
+%\usepackage{scrhack}
+
+\usepackage[autocite=superscript,
+            backref=true,
+            backend=biber,
+            hyperref=true,
+            url=true,
+            isbn=true,
+            maxcitenames=3,
+            maxbibnames=200,
+            block=none,
+            sorting=anyt]{biblatex}
+
+%\bibstyle{alphadin}
+\addbibresource{messageVortex.bib}
+%\addbibresource{inc/bib/unclassified/Anonbib/anonbib}
+\usepackage{csquotes}
+
+% For Multipage listing in appendix
+\usepackage[final]{listings}
+\usepackage{caption}
+\usepackage[framemethod=tikz]{mdframed}
+\usepackage[many]{tcolorbox}
+\tcbuselibrary{listings}
+
+% enable raggedright in tables
+\usepackage{array}
+% for diagonal divided cells in tables
+\usepackage{makecell}
+\renewcommand\theadfont{\bfseries}
+
+% footnotes for tables
+\usepackage{tablefootnote}
+%\makesavenoteenv{tabular}
+%\makesavenoteenv{table}
+
+% enable placement of floating images
+\usepackage{float}
+
+%enable page spanning tables
+\usepackage{supertabular}
+
+% Link above tables and figures
+%\usepackage[hypcap]{caption}
+
+% support repetitive footnotes
+\usepackage{fixfoot}
+
+% Document annotations
+\usepackage[nomargin]{fixme}
+\fxsetup{layout=pdfnote}
+
+%enable attached files
+\usepackage[color=black]{attachfile}
+\usepackage{embedfile}
+\usepackage{hypgotoe}
+
+%enable word separation
+\usepackage[english]{babel}
+
+% enable nice references
+\usepackage{fancyref}
+
+% Enable indexes
+\usepackage{makeidx}
+\makeindex 
+
+% format appendix
+\usepackage{bookmark}
+\usepackage[]{appendix} %enable appendix 
+
+\let\oldappendices\appendices
+\renewcommand{\appendices}{%
+	\oldappendices
+	\bookmarksetupnext{level=-1}
+	\addtocontents{toc}{\protect\renewcommand\protect\cftpartpresnum{}}
+	\addcontentsline{toc}{part}{Appendices}
+	\addtocontents{toc}{\protect\renewcommand\protect\cftchappresnum{}%
+		\protect\setlength\protect\cftchapnumwidth{15pt}}%
+}
+
+% citations
+%\usepackage{cite}
+
+%fonts for comparison table 
+\usepackage{pifont,wasysym,fontawesome,txfonts,marvosym}
+
+% colored tables 
+\usepackage{colortbl}
+
+
+% set numbering for subsubsections
+%\usepackage{tocstyle}
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{4}
+
+% Sans serif font for the whole document
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage[T1]{fontenc}
+\usepackage{times}
+
+\usepackage{amsmath}
+
+% No paragraph indentation
+\setlength\parindent{0pt} 
+\setlength\parskip{6pt} 
+
+% For coments and similar
+\usepackage{verbatim}
+
+% For Page background color
+\usepackage{afterpage}
+\usepackage[table]{xcolor} 
+
+
+\usepackage{tabularx}
+\usepackage{multirow}
+
+% Required for definitions environment
+\usepackage{hanging}
+\usepackage{ragged2e}
+\newenvironment{entry}{\par\leavevmode\hangpara{1.5mm}{1}\ignorespaces}{\RaggedRight\par}
+\newcommand*{\mainentry}[2]{{\bfseries{#1\label{def:#1}}}~#2\par}
+\newcommand*{\subentry}[2]{\par~\begin{minipage}{\columnwidth-0.6cm}{\bfseries{\itshape{#1\label{def:#1}}}}~#2\end{minipage}}
+
+\newcommand*{\defref}[1]{\hyperref[def:#1]{#1}}
+\title{MessageVortex}
+\subtitle{Transport Independent and Unlinking Messaging}
+\author{Martin Gwerder (06-073-787)}
+\date{\gitAuthorDate}
+
+%\hypersetup{pdfinfo={
+%Subject={Privacy when using common Internet transport protocols},
+%
+%}}
+
+\lstset{ %
+	backgroundcolor=\color{lightgray},   
+	language=java,
+	frame=single,
+	numbers=left,
+	numbersep=5pt,
+	numberstyle=\tiny,
+	basicstyle=\tiny,
+	frame=tb,
+	xleftmargin=.05\columnwidth, 
+	xrightmargin=.05\columnwidth,
+}
+
+\lstdefinelanguage{EBNF}%
+{
+	morestring=[b]',%
+	morestring=[b]",%
+	morecomment=[s]{?}{?},%
+	morecomment=[s]{(*}{*)},%
+}
+
+\lstdefinelanguage{ASN1}
+{
+	morekeywords=[1]{DEFINITIONS,AUTOMATIC,TAGS,BEGIN,END,%
+		SEQUENCE,OF,CHOICE,ENUMERATED,NULL,SIZE,OPTIONAL,%
+		OCTET,BIT,STRING,INTEGER,REAL,BOOLEAN,WITH,COMPONENTS},%
+	commentstyle=\itshape,%
+	morecomment=[l]{--},%
+	basicstyle=\tiny\sffamily,
+	breaklines=true,
+	prebreak={\mbox{\quad$\hookleftarrow$}},
+}
+
+\lstdefinelanguage{bash}{
+	language={},
+	basicstyle=\tiny\ttfamily,
+	numbers=none,
+	frame=tb,
+	%keepspaces=true,
+	breaklines=true,
+	prebreak={\mbox{\quad$\hookleftarrow$}},
+	columns=fullflexible,
+	backgroundcolor=\color{gray!20},
+    literate=~{$\sim$}2
+			{\$}{\$}1
+%	linewidth=0.9\linewidth,
+%	xleftmargin=0.1\linewidth
+}
+
+\hyphenation{an-on-ym-iz-ing an-on-ym-ity al-though weak-ness-es mes-sa-ges know-led-ge}
+
+\makeatletter
+\newcommand{\getfilename}[1]{%
+	\begingroup
+	% \lstname seems to change hyphens into \textendash
+	\def\textendash{-}%
+	\filename@parse{#1}%
+	\texttt{\filename@base.\filename@ext}%
+	\endgroup
+}
+\makeatother
+
+\usepackage{wrapfig}
+
+%% This package will make dealing with the ``requirements'' environment a lot easier:
+\usepackage{environ}
+\newcounter{requirements}\setcounter{requirements}{0}
+\makeatletter
+%% This is a macro that gets called by the .aux file to load in data.
+\gdef\savedreq#1#2{\expandafter\gdef\csname req#1\endcsname{#2}}
+%% This macro will save the given requirement to the .aux file so we will have it during the next LaTeX pass to put in the list:
+\def\recordrequirement#1{\immediate\write\@mainaux{\string\savedreq{\the\value{requirements}}{#1}}}
+\AtEndDocument{
+	\refstepcounter{requirements}
+	\immediate\write\@mainaux{\string\xdef\string\totalreqsplusone{\the\value{requirements}}}
+}
+\NewEnviron{requirement}[2]{
+	\noindent
+	\begingroup
+	%% Increment the requirement counter
+	\refstepcounter{requirements}
+	%% Here is the ``Req.'' text:
+	%\textbf{RQ\arabic{requirements} (#2)}:
+	%% Make a label that we can use to refer to this counter:
+	\label{req:\arabic{requirements}}
+	\protected@write \@auxout {}{\string \newlabel {req:#1}{{RQ\arabic{requirements} (#2)}{\thepage}{RQ\arabic{requirements} (#2)}{req:#1}{}} }\recordrequirement{\BODY}
+	
+	%% Next, save this requirement to the .aux file so we will have it during the next LaTeX pass to put in the list:
+	%% We will make the remainder italic:
+	\textbf{RQ\arabic{requirements} (#2):} \itshape
+	\BODY\hypertarget{req:#1}{}
+	\endgroup
+}
+\newcommand{\listofrequirements}{
+	\chapter*{List of Requirements}
+	%% First, we need to make sure that this is not the first LaTeX pass (i.e., that all of the information has already been recorded to the .aux file):
+	\expandafter\ifx\csname totalreqsplusone\endcsname\relax
+	Please run \LaTeX\ again to populate this list!
+	\else
+	\begingroup
+	%% This \reqi counter is what we are going to use to iterate over the requirements:
+	\newcount\reqi
+	\reqi=0
+	\loop
+	\advance\reqi by 1
+	\ifnum\reqi<\totalreqsplusone
+	%% The requirement numbered \reqi exists!
+	\noindent\textbf{RQ\the\reqi} \csname req\the\reqi\endcsname\leaders\hbox to 2em{\dotfill}\hfill\pageref{req:\the\reqi}\\
+	\repeat
+	\endgroup
+	\fi
+}
+
+\newcommand{\slistofrequirements}{
+	%% First, we need to make sure that this is not the first LaTeX pass (i.e., that all of the information has already been recorded to the .aux file):
+	\expandafter\ifx\csname totalreqsplusone\endcsname\relax
+	Please run \LaTeX\ again to populate this list!
+	\else
+	\begingroup
+	%% This \reqi counter is what we are going to use to iterate over the requirements:
+	\par
+	\newcount\reqi
+	\reqi=0
+%	\leftskip=25pt
+	\loop
+	\advance\reqi by 1
+	\ifnum\reqi<\totalreqsplusone
+	%% The requirement numbered \reqi exists!
+	\hangindent=30pt \parbox{30pt}{\textbf{RQ\the\reqi} }\csname req\the\reqi\endcsname\par
+	\repeat
+	\endgroup
+	\fi
+}
+\makeatother
+
+\captionsetup[lstlisting]{position=bottom}
+\captionsetup[lstinputlisting]{position=bottom}
+
+
+\usepackage[final]{pdfpages}
+
+% How do I make an attached non-pdf file display like a link?
+% (http://tex.stackexchange.com/q/230581)
+\makeatletter
+\newcommand*{\embeddedfilelink}[2]{%
+	\begingroup
+	\leavevmode
+	\pdfstartlink
+	attr{%
+		\Hy@setpdfborder
+		\ifx\@pdfhighlight\@empty
+		\else
+		/H\@pdfhighlight
+		\fi
+		\ifx\@filebordercolor\relax
+		\else
+		/C[\@filebordercolor]%
+		\fi
+	}%
+	user{%
+		/Subtype/Link%
+		/A<<%
+		/Type/Action%
+		/S/JavaScript%
+		/JS(this.exportDataObject({cName: "#1", nLaunch: 2}))%
+		>>%
+	}%
+	\relax
+	\Hy@colorlink\@filebordercolor#2%
+	\close@pdflink
+	\endgroup
+}
+\makeatother
+
+\makeatother
+\renewcommand*{\bibfont}{\small}
+
+\makeatletter\@ifclasswith{\doctype}{draft}{\gdef\indexes{\listoffixmes}}{\gdef\indexes{\listoftables\listoffigures\listofrequirements}}\makeatother
+
+\RequirePackage[explicit]{titlesec}
+
+\usepackage{ifdraft}
+
+% Adapt bibtex to include documents  
+\makeatletter
+\@ifclasswith{\doctype}{attachdocs}{
+	\typeout{INFO: ======================}
+	\typeout{INFO: attaching files to PDF}
+	\typeout{INFO: ======================}
+	\DeclareFieldFormat{file}{\StrGobbleLeft{#1}{1}[\wtcGwM]\StrGobbleRight{\wtcGwM}{4}[\filename]
+	\IfFileExists{\filename}{\textattachfile[subject={\printfield{ids}_\filenameExtract{\StrGobbleLeft{#1}{1}[\wtcGwM]\StrGobbleRight{\wtcGwM}{4}[\filename]}}]{\filename}{}}{ FIXME missing document link}}
+	\renewcommand*{\finentrypunct}{\printfield{file}}%\addperiod
+}{}
+\makeatother
+
+\begin{document}%
+%
+\frontmatter%
+%
+% include title page
+\input{inc/parts/title.tex}
+%
+
+\vspace*{\fill}
+
+\section*{Acknowledgments}
+I want to thank my wife Cornelia and my lovely three kids (Saphira, Florian, and Aurelius) for their patience and their support. Without them I could never have done this work.
+
+I want to thank Prof. Dr. C. Tschudin and the University of Basel for the possibility of writing this work and for the challenges they opposed to me, allowing me to grow. 
+
+Dr. Andreas Hueni for his thoughts and challenging outside-the-normal-box thinking.
+
+Prof. Dr. Carlos Nicolas of the University of Northwestern Switzerland for being such a valuable sparring partner allowing me to test my ideas.
+
+I want to acknowledge all the individuals who have coded for the \LaTeX project for free. It is due to their efforts that we can generate professionally typeset PDFs (and far more) for free.
+
+\twocolumn\cleardoublepage
+\makeatletter
+%\renewcommand{\l@subsubsection}{\@dottedtocline{3px}{7.4em}{4.5em}}
+%\renewcommand{\@pnumwidth}{3em}
+\makeatother
+
+\onecolumn
+%\setpnumwidth{2em}
+%\setlength\cftsectionnumwidth{3em}
+\setcounter{tocdepth}{2}
+\tableofcontents
+\indexes
+\twocolumn
+
+\makeatletter
+\newlength\mylena
+\newlength\mylenb
+\setlength\mylena{1.3cm}
+\setlength\mylenb{\dimexpr\columnwidth-\mylena\relax}
+
+\newcommand\PlaceNumber[1]{%
+	\makebox[\mylena][l]{#1}}
+
+\titleformat{\chapter}
+{\Large\sffamily\bfseries}
+{}
+{0em}
+{\PlaceNumber{\thechapter}\parbox[t]{\mylenb}{\raggedright#1}}
+
+\titlespacing*{\chapter}{0pc}{3ex \@plus4pt \@minus3pt}{5pt}
+
+\titleclass{\chapter}{straight}%% added
+\makeatother
+
+\mainmatter
+
+\input{inc/parts/01_intro.inc.tex}
+\input{inc/parts/02_methodes.inc.tex}
+\input{inc/parts/03_results.inc.tex}
+\input{inc/parts/04_discussion.inc.tex}
+
+%\appendix
+%\part{Appendix}
+
+\onecolumn
+\appendix
+\pagenumbering{arabic}% resets `page` counter to 1
+\renewcommand*{\thepage}{A\arabic{page}}
+%\renewcommand{\setthechapter}{\Alph{section}}
+%\renewcommand\thechapter{\Alph{chapter}}
+%\setcounter{chapter}{0}
+
+
+
+\gdef\rfc{../../../../rfc/src/xml2rfc/draft-gwerder-messagevortexmain-04.pdf}
+%\includepdf[pages=-,frame=true,scale=0.5]{\rfc}
+\includepdf[pages=1,frame=true,scale=0.70,pagecommand={\chapter{The RFC draft document\label{app:rfcMessageVortexMain}}}, offset=0 -1cm]{\rfc}
+\includepdf[pages=2-,frame=true,scale=0.8,pagecommand={}, offset=0 -1cm]{\rfc}
+
+\twocolumn\clearpage
+\chapter{Analysis on Common Internet Protocols Suitable as Transport Layers for MessageVortex\label{app:transportProtocols}}
+
+\section{Introduction}
+The following sections list common Internet protocols. We analyze those protocols for the fitness as transport layer of message vortex. 
+
+\section{Methods}
+
+All sections are structured the same way. We first refer to the protocol or standard and describe it in the simplest possible form. We refer to subsequent standards if required to consider extensions where sensible. We then apply the previously referenced criteria and make a concise summary of the suiting of the protocol as a transport layer. The findings of this section is listed in table \ref{tab:protoSuitCrit}. The list here does not reflect the quality or maturity of the protocols. It is a simple analysis of suiting as a transport layer.
+
+All sections are structured the same way. 
+\begin{itemize}
+	\item Description\\
+	We first refer to the protocol or standard and describe it in the simplest possible form. We refer to subsequent standards if required to consider extensions where sensible.
+	\item Apply criteria\\\\
+	We then apply the previously referenced criteria and make a concise summary of the suiting of the protocol as a transport layer. The findings of this section is listed in table \ref{tab:protoSuitCrit}. The list here does not reflect the quality or maturity of the protocols. It is a simple analysis of suiting as a transport layer.
+\end{itemize} 
+
+\subsection{Applied Criteria}
+\begin{itemize}
+	\item Widely adopted (Ct1)\\
+	The more widely adopted and used a protocol is, the harder it is due to the sheer mass for an adversary to monitor , filter, or block the protocol. This is important for censorship resistance of the protocol. 
+	\item Reliable (Ct2)\\
+	Message transport between peers should be reliable. As messages may arrive anytime from everywhere, we do not have means to synchronize the peer partners on a higher level without investing a considerable effort. Furthermore, the availability of information when what type of information should be available at a specific point in the system would drastically simplify the identification of peers. To avoid synchronization, we do look for inherently reliable protocols.
+	\item Symmetrical built (Ct3)\\
+	The transport layer should rely on a peer to peer base. All servers implement a generic routing that requires no prior knowledge of all possible targets. This criterion neglects centralized infrastructures. This criterion may be dropped, assuming that the blending layer or a specialized transport overlay is responsible for routing.
+\end{itemize}
+
+\subsection{Analyzed Protocols}
+We were unable to find a comprehensive list of protocols being used within the Internet and their bandwidth consumption. A weak reference is \cite{zhou2011examining}. This wekaness is founded in the fact that traffic in this report is callified among two critera: Know server or known port. As streaming services consume a considerable part of the Internet bandwidth (acording to the report more than 60\% download). The focus on the report lies on the bandwidth intense figures. However, leavin aside all sources which are strictly one way or dominated by a small number of companies worldwide, the ``top 10'' list of the report shrinks to the two categories ``File sharing'' (Rank 5; 4.2\% download and 30.2\% upload) and ``Messaging'' (Rank 8; 1.6\% download and 8.3\% upload bandwidth). 
+
+In lack of such material we first collected a list of all common Internet messaging protocols (synchronous and asynchronous). We added furthermore some of the most common transfer protocols such as HTTP and FTP and analyzed this list.
+
+\begin{itemize}
+	\item Messaging Protocols
+	\begin{itemize}
+		\item SMTP
+		\item CoAP
+		\item MQTT
+		\item AMQP
+		\item XMPP
+		\item WAMP
+		\item SMS
+		\item MMS
+	\end{itemize}
+	\item Other Protocols
+	\begin{itemize}
+		\item FTP, SFTP, and FTPS
+		\item TFTP
+		\item HTTP
+	\end{itemize}
+\end{itemize}
+
+The following protocols have been discarded as we have considered them as outdated:
+\begin{itemize}
+	\item MTP\cite{RFC780} (obsoleted by SMTP)
+	\item NNTP\cite{RFC3977} (outdated and has only a small usage acording to \cite{kim2010today})
+\end{itemize}
+
+We furthermore discarded all RPC-related protocols as they would by definition violate Ct3.
+
+\section{Analysis}
+\subsection{HTTP}
+The HTTP protocol allows message transfer from and to a server and is specified in RFC2616 \cite{rfc2616}. It is not suitable as a communication protocol for messages due to the lack of notifications. There are some extensions that would allow such communications (such as WebDAV). Still, in general, even those are not suitable as they require a continuous connection to the server to get notifications. Having a ``rollup'' of notifications when connecting is not there by default but could be implemented on top of it. HTTP servers listen on standard ports 80 or 443 for incoming connects. The port 443 is equivalent to the port 80 except for the fact that it has a wrapping encryption layer (usually TLS). The incoming connects (requests) must offer a header part and may contain a body part that would be suitable for transferring messages to the server. The reply to this request is transferred over the same TCP connection containing the same two sections.
+
+HTTP0.9-HTTP/1.1 are clear text protocols which are human-readable (except for the data part which might contain binary data). The HTTP/2\cite{rfc7540} protocol is using the same ports and default behavior. Unlike HTTP/0.9-HTTP/1.1, it is not a clear text but encodes headers and bodies in binary form. 
+
+To be a valid candidate as storage, unauthenticated WebDAV support, as specified in \cite{rfc4918}, must be assumed.
+
+The protocol does satisfy the first two main criteria (Ct1: Widely Adopted and Ct2: Reliable). The main disadvantage in terms of a message transport protocol is that this protocol is not symmetrically. A server is always just ``serving requests'' and not sending information actively to peers. This Request-Reply violates criteria (Ct3: Symmetrically built) and makes the protocol not a primary choice for message transport. 
+
+It is possible to add such behavior to the blending layer using HTTP servers as pure storage. Such a behavior would however be most likely detectable and thus no longer be censorship resistant.
+
+\subsection{FTP}
+FTP is defined in RFC959\cite{RFC959}. This Protocol is intended for authenticated file transfer only. There is an account available for general access (``anonymous''). This account does normally not offer upload rights for security reasons. It is possible to use FTP as a message transfer endpoint. The configuration would work as follows: the user ``anonymous'' has upload rights only. It is unable to download or list a directory. A node may upload a message with a random name. In case a collision arises, the node retries with another random name. The blending layer picks messages up using an authenticated user. This workaround has multiple downsides. At first, handling FTP that way is very uncommon and usually requires an own dedicated infrastructure. Such beavior would make the protocol again possibly detectable. Secondly, passwords are always sent in the clear within FTP. Encryption as a wrapping layer (FTPS) is not common, and SFTP (actually a subsystem of SSH) has nothing in common with FTP except for the fact that it may transfer files as well.
+
+Furthermore, FTP may be problematic when used in active mode for firewalls. All these problems make FTP not very suitable as a transport layer protocol. FTPS and SFTP feature similar weaknesses as the FTP version in terms of detectability of non-standard behavior.
+
+Like in HTTP, a disadvantage of FTP in terms of a message transport protocol is that this protocol is not symmetrically. A server is always just ``serving requests'' and not sending information actively to peers. This Request-Reply violates criteria (Ct3: Symmetrically built) and makes the protocol not a primary choice for message transport. The Protocol, however, satisfies the first two criteria  (Ct1: Widely Adopted and Ct2: Reliable).
+
+\subsection{TFTP}
+TFTP has, despite its naming similarities to FTP, very little in common with it. TFTP is a UDP based file transfer protocol without any authentication scheme. The possibility of unauthenticated message access makes it not suitable as a transport layer. The protocol is due to the use of UDP in a meshed network with redundant routes. Since the Internet has a lot of these redundant routes, this neglects the use of this protocol.
+
+TFTP is rarely ever used on the Internet, as its UDP based nature is not suitable for a network with redundant routes. Not being common on the Internet violates criterion one (Ct1: Widely Adopted). TFTP is not symmetrically. This means that a server is always just ``serving requests'' and not sending information actively to peers. This Request-Reply violates criteria (Ct3: Symmetrically built) and makes the protocol not a primary choice for message transport. The Protocol furthermore violates Ct2 (Ct2: Reliable) as it is based on UDP without any additional error correction.
+
+\subsection{MQTT}
+MQTT is an ISO standard (ISO/IEC PRF 20922:2016) and was formerly called MQ Telemetry Transport. The current standard as the time of writing this document was 3.1.1 \cite{mqtt}. 
+
+The protocol runs by default on the two ports 1883 and 8883 and can be encrypted with TLS. MQTT is a publish/subscribe based message-passing protocol that is mainly targeted to m2m communication. This Protocol requires the receiving party to be subscribed to a central infrastructure in order to be able to receive messages. This makes it very hard to be used in a system without centralistic infrastructure and having no static routes between senders and recipients. 
+
+The protocol does satisfy the second criterion (Ct2: Reliable). It is in the area of end-user (i.e., Internet) not widely adopted, thus violating Criteria 1 (Ct1: Widely Adopted). In terms of decentralization design, the protocol fails as well (Ct3: Symmetrically built).
+
+\subsection{Advanced Message Queuing Protocol (AMQP)}
+The Advanced Message Queuing Protocol (AMQP) was initially initiated by numerous exponents based mainly on finance-related industries. The AMQP-Protocol is either used for communication between two message brokers, or between a message broker and a client\cite{amqp}.
+
+It is designed to be interoperable, stable, reliable, and safe. It supports either SASL or TLS secured communication. The use of such a tunnel is controlled by the immediate sender of a message. In its current version 1.0, it does, however, not support a dynamic routing between brokers\cite{amqp}.
+
+Due to the lack of a generic routing capability, this protocol is therefore not suitable for message transport in a generic, global environment.
+
+The protocol satisfies partially the first criterion (Ct1: Widely Adopted) and fully meets the second criterion (Ct2: Reliable). However, the third criterion is violated due to the lack of routing capabilities between message brokers (Ct3: Symmetrically built).
+
+\subsection{Constrained Application Protocol (CoAP)}
+The Constrained Application Protocol (CoAP) is a communication Protocol which is primarily destined to m2m communication. It is defined in RFC7252\cite{RFC7252}.  It is defined as a lightweight replacement for HTTP in IoT devices and is based on UDP.
+
+The protocol does partially satisfy the first criteria (Ct1: Widely Adopted). The second criterion (Ct2: Reliable) is only partially fulfilled as it is based on UDP and does only add limited session control on its own.
+
+The main disadvantage in terms of a message transport protocol is that this protocol is not (like HTTP) symmetrically. This means that a server is always just ``serving requests'' and not sending information actively to peers. This Request-Reply violates criteria (Ct3: Symmetrically built) and makes the protocol not a primary choice for message transport. 
+
+\subsection{Web Application Messaging Protocol (WAMP)}
+WAMP is a web-sockets based protocol destined to enable M2M communication. Like MQTT, it is publish respectively subscribe oriented. Unlike MQTT, it allows remote procedure calls (RPC).
+
+The WAMP protocol is not widely adopted (Ct1: Widely Adopted), but it is reliable on a per-node base (Ct2: Reliable). Due to its RPC based capability, unlike MQTT, a routing like capability could be implemented. Symmetrical protocol behavior is therefore not available but could be built in relatively easy.
+
+\subsection{XMPP (jabber)}
+XMPP (originally named Jabber) is a synchronous message protocol used in the Internet. It is specified in the documents RFC6120\cite{RFC6120}, RFC6121\cite{RFC6120}, RFC3922\cite{RFC3922}, and RFC3923\cite{RFC3923}. The protocol is a very advanced chat protocol featuring numeros levels of security including end-to-end signing and object encryption\cite{RFC3923}. There is also a stream initiation extension for transferring files between endpoints \cite{xep0096}.
+
+It has generic routing capabilities spanning between known and unknown servers. The protocol offers a message retrieval mechanism for offline messages similarily to POP \cite{xep0013}.
+
+The protocol itself seems to be a strong candidate as a transport layer as it is being used actively on the Internet.
+
+\subsection{SMTP}
+The SMTP protocol is currently specified in \cite{RFC5321}. It specifies a method to deliver reliably asynchronous mail objects through a specific transport medium (most of the time, the Internet). The document splits a mail object into a mail envelope and its content. The envelope contains the routing information, which is the sender (one) and the recipient (one or more) in 7-Bit ASCII. The envelope may additionally contain optional protocol extension material. 
+
+The content should be in 7-Bit-ASCII (8-Bit ASCII may be requested, but this feature is not widely adopted). It is split into two parts. These parts are the header (which does contain meta-information about the message such as subject, reply address, or a comprehensive list of all recipients), and the body which includes the message itself. All lines of the content must be terminated with a CRLF and must not be longer than 998 characters, excluding CRLF.
+
+The header consists of a collection of header fields. Each of them is built by a header name, a colon, and the data. The exact outline of the header is specified in \cite{RFC5322} and is separated with a blank line from the body. 
+
+\cite{RFC5321} furthermore introduces a simplistic model for SMTP message-based communication. A more comprehensive model is presented in section \nameref{sec:mailTransport} as the proposed model is not sufficient for a detailed end-to-end analysis.
+
+Traditionally the message itself is mime encoded. The MIME messages are mainly specified in \cite{RFC2045} and \cite{RFC2046}. MIME allows to send messages in multiple representations (alternates), and attach additional information (such as possibly inlined images or attached documents). 
+
+SMTP is one of the most common messaging protocols on the Internet (Ct1: Widely Adopted), and it would be devastating for the business of a country if, for censoring reasons, this protocol would be cut off. The protocol is furthermore very reliable as it has built-in support for redundancy and a thorough message design making it relatively easy to diagnose problems (Ct2: Reliable). All SMTP servers usually are capable of routing and receiving messages. Messages going over several servers are common (Ct3: Symmetrically built), so the third criterion may be considered as fulfilled as well.
+
+SMTP is considered a strong candidate as a transport layer.  
+
+\subsection{SMS and MMS}
+SMS capability was introduced in the SS7 protocol. This protocol allows the message transfer of messages not bigger than 144 characters. Due to this restriction in size, it is unlikely to be suitable for this type of communication as the keys being required are already sized similarly, leaving no space for Messages or routing information.
+
+The \nth{3} Generation Partnership Project (3GPP) maintains the Multimedia Messaging Service (MMS). This protocol is mainly a mobile protocol based on telephone networks.
+
+Both protocols are not widely adopted within the Internet domain. There are gateways providing bridging functionalities to the SMS/MMS services. However, the protocol itself is insignificant on the Internet itself. 
+
+\subsection{MMS}
+ This protocol is just like the SMS protocol accessible through the Internet by using gateways but not directly usable within the Internet.
+
+\section{Results}
+We have shown that all common M2M protocols failed mainly at Ct3 as there is no need for message routing. In M2M communication contacting foreign machines is not common. Therefore M2M protocolls are typically using static M2M communication over prepared channels. Such behavior is, however unsuitable for a generic messaging protocol.
+
+Pure storage protocols fail at the same criteria as they typically have a defined set of data sources and data sinks, whereas usually at least the data sources are limited in number. This makes those protocols unsuitable again.
+
+We can clearly state that according to the criteria, only a few protocols are suitable. Table \ref{tab:protoSuitCrit2} on page \pageref{tab:protoSuitCrit} shows that only SMTP and XMPP are suitable protocols. Eventually, similar protocols such as HTTP (with WebDAV) or FTP may be usable as well. 
+
+\begin{table}[h]
+	\centering\tiny
+	\begin{tabular}{|l|l|l|l|}\hline
+		\diaghead{\theadfont protocol Criteria}{Protocol}{Criteria} & \thead{Ct1: Widely adopted}     & \thead{Ct2: Reliable} & \thead{Ct3: Symmetrically built}\\\hline
+		HTTP     & $\checkmark$            & $\checkmark$        & $\times$\\              
+		FTP      & $\checkmark$            & $\checkmark$        & $\times$\\
+		TFTP     & $\times$                & $\times$            & $\times$\\
+		MQTT     & \textasciitilde         & $\checkmark$        & $\times$\\              
+		AMQP     & \textasciitilde         & $\checkmark$        & $\times$\\
+		CoAP     & \textasciitilde         & \textasciitilde     & $\times$\\
+		WAMP     & $\times$                & $\checkmark$        & \textasciitilde\\
+		XMPP     & $\checkmark$            & $\checkmark$        & $\checkmark$\\
+		SMTP     & $\checkmark$            & $\checkmark$        & $\checkmark$\\\hline
+	\end{tabular}    
+	\caption{comparison of protocols in terms of the suitability as transport layer}
+	\label{tab:protoSuitCrit2}
+\end{table}
+
+The findings of this short analysis suggested that we should use the two protocols, SMTP and XMPP, for our first standardization. We require at least two to prove that the protocol is agnostic to the transport.
+
+\clearpage\chapter{Glossary}
+
+\begin{entry}
+	\mainentry{adversary}{In this work, we are referring to an adverser to any entity opposing to the privacy of a message. For a more throughout definition refer to section~\ref{sec:adversary}}
+\end{entry}
+
+\begin{entry}
+	\mainentry{anonymity}{We refer to the term anonymity as defined in \cite{anonTerminology}. ``Anonymity of a subject means that the subject is not identifiable within a set of subjects, the anonymity set.''\omitted}
+	\subentry{Sender Anonymity}{The anonymity set is the set of all possible subjects. For actors, the anonymity set consists of the subjects who might cause an action. For actees, the anonymity set consists of the subjects which might be acted upon. Therefore, a sender may be anonymous (sender anonymity) only within a set of potential senders, his/her sender anonymity set, which itself may be a subset of all subjects worldwide who may send a message from time to time.}
+	\subentry{Receiver Anonymity}{The same for the recipient means that a recipient may be anonymous (recipient anonymity) only within a set of potential recipients, his/her recipient anonymity set. Both anonymity sets may be disjoint, be the same, or they may overlap. The anonymity sets may vary over time.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{Agent}{An agent is a single component of a service (\defref{Service}) provided to a user or other services.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{eID}{An ephemeral identity (eID) is a unique user of a vortex node characterized by its public key. This user is created with a VortexMessage and has only a limited lifetime. After expiry all informations related to this identity are deleted.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{EWS}{Exchange Web Services (EWS) are a Microsoft proprietary protocol to access exchange services from a client. It may be regarded as an alternative to IMAPv4. This is however incomplete as EWS offers additional features such as User Configuration, Delegate Management or Unified Messaging.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{IMAP}{IMAP (currently IMAPv4) is a typical protocol to be used between a \defref{Client MRA} and a \defref{Remote MDA}. It has been specified in its current version in \cite{RFC3501}. The protocol is capable of fully maintaining a server-based message store. This includes the capability of adding, modifying, and deleting messages and folders of a mailstore. It does not include however sending mails to other destinations outside the server-based store.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{Item of Interest (IoI)}{The Item of Intrest (IoI) are defined in \cite{anonTerminology} and refer to any subject action or entity which is of interest to a potential adversary.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{LMTP}{The Local Mail Transfer Protocol is defined in \cite{RFC2033}. This RFC defines a protocol similar to SMTP for local mail senders. This protocol allows a sender to have no mail queue at all and thus simplifies the client implementation.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{Local Mail Store}{A Local Mail Store offers a persistent store on a local non-volatile memory in which messages are being stored. A store may be flat or structured (e.g., supports folders). A local mail store may be an authoritative store for mails or a ``cache only'' copy. It is typically not a queue.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{Server Admin}{We do regard a server admin as a person with high privileges and profound technical knowledge of a server and its associated technology. A Server Admin may have access to one or multiple servers of the same kind.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{MDA}{An MDA provides uniform access to a local message store.}
+	\subentry{Remote MDA}{A Remote MDA is typically supporting a specific access protocol to access the data stored within a local message store.}
+	\subentry{Local MDA}{A Local MDA is typically giving local applications access to a server store. This may be done thru an API, a named socket or similar mechanisms.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{MRA}{A Mail Receiving Agent is an agent, which receives emails from another agent. Depending on the used protocol two subtypes of MRAs are available.}
+	\subentry{Client MRA}{A client MRA picks up emails in the server mail storage from a remote MDA. Client MRAs usually connect through a standard protocol that was designed for client access. Examples for such protocols are POP or IMAP.}
+	\subentry{Server MRA}{Unlike a Client MRA, a server MRA listens passively for incoming connections and forwards received messages to an MTA for delivery and routing. A typical protocol supported by a server MRA is SMTP}
+\end{entry}
+
+\begin{entry}
+	\mainentry{MS-OXCMAPIHTTP}{Microsofts Messaging Application Programming Interface (MAPI) 
+		Extensions for HTTP specifies the Messaging Application Programming Interface (MAPI) Extensions for HTTP in \cite{ms-oxcmapihttp}, which enable a client to access personal messaging and directory data on a server by sending HTTP requests and receiving responses returned on the same HTTP connection. This protocol extends HTTP and HTTPS.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{MSA}{A Mail Sending Agent. This agent sends emails to a \defref{Server MRA}. }
+\end{entry}
+
+\begin{entry}
+	\mainentry{MTA}{A Mail Transfer Agent. This transfer agent routes emails between other components. Typically an MTA receives emails from an MRA and forwards them to an MDA or MSA. The main task of an MTA is to provide reliable queues and solid track of all emails as long as they are not forwarded to another MTA or local storage.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{MTS}{A Mail Transfer Service. This is a set of agents which provide the functionality to send and receive messages and forward them to a local or remote store.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{MSS}{A Mail Storage Service. This is a set of agents providing a reliable store for local mail accounts. It also provides Interfacing which enables clients to access the users' mail.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{MUA}{A Mail User Agent. This user-agent reads emails from local storage and allows a user to read existing emails, create and modify emails.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{MURB}{A multi use reply block. This tzpe of routing block is provided by a sender to give a node the possibilitz to route back answers without the knowledge of a location of the sender. In contrast to a SURB a MURB may be used mutiple times. The number of times is regulated by the $maxReplay$ field. Furthermore a MURB must provide multiple peer keys for all routing steps to avoid repeating patterns of key blocks. This structure makes a MURB much bigger than a SURB.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{Privacy}{From the Oxford English Dictionary: ``
+		\begin{enumerate}
+			\item The state or condition of being withdrawn from the society of others, or from the public interest; seclusion. The state or condition of being alone, undisturbed, or free from public attention, as a matter of choice or right; freedom from interference or intrusion.
+			\item Private or retired place; private apartments; places of retreat.
+			\item Absence or avoidance of publicity or display; a condition approaching to secrecy or concealment. Keeping of a secret.
+			\item A private matter, a secret; private or personal matters or relations; The private parts.
+			\item Intimacy, confidential relations.
+			\item The state of being privy to some act.
+		\end{enumerate}''\cite{OXFORD}\\
+		In this work, privacy is related to definition two. Mails should be able to be handled as a virtual private place where no one knows who is talking to whom and about what or how frequent (except for directly involved people).
+	}
+\end{entry}
+
+\begin{entry}
+	\mainentry{Pseudonymity}{
+		As Pseudonymity we take the definition as specified in \cite{anonTerminology}.
+		\begin{quote}
+			A pseudonym is an identifier of a subject other than one of the subject's real names. The subject which the pseudonym refers to is the holder of the pseudonym. A subject is pseudonymous if a pseudonym is used as an identifier instead of one of its real names.\omitted
+		\end{quote}
+	}
+\end{entry}
+
+\begin{entry}
+	\mainentry{POP}{POP (currently in version 3) is a typical protocol to be used between a \defref{Client MRA} and a \defref{Remote MDA}. Unlike \defref{IMAP}, it is not able to maintain a mail store. Its sole purpose is to fetch and delete emails in a server-based store. Modifying Mails or even handling a complex folder structure is not doable with POP}
+\end{entry}
+
+\begin{entry}
+	\mainentry{RBB}{A routing block builder (RBB) is a VortexNode assembling the operations and hops for a message. If the RBB is not equal to the sender of the message the receiver may be anonymous to the sender.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{Service}{A service is an endpoint on a server providing the functionality to a client. This service may consist of several Agents (\defref{Agent}).}
+\end{entry}
+
+\begin{entry}
+	\mainentry{SMTP}{SMTP is the most commonly used protocol for sending emails across the Internet. In its current version it has been specified in \cite{RFC5321}.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{Storage}{A store to keep data. It is assumed to be temporary or persistent.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{SURB}{A single use reply block. This type of routing block is provided by a sender to give a node the possibility to route back answers without the knowledge of a location of the sender. A SURB may only be used once subsequent uses of the block are not possible. The lifetime of a SURB is typically limited to minutes or hours.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{UBM}{We use the term Unsolicited Bulk Message as a term for any mass message being received by a user without prior explicit consent. A less formal term for such a message in email terminology is spam or junk mail.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{Undetectability}{
+		As undetectability we take the definition as specified in \cite{anonTerminology}.
+		\begin{quote}
+			Undetectability of an item of interest (IOI\index{Item of Interest}) from an attacker's perspective means that the
+			attacker cannot sufficiently distinguish whether it exists or not.\omitted
+		\end{quote}
+	}
+\end{entry}
+
+\begin{entry}
+	\mainentry{Unlikability}{We refer to the term unlinkability as defined in \cite{anonTerminology}. ``Unlinkability of two or more items of interest (IOIs, e.g., subjects, messages, actions, ...) from an attacker’s perspective means that within the system (comprising these and possibly other items), the attacker cannot sufficiently distinguish whether these IOIs are 
+		related or not.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{Unobservability}{
+		As unobservability we take the definition as specified in \cite{anonTerminology}.
+		\begin{quote}
+			Unobservability of an item of interest (IOI) means
+			\begin{itemize}
+				\item undetectability of the IOI against all subjects uninvolved in it and
+				\item anonymity of the subject(s) involved in the IOI even against the other subject(s) involved in that IOI.
+			\end{itemize}
+		\end{quote}        
+		As mentioned in this paper, unobservability raises the bar of required attributes again ($\Rightarrow$ reads ``implies''):
+		\begin{eqnarray*}
+			censorship\ resistance & \Rightarrow & unobservability\\
+			unobserability         & \Rightarrow & undetectability\\
+			unobserability         & \Rightarrow & anonymity
+		\end{eqnarray*}
+	}
+\end{entry}
+
+
+\begin{entry}
+	\mainentry{user}{Any human or technical entity using a system not following strict message processing rules. A user does always interface a non-interface related entity and is triggered by this or triggers it related, but not limited, to the message.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{XMPP}{The Extensible Messaging and Presence Protocol (XMPP)\cite{RFC6120,RFC6121} was formerly also known as Jabber protocol. It is an extensible instant messenger protocol widely adopted in chat clients.}
+\end{entry}
+
+\begin{entry}
+	\mainentry{Zero Trust}{
+		Zero trust is not a truly researched model in systems engineering. It is, however, widely adopted. We refer in this work to the zero trust model when denying the trust in any infrastructure not directly controlled by the sending or receiving entity. This distrust extends especially but not exclusively to the network transporting the message, the nodes storing and forwarding messages, the backup taken from any system except the client machines of the sending and receiving parties, and software, hardware, and operators of all systems not explicitly trusted. As explicitly trusted in our model, we do regard the user sending a message (and his immediate hardware used for sending the message), and the users receiving the messages. Trust in between the receiving parties (if more than one) of a message is not necessarily given.
+	}
+\end{entry}        
+
+\backmatter
+\chapter{Bibliography}
+{
+  %\def\filespliter#1{\expandafter\intfilespliter#1\relax}
+  %\def\intfilespliter#1 #2 #3\relax{ First: (#1), Second: (#2), Third: (#3) }
+  \printbibliography[title={},heading=none]
+}
+
+% additional reference entries
+\index{Mail transport|see {Message Transport}}
+
+% add the index
+%\printindex
+
+\clearpage\chapter{Short Biography}
+\begin{wrapfigure}{R}{0.3\columnwidth}
+	\includegraphics[width=0.29\columnwidth]{inc/biography/passphoto}
+\end{wrapfigure}
+\input{inc/biography/biotext.inc.tex}
+
+\end{document}

@@ -62,6 +62,7 @@ public class MessageVortexTest {
   public void runRegularlyAndShutdown() {
     try {
       DummyTransportTrx.clearDummyEndpoints();
+      DummyTransportTrx.setLocalMode(true);
       assertTrue("Errorcode is not 0", MessageVortex.mainReturn(new String[] {"--timeoutAndDie=0"}) == 0);
     } catch (Exception e) {
       e.printStackTrace();
@@ -78,6 +79,8 @@ public class MessageVortexTest {
   @Test
   public void runRegularlyWithTimeout() {
     try {
+      DummyTransportTrx.clearDummyEndpoints();
+      DummyTransportTrx.setLocalMode(true);
       long start = System.currentTimeMillis();
       int ret = MessageVortex.mainReturn(new String[] {"--timeoutAndDie=3"});
       long duration = System.currentTimeMillis()-start;
