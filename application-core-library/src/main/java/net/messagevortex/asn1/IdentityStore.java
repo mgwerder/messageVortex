@@ -198,7 +198,11 @@ public class IdentityStore extends AbstractBlock
         ret.add(isb);
         LOGGER.log(Level.FINER, "adding to anonSet " + isb.getNodeAddress());
       } else {
-        LOGGER.log(Level.INFO, "Skipping " + isb.getNodeAddress()+" ("+isb.getType()+")");
+        if( isb!=null) {
+          LOGGER.log(Level.INFO, "Skipping " + isb.getNodeAddress() + " (" + isb.getType() + ")");
+        } else {
+          LOGGER.log(Level.SEVERE, "Skipping ISB==null");
+        }
       }
     }
     if (ret.size() < size) {
