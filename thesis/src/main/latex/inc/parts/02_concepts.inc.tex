@@ -13,10 +13,10 @@
 \partepigraph{Where does a snake's tail start?}{My son Florian}
 \DeclareFixedFootnote{\omitted}{footnotes omitted in quote}
 \part{Relevant Concepts and Technologies}
-\fxwarning{complete section}
+In this part, we shed lights on important concepts and technologies related to our work. The first chapter relates to some basic concepts of anonymity such as a definition or some metrics. We furthermore introduce the concept of Zero Trust. The second chapter covers cryptographic related research and sums up some important facts which form the base for our future design. The third part collects some research arround the topic of censorship circumvention.
 
-\chapter{Anonymity Research}
-In this section, we collect protocols research related to anonymity. We did not stick to anonymous message transfer. Instead, we took a broad focus in terms of technology and outlined in each protocol strengths and weaknesses identified, which may be relevant to this research.
+\chapter{Anonymity and Trust Related Research}
+While there is a lot of research going on towards anonymity and trust, there is still a lot of basics covert badly. Getting definitions for basic terms such as anonymity or censorship is hard. There is no common agreement for such terms. Measuring terms such as censorship or anonymity is even harder. We were unable to find metrics for measuring anonymity which cover all aspects.
 
 \section{Definition of Anonymity}
 As the definition for Anonymity we take the definition as specified in \cite{anonTerminology}.
@@ -31,11 +31,13 @@ and
 We define the anonymity set as the set of all possible subjects within a supposed message. The anonymity of a subject towards an observing third party is a crucial factor as it relates directly to our adversary model.
 
 \section{\texorpdfstring{$k$}{k}-Anonymity}
-$k$-anonymity is a term introduced in \cite{k-anonymous:ccs2003}. This work claims that entities are not responsible for an action if an observer is unable to match a specific action to less than $k$ entities.
+$k$-anonymity is a term introduced in \cite{k-anonymous:ccs2003}. This work claims that entities are not responsible for an action if an observer is unable to match a specific action to less than $k$ entities whereas the metric $k$ may be dependant on the subjects location and personal circumstances.
 
 The Document distinguishes between \textit{Sender $k$-anonymity}, where the sending entity can only be narrowed down to a set of $k$ entities and \textit{Receiver $k$-anonymity}. 
 
-The size of $k$ is a crucial factor. One of the criteria is the legal requirements of the jurisdiction. Depending on the jurisdiction, it usually is not possible to prosecute someone if an action is not directly coupled to one person. Another criterion might be the decreasing of $k$ over time. If a Vortex account is used, we have to assume that some vortex identities go out of commission over time. If $k$ is chosen according to a legal requirement, it should be taken into account that $k$ might be decreasing over time.
+The size of $k$ is a crucial factor. One of the criteria is the legal requirements of the jurisdiction. Depending on the jurisdiction, it usually is not possible to prosecute someone if an action is not directly coupled to one person. 
+
+The problem is that under normal circumstances $k$ is either not constant or decreases over time. Therefore, an anonymity protocol must make sure that a sender or receiver set of $k$ entities is either not identifiable or sufficiently large so that $k$ is sufficiently sized even when decreasing over time.
 
 \section{\texorpdfstring{$\ell$}{l}-Diversity}
 In \cite{machanavajjhala2007diversity} an extended model of $k$-anonymity is introduced. In this paper, the authors emphasize that it is possible to break a $k$-anonymity set if there is additional information available which may be merged into a data set so that a distinct entity can be filtered from the $k$-anonymity set. In other words, if an anonymity set is to tightly specified, additional background information might be sufficient to identify a specific entity in an anonymity set.
@@ -49,10 +51,7 @@ While $\ell$-diversity protects the identity of an entity, it does not prevent i
 	An equivalence class is said to have $t$-closeness if the distance between the distribution of a sensitive attribute in this class and the distribution of the attribute in the whole table is no more than a threshold. A table is said to have $t$-closeness if all equivalence classes have $t$-closeness.
 \end{quote}
 
-\section{Single Use Reply Blocks and Multi-Use Reply Blocks}
-Chaum first introduced the use of reply blocks in \cite{CHAUM1}. A routing block, in general, is a structure allowing to send a message to someone without knowing the targets' real address. Reply blocks may be differentiated into two classes ``Single Use Reply Blocks'' (SURBs)  and ``Multi-Use Reply Blocks'' (MURBs). SURBs may be used once while MURBs may be used a limited number of times. 
-
-Within our research, we discovered that if a routing protocol is reproducible, the traffic of a MURB may be used to identify some of the properties of the message. Depending on the type of attack, the block has to be repeated very often. For this reason, we limited the number of replays to a low number. The concept is that we have, in our case a routing block, which might be used up to $n$ times ($0<n<127$). It is easily representable in a byte integer (signed or unsigned) on any system. It is big enough to support human communication sensibly and is big enough to add not too much overhead when rerequesting more MURBs. The number should not be too big because if a MURB is reused, the same pattern of traffic is generated, thus making the system susceptible to statistical attacks.
+While in statistics working with cases and exact figures we may, possibly, identify the distance betweens atrtributes of a class for a single set of classes reflecting a defined distribution at a given point in time. Whenever we look at a varying set of attributes such metric seemed to us as non-practical value. We therefore discarded this value as a metric for our protocol.
 
 \section{Censorship}
 As a definition for censorship we take
@@ -83,6 +82,37 @@ In \cite{oakland2013-parrot} \citeauthor{oakland2013-parrot} express that it is 
 
 In our design, this is the job covered by the blending layer. The blending layer generates these messages. These messages are context-less or remain in the context of previous conversations.
 
+\section{Single Use Reply Blocks and Multi-Use Reply Blocks}
+Chaum first introduced the use of reply blocks in \cite{CHAUM1}. A routing block, in general, is a structure allowing to send a message to someone without knowing the targets' real address. Reply blocks may be differentiated into two classes ``Single Use Reply Blocks'' (SURBs)  and ``Multi-Use Reply Blocks'' (MURBs). SURBs may be used once while MURBs may be used a limited number of times. 
+
+Within our research, we discovered that if a routing protocol is reproducible, the traffic of a MURB may be used to identify some of the properties of the message. Depending on the type of attack, the block has to be repeated very often. For this reason, we limited the number of replays to a low number. The concept is that we have, in our case a routing block, which might be used up to $n$ times ($0<n<127$). It is easily representable in a byte integer (signed or unsigned) on any system. It is big enough to support human communication sensibly and is big enough to add not too much overhead when rerequesting more MURBs. The number should not be too big because if a MURB is reused, the same pattern of traffic is generated, thus making the system susceptible to statistical attacks.
+
+\section{Zero Trust\label{sec:zeroTrust}}
+Zero trust is not an acdemically defined concept. In fact it is widely misused by many marketing departments of well known devices and applications related to security. The first citation of the concept was in \cite{kindervag2010no} where \citeauthor{kindervag2010no} introduced this concept.
+
+\citeauthor{kindervag2010no} compares the traditional approach as an M\&M (crunchy shell and soft inner part). And introduces the zero trust principle in three concepts:
+\begin{quote}
+	\begin{enumerate}
+		\item Ensure That All Resources Are Accessed Securely Regardless Of Location
+		\item Adopt A Least Privilege Strategy And Strictly Enforce Access Control
+		\item Inspect And Log All Traffic
+	\end{enumerate}
+\end{quote}
+
+This concept applies to security and no to anonymity. We therefore had to adopt this concept not violating anonymity.
+\begin{enumerate}
+	\item Ensure that all resources are accessed securely regardless of location\\
+	We make sure that control over the security relevant parameters remain at all time within the originator of a message. Violation of transport security should not be possible by malfunctioning or poorly configured nodes.
+	\item Adopt a least privilege strategy and strictly enforce access control\\
+	As design principle this means that information is kept hidden as much as possible within the system. We always assume that an adversary
+	\begin{itemize}
+		\item makes some or all information within his reach available to others.
+		\item Analyze all information within his reach.
+		\item Willingly break protocol rules in order to gain information, disrupt information flows, or other advantages.
+	\end{itemize}		
+	\item Inspect and log all traffic
+	
+\end{enumerate}
 
 \chapter{Related Cryptographic Theory and Algorithms}
 
@@ -338,50 +368,28 @@ Many jurisdictions have implemented such measures a very cheap measure of censor
 \end{itemize}
 
 \subsection{Making Systems Unavailable by Disrupting System Traffic}
-Disruption of traffic is commonly done with packet filtering devices commonly referred as firewalls. These firewalls may filter any traffic to a given system. There are some considerable downsides to this system from the adversary's point of view.
+Disruption of traffic is done with packet filtering devices commonly referred as firewalls. These firewalls may filter any traffic to a given system. There are some considerable downsides to this system from the adversary's point of view.
 
-First, it requires high bandwidth. All traffic of a jurisdiction or target must pass through this filtering device. This is usually doable for a country. 
+First, a censoring adversary requires high bandwidth. All traffic of a jurisdiction or target must pass through such a filtering device. This is usually not easy doable for a country. Very high bandwith system such as the great wall of china do use a different approach. Instead of filtering each packet they concetrate on TCP connections. Each packet slightly suspicious is copied to an analyzing system while the original message is routed normally. The copied packet or packet sequence is then analyzed by a subsequent system. If the subsequent system decides that the traffic should be censored a connection reset is sent to the sender and the recipient. Any cclient or server having standard protocol support will immediately cease communication.
 
-Secondly, the target must be identifiable on a technical level (e.g., IP address) as content based filtering is only feasible with unencrypted or weakly protected systems. This technical identification is hard as systems may change their addresses dynamically either due to cloud related elasticity or simply due to an incomplete view to a distributed system (e.g., only a Loadbalancer is visible). An IP is, therefore not synonymous, for a single user or server. Sometimes , In depth information or insight into a protocol may be helpful to further down narrow a user (e.g., by a set cookie or a fingerprint). When using encrypted connections, ordinary attackers have troubles to do a Man in the Middle (MitM) attack. For a larger attacker based on state or ISP level this may be 
+Secondly, the target must be identifiable on a technical level (e.g., IP address) as content based filtering is only feasible with unencrypted or weakly protected systems. This technical identification is hard as systems may change their addresses dynamically either due to cloud related elasticity or simply due to an incomplete view to a distributed system (e.g., only a Loadbalancer is visible). An IP is, therefore not synonymous, for a single user or server. 
 
-\fxwarning{Explain further the problem for people not so much in cloud and networks}
+When looking at the client side, quite often clients are hidden behind a network address translation (NAT) or a proxy collapsing all users onto a single IP address. The same applies for the server side where cloud washing and reverse proxy infrastructures optimize bandwidth usage. Sometimes , In depth information or insight into a protocol may be helpful to further narrow down a user (e.g., by a set cookie or a fingerprint). When using encrypted connections, ordinary attackers have troubles to do a Man in the Middle (MitM) attack. For a larger attacker on state or internet service provider (ISP) level this may be doable. To do so, such an adversary requires access to a publicly accepted CA creating fake certificates for the attacker. It may be safely assumed that such access is given considering the standard set of CAs which is trusted nowadays (depending on the delivered trust store we found between 100 and 200 root CAs).
 
-And lastly, The target may not be split (e.g., partial censoring). Censoring platforms such as Youtube or Gmail which are commonly shared among legit and illegit uses from the censorers point-of-view can not be reasonably split. This due to the fact that only the provider of the service can do selective censoring on the system.
-
-\fxwarning{Explain more and maybe add china as an example}
+Identificaion of a target is especially hard if a taget comprises of multiple possible target from which some may be valid. This is the case wehn using reverse ürpoxy but as well if using the same platform for multiple means. Streaming or movie platforms may contain content which should be banned from a censorers' point of view as well as content which comprises of legitimate content such as educational material. From the censorers point-of-view these content can not be reasonably split. This due to the fact that normally only the provider of the service can do selective censoring on the system. This is why some governments try to shift the responsibility of censorship away from the government to the provider by establishing self-censorship. 
 
 \subsection{Making Systems Unavailable by Interfering with System Traffic}
-\fxwarning{May be done by traffic shaping, content moderation}
+Censoring may be done as well in more subtle or less abusive ways such as traffic shaping or content moderation. We already outlined that content moderation is usually done by the platform provider. This is either done by allowing an entity to control the platform directly or indirectly to apply censorship or by using legal means to force platform into self censorship.
+
+Other means of censorship are:
+\begin{itemize}
+	\item Redirecting all traffic to certain systems to filter according to the needs of a censorer
+	\item Shaping traffic in such a way that the service is deemed no longer available to people of a jurisdiction (e.g., by slowing down traffic in such a way that streaming is no longer a viable option).
+	\item Redirecting traffic to similar platforms employing a form of censorship (either a localized form of the respective information or an alternate provider of the same form of information).
+\end{itemize}
 
 \section{Spread Spectrum in Networking Protocols}
-\fxwarning{Empty section}
+Another way of sending information anonymously is spread spectrum transmission. In spread spectrum transmission, a radio signal is distributed in the frequency domain. This makes it hard for an adversary to identify and disrupt those radio signals in question. 
 
-\chapter{Other Related Concepts}
-\section{Zero Trust\label{sec:zeroTrust}}
-Zero trust is not an acdemically defined concept. In fact it is widely misused by many marketing departments of well known devices and applications related to security. The first citation of the concept was in \cite{kindervag2010no} where \citeauthor{kindervag2010no} introduced this concept.
-
-\citeauthor{kindervag2010no} compares the traditional approach as an M\&M (crunchy shell and soft inner part). And introduces the zero trust principle in three concepts:
-\begin{quote}
-	\begin{enumerate}
-		\item Ensure That All Resources Are Accessed Securely Regardless Of Location
-		\item Adopt A Least Privilege Strategy And Strictly Enforce Access Control
-		\item Inspect And Log All Traffic
-	\end{enumerate}
-\end{quote}
-
-This concept applies to security and no to anonymity. We therefore had to adopt this concept not violating anonymity.
-	\begin{enumerate}
-	\item Ensure that all resources are accessed securely regardless of location\\
-		  We make sure that control over the security relevant parameters remain at all time within the originator of a message. Violation of transport security should not be possible by malfunctioning or poorly configured nodes.
-	\item Adopt a least privilege strategy and strictly enforce access control\\
-	      As design principle this means that information is kept hidden as much as possible within the system. We always assume that an adversary
-		  \begin{itemize}
-			\item makes some or all information within his reach available to others.
-			\item Analyze all information within his reach.
-			\item Willingly break protocol rules in order to gain information, disrupt information flows, or other advantages.
-		  \end{itemize}		
-	\item Inspect and log all traffic
-	      
-\end{enumerate}
-
+While in use when doing radio-electric transmission, spread spectrum is very uncommon in the domain of network protocols. We could employ multiple protocols and packet types to transmit data. Unlike in radio signals, such data is always available as discrete information pieces and an adversary may choose to block them at any point. Unlike in radio transmission, where the available spectrum is almost indefinite and not fully blockable by practical means, full censorship does not oppose a problem as we may simply completely disrupt all communication by not routing it anymore.
 

@@ -74,6 +74,7 @@
 	  pdfpagelabels,
 	  final}{hyperref}
 	\usepackage[a-3b]{pdfx}
+	\catcode30=12
 }
 \makeatother
 
@@ -185,7 +186,7 @@
             isbn=true,
             maxcitenames=3,
             minbibnames=1,
-            maxbibnames=200,
+            maxbibnames=300,
             bibencoding=utf8,
             block=none,
             sorting=anyt]{biblatex}
@@ -629,7 +630,7 @@
 
 \RequirePackage[explicit]{titlesec}
 
-%\usepackage{ifdraft}
+\usepackage{ifdraft}
 \newif\ifdraft\drafttrue % or \draftfalse
 
 % Adapt bibtex to include documents  
