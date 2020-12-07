@@ -141,6 +141,38 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
           description = "number of elements for a key (requires --element)")
   private int value = -1;
   
+  /**
+   * Worker thread class to claculate a new specific asymmetric key.
+   */
+  private static class CalculationThread extends Thread {
+    
+    private final AlgorithmParameter param;
+    
+    /**
+     * <p>Create a worker thread for the spicified set of parameters.</p>
+     *
+     * @param param the parameter set for the key to be generated
+     */
+    public CalculationThread(AlgorithmParameter param) {
+      this.param = new AlgorithmParameter(param);
+    }
+    
+    /**
+     * <p>Runner for the key calculation.</p>
+     */
+    public void run() {
+      LOGGER.log(Level.FINE, "precalculating key " + param + "");
+      try {
+        long start = System.currentTimeMillis();
+        AsymmetricKey ak = new AsymmetricKey(new AlgorithmParameter(param), false);
+        cache.setCalcTime(new AlgorithmParameter(param), System.currentTimeMillis() - start);
+        cache.push(ak);
+      } catch (IOException ioe) {
+        LOGGER.log(Level.SEVERE, "got unexpected exception", ioe);
+      }
+    }
+  }
+  
   private AsymmetricKeyPreCalculator() {
     // just a dummy to hide the default constructor
     this(false);
@@ -181,6 +213,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
   
   /***
    * <p>retrieves a precomputed key from the cache.</p>
+   *
    * @param parameters the parameters reflecting the requested key
    * @return the requested key
    */
@@ -698,20 +731,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
     }
     
     private Thread runCalculatorThread(final AlgorithmParameter param) {
-      return new Thread() {
-        public void run() {
-          LOGGER.log(Level.FINE, "precalculating key " + param + "");
-          try {
-            long start = System.currentTimeMillis();
-            AsymmetricKey ak = new AsymmetricKey(new AlgorithmParameter(param), false);
-            cache.setCalcTime(new AlgorithmParameter(param), System.currentTimeMillis() - start);
-            cache.push(ak);
-          } catch (IOException ioe) {
-            LOGGER.log(Level.SEVERE, "got unexpected exception", ioe);
-          }
-        }
-        
-      };
+      return new CalculationThread(param);
     }
   }
 }

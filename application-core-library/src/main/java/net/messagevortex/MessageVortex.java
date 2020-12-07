@@ -184,7 +184,9 @@ public class MessageVortex implements Callable<Integer> {
    */
   public static int mainReturn(String[] args) {
     LOGGER.log(Level.INFO, "MessageVortex V" + Version.getBuild());
-    Integer i = CommandLine.call(new MessageVortex(), args == null ? new String[0] : args);
+    CommandLine c= new CommandLine(new MessageVortex());
+    c.execute(args == null ? new String[0] : args);
+    Integer i = c.getExecutionResult();
     return i != null ? i : ARGUMENT_FAIL;
   }
 

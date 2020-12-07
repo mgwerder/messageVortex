@@ -1,9 +1,11 @@
 %\newgeometry{margin=0.1cm, footskip=1mm}
 \begin{titlepage}
 \ifdraft{
-\begin{tikzpicture}[remember picture,overlay] 
-\node[rotate=60,scale=10,text opacity=0.8] at (current page.center){\color{red}\textbf{\Huge DRAFT}};
-\end{tikzpicture}}{}
+	\begin{tikzpicture}[remember picture,overlay] 
+	\node[rotate=60,scale=10,text opacity=0.8] at (current page.center){\color{red}\textbf{\Huge DRAFT}};
+	\end{tikzpicture}
+}{}
+
 \pagecolor{gray}\afterpage{\nopagecolor}
 \begin{center}~\\[1cm]
 \includegraphics[height=0.4\paperwidth]{../../../../website/src/main/jbake/assets/images/MessageVortexLogo_huge}~\\[1cm]
