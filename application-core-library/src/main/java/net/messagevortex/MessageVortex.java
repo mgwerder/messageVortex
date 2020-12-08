@@ -56,29 +56,28 @@ import net.messagevortex.transport.dummy.DummyTransportTrx;
 import picocli.CommandLine;
 
 @CommandLine.Command(
-    description = "A MessageVortex implementation for the privacy aware person.",
-    name = "MessageVortex",
-    mixinStandardHelpOptions = true,
-    versionProvider = Version.class,
-    subcommands = {
-        AsymmetricKeyPreCalculator.class,
-        CommandLineHandlerIdentityStore.class,
-        CommandLineHandlerCipher.class,
-        CommandLineHandlerVersion.class,
-        CommandLineHandlerInit.class,
-        CommandLineHandlerRedundancy.class,
-        CommandLineHandlerExamples.class
-,
-    }
+        description = "A MessageVortex implementation for the privacy aware person.",
+        name = "MessageVortex",
+        mixinStandardHelpOptions = true,
+        versionProvider = Version.class,
+        subcommands = {
+                AsymmetricKeyPreCalculator.class,
+                CommandLineHandlerIdentityStore.class,
+                CommandLineHandlerCipher.class,
+                CommandLineHandlerVersion.class,
+                CommandLineHandlerInit.class,
+                CommandLineHandlerRedundancy.class,
+                CommandLineHandlerExamples.class
+        }
 )
 public class MessageVortex implements Callable<Integer> {
-
+  
   public static final int CONFIG_FAIL = 101;
   public static final int SETUP_FAIL = 102;
   public static final int ARGUMENT_FAIL = 103;
-
+  
   private static final Logger LOGGER;
-
+  
   private enum DaemonType {
     TRANSPORT,
     BLEDING,
@@ -86,22 +85,22 @@ public class MessageVortex implements Callable<Integer> {
     ACCOUNTING,
     IDENTITY_STORE;
   }
-
+  
   @CommandLine.Option(names = {"-c", "--config"}, description = "filename of the config to be used")
   private String configFile = "messageVortex.cfg";
-
+  
   @CommandLine.Option(names = {"--timeoutAndDie"}, hidden = true,
-      description = "timeout before aboorting execution (for test purposes only)")
+          description = "timeout before aboorting execution (for test purposes only)")
   private int timeoutInSeconds = -1;
-
+  
   @CommandLine.Option(names = {"--threadDumpInteval"}, hidden = true,
-      description = "timeout before aboorting execution (for test purposes only)")
+          description = "timeout before aboorting execution (for test purposes only)")
   private int threadDumpInterval = 300;
-
+  
   static {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
-
+  
   private static Map<String, Transport> transport = new ConcurrentHashMap<>();
   private static Map<String, Blender> blender = new ConcurrentHashMap<>();
   private static Map<String, Router> router = new ConcurrentHashMap<>();
@@ -110,20 +109,20 @@ public class MessageVortex implements Callable<Integer> {
   private static InternalPayloadSpaceStore ownStores = new InternalPayloadSpaceStore();
   private static InternalPayloadSpaceStore simStores = new InternalPayloadSpaceStore();
   private static Integer JRE_AES_KEY_SIZE = null;
-
+  
   private boolean verifyPrerequisites() {
     LOGGER.log(Level.INFO, "Checking bouncycastle version...");
     String bcversion = org.bouncycastle.jce.provider.BouncyCastleProvider
-        .class
-        .getPackage()
-        .getImplementationVersion();
+            .class
+            .getPackage()
+            .getImplementationVersion();
     LOGGER.log(Level.INFO, "Detected BouncyCastle version is " + bcversion);
     if (bcversion == null) {
       LOGGER.log(Level.SEVERE, "unable to determine BC version (got NULL value)");
       return false;
     }
     Matcher m = Pattern.compile("(\\d+)\\.(\\d+)\\.(\\d+)(beta(\\d*))?")
-        .matcher(bcversion);
+            .matcher(bcversion);
     if (!m.matches()) {
       LOGGER.log(Level.SEVERE, "unable to parse BC version (" + bcversion + ")");
       return false;
@@ -132,14 +131,14 @@ public class MessageVortex implements Callable<Integer> {
       int minor = Integer.parseInt(m.group(2));
       if ((major == 1 && minor >= 60) || (major >= 2)) {
         LOGGER.log(Level.INFO, "Detected BC version is " + bcversion
-            + ". This should do the trick.");
+                + ". This should do the trick.");
       } else {
         LOGGER.log(Level.SEVERE, "Looks like your BC installation is heavily outdated. "
-            + "At least version 1.60 is recommended.");
+                + "At least version 1.60 is recommended.");
         return false;
       }
     }
-
+    
     LOGGER.log(Level.INFO, "Checking JRE");
     try {
       String jreversion = System.getProperty("java.version");
@@ -150,20 +149,20 @@ public class MessageVortex implements Callable<Integer> {
       int i = JRE_AES_KEY_SIZE;
       if (i > 128) {
         LOGGER.log(Level.INFO, "Looks like JRE having an unlimited JCE installed (AES max allowed "
-            + "key length is = " + i + "). This is good.");
+                + "key length is = " + i + "). This is good.");
       } else {
         LOGGER.log(Level.SEVERE, "Looks like JRE not having an unlimited JCE installed (AES max "
-            + "allowed key length is = " + i + "). This is bad.");
+                + "allowed key length is = " + i + "). This is bad.");
         return false;
       }
     } catch (NoSuchAlgorithmException nsa) {
       LOGGER.log(Level.SEVERE, "OOPS... Got an exception while testing for an unlimited JCE. "
-          + "This is bad.", nsa);
+              + "This is bad.", nsa);
       return false;
     }
     return true;
   }
-
+  
   /***
    * <p>Main command line method.</p>
    *
@@ -175,7 +174,7 @@ public class MessageVortex implements Callable<Integer> {
       System.exit(retval);
     }
   }
-
+  
   /***
    * <p>Wrapper function as entry point for tests.</p>
    *
@@ -184,12 +183,12 @@ public class MessageVortex implements Callable<Integer> {
    */
   public static int mainReturn(String[] args) {
     LOGGER.log(Level.INFO, "MessageVortex V" + Version.getBuild());
-    CommandLine c= new CommandLine(new MessageVortex());
+    CommandLine c = new CommandLine(new MessageVortex());
     c.execute(args == null ? new String[0] : args);
     Integer i = c.getExecutionResult();
     return i != null ? i : ARGUMENT_FAIL;
   }
-
+  
   @Override
   public Integer call() {
     LOGGER.log(Level.INFO, "******* startup of MessageVortex *******");
@@ -201,25 +200,25 @@ public class MessageVortex implements Callable<Integer> {
       LOGGER.log(Level.SEVERE, "Unable to parse config file", ioe);
       return CONFIG_FAIL;
     }
-
+    
     try {
       // check prerequisites
       verifyPrerequisites();
-
+      
       Config cfg = MessageVortexConfig.getDefault();
-
+      
       // load IdentityStore
       identityStore.put("default_identity_store", new IdentityStore(
-          new File(CommandLineHandlerIdentityStore.DEFAULT_FILENAME)));
-
+              new File(CommandLineHandlerIdentityStore.DEFAULT_FILENAME)));
+      
       // setup non-standard identity stores
       for (String idstoreSection : cfg.getSectionListValue(null, "identity_store_setup")) {
         LOGGER.log(Level.INFO, "setting up identity store \"" + idstoreSection
-            + "\"");
+                + "\"");
         String fn = cfg.getStringValue(idstoreSection, "filename");
         if (fn == null) {
           throw new IOException("unable to obtain identity store filename of section "
-              + idstoreSection + "");
+                  + idstoreSection + "");
         }
         File f = new File(fn);
         if (!f.exists()) {
@@ -227,58 +226,58 @@ public class MessageVortex implements Callable<Integer> {
         }
         identityStore.put(idstoreSection.toLowerCase(), new IdentityStore(f));
       }
-
+      
       // setup recipes
       // create default recipe store
       String lst = Config.getDefault().getStringValue(null, "recipes");
       BlenderRecipe.clearRecipes(null);
       for (String cl : lst.split(" *, *")) {
         BlenderRecipe.addRecipe(null,
-            (BlenderRecipe) getConfiguredClass(null, cl, BlenderRecipe.class));
+                (BlenderRecipe) getConfiguredClass(null, cl, BlenderRecipe.class));
       }
       for (String accountingSection : cfg.getSectionListValue(null, "recipe_setup")) {
         // FIXME there is something missing here! Just found this unused code snipped...
         // I really need some sleep.
       }
-
+      
       //Setup accounting
       for (String accountingSection : cfg.getSectionListValue(null, "accountant_setup")) {
-
+        
         // setup Accounting
         LOGGER.log(Level.INFO, "setting up accounting for routing layer \"" + accountingSection
-            + "\"");
+                + "\"");
         accountant.put(accountingSection.toLowerCase(), (Accountant) getDaemon(accountingSection,
-            cfg.getStringValue(accountingSection, "accounting_implementation"),
-            DaemonType.ACCOUNTING));
-
+                cfg.getStringValue(accountingSection, "accounting_implementation"),
+                DaemonType.ACCOUNTING));
+        
       }
-
+      
       // setup routers
       for (String routerSection : cfg.getSectionListValue(null, "router_setup")) {
         // setup routers
         LOGGER.log(Level.INFO, "setting up routing layer \"" + routerSection + "\"");
         router.put(routerSection.toLowerCase(), (Router) getDaemon(routerSection,
-            cfg.getStringValue(routerSection, "router_implementation"),
-            DaemonType.ROUTING));
+                cfg.getStringValue(routerSection, "router_implementation"),
+                DaemonType.ROUTING));
       }
-
+      
       // setup blending
       for (String blendingSection : cfg.getSectionListValue(null, "blender_setup")) {
         // setup blending
         LOGGER.log(Level.INFO, "setting up blending layer \"" + blendingSection + "\"");
         blender.put(blendingSection.toLowerCase(), (Blender) getDaemon(blendingSection,
-            cfg.getStringValue(blendingSection, "blender_implementation"),
-            DaemonType.BLEDING));
-
+                cfg.getStringValue(blendingSection, "blender_implementation"),
+                DaemonType.BLEDING));
+        
       }
-
+      
       // Setup transport
       for (String transportSection : cfg.getSectionListValue(null, "transport_setup")) {
         // setup transport
         LOGGER.log(Level.INFO, "setting up transport layer \"" + transportSection + "\"");
         transport.put(transportSection.toLowerCase(), (Transport) getDaemon(transportSection,
-            cfg.getStringValue(transportSection, "transport_implementation"),
-            DaemonType.TRANSPORT));
+                cfg.getStringValue(transportSection, "transport_implementation"),
+                DaemonType.TRANSPORT));
         LOGGER.log(Level.INFO, "  setting up of \"" + transportSection + "\" is done");
       }
     } catch (IOException ioe) {
@@ -288,19 +287,19 @@ public class MessageVortex implements Callable<Integer> {
       LOGGER.log(Level.SEVERE, "Bad class configured", cnf);
       return SETUP_FAIL;
     }
-
+    
     // enable thread dumper
     if (threadDumpInterval > 0) {
       LOGGER.log(Level.INFO, "starting thread dumper with interval " + threadDumpInterval);
       new ThreadDumper(threadDumpInterval);
     }
-
+    
     LOGGER.log(Level.INFO, "******* startup of MessageVortex complete *******");
-
+    
     MessageVortexController controller = new MessageVortexController();
     controller.setTimeout(timeoutInSeconds * 1000);
     controller.waitForShutdown();
-
+    
     LOGGER.log(Level.INFO, "******* shutting down MessageVortex *******");
     Map<String, RunningDaemon> tmap = new HashMap<>();
     tmap.putAll(transport);
@@ -311,12 +310,12 @@ public class MessageVortex implements Callable<Integer> {
       LOGGER.log(Level.INFO, "shutting down " + es.getKey());
       es.getValue().shutdownDaemon();
     }
-  
+    
     DummyTransportTrx.clearDummyEndpoints();
     LOGGER.log(Level.INFO, "******* shutdown complete *******");
     return 0;
   }
-
+  
   /**
    * <p>This is a wrapper of the getConfiguredClass() methode.</p>
    *
@@ -329,10 +328,10 @@ public class MessageVortex implements Callable<Integer> {
    * @throws ClassNotFoundException if classname not found
    **/
   public static RunningDaemon getDaemon(String section, String classname, DaemonType type)
-      throws ClassNotFoundException {
+          throws ClassNotFoundException {
     return (RunningDaemon) getConfiguredClass(section, classname, RunningDaemon.class);
   }
-
+  
   /**
    * <p>Loads a class of the given type.</p>
    *
@@ -348,7 +347,7 @@ public class MessageVortex implements Callable<Integer> {
    * @throws ClassNotFoundException if the named class cannot be found
    **/
   public static Object getConfiguredClass(String section, String name, Class templateClass)
-      throws ClassNotFoundException {
+          throws ClassNotFoundException {
     if (name == null) {
       throw new ClassNotFoundException("unable to obtain class \"null\"");
     }
@@ -358,19 +357,19 @@ public class MessageVortex implements Callable<Integer> {
       myConstructor = myClass.getConstructor(String.class);
     } catch (NoSuchMethodException e) {
       throw new ClassNotFoundException("unable to get apropriate constructor from class \""
-          + name + "\"", e);
+              + name + "\"", e);
     }
     if (!templateClass.isAssignableFrom(myClass)) {
       throw new ClassNotFoundException("Class \"" + name
-          + "\" does not implement required interfaces");
+              + "\" does not implement required interfaces");
     }
     try {
-      return myConstructor.newInstance(new Object[] {section});
+      return myConstructor.newInstance(new Object[]{section});
     } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
       throw new ClassNotFoundException("Class \"" + name + "\" failed running the constructor", e);
     }
   }
-
+  
   /***
    * <p>Get the accountant specified in the named configuration section.</p>
    * @param id the name of the config section
@@ -382,7 +381,7 @@ public class MessageVortex implements Callable<Integer> {
     }
     return accountant.get(id.toLowerCase());
   }
-
+  
   /***
    * <p>Get the blender specified in the named configuration section.</p>
    * @param id the name of the config section
@@ -394,7 +393,7 @@ public class MessageVortex implements Callable<Integer> {
     }
     return blender.get(id.toLowerCase());
   }
-
+  
   /***
    * <p>Get the router specified in the named configuration section.</p>
    * @param id the name of the config section
@@ -406,7 +405,7 @@ public class MessageVortex implements Callable<Integer> {
     }
     return router.get(id.toLowerCase());
   }
-
+  
   /***
    * <p>Get the identity store specified in the named configuration section.</p>
    * @param id the name of the config section
@@ -418,7 +417,7 @@ public class MessageVortex implements Callable<Integer> {
     }
     return identityStore.get(id.toLowerCase());
   }
-
+  
   /***
    * <p>gets a simulated payload space for a specific identity block.</p>
    *
@@ -429,7 +428,7 @@ public class MessageVortex implements Callable<Integer> {
     // get exiting space
     return simStores.getInternalPayload(ib);
   }
-
+  
   /***
    * <p>Gets own payload space for a specific identity.</p>
    *

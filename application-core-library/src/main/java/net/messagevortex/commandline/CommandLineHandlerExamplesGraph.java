@@ -39,11 +39,11 @@ public class CommandLineHandlerExamplesGraph implements Callable<Integer> {
   
   @CommandLine.Option(names = {"--x-resolution", "-x"}, required = false,
           description = "resolution of x-axis")
-  int x = 1024;
+  int xResolution = 1024;
   
   @CommandLine.Option(names = {"--y-resolution", "-y"}, required = false,
           description = "resolution of x-axis")
-  int y = 768;
+  int yResolution = 768;
   
   @CommandLine.Option(names = {"--redundancy-size", "-r"}, required = false,
           description = "minimum number of paths to target node")
@@ -78,12 +78,12 @@ public class CommandLineHandlerExamplesGraph implements Callable<Integer> {
     if (filename == null) {
       SwingUtilities.invokeLater(new Runnable() {
         public void run() {
-          jg.createAndShowUserInterface(x, y);
+          jg.createAndShowUserInterface(xResolution, yResolution);
         }
       });
     } else {
       // store image
-      jg.saveScreenshot(filename, x, y);
+      jg.saveScreenshot(filename, xResolution, yResolution);
     }
     
     return 0;

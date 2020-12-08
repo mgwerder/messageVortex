@@ -22,7 +22,6 @@ package net.messagevortex.blender;
 // * SOFTWARE.
 // ************************************************************************************
 
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -35,6 +34,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import javax.activation.DataHandler;
+import javax.mail.Authenticator;
 import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -63,39 +63,39 @@ import net.messagevortex.transport.dummy.DummyTransportTrx;
  * <p>This Dummy blender supports only plain blending without an offset.</p>
  */
 public class DummyBlender extends Blender {
-
+  
   private static final java.util.logging.Logger LOGGER;
-
+  
   static {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
     //MessageVortexLogger.setGlobalLogLevel(Level.ALL);
   }
-
+  
   private String identity;
   private Transport transport;
   private BlendingReceiver router;
   private IdentityStore identityStore;
-
+  
   private static class SenderThread extends Thread {
-
+    
     OutputStream output;
     MimeMessage msg;
-
+    
     volatile boolean success = true;
-
+    
     public SenderThread(MimeMessage msg, OutputStream os) {
       this.output = os;
       this.msg = msg;
     }
-
+    
     public SenderThread(byte[] msg, OutputStream os) throws MessagingException {
       this.output = os;
       Properties props = new Properties();
       ByteArrayInputStream bis = new ByteArrayInputStream(msg);
-      MimeMessage mmsg = new MimeMessage(null,bis);
+      MimeMessage mmsg = new MimeMessage(null, bis);
       this.msg = mmsg;
     }
-
+    
     @Override
     public void run() {
       try {
@@ -109,7 +109,7 @@ public class DummyBlender extends Blender {
       }
       LOGGER.log(Level.INFO, "streaming message to target done");
     }
-
+    
     public boolean getSuccess(long millis) {
       try {
         join(millis);
@@ -123,7 +123,7 @@ public class DummyBlender extends Blender {
       }
     }
   }
-
+  
   /**
    * <p>A dummy blender implementation.</p>
    *
@@ -139,7 +139,7 @@ public class DummyBlender extends Blender {
             new IdentityStore()
     );
   }
-
+  
   /***
    * <p>Creates a passthru blender which abstracts a local transport media.</p>
    *
@@ -163,70 +163,69 @@ public class DummyBlender extends Blender {
     }
     this.identityStore = identityStore;
   }
-
+  
   @Override
   public String getBlendingAddress() {
     return this.identity;
   }
-
+  
   @Override
   public byte[] blendMessageToBytes(BlendingSpec target, VortexMessage msg) {
     // encode message in clear readable and send it
     try {
       //Session session = Session.getDefaultInstance(new Properties(), null);
-      Session session = Session.getInstance(new Properties(),
-          new javax.mail.Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-              return new PasswordAuthentication("username", "password");
-            }
-          }
-      );
+      Authenticator a = new javax.mail.Authenticator() {
+        protected PasswordAuthentication getPasswordAuthentication() {
+          return new PasswordAuthentication("username", "password");
+        }
+      };
+      Session session = Session.getInstance(new Properties(), a);
       session.setDebug(true);
       final MimeMessage mimeMsg = new MimeMessage(session);
       mimeMsg.setFrom(new InternetAddress("test@test.com"));
       mimeMsg.setRecipient(Message.RecipientType.TO,
-          new InternetAddress(target.getRecipientAddress()));
+              new InternetAddress(target.getRecipientAddress()));
       mimeMsg.setSubject("VortexMessage");
       mimeMsg.setHeader("User-Agent:",
-          "MessageVortex/" + Version.getStringVersion());
+              "MessageVortex/" + Version.getStringVersion());
       MimeMultipart content = new MimeMultipart("mixed");
-
+      
       // body
       MimeBodyPart body = new MimeBodyPart();
       body.setText("-- This is a VortexMessage --\r\n\r\n" + msg.dumpValueNotation(""));
       content.addBodyPart(body);
-
+      
       //create attachment
       MimeBodyPart attachment = new MimeBodyPart();
       ByteArrayDataSource source = new ByteArrayDataSource(msg.toBytes(DumpType.PUBLIC_ONLY),
-          "application/octet-stream");
+              "application/octet-stream");
       attachment.setDataHandler(new DataHandler(source));
       attachment.setFileName("messageVortex.raw");
       content.addBodyPart(attachment);
-
+      
       mimeMsg.setContent(content);
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
       mimeMsg.writeTo(baos);
       baos.close();
       return baos.toByteArray();
-    } catch(IOException | MessagingException ioe ) {
-      LOGGER.log(Level.SEVERE, "OOPS... got an unexpected exception",ioe);
+    } catch (IOException | MessagingException ioe) {
+      LOGGER.log(Level.SEVERE, "OOPS... got an unexpected exception", ioe);
       return null;
     }
   }
-
+  
   @Override
   public VortexMessage unblendMessage(byte[] blendedMessage) {
     return null;
   }
-
+  
   @Override
   public boolean blendMessage(BlendingSpec target, VortexMessage msg) throws IOException {
     try {
       if (transport != null) {
         PipedOutputStream os = new PipedOutputStream();
         PipedInputStream is = new PipedInputStream(os);
-        SenderThread t = new SenderThread(blendMessageToBytes(target,msg), os);
+        SenderThread t = new SenderThread(blendMessageToBytes(target, msg), os);
         t.start();
         try {
           transport.sendMessage(target.getRecipientAddress(), is);
@@ -249,21 +248,21 @@ public class DummyBlender extends Blender {
       LOGGER.log(Level.SEVERE, "Error when composing message", me);
     } catch (IOException ioe) {
       LOGGER.log(Level.SEVERE, "Unable to send to transport endpoint "
-        + target.getRecipientAddress(), ioe);
+              + target.getRecipientAddress(), ioe);
     }
     return false;
   }
-
+  
   @Override
   public boolean gotMessage(final InputStream is) {
     try {
-      Session session = Session.getInstance(new Properties(),
-          new javax.mail.Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-              return new PasswordAuthentication("username", "password");
-            }
-          }
-      );
+      Authenticator a = new javax.mail.Authenticator() {
+        protected PasswordAuthentication getPasswordAuthentication() {
+          return new PasswordAuthentication("username", "password");
+        }
+      };
+      
+      Session session = Session.getInstance(new Properties(), a);
       MimeMessage msg = new MimeMessage(session, is);
       is.close();
       VortexMessage vmsg = null;
@@ -287,26 +286,26 @@ public class DummyBlender extends Blender {
       return false;
     }
   }
-
+  
   private List<InputStream> getAttachments(Message message) throws MessagingException, IOException {
     Object content = message.getContent();
     if (content instanceof String) {
       return null;
     }
-
+    
     if (content instanceof Multipart) {
       Multipart multipart = (Multipart) content;
       List<InputStream> result = new ArrayList<InputStream>();
-
+      
       for (int i = 0; i < multipart.getCount(); i++) {
         result.addAll(getAttachments(multipart.getBodyPart(i)));
       }
       return result;
-
+      
     }
     return null;
   }
-
+  
   private List<InputStream> getAttachments(BodyPart part) throws IOException, MessagingException {
     List<InputStream> result = new ArrayList<InputStream>();
     Object content = part.getContent();
@@ -319,7 +318,7 @@ public class DummyBlender extends Blender {
         return new ArrayList<InputStream>();
       }
     }
-
+    
     if (content instanceof Multipart) {
       Multipart multipart = (Multipart) content;
       for (int i = 0; i < multipart.getCount(); i++) {
@@ -329,5 +328,5 @@ public class DummyBlender extends Blender {
     }
     return result;
   }
-
+  
 }

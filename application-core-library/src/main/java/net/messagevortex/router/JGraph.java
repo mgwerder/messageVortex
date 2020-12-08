@@ -145,7 +145,8 @@ public class JGraph extends JPanel implements MouseListener {
       
       if (this.route >= 0 && routes[this.route].contains(gr)) {
         System.out.println("##   route " + this.route + " contains " + i + " ("
-                + (this.route < 0 ? "none" : routes[this.route].size()) + "/" + gr.getStartTime() + ")");
+                + (this.route < 0 ? "none" : routes[this.route].size()) + "/" + gr.getStartTime()
+                + ")");
         g2.setColor(Color.GREEN);
         g2.setStroke(s2);
         if (lastY > 0) {
@@ -307,6 +308,12 @@ public class JGraph extends JPanel implements MouseListener {
     });
   }
   
+  /**
+   * <p>Shows UI interface with graph with specified sizes.</p>
+   *
+   * @param x width of window
+   * @param y height of window
+   */
   public void createAndShowUserInterface(int x, int y) {
     System.out.println("Created GUI on event dispatching thread? "
             + SwingUtilities.isEventDispatchThread());
@@ -323,7 +330,8 @@ public class JGraph extends JPanel implements MouseListener {
   
   /***
    * <p>gets an image of the current graph.</p>
-   * @param width the width of the screenshot in pixels
+   *
+   *  @param width the width of the screenshot in pixels
    * @param height the height of the screenshot in pixels
    * @return the image
    */
@@ -340,6 +348,7 @@ public class JGraph extends JPanel implements MouseListener {
   
   /***
    * <p>Writes a screenshot of the current graph into a jpeg file.</p>
+   *
    * @param filename name of the file to be written
    * @param width the width of the screenshot in pixels
    * @param height the height of the screenshot in pixels

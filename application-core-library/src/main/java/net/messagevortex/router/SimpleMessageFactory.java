@@ -24,7 +24,6 @@ package net.messagevortex.router;
 
 import java.io.File;
 import java.io.IOException;
-import java.security.SecureRandom;
 import java.util.logging.Level;
 import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortexLogger;
@@ -36,25 +35,25 @@ import net.messagevortex.asn1.RoutingCombo;
  * Created by martin.gwerder on 06.06.2016.
  */
 public class SimpleMessageFactory extends MessageFactory {
-
+  
   private static final java.util.logging.Logger LOGGER;
-
+  
   static {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
-
+  
   /* Edge set to be honored */
   private GraphSet graph = new GraphSet();
-
+  
   /* number of s for the graph to be completed */
   private long minMessageTransferStart = 180L;
-
+  
   /* number of s for the graph to be completed */
   private long maxMessageTransferTime = 1800L;
-
+  
   /* number of s between arrival the first sending time */
   private long minStepProcessSTime = 30L;
-
+  
   /***
    * <p>A simple message factory creating a possibly redundant message path.</p>
    * @param msg     the message to be used
@@ -66,12 +65,12 @@ public class SimpleMessageFactory extends MessageFactory {
   public SimpleMessageFactory(String msg, int source, int target,
                               IdentityStoreBlock[] anonGroupMembers, IdentityStore is) {
     this.msg = msg;
-
+    
     graph.setAnonymitySet(anonGroupMembers);
     graph.setSource(anonGroupMembers[source]);
     graph.setTarget(anonGroupMembers[target]);
   }
-
+  
   /***
    * <p>build a simple message path.</p>
    */
@@ -79,7 +78,7 @@ public class SimpleMessageFactory extends MessageFactory {
     // building vector graphs
     // minimum Graph size is 2.5 time edges
     int numberOfGraphs = (int) (graph.getAnonymitySetSize() * 2.5);
-
+    
     // create graph until minimum size is reached and target graph get message
     LOGGER.log(Level.FINE, "Create graph");
     while (graph.size() < numberOfGraphs || !graph.allTargetsReached()) {
@@ -93,47 +92,51 @@ public class SimpleMessageFactory extends MessageFactory {
       }
       graph.add(new Edge(from, to, graph.size(), 0));
     }
-
+    
     // set times (all times in seconds)
     LOGGER.log(Level.FINE, "Assigning time to graph");
     long minArrival = 0;
     long maxArrival = 0;
     for (int i = 0; i < graph.size(); i++) {
-      Edge g = graph.get(i);
       // the maximum remaining time to fulfill maximum time graph length
       long maxRemainingTime = maxMessageTransferTime - maxArrival; // OK
       int remainingHops = graph.size() - i; //OK
-      LOGGER.log(Level.FINEST, "calculating timing for minArival=" + minArrival + "/maxArrival=" + maxArrival + "/remainingTime=" + maxRemainingTime + "/remainingHps=" + remainingHops);
+      LOGGER.log(Level.FINEST, "calculating timing for minArival=" + minArrival
+              + "/maxArrival=" + maxArrival + "/remainingTime=" + maxRemainingTime
+              + "/remainingHps=" + remainingHops);
       long maxShare = maxRemainingTime - remainingHops * minStepProcessSTime - 2;
-      long share = Math.max(1,maxShare / remainingHops);
-      maxShare = Math.max(2,maxShare);
+      long share = Math.max(1, maxShare / remainingHops);
+      maxShare = Math.max(2, maxShare);
       LOGGER.log(Level.FINEST, "calculated shares are maxShare=" + maxShare + "/share=" + share);
       assert maxShare > 0 : "maxShare is negative (" + maxShare + ")";
       assert share > 0 : "share is negative (" + share + ")";
-      long minTime = (long) (ExtendedSecureRandom.nextRandomTime(minArrival, minArrival + share + 1, minArrival + maxShare + 2));
+      long minTime = (long) (ExtendedSecureRandom.nextRandomTime(minArrival, minArrival + share
+              + 1, minArrival + maxShare + 2));
       maxRemainingTime = maxMessageTransferTime - minTime; // OK
       maxShare = maxRemainingTime - remainingHops * minStepProcessSTime - 2;
-      share = Math.max(1,maxShare / remainingHops);
-      maxShare = Math.max(2,maxShare);
-      long maxTime = (long) (ExtendedSecureRandom.nextRandomTime(minTime, minTime + share + 1, minTime + maxShare + 2));
+      share = Math.max(1, maxShare / remainingHops);
+      maxShare = Math.max(2, maxShare);
+      long maxTime = (long) (ExtendedSecureRandom.nextRandomTime(minTime, minTime + share + 1,
+              minTime + maxShare + 2));
+      Edge g = graph.get(i);
       g.setStartTime(minArrival - minTime);
       g.setDelayTime(maxTime - minTime);
       maxArrival = maxTime + minStepProcessSTime;
       minArrival = minTime + minStepProcessSTime;
     }
-
+    
     // select operations
     return buildRoutingBlock();
   }
-
+  
   private RoutingCombo buildRoutingBlock() {
     // determine message route
     GraphSet[] gs = graph.getRoutes();
     GraphSet msgpath = gs[ExtendedSecureRandom.nextInt(gs.length)];
-
+    
     return graph.getRoutingBlock();
   }
-
+  
   /***
    * <p>Sets the maximum time allowed to transfer the message to the final destination.</p>
    *
@@ -145,7 +148,7 @@ public class SimpleMessageFactory extends MessageFactory {
     maxMessageTransferTime = newmax;
     return ret;
   }
-
+  
   /***
    * <p>Sets the minimum time required to process a message in a node.</p>
    *
@@ -158,7 +161,7 @@ public class SimpleMessageFactory extends MessageFactory {
     minStepProcessSTime = newmin;
     return ret;
   }
-
+  
   /***
    * <p>Gets the previously built message path.</p>
    * @return the message path or null if the previous build has failed
@@ -166,7 +169,7 @@ public class SimpleMessageFactory extends MessageFactory {
   public GraphSet getGraph() {
     return graph;
   }
-
+  
   /***
    * <p>This is a test methode sheduled to be removed.</p>
    *
@@ -187,5 +190,5 @@ public class SimpleMessageFactory extends MessageFactory {
     smf.build();
     LOGGER.log(Level.INFO, "done building");
   }
-
+  
 }

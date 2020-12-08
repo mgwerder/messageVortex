@@ -753,6 +753,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/ExtendedSecureRandom.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/MessageVortex.java">
           <value>
             <set />
@@ -773,12 +778,27 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/asn1/AsymmetricKey.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/asn1/AsymmetricKeyCache.java">
           <value>
             <set />
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/asn1/AsymmetricKeyPreCalculator.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/asn1/IdentityStore.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/asn1/encryption/EllipticCurveType.java">
           <value>
             <set />
           </value>
@@ -798,7 +818,42 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/blender/Blender.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/blender/DummyBlender.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/blender/generators/AcademicGenerator.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/blender/generators/BlenderGenerator.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/blender/generators/GenericGenerator.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/commandline/CommandLineHandlerCache.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/commandline/CommandLineHandlerCacheCalculate.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/commandline/CommandLineHandlerExamplesAddress.java">
           <value>
             <set />
           </value>
@@ -828,7 +883,42 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/router/SimpleMessageFactory.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/router/TooltipContainer.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/router/TooltipExtent.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/router/TooltipExtentBox.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/router/TooltipExtentCircular.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/router/operation/AddRedundancy.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/router/operation/GaloisFieldMathMode.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/router/operation/RedundancyMatrix.java">
           <value>
             <set />
           </value>

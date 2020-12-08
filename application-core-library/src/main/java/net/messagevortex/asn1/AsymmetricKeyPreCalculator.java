@@ -301,10 +301,19 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
     return ret;
   }
   
+  /**
+   * <p>Gets the currently set filename for key pre-calculation.</p>
+   *
+   * @return the currently set filename
+   */
+  public static String getCacheFileName() {
+    return filename;
+  }
+  
   /***
    * <p>Set name of cache file.</p>
    *
-   * <p>If set to null the Precalculator is disabled.</p>
+   * <p>If set to null the pre-calculator is disabled.</p>
    *
    * @param name                         file name of the cache file
    * @return String representing the previously set name

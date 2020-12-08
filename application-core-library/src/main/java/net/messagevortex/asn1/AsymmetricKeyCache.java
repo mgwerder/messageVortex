@@ -44,32 +44,32 @@ import net.messagevortex.asn1.encryption.Parameter;
  * <p>The key cache supporting AsymmetricKey.</p>
  */
 public class AsymmetricKeyCache implements Serializable {
-
+  
   public static final long serialVersionUID = 100000000081L;
-
+  
   public static final SecureRandom esr = new SecureRandom();
-
+  
   private static final java.util.logging.Logger LOGGER;
-
+  
   static {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
     //MessageVortexLogger.setGlobalLogLevel(Level.ALL);
   }
-
+  
   private Map<AlgorithmParameter, CacheElement> cache = new TreeMap<>();
-
+  
   private static class CacheElement implements Serializable {
-
+    
     public static final long serialVersionUID = 100000000080L;
-
+    
     private static final int MAX_NUMBER_OF_CALC_TIMES = 100;
     private static final int MAX_CACHE_SIZE = 40000;
-
+    
     private int maxSize = 1;
     private long averageCalcTime = 100;
     private int numberOfCalcTimes = 0;
     private Queue<AsymmetricKey> cache = new ArrayDeque<>();
-
+    
     /***
      * <p>Gets the maximum size of the cache element.</p>
      *
@@ -78,7 +78,7 @@ public class AsymmetricKeyCache implements Serializable {
     public int getMaxSize() {
       return maxSize;
     }
-
+    
     /***
      * <p>Sets the maximum size of the cache to the specified value.</p>
      *
@@ -90,7 +90,7 @@ public class AsymmetricKeyCache implements Serializable {
       maxSize = size;
       return ret;
     }
-
+    
     /***
      * <p>Gets the topmost cache element from the element queue.</p>
      *
@@ -106,7 +106,7 @@ public class AsymmetricKeyCache implements Serializable {
         }
       }
     }
-
+    
     /***
      * <p>Gets the topmost element from the cache queue without removing it.</p>
      *
@@ -121,7 +121,7 @@ public class AsymmetricKeyCache implements Serializable {
         }
       }
     }
-
+    
     /***
      * <p>Adds a new precaculated key to the cache queue.</p>
      * @param key the key to be added.
@@ -129,12 +129,17 @@ public class AsymmetricKeyCache implements Serializable {
     public void push(AsymmetricKey key) {
       synchronized (cache) {
         AlgorithmParameter p = key.getAlgorithmParameter();
-        assert key.getAlgorithm()!=Algorithm.EC || p.get(Parameter.CURVETYPE).indexOf(""+p.get(Parameter.BLOCKSIZE))>0: "found mismatch in curve type vs blocksize ("+p.get(Parameter.BLOCKSIZE)+"/"+p.get(Parameter.CURVETYPE)+")";
-        assert key.getAlgorithm()!=Algorithm.RSA || p.get(Parameter.KEYSIZE).equals(p.get(Parameter.BLOCKSIZE)): "found mismatch in RSA keysize vs blocksize (ks:"+p.get(Parameter.KEYSIZE)+"/bs:"+p.get(Parameter.BLOCKSIZE)+")";
+        assert key.getAlgorithm() != Algorithm.EC || p.get(Parameter.CURVETYPE).indexOf(""
+                + p.get(Parameter.BLOCKSIZE)) > 0 : "found mismatch in curve type vs blocksize ("
+                + p.get(Parameter.BLOCKSIZE) + "/" + p.get(Parameter.CURVETYPE) + ")";
+        assert key.getAlgorithm() != Algorithm.RSA
+                || p.get(Parameter.KEYSIZE).equals(p.get(Parameter.BLOCKSIZE))
+                : "found mismatch in RSA keysize vs blocksize (ks:" + p.get(Parameter.KEYSIZE)
+                + "/bs:" + p.get(Parameter.BLOCKSIZE) + ")";
         cache.add(key);
       }
     }
-
+    
     /***
      * <p>Adds the time of calculation of the last key for stats purposes.</p>
      * @param millis the required time in milliseconds
@@ -145,7 +150,7 @@ public class AsymmetricKeyCache implements Serializable {
         numberOfCalcTimes = Math.min(numberOfCalcTimes, MAX_NUMBER_OF_CALC_TIMES);
       }
     }
-
+    
     /***
      * <p>Gets the average time to calculate this type of key.</p>
      *
@@ -154,7 +159,7 @@ public class AsymmetricKeyCache implements Serializable {
     public double getAverageCalcTime() {
       return averageCalcTime;
     }
-
+    
     /***
      * <p>Cacluates the time required to fill this cache based on its current fill.</p>
      *
@@ -167,7 +172,7 @@ public class AsymmetricKeyCache implements Serializable {
       }
       return Math.max(0, maxSize - cache.size()) * avg;
     }
-
+    
     /***
      * <p>Gets the number of elements in the cache.</p>
      *
@@ -178,7 +183,7 @@ public class AsymmetricKeyCache implements Serializable {
         return cache.size();
       }
     }
-
+    
     /***
      * <p>Clears all elements from the cache queue.</p>
      */
@@ -187,7 +192,7 @@ public class AsymmetricKeyCache implements Serializable {
         cache.clear();
       }
     }
-
+    
     /***
      * <p>Merges two cache queues.</p>
      *
@@ -195,7 +200,7 @@ public class AsymmetricKeyCache implements Serializable {
      */
     public void merge(CacheElement element) {
       synchronized (cache) {
-        for (AsymmetricKey e :element.cache) {
+        for (AsymmetricKey e : element.cache) {
           push(e);
         }
         maxSize = Math.max(maxSize, element.maxSize);
@@ -207,7 +212,7 @@ public class AsymmetricKeyCache implements Serializable {
                 MAX_NUMBER_OF_CALC_TIMES);
       }
     }
-
+    
     /***
      * <p>Serializer for the cache queue including the cache elements and stats.</p>
      *
@@ -226,7 +231,7 @@ public class AsymmetricKeyCache implements Serializable {
         }
       }
     }
-
+    
     /***
      * <p>Deserializer for the cache queue.</p>
      *
@@ -244,16 +249,16 @@ public class AsymmetricKeyCache implements Serializable {
         push((AsymmetricKey) in.readObject());
       }
     }
-
+    
     /***
      * <p>Convenience function to request a cache increase in case of an empty cache.</p>
      */
     public void requestCacheIncrease() {
       maxSize = Math.min(MAX_CACHE_SIZE, Math.max((int) (maxSize * 1.1), maxSize + 1));
     }
-
+    
   }
-
+  
   /***
    * <p>Stores the cache to the specified filename for later usage.</p>
    *
@@ -270,7 +275,7 @@ public class AsymmetricKeyCache implements Serializable {
     LOGGER.log(Level.INFO, "stored cache to file \"" + filename + "\"");
     showStats();
   }
-
+  
   /***
    * <p>Loads the cache from the specified filename.</p>
    *
@@ -285,7 +290,7 @@ public class AsymmetricKeyCache implements Serializable {
     LOGGER.log(Level.INFO, "loaded cache from file \"" + filename + "\"");
     showStats();
   }
-
+  
   private void load(ObjectInputStream f, boolean merge) throws IOException {
     synchronized (cache) {
       if (!merge) {
@@ -310,10 +315,10 @@ public class AsymmetricKeyCache implements Serializable {
       } catch (ClassNotFoundException cnfe) {
         throw new IOException("got unexpected exception when deserializing", cnfe);
       }
-
+      
     }
   }
-
+  
   /***
    * <p>Adds the keys in the specified file to the cache.</p>
    *
@@ -328,7 +333,7 @@ public class AsymmetricKeyCache implements Serializable {
       throw new IOException("Error deserializing file \"" + filename + "\"", cce);
     }
   }
-
+  
   /***
    * <p>Sets the time for a calculation with the specified parameter.</p>
    *
@@ -341,7 +346,7 @@ public class AsymmetricKeyCache implements Serializable {
       ce.setCalcTime(millis);
     }
   }
-
+  
   private AlgorithmParameter getCacheElementByIndex(int index) {
     synchronized (cache) {
       int i = 0;
@@ -354,7 +359,7 @@ public class AsymmetricKeyCache implements Serializable {
       return null;
     }
   }
-
+  
   /***
    * <p>Gets a precalculated key from the cache.</p>
    *
@@ -372,7 +377,7 @@ public class AsymmetricKeyCache implements Serializable {
       return ret;
     }
   }
-
+  
   /***
    * <p>Gets a precalculated key from the cache without removing it.</p>
    *
@@ -390,7 +395,7 @@ public class AsymmetricKeyCache implements Serializable {
       return ret;
     }
   }
-
+  
   /***
    * <p>store a precalculated key into the cache.</p>
    *
@@ -407,7 +412,7 @@ public class AsymmetricKeyCache implements Serializable {
       ce.push(key);
     }
   }
-
+  
   /***
    * <p>Increase the cache size for the specified parameter set.</p>
    *
@@ -423,7 +428,7 @@ public class AsymmetricKeyCache implements Serializable {
       ce.requestCacheIncrease();
     }
   }
-
+  
   /***
    * <p>Gets a set of parameter which should be calculated next.</p>
    *
@@ -437,37 +442,37 @@ public class AsymmetricKeyCache implements Serializable {
       for (Map.Entry<AlgorithmParameter, CacheElement> me : cache.entrySet()) {
         long ft = (long) (me.getValue().getCacheFillTime());
         // make sure that all key sizes have a minimum time
-
+        
         l += ft;
         if (ft > 0) {
           hm.put(l, me.getKey());
         }
       }
     }
-
+    
     // if all caches are full return no parameter
     if (l == 0 || hm.size() == 0) {
       return null;
     }
-
+    
     // elect weighted element acording to number and estimated calc time
     long e;
     synchronized (esr) {
       e = Math.abs(esr.nextLong() % (l + 1));
     }
-
-
+    
+    
     // get element and return
     for (Map.Entry<Long, AlgorithmParameter> me : hm.entrySet()) {
       if (me.getKey() >= e) {
         return me.getValue();
       }
     }
-
+    
     return null;
   }
-
-
+  
+  
   /***
    * <p>Get the size of the lowest cache in fraction of percent.</p>
    *
@@ -481,7 +486,7 @@ public class AsymmetricKeyCache implements Serializable {
     ;
     return lowest;
   }
-
+  
   /***
    * <p>Get the total cache fill grade in percent.</p>
    *
@@ -502,7 +507,7 @@ public class AsymmetricKeyCache implements Serializable {
       return fg;
     }
   }
-
+  
   /***
    * <p>Remove all elements from the cache.</p>
    */
@@ -513,7 +518,7 @@ public class AsymmetricKeyCache implements Serializable {
       }
     }
   }
-
+  
   /***
    * <p>Check if the cache is empty.</p>
    *
@@ -526,7 +531,7 @@ public class AsymmetricKeyCache implements Serializable {
     }
     return (int) (size) == 0;
   }
-
+  
   private void writeObject(ObjectOutputStream out) throws IOException {
     synchronized (cache) {
       out.writeInt(cache.size());
@@ -536,7 +541,7 @@ public class AsymmetricKeyCache implements Serializable {
       }
     }
   }
-
+  
   private void readObject(ObjectInputStream in) throws IOException {
     try {
       int i = in.readInt();
@@ -548,8 +553,8 @@ public class AsymmetricKeyCache implements Serializable {
       throw new IOException("Exception while reading cache file", cnfe);
     }
   }
-
-
+  
+  
   private static String percentBar(double percent, int size) {
     StringBuilder sb = new StringBuilder();
     sb.append('|');
@@ -562,7 +567,7 @@ public class AsymmetricKeyCache implements Serializable {
     sb.append('|');
     return sb.toString();
   }
-
+  
   /***
    * <p>Set the expected size of the cache.</p>
    * @param index index of the cache to be set
@@ -579,7 +584,7 @@ public class AsymmetricKeyCache implements Serializable {
       ce.setMaxSize(value);
     }
   }
-
+  
   /***
    * <p>Remove the specified key type from cache.</p>
    * @param index the index of the cache to be removed
@@ -594,7 +599,7 @@ public class AsymmetricKeyCache implements Serializable {
       cache.remove(ap);
     }
   }
-
+  
   /***
    * <p>Dumps cache stats to the logger.</p>
    */
@@ -617,12 +622,12 @@ public class AsymmetricKeyCache implements Serializable {
                 + percentBar((double) (s) / ms, 20) + " " + e.getKey());
         sum += s;
         tot += ms;
-
+        
       }
       LOGGER.log(Level.INFO, sepLine);
       LOGGER.log(Level.INFO, "| Total: " + sum + "/" + tot + "");
       LOGGER.log(Level.INFO, sepLine);
     }
   }
-
+  
 }
