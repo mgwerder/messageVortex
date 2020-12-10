@@ -14,6 +14,9 @@ import net.messagevortex.asn1.encryption.Mode;
 import net.messagevortex.asn1.encryption.Padding;
 import picocli.CommandLine;
 
+/**
+ * <p>Commandline handler to list available ciphers.</p>
+ */
 @CommandLine.Command(
     description = "list available ciphers",
     name = "list",
@@ -39,6 +42,14 @@ public class CommandLineHandlerCipherList implements Callable<Integer> {
       description = "type of information (ASYM, SYM, MODE, PAD)")
   CipherType[] types = {ASYM, SYM, MODE, PAD};
 
+  /**
+   * <p>Commandline handler to list all available ciphers, modes and paddings.</p>
+   *
+   * <p>Use java -jar MessageVortex.jar crypt list --help to get all supported parameters.</p>
+   *
+   * @return the errorlevel to be returned
+   * @throws Exception if anything goes wrong
+   */
   @Override
   public Integer call() throws Exception {
     for (CipherType c : types) {

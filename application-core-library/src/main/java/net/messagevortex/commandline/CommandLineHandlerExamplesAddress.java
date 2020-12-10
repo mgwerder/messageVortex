@@ -12,6 +12,9 @@ import net.messagevortex.asn1.encryption.Parameter;
 import net.messagevortex.asn1.encryption.SecurityLevel;
 import picocli.CommandLine;
 
+/**
+ * <p>creates sample adress representations for MessageVortex.</p>
+ */
 @CommandLine.Command(
         description = "create a sample address",
         name = "address",
@@ -41,7 +44,15 @@ public class CommandLineHandlerExamplesAddress implements Callable<Integer> {
   @CommandLine.Option(names = {"--key-size", "-s"}, required = false,
           description = "the key size")
   int size = 384;
-  
+
+  /**
+   * <p>Commandline handler to create sample addresses.</p>
+   *
+   * <p>Use java -jar MessageVortex.jar example address --help to get all supported parameters.</p>
+   *
+   * @return the errorlevel to be returned
+   * @throws Exception if anything goes wrong
+   */
   @Override
   public Integer call() throws Exception {
     // create key

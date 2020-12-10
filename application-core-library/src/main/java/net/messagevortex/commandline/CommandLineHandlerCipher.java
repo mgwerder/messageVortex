@@ -4,6 +4,12 @@ import java.util.concurrent.Callable;
 import net.messagevortex.NotImplementedException;
 import picocli.CommandLine;
 
+/**
+ * <p>Commandline handler for using the encryot operations on files.</p>
+ *
+ * <p>This handler was used in the course of detecting remanences of messages. It serves as rump
+ * for all subcommands and is empty.</p>
+ */
 @CommandLine.Command(
         description = "Helper for symmetrical encryption operations",
         name = "cipher",
@@ -14,10 +20,4 @@ import picocli.CommandLine;
                 CommandLineHandlerCipherEncrypt.class
         }
 )
-public class CommandLineHandlerCipher implements Callable<Integer> {
-
-  public Integer call() throws Exception {
-    throw new NotImplementedException();
-  }
-
-}
+public class CommandLineHandlerCipher {}

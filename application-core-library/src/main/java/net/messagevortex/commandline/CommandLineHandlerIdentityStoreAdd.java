@@ -12,6 +12,9 @@ import net.messagevortex.asn1.IdentityStoreBlock;
 import net.messagevortex.asn1.encryption.DumpType;
 import picocli.CommandLine;
 
+/**
+ * <p>Commandline helper to add an identity to an identity store.</p>
+ */
 @CommandLine.Command(
         description = "add an identity and dump store",
         name = "addIdentity",
@@ -34,6 +37,14 @@ public class CommandLineHandlerIdentityStoreAdd implements Callable<Integer> {
           description = "the identity URL")
   String[] identity;
 
+  /**
+   * <p>Commandline handler to add an identity to an identity store.</p>
+   *
+   * <p>Use java -jar MessageVortex.jar identitystore addIdentity --help to get all supported parameters.</p>
+   *
+   * @return the error level to be returned
+   * @throws Exception if anything goes wrong
+   */
   @Override
   public Integer call() throws Exception {
     // load store

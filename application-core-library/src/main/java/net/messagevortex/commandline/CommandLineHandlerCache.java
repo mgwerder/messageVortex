@@ -6,6 +6,8 @@ import picocli.CommandLine;
 
 /**
  * Commandline handler for generating asymmetric keys.
+ *
+ * <p>This class serves as commandline command rump only.</p>
  */
 @CommandLine.Command(
         description = "Helper for cache of asymmetric keys",
@@ -15,16 +17,4 @@ import picocli.CommandLine;
                 CommandLineHandlerCacheCalculate.class,
         }
 )
-public class CommandLineHandlerCache implements Callable<Integer> {
-  
-  /**
-   * <p>Dummy handler only providing sub calls.</p>
-   *
-   * @return nothing
-   * @throws Exception always
-   */
-  public Integer call() throws Exception {
-    throw new NotImplementedException();
-  }
-  
-}
+public class CommandLineHandlerCache {};

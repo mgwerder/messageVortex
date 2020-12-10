@@ -8,6 +8,11 @@ import net.messagevortex.NotImplementedException;
 import picocli.CommandLine;
 
 
+/**
+ * <p>Commandline handler to generate sample files.</p>
+ *
+ * <p>Implements the command "example".</p>
+ */
 @CommandLine.Command(
     description = "Create example snippets",
     name = "example",
@@ -18,10 +23,8 @@ import picocli.CommandLine;
         CommandLineHandlerExamplesGraph.class
     }
 )
-public class CommandLineHandlerExamples implements Callable<Integer> {
+public class CommandLineHandlerExamples {
+
   public static final String DEFAULT_FILENAME = "identityStore.cfg";
 
-  public Integer call() throws Exception {
-    throw new NotImplementedException();
-  }
 }

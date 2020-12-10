@@ -48,7 +48,15 @@ public class CommandLineHandlerExamplesGraph implements Callable<Integer> {
   @CommandLine.Option(names = {"--redundancy-size", "-r"}, required = false,
           description = "minimum number of paths to target node")
   int redundancy = 3;
-  
+
+  /**
+   * <p>Commandline handler to create sample graphs.</p>
+   *
+   * <p>Use java -jar MessageVortex.jar example graph --help to get all supported parameters.</p>
+   *
+   * @return the error level to be returned
+   * @throws Exception if anything goes wrong
+   */
   @Override
   public Integer call() throws Exception {
     IdentityStore is = null;
