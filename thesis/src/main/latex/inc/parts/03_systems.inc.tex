@@ -4,7 +4,7 @@
 %!TeX root = ../../messageVortex.tex
 
 \partepigraph{It was the anonymity. He wanted to be unknown, unpossessed by others' knowledge of him. That was freedom.}{Ling Ma, Severance}
-\part{Anonymous Communication Systems\label{sec:systems}}
+\part{Anonymous Communication Systems}\label{sec:systems}
 \chapter{Well Known Standard Protocols}
 \section*{SMTP and Related Post Office Protocols (1982)}
 Today's mail transport is mostly done via \defref{SMTP}\index{SMTP} protocol, as specified in \cite{rfc5321}. This protocol has proven to be stable and reliable. Most of the messages are passed from an MUA to an SMTP relay of a provider. From there, the message is directly sent to the SMTP server of the recipient and subsequently to the server-based storage of the recipient. The recipient may, at any time, connect to his server-based storage and may optionally relocate the message to a client-based (local) storage. The delivery from the server storage to the MUA of the recipient may happen by message polling or by message push (whereas the latter is usually implemented by a push-pull mechanism).

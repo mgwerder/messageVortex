@@ -8,12 +8,12 @@
 % *** Decisions and Research
 % ********************************************************************************************************
 \partepigraph{Thinking is the hardest work there is, which is probably the reason, so few engage in it.}{Henry Ford, American industrialist and founder of Ford Motor Co.}
-\part{The  MessageVortex System}
+\part{The  MessageVortex System}\label{sec:coreMVProtocol}
 In this part, we create a protocol called \MessageVortex{}, enabling anonymous communication. Unlike most other academic attempts, we do this on the base of an adversary, which is capable of banning our technology. We, therefore, are not able to focus solely on the anonymity property. Instead, we first collect requirements for such a system in section~\ref{sec:genRequirements}. Based on these requirements, we explain our architectural concepts and decisions in section~\ref{sec:rationale}. We then build an outline of our protocol focusing on the protocol's main properties, without going too much into implementation details. In section~\ref{sec:protocol}, we describe the protocol and its key concepts in depth. We explain all aspects relevant to the academic solution without going into implementation details.
 
 The details of the implementation, as well as their realization in infrastructure, are in part~\ref{sec:implementation}. For operational concerns such as route building strategies, refer to part~\ref{sec:operation}.
 
-\chapter{Requirements for an Anonymizing Protocol\label{sec:genRequirements}}
+\chapter{Requirements for an Anonymizing Protocol}\label{sec:genRequirements}
 In the following sections, we first define a threat model. We then elaborate on the main characteristics of the anonymizing protocol based on the threat model. 
 
 \begin{table*}[ht]\centering\tiny
@@ -249,7 +249,7 @@ A messaging system offering unlinkability may offer sender anonymity from a reci
 
 We did not consider efficiency as a requirement. Our goal is to achieve anonymity under harsh conditions such as . 
 
-\chapter{Rationale\label{sec:rationale}}
+\chapter{Rationale}\label{sec:rationale}
 In this chapter, we set the course for our system. We explain why we built the protocol the way it is. We try to elaborate on our decisions and explain why the system is not built differently.
 
 The system we describe is a four-layered system (transport, blending, routing, and accounting layer) in which each layer fulfills a specific duty. The transport layer is equal to an unmodified, common internet data transport protocol. The blending layer inserts and extracts our protocol messages into the transport layer. The routing layer does disassemble and reassemble the messages received and applies specially crafted operations, and the accounting layer keeps track of quotas and protects the resources of the system. The three \MessageVortex{} layers (all layers except "transport") run on common internet end-user devices such as mobile phones or tablets.

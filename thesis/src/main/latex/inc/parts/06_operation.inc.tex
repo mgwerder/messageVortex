@@ -907,7 +907,7 @@ Operations are chosen in two ways either we create an $addRedundancy$ operation 
 			\State $\Call{addMessageMapping}{\text{edges}}$
 		\EndProcedure
 		\item[]		
-		\Function{assignSingleRoute}{route, payloadIds, lastNode, targetIds}\funclabel{alg:assignRoute}\label{alg:startAssignRoute-line}
+		\Function{assignSingleRoute}{route, payloadIds, lastNode, targetIds}\funclabel{alg:assignSingleRoute}\label{alg:startAssignSingleRoute-line}
 			\State $source \gets route.getSourceNode()$
 			\If{$payloadIds.isEmpty()$}
 				\State $\text{PayloadIds} \gets source.getRandopOperation().getUnusedIds(1)$

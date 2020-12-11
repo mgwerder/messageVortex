@@ -8,7 +8,7 @@ import net.messagevortex.blender.BlenderContent;
 public interface BlenderGenerator {
   
   /**
-   * <p>creates the blended message including the decoy text if meeded.</p>
+   * <p>creates the blended message including the decoy text if needed.</p>
    *
    * @param parameter the parameters required for blending
    * @param msg       the message to be blended
