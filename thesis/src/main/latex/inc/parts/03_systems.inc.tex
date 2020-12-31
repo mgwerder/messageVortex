@@ -301,22 +301,26 @@ Table \ref{tab:anonClass} shows the previously analyzed protocols according to t
 
 		Dissent in numbers\takenFrom & \networkPartly & \directionUnidi  & \syncAsync & \roleCs & \hierarchyHierarchical & \decentralizationPart & \netviewPartly & \updatingEvent & \routingRoutebc & \shedfair & \nsdetdet & \nsnodesnet & \nsprobstat & \perflath & \perfmodemsg & \nsimplyes & \nscodeyes & \nscontmsg \\
 
-		Verdict & & & & & & & & & & & & & & & & & & \\
+		Verdict & \networkFully & \directionUnidi & \syncSynchronous & \roleCs & \hierarchyHierarchical & \decentralizationPart & \netviewPartly & \updatingEvent & \routingRoutebc & \shedfair & \nsdetdet & \nsnodesnet & \nsprobstat & \perflath & \perfmodemsg &\nsimplyes & \nscodeyes & \nscontmsg \\
 
 		$I^2P$\takenFrom & \networkMostly & \directionUnidi  & \syncAsync & \rolePtp & \hierarchyFlat & \decentralizationDecentr & \netviewFully & \updatingTimed & \routingRoutesrc & \shedprio & \nsdetprob & \nsnodesnet \nsnodessec & \nsprobdyn & \perflatl & \perfmodecon & \nsimplyes & \nscodeyes & \begin{tabular}{@{}c@{}} \nscontwww \nscontmail \\ \nscontfiles\end{tabular} \\
 
 		$\mathcal{P}^5$\takenFrom & \networkPartly & \directionUnidi  & \syncAsync & \rolePtp & \hierarchyHierarchical & \decentralizationPart & \netviewPartly & \updatingEvent & \routingRoutebc & \shedprio & \nsdetdet & \nsnodesusr & \nsprobstat & \perflath & \perfmodemsg & \nsimplyes & \nscodeno & \nscontmsg\\
 		
-		Riffle & \networkFully & \directionBidi & \syncSynchronous & \roleHybrid & \hierarchyHierarchical & \decentralizationNo & \netviewFully & \updatingNoupd & \routingRoutehop & \shedfair & \nsdetdet & F & & & & & & \\
+		Riffle & \networkFully & \directionBidi & \syncSynchronous & \roleHybrid & \hierarchyHierarchical & \decentralizationNo & \netviewFully & \updatingNoupd & \routingRoutehop & \shedfair & \nsdetdet & \nsnodesnet \nsnodessec & \nsprobstat & \perflatl & \perfmodemsg & \nsimplyes & \nscodeyes & \nscontwww \\
 
-		Atom & & & & & & & & & & & & & & & & & & \\
-		Riposte & & & & & & & & & & & & & & & & & & \\
+		Atom & \networkPartly & \directionUnidi & \syncSynchronous & \roleCs & \hierarchyFlat & \decentralizationPart & \netviewFully & ? & \routingRoutesrc & \shedfair & \nsdetprob &  \nsnodesall & \nsprobuni & \perflath & \perfmodemsg & \nsimplyes & \nscodeyes & \nscontBC\nscontmicroblog \\
+
+		
+		Riposte & \networkFully & \directionUnidi & \syncSynchronous & \roleCs & \hierarchyFlat & \decentralizationPart & \netviewFully & \updatingNoupd & \routingRoutebc & \shedfair & \nsdetprob & \nsnodesall &\nsprobuni & \perflath & \perfmodemsg & \nsimplyes & \nscodeyes & \nscontBC\nscontmicroblog \\
+		
+		% https://www.youtube.com/watch?v=hL3AnIOfu4Y
+		
 		Pung & & & & & & & & & & & & & & & & & & \\
-		PIR & & & & & & & & & & & & & & & & & & \\
 		Karaoke & & & & & & & & & & & & & & & & & & \\
 		Loopix & & & & & & & & & & & & & & & & & & \\
 		Stadium & & & & & & & & & & & & & & & & & & \\
-		Vuvuzela & & & & & & & & & & & & & & & & & & \\
+		Vuvuzela & \networkFully & \directionBidi & \syncSynchronous & \roleCs & \hierarchyHierarchical & \decentralizationNo & \netviewFully & \updatingNoupd & \routingRoutesrc & \shedfair & \nsdetdet & \nsnodesusr & \nsprobuni &  \perflatm & \perfmodemsg& \nsimplyes & \nscodeyes & \nscontmicroblog \\
 		Alpenhorn & & & & & & & & & & & & & & & & & & \\
 		\bottomrule
 	\end{tabular}
@@ -437,14 +441,12 @@ So far the Riffle system has not attracted much interest in the academic world. 
 
 \fxwarning{Fill gaps in classification of Riffle}
 
-\subsection{Atom (2016)}
-Atom\cite{kwon2016atom} is an asynchronous anonymity service for small messages claiming to be scaleable and transferring up to a million tweet sized messages in 28 minutes. Its PoC implementation is written in Go and was tested by creating series of AWS based EC2 instances. It provides a broadcast primitive with limited reach by groupig its servers into small groups. All messages have equal length and groups organize all received messages in batches and distribute them to other server groups. This results in a mix cascade somehow similar to the Mixminion system. However, the system extends the mix cascades with a zero knowledge proof so that tampering may be discovered to a certain extent.
+\subsection{Vuvuzela (2015)}
+Vuvuzela was presented by \citeauthor{van2015vuvuzela} in \cite{van2015vuvuzela}. It is a scaleable anonymity system offering a high throughput between millions of users. The system is available as a PoC implementation written in Go. An adversary knows immediatly what clients do use vuvuzela. He is however unable to match up communication peers over time. The Vuvuzela client software is available under \href{https://vuvuzela.io/} and connects to a vuvuzela network forming a centralized infrastructure. A Vuvuzela infrastructure may handle according to its authors up to 10 million users with an average bandwith cost of 3.7KB/s per user.
 
-According to the paper many aspects of Atom remain unsolved. Key distribution is proposed to be done by trustworthy third party ``directory authorities''. To remain anonymous at least one honest node per group is required. Identifying malicious users in Atom require a collaborative effort involving the publications of the private keys of the entry groups. Malicious users a proposed to be blacklisted by the directory authorities. 
+Vuvuzela routes user messages through a chain forward and back again before redistributing  the final messages to their recipients. Each node adds additional decoy traffic to further improve anonymity of the message path. The Authors calculated that each user contributes $\approx 12 \frac{KB}{s}$ traffic adding up to $30 GB$ per month. A server node had an average throughput $166 \frac{MB}{s}$. Vuvuzela protects the messages peer partners as long as one server in the used chain is not controlled by the adversary. It does, however, not protect the fact that both peer partners are using Vuvuzela. 
 
-As most of the other protocols Atom implements its own protocol making it susceptible to censorship.
-
-\fxwarning{Classify Atom}
+Vuvuzela assumes that the chain of servers and th involved public keys are known to the client ahead of time. Messages are delivered in synchronized rounds into common, ephemeral dead drops created by the users. The ephemeral dead drop design makes it impossible for an adversary to identify users over time.
 
 \subsection{SCION (2017)}
 SCION\cite{perrig2017scion} is a clean slate Internet protocol. While SCION is not really an anonymizing protocol. It contains, however,  many interesting features. Unlike with the traditional networks, we have the possibility of influencing the routing of data within SCION. Furthermore, with PHI\cite{chen2017phi} and Dovetail\cite{sankey2014dovetail}, SCION may feature strong and fast anonymity features. 
@@ -473,9 +475,7 @@ In an attempt to improve Dissent \citeauthor{wolinsky2012dissent} introduced in 
 \subsection{Verdict (2013)}
 Verdict\cite{180367} is an improved version of Dissent using proactively verifiable DC-Nets. It uses zero-knowledge proofs (ZKPs) to detect misbehaving nodes. The authors claim that it is able to process 1000 Senders within 10 seconds.
 
-Unlike many other systems Verdict withstands an observing adversary as defined within this work. However, due to the message patterns generated when communicating eve when steganographically hiding the traffic, a censoring adversary would be able to detect the traffic generated.
-
-\fxwarning{Classify verdict}
+Unlike many other systems Verdict withstands an observing adversary as defined within this work. However, due to the message patterns generated when communicating eve when steganographically hiding the traffic, a censoring adversary would be able to detect the traffic generated. Tampering with the protocol itself would be detectable and thus misbehaving nodes could be excluded from such a DC-net.
 
 \section{Broadcast and Multicast Networks}
 \subsection{Hordes (2002)}
@@ -483,6 +483,13 @@ Hordes was a multicast-based protocol for anonymity specified in \cite{Levine:20
 
 
 This assumption is correct for a local observer. Unfortunately, it is not sufficient assuming an adversary as defined in this paper.
+
+\subsection{Atom (2016)}
+Atom\cite{kwon2016atom} is an asynchronous anonymity service for small messages claiming to be scaleable and transferring up to a million tweet sized messages in 28 minutes. Its PoC implementation is written in Go and was tested by creating series of AWS based EC2 instances. It provides a broadcast primitive with limited reach by grouping its servers into small groups. All messages have equal length and groups organize all received messages in batches and distribute them to other server groups. This results in a mix cascade somehow similar to the Mixminion system. However, the system extends the mix cascades with a zero knowledge proof so that tampering may be discovered to a certain extent.
+
+According to the paper many aspects of Atom remain unsolved. Key distribution is proposed to be done by trustworthy third party ``directory authorities''. To remain anonymous at least one honest node per group is required. Identifying malicious users in Atom require a collaborative effort involving the publications of the private keys of the entry groups. Malicious users are proposed to be blacklisted by the directory authorities. 
+
+As most of the other protocols, Atom implements its own protocol making it susceptible to censorship.
 
 \section{Distributed Storage Systems}
 \subsection{Feenet (2000)}
@@ -502,11 +509,12 @@ The current protocol specification may be found under \href{http://rfc-gnutella.
 \subsection{Gnutella2 (2002)}
 Despite its name, Gnutella2 is not the next generation of Gnutella. It was a fork in 2002 from the original Gnutella and has been developed in a different direction. The specification may be found on \url{http://g2.doxu.org}. Just as its predecessor, Gnutella2 seems to be dead. The last relevant update to the main site or its protocol is dated four years back.
 
-\section{Unknown (TBD)}
 \subsection{Riposte (2015)}
-Riposte\cite{corrigan2015riposte} is an anonymity messaging system inspired by DC networks which scales well for tweet sized messages. The messages are sent o a regular base (time epochs). The system achieves sender anonymity by distributing parts of a message over multiple hosts. The sytem builds on a 
+Riposte\cite{corrigan2015riposte} is an anonymity messaging system inspired by DC networks which scales well for tweet sized messages. The messages are sent on a regular base (time epochs). The system achieves sender anonymity by distributing parts of a message over multiple hosts. To reduce the size of the transferred message Riposte uses a Distributed Point Function (DPF) described in \cite{gilboa2014distributed}. This reduces the messages transferred to each sever to $\sqrt{databaseSize} Bytes$
 
 \fxwarning{Classify Riposte}%
+
+\section{Unknown (TBD)}
 
 \subsection{Pung (2016)}
 \cite{angel2016unobservable}
@@ -533,8 +541,7 @@ Karaoke\cite{lazar2018karaoke} is a low latency messaging system offering an alt
 
 \fxwarning{Add Stadium and classify}%
 
-\subsection{Vuvuzela (2015)}
-Vuvuzela was presented by \citeauthor{van2015vuvuzela} in \cite{van2015vuvuzela}. It is a scaleable anonymity system offering a high throughput between millions of users. The system is available as a PoC implementation written in Go. An adversary knows immediatly what clients do use vuvuzela. He is however unable to match up communication peers over time. The Vuvuzela client software is available under \href{https://vuvuzela.io/} and connects to a vuvuzela network forming a centralized infrastructure. A Vuvuzela infrastructure may handle according to its authors up to 10 million users with an average bandwith cost of 3.7KB/s per user.
+
 
 \subsection{Alpenhorn (2016)}
 \cite{lazar2016alpenhorn}

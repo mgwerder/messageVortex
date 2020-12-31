@@ -75,6 +75,7 @@ We cannot state that data packets we are sending are passing only through countr
 	12   130.59.38.82  7.155ms  17.166ms  7.034ms
 	13   80.249.211.140  22.749ms  22.415ms  22.467ms
 	14   104.20.0.85  22.398ms  22.222ms  22.146ms
+	$
 	\end{lstlisting}
 	\caption{A traceroute to the host www.ietf.org}
 \end{figure}
@@ -149,8 +150,8 @@ In general, subscripts denote selectors to differentiate the values of the same 
 We refer to the components of a \VortexMessage as follows:
 \begin{align*}
 \text{Prefix component:}         & \mathbf{PREFIX}                 &=D^{K^{1}_a}\left(\mathbf{P}^{K^{-1}_a}\right) &=D\left(\mathbf{P}\right)\\
-\text{Header component:}         & \mathbf{HEAD}                 &=D^{K^{1}_a}\left(\mathbf{H}^{K^{-1}_a}\right) &=D\left(\mathbf{H}\right)\\
-\text{Route component:}         & \mathbf{ROUTE}                 &=D^{K^{1}_a}\left(\mathbf{R}^{K^{-1}_a}\right) &=D\left(\mathbf{R}\right)\\
+\text{Header component:}         & \mathbf{HEAD}                   &=D^{K^{1}_a}\left(\mathbf{H}^{K^{-1}_a}\right) &=D\left(\mathbf{H}\right)\\
+\text{Route component:}         & \mathbf{ROUTING}                 &=D^{K^{1}_a}\left(\mathbf{R}^{K^{-1}_a}\right) &=D\left(\mathbf{R}\right)\\
 \end{align*}
 
 In general, a decrypted Block is written as a capitalized multi-character boldface sequence. An encrypted Block is expressed as a capitalized, single character, boldface letter.
