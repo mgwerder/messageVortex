@@ -357,7 +357,7 @@ The content should be in 7-Bit-ASCII (8-Bit ASCII may be requested, but this fea
 
 The header consists of a collection of header fields. Each of them is built by a header name, a colon, and the data. The exact outline of the header is specified in \cite{rfc5322} and is separated with a blank line from the body. 
 
-\cite{rfc5321} furthermore introduces a simplistic model for SMTP message-based communication. A more comprehensive model is presented in section \nameref{sec:mailTransport} as the proposed model is not sufficient for a detailed end-to-end analysis.
+\citename{rfc5321}\cite{rfc5321} furthermore introduces a simplistic model for SMTP message-based communication. A more comprehensive model is presented in section \nameref{sec:mailTransport} as the proposed model is not sufficient for a detailed end-to-end analysis.
 
 Traditionally the message itself is mime encoded. The MIME messages are mainly specified in \cite{rfc2045} and \cite{rfc2046}. MIME allows to send messages in multiple representations (alternates), and attach additional information (such as possibly inlined images or attached documents). 
 
@@ -380,7 +380,7 @@ We have shown that all common M2M protocols failed mainly at Ct3 as there is no 
 
 Pure storage protocols fail at the same criteria as they typically have a defined set of data sources and data sinks, whereas usually at least the data sources are limited in number. This makes those protocols unsuitable again.
 
-We can clearly state that according to the criteria, only a few protocols are suitable. Table \ref{tab:protoSuitCrit2} on page \pageref{tab:protoSuitCrit} shows that only SMTP and XMPP are suitable protocols. Eventually, similar protocols such as HTTP (with WebDAV) or FTP may be usable as well. 
+We can clearly state that according to the criteria, only a few protocols are suitable. Table \ref{tab:protoSuitCrit} on page \pageref{tab:protoSuitCrit} shows that only SMTP and XMPP are suitable protocols. Eventually, similar protocols such as HTTP (with WebDAV) or FTP may be usable as well. 
 
 \begin{table}[h]
 	\centering\tiny

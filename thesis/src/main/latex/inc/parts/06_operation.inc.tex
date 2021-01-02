@@ -113,7 +113,7 @@ We may use several strategies depending on our anonymity needs.
 Strategies may include:
 \begin{itemize}
 	\item Focusing on redundancy of paths.\\
-	      In this scenario, we build \defref{routing graphs} that have a minimum sized set of $u$ independent paths expressed by the involved nodes. Such a \defref{routing graph} can guarantee that a message will arrive when less than $u$ nodes fail.
+	      In this scenario, we build \defref{routing graph}s that have a minimum sized set of $u$ independent paths expressed by the involved nodes. Such a \defref{routing graph} can guarantee that a message will arrive when less than $u$ nodes fail.
 	\item Focusing on involved jurisdictions.\\
 	      By focusing on the jurisdiction, an RBB may decrease the likeliness of analysis. As with each jurisdiction involved in the routing o a \VortexMessage{}, the likeliness increases that a non-collaborating jurisdiction is involved. By making educated guesses (e.g., that two opposing countries or organizations are unlikely to collaborate), the risk that a path may fully be analyzed from the sending node to the receiving node is less likely.
 	\item Focusing on the speed of delivery.\\
@@ -755,7 +755,7 @@ To create a \defref{routing block}, we need some basic objects as defined in alg
 
 To create a routing block, we first need a graph representing the message flow. Algorithm~\ref{alg:simpleGraph} shows a pseudo-code to get such a valid graph. After creating a graph, we need to assign timing and routing information. Algorithm~\ref{alg:simpleTiming} shows a possible algorithm for assigning this timing information, whereas Algorithm~\ref{alg:simpleRouting} shows a simple generator for the routing operation. The algorithm omits for simplicity allocation of workspace IDs as this is a ``bookkeeping''-only problem.
 
-To create a graph we use the function~\funcref{alg:getRoutingGraph}{} on line~\ref{alg:getRoutingGraph-line} as shown in algorithm~\ref{alg:simpleGraph}. It creates an ordered set of nodes (\texttt{nodes}), whereas the first node in the set is the sender and the second node of the set is the final recipient. It then adds randomly known nodes until the anonymity set is as large as requested. Next, we assign the edges by calling function~\funcref{alg:getEdges}{} (Line~\ref{alg:getEdges-line}). The function loops until the requested minimum number of edges are reached, and all nodes of the graph receive at least one message. On each loop, an edge is added to the graph, that is pointing from any already reached node to a random, different node.
+To create a graph, we use the function~\funcref{alg:getRoutingGraph}{} on line~\ref{alg:getRoutingGraph-line} as shown in algorithm~\ref{alg:simpleGraph}. It creates an ordered set of nodes (\texttt{nodes}), whereas the first node in the set is the sender and the second node of the set is the final recipient. It then adds randomly known nodes until the anonymity set is as large as requested. Next, we assign the edges by calling function~\funcref{alg:getEdges}{} (Line~\ref{alg:getEdges-line}). The function loops until the requested minimum number of edges are reached, and all nodes of the graph receive at least one message. On each loop, an edge is added to the graph, that is pointing from any already reached node to a random, different node.
 
 \begin{breakablealgorithm}
 	\captionof{figure}[Simple Graph for Routing Block (PseudoCode)]{Simple Graph for Routing Block}\label{alg:simpleGraph}
