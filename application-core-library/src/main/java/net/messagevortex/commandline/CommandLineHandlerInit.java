@@ -33,6 +33,7 @@ public class CommandLineHandlerInit implements Callable<Integer> {
 
   /***
    * <p>Commandline handler to rewrite a commented configuration file.</p>
+   *
    * @return the error level
    * @throws Exception if problem when obtaining logger
    */

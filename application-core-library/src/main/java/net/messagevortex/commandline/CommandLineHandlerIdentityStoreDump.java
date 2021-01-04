@@ -41,6 +41,14 @@ public class CommandLineHandlerIdentityStoreDump implements Callable<Integer> {
   )
   Format outputFormat = Format.ASN1;
 
+  /**
+   * <p>Commandline handler to dump identities of an identity store.</p>
+   *
+   * <p>Use java -jar MessageVortex.jar identitystore dump --help to get all supported parameters.</p>
+   *
+   * @return the error level to be returned
+   * @throws Exception if anything goes wrong
+   */
   @Override
   public Integer call() throws Exception {
     if (!(new File(filename).exists())) {

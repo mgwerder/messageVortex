@@ -17,7 +17,8 @@ public class CommandLineHandlerVersion implements Callable<Integer> {
 
   /***
    * <p>Commandline handler to display application version.</p>
-   * @return the errorlevel
+   *
+   * @return the error level
    */
   @Override
   public Integer call() {
