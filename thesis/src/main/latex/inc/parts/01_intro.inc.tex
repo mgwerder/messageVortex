@@ -10,37 +10,37 @@
 \partepigraph{The most effective way to do it is TO DO IT}{Amelia Earhart}
 \part{Introduction}
 \chapter{Preface}
-Almon Brown Strowger was the owner of a funeral parlor in St. Petersburg. He filed a patent on March \nth{10}, 1891 for an ``Automatic Telephone Exchange'' \cite{pulseDialingPatent}. This patent built the base for modern automated telephone systems. According to several sources, he was annoyed by the fact that the local telephone operator was married to another undertaker. She diverted potential customers of Mr. Strowger to her husband instead, which caused Almon B. Strowger to lose business. In 1922, this telephone dialing system, which is nowadays called pulse dialing, became the standard dialing technology for more than 70 years until tone dialing replaced it.
+Almon Brown Strowger was the owner of a funeral parlor in St. Petersburg. He filed a patent on March \nth{10}, 1891 for an ``Automatic Telephone Exchange'' \cite{pulseDialingPatent}. This patent built the base for modern automated telephone systems. According to several sources, he was annoyed that the local telephone operator was married to another undertaker. She diverted potential customers of Mr. Strowger to her husband instead, which caused Almon B. Strowger to lose business. In 1922, this telephone dialing system, which is nowadays called pulse dialing, became the standard dialing technology for more than 70 years until tone dialing replaced it.
 
-This dialing technology was the base for automatic messaging for voice and text messages (e.g., telex) up until today and is the foundation for current routed networks. These networks build the base for our communication-based Society these days and allow us to connect quickly with any person or company of our wish. We use these networks today as communication meaning for all purposes, and most of the people spend minimal thoughts on the possible consequences arising if someone puts hands on this communication. 
+This dialing technology was the base for automatic messaging for voice and text messages (e.g., telex) until today and is the foundation for current routed networks. These networks build the base for our communication-based Society these days and allow us to connect quickly with any person or company of our wish. However, computers do not only allow to route at high speed and throughput. They also allow the collection and analysis of data. We use these networks today as communication meaning for all purposes, and most people spend minimal thoughts on the possible consequences arising if someone puts their hands on this communication. 
 
-This collected data may be used to judge our intentions and thus is not only confidential if we have something to hide. This problem has dramatically increased in the last years as big companies and countries started to collect all kinds of data and created the means to process them. It allows supposedly to judge peoples not only on what they are doing but as well, on what they did and what they might do. Numerous events past and present show that actors, some of which are state-sponsored, collected data on a broad base within the Internet. Whether this is a problem or not is a disputable fact. Undisputed is, however, that such data requires careful handling, and accusations should then base on solid facts. While people may classify personalized advertising as legit use, a general classification of citizens is broadly considered unacceptable\cite{NCR2013,XKeyscore,Ball2013,Greenberg2013,Leuenberger1989}.
+Information data miners may use this collected data to judge our intentions and, thus, is confidential if we have something to hide. This problem has dramatically increased in the last years as big companies and countries started to collect all kinds of data and created the means to process them. It allows supposedly to judge people not only on what they are doing but also on what they did and what they might do. Past and present, numerous events show that actors, some state-sponsored, collected data on a broad base within the Internet. Whether this is a problem or not is a disputable fact. However, undisputed is that such data requires careful handling, and accusations should then base on solid facts. While people may classify personalized advertising as legit use, a general classification of citizens is broadly considered unacceptable\cite{NCR2013,XKeyscore,Ball2013,Greenberg2013,Leuenberger1989}.
 
 To show that this may happen even in democracies, we might refer to events such as the ``secret files scandal'' (or  ``Fichenskandal'') in Switzerland. In the years from 1900 to 1990 Swiss government collected 900’000 files in a secret archive (covering more than 10\% of the natural and juristic entities within Switzerland at that time). The Swiss Federal Archives document this event in depth\cite{Leuenberger1989}.
 
-Whistleblower Edward Snowden leaked a vast amount of documents. These documents suggest that such attacks on privacy are commonly made on a global scale. The documents leaked in 2009 by him claim that there was a data collection starting in 2010. Since these documents are not publicly available, it is hard proving the claims based on these documents. However -- A significant number of journalists from multiple countries screened these documents claiming that the information seems credible. According to these documents (verified by \href{http://www.nrc.nl/nieuws/2013/11/23/nederland-sinds-1946-doelwit-van-nsa}{NRC}), NSA infiltrated more than 50k computers with malware to collect classified or personal information. They furthermore infiltrated Telecom-Operators (mainly executed by British GCHQ) such as Belgacom to collect data and targeted high members of governments even in associated states (such as the mobile phone number of Germany's president) \cite{NCR2013,XKeyscore,Ball2013,Ackerman2013,Greenberg2013}. A later published shortened list of ``selectors'' in Germany showed 68 telephone and fax numbers targeting economy, finance, and agricultural parts of the German government. A global survey done by the freedom house\cite{FOTN2018} claims a decrease in Internet freedom for the \th{8} year in a row. 
+Whistleblower Edward Snowden leaked a vast amount of documents. These documents suggest that such attacks on privacy are commonly made on a global scale. The documents leaked in 2009 by him claim that there was a data collection starting in 2010. Since these documents are not publicly available, it is hard proving the claims based on these documents. However -- A significant number of journalists from multiple countries screened these documents claiming that the information seems credible. According to these documents (verified by \href{http://www.nrc.nl/nieuws/2013/11/23/nederland-sinds-1946-doelwit-van-nsa}{NRC}), NSA infiltrated more than 50k computers with malware to collect classified or personal information. They furthermore infiltrated Telecom-Operators (mainly executed by British GCHQ) such as Belgacom to collect data and targeted high members of governments even in associated states (such as the mobile phone number of Germany's president) \cite{NCR2013,XKeyscore,Ball2013,Ackerman2013,Greenberg2013}. A later published shortened list of ``selectors'' in Germany showed 68 telephone and fax numbers targeting the German government's economy, finance, and agricultural parts. A global survey done by the freedom house\cite{FOTN2020} claims a decrease in Internet freedom for the \th{11} year in a row. 
 
-This list of events shows that big players are collecting and storing vast amounts of data for analysis or possible future use. The list of events also shows that the use of such data was at least partially questionable. This work analyses the possibility of using state-of-the-art technology to minimize the information footprint of a person on the Internet. 
+This list of events shows that big players collect and store vast amounts of data for analysis or possible future use. The list of events also shows that the use of such data was at least partially questionable. This work analyses the possibility of using state-of-the-art technology to minimize a person's information footprint on the Internet. 
 
-We leave a large information footprint in our daily communication. On a regular email, we disclose everything in an ``postcard'' to any entity on its way. Even when encrypting a message perfectly with today's technology (S/MIME\cite{rfc2045} or PGP\cite{rfc2015}), it still leaves at least the originating and the receiving entity disclosed, or we rely on the promises of a third party provider which offers a proprietary solution. Even in those cases, we leak pieces of information such as ``message subject'', ``frequency of exchanged messages'', ``size of messages'', or ``client being used''. A suitable anonymity protocol must cover more than the sent message itself. It includes, besides the message itself, all metadata, and all the traffic flows. Furthermore, a protocol to anonymize messages should not rely on the trust of infrastructure other than the infrastructure under control of the sending or receiving entity. Trust in any third party might be misleading in terms of security or privacy.
+We leave a large information footprint in our daily communication. On a regular email, we disclose everything in an ``postcard'' to any entity on its way. Even when encrypting a message perfectly with today's technology (S/MIME\cite{rfc2045} or PGP\cite{rfc2015}), it still leaves at least the originating and the receiving entity disclosed, or we rely on the promises of a third-party provider that offers a proprietary solution. Even in those cases, we leak information such as ``message subject'', ``frequency of exchanged messages'', ``size of messages'', or ``client being used''. A suitable anonymity protocol must cover more than the sent message itself. It includes, besides the message itself, all metadata, and all the traffic flows. Furthermore, a protocol to anonymize messages should not rely on the trust of infrastructure other than the infrastructure under the sending or receiving entity's control. Trust in any third party might be misleading in terms of security or privacy.
 
-Furthermore, central infrastructure is bound to be of particular interest to anyone gathering data. Such control by an adversary would allow manipulating the system or the data or the data flow. So, avoiding a central infrastructure is a good thing when it comes to minimizing an information footprint available to a single entity.
+Furthermore, central infrastructure is bound to be of particular interest to anyone gathering data. Such control by an adversary would allow manipulating the system or the data or the data flow. So, avoiding a central infrastructure is a good thing for minimizing an information footprint available to a single entity.
 
 Leaving no information trail when sending information from one person to another is hard to achieve. Most messaging systems disclose at least the peer partners when posting messages. Metadata such as starting and endpoints, frequency, or message size are leaked in all standard protocols even when encrypting messages.
 
 Allowing an entity to collect data may affect senders and recipients of any information. The collection of vast amounts of data allows a potent adversary to build a  profile of a person. Unlike in the past, the availability of information has risen to a never known extent with the Internet.
 
-An entity in possession of such Profiles may use them for many purposes. These include service adoption, directed advertising, or classification of citizens. The examples given above show that the effects of this data is not limited to the Internet but reaches us effectively in the real world.
+An entity in possession of such Profiles may use them for many purposes. These include service adoption, directed advertising, or classification of citizens. The examples given above show that this data's effects are not limited to the Internet but reach us effectively in the real world.
 
-The main problem of this data is that it may be collected over a considerable amount of time and evaluated at any time. It even happened that standard practices at a time are differently judged upon at a later time. Persons may then be judged retrospectively upon these types of practice. This questionable type of judgment is visible in the tax avoidance discussion\cite{Amat1999}. 
+The main problem with this data is that it may be collected over a considerable amount of time and evaluated at any time. It even happened that standard practices at a time are differently judged upon at a later time. Governments, companies, or people may then judge persons retrospectively upon these types of practices. This questionable type of judgment is visible in the tax avoidance discussion\cite{Amat1999}. 
 
-People must be able to control their data footprint. Not providing these means does effectively allow any country or a more prominent player to ban and control any number of persons within or outside the Internet. 
+People with a ``bad'', ``unsuitable'', or ``non-conformant'' information footprint may be subject to banning repression or information access exclusion. People must be able to control their data footprint. Not providing these means effectively allows any country or a more prominent player to ban and control any number of persons within or outside the Internet. 
 
 We design in this work a new protocol. This protocol allows message transfer through existing communication channels. These messages are next to unobservable to any third party. This unobservability does not only cover the message itself but all metadata and flows associated with it. We called this protocol ``\MessageVortex'' or just ``\emph{Vortex}''. The protocol is capable of using a wide variety of transport protocols. It is even possible to switch protocols while the messages are in the transfer. This behavior allows media breaches (at least on a protocol level) and makes the analysis even harder.
 
 The new protocol allows secure communication without the need to trust the underlying transport media. Furthermore, the usage of the protocol itself is possible without altering the immediate behavior of the transport layer. The transport layers' regular traffic does, therefore, increase the noise in which hidden information has to be searched. 
 
-The primary goal of the protocol is to enable freedom of speech, as defined in Article 19 of the International Covenant on Civil and Political Rights (ICCPR)\cite{iccpr}.
+The protocol's primary goal is to enable freedom of speech, as defined in Article 19 of the International Covenant on Civil and Political Rights (ICCPR)\cite{iccpr}.
 \begin{quote}
 	everyone shall have the right to hold opinions without interference 
 \end{quote}
@@ -49,77 +49,78 @@ and
 	Everyone shall have the right to freedom of expression; this right shall include freedom to seek, receive and impart information and ideas of all kinds, regardless of frontiers, either orally, in writing or print, in the form of art, or through any other media of his choice.
 \end{quote}
 
-We imply that not all participants on the Internet share this value. As of September \nth{1}, 2016 Countries such as China (signatory), Cuba (signatory), Qatar, Saudi Arabia, Singapore, United Arab Emirates, or Myanmar did not ratify the ICCPR. Other countries such as the United States or Russia did either put local laws in place superseding the ICCPR or made reservations rendering parts of it ineffective. We may, therefore, safely assume that freedom of speech is not given on the Internet, as at least countries explicitly supersede them.
+We imply that not all participants on the Internet share this value. As of September \nth{1}, 2016 Countries such as China (signatory), Cuba (signatory), Qatar, Saudi Arabia, Singapore, United Arab Emirates, or Myanmar did not ratify the ICCPR. Other countries such as the United States or Russia either put local laws in place superseding the ICCPR or made reservations rendering parts ineffective. Therefore, we may safely assume that freedom of speech is not given on the Internet, as at least countries explicitly supersede them.
 
-Network packets may pass through any point of the world. A sender has no control over it. This lack of control is since every routing device decides on its own for the next hop. This decision may be based on static rules or influenced by third party nodes or circumstances (e.g., BGB, RIP, OSPF\ldots). It is furthermore not possible to detect what way has a packet taken. The standard network diagnostic tool \verb|tracert| respectively \verb|traceroute| returns a potential list of hops. This list is only correct under certain circumstances (e.g., a stable route for multiple packets or same routing decisions regardless of other properties than the source and destination address). Any Output of these tools may, therefore, not taken as a log of routing decisions. There is no possibility in standard IP routed networks to foresee a route for a packet, nor can it be measured, recorded, or predicted before, while, or after sending. 
+Network packets may pass through any point in the world. A sender has no control over it. This lack of control is since every routing device decides on its own for the next hop. This decision may be based on static rules or influenced by third party nodes or circumstances (e.g., BGB, RIP, OSPF\ldots). It is furthermore not possible to detect what way a packet has taken. The standard network diagnostic tool \verb|tracert| respectively \verb|traceroute| returns a potential list of hops. This list is only correct under certain circumstances (e.g., a stable route for multiple packets or the same routing decisions regardless of other properties than the source and destination address). Any Output of these tools may, therefore, not taken as a log of routing decisions. There is no possibility in standard IP routed networks to foresee a route for a packet, nor can it be measured, recorded, or predicted before, while, or after sending. 
 
 As an example of the problems analyzing a packet route, we may look at \verb|traceroute|. According to the man page of traceroute, \verb|traceroute| uses UDP, TCP, or ICMP packets with a short TTL and analyzes the IP of the peer sending a TIME\_EXCEEDED (message of the ICMP protocol). This information is then collected and shown as a route. This route may be completely wrong. The man page describes some of the possible causes.
 
-We cannot state that data packets we are sending are passing only through countries accepting the ICCPR to the full extent, nor can we craft packages following such a rule.
+We cannot state that data packets we are sending pass only through countries accepting the ICCPR to the full extent, nor can we craft packages following such a rule.
 
 \begin{figure}[H]
 	\begin{lstlisting}[language=bash,breaklines=true,basicstyle=\tiny]
-	$ traceroute www.ietf.org
-	traceroute to www.ietf.org.cdn.cloudflare-dnssec.net (104.20.0.85), 64 hops max
-	1   147.86.8.253  0.418ms  0.593ms  0.421ms
-	2   10.19.0.253  1.177ms  0.829ms  0.782ms
-	3   10.19.0.253  0.620ms  0.427ms  0.402ms
-	4   193.73.125.35  1.121ms  0.828ms  0.905ms
-	5   193.73.125.81  2.991ms  2.450ms  2.414ms
-	6   193.73.125.81  2.264ms  1.961ms  1.959ms
-	7   192.43.192.196  6.472ms  199.543ms  201.152ms
-	8   130.59.37.105  3.465ms  3.138ms  3.121ms
-	9   130.59.36.34  3.904ms  3.897ms  4.989ms
-	10   130.59.38.110  3.625ms  3.333ms  3.379ms
-	11   130.59.36.93  7.518ms  7.232ms  7.246ms
-	12   130.59.38.82  7.155ms  17.166ms  7.034ms
-	13   80.249.211.140  22.749ms  22.415ms  22.467ms
-	14   104.20.0.85  22.398ms  22.222ms  22.146ms
-	$
+		$ traceroute www.ietf.org
+		traceroute to www.ietf.org.cdn.cloudflare-dnssec.net (104.20.0.85), 64 hops max
+		1   147.86.8.253  0.418ms  0.593ms  0.421ms
+		2   10.19.0.253  1.177ms  0.829ms  0.782ms
+		3   10.19.0.253  0.620ms  0.427ms  0.402ms
+		4   193.73.125.35  1.121ms  0.828ms  0.905ms
+		5   193.73.125.81  2.991ms  2.450ms  2.414ms
+		6   193.73.125.81  2.264ms  1.961ms  1.959ms
+		7   192.43.192.196  6.472ms  199.543ms  201.152ms
+		8   130.59.37.105  3.465ms  3.138ms  3.121ms
+		9   130.59.36.34  3.904ms  3.897ms  4.989ms
+		10   130.59.38.110  3.625ms  3.333ms  3.379ms
+		11   130.59.36.93  7.518ms  7.232ms  7.246ms
+		12   130.59.38.82  7.155ms  17.166ms  7.034ms
+		13   80.249.211.140  22.749ms  22.415ms  22.467ms
+		14   104.20.0.85  22.398ms  22.222ms  22.146ms
+		$
 	\end{lstlisting}
 	\caption{A traceroute to the host www.ietf.org}
 \end{figure}
 
 To enable freedom of speech, we need a mean of transport for messages which keep sender and recipient anonymous to an adversary.
 
-We feel that this work is needed as a lot of work in the anonymity field focus on the aspect ``how to achieve anonymity'' and analyze it against the means of an adversary which is simple and technocratically based. In this work we define an adversary which is not only observing or disrupting communication but can supress the use of technology as well. Therefor the focus is not only to create a protocol for anonymity but to create a protocol which has to be undetectable.
+We feel that this work is needed as much work in the anonymity field focus on the aspect of ``how to achieve anonymity'' and analyze it against the means of an adversary, which is simple and technocratically based. In this work, we define an adversary that is observing or disrupting communication but can suppress the use of technology. Therefore, the focus is not only to create a protocol for anonymity but to create a protocol that has to be undetectable.
 
 \chapter{Our Contribution}
 This thesis contributes to anonymization with an asynchronous messaging protocol called \MessageVortex.
 
-The protocol employs a new type of programmable forwarders called ``routing nodes'' (nodes or \VortexNodes) with a novel way of message mixing, moving away from a strictly chunked and onionized system, to a system where routing operations allow to increase or decrease in size without differentiating between decoy traffic and message routing. We refer to the instructions required to process a node as ``routing blocks''. These routing blocks have an onionized structure, only exposing the required information for the current node. Routing blocks may travel with a message or join at any common routing node with the message.
+The protocol employs a new type of programmable forwarders called \VortexNodes (nodes) with a novel way of message mixing, moving away from a strictly chunked and onionized system to a system, where routing operations allow to increase or decrease in size without differentiating between decoy traffic and message routing. We refer to the instructions required to process a node as ``routing blocks''. These routing blocks have an onionized structure, only exposing the required information for the current node. Routing blocks may travel with a message or join at any common \VortexNode with the message.
 
-Our protocol differentiates from other protocols by the fact that our way of mixing and routing messages does not rely on knowingly injected decoy traffic and that we are capable of piggybacking multiple other carrier protocols without modifying the required, already available infrastructure on the internet or requiring dedicated infrastructure. The carrier protocols may even be switched during routing, making it even harder to observe message traffic. 
+Our protocol differentiates from other protocols by the fact that our way of mixing and routing messages does not rely on knowingly injected decoy traffic and that we are capable of piggybacking multiple other carrier protocols without modifying the required, already available infrastructure on the Internet or requiring dedicated infrastructure. The carrier protocols may even be switched during routing, making it even harder to observe message traffic. 
 
-To non-traceable routing, we introduce a novel type of routing operation called ``addRedundancy''. This operation is a Reed-Solomon-calculation with encryption and a new type of padding. This operation transposes the received information in a form bigger or smaller than the original message by adding or removing redundancy operations. The applied padding structures the message in such a way that any possible result of a decryption operation results in a plausible padding structure. With standard paddings, decoy operations on traffic would possibly be identifiable as the resulting padding structure may be invalid leaking information. After applying these operations, the routing node then sends this transposed information to subsequent peers without any knowledge of what parts of the sent messages are relevant for the successful message delivery. Therefore, applying such operations makes it impossible for any node to differentiate between decoy traffic and real message traffic. Furthermore, tagging beyond peering nodes is not possible, as building relations between messages of non-neighboring nodes is not possible.
+To non-traceable routing, we introduce a novel type of routing operation called ``addRedundancy''. This operation is a Reed-Solomon-calculation with encryption and a new type of padding. This operation transposes the received information in a bigger or smaller form than the original message by adding or removing redundancy operations. The applied padding structures the message so that any possible result of a decryption operation results in a plausible padding structure. With standard paddings, decoy operations on traffic would possibly be identifiable as the resulting padding structure may be invalid leaking information. After applying these operations, the routing node sends this transposed information to subsequent peers without any knowledge of what parts of the sent messages are relevant for the successful message delivery. Therefore, applying such operations makes it impossible for any node to differentiate between decoy traffic and real message traffic. Furthermore, tagging beyond peering nodes is not possible, as building relations between non-neighboring nodes' messages is not possible.
 
-An outside observer is unable to identify messages, as they do not use proprietary communication protocol but hide within other standard internet protocols. We blend these transport protocols without modifying the servers used for message transport. This property makes the protocol very robust as the prosecution of server administrators is not sensible if traffic is running over their infrastructures. 
+An outside observer cannot identify messages, as they do not use proprietary communication protocol but hide within other standard Internet protocols. We blend these transport protocols without modifying the servers used for message transport. This property makes the protocol very robust as server administrators' prosecution is not sensible if traffic is running over their infrastructures. 
 
-As the structure of routing blocks does not expose the encryption keys required to build routing blocks for a peering node, a malicious node may only discover other possible peer partners when routing traffic without gaining the capability of talking to them. Other properties, such as type of routed traffic, message size, message content, communication partners, or intensity of communication, remain hidden. External global observers are unable to differentiate between regular protocol traffic and Vortex traffic. Assuming an observer capable of identifying the steganographically hidden information, he may apply censorship but remains unable to trace messages according to externally attributes, even assuming that he has additional information from collaborating nodes within the message path.
+As the structure of routing blocks does not expose the encryption keys required to build routing blocks for a peering node, a malicious node may only discover other possible peer partners when routing traffic without gaining the capability of talking to them. Other properties, such as routed traffic, message size, message content, communication partners, or intensity of communication, remain hidden. External global observers are unable to differentiate between regular protocol traffic and Vortex traffic. Assuming an observer can identify the steganographically hidden information, he may apply censorship but remains unable to trace messages according to external attributes, even assuming that he has additional information from collaborating nodes within the message path.
 
+This protocol can withstand even a censoring adversary on a regional or super-regional scale as we hide in common protocols and remain undetectable. As the creator of a routing block fully controls anonymity, we achieve either sender or receiver anonymity. The protocol is built crypto-agile and able to adapt to the anonymity needs of its user.
 
 \chapter{Scope and Aproach}
 The main topic of this thesis was defined as follows:
 
 \begin{itemize}
-	\item Is it possible to have a messaging protocol used on the Internet, based on ``state of the science'' technologies offering a high degree of unlinkability (sender and receiver anonymity) towards an adversary with a high budget and privileged access to Internet infrastructure?
+	\item Is it possible to have a messaging protocol used on the Internet, based on ``state of the science'' technologies offering a high degree of unlinkability (sender and receiver anonymity) towards an adversary with a high budget and privileged access to the Internet infrastructure?
 \end{itemize}
 
 Based on this central question, there are several sub-questions grouped around various topics:
 
 \begin{enumerate}
-	\item What technologies and methods may be used to provide sender and receiver anonymity and unlinkability when sending messages against a potential adversary? 
+	\item What technologies and methods may be used to provide sender and receiver anonymity and unlinkability when sending messages against a potential censoring or observing adversary? 
 	
-	      This question covers the principal part of the work. We first collect relevant concepts system and technologies in \cref{sec:concepts} and \ref{sec:systems}. We then elaborate on a list of criteria for the \MessageVortex protocol in \cref{sec:genRequirements}. In \cref{sec:coreMVProtocol}, we then create a list of suitable technologies and methods and explain our choice in \cref{sec:rationale}. Based on these findings, we define a protocol combining these technologies and researches into a solution in \cref{sec:protocol}. This solutions implementation is explained in \cref{sec:implementation} and then in \cref{sec:analysis} analyzed for suitability based on the criteria specified. 
+	This question covers the principal part of the work. We first collect relevant concepts system and technologies in \cref{sec:concepts} and \ref{sec:systems}. We then elaborate on a list of criteria for the \MessageVortex protocol in \cref{sec:genRequirements}. In \cref{sec:coreMVProtocol}, we then create a list of suitable technologies and methods and explain our choice in \cref{sec:rationale}. Based on these findings, we define a protocol combining these technologies and researches into a solution in \cref{sec:protocol}. The implementation of This solution is explained in \cref{sec:implementation} and then in \cref{sec:analysis} analyzed for suitability based on the criteria specified. 
 	
 	\item How can entities utilizing \MessageVortex be attacked, and what measures are available to circumvent such attacks? 
 	
-	      Within this question, we look at various attacks and test resistance of the protocol based on the definition of the protocol in \cref{sec:coreMVProtocol}. We do this by first collecting well-known attacks in \cref{sec:attacks}. We then elaborate if those attacks might be successful (and if so under what circumstances) in \cref{sec:staticAnalysis} and \cref{sec:dynamicAnalysis}.
-	      
+	Within this question, we look at various attacks and test the protocol's resistance based on the definition of the protocol in \cref{sec:coreMVProtocol}. We do this by first collecting well-known attacks in \cref{sec:attacks}. We then elaborate if those attacks might be successful (and if so under what circumstances) in \cref{sec:staticAnalysis} and \cref{sec:dynamicAnalysis}.
+	
 	\item How can design mitigate attacks target anonymity of a sending or receiving entity within \MessageVortex? 
 	
-          Within this question, we define baselines to mitigate attacks by identifying guidelines for using the protocol in \cref{sec:operation}. We analyze the effectiveness of the guidelines and elaborate on the general achievement level of the protocol by looking again at the criteria defined in SQ1. 
-
+	Within this question, we define baselines to mitigate attacks by identifying guidelines for using the protocol in \cref{sec:operation}. We analyze the guidelines' effectiveness and elaborate on the general achievement level of the protocol by looking again at the criteria defined in SQ1. 
+	
 \end{enumerate}
 
 \chapter{Notation}
@@ -136,22 +137,22 @@ For hashing, we do use $H(\mathbf{M})$ if unsalted and $H^{S_a}$ if using a salt
 If we want to express what details contained in a tuple we use the the notation $\mathbf{M\langle t,MURB,serial\rangle }$ respectively if encrypted $\mathbf{M^{K_{a}}\langle t,MURB,serial\rangle}$.
 
 \begin{align*}
-\text{asymetric:}         & E^{K^{-1}_a}\left(\mathbf{M}\right)                            && =\mathbf{M}^{K^{-1}_a}\\
-& D^{K^{1}_a}\left(E^{K^{-1}_a}\left(\mathbf{M}\right)\right)    && =\mathbf{M}\\
-& D^{K^{-1}_a}\left(E^{K^{1}_a}\left(\mathbf{M}\right)\right)    && =\mathbf{M}\\
-\text{symetric:}          & E^{K_a}\left(\mathbf{M}\right)                                 && =\mathbf{M}^{K_a}\\
-& D^{K_a}\left(E^{K_a}\left(\mathbf{M}\right)\right)          && =\mathbf{M}\\
-\text{hashing (unsalted):}& H\left(\mathbf{M}\right)                                       && =\mathbf{H}_M\\
-\text{hashing (salted):}  & H^{S_a}\left(\mathbf{M}\right)                                 && =\mathbf{H}^{S_a}_M
+	\text{Asymmetric:}         & E^{K^{-1}_a}\left(\mathbf{M}\right)                            && =\mathbf{M}^{K^{-1}_a}\\
+	& D^{K^{1}_a}\left(E^{K^{-1}_a}\left(\mathbf{M}\right)\right)    && =\mathbf{M}\\
+	& D^{K^{-1}_a}\left(E^{K^{1}_a}\left(\mathbf{M}\right)\right)    && =\mathbf{M}\\
+	\text{Symmetric:}          & E^{K_a}\left(\mathbf{M}\right)                                 && =\mathbf{M}^{K_a}\\
+	& D^{K_a}\left(E^{K_a}\left(\mathbf{M}\right)\right)          && =\mathbf{M}\\
+	\text{hashing (unsalted):}& H\left(\mathbf{M}\right)                                       && =\mathbf{H}_M\\
+	\text{hashing (salted):}  & H^{S_a}\left(\mathbf{M}\right)                                 && =\mathbf{H}^{S_a}_M
 \end{align*}
 
-In general, subscripts denote selectors to differentiate the values of the same type, and superscript denotes relevant parameters to operations expressed. The subscripted and superscripted pieces of information are omitted if not needed.
+In general, subscripts denote selectors to differentiate the same type's values, and superscript denotes relevant parameters to operations expressed. The subscripted and superscripted pieces of information are omitted if not needed.
 
 We refer to the components of a \VortexMessage as follows:
 \begin{align*}
-\text{Prefix component:}         & \mathbf{PREFIX}                 &=D^{K^{1}_a}\left(\mathbf{P}^{K^{-1}_a}\right) &=D\left(\mathbf{P}\right)\\
-\text{Header component:}         & \mathbf{HEAD}                   &=D^{K^{1}_a}\left(\mathbf{H}^{K^{-1}_a}\right) &=D\left(\mathbf{H}\right)\\
-\text{Route component:}         & \mathbf{ROUTING}                 &=D^{K^{1}_a}\left(\mathbf{R}^{K^{-1}_a}\right) &=D\left(\mathbf{R}\right)\\
+	\text{Prefix component:}         & \mathbf{PREFIX}                 &=D^{K^{1}_a}\left(\mathbf{P}^{K^{-1}_a}\right) &=D\left(\mathbf{P}\right)\\
+	\text{Header component:}         & \mathbf{HEAD}                   &=D^{K^{1}_a}\left(\mathbf{H}^{K^{-1}_a}\right) &=D\left(\mathbf{H}\right)\\
+	\text{Route component:}         & \mathbf{ROUTING}                 &=D^{K^{1}_a}\left(\mathbf{R}^{K^{-1}_a}\right) &=D\left(\mathbf{R}\right)\\
 \end{align*}
 
 In general, a decrypted Block is written as a capitalized multi-character boldface sequence. An encrypted Block is expressed as a capitalized, single character, boldface letter.
@@ -160,26 +161,26 @@ In general, a decrypted Block is written as a capitalized multi-character boldfa
 We write code blocks as a light grey block with line numbers:
 
 \begin{lstlisting}
-public class Hello {
-public static void main(String args[]) {
-System.println("Hello. "+args[1]);
-}
-}
+	public class Hello {
+		public static void main(String args[]) {
+			System.println("Hello. "+args[1]);
+		}
+	}
 \end{lstlisting}
 
-Commands entered at the command line are in a grey box with a top and bottom line. Whenever root rights are required, the command line is prefixed with a ``\#''. Commands not requiring specific rights are prefixed with a ``\$''. Lines without a trailing ``\$'' or ``\#'' are output lines of the previous command. If long lines are split to fit into the paper, a ``$\hookleftarrow$'' is inserted to indicate that a line break was inserted for readability.
+Commands entered at the command line are in a grey box with a top and bottom line. Whenever root rights are required, the command line is prefixed with a ``\#''. Commands not requiring specific rights are prefixed with a ``\$''. Lines without a trailing ``\$'' or ``\#'' are output lines of the previous command. If long lines are split to fit, a ``$\hookleftarrow$'' is inserted to indicate that system inserted a line break for readability.
 
 \begin{lstlisting}[language=bash]
-# su -
-# javac Hello.java 
-# exit
-$ java Hello
-Hello.
-$ java Hello "This is a very long command-line that had to be broken to fit into the code box displayed on this page."
-Hello. This is a very long command-line that had to be broken to fit into the code box displayed on this page.
+	# su -
+	# javac Hello.java 
+	# exit
+	$ java Hello
+	Hello.
+	$ java Hello "This is a very long command-line that had to be broken to fit into the code box displayed on this page."
+	Hello. This is a very long command-line that had to be broken to fit into the code box displayed on this page.
 \end{lstlisting}
 
 \section{Hyperlinking}
-The electronic version of this document is hyperlinked. References to the glossary or the literature may be clicked to find the respective entry. Chapter or table references are clickable too. 
+The electronic version of this document is hyperlinked. Readers may click references to the glossary or the literature to find the respective entry. Chapter or table references are clickable too. 
 
 
