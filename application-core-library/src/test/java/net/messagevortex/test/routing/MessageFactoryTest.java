@@ -45,7 +45,16 @@ public class MessageFactoryTest {
       is = new IdentityStore(new File("CachedIdentityStoreExample.der"));
     } catch (Exception ioe) {
       is = IdentityStore.getNewIdentityStoreDemo(false);
-      ASN1OutputStream f = ASN1OutputStream.create(new FileOutputStream(System.getProperty("java.io.tmpdir") + "/IdentityStoreExample1.der"), ASN1Encoding.DER);
+      String fn = System.getProperty("java.io.tmpdir") + "/IdentityStoreExample1.der"
+      File fd = new File(fn).getParentFile();
+      if (fd != null) {
+        try {
+          fd.mkdirs();
+        } catch (SecurityException se) {
+          LOGGER.log(Level.INFO, "unable to create parent directory " + fn);
+        }
+      }
+      ASN1OutputStream f = ASN1OutputStream.create(new FileOutputStream(fn), ASN1Encoding.DER);
       f.writeObject(is.toAsn1Object(DumpType.ALL_UNENCRYPTED));
       f.close();
     }
