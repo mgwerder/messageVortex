@@ -8,6 +8,10 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 
+% fix some fonts
+\usepackage{sansmath}                  % Maths without seroifes
+\usepackage{microtype}                 % better text distribution in lines
+
 
 % Workarround for book
 \makeatletter
@@ -38,7 +42,17 @@
 \usetikzlibrary{calc,positioning,arrows,backgrounds,shapes.geometric}
 \tikzset{background rectangle/.style={fill=black!10}, show background rectangle}
 
-\usepackage[draft=false]{scrlayer-scrpage}
+\usepackage[draft=false,automark]{scrlayer-scrpage}
+% and make some nice page headers
+\automark{part}
+\automark*{chapter}
+\clearpairofpagestyles
+\ihead{\headmark}
+\ohead{\pagemark}
+
+\setheadsepline{0.55pt}
+\setkomafont{headsepline}{\color{black}}
+\definecolor{head}{rgb}{0.01, 0.28, 1.0}
 
 \gdef\thetitle{MessageVortex}
 \title{\thetitle}
@@ -47,7 +61,7 @@
 \author{Martin Gwerder (06-073-787)}
 %\date{\gitAuthorDate}
 \gdef\myabstract{
-	In this paper, we introduce an unobservable message anonymization protocol, named MessageVortex. It bases on the zero-trust principle, a distributed peer-to-peer (P2P) architecture, and avoids central aspects such as fixed infrastructures within a global network. It scores over existing work by blending its traffic into suitable existing transport protocols, thus making it next to impossible to block it without significantly affecting regular users of the transport medium. No additional protocol-specific infrastructure is required in public networks and allows a sender to control all aspects of a message such as the degree of anonymity, timing, and redundancy of the message transport without disclosing any of these details to the routing or transporting nodes. Part of this work is an RFC document attached in Appendix A describing the protocol. It contains all the necessary information to build protocol nodes. The RFC draft is available through the official RFC channels. Additionally, the RFC document, additional documents, and a reference are available under https://messagevortex.net/.}
+	In this paper, we introduce an unobservable message anonymization protocol named MessageVortex. It bases on the zero-trust principle, a distributed peer-to-peer (P2P) architecture, and avoids central aspects such as fixed infrastructures within a global network. It scores over existing work by blending its traffic into suitable standard transport protocols, making it next to impossible to block it without significantly affecting regular users of the transport medium. No additional protocol-specific infrastructure is required in public networks and allows a sender to control all aspects of a message, such as the degree of anonymity, timing, and redundancy of the message transport, without disclosing any of these details routing or transporting nodes. Part of this work is an RFC document attached in Appendix A describing the protocol. It contains all the necessary information to build protocol nodes. The RFC draft is available through the official RFC channels. Additionally, the RFC document, additional documents, and a reference are available under https://messagevortex.net/.}
 \makeatother
 
 % for PDF/A generation
@@ -167,8 +181,9 @@
 \makeatother
 
 % titlepage geometry change
-\usepackage[paper=a4paper,top=1.5cm,bottom=1.5cm,inner=2cm,outer=1.5cm]{geometry}% http://ctan.org/pkg/geometry
+\usepackage[paper=a4paper,top=2cm,bottom=2cm,inner=3.1cm,outer=2.2cm]{geometry}% http://ctan.org/pkg/geometry
 
+% Pagestyles
 % For formulae in twocolumn
 \usepackage{mathtools}
 \usepackage{amsmath}
@@ -440,7 +455,7 @@
 
 \newcommand*{\defref}[1]{\hyperref[def:#1]{#1}}
 \title{MessageVortex}
-\subtitle{Transport Independent and Unlinking Messaging}
+\subtitle{Transport Independent, Unobservable, and Unlinking Messaging}
 \author{Martin Gwerder (06-073-787)}
 \date{\gitAuthorDate}
 
@@ -673,24 +688,22 @@
 \newlength\PartWd
 \settowidth\PartWd{\huge\parttitle}
 
-\definecolor{myblue}{RGB}{0,0,122}
-
 \titleformat{\part}[display]
 {\normalfont\filcenter\sffamily}
 {\tikz[remember picture,overlay]
 	{
-		\node[fill=myblue,font=\fontsize{60}{72}\selectfont\color{white},anchor=north east,minimum size=\PartWd] 
+		\node[fill=head,font=\fontsize{60}{72}\selectfont\color{white},anchor=north east,minimum size=\PartWd] 
 		at ([xshift=-25pt,yshift=-25pt]current page.north east) 
 		(numb) {\thepart~};
 		\node[rotate=90,anchor=south,inner sep=0pt,font=\huge] at (numb.west) {Part};
 	}
-}{0pt}{\fontsize{33}{40}\selectfont\color{myblue}#1}[\vskip10pt\Large***\vskip10pt\epigraph{\partepigraphtext}{\partepigraphauthor}\vskip10pt ]
+}{0pt}{\fontsize{33}{40}\selectfont\color{head}#1}[\vskip10pt\Large***\vskip10pt\epigraph{\partepigraphtext}{\partepigraphauthor}\vskip10pt ]
 \titlespacing*{\part}
 {0pt}{50pt}{10pt}
 
 
 \makeatletter
-\xpatchcmd{\ttl@printlist}{\endgroup}{{\noindent\color{myblue}\rule{\textwidth}{1.5pt}}\vskip30pt\endgroup}{}{}
+\xpatchcmd{\ttl@printlist}{\endgroup}{{\noindent\color{head}\rule{\textwidth}{1.5pt}}\vskip30pt\endgroup}{}{}
 \makeatother
 
 \setlength\epigraphrule{0pt}

@@ -1,0 +1,96 @@
+\documentclass[a4paper,10pt,english]{extarticle}
+
+\usepackage[table]{xcolor}
+\usepackage{hyperref}
+
+\usepackage{pgfgantt}
+\usepackage[landscape,margin=1cm]{geometry}
+
+\usepackage{csquotes}
+\usepackage{soul}
+
+%\usepackage{inputenc}
+\usepackage{babel}
+
+\usepackage[T1]{fontenc}
+\usepackage{times}
+\pagestyle{empty}
+
+
+% No paragraph indentation
+\setlength\parindent{0pt} 
+\setlength\parskip{6pt} 
+
+% figure placemnent
+\usepackage{float}
+
+
+\begin{document}
+	\small
+	\section{Grafische Übersicht}
+	\begin{figure}[H]%
+\resizebox{\textwidth}{0.5\textheight}{
+\begin{ganttchart}[vgrid,hgrid]{1}{181}
+\gantttitle{2021-01}{31} \gantttitle{2021-02}{28} \gantttitle{2021-03}{31}  \gantttitle{2021-04}{30} \gantttitle{2021-05}{31} \gantttitle{2021-06}{30}\\
+\gantttitlelist{1,...,31}{1}\gantttitlelist{1,...,28}{1}\gantttitlelist{1,...,31}{1}\gantttitlelist{1,...,30}{1}\gantttitlelist{1,...,31}{1}\gantttitlelist{1,...,30}{1} \\
+\ganttgroup[progress=10]{Finalisierung}{1}{85} \\
+\ganttbar[progress=30]{Finalisierung text}{16}{31}\\
+\ganttbar[progress=0]{Lesen und Feedback}{32}{57}\\
+\ganttbar[progress=0]{Korrektur}{57}{63}\\
+\ganttbar[progress=0]{Lektorat}{64}{85}\\
+\ganttmilestone{Thesis Referent/Koreferent}{91}\\
+\ganttgroup[progress=0]{Bewertung}{92}{145} \\
+\ganttbar[progress=0]{Bewertung TsC}{92}{137}\\
+\ganttbar[progress=0]{Bewertung UUN}{92}{137}\\
+\ganttmilestone{Einreichung Promotionsantrag}{117}\\
+\ganttbar[progress=0]{Vorbereitung Einreichedokumente}{118}{131}\\
+\ganttmilestone{Einreichung Manuskript}{131}\\
+\ganttmilestone{Einreichung Bewertung}{137}\\
+\ganttbar[progress=0]{Bewertung Fakultätsversammlung}{138}{145}\\
+\ganttmilestone{Entscheidung durch Fakultätsversammlung}{145}\\
+\ganttbar[progress=0]{Vorbereitung Doktoratsexamen}{132}{159}
+\ganttlink{elem1}{elem2}
+\ganttlink{elem2}{elem3}
+\ganttlink{elem3}{elem4}
+\ganttlink{elem4}{elem5}
+\ganttlink{elem5}{elem7}
+\ganttlink{elem5}{elem8}
+\ganttlink{elem7}{elem12}
+\ganttlink{elem8}{elem12}
+\ganttlink{elem9}{elem10}
+\ganttlink{elem10}{elem11}
+\ganttlink{elem11}{elem12}
+\end{ganttchart}
+}
+\caption{Planung im Bezug auf Thesis-Abgabe}%
+\label{gantChart}%
+\end{figure}
+\section{Todo's}
+\definecolor{lightgray}{gray}{0.74}\rowcolors{2}{lightgray}{white}
+\begin{tabular}{|l|l|l|}\hline
+	Wann & Wer & Was \\\hline
+	ongoing & GwM & Zeichnet sich verantwortlich für Termine und sorgt für Reminder mit angemessener Vorlaufzeit bei TsC (Gilt auch für Doktorvater Termine)\\
+	ASAP    & TsC & \hl{Kontaktiert Ulrich Ultes-Nitsche (UUN) wegen Koreferat}\\
+	unklar  & TsC & \hl{Nach Annahme von Koreferent muss dieser noch durch das Dekanat bewilligt werden}\\
+	18.01.21& GwM & Sendet Abstract und ToC an TsC\\
+	01.02.21& GwM & (Deadline) Liefert Gesamtarbeit an TsC\\
+	26.02.21& TsC & (Deadline) Liefert Feedback zur Gesamtarbeit\\
+	27.04.21& TsC & (Deadline) Letzter Termin für Promotionsantrag\\
+	11.05.21& GwM & Dissertationsmanuskript, Studentenausweiskopie, Lebenslauf und Ehrlichkeitserklärung im Dekanat.\\
+	18.05.21& TsC & Referat und Koreferat im Dekanat\\
+	25.05.21& --- & Dekanatssitzung\\
+	28.05.21& TsC & Festlegung Termin Doktoratsexamen \\\hline
+\end{tabular}
+
+\section{Sitzungen}
+\begin{tabular}{|l|l|}\hline
+	Wann & Ziel \\\hline
+	26.02.21 17:00-18:30 & Feedback Gesamtarbeit \\
+	05.03.21 17:00-18:30 & Reservetermin Feedback Gesamtarbeit\\
+	23.04.21 17:00-18:00 & (Vorschlag) Entscheidungssitzung Promotionsantrag\\
+	28.05.21 17:00-17:30 & (Vorschlag)\\
+	\hline
+\end{tabular}
+
+
+\end{document}
