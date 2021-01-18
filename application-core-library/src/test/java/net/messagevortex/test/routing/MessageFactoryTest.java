@@ -45,7 +45,7 @@ public class MessageFactoryTest {
       is = new IdentityStore(new File("CachedIdentityStoreExample.der"));
     } catch (Exception ioe) {
       is = IdentityStore.getNewIdentityStoreDemo(false);
-      String fn = System.getProperty("java.io.tmpdir") + "/IdentityStoreExample1.der"
+      String fn = System.getProperty("java.io.tmpdir") + "/IdentityStoreExample1.der";
       File fd = new File(fn).getParentFile();
       if (fd != null) {
         try {

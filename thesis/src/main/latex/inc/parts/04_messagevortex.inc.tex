@@ -49,9 +49,9 @@ We collected an overview of all isolated characteristics of \cref{sec:properties
 \end{table*}
 
 \section{Threat Model}\label{sec:adversary}
-Within this work, we look at two adversaries with different behavior. The two adversaries are an "observing adversary (mainly doing spying) and a "censoring adversary" (Actively disrupting communication). While equal in their technical capabilities, they have different executive and legislative environments. This difference in adversaries is essential as the usage of our system differs in these two environments. We assume that one of these adversaries is present within any jurisdiction. 
+Within this work, we look at two adversaries with different behavior. The two adversaries are an ``observing adversary'' (mainly doing spying) and a ``censoring adversary'' (Actively disrupting communication). While equal in their technical capabilities, they have different executive and legislative environments. This difference in adversaries is essential as the usage of our system differs in these two environments. We assume that one of these adversaries is present within any jurisdiction. 
 
-We refer to "\defref{jurisdiction}" as a geographical area where a set of legal rules created by a single actor or a group of actors apply. These actors do have executive capabilities (e.g., police, army, or secret service) to enforce this set of legal rules.
+We refer to ``\defref{jurisdiction}'' as a geographical area where a set of legal rules created by a single actor or a group of actors apply. These actors do have executive capabilities (e.g., police, army, or secret service) to enforce this set of legal rules.
 
 We assume for our protocol that adversaries are state-sponsored actors or players of large organizations. We, furthermore, assume that these actors have high funding and elaborated capabilities either themselves or within reach of their sponsor. Actors may join forces with other actors as allies. However, achieving more than 50\% on a world scale is excluded from our model. We always assume one or more actors with disjoint interests covering half of the network or more. 
 
@@ -92,7 +92,7 @@ This adversary describes a powerful state-sponsored actor with very high but not
 \subsection{Observing Adversaries}
 This adversary behaves like a traditional spy. He collects and classifies information while typically hiding its activities. The adversary only observes traffic and tries to extract data from the system.
 
-Unlike the case of a censoring adversary, we imply that in most of the cases no restrictions apply for the use of anonymizing technology from a jurisdictional point of view. If restrictions apply, then such an adversary should be classified as censoring adversary, as the technology is "censored." Such classification must be done in this case, regardless of whether the adversary only tries to collect information or not.
+Unlike the case of a censoring adversary, we imply that in most of the cases no restrictions apply for the use of anonymizing technology from a jurisdictional point of view. If restrictions apply, then such an adversary should be classified as censoring adversary, as the technology is ``censored.'' Such classification must be done in this case, regardless of whether the adversary only tries to collect information or not.
 
 \subsection{Censoring Adversaries}
 The primary goal of this adversary is censoring messages and opinions, not within his interests. He does this, regardless of whether the activities of censorship may be observed or not. Therefore, this adversary does not necessarily cloak its activities and typically bans censorship circumventing actions as illegal.
@@ -111,27 +111,26 @@ It is furthermore not realistic that a state-sponsored-actor is carrying out a D
 An adversary may, however have a limited number of accesses to the network with exactly these capabilities. As we are unable to define or limit a number of access points, our defined adversaries reflect a worst case assumption which may not be surpassed. Therefore, our adverasaries are, while not realistic, reflect a state where, if our protocol withstands such adversaries, may be considered as safe.
 
 \section{Required Properties for our Unobservable Protocol}\label{sec:properties}
-% FIXME start correcting from here
-In this section, we collect requirements for our system. We always first list a requirement and then explain why it is essential.
+In this section, we collect required properties for our system. We first list a property and then explain why it is essential.
 
-\subsection{System requirements}\label{sec:requirements}
+\subsection{Required System Properties}\label{sec:requirements}
 
 \begin{requirement}{undetectable}{Undetectable}
 	Protocol nodes and their traffic should be undistinguishable from accepted nodes and traffic. 
 \end{requirement}
 
-Users are unable to limit the route of our packets through named jurisdictions. Therefore, we must protect users of \MessageVortex (users) from being subject to legal prosecution in any country. Therefore, these users need to be anonymous when sending or receiving messages. Unfortunately, most transport protocols (in fact, almost all of them such as \defref{SMTP}, SMS, \defref{XMPP}, or IP) use a globally unique identifier for senders and receivers, which are readable by any party which is capable of reading the packets (mainly the routing nodes).  
+Users are unable to limit the route of network packets through named jurisdictions. Therefore, we must protect users of \MessageVortex (users) from being subject to legal prosecution in any jurisdiction. All these users need to be anonymous when sending or receiving messages. This applies not only to their communication but as well to the usage of an anonymizing technology. Unfortunately, most transport protocols (in fact, all of the common ones such as \defref{SMTP}, SMS, \defref{XMPP}, or IP) use a globally unique identifier for senders and receivers, which are readable by any party which is capable of reading the packets (mainly the routing nodes).  
 
 Threat model in \cref{sec:adversary}, we defined the adversary as someone with superior access to the network and its infrastructure. Such an adversary might attack a message flow in several ways:
 \begin{itemize}
 	\item Identify the sender.
 	\item Identify the recipient.
-	\item Identify other involved parties.
+	\item Identify other involved parties (e.g., routers).
 	\item Read messages passed or extract meta information.
 	\item Disrupt or modify communication fully or partially. This may or may not include the possible identification of the traffic.
 \end{itemize}
 
-If users want to stay anonymous, they must protect our traffic from outside system influences. As we are unable to protect data from modification, we must hide the traffic of our application. In such a scenario, an adversary cannot block our traffic unless he is willing to disrupt communication entirely by disrupting communication of the transport protocol. 
+If users need to stay anonymous, they must protect their traffic from outside system influences. As we are unable to protect data from modification, we must hide the traffic of our application. In such a scenario, an adversary cannot block our traffic unless he is willing to disrupt communication entirely by disrupting communication of the transport protocol. 
 
 \begin{requirement}{P2P}{equal nodes}
 	All nodes of the system should have similar functions, capabilities, and behavior.
@@ -141,11 +140,11 @@ This requirement protects all involved parties from possible legal prosecution. 
 
 We have to assume that all actions taken by a potential adversary are not subject to legal prosecution. This assumption based on the fact that an adversary trying to establish censorship may be part of the government of jurisdiction. We may safely assume that there are legal exceptions in some jurisdictions for such entities. This means he may legally introduce nodes into our system.
 
-To withstand an adversary outlined in \cref{sec:adversary}, the messages sent even within the system requires to be unidentifiable by attributes or content. "Attributes" may include any meta information including, but not limited to, frequency, timing, message size, sender, protocol, ports, or recipient. If we want to guarantee that a node is not identifiable as an endpoint of a message, all involved nodes must carry out equivalent \defref{operation}s. As soon as we have differences between routing nodes and endpoints, we can identify participating persons at entry or exit nodes.
+To withstand an adversary outlined in \cref{sec:adversary}, the messages sent even within the system requires to be unidentifiable by meta information or content. ``Meta information'' may include any information including, but not limited to, frequency, timing, message size, sender, protocol, ports, or recipient. If we want to guarantee that a node is not identifiable as an endpoint of a message, all involved nodes must carry out equivalent \defref{operation}s. As soon as we have differences between routing nodes and endpoints, we can identify participating persons at entry or exit nodes.
 
-Furthermore, it must be impossible from an observing adversary to identify message endpoints. All nodes must look equal from the outside in terms of traffic, as well as in terms of their offered functions and behavior. 
+If we want users traffic to remain undistinguishable from traffic generated from routing nodes, all traffic muist have the same properties. This applies not only after ``entering the system'' but any time. As a result only an infrastructure-less aproach may be used as a consequence. A hybrid or server based approach requires infrastructure to be placed within the Internet. Jurisdictions with a censoring adversary may place focus on such systems and identify and prosecute their owners. 
 
-The term "Equal nodes" does not necessarily mean that nodes must be indistinguishable. It merely means that given the functions, capabilities, and behavior of a node, no further information can be deduced.
+Furthermore, it must be impossible from an observing adversary to identify message endpoints. All nodes must look equal from the outside in terms of traffic, as well as in terms of their offered functions and behavior. The term ``Equal nodes'' does not necessarily mean that nodes must be indistinguishable. It merely means that given the functions, capabilities, and behavior of a node, no further information can be deduced and no differentiation in function may be done.
 
 \begin{requirement}{zeroTrust}{zero trust}
 	No trust should be imposed on any infrastructure unless it is the senders' or the recipients' infrastructure.
@@ -171,7 +170,7 @@ We need a requirement guaranteeing the unlinkability between the sender and reci
 	A system must be able to anonymize sender and recipient at any point of the transport layer and any point within the system unless on the senders' or the recipients' node.
 \end{requirement}
 
-Unobservability requires, according to \cite{anonTerminology}, that an item of interest (\defref{IoI}) is undetectable from an uninvolved entity and anonymous for the involved entities. We therefore require: 
+Unobservability requires, according to \cite{anonTerminology}, that an item of interest (\defref{IoI}) is undetectable from an uninvolved entity and anonymous for the involved entities. We therefore require anonymization as a property.
 
 As a result of the architecture of today's common networks, the anonymization of a sender or a receiver is not simple. A relay may allow at least the anonymization of the original sender given trust into the proxy. By combining it with encryption, we may even achieve a simple form of a sender and receiver pseudonymity, even for a weak outside observer. This has been done in cypherpunk remailers (see \cref{sec:remailersAndMixnets}). If cascading more relay like infrastructures and combining it with cryptography, we may achieve sender and receiver anonymity. When introducing anonymous remailing endpoints, we may additionally achieve both simultaneously. These are the standard approaches in remailers and mixes. We have seen real-world attacks on such systems in the past, and some were successful (e.g., \cite{penetClosure}). 
 
@@ -186,26 +185,26 @@ If we apply our threat model, we find that we require all users to be anonymous,
 	The system must be able to do accounting for an entity without being linked to a real identity.
 \end{requirement}
 
-As a system may be flooded with messages, we need means to control the burden of processed messages. To separate message flows, we need means to control it by identity. Unlike other protocols, we have no identifier as we work based on the previous requirement anonymously. However: We will need some type of accounting to restrict single attackers in flooding.
+As a system may be flooded with messages, we need means to control the burden of processed messages. To separate message flows, we need means to control it by identity. Unlike other protocols, we have no identifier as we work based on the previous requirement anonymously. We will, however, need some type of accounting to keep adversaries from flooding our system.
 
 \subsection{Message Requirements}
 From the message point-of-view, we need to conserve privacy, which has been built up in the previous section.
 
 \begin{requirement}{untagable}{untagable}
-	The message should be un-tagable (neither by a sender nor by an involved intermediate node).
+	The message should be untagable (neither by a sender nor by an involved intermediate node).
 \end{requirement}
 
 To protect a message from being followed or observed, a message needs to have certain properties. First, a message should not have, by design, any properties which can be observed when passing through the system. Any node should remove all parts which were under the control of the previous node.
 
-\ref{req:zeroTrust} implies that a node may try to introduce such features into the message. As we cannot keep a node from doing so, we can define that such tags must be removed by the next node. 
+\ref{req:zeroTrust} implies that a node may try to introduce such features into the message. As we cannot keep a node from doing so, we can define that such tags must be removed by the next node. This may only be done if any node apart from the sender and recipient node have no access to the message being transported or the message is protected from modification.
 
 \begin{requirement}{unbugable}{unbugable}
 	The message should be unbugable (neither by the sender nor by an involved intermediate node).
 \end{requirement}
 
-Another way of breaking anonymity is that, instead of following a message through the system, an adversary may modify (bug) it so that the receiving or any intermediate node leaks its presence. In traditional messaging such bugging is done by introducing remotely hosted data or by introducing revocable certificate operations into the message stream and then observe the VA of a PKI for respective OCSP calls or CRL accesses. Our protocol handling must not depend on such external lookup mechanisms to ensure that bugging is not possible:
+Another way of breaking anonymity is that, instead of following a message through the system, an adversary may modify (bug) it so that the receiving or any intermediate node leaks its presence. In traditional messaging such bugging is done by introducing remotely hosted data or by introducing revocable certificate operations into the message stream and then observe the VA of a PKI for respective OCSP calls or CRL accesses. DNS or similar information lookups may be used as well. Our protocol handling must not depend on such external lookup or download mechanisms to ensure that bugging is not possible.
 
-As with \ref{req:untagable}, a recipient or an intermediate node may be identified by a download or lookup behavior of a recipient or any intermediate routing node.  
+This property applies not only to the message content itself but as well to any routing node processing. All carried out operations need to be standalone and not queryable or detectable from an outside observer even if he is able to manipulate the message content.
 
 \begin{requirement}{unreplayable}{unreplayable}
 	A message or its behavior must not be replayable.
@@ -221,11 +220,13 @@ In order to be realistically operated, our system needs to fulfill some addition
 \end{requirement}
 Up until here, we described a system that is not centrally controlled. If not relying on broadcast domains, which is not feasible on a global scale, each node needs to know other nodes that may be contacted for routing purposes. We refer to the initial process of collecting routing nodes as bootstrapping.
 
+This bootstrapping is needed for users to extend their network at first to a reasonable anonymity set towards an adversary inside the system. At the same time, the bootstrapping  mechanism is a great danger as it allows an adversary to harvest nodes. As a result, each node must be able to control by whom a node is discoverable.
+
 \begin{requirement}{algVar}{algorithmic variety}
 	The system must be able to use multiple symmetric, asymmetric, and hashing algorithms to immediately fall back to a secure algorithm for all new messages if required. 
 \end{requirement}
 
-It is quite common that weaknesses in algorithms are discovered. We may, therefore, not rely on a single algorithm. Instead, we must create a protocol supporting crypto agility, as described in \cite{bsiPostQuantum}.
+It is quite common that weaknesses in algorithms are discovered. We may, therefore, not rely on a single algorithm. Instead, we must create a protocol supporting processing alternatives for algorithms. This includes crypto agility, as described in \cite{bsiPostQuantum}.
 
 \begin{requirement}{easy}{easy handleable}
 	The system must be usable without cryptographic know-how and with popular or common tools.
@@ -243,7 +244,7 @@ Any message-sending protocol needs to be reliable in its functionality. If the m
 	From a user's perspective, the system must act in a predictable manner. He is able to determine the state of a message at any given point in time.
 \end{requirement}
 
-Transparent behavior is a prerequisite for reliability. If something is generating a  behavior, but a user is unable to determine the reason for it (i.e., if a user is expecting a different behavior), he usually assumes a malfunction. Therefore, "reliable" means not only stable by its behavior. It also means diagnosable. A user's perception will not be "reliable" if he is not able to determine causes for differences in observed and expected behavior (e.g., \cite{nicholson2003assessing}).
+Transparent behavior is a prerequisite for reliability. If something is generating a  behavior, but a user is unable to determine the reason for it (i.e., if a user is expecting a different behavior), he usually assumes a malfunction. Therefore, ``reliable'' means not only stable by its behavior. It also means diagnosable. A user's perception will not be ``reliable'' if he is not able to determine causes for differences in observed and expected behavior (e.g., \cite{nicholson2003assessing}).
 
 \begin{requirement}{available}{available}
 	A user must have access to a working system and its software and updates.
@@ -254,7 +255,7 @@ If a user should be able to use the system, he needs access to other nodes and t
 Availability, in this specific context, may have two meanings, which do differ. A system is available if\ldots
 \begin{enumerate}
 	\item a sender and a recipient have (or may have) the means of using it.
-	\item the infrastructure provides the service (as opposed to: "is running in a degraded or faulty state and, therefore, unable to provide the service").
+	\item the infrastructure provides the service, as opposed to: ``is running in a degraded or disfunctional state and, therefore, possibly unable to provide the service.''
 \end{enumerate}
 
 \begin{requirement}{senderId}{identifiable sender}
@@ -268,31 +269,42 @@ We did not consider efficiency as a requirement. Our goal is to achieve anonymit
 \chapter{Rationale}\label{sec:rationale}
 In this chapter, we set the course for our system. We explain why we built the protocol the way it is. We try to elaborate on our decisions and explain why the system is not built differently.
 
-The system we describe is a four-layered system (transport, blending, routing, and accounting layer) in which each layer fulfills a specific duty. The transport layer is equal to an unmodified, common internet data transport protocol. The blending layer inserts and extracts our protocol messages into the transport layer. The routing layer does disassemble and reassemble the messages received and applies specially crafted operations, and the accounting layer keeps track of quotas and protects the resources of the system. The three \MessageVortex{} layers (all layers except "transport") run on common internet end-user devices such as mobile phones or tablets.
+The system we describe is a four-layered system (transport, blending, routing, and accounting layer) in which each layer fulfills a specific duty. The transport layer is equal to an unmodified, common internet data transport protocol. The blending layer inserts and extracts our protocol messages into the transport layer. The routing layer does disassemble and reassemble the messages received and applies specially crafted operations, and the accounting layer keeps track of quotas and protects the resources of the system. The three \MessageVortex{} layers (all layers except ``transport'') run on common internet end-user devices such as mobile phones or tablets.
 
 \section{System Design and Infrastructure}
-All anonymity systems listed in \cref{sec:systems} have in common that they do rely on dedicated servers providing an anonymity related service. Such specialized servers make operators of such servers vulnerable in an environment where a censoring adversary (as described in \cref{sec:adversary}) exists. Our approach should, therefore, be different. Instead of creating our own protocol, we describe a system where we use preexisting standard servers without modification. If we succeed to piggyback such a protocol invisibly, we may inherit the regular usage of this infrastructure as decoy traffic. Piggybacking and mimicking of protocols is not new. Protocols such as Skypemorph\cite{mohajeri2012skypemorph} or pluggable transports for Tor (e.g., Meek, FTE, or OBFS4) use this technology successfully for censorship circumvention.
+All anonymity systems listed in \cref{sec:systems} have in common that they do rely on dedicated servers providing an anonymity related service. Such specialized servers make operators or owners of such servers vulnerable in an environment where a censoring adversary (as described in \cref{sec:adversary}) exists. Our approach should, therefore, be different. Instead of creating our own protocol, we describe a system where we use preexisting standard servers without modification for our purpose. If we succeed to piggyback such a protocol invisibly, we may inherit the regular usage of this infrastructure as decoy traffic. Piggybacking and mimicking of protocols is not new. Protocols such as Skypemorph\cite{mohajeri2012skypemorph} or pluggable transports for Tor (e.g., Meek, FTE, or OBFS4) use this technology successfully for censorship circumvention.
 
 We will do this piggybacking in a protocol-agnostic manner. On the protocol level, this requires that we separate embedding of messages into the transport protocol from the rest of the system. To do this in such a way makes the system even harder to observe as routing graphs taking multiple protocols into account increase the complexity exponentially through their different properties.
 
+Important properties of such piggybacking are mainly:
+\begin{itemize}
+	\item \ldots the importance or significance of the transport protocol.\\
+	The more important the transport protocol is the higher, the barrier to censor the entire protocol.
+	\item \ldots the traffic load.\\
+	The higher the load created by the transport protocol is for analyzing the data, the harder it is to uncover messages.
+	\item \ldots the quality of the piggybacking\\
+	The harder it is to identify a single message as part of the protocol or not, the harder it is to establish censorship.
+\end{itemize} 
+
 The content of the message in the transport layer protocol is provided by the routing node and not by anyone else. This restriction is based on the fact that if we allow anyone else except the routing node itself to control visible aspects of the transport layer message, the system could be misused for sending transport layer messages. To give an example: Such a system could be misused for blackmailing of a user not participating in the system. We simply create a message obfuscating the source and then exit the system by embedding the true blackmailing message. 
 
-As we rely on third-party infrastructure with our approach, now we have to take special care when designing our approach not to violate requirement \ref{req:zeroTrust}. For obvious reasons, a direct connection between the sender and recipient via any named transport protocol would violate the requirement \ref{req:unlink}. A single intermediate node would minimally imply trust in this node and its anonymization capabilities, which is not acceptable due to the requirement \ref{req:zeroTrust}. When using multiple nodes, other anonymization protocols typically use three to five intermediate nodes due to their arguing. Typically we have at least three anonymization nodes for obvious reasons and sometimes an entry and exit node summing up to five nodes. This implies that the routing of our protocol is required. As we have an \ref{req:zeroTrust} policy, decisions for routing may no longer take place on the routing node but must be dictated externally. 
+As we rely on third-party infrastructure with our approach, now we have to take special care when designing our approach not to violate requirement \ref{req:zeroTrust}. For obvious reasons, a direct connection between the sender and recipient via any named transport protocol would violate the requirement \ref{req:unlink}. A single intermediate node would minimally imply trust in this node and its anonymization capabilities, which is not acceptable due to the requirement \ref{req:zeroTrust}. When using multiple nodes, other anonymization protocols typically use three to five intermediate nodes due to their arguing. Such protocols typically have at least three anonymization nodes for obvious reasons and sometimes an entry and exit node summing up to five nodes. This implies that the routing of our protocol is required. As we have an \ref{req:zeroTrust} policy, decisions for routing may no longer take place on the routing node but must be dictated externally. Some protocols (such as typical Crowds based system) have weaknesses as each node may decide on the subsequent node and choose one in their favor.
 
 For routing, we will use end-user devices. This decision is further backed by the requirement \ref{req:P2P}. It, however, opposes the requirement of \ref{req:reliable}, as such system participants are likely to be unreliable due to missing network connectivity, device failure due to drained batteries, or simply because they no longer participate in a network. To counter this, we implement measures on the message level.
 
+%% FIXME: start reading from here
 \section{Message and Routing}
 One of the biggest weaknesses of all protocols is the information leakage they have by design and the inability to restrict access to their functionality. We will build the messages with the following design guidelines:
 \begin{itemize}
 	\item No routing controlled content shall survive a hop.\\
 	For us, this means that by design, a message is received and dismantled. Any content visible or manipulable by the previous node must be removed. Only new content or content inaccessible to the previous node may be used to build new messages. Following this criterion, we automatically fulfill the requirement \ref{req:untagable}.
 	\item A routing node may efficiently identify a message sender.\\      
-	The sender must be efficiently identifiable. At first sight, this requirement is non-fitting as it opposes heavily to \ref{req:anon} and \ref{req:unlink}. On the other hand, not providing these means makes it next to impossible to create a system that may not be misused and flooded. As the identification is pseudonymous, it must be short-lived, and multiple identities of the same sender must not be linked to each other. We will refer to this identity as an ephemeral ID (\defref{eID}). This \defref{eID} is handled in such a way that not complete decoding of the message is required to authorize the user. Instead, we build a message in such a way that tamper-proof, small-sized parts of the message are decoded first, and possibly bloated message content may be decoded after it is clear that the content is acceptable. If we assign "costs" to the creation of \defref{eID}s, it effectively protects the system from flooding.
+	The sender must be efficiently identifiable. At first sight, this requirement is non-fitting as it opposes heavily to \ref{req:anon} and \ref{req:unlink}. On the other hand, not providing these means makes it next to impossible to create a system that may not be misused and flooded. As the identification is pseudonymous, it must be short-lived, and multiple identities of the same sender must not be linked to each other. We will refer to this identity as an ephemeral ID (\defref{eID}). This \defref{eID} is handled in such a way that not complete decoding of the message is required to authorize the user. Instead, we build a message in such a way that tamper-proof, small-sized parts of the message are decoded first, and possibly bloated message content may be decoded after it is clear that the content is acceptable. If we assign ``costs'' to the creation of \defref{eID}s, it effectively protects the system from flooding.
 	\item The routing \defref{operation}s must not leak more information than the next hop.\\
 	We will apply a transformation on each routing hop to the message. This prevents following the message throughout the system. In most of the systems, messages are mainly disassembled and reassembled or onionized. The traffic is then cloaked in mimic traffic, making it impossible for an outside observer to identify message flows. The node generating the traffic is, however, well aware of the true message flow. In our system, we will add, instead of mimicking traffic, redundancy information (or remove it). By doing so, a routing node has no longer the insight which part of the traffic is relevant to the message and which not. We may, furthermore, introduce the possibility of distributing the message content throughout multiple paths in such a way that each path has not sufficient content to rebuild the message. In fact, depending on the complementing missing message, any content may be valid. 
 	\item Messages are protected from being replayed.\\
 	In former systems, message paths were highlighted by injecting additional information. Our system is already protected from such injections by the \defref{eID} concept, which identifies the sender. There are, however, other means to highlight traffic. An adversary may either inject message payload (corrupting the message flow) or replay the message. While we cannot keep anyone from sticking to rules, we may at least implement replay protection. Furthermore, we may later observe that we are able to control willingly induced, size mismatching content.
-	\item Messages in the routing system are "store and forward" .\\
+	\item Messages in the routing system are ``store and forward.''\\
 	All synchronous routing systems have in common that message observation is relatively easy for an outside or inside observer unless mimick routes are used. This is why we allow the message to be stored and picked up or sent at a later stage. 
 	\item Use the Reed-Solomon-Function as the main routing \defref{operation}.\\
 	Originally \cite{reed1960polynomial} introduced a system allowing the use of polynomes to create error-correcting codes. In \cite{chaum1988multiparty} \citeauthor{chaum1988multiparty}, they have shown that the codes are suitable for distributing data assuming enough parties are honest and not malfunctioning. Unlike \citeauthor{chaum1988multiparty} proposition, we are not using the Reed Solomon function to achieve anonymity or privacy. Instead, we use it for decoy traffic generation. We are splitting a message into multiple parts at several points when routing and assemble it again on different nodes. By doing so, we achieve two vital things. First, we introduce the possibility of recovering errors due to misbehaving nodes, and secondly, the real traffic can no longer be differentiated from decoy traffic. The \defref{operation} has proven to be insecure as it leaks properties of the operation applied in the result. We will show this in section \ref{sec:analysisReedSolomon}. Thus, We hardened the operation to remove the negative effects.
@@ -344,7 +356,7 @@ This design is definitely implementable on a consumer device. On the other hand,
 
 Our system sends so-called \VortexMessages. These messages are hidden within a transport protocol (e.g., SMTP or XMPP) with a blending mechanism (e.g., the steganographic algorithm F5) and extracted by a blending layer. The extracted \VortexMessage{} is handed over to a routing layer. The \VortexMessage{} itself contains a header block, a routing block, and possibly some payload blocks. The header block contains all the information required to protect the system. The routing block contains instructions (so-called ``\defref{operation}s'') how the payload blocks have to be processed and where to send the resulting blocks. Those \defref{operation}s are one of the keys as information leaking happens in this step in most of the systems. We, therefore, crafted all \defref{operation}s very carefully to keep as much information secret as we could. These \defref{operation}s are the key to the system as they allow us to increase and decrease the size of a message without leaking what part of the data is a decoy and what not.
 
-A payload may either be kept by the system for later processing with other messages, processed (possibly with different) payload blocks, or displayed to the "local user" as a message.
+A payload may either be kept by the system for later processing with other messages, processed (possibly with different) payload blocks, or displayed to the ``local user'' as a message.
 
 The general idea of the protocol is to form a network from nodes that mix and route messages between the sender and receiver. A routing block builder (\defref{RBB}), which is typically identical to the sender, has full control over almost all attributes of the message, and nodes are unable to learn anything from the message while routing. Each user has a node, and there may be additional nodes (public routing nodes) without a user connected to it. 
 
@@ -362,8 +374,8 @@ For our protocol, we use the following terms:
 	\item \textbf{\defref{recipient}:} The user or process destined to receive the message in the end.
 	\item \textbf{\defref{user}:} Any entity, running a \MessageVortex{} node.
 	\item \textbf{\defref{router}:} Any node which is processing the message. Please note that all \VortexNode{}s are routers. This includes the senders' and recipients' node.
-	\item \textbf{\defref{message}:} The "real content" to be transferred from the sender to the recipient.    
-	\item \textbf{\defref{VortexMessage}:} The encoded message passed from one node to another one. The \VortexMessage{} is considered before any embedding takes place. If embedded, we refer to such a message as "embedded \VortexMessage".
+	\item \textbf{\defref{message}:} The ``real content'' to be transferred from the sender to the recipient.    
+	\item \textbf{\defref{VortexMessage}:} The encoded message passed from one node to another one. The \VortexMessage{} is considered before any embedding takes place. If embedded, we refer to such a message as ``embedded \VortexMessage''.
 	\item \textbf{\defref{payload}:} Any data transported in a \VortexMessage{} between routers with exception to the routing and header block, regardless of the meaningfulness or relevance to the \VortexMessage.
 	\item \textbf{\defref{decoy traffic}:} Any payload transported between routers that have no relevance to the message at the final destination.
 	\item \textbf{\defref{identity}:} A tuple of a routable address and a public key. This tuple is a long-living tuple but may be exchanged from time to time. An Identity is always assigned to a node, but one node may have multiple identities. 
@@ -392,7 +404,7 @@ The protocol itself has the possibility to answer clear-text requests. So-called
 \subsection{Workspaces and Ephemeral Identities}
 We dumped the approach for a system global unified storage for all message processing as such a design would allow an adversary to flood our storage. Instead, we introduced temporary storages suitable for a set of transaction belonging to a single identity or limited set of entities which collaborate. In our system, every transaction on a nose is assigned to an ephemeral identity (\defref{eID}). An \defref{eID} has a limited lifetime and is represented by an asymmetric key pair and has to be created on each \VortexNode{} taking part in a message processing. Each \defref{eID} has a storage assigned to which we refer as ``\defref{workspace}''.
 
-An \defref{eID} is unique on every host and created on each \VortexNode{} by the routing block builder (\defref{RBB}). To create an \defref{eID}, an \defref{RBB} first sends a message with only a header block to the respective \VortexNode. The request contains the new identity, a reply block, and a request to create a new identity. The receiving \VortexNode will then typically sends a challenge back. A challenge may be the start of a hash bit sequence (also referred to as "puzzle"). The requester has then to resend the request with a header block. The requester must insert additional data in such a way that the start hash in its binary form matches the bit sequence provided. Another possibility is to request a payment in cryptocurrency. This allows us to commercialize routers in some countries where the usage of such routers is generally allowed.
+An \defref{eID} is unique on every host and created on each \VortexNode{} by the routing block builder (\defref{RBB}). To create an \defref{eID}, an \defref{RBB} first sends a message with only a header block to the respective \VortexNode. The request contains the new identity, a reply block, and a request to create a new identity. The receiving \VortexNode will then typically sends a challenge back. A challenge may be the start of a hash bit sequence (also referred to as ``puzzle''). The requester has then to resend the request with a header block. The requester must insert additional data in such a way that the start hash in its binary form matches the bit sequence provided. Another possibility is to request a payment in cryptocurrency. This allows us to commercialize routers in some countries where the usage of such routers is generally allowed.
 
 The length of the requested bit sequence is chosen by the accounting layer at its own will. If the request is not answered in a given time, the \defref{eID} will be discarded. Analogous to an SYN-Flood attack, an adversary may try to overwhelm a \VortexNode{} with \defref{eID} creation requests. Such flooding will be much more costly for the adversary than for the \VortexNode{}, and such a node may decide to temporarily no longer accept new \defref{eID} requests without affecting already existing \defref{eID}s.
 
@@ -426,7 +438,7 @@ As already introduced in \cref{sec:reqSummary}, the protocol is built on multipl
 In total, we have four layers. The bottom-most layer consists of unmodified standard infrastructure for transport within the Internet, and the three layers on top build a single \VortexNode.
 
 \subsection{Transport Layer}
-The transport layer is a standard protocol within the Internet. It is neither a \MessageVortex{}-specific infrastructure, nor has it been modified for the purpose. Instead, it serves the purpose as a store and forward medium. This medium solves two major problems. First, no NAT traversal technology such as "TCP hairpins" or "hole punching" is required. And secondly, it compensates for short outages due to regional routing problems to the end-user.
+The transport layer is a standard protocol within the Internet. It is neither a \MessageVortex{}-specific infrastructure, nor has it been modified for the purpose. Instead, it serves the purpose as a store and forward medium. This medium solves two major problems. First, no NAT traversal technology such as ``TCP hairpins'' or ``hole punching'' is required. And secondly, it compensates for short outages due to regional routing problems to the end-user.
 
 A transport layer should have some generic properties:
 \begin{itemize}
@@ -484,7 +496,7 @@ We define the blending layer to work as follows for sending messages:
 \end{enumerate}
 
 \paragraph{Credible Content Creation for the Transport Layer}~\\
-One of the most demanding tasks of the blending layer is to create transport protocol messages. In \cite{oakland2013-parrot}, \citeauthor{oakland2013-parrot} expresses that it is easy for a human to determine decoy traffic as the content is easily identifiable as generated content. While this is up to all that we know true, there is a possibility here to generate "human-like" data traffic to a certain extent. For the blending layer, it is not necessarily required to mimic human messages. Instead, the blending layer may generate messages such as password recovery messages, monitoring messages, and even \defref{UBM}-like content. All these messages have required properties in common. First, all of them are machine-generated messages which are modified quite often. All of these messages are known to be sent and possibly adapted individually. 
+One of the most demanding tasks of the blending layer is to create transport protocol messages. In \cite{oakland2013-parrot}, \citeauthor{oakland2013-parrot} expresses that it is easy for a human to determine decoy traffic as the content is easily identifiable as generated content. While this is up to all that we know true, there is a possibility here to generate ``human-like'' data traffic to a certain extent. For the blending layer, it is not necessarily required to mimic human messages. Instead, the blending layer may generate messages such as password recovery messages, monitoring messages, and even \defref{UBM}-like content. All these messages have required properties in common. First, all of them are machine-generated messages which are modified quite often. All of these messages are known to be sent and possibly adapted individually. 
 
 For the blending itself, we required a steganographic algorithm. After reviewing the options, we decided to go for F5\cite{f5} as a steganographic algorithm. It is a reasonably well-researched algorithm, which attracted many researchers. The original F5 implementation had a detectable issue with artifacts\cite{F5broken} caused by the recompression of the image. This issue was caused only due to a problem in the reference implementation, and the researchers have provided a corrected reference implementation without the weakness.
 
@@ -738,7 +750,7 @@ The $splitPayload$ operation splits a payload block into two chunks of different
 \begin{itemize}
 	\item source payload block $pb_1$
 	\item fraction $f$\\
-	A floating-point number which is describing the size of the first chunk. If the fraction is "1.0", then the whole payload is transferred to the second target chunk
+	A floating-point number which is describing the size of the first chunk. If the fraction is ``1.0'', then the whole payload is transferred to the second target chunk
 \end{itemize}
 
 If $len(pb_1)$ expresses the size of a payloadblock called $pb_1$ in bytes, then the two resulting blocks of the SpitPayload Operation $pb_2$ and $pb_3$ have to follow the following rules:
