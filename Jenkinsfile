@@ -25,7 +25,7 @@ pipeline {
         timeout(time: 120, unit: 'MINUTES')
       }
       steps{
-        sh "mvn -pl -DargLine='-Djava.io.tmpdir=${env.WORKSPACE}/target/' application-core-library jacoco:prepare-agent test jacoco:report site"
+        sh "JVM_SUPPORT_RECOMMENDED_ARGS="-Dbamboo.build.parent.java.io.tmpdir==${env.WORKSPACE}/target/ mvn -pl application-core-library jacoco:prepare-agent test jacoco:report site"
       }
       post {
         success {
