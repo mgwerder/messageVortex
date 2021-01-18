@@ -25,7 +25,7 @@ pipeline {
         timeout(time: 120, unit: 'MINUTES')
       }
       steps{
-        sh 'mvn -pl application-core-library jacoco:prepare-agent test jacoco:report site'
+        sh 'MAVEN_OPTS="-Djava.io.tmpdir=${env.WORKSPACE}/target/" mvn -pl application-core-library jacoco:prepare-agent test jacoco:report site'
       }
       post {
         success {
