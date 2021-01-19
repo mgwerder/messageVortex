@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.concurrent.Callable;
-import javax.swing.*;
+import javax.swing.SwingUtilities;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.IdentityStore;
 import net.messagevortex.asn1.IdentityStoreBlock;
@@ -39,11 +39,11 @@ public class CommandLineHandlerExamplesGraph implements Callable<Integer> {
   
   @CommandLine.Option(names = {"--x-resolution", "-x"}, required = false,
           description = "resolution of x-axis")
-  int xResolution = 1024;
+  int xres = 1024;
   
   @CommandLine.Option(names = {"--y-resolution", "-y"}, required = false,
           description = "resolution of x-axis")
-  int yResolution = 768;
+  int yres = 768;
   
   @CommandLine.Option(names = {"--redundancy-size", "-r"}, required = false,
           description = "minimum number of paths to target node")
@@ -86,12 +86,12 @@ public class CommandLineHandlerExamplesGraph implements Callable<Integer> {
     if (filename == null) {
       SwingUtilities.invokeLater(new Runnable() {
         public void run() {
-          jg.createAndShowUserInterface(xResolution, yResolution);
+          jg.createAndShowUserInterface(xres, yres);
         }
       });
     } else {
       // store image
-      jg.saveScreenshot(filename, xResolution, yResolution);
+      jg.saveScreenshot(filename, xres, yres);
     }
     
     return 0;

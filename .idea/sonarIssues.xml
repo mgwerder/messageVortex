@@ -748,6 +748,16 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/MessageVortexLogger.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/ThreadDumper.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/asn1/yaml/IdentityStoreRepresenter.java">
           <value>
             <set />
@@ -758,7 +768,52 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/commandline/CommandLineHandlerCache.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/commandline/CommandLineHandlerCacheCalculate.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/commandline/CommandLineHandlerExamplesGraph.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/commandline/CommandLineHandlerIdentityStoreAdd.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/commandline/CommandLineHandlerIdentityStoreCreate.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/commandline/CommandLineHandlerIdentityStoreDel.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/commandline/CommandLineHandlerIdentityStoreDump.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/commandline/CommandLineHandlerIdentityStoreGenerate.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/commandline/CommandLineHandlerIdentityStoreInitDemo.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/commandline/CommandLineHandlerRedundancyAdd.java">
           <value>
             <set />
           </value>

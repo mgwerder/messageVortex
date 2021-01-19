@@ -44,7 +44,8 @@ public class CommandLineHandlerIdentityStoreDump implements Callable<Integer> {
   /**
    * <p>Commandline handler to dump identities of an identity store.</p>
    *
-   * <p>Use java -jar MessageVortex.jar identitystore dump --help to get all supported parameters.</p>
+   * <p>Use java -jar MessageVortex.jar identitystore dump --help to get all supported
+   * parameters.</p>
    *
    * @return the error level to be returned
    * @throws Exception if anything goes wrong

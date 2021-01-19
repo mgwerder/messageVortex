@@ -1,7 +1,5 @@
 package net.messagevortex.commandline;
 
-import java.util.concurrent.Callable;
-import net.messagevortex.NotImplementedException;
 import picocli.CommandLine;
 
 /**
@@ -17,4 +15,4 @@ import picocli.CommandLine;
                 CommandLineHandlerCacheCalculate.class,
         }
 )
-public class CommandLineHandlerCache {};
+public class CommandLineHandlerCache {}

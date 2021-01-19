@@ -27,7 +27,8 @@ public class CommandLineHandlerIdentityStoreInitDemo implements Callable<Integer
   /**
    * <p>Commandline handler to create a demo identity store.</p>
    *
-   * <p>Use java -jar MessageVortex.jar identitystore initDemo --help to get all supported parameters.</p>
+   * <p>Use java -jar MessageVortex.jar identitystore initDemo --help to get all supported
+   * parameters.</p>
    *
    * @return the error level to be returned
    * @throws Exception if anything goes wrong

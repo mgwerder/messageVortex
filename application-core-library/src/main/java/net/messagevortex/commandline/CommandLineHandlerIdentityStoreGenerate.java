@@ -44,7 +44,8 @@ public class CommandLineHandlerIdentityStoreGenerate implements Callable<Integer
   /**
    * <p>Commandline handler to generate an identity to an identity store.</p>
    *
-   * <p>Use java -jar MessageVortex.jar identitystore generate --help to get all supported parameters.</p>
+   * <p>Use java -jar MessageVortex.jar identitystore generate --help to get all supported
+   * parameters.</p>
    *
    * @return the error level to be returned
    * @throws Exception if anything goes wrong

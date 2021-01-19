@@ -37,7 +37,8 @@ public class CommandLineHandlerIdentityStoreDel implements Callable<Integer> {
   /**
    * <p>Commandline handler to remove an identity from an identity store.</p>
    *
-   * <p>Use java -jar MessageVortex.jar identitystore removeIdentity --help to get all supported parameters.</p>
+   * <p>Use java -jar MessageVortex.jar identitystore removeIdentity --help to get all supported
+   * parameters.</p>
    *
    * @return the error level to be returned
    * @throws Exception if anything goes wrong

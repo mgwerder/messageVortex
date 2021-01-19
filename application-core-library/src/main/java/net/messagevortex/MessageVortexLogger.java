@@ -123,7 +123,7 @@ public class MessageVortexLogger extends Logger {
           String time = sdf.format(new Date());
 
           sb.append(time).append(' ').append(record.getLevel().getLocalizedName()).append(": ")
-              .append('[').append(Thread.currentThread().getName()).append("/")
+              .append('[').append(Thread.currentThread().getName()).append('/')
               .append(record.getLoggerName()).append("] ")
               .append(formatMessage(record)).append(LINE_SEPARATOR);
         }

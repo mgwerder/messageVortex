@@ -50,7 +50,8 @@ public class CommandLineHandlerRedundancyAdd implements Callable<Integer> {
   /**
    * <p>Commandline handler to apply an add redundancy operation to a file.</p>
    *
-   * <p>Use java -jar MessageVortex.jar redundancy addRedundancy --help to get all supported parameters.</p>
+   * <p>Use java -jar MessageVortex.jar redundancy addRedundancy --help to get all supported
+   * parameters.</p>
    *
    * @return the error level to be returned
    * @throws Exception if anything goes wrong
