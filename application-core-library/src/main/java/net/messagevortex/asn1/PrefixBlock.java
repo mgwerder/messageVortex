@@ -254,7 +254,11 @@ public class PrefixBlock extends AbstractBlock implements Serializable {
       }
       return decryptionKey.encrypt(b);
     } else {
-      return encrypted.clone();
+      if ( encrypted==null) {
+        return null;
+      } else {
+        return encrypted.clone();
+      }
     }
   }
 }

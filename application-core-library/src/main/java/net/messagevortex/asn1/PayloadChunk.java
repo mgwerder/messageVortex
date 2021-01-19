@@ -137,7 +137,11 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
    */
   public final byte[] setPayload(byte[] b) {
     byte[] opl = payload;
-    payload = Arrays.copyOf(b,b.length);
+    if ( b!= null) {
+      payload = Arrays.copyOf(b, b.length);
+    } else {
+      payload = null;
+    }
     payloadType = PayloadType.PAYLOAD;
     return opl;
   }
