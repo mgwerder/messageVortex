@@ -350,7 +350,7 @@ public class RoutingCombo extends AbstractBlock implements Serializable {
   }
 
   public byte[] toEncBytes() {
-    return encrypted;
+    return encrypted.clone();
   }
 
   @Override

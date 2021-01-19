@@ -24,6 +24,7 @@ package net.messagevortex.asn1;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Date;
 
 import net.messagevortex.asn1.encryption.DumpType;
@@ -136,7 +137,7 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
    */
   public final byte[] setPayload(byte[] b) {
     byte[] opl = payload;
-    payload = b;
+    payload = Arrays.copyOf(b,b.length);
     payloadType = PayloadType.PAYLOAD;
     return opl;
   }
@@ -165,7 +166,7 @@ public class PayloadChunk extends AbstractBlock implements Serializable {
    */
   public final byte[] setReplyBlock(byte[] reply) {
     byte[] opl = payload;
-    payload = reply;
+    payload = Arrays.copyOf(reply,reply.length);
     payloadType = PayloadType.REPLY;
     return opl;
   }

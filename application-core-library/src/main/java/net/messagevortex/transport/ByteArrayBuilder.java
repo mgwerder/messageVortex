@@ -48,7 +48,7 @@ public class ByteArrayBuilder {
    * @return The requested byte array
    */
   public byte[] toBytes() {
-    return values;
+    return values.clone();
   }
 
 }

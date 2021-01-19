@@ -3,6 +3,7 @@ package net.messagevortex.blender.generators;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.logging.Level;
 import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortexLogger;
@@ -47,9 +48,9 @@ public class GenericGenerator implements BlenderGenerator {
   
   private static byte[] getFileContent(File f) {
     byte[] b = null;
-    try {
+    try(InputStream is=new FileInputStream(f)) {
       b = new byte[(int) (f.length())];
-      new FileInputStream(f).read(b);
+      is.read(b);
     } catch (IOException ioe) {
       LOGGER.log(Level.WARNING, "unable to reat file \"" + f.getAbsolutePath() + "\"", ioe);
     }

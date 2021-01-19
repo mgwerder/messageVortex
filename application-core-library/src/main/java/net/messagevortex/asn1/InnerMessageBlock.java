@@ -298,7 +298,7 @@ public class InnerMessageBlock extends AbstractBlock implements Serializable {
   }
 
   public PayloadChunk[] getPayload() {
-    return payload;
+    return payload.clone();
   }
 
   public PrefixBlock getPrefix() {

@@ -605,12 +605,8 @@ public class AsymmetricKey extends Key implements Serializable, Dumpable {
     if (b == null) {
       throw new NullPointerException("Public key may not be null");
     }
-    byte[] old = publicKey;
-    if (b == null) {
-      publicKey = null;
-    } else {
-      publicKey = Arrays.copyOf(b, b.length);
-    }
+    byte[] old =  Arrays.copyOf(publicKey,publicKey.length);
+    publicKey = Arrays.copyOf(b, b.length);
     return old;
   }
   

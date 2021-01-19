@@ -117,11 +117,11 @@ public class GaloisFieldMathMode implements MathMode {
   }
   
   public int[] getGfLog() {
-    return gfLog;
+    return gfLog.clone();
   }
   
   public int[] getGfIlog() {
-    return gfInverseLog;
+    return gfInverseLog.clone();
   }
   
   @Override

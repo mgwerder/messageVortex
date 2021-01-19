@@ -373,5 +373,10 @@ public class UsagePeriod extends AbstractBlock implements Serializable, Comparab
       return false;
     }
   }
+  
+  @Override
+  public int hashCode() {
+    return dumpValueNotation("",DumpType.ALL).hashCode();
+  }
 
 }

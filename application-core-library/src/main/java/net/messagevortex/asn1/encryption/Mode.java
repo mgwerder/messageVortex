@@ -164,7 +164,7 @@ public enum Mode {
    * @return an array of all paddings
    */
   public Padding[] getPaddings() {
-    return pad;
+    return pad.clone();
   }
 
   /***

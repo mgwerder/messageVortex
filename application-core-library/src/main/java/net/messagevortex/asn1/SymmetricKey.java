@@ -284,7 +284,7 @@ public class SymmetricKey extends Key implements Serializable {
   }
 
   public byte[] getKey() {
-    return key;
+    return key.clone();
   }
 
   /***
@@ -295,7 +295,7 @@ public class SymmetricKey extends Key implements Serializable {
    */
   public byte[] setKey(byte[] b) {
     byte[] old = key;
-    key = b;
+    key = Arrays.copyOf(b,b.length);
     return old;
   }
 
