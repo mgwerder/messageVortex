@@ -94,9 +94,9 @@ public class ThreadDumper {
       Thread.State state = threadInfo.getThreadState();
       Thread t = getThread(threadInfo.getThreadId());
       if (dumpDaemon || !t.isDaemon()) {
-        tdump.append("\"" + threadInfo.getThreadName() + "\"" + CRLF);
-        tdump.append("   java.lang.Thread.State: " + state
-                + (t.isDaemon() ? " [DAEMON]" : " [normal]") + CRLF);
+        tdump.append("\"").append(threadInfo.getThreadName()).append("\"").append(CRLF);
+        tdump.append("   java.lang.Thread.State: ").append(state).append(t.isDaemon() ? " [DAEMON]" : " [normal]")
+                .append(CRLF);
         final StackTraceElement[] stackTraceElements = threadInfo.getStackTrace();
         for (final StackTraceElement stackTraceElement : stackTraceElements) {
           tdump.append("        at " + stackTraceElement).append(CRLF);

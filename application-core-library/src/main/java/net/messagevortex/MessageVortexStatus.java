@@ -84,13 +84,13 @@ public class MessageVortexStatus {
             trayIcon.setImageAutoSize(true);
             trayIcon.addActionListener(new ActionListener() {
               public void actionPerformed(ActionEvent e) {
-                LOGGER.log(Level.INFO, "got event " + e.toString());
+                LOGGER.log(Level.INFO, "got event " + e);
                 try {
                   Thread.sleep(1000);
                 } catch (InterruptedException ie) {
                   // safe to ignore
                 }
-                LOGGER.log(Level.INFO, "displaying event " + e.toString());
+                LOGGER.log(Level.INFO, "displaying event " + e);
                 displayMessage("Action", "Some action performed");
               }
             });
