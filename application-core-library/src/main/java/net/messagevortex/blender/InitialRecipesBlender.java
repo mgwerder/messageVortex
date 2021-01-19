@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
-import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 import java.util.logging.Level;
 import javax.activation.DataHandler;
 import javax.mail.Address;
@@ -220,7 +220,7 @@ public class InitialRecipesBlender extends Blender {
       IdentityStore istore = this.identityStore;
       
       // get anonymity set
-      List<IdentityStoreBlock> anonSet = istore.getAnonSet(anonSetSize);
+      Set<IdentityStoreBlock> anonSet = istore.getAnonSet(anonSetSize);
       if (anonSet == null) {
         LOGGER.log(Level.WARNING, "unable to get anonymity set for message");
         return false;

@@ -28,9 +28,10 @@ import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.Vector;
 import java.util.concurrent.Callable;
@@ -178,13 +179,13 @@ public class IdentityStore extends AbstractBlock
    * @return the anonymity set
    * @throws IOException if requested anonymity set size is too big for this store
    */
-  public List<IdentityStoreBlock> getAnonSet(int size) throws IOException {
+  public Set<IdentityStoreBlock> getAnonSet(int size) throws IOException {
     LOGGER.log(Level.INFO, "Executing getAnonSet(" + size + ") from " + blocks.size());
     if (size > blocks.size() + 1) {
       // unable to create a block with a bigger anonymity set than the sum of identity store blocks
       return null;
     }
-    List<IdentityStoreBlock> ret = new ArrayList<>();
+    Set<IdentityStoreBlock> ret = new HashSet<>();
     String[] keys = blocks.keySet().toArray(new String[0]);
     int i = 0;
     while (ret.size() < size && i < 10000) {

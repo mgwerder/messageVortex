@@ -30,7 +30,7 @@ public abstract class BlenderRecipe implements Comparable<BlenderRecipe> {
    *
    * @throws IOException if no candidates can be found
    */
-  public static BlenderRecipe getRecipe(String identifier, List<IdentityStoreBlock> anonSet)
+  public static BlenderRecipe getRecipe(String identifier, Set<IdentityStoreBlock> anonSet)
           throws IOException {
     if (identifier == null) {
       identifier = DEFAULT;
@@ -96,7 +96,7 @@ public abstract class BlenderRecipe implements Comparable<BlenderRecipe> {
    * @param anonSet the currently available anonymity set
    * @return true if the recipe may be applied
    */
-  public abstract boolean isAppliable(List<IdentityStoreBlock> anonSet);
+  public abstract boolean isAppliable(Set<IdentityStoreBlock> anonSet);
 
   /***
    * <p>Creates a routing block with the given parameters.</p>
@@ -108,7 +108,7 @@ public abstract class BlenderRecipe implements Comparable<BlenderRecipe> {
    *
    * @throws IOException if a problem arises when creating the block
    */
-  public abstract RoutingCombo applyRecipe(List<IdentityStoreBlock> anonSet,
+  public abstract RoutingCombo applyRecipe(Set<IdentityStoreBlock> anonSet,
                                            IdentityStoreBlock from,
                                            IdentityStoreBlock to) throws IOException;
 
