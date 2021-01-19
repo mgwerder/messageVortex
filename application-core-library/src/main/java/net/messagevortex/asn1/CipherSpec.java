@@ -68,7 +68,7 @@ public class CipherSpec extends AbstractBlock implements Serializable {
     this.cipherUsage = cipherUsage;
   }
 
-  protected void parse(ASN1Encodable to) throws IOException {
+  protected final void parse(ASN1Encodable to) throws IOException {
     ASN1Sequence s1 = ASN1Sequence.getInstance(to);
     int i = 0;
 

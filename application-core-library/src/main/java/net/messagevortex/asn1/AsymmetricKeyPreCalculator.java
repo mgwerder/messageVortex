@@ -240,7 +240,7 @@ public class AsymmetricKeyPreCalculator implements Serializable, Callable<Intege
           // this cache does not yet exist schedule for creation
           // is done by peeking first time
           cache.requestCacheIncrease(ap);
-          LOGGER.log(Level.FINE, "added new key type to cache (" + ap.toString() + ")");
+          LOGGER.log(Level.FINE, "added new key type to cache (" + ap + ")");
           return null;
         }
       }

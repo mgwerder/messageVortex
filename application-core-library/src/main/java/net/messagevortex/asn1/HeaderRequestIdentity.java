@@ -58,7 +58,7 @@ public class HeaderRequestIdentity extends HeaderRequest implements Serializable
     }
   }
 
-  protected void parse(ASN1Encodable ae) throws IOException {
+  protected final void parse(ASN1Encodable ae) throws IOException {
     ASN1Sequence s1 = ASN1Sequence.getInstance(ae);
     period = new UsagePeriod(s1.getObjectAt(0));
   }
