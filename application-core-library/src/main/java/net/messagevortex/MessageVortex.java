@@ -303,9 +303,13 @@ public class MessageVortex implements Callable<Integer> {
     LOGGER.log(Level.INFO, "******* shutting down MessageVortex *******");
     Map<String, RunningDaemon> tmap = new HashMap<>();
     tmap.putAll(transport);
+    transport.clear();
     tmap.putAll(blender);
+    blender.clear();
     tmap.putAll(router);
+    router.clear();
     tmap.putAll(accountant);
+    accountant.clear();
     for (Map.Entry<String, RunningDaemon> es : tmap.entrySet()) {
       LOGGER.log(Level.INFO, "shutting down " + es.getKey());
       es.getValue().shutdownDaemon();
