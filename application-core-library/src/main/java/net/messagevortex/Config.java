@@ -24,7 +24,7 @@ package net.messagevortex;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileInputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -34,6 +34,7 @@ import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -88,7 +89,7 @@ public class Config {
     
     @Override
     public Object stringToObject(String s) throws NumberFormatException {
-      return Integer.parseInt(s);
+      return Integer.valueOf(s);
     }
   }
   
@@ -978,7 +979,7 @@ public class Config {
     InputStream fstream = this.getClass().getClassLoader().getResourceAsStream(filename);
     if (fstream == null) {
       try {
-        fstream = new FileInputStream(filename);
+        fstream = Files.newInputStream(new File(filename).toPath());
       } catch (FileNotFoundException fnfe) {
         LOGGER.log(Level.WARNING, "Unable to load config file \"" + filename + "\"", fnfe);
         throw fnfe;

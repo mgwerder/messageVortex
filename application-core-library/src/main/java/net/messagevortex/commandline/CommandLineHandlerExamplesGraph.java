@@ -48,7 +48,7 @@ public class CommandLineHandlerExamplesGraph implements Callable<Integer> {
   @CommandLine.Option(names = {"--redundancy-size", "-r"}, required = false,
           description = "minimum number of paths to target node")
   int redundancy = 3;
-
+  
   /**
    * <p>Commandline handler to create sample graphs.</p>
    *

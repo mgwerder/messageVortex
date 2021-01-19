@@ -101,6 +101,12 @@ public class InitialRecipesBlender extends Blender {
     }
     this.identityStore = identityStore;
   }
+  
+  public int setAnonymitySetSize(int newSize) {
+    int oldsetsize = anonSetSize;
+    anonSetSize=newSize;
+    return oldsetsize;
+  }
 
   @Override
   public String getBlendingAddress() {
