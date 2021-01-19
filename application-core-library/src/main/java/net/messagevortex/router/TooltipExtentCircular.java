@@ -1,6 +1,6 @@
 package net.messagevortex.router;
 
-import java.awt.*;
+import java.awt.Point;
 import java.awt.geom.Ellipse2D;
 
 public class TooltipExtentCircular extends TooltipExtent {

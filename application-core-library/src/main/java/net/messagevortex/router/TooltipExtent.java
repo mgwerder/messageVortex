@@ -1,6 +1,6 @@
 package net.messagevortex.router;
 
-import java.awt.*;
+import java.awt.Point;
 
 public abstract class TooltipExtent {
   

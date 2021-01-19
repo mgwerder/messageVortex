@@ -1,6 +1,6 @@
 package net.messagevortex.router;
 
-import java.awt.*;
+import java.awt.Point;
 import java.awt.geom.Rectangle2D;
 
 public class TooltipExtentBox extends TooltipExtent {
