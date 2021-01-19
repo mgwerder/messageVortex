@@ -190,7 +190,7 @@ public class IdentityBlock extends AbstractBlock implements Serializable, Dumpab
   }
 
   @Override
-  protected void parse(ASN1Encodable o) throws IOException {
+  protected final void parse(ASN1Encodable o) throws IOException {
     ASN1Sequence s = ASN1Sequence.getInstance(o);
     ASN1Sequence s1;
     int j = 0;

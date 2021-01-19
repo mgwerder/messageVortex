@@ -271,7 +271,7 @@ public class SymmetricKey extends Key implements Serializable {
     }
   }
 
-  protected void parse(ASN1Encodable to) throws IOException {
+  protected final void parse(ASN1Encodable to) throws IOException {
     // preparing parsing
     int i = 0;
     ASN1Sequence s1 = ASN1Sequence.getInstance(to);

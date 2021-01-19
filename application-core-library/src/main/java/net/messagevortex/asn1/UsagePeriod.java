@@ -153,7 +153,7 @@ public class UsagePeriod extends AbstractBlock implements Serializable, Comparab
     parse(to);
   }
 
-  protected void parse(ASN1Encodable to) throws IOException {
+  protected final void parse(ASN1Encodable to) throws IOException {
     ASN1TaggedObject s1 = ASN1TaggedObject.getInstance(to);
     ASN1Sequence s2 = ASN1Sequence.getInstance(s1.getObject());
     if (s1.getTagNo() == UsagePeriodType.ABSOLUTE.getId()) {

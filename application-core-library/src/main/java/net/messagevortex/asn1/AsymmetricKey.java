@@ -198,7 +198,7 @@ public class AsymmetricKey extends Key implements Serializable, Dumpable {
     return AsymmetricKeyPreCalculator.getCacheFileName();
   }
   
-  private void selftest() throws IOException {
+  private final void selftest() throws IOException {
     if (publicKey == null) {
       throw new IOException("selftest failed: Public key may not be null");
     }
@@ -279,7 +279,7 @@ public class AsymmetricKey extends Key implements Serializable, Dumpable {
     }
   }
   
-  protected void parse(ASN1Encodable to) throws IOException {
+  protected final void parse(ASN1Encodable to) throws IOException {
     ASN1Sequence s1 = ASN1Sequence.getInstance(to);
     // parsing asymmetric key identifier
     int i = 0;

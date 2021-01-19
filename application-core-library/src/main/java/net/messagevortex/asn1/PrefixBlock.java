@@ -117,7 +117,7 @@ public class PrefixBlock extends AbstractBlock implements Serializable {
   }
 
   @Override
-  protected void parse(ASN1Encodable to) throws IOException {
+  protected final void parse(ASN1Encodable to) throws IOException {
     encrypted = null;
     LOGGER.log(Level.FINER, "Executing parse()");
     int i = 0;

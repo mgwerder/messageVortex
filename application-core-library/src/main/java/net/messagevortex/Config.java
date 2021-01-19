@@ -88,7 +88,7 @@ public class Config {
     
     @Override
     public Object stringToObject(String s) throws NumberFormatException {
-      return Integer.parseInt(s);
+      return Integer.valueOf(s);
     }
   }
   

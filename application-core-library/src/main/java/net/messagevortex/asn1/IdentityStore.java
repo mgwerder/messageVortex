@@ -218,7 +218,7 @@ public class IdentityStore extends AbstractBlock
     }
   }
   
-  protected void parse(ASN1Encodable p) throws IOException {
+  protected final void parse(ASN1Encodable p) throws IOException {
     LOGGER.log(Level.FINER, "Executing parse()");
     
     ASN1Sequence s1 = ASN1Sequence.getInstance(p);

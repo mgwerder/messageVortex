@@ -315,7 +315,7 @@ public class IdentityStoreBlock extends AbstractBlock implements Serializable {
     return nodeKey;
   }
 
-  protected void parse(ASN1Encodable p) throws IOException {
+  protected final void parse(ASN1Encodable p) throws IOException {
     LOGGER.log(Level.FINER, "Executing parse()");
     ASN1Sequence s1 = ASN1Sequence.getInstance(p);
     int i = 0;

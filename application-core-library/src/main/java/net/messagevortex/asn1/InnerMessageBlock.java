@@ -113,7 +113,7 @@ public class InnerMessageBlock extends AbstractBlock implements Serializable {
     parse(o, null);
   }
 
-  protected void parse(ASN1Encodable o, AsymmetricKey decryptionKey) throws IOException {
+  protected final void parse(ASN1Encodable o, AsymmetricKey decryptionKey) throws IOException {
     LOGGER.log(Level.FINER, "Executing parse()");
     int i = 0;
     ASN1Sequence s1 = ASN1Sequence.getInstance(o);

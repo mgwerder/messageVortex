@@ -99,7 +99,7 @@ public class BlendingParameter extends AbstractBlock implements Serializable, Du
   }
 
   @Override
-  protected void parse(ASN1Encodable to) throws IOException {
+  protected final void parse(ASN1Encodable to) throws IOException {
     ASN1TaggedObject t = ASN1TaggedObject.getInstance(to);
     if (to == null || t == null) {
       throw new IOException("unknown blender parameter choice detected (tagged object is null)");

@@ -106,7 +106,7 @@ public abstract class AbstractRedundancyOperation
     parse(to);
   }
 
-  protected void parse(ASN1Encodable p) throws IOException {
+  protected final void parse(ASN1Encodable p) throws IOException {
     LOGGER.log(Level.FINER, "Executing parse()");
 
     int i = 0;

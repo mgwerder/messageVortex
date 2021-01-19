@@ -235,7 +235,7 @@ public class VortexMessage extends AbstractBlock implements Serializable {
     return old;
   }
 
-  protected void parse(byte[] p) throws IOException {
+  protected final void parse(byte[] p) throws IOException {
     try (ASN1InputStream asnIn = new ASN1InputStream(p);) {
       parse(asnIn.readObject());
     }
