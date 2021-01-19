@@ -87,7 +87,7 @@ public class Config {
     }
     
     @Override
-    public Object stringToObject(String s) throws NumberFormatException {
+    public Object stringToObject(String s) {
       return Integer.valueOf(s);
     }
   }
@@ -435,44 +435,52 @@ public class Config {
             scanner.useDelimiter("\\s*;\\s*");
             while (scanner.hasNext()) {
               String token = scanner.next().trim();
-              if ("boolean".equals(token.toLowerCase())) {
-                String name = scanner.next().trim();
-                boolean val = "true".equals(scanner.next().toLowerCase().trim());
-                String desc = scanner.next().trim();
-                createBooleanConfigValue(name, desc, val);
-              } else if ("string".equals(token.toLowerCase())) {
-                String name = scanner.next().trim();
-                String val = scanner.next().trim();
-                if ("".equals(val)) {
-                  val = null;
-                }
-                String desc = scanner.next().trim();
-                createStringConfigValue(name, desc, val);
-              } else if ("numeric".equals(token.toLowerCase())) {
-                String name = scanner.next().trim();
-                int val = Integer.parseInt(scanner.next().trim());
-                String desc = scanner.next().trim();
-                createNumericConfigValue(name, desc, val);
-              } else if ("section_list".equals(token.toLowerCase())) {
-                String name = scanner.next().trim();
-                String val = scanner.next().trim();
-                if ("".equals(val)) {
-                  val = null;
-                }
-                String desc = scanner.next().trim();
-                createSectionListConfigValue(name, desc, val);
-              } else if ("section".equals(token.toLowerCase())) {
-                String name = scanner.next().trim();
-                String val = scanner.next().trim();
-                if ("".equals(val)) {
-                  val = null;
-                }
-                String desc = scanner.next().trim();
-                createSectionConfigValue(name, desc, val);
-              } else {
-                throw new IOException(
-                        "encountered unknown field type: " + token + " (line was \""
-                                + line + "\")");
+              String name;
+              String desc;
+              switch (token.toLowerCase()) {
+                case "boolean":
+                  name = scanner.next().trim();
+                  boolean bval = "true".equals(scanner.next().toLowerCase().trim());
+                  desc = scanner.next().trim();
+                  createBooleanConfigValue(name, desc, bval);
+                  break;
+                case "string":
+                  name = scanner.next().trim();
+                  String sval = scanner.next().trim();
+                  if ("".equals(sval)) {
+                    sval = null;
+                  }
+                  desc = scanner.next().trim();
+                  createStringConfigValue(name, desc, sval);
+                  break;
+                case "numeric":
+                  name = scanner.next().trim();
+                  int ival = Integer.parseInt(scanner.next().trim());
+                  desc = scanner.next().trim();
+                  createNumericConfigValue(name, desc, ival);
+                  break;
+                case "section_list":
+                  name = scanner.next().trim();
+                  String seclval = scanner.next().trim();
+                  if ("".equals(seclval)) {
+                    seclval = null;
+                  }
+                  desc = scanner.next().trim();
+                  createSectionListConfigValue(name, desc, seclval);
+                  break;
+                case "section":
+                  name = scanner.next().trim();
+                  String secval = scanner.next().trim();
+                  if ("".equals(secval)) {
+                    secval = null;
+                  }
+                  desc = scanner.next().trim();
+                  createSectionConfigValue(name, desc, secval);
+                  break;
+                default:
+                  throw new IOException(
+                          "encountered unknown field type: " + token + " (line was \""
+                                  + line + "\")");
               }
             }
           }
