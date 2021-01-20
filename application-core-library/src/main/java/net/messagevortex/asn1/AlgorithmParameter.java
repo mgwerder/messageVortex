@@ -138,7 +138,7 @@ public class AlgorithmParameter extends AbstractBlock
     return parameter.get(id);
   }
 
-  protected void parse(ASN1Encodable ae) throws IOException {
+  protected final void parse(ASN1Encodable ae) throws IOException {
     ASN1Sequence s1 = ASN1Sequence.getInstance(ae);
     for (ASN1Encodable o : s1) {
       ASN1TaggedObject to = ASN1TaggedObject.getInstance(o);

@@ -4,6 +4,9 @@ import java.util.concurrent.Callable;
 import net.messagevortex.NotImplementedException;
 import picocli.CommandLine;
 
+/**
+ * <p>commandline handler for identity store manipulations.</p>
+ */
 @CommandLine.Command(
         description = "Manipulator for IdentityStore",
         name = "intentitystore",
@@ -18,10 +21,7 @@ import picocli.CommandLine;
                 CommandLineHandlerIdentityStoreInitDemo.class
         }
 )
-public class CommandLineHandlerIdentityStore implements Callable<Integer> {
+public class CommandLineHandlerIdentityStore {
   public static final String DEFAULT_FILENAME = "identityStore.cfg";
 
-  public Integer call() throws Exception {
-    throw new NotImplementedException();
-  }
 }

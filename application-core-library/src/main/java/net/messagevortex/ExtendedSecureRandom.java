@@ -29,16 +29,16 @@ import java.util.logging.Level;
  * <p>A Specialized random number generator for MessageVortex.</p>
  */
 public class ExtendedSecureRandom {
-
+  
   private static final java.util.logging.Logger LOGGER;
-
+  
   static {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
     //MessageVortexLogger.setGlobalLogLevel(Level.ALL);
   }
-
+  
   private static final SecureRandom sr = new SecureRandom();
-
+  
   /***
    * <p>Returns an integer between 0 and bound-1.</p>
    *
@@ -48,7 +48,7 @@ public class ExtendedSecureRandom {
   public static final int nextInt(int bound) {
     return sr.nextInt(bound);
   }
-
+  
   /***
    * <p>Returns an integer between low and up-1.</p>
    *
@@ -64,7 +64,7 @@ public class ExtendedSecureRandom {
     }
     return low + sr.nextInt(up - low);
   }
-
+  
   /***
    * <p>An array filled with random byte values.</p>
    *
@@ -73,7 +73,7 @@ public class ExtendedSecureRandom {
   public static final void nextBytes(byte[] array) {
     sr.nextBytes(array);
   }
-
+  
   /***
    * <p>Returns the given number of seed bytes, computed using the seed generation algorithm
    * that this class uses to seed itself.</p>
@@ -84,7 +84,7 @@ public class ExtendedSecureRandom {
   public static final byte[] generateSeed(int i) {
     return sr.generateSeed(i);
   }
-
+  
   /***
    * <p>Returns the next pseudorandom, uniformly distributed double value between 0.0 and 1.0 from
    * this random number generator's sequence.</p>
@@ -111,7 +111,7 @@ public class ExtendedSecureRandom {
   public static final double nextDouble() {
     return sr.nextDouble();
   }
-
+  
   /***
    * <p>Returns an internal representation of the secure Random number generator.</p>
    *
@@ -120,7 +120,7 @@ public class ExtendedSecureRandom {
   public static final SecureRandom getSecureRandom() {
     return sr;
   }
-
+  
   /***
    * <p>Returns a gaussian distributed value between 0 and 1 (maximum at 0.5).</p>
    *
@@ -133,7 +133,7 @@ public class ExtendedSecureRandom {
     }
     return result;
   }
-
+  
   /***
    * <p>Returns a random time.</p>
    *
@@ -144,23 +144,24 @@ public class ExtendedSecureRandom {
    * @return a gaussian random value
    */
   public static final double nextRandomTime(long start, long peak, long end) {
-    if(start>=end || peak<=start || end<=peak) {
-      throw new NullPointerException("random time must offer a valid window [start("+start+")<peak("+peak+")<end("+end+")]");
+    if (start >= end || peak <= start || end <= peak) {
+      throw new NullPointerException("random time must offer a valid window [start(" + start
+              + ")<peak(" + peak + ")<end(" + end + ")]");
     }
     double ret = -1;
-    LOGGER.log(Level.FINEST, "Getting random Time "+start+"/"+peak+"/"+end);
-    while (ret < start || ret>end) {
+    LOGGER.log(Level.FINEST, "Getting random Time " + start + "/" + peak + "/" + end);
+    while (ret < start || ret > end) {
       ret = sr.nextGaussian();
-      double d=sr.nextDouble();
-      if (d < (double)(peak-start)/(end-start)) {
-        ret = peak - (Math.abs(ret) * (peak - start) / 5.0 );
+      double d = sr.nextDouble();
+      if (d < (double) (peak - start) / (end - start)) {
+        ret = peak - (Math.abs(ret) * (peak - start) / 5.0);
       } else {
-        ret = peak + (Math.abs(ret) * (end  - peak) / 5.0 );
+        ret = peak + (Math.abs(ret) * (end - peak) / 5.0);
       }
     }
-    LOGGER.log(Level.FINEST, "Done getting random Time ("+(ret)+")");
+    LOGGER.log(Level.FINEST, "Done getting random Time (" + (ret) + ")");
     return ret;
   }
-
-
+  
+  
 }

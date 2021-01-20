@@ -24,6 +24,7 @@ package net.messagevortex.asn1;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.logging.Level;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.encryption.DumpType;
@@ -111,13 +112,13 @@ public class PrefixBlock extends AbstractBlock implements Serializable {
         LOGGER.log(Level.WARNING, "Parsing of prefix block failed", ioe);
         setDecryptionKey(null);
         key = null;
-        encrypted = to;
+        encrypted = Arrays.copyOf(to,to.length);
       }
     }
   }
 
   @Override
-  protected void parse(ASN1Encodable to) throws IOException {
+  protected final void parse(ASN1Encodable to) throws IOException {
     encrypted = null;
     LOGGER.log(Level.FINER, "Executing parse()");
     int i = 0;
@@ -253,7 +254,11 @@ public class PrefixBlock extends AbstractBlock implements Serializable {
       }
       return decryptionKey.encrypt(b);
     } else {
-      return encrypted;
+      if ( encrypted==null) {
+        return null;
+      } else {
+        return encrypted.clone();
+      }
     }
   }
 }

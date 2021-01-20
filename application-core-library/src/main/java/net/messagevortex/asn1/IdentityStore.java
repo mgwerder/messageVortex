@@ -28,14 +28,14 @@ import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.Vector;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
-
 import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.RunningDaemon;
@@ -62,29 +62,29 @@ import picocli.CommandLine;
 )
 public class IdentityStore extends AbstractBlock
         implements Serializable, Callable<Integer>, RunningDaemon {
-
+  
   public static final long serialVersionUID = 100000000008L;
-
+  
   private static final java.util.logging.Logger LOGGER;
-
+  
   static {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
     //MessageVortexLogger.setGlobalLogLevel(Level.ALL);
   }
-
+  
   private static IdentityStore demo = null;
   private AsymmetricKey hostIdentity = null;
   private Map<String, IdentityStoreBlock> blocks = new TreeMap<>();
-
+  
   public IdentityStore() {
     blocks.clear();
   }
-
+  
   public IdentityStore(byte[] b) throws IOException {
     this();
     parse(b);
   }
-
+  
   /***
    * <p>Create object from ASN.1 encoded file.</p>
    *
@@ -97,11 +97,11 @@ public class IdentityStore extends AbstractBlock
     byte[] p = Files.readAllBytes(asn1DataPath);
     parse(p);
   }
-
+  
   public static void resetDemo() {
     demo = null;
   }
-
+  
   /***
    * <p>Creates a new complete dummy identity store suitable for testing purposes.</p>
    *
@@ -114,7 +114,7 @@ public class IdentityStore extends AbstractBlock
     }
     return demo;
   }
-
+  
   /***
    * <p>Creates a new dummy identity store suitable for testing purposes.</p>
    *
@@ -146,7 +146,7 @@ public class IdentityStore extends AbstractBlock
     }
     return tmp;
   }
-
+  
   /***
    * <p>Get the own identity key.</p>
    *
@@ -155,7 +155,7 @@ public class IdentityStore extends AbstractBlock
   public AsymmetricKey getHostIdentity() {
     return hostIdentity;
   }
-
+  
   /***
    * <p>Sets the owned key.</p>
    *
@@ -167,11 +167,11 @@ public class IdentityStore extends AbstractBlock
     this.hostIdentity = identity;
     return ret;
   }
-
+  
   public String[] getIdentityList() {
     return blocks.keySet().toArray(new String[0]);
   }
-
+  
   /***
    * <p>Gets a random set of known recipient identities.</p>
    *
@@ -179,26 +179,26 @@ public class IdentityStore extends AbstractBlock
    * @return the anonymity set
    * @throws IOException if requested anonymity set size is too big for this store
    */
-  public List<IdentityStoreBlock> getAnonSet(int size) throws IOException {
+  public Set<IdentityStoreBlock> getAnonSet(int size) throws IOException {
     LOGGER.log(Level.INFO, "Executing getAnonSet(" + size + ") from " + blocks.size());
     if (size > blocks.size() + 1) {
       // unable to create a block with a bigger anonymity set than the sum of identity store blocks
       return null;
     }
-    List<IdentityStoreBlock> ret = new ArrayList<>();
+    Set<IdentityStoreBlock> ret = new HashSet<>();
     String[] keys = blocks.keySet().toArray(new String[0]);
     int i = 0;
     while (ret.size() < size && i < 10000) {
       i++;
       IdentityStoreBlock isb = blocks.get(keys[ExtendedSecureRandom.nextInt(keys.length)]);
       if (isb != null && (
-          isb.getType() == IdentityStoreBlock.IdentityType.RECIPIENT_IDENTITY
-              || isb.getType() == IdentityStoreBlock.IdentityType.NODE_IDENTITY)
-          && !ret.contains(isb)) {
+              isb.getType() == IdentityStoreBlock.IdentityType.RECIPIENT_IDENTITY
+                      || isb.getType() == IdentityStoreBlock.IdentityType.NODE_IDENTITY)
+              && !ret.contains(isb)) {
         ret.add(isb);
         LOGGER.log(Level.FINER, "adding to anonSet " + isb.getNodeAddress());
       } else {
-        if( isb!=null) {
+        if (isb != null) {
           LOGGER.log(Level.INFO, "Skipping " + isb.getNodeAddress() + " (" + isb.getType() + ")");
         } else {
           LOGGER.log(Level.SEVERE, "Skipping ISB==null");
@@ -212,16 +212,16 @@ public class IdentityStore extends AbstractBlock
     LOGGER.log(Level.FINE, "done getAnonSet()");
     return ret;
   }
-
+  
   protected void parse(byte[] p) throws IOException {
     try (ASN1InputStream aIn = new ASN1InputStream(p)) {
       parse(aIn.readObject());
     }
   }
-
-  protected void parse(ASN1Encodable p) throws IOException {
+  
+  protected final void parse(ASN1Encodable p) throws IOException {
     LOGGER.log(Level.FINER, "Executing parse()");
-
+    
     ASN1Sequence s1 = ASN1Sequence.getInstance(p);
     for (ASN1Encodable ao : s1.toArray()) {
       IdentityStoreBlock sb = new IdentityStoreBlock(ao);
@@ -229,7 +229,7 @@ public class IdentityStore extends AbstractBlock
     }
     LOGGER.log(Level.FINER, "Finished parse()");
   }
-
+  
   /***
    * <p>Adds an existing identity store block to the store.</p>
    *
@@ -242,7 +242,7 @@ public class IdentityStore extends AbstractBlock
     }
     blocks.put(ident, isb);
   }
-
+  
   /***
    * <p>removes a node address from the identity store.</p>
    *
@@ -271,14 +271,14 @@ public class IdentityStore extends AbstractBlock
       }
     }
   }
-
+  
   @Override
   public ASN1Object toAsn1Object(DumpType dumpType) throws IOException {
     // Prepare encoding
     LOGGER.log(Level.FINER, "Executing toAsn1Object()");
-
+    
     ASN1EncodableVector v = new ASN1EncodableVector();
-
+    
     LOGGER.log(Level.FINER, "adding blocks");
     for (Map.Entry<String, IdentityStoreBlock> e : blocks.entrySet()) {
       v.add(e.getValue().toAsn1Object(dumpType));
@@ -287,7 +287,7 @@ public class IdentityStore extends AbstractBlock
     LOGGER.log(Level.FINER, "done toAsn1Object()");
     return seq;
   }
-
+  
   @Override
   public String dumpValueNotation(String prefix, DumpType dumpType) throws IOException {
     StringBuilder sb = new StringBuilder();
@@ -308,25 +308,25 @@ public class IdentityStore extends AbstractBlock
     sb.append(prefix).append('}').append(CRLF);
     return sb.toString();
   }
-
+  
   public IdentityStoreBlock getIdentity(String id) {
     return blocks.get(id);
   }
-
+  
   public Integer call() {
     return null;
   }
-
+  
   @Override
   public void startDaemon() {
     // FIXME implement file monitor
   }
-
+  
   @Override
   public void stopDaemon() {
     // FIXME implement file monitor
   }
-
+  
   @Override
   public void shutdownDaemon() {
     // FIXME implement file monitor

@@ -45,7 +45,6 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-
 import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.asn1.encryption.Algorithm;
@@ -55,7 +54,6 @@ import net.messagevortex.asn1.encryption.Mode;
 import net.messagevortex.asn1.encryption.Padding;
 import net.messagevortex.asn1.encryption.Parameter;
 import net.messagevortex.asn1.encryption.SecurityLevel;
-
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1EncodableVector;
 import org.bouncycastle.asn1.ASN1Object;
@@ -76,38 +74,38 @@ import org.bouncycastle.pqc.jcajce.provider.BouncyCastlePQCProvider;
  * <p>This class parses and encodes Asymmetric keys from/to ASN.1.
  * It furthermore handles encoding and decoding of encrypted material.</p>
  */
-public class AsymmetricKey extends Key  implements Serializable, Dumpable {
-
+public class AsymmetricKey extends Key implements Serializable, Dumpable {
+  
   public static final long serialVersionUID = 100000000032L;
-
-  private static int PUBLIC_KEY_TAG  = 2;
+  
+  private static int PUBLIC_KEY_TAG = 2;
   private static int PRIVATE_KEY_TAG = 3;
-
+  
   static {
     Security.addProvider(new BouncyCastleProvider());
-
+    
     Security.addProvider(new BouncyCastlePQCProvider());
   }
-
+  
   private static final java.util.logging.Logger LOGGER;
-
+  
   static {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
-
+  
   static {
     // start key precalculator
     try {
       AsymmetricKey.setCacheFileName("AsymmetricKey.cache");
     } catch (Exception e) {
-      LOGGER.log(Level.WARNING,"Failed to set cache file name",e);
+      LOGGER.log(Level.WARNING, "Failed to set cache file name", e);
     }
   }
-
-  protected byte[]  publicKey  = null;
-  protected byte[]  privateKey = null;
+  
+  protected byte[] publicKey = null;
+  protected byte[] privateKey = null;
   protected Algorithm mac = Algorithm.getDefault(AlgorithmType.HASHING);
-
+  
   /***
    * <p>Creates an asymmetric key based on the byte sequence.</p>
    *
@@ -118,7 +116,7 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
     this(ASN1Sequence.getInstance(b));
     selftest();
   }
-
+  
   /***
    * <p>Copy Constructor.</p>
    *
@@ -131,21 +129,21 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
       parse(ak.toAsn1Object(DumpType.ALL));
       selftest();
     } catch (IOException ioe) {
-      throw new IllegalArgumentException("Error cloning key",ioe);
+      throw new IllegalArgumentException("Error cloning key", ioe);
     }
   }
-
+  
   /***
    * <p>Create object from ASN.1 code.</p>
    *
    * @param to the ASN.1 code
    * @throws IOException if parsing of ASN.1 code fails
    */
-  private AsymmetricKey(ASN1Encodable to) throws IOException  {
+  private AsymmetricKey(ASN1Encodable to) throws IOException {
     parse(to);
     selftest();
   }
-
+  
   /***
    * <p>Creates a new Asymmetric key based on the default values.</p>
    *
@@ -155,7 +153,7 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
     this(Algorithm.getDefault(AlgorithmType.ASYMMETRIC).getParameters(SecurityLevel.MEDIUM));
     selftest();
   }
-
+  
   /***
    * <p>creates a new asymmetric key based on the parameters given.</p>
    *
@@ -165,9 +163,9 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
    * @throws IOException if the key can not be generated with the given parameters
    */
   public AsymmetricKey(AlgorithmParameter params) throws IOException {
-    this(params,true);
+    this(params, true);
   }
-
+  
   /***
    * <p>creates a new asymmetric key based on the parameters given.</p>
    *
@@ -177,39 +175,49 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
    * @param allowPrecalculated true if a precalculated key is allowed
    * @throws IOException if the key can not be generated with the given parameters
    */
-  public AsymmetricKey(AlgorithmParameter params,boolean allowPrecalculated) throws IOException {
+  public AsymmetricKey(AlgorithmParameter params, boolean allowPrecalculated) throws IOException {
     if (params == null) {
       throw new NullPointerException("parameters may not be null");
     }
     this.parameters = new AlgorithmParameter(params.toAsn1Object(DumpType.INTERNAL));
-
+    
     if (params.get(Parameter.ALGORITHM) == null) {
       throw new IOException("Algorithm null is not encodable by the system");
     }
-
+    
     createKey(allowPrecalculated);
-
+    
     selftest();
   }
-
+  
   public static String setCacheFileName(String name) {
     return AsymmetricKeyPreCalculator.setCacheFileName(name);
   }
-
-  private void selftest() throws IOException {
+  
+  public static String getCacheFileName() {
+    return AsymmetricKeyPreCalculator.getCacheFileName();
+  }
+  
+  private final void selftest() throws IOException {
     if (publicKey == null) {
       throw new IOException("selftest failed: Public key may not be null");
     }
-    assert getAlgorithm()!=Algorithm.EC || parameters.get(Parameter.CURVETYPE).indexOf(""+parameters.get(Parameter.BLOCKSIZE))>0: "found mismatch in curve type vs blocksize ("+parameters.get(Parameter.BLOCKSIZE)+"/"+parameters.get(Parameter.CURVETYPE)+")";
-    assert getAlgorithm()!=Algorithm.RSA || parameters.get(Parameter.KEYSIZE).equals(parameters.get(Parameter.BLOCKSIZE)): "found mismatch in RSA keysize vs blocksize (ks:"+parameters.get(Parameter.KEYSIZE)+"/bs:"+parameters.get(Parameter.BLOCKSIZE)+")";
+    assert getAlgorithm() != Algorithm.EC || parameters.get(Parameter.CURVETYPE).indexOf(""
+            + parameters.get(Parameter.BLOCKSIZE)) > 0 : "found mismatch in curve type vs "
+            + "blocksize (" + parameters.get(Parameter.BLOCKSIZE) + "/"
+            + parameters.get(Parameter.CURVETYPE) + ")";
+    assert getAlgorithm() != Algorithm.RSA
+            || parameters.get(Parameter.KEYSIZE).equals(parameters.get(Parameter.BLOCKSIZE))
+            : "found mismatch in RSA keysize vs blocksize (ks:" + parameters.get(Parameter.KEYSIZE)
+            + "/bs:" + parameters.get(Parameter.BLOCKSIZE) + ")";
   }
-
+  
   private void createKey(boolean allowPrecomputed) throws IOException {
     // Selfcheck
     assert parameters != null;
     Algorithm alg = Algorithm.getByString(parameters.get(Parameter.ALGORITHM));
     assert alg != null;
-
+    
     // check for precomputed key
     if (allowPrecomputed) {
       AsymmetricKey tk = AsymmetricKeyPreCalculator.getPrecomputedAsymmetricKey(parameters);
@@ -230,7 +238,7 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
       throw new IOException("Encountered unsupported algorithm \"" + alg + "\"");
     }
   }
-
+  
   private void createRsaKey() throws IOException {
     Algorithm alg = Algorithm.getByString(parameters.get(Parameter.ALGORITHM));
     int keySize = getKeySize();
@@ -249,8 +257,8 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
       throw new IOException("Exception while generating key pair", e);
     }
   }
-
-
+  
+  
   private void createEcKey() throws IOException {
     Algorithm alg = Algorithm.getByString(parameters.get(Parameter.ALGORITHM));
     try {
@@ -270,35 +278,35 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
       throw new IOException("Exception while initializing key generation", e);
     }
   }
-
-  protected void parse(ASN1Encodable to) throws IOException {
+  
+  protected final void parse(ASN1Encodable to) throws IOException {
     ASN1Sequence s1 = ASN1Sequence.getInstance(to);
     // parsing asymmetric key identifier
     int i = 0;
-
+    
     // parse parameters
     parseKeyParameter(ASN1Sequence.getInstance(s1.getObjectAt(i++)));
-
+    
     //parse public key
-    ASN1TaggedObject tagged = (ASN1TaggedObject)(s1.getObjectAt(i++));
-    if (tagged.getTagNo() !=  PUBLIC_KEY_TAG) {
+    ASN1TaggedObject tagged = (ASN1TaggedObject) (s1.getObjectAt(i++));
+    if (tagged.getTagNo() != PUBLIC_KEY_TAG) {
       throw new IOException("encountered wrong tag number when parsing public key (expected: "
               + PUBLIC_KEY_TAG + "; got:" + tagged.getTagNo() + ")");
     }
     publicKey = ASN1OctetString.getInstance(tagged.getObject()).getOctets();
-
+    
     // parse private key
     if (s1.size() > i) {
-      tagged = (ASN1TaggedObject)(s1.getObjectAt(i++));
+      tagged = (ASN1TaggedObject) (s1.getObjectAt(i++));
       if (tagged.getTagNo() != PRIVATE_KEY_TAG) {
         throw new IOException("encountered wrong tag number when parsing private key (expected: "
                 + PRIVATE_KEY_TAG + "; got:" + tagged.getTagNo() + ")");
       }
       privateKey = ASN1OctetString.getInstance(tagged.getObject()).getOctets();
     }
-
+    
   }
-
+  
   /***
    * <p>Checks if the object contains a private key.</p>
    *
@@ -307,7 +315,7 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
   public boolean hasPrivateKey() {
     return privateKey != null;
   }
-
+  
   /***
    * <p>Generates the ASN1 notation of the object.</p>
    *
@@ -317,7 +325,7 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
   public String dumpValueNotation(String prefix) {
     return dumpValueNotation(prefix, DumpType.PUBLIC_ONLY);
   }
-
+  
   /***
    * <p>Generates the ASN1 notation of the object.</p>
    *
@@ -325,10 +333,10 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
    * @param dumpType     the dump type to be used (normally DumpType.PUBLIC_ONLY)
    * @return the string representation of the ASN1 dump
    */
-  public String dumpValueNotation(String prefix,DumpType dumpType) {
+  public String dumpValueNotation(String prefix, DumpType dumpType) {
     StringBuilder sb = new StringBuilder();
     sb.append('{').append(CRLF);
-    sb.append(dumpKeyTypeValueNotation(prefix + "  ",dumpType)).append(',').append(CRLF);
+    sb.append(dumpKeyTypeValueNotation(prefix + "  ", dumpType)).append(',').append(CRLF);
     String s = toHex(publicKey);
     sb.append(prefix).append("  publicKey ").append(s);
     if (privateKey != null && privateKey.length != 0) {
@@ -347,8 +355,8 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
     sb.append(prefix).append('}');
     return sb.toString();
   }
-
-  private void dumpPrivateKey(StringBuilder sb, DumpType dumpType,String prefix) {
+  
+  private void dumpPrivateKey(StringBuilder sb, DumpType dumpType, String prefix) {
     if (dumpType != DumpType.PRIVATE_COMMENTED) {
       sb.append(',');
     }
@@ -360,7 +368,7 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
     }
     sb.append("privateKey ").append(s).append(CRLF);
   }
-
+  
   /***
    * <p>Dumps the key as ASN1 object.</p>
    *
@@ -374,33 +382,33 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
       throw new IOException("publicKey may not be null when dumping");
     }
     ASN1EncodableVector v = new ASN1EncodableVector();
-
+    
     // add key parameters
     addToAsn1Parameter(v, dt);
-
+    
     // add public key
     addToAsn1PublicKey(v, dt);
-
+    
     // add private key
     addToAsn1PrivateKey(v, dt);
-
+    
     return new DERSequence(v);
   }
-
+  
   private void addToAsn1Parameter(ASN1EncodableVector v, DumpType dumpType) throws IOException {
     v.add(encodeKeyParameter(dumpType));
   }
-
+  
   private void addToAsn1PublicKey(ASN1EncodableVector v, DumpType dt) {
     v.add(new DERTaggedObject(true, PUBLIC_KEY_TAG, new DEROctetString(publicKey)));
   }
-
+  
   private void addToAsn1PrivateKey(ASN1EncodableVector v, DumpType dt) {
     if (privateKey != null && (dt == DumpType.ALL || dt == DumpType.ALL_UNENCRYPTED)) {
       v.add(new DERTaggedObject(true, PRIVATE_KEY_TAG, new DEROctetString(privateKey)));
     }
   }
-
+  
   /***
    * <p>Encrypts a byte array using the key contained in this object.</p>
    *
@@ -424,7 +432,7 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
       throw new IOException("Exception while init of cipher ", e);
     }
   }
-
+  
   /***
    * <p>Decrypts a byte array using the key contained in this object.</p>
    *
@@ -444,9 +452,9 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
             | BadPaddingException e) {
       throw new IOException("Exception while decrypting (len: " + b.length + ")", e);
     }
-
+    
   }
-
+  
   /***
    * <p>Signs a byte array.</p>
    *
@@ -459,7 +467,7 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
   public byte[] sign(byte[] b) throws IOException {
     return sign(b, Algorithm.getDefault(AlgorithmType.HASHING));
   }
-
+  
   /***
    * <p>Signs a byte array.</p>
    *
@@ -481,7 +489,7 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
       throw new IOException("Exception while encrypting", e);
     }
   }
-
+  
   /***
    * <p>Verifies a given signature accourding to the objects public key.</p>
    *
@@ -493,7 +501,7 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
   public boolean verify(byte[] b, byte[] sig) throws IOException {
     return verify(b, sig, Algorithm.getDefault(AlgorithmType.HASHING));
   }
-
+  
   /***
    * <p>Verifies a given signature accourding to the objects public key.</p>
    *
@@ -516,7 +524,7 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
       throw new IOException("Exception while verifying signature", e);
     }
   }
-
+  
   private KeyFactory getKeyFactory() throws NoSuchAlgorithmException, NoSuchProviderException {
     if (parameters.get(Parameter.ALGORITHM).startsWith(Algorithm.EC.toString())) {
       return KeyFactory.getInstance("ECDSA", "BC");
@@ -525,7 +533,7 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
       return KeyFactory.getInstance(alg.toString(), alg.getProvider());
     }
   }
-
+  
   /***
    * <p>Sets the probability of reusing a precalculated key again.</p>
    *
@@ -537,7 +545,7 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
   public static double setDequeueProbability(double probability) {
     return AsymmetricKeyPreCalculator.setDequeueProbability(probability);
   }
-
+  
   /***
    * <p>Gets the current probability for dequeing a used key (nolrmally 1.0)</p>
    *
@@ -546,25 +554,25 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
   public static double getDequeueProbability() {
     return AsymmetricKeyPreCalculator.getDequeueProbability();
   }
-
+  
   private KeyPair getKeyPair() throws NoSuchAlgorithmException, NoSuchProviderException,
           InvalidKeySpecException {
-
+    
     KeyFactory kf = getKeyFactory();
-
+    
     // Getting public key
     PublicKey localPublicKey = kf.generatePublic(new X509EncodedKeySpec(this.publicKey));
-
+    
     // getting stored private key
     PrivateKey localPrivateKey = null;
     if (this.privateKey != null) {
       localPrivateKey = kf.generatePrivate(new PKCS8EncodedKeySpec(this.privateKey));
     }
-
+    
     // build result and return
-    return new KeyPair(localPublicKey,localPrivateKey);
+    return new KeyPair(localPublicKey, localPrivateKey);
   }
-
+  
   private Cipher getCipher() throws NoSuchPaddingException, NoSuchAlgorithmException,
           NoSuchProviderException {
     Algorithm alg = getAlgorithm();
@@ -574,18 +582,18 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
       return Cipher.getInstance(alg + "/" + getMode() + "/" + getPadding(), alg.getProvider());
     }
   }
-
+  
   private Signature getSignature(Algorithm a)
           throws NoSuchAlgorithmException, NoSuchProviderException {
     Algorithm alg = getAlgorithm();
-
+    
     if (alg == Algorithm.EC) {
       return Signature.getInstance(a + "WithECDSA", alg.getProvider());
     } else {
       return Signature.getInstance(a + "With" + alg, alg.getProvider());
     }
   }
-
+  
   /***
    * <p>Sets the public key.</p>
    *
@@ -597,15 +605,11 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
     if (b == null) {
       throw new NullPointerException("Public key may not be null");
     }
-    byte[] old = publicKey;
-    if (b == null) {
-      publicKey = null;
-    } else {
-      publicKey = Arrays.copyOf(b, b.length);
-    }
+    byte[] old =  Arrays.copyOf(publicKey,publicKey.length);
+    publicKey = Arrays.copyOf(b, b.length);
     return old;
   }
-
+  
   /***
    * <p>Gets the public key in binary representation.</p>
    *
@@ -614,7 +618,7 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
   public byte[] getPublicKey() {
     return Arrays.copyOf(publicKey, publicKey.length);
   }
-
+  
   /***
    * <p>Sets the private key of this object.</p>
    *
@@ -630,7 +634,7 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
     }
     return old;
   }
-
+  
   /***
    * <p>Gets the private key of this object.</p>
    *
@@ -639,7 +643,7 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
   public byte[] getPrivateKey() {
     return Arrays.copyOf(privateKey, privateKey.length);
   }
-
+  
   /***
    * <p>Gets the algorithm of this key type.</p>
    *
@@ -648,7 +652,7 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
   public Algorithm getAlgorithm() {
     return Algorithm.getByString(parameters.get(Parameter.ALGORITHM));
   }
-
+  
   /***
    * <p>Gets the full algorithm parameters of this key.</p>
    *
@@ -661,7 +665,7 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
       throw new IllegalStateException("parameter structure not clonable", ex);
     }
   }
-
+  
   /***
    * <p>Gets the padding used for encryption.</p>
    *
@@ -671,7 +675,7 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
     Padding padding = Padding.getByString(parameters.get(Parameter.PADDING));
     return padding == null ? Padding.getDefault(AlgorithmType.ASYMMETRIC) : padding;
   }
-
+  
   /***
    * <p>Sets the padding used for encryption.</p>
    *
@@ -680,10 +684,10 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
    */
   public Padding setPadding(Padding p) {
     Padding old = getPadding();
-    parameters.put(Parameter.PADDING.getId(),p.toString());
+    parameters.put(Parameter.PADDING.getId(), p.toString());
     return old;
   }
-
+  
   /***
    * <p>Gets the size of the key stored in this object.</p>
    *
@@ -692,7 +696,7 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
   public int getKeySize() {
     return Integer.parseInt(parameters.get(Parameter.KEYSIZE));
   }
-
+  
   /***
    * <p>Gets the size of the key stored in this object.</p>
    *
@@ -702,7 +706,7 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
     int bs = 0;
     try {
       bs = Integer.parseInt(parameters.get(Parameter.BLOCKSIZE));
-
+      
       // get keysize if blocksize is to small/invalid
       if (bs < 128) {
         throw new NumberFormatException();
@@ -715,7 +719,7 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
     }
     return bs;
   }
-
+  
   /***
    * <p>Gets the mode used for encryption.</p>
    *
@@ -724,7 +728,7 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
   public Mode getMode() {
     return Mode.getByString(parameters.get(Parameter.MODE));
   }
-
+  
   /***
    * <p>Sets the mode used for encryption.</p>
    *
@@ -733,10 +737,10 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
    */
   public Mode setMode(Mode m) {
     Mode old = getMode();
-    parameters.put(Parameter.MODE.getId(),m.toString());
+    parameters.put(Parameter.MODE.getId(), m.toString());
     return old;
   }
-
+  
   /***
    * <p>tests two asymmetric keys for equality.</p>
    *
@@ -752,20 +756,20 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
     if (key == null) {
       return false;
     }
-
+    
     //make sure object is of right type
-    if (key.getClass() !=  this.getClass()) {
+    if (key.getClass() != this.getClass()) {
       return false;
     }
-
+    
     // compare public keys
-    AsymmetricKey o = (AsymmetricKey)key;
+    AsymmetricKey o = (AsymmetricKey) key;
     return dumpValueNotation("",
             DumpType.ALL_UNENCRYPTED).equals(o.dumpValueNotation("", DumpType.ALL_UNENCRYPTED)
     );
-
+    
   }
-
+  
   /***
    * <p>returns the hashcode of the dump representation.</p>
    */
@@ -773,7 +777,7 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
   public int hashCode() {
     return dumpValueNotation("", DumpType.ALL_UNENCRYPTED).hashCode();
   }
-
+  
   /***
    * <p>Gets a textual representation of the objects parameters (without the keys).</p>
    *
@@ -782,8 +786,8 @@ public class AsymmetricKey extends Key  implements Serializable, Dumpable {
   @Override
   public String toString() {
     return "([AsymmetricKey]hash=" + (privateKey != null ? Arrays.hashCode(privateKey) : "null")
-            + "/" + (publicKey != null ?  Arrays.hashCode(publicKey) : "null") + ";" + parameters
+            + "/" + (publicKey != null ? Arrays.hashCode(publicKey) : "null") + ";" + parameters
             + ")";
   }
-
+  
 }

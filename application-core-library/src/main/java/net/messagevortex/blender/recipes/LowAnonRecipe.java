@@ -2,8 +2,8 @@ package net.messagevortex.blender.recipes;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
-
 import net.messagevortex.ExtendedSecureRandom;
 import net.messagevortex.asn1.EncryptPayloadOperation;
 import net.messagevortex.asn1.IdentityStoreBlock;
@@ -40,12 +40,12 @@ public class LowAnonRecipe extends BlenderRecipe {
    * @return true if recipe may be applied
    */
   @Override
-  public boolean isAppliable(List<IdentityStoreBlock> anonSet) {
+  public boolean isAppliable(Set<IdentityStoreBlock> anonSet) {
     return (anonSet != null && anonSet.size() <= 4);
   }
 
   @Override
-  public RoutingCombo applyRecipe(List<IdentityStoreBlock> anonSet, IdentityStoreBlock from,
+  public RoutingCombo applyRecipe(Set<IdentityStoreBlock> anonSet, IdentityStoreBlock from,
                                   IdentityStoreBlock to) throws IOException {
     // select random order
     List<IdentityStoreBlock> set = new Vector<>();

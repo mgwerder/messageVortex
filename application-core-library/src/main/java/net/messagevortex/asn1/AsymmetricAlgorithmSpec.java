@@ -76,7 +76,7 @@ public class AsymmetricAlgorithmSpec extends AbstractBlock implements Serializab
   }
 
   @Override
-  protected void parse(ASN1Encodable to) throws IOException {
+  protected final void parse(ASN1Encodable to) throws IOException {
     int i = 0;
     ASN1Sequence s1 = ASN1Sequence.getInstance(to);
 

@@ -41,6 +41,15 @@ public class CommandLineHandlerIdentityStoreGenerate implements Callable<Integer
           description = "name of the identity")
   String identityId;
 
+  /**
+   * <p>Commandline handler to generate an identity to an identity store.</p>
+   *
+   * <p>Use java -jar MessageVortex.jar identitystore generate --help to get all supported
+   * parameters.</p>
+   *
+   * @return the error level to be returned
+   * @throws Exception if anything goes wrong
+   */
   @Override
   public Integer call() throws Exception {
     // generate new identity
@@ -69,7 +78,7 @@ public class CommandLineHandlerIdentityStoreGenerate implements Callable<Integer
     LOGGER.log(Level.INFO, "Loading identity store \"" + filename + "\"");
     IdentityStore is = new IdentityStore(new File(filename));
 
-    // add identity stor block to identity store
+    // add identity store block to identity store
     is.add(isb);
 
     // dump store

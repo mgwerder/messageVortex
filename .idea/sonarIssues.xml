@@ -738,16 +738,6 @@
             <set />
           </value>
         </entry>
-        <entry key="$PROJECT_DIR$/application-core-library/messageVortex.cfgWritten">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/application-core-library/pom.xml">
-          <value>
-            <set />
-          </value>
-        </entry>
         <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/Config.java">
           <value>
             <set />
@@ -758,17 +748,17 @@
             <set />
           </value>
         </entry>
-        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/MessageVortexConfig.java">
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/MessageVortexStatus.java">
           <value>
             <set />
           </value>
         </entry>
-        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/MessageVortexController.java">
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/ThreadDumper.java">
           <value>
             <set />
           </value>
         </entry>
-        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/asn1/AlgorithmParameter.java">
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/asn1/AbstractCryptPayloadOperation.java">
           <value>
             <set />
           </value>
@@ -778,177 +768,37 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/asn1/BlendingSpec.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/asn1/CipherSpec.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/asn1/HeaderRequestCapability.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/asn1/HeaderRequestIdentity.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/asn1/HeaderRequestIncreaseMessageQuota.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/asn1/yaml/IdentityStoreRepresenter.java">
           <value>
             <set />
           </value>
         </entry>
-        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/asn1/yaml/IdentityStoreYamlHandler.java">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/asn1/yaml/MessageVortexRepresenter.java">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/blender/DummyBlender.java">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/commandline/CommandLineHandlerIdentityStoreDump.java">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/commandline/CommandLineHandlerRedundancyAdd.java">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/commandline/CommandLineHandlerVersion.java">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/router/JGraph.java">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/router/operation/AddRedundancy.java">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/transport/CustomKeyManager.java">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/application-core-library/src/main/java/net/messagevortex/transport/dummy/DummyTransportTrx.java">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/application-core-library/src/main/resources/messageVortex.cfgRessources">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/MainASN1Suite.java">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/MainIMAPSuite.java">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/MainRoutingSuite.java">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/asn1/AsymmetricKeyReencodingTest.java">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/asn1/AsymmetricKeyTest.java">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/asn1/FuzzerTest.java">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/asn1/IdentityBlockTest.java">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/asn1/SymmetricKeyTest.java">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/asn1/VortexMessageTest.java">
-          <value>
-            <set />
-          </value>
-        </entry>
         <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/blender/DummyBlenderTest.java">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/blender/DummyBlendingTest.java">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/core/ConfigTest.java">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/core/MessageVortexTest.java">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/imap/ImapClientTest.java">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/imap/ImapCommandLoginTest.java">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/imap/ImapCommandTest.java">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/imap/ImapSSLTest.java">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/routing/FullMessageTest.java">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/routing/JGraphTest.java">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/routing/MatrixTest.java">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/routing/OperationProcessingTest.java">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/transport/DummyTransportSenderTest.java">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/application-core-library/src/test/java/net/messagevortex/test/transport/LineTRXTest.java">
           <value>
             <set />
           </value>
@@ -968,22 +818,7 @@
             <set />
           </value>
         </entry>
-        <entry key="$PROJECT_DIR$/pom.xml">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/thesis/pom.xml">
-          <value>
-            <set />
-          </value>
-        </entry>
         <entry key="$PROJECT_DIR$/thesis/src/main/latex/rfc/draft-gwerder-messagevortexmain-00.xml">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/website/pom.xml">
           <value>
             <set />
           </value>

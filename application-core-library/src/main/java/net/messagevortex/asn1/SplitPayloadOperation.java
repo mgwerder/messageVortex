@@ -53,7 +53,7 @@ public class SplitPayloadOperation extends Operation implements Serializable {
   }
 
   @Override
-  protected void parse(ASN1Encodable to) throws IOException {
+  protected final void parse(ASN1Encodable to) throws IOException {
     ASN1Sequence s1 = ASN1Sequence.getInstance(to);
     int i = 0;
     originalFirstId = ASN1Integer.getInstance(s1.getObjectAt(i++)).getValue().intValue();

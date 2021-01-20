@@ -4,6 +4,11 @@ import java.util.concurrent.Callable;
 import net.messagevortex.NotImplementedException;
 import picocli.CommandLine;
 
+/**
+ * <p>Commandline handler to the redundancy operations.</p>
+ *
+ * <p>Implements the command "redundancy".</p>
+ */
 @CommandLine.Command(
     description = "Helper for add redundancy operations",
     name = "redundancy",
@@ -13,10 +18,5 @@ import picocli.CommandLine;
         CommandLineHandlerRedundancyAdd.class
     }
 )
-public class CommandLineHandlerRedundancy implements Callable<Integer> {
-
-  public Integer call() throws Exception {
-    throw new NotImplementedException();
-  }
-
+public class CommandLineHandlerRedundancy {
 }

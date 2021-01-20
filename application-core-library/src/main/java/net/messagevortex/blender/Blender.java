@@ -119,7 +119,8 @@ public abstract class Blender extends AbstractDaemon implements TransportReceive
    * @param message the message to be blended
    * @return true if blended successfully and sent by the transport layer
    */
-  public abstract boolean blendMessage(BlendingSpec target, VortexMessage message) throws IOException;
+  public abstract boolean blendMessage(BlendingSpec target, VortexMessage message)
+          throws IOException;
 
   /***
    * <p>Returns the address supported for blender.</p>

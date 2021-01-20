@@ -315,7 +315,7 @@ public class IdentityStoreBlock extends AbstractBlock implements Serializable {
     return nodeKey;
   }
 
-  protected void parse(ASN1Encodable p) throws IOException {
+  protected final void parse(ASN1Encodable p) throws IOException {
     LOGGER.log(Level.FINER, "Executing parse()");
     ASN1Sequence s1 = ASN1Sequence.getInstance(p);
     int i = 0;
@@ -414,10 +414,6 @@ public class IdentityStoreBlock extends AbstractBlock implements Serializable {
         return UNENCODABLE;
       }
       ASN1Object e = identityKey.toAsn1Object(DumpType.PUBLIC_ONLY);
-      if (e == null) {
-        LOGGER.log(Level.WARNING, "unable to encode identity key of " + nodeAddress);
-        return UNENCODABLE;
-      }
       String keySpec = toBase64(e.getEncoded());
       return "vortexsmtp://" + addr[0] + ".." + keySpec + ".." + addr[1] + "@localhost";
     } else {

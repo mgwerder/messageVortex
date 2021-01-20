@@ -29,6 +29,15 @@ public class CommandLineHandlerIdentityStoreCreate implements Callable<Integer> 
       description = "filename of the IdentityStorage file")
   String filename = CommandLineHandlerIdentityStore.DEFAULT_FILENAME;
 
+  /**
+   * <p>Commandline handler to create an identity  store.</p>
+   *
+   * <p>Use java -jar MessageVortex.jar identitystore create --help to get all supported
+   * parameters.</p>
+   *
+   * @return the error level to be returned
+   * @throws Exception if anything goes wrong
+   */
   @Override
   public Integer call() throws Exception {
     IdentityStore is = new IdentityStore();

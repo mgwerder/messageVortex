@@ -129,7 +129,7 @@ public class RoutingCombo extends AbstractBlock implements Serializable {
   }
 
   @Override
-  protected void parse(ASN1Encodable to) throws IOException {
+  protected final void parse(ASN1Encodable to) throws IOException {
     if (isEncrypted()) {
       throw new IOException("Unable to encode to asn encrypted stream");
     }
@@ -350,7 +350,7 @@ public class RoutingCombo extends AbstractBlock implements Serializable {
   }
 
   public byte[] toEncBytes() {
-    return encrypted;
+    return encrypted.clone();
   }
 
   @Override

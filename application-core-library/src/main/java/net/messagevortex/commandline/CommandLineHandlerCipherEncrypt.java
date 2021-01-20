@@ -17,6 +17,9 @@ import net.messagevortex.asn1.encryption.Padding;
 import net.messagevortex.asn1.encryption.Parameter;
 import picocli.CommandLine;
 
+/**
+ * <p>Commandline handler for symmetric encryption.</p>
+ */
 @CommandLine.Command(
         description = "symmetrically encrypt a file",
         name = "encrypt",
@@ -63,6 +66,14 @@ public class CommandLineHandlerCipherEncrypt implements Callable<Integer> {
           description = "output filename for the generated or loaded key")
   String outKey;
 
+  /**
+   * <p>Commandline handler or encryption.</p>
+   *
+   * <p>Use java -jar MessageVortex.jar crypt encrypt --help to get all supported parameters.</p>
+   *
+   * @return the return code
+   * @throws Exception if anything goes wrong
+   */
   @Override
   public Integer call() throws Exception {
     byte[] inBuffer = Files.readAllBytes(new File(inFile).toPath());

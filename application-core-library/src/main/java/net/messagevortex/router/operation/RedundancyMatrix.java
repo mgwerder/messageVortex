@@ -23,26 +23,25 @@ package net.messagevortex.router.operation;
 // ************************************************************************************
 
 import java.util.Arrays;
-import java.util.logging.Level;
 import net.messagevortex.MessageVortexLogger;
 
 /**
  * Creates a redundancy matrixContent or a recovery matrixContent for the redundancy operations.
  */
 public class RedundancyMatrix extends VandermondeMatrix {
-
+  
   private static final java.util.logging.Logger LOGGER;
-
+  
   static {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
     //MessageVortexLogger.setGlobalLogLevel(Level.ALL);
   }
-
+  
   public RedundancyMatrix(RedundancyMatrix r) {
     this(r.dimension[0], r.dimension[1], r.mode, true, true);
     matrixContent = Arrays.copyOf(r.matrixContent, r.matrixContent.length);
   }
-
+  
   /***
    * <p>Creates a redundancy matrixContent based on vnadermonde matrices.</p>
    *
@@ -53,7 +52,7 @@ public class RedundancyMatrix extends VandermondeMatrix {
   public RedundancyMatrix(int dataRows, int total, MathMode mode) {
     this(dataRows, total, mode, true, false);
   }
-
+  
   /***
    * <p>Creates a redundancy matrixContent based on vandermonde matrices.</p>
    *
@@ -64,9 +63,9 @@ public class RedundancyMatrix extends VandermondeMatrix {
    * @param noNormalize if set the matrix is not normalized upon creation
    */
   public RedundancyMatrix(int dataRows, int total, MathMode mode, boolean noCache,
-                           boolean noNormalize ) {
+                          boolean noNormalize) {
     super(dataRows, total, mode);
-
+    
     // get value from cache
     if (!matrixCacheDisabled) {
       Matrix m = matrixCache.get("rm" + dataRows + "/" + total + "/" + mode.toString());
@@ -76,7 +75,7 @@ public class RedundancyMatrix extends VandermondeMatrix {
         return;
       }
     }
-
+    
     if (!noNormalize) {
       for (int col = 1; col < getX(); col++) {
         // make x=y a unit field
@@ -85,7 +84,7 @@ public class RedundancyMatrix extends VandermondeMatrix {
           transformColumn(col, -1, scalar);
           assert getField(col, col) == 1;
         }
-
+        
         // nullify other columns in this row
         for (int col2 = 0; col2 < getX(); col2++) {
           int scalar = getField(col2, col);
@@ -94,13 +93,13 @@ public class RedundancyMatrix extends VandermondeMatrix {
             assert getField(col2, col) == 0;
           }
         }
-
+        
       }
       matrixCache.put("rm" + dataRows + "/" + total + "/" + mode.toString(), new Matrix(this));
     }
   }
-
-
+  
+  
   /***
    * <p>Calculates a matrixContent to recover all data rows given the missing rows.</p>
    *
@@ -119,5 +118,5 @@ public class RedundancyMatrix extends VandermondeMatrix {
     Matrix ret = red.getInverse();
     return ret;
   }
-
+  
 }

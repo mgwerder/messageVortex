@@ -61,12 +61,12 @@ public class IdMapOperation extends AbstractOperation implements Serializable {
 
   @Override
   public int[] getOutputId() {
-    return outputId;
+    return outputId.clone();
   }
 
   @Override
   public int[] getInputId() {
-    return inputId;
+    return inputId.clone();
   }
 
   @Override

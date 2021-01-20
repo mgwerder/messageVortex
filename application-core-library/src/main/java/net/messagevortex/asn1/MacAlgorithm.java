@@ -75,7 +75,7 @@ public class MacAlgorithm extends AbstractBlock implements Serializable {
     alg = a;
   }
 
-  protected void parse(ASN1Encodable to) throws IOException {
+  protected final void parse(ASN1Encodable to) throws IOException {
     Algorithm a = Algorithm.getById(ASN1Integer.getInstance(to).getValue().intValue());
     if (a == null || a.getAlgorithmType() != AlgorithmType.HASHING) {
       throw new IOException("Only hashing algorithms may be parsed");

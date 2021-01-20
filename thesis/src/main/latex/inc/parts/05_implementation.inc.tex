@@ -4,7 +4,7 @@
 %!TeX root = ../../messageVortex.tex
 
 \partepigraph{No matter how hard you work, someone else is working harder.}{Elon Musk, entrepreneur}
-\part{Implementation\label{sec:implementation}}
+\part{Implementation}\label{sec:implementation}
 The implementation differs from the academic model in some details. It is formeost more precise than the academic model. Furthermore, it requires a strict definition of the implementation in order to guarantee the interoperability between different implementations.
 
 This section focuses therefore on the details of the reference implementation.
@@ -176,7 +176,7 @@ We decided to go with mainly cbc. However, most of the implementations are avail
 \section{Padding selection}
 A plain text stream may have any length. Since we always encrypt in blocks of a fixed size, we need a mechanism to indicate how many bytes of the last encrypted block may be safely discarded. 
 
-We have chosen for the paddings outlined in figure~\ref{fig:defPaddings} to be supported.
+We have chosen for the paddings outlined in \cref{fig:defPaddings} to be supported.
 \begin{figure}[ht]
 	\lstinputlisting[linerange={116-123},language=asn.1]{../../../../application-core-library/src/main/asn/MessageVortex-Ciphers.asn}
 	\caption{Enumeration definition of paddings in ASN.1 with support requirements.}
@@ -204,7 +204,7 @@ We have introduced an additional type of padding not related to these paddings. 
 	Due to the nature of the operation, it is required to be able to pad more than just one block.
 \end{itemize}
 
-This padding is the only padding for the $addRedundancy$ and $removeRedundancy$ operations. A specification may be found in section~\ref{sec:redundancyOperation}.
+This padding is the only padding for the $addRedundancy$ and $removeRedundancy$ operations. A specification may be found in \cref{sec:redundancyOperation}.
 
 \subsection{Pseudo Random Number Generator Selection\label{sec:prng}}
 For our $addRedundancy$ and $removeRedundancy$ operations we needed a pseudo random number generator (PRNG). For our implementation we did not research deeply this part as it seemed irrelevant. The only criteriion was, that it had to create content indistinguishable from an encrypted message. This criterion arose as we use it for padding invisibly an already encrypted message.
@@ -238,14 +238,14 @@ The following sections list common Internet protocols. We analyze those protocol
 
 We will identify SMTP and XMPP as good transport layer protocols for the \MessageVortex approach, as they have all required properties.
 
-All sections are structured the same way. We first refer to the protocol or standard and describe it in the simplest possible form. We refer to subsequent standards if required to consider extensions where sensible. We then apply the previously referenced criteria and make a concise summary of the suiting of the protocol as a transport layer. The findings of this section is listed in table \ref{tab:protoSuitCrit}. The list here does not reflect the quality or maturity of the protocols. It is a simple analysis of suiting as a transport layer.
+All sections are structured the same way. We first refer to the protocol or standard and describe it in the simplest possible form. We refer to subsequent standards if required to consider extensions where sensible. We then apply the previously referenced criteria and make a concise summary of the suiting of the protocol as a transport layer. The findings of this section is listed in \cref{tab:protoSuitCrit}. The list here does not reflect the quality or maturity of the protocols. It is a simple analysis of suiting as a transport layer.
 
 All sections are structured the same way. 
 \begin{itemize}
 	\item Description\\
 	We first refer to the protocol or standard and describe it in the simplest possible form. We refer to subsequent standards if required to consider extensions where sensible.
 	\item Apply criteria\\\\
-	We then apply the previously referenced criteria and make a concise summary of the suiting of the protocol as a transport layer. The findings of this section is listed in table \ref{tab:protoSuitCrit}. The list here does not reflect the quality or maturity of the protocols. It is a simple analysis of suiting as a transport layer.
+	We then apply the previously referenced criteria and make a concise summary of the suiting of the protocol as a transport layer. The findings of this section is listed in \cref{tab:protoSuitCrit}. The list here does not reflect the quality or maturity of the protocols. It is a simple analysis of suiting as a transport layer.
 \end{itemize} 
 
 \subsection{Applied Criteria\label{sec:transportCriteria}}
@@ -292,7 +292,7 @@ The following protocols have been discarded as we have considered them as outdat
 We furthermore discarded all RPC-related protocols as they would by definition violate Ct3.
 
 \subsection{Analysis}
-\subsubsection{HTTP}
+\subsubsection*{HTTP}
 The HTTP protocol allows message transfer from and to a server and is specified in RFC2616 \cite{rfc2616}. It is not suitable as a communication protocol for messages due to the lack of notifications. There are some extensions that would allow such communications (such as WebDAV). Still, in general, even those are not suitable as they require a continuous connection to the server to get notifications. Having a ``rollup'' of notifications when connecting is not there by default but could be implemented on top of it. HTTP servers listen on standard ports 80 or 443 for incoming connects. The port 443 is equivalent to the port 80 except for the fact that it has a wrapping encryption layer (usually TLS). The incoming connects (requests) must offer a header part and may contain a body part that would be suitable for transferring messages to the server. The reply to this request is transferred over the same TCP connection containing the same two sections.
 
 HTTP0.9-HTTP/1.1 are clear text protocols which are human-readable (except for the data part which might contain binary data). The HTTP/2\cite{rfc7540} protocol is using the same ports and default behavior. Unlike HTTP/0.9-HTTP/1.1, it is not a clear text but encodes headers and bodies in binary form. 
@@ -303,26 +303,26 @@ The protocol does satisfy the first two main criteria (Ct1: Widely Adopted and C
 
 It is possible to add such behavior to the blending layer using HTTP servers as pure storage. Such a behavior would however be most likely detectable and thus no longer be censorship resistant.
 
-\subsubsection{FTP}
+\subsubsection*{FTP}
 FTP is defined in RFC959\cite{rfc959}. This Protocol is intended for authenticated file transfer only. There is an account available for general access (``anonymous''). This account does normally not offer upload rights for security reasons. It is possible to use FTP as a message transfer endpoint. The configuration would work as follows: the user ``anonymous'' has upload rights only. It is unable to download or list a directory. A node may upload a message with a random name. In case a collision arises, the node retries with another random name. The blending layer picks messages up using an authenticated user. This workaround has multiple downsides. At first, handling FTP that way is very uncommon and usually requires an own dedicated infrastructure. Such beavior would make the protocol again possibly detectable. Secondly, passwords are always sent in the clear within FTP. Encryption as a wrapping layer (FTPS) is not common, and SFTP (actually a subsystem of SSH) has nothing in common with FTP except for the fact that it may transfer files as well.
 
 Furthermore, FTP may be problematic when used in active mode for firewalls. All these problems make FTP not very suitable as a transport layer protocol. FTPS and SFTP feature similar weaknesses as the FTP version in terms of detectability of non-standard behavior.
 
 Like in HTTP, a disadvantage of FTP in terms of a message transport protocol is that this protocol is not symmetrically. A server is always just ``serving requests'' and not sending information actively to peers. This Request-Reply violates criteria (Ct3: Symmetrically built) and makes the protocol not a primary choice for message transport. The Protocol, however, satisfies the first two criteria  (Ct1: Widely Adopted and Ct2: Reliable).
 
-\subsubsection{TFTP}
+\subsubsection*{TFTP}
 TFTP has, despite its naming similarities to FTP, very little in common with it. TFTP is a UDP based file transfer protocol without any authentication scheme. The possibility of unauthenticated message access makes it not suitable as a transport layer. The protocol is due to the use of UDP in a meshed network with redundant routes. Since the Internet has a lot of these redundant routes, this neglects the use of this protocol.
 
 TFTP is rarely ever used on the Internet, as its UDP based nature is not suitable for a network with redundant routes. Not being common on the Internet violates criterion one (Ct1: Widely Adopted). TFTP is not symmetrically. This means that a server is always just ``serving requests'' and not sending information actively to peers. This Request-Reply violates criteria (Ct3: Symmetrically built) and makes the protocol not a primary choice for message transport. The Protocol furthermore violates Ct2 (Ct2: Reliable) as it is based on UDP without any additional error correction.
 
-\subsubsection{MQTT}
+\subsubsection*{MQTT}
 MQTT is an ISO standard (ISO/IEC PRF 20922:2016) and was formerly called MQ Telemetry Transport. The current standard as the time of writing this document was 3.1.1 \cite{mqtt}. 
 
 The protocol runs by default on the two ports 1883 and 8883 and can be encrypted with TLS. MQTT is a publish/subscribe based message-passing protocol that is mainly targeted to m2m communication. This Protocol requires the receiving party to be subscribed to a central infrastructure in order to be able to receive messages. This makes it very hard to be used in a system without centralistic infrastructure and having no static routes between senders and recipients. 
 
 The protocol does satisfy the second criterion (Ct2: Reliable). It is in the area of end-user (i.e., Internet) not widely adopted, thus violating Criteria 1 (Ct1: Widely Adopted). In terms of decentralization design, the protocol fails as well (Ct3: Symmetrically built).
 
-\subsubsection{Advanced Message Queuing Protocol (AMQP)}
+\subsubsection*{Advanced Message Queuing Protocol (AMQP)}
 The Advanced Message Queuing Protocol (AMQP) was initially initiated by numerous exponents based mainly on finance-related industries. The AMQP-Protocol is either used for communication between two message brokers, or between a message broker and a client\cite{amqp}.
 
 It is designed to be interoperable, stable, reliable, and safe. It supports either SASL or TLS secured communication. The use of such a tunnel is controlled by the immediate sender of a message. In its current version 1.0, it does, however, not support a dynamic routing between brokers\cite{amqp}.
@@ -331,33 +331,33 @@ Due to the lack of a generic routing capability, this protocol is therefore not 
 
 The protocol satisfies partially the first criterion (Ct1: Widely Adopted) and fully meets the second criterion (Ct2: Reliable). However, the third criterion is violated due to the lack of routing capabilities between message brokers (Ct3: Symmetrically built).
 
-\subsubsection{Constrained Application Protocol (CoAP)}
+\subsubsection*{Constrained Application Protocol (CoAP)}
 The Constrained Application Protocol (CoAP) is a communication Protocol which is primarily destined to m2m communication. It is defined in RFC7252\cite{rfc7252}.  It is defined as a lightweight replacement for HTTP in IoT devices and is based on UDP.
 
 The protocol does partially satisfy the first criteria (Ct1: Widely Adopted). The second criterion (Ct2: Reliable) is only partially fulfilled as it is based on UDP and does only add limited session control on its own.
 
 The main disadvantage in terms of a message transport protocol is that this protocol is not (like HTTP) symmetrically. This means that a server is always just ``serving requests'' and not sending information actively to peers. This Request-Reply violates criteria (Ct3: Symmetrically built) and makes the protocol not a primary choice for message transport. 
 
-\subsubsection{Web Application Messaging Protocol (WAMP)}
+\subsubsection*{Web Application Messaging Protocol (WAMP)}
 WAMP is a web-sockets based protocol destined to enable M2M communication. Like MQTT, it is publish respectively subscribe oriented. Unlike MQTT, it allows remote procedure calls (RPC).
 
 The WAMP protocol is not widely adopted (Ct1: Widely Adopted), but it is reliable on a per-node base (Ct2: Reliable). Due to its RPC based capability, unlike MQTT, a routing like capability could be implemented. Symmetrical protocol behavior is therefore not available but could be built in relatively easy.
 
-\subsubsection{XMPP (jabber)}
+\subsubsection*{XMPP (jabber)}
 XMPP (originally named Jabber) is a synchronous message protocol used in the Internet. It is specified in the documents RFC6120\cite{rfc6120}, RFC6121\cite{rfc6121}, RFC3922\cite{rfc3922}, and RFC3923\cite{rfc3923}. The protocol is a very advanced chat protocol featuring numeros levels of security including end-to-end signing and object encryption\cite{rfc3923}. There is also a stream initiation extension for transferring files between endpoints \cite{xep0096}.
 
 It has generic routing capabilities spanning between known and unknown servers. The protocol offers a message retrieval mechanism for offline messages similarily to POP \cite{xep0013}.
 
 The protocol itself seems to be a strong candidate as a transport layer as it is being used actively on the Internet.
 
-\subsubsection{SMTP}
+\subsubsection*{SMTP}
 The SMTP protocol is currently specified in \cite{rfc5321}. It specifies a method to deliver reliably asynchronous mail objects through a specific transport medium (most of the time, the Internet). The document splits a mail object into a mail envelope and its content. The envelope contains the routing information, which is the sender (one) and the recipient (one or more) in 7-Bit ASCII. The envelope may additionally contain optional protocol extension material. 
 
 The content should be in 7-Bit-ASCII (8-Bit ASCII may be requested, but this feature is not widely adopted). It is split into two parts. These parts are the header (which does contain meta-information about the message such as subject, reply address, or a comprehensive list of all recipients), and the body which includes the message itself. All lines of the content must be terminated with a CRLF and must not be longer than 998 characters, excluding CRLF.
 
 The header consists of a collection of header fields. Each of them is built by a header name, a colon, and the data. The exact outline of the header is specified in \cite{rfc5322} and is separated with a blank line from the body. 
 
-\cite{rfc5321} furthermore introduces a simplistic model for SMTP message-based communication. A more comprehensive model is presented in section \nameref{sec:mailTransport} as the proposed model is not sufficient for a detailed end-to-end analysis.
+RFC5321\cite{rfc5321} furthermore introduces a simplistic model for SMTP message-based communication. A more comprehensive model is presented in section \nameref{sec:mailTransport} as the proposed model is not sufficient for a detailed end-to-end analysis.
 
 Traditionally the message itself is mime encoded. The MIME messages are mainly specified in \cite{rfc2045} and \cite{rfc2046}. MIME allows to send messages in multiple representations (alternates), and attach additional information (such as possibly inlined images or attached documents). 
 
@@ -365,22 +365,19 @@ SMTP is one of the most common messaging protocols on the Internet (Ct1: Widely 
 
 SMTP is considered a strong candidate as a transport layer.  
 
-\subsubsection{SMS and MMS}
+\subsubsection*{SMS and MMS}
 SMS capability was introduced in the SS7 protocol. This protocol allows the message transfer of messages not bigger than 144 characters. Due to this restriction in size, it is unlikely to be suitable for this type of communication as the keys being required are already sized similarly, leaving no space for Messages or routing information.
 
 The \nth{3} Generation Partnership Project (3GPP) maintains the Multimedia Messaging Service (MMS). This protocol is mainly a mobile protocol based on telephone networks.
 
 Both protocols are not widely adopted within the Internet domain. There are gateways providing bridging functionalities to the SMS/MMS services. However, the protocol itself is insignificant on the Internet itself. 
 
-\subsubsection{MMS}
-This protocol is just like the SMS protocol accessible through the Internet by using gateways but not directly usable within the Internet.
-
 \subsection{Results}
 We have shown that all common M2M protocols failed mainly at Ct3 as there is no need for message routing. In M2M communication contacting foreign machines is not common. Therefore M2M protocolls are typically using static M2M communication over prepared channels. Such behavior is, however unsuitable for a generic messaging protocol.
 
 Pure storage protocols fail at the same criteria as they typically have a defined set of data sources and data sinks, whereas usually at least the data sources are limited in number. This makes those protocols unsuitable again.
 
-We can clearly state that according to the criteria, only a few protocols are suitable. Table \ref{tab:protoSuitCrit2} on page \pageref{tab:protoSuitCrit} shows that only SMTP and XMPP are suitable protocols. Eventually, similar protocols such as HTTP (with WebDAV) or FTP may be usable as well. 
+We can clearly state that according to the criteria, only a few protocols are suitable. Table~\ref{tab:protoSuitCrit} on page \pageref{tab:protoSuitCrit} shows that only SMTP and XMPP are suitable protocols. Eventually, similar protocols such as HTTP (with WebDAV) or FTP may be usable as well. 
 
 \begin{table}[h]
 	\centering\tiny
@@ -409,9 +406,9 @@ For better diagnosability and fast setup, we implemented a custom transport laye
 \section{Implementation of an Email Transport Layer}
 Email supports a conglomerate of protocols. Looking at the client side, we will find that email is sent with an authenticated SMTP connection. The SMTP connection is somewhat different than than the connections used to send emails to the destination. First of all the client port was shifted in the past to a specific submission port (SMTPS: Port 465; Submission: Port 587). These submmission ports are authenticated (either by username and password, by IP or by certificates) and usually privileged (no \defref{UBM} checks). On the retrieval side, SMTP is not capable of handling these tasks sensibly. Instead, POP3 and IMAPv4 are used. POP3 is a deposit box for email where a device fetches the mail and stores it locally. This is commonly in use for automated processing of mails but these days, where the same user owns multiple devices no longer adequate. IMAPv4 offers to organize mails on the server. This allows a user to have the same folder structure of mails in a synchronized manner on all devices.
 
-For an ideal implementation we would do the following: Organize our \MessageVortex{} mails in a separate account. The account is accessed through a local proxy relaying our ``ordinary outgoing mails'' through the SMTP server of our regular provider and all \MessageVortex{} related traffic through the provider of our \MessageVortex{} mailbox. Keeping the two mailboxes separate is sensible and important as we will see in part~\ref{sec:operation}. The housekeeping on the account used for \MessageVortex{} is done automatically and in a sensible way, comparable to a human (e.g., handle draft, sent and trash bin folders sensibly and keep all mails in a flat structure deleting old mails from time to time). The mails from the regular and the \MessageVortex{} account are merged by the proxy in a transparent way. Keeping the messages apart but offering a unified look.
+For an ideal implementation we would do the following: Organize our \MessageVortex{} mails in a separate account. The account is accessed through a local proxy relaying our ``ordinary outgoing mails'' through the SMTP server of our regular provider and all \MessageVortex{} related traffic through the provider of our \MessageVortex{} mailbox. Keeping the two mailboxes separate is sensible and important as we will see in \cref{sec:operation}. The housekeeping on the account used for \MessageVortex{} is done automatically and in a sensible way, comparable to a human (e.g., handle draft, sent and trash bin folders sensibly and keep all mails in a flat structure deleting old mails from time to time). The mails from the regular and the \MessageVortex{} account are merged by the proxy in a transparent way. Keeping the messages apart but offering a unified look.
 
-We were unable to find any scientifical data regarding what type of traffic or attachment is common on the Internet. We, therefore, tried to analyze mail logs (SMTP) of a mail provider. We were scanning $567594$ emails for attachment properties after the spam elimination queue. $16.5\%$ of all scanned messages had an attachment. The top 20 attachment types distributions are shown in table \ref{tab:emailAttachments}.
+We were unable to find any scientifical data regarding what type of traffic or attachment is common on the Internet. We, therefore, tried to analyze mail logs (SMTP) of a mail provider. We were scanning $567594$ emails for attachment properties after the spam elimination queue. $16.5\%$ of all scanned messages had an attachment. The top 20 attachment types distributions are shown in \cref{tab:emailAttachments}.
 \begin{table}[ht]
 	%    \centering\scriptsize
 	
@@ -444,7 +441,7 @@ We were unable to find any scientifical data regarding what type of traffic or a
 
 As expected, the number of images within mail was very high ($\approx 50\%$). Unfortunately, we were unable to analyze the content of ms-tnef attachments retrospectively. It seems that based on these figures, information hiding within images in email traffic is a good choice.
 
-For our implementation, we worked with F5 blending into jpeg images, as this choice seemed to undermine credible content based on table~\ref{tab:emailAttachments}.
+For our implementation, we worked with F5 blending into jpeg images, as this choice seemed to undermine credible content based on \cref{tab:emailAttachments}.
 
 In our current implementation the house keeping part has been skipped. Instead, we are just fetching the newly arrived messages and put in a local storage. The email presented to the client is provided by a local IMAP server. Persistence of these messages is not yet implemented. 
 
@@ -482,7 +479,7 @@ Embedding works exactly the same as with email with the same supported blending 
 The blending layer may generate decoy message analogue to the messages generated in the case of email. Some adoptions in terms of texts might be advisable.
 
 \section{Distributed Configuration and Runtime Store of processing content}
-A distributed storage is advisable if working as a reliable service. This is why we defined ASN.1 structures for all elements kept in memory as shown in figure~\ref{fig:defConfig}. Wisely applied, they may be used to store in a transport storage for access of a redundant set of devices all maintaining the same set of data. 
+A distributed storage is advisable if working as a reliable service. This is why we defined ASN.1 structures for all elements kept in memory as shown in \cref{fig:defConfig}. Wisely applied, they may be used to store in a transport storage for access of a redundant set of devices all maintaining the same set of data. 
 
 \begin{lstfloat}[ht]
 	\lstinputlisting[language=asn.1,multicols=2]{../../../../application-core-library/src/main/asn/MessageVortex-NonProtocolBlocks.asn}
@@ -517,7 +514,7 @@ F5Embedding    = "(F5:"<passwordString>[,<PasswordString>]*")"
 \label{lst:embeddingSpecs}
 \end{lstfloat}
 
-Both specifications allow embedding of a \VortexMessage{} and are described in the following section. In both cases a byte stream is extracted consisting of a prefix block containing the peer key $K_{peer_o}$ immediately followed by the symmetrically encrypted InnerMessageBlock as described in figure~\ref{fig:defOuterBlocks}. The string is not necessarily terminated correctly. The presence of a valid PrefixBlock signals an existing \VortexMessage{} to the blending layer. That way we make sure that the size of a potential message leakes its presence. To detect the presence of a \VortexMessage{}, the hosts private key $K^{-1}_{host_o}$ for decoding the is required. 
+Both specifications allow embedding of a \VortexMessage{} and are described in the following section. In both cases a byte stream is extracted consisting of a prefix block containing the peer key $K_{peer_o}$ immediately followed by the symmetrically encrypted InnerMessageBlock as described in \cref{fig:defOuterBlocks}. The string is not necessarily terminated correctly. The presence of a valid PrefixBlock signals an existing \VortexMessage{} to the blending layer. That way we make sure that the size of a potential message leakes its presence. To detect the presence of a \VortexMessage{}, the hosts private key $K^{-1}_{host_o}$ for decoding the is required. 
 
 \begin{lstfloat}[ht]
 	\lstinputlisting[linerange={50-84},language=asn.1,multicols=2]{../../../../application-core-library/src/main/asn/MessageVortex-Schema.asn}
@@ -533,7 +530,7 @@ In this section we explain $plainEmbedding$ and how \VortexMessages{} with $plai
 
 The $plainEmbedding$ is a simple embedding replacing parts of the original file with the content of the \VortexMessage. To maintain the header information of a file, we introduced an offset as a set of fixed values. Plain embedding is simply detectable. While offset and chunking may allow us to maintain a valid file structure, the original content of the file is, however, normally destroyed. We use plain embedding mainly for our experiments. For better readability, we used a specialized blending layer using unchunked, plain embedding with an offset of $0$. The decoy message is the ASN.1 block representation of the encoded block. The chosen encoding simplified to see the inner workings of the protocol. For production use, we apply F5 embedding with a generated payload. The current implementation of the blending layer employing plain embedding is thus not suitable for production use as the messages remain identifiable or at least suspicious.
 
-\paragraph{Chunking of Plain Embedded Messages}\label{sec:chunkingPlain}~\\
+\subsubsection*{Chunking of Plain Embedded Messages}\label{sec:chunkingPlain}~\\
 In this section we describe the chunked embedding into plain messages. Chunking is done by pre-pending two numeric values to a data chunk. The first number (modulo the remaining number of bytes of the file) reflects the size of the chunk immediately following the second value. The second value (again modulo the same number)  reflects the number of bytes to be skipped after the chunk for getting to the next header.
 
 Each value is encoded in one to four bytes forming an integer value. The first seven bits are the least significant bits of the value. If the eight bit is set, we signal an additional relevant octet. The second and third byte (if any) are interpreted equivalently. The fourth byte is always interpreted without any signal bit. Instead the eight bit is used as the most significant bit in that case. All bits collected together form an integer value. This value is taken modulo the remaining bytes of the file, starting with the first byte of the first header value. The chain formed by these headers have no terminator and may surpass the file end.
@@ -592,7 +589,7 @@ When plain embedding messages we have the problem that most of the files have re
 
 
 
-\subsubsection{Implementation of F5 Blending}
+\subsection{Implementation of F5 Blending}
 In this section we introduce the implementation of F5 blending. It is a better blending than the rather simple $plainBlending$ discused in the previous section. While F5 is very old (\citeyear{f5}, it has not been broken. In the reference implementation of F5 was a detectable unintentional double compression\cite{steganalysisf5}. The authors of the reference implementation fixed this issue \cite{F5broken} and we were unable to find newer breaches. Newer derivates, such as nsF5\cite{fridrich2007statistically} or MSET\cite{hosseini2015modification}, were proposed. We did, however, not consider these as candidates as an appropriate reference implementation seemed to be unavailable.
 
 F5 hides its information in JPEG, BMP, and GIF images by matrix encoding its information in the image data. According to \cite{f5} it has a capacity exceeding 13\% of the steganograms' size.
@@ -601,18 +598,18 @@ The implementation of F5 uses a ``password'' for the initialization of the rando
 
 As shown in listing~\ref{lst:embeddingSpecs}, we publish this password and keep detection to the decoding part of our blending layer. In therory we could have kept this password specific to the eID. This would, however, increase the decoding complexity and the password would be needed by the node blending the content, which would leak a synonym to the \defref{eID} used on the next host to the current host.
 
-\subsection{Message Processing by the Blending Layer}
+\section{Message Processing by the Blending Layer}
 If a \VortexMessage is detected, the $prefix$ with the sender key $K_{sender_o}$ is decrypted to decrypt the header block $header$. Verfying the identity signature (which may be done even before decrypting the header block) guarantees that the original sender is the owner of the \defref{eID}. WIth the help of the accounting layer the \VortexMessage{} is authorized for processing. 
 
-Depending on the current quota (messages) and the status of the identity (temporary or established) further procesing by the routing layer is acknowledged. For an overarching description of the whole message processing see section~\ref{sec:messageProcessing}.
+Depending on the current quota (messages) and the status of the identity (temporary or established) further procesing by the routing layer is acknowledged. For an overarching description of the whole message processing see \cref{sec:messageProcessing}.
 
 
-\section{Blending Decoy Content Generation}
+\section{Decoy Content Generation}
 The decoy content of a message is an important part for the \MessageVortex system. It creates meaningful content for the traffic to be hidden within.
 
 When using F5 or similar mechanisms for blending, we decided to make sure that our content does not have to pass a turing test. Normal email conversations is two way and has many properties such as references to previous messages and similar contexts. In order not to fall in such traps, we use common machine  generated one way messages with generated images. Examples for such messages are password recovery requests with gravatars or monitoring messages with generated graphs (such as current running processes on a system). Such messages are easy to generate in various sizes and are obviously machine generated.
 
-To make it harder for an attacker to identify context of messages the sending address on the transport media should not be equal to the receiving address. This makes generation of interaction graphs much harder as we will see in section~\ref{sec:analysisInteractionGraphs}.
+To make it harder for an attacker to identify context of messages the sending address on the transport media should not be equal to the receiving address. This makes generation of interaction graphs much harder as we will see in \cref{sec:analysisInteractionGraphs}.
 
 \chapter{Routing Layer Implementation}
 In this chapter we describe the routing layer as our main workhorse for processing \VortexMessages. The routing layer keeps a workspace for each \defref{eID} and discards old or unused entries. When receiving routing blocks, it processes those and generates new messages. We, furthermore, shed light on some decisions specific to our implementation such as encoding formats or message layout.
@@ -624,7 +621,7 @@ Furthermore, the some XML features such as external entities or the possibility 
 
 To counter these downsides, we reimplented our client with ASN.1 based DER encoding. This type of encoding fits well the purpose of encrypted structures and is commonly used for related tasks such as key storage or signing maessages and certificates.
 
-DER encoding of ASN.1 structures even enables us to foresee the content of an encoded message down to each bit. This is important as it enables in depth analysis of message flows as we will see in section~\ref{sec:diagnosisOfMessagePath}.
+DER encoding of ASN.1 structures even enables us to foresee the content of an encoded message down to each bit. This is important as it enables in depth analysis of message flows as we will see in \cref{sec:diagnosisOfMessagePath}.
 
 ASN.1 offers three common encoding schemes:
 \begin{itemize}
@@ -639,7 +636,7 @@ Where DER and CER are a subset of BER being more strictly defined. We decided to
 In this secion we focus on the processing of messages. Messages are processed either upon their arrival or if a routing block is processed. The processing of a routing block is typically relative to the delivery of the message containing the routing block. as an immediate result of processing a routing block a new message is generated for a routing block or a message for the current node.
 
 \subsection{Workspace Layout}
-The workspace itself contains payload blocks assigned to workspace IDs. The ID space is divided into three parts as shown in table~\ref{tab:workspaceId}.
+The workspace itself contains payload blocks assigned to workspace IDs. The ID space is divided into three parts as shown in \cref{tab:workspaceId}.
 
 \begin{table*}[ht]\centering\tiny
 	%\setlength{\aboverulesep}{0pt}
@@ -667,7 +664,7 @@ In this section we focus on the operations carried out by a routing layer on eac
 
 A message extracted by the blending layer is passed to the routing layer for further processing. The source of the message (e.g., protocol of the message or sender address) is irrelevant and discarded by the blending layer. 
 
-First step of the processing is the extraction of the identity. The identity can be found in the header block (see figure~\ref{fig:defInnerBlocks} $identityKey$) and then verified with the signature $identitySignature$ (figure~\ref{fig:defOuterBlocks})
+First step of the processing is the extraction of the identity. The identity can be found in the header block (see \cref{fig:defInnerBlocks} $identityKey$) and then verified with the signature $identitySignature$ (\cref{fig:defOuterBlocks})
 
 \begin{lstfloat}[ht]
 	\lstinputlisting[linerange={85-173},language=asn.1,multicols=2]{../../../../application-core-library/src/main/asn/MessageVortex-Schema.asn}
@@ -678,7 +675,7 @@ First step of the processing is the extraction of the identity. The identity can
 If verification is successful the message is authenticated but not necessarily ready for further processing. Unless the Header contains an identity creation request, next step is then the authorization for further processing. For proper authentication the following preconditions must be met:
 \begin{itemize}
 	\item Message must be outside a replay blocking intervall
-	\item The identity is not temporary (\ref{sec:newEID})
+	\item The identity is not temporary (\cref{sec:newEID})
 \end{itemize}
 
 If the identity is not temporary header requests are executed upon authorization. The only header request executed on a temporary \defref{eID} is a $createIdentity$ request. 
@@ -695,7 +692,7 @@ As soon as the header requests are executed, the content is processed. The opera
 \subsection{Processing of Outgoing Messages\label{sec:processingOutgoingMessages}}
 In this section, we focus on the creation of new messages sent to a next hop router. The message creation is triggered on a timed manner based on the content of the $RoutingCombo$ and then passed to the blending layer for blending.
 
-The processing of a sending block is triggered by a routing block in the workspace, as shown in figure~\ref{fig:msgSendProcessing}. The assembly instructions are processed to collect the payload blocks. Then the encryption is applied to the message and passed on to the blending layer for processing.
+The processing of a sending block is triggered by a routing block in the workspace, as shown in \cref{fig:msgSendProcessing}. The assembly instructions are processed to collect the payload blocks. Then the encryption is applied to the message and passed on to the blending layer for processing.
 
 \begin{figure*}[ht]
 	\centering
@@ -711,11 +708,11 @@ The message is assembled by building the $InnerMessageBlock$ with $cPrefix$, $he
 The resulting message is a valid \VortexMessage but the generating node has no relevant knowledge about the message or its content except for the recipient address.
 
 \subsection{Implementation of Operations\label{sec:implOperations}}
-In this section we focus on the implemented operations. The operations outlined in section~\ref{sec:operations} were implemented in exact the described manner. Additionally we implemented a mapping operation, copying the content of one payload ID to another one. The implementation and its test showed some weaknesses related to platform and implementation specifics, which are outlined further down.
+In this section we focus on the implemented operations. The operations outlined in \cref{sec:operations} were implemented in exact the described manner. Additionally we implemented a mapping operation, copying the content of one payload ID to another one. The implementation and its test showed some weaknesses related to platform and implementation specifics, which are outlined further down.
 
 For our implementation we used a HashMap to keep a list of all operations. Key of the HashMap is the output id of the resulting operations. Instead of proactively executing all operations to get all possible payload IDs, we build a dependency tree of all required prerequisites. A caching structure allows us to efficiently work with the results of all operations. If an operation expires, all cached output of the respecthive operations is invalidated. If a payload block expires or is overridden, all outputs taking input from this payload directly or indirectly are invalidated. This allows us to keep a very efficient and compact representation of the payload space not wasting any memory without necessity.
 
-The mapping operation became a necessity when defining the system of specialized IDs as outlined in table~\ref{tab:workspaceId}. This usage of specialized workspace IDs make the mapping of values from one  ID to another one a necessity. While theoretically doable in a two-step operation by applying an operation and its reverse, the mapping operation is far more efficient.
+The mapping operation became a necessity when defining the system of specialized IDs as outlined in \cref{tab:workspaceId}. This usage of specialized workspace IDs make the mapping of values from one  ID to another one a necessity. While theoretically doable in a two-step operation by applying an operation and its reverse, the mapping operation is far more efficient.
 
 Some operations showed weaknesses. The splitPayload Operation was mathematically well designed. Due to differences in floating point calculations (FP ops)when carried out on ARM and AMD based platforms, the result may differ when working with this operation. As an immediate result we defined that all FP ops must be carried out as specified in \cite{IEEE754}. This allows us to have exact the same output of the splitting operation on all platforms and thus a constant result. Luckily in java such behavior may be achieved by applying the \lstinline[columns=fixed,basicstyle={\normalsize}]{strictfp} keyword, which saved a lot of troubles and work.
 
@@ -728,7 +725,7 @@ In this section we focus on the handling of requests and the replies to requests
 
 In general any host may send a request to any other host. These requests normally involve the requirement for sender anonymity. The request itself is included in the \lstinline[columns=fixed,basicstyle=\normalsize]{HeaderBlock}. The reply block provided in $requestReplyBlock$.
 
-Requests are identified shown in figure~\ref{fig:defRequest}. The tagging of the requests is necessary to identify the request provided.
+Requests are identified shown in \cref{fig:defRequest}. The tagging of the requests is necessary to identify the request provided.
 
 \begin{lstfloat}[ht]
 	\lstinputlisting[linerange={9-18},language=asn.1]{../../../../application-core-library/src/main/asn/MessageVortex-Requests.asn}
@@ -790,7 +787,7 @@ The CPU bound puzzle is a hash based puzzle. The \VortexNode{} provides a bit st
 The second approach has a huge downside: A DoS attack is feasible. Given the fact that we need to store the key (1KB max) , the date and time of expiry 4 bytes (epoch), and the bit sequence (up to 8 bytes). Means that we require millions of requests to flood a host. Since the keys do not need to be strong (an adversary does not intend to use them; It is just a DoS attack), this attack is doable with considerable efforts. This is why we favor the first approach.
 
 \subsection{Replacing an Existing Node Specification or Proving a Sender Identity\label{sec:replaceID}}
-As users tend to change transport layer addresses, keys might become insecure, or transport services are no longer available, we need means of upgrading keys or replacing them with newer transport addresses. This may be done with a $HeaderRequestReplaceIdentity$ request as shown in figure~\ref{fig:reqReplaceIdentity}. This request allows in a cryptographically secured way to exchange keys and transport endpoints by the respective owners.
+As users tend to change transport layer addresses, keys might become insecure, or transport services are no longer available, we need means of upgrading keys or replacing them with newer transport addresses. This may be done with a $HeaderRequestReplaceIdentity$ request as shown in \cref{fig:reqReplaceIdentity}. This request allows in a cryptographically secured way to exchange keys and transport endpoints by the respective owners.
 
 \begin{lstfloat}[ht]
 	\lstinputlisting[linerange={23-30},language=asn.1]{../../../../application-core-library/src/main/asn/MessageVortex-Requests.asn}
@@ -828,7 +825,7 @@ The $puzz[]$ list with $requestHeaders$ is only required if relying on random us
 
 The last list to be kept is the list for replay protection $Replay[]$. This list is a list of serials and their remaining usages is an effective replay protection. A serial is only allowed to be processed if the serial has not reached the maximum number of replays. As a header block has typically only a limited lifespan this is a very short list. Flooding is not very effective as a host may limit the number of entries in this list. The only identity suffering from that measure would be the identity assigned to the serial as serials from this \defref{eID} would suffer incomplete replay protection and thus endanger its quotas and .
 
-In table \ref{tab:protoReplyCrit}, we show under what circumstances a reply to a header request should be sent. The capitalized words MAY, MUST, SHOULD, and SHOULD NOT are used as defined in RFC2119\cite{rfc2119}. 
+In \cref{tab:protoReplyCrit}, we show under what circumstances a reply to a header request should be sent. The capitalized words MAY, MUST, SHOULD, and SHOULD NOT are used as defined in RFC2119\cite{rfc2119}. 
 \begin{table*}[ht]
 	\centering\scriptsize
 	\begin{tabular}{|l|l|l|l|l|}\hline
@@ -894,7 +891,7 @@ When receiving messages by mail things get quickly more complex. For our experim
 Such a store would have huge benefits compared to the current solution. It would allow a unified storage and offering simultaneous access for multiple devices. The problems to be solved are numerous. We need a unified storage for configurations including \defref{eID}s and workspaces. Furthermore, we need a lock to avoid concurrency issues with simulatneously running \VortexNodes{}. The unified view requires intelligence so that it is able to keep all \VortexMessages{} on the transport layer account  whereas ordinary emails are kept on the respective account. The housekeeping of the transport layer account needs to be done in a credible way. 
 
 \chapter{Efficiency Related Implementation Details}
-In the following subsection we focus on the storage management of \VortexNodes{}. As they do run on mobile and similar devices, an adequate ressource consumption is essential for our system. We mainly focus on memory and CPU consumptions. Network bandwith overhead and their related problems are discussed in part~\ref{sec:analysis}.
+In the following subsection we focus on the storage management of \VortexNodes{}. As they do run on mobile and similar devices, an adequate ressource consumption is essential for our system. We mainly focus on memory and CPU consumptions. Network bandwith overhead and their related problems are discussed in \cref{sec:analysis}.
 
 \section{Node Storage Management}
 In most mobile devices storage is very limited. This applies to the disk storage, but is exceptionally true for the RAM of such devices. Our protocol supports minimization of storage footpints in two ways.
@@ -922,7 +919,7 @@ The \texttt{ReplyCapability} as shown in listing~\ref{lst:defCapabilityReply} al
 \subsection{Storage Management of Ephemeral Identities,  Operations, and Payload Blocks}
 The ephemeral identity (\defref{eID}) is the overarching unit of a users data. In a normal message server it may be comparable with the storage required for the queues. Unlike a message queue, \VortexMessages{} are not only kept until sent. \VortexMessages{} have different properties as we have a timed store-and-forward behavior. As a general rule, no data lives longer than its \defref{eID}.
 
-When an \defref{eID} is requested an absolute \texttt{UsagePeriod} (a timezone bound time) is specifies with an \texttt{AbsoluteUsagePeriod} is specified (see Figure~\ref{lst:defUsage}). Unless used for reply blocks (MURBs), \defref{eID} have a very limited lifespan of a couple hours. This minimizes any storage footprint associated with an \defref{eID}. 
+When an \defref{eID} is requested an absolute \texttt{UsagePeriod} (a timezone bound time) is specifies with an \texttt{AbsoluteUsagePeriod} is specified (see \cref{lst:defUsage}). Unless used for reply blocks (MURBs), \defref{eID} have a very limited lifespan of a couple hours. This minimizes any storage footprint associated with an \defref{eID}. 
 
 \begin{lstfloat}[ht]
 	\lstinputlisting[linerange={85-114},language=asn.1,multicols=2,basicstyle=\tiny]{../../../../application-core-library/src/main/asn/MessageVortex-Schema.asn}
@@ -932,17 +929,17 @@ When an \defref{eID} is requested an absolute \texttt{UsagePeriod} (a timezone b
 
 Every header block contains a relative and possibly an absolute \texttt{UsagePeriod}. A receiving node calculates a headers' lifespan by intersecting an absolute lifespan and a relative lifespan. All elements of a \VortexMessage{} inherit this lifespan. Therefore, payload blocks and operations as well as the routing blocks expire simultaneously within a workspace.
 
-Furthermore, A node signals additional boundaries in the CapabilityReplyBlock (see Figure~\ref{lst:defCapabilityReply}). with this block, a \VortexNode{} may limit the storage required even further. By specifying low boundaries for the maximum simultaneously usable payload blocks in a workspace and their maximum size, we can effectively limit the size of the payload data of a single workspace. The number of simultaneously active operations is similarly limited by specifying \texttt{maxBuildOps}.
+Furthermore, A node signals additional boundaries in the CapabilityReplyBlock (see \cref{lst:defCapabilityReply}). with this block, a \VortexNode{} may limit the storage required even further. By specifying low boundaries for the maximum simultaneously usable payload blocks in a workspace and their maximum size, we can effectively limit the size of the payload data of a single workspace. The number of simultaneously active operations is similarly limited by specifying \texttt{maxBuildOps}.
 
 \subsection{Life-cycle of Requests}
 Requests have a separate livecycle. As a Request may exist prior to a corresponding workspace, which is typically assigned to a proof of work, such requests may be subject of DoS attacks by flooding the memory of a node. All requests immediately executed have no direct memory requirements. However, requests containing a PoW cycle require to maintain the state. 
 
-While this is considered a minor issue as it is very likely that nodes will first collapse due to their network load, we can still address this issue by using a secret generator instead of a list based as outlined in section~\ref{sec:newEID}. By using such a generator, we minimize the impact of a very sudden increase in requests while keeping the local memory requirements to an absolute minimum. 
+While this is considered a minor issue as it is very likely that nodes will first collapse due to their network load, we can still address this issue by using a secret generator instead of a list based as outlined in \cref{sec:newEID}. By using such a generator, we minimize the impact of a very sudden increase in requests while keeping the local memory requirements to an absolute minimum. 
 
 %\section{Overhead Minimization in Message}
 %\fxwarning{complete section}
-%
-%\section{Minimizing the Memory Footprint of Transactions}
-%\fxwarning{complete section}
+
+\subsection{Minimizing the Memory Footprint of Transactions}
+\fxwarning{complete section}
 
 

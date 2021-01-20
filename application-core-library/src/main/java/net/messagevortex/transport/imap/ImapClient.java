@@ -35,7 +35,6 @@ import java.util.logging.Logger;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.sasl.Sasl;
 import javax.security.sasl.SaslClient;
-
 import net.messagevortex.MessageVortexLogger;
 import net.messagevortex.transport.ClientConnection;
 import net.messagevortex.transport.Credentials;
@@ -45,32 +44,32 @@ import net.messagevortex.transport.SecurityContext;
 import org.bouncycastle.util.encoders.Base64;
 
 public class ImapClient extends ClientConnection {
-
+  
   private static final String REGEXP_IMAP_OK = "\\s+OK.*";
   private static final String REGEXP_IMAP_BAD = "\\s+BAD.*";
-
+  
   private static final Logger LOGGER;
-
+  
   static {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
     LOGGER.setLevel(Level.FINEST);
-
+    
     java.security.Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
   }
-
-
+  
+  
   private final Object sync = new Object();
   private final Object notifyThread = new Object();
-
+  
   private String currentCommand = null;
   private String[] currentCommandReply = null;
   private boolean currentCommandCompleted = false;
-
+  
   public ImapClient(InetSocketAddress addr, SecurityContext secContext) throws IOException {
     super(addr, secContext);
     setProtocol("IMAP");
   }
-
+  
   /***
    * <p>Initiate a TLS handshake by issuing a STARTTLS command.</p>
    *
@@ -89,7 +88,7 @@ public class ImapClient extends ClientConnection {
       throw new IOException("Timeout while communicating with server", te);
     }
   }
-
+  
   /***
    * <p>Authenticate with the strongest offered authentication scheme.</p>
    *
@@ -104,7 +103,7 @@ public class ImapClient extends ClientConnection {
     // get best auth type supported
     return authenticate(creds, SaslMechanisms.DIGEST_MD5);
   }
-
+  
   /***
    * <p>Authenticate with the specified SASL mechanism.</p>
    *
@@ -116,12 +115,12 @@ public class ImapClient extends ClientConnection {
    */
   public boolean authenticate(Credentials creds, SaslMechanisms mech) throws TimeoutException {
     CallbackHandler clientHandler = new SaslClientCallbackHandler(creds);
-
+    
     Map<String, String> props = new HashMap<>();
     if (!isTls()) {
       props.put(Sasl.POLICY_NOPLAINTEXT, "true");
     }
-
+    
     try {
       String tag = ImapLine.getNextTag();
       writeln(tag + " AUTHENTICATE " + mech.toString());
@@ -136,7 +135,7 @@ public class ImapClient extends ClientConnection {
         // got bad challenge from server
         LOGGER.log(Level.WARNING, "Got a bad challenge from server (" + saslchallenge + ")");
         return false;
-      } else if (saslchallenge != null && saslchallenge.equals("+ ")) {
+      } else if (saslchallenge.equals("+ ")) {
         LOGGER.log(Level.INFO, "Got a empty challenge from server");
       } else {
         LOGGER.log(Level.INFO, "Got a challenge from server (" + saslchallenge + ")");
@@ -159,7 +158,7 @@ public class ImapClient extends ClientConnection {
       return false;
     }
   }
-
+  
   /***
    * <p>Send a command to an IMAP server.</p>
    *
@@ -172,7 +171,7 @@ public class ImapClient extends ClientConnection {
   public String[] sendCommand(String command) throws TimeoutException {
     return sendCommand(command, getTimeout());
   }
-
+  
   /***
    * <p>Send a command to an IMAP server.</p>
    *
@@ -220,14 +219,14 @@ public class ImapClient extends ClientConnection {
               + ImapLine.commandEncoder(currentCommandReply[currentCommandReply.length - 1])
               + "\" as reply from server (" + currentCommandReply.length + ")");
     }
-    return currentCommandReply;
+    return currentCommandReply.clone();
   }
-
+  
   private void interruptedCatcher(InterruptedException ie) {
     assert false : "This Point should never be reached (" + ie.toString() + ")";
     Thread.currentThread().interrupt();
   }
-
+  
   private void waitForWakeupRunner() {
     synchronized (notifyThread) {
       try {
@@ -237,17 +236,17 @@ public class ImapClient extends ClientConnection {
       }
     }
   }
-
+  
   public void processLine(String line) throws IOException, TimeoutException {
     processLine(line, getTimeout());
   }
-
+  
   private void processLine(String line, long timeout) throws IOException, TimeoutException {
     currentCommand = line;
     LOGGER.log(Level.INFO, "IMAP C->S: " + ImapLine.commandEncoder(currentCommand));
     final long start = System.currentTimeMillis();
     writeln(currentCommand, timeout);
-
+    
     String tag = null;
     ImapLine il = null;
     try {
@@ -282,10 +281,10 @@ public class ImapClient extends ClientConnection {
     synchronized (sync) {
       sync.notifyAll();
     }
-
+    
     LOGGER.log(Level.FINEST, "command has been completely processed");
   }
-
+  
   private void runStep() throws IOException, TimeoutException {
     LOGGER.log(Level.INFO, "Waiting for command to process");
     startTls();
@@ -296,7 +295,7 @@ public class ImapClient extends ClientConnection {
     }
     LOGGER.log(Level.FINEST, "Client looping (shutdown=" + isShutdown() + ")");
   }
-
+  
   /***
    * <p>the processing methode of the running thread.</p>
    *
@@ -304,7 +303,7 @@ public class ImapClient extends ClientConnection {
    * FIXME: move to a private runner.
    */
   public void run() {
-
+    
     try {
       while (!isShutdown()) {
         runStep();

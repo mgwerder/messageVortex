@@ -34,6 +34,15 @@ public class CommandLineHandlerIdentityStoreDel implements Callable<Integer> {
           description = "the identity address")
   String[] nodeAddress;
 
+  /**
+   * <p>Commandline handler to remove an identity from an identity store.</p>
+   *
+   * <p>Use java -jar MessageVortex.jar identitystore removeIdentity --help to get all supported
+   * parameters.</p>
+   *
+   * @return the error level to be returned
+   * @throws Exception if anything goes wrong
+   */
   @Override
   public Integer call() throws Exception {
     // load store

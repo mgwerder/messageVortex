@@ -99,17 +99,13 @@ BEGIN
   }
 
   CipherMode ::= ENUMERATED {
-    -- ECB is a really bad choice. Do not use unless 
-	-- really necessary and you are sure that the 
-	-- content is already encrypted
-    ecb           (10000), -- optional support
-    cbc           (10001), -- required
-    eax           (10002), -- optional support
-    ctr           (10003), -- required
-    ccm           (10004), -- optional support
-    gcm           (10005), -- optional support
-    ocb           (10006), -- optional support
-    ofb           (10007), -- optional support
+    cbc           (10000), -- required
+    ctr           (10001), -- required
+    ccm           (10002), -- optional support
+    gcm           (10003), -- optional support
+    ocb           (10004), -- optional support
+    ofb           (10005), -- optional support
+    xts           (10006), -- optional support
     none          (10100)  -- required
   }
 

@@ -45,21 +45,21 @@ import net.messagevortex.transport.Transport;
 import net.messagevortex.transport.TransportReceiver;
 
 public class DummyTransportTrx extends AbstractDaemon implements Transport {
-
+  
   private static final Logger LOGGER;
-
+  
   static {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
-
+  
   private static Map<String, String> idReservation = null;
   private static final Object mon = new Object();
   private static boolean localMode = false;
-
+  
   static Map<String, TransportReceiver> endpoints = new HashMap<>();
   private static String name = null;
   private String registeredEndpoint = null;
-
+  
   /**
    * <p>Constructor to set up a dummy endpoint with named id and blender.</p>
    *
@@ -79,9 +79,9 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
     init(id, blender);
     LOGGER.log(Level.INFO, "setup of dummy endpoint for section \"" + section + "\" done");
   }
-
+  
   /**
-   * <p>Sets the name of the cluster instance</p>
+   * <p>Sets the name of the cluster instance.</p>
    *
    * @param newName the new Name of the instance to connect to.
    * @throws IOException if the cluster is already initialized
@@ -95,7 +95,7 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
       }
     }
   }
-
+  
   /**
    * <p>Constructor to set up a dummy endpoint with named id and blender.</p>
    *
@@ -106,7 +106,7 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
   public DummyTransportTrx(String id, TransportReceiver blender) throws IOException {
     init(id, blender);
   }
-
+  
   /**
    * Constructor to create an endpoint with a random id.
    *
@@ -123,7 +123,7 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
       init(id, blender);
     }
   }
-
+  
   private void initCluster() throws IOException {
     synchronized (mon) {
       if (idReservation == null) {
@@ -131,8 +131,9 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
           // set an instance name
           name = InetAddress.getLocalHost().getHostName();
         }
-
-        HazelcastInstance hz = Hazelcast.getOrCreateHazelcastInstance(new com.hazelcast.config.Config(name));
+        
+        HazelcastInstance hz =
+                Hazelcast.getOrCreateHazelcastInstance(new com.hazelcast.config.Config(name));
         if (localMode) {
           idReservation = hz.getMap("dummyTransportTrxEndpoints");
         } else {
@@ -141,7 +142,7 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
       }
     }
   }
-
+  
   /**
    * <p>Set local only mode for dummy transport.</p>
    *
@@ -160,7 +161,7 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
     }
     return old;
   }
-
+  
   private void init(String id, TransportReceiver blender) throws IOException {
     initCluster();
     synchronized (endpoints) {
@@ -174,7 +175,7 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
       endpoints.put(id, blender);
     }
   }
-
+  
   @Override
   public void shutdownDaemon() {
     // deregister endpoint
@@ -190,20 +191,23 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
         for (String key : l) {
           String hostname = idReservation.remove(key);
           if (hostname != null && hostname.equals(InetAddress.getLocalHost().getHostName())) {
-            LOGGER.log(Level.FINE, "successfully deregistered id " + registeredEndpoint + " from dummy transport");
+            LOGGER.log(Level.FINE, "successfully deregistered id " + registeredEndpoint
+                    + " from dummy transport");
           } else {
-            LOGGER.log(Level.SEVERE, "OUCH... for some reasons this endpoint was registered to a different host (" + hostname + "). It is unclear if your system is still working properly.");
+            LOGGER.log(Level.SEVERE, "OUCH... for some reasons this endpoint was registered to"
+                    + " a different host (" + hostname + "). It is unclear if your system is still"
+                    + " working properly.");
           }
         }
-
+        
       } catch (UnknownHostException uhe) {
         LOGGER.log(Level.SEVERE, "OUCH... got exception while fetching own host name.", uhe);
       }
     }
-
+    
     super.shutdownDaemon();
   }
-
+  
   /**
    * <p>send a message to another dummy endpoint.</p>
    *
@@ -226,7 +230,7 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
       bab.append(buffer, n);
     }
     is.close();
-
+    
     // send byte array as input stream to target
     byte[] arr = bab.toBytes();
     LOGGER.log(Level.INFO, "Dummy transport received " + arr.length + " sized message");
@@ -241,7 +245,7 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
       }.start();
     }
   }
-
+  
   /**
    * <p>Remove all Dummy endpoints from the main listing.</p>
    */

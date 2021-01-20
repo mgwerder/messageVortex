@@ -8,8 +8,19 @@ import net.messagevortex.asn1.encryption.DumpType;
 import net.messagevortex.blender.BlenderContent;
 
 
+/**
+ * An academic generator creating readable identifiable messages for scientific purposes.
+ */
 public class AcademicGenerator implements BlenderGenerator {
-
+  
+  /**
+   * <p>create an ASN.1 representation as blending text containing all possible
+   * data in unencrypted, readable form.</p>
+   *
+   * @param parameter the lending parameters to use
+   * @param msg the message to encode
+   * @return the blended message
+   */
   @Override
   public BlenderContent getBlenderContent(BlendingParameter parameter, VortexMessage msg) {
     BlenderContent cont = new BlenderContent();
