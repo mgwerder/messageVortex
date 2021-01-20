@@ -22,18 +22,9 @@ package net.messagevortex.router;
 // * SOFTWARE.
 // ************************************************************************************
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Shape;
-import java.awt.Stroke;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -41,10 +32,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.imageio.ImageIO;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-import javax.swing.ToolTipManager;
+import javax.swing.*;
 import net.messagevortex.asn1.IdentityStore;
 import net.messagevortex.asn1.IdentityStoreBlock;
 import net.messagevortex.asn1.encryption.DumpType;
@@ -68,6 +56,8 @@ public class JGraph extends JPanel implements MouseListener {
   private int route = 0;
 
   private GraphSet graph;
+
+  private TooltipContainer ttContainer = new TooltipContainer();
 
   /***
    * <p>Creates a graph with the specified set.</p>
@@ -138,8 +128,12 @@ public class JGraph extends JPanel implements MouseListener {
     Stroke s2 = new BasicStroke(3);
 
     int lastY = 0;
-    System.out.println("## displaying route " + this.route + " (" + routes[this.route].size()
+    if(this.route>=0) {
+      System.out.println("## displaying route " + this.route + " (" + routes[this.route].size()
         + ")");
+    } else {
+      System.out.println("## no route set");
+    }
     for (int i = 0; i < graph.size(); i++) {
       Edge gr = graph.get(i);
       int x1 = (int) (X_OFFSET + (double) BOX_WIDTH / 2 + graph.getAnonymityIndex(gr.getFrom())
@@ -148,9 +142,9 @@ public class JGraph extends JPanel implements MouseListener {
           * horizontalSpace);
       int y = (int) (Y_OFFSET + 2 * BOX_HEIGHT + i * verticalSpace);
 
-      if (routes[this.route].contains(gr)) {
+      if (this.route>=0 && routes[this.route].contains(gr)) {
         System.out.println("##   route " + this.route + " contains " + i + " ("
-            + routes[this.route].size() + "/" + gr.getStartTime() + ")");
+            + (this.route<0?"none":routes[this.route].size()) + "/" + gr.getStartTime() + ")");
         g2.setColor(Color.GREEN);
         g2.setStroke(s2);
         if (lastY > 0) {
@@ -210,27 +204,17 @@ public class JGraph extends JPanel implements MouseListener {
    */
   @Override
   public String getToolTipText(MouseEvent event) {
-    Point p = new Point(event.getX(), event.getY());
-    String t = tooltipForCircle(p, new Ellipse2D.Double(0, 0, 20, 20));
-    if (t != null) {
-      return t;
+    String t = ttContainer.getTooltipText(new Point(event.getX(), event.getY()));
+    if (t == null) {
+      t=super.getToolTipText(event);
     }
-    return "No location effective tooltip (x=" + event.getX() + "/y=" + event.getY() + ""
-        + super.getToolTipText(event);
-  }
-
-  private String tooltipForCircle(Point p, Ellipse2D circle) {
-    // Test to check if the point  is inside circle
-    if (circle.contains(p)) {
-      // p is inside the circle, we return some information
-      // relative to that circle.
-      return "Circle: (" + circle.getX() + " " + circle.getY() + ")";
-    }
-    return null;
+    return t;
   }
 
   /***
    * <p>Sets the highlighted route.</p>
+   *
+   * <p>The selected route is highlighted in the graph.</p>
    *
    * @param r the route to be highlighted
    * @return the prviously set route
@@ -238,7 +222,7 @@ public class JGraph extends JPanel implements MouseListener {
   public int setRoute(int r) {
     int s = graph.getRoutes().length;
     if (r < 0 || s <= r) {
-      throw new NullPointerException("unable to find adressed route r (0<=" + r + "<" + s + ")");
+      r=-1;
     }
     int old = this.route;
     this.route = r;
@@ -279,7 +263,10 @@ public class JGraph extends JPanel implements MouseListener {
       int y = getHeight() - Y_OFFSET - ROUTE_BORDER;
       tmp = tmp - (int) ((0.0 + pos) * 2 * horizontalSpace);
       if (e.getY() <= y + ROUTE_BORDER && e.getY() >= y && tmp < horizontalSpace) {
-        setRoute(Math.min(routes.length, pos));
+        int oldpos=setRoute(Math.min(routes.length, pos));
+        if(oldpos==pos) {
+          setRoute(-1);
+        }
       }
     }
   }
@@ -319,23 +306,27 @@ public class JGraph extends JPanel implements MouseListener {
     });
   }
 
-  private void createAndShowUserInterface() {
+  public void createAndShowUserInterface(int x, int y) {
     System.out.println("Created GUI on event dispatching thread? "
         + SwingUtilities.isEventDispatchThread());
     JFrame f = new JFrame("Edge Demo");
     f.add(this);
     f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    f.setSize(250, 250);
+    f.setSize(x, y);
     f.setVisible(true);
+  }
+
+  public void createAndShowUserInterface() {
+    createAndShowUserInterface(250,100);
   }
 
   /***
    * <p>gets an image of the current graph.</p>
+   * @param width the width of the screenshot in pixels
+   * @param height the height of the screenshot in pixels
    * @return the image
    */
-  public BufferedImage getScreenShot() {
-    int width = 1024;
-    int height = 768;
+  public BufferedImage getScreenShot(int width, int height) {
     BufferedImage image = new BufferedImage(
         width,
         height,
@@ -349,11 +340,13 @@ public class JGraph extends JPanel implements MouseListener {
   /***
    * <p>Writes a screenshot of the current graph into a jpeg file.</p>
    * @param filename name of the file to be written
+   * @param width the width of the screenshot in pixels
+   * @param height the height of the screenshot in pixels
    * @return the image object
    * @throws IOException when writing file
    */
-  public BufferedImage saveScreenShot(String filename) throws IOException {
-    BufferedImage image = getScreenShot();
+  public BufferedImage saveScreenshot(String filename, int width, int height) throws IOException {
+    BufferedImage image = getScreenShot(width,height);
     File outputfile = new File(filename);
     ImageIO.write(image, "jpg", outputfile);
     return image;

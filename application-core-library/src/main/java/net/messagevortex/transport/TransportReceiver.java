@@ -24,6 +24,7 @@ package net.messagevortex.transport;
 
 import java.io.InputStream;
 
+import java.io.Serializable;
 import net.messagevortex.RunningDaemon;
 
 /**

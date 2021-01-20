@@ -1,9 +1,11 @@
 out
+/tmp.*/**/*
 /app/.idea
 /app/messageVortex.iml
 /app/testfile_*
 /app/src/messageVortex.iml
 /app/*.cache
+/thesis/src/main/latex/biberentries/*.bib
 build
 api
 cobertura

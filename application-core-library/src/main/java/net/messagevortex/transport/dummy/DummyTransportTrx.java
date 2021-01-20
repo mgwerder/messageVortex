@@ -22,11 +22,17 @@ package net.messagevortex.transport.dummy;
 // * SOFTWARE.
 // ************************************************************************************
 
+import com.hazelcast.core.Hazelcast;
+import com.hazelcast.core.HazelcastInstance;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.messagevortex.AbstractDaemon;
@@ -46,7 +52,13 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
     LOGGER = MessageVortexLogger.getLogger((new Throwable()).getStackTrace()[0].getClassName());
   }
 
-  static final Map<String, TransportReceiver> endpoints = new HashMap<>();
+  private static Map<String, String> idReservation = null;
+  private static final Object mon = new Object();
+  private static boolean localMode = false;
+
+  static Map<String, TransportReceiver> endpoints = new HashMap<>();
+  private static String name = null;
+  private String registeredEndpoint = null;
 
   /**
    * <p>Constructor to set up a dummy endpoint with named id and blender.</p>
@@ -55,13 +67,33 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
    * @throws IOException if endpoint id is already defined
    */
   public DummyTransportTrx(String section) throws IOException {
-    LOGGER.log(Level.INFO, "setup of dummy endpoint for section \"" + section + "\" done");
+    initCluster();
+    LOGGER.log(Level.INFO, "setup of dummy endpoint for section \"" + section + "\"");
     String id = Config.getDefault().getStringValue(section, "transport_id");
     LOGGER.log(Level.INFO, "  id is \"" + id + "\"");
-    TransportReceiver blender = MessageVortex.getBlender(
-            Config.getDefault().getStringValue(section, "blender")
-    );
+    String blenderName = Config.getDefault().getStringValue(section, "blender");
+    LOGGER.log(Level.INFO, "  blender is \"" + blenderName + "\"");
+    TransportReceiver blender = MessageVortex.getBlender(blenderName);
+    LOGGER.log(Level.INFO, "  blender " + (blender != null ? "found" : "not found"));
+    LOGGER.log(Level.INFO, "  initializing transport");
     init(id, blender);
+    LOGGER.log(Level.INFO, "setup of dummy endpoint for section \"" + section + "\" done");
+  }
+
+  /**
+   * <p>Sets the name of the cluster instance</p>
+   *
+   * @param newName the new Name of the instance to connect to.
+   * @throws IOException if the cluster is already initialized
+   */
+  public static void setClusterName(String newName) throws IOException {
+    synchronized (mon) {
+      if (idReservation == null) {
+        name = newName;
+      } else {
+        throw new IOException("Cluster is already initialized");
+      }
+    }
   }
 
   /**
@@ -82,30 +114,103 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
    * @throws IOException if therad problems occure
    */
   public DummyTransportTrx(TransportReceiver blender) throws IOException {
+    initCluster();
     synchronized (endpoints) {
       String id = null;
-      while (id == null || endpoints.containsKey(id)) {
+      while (id == null || idReservation.containsKey(id)) {
         id = RandomString.nextString(5, "0123456789abcdef@example.com");
       }
       init(id, blender);
     }
   }
 
-  private void init(String id, TransportReceiver blender) throws IOException {
-    synchronized (endpoints) {
-      if (endpoints.containsKey(id)) {
-        throw new IOException("Duplicate transport endpoint identifier (id:" + id + ")");
+  private void initCluster() throws IOException {
+    synchronized (mon) {
+      if (idReservation == null) {
+        if (name == null) {
+          // set an instance name
+          name = InetAddress.getLocalHost().getHostName();
+        }
+
+        HazelcastInstance hz = Hazelcast.getOrCreateHazelcastInstance(new com.hazelcast.config.Config(name));
+        if (localMode) {
+          idReservation = hz.getMap("dummyTransportTrxEndpoints");
+        } else {
+          idReservation = new HashMap<>();
+        }
       }
-      endpoints.put(id, blender);
     }
   }
 
   /**
-   * send a message to another dummy endpoint.
+   * <p>Set local only mode for dummy transport.</p>
+   *
+   * @param lm true if localmode is set
+   * @return old state of local mode
+   * @throws IOException if cluster is already inited
+   */
+  public static boolean setLocalMode(boolean lm) throws IOException {
+    boolean old = localMode;
+    synchronized (mon) {
+      if (idReservation == null) {
+        localMode = lm;
+      } else {
+        throw new IOException("Cluster is already initialized");
+      }
+    }
+    return old;
+  }
+
+  private void init(String id, TransportReceiver blender) throws IOException {
+    initCluster();
+    synchronized (endpoints) {
+      if (idReservation.containsKey(id)) {
+        throw new IOException("Duplicate transport endpoint identifier (id:" + id + ")");
+      }
+      String host = InetAddress.getLocalHost().getHostName();
+      LOGGER.log(Level.INFO, "Registering " + id + " to node " + host);
+      idReservation.put(id, host);
+      registeredEndpoint = id;
+      endpoints.put(id, blender);
+    }
+  }
+
+  @Override
+  public void shutdownDaemon() {
+    // deregister endpoint
+    synchronized (idReservation) {
+      try {
+        // Remove all identities
+        List<String> l = new Vector<>();
+        for (Map.Entry<String, String> e : idReservation.entrySet()) {
+          if (e.getValue().equals(InetAddress.getLocalHost().getHostName())) {
+            l.add(e.getKey());
+          }
+        }
+        for (String key : l) {
+          String hostname = idReservation.remove(key);
+          if (hostname != null && hostname.equals(InetAddress.getLocalHost().getHostName())) {
+            LOGGER.log(Level.FINE, "successfully deregistered id " + registeredEndpoint + " from dummy transport");
+          } else {
+            LOGGER.log(Level.SEVERE, "OUCH... for some reasons this endpoint was registered to a different host (" + hostname + "). It is unclear if your system is still working properly.");
+          }
+        }
+
+      } catch (UnknownHostException uhe) {
+        LOGGER.log(Level.SEVERE, "OUCH... got exception while fetching own host name.", uhe);
+      }
+    }
+
+    super.shutdownDaemon();
+  }
+
+  /**
+   * <p>send a message to another dummy endpoint.</p>
+   *
+   * <p>FIXME: This only works for local messages</p>
    *
    * @param address the string representation of the target address on the transport layer
    * @param is      the input stream to be sent
-   *
    * @throws IOException if requested endpoint id is unknown
    */
   public void sendMessage(final String address, InputStream is) throws IOException {
@@ -127,8 +232,8 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
     LOGGER.log(Level.INFO, "Dummy transport received " + arr.length + " sized message");
     final InputStream iso = new ByteArrayInputStream(arr);
     synchronized (endpoints) {
+      // create new thread for message processing
       new Thread() {
-
         @Override
         public void run() {
           ep.gotMessage(iso);
@@ -143,6 +248,8 @@ public class DummyTransportTrx extends AbstractDaemon implements Transport {
   public static void clearDummyEndpoints() {
     synchronized (endpoints) {
       endpoints.clear();
+      idReservation = null;
+      name = null;
     }
   }
 }

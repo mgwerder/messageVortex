@@ -1,0 +1,90 @@
+<?xml version="1.0" standalone="no"?>
+<!-- Creator: fig2dev Version 3.2.6a -->
+<!-- CreationDate: 2019-02-21 07:33:51 -->
+<!-- Magnification: 1.05 -->
+<svg	xmlns="http://www.w3.org/2000/svg"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	width="475pt" height="465pt"
+	viewBox="817 593 7531 7378">
+<desc> Created by WinFIG version 7.5 </desc>
+<desc> METADATA <version>1.0</version> </desc>
+<g fill="none">
+<!-- Ellipse -->
+<!--  METADATA <id>19</id>  -->
+<ellipse cx="4425" cy="3660" rx="3600" ry="802"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Ellipse -->
+<!--  METADATA <id>20</id>  -->
+<ellipse cx="4230" cy="6585" rx="3157" ry="1380"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Ellipse -->
+<!--  METADATA <id>21</id>  -->
+<ellipse cx="4710" cy="1402" rx="3630" ry="802"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Line -->
+<!--  METADATA <id>8</id>  -->
+<!--  METADATA <link srcPointIdx=0 targetObjId=21 targetLeftPointIdx=-1/>  -->
+<defs>
+<clipPath id="cp0">
+	<path clip-rule="evenodd" d="M 817,593 H 8348 V 7971 H 817 z
+		M 4473,2715 4413,2713 4433,2857 4447,2857z"/>
+</clipPath>
+</defs>
+<polyline points=" 4456,2202 4440,2850" clip-path="url(#cp0)"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Forward arrow to point 4440,2850 -->
+<polygon points=" 4413,2713 4440,2834 4473,2715 4413,2713"
+	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
+<!-- Line -->
+<!--  METADATA <id>11</id>  -->
+<!--  METADATA <link srcPointIdx=0 targetObjId=19 targetLeftPointIdx=-1/>  -->
+<!--  METADATA <link srcPointIdx=1 targetObjId=20 targetLeftPointIdx=-1/>  -->
+<defs>
+<clipPath id="cp1">
+	<path clip-rule="evenodd" d="M 817,593 H 8348 V 7971 H 817 z
+		M 4308,5069 4248,5068 4268,5212 4282,5212z"/>
+</clipPath>
+</defs>
+<polyline points=" 4290,4461 4275,5205" clip-path="url(#cp1)"
+	stroke="#000000" stroke-width="8px"/>
+<!-- Forward arrow to point 4275,5205 -->
+<polygon points=" 4248,5068 4275,5189 4308,5069 4248,5068"
+	stroke="#000000" stroke-width="8px" stroke-miterlimit="8" fill="#000000"/>
+<!-- Text -->
+<!--  METADATA <id>2</id>  -->
+<text xml:space="preserve" x="1665" y="1395" fill="#000000" font-family="Times" font-style="normal" font-weight="normal" font-size="168" text-anchor="start">Incoming Message</text>
+<!-- Text -->
+<!--  METADATA <id>5</id>  -->
+<text xml:space="preserve" x="1695" y="3593" fill="#000000" font-family="Times" font-style="normal" font-weight="normal" font-size="168" text-anchor="start">Unauthenticated VortexMessage</text>
+<!-- Text -->
+<!--  METADATA <id>7</id>  -->
+<text xml:space="preserve" x="1928" y="6047" fill="#000000" font-family="Times" font-style="normal" font-weight="normal" font-size="168" text-anchor="start">Authenticated VortexMessage</text>
+<!-- Text -->
+<!--  METADATA <id>12</id>  -->
+<text xml:space="preserve" x="1920" y="3848" fill="#000000" font-family="Times" font-style="normal" font-weight="normal" font-size="168" text-anchor="start">- process newIdentity request (if any)</text>
+<!-- Text -->
+<!--  METADATA <id>13</id>  -->
+<text xml:space="preserve" x="2153" y="6497" fill="#000000" font-family="Times" font-style="normal" font-weight="normal" font-size="168" text-anchor="start">- process all remaining header requests (if any)</text>
+<!-- Text -->
+<!--  METADATA <id>14</id>  -->
+<text xml:space="preserve" x="2138" y="6737" fill="#000000" font-family="Times" font-style="normal" font-weight="normal" font-size="168" text-anchor="start">- Replace current replyBlock (if any)</text>
+<!-- Text -->
+<!--  METADATA <id>15</id>  -->
+<text xml:space="preserve" x="2138" y="6992" fill="#000000" font-family="Times" font-style="normal" font-weight="normal" font-size="168" text-anchor="start">- Add routing blocks to workspace</text>
+<!-- Text -->
+<!--  METADATA <id>16</id>  -->
+<text xml:space="preserve" x="2138" y="7217" fill="#000000" font-family="Times" font-style="normal" font-weight="normal" font-size="168" text-anchor="start">- Add pyload blocks to workspace</text>
+<!-- Text -->
+<!--  METADATA <id>17</id>  -->
+<text xml:space="preserve" x="2138" y="6287" fill="#000000" font-family="Times" font-style="normal" font-weight="normal" font-size="168" text-anchor="start">- Extract rest of VortexMessage</text>
+<!-- Text -->
+<!--  METADATA <id>18</id>  -->
+<text xml:space="preserve" x="1920" y="1665" fill="#000000" font-family="Times" font-style="normal" font-weight="normal" font-size="168" text-anchor="start">- Extract start of VortexMessage (up to header block)</text>
+<!-- Text -->
+<!--  METADATA <id>22</id>  -->
+<text xml:space="preserve" x="4380" y="4935" fill="#000000" font-family="Times" font-style="normal" font-weight="normal" font-size="168" text-anchor="start">Authentication</text>
+<!-- Text -->
+<!--  METADATA <id>23</id>  -->
+<text xml:space="preserve" x="4515" y="2625" fill="#000000" font-family="Times" font-style="normal" font-weight="normal" font-size="168" text-anchor="start">Header extration</text>
+</g>
+</svg>

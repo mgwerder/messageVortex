@@ -1,0 +1,140 @@
+%!TeX program=pdflatex
+%!TeX encoding=utf8
+%!TeX spellcheck = en_US
+%!TeX root = ../../messageVortex.tex
+
+\part{Introduction}
+\chapter{Foreword}
+Almon Brown Strowger was the owner of a funeral parlor in St. Petersburg. He filed a patent on March \nth{10}, 1891 for an ``Automatic Telephone Exchange'' \cite{pulseDialingPatent}. This patent built the base for modern automated telephone systems. According to several sources, he was annoyed by the fact that the local telephone operator was married to another undertaker. She diverted potential customers of Mr. Strowger to her husband instead, which caused Almon B. Strowger to lose business. In 1922, this telephone dialing system, which is nowadays called pulse dialing, became the standard dialing technology for more than 70 years until tone dialing replaced it.
+
+This dialing technology is the base for automatic messaging for voice and text messages (e.g., telex) up until today and is the foundation for current routed networks. These networks build the base for our communication-based Society these days and allow us to connect quickly with any person or company of our wish. We use these networks today as communication meaning for all purposes, and most of the people spend minimal thoughts on the possible consequences arising if someone puts hands on this communication. 
+
+This collected data may be used to judge our intentions and thus is not only confidential if we have something to hide. This problem has dramatically increased in the last years as big companies and countries started to collect all kinds of data and created the means to process them. It allows supposedly to judge peoples not only on what they are doing but as well, on what they did and what they might do. Numerous events past and present show that actors, some of which are state-sponsored, collected data on a broad base within the Internet. Whether this is a problem or not is a disputable fact. Undisputed is, however, that such data requires careful handling, and accusations should then base on solid facts. While people may classify personalized advertising as legit use, a general classification of citizens is broadly considered unacceptable\cite{NCR2013,XKeyscore,Ball2013,Greenberg2013,Leuenberger1989}.
+
+To show that this may happen even in democracies, we might refer to events such as the ``secret files scandal'' (or  ``Fichenskandal'') in Switzerland. In the years from 1900 to 1990 Swiss government collected 900’000 files in a secret archive (covering more than 10\% of the natural and juristic entities within Switzerland at that time). The Swiss Federal Archives document this event in depth\cite{Leuenberger1989}.
+
+Whistleblower Edward Snowden leaked a vast amount of documents. These documents suggest that such attacks on privacy are commonly made on a global scale. The documents leaked in 2009 by him claim that there was a data collection starting in 2010. Since these documents are not publicly available, it is hard proving the claims based on these documents. However -- A significant number of journalists from multiple countries screened these documents claiming that the information seems credible. According to these documents (verified by \href{http://www.nrc.nl/nieuws/2013/11/23/nederland-sinds-1946-doelwit-van-nsa}{NRC}), NSA infiltrated more than 50k computers with malware to collect classified or personal information. They furthermore infiltrated Telecom-Operators (mainly executed by British GCHQ) such as Belgacom to collect data and targeted high members of governments even in associated states (such as the mobile phone number of Germany's president) \cite{NCR2013,XKeyscore,Ball2013,Ackerman2013,Greenberg2013}. A later published shortened list of ``selectors'' in Germany showed 68 telephone and fax numbers targeting economy, finance, and agricultural parts of the German government. A global survey done by the freedom house\cite{FOTN2018} claims a decrease in Internet freedom for the \th{8} year in a row. 
+
+This list of events shows that big players are collecting and storing vast amounts of data for analysis or possible future use. The list of events also shows that the use of such data was at least partially questionable. This work analyses the possibility of using state-of-the-art technology to minimize the information footprint of a person on the Internet. 
+
+We leave a large information footprint in our daily communication. On a regular email, we disclose everything in an ``postcard'' to any entity on its way. Even when encrypting a message perfectly with today's technology (S/MIME\cite{RFC2045} or PGP\cite{RFC2015}), it still leaves at least the originating and the receiving entity disclosed, or we rely on the promises of a third party provider which offers a proprietary solution. Even in those cases, we leak pieces of information such as ``message subject'', ``frequency of exchanged messages'', ``size of messages'', or ``client being used''. A suitable anonymity protocol must cover more than the sent message itself. It includes, besides the message itself, all metadata, and all the traffic flows. Furthermore, a protocol to anonymize messages should not rely on the trust of infrastructure other than the infrastructure under control of the sending or receiving entity. Trust in any third party might be misleading in terms of security or privacy.
+
+Furthermore, central infrastructure is bound to be of particular interest to anyone gathering data. Such control by an adversary would allow manipulating the system or the data or the data flow. So, avoiding a central infrastructure is a good thing when it comes to minimizing an information footprint available to a single entity.
+
+Leaving no information trail when sending information from one person to another is hard to achieve. Most messaging systems disclose at least the peer partners when posting messages. Metadata such as starting and endpoints, frequency, or message size are leaked in all standard protocols even when encrypting messages.
+
+Allowing an entity to collect data may affect senders and recipients of any information. The collection of vast amounts of data allows a potent adversary to build a  profile of a person. Unlike in the past, the availability of information has risen to a never known extent with the Internet.
+
+An entity in possession of such Profiles may use them for many purposes. These include service adoption, directed advertising, or classification of citizens. The examples given above show that the effects of this data is not limited to the Internet but reaches us effectively in the real world.
+
+The main problem of this data is that it may be collected over a considerable amount of time and evaluated at any time. It even happened that standard practices at a time are differently judged upon at a later time. Persons may then be judged retrospectively upon these types of practice. This questionable type of judgment is visible in the tax avoidance discussion\cite{Amat1999}. 
+
+People must be able to control their data footprint. Not providing these means does effectively allow any country or a more prominent player to ban and control any number of persons within or outside the Internet. 
+
+We design in this work a new protocol. This protocol allows message transfer through existing communication channels. These messages are next to unobservable to any third party. This unobservability does not only cover the message itself but all metadata and flows associated with it. We called this protocol ``\emph{MessageVortex}'' or just ``\emph{Vortex}''. The protocol is capable of using a wide variety of transport protocols. It is even possible to switch protocols while the messages are in the transfer. This behavior allows media breaches (at least on a protocol level) and makes the analysis even harder.
+
+The new protocol allows secure communication without the need to trust the underlying transport media. Furthermore, the usage of the protocol itself is possible without altering the immediate behavior of the transport layer. The transport layers' regular traffic does, therefore, increase the noise in which hidden information has to be searched. 
+
+This work splits into multiple parts. In the first part, we collect available researches and technologies. We emphasize techniques on the strength and weaknesses relevant to this work. 
+
+In the second part, we reassemble the pieces to a new protocol. 
+
+In the third part, we analyze the protocol for the fitness of the purpose. We try to find weaknesses and work out recommendations for protocol usage. 
+
+In the last part, we discuss the results and try to summarize the findings. We furthermore elaborate to what extent the protocol fulfills the requirements mentioned in the previous sections.
+
+\section{Contributions}
+This thesis contributes to the topic in the following senses:
+\begin{itemize}
+	\item It introduces a consistent model for message delivery, which includes all endpoints and involved parties.
+	\item It shows an approach based on existing protocols for anonymous communication, which gives full control of the anonymity to the sender while controlling the costs.
+	\item It offers a client application implementing the proposed Protocol as IMAPv4 cache daemon and as SMTP relay.
+\end{itemize}
+
+\chapter{Notation}
+\section{Cryptography \label{sec:encNot}}
+The theory in this document is heavily based on symmetric encryption, asymmetric encryption, and hashing. To use a uniformed notation I use $E^{K_a}(M)$ (where $a$ is an index to distinguish multiple keys) resulting in $\mathbf{M^{K_a}}$ as the encrypted message. If we are reflecting a tuple of information, we write it in boldface. To express the content of the tuple, we use angular brackets $\mathbf{L\langle normalAddress,vortexAddress\rangle }$. If we want Messages encrypted with multiple keys do list the used keys as a comma-separated list in superscript $E^{K_b}\left(E^{K_a}\left(M\right)\right)=M^{{K_{a}},{K_b}}$.
+
+For a symmetric encryption of a message $\mathbf{M}$ with a key $K_a$ resulting in $\mathbf{M^{K_a}}$ where $a$ is an index to distinguish different keys. Decryption uses therefore $D^{K_a}(\mathbf{M^{K_a}})=\mathbf{M}$.
+
+As notation for asymetric encryption we use $E^{K^{1}_a}(\mathbf{M})$ where as $K^{-1}_a$ is the private key and $K^{1}_a$ is the public key of a key pair $K^p_a$. The asymmetric decryption is noted as $D^{K^{-1}_a}(\mathbf{M})$.
+
+For hashing, we do use $H(\mathbf{M})$ if unsalted and $H^{S_a}$ if using a salted hash with salt $S_a$. The generated hash is shown as $H_M$ if unsalted and $H^{S_a}_M$ if salted.
+
+If we want to express what details contained in a tuple we use the the notation $\mathbf{M\langle t,MURB,serial\rangle }$ respectively if encrypted $\mathbf{M^{K_{a}}\langle t,MURB,serial\rangle}$.
+
+\begin{align*}
+\text{asymetric:}         & E^{K^{-1}_a}\left(\mathbf{M}\right)                            && =\mathbf{M}^{K^{-1}_a}\\
+& D^{K^{1}_a}\left(E^{K^{-1}_a}\left(\mathbf{M}\right)\right)    && =\mathbf{M}\\
+& D^{K^{-1}_a}\left(E^{K^{1}_a}\left(\mathbf{M}\right)\right)    && =\mathbf{M}\\
+\text{symetric:}          & E^{K_a}\left(\mathbf{M}\right)                                 && =\mathbf{M}^{K_a}\\
+& D^{K_a}\left(E^{K_a}\left(\mathbf{M}\right)\right)          && =\mathbf{M}\\
+\text{hashing (unsalted):}& H\left(\mathbf{M}\right)                                       && =\mathbf{H}_M\\
+\text{hashing (salted):}  & H^{S_a}\left(\mathbf{M}\right)                                 && =\mathbf{H}^{S_a}_M
+\end{align*}
+
+In general, subscripts denote selectors to differentiate the values of the same type, and superscript denotes relevant parameters to operations expressed. The subscripted and superscripted pieces of information are omitted if not needed.
+
+We refer to the components of a \emph{VortexMessage} as follows:
+\begin{align*}
+\text{Prefix component:}         & \mathbf{PREFIX}                 &=D^{K^{1}_a}\left(\mathbf{P}^{K^{-1}_a}\right) &=D\left(\mathbf{P}\right)\\
+\text{Header component:}         & \mathbf{HEAD}                 &=D^{K^{1}_a}\left(\mathbf{H}^{K^{-1}_a}\right) &=D\left(\mathbf{H}\right)\\
+\text{Route component:}         & \mathbf{ROUTE}                 &=D^{K^{1}_a}\left(\mathbf{R}^{K^{-1}_a}\right) &=D\left(\mathbf{R}\right)\\
+\end{align*}
+
+In general, a decrypted Block is written as a capitalized multi-character boldface sequence. An encrypted Block is expressed as a capitalized, single character, boldface letter.
+
+\section{Code and commands}
+We write code blocks as a light grey block with line numbers:
+
+\begin{lstlisting}
+public class Hello {
+public static void main(String args[]) {
+System.println("Hello. "+args[1]);
+}
+}
+\end{lstlisting}
+
+Commands entered at the command line are in a grey box with a top and bottom line. Whenever root rights are required, the command line is prefixed with a ``\#''. Commands not requiring specific rights are prefixed with a ``\$''. Lines without a trailing ``\$'' or ``\#'' are output lines of the previous command. If long lines are split to fit into the paper, a ``$\hookleftarrow$'' is inserted to indicate that a line break was inserted for readability.
+
+\begin{lstlisting}[language=bash]
+# su -
+# javac Hello.java 
+# exit
+$ java Hello
+Hello.
+$ java Hello "This is a very long command-line that had to be broken to fit into the code box displayed on this page."
+Hello. This is a very long command-line that had to be broken to fit into the code box displayed on this page.
+\end{lstlisting}
+
+\section{Hyperlinking}
+The electronic version of this document is hyperlinked. References to the glossary or the literature may be clicked to find the respective entry. Chapter or table references are clickable too. 
+
+\chapter{Main Research Question}
+The main topic of this thesis was defined as follows:
+\begin{itemize}
+	\item Is it possible to have a specialized messaging protocol used on the Internet-based on ``state of the science'' technologies offering a high level of unlikability (sender and receiver anonymity) towards an adversary with a high budget and privileged access to Internet infrastructure?
+\end{itemize}
+
+Based on this central question, there are several sub-questions grouped around various topics:
+
+\begin{enumerate}
+	\item What technologies and methods may be used to provide sender and receiver anonymity and unlinkability when sending messages against a potential adversary? (SQ1)
+	\item How can entities utilizing \emph{MessageVortex} be attacked, and what measures are available to circumvent such attacks? (SQ2)
+	\item How can design mitigate attacks target anonymity of a sending or receiving entity within \emph{MessageVortex}? (SQ3)
+\end{enumerate}
+
+\section{SQ1: Technologies for Sending Messages Maintaining Unlinkability}
+This question covers the principal part of the work. We first elaborate on a list of criteria for the \emph{MessageVortex} protocol. We then create a list of suitable technologies and methods. Based on these findings, we define a protocol combining these technologies and researches into a solution. This solution is implemented and analyzed for suitability based on the criteria specified previously.
+
+Main results of this question are found in part~\ref{sec:methodes} and part~\ref{sec:results}.
+
+\section{SQ2: Attacking unlinkability and circumvention}
+Within this question, we look at various attacks and test resistance of the protocol based on the definition of the protocol. We do this by first collecting well-known attacks (either generic or specific to a technology used in the protocol). We then elaborate if those attacks might be successful (and if so under what circumstances).
+
+We discuss this question in part~\ref{sec:discussion}.
+
+\section{SQ3: Attack Mitigation by design}
+Within this question, we define baselines to mitigate attacks by identifying guidelines for using the protocol. We analyze the effectiveness of the guidelines and elaborate on the general achievement level of the protocol by looking again at the criteria defined in SQ1. 
+
+This question is answered in part \ref{sec:discussion}.

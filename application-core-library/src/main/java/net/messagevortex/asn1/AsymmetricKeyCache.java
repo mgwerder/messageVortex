@@ -37,6 +37,8 @@ import java.util.Queue;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import net.messagevortex.MessageVortexLogger;
+import net.messagevortex.asn1.encryption.Algorithm;
+import net.messagevortex.asn1.encryption.Parameter;
 
 /**
  * <p>The key cache supporting AsymmetricKey.</p>
@@ -126,6 +128,9 @@ public class AsymmetricKeyCache implements Serializable {
      */
     public void push(AsymmetricKey key) {
       synchronized (cache) {
+        AlgorithmParameter p = key.getAlgorithmParameter();
+        assert key.getAlgorithm()!=Algorithm.EC || p.get(Parameter.CURVETYPE).indexOf(""+p.get(Parameter.BLOCKSIZE))>0: "found mismatch in curve type vs blocksize ("+p.get(Parameter.BLOCKSIZE)+"/"+p.get(Parameter.CURVETYPE)+")";
+        assert key.getAlgorithm()!=Algorithm.RSA || p.get(Parameter.KEYSIZE).equals(p.get(Parameter.BLOCKSIZE)): "found mismatch in RSA keysize vs blocksize (ks:"+p.get(Parameter.KEYSIZE)+"/bs:"+p.get(Parameter.BLOCKSIZE)+")";
         cache.add(key);
       }
     }
@@ -190,7 +195,9 @@ public class AsymmetricKeyCache implements Serializable {
      */
     public void merge(CacheElement element) {
       synchronized (cache) {
-        cache.addAll(element.cache);
+        for (AsymmetricKey e :element.cache) {
+          push(e);
+        }
         maxSize = Math.max(maxSize, element.maxSize);
         if ((numberOfCalcTimes + element.numberOfCalcTimes) > 0) {
           averageCalcTime = (averageCalcTime * numberOfCalcTimes + element.averageCalcTime
@@ -234,7 +241,7 @@ public class AsymmetricKeyCache implements Serializable {
       int i = (Integer) in.readObject();
       cache = new ArrayDeque<>(i);
       for (int j = 0; j < i; j++) {
-        cache.add((AsymmetricKey) in.readObject());
+        push((AsymmetricKey) in.readObject());
       }
     }
 

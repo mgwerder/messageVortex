@@ -43,6 +43,7 @@ public class DummyTransportSenderTest extends AbstractDaemon implements Transpor
         try {
           dt[i] = new DummyTransportTrx("martin@example.com", this);
         } catch (IOException ioe) {
+          ioe.printStackTrace();
           fail("failed to add martin@example.com");
         }
       } else {
@@ -50,7 +51,7 @@ public class DummyTransportSenderTest extends AbstractDaemon implements Transpor
           dt[i] = new DummyTransportTrx(this);
         } catch(IOException ioe) {
           ioe.printStackTrace();
-          fail( "unexpected IOException ocurred when setting up entpoints");
+          fail( "unexpected IOException occurred when setting up endpoints");
         }
       }
     }
@@ -62,7 +63,11 @@ public class DummyTransportSenderTest extends AbstractDaemon implements Transpor
     } catch (IOException ioe) {
       // this is expected behaviour
     }
+    for (int i = 0; i < dt.length; i++) {
+      dt[i].shutdownDaemon();
+    }
     assertTrue("error searching for hangig threads", ImapSSLTest.verifyHangingThreads(threadSet).size() == 0);
+    DummyTransportTrx.clearDummyEndpoints();
   }
 
 

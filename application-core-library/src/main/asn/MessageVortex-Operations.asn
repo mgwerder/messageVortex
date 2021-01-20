@@ -1,7 +1,7 @@
 MessageVortex-Operations DEFINITIONS EXPLICIT TAGS ::=
 BEGIN
-  EXPORTS PayloadOperation;
-  IMPORTS maxID
+  EXPORTS PayloadOperation,MapBlockOperation,maxGFSize;
+  IMPORTS maxWorkspaceID
                 FROM MessageVortex-Schema
           SymmetricKey, AsymmetricKey, MacAlgorithmSpec, CipherSpec
                 FROM MessageVortex-Ciphers
@@ -45,53 +45,53 @@ BEGIN
   }
 
   AddRedundancyOperation ::= SEQUENCE {
-    inputId            [16000] INTEGER (0..maxID),
+    inputId            [16000] INTEGER (0..maxWorkspaceID),
     dataStripes        [16001] INTEGER (1..254),
     redundancy         [16002] INTEGER (1..254),
     keys               [16003] SEQUENCE (SIZE (2..512))
                                OF SymmetricKey,
-    outputId           [16004] INTEGER (1..maxID),
+    outputId           [16004] INTEGER (1..maxWorkspaceID),
     gfSize             [16005] INTEGER (2..maxGFSize)
   }
 
   RemoveRedundancyOperation ::= SEQUENCE {
-    inputId            [16000] INTEGER (0..maxID),
+    inputId            [16000] INTEGER (0..maxWorkspaceID),
     dataStripes        [16001] INTEGER (1..254),
     redundancy         [16002] INTEGER (1..254),
     keys               [16003] SEQUENCE (SIZE (2..512))
                                OF SymmetricKey,
-    outputId           [16004] INTEGER (1..maxID),
+    outputId           [16004] INTEGER (1..maxWorkspaceID),
     gfSize             [16005] INTEGER (2..maxGFSize)
   }
 
   SplitPayloadOperation ::= SEQUENCE {
-    originalId         INTEGER (0..maxID),
+    originalId         INTEGER (0..maxWorkspaceID),
     firstSize          SizeBlock,
-    newFirstId         INTEGER (1..maxID),
-    newSecondId        INTEGER (1..maxID)
+    newFirstId         INTEGER (1..maxWorkspaceID),
+    newSecondId        INTEGER (1..maxWorkspaceID)
   }
 
   MergePayloadOperation ::= SEQUENCE {
-    originalFirstId      INTEGER (0..maxID),
-    originalSecondId     INTEGER (0..maxID),
-    newId                INTEGER (1..maxID)
+    originalFirstId      INTEGER (0..maxWorkspaceID),
+    originalSecondId     INTEGER (0..maxWorkspaceID),
+    newId                INTEGER (1..maxWorkspaceID)
   }
 
   EncryptPayloadOperation ::= SEQUENCE {
-    originalId            INTEGER (0..maxID),
+    originalId            INTEGER (0..maxWorkspaceID),
     key                   SymmetricKey,
-    newId                 INTEGER (1..maxID)
+    newId                 INTEGER (1..maxWorkspaceID)
   }
 
   DecryptPayloadOperation ::= SEQUENCE {
-    originalId            INTEGER (0..maxID),
+    originalId            INTEGER (0..maxWorkspaceID),
     key                   SymmetricKey,
-    newId                 INTEGER (1..maxID)
+    newId                 INTEGER (1..maxWorkspaceID)
   }
 
   MapBlockOperation ::= SEQUENCE {
-    originalId            INTEGER (0..maxID),
-    newId                 INTEGER (1..maxID)
+    originalId            INTEGER (0..maxWorkspaceID),
+    newId                 INTEGER (1..maxWorkspaceID)
   }
 
 END
