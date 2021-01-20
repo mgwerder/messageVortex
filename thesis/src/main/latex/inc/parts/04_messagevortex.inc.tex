@@ -119,7 +119,7 @@ In this section, we collect required properties for our system. We first list a 
 	Protocol nodes and their traffic should be undistinguishable from accepted nodes and traffic. 
 \end{requirement}
 
-Users are unable to limit the route of network packets through named jurisdictions. Therefore, we must protect users of \MessageVortex (users) from being subject to legal prosecution in any jurisdiction. All these users need to be anonymous when sending or receiving messages. This applies not only to their communication but as well to the usage of an anonymizing technology. Unfortunately, most transport protocols (in fact, all of the common ones such as \defref{SMTP}, SMS, \defref{XMPP}, or IP) use a globally unique identifier for senders and receivers, which are readable by any party which is capable of reading the packets (mainly the routing nodes).  
+Users are unable to limit the route of network packets through named jurisdictions. Therefore, we must protect users of \MessageVortex (users) from being subject to legal prosecution in any jurisdiction. All these users need to be anonymous when sending or receiving messages. This applies not only to their communication but as well to the usage of an anonymizing technology. Unfortunately, most transport protocols (in fact, all of the common ones such as \defref{SMTP}, SMS, \defref{XMPP}, or IP) use a globally unique identifier for senders and recipients, which are readable by any party which is capable of reading the packets (mainly the routing nodes).  
 
 Threat model in \cref{sec:adversary}, we defined the adversary as someone with superior access to the network and its infrastructure. Such an adversary might attack a message flow in several ways:
 \begin{itemize}
@@ -292,7 +292,7 @@ As we rely on third-party infrastructure with our approach, now we have to take 
 
 For routing, we will use end-user devices. This decision is further backed by the requirement \ref{req:P2P}. It, however, opposes the requirement of \ref{req:reliable}, as such system participants are likely to be unreliable due to missing network connectivity, device failure due to drained batteries, or simply because they no longer participate in a network. To counter this, we implement measures on the message level.
 
-%% FIXME: start reading from here
+
 \section{Message and Routing}
 One of the biggest weaknesses of all protocols is the information leakage they have by design and the inability to restrict access to their functionality. We will build the messages with the following design guidelines:
 \begin{itemize}
@@ -301,20 +301,20 @@ One of the biggest weaknesses of all protocols is the information leakage they h
 	\item A routing node may efficiently identify a message sender.\\      
 	The sender must be efficiently identifiable. At first sight, this requirement is non-fitting as it opposes heavily to \ref{req:anon} and \ref{req:unlink}. On the other hand, not providing these means makes it next to impossible to create a system that may not be misused and flooded. As the identification is pseudonymous, it must be short-lived, and multiple identities of the same sender must not be linked to each other. We will refer to this identity as an ephemeral ID (\defref{eID}). This \defref{eID} is handled in such a way that not complete decoding of the message is required to authorize the user. Instead, we build a message in such a way that tamper-proof, small-sized parts of the message are decoded first, and possibly bloated message content may be decoded after it is clear that the content is acceptable. If we assign ``costs'' to the creation of \defref{eID}s, it effectively protects the system from flooding.
 	\item The routing \defref{operation}s must not leak more information than the next hop.\\
-	We will apply a transformation on each routing hop to the message. This prevents following the message throughout the system. In most of the systems, messages are mainly disassembled and reassembled or onionized. The traffic is then cloaked in mimic traffic, making it impossible for an outside observer to identify message flows. The node generating the traffic is, however, well aware of the true message flow. In our system, we will add, instead of mimicking traffic, redundancy information (or remove it). By doing so, a routing node has no longer the insight which part of the traffic is relevant to the message and which not. We may, furthermore, introduce the possibility of distributing the message content throughout multiple paths in such a way that each path has not sufficient content to rebuild the message. In fact, depending on the complementing missing message, any content may be valid. 
+	We will apply a transformation on each routing hop to the message. This prevents following the message throughout the system. In most of the systems, messages are mainly disassembled and reassembled or onionized. Additionally to that, the traffic of our system is cloaked in mimic traffic, making it next to impossible for an outside observer to identify message flows. In other systems, the node generating decoy or mimick traffic is, however, well aware of the true message flow. In our system, we will add, instead of mimicking traffic, redundancy information (or remove it). By doing so, a routing node has no longer the insight which part of the traffic is relevant to the message and which not. We may, furthermore, introduce the possibility of distributing the message content throughout multiple paths in such a way that each path has not sufficient content to rebuild the message. In fact, depending on the complementing missing message, any content received or sent by a node may be valid in our system. 
 	\item Messages are protected from being replayed.\\
-	In former systems, message paths were highlighted by injecting additional information. Our system is already protected from such injections by the \defref{eID} concept, which identifies the sender. There are, however, other means to highlight traffic. An adversary may either inject message payload (corrupting the message flow) or replay the message. While we cannot keep anyone from sticking to rules, we may at least implement replay protection. Furthermore, we may later observe that we are able to control willingly induced, size mismatching content.
+	In former systems, message paths were highlighted by injecting additional information. Our system is already protected from such injections by the \defref{eID} concept, which identifies the sender. There are, however, other means to highlight traffic. An adversary may either inject message payload (corrupting the message flow) or replay the message. While we cannot keep anyone from violating the rules, we may at least implement replay protection. Furthermore, we may later discover that we are able to identify willingly induced, or size mismatching content.
 	\item Messages in the routing system are ``store and forward.''\\
-	All synchronous routing systems have in common that message observation is relatively easy for an outside or inside observer unless mimick routes are used. This is why we allow the message to be stored and picked up or sent at a later stage. 
+	All synchronous routing systems have in common that message observation is relatively easy for an outside or inside observer with a sufficient number of observation points unless mimick routes are used. This is why we allow the message to be stored and picked up or sent at a later stage. 
 	\item Use the Reed-Solomon-Function as the main routing \defref{operation}.\\
-	Originally \cite{reed1960polynomial} introduced a system allowing the use of polynomes to create error-correcting codes. In \cite{chaum1988multiparty} \citeauthor{chaum1988multiparty}, they have shown that the codes are suitable for distributing data assuming enough parties are honest and not malfunctioning. Unlike \citeauthor{chaum1988multiparty} proposition, we are not using the Reed Solomon function to achieve anonymity or privacy. Instead, we use it for decoy traffic generation. We are splitting a message into multiple parts at several points when routing and assemble it again on different nodes. By doing so, we achieve two vital things. First, we introduce the possibility of recovering errors due to misbehaving nodes, and secondly, the real traffic can no longer be differentiated from decoy traffic. The \defref{operation} has proven to be insecure as it leaks properties of the operation applied in the result. We will show this in section \ref{sec:analysisReedSolomon}. Thus, We hardened the operation to remove the negative effects.
+	Originally \cite{reed1960polynomial} introduced a system allowing the use of polynomes to create error-correcting codes. In \cite{chaum1988multiparty} \citeauthor{chaum1988multiparty}, they have shown that the codes are suitable for distributing data assuming enough parties are honest and not malfunctioning. Unlike \citeauthor{chaum1988multiparty} proposition, we are not using the Reed Solomon function to achieve anonymity or privacy. Instead, we use it for decoy traffic generation. We are splitting a message into multiple parts at several points when routing and assemble it again on different nodes. By doing so, we achieve two vital things. First, we introduce the possibility of recovering errors due to misbehaving nodes, and secondly, the real traffic can no longer be differentiated from decoy traffic. 
 	\item \MessageVortex{} must provide a variety of algorithms and \defref{operation}s to build a message.\\        
 	As all systems and algorithms applied to the system may be weakened or fail, a system needs to have the possibility to choose from multiple algorithms, protocols, and infrastructures. This choice should be made by a trustworthy system that restricts us to either the sender or the receiving system. The German Federal Office for Information Security (BSI) makes in \cite{bsiPostQuantum} recommendations for systems and protocols, which we will follow.
 	
 	The main text can be boiled down to the following recommendations:
 	\begin{itemize}
 		\item A protocol or system should be crypto agile.
-		\item A protocol or system should use hash-based signatures for updates.
+		\item A protocol or system should use signatures for updates.
 		\item The document furthermore recommends using symmetrical keys with a key length of 128 bit or more.
 		\item The document recommends a combination of big long term keys and small short term keys.
 		\item The document recommends using a combination of multiple independent algorithms in cascaded forms so that if one algorithm fails, the other one is still able to protect the data.
@@ -326,15 +326,16 @@ One of the biggest weaknesses of all protocols is the information leakage they h
 In this section, we have taken the following decisions for \MessageVortex:
 \begin{itemize}
 	\item Piggybacks common protocols.
-	\item Does not require specialized hardware within the Internet.
+	\item Does not require specialized infrastructure within the Internet.
 	\item No proprietary systems on the Internet.
 	\item Runs on commodity hardware.
 	\item Sends messages in an asynchronous mode.
 	\item Creates unidentifiable decoy traffic by using a Reed-Solomon-Function.
 	\item Have no strict message size and avoid strictly increasing or decreasing sizes in any type of message or message part.
 	\item Does not enforce specific attributes such as transport protocol, message size, message timing, or providers.
-	\item Run special routing \defref{operation}s instead of traditional mixing and recombination methods.
-	\item Offer a choice of algorithms to use when routing.
+	\item Run offers routing \defref{operation}s instead of traditional mixing and recombination methods.
+	\item Offers a choice of algorithms when routing.
+	\item Offers short lived pseudonyms to enable identification of the original sender.
 \end{itemize}
 
 \begin{figure}[ht]
@@ -352,9 +353,9 @@ The routing layer receives unified standard messages from the blending layer pro
 This design is definitely implementable on a consumer device. On the other hand, it is scalable and suitable for a clustered environment. Blending can be done in a stateless manner, is even suitable for serverless computing, and thus largely scalable. Routing may be implemented either with horizontal partitioning along with a set of \defref{eID}s or on a serverless base with a unified storage in the background. The accounting layer acts as a controller and may be implemented as well as stateless service with a minimal NOSQL-storage for all \defref{eID}s. 
 
 \chapter{Protocol}\label{sec:protocol}
-\MessageVortex{} is a protocol piggybacking standard transport protocols somehow similar to S/MIME\cite{rfc2015} or PGP\cite{PGP}. Unlike these protocols, we need the capability to keep the presence of our messages secret.  The message itself should only be visible to an intended node.\MessageVortex{} itself is agnostic to the transport, but we do require appropriate blending to hide within the transport protocol. The information processed on a node and its associated meta-information should not leak any information about the processed message. 
+\MessageVortex{} is a protocol piggybacking standard transport protocols somehow similar to S/MIME\cite{rfc2015} or PGP\cite{PGP}. Unlike these protocols, we need the capability to keep the presence of our messages secret.  The message itself should only be visible to an intended node.\MessageVortex{} itself is agnostic to the transport, but we do require appropriate blending to hide credibly within the transport protocol. The information processed on a node and its associated meta-information should not leak any information about the processed message. 
 
-Our system sends so-called \VortexMessages. These messages are hidden within a transport protocol (e.g., SMTP or XMPP) with a blending mechanism (e.g., the steganographic algorithm F5) and extracted by a blending layer. The extracted \VortexMessage{} is handed over to a routing layer. The \VortexMessage{} itself contains a header block, a routing block, and possibly some payload blocks. The header block contains all the information required to protect the system. The routing block contains instructions (so-called ``\defref{operation}s'') how the payload blocks have to be processed and where to send the resulting blocks. Those \defref{operation}s are one of the keys as information leaking happens in this step in most of the systems. We, therefore, crafted all \defref{operation}s very carefully to keep as much information secret as we could. These \defref{operation}s are the key to the system as they allow us to increase and decrease the size of a message without leaking what part of the data is a decoy and what not.
+Our system sends so-called \VortexMessages. These messages are hidden within a transport protocol (e.g., SMTP or XMPP) with a blending mechanism (e.g., the steganographic algorithm F5) and extracted by a blending layer. The extracted \VortexMessage{} is an encrypted, structurless blob, which is handed over to a routing layer. The \VortexMessage{} itself contains a header block, a routing block, and possibly some payload blocks. The header block contains all the information required to protect the system. The routing block contains instructions (so-called ``\defref{operation}s'') how the payload blocks are processed and where to send the resulting blocks. Those \defref{operation}s are one of the keys as information leaking happens in this step in most of the systems. We, therefore, crafted all \defref{operation}s very carefully to keep as much information secret as we could. These \defref{operation}s are the key to the system as they allow us to increase and decrease the size of a message without leaking what part of the data is a decoy and what not.
 
 A payload may either be kept by the system for later processing with other messages, processed (possibly with different) payload blocks, or displayed to the ``local user'' as a message.
 
@@ -370,7 +371,7 @@ In the following sections, we describe this protocol in detail. First, we build 
 \section{Protocol Terminology}
 For our protocol, we use the following terms:
 \begin{itemize}
-	\item \textbf{\defref{sender}:} The user or process originally composing the message.
+	\item \textbf{\defref{sender}:} The user or process originally composing the message. in contrast to the \defref{sender}, the \defref{immediate sender} is the node that was sending the message to the current node. It may or may not be identical to the \defref{sender}.
 	\item \textbf{\defref{recipient}:} The user or process destined to receive the message in the end.
 	\item \textbf{\defref{user}:} Any entity, running a \MessageVortex{} node.
 	\item \textbf{\defref{router}:} Any node which is processing the message. Please note that all \VortexNode{}s are routers. This includes the senders' and recipients' node.
@@ -379,9 +380,11 @@ For our protocol, we use the following terms:
 	\item \textbf{\defref{payload}:} Any data transported in a \VortexMessage{} between routers with exception to the routing and header block, regardless of the meaningfulness or relevance to the \VortexMessage.
 	\item \textbf{\defref{decoy traffic}:} Any payload transported between routers that have no relevance to the message at the final destination.
 	\item \textbf{\defref{identity}:} A tuple of a routable address and a public key. This tuple is a long-living tuple but may be exchanged from time to time. An Identity is always assigned to a node, but one node may have multiple identities. 
-	\item \textbf{\defref{eID}:} An identity created on any node with a limited lifetime anyone possessing the private key (proven by encrypting with it) is accepted as representative of that identity.
+	\item \textbf{\defref{eID}:} An identity created on any node with a limited lifetime anyone possessing the private key (proven by encrypting with it) is accepted as representative of that identity. An \defref{eID} has a workspace associated to it. Please note that an \defref{eID}{} is not identical to an \defref{ID}{} which is a numerical identifier for a payload block storage location within a workspace.
 	\item \textbf{Routing Block Builder (\defref{RBB}):} An entity, which is building a routing block. Typically identical to either sender or recipient.
 \end{itemize}
+
+% FIXME continue reading from here
 
 \section{Key Components}
 The following sections list some of the key components of the system. Their understanding is essential for the understanding of the protocol as a whole. 
