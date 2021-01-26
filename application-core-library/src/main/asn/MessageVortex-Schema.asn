@@ -105,7 +105,7 @@ BEGIN
                        (SIZE (0..maxNumOfRequests))
                        OF HeaderRequest ,
     -- Reply Block for the requests
-    requestReplyBlock   RoutingCombo,
+    requestReplyBlock   RoutingCombo OPTIONAL,
     -- padding and identitifier required to solve  
     -- the cryptopuzzle
     identifier [12201] PuzzleIdentifier OPTIONAL,

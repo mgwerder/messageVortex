@@ -1,6 +1,6 @@
 % !TeX spellcheck = en_US
 \gdef\doctype{extbook}
-\documentclass[a4paper,appendixprefix,pdfusetitle,twocolumn,fontsize=12pt,DIV=calc,12pt,draft,utf8]{\doctype} %scrbook
+\documentclass[a4paper,appendixprefix,pdfusetitle,twocolumn,fontsize=12pt,DIV=calc,12pt,final,utf8]{\doctype} %scrbook
 % add attachdocs to attach all documents
 % add openany to avoid empty pages
 
@@ -9,9 +9,8 @@
 \usepackage[T1]{fontenc}
 
 % fix some fonts
-\usepackage{sansmath}                  % Maths without seroifes
+\usepackage{sansmath}                  % Maths without serifes
 \usepackage{microtype}                 % better text distribution in lines
-
 
 % Workarround for book
 \makeatletter
@@ -39,7 +38,7 @@
 \PassOptionsToPackage{final}{graphicx}
 
 \usepackage{tikz}
-\usetikzlibrary{calc,positioning,arrows,backgrounds,shapes.geometric}
+\usetikzlibrary{calc,positioning,arrows.meta,backgrounds,shapes.geometric,shadows.blur}
 \tikzset{background rectangle/.style={fill=black!10}, show background rectangle}
 
 \usepackage[draft=false,automark]{scrlayer-scrpage}
@@ -641,12 +640,16 @@
 \makeatother
 \renewcommand*{\bibfont}{\small}
 
-\makeatletter\@ifclasswith{\doctype}{draft}{\gdef\indexes{\listoffixmes}}{\gdef\indexes{\listoftables\listoffigures\listofrequirements}}\makeatother
+\usepackage{ifdraft}
+\newif\ifdraft
+%\drafttrue 
+%\draftfalse
+
+\makeatletter\@ifclasswith{\doctype}{draft}{\drafttrue\gdef\indexes{\listoffixmes}}{\draftfalse\gdef\indexes{\listoftables\listoffigures\listofrequirements}}\makeatother
 
 \RequirePackage[explicit]{titlesec}
 
-\usepackage{ifdraft}
-\newif\ifdraft\drafttrue % or \draftfalse
+\usepackage[export]{adjustbox}
 
 % Adapt bibtex to include documents  
 \makeatletter
@@ -724,6 +727,7 @@
 }
 
 % some macros to make it more readable
+\gdef\theV{\includegraphics[height=1.1\fontcharht\font`V]{../../../../website/src/main/jbake/assets/images/MessageVortexLogo}}
 \gdef\MessageVortex{\texorpdfstring{\emph{\defref{MessageVortex}}}{MessageVortex}}
 \gdef\VortexMessage{\emph{\defref{VortexMessage}}}
 \gdef\VortexMessages{\texorpdfstring{\emph{\defref{VortexMessage}s}}{VortexMessages}}
@@ -738,6 +742,18 @@
 \usepackage[shortcuts]{extdash}
 
 \usepackage{cleveref}
+
+% define colors
+\gdef\shadowshift{-3pt}
+\definecolor{operationcolor}{RGB}{255,226,226}
+\definecolor{atomicopcolor}{RGB}{217,248,217}
+\definecolor{peerkeycolor}{RGB}{190,217, 232}
+\definecolor{hostkeycolor}{RGB}{190,217, 232}
+\definecolor{layercolor}{RGB}{190,217, 232}
+\definecolor{nodecolor}{RGB}{132, 151, 176}
+\definecolor{nodeshadow}{RGB}{107, 107, 107}
+\definecolor{transportcolor}{RGB}{220,20,20}
+
 
 \begin{document}%
 %

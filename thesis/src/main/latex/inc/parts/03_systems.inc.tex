@@ -92,7 +92,7 @@ We use XMPP in our work as proof of concept that a switch of protocols (in our c
 The fact that the two protocols differ in their cores significantly makes it an ideal use-case. XMPP is synchronous (whereas SMTP is asynchronous, is not MIME-based (whereas SMTP is)), and has an own implementation for file transfers. On the other hand, it offers many advantages, such as the availability of end-to-end encryption or additional store-and-forward services.
 
 
-\chapter{Information Routing and Distribution for Anonymizing Protocols}
+\chapter[Information in Anonymizing Protocols]{Information Routing and Distribution for Anonymizing Protocols}
 Information routing and distribution is not a novelty in privacy research. Researchers around the globe have searched for means of privacy.  One good example was the patent in the intro of Almon B. Strowger\cite{pulseDialingPatent}. More recent activities are the infamous "How to share a secret"\cite{shamir1979share}, which used Lagrange polynomials to distribute shares of information across multiple hosts for privacy. A single polynomial would be attackable. Therefore Shamir applied a $\mod p$ operation to hide characteristics of a curve (as long as $p$ is large and prime). The system had many problems which were addressed by subsequent work such as \cite{tompa1989share}.
 
 Lagrange polynomes form an essential part when it comes to networking and privacy. They are commonly used in the form of Reed-Solomon codes for securing unreliable connections (e.g., \cite{aiache2008reed}), distributing data \cite{shamir1979share}.
@@ -189,78 +189,94 @@ Private Information Retrieval (PIR)\cite{chor1995private} was developed by \cite
 
 PIR was the foundation or an inspiration for many other systems and extensions such as CSPIR\cite{lipmaa2009first}, BddCpir\cite{lipmaa2009first}, Popcorn\cite{gupta2016scalable}, or Riposte\cite{corrigan2015riposte}.
 
-\chapter{Proposed Academic Protocols and Implementations}\label{sec:implSystems}
+\chapter[Academic Protocols and Implementations]{Proposed Academic Protocols and Implementations}\label{sec:implSystems}
 In this section, we list various proposed anonymity systems regardless of their age or state. We analyze their inner working and try to compare them in a unified way. This comparison was a base for selecting our approach.
 
 
 \section{Characteristics of Known Anonymity Implementations}
 Table \ref{tab:anonClass} shows the protocols analyzed in the next sections ordered by type and year according to the classification scheme introduced in \cite{Shirazi2018}.
 
+\gdef\cc{}
+\gdef\cols{
+	\ifx\cc\empty
+		\gdef\cc{not empty}
+	\else
+		\gdef\cc{}
+	\fi
+	\col
+}
+\gdef\col{%
+\ifx\cc\empty%
+\cellcolor{black!30}%
+\else%
+\cellcolor{black!10}%
+\fi}
+	
 \gdef\mybull{\medbullet}
 \gdef\mycirc{\medcirc}
 \gdef\mytick{\faCheck}
 \gdef\mycross{\faTimes}
 % network
 %\usepackage{ amssymb }
-\newcommand\networkFully{$\boxtimes$}
-\newcommand\networkMostly{$\square$}
-\newcommand\networkPartly{$\sqsubset$}
+\newcommand\networkFully{$\col\boxtimes$}
+\newcommand\networkMostly{\col$\square$}
+\newcommand\networkPartly{\col$\sqsubset$}
 %direction
-\newcommand\directionBidi{$\longleftrightarrow$}
-\newcommand\directionUnidi{$\longrightarrow$}
+\newcommand\directionBidi{\col$\longleftrightarrow$}
+\newcommand\directionUnidi{\col$\longrightarrow$}
 % synchronization
-\newcommand\syncAsync{$\neq$}
-\newcommand\syncSynchronous{$\cong$}
+\newcommand\syncAsync{\col$\neq$}
+\newcommand\syncSynchronous{\col$\cong$}
 % symmetry
-\newcommand\rolePtp{\scalebox{0.4}{$\mybull\cdot\cdot\mybull\cdot\cdot\mybull$}}
-\newcommand\roleCs{\scalebox{0.4}{$\mybull\cdot\cdot\mybull$}}
-\newcommand\roleHybrid{\scalebox{0.4}{$\mybull\cdot\cdot\mycirc\cdot\cdot\mybull$}}
+\newcommand\rolePtp{\col\scalebox{0.4}{$\mybull\cdot\cdot\mybull\cdot\cdot\mybull$}}
+\newcommand\roleCs{\col\scalebox{0.4}{$\mybull\cdot\cdot\mybull$}}
+\newcommand\roleHybrid{\col\scalebox{0.4}{$\mybull\cdot\cdot\mycirc\cdot\cdot\mybull$}}
 % Hierarchy
-\newcommand\hierarchyFlat{$\cdots$}
-\newcommand\hierarchyHierarchical{\ding{68}}
+\newcommand\hierarchyFlat{\col$\cdots$}
+\newcommand\hierarchyHierarchical{\col\ding{68}}
 % centralization
-\newcommand\decentralizationPart{\astrosun}
-\newcommand\decentralizationDecentr{$\bigcirc$}
-\newcommand\decentralizationNo{\mycross}
+\newcommand\decentralizationPart{\col\astrosun}
+\newcommand\decentralizationDecentr{\col$\bigcirc$}
+\newcommand\decentralizationNo{\col\mycross}
 % Network view
-\newcommand\netviewFully{$\CIRCLE$}
-\newcommand\netviewPartly{$\LEFTcircle$}
+\newcommand\netviewFully{\col$\CIRCLE$}
+\newcommand\netviewPartly{\col$\LEFTcircle$}
 % NW updating
-\newcommand\updatingTimed{\clock}
-\newcommand\updatingEvent{\lightning}
-\newcommand\updatingNoupd{\mycross}
+\newcommand\updatingTimed{\col\clock}
+\newcommand\updatingEvent{\col\lightning}
+\newcommand\updatingNoupd{\col\mycross}
 % Routing
-\newcommand\routingRoutesrc{\scalebox{0.4}{$\mybull\cdots$}}
-\newcommand\routingRoutehop{\scalebox{0.4}{$\cdots\mybull\cdots$}}
-\newcommand\routingRoutebc{\faBullhorn}
+\newcommand\routingRoutesrc{\col\scalebox{0.4}{$\mybull\cdots$}}
+\newcommand\routingRoutehop{\col\scalebox{0.4}{$\cdots\mybull\cdots$}}
+\newcommand\routingRoutebc{\col\faBullhorn}
 % Sheduling
-\newcommand\shedfair{$\equiv$}
-\newcommand\shedprio{$\Diamonddot$}
+\newcommand\shedfair{\col$\equiv$}
+\newcommand\shedprio{\col$\Diamonddot$}
 %determinism
-\newcommand\nsdetdet{\mytick}
-\newcommand\nsdetprob{\mycross}
+\newcommand\nsdetdet{\col\mytick}
+\newcommand\nsdetprob{\col\mycross}
 %selection set
-\newcommand\nsnodesall{\CircledA}
-\newcommand\nsnodessec{\Stopsign}
-\newcommand\nsnodesnet{\Mundus}
-\newcommand\nsnodesusr{\smiley}
+\newcommand\nsnodesall{\col\CircledA}
+\newcommand\nsnodessec{\col\Stopsign}
+\newcommand\nsnodesnet{\col\Mundus}
+\newcommand\nsnodesusr{\col\smiley}
 % probability
-\newcommand\nsprobuni{$\circledast$}
-\newcommand\nsprobstat{$\circledcirc$}
-\newcommand\nsprobdyn{$\ast$}
+\newcommand\nsprobuni{\col$\circledast$}
+\newcommand\nsprobstat{\col$\circledcirc$}
+\newcommand\nsprobdyn{\col$\ast$}
 % latency
-\newcommand\perflatl{L}
-\newcommand\perflath{H}
-\newcommand\perflatm{M}
+\newcommand\perflatl{\col L}
+\newcommand\perflath{\col H}
+\newcommand\perflatm{\col M}
 % mode 
-\newcommand\perfmodecon{$\multimapdotboth$}
-\newcommand\perfmodemsg{\Letter}
+\newcommand\perfmodecon{\col$\multimapdotboth$}
+\newcommand\perfmodemsg{\col\Letter}
 % implementation
-\newcommand\nsimplyes{\mytick}
-\newcommand\nsimplno{\mycross}
+\newcommand\nsimplyes{\col\mytick}
+\newcommand\nsimplno{\col\mycross}
 % code available
-\newcommand\nscodeyes{\mytick}
-\newcommand\nscodeno{\mycross}
+\newcommand\nscodeyes{\col\mytick}
+\newcommand\nscodeno{\col\mycross}
 % context
 \newcommand\nscontmsg{\faEnvelope}
 \newcommand\nscontmail{@}
@@ -277,76 +293,77 @@ Table \ref{tab:anonClass} shows the protocols analyzed in the next sections orde
 	\setlength{\aboverulesep}{0pt}
 	\setlength{\belowrulesep}{0pt}
 	\newcolumntype{x}[1]{!{\centering\arraybackslash\vrule width #1}}
-	\gdef\cwidth{0.36cm}
+	\gdef\swidth{0.18cm}
+	\gdef\wwidth{0.36cm}
 	%\rowcolors{8}{black!30}{black!10}
-	\begin{tabular}{x{2pt}cx{1pt}lx{2pt}*{5}{p{\cwidth}|}p{\cwidth}x{2pt}p{\cwidth}|p{\cwidth}x{2pt}*{4}{p{\cwidth}|}p{\cwidth}x{2pt}*{4}{p{\cwidth}|}p{\cwidth}x{2pt}}
+	\begin{tabular}{x{2pt}clx{2pt}*{5}{p{\swidth}|}p{\swidth}x{2pt}p{\swidth}|p{\swidth}x{2pt}*{4}{p{\swidth}|}p{\swidth}x{2pt}*{4}{p{\swidth}|}p{\wwidth}x{2pt}}
 		\toprule
 		
-		& & \multicolumn{6}{cx{2pt}}{Network Structure} & \multicolumn{2}{p{1.2cm}x{2pt}}{\centering Routing Information} & \multicolumn{5}{cx{2pt}}{Communication Model} & \multicolumn{5}{cx{2pt}}{Performance and Deployability}\\\cmidrule{2-19}
+		& & \multicolumn{6}{cx{2pt}}{Network structure} & \multicolumn{2}{p{\wwidth}x{2pt}}{\centering Routing \\ info} & \multicolumn{5}{cx{2pt}}{Communication model} & \multicolumn{5}{cx{2pt}}{Performance and deployability}\\\cmidrule{3-20}
 		
-		& & & \multicolumn{2}{c|}{Connection} & \multicolumn{3}{cx{2pt}}{Symmetry} & & & & & \multicolumn{3}{cx{2pt}}{Node Selection} & & & & & \\\cmidrule{3-4}\cmidrule{5-7}\cmidrule{12-14}
+		& & & \multicolumn{2}{c|}{Connect} & \multicolumn{3}{cx{2pt}}{Symmetry} & & & & & \multicolumn{3}{cx{2pt}}{Node selection} & & & & & \\\cmidrule{4-5}\cmidrule{6-8}\cmidrule{13-15}
 		
-		& & \rot{Topology} & \rot{Direction} & \rot{Synchronization} & \rot{Roles} & \rot{Hierarchy} & \rot{Decentralization} & \rot{Network view} & \rot{Updating} & \rot{Routing Type} & \rot{Scheduling} & \rot{Determinism} & \rot{Selection set} & \rot{selection probability} & \rot{Latency} & \rot{Communication mode} & \rot{Implementation} & \rot{Code availability} & \rot{Context/application} \\
+		& & \rot{Topology} & \rot{Direction} & \rot{Synchronization} & \rot{Roles} & \rot{Hierarchy} & \rot{Decentralization} & \rot{Network view} & \rot{Updating} & \rot{Routing Type} & \rot{Scheduling} & \rot{Determinism} & \rot{Selection set} & \rot{selection probability} & \rot{Latency} & \rot{Communication mode} & \rot{Implementation} & \rot{Code availability} & \cellcolor{white}\rot{Context/application} \\
 		\midrule
+	
+		\parbox[t]{6pt}{\multirow{14}{*}{\rot{\parbox[c]{4.2cm}{\centering Resenders, onion routers and mixes}}}} &  \cols Chaum Mixes\takenFrom & \networkFully & \directionUnidi & \syncAsync & \roleCs & \hierarchyFlat & \decentralizationNo & \netviewFully & \updatingNoupd & \routingRoutesrc & \shedfair & \nsdetdet &  \nsnodesall & \nsprobstat & \perflath & \perfmodemsg & \nsimplyes & \nscodeno & \col\nscontmail \\
 		
-		\parbox[t]{6pt}{\multirow{14}{*}{\rot{\parbox[c]{4.2cm}{\centering Resenders, onion routers and mixes}}}} & Chaum Mixes\takenFrom & \networkFully & \directionUnidi & \syncAsync & \roleCs & \hierarchyFlat & \decentralizationNo & \netviewFully & \updatingNoupd & \routingRoutesrc & \shedfair & \nsdetdet &  \nsnodesall & \nsprobstat & \perflath & \perfmodemsg & \nsimplyes & \nscodeno & \nscontmail \\
+		& \cols Babel\takenFrom & \networkFully & \directionUnidi & \syncAsync & \roleCs & \hierarchyFlat & \decentralizationPart & \netviewFully & \updatingNoupd & \col\centering\begin{minipage}{\swidth}\routingRoutesrc \\ \routingRoutehop\end{minipage} & \shedfair & \nsdetdet &  \nsnodesall & \nsprobuni & \perflath & \perfmodemsg & \nsimplno & \nscodeno & \col\nscontmail \\
 		
-		&Babel\takenFrom & \networkFully & \directionUnidi & \syncAsync & \roleCs & \hierarchyFlat & \decentralizationPart & \netviewFully & \updatingNoupd & \begin{tabular}{@{}c@{}}\routingRoutesrc \\ \routingRoutehop\end{tabular} & \shedfair & \nsdetdet &  \nsnodesall & \nsprobuni & \perflath & \perfmodemsg & \nsimplno & \nscodeno & \nscontmail \\
+		&\cols Mixmaster\takenFrom & \networkFully & \directionUnidi & \syncAsync & \roleCs & \hierarchyFlat & \decentralizationPart & \netviewPartly & \updatingNoupd & \routingRoutesrc & \shedfair & \nsdetprob &  \nsnodesall & \nsprobuni & \perflath & \perfmodemsg & \nsimplyes & \nscodeyes & \col\nscontmail \\
 		
-		&Mixmaster\takenFrom & \networkFully & \directionUnidi & \syncAsync & \roleCs & \hierarchyFlat & \decentralizationPart & \netviewPartly & \updatingNoupd & \routingRoutesrc & \shedfair & \nsdetprob &  \nsnodesall & \nsprobuni & \perflath & \perfmodemsg & \nsimplyes & \nscodeyes & \nscontmail \\
+		&\cols Crowds\takenFrom & \networkFully & \directionBidi & \syncAsync & \rolePtp & \hierarchyFlat & \decentralizationPart & \netviewFully & \updatingEvent & \routingRoutehop & \shedfair & \nsdetprob &  \nsnodesall & \nsprobuni & \perflatl & \perfmodemsg & \nsimplyes &\nscodeno & \col\nscontwww \\
 		
-		&Crowds\takenFrom & \networkFully & \directionBidi & \syncAsync & \rolePtp & \hierarchyFlat & \decentralizationPart & \netviewFully & \updatingEvent & \routingRoutehop & \shedfair & \nsdetprob &  \nsnodesall & \nsprobuni & \perflatl & \perfmodemsg & \nsimplyes &\nscodeno & \nscontwww \\
+		&\cols Tor\takenFrom & \networkPartly & \directionBidi & \syncSynchronous & \roleHybrid & \hierarchyFlat & \decentralizationPart & \netviewFully & \updatingTimed & \routingRoutesrc & \shedfair & \nsdetprob &  \nsnodesnet \nsnodessec & \nsprobstat & \perflatl & \perfmodemsg & \nsimplyes & \nscodeyes & \col\nscontwww \\
 		
-		&Tor\takenFrom & \networkPartly & \directionBidi & \syncSynchronous & \roleHybrid & \hierarchyFlat & \decentralizationPart & \netviewFully & \updatingTimed & \routingRoutesrc & \shedfair & \nsdetprob &  \nsnodesnet \nsnodessec & \nsprobstat & \perflatl & \perfmodemsg & \nsimplyes & \nscodeyes & \nscontwww \\
+		&\cols $I^2P$\takenFrom & \networkMostly & \directionUnidi  & \syncAsync & \rolePtp & \hierarchyFlat & \decentralizationDecentr & \netviewFully & \updatingTimed & \routingRoutesrc & \shedprio & \nsdetprob & \nsnodesnet \nsnodessec & \nsprobdyn & \perflatl & \perfmodecon & \nsimplyes & \nscodeyes & \col\begin{tabular}{@{}c@{}} \nscontwww \nscontmail \\ \nscontfiles\end{tabular} \\
 		
-		&$I^2P$\takenFrom & \networkMostly & \directionUnidi  & \syncAsync & \rolePtp & \hierarchyFlat & \decentralizationDecentr & \netviewFully & \updatingTimed & \routingRoutesrc & \shedprio & \nsdetprob & \nsnodesnet \nsnodessec & \nsprobdyn & \perflatl & \perfmodecon & \nsimplyes & \nscodeyes & \begin{tabular}{@{}c@{}} \nscontwww \nscontmail \\ \nscontfiles\end{tabular} \\
+		&\cols Mixminion\takenFrom & \networkFully & \directionUnidi & \syncAsync & \roleCs & \hierarchyFlat & \decentralizationPart & \netviewFully & \updatingTimed & \routingRoutesrc & \shedfair & \nsdetprob &  \nsnodesall & \nsprobuni & \perflath & \perfmodemsg & \nsimplyes & \nscodeyes & \col\nscontmail \\
 		
-		&Mixminion\takenFrom & \networkFully & \directionUnidi & \syncAsync & \roleCs & \hierarchyFlat & \decentralizationPart & \netviewFully & \updatingTimed & \routingRoutesrc & \shedfair & \nsdetprob &  \nsnodesall & \nsprobuni & \perflath & \perfmodemsg & \nsimplyes & \nscodeyes & \nscontmail \\
-		
-		&$\mathcal{P}^5$\takenFrom & \networkPartly & \directionUnidi  & \syncAsync & \rolePtp & \hierarchyHierarchical & \decentralizationPart & \netviewPartly & \updatingEvent & \routingRoutebc & \shedprio & \nsdetdet & \nsnodesusr & \nsprobstat & \perflath & \perfmodemsg & \nsimplyes & \nscodeno & \nscontmsg\\
+		&\cols $\mathcal{P}^5$\takenFrom & \networkPartly & \directionUnidi  & \syncAsync & \rolePtp & \hierarchyHierarchical & \decentralizationPart & \netviewPartly & \updatingEvent & \routingRoutebc & \shedprio & \nsdetdet & \nsnodesusr & \nsprobstat & \perflath & \perfmodemsg & \nsimplyes & \nscodeno & \col\nscontmsg\\
 		
 		% AN.ON missing
 		
-		&AP3\takenFrom & \networkPartly & \directionBidi & \syncAsync & \rolePtp & \hierarchyFlat & \decentralizationDecentr & \netviewPartly & \updatingEvent & \routingRoutehop & \shedfair & \nsdetprob &  \nsnodesall  & \nsprobuni & \perflatl & \perfmodecon & \nsimplno & \nscodeno  & \begin{tabular}{@{}c@{}}\nscontwww\nscontmail \\ \nscontBC \end{tabular}\\
+		&\cols AP3\takenFrom & \networkPartly & \directionBidi & \syncAsync & \rolePtp & \hierarchyFlat & \decentralizationDecentr & \netviewPartly & \updatingEvent & \routingRoutehop & \shedfair & \nsdetprob &  \nsnodesall  & \nsprobuni & \perflatl & \perfmodecon & \nsimplno & \nscodeno  & \col\begin{tabular}{@{}c@{}}\nscontwww\nscontmail \\ \nscontBC \end{tabular}\\
 		
 		% Cashmere missing
 		
-		&SOR & \networkFully & \directionBidi & \syncSynchronous & \roleCs & \hierarchyFlat & \decentralizationDecentr & \netviewFully & \updatingNoupd & \routingRoutesrc & \shedfair & \nsdetdet & \nsnodesusr & \nsprobuni &  \perflatl & \perfmodecon & \nsimplyes & \nscodeyes & \nscontwww\nscontmail \\
+		&\cols SOR & \networkFully & \directionBidi & \syncSynchronous & \roleCs & \hierarchyFlat & \decentralizationDecentr & \netviewFully & \updatingNoupd & \routingRoutesrc & \shedfair & \nsdetdet & \nsnodesusr & \nsprobuni &  \perflatl & \perfmodecon & \nsimplyes & \nscodeyes & \col\nscontwww\nscontmail \\
 		
 		
-		&Vuvuzela & \networkFully & \directionBidi & \syncSynchronous & \roleCs & \hierarchyHierarchical & \decentralizationNo & \netviewFully & \updatingNoupd & \routingRoutesrc & \shedfair & \nsdetdet & \nsnodesusr & \nsprobuni &  \perflatm & \perfmodemsg & \nsimplyes & \nscodeyes & \nscontmicroblog \\
+		&\cols Vuvuzela & \networkFully & \directionBidi & \syncSynchronous & \roleCs & \hierarchyHierarchical & \decentralizationNo & \netviewFully & \updatingNoupd & \routingRoutesrc & \shedfair & \nsdetdet & \nsnodesusr & \nsprobuni &  \perflatm & \perfmodemsg & \nsimplyes & \nscodeyes & \col\nscontmicroblog \\
 		
-		&Riffle & \networkFully & \directionBidi & \syncSynchronous & \roleHybrid & \hierarchyHierarchical & \decentralizationNo & \netviewFully & \updatingNoupd & \routingRoutehop & \shedfair & \nsdetdet & \nsnodesnet \nsnodessec & \nsprobstat & \perflatl & \perfmodemsg & \nsimplyes & \nscodeyes & \nscontwww \\
+		&\cols Riffle & \networkFully & \directionBidi & \syncSynchronous & \roleHybrid & \hierarchyHierarchical & \decentralizationNo & \netviewFully & \updatingNoupd & \routingRoutehop & \shedfair & \nsdetdet & \nsnodesnet \nsnodessec & \nsprobstat & \perflatl & \perfmodemsg & \nsimplyes & \nscodeyes & \col\nscontwww \\
 		
 		% MCMix missing
 		
 		% SCION missing
 		
-		&Karaoke & \networkFully & \directionUnidi & \syncSynchronous & \roleCs & \hierarchyHierarchical & \decentralizationNo & \netviewFully& \updatingNoupd& \routingRoutesrc& \shedfair & \nsdetprob & \nsnodesusr & \nsprobuni & \perflatl & \perfmodemsg & \nsimplyes & \nscodeno & \nscontBC\nscontmicroblog \\
+		&\cols Karaoke & \networkFully & \directionUnidi & \syncSynchronous & \roleCs & \hierarchyHierarchical & \decentralizationNo & \netviewFully& \updatingNoupd& \routingRoutesrc& \shedfair & \nsdetprob & \nsnodesusr & \nsprobuni & \perflatl & \perfmodemsg & \nsimplyes & \nscodeno & \col\nscontBC\nscontmicroblog \\
 		
-		& \MessageVortex & \networkFully & \directionBidi & \syncSynchronous & \rolePtp & \hierarchyFlat & \decentralizationDecentr & \netviewPartly &  \updatingEvent &  \routingRoutesrc & \shedfair & \nsdetprob & \nsnodesusr & \nsprobuni & \perflath & \perfmodemsg & \nsimplyes & \nscodeyes & \nscontmail \\ \cline{1-1}
+		& \cols \MessageVortex & \networkFully & \directionBidi & \syncSynchronous & \rolePtp & \hierarchyFlat & \decentralizationDecentr & \netviewPartly &  \updatingEvent &  \routingRoutesrc & \shedfair & \nsdetprob & \nsnodesusr & \nsprobuni & \perflath & \perfmodemsg & \nsimplyes & \nscodeyes & \col\nscontmail \\ \hline
 		
-		\parbox[t]{5pt}{\multirow{2}{*}{\rot{PIR}}} & Riposte & \networkFully & \directionUnidi & \syncSynchronous & \roleCs & \hierarchyFlat & \decentralizationPart & \netviewFully & \updatingNoupd & \routingRoutebc & \shedfair & \nsdetprob & \nsnodesall &\nsprobuni & \perflath & \perfmodemsg & \nsimplyes & \nscodeyes & \nscontBC\nscontmicroblog \\
+		\parbox[t]{5pt}{\multirow{2}{*}{\rot{PIR~~}}} & \cols Riposte & \networkFully & \directionUnidi & \syncSynchronous & \roleCs & \hierarchyFlat & \decentralizationPart & \netviewFully & \updatingNoupd & \routingRoutebc & \shedfair & \nsdetprob & \nsnodesall &\nsprobuni & \perflath & \perfmodemsg & \nsimplyes & \nscodeyes & \col\nscontBC\nscontmicroblog \\
 		
-		& Pung & \networkFully & \directionBidi & \syncAsync & \roleCs & \hierarchyFlat & \decentralizationNo & \netviewFully & \updatingNoupd & \routingRoutebc & \shedfair & \nsdetdet & \nsnodesall & \nsprobuni & \perflatm & \perfmodemsg & \nsimplyes & \nscodeno & \nscontBC\nscontmicroblog \\\cline{1-1}
+		& \cols Pung & \networkFully & \directionBidi & \syncAsync & \roleCs & \hierarchyFlat & \decentralizationNo & \netviewFully & \updatingNoupd & \routingRoutebc & \shedfair & \nsdetdet & \nsnodesall & \nsprobuni & \perflatm & \perfmodemsg & \nsimplyes & \nscodeno & \col\nscontBC\nscontmicroblog \\\hline
 		
-		\parbox[t]{5pt}{\multirow{3}{*}{\rot{DHT~~~}}}& Tarzan\takenFrom & \networkMostly & \directionBidi & \syncAsync & \rolePtp & \hierarchyFlat & \decentralizationDecentr & \netviewFully & \updatingEvent & \routingRoutesrc & \shedfair & \nsdetprob &  \nsnodessec  & \nsprobuni & \perflatl & \perfmodecon & \nsimplyes & \nscodeyes  & \nscontwww \\
+		\parbox[t]{5pt}{\multirow{3}{*}{\rot{DHT~~~}}}& \cols Tarzan\takenFrom & \networkMostly & \directionBidi & \syncAsync & \rolePtp & \hierarchyFlat & \decentralizationDecentr & \netviewFully & \updatingEvent & \routingRoutesrc & \shedfair & \nsdetprob &  \nsnodessec  & \nsprobuni & \perflatl & \perfmodecon & \nsimplyes & \nscodeyes  & \col\nscontwww \\
 		
-		& MorphMix\takenFrom & \networkPartly & \directionBidi & \syncAsync & \rolePtp & \hierarchyFlat & \decentralizationPart & \netviewPartly & \updatingEvent & \routingRoutehop & \shedfair & \nsdetprob &  \nsnodesnet & \nsprobdyn & \perflatl & \perfmodecon & \nsimplyes & \nscodeyes  & \nscontwww \\
+		& \cols MorphMix\takenFrom & \networkPartly & \directionBidi & \syncAsync & \rolePtp & \hierarchyFlat & \decentralizationPart & \netviewPartly & \updatingEvent & \routingRoutehop & \shedfair & \nsdetprob &  \nsnodesnet & \nsprobdyn & \perflatl & \perfmodecon & \nsimplyes & \nscodeyes  & \col\nscontwww \\
 		
-		& Salsa\takenFrom & \networkPartly & \directionBidi & \syncAsync & \begin{tabular}{@{}c@{}}\rolePtp \\ \roleHybrid \end{tabular} & \hierarchyFlat & \decentralizationDecentr & \netviewPartly & \updatingEvent & \routingRoutehop & \shedfair & \nsdetprob &  \nsnodesall  & \nsprobuni & \perflatl & \perfmodecon & \nsimplyes & \nscodeno & \nscontwww \\\cline{1-1}
+		& \cols Salsa\takenFrom & \networkPartly & \directionBidi & \syncAsync & \col\centering\begin{minipage}{\swidth}\rolePtp \\ \roleHybrid \end{minipage} & \hierarchyFlat & \decentralizationDecentr & \netviewPartly & \updatingEvent & \routingRoutehop & \shedfair & \nsdetprob &  \nsnodesall  & \nsprobuni & \perflatl & \perfmodecon & \nsimplyes & \nscodeno & \col\nscontwww \\\hline
 		
-		\parbox[t]{5pt}{\multirow{4}{*}{\rot{DC~~}}}& Chaum\'{}s DCnet\takenFrom & \networkFully & \directionUnidi  & \syncAsync & \rolePtp & \hierarchyFlat & \decentralizationNo & \netviewFully & \updatingEvent & \routingRoutebc & \shedfair & \nsdetdet & \nsnodesall & \nsprobstat & \perflath & \perfmodemsg & \nsimplno & \nscodeno & \nscontmsg \\
+		\parbox[t]{5pt}{\multirow{4}{*}{\rot{DC~~}}}& \cols Chaum\'{}s DCnet\takenFrom & \networkFully & \directionUnidi  & \syncAsync & \rolePtp & \hierarchyFlat & \decentralizationNo & \netviewFully & \updatingEvent & \routingRoutebc & \shedfair & \nsdetdet & \nsnodesall & \nsprobstat & \perflath & \perfmodemsg & \nsimplno & \nscodeno & \col\nscontmsg \\
 		
-		& Herbivore\takenFrom & \networkPartly & \directionUnidi  & \syncAsync & \rolePtp & \hierarchyHierarchical & \decentralizationPart & \netviewPartly & \updatingEvent & \routingRoutebc & \shedfair & \nsdetdet & \nsnodesnet & \nsprobstat & \perflatm & \perfmodemsg & \nsimplyes & \nscodeno & \nscontmsg \\
+		& \cols Herbivore\takenFrom & \networkPartly & \directionUnidi  & \syncAsync & \rolePtp & \hierarchyHierarchical & \decentralizationPart & \netviewPartly & \updatingEvent & \routingRoutebc & \shedfair & \nsdetdet & \nsnodesnet & \nsprobstat & \perflatm & \perfmodemsg & \nsimplyes & \nscodeno & \col\nscontmsg \\
 		
-		& Dissent in numbers\takenFrom & \networkPartly & \directionUnidi  & \syncAsync & \roleCs & \hierarchyHierarchical & \decentralizationPart & \netviewPartly & \updatingEvent & \routingRoutebc & \shedfair & \nsdetdet & \nsnodesnet & \nsprobstat & \perflath & \perfmodemsg & \nsimplyes & \nscodeyes & \nscontmsg \\
+		& \cols Dissent in numbers\takenFrom & \networkPartly & \directionUnidi  & \syncAsync & \roleCs & \hierarchyHierarchical & \decentralizationPart & \netviewPartly & \updatingEvent & \routingRoutebc & \shedfair & \nsdetdet & \nsnodesnet & \nsprobstat & \perflath & \perfmodemsg & \nsimplyes & \nscodeyes & \col\nscontmsg \\
 		
-		& Verdict & \networkFully & \directionUnidi & \syncSynchronous & \roleCs & \hierarchyHierarchical & \decentralizationPart & \netviewPartly & \updatingEvent & \routingRoutebc & \shedfair & \nsdetdet & \nsnodesnet & \nsprobstat & \perflath & \perfmodemsg &\nsimplyes & \nscodeyes & \nscontmsg \\\cline{1-1}
+		& \cols Verdict & \networkFully & \directionUnidi & \syncSynchronous & \roleCs & \hierarchyHierarchical & \decentralizationPart & \netviewPartly & \updatingEvent & \routingRoutebc & \shedfair & \nsdetdet & \nsnodesnet & \nsprobstat & \perflath & \perfmodemsg &\nsimplyes & \nscodeyes & \col\nscontmsg \\\hline
 		
-		\parbox[t]{5pt}{\multirow{2}{*}{\rot{BC}}}& Hordes & \networkFully & \directionBidi & \syncAsync & \rolePtp & \hierarchyFlat & \decentralizationPart & \netviewFully & \updatingEvent & \routingRoutebc & \shedfair & \nsdetprob &  \nsnodesall & \nsprobuni & \perflatl & \perfmodemsg & \nsimplyes &\nscodeno & \nscontwww \\
+		\parbox[t]{5pt}{\multirow{2}{*}{\rot{BC~}}}& \cols Hordes & \networkFully & \directionBidi & \syncAsync & \rolePtp & \hierarchyFlat & \decentralizationPart & \netviewFully & \updatingEvent & \routingRoutebc & \shedfair & \nsdetprob &  \nsnodesall & \nsprobuni & \perflatl & \perfmodemsg & \nsimplyes &\nscodeno & \col\nscontwww \\
 		
-		& Atom & \networkPartly & \directionUnidi & \syncSynchronous & \roleCs & \hierarchyFlat & \decentralizationPart & \netviewFully & ? & \routingRoutesrc & \shedfair & \nsdetprob &  \nsnodesall & \nsprobuni & \perflath & \perfmodemsg & \nsimplyes & \nscodeyes & \nscontBC\nscontmicroblog \\\cline{1-1}
+		& \cols Atom & \networkPartly & \directionUnidi & \syncSynchronous & \roleCs & \hierarchyFlat & \decentralizationPart & \netviewFully & \col ? & \routingRoutesrc & \shedfair & \nsdetprob &  \nsnodesall & \nsprobuni & \perflath & \perfmodemsg & \nsimplyes & \nscodeyes & \col\nscontBC\nscontmicroblog \\\hline
 		
 		% Loopix & & & & & & & & & & & & & & & & & & \\
 		% Stadium & & & & & & & & & & & & & & & & & & \\
@@ -361,7 +378,7 @@ Table \ref{tab:anonClass} shows the protocols analyzed in the next sections orde
 	\label{tab:anonClass}
 \end{table*}
 
-In the table, some historical systems have been omitted. Furthermore, SOR is omitted as this system has many aspects left out, making it hard to categorize correctly.
+In the table, some historical systems have been omitted. Additionally SCION has been ommited as not fitting anywhere into the table. It may be seen as a remixing system but too many aspects have been intermixed with the routing logic to give really a clear classification. Furthermore, the SOR classification is highly speculative as this system has many aspects left out, making it hard to categorize correctly. Where the paper does not give exact indication of how this part is solved we made guesses in favor of the work.
 
 As key indicators for similar protocols, we identified the following characteristics:
 \begin{itemize}
@@ -582,7 +599,7 @@ Tarzan is a P2P IP protocol using UDP to communicate. It is specified in \cite{t
 \subsection{MorphMix (2002)}
 MorphMix was a thesis published by \citeauthor{morphmix:wpes2002} in \cite{morphmix:wpes2002}. MorphMix was among the first to introduce a pure peer-to-peer anonymity protocol. Users and mixes were indistinguishable, and there was no cover traffic generated to save bandwidth. For anonymity, it uses a source controlled, onionized routing system. Nodes are discovered by querying any random first node. It was a circuit-based mix system for networking anonymity. The core of the network was collision detection. This detection has been circumvented by \cite{morphmix:pet2006}. Since then, no new papers have been published, and the project seems to be dead.
 
-In many respects, MorphMix may be seen as an ancestor of \MessageVortex. However, \MessageVortex goes far beyond the capabilities of MorphMix while eliminating most of its weaknesses.
+In many respects, MorphMix may be seen as an ancestor of \MessageVortex. However, \MessageVortex{} goes far beyond the capabilities of MorphMix while eliminating most of its weaknesses.
 
 
 \subsection{Salsa (2008)}

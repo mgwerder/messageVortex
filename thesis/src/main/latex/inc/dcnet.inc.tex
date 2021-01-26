@@ -1,0 +1,20 @@
+\begin{tikzpicture}[node distance=0.5cm,auto,>=stealth]
+	\begin{scope}[baseline=(current bounding box.center)]
+		\tikzstyle{knode}=[circle,draw=black,thick,inner sep=8pt,baseline=(current bounding box.center)]
+		\node[knode] (n0) at (0:3cm) {node 0};
+		\node[knode] (n1) at (51:3cm) {node 1};
+		\node[knode] (n2) at (103:3cm) {node 2};
+		\node[knode] (n3) at (154:3cm) {node 3};
+		\node[knode] (n4) at (206:3cm) {node 4};
+		\node[knode] (n5) at (257:3cm) {node 5};
+		\node[knode] (n6) at (309:3cm) {node 6};
+		%arrows
+		\draw[->] (n0)--(n1);
+		\draw[->] (n1)--(n2);
+		\draw[->] (n2)--(n3);
+		\draw[->] (n3)--(n4);
+		\draw[->] (n4)--(n5);
+		\draw[->] (n5)--(n6);
+		\draw[->] (n6)--(n0);
+	\end{scope}
+\end{tikzpicture}

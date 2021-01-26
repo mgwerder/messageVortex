@@ -37,7 +37,7 @@ The main problem with this data is that it may be collected over a considerable 
 
 People with a ``bad'', ``unsuitable'', or ``non-conformant'' information footprint may be subject to banning repression or information access exclusion. People must be able to control their data footprint. Not providing these means effectively allows any country or a more prominent player to ban and control any number of persons within or outside the Internet. 
 
-We design in this work a new protocol. This protocol allows message transfer through existing communication channels. These messages are next to unobservable to any third party. This unobservability does not only cover the message itself but all metadata and flows associated with it. We called this protocol ``\MessageVortex'' or just ``\emph{Vortex}''. The protocol is capable of using a wide variety of transport protocols. It is even possible to switch protocols while the messages are in the transfer. This behavior allows media breaches (at least on a protocol level) and makes the analysis even harder.
+We design in this work a new protocol. This protocol allows message transfer through existing communication channels. These messages are next to unobservable to any third party. This unobservability does not only cover the message itself but all metadata and flows associated with it. We called this protocol ``\MessageVortex''. The protocol is capable of using a wide variety of transport protocols. It is even possible to switch protocols while the messages are in the transfer. This behavior allows media breaches (at least on a protocol level) and makes the analysis even harder.
 
 The new protocol allows secure communication without the need to trust the underlying transport media. Furthermore, the usage of the protocol itself is possible without altering the immediate behavior of the transport layer. The transport layers' regular traffic does, therefore, increase the noise in which hidden information has to be searched. 
 
@@ -88,7 +88,7 @@ We feel that this work is needed as much work in the anonymity field focus on th
 \chapter{Our Contribution}
 This thesis contributes to anonymization with an asynchronous messaging protocol called \MessageVortex.
 
-The protocol employs a new type of programmable forwarders called \VortexNodes (nodes) with a novel way of message mixing, moving away from a strictly chunked and onionized system to a system, where routing operations allow to increase or decrease in size without differentiating between decoy traffic and message routing. We refer to the instructions required to process a node as ``routing blocks''. These routing blocks have an onionized structure, only exposing the required information for the current node. Routing blocks may travel with a message or join at any common \VortexNode with the message.
+The protocol employs a new type of programmable forwarders called \VortexNodes{} (nodes) with a novel way of message mixing, moving away from a strictly chunked and onionized system to a system, where routing operations allow to increase or decrease in size without differentiating between decoy traffic and message routing. We refer to the instructions required to process a node as ``routing blocks''. These routing blocks have an onionized structure, only exposing the required information for the current node. Routing blocks may travel with a message or join at any common \VortexNode with the message.
 
 Our protocol differentiates from other protocols by the fact that our way of mixing and routing messages does not rely on knowingly injected decoy traffic and that we are capable of piggybacking multiple other carrier protocols without modifying the required, already available infrastructure on the Internet or requiring dedicated infrastructure. The carrier protocols may even be switched during routing, making it even harder to observe message traffic. 
 
@@ -112,9 +112,9 @@ Based on this central question, there are several sub-questions grouped around v
 \begin{enumerate}
 	\item What technologies and methods may be used to provide sender and receiver anonymity and unlinkability when sending messages against a potential censoring or observing adversary? 
 	
-	This question covers the principal part of the work. We first collect relevant concepts system and technologies in \cref{sec:concepts} and \ref{sec:systems}. We then elaborate on a list of criteria for the \MessageVortex protocol in \cref{sec:genRequirements}. In \cref{sec:coreMVProtocol}, we then create a list of suitable technologies and methods and explain our choice in \cref{sec:rationale}. Based on these findings, we define a protocol combining these technologies and researches into a solution in \cref{sec:protocol}. The implementation of This solution is explained in \cref{sec:implementation} and then in \cref{sec:analysis} analyzed for suitability based on the criteria specified. 
+	This question covers the principal part of the work. We first collect relevant concepts system and technologies in \cref{sec:concepts} and \ref{sec:systems}. We then elaborate on a list of criteria for the \MessageVortex{} protocol in \cref{sec:genRequirements}. In \cref{sec:coreMVProtocol}, we then create a list of suitable technologies and methods and explain our choice in \cref{sec:rationale}. Based on these findings, we define a protocol combining these technologies and researches into a solution in \cref{sec:protocol}. The implementation of This solution is explained in \cref{sec:implementation} and then in \cref{sec:analysis} analyzed for suitability based on the criteria specified. 
 	
-	\item How can entities utilizing \MessageVortex be attacked, and what measures are available to circumvent such attacks? 
+	\item How can entities utilizing \MessageVortex{} be attacked, and what measures are available to circumvent such attacks? 
 	
 	Within this question, we look at various attacks and test the protocol's resistance based on the definition of the protocol in \cref{sec:coreMVProtocol}. We do this by first collecting well-known attacks in \cref{sec:attacks}. We then elaborate if those attacks might be successful (and if so under what circumstances) in \cref{sec:staticAnalysis} and \cref{sec:dynamicAnalysis}.
 	
@@ -149,7 +149,7 @@ If we want to express what details contained in a tuple we use the the notation 
 
 In general, subscripts denote selectors to differentiate the same type's values, and superscript denotes relevant parameters to operations expressed. The subscripted and superscripted pieces of information are omitted if not needed.
 
-We refer to the components of a \VortexMessage as follows:
+We refer to the components of a \VortexMessage{} as follows:
 \begin{align*}
 	\text{Prefix component:}         & \mathbf{PREFIX}                 &=D^{K^{1}_a}\left(\mathbf{P}^{K^{-1}_a}\right) &=D\left(\mathbf{P}\right)\\
 	\text{Header component:}         & \mathbf{HEAD}                   &=D^{K^{1}_a}\left(\mathbf{H}^{K^{-1}_a}\right) &=D\left(\mathbf{H}\right)\\

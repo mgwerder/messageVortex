@@ -1,0 +1,25 @@
+\gdef\shadowshift{-3pt}
+\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
+
+\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+
+% Hexagon
+\path[
+ 	fill={rgb, 255:red, 255; green, 226; blue, 226 },
+ 	draw=black,
+ 	xshift=100, 
+ 	general shadow={fill={rgb, 255:red, 155; green, 155; blue, 155 },shadow xshift=-3pt,shadow yshift=-3pt}
+ 	] (0:200) -- (60:200) -- (120:200) -- (180:200) -- (240:200) -- (300:200) -- (0:200);
+% square
+\path[fill={rgb, 255:red, 217; green, 248; blue, 217 },draw=black,rounded corners=5pt,
+ 	general shadow={fill={rgb, 255:red, 155; green, 155; blue, 155 },shadow xshift=-3pt,shadow yshift=-3pt}
+	] (70,-30) rectangle +(120,60) node [pos=.5,scale=2] {$merge$};
+% Input arrow
+\draw [color=black  ,draw opacity=1,Latex- ]   (130,-100) -- +(0,70)  node [pos=.5,xshift=15,scale=2] {$O$} node [yshift=70,scale=2] {$Output$};
+% output arrow
+\draw [color=black  ,draw opacity=1,Latex-]   (100,30) -- +(0,70)  node [pos=.5,xshift=-15,scale=2] {$I_1$} node [yshift=-10,scale=2,xshift=10] {$Input$};
+\draw [color=black  ,draw opacity=1,Latex-]   (160,30) -- +(0,70)  node [pos=.5,xshift=15,scale=2] {$I_2$} ;
+
+\end{tikzpicture}
+
+%\end{document}
