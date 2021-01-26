@@ -545,8 +545,8 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
           <t><figure>
               <artwork type="ascii-art"><![CDATA[
 								
-position:00h   02h   04h   06h   08h ... 400h  402h  404h  406h  408h  40Ah
-value:   01 02 03 04 05 06 07 08 09  ... 01 05 0A 0B 0C 0D 0E 0F f0 03 12 13 
+pos: 00h   02h   04h   06h   08h...400h  402h  404h  406h  408h  40Ah
+val: 01 02 03 04 05 06 07 08 09 ...01 05 0A 0B 0C 0D 0E 0F f0 03 12 13
 
 Embedding: "(plain:1024)"
 
@@ -561,7 +561,7 @@ Result:  0A 13 (+ 494 omitted bytes; then skip 12 bytes to next chunk)
 
           <t><figure>
               <artwork type="abnf"><![CDATA[
-								plainEncoding = "("plain:" <numberOfBytesOfOffset> 
+plainEncoding = "("plain:" <numberOfBytesOfOffset> 
                 [ "," <numberOfBytesOfOffset> ]* ")"
 							]]></artwork>
             </figure></t>
@@ -574,8 +574,8 @@ Result:  0A 13 (+ 494 omitted bytes; then skip 12 bytes to next chunk)
 
           <t><figure>
               <artwork type="abnf"><![CDATA[
-								f5Encoding = "(F5:" <passwordString> [ "," <PasswordString> ]* ")"
-							]]></artwork>
+f5Encoding = "(F5:" <passwordString> [ "," <PasswordString> ]* ")"
+			  ]]></artwork>
             </figure></t>
 
           <t>Commas and backslashes in passwords MUST be escaped with a backslash whereas closing brackets are treated as normal password characters unless they are the final character of the encoding specification string.</t>
@@ -637,7 +637,7 @@ Result:  0A 13 (+ 494 omitted bytes; then skip 12 bytes to next chunk)
           <t>The message processing works according to the pseudo-code shown below.
           <figure>
               <artwork type="pseudocode"><![CDATA[
-								function incomming_message(VortexMessage blendedMessage) {
+function incomming_message(VortexMessage blendedMessage) {
   try{                    				
     msg = unblend( blendedMessage );
     if( not msg ) {
@@ -668,17 +668,22 @@ Result:  0A 13 (+ 494 omitted bytes; then skip 12 bytes to next chunk)
           }
           
           // Message authenticated
-          get_accounting( hdr.identity ).register_for_replay_protection( msg )
+          get_accounting( hdr.identity )
+			  .register_for_replay_protection( msg )
           if( not verify_mtching_forward_secrets( msg ) ) {
             throw exception( "forward secret missmatch" )
           }
           if( contains_payload( msg ) ) {
-            if( get_accounting( hdr.identity ).decrement_message_quota() ) {
-              while index,nextPayloadBlock = get_next_payload_block( msg ) {
-                add_workspace( header.identity, index, nextPayloadBlock )
+            if( get_accounting( hdr.identity )
+			    .decrement_message_quota() ) {
+              while index,nextPayloadBlock 
+			        == get_next_payload_block( msg ) {
+                add_workspace( header.identity, 
+				               index, nextPayloadBlock )
               }
               while nextRoutingBlock = get_next_routing_block( msg ) {
-                add_workspace( hdr.identity, add_routing( nextRoutingBlock ) )
+                add_workspace( hdr.identity, 
+				               add_routing( nextRoutingBlock ) )
               }
               process_reserved_mapping_space( msg )
               while nextRequirement = get_next_requirement( hdr ) {
