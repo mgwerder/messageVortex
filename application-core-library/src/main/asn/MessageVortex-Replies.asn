@@ -60,12 +60,16 @@ BEGIN
 
   ReplyCapability ::= SEQUENCE {
     -- supported ciphers
-    cipher            SEQUENCE (SIZE (2..256)) OF CipherSpec,
+    cipher            SEQUENCE (SIZE (2..256)) 
+	                  OF CipherSpec,
     -- supported mac algorithms
-    mac               SEQUENCE (SIZE (2..256)) OF MacAlgorithm,
+    mac               SEQUENCE (SIZE (2..256)) 
+	                  OF MacAlgorithm,
     -- supported PRNGs
-    prng              SEQUENCE (SIZE (2..256)) OF PRNGType,
-    -- maximum number of bytes to be transferred (outgoing bytes in vortex message without blending)
+    prng              SEQUENCE (SIZE (2..256)) 
+	                  OF PRNGType,
+    -- maximum number of bytes to be transferred 
+	-- (outgoing bytes in vortex message without blending)
     maxTransferQuota  INTEGER (0..4294967295),
     -- maximum number of messages to process for this identity
     maxMessageQuota   INTEGER (0..4294967295),
@@ -86,7 +90,7 @@ BEGIN
     -- Supported outbound blending
     supportedBlendingOut SEQUENCE OF BlendingSpec,
     -- supported galoise fields
-    supportedGFSize   SEQUENCE OF (1..maxGF) OF INTEGER (1..maxGF)
+    supportedGFSize   SEQUENCE OF INTEGER (1..maxGF)
   }
 
   ReplyCurrentQuota ::= SEQUENCE {
@@ -100,7 +104,7 @@ BEGIN
     -- The offered identitfier
     identifier [1] OCTET STRING,
     -- The archive or blob containing the software
-    blob       [2] OPTIONAL OCTET STRING  
+    blob       [2] OCTET STRING OPTIONAL
   }
 
 END

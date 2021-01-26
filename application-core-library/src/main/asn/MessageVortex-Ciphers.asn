@@ -46,21 +46,6 @@ BEGIN
     privateKey    [3] OCTET STRING OPTIONAL
   }
 
-  SymmetricKey ::= SEQUENCE {
-    keyType       SymmetricAlgorithm,
-    parameter     AlgParameters,
-    key           OCTET STRING (SIZE(16..512))
-  }
-
-  AsymmetricKey ::= SEQUENCE {
-    keyType       AsymmetricAlgorithm,
-    -- private key encoded as PKCS#8/PrivateKeyInfo
-    publicKey     [2] OCTET STRING,
-    -- private key encoded as 
-	-- X.509/SubjectPublicKeyInfo
-    privateKey    [3] OCTET STRING OPTIONAL
-  }
-
   SymmetricAlgorithm ::= ENUMERATED {
     aes128        (1000),  -- required
     aes192        (1001),  -- optional support
@@ -113,7 +98,7 @@ BEGIN
     none           (10200), -- required
     pkcs1          (10201), -- required
     rsaesOaep      (10202), -- optional support
-    oaepSha256Mgf1 (10202), -- optional support
+    oaepSha256Mgf1 (10203), -- optional support
     pkcs7          (10301), -- required
     ap             (10221)  -- required
   }

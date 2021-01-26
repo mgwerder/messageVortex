@@ -48,8 +48,8 @@ BEGIN
   -- Block Definitions
   --***************************************************************
   PrefixBlock ::= SEQUENCE {
-    version         [0] INTEGER OPTIONAL
-    key             [2] SymmetricKey,
+    version         [0] INTEGER OPTIONAL,
+    key             [2] SymmetricKey
   }
 
   InnerMessageBlock ::= SEQUENCE {
@@ -145,13 +145,13 @@ BEGIN
 	               (0..maxDurationOfProcessing),
     -- The message key to encrypt the message
     peerKey        [401] SEQUENCE 
-	                     (1..maxNumOfReplays)
-                         SymmetricKey OPTIONAL,
+	                     (SIZE (1..maxNumOfReplays))
+                         OF SymmetricKey OPTIONAL,
     -- contains the next recipient
     recipient      [402] BlendingSpec,
     -- PrefixBlock encrypted with message key
     mPrefix        [403] SEQUENCE 
-	                     (1..maxNumOfReplays) 
+	                     (SIZE (1..maxNumOfReplays)) 
                          OF OCTET STRING OPTIONAL,
     -- PrefixBlock encrypted with sender key
     cPrefix        [404] OCTET STRING OPTIONAL,
@@ -170,7 +170,7 @@ BEGIN
                    (SIZE (0..maxAssemblyInstr))
                    OF PayloadOperation,
     -- optional for storage of the arrival time
-    validity       [408] UsagePeriod OPTIONAL,
+    validity       [408] UsagePeriod OPTIONAL
   }
 
 END

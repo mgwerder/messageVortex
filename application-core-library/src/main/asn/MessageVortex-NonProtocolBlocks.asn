@@ -1,7 +1,6 @@
 -- States reflected: 
---   Tuple()=Val()
-             [vallidity; allowed operations]{Store}
---
+--   Tuple()=Val()[vallidity; allowed operations]
+--   {Store}
 -- - Tuple(identity)=Val(messageQuota,transferQuota,
 --   sequence of Routingblocks for Error Message 
 --   Routing) [validity; Requested at creation; may  
