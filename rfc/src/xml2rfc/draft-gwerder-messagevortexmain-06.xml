@@ -106,7 +106,7 @@
             <t>An alternative address representation is defined that allows a standard email client to address a Vortex node. A node SHOULD support the smtpAlternateSpec (its specification is noted in ABNF as in <xref target="RFC5234"/>). For applications with QR code support, an implementation SHOULD use the smtpUrl representation.
             <figure>
                 <artwork type="abnf"><![CDATA[
-									localPart         = <local part of address>
+localPart         = <local part of address>
 domain            = <domain part of address>
 email             = localPart "@" domain
 keySpec           = <BASE64 encoded AsymmetricKey [DER encoded]>
@@ -121,7 +121,7 @@ smtpUrl           = "vortexsmtp://" smtpAlternateSpec
           <section anchor="entities_node_spec_spec" title="NodeSpec for XMPP nodes">
             <t>Typically, a node specification follows the ASN.1 block NodeSpec. For support of XMPP clients, an implementation SHOULD support the jidAlternateSpec (its specification is noted in ABNF as in <xref target="RFC5234"/>). <figure>
                 <artwork type="abnf"><![CDATA[
-									localPart         = <local part of address>
+localPart         = <local part of address>
 domain            = <domain part of address>
 resourcePart      = <resource part of the address>
 jid               = localPart "@" domain [ "/" resourcePart ]
@@ -344,7 +344,7 @@ jidUrl            = "vortexxmpp://" jidAlternateSpec
       <section title="Overview">
         <t><xref target="fig_message_overview"/> shows a Vortex message. The enclosed sections denote encrypted blocks, and the three or four-letter abbreviations denote the key required for decryption. The abbreviation k_h stands for the asymmetric host key, and sk_p is the symmetric peer key. The receiving node obtains this key by decrypting MPREFIX with its host key k_h. Then, sk_s is the symmetric sender key. When decrypting the MPREFIX block, the node obtains this key. The sender key protects the header and routing blocks by guaranteeing the node assembling the message does not know about upcoming identities, operations, and requests. The peer key protects the message, including its structure, from third-party observers. <figure anchor="fig_message_overview" title="Vortex message overview">
             <artwork align="center" type="ascii-art"><![CDATA[
-							+-+---+-+-+---+-+---+-+-+---+-+-+---+-+-------+-+
++-+---+-+-+---+-+---+-+-+---+-+-+-+-------+-+
 | |   | | | | C | | |   | | | R | |       | |
 | |   | | | | P | | | H | | | O | |       | |
 | | M | | | | R | | | E | | | U | |   P   | |
