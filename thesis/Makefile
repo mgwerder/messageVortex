@@ -8,7 +8,8 @@ MKFILEP := $(abspath $(lastword $(MAKEFILE_LIST)))
 
 .PHONY: all clean dirs
 
-all: $(OUTDIR)/messageVortex.pdf $(OUTDIR)/messageVortex_attachdocs.pdf dirs $(OUTDIR)/filet.pdf $(OUTDIR)/MessageVortexExcerpt.pdf
+# $(OUTDIR)/filet.pdf $(OUTDIR)/MessageVortexExcerpt.pdf
+all: $(OUTDIR)/messageVortex.pdf $(OUTDIR)/messageVortex_attachdocs.pdf dirs 
 
 clean:
 	@rm -r target 2>/dev/null; /bin/true
